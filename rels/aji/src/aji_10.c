@@ -337,7 +337,7 @@ void monitor_cap_capture(CameraId cameraId, void* param) {
  * never finishes (blocks).
  */
 USER_FUNC(monitor_cap_evt) {
-    dispEntry(CAMERA_3D, 1000.0f, 0, monitor_cap_capture, NULL);
+    dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_OPAQUE, monitor_cap_capture, NULL);
     return EVT_RETURN_BLOCK;
 }
 

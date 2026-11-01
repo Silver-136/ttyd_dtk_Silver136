@@ -464,7 +464,7 @@ void moamoa_main(void) {
 
 /** Registers ext_disp with the display list on the 3D camera each frame. */
 void moamoa_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
 }
 
 /**

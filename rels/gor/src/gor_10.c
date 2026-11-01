@@ -77,7 +77,7 @@ USER_FUNC(tegami) {
     if (wp->alpha > 128) {
         wp->alpha = 128;
     }
-    dispEntry(CAMERA_2D, 0.0f, 0, draw, wp);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, draw, wp);
     return EVT_RETURN_BLOCK;
 }
 
@@ -165,7 +165,7 @@ static void depthDisp(CameraId camera, void* param) {
 
 /** Script helper that queues depthDisp every frame (priority 1200). Never finishes. */
 static USER_FUNC(depth) {
-    dispEntry(CAMERA_2D, 1200.0f, 0, depthDisp, NULL);
+    dispEntry(CAMERA_2D, 1200.0f, DISP_MODE_OPAQUE, depthDisp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -252,7 +252,7 @@ void mabutaDisp(CameraId camera, void* param) {
 
 /** Script helper that queues mabutaDisp every frame (priority 1100). Never finishes. */
 USER_FUNC(mabuta) {
-    dispEntry(CAMERA_2D, 1100.0f, 0, mabutaDisp, NULL);
+    dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, mabutaDisp, NULL);
     return EVT_RETURN_BLOCK;
 }
 

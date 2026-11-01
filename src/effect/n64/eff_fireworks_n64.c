@@ -214,7 +214,7 @@ void effFireworksMain(EffectEntry* effect) {
             work->frame = 1;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireworksDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireworksDisp, effect);
 }
 
 /**

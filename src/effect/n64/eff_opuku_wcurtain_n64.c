@@ -107,7 +107,7 @@ void effOpukuWcurtainMain(EffectEntry* effect) {
             work->speed[i] += 0.1f * (5.0f - work->speed[i]);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuWcurtainDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuWcurtainDisp, effect);
 }
 
 /**

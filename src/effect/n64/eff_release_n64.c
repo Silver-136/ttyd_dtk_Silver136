@@ -417,7 +417,7 @@ void effReleaseMain(EffectEntry* effect) {
             work->size[i] = 0.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effReleaseDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effReleaseDisp, effect);
 }
 
 /**

@@ -262,7 +262,7 @@ s32 winRootMain(WindowWork* w) {
 #if VERSION > VERSION_DEMO_US
         w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), 1);
         w->texBufValid = 0;
-        dispEntry(CAMERA_2D, 1000.0f, 0, (DispCallback)winRootBgCaptureDisp, w);
+        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, (DispCallback)winRootBgCaptureDisp, w);
 #endif
         break;
     case 10:
@@ -449,7 +449,7 @@ s32 winRootMain(WindowWork* w) {
     w->sortPosX += (w->sortTgtX - w->sortPosX) / WR_FSTEP(4.0f);
     w->sortPosY += (w->sortTgtY - w->sortPosY) / WR_FSTEP(4.0f);
 #if VERSION > VERSION_DEMO_US
-    dispEntry(CAMERA_2D, 1000.0f, 0, (DispCallback)winRootBgDrawDisp, w);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, (DispCallback)winRootBgDrawDisp, w);
 #endif
     return 0;
 }

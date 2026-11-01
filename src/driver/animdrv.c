@@ -422,7 +422,7 @@ void animInit(void) {
 
 /** Once per frame: queues the offscreen pass that renders the paper (effect overlay) poses. */
 void animMain(void) {
-    dispEntry(CAMERA_OFFSCREEN, 0.0f, 1, animPaperPoseDisp, NULL);
+    dispEntry(CAMERA_OFFSCREEN, 0.0f, DISP_MODE_ALPHA_TEST, animPaperPoseDisp, NULL);
 }
 
 /** The animation file data of pose pose. */

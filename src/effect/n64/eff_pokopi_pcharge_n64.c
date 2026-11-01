@@ -287,7 +287,7 @@ void effPokopiPchargeMain(EffectEntry* effect) {
             p->alpha = (s32)(255.0f * sv);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPokopiPchargeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPokopiPchargeDisp, effect);
 }
 
 /** Draws each streak as a camera-facing sprite (texture 0x86) pushed out along its ray, in a shape chosen by type. */

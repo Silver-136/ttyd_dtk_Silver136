@@ -101,7 +101,7 @@ void effTogeFlushMain(EffectEntry* effect) {
         position.x = work->position.x;
         position.y = work->position.y;
         position.z = work->position.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effTogeFlushDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effTogeFlushDisp, effect);
     }
 }
 

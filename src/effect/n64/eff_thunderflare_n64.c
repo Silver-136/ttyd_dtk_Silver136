@@ -161,7 +161,7 @@ void effThunderflareMain(EffectEntry* effect) {
         work->rotA += odd ? 5 : 2;
         work->rotB += odd ? 2 : 5;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effThunderflareDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effThunderflareDisp, effect);
 }
 
 /**

@@ -3407,7 +3407,7 @@ EVT_END()
 
 s32 noise(EventEntry* event, BOOL isFirstCall) {
     EvtWord alpha = evtGetValue(event, event->args[0]);
-    dispEntry(CAMERA_2D, 1100.0f, 0, noiseDisp, (void*)alpha);
+    dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);
     return EVT_RETURN_DONE;
 }
 
@@ -3505,7 +3505,7 @@ void disp_horogram(CameraId cameraId, void* param) {
 
 /** Script function that queues disp_horogram for the 3D camera every frame; never finishes. */
 s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_3D, 0.0f, 2, disp_horogram, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, disp_horogram, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -3586,7 +3586,7 @@ void peach_capture(CameraId cameraId, void* param) {
 
 /** Script function that queues the capture of the hologram (peach_capture) every frame; blocks forever. */
 s32 horogram_cap_evt(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_3D, 1000.0f, 0, peach_capture, NULL);
+    dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_OPAQUE, peach_capture, NULL);
     return EVT_RETURN_BLOCK;
 }
 

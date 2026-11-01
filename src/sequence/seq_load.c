@@ -883,10 +883,10 @@ void loadMain(SequenceWork* seq) {
         wp->x += __fabsf(s);
     }
 #if VERSION <= VERSION_DEMO_US
-    dispEntry(CAMERA_2D, 1000.0f, 0, loadDraw, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, loadDraw, NULL);
     return FALSE;
 #else
-    dispEntry(CAMERA_3D, 1000.0f, 0, loadDraw, NULL);
+    dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_OPAQUE, loadDraw, NULL);
 #endif
 }
 

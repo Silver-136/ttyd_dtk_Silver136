@@ -193,7 +193,7 @@ USER_FUNC(make_gonbaba_projection_evt) {
     GXInitTexObj(&wp->obj, wp->tex->address, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     mapSetProjTexObj(&wp->obj, wp->tex);
-    dispEntry(CAMERA_SHADOW, 0.0f, 3, make_gonbaba_projection, wp);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, make_gonbaba_projection, wp);
     return EVT_RETURN_BLOCK;
 }
 

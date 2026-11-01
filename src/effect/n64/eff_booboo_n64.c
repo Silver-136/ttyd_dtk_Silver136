@@ -413,7 +413,7 @@ void effBoobooMain(EffectEntry* effect) {
             work->frame[i] = 0;
         }
     }
-    dispEntry(CAMERA_3D, 0.0f, 0, (DispCallback)effBoobooDisp, effect);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, (DispCallback)effBoobooDisp, effect);
 }
 
 static inline void booTexCommon(s32 id, GXTevColorArg d, GXTexObj* texObj) {

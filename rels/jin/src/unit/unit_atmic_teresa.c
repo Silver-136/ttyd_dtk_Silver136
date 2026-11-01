@@ -1372,7 +1372,7 @@ void teresa_ext_main(void) {
                 break;
         }
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, teresa_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, teresa_ext_disp, NULL);
 }
 
 /**

@@ -63,7 +63,7 @@ USER_FUNC(btlevtcmd_AnnounceMessage) {
                 break;
         }
     }
-    dispEntry(CAMERA_2D, 900.0f, 1, _disp, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _disp, NULL);
 #if VERSION >= VERSION_US
     if (type == 2) {
         if (BattlePadCheckTrigger(PAD_BUTTON_A) || BattlePadCheckTrigger(PAD_BUTTON_B)) {

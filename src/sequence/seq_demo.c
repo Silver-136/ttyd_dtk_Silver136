@@ -1140,7 +1140,7 @@ void seq_demoMain(SequenceWork* seq) {
             break;
     }
     if (seq->state < 2) {
-        dispEntry(CAMERA_2D, 0.0f, 0, demoDisp, NULL);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, demoDisp, NULL);
     }
 }
 /**

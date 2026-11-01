@@ -107,7 +107,7 @@ void effTeresaMain(EffectEntry* effect) {
             return;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effTeresaDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effTeresaDisp, effect);
 }
 
 /** Draws the Boo texture as a camera-facing quad: white for type 0, black for type 1. */

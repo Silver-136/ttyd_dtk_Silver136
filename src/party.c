@@ -3182,10 +3182,10 @@ void partyPreDisp(PartyEntry* party) {
     mutekiTimer = party->mutekiTimer;
     if (mutekiTimer > 0) {
         if (!(mutekiTimer & 2)) {
-            dispEntry((CameraId)party->camId, z, 1, partyDisp, party);
+            dispEntry((CameraId)party->camId, z, DISP_MODE_ALPHA_TEST, partyDisp, party);
         }
     } else {
-        dispEntry((CameraId)party->camId, z, 1, partyDisp, party);
+        dispEntry((CameraId)party->camId, z, DISP_MODE_ALPHA_TEST, partyDisp, party);
     }
     mode = 2;
     size = 13.333333f;

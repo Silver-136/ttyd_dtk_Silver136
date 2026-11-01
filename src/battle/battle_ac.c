@@ -45,7 +45,7 @@ void BattleActionCommandManager(BattleWork* wp) {
 
         disp = wp->actionCommands.dispcb;
         if (disp) {
-            dispEntry(CAMERA_2D, 900.0f, 1, disp, wp);
+            dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, disp, wp);
         }
     }
 }

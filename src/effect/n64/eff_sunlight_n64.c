@@ -138,7 +138,7 @@ void effSunlightMain(EffectEntry* effect) {
             work->offset[i] -= 256.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), VERSION_PICK(2, 10), (DispCallback)effSunlightDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), VERSION_PICK(DISP_MODE_XLU, DISP_MODE_XLU_AFTER), (DispCallback)effSunlightDisp, effect);
 }
 
 /**

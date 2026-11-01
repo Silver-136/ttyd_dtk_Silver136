@@ -125,7 +125,7 @@ USER_FUNC(evt_goryuugijo_main_func) {
     }
     wp->main(event, isFirstCall);
 disp:
-    dispEntry(CAMERA_2D, 1000.0f, 0, evt_goryuugijo_disp_func, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_goryuugijo_disp_func, wp);
     return EVT_RETURN_BLOCK;
 }
 

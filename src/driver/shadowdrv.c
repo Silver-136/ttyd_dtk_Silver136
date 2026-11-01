@@ -295,16 +295,16 @@ void shadowInit(void) {
  * depth shadow end), then empties the shadow list and draw counts for the new frame.
  */
 void shadowMain(void) {
-    dispEntry(CAMERA_3D, 0.0f, 9, shadowDisp, NULL);
-    dispEntry(CAMERA_OFFSCREEN2, 0.0f, 9, shadowDisp, NULL);
-    dispEntry(CAMERA_3D_EFFECTA, 0.0f, 9, shadowDisp, NULL);
-    dispEntry(CAMERA_3D_EFFECTB, 0.0f, 9, shadowDisp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU_BEFORE, shadowDisp, NULL);
+    dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_XLU_BEFORE, shadowDisp, NULL);
+    dispEntry(CAMERA_3D_EFFECTA, 0.0f, DISP_MODE_XLU_BEFORE, shadowDisp, NULL);
+    dispEntry(CAMERA_3D_EFFECTB, 0.0f, DISP_MODE_XLU_BEFORE, shadowDisp, NULL);
     if (cswp->projection) {
-        dispEntry(CAMERA_SHADOW, 0.0f, 5, shadowDisp, NULL);
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_XLU_BEFORE_OPAQUE, shadowDisp, NULL);
     }
-    dispEntry(CAMERA_SHADOW, 0.0f, 0, shadowDisp, NULL);
-    dispEntry(CAMERA_SHADOW, 0.0f, 2, shadowDisp, NULL);
-    dispEntry(CAMERA_SHADOW, 0.0f, 7, shadowDisp, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, shadowDisp, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_XLU, shadowDisp, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_CUSTOM_LAST, shadowDisp, NULL);
     cswp->numEntries = 0;
     cswp->base.flags &= ~SHADOW_WORK_READY;
     cswp->base.drawCount = 0;
@@ -408,7 +408,7 @@ void shadowDisp(CameraId cameraId, void* param) {
         shadowCharShadowDisp_Texture(cameraId, param);
     } else if (cameraId == CAMERA_SHADOW) {
         switch (disp->renderMode) {
-            case 5: {
+            case DISP_MODE_XLU_BEFORE_OPAQUE: {
                 ShadowConfig* cfg;
                 shadowCharShadowDisp_Collision(cameraId, param);
                 if ((cfg = &shadowConfig[cswp->base.configIdx])->follow == 1) {
@@ -429,14 +429,14 @@ void shadowDisp(CameraId cameraId, void* param) {
                 projShadowEnd(cameraId, &cswp->base);
                 break;
             }
-            case 0:
+            case DISP_MODE_OPAQUE:
                 shadowBegin(pswp, FALSE);
                 break;
-            case 2:
+            case DISP_MODE_XLU:
                 projShadowEnd(cameraId, pswp);
                 shadowBegin(dswp, TRUE);
                 break;
-            case 7:
+            case DISP_MODE_CUSTOM_LAST:
                 depthShadowEnd(cameraId, dswp);
                 break;
         }

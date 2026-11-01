@@ -232,7 +232,7 @@ void effPturnMain(EffectEntry* effect) {
         }
         work->age++;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPturnDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPturnDisp, effect);
 }
 
 /** Draws the badge, and the digits for every type except 1, while the effect is active. */

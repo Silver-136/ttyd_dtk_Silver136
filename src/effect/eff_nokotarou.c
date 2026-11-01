@@ -87,7 +87,7 @@ void effNokotarouMain(EffectEntry* effect) {
     } else {
         work->scale += (1.0f - work->scale) / 32.0f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effNokotarouDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effNokotarouDisp, effect);
 }
 
 /** Draws the pose in three stretched segments from the start point to the current point. */

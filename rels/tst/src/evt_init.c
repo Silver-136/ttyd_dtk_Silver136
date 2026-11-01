@@ -532,12 +532,12 @@ USER_FUNC(tess_test_draw) {
                 for (j = 0; j < i; j++) {
                     tess_test_work->vertices[j] = tess_test_work->vertices[tess_test_work->vertexCount - 1];
                 }
-                dispEntry(CAMERA_2D, 0.0f, 0, tess_test_capture, NULL);
+                dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, tess_test_capture, NULL);
                 return EVT_RETURN_DONE;
             }
         }
     }
-    dispEntry(CAMERA_2D, 0.0f, 0, tess_test_line_disp, NULL);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, tess_test_line_disp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -592,7 +592,7 @@ USER_FUNC(tess_test_run) {
 
 /** Script helper: queues the tessellated polygon draw (tess_test_disp) on the second offscreen camera. */
 USER_FUNC(tess_test_disp_entry) {
-    dispEntry(CAMERA_OFFSCREEN2, 0.0f, 1, tess_test_disp, NULL);
+    dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_ALPHA_TEST, tess_test_disp, NULL);
     return EVT_RETURN_DONE;
 }
 

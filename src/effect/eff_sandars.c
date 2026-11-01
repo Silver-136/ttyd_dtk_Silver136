@@ -154,7 +154,7 @@ void effSandarsMain(EffectEntry* effect) {
                 work->rot += work->rotSpeed;
             }
         }
-        dispEntry(camId, dispCalcZ(&pos2), 2, (DispCallback)effSandarsDisp2, effect);
+        dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, (DispCallback)effSandarsDisp2, effect);
         return;
     default:
         break;
@@ -188,7 +188,7 @@ void effSandarsMain(EffectEntry* effect) {
         }
         break;
     }
-    dispEntry(camId, dispCalcZ(&pos2), 2, (DispCallback)effSandarsDisp, effect);
+    dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, (DispCallback)effSandarsDisp, effect);
 }
 
 /** Draws the EFF_bakuhatu explosion pose, camera-facing, with fading alpha. */

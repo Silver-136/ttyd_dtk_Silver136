@@ -832,7 +832,7 @@ void uranai_cap(CameraId cameraId, void* param) {
  * Queues the uranai_cap draw callback on the shadow camera and blocks, so the capture runs every frame.
  */
 USER_FUNC(uranai_cap_evt) {
-    dispEntry(CAMERA_SHADOW, 0.0f, 3, uranai_cap, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, uranai_cap, NULL);
     return EVT_RETURN_BLOCK;
 }
 

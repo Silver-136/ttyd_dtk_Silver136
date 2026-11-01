@@ -1276,13 +1276,13 @@ void BattleAudience_Disp(void) {
     BattleAudienceBaseGetPtr();
     BattleAudienceAnimProcess();
     if (!(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_DISP)) {
-        dispEntry(CAMERA_3D, 0.0f, 1, BattleAudienceDispAudience, NULL);
-        dispEntry(CAMERA_3D, 0.0f, 2, BattleAudienceDispAudience, NULL);
-        dispEntry(CAMERA_3D, 0.0f, 1, BattleAudienceDispItem, NULL);
-        dispEntry(CAMERA_2D, 499.0f, 0, BattleAudienceDispApSrc, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, BattleAudienceDispAudience, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, BattleAudienceDispAudience, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, BattleAudienceDispItem, NULL);
+        dispEntry(CAMERA_2D, 499.0f, DISP_MODE_OPAQUE, BattleAudienceDispApSrc, NULL);
     }
     if (pouchGetPtr()->starPowersObtained) {
-        dispEntry(CAMERA_2D, 499.0f, 1, BattleAudienceDispWin, NULL);
+        dispEntry(CAMERA_2D, 499.0f, DISP_MODE_ALPHA_TEST, BattleAudienceDispWin, NULL);
     }
 }
 
@@ -2571,7 +2571,7 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
     hw = 20.0f;
     nhw = -hw;
     for (; i < 200; i++, m++) {
-        if (dispGetCurWork()->renderMode != 2) {
+        if (dispGetCurWork()->renderMode != DISP_MODE_XLU) {
             if (m->colorA != 0xFF) continue;
         } else {
             if (m->colorA == 0xFF) continue;

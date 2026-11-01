@@ -5779,7 +5779,7 @@ inline void hand_pose_inl(void) {
  */
 void hand_main(void) {
     hand_pose_inl();
-    dispEntry(CAMERA_3D, 0.0f, 1, hand_draw, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, hand_draw, NULL);
 }
 
 /** Draw callback of the hand swarm: loads the ext render mode, vertex, texture and TEV set-up and draws all hands. */

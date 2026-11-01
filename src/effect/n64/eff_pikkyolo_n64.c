@@ -150,7 +150,7 @@ void effPikkyoloMain(EffectEntry* effect) {
         }
         work->rot += ((i & 1) * 2 - 1) * 14;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPikkyoloDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPikkyoloDisp, effect);
 }
 
 /** Draws each fragment as a camera-facing, spinning quad using one of four animation cells of texture 0x41. */

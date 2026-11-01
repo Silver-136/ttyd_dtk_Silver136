@@ -396,7 +396,7 @@ void effDamageStarMain(EffectEntry* effect) {
         }
     }
     ((DamageStarWork*)effect->userdata)->tick = gp->retraceCount;
-    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 8, (DispCallback)effDamageStarDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, (DispCallback)effDamageStarDisp, effect);
 }
 
 // One textured square of half-size h, u = horizontal texture repeat.

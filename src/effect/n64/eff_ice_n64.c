@@ -140,7 +140,7 @@ static void effIceMain(EffectEntry* effect) {
         p->x += p->velX;
         p->y += p->velY;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 2, (DispCallback)effIceDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_XLU, (DispCallback)effIceDisp, effect);
 }
 
 /**

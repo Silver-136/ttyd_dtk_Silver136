@@ -545,10 +545,10 @@ void effNozleMain(EffectEntry* effect) {
         effDelete(effect);
 #if VERSION > VERSION_DEMO_US
     } else if (type == 3) {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 8, (DispCallback)effNozleDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effNozleDisp, effect);
 #endif
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effNozleDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effNozleDisp, effect);
     }
 }
 

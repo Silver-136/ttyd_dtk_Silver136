@@ -766,7 +766,7 @@ void chorogun_ext_main(void) {
                 break;
         }
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, chorogun_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, chorogun_ext_disp, NULL);
 }
 
 /** Draw callback for the swarm: sets up the extdrv render mode, vertices, texture and TEV, then draws all poses. */

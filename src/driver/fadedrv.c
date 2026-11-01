@@ -1136,13 +1136,13 @@ void fadeMain(void) {
             case FADE_CURTAIN_CENTER_Z1:
             case FADE_CURTAIN_LEAVE:
             case FADE_CURTAIN_ENTER:
-                dispEntry(CAMERA_FADE, 0.0f, 0, disp_maku, entry);
+                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
             case FADE_CURTAIN_SIDES_A1:
             case FADE_CURTAIN_SIDES_A2:
             case FADE_CURTAIN_SIDES_A1_TOP:
             case FADE_CURTAIN_SIDES_A2_TOP:
-                dispEntry(CAMERA_FADE2, 0.0f, 0, disp_maku, entry);
+                dispEntry(CAMERA_FADE2, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
             case FADE_CURTAIN_SIDES_A1_3D:
             case FADE_CURTAIN_SIDES_A2_3D:
@@ -1154,7 +1154,7 @@ void fadeMain(void) {
             case FADE_CURTAIN_LEAVE_3D:
             case FADE_CURTAIN_ENTER_3D:
             case FADE_PAGE_FLIP_FOUR:
-                dispEntry(CAMERA_3D_IMAGE, 0.0f, 0, disp_maku, entry);
+                dispEntry(CAMERA_3D_IMAGE, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
             case FADE_PAGE_FLIP_Z1:
             case FADE_PAGE_FLIP_A1:
@@ -1171,19 +1171,19 @@ void fadeMain(void) {
             case FADE_STORY_BOWSER_A2:
 #else
             case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28:
-                dispEntry(CAMERA_FADE, 0.0f, 0, disp_maku, entry);
+                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
             case 0x1B: case 0x1C: case 0x3F: case 0x40:
-                dispEntry(CAMERA_FADE2, 0.0f, 0, disp_maku, entry);
+                dispEntry(CAMERA_FADE2, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
             case 0x18: case 0x19: case 0x1A: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x33:
-                dispEntry(CAMERA_3D_IMAGE, 0.0f, 0, disp_maku, entry);
+                dispEntry(CAMERA_3D_IMAGE, 0.0f, DISP_MODE_OPAQUE, disp_maku, entry);
                 break;
             case 0x31: case 0x32: case 0x34: case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: case 0x3A:
             case 0x3B: case 0x3C: case 0x3D: case 0x3E:
 #endif
                 if (entry->paperPoseId >= 0 && entry->callback) {
-                    dispEntry(CAMERA_OFFSCREEN2, 0.0f, 0, entry->callback, entry->offparam);
+                    dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_OPAQUE, entry->callback, entry->offparam);
                 }
                 break;
 #if VERSION <= VERSION_DEMO_US
@@ -1193,7 +1193,7 @@ void fadeMain(void) {
 #else
             case 0xB: case 0xC: case 0xD:
 #endif
-                dispEntry(CAMERA_2D, 1000.0f, 0, disp_texture, wp);
+                dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, disp_texture, wp);
                 break;
 #if VERSION <= VERSION_DEMO_US
             case FADE_IN_SPOT_3D:
@@ -1203,7 +1203,7 @@ void fadeMain(void) {
 #else
             case 5: case 6: case 0xE: case 0xF:
 #endif
-                dispEntry(CAMERA_3D, 0.0f, 7, disp_texture, wp);
+                dispEntry(CAMERA_3D, 0.0f, DISP_MODE_CUSTOM_LAST, disp_texture, wp);
                 break;
 #if VERSION <= VERSION_DEMO_US
             case FADE_PIPE_UP_A1:
@@ -1219,18 +1219,18 @@ void fadeMain(void) {
 #endif
                 break;
             default:
-                dispEntry(CAMERA_FADE, 0.0f, 0, disp_texture, wp);
+                dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_OPAQUE, disp_texture, wp);
                 break;
         }
     }
     if (wp->flags & (FADE_WORK_TEC | FADE_WORK_SOFT_FOCUS)) {
-        dispEntry(CAMERA_2D, 999.0f, 0, disp_tec, wp);
+        dispEntry(CAMERA_2D, 999.0f, DISP_MODE_OPAQUE, disp_tec, wp);
     }
     if (wp->flags & FADE_WORK_LOAD_BLACK) {
-        dispEntry(CAMERA_FADE, -100.0f, 0, disp_dummy_black, wp);
+        dispEntry(CAMERA_FADE, -100.0f, DISP_MODE_OPAQUE, disp_dummy_black, wp);
     }
     if (wp->flags & FADE_WORK_WHITE_OUT) {
-        dispEntry(CAMERA_3D, 1000.0f, 7, disp_dummy_black, wp);
+        dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_CUSTOM_LAST, disp_dummy_black, wp);
     }
 }
 

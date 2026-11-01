@@ -138,7 +138,7 @@ void effKamekiTornadeMain(EffectEntry* effect) {
     for (i = 0; i < 8; i++) {
         work->ang[i] += work->angVel[i];
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKamekiTornadeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKamekiTornadeDisp, effect);
 }
 
 /**

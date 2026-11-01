@@ -170,7 +170,7 @@ void effOpukuJetwrainMain(EffectEntry* effect) {
             work->h[i][j] += 0.02f * work->v[i][j];
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuJetwrainDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuJetwrainDisp, effect);
 }
 
 /**

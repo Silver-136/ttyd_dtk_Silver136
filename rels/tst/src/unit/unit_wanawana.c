@@ -244,7 +244,7 @@ USER_FUNC(replace_evt) {
     TST_BATTLE_UNIT(unit)->countersetWeapon = (struct BattleWeapon*)wp; // reused as the WanaWork pointer
     TST_BATTLE_UNIT(unit)->screenTexBuf = wp->tex;
     wp->ready = 0;
-    dispEntry(CAMERA_SHADOW, 0.0f, 0, replace_disp, wp);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, replace_disp, wp);
     return EVT_RETURN_DONE;
 }
 

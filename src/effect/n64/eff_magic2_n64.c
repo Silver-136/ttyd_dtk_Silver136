@@ -216,7 +216,7 @@ void effMagic2Main(EffectEntry* effect) {
             w->tex1ScrollY += 0x100;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagic2Disp, effect);
 }
 
 /**

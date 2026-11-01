@@ -1421,7 +1421,7 @@ static USER_FUNC(evt_tou_print_ranking) {
     }
     dwp->targetY = dwp->page * 220;
     dwp->y += (dwp->targetY - dwp->y) / 8.0f;
-    dispEntry(CAMERA_2D, 300.0f, 0, disp_proc, NULL);
+    dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, disp_proc, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -2799,7 +2799,7 @@ USER_FUNC(make_monitor) {
             gans_wp->alpha = 0;
         }
     }
-    dispEntry(CAMERA_SHADOW, 0.0f, 3, gans_tex, wp);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, gans_tex, wp);
     return EVT_RETURN_BLOCK;
 }
 

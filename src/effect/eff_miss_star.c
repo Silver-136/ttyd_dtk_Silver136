@@ -149,7 +149,7 @@ void effMissStarMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position2), 1, (DispCallback)effMissStarDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position2), DISP_MODE_ALPHA_TEST, (DispCallback)effMissStarDisp, effect);
 }
 
 /** Draws each star as a camera-facing textured quad (effect texture 24). */

@@ -199,7 +199,7 @@ void effCloudMain(EffectEntry* effect) {
         }
         work->len[idx] = prev + d;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effCloudDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effCloudDisp, effect);
 }
 
 /**

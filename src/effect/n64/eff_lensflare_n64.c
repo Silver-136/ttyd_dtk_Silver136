@@ -139,7 +139,7 @@ void effLensflareMain(EffectEntry* effect) {
             e->angle = (f32)(rand() % 360);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effLensflareDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effLensflareDisp, effect);
 }
 
 /**

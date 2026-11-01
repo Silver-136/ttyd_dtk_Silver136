@@ -108,7 +108,7 @@ void effRankupMain(EffectEntry* effect) {
             work->alpha = 0;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRankupDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRankupDisp, effect);
 }
 
 /** Draws the banner animation pose in three segments scaled by 6. */

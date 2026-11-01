@@ -127,7 +127,7 @@ void effKemuri7Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri7Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri7Disp, effect);
 }
 
 /** Draws the footprint as a flat 10x10 textured quad (effect texture 0x4F), mirrored when side is 0. */

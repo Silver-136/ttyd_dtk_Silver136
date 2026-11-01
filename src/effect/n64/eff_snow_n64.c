@@ -95,7 +95,7 @@ void effSnowMain(EffectEntry* effect) {
     } else if (mario->position.z - work->position.z > 200.0f) {
         work->position.z += 400.0f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSnowDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSnowDisp, effect);
 }
 
 /**

@@ -219,7 +219,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
             }
         }
         if (icon->numStatusIcons > 0) {
-            dispEntry(CAMERA_2D, 901.0f, 1, BattleStatusIconDisp, unit);
+            dispEntry(CAMERA_2D, 901.0f, DISP_MODE_ALPHA_TEST, BattleStatusIconDisp, unit);
         }
     }
 }

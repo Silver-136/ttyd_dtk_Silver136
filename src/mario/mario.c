@@ -2225,13 +2225,13 @@ void marioPreDisp(void) {
         }
         if (t > 0) {
             if (!(t & 2)) {
-                dispEntry(marioGetCamId(), z, 1, marioDisp, wp);
+                dispEntry(marioGetCamId(), z, DISP_MODE_ALPHA_TEST, marioDisp, wp);
             }
         } else {
-            dispEntry(marioGetCamId(), z, 1, marioDisp, wp);
+            dispEntry(marioGetCamId(), z, DISP_MODE_ALPHA_TEST, marioDisp, wp);
         }
     } else {
-        dispEntry(marioGetCamId(), z, 2, marioDispBlur, wp);
+        dispEntry(marioGetCamId(), z, DISP_MODE_XLU, marioDispBlur, wp);
     }
     if (wp->dispFlags & MARIO_DISP_FLAG_SHADOW_OFF) {
         return;

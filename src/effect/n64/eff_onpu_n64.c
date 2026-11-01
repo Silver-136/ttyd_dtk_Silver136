@@ -117,7 +117,7 @@ void effOnpuMain(EffectEntry* effect) {
     work->position.y += work->vy;
     work->vx += 0.04f * (work->targetVx - work->vx);
     work->vy += 0.04f * (work->targetVy - work->vy);
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOnpuDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOnpuDisp, effect);
 }
 
 /**

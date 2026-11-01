@@ -3248,7 +3248,7 @@ USER_FUNC(_announce_wall_message) {
         return EVT_RETURN_DONE;
     }
     event->userdata[0]--;
-    dispEntry(CAMERA_2D, 900.0f, 1, _disp_escape_wall_message, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_escape_wall_message, NULL);
     return EVT_RETURN_BLOCK;
 }
 

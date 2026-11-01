@@ -177,10 +177,10 @@ USER_FUNC(main_deka) {
     main_star();
     main_enemy();
     yuka_main();
-    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 0, yuka_disp, NULL);
+    dispEntry(CAMERA_2D, 901.0f, DISP_MODE_ALPHA_TEST, disp_2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, disp_3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, disp_3D_alpha, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, yuka_disp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -236,7 +236,7 @@ static void yuka_init(void) {
             m->v[r][i] = r;
         }
     }
-    dispEntry(CAMERA_SHADOW, 0.0f, 0, yuka_capture, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, yuka_capture, NULL);
 }
 
 /**

@@ -1498,30 +1498,30 @@ void BattleCommandDisplay(BattleWork* wp) {
     if (cmd != NULL) {
         SelectedItemCoordinateColorUpDate();
 #if VERSION <= VERSION_DEMO_US
-        dispEntry(CAMERA_2D, 501.0f, 0, BattleDrawEnemyHP, wp);
+        dispEntry(CAMERA_2D, 501.0f, DISP_MODE_OPAQUE, BattleDrawEnemyHP, wp);
 #else
-        dispEntry(CAMERA_2D, 902.0f, 0, BattleDrawEnemyHP, wp);
+        dispEntry(CAMERA_2D, 902.0f, DISP_MODE_OPAQUE, BattleDrawEnemyHP, wp);
 #endif
         if (cmd->flags & CMD_MENU_ACT) {
-            dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_ActMenuDisp, wp);
+            dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, BattleCommandDisplay_ActMenuDisp, wp);
         }
         if (cmd->flags & CMD_MENU_WEAPON_SELECT) {
-            dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_WeaponSelectMenuDisp, wp);
+            dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, BattleCommandDisplay_WeaponSelectMenuDisp, wp);
         }
         if (cmd->flags & CMD_MENU_OPERATION) {
-            dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_OperationMenuDisp, wp);
+            dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, BattleCommandDisplay_OperationMenuDisp, wp);
         }
         if (cmd->flags & CMD_MENU_CHANGE_PARTY) {
-            dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_ChangePartySelectMenuDisp, wp);
+            dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, BattleCommandDisplay_ChangePartySelectMenuDisp, wp);
         }
         if (cmd->flags & CMD_MENU_MULTI_ITEM) {
-            dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_MultiItemMenuDisp, wp);
+            dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, BattleCommandDisplay_MultiItemMenuDisp, wp);
         }
         if (cmd->flags & CMD_MENU_TARGET_SELECT) {
-            dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_TargetSelectMenuDisp, wp);
+            dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, BattleCommandDisplay_TargetSelectMenuDisp, wp);
         }
         if (cmd->flags & CMD_MENU_PROTECT_PARTNER) {
-            dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_ProtectPartnerSelectMenuDisp, wp);
+            dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, BattleCommandDisplay_ProtectPartnerSelectMenuDisp, wp);
         }
     }
 }
@@ -1963,7 +1963,7 @@ check:
             cmd->state = 6;
         }
     }
-    dispEntry(CAMERA_2D, 900.0f, 0, BattleCommandDisplay_WeaponMultiItemCancelCheckDisp, wp);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_OPAQUE, BattleCommandDisplay_WeaponMultiItemCancelCheckDisp, wp);
     return done;
 }
 

@@ -159,7 +159,7 @@ void effPokopiThunderMain(EffectEntry* effect) {
     } else if (frame >= 11) {
         work->alpha = (s32)inline_fn(work->alpha, 0.5f);
     }
-    dispEntry(work->cameraId, dispCalcZ(&position), 2, (DispCallback)effPokopiThunderDisp, effect);
+    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPokopiThunderDisp, effect);
 }
 
 /** Returns a->end.y - b->start.y, the vertical span of the bolt. */

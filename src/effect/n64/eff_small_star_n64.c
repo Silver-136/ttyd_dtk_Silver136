@@ -246,7 +246,7 @@ void effSmallStarMain(EffectEntry* effect) {
         w->position.z += w->velocity.z;
         w->rotation += w->rotVel;
     }
-    dispEntry(((EffSmallStarN64Work*)effect->userdata)->camera, dispCalcZ(&position), 2, (DispCallback)effSmallStarDisp, effect);
+    dispEntry(((EffSmallStarN64Work*)effect->userdata)->camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSmallStarDisp, effect);
 }
 
 #pragma opt_propagation reset

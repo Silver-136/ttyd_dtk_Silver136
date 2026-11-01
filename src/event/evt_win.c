@@ -1167,7 +1167,7 @@ USER_FUNC(evt_unitwin_main_func) {
     } else {
         wp->flags &= ~UNITWIN_FLAG_SELECTED;
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, evt_unitwin_disp_func, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_unitwin_disp_func, wp);
     return EVT_RETURN_BLOCK;
 }
 

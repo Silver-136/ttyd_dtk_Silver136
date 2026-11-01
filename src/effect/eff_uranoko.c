@@ -74,7 +74,7 @@ void effUranokoMain(EffectEntry* effect) {
     }
     work->frame++;
     work->scale += (1.0f - work->scale) / 8.0f;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effUranokoDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effUranokoDisp, effect);
 }
 
 /** Draws the aura pose camera-facing, with the fade alpha as an event colour. */

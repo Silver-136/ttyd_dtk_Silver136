@@ -174,7 +174,7 @@ void effRubbleMain(EffectEntry* effect) {
     if (lifetime < 10) {
         work->alpha *= 0.8f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRubbleDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRubbleDisp, effect);
 }
 
 /**

@@ -550,16 +550,16 @@ next:
                 if (!(part->attributes & kMainPart) || !(unit->attributeFlags & kVeiled)) {
                     if (part->dispColor.a < 0xFF || animPoseTestXLU(part->poseId)) {
                         if (!(part->animFlags & PART_ANIM_NO_DISP)) {
-                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), 2, (DispCallback)btlUnitPartsDisp, part);
+                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_XLU, (DispCallback)btlUnitPartsDisp, part);
                         }
                     } else {
                         if (!(part->animFlags & PART_ANIM_NO_DISP)) {
-                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), 1, (DispCallback)btlUnitPartsDisp, part);
+                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_ALPHA_TEST, (DispCallback)btlUnitPartsDisp, part);
                         }
                     }
                 }
                 if (part->attributes & kMotionBlur) {
-                    dispEntry(CAMERA_3D, wz, 2, (DispCallback)btlUnitPartsBlurDisp, part);
+                    dispEntry(CAMERA_3D, wz, DISP_MODE_XLU, (DispCallback)btlUnitPartsBlurDisp, part);
                 }
             }
             if (!(unit->attributeFlags & kUnitNoShadow) && !(part->attributes & kNoShadow)) {
@@ -607,12 +607,12 @@ next:
         }
         if (unit->heldItem) {
             if ((unit->flags & BATTLE_UNIT_FLAG_STOLEN_ITEM) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
-                dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitStolenItemDisp, unit);
+                dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitStolenItemDisp, unit);
             } else if ((!(unit->flags & BATTLE_UNIT_FLAG_ACTING) || (unit->flags & BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING)) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
-                dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp, unit);
+                dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitItemDisp, unit);
             }
         } else if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) {
-            dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp2, unit);
+            dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitItemDisp2, unit);
         }
     }
     BattleStockExpDisp();
@@ -1386,7 +1386,7 @@ void BattleStockExpDisp(void) {
         }
     }
     if (wp->dispFlags & BATTLE_DISP_FLAG_STAR_POINTS) {
-        dispEntry(CAMERA_2D, 901.0f, 1, _btlStockExpDisp, NULL);
+        dispEntry(CAMERA_2D, 901.0f, DISP_MODE_ALPHA_TEST, _btlStockExpDisp, NULL);
     }
 }
 

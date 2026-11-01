@@ -159,7 +159,7 @@ void effMajinaiMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMajinaiDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMajinaiDisp, effect);
 }
 
 /** Draws the MOBJ_EFF_majinai animation pose at the effect position. */

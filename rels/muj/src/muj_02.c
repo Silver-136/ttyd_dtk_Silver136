@@ -750,6 +750,6 @@ void printCount(CameraId camera, void* param) {
  * killed).
  */
 USER_FUNC(countDisp) {
-    dispEntry(CAMERA_2D, 399.0f, 0, printCount, NULL);
+    dispEntry(CAMERA_2D, 399.0f, DISP_MODE_OPAQUE, printCount, NULL);
     return EVT_RETURN_BLOCK;
 }

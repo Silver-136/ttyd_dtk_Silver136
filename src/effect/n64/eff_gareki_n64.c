@@ -195,7 +195,7 @@ void effGarekiMain(EffectEntry* effect) {
             work->rotZ += 20.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effGarekiDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effGarekiDisp, effect);
 }
 
 /**

@@ -2231,7 +2231,7 @@ void msgWindow_Main(WindowEntry* window) {
         }
         break;
     }
-    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, msgWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, DISP_MODE_OPAQUE, msgWindow_Disp, window);
 }
 
 #pragma opt_common_subs reset
@@ -2297,7 +2297,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
         }
         break;
     }
-    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, msgWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, DISP_MODE_OPAQUE, msgWindow_Disp, window);
 }
 
 /**
@@ -2494,7 +2494,7 @@ void selectWindow_Main(WindowEntry* window) {
     case 4:
         return;
     }
-    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, selectWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, DISP_MODE_OPAQUE, selectWindow_Disp, window);
 }
 
 /**

@@ -178,7 +178,7 @@ void effOpukuWgunMain(EffectEntry* effect) {
             work->alphas[i] = (u8)(255.0f - 255.0f * t);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuWgunDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuWgunDisp, effect);
 }
 
 /**

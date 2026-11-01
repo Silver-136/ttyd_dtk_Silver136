@@ -89,7 +89,7 @@ void effLasMonMain(EffectEntry* effect) {
         case 1:
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effLasMonDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effLasMonDisp, effect);
 }
 
 /** Draws the pose at the effect position with the current alpha. */

@@ -618,7 +618,7 @@ void seq_e3Main(SequenceWork* seq) {
     wp->curX += (wp->dstX - wp->curX) / 4;
     wp->curY += (wp->dstY - wp->curY) / 4;
 #endif
-    dispEntry(CAMERA_3D, 0.0f, 0, e3Disp, seq);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, e3Disp, seq);
 }
 
 #if VERSION == VERSION_DEMO_US

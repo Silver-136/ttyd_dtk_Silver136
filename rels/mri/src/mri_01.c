@@ -2183,13 +2183,13 @@ void bossrobot_batu(CameraId camera, void* param) {
     animPoseSetMaterialFlagOn(batu->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(batu->poseId, (GXColor){0xFF, 0xFF, 0xFF, *alpha});
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
             animPoseDrawMtx(batu->poseId, mtx, 1, 0.0f, 2.0f);
             break;
-        case 1:
+        case DISP_MODE_ALPHA_TEST:
             animPoseDrawMtx(batu->poseId, mtx, 2, 0.0f, 2.0f);
             break;
-        case 2:
+        case DISP_MODE_XLU:
             animPoseDrawMtx(batu->poseId, mtx, 3, 0.0f, 2.0f);
             break;
     }
@@ -2227,9 +2227,9 @@ USER_FUNC(bossrobot) {
     maru->position = (Vec){mtxs[idx][0][3], mtxs[idx][1][3], mtxs[idx][2][3]};
     pos = (Vec){0.0f, 0.0f, 0.0f};
     *bp = alpha;
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), 0, bossrobot_batu, bp);
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), 1, bossrobot_batu, bp);
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, bossrobot_batu, bp);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_OPAQUE, bossrobot_batu, bp);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, bossrobot_batu, bp);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, bossrobot_batu, bp);
     return EVT_RETURN_BLOCK;
 }
 

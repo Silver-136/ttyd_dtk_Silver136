@@ -655,7 +655,7 @@ void zakogun_ext_main(void) {
             zakogun_ext_main3();
             break;
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, zakogun_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, zakogun_ext_disp, NULL);
 }
 
 /** Draw callback of the horde: loads render mode, vertices, textures and TEV then draws all the extended poses. */

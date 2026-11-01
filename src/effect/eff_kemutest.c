@@ -377,7 +377,7 @@ static void effKemuTestMain(EffectEntry* effect) {
     if (done >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(camera, dispCalcZ(&pos), 2, effKemuTestDisp, effect);
+        dispEntry(camera, dispCalcZ(&pos), DISP_MODE_XLU, effKemuTestDisp, effect);
     }
 }
 

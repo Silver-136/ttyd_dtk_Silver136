@@ -507,21 +507,21 @@ void effRecoveryMain(EffectEntry* effect) {
         calc.x = work->position.x;
         calc.y = work->position.y;
         calc.z = work->position.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&calc), 1, (DispCallback)effRecoveryDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_ALPHA_TEST, (DispCallback)effRecoveryDisp, effect);
     }
     if (type <= 1u || type == 7 || type == 8) {
         Vec calc = { 0.0f, 0.0f, 0.0f };
         calc.x = work->position.x;
         calc.y = work->position.y;
         calc.z = work->position.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&calc), 2, (DispCallback)effRecoveryDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, (DispCallback)effRecoveryDisp2, effect);
     }
     if (type == 4 || type == 5) {
         Vec calc = { 0.0f, 0.0f, 0.0f };
         calc.x = work->position.x;
         calc.y = work->position.y;
         calc.z = work->position.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&calc), 2, (DispCallback)effRecoveryDisp3, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, (DispCallback)effRecoveryDisp3, effect);
     }
 }
 
@@ -576,7 +576,7 @@ void effRecoveryMain2(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&calc), 2, (DispCallback)effRecoveryDisp4, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, (DispCallback)effRecoveryDisp4, effect);
 }
 
 /** Draws the rising icons as textured quads. */

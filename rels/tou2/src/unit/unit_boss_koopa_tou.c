@@ -1065,7 +1065,7 @@ static USER_FUNC(_icon_jump_icon) {
         event->userdata[2] = 1;
         wk->pos = wk->end;
     }
-    dispEntry(CAMERA_3D, 900.0f, 1, _disp_icon, event);
+    dispEntry(CAMERA_3D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_icon, event);
     return EVT_RETURN_BLOCK;
 }
 

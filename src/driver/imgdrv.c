@@ -543,22 +543,22 @@ void imgMain(void) {
                 }
                 if (shadow != 3) {
 #if VERSION <= VERSION_DEMO_US
-                    dispEntry(entry->camId, 0.0f, 1, imgDisp, entry);
+                    dispEntry(entry->camId, 0.0f, DISP_MODE_ALPHA_TEST, imgDisp, entry);
 #else
-                    dispEntry(entry->camId, entry->order, 1, imgDisp, entry);
+                    dispEntry(entry->camId, entry->order, DISP_MODE_ALPHA_TEST, imgDisp, entry);
 #endif
                     switch (entry->shadowId) {
                         case 0:
                             animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_DEPTH_SHADOW);
                             break;
                         case 1:
-                            dispEntry(CAMERA_SHADOW, 0.0f, 1, imgShadowDisp, entry);
-                            dispEntry(CAMERA_3D_IMAGE, 0.0f, 5, imgDisp_ProjPlane, entry);
+                            dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_ALPHA_TEST, imgShadowDisp, entry);
+                            dispEntry(CAMERA_3D_IMAGE, 0.0f, DISP_MODE_XLU_BEFORE_OPAQUE, imgDisp_ProjPlane, entry);
                             break;
                         case 2:
                             animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_DEPTH_SHADOW);
-                            dispEntry(CAMERA_SHADOW, 0.0f, 6, imgShadowDisp, entry);
-                            dispEntry(CAMERA_3D_IMAGE, 0.0f, 5, imgDisp_ProjPlane, entry);
+                            dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_CUSTOM_FIRST, imgShadowDisp, entry);
+                            dispEntry(CAMERA_3D_IMAGE, 0.0f, DISP_MODE_XLU_BEFORE_OPAQUE, imgDisp_ProjPlane, entry);
                             break;
                     }
                 }
@@ -567,7 +567,7 @@ void imgMain(void) {
     }
 
     for (i = 0; i < CAMERA_MAX; i++) {
-        dispEntry(i, 0.0f, 7, imgCapture, NULL);
+        dispEntry(i, 0.0f, DISP_MODE_CUSTOM_LAST, imgCapture, NULL);
     }
 }
 

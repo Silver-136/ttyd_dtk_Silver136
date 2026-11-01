@@ -161,7 +161,7 @@ void effStarPowerMain(EffectEntry* effect) {
         work->prevRotZ = work->rotZ;
         work->prevScale = work->scale;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effStarPowerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStarPowerDisp, effect);
 }
 
 /**

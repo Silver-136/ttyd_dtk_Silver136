@@ -189,7 +189,7 @@ void effKemuri4Main(EffectEntry* effect) {
     if (anyActive == 0) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 1, (DispCallback)effKemuri4Disp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effKemuri4Disp, effect);
     }
 }
 

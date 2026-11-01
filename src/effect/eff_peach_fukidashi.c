@@ -88,7 +88,7 @@ void effPeachFukidashiMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)effPeachFukidashiDisp, effect);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)effPeachFukidashiDisp, effect);
 }
 
 /** Draws the speech bubble next to the speaker's head, rotated around the camera view axis. */

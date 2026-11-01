@@ -292,7 +292,7 @@ static USER_FUNC(piders_draw_yarn) {
     BtlUnit_GetHomePos(unit, &yarn->x0, &yarn->y0, &yarn->z0);
     yarn->y0 = 400.0f;
     yarn->alpha = alpha;
-    dispEntry(CAMERA_3D, 0.0f, 2, piders_draw_yarn_sub, yarn);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, piders_draw_yarn_sub, yarn);
     return EVT_RETURN_DONE;
 }
 

@@ -782,18 +782,18 @@ void effFallMain(EffectEntry* effect) {
     }
     switch (type) {
         case 3:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), 2, (DispCallback)effFallDispWater, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDispWater, effect);
             break;
         case 4:
         case 5:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), 0, (DispCallback)effFallDisp, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_OPAQUE, (DispCallback)effFallDisp, effect);
             break;
         case 7:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), 2, (DispCallback)effFallDispInseki, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDispInseki, effect);
             break;
         case 6:
         default:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), 2, (DispCallback)effFallDisp, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDisp, effect);
             break;
     }
 }

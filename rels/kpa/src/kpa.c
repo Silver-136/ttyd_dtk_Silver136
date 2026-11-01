@@ -744,7 +744,7 @@ void kpa_status_disp(CameraId camera, void* param) {
 
 /** Script helper: queues kpa_status_disp for this frame on the 2D camera. */
 USER_FUNC(kpa_status_main) {
-    dispEntry(CAMERA_2D, 1000.0f, 0, kpa_status_disp, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, kpa_status_disp, NULL);
     return EVT_RETURN_DONE;
 }
 
@@ -836,7 +836,7 @@ EVT_BEGIN(kpa_stage_clear)
 EVT_END()
 
 USER_FUNC(kpa_stageclear_disp_entry) {
-    dispEntry(CAMERA_2D, 1000.0f, 0, kpa_stageclear_disp, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, kpa_stageclear_disp, NULL);
     return EVT_RETURN_DONE;
 }
 

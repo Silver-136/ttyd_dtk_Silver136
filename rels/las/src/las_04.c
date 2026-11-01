@@ -749,7 +749,7 @@ USER_FUNC(firebar_disp_evt) {
             shadowEntryMode(2, ball->pos.x, ball->pos.y, ball->pos.z, 17.0f * wp->scale);
             shadowSetVolumeDecay(a, 0.2f * a, 0.4f * a);
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&wp->pos), 1, firebar_disp, wp);
+        dispEntry(CAMERA_3D, dispCalcZ(&wp->pos), DISP_MODE_ALPHA_TEST, firebar_disp, wp);
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;

@@ -333,7 +333,7 @@ void nameEntMain(void) {
             break;
     }
     if (wp->loadState > 1) {
-        dispEntry(CAMERA_3D, 0.0f, 7, nameEntDisp, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_CUSTOM_LAST, nameEntDisp, NULL);
     }
 }
 

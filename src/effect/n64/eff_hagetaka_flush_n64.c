@@ -110,7 +110,7 @@ void effHagetakaFlushMain(EffectEntry* effect) {
     } else {
         work->scale = 0.3f + 0.2f * frame;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHagetakaFlushDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHagetakaFlushDisp, effect);
 }
 
 /** Draws a camera-facing 16x16 sprite from texture 0x1C, scaled by baseScale * scale. */

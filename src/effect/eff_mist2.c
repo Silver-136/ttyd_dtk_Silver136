@@ -145,7 +145,7 @@ void effMist2Main(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMist2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMist2Disp, effect);
 }
 
 /** Draws each puff as a rotated textured quad (effect texture 0x5E). */

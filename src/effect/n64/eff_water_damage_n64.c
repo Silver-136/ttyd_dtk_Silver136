@@ -247,9 +247,9 @@ void effWaterDamageMain(EffectEntry* effect) {
         }
     }
     if (variant == 0) {
-        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 8, (DispCallback)effWaterDamageDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, (DispCallback)effWaterDamageDisp, effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 8, (DispCallback)effWaterDamageDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, (DispCallback)effWaterDamageDisp2, effect);
     }
 }
 

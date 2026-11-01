@@ -3734,12 +3734,12 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         }
         animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-        dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
         break;
     case 1:
         animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-        dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
         if (!(animPoseGetLoopTimes(mobj->poseId) < 1.0f)) {
             animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
             mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
@@ -3753,7 +3753,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         f32* joint;
         animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-        dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
         // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
         joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
         item = marioGetPtr();
@@ -3886,7 +3886,7 @@ static s32 mobj_trap_floor(MapObjectEntry* mobj) {
         case 1:
             animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
             mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-            dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+            dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
             if (!(animPoseGetLoopTimes(mobj->poseId) < 1.0f)) {
                 animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
                 mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
@@ -5240,7 +5240,7 @@ USER_FUNC(kpa_disp_pole_score_main) {
     } else {
         psw->y = 230.0f;
     }
-    dispEntry(CAMERA_3D, 0.0f, 2, kpa_disp_pole_score, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, kpa_disp_pole_score, NULL);
     return EVT_RETURN_BLOCK;
 }
 

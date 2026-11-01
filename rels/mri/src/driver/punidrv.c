@@ -148,7 +148,7 @@ void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), voi
         wp->poses[i].scale = 1.0f;
     }
     PSMTXIdentity(wp->shadowMtx);
-    dispEntry(CAMERA_OFFSCREEN, 0.0f, 1, puniMakeTexture, texInfo);
+    dispEntry(CAMERA_OFFSCREEN, 0.0f, DISP_MODE_ALPHA_TEST, puniMakeTexture, texInfo);
     if (initFunc != NULL) {
         initFunc();
     }

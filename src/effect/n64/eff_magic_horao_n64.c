@@ -144,7 +144,7 @@ void effMagicHoraoMain(EffectEntry* effect) {
             work->scale -= 0.05f;
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagicHoraoDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagicHoraoDisp, effect);
 }
 
 /** Draws a wobbling 16-strip ribbon (textures 0x56/0x57) while easing in; in the hold state draws two flat textures. */

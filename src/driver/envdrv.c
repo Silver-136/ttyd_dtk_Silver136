@@ -261,10 +261,10 @@ void envDisp2(CameraId camId, void *param) {
 
 /** Once per frame: queues the environment capture and draw callbacks on the 3D camera around the scene. */
 void envMain(void) {
-    dispEntry(CAMERA_3D, 20.0f, 7, envCapture, NULL);
-    dispEntry(CAMERA_3D, 10.0f, 7, envDisp, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 7, envCapture2, NULL);
-    dispEntry(CAMERA_3D, 5000.0f, 8, envDisp2, NULL);
+    dispEntry(CAMERA_3D, 20.0f, DISP_MODE_CUSTOM_LAST, envCapture, NULL);
+    dispEntry(CAMERA_3D, 10.0f, DISP_MODE_CUSTOM_LAST, envDisp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_CUSTOM_LAST, envCapture2, NULL);
+    dispEntry(CAMERA_3D, 5000.0f, DISP_MODE_CUSTOM_MID, envDisp2, NULL);
 }
 
 /** Texture matrix slots (GX_TEXMTX0 to 9) by index, for the environment textures and depth of field. */

@@ -1629,7 +1629,7 @@ USER_FUNC(_disp_heart_entry) {
         return EVT_RETURN_DONE;
     }
     event->heart.cur++;
-    dispEntry(CAMERA_3D, 0.0f, 1, _disp_heart, event);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, _disp_heart, event);
     return event->heart.cur < event->heart.total ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 

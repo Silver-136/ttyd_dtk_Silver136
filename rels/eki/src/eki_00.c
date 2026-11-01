@@ -1356,12 +1356,12 @@ static void ext_moamoa_main(void) {
 #pragma opt_lifetimes reset
 static void ext_moamoa_dispent(void) {
     if (wp->flags & MOAMOA_WORK_FLAG_ACTIVE) {
-        dispEntry(CAMERA_3D, (0.0f), 1, ext_disp, NULL);
-        dispEntry(CAMERA_3D, (0.0f), 2, ext_shadow_disp, NULL);
+        dispEntry(CAMERA_3D, (0.0f), DISP_MODE_ALPHA_TEST, ext_disp, NULL);
+        dispEntry(CAMERA_3D, (0.0f), DISP_MODE_XLU, ext_shadow_disp, NULL);
     }
     if (wp->flags & MOAMOA_WORK_FLAG_DRAW_OFFSCREEN) {
-        dispEntry(CAMERA_OFFSCREEN2, -5000.0f, 1, ext_disp, NULL);
-        dispEntry(CAMERA_OFFSCREEN2, -5000.0f, 2, ext_shadow_disp, NULL);
+        dispEntry(CAMERA_OFFSCREEN2, -5000.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
+        dispEntry(CAMERA_OFFSCREEN2, -5000.0f, DISP_MODE_XLU, ext_shadow_disp, NULL);
     }
 }
 

@@ -324,7 +324,7 @@ void effButterflyMain(EffectEntry* effect) {
     work->position.x += work->velocity.x;
     work->position.y += work->velocity.y;
     work->position.z += work->velocity.z;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 1, (DispCallback)effButterflyDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effButterflyDisp, effect);
 }
 
 /**

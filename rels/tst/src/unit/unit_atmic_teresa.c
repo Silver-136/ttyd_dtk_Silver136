@@ -1395,7 +1395,7 @@ void teresa_ext_main(void) {
                 break;
         }
     }
-    dispEntry(4, 0.0f, 1, teresa_ext_disp, NULL);
+    dispEntry(4, 0.0f, DISP_MODE_ALPHA_TEST, teresa_ext_disp, NULL);
 }
 
 /**

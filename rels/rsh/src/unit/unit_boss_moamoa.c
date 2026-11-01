@@ -1537,7 +1537,7 @@ static void ext_moamoa_main(void) {
             }
         }
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, moamoa_draw, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, moamoa_draw, NULL);
 }
 
 /** Draw callback of the boss swarm: loads the ext driver state and draws all sprites. */

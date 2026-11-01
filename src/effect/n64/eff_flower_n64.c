@@ -146,7 +146,7 @@ void effFlowerMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFlowerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFlowerDisp, effect);
 }
 
 /** Draws the flower with texture 0x4C in two passes (the flowers_v meshes), tilted by rotX/rotY. */

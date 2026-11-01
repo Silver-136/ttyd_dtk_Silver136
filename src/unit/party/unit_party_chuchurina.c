@@ -2657,7 +2657,7 @@ USER_FUNC(mono_main) {
 
     id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    dispEntry(CAMERA_2D, 910.0f, 0, (DispCallback)mono_disp, unit);
+    dispEntry(CAMERA_2D, 910.0f, DISP_MODE_OPAQUE, (DispCallback)mono_disp, unit);
     return EVT_RETURN_BLOCK;
 }
 
@@ -2669,7 +2669,7 @@ USER_FUNC(mono_capture_event) {
     id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     BtlUnit_GetPartsPtr(unit, 1);
-    dispEntry(CAMERA_2D, 910.0f, 0, (DispCallback)mono_capture, unit);
+    dispEntry(CAMERA_2D, 910.0f, DISP_MODE_OPAQUE, (DispCallback)mono_capture, unit);
     return EVT_RETURN_DONE;
 }
 

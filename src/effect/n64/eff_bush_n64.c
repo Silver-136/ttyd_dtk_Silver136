@@ -147,7 +147,7 @@ void effBushMain(EffectEntry* effect) {
         work->position.x += work->vx;
         work->position.y += work->vy;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBushDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBushDisp, effect);
 }
 
 /** Draws each leaf as a two-sided quad tilted around Z and Y, with the leaf texture. */

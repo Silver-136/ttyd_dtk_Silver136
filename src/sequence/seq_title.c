@@ -369,8 +369,8 @@ void titleMain(SequenceWork* work) {
             break;
     }
     if (wp2->state != 12 && work->state < 14) {
-        dispEntry(CAMERA_3D, 0.0f, 0, disp1, NULL);
-        dispEntry(CAMERA_3D_EFFECTB, 0.0f, 0, disp2, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, disp1, NULL);
+        dispEntry(CAMERA_3D_EFFECTB, 0.0f, DISP_MODE_OPAQUE, disp2, NULL);
 #if VERSION > VERSION_DEMO_US
         // a button sequence on the title screen turns on debug mode (getDebugMode)
         switch (wp2->debug) {

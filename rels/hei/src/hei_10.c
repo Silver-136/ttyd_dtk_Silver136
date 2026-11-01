@@ -468,7 +468,7 @@ static inline void chb_zero(Vec* v) {
 
 /** Registers the swarm's draw callback with the 3D camera. */
 static void ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
 }
 
 /** Script helper: switches every Fuzzy of the swarm to the fleeing state. */

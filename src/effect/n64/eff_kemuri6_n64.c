@@ -135,7 +135,7 @@ void effKemuri6Main(EffectEntry* effect) {
     if (!disp) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri6Disp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri6Disp, effect);
     }
 }
 

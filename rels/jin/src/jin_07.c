@@ -394,7 +394,7 @@ static void senteresa_ext_main(void) {
 
 /** Registers the swarm's draw callback with the 3D camera. */
 static void senteresa_ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, senteresa_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, senteresa_ext_disp, NULL);
 }
 
 /** Draw callback of the Boo swarm: loads the ext-pose render setup, vertices, textures and TEV setup and draws them. */

@@ -340,10 +340,10 @@ void npcDisp(CameraId camId, void* param) {
         animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
     }
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
 #else
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
             color = entry->color;
             if (entry->statusFlags & NPC_STATUS_DARKEN) {
                 color.r /= 2;
@@ -358,10 +358,10 @@ void npcDisp(CameraId camId, void* param) {
             animPoseMain(entry->poseId);
             animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
             break;
-        case 1:
+        case DISP_MODE_ALPHA_TEST:
             animPoseDrawMtx(entry->poseId, mtx, 2, rotY, 2.0f);
             break;
-        case 2:
+        case DISP_MODE_XLU:
             animPoseDrawMtx(entry->poseId, mtx, 3, rotY, 2.0f);
             break;
     }
@@ -413,10 +413,10 @@ void npcDisp_offscreen(CameraId camId, void* param) {
 #if VERSION >= VERSION_US
     npcDimColor(entry);
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
 #else
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
             npcDimColor(entry);
 #endif
 
@@ -424,10 +424,10 @@ void npcDisp_offscreen(CameraId camId, void* param) {
             animPoseMain(entry->poseId);
             animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
             break;
-        case 1:
+        case DISP_MODE_ALPHA_TEST:
             animPoseDrawMtx(entry->poseId, mtx, 2, rotY, 2.0f);
             break;
-        case 2:
+        case DISP_MODE_XLU:
             animPoseDrawMtx(entry->poseId, mtx, 3, rotY, 2.0f);
             break;
     }
@@ -1109,11 +1109,11 @@ void npcMain(void) {
                         if (!(entry->flags & NPC_FLAG_NO_DRAW) &&
                             (!(entry->wFbatHitCheckRelated & 2) || (entry->statusFlags & NPC_STATUS_STOPPED))) {
                             if (entry->color.a != 0xFF) {
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp_xlu, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_XLU, npcDisp_xlu, entry);
                             } else {
-                                dispEntry((CameraId)entry->cameraId, prio, 0, npcDisp, entry);
-                                dispEntry((CameraId)entry->cameraId, prio, 1, npcDisp, entry);
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_OPAQUE, npcDisp, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_ALPHA_TEST, npcDisp, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_XLU, npcDisp, entry);
                             }
                             if (!(entry->flags & NPC_FLAG_VIVIAN_TYPE)) {
                                 if (!(entry->flags & NPC_FLAG_NO_SHADOW)) {
@@ -1150,23 +1150,23 @@ void npcMain(void) {
                                 }
                             }
                             if (entry->flags & NPC_FLAG_BLUR) {
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp_blur, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_XLU, npcDisp_blur, entry);
                             }
                         }
                         if (entry->offscreenId != -1) {
                             if (entry->color.a != 0xFF) {
 #if VERSION <= VERSION_DEMO_US
-                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen_xlu, entry);
+                                dispEntry((CameraId)1, prio, DISP_MODE_XLU, npcDisp_offscreen_xlu, entry);
                             } else {
-                                dispEntry((CameraId)1, prio, 0, npcDisp_offscreen, entry);
-                                dispEntry((CameraId)1, prio, 1, npcDisp_offscreen, entry);
-                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen, entry);
+                                dispEntry((CameraId)1, prio, DISP_MODE_OPAQUE, npcDisp_offscreen, entry);
+                                dispEntry((CameraId)1, prio, DISP_MODE_ALPHA_TEST, npcDisp_offscreen, entry);
+                                dispEntry((CameraId)1, prio, DISP_MODE_XLU, npcDisp_offscreen, entry);
 #else
-                                dispEntry(CAMERA_OFFSCREEN2, prio, 2, npcDisp_offscreen_xlu, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, DISP_MODE_XLU, npcDisp_offscreen_xlu, entry);
                             } else {
-                                dispEntry(CAMERA_OFFSCREEN2, prio, 0, npcDisp_offscreen, entry);
-                                dispEntry(CAMERA_OFFSCREEN2, prio, 1, npcDisp_offscreen, entry);
-                                dispEntry(CAMERA_OFFSCREEN2, prio, 2, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, DISP_MODE_OPAQUE, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, DISP_MODE_ALPHA_TEST, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, DISP_MODE_XLU, npcDisp_offscreen, entry);
 #endif
                             }
                         }
@@ -1214,12 +1214,12 @@ void npcMain(void) {
                     }
                     firstStrike->y = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
                     break;
                 case 1:
                     (firstStrike->timer)++;
 #else
-                    dispEntry(CAMERA_FADE, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
                     break;
                 case 1:
                     firstStrike->timer++;
@@ -1231,9 +1231,9 @@ void npcMain(void) {
                     firstStrike->x = 0.0f;
                     firstStrike->y = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
 #else
-                    dispEntry(CAMERA_FADE, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
 #endif
                     break;
             }

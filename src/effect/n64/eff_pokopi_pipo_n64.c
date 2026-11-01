@@ -153,7 +153,7 @@ void effPokopiPipoMain(EffectEntry* effect) {
         work->position.y = 14.285715f;
         work->angleVel = -20.0f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPokopiPipoDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPokopiPipoDisp, effect);
 }
 
 /** Draws the blob as a camera-facing, spinning quad (texture 0x95 for type 0, otherwise 0x96). */

@@ -1605,7 +1605,7 @@ USER_FUNC(evt_flower) {
                 break;
         }
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, flower_disp, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, flower_disp, wp);
     return EVT_RETURN_DONE;
 }
 
@@ -1640,7 +1640,7 @@ USER_FUNC(evt_flower_end_main) {
                 break;
         }
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, flower_disp, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, flower_disp, wp);
     return EVT_RETURN_DONE;
 }
 

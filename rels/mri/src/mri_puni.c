@@ -5804,7 +5804,7 @@ void puni_puni_dispent(void) {
     Vec v;
     Vec tmp;
 
-    dispEntry(CAMERA_3D, 0.0f, 1, puni_puni_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, puni_puni_disp, NULL);
     pose = puniGetPosePtr();
     for (i = 0; i < 210; i++) {
         {
@@ -5815,10 +5815,10 @@ void puni_puni_dispent(void) {
         tmp.y = (*pose->mtx)[1][3];
         tmp.z = (*pose->mtx)[2][3];
         v = tmp;
-        dispEntry(CAMERA_3D, dispCalcZ(&v), 2, puni_puni_shadow_disp, pose);
+        dispEntry(CAMERA_3D, dispCalcZ(&v), DISP_MODE_XLU, puni_puni_shadow_disp, pose);
         pose++;
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, evt_icon_disp_func, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, evt_icon_disp_func, NULL);
 }
 
 /**
@@ -7643,7 +7643,7 @@ USER_FUNC(puni_disp_info_sub) {
     }
     packed = (count << 16) | total;
     if (Punigp->showPuniCounter && total >= 10) {
-        dispEntry(CAMERA_2D, 1000.0f, 0, puniCountDisp, (void*)packed);
+        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, puniCountDisp, (void*)packed);
     }
     return EVT_RETURN_DONE;
 }

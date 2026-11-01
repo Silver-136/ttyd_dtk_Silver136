@@ -336,9 +336,9 @@ void effFukidashiMain(EffectEntry* effect) {
         calc_pos(work, 1);
     }
     if (work->type == 4) {
-        dispEntry(work->camera, dispCalcZ(&position), 2, (DispCallback)effFukidashiDisp, effect);
+        dispEntry(work->camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFukidashiDisp, effect);
     } else {
-        dispEntry(work->camera, dispCalcZ(&position), 8, (DispCallback)effFukidashiDisp, effect);
+        dispEntry(work->camera, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effFukidashiDisp, effect);
     }
 }
 

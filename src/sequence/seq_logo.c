@@ -377,7 +377,7 @@ void seq_logoMain(SequenceWork* work) {
                         VIFlush();
                     }
                     VISetBlack(TRUE);
-                    dispEntry(CAMERA_BACKGROUND, 0.0f, 0, dummy_draw, NULL);
+                    dispEntry(CAMERA_BACKGROUND, 0.0f, DISP_MODE_OPAQUE, dummy_draw, NULL);
                     work->state++;
                 }
             }
@@ -467,14 +467,14 @@ void seq_logoMain(SequenceWork* work) {
 
 #if VERSION >= VERSION_US
     if (work->state >= 2 && work->state < 4) {
-        dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, progDisp, NULL);
     }
     if (work->state >= 4 && work->state < 18) {
-        dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, work);
+        dispEntry(CAMERA_2D, 1.0f, DISP_MODE_OPAQUE, logoDisp, work);
 #else
     if (work->state < 10) {
-        dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, NULL);
-        dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
+        dispEntry(CAMERA_2D, 1.0f, DISP_MODE_OPAQUE, logoDisp, NULL);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, progDisp, NULL);
 #endif
     }
 }

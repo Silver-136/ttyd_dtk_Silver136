@@ -880,7 +880,7 @@ USER_FUNC(mapdraw) {
         wp->alpha = 255;
         evtSetValue(event, GF(0), 1);
     }
-    dispEntry(CAMERA_3D, 1000.0f, 7, draw, wp);
+    dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_CUSTOM_LAST, draw, wp);
     return EVT_RETURN_BLOCK;
 }
 

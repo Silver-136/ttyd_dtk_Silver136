@@ -849,7 +849,7 @@ void camLetterBox(void) {
             camera->letterBoxAlpha = 0;
         }
     }
-    dispEntry(camera->letterBoxCamId, 0.0f, 3, &camLetterBoxDraw, NULL);
+    dispEntry(camera->letterBoxCamId, 0.0f, DISP_MODE_OPAQUE_NO_Z, &camLetterBoxDraw, NULL);
 }
 
 /** A zero vector; unused leftover helper. */

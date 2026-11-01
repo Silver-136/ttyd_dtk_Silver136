@@ -612,7 +612,7 @@ void effUltraHammerMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, effUltraHammerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effUltraHammerDisp, effect);
 }
 
 /**

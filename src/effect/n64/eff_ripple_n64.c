@@ -147,7 +147,7 @@ void effRippleMain(EffectEntry* effect) {
         work->offset -= 32;
     }
     work->scale += 0.1f;
-    dispEntry(work->cameraId, dispCalcZ(&position), 2, (DispCallback)effRippleDisp, effect);
+    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRippleDisp, effect);
 }
 
 /**

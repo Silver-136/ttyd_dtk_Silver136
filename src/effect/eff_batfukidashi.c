@@ -95,7 +95,7 @@ void effCoinFukidashiMain(EffectEntry* effect) {
     if (work->frame >= 61) {
         work->frame = 0;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effCoinFukidashiDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effCoinFukidashiDisp, effect);
 }
 
 /** Draws the camera-facing bubble sprite (texture 0x25) and then the number printed inside it. */

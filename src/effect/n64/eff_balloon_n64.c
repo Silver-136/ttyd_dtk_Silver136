@@ -148,7 +148,7 @@ void effBalloonMain(EffectEntry* effect) {
     } else {
         work->offsetY = 1.2f * scale;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBalloonDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBalloonDisp, effect);
 }
 
 /**

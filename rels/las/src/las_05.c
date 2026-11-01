@@ -1142,8 +1142,8 @@ static void senkaron_ext_main(void) {
 
 /** Queues the shadow draw callback of the bone swarm every frame. */
 static void senkaron_ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, senkaron_ext_disp, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 2, senkaron_ext_shadow_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, senkaron_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, senkaron_ext_shadow_disp, NULL);
 }
 
 /** Draw callback of the bone swarm: loads the ext vertex and TEV setup and draws every bone pose. */

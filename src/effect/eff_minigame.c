@@ -445,7 +445,7 @@ void effMiniGameMain(EffectEntry* effect) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_2D, dispCalcZ(&pos), 2, (DispCallback)effMiniGameDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effMiniGameDisp, effect);
     }
 }
 

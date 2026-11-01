@@ -54,13 +54,13 @@ s32 BattleAcrobatMain(BattleWork* work) {
     }
     if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
 #if VERSION <= VERSION_DEMO_US
-        dispEntry(CAMERA_3D, 900.0f, 1, _accrobat_timing_icon_disp, unit);
+        dispEntry(CAMERA_3D, 900.0f, DISP_MODE_ALPHA_TEST, _accrobat_timing_icon_disp, unit);
 #else
         Vec pos = { 0 };
         pos.x = unit->position.x;
         pos.y = unit->position.y;
         pos.z = 15.0f + unit->position.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), 1, _accrobat_timing_icon_disp, unit);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, _accrobat_timing_icon_disp, unit);
 #endif
     }
     if (unit->badgesEquipped.AutoCommand && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {

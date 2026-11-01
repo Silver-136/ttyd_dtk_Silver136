@@ -115,7 +115,7 @@ void effIrekaeruMain(EffectEntry* effect) {
             work->alpha = 0;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effIrekaeruDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effIrekaeruDisp, effect);
 }
 
 /** Draws the EFF_Irekae pose billboarded to the camera with the current alpha. */

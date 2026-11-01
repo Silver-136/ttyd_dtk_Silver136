@@ -834,7 +834,7 @@ USER_FUNC(irai_main_func) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
             return EVT_RETURN_DONE;
     }
-    dispEntry(CAMERA_2D, 300.0f, 0, irai_window_disp, wp);
+    dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, irai_window_disp, wp);
     return EVT_RETURN_BLOCK;
 }
 

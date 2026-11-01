@@ -2879,8 +2879,8 @@ EVT_END()
 
 
 void kpaSen_ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, kpaSen_ext_disp, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 2, kpaSen_ext_shadow_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kpaSen_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, kpaSen_ext_shadow_disp, NULL);
 }
 
 /** Script helper: resets the first 100 crowd sprites (the troopers) to state 0 so they gather again. */

@@ -2609,10 +2609,10 @@ USER_FUNC(_gundan_yoshi_run_effect) {
                 return EVT_RETURN_DONE;
         }
 #if VERSION <= VERSION_DEMO_US
-        dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)_btlYoshiDisp, w);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)_btlYoshiDisp, w);
 #else
         for (i = 0; i < 256; i++) {
-            dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(2, 1), (DispCallback)_btlYoshiDisp, &w->parts[i]);
+            dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(DISP_MODE_XLU, DISP_MODE_ALPHA_TEST), (DispCallback)_btlYoshiDisp, &w->parts[i]);
         }
 #endif
     } while (0);

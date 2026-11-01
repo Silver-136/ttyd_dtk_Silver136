@@ -493,13 +493,13 @@ void winMain(void) {
             switch (marioGetPtr()->characterId) {
                 case CHARACTER_MARIO:
                     if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
-                        dispEntry(CAMERA_2D, 250.0f, 0, winDisp, NULL);
+                        dispEntry(CAMERA_2D, 250.0f, DISP_MODE_OPAQUE, winDisp, NULL);
                     } else {
-                        dispEntry(CAMERA_2D, 500.0f, 0, winDisp, NULL);
+                        dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, winDisp, NULL);
                     }
                     break;
                 case CHARACTER_BOWSER:
-                    dispEntry(CAMERA_2D, 250.0f, 0, winDispKoopa, NULL);
+                    dispEntry(CAMERA_2D, 250.0f, DISP_MODE_OPAQUE, winDispKoopa, NULL);
                     break;
             }
         }

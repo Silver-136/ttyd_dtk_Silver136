@@ -243,7 +243,7 @@ static USER_FUNC(main_star) {
         e->rot.z = w->star.rot.z;
         e->scale = 1.5f * w->star.scale.x;
     }
-    dispEntry(CAMERA_3D, 0.0f, 2, bakuGameDispStar, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, bakuGameDispStar, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -1123,8 +1123,8 @@ main_end:
     if (w->poseId != -1) {
         animPoseMain(w->poseId);
     }
-    dispEntry(CAMERA_2D, 900.0f, 1, bakuGameDisp2D, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, bakuGameDisp2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, bakuGameDisp3D, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -1183,7 +1183,7 @@ USER_FUNC(bakuGameHeihoReturn) {
         }
         break;
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, bakuGameDisp3D, NULL);
     return EVT_RETURN_BLOCK;
 }
 

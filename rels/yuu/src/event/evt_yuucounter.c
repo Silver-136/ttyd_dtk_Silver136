@@ -176,7 +176,7 @@ USER_FUNC(evt_yuucounter_main_func) {
         wp->flags |= 2;
         return EVT_RETURN_DONE;
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, evt_yuucounter_disp_func, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_yuucounter_disp_func, wp);
     return EVT_RETURN_BLOCK;
 }
 

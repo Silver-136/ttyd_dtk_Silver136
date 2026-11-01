@@ -149,7 +149,7 @@ USER_FUNC(movie) {
     } else if (*wp[0] >= 300) {
         evtSetValue(event, GF(0), TRUE);
     }
-    dispEntry(CAMERA_3D, 0.0f, 3, movie_draw, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE_NO_Z, movie_draw, NULL);
     return EVT_RETURN_BLOCK;
 }
 

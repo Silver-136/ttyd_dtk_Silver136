@@ -382,15 +382,15 @@ void mobjDisp(CameraId camId, void* param) {
     }
     disp = dispGetCurWork();
     switch (disp->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
             animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
                          10.0f * entry->scale.x, 1);
             break;
-        case 1:
+        case DISP_MODE_ALPHA_TEST:
             animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
                          10.0f * entry->scale.x, 2);
             break;
-        case 2:
+        case DISP_MODE_XLU:
         default:
             animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
                          10.0f * entry->scale.x, 3);
@@ -961,19 +961,19 @@ void mobjMain(void) {
         }
         if (entry->offscreenId == -1) {
             if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
-                dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDispXLU, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDispXLU, entry);
             } else {
-                dispEntry(entry->camId, dispCalcZ(&entry->position), 0, mobjDisp, entry);
-                dispEntry(entry->camId, dispCalcZ(&entry->position), 1, mobjDisp, entry);
-                dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDisp, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_OPAQUE, mobjDisp, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, mobjDisp, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp, entry);
             }
         } else {
             if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp_OffscreenXLU, entry);
             } else {
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 0, mobjDisp_OffscreenXLU, entry);
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 1, mobjDisp_OffscreenXLU, entry);
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_OPAQUE, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp_OffscreenXLU, entry);
             }
         }
     }

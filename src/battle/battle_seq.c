@@ -809,7 +809,7 @@ void btlseqTurn(BattleWork* wp) {
                 BattleIncSeq(wp, SEQ_TURN);
                 break;
             }
-            dispEntry(CAMERA_2D, 900.0f, 1, _rule_disp, NULL);
+            dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _rule_disp, NULL);
             break;
 
         case 0x3000002:

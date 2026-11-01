@@ -199,7 +199,7 @@ void effMistMain(EffectEntry* effect) {
                 work->position.z += work->velocity.z;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMistDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMistDisp, effect);
 }
 
 /** Draws each puff as a camera-facing textured quad (effect texture 0x44) tinted by its r, g, b. */

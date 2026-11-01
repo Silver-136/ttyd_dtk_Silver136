@@ -77,7 +77,7 @@ void effScanningMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, effScanningDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effScanningDisp, effect);
 }
 
 /** Draws the EFF_Scan pose billboarded to the camera yaw. */

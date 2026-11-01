@@ -96,7 +96,7 @@ void effSleepMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSleepDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSleepDisp, effect);
 }
 
 // FAKE: same values as the plain form, written so the code generator sees the target's shapes:

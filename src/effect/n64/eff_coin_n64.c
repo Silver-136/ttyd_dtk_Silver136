@@ -114,7 +114,7 @@ void effCoinMain(EffectEntry* effect) {
             work->delay = -1;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effCoinDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effCoinDisp, effect);
 }
 
 /**

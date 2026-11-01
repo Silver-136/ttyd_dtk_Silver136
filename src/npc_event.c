@@ -2870,7 +2870,7 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
  */
 USER_FUNC(piders_draw_yawn) {
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
-    dispEntry(CAMERA_3D, 0.0f, 1, piders_draw_yarn_sub, npc);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, piders_draw_yarn_sub, npc);
     return EVT_RETURN_DONE;
 }
 

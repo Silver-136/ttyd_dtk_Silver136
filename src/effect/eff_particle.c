@@ -302,7 +302,7 @@ void effParticleMain(EffectEntry* effect) {
         }
         idx = prev->next;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effParticleDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effParticleDisp, effect);
 }
 
 /** Draws every live particle as a camera-facing textured quad (effect texture 0x61). */

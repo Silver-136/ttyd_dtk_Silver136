@@ -42,7 +42,7 @@ void BattleAcHelpMain(void) {
     // FAKE: spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object
     s32* type = &wp->acHelpDispType;
     if (wp->acHelpMsg && *type && !(wp->flags & BATTLE_FLAG_FIRST_ATTACK)) {
-        dispEntry(CAMERA_2D, 498.0f, 1, _ac_help_disp, NULL);
+        dispEntry(CAMERA_2D, 498.0f, DISP_MODE_ALPHA_TEST, _ac_help_disp, NULL);
     }
 }
 

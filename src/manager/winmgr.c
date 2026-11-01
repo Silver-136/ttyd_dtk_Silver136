@@ -374,7 +374,7 @@ void winMgrMain(void) {
                 entry->description->main(entry);
             }
             if (entry->flags & WINMGR_FLAG_VISIBLE) {
-                dispEntry((CameraId)entry->description->camId, entry->priority + 300, 0, winMgrDisp, entry);
+                dispEntry((CameraId)entry->description->camId, entry->priority + 300, DISP_MODE_OPAQUE, winMgrDisp, entry);
             }
         }
     }

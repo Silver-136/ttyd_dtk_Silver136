@@ -681,7 +681,7 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
             }
             msg->timer = 90;
         }
-        dispEntry(CAMERA_2D, 900.0f, 1, (DispCallback)_st_chg_msg_disp, 0);
+        dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, (DispCallback)_st_chg_msg_disp, 0);
         break;
     }
 #if VERSION > VERSION_DEMO_US

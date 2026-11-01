@@ -66,7 +66,7 @@ void effMarioBalloonMain(EffectEntry* effect) {
     pos.x = work->position.x;
     pos.y = work->position.y;
     pos.z = work->position.z;
-    dispEntry(work->camera, dispCalcZ(&pos), 8, (DispCallback)effMarioBalloonDisp, effect);
+    dispEntry(work->camera, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, (DispCallback)effMarioBalloonDisp, effect);
 }
 
 /** Draws the balloon icon as textured quads (effect textures 14-17) with alpha blending. */

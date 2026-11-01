@@ -1422,7 +1422,7 @@ void effHolographyMain(EffectEntry* effect) {
     if (timer < 16) {
         work->alpha = timer * 16;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHolographyDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHolographyDisp, effect);
 }
 
 /**

@@ -323,7 +323,7 @@ void effKemuri11Main(EffectEntry* effect) {
             work->texS = 128.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri11Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri11Disp, effect);
 }
 
 /**

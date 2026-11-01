@@ -125,7 +125,7 @@ void offscreenMain(void) {
             entry->currBottom = 2;
         }
     }
-    dispEntry(CAMERA_OFFSCREEN2, 0.0f, 7, offscreenDisp, NULL);
+    dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_CUSTOM_LAST, offscreenDisp, NULL);
 }
 
 /**

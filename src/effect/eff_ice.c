@@ -1020,7 +1020,7 @@ static void effIceMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 2, (DispCallback)effIceDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_XLU, (DispCallback)effIceDisp, effect);
 }
 
 /** Draws the ice block model with its animated joint transforms. */

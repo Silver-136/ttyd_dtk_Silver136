@@ -139,7 +139,7 @@ void countDownMain(void) {
         if (OSTicksToMilliseconds(wp->elapsed) >= wp->limit) {
             wp->flags |= COUNTDOWN_FLAG_TIME_UP;
         }
-        dispEntry(CAMERA_2D, 1000.0f, 0, countDownDisp, NULL);
+        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, countDownDisp, NULL);
     }
 }
 

@@ -74,7 +74,7 @@ void effTreasureMapMain(EffectEntry* effect) {
         return;
     }
     work->frame++;
-    dispEntry(work->cameraId, dispCalcZ(&position), 2, (DispCallback)effTreasureMapDisp, effect);
+    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effTreasureMapDisp, effect);
 }
 
 /** Draws the map twice: first a larger brown copy as an outline, then the normal one on top. */

@@ -4885,7 +4885,7 @@ USER_FUNC(_throw_item_icon) {
         event->userdata[2] = 1;
         wk->pos = wk->target;
     }
-    dispEntry(CAMERA_3D, 900.0f, 1, _disp_item_icon, event);
+    dispEntry(CAMERA_3D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_item_icon, event);
     return EVT_RETURN_BLOCK;
 }
 
@@ -4923,7 +4923,7 @@ USER_FUNC(_nancy_mirage) {
         return EVT_RETURN_DONE;
     }
     animPoseMain(event->userdata[1]);
-    dispEntry(CAMERA_3D, z, 2, _nancy_disp, event);
+    dispEntry(CAMERA_3D, z, DISP_MODE_XLU, _nancy_disp, event);
     return EVT_RETURN_BLOCK;
 }
 

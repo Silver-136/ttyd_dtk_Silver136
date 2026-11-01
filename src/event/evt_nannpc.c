@@ -373,11 +373,11 @@ void nannpc_ext_main() {
  */
 void nannpc_ext_dispent() {
     if (!(nanNPCWork->flags & 1)) {
-        dispEntry(CAMERA_3D, 0.0f, 1, nannpc_ext_disp, 0);
-        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_shadow_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, nannpc_ext_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, nannpc_ext_shadow_disp, 0);
     } else {
-        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_disp, 0);
-        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_shadow_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, nannpc_ext_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, nannpc_ext_shadow_disp, 0);
     }
 }
 

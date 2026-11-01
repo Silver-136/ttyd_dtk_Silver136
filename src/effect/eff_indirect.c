@@ -91,7 +91,7 @@ void effIndirectMain(EffectEntry* effect) {
 #endif
             break;
     }
-    dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), 2, (DispCallback)effIndirectDisp, effect);
+    dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effIndirectDisp, effect);
 }
 
 /** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */

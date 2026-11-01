@@ -298,9 +298,9 @@ void effRadiationMain(EffectEntry* effect) {
     }
     w2 = effect->userdata;
     if (w2->flag == 0) {
-        dispEntry(w2->camera, dispCalcZ(&position), 2, (DispCallback)effRadiationDisp, effect);
+        dispEntry(w2->camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRadiationDisp, effect);
     } else {
-        dispEntry(w2->camera, dispCalcZ(&position), 8, (DispCallback)effRadiationDisp, effect);
+        dispEntry(w2->camera, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effRadiationDisp, effect);
     }
 }
 

@@ -174,7 +174,7 @@ void effKemuri8Main(EffectEntry* effect) {
         work->position.x += work->speed * work->sinAngle;
         work->position.y += work->speed * work->cosAngle;
     }
-    dispEntry(camId, dispCalcZ(&position), 2, (DispCallback)effKemuri8Disp, effect);
+    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri8Disp, effect);
 }
 
 /**

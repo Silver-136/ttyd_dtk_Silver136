@@ -150,7 +150,7 @@ void effVaporMain(EffectEntry* effect) {
         work->vel = -1.5f;
     }
     work->anim += 1.0f;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effVaporDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effVaporDisp, effect);
 }
 
 /**

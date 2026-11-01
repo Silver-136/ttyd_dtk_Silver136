@@ -2302,7 +2302,7 @@ static void ext_fan_dispent(void) {
 void ext_fan_dispent(void) {
     pose_main();
 #endif
-    dispEntry(CAMERA_3D, 0.0f, 1, fan_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, fan_disp, NULL);
 }
 
 #pragma opt_propagation off

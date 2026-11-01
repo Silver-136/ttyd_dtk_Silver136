@@ -242,7 +242,7 @@ void statusWinMain(void) {
     wp->y = wp->openY * t + wp->closeY * inv;
     valueUpdate();
     if (!(wp->flags & STATUS_WINDOW_FLAG_DISP_OFF)) {
-        dispEntry(CAMERA_2D, 500.0f, 0, statusWinDisp, NULL);
+        dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, statusWinDisp, NULL);
     }
 }
 

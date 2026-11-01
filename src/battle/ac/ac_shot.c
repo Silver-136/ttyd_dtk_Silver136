@@ -245,9 +245,9 @@ s32 battleAcMain_Shot(BattleWork* work) {
         }
     } while (loop);
     if (ac->acState == 1000 || ac->acState == 1001) {
-        dispEntry(CAMERA_2D, 900.0f, 1, _disp_target_mark, work);
+        dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_target_mark, work);
     }
-    dispEntry(CAMERA_2D, 900.0f, 1, _disp_target_mark_afterimage, work);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_target_mark_afterimage, work);
     return 1;
 }
 

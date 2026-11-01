@@ -144,7 +144,7 @@ void effHoraoSpellMain(EffectEntry* effect) {
     if (frame < 16) {
         work->alpha = frame * 16 + 15;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHoraoSpellDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHoraoSpellDisp, effect);
 }
 
 /**

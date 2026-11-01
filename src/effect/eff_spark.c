@@ -180,9 +180,9 @@ void effSparkMain(EffectEntry* effect) {
         p->velX += b * (p->destX - p->velX);
         p->velY += b * (p->destY - p->velY);
     }
-    prio = 1;
+    prio = DISP_MODE_ALPHA_TEST;
     if (alpha != 255) {
-        prio = 2;
+        prio = DISP_MODE_XLU;
     }
     dispEntry(CAMERA_3D, dispCalcZ(&position), prio, (DispCallback)effSparkDisp, effect);
 }

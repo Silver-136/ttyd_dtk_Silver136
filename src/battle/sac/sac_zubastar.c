@@ -217,7 +217,7 @@ static USER_FUNC(main_star) {
         d->rot.z = w->star.rot.z;
         d->scale = 1.5f * w->star.scale.x;
     }
-    dispEntry(CAMERA_3D, 0.0f, 2, zubaStarDispStar, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, zubaStarDispStar, NULL);
     return 0;
 }
 
@@ -826,7 +826,7 @@ USER_FUNC(zubastar_main) {
             break;
         }
     }
-    dispEntry(CAMERA_2D, 900.0f, 1, zubastar_disp2D, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, zubastar_disp2D, NULL);
     return 0;
 }
 
@@ -844,7 +844,7 @@ USER_FUNC(zubastar_bomb) {
     s32 i;
     s32 k;
     if (isFirstCall) {
-        dispEntry(CAMERA_2D, 0.0f, 0, zubastar_capture, NULL);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, zubastar_capture, NULL);
         w->phase = 0;
         return 0;
     }
@@ -908,7 +908,7 @@ USER_FUNC(zubastar_bomb) {
             break;
         }
     }
-    dispEntry(CAMERA_2D, 0.0f, 1, zubastar_disp_bomb, NULL);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_ALPHA_TEST, zubastar_disp_bomb, NULL);
     return 0;
 }
 

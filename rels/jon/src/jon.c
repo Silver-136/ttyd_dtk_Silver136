@@ -3521,7 +3521,7 @@ USER_FUNC(evt_raster) {
     }
     work[0] += 0.2f;
     work[1] += 0.01f;
-    dispEntry(CAMERA_2D, 0.0f, 3, raster_disp, event);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE_NO_Z, raster_disp, event);
     return EVT_RETURN_BLOCK;
 }
 

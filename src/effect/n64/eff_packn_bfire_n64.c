@@ -210,7 +210,7 @@ void effPacknBfireMain(EffectEntry* effect) {
             }
             break;
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPacknBfireDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPacknBfireDisp, effect);
     }
 }
 

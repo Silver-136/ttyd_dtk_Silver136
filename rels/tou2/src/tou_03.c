@@ -4037,7 +4037,7 @@ void ext_kyaku_main(void) {
 
 /** Display callback of the crowd billboard set: queues kyaku_disp on the 3D camera. */
 void ext_kyaku_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, kyaku_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kyaku_disp, NULL);
 }
 
 /**
@@ -4084,7 +4084,7 @@ s32 screen_init(EventEntry* event, BOOL isFirstCall) {
  * so the monitor shows the live arena picture.
  */
 static s32 screen_evt(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_2D, 1000.0f, 0, screen_capture, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, screen_capture, NULL);
     return EVT_RETURN_BLOCK;
 }
 

@@ -82,7 +82,7 @@ void effBalloonHeihoMain(EffectEntry* effect) {
         work->speed = 2.0f;
     }
     work->position.y += work->speed;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBalloonHeihoDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBalloonHeihoDisp, effect);
 }
 
 /** Draws a camera-facing 32x64 sprite, split into four strips, with the colour's texture and map fog applied. */

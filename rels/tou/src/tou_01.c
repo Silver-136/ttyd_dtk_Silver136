@@ -830,7 +830,7 @@ USER_FUNC(make_shadow) {
     GXInitTexObj(&wp->obj, wp->tex->address, 128, 128, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     mapSetProjTexObj(&wp->obj, wp->tex);
-    dispEntry(CAMERA_SHADOW, 0.0f, 3, make_shadow_disp, wp);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, make_shadow_disp, wp);
     return EVT_RETURN_BLOCK;
 }
 

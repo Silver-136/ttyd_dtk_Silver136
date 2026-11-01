@@ -868,21 +868,21 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
     if (work) {
         if (work->flags & SEQEND_DISP_EXP_ICON) {
             _GetExpIcon_Main(wp);
-            dispEntry(camId, 900.0f, 1, _GetExpIcon_Disp, wp);
+            dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _GetExpIcon_Disp, wp);
         }
         if (work->flags & SEQEND_DISP_MARIO_EXP_UNUSED) {
-            dispEntry(camId, 900.0f, 1, _MarioExpDisp, wp);
+            dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _MarioExpDisp, wp);
         }
         if (work->flags & SEQEND_DISP_LVUP_SELECT) {
             Vec pos = {0.0f, 0.0f, 0.0f};
-            dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, _lvup_select_object_disp, wp);
+            dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, _lvup_select_object_disp, wp);
         }
         if (work->flags & SEQEND_DISP_LVUP_CONFIRM_UNUSED) {
-            dispEntry(camId, 900.0f, 1, _LvupParamConfirmDisp, wp);
+            dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _LvupParamConfirmDisp, wp);
         }
 #if VERSION > VERSION_DEMO_US
         if (work->flags & SEQEND_DISP_LVUP_HELP) {
-            dispEntry(camId, 900.0f, 1, _LvupParamHelpMsgDisp, wp);
+            dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _LvupParamHelpMsgDisp, wp);
         }
 #endif
     }
@@ -1491,7 +1491,7 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
  */
 // Descriptive name (not in the symbol maps).
 USER_FUNC(_display_select_one_to_upgrade_text) {
-    dispEntry(CAMERA_2D, 900.0f, 1, _draw_select_one_to_upgrade_text, _battleWorkPointer);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _draw_select_one_to_upgrade_text, _battleWorkPointer);
     return 2;
 }
 #endif

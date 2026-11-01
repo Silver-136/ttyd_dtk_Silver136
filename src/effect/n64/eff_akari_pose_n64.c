@@ -189,7 +189,7 @@ void effAkariPoseMain(EffectEntry* effect) {
         work->vy += b * (work->targetVy - work->vy);
     }
 
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effAkariPoseDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effAkariPoseDisp, effect);
 }
 
 /** Draws each started flare as a rotated, camera-facing 16x16 textured quad. */

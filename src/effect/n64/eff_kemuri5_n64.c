@@ -141,7 +141,7 @@ void effKemuri5Main(EffectEntry* effect) {
     if (anyActive == 0) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri5Disp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri5Disp, effect);
     }
 }
 

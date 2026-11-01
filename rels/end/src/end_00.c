@@ -837,7 +837,7 @@ USER_FUNC(evt_end_credit_npc_main) {
     }
 #endif
     animPoseMain(actor->poseId);
-    dispEntry(CAMERA_3D, 0.0f, 1, end_credit_npc_disp, actor);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, end_credit_npc_disp, actor);
     return 0;
 }
 
@@ -1691,7 +1691,7 @@ const char* end_moa_ext_pose = "S_1";
 /** Script helper: queues the ending picture draw callback (end_image_disp) for this frame. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000012e0, JP end .text+0x121C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_disp_entry) {
-    dispEntry(CAMERA_3D, 0.0f, 7, end_image_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_CUSTOM_LAST, end_image_disp, NULL);
     return 0;
 }
 
@@ -2264,7 +2264,7 @@ void end_ext_disp(CameraId cameraId, void* param) {
 #if VERSION > VERSION_DEMO_US
 /** Queues end_ext_disp into the 3D camera every frame. */
 void end_ext_moamoa_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, end_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, end_ext_disp, NULL);
 }
 #endif
 

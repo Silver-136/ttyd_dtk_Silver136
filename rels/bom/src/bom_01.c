@@ -537,7 +537,7 @@ s32 sight(EventEntry* event, BOOL isFirstCall) {
         return EVT_RETURN_DONE;
     }
     if (sight_wp->dir != 5) {
-        dispEntry(CAMERA_2D, 800.0f, 0, disp_sight, NULL);
+        dispEntry(CAMERA_2D, 800.0f, DISP_MODE_OPAQUE, disp_sight, NULL);
     }
     return EVT_RETURN_BLOCK;
 }
@@ -1094,7 +1094,7 @@ static void ext_dispent(void) {
     BomWork* wp = lp->address;
 
     if (!(wp->flags & 1)) {
-        dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
     }
 }
 
@@ -2576,7 +2576,7 @@ static void depthDisp(CameraId camera, void* param) {
 
 /** Script helper: queues depthDisp on the 2D camera and keeps blocking, so the blur runs every frame. */
 static s32 depth(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_2D, 1000.0f, 0, depthDisp, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, depthDisp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -2700,7 +2700,7 @@ void ext_disp_minnnanokoe(CameraId camera, void* param) {
 
 /** Queues ext_disp_minnnanokoe for the 3D camera each frame. */
 void ext_dispent_minnnanokoe(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, ext_disp_minnnanokoe, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp_minnnanokoe, NULL);
 }
 
 /**

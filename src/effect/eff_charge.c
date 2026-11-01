@@ -173,7 +173,7 @@ void effChargeMain(EffectEntry* effect) {
         work->yaw += (f32)(odd ? 5 : 2);
         work->pitch += (f32)(odd ? 2 : 5);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effChargeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effChargeDisp, effect);
 }
 
 /**

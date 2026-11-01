@@ -848,7 +848,7 @@ void BattleBreakSlot_Main(void) {
 
 /** Queues the Bingo reel drawing on the 2D camera. */
 void BattleBreakSlot_Disp(void) {
-    dispEntry(CAMERA_2D, 490.0f, 0, BattleBreakSlotDispReel, NULL);
+    dispEntry(CAMERA_2D, 490.0f, DISP_MODE_OPAQUE, BattleBreakSlotDispReel, NULL);
 }
 
 /**

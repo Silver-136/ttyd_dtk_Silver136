@@ -278,17 +278,17 @@ void effNanigaMain(EffectEntry* effect) {
     case 4:
     case 5:
     case 10:
-        dispEntry(CAMERA_2D, dispCalcZ(&pos), 1, (DispCallback)effNanigaDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, (DispCallback)effNanigaDisp, effect);
         break;
     default:
         if (state == 11 && animPoseGetLoopTimes(work->pose) < 0.8f) {
             break;
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), 1, (DispCallback)effNanigaDisp3, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, (DispCallback)effNanigaDisp3, effect);
         break;
     }
     if (work->pose != -1) {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effNanigaDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effNanigaDisp2, effect);
     }
 }
 

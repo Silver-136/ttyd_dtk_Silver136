@@ -214,7 +214,7 @@ void effShockMain(EffectEntry* effect) {
             w->c10 = 0;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effShockDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effShockDisp, effect);
 }
 
 /**

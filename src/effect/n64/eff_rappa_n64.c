@@ -132,7 +132,7 @@ void effRappaMain(EffectEntry* effect) {
             work->scaleOfs += work->speed / 10.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRappaDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRappaDisp, effect);
 }
 
 /** Builds a GXColor from four byte components. */

@@ -89,7 +89,7 @@ static void effKemuri2Main(EffectEntry* effect) {
         work->velY += work->accelY;
         work->position.y += work->velY;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri2Disp, effect);
 }
 
 /** Binds the texture for the puff type (0xC, 0xD or 0xE) and draws one centred quad (16x16 for type 0, else 24x24). */

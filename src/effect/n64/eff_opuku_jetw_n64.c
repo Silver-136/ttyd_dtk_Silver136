@@ -215,7 +215,7 @@ void effOpukuJetwMain(EffectEntry* effect) {
     if (work->frame < 8) {
         work->alpha = (work->frame << 5) + 31;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuJetwDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuJetwDisp, effect);
 }
 
 /**

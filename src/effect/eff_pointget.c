@@ -156,7 +156,7 @@ void effPointGetMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_2D, dispCalcZ(&position), 2, (DispCallback)effPointGetDisp, effect);
+    dispEntry(CAMERA_2D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPointGetDisp, effect);
 }
 
 #if VERSION <= VERSION_DEMO_US
