@@ -113,7 +113,7 @@ float dspDLSVolTab[129] = {
 }
 #endif
 #pragma force_active on
-#ifdef VERSION_G8ME01_DEMO
+#if defined(VERSION_G8ME01_DEMO) || defined(VERSION_G8MJ01_DEMO)
 __declspec(section ".data") u32 gap_05_803B8E28_data[2] = {0, 0}; // FAKE: demo padding (same object, smaller)
 #else
 __declspec(section ".data") u32 gap_05_803B8E28_data[6] = {0, 0, 0, 0, 0, 0};
