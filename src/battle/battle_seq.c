@@ -2054,11 +2054,11 @@ void btlseqMove(BattleWork* wp) {
                         if (unit && unit->movesRemaining > 0) {
 #endif
                             state = unit->moveState;
-                            if (state != 10 && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
-                                if (state != 1) {
+                            if (state != MOVE_STATE_DONE && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
+                                if (state != MOVE_STATE_POSITION_CHANGE) {
                                     break;
                                 }
-                                unit->moveState = 0;
+                                unit->moveState = MOVE_STATE_NORMAL;
                             }
                         }
                     }
@@ -2071,8 +2071,8 @@ void btlseqMove(BattleWork* wp) {
                     id = wp->movePriorityQueue[i];
                     if (id != -1) {
                         unit = BattleGetUnitPtr(wp, id);
-                        if (unit && unit->moveState == 1) {
-                            unit->moveState = 0;
+                        if (unit && unit->moveState == MOVE_STATE_POSITION_CHANGE) {
+                            unit->moveState = MOVE_STATE_NORMAL;
                         }
                     }
                 }
@@ -2174,9 +2174,9 @@ BOOL BattlePhaseEndCheck(void) {
         if (wp->movePriorityQueue[i] != -1) {
             unit = BattleGetUnitPtr(wp, wp->movePriorityQueue[i]);
 #if VERSION <= VERSION_DEMO_US
-            if (unit && unit->moveState != 10 && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+            if (unit && unit->moveState != MOVE_STATE_DONE && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
 #else
-            if (unit && unit->moveState != 10 && unit->movesRemaining > 0 &&
+            if (unit && unit->moveState != MOVE_STATE_DONE && unit->movesRemaining > 0 &&
                 !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
 #endif
                 break;
@@ -2352,21 +2352,21 @@ void btlseqAct(BattleWork* wp) {
                 }
                 unit->reserved_258 = 0;
                 switch (unit->moveState) {
-                    case 5:
-                        unit->moveState = 6;
+                    case MOVE_STATE_TRIPLE_DIP_1:
+                        unit->moveState = MOVE_STATE_TRIPLE_DIP_2;
                         break;
-                    case 6:
-                        unit->moveState = 7;
+                    case MOVE_STATE_TRIPLE_DIP_2:
+                        unit->moveState = MOVE_STATE_TRIPLE_DIP_3;
                         break;
-                    case 8:
-                        unit->moveState = 9;
+                    case MOVE_STATE_DOUBLE_DIP_1:
+                        unit->moveState = MOVE_STATE_DOUBLE_DIP_2;
                         break;
-                    case 7:
-                    case 9:
-                        unit->moveState = 0;
+                    case MOVE_STATE_TRIPLE_DIP_3:
+                    case MOVE_STATE_DOUBLE_DIP_2:
+                        unit->moveState = MOVE_STATE_NORMAL;
                         break;
                 }
-                if (unit->moveState == 0) {
+                if (unit->moveState == MOVE_STATE_NORMAL) {
                     // FAKE: decrement is always TRUE; the plain form without the flag and its test changes the object
                     decrement = TRUE;
                     if (wp->flags & BATTLE_FLAG_RESET_TURN) {
@@ -2382,7 +2382,7 @@ void btlseqAct(BattleWork* wp) {
                             unit->movesRemaining = 0;
                         }
                         if (unit->movesRemaining <= 0) {
-                            unit->moveState = 10;
+                            unit->moveState = MOVE_STATE_DONE;
 #if VERSION > VERSION_DEMO_US
                             if (!(unit->tokenFlags & kHasRallyWinkStatus)) {
                                 unit->activeTurns = 0;
@@ -2398,10 +2398,10 @@ void btlseqAct(BattleWork* wp) {
                             }
                         }
                     }
-                } else if (unit->moveState == 3) {
-                    unit->moveState = 0;
-                } else if (unit->moveState == 4) {
-                    unit->moveState = 0;
+                } else if (unit->moveState == MOVE_STATE_QUICK_CHANGE) {
+                    unit->moveState = MOVE_STATE_NORMAL;
+                } else if (unit->moveState == MOVE_STATE_AUDIENCE_ATTACK) {
+                    unit->moveState = MOVE_STATE_NORMAL;
                 }
             }
             BattleConsumeReserveItem();
@@ -2519,9 +2519,9 @@ void btlseqPhaseFirstProcess(BattleWork* wp) {
         if (unit) {
             unit->moveColorLv = 0xFF;
 #if VERSION <= VERSION_DEMO_US
-            if (unit->moveState == 10) {
+            if (unit->moveState == MOVE_STATE_DONE) {
 #else
-            if (unit->moveState == 10 && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
+            if (unit->moveState == MOVE_STATE_DONE && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
 #endif
                 continue;
             }

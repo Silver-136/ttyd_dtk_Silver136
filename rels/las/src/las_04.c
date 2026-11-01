@@ -746,7 +746,7 @@ USER_FUNC(firebar_disp_evt) {
         a = 0.375f * a + 0.625f;
         ball = wp->balls;
         for (i = 0; i < wp->count; i++, ball++) {
-            shadowEntryMode(2, ball->pos.x, ball->pos.y, ball->pos.z, 17.0f * wp->scale);
+            shadowEntryMode(SHADOW_MODE_CYLINDER, ball->pos.x, ball->pos.y, ball->pos.z, 17.0f * wp->scale);
             shadowSetVolumeDecay(a, 0.2f * a, 0.4f * a);
         }
         dispEntry(CAMERA_3D, dispCalcZ(&wp->pos), DISP_MODE_ALPHA_TEST, firebar_disp, wp);

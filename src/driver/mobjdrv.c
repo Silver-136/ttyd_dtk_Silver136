@@ -939,7 +939,7 @@ void mobjMain(void) {
                 shadowId = shadowEntry(entry->position.x, entry->position.y, entry->position.z,
                                        10.0f * entry->scale.x * entry->scale2.x / 25.0f);
                 if (entry->flags & MOBJ_FLAG_HIT_HEAD) {
-                    shadowSetType(shadowId, 1);
+                    shadowSetType(shadowId, SHADOW_TYPE_CUBE);
                     shadowSetSize(shadowId, 10.0f * entry->scale.x * entry->scale2.x / 20.0f);
                 }
             }

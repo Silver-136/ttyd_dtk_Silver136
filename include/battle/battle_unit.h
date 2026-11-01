@@ -829,6 +829,21 @@ typedef struct BtlStatusCopy {
     u8 data[0x1E]; // BattleUnit status turns/strengths from sleepTurns, copied as one block
 } BtlStatusCopy;
 
+// BattleUnit.moveState: how the current action counts against the unit's moves (battle_seq.c, battle_seq_command.c).
+// Anything but NORMAL does not spend a move. Dip states step at act end (badgeWeapon_3KaiItem, badgeWeapon_2KaiItem).
+typedef enum BattleMoveState {
+    MOVE_STATE_NORMAL = 0,
+    MOVE_STATE_POSITION_CHANGE = 1,     // btldefaultevt_ChangePosition
+    MOVE_STATE_QUICK_CHANGE = 3,        // partner change with BATTLE_BADGE_QUICK_CHANGE
+    MOVE_STATE_AUDIENCE_ATTACK = 4,     // Appeal-type free act (btlataudGetAttackEventPtr)
+    MOVE_STATE_TRIPLE_DIP_1 = 5,
+    MOVE_STATE_TRIPLE_DIP_2 = 6,
+    MOVE_STATE_TRIPLE_DIP_3 = 7,
+    MOVE_STATE_DOUBLE_DIP_1 = 8,
+    MOVE_STATE_DOUBLE_DIP_2 = 9,
+    MOVE_STATE_DONE = 10,               // no moves left this turn
+} BattleMoveState;
+
 typedef struct BattleUnit {
     s32 unitId;                                  // 0x0
     BattleUnitType initialKind;                  // 0x4

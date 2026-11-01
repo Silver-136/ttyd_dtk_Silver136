@@ -37,6 +37,20 @@ typedef ShadowWork DepthShadowWork;
 
 typedef ShadowWork ProjShadowWork;
 
+// ShadowEntry.mode: which pass of shadowCharShadowDisp draws the character shadow.
+typedef enum ShadowMode {
+    SHADOW_MODE_POLYGON = 0,     // flat polygon on the ground
+    SHADOW_MODE_TEXTURE = 1,     // textured
+    SHADOW_MODE_CYLINDER = 2,    // volume (the default); shape from ShadowEntry.type
+    SHADOW_MODE_PROJECTION = 3,  // projected from the owner's model
+} ShadowMode;
+
+// ShadowEntry.type: volume shape (shadowDrawVolume).
+typedef enum ShadowType {
+    SHADOW_TYPE_CYLINDER = 0,
+    SHADOW_TYPE_CUBE = 1,
+} ShadowType;
+
 typedef struct ShadowEntry {
     u16 flags; //0x0, ShadowEntryFlags
     u8 mode; //0x2

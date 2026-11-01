@@ -1236,7 +1236,7 @@ s32 BattleCommandInput(BattleWork* work) {
             cmd->cancelled = 0;
             wp->dispFlags |= BATTLE_DISP_FLAG_COMMAND_MENU;
             BtlUnit_SetCommandAnimPose(unit);
-            if (unit->moveState >= 5 && unit->moveState <= 9) {
+            if (unit->moveState >= MOVE_STATE_TRIPLE_DIP_1 && unit->moveState <= MOVE_STATE_DOUBLE_DIP_2) {
                 BattleStageOnLightInCommand();
                 BattleStageOffLightFriendInCommand();
                 BattleStageOffLightEnemyInCommand();
@@ -1381,14 +1381,14 @@ s32 BattleCommandInput(BattleWork* work) {
                 cmd->state = 0x1d;
                 BattleCommandDisplay_TargetSelectMenuEnd(wp);
                 wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
-                if (wtype == 2 && unit->moveState == 0) {
+                if (wtype == 2 && unit->moveState == MOVE_STATE_NORMAL) {
                     switch (cmd->dipMode) {
                     case 2:
-                        unit->moveState = 8;
+                        unit->moveState = MOVE_STATE_DOUBLE_DIP_1;
                         BtlUnit_PayWeaponCost(unit, &badgeWeapon_2KaiItem);
                         break;
                     case 3:
-                        unit->moveState = 5;
+                        unit->moveState = MOVE_STATE_TRIPLE_DIP_1;
                         BtlUnit_PayWeaponCost(unit, &badgeWeapon_3KaiItem);
                         break;
                     }
@@ -2518,7 +2518,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     BattleWeapon* weapon;
 
     if (cmd->cancelled) {
-        unit->moveState = 0;
+        unit->moveState = MOVE_STATE_NORMAL;
         unit->attackEventCode = btldefaultevt_Wait;
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
         return;
@@ -2600,7 +2600,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             cmd->cursor[1].absPos = 0;
             if (wp->badgeEquippedFlags & BATTLE_BADGE_QUICK_CHANGE) {
-                unit->moveState = 3;
+                unit->moveState = MOVE_STATE_QUICK_CHANGE;
             }
             if (unit->currentKind == UNIT_MARIO) {
                 BtlActRec_AddCount(&wp->actRecord.marioPartyChanges);
@@ -2683,23 +2683,23 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         }
         break;
     case 9:
-        unit->moveState = 1;
+        unit->moveState = MOVE_STATE_POSITION_CHANGE;
         unit->attackEventCode = btldefaultevt_ChangePosition;
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS | ACT_EVENT_SHELL_FOLLOWS;
         break;
     case 11:
         switch (unit->moveState) {
-        case 6:
-            unit->moveState = 5;
+        case MOVE_STATE_TRIPLE_DIP_2:
+            unit->moveState = MOVE_STATE_TRIPLE_DIP_1;
             break;
-        case 7:
-            unit->moveState = 6;
+        case MOVE_STATE_TRIPLE_DIP_3:
+            unit->moveState = MOVE_STATE_TRIPLE_DIP_2;
             break;
-        case 9:
-            unit->moveState = 8;
+        case MOVE_STATE_DOUBLE_DIP_2:
+            unit->moveState = MOVE_STATE_DOUBLE_DIP_1;
             break;
         default:
-            unit->moveState = 4;
+            unit->moveState = MOVE_STATE_AUDIENCE_ATTACK;
             break;
         }
         unit->attackEventCode = btlataudGetAttackEventPtr(unit->unitId);
@@ -2715,17 +2715,17 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         break;
     case 12:
         switch (unit->moveState) {
-        case 6:
-            unit->moveState = 5;
+        case MOVE_STATE_TRIPLE_DIP_2:
+            unit->moveState = MOVE_STATE_TRIPLE_DIP_1;
             break;
-        case 7:
-            unit->moveState = 6;
+        case MOVE_STATE_TRIPLE_DIP_3:
+            unit->moveState = MOVE_STATE_TRIPLE_DIP_2;
             break;
-        case 9:
-            unit->moveState = 8;
+        case MOVE_STATE_DOUBLE_DIP_2:
+            unit->moveState = MOVE_STATE_DOUBLE_DIP_1;
             break;
         default:
-            unit->moveState = 4;
+            unit->moveState = MOVE_STATE_AUDIENCE_ATTACK;
             break;
         }
         unit->attackEventCode = btlataudGetMoveEventPtr(unit->unitId);
@@ -2928,8 +2928,8 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     s16 list[24];
     BattleWeapon* weapon;
 
-    if (unit->moveState == 3) {
-        unit->moveState = 0;
+    if (unit->moveState == MOVE_STATE_QUICK_CHANGE) {
+        unit->moveState = MOVE_STATE_NORMAL;
     }
     BattleAcHelpSetDispType(0);
     if (unit->alliance) {
@@ -2940,7 +2940,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     }
 #if VERSION >= VERSION_US
     if (cmd->dipMode) {
-        unit->moveState = 0;
+        unit->moveState = MOVE_STATE_NORMAL;
         cmd->dipMode = 0;
     }
 #endif

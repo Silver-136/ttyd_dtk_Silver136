@@ -252,7 +252,7 @@ void shadowInit(void) {
     cswp->base.configIdx = 1;
     cswp->base.color = (GXColor){0, 0, 0, 0x6E};
     cswp->projection = 1;
-    cswp->defaultMode = 2;
+    cswp->defaultMode = SHADOW_MODE_CYLINDER;
     cswp->defaultSizeY = 20.0f;
     cswp->defaultEnabled = 1;
     cswp->numEntries = 0;
@@ -485,7 +485,7 @@ void shadowCharShadowDisp_Collision(CameraId cameraId, void* param) {
         if (entry->flags & SHADOW_ENTRY_PLACED) {
             continue;
         }
-        if (entry->mode != 3 && (entry->flags & SHADOW_ENTRY_GROUND)) {
+        if (entry->mode != SHADOW_MODE_PROJECTION && (entry->flags & SHADOW_ENTRY_GROUND)) {
             query.targetPos = entry->pos;
             query.targetPos.y += 1.0f;
             query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
@@ -554,7 +554,7 @@ void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
         if (!entry->size) {
             continue;
         }
-        if (entry->mode != 3) {
+        if (entry->mode != SHADOW_MODE_PROJECTION) {
             continue;
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
@@ -650,7 +650,7 @@ void shadowCharShadowDisp_Polygon(CameraId cameraId, void* param) {
         if (!entry->size) {
             continue;
         }
-        if (entry->mode != 0) {
+        if (entry->mode != SHADOW_MODE_POLYGON) {
             continue;
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
@@ -729,7 +729,7 @@ void shadowCharShadowDisp_Texture(CameraId cameraId, void* param) {
         if (!entry->size) {
             continue;
         }
-        if (entry->mode != 1) {
+        if (entry->mode != SHADOW_MODE_TEXTURE) {
             continue;
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
@@ -810,13 +810,13 @@ void cylinder(ShadowEntry* entry) {
 /** Draws a shadow's volume shape: a cube for type 1, otherwise the cylinder. */
 static inline void shadowDrawVolume(ShadowEntry* entry) {
     switch (entry->type) {
-        case 1:
+        case SHADOW_TYPE_CUBE:
             GXSetArray(GX_VA_CLR0, color_tbl_cube, 4);
             GXCallDisplayList(cube_dl_top, 0x40);
             GXCallDisplayList(cube_dl_bottom, 0x20);
             GXCallDisplayList(cube_dl_side, 0x20);
             break;
-        case 0:
+        case SHADOW_TYPE_CYLINDER:
         default:
             cylinder(entry);
             break;
@@ -856,7 +856,7 @@ void cylinderShadowDraw(CameraId cameraId, void* param) {
         if (!entry->size) {
             continue;
         }
-        if (entry->mode != 2) {
+        if (entry->mode != SHADOW_MODE_CYLINDER) {
             continue;
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
@@ -918,7 +918,7 @@ s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
     entry->size = size;
     entry->sizeY = cswp->defaultSizeY;
     entry->mode = cswp->defaultMode;
-    entry->type = 0;
+    entry->type = SHADOW_TYPE_CYLINDER;
     entry->offscreenId = -1;
     entry->camId = CAMERA_3D;
     entry->volume = 1.0f;
@@ -949,7 +949,7 @@ s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size) {
     entry->size = size;
     entry->sizeY = cswp->defaultSizeY;
     entry->mode = mode;
-    entry->type = 0;
+    entry->type = SHADOW_TYPE_CYLINDER;
     entry->offscreenId = -1;
     entry->camId = CAMERA_3D;
     entry->volume = 1.0f;

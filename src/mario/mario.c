@@ -2240,7 +2240,7 @@ void marioPreDisp(void) {
         return;
     }
     if (wp->currMotionId == MARIO_MOTION_PLANE) {
-        shadowEntryMode(2, wp->position.x, wp->groundY, wp->position.z, 13.333333f);
+        shadowEntryMode(SHADOW_MODE_CYLINDER, wp->position.x, wp->groundY, wp->position.z, 13.333333f);
         return;
     }
     if (wp->characterId == CHARACTER_BOWSER) {
@@ -2269,9 +2269,9 @@ void marioPreDisp(void) {
         } else {
             sz = size;
         }
-        t = 2;
+        t = SHADOW_MODE_CYLINDER;
         if (bit) {
-            t = 0;
+            t = SHADOW_MODE_POLYGON;
         }
         shadowEntryMode(t, wp->position.x + xo, wp->position.y, wp->position.z + zo, sz);
     } else {
@@ -2282,9 +2282,9 @@ void marioPreDisp(void) {
                 size = 0.0f;
             }
             if (size) {
-                t = 2;
+                t = SHADOW_MODE_CYLINDER;
                 if (wp->flags & MARIO_FLAG_BG_MODE) {
-                    t = 0;
+                    t = SHADOW_MODE_POLYGON;
                 }
                 shadowEntryMode(t, wp->position.x + xo, wp->position.y, wp->position.z + zo, size);
             }
