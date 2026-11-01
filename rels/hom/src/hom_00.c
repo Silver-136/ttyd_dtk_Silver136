@@ -453,7 +453,11 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STATION_KEY_0x18, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -810,6 +814,86 @@ EVT_END()
  * the drawbridge and the locked station door (opened with the Station Key),
  * and starts the arrival or drawbridge scene as the story requires.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(hom_00_init_evt)
+    // NPCs, music, ambience, the save block and the recovery block.
+    SET_VALUE(GF(15), 0)
+CALL(evt_npc_setup, PTR(npc_data))
+CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI1"))
+CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)
+    CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 15, -125, 140, -170, 0, 0)
+    // The train is placed on the correct side of the platform.
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+        CALL_CHILD(hom_10_evt_resha_right)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL_CHILD(hom_10_evt_resha_left)
+    END_IF
+    // Late in the story the crossing barrier is shown in its open position.
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_54_WELCOME_BACK)
+CALL(evt_map_playanim, STRING("shadanki"), MAP_ANIM_PLAY_AT_END, 0)
+END_IF
+    // The sun's heat haze and glare, and the station clock hands.
+    CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sun"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_FLAG_NO_COLOR_STAGE)
+    BEGIN_INLINE_EVENT
+        CALL(test_glare)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        LOOP(0)
+            CALL(tokei)
+            CALL(evt_mapobj_rotate, 1, STRING("short"), 0, LW(0), 0)
+            CALL(evt_mapobj_rotate, 0, STRING("long"), 0, LW(1), 0)
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_INLINE_EVENT
+    // The drawbridge scene, the doors, and the arrival scenes of the first and second visits.
+    IF_INT_EQUAL(GSWF(GSWF_EKI00_BRIDGE_LOWER_SCENE), 1)
+        SPAWN_EVENT(evt_bridge_down)
+        RETURN
+    END_IF
+    SET_VALUE(LW(0), PTR(bero_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_27_RIVERSIDE_STATION)
+        SPAWN_EVENT(evt_hom_touchaku)
+    END_IF
+    CALL(evt_bero_get_entername, LW(0))
+    IF_STR_EQUAL(LW(0), STRING("nidome"))
+        SPAWN_EVENT(evt_hom_touchaku_nidome)
+    END_IF
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_55_PEACH_GRODUS_X_NAUT)
+        SET_VALUE(LW(0), STRING("n_bero_1"))
+        CALL_CHILD(bero_case_switch_off)
+        CALL(evt_bero_overwrite, STRING("n_bero_1"), PTR(bero_data_nidome))
+        SET_VALUE(LW(0), STRING("n_bero_1"))
+        CALL_CHILD(bero_case_switch_on)
+    END_IF
+    // The station door stays locked until the Station Key has been used.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_29_STATION_DOOR_UNLOCKED)
+        CALL(evt_mobj_lock, STRING("lock"), 24, -260, 90, -190, 0, PTR(evt_chk), PTR(evt_lock), GSWF(GSWF_HOM00_STATION_DOOR_UNLOCKED))
+        SET_VALUE(LW(0), 1)
+        CALL_CHILD(bero_case_switch_off)
+    END_IF
+    // From the drawbridge-down step on, the bridge is lowered and the train door can be used.
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_42_DRAWBRIDGE_DOWN)
+        CALL(evt_map_playanim, STRING("hasi"), MAP_ANIM_PLAY_AT_END, 0)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_42_DRAWBRIDGE_DOWN)
+        CALL(evt_hitobj_attr_onoff, 0, 1, STRING("n_bero_1"), HIT_ATTR_BERO)
+        CALL(evt_run_case_evt, CASE_FRONT, 1, STRING("n_bero_1"), 0, PTR(evt_train), 0)
+        CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_AT_END, 0)
+    END_IF
+    SPAWN_EVENT(evt_sub_mail_event)
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(hom_00_init_evt)
     // NPCs, music, ambience, the save block and the recovery block.
     SET_VALUE(GF(15), 0)
@@ -898,6 +982,7 @@ EVT_BEGIN(hom_00_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Texture-environment callback for the sun: every frame it fills a 64x64 indirect texture with a scrolling sine

@@ -119,7 +119,11 @@ static NpcSetupInfo npcEnt[4];
 EvtWord aji_01_init_evt[171];
 
 static EVT_BEGIN(w1_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), 0, 0, LW(0))
@@ -127,7 +131,11 @@ static EVT_BEGIN(w1_door_open)
 EVT_END()
 
 static EVT_BEGIN(w1_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), 0, 0, LW(0))
@@ -135,7 +143,11 @@ static EVT_BEGIN(w1_door_close)
 EVT_END()
 
 static EVT_BEGIN(e1_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door2_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door2_1"), 0, 0, LW(0))
@@ -143,7 +155,11 @@ static EVT_BEGIN(e1_door_open)
 EVT_END()
 
 static EVT_BEGIN(e1_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door2_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door2_1"), 0, 0, LW(0))
@@ -151,7 +167,11 @@ static EVT_BEGIN(e1_door_close)
 EVT_END()
 
 static EVT_BEGIN(w2_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door3_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door3_2"), 0, 0, LW(0))
@@ -159,7 +179,11 @@ static EVT_BEGIN(w2_door_open)
 EVT_END()
 
 static EVT_BEGIN(w2_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door3_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door3_2"), 0, 0, LW(0))
@@ -167,7 +191,11 @@ static EVT_BEGIN(w2_door_close)
 EVT_END()
 
 static EVT_BEGIN(e2_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door4_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door4_1"), 0, 0, LW(0))
@@ -175,7 +203,11 @@ static EVT_BEGIN(e2_door_open)
 EVT_END()
 
 static EVT_BEGIN(e2_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door4_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door4_1"), 0, 0, LW(0))
@@ -281,7 +313,11 @@ EVT_BEGIN(n4_door_close)
 EVT_END()
 
 EVT_BEGIN(w3_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door5_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door5_2"), 0, 0, LW(0))
@@ -290,7 +326,11 @@ EVT_END()
 
 /** Closing step of door w3 (S_door5_1/S_door5_2 along Z); the same slide as w3_door_open. */
 EVT_BEGIN(w3_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door5_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door5_2"), 0, 0, LW(0))
@@ -298,7 +338,11 @@ EVT_BEGIN(w3_door_close)
 EVT_END()
 
 static EVT_BEGIN(e3_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door10_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door10_1"), 0, 0, LW(0))
@@ -306,7 +350,11 @@ static EVT_BEGIN(e3_door_open)
 EVT_END()
 
 static EVT_BEGIN(e3_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door10_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door10_1"), 0, 0, LW(0))
@@ -314,7 +362,11 @@ static EVT_BEGIN(e3_door_close)
 EVT_END()
 
 EVT_BEGIN(w4_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door11_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door11_2"), 0, 0, LW(0))
@@ -323,7 +375,11 @@ EVT_END()
 
 /** Closing step of door w4 (S_door11_1/S_door11_2 along Z); the same slide as w4_door_open. */
 EVT_BEGIN(w4_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door11_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door11_2"), 0, 0, LW(0))
@@ -331,7 +387,11 @@ EVT_BEGIN(w4_door_close)
 EVT_END()
 
 EVT_BEGIN(e4_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door12_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door12_1"), 0, 0, LW(0))
@@ -340,7 +400,11 @@ EVT_END()
 
 /** Closing step of door e4 (S_door12_1/S_door12_2 along Z); the same slide as e4_door_open. */
 EVT_BEGIN(e4_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door12_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door12_1"), 0, 0, LW(0))
@@ -348,7 +412,11 @@ EVT_BEGIN(e4_door_close)
 EVT_END()
 
 EVT_BEGIN(w5_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door13_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door13_2"), 0, 0, LW(0))
@@ -357,7 +425,11 @@ EVT_END()
 
 /** Closing step of door w5 (S_door13_1/S_door13_2 along Z); the same slide as w5_door_open. */
 EVT_BEGIN(w5_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door13_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door13_2"), 0, 0, LW(0))
@@ -365,7 +437,11 @@ EVT_BEGIN(w5_door_close)
 EVT_END()
 
 EVT_BEGIN(e5_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door14_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door14_1"), 0, 0, LW(0))
@@ -374,7 +450,11 @@ EVT_END()
 
 /** Closing step of door e5 (S_door14_1/S_door14_2 along Z); the same slide as e5_door_open. */
 EVT_BEGIN(e5_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 1, STRING("S_door14_2"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 1, STRING("S_door14_1"), 0, 0, LW(0))
@@ -686,7 +766,11 @@ EVT_BEGIN(elv_unlock1)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(elv_key1), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(elv_key1), LW(0), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -703,7 +787,11 @@ EVT_BEGIN(elv_unlock1)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi3"), 0, PTR(ele_1), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_KEY1"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_10_ELEVATOR_ACTIVATED)
+#else
         SET_VALUE(GSW_STORY_PROGRESS, STG7_10_ELEVATOR_ACTIVATED)
+#endif
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_exit_case_evt)
         RETURN
@@ -730,7 +818,11 @@ EVT_BEGIN(elv_unlock2)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(elv_key2), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(elv_key2), LW(0), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -747,7 +839,11 @@ EVT_BEGIN(elv_unlock2)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi6"), 0, PTR(ele_2), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_KEY1"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_15_ELEVATOR_ACTIVATED_2)
+#else
         SET_VALUE(GSW_STORY_PROGRESS, STG7_15_ELEVATOR_ACTIVATED_2)
+#endif
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_exit_case_evt)
         RETURN
@@ -867,6 +963,218 @@ EVT_END()
  * and the cabin ere1_m (hit area A_ere1_m) rides to the chosen floor with the doors opening and closing.
  * GW(0) remembers the floor the cabin is on.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ele_1)
+    // Mario stops and waits for his partner to finish what it is doing.
+    SET_VALUE(LW(5), LW(0))
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_normalize)
+    BEGIN_INLINE_EVENT_GET_ID(LW(10))
+        CALL(evt_mario_get_party, LW(0))
+        SWITCH(LW(0))
+            CASE_EQUAL(2)
+            LOOP(0)
+                CALL(evt_party_nokotaro_get_status, 0, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
+            CASE_EQUAL(3)
+            LOOP(0)
+                CALL(evt_party_get_status, 3, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
+        END_SWITCH
+        // Mario and the partner walk up to the elevator doors while the camera swings to the shaft.
+        CALL(evt_party_stop, 0)
+        CALL(evt_party_move_pos2, 0, -530, 0, FLOAT(80.0f))
+        CALL(evt_party_set_dir, 0, 270, 300)
+    END_INLINE_EVENT
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_ACCESS1"), LW(0), LW(1), LW(2), 0)
+    BEGIN_INLINE_EVENT
+        CALL(evt_cam3d_evt_set_now)
+        CALL(evt_cam_road_reset)
+        CALL(evt_cam_shift_reset)
+        CALL(evt_cam3d_event_from_road, -545, LW(1), -120, 0, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
+        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
+    END_INLINE_EVENT
+    CALL(evt_mario_mov_pos2, -560, 0, FLOAT(80.0f))
+    CALL(evt_mario_set_dir, 90, 200, 0)
+    // If the cabin is waiting on another floor, it first rides to the floor that was called.
+    IF_INT_NOT_EQUAL(GW(0), LW(5))
+        SWITCH(GW(0))
+            CASE_EQUAL(0)
+            SET_VALUE(LW(0), 2000)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(0), 1000)
+            CASE_EQUAL(2)
+            SET_VALUE(LW(0), 0)
+        END_SWITCH
+        SWITCH(LW(5))
+            CASE_EQUAL(0)
+            SET_VALUE(LW(1), 2000)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(1), 1000)
+            CASE_EQUAL(2)
+            SET_VALUE(LW(1), 0)
+        END_SWITCH
+        SET_VALUE(LW(2), LW(0))
+        SUBTRACT(LW(2), LW(1))
+        IF_INT_LESS(LW(2), 0)
+            MULTIPLY(LW(2), -1)
+        END_IF
+        BEGIN_INLINE_EVENT
+            SUBTRACT(LW(2), 200)
+            WAIT_MS(LW(2))
+            CALL(evt_mapobj_get_position, STRING("ere1_m"), LW(10), LW(11), LW(12))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_APPEAR1"), LW(10), LW(11), LW(12), 0)
+        END_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(0), LW(1), LW(2))
+        LABEL(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        CALL(evt_mapobj_trans, 1, STRING("ere1_m"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 1)
+            GOTO(0)
+        END_IF
+        CALL(evt_hit_bind_update, STRING("A_ere1_m"))
+    END_IF
+    // The doors open and Mario and the partner step into the cabin.
+    SET_VALUE(LW(0), LW(5))
+    CALL_CHILD(ele1_door_open)
+    CALL(evt_mario_mov_pos2, -560, -120, FLOAT(120.0f))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    ADD(LW(0), 30)
+    LOOP(0)
+        IS_EVENT_RUNNING(LW(10), LW(11))
+        IF_INT_EQUAL(LW(11), 0)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+    CALL(evt_party_stop, 0)
+    CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 400, 0, -1000)
+    CALL(evt_mario_set_dir, 90, 200, 0)
+    CALL(evt_party_set_dir, 0, 270, 300)
+    // A voice announces the elevator and the player picks a floor; backing out walks them out again.
+    CALL(evt_msg_print, 0, STRING("stg7_aji_66"), 0, 0)
+    SWITCH(LW(5))
+        CASE_EQUAL(0)
+        CALL(evt_msg_select, 0, STRING("stg7_aji_ele_1_00"))
+        CALL(evt_msg_continue)
+        SWITCH(LW(0))
+            CASE_EQUAL(0)
+            SET_VALUE(LW(0), 1)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(0), 2)
+            CASE_DEFAULT
+            SET_VALUE(LW(0), -1)
+        END_SWITCH
+        CASE_EQUAL(1)
+        CALL(evt_msg_select, 0, STRING("stg7_aji_ele_1_01"))
+        CALL(evt_msg_continue)
+        SWITCH(LW(0))
+            CASE_EQUAL(0)
+            SET_VALUE(LW(0), 0)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(0), 2)
+            CASE_DEFAULT
+            SET_VALUE(LW(0), -1)
+        END_SWITCH
+        CASE_EQUAL(2)
+        CALL(evt_msg_select, 0, STRING("stg7_aji_ele_1_02"))
+        CALL(evt_msg_continue)
+        SWITCH(LW(0))
+            CASE_EQUAL(0)
+            SET_VALUE(LW(0), 0)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(0), 1)
+            CASE_DEFAULT
+            SET_VALUE(LW(0), -1)
+        END_SWITCH
+    END_SWITCH
+    SET_VALUE(LW(8), LW(0))
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+    IF_INT_EQUAL(LW(0), -1)
+        CALL(evt_mario_mov_pos2, -560, 0, FLOAT(120.0f))
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        ADD(LW(0), 30)
+        CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 400, 0, -1000)
+        SET_VALUE(LW(0), LW(5))
+        CALL_CHILD(ele1_door_close)
+        SET_VALUE(GW(0), LW(5))
+CALL(evt_party_run, 0)
+        CALL(evt_mario_key_onoff, 1)
+        RETURN
+    END_IF
+    // The doors close and the cabin rides to the chosen floor.
+    SET_VALUE(LW(0), LW(5))
+    CALL_CHILD(ele1_door_close)
+    SWITCH(LW(5))
+        CASE_EQUAL(0)
+        SET_VALUE(LW(0), 2000)
+        CASE_EQUAL(1)
+        SET_VALUE(LW(0), 1000)
+        CASE_EQUAL(2)
+        SET_VALUE(LW(0), 0)
+    END_SWITCH
+    SWITCH(LW(8))
+        CASE_EQUAL(0)
+        SET_VALUE(LW(1), 2000)
+        CASE_EQUAL(1)
+        SET_VALUE(LW(1), 1000)
+        CASE_EQUAL(2)
+        SET_VALUE(LW(1), 0)
+    END_SWITCH
+    SET_VALUE(LW(2), LW(0))
+    SUBTRACT(LW(2), LW(1))
+    IF_INT_LESS(LW(2), 0)
+        MULTIPLY(LW(2), -1)
+    END_IF
+    MULTIPLY(LW(2), 4)
+    CALL(evt_mario_cont_onoff, 0)
+    CALL(evt_party_cont_onoff, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("ere1_m"), LW(10), LW(11), LW(12))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_MOVE1"), LW(10), LW(11), LW(12), LW(9))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(0), LW(1), LW(2))
+    LABEL(5)
+    CALL(evt_sub_intpl_msec_get_value)
+    CALL(evt_mapobj_trans, 1, STRING("ere1_m"), 0, LW(0), 0)
+    CALL(evt_hit_bind_update, STRING("A_ere1_m"))
+ADD(LW(0), 1000)
+    CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
+    CALL(evt_mario_set_pos, LW(2), LW(0), LW(4))
+    CALL(evt_party_get_pos, 0, LW(2), LW(3), LW(4))
+    CALL(evt_party_set_pos, 0, LW(2), LW(0), LW(4))
+    WAIT_FRAMES(1)
+    IF_INT_EQUAL(LW(1), 1)
+        GOTO(5)
+    END_IF
+    CALL(evt_snd_sfxoff, LW(9))
+    CALL(evt_mario_cont_onoff, 1)
+    CALL(evt_party_cont_onoff, 0, 1)
+    // The doors open on the new floor and Mario and the partner step out.
+    SET_VALUE(LW(0), LW(8))
+    CALL_CHILD(ele1_door_open)
+    CALL(evt_mario_mov_pos2, -560, 0, FLOAT(120.0f))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    ADD(LW(0), 30)
+    CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 400, 0, -1000)
+    BEGIN_INLINE_EVENT
+        SET_VALUE(LW(0), LW(8))
+        CALL_CHILD(ele1_door_close)
+    END_INLINE_EVENT
+    SET_VALUE(GW(0), LW(8))
+CALL(evt_party_run, 0)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(ele_1)
     // Mario stops and waits for his partner to finish what it is doing.
     SET_VALUE(LW(5), LW(0))
@@ -1083,6 +1391,7 @@ EVT_BEGIN(ele_1)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Opens the doors of elevator 2 on floor LW(0) (2 to 4):
@@ -1189,6 +1498,227 @@ EVT_END()
  * Elevator 2 button script: the same ride as ele_1 for the second elevator (cabin ere2_m, floors 2 to 4,
  * current floor in GW(1)). Before STG7_14_ELEVATOR_KEY_B it only shows the "needs a key" text stg7_aji_65.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(ele_2)
+    SET_VALUE(LW(5), LW(0))
+    // Without the second Elevator Key the elevator only asks for it.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_14_ELEVATOR_KEY_B)
+        CALL(evt_mario_key_onoff, 0)
+        CALL(evt_msg_print, 0, STRING("stg7_aji_65"), 0, 0)
+        CALL(evt_mario_key_onoff, 1)
+        RETURN
+    END_IF
+    // Mario stops and waits for his partner to finish what it is doing.
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_normalize)
+    BEGIN_INLINE_EVENT_GET_ID(LW(10))
+        CALL(evt_mario_get_party, LW(0))
+        SWITCH(LW(0))
+            CASE_EQUAL(2)
+            LOOP(0)
+                CALL(evt_party_nokotaro_get_status, 0, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
+            CASE_EQUAL(3)
+            LOOP(0)
+                CALL(evt_party_get_status, 3, LW(0))
+                IF_INT_EQUAL(LW(0), 0)
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
+        END_SWITCH
+        // Mario and the partner walk up to the elevator doors while the camera swings to the shaft.
+        CALL(evt_party_stop, 0)
+        CALL(evt_party_move_pos2, 0, 565, 0, FLOAT(80.0f))
+        CALL(evt_party_set_dir, 0, 270, 300)
+    END_INLINE_EVENT
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_ACCESS1"), LW(0), LW(1), LW(2), 0)
+    BEGIN_INLINE_EVENT
+        CALL(evt_cam3d_evt_set_now)
+        CALL(evt_cam_road_reset)
+        CALL(evt_cam_shift_reset)
+        CALL(evt_cam3d_event_from_road, 550, LW(1), -120, 0, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
+        CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 500, EASING_SINE_IN_OUT)
+    END_INLINE_EVENT
+    CALL(evt_mario_mov_pos2, 535, 0, FLOAT(80.0f))
+    CALL(evt_mario_set_dir, 90, 200, 0)
+    // If the cabin is waiting on another floor, it first rides to the floor that was called.
+    IF_INT_NOT_EQUAL(GW(1), LW(5))
+        SWITCH(GW(1))
+            CASE_EQUAL(2)
+            SET_VALUE(LW(0), 2000)
+            CASE_EQUAL(3)
+            SET_VALUE(LW(0), 1000)
+            CASE_EQUAL(4)
+            SET_VALUE(LW(0), 0)
+        END_SWITCH
+        SWITCH(LW(5))
+            CASE_EQUAL(2)
+            SET_VALUE(LW(1), 2000)
+            CASE_EQUAL(3)
+            SET_VALUE(LW(1), 1000)
+            CASE_EQUAL(4)
+            SET_VALUE(LW(1), 0)
+        END_SWITCH
+        SET_VALUE(LW(2), LW(0))
+        SUBTRACT(LW(2), LW(1))
+        IF_INT_LESS(LW(2), 0)
+            MULTIPLY(LW(2), -1)
+        END_IF
+        BEGIN_INLINE_EVENT
+            CALL(evt_mapobj_get_position, STRING("ere2_m"), LW(10), LW(11), LW(12))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_APPEAR1"), LW(10), LW(11), LW(12), 0)
+        END_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(0), LW(1), LW(2))
+        LABEL(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        CALL(evt_mapobj_trans, 1, STRING("ere2_m"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 1)
+            GOTO(0)
+        END_IF
+        BEGIN_INLINE_EVENT
+            CALL(evt_mapobj_get_position, STRING("ere2_m"), LW(10), LW(11), LW(12))
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_APPEAR1"), LW(10), LW(11), LW(12), 0)
+        END_INLINE_EVENT
+        CALL(evt_hit_bind_update, STRING("A_ere2_m"))
+    END_IF
+    SET_VALUE(LW(0), LW(5))
+    // The doors open and Mario and the partner step into the cabin.
+    CALL_CHILD(ele2_door_open)
+    CALL(evt_mario_mov_pos2, 535, -120, FLOAT(120.0f))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    ADD(LW(0), 30)
+    LOOP(0)
+        IS_EVENT_RUNNING(LW(10), LW(11))
+        IF_INT_EQUAL(LW(11), 0)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+    CALL(evt_party_stop, 0)
+    CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 400, 0, -1000)
+    CALL(evt_mario_set_dir, 90, 200, 0)
+    CALL(evt_party_set_dir, 0, 270, 300)
+    // A voice announces the elevator and the player picks a floor; backing out walks them out again.
+    CALL(evt_msg_print, 0, STRING("stg7_aji_66"), 0, 0)
+    SWITCH(LW(5))
+        CASE_EQUAL(2)
+        CALL(evt_msg_select, 0, STRING("stg7_aji_ele_2_00"))
+        CALL(evt_msg_continue)
+        SWITCH(LW(0))
+            CASE_EQUAL(0)
+            SET_VALUE(LW(0), 3)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(0), 4)
+            CASE_DEFAULT
+            SET_VALUE(LW(0), -1)
+        END_SWITCH
+        CASE_EQUAL(3)
+        CALL(evt_msg_select, 0, STRING("stg7_aji_ele_2_01"))
+        CALL(evt_msg_continue)
+        SWITCH(LW(0))
+            CASE_EQUAL(0)
+            SET_VALUE(LW(0), 2)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(0), 4)
+            CASE_DEFAULT
+            SET_VALUE(LW(0), -1)
+        END_SWITCH
+        CASE_EQUAL(4)
+        CALL(evt_msg_select, 0, STRING("stg7_aji_ele_2_02"))
+        CALL(evt_msg_continue)
+        SWITCH(LW(0))
+            CASE_EQUAL(0)
+            SET_VALUE(LW(0), 2)
+            CASE_EQUAL(1)
+            SET_VALUE(LW(0), 3)
+            CASE_DEFAULT
+            SET_VALUE(LW(0), -1)
+        END_SWITCH
+    END_SWITCH
+    SET_VALUE(LW(8), LW(0))
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+    IF_INT_EQUAL(LW(0), -1)
+        CALL(evt_mario_mov_pos2, 535, 0, FLOAT(120.0f))
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        ADD(LW(0), 30)
+        CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 400, 0, -1000)
+        SET_VALUE(LW(0), LW(5))
+        CALL_CHILD(ele2_door_close)
+        SET_VALUE(GW(1), LW(5))
+CALL(evt_party_run, 0)
+        CALL(evt_mario_key_onoff, 1)
+        RETURN
+    END_IF
+    SET_VALUE(LW(0), LW(5))
+    // The doors close and the cabin rides to the chosen floor.
+    CALL_CHILD(ele2_door_close)
+    SWITCH(LW(5))
+        CASE_EQUAL(2)
+        SET_VALUE(LW(0), 2000)
+        CASE_EQUAL(3)
+        SET_VALUE(LW(0), 1000)
+        CASE_EQUAL(4)
+        SET_VALUE(LW(0), 0)
+    END_SWITCH
+    SWITCH(LW(8))
+        CASE_EQUAL(2)
+        SET_VALUE(LW(1), 2000)
+        CASE_EQUAL(3)
+        SET_VALUE(LW(1), 1000)
+        CASE_EQUAL(4)
+        SET_VALUE(LW(1), 0)
+    END_SWITCH
+    SET_VALUE(LW(2), LW(0))
+    SUBTRACT(LW(2), LW(1))
+    IF_INT_LESS(LW(2), 0)
+        MULTIPLY(LW(2), -1)
+    END_IF
+    MULTIPLY(LW(2), 4)
+    CALL(evt_mario_cont_onoff, 0)
+    CALL(evt_party_cont_onoff, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("ere2_m"), LW(10), LW(11), LW(12))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_ELEVATOR_MOVE1"), LW(10), LW(11), LW(12), LW(9))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(0), LW(1), LW(2))
+    LABEL(5)
+    CALL(evt_sub_intpl_msec_get_value)
+    CALL(evt_mapobj_trans, 1, STRING("ere2_m"), 0, LW(0), 0)
+    CALL(evt_hit_bind_update, STRING("A_ere2_m"))
+ADD(LW(0), -998)
+    CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
+    CALL(evt_mario_set_pos, LW(2), LW(0), LW(4))
+    CALL(evt_party_get_pos, 0, LW(2), LW(3), LW(4))
+    CALL(evt_party_set_pos, 0, LW(2), LW(0), LW(4))
+    WAIT_FRAMES(1)
+    IF_INT_EQUAL(LW(1), 1)
+        GOTO(5)
+    END_IF
+    CALL(evt_snd_sfxoff, LW(9))
+    CALL(evt_mario_cont_onoff, 1)
+    CALL(evt_party_cont_onoff, 0, 1)
+    SET_VALUE(LW(0), LW(8))
+    // The doors open on the new floor and Mario and the partner step out.
+    CALL_CHILD(ele2_door_open)
+    CALL(evt_mario_mov_pos2, 535, 0, FLOAT(120.0f))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    ADD(LW(0), 30)
+    CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 400, 0, -1000)
+    BEGIN_INLINE_EVENT
+        SET_VALUE(LW(0), LW(8))
+        CALL_CHILD(ele2_door_close)
+    END_INLINE_EVENT
+    SET_VALUE(GW(1), LW(8))
+CALL(evt_party_run, 0)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(ele_2)
     SET_VALUE(LW(5), LW(0))
     // Without the second Elevator Key the elevator only asks for it.
@@ -1415,6 +1945,7 @@ EVT_BEGIN(ele_2)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 static EVT_BEGIN(evt_elv_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1996,12 +2527,24 @@ EVT_END()
 EVT_BEGIN(peach_evt_ele_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_44_PEACH_TECS_REQUEST_2)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
+#else
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
+#else
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2012,7 +2555,11 @@ EVT_BEGIN(peach_evt_ele_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SET_VALUE(GW(1), 4)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_33_PEACH_THE_SECRET_WEAPON)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_PEACH_THE_SECRET_WEAPON)
+#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("e_bero_5"))
             SET_VALUE(LW(0), 4)
@@ -2379,21 +2926,37 @@ static NpcSetupInfo npcEnt[] = {
  * and otherwise starts BGM_STG7_DUN2 and the elevator and door lock setup.
  */
 EVT_BEGIN(aji_01_init_evt)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(peach_evt_init)
+#else
     CALL_CHILD(PTR(peach_evt_init))
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     IF_INT_EQUAL(LW(15), 1)
         RETURN
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_map_playanim, STRING("hosi_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hosi_03"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1300_q00266"), MAP_OBJ_FLAG_CLIP)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_12_PASSWORD_ENTRY)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_12_PASSWORD_ENTRY)
+#endif
         SET_VALUE(LW(0), STRING("e_bero_2"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_aikotoba), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2403,8 +2966,13 @@ EVT_BEGIN(aji_01_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_emergency)
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+#else
     SPAWN_EVENT(PTR(evt_emergency))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+#endif
         CALL(evt_npc_check_delete, STRING("軍団ザコ１"))
         CALL(evt_npc_check_delete, STRING("軍団ザコ２"))
         CALL(evt_npc_check_delete, STRING("軍団ザコ３"))
@@ -2428,8 +2996,13 @@ EVT_BEGIN(aji_01_init_evt)
         ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_elv_init)
+        CALL_CHILD(evt_key_init)
+#else
         CALL_CHILD(PTR(evt_elv_init))
         CALL_CHILD(PTR(evt_key_init))
+#endif
     END_IF
     RETURN
 EVT_END()

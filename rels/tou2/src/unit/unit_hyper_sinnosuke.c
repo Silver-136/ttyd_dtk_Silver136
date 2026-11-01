@@ -98,6 +98,9 @@ static BattleUnitDefense defence_turn = {0};
 /** Damage-type reactions of the Hyper Bald Cleft: immune to fire. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 80, 40, 100, 40, 100, 0, 60, 100, 60, 100, 60, 100, 70, 70, 40, 20, 100, 70, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     40, // sleep
     90, // stop
@@ -122,6 +125,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /**
  * Parts of the Hyper Bald Cleft: a single body part (part 1, model c_sinnosuke_h), each with its defense

@@ -152,7 +152,11 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
     return effect;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void effSstarMain(EffectEntry* effect) {
+#else
 void effSstarMain(EffectEntry* effect) {
+#endif
     EffSstarN64Work* w = effect->userdata;
     MarioWork* mario = marioGetPtr();
     Vec pos;
@@ -193,11 +197,15 @@ void effSstarMain(EffectEntry* effect) {
             w->rotZ = angleABf(0.0f, 0.0f, -w->velocity.y, w->screenVelX);
         }
     }
+#if VERSION > VERSION_DEMO_US
     if (gp->inBattle == 0) {
+#endif
         if (mario->position.y - w->position.y > 300.0f) {
+#if VERSION > VERSION_DEMO_US
             w->life = -1;
         }
     } else if (w->position.y < -300.0f) {
+#endif
         w->life = -1;
     }
     w->position.x += w->velocity.x;

@@ -407,7 +407,11 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, LW(14))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), MOVE_SOUND_FROM_TABLE, 0)
+#endif
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(10), 0)
@@ -438,45 +442,69 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
     // Mid-jump, Professor Frankly freezes the action and explains how to guard.
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 0, -1)
+#else
     CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
         // Guard lesson: he asks Mario to press the A button as she lands, and waits for it.
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, UNIT_ID_LECTURE)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, -6)
         WAIT_FRAMES(1)
+#endif
         LABEL(11)
         CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_A, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             WAIT_FRAMES(1)
             GOTO(11)
         END_IF
+#if VERSION > VERSION_DEMO_US
         WAIT_MS(50)
+#endif
         BEGIN_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
             WAIT_MS(100)
+#endif
             CALL(evt_msg_continue)
         END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
         WAIT_MS(100)
+#endif
         CASE_EQUAL(7)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
         // Superguard lesson: he asks for the B button instead, and waits for it.
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_014"), 0, UNIT_ID_LECTURE)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_014"), 0, -6)
         WAIT_FRAMES(1)
+#endif
         LABEL(12)
         CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_B, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             WAIT_FRAMES(1)
             GOTO(12)
         END_IF
+#if VERSION > VERSION_DEMO_US
         WAIT_MS(50)
+#endif
         BEGIN_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
             WAIT_MS(100)
+#endif
             CALL(evt_msg_continue)
         END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
         WAIT_MS(100)
+#endif
     END_SWITCH
     BEGIN_INLINE_EVENT
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
@@ -530,12 +558,24 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5996094f))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+#endif
     // She walks back to her home position.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -543,7 +583,11 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

@@ -530,4 +530,31 @@ void vivian_use(PartyEntry* party) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_US
 #pragma explicit_zero_data reset
+static inline void partyVivianTailStop(PartyEntry* party) {
+    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+        party->work.vivian.tailFlags |= 1; // the demo keeps the tail flags in the Vivian work
+    }
+}
+static inline void partyVivianTailStart(PartyEntry* party) {
+    if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
+        party->work.vivian.tailFlags &= ~1;
+    }
+}
+static inline void vivianFollow(PartyEntry* party) {
+    MarioWork* mario = party->playerPtr;
+    f32 ofs;
+
+    party->moveTarget = mario->position;
+    movePos(&party->moveTarget.x, &party->moveTarget.z, -13.0f, toMovedirSimple(mario->displayDirection));
+    if (0.0f == mario->displayDirectionTarget) {
+        ofs = -2.5f;
+    } else {
+        ofs = -2.5f;
+    }
+    movePos(&party->moveTarget.x, &party->moveTarget.z, ofs, toMovedir(270.0f + mario->displayDirection));
+}
+#else
+#pragma explicit_zero_data reset
+#endif

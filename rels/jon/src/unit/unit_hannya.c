@@ -84,6 +84,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Spania: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 110, 90, 150, 90, 150, 150, 90, 150, 90, 150, 90, 150, 90, 90, 110, 110, 150, 90, 0, 0, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     120, // stop
@@ -108,6 +111,7 @@ static StatusVulnerability regist = {
     0, // invisible
     150, // ohko
 };
+#endif
 
 /** Data table of the Spania: event handlers keyed by tag (dmg_avoid_counter_thorn_head_event). */
 static BattleDataEntry data_table[] = {

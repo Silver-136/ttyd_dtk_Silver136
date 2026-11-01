@@ -309,14 +309,24 @@ static EVT_BEGIN(peach_mail)
     DELETE_EVENT(LW(10))
     WAIT_FRAMES(1)
     CALL(evt_sub_rumble_onoff, 1, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(2))
     ADD(LW(3), 267)
     SET_VALUE(LW(4), LW(2))
+#endif
     IF_INT_EQUAL(LF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_cam3d_evt_set, -184, 86, 262, -184, 38, -5, 1000, EASING_SINE_IN_OUT)
+#else
         CALL(evt_cam3d_evt_set, -184, 86, LW(3), -184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_cam3d_evt_set, 184, 86, 262, 184, 38, -5, 1000, EASING_SINE_IN_OUT)
+#else
         CALL(evt_cam3d_evt_set, 184, 86, LW(3), 184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
+#endif
     END_IF
     WAIT_MS(1000)
     // Mario reads Peach's letter, the partner reacts, and Mario can move again.
@@ -340,7 +350,12 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_party_run, 0)
     CALL(evt_cam_shift_reset)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    // The story advances and the letter is added to the mail list and opened.
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_27_A_MAIL_FROM_PEACH)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_27_A_MAIL_FROM_PEACH)
+#endif
     CALL(evt_pouch_receive_mail, 1)
     CALL(evt_pouch_open_mail, 1)
     RETURN

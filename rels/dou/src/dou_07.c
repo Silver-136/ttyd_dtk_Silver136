@@ -146,7 +146,11 @@ EVT_END()
  */
 EVT_BEGIN(peramajin_before)
     // The Ember has already appeared (Black Key stage): the chest now wants the key.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_21_GROTTO_KEY)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
+#endif
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_normalize)
         CALL(evt_party_stop, 0)
@@ -174,8 +178,12 @@ EVT_BEGIN(peramajin_before)
         // Mario has the key: the chest asks him to pick it from the item menu.
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_09"), PTR(majin_callback), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_tbl), LW(10))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(10), 0)
         // Mario cancels the menu: the chest sulks and stays shut.
+#endif
         IF_INT_EQUAL(LW(10), -1)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_10"), PTR(majin_callback), 0)
@@ -199,7 +207,9 @@ EVT_BEGIN(peramajin_before)
         END_INLINE_EVENT
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_11"), PTR(majin_callback), 0)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_mario_set_pose, STRING("M_I_N"))
+#endif
         CALL(evt_cam3d_evt_set, -33, 92, 412, -33, 36, 92, 500, EASING_SINE_IN_OUT)
         CALL(evt_pouch_remove_item, ITEM_BLACK_KEY_0x24, LW(10))
         CALL(evt_party_run, 0)
@@ -259,9 +269,17 @@ EVT_BEGIN(peramajin_before)
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_07"), PTR(majin_callback), 0)
     // The Ember ghost appears from the chest and the story advances to the Grotto key stage.
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR1"), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(apper_elmos)
+#else
     CALL_CHILD(PTR(apper_elmos))
+#endif
     CALL(evt_mobj_exec_cancel, STRING("mobj_box00"))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_21_GROTTO_KEY)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -270,6 +288,9 @@ EVT_END()
 EVT_BEGIN(peramajin_after)
     // The chest has opened: Mario receives the Boat Curse and the music changes.
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_normalize)
+#endif
     CALL(evt_party_stop, 0)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_pouch_add_item, ITEM_BOAT_CURSE, LW(0))
@@ -311,11 +332,16 @@ EVT_BEGIN(peramajin_after)
     CALL(lect_cam_save)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(ship_majin_lecture_init)
+CALL_CHILD(ship_majin_lecture)
+#else
     CALL_CHILD(PTR(ship_majin_lecture_init))
     CALL(evt_party_run, 0)
     CALL_CHILD(PTR(ship_majin_lecture))
     CALL(evt_party_stop, 0)
     // Mario flickers while the lecture ends and he returns to his spot.
+#endif
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
@@ -344,11 +370,17 @@ EVT_BEGIN(peramajin_after)
     END_INLINE_EVENT
     CALL(evt_img_release, STRING("img"))
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
+#endif
     CALL(evt_msg_print_party, STRING("stg1_gon_majin4_19"))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_21_01_BOAT_MOD_OBTAINED)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_21_01_BOAT_MOD_OBTAINED)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))

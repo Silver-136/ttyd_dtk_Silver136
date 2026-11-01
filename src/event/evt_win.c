@@ -1,6 +1,12 @@
 // Script commands for the unit windows (unitwin): the shop, partner and item list windows.
 
+#if VERSION <= VERSION_DEMO_US
+#define DTRIGF_WITH_INITIAL_VALUES
+#include <dtrigf.h>
 #include "evt/evt_cmd.h"
+#else
+#include "evt/evt_cmd.h"
+#endif
 #include "driver/icondrv.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -26,12 +32,23 @@
 #include <dolphin/mtx.h>
 #include <stdio.h>
 #include <string.h>
+#if VERSION <= VERSION_DEMO_US
+#include <stdlib.h>
 #include "icon_ids.h"
+#else
+#include "icon_ids.h"
+#endif
 #include "mario/mario_party.h"
 #include "driver/itemdrv.h"
 #include "statuswindow.h"
 #include "win/win_main.h"
+#if VERSION <= VERSION_DEMO_US
+#include "driver/casedrv.h"
+#include "evt/evt_case.h"
 #include "data_tables.h"
+#else
+#include "data_tables.h"
+#endif
 #include <dolphin/pad.h>
 
 
@@ -62,7 +79,9 @@ typedef struct UnitWinWork {
     u16 pad2;              // 0x2
     UnitWinSell* entries;  // 0x4
     s32* goods;            // 0x8
+#if VERSION > VERSION_DEMO_US
     u16 itemFlags[6];      // 0xC
+#endif
     s32 goodsMax;          // 0x18
     EventEntry* evt;       // 0x1C
     EventEntry* childEvt;  // 0x20
@@ -71,21 +90,36 @@ typedef struct UnitWinWork {
     s32 coin;              // 0x2C
     s32 coinDisp;          // 0x30
     f32 cursor;            // 0x34
+#if VERSION <= VERSION_DEMO_US
+    f32 scrollTop;         // 0x2C
+#else
     u8 pad38[4];           // 0x38
+#endif
     f32 cursorX;           // 0x3C
     f32 cursorY;           // 0x40
     f32 scroll;            // 0x44
+#if VERSION <= VERSION_DEMO_US
+    u8 pad3C[4];           // 0x3C
+#else
     u8 pad48[4];           // 0x48
+#endif
     s32 skipEntry;         // 0x4C, never written (0 after the memset); both lists skip the entry equal to it
     s32 mode;              // 0x50
     u16 flags2;            // 0x54, UNITWIN_FREE_*
+#if VERSION <= VERSION_DEMO_US
+    u8 pad4A[2];           // 0x4A
+    s32 caseId[16];        // 0x4C, one case event per counter hit object
+#else
     u8 pad56[2];           // 0x56
+#endif
     s32 count;             // 0x58
     s32 coinTick;          // 0x5C
+#if VERSION > VERSION_DEMO_US
     s32 winId[3];          // 0x60
     u8 pad6C[0xE0 - 0x6C]; // 0x6C
     s32 selected;          // 0xE0
     s32 bought;            // 0xE4
+#endif
 } UnitWinWork;
 
 static s16* mario_status_point_table[3];
@@ -96,17 +130,27 @@ USER_FUNC(evt_unitwin_main_func);
 USER_FUNC(evt_unitwin_select_func);
 void evt_unitwin_disp_func(CameraId cameraId, void* param);
 
+#if VERSION > VERSION_DEMO_US
 void unitwin_help_main(WinMgrEntry* entry);
+#endif
+#if VERSION > VERSION_DEMO_US
 void unitwin_help_disp(WinMgrEntry* entry);
+#endif
+#if VERSION > VERSION_DEMO_US
 void unitwin_point_disp(WinMgrEntry* entry);
+#endif
+#if VERSION > VERSION_DEMO_US
 void unitwin_name_disp(WinMgrEntry* entry);
+#endif
 
 /** The three windows of the unit window: the name plate, the help text box and the points counter. */
+#if VERSION > VERSION_DEMO_US
 WinMgrDesc unitwin_desc[3] = {
     {0, 0, 8, -150, 120, 300, 50, {0x2B, 0xA4, 0xFF, 0xFF}, NULL, unitwin_name_disp},
     {0, 0, 8, -240, -130, 500, 80, {0xF0, 0xF0, 0xF0, 0xFF}, unitwin_help_main, unitwin_help_disp},
     {2, 0, 8, -250, -130, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, unitwin_point_disp},
 };
+#endif
 
 /**
  * Tables of the unit window (partner and Mario lists): the partner ids in menu order (Goombella, Koops, Flurrie,
@@ -132,6 +176,7 @@ EVT_BEGIN(select_evt)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_8017599c, JP 0x8017599C. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 void unitwin_name_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     const char* msg = msgSearch(itemDataTable[wp->goods[wp->goodsIdx]].name);
@@ -160,20 +205,26 @@ void unitwin_name_disp(WinMgrEntry* entry) {
         }
     }
 }
+#endif
 
 // never called: the linker strips it, its "%s_%04d" string stays in this object's .rodata (name descriptive)
+#if VERSION > VERSION_DEMO_US
 static void unitwin_fmt(char* buf, const char* name, s32 n) {
     sprintf(buf, "%s_%04d", name, n);
 }
+#endif
 
 /** Help window update: runs the shared help-window logic. */
 // Descriptive name (not in the symbol maps); placeholder unk_8017597c, JP 0x8017597C. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 void unitwin_help_main(WinMgrEntry* entry) {
     winMgrHelpMain(entry);
 }
+#endif
 
 /** Help window draw: shows the description of the item at the selected counter slot. */
 // Descriptive name (not in the symbol maps); placeholder unk_801758fc, JP 0x801758FC. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 void unitwin_help_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     s32 idx = wp->goodsIdx * sizeof(s32); // FAKE: byte offset of the goods slot computed before winMgrAction (slwi ahead of the call, lwzx after), as in the target; goods[wp->goodsIdx] and an index local both scale after the call
@@ -183,6 +234,7 @@ void unitwin_help_disp(WinMgrEntry* entry) {
         winMgrHelpDraw(entry);
     }
 }
+#endif
 
 /**
  * Draws the shop-point window: the points label and the count,
@@ -190,6 +242,7 @@ void unitwin_help_disp(WinMgrEntry* entry) {
  * The label icon differs between Japanese (language 0) and other text.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_80175710, JP 0x80175710. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 void unitwin_point_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
@@ -222,25 +275,92 @@ void unitwin_point_disp(WinMgrEntry* entry) {
         }
     }
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static s32 iconid_conv(s32 icon) {
+    if (icon == ICON_PARTY_YOSHI) {
+        switch (pouchGetPartyColor(4)) {
+            case 0:
+                icon = ICON_PARTY_YOSHI;
+                break;
+            case 1:
+                icon = ICON_PARTY_YOSHI_1;
+                break;
+            case 2:
+                icon = ICON_PARTY_YOSHI_2;
+                break;
+            case 3:
+                icon = ICON_PARTY_YOSHI_3;
+                break;
+            case 4:
+                icon = ICON_PARTY_YOSHI_4;
+                break;
+            case 5:
+                icon = ICON_PARTY_YOSHI_5;
+                break;
+            case 6:
+            default:
+                icon = ICON_PARTY_YOSHI_6;
+                break;
+        }
+    }
+    return icon;
+}
+static const char* party_name_table_rtn(s32 i) {
+    const char* name;
+    switch (i) {
+        case 0:
+            name = msgSearch("name_party0");
+            break;
+        case 1:
+            name = msgSearch("name_party1");
+            break;
+        case 2:
+            name = msgSearch("name_party4");
+            break;
+        case 3:
+            name = pouchGetYoshiName();
+            break;
+        case 4:
+            name = msgSearch("name_party5");
+            break;
+        case 5:
+            name = msgSearch("name_party2");
+            break;
+        case 6:
+            name = msgSearch("name_party6");
+            break;
+    }
+    return name;
+}
+#endif
 USER_FUNC(evt_unitwin_alloc) {
+#if VERSION > VERSION_DEMO_US
     s32 useWinMgr = evtGetValue(event, event->args[0]);
+#endif
     UnitWinWork* wp = _mapAlloc(sizeof(UnitWinWork));
     memset(wp, 0, sizeof(UnitWinWork));
     wp->mode = 0;
     _wp = wp;
+#if VERSION > VERSION_DEMO_US
     if (useWinMgr) {
         wp->flags |= UNITWIN_FLAG_WINMGR;
     } else {
         wp->flags &= ~UNITWIN_FLAG_WINMGR;
     }
+#endif
     iconEntry2D("yubicursor_2", ICON_YUBI_CURSOR);
     iconFlagOn("yubicursor_2", ICON_FLAG_HIDDEN);
     iconFlagOn("yubicursor_2", ICON_FLAG_FLIP_X);
+#if VERSION > VERSION_DEMO_US
     if (!(wp->flags & UNITWIN_FLAG_WINMGR)) {
+#endif
         wp->evt = evtEntry(main_evt, 0, 0);
         wp->evt->lwData[0] = (EvtWord)wp;
+#if VERSION > VERSION_DEMO_US
     }
+#endif
     mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
     mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
     mario_status_point_table[2] = &pouchGetPtr()->maximumBP;
@@ -248,9 +368,17 @@ USER_FUNC(evt_unitwin_alloc) {
 }
 
 USER_FUNC(evt_unitwin_free) {
+#if VERSION > VERSION_DEMO_US
     UnitWinWork* wp = _wp;
+#endif
     s32 i;
+#if VERSION <= VERSION_DEMO_US
+    UnitWinWork* wp = _wp;
+#endif
     char name[32];
+#if VERSION <= VERSION_DEMO_US
+    CaseEntry* entry;
+#endif
     if (wp == NULL) {
         return EVT_RETURN_DONE;
     }
@@ -264,11 +392,20 @@ USER_FUNC(evt_unitwin_free) {
         mapObjFlagOff(wp->entries[i].mapObj, MAP_OBJ_FLAG_DISABLED);
         sprintf(name, "uwn%d", i);
         iconDelete(name);
+#if VERSION <= VERSION_DEMO_US
+        entry = caseIdToPtr(wp->caseId[i]);
+        if (evtCheckID(entry->evtId)) {
+            evtDeleteID(entry->evtId);
+#endif
     }
+#if VERSION <= VERSION_DEMO_US
+        caseDelete(wp->caseId[i]);
+#else
     if (wp->flags & UNITWIN_FLAG_WINMGR) {
         for (i = 0; i < 3; i++) {
             winMgrDelete(wp->winId[i]);
         }
+#endif
     }
     iconDelete("yubicursor_2");
     _mapFree(_wp);
@@ -282,6 +419,9 @@ USER_FUNC(evt_unitwin_selltable_setup) {
     UnitWinSell* tbl = (UnitWinSell*)evtGetValue(event, args[0]);
     s32* goods = (s32*)evtGetValue(event, args[1]);
     UnitWinWork* wp = _wp;
+#if VERSION <= VERSION_DEMO_US
+    EvtWord caseWork[16];
+#endif
     char name[32];
     Vec pos;
     wp->entries = tbl;
@@ -296,16 +436,25 @@ USER_FUNC(evt_unitwin_selltable_setup) {
             iconEntry(name, itemDataTable[wp->goods[i]].icon_id);
             iconSetPos(name, pos.x, pos.y + 6.0f, pos.z);
             iconFlagOn(name, ICON_FLAG_NO_MAP_BLEND);
+#if VERSION > VERSION_DEMO_US
         } else {
             wp->itemFlags[i] |= UNITWIN_ITEM_UNAVAILABLE;
+#endif
         }
+#if VERSION <= VERSION_DEMO_US
+        caseWork[0] = (EvtWord)wp;
+        caseWork[1] = i;
+        wp->caseId[i] = evtRunCaseEntry(0, 0, wp->entries[i].hitName, 0, select_evt, caseWork);
+#endif
     }
+#if VERSION > VERSION_DEMO_US
     wp->evt = evtEntryType(select_evt, 0, EVENT_START_IMMEDIATE, 0);
     wp->evt->lwData[0] = (EvtWord)wp;
     for (i = 0; i < 3; i++) {
         wp->winId[i] = winMgrEntry(&unitwin_desc[i]);
     }
     wp->selected = -1;
+#endif
     return EVT_RETURN_DONE;
 }
 
@@ -313,6 +462,32 @@ USER_FUNC(evt_unitwin_selltable_setup) {
  * Shows (args[0] nonzero) or hides the coin counter window,
  * starting it from Mario's current coins so it counts up or down to later changes.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(evt_unitwin_select_func) {
+    UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
+    if (wp->mode == 0) {
+        wp->goodsIdx = event->lwData[1];
+        if (wp->goods[wp->goodsIdx] != 0) {
+            wp->timer = 1;
+            wp->flags |= UNITWIN_FLAG_SELECTED;
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                marioKeyOff();
+                wp->childEvt = evtEntry(wp->entries[wp->goodsIdx].evt, 0, 0);
+                wp->childEvt->lwData[0] = (EvtWord)wp;
+                wp->mode = 1;
+                return EVT_RETURN_BLOCK;
+            }
+        }
+        return EVT_RETURN_DONE;
+    }
+    if (evtCheckID(wp->childEvt->eventId)) {
+        return EVT_RETURN_BLOCK;
+    }
+    wp->mode = 0;
+    marioKeyOn();
+    return EVT_RETURN_YIELD;
+}
+#endif
 USER_FUNC(unitwincoin_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp;
@@ -343,6 +518,7 @@ USER_FUNC(unitwincoin_wait) {
  * it is drawn only while the lottery reports a ticket.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8017524c, JP 0x8017524C. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(unitwin_lottery_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp = _wp;
@@ -353,19 +529,23 @@ USER_FUNC(unitwin_lottery_disp_onoff) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Tells the counter whether the purchase script finished with a sale:
  * args[0] is the unit window work, args[1] nonzero marks the slot sold so its item disappears.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_801751f8, JP 0x801751F8. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(unitwin_set_bought) {
     EvtWord* args = event->args;
     UnitWinWork* wp = (UnitWinWork*)evtGetValue(event, args[0]);
     wp->bought = evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
 }
+#endif
 
+#if VERSION > VERSION_DEMO_US
 static inline void unitWinClose(UnitWinWork* wp) {
     if (wp->selected != -1) {
         wp->selected = -1;
@@ -373,8 +553,18 @@ static inline void unitWinClose(UnitWinWork* wp) {
         winMgrClose(wp->winId[1]);
     }
 }
+#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_80174e98, JP 0x80174E98. See docs/NAME_PROVENANCE.md.
+#if VERSION <= VERSION_DEMO_US
+USER_FUNC(unitwin_window_select_func) {
+    EvtWord* args = event->args;
+    s32 arg = evtGetValue(event, *args++);
+    UnitWinWork* wp = _wp;
+    PouchData* pouch;
+    const char* name;
+    s32 prev;
+#else
 USER_FUNC(evt_unitwin_select_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
     s32 found = FALSE;
@@ -382,7 +572,18 @@ USER_FUNC(evt_unitwin_select_func) {
     PartyEntry* party = partyGetPtr(0);
     HitEntry* hit = mario->hitobjStandOn;
     u32 btn;
+#endif
     s32 i;
+#if VERSION <= VERSION_DEMO_US
+    s32 k;
+    s32 j;
+    s32 n;
+    s32 ng;
+    s32* p;
+    s32 t;
+    s32 id;
+    InformantWork* jdt = &_jdt;
+#else
     char name[32];
     MapObject* obj;
     if (wp->flags2 & UNITWIN_FREE_REQUEST) {
@@ -391,14 +592,36 @@ USER_FUNC(evt_unitwin_select_func) {
     }
     wp->flags &= ~UNITWIN_FLAG_SELECTED;
     btn = keyGetButtonTrg(0);
+#endif
     // FAKE: `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() || !marioChkKey() changes the object
+#if VERSION <= VERSION_DEMO_US
+    if (isFirstCall) {
+        wp->mode = arg;
+        wp->cursor = 0.0f;
+        wp->scrollTop = 0.0f;
+        wp->scroll = 0.0f;
+        wp->cursorX = -25.0f;
+        wp->cursorY = 60.0f - 24.0f * (wp->cursor - wp->scrollTop);
+        statusWinForceOpen();
+#else
     if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
         btn = 0;
     }
     if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         unitWinClose(wp);
+#endif
         return EVT_RETURN_BLOCK;
     }
+#if VERSION <= VERSION_DEMO_US
+
+    switch (wp->mode) {
+        case 2:
+        case 3:
+            wp->count = 0;
+            for (k = 0; k < 20; k++) {
+                if (pouchHaveItem(k)) {
+                    wp->count++;
+#else
     if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
         unitWinClose(wp);
         return EVT_RETURN_BLOCK;
@@ -409,8 +632,17 @@ USER_FUNC(evt_unitwin_select_func) {
                 const char* hitName = hitGetName(hit);
                 if (!strcmp(wp->entries[i].hitName, hitName)) {
                     break;
+#endif
                 }
             }
+#if VERSION <= VERSION_DEMO_US
+            break;
+        case 12:
+            wp->count = 0;
+            for (k = 0; k < 200; k++) {
+                if (pouchHaveBadge(k)) {
+                    wp->count++;
+#else
             if (!(wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) && i < wp->goodsMax) {
                 if (wp->selected != i) {
                     if (wp->selected == -1) {
@@ -422,8 +654,17 @@ USER_FUNC(evt_unitwin_select_func) {
                     winMgrHelpInit(winMgrGetPtr(wp->winId[1]));
                 }
                 found = TRUE;
+#endif
             }
         }
+#if VERSION <= VERSION_DEMO_US
+            break;
+        case 11:
+            wp->count = 0;
+            for (k = 0; k < 99; k++) {
+                if ((s16)badgeShop_get(bdsw->bargain_table, k + 0xF0) - badgeShop_ThrowCheck(k + 0xF0) > 0) {
+                    wp->count++;
+#else
         if (!found) {
             unitWinClose(wp);
         }
@@ -438,15 +679,187 @@ USER_FUNC(evt_unitwin_select_func) {
                 winMgrClose(wp->winId[1]);
                 wp->selected = -1;
                 wp->bought = 0;
+#endif
             }
         }
+#if VERSION <= VERSION_DEMO_US
+            break;
+        case 17:
+        case 18:
+            wp->count = jdt->count;
+            break;
+        case 13:
+            wp->count = 0;
+            for (k = 0; k < 99; k++) {
+                if ((s16)badgeShop_get(bdsw->starmaniac_table, k + 0xF0) > 0) {
+                    wp->count++;
+#else
     } else if (!evtCheckID(wp->childEvt->eventId)) {
         wp->flags &= ~UNITWIN_FLAG_BUYING;
         marioKeyOn();
         if (wp->bought) {
             wp->itemFlags[wp->goodsIdx] |= 1;
+#endif
         }
     }
+#if VERSION <= VERSION_DEMO_US
+            break;
+        case 14:
+            wp->count = 0;
+            for (k = 0; k < 0x152; k++) {
+                if ((s16)badgeShop_get(bdsw->bottakuru_table, k + 1) > 0) {
+                    wp->count++;
+                }
+            }
+            break;
+        case 15:
+            wp->count = 0;
+            for (k = 0; badge_bottakuru100_table[k] != 0; k++) {
+                wp->count++;
+            }
+            break;
+        case 16:
+            wp->count = 0;
+            for (k = 0; k < 0x152; k++) {
+                if ((s16)badgeShop_get(bdsw->bteresa_table, k + 1) > 0) {
+                    wp->count++;
+                }
+            }
+            break;
+        case 4:
+            wp->count = 0;
+            for (k = 0; k < 32; k++) {
+                if (pouchKeepItem(k)) {
+                    wp->count++;
+                }
+            }
+            break;
+        case 5:
+        case 6:
+            wp->count = 0;
+            for (k = 0; (id = party_id_table[k]) != 0; k++) {
+                if (partyChkJoin(id)) {
+                    wp->count++;
+                }
+            }
+            break;
+        case 7:
+            wp->skipEntry = event->lwData[1];
+            wp->count = 0;
+            for (k = 0; (id = party_id_table[k]) != 0; k++) {
+                if (partyChkJoin(id) && wp->skipEntry != party_id_table[k]) {
+                    wp->count++;
+                }
+            }
+            break;
+        case 8:
+        case 9:
+            wp->count = 3;
+            break;
+        case 10:
+            wp->skipEntry = event->lwData[1];
+            wp->count = 2;
+            break;
+    }
+
+    prev = wp->cursor;
+    if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
+        wp->cursor += 1.0f;
+    }
+    if (keyGetDirRep(0) & DEMO_STICK_UP) {
+        wp->cursor -= 1.0f;
+    }
+    if (prev != (s32)wp->cursor) {
+        psndSFXOn((const char*)5);
+    }
+    if (wp->cursor >= wp->count) {
+        wp->cursor = 0.0f;
+        wp->scrollTop = 0.0f;
+    }
+    if (wp->cursor < 0.0f) {
+        wp->cursor = wp->count - 1;
+        if ((t = wp->count - 8) > 0) {
+            wp->scrollTop = t;
+        }
+    }
+    if (prev < wp->cursor) {
+        if (wp->cursor > 5.0f && wp->scrollTop < wp->count - 8) {
+            wp->scrollTop += 1.0f;
+        }
+    } else if (prev > wp->cursor) {
+        if (wp->cursor - wp->scrollTop < 3.0f && wp->scrollTop > 0.0f) {
+            wp->scrollTop -= 1.0f;
+        }
+    }
+    wp->scroll += (24.0f * wp->scrollTop - wp->scroll) / 6.0f;
+    wp->cursorX += (-25.0f - wp->cursorX) / 6.0f;
+    wp->cursorY += ((60.0f - 24.0f * (wp->cursor - wp->scrollTop)) - wp->cursorY) / 6.0f;
+
+    if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+        n = 0;
+        switch (wp->mode) {
+            case 2:
+            case 3:
+                statusWinForceOff();
+                for (i = 0; i < 20; i++) {
+                    if (pouchHaveItem(i)) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = pouchHaveItem(i);
+                event->lwData[2] = (EvtWord)itemDataTable[pouchHaveItem(i)].id;
+                event->lwData[3] = itemDataTable[pouchHaveItem(i)].sell_price;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 12:
+                statusWinForceOff();
+                for (i = 0; i < 200; i++) {
+                    if (pouchHaveBadge(i)) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = pouchHaveBadge(i);
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = itemDataTable[event->lwData[1]].sell_price;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 11:
+                statusWinForceOff();
+                for (i = 0; i < 99; i++) {
+                    if ((s16)badgeShop_get(bdsw->bargain_table, i + 0xF0) - badgeShop_ThrowCheck(i + 0xF0) > 0) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = i + 0xF0;
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = itemDataTable[event->lwData[1]].buy_price;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 17:
+                statusWinForceOff();
+                j = wp->cursor;
+                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
+                jdt->curIndex = j;
+                event->lwData[0] = 1;
+                event->lwData[1] = (EvtWord)jdt->infoEnd;
+                event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
+                event->lwData[3] = jdt->info[j].tagEndPos;
+                if (johoya_get(jdt->readFlags.perfectRead, jdt->info[j].storyId)) {
+                    event->lwData[4] = 0;
+#else
     for (i = 0; i < wp->goodsMax; i++) {
         obj = mapGetMapObj(wp->entries[i].mapObj);
         if (obj != NULL) {
@@ -455,11 +868,269 @@ USER_FUNC(evt_unitwin_select_func) {
                 iconFlagOn(name, ICON_FLAG_HIDDEN);
             } else if (obj->flags & MAP_OBJ_FLAG_HIDDEN) {
                 iconFlagOn(name, ICON_FLAG_HIDDEN);
+#endif
             } else {
+#if VERSION <= VERSION_DEMO_US
+                    event->lwData[4] = jdt->info[j].cost;
+                }
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 18:
+                statusWinForceOff();
+                psndSFXOn((const char*)0x12);
+                j = wp->cursor;
+                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
+                jdt->curIndex = j;
+                event->lwData[0] = 1;
+                event->lwData[1] = (EvtWord)jdt->infoEnd;
+                event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
+                event->lwData[3] = jdt->info[j].tagEndPos;
+                if (johoya_get(jdt->readFlags.luigiRead, jdt->info[j].storyId)) {
+                    event->lwData[4] = 0;
+                } else {
+                    event->lwData[4] = 1;
+                }
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 13:
+                statusWinForceOff();
+                for (i = 0; i < 99; i++) {
+                    if ((s16)badgeShop_get(bdsw->starmaniac_table, i + 0xF0) > 0) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                if (itemDataTable[i + 0xF0].star_piece_price > pouchGetStarPiece()) {
+                    break;
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = i + 0xF0;
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = itemDataTable[event->lwData[1]].star_piece_price;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 14:
+                statusWinForceOff();
+                for (i = 0; i < 0x152; i++) {
+                    if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = i + 1;
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 12) / 10;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 15:
+                statusWinForceOff();
+                for (i = 0; badge_bottakuru100_table[i] != 0; i++) {
+                    if (n == wp->cursor) {
+                        break;
+                    }
+                    n++;
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = badge_bottakuru100_table[i];
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = ((evtGetValue(NULL, GSW(GSW_JON_FLOOR)) + 11) * itemDataTable[event->lwData[1]].buy_price) / 10;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 16:
+                statusWinForceOff();
+                for (i = 0; i < 0x152; i++) {
+                    if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = i + 1;
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 2 + 2) / 3;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 4:
+                statusWinForceOff();
+                for (i = 0; i < 32; i++) {
+                    if (pouchKeepItem(i)) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = pouchKeepItem(i);
+                event->lwData[2] = (EvtWord)itemDataTable[pouchKeepItem(i)].id;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 5:
+            case 6:
+                pouch = pouchGetPtr();
+                for (i = 0; (id = party_id_table[i]) != 0; i++) {
+                    if (partyChkJoin(id)) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                if (!evtGetValue(event, GSWF(GSWF_MERLON_FIRST_UPGRADE_DONE))) {
+                    if (pouch->partyData[party_id_table[i]].techLevel < 1) {
+                        ng = 0;
+                    } else {
+                        ng = 1;
+                    }
+                } else {
+                    if (pouch->partyData[party_id_table[i]].techLevel < 2) {
+                        ng = 0;
+                    } else {
+                        ng = 2;
+                    }
+                }
+                if (ng) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[1] = party_id_table[i];
+                if (arg == 6) {
+                    name = party_name_table_rtn(i);
+                    event->lwData[3] = (EvtWord)name;
+                }
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 7:
+                pouch = pouchGetPtr();
+                for (i = 0, p = party_id_table; (id = *p) != 0; p++, i++) {
+                    if (partyChkJoin(id) && wp->skipEntry != *p) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                if ((pouch->partyData[party_id_table[i]].techLevel > 0 ? 0 : 1) != 0) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[2] = party_id_table[i];
+                name = party_name_table_rtn(i);
+                event->lwData[4] = (EvtWord)name;
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 8:
+                pouchGetPtr();
+                for (i = 0; i < wp->count; i++) {
+                    if (n == wp->cursor) {
+                        break;
+                    }
+                    n++;
+                }
+                ng = 0;
+                for (j = 0; j < wp->count; j++) {
+                    if (j != wp->cursor) {
+                        if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
+                            ng = 1;
+#else
                 iconFlagOff(name, ICON_FLAG_HIDDEN);
+#endif
             }
         }
     }
+#if VERSION <= VERSION_DEMO_US
+                if (ng) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[1] = i;
+                event->lwData[2] = (EvtWord)mario_status_name_table[i];
+                event->lwData[3] = (EvtWord)mario_status_name_table[i == 0];
+                event->lwData[4] = (EvtWord)mario_status_name_table[i != 2 ? 2 : 1];
+                for (j = 0; j < wp->count; j++) {
+                    if (j == wp->cursor) {
+                        event->lwData[5 + j] = *mario_status_point_table[j] + mario_status_henka_table[j] * 2;
+                    } else {
+                        event->lwData[5 + j] = *mario_status_point_table[j] - mario_status_henka_table[j];
+                    }
+                }
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 9:
+                pouchGetPtr();
+                for (i = 0; i < wp->count; i++) {
+                    if (n == wp->cursor) {
+                        break;
+                    }
+                    n++;
+                }
+                ng = 0;
+                for (j = 0; j < wp->count; j++) {
+                    if (j != wp->cursor) {
+                        if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
+                            ng++;
+                        }
+                    }
+                }
+                if (ng >= 2) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[1] = i;
+                event->lwData[2] = (EvtWord)mario_status_name_table[i];
+                for (j = 0; j < wp->count; j++) {
+                    if (j == wp->cursor) {
+                        event->lwData[5 + j] = *mario_status_point_table[j] + mario_status_henka_table[j];
+                    } else {
+                        event->lwData[5 + j] = *mario_status_point_table[j];
+                    }
+                }
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+            case 10:
+                pouchGetPtr();
+                for (i = 0; i < 3; i++) {
+                    if (i != wp->skipEntry) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                if (*mario_status_point_table[i] - mario_status_henka_table[i] <= 0) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[1] = i;
+                event->lwData[3] = (EvtWord)mario_status_name_table[i];
+                event->lwData[5 + i] = *mario_status_point_table[i] - mario_status_henka_table[i];
+                wp->mode = 0;
+                return EVT_RETURN_YIELD;
+        }
+    } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
+        statusWinForceOff();
+        psndSFXOn((const char*)0x13);
+        event->lwData[0] = 0;
+        wp->mode = 0;
+        return EVT_RETURN_YIELD;
+    }
+#endif
     return EVT_RETURN_BLOCK;
 }
 
@@ -478,6 +1149,7 @@ USER_FUNC(evt_unitwin_main_func) {
     return EVT_RETURN_BLOCK;
 }
 
+#if VERSION > VERSION_DEMO_US
 static inline s32 unitwin_party_icon(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {
         switch (pouchGetPartyColor(PARTNER_YOSHI)) {
@@ -507,8 +1179,13 @@ static inline s32 unitwin_party_icon(s32 icon) {
     }
     return icon;
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
 #define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)
+#else
+#define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)
+#endif
 
 static inline const char* unitwin_party_name(s32 i) {
     const char* name;
@@ -537,7 +1214,11 @@ static inline const char* unitwin_party_name(s32 i) {
     }
     return name;
 }
+#if VERSION <= VERSION_DEMO_US
+static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
+#else
 void evt_unitwin_disp_func(CameraId cameraId, void* param) {
+#endif
     PouchData* pouch = pouchGetPtr();
     UnitWinWork* wp = (UnitWinWork*)param;
     s32 mode;
@@ -627,13 +1308,21 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             wp->coinTick++;
             wp->coinTick %= 1200;
+#if VERSION <= VERSION_DEMO_US
+if (abs(coin - wp->coin) == 1 || gp->retraceCount % 6 == 0) {
+#else
             if (!unitwin_coin_se_wait) {
+#endif
                 psndSFXOn("SFX_COUNT_COIN1");
+#if VERSION > VERSION_DEMO_US
                 unitwin_coin_se_wait = 7;
+#endif
             }
+#if VERSION > VERSION_DEMO_US
         }
         if (unitwin_coin_se_wait > 0) {
             unitwin_coin_se_wait--;
+#endif
         }
     }
 
@@ -659,6 +1348,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
         }
     }
+#if VERSION > VERSION_DEMO_US
 
     if ((wp->flags & UNITWIN_FLAG_LOTTERY) && (lotteryGetPtr()->flags & LOTTERY_FLAG_TICKET)) {
         Mtx mtx;
@@ -673,7 +1363,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             iconNumberDispGx(mtx, (s8)buf[i] - '0', 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         }
     }
-
+#endif
     switch (mode = wp->mode) {
         case 0:
         case 1:
@@ -748,7 +1438,11 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             } else if (mode == 14) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
+#if VERSION <= VERSION_DEMO_US
+                max = 0x152;
+#else
                 max = ITEM_TYPE_MAX - 1;
+#endif
                 title = msgSearch("msg_window_title_3");
                 titleX = 20;
             } else if (mode == 15) {
@@ -760,7 +1454,11 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             } else if (mode == 16) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
+#if VERSION <= VERSION_DEMO_US
+                max = 0x152;
+#else
                 max = ITEM_TYPE_MAX - 1;
+#endif
                 title = msgSearch("msg_window_title_4");
                 titleX = 30;
             } else {
@@ -799,6 +1497,8 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             GXGetScissor(&sl, &st, &sw, &sh);
             GXSetScissor(0x120, 0xA2, 0x11C, 0xBE - h);
             for (tbl = badge_bottakuru100_table, i = 0; i < max; i++) {
+#if VERSION <= VERSION_DEMO_US
+#endif
                 GXColor color = {0x00, 0x00, 0x00, 0xFF};
                 s32 id;
                 ItemData* item;

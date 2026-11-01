@@ -265,9 +265,14 @@ const char* hotel_npc[] = {
 };
 
 static EVT_BEGIN(door_2_open)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#endif
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -335,7 +340,9 @@ EVT_BEGIN(imgstart)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_img_set_color, STRING("capture_img"), 255, 255, 255, LW(0))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_item_set_alpha, STRING("breakfast"), LW(0))
+#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -371,7 +378,9 @@ EVT_BEGIN(imgend)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_img_set_color, STRING("capture_img"), 255, 255, 255, LW(0))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_item_set_alpha, STRING("breakfast"), LW(0))
+#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -392,9 +401,15 @@ EVT_END()
 EVT_BEGIN(evt_up)
     // The ride up: the elevator doors slide open.
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 40, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -406,9 +421,15 @@ EVT_BEGIN(evt_up)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
+#endif
     CALL(evt_hitobj_onoff, STRING("a_door_2"), 1, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(133.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(56.5f), FLOAT(-65.0f), 800, EASING_SINE_IN_OUT)
+#endif
     BEGIN_INLINE_EVENT
         // Mario steps into the elevator box.
         CALL(evt_mario_mov_pos2, 435, 45, FLOAT(80.0f))
@@ -417,11 +438,16 @@ EVT_BEGIN(evt_up)
     CALL(evt_party_stop, 0)
     CALL(evt_party_move_pos2, 0, 410, 67, FLOAT(80.0f))
     CALL(evt_party_set_dir, 0, 270, 200)
+#if VERSION <= VERSION_DEMO_US
+    // The street fades out as the doors close.
+    SPAWN_EVENT(imgstart)
+#else
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_set_pos, 0, 410, LW(1), 67)
     CALL(evt_party_set_dir, 0, 270, 200)
     CALL(evt_party_stop, 0)
     SPAWN_EVENT(PTR(imgstart))
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 40, 0, 1000)
@@ -437,35 +463,73 @@ EVT_BEGIN(evt_up)
     END_LOOP
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_hitobj_onoff, STRING("a_door_2"), 1, 1)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(1463.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(1386.5f), FLOAT(-65.0f), 10000, EASING_SINE_IN_OUT)
+#endif
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
+    CALL(evt_mario_get_party, LW(5))
+    IF_INT_NOT_EQUAL(LW(5), 0)
+        CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
+    ELSE
+        SET_FLOAT_VALUE(LW(5), LW(2))
+        SET_FLOAT_VALUE(LW(6), LW(3))
+        SET_FLOAT_VALUE(LW(7), LW(4))
+    END_IF
+#endif
     // The elevator box rises.
     CALL(evt_hit_bind_mapobj, STRING("a_hako"), STRING("hako"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(10))
+#else
     CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(9))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 13250, 10000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
         CALL(evt_mapobj_trans, 1, STRING("hako"), 0, LW(0), 0)
         CALL(evt_hit_bind_update, STRING("a_hako"))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(8), LW(3))
+        ADD(LW(8), LW(0))
+        CALL(evt_mario_set_pos, LW(2), LW(8), LW(4))
+        SET_VALUE(LW(8), LW(6))
+        ADD(LW(8), LW(0))
+        CALL(evt_party_set_pos, 0, LW(5), LW(8), LW(7))
+#else
         ADD_FLOAT(LW(0), FLOAT(4.0f))
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
         CALL(evt_mario_set_pos, LW(2), LW(0), LW(4))
         CALL(evt_party_get_pos, 0, LW(2), LW(3), LW(4))
         CALL(evt_party_set_pos, 0, LW(2), LW(0), LW(4))
+#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
+#endif
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     // The upper floor fades in and its doors open.
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(imgend)
+#else
     SPAWN_EVENT(PTR(imgend))
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 40, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -477,16 +541,24 @@ EVT_BEGIN(evt_up)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
     END_INLINE_EVENT
+#endif
     // Mario walks out onto the upper floor.
     CALL(evt_mario_mov_pos2, 383, -10, FLOAT(80.0f))
     CALL(evt_party_move_pos2, 0, 360, 10, FLOAT(80.0f))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 40, 0, 1000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -498,7 +570,11 @@ EVT_BEGIN(evt_up)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -508,11 +584,18 @@ EVT_BEGIN(evt_down)
     // The ride down: the elevator doors slide open.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 40, 1000)
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 4000, 1000)
+#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION > VERSION_DEMO_US
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+#endif
         CALL(evt_mapobj_trans, 1, STRING("door_3_b"), 0, 0, LW(0))
         MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
         CALL(evt_mapobj_trans, 1, STRING("door_3_a"), 0, 0, LW(0))
@@ -521,9 +604,15 @@ EVT_BEGIN(evt_down)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
+#endif
     CALL(evt_hitobj_onoff, STRING("a_door_3"), 1, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(1463.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(1386.5f), FLOAT(-65.0f), 800, EASING_SINE_IN_OUT)
+#endif
     BEGIN_INLINE_EVENT
         // Mario steps into the elevator box.
         CALL(evt_mario_mov_pos2, 435, 45, FLOAT(80.0f))
@@ -532,7 +621,15 @@ EVT_BEGIN(evt_down)
     CALL(evt_party_stop, 0)
     CALL(evt_party_move_pos2, 0, 410, 67, FLOAT(80.0f))
     CALL(evt_party_set_dir, 0, 270, 200)
+#if VERSION <= VERSION_DEMO_US
+    // The upper floor fades out as the doors close.
+    SPAWN_EVENT(imgstart)
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 40, 0, 1000)
+#else
     CALL(evt_party_set_pos, 0, 410, LW(1), 67)
     CALL(evt_party_set_dir, 0, 270, 200)
     CALL(evt_party_stop, 0)
@@ -540,9 +637,12 @@ EVT_BEGIN(evt_down)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 4000, 0, 1000)
+#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION > VERSION_DEMO_US
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+#endif
         CALL(evt_mapobj_trans, 1, STRING("door_3_b"), 0, 0, LW(0))
         MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
         CALL(evt_mapobj_trans, 1, STRING("door_3_a"), 0, 0, LW(0))
@@ -551,41 +651,88 @@ EVT_BEGIN(evt_down)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
+#endif
     CALL(evt_hitobj_onoff, STRING("a_door_3"), 1, 1)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(133.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(56.5f), FLOAT(-65.0f), 10000, EASING_SINE_IN_OUT)
+#endif
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
+    CALL(evt_mario_get_party, LW(5))
+    IF_INT_NOT_EQUAL(LW(5), 0)
+        CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
+    ELSE
+        SET_FLOAT_VALUE(LW(5), LW(2))
+        SET_FLOAT_VALUE(LW(6), LW(3))
+        SET_FLOAT_VALUE(LW(7), LW(4))
+    END_IF
+    SUBTRACT_FLOAT(LW(3), FLOAT(1325.0f))
+    SUBTRACT_FLOAT(LW(6), FLOAT(1325.0f))
+#endif
     // The elevator box sinks.
     CALL(evt_hit_bind_mapobj, STRING("a_hako"), STRING("hako"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(10))
+#else
     CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(9))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 13250, 0, 10000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
         CALL(evt_mapobj_trans, 1, STRING("hako"), 0, LW(0), 0)
         CALL(evt_hit_bind_update, STRING("a_hako"))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(8), LW(3))
+        ADD(LW(8), LW(0))
+        CALL(evt_mario_set_pos, LW(2), LW(8), LW(4))
+        SET_VALUE(LW(8), LW(6))
+        ADD(LW(8), LW(0))
+        CALL(evt_party_set_pos, 0, LW(5), LW(8), LW(7))
+#else
         ADD_FLOAT(LW(0), FLOAT(4.0f))
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
         CALL(evt_mario_set_pos, LW(2), LW(0), LW(4))
         CALL(evt_party_get_pos, 0, LW(2), LW(3), LW(4))
         CALL(evt_party_set_pos, 0, LW(2), LW(0), LW(4))
+#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
+#endif
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     // The street fades in and its doors open.
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(imgend)
+#else
     SPAWN_EVENT(PTR(imgend))
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 40, 1000)
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 4000, 1000)
+#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION > VERSION_DEMO_US
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+#endif
         CALL(evt_mapobj_trans, 1, STRING("door_2_b"), 0, 0, LW(0))
         MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
         CALL(evt_mapobj_trans, 1, STRING("door_2_a"), 0, 0, LW(0))
@@ -594,17 +741,28 @@ EVT_BEGIN(evt_down)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
     CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
+#endif
     // Mario walks out onto the street.
     CALL(evt_mario_mov_pos2, 383, -10, FLOAT(80.0f))
     CALL(evt_party_move_pos2, 0, 360, 10, FLOAT(80.0f))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(10))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 40, 0, 1000)
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 4000, 0, 1000)
+#endif
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION > VERSION_DEMO_US
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+#endif
         CALL(evt_mapobj_trans, 1, STRING("door_2_b"), 0, 0, LW(0))
         MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
         CALL(evt_mapobj_trans, 1, STRING("door_2_a"), 0, 0, LW(0))
@@ -613,7 +771,11 @@ EVT_BEGIN(evt_down)
             BREAK_LOOP
         END_IF
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxoff, LW(10))
+#else
     CALL(evt_snd_sfxoff, LW(9))
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -873,7 +1035,11 @@ static NpcSetupInfo npc_data[] = {
  */
 EVT_BEGIN(evt_roten)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_unitwin_alloc)
+#else
     CALL(evt_unitwin_alloc, 0)
+#endif
     CALL(evt_msg_print, 0, STRING("stg7_pik_shop_00"), 0, STRING("土産屋"))
     CALL(unitwincoin_disp_onoff, 1)
     CALL(evt_msg_select, 0, STRING("stg7_pik_shop_01"))
@@ -949,7 +1115,11 @@ static KinopioData kino_dt = {
     221, // breakfastItem
     {360.0f, 33.0f, -235.0f}, // breakfastPos
     30, // ryoukin
+#if VERSION <= VERSION_DEMO_US
+{295.0f, 1345.0f, 75.0f},
+#else
     {290.0f, 1345.0f, 80.0f}, // bed
+#endif
     {270.0f, 1330.0f, 60.0f}, // bedside
     {185.0f, 1442.0f, -285.0f, 295.0f, 1386.0f, -24.0f}, // cam
     -60.0f, // bedDeg
@@ -1074,11 +1244,17 @@ EVT_END()
 EVT_BEGIN(pik_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
+#if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_snd_bgm_scope, 0, 1)
     END_IF
+#endif
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK1_2"))
     CALL(evt_map_playanim, STRING("anm_taki"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_mizu_1"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1086,31 +1262,66 @@ EVT_BEGIN(pik_04_init_evt)
     SET_INT_READ_ADDR(PTR(&name_tbl))
     LOOP(6)
         READ_INT(LW(9))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_pik_yajirushi)
+#else
         SPAWN_EVENT(PTR(evt_pik_yajirushi))
+#endif
     END_LOOP
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gazigazi_entry)
+#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
+#endif
     CALL(evt_npc_setup, PTR(npc_data))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(init_takun3)
+#else
     CALL_CHILD(PTR(init_takun3))
+#endif
     CALL(evt_npc_change_interrupt, STRING("ターくん３"), 6, PTR(talk_takun3))
     SET_VALUE(LW(0), PTR(&door_1))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_door_entry)
+#else
     CALL_CHILD(PTR(evt_door_entry))
+#endif
     SET_VALUE(LW(0), PTR(&door_2))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_door_entry)
+#else
     CALL_CHILD(PTR(evt_door_entry))
+#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_door_2"), 0, PTR(evt_up), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_door_3"), 0, PTR(evt_down), 0)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("nw_bero"), HIT_ATTR_NPC_ONLY)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("se_bero"), HIT_ATTR_NPC_ONLY)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_roten"), 0, PTR(evt_roten), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, ITEM_TYPE_STILL, GSWF(GSWF_PIK04_STAR_PIECE), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -305, 0, 105, ITEM_TYPE_STILL, GSWF(GSWF_PIK04_INN_COUPON), 0)
+    CALL_CHILD(imginit)
+#else
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, ITEM_TYPE_STILL, GSWF_STARPIECE_90, 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -305, 0, 105, ITEM_TYPE_STILL, GSWF_PIK_04_INN_COUPON, 0)
     CALL_CHILD(PTR(imginit))
+#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("front_"), 0, PTR(kinopio_house_talk_evt), 0)
     CALL(evt_kinopio_setup, PTR(&kino_dt))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
+#endif
         CALL(evt_mario_kill_party, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(epilogue_npc_entry)
+        SPAWN_EVENT(epilogue_evt)
+#else
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
+#endif
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_bero"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("group92"), MAP_OBJ_FLAG_CLIP)

@@ -147,6 +147,9 @@ static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
  */
 static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_patapata = {85, 90, 110, 100, 85, 100, 100, 85, 100, 85, 100, 85, 100, 85, 85, 90, 110, 100, 90, 100, 100, 100};
+#else
 static StatusVulnerability regist_patapata = {
     85, // sleep
     90, // stop
@@ -171,6 +174,7 @@ static StatusVulnerability regist_patapata = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /**
  * Parts of the KP Paratroopa in its winged form: a single body part (part 1, model c_touginoko), each with
@@ -488,8 +492,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "NKT_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
     {POSE_TYPE_DAMAGE, "NKT_D_1"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_RUN, "NKT_R_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
+#endif
     {POSE_TYPE_DANGER, "NKT_K_2"},
     {POSE_TYPE_PERIL, "NKT_K_2"},
     {POSE_TYPE_TALK, "NKT_S_2"},
@@ -518,6 +524,9 @@ static BattleUnitDefenseAttr defence_attr = {0};
  */
 static BattleUnitDefense defence_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {85, 90, 85, 100, 85, 100, 100, 85, 100, 85, 100, 85, 100, 85, 85, 90, 80, 100, 85, 100, 100, 100};
+#else
 static StatusVulnerability regist = {
     85, // sleep
     90, // stop
@@ -542,6 +551,7 @@ static StatusVulnerability regist = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /**
  * Parts of the KP Paratroopa: a single body part (part 1, model c_touginoko), each with its defense
@@ -583,7 +593,11 @@ static BattleWeapon weapon_nokonoko_attack = {
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
     ATTACKPATTERN_SHELL_ATTACK, // damagePattern
@@ -591,7 +605,11 @@ static BattleWeapon weapon_nokonoko_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_ALL,
+#else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
+#endif
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

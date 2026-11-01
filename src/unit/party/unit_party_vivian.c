@@ -39,7 +39,9 @@ USER_FUNC(_disp_heart_entry_stop);
 void _disp_heart(CameraId camera, void* param);
 USER_FUNC(_disp_heart_entry);
 USER_FUNC(_make_kagenuke_weapon);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(_get_vivian_attack_position);
+#endif
 USER_FUNC(_get_move_frame);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
@@ -551,6 +553,48 @@ BattleWeapon partyWeapon_VivianMagicalPowder = {
 #endif
 };
 
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_VivianCharmKissAttack = {
+    "btl_wn_ptr_lv3",
+ICON_PARTNER_MOVE_LV3,
+{0}, // pad_06
+    0, // itemId
+    "msg_ptr_meromero_kiss", // description
+    100, // baseAccuracy
+    4, // baseFpCost
+    0, 0, // baseSpCost..superguardsAllowed
+    1.0f,
+2,
+5, // reserved_19
+    100, // bingoSlotChance
+    50, // reserved_1B
+    NULL, // hpDamageFn
+    {0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    "msg_ac_meromero_kiss", // acHelpMsg
+    SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0,
+90,
+3, // confuseTime
+    0, 0, 0, 0, 0, 0, 0, 0, // electricChance..freezeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // defChangeStrength..slowChance
+    0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
+    0, 0, 0, // hpRegenStrength..fpRegenStrength
+    {0}, // pad_AE
+    partyVivianAttack_CharmKissAttack,
+{0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0},
+};
+#else
 BattleWeapon partyWeapon_VivianCharmKissAttack = {
     "btl_wn_ptr_lv3", // name
     ICON_PARTNER_MOVE_LV3, // icon
@@ -599,12 +643,182 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #endif
 };
+#endif
 
 /**
  * Vivian's Shade Fist: she sinks into the shadows,
  * reappears beside the enemy (_get_vivian_attack_position) and punches it with the action command,
  * the hit able to burn it for 2 turns (_make_kagenuke_weapon), then returns.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(partyVivianAttack_NormalAttack)
+    // Pick the target, set up the burn and pay the cost; the camera follows Vivian and the enemy.
+    CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
+    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    IF_INT_EQUAL(LW(3), -1)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    CALL(btlevtcmd_GetPartyTechLv, UNIT_ID_SELF, LW(0))
+    SWITCH(LW(0))
+        CASE_EQUAL(2)
+        CALL(_make_kagenuke_weapon, LW(12), 2)
+        CASE_EQUAL(1)
+        CALL(_make_kagenuke_weapon, LW(12), 2)
+        CASE_DEFAULT
+        CALL(_make_kagenuke_weapon, LW(12), 2)
+    END_SWITCH
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
+    CALL(btlevtcmd_WaitGuardMove)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
+    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
+    CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 200)
+    // Action command (press the button shown on screen) starts as she sinks into her shadow.
+    CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
+    CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_AcSetParamAll, 1, 1, 40, 1, 2, 0, 3, 0)
+    CALL(btlevtcmd_AcSetFlag, 23)
+    CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 18, 1, 0)
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_VIVIAN_ATTACK1"), 0)
+    CALL(battle_evt_majo_disp_off, UNIT_ID_SELF, 1, 0, 0)
+    CALL(btlevtcmd_StartAC, 1)
+    // She glides under the stage to a spot beside the enemy and rises out of the floor there.
+    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
+    CALL(btlevtcmd_TransStageFloorPosition, LW(6), LW(7), LW(8))
+    CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 30)
+    SUBTRACT(LW(1), 20)
+    IF_INT_LESS(LW(1), LW(7))
+        SET_VALUE(LW(1), LW(7))
+    END_IF
+    CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, 0, EASING_CUBIC_OUT, 0, -1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHADOW_TAIL_WORK_HOLD, 1)
+    CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_VIVIAN_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(battle_evt_majo_disp_on, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0)
+    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    // She turns to face the enemy and glides in close if she is not there yet.
+    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
+CALL(btlevtcmd_TransStageFloorPosition, LW(6), LW(7), LW(8))
+    CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 30)
+    SUBTRACT(LW(1), 20)
+    IF_INT_LESS(LW(1), LW(7))
+        SET_VALUE(LW(1), LW(7))
+    END_IF
+CALL(btlevtcmd_GetFaceDirection, LW(3), LW(15))
+    MULTIPLY(LW(15), -1)
+    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(6), LW(7), LW(8))
+    CALL(_get_move_frame, LW(0), LW(1), LW(2), LW(6), LW(7), LW(8), FLOAT(4.0f), LW(6))
+    IF_INT_GREATER_OR_EQUAL(LW(6), 1)
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_VIVIAN_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, 0, EASING_CUBIC_OUT, 0, -1)
+    END_IF
+    // A pre-emptive spiky enemy hurts her first.
+    LABEL(9)
+    CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    IF_INT_EQUAL(LW(5), 5)
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    END_IF
+    // Wait for the command result, then check whether the punch connects; a miss plays the enemy's dodge reaction.
+    CALL(btlevtcmd_ResultAC)
+    SET_VALUE(LW(10), 0)
+    LABEL(10)
+    IF_INT_GREATER_OR_EQUAL(LW(10), 1)
+        CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
+    ELSE
+        CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    END_IF
+    SWITCH(LW(5))
+        CASE_OR_EQUAL(2)
+        CASE_OR_EQUAL(3)
+        CASE_OR_EQUAL(6)
+        CASE_OR_EQUAL(4)
+        CASE_END
+        CASE_EQUAL(1)
+        CASE_DEFAULT
+    END_SWITCH
+    IF_INT_NOT_EQUAL(LW(5), 1)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A1_2"))
+        WAIT_MS(166)
+        IF_INT_EQUAL(LW(5), 3)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+        END_IF
+        IF_INT_EQUAL(LW(5), 6)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+        END_IF
+        IF_INT_EQUAL(LW(5), 2)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+        END_IF
+        WAIT_MS(500)
+        GOTO(90)
+    END_IF
+    // The punch lands; a successful command also burns the enemy and adds the rating effect (Nice, Good...).
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A1_2"))
+    CALL(btlevtcmd_ftomsec, 4, LW(0))
+    WAIT_MS(LW(0))
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_VIVIAN_ATTACK4"), 0)
+    CALL(btlevtcmd_GetResultAC, LW(0))
+    IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
+    ELSE
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_STATUS, LW(5))
+    END_IF
+    IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
+        CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
+        CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
+    ELSE
+        CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
+    END_IF
+    WAIT_MS(500)
+    // She sinks back into the floor, glides home under the stage and rises again; pressing A as she rises is the
+    // stylish.
+    LABEL(90)
+    CALL(btlevtcmd_StopAC)
+    LABEL(95)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A1_1"))
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, 0, EASING_CUBIC_OUT, 0, -1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHADOW_TAIL_WORK_HOLD, 0)
+    CALL(battle_evt_majo_disp_off, UNIT_ID_SELF, 1, 0, 0)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_CUBIC_OUT, 0, -1)
+    BEGIN_SIBLING_EVENT
+CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 20, 29, 29, 0)
+END_SIBLING_EVENT
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(battle_evt_majo_disp_on, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0)
+    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+    IF_INT_EQUAL(LW(6), 2)
+        CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
+        CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_Y_1"))
+        WAIT_FRAMES(52)
+    END_IF
+    // The audience refills Star Power and her turn ends.
+    LABEL(99)
+    CALL(evt_audience_ap_recovery)
+    CALL(btlevtcmd_InviteApInfoReport)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(partyVivianAttack_NormalAttack)
     // Pick the target, set up the burn and pay the cost; the camera follows Vivian and the enemy.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -766,9 +980,15 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 EVT_BEGIN(partyVivianAttack_ShadowGuard)
+#if VERSION <= VERSION_DEMO_US
+    // Target Mario, pay the cost and focus the camera on Vivian as she floats over to him.
+    SET_VALUE(LW(3), -3)
+#else
     SET_VALUE(LW(3), UNIT_ID_MARIO)
+#endif
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
@@ -785,9 +1005,17 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 15)
     ADD(LW(2), 5)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), -1, FACE_DIR_TOWARD_UNIT, LW(0))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(0))
+#if VERSION <= VERSION_DEMO_US
+    // Action command (press the buttons in order as they appear); on a failure she floats back home and nothing
+    // happens.
+#endif
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
@@ -822,17 +1050,27 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
         CALL(btlevtcmd_StopAC)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         GOTO(90)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
+#else
     CALL(btlevtcmd_GetResultPrizeLv, -1, 0, LW(6))
+#endif
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
     CALL(btlevtcmd_StopAC)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
+#endif
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A2_2"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A2_3"))
@@ -841,11 +1079,19 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
         CALL(btlevtcmd_AnimeChangePose, LW(3), 1, STRING("M_B_3"))
         CALL(battle_evt_majo_disp_off, LW(3), 1, 1, 0)
         CALL(btlevtcmd_OnAttribute, LW(3), kVeiled)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW)
+#else
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, (kHidden | kNoShadow))
+#endif
         WAIT_FRAMES(1)
         CALL(btlevtcmd_GetHomePos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     END_SIBLING_EVENT
+#if VERSION <= VERSION_DEMO_US
+    // Vivian follows him under with a ripple on the floor; she stays untargetable until vivian_hide_event brings
+    // them back out.
+#endif
     CALL(battle_evt_majo_disp_off, UNIT_ID_SELF, 1, 1, 1)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, LW(3), LW(5), LW(1), LW(2))
@@ -865,13 +1111,18 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, -1, -1, FACE_DIR_ATTACK_DIR, LW(0))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(0))
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    // The audience refills Star Power and the camera returns.
+#endif
     LABEL(90)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
+#endif
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1471,6 +1722,7 @@ USER_FUNC(_get_move_frame) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_8017d03c, JP 0x8017D03C. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(_get_vivian_attack_position) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1506,6 +1758,7 @@ USER_FUNC(_get_vivian_attack_position) {
     evtSetValue(event, i3, z);
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Copies the weapon pointed to by args[0] into the unit's spare weapon,

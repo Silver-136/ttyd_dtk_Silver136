@@ -232,7 +232,11 @@ static StatusVulnerability regist = {40, 40, 40, 40, 40, 40, 100, 30, 0, 0, 100,
  * hold: immune to Huge, Tiny, Attack Down and Fright; resists 10 statuses (down to 5% of the normal
  * chance).
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 40, 40, 40, 40, 40, 100, 30, 0, 0, 100, 0, 100, 40, 40, 0, 10, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist = {40, 40, 40, 100, 40, 100, 100, 30, 0, 0, 100, 0, 100, 80, 40, 0, 10, 100, 40, 100, 100, 5};
+#endif
 #endif
 
 /** Weapon record of the Atomic Boo's Press: 4 damage and can hit several targets. */
@@ -275,6 +279,45 @@ BattleWeapon weapon_atmic_teresa_press = {
  * Weapon record of the Atomic Boo's split-up attack (bikkuri, Japanese for surprise, in the code):
  * 4 damage, can hit several targets and ignores Defense.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon weapon_atmic_teresa_bikkuri = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL,
+SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+COUNTER_RESIST_ALL, // counterResistFlags
+    0, 0, 0, // targetWeightFlags..sleepTime
+    50, // stopChance
+    3, // stopTime
+    0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
+    0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
+    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeTime..defChangeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // allergicChance..slowTime
+    0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
+    0, 0, // fpRegenTime..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon weapon_atmic_teresa_bikkuri = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -320,11 +363,51 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Weapon record of the Atomic Boo's surprise attack (surprise_event): 4 damage, can hit several targets and
  * ignores Defense.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon weapon_atmic_teresa_surprise = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL,
+SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+COUNTER_RESIST_ALL, // counterResistFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
+    0, 0, // poisonTime..poisonStrength
+    50, // confuseChance
+    3, // confuseTime
+    0, 0, 0, 0, 0, 0, 0, 0, // electricChance..freezeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // defChangeStrength..slowChance
+    0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
+    0, 0, 0, // hpRegenStrength..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon weapon_atmic_teresa_surprise = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -370,6 +453,7 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /** Weapon record of the Atomic Boo's breath attack: 3 damage and can hit several targets. */
 BattleWeapon weapon_atmic_teresa_breath = {

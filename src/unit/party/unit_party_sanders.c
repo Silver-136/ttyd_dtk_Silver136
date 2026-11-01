@@ -39,7 +39,11 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 PoseTableEntry pose_table_sanders_stay[25];
 PoseTableEntry pose_table_counter_sanders[20];
+#if VERSION <= VERSION_DEMO_US
+static BattleDataEntry data_table[8];
+#else
 static BattleDataEntry data_table[9];
+#endif
 BattleUnitKindPart unitpartsdata_Party_Sanders[1];
 BattleUnitKind unitdata_Party_Sanders;
 static EvtWord battle_entry_event[59];

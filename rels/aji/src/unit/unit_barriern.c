@@ -193,6 +193,9 @@ static BattleUnitKindPart parts[] = {
     {11, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {20, 90, 80, 0, 80, 100, 0, 0, 100, 80, 100, 80, 100, 80, 80, 0, 80, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     30, // sleep
     80, // stop
@@ -217,6 +220,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Weapon data for the Yux's single-ring attack (wakka_attack_event): 2 damage, one target. */
 static BattleWeapon weapon_wakka_attack = {

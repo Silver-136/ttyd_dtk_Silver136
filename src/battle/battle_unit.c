@@ -1117,7 +1117,11 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
 }
 
 BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
+#if VERSION <= VERSION_DEMO_US
+    switch ((s8)type) {
+#else
     switch (type) {
+#endif
         case STATUS_SLEEP:
             unit->sleepTurns = turns;
             unit->sleepStrength = 0;
@@ -1158,7 +1162,11 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
         case STATUS_HUGE:
         case STATUS_TINY:
             if (!strength) {
+#if VERSION <= VERSION_DEMO_US
+                if ((s8)type == STATUS_HUGE) {
+#else
                 if (type == STATUS_HUGE) {
+#endif
                     if (unit->sizeChangeStrength >= 0) {
                         unit->sizeChangeTurns = 0;
                         unit->sizeChangeStrength = 0;
@@ -1207,7 +1215,11 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                 unit->defChangeTurns = turns;
                 unit->defChangeStrength = strength;
             } else if (strength == 0) {
+#if VERSION <= VERSION_DEMO_US
+                if ((s8)type == STATUS_DEFENSE_DOWN) {
+#else
                 if (type == STATUS_DEFENSE_DOWN) {
+#endif
                     if (unit->defChangeStrength <= 0) {
                         unit->defChangeTurns = 0;
                         unit->defChangeStrength = 0;
@@ -1231,19 +1243,27 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             unit->chargeStrength += strength;
             if (unit->chargeStrength < 0) {
                 unit->chargeStrength = 0;
+#if VERSION <= VERSION_DEMO_US
+            } else if (unit->chargeStrength > 99) {
+#else
                 return FALSE;
             }
             if (unit->chargeStrength > 99) {
+#endif
                 unit->chargeStrength = 99;
             }
             break;
         case STATUS_ALLERGIC:
+#if VERSION > VERSION_DEMO_US
             if (turns > 0) {
+#endif
                 unit->allergicTurns = turns;
+#if VERSION > VERSION_DEMO_US
             } else {
                 unit->allergicTurns = 0;
                 return FALSE;
             }
+#endif
             break;
         case STATUS_FLIPPED:
             unit->flippedTurns = turns;
@@ -1252,12 +1272,16 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             unit->invisibleTurns = turns;
             break;
         case STATUS_PAYBACK:
+#if VERSION > VERSION_DEMO_US
             if (turns > 0) {
+#endif
                 unit->paybackTurns = turns;
+#if VERSION > VERSION_DEMO_US
             } else {
                 unit->paybackTurns = 0;
                 return FALSE;
             }
+#endif
             break;
         case STATUS_HOLD_FAST:
             unit->holdFastTurns = turns;
@@ -1308,9 +1332,15 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
 /** clears the 0x1E bytes of status turns and strengths from sleepTurns on */
 // the 0x1E bytes from sleepTurns are every status's turns and strength
 void BtlUnit_ClearStatus(BattleUnit* unit) {
+#if VERSION <= VERSION_DEMO_US
+    memset(&unit->sleepTurns, 0, 0x1Eu);
+#else
     memset(&unit->sleepTurns, 0, sizeof(BtlStatusCopy));
+#endif
     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
+#if VERSION > VERSION_DEMO_US
     BattleStatusChangeInfoWorkInit(unit);
+#endif
 }
 
 /**
@@ -1955,9 +1985,11 @@ s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
             cost = 1;
         }
     }
+#if VERSION > VERSION_DEMO_US
     if (cost >= 1000) {
         cost = 999;
     }
+#endif
     return cost;
 }
 

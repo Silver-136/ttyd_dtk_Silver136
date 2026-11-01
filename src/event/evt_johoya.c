@@ -114,8 +114,10 @@ USER_FUNC(johoya_keti_newjoho_check) {
 
 USER_FUNC(johoya_keti_newjoho_makelabel) {
     EvtWord* args = event->args;
+#if VERSION > VERSION_DEMO_US
     char tmp[64];
     const char* msg;
+#endif
     s32 target = evtGetValue(event, args[0]);
     InformantWork* wp = &_jdt;
     u8* table = wp->readFlags.ketiRead;
@@ -125,12 +127,21 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
     for (i = 0; i < wp->count; i++) {
         if (johoya_get(table, wp->info[i].storyId) == 0) {
             if (target == n) {
+#if VERSION <= VERSION_DEMO_US
+                sprintf((char*)wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
+#else
                 sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
                 sprintf(tmp, "jketi_title_%04d", wp->info[i].storyId);
                 msg = msgSearch(tmp);
+#endif
                 evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
+#if VERSION <= VERSION_DEMO_US
+                evtSetValue(event, args[2], (EvtWord)wp->info[i].initEndPos);
+                evtSetValue(event, args[3], wp->info[i].tagEndPos);
+#else
                 evtSetValue(event, args[2], (EvtWord)msg);
                 evtSetValue(event, args[3], strlen(msg));
+#endif
                 evtSetValue(event, args[4], wp->info[i].cost);
                 wp->curIndex = i;
                 return EVT_RETURN_DONE;
@@ -138,7 +149,11 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
             n++;
         }
     }
+#if VERSION <= VERSION_DEMO_US
+    *(char*)wp->infoEnd = 0;
+#else
     *wp->infoEnd = 0;
+#endif
     evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[2], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[3], 0);

@@ -665,7 +665,9 @@ static ShopperData35 shopper_data = {
 // Charge only after the item was successfully added to the pouch.
 EVT_BEGIN(evt_hotdog)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("mario"))
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), PARTNER_YOSHI)
@@ -1577,18 +1579,28 @@ EVT_END()
  * early Chapter 3 stage, elsewhere or absent otherwise, including after Mario leaves as champion).
  */
 EVT_BEGIN(init_bijyo)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_BETWEEN(STG3_20_00_MAJORS_8TH_PLACE, STG3_20_03_THE_YELLOW_BLOCK)
+#if VERSION > VERSION_DEMO_US
         CASE_BETWEEN(STG3_20_05_MAJORS_4TH_PL, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
         IF_INT_EQUAL(GSWF_TOU_04_STORAGE_ROOM_TALK_SEEN, 1)
             CALL(evt_npc_set_position, STRING("me"), 610, 10, -120)
         END_IF
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING("me"), 610, 10, -120)
+#endif
         CASE_DEFAULT
+#if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
+#endif
             CALL(evt_npc_set_position, STRING("me"), 610, 10, -120)
+#if VERSION > VERSION_DEMO_US
         END_IF
+#endif
     END_SWITCH
     RETURN
 EVT_END()
@@ -1713,7 +1725,11 @@ EVT_END()
 
 static EVT_BEGIN(talk_sarary)
     // During his Trouble Center request: Mario and the partner walk over to him.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_SECURITY_CODE)
+#else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SECURITY_CODE)
+#endif
         CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_HIT)
         BEGIN_INLINE_EVENT
             CALL(evt_party_move_pos2, 0, -160, -95, 60)
@@ -1726,6 +1742,9 @@ static EVT_BEGIN(talk_sarary)
         CALL(evt_npc_wait_pera, STRING("サラリーマン"))
         WAIT_MS(300)
         CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_HIT)
+#if VERSION <= VERSION_DEMO_US
+        // First talk: he has forgotten his briefcase code, the chair counts of four places.
+#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_24_001"), 0, 0)
             CALL(evt_msg_print_add, 0, STRING("irai_24_002"))
@@ -1740,22 +1759,38 @@ static EVT_BEGIN(talk_sarary)
             END_IF
             SET_VALUE(GW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("irai_24_009"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(select_number)
+#else
             CALL_CHILD(PTR(select_number))
+#endif
             IF_INT_EQUAL(LW(0), 2)
                 ADD(GW(0), 1)
             END_IF
             CALL(evt_msg_print_add, 0, STRING("irai_24_012"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(select_number)
+#else
             CALL_CHILD(PTR(select_number))
+#endif
             IF_INT_EQUAL(LW(0), 6)
                 ADD(GW(0), 1)
             END_IF
             CALL(evt_msg_print_add, 0, STRING("irai_24_015"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(select_number)
+#else
             CALL_CHILD(PTR(select_number))
+#endif
             IF_INT_EQUAL(LW(0), 2)
                 ADD(GW(0), 1)
             END_IF
             CALL(evt_msg_print_add, 0, STRING("irai_24_018"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(select_number)
+#else
             CALL_CHILD(PTR(select_number))
+#endif
             IF_INT_EQUAL(LW(0), 5)
                 ADD(GW(0), 1)
             END_IF
@@ -1803,7 +1838,11 @@ static EVT_BEGIN(talk_sarary)
                 WAIT_FRAMES(1)
                 CALL(evt_npc_wait_pera, STRING("サラリーマン"))
                 WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_TROUBLE24_ITEM_LEFT), 0)
+#else
                 CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF_TOU_01_HOT_SAUCE_REWARD, 0)
+#endif
                 WAIT_MS(300)
                 CALL(evt_set_dir_to_target, STRING("サラリーマン"), STRING("mario"))
                 WAIT_FRAMES(1)
@@ -1813,10 +1852,18 @@ static EVT_BEGIN(talk_sarary)
                 CALL(evt_item_entry, STRING("rk"), ITEM_HOT_SAUCE, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 CALL(evt_item_get_item, STRING("rk"))
                 CALL(evt_item_get_item_end_wait, STRING("rk"))
+#if VERSION <= VERSION_DEMO_US
+                SET_VALUE(GSWF(GSWF_TOU01_TROUBLE24_ITEM_LEFT), 1)
+#else
                 SET_VALUE(GSWF_TOU_01_HOT_SAUCE_REWARD, 1)
+#endif
             END_IF
             CALL(evt_msg_print, 0, STRING("irai_24_027"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+#else
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+#endif
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE), 1)
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         END_IF
@@ -1831,7 +1878,11 @@ static EVT_BEGIN(talk_sarary)
             RETURN
         END_IF
         CALL(evt_msg_print_add, 0, STRING("irai_24_032"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_unitwin_alloc)
+#else
         CALL(evt_unitwin_alloc, 0)
+#endif
         CALL(unitwincoin_disp_onoff, 1)
         CALL(evt_msg_select, 0, STRING("irai_24_033"))
         IF_INT_EQUAL(LW(0), 0)
@@ -2118,7 +2169,9 @@ static NpcSetupInfo npcEnt[] = {
  */
 EVT_BEGIN(evt_uron)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_party_stop, 0)
     CALL(evt_snd_bgm_scope, 0, 1)
     BEGIN_INLINE_EVENT
@@ -2171,11 +2224,17 @@ EVT_BEGIN(evt_uron)
     CALL(evt_msg_print_party, STRING("stg3_tou_04"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     CALL(evt_snd_bgm_scope, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_00_WELCOME_TO_GLITZVILLE)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_00_WELCOME_TO_GLITZVILLE)
+#endif
     RETURN
 EVT_END()
 
@@ -2216,6 +2275,24 @@ static USER_FUNC(mario_chk) {
  * Idle loop of the egg NPC: while the story is at STG3_11_RUNAWAY_EGG it pulses its scale between 100%
  * and 120% to look like it breathes in its sleep.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(rankingReset) {
+    s32 i;
+
+    pouchRemoveItem(ITEM_CHAMPS_BELT);
+    for (i = 0; i < 20; i++) {
+        swClear(i + GSWF_TOU_FIGHTER_BELOW_BASE);
+    }
+    swClear(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN);
+    swClear(GSWF_TOU_CHAMP_OPENING_SEEN);
+    swClear(GSWF_TOU_CHAMP_WIN_SEEN);
+    swClear(GSWF_TOU_TITLE_MATCH_RESERVED);
+    swClear(GSWF_TOU_RANKING_SAVED);
+    swClear(GSWF_TOU_LAST_OPPONENT_VALID);
+    swClear(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN);
+    return EVT_RETURN_DONE;
+}
+#endif
 EVT_BEGIN(evt_tamago_sleep)
     LOOP(0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
@@ -2411,7 +2488,11 @@ EVT_BEGIN(evt_tamago_move)
         ADD(LW(4), 30)
         MULTIPLY(LW(4), 120)
         DIVIDE(LW(4), 100)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_tamago_scale)
+#else
         SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
         CALL(evt_npc_jump_position_nohit, STRING("たまご"), LW(0), LW(1), LW(2), LW(3), LW(4))
         // Mario catching up with it twice ends the chase.
         CALL(mario_chk, LW(0))
@@ -2439,18 +2520,32 @@ EVT_BEGIN(evt_tamago_move)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_npc_change_interrupt, STRING("ホットドッグ"), 1, PTR(dummy))
     CALL(evt_npc_restart_regular_event, STRING("ホットドッグ"))
     CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("たまご"))
     SET_VALUE(LW(3), 400)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_tamago_scale)
+#else
     SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
     CALL(evt_npc_jump_position_nohit, STRING("たまご"), -360, 10, -60, LW(3), 30)
     SET_VALUE(LW(3), 400)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_tamago_scale)
+#else
     SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
     CALL(evt_npc_jump_position_nohit, STRING("たまご"), -400, 10, -45, LW(3), 40)
     SET_VALUE(LW(3), 400)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_tamago_scale)
+#else
     SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
     CALL(evt_npc_jump_position_nohit, STRING("たまご"), -400, 110, -120, LW(3), 50)
     LOOP(3)
         CALL(evt_npc_get_position, STRING("たまご"), LW(0), LW(1), LW(2))
@@ -2458,16 +2553,28 @@ EVT_BEGIN(evt_tamago_move)
         ADD(LW(3), 200)
         CALL(evt_sub_random, 20, LW(4))
         ADD(LW(4), 20)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_tamago_scale)
+#else
         SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
         CALL(evt_npc_jump_position_nohit, STRING("たまご"), LW(0), LW(1), LW(2), LW(3), LW(4))
     END_LOOP
     SET_VALUE(LW(3), 400)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_tamago_scale2)
+#else
     SPAWN_EVENT(PTR(evt_tamago_scale2))
+#endif
     WAIT_MS(500)
     // The vendor shouts at the egg, which falls asleep up there while the music fades.
     CALL(evt_msg_print, 0, STRING("stg3_tou_244"), 0, STRING("ホットドッグ"))
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_11_RUNAWAY_EGG)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
+#endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_cam3d_evt_set, -400, 211, 321, -400, 156, -132, 3000, EASING_SINE_IN_OUT)
     WAIT_MS(3000)
@@ -2495,7 +2602,9 @@ EVT_END()
 EVT_BEGIN(evt_tamago)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_mario_wait_move_end)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg3_tou_241"), 0, 0)
@@ -2507,9 +2616,14 @@ EVT_BEGIN(evt_tamago)
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_cam3d_evt_set, -345, 169, 544, -345, 38, -204, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+SPAWN_EVENT(evt_tamago_move)
+    SPAWN_EVENT(evt_oyaji_move)
+#else
     SET_VALUE(GF(0), 0)
     SPAWN_EVENT(PTR(evt_tamago_move))
     SPAWN_EVENT(PTR(evt_oyaji_move))
+#endif
     WAIT_MS(6000)
     LABEL(0)
     IF_INT_EQUAL(GF(0), 0)
@@ -2518,7 +2632,11 @@ EVT_BEGIN(evt_tamago)
     END_IF
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_10_MINORS_5TH_PL_EGG)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_10_MINORS_5TH_PL_EGG)
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -2529,13 +2647,22 @@ EVT_END()
  * and the story advances to STG3_12_THE_MINI_YOSHI_EGG.
  */
 EVT_BEGIN(talk_tamago)
+#if VERSION <= VERSION_DEMO_US
+    // Mario wakes the egg and it hops about while the partner wonders what to do with it.
+#endif
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_party_stop, 0)
     CALL(eff_sleep_off)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_1"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
+#endif
     CALL(evt_cam3d_evt_set, -400, 211, 304, -400, 156, -142, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     LOOP(2)
@@ -2544,7 +2671,11 @@ EVT_BEGIN(talk_tamago)
         ADD(LW(3), 200)
         CALL(evt_sub_random, 20, LW(4))
         ADD(LW(4), 20)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_tamago_scale)
+#else
         SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
         CALL(evt_npc_jump_position_nohit, STRING("たまご"), LW(0), LW(1), LW(2), LW(3), LW(4))
     END_LOOP
     CALL(evt_msg_print_party, STRING("stg3_tou_247"))
@@ -2554,6 +2685,9 @@ EVT_BEGIN(talk_tamago)
         ELSE
         CALL(evt_msg_print_party_add, STRING("stg3_tou_249"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // The hot dog vendor gives up on cooking it and the partner keeps talking while the egg hops.
+#endif
     CALL(evt_cam3d_evt_set, -300, 111, 306, -300, 56, -140, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("mario"))
@@ -2567,11 +2701,19 @@ EVT_BEGIN(talk_tamago)
         ADD(LW(3), 200)
         CALL(evt_sub_random, 20, LW(4))
         ADD(LW(4), 20)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_tamago_scale)
+#else
         SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
         CALL(evt_npc_jump_position_nohit, STRING("たまご"), LW(0), LW(1), LW(2), LW(3), LW(4))
     END_LOOP
     SET_VALUE(LW(3), 400)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_tamago_scale2)
+#else
     SPAWN_EVENT(PTR(evt_tamago_scale2))
+#endif
     CALL(evt_msg_print_party, STRING("stg3_tou_252"))
     LOOP(1)
         CALL(evt_npc_get_position, STRING("たまご"), LW(0), LW(1), LW(2))
@@ -2579,11 +2721,19 @@ EVT_BEGIN(talk_tamago)
         ADD(LW(3), 200)
         CALL(evt_sub_random, 20, LW(4))
         ADD(LW(4), 20)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_tamago_scale)
+#else
         SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
         CALL(evt_npc_jump_position_nohit, STRING("たまご"), LW(0), LW(1), LW(2), LW(3), LW(4))
     END_LOOP
     SET_VALUE(LW(3), 400)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_tamago_scale2)
+#else
     SPAWN_EVENT(PTR(evt_tamago_scale2))
+#endif
     CALL(evt_msg_print_party, STRING("stg3_tou_253"))
     CALL(evt_msg_select, 0, STRING("stg3_tou_253_yn"))
     IF_INT_EQUAL(LW(0), 0)
@@ -2597,11 +2747,20 @@ EVT_BEGIN(talk_tamago)
         ADD(LW(3), 200)
         CALL(evt_sub_random, 20, LW(4))
         ADD(LW(4), 20)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_tamago_scale)
+#else
         SPAWN_EVENT(PTR(evt_tamago_scale))
+#endif
         CALL(evt_npc_jump_position_nohit, STRING("たまご"), LW(0), LW(1), LW(2), LW(3), LW(4))
     END_LOOP
     SET_VALUE(LW(3), 400)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_tamago_scale2)
+    // The vendor returns to his counter and the egg joins Mario as a follower.
+#else
     SPAWN_EVENT(PTR(evt_tamago_scale2))
+#endif
     CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_set_position, STRING("ホットドッグ"), -400, 20, -125)
@@ -2611,7 +2770,11 @@ EVT_BEGIN(talk_tamago)
     CALL(evt_mario_set_party_pos, 1, PARTY_MEMBER_EGG, LW(0), LW(1), LW(2))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_sub_save_playtime, GSW(GSW_TOU_EGG_TIME))
+#else
     CALL(evt_sub_save_playtime, GSW_TOU_EGG_RECEIVED_TIME)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -2688,7 +2851,9 @@ EVT_END()
 
 EVT_BEGIN(evt_gondora)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     CALL(evt_mario_set_pos, -20, 315, 410)
@@ -2706,10 +2871,18 @@ EVT_BEGIN(evt_gondora)
     SET_VALUE(LW(0), 300)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gondora_updown)
+#else
     CALL_CHILD(PTR(evt_gondora_updown))
+#endif
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 120)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gondora_mon)
+#else
     CALL_CHILD(PTR(evt_gondora_mon))
+#endif
     CALL(evt_party_move_pos2, 0, 20, 500, FLOAT(60.0f))
     CALL(evt_party_stop, 0)
     CALL(evt_mario_mov_pos2, 20, 410, FLOAT(60.0f))
@@ -2720,15 +2893,28 @@ EVT_BEGIN(evt_gondora)
     CALL(evt_party_run, 1)
     SET_VALUE(LW(0), 120)
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gondora_mon)
+#else
     CALL_CHILD(PTR(evt_gondora_mon))
+#endif
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 800)
     SET_VALUE(LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_gondora_updown)
+#else
     SPAWN_EVENT(PTR(evt_gondora_updown))
+#endif
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1500)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_00_WELCOME_TO_GLITZVILLE)
+        CALL_CHILD(evt_uron)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_00_WELCOME_TO_GLITZVILLE)
         CALL_CHILD(PTR(evt_uron))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -2736,6 +2922,7 @@ EVT_END()
 
 EVT_BEGIN(evt_gondora2)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -2743,6 +2930,7 @@ EVT_BEGIN(evt_gondora2)
     IF_INT_GREATER(LW(10), 100)
         CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     END_IF
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_npc_status_onoff, 1, STRING("飛空船"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_flag_onoff, 1, STRING("飛空船"), NPC_FLAG_NO_HIT)
@@ -2757,15 +2945,25 @@ EVT_BEGIN(evt_gondora2)
     SET_VALUE(LW(0), 300)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gondora_updown)
+#else
     CALL_CHILD(PTR(evt_gondora_updown))
+#endif
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 120)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gondora_mon)
+#else
     CALL_CHILD(PTR(evt_gondora_mon))
+#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_party_move_pos2, 0, 20, 490, FLOAT(80.0f))
         CALL(evt_party_move_pos2, 0, 20, 410, FLOAT(80.0f))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_mario_set_dir, 270, 200, 0)
+#endif
         CALL(evt_party_stop, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -2776,14 +2974,24 @@ EVT_BEGIN(evt_gondora2)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 20, 410, FLOAT(80.0f))
     CALL(evt_mario_mov_pos2, -20, 410, FLOAT(80.0f))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_set_dir, 90, 200, 0)
+#endif
     SET_VALUE(LW(0), 120)
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gondora_mon)
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+        IF_INT_EQUAL(GSWF(GSWF_TOU_LEFT_AS_CHAMPION), 0)
+            SET_VALUE(GSWF(GSWF_TOU_LEFT_AS_CHAMPION), 1)
+CALL(rankingReset)
+#else
     CALL_CHILD(PTR(evt_gondora_mon))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
             CALL(evt_rankingReset)
+#endif
         END_IF
     END_IF
     BEGIN_INLINE_EVENT
@@ -2795,7 +3003,11 @@ EVT_BEGIN(evt_gondora2)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 300)
     SET_VALUE(LW(2), 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gondora_updown)
+#else
     CALL_CHILD(PTR(evt_gondora_updown))
+#endif
     RETURN
 EVT_END()
 
@@ -2899,8 +3111,12 @@ EVT_BEGIN(evt_peach_after)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+#else
     CALL(evt_npc_set_position, STRING("美女"), 0, -1000, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN
@@ -3053,24 +3269,40 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_tribe, STRING("キノシコワ"), STRING("キノシコワ"))
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, 350)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 270)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
+#endif
     CALL(evt_npc_entry, STRING("ブレッドハート"), STRING("c_bred_h"))
     CALL(evt_npc_set_tribe, STRING("ブレッドハート"), STRING("ブレッドハート"))
     CALL(evt_npc_set_position, STRING("ブレッドハート"), -50, 0, 250)
     CALL(evt_npc_set_ry, STRING("ブレッドハート"), 90)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("ブレッドハート"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("ブレッドハート"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
+#endif
     CALL(evt_npc_entry, STRING("シンエモンＡ"), STRING("c_sinemon_a"))
     CALL(evt_npc_set_tribe, STRING("シンエモンＡ"), STRING("アイアンシンエモン"))
     CALL(evt_npc_set_position, STRING("シンエモンＡ"), 50, 0, 375)
     CALL(evt_npc_set_ry, STRING("シンエモンＡ"), 270)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_scale, STRING("シンエモンＡ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
+#endif
     CALL(evt_npc_entry, STRING("シンエモンＢ"), STRING("c_sinemon_m"))
     CALL(evt_npc_set_tribe, STRING("シンエモンＢ"), STRING("アイアンシンエモン2"))
     CALL(evt_npc_set_position, STRING("シンエモンＢ"), -50, 0, 400)
     CALL(evt_npc_set_ry, STRING("シンエモンＢ"), 90)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_scale, STRING("シンエモンＢ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
+#endif
     CALL(evt_npc_entry, STRING("レポーター"), STRING("c_report"))
     CALL(evt_npc_set_tribe, STRING("レポーター"), STRING("リポーター"))
     CALL(evt_npc_set_position, STRING("レポーター"), 75, 0, 350)
@@ -3085,7 +3317,11 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_tribe, STRING("ウラノコ"), STRING("ウラノコ"))
     CALL(evt_npc_set_position, STRING("ウラノコ"), -100, 0, 300)
     CALL(evt_npc_set_ry, STRING("ウラノコ"), 90)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("ウラノコ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING("ウラノコ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
+#endif
     RETURN
 EVT_END()
 
@@ -3218,7 +3454,9 @@ EVT_BEGIN(evt_telbox)
     CALL(evt_mapobj_get_position, STRING("tel_box"), LW(10), LW(11), LW(12))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(10), LW(11), LW(12))
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_msg_print, 0, STRING("stg3_tel_01"), 0, 0)
@@ -3421,10 +3659,16 @@ EVT_END()
 
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_PLUS_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
@@ -3432,6 +3676,201 @@ static EVT_BEGIN(mobj_box00)
 EVT_END()
 
 // Set up map objects and localized assets before selecting entrance-specific scenes.
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(tou_01_init_evt)
+    // Entrances, blocks, the Star Piece panel, the Star Pieces and the Inn Coupon.
+    SET_VALUE(LW(0), PTR(bero_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_mobj_save_blk, STRING("mobj_save"), -225, 70, -225, 0, 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk01"), 245, 100, -220, 0, GSWF(GSWF_TOU01_SHINE_SPRITE), 0)
+    CALL(evt_mobj_brick, STRING("hblk01"), 245, 10, -220, ITEM_COIN, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(GSWF_TOU01_COIN_BRICK))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 700, 160, -10, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(GSWF_TOU01_ITEMBOX_00))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 0, 0, 800, STRING("jimen"), 125, GSWF(GSWF_TOU01_STAR_PIECE_PANEL))
+    CALL(evt_item_entry, STRING("item_03"), ITEM_STAR_PIECE, 675, 10, -165, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_STAR_PIECE_1), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -785, 10, 390, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_STAR_PIECE_2), 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, 60, 30, -365, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_STAR_PIECE_3), 0)
+    CALL(evt_item_entry, STRING("item_04"), ITEM_STAR_PIECE, 615, 160, -75, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_STAR_PIECE_4), 0)
+    CALL(evt_item_entry, STRING("item_05"), ITEM_INN_COUPON, 450, 10, -90, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_INN_COUPON), 0)
+    // The NPCs are left out when Mario arrives for the chapter 8 scenes.
+    SET_VALUE(LF(0), 0)
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+    END_IF
+    IF_INT_EQUAL(LF(0), 0)
+        CALL(evt_npc_setup, PTR(npcEnt))
+        CALL_CHILD(init_roten_1)
+        CALL(evt_npc_change_interrupt, STRING("ロテン1"), 6, PTR(talk_roten_1))
+    END_IF
+    // Hot Sauce left on the ground after the salaryman's request.
+    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE), 1)
+        CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_TROUBLE24_ITEM_LEFT), 0)
+    END_IF
+    // The shop and tavern doors, the looping map animations, the searchlights and the telephone box.
+    SET_VALUE(LW(0), PTR(&door_1))
+    CALL_CHILD(evt_door_entry)
+    SET_VALUE(LW(0), PTR(&door_2))
+    CALL_CHILD(evt_door_entry)
+    CALL(evt_map_playanim, STRING("anm_kemuri"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_aisu"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_den"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_denden"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_raito"), MAP_ANIM_PLAY_LOOP, 0)
+    SET_VALUE(LW(0), STRING("sati_1"))
+    SPAWN_EVENT(evt_search_light)
+    SET_VALUE(LW(0), STRING("sati_2"))
+    SPAWN_EVENT(evt_search_light)
+    SPAWN_EVENT(evt_kanban)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_telbox"), 0, PTR(evt_telbox), 0)
+    // The Storage Key lies on the plaza during Rawk Hawk's warning.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_20_06_RAWK_HAWKS_WARNING)
+        CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x12, -745, 20, 435, ITEM_TYPE_STILL, -1, PTR(evt_key))
+    END_IF
+    // The item shop, the airship's shadow and the airship landing spot.
+    CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
+    SPAWN_EVENT(evt_ship_shadow)
+    CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
+    // Until the hidden switch is spun, the neon sign hangs loose and the tavern stairs are blocked;
+    // afterwards it is fixed.
+    IF_INT_EQUAL(GSWF(GSWF_TOU01_HIDDEN_SWITCH), 0)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neon_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("neon_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("neon_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_hitobj_onoff, STRING("a_sak_kaidan"), 1, 0)
+        CALL(evt_mobj_tornadoswitch_blue, 0, STRING("dummy_sw"), 735, 10, 455, PTR(evt_dummy_sw), GSWF(GSWF_TOU01_HIDDEN_SWITCH))
+        SET_VALUE(GF(10), 0)
+        SPAWN_EVENT(evt_kanban2)
+    ELSE
+        CALL(evt_map_playanim, STRING("anm_kan"), MAP_ANIM_PLAY_AT_END, 0)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("neon_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("neon_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neon_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_hitobj_onoff, STRING("a_sak_kaidan"), 1, 1)
+        CALL(evt_hitobj_onoff, STRING("a_hasira"), 1, 0)
+    END_IF
+    // The hot dog counter sells Hot Dogs, except while the runaway egg story is under way.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_11_RUNAWAY_EGG)
+        CALL(evt_tou_get_ranking, LW(0))
+        IF_INT_LESS_OR_EQUAL(LW(0), 15)
+        ELSE
+            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
+        END_IF
+    END_IF
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
+    END_IF
+    // The blimp gondola starts raised and hidden.
+    CALL(evt_hit_bind_mapobj, STRING("a_gondora"), STRING("gondora"))
+    CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)
+    CALL(evt_hit_bind_update, STRING("a_gondora"))
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora"), MAP_OBJ_FLAG_HIDDEN)
+CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 615, 160, -10, 0, 0)
+CALL(evt_sub_get_system_flag, LW(0))
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
+        RETURN
+    END_IF
+    CALL(evt_sub_get_system_flag, LW(0))
+    IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
+    ELSE
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_NOT_EQUAL(LW(0), STRING("a_door_mon"))
+            IF_INT_EQUAL(LF(0), 0)
+                SPAWN_EVENT(evt_gondora)
+            END_IF
+        ELSE
+            CALL(evt_cam_road_reset)
+        END_IF
+    END_IF
+    // Music: the chapter 8 themes, the egg tune while the egg story runs, or the plaza theme.
+    SET_VALUE(LF(0), 0)
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH1"))
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+            SET_VALUE(LF(0), 1)
+        END_IF
+    END_IF
+    IF_INT_EQUAL(LF(0), 0)
+        CALL(evt_tou_get_ranking, LW(0))
+        IF_INT_LESS_OR_EQUAL(LW(0), 15)
+            SWITCH(GSW(GSW_STORY_PROGRESS))
+                CASE_LESS(STG3_10_MINORS_5TH_PL_EGG)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))
+                CALL(evt_snd_envoff, PSND_FADEOUT)
+                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+                SPAWN_EVENT(evt_tamago)
+                SPAWN_EVENT(evt_tamago_sleep)
+                CASE_LESS(STG3_11_RUNAWAY_EGG)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))
+                CALL(evt_snd_envoff, PSND_FADEOUT)
+                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+                SPAWN_EVENT(evt_tamago_move)
+                SPAWN_EVENT(evt_tamago_sleep)
+                CALL(evt_npc_set_position, STRING("ホットドッグ"), -288, 10, -110)
+                CALL(evt_npc_change_interrupt, STRING("ホットドッグ"), 1, PTR(hot_move_evt))
+                CALL(evt_npc_restart_regular_event, STRING("ホットドッグ"))
+                CASE_LESS(STG3_12_THE_MINI_YOSHI_EGG)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_URN1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
+                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+                CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
+                CALL(evt_npc_set_position, STRING("たまご"), -400, 110, -120)
+                CALL(evt_npc_set_position, STRING("ホットドッグ"), -288, 10, -110)
+                CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("たまご"))
+                CALL(evt_npc_change_interrupt, STRING("たまご"), 6, PTR(talk_tamago))
+                CALL(eff_sleep_on)
+                SPAWN_EVENT(evt_tamago_sleep)
+                CASE_DEFAULT
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_URN1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
+                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+            END_SWITCH
+        ELSE
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_URN1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
+            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+        END_IF
+    END_IF
+    // After the Peach interlude the party is healed and Mario and the partner come back into the plaza.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_33_06_BOWSER_TREASURE)
+        CALL(evt_mario_get_party, LW(15))
+        IF_INT_EQUAL(LW(15), 0)
+            CALL(evt_mario_set_party, 0, PARTNER_GOOMBELLA)
+            CALL(evt_party_run, 0)
+CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_all_party_recovery)
+END_IF
+SPAWN_EVENT(evt_peach_after)
+    END_IF
+    // Chapter 8 scenes: the darkness over Glitzville, or everyone's voices.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+            CALL_CHILD(sekai_yami_npc_init)
+            SPAWN_EVENT(sekai_yami_evt)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+            CALL_CHILD(minnnanokoe_npc_entry)
+            SPAWN_EVENT(minnnanokoe_evt)
+        END_IF
+    END_IF
+    // Incoming e-mail check.
+    SPAWN_EVENT(evt_sub_mail_event)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(tou_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -3807,6 +4246,7 @@ EVT_BEGIN(tou_01_init_evt)
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     RETURN
 EVT_END()
+#endif
 
 #if VERSION >= VERSION_US
 // US: copy the sign board's map-blend exemptions onto the localized letter objects

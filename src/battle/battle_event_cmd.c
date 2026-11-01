@@ -3729,7 +3729,12 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
     time = evtGetValue(event, args[4]);
     if (isFirstCall) {
         event->userdata[0] = time;
+#if VERSION <= VERSION_DEMO_US
+event->userdatap[1] = itemEntry(x, y, z, NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, 0);
+        itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
+#else
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
+#endif
         return EVT_RETURN_BLOCK;
     }
     if (--event->userdata[0] > 0) {
@@ -3777,8 +3782,15 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
                 pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
             }
         }
+#if VERSION <= VERSION_DEMO_US
+event->userdatap[1] = itemEntry(pos.x, pos.y, pos.z, NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, 0);
+#else
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, pos.x, pos.y, pos.z);
+#endif
         effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
+#if VERSION <= VERSION_DEMO_US
+        itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
+#endif
         if (kind == UNIT_MARIO) {
             psndSFXOn_3D("SFX_ITEM_MARIO_USE1", &pos);
         } else if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX) {
@@ -4433,7 +4445,11 @@ USER_FUNC(btlevtcmd_GetConfuseActEvent) {
     while (!evt) {
         evt = BattleSetConfuseAct(_battleWorkPointer, unit);
         i++;
+#if VERSION <= VERSION_DEMO_US
+if (i > 10) {
+#else
         if (i > 20) {
+#endif
             evt = subsetevt_confuse_flustered;
         }
     }
@@ -5376,6 +5392,153 @@ static f32 ac_success_width_tbl[7][8] = {
  * Excellent) above the position args[1..3], kept on screen, with its sound.
  * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
  */
+#if VERSION == VERSION_DEMO_JP
+USER_FUNC(btlevtcmd_ACSuccessEffect) {
+    EvtWord* args = event->args;
+    s32 type;
+    f32 scale;
+    f32 w;
+    Vec pos;
+    f32 h;
+    const char* name;
+    s32 eff;
+EffectEntry* entry;
+
+    type = evtGetValue(event, args[0]);
+    scale = 0.75f;
+pos.x = (f32)evtGetValue(event, args[1]);
+    pos.y = (f32)evtGetValue(event, args[2]);
+    pos.z = (f32)evtGetValue(event, args[3]);
+    switch (type) {
+case 0:
+            scale *= 0.3f;
+            name = "SFX_SYSTEM_NICE_25PERCENT1";
+            w = 90.0f;
+            eff = 0;
+            break;
+        case 1:
+            scale *= 0.6f;
+            name = "SFX_SYSTEM_NICE_50PERCENT1";
+            w = 90.0f;
+            eff = 0;
+            break;
+        case 2:
+            scale *= 1.2f;
+            name = "SFX_SYSTEM_NICE1";
+            w = 90.0f;
+            eff = 0;
+            break;
+        case 3:
+            scale *= 1.2f;
+            name = "SFX_SYSTEM_GOOD1";
+            w = 90.0f;
+            eff = 1;
+            break;
+        case 4:
+            scale *= 1.2f;
+            name = "SFX_SYSTEM_GREAT1";
+            w = 120.0f;
+            eff = 2;
+            break;
+        case 5:
+            name = "SFX_SYSTEM_WONDERFUL1";
+            w = 150.0f;
+            eff = 3;
+            break;
+        case 6:
+            name = "SFX_SYSTEM_EXCELLENT1";
+            w = 180.0f;
+            eff = 4;
+            break;
+default: return EVT_RETURN_DONE;
+    }
+    w *= scale;
+    h = w / 2.0f;
+    if (pos.x + h > 160.0f) {
+        pos.x = 160.0f - h;
+}
+    if (pos.y < 80.0f) {
+        entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);
+    } else {
+        entry = effNiceEntry(eff, pos.x - h, pos.y - 50.0f, pos.z);
+    }
+    ((NiceEffectWork*)entry->userdata)->overallScale = scale;
+    psndSFX_pit(psndSFXOn_3D(name, &pos), 0);
+    return EVT_RETURN_DONE;
+}
+#elif VERSION == VERSION_DEMO_US
+USER_FUNC(btlevtcmd_ACSuccessEffect) {
+    EvtWord* args = event->args;
+    s32 type;
+    f32 scale;
+    f32 w;
+    Vec pos;
+    f32 h;
+    const char* name;
+    s32 eff;
+    EffectEntry* entry;
+
+    type = evtGetValue(event, args[0]);
+    scale = 0.65f;
+    pos.x = (f32)evtGetValue(event, args[1]);
+    pos.y = (f32)evtGetValue(event, args[2]);
+    pos.z = (f32)evtGetValue(event, args[3]);
+    switch (type) {
+        case 0:
+            w = 120.0f;
+            scale *= 0.3f;
+            name = "SFX_SYSTEM_NICE_25PERCENT1";
+            eff = 0;
+            break;
+        case 1:
+            scale *= 0.6f;
+            name = "SFX_SYSTEM_NICE_50PERCENT1";
+            w = 120.0f;
+            eff = 0;
+            break;
+        case 2:
+            scale *= 1.2f;
+            name = "SFX_SYSTEM_NICE1";
+            w = 120.0f;
+            eff = 0;
+            break;
+        case 3:
+            scale *= 1.2f;
+            name = "SFX_SYSTEM_GOOD1";
+            w = 120.0f;
+            eff = 1;
+            break;
+        case 4:
+            scale *= 1.2f;
+            name = "SFX_SYSTEM_GREAT1";
+            w = 150.0f;
+            eff = 2;
+            break;
+        case 5:
+            name = "SFX_SYSTEM_WONDERFUL1";
+            w = 225.0f;
+            eff = 3;
+            break;
+        case 6:
+            name = "SFX_SYSTEM_EXCELLENT1";
+            w = 225.0f;
+            eff = 4;
+            break;
+        default:
+            return EVT_RETURN_DONE;
+    }
+    w += 20.0f;
+    h = 0.5f * w;
+    if (pos.y < 80.0f) {
+        entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);
+    } else {
+        entry = effNiceEntry(eff, pos.x - h, pos.y - 50.0f, pos.z);
+    }
+    ((NiceEffectWork*)entry->userdata)->overallScale = scale;
+    psndSFX_pit(psndSFXOn_3D(name, &pos), 0);
+    return EVT_RETURN_DONE;
+}
+#else
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
     EvtWord* args = event->args;
     s32 type;
@@ -5526,6 +5689,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     psndSFX_pit(psndSFXOn_3D(name, &pos), 0);
     return EVT_RETURN_DONE;
 }
+#endif
 
 /** Script: sets (args[0] nonzero) or clears the flags args[1] in the running timing action command's work. */
 USER_FUNC(btlevtcmd_ac_timing_flag_onoff) {
@@ -7007,6 +7171,20 @@ USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
  * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.
  * Used by Star Power special moves that need a clear stage.
  */
+#endif
+#if VERSION <= VERSION_DEMO_US
+USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    s32 id;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    unit->hitEventCode = (void*)evtGetValue(event, args[1]);
+    return EVT_RETURN_DONE;
+}
 #endif
 USER_FUNC(btlevtcmd_SacBgsetMove) {
     BattleWork* wp = _battleWorkPointer;

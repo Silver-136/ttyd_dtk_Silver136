@@ -136,9 +136,21 @@ EVT_END()
 EVT_BEGIN(las_15_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_mobj_lv_blk, STRING("stone1"), 150, 0, 75, PTR(block_break), GSWF(GSWF_LAS_TOWER_BIG_BLOCK_C), STRING("MOBJ_Lv2BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("stone2"), -150, 50, 0, PTR(block_break), GSWF(GSWF_LAS_TOWER_BIG_BLOCK_D), STRING("MOBJ_Lv2BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("metal1"), 150, 50, 0, 0, GSWF(GSWF_LAS_TOWER_BIG_BLOCK_A), STRING("MOBJ_Lv3BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("metal2"), -150, 0, 75, 0, GSWF(GSWF_LAS_TOWER_BIG_BLOCK_B), STRING("MOBJ_Lv3BigBlock"))
+    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 110, -10, PTR(switch_evt), GSWF(GSWF_LAS15_FLOAT_SWITCH_PRESSED))
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS15_KEY_CHEST_OPENED))
+    IF_INT_EQUAL(GSWF(GSWF_LAS15_FLOAT_SWITCH_PRESSED), 0)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_lv_blk, STRING("stone1"), 150, 0, 75, PTR(block_break), GSWF_LAS_11_15_BIG_BLOCK_3_BROKEN, STRING("MOBJ_Lv2BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("stone2"), -150, 50, 0, PTR(block_break), GSWF_LAS_11_15_BIG_BLOCK_4_BROKEN, STRING("MOBJ_Lv2BigBlock"))
@@ -147,6 +159,7 @@ EVT_BEGIN(las_15_init_evt)
     CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 110, -10, PTR(switch_evt), GSWF_LAS_15_SWITCH_PRESSED)
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_15_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_15_SWITCH_PRESSED, 0)
+#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF

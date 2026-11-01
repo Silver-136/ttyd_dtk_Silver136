@@ -54,7 +54,9 @@ typedef struct {
 
 USER_FUNC(bg_cam_chk);
 static USER_FUNC(mario_chk);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(hit_group_chk);
+#endif
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 static EvtWord w_door_close[22];
@@ -127,7 +129,11 @@ static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
 }
 
 static EVT_BEGIN(w_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_2"), 0, 0, LW(0))
@@ -135,7 +141,11 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_2"), 0, 0, LW(0))
@@ -143,7 +153,11 @@ static EVT_BEGIN(w_door_open)
 EVT_END()
 
 static EVT_BEGIN(e_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -151,7 +165,11 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -602,6 +620,63 @@ EVT_BEGIN(move_left_right)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(move_up_down)
+    // The hit area is tied to the platform and the row's heights are scaled for smooth movement.
+    SET_VALUE(LW(5), LW(0))
+    SET_VALUE(LW(6), LW(1))
+    SET_VALUE(LW(7), LW(2))
+    SET_VALUE(LW(8), LW(3))
+    SET_VALUE(LW(9), LW(4))
+    IF_INT_NOT_EQUAL(LW(5), 0)
+        CALL(evt_hit_bind_mapobj, LW(5), LW(6))
+    END_IF
+    MULTIPLY(LW(7), 100)
+    MULTIPLY(LW(8), 100)
+LOOP(0)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(7), LW(8), LW(9))
+        LABEL(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+        CALL(evt_mapobj_trans, 1, LW(6), 0, LW(0), 0)
+        IF_INT_NOT_EQUAL(LW(5), 0)
+            CALL(evt_hit_bind_update, LW(5))
+        END_IF
+WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 1)
+            GOTO(0)
+        END_IF
+WAIT_MS(300)
+LOOP(0)
+            IF_INT_EQUAL(GF(0), 0)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(8), LW(7), LW(9))
+        // Then it glides back, and the cycle repeats forever.
+        LABEL(1)
+        CALL(evt_sub_intpl_msec_get_value)
+        DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+        CALL(evt_mapobj_trans, 1, LW(6), 0, LW(0), 0)
+        IF_INT_NOT_EQUAL(LW(5), 0)
+            CALL(evt_hit_bind_update, LW(5))
+        END_IF
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(1), 1)
+            GOTO(1)
+        END_IF
+WAIT_MS(300)
+        LOOP(0)
+            IF_INT_EQUAL(GF(0), 0)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_LOOP
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(move_up_down)
     // The hit area is tied to the platform and the row's heights are scaled for smooth movement.
     SET_VALUE(LW(5), LW(0))
@@ -708,6 +783,7 @@ EVT_BEGIN(move_up_down)
     END_LOOP
     RETURN
 EVT_END()
+#endif
 
 /**
  * Script for one platform of r_tbl: binds the hit area to the map object
@@ -778,7 +854,11 @@ ShikakeMoveTbl6 up_down_tbl = {
         {"A_ugoku_2", "S_ugoku_2", 0, -150, 2800},
         {"A_ugoku_h_4", "S_ugoku_h_4", 0, 100, 3000},
         {"A_ugoku_h_5", "S_ugoku_h_5", 0, -200, 4000},
+#if VERSION <= VERSION_DEMO_US
+{"A_ugoku_h_6", "S_ugoku_h_6", 0, -150, 3000},
+#else
         {"A_ugoku_h_6", "S_ugoku_h_6", 40, -150, 3000},
+#endif
         {"A_ugoku_h_8", "S_ugoku_h_8", 20, -100, 2000},
         {"A_ugoku_h_9", "S_ugoku_h_9", -100, 20, 2000},
     },
@@ -998,12 +1078,21 @@ static EVT_BEGIN(evt_door_msg)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_on)
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_19_THE_DOOR_TO_LORD_CRUMP)
+#else
         CALL_CHILD(PTR(bero_case_switch_on))
         SET_VALUE(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -1019,17 +1108,29 @@ EVT_END()
 EVT_BEGIN(aji_13_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI7"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(shikake_init)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(shikake_init))
+#endif
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou1"), STRING("A_hikou1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ami2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai5"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai3"), MAP_OBJ_FLAG_CLIP)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_17_CONVEYOR_BELT)
+        CALL(evt_mobj_switch_blue, 0, STRING("bcv_sw"), -150, 0, 100, PTR(evt_bcv_sw), GSWF(GSWF_AJI13_CONVEYOR_SWITCH_PRESSED))
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_17_CONVEYOR_BELT)
         CALL(evt_mobj_switch_blue, 0, STRING("bcv_sw"), -150, 0, 100, PTR(evt_bcv_sw), GSWF_AJI_13_CONVEYOR_SWITCH_PRESSED)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -1041,7 +1142,11 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_map_playanim, STRING("kon"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_ramp)
+#else
         CALL_CHILD(PTR(evt_ramp))
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -1051,17 +1156,34 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI13_CARD_KEY_TAKEN), 0)
+#else
     IF_INT_EQUAL(GSWF_AJI_13_CARD_KEY, 0)
+#endif
         CALL(evt_item_entry, STRING("key"), ITEM_CARD_KEY_0x20, -50, 100, 100, ITEM_TYPE_STILL, -1, PTR(evt_key_get))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_18_OFF_SCREEN_STAIRS)
+        CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF(GSWF_AJI13_STAIRS_SWITCH_PRESSED))
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_18_OFF_SCREEN_STAIRS)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF_AJI_13_STAIRS_SWITCH_PRESSED)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kaidan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_kaidan"), 1, 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_19_THE_DOOR_TO_LORD_CRUMP)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_19_THE_DOOR_TO_LORD_CRUMP)
+#endif
         SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_door_msg), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -1071,13 +1193,22 @@ EVT_BEGIN(aji_13_init_evt)
     END_IF
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 200, 60, 100, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF(GSWF_AJI13_ULTRA_SHROOM), 0)
+IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+#else
     CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+#endif
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         CALL(evt_npc_check_delete, STRING("バリアーンＺ"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_emergency)
+#else
     SPAWN_EVENT(PTR(evt_emergency))
+#endif
     BEGIN_INLINE_EVENT
         CALL(bg_cam_chk)
     END_INLINE_EVENT
@@ -1085,6 +1216,7 @@ EVT_BEGIN(aji_13_init_evt)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_000035a0, JP aji .text+0x34DC. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(hit_group_chk) {
     EvtWord* args = event->args;
     const char* name1 = (const char*)evtGetValue(event, args[0]);
@@ -1099,11 +1231,20 @@ USER_FUNC(hit_group_chk) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(bg_cam_chk) {
+#else
 USER_FUNC(bg_cam_chk) {
+#endif
     CameraEntry* camera = camGetPtr(CAMERA_3D);
+#if VERSION <= VERSION_DEMO_US
+if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW)) {
+#else
 
     if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW) && marioGetPtr()->airTimer == 0) {
+#endif
         camFollowYOn();
     }
     return EVT_RETURN_BLOCK;

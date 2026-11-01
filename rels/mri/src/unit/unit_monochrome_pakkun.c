@@ -100,6 +100,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Pale Piranha: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 100, 80, 100, 95, 100, 100, 100, 100, 90, 100, 90, 100, 90, 90, 40, 60, 100, 90, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     110, // sleep
     90, // stop
@@ -124,6 +127,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Parts of the Pale Piranha: 1 part (model c_pakflwr_t). */
 static BattleUnitKindPart parts[] = {

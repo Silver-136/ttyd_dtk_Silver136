@@ -562,6 +562,56 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
  * and stick directions, the analogue sticks and triggers,
  * and applies rumble changes to the motors when rumble is enabled.
  */
+#if VERSION <= VERSION_DEMO_US
+void makeKey(void) {
+    s32 delay;
+u32 button;
+    u32 dirs;
+int i;
+
+    DEMOPadRead();
+    for (i = 0; i < 4; i++) {
+        dirs = GET_DEMO_PAD_STATUS(i)->dirs;
+        gp->dirsNew[i] = dirs & (dirs ^ gp->dirs[i]);
+        gp->dirsRepeat[i] = gp->dirsNew[i];
+        if (dirs && dirs == gp->dirs[i]) {
+            if (!--gp->dirsRepeatDelay[i]) {
+                gp->dirsRepeat[i] = dirs;
+                gp->dirsRepeatDelay[i] = KEY_REPEAT_FRAMES(6);
+            }
+        } else {
+            gp->dirsRepeatDelay[i] = KEY_REPEAT_FRAMES(24);
+        }
+        gp->dirs[i] = dirs;
+    }
+
+    for (i = 0; i < 4; i++) {
+        button = GET_DEMO_PAD_STATUS(i)->pst.button;
+        gp->buttonNew[i] = button & (button ^ gp->button[i]);
+        gp->buttonRepeat[i] = gp->buttonNew[i];
+        if (button && button == gp->button[i]) {
+            if (!--gp->buttonRepeatDelay[i]) {
+                gp->buttonRepeat[i] = button;
+                gp->buttonRepeatDelay[i] = KEY_REPEAT_FRAMES(6);
+            }
+        } else {
+            gp->buttonRepeatDelay[i] = KEY_REPEAT_FRAMES(24);
+        }
+        gp->button[i] = button;
+        gp->buttonUp[i] = GET_DEMO_PAD_STATUS(i)->buttonUp;
+    }
+
+    for (i = 0; i < 4; i++) {
+        gp->stickX[i] = GET_DEMO_PAD_STATUS(i)->pst.stickX;
+        gp->stickY[i] = GET_DEMO_PAD_STATUS(i)->pst.stickY;
+        gp->substickX[i] = GET_DEMO_PAD_STATUS(i)->pst.substickX;
+        gp->substickY[i] = GET_DEMO_PAD_STATUS(i)->pst.substickY;
+        gp->triggerLeft[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerLeft;
+        gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
+    }
+gp->keyDataValid = 1;
+}
+#else
 void makeKey(void) {
     u16 button;
     u16 dirs;
@@ -654,6 +704,7 @@ void makeKey(void) {
     }
     gp->keyDataValid = 1;
 }
+#endif
 
 /** Returns the stick and d-pad directions held on controller chan. */
 u32 keyGetDir(u32 chan) {
@@ -1095,6 +1146,30 @@ f32 systemStrippedPool2(s32 x) {
  * FAKE stand-in (see above): recreates the stripped debug code's constants (the interpolation mode names LINEAR,
  * ACCEL, ..., the file:line report format and a few numbers) in their original pool order.
  */
+#if VERSION <= VERSION_DEMO_US
+void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
+    f[0] = 1.0f;
+str[0] = "LINEAR";
+    str[1] = "ACCEL";
+    str[2] = "DOUBLE_ACCEL";
+    str[3] = "TRIPLE_ACCEL";
+    str[4] = "DECEL";
+    str[5] = "DOUBLE_DECEL";
+    str[6] = "TRIPLE_DECEL";
+    str[7] = "GEMINI";
+    str[8] = "BURURUN";
+    str[9] = "BURURUN_DECEL";
+    str[10] = "BOUND";
+    str[11] = "SIN_ACCEL";
+    str[12] = "SIN_DECEL";
+f[1] = sqrtf(x);
+    str[10] = "[%8s:% 4d] %s";
+    d[0] = 1.5;
+    d[1] = 2.5;
+    d[2] = 1.7;
+    f[2] = 1000.0f;
+}
+#else
 void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     f[0] = 1.0f;
     str[0] = "LINEAR";
@@ -1118,4 +1193,6 @@ void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     f[2] = 1000.0f;
 }
 #endif
+#endif
+
 

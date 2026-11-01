@@ -70,7 +70,11 @@ static EvtWord init_event[26];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[80];
 #else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event[80];
+#else
 static EvtWord damage_event[59];
+#endif
 #endif
 static EvtWord attack_event[217];
 static EvtWord wait_event[6];
@@ -95,6 +99,73 @@ BattleUnit* chorogun_get_ptr(void) {
  * Unit kind of Fuzzy Horde: 20 max HP, level 19. The battle engine reads it when the unit spawns:
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_chorobon_gundan = {
+    21,
+    "btl_un_chorobon_gundan",
+    20,
+    0,
+    1,
+    1,
+    19,
+    0,
+    5,
+    100,
+    0,
+    50,
+    5,
+    260,
+    50,
+    0,
+    50,
+    0.0f,
+    0.0f,
+    0.0f,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    130.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    130.0f,
+    0.0f,
+    0.0f,
+    130.0f,
+    32.5f,
+    0.0f,
+    0.0f,
+    25.0f,
+    0.0f,
+    260.0f,
+    50.0f,
+    0,
+    0,
+    -1,
+    0,
+    100,
+    20,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_BOSS_TEAM_CHORO_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+kUnitLeader | kUnitNoSpin | kUnitNoHpGauge,
+&regist.v,
+    1,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_chorobon_gundan = {
     21,
     "btl_un_chorobon_gundan",
@@ -164,6 +235,7 @@ BattleUnitKind unit_chorobon_gundan = {
     init_event,
     data_table,
 };
+#endif
 
 /**
  * Defence of Fuzzy Horde per element (normal, fire, ice, explosion, electric), subtracted from each hit:
@@ -258,6 +330,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
  * Reward script run when a Fuzzy from the horde is defeated (unit LW(10)):
  * plays its death sound, pays out its coins and EXP and spawns the star point effect above it.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(chorogun_dead_reward)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -277,6 +350,7 @@ EVT_BEGIN(chorogun_dead_reward)
     END_IF
     RETURN
 EVT_END()
+#endif
 #endif
 
 /**
@@ -299,6 +373,42 @@ EVT_END()
  * while more than 50 remain; once 50 or fewer are left it sets unit work 0 to 1.
  * After a lethal hit, it runs escape_chorogun_event if 500 or fewer are alive.
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(damage_event)
+    CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
+    SET_VALUE(LW(0), 0)
+    LOOP(0)
+        IF_INT_GREATER_OR_EQUAL(LW(0), LW(15))
+            BREAK_LOOP
+        END_IF
+        CALL(chorogun_get_alive_num, LW(1))
+        IF_INT_LESS_OR_EQUAL(LW(1), 50)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_CHOROBON_GUNDAN_FEW_LEFT, 1)
+        ELSE
+            CALL(chorogun_escape)
+        END_IF
+        ADD(LW(0), 1)
+    END_LOOP
+    CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
+    IF_INT_EQUAL(LW(0), 0)
+        GOTO(99)
+    END_IF
+CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_CHOROBON_GUNDAN_FEW_LEFT, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(chorogun_escape)
+        CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
+        GOTO(99)
+    END_IF
+CALL(chorogun_get_alive_num, LW(0))
+    IF_INT_LESS_OR_EQUAL(LW(0), 500)
+        CALL_CHILD(escape_chorogun_event)
+        GOTO(99)
+    END_IF
+    LABEL(99)
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(0), 0)
@@ -335,6 +445,7 @@ static EVT_BEGIN(damage_event)
     LABEL(99)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Attack script of the Fuzzy Horde: after the item-use check,

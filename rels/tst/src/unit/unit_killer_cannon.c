@@ -51,6 +51,73 @@ static USER_FUNC(killer_copy_status) {
 /**
  * Unit definition of the Bill Blaster: 5 HP, level 22, 3 parts, with its sounds, init script and data table.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_killer_cannon = {
+    90,
+    "btl_un_killer_cannon",
+    5,
+    0,
+    1,
+    1,
+    22,
+    0,
+    3,
+    70,
+    3,
+    60,
+    9999,
+    52,
+    38,
+    5,
+    38,
+    0.0f,
+    19.0f,
+    0.0f,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    26.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+0.0f,
+0.0f,
+26.0f,
+    0.0f,
+    0.0f,
+    26.0f,
+    24.7f,
+    0.0f,
+    -10.0f,
+    19.0f,
+    0.0f,
+    52.0f,
+    38.0f,
+    0,
+    0,
+    0,
+    2,
+    100,
+    20,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_ENM_KILLER_CANON_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    0,
+    &regist,
+    3,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_killer_cannon = {
     90,
     "btl_un_killer_cannon",
@@ -124,6 +191,7 @@ BattleUnitKind unit_killer_cannon = {
     init_event,
     data_table,
 };
+#endif
 
 /** Defence of the Bill Blaster: 2 against every kind of attack. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
@@ -139,7 +207,11 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 50, 100, 50, 100, 50, 100, 50, 50, 0, 15, 100, 50, 100, 100, 95};
 #else
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 50, 100, 50, 100, 50, 100, 50, 50, 0, 15, 100, 50, 100, 100, 95};
+#else
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 100, 100, 90, 100, 90, 100, 95, 50, 0, 15, 100, 50, 100, 100, 95};
+#endif
 #endif
 
 /**

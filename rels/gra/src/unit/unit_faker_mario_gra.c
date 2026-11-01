@@ -107,6 +107,9 @@ static BattleUnitDefense defence_fmario = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr_fmario = {{2, 2, 2, 2, 2}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_fmario = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 0};
+#else
 static StatusVulnerability regist_fmario = {
     0, // sleep
     0, // stop
@@ -131,6 +134,7 @@ static StatusVulnerability regist_fmario = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /**
  * Pose table of Doopliss as Mario:

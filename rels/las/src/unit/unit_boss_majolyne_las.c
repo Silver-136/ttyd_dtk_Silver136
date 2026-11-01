@@ -128,6 +128,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist = {
     40, // sleep
     50, // stop
@@ -152,6 +155,7 @@ static StatusVulnerability regist = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /** Pose table of Beldam: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
@@ -895,29 +899,51 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
         // Beldam opens with the blizzard.
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(blizzard_attack_event)
+#else
         CALL_CHILD(PTR(blizzard_attack_event))
+#endif
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack4))
         // Then comes a powder attack, whose kind depends on where the Sirens stand.
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(powder_attack_check)
+        CALL_CHILD(powder_attack_event)
+#else
         CALL_CHILD(PTR(powder_attack_check))
         CALL_CHILD(PTR(powder_attack_event))
+#endif
         CASE_EQUAL(2)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 4)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack5))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(powder_attack_check)
+        CALL_CHILD(powder_attack_event)
+#else
         CALL_CHILD(PTR(powder_attack_check))
         CALL_CHILD(PTR(powder_attack_event))
+#endif
         CASE_EQUAL(3)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 4)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
         // Another blizzard follows.
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(blizzard_attack_event)
+#else
         CALL_CHILD(PTR(blizzard_attack_event))
+#endif
         CASE_EQUAL(4)
         SET_UW_BASE(GW(15))
         SET_VALUE(LW(14), 30)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(powder_attack_check)
+#else
         CALL_CHILD(PTR(powder_attack_check))
+#endif
         IF_INT_NOT_EQUAL(LW(3), -1)
             SET_VALUE(UW(0), LW(3))
             SET_VALUE(UW(1), LW(4))
@@ -927,7 +953,11 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack2))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(powder_attack_check)
+#else
         CALL_CHILD(PTR(powder_attack_check))
+#endif
         IF_INT_NOT_EQUAL(LW(3), -1)
             SET_VALUE(UW(2), LW(3))
             SET_VALUE(UW(3), LW(4))
@@ -937,7 +967,11 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack3))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(powder_attack_check)
+#else
         CALL_CHILD(PTR(powder_attack_check))
+#endif
         IF_INT_NOT_EQUAL(LW(3), -1)
             SET_VALUE(UW(4), LW(3))
             SET_VALUE(UW(5), LW(4))
@@ -947,7 +981,11 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack4))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(powder_attack_check)
+#else
         CALL_CHILD(PTR(powder_attack_check))
+#endif
         IF_INT_NOT_EQUAL(LW(3), -1)
             SET_VALUE(UW(6), LW(3))
             SET_VALUE(UW(7), LW(4))
@@ -957,7 +995,11 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack5))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(powder_attack_check)
+#else
         CALL_CHILD(PTR(powder_attack_check))
+#endif
         IF_INT_NOT_EQUAL(LW(3), -1)
             SET_VALUE(UW(8), LW(3))
             SET_VALUE(UW(9), LW(4))
@@ -970,7 +1012,11 @@ static EVT_BEGIN(attack_event)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, LW(0))
             IF_INT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(14), 20)
+#else
                 ADD(LW(14), 30)
+#endif
             END_IF
         END_IF
         SUBTRACT(LW(14), 1)
@@ -979,7 +1025,11 @@ static EVT_BEGIN(attack_event)
         IF_INT_LESS(LW(0), LW(1))
             SET_VALUE(LW(9), PTR(&weapon_majolyne_kagenuke_attack1))
             // Sometimes she uses her kagenuke attack instead.
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(kagenuke_attack_event)
+#else
             CALL_CHILD(PTR(kagenuke_attack_event))
+#endif
             GOTO(90)
         END_IF
         ADD(LW(1), 5)
@@ -987,7 +1037,11 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
             SET_VALUE(LW(3), UW(0))
             SET_VALUE(LW(4), UW(1))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(powder_attack_event)
+#else
             CALL_CHILD(PTR(powder_attack_event))
+#endif
             GOTO(90)
         END_IF
         ADD(LW(1), 5)
@@ -995,7 +1049,11 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack2))
             SET_VALUE(LW(3), UW(2))
             SET_VALUE(LW(4), UW(3))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(powder_attack_event)
+#else
             CALL_CHILD(PTR(powder_attack_event))
+#endif
             GOTO(90)
         END_IF
         ADD(LW(1), 15)
@@ -1003,7 +1061,11 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack3))
             SET_VALUE(LW(3), UW(4))
             SET_VALUE(LW(4), UW(5))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(powder_attack_event)
+#else
             CALL_CHILD(PTR(powder_attack_event))
+#endif
             GOTO(90)
         END_IF
         ADD(LW(1), 0)
@@ -1011,7 +1073,11 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack4))
             SET_VALUE(LW(3), UW(6))
             SET_VALUE(LW(4), UW(7))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(powder_attack_event)
+#else
             CALL_CHILD(PTR(powder_attack_event))
+#endif
             GOTO(90)
         END_IF
         ADD(LW(1), 5)
@@ -1019,13 +1085,21 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack5))
             SET_VALUE(LW(3), UW(8))
             SET_VALUE(LW(4), UW(9))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(powder_attack_event)
+#else
             CALL_CHILD(PTR(powder_attack_event))
+#endif
             GOTO(90)
         ELSE
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
             // The cycle ends with a blizzard and starts over.
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(blizzard_attack_event)
+#else
             CALL_CHILD(PTR(blizzard_attack_event))
+#endif
         END_IF
     END_SWITCH
     LABEL(90)

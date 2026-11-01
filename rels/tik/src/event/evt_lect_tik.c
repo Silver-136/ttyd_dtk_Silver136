@@ -694,10 +694,16 @@ EVT_BEGIN(plane_majin_lecture)
                 WAIT_FRAMES(1)
             END_LOOP
             LOOP(0)
+#if VERSION > VERSION_DEMO_US
                 CALL(x_flag_get, 1, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), 3)
+#endif
                     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+CALL(x_flag_get, 1, LW(0))
+#else
                 END_IF
+#endif
                 IF_INT_EQUAL(LW(0), 2)
                     BREAK_LOOP
                 END_IF
@@ -729,16 +735,45 @@ EVT_BEGIN(plane_majin_lecture)
                 END_IF
             END_LOOP
         END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_cam_letter_box_disable, 1)
+        CALL(mainwindow_opendisable)
+        CALL(evt_mario_trigflag_onoff, 1, -2147483648)
+        CALL(evt_mario_trigflag_onoff, 1, 1073741824)
+        CALL(evt_mario_set_enable_key, 2048)
+        CALL(evt_mario_key_onoff, 1)
+        CALL(evt_mario_key_onoff, 1)
+#endif
         LOOP(0)
+#if VERSION <= VERSION_DEMO_US
+CALL(lect_status_off)
+            WAIT_FRAMES(1)
+            CALL(evt_mario_get_motion, LW(3))
+            IF_INT_EQUAL(LW(3), 24)
+#else
             CALL(evt_key_get_buttontrg, 0, LW(0))
             IF_BITS_SET(LW(0), PAD_BUTTON_Y)
+#endif
                 BREAK_LOOP
             END_IF
+#if VERSION > VERSION_DEMO_US
             WAIT_FRAMES(1)
+#endif
         END_LOOP
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_key_onoff, 0)
+        CALL(evt_mario_key_onoff, 0)
+        CALL(lect_status_on)
+        CALL(evt_mario_trigflag_onoff, 0, -2147483648)
+        CALL(evt_mario_trigflag_onoff, 0, 1073741824)
+        CALL(evt_mario_set_enable_key, 0)
+        CALL(mainwindow_openenable)
+        CALL(evt_cam_letter_box_disable, 0)
+#else
         CALL(evt_msg_continue)
         CALL(evt_mario_paper_plane, 1)
         // Mario turns into a paper airplane and glides off the panel, and the view follows him down.
+#endif
         CALL(x_flag_set, 0, 2)
         CALL(lecture_button_set_seq, 0, 3)
         BEGIN_INLINE_EVENT
@@ -750,6 +785,7 @@ EVT_BEGIN(plane_majin_lecture)
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
+#if VERSION > VERSION_DEMO_US
             CALL(x_flag_set, 1, 3)
             WAIT_FRAMES(1)
             CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
@@ -767,6 +803,7 @@ EVT_BEGIN(plane_majin_lecture)
             CALL(evt_mario_cont_onoff, 1)
             CALL(dai_moveti_set, FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f))
             CALL(x_flag_set, 1, 1)
+#endif
             LOOP(0)
                 CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
                 CALL(x_flag_get, 0, LW(3))
@@ -780,17 +817,45 @@ EVT_BEGIN(plane_majin_lecture)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(lecture_button_flag_on_off, 0, 2, 0)
         WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+CALL(dai_moveti_get, LW(0), LW(1), LW(2))
+        ADD_FLOAT(LW(0), FLOAT(700.0f))
+        SUBTRACT_FLOAT(LW(1), FLOAT(260.0f))
+        CALL(dai_moveti_set, LW(0), LW(1), LW(2))
+        CALL(evt_msg_print_add, 0, STRING("mac_majin_16"))
+#else
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("mac_majin_16"), 0, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"))
+#endif
         CALL(evt_msg_select, 0, STRING("mac_majin_17"))
+#if VERSION <= VERSION_DEMO_US
+IF_INT_EQUAL(LW(0), 0)
+            CALL(x_flag_set, 1, 2)
+            CALL(x_flag_set, 0, 2)
+            CALL(evt_mario_paper_plane, 0)
+            CALL(dai_moveti_set, FLOAT(0.0f), FLOAT(0.0f), FLOAT(0.0f))
+#else
         SET_VALUE(LW(3), LW(0))
+#endif
         LOOP(0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+                IF_INT_LESS_OR_EQUAL(LW(1), -900)
+#else
             IF_INT_GREATER_OR_EQUAL(LW(1), -550)
+#endif
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_mario_cont_onoff, 0)
+            CALL(evt_mario_set_pos, -300, -600, 0)
+            CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), EASING_LINEAR, 11)
+            CALL(evt_mario_set_pos, -300, -400, 0)
+            WAIT_MS(1000)
+            CALL(evt_mario_cont_onoff, 1)
+#else
         IF_INT_EQUAL(LW(3), 0)
             CALL(x_flag_set, 1, 2)
             WAIT_FRAMES(2)
@@ -798,6 +863,7 @@ EVT_BEGIN(plane_majin_lecture)
             CALL(x_flag_set, 0, 2)
             CALL(evt_mario_paper_plane, 0)
             // After "I zoned out", Mario lands, the panel slides back in and the demon goes over it again.
+#endif
             CALL(evt_mario_wait_landon)
             CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(80.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
             SET_FLOAT_VALUE(LW(1), FLOAT(2.6660156f))
@@ -820,18 +886,33 @@ EVT_BEGIN(plane_majin_lecture)
     END_LOOP
     // The demon hints at how to change back; Mario drops out of plane mode and the demon leaves.
     CALL(evt_msg_print_add, 0, STRING("mac_majin_18_1"))
+#if VERSION > VERSION_DEMO_US
     CALL(x_flag_set, 1, 2)
     WAIT_FRAMES(2)
     CALL(evt_cam3d_evt_set, FLOAT(-300.0f), FLOAT(-460.0f), FLOAT(457.0f), FLOAT(-300.0f), FLOAT(-558.0f), FLOAT(-101.799805f), 1200, EASING_LINEAR)
+#endif
     CALL(x_flag_set, 0, 2)
     CALL(evt_mario_paper_plane, 0)
+#if VERSION <= VERSION_DEMO_US
+LOOP(0)
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        IF_INT_LESS_OR_EQUAL(LW(1), -850)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+#else
     CALL(evt_mario_wait_landon)
+#endif
     CALL(evt_msg_print_add, 0, STRING("mac_majin_19"))
     CALL(evt_npc_set_anim, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), STRING("P_2"))
     WAIT_MS(200)
     CALL(evt_npc_set_camid, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), CAMERA_3D)
     CALL(evt_npc_set_position, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), 0, -1000, 0)
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+#else
 EVT_END_PAD()
 
 /** Script helper. Stores TRUE in args[0] while the R trigger is held on controller 0, otherwise FALSE. */
@@ -845,17 +926,34 @@ static USER_FUNC(lect_push_r_check) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper (normal change).
  * Cancels Mario's roll and paper mode so he is back to normal,
  * and blocks until the roll is finished and the slit (paper) pose is over.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(lect_push_r_check) {
+    EvtWord* args = event->args;
+
+    if (keyGetButton(0) & PAD_TRIGGER_R) {
+        evtSetValue(event, args[0], TRUE);
+    } else {
+        evtSetValue(event, args[0], FALSE);
+    }
+    return EVT_RETURN_DONE;
+}
+#endif
 static USER_FUNC(evt_nomal_cange) {
     MarioWork* mario = marioGetPtr();
 
     if (isFirstCall) {
+#if VERSION <= VERSION_DEMO_US
+marioRollCancel();
+#else
         marioRollTryCancel();
+#endif
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             motSlitCancel3();
         }

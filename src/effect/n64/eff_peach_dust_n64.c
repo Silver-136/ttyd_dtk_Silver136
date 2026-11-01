@@ -169,7 +169,11 @@ EffectEntry* effPeachDustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 unused, f32
  * Advances every particle (spreading outward, scale from a table then easing to 0.1)
  * and cycles its texture frame; deletes the effect once all particles have expired.
  */
+#if VERSION <= VERSION_DEMO_US
+static void effPeachDustMain(EffectEntry* effect) {
+#else
 void effPeachDustMain(EffectEntry* effect) {
+#endif
     EffPeachDustParticle* p = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -197,16 +201,23 @@ void effPeachDustMain(EffectEntry* effect) {
         } else {
             p->frame++;
             f = p->frame;
+#if VERSION <= VERSION_DEMO_US
+if (f - 1 < 25) {
+                p->scale = 0.4f * (0.01f * scale_data[f - 1]);
+#else
             g = f - 1;
             if (g < 25) {
                 p->scale = 0.4f * (0.01f * scale_data[g]);
+#endif
             } else {
                 p->scale += 0.1f * (0.1f - p->scale);
             }
             p->position.x += p->velocity.x;
             p->position.y += p->velocity.y;
             p->velocity.y += p->velocity.z;
+#if VERSION > VERSION_DEMO_US
             // z moves with the x step; the third stored velocity component accelerates y (above).
+#endif
             p->position.z += p->velocity.x;
         }
     }

@@ -1926,6 +1926,30 @@ BattleGroupSetup btlgrp_test_nakayama = {
 };
 
 /** Enemy lineup of test battle BTLNO_TEST_BARRIERN: Z-Yux, X-Yux. */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitSetup btlparty_test_barriern[] = {
+    {
+        &unit_barriern_z, // unitKindParams
+        1, // alliance
+        {0}, // pad_05
+        BATTLE_PHASE_ENEMY,
+{90.0f, 60.0f, 0.0f},
+0, // hitOffsetX
+        {4, 0, 0, 0}, // unitWork
+        battle_item_NONE, // itemDropTable
+    },
+    {
+        &unit_barriern_custom, // unitKindParams
+        1, // alliance
+        {0}, // pad_05
+        BATTLE_PHASE_ENEMY,
+{170.0f, 60.0f, 0.0f},
+0, // hitOffsetX
+        {4, 0, 0, 0}, // unitWork
+        battle_item_NONE, // itemDropTable
+    },
+};
+#else
 BattleUnitSetup btlparty_test_barriern[] = {
     {
         &unit_barriern_z, // unitKindParams
@@ -1956,6 +1980,7 @@ BattleUnitSetup btlparty_test_barriern[] = {
         battle_item_NONE, // itemDropTable
     },
 };
+#endif
 
 /**
  * Battle group of test battle BTLNO_TEST_BARRIERN: Z-Yux, X-Yux, with its item drop odds and heart and
@@ -2928,6 +2953,34 @@ NpcTerritoryInfo btl_tst_setup_no_tbl[] = {
  * Moves a stage object along two sine waves: x = ampX * sin(stepX / periodX), y = ampY * (1 + sin(...)).
  * Args: object name, x step var, x period, x amplitude, y step var, y period, y amplitude.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(_wave_offset) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    s32 varX = args[1];
+    s32 stepX = evtGetValue(event, varX);
+    s32 periodX = evtGetValue(event, args[2]);
+    s32 ampX = evtGetValue(event, args[3]);
+    s32 varY = args[4];
+    s32 stepY = evtGetValue(event, varY);
+    s32 periodY = evtGetValue(event, args[5]);
+    s32 ampY = evtGetValue(event, args[6]);
+    BattleStageObject* pObject = BattleSearchObjectPtr(name);
+pObject->positionOffset.x = ampX * sinfd(stepX * 360 / periodX);
+    pObject->positionOffset.y = ampY * sinfd(stepY * 360 / periodY + 270) + ampY;
+    stepX++;
+    if (stepX >= periodX) {
+        stepX = 0;
+    }
+    evtSetValue(event, varX, stepX);
+    stepY++;
+    if (stepY >= periodY) {
+        stepY = 0;
+    }
+    evtSetValue(event, varY, stepY);
+    return EVT_RETURN_DONE;
+}
+#else
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -2964,6 +3017,7 @@ static USER_FUNC(_wave_offset) {
     evtSetValue(event, varY, stepY);
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Endless loop for the test battle stage: each frame calls _wave_offset on stage object B to make it sway on a

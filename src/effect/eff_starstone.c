@@ -378,7 +378,11 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * States 1-5 are the drop: it falls under gravity, bounces on the ground (jump sound, puffs),
  * then the halves separate and tilt.
  */
+#if VERSION <= VERSION_DEMO_US
+static void effStarStoneMain(EffectEntry* effect) {
+#else
 void effStarStoneMain(EffectEntry* effect) {
+#endif
     EffStarStoneWork* w = effect->userdata;
     Vec pos;
     Vec tmp = { 0.0f, 0.0f, 0.0f };
@@ -480,10 +484,18 @@ void effStarStoneMain(EffectEntry* effect) {
             w->half0OffsetZ -= (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
             w->half1OffsetX += (f32)sin(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
             w->half1OffsetZ += (f32)cos(6.2831855f * (90.0f + camGetPtr(w->cam)->viewYaw) / 360.0f);
+#if VERSION <= VERSION_DEMO_US
+                w->tiltZ += (90.0f - w->tiltZ) / 10.0f;
+#else
             w->rot.z += (90.0f - w->rot.z) / 10.0f;
+#endif
         }
         if (w->state > 3) {
+#if VERSION <= VERSION_DEMO_US
+                w->spinY += (-90.0f - w->spinY) / 10.0f;
+#else
             w->rot.x += (-90.0f - w->rot.x) / 10.0f;
+#endif
         }
         break;
     }
@@ -513,7 +525,11 @@ void effStarStoneMain(EffectEntry* effect) {
             ((EffSnowDustN64Work*)w->dust->userdata)->position.z = 0.0f;
         }
         if (w->state < 3 && cam == CAMERA_3D) {
+#if VERSION <= VERSION_DEMO_US
+shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale);
+#else
             shadowSetMode(shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale), w->a);
+#endif
         }
     }
     if (!(w->flags & STAR_STONE_FLAG_EXTERNAL_DRAW)) {
@@ -551,7 +567,14 @@ void effStarStoneMain(EffectEntry* effect) {
     for (; k < n##U; k++, sq++, dq++) {   \
         GXCallDisplayList(*dq, *sq << 5); \
     }
+#if VERSION <= VERSION_DEMO_US
+static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
+u32 i;
+    u8* size;
+    u8** list;
+#else
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
+#endif
     Mtx m;
     Mtx s;
     Mtx r;
@@ -559,18 +582,42 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     EffStarStoneWork* w = effect->userdata;
     CameraEntry* cam = camGetPtr(cameraId);
     s32 type = w->type;
+#if VERSION > VERSION_DEMO_US
     u8** dp;
     u8* sp;
     u32 i;
     u8* sq;
     u8** dq;
     s32 k;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    mapSetMaterialFog();
+    GXSetArray(GX_VA_CLR0, color_tbl[w->type], 4);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanMatColor(GX_COLOR0A0, w->color);
+    GXSetNumTexGens(0);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
+#else
     DISP_START(w)
+#endif
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, 1.1f * w->scale, 1.1f * w->scale, 1.1f * w->scale);
     PSMTXConcat(m, s, m);
+#if VERSION <= VERSION_DEMO_US
+    PSMTXRotRad(r, 'y', MTXDegToRad(w->rotY));
+#else
     PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
+#endif
     PSMTXConcat(m, r, m);
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);
@@ -578,6 +625,11 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     starStoneBlendState();
     GXSetCullMode(GX_CULL_BACK);
     if (type == 0) {
+#if VERSION <= VERSION_DEMO_US
+        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
+for (i = 0, size = diamond_1_dl_0_size_tbl, list = diamond_1_dl_0_tbl; i < sizeof(diamond_1_dl_0_tbl) / sizeof(diamond_1_dl_0_tbl[0]); i++, size++, list++) {
+            GXCallDisplayList(*list, *size << 5);
+#else
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
         CALL_DL_TABLE(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
@@ -587,12 +639,69 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         CALL_DL_TABLE(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
         VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
         CALL_DL_TABLE(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
+#endif
     }
+#if VERSION <= VERSION_DEMO_US
+starStoneSetVtx(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
+{
+            u8* sz;
+            u8** dl;
+            u32 n;
+
+            for (n = 0, sz = diamond_1_dl_1_size_tbl, dl = diamond_1_dl_1_tbl; n < sizeof(diamond_1_dl_1_tbl) / sizeof(diamond_1_dl_1_tbl[0]); n++, sz++, dl++) {
+                GXCallDisplayList(*dl, *sz << 5);
+            }
+        }
+} else {
+        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
+{
+            u8* sz;
+            u8** dl;
+            u32 n;
+
+            for (n = 0, sz = diamond_7_dl_0_size_tbl, dl = diamond_7_dl_0_tbl; n < sizeof(diamond_7_dl_0_tbl) / sizeof(diamond_7_dl_0_tbl[0]); n++, sz++, dl++) {
+                GXCallDisplayList(*dl, *sz << 5);
+            }
+        }
+starStoneSetVtx(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
+{
+            u8* sz;
+            u8** dl;
+            u32 n;
+
+            for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(w) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
+                GXCallDisplayList(*dl, *sz << 5);
+            }
+        }
+}
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    PSMTXTrans(m, w->texScrollX, w->texScrollY, 0.0f);
+    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
+    GXSetNumTevStages(2);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
+    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
+#else
     DISP_MID(w)
+#endif
     PSMTXTrans(m, w->position.x, w->position.y, w->position.z);
     PSMTXScale(s, w->scale, w->scale, w->scale);
     PSMTXConcat(m, s, m);
+#if VERSION <= VERSION_DEMO_US
+    PSMTXRotRad(r, 'y', MTXDegToRad(w->rotY));
+#else
     PSMTXRotRad(r, 'y', MTXDegToRad(w->rot.y));
+#endif
     PSMTXConcat(m, r, m);
     PSMTXConcat(cam->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);
@@ -606,23 +715,75 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     }
     starStoneBlendState();
     if (type == 0) {
+#if VERSION <= VERSION_DEMO_US
+        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
+{
+            u8* sz;
+            u8** dl;
+            u32 n;
+
+            for (n = 0, sz = diamond_1_dl_0_size_tbl, dl = diamond_1_dl_0_tbl; n < sizeof(diamond_1_dl_0_tbl) / sizeof(diamond_1_dl_0_tbl[0]); n++, sz++, dl++) {
+                GXCallDisplayList(*dl, *sz << 5);
+            }
+        }
+#else
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
         LOOPK(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
+#endif
     } else {
+#if VERSION <= VERSION_DEMO_US
+        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
+        {
+            u8* sz;
+            u8** dl;
+            u32 n;
+
+            for (n = 0, sz = diamond_7_dl_0_size_tbl, dl = diamond_7_dl_0_tbl; n < sizeof(diamond_7_dl_0_tbl) / sizeof(diamond_7_dl_0_tbl[0]); n++, sz++, dl++) {
+                GXCallDisplayList(*dl, *sz << 5);
+            }
+        }
+#else
         VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
         LOOPK2(diamond_7_dl_0_tbl, diamond_7_dl_0_size_tbl, 34)
+#endif
     }
     effGetTexObj(0x2d, &tex);
     GXLoadTexObj(&tex, GX_TEXMAP0);
     starStoneBlendState();
     if (type == 0) {
+#if VERSION <= VERSION_DEMO_US
+        VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
+        {
+            u8* sz;
+            u8** dl;
+            u32 n;
+
+            for (n = 0, sz = diamond_1_dl_1_size_tbl, dl = diamond_1_dl_1_tbl; n < sizeof(diamond_1_dl_1_tbl) / sizeof(diamond_1_dl_1_tbl[0]); n++, sz++, dl++) {
+                GXCallDisplayList(*dl, *sz << 5);
+#else
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13)
         LOOPK2(diamond_1_dl_1_tbl, diamond_1_dl_1_size_tbl, 34)
     } else {
         VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13)
         LOOPK2(diamond_7_dl_1_tbl, diamond_7_dl_1_size_tbl, 33)
+#endif
     }
 }
+#if VERSION <= VERSION_DEMO_US
+    } else {
+        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
+        {
+            u8* sz;
+            u8** dl;
+            u32 n;
+
+            for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
+                GXCallDisplayList(*dl, *sz << 5);
+            }
+        }
+    }
+}
+#endif
 
 /** Draws the stones that split in two (types 1-5): an untextured shell for each half, then each half textured. */
 void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {

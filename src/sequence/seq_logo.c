@@ -4,7 +4,12 @@
 #include "seq/seq_logo.h"
 #include "libc_decls.h"
 #include "driver/arcdrv.h"
+#if VERSION <= VERSION_DEMO_US
+#include "driver/animdrv.h"
 #include "driver/effdrv.h"
+#else
+#include "driver/effdrv.h"
+#endif
 #include "driver/envdrv.h"
 #include "driver/fadedrv.h"
 #include "driver/icondrv.h"
@@ -47,6 +52,7 @@ void progDisp(CameraId camId, void* param);
 static s32 logoAsyncFirst(void);
 #endif
 
+#if VERSION > VERSION_DEMO_US
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
 #if VERSION >= VERSION_US
@@ -109,12 +115,62 @@ void seq_logoInit(SequenceWork* work) {
         gp->flags |= GW_FLAG_VIDEO_MODE_SET;
     }
 }
+#endif
 
 
 /**
  * Leaves the logo sequence: sets up the font, window, fade, icon,
  * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
  */
+#if VERSION == VERSION_DEMO_JP
+void seq_logoInit(SequenceWork* work) {
+    memset(wp, 0, sizeof(LogoWork));
+wp->texture = fileAllocf(4, "%s/monthry.tpl", getMarioStDvdRoot());
+wp->progressive = FALSE;
+VIConfigure(&sRMObjHReso);
+    VIFlush();
+    VIWaitForRetrace();
+}
+void seq_logoExit(SequenceWork* work) {
+    fontmgrTexSetup();
+    windowTexSetup();
+    fadeTexSetup();
+    iconTexSetup();
+    envTexSetup();
+    effTexSetup();
+    marioPoseInit();
+    fileFree(wp->texture);
+gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+}
+#elif VERSION == VERSION_DEMO_US
+void seq_logoInit(SequenceWork* work) {
+    memset(wp, 0, sizeof(LogoWork));
+wp->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
+wp->progressive = FALSE;
+work->state = 0;
+    logoAsyncFirst();
+VIConfigure(&sRMObjHReso);
+    VIFlush();
+    VIWaitForRetrace();
+animGroupBaseAsync("c_pkr", 0, NULL);
+    animGroupBaseAsync("c_pnk", 0, NULL);
+    animGroupBaseAsync("c_windy", 0, NULL);
+    animGroupBaseAsync("OFF_d_meku", 0, NULL);
+    animGroupBaseAsync("EFF_Mugi", 0, NULL);
+    fileAsyncf(4, 0, "%s/e3.tpl", getMarioStDvdRoot());
+}
+void seq_logoExit(SequenceWork* work) {
+    fontmgrTexSetup();
+    windowTexSetup();
+    fadeTexSetup();
+    iconTexSetup();
+    envTexSetup();
+    effTexSetup();
+    marioPoseInit();
+    fileFree(wp->texture);
+gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+}
+#else
 void seq_logoExit(SequenceWork* work) {
     fontmgrTexSetup();
     windowTexSetup();
@@ -125,7 +181,155 @@ void seq_logoExit(SequenceWork* work) {
     marioPoseInit();
     fileFree(wp->texture);
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+void seq_logoMain(SequenceWork* work) {
+    static OSTime time; // time instance 1
+    u32 size;
+    u8* decode;
+    FileEntry* first;
+    FileEntry* ret;
+    int ok;
+
+    switch (work->state) {
+        case 0:
+            fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
+            DVDMgrSetupCallback(psndPushGroup);
+            work->state++;
+            break;
+
+        case 1:
+            if (fadeIsFinish() && !wp->progressive) {
+                work->state++;
+                time = gp->renderTime;
+}
+            break;
+
+        case 2:
+            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
+                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
+                work->state++;
+            }
+            break;
+
+        case 3:
+            if (fadeIsFinish()) {
+                fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
+                work->state++;
+                wp->logoId = 1;
+            }
+            break;
+
+        case 4:
+            if (fadeIsFinish()) {
+                work->state++;
+                time = gp->renderTime;
+            }
+            break;
+
+        case 5:
+            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
+                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
+                work->state++;
+            }
+            break;
+
+        case 6:
+            if (fadeIsFinish()) {
+                fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
+                work->state++;
+                wp->logoId = 2;
+            }
+            break;
+
+        case 7:
+            if (fadeIsFinish()) {
+                work->state++;
+                time = gp->renderTime;
+            }
+            break;
+
+        case 8:
+            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
+                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
+                wp->skipStory = FALSE;
+                work->state++;
+            }
+            break;
+
+        case 9:
+            if (keyGetButtonTrg(0) & (PAD_BUTTON_START | PAD_BUTTON_A)) {
+                wp->skipStory = TRUE;
+            }
+            if ((u32)psndPushGroup() == 0U) {
+                DVDMgrSetupCallback(NULL);
+                if (fadeIsFinish()) {
+                    if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
+                        VIConfigure(&GXNtsc480IntDfMarioSt);
+                        VIFlush();
+                    } else {
+                        VIConfigure(&GXNtsc480ProgMarioSt);
+                        VIFlush();
+                    }
+                    VISetBlack(TRUE);
+                    dispEntry(CAMERA_BACKGROUND, 0.0f, 0, dummy_draw, NULL);
+                    work->state++;
+                }
+            }
+            break;
+
+        case 10:
+            VISetBlack(FALSE);
+            VIWaitForRetrace();
+            ret = logoAsyncFirst();
+            if (ret == 0U) {
+                ok = 0;
+            } else if (fileAsyncMissing(ret)) {
+                ok = 1;
+            } else {
+                ok = 1;
+            }
+            if (!ok) {
+                break;
+            }
+            first = fileAllocf(FILE_TYPE_RAW, "%s/b/first", getMarioStDvdRoot());
+            if (first) {
+                decode = *first->data;
+                size = *(u32*)decode;
+                size = ((size << 16) & 0xFF0000) | (size & 0xFF00) | ((size >> 16) & 0xFF);
+                LZ77Decode(*first->data, decode = __memAlloc(HEAP_DEFAULT, size));
+                arcEntry(0, decode, size);
+                fileFree(first);
+            }
+            if (!(gp->flags & GW_FLAG_E3)) {
+                if (!wp->skipStory) { // play story demo
+                    seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
+                    return;
+                } else { // continue to title screen
+                    fadeEntry(FADE_OUT_WHITE, 500, (GXColor){0, 0, 0, 0xFF});
+                    work->state++;
+                    return;
+                }
+            } else {
+                seqSetSeq(SEQ_E3, NULL, NULL);
+                return;
+            }
+            break;
+
+        case 11:
+            if (fadeIsFinish()) {
+                seqSetSeq(SEQ_TITLE, NULL, NULL);
+            }
+            break;
+    }
+
+    if (work->state < 10) {
+        dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, NULL);
+        dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
+    }
+}
+#else
 void seq_logoMain(SequenceWork* work) {
 #if VERSION >= VERSION_US
     static OSTime time;
@@ -404,6 +608,7 @@ void seq_logoMain(SequenceWork* work) {
 #endif
     }
 }
+#endif
 
 
 /** param is unused */
@@ -714,7 +919,11 @@ void dummy_draw(CameraId camId, void* param) {
 
 #if VERSION < VERSION_US
 //param is unused
+#if VERSION <= VERSION_DEMO_US
+static void progDisp(CameraId camId, void* param) {
+#else
 void progDisp(CameraId camId, void* param) {
+#endif
     static OSTime time;
     const char* msg;
     f32 width;
@@ -791,7 +1000,11 @@ void progDisp(CameraId camId, void* param) {
                 msg = romFontGetMessage(type);
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
+#if VERSION <= VERSION_DEMO_US
+                    -(0.7f * (f32)width) / 2.0f,
+#else
                     -(0.7f * width) / 2.0f,
+#endif
                     -145.0f,
                     0.7f,
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
@@ -814,7 +1027,9 @@ void progDisp(CameraId camId, void* param) {
                     wp->progressive = 0;
                     gp->flags &= ~GW_FLAG_PROGRESSIVE;
                 }
+#if VERSION > VERSION_DEMO_US
                 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+#endif
                 break;
 
             case 4:

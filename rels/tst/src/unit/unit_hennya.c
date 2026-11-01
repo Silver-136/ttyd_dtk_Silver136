@@ -37,26 +37,68 @@ BattleUnitKind unit_hennya = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
+#if VERSION <= VERSION_DEMO_US
+36,
+    0,
+#else
     33, // level
+#endif
     1, // bonusExp
+#if VERSION > VERSION_DEMO_US
     3, // bonusCoin
+#endif
     70, // bonusCoinRate
+#if VERSION <= VERSION_DEMO_US
+    3,
+#else
     1, // baseCoin
+#endif
     50, // runRate
     9999, // pbSoftCap
     26, // width
     40, // height
+#if VERSION <= VERSION_DEMO_US
+    3,
+    35,
+    0.0f,
+    20.0f,
+    0.0f,
+    0,
+    0,
+#else
     {3, 35}, // hitOffset
     {0.0f, 20.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {13.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    13.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    13.0f,
+    0.0f,
+    0.0f,
+    13.0f,
+    20.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    0.0f,
+#else
     {13.0f, 0.0f, 0.0f}, // bintaHitOffset
     {13.0f, 20.0f, 0.0f}, // kissHitOffset
     {0.0f, 20.0f, 0.0f}, // cutBaseOffset
+#endif
     26.0f, // cutWidth
     40.0f, // cutHeight
     0, // turnOrder
@@ -65,7 +107,13 @@ BattleUnitKind unit_hennya = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_HANNYA_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -84,6 +132,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Element response of the Spunia: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 90, 70, 150, 70, 150, 150, 70, 150, 70, 150, 70, 150, 70, 70, 90, 90, 150, 70, 0, 0, 30};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     90, // stop
@@ -108,6 +159,7 @@ static StatusVulnerability regist = {
     0, // invisible
     30, // ohko
 };
+#endif
 
 /** Data table of the Spunia: event handlers keyed by tag (dmg_avoid_counter_thorn_head_event). */
 static BattleDataEntry data_table[] = {

@@ -359,6 +359,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 40, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist = {
     40, // sleep
     40, // stop
@@ -383,6 +386,7 @@ static StatusVulnerability regist = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /** Pose table of Kammy Koopa: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {

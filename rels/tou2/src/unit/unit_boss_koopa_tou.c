@@ -125,6 +125,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * Status vulnerability of the Bowser (percent chance to take each status):
  * immune to fright, gale force and instant kill; resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 60, 70, 50, 60, 50, 100, 40, 100, 75, 100, 75, 100, 60, 60, 0, 0, 100, 60, 100, 100, 0};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     60, // stop
@@ -149,6 +152,7 @@ static StatusVulnerability regist = {
     100, // invisible
     0, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KPA_N_3"},

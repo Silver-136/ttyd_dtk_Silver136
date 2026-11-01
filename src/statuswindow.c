@@ -126,6 +126,122 @@ void statusWinReInit(void) {
  * toggles with Z (held for 10 seconds, with a sound) and pops open for 2 seconds when a value changes.
  * Then starts and runs the slide animation (16 frames in, 28 out).
  */
+#if VERSION <= VERSION_DEMO_US
+void statusWinMain(void) {
+    MarioWork* mario;
+    f32 inv;
+    f32 one;
+    f32 t;
+
+    one = 1.0f;
+    mario = marioGetPtr();
+    if (mario->characterId) {
+        wp->flags = STATUS_WINDOW_FLAG_CLOSED;
+        wp->duration = one;
+        wp->timer = one;
+        wp->tEnd = 0.0f;
+        wp->t = 0.0f;
+        return;
+    }
+    if (!strcmp(gp->currentAreaName, "yuu")) {
+        return;
+    }
+    switch (seqGetSeq()) {
+        case SEQ_GAME:
+        case SEQ_MAP_CHANGE:
+            if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE) || !(mario->flags & MARIO_FLAG_ACTIVE)) {
+                if (statusWinCheck()) {
+                    statusWinClose();
+                }
+                valueCheck();
+                wp->idle = 0;
+                wp->forceTimer = 0;
+            } else {
+                if (VECDistance(&wp->prevPos, &mario->position) < 1.0f) {
+                    wp->idle++;
+                    if (wp->idle > gp->framerate * 10) {
+                        wp->idle = gp->framerate * 10;
+                        if (!wp->forcedClose && !wp->forceTimer && !statusWinCheck()) {
+                            statusWinOpen();
+}
+                    }
+                } else {
+                    wp->idle = 0;
+                    wp->forcedClose = 0;
+                    if (!wp->forceTimer && statusWinCheck()) {
+                        statusWinClose();
+                    }
+                }
+                if (mario->buttonTrg & PAD_TRIGGER_Z) {
+                    if (!statusWinCheck()) {
+                        statusWinOpen();
+                        wp->forceTimer = gp->framerate * 10;
+                        psndSFXOn((const char*)0x2A);
+                        wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
+                    } else {
+                        statusWinClose();
+                        wp->forceTimer = gp->framerate * 10;
+                        wp->forcedClose = 1;
+                        psndSFXOn((const char*)0x2B);
+                    }
+                }
+                if (valueCheck()) {
+                    wp->forceTimer = gp->framerate * 2;
+                    if (!statusWinCheck()) {
+                        statusWinOpen();
+                    }
+                }
+            }
+            if (wp->forceTimer) {
+                wp->forceTimer--;
+            }
+            wp->prevPos = mario->position;
+            if (wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN) {
+                wp->flags &= ~(STATUS_WINDOW_FLAG_CLOSED | STATUS_WINDOW_FLAG_CLOSE_REQ);
+            }
+            if (wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE) {
+                wp->flags &= ~(STATUS_WINDOW_FLAG_OPEN | STATUS_WINDOW_FLAG_OPEN_REQ);
+            }
+            break;
+        case SEQ_BATTLE:
+            break;
+        default:
+            if (statusWinCheck()) {
+                statusWinClose();
+            }
+            break;
+    }
+    if (wp->flags & STATUS_WINDOW_FLAG_OPEN_REQ || wp->flags & STATUS_WINDOW_FLAG_CLOSE_REQ || wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN_REQ || wp->flags & STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ) {
+        wp->tStart = wp->t;
+        wp->tEnd = (wp->flags & (STATUS_WINDOW_FLAG_OPEN_REQ | STATUS_WINDOW_FLAG_FORCE_OPEN_REQ)) ? 1.0f : 0.0f;
+        wp->timer = 0.0f;
+        wp->duration = (wp->flags & (STATUS_WINDOW_FLAG_OPEN_REQ | STATUS_WINDOW_FLAG_FORCE_OPEN_REQ)) ? 16.0f / wp->speed : 28.0f / wp->speed;
+        wp->flags &= ~STATUS_WINDOW_FLAG_OPEN_REQ;
+        wp->flags &= ~STATUS_WINDOW_FLAG_CLOSE_REQ;
+        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN_REQ;
+        wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ;
+    }
+wp->timer += one;
+if (wp->timer >= wp->duration) {
+        wp->timer = wp->duration;
+        wp->t = wp->tEnd;
+        if (wp->t == 0.0f) {
+            wp->flags &= ~STATUS_WINDOW_FLAG_MENU_ICONS;
+        }
+    } else {
+        inv = (f32)cos(3.1415927f * wp->timer / wp->duration);
+        wp->t = wp->tStart + (wp->tEnd - wp->tStart) * (one - inv) / 2.0f;
+    }
+    t = wp->t;
+    inv = 1.0f - t;
+    wp->x = wp->openX * t + wp->closeX * inv;
+    wp->y = wp->openY * t + wp->closeY * inv;
+    valueUpdate();
+    if (!(wp->flags & STATUS_WINDOW_FLAG_DISP_OFF)) {
+        dispEntry(CAMERA_2D, 500.0f, 0, statusWinDisp, NULL);
+    }
+}
+#else
 void statusWinMain(void) {
     MarioWork* mario;
     f32 inv;
@@ -246,6 +362,7 @@ void statusWinMain(void) {
         dispEntry(CAMERA_2D, 500.0f, 0, statusWinDisp, NULL);
     }
 }
+#endif
 
 // FAKE: iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which
 // evaluates the arguments in the retail order; the plain call changes the object.
@@ -308,6 +425,111 @@ static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
  * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
  * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
  */
+#if VERSION <= VERSION_DEMO_US
+static void statusWinDisp(CameraId camId, void* param) {
+    alwaysDtEntry* e;
+    s32 i;
+    s32 blinkOn;
+    s32 blink;
+    f32 x, y, y2;
+    Mtx m, s;
+    Mtx m2, s2;
+
+    x = wp->x;
+    y = wp->y;
+    blinkOn = 1;
+    if (wp->blinkTimer > 0) {
+        wp->blinkTimer--;
+        blinkOn = (wp->blinkTimer % 16) >= 6;
+    }
+
+    e = alwaysDt;
+    for (i = 0; i < sizeof(alwaysDt) / sizeof(alwaysDt[0]); i++, e++) {
+        if (e->iconId == ICON_STATUS_SP_BANNER && !pouchGetPtr()->starPowersObtained) {
+            break;
+        }
+        if (!blinkOn) {
+            blink = wp->blink;
+            if (blink & 1 && i == 1) {
+                continue;
+            }
+            if (blink & 2 && i == 4) {
+                continue;
+            }
+            if (blink & 0x10 && i == 8) {
+                continue;
+            }
+            if (blink & 4 && i == 12) {
+                continue;
+            }
+        }
+        MTXTrans(m, x + (f32)e->xpos, y - (f32)e->ypos, 0.0f);
+        MTXScale(s, e->scale, e->scale, e->scale);
+        MTXConcat(m, s, m);
+        iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    }
+
+    if (!(wp->blink & 1) || blinkOn) {
+        numDisp(120.0f + x - 6.0f - 10.0f, 2.0f + (y - 38.0f), wp->cur.hp, 0);
+    }
+    numDisp(186.0f + x - 6.0f - 10.0f, 3.0f + (y - 38.0f), wp->cur.maxHp, 1);
+    if (!(wp->blink & 2) || blinkOn) {
+        numDisp(292.0f + x - 6.0f, 2.0f + (y - 38.0f), wp->cur.fp, 0);
+    }
+    numDisp(358.0f + x - 6.0f, 3.0f + (y - 38.0f), wp->cur.maxFp, 1);
+    numDisp(462.0f + x, 2.0f + (y - 38.0f), wp->cur.starPoints, 0);
+    if (!(wp->blink & 0x10) || blinkOn) {
+        numDisp(572.0f + x, 2.0f + (y - 38.0f), wp->cur.coins, 0);
+    }
+    if (!(wp->blink & 4) || blinkOn) {
+        gaugeDisp(wp->cur.ap, 260.0f + x, 4.0f + (y - 87.0f));
+    }
+
+    if (wp->cur.party) {
+        partysDt[1].iconId = party_icon[wp->cur.party];
+        if (wp->cur.party == PARTNER_YOSHI) {
+            switch (pouchGetPartyColor(PARTNER_YOSHI)) {
+                case 0:
+                    partysDt[1].iconId = ICON_STATUS_YOSHI;
+                    break;
+                case 1:
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_1;
+                    break;
+                case 2:
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_2;
+                    break;
+                case 3:
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_3;
+                    break;
+                case 4:
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_4;
+                    break;
+                case 5:
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_5;
+                    break;
+                case 6:
+                default:
+                    partysDt[1].iconId = ICON_STATUS_YOSHI_6;
+                    break;
+            }
+        }
+        e = partysDt;
+        for (i = 0; i < sizeof(partysDt) / sizeof(partysDt[0]); i++, e++) {
+            if (wp->blink & 8 && !blinkOn && i == 1) {
+                continue;
+            }
+            MTXTrans(m, x + (f32)e->xpos, y - (f32)e->ypos, 0.0f);
+            MTXScale(s, e->scale, e->scale, e->scale);
+            MTXConcat(m, s, m);
+            iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+        }
+        if (!(wp->blink & 8) || blinkOn) {
+            numDisp(120.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyHp, 0);
+        }
+        numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
+    }
+}
+#else
 void statusWinDisp(CameraId camId, void* param) {
     alwaysDtEntry* e;
     s32 i;
@@ -457,12 +679,17 @@ void statusWinDisp(CameraId camId, void* param) {
 #endif
     }
 }
+#endif
 
 /**
  * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
  * from Mario's and the partner's battle units in battle.
  */
+#if VERSION <= VERSION_DEMO_US
+static void statusGetValue(StatusValue* values) {
+#else
 void statusGetValue(StatusValue* values) {
+#endif
     BattleWork* bw;
     BattleUnit* mario;
     BattleUnit* party;
@@ -476,9 +703,24 @@ void statusGetValue(StatusValue* values) {
         values->maxAp = pouchGetMaxAP();
         values->starPoints = pouchGetStarPoint();
         values->coins = pouchGetCoin();
+#if VERSION <= VERSION_DEMO_US
+if (!marioBgmodeChk()) {
+            values->party = marioGetParty();
+#else
         values->party = !marioBgmodeChk() ? (s16)marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
+#endif
         values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
         values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
+#if VERSION <= VERSION_DEMO_US
+            if (values->party) {
+                wp->cur.lastParty = values->party;
+            }
+        } else {
+            values->party = wp->cur.lastParty;
+            values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
+            values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
+        }
+#endif
     } else {
         bw = _battleWorkPointer;
         mario = BattleGetMarioPtr(bw);
@@ -580,7 +822,11 @@ static inline s32 calcStep(s32 target, s32 cur) {
     return d;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void valueUpdate(void) {
+#else
 void valueUpdate(void) {
+#endif
     static s32 count;
     StatusValue v;
     s32 d;
@@ -595,7 +841,11 @@ void valueUpdate(void) {
         return;
     }
     d = calcStep(v.coins, wp->cur.coins);
+#if VERSION <= VERSION_DEMO_US
+if (d && !(count % 6)) {
+#else
     if (d && !(count % 8)) {
+#endif
         psndSFXOn("SFX_COUNT_COIN1");
     }
     wp->cur.hp += calcStep(v.hp, wp->cur.hp);
@@ -731,9 +981,11 @@ void statusAPBlink(s32 frames) {
 }
 
 // Descriptive name (not in the symbol maps).
+#if VERSION > VERSION_DEMO_US
 void statusClearBlink(void) {
     wp->blink = 0;
 }
+#endif
 
 /** Makes the FP number blink for frames. */
 void statusFPBlink(s32 frames) {

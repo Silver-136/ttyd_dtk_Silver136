@@ -31,7 +31,11 @@ static BattleUnitDefense defence_guard;
 static BattleUnitDefenseAttr defence_attr_guard;
 static StatusVulnerability regist_guard;
 static PoseTableEntry pose_table[15];
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table_turn[12];
+#else
 static PoseTableEntry pose_table_turn[14];
+#endif
 static PoseTableEntry pose_table_guard[12];
 static BattleDataEntry data_table[5];
 static BattleDataEntry data_table_turn[3];
@@ -63,22 +67,57 @@ BattleUnitKind unit_hyper_togezo = {
     0, // bonusExp
     1, // bonusCoin
     70, // bonusCoinRate
+#if VERSION <= VERSION_DEMO_US
+3,
+#else
     0, // baseCoin
+#endif
     50, // runRate
     9999, // pbSoftCap
     32, // width
     30, // height
+#if VERSION <= VERSION_DEMO_US
+    4,
+    30,
+    0.0f,
+    15.0f,
+    0.0f,
+    0,
+    0,
+#else
     {4, 30}, // hitOffset
     {0.0f, 15.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {16.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    16.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    16.0f,
+    0.0f,
+    0.0f,
+    12.0f,
+    16.0f,
+    0.0f,
+    0.0f,
+    15.0f,
+    0.0f,
+#else
     {16.0f, 0.0f, 0.0f}, // bintaHitOffset
     {12.0f, 16.0f, 0.0f}, // kissHitOffset
     {0.0f, 15.0f, 0.0f}, // cutBaseOffset
+#endif
     32.0f, // cutWidth
     30.0f, // cutHeight
     0, // turnOrder
@@ -87,7 +126,13 @@ BattleUnitKind unit_hyper_togezo = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_TOGEZO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -106,6 +151,9 @@ static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
 /** Element response of the Sky-Blue Spiny: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 70, 70, 100, 70, 100, 100, 60, 100, 70, 100, 70, 100, 70, 70, 80, 60, 100, 70, 100, 100, 50};
+#else
 static StatusVulnerability regist = {
     60, // sleep
     70, // stop
@@ -130,6 +178,7 @@ static StatusVulnerability regist = {
     100, // invisible
     50, // ohko
 };
+#endif
 
 /** Damage reduction of the Sky-Blue Spiny, flipped on its back: none, every attack type does full damage. */
 static BattleUnitDefense defence_turn = {0};
@@ -242,8 +291,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGZ_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "TGZ_S_1"},
     {POSE_TYPE_DAMAGE, "TGZ_D_3"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_WALK, "TGZ_W_1"},
     {POSE_TYPE_RUN, "TGZ_R_1"},
+#endif
     {POSE_TYPE_ACTION, "TGZ_S_2"},
 };
 
@@ -314,15 +365,24 @@ static BattleWeapon weapon_togezo_attack = {
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_ALL,
+TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+#else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x2004, // targetWeightFlags
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime

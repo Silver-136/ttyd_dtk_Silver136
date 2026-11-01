@@ -248,24 +248,43 @@ typedef struct BattleAudience {
     BattleAudienceMember members[200]; // 0x1BC
     BattleAudienceItem items[100];     // 0xF25C
     BattleAudienceStar starpower[100]; // 0x10E7C
+#if VERSION > VERSION_DEMO_US
     BattleAudienceSound sounds[24];    // 0x133FC
     BattleAudienceWindow window;       // 0x1375C
+#endif
     f32 audienceDeltaMultiplier;      // 0x13778
     f32 targetAudienceCount;          // 0x1377C
     f32 addedAudienceCount;           // 013780
     s32 currentAudienceIntCount;      // 0x13784
     s32 currentAudienceIntCountRight; // 0x13788
     s32 currentAudienceIntCountLeft;  // 0x1378C
+#if VERSION <= VERSION_DEMO_US
+    s32 presentCount;                     // 0x13414, members that exist and are not in status 12 (BattleAudienceNumToTargetSub)
+#endif
     s32 maxAudience;                  // 0x13790
     s32 typeWeights[12];               // 0x13794, per-type audience weights (BattleAudienceSettingAudience)
     s32 starPowerGain;                 // 0x137C4, star power gained this action
+#if VERSION <= VERSION_DEMO_US
+    s32 numStylishCommandsThisAttack;     // 0x13450
+    s32 stylishTotal;                     // 0x13454, stylish commands summed over the battle, capped at 100
+#else
     StarPowerInfo* impendingBonuses;   // 0x137C8, copy of the last StarPowerInfo (BattleAudience_ApRecoveryBuild)
+#endif
     s32 crowdPleasedStreak;            // 0x137CC, consecutive good actions, capped at 2
     s32 crowdDispleasedStreak;         // 0x137D0, consecutive bad actions, capped at 5
+#if VERSION <= VERSION_DEMO_US
+    s32 acStreak;                         // 0x13460, capped at 2, indexes the weapon's per-streak table
+    StarPowerInfo* impendingBonuses;      // 0x13464
+    u8 reserved_13468[0x1346C - 0x13468]; // 0x13468, never accessed
+#else
     s32 numStylishCommandsThisAttack; // 0x137D4
     u8 pad_137D8[0x137DC - 0x137D8];   // 0x137D8, never accessed
+#endif
     s32 checkPhaseReactionState;      // 0x137DC
     s32 phaseSub;                      // 0x137E0, phase sub-state
+#if VERSION <= VERSION_DEMO_US
+    s32 joyLevel;                         // 0x13474
+#endif
     s32 presentItemNo;                 // 0x137E4
     s32 presentItemType;               // 0x137E8
     s32 presentTargetUnitId;           // 0x137EC
@@ -278,7 +297,12 @@ typedef struct BattleAudience {
     s32 phaseList[14];                 // 0x138CC
     s32 phaseListCount;                // 0x13904
     s32 turnEndPhaseEventChance;      // 0x13908
+#if VERSION <= VERSION_DEMO_US
+    BattleAudienceSound sounds[24];       // 0x135A0
+    BattleAudienceWindow window;          // 0x13900
+#else
     s32 joyLevel;                      // 0x1390C, audience joy level
+#endif
     BOOL excited;                      // 0x13910, if toads are cheering
 } BattleAudience;
 

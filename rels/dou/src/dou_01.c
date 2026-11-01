@@ -62,9 +62,14 @@ static BeroEntry bero_entry_data[] = {
  */
 static EVT_BEGIN(korutesu_event)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
+#endif
     CALL(evt_mario_normalize)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_seq_wait, 2)
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
@@ -72,7 +77,11 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
     CALL(evt_msg_print, 0, STRING("stg5_dou_01"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_19_02_THE_CALL_OF_CORTEZ)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_19_02_THE_CALL_OF_CORTEZ)
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

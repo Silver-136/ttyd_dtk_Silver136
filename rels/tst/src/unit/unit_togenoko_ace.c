@@ -86,7 +86,11 @@ BattleUnitKind unit_togenoko_ace = {
     1, // dangerHP
     1, // perilHP
     30, // level
+#if VERSION <= VERSION_DEMO_US
+0,
+#else
     1, // bonusExp
+#endif
     3, // bonusCoin
     70, // bonusCoinRate
     2, // baseCoin
@@ -94,17 +98,48 @@ BattleUnitKind unit_togenoko_ace = {
     9999, // pbSoftCap
     36, // width
     50, // height
+#if VERSION <= VERSION_DEMO_US
+    -4,
+    50,
+    0.0f,
+    25.0f,
+    0.0f,
+    0,
+    0,
+#else
     {-4, 50}, // hitOffset
     {0.0f, 25.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {18.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    18.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    18.0f,
+    0.0f,
+    0.0f,
+    13.0f,
+    32.0f,
+    0.0f,
+    0.0f,
+    25.0f,
+    0.0f,
+#else
     {18.0f, 0.0f, 0.0f}, // bintaHitOffset
     {13.0f, 32.0f, 0.0f}, // kissHitOffset
     {0.0f, 25.0f, 0.0f}, // cutBaseOffset
+#endif
     36.0f, // cutWidth
     50.0f, // cutHeight
     0, // turnOrder
@@ -113,7 +148,13 @@ BattleUnitKind unit_togenoko_ace = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_TOGENOKO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -138,6 +179,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 60, 50, 100, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 50, 100, 50, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     60, // sleep
     65, // stop
@@ -162,6 +206,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /**
  * Defence of the Dark Koopatrol while flipped over against each element (normal, fire, ice, explosion,
@@ -424,10 +469,18 @@ static BattleWeapon weapon_togenoko_shell_attack = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
+#if VERSION <= VERSION_DEMO_US
+{4, 0, 0, 0, 0, 0, 0, 0},
+#else
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+#endif
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_NO_CEILING | TARGET_PROP_SHELL_TOSSLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
     ATTACKPATTERN_SHELL_ATTACK, // damagePattern
@@ -435,7 +488,11 @@ static BattleWeapon weapon_togenoko_shell_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_ALL,
+#else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
+#endif
     TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
@@ -476,7 +533,11 @@ static BattleWeapon weapon_togenoko_charge = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+#if VERSION <= VERSION_DEMO_US
+4,
+#else
     5, // chargeStrength
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE

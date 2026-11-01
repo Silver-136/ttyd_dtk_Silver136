@@ -28,7 +28,11 @@ static PoseSoundTiming pose_sound_timing_table[9];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_event[72];
 #else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord init_event[72];
+#else
 static EvtWord init_event[78];
+#endif
 #endif
 static EvtWord dmg_first_attack_pos[12];
 static EvtWord damage_event[10];
@@ -118,6 +122,40 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Attack data of Swooper's drain attack biribiri counterd attack: no damage, 100% accuracy. */
+#if VERSION <= VERSION_DEMO_US
+static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100,
+0, 0, 0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    NULL, // hpDamageFn
+    {0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, 0, 0, // acHelpMsg..counterResistFlags
+    TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -154,6 +192,7 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Pose table of Swooper: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to animation
@@ -249,7 +288,11 @@ static StatusVulnerability regist = {70, 85, 100, 100, 80, 100, 100, 80, 100, 80
  * otherwise Sleep 80, Stop 85, Confuse 80, Freeze 80, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 80, Fright 80, Gale Force 95, Slow 80 and instant KO 95.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 85, 100, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 80, 110, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {80, 85, 105, 100, 80, 100, 100, 80, 100, 90, 100, 90, 100, 95, 80, 80, 95, 100, 80, 100, 100, 95};
+#endif
 #endif
 
 /** Attack data of Swooper's attack: base damage 3, 100% accuracy. */
@@ -313,6 +356,31 @@ static PoseSoundTiming pose_sound_timing_table[] = {
  * cursor and status icon offsets and hands the damage event over to damage_event.
  * Leaves the home position in LW(0) to LW(2).
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(ceil_sky_event)
+    CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
+    IF_INT_EQUAL(LW(0), 0)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
+    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, UNIT_ATTR_FLOATING)
+    CALL(btlevtcmd_SetPossessionItemOffset, UNIT_ID_SELF, 0, 0, 0)
+    CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
+    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+    WAIT_FRAMES(1)
+    CALL(btlevtcmd_AddPos, UNIT_ID_SELF, 0, -30, 0)
+    CALL(btlevtcmd_AddHomePos, UNIT_ID_SELF, 0, -30, 0)
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event))
+    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
+    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 30, 0)
+CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 6, 32)
+    CALL(btlevtcmd_AddHomePos, UNIT_ID_SELF, 0, -40, 0)
+    LABEL(99)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -339,6 +407,7 @@ static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     RETURN
 EVT_END()
+#endif
 
 /**
  * Init script of the bat: registers its wait, attack,
@@ -346,6 +415,27 @@ EVT_END()
  * sets the pose sound table and the offsets of its hit, cursor and status icon for the upside-down pose,
  * and if it starts in the sky (unit work 0 = 1) runs ceil_sky_event right away; then starts the idle event.
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(init_event)
+    CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
+    CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event_ceil))
+    CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(attack_event))
+    CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, PTR(ceil_fall_ready_event))
+    CALL(btlevtcmd_SetPossessionItemOffset, UNIT_ID_SELF, 0, -20, 0)
+    CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(pose_sound_timing_table))
+    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -50, 0)
+    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -30, 0)
+    CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 6, 10)
+CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_START_FLYING, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL_CHILD(ceil_sky_event)
+        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    END_IF
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -368,6 +458,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Position event for a first strike on the bat:

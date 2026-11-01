@@ -428,7 +428,9 @@ typedef struct FieldBattleData {
     u8 sandersBombTrigger;       // 0x54D
     u8 pad_54E[0x550 - 0x54E];   // 0x54E, never accessed
     FirstStrikeInfo firstStrike; // 0x550
+#if VERSION > VERSION_DEMO_US
     s32 battleWait;              // 0x570, frames seq_battle has waited for the first-strike announce (gives up at 200)
+#endif
     s32 kpaComboCount;           // 0x574, Bowser stomp combo, score multiplier
     s32 kpaJumpKills;            // 0x578, Bowser kills during one jump
     s32 kpaJumpScore;            // 0x57C, score banked during one jump, shown on landing

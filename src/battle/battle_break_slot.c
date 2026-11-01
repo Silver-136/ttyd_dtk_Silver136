@@ -41,6 +41,10 @@ void BattleBreakSlotDispReel(CameraId camId, void* param);
 void item_appear_force(BreakSlotReel* reel, s32 item);
 
 /** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
+#if VERSION <= VERSION_DEMO_US
+u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
+u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
+#endif
 EVT_BEGIN(kinoko_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
@@ -200,8 +204,12 @@ EVT_BEGIN(doku_kinoko_effect)
 EVT_END()
 
 // US battle textures are 0x16 higher; BTL_TEX uses JP-base IDs.
+#if VERSION > VERSION_DEMO_US
 u16 tex_id_list_small[5] = {BTL_TEX(0x2B), BTL_TEX(0x2D), BTL_TEX(0x2F), BTL_TEX(0x2E), BTL_TEX(0x2C)};
+#endif
+#if VERSION > VERSION_DEMO_US
 u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BTL_TEX(0x33), BTL_TEX(0x31)};
+#endif
 
 /** BINGO! with three Stars: no script work; the Star Power refill and sound are done by BattleBreakSlot_Main. */
 EVT_BEGIN(star_effect)
@@ -287,6 +295,496 @@ void BattleBreakSlot_Init(void) {
     memcpy(reel->cards, &c3, reel->numCards * sizeof(s32));
 }
 
+#if VERSION <= VERSION_DEMO_US
+void BattleBreakSlot_Main(void) {
+    static f32 updown;
+    BattleWork* wp = _battleWorkPointer;
+    BattleDebugCtrl* dbg2 = &wp->debug;
+    BattleAudience* aud = BattleAudienceBaseGetPtr();
+    BreakSlotWork* slot = BattleBreakSlotGetPtr();
+    BattleUnit* mario = BattleGetMarioPtr(wp);
+    BattleUnit* party = BattleGetPartyPtr(wp);
+    BreakSlotReel* reel;
+    BreakSlotReel* rr;
+    s32 count;
+    s32 item;
+s32 k;
+    s32 i;
+    f32 y;
+switch (slot->phase) {
+        case 0:
+            count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
+            for (i = 0; i < 3; i++, reel++) {
+                if (reel->state == 2) {
+                    count++;
+                }
+            }
+            if (count == 2) {
+
+                if (BattleBreakSlotReelGetPtr(0)->item != BattleBreakSlotReelGetPtr(1)->item) {
+                    slot->phase = 1;
+                    slot->phaseTimer = 0;
+                }
+            }
+            break;
+        case 1:
+            if (slot->phaseTimer == 60) {
+                reel = BattleBreakSlotReelGetPtr(0);
+                for (i = 2; i != 0; i--, reel++) {
+                    reel->state = 3;
+                    reel->counter = 0;
+                }
+            }
+            count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
+            for (i = 0; i < 3; i++, reel++) {
+                if (reel->state == 0) {
+                    count++;
+                }
+            }
+            if (count == 3) {
+                slot->phase = 8;
+                slot->reelNo = 0;
+            }
+            slot->phaseTimer++;
+            break;
+        case 2:
+            count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
+            for (i = 0; i < 3; i++, reel++) {
+                if (reel->state == 6 || reel->state == 10) {
+                    count++;
+                }
+            }
+            if (count == 3) {
+                slot->phase = 3;
+                slot->phaseTimer = 0;
+                reel = BattleBreakSlotReelGetPtr(0);
+                for (i = 0; i < 3; i++, reel++) {
+                    if (reel->state == 6) {
+                        reel->state = 7;
+                    }
+                }
+                slot->startSfxId = psndSFXOn("SFX_BTL_SLOT_START1");
+            }
+            break;
+        case 3:
+            count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
+            for (i = 0; i < 3; i++, reel++) {
+                if (reel->state == 10) {
+                    count++;
+                }
+            }
+            if (count == 3) {
+                slot->phase = 4;
+                slot->phaseTimer = 0;
+                psndSFXOff(slot->startSfxId);
+            }
+            if ((keyGetButtonTrg(0) & PAD_BUTTON_A) && slot->phaseTimer >= 15) {
+                reel = BattleBreakSlotReelGetPtr(0);
+                for (i = 0; i < 3; i++, reel++) {
+                    if (reel->state == 8) {
+                        reel->state = 9;
+                        reel->spinAccel = -1.0f * (0.2f + 0.15f * rand() / 32767.0f);
+                        reel->spinAccel = -1.0f;
+                        break;
+                    }
+                }
+            }
+            slot->phaseTimer++;
+            break;
+        case 4:
+            if (slot->phaseTimer == 20) {
+                count = 0;
+                reel = BattleBreakSlotReelGetPtr(0);
+                for (i = 0; i < 2; i++, reel++) {
+                    if (reel->item == reel[1].item) {
+                        count++;
+                    }
+                }
+                if (count >= 2) {
+                    slot->phase = 5;
+                    psndSFXOn("SFX_BTL_SLOT_SUCCESS1");
+                    reel = BattleBreakSlotReelGetPtr(0);
+                    for (i = 3; i != 0; i--, reel++) {
+                        reel->state = 11;
+                        reel->counter = 0;
+                    }
+                } else {
+                    slot->phase = 7;
+                    psndSFXOn("SFX_BTL_SYS_BREAK_FAILRE1");
+                    reel = BattleBreakSlotReelGetPtr(0);
+                    for (i = 3; i != 0; i--, reel++) {
+                        reel->state = 12;
+                        reel->counter = 0;
+                    }
+                }
+            }
+            slot->phaseTimer++;
+            break;
+        case 5:
+            count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
+            for (i = 0; i < 3; i++, reel++) {
+                if (reel->state == 0) {
+                    count++;
+                }
+            }
+            if (count == 3) {
+                slot->phase = 6;
+                slot->phaseTimer = 0;
+            }
+            break;
+        case 6:
+            if (slot->phaseTimer == 0) {
+                if (BattleBreakSlotReelGetPtr(0)->item != 4) {
+                    effBreakEntry(0, 240, 0.0f, 80.0f, 0.0f);
+                } else {
+                    slot->phaseTimer = 101;
+                    BattleAudienceSoundBooing();
+                }
+            }
+if (slot->phaseTimer == 20 || slot->phaseTimer == 40 || slot->phaseTimer == 60 || slot->phaseTimer == 80 ||
+                slot->phaseTimer == 100 || slot->phaseTimer == 120) {
+                psndSFXOn("SFX_BTL_SYS_BREAK1");
+                btl_camera_shake_h(0, 5.0f, 0.0f, 10, 0);
+            }
+            count = 120;
+if (slot->phaseTimer == count) {
+                BattleAudienceSoundCheer(240, 240);
+            }
+            if (slot->phaseTimer == count + 10) {
+                switch (BattleBreakSlotReelGetPtr(0)->item) {
+                    case 0:
+                        evtEntry(kinoko_effect, 0, EVENT_START_IMMEDIATE);
+                        slot->breakTurn = 4;
+                        slot->spMultiplier = 2.0f;
+                        break;
+                    case 1:
+                        evtEntry(flower_effect, 0, EVENT_START_IMMEDIATE);
+                        slot->breakTurn = 4;
+                        slot->spMultiplier = 2.0f;
+                        break;
+                    case 2:
+                        evtEntry(star_effect, 0, EVENT_START_IMMEDIATE);
+                        pouchSetAP(pouchGetMaxAP());
+                        psndSFXOn("SFX_HP_RECOVER_BIG1");
+                        slot->breakTurn = 4;
+                        slot->spMultiplier = 2.0f;
+                        break;
+                    case 3:
+                        evtEntry(shine_effect, 0, EVENT_START_IMMEDIATE);
+                        pouchSetAP(pouchGetMaxAP());
+                        slot->breakTurn = 6;
+                        slot->spMultiplier = 3.0f;
+                        break;
+                    case 4:
+                        evtEntry(doku_kinoko_effect, 0, EVENT_START_IMMEDIATE);
+                        ((PouchSetAPS32Fn)pouchSetAP)(pouchGetAP() / 2);
+                        break;
+                }
+            }
+            if (slot->phaseTimer == count + 20) {
+                switch (BattleBreakSlotReelGetPtr(0)->item) {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE);
+                        btl_camera_set_moveSpeedLv(0, 2);
+                        break;
+                }
+                if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
+                    btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
+                }
+            }
+            if (slot->phaseTimer == count + 60) {
+                updown = 0.0f;
+                switch (BattleBreakSlotReelGetPtr(0)->item) {
+                    case 0:
+                    case 1:
+                    case 2:
+                        updown = BattleAudienceAddAudienceNum(aud->maxAudience / 2);
+                        break;
+                    case 3:
+                        updown = BattleAudienceAddAudienceNum(aud->maxAudience);
+                        break;
+                    case 4:
+                        updown = BattleAudienceAddAudienceNum(-aud->maxAudience);
+                        break;
+                }
+                if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
+                    updown = 0.0f;
+                }
+            }
+            if (slot->phaseTimer == count + 89 && updown != 0.0f) {
+                BattleAudienceSoundRun(0);
+            }
+            if (slot->phaseTimer == count + 90) {
+                if (!((u32)_battleWorkPointer->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H)) {
+                    btl_camera_shake_h(0, 2.0f, 2.0f, 1000, 0);
+                }
+                for (k = 0; k < AUDIENCE_MEMBER_MAX; k++) {
+                    if ((u8)BattleAudience_GetExist(k) == 1) {
+                        if (BattleAudienceGetPtr(k)->status == AUDIENCE_STATUS_ENTER || BattleAudienceGetPtr(k)->status == AUDIENCE_STATUS_ESCAPE) {
+                            slot->phaseTimer--;
+                            break;
+                        }
+                    }
+                }
+                if (k == 200) {
+                    btl_camera_noshake(0);
+                    BattleAudienceSoundStop(13);
+                }
+            }
+            if (slot->phaseTimer == count + 100 && k == 200) {
+                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
+                btl_camera_noshake(0);
+            }
+            if (slot->phaseTimer == count + 150) {
+                BattleAudienceAddTargetNum(0.0f, updown);
+                slot->phase = 8;
+slot->flags &= ~BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
+if (gp->language == LANGUAGE_JP) {
+switch (BattleBreakSlotReelGetPtr(0)->item) {
+                        case 0:
+                            slot->evt = evtEntry(msg_hp_max, 0, EVENT_START_IMMEDIATE);
+                            break;
+                        case 1:
+                            slot->evt = evtEntry(msg_fp_max, 0, EVENT_START_IMMEDIATE);
+                            break;
+                        case 2:
+                            slot->evt = evtEntry(msg_star_max, 0, EVENT_START_IMMEDIATE);
+                            break;
+                        case 3:
+                            slot->evt = evtEntry(msg_super_max, 0, EVENT_START_IMMEDIATE);
+                            break;
+                        case 4:
+                            slot->evt = evtEntry(msg_fault, 0, EVENT_START_IMMEDIATE);
+                            break;
+                    }
+                }
+            }
+            slot->phaseTimer++;
+            break;
+        case 7:
+            count = 0;
+            reel = BattleBreakSlotReelGetPtr(0);
+            for (i = 0; i < 3; i++, reel++) {
+                if (reel->state == 0) {
+                    count++;
+                }
+            }
+            if (count == 3) {
+                slot->phase = 8;
+            }
+            break;
+        case 8:
+            slot->phase = 0;
+            break;
+    }
+
+    i = 0;
+    rr = BattleBreakSlotReelGetPtr(0);
+    for (; i < 3; i++, rr++) {
+        switch (rr->state) {
+            case 0:
+                rr->flags &= ~1;
+                rr->alpha = 255;
+                break;
+            case 1:
+                if (i != 2) {
+                    rr->flags |= 1;
+                }
+                rr->counter++;
+                if (rr->counter <= 5) {
+                    y = intplGetValue(EASING_LINEAR, 110.0f, 142.0f, rr->counter, 5);
+                    rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
+                    rr->scale = (Vec){0.8f, 0.8f, 0.8f};
+                    rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                    rr->pivot = (Vec){0.0f, 0.0f, 0.0f};
+                    rr->alpha = 255;
+                } else {
+                    y = intplGetValue(EASING_QUADRATIC_OUT, 142.0f, 174.0f, rr->counter - 5, 20);
+                    rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
+                    rr->scale = (Vec){0.8f, 0.8f, 0.8f};
+                    rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                    rr->pivot = (Vec){0.0f, 0.0f, 0.0f};
+                    rr->alpha = 255;
+                }
+                if (rr->counter >= 25) {
+                    rr->state = 2;
+                    rr->index++;
+                    if (rr->index >= rr->numCards) {
+                        rr->index -= rr->numCards;
+                    }
+                    rr->item = rr->cards[rr->index];
+                    rr->pos = (Vec){42.0f * i + 226.0f, 142.0f, 0.0f};
+                }
+                break;
+            case 2:
+                rr->pos = (Vec){42.0f * i + 226.0f, 142.0f, 0.0f};
+                rr->scale = (Vec){0.8f, 0.8f, 0.8f};
+                rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                if (rr->flags & 2) {
+                    rr->flags &= ~2;
+                    rr->state = 3;
+                    rr->counter = 0;
+                }
+                break;
+            case 3:
+                y = intplGetValue(EASING_LINEAR, 142.0f, 174.0f, rr->counter, 20);
+                rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
+                rr->scale = (Vec){0.8f, 0.8f, 0.8f};
+                rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                rr->counter++;
+                if (rr->counter > 20) {
+                    rr->state = 0;
+                    rr->counter = 0;
+                    rr->flags &= ~1;
+                }
+                break;
+            case 4:
+                y = intplGetValue(EASING_LINEAR, 142.0f, 174.0f, rr->counter, 20);
+                rr->pos = (Vec){42.0f * i + 226.0f, y, 0.0f};
+                rr->scale = (Vec){0.8f, 0.8f, 0.8f};
+                rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                rr->counter++;
+                if (rr->counter > 20) {
+                    rr->state = 5;
+                    rr->pos = (Vec){i * 128 - 128, -128.0f, 0.0f};
+                    rr->counter = 0;
+                }
+                break;
+            case 5:
+                rr->flags |= 1;
+                y = intplGetValue(EASING_LINEAR, -128.0f, 0.0f, rr->counter, 40);
+                rr->pos = (Vec){i * 128 - 128, y, 0.0f};
+                rr->scale = (Vec){1.0f, 1.0f, 1.0f};
+                rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                rr->counter++;
+                if (rr->counter > 40) {
+                    if (rr->kind == 2) {
+                        rr->state = 6;
+                        rr->counter = 0;
+                    } else {
+                        rr->state = 10;
+                        rr->counter = 0;
+                    }
+                }
+                break;
+            case 6:
+                break;
+            case 7:
+                rr->spinSpeed = intplGetValue(EASING_LINEAR, 0.0f, 22.5f, rr->counter, 20);
+                rr->pos = (Vec){128.0f * i + -128.0f, rr->pos.y + rr->spinSpeed, 0.0f};
+                rr->scale = (Vec){1.0f, 1.0f, 1.0f};
+                rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                rr->pivot = (Vec){0.0f, 0.0f, 0.0f};
+                if (rr->pos.y >= 128.0f) {
+                    rr->pos.y -= 128.0f;
+                    rr->index++;
+                    if (rr->index >= rr->numCards) {
+                        rr->index = 0;
+                    }
+                    rr->item = rr->cards[rr->index];
+                }
+                rr->counter++;
+                if (rr->counter > 20) {
+                    rr->state = 8;
+                    rr->counter = 0;
+                }
+                break;
+            case 8:
+                rr->spinSpeed = 22.5f;
+                rr->pos = (Vec){128.0f * i + -128.0f, rr->pos.y + rr->spinSpeed, 0.0f};
+                rr->scale = (Vec){1.0f, 1.0f, 1.0f};
+                rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                if (rr->pos.y >= 128.0f) {
+                    rr->pos.y -= 128.0f;
+                    rr->index++;
+                    if (rr->index >= rr->numCards) {
+                        rr->index = 0;
+                    }
+                    rr->item = rr->cards[rr->index];
+                }
+                break;
+            case 9:
+                rr->spinSpeed += rr->spinAccel;
+                if (rr->spinSpeed < 20.0f) {
+                    rr->spinSpeed = 20.0f;
+                }
+                rr->pos = (Vec){128.0f * i + -128.0f, rr->pos.y + rr->spinSpeed, 0.0f};
+                rr->scale = (Vec){1.0f, 1.0f, 1.0f};
+                rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                if (rr->spinSpeed >= 0.0f && rr->pos.y >= 128.0f) {
+                    rr->pos.y -= 128.0f;
+                    rr->index++;
+                    if (rr->index == rr->numCards) {
+                        rr->index = 0;
+                    }
+                    rr->item = rr->cards[rr->index];
+                    if ((aud->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS) && BattleBreakSlotReelGetPtr(0)->item == 4 &&
+                        BattleBreakSlotReelGetPtr(1)->item == 4 && rr->item == 4) {
+                        break;
+                    }
+if ((slot->flags & BREAK_SLOT_FLAG_LECTURE) && rr->item != 3) {
+                        break;
+                    }
+if ((slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) && rr->item != 2) {
+                        break;
+                    }
+if (((u32)dbg2->flags & BATTLE_DEBUG_SLOT_ITEM) && rr->item != dbg2->slotItem) {
+                        break;
+                    }
+                    rr->pos.y = 0.0f;
+                    rr->state = 10;
+                    rr->counter = 0;
+                    rr->spinAccel = rr->spinSpeed;
+                }
+                break;
+            case 10:
+                if (i == 2) {
+                    rr->counter++;
+                    rr->spinSpeed = intplGetValue(EASING_LINEAR, rr->spinSpeed, 0.0f, rr->counter, 20);
+                    rr->pos.y = rr->spinSpeed * (f32)sin(3.141592f * (2.0f * rr->counter) / 8.0f);
+                }
+                break;
+            case 11:
+                rr->spinSpeed = 0.0f;
+                rr->pos.y = 0.0f;
+                y = intplGetValue(EASING_LINEAR, 1.0f, 2.0f, rr->counter, 60);
+                rr->scale = (Vec){y, y, 1.0f};
+                rr->alpha = intplGetValue(EASING_LINEAR, 255.0f, 0.0f, rr->counter, 60);
+                rr->counter++;
+                if (rr->counter > 60) {
+                    rr->state = 13;
+                    rr->flags &= ~1;
+                }
+                break;
+            case 12:
+                rr->spinSpeed = 0.0f;
+                rr->pos.y = 0.0f;
+                y = intplGetValue(EASING_LINEAR, 0.0f, 128.0f, rr->counter, 40);
+                rr->pos = (Vec){128.0f * i + -128.0f, y, 0.0f};
+                rr->scale = (Vec){1.0f, 1.0f, 1.0f};
+                rr->rot = (Vec){0.0f, 0.0f, 0.0f};
+                rr->counter++;
+                if (rr->counter > 40) {
+                    rr->state = 13;
+                    rr->flags &= ~1;
+                }
+                break;
+            case 13:
+                rr->state = 0;
+                break;
+        }
+    }
+}
+#else
 void BattleBreakSlot_Main(void) {
     static f32 updown;
     BattleWork* wp = _battleWorkPointer;
@@ -819,6 +1317,7 @@ void BattleBreakSlot_Main(void) {
         }
     }
 }
+#endif
 
 /** Queues the Bingo reel drawing on the 2D camera. */
 void BattleBreakSlot_Disp(void) {
@@ -945,14 +1444,23 @@ void BattleBreakSlot_PointInc(void) {
                 reel->index = reel->numCards - 1;
             }
             reel->item = reel->cards[reel->index];
+#if VERSION <= VERSION_DEMO_US
+            if ((u32)dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
+#else
             if (dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
+#endif
                 item_appear_force(reel, dbg->slotItem);
             }
             if (slot->flags & BREAK_SLOT_FLAG_LECTURE) {
                 item_appear_force(reel, 3);
             }
+#if VERSION <= VERSION_DEMO_US
+if (slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) {
+                item_appear_force(reel, 2);
+#else
             if (slot->flags & 4) {
                 item_appear_force(reel, 3);
+#endif
             }
             break;
         case 1:
@@ -961,14 +1469,23 @@ void BattleBreakSlot_PointInc(void) {
                 reel->index = reel->numCards - 1;
             }
             reel->item = reel->cards[reel->index];
+#if VERSION <= VERSION_DEMO_US
+            if ((u32)dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
+#else
             if (dbg->flags & BATTLE_DEBUG_SLOT_ITEM) {
+#endif
                 item_appear_force(reel, dbg->slotItem);
             }
             if (slot->flags & BREAK_SLOT_FLAG_LECTURE) {
                 item_appear_force(reel, 3);
             }
+#if VERSION <= VERSION_DEMO_US
+if (slot->flags & BREAK_SLOT_FLAG_QUEEN_FORCE_STAR) {
+                item_appear_force(reel, 2);
+#else
             if (slot->flags & 4) {
                 item_appear_force(reel, 3);
+#endif
             }
             break;
         case 2:

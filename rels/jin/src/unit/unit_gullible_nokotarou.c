@@ -32,7 +32,11 @@ static EvtWord dmg_turn_event[64];
 static EvtWord wakeup_event[67];
 static EvtWord init_event_nokotarou[62];
 static EvtWord damage_event_nokotarou[24];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_nokotarou[156];
+#else
 static EvtWord dead_event_nokotarou[177];
+#endif
 static EvtWord _change_koura_pose[34];
 static EvtWord _change_koura_pose_fast[34];
 static EvtWord _restore_koura_pose[47];
@@ -178,6 +182,9 @@ static BattleUnitDefenseAttr defence_attr_nokotarou = {{0, 0, 0, 0, 0}};
 /** Defence of the Koops double's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn_nokotarou = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_nokotarou = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
+#else
 static StatusVulnerability regist_nokotarou = {
     60, // sleep
     80, // stop
@@ -202,6 +209,7 @@ static StatusVulnerability regist_nokotarou = {
     100, // invisible
     0, // ohko
 };
+#endif
 
 /** Event table of the Koops double: its defeat script, its reaction to being flipped over. */
 static BattleDataEntry data_table_nokotarou[] = {
@@ -333,8 +341,13 @@ static EVT_BEGIN(dead_event_nokotarou)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         CALL(btlevtcmd_ResetFaceDirection, -2)
+#endif
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -343,9 +356,15 @@ static EVT_BEGIN(dead_event_nokotarou)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
         WAIT_FRAMES(37)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_nok"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_nok"), 0, -2)
+#endif
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
         WAIT_MS(500)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 90, 58, 228, 90, 38, -20, 30, 11)
@@ -354,7 +373,9 @@ static EVT_BEGIN(dead_event_nokotarou)
         WAIT_MS(200)
         CASE_EQUAL(1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
         LOOP(0)
             IF_INT_EQUAL(GW(19), 2)
                 BREAK_LOOP
@@ -363,7 +384,9 @@ static EVT_BEGIN(dead_event_nokotarou)
         END_LOOP
         CASE_EQUAL(2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     END_SWITCH
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
     SET_VALUE(GW(20), 2)
@@ -565,7 +588,11 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(5), LW(2))
     ADD(LW(2), 5)
     CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, LW(13))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(13), -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(13), MOVE_SOUND_FROM_TABLE, 0)
+#endif
     IF_INT_NOT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(6), 3)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -576,8 +603,13 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         IF_INT_EQUAL(LW(6), 2)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 40)
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL_CHILD(_koura_rotate_stop)
         CALL_CHILD(_restore_koura_pose)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
@@ -585,7 +617,11 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         GOTO(99)
     END_IF
     // Hit: the shell slams into the target for its damage.
@@ -598,12 +634,24 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     // He tumbles back in three decreasing hops and comes out of the shell.
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 30)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 18, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 18, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5996094f))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL_CHILD(_restore_koura_pose)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(30)
@@ -614,9 +662,17 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     LABEL(99)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+#else
     CALL(btlevtcmd_ResetFaceDirection, -2)
+#endif
     RETURN
 EVT_END()
 

@@ -157,6 +157,129 @@ static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
 EvtWord zonbaba_first_event[677];
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(jon_init_evt)
+    // When map events are skipped (a debug warp), the floor number is derived from the name of the map.
+    CALL(evt_sub_get_system_flag, LW(0))
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
+        CALL(evt_sub_get_mapname, LW(0))
+        IF_STR_EQUAL(LW(0), STRING("jon_00"))
+            SET_VALUE(GSW(GSW_JON_FLOOR), 0)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("jon_01"))
+            SET_VALUE(GSW(GSW_JON_FLOOR), 50)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("jon_02"))
+            SET_VALUE(GSW(GSW_JON_FLOOR), 80)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("jon_03"))
+            SET_VALUE(GSW(GSW_JON_FLOOR), 9)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("jon_04"))
+            SET_VALUE(GSW(GSW_JON_FLOOR), 49)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("jon_05"))
+            SET_VALUE(GSW(GSW_JON_FLOOR), 79)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("jon_06"))
+            SET_VALUE(GSW(GSW_JON_FLOOR), 99)
+        END_IF
+    END_IF
+    // Remember the deepest floor reached, then set up the signboard, the mover, the trader and the enemies of
+    // this floor.
+    SET_VALUE(LSW(0), GSW(GSW_JON_FLOOR))
+    SET_VALUE(LW(0), LSW(0))
+    ADD(LW(0), 1)
+    IF_INT_GREATER(LW(0), GSW(GSW_JON_DEEPEST_FLOOR))
+        SET_VALUE(GSW(GSW_JON_DEEPEST_FLOOR), LW(0))
+    END_IF
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kanban"), 0, PTR(evt_kanban), 0)
+    CALL_CHILD(idouya_setup)
+    CALL_CHILD(gyousyou_setup)
+    CALL_CHILD(enemy_setup)
+    // Choose the floor layout from the floor number: the boss floor, a rest-room floor, the floor before one,
+    // or a plain floor.
+    SET_VALUE(LW(0), GSW(GSW_JON_FLOOR))
+    ADD(LW(0), 1)
+    SET_VALUE(LW(1), LW(0))
+    MODULO(LW(1), 10)
+    SET_VALUE(LW(2), LW(0))
+    DIVIDE(LW(2), 10)
+    SWITCH(LW(1))
+        CASE_EQUAL(0)
+        IF_INT_EQUAL(LW(2), 10)
+            CALL_CHILD(setup_boss)
+        ELSE
+            CALL_CHILD(setup_return)
+            CALL(evt_mobj_floatswitch_blue, 0, STRING("sw"), -75, 60, 0, PTR(dokan_open2), 0)
+        END_IF
+        CASE_EQUAL(9)
+        CALL_CHILD(setup_prev_return)
+        CALL(evt_npc_check, STRING("敵"), LW(0))
+        IF_INT_NOT_EQUAL(LW(0), 1)
+            CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
+            CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
+            CALL(evt_hit_bind_update, STRING("a_dokan_1"))
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+        END_IF
+CASE_DEFAULT
+        CALL_CHILD(setup_normal)
+        CALL(evt_npc_check, STRING("敵"), LW(0))
+        IF_INT_NOT_EQUAL(LW(0), 1)
+            CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
+            CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)
+            CALL(evt_hit_bind_update, STRING("a_dokan_1"))
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+        END_IF
+END_SWITCH
+    // Trouble Center job 12 is set up on every floor map.
+    CALL_CHILD(iri_12_init)
+    CALL(evt_sub_get_mapname, LW(0))
+    // On floor 50 the graffiti wall of Trouble Center job 30 shows its before or after state and reacts to
+    // Bobbery.
+    IF_STR_EQUAL(LW(0), STRING("jon_04"))
+        IF_INT_EQUAL(GSW(GSW_JON_FLOOR), 49)
+            IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
+SET_VALUE(LF(0), 0)
+                    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_ERASE_THAT_GRAFFITI)
+                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+                            SET_VALUE(LF(0), 1)
+                        END_IF
+                    END_IF
+                    IF_INT_EQUAL(LF(0), 0)
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+                        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
+IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_ERASE_THAT_GRAFFITI)
+                        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
+CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
+                            CALL(evt_set_case_wrk, LW(1), 15, LW(0))
+END_IF
+                    END_IF
+ELSE
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+                        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+END_IF
+            ELSE
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+            END_IF
+        ELSE
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+        END_IF
+    END_IF
+    IF_INT_NOT_EQUAL(GSW(GSW_JON_FLOOR), 99)
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_100DN1"))
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_set_rev_mode, 1)
+    ELSE
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_DAN1"))
+        CALL(evt_snd_set_rev_mode, 2)
+    END_IF
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(jon_init_evt)
     // When map events are skipped (a debug warp), the floor number is derived from the name of the map.
     CALL(evt_sub_get_system_flag, LW(0))
@@ -304,6 +427,7 @@ EVT_BEGIN(jon_init_evt)
     END_IF
     RETURN
 EVT_END()
+#endif
 
 /**
  * Enemy number for each of the 100 floors of the Pit of 100 Trials: every group of twenty floors cycles through five
@@ -336,7 +460,11 @@ NpcSetupInfo npcEnt_kuriboo[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -365,7 +493,11 @@ NpcSetupInfo npcEnt_patakuri[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -394,7 +526,11 @@ NpcSetupInfo npcEnt_hannya[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -423,7 +559,11 @@ NpcSetupInfo npcEnt_chorobon[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -452,7 +592,11 @@ NpcSetupInfo npcEnt_sinnosuke[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -481,7 +625,11 @@ NpcSetupInfo npcEnt_sinemon[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -510,7 +658,11 @@ NpcSetupInfo npcEnt_nokonoko[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -539,7 +691,11 @@ NpcSetupInfo npcEnt_patapata[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -568,7 +724,11 @@ NpcSetupInfo npcEnt_met[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -597,7 +757,11 @@ NpcSetupInfo npcEnt_patamet[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -626,7 +790,11 @@ NpcSetupInfo npcEnt_sambo[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -655,7 +823,11 @@ NpcSetupInfo npcEnt_honenoko[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -684,7 +856,11 @@ NpcSetupInfo npcEnt_karon[] = {
         karon_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -713,7 +889,11 @@ NpcSetupInfo npcEnt_dokugassun[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -741,7 +921,11 @@ NpcSetupInfo npcEnt_piders[] = {
         piders_blow_event, // blowEvent
         2, // territoryType
         {0.0f, 140.0f, 0.0f}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -770,7 +954,11 @@ NpcSetupInfo npcEnt_teresa[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -799,7 +987,11 @@ NpcSetupInfo npcEnt_hbom[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -828,7 +1020,11 @@ NpcSetupInfo npcEnt_bubble[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -856,7 +1052,11 @@ NpcSetupInfo npcEnt_wanwan[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -885,7 +1085,11 @@ NpcSetupInfo npcEnt_mahoon[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -914,7 +1118,11 @@ NpcSetupInfo npcEnt_pakkun[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -943,7 +1151,11 @@ NpcSetupInfo npcEnt_togenoko[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -972,7 +1184,11 @@ NpcSetupInfo npcEnt_basabasa2[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -1001,7 +1217,11 @@ NpcSetupInfo npcEnt_togedaruma[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -1030,7 +1250,11 @@ NpcSetupInfo npcEnt_pansy[] = {
         enemy_common_blow_event, // blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -1053,7 +1277,11 @@ NpcSetupInfo npcEnt_zonbaba[] = {
         NULL, NULL, NULL, NULL, // findEvent..blowEvent
         2, // territoryType
         {0}, // territoryBase
+#if VERSION <= VERSION_DEMO_US
+{200.0f, 100.0f, 140.0f},
+#else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
+#endif
         200.0f, // searchRange
         300.0f, // searchAngle
         1000.0f, // homingRange
@@ -1070,7 +1298,11 @@ EVT_BEGIN(enemy_setup)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(0), GSW(GSW_JON_FLOOR))
+#else
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
+#endif
     ADD(LW(0), 1)
     IF_INT_NOT_EQUAL(LW(0), 100)
         MODULO(LW(0), 10)
@@ -1080,7 +1312,11 @@ EVT_BEGIN(enemy_setup)
     END_IF
     // Look up this floor's species and battle, create the enemy NPC and pick a random spot for it on the left
     // or right half of the room.
+#if VERSION <= VERSION_DEMO_US
+    CALL(enemy_info, GSW(GSW_JON_FLOOR), LW(0), LW(1), LW(2))
+#else
     CALL(enemy_info, GSW_PIT_FLOOR, LW(0), LW(1), LW(2))
+#endif
     CALL(evt_npc_entry, STRING("敵"), LW(0))
     CALL(evt_npc_set_tribe, STRING("敵"), LW(1))
     CALL(evt_sub_random, 100, LW(3))
@@ -1252,12 +1488,16 @@ EVT_BEGIN(enemy_setup)
     IF_STR_EQUAL(LW(1), STRING("パイダース"))
         CALL(evt_npc_setup, PTR(npcEnt_piders))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 140, LW(4))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_npc_set_home_position, STRING("敵"), LW(3), 140, LW(4))
+#endif
     END_IF
     IF_STR_EQUAL(LW(1), STRING("チュランタラー"))
         CALL(evt_npc_setup, PTR(npcEnt_piders))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 140, LW(4))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_npc_set_home_position, STRING("敵"), LW(3), 140, LW(4))
+#endif
     END_IF
     // Bandit-type thieves share the Goomba setup.
     IF_STR_EQUAL(LW(1), STRING("ボロドー"))
@@ -1389,10 +1629,17 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_CULL | NPC_FLAG_NO_VIEW_CORRECTION)
         CALL(evt_npc_pera_onoff, STRING("敵"), 0)
         CALL(evt_npc_set_ry, STRING("敵"), 0)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(zonbaba_first_event)
+#else
         SPAWN_EVENT(PTR(zonbaba_first_event))
+#endif
     END_IF
     // Make the chosen spot the enemy's home, then arm its battle and watch for its defeat.
     CALL(evt_npc_get_position, STRING("敵"), LW(3), LW(4), LW(5))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_npc_set_home_position, STRING("敵"), LW(3), LW(4), LW(5))
+#endif
     CALL(evt_npc_set_battle_info, STRING("敵"), LW(2))
     CALL(setup_npc_ex_para, STRING("敵"))
     CALL(yattukeFlag)
@@ -1404,14 +1651,30 @@ EVT_BEGIN(enemy_setup)
         IF_INT_EQUAL(LW(0), 0)
             GOTO(1)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), GSW(GSW_JON_FLOOR))
+#else
         SET_VALUE(LW(0), GSW_PIT_FLOOR)
+#endif
         ADD(LW(0), 1)
         IF_INT_NOT_EQUAL(LW(0), 100)
+#if VERSION <= VERSION_DEMO_US
+            SPAWN_EVENT(dokan_open)
+#else
             SPAWN_EVENT(PTR(dokan_open))
+#endif
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_JON_BONETAIL_DEFEATED), 1)
+#else
             SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
+#endif
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(iri_12_enemy_dead_event)
+#else
         SPAWN_EVENT(PTR(iri_12_enemy_dead_event))
+#endif
     END_INLINE_EVENT
     RETURN
 EVT_END()
@@ -1522,10 +1785,26 @@ EVT_BEGIN(talk_idouya)
     CALL(evt_msg_select, 0, STRING("msg_jon_mover_select"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+#if VERSION <= VERSION_DEMO_US
+        ADD(GSW(GSW_JON_FLOOR), 2)
+        CALL_CHILD(get_map_name)
+        SET_VALUE(LW(1), STRING("dokan_2"))
+#endif
         SET_VALUE(LW(2), 10)
         CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+        ADD(GSW(GSW_JON_FLOOR), 5)
+        CALL_CHILD(get_map_name)
+        SET_VALUE(LW(1), STRING("dokan_2"))
+        SET_VALUE(LW(2), 10)
+#else
         SET_VALUE(LW(2), 30)
+#endif
         CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(LW(0), STRING("tik_06"))
+        SET_VALUE(LW(1), STRING("dokan_3"))
+#endif
         SET_VALUE(LW(2), 10)
         CASE_EQUAL(3)
         CALL(evt_msg_continue)
@@ -1536,8 +1815,12 @@ EVT_BEGIN(talk_idouya)
         CALL(evt_msg_print_add, 0, STRING("msg_jon_mover_nocoin"))
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_continue)
+#endif
     MULTIPLY(LW(2), -1)
     CALL(evt_pouch_add_coin, LW(2))
+#if VERSION > VERSION_DEMO_US
     SWITCH(LW(0))
         CASE_EQUAL(0)
         ADD(GSW_PIT_FLOOR, 2)
@@ -1551,15 +1834,22 @@ EVT_BEGIN(talk_idouya)
         SET_VALUE(LW(0), STRING("tik_06"))
         SET_VALUE(LW(1), STRING("dokan_3"))
     END_SWITCH
+#endif
     IF_STR_EQUAL(LW(0), STRING("tik_06"))
+#if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
+#endif
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                 SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             END_IF
         END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("msg_jon_mover_2"), 0, 0)
+#else
     END_IF
     CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
     CALL(evt_msg_print_add, 0, STRING("msg_jon_mover_2"))
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_raster)
     END_INLINE_EVENT
@@ -1567,9 +1857,15 @@ EVT_BEGIN(talk_idouya)
     CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     IF_STR_EQUAL(LW(0), STRING("tik_06"))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSW(GSW_JON_FLOOR), 0)
+#else
         SET_VALUE(GSW_PIT_FLOOR, 0)
+#endif
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_goodbye_party, 0)
+#endif
     CALL(evt_bero_mapchange, LW(0), LW(1))
     RETURN
 EVT_END()
@@ -1615,6 +1911,80 @@ EVT_BEGIN(idouya_setup)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(talk_gyousyou)
+    // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
+    CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
+    CALL(evt_msg_select, 0, STRING("100kai_item_00"))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_msg_print_add, 0, STRING("100kai_item_02"))
+        RETURN
+    END_IF
+    CALL(evt_msg_continue)
+    // Show the coin window and the list of goods; closing it ends the sale with a goodbye.
+    LABEL(0)
+    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_other_select, 15)
+    IF_INT_EQUAL(LW(0), 0)
+        CALL(evt_win_coin_off, LW(12))
+        CALL(evt_msg_print, 0, STRING("100kai_item_10"), 0, STRING("me"))
+        RETURN
+    END_IF
+    // Not enough coins for the chosen item: the trader says so and the list comes back.
+    CALL(evt_pouch_get_coin, LW(0))
+    IF_INT_LESS(LW(0), LW(3))
+        CALL(evt_win_coin_off, LW(12))
+        CALL(evt_msg_print, 0, STRING("100kai_item_03"), 0, STRING("me"))
+        GOTO(0)
+    END_IF
+    // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
+    // name and price for some languages).
+    IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
+ELSE
+CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
+END_IF
+    CALL(evt_msg_select, 0, STRING("100kai_item_00"))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_win_coin_off, LW(12))
+        CALL(evt_msg_print_add, 0, STRING("100kai_item_05"))
+        RETURN
+    END_IF
+    // Mario agrees: the item goes into his pouch, or the trader sighs that he cannot carry any more.
+    CALL(evt_pouch_add_item, LW(1), LW(0))
+    IF_INT_EQUAL(LW(0), -1)
+        CALL(evt_win_coin_off, LW(12))
+        IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+            CALL(evt_msg_print_add, 0, STRING("100kai_item_09"))
+        ELSE
+            CALL(evt_msg_print_add, 0, STRING("100kai_item_09"))
+        END_IF
+        RETURN
+    END_IF
+    // Take the price in coins, thank Mario and offer the list again.
+    MULTIPLY(LW(3), -1)
+    CALL(evt_pouch_add_coin, LW(3))
+    CALL(evt_win_coin_wait, LW(12))
+    WAIT_MS(200)
+    CALL(evt_win_coin_off, LW(12))
+CALL(evt_msg_continue)
+CALL(evt_pouch_get_coin, LW(0))
+    IF_INT_EQUAL(LW(0), 0)
+CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
+RETURN
+    END_IF
+CALL(evt_msg_print, 0, STRING("100kai_item_06"), 0, STRING("me"))
+    CALL(evt_msg_print, 0, STRING("100kai_item_07"), 0, STRING("me"))
+CALL(evt_msg_select, 0, STRING("100kai_item_00"))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_msg_print_add, 0, STRING("100kai_item_08"))
+        RETURN
+    END_IF
+    CALL(evt_msg_continue)
+    GOTO(0)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(talk_gyousyou)
     // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
     CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
@@ -1719,6 +2089,7 @@ EVT_BEGIN(talk_gyousyou)
     GOTO(0)
     RETURN
 EVT_END()
+#endif
 
 /**
  * The traveling trader (gyousyou) of the Pit of 100 Trials, who sells items to Mario; talk_gyousyou runs the
@@ -1820,6 +2191,32 @@ EVT_END()
  * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
  * Spawned from enemy_setup.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(dokan_open)
+WAIT_MS(1000)
+    CALL(evt_mario_key_onoff, 0)
+CALL(evt_cam_letter_box_wait)
+WAIT_MS(500)
+    SET_VALUE(LW(2), STRING("a_dokan_1"))
+    SET_VALUE(LW(3), STRING("dokan_1_s"))
+    CALL(evt_mapobj_get_position, LW(3), LW(7), LW(8), LW(9))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(7), LW(8), LW(9), 0)
+    CALL(evt_hit_bind_mapobj, LW(2), LW(3))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 300, 500)
+    LABEL(0)
+    CALL(evt_sub_intpl_msec_get_value)
+    DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+    CALL(evt_mapobj_trans, 1, LW(3), 0, LW(0), 0)
+    CALL(evt_hit_bind_update, LW(2))
+    WAIT_FRAMES(1)
+    IF_INT_EQUAL(LW(1), 1)
+        GOTO(0)
+    END_IF
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dokan_1_k"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(dokan_open)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)
@@ -1848,6 +2245,7 @@ EVT_BEGIN(dokan_open)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Variant used in rest rooms: pressing the blue float switch ("sw") raises the exit pipe a_dokan_3 the same way
@@ -2958,10 +3356,18 @@ EVT_END()
 EVT_BEGIN(zonbaba_first_event)
     // Arriving on floor 100 for the first time: Bonetail is hidden underground and the chest is not placed
     // yet; if he was already beaten the room is set up with only the chest.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_JON_BONETAIL_DEFEATED), 1)
+#else
     IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
+#endif
         CALL(evt_npc_set_position, STRING("敵"), 0, -1000, 0)
         CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF(GSWF_JON_FLOOR100_CHEST_OPENED))
+#else
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
+#endif
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         RETURN
     END_IF
@@ -2974,17 +3380,23 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_S_1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(4000)
+#else
     WAIT_MS(3500)
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 96)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 96)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(3), LW(0))
         ADD(LW(3), -40)
         CALL(evt_party_move_pos, 0, LW(3), LW(2), 250)
     END_INLINE_EVENT
+#endif
     WAIT_MS(2000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_set_dir_npc, STRING("敵"))
@@ -2997,8 +3409,13 @@ EVT_BEGIN(zonbaba_first_event)
         CALL(evt_npc_wait_anim, STRING("敵"), FLOAT(1.0f))
         CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_S_1"))
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(gonbaba_standup_shake)
+    SPAWN_EVENT(gonbaba_fog_change)
+#else
     SPAWN_EVENT(PTR(gonbaba_standup_shake))
     SPAWN_EVENT(PTR(gonbaba_fog_change))
+#endif
     // The camera pulls back to show his size; the screen shakes.
     CALL(evt_cam3d_evt_set, -755, 24, 376, -84, 114, -22, 4500, EASING_SINE_IN_OUT)
     WAIT_MS(4000)
@@ -3022,7 +3439,11 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_party_set_pos, 0, -25, 10, 150)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 90, -1)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(gonbaba_down_shake)
+#else
     SPAWN_EVENT(PTR(gonbaba_down_shake))
+#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -3053,7 +3474,11 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_cam3d_evt_set, -145, 80, 882, 104, 114, 81, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     // His mouth opens and the treasure chest tumbles out, bouncing across the floor.
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF(GSWF_JON_FLOOR100_CHEST_OPENED))
+#else
     CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
+#endif
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("敵"), LW(0), LW(1), LW(2))
@@ -3125,15 +3550,26 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_JON_BONETAIL_DEFEATED), 1)
+    IF_INT_EQUAL(GSWF_TROUBLE_WORK(GSW_TROUBLE_ACTIVE), 12)
+        IF_INT_EQUAL(GSWF(GSWF_TROUBLE_WORK_1), 1)
+            IF_INT_EQUAL(GSWF(GSWF_TROUBLE_WORK_2), 0)
+#else
     SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
+#endif
                 CALL(evt_npc_get_reglid, STRING("マッキノ"), LW(0))
                 DELETE_EVENT(LW(0))
                 CALL(evt_npc_change_interrupt, STRING("マッキノ"), 1, 0)
                 CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(iri_12_makkino_return_zonbaba)
+#else
                 SPAWN_EVENT(PTR(iri_12_makkino_return_zonbaba))
+#endif
                 SET_VALUE(GSWF_TROUBLE_WORK(2), 1)
             END_IF
         END_IF

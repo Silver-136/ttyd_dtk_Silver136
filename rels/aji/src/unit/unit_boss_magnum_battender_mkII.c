@@ -71,9 +71,15 @@ s32 jetCount;
 static s32* list;
 EffectEntry* eff_suikomi;
 s32 screamId;
+#if VERSION > VERSION_DEMO_US
 s32 scream_fade_timer;
+#endif
+#if VERSION > VERSION_DEMO_US
 u8 scream_fade_start_vol;
+#endif
+#if VERSION > VERSION_DEMO_US
 u8 scream_fade_vol;
+#endif
 TargetWork* wp_target;
 s32 targetSoundId;
 static EffectEntry* eff_charge;
@@ -115,7 +121,11 @@ EvtWord aud_no_hit_event[16];
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[216];
+#else
 static EvtWord dead_event[234];
+#endif
 static EvtWord entry_event[78];
 static EvtWord attack_event[320];
 EvtWord drill_attack_event[392];
@@ -157,17 +167,48 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
     6, // pbSoftCap
     120, // width
     160, // height
+#if VERSION <= VERSION_DEMO_US
+    30,
+    100,
+    0.0f,
+    80.0f,
+    0.0f,
+    0,
+    0,
+#else
     {30, 100}, // hitOffset
     {0.0f, 80.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {30.0f, 115.0f, 0.0f}, // talkTogeBaseOffset
     {60.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+0.0f,
+    60.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    52.0f,
+    0.0f,
+    0.0f,
+    30.0f,
+    110.0f,
+    20.0f,
+    0.0f,
+    80.0f,
+    0.0f,
+#else
     {52.0f, 0.0f, 0.0f}, // bintaHitOffset
     {30.0f, 110.0f, 20.0f}, // kissHitOffset
     {0.0f, 80.0f, 0.0f}, // cutBaseOffset
+#endif
     120.0f, // cutWidth
     160.0f, // cutHeight
     0, // turnOrder
@@ -176,7 +217,13 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
     0, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_BOSS_MBTN_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -195,6 +242,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Elemental reactions of Magnus von Grapple 2.0: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 40, 40, 0, 40, 0, 100, 20, 0, 0, 100, 0, 100, 40, 40, 0, 0, 100, 30, 0, 0, 0};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     40, // stop
@@ -219,6 +269,7 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /**
  * Pose table of Magnus von Grapple 2.0: the animation each battle pose (idle, hurt, walk, attack and so on)
@@ -229,8 +280,13 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_STOP, "MGN_2D_1"},
     {POSE_TYPE_FREEZE, "MGN_2D_1"},
     {POSE_TYPE_CONFUSE, "MGN_X_1"},
+#if VERSION <= VERSION_DEMO_US
+{POSE_TYPE_POISON, "MGN_S_1"},
+    {POSE_TYPE_DIZZY, "MGN_S_1"},
+#else
     {POSE_TYPE_POISON, "MGN_X_1"},
     {POSE_TYPE_DIZZY, "MGN_X_1"},
+#endif
     {POSE_TYPE_NORMAL, "MGN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MGN_Q_1"},
@@ -250,8 +306,13 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_STOP, "MGN_2D_2"},
     {POSE_TYPE_FREEZE, "MGN_2D_2"},
     {POSE_TYPE_CONFUSE, "MGN_X_2"},
+#if VERSION <= VERSION_DEMO_US
+{POSE_TYPE_POISON, "MGN_S_2"},
+    {POSE_TYPE_DIZZY, "MGN_S_2"},
+#else
     {POSE_TYPE_POISON, "MGN_X_2"},
     {POSE_TYPE_DIZZY, "MGN_X_2"},
+#endif
     {POSE_TYPE_NORMAL, "MGN_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MGN_Q_2"},
@@ -637,7 +698,11 @@ USER_FUNC(get_aud_num) {
  * and removes each when it arrives. The list of 20 is kept for the shots that follow.
  * Blocks until all 20 arrived.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(aud_suikomi) {
+#else
 USER_FUNC(aud_suikomi) {
+#endif
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     s32 done = 0;
     BattleAudienceMember* mem;
@@ -664,7 +729,9 @@ USER_FUNC(aud_suikomi) {
                 n++;
             }
         }
+#if VERSION > VERSION_DEMO_US
         // Shuffle the occupied-seat IDs before taking the first twenty.
+#endif
         for (i = 0; i < 1000; i++) {
             s32 a = irand(n);
             s32 b = irand(n);
@@ -708,10 +775,21 @@ USER_FUNC(aud_suikomi) {
             }
         }
     }
+#if VERSION <= VERSION_DEMO_US
+if (done < 20) {
+        return EVT_RETURN_BLOCK;
+#else
     return done < 20 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+#endif
 }
+#if VERSION <= VERSION_DEMO_US
+    psndSFXOff(screamId);
+    return EVT_RETURN_DONE;
+}
+#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_00007668, JP aji .text+0x75A4. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(aud_scream_fadeout) {
     if (isFirstCall) {
         scream_fade_timer = 120;
@@ -725,6 +803,7 @@ USER_FUNC(aud_scream_fadeout) {
     }
     return EVT_RETURN_BLOCK;
 }
+#endif
 
 /** Returns the position of the boss's pod, 10 units right of and 78 above the unit, for the audience cannon. */
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z) {
@@ -1032,15 +1111,21 @@ static EVT_BEGIN(dead_event)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
     CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_07"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_07"), 0, -2)
+#endif
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     WAIT_MS(500)
     CALL(arm_check, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
+#endif
             SET_VALUE(LW(10), LW(0))
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
@@ -1049,11 +1134,15 @@ static EVT_BEGIN(dead_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
         END_IF
+#if VERSION > VERSION_DEMO_US
     END_IF
+#endif
     CALL(arm_check, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
+#endif
             SET_VALUE(LW(10), LW(0))
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
@@ -1061,7 +1150,9 @@ static EVT_BEGIN(dead_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kHidden)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
         END_IF
+#endif
     END_IF
     SET_VALUE(LW(10), -2)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1556,7 +1647,11 @@ EVT_BEGIN(aud_attack_event)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("MGN_T_2"))
             CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("MGN_S_2"))
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_04"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_04"), 0, -2)
+#endif
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -1600,7 +1695,11 @@ EVT_BEGIN(aud_attack_event)
     // It rises on its jets while the camera moves to the audience and the audience area darkens.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, -1)
+#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     WAIT_MS(300)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1619,7 +1718,11 @@ EVT_BEGIN(aud_attack_event)
     ADD(LW(2), 150)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), 25, LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, -1)
+#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), 25, LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_3"))
@@ -1629,9 +1732,11 @@ EVT_BEGIN(aud_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_INHALE1"), EVT_NULLPTR, 0, LW(15))
     // It sucks 20 audience members into its pod.
     CALL(aud_suikomi, UNIT_ID_SELF)
+#if VERSION > VERSION_DEMO_US
     BEGIN_SIBLING_EVENT
         CALL(aud_scream_fadeout)
     END_SIBLING_EVENT
+#endif
     CALL(evt_snd_sfxoff, LW(15))
     // It sinks back down and the jets shut off.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
@@ -1644,7 +1749,11 @@ EVT_BEGIN(aud_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, -1)
+#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(aud_jet_end)
     WAIT_MS(300)
     // The audience lighting comes back, the camera returns and the boss goes back to its home position.
@@ -1665,7 +1774,11 @@ EVT_BEGIN(aud_attack_event)
     ADD(LW(1), 300)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, -1)
+#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_MOTOR_ACTIVE1"), EVT_NULLPTR, 0, LW(15))
         WAIT_MS(600)
@@ -1699,7 +1812,11 @@ EVT_BEGIN(aud_attack_event)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("MGN_T_4"))
             CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("MGN_A5_8"))
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_05"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg7_aji_41_05"), 0, -2)
+#endif
         CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
         CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 69)
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
@@ -1994,6 +2111,9 @@ static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_r = {0, 70, 70, 70, 70, 70, 100, 70, 0, 0, 100, 0, 100, 70, 70, 0, 90, 100, 70, 0, 0, 0};
+#else
 static StatusVulnerability regist_r = {
     0, // sleep
     70, // stop
@@ -2018,6 +2138,7 @@ static StatusVulnerability regist_r = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /** Pose table of the X-Punch fist: its flying and stay poses. */
 static PoseTableEntry pose_table_r[] = {
@@ -2067,15 +2188,24 @@ static BattleWeapon weapon_batten_rocket_attack = {
     {9, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_ALL & ~(COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_PREEMPTIVE_SPIKY),
+TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+#else
     COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime

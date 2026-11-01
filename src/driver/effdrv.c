@@ -14,7 +14,140 @@
 #include "libc_decls.h"
 
 //.data
+#if VERSION <= VERSION_DEMO_US
+static const char* str_kemuri[] = {"着地", "敵消滅", "重いもの移動用", NULL};
+static const char* str_confetti[] = {"type 0", "type 1", "type 2", "type 3", "type 4", "type 5", "type 6", NULL};
+static const char* str_fukidashi[] = {"びっくり！", "はてな？", "ぐるぐる", "数字", "てんてん", "もじゃもじゃ", "チュチュリーナ", NULL};
+static const char* str_butterfly[] = {"type 0", "type 1", "type 2", "type 3", "type 4", "type 5", "type 6", "type 7", "type 8", "type 9", "type 10", NULL};
+static const char* str_hit[] = {"通常", "ほのお", "かみなり", "れいき", NULL};
+static const char* str_damage[] = {"通常", "フラワー", NULL};
+static const char* str_small_star[] = {"初期回転なし", "初期回転あり", "落下あり", "扇", "パーティ", NULL};
+static const char* str_mario_balloon[] = {"びっくり！", "てんてん", NULL};
+static const char* str_stardust[] = {"type 0", "コインゲット", "ＨＰかいふく", "type 3", "type 4", "type 5", "type 6", NULL};
+static const char* str_recovery[] = {"ハート", "フラワー", "生ハート", "生フラワー", "ハートMAX", "フラワーMAX", "バトルクリスチーヌ2", "ハート（星屑なし）", "フラワー（星屑なし）", NULL};
+static const char* str_nice[] = {"ナイス", "グット", "グレイト", "ワンダフル", "エクセレント", "-----", "ラッキー", "アクロバット", NULL};
+static const char* str_breath_fire[] = {"type 0", "type 1", "テスト", NULL};
+static const char* str_kemuri_test[] = {"ノーマル", "ゆげ", "ＭＯＢＪ破壊", "ノズル爆発", "敵を倒した", "ノコタロウ３（待機）", "マグマのけむり", "ぶた変身", "テレサ", "バトルチュチュリーナ１", "暖炉に落ちた", "大砲発射", "大砲発射２", "クスリ調合", "月面", "バトルノコタロウ２", "軍団ザコ１（ほのおのビン）", "キラー", "キラー大砲", "首領・魔法不発", "軍団ザコ魔法使い系１", "マリオのハンマーの煙（地面）", "マリオのハンマーの煙（壁）", NULL};
+static const char* str_starstone[] = {"ダイアモンドスター", "エメラルドスター", "ゴールドスター", "ルビースター", "サファイアスター", "ガーネットスター", "クリスタルスター", "生ダイアモンドスター", "生エメラルドスター", "生ゴールドスター", "生ルビースター", "生サファイアスター", "生ガーネットスター", "生クリスタルスター", NULL};
+static const char* str_itemget[] = {"スターストーン", "パーティ", "パーティパワーアップ", "重要アイテム", "スーパーコイン", "バッジ", "キーアイテム", "消費アイテム", "ほしのかけら", "スーパーアクションコマンド（バトル）", "アイテム使用時", NULL};
+static const char* str_status[] = {"グルグル", "アレルギー", NULL};
+static const char* str_fall[] = {"けむし", "けむし大", "フォーク", "水", "たらい", "ばけつ", "クッパ", "いんせき", "ライト", NULL};
+static const char* str_mobj_broken[] = {"ブロック茶", "ブロック灰", "ブロック黄", "ブロック茶・大", "ブロック灰・大", "ブロック黄・大", "ドカン", "さんご", NULL};
+static const char* str_mahojin[] = {"出現", "★1", "★2", "★3", "★4", "★5", "★6", "★7", "★★", NULL};
+static const char* str_nozle[] = {"けむり", "爆発", "炎", "ドライアイス", NULL};
+static const char* str_minigame[] = {"スタート", "ゴール", "リタイア", NULL};
+static const char* str_splash[] = {"はまった・水", "とびでる・水", "はまった・炎", "ゲッソー登場", "ゲッソー登場・背景", NULL};
+static const char* str_toge_flush[] = {"ノーマル", "赤", "青", "ランペル", "影の女王・目玉が光る", NULL};
+static const char* str_charge[] = {"チャージ1", "チャージ2", "影の女王・チャージ", NULL};
+static const char* str_mizutama[] = {"泳ぐ lv0", "泳ぐ lv1", "泳ぐ lv2", "泳ぐ lv3", "とびこんだ lv0", "とびこんだ lv1", "とびこんだ lv2", "とびこんだ lv3", NULL};
+static const char* str_fire[] = {"火", "ノーマル炎（実験）", "ノーマル炎２（実験）", "ローソク炎（グレアが丸い）", "ローソク炎（グレアが十字）", "炎・赤（実験）", "炎・青（実験）", "炎・緑（実験）", "ローソク炎（グレアが丸い）（黒）", NULL};
+static const char* str_kiss[] = {"イベント・チュチュリーナ", "バトル・クリスチーヌ１", "バトル・クラウダ２", "バトル・チビヨッシー２", "バトル・ビビアン３", "バトル・ビビアン３（敵）", NULL};
+static const char* str_stageclear[] = {"ステージクリア！", "ゴールイン！", NULL};
+static const char* str_sandars[] = {"フィールド Lv0", "フィールド Lv1", "フィールド Lv2", "バトル AC 成功", "バトル AC 失敗", "噴出す蒸気", NULL};
+static const char* str_mist[] = {"霧", "ヤミの吐息", "困惑の吐息", "毒の息", "白い息 bom", "伝説の扉", "影の女王黒い煙", NULL};
+static const char* str_ripple[] = {"普通の波紋", "ビビアンの波紋", "大砲の衝撃波", "影の女王・蒸発する黒い煙", NULL};
+static const char* str_toiki[] = {"ヤミの吐息", "困惑の吐息", "毒の息", NULL};
+static const char* str_mist2[] = {"湧き出す黒いカタマリ", "落下する黒いカタマリ", NULL};
+static const char* str_particle[] = {"火花", NULL};
+static const char* str_updown[] = {"攻撃力", "防御力", "攻撃力（静止）", "防御力（静止）", NULL};
+static const char* str_indirect[] = {"スター", "わっか", NULL};
+static const char* str_batten[] = {"エックス", "照準", "照準ロックオン", "ロケット", NULL};
+static const char* str_syuryou[] = {"首領の杖", "バリア", NULL};
+static const char* str_uranoko[] = {"黒いオーラ", NULL};
+static const char* str_hibashira[] = {"ファイアナグーリ", "首領・炎", "バトルサンダース４", "ファイアナグーリ・衝撃波", "首領・炎・衝撃波", "バトルサンダース４・衝撃波", NULL};
+static const char* str_number[] = {"ＨＰ回復", "ＦＰ回復", "ダメージ", "ノーマル", NULL};
+static const char* str_energy[] = {"こんらんエネルギー", "ふにゃふにゃエネルギー", "つらぬきエネルギー", "ねむらせエネルギー", "ミニミニエネルギー", NULL};
+static const char* str_biribirikinoko[] = {"左向き", "右向き", NULL};
+static const char* str_nokotarou[] = {"バトルノコタロウ３", NULL};
+static const char* str_teresa[] = {"テレサ", "影の女王・衝撃波", NULL};
+static const char* str_gonbaba_breath[] = {"通常", "ポイズン", "メガ", "コールド", "混乱", "眠り", "ミニミニ", "クッパ", NULL};
+static const char* str_ultra_hammer[] = {"左回り", "右回り", NULL};
+#endif
 EffectSet eff_set_table[] = {
+#if VERSION <= VERSION_DEMO_US
+    { 0, "kemuri", "けむり", str_kemuri },
+    { 1, "confetti", "紙ふぶき", str_confetti },
+    { 2, "fukidashi", "ふきだし", str_fukidashi },
+    { 3, "butterfly", "ちょうちょ", str_butterfly },
+    { 4, "hit", "ヒット", str_hit },
+    { 5, "damage_star", "バトルダメージ", str_damage },
+    { 6, "small_star", "敵と接触", str_small_star },
+    { 7, "mario_balloon", "マリオ吹き出し", str_mario_balloon },
+    { 8, "mugi", "むぎばたけ", NULL },
+    { 9, "stardust", "ほしくず", str_stardust },
+    { 10, "recovery", "回復ハート", str_recovery },
+    { 11, "miss_star", "攻撃ミス", NULL },
+    { 12, "nice", "ナイス", str_nice },
+    { 13, "breath_fire", "クッパが火を吐く", str_breath_fire },
+    { 14, "torch", "たいまつ", NULL },
+    { 15, "confusion", "バトル・混乱", NULL },
+    { 16, "spark", "バトル・スパーク", NULL },
+    { 17, "updown", "ステータスアップ・ダウン", str_updown },
+    { 18, "charge", "バトル・チャージ", str_charge },
+    { 19, "toge_flush", "トゲフラッシュ", str_toge_flush },
+    { 20, "ice", "アイス", NULL },
+    { 21, "fire", "ファイアー", str_fire },
+    { 22, "bomb", "ボム", NULL },
+    { 23, "ripple", "波紋", str_ripple },
+    { 24, "coin_fukidashi", "コイン吹き出し", NULL },
+    { 25, "star_point", "スターポイント", NULL },
+    { 26, "puni_balloon", "ぷにバルーン", NULL },
+    { 27, "p_fukidashi", "ピーチ編のふきだし", NULL },
+    { 28, "kemuri_test", "けむりテスト", str_kemuri_test },
+    { 29, "starstone", "スターストーン", str_starstone },
+    { 30, "itemget", "アイテム取得", str_itemget },
+    { 31, "status", "ステータス異常", str_status },
+    { 32, "pointget", "ポイントゲット", NULL },
+    { 33, "levelup", "レベルアップ", NULL },
+    { 34, "stageclear", "ステージクリア", str_stageclear },
+    { 35, "fall", "落下物", str_fall },
+    { 36, "fpdamage", "ＦＰダメージ", NULL },
+    { 37, "break", "ブレイク", NULL },
+    { 38, "mobj_broken", "ＭＯＢＪ破壊", str_mobj_broken },
+    { 39, "mahojin", "魔方陣", str_mahojin },
+    { 40, "nozle", "ノズル", str_nozle },
+    { 41, "mizutama", "水中の泡", str_mizutama },
+    { 42, "minigame", "ミニゲーム", str_minigame },
+    { 43, "splash", "水しぶき", str_splash },
+    { 44, "treasure_map", "宝の地図", NULL },
+    { 45, "kiss", "チュチュリーナキス", str_kiss },
+    { 46, "funemizu", "船のしぶき", NULL },
+    { 47, "mist", "霧", str_mist },
+    { 48, "teresa", "テレサ１０００", str_teresa },
+    { 49, "batten", "バッテンダーエックス", str_batten },
+    { 50, "sheep", "ねむれよいこ", NULL },
+    { 51, "naniga", "なにがおこるかな", NULL },
+    { 52, "sandars", "サンダース爆発", str_sandars },
+    { 53, "boomerang", "ブーメラン", NULL },
+    { 54, "irekae", "いれかえーる", NULL },
+    { 55, "rankup", "ランクアップ", NULL },
+    { 56, "scanning", "スキャニング", NULL },
+    { 57, "toiki", "影の女王・吐息", str_toiki },
+    { 58, "mist2", "黒い霧", str_mist2 },
+    { 59, "particle", "パーティクル", str_particle },
+    { 60, "ibuki", "こおりのいぶき", NULL },
+    { 61, "mahorn", "マホーン", NULL },
+    { 62, "spirit", "コルテス魂", NULL },
+    { 63, "indirect", "インダイレクト", str_indirect },
+    { 64, "syuryou", "首領", str_syuryou },
+    { 65, "uranoko", "ウラノコ", str_uranoko },
+    { 66, "hibashira", "火柱", str_hibashira },
+    { 67, "number", "汎用数字", str_number },
+    { 68, "laser", "レーザー（地図イベント）", NULL },
+    { 69, "machingegun", "バッテンダー・マシンガン２", NULL },
+    { 70, "las_mon", "伝説の扉", NULL },
+    { 71, "sleep", "眠る", NULL },
+    { 72, "energy", "エネルギー", str_energy },
+    { 73, "biribirikinoko", "びりびりキノコ", str_biribirikinoko },
+    { 74, "nokotarou", "ノコタロウ", str_nokotarou },
+    { 75, "queen", "影の女王・渦", NULL },
+    { 76, "queen2", "影の女王・黒い衝撃波", NULL },
+    { 77, "gonbaba_breath", "ファイアブレス", str_gonbaba_breath },
+    { 78, "majinai", "呪い師", NULL },
+    { 79, "mahorn2", "マホーン", NULL },
+    { 80, "ultra_hammer", "ウルトラハンマー", str_ultra_hammer },
+    { -1, NULL, NULL, NULL },
+#else
     {0, "kemuri"},
     {1, "confetti"},
     {2, "fukidashi"},
@@ -97,6 +230,7 @@ EffectSet eff_set_table[] = {
     {79, "mahorn2"},
     {80, "ultra_hammer"},
     {-1, NULL}
+#endif
 };
 
 //.sbss

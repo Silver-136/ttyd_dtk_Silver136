@@ -37,7 +37,9 @@
 #define UNIT_WORK_HAS_ATTACKED 13       // 1 once it has attacked in its own form; phase_event starts mutating only after that
 #define UNIT_WORK_TAIL_EVENT_ID 14      // id of the vivian_shadow_tail_event spawned for the Vivian form (0 = none); mutate_event deletes it
 
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(mario_shadow_guard_check);
+#endif
 USER_FUNC(yoshi_original_color_anim_set);
 static USER_FUNC(_krb_get_dir);
 static USER_FUNC(vivian_comeback);
@@ -65,9 +67,17 @@ static EvtWord entry_event[46];
 static EvtWord damage_event[22];
 static EvtWord dead_event[261];
 static EvtWord unison_phase_event[87];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[61];
+#else
 static EvtWord phase_event[68];
+#endif
 static EvtWord attack_event[29];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord ogg_attack_event[481];
+#else
 static EvtWord ogg_attack_event[491];
+#endif
 static EvtWord wait_event[6];
 static BattleUnitDefense defence_fmario;
 static BattleUnitDefenseAttr defence_attr_fmario;
@@ -101,7 +111,11 @@ static BattleUnitKindPart parts_christine[1];
 static EvtWord fmario_zoom_christine[19];
 static EvtWord gparty_zoom_christine[19];
 static EvtWord init_event_christine[72];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_christine[73];
+#else
 static EvtWord dead_event_christine[80];
+#endif
 static EvtWord attack_event_christine[690];
 static EvtWord wait_event_christine[6];
 static BattleWeapon enemyWeapon_NokotarouKouraAttack;
@@ -116,7 +130,11 @@ static EvtWord dmg_turn_event[64];
 static EvtWord wakeup_event[67];
 static EvtWord init_event_nokotarou[92];
 static EvtWord damage_event_nokotarou[6];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_nokotarou[73];
+#else
 static EvtWord dead_event_nokotarou[80];
+#endif
 static EvtWord _change_koura_pose[34];
 static EvtWord _change_koura_pose_fast[34];
 static EvtWord _restore_koura_pose[47];
@@ -133,7 +151,11 @@ static StatusVulnerability regist_clauda;
 static BattleDataEntry data_table_clauda[2];
 static BattleUnitKindPart parts_clauda[1];
 static EvtWord init_event_clauda[80];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_clauda[73];
+#else
 static EvtWord dead_event_clauda[80];
+#endif
 static EvtWord attack_event_clauda[393];
 static EvtWord wait_event_clauda[6];
 static BattleWeapon enemyWeapon_YoshiNormalAttack;
@@ -143,7 +165,11 @@ static StatusVulnerability regist_yoshi;
 static BattleDataEntry data_table_yoshi[2];
 static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[54];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_yoshi[73];
+#else
 static EvtWord dead_event_yoshi[80];
+#endif
 static EvtWord attack_event_yoshi[748];
 static EvtWord wait_event_yoshi[6];
 BattleUnitDefense defence_vivian;
@@ -248,6 +274,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist = {
     40, // sleep
     50, // stop
@@ -272,6 +301,7 @@ static StatusVulnerability regist = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /**
  * Pose table of Doopliss in his own form: animation names for each pose type (idle, walk, hurt, attack and
@@ -781,20 +811,32 @@ static EVT_BEGIN(phase_event)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HAS_ATTACKED, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
+#if VERSION > VERSION_DEMO_US
                 CALL(mario_shadow_guard_check, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
+#endif
                     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FORM, LW(0))
                     IF_INT_EQUAL(LW(0), 0)
                         CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
+#if VERSION <= VERSION_DEMO_US
+                        CALL_CHILD(mutate_event)
+#else
                         CALL_CHILD(PTR(mutate_event))
+#endif
                         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                     ELSE
                         CALL(evt_sub_random, 10, LW(0))
                         IF_INT_LESS(LW(0), 3)
                             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
+#if VERSION <= VERSION_DEMO_US
+                            CALL_CHILD(mutate_event)
+#else
                             CALL_CHILD(PTR(mutate_event))
+#endif
                             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+#if VERSION > VERSION_DEMO_US
                         END_IF
+#endif
                     END_IF
                 END_IF
             END_IF
@@ -852,7 +894,11 @@ static EVT_BEGIN(ogg_attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 20)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     // He winds up and lunges at it.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(250)
@@ -871,7 +917,11 @@ static EVT_BEGIN(ogg_attack_event)
         CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(1.0f))
     END_SIBLING_EVENT
     // He dives at the target.
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, 7, EASING_QUADRATIC_OUT, 0, -1)
+#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, 7, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(0.75f))
     WAIT_MS(200)
     BEGIN_SIBLING_EVENT
@@ -893,7 +943,11 @@ static EVT_BEGIN(ogg_attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(2.0f))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.009765625f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 15, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 15, MOVE_SOUND_FROM_TABLE)
+#endif
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -934,9 +988,13 @@ static EVT_BEGIN(ogg_attack_event)
     LABEL(91)
     // Deal the damage, reduced by the action command defence.
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(1.0f))
+#endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(2.0f))
+#endif
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 15, 0)
         CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 135, 0, 20)
@@ -955,7 +1013,11 @@ static EVT_BEGIN(ogg_attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(0), 60)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.75f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 20, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 20, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_RNPL_LANDING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     WAIT_MS(200)
@@ -967,7 +1029,11 @@ static EVT_BEGIN(ogg_attack_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     // He walks back to his place.
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(1.0f))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     RETURN
@@ -991,6 +1057,9 @@ static BattleUnitDefense defence_fmario = {0};
  */
 static BattleUnitDefenseAttr defence_attr_fmario = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_fmario = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist_fmario = {
     40, // sleep
     50, // stop
@@ -1015,6 +1084,7 @@ static StatusVulnerability regist_fmario = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /** Pose table of Doopliss as Mario while standing in place: animation names for each pose type. */
 static PoseTableEntry pose_table_fmario_stay[] = {
@@ -1118,15 +1188,24 @@ static BattleWeapon weapon_masao_hammer = {
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
+TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1192,15 +1271,24 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
+TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1834,6 +1922,9 @@ static BattleUnitDefense defence_christine = {0};
  */
 static BattleUnitDefenseAttr defence_attr_christine = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_christine = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist_christine = {
     40, // sleep
     50, // stop
@@ -1858,6 +1949,7 @@ static StatusVulnerability regist_christine = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /**
  * Data table of Doopliss as Goombella: event scripts
@@ -1942,12 +2034,18 @@ static EVT_BEGIN(dead_event_christine)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -1992,10 +2090,18 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, LW(14))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), MOVE_SOUND_FROM_TABLE, 0)
+#endif
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
+#else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
+#endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
         SET_VALUE(LW(11), 0)
@@ -2048,7 +2154,11 @@ static EVT_BEGIN(attack_event_christine)
             END_LOOP
         END_SIBLING_EVENT
         // She comes down on the target headfirst.
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, -1)
+#else
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, MOVE_SOUND_FROM_TABLE)
+#endif
     ELSE
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 14, 0)
         BEGIN_SIBLING_EVENT
@@ -2066,7 +2176,11 @@ static EVT_BEGIN(attack_event_christine)
         END_SIBLING_EVENT
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         ADD(LW(2), 5)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 0, -1)
+#else
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     END_IF
     IF_INT_NOT_EQUAL(LW(5), 1)
         IF_INT_EQUAL(LW(5), 3)
@@ -2085,9 +2199,17 @@ static EVT_BEGIN(attack_event_christine)
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_MoveDirectionAdd, UNIT_ID_SELF, LW(0), 30)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
+#endif
         CALL(btlevtcmd_MoveDirectionAdd, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, MOVE_SOUND_FROM_TABLE)
+#endif
         WAIT_MS(500)
         GOTO(95)
     END_IF
@@ -2140,12 +2262,24 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5996094f))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+#endif
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -2153,7 +2287,11 @@ static EVT_BEGIN(attack_event_christine)
     // She walks back to her place.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     // The attack is over; back to waiting.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -2267,6 +2405,9 @@ static BattleUnitDefenseAttr defence_attr_nokotarou = {0};
  */
 static BattleUnitDefense defence_turn_nokotarou = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_nokotarou = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist_nokotarou = {
     40, // sleep
     50, // stop
@@ -2291,6 +2432,7 @@ static StatusVulnerability regist_nokotarou = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /**
  * Data table of Doopliss as Koops: event scripts
@@ -2416,12 +2558,18 @@ static EVT_BEGIN(dead_event_nokotarou)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -2533,15 +2681,31 @@ EVT_END()
 static EVT_BEGIN(attack_event_nokotarou)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(wakeup_event)
+#else
         CALL_CHILD(PTR(wakeup_event))
+#endif
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
+#else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
+#endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(attack_event_nokotarou_koura)
+#else
         CALL_CHILD(PTR(attack_event_nokotarou_koura))
+#endif
         CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(attack_event_nokotarou_shubibin)
+#else
         CALL_CHILD(PTR(attack_event_nokotarou_shubibin))
+#endif
     END_SWITCH
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -2604,7 +2768,11 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     ADD(LW(2), 5)
     CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, LW(13))
     // He slams into the target.
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(13), -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(13), MOVE_SOUND_FROM_TABLE, 0)
+#endif
     IF_INT_NOT_EQUAL(LW(6), 1)
         IF_INT_EQUAL(LW(6), 3)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -2615,8 +2783,13 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         IF_INT_EQUAL(LW(6), 2)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_FaceDirectionAdd, -29999997, LW(0), 40)
+CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         // The spinning stops and he pops out of the shell.
         CALL_CHILD(_koura_rotate_stop)
         CALL_CHILD(_restore_koura_pose)
@@ -2626,7 +2799,11 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         // After the hit he bounces back with a hop.
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         GOTO(99)
     END_IF
     // Deal the damage, reduced by the action command defence.
@@ -2638,12 +2815,24 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 30)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 18, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 18, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5996094f))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL_CHILD(_restore_koura_pose)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(30)
@@ -2654,7 +2843,11 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     // He walks back to his place.
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
@@ -2827,6 +3020,9 @@ static BattleUnitDefense defence_clauda = {0};
  */
 static BattleUnitDefenseAttr defence_attr_clauda = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_clauda = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist_clauda = {
     40, // sleep
     50, // stop
@@ -2851,6 +3047,7 @@ static StatusVulnerability regist_clauda = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /**
  * Data table of Doopliss as Flurrie: event scripts
@@ -2920,12 +3117,18 @@ static EVT_BEGIN(dead_event_clauda)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -3112,6 +3315,9 @@ static BattleUnitDefense defence_yoshi = {0};
  */
 static BattleUnitDefenseAttr defence_attr_yoshi = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_yoshi = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist_yoshi = {
     40, // sleep
     50, // stop
@@ -3136,6 +3342,7 @@ static StatusVulnerability regist_yoshi = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /**
  * Data table of Doopliss as Yoshi: event scripts
@@ -3202,12 +3409,18 @@ static EVT_BEGIN(dead_event_yoshi)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -3441,6 +3654,9 @@ BattleUnitDefense defence_vivian = {0};
  */
 BattleUnitDefenseAttr defence_attr_vivian = {0};
 
+#if VERSION <= VERSION_DEMO_US
+StatusVulnerability regist_vivian = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 StatusVulnerability regist_vivian = {
     40, // sleep
     50, // stop
@@ -3465,6 +3681,7 @@ StatusVulnerability regist_vivian = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /**
  * Data table of Doopliss as Vivian: event scripts
@@ -3603,12 +3820,18 @@ EVT_BEGIN(dead_event_vivian)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_D_3"))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -3712,6 +3935,9 @@ BattleUnitDefense defence_sanders = {0};
  */
 BattleUnitDefenseAttr defence_attr_sanders = {0};
 
+#if VERSION <= VERSION_DEMO_US
+StatusVulnerability regist_sanders = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 StatusVulnerability regist_sanders = {
     40, // sleep
     50, // stop
@@ -3736,6 +3962,7 @@ StatusVulnerability regist_sanders = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /**
  * Data table of Doopliss as Bobbery: event scripts
@@ -3786,7 +4013,11 @@ BattleWeapon enemyWeapon_SandersNormalAttack = {
     {4, 5, 6, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_EXPLOSION, // element
     ATTACKPATTERN_NULL, // damagePattern
@@ -3794,8 +4025,13 @@ BattleWeapon enemyWeapon_SandersNormalAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
+TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+#else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
     0x80002004, // targetWeightFlags
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -3839,12 +4075,18 @@ EVT_BEGIN(dead_event_sanders)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -3971,6 +4213,9 @@ BattleUnitDefense defence_chuchurina = {0};
  */
 BattleUnitDefenseAttr defence_attr_chuchurina = {0};
 
+#if VERSION <= VERSION_DEMO_US
+StatusVulnerability regist_chuchurina = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 StatusVulnerability regist_chuchurina = {
     40, // sleep
     50, // stop
@@ -3995,6 +4240,7 @@ StatusVulnerability regist_chuchurina = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /**
  * Data table of Doopliss as Ms. Mowz: event scripts
@@ -4045,7 +4291,11 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
     ATTACKPATTERN_CHUCHURINA_BINTA_R, // damagePattern
@@ -4053,8 +4303,13 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
+TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -4086,7 +4341,11 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
     ATTACKPATTERN_CHUCHURINA_BINTA_L, // damagePattern
@@ -4094,8 +4353,13 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
+TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+#else
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
     0x80002004, // targetWeightFlags
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -4214,12 +4478,18 @@ EVT_BEGIN(dead_event_chuchurina)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_D_3"))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     WAIT_MS(500)
     CALL_CHILD(dead_event)
     RETURN
@@ -4530,6 +4800,7 @@ static USER_FUNC(eff_scanning) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000855c, JP las .text+0x8490. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(mario_shadow_guard_check) {
     EvtWord* args = event->args;
 
@@ -4540,6 +4811,7 @@ USER_FUNC(mario_shadow_guard_check) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 /**
  * Script helper: clears flag 2 on Vivian's partner data so she can rejoin Mario's party
  * after the fight (the pouch's partyData[6] flags).

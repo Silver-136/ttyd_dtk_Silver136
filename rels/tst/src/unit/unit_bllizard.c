@@ -69,24 +69,63 @@ BattleUnitKind unit_bllizard = {
     1, // perilHP
     25, // level
     0, // bonusExp
+#if VERSION <= VERSION_DEMO_US
+2,
+#else
     4, // bonusCoin
+#endif
     70, // bonusCoinRate
+#if VERSION <= VERSION_DEMO_US
+    2,
+#else
     0, // baseCoin
+#endif
     50, // runRate
     9999, // pbSoftCap
     35, // width
     30, // height
+#if VERSION <= VERSION_DEMO_US
+    4,
+    30,
+    0.0f,
+    15.0f,
+    0.0f,
+    0,
+    -3,
+#else
     {4, 30}, // hitOffset
     {0.0f, 15.0f, 0.0f}, // centerOffset
     {0, -3}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {18.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    18.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    17.5f,
+    0.0f,
+    0.0f,
+    17.5f,
+    19.5f,
+    0.0f,
+    0.0f,
+    15.0f,
+    0.0f,
+#else
     {17.5f, 0.0f, 0.0f}, // bintaHitOffset
     {17.5f, 19.5f, 0.0f}, // kissHitOffset
     {0.0f, 15.0f, 0.0f}, // cutBaseOffset
+#endif
     35.0f, // cutWidth
     30.0f, // cutHeight
     0, // turnOrder
@@ -95,7 +134,13 @@ BattleUnitKind unit_bllizard = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_KUMO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -114,6 +159,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Elemental reactions of the Ice Puff: takes 1 extra damage from fire attacks; is healed by ice attacks. */
 static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 70, 70, 100, 60, 0, 100, 0, 100, 60, 100, 60, 100, 70, 60, 70, 80, 100, 60, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     65, // sleep
     65, // stop
@@ -138,6 +186,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Body part of the Ice Puff, model c_kmoon_b: its one target part. */
 static BattleUnitKindPart parts[] = {

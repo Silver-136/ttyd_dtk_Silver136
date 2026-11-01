@@ -71,7 +71,11 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
  * Moves the bolt along its velocity (the burst slows and fades); a bolt reaching the end spawns the burst there.
  * From JP on, it only draws while the system level is nonzero.
  */
+#if VERSION <= VERSION_DEMO_US
+static void effMagic1Main(EffectEntry* effect) {
+#else
 void effMagic1Main(EffectEntry* effect) {
+#endif
     EffMagic1N64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -81,10 +85,12 @@ void effMagic1Main(EffectEntry* effect) {
     tmp.y = work->offset.y;
     tmp.z = work->offset.z;
     position = tmp;
+#if VERSION > VERSION_DEMO_US
     if (marioStGetSystemLevel() != 0) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic1Disp, effect);
         return;
     }
+#endif
     if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         work->life = 0;
@@ -99,7 +105,13 @@ void effMagic1Main(EffectEntry* effect) {
     if (type == 0 && work->life == 0) {
         EffectEntry* e = effMagic1N64Entry(1, 0x30, work->position.x + work->offset.x, work->position.y + work->offset.y,
                                            work->position.z + work->offset.z, 0.0f, 0.0f, 0.0f);
+#if VERSION <= VERSION_DEMO_US
+        EffMagic1N64Work* sparkle = e->userdata;
+
+        sparkle->scale = work->scale;
+#else
         ((EffMagic1N64Work*)e->userdata)->scale = work->scale;
+#endif
     }
     if (type == 1) {
         work->velocity.x *= 0.83f;

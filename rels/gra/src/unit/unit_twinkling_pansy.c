@@ -90,6 +90,9 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Defence attributes of the Amazy Dayzee's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {95, 10, 10, 100, 10, 100, 100, 10, 100, 10, 100, 10, 100, 10, 10, 100, 80, 100, 10, 100, 100, 10};
+#else
 static StatusVulnerability regist = {
     50, // sleep
     10, // stop
@@ -114,6 +117,7 @@ static StatusVulnerability regist = {
     100, // invisible
     10, // ohko
 };
+#endif
 
 /** Body part of the Amazy Dayzee: a single part using the model "c_kpansy". */
 static BattleUnitKindPart parts[] = {
@@ -121,6 +125,45 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Amazy Dayzee's attack: 20 damage to every target, a plain attack. */
+#if VERSION <= VERSION_DEMO_US
+static BattleWeapon weapon_twinkling_pansy_attack = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {20, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL,
+SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    75, // sleepChance
+    5, // sleepTime
+    0, 0, 0, 0, 0, 0, 0, 0, // stopChance..confuseChance
+    0, 0, 0, 0, 0, 0, 0, 0, // confuseTime..freezeChance
+    0, 0, 0, 0, 0, 0, 0, 0, // freezeTime..defChangeChance
+    0, 0, 0, 0, 0, 0, 0, 0, // defChangeTime..fastTime
+    0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
+    0, 0, 0, 0, // hpRegenTime..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 static BattleWeapon weapon_twinkling_pansy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -162,6 +205,7 @@ static BattleWeapon weapon_twinkling_pansy_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Attack event of the Amazy Dayzee: uses an enemy item if it has one;

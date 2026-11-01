@@ -19,12 +19,16 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[4];
+#if VERSION > VERSION_DEMO_US
 BattleDataEntry gesso_left_arm_data_table[13];
+#endif
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
 static EvtWord damage_event[31];
+#if VERSION > VERSION_DEMO_US
 EvtWord gesso_left_arm_damage_event[93];
+#endif
 static EvtWord phase_event[2];
 BattleWeapon weapon_gesso_left_arm_attack;
 static EvtWord attack_event[171];
@@ -50,17 +54,48 @@ BattleUnitKind unit_boss_gesso_left_arm = {
     9, // pbSoftCap
     150, // width
     40, // height
+#if VERSION <= VERSION_DEMO_US
+    -240,
+    36,
+#else
     {-240, 36}, // hitOffset
     {0.0f, 0.0f, 0.0f}, // centerOffset
     {-255, -5}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {75.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    -255,
+    -5,
+    0.0f,
+    0.0f,
+    0.0f,
+    75.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    75.0f,
+    0.0f,
+    0.0f,
+    75.0f,
+    26.0f,
+    0.0f,
+    -215.0f,
+    20.0f,
+    0.0f,
+#else
     {75.0f, 0.0f, 0.0f}, // bintaHitOffset
     {75.0f, 26.0f, 0.0f}, // kissHitOffset
     {-215.0f, 20.0f, 0.0f}, // cutBaseOffset
+#endif
     150.0f, // cutWidth
     40.0f, // cutHeight
     0, // turnOrder
@@ -69,7 +104,13 @@ BattleUnitKind unit_boss_gesso_left_arm = {
     0, // swallowAttributes
     0, // hammerKnockbackChance
     0, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_BOSS_GESSO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -79,7 +120,11 @@ BattleUnitKind unit_boss_gesso_left_arm = {
     1, // numParts
     parts, // parts
     init_event, // initEventCode
+#if VERSION <= VERSION_DEMO_US
+data_table,
+#else
     gesso_left_arm_data_table, // dataTable
+#endif
 };
 
 /** Defence of the L. Tentacle: no damage reduction. */
@@ -127,6 +172,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /** Data table of the Blooper's L. Tentacle: its damage reaction for the hit tags 24 to 36. */
+#if VERSION > VERSION_DEMO_US
 BattleDataEntry gesso_left_arm_data_table[] = {
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, gesso_left_arm_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, gesso_left_arm_damage_event},
@@ -142,6 +188,7 @@ BattleDataEntry gesso_left_arm_data_table[] = {
     {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, gesso_left_arm_damage_event},
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, gesso_left_arm_damage_event},
 };
+#endif
 
 /** Data table of the L. Tentacle: event handlers for its arm hit pose and being defeated. */
 static BattleDataEntry data_table[] = {
@@ -184,6 +231,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(gesso_left_arm_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -220,6 +268,7 @@ EVT_BEGIN(gesso_left_arm_damage_event)
     END_IF
     RETURN
 EVT_END()
+#endif
 
 /** Phase script of the left tentacle; does nothing. */
 static EVT_BEGIN(phase_event)

@@ -65,6 +65,35 @@ BattleUnitKind unit_killer_cannon = {
     9999, // pbSoftCap
     52, // width
     38, // height
+#if VERSION <= VERSION_DEMO_US
+    5,
+    38,
+    0.0f,
+    19.0f,
+    0.0f,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    26.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+0.0f,
+    0.0f,
+26.0f,
+    0.0f,
+    0.0f,
+    26.0f,
+    24.7f,
+    0.0f,
+    -10.0f,
+    19.0f,
+    0.0f,
+#else
     {5, 38}, // hitOffset
     {0.0f, 19.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
@@ -76,6 +105,7 @@ BattleUnitKind unit_killer_cannon = {
     {26.0f, 0.0f, 0.0f}, // bintaHitOffset
     {26.0f, 24.7f, 0.0f}, // kissHitOffset
     {-10.0f, 19.0f, 0.0f}, // cutBaseOffset
+#endif
     52.0f, // cutWidth
     38.0f, // cutHeight
     0, // turnOrder
@@ -84,7 +114,13 @@ BattleUnitKind unit_killer_cannon = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_KILLER_CANON_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -103,6 +139,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Elemental reactions of the Bill Blaster: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 50, 100, 50, 100, 50, 100, 50, 50, 0, 15, 100, 50, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -127,6 +166,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /**
  * Parts of the Bill Blaster: part 1 is the cannon with its front barrel, and parts 2 and 3 are the pieces

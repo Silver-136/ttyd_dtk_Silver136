@@ -150,8 +150,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TMT_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "TMT_A_1"},
     {POSE_TYPE_DAMAGE, "TMT_S_3"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_WALK, "TMT_W_1"},
     {POSE_TYPE_RUN, "TMT_R_1"},
+#endif
     {POSE_TYPE_DANGER, "TMT_S_3"},
     {POSE_TYPE_PERIL, "TMT_S_3"},
     {POSE_TYPE_ACTION, "TMT_S_3"},
@@ -284,6 +286,9 @@ static BattleUnitDefense defence_turn = {0};
  */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     75, // sleep
     90, // stop
@@ -308,6 +313,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /**
  * Parts of the Red Spike Top: a single body part (part 1, model c_met_h), each with its defense tables,

@@ -32,11 +32,67 @@ static CamRoadWork* wp = &work;
 // (MarioSt.MAP) names the original: the strings are @2397/@2398, numbered between calcCurrentCamState and
 // camRoadSetup, where the map lists the stripped camRoadDraw (0x8b8 bytes, UNUSED in the demo as well), so
 // no build contains its code.
+#if VERSION <= VERSION_DEMO_US
+s32 camRoadSetup(const char* name) {
+    char path[128];
+    u32 size;
+    DVDEntry* entry;
+    memset(wp, 0, 0x210);
+    wp->hokanOn = 0;
+    wp->prev.on = 0;
+    wp->prev.on = 0;
+    wp->tuning[0] = 0.005f;
+    wp->tuning[1] = 0.0f;
+    wp->tuning[2] = 0.004f;
+    wp->tuning[3] = 0.008f;
+    wp->tuning[4] = 1.0f;
+    wp->tuning[5] = 1.0f;
+    wp->tuning[6] = 2.0f;
+    wp->tuning[7] = 1.0f;
+    wp->tuning[8] = 1.0f;
+    wp->tuning[9] = 3.0f;
+    wp->tuning[10] = 1.0f;
+    wp->keptIdx = -1;
+    wp->unusedFlag = 0;
+    camShiftInit();
+    arcOpen(name, (void**)&wp->map, &size);
+    if (!wp->map) {
+        sprintf(path, "%s/%s", getMapDataDvdRoot(), name);
+        entry = DVDMgrOpen(path, 2, 0);
+        if (entry) {
+            size = DVDMgrGetLength(entry);
+            wp->map = _mapAlloc((size + 0x1f) & ~0x1f);
+            DVDMgrRead(entry, wp->map, (size + 0x1f) & ~0x1f, 0);
+            DVDMgrClose(entry);
+        } else {
+            return 0;
+        }
+    }
+    if ((u8*)wp->map->projection < (u8*)wp->map) {
+        ADDR_WORD(wp->map->projection) += (AddrWord)wp->map;
+        ADDR_WORD(wp->map->curves) += (AddrWord)wp->map;
+        ADDR_WORD(wp->map->groups) += (AddrWord)wp->map;
+        ADDR_WORD(wp->map->strips) += (AddrWord)wp->map;
+        ADDR_WORD(wp->map->curveVtx) += (AddrWord)wp->map;
+        ADDR_WORD(wp->map->groupVtx) += (AddrWord)wp->map;
+        ADDR_WORD(wp->map->stripIdx) += (AddrWord)wp->map;
+        ADDR_WORD(wp->map->collGroups) += (AddrWord)wp->map;
+        ADDR_WORD(wp->map->extra) += (AddrWord)wp->map;
+    }
+    if (strcmp(wp->map->version, "1.01") == 0) {
+        wp->state = 0x65;
+    } else {
+        wp->state = 0x64;
+    }
+    return 1;
+}
+#endif
 static void camRoadStrippedReport(const char* p, s32 a, s32 b) {
     OSReport("%scam = %d\n", p, a);
     OSReport("%scurve = %d\n", p, b);
 }
 
+#if VERSION > VERSION_DEMO_US
 s32 camRoadSetup(const char* name) {
     char path[128];
     u32 size;
@@ -91,6 +147,7 @@ s32 camRoadSetup(const char* name) {
     }
     return 1;
 }
+#endif
 /**
  * Turns the current road state into camera parameters:
  * the file's field of view, aspect and far plane,

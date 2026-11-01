@@ -273,6 +273,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Status vulnerability of the Bandit (percent chance to take each status): resists most statuses. */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 90, 80, 100, 90, 100, 100, 70, 100, 90, 100, 90, 100, 90, 90, 95, 80, 100, 90, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     90, // stop
@@ -297,6 +300,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -315,8 +319,13 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_RUN, "R_1"},
     {POSE_TYPE_RUN_HOME, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
+#if VERSION <= VERSION_DEMO_US
+{POSE_TYPE_DANGER, "I_1"},
+    {POSE_TYPE_PERIL, "I_1"},
+#else
     {POSE_TYPE_DANGER, "X_1"},
     {POSE_TYPE_PERIL, "X_1"},
+#endif
     {POSE_TYPE_TALK, "T_1"},
     {POSE_TYPE_ACTION, "S_1"},
 };
@@ -326,8 +335,13 @@ static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_STOP, "Y_1"},
     {POSE_TYPE_FREEZE, "Y_1"},
     {POSE_TYPE_CONFUSE, "K_1"},
+#if VERSION <= VERSION_DEMO_US
+{POSE_TYPE_POISON, "I_1"},
+    {POSE_TYPE_DIZZY, "I_1"},
+#else
     {POSE_TYPE_POISON, "X_1"},
     {POSE_TYPE_DIZZY, "X_1"},
+#endif
     {POSE_TYPE_NORMAL, "S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},

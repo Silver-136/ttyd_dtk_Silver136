@@ -30,7 +30,11 @@ typedef struct MotPlaneWork {
 
 void marioForcePlaneAnime(void);
 s32 marioGetPlaneStatus(void);
+#if VERSION <= VERSION_DEMO_US
+void marioPlaneGetFlyingDir(void);
+#else
 s32 marioPlaneGetFlyingDir(void);
+#endif
 void mot_plane(void);
 void mot_plane_post(void);
 BOOL mario_plane_cancel(void);

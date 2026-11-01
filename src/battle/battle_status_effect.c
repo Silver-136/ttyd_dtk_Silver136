@@ -34,6 +34,35 @@ typedef struct StChgMsgData {
  * msg1 when the status took hold, msg0 when not; only Charge differs ("...But it had no effect!").
  * Ends with type -1.
  */
+#if VERSION <= VERSION_DEMO_US
+s8 _st_pri_data[] = {
+    STATUS_CHARGE, //charge is elevated
+    STATUS_POISON, //poison is elevated
+    STATUS_SLEEP,
+    STATUS_STOP,
+    STATUS_DIZZY,
+    STATUS_CONFUSE,
+    STATUS_ELECTRIC,
+    STATUS_DODGY,
+    STATUS_BURN,
+    STATUS_FREEZE,
+    STATUS_HUGE,
+    STATUS_TINY,
+    STATUS_ATTACK_UP,
+    STATUS_ATTACK_DOWN,
+    STATUS_DEFENSE_UP,
+    STATUS_DEFENSE_DOWN,
+    STATUS_ALLERGIC,
+    STATUS_INVISIBLE,
+    STATUS_FAST,
+    STATUS_SLOW,
+    STATUS_PAYBACK,
+    STATUS_HOLD_FAST,
+    STATUS_HP_REGEN,
+    STATUS_FP_REGEN,
+    -1,
+};
+#endif
 StChgMsgData _st_chg_msg_data[] = {
     { 4, "\202\307\202\255", "msg_st_chg_poison", "msg_st_chg_poison" },
     { 16, "\203`\203\203\201[\203W", "msg_st_chg_charge", "msg_st_chg_charge3" },
@@ -64,6 +93,7 @@ StChgMsgData _st_chg_msg_data[] = {
 
 //.sdata
 //Status Type Priority Data
+#if VERSION > VERSION_DEMO_US
 s8 _st_pri_data[] = {
     STATUS_CHARGE, //charge is elevated
     STATUS_POISON, //poison is elevated
@@ -91,6 +121,7 @@ s8 _st_pri_data[] = {
     STATUS_FP_REGEN,
     -1,
 };
+#endif
 
 //local prototypes
 void BSE_Sleep(BattleUnit* unit);
@@ -622,12 +653,21 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
 
     for (i = 0; _st_pri_data[i] != -1; i++) {
         msg = &base->msg[_st_pri_data[i]];
+#if VERSION <= VERSION_DEMO_US
+        if (msg->type == -1)
+            continue;
+#else
         if (msg->type == -1) continue;
+#endif
         ret = TRUE;
         BattleGetUnitPtr(wp, msg->unitId);
         if (msg->timer) {
             msg->timer--;
+#if VERSION <= VERSION_DEMO_US
+            if (BattlePadCheckTrigger((PAD_BUTTON_A | PAD_BUTTON_B))) {
+#else
             if (BattlePadCheckTrigger(PAD_BUTTON_A | PAD_BUTTON_B)) {
+#endif
                 msg->timer = 0;
             }
             if (!msg->timer) {
@@ -650,6 +690,7 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
         dispEntry(CAMERA_2D, 900.0f, 1, (DispCallback)_st_chg_msg_disp, 0);
         break;
     }
+#if VERSION > VERSION_DEMO_US
     if (ret) {
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             BattleUnit* unit = BattleGetUnitPtr(wp, i);
@@ -658,6 +699,7 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
             }
         }
     }
+#endif
     return ret;
 }
 

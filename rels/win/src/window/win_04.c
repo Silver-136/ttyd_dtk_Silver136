@@ -254,7 +254,21 @@ EVT_BEGIN(meet_clouda2)
         IF_INT_GREATER_OR_EQUAL(LW(0), 150)
             IF_INT_GREATER_OR_EQUAL(LW(1), 50)
                 IF_INT_LESS(LW(1), 51)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
+                    IF_INT_GREATER_OR_EQUAL(LW(1), 50)
+                        IF_INT_LESS(LW(1), 51)
+                            CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
+                            IF_INT_GREATER_OR_EQUAL(LW(1), 50)
+                                IF_INT_LESS(LW(1), 51)
+#endif
                     BREAK_LOOP
+#if VERSION <= VERSION_DEMO_US
+                                END_IF
+                            END_IF
+                        END_IF
+                    END_IF
+#endif
                 END_IF
             END_IF
         END_IF
@@ -262,6 +276,7 @@ EVT_BEGIN(meet_clouda2)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_party_force_reset_outofscreen, 0)
         CALL(evt_party_stop, 0)
@@ -276,6 +291,7 @@ EVT_BEGIN(meet_clouda2)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
     CALL(evt_party_force_reset_outofscreen, 1)
+#endif
     CALL(evt_party_stop, 1)
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     ADD(LW(0), 50)
@@ -284,6 +300,9 @@ EVT_BEGIN(meet_clouda2)
         ELSE
         SUBTRACT(LW(2), 50)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(120.0f))
+#else
     CALL(evt_party_move_pos2, 1, 160, LW(2), FLOAT(120.0f))
     CALL(evt_party_set_dir, 1, 90, 200)
     LOOP(0)
@@ -293,11 +312,18 @@ EVT_BEGIN(meet_clouda2)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#endif
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_02"), 0, STRING("extparty"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_run, 0)
+#endif
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_05_01_FLURRIE_LIVING_ROOM)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_05_01_FLURRIE_LIVING_ROOM)
+#endif
     RETURN
 EVT_END()
 
@@ -315,17 +341,25 @@ EVT_BEGIN(clouda_inai)
 EVT_END()
 
 EVT_BEGIN(clouda_irai)
+#if VERSION <= VERSION_DEMO_US
+    // Mario's controls are locked; outside the demos both partners first gather by Mario.
+#endif
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_party_force_reset_outofscreen, 0)
+#endif
         CALL(evt_party_stop, 0)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 0, 255, LW(2), FLOAT(120.0f))
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
         CALL(evt_party_force_reset_outofscreen, 1)
+#endif
         CALL(evt_party_stop, 1)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 1, 225, LW(2), FLOAT(120.0f))
         CALL(evt_party_set_dir, 1, 90, 200)
@@ -340,6 +374,7 @@ EVT_BEGIN(clouda_irai)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#endif
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_03"), 0, 0)
     CALL(evt_mario_set_dir, 90, 200, 0)
@@ -422,16 +457,29 @@ EVT_BEGIN(clouda_irai)
     WAIT_MS(300)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_15"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_05_02_FLURRIE_REQUEST)
+    SET_VALUE(GSWF(GSWF_WIN04_FLURRIE_REQUEST_HEARD), 1)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_05_02_FLURRIE_REQUEST)
     SET_VALUE(GSWF_WIN_FLURRIE_REQUEST_ACCEPTED, 1)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(LW(0), STRING("w_bero"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(bero_case_switch_off)
+#else
     CALL_CHILD(PTR(bero_case_switch_off))
+#endif
     CALL(evt_bero_overwrite, STRING("w_bero"), PTR(bero_witchtrio))
     SET_VALUE(LW(0), STRING("w_bero"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(bero_case_switch_on)
+#else
     CALL_CHILD(PTR(bero_case_switch_on))
+#endif
     RETURN
 EVT_END()
 
@@ -594,7 +642,11 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(item_list), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
+#endif
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
         CALL(evt_msg_print, 0, STRING("stg2_win_e09_00_01"), 0, 0)
@@ -635,13 +687,21 @@ EVT_BEGIN(clouda_nakama)
     // Mario steps back, the door opens a crack and the necklace slides inside.
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_mario_mov_pos2, 150, 0, FLOAT(120.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(mario_move_wait)
+#else
     CALL_CHILD(PTR(mario_move_wait))
+#endif
     CALL(evt_mario_set_dir, 90, 200, 0)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 500)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_win_door_open_pure)
+#else
     SPAWN_EVENT(PTR(evt_win_door_open_pure))
+#endif
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_item_get_position, STRING("necklace"), LW(0), LW(1), LW(2))
@@ -654,7 +714,11 @@ EVT_BEGIN(clouda_nakama)
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
     SET_VALUE(LW(0), 1)
     SET_VALUE(LW(1), 500)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_win_door_open_pure)
+#else
     SPAWN_EVENT(PTR(evt_win_door_open_pure))
+#endif
     WAIT_MS(1500)
     // Flurrie rejoices; the chandelier lifts and the room goes dark, puzzling Mario.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 350, 100, 0)
@@ -721,9 +785,17 @@ EVT_BEGIN(clouda_nakama)
     END_INLINE_EVENT
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(mirror_ball_event)
+#else
         SPAWN_EVENT(PTR(mirror_ball_event))
+#endif
         SPAWN_EVENT_GET_ID(PTR(mirror_rotate), GW(10))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(mirror_trans)
+#else
         CALL_CHILD(PTR(mirror_trans))
+#endif
         WAIT_MS(500)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
@@ -763,7 +835,11 @@ EVT_BEGIN(clouda_nakama)
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 500)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_win_door_open_pure)
+#else
     SPAWN_EVENT(PTR(evt_win_door_open_pure))
+#endif
     WAIT_MS(1500)
     CALL(evt_cam3d_evt_set, 272, 75, 175, 272, 75, -1, 0, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -774,11 +850,19 @@ EVT_BEGIN(clouda_nakama)
         SET_VALUE(LW(9), STRING("S_doa_e_r"))
         SET_VALUE(LW(0), 1)
         SET_VALUE(LW(1), 500)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_win_door_open_pure)
+#else
         SPAWN_EVENT(PTR(evt_win_door_open_pure))
+#endif
         WAIT_MS(500)
     END_INLINE_EVENT
     WAIT_MS(2000)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(flower_event)
+#else
     SPAWN_EVENT(PTR(flower_event))
+#endif
     WAIT_MS(2500)
     CALL(evt_npc_set_anim, STRING("クラウダ"), STRING("PWD_A_7"))
     CALL(evt_npc_get_position, STRING("クラウダ"), LW(0), LW(1), LW(2))
@@ -885,7 +969,11 @@ EVT_BEGIN(clouda_nakama)
             CALL(evt_party_set_pose, 0, STRING("PNK_D_1"))
         END_SWITCH
         CALL(ss_ch_set, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(dummy1_jump)
+#else
         SPAWN_EVENT(PTR(dummy1_jump))
+#endif
         LOOP(0)
             CALL(evt_npc_get_position, STRING("dummy1"), LW(0), LW(1), LW(2))
             CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
@@ -922,7 +1010,11 @@ EVT_BEGIN(clouda_nakama)
         CALL(evt_party_set_dir, 1, 270, -1)
         CALL(evt_party_set_pose, 1, STRING("R_1"))
         CALL(ss_ch_set, 1, 0)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(dummy2_jump)
+#else
         SPAWN_EVENT(PTR(dummy2_jump))
+#endif
         LOOP(0)
             CALL(evt_npc_get_position, STRING("dummy2"), LW(0), LW(1), LW(2))
             CALL(evt_party_set_pos, 1, LW(0), LW(1), LW(2))
@@ -1013,17 +1105,30 @@ EVT_BEGIN(clouda_nakama)
     // Flurrie joins with the partner lecture, Punio cheers, the story advances and the woods music returns.
     SET_VALUE(LW(8), STRING("クラウダ"))
     SET_VALUE(LW(9), 5)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(all_party_lecture)
+#else
     CALL_CHILD(PTR(all_party_lecture))
+#endif
     CALL(evt_party_move_pos2, 1, 148, 30, FLOAT(120.0f))
     CALL(evt_msg_print, 0, STRING("stg2_win_e09_09"), 0, STRING("extparty"))
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_WIN04_FLURRIE_JOINED), 1)
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_09_FLURRIE_JOINS)
+#else
     SET_VALUE(GSWF_WIN_FLURRIE_JOINED, 1)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_09_FLURRIE_JOINS)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(5))
+#else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(5))
+#endif
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN2"))
     CALL(evt_snd_env_lpf, 0, 800)
     SET_VALUE(LW(0), 1)
@@ -1442,35 +1547,80 @@ static EVT_BEGIN(cloud_toujou)
 EVT_END()
 
 EVT_BEGIN(win_04_init_evt)
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(GSWF_WIN_04_ENTERED, 1)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_WIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN2"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(5))
+#else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(5))
+#endif
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -125, 60, -95, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_04_EXTENDING_PLANE_PANEL)
+        SPAWN_EVENT(meet_clouda)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_04_EXTENDING_PLANE_PANEL)
         SPAWN_EVENT(PTR(meet_clouda))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_05_A_SHY_FLURRIE)
+        SPAWN_EVENT(meet_clouda2)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_05_A_SHY_FLURRIE)
         SPAWN_EVENT(PTR(meet_clouda2))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_05_02_FLURRIE_REQUEST)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_05_02_FLURRIE_REQUEST)
+#endif
         SET_VALUE(LW(0), STRING("w_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         CALL(evt_bero_overwrite, STRING("w_bero"), PTR(bero_witchtrio))
         SET_VALUE(LW(0), STRING("w_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_on)
+#else
         CALL_CHILD(PTR(bero_case_switch_on))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_08_SHADOW_SIRENS_LOSE)
+#else
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_08_SHADOW_SIRENS_LOSE)
+#endif
         SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(touch_door), 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_03_02_SEALED_ENTRANCE_2)
+        SPAWN_EVENT(cloud_toujou)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_03_02_SEALED_ENTRANCE_2)
         SPAWN_EVENT(PTR(cloud_toujou))
+#endif
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hika_"), MAP_OBJ_FLAG_HIDDEN)
     RETURN

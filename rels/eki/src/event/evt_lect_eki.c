@@ -672,8 +672,10 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(lecture_button_seq_wait, 1, 1)
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_08"), 0, STRING("キノピコ"))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_msg_continue)
         WAIT_MS(500)
+#endif
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         ADD(LW(1), 1)
         ADD(LW(2), 1)
@@ -690,8 +692,12 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
         CALL(evt_npc_set_ry, STRING("キノピコ"), 270)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_2"), STRING("T_2"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_10"))
+#else
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_10"), 0, STRING("キノピコ"))
         // If he says "One more time" the loop repeats; otherwise it ends.
+#endif
         CALL(evt_msg_select, 0, STRING("lecture_u_boots_11"))
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
         IF_INT_EQUAL(LW(0), 0)

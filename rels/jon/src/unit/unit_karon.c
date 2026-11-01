@@ -105,6 +105,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Element response of the Dry Bones: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 70, 60, 0, 60, 100, 100, 60, 100, 60, 100, 60, 100, 60, 60, 10, 70, 100, 60, 100, 100, 90};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     75, // stop
@@ -129,6 +132,7 @@ static StatusVulnerability regist = {
     100, // invisible
     90, // ohko
 };
+#endif
 
 /** Body parts of the Dry Bones: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {

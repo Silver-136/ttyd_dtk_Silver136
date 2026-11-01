@@ -436,8 +436,13 @@ static EVT_BEGIN(korutesu_event)
     CALL(evtflash)
     SET_VALUE(GF(0), 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_KORTESS1"))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(korutesu_flush)
+    CALL_CHILD(korutesu_apper)
+#else
     SPAWN_EVENT(PTR(korutesu_flush))
     CALL_CHILD(PTR(korutesu_apper))
+#endif
     SET_VALUE(GF(0), 1)
     // Cortez appears and says he has had enough.
     CALL(evt_msg_print, 0, STRING("stg5_dou_22"), 0, STRING("コルテス"))
@@ -451,7 +456,11 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SET_VALUE(GF(0), 1)
     SET_VALUE(GF(1), 1)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(korutesu_blur)
+#else
     SPAWN_EVENT(PTR(korutesu_blur))
+#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED3"))
     // Cortez rages at the intruders.
     CALL(evt_msg_print, 0, STRING("stg5_dou_23"), 0, STRING("コルテス"))
@@ -476,8 +485,13 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_party_set_dir, 0, 90, 0)
     WAIT_MS(1000)
     SET_VALUE(GF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(korutesu_yure)
+    SPAWN_EVENT(korutesu_flush2)
+#else
     SPAWN_EVENT(PTR(korutesu_yure))
     SPAWN_EVENT(PTR(korutesu_flush2))
+#endif
     CALL(evt_npc_set_autotalkpose, STRING("コルテス"), STRING("KRT_S_1"), STRING("KRT_T_3"))
     WAIT_FRAMES(1)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -496,8 +510,13 @@ static EVT_BEGIN(korutesu_event)
             WAIT_MS(50)
         END_LOOP
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(korutesu_rotate)
+    SPAWN_EVENT(korutesu_small)
+#else
     SPAWN_EVENT(PTR(korutesu_rotate))
     SPAWN_EVENT(PTR(korutesu_small))
+#endif
     WAIT_MS(5000)
     CALL(evt_msg_print, 0, STRING("stg5_dou_26"), 0, STRING("コルテス"))
     CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
@@ -510,8 +529,13 @@ static EVT_BEGIN(korutesu_event)
             WAIT_MS(50)
         END_LOOP
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(korutesu_rotate2)
+    SPAWN_EVENT(korutesu_large)
+#else
     SPAWN_EVENT(PTR(korutesu_rotate2))
     SPAWN_EVENT(PTR(korutesu_large))
+#endif
     WAIT_MS(1500)
     // Cortez laughs, then notices Mario is not after his treasure.
     CALL(evt_msg_print, 0, STRING("stg5_dou_27"), 0, STRING("コルテス"))
@@ -566,12 +590,19 @@ static EVT_BEGIN(korutesu_event)
     SET_VALUE(LW(0), 5)
     SET_VALUE(LW(1), LW(10))
     // The story advances and the Crystal Star is awarded.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_33_CORTEZ_AND_THE_TREASURE)
+CALL_CHILD(evt_sub_starstone)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL_CHILD(PTR(evt_sub_starstone))
+#endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ9"))
+#endif
     RETURN
 EVT_END()
 
@@ -626,7 +657,11 @@ EVT_BEGIN(kosho_event)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG5_KORTESS1"))
     // Cortez appears, moaning, and Flavio shakes with fear.
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(korutesu_apper)
+#else
     CALL_CHILD(PTR(korutesu_apper))
+#endif
     CALL(evt_msg_print, 0, STRING("stg5_dou_31"), 0, STRING("コルテス"))
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_MARCO_SHAKE1"), LW(0), LW(1), LW(2), LW(9))
@@ -713,7 +748,11 @@ EVT_BEGIN(kosho_event)
     SET_VALUE(GF(2), 1)
     DELETE_EVENT(LW(10))
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_item_set_position, STRING("jewel"), 0, -1000, 0)
+#else
     CALL(evt_item_delete, STRING("jewel"))
+#endif
     WAIT_MS(500)
     // Cortez has his Black Skull back and Flavio asks for thanks.
     CALL(evt_msg_print, 0, STRING("stg5_dou_37"), 0, STRING("コルテス"))
@@ -727,13 +766,21 @@ EVT_BEGIN(kosho_event)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
     CALL(evt_snd_bgmon_f, PSND_CONTINUE | PSND_FADEIN, 0, 2000)
     // Cortez vanishes.
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(korutesu_vanish)
+#else
     CALL_CHILD(PTR(korutesu_vanish))
+#endif
     WAIT_MS(1000)
     CALL(evt_npc_set_position, STRING("コルテス"), 0, -1000, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     // The story advances and control returns.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_41_RETURN_TO_THE_GROTTO)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)

@@ -90,6 +90,73 @@ USER_FUNC(ceil_exist) {
  * Unit kind of the Rawk Hawk (HP 40, level 49):
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_boss_champion = {
+    UNIT_RAWK_HAWK,
+    "btl_un_champion",
+    40,
+    0,
+    1,
+    1,
+49,
+0,
+    0,
+    100,
+    0,
+    50,
+8,
+50,
+    64,
+    3,
+    64,
+    0.0f,
+    32.0f,
+    0.0f,
+    0,
+    0,
+    8.0f,
+    36.0f,
+    0.0f,
+    25.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    25.0f,
+    0.0f,
+    0.0f,
+    10.0f,
+    48.0f,
+    10.0f,
+    0.0f,
+    32.0f,
+    0.0f,
+    50.0f,
+    64.0f,
+    0,
+    0,
+    0,
+    2,
+    100,
+    20,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_BOSS_BLED_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    0,
+    &regist,
+    1,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_boss_champion = {
     UNIT_RAWK_HAWK,
     "btl_un_champion",
@@ -159,6 +226,7 @@ BattleUnitKind unit_boss_champion = {
     init_event,
     data_table,
 };
+#endif
 
 /** Defence of the Rawk Hawk: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -170,6 +238,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * Status vulnerability of the Rawk Hawk (percent chance to take each status):
  * immune to growing huge, fright, gale force and instant kill; resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {60, 60, 70, 70, 60, 70, 100, 40, 0, 60, 100, 60, 100, 60, 60, 0, 0, 100, 70, 100, 100, 0};
+#else
 static StatusVulnerability regist = {
     60, // sleep
     50, // stop
@@ -194,6 +265,7 @@ static StatusVulnerability regist = {
     100, // invisible
     0, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -489,6 +561,44 @@ BattleWeapon weapon_champion_roof_shake_attack = {
 };
 
 /** Weapon of Rawk Hawk's final Roof Shake: no HP damage. */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon weapon_champion_roof_shake_last_attack = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    NULL, // hpDamageFn
+    {0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, // element
+    ATTACKPATTERN_NO_DAMAGE_FINISH, // damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL,
+SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH,
+COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon weapon_champion_roof_shake_last_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -529,6 +639,7 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     NULL, // attackEvtScript
     {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Rawk Hawk jumps up and hangs from the iron frame in the ceiling:
@@ -1537,6 +1648,7 @@ USER_FUNC(check_ceil) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_000027b8, JP tou2 .text+0x26F4. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(eff_fall_entry) {
     EvtWord* args = event->args;
     s32 var = args[0];
@@ -1554,8 +1666,10 @@ USER_FUNC(eff_fall_entry) {
     evtSetValue(event, var, (EvtWord)eff);
     return EVT_RETURN_DONE;
 }
+#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_00002770, JP tou2 .text+0x26AC. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(eff_fall_hit_wait) {
     EffectEntry* eff = (EffectEntry*)evtGetValue(event, event->args[0]);
 
@@ -1564,8 +1678,10 @@ USER_FUNC(eff_fall_hit_wait) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 EVT_BEGIN(roof_shake_attack_event)
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(LW(15), 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_FALL_EVENT, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_FALL_EVENT + 1, 0)
@@ -1578,10 +1694,13 @@ EVT_BEGIN(roof_shake_attack_event)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_FALL_EVENT + 8, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_FALL_EVENT + 9, 0)
     SET_VALUE(LW(13), 0)
+#endif
     LOOP(10)
+#if VERSION > VERSION_DEMO_US
         SET_VALUE(LW(0), 0)
         ADD(LW(0), LW(13))
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, LW(0), 0)
+#endif
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1602,8 +1721,16 @@ EVT_BEGIN(roof_shake_attack_event)
         WAIT_FRAMES(16)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_BLED_SHAKE_CAILING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+#else
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+#endif
         ADD(LW(2), 10)
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(LW(6), 30)
+        CALL(evt_sub_random, 2, LW(5))
+#else
         SET_VALUE(LW(8), LW(1))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
@@ -1620,11 +1747,29 @@ EVT_BEGIN(roof_shake_attack_event)
             CALL(eff_fall_entry, LW(14), 8, LW(0), LW(1), LW(2), 20, LW(8), 0, 1, 60)
         END_SWITCH
         BEGIN_INLINE_EVENT_GET_ID(LW(15))
+#endif
             SWITCH(LW(5))
+#if VERSION <= VERSION_DEMO_US
+            CASE_EQUAL(0)
+            CALL(evt_eff, 0, STRING("fall"), 4, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
+#endif
                 CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_eff, 0, STRING("fall"), 5, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
+            CASE_EQUAL(2)
+            CALL(evt_eff, 0, STRING("fall"), 8, LW(0), LW(1), LW(2), 20, 20, 0, 1, 60, 0, 0, 0)
+        END_SWITCH
+        WAIT_FRAMES(4)
+CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
+IF_INT_EQUAL(LW(5), 1)
+            BEGIN_INLINE_EVENT
+                WAIT_FRAMES(LW(6))
+#else
                 CALL(eff_fall_hit_wait, LW(14))
+#endif
                 CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
+#if VERSION > VERSION_DEMO_US
                 CASE_EQUAL(3)
                 CALL(eff_fall_hit_wait, LW(14))
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -1637,7 +1782,9 @@ EVT_BEGIN(roof_shake_attack_event)
                 CASE_DEFAULT
                 CALL(eff_fall_hit_wait, LW(14))
             END_SWITCH
+#endif
         END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
         SET_VALUE(LW(0), 0)
         ADD(LW(0), LW(13))
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, LW(0), LW(15))
@@ -1657,17 +1804,37 @@ EVT_BEGIN(roof_shake_attack_event)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, LW(0), 0)
         GOTO(92)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(LW(5), 3)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
+#else
     ADD(LW(13), 1)
     IF_INT_LESS(LW(13), 10)
         GOTO(93)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(LW(5), 6)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
+#else
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(0), 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(LW(5), 2)
+            CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
+        END_IF
+LABEL(90)
+END_LOOP
+WAIT_FRAMES(32)
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
+#endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_PARTNER, 1, PTR(&weapon_champion_roof_shake_last_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN

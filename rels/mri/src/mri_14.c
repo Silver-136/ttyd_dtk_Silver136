@@ -474,6 +474,236 @@ EVT_END()
  * sets a time bomb that switches on the countdown and flees through a pipe, and the party reacts.
  * Sets the story to STG2_23_TIME_BOMB_ACTIVATED.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(time_bomb)
+    // Controls off, the music fades out and the room begins to shake.
+    CALL(evt_mario_key_onoff, 0)
+SET_VALUE(GF(10), 0)
+    WAIT_WHILE(GF(15))
+    WAIT_MS(1000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
+    CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 270)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
+    SET_VALUE(LW(10), 1)
+    LOOP(0)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_INERT)
+        CALL(evt_puni_set_anim, LW(10), 0)
+        ADD(LW(10), 1)
+        IF_INT_EQUAL(LW(10), 103)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    BEGIN_INLINE_EVENT
+        WAIT_MS(2000)
+        CALL(evt_cam3d_evt_set, 555, 507, 846, 0, 50, 0, 2000, EASING_SINE_IN_OUT)
+    END_INLINE_EVENT
+    CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), LW(11))
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0029296875f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 300)
+    SET_VALUE(GF(0), 0)
+    // The quakes grow stronger and the room flashes.
+    SPAWN_EVENT(flash_and_wait)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.005859375f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0068359375f), FLOAT(0.0f), 300)
+SPAWN_EVENT(flash2_and_wait)
+CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0078125f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0087890625f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+SPAWN_EVENT(flash2_and_wait)
+CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+SPAWN_EVENT(flash_and_wait)
+CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+    BEGIN_INLINE_EVENT
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0087890625f), FLOAT(0.0f), 200)
+        SPAWN_EVENT(flash_and_wait)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0078125f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0068359375f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.005859375f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0029296875f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 200)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 200)
+    END_INLINE_EVENT
+    WAIT_MS(2000)
+    CALL(evt_snd_sfxoff, LW(11))
+    CALL(evt_cam3d_evt_set, 200, 305, -33, 0, 140, -338, 1000, EASING_SINE_IN_OUT)
+    WAIT_MS(2000)
+BEGIN_INLINE_EVENT
+        CALL(evt_eff64, STRING("ripple00"), STRING("ripple_n64"), 0, 0, 150, -340, 0, 0, 0, 0, 0, 0, 0, 0)
+        WAIT_MS(400)
+        CALL(evt_eff64, STRING("ripple01"), STRING("ripple_n64"), 0, 0, 150, -340, 0, 0, 0, 0, 0, 0, 0, 0)
+        WAIT_MS(400)
+        CALL(evt_eff64, STRING("ripple02"), STRING("ripple_n64"), 0, 0, 150, -340, 0, 0, 0, 0, 0, 0, 0, 0)
+        WAIT_MS(400)
+    END_INLINE_EVENT
+    // The Crystal Star appears in a ripple of light and spins above the floor.
+    CALL(evt_snd_sfxon, STRING("SFX_STG2_STARSTONE_APPEAR1"), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_EMERALD_STAR, 0, 120, -340, ITEM_TYPE_STILL, -1, 0)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
+    SET_VALUE(LW(0), STRING("item00"))
+    SET_VALUE(GW(10), 0)
+    SPAWN_EVENT_GET_ID(PTR(starstone_rotate), LW(14))
+    SPAWN_EVENT_GET_ID(PTR(starstone_rotate_exec), LW(15))
+    CALL(evt_item_move_3d_position, STRING("item00"), 0, 150, -340, 1000, EASING_LINEAR)
+    SPAWN_EVENT_GET_ID(PTR(starstone_fuwafuwa), LW(13))
+    WAIT_MS(2000)
+    DELETE_EVENT(LW(13))
+    CALL(evt_item_move_3d_position, STRING("item00"), 0, 400, -340, 750, EASING_LINEAR)
+    CALL(evt_item_set_position, STRING("item00"), 0, -1000, 0)
+    WAIT_MS(500)
+CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    ADD(LW(0), 30)
+    CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
+    CALL(evt_party_set_dir, 0, 270, -1)
+    CALL(evt_mario_set_dir, 270, 0, 0)
+CALL(evt_puni_set_dir, 1, 270)
+    CALL(evt_cam3d_evt_set, 200, 213, 91, 0, 60, -215, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(500)
+    CALL(evt_item_set_position, STRING("item00"), 0, 400, -215)
+    CALL(evt_item_move_3d_position, STRING("item00"), 0, 50, -215, 3000, EASING_SINE_IN_OUT)
+    SPAWN_EVENT_GET_ID(PTR(starstone_fuwafuwa), LW(13))
+    WAIT_MS(2000)
+    CALL(evt_cam3d_evt_set, 0, 95, 283, 0, 55, -215, 0, EASING_SINE_IN_OUT)
+    WAIT_FRAMES(1)
+    CALL(evt_msg_print_party, STRING("stg2_mri_e23_00_00"))
+    // Lord Crump grabs the Crystal Star to the Third Force's theme.
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_3RD_ENEMY"))
+    CALL(evt_npc_set_position, STRING("第三勢力幹部"), 175, 0, -194)
+    CALL(evt_npc_move_position, STRING("第三勢力幹部"), 0, -215, 0, FLOAT(180.0f), 0)
+    BEGIN_INLINE_EVENT
+        WAIT_MS(150)
+        CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_KANBU_STARSTONE_GET1"), LW(0), LW(1), LW(2), 0)
+        DELETE_EVENT(LW(13))
+        DELETE_EVENT(LW(14))
+        DELETE_EVENT(LW(15))
+        CALL(evt_item_delete, STRING("item00"))
+    END_INLINE_EVENT
+    CALL(evt_npc_jump_position_nohit, STRING("第三勢力幹部"), 0, 0, -215, 300, 30)
+    CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 90)
+    WAIT_MS(200)
+    CALL(evt_npc_move_position, STRING("第三勢力幹部"), 44, -245, 0, FLOAT(180.0f), 0)
+    CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 270)
+    WAIT_MS(200)
+    BEGIN_INLINE_EVENT
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
+    END_INLINE_EVENT
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_mario_set_dir, 90, 200, 0)
+    CALL(evt_party_set_dir, 0, 90, -1)
+    WAIT_MS(1000)
+    CALL(evt_cam3d_evt_set, 248, 125, 212, -7, 38, -208, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(500)
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
+    CALL(evt_msg_print_party, STRING("stg2_mri_e23_00"))
+    SET_VALUE(LW(10), STRING("第三勢力幹部"))
+    // He gloats, then reveals a remote time bomb switch to bury Mario and the Punies.
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e23_01"), 0, LW(10))
+    WAIT_MS(500)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), LW(10), 0, 0, 0, 0, 0, 0, 0, 60)
+    WAIT_MS(1000)
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e23_02"), 0, LW(10))
+    WAIT_MS(200)
+    CALL(evt_npc_set_autotalkpose, LW(10), STRING("S_8"), STRING("T_8"))
+    CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_APPEAR1"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_npc_set_anim, LW(10), STRING("I_6"))
+    WAIT_MS(1000)
+    CALL(evt_cam3d_evt_set, 190, 95, 5, 43, 45, -239, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(1000)
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e23_03"), 0, LW(10))
+    CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_AWAY1"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_npc_set_anim, LW(10), STRING("I_8"))
+    WAIT_MS(1000)
+    CALL(evt_npc_set_ry, LW(10), 90)
+    BEGIN_INLINE_EVENT
+        WAIT_MS(1000)
+        CALL(evt_cam3d_evt_set, 240, 110, 237, 240, 50, -105, 0, EASING_SINE_IN_OUT)
+    END_INLINE_EVENT
+    CALL(evt_npc_move_position, LW(10), 220, -160, 0, FLOAT(120.0f), 0)
+    WAIT_MS(500)
+    CALL(evt_npc_set_ry, LW(10), 270)
+    WAIT_MS(200)
+    CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_APPEAR1"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_npc_set_anim, LW(10), STRING("I_6"))
+    WAIT_MS(1000)
+    CALL(evt_msg_print, 0, STRING("stg2_mri_e23_04"), 0, LW(10))
+    CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_TIMER_SET1"), LW(0), LW(1), LW(2), 0)
+    // He sets the timer, the danger music begins and Crump flees down a pipe.
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
+    CALL(evt_sub_countdown_start, 300000, 300000)
+    CALL(evt_npc_set_anim, LW(10), STRING("I_7"))
+    WAIT_MS(1000)
+    CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_AWAY1"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_npc_set_anim, LW(10), STRING("I_8"))
+    WAIT_MS(1000)
+    CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
+    CALL(evt_npc_jump_position_nohit, LW(10), LW(0), LW(1), LW(2), 200, 27)
+    BEGIN_INLINE_EVENT
+        WAIT_MS(150)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 1000)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        WAIT_MS(350)
+        CALL(evt_mapobj_get_position, STRING("S_dokan"), LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOKAN_FALL1"), LW(0), LW(1), LW(2), 0)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 200, 0, 500)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
+            CALL(evt_mapobj_trans, 1, STRING("S_dokan"), 0, LW(0), 0)
+            CALL(evt_hit_bind_update, STRING("A_dokan"))
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        SET_VALUE(LW(0), STRING("dokan"))
+        CALL_CHILD(bero_case_switch_on)
+    END_INLINE_EVENT
+    WAIT_MS(1200)
+    CALL(evt_npc_set_ry, LW(10), 90)
+    WAIT_MS(200)
+    CALL(evt_npc_move_position, LW(10), 250, -160, 0, FLOAT(180.0f), 0)
+    WAIT_MS(500)
+    CALL_CHILD(npc_dokan)
+    WAIT_MS(2000)
+    CALL(evt_cam3d_evt_set, 0, 105, 269, 0, 45, -76, 0, EASING_SINE_IN_OUT)
+CALL(evt_party_set_dir, 0, 270, -1)
+WAIT_MS(200)
+    CALL(evt_msg_print_party, STRING("stg2_mri_e23_05"))
+    CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
+    SET_VALUE(LW(10), 1)
+    LOOP(0)
+        CALL(evt_puni_set_mode, LW(10), PUNI_MODE_JOIN)
+        CALL(evt_puni_flag_onoff, LW(10), 1, PUNI_FLAG_STRAY)
+        ADD(LW(10), 1)
+        IF_INT_EQUAL(LW(10), 103)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_23_TIME_BOMB_ACTIVATED)
+CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(time_bomb)
     // Controls off, the music fades out and the room begins to shake.
     CALL(evt_mario_key_onoff, 0)
@@ -709,6 +939,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Waits until the floor counter GW(0) reaches zero (enough Punies stand on the plate) and
@@ -842,21 +1073,50 @@ EVT_END()
 
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_MRI14_ORB_ON_PEDESTAL), 0)
+        CALL_CHILD(mri_punipuni_itemselect)
+#else
     IF_INT_EQUAL(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
         CALL_CHILD(PTR(mri_punipuni_itemselect))
+#endif
         IF_INT_EQUAL(LW(1), 0)
             GOTO(100)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSWF(GSWF_MRI14_ORB_ON_PEDESTAL), 1)
+#else
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
+#endif
         CALL(evt_item_set_position, LW(10), 0, 30, -100)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(GF(15), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(mri_punipuni_itemset)
+#else
         CALL_CHILD(PTR(mri_punipuni_itemset))
+#endif
         SET_VALUE(GF(15), 0)
+#if VERSION <= VERSION_DEMO_US
+IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_22_LORD_CRUMP_APPEARS)
+            CALL(evt_mario_key_onoff, 1)
+            SET_VALUE(GF(10), 1)
+            SPAWN_EVENT(punipuni_mario_halt)
+            RETURN
+        END_IF
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSWF(GSWF_MRI14_ORB_ON_PEDESTAL), 0)
+#else
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(mri_punipuni_itemremove)
+#else
         CALL_CHILD(PTR(mri_punipuni_itemremove))
+#endif
     END_IF
     LABEL(100)
     CALL(evt_mario_key_onoff, 1)

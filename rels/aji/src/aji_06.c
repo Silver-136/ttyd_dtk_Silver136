@@ -343,24 +343,44 @@ s32 kusuri_id[] = {
 EVT_BEGIN(peach_evt_kusuri_select)
     CALL(kusuri_list_init)
     SET_VALUE(LF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(LSWF(2), 0)
+#else
     IF_INT_NOT_EQUAL(LSWF_AJI_06_BLUE_POTION_HELD, 0)
+#endif
         CALL(kusuri_list_add, 2)
         SET_VALUE(LF(0), 1)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(LSWF(1), 0)
+#else
     IF_INT_NOT_EQUAL(LSWF_AJI_06_RED_POTION_HELD, 0)
+#endif
         CALL(kusuri_list_add, 1)
         SET_VALUE(LF(0), 1)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(LSWF(3), 0)
+#else
     IF_INT_NOT_EQUAL(LSWF_AJI_06_ORANGE_POTION_HELD, 0)
+#endif
         CALL(kusuri_list_add, 3)
         SET_VALUE(LF(0), 1)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(LSWF(4), 0)
+#else
     IF_INT_NOT_EQUAL(LSWF_AJI_06_GREEN_POTION_HELD, 0)
+#endif
         CALL(kusuri_list_add, 4)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(kusuri_list), LW(1))
+#else
         CALL(evt_win_item_select, 0, PTR(kusuri_list), LW(1), 0)
+#endif
         ELSE
         SET_VALUE(LW(1), -1)
     END_IF
@@ -1889,6 +1909,86 @@ EVT_END()
  * Peach's scenes of STG5_44, 45 and 46 (peach_evt_stg5, the invisible state and peach_evt_stg5_1)
  * and the wall notes. The magician grunt 軍団ザコ魔法使い is removed once Lord Crump is beaten.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(aji_06_init_evt)
+    // Peach's visits get her own music; later visits use the fortress music and ambience.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_00_START)
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+    ELSE
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
+    END_IF
+SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_bero_get_entername, LW(0))
+    // Entering from the ceiling (tenjo): Mario and his partner drop into the lab and land.
+    IF_STR_EQUAL(LW(0), STRING("tenjo"))
+        CALL(evt_cam_letter_box_disable, 1)
+        CALL(evt_mario_key_onoff, 0)
+        CALL(evt_mario_cont_onoff, 0)
+        CALL(evt_party_cont_onoff, 0, 0)
+        CALL(evt_party_cont_onoff, 1, 0)
+        CALL(evt_mario_set_pos, 175, 165, -110)
+        CALL(evt_party_set_pos, 0, 185, 165, -100)
+        CALL(evt_party_set_pos, 1, 195, 165, -90)
+        BEGIN_INLINE_EVENT
+            CALL(evt_seq_wait, SEQ_GAME)
+            CALL(evt_mario_cont_onoff, 1)
+            CALL(evt_party_cont_onoff, 0, 1)
+            CALL(evt_party_cont_onoff, 1, 1)
+            CALL(evt_mario_wait_landon)
+CALL(evt_mario_key_onoff, 1)
+            CALL(evt_cam_letter_box_disable, 0)
+        END_INLINE_EVENT
+    END_IF
+    // The alarm and the potion machine start up.
+    SPAWN_EVENT(evt_emergency)
+    SPAWN_EVENT(kikai_init)
+    // The magician underling is removed once Lord Crump has been beaten.
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+        CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
+    END_IF
+    // Chapter 5: Peach takes over, her partner is dismissed and TEC's request scene starts.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_44_PEACH_TECS_REQUEST_2)
+        CALL(evt_mario_set_mode, 1)
+        CALL(evt_mario_kill_party, 0)
+        CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
+        SPAWN_EVENT(peach_evt_stg5)
+    END_IF
+    // Potion puzzle: Peach is invisible from now on.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_45_PEACH_POTION_PUZZLE)
+        CALL(evt_mario_set_mode, 1)
+        CALL(evt_mario_kill_party, 0)
+        CALL(peach_evt_toumei_onoff, 1)
+        CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
+    END_IF
+    // Disk search: Peach is still invisible and the next scene starts.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_46_PEACH_DISK_SEARCH)
+        CALL(evt_mario_set_mode, 1)
+        CALL(evt_mario_kill_party, 0)
+        CALL(peach_evt_toumei_onoff, 1)
+        CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
+        SPAWN_EVENT(peach_evt_stg5_1)
+    END_IF
+    // Peach can read the notes on the walls; the machine's lamps start switched off.
+    CALL(evt_mario_get_mode, LW(0))
+    IF_INT_EQUAL(LW(0), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo1"), 0, PTR(evt_memo1), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo2"), 0, PTR(evt_memo2), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo3"), 0, PTR(evt_memo3), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo4"), 0, PTR(evt_memo4), 0)
+    END_IF
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_1_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_2_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_3_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_4_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_5_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_6_2"), MAP_OBJ_FLAG_HIDDEN)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(aji_06_init_evt)
     // Peach's visits get her own music; later visits use the fortress music and ambience.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
@@ -1980,6 +2080,7 @@ EVT_BEGIN(aji_06_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_6_2"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
+#endif
 
 USER_FUNC(yuka_anim_reverse_end) {
     yuka_anim.flags |= 2;

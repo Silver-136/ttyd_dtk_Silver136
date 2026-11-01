@@ -111,7 +111,11 @@ static EVT_BEGIN(hint_plate)
 EVT_END()
 
 EVT_BEGIN(kabenuke_check_evt)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_LAS12_WALL_PASSED), 1)
+#else
     IF_INT_EQUAL(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
+#endif
         RETURN
     END_IF
     LABEL(0)
@@ -120,12 +124,22 @@ EVT_BEGIN(kabenuke_check_evt)
     IF_INT_LESS(LW(0), 0)
         GOTO(0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_cam_letter_box_disable, 1)
+    CALL(evt_mario_key_onoff, 0)
+#endif
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_LAS12_WALL_PASSED), 1)
+CALL(evt_mario_key_onoff, 1)
+    CALL(evt_cam_letter_box_disable, 0)
+#else
     SET_VALUE(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
+#endif
     RETURN
 EVT_END()
 
@@ -137,18 +151,31 @@ EVT_END()
 EVT_BEGIN(las_12_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 60, 0, PTR(switch_evt), GSWF(GSWF_LAS12_FLOAT_SWITCH_PRESSED))
+    CALL(evt_mobj_itembox, STRING("box"), -150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS12_KEY_CHEST_OPENED))
+    IF_INT_EQUAL(GSWF(GSWF_LAS12_FLOAT_SWITCH_PRESSED), 0)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 60, 0, PTR(switch_evt), GSWF_LAS_12_SWITCH_PRESSED)
     CALL(evt_mobj_itembox, STRING("box"), -150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_12_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_12_SWITCH_PRESSED, 0)
+#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_pure"), 0, PTR(hint_plate), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(kabenuke_check_evt)
+#else
     SPAWN_EVENT(PTR(kabenuke_check_evt))
+#endif
     RETURN
 EVT_END()
 

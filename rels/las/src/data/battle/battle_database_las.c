@@ -15,13 +15,19 @@
 #include "battle/battle_stage.h"
 #include "driver/npcdrv.h"
 
+#if VERSION > VERSION_DEMO_US
 EffectEntry* hi_fire_eff[6];
+#endif
+#if VERSION > VERSION_DEMO_US
 s8 hi_fire_end_flag[4];
+#endif
 
 USER_FUNC(_gear_rotate);
 USER_FUNC(check_battle_end);
 USER_FUNC(hi_fire_end);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(hi_fire_main);
+#endif
 extern BattleUnitKind unit_black_karon;
 extern BattleUnitKind unit_boss_batten_leader;
 extern BattleUnitKind unit_boss_koopa;
@@ -218,10 +224,12 @@ EvtWord stg_08_6_init_sub_event[46];
 EvtWord stg_08_6_init_event[4];
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000775c, JP las .text+0x7690. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(hi_fire_end) {
     hi_fire_end_flag[0] = 1;
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Scenery pieces of the Palace of Shadow battle stages
@@ -2835,7 +2843,11 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_05_01_off, // select
+#if VERSION <= VERSION_DEMO_US
+        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
+#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
+#endif
         0, // randomMode
         {{3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_CHUBOSS_BATTLE1", // bgmName
@@ -2847,7 +2859,11 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_09_rampell_off, // select
+#if VERSION <= VERSION_DEMO_US
+        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
+#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
+#endif
         6, // randomMode
         {{3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG3_3WOMEN1", // bgmName
@@ -2899,7 +2915,11 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_28_koopa_off, // select
+#if VERSION <= VERSION_DEMO_US
+        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
+#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
+#endif
         6, // randomMode
         {{3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG8_KOOPA", // bgmName
@@ -2911,7 +2931,11 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_bunbaba_off, // select
+#if VERSION <= VERSION_DEMO_US
+NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY,
+#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_NO_PARTY_ENTRY | NPC_BATTLE_STORY), // battleFlags
+#endif
         6, // randomMode
         {{3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {3, 3}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG1_GONBABA1", // bgmName
@@ -2923,7 +2947,11 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_28_batten_leader_off, // select
+#if VERSION <= VERSION_DEMO_US
+        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
+#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
+#endif
         5, // randomMode
         {{0}, {10, 10}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG8_3RDHEAD1", // bgmName
@@ -2935,7 +2963,11 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_29_black_peach_1_off, // select
+#if VERSION <= VERSION_DEMO_US
+        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
+#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
+#endif
         6, // randomMode
         {{10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG8_WITCH", // bgmName
@@ -2947,7 +2979,11 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_29_black_peach_2_off, // select
+#if VERSION <= VERSION_DEMO_US
+        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY, // battleFlags
+#else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
+#endif
         6, // randomMode
         {{10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {10, 10}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1}}, // field_20
         "BGM_BOSS_STG8_LAST_BOSS2", // bgmName
@@ -3463,9 +3499,11 @@ EVT_BEGIN(stg_08_1_init_sub_event)
     CALL(evt_eff, STRING("_hi2"), STRING("fire"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_get_position, STRING("hi3"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("_hi3"), STRING("fire"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
+#endif
     CALL(check_battle_end)
     CALL(evt_eff_softdelete, STRING("_hi1"))
     CALL(evt_eff_softdelete, STRING("_hi2"))
@@ -3479,6 +3517,7 @@ EVT_BEGIN(stg_08_1_init_event)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(stg_08_6_init_sub_event)
     BEGIN_SIBLING_EVENT
         CALL(hi_fire_main)
@@ -3493,8 +3532,10 @@ EVT_BEGIN(stg_08_6_init_sub_event)
     CALL(hi_fire_end)
     RETURN
 EVT_END()
+#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_00007774, JP las .text+0x76A8. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(hi_fire_main) {
     const char* names[6] = {"hi1", "hi2", "hi3", "hi4", "hi5", "hi6"};
     Vec pos;
@@ -3524,8 +3565,33 @@ USER_FUNC(hi_fire_main) {
     }
     return EVT_RETURN_BLOCK;
 }
+#endif
 
 /** Script helper: blocks until the battle sequence has ended. */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(stg_08_6_init_sub_event)
+CALL(evt_mapobj_get_position, STRING("hi1"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi1"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi2"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi2"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi3"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi3"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi4"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi4"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi5"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi5"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+    CALL(evt_mapobj_get_position, STRING("hi6"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING("__hi6"), STRING("fire"), 8, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+CALL(check_battle_end)
+CALL(evt_eff_softdelete, STRING("__hi1"))
+    CALL(evt_eff_softdelete, STRING("__hi2"))
+    CALL(evt_eff_softdelete, STRING("__hi3"))
+    CALL(evt_eff_softdelete, STRING("__hi4"))
+    CALL(evt_eff_softdelete, STRING("__hi5"))
+    CALL(evt_eff_softdelete, STRING("__hi6"))
+RETURN
+EVT_END()
+#endif
 USER_FUNC(check_battle_end) {
     return battleSeqEndCheck() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

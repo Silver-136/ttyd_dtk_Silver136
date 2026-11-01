@@ -120,7 +120,11 @@ static StatusVulnerability regist = {100, 100, 90, 100, 90, 100, 100, 75, 100, 8
  * Invisible and instant KO; otherwise Sleep 95, Stop 95, Dizzy 90, Confuse 95, Freeze 80, Tiny 90,
  * Attack Down 90, Defense Down 95, Allergic 70, Fright 95, Gale Force 90 and Slow 90.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 100, 90, 100, 90, 100, 100, 75, 100, 80, 100, 80, 100, 75, 75, 95, 95, 100, 75, 100, 100, 100};
+#else
 static StatusVulnerability regist = {95, 95, 90, 100, 95, 100, 100, 80, 100, 90, 100, 90, 100, 95, 70, 95, 90, 100, 90, 100, 100, 100};
+#endif
 #endif
 
 /**
@@ -185,6 +189,40 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /** Attack data of Fuzzy's drain attack biribiri counterd attack: no damage, 100% accuracy. */
+#if VERSION <= VERSION_DEMO_US
+static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100,
+0, 0, 0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    NULL, // hpDamageFn
+    {0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, 0, 0, // acHelpMsg..counterResistFlags
+    TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -221,6 +259,7 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Pose table of Fuzzy: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to animation

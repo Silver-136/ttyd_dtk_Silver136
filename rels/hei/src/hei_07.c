@@ -505,7 +505,11 @@ EVT_BEGIN(a_sekizou_1)
     WAIT_MS(500)
     // The statue greets Mario and asks whether he will take its quiz.
     SET_VALUE(LW(0), STRING("anm_dossun_1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(animation_wait)
+#else
     CALL_CHILD(PTR(animation_wait))
+#endif
     WAIT_MS(500)
     SET_VALUE(LW(15), 0)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
@@ -519,29 +523,54 @@ EVT_BEGIN(a_sekizou_1)
     // If Mario declines, the statue scolds him and goes back to sleep.
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(0), STRING("anm_kaiten1"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(animation_wait)
+#else
         CALL_CHILD(PTR(animation_wait))
+#endif
         CALL(evt_msg_print_add, 0, STRING("stg1_hei_21"))
         SET_VALUE(LW(0), STRING("anm_dossun_2"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(animation_wait)
+#else
         CALL_CHILD(PTR(animation_wait))
+#endif
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1))
+#else
         CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
+#endif
         RETURN
     END_IF
     // If he accepts, the statue gets ready and the quiz music starts.
     SET_VALUE(LW(0), STRING("anm_kaiten1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(animation_wait)
+#else
     CALL_CHILD(PTR(animation_wait))
+#endif
     CALL(evt_msg_print_add, 0, STRING("stg1_hei_22"))
     CALL(evt_map_playanim, STRING("anm_denshoku"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_mamekyuu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_QUIZ1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(offscreen_to_quiz)
+#else
     CALL_CHILD(PTR(offscreen_to_quiz))
+#endif
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 1500, EASING_SINE_IN_OUT)
     WAIT_MS(1500)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    // Quiz loop: each round reads a question from quiz_data and Mario picks an answer; sometimes the statue
+#else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#endif
     // Question index, correct answers, and wrong answers; finish at five correct or three wrong.
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
@@ -571,7 +600,11 @@ EVT_BEGIN(a_sekizou_1)
         BEGIN_INLINE_EVENT
             IF_INT_EQUAL(LW(11), 0)
                 SET_VALUE(LW(0), STRING("anm_kaiten1"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(animation_wait)
+#else
                 CALL_CHILD(PTR(animation_wait))
+#endif
                 WAIT_MS(400)
             END_IF
         END_INLINE_EVENT
@@ -599,7 +632,11 @@ EVT_BEGIN(a_sekizou_1)
         END_IF
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+#else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#endif
         CALL(evt_msg_continue)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
         // A right answer plays a jingle and the statue howls; the fifth right answer ends the quiz, the
@@ -610,49 +647,90 @@ EVT_BEGIN(a_sekizou_1)
                 ELSE
                 CALL(evt_snd_sfxon, STRING("SFX_GOOD_SOUND1"), 0)
             END_IF
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(seikai_anime)
+#else
             CALL_CHILD(PTR(seikai_anime))
+#endif
             ADD(LW(12), 1)
             SWITCH(LW(12))
                 CASE_LESS(4)
                 CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, EASING_SINE_IN_OUT)
                 WAIT_FRAMES(1)
                 SET_VALUE(LW(0), STRING("anm_kaiten1"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(animation_wait)
+#else
                 CALL_CHILD(PTR(animation_wait))
+#endif
                 CALL(evt_msg_print, 0, STRING("stg1_hei_33"), PTR(callback), 0)
                 CASE_EQUAL(4)
                 CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, EASING_SINE_IN_OUT)
                 WAIT_FRAMES(1)
                 SET_VALUE(LW(0), STRING("anm_kaiten1"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(animation_wait)
+#else
                 CALL_CHILD(PTR(animation_wait))
+#endif
                 CALL(evt_msg_print, 0, STRING("stg1_hei_34"), PTR(callback), 0)
                 SET_VALUE(LF(0), 1)
                 CASE_EQUAL(5)
                 CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, EASING_SINE_IN_OUT)
                 WAIT_FRAMES(1)
                 SET_VALUE(LW(0), STRING("anm_kaiten3"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(animation_wait)
+#else
                 CALL_CHILD(PTR(animation_wait))
+#endif
                 CALL(evt_msg_print, 0, STRING("stg1_hei_35"), PTR(callback), 0)
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(offscreen_to_normal)
+#else
                 CALL_CHILD(PTR(offscreen_to_normal))
+#endif
                 CALL(evt_snd_bgmoff, PSND_FADEOUT)
                 WAIT_MS(1000)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_hei_35_01"), PTR(callback), 0)
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(sekizou_move)
+#else
                 CALL_CHILD(PTR(sekizou_move))
+#endif
                 SET_VALUE(LW(0), STRING("anm_kaiten1"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(animation_wait)
+#else
                 CALL_CHILD(PTR(animation_wait))
+#endif
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 65, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_hei_41"), PTR(callback), 0)
                 SET_VALUE(LW(0), STRING("anm_dossun_2"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(animation_wait)
+#else
                 CALL_CHILD(PTR(animation_wait))
+#endif
                 CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1))
+SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_06_QUIZ)
+#else
                 CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
                 SET_VALUE(GSW_STORY_PROGRESS, STG1_06_QUIZ)
+#endif
                 CALL(evt_exit_case_evt)
                 RETURN
             END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(seikai_anime_stop)
+#else
             CALL_CHILD(PTR(seikai_anime_stop))
+#endif
             // A wrong answer plays a buzzer; the third wrong answer summons four Clefts that attack, and after
             // the fight the statue moves aside as well.
             ELSE
@@ -661,7 +739,11 @@ EVT_BEGIN(a_sekizou_1)
                 ELSE
                 CALL(evt_snd_sfxon, STRING("SFX_BAD_SOUND1"), 0)
             END_IF
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(fuseikai_anime)
+#else
             CALL_CHILD(PTR(fuseikai_anime))
+#endif
             ADD(LW(13), 1)
             SWITCH(LW(13))
                 CASE_EQUAL(1)
@@ -683,9 +765,17 @@ EVT_BEGIN(a_sekizou_1)
                 BEGIN_INLINE_EVENT
                     WAIT_MS(700)
                     SET_VALUE(LW(0), STRING("anm_kaiten1"))
+#if VERSION <= VERSION_DEMO_US
+                    CALL_CHILD(animation_wait)
+#else
                     CALL_CHILD(PTR(animation_wait))
+#endif
                 END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(offscreen_to_normal)
+#else
                 CALL_CHILD(PTR(offscreen_to_normal))
+#endif
                 CALL(evt_snd_bgmoff, PSND_FADEOUT)
                 WAIT_MS(1000)
                 SET_VALUE(LW(14), 0)
@@ -694,19 +784,35 @@ EVT_BEGIN(a_sekizou_1)
                 CALL(evt_msg_print, 0, STRING("stg1_hei_38_01"), PTR(callback), 0)
                 CALL(evt_npc_set_position, STRING("シンエモン1"), 70, 250, -53)
                 SET_VALUE(LW(10), STRING("シンエモン1"))
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(npc_jump)
+#else
                 SPAWN_EVENT(PTR(npc_jump))
+#endif
                 WAIT_MS(200)
                 CALL(evt_npc_set_position, STRING("シンエモン2"), 47, 250, 2)
                 SET_VALUE(LW(10), STRING("シンエモン2"))
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(npc_jump)
+#else
                 SPAWN_EVENT(PTR(npc_jump))
+#endif
                 WAIT_MS(200)
                 CALL(evt_npc_set_position, STRING("シンエモン3"), 79, 250, 53)
                 SET_VALUE(LW(10), STRING("シンエモン3"))
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(npc_jump)
+#else
                 SPAWN_EVENT(PTR(npc_jump))
+#endif
                 WAIT_MS(200)
                 CALL(evt_npc_set_position, STRING("シンエモン4"), 122, 250, 73)
                 SET_VALUE(LW(10), STRING("シンエモン4"))
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(npc_jump)
+#else
                 SPAWN_EVENT(PTR(npc_jump))
+#endif
                 WAIT_MS(200)
                 WAIT_MS(500)
                 SET_VALUE(LW(14), 0)
@@ -756,22 +862,43 @@ EVT_BEGIN(a_sekizou_1)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_hei_40"), PTR(callback), 0)
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(sekizou_move)
+#else
                 CALL_CHILD(PTR(sekizou_move))
+#endif
                 SET_VALUE(LW(0), STRING("anm_kaiten1"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(animation_wait)
+#else
                 CALL_CHILD(PTR(animation_wait))
+#endif
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 150, 65, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_hei_41"), PTR(callback), 0)
                 SET_VALUE(LW(0), STRING("anm_dossun_2"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(animation_wait)
+#else
                 CALL_CHILD(PTR(animation_wait))
+#endif
                 CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1) | PSND_QUICK)
+                SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_06_QUIZ)
+#else
                 CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
                 SET_VALUE(GSW_STORY_PROGRESS, STG1_06_QUIZ)
+#endif
                 CALL(evt_exit_case_evt)
                 RETURN
             END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(fuseikai_anime_stop)
+#else
             CALL_CHILD(PTR(fuseikai_anime_stop))
+#endif
         END_IF
         CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 800, EASING_SINE_IN_OUT)
         WAIT_MS(800)

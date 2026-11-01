@@ -985,7 +985,11 @@ EVT_BEGIN(btldefaultevt_Wait)
 EVT_END()
 
 EVT_BEGIN(btldefaultevt_LectureEnd)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, 69)
+#else
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_LECTURE, UNIT_DATA_LECTURE_END_EVENT)
+#endif
     RETURN
 EVT_END()
 

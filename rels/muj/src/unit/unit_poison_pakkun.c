@@ -111,6 +111,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * Status vulnerability of the Putrid Piranha (percent chance to take each status): immune to poison;
  * resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 90, 70, 0, 85, 100, 100, 90, 100, 80, 100, 80, 100, 80, 80, 30, 40, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     105, // sleep
     80, // stop
@@ -135,6 +138,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /**
  * Body part of the Putrid Piranha (model c_pakflwr_p): hit position, defences, attributes and pose table.
@@ -181,6 +185,45 @@ BattleWeapon weapon_poison_pakkun_attack = {
 };
 
 /** Weapon of the Putrid Piranha's breath: 2 damage, jump-type contact attack. */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon weapon_poison_pakkun_breath_attack = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL,
+SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+COUNTER_RESIST_ALL, // counterResistFlags
+    0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..dizzyTime
+    50, // poisonChance
+    10, // poisonTime
+    1, // poisonStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // confuseChance..burnTime
+    0, 0, 0, 0, 0, 0, 0, 0, // freezeChance..atkChangeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // defChangeChance..fastChance
+    0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
+    0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon weapon_poison_pakkun_breath_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -222,6 +265,7 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Attack event (also its confusion event) of the Putrid Piranha: on a first strike it bites at once;

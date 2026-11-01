@@ -156,35 +156,62 @@ static USER_FUNC(evtflash) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(elder_talk_sub_punicheck) {
+#else
 USER_FUNC(elder_talk_sub_punicheck) {
+#endif
     EvtWord* args = event->args;
     s32* punigp = puniGetPunigp();
     s32 i;
     s32 traps = 0;
     s32 others = 0;
     s32 result;
+#if VERSION <= VERSION_DEMO_US
+    Vec pos;
+#else
     s32 c[5];
+#endif
     s32 trap;
     s32 puni;
-
+#if VERSION <= VERSION_DEMO_US
+#endif
     for (i = 1; i < 103; i++) {
         puniGetPunidat();
+#if VERSION <= VERSION_DEMO_US
+        puniswGetindex(LSW(0), i - 1, &puni, &pos);
+        if (puni != 0 && puni != punigp->floor) {
+            others++;
+        } else {
+#else
         if (i == 1 && swGet(0xB14)) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
             continue;
         }
         puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, c);
+#endif
         puniswTrapGetindex(i, &trap);
         if (trap != 0) {
             traps++;
+#if VERSION <= VERSION_DEMO_US
+            }
+#else
         } else if (puni != 0 && puni != punigp[0x328 / 4]) {
             others++;
+#endif
         }
     }
     result = 1;
+#if VERSION <= VERSION_DEMO_US
+    if (traps != 0) {
+        result = 2;
+    }
+#endif
     if (others != 0) {
         result = 0;
+#if VERSION > VERSION_DEMO_US
     } else if (traps != 0) {
         result = 2;
+#endif
     }
     evtSetValue(event, args[0], result);
     return EVT_RETURN_DONE;
@@ -305,15 +332,33 @@ EVT_BEGIN(puni_return)
     LOOP(0)
         SET_VALUE(LW(11), LW(10))
         ADD(LW(11), -1)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_puni_get_lsw_index, LSW(0), LW(11), LW(0), LW(1), LW(2), LW(3))
+#else
         CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, LW(11), LW(0), LW(1), LW(2), LW(3))
+#endif
         CALL(evt_puni_get_flag, LW(10), LW(4))
+#if VERSION <= VERSION_DEMO_US
+IF_INT_NOT_EQUAL(LW(0), 0)
+IF_BITS_SET(LW(4), PUNI_FLAG_ACTIVE)
+DEBUG_PUT_MSG(STRING("長老の能力"))
+                DEBUG_PUT_MSG(STRING("プニ番号"))
+                DEBUG_PUT_REG(LW(11))
+DEBUG_PUT_MSG(STRING("同じエリアにいます"))
+ELSE
+READ_INT2(LW(12), LW(13))
+                CALL(evt_puni_set_lsw_index, LSW(0), LW(11), 0, 0, 0, 0)
+                CALL(evt_puni_init_puni, LW(10), 1, LW(12), 0, LW(13), 0)
+#else
         CALL(evt_puni_get_trap_index, LW(10), LW(5))
         IF_INT_EQUAL(LW(10), 1)
             IF_INT_EQUAL(GSWF_MRI_PUNIO_WAITING_AT_JAIL, 1)
                 DEBUG_PUT_MSG(STRING("牢屋の前に待機しています"))
                 GOTO(100)
+#endif
             END_IF
         END_IF
+#if VERSION > VERSION_DEMO_US
         IF_INT_NOT_EQUAL(LW(5), 0)
             DEBUG_PUT_MSG(STRING("トラップにかかっています"))
             GOTO(100)
@@ -331,6 +376,7 @@ EVT_BEGIN(puni_return)
         CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, LW(11), 0, 0, 0, 0)
         CALL(evt_puni_init_puni, LW(10), 1, LW(12), 0, LW(13), 0)
         LABEL(100)
+#endif
         ADD(LW(10), 1)
         IF_INT_EQUAL(LW(10), 103)
             BREAK_LOOP
@@ -481,16 +527,28 @@ static s32 iri_17_item_tbl[] = {
  * and has a different line after the praise and after the game's end.
  */
 static EVT_BEGIN(elder_talk)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_EMERGENCY_SHROOM)
+#else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_EMERGENCY_SHROOM)
+#endif
         CALL(evt_pouch_check_item, ITEM_LIFE_SHROOM, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("irai_10_01"), 0, STRING("me"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(irai_item_tbl), LW(0))
+#else
             CALL(evt_win_item_select, 0, PTR(irai_item_tbl), LW(0), 0)
+#endif
             IF_INT_NOT_EQUAL(LW(0), -1)
                 CALL(evt_msg_print, 0, STRING("irai_10_02"), 0, STRING("me"))
                 CALL(evt_sub_get_coin, 60)
                 CALL(evt_pouch_remove_item, ITEM_LIFE_SHROOM, LW(0))
+#if VERSION <= VERSION_DEMO_US
+                SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+#else
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+#endif
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_EMERGENCY_SHROOM), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
@@ -499,12 +557,20 @@ static EVT_BEGIN(elder_talk)
         END_IF
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NEWSLETTER)
+#else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
+#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
+#else
                 CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
+#endif
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL(evt_pouch_remove_item, ITEM_ROUTING_SLIP, LW(0))
                     CALL(evt_msg_print, 0, STRING("irai_17_01"), 0, 0)
@@ -525,12 +591,24 @@ static EVT_BEGIN(elder_talk)
             END_IF
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_BETWEEN(STG2_15_11_PUNIES, STG2_26_PRAISE_FROM_THE_PUNI)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_MRI01_ELDER_POWERS_EXPLAINED), 0)
+#else
         IF_INT_EQUAL(GSWF_MRI_01_ELDER_TIP_SEEN, 0)
+#endif
             CALL(evt_msg_print, 0, STRING("stg2_mri_e15_28"), 0, STRING("me"))
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(elder_talk_sub)
+#else
             CALL_CHILD(PTR(elder_talk_sub))
+#endif
         END_IF
         CASE_BETWEEN(STG2_26_PRAISE_FROM_THE_PUNI, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_001"), 0, STRING("me"))
@@ -558,16 +636,28 @@ EVT_END()
  * otherwise it has a line that changes after the story.
  */
 EVT_BEGIN(puni_1_talk)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
+IF_INT_EQUAL(GSWF(GSWF_STG7_WHITE_GLITZVILLE_HINT), 0)
+#else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_02_MAYOR_BOB, STG7_02_MAYOR_BOB)
         IF_INT_EQUAL(GSWF_TOU_GENERAL_WHITE_HINT_HEARD, 0)
+#endif
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_000_1"), 0, STRING("me"))
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_STG7_WHITE_BOGGLY_HINT), 1)
+#else
             SET_VALUE(GSWF_MRI_GENERAL_WHITE_HINT_HEARD, 1)
+#endif
         END_IF
+#if VERSION > VERSION_DEMO_US
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
+#endif
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_000_1_1"), 0, STRING("me"))
     END_SWITCH
@@ -943,6 +1033,7 @@ EVT_BEGIN(bigtree_firstbattle)
     // Punio leads Mario into the empty village; he wonders where everyone is and calls out.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
         CALL(evt_mario_set_dir, 90, 200, 0)
@@ -960,6 +1051,7 @@ EVT_BEGIN(bigtree_firstbattle)
         CALL(evt_party_stop, 0)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
+#endif
     CALL(evt_cam3d_evt_set, -28, 152, 548, -28, 57, 7, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     SET_VALUE(LW(10), STRING("ガイド"))
@@ -995,7 +1087,11 @@ EVT_BEGIN(bigtree_firstbattle)
     WAIT_MS(580)
     SET_VALUE(LW(9), 1)
     SET_VALUE(LW(10), STRING("S_doa_r_a"))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_mri_door_open_pure)
+#else
     SPAWN_EVENT(PTR(evt_mri_door_open_pure))
+#endif
     WAIT_MS(1580)
     CALL(evt_npc_set_position, STRING("ガイド"), -20, 0, 50)
     CALL(evt_mario_set_pos, -60, 0, 30)
@@ -1004,7 +1100,11 @@ EVT_BEGIN(bigtree_firstbattle)
         WAIT_MS(1500)
         SET_VALUE(LW(9), 1)
         SET_VALUE(LW(10), STRING("S_doa_r_a"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_mri_door_close_pure)
+#else
         SPAWN_EVENT(PTR(evt_mri_door_close_pure))
+#endif
     END_INLINE_EVENT
     SET_VALUE(LW(10), STRING("第三勢力部下Ａ"))
     SET_VALUE(LW(11), STRING("第三勢力部下Ｂ"))
@@ -1096,8 +1196,12 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_npc_battle_start, LW(10))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_key_onoff, 1)
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_11_X_NAUT_BATTLE)
+#else
     CALL(evt_party_run, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
+#endif
     SET_VALUE(LW(10), STRING("第三勢力部下Ａ"))
     SET_VALUE(LW(11), STRING("第三勢力部下Ｂ"))
     CALL(evt_npc_set_position, STRING("ガイド"), -80, 0, 50)
@@ -1115,7 +1219,11 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_npc_flag_onoff, 1, LW(11), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_map_playanim, STRING("doalight01"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_cam3d_evt_set, -20, 125, 450, -20, 45, 7, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(meet_rival)
+#else
     SPAWN_EVENT(PTR(meet_rival))
+#endif
     RETURN
 EVT_END()
 
@@ -2846,7 +2954,11 @@ EVT_BEGIN(boss_battle_win)
         END_IF
     END_LOOP
     // The Punies in the party run up to the wreckage (the Jabbi among them, if he joined).
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_MRI_JABBI_IN_PUNI_GROUP), 1)
+#else
     IF_INT_EQUAL(GSWF_MRI_JABBLE_JOINED, 1)
+#endif
         CALL(evt_puni_set_mode, 3, PUNI_MODE_INERT)
         CALL(evt_puni_set_position, 3, -120, 0, 10)
         CALL(evt_puni_set_anim, 3, 0)
@@ -3054,34 +3166,66 @@ EVT_BEGIN(boss_battle_win)
         CALL(evt_npc_set_position, LW(14), 0, -1000, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(1100)
+#else
         WAIT_MS(600)
+#endif
         CALL(evt_npc_get_position, LW(11), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(0), -40)
+#else
         ADD(LW(0), -80)
+#endif
         ADD(LW(1), 30)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         // The Punies cheer and the grunts flee in a panic.
         CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_03"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(1100)
+#else
         WAIT_MS(600)
+#endif
         CALL(evt_npc_get_position, LW(12), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(0), -40)
+#else
         ADD(LW(0), -80)
+#endif
         ADD(LW(1), 30)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_04"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(1700)
+#else
         WAIT_MS(1200)
+#endif
         CALL(evt_npc_get_position, LW(13), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(0), -40)
+#else
         ADD(LW(0), -80)
+#endif
         ADD(LW(1), 30)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_05"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(2000)
+#else
         WAIT_MS(1500)
+#endif
         CALL(evt_npc_get_position, LW(14), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(0), -40)
+#else
         ADD(LW(0), -80)
+#endif
         ADD(LW(1), 30)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_06"), 0, 0)
@@ -3138,7 +3282,11 @@ EVT_BEGIN(boss_battle_win)
     CALL(evt_npc_set_ry_lr, STRING("ライバルsp"), 0)
     CALL(evt_mario_mov_pos, -50, 60, 500)
     // The story advances and the Emerald Star is held up for the Star Stone sequence.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
+#endif
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
     CALL(evt_item_set_position, STRING("item00"), 0, -1000, 0)
     SET_VALUE(LW(10), STRING("item01"))
@@ -3146,8 +3294,12 @@ EVT_BEGIN(boss_battle_win)
     CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
     SET_VALUE(LW(0), 2)
     SET_VALUE(LW(1), LW(10))
+#if VERSION <= VERSION_DEMO_US
+CALL_CHILD(evt_sub_starstone)
+#else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL_CHILD(PTR(evt_sub_starstone))
+#endif
     RETURN
 EVT_END()
 

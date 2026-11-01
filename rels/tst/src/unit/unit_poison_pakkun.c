@@ -44,7 +44,11 @@ static EvtWord counter_damage_event[30];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord return_event[244];
 #else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord return_event[244];
+#else
 static EvtWord return_event[256];
+#endif
 #endif
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
@@ -53,6 +57,73 @@ static EvtWord wait_event[6];
  * Unit definition of the Putrid Piranha: its HP, level, sizes, sounds, status vulnerability,
  * parts and init script.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_poison_pakkun = {
+    88,
+    "btl_un_poison_pakkun",
+    8,
+    0,
+    1,
+    1,
+    20,
+    0,
+2,
+    70,
+    1,
+    60,
+9999,
+    40,
+    48,
+    4,
+    48,
+    0.0f,
+    24.0f,
+    0.0f,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    0.0f,
+    0.0f,
+    16.0f,
+    32.0f,
+    0.0f,
+    0.0f,
+    24.0f,
+    0.0f,
+    40.0f,
+    48.0f,
+    0,
+    0,
+    0,
+    2,
+    100,
+    20,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_ENM_PAKKUN_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    0,
+    &regist,
+    1,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_poison_pakkun = {
     88,
     "btl_un_poison_pakkun",
@@ -125,6 +196,7 @@ BattleUnitKind unit_poison_pakkun = {
     init_event,
     data_table,
 };
+#endif
 
 /** Defence of the Putrid Piranha: none, every hit does its full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -142,7 +214,11 @@ static StatusVulnerability regist = {90, 90, 70, 0, 85, 100, 100, 90, 100, 80, 1
  * Status vulnerability of the Putrid Piranha in the retail builds: immune to poison; extra prone to sleep;
  * resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 90, 70, 0, 85, 100, 100, 90, 100, 80, 100, 80, 100, 80, 80, 30, 40, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {105, 80, 50, 0, 95, 100, 100, 70, 100, 90, 100, 90, 100, 95, 80, 20, 40, 100, 80, 100, 100, 95};
+#endif
 #endif
 
 /** Body part of the Putrid Piranha: a single part using the c_pakflwr_p model. */
@@ -191,6 +267,45 @@ BattleWeapon weapon_poison_pakkun_attack = {
  * Attack data of the Putrid Piranha's poison breath: 2 damage; 50% chance of poison for 10 turns;
  * pierces defence.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon weapon_poison_pakkun_breath_attack = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL,
+SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+COUNTER_RESIST_ALL, // counterResistFlags
+    0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..dizzyTime
+    50, // poisonChance
+    10, // poisonTime
+    1, // poisonStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // confuseChance..burnTime
+    0, 0, 0, 0, 0, 0, 0, 0, // freezeChance..atkChangeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // defChangeChance..fastChance
+    0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
+    0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon weapon_poison_pakkun_breath_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -236,6 +351,7 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Attack script of the Putrid Piranha: in a battle-flag-2 battle it bites (normal_attack_event with
@@ -578,6 +694,40 @@ EVT_END()
  * then pops back up standing (PKF_E_1, then PKF_S_1) with the ground hit, cursor, status-icon and kiss offsets,
  * the ceiling attributes cleared and the ground pose table.
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(ceil_fall_ready_event)
+    CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    BEGIN_SIBLING_EVENT
+        CALL(shadow_scale_small, UNIT_ID_SELF)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_4"))
+    WAIT_MS(300)
+    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
+    CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
+    WAIT_MS(500)
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    BEGIN_SIBLING_EVENT
+        CALL(shadow_scale_return, UNIT_ID_SELF)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
+    CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
+    CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
+    CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 48)
+CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+    CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
+    WAIT_MS(500)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -613,6 +763,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
     RETURN
 EVT_END()
+#endif
 
 /**
  * Burrow back after an attack (run by normal_attack_event and counter_damage_event):
@@ -625,6 +776,71 @@ EVT_END()
  * flipped hit and cursor offsets, ceiling unit attribute and the two part attributes on,
  * the ceiling pose table) with ceil_fall_ready_event as its ceiling-fall script.
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(return_event)
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(pakkun_ceil_exist, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_sub_random, 1, LW(15))
+    ELSE
+        SET_VALUE(LW(15), 0)
+    END_IF
+    CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    BEGIN_SIBLING_EVENT
+        CALL(shadow_scale_small, UNIT_ID_SELF)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_2"))
+    WAIT_MS(300)
+    CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+    IF_INT_EQUAL(LW(15), 0)
+        CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
+        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
+        CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
+        WAIT_MS(500)
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        BEGIN_SIBLING_EVENT
+            CALL(shadow_scale_return, UNIT_ID_SELF)
+        END_SIBLING_EVENT
+        CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
+        CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
+        CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 50, 0)
+        CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 48)
+CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+        CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
+        WAIT_MS(500)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
+    ELSE
+        CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, PTR(ceil_fall_ready_event))
+        CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 130, LW(2))
+        CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 130, LW(2))
+        WAIT_MS(500)
+        CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+        BEGIN_SIBLING_EVENT
+            CALL(shadow_scale_return, UNIT_ID_SELF)
+        END_SIBLING_EVENT
+        CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
+        CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_NO_SHADOW)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_3"))
+        CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -80, 0)
+        CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -50, 0)
+        CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 4, 10)
+CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kCeiling)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
+        CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET)
+        CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_ceil))
+        WAIT_MS(500)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_3"))
+    END_IF
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(return_event)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(pakkun_ceil_exist, LW(0))
@@ -694,6 +910,7 @@ static EVT_BEGIN(return_event)
     END_IF
     RETURN
 EVT_END()
+#endif
 
 /**
  * The Putrid Piranha's bite with the weapon in LW(9), at the First Strike target in a battle-flag-2 battle,
@@ -875,6 +1092,17 @@ static USER_FUNC(shadow_scale_memory) {
  * Script helper: writes 0 to args[0] when the stage's iron frame is gone (STAGE_OBJ_FLAG_IRON_FRAME_GONE) and 1
  * while the ceiling still exists, so the plant knows whether it can hang from it.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(pakkun_ceil_exist) {
+    EvtWord* args = event->args;
+if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
+evtSetValue(event, args[0], 0);
+    } else {
+        evtSetValue(event, args[0], 1);
+    }
+    return EVT_RETURN_DONE;
+}
+#else
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 
@@ -889,6 +1117,7 @@ static USER_FUNC(pakkun_ceil_exist) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper: puffs one green vapour effect at a random spot on one side of the stage (x about -125 when

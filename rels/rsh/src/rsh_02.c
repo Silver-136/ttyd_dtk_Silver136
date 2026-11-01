@@ -104,12 +104,14 @@ EvtWord evt_nidome_bed[126];
 
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002384, JP rsh .text+0x22C0. See docs/NAME_PROVENANCE.md.
 // Wait until neither roll-cancel protection nor continued slit movement prevents normalization.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(mario_normalize_wait) {
     if (!marioRollCancelDisable() && !marioSlitContinueChk()) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
 }
+#endif
 
 /** Doors and exits of rsh_02 variant a: w_bero to rsh_03_a; e_bero to rsh_01_a. */
 static BeroEntry bero_data_a[] = {
@@ -545,11 +547,20 @@ EVT_BEGIN(talk_yuurei)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     // The ghost's music plays and her quest begins.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG5_GHOST1"))
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_LESS(STG6_15_GHOST_REQUEST)
         SET_VALUE(LW(13), 0)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_14_GHOST_T)
+            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_14_GHOST_T)
+#else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
+#endif
             // She introduces herself and asks Mario a favour.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_118"), PTR(yuurei_callback), 0)
             ELSE
@@ -561,7 +572,11 @@ EVT_BEGIN(talk_yuurei)
             SET_VALUE(LW(14), 0)
             SET_VALUE(LW(15), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_120"))
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_15_GHOST_REQUEST)
+#else
             SET_VALUE(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
+#endif
             ELSE
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_121"))
         END_IF
@@ -570,7 +585,11 @@ EVT_BEGIN(talk_yuurei)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_122"), 0, 0)
         CASE_LESS(STG6_18_BLANKET_EXCHANGE)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_135"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
+#else
         CALL(evt_win_item_select, 0, PTR(item_tbl2), LW(1), 0)
+#endif
         IF_INT_NOT_EQUAL(LW(1), -1)
             // She takes the diary and gives Mario a Blanket in return.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_136"), 0, 0)
@@ -585,10 +604,18 @@ EVT_BEGIN(talk_yuurei)
             CALL(evt_snd_bgmoff, PSND_PAUSE)
             CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG5_GHOST1"))
             CALL(evt_msg_print, 0, STRING("stg6_rsh_138"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_RSH02_GHOST_TALK_ACTIVE), 1)
+#else
             // Wait for the background alpha loop to acknowledge its hold before changing the ghost directly.
             SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 1)
+#endif
             LOOP(0)
+#if VERSION <= VERSION_DEMO_US
+                IF_INT_EQUAL(GSWF(GSWF_RSH02_GHOST_FADE_PAUSED), 1)
+#else
                 IF_INT_EQUAL(GSWF_RSH_GHOST_FADE_HELD, 1)
+#endif
                     BREAK_LOOP
                 END_IF
                 WAIT_FRAMES(1)
@@ -659,11 +686,19 @@ EVT_BEGIN(talk_yuurei)
                     BREAK_LOOP
                 END_IF
             END_LOOP
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_RSH02_GHOST_TALK_ACTIVE), 0)
+#else
             SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 0)
+#endif
             // Afterwards she repeats a hint or a closing line for each stage.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_139"), 0, 0)
             CALL(evt_pouch_remove_item, ITEM_RAGGED_DIARY, LW(0))
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_18_BLANKET_EXCHANGE)
+#else
             SET_VALUE(GSW_STORY_PROGRESS, STG6_18_BLANKET_EXCHANGE)
+#endif
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_140"), 0, 0)
         END_IF
@@ -1009,7 +1044,9 @@ EVT_END()
  * then the story advances to STG6_26_ZIP_TOAD_CAUGHT and the map changes to rsh_02_b.
  */
 EVT_BEGIN(evt_toron_catch)
+#if VERSION > VERSION_DEMO_US
     // GF(0) requests the jumping loop to stop; GF(1) acknowledges its cleanup.
+#endif
     SET_VALUE(LW(10), 0)
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
@@ -1053,12 +1090,18 @@ EVT_BEGIN(evt_toron_catch)
     LOOP(0)
         CALL(toron_check)
         IF_INT_EQUAL(LW(10), 1)
+#if VERSION > VERSION_DEMO_US
             CALL(evt_mario_key_onoff, 0)
             BEGIN_INLINE_EVENT
                 CALL(mario_normalize_wait)
+#endif
                 CALL(evt_mario_normalize)
                 CALL(evt_party_yoshi_ride, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_mario_key_onoff, 0)
+#else
             END_INLINE_EVENT
+#endif
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -1091,11 +1134,22 @@ EVT_BEGIN(evt_toron_catch)
     // Zip Toad is caught and says his piece.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_182"), 0, STRING("トロン"))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_RSH_SCRIPTED_ENTRY_PENDING), 1)
+#else
     SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
+#endif
     CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 2000, FADE_IN_BLACK, 2000)
     // The story advances and the map changes to rsh_02_b.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_26_ZIP_TOAD_CAUGHT)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
+#endif
     CALL(evt_bero_mapchange, STRING("rsh_02_b"), STRING("w_bero"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_key_onoff, 1)
+#endif
     RETURN
 EVT_END()
 
@@ -1165,7 +1219,11 @@ EVT_BEGIN(evt_toron_catch2)
     WAIT_MS(500)
     CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
     LOOP(0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(item_tbl), LW(1))
+#else
         CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)
+#endif
         IF_INT_NOT_EQUAL(LW(1), -1)
             BREAK_LOOP
         END_IF
@@ -1191,7 +1249,11 @@ EVT_BEGIN(evt_toron_catch2)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_191"), 0, STRING("ポワン探偵"))
     CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_ENEMY)
     CALL(evt_pouch_remove_item, ITEM_VITAL_PAPER, LW(0))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_26_ZIP_TOAD_CAUGHT)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
+#endif
     WAIT_MS(750)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1205,6 +1267,146 @@ EVT_BEGIN(evt_toron_catch2)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_toron_appear)
+    LABEL(100)
+    CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
+    CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
+    CALL(evt_npc_set_ry, STRING("トロン"), 270)
+    CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
+    WAIT_FRAMES(1)
+    // Wait until Mario has found the clue and hides in the shadows with Vivian.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_24_02_ANOTHER_CLUE)
+        GOTO(100)
+    END_IF
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    IF_INT_GREATER(LW(0), -110)
+        GOTO(100)
+    END_IF
+IF_INT_GREATER(LW(2), -70)
+        GOTO(100)
+    END_IF
+    SET_VALUE(LW(0), 0)
+    LOOP(0)
+        CALL(evt_mario_party_use_check, LW(1))
+        IF_INT_EQUAL(LW(1), 6)
+            ADD(LW(0), 1)
+            IF_INT_GREATER(LW(0), 300)
+                BREAK_LOOP
+            END_IF
+        ELSE
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+    IF_INT_LESS(LW(0), 300)
+        GOTO(100)
+    END_IF
+    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_NO_HIT)
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    IF_INT_LESS(LW(0), -200)
+        CALL(evt_npc_set_position, STRING("トロン"), -130, -50, -278)
+        CALL(evt_npc_set_ry, STRING("トロン"), 270)
+        CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRON_APPEAR1"), LW(0), LW(1), LW(2), 0)
+        SET_FLOAT_VALUE(LW(3), FLOAT(0.8330078f))
+        SET_VALUE(LW(4), 1)
+        SET_VALUE(LF(0), 0)
+        LOOP(60)
+            ADD_FLOAT(LW(1), LW(3))
+            CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
+            CALL(evt_mario_party_use_check, LW(5))
+            IF_INT_NOT_EQUAL(LW(5), 6)
+                BEGIN_INLINE_EVENT
+                    LOOP(100)
+                        SUBTRACT_FLOAT(LW(1), LW(3))
+                        CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
+                END_INLINE_EVENT
+                SET_VALUE(LF(0), 1)
+                BREAK_LOOP
+            END_IF
+            ADD(LW(4), 1)
+            WAIT_FRAMES(1)
+        END_LOOP
+        IF_INT_EQUAL(LF(0), 1)
+            GOTO(100)
+        END_IF
+    ELSE
+        CALL(evt_npc_pera_onoff, STRING("トロン"), 0)
+        CALL(evt_npc_set_rotate, STRING("トロン"), 180, 180, 90)
+        CALL(evt_npc_set_position, STRING("トロン"), -300, 2, -220)
+CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
+CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRON_APPEAR1"), LW(0), LW(1), LW(2), 0)
+        SET_FLOAT_VALUE(LW(3), FLOAT(0.5f))
+        SET_VALUE(LW(4), 1)
+        SET_VALUE(LF(0), 0)
+        LOOP(60)
+            ADD_FLOAT(LW(0), LW(3))
+            CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
+            CALL(evt_mario_party_use_check, LW(5))
+            IF_INT_NOT_EQUAL(LW(5), 6)
+                BEGIN_INLINE_EVENT
+                    LOOP(100)
+                        SUBTRACT_FLOAT(LW(0), LW(3))
+                        CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
+                        WAIT_FRAMES(1)
+                    END_LOOP
+                    CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
+                END_INLINE_EVENT
+                SET_VALUE(LF(0), 1)
+                BREAK_LOOP
+            END_IF
+            ADD(LW(4), 1)
+            WAIT_FRAMES(1)
+        END_LOOP
+        IF_INT_EQUAL(LF(0), 1)
+            GOTO(100)
+        END_IF
+    END_IF
+    LABEL(2)
+    CALL(evt_mario_party_use_check, LW(0))
+    WAIT_FRAMES(1)
+    IF_INT_EQUAL(LW(0), 6)
+        GOTO(2)
+    END_IF
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
+    CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
+    CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
+CALL(evt_npc_jump_position_nohit, STRING("トロン"), LW(0), LW(1), LW(2), 300, 20)
+    WAIT_FRAMES(1)
+    CALL(evt_npc_set_anim, STRING("トロン"), STRING("B_1"))
+    WAIT_MS(500)
+    CALL(evt_npc_set_anim, STRING("トロン"), STRING("B_2"))
+    CALL(evt_npc_set_autotalkpose, STRING("トロン"), STRING("B_2"), STRING("T_2"))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    IF_INT_LESS(LW(0), -200)
+        LOOP(10)
+            CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
+            ADD(LW(1), 1)
+            CALL(evt_npc_set_position, STRING("トロン"), LW(0), LW(1), LW(2))
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_IF
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    // Toron jumps out and taunts Mario.
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_181"), 0, STRING("トロン"))
+    WAIT_MS(500)
+    CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
+    CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
+    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_NO_HIT)
+    // The chase music starts and the catch begins.
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_25_ZIP_TOAD_APPEARS)
+    CALL(evt_del_case_evt, 0, GW(11))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))
+    SPAWN_EVENT(evt_toron_catch)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(evt_toron_appear)
     LABEL(100)
     CALL(evt_npc_set_position, STRING("トロン"), 0, -1000, 0)
@@ -1358,6 +1560,7 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Trigger on the paper spot (a_kami) between STG6_24_A_VITAL_CLUE and the next clue:
@@ -1446,10 +1649,13 @@ EVT_END()
  * depending on the version and the story stage.
  */
 static EVT_BEGIN(evt_access_entry)
+#if VERSION > VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
+#endif
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_4"), 0, PTR(evt_access), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_5"), 0, PTR(evt_access2), 0)
+#if VERSION > VERSION_DEMO_US
         ELSE
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_3"), 0, PTR(evt_access), 0)
@@ -1459,6 +1665,7 @@ static EVT_BEGIN(evt_access_entry)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_5"), 0, PTR(evt_access), 0)
         SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 1)
     END_IF
+#endif
     RETURN
 EVT_END()
 
@@ -1468,7 +1675,11 @@ EVT_END()
  * the bed (from STG6_01_THE_CONDUCTOR on), the shelf signs, and the music for the story stage.
  */
 EVT_BEGIN(rsh_02_init_evt)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CASE_GREATER_OR_EQUAL(STG6_49_00_TRAIN_ARRIVAL)
         CASE_DEFAULT
@@ -1478,25 +1689,56 @@ EVT_BEGIN(rsh_02_init_evt)
         CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_rsh_door_init)
+#else
     CALL_CHILD(PTR(evt_rsh_door_init))
+#endif
     SET_VALUE(LW(0), PTR(&door_3))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_rsh_door_entry)
+#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
+#endif
     SET_VALUE(LW(0), PTR(&door_4))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_rsh_door_entry)
+#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
+#endif
     SET_VALUE(LW(0), PTR(&door_5))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_rsh_door_entry)
+#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
+#endif
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_3"), 0, PTR(evt_nabe), 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_01_THE_CONDUCTOR)
+        IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_25_ZIP_TOAD_APPEARS)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
+#endif
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("bed"), 0, PTR(evt_bed), GW(11))
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_access_entry)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF(GSWF_RSH02_STAR_PIECE_PANEL))
+CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF(GSWF_RSH02_SHINE_SPRITE), 0)
+#else
     CALL_CHILD(PTR(evt_access_entry))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -317, 0, -127, 0, GSWF_SHINE_34, 0)
+#endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -365, 60, -175, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_LESS(STG6_00_START)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
         CASE_BETWEEN(STG6_02_A_CASE_OF_LOST_STEW, STG6_04_GRILLING_HEFF_T)
@@ -1514,7 +1756,11 @@ EVT_BEGIN(rsh_02_init_evt)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
         CASE_BETWEEN(STG6_44_END_OF_DAY_2, STG6_45_DAY_3_STARTS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
@@ -1524,7 +1770,11 @@ EVT_BEGIN(rsh_02_init_evt)
         CASE_BETWEEN(STG6_49_00_TRAIN_ARRIVAL, STG6_55_04_BOWSER_RAWK_HAWK)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
         CASE_DEFAULT
         CALL(evt_sub_get_mapname, LW(0))
         IF_STR_EQUAL(LW(0), STRING("rsh_02_a"))
@@ -1847,11 +2097,21 @@ EVT_END()
  * shelf signs and the music for the station the train has reached.
  */
 EVT_BEGIN(rsh_02_init_evt_nidome)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
+            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+#else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+#endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+                IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+#else
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
+#endif
                     CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1865,37 +2125,85 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
             END_IF
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_rsh_door_init)
+#else
     CALL_CHILD(PTR(evt_rsh_door_init))
+#endif
     SET_VALUE(LW(0), PTR(&door_3))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_rsh_door_entry)
+#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
+#endif
     SET_VALUE(LW(0), PTR(&door_4))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_rsh_door_entry)
+#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
+#endif
     SET_VALUE(LW(0), PTR(&door_5))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_rsh_door_entry)
+#else
     CALL_CHILD(PTR(evt_rsh_door_entry))
+#endif
     CALL(evt_npc_setup, PTR(npc_data))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_RSH_NEW_RIDE_PENDING), 1)
+        SET_VALUE(GSWF(GSWF_RSH_NEW_RIDE_PENDING), 0)
+        CALL_CHILD(evt_rsh_rnd_npc_init)
+#else
     IF_INT_EQUAL(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
         SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 0)
         CALL_CHILD(PTR(evt_rsh_rnd_npc_init))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF(GSWF_RSH02_STAR_PIECE_PANEL))
+CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF(GSWF_RSH02_SHINE_SPRITE), 0)
+#else
     CALL_CHILD(PTR(evt_access_entry))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -317, 0, -127, 0, GSWF_SHINE_34, 0)
+#endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -365, 60, -175, 0, 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("pik_touchaku"))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+#else
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
+#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+#else
             IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
+#endif
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
                 CALL(evt_snd_envoff, PSND_FADEOUT)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
                 ELSE
                 CALL(evt_sub_get_mapname, LW(0))
                 IF_STR_EQUAL(LW(0), STRING("rsh_02_a"))
@@ -2032,7 +2340,11 @@ EVT_END()
  * places Mario and the partners inside cabin 5 with only that cabin shown; otherwise uses the normal doors.
  */
 EVT_BEGIN(rsh_02_b_init_evt_nidome)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(rsh_02_init_evt_nidome)
+#else
     CALL_CHILD(PTR(rsh_02_init_evt_nidome))
+#endif
     SET_VALUE(LF(0), 0)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nidome"))
@@ -2044,7 +2356,11 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
     IF_INT_EQUAL(LF(0), 1)
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_entry)
+#else
         CALL_CHILD(PTR(bero_case_entry))
+#endif
         CALL(evt_mario_set_pos, -245, 0, -185)
         CALL(evt_party_set_pos, 0, -215, 0, -185)
         CALL(evt_party_set_pos, 1, -230, 0, -195)
@@ -2066,8 +2382,10 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_party_stop, 0)
+#if VERSION > VERSION_DEMO_US
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH3"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
+#endif
                 WAIT_MS(2000)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_CHIME1"), LW(0), LW(1), LW(2), 0)
@@ -2090,7 +2408,11 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
         ELSE
         SET_VALUE(LW(0), PTR(bero_data_b))
         CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_bero_info_run)
+#else
         CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     END_IF
     RETURN
 EVT_END()

@@ -210,9 +210,236 @@ GXRenderModeObj GXNtsc480ProgMarioSt = {
 void viPostCallback(u32 retraceCount);
 void* gcDvdCheckThread(void* param);
 void gcRumbleCheck(void);
+#if VERSION <= VERSION_DEMO_US
+static inline void gcResetCheck(void);
+#else
 void gcResetCheck(void);
+#endif
 
 
+#if VERSION == VERSION_DEMO_JP
+void marioStInit(void) {
+    static u8 stack[0x1000];
+    // the releases also start cold after a shutdown reset
+    if (!OSIsRestart()
+) {
+        DEMOInit(&GXNtsc480IntDfMarioSt);
+    } else {
+        switch (OSGetResetCode() & OS_RESET_HOTRESET) {
+            case 0:
+                DEMOInit(&GXNtsc480IntDfMarioSt);
+                break;
+            case 1:
+                DEMOInit(&GXNtsc480ProgMarioSt);
+                break;
+        }
+    }
+    DEMOEnableGPHangWorkaround(5);
+DEMOPadInit();
+DVDSetAutoFatalMessaging(TRUE);
+GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
+    __GXSetIndirectMask(0);
+    memset(gp, 0, sizeof(GlobalWork));
+    gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
+    gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
+if (OSIsRestart()) {
+        gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+    }
+    gp->flags |= GW_FLAG_E3;
+gp->rumbleEnabled = 1;
+    gp->soundMode = 0;
+
+    gp->retraceLocalTime = 0;
+    gp->retraceDeltaTime = 0;
+    gp->retraceTime = OSGetTime();
+
+    gp->renderFieldTime = 0;
+    gp->renderTime = 0;
+
+    gp->systemLv3Time = 0;
+    gp->systemLv2Time = 0;
+    gp->systemLv1Time = 0;
+    gp->systemLv0Time = 0;
+
+    gp->mapFadeOutType = FADE_IN_BLACK;
+    gp->mapFadeOutDuration = 300;
+    gp->mapFadeInType = FADE_OUT_BLACK;
+    gp->mapFadeInDuration = 300;
+    gp->areaFadeOutType = FADE_IN_BLACK;
+    gp->areaFadeOutDuration = 300;
+    gp->areaFadeInType = FADE_OUT_BLACK;
+    gp->areaFadeInDuration = 300;
+gp->language = LANGUAGE_JP;
+gp->framerate = 60;
+gp->systemLevelFlags = 0;
+    badgeShop_init(); // Badge Shop
+    yuugijou_init();  // Pianta Parlor
+    johoya_init();
+gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
+VISetPostRetraceCallback(viPostCallback);
+    romFontInit();
+    OSCreateThread(&DvdCheckThread, gcDvdCheckThread, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH);
+    DvdCheckTreadOn = TRUE;
+    OSResumeThread(&DvdCheckThread);
+    DVDMgrInit();
+    psndInit();
+    aramMgrInit();
+    fileInit();
+    smartInit();
+    dispInit();
+    camInit();
+    fontmgrInit();
+    windowInit();
+    mapInit();
+    hitInit();
+    itemInit();
+    iconInit();
+    fadeInit();
+    bgInit();
+    shadowInit();
+    evtmgrInit();
+    animInit();
+    msgInit();
+    npcInit();
+    mobjInit();
+    effInit();
+    marioInit();
+    caseInit();
+    imgInit();
+    lightInit();
+    offscreenInit();
+    arcInit();
+    extInit();
+    swInit();
+    cardInit();
+    winInit();
+    statusWinInit();
+    envInit();
+    countDownInit();
+    nameEntInit();
+    winMgrInit();
+    seqInit_MARIOSTORY();
+    seqSetSeq(SEQ_LOGO, NULL, NULL);
+    gp->soundMode = 0;
+    if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
+        SoundSetOutputMode(0);
+    } else {
+        SoundSetOutputMode(1);
+    }
+none_key = OSGetTime();
+}
+#elif VERSION == VERSION_DEMO_US
+void marioStInit(void) {
+    static u8 stack[0x1000];
+    // the releases also start cold after a shutdown reset
+    if (!OSIsRestart()
+) {
+        DEMOInit(&GXNtsc480IntDfMarioSt);
+    } else {
+        switch (OSGetResetCode() & OS_RESET_HOTRESET) {
+            case 0:
+                DEMOInit(&GXNtsc480IntDfMarioSt);
+                break;
+            case 1:
+                DEMOInit(&GXNtsc480ProgMarioSt);
+                break;
+        }
+    }
+    DEMOEnableGPHangWorkaround(5);
+DEMOPadInit();
+DVDSetAutoFatalMessaging(TRUE);
+GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
+    __GXSetIndirectMask(0);
+    memset(gp, 0, sizeof(GlobalWork));
+    gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
+    gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
+if (OSIsRestart()) {
+        gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+    }
+    gp->flags |= GW_FLAG_E3;
+gp->rumbleEnabled = 1;
+    gp->soundMode = 0;
+
+    gp->retraceLocalTime = 0;
+    gp->retraceDeltaTime = 0;
+    gp->retraceTime = OSGetTime();
+
+    gp->renderFieldTime = 0;
+    gp->renderTime = 0;
+
+    gp->systemLv3Time = 0;
+    gp->systemLv2Time = 0;
+    gp->systemLv1Time = 0;
+    gp->systemLv0Time = 0;
+
+    gp->mapFadeOutType = FADE_IN_BLACK;
+    gp->mapFadeOutDuration = 300;
+    gp->mapFadeInType = FADE_OUT_BLACK;
+    gp->mapFadeInDuration = 300;
+    gp->areaFadeOutType = FADE_IN_BLACK;
+    gp->areaFadeOutDuration = 300;
+    gp->areaFadeInType = FADE_OUT_BLACK;
+    gp->areaFadeInDuration = 300;
+gp->language = LANGUAGE_US;
+gp->framerate = 60;
+gp->systemLevelFlags = 0;
+    badgeShop_init(); // Badge Shop
+    yuugijou_init();  // Pianta Parlor
+    johoya_init();
+gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
+VISetPostRetraceCallback(viPostCallback);
+    romFontInit();
+    OSCreateThread(&DvdCheckThread, gcDvdCheckThread, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH);
+    DvdCheckTreadOn = TRUE;
+    OSResumeThread(&DvdCheckThread);
+    DVDMgrInit();
+    psndInit();
+    aramMgrInit();
+    fileInit();
+    smartInit();
+    dispInit();
+    camInit();
+    fontmgrInit();
+    windowInit();
+    mapInit();
+    hitInit();
+    itemInit();
+    iconInit();
+    fadeInit();
+    bgInit();
+    shadowInit();
+    evtmgrInit();
+    animInit();
+    msgInit();
+    npcInit();
+    mobjInit();
+    effInit();
+    marioInit();
+    caseInit();
+    imgInit();
+    lightInit();
+    offscreenInit();
+    arcInit();
+    extInit();
+    swInit();
+    cardInit();
+    winInit();
+    statusWinInit();
+    envInit();
+    countDownInit();
+    nameEntInit();
+    winMgrInit();
+    seqInit_MARIOSTORY();
+    seqSetSeq(SEQ_LOGO, NULL, NULL);
+    gp->soundMode = 0;
+    if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
+        SoundSetOutputMode(0);
+    } else {
+        SoundSetOutputMode(1);
+    }
+none_key = OSGetTime();
+}
+#else
 void marioStInit(void) {
     static u8 stack[0x1000];
     // the releases also start cold after a shutdown reset
@@ -368,7 +595,154 @@ void marioStInit(void) {
         SoundSetOutputMode(1);
     }
 }
+#endif
 
+#if VERSION == VERSION_DEMO_JP
+void marioStMain(void) {
+    int i;
+
+    while (gp->dvdError) {
+        OSYieldThread();
+    }
+    makeKey();
+    seqMain();
+    cardMain();
+    bgMain();
+    shadowMain();
+    animMain();
+    battleMain();
+    camMain();
+    windowMain();
+    mapMain();
+    hitMain();
+    evtmgrMain();
+    mapDisp();
+    marioMain();
+    mobjMain();
+    npcMain();
+    fadeMain();
+    imgMain();
+    lightMain();
+    offscreenMain();
+    itemMain();
+    caseMain();
+    iconMain();
+    extMain();
+    psndMain();
+    winMain();
+    statusWinMain();
+    envMain();
+    countDownMain();
+    nameEntMain();
+    winMgrMain();
+    effMain();
+    gcResetCheck();
+    if (gp->flags & GW_FLAG_E3) {
+        for (i = 0; i < 4; i++) {
+            if (gp->dirs[i])
+                break;
+            if (gp->button[i])
+                break;
+            if (gp->stickX[i])
+                break;
+            if (gp->stickY[i])
+                break;
+            if (gp->substickX[i])
+                break;
+            if (gp->substickY[i])
+                break;
+            if (gp->triggerLeft[i])
+                break;
+            if (gp->triggerRight[i])
+                break;
+        }
+        if (i >= 4) {
+if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
+                if (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE) {
+                    gp->flags |= GW_FLAG_E3_TIMEOUT;
+} else {
+                    gp->resetType = 1;
+                }
+            }
+} else {
+            none_key = OSGetTime();
+        }
+    }
+}
+#elif VERSION == VERSION_DEMO_US
+void marioStMain(void) {
+    int i;
+
+    while (gp->dvdError) {
+        OSYieldThread();
+    }
+    makeKey();
+    seqMain();
+    cardMain();
+    bgMain();
+    shadowMain();
+    animMain();
+    battleMain();
+    camMain();
+    windowMain();
+    mapMain();
+    hitMain();
+    evtmgrMain();
+    mapDisp();
+    marioMain();
+    mobjMain();
+    npcMain();
+    fadeMain();
+    imgMain();
+    lightMain();
+    offscreenMain();
+    itemMain();
+    caseMain();
+    iconMain();
+    extMain();
+    psndMain();
+    winMain();
+    statusWinMain();
+    envMain();
+    countDownMain();
+    nameEntMain();
+    winMgrMain();
+    effMain();
+    gcResetCheck();
+    if (gp->flags & GW_FLAG_E3) {
+        for (i = 0; i < 4; i++) {
+            if (gp->dirs[i])
+                break;
+            if (gp->button[i])
+                break;
+            if (gp->stickX[i])
+                break;
+            if (gp->stickY[i])
+                break;
+            if (gp->substickX[i])
+                break;
+            if (gp->substickY[i])
+                break;
+            if (gp->triggerLeft[i])
+                break;
+            if (gp->triggerRight[i])
+                break;
+        }
+        if (i >= 4) {
+if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
+                if (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE) {
+                    gp->flags |= GW_FLAG_E3_TIMEOUT;
+none_key = OSGetTime();
+} else {
+                    gp->resetType = 1;
+                }
+            }
+} else {
+            none_key = OSGetTime();
+        }
+    }
+}
+#else
 void marioStMain(void) {
     int i;
 
@@ -446,6 +820,7 @@ void marioStMain(void) {
         }
     }
 }
+#endif
 
 /** Draws the frame through the camera list (camDraw) and clears g_bFirstSmartAlloc after the first drawn frame. */
 void marioStDisp(void) {
@@ -500,6 +875,76 @@ u32 marioStGetSystemLevel(void) {
     return gp->systemLevelFlags;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void viPostCallback(u32 retraceCount) {
+    OSTime time;
+    u32 reset = PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_START;
+
+    time = OSGetTime();
+    gp->retraceDeltaTime = time - gp->retraceTime;
+    gp->retraceLocalTime += gp->retraceDeltaTime;
+    if (gp->retraceLocalTime > (OS_TIMER_CLOCK * (OSTime)359999999)) {
+        gp->retraceLocalTime = (OS_TIMER_CLOCK * (OSTime)359999999);
+    }
+if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
+        gp->systemLv3Time += gp->retraceDeltaTime;
+    }
+    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV2)) {
+        gp->systemLv2Time += gp->retraceDeltaTime;
+    }
+    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV1)) {
+        gp->systemLv1Time += gp->retraceDeltaTime;
+    }
+    if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV0)) {
+        gp->systemLv0Time += gp->retraceDeltaTime;
+    }
+    if (!gp->dvdError && !winCheck()) {
+        gp->renderTime += gp->retraceDeltaTime;
+        if (!gp->inBattle) {
+            gp->renderFieldTime += gp->retraceDeltaTime;
+        }
+    }
+gp->retraceTime = time;
+    gp->retraceCount = retraceCount;
+    if (battleDisableHResetCheck()) {
+        gp->resetButtonDown = FALSE;
+    } else {
+        if (!gp->resetButtonDown) {
+            if (OSGetResetButtonState()) {
+                gp->resetButtonDown = TRUE;
+            }
+        } else {
+            if (!OSGetResetButtonState()) {
+                gp->resetType = 1;
+            }
+        }
+        if (gp->keyDataValid) {
+            if (OSIsRestart() && !gp->restartChecked) {
+                if ((keyGetButton(0) & reset) == reset) {
+                    gp->resetType = 0;
+                    goto exitcheck;
+                } else {
+                    gp->restartChecked = TRUE;
+                }
+            }
+            if ((keyGetButton(0) & reset) == reset) {
+                if (!gp->softResetWait) {
+                    gp->softResetWait = TRUE;
+                    gp->softResetTimeout = OSGetTime();
+                }
+                if (OSTicksToMilliseconds(OSGetTime() - gp->softResetTimeout) > 500) {
+                    gp->resetType = 1;
+                }
+            } else {
+                gp->softResetWait = FALSE;
+            }
+}
+    }
+exitcheck:
+    gcRumbleCheck();
+    psndMainInt();
+}
+#else
 void viPostCallback(u32 retraceCount) {
     OSTime time;
     u32 reset = PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_START;
@@ -587,7 +1032,66 @@ exitcheck:
     gcRumbleCheck();
     psndMainInt();
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static void* gcDvdCheckThread(void* param) {
+const char* message;
+    s32 msgId;
+    s32 width;
+    f32 xpos;
+    Mtx44 mtx;
+
+    while (1) {
+        msgId = 0;
+        switch (DVDGetDriveStatus()) {
+            case DVD_STATE_COVER_OPEN:
+msgId = 5;
+gp->dvdError = TRUE;
+                break;
+            case DVD_STATE_NO_DISK:
+msgId = 6;
+gp->dvdError = TRUE;
+                break;
+            case DVD_STATE_WRONG_DISK:
+msgId = 6;
+gp->dvdError = TRUE;
+                break;
+            case DVD_STATE_RETRY:
+msgId = 7;
+gp->dvdError = TRUE;
+                break;
+case DVD_STATE_FATAL_ERROR:
+                break;
+default:
+                gp->dvdError = FALSE;
+                break;
+            case DVD_STATE_BUSY:
+                break;
+        }
+if (gp->dvdError) {
+            SoundOpenCover();
+        } else {
+            SoundCloseCover();
+        }
+if (gp->dvdError) {
+DEMOBeforeRender();
+if (msgId) {
+                message = romFontGetMessage(msgId);
+                width = 0.8f * romFontGetWidth(message);
+                MTXPerspective(mtx, 25.0f, 1.2666667f, 1.0f, 10000.0f);
+                GXSetProjection(mtx, GX_PERSPECTIVE);
+                xpos = -width / 2.0f;
+                romFontPrintGX(xpos, 0.0f, 0.8f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
+            }
+DEMODoneRender();
+            makeKey();
+            gcResetCheck();
+        }
+        OSYieldThread();
+    }
+}
+#else
 void* gcDvdCheckThread(void* param) {
 #if VERSION >= VERSION_US
     s32 prevStatus = 0;
@@ -693,6 +1197,7 @@ void* gcDvdCheckThread(void* param) {
         OSYieldThread();
     }
 }
+#endif
 
 /**
  * Rumble safety, run from viPostCallback: forces a pad's motor off for 30 seconds
@@ -760,6 +1265,82 @@ void gcRumbleCheck(void) {
     }
 }
 
+#if VERSION == VERSION_DEMO_JP
+static inline void gcResetCheck(void) {
+    u32 code;
+
+    if (gp->resetType) {
+VISetBlack(TRUE);
+        VIFlush();
+        VIWaitForRetrace();
+        VIWaitForRetrace();
+        VIWaitForRetrace();
+        psndExit();
+        DVDMgrDelete();
+        if (DvdCheckTreadOn) {
+            OSCancelThread(&DvdCheckThread);
+            DvdCheckTreadOn = FALSE;
+        }
+        while (cardIsExec()) {
+            cardMain();
+            VIWaitForRetrace();
+        }
+        if (gp->resetType != 2) {
+            if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
+                code = OS_RESET_RESTART;
+            } else {
+                if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
+                    code = OS_RESET_RESTART;
+                } else {
+                    code = OS_RESET_HOTRESET;
+                }
+            }
+            OSResetSystem(OS_RESET_RESTART, code, FALSE);
+        } else {
+            OSResetSystem(OS_RESET_HOTRESET, 0, TRUE);
+        }
+        while (1) {}
+    }
+}
+#elif VERSION == VERSION_DEMO_US
+static inline void gcResetCheck(void) {
+    u32 code;
+
+    if (gp->resetType) {
+OSReport("\x83\x8A\x83\x5A\x83\x62\x83\x67\x8F\x88\x97\x9D\x8A\x4A\x8E\x6E\n");
+VISetBlack(TRUE);
+        VIFlush();
+        VIWaitForRetrace();
+        VIWaitForRetrace();
+        VIWaitForRetrace();
+        psndExit();
+        DVDMgrDelete();
+        if (DvdCheckTreadOn) {
+            OSCancelThread(&DvdCheckThread);
+            DvdCheckTreadOn = FALSE;
+        }
+        while (cardIsExec()) {
+            cardMain();
+            VIWaitForRetrace();
+        }
+        if (gp->resetType != 2) {
+            if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
+                code = OS_RESET_RESTART;
+            } else {
+                if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
+                    code = OS_RESET_RESTART;
+                } else {
+                    code = OS_RESET_HOTRESET;
+                }
+            }
+            OSResetSystem(OS_RESET_RESTART, code, FALSE);
+        } else {
+            OSResetSystem(OS_RESET_HOTRESET, 0, TRUE);
+        }
+        while (1) {}
+    }
+}
+#else
 void gcResetCheck(void) {
     u32 code;
 
@@ -803,3 +1384,4 @@ void gcResetCheck(void) {
         while (1) {}
     }
 }
+#endif

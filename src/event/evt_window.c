@@ -35,7 +35,9 @@ typedef struct OneMsgWin {
     s32 id;    // 0x8
 } OneMsgWin;
 
+#if VERSION > VERSION_DEMO_US
 s32 coinwin_se_wait;
+#endif
 s32 unk_80418b3c;
 static void coin_disp(WinMgrEntry* entry);
 static void oneMessageDisp(WinMgrEntry* entry);
@@ -62,11 +64,17 @@ WinMgrDesc coin_desc = {
  */
 USER_FUNC(evt_win_item_select) {
     EvtWord* args = event->args;
+#if VERSION <= VERSION_DEMO_US
+    s32 type = evtGetValue(event, args[0]);
+#else
     s32 getCursor = evtGetValue(event, args[0]);
     s32 type = evtGetValue(event, args[1]);
+#endif
     WinMgrSelect* sel;
     s32 result;
+#if VERSION > VERSION_DEMO_US
     s32 cursor;
+#endif
     if (isFirstCall) {
         event->userdatap[0] = winMgrSelectEntry(type, 0, 1);
         marioKeyOff();
@@ -76,13 +84,19 @@ USER_FUNC(evt_win_item_select) {
     if (result == 0) {
         return EVT_RETURN_BLOCK;
     }
+#if VERSION > VERSION_DEMO_US
     cursor = winMgrSelectGetCursor(sel);
+#endif
     winMgrSelectDelete(sel);
     marioKeyOn();
+#if VERSION <= VERSION_DEMO_US
+    evtSetValue(event, args[1], result);
+#else
     evtSetValue(event, args[2], result);
     if (getCursor != 0) {
         evtSetValue(event, args[3], cursor);
     }
+#endif
     return EVT_RETURN_DONE;
 }
 
@@ -304,15 +318,29 @@ static void coin_disp(WinMgrEntry* entry) {
     switch (w->type) {
     case COIN_WINDOW_COINS:
         target = pouchGetCoin();
+#if VERSION <= VERSION_DEMO_US
+            icon = 0x18B + EW_ICON_OFS;
+#else
         icon = ICON_ITEM_COIN;
+#endif
         break;
     case COIN_WINDOW_SHINE_SPRITES:
+#if VERSION <= VERSION_DEMO_US
+            target = RAW_GET(pouchGetSuperCoin)();
+            icon = 0x102 + EW_ICON_OFS;
+#else
         target = pouchGetSuperCoin();
         icon = ICON_ITEM_SHINE_SPRITE;
+#endif
         break;
     case COIN_WINDOW_STAR_PIECES:
+#if VERSION <= VERSION_DEMO_US
+            target = RAW_GET(pouchGetStarPiece)();
+            icon = 0x18D + EW_ICON_OFS;
+#else
         target = pouchGetStarPiece();
         icon = ICON_ITEM_STAR_PIECE;
+#endif
         break;
     }
     PSMTXTrans(pos, -220.0f, -113.0f, 0.0f);
@@ -320,7 +348,11 @@ static void coin_disp(WinMgrEntry* entry) {
     PSMTXConcat(pos, scale, pos);
     iconDispGx2(pos, ICON_FLAG_2D, icon);
     PSMTXTrans(pos, -192.0f, -113.0f, 0.0f);
+#if VERSION <= VERSION_DEMO_US
+    iconDispGx2(pos, ICON_FLAG_2D, 0x1D6 + EW_ICON_OFS);
+#else
     iconDispGx2(pos, ICON_FLAG_2D, ICON_TIMES);
+#endif
     PSMTXTrans(pos, -126.0f, -113.0f, 0.0f);
     {
         GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -338,15 +370,24 @@ static void coin_disp(WinMgrEntry* entry) {
         }
         w->timer++;
         w->timer = w->timer % 1200;
+#if VERSION <= VERSION_DEMO_US
+if (__abs(target - w->coins) == 1 || gp->retraceCount % 6 == 0) {
+            psndSFXOn("SFX_COUNT_COIN1");
+#else
         if (coinwin_se_wait == 0) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_COUNT_COIN1 | PSND_SFX_BYPASS_MUTE));
             coinwin_se_wait = 7;
+#endif
         }
     }
+#if VERSION > VERSION_DEMO_US
     if (coinwin_se_wait > 0) {
         coinwin_se_wait--;
+#endif
     }
+#if VERSION > VERSION_DEMO_US
 }
+#endif
 
 /**
  * Opens the counter window of type args[0] (0 coins, 1 Shine Sprites, 2 Star Pieces) at the top left,

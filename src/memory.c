@@ -18,7 +18,11 @@ struct MapAllocEntry {
 };
 
 //.bss
+#if VERSION <= VERSION_DEMO_US
+extern SmartWork smartWork;
+#else
 SmartWork smartWork;
+#endif
 
 //.sdata
 #if VERSION >= VERSION_US
@@ -31,6 +35,16 @@ SmartWork smartWork;
 #endif
 
 // {fixed, size}: a fixed heap (1) has its size in KiB, the others (0) get size percent of the arena left over
+#if VERSION <= VERSION_DEMO_US
+s32 size_table[HEAP_COUNT][2] = {
+{1, 0x3784},
+{1, 0xD90}, //0x364000, 3472 KiB/3.39 MiB
+    {1, 0xE0}, //0x38000, 224 KiB
+    {1, 0x80}, //0x20000, 128 KiB
+    {1, 0x100}, //0x40000, 256 KiB
+    {0, 0x64}
+};
+#else
 s32 size_table[HEAP_COUNT][2] = {
     {1, 0x1C84}, // 0x721000, 7300 KiB (7.13 MiB)
     {1, 0xD90},  // 0x364000, 3472 KiB (3.39 MiB)
@@ -41,6 +55,7 @@ s32 size_table[HEAP_COUNT][2] = {
 #endif
     {0, 0x64}    // the smart heap: 100 % of what is left
 };
+#endif
 
 static SmartWork* wp = &smartWork;
 
@@ -56,6 +71,9 @@ BOOL g_bFirstSmartAlloc;
 void* R_battlemapalloc_base_ptr;
 void* mapalloc_base_ptr;
 #else
+#if VERSION <= VERSION_DEMO_US
+SmartWork smartWork;
+#endif
 void* mapalloc_base_ptr;
 u32 mapalloc_size;
 BOOL g_bFirstSmartAlloc;
@@ -67,7 +85,11 @@ BOOL g_bFirstSmartAlloc;
 #else
 u32 count;
 #define COUNT (*(u16*)&count)
+#if VERSION <= VERSION_DEMO_US
+#define SMART_HEAP HEAP_DEFAULT
+#else
 #define MAPBASE_PARAM
+#endif
 #define MAPBASE mapalloc_base_ptr
 #endif
 
@@ -404,6 +426,7 @@ void smartInit(void) {
     g_bFirstSmartAlloc = FALSE;
 }
 
+#if VERSION > VERSION_DEMO_US
 void smartReInit(void) {
     smartEntry* e;
     int i;
@@ -424,6 +447,7 @@ void smartReInit(void) {
     wp->tail->next = NULL;
     g_bFirstSmartAlloc = FALSE;
 }
+#endif
 
 #pragma dont_inline on
 void smartAutoFree(s32 allocType) {

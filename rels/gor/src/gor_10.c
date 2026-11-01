@@ -181,14 +181,23 @@ EvtWord gor_10_init_evt[29];
 EVT_BEGIN(tegami_init_evt)
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_snd_envon, PSND_FADEIN | PSND_SLOT(1), STRING("ENV_STG0_GOR6"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+#else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#endif
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_nami"), 1, 0)
+#endif
     BEGIN_INLINE_EVENT
         CALL(tegami)
     END_INLINE_EVENT
@@ -388,6 +397,10 @@ EVT_BEGIN(mezame_init_evt)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_nami"), 1, 0)
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("marukongou"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("densha"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("pukupuku"), MAP_OBJ_FLAG_HIDDEN)
@@ -402,11 +415,19 @@ EVT_BEGIN(mezame_init_evt)
     BEGIN_INLINE_EVENT
         CALL(cam_yure)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_mezame)
+#else
     SPAWN_EVENT(PTR(evt_mezame))
+#endif
     RETURN
 EVT_END()
 
 EVT_BEGIN(gor_10_init_evt)
+#if VERSION <= VERSION_DEMO_US
+IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG0_02_MARIOS_HOUSE)
+        CALL_CHILD(tegami_init_evt)
+#else
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_sub_get_system_flag, LW(0))
@@ -415,8 +436,13 @@ EVT_BEGIN(gor_10_init_evt)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
         CALL_CHILD(PTR(tegami_init_evt))
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(mezame_init_evt)
+#else
         CALL_CHILD(PTR(mezame_init_evt))
+#endif
     END_IF
     RETURN
 EVT_END()

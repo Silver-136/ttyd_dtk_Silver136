@@ -37,6 +37,73 @@ static EvtWord wait_event[56];
  * Unit kind of Mini-Z-Yux: 2 max HP, level 0. The battle engine reads it when the unit spawns:
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_barriern_z_satellite = {
+    116,
+    "btl_un_barriern_satellite_z",
+    2,
+    0,
+    1,
+    1,
+    0,
+    0,
+    0,
+    70,
+    0,
+    50,
+    9999,
+    16,
+    16,
+    0,
+    8,
+    0.0f,
+    0.0f,
+    0.0f,
+0,
+    -16,
+0.0f,
+    0.0f,
+    0.0f,
+    8.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    8.0f,
+    0.0f,
+    0.0f,
+    5.0f,
+    6.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    16.0f,
+    16.0f,
+    0,
+    0,
+    0,
+    2,
+    100,
+    20,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_ENM_BARRI_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    0x4,
+    &regist,
+    6,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_barriern_z_satellite = {
     116,
     "btl_un_barriern_satellite_z",
@@ -107,6 +174,7 @@ BattleUnitKind unit_barriern_z_satellite = {
     init_event,
     data_table,
 };
+#endif
 
 /**
  * Defence of Mini-Z-Yux per element (normal, fire, ice, explosion, electric), subtracted from each hit:
@@ -145,7 +213,11 @@ static StatusVulnerability regist = {70, 90, 90, 0, 80, 100, 100, 0, 100, 80, 10
  * Dodgy, Invisible and instant KO; otherwise Sleep 70, Stop 90, Dizzy 95, Confuse 80, Tiny 85,
  * Attack Down 85, Defense Down 90, Allergic 80, Gale Force 95 and Slow 80.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 90, 90, 0, 80, 100, 100, 0, 100, 80, 100, 80, 100, 80, 80, 0, 90, 100, 80, 100, 100, 100};
+#else
 static StatusVulnerability regist = {70, 90, 95, 0, 80, 100, 100, 0, 100, 85, 100, 85, 100, 90, 80, 0, 95, 100, 80, 100, 100, 100};
+#endif
 #endif
 
 /**
@@ -259,6 +331,60 @@ EVT_END()
  * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
  * formation of +-25 units, x mirrored by facing direction).
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(battleGetBarriernSatelliteInitPos) {
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    s32 max;
+    s32 index;
+    s32 id;
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 i;
+    s32 j;
+    static const Vec VecData[] = {
+        // 1 satellite
+        {25.0f, 0.0f, 0.0f},
+        // 2 satellites
+        {25.0f, 0.0f, 0.0f},
+        {-25.0f, 0.0f, 0.0f},
+        // 3 satellites
+        {0.0f, 25.0f, 0.0f},
+        {25.0f, -25.0f, 0.0f},
+        {-25.0f, -25.0f, 0.0f},
+        // 4 satellites
+        {25.0f, 25.0f, 0.0f},
+        {-25.0f, 25.0f, 0.0f},
+        {25.0f, -25.0f, 0.0f},
+        {-25.0f, -25.0f, 0.0f},
+    };
+    const Vec* p;
+    BattleWork* wp = _battleWorkPointer;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    max = evtGetValue(event, args[1]);
+    index = evtGetValue(event, args[2]);
+    x = args[3];
+    y = args[4];
+    z = args[5];
+p = VecData;
+    for (i = 0; i < max; i++) {
+        for (j = 0; j < i; j++) {
+            p++;
+        }
+    }
+    for (j = 0; j < index; j++) {
+        p++;
+    }
+    evtSetValue(event, x, (s32)(p->x * unit->faceDirection));
+    evtSetValue(event, y, (s32)p->y);
+    evtSetValue(event, z, (s32)p->z);
+    return EVT_RETURN_DONE;
+}
+#else
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -314,3 +440,4 @@ static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     evtSetValue(event, z, (s32)p->z);
     return EVT_RETURN_DONE;
 }
+#endif

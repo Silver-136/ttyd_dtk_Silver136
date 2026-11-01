@@ -97,6 +97,9 @@ static BattleUnitDefense defence = {0};
 /** Defence attributes of the Piranha Plant: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 80, 60, 100, 75, 100, 100, 80, 100, 70, 100, 70, 100, 70, 70, 20, 30, 100, 70, 100, 100, 30};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     70, // stop
@@ -121,6 +124,7 @@ static StatusVulnerability regist = {
     100, // invisible
     30, // ohko
 };
+#endif
 
 /** Parts of the Piranha Plant: 1 part (model c_pakflwr). */
 static BattleUnitKindPart parts[] = {

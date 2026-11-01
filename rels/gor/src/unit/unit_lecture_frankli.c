@@ -212,9 +212,15 @@ BattleWeapon _lec_weapon_hammer = {
  *  and the end-of-lecture script (the tags are one higher in the retail versions).
  */
 static BattleDataEntry data_table[] = {
+#if VERSION <= VERSION_DEMO_US
+{67, &_lec_weapon_jump},
+    {68, &_lec_weapon_hammer},
+    {69, lecture_end_event},
+#else
     {UNIT_DATA_LECTURE_JUMP_WEAPON, &_lec_weapon_jump},
     {UNIT_DATA_LECTURE_HAMMER_WEAPON, &_lec_weapon_hammer},
     {UNIT_DATA_LECTURE_END_EVENT, lecture_end_event},
+#endif
     {0, NULL},
 };
 
@@ -501,7 +507,11 @@ EVT_BEGIN(lecAttackEvent_Jump)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
         // Frankly explains how the Action Command details appear once a target is chosen.
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_001"), 0, UNIT_ID_LECTURE)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_001"), 0, -6)
+#endif
     END_IF
     // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -521,7 +531,11 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_GetTakeoffPosition, UNIT_ID_SELF, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(6))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(6))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_StartAC, 1)
@@ -532,10 +546,18 @@ EVT_BEGIN(lecAttackEvent_Jump)
     // He jumps (M_J_1B) with his jump cry and the jump slows into a hover just above the enemy.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, -1)
+#else
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, MOVE_SOUND_FROM_TABLE)
+#endif
     ELSE
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 0, -1)
+#else
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     END_IF
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
@@ -561,15 +583,21 @@ EVT_BEGIN(lecAttackEvent_Jump)
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
             CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_002"), 0, UNIT_ID_LECTURE)
+#else
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_002"), 0, -6)
             WAIT_FRAMES(1)
+#endif
             LABEL(11)
             CALL(btlevtcmd_PadCheckTrigger, 0, 256, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 WAIT_FRAMES(1)
                 GOTO(11)
             END_IF
+#if VERSION > VERSION_DEMO_US
             WAIT_MS(150)
+#endif
             CALL(evt_msg_continue)
         END_IF
     ELSE
@@ -616,12 +644,24 @@ EVT_BEGIN(lecAttackEvent_Jump)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
         CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 27)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
+#endif
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5996094f))
         CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
+#endif
         CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+#endif
         GOTO(95)
     END_IF
     // Success: a second stomp follows with a cheer and the NICE effect.
@@ -646,7 +686,11 @@ EVT_BEGIN(lecAttackEvent_Jump)
         GOTO(10)
     ELSE
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 131328, LW(5))
+#else
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
+#endif
         WAIT_FRAMES(2)
     END_IF
     LABEL(90)
@@ -674,12 +718,24 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5996094f))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 20)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, -1)
+#else
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_WaitEventEnd, LW(14))
     // He walks back to his home position.
     LABEL(95)
@@ -689,7 +745,11 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
@@ -723,7 +783,11 @@ EVT_BEGIN(lecAttackEvent_Hammer)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
         // Frankly tells Mario to tilt and hold the stick left, and waits until he does.
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_008"), 0, UNIT_ID_LECTURE)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_008"), 0, -6)
+#endif
         LABEL(1)
         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -772,7 +836,11 @@ EVT_BEGIN(lecAttackEvent_Hammer)
         ADD(LW(2), 5)
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
@@ -802,26 +870,36 @@ EVT_BEGIN(lecAttackEvent_Hammer)
             LOOP(LW(5))
                 CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
+#if VERSION > VERSION_DEMO_US
                     IS_EVENT_RUNNING(LW(15), LW(0))
                     IF_INT_EQUAL(LW(0), 0)
                     ELSE
+#endif
                         SUSPEND_EVENT(LW(15))
                         CALL(btlevtcmd_AcSetParam, 2, 1)
                         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
                         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
                         // Frankly tells him to keep holding the stick.
+#if VERSION <= VERSION_DEMO_US
+                        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_009"), 0, UNIT_ID_LECTURE)
+#else
                         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_009"), 0, -6)
+#endif
                         LABEL(6)
                         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
                         IF_INT_EQUAL(LW(0), 0)
                             WAIT_FRAMES(1)
                             GOTO(6)
                         END_IF
+#if VERSION > VERSION_DEMO_US
                         WAIT_MS(200)
+#endif
                         CALL(evt_msg_continue)
                         CALL(btlevtcmd_AcSetParam, 2, 0)
                         RESUME_EVENT(LW(15))
+#if VERSION > VERSION_DEMO_US
                     END_IF
+#endif
                 END_IF
                 WAIT_FRAMES(1)
                 SET_VALUE(LW(5), 5)
@@ -837,7 +915,11 @@ EVT_BEGIN(lecAttackEvent_Hammer)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
         // Frankly tells him to release the stick when the light comes on, and waits.
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_010"), 0, UNIT_ID_LECTURE)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_010"), 0, -6)
+#endif
         LABEL(10)
         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -845,7 +927,9 @@ EVT_BEGIN(lecAttackEvent_Hammer)
             GOTO(10)
         END_IF
         CALL(btlevtcmd_ResultAC)
+#if VERSION > VERSION_DEMO_US
         WAIT_MS(200)
+#endif
         CALL(evt_msg_continue)
     ELSE
         CALL(btlevtcmd_ResultAC)
@@ -877,7 +961,11 @@ EVT_BEGIN(lecAttackEvent_Hammer)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
         GOTO(90)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 131328, LW(5))
+#else
     CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
+#endif
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
@@ -903,7 +991,11 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))

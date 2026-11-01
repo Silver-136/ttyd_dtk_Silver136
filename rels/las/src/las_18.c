@@ -215,17 +215,34 @@ EVT_END()
 EVT_BEGIN(las_18_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 75, 60, 0, PTR(switch_evt), GSWF(GSWF_LAS18_SWITCH_PRESSED))
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 75, 60, 0, PTR(switch_evt), GSWF_LAS_18_SWITCH_PRESSED)
+#endif
     CALL(evt_mobj_flag_onoff, 1, STRING("switch"), MOBJ_FLAG_NO_SHADOW)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_LAS18_SWITCH_PRESSED), 0)
+        SPAWN_EVENT(vivian_check)
+#else
     IF_INT_EQUAL(GSWF_LAS_18_SWITCH_PRESSED, 0)
         SPAWN_EVENT(PTR(vivian_check))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS18_KEY_CHEST_OPENED))
+    IF_INT_EQUAL(GSWF(GSWF_LAS18_SWITCH_PRESSED), 0)
+#else
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_18_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_18_SWITCH_PRESSED, 0)
+#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF

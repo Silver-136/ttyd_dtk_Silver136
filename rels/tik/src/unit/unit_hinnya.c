@@ -92,6 +92,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * extra prone to stop, poison, electric shock, burn, growing huge, attack up, defence up, fright, gale force,
  * speed up and instant kill.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 120, 100, 150, 100, 150, 150, 100, 150, 100, 150, 100, 150, 100, 100, 120, 120, 150, 100, 0, 0, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     120, // stop
@@ -116,6 +119,7 @@ static StatusVulnerability regist = {
     0, // invisible
     150, // ohko
 };
+#endif
 
 /** Data table of the Spinia: event handlers for a First Strike on it (no reaction). */
 static BattleDataEntry data_table[] = {

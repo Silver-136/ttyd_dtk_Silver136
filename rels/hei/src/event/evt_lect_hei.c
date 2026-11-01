@@ -477,15 +477,31 @@ EVT_BEGIN(nokotaro_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_04_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_04_1"), 0, 0)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(100.0f), FLOAT(630.0f), FLOAT(45.0f), FLOAT(39.0f), FLOAT(-100.0f), 1000, EASING_LINEAR)
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(1000)
+#else
     WAIT_MS(1500)
+#endif
     CALL(evt_cam_letter_box_disable, 1)
     // Koops kicks his shell twice.
     LOOP(2)
         CALL(evt_party_nokotaro_kick, 0)
         WAIT_MS(500)
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+CALL(x_flag_set, 0, 1)
+    BEGIN_INLINE_EVENT
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        SUBTRACT(LW(0), 30)
+        CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(80.0f))
+        CALL(evt_party_set_dir, 0, 90, 300)
+        CALL(x_flag_set, 0, 0)
+    END_INLINE_EVENT
+    CALL(x_flag_wait, 0, 0)
+#else
     // A blue switch block is dropped for Koops to hit; the lesson runs twice, explaining the kick and then
     // the hold.
+#endif
     CALL(evt_npc_change_fbat_mode, 8)
     SET_VALUE(LW(8), 2)
     LOOP(LW(8))
@@ -498,10 +514,16 @@ EVT_BEGIN(nokotaro_party_lecture)
         SET_VALUE(LW(1), STRING("TESTMOBJ"))
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
         ADD(LW(2), -70)
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(GSWF(GSWF_HEI_KOOPS_LECTURE_SWITCH), 0)
+        CALL(evt_mobj_switch_blue, 0, LW(1), LW(2), LW(3), LW(4), 0, GSWF(GSWF_HEI_KOOPS_LECTURE_SWITCH))
+#else
         ADD(LW(3), 100)
         SET_VALUE(GSWF_HEI_KOOPS_LECTURE_SWITCH, 0)
         CALL(evt_mobj_switch_blue, 0, LW(1), LW(2), LW(3), LW(4), 0, GSWF_HEI_KOOPS_LECTURE_SWITCH)
+#endif
         CALL(evt_mobj_set_camid, LW(1), 7)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_snd_sfxon, STRING("SFX_EVT_LECTURE_BLOCK_FALL1"), LW(7))
         BEGIN_INLINE_EVENT
             LOOP(0)
@@ -529,13 +551,18 @@ EVT_BEGIN(nokotaro_party_lecture)
             WAIT_FRAMES(1)
         END_LOOP
         WAIT_MS(300)
+#endif
         WAIT_MS(1000)
         CALL(evt_party_nokotaro_kick_hold, 0)
         SWITCH(LW(8))
             CASE_EQUAL(2)
             CALL(evt_msg_print_add, 0, STRING("lecture_friends_05_1"))
             CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_mov_pos2, 367, 74, FLOAT(135.0f))
+#else
             CALL(evt_mario_mov_pos2, 367, -38, FLOAT(135.0f))
+#endif
             CALL(evt_mario_mov_pos2, 416, -38, FLOAT(135.0f))
             CALL(evt_mario_set_dir, 270, 300, 0)
         END_SWITCH

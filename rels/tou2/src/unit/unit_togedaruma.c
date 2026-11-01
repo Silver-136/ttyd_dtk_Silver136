@@ -101,6 +101,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
  */
 static BattleUnitDefense defence_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 70, 70, 50, 75, 100, 70, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     40, // sleep
     100, // stop
@@ -125,6 +128,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TGD_N_1"},

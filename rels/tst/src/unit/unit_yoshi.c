@@ -57,7 +57,11 @@ typedef void (*BtlDispTexPlaneArgOrderFn)(f32, f32, f32, f32, f32, u32, GXColor,
 #if VERSION <= VERSION_DEMO_US
 void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 #else
+#if VERSION <= VERSION_DEMO_US
+void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
+#else
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
+#endif
 #endif
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
@@ -91,7 +95,9 @@ USER_FUNC(_wait_yoshig_run);
 USER_FUNC(_check_swallow_attribute);
 USER_FUNC(_get_swallow_param);
 #if VERSION >= VERSION_JP
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(_get_nomikomi_hit_position);
+#endif
 #endif
 
 PoseTableEntry pose_table_yoshi_stay[25];
@@ -353,6 +359,44 @@ EVT_END()
  * Yoshi's Ground Pound (btl_wn_pys_normal), his basic attack: 1 damage per stomp to a single enemy,
  * no FP cost, a jump-like move that cannot hit the ceiling and is repeated by tapping R.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_YoshiNormalAttack = {
+    "btl_wn_pys_normal",
+335,
+{0}, // pad_06
+    0, // itemId
+    "msg_pys_hip_drop", // description
+    100, // baseAccuracy
+    0, 0, 0, // baseFpCost..superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    100, // bingoSlotChance
+    50, // reserved_1B
+    weaponGetPowerFromPartyAttackLv, // hpDamageFn
+    {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_NO_CEILING | TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    "msg_ac_hip_drop", // acHelpMsg
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    partyYoshiAttack_NormalAttack,
+{0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0},
+};
+#else
 BattleWeapon partyWeapon_YoshiNormalAttack = {
     "btl_wn_pys_normal", // name
 #if VERSION <= VERSION_DEMO_US
@@ -397,12 +441,53 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     {0, 10, 10, 100, 10, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #endif
 };
+#endif
 
 /**
  * Yoshi's Gulp as listed in his move menu (btl_wn_pys_lv1, 4 FP):
  * the swallowed enemy is spat at the front-most enemy, with damage values from the table 2/4/3/5/3/6;
  * it ignores Defense and cannot be guarded.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
+    "btl_wn_pys_lv1",
+336,
+{0}, // pad_06
+    0, // itemId
+    "msg_pys_nomikomi", // description
+    100, // baseAccuracy
+    4, // baseFpCost
+    0, 0, // baseSpCost..superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    5, // reserved_19
+    100, // bingoSlotChance
+    50, // reserved_1B
+    weaponGetPowerFromPartyAttackLv, // hpDamageFn
+    {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, // element
+    6, // damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    "msg_ac_nomikomi", // acHelpMsg
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    partyYoshiAttack_Nomikomi,
+{0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0},
+};
+#else
 BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     "btl_wn_pys_lv1", // name
 #if VERSION <= VERSION_DEMO_US
@@ -449,11 +534,52 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #endif
 };
+#endif
 
 /**
  * Variant of Gulp's spat-out hit used for an enemy without swallow flag 2 (damage pattern 5);
  * Yoshi is immune to every counter effect when it connects.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
+    "btl_wn_pys_lv1",
+336,
+{0}, // pad_06
+    0, // itemId
+    "msg_pys_nomikomi", // description
+    100, // baseAccuracy
+    4, // baseFpCost
+    0, 0, // baseSpCost..superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    5, // reserved_19
+    100, // bingoSlotChance
+    50, // reserved_1B
+    weaponGetPowerFromPartyAttackLv, // hpDamageFn
+    {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, // element
+    5, // damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    "msg_ac_nomikomi", // acHelpMsg
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    partyYoshiAttack_Nomikomi,
+{0, 0, 0, 100, 0, 5, 5, 5, 0, 0, 0, 0},
+};
+#else
 BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     "btl_wn_pys_lv1", // name
 #if VERSION <= VERSION_DEMO_US
@@ -500,11 +626,51 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     {0, 0, 0, 100, 0, 10, 5, 5, 0, 0, 0, 0}, // stageEffectRates
 #endif
 };
+#endif
 
 /**
  * Gulp's no-damage hit: used when the tongue only touches an enemy that cannot be swallowed,
  * or the action command failed; it deals 0 damage.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
+    "btl_wn_pys_lv1",
+336,
+{0}, // pad_06
+    0, // itemId
+    "msg_pys_nomikomi", // description
+    100, // baseAccuracy
+    2, // baseFpCost
+    0, 0, // baseSpCost..superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    5, // reserved_19
+    100, // bingoSlotChance
+    50, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    "msg_ac_nomikomi", // acHelpMsg
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    partyYoshiAttack_Nomikomi, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     "btl_wn_pys_lv1", // name
 #if VERSION <= VERSION_DEMO_US
@@ -546,11 +712,52 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     partyYoshiAttack_Nomikomi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Gulp's fire breath: after eating a fire-type enemy Yoshi breathes fire on every enemy for 1 damage of the
  * fire element, ignoring Defense.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
+    "btl_wn_pys_lv1",
+336,
+{0}, // pad_06
+    0, // itemId
+    "msg_pys_nomikomi", // description
+    100, // baseAccuracy
+    2, // baseFpCost
+    0, 0, // baseSpCost..superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    5, // reserved_19
+    100, // bingoSlotChance
+    50, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_FIRE, // element
+    0, // damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    "msg_ac_nomikomi", // acHelpMsg
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    partyYoshiAttack_Nomikomi, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     "btl_wn_pys_lv1", // name
 #if VERSION <= VERSION_DEMO_US
@@ -593,11 +800,43 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     partyYoshiAttack_Nomikomi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Hit taken by enemies caught in Gulp's spat-out enemy (a hammer-like recoil hit across all enemies,
  * ignoring Defense); not referenced by the scripts in this file.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
+    weaponGetPowerFromPartyAttackLv, // hpDamageFn
+    {1, 4, 2, 5, 3, 6, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE,
+TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST,
+ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, // acHelpMsg
+    SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -631,11 +870,54 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Yoshi's Mini-Egg (btl_wn_pys_lv2, 3 FP): eggs that hit every ground enemy for 1 damage each and shrink
  * them; the action command is a single press when the light comes on.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
+    "btl_wn_pys_lv2",
+337,
+{0}, // pad_06
+    0, // itemId
+    "msg_pys_wonder_egg", // description
+    100, // baseAccuracy
+    3, // baseFpCost
+    0, 0, // baseSpCost..superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    5, // reserved_19
+    100, // bingoSlotChance
+    50, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    "msg_ac_wonder_egg", // acHelpMsg
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, // burnTime..freezeTime
+    100, // sizeChangeChance
+    3, // sizeChangeTime
+    -2, // sizeChangeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeChance..allergicTime
+    0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
+    0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
+    {0}, // pad_AE
+    partyYoshiAttack_EggAttack,
+{0, 0, 0, 100, 0, 3, 3, 0, 0, 0, 0, 0},
+};
+#else
 BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     "btl_wn_pys_lv2", // name
 #if VERSION <= VERSION_DEMO_US
@@ -684,12 +966,52 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     {0, 0, 0, 100, 0, 6, 3, 0, 0, 0, 0, 0}, // stageEffectRates
 #endif
 };
+#endif
 
 /**
  * Yoshi's Stampede (btl_wn_pys_lv3, 6 FP): the herd of Yoshis that runs across the stage;
  * 1 damage per hit to every ground enemy, repeated as the action command is mashed.
  * Its attack script is partyYoshiAttack_CallGuard.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon partyWeapon_YoshiCallGuard = {
+    "btl_wn_pys_lv3",
+338,
+{0}, // pad_06
+    0, // itemId
+    "msg_pys_taigun_yoshi", // description
+    100, // baseAccuracy
+    6, // baseFpCost
+    0, 0, // baseSpCost..superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    5, // reserved_19
+    100, // bingoSlotChance
+    50, // reserved_1B
+    weaponGetPowerFromPartyAttackLv, // hpDamageFn
+    {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    "msg_ac_taigun_yoshi", // acHelpMsg
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    partyYoshiAttack_CallGuard,
+{0, 20, 20, 100, 20, 20, 5, 5, 20, 5, 0, 0},
+};
+#else
 BattleWeapon partyWeapon_YoshiCallGuard = {
     "btl_wn_pys_lv3", // name
 #if VERSION <= VERSION_DEMO_US
@@ -735,6 +1057,7 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     {0, 20, 20, 100, 20, 40, 5, 5, 20, 5, 0, 0}, // stageEffectRates
 #endif
 };
+#endif
 
 /**
  * Footstep sounds for Ground Pound's run-up and slide, one per step of each pose;
@@ -1083,6 +1406,300 @@ EVT_END()
  * and an eaten enemy with swallow attribute 4 makes him breathe fire at every enemy
  * (partyWeapon_YoshiNomikomi_Fire). partyWeapon_YoshiNomikomi_Involved is not used here.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(partyYoshiAttack_Nomikomi)
+    // The enemy chosen in the menu is the target; Gulp is declared and its FP cost paid.
+    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    IF_INT_EQUAL(LW(3), -1)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SWALLOWED, 0)
+    CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
+    CALL(btlevtcmd_WaitGuardMove)
+    CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
+    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, 7)
+    // The Gulp action command is set up (press R and release when the light comes on),
+    // tighter at higher move levels.
+    CALL(btlevtcmd_CommandGetWeaponActionLv, LW(15))
+    CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(15))
+    CALL(btlevtcmd_AcGetDifficulty, LW(0))
+    SUBTRACT(LW(0), 3)
+    SWITCH(LW(0))
+        CASE_LESS_OR_EQUAL(-3)
+        SET_VALUE(LW(0), 160)
+        SET_VALUE(LW(1), 40)
+        CASE_EQUAL(-2)
+        SET_VALUE(LW(0), 140)
+        SET_VALUE(LW(1), 30)
+        CASE_EQUAL(-1)
+        SET_VALUE(LW(0), 120)
+        SET_VALUE(LW(1), 25)
+        CASE_EQUAL(0)
+        SET_VALUE(LW(0), 100)
+        SET_VALUE(LW(1), 20)
+        CASE_EQUAL(1)
+        SET_VALUE(LW(0), 80)
+        SET_VALUE(LW(1), 10)
+        CASE_EQUAL(2)
+        SET_VALUE(LW(0), 50)
+        SET_VALUE(LW(1), 5)
+        CASE_DEFAULT
+        SET_VALUE(LW(0), 30)
+        SET_VALUE(LW(1), 2)
+    END_SWITCH
+    CALL(btlevtcmd_AcSetParamAll, 3, LW(0), LW(1), 0, 100, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
+    CALL(btlevtcmd_AcSetFlag, 15)
+    CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 15, 1, 0)
+    // The camera frames Yoshi and the target, then the command starts.
+    CALL(evt_btl_camera_set_mode, 0, 10)
+    CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, BTL_UNIT_NONE, 0)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 250)
+    WAIT_FRAMES(22)
+    CALL(btlevtcmd_StartAC, 1)
+    LABEL(5)
+    CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
+    IF_INT_EQUAL(LW(0), 0)
+        WAIT_FRAMES(1)
+        GOTO(5)
+    END_IF
+    // If the target is out of reach (a flying enemy), Yoshi first moves to where he can reach it.
+    CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 256, LW(5))
+    IF_INT_EQUAL(LW(5), 5)
+CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
+        MULTIPLY(LW(6), 40)
+        CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
+CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+        CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+        CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 80, -1, 0)
+        CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 256, LW(5))
+    END_IF
+CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
+    MULTIPLY(LW(6), 40)
+    CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
+CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 80, -1, 0)
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    CALL(btlevtcmd_ResultAC)
+    // His tongue shoots out.
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_2"))
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW1"), 0)
+    IF_INT_NOT_EQUAL(LW(5), 1)
+        IF_INT_EQUAL(LW(5), 3)
+            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        END_IF
+        IF_INT_EQUAL(LW(5), 6)
+            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        END_IF
+        IF_INT_EQUAL(LW(5), 2)
+            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        END_IF
+        WAIT_FRAMES(50)
+        GOTO(90)
+    END_IF
+    WAIT_FRAMES(7)
+    // An enemy that cannot be swallowed, or a failed command, only gets the no-damage hit.
+    CALL(_get_swallow_param, LW(3), LW(7))
+    IF_INT_EQUAL(LW(7), -1)
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&partyWeapon_YoshiNomikomi_Dmg0), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
+        WAIT_FRAMES(43)
+        GOTO(90)
+    END_IF
+    CALL(btlevtcmd_GetResultAC, LW(0))
+    IF_BITS_CLEAR(LW(0), 2)
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&partyWeapon_YoshiNomikomi_Dmg0), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
+        WAIT_FRAMES(43)
+        GOTO(90)
+    END_IF
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW2"), 0)
+    // A Pokey-like enemy (swallow flag 8) is eaten a piece at a time instead of being swallowed whole.
+    CALL(_check_swallow_attribute, LW(3), 8, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 7, 1)
+        WAIT_FRAMES(13)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_7"))
+        CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW5"), 0)
+        WAIT_FRAMES(34)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_5"))
+        WAIT_FRAMES(54)
+        GOTO(90)
+    END_IF
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    CALL(evt_btl_camera_set_zoom, 0, 350)
+    // The tongue pulls the enemy in, the camera zooms in and the swallow sounds play.
+    CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 2, 1)
+    WAIT_FRAMES(3)
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 12)
+    CALL(btlevtcmd_DivePosition, LW(3), LW(0), LW(1), LW(2), 5, 0, 0, 0, -1)
+    CALL(btlevtcmd_OnAttribute, LW(3), kUnitHidden)
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW3"), 0)
+    WAIT_FRAMES(6)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_3"))
+    WAIT_FRAMES(7)
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    // A random roll against the enemy's swallow value: a high roll spits it out at another enemy,
+    // a low one swallows it.
+    CALL(evt_sub_random, 99, LW(0))
+    IF_INT_GREATER_OR_EQUAL(LW(0), LW(7))
+        BEGIN_INLINE_EVENT
+            CALL(evt_env_blur_on, 0, 600)
+        END_INLINE_EVENT
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_4"))
+        CALL(btlevtcmd_ftomsec, 22, LW(0))
+        WAIT_MS(LW(0))
+        BEGIN_INLINE_EVENT_GET_ID(LW(15))
+            CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_NOMIKOMI6"), 0)
+            CALL(btlevtcmd_OffAttribute, LW(3), kUnitHidden)
+            CALL(_check_swallow_attribute, LW(3), 2, LW(0))
+            IF_INT_EQUAL(LW(0), 0)
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&partyWeapon_YoshiNomikomi_Spew), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
+            ELSE
+                CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&partyWeapon_YoshiNomikomi_Shot), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
+            END_IF
+            CALL(btlevtcmd_GetResultAC, LW(0))
+            IF_BITS_SET(LW(0), 2)
+                CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
+                CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
+            ELSE
+                CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
+            END_IF
+            CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+            CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 20)
+            CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+            SWITCH(LW(6))
+                CASE_GREATER_OR_EQUAL(2)
+                CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
+                CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
+                CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_Y_1"))
+                CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+                CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_Y_1"))
+                CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+                CASE_DEFAULT
+                CALL(evt_audience_acrobat_notry)
+            END_SWITCH
+        END_INLINE_EVENT
+        CALL(btlevtcmd_WaitEventEnd, LW(15))
+        GOTO(90)
+    END_IF
+    // Eaten: the enemy vanishes from battle and its Star Points are kept for the party.
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SWALLOWED, 1)
+    BEGIN_SIBLING_EVENT
+        CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
+        CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+        CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
+    END_SIBLING_EVENT
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW5"), 0)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_7"))
+    WAIT_FRAMES(26)
+    CALL(_check_swallow_attribute, LW(3), 1, LW(1))
+    CALL(_check_swallow_attribute, LW(3), 4, LW(2))
+    CALL(btlevtcmd_GetExp, LW(3), LW(0))
+    CALL(btlevtcmd_StoreExp, LW(0))
+    CALL(btlevtcmd_KillUnit, LW(3), 0)
+    WAIT_FRAMES(8)
+    IF_INT_NOT_EQUAL(LW(1), 0)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_6"))
+        CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW7"), 0)
+        WAIT_FRAMES(50)
+        GOTO(90)
+    ELSE
+        IF_INT_EQUAL(LW(2), 0)
+            CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_5"))
+            CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW4"), 0)
+            WAIT_FRAMES(54)
+            GOTO(90)
+        END_IF
+    END_IF
+    // An enemy with swallow flag 4 (a fire-type) makes him breathe fire on every enemy.
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_4"))
+    WAIT_FRAMES(22)
+    BEGIN_SIBLING_EVENT
+        WAIT_FRAMES(18)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
+    ADD(LW(1), 15)
+    SET_VALUE(LW(3), LW(0))
+    SET_VALUE(LW(4), LW(1))
+    SET_VALUE(LW(5), LW(2))
+    CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(3), 240)
+    CALL(evt_eff, STRING("eff"), STRING("breath_fire"), 1, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 1, 2, 60, FLOAT(0.5f), FLOAT(30.0f))
+    WAIT_FRAMES(60)
+    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&partyWeapon_YoshiNomikomi_Fire))
+    CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
+    LABEL(10)
+    IF_INT_EQUAL(LW(10), -1)
+        GOTO(90)
+    END_IF
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), PTR(&partyWeapon_YoshiNomikomi_Fire), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
+    CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
+    GOTO(10)
+    LABEL(90)
+    CALL(btlevtcmd_StopAC)
+    CALL(evt_audience_ap_recovery)
+    CALL(btlevtcmd_InviteApInfoReport)
+    // Yoshi runs back to his home spot; a well-timed Stylish press on the way makes him pose and spin.
+    LABEL(95)
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
+    CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SWALLOWED, LW(5))
+    IF_INT_EQUAL(LW(5), 0)
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+        GOTO(99)
+    END_IF
+    CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), FLOAT(4.0f), LW(5))
+    IF_INT_LESS_OR_EQUAL(LW(5), 20)
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+        GOTO(99)
+    END_IF
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        SUBTRACT(LW(5), 1)
+        SET_VALUE(LW(6), LW(5))
+        SUBTRACT(LW(6), 10)
+        CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, LW(6), LW(5), LW(5), 0)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(5), -1, 0)
+    CALL(btlevtcmd_WaitEventEnd, LW(15))
+    CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+    IF_INT_EQUAL(LW(6), 2)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_O_1"))
+        CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
+        WAIT_FRAMES(20)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_J_1B"))
+        CALL(evt_sub_intpl_init, 4, 0, 360, 30)
+        LOOP(30)
+            CALL(evt_sub_intpl_get_value)
+            CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(0), 0)
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_IF
+    LABEL(99)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(partyYoshiAttack_Nomikomi)
     // The enemy chosen in the menu is the target; Gulp is declared and its FP cost paid.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1392,6 +2009,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Yoshi's Mini-Egg (partyWeapon_YoshiEggAttack_Minimini, named btl_wn_pys_lv2: eggs that shrink enemies to Tiny,
@@ -1815,6 +2433,188 @@ EVT_END()
  * _gundan_yoshi_run_effect runs the herd across the stage,
  * and each sampled enemy takes as many hits as the command's output gives, the last with the last-hit flag.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(partyYoshiAttack_CallGuard)
+    // Stampede is declared and its FP cost paid; all ground enemies are targeted.
+    SET_VALUE(LW(12), PTR(&partyWeapon_YoshiCallGuard))
+    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
+    CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    IF_INT_EQUAL(LW(3), -1)
+        CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+        RETURN
+    END_IF
+    CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
+    CALL(btlevtcmd_WaitGuardMove)
+    CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
+    CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, 7)
+    CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
+    CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
+    CALL(btlevtcmd_AcGetDifficulty, LW(0))
+    SUBTRACT(LW(0), 3)
+    // The action command (alternate L and R) is set up; its timing depends on the move level.
+    SWITCH(LW(0))
+        CASE_LESS_OR_EQUAL(-3)
+        SET_VALUE(LW(0), 280)
+        SET_VALUE(LW(1), 18)
+        SET_VALUE(LW(2), 25)
+        CASE_EQUAL(-2)
+        SET_VALUE(LW(0), 250)
+        SET_VALUE(LW(1), 17)
+        SET_VALUE(LW(2), 27)
+        CASE_EQUAL(-1)
+        SET_VALUE(LW(0), 240)
+        SET_VALUE(LW(1), 16)
+        SET_VALUE(LW(2), 29)
+        CASE_EQUAL(0)
+        SET_VALUE(LW(0), 240)
+        SET_VALUE(LW(1), 15)
+        SET_VALUE(LW(2), 30)
+        CASE_EQUAL(1)
+        SET_VALUE(LW(0), 200)
+        SET_VALUE(LW(1), 15)
+        SET_VALUE(LW(2), 30)
+        CASE_EQUAL(2)
+        SET_VALUE(LW(0), 180)
+        SET_VALUE(LW(1), 15)
+        SET_VALUE(LW(2), 30)
+        CASE_DEFAULT
+        SET_VALUE(LW(0), 150)
+        SET_VALUE(LW(1), 14)
+        SET_VALUE(LW(2), 30)
+    END_SWITCH
+CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 17, 18, EVT_NULLPTR)
+CALL(btlevtcmd_AcSetGaugeParam, 60, 80, 100, 100)
+    CALL(btlevtcmd_AcSetFlag, 64)
+    CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
+    // The camera frames Yoshi as he starts to shout; the command begins.
+    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, 1)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
+    CALL(evt_btl_camera_set_zoom, 0, 400)
+    WAIT_FRAMES(20)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_10"))
+    CALL(btlevtcmd_ftof, 24, LW(0))
+    WAIT_FRAMES(LW(0))
+    CALL(btlevtcmd_StartAC, 1)
+    CALL(btlevtcmd_ResultAC)
+    // He calls the herd, with a call sound and a puff of smoke.
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_11"))
+CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
+    MULTIPLY(LW(5), 30)
+    CALL(evt_eff, STRING(""), STRING("kiss"), 3, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
+CALL(btlevtcmd_ftof, 33, LW(0))
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        WAIT_FRAMES(LW(0))
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, LW(0), LW(0), 20)
+    CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+    SWITCH(LW(6))
+        CASE_GREATER_OR_EQUAL(2)
+        CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_Y_1"))
+        CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+        CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_Y_1"))
+        CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+        CASE_DEFAULT
+        CALL(evt_audience_acrobat_notry)
+        CALL(btlevtcmd_WaitEventEnd, LW(15))
+        BEGIN_SIBLING_EVENT
+            WAIT_MS(166)
+            CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
+        END_SIBLING_EVENT
+    END_SWITCH
+    // The herd begins to run across the stage while the camera rumbles.
+    BEGIN_INLINE_EVENT_GET_ID(LW(9))
+        WAIT_MS(1000)
+        CALL(_gundan_yoshi_run_effect, UNIT_ID_SELF)
+    END_INLINE_EVENT
+    WAIT_MS(166)
+    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(evt_btl_camera_shake_h, 0, 1, 0, 6000, 0)
+    WAIT_MS(1000)
+    CALL(_wait_yoshig_run, UNIT_ID_SELF)
+    SET_VALUE(LW(15), 0)
+    // For each enemy in turn: the game checks whether the stampede reaches it or it dodges.
+    LABEL(70)
+    IF_INT_EQUAL(LW(3), -1)
+        IF_INT_NOT_EQUAL(LW(15), 0)
+            CALL(btlevtcmd_WaitEventEnd, LW(15))
+        END_IF
+        CALL(btlevtcmd_WaitEventEnd, LW(9))
+        GOTO(90)
+    END_IF
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(6))
+    IF_INT_NOT_EQUAL(LW(6), 1)
+        IF_INT_EQUAL(LW(6), 3)
+            CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        END_IF
+        IF_INT_EQUAL(LW(6), 6)
+            CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        END_IF
+        IF_INT_EQUAL(LW(6), 2)
+            CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        END_IF
+        GOTO(75)
+    END_IF
+    CALL(btlevtcmd_AcGetOutputParam, 2, LW(14))
+    // The enemy takes one hit for each repetition the action command earned,
+    // the last one counting as the final hit.
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        LOOP(LW(14))
+            IF_INT_GREATER_OR_EQUAL(LW(14), 2)
+                CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
+                IF_INT_GREATER_OR_EQUAL(LW(0), 2)
+                    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_AC_SUCCESS, LW(5))
+                ELSE
+                    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 0, LW(5))
+                END_IF
+            ELSE
+                CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
+                SWITCH(LW(0))
+                    CASE_GREATER_OR_EQUAL(6)
+                    SET_VALUE(LW(0), 2)
+                    CASE_GREATER_OR_EQUAL(4)
+                    SET_VALUE(LW(0), 1)
+                    CASE_GREATER_OR_EQUAL(2)
+                    SET_VALUE(LW(0), 0)
+                    CASE_DEFAULT
+                    SET_VALUE(LW(0), -1)
+                END_SWITCH
+                IF_INT_GREATER_OR_EQUAL(LW(0), 0)
+                    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
+                    CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(0), LW(6))
+                    CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+                    CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
+                    CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
+                ELSE
+                    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+                    CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
+                END_IF
+            END_IF
+            WAIT_FRAMES(10)
+        END_LOOP
+    END_SIBLING_EVENT
+    LABEL(75)
+    CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
+    GOTO(70)
+    // The herd finishes crossing, the camera stops shaking and the audience reaction is reported.
+    LABEL(90)
+    CALL(_wait_yoshig_complete, UNIT_ID_SELF)
+    CALL(evt_btl_camera_noshake, 1)
+    WAIT_MS(500)
+    CALL(evt_audience_ap_recovery)
+    CALL(btlevtcmd_InviteApInfoReport)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+    CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
+    CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(partyYoshiAttack_CallGuard)
     // Stampede is declared and its FP cost paid; all ground enemies are targeted.
     SET_VALUE(LW(12), PTR(&partyWeapon_YoshiCallGuard))
@@ -2012,7 +2812,13 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = {
+0x46, 0x49, 0x47, 0x46, 0x4A, 0x48, 0, 0,
+};
+#else
 u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = { // battle tex id per sweat frame (tst ids: JP +7, JP demo: JP)
 #if VERSION <= VERSION_DEMO_US
     0x46, 0x49, 0x47, 0x46, 0x4A, 0x48, 0, 0,
@@ -2020,6 +2826,7 @@ u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = { // battle tex id per sw
     0x4D, 0x50, 0x4E, 0x4D, 0x51, 0x4F, 0, 0,
 #endif
 };
+#endif
 
 /**
  * Script helper: args[0] is Yoshi.
@@ -2198,6 +3005,41 @@ typedef struct YoshiSlideAcWork {
  * Follows the action command: a new stage changes the run pose,
  * and unit work 4 (the slide sound value) follows the AC power.
  */
+#if VERSION <= VERSION_DEMO_US
+USER_FUNC(_yoshi_slide_ac_check) {
+    BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
+    EvtWord stageArg = args[0];
+    s32 last = evtGetValue(event, stageArg);
+    EvtWord flagArg = args[1];
+YoshiSlideAcWork* ac = (YoshiSlideAcWork*)TST_DEMO_BATTLE_WORK(wp)->actionCommands.work;
+s32 stage = ac->stage;
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, -2));
+    BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+
+    if (stage != last) {
+        evtSetValue(event, stageArg, stage);
+        switch (stage) {
+            case 1:
+                BtlUnit_SetAnim(part, "PYS_R_1");
+                break;
+            case 2:
+                BtlUnit_SetAnim(part, "PYS_R_4");
+                break;
+            case 3:
+                BtlUnit_SetAnim(part, "PYS_R_5");
+                break;
+        }
+    }
+    unit->work[UW_YOSHI_SLIDE_SOUND_POWER] = ac->power * 2387 / 100;
+    if (ac->flags & 1) {
+        evtSetValue(event, flagArg, 1);
+    } else {
+        evtSetValue(event, flagArg, 0);
+    }
+    return EVT_RETURN_DONE;
+}
+#else
 USER_FUNC(_yoshi_slide_ac_check) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2235,6 +3077,7 @@ USER_FUNC(_yoshi_slide_ac_check) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper for Yoshi's staggering ('yoroyoro') walk:
@@ -2371,6 +3214,7 @@ void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
  * args[3]-args[5] receive the world position of the target's hit offset (bintaHitOffset scaled by its size,
  * x mirrored by facing direction).
  */
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(_get_nomikomi_hit_position) {
     BattleWork* wp;
     EvtWord* args;
@@ -2399,6 +3243,7 @@ USER_FUNC(_get_nomikomi_hit_position) {
     evtSetFloat(event, outZ, pos.z);
     return EVT_RETURN_DONE;
 }
+#endif
 #endif
 
 /** arg 0: animation speed of Yoshi's body part */
@@ -2493,6 +3338,84 @@ USER_FUNC(_wait_yoshig_complete) {
  * animating their run cycles, kicking up smoke and panning a looped sound with the herd's average x.
  * Allocates the herd on its first call and frees it when every Yoshi has arrived; blocks while it runs.
  */
+#if VERSION <= VERSION_DEMO_US
+USER_FUNC(_gundan_yoshi_run_effect) {
+    BattleUnit* unit;
+    YoshiGundanWork* w;
+    YoshiGundanPart* p;
+    s32 i;
+    s32 allDone;
+    Vec pos;
+    s32 id;
+
+    do {
+        id = evtGetValue(event, event->args[0]);
+        id = BattleTransID(event, id);
+        unit = BattleGetUnitPtr(_battleWorkPointer, id);
+        if (isFirstCall) {
+            w = BattleAlloc(sizeof(YoshiGundanWork));
+            TST_BATTLE_UNIT(unit)->countersetWeapon = (BattleWeapon*)w;
+            memset(w, 0, sizeof(YoshiGundanWork));
+            w->state = 0;
+            w->timer = 0.0f;
+            event->userdata[0] = 0;
+            {
+                Vec tmp;
+                tmp.x = (f32)id;
+            }
+            event->userdata[1] = psndSFXOn("SFX_BTL_YOSHI_TAIGUN1");
+        } else {
+            w = (YoshiGundanWork*)TST_BATTLE_UNIT(unit)->countersetWeapon;
+        }
+        switch (w->state) {
+            case 0:
+                w->state++;
+            case 1:
+                w->timer = 0.0f;
+                allDone = TRUE;
+                for (i = 0; i < 256; i++) {
+                    p = &w->parts[i];
+                    p->frameCount++;
+                    if (p->frameCount > 2) {
+                        p->frameCount = 0;
+                        p->frame++;
+                        if (p->frame >= 6) {
+                            p->frame = 0;
+                        }
+                    }
+                    if (_gundan_part_update(p, i)) {
+                        allDone = FALSE;
+                    }
+                    w->timer += p->x;
+                }
+                if (event->userdata[0] > 0) {
+                    event->userdata[0]--;
+                } else {
+                    f32 sc;
+                    p = &w->parts[irand(256)];
+                    sc = 1.0f + 0.05f * (f32)irand(20);
+effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
+}
+                w->timer *= 0.00390625f;
+                pos.x = w->timer;
+                pos.y = 0.0f;
+                pos.z = 0.0f;
+                psndSFX_pos(event->userdata[1], &pos);
+                if (allDone) {
+                    w->state = 999;
+                }
+                break;
+            case 999:
+                psndSFXOff(event->userdata[1]);
+                BattleFree(TST_BATTLE_UNIT(unit)->countersetWeapon);
+                TST_BATTLE_UNIT(unit)->countersetWeapon = NULL;
+                return EVT_RETURN_DONE;
+        }
+dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)_btlYoshiDisp, w);
+} while (0);
+    return EVT_RETURN_BLOCK;
+}
+#else
 USER_FUNC(_gundan_yoshi_run_effect) {
     BattleUnit* unit;
     YoshiGundanWork* w;
@@ -2580,6 +3503,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
     } while (0);
     return EVT_RETURN_BLOCK;
 }
+#endif
 /**
  * Updates herd member i of the Stampede for one frame.
  * State 0 places it in a row of 16 behind the left edge (x = -300 minus 30 per row, plus up to 10 at random;
@@ -2649,11 +3573,24 @@ void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
  * Draw callback for the Stampede herd: draws the Yoshi run-cycle sprites (texture plane at the Yoshi's position
  * and frame, flipped by direction).
  */
+#if VERSION <= VERSION_DEMO_US
+void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
+    YoshiGundanPart* p;
+    s32 i;
+#else
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
+#endif
     f32 s;
+#if VERSION <= VERSION_DEMO_US
+    for (i = 0; i < 256; i++) {
+        p = &w->parts[i];
+#endif
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
     ((BtlDispTexPlaneArgOrderFn)btlDispTexPlane)(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);
 }
+#if VERSION <= VERSION_DEMO_US
+}
+#endif
 #endif
 
 /**

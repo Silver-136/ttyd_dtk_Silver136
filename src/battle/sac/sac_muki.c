@@ -101,6 +101,12 @@ EvtWord marioAttackEvent_Muki[];
  * Power Lift's weapon template (3 SP, targets Mario and the partner): set_weapon copies it and adds a sure
  * 3-turn Attack or Defense boost of the points earned in the minigame.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(nice_event_pow)
+    CALL(btlevtcmd_ACSuccessEffect, LW(0), -100, 175, 0)
+    RETURN
+EVT_END()
+#endif
 static BattleWeapon weapon = {
     "btl_wn_sac_mukimuki_body", // name
     ICON_SAC_MUKI, // icon
@@ -139,10 +145,12 @@ static BattleWeapon weapon = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(nice_event_pow)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -100, 175, 0)
     RETURN
 EVT_END()
+#endif
 
 
 USER_FUNC(main_muki) {
@@ -338,7 +346,11 @@ static inline void sacMukiAudienceCall(s32 num) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void main_cursor(void) {
+#else
 void main_cursor(void) {
+#endif
     MukiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));
@@ -371,7 +383,11 @@ void main_cursor(void) {
             ob = w->o3d[w->idx].link;
             if (ob) {
                 ob->kind = 5;
+#if VERSION <= VERSION_DEMO_US
+effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
+#else
                 effHitEntry(0, 5, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
+#endif
                 switch (ob->type) {
                 case 0:
                     prev = w->atkBoost;
@@ -382,7 +398,11 @@ void main_cursor(void) {
                     if ((s32)w->atkBoost > (s32)prev) {
                         w->t24 = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
+#if VERSION <= VERSION_DEMO_US
+                                sacMukiAudienceCall(num)
+#else
                         sacMukiAudienceCall(num);
+#endif
                     }
                     psndSFXOn("SFX_BTL_SAC_BODY4");
                     break;
@@ -395,7 +415,11 @@ void main_cursor(void) {
                     if ((s32)w->defBoost > (s32)prev) {
                         w->t28 = 60;
                         psndSFXOn("SFX_BTL_SAC_BODY6");
+#if VERSION <= VERSION_DEMO_US
+                                sacMukiAudienceCall(num)
+#else
                         sacMukiAudienceCall(num);
+#endif
                     }
                     psndSFXOn("SFX_BTL_SAC_BODY4");
                     break;

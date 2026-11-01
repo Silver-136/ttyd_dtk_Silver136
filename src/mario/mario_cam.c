@@ -75,14 +75,20 @@ f32 marioGetCamFollowRate(void) {
 }
 
 void marioPreCamera(void) {
+#if VERSION <= VERSION_DEMO_US
+marioGetPtr()->targetYaw = revise360((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
+#else
     f32 roundingFactor;
     if (camGetPtr(CAMERA_3D)->viewYaw >= 0.0f) {
         roundingFactor = 0.5f;
     } else {
         roundingFactor = -0.5f;
+#endif
     }
+#if VERSION > VERSION_DEMO_US
     marioGetPtr()->targetYaw = revise360((s32)((1000.0f * camGetPtr(CAMERA_3D)->viewYaw) + roundingFactor) / 1000.0f);
 }
+#endif
 
 /**
  * Per-frame camera update from Mario's main loop (also Bowser's and Peach's):

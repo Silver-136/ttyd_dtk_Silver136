@@ -64,7 +64,9 @@ static void monte_disp(CameraId camera, void* param);
 USER_FUNC(evt_change_plane);
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(yuu_00_cam_shift_reset);
+#endif
 USER_FUNC(yuuminigame1_opening_chk);
 USER_FUNC(yuuminigame1_opening_on_off);
 USER_FUNC(yuuminigame1_set_phase);
@@ -96,9 +98,15 @@ EvtWord yuu_00_init_evt[11];
 #endif
 
 static MonteTable montetable[] = {
+#if VERSION <= VERSION_DEMO_US
+{-1200.0f, -800.0f, 450.0f, 400.0f, 2},
+    {-800.0f, -300.0f, 400.0f, 300.0f, 2},
+    {-300.0f, 200.0f, 300.0f, 150.0f, 1},
+#else
     {-1200.0f, -800.0f, 450.0f, 200.0f, 2},
     {-800.0f, -300.0f, 300.0f, 100.0f, 2},
     {-300.0f, 200.0f, 200.0f, 100.0f, 1},
+#endif
     {0},
 };
 
@@ -336,12 +344,22 @@ EVT_BEGIN(minigame01_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1230.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(-1230.0f), FLOAT(160.0f), FLOAT(-10.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 4000, EASING_LINEAR)
+#else
     CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 6000, EASING_LINEAR)
+#endif
     WAIT_MS(1000)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame1"))
+#if VERSION > VERSION_DEMO_US
     WAIT_MS(3000)
     CALL(evt_yuutitle_free)
+#endif
     WAIT_MS(2000)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_yuutitle_free)
+WAIT_MS(1000)
+#endif
     RETURN
 EVT_END()
 
@@ -360,6 +378,132 @@ EVT_BEGIN(minigame01_start_cam_cancel)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(minigame01_start)
+    CALL(yuu_atai_init)
+    CALL(yuu_atai_push, LW(0))
+    CALL(evt_map_playanim, STRING("neon_01"), MAP_ANIM_PLAY_LOOP, 0)
+SET_VALUE(LW(0), STRING("S_dai_01"))
+        SET_VALUE(LW(1), STRING("A_dai_01"))
+        SET_VALUE(LW(2), -150)
+        SET_VALUE(LW(3), 150)
+        SET_VALUE(LW(4), 2000)
+        SET_VALUE(LW(5), 500)
+        SET_VALUE(LW(6), 0)
+        SET_VALUE(LW(7), STRING("S_dai_01_k"))
+        SET_VALUE(LW(8), 0)
+        SET_VALUE(LW(9), 0)
+        SET_VALUE(LW(10), 0)
+        SET_VALUE(LW(11), 0)
+        SET_VALUE(LW(12), 0)
+        SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
+CALL(yuuminigame_set_dataadr, 1, LW(15))
+SET_VALUE(LW(0), STRING("S_dai_02"))
+        SET_VALUE(LW(1), STRING("A_dai_02"))
+        SET_VALUE(LW(2), -150)
+        SET_VALUE(LW(3), 150)
+        SET_VALUE(LW(4), 2000)
+        SET_VALUE(LW(5), 500)
+        SET_VALUE(LW(6), 2)
+        SET_VALUE(LW(7), STRING("S_dai_02_k"))
+        SET_VALUE(LW(8), 0)
+        SET_VALUE(LW(9), 0)
+        SET_VALUE(LW(10), 0)
+        SET_VALUE(LW(11), 0)
+        SET_VALUE(LW(12), 0)
+        SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
+CALL(yuuminigame_set_dataadr, 2, LW(15))
+SET_VALUE(LW(0), STRING("S_dai_03"))
+        SET_VALUE(LW(1), STRING("A_dai_03"))
+        SET_VALUE(LW(2), -150)
+        SET_VALUE(LW(3), 150)
+        SET_VALUE(LW(4), 2000)
+        SET_VALUE(LW(5), 200)
+SET_VALUE(LW(6), 3)
+SET_VALUE(LW(7), STRING("S_dai_03_k"))
+        SET_VALUE(LW(8), -150)
+        SET_VALUE(LW(9), 150)
+        SET_VALUE(LW(10), 2000)
+        SET_VALUE(LW(11), 0)
+        SET_VALUE(LW(12), 0)
+        SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
+CALL(yuuminigame_set_dataadr, 3, LW(15))
+SET_VALUE(LW(0), STRING("S_dai_04"))
+        SET_VALUE(LW(1), STRING("A_dai_04"))
+        SET_VALUE(LW(2), -150)
+        SET_VALUE(LW(3), 150)
+        SET_VALUE(LW(4), 2000)
+        SET_VALUE(LW(5), 200)
+        SET_VALUE(LW(6), 4)
+        SET_VALUE(LW(7), STRING("S_dai_04_k"))
+        SET_VALUE(LW(8), -150)
+        SET_VALUE(LW(9), 150)
+        SET_VALUE(LW(10), 2000)
+        SET_VALUE(LW(11), 0)
+        SET_VALUE(LW(12), 0)
+        SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
+CALL(yuuminigame_set_dataadr, 4, LW(15))
+SET_VALUE(LW(0), STRING("S_dai_05"))
+        SET_VALUE(LW(1), STRING("A_dai_05"))
+        SET_VALUE(LW(2), -150)
+        SET_VALUE(LW(3), 150)
+        SET_VALUE(LW(4), 2000)
+        SET_VALUE(LW(5), 200)
+        SET_VALUE(LW(6), 4)
+        SET_VALUE(LW(7), STRING("S_dai_05_k"))
+        SET_VALUE(LW(8), -150)
+        SET_VALUE(LW(9), 150)
+        SET_VALUE(LW(10), 2000)
+        SET_VALUE(LW(11), 0)
+        SET_VALUE(LW(12), 0)
+        SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
+CALL(yuuminigame_set_dataadr, 5, LW(15))
+    // The platforms are ready. On the first round the camera flies over the course; A or B skips it.
+    CALL(yuu_atai_pop, LW(0))
+CALL(yuuminigame1_opening_chk, LW(0), LW(1))
+    IF_INT_NOT_EQUAL(LW(1), 0)
+        SPAWN_EVENT_GET_ID(PTR(minigame01_start_cam), LW(8))
+        LOOP(0)
+            IS_EVENT_RUNNING(LW(8), LW(9))
+            IF_INT_EQUAL(LW(9), 0)
+                CALL(evt_seq_wait, SEQ_GAME)
+                BREAK_LOOP
+            ELSE
+                CALL(evt_key_get_buttontrg, 0, LW(9))
+                IF_BITS_SET(LW(9), 768)
+                    DELETE_EVENT(LW(8))
+                    CALL(evt_seq_wait, SEQ_GAME)
+                    CALL_CHILD(minigame01_start_cam_cancel)
+                    BREAK_LOOP
+                END_IF
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(yuuminigame1_opening_on_off, LW(0), 0)
+        CALL_CHILD(yuu_00_kaijo_init2)
+        CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
+        WAIT_FRAMES(1)
+    END_IF
+    // The music starts, Mario poses, the spotlights stop and the start signal plays.
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MINIGAME1"))
+    WAIT_MS(200)
+    CALL(evt_mario_set_pose, STRING("M_I_1"))
+    WAIT_MS(400)
+    WAIT_MS(200)
+    CALL(evt_mario_set_pose, STRING("M_S_1"))
+    WAIT_MS(600)
+    CALL(evt_map_playanim, STRING("neon_01"), MAP_ANIM_PLAY_AT_END, 0)
+    SET_VALUE(GF(0), 0)
+    CALL(eff_call_minigame, 0, 0, 0, 500)
+    WAIT_MS(3000)
+    // Mario becomes a paper airplane, the controls come back and the coin counter appears.
+    CALL(evt_change_plane)
+CALL(evt_mario_key_onoff, 1)
+WAIT_MS(1000)
+    CALL(evt_yuucounter_alloc, 0, 70, 0, 0)
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(minigame01_start)
     CALL(yuu_atai_init)
     CALL(yuu_atai_push, LW(0))
@@ -917,7 +1061,93 @@ EVT_BEGIN(minigame01_start)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(minigame01_end)
+CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
+CALL(yuuminigame_get_dataadr, 1, LW(15))
+    CALL(evt_moving_floor_delete, LW(15))
+    CALL(yuuminigame_get_dataadr, 2, LW(15))
+    CALL(evt_moving_floor_delete, LW(15))
+    CALL(yuuminigame_get_dataadr, 3, LW(15))
+    CALL(evt_moving_floor_delete, LW(15))
+    CALL(yuuminigame_get_dataadr, 4, LW(15))
+    CALL(evt_moving_floor_delete, LW(15))
+    CALL(yuuminigame_get_dataadr, 5, LW(15))
+    CALL(evt_moving_floor_delete, LW(15))
+CALL(evt_mario_adjust_dir)
+    IF_INT_LESS(LW(0), 0)
+        CALL(eff_call_minigame, 2, 0, 0, 500)
+        CALL(evt_mario_set_pose, STRING("M_I_S"))
+        WAIT_MS(3800)
+        CALL(evt_mario_set_pose, STRING("M_D_2"))
+        WAIT_MS(200)
+    ELSE
+        CALL(eff_call_minigame, 1, 0, 0, 500)
+        WAIT_MS(500)
+        IF_INT_LESS(LW(1), 1)
+            CALL(evt_mario_set_pose, STRING("M_X_1"))
+        ELSE
+            IF_INT_GREATER(LW(1), 1)
+                CALL(evt_mario_set_pose, STRING("M_V_2"))
+            ELSE
+                CALL(evt_mario_set_pose, STRING("M_I_1"))
+            END_IF
+        END_IF
+        WAIT_MS(3500)
+    END_IF
+    // The tally screen shows the score and Mario receives his piantas, then the ranking screen records it.
+    CALL(evt_yuucounter_free)
+    CALL(yuugijou_montemedal_disp_onoff, 1)
+    CALL(evt_yuuranking_alloc, 0, 0, 0, 0, LW(0), LW(2), LW(1), 0)
+    WAIT_FRAMES(1)
+    CALL(yuuranking_wait_button)
+    CALL(yuuranking_get_monte, LW(3))
+    CALL(yuugijou_add_montemedal, 0, LW(3))
+    CALL(yuugijou_montemedal_wait)
+    CALL(evt_yuuranking_free)
+    WAIT_MS(200)
+    CALL(evt_yuuranking_alloc, 0, 0, 0, 1, LW(0), LW(2), LW(1), 0)
+    WAIT_FRAMES(1)
+    CALL(yuuranking_wait_button)
+    CALL(evt_yuuranking_free)
+    // With fewer than 10 piantas the game ends; otherwise the player picks Continue (10 piantas) or Quit.
+    SET_VALUE(LW(1), 10)
+    CALL(yuugijou_get_montemedal, LW(0))
+    IF_INT_LESS(LW(0), LW(1))
+        SET_VALUE(LW(0), 1)
+    ELSE
+        CALL(evt_msg_select, 0, STRING("sysyuu_00_00"))
+    END_IF
+    // Quitting sends Mario back through the pipe to gor_03.
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        SET_VALUE(GSWF(GSWF_YUU_MINIGAME_QUIT), 1)
+        CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
+        CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT)
+        CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
+        RETURN
+    END_IF
+    // Continuing pays 10 piantas; the stage fades out, Mario returns to the start and the lights come back on.
+    MULTIPLY(LW(1), -1)
+    CALL(yuugijou_add_montemedal, 0, LW(1))
+    CALL(yuugijou_montemedal_wait)
+    WAIT_MS(200)
+    CALL(yuugijou_montemedal_disp_onoff, 0)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    CALL(evt_snd_sfxoff, GW(10))
+    CALL(evt_fade_out, 1000)
+    CALL(re_fall_rtn)
+    CALL(evt_mario_set_pose, STRING("M_S_1"))
+    CALL_CHILD(yuu_00_kaijo_init2)
+WAIT_MS(500)
+    CALL_CHILD(light_sub_event)
+    CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE1"), GW(10))
+    CALL(evt_fade_in, 1000)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(minigame01_end)
     CALL(evt_cam_letter_box_onoff, 1, 0)
     CALL(evt_cam_letter_box_disable, 0)
@@ -1017,6 +1247,7 @@ EVT_BEGIN(minigame01_end)
     CALL(evt_fade_in, 1000)
     RETURN
 EVT_END()
+#endif
 
 EVT_BEGIN(yuu_00_init_evt)
     // The neon sign lights up, the game is set up and the audience appears.
@@ -1106,10 +1337,12 @@ EVT_BEGIN(yuu_00_init_evt)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00004250, JP yuu .text+0x4184. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(yuu_00_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Names of the floor areas below the course for yuuminigame1_gamerule;

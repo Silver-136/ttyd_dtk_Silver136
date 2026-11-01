@@ -35,6 +35,73 @@ static EvtWord wait_event[102];
  * Jumping on it or hammering its front hurts the attacker; it charges at its target,
  * and a flip leaves it helpless on its back for a turn.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_yamitogedaruma = {
+    165,
+    "btl_un_yamitogedaruma",
+    8,
+    0,
+    1,
+    1,
+40,
+    0,
+    1,
+    70,
+    4,
+50,
+    9999,
+    46,
+    40,
+    4,
+    40,
+    0.0f,
+    20.0f,
+    0.0f,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    23.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    23.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    26.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    0.0f,
+    46.0f,
+    40.0f,
+    0,
+    0,
+    0,
+    2,
+    100,
+    20,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_ENM_TOGEDA_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    0,
+    &regist,
+    1,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_yamitogedaruma = {
     165,
     "btl_un_yamitogedaruma",
@@ -108,6 +175,7 @@ BattleUnitKind unit_yamitogedaruma = {
     init_event,
     data_table,
 };
+#endif
 
 /** Damage reduction of the Dark Bristle while upright: 4 against every kind of hit. */
 static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
@@ -129,7 +197,11 @@ static StatusVulnerability regist = {20, 70, 30, 100, 30, 100, 100, 50, 100, 50,
  * Status vulnerabilities of the Dark Bristle (percent chance per status;
  * the newer releases tweak a few values).
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {20, 70, 30, 100, 30, 100, 100, 50, 100, 50, 100, 50, 100, 50, 50, 30, 55, 100, 50, 100, 100, 30};
+#else
 static StatusVulnerability regist = {20, 80, 20, 100, 20, 100, 100, 40, 100, 50, 100, 50, 100, 100, 40, 30, 20, 100, 40, 100, 100, 30};
+#endif
 #endif
 
 /**
@@ -204,6 +276,43 @@ static BattleUnitKindPart parts[] = {
  * The Dark Bristle's charge: 8 damage (7 in the demos) to the front-most opposing target,
  * a hammer-like blow that is guardable and superguardable; the spikes make it hurt whoever touches it.
  */
+#if VERSION <= VERSION_DEMO_US
+static BattleWeapon weapon_togedaruma_attack = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0, // baseFpCost..baseSpCost
+    1, // superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault,
+{7, 0, 0, 0, 0, 0, 0, 0},
+NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, // acHelpMsg
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 static BattleWeapon weapon_togedaruma_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -243,6 +352,7 @@ static BattleWeapon weapon_togedaruma_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Init event of the Dark Bristle: registers its wait,

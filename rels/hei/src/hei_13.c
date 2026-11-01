@@ -128,23 +128,50 @@ EVT_END()
 EVT_BEGIN(hei_13_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     SET_VALUE(GF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_HEI13_CAN_HITS), 0)
+#else
     SET_VALUE(GSW_HEI_13_HAMMER_HIT_COUNT, 0)
+#endif
     CALL(evt_npc_change_fbat_mode, 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_badgeblk, STRING("m"), -320, 60, -100, ITEM_CLOSE_CALL, 0, GSWF(GSWF_HEI13_CLOSE_CALL_BLOCK_HIT), 1)
+    SET_VALUE(LSWF(3), 0)
+    CALL(evt_mobj_brick, STRING("mm"), 325, 175, -100, 0, 0, 0, LSWF(3))
+    IF_INT_EQUAL(LSWF(3), 0)
+#else
     CALL(evt_mobj_badgeblk, STRING("m"), -320, 60, -100, ITEM_CLOSE_CALL, 0, GSWF_HEI_13_CLOSE_CALL_BADGE_BLOCK, 1)
     SET_VALUE(LSWF_HEI_13_BRICK_MM, 0)
     CALL(evt_mobj_brick, STRING("mm"), 325, 175, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_HEI_13_BRICK_MM)
     IF_INT_EQUAL(LSWF_HEI_13_BRICK_MM, 0)
+#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("mm"), MOBJ_FLAG_NO_SHADOW)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_TYPE_GROUND, GSWF(GSWF_HEI13_HAPPY_HEART_TAKEN), 0)
+#else
         CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_TYPE_STILL, GSWF_HEI_13_HAPPY_HEART, 0)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_brick, STRING("10m"), 325, 60, -100, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF(GSWF_HEI13_COIN_BRICK_EMPTIED))
+#else
     CALL(evt_mobj_brick, STRING("10m"), 325, 60, -100, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF_HEI_13_TEN_COIN_BRICK)
+#endif
     SET_VALUE(LW(0), PTR(ki_data))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_sub_tree_access_entry)
+#else
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
+#endif
     CALL(evt_map_playanim, STRING("anm_mugi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))

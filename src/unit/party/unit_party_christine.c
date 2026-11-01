@@ -1403,6 +1403,14 @@ static StatusVulnerability regist = {
 };
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
+#if VERSION <= VERSION_DEMO_US
+PoseTableEntry pose_table_dictionary_page[] = {
+    {BTL_POSE_NORMAL, "ZYO_Z_1"},
+    {31, "ZYO_Z_1"},
+    {BTL_POSE_DAMAGE, "ZYO_Z_1"},
+    {BTL_POSE_STAY_DEFAULT, "ZYO_Z_1"},
+};
+#endif
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
@@ -1564,7 +1572,11 @@ USER_FUNC(_dictionary) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(_set_hustle) {
+#else
 USER_FUNC(_set_hustle) {
+#endif
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;
@@ -1575,13 +1587,18 @@ USER_FUNC(_set_hustle) {
         if (unit->movesRemaining <= 0) {
             unit->movesRemaining++;
             unit->moveState = 0;
+#if VERSION <= VERSION_DEMO_US
+unit->activeTurns = 0;
+#endif
             unit->moveColorLv = 0xFF;
+#if VERSION > VERSION_DEMO_US
             if (unit->maxMovesThisTurn <= 0) {
                 unit->maxMovesThisTurn = 1;
                 if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
                     unit->tokenFlags |= kHasRallyWinkStatus;
                 }
             }
+#endif
         } else {
             BtlUnit_OnStatusFlag(unit, UNIT_STATUS_FLAG_HUSTLE);
         }

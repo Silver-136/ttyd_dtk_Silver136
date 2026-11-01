@@ -28,7 +28,11 @@ USER_FUNC(_get_local_frame);
 static USER_FUNC(_mario_makkuro_set);
 USER_FUNC(_mario_super_emblem_anim_set);
 
+#if VERSION <= VERSION_DEMO_US
+PoseTableEntry pose_table_mario_stay[32];
+#else
 PoseTableEntry pose_table_mario_stay[34];
+#endif
 BattleDataEntry data_table_mario[10];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;

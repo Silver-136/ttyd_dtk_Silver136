@@ -127,18 +127,34 @@ EVT_BEGIN(tik_18_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gazigazi_entry)
+#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
+#endif
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TIK18_CLOUD_BLOWN), 0)
+#else
     IF_INT_EQUAL(GSWF_TIK_18_WALL_BLOWN_AWAY, 0)
+#endif
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("s_win_1"), STRING("a_win_1"), PTR(tik_18_cloud_evt))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_win_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_win_1"), 1, 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG5_43_X_NAUTS_RETREAT)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
+#endif
         CALL(evt_npc_check_delete, STRING("カメック"))
         CALL(evt_npc_check_delete, STRING("トゲノコ"))
         ELSE
@@ -146,8 +162,13 @@ EVT_BEGIN(tik_18_init_evt)
         CALL(evt_npc_check_delete, STRING("ハンニャー２"))
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("ue"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -30, ITEM_SLOW_SHROOM, 0, GSWF(GSWF_TIK18_SLOW_SHROOM_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -30, ITEM_GRADUAL_SYRUP, 0, GSWF(GSWF_TIK18_GRADUAL_SYRUP_BLOCK_HIT), 0)
+#else
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -38, ITEM_SLOW_SHROOM, 0, GSWF_TIK_18_SLOW_SHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -38, ITEM_GRADUAL_SYRUP, 0, GSWF_TIK_18_GRADUAL_SYRUP_BLOCK, 0)
+#endif
     RETURN
 EVT_END()
 

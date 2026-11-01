@@ -173,7 +173,11 @@ static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
  * Defence of Fire Bro per element (normal, fire, ice, explosion, electric), subtracted from each hit:
  * 1 against every element.
  */
+#if VERSION <= VERSION_DEMO_US
+static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
+#else
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
+#endif
 #endif
 
 #if VERSION <= VERSION_DEMO_US
@@ -181,7 +185,11 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 #else
 /** Element reactions of Fire Bro: none, every element hits normally. */
+#if VERSION <= VERSION_DEMO_US
+static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+#else
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+#endif
 #endif
 
 #if VERSION <= VERSION_DEMO_US
@@ -199,7 +207,11 @@ static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80,
  * otherwise Sleep 80, Stop 80, Dizzy 70, Confuse 80, Freeze 70, Tiny 80, Attack Down 80, Defense Down 95,
  * Allergic 80, Fright 70, Gale Force 60, Slow 80 and instant KO 95.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 40, 60, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {80, 80, 70, 100, 80, 100, 100, 70, 100, 80, 100, 80, 100, 95, 80, 70, 60, 100, 80, 100, 100, 95};
+#endif
 #endif
 
 /**

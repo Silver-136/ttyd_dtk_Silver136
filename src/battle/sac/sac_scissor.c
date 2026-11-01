@@ -962,7 +962,11 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
  * untargetable and immune ones and some defense attributes) and hits each with Art Attack.
  * args[0] gets the rating level for the popup when every enemy was hit, else -1; the crowd cheers louder.
  */
+#if VERSION <= VERSION_DEMO_US
+static s32 scissor_damage(EventEntry* evt, BOOL first) {
+#else
 s32 scissor_damage(EventEntry* evt, BOOL first) {
+#endif
     BattleWork* wp;
     BattleUnit* mario;
     BattleUnit* unit;
@@ -985,8 +989,12 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
             BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             s32 res;
             if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) != 1 && !(part->attributes & kClone) && !(part->attributes & kImmuneToDamageAndStatus) &&
+#if VERSION <= VERSION_DEMO_US
+!(part->attributes & kNotTargetable) && *(s8*)part->defenseAttr != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP) {
+#else
                 !(part->attributes & kNotTargetable) && part->defenseAttr->defenseAttrs[ELEMENT_NORMAL] != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP &&
                 part->defenseAttr->defenseAttrs[ELEMENT_NORMAL] != DEFENSE_ATTR_IMMUNE) {
+#endif
                 scissor_damage_sub(unit, &res);
                 w->unitIds[n] = i;
                 w->power[n] = res;
@@ -1003,7 +1011,11 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
     for (i = 0; i < n; i++) {
         if (w->unitIds[i] != -1 && w->power[i] >= 1) {
             unit = BattleGetUnitPtr(wp, w->unitIds[i]);
+#if VERSION <= VERSION_DEMO_US
+            BattleCheckDamage(mario, unit, BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), (void*)&weapon_scissor, 0);
+#else
             BattleCheckDamage(mario, unit, BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &weapon_scissor, 0);
+#endif
             hit = 1;
         }
     }
@@ -1136,10 +1148,26 @@ void scissor_capture(CameraId camera, void* param) {
     GXPixModeSync();
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void scissor_disp_control(CameraId camera, void* param) {
+#else
 void scissor_disp_control(CameraId camera, void* param) {
+#endif
     ScissorWork* w = GetScissorPtr();
     f32* pts = (f32*)w->points;
     s32 i;
+#if VERSION <= VERSION_DEMO_US
+BattleWork* wp;
+    BattleUnit* unit;
+    Vec pos;
+    Vec a;
+    Vec b;
+    f32 width;
+    f32 height;
+    f32 hw;
+    f32 hh;
+    f32 sign;
+#endif
     w->blinkFrame = w->blinkFrame + 1;
     if (w->blinkFrame >= 60) {
         w->blinkFrame -= 60;
@@ -1154,7 +1182,11 @@ void scissor_disp_control(CameraId camera, void* param) {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetNumChans(1);
+#if VERSION <= VERSION_DEMO_US
+    GXSetChanCtrl(4, 0, GX_DF_NONE, 0, 0, 0, 2);
+#else
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+#endif
     GXSetNumTexGens(0);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -1172,7 +1204,80 @@ void scissor_disp_control(CameraId camera, void* param) {
         GXPosition3f32(pts[i * 2], pts[i * 2 + 1], 0.0f);
         GXPosition3f32(pts[i * 2 + 2], pts[i * 2 + 3], 0.0f);
     }
+#if VERSION <= VERSION_DEMO_US
+wp = _battleWorkPointer;
+    GXSetChanMatColor(4, (GXColor){0xFF, 0x00, 0x00, 0xFF});
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
+        unit = BattleGetUnitPtr(wp, i);
+        if (unit == NULL)
+            continue;
+        if (BtlUnit_GetBelong(unit) != 1)
+            continue;
+        if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))
+            continue;
+        if (BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->attributes & PART_ATTR_NOT_TARGETABLE)
+            continue;
+        if (unit->attributeFlags & kCeiling) {
+            sign = -1.0f;
+        } else {
+            sign = 1.0f;
+#endif
 }
+#if VERSION <= VERSION_DEMO_US
+        width = unit->cutWidth * unit->sizeMultiplier;
+        height = unit->cutHeight * unit->sizeMultiplier;
+        BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
+        pos.x = unit->cutBaseOffset.x * unit->sizeMultiplier + pos.x;
+        hw = 0.5f * width;
+        hh = 0.5f * height;
+        pos.y = sign * (unit->cutBaseOffset.y * unit->sizeMultiplier) + pos.y;
+        a.x = pos.x - hw;
+        a.y = pos.y + hh;
+        a.z = pos.z;
+        btlGetScreenPoint(&a, &a);
+        b.x = pos.x + hw;
+        b.y = pos.y + hh;
+        b.z = pos.z;
+        btlGetScreenPoint(&b, &b);
+        GXBegin(0xA8, 0, 2);
+        GXPosition3f32(a.x, a.y, 0.0f);
+        GXPosition3f32(b.x, b.y, 0.0f);
+        a.x = pos.x + hw;
+        a.y = pos.y + hh;
+        a.z = pos.z;
+        btlGetScreenPoint(&a, &a);
+        b.x = pos.x + hw;
+        b.y = pos.y - hh;
+        b.z = pos.z;
+        btlGetScreenPoint(&b, &b);
+        GXBegin(0xA8, 0, 2);
+        GXPosition3f32(a.x, a.y, 0.0f);
+        GXPosition3f32(b.x, b.y, 0.0f);
+        a.x = pos.x + hw;
+        a.y = pos.y - hh;
+        a.z = pos.z;
+        btlGetScreenPoint(&a, &a);
+        b.x = pos.x - hw;
+        b.y = pos.y - hh;
+        b.z = pos.z;
+        btlGetScreenPoint(&b, &b);
+        GXBegin(0xA8, 0, 2);
+        GXPosition3f32(a.x, a.y, 0.0f);
+        GXPosition3f32(b.x, b.y, 0.0f);
+        a.x = pos.x - hw;
+        a.y = pos.y - hh;
+        a.z = pos.z;
+        btlGetScreenPoint(&a, &a);
+        b.x = pos.x - hw;
+        b.y = pos.y + hh;
+        b.z = pos.z;
+        btlGetScreenPoint(&b, &b);
+        GXBegin(0xA8, 0, 2);
+        GXPosition3f32(a.x, a.y, 0.0f);
+        GXPosition3f32(b.x, b.y, 0.0f);
+    }
+}
+#endif
 
 /** Registers scissor_disp_region on the off-screen camera to draw the closed loop. */
 s32 scissor_offscreen(void) {
@@ -1312,7 +1417,11 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(30)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_btl_camera_set_moveto, 0, 75, 120, 600, 75, 70, 0, 30, 0)
+#else
         CALL(evt_btl_camera_set_moveto, 0, 75, 105, 600, 75, 55, 0, 30, 0)
+#endif
     END_SIBLING_EVENT
     // Once the star is in place as the drawing cursor, the timer runs, the crowd cheers and help shows.
     CALL(wait_star_standby)

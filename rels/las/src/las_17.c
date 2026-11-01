@@ -136,10 +136,17 @@ EVT_END()
  * plays a success jingle and makes the blue floating switch appear in a puff of smoke.
  */
 EVT_BEGIN(enemy4_dead_evt)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(enemy_common_dead_event)
+    IF_INT_EQUAL(GSW(GSW_LAS17_ENEMY_ORDER), 3)
+        SET_VALUE(GSW(GSW_LAS17_ENEMY_ORDER), 4)
+        SET_VALUE(GSWF(GSWF_LAS17_ENEMIES_BEATEN_IN_ORDER), 1)
+#else
     CALL_CHILD(PTR(enemy_common_dead_event))
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 3)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
         SET_VALUE(GSWF_LAS_17_ENEMIES_IN_ORDER_UNUSED, 1)
+#endif
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_npc_change_fbat_mode, 7)
         CALL(evt_npc_stop_for_event)
@@ -152,9 +159,17 @@ EVT_BEGIN(enemy4_dead_evt)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         WAIT_MS(500)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_SWITCH_BIKKURI_APPEAR1"), -225, 60, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff, STRING(""), STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
+#else
         CALL(evt_eff, 0, STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
+#endif
         WAIT_MS(100)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF(GSWF_LAS17_SWITCH_PRESSED))
+#else
         CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF_LAS_17_SWITCH_PRESSED)
+#endif
         WAIT_MS(500)
         WAIT_MS(1000)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
@@ -188,12 +203,20 @@ EVT_END()
 EVT_BEGIN(las_17_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    IF_INT_LESS(GSW(GSW_LAS17_ENEMY_ORDER), 4)
+        SET_VALUE(GSW(GSW_LAS17_ENEMY_ORDER), 0)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
         SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 0)
+#endif
     END_IF
     CALL(evt_npc_flag_onoff, 0, STRING("クリボー"), NPC_FLAG_RECORD_DEFEAT)
     CALL(evt_npc_flag_onoff, 0, STRING("トゲクリボー"), NPC_FLAG_RECORD_DEFEAT)
@@ -203,15 +226,25 @@ EVT_BEGIN(las_17_init_evt)
     CALL(evt_npc_change_interrupt, STRING("トゲクリボー"), 8, PTR(enemy2_dead_evt))
     CALL(evt_npc_change_interrupt, STRING("ノコノコ"), 8, PTR(enemy3_dead_evt))
     CALL(evt_npc_change_interrupt, STRING("シンノスケ"), 8, PTR(enemy4_dead_evt))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_LAS17_ENEMY_ORDER), 4)
+        CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF(GSWF_LAS17_SWITCH_PRESSED))
+#else
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
         CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF_LAS_17_SWITCH_PRESSED)
+#endif
         CALL(evt_npc_check_delete, STRING("クリボー"))
         CALL(evt_npc_check_delete, STRING("トゲクリボー"))
         CALL(evt_npc_check_delete, STRING("ノコノコ"))
         CALL(evt_npc_check_delete, STRING("シンノスケ"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS17_KEY_CHEST_OPENED))
+    IF_INT_EQUAL(GSWF(GSWF_LAS17_SWITCH_PRESSED), 0)
+#else
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_17_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_17_SWITCH_PRESSED, 0)
+#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("box"), MOBJ_FLAG_NO_DISP)
         CALL(evt_mobj_hit_onoff, STRING("box"), 0)
     END_IF

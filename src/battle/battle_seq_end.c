@@ -205,6 +205,641 @@ extern PoseTableEntry pose_table_nokotarou_stay[];
  * then plays the level-up show with the HP/FP/BP choice and the rank-up message,
  * fades out and hands Mario's and the partner's state back to the field. A loss goes to the game over sequence.
  */
+#if VERSION <= VERSION_DEMO_US
+void btlseqEnd(BattleWork* wp) {
+    BattleSeqEndWork* work = (BattleSeqEndWork*)wp->seqEndWork;
+    FieldBattleInfo* info = wp->fbatInfo;
+    PouchData* pouch = pouchGetPtr();
+
+    _audience_Whistle_control();
+    switch (BattleGetSeq(wp, (BattleSequence)7)) {
+        case 0x7000000: {
+            s32 marioBelong;
+            s32 enemyBelong;
+            u32 flags;
+            BattleUnit* mu;
+            BattleSeqEndWork* nw;
+            btlsubResetMoveColorLvAll(wp);
+            mu = BattleGetMarioPtr(wp);
+            marioBelong = mu->alliance;
+            enemyBelong = BtlUnit_GetEnemyBelong(mu);
+            flags = wp->flags;
+            if (flags & BATTLE_FLAG_DEMO_TIMEOUT) {
+                BattleInformationSetResult(info, BATTLE_RESULT_ESCAPE);
+            } else if (flags & BATTLE_FLAG_INTERRUPT_STOP) {
+                BattleInformationSetResult(info, BATTLE_RESULT_STOPPED);
+            } else if (wp->alliances[marioBelong].clearConditionMet) {
+                BattleInformationSetResult(info, BATTLE_RESULT_LOSE);
+            } else if (wp->alliances[enemyBelong].clearConditionMet) {
+                BattleInformationSetResult(info, BATTLE_RESULT_WIN);
+            } else if (flags & BATTLE_FLAG_ESCAPED) {
+                BattleInformationSetResult(info, BATTLE_RESULT_ESCAPE);
+            }
+            switch (BattleInformationGetResult(info)) {
+                case BATTLE_RESULT_WIN:
+                    if (fbatGetPointer()->postBattleEvent != NULL) {
+                        BattleSetSeq(0x7000003);
+                        return;
+                    }
+                    _check_audience_battle_end_exec();
+                    BattleSetSeq(0x7000005);
+                    _BattleMarioKouraDelete();
+                    break;
+                case BATTLE_RESULT_LOSE:
+                    BattleSetSeq(0x7000001);
+                    break;
+                case BATTLE_RESULT_ESCAPE:
+                default:
+                    _ExecAllUnitBattleEndEvent();
+                    BattleSetSeq(0x700001D);
+                    BattleAudienceSoundSetVolAll(0, 30);
+                    break;
+            }
+            nw = BattleAlloc(0x2AC);
+            wp->seqEndWork = (BattleSeqEndWork*)nw;
+            btlseqEnd_DispInit(wp);
+            nw->state = 0;
+            nw->expEffect = NULL;
+            nw->whistleTimer = irand(120) + 60;
+            nw->confettiEvtId = 0;
+            break;
+        }
+        case 0x7000003: {
+            FieldBattleData* fb = fbatGetPointer();
+            EventEntry* e = evtEntry(fb->postBattleEvent, 10, 0);
+            fb->postBattleEventId = e->eventId;
+            BattleSetSeq(0x7000004);
+            return;
+        }
+        case 0x7000004: {
+            FieldBattleData* fb = fbatGetPointer();
+            BattleSeqEndWork* nw;
+            if (evtCheckID(fb->postBattleEventId))
+                break;
+            if (!BattleWaitAllActiveEvtEnd(wp))
+                break;
+            if (fb->postBattleMode) {
+                BattleSetSeq(wp, SEQ_TURN, 0x3000001);
+                BattleSetSeq(wp, (BattleSequence)0, 2);
+                return;
+            }
+            BattleSetSeq(0x7000005);
+            _BattleMarioKouraDelete();
+            nw = BattleAlloc(0x2AC);
+            wp->seqEndWork = (BattleSeqEndWork*)nw;
+            btlseqEnd_DispInit(wp);
+            nw->state = 0;
+            return;
+        }
+        case 0x7000001: {
+            _ExecAllUnitBattleEndEvent();
+            btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
+            btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFEAT);
+            btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
+            fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
+            psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
+            BattleSetSeq(0x7000002);
+            break;
+        }
+        case 0x7000002:
+            if (!fadeIsFinish())
+                break;
+            if (!((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_GAME_OVER)) {
+                seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
+                break;
+            }
+            BattleSetSeq(0x700001F);
+            break;
+        case 0x7000005: {
+            BattleUnit* mario = BattleGetMarioPtr(wp);
+            BattleUnit* party = BattleGetPartyPtr(wp);
+            s8 i;
+            if (party && BtlUnit_CheckStatusFlag(party, UNIT_STATUS_FLAG_FLIPPED)) {
+                party->flippedTurns = 0;
+                BtlUnit_OffStatusFlag(party, UNIT_STATUS_FLAG_FLIPPED);
+                BtlUnit_GetPartsPtr(party, BtlUnit_GetBodyPartsId(party))->poseTable = pose_table_nokotarou_stay;
+            }
+            BattleConsumeReserveItem();
+            for (i = 0; (s8)i < STATUS_INVALID; i++) {
+                if ((s8)i >= STATUS_INVALID || (s8)i < STATUS_FRIGHT) {
+                    if (party)
+                        BtlUnit_SetStatus(party, i, 0, 0);
+                    BtlUnit_SetStatus(mario, i, 0, 0);
+                }
+            }
+            if ((u32)mario->attributeFlags & kVeiled) {
+                BattleUnit* p2 = BattleGetPartyPtr(wp);
+                EventEntry* e;
+                if (!p2)
+                    break;
+                e = evtEntry(BtlUnit_GetData(p2, UNIT_DATA_HIDE_EVENT), 10, 0);
+                e->unitId = p2->unitId;
+                p2->attackEventId = e->eventId;
+                break;
+            }
+            BattleSetSeq(0x7000006);
+        }
+        case 0x7000006: {
+            BattleUnit* mario;
+            PouchData* pp;
+            if (!BattleWaitAllActiveEvtEnd(wp))
+                break;
+            BattleAudienceSoundClap(-1, 0);
+            _ExecAllUnitBattleEndEvent();
+            BattleInformationSetDropMaterial(info);
+            pp = pouchGetPtr();
+            mario = BattleGetMarioPtr(wp);
+            if (pp->merleeNextCurseType == 3) {
+                EventEntry* e;
+                wp->majinaiState = 3;
+                BattleMajinaiDone();
+                BattleMajinaiEndCheck();
+                e = evtEntry(marioAttackEvent_MajinaiExpUp, 10, 0);
+                e->unitId = mario->unitId;
+                mario->attackEventId = e->eventId;
+                BattleSetSeq(0x7000007);
+                break;
+            }
+            BattleSetSeq(0x7000008);
+            break;
+        }
+        case 0x7000007:
+            if (!BattleWaitAllActiveEvtEnd(wp))
+                break;
+            BattleSetSeq(0x7000008);
+            break;
+        case 0x7000008: {
+            s32 flag;
+            BattleFogForceStop();
+            work->levelUp = 0;
+            work->exp = BattleGetStockExp(wp);
+            if (wp->majinaiState == 3) {
+                work->exp = work->exp * 2;
+            }
+            if (pouch->level >= 99) {
+                work->exp = 0;
+            }
+            if (work->exp > 100) {
+                work->exp = 100;
+            }
+            work->expDisp = work->exp;
+            wp->dispFlags &= ~BATTLE_DISP_FLAG_STAR_POINTS;
+            if (work->exp > 0) {
+                _GetExpIcon_Init(work);
+            }
+            work->timer = 0x78;
+            btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
+            if (!(wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE)) {
+                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY);
+            } else {
+                btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY_AUDIENCE);
+            }
+            btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
+            BattleSetSeq(0x7000009);
+            BattleAudienceSoundCheer(0x3C, 0x3C);
+            BattleAudienceSoundClap(-1, 0);
+            BattleAudienceSoundWhistle();
+            flag = 0;
+            {
+                BattleUnit* party = BattleGetPartyPtr(wp);
+                if (party && BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
+                    flag = 1;
+                }
+            }
+            if (!flag) {
+                psndBGMOff(PSND_PAUSE);
+                psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN1");
+            } else {
+                psndBGMOff(PSND_PAUSE);
+                psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN2");
+            }
+        }
+        case 0x7000009:
+            work->timer = work->timer - 1;
+            if (work->timer > 0)
+                break;
+            BattleSetSeq(0x700000A);
+            break;
+        case 0x700000A:
+            if (work->exp > 0) {
+                BattleUnit* mario = BattleGetMarioPtr(wp);
+                BattleUnit* party = BattleGetPartyPtr(wp);
+                EventEntry* e = evtEntry(BtlUnit_GetData(mario, UNIT_DATA_WIN_REACTION_EVENT), 10, 0);
+                if (e) {
+                    e->unitId = mario->unitId;
+                    mario->attackEventId = e->eventId;
+                }
+                if (party) {
+                    e = evtEntry(BtlUnit_GetData(party, UNIT_DATA_WIN_REACTION_EVENT), 10, 0);
+                    if (e) {
+                        e->unitId = party->unitId;
+                        party->attackEventId = e->eventId;
+                    }
+                }
+                if (!work->expEffect) {
+                    work->expEffect = effPointGetEntry(0, 0.0f, 90.0f, 0.0f, work->exp, 0);
+                }
+                BattleSetSeq(0x700000B);
+                break;
+            }
+            if (!(wp->flags & BATTLE_FLAG_MAJINAI_END)) {
+                BattleSetSeq(0x7000019);
+                break;
+            }
+            BattleSetSeq(0x700000E);
+            break;
+        case 0x700000B:
+            if (work->expDisp > 0) {
+                work->timer = work->timer + 1;
+                if ((s32)(s32)BattlePadCheckNow((PAD_BUTTON_A | PAD_BUTTON_B)) != 0) {
+                    if (work->timer < 1000) {
+                        work->timer = work->timer + 1000;
+                    }
+                }
+                if ((work->timer & 3) == 0 || work->timer >= 1000) {
+                    work->expDisp = work->expDisp - 1;
+                    pouch->starPoints = pouch->starPoints + 1;
+                    if ((work->timer & 7) == 0) {
+                        psndSFXOn("SFX_STAR_POINT_GET1");
+                    }
+                }
+                if (pouch->starPoints < 100)
+                    break;
+                pouch->starPoints = 0;
+                work->levelUp = 1;
+                if (pouch->level + 1 < 99)
+                    break;
+                work->expDisp = 0;
+                break;
+            }
+            if (work->timer >= 1000) {
+                work->timer = 10;
+            } else if (work->timer < 0x78) {
+                work->timer = 0x8C - work->timer;
+            } else {
+                work->timer = 0x14;
+            }
+            BattleSetSeq(0x700000C);
+            break;
+        case 0x700000C:
+            work->timer = work->timer - 1;
+            if (work->timer > 0)
+                break;
+            work->timer = 0x3C;
+            _GetExpIcon_End(work);
+            BattleSetSeq(0x700000D);
+            effSoftDelete(work->expEffect);
+            if (work->levelUp) {
+                work->timer = 0x3C;
+                break;
+            }
+            work->timer = 5;
+            break;
+        case 0x700000D:
+            work->timer = work->timer - 1;
+            if (work->timer > 0)
+                break;
+            work->expEffect = NULL;
+            BattleSetSeq(0x700000E);
+            break;
+        case 0x700000E:
+            if (wp->flags & BATTLE_FLAG_MAJINAI_END) {
+                BattleUnit* mario = BattleGetMarioPtr(wp);
+                EventEntry* e = evtEntry(_event_MajinaiEnd, 10, 0);
+                e->unitId = mario->unitId;
+                mario->attackEventId = e->eventId;
+                BattleSetSeq(0x700000F);
+                break;
+            }
+            BattleSetSeq(0x7000010);
+            break;
+        case 0x700000F:
+            if (!BattleWaitAllActiveEvtEnd(wp))
+                break;
+            if (work->exp > 0) {
+                BattleSetSeq(0x7000010);
+                break;
+            }
+            BattleSetSeq(0x7000019);
+            break;
+        case 0x7000010:
+            work->flags &= ~1;
+            if (work->levelUp) {
+                work->selected = 1;
+                work->unk14 = 0;
+                work->objCount = 3;
+                work->timer = 0;
+                BattleAudience_WinSetActive(0);
+                BattleBreakSlot_HideReel();
+                BattleSetSeq(0x7000011);
+                break;
+            }
+            BattleSetSeq(0x7000019);
+            break;
+        case 0x7000011:
+            if (work->timer == 0) {
+                EventEntry* e = evtEntry(_curtain_close_event, 10, 0);
+                work->evtId = e->eventId;
+                BattleStatusWindowSystemOff();
+                psndBGMOff(PSND_PAUSE);
+                psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN3");
+            }
+            work->timer = work->timer + 1;
+            if (evtCheckID(work->evtId))
+                break;
+            work->evtId = 0;
+            BattleStatusWindowSystemOn();
+            BattleStatusWindowEventOn();
+            BattleSetSeq(0x7000012);
+            break;
+        case 0x7000012: {
+            s32 sel = work->selected;
+            EventEntry* e;
+            if (work->evtId) {
+                if (evtCheckID(work->evtId))
+                    break;
+                work->evtId = 0;
+            }
+            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_RIGHT)) {
+                if (work->selected < work->objCount - 1) {
+                    work->selected = work->selected + 1;
+                }
+            }
+            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_LEFT)) {
+                if (work->selected > 0) {
+                    work->selected = work->selected - 1;
+                }
+            }
+            if (work->selected != sel) {
+                e = NULL;
+                switch (work->selected) {
+                    case 0:
+                        e = evtEntry(_move_to_heart_event, 10, 0);
+                        break;
+                    case 1:
+                        e = evtEntry(_move_to_flower_event, 10, 0);
+                        break;
+                    case 2:
+                        e = evtEntry(_move_to_badge_point_event, 10, 0);
+                        break;
+                }
+if (e) {
+                    work->evtId = e->eventId;
+                    break;
+                }
+            }
+            if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
+                s32 ok = 0;
+                switch (work->selected) {
+                    case 0:
+                        if (pouch->baseMaxHP < 200)
+                            ok = 1;
+                        break;
+                    case 1:
+                        if (pouch->baseMaxFP < 200)
+                            ok = 1;
+                        break;
+                    case 2:
+                        if (pouch->maximumBP < 99)
+                            ok = 1;
+                        break;
+                }
+                if (ok) {
+                    work->cursor = 0;
+                    work->unk28 = 0;
+                    work->cursorCount = 2;
+                    work->flags &= ~SEQEND_DISP_LVUP_HELP;
+                    BattleSetSeq(0x7000014);
+                    e = evtEntry(_jump_event, 10, 0);
+                    work->evtId = e->eventId;
+                }
+            }
+            break;
+        }
+        case 0x7000013:
+            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
+                work->cursor = work->cursor + 1;
+                if (work->cursor >= work->cursorCount) {
+                    work->cursor = 0;
+                }
+            }
+            if (BattlePadCheckTrigger(BATTLE_PAD_STICK_UP)) {
+                work->cursor = work->cursor - 1;
+                if (work->cursor < 0) {
+                    work->cursor = work->cursorCount - 1;
+                }
+            }
+            if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
+                work->flags &= ~SEQEND_DISP_LVUP_CONFIRM_UNUSED;
+                BattleSetSeq(0x7000012);
+            }
+            if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
+                if (work->cursor == 0) {
+                    work->flags &= ~(SEQEND_DISP_LVUP_SELECT | SEQEND_DISP_LVUP_CONFIRM_UNUSED);
+                    BattleSetSeq(0x7000015);
+                    break;
+                }
+                work->flags &= ~SEQEND_DISP_LVUP_CONFIRM_UNUSED;
+                BattleSetSeq(0x7000012);
+            }
+            break;
+        case 0x7000014:
+            if (evtCheckID(work->evtId))
+                break;
+            work->evtId = 0;
+            BattleSetSeq(0x7000015);
+            break;
+        case 0x7000015: {
+            BattleUnit* party;
+            BattleUnit* party2;
+            s32 ok;
+            NpcBattleInfo* fd;
+            BattleUnit* mario;
+            pouch->level = pouch->level + 1;
+            switch (work->selected) {
+                case 0:
+                    pouch->baseMaxHP = pouch->baseMaxHP + 5;
+                    break;
+                case 1:
+                    pouch->baseMaxFP = pouch->baseMaxFP + 5;
+                    break;
+                case 2:
+                    pouch->maximumBP = pouch->maximumBP + 3;
+                    break;
+            }
+            pouchReviseMarioParam();
+            pouch->currentHP = pouch->maximumHP;
+            pouch->currentFP = pouch->maximumFP;
+            BtlUnit_SetParamFromPouch(BattleGetMarioPtr(wp));
+            party = BattleGetPartyPtr(wp);
+            if (party) {
+                s32 id = BattleTransPartyId((s32)party->currentKind);
+                if (id != 0 && id < 8) {
+                    PouchPartyData* pe = &pouch->partyData[id];
+                    pe->currentHP = pe->maximumHP;
+                    party->currentHp = party->maxHp;
+                }
+            }
+            fd = wp->fbatInfo->setup;
+            ok = 1;
+            mario = BattleGetMarioPtr(wp);
+            party2 = BattleGetPartyPtr(wp);
+            if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
+                ok = 0;
+            } else if (party2) {
+                if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
+                    BtlUnit_CheckStatus(party2, STATUS_INSTANT_KILL)) {
+                    ok = 0;
+                }
+            }
+            if (ok) {
+                if ((u32)fd->battleFlags & NPC_BATTLE_STORY) {
+                    BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE3", -250000000, 0);
+                } else {
+                    BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_PAUSE1", -250000000, 0);
+                }
+            }
+            BtlUnit_SetBodyAnim(BattleGetMarioPtr(wp), "M_V_2");
+            BattleAudienceSoundCheer(0xB4, 0x28);
+            work->timer = 0xB4;
+            BattleSetSeq(0x7000016);
+            mario = BattleGetMarioPtr(wp);
+            party = BattleGetPartyPtr(wp);
+            if (mario) {
+                effRecoveryEntry(4, 0, mario->position.x, 40.0f + mario->position.y, mario->position.z);
+            }
+            if (party) {
+                effRecoveryEntry(4, 0, party->position.x, 40.0f + party->position.y, party->position.z);
+            }
+            break;
+        }
+        case 0x7000016:
+            work->timer = work->timer - 1;
+            if (work->timer == 0x78) {
+                BattleUnit* mario = BattleGetMarioPtr(wp);
+                if (mario) {
+                    effRecoveryEntry(5, 0, mario->position.x, 40.0f + mario->position.y, mario->position.z);
+                }
+            }
+            if (work->timer > 0)
+                break;
+            if (work->confettiEvtId)
+                evtDeleteID(work->confettiEvtId);
+            BattleSetSeq(0x7000017);
+            break;
+        case 0x7000017: {
+            EventEntry* e;
+            if (!_get_rank_data(pouch->level)) {
+                BattleSetSeq(0x700001C);
+                break;
+            }
+            pouch->rank = _get_rank_data(pouch->level)->rankId;
+            e = evtEntry(_rank_up_event, 10, 0);
+            work->rankUpEvtId = e->eventId;
+            BattleSetSeq(0x7000018);
+        }
+        case 0x7000018:
+            if (evtCheckID(work->rankUpEvtId))
+                break;
+            BattleSetSeq(0x700001C);
+            break;
+        case 0x7000019: {
+            s32 ok = 1;
+            NpcBattleInfo* fd = wp->fbatInfo->setup;
+            BattleUnit* mario = BattleGetMarioPtr(wp);
+            BattleUnit* party = BattleGetPartyPtr(wp);
+            if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
+                ok = 0;
+            } else if (party) {
+                if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
+                    BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
+                    ok = 0;
+                }
+            }
+            if (!ok) {
+                if ((u32)fd->battleFlags & NPC_BATTLE_STORY) {
+                    BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF1", -250000000, 0);
+                } else {
+                    BtlUnit_snd_se(mario, "SFX_VOICE_MARIO_RELIEF2", -250000000, 0);
+                }
+            }
+            BtlUnit_SetBodyAnim(BattleGetMarioPtr(wp), "M_V_1");
+            work->timer = 0x3C;
+            BattleSetSeq(0x700001A);
+            break;
+        }
+        case 0x700001A:
+            if (--work->timer > 0)
+                break;
+            BtlUnit_SetBodyAnimType(BattleGetMarioPtr(wp), POSE_TYPE_RUN);
+            if (BattleGetPartyPtr(wp)) {
+                BattleUnit* party = BattleGetPartyPtr(wp);
+                if ((s32)party->currentKind != UNIT_KOOPS || party->flippedTurns < 1) {
+                    BtlUnit_SetBodyAnimType(BattleGetPartyPtr(wp), POSE_TYPE_RUN);
+                }
+            }
+            BattleSetSeq(0x700001B);
+            break;
+        case 0x700001B:
+            BattleSetSeq(0x700001C);
+            break;
+        case 0x700001C: {
+            FieldBattleData* fb;
+            NpcEntry* p;
+            BattleSetSeq(0x700001D);
+            BattleAudienceSoundSetVolAll(0, 30);
+break;
+        }
+        case 0x700001D: {
+            fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
+            BattleSetSeq(0x700001E);
+            psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
+        }
+        case 0x700001E:
+            if (!fadeIsFinish())
+                break;
+            BattleSetSeq(0x700001F);
+            break;
+        case 0x700001F: {
+            BattleUnit* party = BattleGetPartyPtr(wp);
+            s32 kind;
+            s32 id;
+            NpcBattleInfo* fd;
+            BattleUnit* mario;
+            MarioWork* mw;
+            PartyEntry* pe;
+            if (party)
+                kind = (s32)party->currentKind;
+            else
+                kind = 0;
+            id = BattleTransPartyId(kind);
+            fd = wp->fbatInfo->setup;
+            mario = BattleGetMarioPtr(wp);
+            if ((u32)fd->battleFlags & NPC_BATTLE_NO_GAME_OVER) {
+                if (mario->currentHp <= 0)
+                    mario->currentHp = 1;
+            }
+            BattleSetMarioParamToFieldBattle(wp);
+            BattleFree(wp->seqEndWork);
+            wp->seqEndWork = NULL;
+            BattleSetSeq(wp, (BattleSequence)0, 4);
+            mw = marioGetPtr();
+            mw->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
+            if (kind)
+                marioPartyEntry((PartyId)id);
+            else
+                marioPartyKill();
+            pe = partyGetPtr(marioGetPartyId());
+            if (pe)
+                ((PartyEntry*)pe)->flags2 &= ~PARTY_DISP_FLAG_HIDE;
+            BtlActRec_JudgeRuleKeep();
+            BattleAudienceSoundStop(1);
+            break;
+        }
+    }
+    btlseqEnd_DispMain((CameraId)8, wp);
+}
+#else
 void btlseqEnd(BattleWork* wp) {
     BattleSeqEndWork* work = (BattleSeqEndWork*)wp->seqEndWork;
     FieldBattleInfo* info = wp->fbatInfo;
@@ -826,6 +1461,7 @@ void btlseqEnd(BattleWork* wp) {
     }
     btlseqEnd_DispMain(CAMERA_2D, wp);
 }
+#endif
 
 /**
  * Starts every unit's battle-end event (unit data entry 0x3F) bound to that unit;
@@ -860,10 +1496,17 @@ void btlseqEnd_DispInit(BattleWork* wp) {
  * Called at the end of every btlseqEnd frame: steps the Star Point icons
  * and queues each result display whose SeqEndDispFlags bit is set.
  */
+#if VERSION <= VERSION_DEMO_US
+static void btlseqEnd_DispMain(CameraId camId, void* param) {
+#else
 void btlseqEnd_DispMain(CameraId camId, void* param) {
+#endif
     BattleWork* wp = (BattleWork*)param;
+#if VERSION <= VERSION_DEMO_US
+    BattleSeqEndWork* work = SEW(wp);
+#else
     BattleSeqEndWork* work = wp->seqEndWork;
-
+#endif
 
     if (work) {
         if (work->flags & SEQEND_DISP_EXP_ICON) {
@@ -880,11 +1523,15 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
         if (work->flags & SEQEND_DISP_LVUP_CONFIRM_UNUSED) {
             dispEntry(camId, 900.0f, 1, _LvupParamConfirmDisp, wp);
         }
+#if VERSION > VERSION_DEMO_US
         if (work->flags & SEQEND_DISP_LVUP_HELP) {
             dispEntry(camId, 900.0f, 1, _LvupParamHelpMsgDisp, wp);
+#endif
         }
     }
+#if VERSION > VERSION_DEMO_US
 }
+#endif
 
 void _MarioExpDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;
@@ -1089,6 +1736,164 @@ USER_FUNC(_display_select_one_to_upgrade_text);
 USER_FUNC(_set_initial_upgrade_cursor_position);
 
 #endif
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(_curtain_close_event)
+    // The stage darkens and the side curtains close.
+    BEGIN_SIBLING_EVENT
+        CALL(evt_batstage_set_stg_dark, 80, 30, 0)
+        CALL(evt_batstage_set_stg_dark_base, 80, 30, 0)
+    END_SIBLING_EVENT
+    BEGIN_SIBLING_EVENT
+        CALL(evt_fade_entry, 24, 1000, 0, 0, 0)
+        CALL(evt_fade_set_anim_ofs_pos, 0, 130)
+        CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
+        CALL(evt_fade_end_wait)
+    END_SIBLING_EVENT
+    // On a wide stage, Mario and the partner walk off to the left while the curtains close.
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_PARTY_IN_AUDIENCE)
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        BEGIN_SIBLING_EVENT
+            CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_RUN)
+            CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
+            CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, -300, LW(1), LW(2), 120, -1, 0)
+        END_SIBLING_EVENT
+        CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(3))
+        IF_INT_NOT_EQUAL(LW(3), -1)
+            BEGIN_SIBLING_EVENT
+                CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
+                CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_RUN)
+                CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
+                CALL(btlevtcmd_MovePosition, LW(3), -330, LW(1), LW(2), 120, -1, 0)
+            END_SIBLING_EVENT
+        END_IF
+    END_IF
+    // The three nozzles above the stage lower together.
+    BEGIN_SIBLING_EVENT
+        CALL(evt_sub_intpl_init_float, EASING_LINEAR, 0, FLOAT(-40.0f), 29)
+        LOOP(30)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
+            CALL(_nozzle_set_offset, STRING("nozzle_l"), LW(0))
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_SIBLING_EVENT
+    BEGIN_SIBLING_EVENT
+        CALL(evt_sub_intpl_init_float, EASING_LINEAR, 0, FLOAT(-40.0f), 29)
+        LOOP(30)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
+            CALL(_nozzle_set_offset, STRING("nozzle_c"), LW(0))
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_SIBLING_EVENT
+    BEGIN_SIBLING_EVENT
+        CALL(evt_sub_intpl_init_float, EASING_LINEAR, 0, FLOAT(-40.0f), 29)
+        LOOP(30)
+            CALL(evt_sub_intpl_get_float, LW(0), EVT_NULLPTR)
+            CALL(_nozzle_set_offset, STRING("nozzle_r"), LW(0))
+            WAIT_FRAMES(1)
+        END_LOOP
+    END_SIBLING_EVENT
+    // The wide-stage flag is cleared and the camera returns to its normal view.
+    CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_PARTY_IN_AUDIENCE)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    WAIT_MS(1500)
+    // Confetti falls, the level-up effect plays and Star Power refills to full.
+    BEGIN_SIBLING_EVENT
+        LOOP(6)
+            CALL(evt_eff, STRING(""), STRING("confetti"), 13, 0, 300, 95, 180, 0, 0, 0, 0, 0, 0, 0)
+            WAIT_FRAMES(20)
+        END_LOOP
+    END_SIBLING_EVENT
+    SPAWN_EVENT_GET_ID(PTR(_confetti_control_event), LW(0))
+    CALL(_set_confetti_control_evtid, LW(0))
+    CALL(evt_eff, STRING(""), STRING("levelup"), 0, 0, 50, 100, 60, 0, 0, 0, 0, 0, 0, 0)
+    WAIT_FRAMES(48)
+    CALL(_lvup_ap_recover_full)
+    WAIT_MS(1000)
+    // A spotlight comes on and follows Mario, and the enemies are hidden.
+    BEGIN_SIBLING_EVENT_GET_ID(LW(15))
+        WAIT_FRAMES(2)
+        CALL(_lvup_spot_on, 0)
+        CALL(_lvup_spot_move, 0)
+    END_SIBLING_EVENT
+    CALL(_disable_enemy_unit_disp)
+    // The partner reappears off to the left and walks back on with its own footstep sounds.
+    BEGIN_SIBLING_EVENT
+        CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(3))
+        IF_INT_NOT_EQUAL(LW(3), -1)
+            CALL(btlevtcmd_SetPos, LW(3), -230, 0, 90)
+            CALL(btlevtcmd_ClearAllStatus, LW(3))
+            CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
+            CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_WALK)
+            SET_VALUE(LW(0), -155)
+            SET_VALUE(LW(1), 0)
+            SET_VALUE(LW(2), 90)
+            SET_VALUE(LW(6), 28)
+            CALL(btlevtcmd_GetUnitKind, LW(3), LW(5))
+            SWITCH(LW(5))
+                CASE_OR_EQUAL(UNIT_GOOMBELLA)
+                CASE_OR_EQUAL(UNIT_KOOPS)
+                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 6, 12, 16, 0, 0)
+                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
+                CASE_END
+                CASE_EQUAL(UNIT_YOSHI)
+                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 0, 6, 6, 0, 0)
+                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
+                CASE_EQUAL(UNIT_FLURRIE)
+                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBHANG1"), STRING("SFX_PARTY_BATTLE_SUBHANG1"), 6, 12, 16, 0, 0)
+                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
+                CASE_EQUAL(UNIT_VIVIAN)
+                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBHANG1"), STRING("SFX_PARTY_BATTLE_SUBHANG1"), 0, 15, 13, 0, 0)
+                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
+                CASE_EQUAL(UNIT_BOBBERY)
+                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 0, 18, 18, 0, 0)
+                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
+                CASE_EQUAL(UNIT_MS_MOWZ)
+                CALL(btlevtcmd_SetMoveSoundDataWork, LW(3), STRING("SFX_PARTY_BATTLE_SUBMOVE1L"), STRING("SFX_PARTY_BATTLE_SUBMOVE1R"), 0, 15, 13, 0, 0)
+                CALL(btlevtcmd_MovePosition, LW(3), LW(0), LW(1), LW(2), LW(6), -2, 1)
+            END_SWITCH
+            CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(4), POSE_TYPE_NEUTRAL)
+        END_IF
+    END_SIBLING_EVENT
+    // Mario walks back to centre stage, strikes a victory pose and the audience cheers.
+    CALL(btlevtcmd_SetPos, UNIT_ID_MARIO, -200, 0, 90)
+    CALL(btlevtcmd_ClearAllStatus, UNIT_ID_MARIO)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_MARIO, 1, POSE_TYPE_WALK)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, 0, 0, 90, 75, -1, 0)
+    CALL(btlevtcmd_snd_se, UNIT_ID_MARIO, STRING("SFX_VOICE_MARIO_PAUSE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_V_2"))
+    CALL(evt_audience_sound_cheer, 180, 40)
+    WAIT_MS(1000)
+    // The HP, FP and BP blocks appear and the spotlight fades.
+    CALL(_lvup_select_object_init)
+    BEGIN_SIBLING_EVENT
+        CALL(_lvup_spot_off, 30)
+    END_SIBLING_EVENT
+    // The stage lights come back, the blocks dim and the curtains open (the demos leave the audience dark).
+    BEGIN_SIBLING_EVENT
+        CALL(evt_batstage_set_stg_dark, 0, 30, 0)
+        CALL(evt_batstage_set_stg_dark_base, 0, 30, 0)
+        CALL(btlevtcmd_BtlStageObjFlagOnOff, STRING("spotlight"), 1, 0)
+        CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
+        CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
+        CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
+CALL(evt_fade_entry, 25, 1000, 0, 0, 0)
+        CALL(evt_fade_set_anim_ofs_pos, 0, 130)
+        CALL(evt_fade_set_anim_virtual_pos, 0, 0, LW(0))
+CALL(evt_fade_end_wait)
+    END_SIBLING_EVENT
+    // A second later the FP block lights up and shows its current and next value; there is no choice.
+    WAIT_MS(1000)
+    BEGIN_SIBLING_EVENT_GET_ID(LW(0))
+        CALL(_lvup_obj_set_color, 1, 255, 255, 255, 255)
+        CALL(_lvup_disp_flag_onoff, 1, SEQEND_DISP_LVUP_HELP)
+        CALL(_lvup_select_obj_disp_on)
+    END_SIBLING_EVENT
+    CALL(btlevtcmd_WaitEventEnd, LW(0))
+    CALL(_lvup_select_obj_lvup_param_disp)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(_curtain_close_event)
     // The stage darkens and the side curtains close.
     BEGIN_SIBLING_EVENT
@@ -1316,6 +2121,7 @@ EVT_BEGIN(_curtain_close_event)
 #endif
     RETURN
 EVT_END()
+#endif
 
 EVT_BEGIN(_confetti_control_event)
     SET_VALUE(LW(0), 1)
@@ -1483,7 +2289,11 @@ USER_FUNC(_lvup_ap_recover_full) {
  * Mario and the partner (retail runs Bobbery's event but never hides him).
  * A stage iron frame (if_body, if_wire) is hidden and marked gone.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(_disable_enemy_unit_disp) {
+#else
 USER_FUNC(_disable_enemy_unit_disp) {
+#endif
     BattleWork* wp = _battleWorkPointer;
     s32 i;
     BattleUnit* unit;
@@ -1494,18 +2304,42 @@ USER_FUNC(_disable_enemy_unit_disp) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
+#if VERSION <= VERSION_DEMO_US
+        if (!unit)
+            continue;
+        if (unit->flags & BATTLE_UNIT_FLAG_BROKEN)
+            continue;
+#else
         if (!unit) continue;
         if (unit->flags & BATTLE_UNIT_FLAG_BROKEN) continue;
+#endif
         kind = unit->currentKind;
+#if VERSION <= VERSION_DEMO_US
+        if (kind == UNIT_SYSTEM)
+            continue;
+        if (kind == UNIT_MARIO)
+            continue;
+if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER)
+            continue;
+#else
         if (kind == UNIT_SYSTEM) continue;
         if (kind == UNIT_MARIO) continue;
         if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER && kind != UNIT_BOBBERY) continue;
+#endif
         data = BtlUnit_GetData(unit, UNIT_DATA_BATTLE_END_HIDE_EVENT);
         if (data) {
             evt = evtEntry(data, 10, 0);
             evt->unitId = unit->unitId;
+#if VERSION <= VERSION_DEMO_US
+        } else {
+{
+#else
         } else if (unit->currentKind != UNIT_BOBBERY) {
+#endif
             unit->attributeFlags |= (kUnitHidden | kUnitNoShadow);
+#if VERSION <= VERSION_DEMO_US
+            }
+#endif
         }
     }
     obj = BattleSearchObjectPtr("if_body");

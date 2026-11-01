@@ -18,10 +18,15 @@
 enum { FILE_ENTRY_CAPACITY = 0x400 };
 
 //.bss
+#if VERSION <= VERSION_DEMO_US
+FileManagerWork fileWork;
+#endif
 char _filename[0x400]; //for fileAllocf/fileAsyncf vsprintf
 
 //.sbss
+#if VERSION > VERSION_DEMO_US
 FileManagerWork fileWork;
+#endif
 
 //.sdata
 FileManagerWork* afp = &fileWork;

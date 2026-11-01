@@ -102,7 +102,11 @@ static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_koopa_get_level, GSW(GSW_KPA_BOWSER_POWER))
+#else
         CALL(evt_koopa_get_level, GSW_KPA_BOWSER_LEVEL)
+#endif
         CALL(evt_bero_mapchange, STRING("kpa_06"), STRING("kpa_next_map"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -118,7 +122,11 @@ static EVT_BEGIN(jumpstand_evt)
     CALL(evt_mobj_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(1))
     ADD(LW(3), 800)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 2000, 1)
+#else
     CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 4000, 3)
+#endif
     RETURN
 EVT_END()
 

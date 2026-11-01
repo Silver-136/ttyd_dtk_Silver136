@@ -35,7 +35,11 @@ static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_dokugassun_attack;
 static BattleWeapon weapon_dokugassun_poisongas_attack;
 static EvtWord attack_event[69];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord poisongas_event[274];
+#else
 static EvtWord poisongas_event[303];
+#endif
 static PoseTableEntry pose_table[17];
 static BattleDataEntry data_table[3];
 static EvtWord init_event[37];
@@ -46,7 +50,11 @@ static EvtWord counter_event[2];
 static EvtWord unison_phase_event[140];
 static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event[12];
+#else
 static EvtWord wait_event[13];
+#endif
 
 /**
  * Unit data of the Poison Puff (btl_un_dokugassun): 15 HP, level 34,
@@ -104,6 +112,9 @@ static BattleUnitDefense defence = {0};
 /** Element attributes of the Poison Puff: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 70, 80, 0, 60, 100, 100, 60, 100, 60, 100, 60, 100, 60, 60, 60, 80, 100, 60, 100, 100, 20};
+#else
 static StatusVulnerability regist = {
     65, // sleep
     65, // stop
@@ -128,6 +139,7 @@ static StatusVulnerability regist = {
     100, // invisible
     20, // ohko
 };
+#endif
 
 /**
  * The Poison Puff's single part: the Puff model (c_kmoon_g), the main target;
@@ -189,6 +201,46 @@ static BattleWeapon weapon_dokugassun_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+#if VERSION <= VERSION_DEMO_US
+static BattleWeapon weapon_dokugassun_poisongas_attack = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {10, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, // acHelpMsg
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
+    0, 0, 0, 0, 0, 0,
+50,
+10, // poisonTime
+    1, // poisonStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // confuseChance..burnTime
+    0, 0, 0, 0, 0, 0, 0, 0, // freezeChance..atkChangeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // defChangeChance..fastChance
+    0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
+    0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 static BattleWeapon weapon_dokugassun_poisongas_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -231,6 +283,7 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -242,20 +295,41 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterPoisonStatus, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(9), PTR(&weapon_dokugassun_poisongas_attack))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(poisongas_event)
+#else
         CALL_CHILD(PTR(poisongas_event))
+#endif
         GOTO(99)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(LW(0), 70)
+    ADD(LW(0), 30)
+#else
     SET_VALUE(LW(0), 65)
     ADD(LW(0), 35)
+#endif
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(LW(0), 70)
+#else
     SET_VALUE(LW(0), 65)
+#endif
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(9), PTR(&weapon_dokugassun_attack))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(normal_attack_event)
+#else
         CALL_CHILD(PTR(normal_attack_event))
+#endif
         GOTO(99)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(charge_event)
+#else
     CALL_CHILD(PTR(charge_event))
+#endif
     GOTO(99)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -281,10 +355,12 @@ static EVT_BEGIN(poisongas_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE3"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -40, LW(1), LW(2), 30, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_DOKU_KUMO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -342,7 +418,9 @@ static EVT_BEGIN(poisongas_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+#if VERSION > VERSION_DEMO_US
     // Check defense once, at the first target that reaches the damage branch.
+#endif
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         SET_VALUE(LW(6), 1)
@@ -361,11 +439,19 @@ static EVT_BEGIN(poisongas_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE3"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 0, EASING_QUADRATIC_OUT, 0, -1)
+#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     WAIT_MS(250)
     LABEL(99)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
+#else
     CALL(btlevtcmd_ResetFaceDirection, -2)
+#endif
     RETURN
 EVT_END()
 
@@ -723,5 +809,9 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+#else
 EVT_END_PAD()
+#endif
 

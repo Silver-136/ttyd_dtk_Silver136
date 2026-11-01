@@ -93,8 +93,11 @@ USER_FUNC(urouro_main_func) {
     f32 dist;
     f32 step;
     f32 lim;
+#if VERSION <= VERSION_DEMO_US
+    f32 temp;
+#else
     s32 sfxFlag;
-
+#endif
     switch (work->state) {
     case UROURO_STATE_CHOOSE_WALK:
         work->timer = work->walkTime / 2 + irand(work->walkTime / 2 + 1);
@@ -120,11 +123,15 @@ USER_FUNC(urouro_main_func) {
                 work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);
             }
         }
+#if VERSION <= VERSION_DEMO_US
+            if (animPoseGetPeraEnd(npc->poseId) && npc == marioGetTouchNpcPtr() && __fabsf(compAngle(npc->moveDir, mario->directionView)) < 90.0f && __fabsf(compAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z), mario->directionView)) < 90.0f && dist < work->radius) {
+#else
         if (animPoseGetPeraEnd(npc->poseId) && npc == marioGetTouchNpcPtr()
             && __fabsf(compAngle(npc->moveDir, mario->directionView)) < 90.0f
             && __fabsf(compAngle(angleABf(npc->position.x, npc->position.z, mario->position.x, mario->position.z),
                               mario->directionView)) < 90.0f
             && dist < work->radius) {
+#endif
             npc->direction = reviseAngle(npc->moveDir - 180.0f);
             npc->moveDir = npc->direction;
             work->flags &= ~(UROURO_FLAG_OUTSIDE | UROURO_FLAG_TURN_HOME);
@@ -146,6 +153,10 @@ USER_FUNC(urouro_main_func) {
                 step = lim;
             }
             npc->moveOffset.x = step * (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
+#if VERSION <= VERSION_DEMO_US
+                temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
+                npc->moveOffset.z = step * -temp;
+#else
             npc->moveOffset.z = step * -(f32)cos(npc->moveDir * 6.2831855f / 360.0f);
             sfxFlag = 0;
             if (psndGetFlag() & PSND_FLAG_DOOR_IN) {
@@ -169,6 +180,7 @@ USER_FUNC(urouro_main_func) {
             if (npc->footstepSfxB != 0 || npc->footstepToggle != 0) {
                 npc->footstepAccum += 1000.0f * npc->moveDt;
             }
+#endif
         }
         break;
     case UROURO_STATE_CHOOSE_WAIT:

@@ -369,16 +369,28 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam3d_evt_set, 157, 87, 1126, -800, 110, 85, 2000, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_open_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
             SET_FLOAT_VALUE(LW(0), FLOAT(-180.0f))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(w_door_open)
+#else
             CALL_CHILD(PTR(w_door_open))
+#endif
             BREAK_LOOP
         ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(w_door_open)
+#else
             CALL_CHILD(PTR(w_door_open))
+#endif
         END_IF
     END_LOOP
     BEGIN_INLINE_EVENT
@@ -386,16 +398,28 @@ static EVT_BEGIN(first_evt)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -875, 0, FLOAT(150.0f))
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_close_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(w_door_close)
+#else
             CALL_CHILD(PTR(w_door_close))
+#endif
             BREAK_LOOP
         ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(w_door_close)
+#else
             CALL_CHILD(PTR(w_door_close))
+#endif
         END_IF
     END_LOOP
     WAIT_MS(300)
@@ -404,10 +428,17 @@ static EVT_BEGIN(first_evt)
     WAIT_FRAMES(1)
     CALL(evt_msg_print_party, STRING("stg8_las_11"))
     CALL(evt_party_run, 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG8_03_THE_PALACE_GARDEN)
+    CALL_CHILD(bero_case_entry)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
     CALL_CHILD(PTR(bero_case_entry))
+#endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -993,43 +1024,77 @@ EVT_END()
 EVT_BEGIN(las_09_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS3"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_02_FOLLOW_THE_LIT_TORCHES)
+        CALL_CHILD(evt_bero_info_run)
+#else
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_02_FOLLOW_THE_LIT_TORCHES)
         CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     END_IF
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gazigazi_entry)
+#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
+#endif
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, 190, 50, 25, 0, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -190, 50, 25, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_02_FOLLOW_THE_LIT_TORCHES)
+        SPAWN_EVENT(first_evt)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_02_FOLLOW_THE_LIT_TORCHES)
         SPAWN_EVENT(PTR(first_evt))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_LAS09_CHOMP_STATUE_1_BOMBED), 0)
+#else
     IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP, 0)
+#endif
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_wan1"), 0, PTR(bomb_wanwan1_evt), 0)
     ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan1"), 0, 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_LAS09_CHOMP_STATUE_2_BOMBED), 0)
+#else
     IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_2_BLOWN_UP, 0)
+#endif
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_wan2"), 0, PTR(bomb_wanwan2_evt), 0)
     ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan2"), 0, 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_switch_blue, 2, STRING("switch1"), -540, 10, -1300, PTR(switch_1_evt), GSWF(GSWF_LAS09_SWITCH_1_PRESSED))
+    CALL(evt_mobj_switch_blue, 2, STRING("switch2"), 540, 10, -1300, PTR(switch_2_evt), GSWF(GSWF_LAS09_SWITCH_2_PRESSED))
+    IF_INT_EQUAL(GSWF(GSWF_LAS09_SWITCH_1_PRESSED), 1)
+#else
     CALL(evt_mobj_switch_blue, 2, STRING("switch1"), -540, 10, -1300, PTR(switch_1_evt), GSWF_LAS_09_SWITCH_1_PRESSED)
     CALL(evt_mobj_switch_blue, 2, STRING("switch2"), 540, 10, -1300, PTR(switch_2_evt), GSWF_LAS_09_SWITCH_2_PRESSED)
     IF_INT_EQUAL(GSWF_LAS_09_SWITCH_1_PRESSED, 1)
+#endif
         CALL(evt_mapobj_rotate, 0, STRING("S_daizadai1_1"), 180, 0, 0)
         CALL(evt_mapobj_rotate, 0, STRING("S_daizadai1_2"), 0, 0, -180)
         CALL(evt_mapobj_rotate, 0, STRING("S_daizadai1_3"), 0, 0, 180)
         CALL(evt_hitobj_onoff, STRING("A_daizadai1"), 0, 0)
         CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change"), STRING("Ship_Change2"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_LAS09_SWITCH_2_PRESSED), 1)
+#else
     IF_INT_EQUAL(GSWF_LAS_09_SWITCH_2_PRESSED, 1)
+#endif
         CALL(evt_mapobj_rotate, 0, STRING("S_daizadai2_1"), 180, 0, 0)
         CALL(evt_mapobj_rotate, 0, STRING("S_daizadai2_2"), 0, 0, -180)
         CALL(evt_mapobj_rotate, 0, STRING("S_daizadai2_3"), 0, 0, 180)
@@ -1038,8 +1103,13 @@ EVT_BEGIN(las_09_init_evt)
         CALL(evt_hitobj_attr_onoff, 0, 0, STRING("Ship_Change1"), HIT_ATTR_SHIP_PANEL2)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_den"), MAP_OBJ_FLAG_CLIP)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_06_MOVING_PLANETS)
+        CALL_CHILD(majyorin_evt_npc_entry)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL_CHILD(PTR(majyorin_evt_npc_entry))
+#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("majyorin_evt"))
             CALL(evt_mario_set_pos, 620, 0, 82)
@@ -1049,14 +1119,27 @@ EVT_BEGIN(las_09_init_evt)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_bero_exec_wait, 65536)
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(majyorin_evt_main)
+#else
                 SPAWN_EVENT(PTR(majyorin_evt_main))
+#endif
             END_INLINE_EVENT
         ELSE
+#if VERSION <= VERSION_DEMO_US
+            SPAWN_EVENT(majyorin_evt)
+#else
             SPAWN_EVENT(PTR(majyorin_evt))
+#endif
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_04_GLOOMTAIL)
+        SET_VALUE(GSWF(GSWF_LAS26_GLOOMTAIL_BODY_CLEARED), 1)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
         SET_VALUE(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 1)
+#endif
     END_IF
     RETURN
 EVT_END()

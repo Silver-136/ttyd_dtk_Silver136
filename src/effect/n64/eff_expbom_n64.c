@@ -71,7 +71,11 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     data = __memAlloc(HEAP_EFFECT, sizeof(effExpBomData) * 10);
     effect->userdata = data;
     effect->callback = effExpBomMain;
+#if VERSION <= VERSION_DEMO_US
+for (i = 0; i < effect->count; i++, data++) {
+#else
     for (i = 0, direction = bom_dir, speed = bom_spd; i < effect->count; direction++, speed++, i++, data++) {
+#endif
         data->age = 0;
         random = rand() % 6 + 16;
         data->lifetime = random;
@@ -83,9 +87,15 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
         data->position.z = z;
         data->offsetX = 0.0f;
         data->offsetY = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+sv = bom_dir[i];
+        spd = 2.0f * bom_spd[i];
+        rad = ((6.2831855f * (90.0f + sv)) / 360.0f);
+#else
 
         spd = 2.0f * *speed;
         rad = ((6.2831855f * (90.0f + *direction)) / 360.0f);
+#endif
         sv = sin(rad);
         cv = cos(rad);
         data->velX = spd * sv;
@@ -142,7 +152,11 @@ void effExpBomMain(EffectEntry* effect) {
  * Draws each live fragment as a camera-facing sprite stepping through the explosion textures 0-6 (blending each
  * with its successor); the sprite scale and Z rotation come from bom_scale and bom_ry.
  */
+#if VERSION <= VERSION_DEMO_US
+static void effExpBomDisp(CameraId camId, void* param) {
+#else
 void effExpBomDisp(CameraId camId, void* param) {
+#endif
     f32* scl;
     f32* ry;
     effExpBomData* data;
@@ -161,17 +175,35 @@ void effExpBomDisp(CameraId camId, void* param) {
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(camId)->viewYaw);
     PSMTXConcat(mtx, rot, base);
     PSMTXConcat(camera->view, base, base);
+#if VERSION <= VERSION_DEMO_US
+for (i = 0; i < ((EffectEntry*)param)->count; i++, data++) {
+if (data->lifeLeft < 0 || data->startDelay >= 0)
+#else
     for (i = 0, scl = bom_scale, ry = bom_ry; i < ((EffectEntry*)param)->count; scl++, ry++, i++, data++) {
         if (data->lifeLeft < 0 || data->startDelay >= 0) {
+#endif
             continue;
+#if VERSION > VERSION_DEMO_US
         }
+#endif
         n = data->lifeLeft;
+#if VERSION <= VERSION_DEMO_US
+        if (n > 16)
+#else
         if (n > 16) {
+#endif
             n = 16;
+#if VERSION > VERSION_DEMO_US
         }
+#endif
         PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
+#if VERSION <= VERSION_DEMO_US
+PSMTXScale(scale, bom_scale[i], bom_scale[i], bom_scale[i]);
+        PSMTXRotRad(rot, 'z', 0.017453292f * bom_ry[i]);
+#else
         PSMTXScale(scale, *scl, *scl, *scl);
         PSMTXRotRad(rot, 'z', 0.017453292f * *ry);
+#endif
         PSMTXConcat(mtx, scale, mtx);
         PSMTXConcat(mtx, rot, rot);
         PSMTXConcat(base, rot, rot);

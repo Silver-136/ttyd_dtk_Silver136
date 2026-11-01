@@ -402,7 +402,11 @@ s32 _getHammerIconId(void) {
  * In the tutorial the basic Jump or Hammer is swapped for the lecture unit's weapon.
  * Then marks which entries are usable.
  */
+#if VERSION <= VERSION_DEMO_US
+static s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
+#else
 s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
+#endif
     s32 top;
     BattleUnit* unit;
     BattleCommand* cmd;
@@ -417,6 +421,47 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     s16* items;
     void (*func)(BattleCommand*, s32*);
     static BattleWeapon defaultWeapon_Dummy_NoItem = {
+#if VERSION <= VERSION_DEMO_US
+        "btl_wn_dummy_noitem", 0, {0}, 0, "msg_dummy_noitem", 100, 0, 0, 0, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x01000160, 0x20000002, 0, 0, 3, 2, NULL, 0, 0, 0x80002000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* counterResist, targetWeight, sleep..confuse */
+        0,
+        0,
+        0,
+        0, /* electric, dodgy */
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0, /* burn..payback */
+        0,
+        0,
+        0, /* holdFast, invisible */
+        0,
+        0,
+        0,
+        0,
+        {0},
+        NULL,
+        {0, 0, 0, 100}};
+#else
         "btl_wn_dummy_noitem", 0, {0}, 0, "msg_dummy_noitem", 100, 0, 0, 0, 0.0f, 0, 0, 0, 0,
         NULL, {0}, NULL, {0}, 0x01000160, 0x20000002, 0, 0, 3, 2, NULL, 0,
         0, 0x80002000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* counterResist, targetWeight, sleep..confuse */
@@ -425,6 +470,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
         0, 0, 0, /* holdFast, invisible */
         0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100}
     };
+#endif
 
     unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     cmd = &wp->commandMenu;
@@ -449,7 +495,11 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
                 if (wp->flags & (BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
+#if VERSION <= VERSION_DEMO_US
+cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x43);
+#else
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_JUMP_WEAPON);
+#endif
                 }
                 num++;
             }
@@ -496,7 +546,11 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
                 if (wp->flags & (BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
+#if VERSION <= VERSION_DEMO_US
+cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x44);
+#else
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_HAMMER_WEAPON);
+#endif
                 }
                 num++;
             }
@@ -618,7 +672,9 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].weapon = &defaultWeapon_Dummy_NoItem;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
+#if VERSION > VERSION_DEMO_US
                 cmd->weapon[num].icon = ICON_UNAVAILABLE;
+#endif
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
                 } else {
@@ -659,10 +715,16 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
         cursor->absPos = cursor->count - 1;
     }
     while (cursor->count < cursor->relPos + BATTLE_COMMAND_VISIBLE_WEAPON_ROWS) {
+#if VERSION <= VERSION_DEMO_US
+        if ((top = cursor->relPos) <= 0)
+#else
         // FAKE: top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object
         if ((top = cursor->relPos) <= 0) {
+#endif
             break;
+#if VERSION > VERSION_DEMO_US
         }
+#endif
         cursor->relPos--;
     }
     _btlcmd_UpdateSelectWeaponTable(wp, type);
@@ -753,7 +815,11 @@ s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon*
     return targets.numTargets;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void _btlcmd_MakeOperationTable(BattleWork* wp) {
+#else
 void _btlcmd_MakeOperationTable(BattleWork* wp) {
+#endif
     PouchData* pouch;
     NpcBattleInfo* info;
     BattleUnit* unit;
@@ -798,7 +864,9 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
             cmd->operation[0].enabled = 0;
             cmd->operation[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
+#if VERSION > VERSION_DEMO_US
         cmd->operation[0].cost = 0;
+#endif
         num = 1;
     }
     if (pouch->starPowersObtained != 0) {
@@ -806,8 +874,12 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].enabled = 1;
         cmd->operation[num].name = msgSearch("btl_cmd_op_appeal");
         cmd->operation[num].icon = ICON_BTL_CMD_APPEAL;
+#if VERSION <= VERSION_DEMO_US
+        cmd->operation[num].disableReason = 0;
+#else
         cmd->operation[num].disableReason = CMD_DISABLE_NONE;
         cmd->operation[num].cost = 0;
+#endif
         cmd->operation[num].help = "btl_hlp_cmd_operation_appeal";
         num++;
     }
@@ -862,7 +934,9 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[num].name = msgSearch("btl_cmd_op_defend");
     cmd->operation[num].icon = ICON_BTL_CMD_DEFEND;
     cmd->operation[num].disableReason = CMD_DISABLE_NONE;
+#if VERSION > VERSION_DEMO_US
     cmd->operation[num].cost = 0;
+#endif
     cmd->operation[num].help = "btl_hlp_cmd_operation_defend";
     if (unit->attributeFlags & kVeiled) {
         cmd->operation[num].enabled = 0;
@@ -873,7 +947,9 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[idx].enabled = BtlUnit_CanActStatus(unit);
     cmd->operation[idx].name = msgSearch("btl_cmd_op_escape");
     cmd->operation[idx].icon = ICON_ARROW;
+#if VERSION > VERSION_DEMO_US
     cmd->operation[idx].cost = 0;
+#endif
     if (cmd->operation[idx].enabled) {
         cmd->operation[idx].disableReason = CMD_DISABLE_NONE;
     } else {
@@ -1462,7 +1538,11 @@ void BattleCommandDisplay(BattleWork* wp) {
 
     if (cmd != NULL) {
         SelectedItemCoordinateColorUpDate();
+#if VERSION <= VERSION_DEMO_US
+dispEntry(CAMERA_2D, 501.0f, 0, BattleDrawEnemyHP, wp);
+#else
         dispEntry(CAMERA_2D, 902.0f, 0, BattleDrawEnemyHP, wp);
+#endif
         if (cmd->flags & CMD_MENU_ACT) {
             dispEntry(CAMERA_2D, 500.0f, 0, BattleCommandDisplay_ActMenuDisp, wp);
         }
@@ -2467,7 +2547,11 @@ s32 _check_weapon_type_attack(BattleWeapon* weapon);
  * which with Quick Change keeps the turn); the Y position swap;
  * the audience attack (X) and audience item scripts; and the tutorial end. A cancelled Double Dip just waits.
  */
+#if VERSION <= VERSION_DEMO_US
+static void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
+#else
 void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
+#endif
     BattleWork* wp = _battleWorkPointer;
     u32 type = cmd->actType;
     BattleCursor* cursor;
@@ -2481,7 +2565,11 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     }
     switch (type) {
     case 5:
+#if VERSION <= VERSION_DEMO_US
+            switch ((u32)cmd->operationType) {
+#else
         switch (cmd->operationType) {
+#endif
         case 6:
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
@@ -2518,22 +2606,36 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             }
             break;
         case 1:
+#if VERSION <= VERSION_DEMO_US
+                    unit->attackEventCode = WEVT(&badgeWeapon_Charge);
+#endif
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
+#if VERSION > VERSION_DEMO_US
                 unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
+#endif
                 BtlActRec_AddCount(&wp->actRecord.marioCharges);
             } else {
+#if VERSION > VERSION_DEMO_US
                 unit->attackEventCode = badgeWeapon_ChargeP.attackEvtScript;
+#endif
                 BtlActRec_AddCount(&wp->actRecord.partnerCharges);
             }
             break;
         case 2:
+#if VERSION <= VERSION_DEMO_US
+                    unit->attackEventCode = WEVT(&badgeWeapon_SuperCharge);
+#endif
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
+#if VERSION > VERSION_DEMO_US
                 unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
+#endif
                 BtlActRec_AddCount(&wp->actRecord.marioSuperCharges);
             } else {
+#if VERSION > VERSION_DEMO_US
                 unit->attackEventCode = badgeWeapon_SuperChargeP.attackEvtScript;
+#endif
                 BtlActRec_AddCount(&wp->actRecord.partnerSuperCharges);
             }
             break;
@@ -2571,7 +2673,11 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     case 6:
         _btlcmd_GetCursorPtr(cmd, type, &cursor);
         weapon = cmd->weapon[cursor->absPos].weapon;
+#if VERSION <= VERSION_DEMO_US
+            unit->attackEventCode = WEVT(weapon);
+#else
         unit->attackEventCode = weapon->attackEvtScript;
+#endif
         unit->attackEventFlags = 0;
         if (!unit->attackEventCode) {
             unit->attackEventCode = btldefaultevt_Wait;
@@ -2584,17 +2690,23 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             BtlActRec_AddCount(&wp->actRecord.marioHammerMoves);
             break;
         case 4:
+#if VERSION <= VERSION_DEMO_US
+if (weapon->hpDamageFn) {
+#else
             if (_check_weapon_type_attack(weapon)) {
+#endif
                 BtlActRec_AddCount(&wp->actRecord.marioSpecialAttacks);
             } else {
                 BtlActRec_AddCount(&wp->actRecord.marioSpecialSupports);
             }
             break;
         case 2:
+#if VERSION > VERSION_DEMO_US
             // FAKE: compares the pointers as signed integers (cmpw); the plain pointer compare changes the object
             if ((EvtWord)weapon == (EvtWord)&ItemWeaponData_Naniga_Okorukana) {
                 break;
             }
+#endif
             if (unit->currentKind == UNIT_MARIO) {
                 if (_check_weapon_type_attack(weapon)) {
                     BtlActRec_AddCount(&wp->actRecord.marioAttackItems);
@@ -2664,7 +2776,13 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             unit->moveState = 4;
             break;
         }
+#if VERSION <= VERSION_DEMO_US
+            // FAKE: called through a cast that passes unit->unitId: btlataudGetMoveEventPtr takes no argument, but the
+            // target loads the id into r3 for the call (the plain call is one instruction short).
+            unit->attackEventCode = ((EvtWord * (*)(s32)) btlataudGetMoveEventPtr)(unit->unitId);
+#else
         unit->attackEventCode = btlataudGetMoveEventPtr(unit->unitId);
+#endif
         unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW | ACT_EVENT_IGNORE_STATUS;
         break;
     case 13:
@@ -2696,20 +2814,36 @@ BattleWeapon* BattleGetSelectWeapon(BattleWork* wp) {
  * any other item closes the menus and forces the audience-item action (actType 12) and returns 1.
  * Returns 0 otherwise.
  */
+#if VERSION <= VERSION_DEMO_US
+static s32 _check_present_item(void) {
+#else
 s32 _check_present_item(void) {
+#endif
     BattleWork* wp = _battleWorkPointer;
     s32 item = BattleAudience_GetPresentItemNo();
     s32 id;
     BattleUnit* unit;
     Vec pos;
 
+#if VERSION <= VERSION_DEMO_US
+    if (item >= ITEM_TYPE_MAX)
+#else
     if (item >= ITEM_TYPE_MAX) {
+#endif
         return 0;
+#if VERSION > VERSION_DEMO_US
     }
+#endif
     id = BattleAudience_GetPresentTargetUnitId();
+#if VERSION <= VERSION_DEMO_US
+    if (id < -1 || id >= BATTLE_COMMAND_UNIT_CAPACITY)
+#else
     if (id < -1 || id >= BATTLE_COMMAND_UNIT_CAPACITY) {
+#endif
         return 0;
+#if VERSION > VERSION_DEMO_US
     }
+#endif
     unit = BattleGetUnitPtr(wp, id);
     switch (item) {
     case ITEM_NULL:
@@ -2717,21 +2851,35 @@ s32 _check_present_item(void) {
     case ITEM_HEART:
         BtlUnit_RecoverHp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
+#if VERSION <= VERSION_DEMO_US
+pos.y += BtlUnit_GetHeight(unit);
+#else
         pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
+#endif
         effRecoveryEntry(0, 1, pos.x, pos.y, pos.z);
         BattleAudience_SetPresentItemNo(0);
         return 0;
     case ITEM_FLOWER:
         BtlUnit_RecoverFp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
+#if VERSION <= VERSION_DEMO_US
+pos.y += BtlUnit_GetHeight(unit);
+#else
         pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
+#endif
         effRecoveryEntry(1, 1, pos.x, pos.y, pos.z);
         BattleAudience_SetPresentItemNo(0);
         return 0;
     default:
+#if VERSION <= VERSION_DEMO_US
+            if (item < 0 || item >= ITEM_TYPE_MAX)
+#else
         if (item < 0 || item >= ITEM_TYPE_MAX) {
+#endif
             return 0;
+#if VERSION > VERSION_DEMO_US
         }
+#endif
         wp->commandMenu.attackAudience = 1;
         if (wp->commandMenu.state == 12 || wp->commandMenu.state == 13) {
             wp->commandMenu.attackAudience = 2;
@@ -2836,6 +2984,166 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
 }
 #pragma dont_inline reset
 
+#if VERSION <= VERSION_DEMO_US
+void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
+    BattleCommand* cmd = &wp->commandMenu;
+    BattleCursor* cursor;
+    s16 list[24];
+    BattleWeapon* weapon;
+
+    if (unit->moveState == 3) {
+        unit->moveState = 0;
+    }
+    BattleAcHelpSetDispType(0);
+    if (unit->alliance) {
+        return subsetevt_confuse_flustered;
+    }
+    if (unit->currentKind != UNIT_MARIO && (unit->currentKind < TYPE_PARTNER_MIN || unit->currentKind >= TYPE_PARTNER_MAX)) {
+        return subsetevt_confuse_flustered;
+    }
+_btlcmd_MakeActClassTable(wp);
+    {
+        u8 cnt;
+        u8 i;
+        _btlcmd_GetCursorPtr(cmd, 14, &cursor);
+        cnt = 0;
+        for (i = 0; i < cursor->count; i++) {
+            if (cmd->act[i].enabled && cmd->act[i].type != 4 && cmd->act[i].type != 2) {
+                list[cnt++] = i;
+            }
+        }
+        list[cnt] = -1;
+        if (cnt) {
+            cursor->absPos = list[irand(cnt)];
+        } else {
+            return subsetevt_confuse_flustered;
+        }
+    }
+    cmd->actType = cmd->act[cursor->absPos].type;
+    if (!cmd->act[cursor->absPos].enabled) {
+        return subsetevt_confuse_flustered;
+    }
+    switch (cmd->actType) {
+        case 0:
+        case 1:
+        case 2:
+        case 4:
+        case 6:
+        case 7:
+        case 8:
+            _btlcmd_MakeSelectWeaponTable(wp, cmd->actType);
+            {
+                u8 cnt;
+                u8 i;
+                _btlcmd_GetCursorPtr(cmd, cmd->actType, &cursor);
+                cnt = 0;
+                for (i = 0; i < cursor->count; i++) {
+                    weapon = cmd->weapon[i].weapon;
+                    if (cmd->weapon[i].enabled && ((u32)weapon->special & SPECIAL_CONFUSED_ACTION) &&
+                        !(weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) && (weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
+                        list[cnt++] = i;
+                    }
+                }
+                list[cnt] = -1;
+                if (cnt) {
+                    cursor->absPos = list[irand(cnt)];
+                } else {
+                    return NULL;
+                }
+            }
+            if (!cmd->weapon[cursor->absPos].enabled) {
+                return subsetevt_confuse_flustered;
+            }
+            _btlcmd_SelectWeaponDecide(wp, cmd->actType, cursor->absPos);
+            weapon = cmd->weapon[cursor->absPos].weapon;
+            if (!((u32)weapon->special & SPECIAL_CONFUSED_ACTION)) {
+                return subsetevt_confuse_flustered;
+            }
+            if ((weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) || !(weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
+                return subsetevt_confuse_flustered;
+            }
+            if (wp->weaponTargets.numTargets <= 0) {
+                return subsetevt_confuse_flustered;
+            }
+            wp->weaponTargets.currentTarget = irand(wp->weaponTargets.numTargets);
+            wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
+            return WEVT(weapon);
+        case 5:
+            _btlcmd_MakeOperationTable(wp);
+            {
+                u8 cnt;
+                u8 i;
+                _btlcmd_GetCursorPtr(cmd, 5, &cursor);
+                cnt = 0;
+                for (i = 0; i < cursor->count; i++) {
+                    if (cmd->operation[i].enabled) {
+                        if (cmd->operation[i].type == 0 || cmd->operation[i].type == 6 || cmd->operation[i].type == 3) {
+                            list[cnt++] = i;
+                        }
+                    }
+                }
+                list[cnt] = -1;
+                if (cnt) {
+                    cursor->absPos = list[irand(cnt)];
+                } else {
+                    return subsetevt_confuse_flustered;
+                }
+            }
+            if (!cmd->operation[cursor->absPos].enabled) {
+                return subsetevt_confuse_flustered;
+            }
+            cmd->operationType = cmd->operation[cursor->absPos].type;
+            switch ((u32)cmd->operationType) {
+                case 6:
+                    if (unit->currentKind == UNIT_MARIO) {
+                        return btldefaultevt_Defend;
+                    }
+                    return btldefaultevt_DefendParty;
+                case 5:
+                    return btldefaultevt_Appeal;
+                case 7:
+                    return btldefaultevt_Wait;
+                case 3:
+                    return btldefaultevt_Escape;
+case 1:
+                    return WEVT(&badgeWeapon_Charge);
+                case 2:
+                    return WEVT(&badgeWeapon_SuperCharge);
+case 8:
+                    return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
+                case 0: {
+                    u8 cnt;
+                    u8 i;
+                    _btlcmd_GetCursorPtr(cmd, 10, &cursor);
+                    cnt = 0;
+                    for (i = 0; i < cursor->count; i++) {
+                        if (cmd->party[i].enabled) {
+                            list[cnt++] = i;
+                        }
+                    }
+                    list[cnt] = -1;
+                    if (cnt) {
+                        cursor->absPos = list[irand(cnt)];
+                    } else {
+return subsetevt_confuse_flustered;
+}
+                }
+                    if (!cmd->party[cursor->absPos].enabled) {
+                        return subsetevt_confuse_flustered;
+                    }
+                    cmd->partyKind = cmd->party[cursor->absPos].kind;
+                    cmd->cursor[1].absPos = 0;
+                    return btldefaultevt_ChangeParty;
+                case 4:
+                    return subsetevt_confuse_flustered;
+                default:
+                    return subsetevt_confuse_flustered;
+            }
+        default:
+            return subsetevt_confuse_flustered;
+    }
+}
+#else
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     BattleCommand* cmd = &wp->commandMenu;
     BattleCursor* cursor;
@@ -3007,6 +3315,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         return subsetevt_confuse_flustered;
     }
 }
+#endif
 
 #pragma dont_inline on
 /**

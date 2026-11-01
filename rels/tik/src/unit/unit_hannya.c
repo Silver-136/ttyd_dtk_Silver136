@@ -92,6 +92,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * extra prone to stop, poison, electric shock, burn, growing huge, attack up, defence up, fright, gale force,
  * speed up and instant kill; resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 110, 90, 150, 90, 150, 150, 90, 150, 90, 150, 90, 150, 90, 90, 110, 110, 150, 90, 0, 0, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     120, // stop
@@ -116,6 +119,7 @@ static StatusVulnerability regist = {
     0, // invisible
     150, // ohko
 };
+#endif
 
 /**
  * Data table of the Spania: event handlers for the attacker hurt by its spikes

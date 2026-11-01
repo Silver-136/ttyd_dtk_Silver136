@@ -43,8 +43,12 @@ USER_FUNC(evt_yuucounter_main_func);
 USER_FUNC(yuucounter_disp_flag_onoff);
 
 static EvtWord main_evt[4];
+#if VERSION > VERSION_DEMO_US
 EvtWord yuucounter_window_disp_evt[6];
+#endif
+#if VERSION > VERSION_DEMO_US
 EvtWord yuucounter_window_null_evt[2];
+#endif
 
 /**
  * Returns the bits of the counter's display flags selected by mask (1 hide, 2 freeze the value,
@@ -137,11 +141,13 @@ USER_FUNC(evt_yuucounter_alloc) {
     }
     wp->event = evtEntry(main_evt, 0, 0);
     wp->event->lwData[0] = (EvtWord)wp;
+#if VERSION > VERSION_DEMO_US
     if (wp->type == 1) {
         evtYuuSetWindowEvt(yuucounter_window_disp_evt);
     } else {
         evtYuuSetWindowEvt(yuucounter_window_null_evt);
     }
+#endif
     return EVT_RETURN_DONE;
 }
 
@@ -167,7 +173,11 @@ USER_FUNC(evt_yuucounter_main_func) {
  * type 2 asks yuunpc_juni for Mario's current rank;
  * then draws the translucent backdrop, the digits and the unit icon with icon sprites.
  */
+#if VERSION <= VERSION_DEMO_US
+static void evt_yuucounter_disp_func(CameraId camera, void* param) {
+#else
 void evt_yuucounter_disp_func(CameraId camera, void* param) {
+#endif
     YuuCounterWork* wp = param;
     GXColor color = white;
     GXColor numColor;
@@ -176,6 +186,9 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
     f32 xOfs;
     s32 value;
     s32 digit;
+#if VERSION <= VERSION_DEMO_US
+    BOOL skip;
+#endif
     BOOL skip2;
     s32 k;
     s32 i;
@@ -208,10 +221,12 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
         case 1:
             if (!(wp->dispFlags & 2)) {
                 if (wp->data >= 0) {
+#if VERSION > VERSION_DEMO_US
                     if (wp->dispFlags & 4) {
                         wp->dispFlags &= ~4;
                         wp->lastTime = gp->renderTime;
                     }
+#endif
                     wp->elapsed += (s32)gp->renderTime - (s32)wp->lastTime;
                     wp->lastTime = gp->renderTime;
                     wp->data = wp->limit - OSTicksToMilliseconds(wp->elapsed);
@@ -334,6 +349,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00009d5c, JP yuu .text+0x9C90. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(yuucounter_disp_flag_onoff) {
     EvtWord* args = event->args;
     BOOL on = evtGetValue(event, args[0]);
@@ -347,6 +363,7 @@ USER_FUNC(yuucounter_disp_flag_onoff) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /** The counter's per-frame event, started by evt_yuucounter_alloc; runs evt_yuucounter_main_func. */
 static EVT_BEGIN(main_evt)
@@ -354,11 +371,15 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(yuucounter_window_disp_evt)
     CALL(yuucounter_disp_flag_onoff, 1, 4)
     RETURN
 EVT_END()
+#endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(yuucounter_window_null_evt)
     RETURN
 EVT_END()
+#endif

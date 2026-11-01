@@ -41,7 +41,9 @@ USER_FUNC(evt_tou_get_ranking);
 static USER_FUNC(get_yoshi_color);
 USER_FUNC(icon_off);
 USER_FUNC(tou_champion_belt);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(tou_08_belt_camid);
+#endif
 
 static EvtWord evt_toile[42];
 static EvtWord n_door_open[12];
@@ -771,20 +773,32 @@ EVT_END()
 
 // This entrance is available only for the first title-match escape; the return path is separate.
 EVT_BEGIN(evt_toile_door)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TOU_TITLE_MATCH_RESERVED), 0)
+        IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESERVED), 1)
+#else
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
+#endif
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
+#endif
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
@@ -792,6 +806,7 @@ EVT_BEGIN(evt_toile_door)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
+#endif
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -888,6 +903,74 @@ EVT_BEGIN(evt_toile_door2)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_champion_win)
+    CALL(evt_mario_key_onoff, 0)
+CALL(evt_mario_set_pos, -90, 0, -95)
+    CALL(evt_party_set_pos, 0, -120, 0, -105)
+    CALL(evt_npc_set_position, STRING("ガンス"), -45, 0, -95)
+    CALL(evt_npc_set_position, STRING("キノシコワ"), -15, 0, -90)
+    CALL(evt_cam3d_evt_set, -75, 91, 266, -75, 57, -11, 0, EASING_SINE_IN_OUT)
+    CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
+    CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
+    CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_mario_set_dir, 90, 0, 0)
+    CALL(evt_party_set_dir, 0, 90, 0)
+    CALL(evt_seq_wait, SEQ_GAME)
+    WAIT_MS(1000)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_flag_onoff, 0, STRING("キノシコワ"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_msg_print, 0, STRING("stg3_tou_445"), 0, STRING("ガンス"))
+    WAIT_MS(300)
+    CALL(evt_npc_move_position, STRING("ガンス"), -60, -95, 0, FLOAT(80.0f), 1)
+    WAIT_MS(500)
+    CALL(evt_npc_move_position, STRING("ガンス"), -45, -95, 0, FLOAT(80.0f), 1)
+    CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
+    CALL(evt_npc_entry, STRING("ベルト"), STRING("c_bred_h"))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    ADD(LW(1), 56)
+    CALL(evt_npc_set_position, STRING("ベルト"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_set_anim, STRING("ベルト"), STRING("C_1"))
+    ADD(LW(1), 4)
+    ADD(LW(2), 15)
+    CALL(evt_eff, STRING("belt"), STRING("starstone"), 9, LW(0), LW(1), LW(2), FLOAT(0.75f), 0, 0, 0, 0, 0, 0, 0)
+CALL(evt_item_entry, STRING("belt"), ITEM_CHAMPS_BELT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+    CALL(icon_off)
+    CALL(evt_item_get_item, STRING("belt"))
+    CALL(evt_item_get_item_end_wait, STRING("belt"))
+    CALL(evt_npc_delete, STRING("ベルト"))
+    CALL(evt_eff_delete, STRING("belt"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_447"), 0, STRING("ガンス"))
+    WAIT_MS(300)
+    CALL(evt_msg_print, 0, STRING("stg3_tou_448"), 0, STRING("キノシコワ"))
+    WAIT_MS(300)
+    CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
+    SET_VALUE(LW(1), 0)
+    SPAWN_EVENT(bero_open_door_play_se)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        CALL_CHILD(n_door_open)
+        IF_INT_EQUAL(LW(1), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    BEGIN_INLINE_EVENT
+        CALL(evt_npc_move_position, STRING("キノシコワ"), -5, -200, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_set_position, STRING("キノシコワ"), 0, -1000, 0)
+    END_INLINE_EVENT
+    WAIT_MS(300)
+    CALL(evt_mario_mov_pos2, 0, -130, FLOAT(60.0f))
+    BEGIN_INLINE_EVENT
+        CALL(evt_mario_mov_pos2, -5, -200, FLOAT(60.0f))
+    END_INLINE_EVENT
+    SET_VALUE(GSWF(GSWF_TOU_JOLENE_ESCORT_CHAMP_PENDING), 1)
+    CALL(evt_bero_mapchange, STRING("tou_04"), 0)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(evt_champion_win)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_US
@@ -965,8 +1048,10 @@ EVT_BEGIN(evt_champion_win)
     CALL(evt_bero_mapchange, STRING("tou_04"), 0)
     RETURN
 EVT_END()
+#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e08, JP tou .text+0x6D44. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(tou_08_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");
     // ベルト
@@ -976,6 +1061,7 @@ USER_FUNC(tou_08_belt_camid) {
     npc->cameraId = CAMERA_3D_EFFECTB;
     return EVT_RETURN_DONE;
 }
+#endif
 
 /** Script helper: hides the belt item's icon. */
 USER_FUNC(icon_off) {
@@ -1221,6 +1307,120 @@ EVT_BEGIN(evt_match_after_stop_npcs)
 EVT_END()
 #endif
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(tou_08_init_evt)
+    // The story is moved up to match Mario's rank, then the debug story-skip flags are applied.
+    CALL(evt_tou_get_ranking, LW(0))
+    SWITCH(LW(0))
+        CASE_LESS_OR_EQUAL(3)
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_12_JOLENES_SECRET)
+            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_12_JOLENES_SECRET)
+        END_IF
+        CASE_LESS_OR_EQUAL(7)
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_04_CONFISCATED)
+            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_04_CONFISCATED)
+        END_IF
+        CASE_LESS_OR_EQUAL(8)
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_00_MAJORS_8TH_PLACE)
+            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_00_MAJORS_8TH_PLACE)
+        END_IF
+        CASE_LESS_OR_EQUAL(10)
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_MAJORS_10TH_PLACE)
+            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_MAJORS_10TH_PLACE)
+        END_IF
+    END_SWITCH
+    IF_INT_EQUAL(GSWF(GSWF_TOU08_SKIP_TO_143), 1)
+        SET_VALUE(GSWF(GSWF_TOU08_SKIP_TO_143), 0)
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_04_CONFISCATED)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU08_SKIP_TO_144), 1)
+        SET_VALUE(GSWF(GSWF_TOU08_SKIP_TO_144), 0)
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_05_MAJORS_4TH_PL)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU08_SKIP_TO_153), 1)
+        SET_VALUE(GSWF(GSWF_TOU08_SKIP_TO_153), 0)
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_13_MAJORS_1ST_PL)
+    END_IF
+    // Doors, the Ice Storm badge, lockers, the fighters, the match terminal and monitor,
+    // the restroom doors and the bed.
+    SET_VALUE(LW(0), PTR(bero_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -120, 12, -135, ITEM_TYPE_STILL, GSWF(GSWF_TOU08_ICE_STORM), 0)
+CALL_CHILD(evt_tou_locker_init)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_npc_setup, PTR(npcEnt))
+    CALL_CHILD(init_hammerbros)
+    CALL(evt_npc_change_interrupt, STRING("ハンマーブロス"), 6, PTR(talk_hammerbros))
+    CALL_CHILD(init_togemet)
+    CALL(evt_npc_change_interrupt, STRING("トゲメット"), 6, PTR(talk_togemet))
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
+    CALL_CHILD(evt_tou_monitor_init)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_2"), 0, PTR(evt_toile_door), 0)
+    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile_door2), 0)
+    CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
+    CALL(evt_sub_animgroup_async, STRING("p_slit"))
+    // After a match: the title win scene at rank 0, otherwise the default after-match scene.
+    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
+        SET_VALUE(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 0)
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+        CALL(evt_tou_get_ranking, LW(0))
+        IF_INT_EQUAL(LW(0), 0)
+            SET_VALUE(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
+            SPAWN_EVENT(evt_champion_win)
+        ELSE
+SPAWN_EVENT(evt_tou_match_after_default)
+END_IF
+        RETURN
+    END_IF
+    // Music: Grubba's theme and his tour on the first visit, else the music for the story stage.
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_LESS(STG3_03_GRUBBA)
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        SPAWN_EVENT(evt_sensyu)
+        CASE_DEFAULT
+        SWITCH(GSW(GSW_STORY_PROGRESS))
+            CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+            CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
+            IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+            END_IF
+            CASE_DEFAULT
+            IF_INT_NOT_EQUAL(GSWF(GSWF_TOU_PROMOTION_PENDING), 1)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+            ELSE
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+            END_IF
+        END_SWITCH
+    END_SWITCH
+    // The promotion scene, Shady Koopa's word about the cake, and the epilogue.
+    IF_INT_EQUAL(GSWF(GSWF_TOU_PROMOTION_PENDING), 1)
+        SET_VALUE(GSWF(GSWF_TOU_PROMOTION_PENDING), 0)
+        SPAWN_EVENT(evt_1st_leagu)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU_CAKE_WAITING), 1)
+        SPAWN_EVENT(evt_tou_08_cake)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+        CALL(evt_mario_kill_party, 0)
+        CALL_CHILD(epilogue_npc_entry)
+        SPAWN_EVENT(epilogue_evt)
+    END_IF
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(tou_08_init_evt)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
@@ -1332,6 +1532,7 @@ EVT_BEGIN(tou_08_init_evt)
     END_IF
     RETURN
 EVT_END()
+#endif
 
 static USER_FUNC(get_yoshi_color) {
     EvtWord* args = event->args;

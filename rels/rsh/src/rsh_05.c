@@ -166,7 +166,11 @@ static EvtWord evt_meet_moamoa[185];
 EvtWord evt_moamoa_help[166];
 EvtWord evt_moamoa_escape0[15];
 EvtWord evt_moamoa_escape1[15];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_moamoa_escape[205];
+#else
 static EvtWord evt_moamoa_escape[228];
+#endif
 static EvtWord init_syashou[30];
 static EvtWord talk_syashou[19];
 static EvtWord init_waitless[30];
@@ -736,12 +740,18 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if ((*pose->mtx)[1][3] > mario->position.y + mario->wPlayerCollisionBox.y) {
         return 0;
     }
+#if VERSION <= VERSION_DEMO_US
+    if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2.0f && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) && wp->bounceCount < 2) {
+#else
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2.0f
         && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
         if (mario->currMotionId != MARIO_MOTION_ROLL && mario->currMotionId != MARIO_MOTION_YOSHI) {
+#endif
             marioChgMot(MARIO_MOTION_JUMP_SW);
+#if VERSION > VERSION_DEMO_US
         }
+#endif
         wp->bounceCount++;
         return 1;
     }
@@ -881,7 +891,9 @@ static void ext_moamoa_main(void) {
         wp->breathPos.y = party->position.y;
         wp->breathPos.z = party->position.z - wp->breathDist * polyCosf(6.2831855f * wp->breathDir / 360.0f);
     }
+#if VERSION > VERSION_DEMO_US
     // Each captive is freed after more than 50 nearby hits; cleared targets redirect to the other side.
+#endif
     if (wp->targetHits[0] > 50) {
         wp->target[0] = wp->target[1];
         if (!(wp->flags & MOAMOA_WORK_FLAG_TARGET0_CLEARED)) {
@@ -918,14 +930,20 @@ static void ext_moamoa_main(void) {
         }
     }
 
+#if VERSION > VERSION_DEMO_US
     // One ordinary hit per update; Bobbery's hit code 4 deliberately leaves that latch clear.
+#endif
     pose = extGetPosePtr();
     sfx = 0;
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, pose++, moa++) {
         wp->angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
         wp->dist = distABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+#if VERSION <= VERSION_DEMO_US
+if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) && !hit && !(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) {
+#else
         if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) && !marioKeyOffChk() && !marioCtrlOffChk() && !hit && !(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) {
+#endif
             ret = moamoa_hit_check(pose, moa);
             if (ret == 1) {
                 moa->flags |= MOAMOA_FLAG_HIT;
@@ -941,7 +959,11 @@ static void ext_moamoa_main(void) {
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
                 hit = 1;
             } else if (ret == 2 || ret == 4) {
+#if VERSION <= VERSION_DEMO_US
+                moa->flags |= MOAMOA_FLAG_HIT | MOAMOA_FLAG_KNOCKED_AWAY;
+#else
                 moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_KNOCKED_AWAY);
+#endif
                 moa->state = MOAMOA_STATE_KNOCKED_AWAY;
                 {
                     s32 idx;
@@ -957,7 +979,11 @@ static void ext_moamoa_main(void) {
                 }
             } else if (ret == 3) {
                 angle = (wp->breathDir + wp->angle) / 2.0f;
+#if VERSION <= VERSION_DEMO_US
+                moa->flags |= MOAMOA_FLAG_HIT | MOAMOA_FLAG_BLOWN;
+#else
                 moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_BLOWN);
+#endif
                 moa->state = MOAMOA_STATE_BLOWN_DRIFT;
                 moa->target = moamoa_zero_vec;
                 spd = randf(0.1f, 0.2f);
@@ -993,7 +1019,9 @@ static void ext_moamoa_main(void) {
                 tmp.z = (*pose->mtx)[2][3];
                 sp2_ = tmp;
             }
+#if VERSION > VERSION_DEMO_US
             // FAKE: integer cast hoists the literal as an @ temp (same values)
+#endif
             psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp2_);
         }
         switch (moa->state) {
@@ -1094,7 +1122,15 @@ static void ext_moamoa_main(void) {
                     x = (*pose->mtx)[0][3] + (15.0f * polySinf(rad));
                     dist = (*pose->mtx)[1][3];
                     z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
+#if VERSION <= VERSION_DEMO_US
+                {
+                    f32 hopSpeed;
+                    f32 k;
+                    f32 r1 = rand() / 32767.0f;
+                    hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
+#else
                     { f32 hopSpeed; f32 k; f32 r1 = rand() / 32767.0f; hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
+#endif
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
                         {
                             f32 g2 = randf(0.4f, 0.4f);
@@ -1108,8 +1144,12 @@ static void ext_moamoa_main(void) {
                             }
                         }
                         }
+#if VERSION <= VERSION_DEMO_US
+            } break;
+#else
                 }
                 break;
+#endif
 
             case MOAMOA_STATE_APPROACH: {
                     f32 z;
@@ -1206,8 +1246,12 @@ static void ext_moamoa_main(void) {
                             moamoa_jump(pose, moa, moa->state + 1, 1, ty, y, z, (r1 * k) + 1.0f, (r2 * k) + 1.0f);
                         }
                     }
+#if VERSION <= VERSION_DEMO_US
+            } break;
+#else
                 }
                 break;
+#endif
 
             case MOAMOA_STATE_SHRINK:
                 if ((++moa->timer) < 30) {
@@ -1223,7 +1267,14 @@ static void ext_moamoa_main(void) {
                     f32 rad;
                     s = rand() / 32767.0f;
                     dist = randf(300.0f, 500.0f);
+#if VERSION <= VERSION_DEMO_US
+                {
+                    f32 k;
+                    rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f;
+                }
+#else
                     { f32 k; rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f; }
+#endif
                     x = (dist * polySinf(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[2][3] - (dist * polyCosf(rad));
                 }
@@ -1242,7 +1293,11 @@ static void ext_moamoa_main(void) {
                     pos.x = (*pose->mtx)[0][3];
                     pos.y = (*pose->mtx)[1][3];
                     pos.z = (*pose->mtx)[2][3];
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0x6c3, &pos);
+#else
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG6_MOAMOA_DAMAGED1), &pos);
+#endif
                     sfx = 1;
                 }
                 dist = -100.0f;
@@ -1302,7 +1357,14 @@ static void ext_moamoa_main(void) {
 
             case MOAMOA_STATE_ESCAPE_RUN:
                 d = distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -275.0f, -100.0f);
+#if VERSION <= VERSION_DEMO_US
+                {
+                    f32 a3;
+                    f32 k;
+                    tz = rand() / 32767.0f;
+#else
                 { f32 a3; f32 k; tz = rand() / 32767.0f;
+#endif
                     a3 = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -275.0f, -100.0f);
                     a3 += ((tz * (k = 45.0f - -45.0f)) + -45.0f);
                     if (d > 6.0f && (x = (*pose->mtx)[1][3]) < 60.0f) {
@@ -1311,9 +1373,16 @@ static void ext_moamoa_main(void) {
                         angle = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                         {
                             f32 k;
+#if VERSION <= VERSION_DEMO_US
+                            f32 k2;
+#endif
                             f32 r1 = rand() / 32767.0f;
                             f32 r2 = rand() / 32767.0f;
+#if VERSION <= VERSION_DEMO_US
+                            moamoa_jump(pose, moa, moa->state, 1, dist, x, angle, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * (k2 = 1.0f - 1.0f)) + 1.0f);
+#else
                             moamoa_jump(pose, moa, moa->state, 1, dist, x, angle, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
+#endif
                         }
                     } else {
                         moa->state++;
@@ -1335,9 +1404,16 @@ static void ext_moamoa_main(void) {
                     grav = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                     {
                         f32 k;
+#if VERSION <= VERSION_DEMO_US
+                        f32 k2;
+#endif
                         f32 r1 = rand() / 32767.0f;
                         f32 r2 = rand() / 32767.0f;
+#if VERSION <= VERSION_DEMO_US
+                        moamoa_jump(pose, moa, moa->state, 1, x, y, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * (k2 = 1.0f - 1.0f)) + 1.0f);
+#else
                         moamoa_jump(pose, moa, moa->state, 1, x, y, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
+#endif
                     }
                 } else {
                     moa->state = MOAMOA_STATE_GONE;
@@ -1382,7 +1458,8 @@ static void ext_moamoa_main(void) {
                     moa->state = MOAMOA_STATE_GONE;
                 }
                 break;
-
+#if VERSION <= VERSION_DEMO_US
+#endif
         }
 
         if (!(moa->flags & (MOAMOA_FLAG_KNOCKED_AWAY | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_BLOWN))) {
@@ -1405,11 +1482,13 @@ static void ext_moamoa_main(void) {
     }
     moamoa_pose_main();
     wp->mobjY = wp->mobj->modelWorldMtx[1][3];
+#if VERSION > VERSION_DEMO_US
     if (wp->flags & MOAMOA_WORK_FLAG_PARTY_IN_USE) {
         mario->floorMove.x = 0.0f;
         mario->floorMove.y = 0.0f;
         mario->floorMove.z = 0.0f;
     } else {
+#endif
         v = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
         { static const Vec zv2 = {0.0f, 0.0f, 0.0f}; } // FAKE: unreferenced 12-byte .rodata pad object, defined after the compound literal's template so the template comes first (target order)
         if (PSVECMag(&v) > 2.0f) {
@@ -1419,7 +1498,9 @@ static void ext_moamoa_main(void) {
             mario->floorMove.z = 2.0f * v.z;
         }
     }
+#if VERSION > VERSION_DEMO_US
 }
+#endif
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
@@ -1602,12 +1683,17 @@ EVT_BEGIN(evt_moamoa_help)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_AUTO_MOVE_ANIM)
     SET_VALUE(LW(10), LW(0))
     CALL(evt_npc_get_position, LW(0), LW(1), LW(2), LW(3))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_sub_random, 180, LW(4))
+    ADD(LW(4), 90)
+#else
     CALL(evt_sub_random, 1000, LW(4))
     IF_INT_LESS(LW(4), 500)
         SET_VALUE(LW(4), 90)
         ELSE
         SET_VALUE(LW(4), 270)
     END_IF
+#endif
     CALL(evt_sub_get_sincos, LW(4), LW(5), LW(6))
     MULTIPLY_FLOAT(LW(5), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(6), FLOAT(30.0f))
@@ -1672,30 +1758,50 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_cam3d_evt_xyz_off, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_party_stop, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 32)
+#endif
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_flag_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
+#endif
         CALL(evt_npc_status_onoff, 1, STRING("\x8e\xd4\x8f\xb6"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING("\x8e\xd4\x8f\xb6"), -80, 22, 1000, 0, 1)
         CALL(evt_npc_set_ry, STRING("\x8e\xd4\x8f\xb6"), 90)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_INTANGIBLE)
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_flag_onoff, 1, STRING("ウェイトレス"), NPC_FLAG_INTANGIBLE)
+        CALL(evt_npc_status_onoff, 1, STRING("ウェイトレス"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("ウェイトレス"), 0, 15, 1000, 0, 1)
+        CALL(evt_npc_set_ry, STRING("ウェイトレス"), 270)
+        CALL(evt_npc_flag_onoff, 0, STRING("ウェイトレス"), NPC_FLAG_INTANGIBLE)
+#else
         CALL(evt_npc_status_onoff, 1, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 0, 15, 1000, 0, 1)
         CALL(evt_npc_set_ry, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 270)
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, -20, -10, FLOAT(80.0f))
         CALL(evt_party_set_dir, 0, 270, 300)
     END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(2), -140)
         CALL(evt_mario_mov_pos2, LW(0), -100, FLOAT(80.0f))
     END_IF
     CALL(evt_mario_flag_onoff, 1, 1024)
+#endif
     CALL(evt_mario_mov_pos2, -45, 5, FLOAT(80.0f))
     CALL(evt_mario_set_dir, 270, 300, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_flag_onoff, 0, 1024)
+#endif
     CALL(evt_cam3d_evt_set, -40, 90, 283, -40, 38, -13, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_240_00"), 0, STRING("\x8e\xd4\x8f\xb6"))
@@ -1706,7 +1812,11 @@ static EVT_BEGIN(evt_moamoa_escape)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 300, 0)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_241"), 0, STRING("ウェイトレス"))
+#else
     CALL(evt_msg_print, 0, STRING("stg6_rsh_241"), 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")))
+#endif
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 270, 300)
@@ -1719,20 +1829,39 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 0, STRING("\x8e\xd4\x8f\xb6"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), NPC_FLAG_INTANGIBLE)
+#endif
     CALL(evt_npc_change_interrupt, STRING("\x8e\xd4\x8f\xb6"), 6, PTR(talk_syashou))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_change_interrupt, STRING("ウェイトレス"), 6, PTR(talk_waitless))
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_47_ESCAPING_THE_SMORGS)
+#else
     CALL(evt_npc_change_interrupt, STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")), 6, PTR(talk_waitless))
     SET_VALUE(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
+#endif
     SET_VALUE(LW(0), STRING("w_bero"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(bero_case_switch_on)
+#else
     CALL_CHILD(PTR(bero_case_switch_on))
+#endif
     RETURN
 EVT_END()
 
 static EVT_BEGIN(init_syashou)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_BETWEEN(STG6_46_ENGINEER, STG6_48_SMORG_MIASMA)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_npc_set_position, STRING("me"), -100, 0, 0)
+#else
         CALL(evt_npc_set_position, STRING("me"), -115, 0, 20)
+#endif
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("O_1"), STRING("T_3"))
         CALL(evt_npc_set_tribe, STRING("me"), STRING("\x8e\xd4\x8f\xb6\x94\xdf"))
         CASE_DEFAULT
@@ -2107,23 +2236,46 @@ EVT_END()
  * scenery, NPCs and the music for the station the train has reached.
  */
 EVT_BEGIN(rsh_05_init_evt_nidome)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
+            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+#else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+#endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
             END_IF
         END_IF
     END_IF
     CALL(evt_npc_setup, PTR(npc_data))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+#else
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+#else
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
+#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
             ELSE
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))

@@ -27,7 +27,11 @@
 
 EvtWord bero_05_custom_in[30];
 EvtWord bero_05_custom_out[12];
+#if VERSION <= VERSION_DEMO_US
+static BeroEntry bero_entry_data[6];
+#else
 static BeroEntry bero_entry_data[3];
+#endif
 static BeroEntry bero_entry_data2[2];
 static EvtWord guide_init[48];
 static EvtWord guide_talk[11];
@@ -84,6 +88,56 @@ static BeroEntry bero_entry_data[] = {
         0, 0, // enterAnimeArg..exitAnimeArg
     },
     {
+#if VERSION <= VERSION_DEMO_US
+        "s_bero_2", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_04", // nextMapName
+        "n_bero_2", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "s_bero_3", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_04", // nextMapName
+        "n_bero_3", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+    {
+        "s_bero_4", // hitName
+        0, 0, // type..sfxId
+        BERO_DIR_AUTO, // directionId
+        BERO_POS_AUTO, // centerPosition
+        0, 0, // centerPositionY..centerPositionZ
+        -1, // length
+        NULL, // enterEvent
+        -1, // caseType
+        NULL, // exitEvent
+        "tik_04", // nextMapName
+        "n_bero_4", // nextBeroName
+        1, // enterAnimeType
+        1, // exitAnimeType
+        0, 0, // enterAnimeArg..exitAnimeArg
+    },
+{
+#endif
         "dokan", // hitName
         2, // type
         0, // sfxId
@@ -91,7 +145,11 @@ static BeroEntry bero_entry_data[] = {
         100000, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
+#if VERSION <= VERSION_DEMO_US
+        (s32*)bero_05_custom_in, // enterEvent
+#else
         bero_05_custom_in, // enterEvent
+#endif
         10, // caseType
         NULL, // exitEvent
         "win_06", // nextMapName

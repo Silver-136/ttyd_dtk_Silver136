@@ -59,7 +59,11 @@ static EvtWord peach_evt_stg1[56];
 EvtWord aji_02_init_evt[125];
 
 static EVT_BEGIN(w_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -67,7 +71,11 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -255,8 +263,12 @@ EVT_END()
 
 EVT_BEGIN(aji_02_init_evt)
     CALL(evt_bero_get_entername, LW(0))
+#if VERSION <= VERSION_DEMO_US
+IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_00_START)
+#else
     CALL(evt_snd_set_rev_mode, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
         ELSE
@@ -271,26 +283,48 @@ EVT_BEGIN(aji_02_init_evt)
         WAIT_FRAMES(1)
         CALL(evt_cam3d_evt_set, -78, 172, 560, -78, 50, -9, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(peach_evt_stg1)
+#else
         SPAWN_EVENT(PTR(peach_evt_stg1))
+#endif
         RETURN
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_cam_road_reset)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
+        SPAWN_EVENT(hikaru_yuka_init)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
         SPAWN_EVENT(PTR(hikaru_yuka_init))
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_FRAMES(1)
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(hikaru_off)
+#else
         CALL_CHILD(PTR(hikaru_off))
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF(GSWF_AJI02_SUPER_SHROOM_BLOCK_HIT), 0)
+    SPAWN_EVENT(evt_emergency)
+#else
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF_AJI_02_SUPER_SHROOM_BLOCK, 0)
     SPAWN_EVENT(PTR(evt_emergency))
+#endif
     RETURN
 EVT_END()
 
@@ -298,14 +332,18 @@ static USER_FUNC(ride_chk) {
     static s32 onoff[30];
     char hitName[64];
     char name[64];
+#if VERSION > VERSION_DEMO_US
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
+#endif
     s32 i;
+#if VERSION > VERSION_DEMO_US
     HitEntry* hit;
-
+#endif
     if (isFirstCall) {
         memset(onoff, 0, sizeof(onoff));
     }
+#if VERSION > VERSION_DEMO_US
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = mario->hitobjStandOn;
         if (hit == NULL) {
@@ -315,10 +353,21 @@ static USER_FUNC(ride_chk) {
         hit = (HitEntry*)mario->hitobjUnder;
     }
     // Contact resets the counter to 30; this call decrements it before testing visibility.
+#endif
     for (i = 0; i < 30; i++) {
+#if VERSION <= VERSION_DEMO_US
+MarioWork* mario = marioGetPtr();
+
+        if (mario->hitobjUnder != NULL) {
+#else
         if (hit != NULL) {
+#endif
             sprintf(hitName, "A_hikaru_%02d", i + 1);
+#if VERSION <= VERSION_DEMO_US
+if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
+#else
             if (strcmp(hit->joint->name, hitName) == 0) {
+#endif
                 onoff[i] = 30;
             }
         }
@@ -339,7 +388,11 @@ static USER_FUNC(ride_chk) {
             mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
+#if VERSION <= VERSION_DEMO_US
+    if (evtGetValue(event, GSW(GSW_STORY_PROGRESS)) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
+#else
     if (evtGetValue(event, GSW_STORY_PROGRESS) >= STG7_09_ELEVATOR_KEY_A_LIT_FLOOR) {
+#endif
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

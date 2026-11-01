@@ -177,12 +177,19 @@ static EVT_BEGIN(first_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG8_00_START)
+    CALL_CHILD(bero_case_entry)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG8_00_START)
     CALL_CHILD(PTR(bero_case_entry))
+#endif
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_snd_bgm_scope, 0, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_telop_entry, 17)
     RETURN
@@ -199,7 +206,11 @@ static EVT_BEGIN(shan_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(9.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+#else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+#endif
         ADD(LW(0), 1)
     END_LOOP
     RETURN
@@ -208,16 +219,32 @@ EVT_END()
 EVT_BEGIN(las_00_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_00_START)
+        CALL_CHILD(evt_bero_info_run)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_00_START)
+        SPAWN_EVENT(first_evt)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_00_START)
         SPAWN_EVENT(PTR(first_evt))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(shan_init)
+#else
     CALL_CHILD(PTR(shan_init))
+#endif
     RETURN
 EVT_END()
 

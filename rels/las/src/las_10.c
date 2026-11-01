@@ -666,8 +666,13 @@ EVT_BEGIN(tenkyugi_evt)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     // Mario is startled as the tower shakes again.
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#endif
     WAIT_MS(1500)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 270, 100, 0)
@@ -770,7 +775,11 @@ EVT_BEGIN(kagi1_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -785,11 +794,19 @@ EVT_BEGIN(kagi1_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEY_SET1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(0), STRING("S_kagi1"))
     SET_VALUE(LW(1), STRING("A113_daiza1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_rotate)
+    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_1), 1)
+    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
+    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+        CALL_CHILD(tenkyugi_evt)
+#else
     CALL_CHILD(PTR(kagi_rotate))
     SET_VALUE(GSWF_LAS_10_KEY_SLOT_1_FILLED, 1)
     ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
     IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(PTR(tenkyugi_evt))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -801,7 +818,11 @@ EVT_BEGIN(kagi2_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -816,11 +837,19 @@ EVT_BEGIN(kagi2_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEY_SET1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(0), STRING("S_kagi2"))
     SET_VALUE(LW(1), STRING("A113_daiza2"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_rotate)
+    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_2), 1)
+    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
+    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+        CALL_CHILD(tenkyugi_evt)
+#else
     CALL_CHILD(PTR(kagi_rotate))
     SET_VALUE(GSWF_LAS_10_KEY_SLOT_2_FILLED, 1)
     ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
     IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(PTR(tenkyugi_evt))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -832,7 +861,11 @@ EVT_BEGIN(kagi3_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -847,11 +880,19 @@ EVT_BEGIN(kagi3_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEY_SET1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(0), STRING("S_kagi3"))
     SET_VALUE(LW(1), STRING("A113_daiza3"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_rotate)
+    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_3), 1)
+    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
+    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+        CALL_CHILD(tenkyugi_evt)
+#else
     CALL_CHILD(PTR(kagi_rotate))
     SET_VALUE(GSWF_LAS_10_KEY_SLOT_3_FILLED, 1)
     ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
     IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(PTR(tenkyugi_evt))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -863,7 +904,11 @@ EVT_BEGIN(kagi4_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -878,11 +923,19 @@ EVT_BEGIN(kagi4_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEY_SET1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(0), STRING("S_kagi4"))
     SET_VALUE(LW(1), STRING("A113_daiza4"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_rotate)
+    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_4), 1)
+    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
+    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+        CALL_CHILD(tenkyugi_evt)
+#else
     CALL_CHILD(PTR(kagi_rotate))
     SET_VALUE(GSWF_LAS_10_KEY_SLOT_4_FILLED, 1)
     ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
     IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(PTR(tenkyugi_evt))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -894,7 +947,11 @@ EVT_BEGIN(kagi5_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -909,11 +966,19 @@ EVT_BEGIN(kagi5_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEY_SET1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(0), STRING("S_kagi5"))
     SET_VALUE(LW(1), STRING("A113_daiza5"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_rotate)
+    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_5), 1)
+    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
+    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+        CALL_CHILD(tenkyugi_evt)
+#else
     CALL_CHILD(PTR(kagi_rotate))
     SET_VALUE(GSWF_LAS_10_KEY_SLOT_5_FILLED, 1)
     ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
     IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(PTR(tenkyugi_evt))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -925,7 +990,11 @@ EVT_BEGIN(kagi6_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -940,11 +1009,19 @@ EVT_BEGIN(kagi6_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEY_SET1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(0), STRING("S_kagi6"))
     SET_VALUE(LW(1), STRING("A113_daiza6"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_rotate)
+    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_6), 1)
+    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
+    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+        CALL_CHILD(tenkyugi_evt)
+#else
     CALL_CHILD(PTR(kagi_rotate))
     SET_VALUE(GSWF_LAS_10_KEY_SLOT_6_FILLED, 1)
     ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
     IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(PTR(tenkyugi_evt))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -956,7 +1033,11 @@ EVT_BEGIN(kagi7_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -971,11 +1052,19 @@ EVT_BEGIN(kagi7_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEY_SET1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(0), STRING("S_kagi7"))
     SET_VALUE(LW(1), STRING("A113_daiza7"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_rotate)
+    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_7), 1)
+    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
+    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+        CALL_CHILD(tenkyugi_evt)
+#else
     CALL_CHILD(PTR(kagi_rotate))
     SET_VALUE(GSWF_LAS_10_KEY_SLOT_7_FILLED, 1)
     ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
     IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(PTR(tenkyugi_evt))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -987,7 +1076,11 @@ EVT_BEGIN(kagi8_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(0), LW(1))
+#else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
@@ -1002,11 +1095,19 @@ EVT_BEGIN(kagi8_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_KEY_SET1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(LW(0), STRING("S_kagi8"))
     SET_VALUE(LW(1), STRING("A113_daiza8"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_rotate)
+    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_8), 1)
+    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
+    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+        CALL_CHILD(tenkyugi_evt)
+#else
     CALL_CHILD(PTR(kagi_rotate))
     SET_VALUE(GSWF_LAS_10_KEY_SLOT_8_FILLED, 1)
     ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
     IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(PTR(tenkyugi_evt))
+#endif
     END_IF
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
@@ -1274,7 +1375,11 @@ EVT_BEGIN(daiza_evt)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(daiza_key_tbl), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(daiza_key_tbl), LW(0), 0)
+#endif
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -1282,8 +1387,13 @@ EVT_BEGIN(daiza_evt)
     CALL(evt_pouch_remove_item, ITEM_STAR_KEY, LW(0))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kagi_8_syutugen)
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG8_05_STAR_KEY_SLOT)
+#else
     CALL_CHILD(PTR(kagi_8_syutugen))
     SET_VALUE(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
     RETURN
@@ -1297,38 +1407,66 @@ EVT_END()
  */
 EVT_BEGIN(las_10_init_evt)
     // Music: the second Palace theme, depending on how Mario arrived.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_05_STAR_KEY_SLOT)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
+#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("ret_chgmap_evt"))
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
+#if VERSION > VERSION_DEMO_US
             CALL(evt_snd_set_rev_mode, 2)
+#endif
         ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
+#if VERSION > VERSION_DEMO_US
             CALL(evt_snd_set_rev_mode, 2)
+#endif
         END_IF
     ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_snd_set_rev_mode, 2)
+#endif
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     // Register the doors, play the first-visit cutscene on the first entry, and set up the Star Key pedestal.
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    SPAWN_EVENT(las_10_temae_kabe)
+    IF_INT_EQUAL(GSWF(GSWF_LAS10_RIDDLE_TOWER_ENTERED), 0)
+        SPAWN_EVENT(first_evt)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     SPAWN_EVENT(PTR(las_10_temae_kabe))
     IF_INT_EQUAL(GSWF_LAS_10_FIRST_CUTSCENE_SEEN, 0)
         SPAWN_EVENT(PTR(first_evt))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_05_STAR_KEY_SLOT)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_daiza1"), 0, PTR(daiza_evt), 0)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // Set up the eight key stands and, after the last key, the globe cutscene (tenkyugi_evt) when coming from
+    // the tower and its return version (tenkyugi_evt2) when coming back from las_19.
+    SPAWN_EVENT(kagi_8_init)
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_05_STAR_KEY_SLOT)
+#else
     SPAWN_EVENT(PTR(kagi_8_init))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
+#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("tenkyugi_evt"))
             BEGIN_INLINE_EVENT
@@ -1337,15 +1475,27 @@ EVT_BEGIN(las_10_init_evt)
                 CALL(evt_cam_road_reset)
                 CALL(evt_seq_wait, SEQ_GAME)
                 CALL(evt_bero_exec_wait, 65536)
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(tenkyugi_evt)
+#else
                 SPAWN_EVENT(PTR(tenkyugi_evt))
+#endif
             END_INLINE_EVENT
         END_IF
         IF_STR_EQUAL(LW(0), STRING("ret_chgmap_evt"))
+#if VERSION <= VERSION_DEMO_US
+            SPAWN_EVENT(tenkyugi_evt2)
+#else
             SPAWN_EVENT(PTR(tenkyugi_evt2))
+#endif
         END_IF
     END_IF
     // Once the planets are moving, the globe keeps turning with its sound.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_06_MOVING_PLANETS)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
+#endif
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CELESTIAL_MOVE2"), 0, 400, -150, LW(10))
         CALL(evt_snd_sfx_dist, LW(10), 10)
         CALL(evt_map_playanim, STRING("en"), MAP_ANIM_PLAY_LOOP, 0)

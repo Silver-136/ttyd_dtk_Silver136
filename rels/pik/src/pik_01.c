@@ -547,7 +547,11 @@ s32 iri_29_item_tbl3[] = {
  * During the Bowser interlude he reacts to Bowser, and depending on the answer runs away.
  */
 EVT_BEGIN(konarikin_talk)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_HELP_ME_MAKE_UP)
+#else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
+#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 // Trouble Center request 29: Little Narikin asks for a gift.
@@ -573,7 +577,11 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_SHROOM_CAKE, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_05"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(iri_29_item_tbl1), LW(0))
+#else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl1), LW(0), 0)
+#endif
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_SHROOM_CAKE, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_08"), 0, 0)
@@ -588,7 +596,11 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_KEEL_MANGO, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_06"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(iri_29_item_tbl2), LW(0))
+#else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl2), LW(0), 0)
+#endif
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_09"), 0, 0)
@@ -603,7 +615,11 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_FRIGHT_MASK, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_07"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(iri_29_item_tbl3), LW(0))
+#else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl3), LW(0), 0)
+#endif
                         IF_INT_NOT_EQUAL(LW(0), -1)
                             CALL(evt_pouch_remove_item, ITEM_FRIGHT_MASK, LW(0))
                             CALL(evt_msg_print, 0, STRING("irai_29_10"), 0, 0)
@@ -636,7 +652,11 @@ EVT_BEGIN(konarikin_talk)
             CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
             CALL(evt_npc_move_position, STRING("me"), -222, -225, 0, 120, 0)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+#else
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+#endif
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_HELP_ME_MAKE_UP), 1)
             // The request is recorded as solved.
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
@@ -1067,20 +1087,48 @@ EVT_BEGIN(koopa_door_evt)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_6"), STRING("KPA_T_6"))
     CALL(evt_msg_print, 0, STRING("kpa_stg7_013"), 0, STRING("mario"))
     SET_VALUE(LW(1), 1)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_open_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
             SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(n_door_open)
+#else
             CALL_CHILD(PTR(n_door_open))
+#endif
             BREAK_LOOP
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(n_door_open)
+#else
             CALL_CHILD(PTR(n_door_open))
+#endif
         END_IF
     END_LOOP
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        SET_VALUE(LW(3), 226)
+        SET_VALUE(LW(5), -216)
+        CALL(evt_sub_get_dir, LW(3), LW(5), LW(0), LW(2), LW(6))
+        SUBTRACT(LW(6), 45)
+        IF_INT_LESS(LW(6), 0)
+            ADD(LW(6), 360)
+        END_IF
+        IF_INT_LESS(LW(6), 180)
+            CALL(evt_mario_mov_pos, 240, -210, 600)
+        ELSE
+            CALL(evt_mario_mov_pos, 195, -210, 600)
+        END_IF
+#else
         CALL(evt_mario_mov_pos, 230, -215, 600)
+#endif
     END_INLINE_EVENT
     WAIT_MS(300)
     CALL(evt_bero_mapchange, STRING("pik_02"), STRING(""))
@@ -1097,7 +1145,9 @@ EVT_BEGIN(pik_01_koopa_evt)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     CALL(evt_cam3d_evt_set, -273, 145, 196, -273, 69, -237, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_exec_wait, 65536)
+#endif
     CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
@@ -1138,7 +1188,11 @@ EVT_BEGIN(pik_01_koopa_evt)
         CALL(evt_mario_set_dir, 90, 400, 0)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+#endif
     SET_VALUE(GF(1), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -1321,7 +1375,11 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(yami_view, -800)
     CALL(evt_cam3d_evt_set, 15, 134, 667, 15, 38, 126, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(sekai_yami_shake)
+#else
     SPAWN_EVENT(PTR(sekai_yami_shake))
+#endif
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(0))
     WAIT_MS(800)
@@ -1340,7 +1398,11 @@ static EVT_BEGIN(sekai_yami_evt)
             WAIT_MS(200)
         END_LOOP
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(3000)
+#else
     WAIT_MS(1000)
+#endif
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("bom_02"), STRING("sekai_yami2"))
@@ -1494,26 +1556,48 @@ EVT_END()
 EVT_BEGIN(pik_01_init_evt)
     SET_VALUE(LF(0), 0)
     // Set up the Bowser interlude state when the story is between Lord Crump's defeat and the sanctum.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
+#endif
             CALL(evt_mario_set_mode, 2)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_switch_init)
+#else
     CALL_CHILD(PTR(evt_switch_init))
+#endif
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     // Register the exits and the Shine Sprite block.
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_mobj_powerupblk, STRING("pblk01"), 400, 95, 125, 0, GSWF(GSWF_PIK01_SHINE_SPRITE), 0)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 400, 95, 125, 0, GSWF_SHINE_38, 0)
+#endif
     IF_INT_EQUAL(LF(0), 1)
         SET_VALUE(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("nw_bero"), 8388612)
+#endif
     END_IF
     SET_VALUE(LF(1), 0)
     IF_INT_EQUAL(LF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+#else
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
+#endif
             CALL(evt_bero_get_entername, LW(0))
             IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
                 CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -1543,10 +1627,18 @@ EVT_BEGIN(pik_01_init_evt)
     SET_INT_READ_ADDR(PTR(&name_tbl))
     LOOP(2)
         READ_INT(LW(9))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_pik_yajirushi)
+#else
         SPAWN_EVENT(PTR(evt_pik_yajirushi))
+#endif
     END_LOOP
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gazigazi_entry)
+#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
+#endif
     CALL(evt_map_set_tevcallback, 1, PTR(test_tev))
     CALL(evt_map_set_tevcallback, 2, PTR(test_tev2))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("opuku"), MAP_OBJ_TEV_CALLBACK(2))
@@ -1577,31 +1669,67 @@ EVT_BEGIN(pik_01_init_evt)
     END_INLINE_EVENT
     CALL(evt_npc_setup, PTR(npc_data))
     IF_INT_EQUAL(LF(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_I_WANNA_MEET_LUIGI)
+            // Place the NPCs: Luigi for request 27 and the epilogue ghosts.
+            CALL_CHILD(iri_27_npc_entry)
+#else
         IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_WANNA_MEET_LUIGI)
             CALL_CHILD(PTR(iri_27_npc_entry))
+#endif
         END_IF
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 1)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF(GSWF_PIK01_TROUBLE27_CAKE_REWARD), 0)
+#else
             CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF_PIK_01_CHOCO_CAKE, 0)
+#endif
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG9_00_EPILOGUE)
+        CALL_CHILD(resaresa_entry)
+        CALL_CHILD(sebaschan_entry)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
         CALL_CHILD(PTR(resaresa_entry))
         CALL_CHILD(PTR(sebaschan_entry))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(takun4_init)
+#else
     CALL_CHILD(PTR(takun4_init))
+#endif
     CALL(evt_npc_change_interrupt, STRING("ターくん４"), 6, PTR(takun4_talk))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(takun5_init)
+#else
     CALL_CHILD(PTR(takun5_init))
+#endif
     CALL(evt_npc_change_interrupt, STRING("ターくん５"), 6, PTR(takun5_talk))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(takun6_init)
+#else
     CALL_CHILD(PTR(takun6_init))
+#endif
     CALL(evt_npc_change_interrupt, STRING("ターくん６"), 6, PTR(takun6_talk))
     // Lock or unlock the sanctum gate, with the case events that open it for Mario or Bowser.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_50_THE_SANCTUM_MANAGER)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_50_THE_SANCTUM_MANAGER)
+#endif
         CALL(evt_mobj_entry, STRING("lock"), STRING("MOBJ_Lock"))
         CALL(evt_mobj_set_position, STRING("lock"), 226, 30, -216)
         CALL(evt_mobj_set_anim, STRING("lock"), STRING("Z_1"))
         CALL(set_r)
         SET_VALUE(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_harigami"), 0, PTR(evt_powan), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("kami"), MAP_OBJ_FLAG_HIDDEN)
@@ -1614,30 +1742,61 @@ EVT_BEGIN(pik_01_init_evt)
         CALL(set_r)
         CALL(kpa_lock_hit_scale)
         SET_VALUE(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("polySurface743_q00096"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("MOBJ_lock"), 0, PTR(koopa_door_evt), 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+#endif
         CALL(evt_mario_kill_party, 0)
         // Start the Bowser interlude.
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(pik_01_koopa_evt)
+#else
         SPAWN_EVENT(PTR(pik_01_koopa_evt))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+#endif
         CALL(evt_mario_set_pos, -227, 0, -227)
         CALL(evt_npc_set_position, STRING("ババ"), -255, 25, -300)
         CALL(evt_mario_set_dir, 90, 0, 0)
         CALL(evt_npc_set_ry, STRING("ババ"), 90)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
+#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(delete_npc_regl_evt)
+            // Start the chapter 8 finale scenes.
+            SPAWN_EVENT(sekai_yami_evt)
+#else
             CALL_CHILD(PTR(delete_npc_regl_evt))
             SPAWN_EVENT(PTR(sekai_yami_evt))
+#endif
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(delete_npc_regl_evt)
+            SPAWN_EVENT(minnnanokoe_evt)
+#else
             CALL_CHILD(PTR(delete_npc_regl_evt))
             SPAWN_EVENT(PTR(minnnanokoe_evt))
+#endif
         END_IF
     END_IF
     RETURN

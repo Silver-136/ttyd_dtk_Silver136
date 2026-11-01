@@ -284,7 +284,11 @@ s32 iri_15_item_tbl2[] = {
 };
 
 EVT_BEGIN(nokonoko_F_talk)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_THE_FOOD_I_WANT)
+#else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_THE_FOOD_I_WANT)
+#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             // Bub-ulber introduces himself and asks Mario to bring him something to eat.
             CALL(evt_msg_print, 0, STRING("irai_15_001"), 0, 0)
@@ -296,7 +300,11 @@ EVT_BEGIN(nokonoko_F_talk)
             CALL(evt_pouch_get_haveitemcnt, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, 1, LW(0))
+#else
                 CALL(evt_win_item_select, 0, 1, LW(0), 0)
+#endif
                 ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
@@ -328,8 +336,13 @@ EVT_BEGIN(nokonoko_F_talk)
                     CALL(evt_item_get_item, STRING("df"))
                     CALL(evt_item_get_item_end_wait, STRING("df"))
                     CALL(evt_msg_print, 0, STRING("irai_15_007"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+                    CALL(evt_sub_save_playtime, GSW(GSW_NOK00_TROUBLE15_TIME))
+                    SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+#else
                     CALL(evt_sub_save_playtime, GSW_NOK_FOOD_I_WANT_DONE_TIME_UNUSED)
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+#endif
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_THE_FOOD_I_WANT), 1)
                     // The request is recorded as solved and the play time is saved.
                     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
@@ -354,7 +367,11 @@ EVT_BEGIN(nokonoko_F_talk)
             CALL(evt_pouch_get_haveitemcnt, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, 1, LW(0))
+#else
                 CALL(evt_win_item_select, 0, 1, LW(0), 0)
+#endif
                 ELSE
                 SET_VALUE(LW(0), -1)
                 SET_VALUE(LF(0), 1)
@@ -378,7 +395,11 @@ EVT_BEGIN(nokonoko_F_talk)
         END_IF
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         // Without a request, he chats about the weather; the lines change as the story advances.
         CALL(evt_msg_print, 0, STRING("stg1_nok_17"), 0, 0)
@@ -815,8 +836,12 @@ EVT_BEGIN(first_time_camera)
     WAIT_MS(100)
     CALL(evt_cam3d_evt_off, 500, EASING_QUADRATIC_OUT)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG1_NOK1"), 2000)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_01A_PETALBURG_1ST_TIME)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)

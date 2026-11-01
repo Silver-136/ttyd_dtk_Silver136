@@ -123,7 +123,11 @@ EvtWord elmos_a_kakushuku[63];
 EvtWord elmos_a_kaku[13];
 EvtWord elmos_a_shuku[13];
 static ExtTexInfo ext_entry_data[21];
+#if VERSION <= VERSION_DEMO_US
+static s16 elmos_animtbl[21];
+#else
 static s16 elmos_animtbl[22];
+#endif
 static EvtWord nannpc_mode_setup[35];
 s32 mist_pos[91];
 EvtWord mist_setup[45];
@@ -962,7 +966,11 @@ static ExtTexInfo ext_entry_data[] = {
 static s16 elmos_animtbl[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
     8, 9, 10, 11, 12, 13, 14, 15,
+#if VERSION <= VERSION_DEMO_US
+16, 17, 18, 19, -1,
+#else
     16, 17, 18, 19, -1, 0,
+#endif
 };
 
 /**
@@ -1936,6 +1944,7 @@ static USER_FUNC(fune_eff) {
  * writing the result to LW(7) to LW(9) and the added heading to LW(0).
  */
 // Descriptive name (not in the symbol maps); placeholder unk_muj_00004328, JP muj .text+0x4264. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(fune_curve_pos) {
     f32 x = evtGetFloat(event, GW(0));
     f32 y = evtGetFloat(event, GW(1));
@@ -1959,6 +1968,7 @@ USER_FUNC(fune_curve_pos) {
     evtSetFloat(event, LW(0), rot + angle);
     return EVT_RETURN_DONE;
 }
+#endif
 
 EVT_BEGIN(anm_yure)
     CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
@@ -1971,11 +1981,20 @@ EVT_BEGIN(anm_yure)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
+#else
             CALL(fune_curve_pos)
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), LW(7), LW(8), LW(9))
+#endif
             CALL(evt_mapobj_rotate, 1, STRING("S_fune_m"), 0, 180, LW(0))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_sfx_pos, GW(4), GW(0), GW(1), GW(2))
+            CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), GW(0), GW(1), GW(2))
+#else
             CALL(evt_snd_sfx_pos, GW(4), LW(7), LW(8), LW(9))
             CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), LW(7), LW(8), LW(9))
+#endif
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
@@ -1985,11 +2004,20 @@ EVT_BEGIN(anm_yure)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
+#else
             CALL(fune_curve_pos)
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), LW(7), LW(8), LW(9))
+#endif
             CALL(evt_mapobj_rotate, 1, STRING("S_fune_m"), 0, 180, LW(0))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_snd_sfx_pos, GW(4), GW(0), GW(1), GW(2))
+            CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), GW(0), GW(1), GW(2))
+#else
             CALL(evt_snd_sfx_pos, GW(4), LW(7), LW(8), LW(9))
             CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), LW(7), LW(8), LW(9))
+#endif
             WAIT_FRAMES(1)
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
@@ -2064,6 +2092,40 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
  * Display callback for the title logo: draws the logo texture for the current language
  * and the Press Start text with the wp alpha.
  */
+#if VERSION <= VERSION_DEMO_US
+static void draw(CameraId camera, void* param) {
+    LogoWork* wp = param;
+    CameraEntry saved;
+    f32 viewport[6];
+    f32 projection[7];
+    CameraEntry* cam;
+GXGetViewportv(viewport);
+    GXGetProjectionv(projection);
+    cam = camGetPtr(CAMERA_2D);
+    GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam->projType);
+    saved = *camGetCurPtr();
+    cam = camGetPtr(CAMERA_2D);
+    *camGetCurPtr() = *cam;
+    winTexInit(*(TEXPalette**)wp->tpl->data);
+winTexSet(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
+    // the demo blinks PRESS START under the logo once the ship has arrived (GF(0))
+    if (evtGetValue(NULL, GF(0))) {
+        f32 s = (f32)sin((f32)gp->retraceCount / 15.0f);
+        s32 alpha = (s32)(1.5f * wp->alpha * s);
+
+        if (alpha < 0) {
+            alpha = 0;
+        }
+        if (alpha > 255) {
+            alpha = 255;
+        }
+        pressStartGX(wp, alpha, 0.0f, -100.0f);
+    }
+*camGetCurPtr() = saved;
+    GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
+    GXSetProjectionv(projection);
+}
+#else
 static void draw(CameraId camera, void* param) {
     LogoWork* wp = param;
     CameraEntry saved;
@@ -2096,13 +2158,18 @@ static void draw(CameraId camera, void* param) {
     GXSetViewport(viewport[0], viewport[1], viewport[2], viewport[3], viewport[4], viewport[5]);
     GXSetProjectionv(projection);
 }
+#endif
 
 static EVT_BEGIN(evt_prologue)
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(4000)
+#else
     WAIT_MS(500)
     // The opening title scene: music starts and the logo appears.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_OPENING1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
     WAIT_MS(3500)
+#endif
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
     SET_VALUE(GF(2), 0)
@@ -2282,7 +2349,12 @@ EVT_BEGIN(muj_20_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hai_r_04"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hai_r_05"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_fune_m"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    // A Bowser interlude plays at this point of the story.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+#endif
         CALL(evt_mario_set_mode, 2)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
@@ -2292,43 +2364,90 @@ EVT_BEGIN(muj_20_init_evt)
         CALL(evt_map_playanim, STRING("fune_01"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("kumo"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_AT_END, 0)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(muj_20_koopa_evt)
+#else
         SPAWN_EVENT(PTR(muj_20_koopa_evt))
+#endif
         RETURN
     END_IF
     CALL(evt_map_playanim, STRING("nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("nami_02"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("fune_01"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kumo"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+    // Pick the music and scene for the ship's crossing to or from Rogueport.
+    IF_INT_EQUAL(GSWF(GSWF_GOR00_SAIL_TO_KEELHAUL), 1)
+#else
     IF_INT_EQUAL(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(gor_muj_ship)
+#else
         SPAWN_EVENT(PTR(gor_muj_ship))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_GOR00_SHIP_ARRIVAL_PENDING), 1)
+#else
     IF_INT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(muj_gor_ship)
+#else
         SPAWN_EVENT(PTR(muj_gor_ship))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // The voyage to Keelhaul Key begins.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_END_OFF_TO_THE_KEYS)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_END_OFF_TO_THE_KEYS)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_SAILING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(onryo_event)
+#else
         SPAWN_EVENT(PTR(onryo_event))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_00_LOGBOOK)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_00_LOGBOOK)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_SAILING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ1_1"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(onryo_event)
+#else
         SPAWN_EVENT(PTR(onryo_event))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // When entered as the prologue, the ship animations start and the opening title scene runs.
+#endif
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("prologue"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_OPENING1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
+#endif
         CALL(evt_cam3d_evt_set, 0, 367, 2093, 0, 343, -115, 0, EASING_SINE_IN_OUT)
         CALL(evt_mario_cont_onoff, 0)
         CALL(evt_party_cont_onoff, 0, 0)
         CALL(evt_mario_set_pos, 0, -1000, 0)
         CALL(evt_party_set_pos, 0, 0, -1000, 0)
         CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_AT_END, 0)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_mapobj_trans, 1, STRING("S_hai03_sun"), 0, -260, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_umi_l_siro_b"), MAP_OBJ_FLAG_HIDDEN)
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_fune_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -2338,20 +2457,39 @@ EVT_BEGIN(muj_20_init_evt)
         SET_FLOAT_VALUE(GW(0), FLOAT(-2000.0f))
         SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
         SET_FLOAT_VALUE(GW(2), FLOAT(-3000.0f))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(anm_kaji)
+        SPAWN_EVENT(anm_wakka)
+        SPAWN_EVENT(anm_entotsu)
+        SPAWN_EVENT(anm_neji)
+        SPAWN_EVENT(anm_yure)
+        SPAWN_EVENT(evt_prologue)
+#else
         SPAWN_EVENT(PTR(anm_kaji))
         SPAWN_EVENT(PTR(anm_wakka))
         SPAWN_EVENT(PTR(anm_entotsu))
         SPAWN_EVENT(PTR(anm_neji))
         SPAWN_EVENT(PTR(anm_yure))
         SPAWN_EVENT(PTR(evt_prologue))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // At the end of the game the epilogue scene on the ship starts.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
+#endif
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_a1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_a1"), 1, 0)
         CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mario_kill_party, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(epilogue_npc_entry)
+        SPAWN_EVENT(epilogue_evt)
+#else
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
+#endif
     END_IF
     RETURN
 EVT_END()
@@ -2361,6 +2499,60 @@ EVT_END()
 
 #endif
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(logo) {
+    LogoWork* wp;
+
+    if (isFirstCall) {
+        wp = _mapAlloc(sizeof(LogoWork));
+        memset(wp, 0, sizeof(LogoWork));
+        event->userdatap[0] = wp;
+    }
+    wp = event->userdatap[0];
+switch (wp->state) {
+        case 0:
+            wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
+            wp->alpha = 0;
+            wp->y = 0.0f;
+            wp->counter = 0;
+            wp->state++;
+            break;
+        case 1:
+            if (wp->counter < VERSION_PICK(180, FPS_FRAMES(180))) {
+                wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
+            } else if (gp->retraceCount % 15 == 0) {
+                wp->state++;
+            }
+            break;
+        case 2:
+if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START))) {
+wp->counter = 0;
+                wp->state++;
+                evtSetValue(event, GF(1), 1);
+            }
+            break;
+        case 3:
+            if (wp->counter < VERSION_PICK(120, FPS_FRAMES(120))) {
+                wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
+            } else {
+                wp->state++;
+            }
+            break;
+        case 4:
+            fileFree(wp->tpl);
+            wp->tpl = NULL;
+            _mapFree(wp);
+            evtSetValue(event, GF(2), 1);
+            return EVT_RETURN_DONE;
+    }
+    if (wp->tpl) {
+        dispEntry(CAMERA_2D, 1000.0f, 0, draw, wp);
+    }
+    return EVT_RETURN_BLOCK;
+}
+#else
 USER_FUNC(logo) {
     LogoWork* wp;
 
@@ -2425,4 +2617,5 @@ USER_FUNC(logo) {
     }
     return EVT_RETURN_BLOCK;
 }
+#endif
 

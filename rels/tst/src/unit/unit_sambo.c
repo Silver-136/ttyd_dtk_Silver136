@@ -115,7 +115,11 @@ static BattleUnitDefenseAttr defence_attr = {0};
 static StatusVulnerability regist = {90, 80, 90, 100, 90, 100, 100, 50, 100, 90, 100, 90, 100, 90, 90, 100, 90, 100, 90, 100, 100, 100};
 #else
 /** Status vulnerability of the Pokey in the retail builds: resists most statuses. */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 80, 90, 100, 90, 100, 100, 50, 100, 90, 100, 90, 100, 90, 90, 100, 90, 100, 90, 100, 100, 100};
+#else
 static StatusVulnerability regist = {95, 80, 80, 100, 90, 100, 100, 60, 100, 90, 100, 90, 100, 95, 90, 100, 90, 100, 90, 100, 100, 100};
+#endif
 #endif
 
 /** Attack data of the Pokey's headbutt with 4 segments: 2 damage. */
@@ -230,6 +234,43 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
 };
 
 /** Attack data of the Pokey's headbutt with 1 segment: 3 damage. */
+#if VERSION <= VERSION_DEMO_US
+static BattleWeapon weapon_sambo_head_attack_1 = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0, // baseFpCost..baseSpCost
+    1, // superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault,
+{3, 0, 0, 0, 0, 0, 0, 0},
+NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_NO_CEILING | TARGET_PROP_SHELL_TOSSLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, // acHelpMsg
+    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED, // special
+    0, // counterResistFlags
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 static BattleWeapon weapon_sambo_head_attack_1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -269,6 +310,7 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /** Attack data of the Pokey's segment throw with 4 segments: 3 damage. */
 static BattleWeapon weapon_sambo_spike_attack_4 = {
@@ -612,6 +654,21 @@ EVT_END()
  * it takes pose type 47 and shows a toge_flush spark just above the top of the stack (its height scaled by its
  * size), then waits 60 frames.
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 47)
+    CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
+    CALL(btlevtcmd_GetHeight, LW(10), LW(3))
+    CALL(btlevtcmd_GetStatusMg, LW(10), LW(4))
+MULTIPLY(LW(3), LW(4))
+ADD(LW(1), LW(3))
+    ADD(LW(1), 5)
+    ADD(LW(2), 10)
+    CALL(evt_eff, STRING(""), STRING("toge_flush"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
+    WAIT_FRAMES(60)
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), 47)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -629,6 +686,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
     WAIT_FRAMES(60)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Damage handler: unit work 0 holds the number of body segments left (4 to 1),

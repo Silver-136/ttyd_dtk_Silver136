@@ -173,8 +173,13 @@ EVT_END()
 EVT_BEGIN(evt_to_tou)
     CALL(evt_cam3d_evt_set, -2000, 241, 534, -2000, 145, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_URN1"), 18000)
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
     CALL(evt_snd_bgmon_f_d, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_URN1"), 18000, 18000)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -461,7 +466,11 @@ EVT_BEGIN(tou_00_koopa_evt)
             GOTO(2)
         END_IF
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_sfx_pit, GW(9), -1365)
+#else
     CALL(evt_snd_sfx_pit, GW(2), -1365)
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(2), LW(2), 500)
     LABEL(4)
     CALL(evt_sub_intpl_msec_get_value)

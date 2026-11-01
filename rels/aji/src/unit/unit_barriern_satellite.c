@@ -43,17 +43,48 @@ BattleUnitKind unit_barriern_satellite = {
     9999, // pbSoftCap
     16, // width
     16, // height
+#if VERSION <= VERSION_DEMO_US
+    0,
+    8,
+#else
     {0, 8}, // hitOffset
     {0.0f, 0.0f, 0.0f}, // centerOffset
     {-3, -6}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {8.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+0,
+    -16,
+0.0f,
+    0.0f,
+    0.0f,
+    8.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    8.0f,
+    0.0f,
+    0.0f,
+    5.0f,
+    6.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {8.0f, 0.0f, 0.0f}, // bintaHitOffset
     {5.0f, 6.0f, 0.0f}, // kissHitOffset
     {0.0f, 0.0f, 0.0f}, // cutBaseOffset
+#endif
     16.0f, // cutWidth
     16.0f, // cutHeight
     0, // turnOrder
@@ -62,7 +93,13 @@ BattleUnitKind unit_barriern_satellite = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_BARRI_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -94,6 +131,9 @@ static BattleUnitKindPart parts[] = {
     {6, "btl_un_barriern_satellite", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 100, 100, 0, 90, 100, 0, 0, 100, 90, 100, 90, 100, 90, 90, 0, 100, 100, 90, 100, 100, 100};
+#else
 static StatusVulnerability regist = {
     80, // sleep
     100, // stop
@@ -118,6 +158,7 @@ static StatusVulnerability regist = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /** Pose table of the Mini-Yux: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {

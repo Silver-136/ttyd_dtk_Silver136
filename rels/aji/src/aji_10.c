@@ -76,7 +76,11 @@ static NpcSetupInfo npcEnt[9];
 EvtWord aji_10_init_evt[279];
 
 static EVT_BEGIN(w_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("door_w_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_w_B"), 0, 0, LW(0))
@@ -84,7 +88,11 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("door_w_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_w_B"), 0, 0, LW(0))
@@ -92,7 +100,11 @@ static EVT_BEGIN(w_door_open)
 EVT_END()
 
 static EVT_BEGIN(e_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("door_e_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_e_B"), 0, 0, LW(0))
@@ -100,7 +112,11 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("door_e_A"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("door_e_B"), 0, 0, LW(0))
@@ -1403,37 +1419,64 @@ static NpcSetupInfo npcEnt[] = {
  * The Barriern Custom guard is removed once Lord Crump is beaten.
  */
 EVT_BEGIN(aji_10_init_evt)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_00_START)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
         ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_00_START)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
+#endif
         DEBUG_PUT_MSG(STRING("npc setup"))
         CALL(evt_npc_setup, PTR(npcEnt))
         CALL(evt_npc_check_delete, STRING("バリアーンカスタム"))
         CALL(evt_shuryolight_init, STRING("シュリョー"))
         CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_normal), PTR(shuryolight_head_normal), PTR(shuryolight_tue_normal))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_EQUAL(STG1_17_FATHER_SON_REUNITED)
         CALL(evt_mario_set_mode, 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(monitor_init)
+        SPAWN_EVENT(peach_evt_stg1)
+#else
         CALL_CHILD(PTR(monitor_init))
         SPAWN_EVENT(PTR(peach_evt_stg1))
+#endif
         CASE_EQUAL(STG2_25_AFTER_THE_BOSS_BATTLE)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_npc_entry, STRING("研究員"), STRING("c_zako_m"))
         CALL(evt_npc_set_tribe, STRING("研究員"), STRING("第三勢力研究員"))
         CALL(evt_npc_set_stay_anim, STRING("研究員"))
         CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(peach_evt_stg2)
+#else
         SPAWN_EVENT(PTR(peach_evt_stg2))
+#endif
         CASE_EQUAL(STG3_32_BOSS_BATTLE)
         CALL(evt_mario_set_mode, 1)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(peach_evt_stg3)
+#else
         SPAWN_EVENT(PTR(peach_evt_stg3))
+#endif
         CASE_EQUAL(STG3_33_02_PEACH_INCOGNITO)
         CALL(evt_mario_set_mode, 1)
         CASE_EQUAL(STG4_15_04_SHADOW_SIRENS_DOOPLISS)
@@ -1442,11 +1485,20 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_npc_set_tribe, STRING("研究員"), STRING("第三勢力研究員"))
         CALL(evt_npc_set_stay_anim, STRING("研究員"))
         CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(peach_evt_stg4)
+#else
         SPAWN_EVENT(PTR(peach_evt_stg4))
+#endif
         CASE_EQUAL(STG5_43_X_NAUTS_RETREAT)
         CALL(evt_mario_set_mode, 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(monitor_init)
+        SPAWN_EVENT(peach_evt_stg5)
+#else
         CALL_CHILD(PTR(monitor_init))
         SPAWN_EVENT(PTR(peach_evt_stg5))
+#endif
         CASE_BETWEEN(STG5_45_PEACH_POTION_PUZZLE, STG5_46_PEACH_DISK_SEARCH)
         CALL(evt_mario_set_mode, 1)
         CALL(peach_evt_toumei)
@@ -1458,47 +1510,101 @@ EVT_BEGIN(aji_10_init_evt)
         BEGIN_INLINE_EVENT
             CALL(evt_bero_exec_wait, 65536)
             SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(bero_case_switch_off)
+#else
             CALL_CHILD(PTR(bero_case_switch_off))
+#endif
             CALL(evt_bero_overwrite, STRING("e_bero"), PTR(bero_peach_data))
             SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(bero_case_switch_on)
+#else
             CALL_CHILD(PTR(bero_case_switch_on))
+#endif
         END_INLINE_EVENT
         CASE_EQUAL(STG6_54_WELCOME_BACK)
         CALL(evt_mario_set_mode, 1)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(peach_evt_stg6)
+#else
         SPAWN_EVENT(PTR(peach_evt_stg6))
+#endif
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_map_playanim, STRING("comp"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kabe"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("sikaku"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("mozaiku"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("moji"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+#endif
         CALL(evt_npc_check_delete, STRING("バリアーンカスタム"))
     END_IF
     // The visited flag is already set before this test; retain the event words.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_AJI10_VISITED), 1)
+    IF_INT_EQUAL(GSWF(GSWF_AJI10_VISITED), 0)
+#else
     SET_VALUE(GSWF_AJI_10_VISITED, 1)
     IF_INT_EQUAL(GSWF_AJI_10_VISITED, 0)
+#endif
         SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_emergency)
+#else
     SPAWN_EVENT(PTR(evt_emergency))
+#endif
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_kill_party, 0)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_AJI09_PEACH3_DISGUISED), 1)
+#else
         IF_INT_EQUAL(GSWF_AJI_PEACH_IN_UNIFORM, 1)
+#endif
             CALL(evt_peach_transform_gundan_on)
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_33_02_PEACH_INCOGNITO)
+#else
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_02_PEACH_INCOGNITO)
+#endif
             SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(bero_case_switch_off)
+#else
             CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_45_PEACH_POTION_PUZZLE)
+            IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_46_PEACH_DISK_SEARCH)
+#else
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_45_PEACH_POTION_PUZZLE)
             IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
+#endif
                 SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(bero_case_switch_on)
+#else
                 CALL_CHILD(PTR(bero_case_switch_on))
+#endif
             END_IF
         END_IF
     END_IF

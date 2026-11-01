@@ -475,7 +475,11 @@ static u8 shadow_dl[32] ATTRIBUTE_ALIGN(32) = {
 
 // The game keeps this 64-byte array in .sdata, above the -sdata 48 limit, hence the explicit section (layout debt);
 // 12 of the 16 floats are set
+#if VERSION <= VERSION_DEMO_US
+static f32 shadow_vtx[16] = {
+#else
 __declspec(section ".sdata") static f32 shadow_vtx[16] = {
+#endif
     -1.2f, 0.0f, -1.2f,
     -1.2f, 0.0f, 1.2f,
     1.2f, 0.0f, 1.2f,

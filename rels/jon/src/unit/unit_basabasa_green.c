@@ -195,6 +195,9 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_basabasa_green", "c_basabasa_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 55, 70, 100, 50, 100, 100, 50, 100, 50, 100, 50, 100, 50, 50, 50, 80, 100, 50, 100, 100, 20};
+#else
 static StatusVulnerability regist = {
     50, // sleep
     55, // stop
@@ -219,6 +222,7 @@ static StatusVulnerability regist = {
     100, // invisible
     20, // ohko
 };
+#endif
 
 /** Attack data for the Swampire's draining bite: 6 damage. */
 static BattleWeapon weapon_basabasa_attack = {

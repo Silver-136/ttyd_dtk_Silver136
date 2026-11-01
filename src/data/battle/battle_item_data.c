@@ -1564,7 +1564,11 @@ BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_ICE, // element
     ATTACKPATTERN_NULL, // damagePattern
@@ -1577,7 +1581,11 @@ BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, // burnTime
+#if VERSION <= VERSION_DEMO_US
+100,
+#else
     95, // freezeChance
+#endif
     2, // freezeTime
     0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeChance..defChangeTime
     0, 0, 0, 0, 0, 0, 0, 0, // defChangeStrength..slowChance
@@ -2044,7 +2052,11 @@ BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -2053,7 +2065,11 @@ BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
+#if VERSION <= VERSION_DEMO_US
+100,
+#else
     95, // sleepChance
+#endif
     5, // sleepTime
     0, 0, 0, 0, 0, 0, 0, 0, // stopChance..confuseChance
     0, 0, 0, 0, 0, 0, 0, 0, // confuseTime..freezeChance
@@ -2074,7 +2090,11 @@ EVT_BEGIN(ItemEvent_Stop_Watch_Core)
     CALL(evt_snd_sfxon, STRING("SFX_ITEM_STOP_WATCH1"), 0)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_PARTY_IN_AUDIENCE)
     IF_INT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff64, 0, STRING("timestamp_n64"), 0, 0, 0, 0, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
+#else
         CALL(evt_eff64, 0, STRING("timestamp_n64"), 0, 0, 0, 103, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
+#endif
         ELSE
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(2), 30)
@@ -2103,7 +2123,11 @@ EVT_BEGIN(ItemEvent_Stop_Watch_Core)
     GOTO(10)
     LABEL(90)
     CALL(evt_audience_ap_recovery)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(_return_home_event)
+#else
     CALL_CHILD(PTR(_return_home_event))
+#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -2151,7 +2175,11 @@ BattleWeapon ItemWeaponData_Stop_Watch = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -2161,7 +2189,11 @@ BattleWeapon ItemWeaponData_Stop_Watch = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
+#if VERSION <= VERSION_DEMO_US
+100,
+#else
     95, // stopChance
+#endif
     3, // stopTime
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
@@ -2895,6 +2927,10 @@ EVT_BEGIN(ItemEvent_Attiike_Shisshi)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ITEM_HORROR2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff64, STRING(""), STRING("holography_n64"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 120, 0, 0, 0, 0, 0, 0)
+    WAIT_FRAMES(120)
+#else
     CALL(evt_eff64, 0, STRING("holography_n64"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 120, 0, 0, 0, 0, 0, 0)
     BEGIN_SIBLING_EVENT
         WAIT_MS(400)
@@ -2919,9 +2955,14 @@ EVT_BEGIN(ItemEvent_Attiike_Shisshi)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     END_SIBLING_EVENT
     WAIT_MS(2000)
+#endif
     CALL_CHILD(ItemEvent_Support_Sub_Effect)
     CALL(evt_audience_ap_recovery)
+#if VERSION <= VERSION_DEMO_US
+    WAIT_FRAMES(150)
+#else
     WAIT_MS(2500)
+#endif
     CALL_CHILD(_return_home_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -4070,6 +4111,43 @@ BattleWeapon ItemWeaponData_FutarideForever = {
  * the dish's icon is thrown in an arc at the target, which takes the dish's damage;
  * Zess Dynamite also shows fire pillars and the cook's ghostly image, the bombs explode.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon ItemWeaponData_FireCandy = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    228, // itemId
+    NULL, // description
+    100, // baseAccuracy
+    0, 0, 0, // baseFpCost..superguardsAllowed
+    1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_SAME_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_FIRE, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, // acHelpMsg
+    SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
+    {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
+};
+#endif
 EVT_BEGIN(ItemEvent_ThrowAttack)
     // The camera closes in on the user; on the player's side they first walk forward.
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
@@ -4525,18 +4603,26 @@ USER_FUNC(_hpfp_change_declare_1) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(_hpfp_change_declare_2) {
+#else
 USER_FUNC(_hpfp_change_declare_2) {
+#endif
     BattleWork* wp = _battleWorkPointer;
     s32 id = evtGetValue(event, event->args[0]);
     BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
 
     if (unit) {
         if (unit->currentKind == UNIT_MARIO) {
+#if VERSION > VERSION_DEMO_US
             statusClearBlink();
+#endif
             statusMarioHPBlink(120);
             statusFPBlink(120);
         } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
+#if VERSION > VERSION_DEMO_US
             statusClearBlink();
+#endif
             statusPartyHPBlink(120);
             statusFPBlink(120);
         }
@@ -4544,7 +4630,11 @@ USER_FUNC(_hpfp_change_declare_2) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(_naniga_okorukana_check) {
+#else
 USER_FUNC(_naniga_okorukana_check) {
+#endif
     Vec pos;
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -4572,6 +4662,7 @@ USER_FUNC(_naniga_okorukana_check) {
         event->userdata[0] = (EvtWord)effNanigaEntry(0, pos.x, pos.y, pos.z, R_mystery_item_table, item);
         effSetName((EffectEntry*)event->userdata[0], "effNaniga");
         evtSetValue(event, out, item);
+#if VERSION > VERSION_DEMO_US
         if (unit->currentKind == UNIT_MARIO) {
             attackItemCount = &wp->actRecord.marioAttackItems;
             supportItemCount = &wp->actRecord.marioSupportItems;
@@ -4580,7 +4671,9 @@ USER_FUNC(_naniga_okorukana_check) {
             supportItemCount = &wp->actRecord.partnerSupportItems;
         } else {
             goto end;
+#endif
         }
+#if VERSION > VERSION_DEMO_US
         switch (item) {
             case ITEM_THUNDER_BOLT:
             case ITEM_THUNDER_RAGE:
@@ -4595,6 +4688,7 @@ USER_FUNC(_naniga_okorukana_check) {
         }
     }
 end:
+#endif
     if (effNameToPtr("effNaniga")) {
         return EVT_RETURN_BLOCK;
     }
@@ -4766,10 +4860,18 @@ USER_FUNC(_full_ap_recover) {
 
 EVT_BEGIN(ItemEvent_LastDinner)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_PoisonKinoko))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(ItemEvent_Support_Sub_UseDeclere)
+#else
     CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
+#endif
     WAIT_FRAMES(30)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(ItemEvent_GetTarget)
+#else
     CALL_CHILD(PTR(ItemEvent_GetTarget))
+#endif
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, LW(10), LW(5))
     CALL(btlevtcmd_GetStatusMg, LW(10), LW(6))
@@ -4787,21 +4889,36 @@ EVT_BEGIN(ItemEvent_LastDinner)
     CALL(btlevtcmd_SetFp, LW(10), 0)
     CALL(_full_ap_recover, LW(10))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_SYSTEM_ON)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+#endif
     CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("hit"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+#endif
     WAIT_MS(250)
     CALL(evt_eff, 0, STRING("hit"), 1, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+#endif
     WAIT_MS(250)
     CALL(evt_eff, 0, STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+#endif
     WAIT_MS(250)
     CALL(evt_eff, 0, STRING("hit"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+#endif
     WAIT_MS(1750)
     CALL(evt_audience_ap_recovery)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(_return_home_event)
+#else
     CALL_CHILD(PTR(_return_home_event))
+#endif
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

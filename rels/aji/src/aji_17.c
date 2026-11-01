@@ -191,18 +191,36 @@ static s32 wait_move_end_50hz(EventEntry* event, BOOL isFirstCall) {
 #pragma defer_codegen on
 
 static EVT_BEGIN(w_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_1")), 0, 0, LW(0))
+#endif
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
+#else
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_2")), 0, 0, LW(0))
+#endif
     RETURN
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_1")), 0, 0, LW(0))
+#endif
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
+#else
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_2")), 0, 0, LW(0))
+#endif
     RETURN
 EVT_END()
 
@@ -335,14 +353,26 @@ void noiseDisp(CameraId cameraId, void* param) {
 }
 
 EVT_BEGIN(evt_emergency)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_THE_LAST_MAIL)
+#else
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
+#endif
         LOOP(0)
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_THE_LAST_MAIL)
+#else
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
+#endif
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 32, 1000)
+#else
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 96, 1000)
+#endif
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_map_set_blend, 0, 255, LW(0), LW(0), 255)
@@ -351,7 +381,11 @@ EVT_BEGIN(evt_emergency)
             GOTO(0)
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_map_set_blend, 0, 255, 32, 32, 255)
+#else
     CALL(evt_map_set_blend, 0, 255, 96, 96, 255)
+#endif
     RETURN
 EVT_END()
 
@@ -3178,6 +3212,107 @@ EVT_BEGIN(tec_talk)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(aji_17_init_evt)
+    SET_VALUE(LW(0), STRING("S_camera_1"))
+    SET_VALUE(LW(1), -30)
+    SET_VALUE(LW(2), 60)
+    // The camera sweep over TEC's room starts.
+    SPAWN_EVENT(evt_camera)
+    SET_VALUE(LW(0), STRING("S_camera_2"))
+    SET_VALUE(LW(1), -60)
+    SET_VALUE(LW(2), 30)
+    SPAWN_EVENT(evt_camera)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_meil"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kikai_0"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1161_q00063"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("polySurface1168_q00065"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_mapobj_scale, 0, STRING("ren2"), 5, 5, 1)
+    // Peach's scenes: each story point from chapter 1 to chapter 6 starts its own conversation with TEC.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_18_01_PEACH_AN_OPEN_DOOR)
+        SPAWN_EVENT(peach_evt_stg1)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_01_PEACH_CRUMP_X_NAUTS)
+        SPAWN_EVENT(peach_evt_stg2)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_33_PEACH_THE_SECRET_WEAPON)
+        SPAWN_EVENT(peach_evt_stg3)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_33_03_PEACH_GRODUS)
+        SPAWN_EVENT(peach_evt_stg3_1)
+        CALL(evt_mario_kill_party, 0)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_04_SHADOW_SIRENS_DOOPLISS)
+        SPAWN_EVENT(peach_evt_stg4)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_43_X_NAUTS_RETREAT)
+        SPAWN_EVENT(peach_evt_stg5)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_46_PEACH_DISK_SEARCH)
+        SPAWN_EVENT(peach_evt_stg5_1)
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_55_PEACH_GRODUS_X_NAUT)
+        CALL(evt_npc_setup, PTR(npcEnt))
+        CALL(evt_shuryolight_init, STRING("シュリョー"))
+        CALL(evt_shuryolight_run_evt, PTR(shuryolight_pow_normal), PTR(shuryolight_head_normal), PTR(shuryolight_tue_normal))
+        SPAWN_EVENT(peach_evt_stg6)
+    END_IF
+    // Mario's visits: at the story point after the Moon, the first visit restores HP and FP and plays TEC's
+    // farewell (evt_last); the second plays the aftermath (evt_last2).
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
+        IF_INT_EQUAL(GSWF(GSWF_AJI17_POST_BOSS_SCENE_STARTED), 0)
+            CALL(evt_mario_get_party, LW(15))
+            IF_INT_EQUAL(LW(15), 0)
+                CALL(evt_mario_set_party, 0, 1)
+                CALL(evt_party_run, 0)
+CALL(evt_pouch_mario_recovery)
+                CALL(evt_pouch_all_party_recovery)
+            END_IF
+SET_VALUE(GSWF(GSWF_AJI17_POST_BOSS_SCENE_STARTED), 1)
+            SPAWN_EVENT(evt_last)
+        ELSE
+            SPAWN_EVENT(evt_last2)
+            SET_VALUE(LW(0), PTR(bero_entry_data))
+            CALL(evt_bero_get_info)
+            CALL_CHILD(bero_case_entry)
+            RETURN
+        END_IF
+    END_IF
+    // Otherwise the emergency lights start and the room's entrances are set up.
+    SPAWN_EVENT(evt_emergency)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_EQUAL(STG1_18_01_PEACH_AN_OPEN_DOOR)
+        CASE_EQUAL(STG3_33_03_PEACH_GRODUS)
+        CASE_EQUAL(STG4_15_04_SHADOW_SIRENS_DOOPLISS)
+        CASE_DEFAULT
+        CALL_CHILD(evt_bero_info_run)
+    END_SWITCH
+    CALL(evt_mario_get_mode, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(evt_mario_kill_party, 0)
+    ELSE
+        // As Mario, the fortress music and ambience play; as Peach, her partner is removed.
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
+    END_IF
+    // After the final battle the room's machine runs again and the keyboard can be used to talk to TEC
+    // (tec_talk).
+    IF_INT_GREATER(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_map_playanim, STRING("kika_1"), 1, 0)
+        CALL(evt_map_playanim, STRING("kika_2"), 1, 0)
+        CALL(evt_map_playanim, STRING("kika_3"), 1, 0)
+        CALL(evt_map_playanim, STRING("moni_1"), 2, 0)
+        CALL(evt_map_playanim, STRING("moza"), 1, 0)
+        CALL(evt_map_pauseanim, 0, STRING("moza"))
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
+    END_IF
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(aji_17_init_evt)
 #if VERSION >= VERSION_US
     SET_VALUE(LW(0), STRING("S_camera_1"))
@@ -3325,6 +3460,7 @@ EVT_BEGIN(aji_17_init_evt)
     CALL(evt_snd_set_rev_mode, 1)
     RETURN
 EVT_END()
+#endif
 
 // target .data tail pad word
 

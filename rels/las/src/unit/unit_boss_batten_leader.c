@@ -69,7 +69,9 @@ static USER_FUNC(enzan_lw_save);
 USER_FUNC(enzan_lw_save2);
 USER_FUNC(pose_check_evt_run);
 USER_FUNC(pose_check_evt_stop);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(_hp_gauge_flag_on);
+#endif
 USER_FUNC(battenSatelliteToOutside);
 USER_FUNC(battenSatelliteToInside);
 USER_FUNC(battleGetBattenSatelliteInitPos);
@@ -155,7 +157,11 @@ static EvtWord damage_event[47];
 EvtWord damage_sub_event[148];
 static EvtWord phase_event[28];
 EvtWord monster_before_phase_event[195];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[126];
+#else
 static EvtWord dead_event[165];
+#endif
 static Vec splineTableIn1_1[5];
 static Vec splineTableIn2_1[5];
 static Vec splineTableIn2_2[5];
@@ -187,7 +193,11 @@ EvtWord batten_leader_ice_attack_event[321];
 EvtWord batten_leader_shikaeshi_attack_event[176];
 EvtWord batten_leader_yokeyoke_attack_event[176];
 EvtWord batten_leader_stop_attack_event[328];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event[15];
+#else
 static EvtWord wait_event[16];
+#endif
 
 /**
  * Event script: moves the battle camera to the close view of Sir Grodus (position 83, 84, 349 looking at 83, 60,
@@ -499,17 +509,48 @@ BattleUnitKind unit_boss_batten_leader = {
     6, // pbSoftCap
     68, // width
     66, // height
+#if VERSION <= VERSION_DEMO_US
+    7,
+68,
+0.0f,
+    33.0f,
+    0.0f,
+    0,
+    0,
+#else
     {7, 70}, // hitOffset
     {0.0f, 33.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {34.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    34.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    34.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    42.9f,
+    10.0f,
+    0.0f,
+    33.0f,
+    0.0f,
+#else
     {34.0f, 0.0f, 0.0f}, // bintaHitOffset
     {20.0f, 42.9f, 10.0f}, // kissHitOffset
     {0.0f, 33.0f, 0.0f}, // cutBaseOffset
+#endif
     68.0f, // cutWidth
     66.0f, // cutHeight
     1, // turnOrder
@@ -518,7 +559,13 @@ BattleUnitKind unit_boss_batten_leader = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_BOSS_SRYO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -549,6 +596,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 BattleUnitDefenseAttr defence_attr_muteki = {{2, 2, 2, 2, 2}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {30, 30, 30, 100, 30, 100, 100, 30, 100, 50, 100, 50, 100, 30, 30, 0, 0, 100, 30, 100, 100, 1};
+#else
 static StatusVulnerability regist = {
     30, // sleep
     30, // stop
@@ -573,6 +623,7 @@ static StatusVulnerability regist = {
     100, // invisible
     1, // ohko
 };
+#endif
 
 u8 defencecopy[8] __attribute__((aligned(4))) = { // defenses[5] copied into the part defense, padded to 8
     1, 1, 1, 1, 1, 0, 0, 0,
@@ -631,7 +682,11 @@ static PoseTableEntry pose_table_furafura[] = {
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, damage_sub_event},
+#if VERSION <= VERSION_DEMO_US
+{50, dead_event},
+#else
     {UNIT_DATA_DEAD_EVENT, dead_event},
+#endif
     {0, NULL},
 };
 
@@ -1582,10 +1637,12 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 EVT_BEGIN(damage_sub_event)
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(_hp_gauge_flag_on, LW(10))
     END_IF
+#endif
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHitPos, LW(10), LW(11), LW(0), LW(1), LW(2))
@@ -1731,8 +1788,13 @@ static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 9)
     LOOP(4)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(0), LW(1))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_GetUnitId, LW(1), LW(1))
+#endif
         IF_INT_NOT_EQUAL(LW(1), -1)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_KillUnit, LW(1), 1)
+#else
             CALL(btlevtcmd_CheckDamageCode, LW(1), DAMAGE_RESULT_ZERO_HP, LW(2))
             IF_INT_EQUAL(LW(2), 0)
                 SET_VALUE(LW(10), LW(1))
@@ -1744,10 +1806,13 @@ static EVT_BEGIN(dead_event)
                 END_INLINE_EVENT
                 WAIT_MS(200)
             END_IF
+#endif
         END_IF
         ADD(LW(0), 1)
     END_LOOP
+#if VERSION > VERSION_DEMO_US
     WAIT_MS(1000)
+#endif
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(pose_check_evt_stop)
     CALL(enzan_lw_save)
@@ -1769,7 +1834,11 @@ static EVT_BEGIN(dead_event)
     WAIT_MS(750)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("T_5"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("D_4"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_69"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_69"), 0, -2)
+#endif
     WAIT_MS(300)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_4"))
     WAIT_MS(500)
@@ -1778,8 +1847,10 @@ static EVT_BEGIN(dead_event)
     DELETE_EVENT(LW(0))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     DELETE_EVENT(LW(0))
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
+#endif
     RETURN
 EVT_END()
 
@@ -2712,9 +2783,14 @@ static EVT_BEGIN(wait_event)
         CALL(check_satellite)
     END_LOOP
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+static USER_FUNC(btlevtcmd_AnimeGetPose) {
+#else
 EVT_END_PAD()
 
 USER_FUNC(btlevtcmd_AnimeGetPose) {
+#endif
     s32 id;
     EvtWord* args = event->args;
     s32 partNo;
@@ -2900,6 +2976,7 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
     }
 }
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000d538, JP las .text+0xD46C. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(_hp_gauge_flag_on) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2913,6 +2990,7 @@ USER_FUNC(_hp_gauge_flag_on) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 /**
  * Starts moving satellite n of the unit along a spline:
  * allocates a 5-point spline from table, remembers the table on the satellite's body part,

@@ -156,6 +156,9 @@ static BeroEntry bero_entry_data[] = {
  * then hides the panel and releases the capture.
  */
 EVT_BEGIN(wall_roll_sub)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_paper_entry, LW(0))
+#endif
     CALL(evt_img_entry, LW(2))
     CALL(evt_img_set_paper, LW(2), LW(0))
     CALL(evt_offscreen_entry, LW(3))
@@ -188,6 +191,77 @@ EVT_END()
  * the floor and wall collisions change, small stars burst from the four switches, which are removed.
  * Sets the story to STG2_21_02_MATCHING_THE_PATTERNS.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(wall_roll)
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_normalize)
+WAIT_MS(500)
+    BEGIN_INLINE_EVENT
+        CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE2"), LW(10))
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.01953125f), FLOAT(0.0f), 1000)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+        CALL(evt_snd_sfxoff, LW(10))
+    END_INLINE_EVENT
+    WAIT_MS(1000)
+    CALL(evt_cam3d_evt_set, 0, 159, 399, 0, 86, -18, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(1000)
+    SET_VALUE(LW(0), STRING("OFF_d_roll_down"))
+    SET_VALUE(LW(1), STRING("S_isk_01A01"))
+    SET_VALUE(LW(2), STRING("img00"))
+    SET_VALUE(LW(3), STRING("ofs00"))
+    SPAWN_EVENT(wall_roll_sub)
+    WAIT_MS(2000)
+    SET_VALUE(LW(0), STRING("OFF_d_roll_left"))
+    SET_VALUE(LW(1), STRING("S_isk_01A02"))
+    SET_VALUE(LW(2), STRING("img01"))
+    SET_VALUE(LW(3), STRING("ofs01"))
+    SPAWN_EVENT(wall_roll_sub)
+    WAIT_MS(2000)
+    SET_VALUE(LW(0), STRING("OFF_d_roll_up"))
+    SET_VALUE(LW(1), STRING("S_isk_01A03"))
+    SET_VALUE(LW(2), STRING("img02"))
+    SET_VALUE(LW(3), STRING("ofs02"))
+    SPAWN_EVENT(wall_roll_sub)
+    WAIT_MS(2000)
+    BEGIN_INLINE_EVENT
+        WAIT_MS(2000)
+        CALL(evt_snd_bgmoff, PSND_PAUSE)
+        CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
+        WAIT_MS(2000)
+        CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    END_INLINE_EVENT
+    SET_VALUE(LW(0), STRING("OFF_d_roll_right"))
+    SET_VALUE(LW(1), STRING("S_isk_01A04"))
+    SET_VALUE(LW(2), STRING("img03"))
+    SET_VALUE(LW(3), STRING("ofs03"))
+    CALL_CHILD(wall_roll_sub)
+    CALL(evt_hitobj_onoff, STRING("A_isk_01A"), 1, 0)
+    CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
+    CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)
+    SET_VALUE(GSWF(GSWF_MRI09_WALL_PANELS_ROLLED), 1)
+CALL(evt_puni_all_fall_check)
+    CALL(evt_puni_set_maze)
+    CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
+    WAIT_MS(500)
+    CALL(evt_mobj_get_position, STRING("slot00"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING(""), STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -20, 0, 3, 0, 0, 0, 0)
+    CALL(evt_mobj_get_position, STRING("slot01"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING(""), STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -20, 0, 3, 0, 0, 0, 0)
+    CALL(evt_mobj_get_position, STRING("slot02"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING(""), STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -20, 0, 3, 0, 0, 0, 0)
+    CALL(evt_mobj_get_position, STRING("slot03"), LW(0), LW(1), LW(2))
+    CALL(evt_eff, STRING(""), STRING("small_star"), 3, LW(0), LW(1), LW(2), 0, -20, 0, 3, 0, 0, 0, 0)
+    CALL(evt_mobj_delete, STRING("slot00"))
+    CALL(evt_mobj_delete, STRING("slot01"))
+    CALL(evt_mobj_delete, STRING("slot02"))
+    CALL(evt_mobj_delete, STRING("slot03"))
+    WAIT_MS(500)
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_21_02_MATCHING_THE_PATTERNS)
+CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -264,12 +338,19 @@ EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 static EVT_BEGIN(breakyuka_init)
+#if VERSION <= VERSION_DEMO_US
+IF_INT_EQUAL(GSWF(GSWF_MRI09_FLOOR_BROKEN), 1)
+#else
     IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 0)
+#endif
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 0)
+#if VERSION > VERSION_DEMO_US
         ELSE
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 1)
+#endif
     END_IF
     RETURN
 EVT_END()
@@ -484,6 +565,60 @@ EVT_END()
  * sets up the Puni, planters and Piders checker, the four red switches and wall panels for the story state,
  * the Blue Key chest, the Charge badge, a Shine Sprite block and the breaking floor.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(mri_09_init_evt)
+    CALL(evt_puni_mem_init)
+    CALL(evt_puni_set_yuka, 9, 100, 0, -310, -1000, 2, 2)
+    CALL(evt_puni_set_hamari, -250, 100, 78, 102, -2, -230, -311)
+    SET_VALUE(LW(6), 0)
+    SET_VALUE(LW(7), 0)
+    SET_VALUE(LW(8), 0)
+    SET_VALUE(LW(9), 0)
+    CALL_CHILD(mri_puni_init)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    SPAWN_EVENT(puni_disp_info)
+    SPAWN_EVENT(puni_piders_check)
+    SET_VALUE(LW(0), PTR(ueki_access_data))
+    CALL_CHILD(evt_sub_kusa_access_entry)
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_BETWEEN(STG2_23_TIME_BOMB_ACTIVATED, STG2_23_01_X_NAUT_BATTLE)
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
+        CASE_DEFAULT
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI1"))
+    END_SWITCH
+    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_map_playanim, STRING("mizu_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("mizu_02"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("awa_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("awa_02"), MAP_ANIM_PLAY_LOOP, 0)
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_LESS(STG2_21_01_MYSTERY_PILLAR)
+        CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)
+CASE_EQUAL(STG2_21_01_MYSTERY_PILLAR)
+        CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)
+        SPAWN_EVENT(slot_event)
+        CALL(evt_mobj_switch_red, 1, STRING("slot00"), -80, 0, 135, PTR(slot00_event), 0)
+        CALL(evt_mobj_switch_red, 1, STRING("slot01"), -30, 0, 135, PTR(slot01_event), 0)
+        CALL(evt_mobj_switch_red, 1, STRING("slot02"), 30, 0, 135, PTR(slot02_event), 0)
+        CALL(evt_mobj_switch_red, 1, STRING("slot03"), 80, 0, 135, PTR(slot03_event), 0)
+CASE_GREATER_OR_EQUAL(STG2_21_02_MATCHING_THE_PATTERNS)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_01A"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_hitobj_onoff, STRING("A_isk_01A"), 1, 0)
+        CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
+        CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)
+    END_SWITCH
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 125, 0, 25, MOBJ_ITEMBOX_NORMAL, 0, PTR(get_blue_jail_key), GSWF(GSWF_MRI09_BLUE_KEY_CHEST_OPENED))
+    CALL(evt_item_entry, STRING("item100"), ITEM_CHARGE, -250, -234, 75, ITEM_TYPE_STILL, GSWF(GSWF_MRI09_CHARGE_TAKEN), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), 0, -174, -125, 0, GSWF(GSWF_MRI09_SHINE_SPRITE), 0)
+    SPAWN_EVENT(breakyuka_init)
+    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, 75, 1, PTR(breakyuka_main), GSWF(GSWF_MRI09_FLOOR_BROKEN))
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(mri_09_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 9, 100, 0, -310, -1000, 2, 2)
@@ -543,4 +678,5 @@ EVT_BEGIN(mri_09_init_evt)
     CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, 75, 1, PTR(breakyuka_main), GSWF_MRI_09_BREAKING_FLOOR_BROKEN)
     RETURN
 EVT_END()
+#endif
 

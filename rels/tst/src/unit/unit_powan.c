@@ -514,6 +514,40 @@ static USER_FUNC(powan_set_post_battle_event) {
 }
 
 /** args: unit id, part id. Keeps the part on the "pPlane1" joint of the unit's body animation. */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(powan_rider_follow) {
+    EvtWord* args = event->args;
+    s32 id = evtGetValue(event, args[0]);
+    s32 partId = evtGetValue(event, args[1]);
+    BattleUnitPart* part;
+    BattleWork* wp = _battleWorkPointer;
+    const char* joint = "pPlane1";
+    AnimationPose* pose;
+    s32 idx;
+    f32 x;
+    f32 y;
+    f32 z;
+
+    part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(wp, BattleTransID(event, id)), partId);
+    if (part->poseId == -1) {
+        return EVT_RETURN_DONE;
+    }
+    idx = animPoseGetGroupIdx(part->poseId, joint);
+    pose = animPoseGetAnimPosePtr(part->poseId);
+    if (pose->worldPositions == NULL) {
+        animPoseWorldPositionEvalOn(part->poseId);
+        x = 0.0f;
+        y = -1000.0f;
+        z = 0.0f;
+    } else {
+        x = (*pose->worldPositions)[idx].x;
+        y = (*pose->worldPositions)[idx].y;
+        z = (*pose->worldPositions)[idx].z;
+    }
+    BtlUnit_SetPartsPos(part, x, y, z);
+return EVT_RETURN_DONE;
+}
+#else
 static USER_FUNC(powan_rider_follow) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -549,3 +583,4 @@ static USER_FUNC(powan_rider_follow) {
 #endif
     return EVT_RETURN_DONE;
 }
+#endif

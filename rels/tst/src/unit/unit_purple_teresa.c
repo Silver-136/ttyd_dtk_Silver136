@@ -46,6 +46,73 @@ static EvtWord wait_event[6];
 /**
  * Unit definition of the Dark Boo: its HP, level, sizes, sounds, status vulnerability, parts and init script.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_purple_teresa = {
+    106,
+    "btl_un_purple_teresa",
+    8,
+    0,
+    1,
+    1,
+    24,
+    0,
+3,
+    70,
+    1,
+50,
+    9999,
+    34,
+    32,
+    0,
+    32,
+    0.0f,
+    16.0f,
+    0.0f,
+    0,
+    -3,
+    0.0f,
+    0.0f,
+    0.0f,
+    17.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    17.0f,
+    0.0f,
+    0.0f,
+    17.0f,
+    20.8f,
+    0.0f,
+    0.0f,
+    16.0f,
+    0.0f,
+    34.0f,
+    32.0f,
+    0,
+    0,
+    0,
+    2,
+    100,
+    20,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_ENM_TELESA_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    UNIT_ATTR_FLOATING,
+    &regist,
+    1,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_purple_teresa = {
     106,
     "btl_un_purple_teresa",
@@ -117,6 +184,7 @@ BattleUnitKind unit_purple_teresa = {
     init_event,
     data_table,
 };
+#endif
 
 /** Defence of the Dark Boo: none, every hit does its full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
@@ -135,7 +203,11 @@ static StatusVulnerability regist = {40, 40, 80, 0, 40, 100, 100, 40, 100, 50, 1
  * Status vulnerability of the Dark Boo in the retail builds: immune to poison and slow;
  * resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 40, 80, 0, 40, 100, 100, 40, 100, 50, 100, 50, 100, 50, 50, 40, 85, 100, 0, 100, 100, 10};
+#else
 static StatusVulnerability regist = {40, 40, 100, 0, 40, 100, 100, 40, 100, 85, 100, 85, 100, 90, 50, 40, 85, 100, 0, 100, 100, 10};
+#endif
 #endif
 
 /** Body part of the Dark Boo: a single part using the c_teresa_p model. */

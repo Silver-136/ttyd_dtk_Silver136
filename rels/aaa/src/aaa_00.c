@@ -229,6 +229,7 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_cam3d_evt_set, 145, 122, 717, 145, 108, -180, 5000, EASING_SINE_IN_OUT)
     WAIT_MS(4000)
     CALL(evt_npc_set_position, STRING("パレッタ"), 500, 500, 0)
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(GF(1), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
@@ -252,6 +253,7 @@ static EVT_BEGIN(evt_prologue)
         END_LOOP
     END_INLINE_EVENT
     // Parakarry glides in to the mailbox, with a wing-beat sound at intervals until he lands.
+#endif
     CALL(evt_npc_glide_position, STRING("パレッタ"), 210, 25, -30, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
     // The mailbox shakes as she drops the mail in.
     CALL(evt_npc_reverse_ry, STRING("パレッタ"))
@@ -268,7 +270,9 @@ static EVT_BEGIN(evt_prologue)
     WAIT_MS(500)
     // Parakarry calls out "Mail call!" and flies off.
     CALL(evt_msg_print, 0, STRING("pro_00"), 0, STRING("パレッタ"))
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(GF(1), 1)
+#endif
     CALL(evt_npc_glide_position, STRING("パレッタ"), 0, 300, -100, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
     // Luigi opens the front door and walks out to the mailbox.
     CALL(evt_npc_set_position, STRING("ルイージ"), 20, 30, -150)
@@ -279,7 +283,11 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_door)
+#else
         CALL_CHILD(PTR(evt_door))
+#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -292,7 +300,11 @@ static EVT_BEGIN(evt_prologue)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(evt_door)
+#else
             CALL_CHILD(PTR(evt_door))
+#endif
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -325,7 +337,11 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_door)
+#else
         CALL_CHILD(PTR(evt_door))
+#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -344,8 +360,13 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_door"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_bg_set_color, 0, 0, 0, 255)
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+#else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+#endif
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mapobj_get_position, STRING("S_ie_door"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT1"), LW(0), LW(1), LW(2), 0)
@@ -353,7 +374,11 @@ static EVT_BEGIN(evt_prologue)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(evt_door)
+#else
             CALL_CHILD(PTR(evt_door))
+#endif
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF

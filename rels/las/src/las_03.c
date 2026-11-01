@@ -248,12 +248,20 @@ EVT_END()
 EVT_BEGIN(las_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -350, 0, -100, ITEM_ALL_OR_NOTHING, 0, GSWF(GSWF_LAS03_ALL_OR_NOTHING_BLOCK_HIT), 1)
+    SPAWN_EVENT(toge_evt)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -350, 0, -100, ITEM_ALL_OR_NOTHING, 0, GSWF_LAS_03_ALL_OR_NOTHING_BADGE_BLOCK, 1)
     SPAWN_EVENT(PTR(toge_evt))
+#endif
     RETURN
 EVT_END()
 

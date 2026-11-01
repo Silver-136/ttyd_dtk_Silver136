@@ -60,7 +60,11 @@ char geso_checkpose[];
 static EvtWord ukishima_apper[294];
 EvtWord geso_battle[676];
 static EvtWord wall_bomb[142];
+#if VERSION <= VERSION_DEMO_US
+static HitDamageReturn hitDmgRetPoints[6];
+#else
 static HitDamageReturn hitDmgRetPoints[7];
+#endif
 EvtWord tik_02_init_evt[207];
 
 /**
@@ -827,7 +831,9 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_3", {0.0f, -1000.0f, 0.0f}},
     {"mod_4", {0.0f, -1000.0f, 0.0f}},
     {"mod_5", {0.0f, -1000.0f, 0.0f}},
+#if VERSION > VERSION_DEMO_US
     {"dokan_1", {0.0f, -1000.0f, 0.0f}},
+#endif
     {0},
 };
 

@@ -101,6 +101,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
  */
 static BattleUnitDefense defence_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {30, 70, 30, 100, 30, 100, 0, 50, 100, 50, 100, 50, 100, 60, 60, 30, 10, 100, 60, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     30, // sleep
     80, // stop
@@ -125,6 +128,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Part of the Moon Cleft: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {

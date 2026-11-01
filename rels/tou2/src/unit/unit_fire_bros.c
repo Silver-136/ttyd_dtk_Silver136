@@ -164,11 +164,22 @@ BattleUnitKind unit_fire_bros = {
  * Defence of the Fire Bro: 1 against normal, ice, explosion and electric hits;
  * immune to fire (defence 99 cancels the hit).
  */
+#if VERSION <= VERSION_DEMO_US
+static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
+#else
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
+#endif
 
 /** Damage-type reactions of the Fire Bro: immune to fire. */
+#if VERSION <= VERSION_DEMO_US
+static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+#else
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 80, 70, 100, 80, 100, 100, 70, 100, 80, 100, 80, 100, 80, 80, 40, 60, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     80, // sleep
     80, // stop
@@ -193,6 +204,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "BRO_N_1"},

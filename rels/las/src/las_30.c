@@ -18,7 +18,9 @@
 #include "evt/evt_snd.h"
 #include "manager/evtmgr_cmd.h"
 
+#if VERSION > VERSION_DEMO_US
 static char name[8];
+#endif
 
 static USER_FUNC(make_name);
 
@@ -134,7 +136,11 @@ static EVT_BEGIN(rousoku_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(7.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.5f), 1000, 0, 0, 0, 0, 0, 0)
+#else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.5f), 1000, 0, 0, 0, 0, 0, 0)
+#endif
         ADD(LW(0), 1)
     END_LOOP
     RETURN
@@ -170,30 +176,61 @@ EVT_END()
  * a save block, a recovery block, two chests (an Ultra Shroom and a Jammin' Jelly) and the torches.
  */
 EVT_BEGIN(las_30_init_evt)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_snd_envoff, PSND_FADEOUT)
+#endif
     ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#else
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 1150, 60, -125, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mobj_recovery_blk, STRING("r_blk"), 1, -1050, 860, -75, 0, 0)
+CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF(GSWF_LAS30_ITEMBOX_01))
+    CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF(GSWF_LAS30_ITEMBOX_02))
+#else
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, -1050, 860, -75, 0, 0)
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_LAS_30_JAMMIN_JELLY_CHEST)
+#endif
     CALL_CHILD(rousoku_init)
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+#else
 EVT_END_PAD()
 
 /** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
+#endif
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
+#if VERSION <= VERSION_DEMO_US
+char name[8];
+s32 number;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    number = evtGetValue(event, args[0]);
+    sprintf(name, "hi%d", number);
+#else
     sprintf(name, "hi%d", evtGetValue(event, args[0]));
+#endif
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }

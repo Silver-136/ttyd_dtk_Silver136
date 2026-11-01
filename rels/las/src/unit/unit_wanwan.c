@@ -40,13 +40,21 @@ static BattleWeapon weapon_wanwan_attack;
 static EvtWord init_event[41];
 static EvtWord chain_event[23];
 static EvtWord damage_event[33];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord counter_damage_event[115];
+#else
 static EvtWord counter_damage_event[68];
+#endif
 static EvtWord dead_event[200];
 static EvtWord attack_event[452];
 static EvtWord wait_event[476];
 static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_sound_event2[11];
+#else
 static EvtWord wait_sound_event2[12];
+#endif
 
 /**
  * Unit data of the Chain-Chomp: 7 HP, 34x36 units in size; ties together its sounds, parts,
@@ -68,26 +76,68 @@ BattleUnitKind unit_wanwan = {
     9999, // pbSoftCap
     34, // width
     36, // height
+#if VERSION <= VERSION_DEMO_US
+    6,
+    44,
+    0.0f,
+    18.0f,
+    0.0f,
+    0,
+    0,
+#else
     {6, 44}, // hitOffset
     {0.0f, 18.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {17.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    17.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    17.0f,
+    0.0f,
+    0.0f,
+    17.0f,
+    23.4f,
+    10.0f,
+    0.0f,
+    18.0f,
+    0.0f,
+#else
     {17.0f, 0.0f, 0.0f}, // bintaHitOffset
     {17.0f, 23.4f, 10.0f}, // kissHitOffset
     {0.0f, 18.0f, 0.0f}, // cutBaseOffset
+#endif
     34.0f, // cutWidth
     36.0f, // cutHeight
     0, // turnOrder
     0, // turnOrderVariance
+#if VERSION <= VERSION_DEMO_US
+-1,
+#endif
     0, // swallowChance
+#if VERSION > VERSION_DEMO_US
     2, // swallowAttributes
+#endif
     100, // hammerKnockbackChance
     0, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_WAN_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -109,6 +159,9 @@ static BattleUnitDefense defence = {{5, 99, 99, 5, 5}};
 /** Defence attributes of the Chain-Chomp: immune to fire hits; immune to ice hits. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 2, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 65, 65, 100, 65, 100, 100, 65, 100, 65, 100, 65, 100, 65, 65, 45, 30, 100, 65, 100, 100, 90};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     70, // stop
@@ -133,6 +186,7 @@ static StatusVulnerability regist = {
     100, // invisible
     90, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "WAN_N_1"},
@@ -286,7 +340,19 @@ static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_GetPartsPos, LW(10), 1, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_PartsFaceDirectionSub, LW(10), 1, LW(2), 25)
     ADD(LW(3), 25)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 5, 0, EASING_LINEAR, 0, -1)
+WAIT_FRAMES(30)
+    CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))
+    CALL(btlevtcmd_GetPartsPos, LW(10), 1, LW(2), LW(3), LW(4))
+    CALL(btlevtcmd_TransStageFloorPosition, LW(2), LW(3), LW(4))
+    CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 30)
+    CALL(btlevtcmd_JumpPartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 20, -1)
+    CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(2), 15)
+    CALL(btlevtcmd_JumpPartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 10, -1)
+#else
     CALL(btlevtcmd_DivePartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 5, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -656,6 +722,9 @@ static EVT_BEGIN(wait_sound_event2)
     WAIT_FRAMES(LW(10))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+#else
 EVT_END_PAD()
 
 /**
@@ -665,6 +734,7 @@ EVT_END_PAD()
  * sagging by 300 / length squared; with work[2] == 2 it records the current shape
  * and with work[2] == 1 it keeps the recorded shape fixed (used after the chomp is knocked loose).
  */
+#endif
 static USER_FUNC(chain_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -724,11 +794,16 @@ static USER_FUNC(chain_main) {
     dx = x1 - x2;
     dy = y1 - y2;
     dz = z1 - z2;
+#if VERSION <= VERSION_DEMO_US
+len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 7;
+#else
     len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 8;
+#endif
     if (len < 10.0f) {
         len = 10.0f;
     }
     sag = 300.0f / (len * len);
+#if VERSION > VERSION_DEMO_US
     // keep the chomp below the top of the stage
     part = BtlUnit_GetPartsPtr(unit, 1);
     BtlUnit_GetPartsPos(part, &x, &y, &z);
@@ -736,11 +811,16 @@ static USER_FUNC(chain_main) {
         y = 110.0f;
     }
     BtlUnit_SetPartsPos(part, x, y, z);
+#endif
     BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x, &y, &z);
     x += -(unit->faceDirection * 16);
     y += 16.0f;
     BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 2), x, y, z);
+#if VERSION <= VERSION_DEMO_US
+for (i = 2; i <= 6; i++) {
+#else
     for (i = 2; i <= 7; i++) {
+#endif
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, i), &x1, &y1, &z1);
         part = BtlUnit_GetPartsPtr(unit, i + 1);
         BtlUnit_GetPartsPos(part, &x2, &y2, &z2);

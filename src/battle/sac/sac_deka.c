@@ -140,22 +140,32 @@ static EVT_BEGIN(nice_event)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(main_deka) {
+#else
 USER_FUNC(main_deka) {
+#endif
     EvtWord* args;
     DekaWork* w = get_ptr();
     s32 i;
 
     args = event->args;
     if (isFirstCall) {
+#if VERSION <= VERSION_DEMO_US
+        memset(w, 0, 0x580);
+#else
         memset(w, 0, sizeof(DekaWork));
+#endif
         w->unitId = evtGetValue(event, args[0]);
         yuka_init();
+#if VERSION > VERSION_DEMO_US
     }
     if (w->tex->address == NULL) {
         return EVT_RETURN_DONE;
     }
     if (w->mesh->address == NULL) {
         return EVT_RETURN_DONE;
+#endif
     }
     main_base();
     main_gauge();
@@ -312,14 +322,24 @@ static void yuka_main(void) {
  * Frees the floor texture and mesh and clears the stg_b_yuka flags again.
  * The retail releases also null the buffer addresses, which is what lets main_deka finish.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(yuka_end) {
+#else
 USER_FUNC(yuka_end) {
+#endif
     DekaWork* w = get_ptr();
 
     smartFree(w->tex);
+#if VERSION > VERSION_DEMO_US
     w->tex->address = NULL;
+#endif
     smartFree(w->mesh);
+#if VERSION <= VERSION_DEMO_US
+mapGrpFlagOff("stg_b_yuka", 0x400001);
+#else
     w->mesh->address = NULL;
     mapGrpFlagOff("stg_b_yuka", (MAP_OBJ_FLAG_HIDDEN | MAP_OBJ_FLAG_KURURING));
+#endif
     return EVT_RETURN_DONE;
 }
 
@@ -1062,7 +1082,11 @@ EVT_BEGIN(marioAttackEvent_Deka)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_JUMP)
         CALL(get_ride_pos, 0, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 30, 0, FLOAT(0.39941406f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_Y"))
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
@@ -1085,7 +1109,11 @@ EVT_BEGIN(marioAttackEvent_Deka)
             CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_JUMP)
             CALL(get_ride_pos, 1, LW(0), LW(1), LW(2))
             CALL(btlevtcmd_JumpSetting, LW(14), 30, 0, FLOAT(0.39941406f))
+#if VERSION <= VERSION_DEMO_US
+            CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, -1)
+#else
             CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
             CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_NEUTRAL)
         END_IF
     END_SIBLING_EVENT
@@ -1127,7 +1155,11 @@ EVT_BEGIN(marioAttackEvent_Deka)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_JUMP)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 30, 0, FLOAT(0.39941406f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
@@ -1135,23 +1167,36 @@ EVT_BEGIN(marioAttackEvent_Deka)
             CALL(btlevtcmd_AnimeChangePoseType, LW(14), LW(15), POSE_TYPE_JUMP)
             CALL(btlevtcmd_GetHomePos, LW(14), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_JumpSetting, LW(14), 30, 0, FLOAT(0.39941406f))
+#if VERSION <= VERSION_DEMO_US
+            CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, -1)
+#else
             CALL(btlevtcmd_JumpPosition, LW(14), LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
             CALL(btlevtcmd_StartWaitEvent, LW(14))
         END_IF
     END_SIBLING_EVENT
     WAIT_FRAMES(30)
     // The camera resets and the background and rippling floor are cleaned up.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+#if VERSION <= VERSION_DEMO_US
+CALL(yuka_end)
+#endif
     CALL(btlevtcmd_SacBgsetMove, 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(end_deka)
+#else
     // Vivian stops tracking her position.
+#endif
     IF_INT_NOT_EQUAL(LW(14), -1)
         CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
         IF_INT_EQUAL(LW(0), UNIT_VIVIAN)
             CALL(btlevtcmd_SetUnitWork, LW(14), SHADOW_TAIL_WORK_HOLD, 0)
         END_IF
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(yuka_end)
     CALL(end_deka)
+#endif
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1219,7 +1264,11 @@ EVT_END()
  * Draws the rippling floor as 128 textured quads along the strip, using the captured floor texture.
  * The retail releases skip it once the buffers are freed.
  */
+#if VERSION <= VERSION_DEMO_US
+static void yuka_disp(CameraId cam, void* param) {
+#else
 void yuka_disp(CameraId cam, void* param) {
+#endif
     DekaWork* w;
     CameraEntry* camera;
     YukaMesh* m;
@@ -1229,9 +1278,17 @@ void yuka_disp(CameraId cam, void* param) {
 
     w = get_ptr();
     camera = camGetPtr(cam);
+#if VERSION <= VERSION_DEMO_US
+{
+#else
     if (w->tex->address != NULL) {
+#endif
         m = w->mesh->address;
+#if VERSION <= VERSION_DEMO_US
+        {
+#else
         if (m != NULL) {
+#endif
             GXSetCullMode(GX_CULL_NONE);
             GXClearVtxDesc();
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);

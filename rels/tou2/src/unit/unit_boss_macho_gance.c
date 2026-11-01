@@ -47,7 +47,11 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_furafura[18];
+#if VERSION <= VERSION_DEMO_US
+static BattleDataEntry data_table[2];
+#else
 static BattleDataEntry data_table[15];
+#endif
 static BattleUnitKindPart parts[1];
 BattleWeapon weapon_gance_macho_speed;
 BattleWeapon weapon_gance_build_up;
@@ -66,7 +70,9 @@ static EvtWord damage_event[97];
 EvtWord base_size_change[99];
 static EvtWord phase_event[482];
 static EvtWord dead_event[64];
+#if VERSION > VERSION_DEMO_US
 EvtWord macho_gance_damage_event[238];
+#endif
 static EvtWord attack_event[151];
 EvtWord gance_macho_speed_attack_event[119];
 EvtWord gance_build_up_attack_event[119];
@@ -89,7 +95,11 @@ BattleUnitKind unit_boss_macho_gance = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
+#if VERSION <= VERSION_DEMO_US
+70,
+#else
     71, // level
+#endif
     0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
@@ -98,17 +108,48 @@ BattleUnitKind unit_boss_macho_gance = {
     6, // pbSoftCap
     116, // width
     124, // height
+#if VERSION <= VERSION_DEMO_US
+    30,
+    100,
+    0.0f,
+    62.0f,
+    0.0f,
+    0,
+    -3,
+    40.0f,
+    80.0f,
+    0.0f,
+    58.0f,
+    0.0f,
+    -10.0f,
+#else
     {30, 100}, // hitOffset
     {0.0f, 62.0f, 0.0f}, // centerOffset
     {0, -3}, // hpGaugeOffset
     {40.0f, 80.0f, 0.0f}, // talkTogeBaseOffset
     {58.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+    58.0f,
+    0.0f,
+    0.0f,
+    42.0f,
+    80.0f,
+    0.0f,
+    0.0f,
+    62.0f,
+    0.0f,
+#else
     {58.0f, 0.0f, 0.0f}, // bintaHitOffset
     {42.0f, 80.0f, 0.0f}, // kissHitOffset
     {0.0f, 62.0f, 0.0f}, // cutBaseOffset
+#endif
     116.0f, // cutWidth
     124.0f, // cutHeight
     0, // turnOrder
@@ -117,7 +158,13 @@ BattleUnitKind unit_boss_macho_gance = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_BOSS_GANSU_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -140,6 +187,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * Status vulnerability of the Macho Grubba (percent chance to take each status):
  * immune to growing huge, fright, gale force and instant kill; resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 40, 50, 60, 50, 60, 100, 40, 0, 60, 100, 60, 100, 60, 60, 0, 0, 100, 60, 100, 100, 0};
+#else
 static StatusVulnerability regist = {
     50, // sleep
     40, // stop
@@ -164,6 +214,7 @@ static StatusVulnerability regist = {
     100, // invisible
     0, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -213,6 +264,7 @@ static PoseTableEntry pose_table_furafura[] = {
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
+#if VERSION > VERSION_DEMO_US
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, macho_gance_damage_event},
@@ -226,6 +278,7 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_ELECTRIFIED_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_PAYBACK_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, macho_gance_damage_event},
+#endif
     {0, NULL},
 };
 
@@ -780,7 +833,11 @@ static EVT_BEGIN(phase_event)
             IF_INT_GREATER(LW(0), 0)
                 WAIT_MS(LW(0))
             END_IF
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_17"), 0, UNIT_ID_SELF)
+#else
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_17"), 0, -2)
+#endif
             WAIT_MS(300)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -798,7 +855,11 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             SET_VALUE(LW(0), 1)
             CALL_CHILD(macho_gance_zoom)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_18"), 0, UNIT_ID_SELF)
+#else
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_18"), 0, -2)
+#endif
             WAIT_MS(300)
             SET_VALUE(LW(0), 0)
             CALL_CHILD(macho_gance_blur_zoom)
@@ -812,7 +873,11 @@ static EVT_BEGIN(phase_event)
             LOOP(LW(5))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(0.0f), FLOAT(180.0f), LW(6))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(1.0f), FLOAT(1.1494141f), LW(7))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
+#else
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), 1)
+#endif
                 ADD(LW(6), LW(1))
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(6), 0)
                 WAIT_FRAMES(1)
@@ -826,7 +891,11 @@ static EVT_BEGIN(phase_event)
             LOOP(LW(5))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(0.0f), FLOAT(-180.0f), LW(6))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(1.1494141f), FLOAT(1.2998047f), LW(7))
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
+#else
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), 1)
+#endif
                 ADD(LW(6), LW(1))
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, LW(6), 0)
                 WAIT_FRAMES(1)
@@ -857,7 +926,11 @@ static EVT_BEGIN(phase_event)
                 END_SIBLING_EVENT
                 CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#if VERSION <= VERSION_DEMO_US
+                CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, -1)
+#else
                 CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, MOVE_SOUND_FROM_TABLE)
+#endif
                 BEGIN_SIBLING_EVENT
                     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_HIPDROP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
                     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 800)
@@ -886,7 +959,11 @@ static EVT_BEGIN(phase_event)
             CALL_CHILD(macho_gance_zoom)
             CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
             CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_STAY)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_19"), 0, UNIT_ID_SELF)
+#else
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_471_19"), 0, -2)
+#endif
             WAIT_MS(300)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -924,6 +1001,7 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(macho_gance_damage_event)
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
@@ -997,6 +1075,7 @@ EVT_BEGIN(macho_gance_damage_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Macho Grubba's move choice, run once per action.

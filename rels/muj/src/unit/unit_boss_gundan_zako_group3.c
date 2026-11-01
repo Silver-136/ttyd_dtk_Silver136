@@ -88,7 +88,11 @@ BattleWeapon weapon_gundan_zako_group3_attack;
 static EvtWord init_event[21];
 static EvtWord damage_event[129];
 static EvtWord dead_event[136];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[260];
+#else
 static EvtWord attack_event[287];
+#endif
 static EvtWord hit_check_event[119];
 static EvtWord wait_event[6];
 
@@ -405,35 +409,53 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_CheckActStatus, LW(5), LW(12))
     IF_INT_NOT_EQUAL(LW(12), 0)
         CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
+#endif
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             WAIT_FRAMES(10)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("W_1"))
             CALL(btlevtcmd_GetPos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_FaceDirectionSub, LW(5), LW(0), 50)
+#if VERSION <= VERSION_DEMO_US
+            CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, -1, 0)
+#else
             CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE, 0)
+#endif
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         END_SIBLING_EVENT
+#if VERSION > VERSION_DEMO_US
     END_IF
+#endif
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(32)
         CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ADHERE1"), 0)
     END_SIBLING_EVENT
     CALL(zakogun_attack3_1)
+#if VERSION > VERSION_DEMO_US
     IF_INT_NOT_EQUAL(LW(12), 0)
+#endif
         DELETE_EVENT(LW(15))
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("A_1A"))
         CALL(btlevtcmd_snd_se, LW(5), STRING("SFX_BOSS_KANBU_JUMP1"), EVT_NULLPTR, 0, LW(13))
         CALL(btlevtcmd_JumpSetting, LW(5), 0, FLOAT(6.0f), FLOAT(0.2998047f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, LW(5), 0, 100, 0, 0, -1)
+#else
         CALL(btlevtcmd_JumpPosition, LW(5), 0, 100, 0, 0, MOVE_SOUND_FROM_TABLE)
+#endif
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         CALL(evt_snd_sfxoff, LW(13))
+#if VERSION > VERSION_DEMO_US
     END_IF
+#endif
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(zakogun_set_target_id, LW(3))
+#if VERSION > VERSION_DEMO_US
     IF_INT_NOT_EQUAL(LW(12), 0)
+#endif
         BEGIN_SIBLING_EVENT_GET_ID(LW(14))
             CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("R_2"))
@@ -442,33 +464,49 @@ static EVT_BEGIN(attack_event)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
+#if VERSION > VERSION_DEMO_US
     END_IF
+#endif
     BEGIN_SIBLING_EVENT
         CALL_CHILD(hit_check_event)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ROUND1"), LW(13))
     CALL(zakogun_attack3_2, LW(13))
+#if VERSION > VERSION_DEMO_US
     IF_INT_NOT_EQUAL(LW(12), 0)
+#endif
         DELETE_EVENT(LW(14))
         DELETE_EVENT(LW(15))
+#if VERSION > VERSION_DEMO_US
     END_IF
     IF_INT_NOT_EQUAL(LW(12), 0)
+#endif
         BEGIN_INLINE_EVENT
             CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("A_1A"))
             CALL(btlevtcmd_GetPos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_JumpSetting, LW(5), 30, 0, FLOAT(0.2998047f))
+#if VERSION <= VERSION_DEMO_US
+            CALL(btlevtcmd_JumpPosition, LW(5), LW(0), 0, LW(2), 30, -1)
+#else
             CALL(btlevtcmd_JumpPosition, LW(5), LW(0), 0, LW(2), 30, MOVE_SOUND_FROM_TABLE)
+#endif
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
             CALL(btlevtcmd_ChangeFaceDirection, LW(5), 1)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("R_1"))
             CALL(btlevtcmd_GetHomePos, LW(5), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetMoveSpeed, LW(5), FLOAT(6.0f))
+#if VERSION <= VERSION_DEMO_US
+            CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 0, -1, 0)
+#else
             CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
             CALL(btlevtcmd_ResetFaceDirection, LW(5))
         END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
     END_IF
+#endif
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ADHERE2"), 0)
     CALL(zakogun_attack3_3)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

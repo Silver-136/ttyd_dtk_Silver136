@@ -131,7 +131,11 @@ static StatusVulnerability regist = {90, 90, 80, 100, 80, 100, 100, 65, 100, 70,
  * otherwise Sleep 85, Stop 85, Dizzy 80, Confuse 85, Freeze 70, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 60, Fright 85, Gale Force 80, Slow 80 and instant KO 95.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 90, 80, 100, 80, 100, 100, 65, 100, 70, 100, 70, 100, 65, 65, 85, 85, 100, 65, 100, 100, 95};
+#else
 static StatusVulnerability regist = {85, 85, 80, 100, 85, 100, 100, 70, 100, 90, 100, 90, 100, 95, 60, 85, 80, 100, 80, 100, 100, 95};
+#endif
 #endif
 
 /**
@@ -323,6 +327,40 @@ static EVT_BEGIN(friend_event)
 EVT_END()
 
 /** Attack data of Green Fuzzy's chorobon drain attack biribiri counterd attack: no damage, 100% accuracy. */
+#if VERSION <= VERSION_DEMO_US
+static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100,
+0, 0, 0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    NULL, // hpDamageFn
+    {0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, 0, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, 0, 0, // acHelpMsg..counterResistFlags
+    TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -359,6 +397,7 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Pose table of Green Fuzzy: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to

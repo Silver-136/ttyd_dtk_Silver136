@@ -35,11 +35,13 @@ extern void partyWalkInit(PartyEntry* party, s32 mode);
 
 /** Map objects Ms. Mowz can sniff out: blocks, and from JP on the treasure chests and the Kururin floor. */
 char* mobj_list[] = {
+#if VERSION > VERSION_DEMO_US
     "MOBJ_TreasureBox",
     "MOBJ_BigTreasureBox",
     "MOBJ_GrayTreasureBox",
     "MOBJ_BlackTreasureBox",
     "MOBJ_KururinFloor",
+#endif
     "MOBJ_HatenaBlock",
     "MOBJ_BadgeBlock",
     "MOBJ_10CountBlock",
@@ -78,6 +80,7 @@ EVT_END()
  * Items hidden in the scenery that Ms. Mowz's sniffing can point at (in bushes, trees and the like): map,
  * the flag set once the item is taken, and the spot's position.
  */
+#if VERSION > VERSION_DEMO_US
 ChuchuTreasure chuchu_treasure_tbl[] = {
     {"hei_00", 0xF840715E, -468, 139, -127},
     {"hei_00", 0xF8406272, -408, 139, -127},
@@ -120,22 +123,32 @@ ChuchuTreasure chuchu_treasure_tbl[] = {
     {"rsh_04_c", 0xF8407194, -265, 0, -250},
     {"tou_05", 0xF8407179, 100, 0, -28},
 };
+#endif
 
 /** Zero vector that starts the position of a hidden scenery item during Ms. Mowz's treasure search. */
+#if VERSION > VERSION_DEMO_US
 static const Vec vecB = {0.0f, 0.0f, 0.0f};
+#endif
 
 /**
  * Script helper: reads set_msg's result (LW0 message, LW1 2 near / 1 far / 0 nothing) and,
  * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
  * then a 1.5 s speech-bubble effect over her. In the retail versions a far find skips the sniff.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(search_result) {
+#else
 USER_FUNC(search_result) {
+#endif
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
     if (isFirstCall) {
         if ((u32)event->lwData[0] == 0 || event->lwData[1] == 0) {
             return EVT_RETURN_DONE;
         }
+#if VERSION <= VERSION_DEMO_US
+psndSFXOn_3D((const char*)0x945, &party->position);
+#else
         if (event->lwData[1] == 1) {
             if (party) {
                 effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
@@ -143,6 +156,7 @@ USER_FUNC(search_result) {
             return EVT_RETURN_DONE;
         }
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CHURINA_SMELL_JUMP1), &party->position);
+#endif
         event->userdata3 = 42;
         partyChgPose(party, "PCH_Y_1");
     }
@@ -151,11 +165,16 @@ USER_FUNC(search_result) {
         return EVT_RETURN_BLOCK;
     }
     if (party) {
+#if VERSION <= VERSION_DEMO_US
+        ((EffFukidashiEntryRetVoidptrS32Fn)effFukidashiEntry)(6, 0, -2, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
+#else
         effFukidashiEntry(6, 0, (NpcEntry*)FUKIDASHI_PARTY, 0.0f, 18.0f, 0.0f, 0.0f, 0.0f, sysMsec2Frame(1500));
+#endif
     }
     return EVT_RETURN_DONE;
 }
 
+#if VERSION > VERSION_DEMO_US
 static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos) {
     u32 i;
     int found;
@@ -188,42 +207,70 @@ static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos)
     }
     return found;
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(set_msg) {
+#else
 USER_FUNC(set_msg) {
     MapObjectEntry* mobj;
     ItemEntry* item;
     int found;
     MarioWork* player;
+#endif
     int pass;
+#if VERSION <= VERSION_DEMO_US
+    PartyEntry* cp = (PartyEntry*)partyGetPtr(marioGetPartyId());
+    MarioWork* player = cp->player;
+    PartyEntry* party = (PartyEntry*)cp;
+    ItemEntry* item;
+    MapObjectEntry* mobj;
+#else
     int type;
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
+#endif
     f32 range;
+#if VERSION > VERSION_DEMO_US
     f32 minDist;
     f32 angle;
     Vec bestPos;
     Vec tmp;
     Vec ip;
+#endif
 
+#if VERSION > VERSION_DEMO_US
     player = cp->playerPtr;
+#endif
     event->lwData[0] = 0;
     event->lwData[1] = 0;
     if (!cp) {
         return EVT_RETURN_DONE;
     }
-
+#if VERSION <= VERSION_DEMO_US
+#endif
     for (pass = 0; pass < 2; pass++) {
         if (pass == 0) {
             range = 150.0f;
         } else {
             range = 10000.0f;
         }
+#if VERSION > VERSION_DEMO_US
         type = -1;
+#endif
         item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
+#if VERSION > VERSION_DEMO_US
         mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
         found = chuchu_findTreasure2(cp, range, &bestPos);
 
         minDist = 10000.0f;
+#endif
         if (item) {
+#if VERSION <= VERSION_DEMO_US
+            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
+            event->lwData[1] = (pass == 0) + 1;
+            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, item->position.x, item->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
+#else
             ip = vecA;
             ip.x = item->position.x;
             ip.y = item->position.y;
@@ -264,13 +311,32 @@ USER_FUNC(set_msg) {
         }
         cp->displayDirectionTarget = (angle <= 180.0f) ? 180.0f : 0.0f;
         cp->moveDir = partyToMovedir(cp, cp->displayDirectionTarget);
+#endif
         cp->targetDir = cp->moveDir;
+#if VERSION > VERSION_DEMO_US
     } else {
         event->lwData[0] = (EvtWord)"map_no_exist";
         event->lwData[1] = 0;
     }
+#endif
     return EVT_RETURN_DONE;
 }
+#if VERSION <= VERSION_DEMO_US
+        mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
+        if (mobj) {
+            event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
+            event->lwData[1] = (pass == 0) + 1;
+            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, mobj->position.x, mobj->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            cp->moveDir = partyToMovedir(cp, cp->displayDirectionTarget);
+            cp->targetDir = cp->moveDir;
+            return EVT_RETURN_DONE;
+        }
+    }
+    event->lwData[0] = (EvtWord) "map_no_exist";
+    event->lwData[1] = 0;
+    return EVT_RETURN_DONE;
+}
+#endif
 
 /** Script helper: clears LW0 and advances Ms. Mowz's use step (22 to 23) so chuchu_use ends the search. */
 USER_FUNC(post_msg) {
@@ -284,6 +350,7 @@ USER_FUNC(post_msg) {
 }
 
 /** Whether any unfound chuchu_treasure_tbl entry on the current map is within range of Mario. */
+#if VERSION > VERSION_DEMO_US
 static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
     u32 i;
     int found;
@@ -313,6 +380,7 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
     }
     return found;
 }
+#endif
 
 /**
  * Whether there is something to sniff within 150 units of Mario (an item, an unopened item box,
@@ -320,17 +388,49 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
  * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
  */
 BOOL chuchu_searchObject(void) {
+#if VERSION <= VERSION_DEMO_US
+    char** name;
+    PartyEntry* cp = (PartyEntry*)partyGetPtr(marioGetPartyId());
+    MapObjectEntry* mobj;
+    MarioWork* mario = cp->player;
+#else
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
     MarioWork* player = cp->playerPtr;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    if (itemNearDistCheck(mario->position.x, mario->position.y, mario->position.z, 150.0f)) {
+#else
     if (itemNearDistCheck(player->position.x, player->position.y, player->position.z, 150.0f)) {
+#endif
         return TRUE;
     }
+#if VERSION <= VERSION_DEMO_US
+    mobj = mobjNearDistCheck(mario->position.x, mario->position.y, mario->position.z, 150.0f);
+    if (mobj) {
+        if (mobjCheckItemboxOpen(mobj) == 1) {
+#else
     if (mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, 150.0f, mobj_list)) {
+#endif
         return TRUE;
     }
+#if VERSION <= VERSION_DEMO_US
+        if (mobjCheckKururingFloorItem(mobj) == 2) {
+            return TRUE;
+#else
     return chuchu_findTreasure(cp, 150.0f) != 0;
+#endif
 }
+#if VERSION <= VERSION_DEMO_US
+        for (name = mobj_list; *name != NULL; name++) {
+            if (strcmp(mobj->animName, *name) == 0) {
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+#endif
 
 /** Party table init handler: Ms. Mowz is member kind 7, 20 units tall and 24 wide. */
 void chuchu_init(PartyEntry* party) {
@@ -356,9 +456,16 @@ void chuchu_move(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+#if VERSION <= VERSION_DEMO_US
+        // FAKE: the call passes a second argument partyWalkInit does not take (no effect); the cast keeps it.
+        ((void (*)(PartyEntry*, s32))partyWalkInit)(party, 1);
+#else
         partyWalkInit(party, 1);
+#endif
     }
+#if VERSION > VERSION_DEMO_US
     partyUpdMoveSpd(party);
+#endif
     partyWalkMain(party);
 }
 

@@ -61,7 +61,14 @@ typedef struct MarioMotTblEntry {
 void mot_talk(void);
 void mot_getItem(void);
 void mot_kaze(void);
+#if VERSION <= VERSION_DEMO_US
+static void mot_bottomless(void);
+#else
 void mot_bottomless(void);
+#endif
+#if VERSION <= VERSION_DEMO_US
+static void mot_cloud_post(void);
+#endif
 void mot_forceReset(void);
 void mot_shadow(void);
 void mot_partyUse(void);
@@ -75,6 +82,51 @@ void* fbatNpcTalkCheck(void);
  * Mario's motions by motion id (standing, walking, dashing, jumping, ... and Bowser's): the function that runs
  * each frame, an unused slot and the cleanup run when Mario leaves the motion; marioMotion calls through it.
  */
+#if VERSION <= VERSION_DEMO_US
+MarioMotTblEntry marioMotTbl[] = {
+    {mot_stay, NULL, mot_stay_post},
+    {mot_walk, NULL, NULL},
+    {mot_dash, NULL, NULL},
+    {mot_jump, NULL, NULL},
+{mot_jumpNpc, NULL, NULL},
+{mot_jumpSw, NULL, NULL},
+    {mot_jumpStand, NULL, NULL},
+    {mot_jump, NULL, NULL},
+    {mot_jump, NULL, NULL},
+    {mot_jumpSmall, NULL, NULL},
+    {mot_fall, NULL, mot_fall_post},
+    {mot_fall, NULL, NULL},
+    {mot_upstairs, NULL, NULL},
+    {mot_land, NULL, NULL},
+    {mot_talk, NULL, NULL},
+    {mot_getItem, NULL, NULL},
+    {mot_hip, NULL, mot_hip_post},
+    {mot_hip, NULL, mot_hip_post},
+    {mot_hammer, NULL, NULL},
+    {mot_hammer2, NULL, mot_ham2_post},
+    {mot_jabara, NULL, mot_jabara_post},
+    {mot_slit, NULL, mot_slit_post},
+    {mot_roll, NULL, mot_roll_post},
+    {mot_kaze, NULL, NULL},
+    {mot_plane, NULL, mot_plane_post},
+    {mot_ship, NULL, mot_ship_post},
+    {mot_yoshi, NULL, mot_yoshi_post},
+{mot_cloud, NULL, mot_cloud_post},
+{mot_vivian, NULL, mot_vivian_post},
+    {mot_dokan, NULL, NULL},
+    {mot_grasp, NULL, NULL},
+    {mot_damage, NULL, NULL},
+    {mot_damageToge, NULL, NULL},
+    {mot_bottomless, NULL, NULL},
+    {mot_forceReset, NULL, NULL},
+    {mot_shadow, NULL, NULL},
+    {mot_partyUse, NULL, NULL},
+    {kpa_swim, NULL, NULL},
+    {kpa_powup, NULL, NULL},
+    {kpa_powdown, NULL, NULL},
+    {mot_dummy, NULL, NULL},
+};
+#else
 MarioMotTblEntry marioMotTbl[] = {
     {mot_stay, NULL, mot_stay_post},
     {mot_walk, NULL, NULL},
@@ -122,6 +174,7 @@ MarioMotTblEntry marioMotTbl[] = {
     {kpa_powdown, NULL, NULL},
     {mot_dummy, NULL, NULL},
 };
+#endif
 
 /**
  * Mario's normal jump physics: rising speed, acceleration, jerk and snap; the same for falling; an unread height
@@ -134,6 +187,26 @@ MarioJumpData marioJumpData = {
     -18.0f,
 };
 
+#if VERSION <= VERSION_DEMO_US
+void marioChgMoveMotion(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->currMotionId == MARIO_MOTION_PLANE) {
+        mario_plane_cancel();
+        return;
+    }
+if (mario->currMotionId == MARIO_MOTION_YOSHI) {
+        return;
+    }
+    if (!mario->baseSpeed) {
+        marioChgStayMotion();
+    }
+    if (mario->baseSpeed > mario->baseWalkSpeed) {
+        marioChgMot(MARIO_MOTION_DASH);
+    } else {
+        marioChgMot(MARIO_MOTION_WALK);
+    }
+}
+#else
 void marioChgMoveMotion(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_PLANE) {
@@ -162,6 +235,7 @@ void marioChgMoveMotion(void) {
         marioChgMot(MARIO_MOTION_WALK);
     }
 }
+#endif
 
 /**
  * Stops Mario in the standing motion unless he is riding the boat or Yoshi,
@@ -224,12 +298,19 @@ void marioChgRollMotion(void) {
  */
 void marioChgJumpStandMotion(f32 v) {
     MarioWork* mario = marioGetPtr();
+#if VERSION > VERSION_DEMO_US
     camFollowYOn();
+#endif
     if (marioChkSts(MARIO_STS_ROLL)) {
         mario->mot.jump.standHeight = v;
+#if VERSION <= VERSION_DEMO_US
+    } else
+if (mario->currMotionId == MARIO_MOTION_YOSHI) {
+#else
         effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
         marioChgMot(MARIO_MOTION_JUMP_STAND);
     } else if (mario->currMotionId == MARIO_MOTION_YOSHI) {
+#endif
         mario->mot.jump.standHeight = v;
         yoshi_jumpStand();
     } else {
@@ -400,10 +481,12 @@ void marioChgMotSub(MarioMotion id, s32 callPost) {
         if (marioMotTbl[mario->prevMotionId].post) {
             marioMotTbl[mario->prevMotionId].post();
         }
+#if VERSION > VERSION_DEMO_US
     } else if (mario->prevMotionId == MARIO_MOTION_JABARA) {
         if (marioMotTbl[mario->prevMotionId].post) {
             marioMotTbl[mario->prevMotionId].post();
         }
+#endif
     }
     mario->trigFlags |= MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
 }
@@ -619,6 +702,87 @@ void marioJump(void) {
  * a passing jabara check (marioPriCheckJabara, stick rub) turns the landing into the jabara motion.
  * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
  */
+#if VERSION <= VERSION_DEMO_US
+void marioFall(void) {
+    MarioWork* mario = marioGetPtr();
+    s32 rub;
+    f32 spd;
+    s32 b;
+    s32 a;
+    f32 c;
+    f32 y;
+    void* hit;
+
+    if (!strcmp(gp->currentMapName, "kpa_03") && mario->characterId == CHARACTER_BOWSER) {
+        mario->hitobjStandOn = NULL;
+        kpaClearHitobjRide();
+        spd = marioGetFallSpd();
+        hit = marioChkLandon(&y, spd);
+        if (hit) {
+            mario->hitobjStandOn = hit;
+            mario->hitobjJumpFrom = NULL;
+            mario->position.y = y;
+        } else {
+            mario->position.y += spd;
+        }
+        if (mario->hitobjStandOn) {
+            marioLandOn();
+        }
+        return;
+    }
+    if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT) && !marioChkInScreen(mario->screenX, mario->screenY)) {
+        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
+        mario->baseSpeed += 0.1f * -mario->baseSpeed;
+    }
+    if (getRollEvtFlag()) {
+        return;
+    }
+    if (mario->currMotionId == MARIO_MOTION_HIP || mario->currMotionId == MARIO_MOTION_HIP_2) {
+        return;
+    }
+    if ((!marioKeyOffChk() || !marioCtrlOffChk()) && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+        f32 s = mario->baseSpeed;
+        s = s + 0.01f * (-0.5f - s);
+        if (s < 0.0f) {
+            s = 0.0f;
+        }
+        mario->baseSpeed = s;
+    }
+    mario->hitobjStandOn = NULL;
+    if (mario->characterId == CHARACTER_BOWSER) {
+        kpaClearHitobjRide();
+    }
+    if (marioChkSts(MARIO_STS_ROLL) == TRUE) {
+        mot_fall_roll();
+        return;
+    }
+rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
+spd = marioGetFallSpd();
+    hit = marioChkLandon(&y, spd);
+    if (hit) {
+        mario->hitobjStandOn = hit;
+        mario->hitobjJumpFrom = NULL;
+        if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
+            mario->position.y += spd;
+        } else {
+            mario->position.y = y;
+if (marioPriCheckJabara() && a != -1 && rub >= 0) {
+marioChgMot(MARIO_MOTION_JABARA);
+                return;
+            }
+        }
+    } else {
+        mario->position.y += spd;
+    }
+    if (mario->characterId != CHARACTER_BOWSER) {
+        if (mario->hitobjStandOn) {
+            marioLandOn();
+        }
+    } else if (kpaChkHitobjRide()) {
+        marioLandOn();
+    }
+}
+#else
 void marioFall(void) {
     MarioWork* mario = marioGetPtr();
     s32 rub;
@@ -712,6 +876,7 @@ void marioFall(void) {
         marioLandOn();
     }
 }
+#endif
 
 /**
  * Mario touches down: plays the landing sound for the floor type, clears the jump state,
@@ -719,6 +884,133 @@ void marioFall(void) {
  * walk or stand from the stick, Bowser's quake, re-entering the slit in paper mode.
  * Bowser and the tube also call it.
  */
+#if VERSION <= VERSION_DEMO_US
+void marioLandOn(void) {
+    MarioWork* mario = marioGetPtr();
+    MapObjectEntry* mobj;
+    Vec pos;
+    s32 attr;
+    u32 flags;
+    s32 sfx;
+    void* stand;
+
+    if (!(hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
+        marioClearJumpPara();
+    }
+    mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+    mario->flags &= ~MARIO_FLAG_USE_FORCE_DIRECTION;
+    mario->airTimer = 0;
+    mario->jumpPeakAirTime = 0;
+    if (mario->characterId != CHARACTER_BOWSER) {
+        if (!marioBgmodeChk()) {
+            camFollowYOn();
+        }
+    } else {
+        kpaCamFollow();
+    }
+    stand = mario->hitobjStandOn;
+    pos = mario->position;
+    if (stand) {
+        attr = hitGetAttr(stand);
+        if (attr & HIT_ATTR_SHALLOW_WATER) {
+            sfx = 0x150;
+        } else if (attr & HIT_ATTR_WOOD) {
+            sfx = 0x151;
+        } else if (attr & HIT_ATTR_SNOW) {
+            sfx = 0x152;
+        } else if (attr & HIT_ATTR_GRASS) {
+            sfx = 0x153;
+        } else if (attr & 0x400000) {
+            sfx = 0x154;
+        } else {
+            sfx = 0x14f;
+        }
+        psndSFXOn_3D((const char*)sfx, &pos);
+    }
+    if (mario->flags & MARIO_FLAG_TUBE_MODE) {
+        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING);
+        mario->hitobjJumpFrom = NULL;
+        return;
+    }
+    mario->mot.jump.dist = __fabsf(distABf(mario->position.x, mario->position.z, mario->lastGroundPos.x, mario->lastGroundPos.z));
+    attr = hitGetAttr(mario->hitobjStandOn);
+    if (mario->currMotionId != MARIO_MOTION_DAMAGE && (attr & HIT_ATTR_WATER_HAZARD)) {
+        set_damage_root_ypos(mario->position.y);
+        marioChgMot(MARIO_MOTION_DAMAGE);
+        return;
+    }
+    if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
+        set_damage_root_ypos(mario->position.y);
+        marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
+        return;
+    }
+    if (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_MOBJ) {
+        mobj = mobjHitObjPtrToPtr(mario->hitobjStandOn);
+        if (!strcmp(mobj->animName, "MOBJ_RedSwitch")) {
+            marioChgMot(MARIO_MOTION_JUMP_SW);
+            return;
+        }
+        if (!strcmp(mobj->animName, "MOBJ_BlueJumpStand")) {
+            marioChgJumpStandMotion(100.0f);
+            return;
+        }
+        if (mario->characterId == CHARACTER_BOWSER) {
+            marioChgMot(MARIO_MOTION_STAY);
+            return;
+        }
+        if (mario->currMotionId != MARIO_MOTION_SLIT) {
+            marioChgMot(MARIO_MOTION_STAY);
+            return;
+        }
+        if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+marioChgMotSub(MARIO_MOTION_STAY, FALSE);
+return;
+        }
+        if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
+            motSlitCancel();
+        }
+        return;
+    }
+if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+if (mario->characterId == CHARACTER_BOWSER) {
+            if (kpaFireAttackCheck()) {
+                marioChgMot(MARIO_MOTION_STAY);
+            } else {
+                marioChgMot(MARIO_MOTION_WALK);
+            }
+            quake_kpaLandOn();
+            return;
+        }
+marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after landing
+        return;
+}
+    flags = mario->flags;
+    if (flags & MARIO_FLAG_TUBE_MODE) {
+        marioChgRollMotion();
+        return;
+    }
+    if (mario->characterId == CHARACTER_BOWSER) {
+        marioChgMot(MARIO_MOTION_STAY);
+        quake_kpaLandOn();
+        return;
+    }
+    if (mario->currMotionId != MARIO_MOTION_SLIT) {
+        if (!(flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+            marioChgMot(MARIO_MOTION_STAY);
+            return;
+        }
+        marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
+        return;
+    }
+    if (flags & MARIO_FLAG_PAPER_MODE) {
+marioChgMotSub(MARIO_MOTION_STAY, FALSE);
+return;
+    }
+    if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
+        motSlitCancel();
+    }
+}
+#else
 void marioLandOn(void) {
     MarioWork* mario = marioGetPtr();
     MapObjectEntry* mobj;
@@ -864,7 +1156,77 @@ void marioLandOn(void) {
         motSlitCancel();
     }
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static f32 marioDemoHalf(f32 x) {
+    if (x < 0.0) {
+        return x;
+    }
+    return 0.5 * x * (3.0 - x);
+}
+void mot_talk(void) {
+    MarioWork* mario = marioGetPtr();
+    NpcEntry* npc;
+    f32 camYaw;
+    f32 angle;
+    NpcEntry* fbat;
+
+    if (mario->characterId == CHARACTER_PEACH) {
+        peach_talk();
+        return;
+    }
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->multiTimer = 0;
+        mario->airTimer = 0;
+        mario->currSubMotionId = 0;
+        mario->baseSpeed = 0.0f;
+        npc = marioGetTouchNpcPtr();
+        if (npc == NULL) {
+            marioAdjustMoveDir();
+        } else {
+            camYaw = camGetPtr(CAMERA_3D)->viewYaw;
+            angle = revise360(270.0f - (s32)(10.0f * (angleABf(mario->position.x, mario->position.z,
+                ((NpcEntry*)npc)->position.x, ((NpcEntry*)npc)->position.z) - camYaw) + 0.5f) / 10.0f);
+            if (angle >= 90.0f && angle <= 270.0f) {
+                mario->moveDirection = toMovedir(90.0f);
+                mario->directionView = mario->moveDirection;
+                mario->displayDirectionTarget = 180.0f;
+            } else {
+                mario->moveDirection = toMovedir(90.0f);
+                mario->directionView = mario->moveDirection;
+                mario->displayDirectionTarget = 0.0f;
+            }
+        }
+        if (mario->characterId == CHARACTER_BOWSER) {
+            kpaChgPose("KPA_S_1", "KPA2_S_1");
+            return;
+        }
+        // BUG: fbatGetPointer()->npc is whichever NPC Mario last talked to or battled, from any map. If that
+        // NPC slot is unused on the current map, checkPose is not valid and marioChgPose can crash.
+        fbat = fbatGetPointer()->npc;
+        if (fbat != NULL) {
+            marioChgPose(((NpcEntry*)fbat)->checkPose);
+        }
+if (!strcmp(mario->animName, "M_I_2")) {
+mario->multiTimer = 60;
+            mario->currSubMotionId = 10;
+        }
+    }
+    switch (mario->currSubMotionId) {
+        case 0:
+            return;
+        case 10:
+            if (--mario->multiTimer > 0) {
+                break;
+            }
+            marioChgPose("M_S_1");
+            mario->currSubMotionId = 11;
+            break;
+    }
+}
+#else
 void mot_talk(void) {
     MarioWork* mario = marioGetPtr();
     NpcEntry* npc;
@@ -930,6 +1292,7 @@ void mot_talk(void) {
             break;
     }
 }
+#endif
 
 /** Item pickup motion: stops Mario and shows the item-up pose M_I_U until the item code changes the motion. */
 void mot_getItem(void) {
@@ -1001,9 +1364,11 @@ BOOL marioChkJump(void) {
 BOOL marioChkTransform(void) {
     MarioWork* mario = marioGetPtr();
     if (!(mario->buttonTrg & PAD_BUTTON_Y)) {
+#if VERSION > VERSION_DEMO_US
         return FALSE;
     }
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON) && mario->partyUseDelay) {
+#endif
         return FALSE;
     }
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
@@ -1055,6 +1420,9 @@ BOOL marioChkItemMotion(void) {
 
 /** Always 0: a left-over stick-rub check; marioMain's air movement would skip the stick while it returned nonzero. */
 s32 L_marioChkRub(void) {
+#if VERSION <= VERSION_DEMO_US
+MarioWork* mario = marioGetPtr();
+#endif
     return 0;
 }
 
@@ -1099,12 +1467,32 @@ s32 marioRollChgChk(void) {
  */
 void marioChgMotJump2(void) {
     MarioWork* mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED) {
+#else
     if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED && mario->currMotionId != MARIO_MOTION_ROLL) {
+#endif
         marioChgMot(MARIO_MOTION_JUMP_NPC);
     }
 }
 
 /** TRUE for display angles strictly between 90 and 270 degrees, so mot_kaze ends facing 180 rather than 0. */
+#if VERSION <= VERSION_DEMO_US
+static void mot_cloud(void) {
+    MarioWork* mario = marioGetPtr();
+
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_JUMPING);
+        mario->multiTimer = 0;
+        mario->airTimer = 0;
+        mario->currSubMotionId = 0;
+    }
+}
+static void mot_cloud_post(void) {
+    cloudResetAt();
+}
+#endif
 static inline BOOL marioChkBackAngle(f32 a) {
     BOOL ret = FALSE;
     if (a > 90.0f && a < 270.0f) {

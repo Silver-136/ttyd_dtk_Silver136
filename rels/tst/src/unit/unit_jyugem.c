@@ -99,6 +99,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Lakitu: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 90, 100, 100, 80, 100, 100, 70, 100, 80, 100, 80, 100, 80, 80, 90, 100, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     80, // sleep
     90, // stop
@@ -123,6 +126,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Pose table of the Lakitu: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {

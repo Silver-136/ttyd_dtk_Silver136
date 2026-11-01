@@ -92,6 +92,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * extra prone to poison, electric shock, burn, growing huge, attack up, defence up and speed up;
  * resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 90, 70, 150, 70, 150, 150, 70, 150, 70, 150, 70, 150, 70, 70, 90, 90, 150, 70, 0, 0, 30};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     90, // stop
@@ -116,6 +119,7 @@ static StatusVulnerability regist = {
     0, // invisible
     30, // ohko
 };
+#endif
 
 /**
  * Data table of the Spunia: event handlers for the attacker hurt by its spikes

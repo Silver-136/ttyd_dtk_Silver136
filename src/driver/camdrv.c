@@ -668,7 +668,11 @@ void cam3dImgMain(CameraEntry* camera) {
     MTXPerspective(camera->projection, camera->fovY, camera->aspect, camera->near, camera->far);
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void camEffMain(CameraEntry* camera) {
+#else
 void camEffMain(CameraEntry* camera) {
+#endif
     CameraEntry* camera3D = camGetPtr(CAMERA_3D);
 
     camera->cameraPos = camera3D->cameraPos;
@@ -676,7 +680,9 @@ void camEffMain(CameraEntry* camera) {
     camera->cameraAt = camera3D->cameraAt;
     camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
     camera->viewYaw = angleABf(camera->cameraPos.x, camera->cameraPos.z, camera->cameraAt.x, camera->cameraAt.z);
+#if VERSION > VERSION_DEMO_US
     MTXPerspective(camera->projection, camera->fovY, camera->aspect, camera->near, camera->far);
+#endif
 }
 
 /**

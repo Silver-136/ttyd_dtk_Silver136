@@ -94,7 +94,9 @@ struct HitEntry {
     struct HitEntry* parent;        // 0xD4
     struct HitEntry* child;         // 0xD8
     struct HitEntry* sibling;       // 0xDC
+#if VERSION > VERSION_DEMO_US
     struct HitEntry* siblingActive; // 0xE0
+#endif
 };
 
 void hitInit(void);

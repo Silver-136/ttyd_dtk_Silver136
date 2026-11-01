@@ -15,7 +15,9 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
+#if VERSION > VERSION_DEMO_US
 static char name[8];
+#endif
 
 static USER_FUNC(make_name);
 
@@ -131,7 +133,11 @@ static EVT_BEGIN(rousoku_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(7.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+#else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
+#endif
         ADD(LW(0), 1)
     END_LOOP
     RETURN
@@ -144,23 +150,43 @@ EVT_END()
 EVT_BEGIN(las_02_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -550, 480, 60, ITEM_SHOOTING_STAR, 0, GSWF(GSWF_LAS02_SHOOTING_STAR_BLOCK_HIT), 0)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -550, 480, 60, ITEM_SHOOTING_STAR, 0, GSWF_LAS_02_SHOOTING_STAR_BLOCK, 0)
+#endif
     CALL(evt_npc_check, STRING("スーパーキラー大砲１"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_npc_set_link, STRING("スーパーキラー大砲１"), STRING("スーパーキラー大砲２"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(rousoku_init)
+#else
     CALL_CHILD(PTR(rousoku_init))
+#endif
     RETURN
 EVT_END()
 
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
+#if VERSION <= VERSION_DEMO_US
+char name[8];
+s32 number;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    number = evtGetValue(event, args[0]);
+    sprintf(name, "hi%d", number);
+#else
     sprintf(name, "hi%d", evtGetValue(event, args[0]));
+#endif
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }

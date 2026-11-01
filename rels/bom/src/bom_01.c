@@ -780,6 +780,9 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam_letter_box_onoff, 1, 1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_normalize)
+#endif
     CALL(evt_cam3d_evt_set, 340, 100, -53, 340, 80, -302, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pos, -580, 0, 0)
     CALL(evt_party_set_pos, 0, -580, 0, 0)
@@ -791,7 +794,9 @@ static EVT_BEGIN(first_evt)
     WAIT_MS(4000)
     CALL(evt_cam3d_evt_set, 200, 150, 1001, -40, 130, 348, 6000, EASING_SINE_IN_OUT)
     WAIT_MS(6000)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_mario_mov_pos2, -351, 0, FLOAT(120.0f))
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, -380, 97, 267, -380, 38, -9, 0, EASING_SINE_IN_OUT)
@@ -799,21 +804,41 @@ static EVT_BEGIN(first_evt)
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_party_stop, 0)
     WAIT_MS(200)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_BOM01_VISITED_BEFORE_STG7), 1)
+        CALL(evt_msg_print_party, STRING("stg7_bom_01__2_00"))
+#else
     IF_INT_EQUAL(GSWF_BOM_01_EARLY_VISIT, 1)
         CALL(evt_msg_print_party, STRING(("stg7_bom_01__2_00")))
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print_party, STRING("stg7_bom_01__2"))
+#else
         CALL(evt_msg_print_party, STRING(("stg7_bom_01__2")))
+#endif
     END_IF
     CALL(evt_party_run, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_3"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_mario_set_pose, STRING("M_N_2"))
+#else
     CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_NOD1_3")), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING(("M_N_2")))
+#endif
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_01_FAHR_OUTPOST_1ST_VISIT)
+SET_VALUE(LW(0), STRING("w_bero"))
+    CALL_CHILD(bero_case_switch_on)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG7_01_FAHR_OUTPOST_1ST_VISIT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     SET_VALUE(LW(0), STRING(("w_bero")))
     CALL_CHILD(PTR(bero_case_switch_on))
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_cam_letter_box_disable, 0)
@@ -825,6 +850,9 @@ EVT_BEGIN(evt_bom_01_karakara)
     SET_VALUE(LW(8), 0)
     LOOP(0)
         CALL(evt_mapobj_get_position, LW(9), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_AMB_WINDVANE1"), LW(0), LW(1), LW(2), LW(10))
+#endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 1, 10, 1000)
         LABEL(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -850,6 +878,9 @@ EVT_BEGIN(evt_bom_01_karakara)
         END_LOOP
         BEGIN_INLINE_EVENT
             WAIT_MS(900)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_sfxoff, LW(10))
+#endif
         END_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 10, 1, 1000)
         LABEL(1)
@@ -1163,32 +1194,56 @@ EVT_END()
  * ripple and particle effects at the muzzle.
  */
 EVT_BEGIN(mario_shot)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(mario_tobideru)
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_DISCHARGE1"), 0)
+#else
     SPAWN_EVENT(PTR(mario_tobideru))
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_DISCHARGE1")), 0)
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, -50, 150)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_rotate, 1, STRING("dekatai"), 0, 0, -40)
+    CALL(evt_mapobj_trans, 1, STRING("dekatai"), 0, LW(0), 0)
+#else
     CALL(evt_mapobj_rotate, 1, STRING(("dekatai")), 0, 0, -40)
     CALL(evt_mapobj_trans, 1, STRING(("dekatai")), 0, LW(0), 0)
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(gamen_shake2)
+    CALL(evt_eff, STRING("kemuri"), STRING("kemuri_test"), 11, 570, 950, 0, FLOAT(3.0f), 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff64, STRING("ripple"), STRING("ripple_n64"), 2, 570, 950, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff, STRING("particle"), STRING("particle"), 0, 520, 900, 0, 1, 1, 0, 100, 0, 0, 0, 0)
+#else
     SPAWN_EVENT(PTR(gamen_shake2))
     CALL(evt_eff, STRING(("kemuri")), STRING(("kemuri_test")), 11, 570, 950, 0, FLOAT(3.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff64, STRING(("ripple")), STRING(("ripple_n64")), 2, 570, 950, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING(("particle")), STRING(("particle")), 0, 520, 900, 0, 1, 1, 0, 100, 0, 0, 0, 0)
+#endif
     CALL(taihou_r)
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
         CALL(evt_eff, 0, STRING(("hit")), 1, 570, 950, 0, FLOAT(3.0f), 4, 0, 0, 0, 0, 0, 0)
         WAIT_MS(200)
         CALL(evt_eff, 0, STRING(("hit")), 1, 570, 950, 0, FLOAT(3.0f), 4, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, -50, 0, 150)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_rotate, 1, STRING("dekatai"), 0, 0, -40)
+    CALL(evt_mapobj_trans, 1, STRING("dekatai"), 0, LW(0), 0)
+#else
     CALL(evt_mapobj_rotate, 1, STRING(("dekatai")), 0, 0, -40)
     CALL(evt_mapobj_trans, 1, STRING(("dekatai")), 0, LW(0), 0)
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(1)
@@ -1368,34 +1423,67 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_mario_key_onoff, 0)
     // The scene starts in the cannon room; the music stops.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_63"), 0, STRING("me"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_63")), 0, STRING(("me")))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_INTANGIBLE)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING(("me")), NPC_FLAG_INTANGIBLE)
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos, 0, 10, 0, 500)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos, 0, 10, 500)
     CALL(evt_cam3d_evt_set, 0, 152, 555, 0, 57, 13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("chika_off"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("jime_ugo"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_yuka2"), MAP_OBJ_FLAG_HIDDEN)
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("chika_off")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("jime_ugo")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("S_yuka1")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("S_yuka2")), MAP_OBJ_FLAG_HIDDEN)
+#endif
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     WAIT_FRAMES(1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_mario_set_pose, STRING("M_N_7"))
+    CALL_CHILD(party_damage_pose)
+#else
     CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_SURPRISED1")), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING(("M_N_7")))
     CALL_CHILD(PTR(party_damage_pose))
+#endif
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_FLOOR_OPEN1"), LW(10), LW(11), LW(12), LW(9))
+#else
     CALL(evt_snd_sfxon_3d, STRING(("SFX_STG7_FLOOR_OPEN1")), LW(10), LW(11), LW(12), LW(9))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 0, 20, 1000)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_ss_1_b"), LW(0), -5, 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_ss_1_b")), LW(0), -5, 0)
+#endif
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_ss_1_a"), LW(0), -5, 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_ss_1_a")), LW(0), -5, 0)
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
@@ -1405,7 +1493,11 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_MARIO_FALL1"), LW(3), LW(4), LW(5), LW(6))
+#else
     CALL(evt_snd_sfxon_3d, STRING(("SFX_STG7_MARIO_FALL1")), LW(3), LW(4), LW(5), LW(6))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, -100, 400)
     LABEL(1)
     CALL(evt_sub_intpl_msec_get_value)
@@ -1423,19 +1515,35 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_sfxoff, LW(6))
     CALL(evt_mario_cont_onoff, 1)
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_set_pose, STRING("M_N_7"))
+#else
     CALL(evt_mario_set_pose, STRING(("M_N_7")))
+#endif
     WAIT_FRAMES(1)
     CALL(evt_mario_cont_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_move_position, STRING("me"), -50, -40, 0, FLOAT(80.0f), 1)
+    CALL(evt_npc_move_position, STRING("me"), -55, -30, 0, FLOAT(80.0f), 1)
+    CALL(evt_npc_move_position, STRING("me"), -45, 80, 0, FLOAT(80.0f), 1)
+#else
     DEBUG_PUT_MSG(STRING(("\203r\203r\203A\203\223\202\265\202\301\202\333\226\263\214\370")))
     CALL(evt_party_vivian_tail, 0, 0)
     CALL(evt_npc_status_onoff, 1, STRING(("me")), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING(("me")), -50, -40, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING(("me")), -55, -30, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING(("me")), -45, 80, 0, FLOAT(80.0f), 1)
+#endif
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_move_position, STRING("me"), 0, 275, 0, FLOAT(80.0f), 1)
+        CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
+#else
         CALL(evt_npc_move_position, STRING(("me")), 0, 275, 0, FLOAT(80.0f), 1)
         CALL(evt_set_dir_to_target, STRING(("me")), STRING(("mario")))
+#endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     WAIT_MS(500)
@@ -1448,17 +1556,31 @@ static EVT_BEGIN(evt_taihou)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_set_ry, STRING("me"), 90)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING(("me")), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING(("me")), 90)
+#endif
     // The mayor asks General White whether the big bomb cannon is ready, and White calls his crew to the drill.
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_64"), 0, STRING("me"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_64_01"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_64")), 0, STRING(("me")))
     CALL(evt_msg_print, 0, STRING(("stg7_bom_64_01")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     SET_INT_READ_ADDR(PTR(&oh_data))
     // The four crew members shout their drill calls in turn (Ho, Hup, Hut, Boom).
     LOOP(4)
         READ_INT2(LW(0), LW(1))
         BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_set_dir_to_target, LW(0), STRING("mario"))
+#else
             CALL(evt_set_dir_to_target, LW(0), STRING(("mario")))
+#endif
             CALL(evt_msg_print, 0, LW(1), 0, LW(0))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
@@ -1469,31 +1591,68 @@ static EVT_BEGIN(evt_taihou)
     END_LOOP
     WAIT_MS(500)
     // White orders positions, and the crew answer (stg7_bom_66 and 67).
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_66"), 0, STRING("me"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_66")), 0, STRING(("me")))
+#endif
     SET_VALUE(GF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("ペントリット"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("スラリー"), NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_npc_flag_onoff, 0, STRING(("\203z\203\217\203C\203g")), NPC_FLAG_TALK_ANIM)
     CALL(evt_npc_flag_onoff, 0, STRING(("\203y\203\223\203g\203\212\203b\203g")), NPC_FLAG_TALK_ANIM)
     CALL(evt_npc_flag_onoff, 0, STRING(("\203X\203\211\203\212\201[")), NPC_FLAG_TALK_ANIM)
+#endif
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("ホワイト"))
+#else
         CALL(evt_msg_print, 0, STRING(("stg7_bom_67")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_get_position, STRING("ホワイト"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_jump_position_nohit, STRING("ホワイト"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+#else
         CALL(evt_npc_get_position, STRING(("\203z\203\217\203C\203g")), LW(0), LW(1), LW(2))
         CALL(evt_npc_jump_position_nohit, STRING(("\203z\203\217\203C\203g")), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("ペントリット"))
+#else
         CALL(evt_msg_print, 0, STRING(("stg7_bom_67")), 0, STRING(("\203y\203\223\203g\203\212\203b\203g")))
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_get_position, STRING("ペントリット"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_jump_position_nohit, STRING("ペントリット"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+#else
         CALL(evt_npc_get_position, STRING(("\203y\203\223\203g\203\212\203b\203g")), LW(0), LW(1), LW(2))
         CALL(evt_npc_jump_position_nohit, STRING(("\203y\203\223\203g\203\212\203b\203g")), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_get_position, STRING("スラリー"), LW(0), LW(1), LW(2))
+        CALL(evt_npc_jump_position_nohit, STRING("スラリー"), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+#else
         CALL(evt_npc_get_position, STRING(("\203X\203\211\203\212\201[")), LW(0), LW(1), LW(2))
         CALL(evt_npc_jump_position_nohit, STRING(("\203X\203\211\203\212\201[")), LW(0), LW(1), LW(2), 300, FLOAT(20.0f))
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("スラリー"))
+#else
         CALL(evt_msg_print, 0, STRING(("stg7_bom_67")), 0, STRING(("\203X\203\211\203\212\201[")))
+#endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     WAIT_MS(1000)
@@ -1507,20 +1666,35 @@ static EVT_BEGIN(evt_taihou)
     SET_VALUE(GF(1), 0)
     SET_VALUE(GF(2), 0)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_status_onoff, 1, STRING("ホワイト"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("ホワイト"), -50, -80, 0, FLOAT(100.0f), 1)
+#else
         CALL(evt_npc_status_onoff, 1, STRING(("\203z\203\217\203C\203g")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING(("\203z\203\217\203C\203g")), -50, -80, 0, FLOAT(100.0f), 1)
+#endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_status_onoff, 1, STRING("ペントリット"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 0, -80, 0, FLOAT(100.0f), 1)
+#else
         CALL(evt_npc_status_onoff, 1, STRING(("\203y\203\223\203g\203\212\203b\203g")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING(("\203y\203\223\203g\203\212\203b\203g")), 0, -80, 0, FLOAT(100.0f), 1)
+#endif
         SET_VALUE(GF(1), 1)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_status_onoff, 1, STRING("スラリー"), NPC_STATUS_FACE_MOVE_DIR)
+        CALL(evt_npc_move_position, STRING("スラリー"), 50, -80, 0, FLOAT(100.0f), 1)
+#else
         CALL(evt_npc_status_onoff, 1, STRING(("\203X\203\211\203\212\201[")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING(("\203X\203\211\203\212\201[")), 50, -80, 0, FLOAT(100.0f), 1)
+#endif
         SET_VALUE(GF(2), 1)
     END_INLINE_EVENT
     LABEL(2)
@@ -1536,28 +1710,56 @@ static EVT_BEGIN(evt_taihou)
         WAIT_FRAMES(1)
         GOTO(2)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("ペントリット"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("スラリー"), NPC_FLAG_TALK_ANIM)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING(("\203z\203\217\203C\203g")), NPC_FLAG_TALK_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING(("\203y\203\223\203g\203\212\203b\203g")), NPC_FLAG_TALK_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING(("\203X\203\211\203\212\201[")), NPC_FLAG_TALK_ANIM)
+#endif
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_move_position, STRING("ホワイト"), -50, -200, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_move_position, STRING("ホワイト"), -35, -260, 0, FLOAT(80.0f), 1)
+#else
         CALL(evt_npc_move_position, STRING(("\203z\203\217\203C\203g")), -50, -200, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_move_position, STRING(("\203z\203\217\203C\203g")), -35, -260, 0, FLOAT(80.0f), 1)
+#endif
     END_INLINE_EVENT
     WAIT_MS(400)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_move_position, STRING("ペントリット"), -50, -80, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), -55, -225, 0, FLOAT(80.0f), 1)
+#else
         CALL(evt_npc_move_position, STRING(("\203y\203\223\203g\203\212\203b\203g")), -50, -80, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_move_position, STRING(("\203y\203\223\203g\203\212\203b\203g")), -55, -225, 0, FLOAT(80.0f), 1)
+#endif
     END_INLINE_EVENT
     WAIT_MS(400)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_move_position, STRING("スラリー"), -50, -80, 0, FLOAT(80.0f), 1)
+#else
     CALL(evt_npc_move_position, STRING(("\203X\203\211\203\212\201[")), -50, -80, 0, FLOAT(80.0f), 1)
+#endif
     CALL(evt_cam3d_evt_set, 0, 152, 108, 0, 57, -432, 0, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_move_position, STRING("スラリー"), -70, -180, 0, FLOAT(80.0f), 1)
+#else
         CALL(evt_npc_move_position, STRING(("\203X\203\211\203\212\201[")), -70, -180, 0, FLOAT(80.0f), 1)
+#endif
     END_INLINE_EVENT
     SET_VALUE(GF(0), 0)
     SET_VALUE(LW(0), PTR(&door))
     // The cannon-room doors slide open.
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_door_open_bom_01)
+#else
     SPAWN_EVENT(PTR(evt_door_open_bom_01))
+#endif
     LOOP(0)
         IF_INT_EQUAL(GF(0), 1)
             BREAK_LOOP
@@ -1565,6 +1767,15 @@ static EVT_BEGIN(evt_taihou)
         WAIT_FRAMES(1)
     END_LOOP
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_move_position, STRING("ホワイト"), 0, -320, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ホワイト"), 35, -330, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ホワイト"), 80, -380, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_jump_position_nohit, STRING("ホワイト"), 70, 30, -435, 300, FLOAT(20.0f))
+        CALL(evt_npc_move_position, STRING("ホワイト"), 40, -445, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_jump_position_nohit, STRING("ホワイト"), 0, 40, -430, 300, FLOAT(20.0f))
+        CALL(evt_npc_set_ry, STRING("ホワイト"), 90)
+#else
         CALL(evt_npc_move_position, STRING(("\203z\203\217\203C\203g")), 0, -320, 0, FLOAT(70.0f), 1)
         CALL(evt_npc_move_position, STRING(("\203z\203\217\203C\203g")), 35, -330, 0, FLOAT(70.0f), 1)
         CALL(evt_npc_move_position, STRING(("\203z\203\217\203C\203g")), 80, -380, 0, FLOAT(70.0f), 1)
@@ -1572,9 +1783,19 @@ static EVT_BEGIN(evt_taihou)
         CALL(evt_npc_move_position, STRING(("\203z\203\217\203C\203g")), 40, -445, 0, FLOAT(70.0f), 1)
         CALL(evt_npc_jump_position_nohit, STRING(("\203z\203\217\203C\203g")), 0, 40, -430, 300, FLOAT(20.0f))
         CALL(evt_npc_set_ry, STRING(("\203z\203\217\203C\203g")), 90)
+#endif
     END_INLINE_EVENT
     WAIT_MS(400)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_move_position, STRING("ペントリット"), 0, -320, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 35, -330, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 80, -380, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 80, -415, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_move_position, STRING("ペントリット"), 45, -415, 0, FLOAT(70.0f), 1)
+        CALL(evt_npc_jump_position_nohit, STRING("ペントリット"), -20, 15, -390, 300, FLOAT(20.0f))
+        CALL(evt_npc_set_ry, STRING("ペントリット"), 315)
+#else
         CALL(evt_npc_move_position, STRING(("\203y\203\223\203g\203\212\203b\203g")), 0, -320, 0, FLOAT(70.0f), 1)
         CALL(evt_npc_move_position, STRING(("\203y\203\223\203g\203\212\203b\203g")), 35, -330, 0, FLOAT(70.0f), 1)
         CALL(evt_npc_move_position, STRING(("\203y\203\223\203g\203\212\203b\203g")), 80, -380, 0, FLOAT(70.0f), 1)
@@ -1582,51 +1803,114 @@ static EVT_BEGIN(evt_taihou)
         CALL(evt_npc_move_position, STRING(("\203y\203\223\203g\203\212\203b\203g")), 45, -415, 0, FLOAT(70.0f), 1)
         CALL(evt_npc_jump_position_nohit, STRING(("\203y\203\223\203g\203\212\203b\203g")), -20, 15, -390, 300, FLOAT(20.0f))
         CALL(evt_npc_set_ry, STRING(("\203y\203\223\203g\203\212\203b\203g")), 315)
+#endif
     END_INLINE_EVENT
     WAIT_MS(400)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_move_position, STRING("スラリー"), 0, -320, 0, FLOAT(70.0f), 1)
+#else
     CALL(evt_npc_move_position, STRING(("\203X\203\211\203\212\201[")), 0, -320, 0, FLOAT(70.0f), 1)
+#endif
     SET_VALUE(GF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_move_position, STRING("スラリー"), 35, -330, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_move_position, STRING("スラリー"), 80, -380, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_move_position, STRING("スラリー"), 80, -415, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_move_position, STRING("スラリー"), 45, -415, 0, FLOAT(70.0f), 1)
+    CALL(evt_npc_jump_position_nohit, STRING("スラリー"), 20, 15, -390, 300, FLOAT(20.0f))
+    CALL(evt_npc_set_ry, STRING("スラリー"), 90)
+#else
     CALL(evt_npc_move_position, STRING(("\203X\203\211\203\212\201[")), 35, -330, 0, FLOAT(70.0f), 1)
     CALL(evt_npc_move_position, STRING(("\203X\203\211\203\212\201[")), 80, -380, 0, FLOAT(70.0f), 1)
     CALL(evt_npc_move_position, STRING(("\203X\203\211\203\212\201[")), 80, -415, 0, FLOAT(70.0f), 1)
     CALL(evt_npc_move_position, STRING(("\203X\203\211\203\212\201[")), 45, -415, 0, FLOAT(70.0f), 1)
     CALL(evt_npc_jump_position_nohit, STRING(("\203X\203\211\203\212\201[")), 20, 15, -390, 300, FLOAT(20.0f))
     CALL(evt_npc_set_ry, STRING(("\203X\203\211\203\212\201[")), 90)
+#endif
     CALL(evt_cam3d_evt_set, -160, 125, -100, 10, 55, -427, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_set_dir_to_target, STRING("ホワイト"), STRING("ペントリット"))
+#else
     CALL(evt_set_dir_to_target, STRING(("\203z\203\217\203C\203g")), STRING(("\203y\203\223\203g\203\212\203b\203g")))
+#endif
     // System check: the guidance system is brought online (stg7_bom_68 to 72).
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_68"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_68")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_set_dir_to_target, STRING("ペントリット"), STRING("ホワイト"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_69"), 0, STRING("ペントリット"))
+#else
     CALL(evt_set_dir_to_target, STRING(("\203y\203\223\203g\203\212\203b\203g")), STRING(("\203z\203\217\203C\203g")))
     CALL(evt_msg_print, 0, STRING(("stg7_bom_69")), 0, STRING(("\203y\203\223\203g\203\212\203b\203g")))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_reverse_ry, STRING("ペントリット"))
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE1"), 0)
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
+    CALL(evt_map_playanim, STRING("kikai"), 1, 0)
+#else
     CALL(evt_npc_reverse_ry, STRING(("\203y\203\223\203g\203\212\203b\203g")))
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE1")), 0)
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE2")), LW(10))
     CALL(evt_map_playanim, STRING(("kikai")), 1, 0)
+#endif
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_set_dir_to_target, STRING("ペントリット"), STRING("ホワイト"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_70"), 0, STRING("ペントリット"))
+    CALL(evt_npc_set_ry, STRING("ペントリット"), 315)
+#else
     CALL(evt_set_dir_to_target, STRING(("\203y\203\223\203g\203\212\203b\203g")), STRING(("\203z\203\217\203C\203g")))
     CALL(evt_msg_print, 0, STRING(("stg7_bom_70")), 0, STRING(("\203y\203\223\203g\203\212\203b\203g")))
     CALL(evt_npc_set_ry, STRING(("\203y\203\223\203g\203\212\203b\203g")), 315)
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_set_dir_to_target, STRING("ホワイト"), STRING("スラリー"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_71"), 0, STRING("ホワイト"))
+#else
     CALL(evt_set_dir_to_target, STRING(("\203z\203\217\203C\203g")), STRING(("\203X\203\211\203\212\201[")))
     CALL(evt_msg_print, 0, STRING(("stg7_bom_71")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_set_dir_to_target, STRING("スラリー"), STRING("ホワイト"))
+    CALL(evt_msg_print, 0, STRING("stg7_bom_72"), 0, STRING("スラリー"))
+#else
     CALL(evt_set_dir_to_target, STRING(("\203X\203\211\203\212\201[")), STRING(("\203z\203\217\203C\203g")))
     CALL(evt_msg_print, 0, STRING(("stg7_bom_72")), 0, STRING(("\203X\203\211\203\212\201[")))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_reverse_ry, STRING("スラリー"))
+#else
     CALL(evt_npc_reverse_ry, STRING(("\203X\203\211\203\212\201[")))
+#endif
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_cam3d_evt_set, 200, 350, 1224, 200, 125, 250, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SIREN1"), LW(10))
+#else
     CALL_CHILD(PTR(cam_outside))
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SIREN1")), LW(10))
+#endif
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         // The detonation sequence is announced and the outer hatch and inner shutter open, with the camera
         // cutting between inside and outside (stg7_bom_73 to 76).
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg7_bom_73"), 0, STRING("ホワイト"))
+#else
         CALL(evt_msg_print, 0, STRING(("stg7_bom_73")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 0, 350, 1224, 0, 125, 250, 6000, EASING_SINE_IN_OUT)
@@ -1639,107 +1923,239 @@ static EVT_BEGIN(evt_taihou)
     END_LOOP
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(10))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
+    CALL_CHILD(cam_inside)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE2")), LW(10))
     CALL_CHILD(PTR(cam_inside))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_74"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_74")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(10))
     // The cannon's theme starts and the screen shakes.
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG7_HUGE_GUN1"))
+#else
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING(("BGM_EVT_STG7_HUGE_GUN1")))
+#endif
     CALL(evt_cam3d_evt_set, 0, 350, 1224, 0, 125, 250, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 283, 932, 0, 125, 250, 3000, EASING_SINE_IN_OUT)
     WAIT_MS(1500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_FLOOR_QUAKE1"), LW(7))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_FLOOR_QUAKE1")), LW(7))
+#endif
     SPAWN_EVENT_GET_ID(PTR(gamen_shake), LW(9))
     WAIT_MS(1500)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(effect_1)
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_FLOOR_QUAKE2"), 0)
+    SPAWN_EVENT(gamen_shake2)
+#else
     SPAWN_EVENT(PTR(effect_1))
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_FLOOR_QUAKE2")), 0)
     SPAWN_EVENT(PTR(gamen_shake2))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_yuka3"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("chika_off"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hikari"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_trans, 1, STRING("chika_off"), 0, FLOAT(0.0f), 0)
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_FLOOR_DOWN1"), LW(8))
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("S_yuka2")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("S_yuka3")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("chika_off")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("S_hikari")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING(("chika_off")), 0, FLOAT(0.0f), 0)
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_FLOOR_DOWN1")), LW(8))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, -20, 1000)
     LABEL(3)
     CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_l_1_a"), 0, LW(0), 0)
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_l_1_b"), 0, LW(0), 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_l_1_a")), 0, LW(0), 0)
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_l_1_b")), 0, LW(0), 0)
+#endif
     ADD(LW(0), -5)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_ss_1_a"), -20, LW(0), 0)
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_ss_1_b"), 20, LW(0), 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_ss_1_a")), -20, LW(0), 0)
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_ss_1_b")), 20, LW(0), 0)
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(3)
     END_IF
     CALL(evt_snd_sfxoff, LW(8))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_FLOOR_OPEN2"), LW(8))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_FLOOR_OPEN2")), LW(8))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 170, 3000)
     LABEL(4)
     CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_l_1_b"), LW(0), -20, 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_l_1_b")), LW(0), -20, 0)
+#endif
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_l_1_a"), LW(0), -20, 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_l_1_a")), LW(0), -20, 0)
+#endif
     ADD(LW(0), -20)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_ss_1_a"), LW(0), -25, 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_ss_1_a")), LW(0), -25, 0)
+#endif
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("hiraku_ss_1_b"), LW(0), -25, 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("hiraku_ss_1_b")), LW(0), -25, 0)
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(4)
     END_IF
     CALL(evt_snd_sfxoff, LW(8))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(gamen_shake2)
+#else
     SPAWN_EVENT(PTR(gamen_shake2))
+#endif
     WAIT_MS(600)
     DELETE_EVENT(LW(9))
     CALL(evt_snd_sfxoff, LW(7))
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0f), 100)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(8))
+    CALL_CHILD(cam_inside)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE2")), LW(8))
     CALL_CHILD(PTR(cam_inside))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_75"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_75")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_cam3d_evt_set, 0, 283, 932, 0, 125, 250, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -200, 734, 684, -10, 50, 63, 2800, EASING_SINE_IN_OUT)
     WAIT_MS(1800)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(0), STRING("hiraku_s_1_a"))
+    SET_VALUE(LW(1), STRING("hiraku_s_1_b"))
+#else
     SET_VALUE(LW(0), STRING(("hiraku_s_1_a")))
     SET_VALUE(LW(1), STRING(("hiraku_s_1_b")))
+#endif
     SET_VALUE(LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(open_hatch)
+#else
     SPAWN_EVENT(PTR(open_hatch))
+#endif
     WAIT_MS(400)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(0), STRING("hiraku_s_2_a"))
+    SET_VALUE(LW(1), STRING("hiraku_s_2_b"))
+#else
     SET_VALUE(LW(0), STRING(("hiraku_s_2_a")))
     SET_VALUE(LW(1), STRING(("hiraku_s_2_b")))
+#endif
     SET_VALUE(LW(2), 1)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(open_hatch)
+#else
     SPAWN_EVENT(PTR(open_hatch))
+#endif
     WAIT_MS(400)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(0), STRING("hiraku_s_3_a"))
+    SET_VALUE(LW(1), STRING("hiraku_s_3_b"))
+#else
     SET_VALUE(LW(0), STRING(("hiraku_s_3_a")))
     SET_VALUE(LW(1), STRING(("hiraku_s_3_b")))
+#endif
     SET_VALUE(LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(open_hatch)
+#else
     SPAWN_EVENT(PTR(open_hatch))
+#endif
     WAIT_MS(400)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(0), STRING("hiraku_s_4_a"))
+    SET_VALUE(LW(1), STRING("hiraku_s_4_b"))
+#else
     SET_VALUE(LW(0), STRING(("hiraku_s_4_a")))
     SET_VALUE(LW(1), STRING(("hiraku_s_4_b")))
+#endif
     SET_VALUE(LW(2), 1)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(open_hatch)
+#else
     SPAWN_EVENT(PTR(open_hatch))
+#endif
     WAIT_MS(400)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(8))
+    CALL_CHILD(cam_inside2)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE2")), LW(8))
     CALL_CHILD(PTR(cam_inside2))
+#endif
     WAIT_MS(300)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_76"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_76")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_cam3d_evt_set, -230, 734, 684, -10, 50, 63, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     WAIT_MS(300)
     SET_VALUE(LW(0), 0)
     LOOP(36)
@@ -1755,36 +2171,73 @@ static EVT_BEGIN(evt_taihou)
         CALL(evt_cam3d_evt_set, 0, 70, 650, 0, 60, 250, 0, EASING_SINE_IN_OUT)
     END_INLINE_EVENT
     SPAWN_EVENT_GET_ID(PTR(gamen_shake), LW(9))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_UP1"), LW(8))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_UP1")), LW(8))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 1600, 11250)
     LABEL(5)
     CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_trans, 1, STRING("S_dekatai"), 0, LW(0), 0)
+#else
     CALL(evt_mapobj_trans, 1, STRING(("S_dekatai")), 0, LW(0), 0)
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(5)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(effect_1)
+#else
     SPAWN_EVENT(PTR(effect_1))
+#endif
     CALL(evt_snd_sfxoff, LW(8))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_STOP1"), 0)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_STOP1")), 0)
+#endif
     DELETE_EVENT(LW(9))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(gamen_shake2)
+#else
     SPAWN_EVENT(PTR(gamen_shake2))
+#endif
     WAIT_MS(2000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hikari"), MAP_OBJ_FLAG_HIDDEN)
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("S_hikari")), MAP_OBJ_FLAG_HIDDEN)
+#endif
     CALL(evt_cam3d_evt_set, 1500, 100, 2539, 0, 650, 0, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_cam3d_evt_set, -1500, 100, 2539, 0, 650, 0, 5000, EASING_SINE_IN_OUT)
     WAIT_MS(5000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
+    CALL_CHILD(cam_inside)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE2")), LW(10))
     CALL_CHILD(PTR(cam_inside))
+#endif
     WAIT_MS(300)
     // White sights the moon and reads out the aim and wind figures (stg7_bom_77 to 80).
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_77"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_77")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
     SET_VALUE(GW(5), 70)
     SPAWN_EVENT_GET_ID(PTR(evt_depth), LW(9))
     CALL(sight_dir, 3)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     CALL(evt_cam3d_evt_set, 400, 151, -171, 400, 62, -676, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_cam3d_evt_set, 420, 151, -171, 420, 62, -676, 2000, EASING_SINE_IN_OUT)
@@ -1796,37 +2249,71 @@ static EVT_BEGIN(evt_taihou)
     DELETE_EVENT(LW(9))
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_cam3d_evt_set, -1500, 100, 2539, 0, 650, 0, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_MOVE1"), LW(8))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_MOVE1")), LW(8))
+#endif
     SPAWN_EVENT_GET_ID(PTR(gamen_shake), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -500, 3000)
     LABEL(6)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_rotate, 1, STRING("dekatai"), 0, 0, LW(0))
+#else
     CALL(evt_mapobj_rotate, 1, STRING(("dekatai")), 0, 0, LW(0))
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(6)
     END_IF
     DELETE_EVENT(LW(9))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_STOP2"), 0)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_STOP2")), 0)
+#endif
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxoff, LW(8))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(8))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE2")), LW(8))
+#endif
     SET_VALUE(GW(10), 70)
     SPAWN_EVENT_GET_ID(PTR(evt_depth), LW(9))
     CALL(sight_dir, 4)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     CALL(evt_cam3d_evt_set, 400, 151, -171, 400, 62, -676, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(300)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_78"), 0, 0)
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_78")), 0, 0)
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_moon"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_trans, 1, STRING("S_moon"), 400, -738, -676)
+    CALL(evt_mapobj_scale, 1, STRING("S_moon"), FLOAT(0.7998047f), FLOAT(0.7998047f), FLOAT(0.7998047f))
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("S_moon")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING(("S_moon")), 400, -738, -676)
     CALL(evt_mapobj_scale, 1, STRING(("S_moon")), FLOAT(0.7998047f), FLOAT(0.7998047f), FLOAT(0.7998047f))
+#endif
     CALL(sight_dir, 0)
     CALL(evt_cam3d_evt_set, 400, 151, -171, 400, 262, -676, 2000, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
@@ -1842,39 +2329,76 @@ static EVT_BEGIN(evt_taihou)
     DELETE_EVENT(LW(9))
     WAIT_MS(2000)
     CALL(sight_dir, 6)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_moon"), MAP_OBJ_FLAG_HIDDEN)
+    CALL_CHILD(cam_inside)
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("S_moon")), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(cam_inside))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_79"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_79")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_cam3d_evt_set, -1500, 100, 2539, 0, 650, 0, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_MOVE1"), LW(8))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_MOVE1")), LW(8))
+#endif
     SPAWN_EVENT_GET_ID(PTR(gamen_shake), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -500, -400, 1000)
     LABEL(7)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_rotate, 1, STRING("dekatai"), 0, 0, LW(0))
+#else
     CALL(evt_mapobj_rotate, 1, STRING(("dekatai")), 0, 0, LW(0))
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(7)
     END_IF
     DELETE_EVENT(LW(9))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_STOP2"), 0)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_STOP2")), 0)
+#endif
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_80"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_80")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_HATCH_OPEN1"), LW(8))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_HATCH_OPEN1")), LW(8))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -1200, 1000)
     LABEL(8)
     CALL(evt_sub_intpl_msec_get_value)
     DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_rotate, 1, STRING("futa"), 0, LW(0), 0)
+#else
     CALL(evt_mapobj_rotate, 1, STRING(("futa")), 0, LW(0), 0)
+#endif
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(8)
@@ -1883,40 +2407,89 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_cam3d_evt_set, 21, 175, 781, 9, 42, 265, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     // The mayor orders everyone in; the crowd squeezes into the chamber, grumbling (stg7_bom_81 to 85_6).
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_81"), 0, STRING("村長"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_81")), 0, STRING(("\221\272\222\267")))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_BOMB_TOGETHER1"), LW(8))
+    CALL_CHILD(evt_bom1000)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_BOMB_TOGETHER1")), LW(8))
     CALL_CHILD(PTR(evt_bom1000))
+#endif
     WAIT_MS(5000)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(evt_cam3d_evt_set, -120, 697, 788, 39, 556, 265, 0, EASING_SINE_IN_OUT)
     WAIT_MS(5000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE2")), LW(10))
+#endif
     CALL(bom_flag, 1, 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_inside2)
+#else
     CALL_CHILD(PTR(cam_inside2))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_85"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_85")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
     CALL(bom_flag, 0, 1)
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_cam3d_evt_set, -120, 697, 788, 39, 556, 265, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_BOMB_TOGETHER1_2"), LW(7))
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_BOMB_TOGETHER1_2")), LW(7))
+#endif
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 180, 520, 100)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_85_1"), 0, 0)
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_85_1")), 0, 0)
+#endif
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 100, 400, 95)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_85_2"), 0, 0)
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_85_2")), 0, 0)
+#endif
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 10, 475, 75)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_85_3"), 0, 0)
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_85_3")), 0, 0)
+#endif
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_sfxon, STRING("SFX_STG7_HATCH_SHUT1"), LW(8))
+#else
         CALL(evt_snd_sfxon, STRING(("SFX_STG7_HATCH_SHUT1")), LW(8))
+#endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -1200, 0, 3000)
         LABEL(9)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mapobj_rotate, 1, STRING("futa"), 0, LW(0), 0)
+#else
         CALL(evt_mapobj_rotate, 1, STRING(("futa")), 0, LW(0), 0)
+#endif
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(9)
@@ -1926,47 +2499,115 @@ static EVT_BEGIN(evt_taihou)
     END_INLINE_EVENT
     WAIT_MS(500)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 180, 520, 100)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_85_4"), 0, 0)
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_85_4")), 0, 0)
+#endif
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 100, 400, 95)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_85_5"), 0, 0)
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_85_5")), 0, 0)
+#endif
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 10, 475, 75)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_85_6"), 0, 0)
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_85_6")), 0, 0)
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_reverse_ry, STRING("村長"))
+#else
     CALL(evt_npc_reverse_ry, STRING(("\221\272\222\267")))
+#endif
     CALL(bom_flag, 1, 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_CANNON_SYS_ACTIVE2"), LW(10))
+    CALL_CHILD(cam_inside)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_CANNON_SYS_ACTIVE2")), LW(10))
     CALL_CHILD(PTR(cam_inside))
+#endif
     WAIT_MS(300)
     // White reports all green and the mayor gives the order to fire (stg7_bom_86 and 87).
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_86"), 0, STRING("ホワイト"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_86")), 0, STRING(("\203z\203\217\203C\203g")))
+#endif
     WAIT_MS(300)
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_cam3d_evt_set, 21, 175, 781, 9, 42, 265, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_outside)
+#else
     CALL_CHILD(PTR(cam_outside))
+#endif
     WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_87"), 0, STRING("村長"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_87")), 0, STRING(("\221\272\222\267")))
+#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 200, 0, 2483, 200, 550, 0, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    // Mario is fired out of the cannon.
+    SPAWN_EVENT(mario_shot)
+#else
     SPAWN_EVENT(PTR(mario_shot))
+#endif
     WAIT_MS(800)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(effect_delete)
+#else
     CALL_CHILD(PTR(effect_delete))
+#endif
     CALL(evt_cam3d_evt_set, 806, 1189, 451, 600, 982, 69, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(mario_shot)
+#else
     SPAWN_EVENT(PTR(mario_shot))
+#endif
     WAIT_MS(800)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(effect_delete)
+#else
     CALL_CHILD(PTR(effect_delete))
+#endif
     CALL(evt_cam3d_evt_set, -605, 170, 785, -25, 334, 227, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(mario_shot)
+#else
     SPAWN_EVENT(PTR(mario_shot))
+#endif
     WAIT_MS(800)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(effect_delete)
+#else
     CALL_CHILD(PTR(effect_delete))
+#endif
     SPAWN_EVENT_GET_ID(PTR(mario_kemuri), LW(9))
     CALL(evt_mario_set_pos, 200, 0, -650)
     CALL(evt_party_set_pos, 0, 200, 0, -650)
     CALL(evt_cam3d_evt_set, 370, 245, -173, 370, 62, -1205, 0, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("HAIKEI"), MAP_OBJ_FLAG_HIDDEN)
+#else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("HAIKEI")), MAP_OBJ_FLAG_HIDDEN)
+#endif
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_DAMAGED2"), 200, 0, -650, 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_AC3_4"), 200, 0, -650, LW(4))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_MARIO_FLY1"), 200, 0, -650, LW(5))
+#else
     CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_DAMAGED2")), 200, 0, -650, 0)
     CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_AC3_4")), 200, 0, -650, LW(4))
     CALL(evt_snd_sfxon_3d, STRING(("SFX_STG7_MARIO_FLY1")), 200, 0, -650, LW(5))
+#endif
     SET_FLOAT_VALUE(LW(6), FLOAT(0.0f))
     // He flies toward the Moon along the camera spline, then vanishes in a flash of light.
     CALL(evt_sub_spline_init, 1, 11, PTR(spline_dt), 3, 0, 2000)
@@ -1990,34 +2631,64 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     WAIT_MS(1000)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon, STRING("SFX_STG7_MARIO_LIGHT1"), 0)
+    CALL(evt_eff64, 0, STRING("wangflush_n64"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
+#else
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_MARIO_LIGHT1")), 0)
     CALL(evt_eff64, 0, STRING(("wangflush_n64")), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
+#endif
     WAIT_MS(2000)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 340, 200, -590)
         // The crowd cheers (stg7_bom_88 to 90).
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg7_bom_88"), 0, 0)
+#else
         CALL(evt_msg_print, 0, STRING(("stg7_bom_88")), 0, 0)
+#endif
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 400, 160, -590)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg7_bom_89"), 0, 0)
+#else
         CALL(evt_msg_print, 0, STRING(("stg7_bom_89")), 0, 0)
+#endif
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 373, 135, -590)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("stg7_bom_90"), 0, 0)
+#else
         CALL(evt_msg_print, 0, STRING(("stg7_bom_90")), 0, 0)
+#endif
     END_INLINE_EVENT
     CALL(bom_flag, 0, 1)
     CALL(bom_fall)
     WAIT_MS(6000)
     CALL(evt_ext_reset)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_set_ry, STRING("村長"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_INSTANT_TURN)
+#else
     CALL(evt_npc_set_ry, STRING(("\221\272\222\267")), 90)
     CALL(evt_npc_flag_onoff, 1, STRING(("\221\272\222\267")), NPC_FLAG_INSTANT_TURN)
+#endif
     CALL(evt_cam3d_evt_set, -60, 26, 493, 22, 33, 257, 0, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
     // The mayor wishes Mario luck, the Goldbob guide is taken from the pouch and the map changes to moo_03.
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, 0, STRING("stg7_bom_91"), 0, STRING("村長"))
+#else
     CALL(evt_msg_print, 0, STRING(("stg7_bom_91")), 0, STRING(("\221\272\222\267")))
+#endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     WAIT_MS(300)
     WAIT_MS(2000)
     CALL(evt_pouch_remove_item, ITEM_GOLDBOB_GUIDE, LW(0))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_bero_mapchange, STRING("moo_03"), 0)
+#else
     CALL(evt_bero_mapchange, STRING(("moo_03")), 0)
+#endif
     RETURN
 EVT_END()
 

@@ -13,7 +13,9 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
+#if VERSION > VERSION_DEMO_US
 static char name[8];
+#endif
 
 static USER_FUNC(make_name);
 
@@ -129,7 +131,11 @@ static EVT_BEGIN(shan_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(9.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
+#else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
+#endif
         ADD(LW(0), 1)
     END_LOOP
     RETURN
@@ -143,21 +149,41 @@ EVT_END()
 EVT_BEGIN(las_27_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 520, 60, -150, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mobj_recovery_blk, STRING("r_blk"), 5, 450, 60, -150, 0, 0)
+CALL_CHILD(shan_init)
+#else
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, 450, 60, -150, 0, 0)
     CALL_CHILD(PTR(shan_init))
+#endif
     RETURN
 EVT_END()
 
 /** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
+#if VERSION <= VERSION_DEMO_US
+char name[8];
+s32 number;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    number = evtGetValue(event, args[0]);
+    sprintf(name, "hi%d", number);
+#else
     sprintf(name, "hi%d", evtGetValue(event, args[0]));
+#endif
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }

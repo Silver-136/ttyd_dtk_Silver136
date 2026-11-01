@@ -800,20 +800,33 @@ static EVT_BEGIN(hom_10_init_evt)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+        CALL_CHILD(hom_10_evt_resha_right)
+        CALL_CHILD(hom_10_evt_resha_start3)
+#else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
+#endif
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(hom_10_evt_resha_left)
+        CALL_CHILD(hom_10_evt_resha_start4)
+#else
         CALL_CHILD(PTR(hom_10_evt_resha_left))
         CALL_CHILD(PTR(hom_10_evt_resha_start4))
+#endif
         SET_VALUE(LW(0), 0)
         SET_VALUE(LW(1), 1000)
         CALL(evt_mapobj_trans, 1, STRING("train"), -1500, 0, 0)
@@ -830,12 +843,16 @@ static EVT_BEGIN(hom_10_init_evt)
 EVT_END()
 
 static EVT_BEGIN(evt_train)
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(GSWF(GSWF_RSH02_SHELF_DRIED_SHROOM), 0)
+#else
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(10))
     IF_INT_GREATER(LW(10), 100)
         CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     END_IF
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -40, 500)
@@ -882,22 +899,43 @@ static EVT_BEGIN(evt_train)
     CALL(evt_msg_print, 0, STRING("train_07"), 0, STRING("駅員"))
     WAIT_MS(500)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG4_TRAIN1"))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(hom_10_evt_resha_start)
+#else
     SPAWN_EVENT(PTR(hom_10_evt_resha_start))
+#endif
     WAIT_MS(4000)
     CALL(evt_cam3d_evt_set, 410, 90, 571, 410, 90, 121, 2000, EASING_SINE_OUT)
     WAIT_MS(9500)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
+        SET_VALUE(GSWF(GSWF_RSH_NEW_RIDE_PENDING), 1)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+    SET_VALUE(GSWF(GSWF_TRAIN_DEPARTED), 1)
+#else
     SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
     SET_VALUE(GSWF_HOM_TRAIN_BOARDED_UNUSED, 1)
+#endif
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_TRAIN_LEG), 0)
+    SET_VALUE(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 0)
+SET_VALUE(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_00_START)
+#else
     SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 0)
     SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_00_START)
+#endif
         CALL(evt_bero_mapchange, STRING("sys_01"), STRING("stg_6"))
         ELSE
         CALL(evt_bero_mapchange, STRING("rsh_02_a"), STRING("nidome_start"))
@@ -980,11 +1018,18 @@ EVT_BEGIN(evt_train2)
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     // Story progress moves to Rogueport Station if it was earlier.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
+#endif
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     // The partners follow Mario and he gets control back.
+#endif
     CALL(evt_party_run, 1)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -1003,12 +1048,22 @@ EVT_BEGIN(evt_train2)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
     SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
+#endif
     // Until Mario reads it, Peach's mail scene plays.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+SET_VALUE(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 1)
+    // Until Mario reads it, Peach's mail scene plays.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_57_A_MAIL_FROM_PEACH)
+        SPAWN_EVENT(peach_mail)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_57_A_MAIL_FROM_PEACH)
         SPAWN_EVENT(PTR(peach_mail))
+#endif
     END_IF
     RETURN
 EVT_END()
@@ -2177,6 +2232,106 @@ EVT_END()
  * Also starts Peach's mail scene, the Bowser interlude and, after STG6_55_04_BOWSER_RAWK_HAWK,
  * heals Mario and his partners.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(gor_04_init_evt)
+    // Pick the music: Bowser's tune during the Bowser interlude, otherwise the Rogueport tune (unless Mario
+    // arrived by blimp).
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
+        CALL(evt_snd_bgm_scope, 0, 1)
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+    ELSE
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_NOT_EQUAL(LW(0), STRING("hikousen_return"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+        END_IF
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+    END_IF
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    // Set up the exits, Luigi, and the NPCs of the station.
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(luigi_npcEnt)
+    CALL(evt_npc_setup, PTR(npcEnt))
+    // A save block is placed, except during the Bowser interlude.
+    IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+        CALL(evt_mobj_save_blk, STRING("mobj_save"), 140, 60, 85, 0, 0)
+    END_IF
+    // The spinning panel with a Star Piece, and another Star Piece on the floor, are placed.
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -510, 80, 120, STRING("S_ground"), 125, GSWF(GSWF_GOR04_STAR_PIECE_PANEL))
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF(GSWF_GOR04_STAR_PIECE), 0)
+    SPAWN_EVENT(evt_wing)
+    // Stepping on the blimp platform starts the blimp ride.
+    CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
+    CALL(evt_bero_get_entername, LW(0))
+    // Arriving back by blimp starts the blimp-landing scene; otherwise the second gondola is hidden.
+    IF_STR_EQUAL(LW(0), STRING("hikousen_return"))
+        SPAWN_EVENT(evt_hikousen_return)
+    ELSE
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_bero"), MAP_OBJ_FLAG_CLIP)
+    CALL(evt_bero_get_entername, LW(0))
+    // Entering through the train door means this is the return trip, and the train is at Rogueport.
+    IF_STR_EQUAL(LW(0), STRING("n_bero"))
+        SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
+        SET_VALUE(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+SET_VALUE(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 1)
+    ELSE
+        SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+    END_IF
+    // Arriving from Poshley Heights on the train plays the station-arrival scene.
+    IF_STR_EQUAL(LW(0), STRING("resha_return"))
+        SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
+        CALL_CHILD(hom_10_evt_resha_left)
+        CALL_CHILD(hom_10_evt_resha_stop)
+        SPAWN_EVENT(evt_train2)
+        SET_VALUE(LW(0), STRING("n_bero"))
+        CALL_CHILD(bero_case_switch_on)
+    ELSE
+        // Otherwise, the train sits at the platform in the correct state for the trip direction.
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
+            CALL_CHILD(hom_10_evt_resha_left)
+            SET_VALUE(LW(0), STRING("n_bero"))
+            CALL_CHILD(bero_case_switch_on)
+            CALL(evt_npc_set_position, STRING("駅員"), -400, 80, 100)
+        ELSE
+            CALL_CHILD(hom_10_evt_resha_right)
+            SET_VALUE(LW(0), STRING("n_bero"))
+            CALL_CHILD(bero_case_switch_off)
+        END_IF
+    END_IF
+    // After the train ride, Peach's mail scene begins.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
+        SPAWN_EVENT(peach_mail)
+    END_IF
+    // Bowser interlude: Bowser is the player character, Kammy's broom is placed, and her story scene starts.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
+        CALL(evt_mario_set_mode, 2)
+        CALL(evt_mario_kill_party, 0)
+        CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be"))
+        CALL(evt_npc_set_anim, STRING("houki"), STRING("H_1"))
+        CALL(evt_npc_set_position, STRING("houki"), 0, -1000, 0)
+        CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_HIT)
+        SPAWN_EVENT(gor_04_koopa_evt)
+    END_IF
+    // At this story stage Mario and his partners are fully healed.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_55_04_BOWSER_RAWK_HAWK)
+        CALL(evt_mario_get_party, LW(15))
+        IF_INT_EQUAL(LW(15), 0)
+            CALL(evt_mario_set_party, 0, 1)
+            CALL(evt_party_run, 0)
+CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_all_party_recovery)
+END_IF
+END_IF
+    // The mail event runs in the background.
+    SPAWN_EVENT(evt_sub_mail_event)
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(gor_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
@@ -2271,6 +2426,7 @@ EVT_BEGIN(gor_04_init_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
     RETURN
 EVT_END()
+#endif
 
 
 static USER_FUNC(ramp_r) {

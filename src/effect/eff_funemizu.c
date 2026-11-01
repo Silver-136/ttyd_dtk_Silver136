@@ -23,7 +23,9 @@ typedef struct ColorEntry {
 } ColorEntry;
 
 /** Water tint used when the current map has no entry in funemizu_color_tbl: plain white. */
+#if VERSION > VERSION_DEMO_US
 static const GXColor funemizu_default_color = {0xFF, 0xFF, 0xFF, 0xFF};
+#endif
 
 // Model data in the exporter's layout: indexed vertex arrays (positions, normals, colours, texture coordinates),
 // display lists of GX commands (each padded to 32 bytes with GX_NOP) and, per list table, the list sizes in
@@ -94,7 +96,11 @@ static u8* funemizu_dl_1_tbl[] = { funemizu_dl_1_0, funemizu_dl_1_1, funemizu_dl
  * used by effFunemizuDisp.
  */
 static u8 funemizu_dl_1_size_tbl[] = { 0x02, 0x01, 0x01, 0x01 };
+#if VERSION <= VERSION_DEMO_US
+static s8 gor_fune_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
+#else
 static s8 gor_fune_normal_tbl[] __attribute__((aligned(32))) = { 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+#endif
 static u8 gor_fune_color0_tbl[] __attribute__((aligned(32))) = { 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 /** The two base-layer display lists of the type 2 wake, drawn with the sizes below. */
 static u8* gor_fune_dl_0_tbl[] = { gor_fune_dl_0_0, gor_fune_dl_0_1 };
@@ -112,6 +118,7 @@ static u8 gor_fune_dl_1_size_tbl[] = { 0x02, 0x02};
  * exact name match in the table first, then a 3-letter area prefix, then the default.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_80224298, JP 0x80224298. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 GXColor effFunemizuGetMapColor(void) {
     ColorEntry* e;
     for (e = funemizu_color_tbl.e; e != NULL; e++) {
@@ -132,6 +139,7 @@ GXColor effFunemizuGetMapColor(void) {
     }
     return funemizu_default_color;
 }
+#endif
 
 /**
  * Spawns boat water: types 0 and 2 are the ripple wake,
@@ -187,13 +195,19 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
 }
 
 /** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
+#if VERSION <= VERSION_DEMO_US
+static void effFunemizuMain(EffectEntry* effect) {
+#else
 void effFunemizuMain(EffectEntry* effect) {
+#endif
     EffFunemizuWork* work = effect->userdata;
     Vec position;
     Vec v = {0.0f, 0.0f, 0.0f};
     s32 i;
     s32 type;
+#if VERSION > VERSION_DEMO_US
     CameraId cam;
+#endif
     s32 dead = 0;
     f32 a, b, s, c, t, f;
 
@@ -202,13 +216,17 @@ void effFunemizuMain(EffectEntry* effect) {
     v.z = work->position.z;
     position = v;
     type = work->type;
+#if VERSION > VERSION_DEMO_US
     cam = work->cam;
+#endif
     work->timer++;
     if (work->timer > 1000) {
         work->timer -= 1000;
     }
     if (work->type == 0 || work->type == 2) {
+#if VERSION > VERSION_DEMO_US
         // FAKE: spare temporary f; `a = work->size; b = a - 1.0f;` changes the object
+#endif
         f = work->size;
         a = f;
         b = f - 1.0f;
@@ -242,6 +260,9 @@ void effFunemizuMain(EffectEntry* effect) {
             effFunemizuEntry(1, work->position.x - 14.0f * c, work->position.y, work->position.z - 14.0f * s, work->size, work->yaw);
         }
     } else {
+#if VERSION <= VERSION_DEMO_US
+        EffFunemizuWork* p;
+#endif
         work->wave0Width = 1.0f;
         for (i = 1, work++; i < effect->count; i++, work++) {
             if (work->position.y < 0.0f) {
@@ -267,9 +288,17 @@ void effFunemizuMain(EffectEntry* effect) {
         }
     }
     if (type == 0 || type == 2) {
+#if VERSION <= VERSION_DEMO_US
+        dispEntry(work->cam, dispCalcZ(&position), 8, (DispCallback)effFunemizuDisp, effect);
+#else
         dispEntry(cam, dispCalcZ(&position), 2, (DispCallback)effFunemizuDisp, effect);
+#endif
     } else {
+#if VERSION <= VERSION_DEMO_US
+        dispEntry(work->cam, dispCalcZ(&position), 8, (DispCallback)effFunemizuShibukiDisp, effect);
+#else
         dispEntry(cam, dispCalcZ(&position), 2, (DispCallback)effFunemizuShibukiDisp, effect);
+#endif
     }
 }
 
@@ -282,14 +311,25 @@ static inline void funemizuCallDL(u32 *p_u) {
     *p_u = u;
 }
 /** Draws the wake ripple mesh tinted with the map's water colour. */
+#if VERSION <= VERSION_DEMO_US
+static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
+#else
 void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
+#endif
     EffFunemizuWork* work = effect->userdata;
     Mtx trans;
     Mtx scale;
     Mtx rot;
     Mtx mtx;
     GXTexObj texObj;
+#if VERSION <= VERSION_DEMO_US
+f32 proj[7];
+    f32 vp[6];
+    f32 sx, sy, sz;
+    u8 argb[4];
+#else
     GXColor color;
+#endif
     CameraEntry* cam;
     f32 z;
     s32 type;
@@ -298,15 +338,61 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 
     cam = camGetPtr(cameraId);
     type = work->type;
+#if VERSION <= VERSION_DEMO_US
+GXSetProjection(cam->projection, cam->projType);
+    GXGetProjectionv(proj);
+    GXGetViewportv(vp);
+    GXProject(work->position.x, work->position.y, work->position.z, cam->view, proj, vp, &sx, &sy, &sz);
+    if (sx > 0.0f && sx < 608.0f && sy > 0.0f && sy < 480.0f) {
+        // FAKE: unprototyped call: the SDK u16 parameters would add two narrowings (FAKES.md)
+        ((void (*)())GXPeekARGB)((s32)sx, (s32)sy, argb);
+#else
     color = effFunemizuGetMapColor();
+#endif
     if (type == 0) {
+#if VERSION <= VERSION_DEMO_US
+            {
+                s32 r = funemizu_color0_tbl[0];
+                s32 g = funemizu_color0_tbl[1];
+                s32 b = funemizu_color0_tbl[2];
+                r += (argb[1] - r) / 16;
+                g += (argb[2] - g) / 16;
+                b += (argb[3] - b) / 16;
+                funemizu_color0_tbl[0] = r;
+                funemizu_color0_tbl[1] = g;
+                funemizu_color0_tbl[2] = b;
+            }
+            DCFlushRange(funemizu_color0_tbl, 4);
+#else
         funemizu_color0_tbl[0] = color.r;
         funemizu_color0_tbl[1] = color.g;
         funemizu_color0_tbl[2] = color.b;
+#endif
     } else {
+#if VERSION <= VERSION_DEMO_US
+            {
+                s32 r = gor_fune_color0_tbl[0];
+                s32 g = gor_fune_color0_tbl[1];
+                s32 b = gor_fune_color0_tbl[2];
+                r += (argb[1] - r) / 16;
+                g += (argb[2] - g) / 16;
+                b += (argb[3] - b) / 16;
+                gor_fune_color0_tbl[0] = r;
+                gor_fune_color0_tbl[1] = g;
+                gor_fune_color0_tbl[2] = b;
+            }
+            DCFlushRange(gor_fune_color0_tbl, 4);
+        }
+    }
+    if (work->cam != 4) {
+        gor_fune_color0_tbl[0] = 0x00;
+        gor_fune_color0_tbl[1] = 0x00;
+        gor_fune_color0_tbl[2] = 0xFF;
+#else
         gor_fune_color0_tbl[0] = color.r;
         gor_fune_color0_tbl[1] = color.g;
         gor_fune_color0_tbl[2] = color.b;
+#endif
     }
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
@@ -362,7 +448,9 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 12);
             GXSetArray(GX_VA_TEX0, funemizu_texcoord0_tbl, 4);
+#if VERSION > VERSION_DEMO_US
             // FAKE: funemizuCallDL wraps this display-list loop with a dead read and write-back of u; the plain loop changes the object
+#endif
             funemizuCallDL(&u);
         } else {
             GXClearVtxDesc();
@@ -427,7 +515,11 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
 }
 
 /** Draws the spray (shibuki) pieces as camera-facing quads. */
+#if VERSION <= VERSION_DEMO_US
+static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
+#else
 void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
+#endif
     EffFunemizuWork* work = effect->userdata;
     Mtx trans;
     Mtx rot;
@@ -437,6 +529,9 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     s32 i;
     f32 w = 3.0f;
     f32 nw;
+#if VERSION <= VERSION_DEMO_US
+    f32 h, p;
+#endif
 
     cam = camGetPtr(cameraId);
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
@@ -453,6 +548,10 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+#if VERSION <= VERSION_DEMO_US
+GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+#endif
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
     effGetTexObj(0x40, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);

@@ -9,7 +9,12 @@
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+#if VERSION <= VERSION_DEMO_US
+#include "mario/mariost.h"
 #include <dolphin/os.h>
+#else
+#include <dolphin/os.h>
+#endif
 
 //.sbss
 static RomFontWork work;
@@ -202,7 +207,11 @@ const char* msg_it[21] = {
  */
 static const char** msg_tbl[6] = { msg_jp, msg_us, msg_ge, msg_fr, msg_sp, msg_it };
 #else
+#if VERSION <= VERSION_DEMO_US
+const char* msg_jp[9] = {
+#else
 const char* msg_jp[10] = {
+#endif
     "プログレッシブモードで表示しますか？",
     "は　い　　　　　　いいえ",
     "【　　　　】",
@@ -211,7 +220,9 @@ const char* msg_jp[10] = {
     "ディスクカバーが開いています。\n\nゲームを続ける場合は、\nディスクカバーを閉めてください。",
     "ペーパーマリオＲＰＧの\nディスクをセットしてください。",
     "ディスクを読めませんでした。\n\nくわしくは、本体の取扱説明書を\nお読みください。",
+#if VERSION > VERSION_DEMO_US
     "エラーが発生しました。\n\n本体のパワーボタンを押して電源をOFFにし、\n本体の取扱説明書の指示に従ってください。",
+#endif
     NULL
 };
 
@@ -247,6 +258,14 @@ void romFontMake(void);
  * Non-JP releases fall back to the English table when the IPL font is ASCII but gp->language is Japanese;
  * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
  */
+#if VERSION <= VERSION_DEMO_US
+const char* romFontGetMessage(s32 msg) {
+if (wp->language != 0 && (u32)gp->language == 0) {
+        return msg_tbl[1][msg];
+    }
+    return msg_tbl[gp->language][msg];
+}
+#else
 const char* romFontGetMessage(s32 msg) {
 #if VERSION >= VERSION_US
     if (wp->language != ROM_FONT_LANGUAGE_SJIS && (u32)gp->language == LANGUAGE_JP) {
@@ -257,6 +276,7 @@ const char* romFontGetMessage(s32 msg) {
     return msg_tbl[0][msg]; // always the Japanese table
 #endif
 }
+#endif
 
 /** Called once at boot from mariost: picks Japanese (SJIS IPL font) or Western text and bakes the glyph cache. */
 void romFontInit(void) {

@@ -274,7 +274,9 @@ static EVT_BEGIN(bomb_wall_evt)
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("S_ana"), STRING("ofs"))
     CALL(evt_offscreen_get_boundingbox2, STRING("ofs"), LW(0), LW(1), LW(2), LW(3))
+#if VERSION > VERSION_DEMO_US
     // Skip the capture animation only when both bounding-box dimensions are zero.
+#endif
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(LW(2), 0)
         IF_INT_EQUAL(LW(3), 0)
@@ -296,6 +298,11 @@ static EVT_BEGIN(bomb_wall_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_hitobj_onoff, STRING("san"), 1, 0)
+    SET_VALUE(LW(0), STRING("e_bero"))
+    CALL_CHILD(bero_case_switch_on)
+#endif
     CALL(evt_img_release, STRING("img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_ana"))
     CALL(evt_paper_delete, STRING("OFF_d_bom_ver2"))
@@ -305,10 +312,14 @@ static EVT_BEGIN(bomb_wall_evt)
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(GSWF(GSWF_GON07_WALL_BOMBED), 1)
+#else
     CALL(evt_hitobj_onoff, STRING("san"), 1, 0)
     SET_VALUE(LW(0), STRING("e_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
     SET_VALUE(GSWF_GON_07_WALL_BOMBED, 1)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
     RETURN

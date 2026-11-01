@@ -102,6 +102,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Dark Boo: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 40, 80, 0, 40, 100, 100, 40, 100, 50, 100, 50, 100, 50, 50, 40, 85, 100, 0, 100, 100, 10};
+#else
 static StatusVulnerability regist = {
     40, // sleep
     40, // stop
@@ -126,6 +129,7 @@ static StatusVulnerability regist = {
     100, // invisible
     10, // ohko
 };
+#endif
 
 /** Body part of the Dark Boo: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {

@@ -46,10 +46,13 @@ EVT_BEGIN(gra_05_in_01)
 EVT_END()
 
 EVT_BEGIN(gra_05_out_01)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_cam3d_evt_set_now)
     CALL(evt_mario_cam_y_off)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
@@ -64,6 +67,7 @@ EVT_BEGIN(gra_05_out_01)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#endif
     CALL(evt_mario_set_pos, 250, -50, 0)
     CALL(evt_party_set_pos, 0, 250, -50, 0)
     CALL(evt_party_set_pos, 1, 250, -50, 0)
@@ -75,19 +79,27 @@ EVT_BEGIN(gra_05_out_01)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
         CALL(evt_party_jump_pos, 0, 310, 0, 0, 700, 0, -1000)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_party_run, 0)
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
         CALL(evt_party_jump_pos, 1, 310, 0, 0, 700, 0, -1000)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_party_run, 1)
+#endif
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(1), LW(2), LW(3), 0)
     CALL(evt_mario_jump_pos, 310, 0, 0, 700, 0, -1000)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_cam_y_on)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 1)
+#endif
     SET_VALUE(LW(0), 1)
     RETURN
 EVT_END()
@@ -102,10 +114,13 @@ EVT_END()
  * later), then Mario and both partners are placed below the floor at (0, -50, 0) and jump back out to x -60.
  */
 EVT_BEGIN(gra_05_out_02)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
+#endif
     CALL(evt_cam3d_evt_set_now)
     CALL(evt_mario_cam_y_off)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
@@ -120,6 +135,7 @@ EVT_BEGIN(gra_05_out_02)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#endif
     CALL(evt_mario_set_pos, 0, -50, 0)
     CALL(evt_party_set_pos, 0, 0, -50, 0)
     CALL(evt_party_set_pos, 1, 0, -50, 0)
@@ -131,19 +147,27 @@ EVT_BEGIN(gra_05_out_02)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
         CALL(evt_party_jump_pos, 0, -60, 0, 0, 700, 0, -1000)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_party_run, 0)
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
         CALL(evt_party_jump_pos, 1, -60, 0, 0, 700, 0, -1000)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_party_run, 1)
+#endif
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP4"), LW(1), LW(2), LW(3), 0)
     CALL(evt_mario_jump_pos, -60, 0, 0, 700, 0, -1000)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_cam_y_off)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 1)
+#endif
     SET_VALUE(LW(0), 1)
     RETURN
 EVT_END()
@@ -162,21 +186,53 @@ EVT_END()
 static EVT_BEGIN(out_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(LF(0), 0)
+    SET_VALUE(LF(1), 0)
+    CALL(evt_mario_get_exparty, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        SET_VALUE(LF(0), 1)
+#else
     CALL(evt_cam3d_evt_set_now)
     CALL(evt_party_stop, 0)
+#endif
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(150.0f))
+        END_INLINE_EVENT
+    END_IF
+    CALL(evt_mario_get_party, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), 0)
+        SET_VALUE(LF(1), 1)
+        BEGIN_INLINE_EVENT_GET_ID(LW(11))
+            CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))
+#else
         CALL(evt_party_force_reset_outofscreen, 0)
+#endif
         CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(150.0f))
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    CALL(evt_cam3d_evt_set_now)
+    WAIT_MS(500)
+    IF_INT_EQUAL(LF(0), 1)
+        DELETE_EVENT(LW(10))
+    END_IF
+    IF_INT_EQUAL(LF(1), 1)
+        DELETE_EVENT(LW(11))
+#else
     LOOP(0)
         IS_EVENT_RUNNING(LW(10), LW(0))
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
+#endif
         END_IF
         WAIT_FRAMES(1)
+#if VERSION > VERSION_DEMO_US
     END_LOOP
     CALL(evt_party_run, 0)
+#endif
     CALL(evt_mario_bgmode_on)
     CALL(evt_mario_kill_party, 0)
     CALL(evt_mario_kill_party, 1)
@@ -210,11 +266,15 @@ static EVT_BEGIN(out_evt2)
     SUBTRACT(LW(1), 50)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 0, -1000)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_set_pos, -250, -50, 0)
+#else
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     CALL(evt_mario_set_pos, -260, -60, 0)
     CALL(evt_party_set_pos, 0, -260, -70, -5)
     CALL(evt_party_set_pos, 1, -260, -80, -10)
+#endif
     CALL(evt_mario_bgmode_off)
     CALL(evt_mario_set_prev_party, 0)
     CALL(evt_mario_set_prev_party, 1)
@@ -238,7 +298,9 @@ static EVT_BEGIN(out_evt2)
     CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP3"), LW(1), LW(2), LW(3), 0)
     CALL(evt_mario_jump_pos, -190, 0, 0, 700, 0, -1000)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(LW(0), 1)
     RETURN

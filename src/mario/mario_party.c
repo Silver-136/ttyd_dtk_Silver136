@@ -35,6 +35,7 @@ static inline void marioPartyKillSlot1(void) {
  * Airborne, field-battle locks, slits, an airborne Goombella or a busy Yoshi block or cancel it.
  * Always returns 0; marioUsePartyMain later fires the ability.
  */
+#if VERSION > VERSION_DEMO_US
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
@@ -98,6 +99,7 @@ s32 marioUseParty(void) {
     }
     return 0;
 }
+#endif
 
 /**
  * Runs from partyMain while a partner is out: after the partner button,
@@ -105,6 +107,7 @@ s32 marioUseParty(void) {
  * else 0). Losing control (marioKeyOffChk) cancels.
  */
 // Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
+#if VERSION > VERSION_DEMO_US
 s32 marioUsePartyMain(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -122,6 +125,7 @@ s32 marioUsePartyMain(void) {
     }
     return 0;
 }
+#endif
 
 /**
  * Puts a party member out at once, replacing whoever held the slot:
@@ -210,6 +214,60 @@ void marioPartyKill(void) {
  * The PartyMember kind of the partner out with Mario (PARTY_MEMBER_GOOMBELLA, ...), or 0 when none.
  * Used by the pause menu, item menu and status window.
  */
+#if VERSION <= VERSION_DEMO_US
+s32 marioUseParty(void) {
+    MarioWork* mario = marioGetPtr();
+    PartyEntry* party;
+
+    if ((mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) && marioKeyOffChk()) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
+        return 0;
+    }
+    if (mario->currPartySlotId[0] < 0) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
+        return 0;
+    }
+    if (mario->flags & MARIO_FLAG_IS_8_BIT) {
+        return 0;
+    }
+    if ((mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) || mario->airTimer != 0) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
+        return 0;
+    }
+    if (mario->currMotionId != MARIO_MOTION_STAY && mario->currMotionId != MARIO_MOTION_WALK && mario->currMotionId != MARIO_MOTION_DASH) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
+        return 0;
+    }
+    if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
+        return 0;
+    }
+    if (partyGetPtr(marioGetPartyId())->flags & PARTY_FLAG_IS_BEING_USED) {
+        return 0;
+    }
+    party = partyGetPtr(marioGetPartyId());
+    if (party == NULL) {
+        return 0;
+    }
+    // 1 = PARTY_MEMBER_GOOMBELLA, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
+    if (party->currentMemberId == 1 && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
+        return 0;
+    }
+    if (party->currentMemberId == 4 && yoshiGetStatus()) {
+        return 0;
+    }
+    if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {
+        if (mario->buttonTrg & PAD_BUTTON_X) {
+            mario->trigFlags |= MARIO_TRIG_FLAG_JABARA_CHK;
+            mario->partyUseDelay = 5;
+        }
+    } else if (--mario->partyUseDelay <= 0) {
+        mario->partyUseDelay = 0;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
+        return partyDoWork();
+    }
+    return 0;
+}
+#endif
 s32 marioGetParty(void) {
     s32 id;
 

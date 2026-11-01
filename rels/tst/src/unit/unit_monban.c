@@ -94,6 +94,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Gus's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {60, 70, 60, 40, 60, 40, 100, 60, 30, 60, 30, 60, 40, 60, 60, 0, 60, 100, 60, 70, 70, 50};
+#else
 static StatusVulnerability regist = {
     90, // sleep
     80, // stop
@@ -118,6 +121,7 @@ static StatusVulnerability regist = {
     70, // invisible
     50, // ohko
 };
+#endif
 
 /** Pose table of Gus: the animation played for each pose type (idle, hurt, walk, run, attack and so on). */
 static PoseTableEntry pose_table[] = {

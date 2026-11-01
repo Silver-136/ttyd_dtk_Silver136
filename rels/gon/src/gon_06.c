@@ -184,11 +184,17 @@ EVT_BEGIN(tsuritenjo_event)
     CALL(evt_mario_normalize)
     CALL(evt_mario_set_pos, 620, 0, 0)
     CALL(evt_party_set_pos, 0, 670, 0, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam_road_reset)
+#endif
     CALL(evt_bero_mario_go_init)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 1)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_play_enter_anime)
+#else
     SPAWN_EVENT(PTR(bero_play_enter_anime))
+#endif
     CALL(evt_bero_mario_go_wait)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 570, 0, FLOAT(150.0f))
@@ -216,10 +222,16 @@ EVT_BEGIN(tsuritenjo_event)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON1"))
     CALL(evt_snd_set_rev_mode, 2)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_13_01_50_SECONDS_TO_ESCAPE)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_50_SECONDS_TO_ESCAPE)
+#endif
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_start_for_event)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     RETURN
@@ -258,7 +270,11 @@ static EVT_BEGIN(evt_majin)
     CALL(evt_mario_normalize)
     CALL(evt_mario_adjust_dir)
     // First visit: the chest talks to Mario.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_GON06_BLACK_CHEST_TALKED), 0)
+#else
     IF_INT_EQUAL(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 0)
+#endif
         CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
         BEGIN_INLINE_EVENT
@@ -315,7 +331,11 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_07"), PTR(majin_callback), 0)
         // The talk is over: the chest keeps the story-flag so it only plays once.
         CALL(evt_mobj_exec_cancel, STRING("box"))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSWF(GSWF_GON06_BLACK_CHEST_TALKED), 1)
+#else
         SET_VALUE(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 1)
+#endif
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         ELSE
         // Later visits: without the Black Key the chest reminds Mario to find it.
@@ -340,8 +360,12 @@ static EVT_BEGIN(evt_majin)
                     CALL(evt_mario_set_dir, 270, 200, 0)
                 END_IF
             END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
             // Mario backs out of the menu and the chest tells him to use the key.
+#endif
             IF_INT_EQUAL(LW(0), -1)
                 CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
                 ADD(LW(1), 30)
@@ -363,7 +387,9 @@ static EVT_BEGIN(evt_majin)
                 ADD(LW(1), 50)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12_11"), PTR(majin_callback), 0)
+#if VERSION > VERSION_DEMO_US
                 CALL(evt_mario_set_pose, STRING("M_I_N"))
+#endif
                 CALL(evt_cam3d_evt_set, 380, 110, 330, 380, 57, 23, 500, EASING_SINE_IN_OUT)
             END_IF
         END_IF
@@ -384,6 +410,9 @@ static EVT_BEGIN(evt_majin2)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_normalize)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_pouch_add_item, ITEM_PAPER_CURSE, LW(0))
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -413,8 +442,13 @@ static EVT_BEGIN(evt_majin2)
     CALL(lect_cam_save)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(slit_majin_lecture_init)
+    CALL_CHILD(slit_majin_lecture)
+#else
     CALL_CHILD(PTR(slit_majin_lecture_init))
     CALL_CHILD(PTR(slit_majin_lecture))
+#endif
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
@@ -442,8 +476,13 @@ static EVT_BEGIN(evt_majin2)
     END_INLINE_EVENT
     CALL(evt_img_release, STRING("img"))
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_13_01_01_PAPER_MAGE_2)
+    SET_VALUE(GSWF(GSWF_GON06_BLACK_CHEST_OPENED), 1)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_01_PAPER_MAGE_2)
     SET_VALUE(GSWF_GON_06_BLACK_CHEST_OPENED, 1)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)

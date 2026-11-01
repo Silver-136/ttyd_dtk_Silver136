@@ -35,7 +35,11 @@ extern EvtWord evt_sub_stopwatch[];
 extern EvtWord evt_sub_tree_access_entry[];
 
 extern WinMgrDesc coinget_window_desc[1];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kusa_evt[41];
+#else
 extern EvtWord kusa_evt[43];
+#endif
 extern EvtWord mail_evt[80];
 extern EvtWord mail_evt_bom_01[65];
 extern EvtWord mail_evt_gor_01[61];
@@ -58,7 +62,11 @@ extern EvtWord mail_evt_tou_01[67];
 extern EvtWord mail_evt_usu_01[61];
 extern EvtWord mail_evt_win_01[61];
 extern s32 tree_data[75];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tree_evt[249];
+#else
 extern EvtWord tree_evt[251];
+#endif
 USER_FUNC(evt_sub_status_gauge_force_update);
 USER_FUNC(evt_sub_area_check);
 USER_FUNC(evt_sub_check_intersect);

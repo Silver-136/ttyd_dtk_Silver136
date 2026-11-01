@@ -51,6 +51,73 @@ static USER_FUNC(killer_copy_status) {
  * Unit definition of the B. Bill Blaster: its HP, level, sizes, sounds, status vulnerability,
  * parts and init script.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_super_killer_cannon = {
+    125,
+    "btl_un_super_killer_cannon",
+    10,
+    0,
+    1,
+    1,
+    31,
+    0,
+3,
+70,
+2,
+50,
+    9999,
+    52,
+    38,
+    5,
+    38,
+    0.0f,
+    19.0f,
+    0.0f,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    26.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+0.0f,
+0.0f,
+26.0f,
+    0.0f,
+    0.0f,
+    26.0f,
+    24.7f,
+    0.0f,
+    -10.0f,
+    19.0f,
+    0.0f,
+    52.0f,
+    38.0f,
+    0,
+    0,
+    0,
+    2,
+    100,
+    20,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_ENM_KILLER_CANON_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    0,
+    &regist,
+    3,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_super_killer_cannon = {
     125,
     "btl_un_super_killer_cannon",
@@ -132,6 +199,7 @@ BattleUnitKind unit_super_killer_cannon = {
     init_event,
     data_table,
 };
+#endif
 
 /** Defence of the B. Bill Blaster: 4 against every kind of hit. */
 static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
@@ -152,7 +220,11 @@ static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 40, 100, 40, 100, 
  * immune to sleep, stop, dizzy, poison, confusion and fright; extra prone to electric;
  * resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 5, 100, 40, 100, 100, 90};
+#else
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 90, 100, 80, 100, 80, 100, 95, 40, 0, 5, 100, 40, 100, 100, 90};
+#endif
 #endif
 
 /**

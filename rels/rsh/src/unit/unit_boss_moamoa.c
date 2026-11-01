@@ -215,6 +215,29 @@ BattleUnitKind unit_boss_moamoa = {
     6, // pbSoftCap
     160, // width
     80, // height
+#if VERSION <= VERSION_DEMO_US
+    0,
+    24,
+    0.0f,
+    0.0f,
+    0.0f,
+    0,
+    0,
+    280.0f,
+    40.0f,
+    0.0f,
+    80.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+250.0f,
+    0.0f,
+80.0f,
+    0.0f,
+    0.0f,
+#else
     {0, 24}, // hitOffset
     {0.0f, 0.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
@@ -222,10 +245,19 @@ BattleUnitKind unit_boss_moamoa = {
     {80.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
     15.0f, // vivianOffsetX
+#endif
     10.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    80.0f,
+    20.0f,
+    0.0f,
+    70.0f,
+    0.0f,
+#else
     {80.0f, 0.0f, 0.0f}, // bintaHitOffset
     {10.0f, 80.0f, 20.0f}, // kissHitOffset
     {0.0f, 70.0f, 0.0f}, // cutBaseOffset
+#endif
     160.0f, // cutWidth
     80.0f, // cutHeight
     0, // turnOrder
@@ -234,7 +266,13 @@ BattleUnitKind unit_boss_moamoa = {
     0, // swallowAttributes
     0, // hammerKnockbackChance
     0, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_BOSS_MOA_G_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName

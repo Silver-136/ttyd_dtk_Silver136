@@ -287,8 +287,13 @@ USER_FUNC(evt_puni_force_pose) {
 }
 
 EVT_BEGIN(yuka_shake)
+#if VERSION <= VERSION_DEMO_US
+LOOP(0)
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1500)
+#else
     LOOP(5)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 1000)
+#endif
     END_LOOP
     RETURN
 EVT_END()
@@ -298,6 +303,19 @@ EVT_END()
  * a series of shakes that die down over about 10 seconds, ending in a final stronger one.
  */
 EVT_BEGIN(yuka_shake2)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0087890625f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0078125f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0068359375f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.005859375f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0029296875f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 1000)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0146484375f), FLOAT(0.0f), 1000)
+#else
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0087890625f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0078125f), 1000)
@@ -309,6 +327,7 @@ EVT_BEGIN(yuka_shake2)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.001953125f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0009765625f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0146484375f), 1000)
+#endif
     RETURN
 EVT_END()
 
@@ -391,7 +410,11 @@ EVT_BEGIN(yuka_event)
         // stand on it too.
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_area_check, 1, -50, 60, 60, LW(0), LW(2), LW(15))
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_MRI13_ORB_ON_PEDESTAL), 1)
+#else
         IF_INT_EQUAL(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
+#endif
             IF_INT_EQUAL(GW(0), 0)
                 IF_INT_EQUAL(GF(0), 0)
                     IF_INT_EQUAL(LW(14), 1)
@@ -440,7 +463,11 @@ EVT_BEGIN(yuka_event)
     CALL(evt_snd_sfxoff, GW(4))
     DELETE_EVENT(LW(10))
     CALL(evt_snd_sfxon, STRING("SFX_STG2_QUAKE1"), GW(3))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(yuka_shake2)
+#else
     SPAWN_EVENT(PTR(yuka_shake2))
+#endif
     CALL(evt_hit_bind_mapobj, STRING("A_sui_l1"), STRING("S_sui_l"))
     CALL(evt_hit_bind_mapobj, STRING("A_dai"), STRING("S_dai"))
     CALL(evt_hit_bind_mapobj, STRING("A_dai_02"), STRING("S_dai"))
@@ -502,12 +529,22 @@ EVT_BEGIN(yuka_event)
     CALL(evt_hitobj_onoff, STRING("A_sui_l1"), 1, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(yuka_check)
+#else
     SPAWN_EVENT(PTR(yuka_check))
+#endif
     CALL(evt_target_flag_onoff, 0, 0, 1)
     CALL(evt_target_set_position, 0, -55, -309, 50)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_21_06_WATER_SWITCH)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
+#endif
     CALL(evt_puni_set_hamari, -180, -310, 60, 2, -2, -306, -312)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_puni_winddisable_onoff, 0)
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()

@@ -386,8 +386,13 @@ EVT_END()
 EVT_BEGIN(aji_15_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+#endif
         CALL(evt_npc_check_delete, STRING("軍団ザコエリート"))
     END_IF
     CALL(evt_mario_get_mode, LW(0))
@@ -400,12 +405,22 @@ EVT_BEGIN(aji_15_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL_CHILD(peach_evt_syawa_init)
+    IF_INT_EQUAL(GSWF(GSWF_AJI15_PEACH1_SHOWER_ROOM_ENTERED), 0)
+        SET_VALUE(GSWF(GSWF_AJI15_PEACH1_SHOWER_ROOM_ENTERED), 1)
+#else
     CALL(evt_snd_set_rev_mode, 1)
     CALL_CHILD(PTR(peach_evt_syawa_init))
     IF_INT_EQUAL(GSWF_AJI_15_VISITED, 0)
         SET_VALUE(GSWF_AJI_15_VISITED, 1)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_emergency)
+#else
     SPAWN_EVENT(PTR(evt_emergency))
+#endif
     RETURN
 EVT_END()
 

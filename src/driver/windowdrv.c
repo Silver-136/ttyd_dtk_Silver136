@@ -52,33 +52,59 @@ void windowInit(void) {
     w[5].userdata = NULL;
     w[6].flags = 0;
     w[6].userdata = NULL;
+#if VERSION > VERSION_DEMO_US
     winTpl = NULL;
     tpl_loaded = FALSE;
+#endif
 }
 
 /** new in retail */
 // Completion callback of the msgWindow.tpl DVD read in windowTexSetup (new in retail)
 // Descriptive name (not in the symbol maps); placeholder unk_8007f204, JP 0x8007F204. See docs/NAME_PROVENANCE.md.
+#if VERSION <= VERSION_DEMO_US
+void windowLoadTpl(const char* name);
+void windowTexSetup(void) {
+#else
 void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
+#endif
     s32 i;
 
+#if VERSION <= VERSION_DEMO_US
+    windowLoadTpl("font/msgWindow.tpl");
+#else
     UnpackTexPalette(winTpl);
     DVDMgrClose(entry);
+#endif
     wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
 
     for (i = 0; i < winTpl->numDescriptors; i++) {
         TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
     }
+#if VERSION > VERSION_DEMO_US
     tpl_loaded = TRUE;
+#endif
 }
 
+#if VERSION <= VERSION_DEMO_US
+void windowLoadTpl(const char* name) {
+#else
 void windowTexSetup(void) {
+#endif
     DVDEntry* entry;
     u32 size;
+#if VERSION <= VERSION_DEMO_US
+    u32 len;
+#endif
     char path[128];
+#if VERSION > VERSION_DEMO_US
     s32 i;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    arcOpen(name, (void**)&winTpl, &size);
+    if (winTpl) {
+#else
     winTpl = NULL;
     tpl_loaded = FALSE;
     winTpl = arcOpen("font/msgWindow.tpl", NULL, NULL);
@@ -90,11 +116,24 @@ void windowTexSetup(void) {
         entry->info.cb.userData = entry;
         DVDMgrReadAsync(entry, winTpl, size, 0, windowTexSetup_callback);
     } else {
+#endif
         UnpackTexPalette(winTpl);
+#if VERSION <= VERSION_DEMO_US
+    } else {
+        sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
+        entry = DVDMgrOpen(path, 2, 0);
+        if (entry) {
+            len = OSRoundUp32B(DVDMgrGetLength(entry));
+            winTpl = __memAlloc(HEAP_DEFAULT, len);
+            DVDMgrRead(entry, winTpl, len, 0);
+            DVDMgrClose(entry);
+            UnpackTexPalette(winTpl);
+#else
         wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
 
         for (i = 0; i < winTpl->numDescriptors; i++) {
             TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
+#endif
         }
     }
 }
@@ -1066,7 +1105,9 @@ end:
     ;
 }
 
+#if VERSION > VERSION_DEMO_US
 BOOL tpl_loaded; // TRUE once msgWindow.tpl is unpacked and wakuTexObj is built (new in retail)
+#endif
 TEXPalette* winTpl; //new in retail
 
 /**

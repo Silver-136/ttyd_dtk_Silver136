@@ -307,6 +307,55 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo);
  * Draws the Badges window (menu slot n): the two tabs,
  * the BP panel with total and remaining BP and a pip per BP point, then the badge list via badge_disp.
  */
+#if VERSION <= VERSION_DEMO_US
+void winBadgeDisp(s32 camId, void* param, s32 n) {
+    WindowWork* w = param;
+    GXColor white = {255, 255, 255, 255};
+    GXColor black = {0, 0, 0, 255};
+    s32 i;
+    s32 off;
+    PouchData* pouch = pouchGetPtr();
+    f32 c;
+    f32 b;
+    f32 a;
+    f32 yy;
+    f32 d;
+    f32 x = w->menu[n].x;
+    f32 y = w->menu[n].y;
+winBgGX(w, 3, x, y);
+    winKirinukiGX(w, 0, x - 100.0f, 20.0f + (120.0f + y), 365.0f, 210.0f);
+    a = 105.0f + y;
+    c = (x - 190.0f) - 4.0f;
+    b = 4.0f + a;
+    for (i = 0; i < 2; i++) {
+        off = i * VERSION_PICK(40, 45);
+        if (i == w->badge.tab) {
+            winTexInit((TEXPalette*)*w->res->data);
+            winTexSet(0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 0x80});
+            winTexInit_x2((TEXPalette*)*w->res->data);
+            winTexSet_x2(i + 0x1A, 0xB4, (Vec){c, VERSION_PICK(20.0f, 25.0f) + (b - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+        } else {
+            winTexInit_x2((TEXPalette*)*w->res->data);
+            winTexSet_x2(i + 0x1A, 0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
+        }
+    }
+    winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - Q) * 13);
+    winFontInit();
+winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "\202a\202o");
+winFontSet((Vec){x - 175.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->maximumBP);
+winFontSet((Vec){x - 180.0f, ((20.0f + (y - 108.0f)) - 18.0f) + (10 - Q) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
+winFontSet((Vec){x - 145.0f, ((20.0f + (y - 102.0f)) - 18.0f) + (10 - Q) * 13, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouch->availableBP);
+winTexInit((TEXPalette*)*w->res->data);
+    d = 28.0f + y;
+    for (i = 0; i < pouch->availableBP; i++) {
+        winTexSet(0x1C, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+    }
+    for (i = pouch->availableBP; i < pouch->maximumBP; i++) {
+        winTexSet(0x1D, (Vec){(x - 242.0f) + (i % 10) * 13, (20.0f + (d - (i / 10) * 13)) - 18.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+    }
+    badge_disp(w, x, y);
+}
+#else
 void winBadgeDisp(s32 camId, void* param, s32 n) {
     WindowWork* w = param;
     GXColor white = {255, 255, 255, 255};
@@ -371,7 +420,101 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     }
     badge_disp(w, x, y);
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
+    ItemData* item;
+    s8* cost;
+    s32 j;
+GXColor colA;
+    GXColor colB;
+    GXColor colU;
+    GXColor colD;
+char buf[64];
+    s32 cnt;
+    s32 i;
+    s32 badge;
+    s32 equipped;
+    s32 gray;
+    f32 scroll;
+    f32 width;
+    s32 tw;
+colA = (GXColor){255, 255, 255, 255};
+    colB = (GXColor){0, 0, 0, 255};
+    colU = colA;
+    colD = colB;
+if (w->badge.tab == 0) {
+        cnt = pouchGetHaveBadgeCnt();
+    } else {
+        cnt = w->badge.count;
+    }
+    GXSetScissor(0, 0x77, 0x260, 0xB8);
+    for (i = 0; i < cnt; i++) {
+        if (w->badge.tab == 0) {
+            badge = pouchHaveBadge(i);
+        } else {
+            badge = p0->badge.list[0].id;
+        }
+        scroll = w->badge.scroll[w->badge.tab];
+        if (w->badge.tab == 0) {
+            equipped = pouchEquipCheckBadgeIndex(i);
+        } else {
+            equipped = p0->badge.list[0].equipped;
+        }
+        if ((scroll + ((yo + 110.0f) - (f32)(i * 23))) > 240.0f) {
+            continue;
+        }
+        if ((scroll + ((yo + 110.0f) - (f32)(i * 23))) < -240.0f) {
+            break;
+        }
+        if (equipped) {
+            winTexInit((TEXPalette*)*w->res->data);
+winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, colA);
+}
+winIconInit();
+        winIconSet(itemDataTable[badge].icon_id, (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.54f, 0.54f, 0.54f}, colA);
+        item = &itemDataTable[badge];
+        winFontInit();
+        winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);
+        cost = &item->bp_cost;
+        winFontSet((Vec){130.0f + xo, scroll + (12.0f + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, "%d", *cost);
+winTexInit((TEXPalette*)*w->res->data);
+        for (j = 0; j < *cost; j++) {
+            {
+                s32 t;
+                winTexSet((t = 0x1D, equipped ? t = 0x1C : 0, t), (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colA);
+            }
+        }
+    }
+    GXSetScissor(0, 0, 0x260, 0x1E0);
+    {
+        f32 ax;
+if (w->badge.page[w->badge.tab] > 0) {
+            winTexInit((TEXPalette*)*w->res->data);
+            ax = 250.0f + xo;
+            winTexSet(0x17, (Vec){ax, 20.0f + (18.0f + (110.0f + yo)), 0.0f}, (Vec){-1.0f, -1.0f, -1.0f}, colU);
+            winIconInit();
+            winIconSet(ICON_TRIGGER_L, (Vec){ax, 20.0f + (113.0f + yo), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
+        }
+        if (cnt > w->badge.page[w->badge.tab] * 8 + 8) {
+            winTexInit((TEXPalette*)*w->res->data);
+            ax = 250.0f + xo;
+            winTexSet(0x17, (Vec){ax, 20.0f + ((yo - 90.0f) - 15.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colU);
+            winIconInit();
+            winIconSet(ICON_TRIGGER_R, (Vec){ax, 20.0f + (yo - 90.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
+        }
+        width = 0.7f * (f32)(u32)FontGetMessageWidth(msgSearch("msg_menu_sort_narabikae"));
+        winFontInit();
+        width = xo + (220.0f - width);
+        winFontSet((Vec){width, 20.0f + ((yo - 92.0f) - 10.0f), 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, colD, msgSearch("msg_menu_sort_narabikae"));
+        winIconInit();
+        winIconSet(ICON_TRIGGER_Z_ALT, (Vec){width - 30.0f, 20.0f + ((yo - 100.0f) - 10.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, colU);
+        winFontInit();
+        winFontSet((Vec){120.0f + xo, 135.0f + yo, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, colD, msgSearch("msg_menu_badge_hituyou"));
+    }
+}
+#else
 void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     WindowWork* p0;
     ItemData* item;
@@ -485,3 +628,4 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         winFontSet((Vec){120.0f + xo, 135.0f + yo, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, colD, msgSearch("msg_menu_badge_hituyou"));
     }
 }
+#endif

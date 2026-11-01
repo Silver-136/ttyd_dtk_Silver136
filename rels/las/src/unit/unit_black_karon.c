@@ -113,6 +113,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 85, 40, 0, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 50, 100, 40, 100, 100, 85};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     65, // stop
@@ -137,6 +140,7 @@ static StatusVulnerability regist = {
     100, // invisible
     85, // ohko
 };
+#endif
 
 /** Parts of the Dark Bones: the body and the bones (parts 2 to 6) it throws and piles up. */
 static BattleUnitKindPart parts[] = {

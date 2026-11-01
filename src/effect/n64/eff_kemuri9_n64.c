@@ -25,12 +25,30 @@ typedef struct EffKemuri9N64Work {
     s32 timer;       // 0x24
     s32 counter;     // 0x28
     s32 life;        // 0x2C
+#if VERSION <= VERSION_DEMO_US
+f32 anim;
+#else
     s32 texU;        // 0x30
     s32 texV;        // 0x34
     s32 frame;       // 0x38
     s32 frameMax;    // 0x3C
+#endif
 } EffKemuri9N64Work;
 
+#if VERSION <= VERSION_DEMO_US
+static effN64Vtx size16x16_tex32x32_vtx[] = {
+    {-8, -8, 0, 0, 0, 0, 0, 0, 255},
+    {8, -8, 0, -1024, 0, 0, 0, 0, 255},
+    {8, 8, 0, -1024, 1024, 0, 0, 0, 255},
+    {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
+};
+static effN64Vtx size32x32_tex32x32_vtx[] = {
+    {-16, -16, 0, 0, 0, 0, 0, 0, 255},
+    {16, -16, 0, -1024, 0, 0, 0, 0, 255},
+    {16, 16, 0, -1024, 1024, 0, 0, 0, 255},
+    {-16, 16, 0, 0, 1024, 0, 0, 0, 255},
+};
+#endif
 void effKemuri9Main(EffectEntry* effect);
 void effKemuri9Disp(CameraId cameraId, EffectEntry* effect);
 
@@ -44,8 +62,10 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     EffKemuri9N64Work* work;
     EffKemuri9N64Work* p;
     s32 i;
+#if VERSION > VERSION_DEMO_US
     f32 twoPi;
     f32 zero;
+#endif
     f32 ang;
 
     effect = effEntry();
@@ -54,24 +74,32 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     work = __memAlloc(HEAP_EFFECT, (count + 1) * sizeof(EffKemuri9N64Work));
     effect->userdata = work;
     effect->callback = effKemuri9Main;
+#if VERSION > VERSION_DEMO_US
     zero = 0.0f;
     twoPi = 6.2831855f;
+#endif
     work->timer = life;
     work->counter = 0;
     work->life = life;
+#if VERSION <= VERSION_DEMO_US
+work->anim = 0.0f;
+#else
     work->texU = 0;
+#endif
     work->type = type;
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
     work->radius = 10.0f;
     work->radiusEnd = radiusEnd;
+#if VERSION > VERSION_DEMO_US
     work->texU = 0;
     work->texV = 0;
     work->frameMax = life;
     work->frame = 0;
     zero = 0.0f;
     twoPi = 6.2831855f;
+#endif
     p = work + 1;
     for (i = 1; i < count + 1; i++, p++) {
         p->position.x = zero;
@@ -86,7 +114,11 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
 }
 
 /** Eases the ring radius toward radiusEnd, lifts each puff, advances the texture animation; deletes at end of life. */
+#if VERSION <= VERSION_DEMO_US
+static void effKemuri9Main(EffectEntry* effect) {
+#else
 void effKemuri9Main(EffectEntry* effect) {
+#endif
     EffKemuri9N64Work* work = effect->userdata;
     s32 i;
     s32 ir;
@@ -97,6 +129,9 @@ void effKemuri9Main(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
+#if VERSION <= VERSION_DEMO_US
+work->anim = 8.0f * (f32)work->counter / (f32)work->lifetime;
+#else
     {
         s32 cur = (s32)(16.0f * (f32)work->frame / (f32)work->frameMax);
         s32 next = (s32)(16.0f * (f32)++work->frame / (f32)work->frameMax);
@@ -109,6 +144,7 @@ void effKemuri9Main(EffectEntry* effect) {
         work->texU = cur;
         work->texV = next;
     }
+#endif
     work->counter++;
     work->timer--;
     if (work->timer < 0) {
@@ -128,26 +164,51 @@ void effKemuri9Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri9Disp, effect);
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
+#else
 void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
+#endif
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri9N64Work* work = effect->userdata;
+#if VERSION <= VERSION_DEMO_US
+    BOOL last;
+#endif
     s32 i;
+#if VERSION <= VERSION_DEMO_US
+    s32 frame;
+#endif
     s32 u;
+#if VERSION <= VERSION_DEMO_US
+    s32 blend;
+#endif
     u16 type;
+#if VERSION > VERSION_DEMO_US
     s32 v;
     GXColor color;
+#endif
     GXTexObj texObj;
     Mtx mtx;
     Mtx scale;
     Mtx rot;
     Mtx view;
+#if VERSION > VERSION_DEMO_US
     f32 w;
     f32 half = 0.5f;
     f32 h;
+#endif
 
+#if VERSION > VERSION_DEMO_US
     u = work->texU;
     v = work->texV;
+#endif
     type = work->type;
+#if VERSION <= VERSION_DEMO_US
+    frame = (s32)work->anim;
+    blend = (s32)(256.0f * (work->anim - (f32)frame));
+    last = frame == 7;
+    effGetTexObjN64(0xE, &texObj);
+#else
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
     PSMTXScale(scale, 1.0f, 1.0f, 1.0f);
@@ -155,14 +216,26 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mtx, scale, mtx);
     PSMTXConcat(camera->view, mtx, view);
     effGetTexObj(0x28, &texObj);
+#endif
     GXLoadTexObj(&texObj, GX_TEXMAP0);
+#if VERSION <= VERSION_DEMO_US
+    if ((s32)type < 2) {
+        GXSetTevColor(GX_TEVREG0, (GXColor){0xE6, 0xDE, 0xDE, 0x82});
+    } else {
+        GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0x28, 0x0A, 0xA0});
+    }
+    GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, blend});
+    GXSetNumChans(0);
+#else
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     color = (GXColor){0xE6, 0xDE, 0xDE, 0xFF};
     GXSetChanMatColor(GX_COLOR0A0, color);
+#endif
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
+#if VERSION > VERSION_DEMO_US
     PSMTXTrans(mtx, 0.0625f * (f32)u, 0.0f, 0.0f);
     PSMTXScale(scale, 0.0625f, 1.0f, 1.0f);
     PSMTXConcat(mtx, scale, mtx);
@@ -171,34 +244,78 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(scale, 0.0625f, 1.0f, 1.0f);
     PSMTXConcat(mtx, scale, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
+#endif
     GXSetNumTevStages(3);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+#if VERSION <= VERSION_DEMO_US
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
+#else
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+#endif
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+#if VERSION <= VERSION_DEMO_US
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_APREV, GX_CA_TEXA, GX_CA_A1, GX_CA_ZERO);
+    GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+#else
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_CPREV, GX_CC_TEXC, GX_CC_C0, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_APREV, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+#endif
     GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+#if VERSION <= VERSION_DEMO_US
+    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
+#else
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_CPREV, GX_CC_RASC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
+#endif
     GXSetCullMode(GX_CULL_NONE);
+#if VERSION <= VERSION_DEMO_US
+    PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
+    PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
+    PSMTXConcat(mtx, rot, view);
+    PSMTXConcat(camera->view, view, view);
+    u = frame * 32;
+    PSMTXScale(scale, 0.00390625f, 0.03125f, 0.0f);
+    PSMTXTrans(mtx, (f32)u, 0.0f, 0.0f);
+    PSMTXConcat(scale, mtx, mtx);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+    if (last) {
+        PSMTXScale(scale, 0.00390625f, 0.03125f, 0.0f);
+        PSMTXTrans(mtx, (f32)(u + 32), 32.0f, 0.0f);
+        PSMTXConcat(scale, mtx, mtx);
+        GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
+    } else {
+        PSMTXScale(scale, 0.00390625f, 0.03125f, 0.0f);
+        PSMTXTrans(mtx, (f32)(u + 32), 0.0f, 0.0f);
+        PSMTXConcat(scale, mtx, mtx);
+        GXLoadTexMtxImm(mtx, GX_TEXMTX1, GX_MTX2x4);
+    }
+#else
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+#endif
     work++;
     for (i = 1; i < effect->count; i++, work++) {
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         PSMTXConcat(view, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
+#if VERSION <= VERSION_DEMO_US
+        effSetVtxDescN64((s32)type == 1 ? size16x16_tex32x32_vtx : size32x32_tex32x32_vtx);
+        GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
+        tri2(0, 1, 2, 0, 0, 2, 3, 0);
+#else
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         // FAKE: no-op cast of type to s32; the plain comparison changes the object
         if ((s32)type != 0) {
@@ -216,5 +333,6 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
         GXTexCoord2f32(1.0f, 1.0f);
         GXPosition3f32(-w * half, -h * half, 0.0f);
         GXTexCoord2f32(0.0f, 1.0f);
+#endif
     }
 }

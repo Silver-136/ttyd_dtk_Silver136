@@ -74,6 +74,10 @@ static const Vec kemu_pos = { 0.0f, 0.0f, 0.0f };
 static const Vec kemu_tmp = { 0.0f, 0.0f, 0.0f };
 
 /** Sets the X and Z rotation used by type 11, which is drawn tilted rather than camera-facing. */
+#if VERSION <= VERSION_DEMO_US
+static f32 bom_dir[10] = {10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f};
+static f32 bom_spd[10] = {2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f};
+#endif
 void effKemuTestSetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
     KemuTestWork* work = effect->userdata;
     work->rx = rx;
@@ -381,12 +385,17 @@ static void effKemuTestMain(EffectEntry* effect) {
  * Spawned by the hammer motion (mot_hammer.c), partner code and event scripts.
  */
 EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
+#if VERSION > VERSION_DEMO_US
     static f32 bom_dir[10] = { 10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f };
     static f32 bom_spd[10] = { 2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f };
+#endif
     EffectEntry* effect;
     KemuTestWork* work;
     s32 i;
     s32 count;
+#if VERSION <= VERSION_DEMO_US
+    s32 n;
+#endif
 
     effect = effEntry();
     count = 1;
@@ -471,7 +480,9 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     work->rx = 0.0f;
     work->rz = 0.0f;
     work++;
+#if VERSION > VERSION_DEMO_US
     // FAKE: count (already equal to effect->count) is re-assigned in the loop test; `i < effect->count` changes the object
+#endif
     for (i = 1; i < (count = effect->count); i++, work++) {
         switch (type) {
         case 0:
@@ -579,7 +590,9 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
                 f32 d;
                 d = bom_dir[i - 1];
                 spd = 2.0f * bom_spd[i - 1];
+#if VERSION > VERSION_DEMO_US
                 // FAKE: d copied through ang; `ang = 6.2831855f * (90.0f + d) / 360.0f` changes the object
+#endif
                 ang = d;
                 ang = 6.2831855f * (90.0f + ang) / 360.0f;
                 work->vel.x = spd * (f32)sin(ang);
@@ -615,6 +628,9 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
                 f32 ang = (f32)irand(0x168);
                 f32 a2;
                 f32 spd;
+#if VERSION <= VERSION_DEMO_US
+                    f32 d;
+#endif
                 if (i < (effect->count - 1) / 2 + 1) {
                     spd = 4.5f;
                 } else {

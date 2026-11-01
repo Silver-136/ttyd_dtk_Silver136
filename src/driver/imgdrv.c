@@ -89,7 +89,11 @@ static void zFill(void) {
 }
 
 
+#if VERSION <= VERSION_DEMO_US
+static void imgDisp(CameraId camId, void* param) {
+#else
 void imgDisp(CameraId camId, void* param) {
+#endif
     ImageEntry* entry = param;
     ImageShadow* sh;
     GXTexObj* texs[3];
@@ -131,16 +135,25 @@ void imgDisp(CameraId camId, void* param) {
         }
         if (texs[i] != NULL) {
             mp[i] = mtxs[i];
+#if VERSION <= VERSION_DEMO_US
+            if (first == -1)
+                first = i;
+#else
             if (first == -1) first = i;
+#endif
         } else {
             mp[i] = NULL;
         }
     }
     if (first == -1) {
+#if VERSION > VERSION_DEMO_US
         entry->flags |= IMAGE_FLAG_NO_CAPTURE;
+#endif
         return;
     }
+#if VERSION > VERSION_DEMO_US
     entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
+#endif
     animSetPaperTexMtx(mp[0], mp[1], mp[2]);
     animSetPaperTexObj(texs[0], texs[1], texs[2], datas[0], datas[1], datas[2],
                        entry->shadows[0].offscreenId != -1 ? 1 : 0, entry->shadows[1].offscreenId != -1 ? 1 : 0);
@@ -169,6 +182,9 @@ void imgDisp(CameraId camId, void* param) {
         scale = t / d;
         zoff = d - t;
     }
+#if VERSION <= VERSION_DEMO_US
+    {
+#endif
     if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
         fl = entry->shadows[first].rect.left;
         ft = entry->shadows[first].rect.top;
@@ -180,10 +196,19 @@ void imgDisp(CameraId camId, void* param) {
         rectW = entry->width;
         rectH = entry->height;
     }
+#if VERSION <= VERSION_DEMO_US
+    }
+    PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)DEMOGetRenderModeObj()->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)DEMOGetRenderModeObj()->efbHeight), zoff);
+#else
     PSMTXTrans(m3, 64.0f * ((entry->offsetX + fl) / (f32)(DEMOGetRenderModeObj())->fbWidth), 48.0f * (-(entry->offsetY + ft) / (f32)(DEMOGetRenderModeObj())->efbHeight), zoff);
+#endif
     PSMTXTrans(m4, -32.0f, 24.0f, 0.0f);
     PSMTXConcat(m3, m4, m3);
+#if VERSION <= VERSION_DEMO_US
+    PSMTXScale(m4, rectW / (f32)DEMOGetRenderModeObj()->fbWidth, rectH / (f32)DEMOGetRenderModeObj()->efbHeight, rectW / (f32)DEMOGetRenderModeObj()->fbWidth);
+#else
     PSMTXScale(m4, rectW / (f32)(DEMOGetRenderModeObj())->fbWidth, rectH / (f32)(DEMOGetRenderModeObj())->efbHeight, rectW / (f32)(DEMOGetRenderModeObj())->fbWidth);
+#endif
     PSMTXConcat(m3, m4, m3);
     PSMTXTrans(m4, 32.0f, -24.0f, 0.0f);
     PSMTXConcat(m3, m4, m3);
@@ -192,14 +217,20 @@ void imgDisp(CameraId camId, void* param) {
     animPoseDrawMtx(entry->poseId, m3, 2, 0.0f, scale);
     animPoseDrawMtx(entry->poseId, m3, 3, 0.0f, scale);
     animSetPaperTexMtx(NULL, NULL, NULL);
+#if VERSION <= VERSION_DEMO_US
+sysWaitDrawSync();
+#else
     e2 = wp->entries;
     for (i = 0; i < wp->count; i++, e2++) {
         if ((e2->flags & IMAGE_FLAG_IN_USE) && e2->poseId != -1 && !(e2->flags & IMAGE_FLAG_HIDE) && strcmp(e2->name, entry->name) != 0 &&
             strcmp(animPoseGetAnimBaseDataPtr(e2->poseId)->fileName, animPoseGetAnimBaseDataPtr(entry->poseId)->fileName) == 0)
             break;
+#endif
     }
+#if VERSION > VERSION_DEMO_US
     if (i < wp->count) sysWaitDrawSync();
 }
+#endif
 
 
 /**
@@ -294,15 +325,27 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
     sh->data = data;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void imgCapture_Prim(ImageEntry* entry, s32 id) {
+#else
 void imgCapture_Prim(ImageEntry* entry, s32 id) {
+#endif
     ImageShadow* sh = &entry->shadows[id];
+#if VERSION <= VERSION_DEMO_US
+void* src;
+#endif
     s32 offId;
     u16 w, h;
     s32 fmt;
     u32 size;
     GXTexObj* obj;
     smartEntry* buf;
+#if VERSION <= VERSION_DEMO_US
+    if (!(sh->flags & IMG_SHADOW_ACTIVE))
+        return;
+#else
     if (!(sh->flags & IMG_SHADOW_ACTIVE)) return;
+#endif
     offId = sh->offscreenId;
     sh->flags |= IMG_SHADOW_PENDING;
     if (offId != -1) {
@@ -310,6 +353,9 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
             if (sh->flags & IMG_SHADOW_COPY_PENDING) {
                 offscreenGetTexObj(offId, &obj, &buf);
                 if (obj) {
+#if VERSION <= VERSION_DEMO_US
+src = buf->address;
+#endif
                     w = GXGetTexObjWidth(obj);
                     h = GXGetTexObjHeight(obj);
                     fmt = GXGetTexObjFmt(obj);
@@ -319,7 +365,11 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
                     } else if (sh->allocMode == 2) {
                         sh->data = smartAlloc(size, 0);
                     }
+#if VERSION <= VERSION_DEMO_US
+                    memcpy(sh->data->address, src, size);
+#else
                     memcpy(sh->data->address, buf->address, size);
+#endif
                     DCFlushRange(sh->data->address, size);
                     GXInitTexObj(&sh->texObj, sh->data->address, w, h, fmt, GX_CLAMP, GX_CLAMP, GX_FALSE);
                     GXInitTexObjLOD(&sh->texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
@@ -329,9 +379,16 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
                     sh->flags &= ~IMG_SHADOW_COPY_PENDING;
                 }
             }
+#if VERSION <= VERSION_DEMO_US
+            if (!(sh->flags & IMG_SHADOW_COPY_PENDING))
+                sh->flags &= ~IMG_SHADOW_PENDING;
+#else
             if (!(sh->flags & IMG_SHADOW_COPY_PENDING)) sh->flags &= ~IMG_SHADOW_PENDING;
+#endif
         } else {
+#if VERSION > VERSION_DEMO_US
             // separate locals from obj/buf, as in the game code (reusing obj/buf changes the object)
+#endif
             GXTexObj* o2;
             smartEntry* b2;
             offscreenGetTexObj(offId, &o2, &b2);
@@ -349,7 +406,12 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
             imgCaptureCopy(sh, entry);
             sh->flags &= ~IMG_SHADOW_COPY_PENDING;
         }
+#if VERSION <= VERSION_DEMO_US
+        if (!(sh->flags & IMG_SHADOW_COPY_PENDING))
+            sh->flags &= ~IMG_SHADOW_PENDING;
+#else
         if (!(sh->flags & IMG_SHADOW_COPY_PENDING)) sh->flags &= ~IMG_SHADOW_PENDING;
+#endif
     } else {
         imgCaptureCopy(sh, entry);
         sh->flags &= ~IMG_SHADOW_PENDING;
@@ -484,10 +546,19 @@ void imgMain(void) {
         if (entry->flags & IMAGE_FLAG_IN_USE && entry->poseId != -1 && !(entry->flags & IMAGE_FLAG_HIDE)) {
             if (entry->type == 2 || entry->type == type) {
                 for (shadow = 0; shadow < 3; shadow++) {
+#if VERSION <= VERSION_DEMO_US
+                    if (entry->shadows[shadow].flags & IMG_SHADOW_ACTIVE)
+                        break;
+#else
                     if (entry->shadows[shadow].flags & IMG_SHADOW_ACTIVE) break;
+#endif
                 }
                 if (shadow != 3) {
+#if VERSION <= VERSION_DEMO_US
+dispEntry(entry->camId, 0.0f, 1, imgDisp, entry);
+#else
                     dispEntry(entry->camId, entry->order, 1, imgDisp, entry);
+#endif
                     switch (entry->shadowId) {
                         case 0:
                             animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_DEPTH_SHADOW);
@@ -575,13 +646,21 @@ void imgSetShadow(ImageEntry* entry, s32 shadowId) {
  * Draw callback on the shadow camera: draws the image's pose with its captured textures into the shadow pass
  * so it casts a projected or depth shadow, and counts the shadow draw for shadowdrv.
  */
+#if VERSION <= VERSION_DEMO_US
+static void imgShadowDisp(CameraId camId, void* param) {
+#else
 void imgShadowDisp(CameraId camId, void* param) {
+#endif
     ImageShadow* sh;
     ImageEntry* entry = param;
     GXTexObj* objs[3];
     void* datas[3];
     Mtx mtxs[3];
+#if VERSION <= VERSION_DEMO_US
+    Mtx* mp[3];
+#else
     MtxPtr mp[3];
+#endif
     int first = -1;
     int i;
     f32 y0, x0, h, w;
@@ -608,6 +687,9 @@ void imgShadowDisp(CameraId camId, void* param) {
                 w = entry->width;
                 h = entry->height;
             }
+#if VERSION <= VERSION_DEMO_US
+            r = &sh->rect;
+#endif
             PSMTXTrans(m, -((f32)r->left - x0) / (f32)r->width, -((f32)r->top - y0) / (f32)r->height, 0.0f);
             PSMTXScale(m1, w / (f32)r->width, h / (f32)r->height, 1.0f);
             PSMTXConcat(m, m1, mtxs[i]);
@@ -615,30 +697,50 @@ void imgShadowDisp(CameraId camId, void* param) {
             datas[i] = sh->data;
         }
         if (objs[i] != NULL) {
+#if VERSION <= VERSION_DEMO_US
+            mp[i] = &mtxs[i];
+            if (first == -1)
+                first = i;
+#else
             mp[i] = mtxs[i];
             if (first == -1) first = i;
+#endif
         } else {
             mp[i] = NULL;
         }
     }
     if (first == -1) {
+#if VERSION > VERSION_DEMO_US
         entry->flags |= IMAGE_FLAG_NO_CAPTURE;
+#endif
         return;
     }
+#if VERSION <= VERSION_DEMO_US
+animSetPaperTexMtx((void*)mp[0], (void*)mp[1], (void*)mp[2]);
+#else
     entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
     animSetPaperTexMtx(mp[0], mp[1], mp[2]);
+#endif
     animSetPaperTexObj(objs[0], objs[1], objs[2], datas[0], datas[1], datas[2],
                        entry->shadows[0].offscreenId != -1 ? 1 : 0, entry->shadows[1].offscreenId != -1 ? 1 : 0);
+#if VERSION <= VERSION_DEMO_US
+    if (entry->animName != NULL)
+#else
     if (entry->animName != NULL) {
+#endif
         animPoseSetAnim(entry->poseId, entry->animName, FALSE);
+#if VERSION > VERSION_DEMO_US
     }
+#endif
     animPoseSetStartTime(entry->poseId, entry->animTime);
     animPoseMain(entry->poseId);
     animPoseSetMaterialLightFlagOn(entry->poseId, MATERIAL_LIGHT_PAPER);
     entry->loopTimes = animPoseGetLoopTimes(entry->poseId);
     {
+#if VERSION > VERSION_DEMO_US
         // As in the game code: these locals shadow the outer ones of the same names, and both branches below set
         // the same values (reusing the outer locals or one plain assignment changes the object)
+#endif
         f32 x0, y0, w, h;
         f32 sc, z;
         if (entry->flags & IMAGE_FLAG_NO_VIRTUAL_POINT) {

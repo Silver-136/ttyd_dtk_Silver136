@@ -70,6 +70,199 @@ BOOL marioChkDeepSleep(void) {
  * After 50 seconds without input Mario yawns and then naps (M_N_5A, snoring).
  * Bowser and Peach run their own versions.
  */
+#if VERSION <= VERSION_DEMO_US
+void mot_stay(void) {
+    MarioWork* mario;
+    MarioWork* m;
+    BOOL newMot;
+    s32 frames;
+    BOOL held;
+
+    mario = marioGetPtr();
+    newMot = FALSE;
+    if (mario->characterId == CHARACTER_BOWSER) {
+        kpa_stay();
+        return;
+    }
+    if (mario->characterId == CHARACTER_PEACH) {
+        peach_stay();
+        return;
+    }
+if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+        mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP | MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING);
+        marioClearJumpPara();
+        newMot = TRUE;
+        mario->airTimer = 0;
+        mario->multiTimer = 0;
+        mario->currSubMotionId = 0;
+mario->lastGroundPos = mario->position;
+        mario->stay.jabaraWait = 0;
+        mario->stay.holdTimer = 0;
+        mario->stay.deepSleepTimer = 0;
+        mario->idleKeyTimer = 0;
+        marioSoundInit();
+        marioResetCamFollowRate();
+if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+                motSlitContinue();
+            } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
+                marioChgMot2(MARIO_MOTION_SLIT);
+                motSlitCancel();
+            }
+            if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
+                if (pouchGetHP() == 0) {
+                    marioChgPose("M_I_S");
+                    psndSFXOn_3D((char*)0x173, &mario->position);
+                } else if (lowHP() && marioChkKey()) {
+                    mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+                    marioChgPose("M_S_3");
+                    mario->idleTimer = 0;
+                } else if (strcmp(mario->animName, "M_I_Y") != 0) {
+                    marioChgPose("M_S_1");
+                }
+            } else {
+                marioChgPoseTime("M_U_2", 10);
+            }
+if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+            mario->baseSpeed = 0.0f;
+        }
+        mario->flags &= ~MARIO_FLAG_IS_PUSHING;
+    }
+frames = sysMsec2Frame(1000);
+    if (++mario->idleKeyTimer > frames && !(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && marioChkKey()) {
+        if (lowHP()) {
+            if (strcmp(mario->animName, "M_S_3") != 0) {
+                mario->idleTimer = 0;
+            }
+            mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+            marioChgPose("M_S_3");
+        } else if ((s32)mario->currSubMotionId == 0 && mario->idleKeyTimer != 0) {
+            mario->idleKeyTimer = 0;
+            if (strcmp(mario->animName, "M_I_Y") != 0) {
+                marioChgPose("M_S_1");
+            }
+        }
+    }
+    if (strcmp(mario->animName, "M_S_3") == 0 && marioChkKey()) {
+m = marioGetPtr();
+        m->idleTimer = m->idleTimer + 1;
+        if (m->idleTimer > 240) {
+            m->idleTimer = 0;
+        }
+        if (m->idleTimer == 15) {
+            m->soundId[0] = psndSFXOn_3D((char*)0xE1, &m->position);
+        }
+        if (m->idleTimer == 135) {
+            m->soundId[0] = psndSFXOn_3D((char*)0xE2, &m->position);
+        }
+}
+    if (mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
+        if (mario->controlStickSensitivity > 0.0f) {
+            marioChgMot(MARIO_MOTION_WALK);
+        }
+        return;
+    }
+    if (!newMot && marioChkItemMotion()) {
+        return;
+    }
+if (mario->buttonHold & PAD_BUTTON_B) {
+        return;
+    }
+if (marioSlitAbilityChk() && marioSlitButton() == 1) {
+        marioChgMot(MARIO_MOTION_SLIT);
+        return;
+    }
+    if (++mario->stay.jabaraWait >= 10) {
+        mario->stay.jabaraWait = 10;
+        if (marioChkJabara()) {
+            marioChgMot(MARIO_MOTION_JABARA);
+            return;
+        }
+    }
+    marioChkJump();
+    marioChkTransform();
+held = FALSE;
+    if (mario->buttonHold & PAD_BUTTON_A) {
+        mario->stay.holdTimer = mario->stay.holdTimer + 1;
+    } else {
+        mario->stay.holdTimer = 0;
+    }
+    if (mario->buttonHold & PAD_BUTTON_A) {
+        if (mario->stay.holdTimer < 10) {
+            held = FALSE;
+        } else {
+            held = TRUE;
+        }
+    }
+    if (mario->wMotionTimer == 0 && mario->controlStickSensitivity > 0.0f && held == FALSE) {
+if ((s8)mario->wStickDir1 * (s8)mario->wStickDir1 + (s8)mario->wStickDir2 * (s8)mario->wStickDir2 > 0xBD1) {
+            if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
+                marioChgMot(MARIO_MOTION_DASH);
+            } else {
+                marioChgMot(MARIO_MOTION_WALK);
+            }
+        } else {
+            marioChgMot(MARIO_MOTION_WALK);
+        }
+    }
+    if ((mario->flags & MARIO_FLAG_KEY_OFF) || (mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
+        if ((s32)mario->currSubMotionId > 0 && strcmp(mario->animName, "M_S_1") != 0 &&
+            strcmp(mario->animName, "M_S_1R") != 0) {
+            marioChgPose("M_S_1");
+            mario->currSubMotionId = 0;
+        }
+        return;
+    }
+    if (lowHP()) {
+        return;
+    }
+    switch ((s32)mario->currSubMotionId) {
+        case 0:
+            if ((s32)++mario->multiTimer >= sysMsec2Frame(50000)) {
+                mario->currSubMotionId = 1;
+            }
+            break;
+        case 1:
+            marioChgEvtPose("M_I_5");
+            marioAdjustMoveDir();
+            m = marioGetPtr();
+            m->soundId[0] = psndSFXOn_3D((char*)0xEF, &m->position);
+            mario->multiTimer = 0x32;
+            mario->currSubMotionId = 2;
+        case 2:
+            if ((s32)--mario->multiTimer < 0) {
+                marioChgPose("M_S_1");
+                mario->multiTimer = 100;
+                mario->currSubMotionId = 3;
+            }
+            break;
+        case 3:
+            if ((s32)--mario->multiTimer < 0) {
+marioChgEvtPose("M_N_5A");
+                mario->multiTimer = 0;
+mario->currSubMotionId = 4;
+                mario->stay.deepSleepTimer = 0;
+                m = marioGetPtr();
+                m->soundId[0] = psndSFXOn_3D((char*)0xE4, &m->position);
+            }
+            break;
+        case 4:
+            if (++mario->stay.deepSleepTimer >= sysMsec2Frame(10000)) {
+                mario->stay.deepSleepTimer = sysMsec2Frame(10000);
+            }
+if ((s32)++mario->multiTimer >= 140) {
+mario->multiTimer = 0;
+                m = marioGetPtr();
+                m->soundId[0] = psndSFXOn_3D((char*)0xE4, &m->position);
+            }
+            if ((mario->flags & MARIO_FLAG_KEY_OFF) || lowHP()) {
+                marioChgPose("M_S_1");
+                mario->currSubMotionId = 0;
+            }
+            break;
+    }
+}
+#else
 void mot_stay(void) {
     MarioWork* mario;
     MarioWork* m;
@@ -331,6 +524,7 @@ void mot_stay(void) {
             break;
     }
 }
+#endif
 
 /**
  * Picks the ground motion from the stick: stay when centred,
@@ -354,8 +548,10 @@ void marioChgMotAuto(void) {
 /** Cleanup when the stay motion ends: stops the idle sound and the charge-up voice. */
 void mot_stay_post(void) {
     MarioWork* mario;
+#if VERSION > VERSION_DEMO_US
     MarioMotion id = marioGetPtr()->currMotionId;
     if (id != MARIO_MOTION_HAMMER_2 && id != MARIO_MOTION_JABARA) {
+#endif
         mario = marioGetPtr();
         if (mario->soundId[0] != (u32)-1) {
             psndSFXOff(mario->soundId[0]);
@@ -366,11 +562,15 @@ void mot_stay_post(void) {
             psndSFXOff(mario->soundId[1]);
             mario->soundId[1] = -1;
         }
+#if VERSION > VERSION_DEMO_US
     } else {
         mario = marioGetPtr();
         if (mario->soundId[0] != (u32)-1) {
             psndSFXOff(mario->soundId[0]);
             mario->soundId[0] = -1;
+#endif
         }
+#if VERSION > VERSION_DEMO_US
     }
 }
+#endif

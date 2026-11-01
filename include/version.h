@@ -30,7 +30,13 @@
 #elif defined(VERSION_G8ME01)
 #define VERSION VERSION_US
 #elif defined(VERSION_G8MJ01)
+#if VERSION == VERSION_DEMO_JP
+#define VERSION VERSION_DEMO_JP
+#elif VERSION == VERSION_DEMO_US
+#define VERSION VERSION_DEMO_US
+#else
 #define VERSION VERSION_JP
+#endif
 #else
 #error "no VERSION_<id> defined: build through configure.py"
 #endif

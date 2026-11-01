@@ -37,7 +37,9 @@ GXTexObj projTexObj;
 void* projTexImgRef;
 Mtx projMtx;
 BOOL __mapdrv_make_dl;
+#if VERSION > VERSION_DEMO_US
 BOOL disableMapDraw;
+#endif
 s32 error_count;
 BOOL error_flag;
 MapObject* current_mp;
@@ -86,15 +88,19 @@ const char* getMapDataDvdRoot(void) {
 }
 
 // Descriptive name (not in the symbol maps).
+#if VERSION > VERSION_DEMO_US
 void mapDispOff(void) {
     disableMapDraw = TRUE;
 }
+#endif
 
 /** Lets mapDisp draw the map again after mapDispOff. */
 // Descriptive name (not in the symbol maps).
+#if VERSION > VERSION_DEMO_US
 void mapDispOn(void) {
     disableMapDraw = FALSE;
 }
+#endif
 
 /** The MapWork of the active group: index 0 is the field map, 1 the battle stage. */
 MapWork* mapGetWork(void) {
@@ -242,6 +248,141 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
  * group and shadow flags, centre, and the bounding-box cull flag
  * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
  */
+#if VERSION <= VERSION_DEMO_US
+static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
+    MapWork* wp = &mapWork[activeGroup];
+    MapObject* obj;
+    s32 i;
+    Mtx trans, scale, rotX, rotY, rotZ;
+    Vec a, b;
+
+    obj = wp->entries[index].objects;
+    for (i = 0; i < wp->entries[index].numJoints; i++, obj++) {
+        if (!obj->joints)
+            break;
+    }
+    obj->flags = 0;
+    obj->joints = joint;
+    obj->groupIndex = (s16)index;
+    PSMTXTrans(trans, joint->translation.x, joint->translation.y, joint->translation.z);
+    PSMTXScale(scale, joint->scale.x, joint->scale.y, joint->scale.z);
+    PSMTXRotRad(rotX, 'x', 0.017453292f * joint->rotation.x);
+    PSMTXRotRad(rotY, 'y', 0.017453292f * joint->rotation.y);
+    PSMTXRotRad(rotZ, 'z', 0.017453292f * joint->rotation.z);
+    PSMTXConcat(trans, rotZ, trans);
+    PSMTXConcat(trans, rotY, trans);
+    PSMTXConcat(trans, rotX, trans);
+    PSMTXConcat(trans, scale, obj->localMtx);
+    PSMTXConcat(mtx, obj->localMtx, obj->modelWorldMtx);
+    PSMTXIdentity(obj->transformMtx);
+    obj->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
+    obj->cameraId = CAMERA_3D;
+    obj->offscreenId = -1;
+    obj->parent = parent;
+    obj->next = NULL;
+    obj->child = NULL;
+    if (joint->drawMode) {
+        if (joint->drawMode->modeFlags & DRAW_MODE_BACKGROUND) {
+            obj->flags |= MAP_OBJ_FLAG_BACKGROUND;
+        }
+        switch (joint->drawMode->blendType) {
+            case 0: {
+                MapFileJoint* j = obj->joints;
+                s32 k, n2 = 0, n1 = 0;
+                for (i = 0; i < obj->joints->partCount; i++) {
+                    u8 t = obj->joints->parts[i].material->blendMode;
+                    if (t == 2) {
+                        n2++;
+                        if (!obj) {}
+                    } else if (t == 1) {
+                        if (1) {}
+                        n1++;
+                    }
+                    for (k = 0; k < 8; k++) {
+                        MapMatSampler* tex = obj->joints->parts[i].material->samplers[k];
+                        if (!tex)
+                            break;
+                        t = tex->blendMode;
+                        if (t == 2)
+                            n2++;
+                        else if (t == 1)
+                            n1++;
+                    }
+                }
+                if (n2)
+                    obj->blendMode = 2;
+                else if (n1)
+                    obj->blendMode = 1;
+                else
+                    obj->blendMode = 0;
+                break;
+            }
+            case 1: {
+                u8 m = 0;
+                if (obj->flags & MAP_OBJ_FLAG_BACKGROUND)
+                    m = 3;
+                obj->blendMode = m;
+            } break;
+            case 2:
+                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? 4 : 1;
+                break;
+            case 3:
+                obj->blendMode = (obj->flags & MAP_OBJ_FLAG_BACKGROUND) ? 5 : 2;
+                break;
+        }
+        if (joint->drawMode->modeFlags & DRAW_MODE_GROUP) {
+            obj->flags |= MAP_OBJ_FLAG_GROUP;
+            if (joint->drawMode->modeFlags & DRAW_MODE_DEPTH_OFFSET) {
+                obj->flags |= MAP_OBJ_FLAG_DEPTH_OFFSET;
+            }
+            switch (joint->drawMode->blendType) {
+                case 0:
+                    obj->blendMode = 2;
+                    break;
+                case 1:
+                    obj->blendMode = 0;
+                    break;
+                case 2:
+                    obj->blendMode = 1;
+                    break;
+                case 3:
+                default:
+                    obj->blendMode = 2;
+                    break;
+            }
+        }
+        if (obj->flags & MAP_OBJ_FLAG_GROUP) {
+            if (parent && (parent->flags & MAP_OBJ_FLAG_GROUP || parent->flags & MAP_OBJ_FLAG_GROUP_MEMBER)) {
+                obj->flags &= ~MAP_OBJ_FLAG_GROUP;
+            }
+        } else if (parent && (parent->flags & MAP_OBJ_FLAG_GROUP || parent->flags & MAP_OBJ_FLAG_GROUP_MEMBER)) {
+            obj->flags |= MAP_OBJ_FLAG_GROUP_MEMBER;
+            if (parent->flags & MAP_OBJ_FLAG_DEPTH_OFFSET) {
+                obj->flags |= MAP_OBJ_FLAG_DEPTH_OFFSET;
+            }
+        }
+        if (joint->drawMode->modeFlags & DRAW_MODE_CHAR_SHADOW) {
+            obj->flags |= MAP_OBJ_FLAG_CHAR_SHADOW;
+        }
+    } else {
+OSPanic("mapdrv.c", 0x2c1, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+}
+    if (joint->partCount) {
+        PSVECAdd(&joint->bboxMin, &joint->bboxMax, &obj->center);
+        PSVECScale(&obj->center, &obj->center, 0.5f);
+    } else {
+        obj->center = joint->translation;
+    }
+    if (joint->partCount) {
+        PSMTXMultVec(obj->modelWorldMtx, &obj->center, &a);
+        PSMTXMultVec(obj->modelWorldMtx, &joint->bboxMax, &b);
+        if (PSVECSquareDistance(&a, &b) < 20000.0f) {
+            obj->flags |= MAP_OBJ_FLAG_CLIP;
+        }
+    }
+    return obj;
+}
+#else
 MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     MapWork* wp = &mapWork[activeGroup];
     MapObject* obj;
@@ -370,6 +511,7 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     }
     return obj;
 }
+#endif
 
 /**
  * Creates the MapObject for joint and, recursively, its children and (unless it is the root) its later siblings,
@@ -416,7 +558,11 @@ static void mapResetPaperCraftAmbColor(void);
  * Only for ver1.02 map files, and skips light-masked parts and Mario's shadow receivers
  * while a character shadow projection is on.
  */
+#if VERSION <= VERSION_DEMO_US
+static void makeDisplayList(BOOL group) {
+#else
 void makeDisplayList(BOOL group) {
+#endif
     static const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
     MapEntry* e;
     MapWork* wp = mapGetWork();
@@ -437,10 +583,12 @@ void makeDisplayList(BOOL group) {
     total = 0;
     for (pass = 0; pass < 2; pass++) {
         obj = e->objects;
+#if VERSION > VERSION_DEMO_US
         for (k = 0; k < 8; k++) {
             obj->displayList[k] = NULL;
             obj->displayListSize[k] = 0;
         }
+#endif
         for (i = 0; i < wp->entries[group].numJoints; i++, obj++) {
             if (obj->joints->partCount < 1 || obj->joints->partCount > 8) {
                 continue;
@@ -802,6 +950,177 @@ found:
  * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
  * textures, bounding box corners, animation table and display lists.
  */
+#if VERSION <= VERSION_DEMO_US
+static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
+    MapFileInfo* info;
+    u32 datSize, k;
+    int i;
+    u32 r4, r7, r0;
+    u32 sizeCheck;
+    char str1[128];
+    char str2[128];
+    char str3[128];
+    DVDEntry* dvd;
+    MapWork* wo;
+    MapHeader* header;
+
+    error_flag = FALSE;
+    error_count = 0;
+    strncpy(wp->entries[group].name, map, sizeof(wp->entries[group].name));
+
+    sprintf(str1, "./m/%s/d", map);
+    arcOpen(str1, &wp->entries[group].dat, &wp->entries[group].datSize);
+    if (!wp->entries[group].dat) {
+        sprintf(str2, "%s/%s", ".", str1);
+        dvd = DVDMgrOpen(str2, 2, 0);
+        wp->entries[group].datSize = DVDMgrGetLength(dvd);
+        wp->entries[group].dat = _mapAllocTail(OSRoundUp32B(wp->entries[group].datSize));
+        DVDMgrRead(dvd, wp->entries[group].dat, OSRoundUp32B(wp->entries[group].datSize), 0);
+        DVDMgrClose(dvd);
+    }
+
+    sprintf(str1, "./m/%s/t", map);
+    wp->entries[group].tpl = NULL;
+    arcOpen(str1, &wp->entries[group].tpl, &wp->entries[group].tplSize);
+    if (wp->entries[group].tpl) {
+        UnpackTexPalette(wp->entries[group].tpl);
+    } else {
+        sprintf(str3, "%s/%s", ".", str1);
+        dvd = DVDMgrOpen(str3, 2, 0);
+        if (dvd) {
+            wp->entries[group].tplSize = DVDMgrGetLength(dvd);
+            wp->entries[group].tpl = _mapAllocTail(OSRoundUp32B(wp->entries[group].tplSize));
+            DVDMgrRead(dvd, wp->entries[group].tpl, OSRoundUp32B(wp->entries[group].tplSize), 0);
+            DVDMgrClose(dvd);
+            UnpackTexPalette(wp->entries[group].tpl);
+        }
+    }
+
+    GXInvalidateVtxCache();
+    mapLoadHeader_(wp, group);
+    header = &wp->entries[group].header;
+    info = (MapFileInfo*)mapSearchChunk(header, "information");
+    wo->entries[group].textureTable = mapSearchChunk(header, "texture_table");
+    wo->entries[group].lightTable = mapSearchChunk(header, "light_table");
+    wo->entries[group].fogTable = mapSearchChunk(header, "fog_table");
+    wo->entries[group].materialNameTable = mapSearchChunk(header, "material_name_table");
+    wo->entries[group].vcdTable = mapSearchChunk(header, "vcd_table");
+    {
+        MapFileJoint* mapJoint = mapSearchDmdJoint(info->joint, info->mapName);
+        MapFileJoint* hitJoint = mapSearchDmdJoint(info->joint, info->hitName);
+        Mtx scale;
+        u32 n;
+        u32* animTbl;
+        MapEntry* e2;
+        MapWork* w;
+        if (strcmp(info->version, "ver1.02") == 0) {
+            wp->entries[group].flags |= MAP_ENTRY_VER_1_02;
+        } else {
+            wp->entries[group].flags &= 0x7FFF;
+        }
+        PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
+        wp->entries[group].rootMapObj = mapEntry(mapJoint, scale, group);
+        wp->entries[group].rootHitObj = hitEntry(hitJoint, scale, group);
+        {
+            for (i = 0; i < wp->entries[group].lightTable->count; i++) {
+                MapFileLight* light = wp->entries[group].lightTable->lights[i];
+                Vec pos;
+                GXColor lcolor;
+                s32 type = 1;
+                s32 lflags = 0;
+                PSVECScale(&light->position, &pos, 10.0f);
+                if (!strcmp(light->type, "ambientLight")) {
+                    type = 0;
+                } else if (!strcmp(light->type, "pointLight")) {
+                    type = 1;
+                } else if (!strcmp(light->type, "directionalLight")) {
+                    type = 2;
+                } else if (!strcmp(light->type, "spotLight")) {
+                    type = 3;
+                }
+                if (light->magic == 0x12D60D8) {
+                    lflags = light->lflags;
+                }
+                lcolor = light->color;
+                ((LightEntryArgOrderFn)lightEntry)(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
+            }
+        }
+        mapResetPaperAmbColor();
+        mapResetPaperCraftAmbColor();
+        if (wp->entries[group].fogTable != NULL) {
+            wo->entries[group].fogEnable = wp->entries[group].fogTable->enable;
+            wp->entries[group].fogType = wp->entries[group].fogTable->type;
+            wp->entries[group].fogStart = wp->entries[group].fogTable->start;
+            wp->entries[group].fogEnd = wp->entries[group].fogTable->end;
+            wp->entries[group].fogColor = wp->entries[group].fogTable->color;
+            if (wo->entries[group].fogEnable != 0) {
+                wp->entries[group].flags |= MAP_ENTRY_FOG;
+            }
+        } else {
+            wo->entries[group].fogEnable = 0;
+            wp->entries[group].fogType = 0;
+            wp->entries[group].fogStart = 0.0f;
+            wp->entries[group].fogEnd = 0.0f;
+            wp->entries[group].fogColor = (GXColor){0, 0, 0, 0};
+            wp->entries[group].flags &= ~MAP_ENTRY_FOG;
+        }
+        if (activeGroup != 1) {
+            sprintf(str1, "./m/%s/c", map);
+            camLoadRoad(CAMERA_3D, str1);
+        }
+        camSetTypePersp(CAMERA_3D);
+        mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, wp->entries[group].textureTable);
+        {
+            Vec mn;
+            Vec mx;
+            mapGetBoundingBox(&mn, &mx);
+#define SET_BBOX_CORNER(idx, X, Y, Z)                \
+    {                                     \
+        Vec v = {0.0f, 0.0f, 0.0f};       \
+        v.x = X;                          \
+        v.y = Y;                          \
+        v.z = Z;                          \
+        wp->entries[group].bbox[idx] = v; \
+    }
+            SET_BBOX_CORNER(0, mx.x, mx.y, mx.z)
+            SET_BBOX_CORNER(1, mn.x, mx.y, mx.z)
+            SET_BBOX_CORNER(2, mx.x, mn.y, mx.z)
+            SET_BBOX_CORNER(3, mx.x, mx.y, mn.z)
+            SET_BBOX_CORNER(4, mn.x, mn.y, mx.z)
+            SET_BBOX_CORNER(5, mx.x, mn.y, mn.z)
+            SET_BBOX_CORNER(6, mn.x, mx.y, mn.z)
+            SET_BBOX_CORNER(7, mn.x, mn.y, mn.z)
+#undef SET_BBOX_CORNER
+        }
+        mapLoadAnim_(group);
+    }
+    makeDisplayList(group);
+    {
+        MapWork* w3 = &mapWork[activeGroup];
+        MapObject* o = w3->entries[group].objects;
+        for (i = 0; i < w3->entries[group].numJoints; i++, o++) {
+            MapJointDrawMode* dm;
+            if (o->joints->partCount < 1 || o->joints->partCount > 8) {
+                continue;
+            }
+            dm = o->joints->drawMode;
+            if (dm->modeFlags & DRAW_MODE_MAP_LIGHTS) {
+                continue;
+            }
+            if (dm->lightMask) {
+                continue;
+            }
+            if (shadowGetCharShadowProjection() && (o->flags & MAP_OBJ_FLAG_CHAR_SHADOW)) {
+                continue;
+            }
+            if (!(w3->entries[group].flags & MAP_ENTRY_VER_1_02)) {
+                continue;
+            }
+            o->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
+        }
+    }
+}
+#else
 void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     int i;
@@ -966,6 +1285,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     }
     disableMapDraw = FALSE;
 }
+#endif
 
 /**
  * Frees the field map and everything built from it:
@@ -977,8 +1297,10 @@ void mapUnLoad(void) {
     MapEntry* entry;
     int i;
     MapWork* wp;
+#if VERSION > VERSION_DEMO_US
 
     sysWaitDrawSync();
+#endif
     entry = mapWork->entries;
     wp = mapWork;
     activeGroup = i = 0;
@@ -999,7 +1321,9 @@ void mapUnLoad(void) {
             entry->dispListSize = 0;
         }
     }
+#if VERSION > VERSION_DEMO_US
     disableMapDraw = FALSE;
+#endif
     hitReInit();
     lightReInit();
     envReInit();
@@ -1029,10 +1353,13 @@ void mapUnLoad(void) {
     memset(wp, 0, sizeof(MapWork));
 }
 
+#if VERSION > VERSION_DEMO_US
 BOOL mapPreLoad(const char* map) {
     return TRUE;
 }
+#endif
 
+#if VERSION > VERSION_DEMO_US
 void mapLoad(const char* map) {
     MapWork* wp;
     // FAKE: wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object
@@ -1045,23 +1372,78 @@ void mapLoad(const char* map) {
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
 }
+#endif
 
 // FAKE: opt_common_subs off for this function only. With CSE on, `wp = mapWork` (last loop) becomes a CSE temp created
 // before the lifetime-split temps, so wp's register lands above i's. With it off, the second web of the reused `wp` is a
 // split temp; split temps are created in order of the variables' first reference (i before wp before entry), which gives
 // the target's i r31 / wp r30 / entry r29. Code is otherwise identical.
+#if VERSION > VERSION_DEMO_US
 #pragma opt_common_subs off
+#endif
 /**
  * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
  */
+#if VERSION <= VERSION_DEMO_US
+BOOL mapPreLoad(const char* map) {
+    FileEntry* file = fileAsyncf(0, NULL, "%s/b/%s", getMarioStDvdRoot(), map);
+#else
 void bmapUnLoad(void) {
     MapEntry* entry2;
     MapEntry* entry;
     int i;
     MapWork* wp;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    if (file == NULL) {
+        return FALSE;
+    }
+    if ((s32)file == -1) {
+        return TRUE;
+    }
+    return TRUE;
+}
+void mapLoad(const char* map) {
+    char path[256];
+    MapWork* wp;
+    FileEntry* file;
+    u32 size;
+    void* arc;
+    u32 header;
+
+    activeGroup = 0;
+    memset(wp = mapWork, 0, sizeof(MapWork));
+    sprintf(path, "%s/b/%s", getMarioStDvdRoot(), map);
+    file = fileAlloc(path, 0);
+    if (file != NULL) {
+        header = *(u32*)*file->data;
+        size = ((header & 0xFF) << 16) | (header & 0xFF00) | ((header >> 16) & 0xFF);
+        arc = _mapAllocTail(size);
+        LZ77Decode(*file->data, arc);
+        arcEntry(1, arc, size);
+        DCFlushRange(arc, size);
+        GXInvalidateVtxCache();
+        GXInvalidateTexAll();
+        wp->entries[0].arcData = arc;
+        wp->entries[0].arcSize = size;
+        fileFree(file);
+    }
+    _mapLoad(wp, 0, map);
+    wp->entries[0].count = 1;
+}
+void bmapUnLoad(void) {
+MapWork* wp2;
+    MapEntry* entry3;
+    int j;
+    MapWork* wp;
+    MapEntry* entry;
+    MapEntry* entry2;
+    int i;
+#else
     sysWaitDrawSync();
+#endif
     i = 0;
     wp = &mapWork[1];
     activeGroup = 1;
@@ -1082,7 +1464,9 @@ void bmapUnLoad(void) {
             entry->dispListSize = 0;
         }
     }
+#if VERSION > VERSION_DEMO_US
     disableMapDraw = FALSE;
+#endif
     hitReInit();
     lightReInit();
     envReInit();
@@ -1109,10 +1493,20 @@ void bmapUnLoad(void) {
     arcDelete(1);
     arcDelete(2);
     memset(wp, 0, sizeof(MapWork));
+#if VERSION <= VERSION_DEMO_US
+j = 0;
+#else
     wp = mapWork;
     activeGroup = 0;
     for (i = 0, entry = wp->entries; i < wp->entries[0].count; entry++, i++) {
+#endif
         // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
+#if VERSION <= VERSION_DEMO_US
+    {
+        s32 gz = 0;
+        if (gz != 0) {
+            j = 0;
+#else
         if (entry->datAram) {
             entry->dat = _mapAllocTail(entry->datSize);
             entry->tpl = _mapAllocTail(entry->tplSize);
@@ -1129,17 +1523,76 @@ void bmapUnLoad(void) {
     }
     if (wp->entries->arcData) {
         arcEntry(1, wp->entries->arcData, wp->entries->arcSize);
+#endif
     }
 }
-#pragma opt_common_subs reset
+#if VERSION <= VERSION_DEMO_US
+    wp2 = mapWork;
+    activeGroup = j;
+    for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
 
+        // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
+        if (entry3->datAram) {
+            entry3->dat = _mapAllocTail(entry3->datSize);
+            entry3->tpl = _mapAllocTail(entry3->tplSize);
+            aramMgrToMram(entry3->datAram, entry3->dat);
+            aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
+            entry3->datAram = NULL;
+            MAPENT_TPLARAM(entry3) = NULL;
+        } else {
+            entry3->arcData = _mapAllocTail(entry3->arcSize);
+            aramMgrToMram(entry3->arcAram, entry3->arcData);
+            entry3->arcAram = NULL;
+        }
+        makeDisplayList(j);
+    }
+    if (wp2->entries->arcData) {
+        arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
+    }
+}
+#endif
+#if VERSION > VERSION_DEMO_US
+#pragma opt_common_subs reset
+#endif
+
+#if VERSION <= VERSION_DEMO_US
+BOOL bmapPreLoad(const char* map, const char* map2) {
+    FileEntry* file = NULL;
+    FileEntry* file2 = NULL;
+
+    if (map != NULL) {
+        file = fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map);
+    }
+    if (map2 != NULL) {
+        file2 = fileAsyncf(0, NULL, "%s/arc_d/%s.arc", getMarioStDvdRoot(), map2);
+    }
+    if (file == NULL) {
+        return FALSE;
+    }
+    return file2 != NULL;
+}
+#endif
 void bmapLoad(const char* map, const char* map2) {
+#if VERSION <= VERSION_DEMO_US
+char path[256];
+#endif
     MapWork* wp;
     MapEntry* entry;
     MapEntry* e;
     int i;
+#if VERSION <= VERSION_DEMO_US
+FileEntry* file;
+    u32 size;
+    void* arc;
+    u32 header;
+    u32 size2;
+    FileEntry* file2;
+    void* arc2;
+    u32 header2;
+#else
 
     sysWaitDrawSync();
+#endif
     activeGroup = 0;
     wp = mapGetWork();
     for (i = 0; i < wp->entries[0].count; i++) {
@@ -1170,13 +1623,55 @@ void bmapLoad(const char* map, const char* map2) {
         }
     }
 
+#if VERSION > VERSION_DEMO_US
     // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
+#endif
     wp = (0, &mapWork[1]);
     activeGroup = 1;
     memset(wp, 0, sizeof(MapWork));
+#if VERSION <= VERSION_DEMO_US
+if (map != NULL) {
+        sprintf(path, "%s/b/%s", getMarioStDvdRoot(), map);
+        file = fileAlloc(path, 0);
+        if (file != NULL) {
+            header = *(u32*)*file->data;
+            size = ((header & 0xFF) << 16) | (header & 0xFF00) | ((header >> 16) & 0xFF);
+            arc = _mapAllocTail(size);
+            LZ77Decode(*file->data, arc);
+            arcEntry(1, arc, size);
+            DCFlushRange(arc, size);
+            GXInvalidateVtxCache();
+            GXInvalidateTexAll();
+            wp->entries[0].arcData = arc;
+            wp->entries[0].arcSize = size;
+            fileFree(file);
+        }
+    }
+    if (map2 != NULL) {
+        sprintf(path, "%s/b/%s", getMarioStDvdRoot(), map2);
+        file2 = fileAlloc(path, 0);
+        if (file2 != NULL) {
+            header2 = *(u32*)*file2->data;
+            size2 = ((header2 & 0xFF) << 16) | (header2 & 0xFF00) | ((header2 >> 16) & 0xFF);
+            arc2 = _mapAllocTail(size2);
+            LZ77Decode(*file2->data, arc2);
+            arcEntry(2, arc2, size2);
+            DCFlushRange(arc2, size2);
+            GXInvalidateVtxCache();
+            GXInvalidateTexAll();
+            wp->entries[1].arcData = arc2;
+            wp->entries[1].arcSize = size2;
+            fileFree(file2);
+        }
+    }
+#endif
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
+#if VERSION <= VERSION_DEMO_US
+    if (map2 != NULL) {
+#else
     if (map2) {
+#endif
         _mapLoad(wp, 1, map2);
         wp->entries[0].count = 2;
     }
@@ -1585,6 +2080,133 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
  * and rate (looping or stopping at the end, handling pause and resume) and applies its joint, material, alpha,
  * light and light colour tracks, then recalculates the changed object matrices.
  */
+#if VERSION <= VERSION_DEMO_US
+void mapMain(void) {
+    int i_, j;
+    MapEntry* e_;
+    MapWork* w_;
+    MapObject* o;
+    MapObject* o_;
+    s32 c, n;
+    f32 cur;
+    MapWork* wp = &mapWork[activeGroup];
+    MapEntry* entry;
+    char mbuf[0x100];
+    s32 i, j;
+    s32 k;
+    MapAnim* anim;
+    BOOL changed;
+    OSTime ms, t;
+    char abuf[0x100];
+    Mtx scale;
+    f32 v[9];
+    f32 cv[5];
+for (i = 0; i < wp->entries[0].count; i++) {
+        entry = &wp->entries[i];
+changed = FALSE;
+        anim = (MapAnim*)entry->animData;
+        for (j = 0; j < entry->numAnims; j++, anim++) {
+            MapAnimJointList* jl = anim->anim->jointAnims;
+            MapAnimMatDataList* ml = anim->anim->materialAnims;
+            MapAnimAlphaDataList* al = anim->anim->alphaAnims;
+            MapAnimLightDataList* ll = anim->anim->lightAnims;
+            MapAnimLightData2List* lc = anim->anim->lightColorAnims;
+
+            if (!(anim->flags & MAP_ANIM_FLAG_ACTIVE) || (anim->flags & MAP_ANIM_FLAG_END)) {
+                continue;
+            }
+            if (anim->flags & MAP_ANIM_FLAG_LV0_TIME) {
+                t = gp->systemLv0Time;
+            } else if (anim->flags & MAP_ANIM_FLAG_LV1_TIME) {
+                t = gp->systemLv1Time;
+            } else if (anim->flags & MAP_ANIM_FLAG_LV2_TIME) {
+                t = gp->systemLv2Time;
+            } else if (anim->flags & MAP_ANIM_FLAG_LV3_TIME) {
+                t = gp->systemLv3Time;
+            } else if (gp->inBattle) {
+                t = gp->renderTime;
+            } else {
+                t = gp->renderFieldTime;
+            }
+            if (!(anim->flags & MAP_ANIM_FLAG_PAUSE)) {
+                ms = OSTicksToMilliseconds(t);
+cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
+if (cur < anim->time) {
+                    anim->time = anim->time - (anim->time - cur);
+                } else {
+                    anim->time = anim->time + anim->rate * (cur - anim->time);
+                }
+                anim->startTime = OSTicksToMilliseconds(t);
+                anim->startTime -= (u64)(1000.0f * anim->time / mapAnimFps());
+            } else if (anim->flags & MAP_ANIM_FLAG_RESTART) {
+                anim->startTime = OSTicksToMilliseconds(t);
+                anim->startTime -= (u64)(1000.0f * anim->time / mapAnimFps());
+                anim->flags &= ~MAP_ANIM_FLAG_RESTART;
+                anim->flags &= ~MAP_ANIM_FLAG_PAUSE;
+            }
+            if (anim->time >= anim->anim->length) {
+                if (anim->flags & MAP_ANIM_FLAG_LOOP) {
+                    f32 t2 = anim->time;
+                    while (t2 > anim->anim->length) {
+                        t2 -= anim->anim->length;
+                    }
+                    anim->time = t2;
+                    anim->startTime = OSTicksToMilliseconds(t);
+                    anim->startTime -= (u64)(1000.0f * anim->time / mapAnimFps());
+                } else {
+                    anim->time = anim->anim->length;
+                    anim->flags |= MAP_ANIM_FLAG_END;
+                }
+            }
+            if (jl) {
+                for (k = 0; k < jl->count; k++) {
+                    o = mapGetMapObj((const char*)jl->items[k]->name);
+                    if (o) {
+                        mapCalcAnimMatrix(o->animMtx, o->localMtx, anim, (MapAnimJoint*)jl->items[k]);
+                        changed = TRUE;
+                        o->flags |= MAP_OBJ_FLAG_ANIM_MTX;
+                        o->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
+                    }
+                }
+            }
+            if (ml) {
+                for (k = 0; k < ml->count; k++) {
+                    mapMainMat(anim, ml->items[k], mbuf, NULL);
+                    mapMainMat(anim, ml->items[k], mbuf, "_v");
+                    mapMainMat(anim, ml->items[k], mbuf, "_v_x");
+                }
+            }
+            if (al) {
+                for (k = 0; k < al->count; k++) {
+                    mapMainAlpha(anim, al->items[k], abuf, NULL);
+                    mapMainAlpha(anim, al->items[k], abuf, "_v");
+                    mapMainAlpha(anim, al->items[k], abuf, "_v_x");
+                }
+            }
+            if (ll) {
+                for (k = 0; k < ll->count; k++) {
+                    LightEntry* lp = lightNameToPtr((const char*)ll->items[k]->name);
+                    if (lp) {
+                        mapMainLight_ll(anim, lp, (MapAnimLightData*)ll->items[k], v);
+                    }
+                }
+            }
+            if (lc) {
+                for (k = 0; k < lc->count; k++) {
+                    LightEntry* lp = lightNameToPtr((const char*)lc->items[k]->name);
+                    if (lp) {
+                        mapMainLight_lc(anim, lp, (MapAnimLightData2*)lc->items[k], cv);
+                    }
+                }
+            }
+        }
+        if (changed) {
+            PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
+            mapReCalcMatrix(entry->rootMapObj, scale, FALSE);
+        }
+    }
+}
+#else
 void mapMain(void) {
     MapObject* o;
     f32 cur;
@@ -1710,6 +2332,7 @@ void mapMain(void) {
         }
     }
 }
+#endif
 
 void mapSetTextureMatrix(MapMaterial* mat);
 
@@ -2072,10 +2695,12 @@ void mapDisp(void) {
     s32 mode;
     MapFileJoint* joint;
     BOOL clipped;
+#if VERSION > VERSION_DEMO_US
 
     if (disableMapDraw) {
         return;
     }
+#endif
     entry = wp->entries;
     for (i = 0; i < wp->entries[0].count; entry++, i++) {
         if (entry->rootMapObj != NULL) {
@@ -2084,19 +2709,39 @@ void mapDisp(void) {
         }
         obj = entry->objects;
         for (j = 0; j < entry->numJoints; j++, obj++) {
+#if VERSION <= VERSION_DEMO_US
+            if (obj->flags & MAP_OBJ_FLAG_DISABLED)
+                continue;
+            if ((obj->flags & MAP_OBJ_FLAG_HIDDEN) && !(obj->flags & MAP_OBJ_FLAG_OFFSCREEN))
+                continue;
+            if ((obj->flags & MAP_OBJ_FLAG_COLOR) && obj->color.a == 0)
+                continue;
+#else
             if (obj->flags & MAP_OBJ_FLAG_DISABLED) continue;
             if ((obj->flags & MAP_OBJ_FLAG_HIDDEN) && !(obj->flags & MAP_OBJ_FLAG_OFFSCREEN)) continue;
             if ((obj->flags & MAP_OBJ_FLAG_COLOR) && obj->color.a == 0) continue;
+#endif
             if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
                 obj->screenRect[2] = 0;
                 obj->screenRect[3] = 0;
                 obj->screenRect[0] = 0;
                 obj->screenRect[1] = 0;
             }
+#if VERSION <= VERSION_DEMO_US
+            if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER)
+                continue;
+            if (!(obj->flags & MAP_OBJ_FLAG_GROUP) && obj->joints->partCount < 1)
+                continue;
+            if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND) && (entry->flags & MAP_ENTRY_BLEND) && entry->blend.a == 0)
+                continue;
+            if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND2) && (entry->flags & MAP_ENTRY_BLEND2) && entry->blend2.a == 0)
+                continue;
+#else
             if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) continue;
             if (!(obj->flags & MAP_OBJ_FLAG_GROUP) && obj->joints->partCount < 1) continue;
             if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND) && (entry->flags & MAP_ENTRY_BLEND) && entry->blend.a == 0) continue;
             if (!(obj->flags & MAP_OBJ_FLAG_NO_MAP_BLEND2) && (entry->flags & MAP_ENTRY_BLEND2) && entry->blend2.a == 0) continue;
+#endif
             PSMTXConcat(camera->view, obj->modelWorldMtx, mtx);
             if ((obj->flags & MAP_OBJ_FLAG_CLIP) && !mapClipOffFlag) {
                 joint = obj->joints;
@@ -2107,25 +2752,45 @@ void mapDisp(void) {
                 v.z = joint->bboxMax.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
+#if VERSION <= VERSION_DEMO_US
+                if (MAP_CLIP_IN(v))
+                    goto vis;
+#else
                 if (MAP_CLIP_IN(v)) goto vis;
+#endif
                 v.x = joint->bboxMin.x;
                 v.y = joint->bboxMin.y;
                 v.z = joint->bboxMin.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
+#if VERSION <= VERSION_DEMO_US
+                if (MAP_CLIP_IN(v))
+                    goto vis;
+#else
                 if (MAP_CLIP_IN(v)) goto vis;
+#endif
                 v.x = joint->bboxMin.x;
                 v.y = joint->bboxMax.y;
                 v.z = joint->bboxMax.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
+#if VERSION <= VERSION_DEMO_US
+                if (MAP_CLIP_IN(v))
+                    goto vis;
+#else
                 if (MAP_CLIP_IN(v)) goto vis;
+#endif
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMin.y;
                 v.z = joint->bboxMax.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
+#if VERSION <= VERSION_DEMO_US
+                if (MAP_CLIP_IN(v))
+                    goto vis;
+#else
                 if (MAP_CLIP_IN(v)) goto vis;
+#endif
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMax.y;
                 v.z = joint->bboxMin.z;
@@ -2133,28 +2798,53 @@ void mapDisp(void) {
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
+#if VERSION <= VERSION_DEMO_US
+                if (MAP_CLIP_IN(v))
+                    goto vis;
+#else
                 if (MAP_CLIP_IN(v)) goto vis;
+#endif
                 v.x = joint->bboxMin.x;
                 v.y = joint->bboxMin.y;
                 v.z = joint->bboxMax.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
+#if VERSION <= VERSION_DEMO_US
+                if (MAP_CLIP_IN(v))
+                    goto vis;
+#else
                 if (MAP_CLIP_IN(v)) goto vis;
+#endif
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMin.y;
                 v.z = joint->bboxMin.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
+#if VERSION <= VERSION_DEMO_US
+                if (MAP_CLIP_IN(v))
+                    goto vis;
+#else
                 if (MAP_CLIP_IN(v)) goto vis;
+#endif
                 v.x = joint->bboxMin.x;
                 v.y = joint->bboxMax.y;
                 v.z = joint->bboxMin.z;
                 PSMTXMultVec(mtx, &v, &v);
                 PSMTX44MultVec(camera->projection, &v, &v);
+#if VERSION <= VERSION_DEMO_US
+                if (MAP_CLIP_IN(v))
+                    goto vis;
+#else
                 if (MAP_CLIP_IN(v)) goto vis;
+#endif
                 clipped = TRUE;
             vis:
+#if VERSION <= VERSION_DEMO_US
+                if (clipped)
+                    continue;
+#else
                 if (clipped) continue;
+#endif
             }
             PSMTXMultVec(mtx, &obj->center, &center);
             PSMTX44MultVec(camera->projection, &center, &center);
@@ -2173,13 +2863,25 @@ void mapDisp(void) {
                 }
             }
             if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
+#if VERSION <= VERSION_DEMO_US
+                dispEntry((CameraId)1, 5000.0f, 3, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox), obj);
+#else
                 dispEntry(CAMERA_OFFSCREEN2, 5000.0f, 3, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox, obj);
+#endif
             }
             if (obj->flags & MAP_OBJ_FLAG_OFFSCREEN) {
+#if VERSION <= VERSION_DEMO_US
+                dispEntry((CameraId)1, z, mode, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off), obj);
+#else
                 dispEntry(CAMERA_OFFSCREEN2, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off, obj);
+#endif
             }
             if (!(obj->flags & MAP_OBJ_FLAG_HIDDEN)) {
+#if VERSION <= VERSION_DEMO_US
+                dispEntry(obj->cameraId, z, mode, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp), obj);
+#else
                 dispEntry(obj->cameraId, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp, obj);
+#endif
             }
         }
     }
@@ -3586,10 +4288,14 @@ void mapObjFlagOn(const char* name, u32 flags) {
         error_count %= 32;
         return;
     }
+#if VERSION > VERSION_DEMO_US
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
+#endif
         obj->flags |= flags;
     }
+#if VERSION > VERSION_DEMO_US
 }
+#endif
 
 void mapObjFlagOff(const char* name, u32 flags) {
     MapObject* obj = mapGetMapObj(name);
@@ -3609,10 +4315,16 @@ void mapObjFlagOff(const char* name, u32 flags) {
  * Sets flags on obj and its whole subtree, and its later siblings when doNext;
  * retail versions skip the display-list flag on objects without a display list.
  */
+#if VERSION <= VERSION_DEMO_US
+static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
+#else
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
+#endif
         obj->flags |= flags;
+#if VERSION > VERSION_DEMO_US
     }
+#endif
     if (obj->child) {
         mapFlgOn(obj->child, flags, TRUE);
     }
@@ -4170,7 +4882,11 @@ static void mapStrippedPool(const char** str, f32* val) {
     val[1] = 0.0f;
     val[2] = 0.5f;
     val[3] = 2.0f;
+#if VERSION <= VERSION_DEMO_US
+str[1] = "%s/map/%s/map.dat";
+#else
     str[1] = "%s/m/%s/d";
+#endif
     str[2] = "information";
     str[3] = "ver1.01";
     str[4] = "ver1.02";

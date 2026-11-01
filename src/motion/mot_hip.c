@@ -236,7 +236,11 @@ void mot_hip(void) {
             break;
         }
         fall = marioGetFallSpd();
+#if VERSION <= VERSION_DEMO_US
+hit = marioChkLandon(&y, fall);
+#else
         hit = marioSearchGround(&y, &tmp1, &tmp2, fall, fall);
+#endif
         if (fall < -100.0f) {
             fall = -100.0f;
             mario->jumpSnapY = 0.0f;
@@ -255,16 +259,20 @@ void mot_hip(void) {
             mario->rotOfs.y = 0.0f;
             mario->airTimer = 0;
             mario->jumpPeakAirTime = 0;
+#if VERSION > VERSION_DEMO_US
             mario->dispOfs2.y = 0.0f;
+#endif
             marioChgPose("M_A_1B");
             attr = hitGetAttr(hit);
             if (attr & HIT_ATTR_WATER_HAZARD) {
                 set_damage_root_ypos(mario->position.y);
+#if VERSION > VERSION_DEMO_US
                 d = -0.4f;
                 mario->jumpVelocityY = d;
                 mario->jumpAccelerationY = d;
                 mario->jumpJerkY = 0.0f;
                 mario->jumpSnapY = 0.0f;
+#endif
                 marioChgMot(MARIO_MOTION_DAMAGE);
                 return;
             }
@@ -278,8 +286,13 @@ void mot_hip(void) {
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
             }
+#if VERSION <= VERSION_DEMO_US
+                psndSFXOn_3D((char*)0x159, &mario->position);
+evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIO_DROP2), &mario->position);
             evtEntryType(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0, 0);
+#endif
         } else {
             mario->position.y += fall;
         }
@@ -319,7 +332,47 @@ void mot_hip(void) {
     }
 }
 
+#if VERSION > VERSION_DEMO_US
 #pragma dont_inline on
+#endif
+#if VERSION <= VERSION_DEMO_US
+s32 chkground(void) {
+    MarioWork* mario;
+    HitEntry* hit;
+    u32 attr;
+    f32 y;
+    f32 v;
+
+    mario = marioGetPtr();
+    hit = marioChkLandon(&y, 1.0f);
+    if (hit != NULL) {
+        mario->hitobjStandOn = hit;
+        mario->hitobjJumpFrom = NULL;
+        mario->position.y = y;
+        mario->mot.hip.angle = 0.0f;
+        mario->rotOfs.y = 0.0f;
+        mario->dispOfs2.y = 0.0f;
+        mario->airTimer = 0;
+        mario->jumpPeakAirTime = 0;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+        mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+camFollowYOn();
+attr = hitGetAttr(hit);
+        if (attr & HIT_ATTR_WATER_HAZARD) {
+            set_damage_root_ypos(mario->position.y);
+marioChgMot(MARIO_MOTION_DAMAGE);
+            return 1;
+        }
+        if (attr & (HIT_ATTR_TOGE | 0x400)) {
+            set_damage_root_ypos(mario->position.y);
+            marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
+            return 1;
+        }
+        return 2;
+    }
+    return 0;
+}
+#else
 s32 chkground(void) {
     MarioWork* mario;
     HitEntry* hit;
@@ -367,8 +420,11 @@ s32 chkground(void) {
     }
     return 0;
 }
+#endif
 
+#if VERSION > VERSION_DEMO_US
 #pragma dont_inline reset
+#endif
 
 /** Cleanup when the spin jump motion ends: resets the spin offsets and air timers and stops the looping sounds. */
 void mot_hip_post(void) {

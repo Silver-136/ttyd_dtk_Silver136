@@ -27,7 +27,11 @@ BattleUnitKind unit_boss_bunbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table[7];
+#else
 static PoseTableEntry pose_table[9];
+#endif
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[2];
 BattleWeapon weapon_bunbaba_fumituke_attack;
@@ -55,6 +59,73 @@ static EvtWord wait_event[6];
  * Unit data of Gloomtail in the Palace of Shadow: 80 HP, level 76;
  * names its parts, status table and init script.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_boss_bunbaba = {
+    UNIT_GLOOMTAIL,
+    "btl_un_bunbaba",
+    80,
+    0,
+    1,
+    1,
+    76,
+    0,
+    0,
+    100,
+    0,
+    50,
+    6,
+    230,
+    170,
+    -210,
+    45,
+    0.0f,
+    0.0f,
+    0.0f,
+    -250,
+    0,
+    280.0f,
+    40.0f,
+    0.0f,
+    115.0f,
+    0.0f,
+    -10.0f,
+0.0f,
+0.0f,
+    0.0f,
+250.0f,
+0.0f,
+    250.0f,
+    0.0f,
+    50.0f,
+    380.0f,
+    110.0f,
+    50.0f,
+    -290.0f,
+    85.0f,
+    0.0f,
+    230.0f,
+    170.0f,
+    0,
+    0,
+    -1,
+    0,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_BOSS_GNB_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    kUnitNoSpin,
+    &regist,
+    2,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_boss_bunbaba = {
     UNIT_GLOOMTAIL,
     "btl_un_bunbaba",
@@ -124,6 +195,7 @@ BattleUnitKind unit_boss_bunbaba = {
     init_event,
     data_table,
 };
+#endif
 
 /**
  * Defence of Gloomtail against each element (normal, fire, ice, explosion, electric):
@@ -137,6 +209,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {40, 40, 40, 100, 40, 100, 100, 0, 0, 0, 100, 0, 100, 40, 40, 0, 0, 100, 40, 0, 0, 1};
+#else
 static StatusVulnerability regist = {
     30, // sleep
     30, // stop
@@ -161,13 +236,16 @@ static StatusVulnerability regist = {
     0, // invisible
     1, // ohko
 };
+#endif
 
 /** Pose table of Gloomtail: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_DIZZY, "GNB_X_1"},
     {POSE_TYPE_STOP, "GNB_D2_1"},
+#endif
     {POSE_TYPE_NORMAL, "GNB_S_3"},
     {POSE_TYPE_TALK, "GNB_T_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_3"},
@@ -999,15 +1077,24 @@ EVT_END()
 
 EVT_BEGIN(mega_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+#if VERSION <= VERSION_DEMO_US
+    // Pick a target for the attack; a confused unit that has none flusters.
+#endif
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+#if VERSION <= VERSION_DEMO_US
+    // Announce the attack; the camera swings to follow it.
+#endif
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+#if VERSION <= VERSION_DEMO_US
+    // He rears back and charges up the mega breath.
+#endif
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GNB_A_1"))
     SET_VALUE(LW(10), 120)
     SET_VALUE(LW(11), 30)
@@ -1023,7 +1110,11 @@ EVT_BEGIN(mega_attack_event)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1750)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_BREATH_FIRE1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
+#else
         CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MEGABREATH1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
+#endif
         ADD(LW(11), 45)
         SUBTRACT(LW(8), 10)
         CALL(evt_eff, 0, STRING("gonbaba_breath"), 2, LW(6), LW(7), LW(8), FLOAT(3.0f), LW(11), 0, 0, 0, 0, 0, 0)
@@ -1040,6 +1131,9 @@ EVT_BEGIN(mega_attack_event)
     WAIT_FRAMES(LW(12))
     SET_VALUE(LW(10), 0)
     LABEL(10)
+#if VERSION <= VERSION_DEMO_US
+    // Find out whether the attack will connect or miss.
+#endif
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1062,10 +1156,19 @@ EVT_BEGIN(mega_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    // The attack misses or is dodged.
+#endif
     LABEL(90)
     GOTO(97)
+#if VERSION <= VERSION_DEMO_US
+    // The attack connects.
+#endif
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
+#if VERSION <= VERSION_DEMO_US
+        // Deal the damage, reduced by the action command defence.
+#endif
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -1078,6 +1181,9 @@ EVT_BEGIN(mega_attack_event)
         GOTO(10)
     END_IF
     WAIT_MS(1400)
+#if VERSION <= VERSION_DEMO_US
+    // The attack is over; back to waiting.
+#endif
     LABEL(99)
     RETURN
 EVT_END()
@@ -1097,6 +1203,9 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        // Gloomtail uses an enemy item if he has one.
+#endif
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -1106,77 +1215,161 @@ static EVT_BEGIN(attack_event)
         CASE_EQUAL(0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STAGE, 1)
         SET_VALUE(LW(9), PTR(&weapon_bunbaba_poison_attack))
+#if VERSION <= VERSION_DEMO_US
+        // His first attack is always the poison breath.
+        CALL_CHILD(poison_attack_event)
+#else
         CALL_CHILD(PTR(poison_attack_event))
+#endif
         CASE_EQUAL(1)
         CALL(btlevtcmd_DrawLots, LW(0), 3, 10, 10, 20)
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_fumituke_attack))
+#if VERSION <= VERSION_DEMO_US
+            // In the early stages he draws lots among the stomp, the bite, the poison breath and the earthquake.
+            CALL_CHILD(fumituke_attack_event)
+#else
             CALL_CHILD(PTR(fumituke_attack_event))
+#endif
             CASE_EQUAL(1)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_kamituki_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(kamituki_attack_event)
+#else
             CALL_CHILD(PTR(kamituki_attack_event))
+#endif
             CASE_EQUAL(2)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_poison_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(poison_attack_event)
+#else
             CALL_CHILD(PTR(poison_attack_event))
+#endif
         END_SWITCH
         CASE_EQUAL(2)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STAGE, 3)
         SET_VALUE(LW(9), PTR(&weapon_bunbaba_eq_attack))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(eq_attack_event)
+#else
         CALL_CHILD(PTR(eq_attack_event))
+#endif
         CASE_EQUAL(3)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 10)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 15)
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_fumituke_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(fumituke_attack_event)
+#else
             CALL_CHILD(PTR(fumituke_attack_event))
+#endif
             CASE_EQUAL(1)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_kamituki_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(kamituki_attack_event)
+#else
             CALL_CHILD(PTR(kamituki_attack_event))
+#endif
             CASE_EQUAL(2)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_poison_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(poison_attack_event)
+#else
             CALL_CHILD(PTR(poison_attack_event))
+#endif
             CASE_EQUAL(3)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_eq_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(eq_attack_event)
+#else
             CALL_CHILD(PTR(eq_attack_event))
+#endif
         END_SWITCH
         CASE_EQUAL(4)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STAGE, 5)
         SET_VALUE(LW(9), PTR(&weapon_bunbaba_charge))
+#if VERSION <= VERSION_DEMO_US
+        // Later stages add the charge, which the mega breath always follows.
+        CALL_CHILD(charge_event)
+#else
         CALL_CHILD(PTR(charge_event))
+#endif
         CASE_EQUAL(5)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STAGE, 7)
         SET_VALUE(LW(9), PTR(&weapon_bunbaba_mega_attack))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(mega_attack_event)
+        // After the mega breath he gloats that they now understand his true power.
+#else
         CALL_CHILD(PTR(mega_attack_event))
+#endif
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_49_06"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_49_06"), 0, -2)
+#endif
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         CASE_EQUAL(6)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STAGE, 7)
         SET_VALUE(LW(9), PTR(&weapon_bunbaba_mega_attack))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(mega_attack_event)
+#else
         CALL_CHILD(PTR(mega_attack_event))
+#endif
         CASE_EQUAL(7)
         CALL(btlevtcmd_DrawLots, LW(0), 6, 10, 10, 20, 10, 20, 0)
         SWITCH(LW(0))
             CASE_EQUAL(0)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_fumituke_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(fumituke_attack_event)
+#else
             CALL_CHILD(PTR(fumituke_attack_event))
+#endif
             CASE_EQUAL(1)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_kamituki_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(kamituki_attack_event)
+#else
             CALL_CHILD(PTR(kamituki_attack_event))
+#endif
             CASE_EQUAL(2)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_poison_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(poison_attack_event)
+#else
             CALL_CHILD(PTR(poison_attack_event))
+#endif
             CASE_EQUAL(3)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_eq_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(eq_attack_event)
+#else
             CALL_CHILD(PTR(eq_attack_event))
+#endif
             CASE_EQUAL(4)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STAGE, 6)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_charge))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(charge_event)
+#else
             CALL_CHILD(PTR(charge_event))
+#endif
             CASE_EQUAL(5)
             SET_VALUE(LW(9), PTR(&weapon_bunbaba_mega_attack))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(mega_attack_event)
+#else
             CALL_CHILD(PTR(mega_attack_event))
+#endif
         END_SWITCH
     END_SWITCH
     LABEL(99)

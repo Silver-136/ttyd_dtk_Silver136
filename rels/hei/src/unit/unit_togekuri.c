@@ -96,6 +96,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Spiky Goomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     110, // stop
@@ -120,6 +123,7 @@ static StatusVulnerability regist = {
     100, // invisible
     150, // ohko
 };
+#endif
 
 /** Body part of the Spiky Goomba: a single part using the model "c_kuribo". */
 static BattleUnitKindPart parts[] = {

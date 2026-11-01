@@ -99,6 +99,9 @@ static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 /** Elemental reactions of the Paragoomba: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_patakuri = {100, 120, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 150, 100, 100, 100, 100, 150};
+#else
 static StatusVulnerability regist_patakuri = {
     100, // sleep
     110, // stop
@@ -123,6 +126,7 @@ static StatusVulnerability regist_patakuri = {
     100, // invisible
     150, // ohko
 };
+#endif
 
 /** Weapon data for the Paragoomba's dive attack: 1 damage, one target. */
 static BattleWeapon weapon_patakuri_attack = {
@@ -450,6 +454,9 @@ static BattleUnitDefense defence = {0};
 /** Elemental reactions of the Goomba: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     110, // stop
@@ -474,6 +481,7 @@ static StatusVulnerability regist = {
     100, // invisible
     150, // ohko
 };
+#endif
 
 /** Body part of the Goomba, model c_kuribo: its one target part. */
 static BattleUnitKindPart parts[] = {

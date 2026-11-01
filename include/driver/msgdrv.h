@@ -98,7 +98,11 @@ typedef struct MsgWinData {
 
 typedef struct MessageEntry {
     u32 length; //0x0
+#if VERSION <= VERSION_DEMO_US
+smartEntry* address;
+#else
     void* address; //0x4
+#endif
     s32 count; //0x8
     smartEntry* lookup; //0xC
 } MessageEntry;

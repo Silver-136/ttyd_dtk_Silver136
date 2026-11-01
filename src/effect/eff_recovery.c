@@ -193,6 +193,9 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     s32 delay;
     RecoveryWork* pp;
     s32 size;
+#if VERSION <= VERSION_DEMO_US
+    f32 ang;
+#endif
     f32 zero;
     s32 i;
 
@@ -233,7 +236,9 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     work->timer = 0;
     work->tick = gp->retraceCount;
     work->alpha = 255;
+#if VERSION > VERSION_DEMO_US
     work->baseY = -30.0f;
+#endif
     {
         Vec sfxPos;
         Vec pos = { 0.0f, 0.0f, 0.0f };
@@ -322,7 +327,11 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
 }
 
 /** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
+#if VERSION <= VERSION_DEMO_US
+static void effRecoveryMain(EffectEntry* effect) {
+#else
 void effRecoveryMain(EffectEntry* effect) {
+#endif
     RecoveryWork* work = effect->userdata;
     RecoveryWork* p;
     s32 i;
@@ -332,9 +341,15 @@ void effRecoveryMain(EffectEntry* effect) {
     s32 type = work->type;
     u32 n = 0;
     f32 x, y, z;
+#if VERSION > VERSION_DEMO_US
     f32 baseY = work->baseY;
+#endif
     f32 a, d;
 
+#if VERSION <= VERSION_DEMO_US
+    work = effect->userdata;
+    type = work->type;
+#endif
     effCalcMayaAnim(work->anim);
     if (gp->retraceCount > work->tick) {
         n = gp->retraceCount - work->tick;
@@ -413,7 +428,11 @@ void effRecoveryMain(EffectEntry* effect) {
                 if (p->timer < 16) {
                     p->timer++;
                     p->position.x = intplGetValue(EASING_QUADRATIC_IN, p->position.x, 0.0f, p->timer, 16);
+#if VERSION <= VERSION_DEMO_US
+p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, -30.0f, p->timer, 16);
+#else
                     p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, baseY, p->timer, 16);
+#endif
                     p->position.z = intplGetValue(EASING_QUADRATIC_IN, p->position.z, 0.0f, p->timer, 20);
                     p->scale.x = p->scale.y = p->scale.z = intplGetValue(EASING_QUADRATIC_IN, 1.0f, 0.0f, p->timer, 16);
                 } else {
@@ -430,7 +449,15 @@ void effRecoveryMain(EffectEntry* effect) {
                 work = effect->userdata;
                 if (type != 7 && type != 8) {
                     Vec sfxPos;
+#if VERSION <= VERSION_DEMO_US
+s32 count = amount * 10;
+                    if (count > 100) {
+                        count = 100;
+                    }
+                    effStardustEntry(2, count, 30, x, y - 20.0f, z, 30.0f, 30.0f);
+#else
                     effStardustEntry(2, 2, 30, x, y - 20.0f, z, 30.0f, 30.0f);
+#endif
                     {
                         Vec pos = { 0.0f, 0.0f, 0.0f };
                         pos.x = work->position.x;

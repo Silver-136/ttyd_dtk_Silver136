@@ -52,12 +52,14 @@ effN64Vtx size8x8_tex16x16_2_vtx[] = {
     {-3, 5, 0, 0, 512, 0, 0, 0, 255},
 };
 
+#if VERSION > VERSION_DEMO_US
 u32 water_damage_tex[32] __attribute__((aligned(32))) = {
     0x78A31427, 0x572B0B52, 0x5167133A, 0x7FDF7F2F, 0x653E32A7, 0xF5FFFF8B, 0x32670486, 0x8BFFD55E,
     0x60830B26, 0xF8E8FA55, 0x602011C5, 0x2E020278, 0x59A40486, 0xF7155555, 0x90200486, 0xBC555555,
     0xE77F1BFF, 0x6258577A, 0xAE9A0C4F, 0xF5B5D522, 0xF7BF241F, 0x78002AFF, 0xF7DF1BFF, 0x022AFFDD,
     0x8D7A0A92, 0xF5F5F5EC, 0xADFA098B, 0xF555FD25, 0xE77E135A, 0xA0035555, 0xADFA09CE, 0x25D5F5F5
 };
+#endif
 
 void effWaterDamageMain(EffectEntry* effect);
 void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect);
@@ -250,19 +252,34 @@ void effWaterDamageMain(EffectEntry* effect) {
     }
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
+#else
 void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
+#endif
     EffWaterDamageN64Work* work;
     CameraEntry* cam;
+#if VERSION > VERSION_DEMO_US
     s32 ix;
+#endif
     Mtx trans;
     Mtx scale;
     Mtx rot;
     Mtx mtx;
+#if VERSION > VERSION_DEMO_US
     s32 i;
     s32 iy;
     s32 alpha;
+#endif
     GXTexObj texObj;
-
+#if VERSION <= VERSION_DEMO_US
+void* buffer;
+s32 i;
+    s32 alpha;
+    s32 ix;
+    s32 iy;
+s32 dx, dy;
+#endif
     cam = camGetPtr(cameraId);
     work = effect->userdata;
     alpha = work->alpha;
@@ -304,11 +321,30 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetCullMode(GX_CULL_NONE);
     work++;
+#if VERSION <= VERSION_DEMO_US
+buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 4)->address;
+    GXSetTexCopySrc(0, 0, 608, 480);
+    GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
+    GXCopyTex(buffer, GX_FALSE);
+    GXPixModeSync();
+    GXInitTexObj(&texObj, buffer, 304, 240, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
+#else
     GXInitTexObj(&texObj, water_damage_tex, 16, 16, GX_TF_CMPR, GX_CLAMP, GX_CLAMP, GX_FALSE);
+#endif
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
     for (i = 1; i < effect->count; i++, work++) {
+#if VERSION <= VERSION_DEMO_US
+dx = (s32)work->position.x + ix;
+        dy = (s32)work->position.y + iy;
+        dx = dx < 0 ? -(dx & 0x7F) : (dx & 0x7F);
+        dy = dy > 0 ? -(dy & 0x3F) : (dy & 0x3F);
+#endif
         PSMTXScale(scale, 0.0625f, 0.0625f, 0.0f);
+#if VERSION <= VERSION_DEMO_US
+        PSMTXTrans(trans, (f32)(dx + 160) / 320.0f, (f32)(dy + 120) / 240.0f, 0.0f);
+        PSMTXConcat(scale, trans, scale);
+#endif
         GXLoadTexMtxImm(scale, GX_TEXMTX1, GX_MTX2x4);
         PSMTXTrans(trans, work->position.x, work->position.y, work->position.z);
         PSMTXScale(scale, work->scale, work->scale, work->scale);
@@ -318,7 +354,11 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
         GXSetCurrentMtx(GX_PNMTX0);
         GXSetTevColor(GX_TEVREG0, (GXColor){ 0xC8, 0xFF, 0xFF, alpha * work->alpha / 255 });
         GXSetTevColor(GX_TEVREG1, (GXColor){ 0x00, 0x20, 0x20, 0x00 });
+#if VERSION <= VERSION_DEMO_US
+        switch (i + (gp->retraceCount >> 1) & 3) {
+#else
         switch ((i + (gp->retraceCount >> 1)) & 3) {
+#endif
         case 0:
         case 2:
             effSetVtxDescN64(size8x8_tex16x16_0_vtx);

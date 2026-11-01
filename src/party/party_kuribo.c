@@ -39,7 +39,11 @@ BOOL christineGetStatus(void) {
     return TRUE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(pre_kurio_use) {
+#else
 USER_FUNC(pre_kurio_use) {
+#endif
     void* hit;
     char* msg;
     MarioWork* mario;
@@ -48,15 +52,20 @@ USER_FUNC(pre_kurio_use) {
     if (!party) {
         return EVT_RETURN_DONE;
     }
+#if VERSION <= VERSION_DEMO_US
+if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
+#else
 
     if (party->flags2 & PARTY_DISP_FLAG_PAPER) {
+#endif
         return EVT_RETURN_DONE;
     }
 
     psndSetFlag(PSND_FLAG_MUTE_SFX);
+#if VERSION > VERSION_DEMO_US
     party->flags |= PARTY_FLAG_DISABLE_FLOORS;
     party->flags |= PARTY_FLAG_FORCE_FALL;
-
+#endif
     mario = party->playerPtr;
     if (event->lwData[0]) {
         event->lwData[0] += 8;
@@ -77,41 +86,103 @@ USER_FUNC(pre_kurio_use) {
         }
         mobj = mobjHitObjPtrToPtr(hit);
         if (!strcmp(mobj->animName, "MOBJ_Lv1Block")) {
+#if VERSION <= VERSION_DEMO_US
+            if (pouchGetHammerLv() < 1)
+#else
             if (pouchGetHammerLv() < 1) {
+#endif
                 msg = "obj_hlp_block_y_0";
+#if VERSION <= VERSION_DEMO_US
+            else
+#else
             } else {
+#endif
                 msg = "obj_hlp_block_y_1";
+#if VERSION > VERSION_DEMO_US
             }
+#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBlock")) {
+#if VERSION <= VERSION_DEMO_US
+            if (pouchGetHammerLv() < 1)
+#else
             if (pouchGetHammerLv() < 1) {
+#endif
                 msg = "obj_hlp_block_y_0";
+#if VERSION <= VERSION_DEMO_US
+            else
+#else
             } else {
+#endif
                 msg = "obj_hlp_block_y_1";
+#if VERSION > VERSION_DEMO_US
             }
+#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv1BigBigBlock")) {
+#if VERSION <= VERSION_DEMO_US
+            if (pouchGetHammerLv() < 1)
+#else
             if (pouchGetHammerLv() < 1) {
+#endif
                 msg = "obj_hlp_block_y_0";
+#if VERSION <= VERSION_DEMO_US
+            else if (pouchGetHammerLv() < 2)
+#else
             } else if (pouchGetHammerLv() < 2) {
+#endif
                 msg = "obj_hlp_block_y_2";
+#if VERSION <= VERSION_DEMO_US
+            else
+#else
             } else {
+#endif
                 msg = "obj_hlp_block_y_3";
+#if VERSION > VERSION_DEMO_US
             }
+#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv2Block") || !strcmp(mobj->animName, "MOBJ_Lv2BigBlock")) {
+#if VERSION <= VERSION_DEMO_US
+            if (pouchGetHammerLv() < 1)
+#else
             if (pouchGetHammerLv() < 1) {
+#endif
                 msg = "obj_hlp_block_s_0";
+#if VERSION <= VERSION_DEMO_US
+            else if (pouchGetHammerLv() < 3)
+#else
             } else if (pouchGetHammerLv() < 3) {
+#endif
                 msg = "obj_hlp_block_s_1";
+#if VERSION <= VERSION_DEMO_US
+            else
+#else
             } else {
+#endif
                 msg = "obj_hlp_block_s_2";
+#if VERSION > VERSION_DEMO_US
             }
+#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv2BigBigBlock")) {
+#if VERSION <= VERSION_DEMO_US
+            if (pouchGetHammerLv() < 1)
+#else
             if (pouchGetHammerLv() < 1) {
+#endif
                 msg = "obj_hlp_block_s_0";
+#if VERSION <= VERSION_DEMO_US
+            else if (pouchGetHammerLv() < 3)
+#else
             } else if (pouchGetHammerLv() < 3) {
+#endif
                 msg = "obj_hlp_block_s_1";
+#if VERSION <= VERSION_DEMO_US
+            else
+#else
             } else {
+#endif
                 msg = "obj_hlp_block_s_3";
+#if VERSION > VERSION_DEMO_US
             }
+#endif
         } else if (!strcmp(mobj->animName, "MOBJ_Lv3BigBigBlock") || !strcmp(mobj->animName, "MOBJ_Lv3BigBlock") || !strcmp(mobj->animName, "MOBJ_Lv3Block")) {
             msg = "obj_hlp_redyellow_block";
         } else if (!strcmp(mobj->animName, "MOBJ_Block") || !strcmp(mobj->animName, "MOBJ_PinkBlock")) {
@@ -135,9 +206,17 @@ USER_FUNC(pre_kurio_use) {
             msg = pouchGetJumpLv() < 2 ? "obj_hlp_big_switch_1" : "obj_hlp_big_switch_2";
         } else if (!strcmp(mobj->animName, "MOBJ_TreasureBox") || !strcmp(mobj->animName, "MOBJ_GrayTreasureBox") ||
                    !strcmp(mobj->animName, "MOBJ_BigTreasureBox")) {
+#if VERSION <= VERSION_DEMO_US
+            msg = mobjCheckItemboxOpen((void*)mobj) == 2 ? "obj_hlp_takara_1" : "obj_hlp_takara_0";
+#else
             msg = mobjCheckItemboxOpen(mobj) == 2 ? "obj_hlp_takara_1" : "obj_hlp_takara_0";
+#endif
         } else if (!strcmp(mobj->animName, "MOBJ_BlackTreasureBox")) {
+#if VERSION <= VERSION_DEMO_US
+            msg = mobjCheckItemboxOpen((void*)mobj) == 2 ? "obj_hlp_blackbox_1" : "obj_hlp_blackbox_0";
+#else
             msg = mobjCheckItemboxOpen(mobj) == 2 ? "obj_hlp_blackbox_1" : "obj_hlp_blackbox_0";
+#endif
         } else if (!strcmp(mobj->animName, "MOBJ_RedJumpStand") || !strcmp(mobj->animName, "MOBJ_RedJumpStand2") ||
                    !strcmp(mobj->animName, "MOBJ_BlueJumpStand") || !strcmp(mobj->animName, "MOBJ_BlueJumpStand2") ||
                    !strcmp(mobj->animName, "MOBJ_MapJumpStand")) {
@@ -152,9 +231,15 @@ USER_FUNC(pre_kurio_use) {
             msg = "obj_hlp_yuka_switch";
         } else if (!strcmp(mobj->animName, "MOBJ_BreakingFloor") || !strcmp(mobj->animName, "MOBJ_BlackBreakingFloor")) {
             msg = "obj_hlp_hip_attack";
+#if VERSION <= VERSION_DEMO_US
+            if (pouchGetJumpLv() >= 2)
+#else
             if (pouchGetJumpLv() >= 2) {
+#endif
                 msg = "obj_hlp_hip_attack_1";
+#if VERSION > VERSION_DEMO_US
             }
+#endif
         } else if (!strcmp(mobj->animName, "MOBJ_BombRock")) {
             msg = "obj_hlp_bomb_rock";
         } else if (!strcmp(mobj->animName, "MOBJ_Signboard")) {
@@ -168,7 +253,9 @@ USER_FUNC(pre_kurio_use) {
         } else {
             msg = "msg_kuri_map";
         }
+#if VERSION > VERSION_DEMO_US
         // FAKE: msg is always set by the chain above; dropping the test changes the object
+#endif
         if (msg) {
             event->lwData[0] = (EvtWord)msg;
             partyChgPoseId(party, 7);
@@ -182,17 +269,27 @@ USER_FUNC(pre_kurio_use) {
  * Last step of the field Tattle script: advances kuribo_use to its wind-down state,
  * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(post_kurio_use) {
+#else
 USER_FUNC(post_kurio_use) {
+#endif
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
     if (!party) {
         return EVT_RETURN_DONE;
     }
+#if VERSION <= VERSION_DEMO_US
+party->useMotionId = 10;
+#else
     party->useMotionId = 20;
+#endif
     marioStSystemLevel(0);
     psndClearFlag(PSND_FLAG_MUTE_SFX);
+#if VERSION > VERSION_DEMO_US
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_FORCE_FALL;
+#endif
     return EVT_RETURN_DONE;
 }
 
@@ -221,11 +318,14 @@ EVT_END()
 s32 fbatNpcTalkCheck(void);
 
 
+#if VERSION > VERSION_DEMO_US
 void kuribo_use_post(PartyEntry* party) {
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_FORCE_FALL;
 }
+#endif
 
+#if VERSION > VERSION_DEMO_US
 void kuribo_use(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
     HitEntry* wall;
@@ -312,11 +412,51 @@ void kuribo_use(PartyEntry* party) {
     }
     partyChkGnd(party);
 }
+#endif
 
 /**
  * Goodbye routine shared by Goombella, Flurrie, Vivian, Ms. Mowz and the walking NPC followers:
  * plays the standard leave-the-party motion and switches to run mode 14 once it ends.
  */
+#if VERSION <= VERSION_DEMO_US
+void kuribo_use_post(PartyEntry* party) {
+}
+void kuribo_use(PartyEntry* party) {
+    EventEntry* evt;
+
+    if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
+        party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
+        partyChgMoveMode(party, 0);
+        partyChgMot(party, 0);
+        partyChgPoseId(party, 1);
+        party->moveFrames = 100;
+        party->useMotionId = 0;
+    }
+
+    switch (party->useMotionId) {
+        case 0:
+            evt = evtEntryType(kurio_msg_evt, 0, 0, 26);
+            marioStSystemLevel(1);
+            evt->lwData[0] = (EvtWord)fbatNpcTalkCheck();
+            party->useMotionId = 1;
+            break;
+        case 10:
+            party->moveFrames = 5;
+            party->useMotionId = 11;
+        case 11:
+            if (--party->moveFrames > 0) {
+                break;
+            }
+            partyChgRunMode(party, 2);
+            partyChgMoveMode(party, 0);
+            partyChgMot(party, 0);
+            partyChgPoseId(party, 1);
+            party->flags &= ~PARTY_FLAG_IS_BEING_USED;
+            break;
+    }
+    partyChkGnd(party);
+}
+#endif
 void kuribo_bye(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;

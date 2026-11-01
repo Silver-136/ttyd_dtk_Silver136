@@ -22,7 +22,11 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 BattleWeapon weapon_cortez_claw_float_attack;
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table[4];
+#else
 static PoseTableEntry pose_table[6];
+#endif
 static BattleDataEntry data_table[18];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[47];
@@ -89,6 +93,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Cortez Hook: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 80, 95, 100, 90, 100, 100, 50, 0, 0, 100, 0, 100, 50, 50, 0, 90, 100, 50, 0, 0, 0};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     80, // stop
@@ -113,6 +120,7 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /**
  * Weapon of Cortez Hook (float attack): targets one unit for 2 damage, may inflict Poison (50%, 10 turns);
@@ -158,8 +166,10 @@ BattleWeapon weapon_cortez_claw_float_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_STOP, "KRT_Z_1"},
     {POSE_TYPE_FREEZE, "KRT_Z_1"},
+#endif
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
     {POSE_TYPE_DAMAGE, "KRT_S_1"},
@@ -174,7 +184,11 @@ static PoseTableEntry pose_table[] = {
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, cortez_weapon_dead_event},
+#if VERSION <= VERSION_DEMO_US
+{70, cortez_weapon_break_event},
+#else
     {UNIT_DATA_WEAPON_BREAK_EVENT, cortez_weapon_break_event},
+#endif
     {UNIT_DATA_BLOW_DEAD_EVENT, cortez_weapon_blow_dead_event},
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, cortez_weapon_counter_damage_event},
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, cortez_weapon_counter_damage_event},

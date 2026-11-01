@@ -19,7 +19,11 @@
 
 BattleUnitKind unit_nokonoko;
 static PoseTableEntry pose_table[18];
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table_turn[15];
+#else
 static PoseTableEntry pose_table_turn[17];
+#endif
 static BattleDataEntry data_table[3];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -124,8 +128,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "NKT_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
     {POSE_TYPE_DAMAGE, "NKT_D_1"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_RUN, "NKT_R_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
+#endif
     {POSE_TYPE_DANGER, "NKT_K_2"},
     {POSE_TYPE_PERIL, "NKT_K_2"},
     {POSE_TYPE_TALK, "NKT_S_2"},
@@ -151,6 +157,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 /** Defence of the Koopa Troopa while it lies flipped on its back: none against any element. */
 static BattleUnitDefense defence_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 100, 90, 100, 95, 100, 100, 95, 100, 95, 100, 95, 100, 95, 95, 100, 90, 100, 95, 100, 100, 100};
+#else
 static StatusVulnerability regist = {
     95, // sleep
     100, // stop
@@ -175,6 +184,7 @@ static StatusVulnerability regist = {
     100, // invisible
     100, // ohko
 };
+#endif
 
 /** Body part of the Koopa Troopa (shelled), model c_nokoteki: its one target part. */
 static BattleUnitKindPart parts[] = {

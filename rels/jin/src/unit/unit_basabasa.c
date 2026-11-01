@@ -215,6 +215,9 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 85, 100, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 80, 110, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     80, // sleep
     85, // stop
@@ -239,6 +242,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Swooper's attack: 3 damage to a single target, a plain attack. */
 static BattleWeapon weapon_basabasa_attack = {

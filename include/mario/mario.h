@@ -90,7 +90,9 @@ typedef enum MarioFlags {
 typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION = (1 << 0),
     MARIO_TRIG_FLAG_USE_PARTNER = (1 << 1),
+#if VERSION > VERSION_DEMO_US
     MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 2),
+#endif
     MARIO_TRIG_FLAG_ZOOM_UP_LEVEL_UNUSED = (1 << 4), // 0x10, request taken (and cleared) by marioCamZoomUpLevelMain; nothing sets it
     MARIO_TRIG_FLAG_DISP_DIR_CORRECTION = (1 << 8),
     MARIO_TRIG_FLAG_DISP_DIR_LEFT = (1 << 9),
@@ -103,12 +105,20 @@ typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_JABARA_CHK = (1 << 20),
     MARIO_TRIG_FLAG_JABARA_MOVE_CHK = (1 << 21),
     MARIO_TRIG_FLAG_START_JABARA_SPIN = (1 << 22),
+#if VERSION <= VERSION_DEMO_US
+MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 24), // the demo also sets it on landing (marioChkGnd)
+    MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT = (1 << 28),
+    MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 29),
+    MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 30),
+    MARIO_TRIG_FLAG_DISABLE_STICK = (1 << 31)
+#else
     MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT = (1 << 24),
     MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 25),
     MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 26),
     MARIO_TRIG_FLAG_DISABLE_STICK = (1 << 27),
     MARIO_TRIG_FLAG_DISABLE_PARTY_SLIT = (1 << 30),
     MARIO_TRIG_FLAG_NORMALIZING = (1 << 31) // evt_mario_normalize running: the partner does not start slit mode
+#endif
 } MarioTrigFlags;
 #pragma enumsalwaysint on
 
@@ -131,7 +141,12 @@ typedef struct MarioMotSlit {      // mot_slit.c (paper slit / side-step)
     s32 counter;                   // 0x04
     f32 pushDir;                   // 0x08, 0 or 180: slide direction relative to targetYaw while pushing a 0x2000 wall
     f32 lastY;                     // 0x0C, position.y last frame
+#if VERSION <= VERSION_DEMO_US
+s16 reserved_10; // 0x10, demo: mot_slit's second timer, accessed as MarioWork.slitTimer2
+    s16 resumeState;
+#else
     u8 pad10[4];                   // 0x10
+#endif
     s16 timer;                     // 0x14
     s16 count;                     // 0x16
     s16 flags;                     // 0x18, bit 0
@@ -345,6 +360,193 @@ typedef enum MarioCharacter {
 #define KPA_STAGE_FLAG_SIDE_SCROLLING (1 << 0)
 #define KPA_STAGE_FLAG_KPA03 (1 << 1)
 
+#if VERSION <= VERSION_DEMO_US
+typedef struct MarioWork {
+    u32 flags;                 // 0x0
+    u32 dispFlags;             // 0x4
+    u32 rollFlags;             // 0x8, mot_roll: 0x10 while rolling (motion 0x16), 0 when done; evt_mario waits for 0
+    u32 trigFlags;             // 0xC
+    s32 peachFlags;            // 0x10
+    u32 stageFlags;            // 0x14, Bowser stages: bit0 clear = side view (kpaGetStageViewType), bit1 = kpaGetStageType
+    const char* animName;      // 0x18
+    const char* paperAnimName; // 0x1C
+    void* reserved_20;         // 0x20, only cleared (marioInit, Vivian hide)
+    u8 pad_24[0x28 - 0x24];    // 0x24, never accessed
+    u16 poseTime;              // 0x28
+    u8 pad_2A[0x2E - 0x2A];    // 0x2A, never accessed
+    MarioMotion currMotionId;  // 0x2E
+    MarioMotion prevMotionId;  // 0x30, currMotionId before the last motion change (marioChgMot)
+    u8 pad_32[0x34 - 0x32];    // 0x32, never accessed
+    u32 frameCounter;          // 0x34, +1 every marioMain frame; bit0 drives blinking
+    s8 ctrlOffCount;           // 0x38
+    s8 keyOffCount;            // 0x39
+    s8 hammerSfxIdx;           // 0x3A, se_data index stepping by 2 (mot_hammer)
+    s8 partyUseDelay;          // 0x3B, frames before partyDoWork after the partner button (5); blocks marioChkTransform while nonzero
+    s8 characterId;            // 0x3C
+    s8 colorId;                // 0x3D
+    s8 dokanType;              // 0x3E, pipe kind set by evt_mario before motion 0x1D (mot_dokan)
+    s8 wallPushTimer;          // 0x3F, frames pushed into a wall before hitobjPush is set
+    s8 wMotionTimer;           // 0x40
+    s8 hammerChargeTimer;      // 0x41, mot_hammer charge frames (capped at 20)
+    s8 hammerChargeLv;         // 0x42, mot_hammer charge stage (3 = full)
+    s8 hammerDir;
+union {
+        s32 currSubMotionId; // 0x44
+        s32 slitState;       // 0x44, demo: mot_slit's state machine runs on the sub-motion id
+    };
+    union {
+        s32 multiTimer; // 0x48, per-motion frame counter
+        s32 slitTimer;  // 0x48, demo: mot_slit's timer is the per-motion counter
+    };
+s16 mutekiTimer;           // 0x4C
+    s16 forceMoveTimer;        // 0x4E
+    s16 airTimer;              // 0x50
+    s16 jumpPeakAirTime;       // 0x52, airTimer when the jump reached its peak (mario_motion.c marioJump)
+    s16 prevAirTimer;          // 0x54, airTimer of the previous frame (marioMain end)
+    u8 pad_56[0x58 - 0x56];    // 0x56, never accessed
+    s16 idleTimer;             // 0x58, mot_stay: frames standing (idle pose after 4 s)
+    s16 idleKeyTimer;          // 0x5A, mot_stay: frames before the stay sub-motion reacts
+    s16 zoomOffDelay;          // 0x5C, frames before marioCamZoomOff fires (32 on request)
+    s16 zoomOffTimer;          // 0x5E, frames until dispFlags 0x100000 (zoomed) clears
+    s16 zoomLevel;             // 0x60, 1..3 picks the zoom distance (520/475/440, else 450)
+    s16 zoomOffTime;           // 0x62, zoom-out time in 10 ms units (passed to evt_cam3d_evt_off)
+    f32 camZoomWeight;         // 0x64, camShiftZ; scales the projection shift in camdrv
+    f32 camZoom;               // 0x68, zoom factor (2.0 default) for the camdrv projection shift
+    Vec camZoomOfs;            // 0x6C, zoom focus offset from position
+    s16 kpaNoHitTimer;         // 0x78, Bowser: frames of no enemy contact (kpaNoHitEnemyCheck)
+    s16 itemGetDisableTimer;   // 0x7A, frames until flag 0x4000 (item get disabled) clears
+    f32 jumpVelocityY;         // 0x7C, JP0 in marioMakeJumpPara: position step per frame
+    f32 jumpAccelerationY;     // 0x80, JP1: velocity += this / div
+    f32 jumpJerkY;             // 0x84, JP2: acceleration += this / div
+    f32 jumpSnapY;             // 0x88, JP3: jerk += this / div
+    Vec position;              // 0x8C
+    Vec dispOfs;               // 0x98, added to position for drawing
+    Vec dispOfs2;              // 0xA4, second draw offset
+    Vec rotOfs;                // 0xB0, rotation pivot offset (.y = half height times scale)
+    Vec rot;                   // 0xBC, rotation in degrees (moo_* spin .z)
+    Vec scale;                 // 0xC8
+    Vec fallStartPos;          // 0xD4, position when airTimer was 0 (jump/fall start)
+    Vec returnPos;             // 0xE0, pipe entry position; bg-mode damage returns here
+    Vec camTarget;             // 0xEC
+    Vec camCollision;          // 0xF8
+    u8 pad_104[0x110 - 0x104]; // 0x104, never accessed
+    Vec basePos;               // 0x110, reference position (init, Bowser/Peach motion 8)
+    Vec lastGroundPos;         // 0x11C, position copied when leaving the ground (jump/roll/stay start), y = landing height
+    f32 jumpDistance;          // 0x128, horizontal distance from lastGroundPos (marioSetFallPara/landing)
+    f32 jumpPeakY;             // 0x12C, position.y at the jump peak (marioSetPeakYpos)
+    f32 tubeScaleY;            // 0x130, y scale while in tube mode
+    CameraId camId;            // 0x134
+    f32 camShiftTargetX;       // 0x138
+    f32 camShiftX;             // 0x13C
+    f32 camShiftTargetY;       // 0x140
+    f32 camShiftY;             // 0x144
+    f32 camShiftTargetZ;       // 0x148
+    f32 camShiftZ;             // 0x14C
+    Vec camShiftRate;          // 0x150
+    f32 camFollowRate;         // 0x15C
+    f32 prevCamPosX;           // 0x160
+    f32 baseHeight;            // 0x164, basePos.y - position.y (marioChkGndRoll)
+    s32 screenX;               // 0x168
+    s32 screenY;               // 0x16C
+    s32 screenZ;               // 0x170
+    Vec floorMove;             // 0x174, per-frame position correction: moving floor, evt_mario_set_hosei_xyz
+    f32 baseSpeed;             // 0x180, same on US
+    f32 baseWalkSpeed;         // 0x184
+    f32 baseDashSpeed;         // 0x188, same on US
+    f32 moveDist;
+f32 controlStickSensitivity; // 0x190
+    f32 controlStickAngle;       // 0x194
+    f32 targetYaw;               // 0x198
+    f32 moveDirection;           // 0x19C
+    f32 directionView;           // 0x1A0
+    f32 forceDir;                // 0x1A4, forced view direction while flags 0x40 (evt_mario_set_force_dir)
+    f32 displayDirection;        // 0x1A8
+    f32 displayDirectionTarget;  // 0x1AC
+    f32 savedDisplayDirection;   // 0x1B0, displayDirection saved by mot_hammer
+    Vec wPlayerCollisionBox;     // 0x1B4 JP, 0x1B8 US
+    f32 groundY;                 // 0x1C0, floor height under Mario (shadow)
+    f32 stepUpY;                 // 0x1C4, height of a small step in front
+    f32 wallPushDist;            // 0x1C8, largest push distance into the front wall
+    f32 wallPushDir;             // 0x1CC, direction of that push
+    s32 wallPushHold;            // 0x1D0, frames the push is held (14)
+    struct NpcEntry* touchNpc;
+struct HitEntry* hitobjFrontA;      // 0x1DC, wall in front found on an A press
+    struct HitEntry* hitobjFront;       // 0x1E0
+    struct HitEntry* hitobjStandOn;     // 0x1E4, 0x1E8 US
+    struct HitEntry* hitobjJumpFrom;    // 0x1E8, 0x1EC US
+    struct HitEntry* hitobjPush;        // 0x1EC JP, 0x1F0 US
+    struct HitEntry* hitobjWall;        // 0x1F0, wall touched this frame (before push threshold)
+    struct HitEntry* hitobjHead;        // 0x1F4
+    struct HitEntry* hitobjUnder;       // 0x1F8
+    struct HitEntry* hitobjHammer;      // 0x1FC, hit by the hammer (mobjdrv/casedrv/marioChkHitHammer)
+    struct HitEntry* hitobjHammerNew;   // 0x200, found by this swing frame (copied to hitobjHammer)
+    struct HitEntry* damageHit;         // 0x204
+    struct HitEntry* prevHitobjStandOn; // 0x208, hitobjStandOn of the previous frame (marioMain end)
+    struct HitEntry* hitobjFrontWall;   // 0x20C, front wall found by searchFrontWall
+    f32 frontWallDist;                  // 0x210, distance to the front wall (1000 = none)
+    f32 groundSlope;                    // 0x214, floor slope angle (degrees)
+    Vec groundRot;                      // 0x218, floor normal as x/z rotation angles (degrees)
+    f32 playerGravity;                  // 0x224 JP, 228 US, 1.0 (0.5 on moo_* moon maps); scales walk/dash speed and jump gravity (marioSetGravity)
+    s32 paperAnimGroupId[5];            // 0x228 JP, 0x22C US
+    s32 paperPoseId;                    // 0x23C JP, 0x240 US
+    u8 pad_240[0x241 - 0x240];          // 0x240, never accessed
+    s8 currPartySlotId[2];              // 0x241 JP, 0x245 US
+    s8 prevPartyMemberId[2];            // 0x243 JP, 0x247 US
+    u8 pad_245[0x246 - 0x245];          // 0x245, never accessed
+    u16 buttonHold;                     // 0x246, gp->button masked by enableKeyMask
+    u16 buttonTrg;                      // 0x248
+    u16 buttonRepeat;                   // 0x24A
+    u16 buttonUp;                       // 0x24C
+    s8 wStickDir1;                      // 0x24E JP, 0x252 US
+    s8 wStickDir2;                      // 0x24F JP, 0x253 US
+    s8 substickX;                       // 0x250
+    s8 substickY;                       // 0x251, negated
+    u8 triggerL;                        // 0x252
+    u8 triggerR;                        // 0x253
+    u8 analogA;                         // 0x254, always 0
+    u8 analogB;                         // 0x255, always 0
+    u8 pad_256[0x258 - 0x256];          // 0x256, never accessed
+    u32 demoButtonPrev;                 // 0x258, DemoPad buttons last frame
+    u32 demoButtonNew;                  // 0x25C, DemoPad buttons pressed this frame
+    void* balloonEffect;                // 0x260, EffectEntry*
+    void* balloonNpc;                   // 0x264, NpcEntry*
+    s32 slitPosSet;                     // 0x268, mot_slit: slitPos is valid
+    Vec slitPos;                        // 0x26C, mot_slit saved position
+    s32 soundId[3];
+u32 enableKeyMask; // 0x284 JP, 0x290 US: evt_mario_set_enable_key; 0 = all buttons
+    union {            // 0x288 JP, 0x294 US: per-motion work (motstruct design)
+        void* motStruct;
+        struct MotShipWork* motShip;
+        struct MotPlaneWork* motPlane;
+        struct MotJabaraWork* motJabara;
+        struct MotRollWork* motRoll;
+    };
+    struct KpaWork* kpaWork; // 0x28C JP, 0x298 US
+    f32 dirEvtStartDir;      // 0x290 JP, 0x29C US: marioSetDirEventMain
+    f32 dirEvtTargetDir;     // 0x294
+    s32 dirEvtMsec;          // 0x298
+    s32 dirEvtFrame;
+union {
+        MarioMotWork mot; // 0x2A0 JP
+        struct {
+            u8 pad_hipAngle[4]; // mot.hip.angle
+            s32 hipSfxId[2];    // 0x2A4 JP: mot_hip's spin and fall sounds, inside the motion work
+        };
+        struct {
+            u8 pad_stay[0x10];  // motion work up to mot_stay's counters
+            MarioStayWork stay; // 0x2B0 JP: mot_stay's counters, inside the motion work
+        };
+struct {
+            u8 pad_slit[0x10]; // mot.slit up to its second timer
+            s16 slitTimer2;    // demo: mot_slit's second timer, inside the motion work
+        };
+};
+u8 pad_2BC[0x2C0 - 0x2BC]; // 0x2BC, never accessed
+    s16 coinDropTimer;         // 0x2C0, set to 3 s by npcdrv (with muteki); marioMain drops a coin every 30 frames
+    u8 pad_2C2[0x2C4 - 0x2C2]; // 0x2C2, never accessed
+    f32 kpaSpeed;
+} MarioWork;
+#else
 typedef struct MarioWork {
     u32 flags;                     // 0x0
     u32 dispFlags;                 // 0x4, MarioDispFlags
@@ -526,6 +728,7 @@ typedef struct MarioWork {
     s16 slitTimer2;                // 0x2DA
     s32 slitTimer;                 // 0x2DC
 } MarioWork;                       // size 0x2E0 JP, 0x2F8 US
+#endif
 
 MarioWork* marioGetPtr(void);
 s32 marioGetColor(void);

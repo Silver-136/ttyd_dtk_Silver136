@@ -125,7 +125,11 @@ EVT_END()
  * picks music by story stage, registers the exits and spawns warning_event at STG5_31_FOUR_EYES.
  */
 EVT_BEGIN(muj_11_init_evt)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG5_33_CORTEZ_AND_THE_TREASURE)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
@@ -134,11 +138,21 @@ EVT_BEGIN(muj_11_init_evt)
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_31_FOUR_EYES)
+        SPAWN_EVENT(warning_event)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     // Only this story step starts the warning; the warning advances progress to the next step.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_31_FOUR_EYES)
         SPAWN_EVENT(PTR(warning_event))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, 0, 60, -20, 0, 0)
+    CALL(evt_mobj_save_blk, STRING("s_blk"), 50, 60, -20, 0, 0)
+#endif
     RETURN
 EVT_END()
 

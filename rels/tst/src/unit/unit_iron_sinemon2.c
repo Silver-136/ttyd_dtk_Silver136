@@ -33,14 +33,22 @@ static BattleUnitDefense defence_turn;
 static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_iron_sinemon_attack;
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table[17];
+#else
 static PoseTableEntry pose_table[18];
+#endif
 static BattleDataEntry data_table[3];
 static EvtWord init_event1[18];
 static EvtWord init_event2[18];
 static EvtWord init_event_sub[47];
 static EvtWord dmg_avoid_counter_thorn_head_event[76];
 static EvtWord damage_event[102];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[164];
+#else
 static EvtWord phase_event[188];
+#endif
 static EvtWord attack_event[385];
 static EvtWord wait_event[6];
 
@@ -208,7 +216,9 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ATTACK, "SIN_A_1a"},
     {POSE_TYPE_WALK, "SIN_W_1"},
     {POSE_TYPE_RUN, "SIN_R_1"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_TALK, "SIN_T_1"},
+#endif
     {POSE_TYPE_DANGER, "SIN_I_1"},
     {POSE_TYPE_PERIL, "SIN_I_1"},
     {POSE_TYPE_ACTION, "SIN_S_1"},
@@ -334,13 +344,27 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+DEBUG_PUT_MSG(STRING("ぺぺぺまん２"))
+IF_INT_EQUAL(GSWF(GSWF_TOU_IRON_CLEFTS_BEATEN), 1)
+#else
     IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
+#endif
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+DEBUG_PUT_MSG(STRING("ぺぺぺまん３"))
+#endif
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+DEBUG_PUT_MSG(STRING("ぺぺぺまん４"))
+#endif
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_EQUAL(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+DEBUG_PUT_MSG(STRING("ぺぺぺまん５"))
+#endif
             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_PARTNER)
             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -348,7 +372,11 @@ static EVT_BEGIN(phase_event)
             CALL(evt_btl_camera_set_moveto, 1, -104, 74, 334, -102, 52, 0, 30, 4)
             WAIT_FRAMES(30)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_EQUAL(GSWF(GSWF_TOU_IRON_CLEFTS_INTRO_SEEN), 0)
+#else
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
+#endif
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_266"))
                 ELSE
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_267"))
@@ -359,25 +387,42 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL(yoshi_exist, LW(0))
             IF_INT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_268"), 0, UNIT_ID_SELF)
+#else
                 CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_268"), 0, -2)
+#endif
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
+#if VERSION > VERSION_DEMO_US
                 CALL(btlevtcmd_SetTalkPoseType, LW(0), POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, LW(0), POSE_TYPE_ACTION)
+#endif
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_269"), 0, LW(0))
                 ELSE
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, UNIT_ID_SELF)
+#else
                 CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, -2)
+#endif
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
+#if VERSION > VERSION_DEMO_US
                 CALL(btlevtcmd_SetTalkPoseType, LW(0), POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, LW(0), POSE_TYPE_ACTION)
+#endif
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_271"), 0, LW(0))
             END_IF
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_EQUAL(GSWF(GSWF_TOU_IRON_CLEFTS_INTRO_SEEN), 0)
+                SET_VALUE(GSWF(GSWF_TOU_IRON_CLEFTS_INTRO_SEEN), 1)
+#else
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
                 SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 1)
+#endif
             END_IF
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

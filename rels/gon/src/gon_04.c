@@ -278,6 +278,214 @@ EVT_END()
  * turns back up instead. The outer IF_INT_NOT_EQUAL(1, 0) is always true, so its ELSE branch (the switch only
  * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_gon_04flowblock_updown1)
+CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
+    IF_INT_NOT_EQUAL(1, 0)
+        // Decide the direction from the saved state (only the ELSE arm below can run): with LSWF(6) clear the
+        // block is high and sinks 225 units, with it set the block is low and rises.
+        SET_VALUE(LW(10), 0)
+        IF_INT_EQUAL(1, 0)
+            IF_INT_EQUAL(LSWF(6), 0)
+                SET_VALUE(LW(10), 0)
+            ELSE
+                SET_VALUE(LW(10), 1)
+            END_IF
+        ELSE
+            IF_INT_EQUAL(LSWF(6), 0)
+                SET_VALUE(LW(10), 1)
+            ELSE
+                SET_VALUE(LW(10), 0)
+            END_IF
+        END_IF
+        IF_INT_EQUAL(LW(10), 0)
+            CALL(evt_mobj_get_y_position, STRING("mobj_fltbl01"), LW(2))
+            SET_FLOAT_VALUE(LW(3), LW(2))
+            ADD_FLOAT(LW(3), FLOAT(225.0f))
+            SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
+            SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
+        ELSE
+            CALL(evt_mobj_get_y_position, STRING("mobj_fltbl01"), LW(2))
+            SET_FLOAT_VALUE(LW(3), LW(2))
+            SUBTRACT_FLOAT(LW(3), FLOAT(225.0f))
+            SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
+            SET_FLOAT_VALUE(LW(9), 0)
+        END_IF
+BEGIN_SIBLING_EVENT
+            WAIT_FRAMES(10)
+            CALL(evt_sub_rumble_onoff, 0, 0)
+            WAIT_MS(300)
+            CALL(evt_sub_rumble_onoff, 1, 0)
+        END_SIBLING_EVENT
+        BEGIN_SIBLING_EVENT
+WAIT_FRAMES(10)
+            CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
+            LABEL(0)
+            CALL(evt_sub_intpl_get_value)
+            DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), LW(0), 100)
+            IF_INT_EQUAL(LW(1), 1)
+                GOTO(0)
+            END_IF
+END_SIBLING_EVENT
+WAIT_MS(500)
+        CALL(evt_mobj_get_position, STRING("mobj_fltbl01"), LW(12), LW(13), LW(14))
+        CALL(evt_mobj_get_kindname, STRING("mobj_fltbl01"), LW(11))
+        SET_VALUE(LF(0), 0)
+        IF_STR_EQUAL(LW(11), STRING("MOBJ_green_big02_FlowBlock"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(11), STRING("MOBJ_purple_big02_FlowBlock"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(11), STRING("MOBJ_orange_big02_FlowBlock"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_INT_EQUAL(LW(10), 0)
+            SET_VALUE(LF(1), 0)
+            IF_INT_EQUAL(LF(0), 1)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
+            ELSE
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
+            END_IF
+        ELSE
+            SET_VALUE(LF(1), 1)
+            IF_INT_EQUAL(LF(0), 1)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
+            ELSE
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
+            END_IF
+        END_IF
+        // The block moves a little each frame; if a sinking block comes down on Mario's head it turns back
+        // up, its state flag is flipped and the switch is reset.
+        SET_FLOAT_VALUE(LW(4), LW(2))
+        SET_VALUE(LF(0), 0)
+        LOOP(0)
+            // BUG: with no partner out the head test uses the bare mobj name, but mobj hit objects are
+            // named "MOBJ_" + name, so it never matches; with a partner it tests LW(7), which nothing sets,
+            // instead of the partner's head object. Fix: test "MOBJ_" + name, and fill LW(7) with
+            // evt_party_get_name_hitobj_head.
+            CALL(evt_mario_get_party, LW(5))
+            IF_INT_EQUAL(LW(5), 0)
+                CALL(evt_mario_get_name_hitobj_head, LW(6))
+                IF_STR_EQUAL(LW(6), STRING("mobj_fltbl01"))
+                    GOTO(1)
+                END_IF
+            ELSE
+                CALL(evt_mario_get_name_hitobj_head, LW(6))
+                IF_STR_EQUAL(LW(6), STRING("MOBJ_mobj_fltbl01"))
+                    GOTO(1)
+                END_IF
+                IF_STR_EQUAL(LW(7), STRING("MOBJ_mobj_fltbl01"))
+                    GOTO(1)
+                END_IF
+            END_IF
+            GOTO(2)
+            LABEL(1)
+            IF_INT_EQUAL(LW(10), 1)
+                SET_FLOAT_VALUE(LW(5), LW(2))
+                SET_FLOAT_VALUE(LW(2), LW(3))
+                SET_FLOAT_VALUE(LW(3), LW(5))
+                SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
+                SET_FLOAT_VALUE(LW(8), 0)
+                SET_FLOAT_VALUE(LW(10), 0)
+                IF_INT_EQUAL(LSWF(6), 0)
+                    SET_VALUE(LSWF(6), 1)
+                ELSE
+                    SET_VALUE(LSWF(6), 0)
+                END_IF
+                CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw01"))
+            END_IF
+            LABEL(2)
+            ADD_FLOAT(LW(4), LW(9))
+            ADD_FLOAT(LW(9), LW(8))
+            IF_FLOAT_GREATER_OR_EQUAL(LW(9), FLOAT(4.0f))
+                SET_FLOAT_VALUE(LW(9), FLOAT(4.0f))
+            END_IF
+            CALL(evt_mobj_get_position, STRING("mobj_fltbl01"), LW(11), LW(12), LW(13))
+            CALL(evt_snd_sfx_pos, LW(15), LW(11), LW(12), LW(13))
+            IF_INT_EQUAL(LW(10), 0)
+                IF_INT_GREATER_OR_EQUAL(LW(4), LW(3))
+                    SET_FLOAT_VALUE(LW(4), LW(3))
+                    SET_VALUE(LF(0), 1)
+                END_IF
+            ELSE
+                IF_INT_LESS_OR_EQUAL(LW(4), LW(3))
+                    SET_FLOAT_VALUE(LW(4), LW(3))
+                    SET_VALUE(LF(0), 1)
+                END_IF
+            END_IF
+            CALL(evt_mobj_set_y_position, STRING("mobj_fltbl01"), LW(4))
+            IF_INT_EQUAL(LF(0), 1)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        // The block reaches its destination and the moving sound stops; a block that has sunk stops with a
+        // thump and a screen shake.
+        IF_INT_EQUAL(LF(1), 0)
+            CALL(evt_snd_sfxoff, LW(15))
+        END_IF
+        BEGIN_INLINE_EVENT
+            CALL(evt_mobj_get_position, STRING("mobj_fltbl01"), LW(13), LW(14), LW(15))
+            CALL(evt_mobj_get_kindname, STRING("mobj_fltbl01"), LW(12))
+            SET_VALUE(LF(0), 0)
+            IF_STR_EQUAL(LW(12), STRING("MOBJ_green_big02_FlowBlock"))
+                SET_VALUE(LF(0), 1)
+            END_IF
+            IF_STR_EQUAL(LW(12), STRING("MOBJ_purple_big02_FlowBlock"))
+                SET_VALUE(LF(0), 1)
+            END_IF
+            IF_STR_EQUAL(LW(12), STRING("MOBJ_orange_big02_FlowBlock"))
+                SET_VALUE(LF(0), 1)
+            END_IF
+            IF_INT_EQUAL(LW(10), 1)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_STOP1"), LW(13), LW(14), LW(15), 0)
+            END_IF
+        END_INLINE_EVENT
+        IF_INT_EQUAL(LW(10), 1)
+BEGIN_SIBLING_EVENT
+                CALL(evt_sub_rumble_onoff, 0, 0)
+                WAIT_MS(300)
+                CALL(evt_sub_rumble_onoff, 1, 0)
+            END_SIBLING_EVENT
+            BEGIN_SIBLING_EVENT
+CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
+                LABEL(2)
+                CALL(evt_sub_intpl_get_value)
+                DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
+                CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), LW(0), 100)
+                IF_INT_EQUAL(LW(1), 1)
+                    GOTO(2)
+                END_IF
+END_SIBLING_EVENT
+WAIT_MS(1000)
+        END_IF
+        // The block's saved up/down state is flipped.
+        IF_INT_EQUAL(LSWF(6), 0)
+            SET_VALUE(LSWF(6), 1)
+        ELSE
+            SET_VALUE(LSWF(6), 0)
+        END_IF
+        // Dead code: IF_INT_NOT_EQUAL(1, 0) is always true, so this branch (the switch just resetting after a
+        // short wait) never runs.
+    ELSE
+        CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw01"))
+        SET_VALUE(LW(0), 0)
+        LOOP(0)
+            WAIT_FRAMES(2)
+            SET_VALUE(LW(1), LW(0))
+            MODULO(LW(1), 2)
+            ADD(LW(0), 1)
+            IF_INT_GREATER_OR_EQUAL(LW(0), 20)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_IF
+    CALL(evt_mobj_hitevt_onoff, STRING("me"), 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(evt_gon_04flowblock_updown1)
     SET_TYPE(239)
     // The switch is disabled while the block moves.
@@ -503,6 +711,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Map-init helper for the second floating block (mobj_fltbl02):
@@ -532,6 +741,214 @@ EVT_END()
  * and camera shake, and flips the state flag LSWF(7).
  */
 // This switch moves block 2 only after the large level-1 block has been broken.
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_gon_04flowblock_updown2)
+CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
+    IF_INT_NOT_EQUAL(GSWF(GSWF_GON04_BIG_BLOCK_A_BROKEN), 0)
+        // The block only moves once big block A in this room has been broken.
+        // Decide the direction from the saved state: a low block will rise 200 units, a raised one will sink
+        // back.
+        SET_VALUE(LW(10), 0)
+        IF_INT_EQUAL(0, 0)
+            IF_INT_EQUAL(LSWF(7), 0)
+                SET_VALUE(LW(10), 0)
+            ELSE
+                SET_VALUE(LW(10), 1)
+            END_IF
+        ELSE
+            IF_INT_EQUAL(LSWF(7), 0)
+                SET_VALUE(LW(10), 1)
+            ELSE
+                SET_VALUE(LW(10), 0)
+            END_IF
+        END_IF
+        IF_INT_EQUAL(LW(10), 0)
+            CALL(evt_mobj_get_y_position, STRING("mobj_fltbl02"), LW(2))
+            SET_FLOAT_VALUE(LW(3), LW(2))
+            ADD_FLOAT(LW(3), FLOAT(200.0f))
+            SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
+            SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
+        ELSE
+            CALL(evt_mobj_get_y_position, STRING("mobj_fltbl02"), LW(2))
+            SET_FLOAT_VALUE(LW(3), LW(2))
+            SUBTRACT_FLOAT(LW(3), FLOAT(200.0f))
+            SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
+            SET_FLOAT_VALUE(LW(9), 0)
+        END_IF
+BEGIN_SIBLING_EVENT
+            WAIT_FRAMES(10)
+            CALL(evt_sub_rumble_onoff, 0, 0)
+            WAIT_MS(300)
+            CALL(evt_sub_rumble_onoff, 1, 0)
+        END_SIBLING_EVENT
+        BEGIN_SIBLING_EVENT
+WAIT_FRAMES(10)
+            CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
+            LABEL(0)
+            CALL(evt_sub_intpl_get_value)
+            DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
+            CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), LW(0), 100)
+            IF_INT_EQUAL(LW(1), 1)
+                GOTO(0)
+            END_IF
+END_SIBLING_EVENT
+WAIT_MS(500)
+        CALL(evt_mobj_get_position, STRING("mobj_fltbl02"), LW(12), LW(13), LW(14))
+        CALL(evt_mobj_get_kindname, STRING("mobj_fltbl02"), LW(11))
+        SET_VALUE(LF(0), 0)
+        IF_STR_EQUAL(LW(11), STRING("MOBJ_green_big02_FlowBlock"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(11), STRING("MOBJ_purple_big02_FlowBlock"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(11), STRING("MOBJ_orange_big02_FlowBlock"))
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_INT_EQUAL(LW(10), 0)
+            SET_VALUE(LF(1), 0)
+            IF_INT_EQUAL(LF(0), 1)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
+            ELSE
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_MOVE1"), LW(12), LW(13), LW(14), LW(15))
+            END_IF
+        ELSE
+            SET_VALUE(LF(1), 1)
+            IF_INT_EQUAL(LF(0), 1)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
+            ELSE
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
+            END_IF
+        END_IF
+        // The block moves a little each frame; if a sinking block comes down on Mario's head it turns back
+        // up, its state flag is flipped and the switch is reset.
+        SET_FLOAT_VALUE(LW(4), LW(2))
+        SET_VALUE(LF(0), 0)
+        LOOP(0)
+            // BUG: with no partner out the head test uses the bare mobj name, but mobj hit objects are
+            // named "MOBJ_" + name, so it never matches; with a partner it tests LW(7), which nothing sets,
+            // instead of the partner's head object. Fix: test "MOBJ_" + name, and fill LW(7) with
+            // evt_party_get_name_hitobj_head.
+            CALL(evt_mario_get_party, LW(5))
+            IF_INT_EQUAL(LW(5), 0)
+                CALL(evt_mario_get_name_hitobj_head, LW(6))
+                IF_STR_EQUAL(LW(6), STRING("mobj_fltbl02"))
+                    GOTO(1)
+                END_IF
+            ELSE
+                CALL(evt_mario_get_name_hitobj_head, LW(6))
+                IF_STR_EQUAL(LW(6), STRING("MOBJ_mobj_fltbl02"))
+                    GOTO(1)
+                END_IF
+                IF_STR_EQUAL(LW(7), STRING("MOBJ_mobj_fltbl02"))
+                    GOTO(1)
+                END_IF
+            END_IF
+            GOTO(2)
+            LABEL(1)
+            IF_INT_EQUAL(LW(10), 1)
+                SET_FLOAT_VALUE(LW(5), LW(2))
+                SET_FLOAT_VALUE(LW(2), LW(3))
+                SET_FLOAT_VALUE(LW(3), LW(5))
+                SET_FLOAT_VALUE(LW(9), FLOAT(2.0f))
+                SET_FLOAT_VALUE(LW(8), 0)
+                SET_FLOAT_VALUE(LW(10), 0)
+                IF_INT_EQUAL(LSWF(7), 0)
+                    SET_VALUE(LSWF(7), 1)
+                ELSE
+                    SET_VALUE(LSWF(7), 0)
+                END_IF
+                CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw02"))
+            END_IF
+            LABEL(2)
+            ADD_FLOAT(LW(4), LW(9))
+            ADD_FLOAT(LW(9), LW(8))
+            IF_FLOAT_GREATER_OR_EQUAL(LW(9), FLOAT(4.0f))
+                SET_FLOAT_VALUE(LW(9), FLOAT(4.0f))
+            END_IF
+            CALL(evt_mobj_get_position, STRING("mobj_fltbl02"), LW(11), LW(12), LW(13))
+            CALL(evt_snd_sfx_pos, LW(15), LW(11), LW(12), LW(13))
+            IF_INT_EQUAL(LW(10), 0)
+                IF_INT_GREATER_OR_EQUAL(LW(4), LW(3))
+                    SET_FLOAT_VALUE(LW(4), LW(3))
+                    SET_VALUE(LF(0), 1)
+                END_IF
+            ELSE
+                IF_INT_LESS_OR_EQUAL(LW(4), LW(3))
+                    SET_FLOAT_VALUE(LW(4), LW(3))
+                    SET_VALUE(LF(0), 1)
+                END_IF
+            END_IF
+            CALL(evt_mobj_set_y_position, STRING("mobj_fltbl02"), LW(4))
+            IF_INT_EQUAL(LF(0), 1)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        // The block reaches its destination and the moving sound stops; a block that has sunk stops with a
+        // thump and a screen shake.
+        IF_INT_EQUAL(LF(1), 0)
+            CALL(evt_snd_sfxoff, LW(15))
+        END_IF
+        BEGIN_INLINE_EVENT
+            CALL(evt_mobj_get_position, STRING("mobj_fltbl02"), LW(13), LW(14), LW(15))
+            CALL(evt_mobj_get_kindname, STRING("mobj_fltbl02"), LW(12))
+            SET_VALUE(LF(0), 0)
+            IF_STR_EQUAL(LW(12), STRING("MOBJ_green_big02_FlowBlock"))
+                SET_VALUE(LF(0), 1)
+            END_IF
+            IF_STR_EQUAL(LW(12), STRING("MOBJ_purple_big02_FlowBlock"))
+                SET_VALUE(LF(0), 1)
+            END_IF
+            IF_STR_EQUAL(LW(12), STRING("MOBJ_orange_big02_FlowBlock"))
+                SET_VALUE(LF(0), 1)
+            END_IF
+            IF_INT_EQUAL(LW(10), 1)
+                CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_STOP1"), LW(13), LW(14), LW(15), 0)
+            END_IF
+        END_INLINE_EVENT
+        IF_INT_EQUAL(LW(10), 1)
+BEGIN_SIBLING_EVENT
+                CALL(evt_sub_rumble_onoff, 0, 0)
+                WAIT_MS(300)
+                CALL(evt_sub_rumble_onoff, 1, 0)
+            END_SIBLING_EVENT
+            BEGIN_SIBLING_EVENT
+CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 10)
+                LABEL(2)
+                CALL(evt_sub_intpl_get_value)
+                DIVIDE_FLOAT(LW(0), FLOAT(1000.0f))
+                CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), LW(0), 100)
+                IF_INT_EQUAL(LW(1), 1)
+                    GOTO(2)
+                END_IF
+END_SIBLING_EVENT
+WAIT_MS(1000)
+        END_IF
+        // The block's saved up/down state is flipped.
+        IF_INT_EQUAL(LSWF(7), 0)
+            SET_VALUE(LSWF(7), 1)
+        ELSE
+            SET_VALUE(LSWF(7), 0)
+        END_IF
+        // Big block A is not broken yet: the block stays put and the switch resets after a short wait.
+    ELSE
+        CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw02"))
+        SET_VALUE(LW(0), 0)
+        LOOP(0)
+            WAIT_FRAMES(2)
+            SET_VALUE(LW(1), LW(0))
+            MODULO(LW(1), 2)
+            ADD(LW(0), 1)
+            IF_INT_GREATER_OR_EQUAL(LW(0), 20)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_IF
+    CALL(evt_mobj_hitevt_onoff, STRING("me"), 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(evt_gon_04flowblock_updown2)
     SET_TYPE(239)
     // The switch is disabled while the block moves.
@@ -757,6 +1174,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 1)
     RETURN
 EVT_END()
+#endif
 
 /** Positions (x, z) where dust puffs rise when the first folding stairs land. */
 KemuriPos kemuri_pos1[] = {
@@ -1051,7 +1469,11 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0D, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF

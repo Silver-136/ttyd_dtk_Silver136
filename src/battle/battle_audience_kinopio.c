@@ -49,6 +49,10 @@ void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front);
+#if VERSION <= VERSION_DEMO_US
+static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front);
+#endif
 void BattleAudienceCtrlProcessKinopioSingSub(s32 index);
 void BattleAudienceCtrlProcessKinopioFireSub(s32 index);
 
@@ -119,6 +123,14 @@ void BattleAudienceCtrlProcessKinopio(s32 index) {
     case AUDIENCE_STATUS_EAT:
         BattleAudienceCtrlProcessKinopioEat(index, front);
         break;
+#if VERSION <= VERSION_DEMO_US
+case 21:
+            BattleAudienceCtrlProcessKinopioNoGravity(index, front);
+            break;
+        case 22:
+            BattleAudienceCtrlProcessKinopioAudBall(index, front);
+            break;
+#endif
     }
     m->position.x += m->velocity.x;
     m->velocity.x += m->accel.x;
@@ -1517,3 +1529,9 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
         break;
     }
 }
+#if VERSION <= VERSION_DEMO_US
+static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front) {
+}
+static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front) {
+}
+#endif

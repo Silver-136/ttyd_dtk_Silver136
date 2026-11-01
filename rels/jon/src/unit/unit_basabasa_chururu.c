@@ -195,6 +195,9 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_basabasa_chururu", "c_cyuru", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 75, 90, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 70, 100, 100, 70, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     75, // stop
@@ -219,6 +222,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Attack data for the Swoopula's draining bite: 4 damage. */
 static BattleWeapon weapon_basabasa_attack = {

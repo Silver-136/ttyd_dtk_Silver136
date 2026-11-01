@@ -86,14 +86,25 @@ BattleUnitKind unit_hyper_sinemon = {
 };
 
 /** Defence of the Hyper Cleft's body per damage type: 3 against every damage type. */
+#if VERSION <= VERSION_DEMO_US
+static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
+#else
 static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
+#endif
 
 /** Defence of the Hyper Cleft's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
 /** Defence attributes of the Hyper Cleft's body: none, so every damage type is dealt normally. */
+#if VERSION <= VERSION_DEMO_US
+static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+#else
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 80, 80, 50, 30, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     40, // sleep
     90, // stop
@@ -118,6 +129,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Body part of the Hyper Cleft: a single part using the model "c_sinemon_h". */
 static BattleUnitKindPart parts[] = {

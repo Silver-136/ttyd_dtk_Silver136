@@ -116,6 +116,15 @@ static inline void fontDrawCodeEdge(u16 code) {
 void fontmgrInit(void) {
 }
 
+#if VERSION == VERSION_DEMO_JP
+void fontmgrTexSetup(void) {
+JUTFontSetup(0);
+}
+#elif VERSION == VERSION_DEMO_US
+void fontmgrTexSetup(void) {
+JUTFontSetup(1);
+}
+#else
 void fontmgrTexSetup(void) {
 #if VERSION >= VERSION_US
     JUTFontSetup(gp->language);
@@ -123,6 +132,7 @@ void fontmgrTexSetup(void) {
     JUTFontSetup(0);
 #endif
 }
+#endif
 
 /** Starts a block of text drawing at full opacity; see FontDrawStart_alpha. */
 void FontDrawStart(void) {

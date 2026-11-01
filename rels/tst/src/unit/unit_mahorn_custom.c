@@ -92,7 +92,11 @@ static EvtWord trans_magic_event[49];
 static EvtWord yokeyoke_magic_event[49];
 static EvtWord recover_magic_event[70];
 static EvtWord bunsin_event[152];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord spawn_event[72];
+#else
 static EvtWord spawn_event[76];
+#endif
 static EvtWord wait_event[386];
 
 /** Unit data of the Elite Wizzerd: stats, sounds, attributes, parts, init script and data table. */
@@ -103,26 +107,67 @@ BattleUnitKind unit_mahorn_custom = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
+#if VERSION <= VERSION_DEMO_US
+50,
+0,
+1,
+#else
     36, // level
     2, // bonusExp
     3, // bonusCoin
+#endif
     70, // bonusCoinRate
+#if VERSION <= VERSION_DEMO_US
+5,
+#else
     2, // baseCoin
+#endif
     50, // runRate
     9999, // pbSoftCap
     48, // width
     44, // height
+#if VERSION <= VERSION_DEMO_US
+    0,
+    44,
+    0.0f,
+    22.0f,
+    0.0f,
+    0,
+    -9,
+#else
     {0, 44}, // hitOffset
     {0.0f, 22.0f, 0.0f}, // centerOffset
     {0, -9}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {24.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    24.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    24.0f,
+    0.0f,
+    0.0f,
+    16.0f,
+    28.6f,
+    10.0f,
+    0.0f,
+    22.0f,
+    0.0f,
+#else
     {24.0f, 0.0f, 0.0f}, // bintaHitOffset
     {16.0f, 28.6f, 10.0f}, // kissHitOffset
     {0.0f, 22.0f, 0.0f}, // cutBaseOffset
+#endif
     48.0f, // cutWidth
     44.0f, // cutHeight
     0, // turnOrder
@@ -131,7 +176,13 @@ BattleUnitKind unit_mahorn_custom = {
     2, // swallowAttributes
     0, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_MAHO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -153,7 +204,11 @@ BattleUnitKind unit_mahorn_custom_bunsin = {
     1,
     1,
     1,
+#if VERSION <= VERSION_DEMO_US
+0,
+#else
     2,
+#endif
     0,
     60,
     0,
@@ -217,6 +272,9 @@ static BattleUnitDefense defence = {{5, 5, 5, 5, 5}};
 /** Element response of the Elite Wizzerd: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 30, 30, 100, 20, 100, 100, 20, 100, 20, 100, 20, 100, 20, 20, 10, 55, 100, 20, 100, 100, 20};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     30, // stop
@@ -241,7 +299,11 @@ static StatusVulnerability regist = {
     100, // invisible
     20, // ohko
 };
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 0};
+#else
 static StatusVulnerability regist_bunsin = {
     0, // sleep
     0, // stop
@@ -266,6 +328,7 @@ static StatusVulnerability regist_bunsin = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /** Body parts of the Elite Wizzerd: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
@@ -293,13 +356,21 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
+#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -314,6 +385,44 @@ static BattleWeapon weapon_mahorn_attack_magic = {
 };
 
 /** Attack data for the Elite Wizzerd's magic on all enemies: 8 damage. */
+#if VERSION <= VERSION_DEMO_US
+static BattleWeapon weapon_mahorn_all_attack_magic = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault,
+{5, 0, 0, 0, 0, 0, 0, 0},
+NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_ELECTRIC, // element
+    ATTACKPATTERN_NULL, // damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL, // acHelpMsg
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
+    COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
+    0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
+    0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
+    0, 0, 0, 0, 0, 0, 0, 0, // atkChangeStrength..chargeStrength
+    0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
+    0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -354,6 +463,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /** Attack data for the Elite Wizzerd's punch flurry: 8 damage. */
 static BattleWeapon weapon_mahorn_attack_punch = {
@@ -607,9 +717,16 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_punch))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(attack_punch_event)
+#else
         CALL_CHILD(PTR(attack_punch_event))
+#endif
         GOTO(99)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // Does nothing on its turn while unit work 4 is set (a clone).
+#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
@@ -621,30 +738,59 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // Only one Wizzerd left alive: it conjures clones of itself.
+#endif
     CALL(mahorn_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bunsin_event)
+#else
         // If it is the only unit left on its side, it splits into copies.
         CALL_CHILD(PTR(bunsin_event))
+#endif
         RETURN
+#if VERSION <= VERSION_DEMO_US
+        // Several Wizzerds with some clones: the group casts a magic attack together (a confused one is flustered
+        // instead).
+#endif
     ELSE
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(subsetevt_confuse_flustered)
+#else
                 CALL_CHILD(PTR(subsetevt_confuse_flustered))
+#endif
                 GOTO(99)
             END_IF
             SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(attack_magic_event)
+#else
             // With copies around it only casts its single-target magic.
             CALL_CHILD(PTR(attack_magic_event))
+#endif
             GOTO(99)
+#if VERSION > VERSION_DEMO_US
         ELSE
+#endif
             // Otherwise it draws a move: the punch flurry, single-target magic, or one of the other spells
             // (all-enemy magic, size-up, defence-up, invisibility, dodgy, heal).
+#if VERSION <= VERSION_DEMO_US
+        ELSE
+#endif
             LABEL(10)
             SET_VALUE(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(0), 50)
+ADD(LW(0), 50)
+#else
             ADD(LW(0), 30)
             ADD(LW(0), 60)
+#endif
             ADD(LW(0), 10)
             ADD(LW(0), 10)
             ADD(LW(0), 10)
@@ -653,57 +799,100 @@ static EVT_BEGIN(attack_event)
             ADD(LW(0), 10)
             SUBTRACT(LW(0), 1)
             CALL(evt_sub_random, LW(0), LW(1))
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(LW(0), 50)
+#else
             SET_VALUE(LW(0), 30)
+#endif
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_punch))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(attack_punch_event)
+#else
                 CALL_CHILD(PTR(attack_punch_event))
+#endif
                 GOTO(99)
             END_IF
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(0), 50)
+#else
             ADD(LW(0), 60)
+#endif
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(attack_magic_event)
+#else
                 CALL_CHILD(PTR(attack_magic_event))
+#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_all_attack_magic))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(all_attack_magic_event)
+#else
                 CALL_CHILD(PTR(all_attack_magic_event))
+#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_dekadeka_magic))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(dekadeka_magic_event)
+#else
                 CALL_CHILD(PTR(dekadeka_magic_event))
+#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_katikati_magic))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(katikati_magic_event)
+#else
                 CALL_CHILD(PTR(katikati_magic_event))
+#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_trans_magic))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(trans_magic_event)
+#else
                 CALL_CHILD(PTR(trans_magic_event))
+#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_yokeyoke_magic))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(yokeyoke_magic_event)
+#else
                 CALL_CHILD(PTR(yokeyoke_magic_event))
+#endif
                 GOTO(99)
             END_IF
             ADD(LW(0), 10)
             IF_INT_LESS(LW(1), LW(0))
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_recover_magic))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(recover_magic_event)
+#else
                 CALL_CHILD(PTR(recover_magic_event))
+#endif
                 GOTO(99)
             END_IF
             GOTO(10)
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // Back to waiting.
+#endif
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1866,7 +2055,9 @@ static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(mahorn_copy_status, LW(13), LW(3))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
+#endif
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)
     CALL(btlevtcmd_SetEventAttack, LW(3), PTR(attack_event_bunsin))
     CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(&regist_bunsin))

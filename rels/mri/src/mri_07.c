@@ -60,7 +60,11 @@ static ShopItem goods_list[] = {
 
 /** What the clerk buys from Mario and at what price (the trade-in list of the shop). */
 static ShopDb trade_list[] = {
+#if VERSION <= VERSION_DEMO_US
+{ITEM_HP_DRAIN_BADGE, 5, 0},
+#else
     {ITEM_HP_DRAIN_ITEM, 5, 0},
+#endif
     {ITEM_ICE_STORM, 7, 0},
     {ITEM_MYSTERY, 1, 0},
     {ITEM_MINI_MR_MINI, 4, 0},
@@ -91,7 +95,11 @@ EVT_BEGIN(chibitoge_nakama)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_TOGETTI_JUMP1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_jump_position_nohit, STRING("me"), -167, 44, 41, 400, 50)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(mri_guide_goryu)
+#else
     CALL_CHILD(PTR(mri_guide_goryu))
+#endif
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_msg_print, 0, STRING("stg2_mri_f01_00"), 0, STRING("ガイドsp"))
@@ -101,7 +109,9 @@ EVT_BEGIN(chibitoge_nakama)
     CALL(evt_msg_print, 0, STRING("stg2_mri_f01_01"), 0, STRING("プニ店員"))
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_stop, 0)
+#endif
     CALL(evt_msg_print_party, STRING("stg2_mri_f01_02"))
     CALL(evt_msg_select, 0, STRING("stg2_mri_f01_yesno"))
     CALL(evt_msg_continue)
@@ -140,12 +150,18 @@ EVT_BEGIN(chibitoge_nakama)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         CALL(evt_puni_init_puni, 3, 1, LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSWF(GSWF_MRI_JABBI_IN_PUNI_GROUP), 1)
+#else
         SET_VALUE(GSWF_MRI_JABBLE_JOINED, 1)
+#endif
     END_IF
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     CALL(evt_npc_flag_onoff, 0, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_run, 0)
+#endif
     RETURN
 EVT_END()
 

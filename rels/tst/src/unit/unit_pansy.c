@@ -27,7 +27,11 @@ static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[2];
 static EvtWord init_event[21];
 static EvtWord damage_event[10];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord song_event[298];
+#else
 static EvtWord song_event[300];
+#endif
 static EvtWord escape_event[96];
 static EvtWord wait_event[6];
 
@@ -89,6 +93,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Crazee Dayzee's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {95, 30, 30, 100, 30, 100, 100, 30, 100, 30, 100, 30, 100, 30, 30, 100, 80, 100, 30, 100, 100, 30};
+#else
 static StatusVulnerability regist = {
     95, // sleep
     30, // stop
@@ -113,6 +120,7 @@ static StatusVulnerability regist = {
     100, // invisible
     30, // ohko
 };
+#endif
 
 /** Body part of the Crazee Dayzee: a single part using the model "c_pansy". */
 static BattleUnitKindPart parts[] = {
@@ -120,6 +128,45 @@ static BattleUnitKindPart parts[] = {
 };
 
 /** Crazee Dayzee's attack: 2 damage to every target, a plain attack. */
+#if VERSION <= VERSION_DEMO_US
+BattleWeapon weapon_pansy_attack = {
+    NULL, 0, // name..icon
+    {0}, // pad_06
+    0, NULL, // itemId..description
+    100, // baseAccuracy
+    0, 0,
+0,
+1.0f, // reserved_14
+    1, // stylishCommandMultiplier
+    1, // reserved_19
+    1, // bingoSlotChance
+    1, // reserved_1B
+    weaponGetPowerDefault, // hpDamageFn
+    {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
+    NULL, // fpDamageFn
+    {0}, // fpDamageWork
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
+    3, // acLevel
+    2, // reserved_6F
+    NULL,
+SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+COUNTER_RESIST_ALL, // counterResistFlags
+    TARGET_WEIGHT_RANDOM,
+75,
+5, // sleepTime
+    0, 0, 0, 0, 0, 0, 0, 0, // stopChance..confuseChance
+    0, 0, 0, 0, 0, 0, 0, 0, // confuseTime..freezeChance
+    0, 0, 0, 0, 0, 0, 0, 0, // freezeTime..defChangeChance
+    0, 0, 0, 0, 0, 0, 0, 0, // defChangeTime..fastTime
+    0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
+    0, 0, 0, 0, // hpRegenTime..fpRegenStrength
+    {0}, // pad_AE
+    NULL, // attackEvtScript
+    {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
+};
+#else
 BattleWeapon weapon_pansy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -165,6 +212,7 @@ BattleWeapon weapon_pansy_attack = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
+#endif
 
 /**
  * Attack event of the Crazee Dayzee: uses an enemy item if it has one;
@@ -254,8 +302,14 @@ EVT_END()
  * and finally fades the map back to normal.
  */
 static EVT_BEGIN(song_event)
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+#endif
     // Target: it picks the targets for its song.
+#if VERSION <= VERSION_DEMO_US
+    // with no target it does nothing (or is flustered when confused).
+    CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+#endif
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -266,14 +320,24 @@ static EVT_BEGIN(song_event)
         END_IF
         GOTO(99)
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+#endif
     // The attack is declared.
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_WeaponAftereffect, LW(9))
+#endif
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
+#if VERSION > VERSION_DEMO_US
     // The map darkens while the Dayzee takes a breath.
+#endif
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+#if VERSION <= VERSION_DEMO_US
+    // The stage dims and takes on a blue tint as the Crazee Dayzee starts to sing.
+#endif
     SET_VALUE(LW(0), 255)
     SET_VALUE(LW(1), 255)
     LOOP(0)
@@ -298,10 +362,17 @@ static EVT_BEGIN(song_event)
             WAIT_FRAMES(12)
         END_LOOP
     END_SIBLING_EVENT
+#if VERSION <= VERSION_DEMO_US
+WAIT_FRAMES(60)
+    WAIT_FRAMES(60)
+#else
     WAIT_FRAMES(120)
+#endif
     SET_VALUE(LW(6), 0)
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     // The pre-damage check decides between a dodge and a hit for each target in turn.
+#endif
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -336,18 +407,26 @@ static EVT_BEGIN(song_event)
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(97)
+#if VERSION <= VERSION_DEMO_US
+    // Next target, until all have been checked.
+#endif
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(98)
     END_IF
     GOTO(10)
+#if VERSION <= VERSION_DEMO_US
+    // The stage light fades back to normal.
+#endif
     LABEL(98)
     SET_VALUE(LW(0), 192)
     SET_VALUE(LW(1), 255)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 256)
+#if VERSION > VERSION_DEMO_US
             // The notes stop and the map fades back to normal.
+#endif
             BREAK_LOOP
         END_IF
         CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(1), 255)

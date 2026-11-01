@@ -287,16 +287,28 @@ static EVT_BEGIN(evt_kanban2)
 EVT_END()
 
 EVT_BEGIN(tik_06_init_evt)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
+#else
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#endif
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(iri_12_init)
+    CALL(evt_mobj_signboard, STRING("board"), -50, 0, 50, PTR(evt_kanban), LSWF(0))
+    CALL(evt_mobj_signboard, STRING("board2"), 50, 0, -250, PTR(evt_kanban2), LSWF(0))
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, ITEM_TYPE_STILL, GSWF(GSWF_TIK06_STAR_PIECE), 0)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(iri_12_init))
     CALL(evt_mobj_signboard, STRING("board"), -50, 0, 50, PTR(evt_kanban), LSWF_TIK_06_SIGNBOARD_UNUSED)
     CALL(evt_mobj_signboard, STRING("board2"), 50, 0, -250, PTR(evt_kanban2), LSWF_TIK_06_SIGNBOARD_UNUSED)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, ITEM_TYPE_STILL, GSWF_STARPIECE_26, 0)
+#endif
     RETURN
 EVT_END()
 

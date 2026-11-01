@@ -75,7 +75,11 @@ static BattleUnitSetup entry_rocket_punch;
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[216];
+#else
 static EvtWord dead_event[234];
+#endif
 static EvtWord entry_event[78];
 static EvtWord attack_event[150];
 EvtWord stamp_attack_event[352];
@@ -118,17 +122,48 @@ BattleUnitKind unit_boss_magnum_battender = {
     6, // pbSoftCap
     120, // width
     160, // height
+#if VERSION <= VERSION_DEMO_US
+    30,
+    100,
+    0.0f,
+    80.0f,
+    0.0f,
+    0,
+    0,
+#else
     {30, 100}, // hitOffset
     {0.0f, 80.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {30.0f, 115.0f, 0.0f}, // talkTogeBaseOffset
     {60.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+0.0f,
+    60.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    52.0f,
+    0.0f,
+    0.0f,
+    30.0f,
+    110.0f,
+    20.0f,
+    0.0f,
+    80.0f,
+    0.0f,
+#else
     {52.0f, 0.0f, 0.0f}, // bintaHitOffset
     {30.0f, 110.0f, 20.0f}, // kissHitOffset
     {0.0f, 80.0f, 0.0f}, // cutBaseOffset
+#endif
     120.0f, // cutWidth
     160.0f, // cutHeight
     0, // turnOrder
@@ -137,7 +172,13 @@ BattleUnitKind unit_boss_magnum_battender = {
     0, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_BOSS_MBTN_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -156,6 +197,9 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Defence attributes of Magnus: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 50, 50, 0, 50, 0, 100, 30, 0, 0, 100, 0, 100, 50, 50, 0, 0, 100, 40, 0, 0, 0};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     50, // stop
@@ -180,14 +224,20 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MGN_S_1"},
     {POSE_TYPE_STOP, "MGN_2D_1"},
     {POSE_TYPE_FREEZE, "MGN_2D_1"},
     {POSE_TYPE_CONFUSE, "MGN_X_1"},
+#if VERSION <= VERSION_DEMO_US
+{POSE_TYPE_POISON, "MGN_S_1"},
+    {POSE_TYPE_DIZZY, "MGN_S_1"},
+#else
     {POSE_TYPE_POISON, "MGN_X_1"},
     {POSE_TYPE_DIZZY, "MGN_X_1"},
+#endif
     {POSE_TYPE_NORMAL, "MGN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MGN_Q_1"},
@@ -207,8 +257,13 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_STOP, "MGN_2D_2"},
     {POSE_TYPE_FREEZE, "MGN_2D_2"},
     {POSE_TYPE_CONFUSE, "MGN_X_2"},
+#if VERSION <= VERSION_DEMO_US
+{POSE_TYPE_POISON, "MGN_S_2"},
+    {POSE_TYPE_DIZZY, "MGN_S_2"},
+#else
     {POSE_TYPE_POISON, "MGN_X_2"},
     {POSE_TYPE_DIZZY, "MGN_X_2"},
+#endif
     {POSE_TYPE_NORMAL, "MGN_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "MGN_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MGN_Q_2"},
@@ -550,15 +605,21 @@ static EVT_BEGIN(dead_event)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
     CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, BTL_POSE_DAMAGE)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg2_mri_e24_16"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg2_mri_e24_16"), 0, -2)
+#endif
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     WAIT_MS(500)
     CALL(arm_check, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
+#endif
             SET_VALUE(LW(10), LW(0))
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
@@ -567,11 +628,15 @@ static EVT_BEGIN(dead_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
         END_IF
+#if VERSION > VERSION_DEMO_US
     END_IF
+#endif
     CALL(arm_check, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
+#endif
             SET_VALUE(LW(10), LW(0))
             BEGIN_INLINE_EVENT
                 CALL_CHILD(subsetevt_dead_core)
@@ -580,8 +645,12 @@ static EVT_BEGIN(dead_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
         END_IF
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LW(10), -2)
+#else
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
+#endif
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
@@ -1123,6 +1192,9 @@ static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Magnus' rocket fist: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_r = {0, 80, 80, 80, 80, 80, 100, 80, 0, 0, 100, 0, 100, 80, 80, 0, 110, 100, 80, 0, 0, 0};
+#else
 static StatusVulnerability regist_r = {
     0, // sleep
     80, // stop
@@ -1147,6 +1219,7 @@ static StatusVulnerability regist_r = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table_r[] = {
     {POSE_TYPE_SLEEP, "MGN_A1_9"},
@@ -1194,15 +1267,24 @@ static BattleWeapon weapon_batten_rocket_attack = {
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
+TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+#else
     COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime

@@ -46,8 +46,16 @@ BattleUnitKind unit_boss_gonbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table[7];
+#else
 static PoseTableEntry pose_table[9];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table_weak[7];
+#else
 static PoseTableEntry pose_table_weak[9];
+#endif
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[3];
 static EvtWord battle_entry_event[375];
@@ -214,6 +222,73 @@ BattleWeapon weapon_gonbaba_kamituki_attack = {
 };
 
 /** Unit data of Hooktail: 20 HP, level 65; the battle starts it from init_event. */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_boss_gonbaba = {
+    UNIT_HOOKTAIL,
+    "btl_un_gonbaba",
+    20,
+    0,
+    1,
+    1,
+    65,
+    0,
+    0,
+    100,
+    0,
+    50,
+    9,
+    230,
+    170,
+    -210,
+    45,
+    0.0f,
+    0.0f,
+    0.0f,
+    -250,
+    0,
+    280.0f,
+    40.0f,
+    0.0f,
+    115.0f,
+    0.0f,
+    -10.0f,
+0.0f,
+0.0f,
+    0.0f,
+250.0f,
+0.0f,
+    250.0f,
+    0.0f,
+    0.0f,
+    115.0f,
+    110.5f,
+    0.0f,
+    -290.0f,
+    85.0f,
+    0.0f,
+    230.0f,
+    170.0f,
+    0,
+    0,
+    -1,
+    0,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    "SFX_BOSS_GNB_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    kUnitNoSpin,
+    &regist,
+    3,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_boss_gonbaba = {
     UNIT_HOOKTAIL,
     "btl_un_gonbaba",
@@ -283,6 +358,7 @@ BattleUnitKind unit_boss_gonbaba = {
     init_event,
     data_table,
 };
+#endif
 
 /** Defence of Hooktail: 1 against every element. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
@@ -290,6 +366,9 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Elemental reactions of Hooktail: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {10, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 100, 0, 100, 0, 0, 100, 0, 0, 0, 0};
+#else
 static StatusVulnerability regist = {
     20, // sleep
     0, // stop
@@ -314,13 +393,16 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /** Pose table of Hooktail: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_STOP, "GNB_Z_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
+#endif
     {POSE_TYPE_NORMAL, "GNB_S_3"},
     {POSE_TYPE_TALK, "GNB_T_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_3"},
@@ -336,8 +418,10 @@ static PoseTableEntry pose_table[] = {
 static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_STOP, "GNB_N_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
+#endif
     {POSE_TYPE_NORMAL, "GNB_S_4"},
     {POSE_TYPE_TALK, "GNB_T_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "GNB_S_4"},
@@ -602,7 +686,11 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_23"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_23"), 0, -2)
+#endif
     LABEL(0)
     // A loop waits until Mario is back at his home position.
     CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
@@ -616,7 +704,11 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
     SET_VALUE(LW(10), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_24"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_24"), 0, -2)
+#endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_24_yesno1"))
@@ -624,7 +716,11 @@ EVT_BEGIN(negotiation_event)
     // Yes: she says money makes the world turn (stg1_gon_25) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_25"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_25"), 0, -2)
+#endif
         GOTO(40)
     END_IF
     // No: Mario shakes his head and she offers a rare badge instead (stg1_gon_26).
@@ -636,7 +732,11 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 1, 0)
     WAIT_FRAMES(5)
     SET_VALUE(LW(10), 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_26"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_26"), 0, -2)
+#endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_26_yesno1"))
@@ -644,7 +744,11 @@ EVT_BEGIN(negotiation_event)
     // Yes: she says of course he wants it (stg1_gon_27) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_27"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_27"), 0, -2)
+#endif
         GOTO(40)
     END_IF
     // No again: she offers to let him sniff her feet instead (stg1_gon_28).
@@ -656,7 +760,11 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 1, 0)
     WAIT_FRAMES(5)
     SET_VALUE(LW(10), 2)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_28"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_28"), 0, -2)
+#endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_28_yesno1"))
@@ -664,7 +772,11 @@ EVT_BEGIN(negotiation_event)
     // Yes: she says she thought so (stg1_gon_29) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 2)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_29"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_29"), 0, -2)
+#endif
         GOTO(40)
     END_IF
     // Refused a third time, she grumbles that he is not very trusting (stg1_gon_31) and skips the trap.
@@ -675,7 +787,11 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 15, 0)
     WAIT_FRAMES(15)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31"), 0, -2)
+#endif
     GOTO(50)
     LABEL(40)
     // If Koops' shell shield is guarding Mario, it is dropped so the bite will land.
@@ -689,7 +805,11 @@ EVT_BEGIN(negotiation_event)
     // The trap: Mario walks up to her head and she bites down on him (GNB_A_2).
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 400)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), 0, LW(2), 0, -1, 0)
+#else
     CALL(btlevtcmd_MovePosition, UNIT_ID_MARIO, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
     IF_INT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_C_4"))
     ELSE
@@ -709,7 +829,11 @@ EVT_BEGIN(negotiation_event)
     // The bite deals damage to Mario with the action-command result.
     CALL(btlevtcmd_ResultACDefence, UNIT_ID_MARIO, PTR(&weapon_gonbaba_kamituki_attack))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, LW(4), PTR(&weapon_gonbaba_kamituki_attack), 1048832, LW(5))
+#else
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, UNIT_ID_MARIO, LW(4), PTR(&weapon_gonbaba_kamituki_attack), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
+#endif
     WAIT_MS(500)
     // If the bite defeats Mario, his damage event plays out here.
     CALL(btlevtcmd_GetHp, UNIT_ID_MARIO, LW(0))
@@ -741,27 +865,47 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30"), 0, -2)
+#endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -115, 50, 265, -115, 49, 170, 1, 0)
     WAIT_FRAMES(5)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_GOOMBELLA)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_01"), 0, UNIT_ID_PARTNER)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_01"), 0, -4)
+#endif
         CASE_EQUAL(UNIT_KOOPS)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_02"), 0, UNIT_ID_PARTNER)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_02"), 0, -4)
+#endif
     END_SWITCH
     // She laughs at their gullibility (stg1_gon_30_03), then admits things look bad and that she had better
     // act (stg1_gon_30_04).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_03"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_03"), 0, -2)
+#endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -233, 45, 452, 56, 125, 37, 20, 0)
     WAIT_FRAMES(20)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_04"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_30_04"), 0, -2)
+#endif
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     LABEL(50)
     // Both paths meet here: her one plea is used up (unit work 3 is set to 1).
@@ -809,15 +953,24 @@ EVT_BEGIN(negotiation_event)
         CALL(evt_btl_camera_noshake, 1)
         CALL(evt_btl_camera_shake_h, 1, 7, 0, 30, 12)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_batstage_set_aud_dark, 0, 180, 0)
+    CALL(evt_batstage_set_aud_dark_base, 0, 180, 0)
+#else
     CALL(evt_batstage_set_aud_dark, 0, 24, 0)
     CALL(evt_batstage_set_aud_dark_base, 0, 24, 0)
     // Mario and his partner jump back in fright.
+#endif
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(40)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_N_7"))
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_MARIO, FLOAT(0.69921875f))
         CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 20, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_MARIO, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
+#endif
         WAIT_FRAMES(60)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_Y"))
     END_INLINE_EVENT
@@ -825,7 +978,11 @@ EVT_BEGIN(negotiation_event)
         WAIT_FRAMES(40)
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_PARTNER, FLOAT(0.69921875f))
         CALL(btlevtcmd_GetPos, UNIT_ID_PARTNER, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_PARTNER, LW(0), LW(1), LW(2), 20, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_PARTNER, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
+#endif
     END_INLINE_EVENT
     SET_VALUE(LW(0), 13)
     // She swallows spectators: gon_extra_eaten_event plays once for each of eight of them.
@@ -1013,9 +1170,17 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_GOOMBELLA)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_00_kur"), 0, UNIT_ID_PARTNER)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_00_kur"), 0, -4)
+#endif
         CASE_EQUAL(UNIT_KOOPS)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_00_nok"), 0, UNIT_ID_PARTNER)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_00_nok"), 0, -4)
+#endif
     END_SWITCH
     // She announces that her strength has returned (stg1_gon_31_01).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -1024,7 +1189,11 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 310, 60, 0)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_5"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_5"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_01"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_01"), 0, -2)
+#endif
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 0, 0, 0)
     // The camera pulls back and the partner says it is time to finish her off (stg1_gon_31_02, _03).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -1039,9 +1208,17 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_PARTNER, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_GOOMBELLA)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_02"), 0, UNIT_ID_PARTNER)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_02"), 0, -4)
+#endif
         CASE_EQUAL(UNIT_KOOPS)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_03"), 0, UNIT_ID_PARTNER)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_03"), 0, -4)
+#endif
     END_SWITCH
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     // Mario and his partner jump back to their places, the turn counter is reset and the battle goes on.
@@ -1059,7 +1236,11 @@ EVT_BEGIN(negotiation_event)
         ADD(LW(5), LW(7))
         ADD(LW(5), 80)
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_PARTNER, FLOAT(0.69921875f))
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_PARTNER, LW(3), LW(4), LW(5), 27, -1)
+#else
         CALL(btlevtcmd_JumpPosition, UNIT_ID_PARTNER, LW(3), LW(4), LW(5), 27, MOVE_SOUND_FROM_TABLE)
+#endif
         CALL(btlevtcmd_SetHomePos, UNIT_ID_PARTNER, LW(3), LW(4), LW(5))
     END_INLINE_EVENT
     ADD(LW(1), LW(6))
@@ -1354,7 +1535,9 @@ EVT_BEGIN(gonbaba_damage_sub_event)
             RETURN
         END_IF
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_WaitAttackEnd)
+#endif
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -1368,13 +1551,21 @@ EVT_BEGIN(gonbaba_damage_sub_event)
         CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_21"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_21"), 0, -2)
+#endif
         CASE_EQUAL(1)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 1, 93, 160, 536, 93, 123, 25, 20, 0)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 2)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_22"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_22"), 0, -2)
+#endif
     END_SWITCH
     // The camera returns to normal and she goes back to her usual pose.
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
@@ -1389,7 +1580,9 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     END_IF
     // Third time: she gags again and wonders why crickets always make her faint (stg1_gon_31_04).
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 3)
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_WaitAttackEnd)
+#endif
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -1408,7 +1601,11 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     SUBTRACT(LW(6), 511)
     CALL(evt_btl_camera_set_moveto, 1, 93, LW(1), LW(2), 93, LW(5), LW(6), 20, 0)
     WAIT_FRAMES(20)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_04"), 0, UNIT_ID_SELF)
+#else
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_31_04"), 0, -2)
+#endif
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
@@ -1530,7 +1727,11 @@ static EVT_BEGIN(init_event)
     CALL(evt_audience_flag_on, 35, 512)
     CALL(evt_audience_flag_on, 53, 512)
     CALL(evt_audience_flag_on, 54, 512)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_audience_base_flag_on, 32768)
+#else
     CALL(evt_audience_base_flag_on, 16384)
+#endif
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.2998047f), FLOAT(1.2998047f), FLOAT(0.5f))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, 0)

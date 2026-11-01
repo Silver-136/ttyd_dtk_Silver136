@@ -48,6 +48,73 @@ static EvtWord wait_event[6];
  * Unit definition of the Red Bones: 5 HP and level 14, with its sizes, damage sounds, status vulnerability,
  * parts and init script.
  */
+#if VERSION <= VERSION_DEMO_US
+BattleUnitKind unit_red_honenoko = {
+    22,
+    "btl_un_red_honenoko",
+    5,
+    0,
+    1,
+    1,
+    14,
+    0,
+    1,
+    100,
+    2,
+    50,
+    9,
+    36,
+    40,
+    -4,
+    40,
+    0.0f,
+    20.0f,
+    0.0f,
+    0,
+    0,
+    0.0f,
+    0.0f,
+    0.0f,
+    9.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    18.0f,
+    0.0f,
+    0.0f,
+    9.0f,
+    24.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    0.0f,
+    36.0f,
+    40.0f,
+    0,
+    0,
+    0,
+    2,
+    100,
+100,
+0.0f,
+    0.0f,
+    0.0f,
+    "SFX_ENM_HONENOKO_DAMAGED1",
+    "SFX_BTL_DAMAGE_FIRE1",
+    "SFX_BTL_DAMAGE_ICE1",
+    "SFX_BTL_DAMAGE_BIRIBIRI1",
+    kUndead,
+    &regist,
+    4,
+    parts,
+    init_event,
+    data_table,
+};
+#else
 BattleUnitKind unit_red_honenoko = {
     22,
     "btl_un_red_honenoko",
@@ -117,6 +184,7 @@ BattleUnitKind unit_red_honenoko = {
     init_event,
     data_table,
 };
+#endif
 
 /** Defence of the Red Bones: 1 against every kind of hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
@@ -135,7 +203,11 @@ static StatusVulnerability regist = {50, 50, 100, 0, 50, 100, 100, 100, 100, 100
  * Status vulnerability of the Red Bones in the retail builds: immune to sleep, poison, fright and instant KO;
  * resists most other statuses.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 50, 100, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0};
+#else
 static StatusVulnerability regist = {0, 85, 40, 0, 40, 100, 90, 80, 100, 90, 100, 90, 100, 90, 80, 0, 80, 100, 80, 100, 100, 0};
+#endif
 #endif
 
 /**

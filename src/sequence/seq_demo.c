@@ -132,7 +132,19 @@ static u16 VolumeTable[] = {
 // clang-format on
 
 //.bss
+#if VERSION <= VERSION_DEMO_US
+#include "manager/filemgr.h"
+typedef struct SeqDemoWork {
+    BOOL fullScreen; // 0x0, draw the movie once at full size instead of twice at half size
+    s32 frame;       // 0x4, frame last drawn (-1 when none)
+    FileEntry* tpl;  // 0x8, mariost.tpl
+    u8 pad_C[4];     // 0xC
+} SeqDemoWork;
+static SeqDemoWork work;
 THPSimple SimpleControl;
+#else
+THPSimple SimpleControl;
+#endif
 s32 WorkBuffer[16];
 s16 SoundBuffer[2][SAMPLES_PER_AUDIO_FRAME * 2] ATTRIBUTE_ALIGN(32);
 
@@ -1020,6 +1032,7 @@ void THPGXYuv2RgbSetup(GXRenderModeObj* rmode) {
 }
 
 /** Draws one movie frame quad from its Y (full size) and U/V (half size) I8 textures; needs THPGXYuv2RgbSetup. */
+#if VERSION <= VERSION_DEMO_US
 void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 textureWidth, s16 textureHeight,
                       s16 polygonWidth, s16 polygonHeight) {
     GXTexObj tobj0, tobj1, tobj2;
@@ -1049,3 +1062,143 @@ void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 text
     GXTexCoord2u16(0, 1);
     GXEnd();
 }
+#include "driver/camdrv.h"
+#include "driver/dispdrv.h"
+#include "driver/fadedrv.h"
+#include "driver/icondrv.h"
+#include "manager/filemgr.h"
+#include "memory.h"
+#include "sdk/DEMOInit.h"
+#include <dolphin/pad.h>
+#include "sdk/texPalette.h"
+#include "statuswindow.h"
+#include "system.h"
+#include <stdlib.h>
+#include <string.h>
+#include "gxsub.h"
+static SeqDemoWork* wp = &work;
+static void demoDisp(CameraId cameraId, void* param);
+void seq_demoInit(SequenceWork* seq) {
+    iconReInit();
+    memClear(HEAP_MALLOC);
+    memClear(HEAP_EXT);
+    smartAutoFree(1);
+    statusWinDispOff();
+    wp->frame = 0;
+    wp->fullScreen = rand() % 100 <= 50;
+    wp->tpl = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
+    THPSimpleInit(2);
+    THPSimpleOpen("demo.thp");
+    THPSimpleSetBuffer(_mapAlloc(THPSimpleCalcNeedMemory()));
+    THPSimpleAudioStop();
+    THPSimplePreLoad(FALSE);
+    THPSimpleAudioStart();
+}
+void seq_demoExit(SequenceWork* seq) {
+    iconReInit();
+    memClear(HEAP_MALLOC);
+    statusWinDispOn();
+    fileFree(wp->tpl);
+}
+void seq_demoMain(SequenceWork* seq) {
+    switch (seq->state) {
+        case 0:
+            fadeEntry(FADE_IN_BLACK, 200, (GXColor){0, 0, 0, 255});
+            seq->state++;
+            break;
+        case 1:
+            if (fadeIsFinish()) {
+                if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
+                    seq->state++;
+                } else if (wp->frame >= THPSimpleGetTotalFrame() - 2) {
+                    seq->state++;
+                }
+            }
+            break;
+        case 2:
+            THPSimpleAudioStop();
+            THPSimpleLoadStop();
+            THPSimpleClose();
+            THPSimpleQuit();
+            fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
+            seq->state++;
+            break;
+        case 3:
+            if (fadeIsFinish()) {
+                seqSetSeq(SEQ_TITLE, NULL, NULL);
+                return;
+            }
+            break;
+    }
+    if (seq->state < 2) {
+        dispEntry(CAMERA_2D, 0.0f, 0, demoDisp, NULL);
+    }
+}
+static void demoDisp(CameraId cameraId, void* param) {
+    GXRenderModeObj* rmode;
+    THPVideoInfo video;
+    THPAudioInfo audio;
+    u32 x, y;
+    CameraEntry* camera;
+    GXTexObj texObj;
+    GXColor color;
+
+    rmode = DEMOGetRenderModeObj();
+    THPSimpleGetVideoInfo(&video);
+    THPSimpleGetAudioInfo(&audio);
+    rmode = DEMOGetRenderModeObj();
+    x = (rmode->fbWidth - video.xSize) / 2;
+    y = (rmode->efbHeight - video.ySize) / 2;
+    if (THPSimpleDecode(0) == 1) {
+        return;
+    }
+    if (wp->fullScreen) {
+        wp->frame = THPSimpleDrawCurrentFrame(rmode, x, y, video.xSize, video.ySize);
+    } else {
+        wp->frame = THPSimpleDrawCurrentFrame(rmode, x, y, video.xSize / 2, video.ySize / 2);
+        wp->frame = THPSimpleDrawCurrentFrame(rmode, video.xSize / 2, video.ySize / 2, video.xSize / 2, video.ySize / 2);
+    }
+    camera = camGetPtr(cameraId);
+    GXSetProjection(camera->projection, camera->projType);
+    GXSetViewport(camera->viewport[0], camera->viewport[1], camera->viewport[2], camera->viewport[3],
+                  camera->viewport[4], camera->viewport[5]);
+    GXSetScissor(camera->scissor[0], camera->scissor[1], camera->scissor[2], camera->scissor[3]);
+    TEXGetGXTexObjFromPalette(*wp->tpl->data, &texObj, 5);
+    gxsubMiscSetGX(-1);
+    gxsubFillSetTexObj(&texObj);
+    color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+    gxsubFillGX(-274, 210, GXGetTexObjWidth(&texObj) / 3, GXGetTexObjHeight(&texObj) / 3, &color);
+    gxsubFillSetTexObj(NULL);
+    gxsubMiscSetGX(-1);
+}
+#else
+void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 textureWidth, s16 textureHeight,
+                      s16 polygonWidth, s16 polygonHeight) {
+    GXTexObj tobj0, tobj1, tobj2;
+
+    GXInitTexObj(&tobj0, y_data, (u16)textureWidth, (u16)textureHeight, GX_TF_I8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObjLOD(&tobj0, GX_NEAR, GX_NEAR, 0, 0, 0, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&tobj0, GX_TEXMAP0);
+
+    GXInitTexObj(&tobj1, u_data, (u16)(textureWidth >> 1), (u16)(textureHeight >> 1), GX_TF_I8, GX_CLAMP, GX_CLAMP,
+                 GX_FALSE);
+    GXInitTexObjLOD(&tobj1, GX_NEAR, GX_NEAR, 0, 0, 0, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&tobj1, GX_TEXMAP1);
+
+    GXInitTexObj(&tobj2, v_data, (u16)(textureWidth >> 1), (u16)(textureHeight >> 1), GX_TF_I8, GX_CLAMP, GX_CLAMP,
+                 GX_FALSE);
+    GXInitTexObjLOD(&tobj2, GX_NEAR, GX_NEAR, 0, 0, 0, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(&tobj2, GX_TEXMAP2);
+
+    GXBegin(GX_QUADS, GX_VTXFMT7, 4);
+    GXPosition3s16(x, y, 0);
+    GXTexCoord2u16(0, 0);
+    GXPosition3s16((s16)(x + polygonWidth), y, 0);
+    GXTexCoord2u16(1, 0);
+    GXPosition3s16((s16)(x + polygonWidth), (s16)(y + polygonHeight), 0);
+    GXTexCoord2u16(1, 1);
+    GXPosition3s16(x, (s16)(y + polygonHeight), 0);
+    GXTexCoord2u16(0, 1);
+    GXEnd();
+}
+#endif

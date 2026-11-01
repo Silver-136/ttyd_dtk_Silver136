@@ -205,18 +205,28 @@ static EVT_BEGIN(evt_toile)
     CALL(evt_mario_adjust_dir)
     WAIT_FRAMES(1)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(10))
     IF_INT_GREATER(LW(10), 100)
         CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     END_IF
+#endif
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_party_move_pos2, 0, 210, 100, FLOAT(80.0f))
+#else
         CALL(evt_party_move_pos2, 0, 200, 110, FLOAT(80.0f))
         CALL(evt_party_set_dir, 0, 90, 200)
+#endif
         CALL(evt_party_stop, 0)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_mov_pos2, 210, 115, FLOAT(80.0f))
+#else
     CALL(evt_mario_mov_pos2, 200, 130, FLOAT(80.0f))
+#endif
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_WOOD3"), LW(0), LW(1), LW(2), 0)
@@ -230,9 +240,17 @@ static EVT_BEGIN(evt_toile)
         END_IF
     END_LOOP
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_party_move_pos2, 0, 265, 100, FLOAT(80.0f))
+#else
         CALL(evt_party_move_pos2, 0, 265, 110, FLOAT(80.0f))
+#endif
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_mov_pos2, 265, 115, FLOAT(80.0f))
+#else
     CALL(evt_mario_mov_pos2, 270, 130, FLOAT(80.0f))
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_WOOD3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -80, 0, 500)
@@ -246,7 +264,9 @@ static EVT_BEGIN(evt_toile)
     END_LOOP
     CALL(evt_hitobj_attr_onoff, 0, 0, STRING("t_door_2"), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 0, STRING("t_door_3"), 8388608)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_party_set_pos, 0, 265, 0, 110)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
@@ -316,25 +336,48 @@ EVT_END()
  * and the "shut in" message at the n_bero exit.
  */
 EVT_BEGIN(tou_09_init_evt)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
         CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(evt_tou_locker_init)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_tou_locker_init))
+#endif
     SET_VALUE(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(bero_case_switch_off)
+#else
     CALL_CHILD(PTR(bero_case_switch_off))
+#endif
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero"), 0, PTR(evt_tojikome_msg), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_2"), 0, PTR(evt_toile), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("t_door_3"), 0, PTR(evt_toile2), 0)

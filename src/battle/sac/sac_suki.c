@@ -98,7 +98,11 @@ static BattleWeapon weapon = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -110,7 +114,11 @@ static BattleWeapon weapon = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
+#if VERSION <= VERSION_DEMO_US
+0,
+#else
     100, // ohkoChance
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
@@ -469,8 +477,140 @@ static void disp_2D(CameraId cam, void* param) {
     }
     GXSetScissor(0, 0x91, gp->fbWidth, 0x50);
     for (i = 0; i < 7; i++) {
+#if VERSION <= VERSION_DEMO_US
+        u16 icon;
+        if (w->btn2[i].state != 0) {
+            if (i < w->prev) {
+                switch (w->btn2[i].button) {
+                    case 0x100:
+                        icon = ICON_BUTTON_A_PRESSED;
+                        break;
+                    case 0x200:
+                        icon = ICON_BUTTON_B_PRESSED;
+                        break;
+                    case 0x400:
+                        icon = ICON_BUTTON_X_PRESSED;
+                        break;
+                    case 0x800:
+                        icon = ICON_BUTTON_Y_PRESSED;
+                        break;
+                    case 0x40:
+                        icon = ICON_TRIGGER_L_PRESSED;
+                        break;
+                    case 0x20:
+                        icon = ICON_TRIGGER_R_PRESSED;
+                        break;
+                    case 0x10:
+                        icon = ICON_TRIGGER_Z_PRESSED;
+                        break;
+                    default:
+                        icon = 0;
+                        break;
+                }
+            } else {
+                switch (w->btn2[i].button) {
+                    case 0x100:
+                        icon = ICON_BUTTON_A;
+                        break;
+                    case 0x200:
+                        icon = ICON_BUTTON_B;
+                        break;
+                    case 0x400:
+                        icon = ICON_BUTTON_X;
+                        break;
+                    case 0x800:
+                        icon = ICON_BUTTON_Y;
+                        break;
+                    case 0x40:
+                        icon = ICON_TRIGGER_L;
+                        break;
+                    case 0x20:
+                        icon = ICON_TRIGGER_R;
+                        break;
+                    case 0x10:
+                        icon = ICON_TRIGGER_Z;
+                        break;
+                    default:
+                        icon = 0;
+                        break;
+                }
+            }
+            if (icon) {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = w->btn2[i].pos.x;
+                pos.y = 60.0f + ((80.0f + w->btn2[i].pos.y) + w->offsetY);
+                pos.z = w->btn2[i].pos.z;
+                iconDispGx(&pos, ICON_DISP_2D, icon, 1.0f);
+            }
+        }
+        if (w->btn[i].state == 2) {
+            if (i < w->cur) {
+                switch (w->btn[i].button) {
+                    case 0x100:
+                        icon = ICON_BUTTON_A_PRESSED;
+                        break;
+                    case 0x200:
+                        icon = ICON_BUTTON_B_PRESSED;
+                        break;
+                    case 0x400:
+                        icon = ICON_BUTTON_X_PRESSED;
+                        break;
+                    case 0x800:
+                        icon = ICON_BUTTON_Y_PRESSED;
+                        break;
+                    case 0x40:
+                        icon = ICON_TRIGGER_L_PRESSED;
+                        break;
+                    case 0x20:
+                        icon = ICON_TRIGGER_R_PRESSED;
+                        break;
+                    case 0x10:
+                        icon = ICON_TRIGGER_Z_PRESSED;
+                        break;
+                    default:
+                        icon = 0;
+                        break;
+                }
+            } else {
+                switch (w->btn[i].button) {
+                    case 0x100:
+                        icon = ICON_BUTTON_A;
+                        break;
+                    case 0x200:
+                        icon = ICON_BUTTON_B;
+                        break;
+                    case 0x400:
+                        icon = ICON_BUTTON_X;
+                        break;
+                    case 0x800:
+                        icon = ICON_BUTTON_Y;
+                        break;
+                    case 0x40:
+                        icon = ICON_TRIGGER_L;
+                        break;
+                    case 0x20:
+                        icon = ICON_TRIGGER_R;
+                        break;
+                    case 0x10:
+                        icon = ICON_TRIGGER_Z;
+                        break;
+                    default:
+                        icon = 0;
+                        break;
+                }
+            }
+            if (icon) {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = w->btn[i].pos.x;
+                pos.y = 60.0f + (w->btn[i].pos.y + w->offsetY);
+                pos.z = w->btn[i].pos.z;
+                iconDispGx(&pos, ICON_DISP_2D, icon, 1.0f);
+            }
+        }
+#else
         _disp_2D(0, i);
         _disp_2D(1, i);
+#endif
     }
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
 }
@@ -480,6 +620,7 @@ static void disp_2D(CameraId cam, void* param) {
  * with the pressed icon for buttons already entered.
  */
 // Descriptive name (not in the symbol maps).
+#if VERSION > VERSION_DEMO_US
 void _disp_2D(s32 side, s32 idx) {
     SukiWork* w = get_ptr();
     SukiBtn* b;
@@ -563,8 +704,12 @@ void _disp_2D(s32 side, s32 idx) {
         iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
     }
 }
+#endif
 
 static void disp_3D(CameraId cam, void* param) {
+#if VERSION <= VERSION_DEMO_US
+get_ptr();
+#endif
 }
 
 /** Translucent 3D draw callback; draws nothing. */

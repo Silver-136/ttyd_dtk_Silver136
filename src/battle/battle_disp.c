@@ -33,9 +33,14 @@
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)
 s32 _status_pose_table[] = {
     STATUS_INSTANT_KILL,
+#if VERSION <= VERSION_DEMO_US
+STATUS_SLEEP,
+#endif
     STATUS_STOP,
     STATUS_FREEZE,
+#if VERSION > VERSION_DEMO_US
     STATUS_SLEEP,
+#endif
     STATUS_POISON,
     STATUS_CONFUSE,
     STATUS_DIZZY,
@@ -336,6 +341,9 @@ void btlDispMain(void) {
     BattleUnit* partner;
     f32 h;
     f32 scale;
+#if VERSION <= VERSION_DEMO_US
+    f64 dist;
+#endif
     Vec tpos;
     s32 xlu;
     Vec pos;
@@ -352,23 +360,46 @@ void btlDispMain(void) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(_battleWorkPointer, i);
+#if VERSION <= VERSION_DEMO_US
+        if (!unit)
+            continue;
+#else
         if (!unit) continue;
+#endif
         if (unit->currentKind == UNIT_SHELL_SHIELD && unit->work[SHELL_SHIELD_WORK_FOLLOW] != 0) {
             target = BattleGetUnitPtr(wp, unit->work[SHELL_SHIELD_WORK_TARGET]);
             if (target) {
                 if (target->attackEventId && evtCheckID(target->attackEventId)) {
+#if VERSION <= VERSION_DEMO_US
+                    if (!((u32)target->attackEventFlags & ACT_EVENT_SHELL_FOLLOWS))
+                        goto next;
+#else
                     if (!(target->attackEventFlags & ACT_EVENT_SHELL_FOLLOWS)) goto next;
+#endif
                 }
+#if VERSION <= VERSION_DEMO_US
+                if (target->damageEventId && evtCheckID(target->damageEventId))
+                    goto next;
+#else
                 if (target->damageEventId && evtCheckID(target->damageEventId)) goto next;
+#endif
                 BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
                 BtlUnit_GetPos(target, &tpos.x, &tpos.y, &tpos.z);
+#if VERSION <= VERSION_DEMO_US
+tpos.z += 5.0f;
+#else
                 tpos.z += 7.0f;
                 h = BattleGetFloorHeight(wp, tpos.x, tpos.y, tpos.z);
+#endif
                 switch (unit->work[SHELL_SHIELD_WORK_FOLLOW]) {
                     case 2:
+#if VERSION <= VERSION_DEMO_US
+                        dist = __fabs(pos.x - tpos.x);
+#else
                         // FAKE: double temp for the fabs result (register order of the diff/fabs webs)
                         {
                             f64 a = __fabs(pos.x - tpos.x);
+#endif
                             if (a > 10.0) {
                                 if (tpos.x > pos.x) {
                                     pos.x = pos.x + ((tpos.x - pos.x) - 10.0f);
@@ -376,23 +407,41 @@ void btlDispMain(void) {
                                     pos.x = pos.x - ((pos.x - tpos.x) - 10.0f);
                                 }
                             }
+#if VERSION > VERSION_DEMO_US
                         }
+#endif
                         BtlUnit_SetPos(unit, pos.x, tpos.y, tpos.z);
                         break;
                     case 3:
                         if (__fabs(pos.x - tpos.x) < 1.0) {
+#if VERSION <= VERSION_DEMO_US
+BtlUnit_SetPos(unit, tpos.x, tpos.y, tpos.z);
+#else
                             BtlUnit_SetPos(unit, tpos.x, h, tpos.z);
+#endif
                             unit->work[SHELL_SHIELD_WORK_FOLLOW] = 1;
                         } else if (tpos.x > pos.x) {
                             pos.x += 1.0f;
+#if VERSION <= VERSION_DEMO_US
+BtlUnit_SetPos(unit, pos.x, tpos.y, tpos.z);
+#else
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
+#endif
                         } else {
                             pos.x -= 1.0f;
+#if VERSION <= VERSION_DEMO_US
+BtlUnit_SetPos(unit, pos.x, tpos.y, tpos.z);
+#else
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
+#endif
                         }
                         break;
                     default:
+#if VERSION <= VERSION_DEMO_US
+BtlUnit_SetPos(unit, tpos.x, tpos.y, tpos.z);
+#else
                         BtlUnit_SetPos(unit, tpos.x, h, tpos.z);
+#endif
                         break;
                 }
             }
@@ -404,10 +453,20 @@ next:
             BtlUnit_OnUnitFlag(unit, BATTLE_UNIT_FLAG_MOVE_COLOR_FADING);
             if (unit->moveColorLv > loop) {
                 loop += 12;
+#if VERSION <= VERSION_DEMO_US
+                if (loop > unit->moveColorLv)
+                    loop = unit->moveColorLv;
+#else
                 if (loop > unit->moveColorLv) loop = unit->moveColorLv;
+#endif
             } else {
                 loop -= 2;
+#if VERSION <= VERSION_DEMO_US
+                if (loop < unit->moveColorLv)
+                    loop = unit->moveColorLv;
+#else
                 if (loop < unit->moveColorLv) loop = unit->moveColorLv;
+#endif
             }
         }
         unit->moveColorLvDisp = loop;
@@ -416,21 +475,37 @@ next:
         BtlUnit_GetStatus(unit, STATUS_TINY, &turns, &strength);
         if (turns > 0 && strength < 0) {
             scale = 0.5f * strength + 1.0f;
+#if VERSION <= VERSION_DEMO_US
+            if (scale < 0.5f)
+                scale = 0.5f;
+#else
             if (scale < 0.5f) scale = 0.5f;
+#endif
             unit->sizeMultiplier *= scale;
         }
         BtlUnit_GetStatus(unit, STATUS_HUGE, &turns, &strength);
         if (turns > 0 && strength > 0) {
             scale = 1.0f + strength;
+#if VERSION <= VERSION_DEMO_US
+            if (scale > 2.0f)
+                scale = 2.0f;
+#else
             if (scale > 2.0f) scale = 2.0f;
+#endif
             unit->sizeMultiplier *= scale;
         }
         BattleStatusEffectMain(unit);
         BattleStatusIconMain(unit);
 
         for (part = unit->parts; part; part = part->nextPart) {
+#if VERSION <= VERSION_DEMO_US
+            if (part->poseId == -1)
+                continue;
+            poseName = PART_POSENAME(part);
+#else
             if (part->poseId == -1) continue;
             poseName = part->poseName;
+#endif
             if (!(part->animFlags & PART_ANIM_EVENT_POSE)) {
                 type = _GetStatusPoseType(unit);
                 if (unit->currentKind >= UNIT_GOOMBA && unit->currentKind < UNIT_UNUSED_TREE) {
@@ -438,10 +513,20 @@ next:
                 } else {
                     if (type == POSE_TYPE_NORMAL && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, POSE_TYPE_PERIL);
+#if VERSION <= VERSION_DEMO_US
+                        if (!poseName)
+                            poseName = searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL);
+#else
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL);
+#endif
                     } else if (type == POSE_TYPE_NORMAL && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->statusFlags & UNIT_STATUS_FLAG_DANGER)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, POSE_TYPE_DANGER);
+#if VERSION <= VERSION_DEMO_US
+                        if (!poseName)
+                            poseName = searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL);
+#else
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL);
+#endif
                     } else {
                         poseName = searchPoseTbl(part->poseTable, type);
                     }
@@ -463,35 +548,71 @@ next:
                 xlu = 0;
                 part->animFlags &= ~PART_ANIM_CHANGED;
                 // BUG: `&=` clears the restart bit and tests the bits left, so any other set bit restarts the animation
+#if VERSION <= VERSION_DEMO_US
+                // so the pose restarts whenever another flag (normally PART_ANIM_MANUAL_POSE) is set. The only
+                // script that sets PART_ANIM_RESTART (Hooktail, after a pose change) gets the restart anyway: no visible effect.
+#endif
                 if (part->animFlags &= ~PART_ANIM_RESTART) {
                     animPoseSetAnim(part->poseId, poseName, TRUE);
                 } else {
                     animPoseSetAnim(part->poseId, poseName, FALSE);
                 }
+#if VERSION <= VERSION_DEMO_US
+                PART_POSESTATE(part) = 0;
+#else
                 part->poseState = 0;
+#endif
                 if (part->animFlags & PART_ANIM_PERA) {
+#if VERSION <= VERSION_DEMO_US
+                    PART_POSETYPE(part) = 0;
+#else
                     part->poseType = 0;
+#endif
                 } else {
+#if VERSION <= VERSION_DEMO_US
+                    PART_POSETYPE(part) = 1;
+#else
                     part->poseType = 1;
+#endif
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
+#if VERSION <= VERSION_DEMO_US
+                        PART_POSETYPE(part) = 7;
+#else
                         part->poseType = 7;
+#endif
                         xlu = 1;
                     }
                 }
                 if (!(part->animFlags & PART_ANIM_EVENT_POSE) || (part->animFlags & PART_ANIM_DAMAGE_POSE) || (part->animFlags & PART_ANIM_COMMAND_POSE)) {
+#if VERSION <= VERSION_DEMO_US
+                    PART_POSETYPE(part) = 1;
+#else
                     part->poseType = 1;
+#endif
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
+#if VERSION <= VERSION_DEMO_US
+                        PART_POSETYPE(part) = 7;
+#else
                         part->poseType = 7;
+#endif
                         xlu = 1;
                     }
                     if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
+#if VERSION <= VERSION_DEMO_US
+                        PART_POSETYPE(part) = 4;
+#else
                         part->poseType = 4;
+#endif
                         xlu = 1;
                     }
                 }
                 if (xlu && (part->attributes & kNoTranslucentLook)) {
                     xlu = 0;
+#if VERSION <= VERSION_DEMO_US
+                    PART_POSETYPE(part) = 0;
+#else
                     part->poseType = 0;
+#endif
                 }
                 if (!(part->animFlags & PART_ANIM_PERA)) {
                     if (xlu && !(part->animFlags & PART_ANIM_XLU)) {
@@ -550,22 +671,43 @@ next:
                 } else {
                     scale = (100.0f - (ppos.y - h)) / 100.0f;
                 }
+#if VERSION <= VERSION_DEMO_US
+                if (scale > 1.0)
+                    scale = 1.0f;
+                if (scale < 0.1f)
+                    scale = 0.1f;
+#else
                 if (scale > 1.0) scale = 1.0f;
                 if (scale < 0.1f) scale = 0.1f;
+#endif
                 scale = scale * ((f32)part->shadowSize * unit->mScale.x * part->mScale.x * unit->sizeMultiplier);
                 scale = scale * part->shadowScale;
+#if VERSION <= VERSION_DEMO_US
+                if ((unit->flags & BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER) && scale < 16.0f)
+                    scale = 16.0f;
+                if (scale < 10.0f)
+                    scale = 8.0f;
+#else
                 if ((unit->flags & BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER) && scale < 16.0f) scale = 16.0f;
                 if (scale < 10.0f) scale = 8.0f;
+#endif
                 shadowEntry(spos.x, 10.0f + h, spos.z, scale);
             }
+#if VERSION > VERSION_DEMO_US
             // FAKE: unsigned range tests written out by hand; k >= a && k <= b changes the object
+#endif
             {
                 s32 k = unit->currentKind;
+#if VERSION <= VERSION_DEMO_US
+                if (k == UNIT_VIVIAN || k == UNIT_DOOPLISS_CHAPTER8_VIVIAN || k == UNIT_MARILYN_CHAPTER8 || (u32)(k - UNIT_BELDAM_CHAPTER2) <= 2 ||
+                    (u32)(k - UNIT_UNUSED_BELDAM2) <= 4 || k == UNIT_BELDAM_CHAPTER8) {
+#else
 
                 if (k == UNIT_VIVIAN || k == UNIT_DOOPLISS_CHAPTER8_VIVIAN || k == UNIT_MARILYN_CHAPTER8
                     || (u32)(k - UNIT_BELDAM_CHAPTER2) <= UNIT_VIVIAN_CHAPTER2 - UNIT_BELDAM_CHAPTER2
                     || (u32)(k - UNIT_UNUSED_BELDAM2) <= UNIT_UNUSED_MARILYN3 - UNIT_UNUSED_BELDAM2
                     || k == UNIT_BELDAM_CHAPTER8) {
+#endif
                     viv.x = unit->work[SHADOW_TAIL_WORK_X];
                     viv.y = unit->work[SHADOW_TAIL_WORK_Y];
                     viv.z = unit->work[SHADOW_TAIL_WORK_Z];
@@ -589,8 +731,15 @@ next:
     BattleCommandDisplay(wp);
     BattleAudience_Disp();
     BattleBreakSlot_Disp();
+#if VERSION <= VERSION_DEMO_US
+    if (wp->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED)
+        wp->flags &= ~BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED;
+    if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED)
+        wp->flags &= ~BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED;
+#else
     if (wp->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED) wp->flags &= ~BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED;
     if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) wp->flags &= ~BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED;
+#endif
 }
 
 

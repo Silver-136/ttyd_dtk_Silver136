@@ -100,17 +100,48 @@ BattleUnitKind unit_boss_batten_satellite = {
     9, // pbSoftCap
     16, // width
     16, // height
+#if VERSION <= VERSION_DEMO_US
+    0,
+    8,
+#else
     {0, 8}, // hitOffset
     {0.0f, 0.0f, 0.0f}, // centerOffset
     {-3, -6}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {8.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+0,
+    0,
+0.0f,
+    0.0f,
+    0.0f,
+    8.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    8.0f,
+    0.0f,
+    0.0f,
+    6.0f,
+    7.0f,
+    0.0f,
+    -1.0f,
+    0.0f,
+    0.0f,
+#else
     {8.0f, 0.0f, 0.0f}, // bintaHitOffset
     {6.0f, 7.0f, 0.0f}, // kissHitOffset
     {-1.0f, 0.0f, 0.0f}, // cutBaseOffset
+#endif
     16.0f, // cutWidth
     16.0f, // cutHeight
     0, // turnOrder
@@ -119,7 +150,13 @@ BattleUnitKind unit_boss_batten_satellite = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_BOSS_SATELLITE_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -144,6 +181,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 75, 75, 0, 10, 100, 100, 75, 100, 75, 100, 75, 100, 75, 75, 0, 75, 100, 75, 100, 100, 90};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     75, // stop
@@ -168,6 +208,7 @@ static StatusVulnerability regist = {
     100, // invisible
     90, // ohko
 };
+#endif
 
 /**
  * Pose table of Grodus's satellite (Grodus X): animation names for each pose type (idle, walk, hurt, attack

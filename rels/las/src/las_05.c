@@ -1692,7 +1692,11 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(key_check_evt)
     CALL(evt_pouch_check_item, ITEM_PALACE_KEY_0x2E, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -1722,7 +1726,11 @@ static EVT_BEGIN(shan_init)
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_get_position, LW(3), LW(4), LW(5), LW(6))
             SUBTRACT_FLOAT(LW(5), FLOAT(7.0f))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(4), LW(5), LW(6), FLOAT(0.7998047f), 1000, 0, 0, 0, 0, 0, 0)
+#else
             CALL(evt_eff, 0, STRING("fire"), 3, LW(4), LW(5), LW(6), FLOAT(0.7998047f), 1000, 0, 0, 0, 0, 0, 0)
+#endif
             ADD(LW(1), 1)
         END_LOOP
         ADD(LW(0), 1)
@@ -1733,22 +1741,45 @@ EVT_END()
 EVT_BEGIN(las_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_00_START)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
+#endif
         CALL(evt_npc_setup, PTR(npcEnt))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_01_1000_DRY_BONES)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_1000_DRY_BONES)
+#endif
         CALL(evt_item_entry, STRING("key"), ITEM_PALACE_KEY_0x2E, 0, 0, 0, ITEM_TYPE_GROUND, -1, PTR(key_evt))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_01_02_LOCK)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
+#endif
         CALL(evt_mobj_lock, STRING("lock"), 46, 590, 20, 0, -90, PTR(key_check_evt), PTR(unlock_evt), 0)
         SET_VALUE(LW(0), STRING("e_bero_1"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(shan_init)
+#else
     CALL_CHILD(PTR(shan_init))
+#endif
     RETURN
 EVT_END()
 

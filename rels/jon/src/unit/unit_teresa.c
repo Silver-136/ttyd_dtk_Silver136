@@ -194,6 +194,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 50, 90, 0, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 95, 100, 10, 100, 100, 10};
+#else
 static StatusVulnerability regist = {
     50, // sleep
     50, // stop
@@ -218,6 +221,7 @@ static StatusVulnerability regist = {
     100, // invisible
     10, // ohko
 };
+#endif
 
 /** Part of the Boo: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {

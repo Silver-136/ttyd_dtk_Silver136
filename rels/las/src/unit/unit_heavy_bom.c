@@ -225,7 +225,11 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, // burnChance..sizeChangeStrength
     100, // atkChangeChance
+#if VERSION <= VERSION_DEMO_US
+2,
+#else
     3, // atkChangeTime
+#endif
     3, // atkChangeStrength
     0, 0, 0, 0, 0, 0, 0, 0, // defChangeChance..fastChance
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
@@ -263,7 +267,11 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+#if VERSION <= VERSION_DEMO_US
+6,
+#else
     3, // chargeStrength
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
@@ -277,6 +285,9 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Defence attributes of the Bulky Bob-omb: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 50, 70, 0, 70, 150, 100, 70, 100, 70, 100, 70, 100, 70, 70, 80, 20, 100, 70, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     90, // sleep
     75, // stop
@@ -301,6 +312,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Poses of the Bulky Bob-omb with its fuse at length 3 and not lit (the full length it starts with). */
 static PoseTableEntry pose_table_3[] = {

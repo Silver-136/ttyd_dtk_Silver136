@@ -108,11 +108,31 @@ USER_FUNC(tobikakaru_init);
 static void alpha_tev(MapTevCallbackInfo* info);
 
 static ExtTexInfo ext_entry_data[59];
+#if VERSION <= VERSION_DEMO_US
+static s16 suifu_animtbl[41];
+#else
 static s16 suifu_animtbl[42];
+#endif
+#if VERSION <= VERSION_DEMO_US
+s16 suifu_animtbl_run[21];
+#else
 s16 suifu_animtbl_run[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static s16 elmos_animtbl[21];
+#else
 static s16 elmos_animtbl[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static s16 dai3_animtbl[41];
+#else
 static s16 dai3_animtbl[42];
+#endif
+#if VERSION <= VERSION_DEMO_US
+s16 dai3_animtbl_run[21];
+#else
 s16 dai3_animtbl_run[22];
+#endif
 static EvtWord nannpc_mode_setup[98];
 static EvtWord back_dark[27];
 static EvtWord back_light[27];
@@ -322,6 +342,26 @@ void suifu_kyorokyoro_init(NanNPC* npc) {
  * adds the turn from angle args[0] to args[1] to each NPC's orbit angle
  * and places it on its circle around the ship centre (args[2], args[3]).
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(tama_shoot_kemuri_entry) {
+    EvtWord* args = event->args;
+    f32 x = evtGetFloat(event, args[0]);
+    f32 y = evtGetFloat(event, args[1]);
+    f32 z = evtGetFloat(event, args[2]);
+
+    evtSetValue(event, args[3], (s32)effKemuTestEntry(11, x, y, z, 1.0f));
+    return EVT_RETURN_DONE;
+}
+static USER_FUNC(tama_shoot_kemuri) {
+    EvtWord* args = event->args;
+    const char* name = (const char*)evtGetValue(event, args[0]);
+    f32 rx = evtGetFloat(event, args[1]);
+    f32 rz = evtGetFloat(event, args[2]);
+
+    effKemuTestSetRxRz(effNameToPtr(name), rx, rz);
+    return EVT_RETURN_DONE;
+}
+#endif
 USER_FUNC(dai3_butai_main_func) {
     s32 d;
     EvtWord* args = event->args;
@@ -830,21 +870,33 @@ static s16 suifu_animtbl[] = {
     5, 5, 6, 6, 6, 7, 7, 7,
     8, 8, 8, 9, 9, 9, 10, 10,
     10, 11, 11, 11, 12, 12, 12, 13,
+#if VERSION <= VERSION_DEMO_US
+-1,
+#else
     -1, 0,
+#endif
 };
 
 /** Frame sequence of the running sailors of the crowd (the panic and the jumping fight), ended by -1. */
 s16 suifu_animtbl_run[] = {
     14, 14, 15, 15, 16, 16, 17, 17,
     18, 18, 19, 19, 20, 20, 21, 21,
+#if VERSION <= VERSION_DEMO_US
+22, 22, 23, 23, -1,
+#else
     22, 22, 23, 23, -1, 0,
+#endif
 };
 
 /** Frame sequence of the c_elmos crowd on the pirate ship, ended by -1. */
 static s16 elmos_animtbl[] = {
     24, 24, 25, 25, 26, 26, 27, 27,
     28, 28, 29, 29, 30, 30, 31, 31,
+#if VERSION <= VERSION_DEMO_US
+32, 32, 33, 33, -1,
+#else
     32, 32, 33, 33, -1, 0,
+#endif
 };
 
 /** Frame sequence of the X-Naut ship's crowd (mass NPCs 205 to 304), ended by -1. */
@@ -854,14 +906,22 @@ static s16 dai3_animtbl[] = {
     39, 39, 40, 40, 40, 41, 41, 41,
     42, 42, 42, 43, 43, 43, 44, 44,
     44, 45, 45, 45, 46, 46, 46, 47,
+#if VERSION <= VERSION_DEMO_US
+-1,
+#else
     -1, 0,
+#endif
 };
 
 /** Running frame sequence of the X-Naut ship's crowd, ended by -1. */
 s16 dai3_animtbl_run[] = {
     48, 48, 49, 49, 50, 50, 51, 51,
     52, 52, 53, 53, 54, 54, 55, 55,
+#if VERSION <= VERSION_DEMO_US
+56, 56, 57, 57, -1,
+#else
     56, 56, 57, 57, -1, 0,
+#endif
 };
 
 /**
@@ -1207,8 +1267,12 @@ EVT_BEGIN(koburon_init)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_2"))
     CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
     CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
+#if VERSION <= VERSION_DEMO_US
+SET_VALUE(LSWF(1), 0)
+#else
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 0)
+#endif
     RETURN
 EVT_END()
 
@@ -1217,14 +1281,20 @@ EVT_END()
  * turns on its reaction flags and talk interrupt (koburon_talk); turns them off again when he walks away.
  */
 EVT_BEGIN(koburon_regp)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_keyon_wait)
+#endif
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(1))
     IF_INT_GREATER(LW(1), 100)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(LSWF(1), 1)
+#else
         IF_INT_EQUAL(LSWF_MUJ_00_WHACKA_OUT, 1)
             CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
+#endif
             CALL(evt_npc_reaction_flag_onoff, 0, STRING("me"), 15)
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_IN1"), LW(3), LW(4), LW(5), 0)
@@ -1232,21 +1302,38 @@ EVT_BEGIN(koburon_regp)
             WAIT_MS(300)
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
             CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LSWF(1), 0)
+#else
             SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 0)
+#endif
         END_IF
+#if VERSION > VERSION_DEMO_US
         CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
         CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(LSWF(1), 0)
+#else
         IF_INT_EQUAL(LSWF_MUJ_00_WHACKA_OUT, 0)
+#endif
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
             CALL(evt_npc_set_position, STRING("me"), LW(3), 35, LW(5))
             CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_OUT1"), LW(3), -29999996, LW(5), 0)
+SET_VALUE(LSWF(1), 1)
+#else
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_OUT1"), LW(3), 35, LW(5), 0)
             SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 1)
+#endif
             WAIT_MS(500)
             CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
             CALL(evt_npc_reaction_flag_onoff, 1, STRING("me"), 15)
+#if VERSION > VERSION_DEMO_US
             CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(koburon_talk))
+#endif
         END_IF
     END_IF
     WAIT_FRAMES(1)
@@ -1283,15 +1370,24 @@ EVT_BEGIN(koburon_talk)
 EVT_END()
 
 EVT_BEGIN(koburon_dead)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_DAMAGED_PLIABLE1"), LW(0), LW(1), LW(2), 0)
+#endif
     CALL(evt_npc_set_damage_anim, STRING("me"))
     WAIT_MS(200)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+#endif
     ADD(LW(1), 30)
     ADD(LW(2), 10)
     CALL(evt_item_entry, STRING("item_99"), ITEM_WHACKA_BUMP, LW(0), LW(1), LW(2), ITEM_TYPE_FALL_NO_PICKUP, -1, 0)
     WAIT_MS(400)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_MUJ00_WHACKA_BUMPS), 7)
+#else
     IF_INT_EQUAL(GSW_MUJ_WHACKA_HIT_COUNT, 7)
+#endif
         CALL(evt_msg_print, 0, STRING("koburon_14"), 0, STRING("me"))
         GOTO(99)
     END_IF
@@ -1317,14 +1413,23 @@ EVT_BEGIN(koburon_dead)
     LABEL(99)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     WAIT_MS(100)
+#if VERSION <= VERSION_DEMO_US
+    ADD(GSW(GSW_MUJ00_WHACKA_BUMPS), 1)
+    SET_VALUE(LSWF(2), 1)
+#else
     ADD(GSW_MUJ_WHACKA_HIT_COUNT, 1)
     SET_VALUE(LSWF_MUJ_00_WHACKA_HIT_UNUSED, 1)
+#endif
     CALL(evt_npc_reaction_flag_onoff, 0, STRING("me"), 15)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_2"))
     WAIT_MS(500)
     CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_MUJ00_KOBURON_FIRST_TALK), 1)
+#else
     SET_VALUE(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 1)
+#endif
     RETURN
 EVT_END()
 
@@ -1632,7 +1737,11 @@ EVT_BEGIN(mujinto_hyochaku)
     WAIT_MS(1500)
     SET_VALUE(LW(10), 300)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(back_light)
+#else
     SPAWN_EVENT(PTR(back_light))
+#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
@@ -1665,9 +1774,15 @@ EVT_BEGIN(mujinto_hyochaku)
     CALL(evt_npc_set_position, STRING("ガラの悪い水夫"), 0, -1000, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_11_DESERTED_ISLAND)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_11_DESERTED_ISLAND)
+#endif
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
@@ -1778,7 +1893,12 @@ EVT_BEGIN(tama_shoot)
         SET_VALUE(LW(1), GW(14))
         ADD(LW(1), 130)
         SET_VALUE(LW(2), GW(15))
+#if VERSION <= VERSION_DEMO_US
+CALL(tama_shoot_kemuri_entry, LW(0), LW(1), LW(2), LW(10))
+        CALL(tama_shoot_kemuri, LW(10), FLOAT(90.0f), FLOAT(90.0f))
+#else
         CALL(evt_eff, 0, STRING("kemuri_test"), 16, LW(0), LW(1), LW(2), FLOAT(3.0f), 0, 0, 0, 0, 0, 0, 0)
+#endif
     END_INLINE_EVENT
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
@@ -2851,6 +2971,158 @@ EVT_END()
  * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
  * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(kaizoku_vs_dai3)
+    // The fight begins: Mario loses control and the crowds on both ships are set up.
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_party_stop, 0)
+    CALL(evt_mario_cont_onoff, 0)
+    CALL(evt_party_cont_onoff, 0, 0)
+    CALL(evt_mario_clear_party, 1)
+    CALL(evt_mario_set_pos, 0, -1000, 0)
+    CALL(evt_party_set_pos, 0, 0, -1000, 0)
+    CALL(evt_npc_set_position, STRING("コルテス"), 20, 40, -1800)
+    CALL(evt_npc_set_ry, STRING("コルテス"), 0)
+    CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_set_position, STRING("第三勢力幹部"), -945, 150, -5)
+    CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 90)
+    CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_INSTANT_TURN | NPC_FLAG_NO_WALL_COLLISION)
+    CALL(evt_npc_flag_onoff, 0, STRING("第三勢力幹部"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
+    SET_VALUE(GW(1), 0)
+    SET_VALUE(GW(2), -1200)
+    SET_VALUE(GW(3), 0)
+    SPAWN_EVENT_GET_ID(PTR(dai3_move_every), LW(10))
+    SET_VALUE(GW(4), 0)
+    SET_VALUE(GW(5), 0)
+    SET_VALUE(GW(6), -2000)
+    SPAWN_EVENT_GET_ID(PTR(kaizoku_move_every), LW(11))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hai"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_cam3d_evt_set, -847, 334, 977, -847, 78, -475, 0, EASING_SINE_IN_OUT)
+    CALL(evt_seq_wait, SEQ_GAME)
+    // Lord Crump gloats that he has ammunition to spare as the X-Naut ship starts to fire.
+    CALL(evt_msg_print, 0, STRING("stg5_muj_118"), 0, STRING("第三勢力幹部"))
+    DELETE_EVENT(GW(8))
+    CALL(evt_cam3d_evt_set, 0, 470, -91, 0, 400, -383, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(600)
+    CALL(evt_npc_flag_onoff, 0, STRING("第三勢力幹部"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_npc_set_position, STRING("第三勢力幹部"), -1105, 60, 30)
+    SPAWN_EVENT(dai3_butai_setup)
+    WAIT_FRAMES(2)
+    SPAWN_EVENT_GET_ID(PTR(dai3_butai_main), LW(12))
+    SPAWN_EVENT_GET_ID(PTR(dai3_kanbu_main), LW(13))
+    SPAWN_EVENT(kaizoku_setup)
+    WAIT_FRAMES(2)
+    SPAWN_EVENT_GET_ID(PTR(kaizoku_main), LW(14))
+    SPAWN_EVENT_GET_ID(PTR(mario_main), LW(15))
+    WAIT_MS(400)
+    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_VIEW_CORRECTION)
+    CALL(evt_npc_pera_onoff, STRING("コルテス"), 0)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    // Cortez's ghost ship appears and he scolds the X-Nauts for firing without his permission.
+    CALL(evt_msg_print, 0, STRING("stg5_muj_119"), 0, STRING("コルテス"))
+    CALL(evt_msg_continue)
+    SET_VALUE(GF(0), 1)
+    SET_VALUE(GF(1), 1)
+    BEGIN_INLINE_EVENT
+        SET_VALUE(GF(10), 1)
+        SPAWN_EVENT(kaizoku_move_trace_se)
+        SET_VALUE(LW(0), 20000)
+        CALL_CHILD(kaizoku_move_trace)
+        SET_VALUE(GF(10), 0)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        SET_VALUE(GF(11), 1)
+        SPAWN_EVENT(dai3_move_trace_se)
+        SET_VALUE(LW(0), 15000)
+        CALL_CHILD(dai3_move_trace)
+        SET_VALUE(GF(11), 0)
+        CALL_CHILD(dai3_kurukuru)
+        SET_VALUE(GF(1), 0)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        WAIT_MS(4000)
+        // Lord Crump is startled as the ghost ship arrives and the boss music starts.
+        CALL(evt_msg_print, 0, STRING("stg5_muj_120"), 0, STRING("第三勢力幹部"))
+        CALL(evt_msg_continue)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        WAIT_MS(500)
+        CALL_CHILD(iwapera_offscreen)
+        CALL(evt_mapobj_get_position, STRING("S_iwa_before"), LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon, STRING("SFX_OFF5_SHIP_APPEAR1"), 0)
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_BOSS_STG5_KORTESS1"))
+        WAIT_MS(3500)
+        CALL(evt_cam3d_evt_set, 0, 2650, 2025, 0, 250, 225, 500, EASING_SINE_IN_OUT)
+        CALL_CHILD(iwapera_offscreen_end)
+        WAIT_MS(4000)
+        SPAWN_EVENT_GET_ID(PTR(cam_dai3_vs_kaizoku), LW(10))
+WAIT_MS(9500)
+        DELETE_EVENT(LW(10))
+        CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, EASING_SINE_IN_OUT)
+        WAIT_MS(1400)
+        CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
+        WAIT_MS(200)
+SET_VALUE(GF(0), 0)
+    END_INLINE_EVENT
+    WAIT_WHILE(GF(0))
+    WAIT_WHILE(GF(1))
+    DELETE_EVENT(LW(10))
+    DELETE_EVENT(LW(11))
+    DELETE_EVENT(LW(12))
+    DELETE_EVENT(LW(13))
+    DELETE_EVENT(LW(14))
+    DELETE_EVENT(LW(15))
+    // Lord Crump swears to sink the ghost ship; Cortez calls on his spirits to take the X-Naut ship.
+    CALL(evt_msg_print, 0, STRING("stg5_muj_121"), 0, STRING("第三勢力幹部"))
+    CALL(evt_mario_cont_onoff, 1)
+    CALL(evt_party_cont_onoff, 0, 1)
+    WAIT_MS(1000)
+    CALL(evt_cam3d_evt_set, -120, 320, 259, -163, 115, -249, 0, EASING_SINE_IN_OUT)
+    WAIT_MS(500)
+    CALL(evt_msg_print, 0, STRING("stg5_muj_122"), 0, STRING("コルテス"))
+    WAIT_MS(500)
+    CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(1000)
+    CALL(tobikakaru_init)
+    SPAWN_EVENT_GET_ID(PTR(tobikakari_kemuri), LW(15))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_ELM_VS_3RD1"), -226, 120, -460, LW(9))
+    CALL(evt_snd_sfx_dist, LW(9), 30)
+    WAIT_MS(2500)
+    CALL(evt_cam3d_evt_set, -369, 245, -37, 0, 67, -303, 0, EASING_SINE_IN_OUT)
+    CALL(evt_npc_flag_onoff, 1, STRING("コルテス"), NPC_FLAG_NO_DRAW)
+    CALL(evt_mario_set_dir, 90, 200, 0)
+    WAIT_MS(500)
+    // Flavio tells Mario to cross over and duel Lord Crump.
+    CALL(evt_msg_print, 0, STRING("stg5_muj_123"), 0, STRING("マルコ"))
+    CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
+    CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_NO_DRAW)
+    WAIT_MS(500)
+BEGIN_INLINE_EVENT
+CALL(evt_party_set_dir, 0, 270, 200)
+        CALL(evt_party_jump_pos, 0, -405, 60, -237, 1000, 0, 80)
+    END_INLINE_EVENT
+    CALL(evt_mario_set_dir, 270, 200, 0)
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP3"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_mario_jump_pos, -430, 60, -212, 1000, 0, 80)
+    CALL(evt_snd_sfxoff, LW(9))
+CALL(evt_npc_release_filednpc, 1)
+    CALL(evt_npc_set_battle_info, STRING("第三勢力幹部"), 5)
+    // The battle with Lord Crump starts.
+    CALL(evt_npc_battle_start, STRING("第三勢力幹部"))
+    CALL(evt_npc_wait_battle_end)
+    DELETE_EVENT(LW(15))
+    CALL(tobikakaru_end)
+    // After the battle the story advances and the X-Naut ship is beaten back.
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_42_PIRATES_VS_X_NAUTS)
+    SET_VALUE(LW(0), 0)
+    CALL_CHILD(dai3_beat_back)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(kaizoku_vs_dai3)
     // The fight begins: Mario loses control and the crowds on both ships are set up.
     CALL(evt_mario_key_onoff, 0)
@@ -3023,6 +3295,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL_CHILD(PTR(dai3_beat_back))
     RETURN
 EVT_END()
+#endif
 
 /**
  * The crew's cheers after the X-Nauts are driven off ("YAHOOOOOOO!", "WE DID IT!" and so on,
@@ -3182,6 +3455,73 @@ EVT_END()
  * Mario's party comments (stg5_muj_126), the story becomes STG5_43_X_NAUTS_RETREAT,
  * the game autosaves and the map changes to aji_10 (Pirate's Grotto).
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(dai3_beat_back)
+    CALL(evt_mario_key_onoff, 0)
+CALL(evt_mario_cont_onoff, 1)
+    CALL(evt_party_cont_onoff, 0, 1)
+CALL(evt_mario_set_pose, STRING("M_S_1"))
+CALL(evt_mario_cont_onoff, 0)
+    CALL(evt_party_cont_onoff, 0, 0)
+CALL(evt_npc_set_position, STRING("第三勢力幹部"), -448, 60, -236)
+    CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
+    SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
+    SET_VALUE(GW(2), -416)
+    SET_VALUE(GW(3), -334)
+    SET_FLOAT_VALUE(GW(4), FLOAT(0.0f))
+    SET_VALUE(GW(5), -78)
+    SET_VALUE(GW(6), -267)
+    SPAWN_EVENT_GET_ID(PTR(dai3_move_every), LW(10))
+    SPAWN_EVENT_GET_ID(PTR(kaizoku_move_every), LW(11))
+    SPAWN_EVENT(dai3_butai_setup)
+    SPAWN_EVENT(kaizoku_setup)
+    WAIT_FRAMES(1)
+    SPAWN_EVENT_GET_ID(PTR(dai3_butai_main), LW(12))
+    SPAWN_EVENT_GET_ID(PTR(dai3_kanbu_main), LW(13))
+    SPAWN_EVENT_GET_ID(PTR(kaizoku_main), LW(14))
+    SPAWN_EVENT_GET_ID(PTR(mario_main2), LW(15))
+    WAIT_FRAMES(2)
+    SET_VALUE(GW(1), 273)
+    SET_VALUE(GW(4), 215)
+    IF_INT_EQUAL(LW(0), 0)
+    ELSE
+        CALL(evt_seq_wait, SEQ_GAME)
+    END_IF
+    SET_FLOAT_VALUE(GW(7), GW(1))
+    SPAWN_EVENT_GET_ID(PTR(nameraka_rotate), LW(9))
+    WAIT_MS(1000)
+    CALL(evt_msg_print, 0, STRING("stg5_muj_125"), 0, STRING("第三勢力幹部"))
+    SET_VALUE(GF(11), 1)
+    SPAWN_EVENT(dai3_move_trace_se)
+    SET_VALUE(LW(0), 3500)
+    SPAWN_EVENT(dai3_taisan_move_trace01)
+    WAIT_MS(3500)
+    SET_VALUE(GF(11), 0)
+    DELETE_EVENT(LW(9))
+    CALL(evt_cam3d_evt_set, -141, 262, 147, -45, 43, -397, 500, EASING_SINE_IN_OUT)
+    WAIT_MS(500)
+    BEGIN_INLINE_EVENT
+        CALL(evt_mario_set_dir, 90, 200, 0)
+    END_INLINE_EVENT
+    CALL(evt_msg_print_party, STRING("stg5_muj_126"))
+    SPAWN_EVENT_GET_ID(PTR(senin_kansei), LW(10))
+    WAIT_MS(3000)
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_43_X_NAUTS_RETREAT)
+    DELETE_EVENT(LW(10))
+    CALL(evt_fade_entry, 6, 1000, 0, 0, 0)
+    CALL(evt_fade_end_wait)
+    WAIT_MS(1500)
+    SET_VALUE(LF(10), 0)
+    SET_VALUE(LW(0), 24)
+CALL_CHILD(evt_memcard_save)
+CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
+    CALL(evt_snd_sfx_all_stop)
+    CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
+    CALL(evt_bero_mapchange, STRING("aji_10"), STRING(""))
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(dai3_beat_back)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -3249,6 +3589,7 @@ EVT_BEGIN(dai3_beat_back)
     CALL(evt_bero_mapchange, STRING("aji_10"), STRING(""))
     RETURN
 EVT_END()
+#endif
 
 /** Positions (x, y, z, facing) of the 95 sailors aboard the ship when the crew leaves Keelhaul Key. */
 s32 leave_island_suifupos[] = {
@@ -3888,10 +4229,17 @@ EVT_BEGIN(into_muj_ship)
     DELETE_EVENT(LW(8))
     DELETE_EVENT(LW(9))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_62_AN_ILL_DON_PIANTA)
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_63_KEELHAUL_ANYTIME)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_62_AN_ILL_DON_PIANTA)
         SET_VALUE(GSW_STORY_PROGRESS, STG5_63_KEELHAUL_ANYTIME)
+#endif
     END_IF
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     RETURN

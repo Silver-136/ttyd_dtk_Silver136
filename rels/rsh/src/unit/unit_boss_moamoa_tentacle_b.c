@@ -57,17 +57,48 @@ BattleUnitKind unit_boss_moamoa_tentacle_b = {
     10, // pbSoftCap
     90, // width
     100, // height
+#if VERSION <= VERSION_DEMO_US
+    0,
+    85,
+#else
     {0, 85}, // hitOffset
     {0.0f, 0.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {280.0f, 40.0f, 0.0f}, // talkTogeBaseOffset
     {45.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0,
+    0,
+    280.0f,
+    40.0f,
+    0.0f,
+    45.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+250.0f,
+0.0f,
+    45.0f,
+    0.0f,
+    0.0f,
+    35.0f,
+    75.0f,
+    20.0f,
+    -30.0f,
+    130.0f,
+    0.0f,
+#else
     {45.0f, 0.0f, 0.0f}, // bintaHitOffset
     {35.0f, 75.0f, 20.0f}, // kissHitOffset
     {-30.0f, 130.0f, 0.0f}, // cutBaseOffset
+#endif
     90.0f, // cutWidth
     100.0f, // cutHeight
     0, // turnOrder
@@ -76,7 +107,13 @@ BattleUnitKind unit_boss_moamoa_tentacle_b = {
     0, // swallowAttributes
     0, // hammerKnockbackChance
     0, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_BOSS_MOA_G_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName

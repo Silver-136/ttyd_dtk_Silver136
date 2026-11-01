@@ -89,7 +89,11 @@ static void __DEMOInitGX(void) {
     GXSetDispCopyGamma(GX_GM_1_0);
 }
 
+#if VERSION <= VERSION_DEMO_US
+static inline void __DEMOInitRenderMode(GXRenderModeObj* mode) {
+#else
 static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
+#endif
     if (mode != NULL) {
         rmodeobj = *mode;
         rmode = &rmodeobj;
@@ -108,7 +112,11 @@ static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
                 rmode = &GXMpal480IntDf;
                 break;
             default:
+#if VERSION <= VERSION_DEMO_US
+OSPanic(demo_file, 0x203, demo_msg);
+#else
                 OSPanic(demo_file, 0x206, demo_msg);
+#endif
                 break;
         }
         GXAdjustForOverscan(rmode, &rmodeobj, 0, 16);
@@ -125,8 +133,13 @@ void DEMOInit(GXRenderModeObj* mode) {
     __DEMOInitMem();
     memInit();
     VIConfigure(rmode);
+#if VERSION <= VERSION_DEMO_US
+DefaultFifo = __memAlloc(HEAP_DEFAULT, 0x60000);
+    DefaultFifoObj = GXInit(DefaultFifo, 0x60000);
+#else
     DefaultFifo = __memAlloc(HEAP_DEFAULT, 0x64000);
     DefaultFifoObj = GXInit(DefaultFifo, 0x64000);
+#endif
     __DEMOInitGX();
     __DEMOInitVI();
 }

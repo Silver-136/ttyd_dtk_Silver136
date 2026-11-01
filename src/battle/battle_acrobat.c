@@ -36,10 +36,16 @@ s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
  * Returns EVT_RETURN_BLOCK while still waiting, EVT_RETURN_YIELD once decided.
  */
 s32 BattleAcrobatMain(BattleWork* work) {
+#if VERSION <= VERSION_DEMO_US
+    BattleActions* manager;
+#endif
     BattleUnit* unit;
     BOOL doSimplified;
     s32 i;
 
+#if VERSION <= VERSION_DEMO_US
+    manager = &work->actionCommands;
+#endif
     unit = BattleGetUnitPtr(work, work->stylishUnitId);
     doSimplified = FALSE;
     work->stylishCurFrame++;
@@ -52,11 +58,15 @@ s32 BattleAcrobatMain(BattleWork* work) {
         return EVT_RETURN_YIELD;
     }
     if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
+#if VERSION <= VERSION_DEMO_US
+dispEntry(CAMERA_3D, 900.0f, 1, _accrobat_timing_icon_disp, unit);
+#else
         Vec pos = { 0 };
         pos.x = unit->position.x;
         pos.y = unit->position.y;
         pos.z = 15.0f + unit->position.z;
         dispEntry(CAMERA_3D, dispCalcZ(&pos), 1, _accrobat_timing_icon_disp, unit);
+#endif
     }
     if (unit->badgesEquipped.AutoCommand && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
         doSimplified = TRUE;

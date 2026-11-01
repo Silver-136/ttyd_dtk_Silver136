@@ -121,6 +121,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  * Status vulnerability of the Goomba (percent chance to take each status):
  * extra prone to stop, fright, gale force and instant kill.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     110, // stop
@@ -145,6 +148,7 @@ static StatusVulnerability regist = {
     100, // invisible
     150, // ohko
 };
+#endif
 
 /** Body part of the Goomba (model c_kuribo): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {

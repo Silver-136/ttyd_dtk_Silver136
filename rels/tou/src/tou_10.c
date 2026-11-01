@@ -112,6 +112,7 @@ EvtWord tou_10_init_evt[254];
 
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e5c, JP tou .text+0x6D98. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(tou_10_mario_keyoff_check) {
     EvtWord* args = event->args;
 
@@ -122,6 +123,7 @@ USER_FUNC(tou_10_mario_keyoff_check) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 #if VERSION >= VERSION_US
 /** Script helper: returns DONE once Mario has left his talking motion, otherwise blocks. */
@@ -135,6 +137,7 @@ s32 tou_10_mario_talk_end_wait(void) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006ec8, JP tou .text+0x6E04. See docs/NAME_PROVENANCE.md.
 // Accumulate 241 eligible checks; blocked controls or other motions pause rather than reset the count.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(tou_10_mario_free_wait) {
     MarioWork* mario = marioGetPtr();
 
@@ -151,6 +154,7 @@ USER_FUNC(tou_10_mario_free_wait) {
     }
     return EVT_RETURN_BLOCK;
 }
+#endif
 
 /** Script helper: args[0] receives Yoshi's color (0-6) from the pouch. */
 static USER_FUNC(getYoshiColor) {
@@ -1495,6 +1499,97 @@ EVT_END()
  * the guard (ガードマン) opens the door, walks in and closes it, calls Mario to his match (stg3_tou_74),
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
  */
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(evt_gardman)
+SET_VALUE(LW(0), 0)
+    LOOP(0)
+        ADD(LW(0), 1)
+        WAIT_FRAMES(1)
+        CALL(evt_mario_wait_movable)
+        IF_INT_GREATER(LW(0), 240)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    LOOP(0)
+        CALL(evt_mario_get_motion, LW(0))
+        IF_INT_EQUAL(LW(0), 0)
+            BREAK_LOOP
+        END_IF
+        IF_INT_EQUAL(LW(0), 1)
+            BREAK_LOOP
+        END_IF
+        IF_INT_EQUAL(LW(0), 2)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_wait_landon)
+WAIT_FRAMES(1)
+BEGIN_INLINE_EVENT
+        WAIT_MS(200)
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        IF_INT_GREATER(LW(2), -60)
+            RETURN
+        END_IF
+        IF_INT_LESS(LW(0), -35)
+            RETURN
+        END_IF
+        IF_INT_GREATER(LW(0), 35)
+            RETURN
+        END_IF
+        CALL(evt_mario_normalize)
+        CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
+        CALL(evt_mario_set_pose, STRING("M_N_7"))
+        CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_NO_HIT)
+        CALL(evt_mario_jump_pos, 40, 0, -120, 400, 1, -1000)
+        CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_NO_HIT)
+        WAIT_MS(500)
+        CALL(evt_mario_set_pose, STRING("M_S_1"))
+        CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+        CALL(evt_mario_set_dir_npc, STRING("キノシコワ"))
+        CALL(evt_mario_set_dir_npc, STRING("ガードマン"))
+    END_INLINE_EVENT
+    // The guard opens the door, walks in and the door closes behind him.
+    SET_VALUE(LW(1), 0)
+    SPAWN_EVENT(bero_open_door_play_se)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        CALL_CHILD(n_door_open)
+        IF_INT_EQUAL(LW(1), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    CALL(evt_npc_status_onoff, 0, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_set_dir_to_target, STRING("ガードマン"), STRING("mario"))
+    CALL(evt_npc_set_position, STRING("ガードマン"), 0, 0, -170)
+    CALL(evt_npc_move_position, STRING("ガードマン"), 0, -90, 0, FLOAT(80.0f), 1)
+    SET_VALUE(LW(1), 0)
+    SPAWN_EVENT(bero_close_door_play_se)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value)
+        CALL_CHILD(n_door_open)
+        IF_INT_EQUAL(LW(1), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    // The guard calls Mario to his match and Jolene says Security will escort him.
+    CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
+    CALL(evt_msg_print, 0, STRING("stg3_tou_74"), 0, STRING("ガードマン"))
+    WAIT_MS(300)
+    CALL(evt_msg_print, 0, STRING("stg3_tou_75"), 0, STRING("キノシコワ"))
+    WAIT_MS(300)
+    CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガードマン"), NPC_FLAG_INSTANT_TURN)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(evt_gardman)
     CALL(tou_10_mario_free_wait)
     // Take control once Mario has landed and finished talking.
@@ -1571,6 +1666,7 @@ static EVT_BEGIN(evt_gardman)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 EVT_BEGIN(evt_match_make_sub)
     CALL(evt_cam3d_evt_set, -75, 91, 188, -75, 57, -1, 1000, EASING_SINE_IN_OUT)
@@ -1620,10 +1716,12 @@ EVT_END()
  * and the chosen opponent and rule are announced (stg3_tou_104_01).
  */
 EVT_BEGIN(evt_match_make)
+#if VERSION > VERSION_DEMO_US
     CALL(tou_10_mario_keyoff_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
+#endif
     CALL(evt_hit_get_position, STRING("M_make"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_TOUROKU_COM1"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_key_onoff, 0)
@@ -1635,20 +1733,34 @@ EVT_BEGIN(evt_match_make)
     CALL(evt_msg_select, 0, STRING("stg3_tou_103_yn"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESERVED), 1)
+            CALL(evt_tou_get_fighter_info, GSW(GSW_TOU_OPPONENT_ID), LW(0), LW(1))
+            CALL(evt_tou_get_rule_msg2, GSW(GSW_TOU_MATCH_RULE), LW(2))
+#else
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
             CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
             CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
+#endif
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
             CALL(evt_msg_print_add_insert, 0, STRING("stg3_tou_104_01"), LW(0), LW(2))
             ELSE
             CALL(evt_msg_continue)
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(evt_match_make_sub)
+#else
             CALL_CHILD(PTR(evt_match_make_sub))
+#endif
         END_IF
         CASE_EQUAL(1)
         CALL(evt_msg_continue)
         CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
         CALL(evt_mario_set_dir_npc, STRING("キノシコワ"))
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESERVED), 0)
+#else
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
+#endif
             CALL(evt_msg_print, 0, STRING("stg3_tou_68"), 0, STRING("キノシコワ"))
             ELSE
             CALL(evt_msg_print, 0, STRING("stg3_tou_73_02"), 0, STRING("キノシコワ"))
@@ -1815,57 +1927,115 @@ EVT_END()
 
 EVT_BEGIN(tou_10_init_evt)
     // Music for the story stage, and the debug skip straight to the Yoshi egg stage.
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
         CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TOU_EGG_STORY_SKIP), 1)
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+            SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+#else
     IF_INT_EQUAL(GSWF_TOU_10_JUMP_STORY_TO_EGG, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
             SET_VALUE(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
+#endif
         END_IF
     END_IF
     // The door, lockers, the fighters, Master Crash's talk hook, and the match terminal and monitor.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(evt_tou_locker_init)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(evt_tou_locker_init))
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(init_octo)
+#else
     CALL_CHILD(PTR(init_octo))
+#endif
     CALL(evt_npc_change_interrupt, STRING("オクトール"), 6, PTR(talk_octo))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("isu"), MAP_OBJ_FLAG_CLIP)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_06_1ST_MATCH)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_match_make), 0)
         ELSE
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_tou_monitor_init)
+    // The huge yellow block until it is broken.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_03_THE_YELLOW_BLOCK)
+        CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF(GSWF_TOU10_BIG_BLOCK_BROKEN), STRING("MOBJ_Lv1BigBigBlock"))
+#else
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
         CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF_TOU_10_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
+#endif
         CALL(evt_mobj_flag_onoff, 1, STRING("blk"), MOBJ_FLAG_NO_CULL)
     END_IF
     // First visit: Jolene's welcome scene, with the door locked.
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_LESS(STG3_05_MATCH)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_rec)
+#else
         SPAWN_EVENT(PTR(evt_rec))
+#endif
         SET_VALUE(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         RETURN
     END_SWITCH
     // After a match: Goombella, Koops and Flurrie rejoin if the cake poisoning was never cured,
     // then the matching after-match scene plays.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
+        IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISONED), 1)
+            IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISON_CURED), 0)
+#else
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
             IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
+#endif
                 CALL(evt_pouch_party_join, 1)
                 CALL(evt_pouch_party_join, 2)
                 CALL(evt_pouch_party_join, 5)
@@ -1873,48 +2043,101 @@ EVT_BEGIN(tou_10_init_evt)
             END_IF
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
+        SET_VALUE(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 0)
+        SWITCH(GSW(GSW_TOU_OPPONENT_ID))
+#else
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         SWITCH(GSW_GLITZ_PIT_OPPONENT)
+#endif
             CASE_EQUAL(19)
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_EQUAL(GSWF(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN), 0)
+                SET_VALUE(GSWF(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN), 1)
+                IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+                    SPAWN_EVENT(evt_saisyo_after)
+#else
             IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 0)
                 SET_VALUE(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 1)
                 IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                     SPAWN_EVENT(PTR(evt_saisyo_after))
+#endif
                     ELSE
+#if VERSION <= VERSION_DEMO_US
+                    SPAWN_EVENT(evt_saisyo_after_re)
+#else
                     SPAWN_EVENT(PTR(evt_saisyo_after_re))
+#endif
                 END_IF
                 ELSE
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(evt_tou_match_after_default)
+#else
                 SPAWN_EVENT(PTR(evt_tou_match_after_default))
+#endif
             END_IF
             CASE_EQUAL(10)
             CALL(evt_tou_get_ranking, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 10)
+#if VERSION <= VERSION_DEMO_US
+                IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+                    SPAWN_EVENT(evt_1st_leagu)
+#else
                 IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
                     SPAWN_EVENT(PTR(evt_1st_leagu))
+#endif
                     ELSE
+#if VERSION <= VERSION_DEMO_US
+                    SPAWN_EVENT(evt_1st_leagu_re)
+#else
                     SPAWN_EVENT(PTR(evt_1st_leagu_re))
+#endif
                 END_IF
                 ELSE
+#if VERSION <= VERSION_DEMO_US
+                SPAWN_EVENT(evt_tou_match_after_default)
+#else
                 SPAWN_EVENT(PTR(evt_tou_match_after_default))
+#endif
             END_IF
             CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+            SPAWN_EVENT(evt_tou_match_after_default)
+#else
             SPAWN_EVENT(PTR(evt_tou_match_after_default))
+#endif
         END_SWITCH
     END_IF
     // The bed, the Dubious Paper until Jolene confiscates it, and the one-time Iron Clefts hint.
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_04_CONFISCATED)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_04_CONFISCATED)
+#endif
         CALL(evt_item_entry, STRING("syorui"), ITEM_DUBIOUS_PAPER, -475, 90, 75, ITEM_TYPE_STILL, -1, PTR(evt_syorui))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
+        IF_INT_EQUAL(GSWF(GSWF_TOU10_EGG_HINT_CHECKED), 0)
+            IF_INT_GREATER_OR_EQUAL(GSW(GSW_TOU_IRON_CLEFTS_LOSSES), 2)
+                SPAWN_EVENT(first_tamago)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
         IF_INT_EQUAL(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 0)
             IF_INT_GREATER_OR_EQUAL(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 2)
                 SPAWN_EVENT(PTR(first_tamago))
+#endif
             END_IF
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSWF(GSWF_TOU10_EGG_HINT_CHECKED), 1)
+#else
         SET_VALUE(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 1)
+#endif
     END_IF
     RETURN
 EVT_END()

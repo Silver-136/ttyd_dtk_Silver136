@@ -145,7 +145,9 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     work->rot[1][3] = zr;
     work->rot[2][3] = zr;
     work->scale = 0.1f * scale;
+#if VERSION > VERSION_DEMO_US
     work->camera = CAMERA_3D;
+#endif
     return effect;
 }
 
@@ -154,7 +156,11 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
  * The alpha rises and the velocity decays for the first 11 frames, then both drop off quickly;
  * the scale grows by 5% per frame and the texture offset scrolls.
  */
+#if VERSION <= VERSION_DEMO_US
+static void effKemuri10Main(EffectEntry* effect) {
+#else
 void effKemuri10Main(EffectEntry* effect) {
+#endif
     EffKemuri10N64Work* work;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -167,9 +173,13 @@ void effKemuri10Main(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
+#if VERSION > VERSION_DEMO_US
     // FAKE: the timer goes through a temporary for the decrement; `work->timer--;` changes the object
+#endif
     timer = work->timer;
+#if VERSION > VERSION_DEMO_US
     camera = work->camera;
+#endif
     work->timer = timer - 1;
     work->counter++;
     timer = work->timer;
@@ -179,13 +189,24 @@ void effKemuri10Main(EffectEntry* effect) {
     }
     for (i = 0; i < effect->count; i++) {
         if (timer > 5) {
+#if VERSION <= VERSION_DEMO_US
+            work->alpha = (s32)((f32)work->alpha + 0.3f * (f32)(255 - work->alpha));
+#else
             work->alpha += 0.3f * (255 - work->alpha);
+#endif
             work->velocity.x *= 0.8f;
             work->velocity.y *= 0.8f;
             work->velocity.z *= 0.8f;
         }
         if (timer < 5) {
+#if VERSION <= VERSION_DEMO_US
+            {
+                f32 fa = work->alpha;
+                work->alpha = (fa *= 0.6f);
+            }
+#else
             work->alpha *= 0.6f;
+#endif
             work->velocity.x *= 0.7f;
             work->velocity.y *= 0.7f;
             work->velocity.z *= 0.7f;
@@ -197,7 +218,11 @@ void effKemuri10Main(EffectEntry* effect) {
         work->scale *= 1.05f;
         work++;
     }
+#if VERSION <= VERSION_DEMO_US
+dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri10Disp, effect);
+#else
     dispEntry((CameraId)camera, dispCalcZ(&position), 2, (DispCallback)effKemuri10Disp, effect);
+#endif
 }
 
 /** Draws the smoke cloud mesh (stg_houki_kemuri_v, 192 vertices) with texture 0x1F, oriented by the direction frame. */

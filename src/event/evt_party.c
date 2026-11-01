@@ -133,6 +133,50 @@ USER_FUNC(evt_party_set_camid) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+USER_FUNC(evt_party_force_reset_outofscreen) {
+    MarioWork* mario;
+    PartyEntry* p = GETPARTY(event->args);
+    Vec from;
+    Vec dir;
+    Vec out1;
+    Vec out2;
+    Vec pos;
+    Vec pos2;
+f32 h;
+    f32 sx, sy, sz;
+f32 ang;
+    if (p == NULL) {
+        return EVT_RETURN_DONE;
+    }
+    pos = p->position;
+    marioGetScreenPos(pos, &sx, &sy, &sz);
+    if (marioChkInScreen((s32)sx, (s32)sy)) {
+        return EVT_RETURN_DONE;
+    }
+    partyClearFootmark();
+    mario = p->playerPtr;
+    dir = (Vec){0.0f, -1.0f, 0.0f};
+    while (1) {
+        pos2 = p->position;
+        marioGetScreenPos(pos2, &sx, &sy, &sz);
+        if (marioChkInScreen((s32)sx, (s32)sy)) {
+            break;
+        }
+ang = angleABf(p->position.x, p->position.z, ((MarioWork*)mw)->position.x, ((MarioWork*)mw)->position.z);
+        movePos(&p->position.x, &p->position.z, 1.0f, ang);
+        h = 100.0f;
+        from = p->position;
+        from.y += 50.0f;
+        if (partyHitCheck(p, &from, &dir, &out1, &out2, &h) != NULL) {
+            p->position.y = out1.y;
+        } else {
+            p->position.y = ((MarioWork*)mw)->position.y;
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+#else
 USER_FUNC(evt_party_force_reset_outofscreen) {
     MarioWork* mario;
     PartyEntry* p = GETPARTY(event->args);
@@ -185,6 +229,7 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 USER_FUNC(evt_party_outofscreen) {
     PartyEntry* p;
@@ -537,7 +582,11 @@ USER_FUNC(evt_party_jump_pos) {
         if (__fabsf(dy) < 1.0f) {
             dy = hgt;
         } else if (dy >= 0.0f) {
+#if VERSION <= VERSION_DEMO_US
+dy += 0.5f * p->height;
+#else
             dy += 37.0f;
+#endif
         } else if (searchUnder2(tmp, x, y, z) != NULL) {
             dy = hgt;
         }
@@ -566,11 +615,22 @@ USER_FUNC(evt_party_jump_pos) {
         mode = 0;
         ff = p->velY;
         {
+#if VERSION <= VERSION_DEMO_US
+f32 groundY, dropDepth;
+                HitEntry* hit = partySearchGround(
+                    p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
+                if (hit != NULL && p->position.y + ff <= groundY) {
+#else
             HitEntry* hit = partySearchGround(p, __fabsf(ff), __fabsf(ff));
             if (hit != NULL && p->position.y + ff <= p->groundY) {
+#endif
                 p->hitobjStandOn = hit;
                 mode = 1;
+#if VERSION <= VERSION_DEMO_US
+                    p->position.y = groundY;
+#else
                 p->position.y = p->groundY;
+#endif
                 p->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
             }
         }
@@ -1093,6 +1153,8 @@ void evtPartyStrippedPool(f32* f) {
     f[1] = 0.5f;
     f[2] = 20.0f;
     f[3] = 0.0f;
+#if VERSION > VERSION_DEMO_US
     f[4] = 37.0f;
+#endif
     f[5] = -1000.0f;
 }

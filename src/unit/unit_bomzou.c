@@ -330,6 +330,9 @@ static EVT_BEGIN(explosion_event)
     LABEL(99)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+#else
 EVT_END_PAD()
 
 /**
@@ -342,6 +345,7 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_BATTLE_END_EVENT, end_battle_evt},
     {0, NULL},
 };
+#endif
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)

@@ -118,6 +118,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 50, 50, 100, 50, 100, 100, 30, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
+#else
 static StatusVulnerability regist = {
     50, // sleep
     50, // stop
@@ -142,6 +145,7 @@ static StatusVulnerability regist = {
     100, // invisible
     5, // ohko
 };
+#endif
 
 /** Pose table of Marilyn: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
@@ -469,22 +473,38 @@ static EVT_BEGIN(attack_event)
     IF_INT_LESS(LW(0), 2)
         SET_VALUE(LW(2), 25)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_DrawLots, LW(0), 3, 50, 25, LW(2))
+#else
     CALL(btlevtcmd_DrawLots, LW(0), 3, 40, 35, LW(2))
+#endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_COUNT, 0)
         SET_VALUE(LW(9), PTR(&weapon_marilyn_kagenuke_attack1))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(kagenuke_attack_event)
+#else
         CALL_CHILD(PTR(kagenuke_attack_event))
+#endif
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_COUNT, 0)
         SET_VALUE(LW(9), PTR(&weapon_marilyn_thunder_attack1))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(thunder_attack_event)
+#else
         CALL_CHILD(PTR(thunder_attack_event))
+#endif
         CASE_EQUAL(2)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_COUNT, LW(0))
         ADD(LW(0), 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGE_COUNT, LW(0))
         SET_VALUE(LW(9), PTR(&weapon_marilyn_charge1))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(charge_attack_event)
+#else
         CALL_CHILD(PTR(charge_attack_event))
+#endif
     END_SWITCH
     LABEL(90)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)

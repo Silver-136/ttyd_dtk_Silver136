@@ -71,7 +71,11 @@ EvtWord badge_evt3[5];
 EvtWord aji_03_init_evt[525];
 
 static EVT_BEGIN(e_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -79,7 +83,11 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -938,7 +946,11 @@ static EVT_BEGIN(evt_haguruma)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(haguruma_tbl), LW(0))
+#else
     CALL(evt_win_item_select, 0, PTR(haguruma_tbl), LW(0), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(0), -1)
         BEGIN_INLINE_EVENT
             CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -949,9 +961,17 @@ static EVT_BEGIN(evt_haguruma)
         END_INLINE_EVENT
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_zenmais_nashi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_zenmais_ari"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_zenmai)
+#else
         SPAWN_EVENT(PTR(evt_zenmai))
+#endif
         CALL(evt_pouch_remove_item, LW(0), LW(1))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSWF(GSWF_AJI03_COG_INSERTED), 1)
+#else
         SET_VALUE(GSWF_AJI_03_COG_PLACED, 1)
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui1"), 0, PTR(evt_sw0), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui2"), 0, PTR(evt_sw1), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui3"), 0, PTR(evt_sw2), 0)
@@ -991,10 +1011,16 @@ EVT_BEGIN(aji_03_init_evt)
     // The room's music and ambience start, and the crane lights are hidden.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI3"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING("S_kure"), 230, 0, 100)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tama_a"), MAP_OBJ_FLAG_HIDDEN)
@@ -1004,25 +1030,47 @@ EVT_BEGIN(aji_03_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_1_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    // If the crane was already activated in an earlier visit, all three crane buttons count as pressed.
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 1)
+        SET_VALUE(GSWF(GSWF_AJI03_CRANE_BUTTON_1), 1)
+        SET_VALUE(GSWF(GSWF_AJI03_CRANE_BUTTON_2), 1)
+        SET_VALUE(GSWF(GSWF_AJI03_CRANE_BUTTON_3), 1)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
         SET_VALUE(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
         SET_VALUE(GSWF_AJI_03_SWITCH_2_PRESSED, 1)
         SET_VALUE(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
+#endif
     END_IF
     // Before the cog is inserted, the shelf door is the place to use it; afterwards the clockwork runs and the
     // crane panel can be used.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_COG_INSERTED), 0)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 0)
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_tanadoor_1"), 0, PTR(evt_haguruma), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_zenmais_ari"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_zenmais_nashi"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_zenmai)
+        IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 1)
+#else
         SPAWN_EVENT(PTR(evt_zenmai))
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
+#endif
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui_01"), 0, PTR(evt_ufo_sousaban), 0)
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_COG_INSERTED), 1)
+        IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 0)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 1)
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 0)
+#endif
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui1"), 0, PTR(evt_sw0), 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui2"), 0, PTR(evt_sw1), 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui3"), 0, PTR(evt_sw2), 0)
@@ -1039,7 +1087,11 @@ EVT_BEGIN(aji_03_init_evt)
     END_IF
     // The three crane buttons blink until the player has pressed them, and the lit or unlit versions of their
     // parts are shown.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 0)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 0)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_2_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui_3_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -1051,44 +1103,102 @@ EVT_BEGIN(aji_03_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato3"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_BUTTON_1), 1)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
+#endif
         SET_VALUE(LW(10), STRING("S_pato1"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_kaitentou2)
+#else
         SPAWN_EVENT(PTR(evt_kaitentou2))
+#endif
         SET_VALUE(LW(8), STRING("meta_1_1"))
         SET_VALUE(LW(9), STRING("meta_1_2"))
         SET_VALUE(LW(10), STRING("S_hari04"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_hari)
+#else
         SPAWN_EVENT(PTR(evt_hari))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_BUTTON_2), 1)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_2_PRESSED, 1)
+#endif
         SET_VALUE(LW(10), STRING("S_pato2"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_kaitentou2)
+#else
         SPAWN_EVENT(PTR(evt_kaitentou2))
+#endif
         SET_VALUE(LW(8), STRING("meta_2_1"))
         SET_VALUE(LW(9), STRING("meta_2_2"))
         SET_VALUE(LW(10), STRING("S_hari05"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_hari)
+#else
         SPAWN_EVENT(PTR(evt_hari))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_BUTTON_3), 1)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
+#endif
         SET_VALUE(LW(10), STRING("S_pato3"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_kaitentou2)
+#else
         SPAWN_EVENT(PTR(evt_kaitentou2))
+#endif
         SET_VALUE(LW(8), STRING("meta_3_1"))
         SET_VALUE(LW(9), STRING("meta_3_2"))
         SET_VALUE(LW(10), STRING("S_hari06"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_hari)
+#else
         SPAWN_EVENT(PTR(evt_hari))
+#endif
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato4"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    // Guess: the spinning lamps (kaitentou) and hands (hari) start moving once the crane is active.
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 1)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
+#endif
         SET_VALUE(LW(10), STRING("S_pato4"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_kaitentou)
+#else
         SPAWN_EVENT(PTR(evt_kaitentou))
+#endif
         SET_VALUE(LW(8), -1)
         SET_VALUE(LW(9), -1)
         SET_VALUE(LW(10), STRING("S_hari01"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_hari)
+#else
         SPAWN_EVENT(PTR(evt_hari))
+#endif
         SET_VALUE(LW(8), -1)
         SET_VALUE(LW(9), -1)
         SET_VALUE(LW(10), STRING("S_hari02"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_hari)
+#else
         SPAWN_EVENT(PTR(evt_hari))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // The metal covers are shown or hidden according to whether the crane is active.
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 1)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("meta_3_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -1108,19 +1218,35 @@ EVT_BEGIN(aji_03_init_evt)
     CALL(evt_item_entry, STRING("keihin01"), ITEM_COIN, -100, 50, 100, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_entry, STRING("keihin02"), ITEM_COIN, -50, 50, 100, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_entry, STRING("keihin03"), ITEM_COIN, -150, 50, 0, ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_PRIZE_A), 0)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_FEELING_FINE, 0)
+#endif
         CALL(evt_item_entry, STRING("keihin04"), ITEM_FEELING_FINE, -100, 50, 0, ITEM_TYPE_STILL, -1, PTR(badge_evt))
     END_IF
     CALL(evt_item_entry, STRING("keihin05"), ITEM_COIN, -50, 50, 0, ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_PRIZE_B), 0)
+#else
     IF_INT_EQUAL(GSWF_AJI_03_FEELING_FINE_P, 0)
+#endif
         CALL(evt_item_entry, STRING("keihin06"), ITEM_FEELING_FINE_P, -150, 50, -100, ITEM_TYPE_STILL, -1, PTR(badge_evt2))
     END_IF
     CALL(evt_item_entry, STRING("keihin07"), ITEM_COIN, -100, 50, -100, ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI03_STAR_PIECE_PRIZE), 0)
+#else
     IF_INT_EQUAL(GSWF_STARPIECE_98, 0)
+#endif
         CALL(evt_item_entry, STRING("keihin08"), ITEM_STAR_PIECE, -50, 50, -100, ITEM_TYPE_STILL, -1, PTR(badge_evt3))
     END_IF
     // The emergency alarm script starts.
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_emergency)
+#else
     SPAWN_EVENT(PTR(evt_emergency))
+#endif
     RETURN
 EVT_END()
 
@@ -1137,7 +1263,11 @@ USER_FUNC(evt_sousa_icon) {
     return EVT_RETURN_YIELD;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void icon_disp(CameraId camera, void* param) {
+#else
 void icon_disp(CameraId camera, void* param) {
+#endif
     EventEntry* event = param;
     Mtx trans;
     Mtx scale;
@@ -1150,22 +1280,38 @@ void icon_disp(CameraId camera, void* param) {
         PSMTXRotRad(rot, 'z', 0.0f);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(trans, rot, trans);
+#if VERSION <= VERSION_DEMO_US
+iconDispGx2(trans, 0x4, ICON_ARROW);
+#else
         iconDispGx2(trans, 0x10, ICON_ARROW);
+#endif
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXConcat(trans, scale, trans);
+#if VERSION <= VERSION_DEMO_US
+iconDispGx2(trans, 0x4, ICON_BUTTON_A);
+#else
         iconDispGx2(trans, 0x10, ICON_BUTTON_A);
+#endif
     } else {
         PSMTXTrans(trans, event->userdata[1] - 30, event->userdata[2] + 100, 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXRotRad(rot, 'z', 4.712389f);
         PSMTXConcat(trans, scale, trans);
         PSMTXConcat(trans, rot, trans);
+#if VERSION <= VERSION_DEMO_US
+iconDispGx2(trans, 0x4, ICON_ARROW);
+#else
         iconDispGx2(trans, 0x10, ICON_ARROW);
+#endif
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
         PSMTXConcat(trans, scale, trans);
+#if VERSION <= VERSION_DEMO_US
+iconDispGx2(trans, 0x4, ICON_BUTTON_B);
+#else
         iconDispGx2(trans, 0x10, ICON_BUTTON_B);
+#endif
     }
 }
 

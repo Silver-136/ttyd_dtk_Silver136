@@ -24,7 +24,11 @@ static BattleDataEntry data_table_clauda[2];
 static BattleUnitKindPart parts_clauda[1];
 static EvtWord init_event_clauda[50];
 EvtWord damage_event_clauda[22];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_clauda[156];
+#else
 static EvtWord dead_event_clauda[177];
+#endif
 static EvtWord attack_event_clauda[393];
 static EvtWord wait_event_clauda[6];
 
@@ -123,6 +127,9 @@ static BattleUnitDefense defence_clauda = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Flurrie double's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_clauda = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_clauda = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
+#else
 static StatusVulnerability regist_clauda = {
     60, // sleep
     80, // stop
@@ -147,6 +154,7 @@ static StatusVulnerability regist_clauda = {
     100, // invisible
     0, // ohko
 };
+#endif
 
 /** Event table of the Flurrie double: its defeat script. */
 static BattleDataEntry data_table_clauda[] = {
@@ -225,7 +233,11 @@ static EVT_BEGIN(dead_event_clauda)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
@@ -235,9 +247,15 @@ static EVT_BEGIN(dead_event_clauda)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
         WAIT_FRAMES(37)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_win"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_win"), 0, -2)
+#endif
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
         WAIT_MS(500)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 90, 58, 228, 90, 38, -20, 30, 11)
@@ -246,7 +264,9 @@ static EVT_BEGIN(dead_event_clauda)
         WAIT_MS(200)
         CASE_EQUAL(1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
         LOOP(0)
             IF_INT_EQUAL(GW(19), 2)
                 BREAK_LOOP
@@ -255,7 +275,9 @@ static EVT_BEGIN(dead_event_clauda)
         END_LOOP
         CASE_EQUAL(2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     END_SWITCH
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
     SET_VALUE(GW(20), 2)

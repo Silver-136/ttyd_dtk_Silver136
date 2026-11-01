@@ -606,19 +606,26 @@ void _firebar_trans(FirebarWork* wp) {
  * Mario's invulnerability motions or invincibility timer set the "no damage" bit;
  * the fire-bar sound plays while Mario is within 120 units in X.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(firebar_entry) {
+#else
 USER_FUNC(firebar_entry) {
+#endif
     FirebarSetup* setup = (FirebarSetup*)evtGetValue(event, event->args[0]);
     FirebarWork* wp;
     FirebarBall* ball;
     MarioWork* mario;
+#if VERSION > VERSION_DEMO_US
     FirebarBall* balls;
     f32 x;
     f32 y;
     f32 z;
+#endif
     s32 i;
+#if VERSION > VERSION_DEMO_US
     s32 j;
     s32 n;
-
+#endif
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(FirebarWork));
         memset(wp, 0, sizeof(FirebarWork));
@@ -661,13 +668,24 @@ USER_FUNC(firebar_entry) {
             ball->pos = (Vec){0.0f, 0.0f, 0.0f};
             animPoseSetAnim(ball->pose, "FRB_S_1", TRUE);
         }
+#if VERSION <= VERSION_DEMO_US
+        event->userdata[0] = wp;
+#else
         event->userdata[0] = (EvtWord)wp;
+#endif
     }
+#if VERSION <= VERSION_DEMO_US
+    // FAKE: storing through &wp keeps wp in a stack slot for the whole function, as in the original
+    // code; it is the same as wp = event->userdatap[0].
+    *(FirebarWork**)&wp = event->userdata[0];
+#else
     *(s32*)&wp = event->userdata[0];
+#endif
     if (wp->flags & 8) {
         if (psndSFXChk(wp->sfxId) == 0) {
             psndSFXOff(wp->sfxId);
             wp->sfxId = -1;
+#if VERSION > VERSION_DEMO_US
         }
         balls = wp->balls;
         for (j = 0; j < 3; j++) {
@@ -676,6 +694,7 @@ USER_FUNC(firebar_entry) {
             y = 10.0f + balls[n].pos.y;
             z = balls[n].pos.z + (rand() % 5 + 3);
             effKemuTestEntry(0, x, y, z, 1.0f);
+#endif
         }
         ball = wp->balls;
         for (i = 0; i < wp->count; i++, ball++) {
@@ -693,7 +712,11 @@ USER_FUNC(firebar_entry) {
     }
     if (__fabsf(mario->position.x - wp->pos.x) < 120.0f) {
         if (psndSFXChk(wp->sfxId)) {
+#if VERSION <= VERSION_DEMO_US
+            wp->sfxId = psndSFXOn_3D((const char*)0x1CD, &wp->pos);
+#else
             wp->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_FIREBAR_ROUND1), &wp->pos);
+#endif
         }
     } else if (psndSFXChk(wp->sfxId) == 0) {
         psndSFXOff(wp->sfxId);
@@ -829,16 +852,31 @@ static HitDamageReturn dmgRetPoint[] = {
 EVT_BEGIN(las_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS2"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gazigazi_entry)
+    SPAWN_EVENT(firebar_evt)
+#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
     SPAWN_EVENT(PTR(firebar_evt))
+#endif
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hamon"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_brick, STRING("mobj_01"), 0, 150, 0, ITEM_BOOS_SHEET, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(GSWF_LAS04_BOOS_SHEET_BRICK))
+#else
     CALL(evt_mobj_brick, STRING("mobj_01"), 0, 150, 0, ITEM_BOOS_SHEET, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_LAS_04_BOOS_SHEET_HIDDEN_BLOCK)
+#endif
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -950, 140, -100, 0, 0)
     RETURN
 EVT_END()

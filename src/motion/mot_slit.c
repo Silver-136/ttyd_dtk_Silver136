@@ -26,19 +26,23 @@ int __abs(int);
 
 
 // Descriptive name (not in the symbol maps); placeholder unk_800a4e40, JP 0x800A4E40. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 void marioSlitReenter(void) {
     MarioWork* mario = marioGetPtr();
     marioChgMot2(MARIO_MOTION_SLIT);
     mario->slitState = 10;
     mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
+#endif
 
 // Descriptive name (not in the symbol maps).
+#if VERSION > VERSION_DEMO_US
 void marioSlitSetAfterLand(void) {
     MarioWork* mario = marioGetPtr();
     marioChgMot2(MARIO_MOTION_SLIT);
     mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
+#endif
 
 /**
  * TRUE when Mario may turn into Paper Mode: he has the paper curse (ITEM_PAPER_CURSE), it is not disabled,
@@ -60,16 +64,22 @@ BOOL marioSlitAbilityChk(void) {
 
 s32 marioSlitButton(void) {
     MarioWork* mario = marioGetPtr();
+#if VERSION > VERSION_DEMO_US
     if (mario->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) {
         return 0;
     }
+#endif
     if (marioKeyOffChk()) {
         return 0;
     }
     if (marioBgmodeChk() == 1) {
         return 0;
     }
+#if VERSION <= VERSION_DEMO_US
+if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
+#else
     if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
+#endif
         if (mario->buttonHold & PAD_TRIGGER_R) {
             return 1;
         }
@@ -104,6 +114,7 @@ BOOL marioSlitKeyDisable(void) {
     return TRUE;
 }
 
+#if VERSION > VERSION_DEMO_US
 BOOL marioSlitContinueChk(void) {
     MarioWork* mario = marioGetPtr();
     Vec pos;
@@ -116,6 +127,7 @@ BOOL marioSlitContinueChk(void) {
     pos = mario->position;
     return marioCreviceWallChk(&pos) != 0;
 }
+#endif
 
 /**
  * TRUE when position p is inside a narrow crack:
@@ -289,6 +301,17 @@ void motSlitContinue(void) {
 }
 
 /** TRUE once the slit motion has reached its ending states (0x64 and later). */
+#if VERSION <= VERSION_DEMO_US
+void motSlitContinue2(void) {
+    MarioWork* mario = marioGetPtr();
+    marioChgMot2(MARIO_MOTION_SLIT);
+    if (!(mario->mot.slit.flags & SLIT_FLAG_RESUME)) {
+        mario->slitState = 0x64;
+    } else {
+        mario->slitState = mario->mot.slit.resumeState;
+    }
+}
+#endif
 BOOL marioChkSlitEnd(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId != MARIO_MOTION_SLIT) {
@@ -308,7 +331,9 @@ void motSlitCancel(void) {
 void motSlitCancel2(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+#if VERSION > VERSION_DEMO_US
         allPartyForceSlitOff();
+#endif
         mario->slitState = 0x6e;
     }
 }
@@ -366,11 +391,20 @@ void marioSlitForceCancel(void) {
             m->displayDirection = 180.0f;
             m->displayDirectionTarget = m->displayDirection;
         }
+#if VERSION <= VERSION_DEMO_US
+        m->dispFlags &= CLR_DISP;
+#else
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
+#endif
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+#if VERSION <= VERSION_DEMO_US
+m->wPlayerCollisionBox.x = 20.0f;
+m->dispFlags &= CLR_DISP;
+#else
         m->wPlayerCollisionBox.x = 10.0f;
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
+#endif
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -389,6 +423,56 @@ void marioSlitForceCancel(void) {
  * step-up); otherwise restores him and the partners like marioSlitForceCancel (in the US release only once the
  * turn into paper has finished; when switching to Tube Mode the partners turn back by request).
  */
+#if VERSION <= VERSION_DEMO_US
+void mot_slit_post(void) {
+MarioWork* mario = marioGetPtr();
+    u16 id;
+    if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
+        if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
+            mario->wPlayerCollisionBox.x = 20.0f;
+            if (mario->directionView >= 180.0f) {
+                mario->displayDirection = 0.0f;
+                mario->displayDirectionTarget = mario->displayDirection;
+            } else {
+                mario->displayDirection = 180.0f;
+                mario->displayDirectionTarget = mario->displayDirection;
+            }
+            mario->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+            mario->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+            mario->dispFlags &= CLR_DISP;
+            mario->dispFlags &= CLR_DISP;
+            marioPaperOff();
+            mapResetPaperAmbColor();
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+            marioAdjustMoveDir();
+            allPartyForceSlitOff();
+        }
+    } else {
+        id = mario->currMotionId;
+        if (id == 1 || (u16)(id - 2) <= 5 || mario->currMotionId == MARIO_MOTION_JUMP_3) {
+            return;
+        }
+        mario->flags &= ~MARIO_FLAG_PAPER_MODE;
+        mario->wPlayerCollisionBox.x = 20.0f;
+        if (mario->directionView >= 180.0f) {
+            mario->displayDirection = 0.0f;
+            mario->displayDirectionTarget = mario->displayDirection;
+        } else {
+            mario->displayDirection = 180.0f;
+            mario->displayDirectionTarget = mario->displayDirection;
+        }
+        mario->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+        mario->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+        mario->dispFlags &= CLR_DISP;
+        mario->dispFlags &= CLR_DISP;
+        marioPaperOff();
+        mapResetPaperAmbColor();
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+        marioAdjustMoveDir();
+        allPartyForceSlitOff();
+    }
+}
+#else
 void mot_slit_post(void) {
     MarioWork* mario = marioGetPtr();
 #if VERSION >= VERSION_US
@@ -458,6 +542,7 @@ void mot_slit_post(void) {
 #endif
     }
 }
+#endif
 
 /** Re-applies the Paper Mode animation (p_slit, PM_S_1A) when mario.c rebuilds Mario's look while he is paper. */
 void marioForceSlitAnime(void) {
@@ -522,7 +607,11 @@ void marioReInit_slit(void) {
 static inline BOOL slitContinueChk(void) {
     MarioWork* mario = marioGetPtr();
     Vec pos;
+#if VERSION <= VERSION_DEMO_US
+if (marioSlitButton() == 2) {
+#else
     if (marioSlitButton()) {
+#endif
         return TRUE;
     }
     if (marioSlitChkWallAround()) {
@@ -627,6 +716,489 @@ static inline void slitCamFix(void) {
  * squeezes through cracks (0x5A-0x5E), and turns back when R is released and there is room.
  * Scripts end it with their own animations (0x6E, 0x78).
  */
+#if VERSION <= VERSION_DEMO_US
+void mot_slit(void) {
+    MarioWork* m = marioGetPtr();
+    f32 d;
+    s16 st;
+    if (!m->controlStickSensitivity) {
+        m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
+    }
+    if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+        slitInit();
+        m->slitState = 0;
+        m->airTimer = 0;
+    }
+    if (marioRollChgChk()) {
+        if (revise360(m->directionView - m->targetYaw) >= 180.0f) {
+            m->displayDirection = 0.0f;
+            m->displayDirectionTarget = m->displayDirection;
+        } else {
+            m->displayDirection = 180.0f;
+            m->displayDirectionTarget = m->displayDirection;
+        }
+        m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+        m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+        m->dispFlags &= CLR_DISP;
+        marioPaperOff();
+        m->flags &= ~MARIO_FLAG_PAPER_MODE;
+        return;
+    }
+    switch (m->slitState) {
+        case 0:
+            m->slitTimer = 30;
+            m->mot.slit.counter = 0;
+            m->slitState = 2;
+            m->mot.slit.lastY = m->position.y;
+if (m->baseSpeed >= m->baseDashSpeed) {
+slitSpeedDown(m);
+            }
+            marioGetPtr();
+            psndSFXOn_3D((char*)0x177, &m->position);
+            break;
+        case 2:
+if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                marioChgPose("M_S_1");
+            }
+            if (--m->slitTimer <= 0) {
+m->flags |= MARIO_FLAG_PAPER_MODE;
+                m->slitState = 4;
+                m->wPlayerCollisionBox.x = 6.0f;
+            }
+            if (m->slitTimer == 0x14) {
+                allPartySlitOn();
+            }
+            break;
+        case 4:
+            if (marioChkKey()) {
+                if (!m->controlStickSensitivity) {
+                    m->baseSpeed = 0.0f;
+                    marioChgPose("M_S_1");
+                }
+                m->directionView = toMovedirSimple(m->displayDirection);
+            }
+if (m->baseSpeed >= m->baseDashSpeed) {
+                slitSpeedDown(m);
+            }
+m->displayDirection = 270.0f;
+            m->displayDirectionTarget = m->displayDirection;
+            if (!m->controlStickSensitivity) {
+                marioChgPose("M_S_1");
+            }
+            marioChgPaper("PM_S_1B");
+            m->slitState = 10;
+            m->mot.slit.count = 0;
+        case 10:
+            if (m->position.y != m->mot.slit.lastY) {
+                slitCamFix();
+            }
+            m->mot.slit.lastY = m->position.y;
+            if (m->forceMoveTimer != 0) {
+                if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
+                    marioChgPose("M_W_1");
+                }
+                marioChgPaper("PM_S_1D");
+                if (revise360(m->directionView - m->targetYaw) <= 180.0f) {
+                    m->mot.slit.side = 1;
+                    m->displayDirection = 260.0f;
+                } else {
+                    m->mot.slit.side = 2;
+                    m->displayDirection = 280.0f;
+                }
+                break;
+            }
+            if (m->baseSpeed >= m->baseDashSpeed) {
+                slitSpeedDown(m);
+            }
+            if (marioChkKey()) {
+                if (slitContinueChk() != TRUE) {
+m->slitState = 0x64;
+                    break;
+                }
+            }
+            if (marioChkJump()) {
+                return;
+            }
+            if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                if (!m->mot.slit.counter) {
+                    marioChgPose("M_S_1");
+                    marioChgPaper("PM_S_1B");
+                }
+                break;
+            }
+            if (strcmp(m->animName, "M_I_Y") == 0) {
+                marioChgPose("M_W_1");
+            }
+            if (!(m->mot.slit.flags & 1)) {
+                slitCamFix();
+            } else {
+                m->mot.slit.flags &= ~1;
+                slitCamFix();
+            }
+            m->baseSpeed = slitWalkSpeed();
+            m->directionView = m->controlStickAngle;
+            if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
+                marioChgPose("M_W_1");
+            }
+            d = revise360(m->controlStickAngle - m->targetYaw);
+            if (d >= 315.0f || d <= 45.0f || (d >= 135.0f && d <= 225.0f)) {
+                marioChgPaper("PM_S_1E");
+            } else {
+                marioChgPaper("PM_S_1D");
+                if (revise360(m->directionView - m->targetYaw) <= 180.0f) {
+                    m->mot.slit.side = 1;
+                    m->displayDirection = 260.0f;
+                } else {
+                    m->mot.slit.side = 2;
+                    m->displayDirection = 280.0f;
+                }
+            }
+            m->slitState = 0x14;
+            break;
+    }
+    switch (m->slitState) {
+        case 0x14:
+if (marioChkKey()) {
+                if (slitContinueChk() != TRUE) {
+                    m->slitState = 0x64;
+                }
+            }
+            if (!(m->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
+                marioChkJump();
+            }
+            if (marioChkKey()) {
+                if (!m->controlStickSensitivity) {
+                    m->baseSpeed = 0.0f;
+                    if (++m->mot.slit.count < 6) {
+                        if (slitContinueChk() != TRUE) {
+                            m->slitState = 0x64;
+                        }
+                        break;
+                    } else {
+                        m->slitState = 4;
+                        break;
+                    }
+                } else {
+                    s32 sum;
+                    m->mot.slit.count = 0;
+                    sum = __abs((s8)m->wStickDir1) + __abs((s8)m->wStickDir2);
+                    if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
+                        marioChgPose((sum < 0x44) ? "M_W_1" : "M_R_1");
+                    }
+                }
+            }
+            if (marioChkKey()) {
+                m->directionView = m->controlStickAngle;
+                m->baseSpeed = slitWalkSpeed();
+            }
+            d = revise360(m->controlStickAngle - m->targetYaw);
+            if (d >= 315.0f || d <= 45.0f || (d >= 135.0f && d <= 225.0f)) {
+                marioChgPaper("PM_S_1E");
+                m->mot.slit.count = 6;
+                m->mot.slit.side = 0;
+                m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
+                break;
+            } else {
+                marioChgPaper("PM_S_1D");
+                d = revise360(m->directionView - m->targetYaw);
+                if (m->mot.slit.side == 0) {
+                    m->mot.slit.side = (d >= 180.0f) ? 2 : 1;
+                }
+                if (m->mot.slit.side == 1) {
+                    if (d >= 180.0f) {
+                        marioChgPaper("PM_S_2");
+                        m->mot.slit.timer = 6;
+                        m->slitState = 0x15;
+                        m->mot.slit.side = 2;
+                        m->baseSpeed = slitWalkSpeed();
+}
+                } else if (m->mot.slit.side == 2) {
+                    if (d <= 180.0f) {
+                        marioChgPaper("PM_S_2");
+                        m->mot.slit.timer = 6;
+                        m->slitState = 0x15;
+                        m->mot.slit.side = 1;
+                        m->baseSpeed = slitWalkSpeed();
+}
+                }
+            }
+            break;
+        case 0x15:
+            if (--m->mot.slit.timer > 0) {
+break;
+            }
+            marioChgPaper("PM_S_1D");
+            m->slitState = 0x14;
+m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
+break;
+    }
+    if (m->flags & MARIO_FLAG_PAPER_MODE) {
+        if (m->hitobjPush != NULL) {
+if (hitGetAttr(m->hitobjPush) & HIT_ATTR_SLIT) {
+                HitCheckQuery q;
+                f32 sn, cs;
+                d = revise360(m->controlStickAngle - m->targetYaw);
+                if (d > 90.0f && d < 270.0f) {
+                    m->mot.slit.pushDir = 180.0f;
+                } else {
+                    m->mot.slit.pushDir = 0.0f;
+                }
+                if (++m->mot.slit.counter >= sysMsec2Frame(50)) {
+                    m->directionView = revise360(m->mot.slit.pushDir + m->targetYaw);
+                    sincosf(&sn, &cs, m->directionView);
+                    q.targetPos = m->position;
+                    q.targetPos.y += 11.0f;
+                    {
+                        Vec tmp = {0, 0, 0};
+                        tmp.x = sn;
+                        tmp.z = cs;
+                        q.targetDir = tmp;
+                    }
+                    q.targetDistance = 20.0f;
+                    if (hitCheckVecHitObjXZ(&q, m->hitobjPush)) {
+                        m->slitState = 0x50;
+                    }
+                }
+            } else {
+                m->mot.slit.counter = 0;
+            }
+} else {
+            st = m->slitState;
+            if (!(st >= 0x5a && st <= 0x5e) && m->hitobjStandOn != NULL && (hitGetAttr(m->hitobjStandOn) & HIT_ATTR_SLIT)) {
+                m->mot.slit.counter += 3;
+                marioChgPaper("PM_S_1H");
+if (m->mot.slit.counter >= 0xf) {
+m->slitState = 0x5a;
+                }
+            } else {
+                m->mot.slit.counter--;
+                if (m->mot.slit.counter < 0) {
+                    m->mot.slit.counter = 0;
+                }
+            }
+        }
+    }
+    switch (m->slitState) {
+        case 0x50:
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+            slitCamFix();
+            m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
+            if (0.0f == m->mot.slit.pushDir) {
+                marioChgPaper("PM_S_1F");
+            } else {
+                marioChgPaper("PM_S_1G");
+            }
+            m->flags |= MARIO_FLAG_WALLS_DISABLED;
+            m->slitTimer = 20;
+            m->baseSpeed = (2.0f * m->wPlayerCollisionBox.x) / (f32)m->slitTimer;
+            m->slitState = 0x51;
+            m->flags |= MARIO_FLAG_GONE_THROUGH_BARS;
+            break;
+        case 0x51:
+            if (--m->slitTimer <= 0) {
+                m->slitState = 0x52;
+            }
+            break;
+        case 0x52:
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+            m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
+            m->slitState = 0x14;
+            m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
+            break;
+    }
+    switch (m->slitState) {
+        case 0x5a:
+            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+            slitCamFix();
+            m->flags |= MARIO_FLAG_CHG_MOT_DISABLED;
+            marioChgPaper("PM_S_1H");
+            m->slitTimer = sysMsec2Frame(500);
+            m->baseSpeed = 0.0f;
+            m->slitState = 0x5b;
+            {
+                MarioWork* p = marioGetPtr();
+                p->slitPosSet = 1;
+                // copy
+                p->slitPos = p->position;
+            }
+        case 0x5b:
+m->slitTimer = 20;
+m->slitState = 0x5c;
+            m->flags |= MARIO_FLAG_FLOORS_DISABLED;
+            marioSetFallPara();
+            m->flags &= ~MARIO_FLAG_IS_JUMPING;
+            m->flags |= (MARIO_FLAG_IS_FALLING | MARIO_FLAG_HAS_INPUT_JUMP);
+        case 0x5c:
+            m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
+            if (--m->slitTimer > 0) {
+                break;
+            }
+            m->slitState = 0x5d;
+            m->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
+case 0x5d:
+            if (m->hitobjStandOn == NULL) {
+                break;
+            }
+            m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+            m->slitState = 0x5e;
+        case 0x5e:
+            camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+            m->slitState = 0x14;
+m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
+break;
+    }
+    switch (m->slitState) {
+        case 0x64:
+            m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+m->mot.slit.resumeState = m->slitState;
+            m->mot.slit.flags |= SLIT_FLAG_RESUME;
+m->slitTimer2 = 0;
+            m->flags &= ~MARIO_FLAG_PAPER_MODE;
+            m->wPlayerCollisionBox.x = 20.0f;
+if (m->baseSpeed == 0.0f) {
+                marioChgPose("M_S_1");
+            }
+            marioChgPaper("PM_S_1C");
+            m->slitTimer2 = 30;
+            m->slitState = 0x65;
+            if (revise360(m->directionView - m->targetYaw) >= 180.0f) {
+                m->displayDirection = 0.0f;
+                m->displayDirectionTarget = m->displayDirection;
+                if (!m->controlStickSensitivity) {
+                    m->directionView = toMovedirSimple(m->displayDirection);
+                }
+            } else {
+                m->displayDirection = 180.0f;
+                m->displayDirectionTarget = m->displayDirection;
+                if (!m->controlStickSensitivity) {
+                    m->directionView = toMovedirSimple(m->displayDirection);
+                }
+            }
+            psndSFXOn_3D((char*)0x178, &m->position);
+        case 0x65:
+m->mot.slit.resumeState = m->slitState;
+if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                marioChgPose("M_S_1");
+            }
+if (--m->slitTimer2 > 0) {
+                break;
+            }
+            m->slitState = 0x66;
+            break;
+        case 0x66:
+m->mot.slit.resumeState = m->slitState;
+if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                marioChgPose("M_S_1");
+            }
+m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+            m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+            m->dispFlags &= CLR_DISP;
+            marioPaperOff();
+            mapResetPaperAmbColor();
+            m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+marioAdjustMoveDir();
+allPartySlitOff();
+slitCamFix();
+            marioChgMotSub(MARIO_MOTION_STAY, 0);
+            break;
+        case 0x6e:
+            m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+            m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+            m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
+            m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
+m->mot.slit.resumeState = m->slitState;
+            m->mot.slit.flags |= SLIT_FLAG_RESUME;
+m->slitTimer2 = 0;
+            m->flags &= ~MARIO_FLAG_PAPER_MODE;
+            m->wPlayerCollisionBox.x = 20.0f;
+            if (!m->controlStickSensitivity) {
+                marioChgPose("M_S_1");
+            }
+            marioChgPaper("PM_S_1C");
+            m->slitTimer2 = 30;
+            m->slitState = 0x6f;
+            m->baseSpeed = 0.0f;
+            if (revise360(m->directionView - m->targetYaw) >= 180.0f) {
+                m->displayDirection = 0.0f;
+                m->displayDirectionTarget = m->displayDirection;
+                m->directionView = toMovedirSimple(m->displayDirection);
+            } else {
+                m->displayDirection = 180.0f;
+                m->displayDirectionTarget = m->displayDirection;
+                m->directionView = toMovedirSimple(m->displayDirection);
+            }
+            psndSFXOn_3D((char*)0x178, &m->position);
+        case 0x6f:
+m->mot.slit.resumeState = m->slitState;
+if (--m->slitTimer2 > 0) {
+                break;
+            }
+            m->slitState = 0x70;
+            break;
+        case 0x70:
+m->mot.slit.resumeState = m->slitState;
+m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+            m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+            m->dispFlags &= CLR_DISP;
+            marioPaperOff();
+            mapResetPaperAmbColor();
+            m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+            marioAdjustMoveDir();
+            allPartySlitOff();
+            slitCamFix();
+            marioChgMot(MARIO_MOTION_STAY);
+            break;
+        case 0x78:
+m->mot.slit.resumeState = m->slitState;
+            m->mot.slit.flags |= SLIT_FLAG_RESUME;
+m->slitTimer2 = 0;
+            m->flags &= ~MARIO_FLAG_PAPER_MODE;
+            m->wPlayerCollisionBox.x = 20.0f;
+            if (!m->controlStickSensitivity) {
+                marioChgPose("M_S_1");
+            }
+            marioChgPaper("PM_S_1C");
+            m->slitTimer2 = 30;
+            m->slitState = 0x79;
+            m->baseSpeed = 0.0f;
+            if (revise360(m->directionView - m->targetYaw) >= 180.0f) {
+                m->displayDirection = 0.0f;
+                m->displayDirectionTarget = m->displayDirection;
+                m->directionView = toMovedirSimple(m->displayDirection);
+            } else {
+                m->displayDirection = 180.0f;
+                m->displayDirectionTarget = m->displayDirection;
+                m->directionView = toMovedirSimple(m->displayDirection);
+            }
+            psndSFXOn_3D((char*)0x178, &m->position);
+        case 0x79:
+m->mot.slit.resumeState = m->slitState;
+if (--m->slitTimer2 > 0) {
+                break;
+            }
+            m->slitState = 0x7a;
+            break;
+        case 0x7a:
+m->mot.slit.resumeState = m->slitState;
+m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+            m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+            m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
+            m->dispFlags &= CLR_DISP;
+            marioPaperOff();
+            mapResetPaperAmbColor();
+            m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+            marioAdjustMoveDir();
+            allPartySlitOff();
+            slitCamFix();
+            marioChgMot(MARIO_MOTION_STAY);
+            break;
+    }
+}
+#else
 void mot_slit(void) {
     MarioWork* m = marioGetPtr();
     f32 d;
@@ -1173,3 +1745,4 @@ void mot_slit(void) {
         break;
     }
 }
+#endif

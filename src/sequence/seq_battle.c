@@ -91,6 +91,7 @@ static const char bti04[7];
  * starts the battle via battle_init, then once the battle ends returns to the field (or game over on a kiosk
  * timeout; states 10/11 end a debug battle).
  */
+#if VERSION > VERSION_DEMO_US
 void seq_battleMain(SequenceWork* work) {
     FieldBattleData* fbat;
     BattleStageData* stage;
@@ -231,7 +232,195 @@ void seq_battleMain(SequenceWork* work) {
             break;
     }
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+void seq_battleMain(SequenceWork* work) {
+switch (work->state) {
+        case 0: {
+            GXColor color = {0, 0, 0, 255};
+            fadeEntry(FADE_CURTAIN_UP_DOWN_A1, 1000, color);
+            work->state++;
+            work->counter = 0;
+            break;
+        }
+        case 1:
+            if (!loadTpl("battle/audience/audience_normal.tpl")) {
+                break;
+            }
+            if (!loadTpl("battle/audience/audience_luigi.tpl")) {
+                break;
+            }
+            work->counter++;
+            if (fadeIsFinish()) {
+                work->state++;
+            }
+            break;
+case 2:
+            battle_init();
+            work->state++;
+        case 3: {
+Vec pos;
+            if (battleSeqEndCheck()) {
+                work->counter = 0;
+                work->state++;
+                if (gp->debugBattle) {
+                    work->state = 11;
+                }
+            }
+            marioGetPtr();
+            camGetPtr(CAMERA_3D);
+            pos.x = 0.0f;
+            pos.y = 0.0f;
+            pos.z = 400.0f;
+            if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
+                pos.z += 200.0f;
+            }
+            psndSetPosDirListener(&pos, camGetPtr(CAMERA_3D)->viewYaw);
+            break;
+        }
+case 4:
+if (++work->counter > 30) {
+                // A non-NULL map name tells seq_gameOver to skip its iris fade (the battle has already
+                // faded out); seq_game does not read it.
+                if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT)) {
+                    seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
+                } else {
+                    seqSetSeq(SEQ_GAME, (const char*)1, NULL);
+                }
+            }
+            break;
+        case 10: {
+            GXColor color = {0, 0, 0, 255};
+            fadeEntry(FADE_CURTAIN_UP_DOWN_A1, 200, color);
+            work->state++;
+            break;
+        }
+        case 11:
+            if (fadeIsFinish()) {
+                gp->debugBattle = 0;
+                seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
+            }
+            break;
+    }
+}
+static void battle_init(void) {
+FieldBattleData* fbat;
+    NpcEntry* npc;
+    PouchData* pouch;
+MapData* map;
+    MapData* map2;
+    BattleStageData* stage;
+FieldBattleInfo* info;
+    PartyEntry* party;
+
+    fbat = fbatGetPointer();
+    npc = fbat->target;
+stage = npc->battleInfo.stageData;
+pouch = pouchGetPtr();
+if (debug_battle_flag == 0) {
+        marioCtrlOff();
+        partyCtrlOff();
+        marioGetPtr()->flags &= ~MARIO_FLAG_ACTIVE;
+        padRumbleOff(0);
+    }
+    switch (pouch->rank) {
+        case 0:
+            map = mapDataPtr(bti01);
+            break;
+        case 1:
+            map = mapDataPtr(bti02);
+            break;
+        case 2:
+            map = mapDataPtr(bti03);
+            break;
+        case 3:
+        default:
+            map = mapDataPtr(bti04);
+            break;
+    }
+    map2 = NULL;
+    if (stage->specificStageDataDir) {
+        map2 = mapDataPtr(stage->specificStageDataDir);
+    }
+    bmapLoad(map->mapName, stage->specificStageDataDir);
+camSetMode(CAMERA_3D, 2);
+    if (gp->debugBattle) {
+        const char* msg = DbgBtlSel_GetMsgDataPtr();
+        if (msg) {
+            msgLoad(msg, 0);
+        } else {
+            msgLoad(gon11, 0);
+        }
+    }
+memClear(HEAP_BATTLE);
+    smartAutoFree(2);
+_battleWorkPointer = NULL;
+    animPoseBattleInit();
+    npcReleaseFiledNpc();
+    gp->inBattle = 1;
+    evtmgrReInit();
+if (map && map->eventAddr) {
+        evtEntry(map->eventAddr, 0, 0);
+    }
+    if (map2 && map2->eventAddr) {
+        evtEntry(map2->eventAddr, 0, 0);
+    }
+psndSetFlag(PSND_FLAG_BATTLE_START);
+    info = &fbat->info;
+    BattleInformationInit(info);
+    BattleInformationSetMode(info, 0);
+    party = partyGetPtr(marioGetPartyId());
+    if (party) {
+        s32 id = party->currentMemberId;
+        BattleUnitType kind = BattleTransPartyIdToUnitKind(id);
+        if (!(pouch->partyData[id].flags & 2)) {
+            BattleInformationSetParty(info, kind);
+        }
+    }
+    if (fbat->firstAttackFlags & 1) {
+        BattleInformationSetFirstAttack(info, FIRST_ATTACK_NONE);
+    } else {
+        switch (fbat->hitKind) {
+            case FBAT_HIT_JUMP:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_JUMP);
+                break;
+            case FBAT_HIT_HIP:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SPIN_JUMP);
+                break;
+            case FBAT_HIT_JUMP_UNUSED:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_JUMP_UNUSED);
+                break;
+            case FBAT_HIT_HAMMER:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_HAMMER);
+                break;
+            case FBAT_HIT_SPIN_HAMMER:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SPIN_HAMMER);
+                break;
+            case FBAT_HIT_ULTRA_SPIN_HAMMER:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_ULTRA_HAMMER);
+                break;
+            case FBAT_HIT_SHELL:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_SHELL);
+                break;
+            case FBAT_HIT_BOMB:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_BOMB);
+                break;
+            case FBAT_HIT_ENEMY_FIRST:
+                BattleInformationSetFirstAttack(info, fbat->firstAttackParam);
+                break;
+            default:
+                BattleInformationSetFirstAttack(info, FIRST_ATTACK_NONE);
+                break;
+        }
+    }
+    BattleInfomationSetBattleSetupInfo(info, &npc->battleInfo);
+    info->ruleType = npc->battleInfo.battleRule[0];
+    info->ruleParam = npc->battleInfo.battleRule[1];
+    info->ruleParam2 = npc->battleInfo.battleRule[2];
+    BattleInit(info);
+}
+#else
 BOOL battle_init(void) {
     FieldBattleData* fbat;
     NpcEntry* npc;
@@ -317,7 +506,54 @@ BOOL battle_init(void) {
     BattleInit(info);
     return FALSE;
 }
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static void battle_exit(void) {
+    LightEntry* light;
+    Mtx mtx;
+
+    BattleEnd();
+itemReInit();
+    iconReInit();
+    extReset();
+    bmapUnLoad();
+    if (camGetPtr(CAMERA_3D)->flags & CAMERA_FLAG_ROAD) {
+        camSetMode(CAMERA_3D, 1);
+    } else {
+        camSetMode(CAMERA_3D, 3);
+    }
+    npcReset(TRUE);
+    mobjReset(TRUE);
+    offscreenReset(TRUE);
+    imgAutoRelease(1);
+    effAutoRelease(TRUE);
+    animPoseAutoRelease(TRUE);
+    evtmgrReInit();
+    npcRecoveryFiledNpc();
+    gp->inBattle = 0;
+memClear(HEAP_BATTLE);
+evtStartAll(4);
+    if (debug_battle_flag == 0) {
+        marioCtrlOn();
+        partyCtrlOn();
+        marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
+    }
+psndClearFlag(PSND_FLAG_BATTLE_START);
+psndClearFlag(PSND_FLAG_MUTE_SFX);
+    light = lightGetPaperCraft();
+    {
+        Vec v = {-200.0f, 100.0f, 100.0f};
+        light->position = v;
+    }
+    PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
+    PSMTXMultVec(mtx, &light->position, &light->position);
+if ((evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
+psndBGMOn(PSND_CONTINUE | PSND_FADEIN, NULL);
+        psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
+    }
+}
+#else
 void battle_exit(void) {
     LightEntry* light;
     Mtx mtx;
@@ -370,12 +606,15 @@ void battle_exit(void) {
         psndENVOn(PSND_CONTINUE | PSND_FADEIN, NULL);
     }
 }
+#endif
 
 /**
  * gon_11, whose message file a debug battle loads when its menu has none, and the battle stage maps for
  * Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises).
  */
+#if VERSION > VERSION_DEMO_US
 static const char gon11[] = "gon_11";
+#endif
 /**
  * Names of the battle stage maps for Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises),
  * and gon_11, whose message file a debug battle loads when its menu has none.
@@ -384,3 +623,6 @@ static const char bti01[] = "bti_01";
 static const char bti02[] = "bti_02";
 static const char bti03[] = "bti_03";
 static const char bti04[] = "bti_04";
+#if VERSION <= VERSION_DEMO_US
+static const char gon11[] = "gon_11";
+#endif

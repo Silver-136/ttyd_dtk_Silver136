@@ -83,6 +83,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Defence attributes of the Bombshell Bill: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 0, 100, 0, 40, 150, 100, 65, 100, 65, 100, 65, 100, 65, 65, 0, 90, 100, 65, 100, 100, 90};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -107,6 +110,7 @@ static StatusVulnerability regist = {
     100, // invisible
     90, // ohko
 };
+#endif
 
 /** Parts of the Bombshell Bill: 1 part (model c_kilr_g). */
 static BattleUnitKindPart parts[] = {

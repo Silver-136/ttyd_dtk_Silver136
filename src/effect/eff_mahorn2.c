@@ -45,7 +45,9 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     data++;
 
     for (i = 1; i < 4; i++, data++) {
+#if VERSION > VERSION_DEMO_US
         memset(data, 0, sizeof(effMahorn2Data));
+#endif
         data->type = 1;
         data->position.x = 0.0f;
         data->position.y = 0.0f;
@@ -56,7 +58,9 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     }
 
     for (i = 4; i < 5; i++, data++) {
+#if VERSION > VERSION_DEMO_US
         memset(data, 0, sizeof(effMahorn2Data));
+#endif
         data->type = 2;
         data->position.x = 0.0f;
         data->position.y = 0.0f;
@@ -67,7 +71,9 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     }
 
     for (i = 5; i < 6; i++, data++) {
+#if VERSION > VERSION_DEMO_US
         memset(data, 0, sizeof(effMahorn2Data));
+#endif
         data->type = 3;
         data->position.x = 0.0f;
         data->position.y = 0.0f;
@@ -78,7 +84,9 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     }
 
     for (i = 6; i < effect->count; i++, data++) {
+#if VERSION > VERSION_DEMO_US
         memset(data, 0, sizeof(effMahorn2Data));
+#endif
         data->type = 4;
         data->position.x = dstX - posX;
         data->position.y = dstY - posY;
@@ -171,7 +179,11 @@ void effMahorn2Main(EffectEntry *effect) {
 }
 
 /** Draws the travelling elements as textured quads (effect textures 0x8F and 0x90). */
+#if VERSION <= VERSION_DEMO_US
+static void effMahorn2Disp(CameraId cameraId, EffectEntry* effect) {
+#else
 void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
+#endif
     effMahorn2Data *data = effect->userdata;
     Mtx mtx;
     Mtx rot;
@@ -267,12 +279,26 @@ void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
             GXPosition3f32(-w / 2.0f, -h / 2.0f, 0.0f);
             GXTexCoord2f32(0.0f, v);
         } else {
+#if VERSION <= VERSION_DEMO_US
+for (i = 0; i < 3; i++) {
+#else
             s32 j;
             for (j = 0; j < 3; j++) {
+#endif
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 {
                     f32 xs[3][2] = { { 0.0f, 2.0f }, { 2.0f, 12.0f }, { 12.0f, 14.0f } };
                     f32 us[3][2] = { { 0.0f, 0.5f }, { 0.5f, 0.5f }, { 0.5f, 1.0f } };
+#if VERSION <= VERSION_DEMO_US
+                    GXPosition3f32(xs[i][0], h / 2.0f, 0.0f);
+                    GXTexCoord2f32(2.0f * us[i][0], 0.0f);
+                    GXPosition3f32(xs[i][1], h / 2.0f, 0.0f);
+                    GXTexCoord2f32(2.0f * us[i][1], 0.0f);
+                    GXPosition3f32(xs[i][1], -h / 2.0f, 0.0f);
+                    GXTexCoord2f32(2.0f * us[i][1], v);
+                    GXPosition3f32(xs[i][0], -h / 2.0f, 0.0f);
+                    GXTexCoord2f32(2.0f * us[i][0], v);
+#else
 
                     GXPosition3f32(xs[j][0], h / 2.0f, 0.0f);
                     GXTexCoord2f32(2.0f * us[j][0], 0.0f);
@@ -282,6 +308,7 @@ void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
                     GXTexCoord2f32(2.0f * us[j][1], v);
                     GXPosition3f32(xs[j][0], -h / 2.0f, 0.0f);
                     GXTexCoord2f32(2.0f * us[j][0], v);
+#endif
                 }
             }
         }

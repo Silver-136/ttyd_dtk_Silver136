@@ -86,6 +86,11 @@ USER_FUNC(evt_npc_slave_entry) {
 
 /** const char* lookupName */
 // const char* lookupName
+#if VERSION <= VERSION_DEMO_US
+static void npc_report_pos(NpcEntry* npc) {
+    OSReport("%f%f%f", npc->position.x, npc->position.y, npc->position.z);
+}
+#endif
 USER_FUNC(evt_npc_delete) {
     const char* name;
     NpcEntry* npc;
@@ -542,9 +547,13 @@ USER_FUNC(evt_npc_move_position) {
             npcTuningRy(npc, npc->moveDir);
         }
     }
+#if VERSION <= VERSION_DEMO_US
+{
+#else
 
     // Advance the move offset along the heading (not while NPC_STATUS_STOPPED)
     if (!(npc->statusFlags & NPC_STATUS_STOPPED)) {
+#endif
         f32 temp = (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
         npc->moveOffset.x += npc->moveDt * (npc->moveSpeed * temp);
         temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
@@ -570,7 +579,9 @@ USER_FUNC(evt_npc_move_position) {
             }
         }
         npc->footstepAccum = 0.0f;
+#if VERSION > VERSION_DEMO_US
         // FAKE: (s8) cast before the store to the s16 field; the plain form changes the object
+#endif
         npc->footstepToggle = (s8)(1 - npc->footstepToggle); // alternate L/R
     }
 
@@ -2003,6 +2014,26 @@ USER_FUNC(evt_npc_battle_start) {
  * then gives control back to Mario and the partner and stops the battle music handling.
  * The US release also runs marioFBattlePost.
  */
+#if VERSION <= VERSION_DEMO_US
+USER_FUNC(evt_npc_wait_battle_end) {
+    FieldBattleInfo* info = &fbatGetPointer()->info;
+    PartyEntry* party;
+
+    if (seqGetSeq() != SEQ_GAME) {
+        return EVT_RETURN_BLOCK;
+    }
+    if (BattleInformationGetResult(info) == BATTLE_RESULT_NONE) {
+        return EVT_RETURN_BLOCK;
+    }
+    marioCtrlOn();
+    party = partyGetPtr(marioGetPartyId());
+    if (party) {
+        partyCtrlOn();
+    }
+psndClearFlag(PSND_FLAG_BATTLE_START);
+return EVT_RETURN_DONE;
+}
+#else
 USER_FUNC(evt_npc_wait_battle_end) {
     FieldBattleInfo* info = &fbatGetPointer()->info;
     PartyEntry* party;
@@ -2024,6 +2055,7 @@ USER_FUNC(evt_npc_wait_battle_end) {
 #endif
     return EVT_RETURN_DONE;
 }
+#endif
 
 /** s32 resultStoreIndex */
 // s32 resultStoreIndex
@@ -2129,7 +2161,11 @@ USER_FUNC(evt_npc_get_drop_item) {
     if (npc->battleInfo.battleFlags & NPC_BATTLE_NO_ITEM_DROP) {
         evtSetValue(event, index, 0);
     } else {
+#if VERSION <= VERSION_DEMO_US
+evtSetValue(event, index, 0);
+#else
         evtSetValue(event, index, npc->battleInfo.itemDropped);
+#endif
     }
     return EVT_RETURN_DONE;
 }
@@ -2552,7 +2588,11 @@ USER_FUNC(evt_npc_calc_score) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
+#else
 void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
+#endif
     static u8 cnt;
     f32 x, dirX;
     u8 mask;
@@ -2580,11 +2620,15 @@ void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
         }
         effect = effKemuri10N64Entry(0, x, (18.0f * npc->scale.x) + npc->position.y, npc->position.z, dirX, 0.0f, 0.0f,
                                      npc->scale.x);
+#if VERSION > VERSION_DEMO_US
         if (!strcmp(gp->currentMapName, "kpa_01")) {
             ((EffKemuri10N64Work*)effect->userdata)->camera = CAMERA_3D_EFFECTB;
+#endif
         }
     }
+#if VERSION > VERSION_DEMO_US
 }
+#endif
 
 /**
  * Flies Kamek on his broom to x = args[1], z = args[2] like evt_npc_move_position,

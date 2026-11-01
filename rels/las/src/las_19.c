@@ -361,17 +361,27 @@ EVT_BEGIN(las_19_init_evt)
     IF_STR_EQUAL(LW(0), STRING("chgmap_evt"))
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
     ELSE
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_06_MOVING_PLANETS)
+#else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
+#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
         ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
         END_IF
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 2)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_08_THE_NEW_PATH)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_08_THE_NEW_PATH)
+#endif
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_futa"), STRING("A_futa"), PTR(cloud_evt))
     ELSE
@@ -381,11 +391,23 @@ EVT_BEGIN(las_19_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("chgmap_evt"))
         CALL(evt_npc_check_delete, STRING("マホーン１"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(change_map_evt)
+#else
         SPAWN_EVENT(PTR(change_map_evt))
+#endif
     ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_bero_info_run)
+#else
         CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_06_MOVING_PLANETS)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_npc_check_delete, STRING("マホーン２"))
@@ -399,23 +421,43 @@ EVT_BEGIN(las_19_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kai_23"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kai_24"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_npc_check_delete, STRING("マホーン１"))
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(hikari_evt)
+#else
         SPAWN_EVENT(PTR(hikari_evt))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_06_MOVING_PLANETS)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
+#endif
         CALL(evt_mobj_switch_float_blk, STRING("switch1"), 375, -320, -45, STRING(""), 2, PTR(switch1_evt), 0)
         CALL(evt_mobj_switch_float_blk, STRING("switch2"), 450, -320, -45, STRING(""), 0, PTR(switch2_evt), 0)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_LAS19_SWITCH1_ON), 0)
+#else
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
+#endif
             CALL(evt_mobj_set_anim, STRING("switch1"), STRING("A_3"))
         ELSE
             CALL(evt_mobj_set_anim, STRING("switch1"), STRING("S_1"))
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_LAS19_SWITCH2_ON), 0)
+#else
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
+#endif
             CALL(evt_mobj_set_anim, STRING("switch2"), STRING("A_3"))
         ELSE
             CALL(evt_mobj_set_anim, STRING("switch2"), STRING("S_1"))
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF(GSWF_LAS19_THUNDER_RAGE_BLOCK_HIT), 0)
+#else
     CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF_LAS_19_THUNDER_RAGE_BLOCK, 0)
+#endif
     RETURN
 EVT_END()
 

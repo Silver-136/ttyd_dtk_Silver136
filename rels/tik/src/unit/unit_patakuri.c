@@ -106,6 +106,9 @@ static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
  * Status vulnerability of the Paragoomba (Paragoomba form) (percent chance to take each status):
  * extra prone to stop, dizzy, fright, gale force and instant kill.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_patakuri = {100, 120, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 150, 100, 100, 100, 100, 150};
+#else
 static StatusVulnerability regist_patakuri = {
     100, // sleep
     110, // stop
@@ -130,6 +133,7 @@ static StatusVulnerability regist_patakuri = {
     100, // invisible
     150, // ohko
 };
+#endif
 
 /** Weapon of the Paragoomba's attack: 1 damage. */
 static BattleWeapon weapon_patakuri_attack = {
@@ -438,6 +442,9 @@ static BattleUnitDefenseAttr defence_attr = {0};
  * Status vulnerability of the Paragoomba (percent chance to take each status):
  * extra prone to stop, fright, gale force and instant kill.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     110, // stop
@@ -462,6 +469,7 @@ static StatusVulnerability regist = {
     100, // invisible
     150, // ohko
 };
+#endif
 
 /** Parts of the Paragoomba : hit positions, defences, attributes and pose tables. */
 static BattleUnitKindPart parts[] = {

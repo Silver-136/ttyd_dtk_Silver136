@@ -121,7 +121,11 @@ static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100
  * Status vulnerability of the Spiky Goomba in the retail builds:
  * extra prone to stop, fright, Gale Force and instant KO.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
+#else
 static StatusVulnerability regist = {100, 110, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 110, 110, 100, 100, 100, 100, 150};
+#endif
 #endif
 
 /** Body part of the Spiky Goomba: a single part using the c_kuribo model. */

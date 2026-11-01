@@ -145,16 +145,28 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_party_run, 0)
     CALL(evt_party_set_homing_dist, 0, FLOAT(50.0f))
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_close_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(10))
         IF_INT_EQUAL(LW(10), 0)
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(w_door_close)
+#else
             CALL_CHILD(PTR(w_door_close))
+#endif
             BREAK_LOOP
         ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(w_door_close)
+#else
             CALL_CHILD(PTR(w_door_close))
+#endif
         END_IF
     END_LOOP
     WAIT_MS(500)
@@ -162,8 +174,13 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_44"), 0, STRING("ボンババ"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#endif
     WAIT_MS(1000)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
     BEGIN_INLINE_EVENT
@@ -213,11 +230,16 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_msg_print, 0, STRING("stg8_las_48"), 0, STRING("ボンババ"))
     CALL(evt_cam3d_evt_set, -299, 25, 748, -328, 134, -34, 3000, EASING_SINE_IN_OUT)
     WAIT_MS(2500)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     // The battle with Gloomtail starts and the script waits for it to end.
+#endif
     CALL(evt_npc_set_battle_info, STRING("ボンババ"), 14)
     CALL(evt_npc_battle_start, STRING("ボンババ"))
     CALL(evt_npc_wait_battle_end)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG8_LST3"))
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_archi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 0, 25, 845, 0, 100, 150, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -260,7 +282,11 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_cam3d_evt_set, 255, 220, 648, 255, 170, 150, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     // His mouth opens and he spits out the chest holding the Star Key.
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS26_STAR_KEY_CHEST_OPENED))
+#else
     CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
+#endif
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ボンババ"), LW(0), LW(1), LW(2))
@@ -328,15 +354,28 @@ EVT_BEGIN(bonbaba_evt)
     WAIT_MS(300)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1"), LW(0), LW(1), LW(2), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
+#endif
     WAIT_MS(1000)
     // Mario notices the chest; the story advances and he regains control.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG8_04_GLOOMTAIL)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
+#endif
     CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
     CALL(evt_npc_flag_onoff, 1, STRING("ボンババ"), NPC_FLAG_NO_HIT)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(bero_case_entry)
+#else
     CALL_CHILD(PTR(bero_case_entry))
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -404,11 +443,17 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_set_tribe, STRING("クリハカセ"), STRING("クリハカセ"))
     CALL(evt_npc_set_position, STRING("クリハカセ"), -58, 0, -280)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE)
+#endif
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CEILING_BREAK1"), LW(10))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0, 0, 0, 0, 0)
+#else
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0, 0, 0, 0, 0)
+#endif
     WAIT_MS(1000)
     CALL(evt_snd_sfxoff, LW(10))
     WAIT_MS(1000)
@@ -478,25 +523,47 @@ EVT_END()
  * and blocks with an Ultra Shroom and Jammin' Jelly.
  */
 EVT_BEGIN(las_26_init_evt)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_03_THE_PALACE_GARDEN)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
+#endif
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_snd_set_rev_mode, 2)
+#endif
     ELSE
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+#else
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
+#endif
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
+#if VERSION > VERSION_DEMO_US
             CALL(evt_snd_set_rev_mode, 2)
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
+#else
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
+#endif
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+#if VERSION > VERSION_DEMO_US
             CALL(evt_snd_set_rev_mode, 2)
+#endif
         END_IF
     END_IF
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL(evt_npc_setup, PTR(npcEnt))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_LAS26_WALL_BOMBED), 0)
+#else
     IF_INT_EQUAL(GSWF_LAS_26_WALL_BOMBED, 0)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_after"), 1, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ana_before1"), 0, PTR(bomb_wall), 0)
@@ -504,23 +571,44 @@ EVT_BEGIN(las_26_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_before1"), 1, 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_15_GRODUS)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yukaato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_yukaato"), 1, 0)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yukamae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_yukamae"), 1, 0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_03_THE_PALACE_GARDEN)
+        SPAWN_EVENT(bonbaba_evt)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
         SPAWN_EVENT(PTR(bonbaba_evt))
+#endif
     ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_bero_info_run)
+#else
         CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_EQUAL(STG8_03_THE_PALACE_GARDEN)
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         CASE_GREATER_OR_EQUAL(STG8_04_GLOOMTAIL)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_LAS26_GLOOMTAIL_BODY_CLEARED), 0)
+#else
         IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
+#endif
             CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
         ELSE
             CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
@@ -528,14 +616,29 @@ EVT_BEGIN(las_26_init_evt)
         CASE_DEFAULT
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_04_GLOOMTAIL)
+        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS26_STAR_KEY_CHEST_OPENED))
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+        SPAWN_EVENT(sekai_yami_evt)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         SPAWN_EVENT(PTR(sekai_yami_evt))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF(GSWF_LAS26_ULTRA_SHROOM_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF(GSWF_LAS26_JAMMIN_JELLY_BLOCK_HIT), 0)
+#else
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_26_ULTRA_SHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_26_JAMMIN_JELLY_BLOCK, 0)
+#endif
     RETURN
 EVT_END()
 

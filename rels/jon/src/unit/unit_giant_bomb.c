@@ -237,7 +237,11 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, // burnChance..sizeChangeStrength
     100, // atkChangeChance
+#if VERSION <= VERSION_DEMO_US
+2,
+#else
     3, // atkChangeTime
+#endif
     3, // atkChangeStrength
     0, 0, 0, 0, 0, 0, 0, 0, // defChangeChance..fastChance
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
@@ -275,7 +279,11 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
+#if VERSION <= VERSION_DEMO_US
+12,
+#else
     9, // chargeStrength
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
@@ -289,6 +297,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Element response of the Bob-ulk: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 30, 50, 100, 50, 100, 100, 50, 100, 50, 100, 50, 100, 50, 50, 60, 0, 100, 50, 100, 100, 20};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     55, // stop
@@ -313,6 +324,7 @@ static StatusVulnerability regist = {
     100, // invisible
     20, // ohko
 };
+#endif
 
 /**
  * Pose table of the Bob-ulk with 3 fuse stages left, fuse out: battle pose types mapped to animation

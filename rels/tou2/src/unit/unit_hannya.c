@@ -90,6 +90,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type reactions of the Spania: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 110, 90, 150, 90, 150, 150, 90, 150, 90, 150, 90, 150, 90, 90, 110, 110, 150, 90, 0, 0, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     120, // stop
@@ -114,6 +117,7 @@ static StatusVulnerability regist = {
     0, // invisible
     150, // ohko
 };
+#endif
 
 /**
  * Event data table of the Spania: scripts that replace the standard handling for an attacker being hurt by

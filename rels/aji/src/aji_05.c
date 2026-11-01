@@ -42,7 +42,11 @@ static EvtWord hikaru_yuka_init[48];
 EvtWord aji_05_init_evt[77];
 
 static EVT_BEGIN(e_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -50,7 +54,11 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -164,23 +172,43 @@ static EvtWord hikaru_yuka_init[] = {
 EVT_BEGIN(aji_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI05_CARD_KEY_TAKEN), 0)
+        CALL_CHILD(hikaru_yuka_init)
+#else
     IF_INT_EQUAL(GSWF_AJI_05_LIT_FLOOR_DONE, 0)
         CALL_CHILD(PTR(hikaru_yuka_init))
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(hikaru_off)
+#else
         CALL_CHILD(PTR(hikaru_off))
+#endif
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_TOGE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF(GSWF_AJI05_SLEEPY_SHEEP_BLOCK_HIT), 0)
+    SPAWN_EVENT(evt_emergency)
+#else
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF_AJI_05_SLEEPY_SHEEP_BLOCK, 0)
     SPAWN_EVENT(PTR(evt_emergency))
+#endif
     RETURN
 EVT_END()
 
@@ -188,14 +216,17 @@ static USER_FUNC(ride_chk) {
     static s32 onoff[24];
     char hitName[64];
     char name[64];
+#if VERSION > VERSION_DEMO_US
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
     HitEntry* hit;
+#endif
     s32 i;
 
     if (isFirstCall) {
         memset(onoff, 0, sizeof(onoff));
     }
+#if VERSION > VERSION_DEMO_US
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = mario->hitobjStandOn;
         if (hit == NULL) {
@@ -205,10 +236,21 @@ static USER_FUNC(ride_chk) {
         hit = (HitEntry*)mario->hitobjUnder;
     }
     // Contact resets the counter to 30; the same call decrements it before testing visibility.
+#endif
     for (i = 0; i < 24; i++) {
+#if VERSION <= VERSION_DEMO_US
+MarioWork* mario = marioGetPtr();
+
+        if (mario->hitobjUnder != NULL) {
+#else
         if (hit != NULL) {
+#endif
             sprintf(hitName, "A_hikaru_%02d", i + 1);
+#if VERSION <= VERSION_DEMO_US
+if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
+#else
             if (strcmp(hit->joint->name, hitName) == 0) {
+#endif
                 onoff[i] = 30;
             }
         }
@@ -229,7 +271,11 @@ static USER_FUNC(ride_chk) {
             mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
         }
     }
+#if VERSION <= VERSION_DEMO_US
+    if (evtGetValue(event, GSWF(GSWF_AJI05_CARD_KEY_TAKEN))) {
+#else
     if (evtGetValue(event, GSWF_AJI_05_LIT_FLOOR_DONE)) {
+#endif
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;

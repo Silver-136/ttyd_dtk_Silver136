@@ -182,7 +182,11 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_GROTTO_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -202,13 +206,23 @@ EVT_END()
  * and the door slab (tetu) is down; afterwards the door is already open.
  */
 EVT_BEGIN(bigdoor_event_init)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG5_20_THE_BLUE_BLOCK)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
         DEBUG_PUT_MSG(STRING("dou_05：扉が開く前の処理"))
+#endif
         SET_VALUE(LW(0), STRING("w_bero_3"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
+#endif
         CALL(evt_mapobj_trans, 0, STRING("tetu"), 1, 0, 0)
         ELSE
+#if VERSION > VERSION_DEMO_US
         DEBUG_PUT_MSG(STRING("dou_05：扉が開く後の処理"))
+#endif
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), 4)
         CALL(evt_mapobj_trans, 0, STRING("tetu"), 1, 100, 0)
     END_IF
@@ -222,10 +236,12 @@ EVT_END()
  */
 EVT_BEGIN(bigdoor_event)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_set_mov_spd, FLOAT(0.0f))
     END_INLINE_EVENT
+#endif
     CALL(evt_cam3d_evt_set, 150, 432, 40, 0, 337, -480, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
@@ -260,9 +276,17 @@ EVT_BEGIN(bigdoor_event)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
     CALL(evt_msg_print, 0, STRING("stg5_dou_10"), 0, 0)
     SET_VALUE(LW(0), STRING("w_bero_3"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(bero_case_switch_on)
+#else
     CALL_CHILD(PTR(bero_case_switch_on))
+#endif
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), 4)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG5_20_THE_BLUE_BLOCK)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
+#endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -280,6 +304,17 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(mobj_box00)
+    CALL(evt_mario_key_onoff, 0)
+CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
+CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
+CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
+    CALL(evt_item_get_item, STRING("item00"))
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION >= VERSION_US
@@ -293,6 +328,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Waterfall fade loop: every frame adds GW(0) to the waterfall alpha (clamped to 0 through 255),

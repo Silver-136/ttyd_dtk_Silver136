@@ -155,23 +155,46 @@ EVT_BEGIN(tik_15_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_gazigazi_entry)
+#else
     CALL_CHILD(PTR(evt_gazigazi_entry))
+#endif
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_17_FATHER_SON_REUNITED)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
+#endif
         CALL(evt_npc_check_delete, STRING("クリボー"))
         CALL(evt_npc_check_delete, STRING("パタクリボー"))
         CALL(evt_npc_check_delete, STRING("トゲクリボー"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG5_43_X_NAUTS_RETREAT)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
+#endif
         CALL(evt_npc_check_delete, STRING("ハンマーブロス"))
         CALL(evt_npc_check_delete, STRING("カメック"))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_lv_blk, STRING("block00"), -370, 0, -25, 0, GSWF(GSWF_TIK15_BIG_BLOCK_A_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("block01"), -420, 0, -25, 0, GSWF(GSWF_TIK15_BIG_BLOCK_B_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -30, ITEM_MUSHROOM, 0, GSWF(GSWF_TIK15_MUSHROOM_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -30, ITEM_FIRE_FLOWER, 0, GSWF(GSWF_TIK15_FIRE_FLOWER_BLOCK_HIT), 0)
+#else
     CALL(evt_mobj_lv_blk, STRING("block00"), -370, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_1_BROKEN, STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("block01"), -420, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_2_BROKEN, STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -38, ITEM_MUSHROOM, 0, GSWF_TIK_15_MUSHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -38, ITEM_FIRE_FLOWER, 0, GSWF_TIK_15_FIRE_FLOWER_BLOCK, 0)
+#endif
     RETURN
 EVT_END()
 

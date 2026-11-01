@@ -13,6 +13,20 @@ struct BattleWeapon;
 // - BattleUnit: tst's has no PAL slideReturnEventId (the US layout), so countersetWeapon and the fields after it sit 4 bytes
 //   lower (countersetWeapon 0x314, not PAL 0x318). The JP demo's tst has the JP layout, 4 bytes lower again (0x310).
 // - BattleWork: tst's places stageObjectWork 0x2A0 further in, at 0x1837C (PAL and US 0x180DC).
+#if VERSION <= VERSION_DEMO_US
+typedef struct TstBattleUnit {
+u8 pad_000[0x304];
+ItemType heldItem;                      // 0x308 (JP demo 0x304)
+    ItemDropData* dropTable;                // 0x30C (JP demo 0x308)
+    u8 stolenCoins;                         // 0x310 (JP demo 0x30C)
+    u8 moveColorLv;                         // 0x311 (JP demo 0x30D)
+    u8 moveColorLvDisp;                     // 0x312 (JP demo 0x30E)
+    u8 pad_313;                             // 0x313 (JP demo 0x30F)
+    struct BattleWeapon* countersetWeapon;  // 0x314 (JP demo 0x310)
+    void (*deleteFunc)(struct BattleUnit*); // 0x318 (JP demo 0x314)
+    struct smartEntry* screenTexBuf;        // 0x31C (JP demo 0x318)
+} TstBattleUnit;
+#else
 typedef struct TstBattleUnit {
 #if VERSION <= VERSION_DEMO_US
     u8 pad_000[0x304]; // 0x0, as the JP BattleUnit
@@ -29,6 +43,7 @@ typedef struct TstBattleUnit {
     void (*deleteFunc)(struct BattleUnit*); // 0x318 (JP demo 0x314)
     struct smartEntry* screenTexBuf;        // 0x31C (JP demo 0x318)
 } TstBattleUnit;
+#endif
 
 typedef struct TstBattleWork {
     u8 pad_00000[0x1837C];                 // 0x0, as BattleWork in tst's headers
@@ -36,7 +51,16 @@ typedef struct TstBattleWork {
 } TstBattleWork;
 
 #define TST_BATTLE_UNIT(unit) ((TstBattleUnit*)(unit))
+#if VERSION <= VERSION_DEMO_US
 #define TST_BATTLE_WORK(work) ((TstBattleWork*)(work))
+typedef struct TstDemoBattleWork {
+    u8 pad_00000[0x19F0];         // 0x0
+    BattleActions actionCommands; // 0x19F0
+} TstDemoBattleWork;
+#define TST_DEMO_BATTLE_WORK(work) ((TstDemoBattleWork*)(work))
+#else
+#define TST_BATTLE_WORK(work) ((TstBattleWork*)(work))
+#endif
 
 #if VERSION <= VERSION_DEMO_US
 // The JP demo's tst places BattleWork's actionCommands 0x2A0 lower than the game, at 0x19F0 (main 0x1C90).

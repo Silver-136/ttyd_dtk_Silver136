@@ -8,7 +8,9 @@
 
 extern EvtWord all_juyoitem_lecture_rel[];
 extern EvtWord all_party_lecture[];
+#if VERSION > VERSION_DEMO_US
 extern EvtWord evt_gardman_spawn[];
+#endif
 extern EvtWord evt_tou_08_cake[];
 extern EvtWord evt_tou_bed[];
 extern EvtWord evt_tou_chibi_yoshi[];
@@ -36,7 +38,9 @@ extern EvtWord tou_20_init_evt[];
 
 extern EvtWord evt_match_after_stop_npcs[];
 USER_FUNC(chk);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(evt_rankingReset);
+#endif
 USER_FUNC(fight_money);
 USER_FUNC(make_monitor);
 USER_FUNC(octo_start);

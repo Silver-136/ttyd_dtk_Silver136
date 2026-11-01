@@ -176,7 +176,11 @@ EVT_END()
  * Display callback for Grodus's lamps: when the pose group being drawn is one of the lamp locators,
  * draws that lamp's shape (on newer versions after advancing its animation).
  */
+#if VERSION <= VERSION_DEMO_US
+static void shuryolight_callback(void* param, s32 group) {
+#else
 static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
+#endif
     ShuryoLight* lights = param;
     s32 i;
 
@@ -186,7 +190,9 @@ static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
         }
     }
     if (i != 5) {
+#if VERSION > VERSION_DEMO_US
         animPoseMain(lights[i].npc->poseId);
+#endif
         animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);
     }
 }

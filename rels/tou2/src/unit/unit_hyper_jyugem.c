@@ -122,6 +122,9 @@ static BattleUnitDefense defence = {0};
 /** Damage-type reactions of the Dark Lakitu: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {60, 70, 80, 100, 60, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 70, 80, 100, 60, 100, 100, 50};
+#else
 static StatusVulnerability regist = {
     60, // sleep
     70, // stop
@@ -146,6 +149,7 @@ static StatusVulnerability regist = {
     100, // invisible
     50, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "JGM_N_1"},

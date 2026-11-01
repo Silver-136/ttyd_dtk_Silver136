@@ -19,9 +19,22 @@
 #include <math.h>
 
 /** Slope of a floor normal: its angle from vertical in degrees. */
+#if VERSION <= VERSION_DEMO_US
+#include "mario/mario_balloon.h"
+#include "mario/mario_hit.h"
+static inline void kpaWallSlide(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
+    f32 dot = vx * nx + vz * nz;
+    *mx = 0.5f * (vx - dot * nx);
+    *mz = 0.5f * (vz - dot * nz);
+}
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
 }
+#else
+static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
+    return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
+}
+#endif
 
 /** Tilts Bowser's groundRot to match the floor normal (x, y, z) and returns the floor's slope in degrees. */
 static inline f32 kpa_nrmSet(MarioWork* mario, f32 x, f32 y, f32 z) {
@@ -633,6 +646,78 @@ HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r) {
 // map shows the head of koopa_hit.o as kpaSearchWallFront (kept there, 0x320 bytes) and the stripped
 // _reflect2/_reflect; the demo kpaSearchWallFront's literals are 45, 0.75, 0.25, 0.5, so the US original
 // (whose only literal left is 0.5) was a different version and cannot be taken from the demo.
+#if VERSION <= VERSION_DEMO_US
+HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
+    Vec p;
+    Vec dir;
+    Vec hp;
+    Vec nrm;
+    f32 s, c;
+    f32 bestDist;
+    f32 dist;
+    f32 range;
+    f32 h2;
+    f32 mx, mz;
+    f32 half;
+    f32 h1;
+    HitEntry* hit;
+    HitEntry* hit2;
+    MarioWork* mario;
+
+    mario = marioGetPtr();
+    sincosf(&s, &c, dz);
+    if (marioChkSts(0x10) && (__fabsf(mario->groundRot.x) >= 45.0f || __fabsf(mario->groundRot.z) >= 45.0f)) {
+        pos->x += dx * s;
+        pos->z += dx * c;
+        return NULL;
+#else
 static f32 kpaHalf(f32 v) {
     return 0.5f * v;
+#endif
 }
+#if VERSION <= VERSION_DEMO_US
+    half = 0.5f * mario->wPlayerCollisionBox.x;
+    h1 = 0.75f * mario->wPlayerCollisionBox.y;
+    h2 = 0.25f * mario->wPlayerCollisionBox.y;
+    range = half + dx;
+    bestDist = range;
+    p = *pos;
+    p.y += h1;
+    dir = (Vec){s, 0.0f, c};
+    hit = marioHitCheckVec(&p, &dir, &hp, &nrm, &bestDist);
+    if (hit) {
+        if (chkBalloon(hit)) {
+            mario->hitobjFrontWall = hit;
+        }
+        kpaWallSlide(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
+    }
+    dist = range;
+    p.y = pos->y + h2;
+    hit2 = marioHitCheckVec(&p, &dir, &hp, &nrm, &dist);
+    if (hit2) {
+        if (chkBalloon(hit2)) {
+            mario->hitobjFrontWall = hit2;
+        }
+        if (hit) {
+            if (dist < bestDist) {
+                hit = hit2;
+                bestDist = dist;
+                kpaWallSlide(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
+            }
+        } else {
+            hit = hit2;
+            bestDist = dist;
+            kpaWallSlide(s * dx, nrm.x, c * dx, nrm.z, &mx, &mz);
+        }
+    }
+    if (hit) {
+        *h = bestDist;
+        pos->x += mx;
+        pos->z += mz;
+        return hit;
+    }
+    pos->x += dx * s;
+    pos->z += dx * c;
+    return NULL;
+}
+#endif

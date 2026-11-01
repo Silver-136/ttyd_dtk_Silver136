@@ -27,6 +27,28 @@ char makestring[16];
  * Names are strings; a value without the top address bit is treated as a number
  * and looked up by its six-digit hex form, so scripts can name crowd NPCs by index. NULL if none matches.
  */
+#if VERSION <= VERSION_DEMO_US
+static inline char* nanNPCEntryName(char* name) {
+    if (!((EvtWord)name & 0x80000000)) {
+        sprintf(makestring, "%06x", name);
+        name = makestring;
+    }
+    return name;
+}
+static inline NanNPC* nanNPCSearch2(char* name) {
+    s32 i;
+    NanNPC* p;
+    NanNPCWork* w = nanNPCWork;
+    for (i = 0; i < w->num; i++) {
+        p = &w->npc[i];
+        name = nanNPCEntryName(name);
+        if (!strcmp((char*)p->name, name)) {
+            return p;
+        }
+    }
+    return NULL;
+}
+#endif
 static inline NanNPC* nanNPCSearch(char* name) {
     s32 i;
     NanNPC* p;
@@ -456,16 +478,22 @@ USER_FUNC(evt_nannpc_entry) {
     NanNPCWork* w;
     args = event->args;
     pose = extGetPosePtr();
+#if VERSION > VERSION_DEMO_US
     // FAKE: the value goes through a long long cast; plain name = evtGetValue(...) changes the object
+#endif
     name = (long long) evtGetValue(event, args[0]);
     w = nanNPCWork;
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
         p = (NanNPC*)((u8*)w->npc + off);
+#if VERSION <= VERSION_DEMO_US
+str = nanNPCEntryName((char*)name);
+#else
         str = (char*)name;
         if (!((EvtWord)str & 0x80000000)) {
             sprintf(makestring, "%06x", name);
             str = makestring;
         }
+#endif
         strcmp((char*)p->name, str);
         if (!p->pose) {
             strcpy((char*)p->name, str);
@@ -617,12 +645,17 @@ USER_FUNC(evt_nannpc_move_position2) {
     Vec diff;
     Vec step;
     args = event->args;
+#if VERSION <= VERSION_DEMO_US
+npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
+    now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
+#else
     npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
     if (gp->inBattle) {
         now = gp->renderTime;
     } else {
         now = gp->renderFieldTime;
     }
+#endif
     target.x = evtGetValue(event, args[1]);
     target.y = evtGetValue(event, args[2]);
     target.z = evtGetValue(event, args[3]);
@@ -633,7 +666,11 @@ USER_FUNC(evt_nannpc_move_position2) {
     }
     PSVECSubtract(&target, &npc->startPos, &diff);
     total = (s32)(1000.0f * PSVECMag(&diff) / speed);
+#if VERSION <= VERSION_DEMO_US
+    elapsed = (u64)(s32)((u32)now - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000);
+#else
     elapsed = OSTicksToMilliseconds((u64)OSDiffTick(now, event->savedTime));
+#endif
     PSVECScale(&diff, &step, (f32)elapsed / (f32)total);
     if (elapsed < total) {
         PSVECAdd(&npc->startPos, &step, &npc->pos);
@@ -649,7 +686,11 @@ USER_FUNC(evt_nannpc_move_position2) {
  */
 USER_FUNC(evt_nannpc_jump_position) {
     EvtWord* args = event->args;
+#if VERSION <= VERSION_DEMO_US
+NanNPC* npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
+#else
     NanNPC* npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
+#endif
     f32 x = evtGetValue(event, args[1]);
     f32 y = evtGetValue(event, args[2]);
     f32 z = evtGetValue(event, args[3]);
@@ -667,8 +708,12 @@ USER_FUNC(evt_nannpc_jump_position) {
         event->userdataf[1] = -4.0f * height;
         event->userdataf[2] = y - (f32)npc->ipos[1] - event->userdataf[1];
     }
+#if VERSION <= VERSION_DEMO_US
+    el = ((u32)gp->renderTime - (u32)npc->startTime) / (OS_TIMER_CLOCK / 1000);
+#else
     // FAKE: el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object
     el = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
+#endif
     uel = el;
     if (el < duration) {
         elapsed = uel;

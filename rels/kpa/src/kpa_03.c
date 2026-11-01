@@ -119,6 +119,31 @@ EVT_BEGIN(kairyu_evt)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static EVT_BEGIN(jumpstand_evt)
+    DELETE_EVENT(GW(15))
+BEGIN_INLINE_EVENT
+        WAIT_MS(600)
+        CALL(evt_koopa_get_level, GSW(GSW_KPA_BOWSER_POWER))
+        CALL(evt_bero_mapchange, STRING("kpa_04"), STRING("kpa_next_map"))
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        LOOP(0)
+            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            IF_INT_GREATER_OR_EQUAL(LW(1), 400)
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(evt_mario_cam_off)
+    END_INLINE_EVENT
+    CALL(evt_mobj_get_position, STRING("me"), LW(0), LW(1), LW(2))
+    SET_VALUE(LW(3), LW(1))
+    ADD(LW(3), 700)
+CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 2000, 1)
+RETURN
+EVT_END()
+#else
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
 #if VERSION == VERSION_EU
@@ -145,6 +170,7 @@ static EVT_BEGIN(jumpstand_evt)
     CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 4000, 3)
     RETURN
 EVT_END()
+#endif
 
 /** No NPCs: the side-scrolling stage is built from the block, pipe and item lists instead. */
 static NpcSetupInfo npcEnt[] = {

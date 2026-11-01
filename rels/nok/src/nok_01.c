@@ -481,7 +481,11 @@ static s32 iri_17_item_tbl[] = {
 };
 
 EVT_BEGIN(boss_noko_talk)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_LISTEN_TO_ME)
+#else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LISTEN_TO_ME)
+#endif
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
         BEGIN_INLINE_EVENT
             CALL(evt_party_move_pos2, 1, -250, -320, 40)
@@ -518,7 +522,11 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_msg_continue)
             CALL(evt_item_entry, STRING("item_irai"), ITEM_TURTLEY_LEAF, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("item_irai"))
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_NOK01_TURTLEY_LEAF_TAKEN), 1)
+#else
             SET_VALUE(GSWF_NOK_01_LISTEN_TO_ME_TURTLEY_LEAF, 1)
+#endif
             ELSE
             CALL(evt_msg_print_add, 0, STRING("irai_08_003_1"))
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -526,7 +534,11 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
             CALL(evt_npc_move_position, STRING("me"), -317, -350, 0, 40, 0)
             WAIT_MS(300)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF(GSWF_NOK01_TURTLEY_LEAF_TAKEN), 0)
+#else
             CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF_NOK_01_LISTEN_TO_ME_TURTLEY_LEAF, 0)
+#endif
             WAIT_MS(300)
             CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, 40, 0)
             CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
@@ -536,12 +548,20 @@ EVT_BEGIN(boss_noko_talk)
         END_IF
         // Request 8 is marked solved.
         CALL(evt_msg_print, 0, STRING("irai_08_004"), 0, STRING("me"))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+#else
         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
+#endif
         SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_LISTEN_TO_ME), 1)
         CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NEWSLETTER)
+#else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
+#endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
@@ -549,7 +569,11 @@ EVT_BEGIN(boss_noko_talk)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
                     // Request 17: the mayor takes the Routing Slip from Mario.
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
+#else
                     CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
+#endif
                     IF_INT_NOT_EQUAL(LW(0), -1)
                         CALL(evt_pouch_remove_item, ITEM_ROUTING_SLIP, LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_17_01"), 0, 0)
@@ -567,12 +591,25 @@ EVT_BEGIN(boss_noko_talk)
         END_IF
     END_IF
     // With no request pending, his talk follows the story.
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_LESS(STG1_02_TALKING_WITH_KROOP)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(boss_noko_open_gate)
+#else
         CALL_CHILD(PTR(boss_noko_open_gate))
+#endif
         CASE_LESS(STG1_08_OPENING_THE_PATH)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_HEI_SUN_STONE_TAKEN), 1)
+            IF_INT_EQUAL(GSWF(GSWF_HEI_MOON_STONE_TAKEN), 1)
+#else
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
             IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
+#endif
                 // After the Sun Stone and Moon Stone errand he congratulates Mario.
                 CALL(evt_msg_print, 0, STRING("stg1_nok_56"), 0, 0)
                 RETURN
@@ -583,9 +620,11 @@ EVT_BEGIN(boss_noko_talk)
         CALL(evt_msg_print, 0, STRING("stg1_nok_56_01"), 0, 0)
         CASE_LESS(STG1_31_FRANKLYS_HOUSE_STG_1)
         CALL(evt_msg_print, 0, STRING("stg1_nok_57"), 0, 0)
+#if VERSION > VERSION_DEMO_US
         CASE_EQUAL(STG7_02_MAYOR_BOB)
         SET_VALUE(GSWF_NOK_GENERAL_WHITE_HINT_HEARD, 1)
         CALL(evt_msg_print, 0, STRING("stg1_nok_57_1_00"), 0, 0)
+#endif
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg1_nok_57_1"), 0, 0)
         CASE_DEFAULT
@@ -1129,7 +1168,11 @@ EVT_BEGIN(nokotarou_tabidachi)
     CALL(evt_msg_print, 0, STRING("stg1_nok_95"), 0, STRING("ノコタロウ"))
     CALL(evt_set_dir_to_target, STRING("クリスチーヌ"), STRING("ノコタロウ"))
     CALL(evt_msg_print, 0, STRING("stg1_nok_96"), 0, STRING("クリスチーヌ"))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_GON11_KOOPS_SWAPPED_IN), 1)
+#else
     IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
+#endif
         SET_VALUE(LW(0), 2)
         SET_VALUE(LW(1), 1)
         SET_VALUE(LW(2), STRING("ノコタロウ"))
@@ -1156,10 +1199,16 @@ EVT_BEGIN(nokotarou_tabidachi)
     CALL(evt_party_set_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_npc_set_position, LW(3), 0, -1000, 0)
     CALL(evt_npc_delete, LW(3))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_20_KOOPS_LEAVES)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
+#endif
     RESUME_TYPES_OTHER(4)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_party_run, 0)
@@ -1607,12 +1656,20 @@ static EVT_BEGIN(epilogue_evt)
 EVT_END()
 
 static EVT_BEGIN(evt_kusa_4)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(LSW(1), 0)
+#else
     IF_INT_NOT_EQUAL(LSW_NOK_01_LEAF_BUSH, 0)
+#endif
         RETURN
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+#else
         CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
+#endif
     END_IF
     RETURN
 EVT_END()
@@ -1622,12 +1679,20 @@ EVT_END()
  * otherwise as evt_kusa_4.
  */
 static EVT_BEGIN(evt_kusa_5)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(LSW(1), 1)
+#else
     IF_INT_NOT_EQUAL(LSW_NOK_01_LEAF_BUSH, 1)
+#endif
         RETURN
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+#else
         CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
+#endif
     END_IF
     RETURN
 EVT_END()
@@ -1637,12 +1702,20 @@ EVT_END()
  * otherwise as evt_kusa_4.
  */
 static EVT_BEGIN(evt_kusa_6)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_NOT_EQUAL(LSW(1), 2)
+#else
     IF_INT_NOT_EQUAL(LSW_NOK_01_LEAF_BUSH, 2)
+#endif
         RETURN
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+#else
         CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
+#endif
     END_IF
     RETURN
 EVT_END()

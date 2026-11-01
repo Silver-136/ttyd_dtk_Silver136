@@ -21,7 +21,9 @@ typedef struct EffKemuri10N64Work {
     u8 r, g, b;     // 0x64
     u8 r2, g2, b2;  // 0x67
     u8 pad_6a[2];   // 0x6A
+#if VERSION > VERSION_DEMO_US
     s32 camera;     // 0x6C
+#endif
 } EffKemuri10N64Work;
 
 EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, f32 scale);

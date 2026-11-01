@@ -361,7 +361,13 @@ static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0
  * Width and height percentages per frame as a type 0 or 2 nozzle grows in; read backwards from its
  * remaining life as it shrinks away at the end.
  */
+#if VERSION <= VERSION_DEMO_US
+static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}
+, {80, 100}, {79, 99}, {77, 97}, {75, 94}, {73, 91}, {70, 87}, {66, 83}, {62, 78}, {58, 73}, {54, 67}, {49, 61}, {44, 55}, {39, 49}, {34, 42}, {29, 36}, {24, 29}, {19, 23}, {14, 17}, {9, 11}, {5, 6}, {0, 0}, {0, 0}
+};
+#else
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}};
+#endif
 
 /**
  * Spawns a nozzle model (type picks the model) at (x, y, z) rotated by rx and ry for `life` frames;
@@ -426,7 +432,11 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
 }
 
 /** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
+#if VERSION <= VERSION_DEMO_US
+static void effNozleMain(EffectEntry* effect) {
+#else
 void effNozleMain(EffectEntry* effect) {
+#endif
     EffNozleWork* work = effect->userdata;
     EffNozleWork* p;
     Vec position;
@@ -486,8 +496,10 @@ void effNozleMain(EffectEntry* effect) {
     work->timer++;
     if (work->life < 0) {
         effDelete(effect);
+#if VERSION > VERSION_DEMO_US
     } else if (type == 3) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 8, (DispCallback)effNozleDisp, effect);
+#endif
     } else {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effNozleDisp, effect);
     }
@@ -514,7 +526,11 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
 }
 
 /** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
+#if VERSION <= VERSION_DEMO_US
+static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
+#else
 void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
+#endif
     void** dl5;
     u8* sz5;
     u8* sz3;
@@ -536,13 +552,16 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx d;
     GXTexObj texObj;
     CameraEntry* cam;
-
+#if VERSION <= VERSION_DEMO_US
+#endif
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
+#if VERSION > VERSION_DEMO_US
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
+#endif
     PSMTXTrans(a, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(b, 'y', 0.017453292f * work->rotY);
     PSMTXConcat(a, b, a);
@@ -595,16 +614,33 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     switch (work->type) {
         case 0:
             nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
+#if VERSION <= VERSION_DEMO_US
+            {
+#endif
             for (k = 0, sz = nozle_1_dl_0_size_tbl, dl = nozle_1_dl_0_tbl; k < 10; k++, sz++, dl++) {
                 GXCallDisplayList(*dl, *sz * 32);
             }
+#if VERSION <= VERSION_DEMO_US
+            }
+            SETUP(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
+            {
+#else
             nozleVtxSetup(GX_INDEX8, 7, 14, nozle_1_vertex_tbl, nozle_1_normal_tbl, nozle_1_color0_tbl, nozle_1_texcoord0_tbl, nozle_1_texcoord1_tbl);
+#endif
             for (k = 0, sz2 = nozle_1_dl_1_size_tbl, dl2 = nozle_1_dl_1_tbl; k < 10; k++, sz2++, dl2++) {
                 GXCallDisplayList(*dl2, *sz2 * 32);
+#if VERSION <= VERSION_DEMO_US
+                }
+#endif
             }
             break;
         case 2:
             nozleVtxSetup(GX_INDEX16, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
+#if VERSION <= VERSION_DEMO_US
+            for(17, sz5= nozle_3_dl_1_size_tbl, sz5, dl5);
+            SETUP(GX_INDEX16, 7, 14, nozle_3_vertex_tbl, nozle_3_normal_tbl, nozle_3_color0_tbl, nozle_3_texcoord0_tbl, nozle_3_texcoord1_tbl);
+            for(17, sz3= nozle_3_dl_0_size_tbl, sz3, dl3);
+#else
             for (k = 0, sz5 = nozle_3_dl_1_size_tbl, dl5 = nozle_3_dl_1_tbl; k < 17; k++, sz5++, dl5++) {
                 GXCallDisplayList(*dl5, *sz5 * 32);
             }
@@ -612,6 +648,7 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
             for (k = 0, sz3 = nozle_3_dl_0_size_tbl, dl3 = nozle_3_dl_0_tbl; k < 17; k++, sz3++, dl3++) {
                 GXCallDisplayList(*dl3, *sz3 * 32);
             }
+#endif
             break;
         case 3:
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
@@ -628,9 +665,13 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(d, c, c);
                 GXLoadPosMtxImm(c, GX_PNMTX0);
                 nozleVtxSetup(GX_INDEX8, 6, 13, nozle_4_vertex_tbl, nozle_4_normal_tbl, nozle_4_color0_tbl, nozle_4_texcoord0_tbl, nozle_4_texcoord1_tbl);
+#if VERSION <= VERSION_DEMO_US
+                for(8, sz4= nozle_4_dl_0_size_tbl, sz4, dl4);
+#else
                 for (k = 0, sz4 = nozle_4_dl_0_size_tbl, dl4 = nozle_4_dl_0_tbl; k < 8; k++, sz4++, dl4++) {
                     GXCallDisplayList(*dl4, *sz4 * 32);
                 }
+#endif
             }
             break;
     }

@@ -213,7 +213,11 @@ static StatusVulnerability regist = {20, 90, 80, 0, 80, 100, 0, 0, 100, 80, 100,
  * Status vulnerability of the Yux (the retail releases), as the percent chance each status takes hold:
  * immune to poison, burn, freeze and Fright; resists 10 statuses (down to 30% of the normal chance).
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {20, 90, 80, 0, 80, 100, 0, 0, 100, 80, 100, 80, 100, 80, 80, 0, 80, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {30, 80, 100, 0, 70, 100, 0, 0, 100, 90, 100, 90, 100, 95, 70, 0, 90, 100, 70, 100, 100, 95};
+#endif
 #endif
 
 /** Weapon record of the Yux's single-ring attack (wakka_attack_event): 2 damage. */
@@ -2047,6 +2051,76 @@ static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
  * While satellites live it raises the barrier (immune body part, barrier effect kept under the Yux)
  * and args[0] receives 1.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(_check_satellite) {
+    s32 id = BattleTransID(event, -2);
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    EvtWord* args = event->args;
+    BattleUnitPart* part;
+    f32 x;
+    f32 y;
+    f32 z;
+    s32 i;
+    BOOL alive;
+    s32 j;
+
+    alive = FALSE;
+    if (unit == NULL) {
+return EVT_RETURN_DONE;
+    }
+    for (i = UNIT_WORK_SATELLITE; i < UNIT_WORK_SATELLITE + 2; i++) {
+        if (unit->work[i] != -1) {
+            if (BattleGetUnitPtr(_battleWorkPointer, unit->work[i]) != NULL) {
+                alive = TRUE;
+            } else {
+                unit->work[i] = -1;
+            }
+        }
+    }
+    if (!alive) {
+        part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+        if (part->attributes & kImmuneToDamageAndStatus) {
+            effDelete((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT]);
+            unit->work[UNIT_WORK_BARRIER_EFFECT] = 0;
+            BtlUnit_snd_se(unit, "SFX_ENM_BARRI_BARRIER_BREAK1", 0xF1194D80, 0);
+            BtlUnit_GetPos(unit, &x, &y, &z);
+            for (j = 0; j < 20; j++) {
+                s32 w = BtlUnit_GetWidth(unit) + 15;
+                s32 h = BtlUnit_GetHeight(unit) + 15;
+                s32 dx = irand(w) - w / 2;
+                s32 dy = irand(h) - h / 2;
+
+                effGlassN64Entry(2, 60, x + dx, y + dy, z, 1.0f);
+            }
+        }
+        part->attributes &= ~kImmuneToDamageAndStatus;
+        evtSetValue(event, args[0], 0);
+    } else {
+        part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
+        if (!(part->attributes & kImmuneToDamageAndStatus)) {
+            f32 px;
+            f32 py;
+            f32 pz;
+
+            BtlUnit_snd_se(unit, "SFX_ENM_BARRI_BARRIER1", 0xF1194D80, 0);
+            BtlUnit_GetPos(unit, &px, &py, &pz);
+            unit->work[UNIT_WORK_BARRIER_EFFECT] = (EvtWord)effSyuryouEntry(1, 1000, 0.0f, -1000.0f, 0.0f);
+        }
+        part->attributes |= kImmuneToDamageAndStatus;
+        evtSetValue(event, args[0], 1);
+        if (unit->work[UNIT_WORK_BARRIER_EFFECT] != 0) {
+            f32* ud = ((EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT])->userdata;
+
+            BtlUnit_GetPos(unit, &x, &y, &z);
+            ud[1] = x;
+            ud[2] = y - 0.8f * (32.0f * unit->sizeMultiplier);
+            ud[3] = 10.0f + z;
+            ud[4] = 1.8f * (0.8f * unit->sizeMultiplier);
+        }
+    }
+    return EVT_RETURN_DONE;
+}
+#else
 static USER_FUNC(_check_satellite) {
     s32 id = BattleTransID(event, -2);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -2118,12 +2192,67 @@ static USER_FUNC(_check_satellite) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper: args[0] is the Yux, args[1] the number of satellites (1-4),
  * args[2] the index of this satellite; args[3]-args[5] receive its starting offset from the Yux (a fixed
  * formation of +-25 units, x mirrored by facing direction).
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(battleGetBarriernSatelliteInitPos) {
+    EvtWord* args = event->args;
+    BattleUnit* unit;
+    s32 max;
+    s32 index;
+    s32 id;
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 i;
+    s32 j;
+    static const Vec VecData[] = {
+        // 1 satellite
+        {25.0f, 0.0f, 0.0f},
+        // 2 satellites
+        {25.0f, 0.0f, 0.0f},
+        {-25.0f, 0.0f, 0.0f},
+        // 3 satellites
+        {0.0f, 25.0f, 0.0f},
+        {25.0f, -25.0f, 0.0f},
+        {-25.0f, -25.0f, 0.0f},
+        // 4 satellites
+        {25.0f, 25.0f, 0.0f},
+        {-25.0f, 25.0f, 0.0f},
+        {25.0f, -25.0f, 0.0f},
+        {-25.0f, -25.0f, 0.0f},
+    };
+    const Vec* p;
+    BattleWork* wp = _battleWorkPointer;
+
+    id = evtGetValue(event, args[0]);
+    id = BattleTransID(event, id);
+    unit = BattleGetUnitPtr(wp, id);
+    max = evtGetValue(event, args[1]);
+    index = evtGetValue(event, args[2]);
+    x = args[3];
+    y = args[4];
+    z = args[5];
+p = VecData;
+    for (i = 0; i < max; i++) {
+        for (j = 0; j < i; j++) {
+            p++;
+        }
+    }
+    for (j = 0; j < index; j++) {
+        p++;
+    }
+    evtSetValue(event, x, (s32)(p->x * unit->faceDirection));
+    evtSetValue(event, y, (s32)p->y);
+    evtSetValue(event, z, (s32)p->z);
+    return EVT_RETURN_DONE;
+}
+#else
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -2179,3 +2308,4 @@ static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     evtSetValue(event, z, (s32)p->z);
     return EVT_RETURN_DONE;
 }
+#endif

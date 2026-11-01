@@ -53,7 +53,9 @@ USER_FUNC(iri_22_make_item_tbl);
 static USER_FUNC(mario_flag);
 USER_FUNC(omiseFukki);
 USER_FUNC(omiseHozon);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(npc_alpha_except_tenin);
+#endif
 
 static BeroEntry bero_data_a[3];
 static BeroEntry bero_data_b[3];
@@ -100,7 +102,11 @@ EvtWord evt_shop_close[317];
 #endif
 EvtWord evt_shop_door_init[36];
 static EvtWord evt_yuka_simi[45];
+#if VERSION <= VERSION_DEMO_US
+static const char* access_tbl[11];
+#else
 static const char* access_tbl[16];
+#endif
 static EvtWord evt_access[25];
 static EvtWord evt_access_entry[24];
 EvtWord rsh_03_init_evt[269];
@@ -366,13 +372,21 @@ s32 item_tbl_cook[] = {
 
 EVT_BEGIN(talk_cook_nabe_return)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_70_00"), 0, STRING("コック"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(item_tbl_cook), LW(1))
+#else
     CALL(evt_win_item_select, 0, PTR(item_tbl_cook), LW(1), 0)
+#endif
     IF_INT_NOT_EQUAL(LW(1), -1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_70_01"), 0, STRING("コック"))
         CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSWF(GSWF_RSH03_STAR_PIECE_GALLEY_POT), 1)
+#else
         SET_VALUE(GSWF_STARPIECE_83, 1)
+#endif
         CALL(evt_pouch_remove_item, ITEM_GALLEY_POT, LW(0))
     END_IF
     RETURN
@@ -386,6 +400,128 @@ s32 iri_22_item_tbl[] = {
     -1, -1, -1, -1,
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(talk_cook)
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_GET_THESE_INGREDIENTS)
+        CALL(iri_22_make_item_tbl, LW(0), LW(1))
+        IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
+            SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
+            IF_INT_EQUAL(LW(1), 0)
+                // Trouble Center request 22: the cook asks for the ingredients of his dish.
+                CALL(evt_msg_print, 0, STRING("irai_22_00"), 0, 0)
+            ELSE
+                CALL(evt_msg_print, 0, STRING("irai_22_01"), 0, 0)
+                GOTO(0)
+            END_IF
+        ELSE
+            IF_INT_EQUAL(LW(1), 0)
+                SWITCH(GSW_TROUBLE_WORK(0))
+                    CASE_EQUAL(0)
+                    CALL(evt_msg_print, 0, STRING("irai_22_02"), 0, 0)
+                    CASE_EQUAL(1)
+                    CALL(evt_msg_print, 0, STRING("irai_22_05"), 0, 0)
+                    CASE_EQUAL(2)
+                    CALL(evt_msg_print, 0, STRING("irai_22_04"), 0, 0)
+                    CASE_EQUAL(4)
+                    CALL(evt_msg_print, 0, STRING("irai_22_03"), 0, 0)
+                    CASE_EQUAL(3)
+                    CALL(evt_msg_print, 0, STRING("irai_22_08"), 0, 0)
+                    CASE_EQUAL(5)
+                    CALL(evt_msg_print, 0, STRING("irai_22_07"), 0, 0)
+                    CASE_EQUAL(6)
+                    CALL(evt_msg_print, 0, STRING("irai_22_06"), 0, 0)
+                    CASE_DEFAULT
+                    DEBUG_PUT_MSG(STRING("iri_22 status ???"))
+                END_SWITCH
+            ELSE
+                // Mario picks which ingredient to hand over.
+                CALL(evt_msg_print, 0, STRING("irai_22_09"), 0, 0)
+                GOTO(0)
+            END_IF
+        END_IF
+        RETURN
+        LABEL(0)
+CALL(evt_win_item_select, LW(0), LW(1))
+SWITCH(LW(1))
+            CASE_EQUAL(ITEM_GOLDEN_LEAF)
+            // The Golden Leaf, Mystic Egg and Keel Mango are taken one at a time.
+            CALL(evt_pouch_remove_item, ITEM_GOLDEN_LEAF, LW(0))
+            CALL(evt_msg_print, 0, STRING("irai_22_10"), 0, 0)
+            OR(GSW_TROUBLE_WORK(0), 1)
+            CASE_EQUAL(ITEM_MYSTIC_EGG)
+            CALL(evt_pouch_remove_item, ITEM_MYSTIC_EGG, LW(0))
+            CALL(evt_msg_print, 0, STRING("irai_22_11"), 0, 0)
+            OR(GSW_TROUBLE_WORK(0), 2)
+            CASE_EQUAL(ITEM_KEEL_MANGO)
+            CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
+            CALL(evt_msg_print, 0, STRING("irai_22_12"), 0, 0)
+            OR(GSW_TROUBLE_WORK(0), 4)
+        END_SWITCH
+        IF_INT_EQUAL(GSW_TROUBLE_WORK(0), 7)
+            CALL(evt_msg_print_add, 0, STRING("irai_22_13"))
+            CALL(evt_sub_get_coin, 40)
+            SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+            SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_GET_THESE_INGREDIENTS), 1)
+            // With all three delivered, the request is recorded as solved.
+            CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
+        ELSE
+            IF_INT_NOT_EQUAL(LW(1), -1)
+                CALL(evt_msg_continue)
+            END_IF
+        END_IF
+        RETURN
+    END_IF
+    // If Mario has the Galley Pot, he can return it.
+    CALL(evt_pouch_check_item, ITEM_GALLEY_POT, LW(0))
+    IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+        CALL_CHILD(talk_cook_nabe_return)
+        RETURN
+    END_IF
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_LESS(STG6_01_THE_CONDUCTOR)
+        IF_INT_EQUAL(LSWF(5), 0)
+            SET_VALUE(LSWF(5), 1)
+            // Without a request, his line depends on the story stage.
+            CALL(evt_msg_print, 0, STRING("stg6_rsh_04"), 0, 0)
+        ELSE
+            CALL(evt_msg_print, 0, STRING("stg6_rsh_05"), 0, 0)
+        END_IF
+        CASE_LESS(STG6_02_A_CASE_OF_LOST_STEW)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_19"), 0, 0)
+        CASE_LESS(STG6_05_GALLEY_KETTLE_DISCOVERED)
+        IF_INT_EQUAL(GSWF(GSWF_RSH03_PENNINGTON_LUNCH_CASE_TALK), 0)
+            CALL(evt_msg_print, 0, STRING("stg6_rsh_40"), 0, 0)
+        ELSE
+            CALL(evt_msg_print, 0, STRING("stg6_rsh_50_1"), 0, 0)
+        END_IF
+        CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_72"), 0, 0)
+        CASE_LESS(STG6_19_GIVE_BLANKET)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_72_01"), 0, 0)
+        CASE_LESS(STG6_20_END_OF_DAY_1)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_147_07"), 0, 0)
+        CASE_LESS(STG6_27_RIVERSIDE_STATION)
+        IF_INT_EQUAL(LSWF(6), 0)
+            SET_VALUE(LSWF(6), 1)
+            CALL(evt_msg_print, 0, STRING("stg6_rsh_156"), 0, 0)
+        ELSE
+            CALL(evt_msg_print, 0, STRING("stg6_rsh_157"), 0, 0)
+        END_IF
+        CASE_LESS(STG6_43_CONDUCTOR_APPEARS)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_212"), 0, 0)
+        CASE_LESS(STG6_44_END_OF_DAY_2)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_219"), 0, 0)
+CALL(evt_msg_print_party, STRING("stg6_rsh_219_2"))
+CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_257"), 0, 0)
+        CASE_LESS(STG8_END_AFTER_THE_BATTLE)
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_c_12"), 0, 0)
+        CASE_DEFAULT
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_c_12_1"), 0, 0)
+    END_SWITCH
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(talk_cook)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_GET_THESE_INGREDIENTS)
         CALL(iri_22_make_item_tbl, LW(0), LW(1))
@@ -513,6 +649,7 @@ EVT_BEGIN(talk_cook)
     END_SWITCH
     RETURN
 EVT_END()
+#endif
 
 /**
  * Init event of the waitress: parked below the floor from day 3 to the Smorg miasma;
@@ -535,6 +672,41 @@ s32 item_tbl_waitless[] = {
     ITEM_SHELL_EARRINGS, -1,
 };
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(talk_waitless_pias_return)
+    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
+    DELETE_EVENT(LW(10))
+    CALL(evt_msg_print, 0, STRING("stg6_rsh_195"), 0, STRING("ウェイトレス"))
+CALL(evt_win_item_select, PTR(item_tbl_waitless), LW(1))
+IF_INT_NOT_EQUAL(LW(1), -1)
+CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_4"))
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_196"), 0, STRING("ウェイトレス"))
+        CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_1"))
+CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
+        CALL(evt_item_get_item, STRING("orei"))
+        CALL(evt_item_get_item_end_wait, STRING("orei"))
+        SET_VALUE(GSWF(GSWF_RSH03_STAR_PIECE_WAITRESS), 1)
+CALL(evt_msg_print, 0, STRING("stg6_rsh_197"), 0, STRING("ウェイトレス"))
+CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
+        WAIT_MS(500)
+        CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
+CALL(evt_pouch_remove_item, ITEM_SHELL_EARRINGS, LW(0))
+    ELSE
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_196_2"), 0, STRING("ウェイトレス"))
+    END_IF
+    CALL(evt_npc_restart_regular_event, STRING("ウェイトレス"))
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CASE_BETWEEN(STG6_49_POSHLEY_HEIGHTS, STG6_55_04_BOWSER_RAWK_HAWK)
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CASE_DEFAULT
+        CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
+    END_SWITCH
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(talk_waitless_pias_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
@@ -593,6 +765,7 @@ EVT_BEGIN(talk_waitless_pias_return)
     END_SWITCH
     RETURN
 EVT_END()
+#endif
 
 static EVT_BEGIN(talk_waitless)
     // From Pennington's assistant on, the waitress asks Mario for help.
@@ -1299,6 +1472,7 @@ EVT_BEGIN(shop_door_close)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002634, JP rsh .text+0x2570. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(npc_alpha_except_tenin) {
     s32 alpha = evtGetValue(event, event->args[0]);
     NpcWork* wp = npcGetWorkPtr();
@@ -1313,6 +1487,7 @@ USER_FUNC(npc_alpha_except_tenin) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Trigger on the shop door (tobira_omise) of the dining car:
@@ -1335,7 +1510,11 @@ EVT_BEGIN(evt_shop_open)
         ADD(LW(12), 50)
         CALL(evt_party_move_pos, 1, LW(10), LW(12), 300)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(shop_door_open)
+#else
     CALL_CHILD(PTR(shop_door_open))
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
         SUBTRACT(LW(12), 30)
@@ -1347,7 +1526,11 @@ EVT_BEGIN(evt_shop_open)
     CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
     SUBTRACT(LW(12), 10)
     CALL(evt_party_move_pos, 1, LW(10), LW(12), 300)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(shop_door_close)
+#else
     CALL_CHILD(PTR(shop_door_close))
+#endif
     CALL(omiseHozon)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_jaba"))
@@ -1359,6 +1542,7 @@ EVT_BEGIN(evt_shop_open)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kagu_s"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_tobira_omise"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 500)
         LOOP(0)
@@ -1370,6 +1554,7 @@ EVT_BEGIN(evt_shop_open)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_IN1"), LW(0), LW(1), LW(2), 0)
@@ -1394,6 +1579,91 @@ EVT_BEGIN(evt_shop_open)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_shop_close)
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_party_stop, 0)
+    CALL(evt_party_stop, 1)
+    CALL(omiseFukki)
+    CALL(evt_hitobj_attr_onoff, 0, 1, STRING("tobira_omise"), 8388608)
+    CALL(evt_hitobj_attr_onoff, 0, 1, STRING("tobira_omise_heya"), 8388608)
+    BEGIN_INLINE_EVENT
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
+END_INLINE_EVENT
+    CALL(evt_img_clear_virtual_point, STRING("capture_img"))
+    CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
+    CALL(evt_img_onoff, STRING("capture_img"), 1)
+    CALL(evt_img_wait_animend, STRING("capture_img"))
+    CALL(evt_img_onoff, STRING("capture_img"), 0)
+    CALL(evt_img_release, STRING("capture_img"))
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("omise_masuku"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("omise_soto"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("shokudou"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kagu_s"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tobira"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_tobira_omise"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_sub_get_mapname, LW(10))
+    IF_STR_EQUAL(LW(10), STRING("rsh_03_c"))
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_close_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+CALL(evt_mapobj_flag_onoff, 1, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
+CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
+END_IF
+CALL(evt_sub_get_mapname, LW(10))
+    IF_STR_EQUAL(LW(10), STRING("rsh_03_a"))
+        SWITCH(GSW(GSW_STORY_PROGRESS))
+            CASE_BETWEEN(STG6_01_THE_CONDUCTOR, STG6_20_END_OF_DAY_1)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
+            CASE_DEFAULT
+            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
+        END_SWITCH
+    END_IF
+    BEGIN_INLINE_EVENT
+        CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
+        CALL(evt_hit_get_position, STRING("tobira_omise"), LW(13), LW(14), LW(15))
+        CALL(evt_mario_mov_pos, LW(13), LW(12), 300)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
+        SUBTRACT(LW(12), 20)
+        CALL(evt_party_move_pos, 0, LW(10), LW(12), 300)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
+        SUBTRACT(LW(12), 30)
+        CALL(evt_party_move_pos, 1, LW(10), LW(12), 300)
+    END_INLINE_EVENT
+    // Mario steps out of the shop: the shop door slides open.
+    CALL_CHILD(shop_door_open)
+    CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+    BEGIN_INLINE_EVENT
+        CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
+        ADD(LW(12), 50)
+        CALL(evt_mario_mov_pos, LW(10), LW(12), 300)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
+        ADD(LW(12), 30)
+        CALL(evt_party_move_pos, 0, LW(10), LW(12), 300)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_hit_get_position, STRING("tobira_omise"), LW(10), LW(11), LW(12))
+        ADD(LW(12), 10)
+        CALL(evt_party_move_pos, 1, LW(10), LW(12), 300)
+    END_INLINE_EVENT
+    WAIT_MS(500)
+    // The door closes behind them and the page turns back to the dining car.
+    CALL_CHILD(shop_door_close)
+    CALL(evt_hitobj_attr_onoff, 0, 0, STRING("tobira_omise"), 8388608)
+    CALL(evt_hitobj_attr_onoff, 0, 0, STRING("tobira_omise_heya"), 8388608)
+    CALL(evt_party_run, 1)
+    CALL(evt_party_run, 0)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(evt_shop_close)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1518,6 +1788,7 @@ EVT_BEGIN(evt_shop_close)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 USER_FUNC(fire) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
@@ -1572,19 +1843,29 @@ EVT_END()
 static const char* access_tbl[] = {
     "table_1",
     "stg6_rsh_268",
+#if VERSION > VERSION_DEMO_US
     "stg6_rsh_268",
+#endif
     "table_2",
+#if VERSION > VERSION_DEMO_US
     "stg6_rsh_268",
+#endif
     "stg6_rsh_268",
     "oubun",
     "stg6_rsh_269",
+#if VERSION > VERSION_DEMO_US
     "stg6_rsh_269",
+#endif
     "shokki",
+#if VERSION > VERSION_DEMO_US
     "stg6_rsh_270",
+#endif
     "stg6_rsh_270",
     "memo",
     "stg6_rsh_271",
+#if VERSION > VERSION_DEMO_US
     "stg6_rsh_271",
+#endif
     NULL,
 };
 
@@ -1594,11 +1875,15 @@ static const char* access_tbl[] = {
  */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
+#endif
         CALL(evt_msg_print, 0, LW(1), 0, 0)
+#if VERSION > VERSION_DEMO_US
         ELSE
         CALL(evt_msg_print, 0, LW(2), 0, 0)
     END_IF
+#endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
@@ -1607,7 +1892,11 @@ EVT_END()
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
+#if VERSION <= VERSION_DEMO_US
+READ_INT2(LW(0), LW(1))
+#else
         READ_INT3(LW(0), LW(1), LW(2))
+#endif
         IF_INT_EQUAL(LW(0), 0)
             BREAK_LOOP
         END_IF
@@ -1884,6 +2173,56 @@ EVT_END()
  * scenery for the outbound or return trip, the dining car NPCs, the shop door and Smorg shop,
  * the random passengers (evt_rsh_03_rnd_npc_entry) and the music for the station the train has reached.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(rsh_03_init_evt_nidome)
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
+            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+                CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
+                IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+                    CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
+                    CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
+                    CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
+                    CALL(evt_map_playanim, STRING("hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
+                ELSE
+                    CALL(evt_map_playanim, STRING("rt_hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
+                    CALL(evt_map_playanim, STRING("rt_hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
+                    CALL(evt_map_playanim, STRING("rt_hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
+                    CALL(evt_map_playanim, STRING("rt_hai_saboten"), MAP_ANIM_PLAY_LOOP, 0)
+                END_IF
+            END_IF
+        END_IF
+    END_IF
+    CALL(evt_npc_setup, PTR(npc_data))
+    CALL_CHILD(evt_shop_door_init)
+    CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
+        CALL(evt_snd_envoff, PSND_FADEOUT)
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+    ELSE
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        ELSE
+            CALL(evt_sub_get_mapname, LW(0))
+            IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_2"))
+            END_IF
+            IF_STR_EQUAL(LW(0), STRING("rsh_03_b"))
+            END_IF
+            IF_STR_EQUAL(LW(0), STRING("rsh_03_c"))
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH2"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_2"))
+            END_IF
+        END_IF
+    END_IF
+    CALL_CHILD(evt_rsh_03_rnd_npc_entry)
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(rsh_03_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -1955,6 +2294,7 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
 #endif
     RETURN
 EVT_END()
+#endif
 
 /** Init script of rsh_03_a on the second visit: doors plus the shared second-visit init. */
 EVT_BEGIN(rsh_03_a_init_evt_nidome)

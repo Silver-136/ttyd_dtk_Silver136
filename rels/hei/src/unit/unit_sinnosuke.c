@@ -96,6 +96,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 /** Defence of the Bald Cleft's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {50, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 80, 80, 50, 30, 100, 80, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     50, // sleep
     100, // stop
@@ -120,6 +123,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Body part of the Bald Cleft: a single part using the model "c_sinnosuke". */
 static BattleUnitKindPart parts[] = {

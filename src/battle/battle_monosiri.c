@@ -286,15 +286,19 @@ BattleUnitType same_tbl_moamoa[] = {
     UNIT_SMORG_MIASMA_TENTACLE_C,
     UNIT_SMORG_MIASMA_TENTACLE_B,
     UNIT_SMORG_MIASMA_TENTACLE_A,
+#if VERSION > VERSION_DEMO_US
     UNIT_SMORG_MIASMA_CLAW,
+#endif
     UNIT_NULL
 };
 
+#if VERSION > VERSION_DEMO_US
 BattleUnitType same_tbl_iron_sinemon[] = {
     UNIT_IRON_CLEFT_RED,
     UNIT_IRON_CLEFT_GREEN,
     UNIT_NULL
 };
+#endif
 
 //.data
 TattleEntry monosiriMessageTable[] = {
@@ -793,7 +797,9 @@ BattleUnitType* battle_monosiri_same_tbl[] = {
     same_tbl_magunum_battender,
     same_tbl_magunum_battender_mkii,
     same_tbl_moamoa,
+#if VERSION > VERSION_DEMO_US
     same_tbl_iron_sinemon,
+#endif
     NULL
 };
 

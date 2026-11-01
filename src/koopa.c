@@ -320,7 +320,11 @@ void kpaMain(void) {
  * horizontal movement limited by his dash speed and walls, jumping and falling, floors and ceilings,
  * then the shared player effects, balloon and camera.
  */
+#if VERSION <= VERSION_DEMO_US
+static void kpa2DMain(void) {
+#else
 void kpa2DMain(void) {
+#endif
     MarioWork* mp = marioGetPtr();
     Vec diff;
     Vec saved;
@@ -332,19 +336,27 @@ void kpa2DMain(void) {
     if (mp->kpaNoHitTimer) {
         mp->kpaNoHitTimer--;
     }
+#if VERSION > VERSION_DEMO_US
     mp->hitobjHead = NULL;
     mp->hitobjFront = NULL;
     mp->hitobjFrontA = NULL;
     mp->hitobjPush = NULL;
     mp->hitobjWall = NULL;
+#endif
     marioItemGetChk();
     kpaFireAttack();
     kpaFireMain();
     {
         MarioWork* m2 = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+        if (mp(m2)->mutekiTimer > 0) {
+            if (--mp(m2)->mutekiTimer <= 0) {
+                mp(m2)->mutekiTimer = 0;
+#else
         if (m2->kpaWork->mutekiTimer > 0) {
             if (--m2->kpaWork->mutekiTimer <= 0) {
                 m2->kpaWork->mutekiTimer = 0;
+#endif
                 kpaMutekiOff();
             }
         }
@@ -383,7 +395,9 @@ void kpa2DMain(void) {
         }
         marioCheckWall(spd, ang);
     }
+#if VERSION > VERSION_DEMO_US
     mp->position.y += mp->floorMove.y;
+#endif
     PSVECSubtract(&mp->position, &saved, &diff);
     {
         f32 mag = PSVECMag(&diff);
@@ -905,7 +919,11 @@ void kpaStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static void kpaFireMain(void) {
+#else
 void kpaFireMain(void) {
+#endif
     MarioWork* mario = marioGetPtr();
     Mtx mb0;
     Mtx m80;
@@ -913,6 +931,9 @@ void kpaFireMain(void) {
     Mtx m20;
     Vec out;
     Vec zero;
+#if VERSION <= VERSION_DEMO_US
+    s32 flag;
+#endif
     s32 lv;
     EffectEntry* fe;
     EffGonbabaBreathWork* w;
@@ -920,10 +941,19 @@ void kpaFireMain(void) {
     f32 ballScale;
     f32 f30;
     f32 headScale;
+#if VERSION <= VERSION_DEMO_US
+    mp(mario)->flameHit = NULL;
+    flag = 0;
+    if (fireefp && (f32)flag == 0.0f) {
+#else
     mario->kpaWork->flameHit = NULL;
     if (fireefp) {
+#endif
         f32 dir;
         f32 scale;
+#if VERSION <= VERSION_DEMO_US
+        f32 x;
+#endif
         f32 y;
         f32 z;
         s32 t;
@@ -944,12 +974,22 @@ void kpaFireMain(void) {
                 ((EffGonbabaBreathWork*)((EffGonbabaBreathWork*)fireefp->userdata)->child->userdata)->position.z = z;
             }
         }
+#if VERSION <= VERSION_DEMO_US
+{
+            f32 sc;
+            f32 base;
+#else
         lv = kpaGetLevel();
         if (lv != 0) {
+#endif
             fe = fireefp;
             camGetPtr(CAMERA_3D);
             w = (EffGonbabaBreathWork*)fe->userdata;
+#if VERSION <= VERSION_DEMO_US
+            base = w->scale;
+#else
             headScale = w->scale;
+#endif
             PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
             PSMTXRotRad(m50, 'y', 0.017453292f * (w->yaw - camGetPtr(CAMERA_3D)->viewYaw));
             if (w->yaw > 90.0f && w->yaw < 270.0f) {
@@ -963,32 +1003,59 @@ void kpaFireMain(void) {
             for (i = 1; i < fe->count; i++, w++) {
                 if (((i - 1) & 3) == 0 && w->delay == 0 && w->life > 0x10) {
                     void* hit;
+#if VERSION <= VERSION_DEMO_US
+                    sc = 7.0f * w->scale;
+#else
                     ballScale = 7.0f * w->scale;
                     f30 = ballScale * headScale;
                     if (!(f30 < 7.0f)) {
+#endif
                         PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
+#if VERSION <= VERSION_DEMO_US
+                    PSMTXScale(mb0, sc, sc, sc);
+#else
                         PSMTXScale(mb0, ballScale, ballScale, ballScale);
+#endif
                         PSMTXConcat(m80, mb0, m80);
                         PSMTXConcat(m20, m80, m80);
                         zero = *(Vec*)vec3_802fc920;
                         PSMTXMultVec(m80, &zero, &out);
+#if VERSION <= VERSION_DEMO_US
+                    hit = kpaFlameHitCheck(out.x, out.y, out.z, sc * base);
+#else
                         hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
+#endif
                         if (hit) {
+#if VERSION <= VERSION_DEMO_US
+                        mp(mario)->flameHit = hit;
+#else
                             mario->kpaWork->flameHit = hit;
+#endif
                             break;
                         }
                     }
                 }
             }
         }
+#if VERSION <= VERSION_DEMO_US
+    {
+#else
     }
+#endif
     if (kpaFireAttackCheck() == 0) {
         if (fireefp) {
+#if VERSION <= VERSION_DEMO_US
+                effSoftDelete((void*)fireefp);
+#else
             effSoftDelete(fireefp);
+#endif
             fireefp = NULL;
         }
     }
 }
+#if VERSION <= VERSION_DEMO_US
+}
+#endif
 
 /** Bowser's scale for power-up level lv (0.3, 1.0, 1.4, 3.1). */
 f32 kpaGetBaseScale(s32 lv) {

@@ -443,7 +443,9 @@ EVT_BEGIN(jin_00_dai_in_sub)
     CALL(evt_party_set_dir, 1, 270, -1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_jump_pos, 365, 40, 0, 700, 0, -1000)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
@@ -965,7 +967,11 @@ static s32 lock_tbl[] = {
 static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x16, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(lock_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -1375,8 +1381,12 @@ static void senteresa_ext_main(void) {
     f32 spd;
     Vec v;
     Vec d;
+#if VERSION <= VERSION_DEMO_US
+if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL && strcmp(mp->paperAnimName, "P_H_1C") == 0) {
+#else
 
     if (marioGetAngleKaitenHammer() > 0.0f) {
+#endif
         hammer = 1;
     }
     PSVECSubtract(&mp->position, &g_vecRotCenter, &d);
@@ -1435,7 +1445,11 @@ static void senteresa_ext_main(void) {
                 if (pTeresa[i].wait == 0) {
                     if (i == 0) {
                         Vec pos = {0.0f, 200.0f, 0.0f};
+#if VERSION <= VERSION_DEMO_US
+                        psndSFXOn_3D((const char*)0x5D3, &pos);
+#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
+#endif
                     }
                     pTeresa[i].seq++;
                 }
@@ -1465,7 +1479,11 @@ static void senteresa_ext_main(void) {
                     g_nNumEndProc[0]++;
                     if (i == 0) {
                         Vec pos = {0.0f, 200.0f, 0.0f};
+#if VERSION <= VERSION_DEMO_US
+                        psndSFXOn_3D((const char*)0x5D3, &pos);
+#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
+#endif
                     }
                 } else {
                     pTeresa[i].alpha = alpha;
@@ -1475,7 +1493,11 @@ static void senteresa_ext_main(void) {
                         g_nNumEndProc[0]++;
                         if (i == 0) {
                             Vec pos = {0.0f, 200.0f, 0.0f};
+#if VERSION <= VERSION_DEMO_US
+                            psndSFXOn_3D((const char*)0x5D3, &pos);
+#else
                             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_APPEAR2), &pos);
+#endif
                         }
                     }
                 }
@@ -1528,7 +1550,11 @@ static void senteresa_ext_main(void) {
                 computePos(&pTeresa[i], &v);
                 v.y = (*pose->mtx)[1][3];
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
+#if VERSION <= VERSION_DEMO_US
+(*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
+#else
                 (*pose->mtx)[1][3] = v.y;
+#endif
                 (*pose->mtx)[2][3] = g_vecRotCenter.z + v.z;
                 pTeresa[i].bobPhase += 0.08f;
                 if (pTeresa[i].bobPhase > 3.1415927f) {
@@ -1625,7 +1651,11 @@ static void senteresa_ext_main(void) {
                         pos.x = (*pose->mtx)[0][3];
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
+#if VERSION <= VERSION_DEMO_US
+                        psndSFXOn_3D((const char*)0x5D7, &pos);
+#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_ESCAPE1), &pos);
+#endif
                     }
                 }
                 break;
@@ -1704,7 +1734,11 @@ static void senteresa_ext_main(void) {
                         pos.x = (*pose->mtx)[0][3];
                         pos.y = (*pose->mtx)[1][3];
                         pos.z = (*pose->mtx)[2][3];
+#if VERSION <= VERSION_DEMO_US
+                        psndSFXOn_3D((const char*)0x5D4, &pos);
+#else
                         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG4_TELESA_TOGETHER1), &pos);
+#endif
                     }
                     g_nNumEndProc[0]++;
                 } else {
@@ -2116,9 +2150,17 @@ EVT_BEGIN(senteresa_evt)
                 CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
                 WAIT_FRAMES(1)
             END_LOOP
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_JIN00_BOOS_CARRIED_MARIO_OUT), 1)
+#else
             SET_VALUE(GSWF_JIN_BOOS_THREW_MARIO_OUT, 1)
+#endif
             CALL(evt_mario_normalize)
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_10_02_TRADING_PLACES)
+#else
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_10_02_TRADING_PLACES)
+#endif
                 CALL(evt_bero_mapchange, STRING("usu_00"), STRING("evt_majo3"))
             ELSE
                 CALL(evt_bero_mapchange, STRING("gra_06"), STRING("n_bero"))
@@ -2134,7 +2176,11 @@ EVT_BEGIN(senteresa_evt)
     ADD(LW(1), 60)
     CALL(evt_npc_set_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_scale, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), 1, 1, 1)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_flag_onoff, 1, STRING("\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), -2147483648)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_TALK_BALLOON)
+#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
         CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
@@ -2302,9 +2348,13 @@ EVT_BEGIN(senteresa_evt)
     ADD(LW(1), 50)
     // After the fight the Lucky Start pops out, the remaining Boos are blown away and the Atomic Boo is
     // marked as defeated.
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(GSWF_JIN00_ATOMIC_BOO_LUCKY_START_TAKEN), 0)
+#else
     CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_JIN_00_LUCKY_START, 0)
     CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_BADGE_RETURN)
     SET_VALUE(GSWF_JIN_00_LUCKY_START, 1)
+#endif
     CALL(senteresa_huttobu)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
     LOOP(0)
@@ -2316,10 +2366,16 @@ EVT_BEGIN(senteresa_evt)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(300)
+#if VERSION > VERSION_DEMO_US
     // All 200 dispersal completions were counted before resetting the ext controller.
+#endif
     CALL(senteresa_end)
     CALL(evt_mario_key_onoff, 1)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_JIN00_ATOMIC_BOO_DEFEATED), 1)
+#else
     SET_VALUE(GSWF_JIN_00_ATOMIC_BOO_DEFEATED, 1)
+#endif
     RETURN
 EVT_END()
 

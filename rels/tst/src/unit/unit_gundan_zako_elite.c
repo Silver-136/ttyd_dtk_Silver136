@@ -45,22 +45,57 @@ BattleUnitKind unit_gundan_zako_elite = {
     0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
+#if VERSION <= VERSION_DEMO_US
+3,
+#else
     2, // baseCoin
+#endif
     50, // runRate
     9999, // pbSoftCap
     30, // width
     36, // height
+#if VERSION <= VERSION_DEMO_US
+    0,
+    36,
+    0.0f,
+    18.0f,
+    0.0f,
+    0,
+    0,
+#else
     {0, 36}, // hitOffset
     {0.0f, 18.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {15.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    15.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    15.0f,
+    0.0f,
+    0.0f,
+    12.0f,
+    27.0f,
+    0.0f,
+    0.0f,
+    18.0f,
+    0.0f,
+#else
     {15.0f, 0.0f, 0.0f}, // bintaHitOffset
     {12.0f, 27.0f, 0.0f}, // kissHitOffset
     {0.0f, 18.0f, 0.0f}, // cutBaseOffset
+#endif
     30.0f, // cutWidth
     36.0f, // cutHeight
     0, // turnOrder
@@ -69,7 +104,13 @@ BattleUnitKind unit_gundan_zako_elite = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_3RD1_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -88,6 +129,9 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Elemental reactions of the Elite X-Naut: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {60, 70, 60, 100, 70, 100, 100, 60, 100, 65, 100, 65, 100, 60, 60, 80, 70, 100, 60, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     70, // stop
@@ -112,6 +156,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /**
  * Pose table of the Elite X-Naut: the animation each battle pose (idle, hurt, walk, attack and so on) plays.

@@ -197,19 +197,33 @@ EVT_END()
 EVT_BEGIN(aji_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_snd_set_rev_mode, 1)
+#endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     SPAWN_EVENT_GET_ID(PTR(heya_tenura_onoff), LW(0))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_emergency)
+#else
     SPAWN_EVENT(PTR(evt_emergency))
+#endif
     BEGIN_INLINE_EVENT
         CALL(slit_chk)
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING("bari"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("awa1"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("awa2"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -975, 170, 75, ITEM_TYPE_STILL, GSWF(GSWF_AJI08_STAR_PIECE), 0)
+#else
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -975, 170, 75, ITEM_TYPE_STILL, GSWF_STARPIECE_99, 0)
+#endif
     BEGIN_INLINE_EVENT
         LOOP(0)
             CALL(evt_mapobj_get_position, STRING("S_ita"), LW(0), LW(1), LW(2))
@@ -236,7 +250,11 @@ EVT_BEGIN(aji_08_init_evt)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+#endif
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
     END_IF
     RETURN

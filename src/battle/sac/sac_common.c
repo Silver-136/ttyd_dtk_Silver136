@@ -65,13 +65,7 @@ EVT_BEGIN(sac_mario_item_on_evt)
     RETURN
 EVT_END()
 
-EVT_BEGIN(sac_mario_item_on_end_evt)
-    CALL(evt_eff_delete, STRING("sac_itemget"))
-    CALL(evt_eff_delete, STRING("sac_treasure"))
-    RETURN
-EVT_END()
-
-/** Six bursts of stardust 50 units above Mario, 10 frames apart, while the Crystal Star appears. */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(sac_start_stardust)
     LOOP(6)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -81,6 +75,25 @@ EVT_BEGIN(sac_start_stardust)
     END_LOOP
     RETURN
 EVT_END()
+#endif
+EVT_BEGIN(sac_mario_item_on_end_evt)
+    CALL(evt_eff_delete, STRING("sac_itemget"))
+    CALL(evt_eff_delete, STRING("sac_treasure"))
+    RETURN
+EVT_END()
+
+/** Six bursts of stardust 50 units above Mario, 10 frames apart, while the Crystal Star appears. */
+#if VERSION > VERSION_DEMO_US
+EVT_BEGIN(sac_start_stardust)
+    LOOP(6)
+        CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+        ADD(LW(1), 50)
+        CALL(evt_eff, STRING(""), STRING("stardust"), 5, LW(0), LW(1), LW(2), 30, 30, 10, 30, 0, 0, 0, 0)
+        WAIT_FRAMES(10)
+    END_LOOP
+    RETURN
+EVT_END()
+#endif
 
 /** Walks Mario back to his home position after the opening pose. */
 EVT_BEGIN(sac_mario_back_home)

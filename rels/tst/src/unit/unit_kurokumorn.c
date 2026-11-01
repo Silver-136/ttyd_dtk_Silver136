@@ -95,6 +95,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Elemental reactions of the Ruff Puff: is healed by electric attacks. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 3}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {60, 80, 80, 100, 70, 0, 100, 70, 100, 70, 100, 70, 100, 70, 70, 70, 90, 100, 70, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     75, // sleep
     75, // stop
@@ -119,6 +122,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Body part of the Ruff Puff, model c_kmoon: its one target part. */
 static BattleUnitKindPart parts[] = {

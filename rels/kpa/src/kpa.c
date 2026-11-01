@@ -282,13 +282,23 @@ USER_FUNC(kpa_add_coin) {
  * kpa_03, 3: kpa_05). Called on a timeout, a pit fall or lethal damage.
  */
 EVT_BEGIN(kpa_dead)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(LSWF(3), 1)
+#else
     IF_INT_EQUAL(LSWF_KPA_STAGE_ENDED, 1)
+#endif
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LSWF(3), 1)
+#else
     SET_VALUE(LSWF_KPA_STAGE_ENDED, 1)
+#endif
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(kpa_fire_off)
+#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_adjust_dir)
@@ -296,7 +306,11 @@ EVT_BEGIN(kpa_dead)
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     CALL(evt_mario_set_motion, 0)
     CALL(kpa_chg_pose, STRING("KPA2_D_4"))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LSWF(4), 1)
+#else
     SET_VALUE(LSWF_KPA_BOWSER_DEAD, 1)
+#endif
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(4), LW(5), LW(6))
     SET_FLOAT_VALUE(LW(3), LW(5))
@@ -332,8 +346,13 @@ EVT_BEGIN(kpa_dead)
         CALL(evt_mario_set_pos, LW(4), LW(0), LW(5))
         WAIT_FRAMES(1)
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_KPA_LIVES), 99)
+        ADD(GSW(GSW_KPA_LIVES), 1)
+#else
     IF_INT_LESS(GSW_KPA_TRY_COUNT, 99)
         ADD(GSW_KPA_TRY_COUNT, 1)
+#endif
     END_IF
     CALL(kpa_status_get_stage, LW(0))
     SWITCH(LW(0))
@@ -377,10 +396,12 @@ USER_FUNC(kpa_nohitenemy_ct_clear) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_kpa_00000a08, JP kpa .text+0x944. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(kpa_fire_off) {
     kpaFireDelete();
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper: args[0] = scale. Resizes Bowser uniformly and scales his collision box to match.

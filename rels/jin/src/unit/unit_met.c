@@ -23,7 +23,11 @@
 BattleUnitKind unit_met;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_ceil[18];
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table_turn[15];
+#else
 static PoseTableEntry pose_table_turn[17];
+#endif
 static BattleDataEntry data_table[3];
 static BattleDataEntry data_table_ceil[14];
 static BattleWeapon weapon_met_attack;
@@ -165,8 +169,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MET_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "MET_A_1"},
     {POSE_TYPE_DAMAGE, "MET_D_3"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_ATTACK, "MET_A_1"},
     {POSE_TYPE_WALK, "MET_W_1"},
+#endif
     {POSE_TYPE_DANGER, "MET_X_2"},
     {POSE_TYPE_PERIL, "MET_X_2"},
     {POSE_TYPE_TALK, "MET_S_2"},
@@ -296,6 +302,9 @@ static BattleUnitDefense defence_turn = {0};
  */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     75, // sleep
     90, // stop
@@ -320,6 +329,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Body part of the Buzzy Beetle: a single part using the model "c_met". */
 static BattleUnitKindPart parts[] = {

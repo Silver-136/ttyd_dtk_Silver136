@@ -850,21 +850,43 @@ EVT_END()
  * the Smorg scene (evt_moamoa) before STG6_46_ENGINEER, and after the story a line for where the train is.
  */
 static EVT_BEGIN(talk_unten)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(LSWF(1), 0)
+#else
         IF_INT_EQUAL(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
+#endif
             // His greeting alternates and early lines mention Pennington's assistant.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_00"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LSWF(1), 1)
+#else
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 1)
+#endif
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_01"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LSWF(1), 0)
+#else
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
+#endif
         END_IF
         // He asks for the conductor and signs an autograph for Mario.
         CASE_LESS(STG6_10_THE_CONDUCTOR_ZIP_TOAD)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         CASE_LESS(STG6_11_OBTAIN_AUTOGRAPH)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_ANIM)
+        // He signs the autograph and gives it to Mario.
+        CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, 0)
+#else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, STRING("me"))
+#endif
         CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
         WAIT_MS(500)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -877,8 +899,14 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_item_get_item, STRING("sign"))
         CALL(evt_item_get_item_end_wait, STRING("sign"))
         CALL(evt_npc_set_anim, STRING("me"), STRING("T_1"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, 0)
+SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_11_OBTAIN_AUTOGRAPH)
+CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_ANIM)
+#else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, STRING("me"))
         SET_VALUE(GSW_STORY_PROGRESS, STG6_11_OBTAIN_AUTOGRAPH)
+#endif
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         // Hints for each later stage of the train mystery.
@@ -887,9 +915,17 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_21_DAY_2)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_147_01"), 0, 0)
         CASE_LESS(STG6_27_RIVERSIDE_STATION)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(LSWF(2), 0)
+#else
         IF_INT_EQUAL(LSWF_RSH_00_ENGINEER_DAY2_TALKED, 0)
+#endif
             CALL(evt_msg_print, 0, STRING("stg6_rsh_152"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(LSWF(2), 1)
+#else
             SET_VALUE(LSWF_RSH_00_ENGINEER_DAY2_TALKED, 1)
+#endif
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_153"), 0, 0)
         END_IF
@@ -899,7 +935,11 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_217"), 0, 0)
         // The Smorg scene (evt_moamoa) before the engineer stage.
         CASE_LESS(STG6_46_ENGINEER)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_moamoa)
+#else
         CALL_CHILD(PTR(evt_moamoa))
+#endif
         CASE_LESS(STG6_48_SMORG_MIASMA)
         CALL(evt_npc_set_anim, STRING("me"), STRING("T_2"))
         CALL(evt_msg_print, 0, STRING("stg6_rsh_235"), 0, 0)
@@ -908,18 +948,30 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_253"), 0, 0)
         CASE_DEFAULT
         // After the story he comments on where the train is.
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
+#else
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
+#endif
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
             RETURN
         END_IF
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+#else
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
+#endif
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_07"), 0, 0)
             ELSE
+#if VERSION > VERSION_DEMO_US
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+#endif
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
+#if VERSION > VERSION_DEMO_US
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
             END_IF
+#endif
         END_IF
     END_SWITCH
     RETURN
@@ -1101,11 +1153,21 @@ EVT_BEGIN(rsh_00_c_init_evt)
 EVT_END()
 
 EVT_BEGIN(rsh_00_init_evt_nidome)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
+        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
+            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+#else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+#endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+                IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+#else
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
+#endif
                     CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1123,27 +1185,53 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -210, 60, -145, 0, 0)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_00_c"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF(GSWF_RSH00_STAR_PIECE_PANEL))
+#else
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF_STARPIECE_81)
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF(GSWF_RSH00_STAR_PIECE_PANEL))
+#else
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF_STARPIECE_81)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_access_entry)
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+#else
     CALL_CHILD(PTR(evt_access_entry))
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+#else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
+#endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
             ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_00_a"))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
             END_IF
+#if VERSION > VERSION_DEMO_US
             // Revisit variant B retains the current moving-train audio.
+#endif
             IF_STR_EQUAL(LW(0), STRING("rsh_00_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_00_c"))
@@ -1151,7 +1239,9 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
             END_IF
         END_IF
+#if VERSION > VERSION_DEMO_US
     END_IF
+#endif
     RETURN
 EVT_END()
 

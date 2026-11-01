@@ -120,6 +120,7 @@ EVT_END()
  * Entrance script: cancels a registered but unplayed match (clears GSWF_TOU_MATCH_RESERVED)
  * when Mario leaves through the door.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(n_bero_match_reset)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
         DEBUG_PUT_MSG(STRING("登録していた試合をリセット"))
@@ -128,6 +129,7 @@ EVT_BEGIN(n_bero_match_reset)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
+#endif
 
 /** Doors of Grubba's office: the north door back to the corridor (tou_04) and the west door to tou_13. */
 static BeroEntry bero_data[] = {
@@ -141,7 +143,11 @@ static BeroEntry bero_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
+#if VERSION <= VERSION_DEMO_US
+NULL,
+#else
         n_bero_match_reset, // exitEvent
+#endif
         "tou_04", // nextMapName
         "s_bero_5", // nextBeroName
         5, // enterAnimeType
@@ -156,7 +162,11 @@ static BeroEntry bero_data[] = {
         BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
+#if VERSION <= VERSION_DEMO_US
+        (s32*)evt_dakuto, // enterEvent
+#else
         evt_dakuto, // enterEvent
+#endif
         -1, // caseType
         NULL, // exitEvent
         "tou_13", // nextMapName
@@ -176,8 +186,10 @@ static BeroEntry bero_data[] = {
  * the story advances to STG3_31_GRUBBAS_PLANS and the office door's entrance is switched on.
  */
 EVT_BEGIN(evt_takurami)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
     // The partner spots a paper in the drawer and Mario takes it out.
+#endif
     CALL(evt_msg_print_party, STRING("stg3_tou_456_01"))
     CALL(evt_party_stop, 0)
     CALL(evt_party_move_pos2, 0, 100, 60, FLOAT(60.0f))
@@ -202,11 +214,19 @@ EVT_BEGIN(evt_takurami)
     CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_open_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(n_door_open)
+#else
         CALL_CHILD(PTR(n_door_open))
+#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -216,11 +236,19 @@ EVT_BEGIN(evt_takurami)
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
         SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(bero_close_door_play_se)
+#else
         SPAWN_EVENT(PTR(bero_close_door_play_se))
+#endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -180, 0, 500)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(n_door_open)
+#else
             CALL_CHILD(PTR(n_door_open))
+#endif
             IF_INT_EQUAL(LW(1), 0)
                 BREAK_LOOP
             END_IF
@@ -250,11 +278,19 @@ EVT_BEGIN(evt_takurami)
     WAIT_MS(300)
     CALL(evt_npc_move_position, STRING("ガンス"), 0, -130, 0, FLOAT(100.0f), 1)
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_open_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(n_door_open)
+#else
         CALL_CHILD(PTR(n_door_open))
+#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -265,11 +301,19 @@ EVT_BEGIN(evt_takurami)
     END_INLINE_EVENT
     WAIT_MS(500)
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_close_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(n_door_open)
+#else
         CALL_CHILD(PTR(n_door_open))
+#endif
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -281,9 +325,17 @@ EVT_BEGIN(evt_takurami)
     WAIT_MS(300)
     // The story moves on to Grubba's plans, the office door's entrance is switched on
     // and control returns to Mario.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
+#endif
     SET_VALUE(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(bero_case_switch_on)
+#else
     CALL_CHILD(PTR(bero_case_switch_on))
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -291,41 +343,60 @@ EVT_END()
 
 /** Closes the desk drawer (kami_2 papers hidden) with the drawer-shut sound and re-registers evt_hiki_open. */
 EVT_BEGIN(evt_hiki_close)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, LW(0), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DRAWER_SHUT1"), LW(10), LW(11), LW(12), 0)
     SET_VALUE(LW(8), LW(0))
     SET_VALUE(LW(9), LW(1))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 100, 0, 30)
+    LOOP(31)
+        CALL(evt_sub_intpl_get_value)
+#else
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 100, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#endif
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
         CALL(evt_mapobj_trans, 1, LW(8), 0, 0, LW(0))
         CALL(evt_hit_bind_update, LW(9))
         WAIT_FRAMES(1)
+#if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
+#endif
     END_LOOP
     SET_VALUE(LW(0), LW(8))
     SET_VALUE(LW(1), LW(9))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(evt_hiki_open), 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
+#endif
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
 
 // LW(0)/LW(1) carry the drawer object and its bound hit name across open/close trigger swaps.
 EVT_BEGIN(evt_hiki_open)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     // The partner comes over to the desk when it is the special drawer and Grubba's secret is still unknown.
+#endif
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+CALL(evt_mario_key_onoff, 0)
+#else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
+#endif
             BEGIN_INLINE_EVENT
                 CALL(evt_party_stop, 0)
                 WAIT_MS(100)
@@ -349,16 +420,24 @@ EVT_BEGIN(evt_hiki_open)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DRAWER_OPEN1"), LW(10), LW(11), LW(12), 0)
     SET_VALUE(LW(8), LW(0))
     SET_VALUE(LW(9), LW(1))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 100, 30)
+    LOOP(31)
+        CALL(evt_sub_intpl_get_value)
+#else
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
+#endif
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
         CALL(evt_mapobj_trans, 1, LW(8), 0, 0, LW(0))
         CALL(evt_hit_bind_update, LW(9))
         WAIT_FRAMES(1)
+#if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
+#endif
     END_LOOP
     // A button case is registered so the drawer can be pushed shut again.
     SET_VALUE(LW(0), LW(8))
@@ -366,27 +445,47 @@ EVT_BEGIN(evt_hiki_open)
     CALL(evt_run_case_evt, CASE_PUSH, 1, LW(1), 0, PTR(evt_hiki_close), 0)
     // The special drawer plays the discovery scene of Grubba's secret paper.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+            CALL_CHILD(evt_takurami)
+#else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             CALL_CHILD(PTR(evt_takurami))
             CALL(evt_mario_key_onoff, 1)
+#endif
             CALL(evt_party_run, 0)
+#if VERSION > VERSION_DEMO_US
             CALL(evt_cam_letter_box_disable, 0)
+#endif
             CALL(evt_exit_case_evt)
             RETURN
         END_IF
     END_IF
     // The other drawer holds a Star Piece, which Mario takes the first time only.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_N"))
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TOU05_DRAWER_STAR_PIECE_TAKEN), 0)
+#else
         IF_INT_EQUAL(GSWF_TOU_05_DRAWER_STAR_PIECE, 0)
+#endif
             CALL(evt_item_entry, STRING("item02"), ITEM_STAR_PIECE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
             CALL(evt_item_get_item, STRING("item02"))
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_TOU05_DRAWER_STAR_PIECE_TAKEN), 1)
+            SET_VALUE(GSWF(GSWF_TOU05_STAR_PIECE_DRAWER), 1)
+#else
             SET_VALUE(GSWF_TOU_05_DRAWER_STAR_PIECE, 1)
             SET_VALUE(GSWF_STARPIECE_58, 1)
+#endif
         END_IF
     END_IF
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 1)
+#endif
     CALL(evt_party_run, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_cam_letter_box_disable, 0)
+#endif
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
@@ -945,9 +1044,13 @@ static EVT_BEGIN(evt_1st_leagu)
     // Grubba, startled, leaps out from behind the desk (the drawer is shoved shut).
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_npc_get_position, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), LW(0), LW(1), LW(2))
+#if VERSION > VERSION_DEMO_US
     CALL(evt_npc_sound_data_set, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     CALL(evt_npc_jump_position_nohit, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), LW(0), LW(1), LW(2), 300, 20)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_npc_sound_data_reset, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(300)
     SET_VALUE(LW(0), STRING("hikidasi_H"))
@@ -1016,7 +1119,11 @@ static EVT_BEGIN(evt_1st_leagu)
     // Mario follows, the escort to the major-league room is queued and the map changes to the corridor.
     CALL(evt_party_run, 0)
     CALL(evt_mario_mov_pos2, 0, -200, FLOAT(60.0f))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_TOU_JOLENE_ESCORT_MAJORS_PENDING), 1)
+#else
     SET_VALUE(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
+#endif
     CALL(evt_bero_mapchange, STRING("tou_04"), 0)
     RETURN
 EVT_END()
@@ -1338,10 +1445,18 @@ EVT_BEGIN(tou_05_init_evt)
     // Set up the doors, the camera animation and the Star Piece on the floor.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(evt_bero_info_run)
+#else
     CALL_CHILD(PTR(evt_bero_info_run))
+#endif
     CALL(evt_map_playanim, STRING("anm_camera"), MAP_ANIM_PLAY_LOOP, 0)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF(GSWF_TOU05_STAR_PIECE), 0)
+#else
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("paifu"), MAP_OBJ_FLAG_CLIP)
+#endif
     CALL(evt_bero_get_entername, LW(0))
     // Entering through the air vent ("fall"): Mario drops into the office from the ceiling
     // and the partner follows a moment later.
@@ -1379,7 +1494,11 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_30_04_AIR_DUCT_EXIT)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_30_04_AIR_DUCT_EXIT)
+#endif
         SET_VALUE(LW(0), STRING("hikidasi_N"))
         SET_VALUE(LW(1), STRING("a_hikidasi_N"))
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -1392,12 +1511,20 @@ EVT_BEGIN(tou_05_init_evt)
     // Place the NPCs; talking to Grubba's desk becomes available early in the story,
     // and the vent peek is set up.
     CALL(evt_npc_setup, PTR(npcEnt))
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_03_GRUBBA)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_12_JOLENES_SECRET)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
+#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("fall"))
             SPAWN_EVENT_GET_ID(PTR(evt_nozoki_msg), GW(9))
@@ -1425,37 +1552,78 @@ EVT_BEGIN(tou_05_init_evt)
         RETURN
     END_IF
     SET_VALUE(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_03_GRUBBA)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
+#endif
         SET_VALUE(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TOU_GRUBBA_ESCORT_PENDING), 0)
+            SPAWN_EVENT(evt_sensyu)
+#else
         IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
             SPAWN_EVENT(PTR(evt_sensyu))
+#endif
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_TOU_GRUBBA_ESCORT_PENDING), 0)
+            SPAWN_EVENT(evt_sensyu2)
+#else
             SET_VALUE(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
             SPAWN_EVENT(PTR(evt_sensyu2))
+#endif
         END_IF
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_TOU_PROMOTION_PENDING), 1)
+#else
     IF_INT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         SET_VALUE(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(evt_1st_leagu)
+#else
         SPAWN_EVENT(PTR(evt_1st_leagu))
+#endif
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // Choose the music and ambience for the story point.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
+#endif
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
         IF_INT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+            SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
             SWITCH(GSW_STORY_PROGRESS)
+#endif
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -1463,13 +1631,21 @@ EVT_BEGIN(tou_05_init_evt)
         END_IF
     END_IF
     // Show the open or closed air duct, depending on whether the way out has been used.
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_LESS(STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(LF(0), 0)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LF(0), 1)
         CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TOU13_DUCT_EXIT_OPEN_REVISIT), 0)
+#else
         IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
+#endif
             SET_VALUE(LF(0), 0)
             ELSE
             SET_VALUE(LF(0), 1)
@@ -1483,11 +1659,22 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // After the return to Rogueport, a visitor who has not yet re-entered the league gets Jolene's re-entry
+    // talk.
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("fall"))
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_EQUAL(GSWF(GSWF_TOU_REENTERED_LEAGUE), 0)
+                SPAWN_EVENT(evt_sensyu_reentry)
+#else
             IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
                 SPAWN_EVENT(PTR(evt_sensyu_reentry))
+#endif
             END_IF
         END_IF
     END_IF

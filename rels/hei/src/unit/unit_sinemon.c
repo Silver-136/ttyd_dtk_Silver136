@@ -95,6 +95,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 /** Defence of the Moon Cleft's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {30, 70, 30, 100, 30, 100, 0, 50, 100, 50, 100, 50, 100, 60, 60, 30, 10, 100, 60, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     30, // sleep
     80, // stop
@@ -119,6 +122,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Body part of the Moon Cleft: a single part using the model "c_sinemon". */
 static BattleUnitKindPart parts[] = {

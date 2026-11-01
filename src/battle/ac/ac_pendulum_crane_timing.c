@@ -37,7 +37,9 @@ typedef struct PendulumWork {
     s32 flag;     // 0x3C
     s32 rate;     // 0x40
     s32 sfxId;    // 0x44
+#if VERSION > VERSION_DEMO_US
     s32 zone;     // 0x48
+#endif
     s32 endTimer; // 0x4C
 } PendulumWork;
 
@@ -70,18 +72,29 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
     PADStatus* pad;
     f32 accel;
     f32 mag;
+#if VERSION > VERSION_DEMO_US
     s32 zone;
+#endif
     s32 rate;
 
     ac = &work->actionCommands;
     autoCommand = FALSE;
     cw = (PendulumWork*)ac->work;
+#if VERSION <= VERSION_DEMO_US
+    disp = (BattleACDispParams*)&ac->disp;
+#else
     disp = &ac->disp;
+#endif
     if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
+#if VERSION <= VERSION_DEMO_US
+    unit = BattleGetUnitPtr(work, PC_PARAMS(work)->unitId);
+    BtlUnit_GetPartsPtr(unit, PC_PARAMS(work)->partsId);
+#else
     unit = BattleGetUnitPtr(work, work->actionCommands.params[PENDULUM_PARAM_UNIT_ID]);
     BtlUnit_GetPartsPtr(unit, work->actionCommands.params[PENDULUM_PARAM_PARTS_ID]);
+#endif
 
     switch (work->actionCommands.acState) {
         case 0:
@@ -91,10 +104,16 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             disp->slideTimer = 20;
             cw->frame = 0;
             cw->angle = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+            cw->cur = PC_PARAMS(work)->period;
+#else
             cw->cur = work->actionCommands.params[PENDULUM_PARAM_PERIOD];
+#endif
             cw->vel = 0;
             cw->force = 3.0f;
+#if VERSION > VERSION_DEMO_US
             cw->zone = -1;
+#endif
             cw->button = PAD_BUTTON_A;
             work->actionCommands.outputParams[0] = 0;
             work->actionCommands.outputParams[1] = _get_angle_hp(50);
@@ -105,9 +124,15 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             cw->sfxId = -1;
             break;
         case 100:
+#if VERSION <= VERSION_DEMO_US
+            BtlUnit_SetRotateOffset(unit, 0.0f, (f32)PC_PARAMS(work)->rotOffset, 0.0f);
+            unit = BattleGetUnitPtr(work, PC_PARAMS(work)->unitId);
+            BtlUnit_GetPartsPtr(unit, PC_PARAMS(work)->partsId);
+#else
             BtlUnit_SetRotateOffset(unit, 0.0f, (f32)work->actionCommands.params[PENDULUM_PARAM_ROT_OFFSET], 0.0f);
             unit = BattleGetUnitPtr(work, work->actionCommands.params[PENDULUM_PARAM_UNIT_ID]);
             BtlUnit_GetPartsPtr(unit, work->actionCommands.params[PENDULUM_PARAM_PARTS_ID]);
+#endif
             BtlUnit_GetPos(unit, &cw->pos.x, &cw->pos.y, &cw->pos.z);
             cw->basePos = cw->pos;
             cw->frame = 0;
@@ -116,16 +141,29 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             work->actionCommands.acState = 1000;
         case 1000:
             cw->frame++;
+#if VERSION <= VERSION_DEMO_US
+            cw->ang360 = (f32)(((cw->cur + cw->vel) % (PC_PARAMS(work)->period * 2)) * 360 /
+                               (PC_PARAMS(work)->period * 2));
+#else
             cw->ang360 = (f32)(((cw->cur + cw->vel) % (work->actionCommands.params[PENDULUM_PARAM_PERIOD] * 2)) * 360 /
                                (work->actionCommands.params[PENDULUM_PARAM_PERIOD] * 2));
+#endif
             cw->angle = reviseAngle(45.0f * sinfd(cw->ang360));
+#if VERSION <= VERSION_DEMO_US
+            pad = (u8*)_battleWorkPointer;
+#else
             pad = &_battleWorkPointer->padWork[0].padData[0];
+#endif
             accel = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+            if(dir)
+#else
             if (cw->ang360 >= 90.0f && cw->ang360 < 270.0f) {
                 dir = -1.0f;
             } else {
                 dir = 1.0f;
             }
+#endif
             if (ac->acFlags & AC_PENDULUM_CRANE_FLAG_TRIGGER_BRAKE_UNUSED) {
                 if (pad->triggerRight > 10 && pad->triggerLeft < 10) {
                     if (dir < 0.0f) {
@@ -148,21 +186,34 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
                 }
             }
             cw->vel = (s32)((f32)cw->vel + accel);
+#if VERSION <= VERSION_DEMO_US
+            if(dir)
+#else
             if (cw->ang360 >= 90.0f && cw->ang360 < 270.0f) {
                 dir = -1.0f;
             } else {
                 dir = 1.0f;
             }
+#endif
             cw->cur = (s32)((f32)cw->cur + cw->force);
+#if VERSION <= VERSION_DEMO_US
+            cw->ang360 = (f32)(((cw->cur + cw->vel) % (PC_PARAMS(work)->period * 2)) * 360 /
+                               (PC_PARAMS(work)->period * 2));
+#else
             cw->ang360 = (f32)(((cw->cur + cw->vel) % (work->actionCommands.params[PENDULUM_PARAM_PERIOD] * 2)) * 360 /
                                (work->actionCommands.params[PENDULUM_PARAM_PERIOD] * 2));
+#endif
             cw->angle = reviseAngle(45.0f * sinfd(cw->ang360));
             BtlUnit_SetRotate(unit, 0.0f, 0.0f, cw->angle);
+#if VERSION <= VERSION_DEMO_US
+            if(dir2)
+#else
             if (cw->ang360 >= 90.0f && cw->ang360 < 270.0f) {
                 dir2 = -1.0f;
             } else {
                 dir2 = 1.0f;
             }
+#endif
             if (dir != dir2) {
                 cw->flag = 0;
             }
@@ -170,6 +221,9 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             work->actionCommands.outputParams[1] = _get_angle_hp(rate);
             cw->rate = rate;
             rate = _get_angle_rate(cw->angle);
+#if VERSION <= VERSION_DEMO_US
+if (rate == 0 || rate == 100) {
+#else
             zone = -1;
             if (rate <= 5) {
                 zone = 0;
@@ -177,11 +231,18 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
                 zone = 1;
             }
             if (zone != -1 && zone != cw->zone) {
+#endif
                 psndSFXOn("SFX_AC_GAUGE_MOVE1");
+#if VERSION > VERSION_DEMO_US
                 cw->zone = zone;
+#endif
             }
             inRange = FALSE;
+#if VERSION <= VERSION_DEMO_US
+            if (autoCommand && (s32)work->actionCommands.outputParams[1] >= _get_angle_hp(50)) {
+#else
             if (autoCommand && work->actionCommands.outputParams[1] >= _get_angle_hp(50)) {
+#endif
                 inRange = TRUE;
             }
             if (BattlePadCheckTrigger(cw->button) || inRange) {
@@ -191,7 +252,11 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
                 work->actionCommands.acState = 1002;
                 break;
             }
+#if VERSION <= VERSION_DEMO_US
+            if (cw->frame > PC_PARAMS(work)->maxFrames) {
+#else
             if (cw->frame > work->actionCommands.params[PENDULUM_PARAM_MAX_FRAMES]) {
+#endif
                 work->actionCommands.result = 0;
                 work->actionCommands.acState = 1002;
             }

@@ -176,7 +176,11 @@ EffectEntry* effStardust2N64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
  * it pops in, then falls (type 5 from the start), type 4 also circling the Y axis 12 degrees per frame;
  * the effect ends when every sparkle is done. Each sparkle cycles through 8 shapes; drawn on the work's camera.
  */
+#if VERSION <= VERSION_DEMO_US
+static void effStardust2Main(EffectEntry* effect) {
+#else
 void effStardust2Main(EffectEntry* effect) {
+#endif
     EffStardust2N64Work* w = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -198,7 +202,11 @@ void effStardust2Main(EffectEntry* effect) {
     w->frame++;
     type = w->type;
     frame = w->frame;
+#if VERSION <= VERSION_DEMO_US
+    if (((u32)type <= 1 || type == 3 || type >= 10) && w->life < 0) {
+#else
     if ((type == 0 || type == 1 || type == 3 || type >= 10) && w->life < 0) {
+#endif
         effDelete(effect);
         return;
     }
@@ -209,12 +217,21 @@ void effStardust2Main(EffectEntry* effect) {
         case 1:
             w->color = (frame + i) & 7;
             w->velocity.z += -0.02f;
+#if VERSION <= VERSION_DEMO_US
+if (frame - 1 < 14) {
+                    s = 0.01f * (f32)speed_data[frame - 1];
+#else
             idx = frame - 1;
             if (idx < 14) {
                 s = 0.01f * (f32)speed_data[idx];
+#endif
                 w->position.x = w->velocity.x * s;
                 w->position.y = w->velocity.y * s + w->velocity.z;
+#if VERSION <= VERSION_DEMO_US
+                    w->scale = 0.01f * (f32)scale_data[frame - 1];
+#else
                 w->scale = 0.01f * (f32)scale_data[idx];
+#endif
             } else {
                 f32 speed = 1.0f;
                 f32 base = 360.0f / (f32)(effect->count - 1) * (f32)i + 60.0f;
@@ -240,9 +257,14 @@ void effStardust2Main(EffectEntry* effect) {
             break;
         case 3:
             w->color = (frame + i + i) & 7;
+#if VERSION <= VERSION_DEMO_US
+if (frame - 1 < 14) {
+                    w->scale = 0.01f * (f32)scale_data[frame - 1];
+#else
             idx = frame - 1;
             if (idx < 14) {
                 w->scale = 0.01f * (f32)scale_data[idx];
+#endif
             } else {
                 w->type = 30;
             }
@@ -262,9 +284,14 @@ void effStardust2Main(EffectEntry* effect) {
             }
             w->frame++;
             frame = w->frame;
+#if VERSION <= VERSION_DEMO_US
+if (frame - 1 < 14) {
+                    w->scale = 0.01f * (f32)scale_data[frame - 1];
+#else
             idx = frame - 1;
             if (idx < 14) {
                 w->scale = 0.01f * (f32)scale_data[idx];
+#endif
                 if (type == 5) {
                     w->velocity.y += w->velocity.z;
                     w->position.y += w->velocity.y;
@@ -285,7 +312,9 @@ void effStardust2Main(EffectEntry* effect) {
             break;
         }
     }
+#if VERSION > VERSION_DEMO_US
     // FAKE: (u32)type > 1 tests type other than 0 and 1; type != 0 && type != 1 changes the object
+#endif
     if ((u32)type > 1 && type != 3 && type < 10 && done >= effect->count - 1) {
         effDelete(effect);
         return;

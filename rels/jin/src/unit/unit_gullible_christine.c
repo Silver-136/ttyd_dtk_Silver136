@@ -29,9 +29,17 @@ static EvtWord fmario_zoom_christine[19];
 static EvtWord gparty_zoom_christine[19];
 static EvtWord init_event_christine[42];
 EvtWord damage_event_christine[22];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_christine[126];
+#else
 static EvtWord dead_event_christine[147];
+#endif
 static EvtWord attack_event_christine[690];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event_christine[6];
+#else
 static EvtWord wait_event_christine[7];
+#endif
 
 /**
  * Unit kind of the Goombella double:
@@ -127,6 +135,9 @@ static BattleUnitDefense defence_christine = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Goombella double's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_christine = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_christine = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
+#else
 static StatusVulnerability regist_christine = {
     60, // sleep
     80, // stop
@@ -151,6 +162,7 @@ static StatusVulnerability regist_christine = {
     100, // invisible
     0, // ohko
 };
+#endif
 
 /** Event table of the Goombella double: its defeat script. */
 static BattleDataEntry data_table_christine[] = {
@@ -239,7 +251,11 @@ static EVT_BEGIN(dead_event_christine)
     IF_INT_EQUAL(LW(6), 1)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+#if VERSION <= VERSION_DEMO_US
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+#else
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+#endif
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
@@ -247,16 +263,24 @@ static EVT_BEGIN(dead_event_christine)
     SWITCH(GW(19))
         CASE_EQUAL(0)
         CALL_CHILD(gparty_zoom_christine)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_kur"), 0, UNIT_ID_SELF)
+#else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_kur"), 0, -2)
+#endif
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
         WAIT_MS(500)
         CALL_CHILD(fmario_zoom_christine)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_04"), 0, GW(16))
         WAIT_MS(200)
         CASE_EQUAL(1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
         LOOP(0)
             IF_INT_EQUAL(GW(19), 2)
                 BREAK_LOOP
@@ -265,7 +289,9 @@ static EVT_BEGIN(dead_event_christine)
         END_LOOP
         CASE_EQUAL(2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
+#if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+#endif
     END_SWITCH
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
     SET_VALUE(GW(20), 2)
@@ -507,5 +533,9 @@ static USER_FUNC(_krb_get_dir) {
 static EVT_BEGIN(wait_event_christine)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+#else
 EVT_END_PAD()
+#endif
 

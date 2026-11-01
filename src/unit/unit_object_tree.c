@@ -15,7 +15,11 @@ USER_FUNC(_turn_tree);
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
 static EvtWord damage_event[14];
+#if VERSION <= VERSION_DEMO_US
+static s32 _data[34];
+#else
 static s32 _data[35];
+#endif
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;

@@ -95,7 +95,11 @@ static EvtWord trans_magic_event[49];
 static EvtWord yokeyoke_magic_event[49];
 static EvtWord recover_magic_event[70];
 static EvtWord bunsin_event[152];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord spawn_event[72];
+#else
 static EvtWord spawn_event[76];
+#endif
 static EvtWord wait_event[386];
 
 /**
@@ -204,6 +208,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Defence attributes of the Dark Wizzerd: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {10, 50, 50, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 30, 75, 100, 40, 100, 100, 90};
+#else
 static StatusVulnerability regist = {
     10, // sleep
     50, // stop
@@ -228,7 +235,11 @@ static StatusVulnerability regist = {
     100, // invisible
     90, // ohko
 };
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 90};
+#else
 static StatusVulnerability regist_bunsin = {
     0, // sleep
     0, // stop
@@ -253,6 +264,7 @@ static StatusVulnerability regist_bunsin = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /** Parts of the Dark Wizzerd: 5 parts (model c_maho_b). */
 static BattleUnitKindPart parts[] = {
@@ -283,13 +295,21 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
+#if VERSION <= VERSION_DEMO_US
+SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
+#else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
+#endif
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -1845,7 +1865,9 @@ static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(mahorn_copy_status, LW(13), LW(3))
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
+#endif
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)
     CALL(btlevtcmd_SetEventAttack, LW(3), PTR(attack_event_bunsin))
     CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(&regist_bunsin))

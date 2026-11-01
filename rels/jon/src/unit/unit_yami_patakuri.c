@@ -106,6 +106,9 @@ static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist_patakuri = {80, 100, 100, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 100, 130, 100, 80, 100, 100, 80};
+#else
 static StatusVulnerability regist_patakuri = {
     80, // sleep
     90, // stop
@@ -130,6 +133,7 @@ static StatusVulnerability regist_patakuri = {
     100, // invisible
     80, // ohko
 };
+#endif
 
 /** Weapon of the flying Paragloomba's swoop: damage 3. */
 static BattleWeapon weapon_patakuri_attack = {
@@ -454,6 +458,9 @@ static BattleUnitDefense defence = {0};
  */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 100, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 100, 100, 100, 80, 100, 100, 80};
+#else
 static StatusVulnerability regist = {
     80, // sleep
     90, // stop
@@ -478,6 +485,7 @@ static StatusVulnerability regist = {
     100, // invisible
     80, // ohko
 };
+#endif
 
 /**
  * Part of the Paragloomba once it has lost its wings (a Gloomba):

@@ -142,6 +142,9 @@ s32 marioGetHammerLevel(void) {
  */
 void mot_hammer(void) {
     MarioWork* mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+    Vec* unused;
+#endif
     s32 snd;
     s32 kind;
     f32 px, pz;
@@ -177,7 +180,11 @@ void mot_hammer(void) {
             mario->mot.hammer.dir = hamDir(mario);
         }
         if (hitGetAttr(hit) & HIT_ATTR_MOBJ) {
+#if VERSION <= VERSION_DEMO_US
+            s32 ok = chkBlock((HamMobj*)mobjHitObjPtrToPtr(hit));
+#else
             s32 ok = chkBlock(mobjHitObjPtrToPtr(hit));
+#endif
             if (ok) {
                 kind = 0;
             }
@@ -195,7 +202,9 @@ void mot_hammer(void) {
         }
         if (kind != 0) {
             {
+#if VERSION > VERSION_DEMO_US
                 // FAKE: spare copy of kind in its own block; using kind directly changes the object
+#endif
                 s32 k = kind;
                 mario->mot.hammer.hitFrames = k == 7 ? 3 : k;
             }
@@ -219,7 +228,9 @@ void mot_hammer(void) {
             }
             psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
         }
+#if VERSION > VERSION_DEMO_US
         mario->mot.hammer.hitKind = kind;
+#endif
     }
     {
         f32 a = mario->mot.hammer.dir;
@@ -261,6 +272,7 @@ void mot_hammer(void) {
         }
         mario->currSubMotionId = 1;
         mario->hitobjHammer = mario->hitobjHammerNew;
+#if VERSION > VERSION_DEMO_US
         px = mario->position.x;
         py = mario->position.y;
         pz = mario->position.z;
@@ -318,6 +330,7 @@ void mot_hammer(void) {
         if (efType > 0) {
             effKemuTestEntry(efType, px, py + ez, pz, 1.0f);
         }
+#endif
         {
             MarioWork* m = marioGetPtr();
             snd = 0x161;
@@ -332,8 +345,12 @@ void mot_hammer(void) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
                 break;
             }
+#if VERSION <= VERSION_DEMO_US
+for (i = 0; i < 5; i++) {
+#else
             // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
             for (i = 0; (u32)i < 10; i++) {
+#endif
                 if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
                     snd = se_data[m->hammerSfxIdx + 1];
                     m->hammerSfxIdx += 2;
@@ -713,6 +730,25 @@ f32 marioGetAngleKaitenHammer(void) {
  * Cleanup when the spin hammer motion ends early:
  * paper animation off, camera shift reset and the facing and mirror locks released.
  */
+#if VERSION <= VERSION_DEMO_US
+void mot_ham2_post(void) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
+        marioPaperOff();
+    }
+    {
+        MarioWork* m = marioGetPtr();
+        m->camShiftTargetZ = 0.0f;
+        m->camShiftRate.z = 0.01f;
+    }
+    marioPaperOff();
+marioPaperLightOn();
+mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
+    marioAdjustMoveDir();
+}
+#else
 void mot_ham2_post(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
@@ -734,13 +770,18 @@ void mot_ham2_post(void) {
     mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
     marioAdjustMoveDir();
 }
+#endif
 
 /**
  * Probes in front of Mario where the hammer will land and returns the hit object, or NULL;
  * *out gets the hit kind (0 nothing, 4/5/6 a wall or object at high, middle or low height,
  * 7 something just above Mario's head height) that picks the swing pose and sound.
  */
+#if VERSION <= VERSION_DEMO_US
+static HitEntry* hitEstimate(s32* out) {
+#else
 HitEntry* hitEstimate(s32* out) {
+#endif
     MarioWork* mario;
     HitCheckQuery q;
     Vec pos;
@@ -753,12 +794,20 @@ HitEntry* hitEstimate(s32* out) {
     f32 h;
     s32 i;
     f32 k5 = 5.0f;
+#if VERSION <= VERSION_DEMO_US
+f32 ang;
+#endif
     mario = marioGetPtr();
     *out = 0;
     a = mario->displayDirection;
     {
+#if VERSION <= VERSION_DEMO_US
+        f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? (-20.0f) : (0.0f);
+        if ((a >= 90.0f) && (a <= 270.0f)) {
+#else
         f32 off = (marioGetPtr()->dispFlags & MARIO_DISP_FLAG_REAR_POSE) ? -20.0f : 0.0f;
         if (a >= 90.0f && a <= 270.0f) {
+#endif
             a = toMovedir2(180.0f, off);
         } else {
             a = toMovedir2(0.0f, off);
@@ -766,7 +815,12 @@ HitEntry* hitEstimate(s32* out) {
     }
     sincosf(&s, &c, a);
     h = mario->wPlayerCollisionBox.y;
+#if VERSION <= VERSION_DEMO_US
+ang = 3.14159265f;
+    cy = (f32)cos(ang);
+#else
     cy = (f32)cos(3.14159265f);
+#endif
     pos = mario->position;
     {
         Vec dir1 = {0.0f, 0.0f, 0.0f};
@@ -783,7 +837,12 @@ HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
+#if VERSION <= VERSION_DEMO_US
+ang = 1.2217306f;
+    cy = (f32)cos(ang);
+#else
     cy = (f32)cos(1.2217306f);
+#endif
     {
         Vec dir2 = {0.0f, 0.0f, 0.0f};
         pos.x = (s * k5) + mario->position.x;
@@ -797,11 +856,20 @@ HitEntry* hitEstimate(s32* out) {
         q.targetDistance = 26.0f;
         hit = hitCheckVecFilter(&q, NULL);
         if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
+#if VERSION <= VERSION_DEMO_US
+            *out = ((q.hitPos.y - mario->position.y) > 30.0f) ? (4) : (5);
+#else
             *out = (q.hitPos.y - mario->position.y > 30.0f) ? 4 : 5;
+#endif
             return hit;
         }
     }
+#if VERSION <= VERSION_DEMO_US
+ang = 0.78539816f;
+    cy = (f32)cos(ang);
+#else
     cy = (f32)cos(0.78539816f);
+#endif
     {
         Vec dir3 = {0.0f, 0.0f, 0.0f};
         pos.x = (s * k5) + mario->position.x;
@@ -819,7 +887,12 @@ HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
+#if VERSION <= VERSION_DEMO_US
+ang = 0.0f;
+    cy = (f32)cos(ang);
+#else
     cy = (f32)cos(0.0f);
+#endif
     {
         Vec dir4 = {0.0f, 0.0f, 0.0f};
         dir4.y = -cy;
@@ -848,17 +921,49 @@ HitEntry* hitEstimate(s32* out) {
                 q.targetDistance = d;
                 hit = hitCheckVecFilter(&q, NULL);
                 if (hit && (!(hitGetAttr(hit) & (HIT_ATTR_SHELL_THROUGH | HIT_ATTR_NPC_ONLY | HIT_ATTR_BERO)))) {
+#if VERSION <= VERSION_DEMO_US
+                    *out = ((q.hitPos.y - mario->position.y) > 13.0f) ? (5) : (6);
+#else
                     *out = (q.hitPos.y - mario->position.y > 13.0f) ? 5 : 6;
+#endif
                     return hit;
                 }
             }
-
+#if VERSION <= VERSION_DEMO_US
+#endif
         }
     }
     return hit;
 }
 
 /** Names of the small and big blocks that only a level 1, 2 or 3 hammer (Hammer, Super, Ultra) can break. */
+#if VERSION <= VERSION_DEMO_US
+const char* not_fullswing_mobj[] = {
+    "MOBJ_RedJumpStand",
+    "MOBJ_RedJumpStand2",
+    "MOBJ_BlueJumpStand",
+    "MOBJ_BlueJumpStand2",
+    "MOBJ_MapJumpStand",
+    "MOBJ_SaveBlock",
+    "MOBJ_RecoverBlock",
+    "MOBJ_Lv1BigBigBlock",
+    "MOBJ_Lv2BigBigBlock",
+    "MOBJ_Lv3BigBigBlock",
+    "MOBJ_green_FlowBlock",
+    "MOBJ_IceBlock",
+    "MOBJ_PowerBlock",
+    "MOBJ_TreasureBox",
+    "MOBJ_BigTreasureBox",
+    "MOBJ_Lock",
+    "MOBJ_GreenPipeL",
+    "MOBJ_GreenPipeW",
+    "MOBJ_Singboard",
+    "MOBJ_Arrow",
+    "MOBJ_HardWoodBox",
+    "MOBJ_BombRock",
+    NULL,
+};
+#endif
 static const char isS1_str[] = "MOBJ_Lv1Block";
 static const char isB1_str[] = "MOBJ_Lv1BigBlock";
 static const char isS2_str[] = "MOBJ_Lv2Block";

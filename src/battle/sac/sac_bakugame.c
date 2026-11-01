@@ -139,7 +139,11 @@ static BattleWeapon weapon = {
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
+#else
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -148,8 +152,13 @@ static BattleWeapon weapon = {
     SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
+#if VERSION <= VERSION_DEMO_US
+0, // stopChance
+    0,
+#else
     100, // stopChance
     1, // stopTime
+#endif
     0, 0, 0, 0, 0, 0, 0, 0, // dizzyChance..electricChance
     0, 0, 0, 0, 0, 0, 0, 0, // electricTime..sizeChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // sizeChangeTime..defChangeStrength
@@ -318,6 +327,788 @@ USER_FUNC(bakuGameBombEntry) {
  * Returns args[0] holder (0 Mario's side, 1 enemies, 2 audience), args[1] gauge,
  * args[2] stop level (-1, or 2/3/4 for gauge under 33/66/above). The US+ releases halve the throw-back rate.
  */
+#if VERSION <= VERSION_DEMO_US
+USER_FUNC(bakuGameMain) {
+    s32 unused[8] = {0, 1, 2, 3, 4, 5, 6, 7}; // unused; kept because the original emits its initialiser
+    BakuWork* w = GetBakuGamePtr();
+    EvtWord* args;
+    BattleWork* bw = _battleWorkPointer;
+    BattleUnit* mario = BattleGetUnitPtr(bw, BattleTransID(event, -3));
+    BattleUnit* party = BattleGetUnitPtr(bw, BattleTransID(event, -4));
+    f32 x = 0.0f, y = 0.0f, z = 0.0f;
+    f32 hx = 0.0f, hy = 0.0f, hz = 0.0f;
+    s32 btns[3] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X};
+    BakuBtn* b;
+    f32 accel;
+    f32 k;
+    s32 flag;
+    s32 i;
+    s32 t;
+    s32 n;
+    BattleUnit* u;
+    BattleAudienceMember* m;
+    f32 v200 = -200.0f;
+    f32 v100 = -100.0f;
+    f32 frames = 40.0f;
+
+    args = event->args;
+    if (isFirstCall) {
+        w->state = 0;
+        bakuGameDecideButton(1);
+        for (i = 0; i < 3; i++) {
+            b = &w->btn[i];
+            b->button = btns[i];
+            b->hp = 100.0f;
+            b->scale = 0.0f;
+        }
+        memcpy(w->weapon, &weapon, 0xC0);
+        flag = 1;
+        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
+            u = BattleGetUnitPtr(bw, i);
+            if (u != NULL && u->alliance == ALLIANCE_ENEMY) {
+                if ((f32)u->width >= 100.0f) {
+                    flag = 1;
+                    break;
+                }
+                if (!(u->attributeFlags & kCeiling)) {
+                    flag = 0;
+                }
+            }
+        }
+        if (!flag) {
+            w->flags &= ~1;
+        } else {
+            w->flags |= 1;
+        }
+        flag = 0;
+        for (i = 0; i < 200; i++) {
+            if (bakuGameAudienceCanThrowPos(i) == 1 && BattleAudience_GetWaiting(i) == 1) {
+                flag = 1;
+            }
+        }
+        if (!flag) {
+            w->flags |= 2;
+        } else {
+            w->flags &= ~2;
+        }
+    }
+
+    switch (w->state) {
+        case 0:
+            for (i = 0; i < 3; i++) {
+                if (w->btn[i].state != 5) {
+                    goto state_end;
+                }
+            }
+            if (w->phase != 8) {
+                break;
+            }
+            if ((w->flags & 1) && w->hstate != 5) {
+                break;
+            }
+            w->state = 5;
+            break;
+        case 5:
+            w->state = 10;
+            w->timer = 0;
+            for (i = 0; i < 3; i++) {
+                b = &w->btn[i];
+                b->state = 10;
+                b->timer = 0;
+            }
+            w->phase = 10;
+            w->fuseTimer = irand(120) + 540;
+        case 10:
+            w->timer++;
+            if (w->timer > 60 && irand(150) == 0) {
+                for (i = 0; i < 3; i++) {
+                    w->btn[i].state = 10;
+                }
+                bakuGameDecideButton(0);
+                w->timer = 0;
+            }
+            if (w->timer == 180) {
+                w->timer = 180;
+                for (i = 0; i < 3; i++) {
+                    w->btn[i].state = 10;
+                }
+                bakuGameDecideButton(0);
+                w->timer = 0;
+            }
+            t = -1;
+            if (w->holder == 1) {
+                if (irand(2) == 0) {
+                    t = 0;
+                } else {
+                    t = 2;
+                }
+            }
+            if (w->holder == 2) {
+                if (irand(2) == 0) {
+                    t = 0;
+                } else {
+                    t = 1;
+                }
+            }
+            if (t != -1) {
+                for (i = 0; i < 3; i++) {
+                    b = &w->btn[i];
+                    if (b->target == t) {
+                        b->hp -= VERSION_PICK(5.0f, 2.5f);
+                    }
+                }
+            }
+            break;
+        case 20:
+            for (i = 0; i < 3; i++) {
+                w->btn[i].state = 20;
+            }
+            w->phase = 40;
+            w->frame = 60;
+            w->state = 25;
+            break;
+        case 25:
+            if (w->phase == 50) {
+                w->state = 30;
+            }
+            break;
+        case 30:
+            animPoseRelease(w->poseId);
+            w->poseId = -1;
+            evtSetValue(event, args[0], w->holder);
+            evtSetFloat(event, args[1], w->gauge);
+            t = -1;
+            if (w->gauge > 0.0f && w->gauge < 33.0f) {
+                t = 2;
+            }
+            if (w->gauge >= 33.0f && w->gauge < 66.0f) {
+                t = 3;
+            }
+            if (w->gauge >= 66.0f) {
+                t = 4;
+            }
+            n = 4;
+            if (t < 4) {
+                n = t;
+            }
+            evtSetValue(event, args[2], n);
+            return EVT_RETURN_DONE;
+    }
+state_end:
+
+    for (i = 0; i < 3; i++) {
+        b = &w->btn[i];
+        switch (b->state) {
+            case 0:
+                b->state = 5;
+                break;
+            case 10:
+                b->state = 15;
+                b->scale = 1.0f;
+                break;
+            case 12:
+                b->scale = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, b->timer, 30);
+                b->timer++;
+                if (b->timer > 30) {
+                    b->state = 15;
+                }
+                break;
+            case 15:
+                if ((keyGetButtonTrg(0) & b->button) && w->pressWait == 0) {
+                    b->hp -= 100.0f;
+                }
+                break;
+            case 20:
+                b->pos = (Vec){0.0f, -1000.0f, 0.0f};
+                break;
+        }
+    }
+
+    switch (w->hstate) {
+        case 0:
+            if (!(w->flags & 1)) {
+                break;
+            }
+            {
+                Vec unusedv = {125.0f, 0.0f, -30.0f}; // unused; kept because the original emits its initialiser
+            }
+            w->hstate = 2;
+            w->hflag = -1;
+            w->texIdx = 0x5A;
+w->hpos = (Vec){300.0f, 0.0f, 100.0f};
+            w->hfrom = w->hpos;
+            w->hto = (Vec){125.0f, 0.0f, -30.0f};
+            w->hpos.y = 0.0f;
+            w->hto.z = 100.0f;
+w->htimer = 0;
+            w->hsteps = 30;
+        case 2:
+            w->hpos.x = intplGetValue(EASING_LINEAR, w->hfrom.x, w->hto.x, w->htimer, w->hsteps);
+            {
+                s32 r = w->htimer % 12;
+                if (r >= 0 && r <= 3) {
+                    w->texIdx = 0x5A;
+                }
+                if (r >= 4 && r <= 7) {
+                    w->texIdx = 0x5B;
+                }
+                if (r >= 8 && r <= 11) {
+                    w->texIdx = 0x5C;
+                }
+            }
+            w->htimer++;
+            if (w->htimer > w->hsteps) {
+                w->hstate = 5;
+                w->hpos = w->hto;
+            }
+            break;
+        case 5:
+            w->texIdx = 0x52;
+            break;
+        case 10:
+            w->texIdx = 0x54;
+            break;
+        case 15:
+            break;
+    }
+
+    if (w->phase >= 10 && w->phase <= 20 && w->fuseTimer <= 0) {
+        w->state = 20;
+        switch (w->holder) {
+            case 0:
+                bakuGameMarioSurpriseReset(mario, party);
+                break;
+            case 1:
+                bakuGameEnemySurpriseReset();
+                break;
+            case 2:
+                bakuGameAudienceSurpriseReset();
+                break;
+        }
+    }
+
+    if (w->phase >= 10 && w->phase <= 30) {
+        if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_X)) {
+            w->vel = 1.5f;
+        }
+        w->acc = -0.3f;
+        w->gauge += w->vel;
+        w->gauge += w->acc;
+        if (w->gauge > 110.0f) {
+            w->gauge = 110.0f;
+        }
+        if (w->gauge < 0.0f) {
+            w->gauge = 0.0f;
+            if (!psndSFXChk(w->sfx1)) {
+                psndSFXOff(w->sfx1);
+            }
+        }
+        if (w->gauge > 0.0f) {
+            if (psndSFXChk(w->sfx1) == -1) {
+                w->sfx1 = psndSFXOn("SFX_BTL_SAC_TIME1");
+            }
+        }
+        if (!psndSFXChk(w->sfx1)) {
+            psndSFX_pit(w->sfx1, 4096.0f * w->gauge / 100.0f);
+        }
+        w->vel -= 0.25f;
+        if (w->vel < 0.0f) {
+            w->vel = 0.0f;
+        }
+        w->rate = w->gauge >= 100.0f ? 1.0f : w->gauge / 100.0f;
+        w->fuseTimer--;
+        w->pressWait--;
+        if (w->pressWait < 0) {
+            w->pressWait = 0;
+        }
+        if (w->fuseTimer == 480) {
+            psndSFXOn("SFX_BTL_SAC_TIME4");
+        }
+        if (w->fuseTimer >= 480 && w->fuseTimer < 490) {
+            w->bombScale = w->c8 = intplGetValue(EASING_LINEAR, 2.0f, 3.0f, 489 - w->fuseTimer, 10);
+        }
+        if (w->fuseTimer == 360) {
+            psndSFXOn("SFX_BTL_SAC_TIME4");
+        }
+        if (w->fuseTimer >= 360 && w->fuseTimer < 370) {
+            w->bombScale = w->c8 = intplGetValue(EASING_LINEAR, 3.0f, 4.0f, 369 - w->fuseTimer, 10);
+        }
+        if (w->fuseTimer == 240) {
+            psndSFXOn("SFX_BTL_SAC_TIME4");
+        }
+        if (w->fuseTimer >= 240 && w->fuseTimer < 250) {
+            w->bombScale = w->c8 = intplGetValue(EASING_LINEAR, 4.0f, 5.0f, 249 - w->fuseTimer, 10);
+        }
+        if (w->fuseTimer == 120) {
+            psndSFXOn("SFX_BTL_SAC_TIME4");
+        }
+        if (w->fuseTimer >= 120 && w->fuseTimer < 130) {
+            w->bombScale = w->c8 = intplGetValue(EASING_LINEAR, 5.0f, 6.0f, 129 - w->fuseTimer, 10);
+        }
+        if (w->fuseTimer == 599) {
+            animPoseSetAnim(w->poseId, "S_1", 0);
+        }
+        if (w->fuseTimer == 400) {
+            animPoseSetAnim(w->poseId, "S_2", 0);
+        }
+        if (w->fuseTimer == 200) {
+            animPoseSetAnim(w->poseId, "S_3", 0);
+        }
+    }
+
+    switch (w->phase) {
+        case 0:
+            w->phase = 2;
+            w->gaugeY = 50.0f;
+            w->frame = 0;
+            w->pos = (Vec){0.0f, -1000.0f, 0.0f};
+            w->fuseTimer = -1;
+            w->bombScale = w->c8 = 2.0f;
+            w->c0 = 90.0f;
+        case 2:
+            w->gaugeX = intplGetValue(EASING_QUADRATIC_OUT, -1000.0f, 50.0f, w->frame, 30);
+            w->frame++;
+            if (w->frame > 30) {
+                w->phase = 4;
+            }
+            break;
+        case 4:
+            w->phase = 5;
+            w->pos = (Vec){-125.0f, 500.0f, -30.0f};
+            w->from = w->pos;
+            w->to = (Vec){-125.0f, 0.0f, -30.0f};
+            w->vy = (2.0f * (w->to.y - w->from.y) - -0.5f * 40.0f * 40.0f) / (2.0f * 40.0f);
+            w->frameTotal = w->frame = 40;
+        case 5:
+            w->pos.y += w->vy;
+            w->vy += -0.5f;
+            ((0, w))->frame--;
+            if (w->frame < 0) {
+                w->phase = 8;
+                w->pos.y = w->to.y;
+                w->holder = 0;
+                bakuGameMarioSurprise(mario, party);
+                btl_camera_shake_h(0, 4.0f, 0.0f, 10, 4);
+                psndSFXOn("SFX_BTL_SAC_TIME2");
+                BtlUnit_snd_se_pos(mario, "SFX_VOICE_MARIO_SURPRISED1", 0x7F, 0, &mario->position);
+            }
+            break;
+        case 10:
+            w->phase = 11;
+            w->frame = 0;
+            w->c0 = 70.0f;
+        case 11:
+if (w->cc == 2 && !(w->flags & 2)) {
+                w->c0 = 70.0f;
+            } else if (w->frame < 14) {
+                w->c0 -= 0.7f;
+            } else if (w->frame < 28) {
+                w->c0 += 0.7f;
+            }
+            w->frame++;
+            if (w->frame >= 28) {
+                w->frame = 0;
+            }
+for (i = 0; i < 3; i++) {
+                b = &w->btn[i];
+                if (b->hp <= 0.0f) {
+                    w->phase = 20;
+                    w->frame = 0;
+                    w->throwTarget = b->target;
+break;
+                }
+            }
+            if (w->holder != 0) {
+                break;
+            }
+            BtlUnit_GetPos(mario, &x, &y, &z);
+            BtlUnit_GetHomePos(mario, &hx, &hy, &hz);
+            mario->faceDirection = -1;
+            if (y == hy) {
+                if (irand(80) == 0) {
+                    w->mvy = -v200 / 20.0f;
+                    BtlUnit_SetPos(mario, x, 0.1f + y, z);
+                }
+            } else {
+                y += w->mvy;
+                w->mvy += -2.0f;
+                if (y < hy) {
+                    y = hy;
+                }
+                BtlUnit_SetPos(mario, x, y, z);
+            }
+            if (bakuGamePartyExist(party) == 1) {
+                BtlUnit_GetPos(party, &x, &y, &z);
+                BtlUnit_GetHomePos(party, &hx, &hy, &hz);
+                if (y == hy) {
+                    if (irand(80) == 0) {
+                        w->pvy = -v200 / 20.0f;
+                        BtlUnit_SetPos(party, x, 0.1f + y, z);
+                    }
+                } else {
+                    y += w->pvy;
+                    w->pvy += -2.0f;
+                    if (y < hy) {
+                        y = hy;
+                    }
+                    BtlUnit_SetPos(party, x, y, z);
+                }
+            }
+            break;
+        case 20:
+if (w->holder == w->throwTarget) {
+                w->phase = 30;
+                break;
+            }
+switch (w->holder) {
+                case 0:
+                    if (w->frame == 0) {
+                        BtlUnit_GetPos(mario, &x, &y, &z);
+                        BtlUnit_GetHomePos(mario, &hx, &hy, &hz);
+                        BtlUnit_SetPos(mario, hx, hy, hz);
+                        w->mfrom = (Vec){x, hy, z};
+                        w->mto = (Vec){w->pos.x, hy, 7.0f + w->pos.z};
+                        mario->faceDirection = -1;
+                        if (bakuGamePartyExist(party) == 1) {
+                            BtlUnit_GetPos(party, &x, &y, &z);
+                            BtlUnit_GetHomePos(party, &hx, &hy, &hz);
+                            BtlUnit_SetPos(party, hx, hy, hz);
+                        }
+                        BtlUnit_SetBodyAnim(mario, "M_W_1");
+                    }
+                    if (w->frame >= 0 && w->frame < 8) {
+                        x = intplGetValue(EASING_LINEAR, w->mfrom.x, w->mto.x, w->frame, 7);
+                        y = w->mfrom.y;
+                        z = intplGetValue(EASING_LINEAR, w->mfrom.z, w->mto.z, w->frame, 7);
+                        BtlUnit_SetPos(mario, x, y, z);
+                    }
+                    if (w->frame == 8) {
+                        BtlUnit_SetBodyAnim(mario, "M_U_2");
+                        mario->faceDirection = 1;
+                        w->to = w->pos;
+                        w->from = w->to;
+                        w->to.y += 30.0f * mario->sizeMultiplier;
+                    }
+                    if (w->frame >= 8 && w->frame < 13) {
+                        w->pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->frame - 8, 4);
+                    }
+                    if (w->frame > 15) {
+                        w->phase = 22;
+                    }
+                    break;
+                case 1:
+                    if (!(w->flags & 1)) {
+                        if (w->frame == 26) {
+                            w->hvy = -v100 / 20.0f;
+                            w->hpos.y = 0.0f;
+                        }
+                        if (w->frame >= 26) {
+                            w->hpos.y += w->hvy;
+                            w->hvy += -1.0f;
+                        }
+                        if (w->frame > 30) {
+                            w->phase = 22;
+                        }
+                        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
+                            u = BattleGetUnitPtr(bw, i);
+                            if (u != NULL && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
+                                u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
+                                if (w->frame == 0) {
+BtlUnit_SetBodyAnimType(u, 0x3F);
+}
+                                if (w->frame == 26) {
+                                    btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
+                                    if (!(u->attributeFlags & kFloating) && !(u->attributeFlags & kCeiling)) {
+                                        BtlUnit_GetHomePos(u, &hx, &hy, &hz);
+                                        BtlUnit_SetPos(u, hx, hy, hz);
+                                    }
+                                }
+                                if (w->frame >= 26 && !(u->attributeFlags & kFloating) && !(u->attributeFlags & kCeiling)) {
+                                    BtlUnit_GetHomePos(u, &hx, &hy, &hz);
+                                    BtlUnit_SetPos(u, hx, hy + w->hpos.y, hz);
+                                }
+                            }
+                        }
+                    } else {
+                        w->hstate = 15;
+                        if (w->frame == 26) {
+                            w->hvy = -v200 / 20.0f;
+                            accel = -2.0f;
+                        }
+                        if (w->frame >= 26) {
+                            w->hpos.y += w->hvy;
+                            w->hvy += accel;
+                            w->pos.y = 30.0f + w->hpos.y;
+                        }
+                        if (w->frame > 30) {
+                            w->phase = 22;
+                        }
+                    }
+                    break;
+                case 2:
+                    if (w->throwTarget == 1) {
+                        k = 2.0f;
+                    } else {
+                        k = 1.0f;
+                    }
+                    if (w->flags & 2) {
+                        w->phase = 30;
+                        goto main_end;
+                    }
+                    if ((f32)w->frame == 26.0f / k) {
+                        w->audY = 0.0f;
+                        w->audVy = -v200 / 20.0f;
+                    }
+                    if ((f32)w->frame >= 26.0f / k) {
+                        w->audY += w->audVy;
+                        w->audVy += -2.0f;
+                    }
+                    if ((f32)w->frame > 30.0f / k) {
+                        w->phase = 22;
+                    }
+                    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
+                        m = BattleAudienceGetPtr(i);
+                        if (bakuGameAudienceCanThrowPos(i) == 1 && GET_EXIST(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
+                            BattleAudience_GetHomePosition(i, &x, &y, &z);
+                            BattleAudience_SetPosition(i, x, y + w->audY, z);
+                            w->pos.y = 20.0f + (y + w->audY);
+                        }
+                    }
+                    break;
+            }
+            w->frame++;
+            if (keyGetButtonTrg(0) & PAD_BUTTON_X) {
+                w->throwTarget = w->btn[2].target;
+            }
+            if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
+                w->throwTarget = w->btn[1].target;
+            }
+            if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
+                w->throwTarget = w->btn[0].target;
+            }
+            break;
+        case 22:
+            switch (w->holder) {
+                case 0:
+                    w->pos = (Vec){-125.0f, 0.0f, -30.0f};
+                    w->from = w->pos;
+                    w->from.y += 30.0f;
+                    w->pos.y += 30.0f;
+                    bakuGameMarioSurpriseReset(mario, party);
+                    BtlUnit_SetBodyAnim(mario, "M_C_1");
+                    break;
+                case 1:
+                    w->pos = (Vec){125.0f, 0.0f, -30.0f};
+                    w->from = w->pos;
+                    if (w->flags & 1) {
+                        w->pos = w->hpos;
+                        w->from = w->pos;
+                        w->from.y = w->pos.y = 30.0f + w->hpos.y;
+                    }
+                    bakuGameEnemySurpriseReset();
+                    break;
+                case 2:
+                    w->pos = (Vec){0.0f, -50.0f, 150.0f};
+                    w->from = w->pos;
+                    w->from.y += 30.0f;
+                    w->pos.y += 20.0f;
+                    bakuGameAudienceSurpriseReset();
+                    break;
+            }
+            switch (w->throwTarget) {
+                case 0:
+                    w->to = (Vec){-125.0f, 0.0f, -30.0f};
+                    bakuGameMarioSurprise(mario, party);
+                    break;
+                case 1:
+                    w->to = (Vec){125.0f, 0.0f, -30.0f};
+                    if (w->flags & 1) {
+w->to = w->hpos;
+                        w->to.y = 30.0f + w->hpos.y;
+}
+                    bakuGameEnemySurprise();
+                    break;
+                case 2:
+                    if (w->flags & 2) {
+                        w->to = (Vec){0.0f, -50.0f, 150.0f};
+                    } else {
+                        w->to = (Vec){0.0f, -50.0f, 150.0f};
+                        w->to.y += 20.0f;
+                    }
+                    bakuGameAudienceSurprise();
+                    break;
+            }
+            w->phase = 25;
+            w->vy = (2.0f * (w->to.y - w->from.y) - -0.5f * 40.0f * 40.0f) / (2.0f * 40.0f);
+            w->frame = w->frameTotal = (s32)frames;
+            if (w->holder == 0) {
+                BtlUnit_GetPos(mario, &x, &y, &z);
+                w->mfrom = (Vec){x, y, z};
+                BtlUnit_GetHomePos(mario, &x, &y, &z);
+                w->mto = (Vec){x, y, z};
+            }
+            w->sfx2 = psndSFXOn("SFX_BTL_SAC_TIME3");
+            n = BattleAudience_GetAudienceNum();
+            switch (w->throwTarget) {
+                case 0:
+                    BattleAudienceSoundBooing();
+                    break;
+                case 1:
+                    if (n >= 1 && n <= 49) {
+                        BattleAudienceSoundCallKind(1);
+                    }
+                    if (n >= 50 && n <= 99) {
+                        BattleAudienceSoundCallKind(1);
+                        BattleAudienceSoundWhistleKind(1);
+                    }
+                    if (n >= 100 && n <= 149) {
+                        BattleAudienceSoundCallKind(2);
+                        BattleAudienceSoundWhistleKind(2);
+                    }
+                    if (n >= 150) {
+                        BattleAudienceSoundCallKind(2);
+                        BattleAudienceSoundWhistleKind(3);
+                    }
+                    break;
+                case 2:
+                    if (n >= 1 && n <= 49) {
+                        BattleAudienceSoundBooingKind(5);
+                    }
+                    if (n >= 50 && n <= 99) {
+                        BattleAudienceSoundBooingKind(6);
+                    }
+                    if (n >= 100 && n <= 149) {
+                        BattleAudienceSoundBooingKind(7);
+                    }
+                    if (n >= 150) {
+                        BattleAudienceSoundBooingKind(8);
+                    }
+                    break;
+            }
+        case 25:
+            w->pos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->frameTotal - w->frame, w->frameTotal);
+            w->pos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->frameTotal - w->frame, w->frameTotal);
+            w->pos.y += w->vy;
+            w->vy += -0.5f;
+            switch (w->holder) {
+                case 0:
+                    if (w->frameTotal - w->frame == 20) {
+                        BtlUnit_SetBodyAnim(mario, "M_W_1");
+                    }
+                    t = w->frameTotal - w->frame;
+                    if (t >= 20 && t <= 34) {
+                        x = intplGetValue(EASING_LINEAR, w->mfrom.x, w->mto.x, t - 20, 14);
+                        y = w->mfrom.y;
+                        z = intplGetValue(EASING_LINEAR, w->mfrom.z, w->mto.z, w->frameTotal - w->frame - 20, 14);
+                        BtlUnit_SetPos(mario, x, y, z);
+                    }
+                    if (w->frameTotal - w->frame == 34) {
+                        btlDispPoseAnime(BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario)));
+                    }
+                    break;
+                case 1:
+                    if (w->hpos.y != 0.0) {
+                        w->hpos.y += w->hvy;
+                        w->hvy += -1.0f;
+                    }
+                    if (w->hpos.y < 0.0f) {
+                        w->hpos.y = 0.0f;
+                    }
+                    if (!(w->flags & 1)) {
+                        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
+                            u = BattleGetUnitPtr(bw, i);
+                            if (u != NULL && u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u) &&
+                                !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
+                                !(u->attributeFlags & kFloating) && !(u->attributeFlags & kCeiling)) {
+                                BtlUnit_GetHomePos(u, &hx, &hy, &hz);
+                                BtlUnit_SetPos(u, hx, hy + w->hpos.y, hz);
+                            }
+                        }
+                    } else {
+                        w->hstate = 15;
+                        if (w->hpos.y != 0.0f) {
+                            w->hpos.y += w->hvy;
+                            w->hvy += -2.0f;
+                        }
+                        if (w->hpos.y <= 0.0f) {
+                            w->hpos.y = 0.0f;
+                            w->hstate = 5;
+                        }
+                    }
+                    break;
+                case 2:
+                    if (w->audY != 0.0f) {
+                        w->audY += w->audVy;
+                        w->audVy += -2.0f;
+                    }
+                    if (w->audY <= 0.0f) {
+                        w->audY = 0.0f;
+                    }
+                    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
+                        m = BattleAudienceGetPtr(i);
+                        if (bakuGameAudienceCanThrowPos(i) == 1 && GET_EXIST(i) && (m->flags & AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL)) {
+                            BattleAudience_GetHomePosition(i, &x, &y, &z);
+                            BattleAudience_SetPosition(i, x, y + w->audY, z);
+                        }
+                    }
+                    break;
+            }
+            ((0, w))->frame--;
+            if (w->frame < 0) {
+                w->phase = 30;
+                w->pos = w->to;
+                w->holder = w->throwTarget;
+                btl_camera_shake_h(0, w->bombScale, 0.0f, 10, 4);
+                psndSFXOn("SFX_BTL_SAC_TIME2");
+                if (!psndSFXChk(w->sfx2)) {
+                    psndSFXOff(w->sfx2);
+                }
+            }
+            break;
+        case 30:
+            w->phase = 10;
+            for (i = 0; i < 3; i++) {
+                w->btn[i].hp = 100.0f;
+            }
+            if (w->holder == 1 && (w->flags & 1)) {
+                w->hstate = 10;
+            }
+            if (w->throwTarget == 0) {
+                BtlUnit_snd_se_pos(mario, "SFX_VOICE_MARIO_SURPRISED1", 0x7F, 0, &mario->position);
+            }
+            break;
+        case 40:
+            effSandarsEntry(3, w->pos.x, w->pos.y, w->pos.z, 0.0f);
+            btl_camera_shake_h(0, w->bombScale, 0.0f, 30, 4);
+            psndSFXOn("SFX_BTL_SAC_TIME5");
+            if (!psndSFXChk(w->sfx1)) {
+                psndSFXOff(w->sfx1);
+            }
+            if (!psndSFXChk(w->sfx2)) {
+                psndSFXOff(w->sfx2);
+            }
+            w->phase = 50;
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
+                m = BattleAudienceGetPtr(i);
+                m->flags &= ~AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
+                if (bakuGameAudienceCanThrowPos(i) == 1) {
+                    BattleAudience_GetHomePosition(i, &x, &y, &z);
+                    BattleAudience_SetPosition(i, x, y, z);
+                }
+            }
+            break;
+        case 50:
+            break;
+    }
+main_end:
+    if (w->poseId != -1) {
+        animPoseMain(w->poseId);
+    }
+    dispEntry(CAMERA_2D, 900.0f, 1, bakuGameDisp2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
+    return EVT_RETURN_BLOCK;
+}
+#else
 USER_FUNC(bakuGameMain) {
     s32 unused[8] = {0, 1, 2, 3, 4, 5, 6, 7};
     BakuWork* w = GetBakuGamePtr();
@@ -1096,6 +1887,7 @@ main_end:
     dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
     return EVT_RETURN_BLOCK;
 }
+#endif
 
 /**
  * After the game, the stand-in Shy Guy (heiho) who caught the bomb for big

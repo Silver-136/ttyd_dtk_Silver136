@@ -81,7 +81,11 @@ WinMgrDesc list_desc[3];
 static EvtWord buy_evt[VERSION_PICK(326, 366)];
 EvtWord shopper_talk_evt[];
 EvtWord first_shopping_evt[86];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord sell_evt[193];
+#else
 static EvtWord sell_evt[VERSION_PICK(196, 207)];
+#endif
 EvtWord keep_evt[VERSION_PICK(148, 167)];
 EvtWord unkeep_evt[147];
 EvtWord point_evt[VERSION_PICK(15, 35)];
@@ -135,6 +139,132 @@ WinMgrDesc list_desc[] = {
  * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
  * then runs the shop's own buy_evt with LW(0) = the item id.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_shoplist)
+    CALL(evt_mario_key_onoff, 0)
+    CALL(disp_list)
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+static EVT_BEGIN(buy_evt)
+    // Mario stops and the item's highlight goes away;
+    // a first-time shopper hears the shopping explanation instead.
+    CALL(evt_mario_normalize)
+    SET_VALUE(LW(10), LW(0))
+    CALL(disp_off, LW(10))
+    IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
+        SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
+        CALL_CHILD(PTR(first_shopping_evt))
+        RETURN
+    END_IF
+    // The shopkeeper turns to Mario, the coin and point windows open, and he names the item and its price.
+    CALL(shopper_name, LW(9))
+    CALL(evt_set_dir_to_target, LW(9), STRING("mario"))
+    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(point_disp_onoff, 1)
+    CALL(get_value, LW(10), LW(11), LW(12), LW(13))
+    CALL(get_msg, LW(10), 0, LW(14))
+    CALL(evt_sub_get_language, LW(0))
+IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
+        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
+        ELSE
+        CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
+    END_IF
+CALL(get_msg, LW(10), 24, LW(14))
+    CALL(evt_msg_select, 0, LW(14))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(get_msg, LW(10), 22, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        CALL(evt_win_coin_off, LW(8))
+        CALL(point_disp_onoff, 0)
+        RETURN
+    END_IF
+    CALL(evt_pouch_get_coin, LW(0))
+    IF_INT_LESS(LW(0), LW(13))
+        CALL(get_msg, LW(10), 1, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        CALL(evt_win_coin_off, LW(8))
+        CALL(point_disp_onoff, 0)
+        RETURN
+    END_IF
+    CALL(evt_pouch_add_item, LW(12), LW(0))
+    IF_INT_EQUAL(LW(0), -1)
+        CALL(get_msg, LW(10), 2, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        CALL(evt_win_coin_off, LW(8))
+        CALL(point_disp_onoff, 0)
+        RETURN
+    END_IF
+    // Bought: a shop point is added (two during a timed double-points sale) and the coins are paid.
+    CALL(set_buy_item_id, LW(12))
+    CALL(evt_sub_load_progresstime, GSW_SHOP_MRI_07_SALE_START_TIME, LW(0))
+    CALL(evt_sub_load_progresstime, GSW_SHOP_USU_01_SALE_START_TIME, LW(1))
+    CALL(evt_sub_load_progresstime, GSW_SHOP_RSH_03_SALE_START_TIME, LW(2))
+    CALL(add_shop_point, 1, LW(0), LW(1), LW(2))
+    MULTIPLY(LW(13), -1)
+    CALL(evt_pouch_add_coin, LW(13))
+    CALL(evt_win_coin_wait, LW(8))
+    CALL(point_wait)
+    WAIT_MS(200)
+    CALL(evt_win_coin_off, LW(8))
+    CALL(point_disp_onoff, 0)
+CALL(evt_msg_continue)
+CALL(evt_sub_get_system_flag, LW(0))
+    IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
+        IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
+            SET_VALUE(GSWF_ITEM_TUTORIAL_SEEN, 1)
+            CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)
+        END_IF
+    END_IF
+    // Hand out every shop point prize now reached; at 300 points the shopkeeper announces the maximum and the
+    // count resets.
+    LOOP(0)
+        CALL(chk_shop_point, LW(0), LW(1), LW(2))
+        IF_INT_EQUAL(LW(0), -1)
+            GOTO(123)
+            RETURN
+        END_IF
+        SET_VALUE(LF(0), 0)
+        CALL(get_shop_point, LW(0))
+        IF_INT_NOT_EQUAL(LW(0), 300)
+            CALL(get_msg, LW(10), 26, LW(14))
+CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(2))
+ELSE
+            CALL(get_msg, LW(10), 34, LW(14))
+            CALL(evt_msg_print, 0, LW(14), 0, LW(9))
+            CALL(evt_win_coin_on, 0, LW(8))
+            CALL(point_disp_onoff, 1)
+            CALL(reset_shop_point)
+            CALL(evt_win_coin_wait, LW(8))
+            CALL(point_wait)
+            WAIT_MS(500)
+            CALL(evt_win_coin_off, LW(8))
+            CALL(point_disp_onoff, 0)
+            SET_VALUE(LF(0), 1)
+        END_IF
+        // With a full item bag the prize is kept for later (the 300-point prize is remembered by a flag).
+        CALL(evt_pouch_add_item, LW(1), LW(0))
+        IF_INT_EQUAL(LW(0), -1)
+            CALL(get_msg, LW(10), 27, LW(14))
+            CALL(evt_msg_print, 0, LW(14), 0, LW(9))
+            IF_INT_EQUAL(LF(0), 1)
+                SET_VALUE(GSWF_SHOP_POINT_PRIZE_PENDING, 1)
+            END_IF
+            GOTO(123)
+            RETURN
+        END_IF
+        CALL(exchange_shop_point)
+    END_LOOP
+    // Finally the shop's own after-purchase script runs, if it has one.
+    LABEL(123)
+    CALL(get_buy_evt, LW(1))
+    IF_INT_NOT_EQUAL(LW(1), 0)
+        SET_VALUE(LW(0), LW(12))
+        CALL_CHILD(LW(1))
+    END_IF
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(buy_evt)
     // Mario stops and the item's highlight goes away;
     // a first-time shopper hears the shopping explanation instead.
@@ -283,6 +413,7 @@ static EVT_BEGIN(buy_evt)
     END_IF
     RETURN
 EVT_END()
+#endif
 
 /**
  * Talk script the shop setup gives the shopkeeper NPC:
@@ -495,6 +626,70 @@ EVT_BEGIN(first_shopping_evt)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+                        static EVT_BEGIN(sell_evt)
+    CALL(sell_pouchcheck_func)
+    IF_INT_EQUAL(LW(0), 0)
+        CALL(get_msg, LW(10), 6, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        RETURN
+    END_IF
+    CALL(get_msg, LW(10), 7, LW(14))
+    CALL(evt_msg_print_add, 0, LW(14))
+    CALL(evt_win_coin_on, 0, LW(8))
+    LABEL(0)
+    CALL(item_data_db_arrange)
+    CALL(evt_win_item_select, 3, LW(1))
+    CALL(item_data_db_restore)
+    IF_INT_LESS_OR_EQUAL(LW(1), 0)
+        CALL(get_msg, LW(10), 22, LW(14))
+        CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
+        CALL(evt_win_coin_off, LW(8))
+        RETURN
+    END_IF
+    CALL(item_data_db_arrange)
+    CALL(name_price, LW(1), LW(2), LW(3))
+    CALL(item_data_db_restore)
+    CALL(get_msg, LW(10), 8, LW(14))
+    CALL(evt_sub_get_language, LW(0))
+    IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
+        CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(3), LW(2))
+    ELSE
+        CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
+    END_IF
+    CALL(get_msg, LW(10), 24, LW(14))
+    CALL(evt_msg_select, 0, LW(14))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(get_msg, LW(10), 9, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        GOTO(0)
+    END_IF
+    CALL(evt_pouch_remove_item, LW(1), LW(0))
+    CALL(evt_pouch_add_coin, LW(3))
+    CALL(evt_win_coin_wait, LW(8))
+    WAIT_MS(200)
+    CALL(evt_win_coin_off, LW(8))
+    CALL(sell_pouchcheck_func)
+    IF_INT_EQUAL(LW(0), 0)
+        CALL(get_msg, LW(10), 11, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        RETURN
+    END_IF
+    CALL(get_msg, LW(10), 10, LW(14))
+    CALL(evt_msg_print_add, 0, LW(14))
+    CALL(get_msg, LW(10), 24, LW(14))
+    CALL(evt_msg_select, 0, LW(14))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(get_msg, LW(10), 22, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        RETURN
+    END_IF
+    CALL(evt_msg_continue)
+    CALL(evt_win_coin_on, 0, LW(8))
+    GOTO(0)
+    RETURN
+EVT_END()
+#else
 static EVT_BEGIN(sell_evt)
     CALL(sell_pouchcheck_func)
     IF_INT_EQUAL(LW(0), 0)
@@ -568,7 +763,59 @@ static EVT_BEGIN(sell_evt)
     GOTO(0)
     RETURN
 EVT_END()
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+                        EVT_BEGIN(keep_evt)
+    CALL(keep_pouchcheck_func)
+    IF_INT_EQUAL(LW(0), 0)
+        CALL(get_msg, LW(10), 12, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        RETURN
+    END_IF
+    IF_INT_EQUAL(LW(1), 0)
+        CALL(get_msg, LW(10), 13, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        RETURN
+    END_IF
+    CALL(get_msg, LW(10), 14, LW(14))
+    CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
+    LABEL(0)
+    CALL(evt_win_item_select, 4, LW(1))
+    IF_INT_LESS_OR_EQUAL(LW(1), 0)
+        CALL(get_msg, LW(10), 22, LW(14))
+        CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
+        RETURN
+    END_IF
+    CALL(evt_pouch_remove_item, LW(1), LW(0))
+    CALL(evt_pouch_add_keepitem, LW(1), LW(0))
+    CALL(keep_pouchcheck_func)
+    SET_VALUE(LF(0), 0)
+    IF_INT_EQUAL(LW(0), 0)
+        SET_VALUE(LF(0), 1)
+    END_IF
+    IF_INT_EQUAL(LW(1), 0)
+        SET_VALUE(LF(0), 1)
+    END_IF
+    IF_INT_EQUAL(LF(0), 1)
+        CALL(get_msg, LW(10), 15, LW(14))
+        CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
+        RETURN
+    END_IF
+    CALL(get_msg, LW(10), 16, LW(14))
+    CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
+    CALL(get_msg, LW(10), 24, LW(14))
+    CALL(evt_msg_select, 0, LW(14))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(get_msg, LW(10), 22, LW(14))
+        CALL(evt_msg_print_add, 0, LW(14))
+        RETURN
+    END_IF
+    CALL(evt_msg_continue)
+    GOTO(0)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(keep_evt)
     CALL(keep_pouchcheck_func)
     IF_INT_EQUAL(LW(0), 0)
@@ -629,6 +876,7 @@ EVT_BEGIN(keep_evt)
     GOTO(0)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Counter menu option for taking stored items back:
@@ -649,13 +897,21 @@ EVT_BEGIN(unkeep_evt)
     CALL(get_msg, LW(10), 19, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
     LABEL(0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, 5, LW(1))
+#else
     CALL(evt_win_item_select, 1, 5, LW(1), LW(4))
+#endif
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
         CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_pouch_remove_keepitem, LW(1), LW(0))
+#else
     CALL(evt_pouch_remove_keepitem, LW(1), LW(4), LW(0))
+#endif
     CALL(evt_pouch_add_item, LW(1), LW(0))
     CALL(unkeep_pouchcheck_func)
     SET_VALUE(LF(0), 0)
@@ -716,12 +972,14 @@ EVT_END()
 u16 point_disp_icons[] = {0x226, 0x227, 0x228, 0x227, 0x229, 0x22A};
 #endif
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
     CALL(disp_list)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 /** Per-shop driver script; evt_shop_main_func does all the work every frame. */
 static EVT_BEGIN(main_evt)
@@ -1025,6 +1283,7 @@ USER_FUNC(disp_list) {
  * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
  * books), gives the shopkeeper its talk script and starts the shop driver.
  */
+#if VERSION == VERSION_DEMO_JP
 USER_FUNC(evt_shop_setup) {
     s32 i;
     ShopWork* wp;
@@ -1086,6 +1345,129 @@ USER_FUNC(evt_shop_setup) {
     evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
     return EVT_RETURN_DONE;
 }
+#elif VERSION == VERSION_DEMO_US
+USER_FUNC(evt_shop_setup) {
+    s32 i;
+    ShopWork* wp;
+    EvtWord* args = event->args;
+    ShopObj* objs = (ShopObj*)evtGetValue(event, args[0]);
+    ShopItem* items = (ShopItem*)evtGetValue(event, args[1]);
+    ShopperData* shopper = (ShopperData*)evtGetValue(event, args[2]);
+    ShopDb* db = (ShopDb*)evtGetValue(event, args[3]);
+    Vec pos;
+    char buf[32];
+
+    wp = _mapAlloc(sizeof(ShopWork));
+    memset(wp, 0, sizeof(ShopWork));
+    _wp = wp;
+    strncpy(mapname, gp->currentMapName, sizeof(gp->currentMapName) - 1);
+    wp->objs = objs;
+    wp->items = items;
+    wp->shopper = shopper;
+    wp->db = db;
+    wp->count = 6;
+    for (i = 0; i < wp->count; i++) {
+        mapObjGetPos(wp->objs[i].mobj, &pos);
+        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
+        sprintf(buf, "shp%d", i);
+        iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
+        iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
+        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
+        wp->itemFlags[i] = 0;
+        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+    }
+    {
+        NpcEntry* npc = npcNameToPtr(shopper->name);
+        npc->talkEvt = shopper_talk_evt;
+    }
+    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
+    wp->mainEvt->lwData[0] = (EvtWord)wp;
+    for (i = 0; i < 3; i++) {
+        wp->win[i] = winMgrEntry(&window_desc[i]);
+    }
+    wp->sel = -1;
+return EVT_RETURN_DONE;
+}
+#else
+USER_FUNC(evt_shop_setup) {
+    s32 i;
+    ShopWork* wp;
+    EvtWord* args = event->args;
+    ShopObj* objs = (ShopObj*)evtGetValue(event, args[0]);
+    ShopItem* items = (ShopItem*)evtGetValue(event, args[1]);
+    ShopperData* shopper = (ShopperData*)evtGetValue(event, args[2]);
+    ShopDb* db = (ShopDb*)evtGetValue(event, args[3]);
+    Vec pos;
+    char buf[32];
+
+    wp = _mapAlloc(sizeof(ShopWork));
+    memset(wp, 0, sizeof(ShopWork));
+    _wp = wp;
+    strncpy(mapname, gp->currentMapName, sizeof(gp->currentMapName) - 1);
+    wp->objs = objs;
+    wp->items = items;
+    wp->shopper = shopper;
+    wp->db = db;
+    wp->count = 6;
+    for (i = 0; i < wp->count; i++) {
+        mapObjGetPos(wp->objs[i].mobj, &pos);
+        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
+        sprintf(buf, "shp%d", i);
+        iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
+        iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
+        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
+        wp->itemFlags[i] = 0;
+        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+    }
+    // FAKE: block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object
+    {
+        NpcEntry* npc = npcNameToPtr(shopper->name);
+        npc->talkEvt = shopper_talk_evt;
+    }
+    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
+    wp->mainEvt->lwData[0] = (EvtWord)wp;
+    for (i = 0; i < 3; i++) {
+        wp->win[i] = winMgrEntry(&window_desc[i]);
+    }
+    wp->sel = -1;
+    evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
+    return EVT_RETURN_DONE;
+}
+#endif
 
 /** Opens (args[0] nonzero) or closes the shop points window, starting its counter from the current points. */
 USER_FUNC(point_disp_onoff) {
@@ -1105,15 +1487,25 @@ USER_FUNC(point_disp_onoff) {
  * Blocks until the shop points window has counted up to Mario's points;
  * retail plays a tick sound each frame meanwhile.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(point_wait) {
+#else
 USER_FUNC(point_wait) {
+#endif
     ShopWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
+#if VERSION <= VERSION_DEMO_US
+return wp->points != SHOP_PTS(pouch) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+#else
     if (wp->points != pouch->shopPoints) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
         return EVT_RETURN_BLOCK;
+#endif
     }
+#if VERSION > VERSION_DEMO_US
     return EVT_RETURN_DONE;
 }
+#endif
 
 /** Sets or clears ShopWork flag bits; args: on/off, mask. The talk script sets SHOP_FLAG_TALKING while the counter menu is up. */
 USER_FUNC(shop_flag_onoff) {
@@ -1371,7 +1763,11 @@ USER_FUNC(unkeep_pouchcheck_func) {
  * and on rsh_03 on day 3 until the shopkeeper is woken.
  * Hides the icons of one-off items once bought and of shelves whose map object is hidden.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(evt_shop_main_func) {
+#else
 USER_FUNC(evt_shop_main_func) {
+#endif
     ShopWork* wp;
     MarioWork* mario;
     PartyEntry* party;
@@ -1389,13 +1785,22 @@ USER_FUNC(evt_shop_main_func) {
     hit = mario->hitobjStandOn;
     wp->flags &= ~1;
     trg = keyGetButtonTrg(0);
+#if VERSION <= VERSION_DEMO_US
+    if ((marioChkCtrl() ? FALSE : TRUE) || (marioChkKey() ? FALSE : TRUE)) {
+#else
     // FAKE: the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
     if ((BOOL)(!marioChkCtrl() & 0x7ffffff) || (BOOL)(!marioChkKey() & 0x7ffffff)) {
+#endif
         trg = 0;
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
+#if VERSION <= VERSION_DEMO_US
+        evtGetValue(event, GSW(GSW_STORY_PROGRESS)) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW(GSW_STORY_PROGRESS)) < STG6_48_SMORG_MIASMA &&
+        !evtGetValue(event, GSWF(GSWF_RSH03_SHOP_CLERK_WOKEN))) {
+#else
         evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
         !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {
+#endif
         return EVT_RETURN_BLOCK;
     }
     if (party && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
@@ -1406,7 +1811,11 @@ USER_FUNC(evt_shop_main_func) {
         }
         return EVT_RETURN_BLOCK;
     }
+#if VERSION <= VERSION_DEMO_US
+if (winGhostDiaryChk()) {
+#else
     if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
+#endif
         if (wp->sel != -1) {
             wp->sel = -1;
             winMgrClose(wp->win[0]);
@@ -1421,7 +1830,9 @@ USER_FUNC(evt_shop_main_func) {
                     break;
                 }
             }
+#if VERSION > VERSION_DEMO_US
             // itemFlags[i] is read before the i < wp->count test; a full six-item shop with no matching hit reads one past itemFlags.
+#endif
             if (!(wp->itemFlags[i] & 1) && i < wp->count) {
                 if (wp->sel != i) {
                     if (wp->sel == -1) {

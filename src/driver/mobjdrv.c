@@ -48,10 +48,14 @@ typedef struct CubeJoint {
 } CubeJoint;
 
 /** Draw mode of the built-in collision cube (culling flag set), shared by the cube, head and front hit joints. */
+#if VERSION > VERSION_DEMO_US
 CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
+#endif
 
 /** Draw mode of the second part of a two-part object's collision (the MOBJ~ part). */
+#if VERSION > VERSION_DEMO_US
 CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
+#endif
 
 // cube vertex positions (cubeDVP) and normals (cubeDVN), listed in cubeDDT
 
@@ -262,6 +266,9 @@ u32 cubeDN[1230] = {
 CubeMesh cubeDP = {0, {0}, 0, 6, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820], &cubeDN[1025]}};
 
 /** Joint of the solid cube collision (type 0) that mobjHitEntry copies into a block's hit object. */
+#if VERSION <= VERSION_DEMO_US
+CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
+#endif
 CubeJoint cubeDJ = {
     {NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
      {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ.mode, 1},
@@ -289,6 +296,9 @@ CubeJoint frontDJ = {
 };
 
 /** Mesh of a two-part object's second hit part: the five faces other than the front one. */
+#if VERSION <= VERSION_DEMO_US
+CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
+#endif
 CubeMesh front2DP = {0, {0}, 0, 5, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820]}};
 
 /** Joint of a two-part object's second hit part (type 2), copied in by mobjHitEntry. */
@@ -461,18 +471,33 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
     min = (Vec){pose->bboxMin.x, pose->bboxMin.y, pose->bboxMin.z};
     max = (Vec){pose->bboxMax.x, pose->bboxMax.y, pose->bboxMax.z};
     for (i = 0; i < 2; i++) {
+#if VERSION <= VERSION_DEMO_US
+        if (entry->hitObj[i].hitObject != NULL)
+#else
         if (entry->hitObj[i].hitObject != NULL) {
+#endif
             hitDelete(entry->hitObj[i].name);
+#if VERSION > VERSION_DEMO_US
         }
+#endif
     }
     PSVECAdd(&max, &min, &entry->translation);
     PSVECScale(&entry->translation, &entry->translation, 0.5f);
     PSVECScale(&entry->translation, &entry->translation, 10.0f);
     entry->translation.y = 0.0f;
     // FAKE: (0, x) comma expressions around the x and z __fabs calls; the plain __fabs changes the object
+#if VERSION <= VERSION_DEMO_US
+    // target float registers; the values are the same
+    entry->scale2.x = 10.0f * (entry->scale.x * (f32)(0, __fabs((0, max.x - min.x))));
+#else
     entry->scale2.x = 10.0f * (entry->scale.x * (f32)(0, __fabs(max.x - min.x)));
+#endif
     entry->scale2.y = 10.0f * (entry->scale.y * (f32)__fabs(max.y));
+#if VERSION <= VERSION_DEMO_US
+    entry->scale2.z = 10.0f * (entry->scale.z * (f32)(0, __fabs((0, max.z - min.z))));
+#else
     entry->scale2.z = 10.0f * (entry->scale.z * (f32)(0, __fabs(max.z - min.z)));
+#endif
     if (strncmp(pose->fileName, "HOBJ_", strlen("HOBJ_")) == 0) {
         entry->translation.z = 0.0f;
         entry->scale2.z = 10.0f * (2.5f * entry->scale.z);
@@ -497,7 +522,9 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
             entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
+#if VERSION > VERSION_DEMO_US
             entry->hitObj[0].hitObject->mobj = entry;
+#endif
             break;
         case 1:
             PSVECAdd(&entry->position, &entry->translation, &position);
@@ -518,7 +545,9 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
             entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
+#if VERSION > VERSION_DEMO_US
             entry->hitObj[0].hitObject->mobj = entry;
+#endif
             break;
         case 2:
             PSVECAdd(&entry->position, &entry->translation, &position);
@@ -539,13 +568,17 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
             strcat(entry->hitObj[0].name, entry->name);
             *(char**)(entry->hitObj[0].jointData + 8) = entry->hitObj[0].name;
             entry->hitObj[0].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[0].jointData + 8), mtx);
+#if VERSION > VERSION_DEMO_US
             entry->hitObj[0].hitObject->mobj = entry;
+#endif
             memcpy(entry->hitObj[1].jointData + 8, &front2DJ, sizeof(CubeJoint));
             strcpy(entry->hitObj[1].name, "MOBJ~");
             strcat(entry->hitObj[1].name, entry->name);
             *(char**)(entry->hitObj[1].jointData + 8) = entry->hitObj[1].name;
             entry->hitObj[1].hitObject = hitEntryMOBJ((MapFileJoint*)(entry->hitObj[1].jointData + 8), mtx);
+#if VERSION > VERSION_DEMO_US
             entry->hitObj[1].hitObject->mobj = entry;
+#endif
             break;
     }
 }
@@ -648,6 +681,280 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
  * and reports it to the object; runs each object's main function, drops falling ones,
  * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
  */
+#if VERSION <= VERSION_DEMO_US
+void mobjMain(void) {
+    MapObjectWork* wp;
+    MapObjectEntry* entry;
+    MarioWork* mario;
+    PartyEntry* party;
+    s16 fbat;
+    s32 count;
+    s32 i;
+    s32 hit;
+    HitEntry* hitJump;
+    s32 partyFlag;
+    HitEntry* hitPtr;
+    s32 k;
+    GXColor blend1;
+    GXColor blend2;
+    GXColor evt;
+    Vec camPos;
+    f32 nz, ny, nx, dist, hz, hy, hx;
+
+    {
+        MapObjectWork* w = mobjGetWork();
+        wp = (MapObjectWork*)w;
+    }
+    count = wp->count;
+    entry = wp->entries;
+    mario = marioGetPtr();
+    party = partyGetPtr(marioGetPartyId());
+    fbat = *(s16*)fbatGetPointer();
+    hitJump = NULL;
+    partyFlag = 0;
+    if (party != NULL && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
+        partyFlag = 1;
+    }
+
+    if (gp->inBattle == 0) {
+        if (mario->hitobjHammer != NULL) {
+            if (WH(0] == NULL || strcmp(hitGetName(WH(0]), hitGetName(mario->hitobjHammer)) != 0) {
+                WH(0] = mario->hitobjHammer;
+            }
+        } else {
+            WH(0] = NULL;
+        }
+        if (mario->hitobjHead != NULL) {
+            if (WH(1] == NULL || strcmp(hitGetName(WH(1]), hitGetName(mario->hitobjHead)) != 0) {
+                hitJump = WH(1] = mario->hitobjHead;
+            }
+        } else {
+            WH(1] = NULL;
+        }
+        if (mario->hitobjStandOn != NULL) {
+            if (WH(2] == NULL || strcmp(hitGetName(WH(2]), hitGetName(mario->hitobjStandOn)) != 0) {
+                WH(2] = mario->hitobjStandOn;
+            }
+        } else {
+            WH(2] = NULL;
+        }
+        if (mario->hitobjFront != NULL) {
+            if (WH(3] == NULL || strcmp(hitGetName(WH(3]), hitGetName(mario->hitobjFront)) != 0) {
+                WH(3] = mario->hitobjFront;
+            }
+        } else {
+            WH(3] = NULL;
+        }
+        if (party != NULL && party->hitobjAction != NULL) {
+            if (WH(4] == NULL || strcmp(hitGetName(WH(4]), hitGetName(party->hitobjAction)) != 0) {
+                WH(4] = party->hitobjAction;
+            }
+        } else {
+            WH(4] = NULL;
+        }
+    }
+
+    for (i = 0; i < count; i++, entry++) {
+        if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
+            continue;
+        }
+if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)))) {
+if (entry->flags & MOBJ_FLAG_UPDATE_MTX) {
+                if (mobjCheckItemboxOpen(entry) == 2) {
+                    mobjCalcMtx2(entry);
+                } else {
+                    mobjCalcMtx(entry);
+                }
+                entry->flags &= ~MOBJ_FLAG_UPDATE_MTX;
+            }
+            if (entry->flags & MOBJ_FLAG_GRAVITY) {
+                if (entry->velocity.y >= 0.0f) {
+                    entry->position.y += entry->velocity.y;
+                    entry->velocity.y -= entry->gravity;
+                } else {
+dist = 1.0f + (f32)__fabs(entry->velocity.y);
+                    if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, entry->position.x,
+                                       10.0f + entry->position.y, entry->position.z, 0.0f, -10.0f, 0.0f) != NULL) {
+entry->position.y = hy;
+                        entry->velocity.y = (-0.5f * entry->bounce) * entry->velocity.y;
+                        if (__fabs(entry->velocity.y) <= 2.0) {
+                            entry->velocity.y = 0.0f;
+                        }
+                    } else {
+                        entry->position.y += entry->velocity.y;
+                        entry->velocity.y -= entry->gravity;
+                    }
+                }
+                mobjCalcMtx(entry);
+            }
+            if (!(entry->flags & MOBJ_FLAG_HIT)) {
+                hit = 0;
+                hitPtr = entry->hitObj[0].hitObject;
+                if ((s32)(u8)mario->characterId != CHARACTER_BOWSER) {
+                    // The first hit kind that applies wins. The goto is kept: the hammer and partner checks
+                    // fall through to the next kind when their inner test fails, and no if/else-if form of
+                    // that gives the same code (the partner blocks merge or re-test the flag).
+                    if ((entry->flags & MOBJ_FLAG_HIT_HAMMER) && mario->hitobjHammer == hitPtr) {
+                        if (marioGetPtr()->position.y <= 5.0f + entry->position.y) {
+                            entry->hitFlag = MOBJ_FLAG_HIT_HAMMER;
+                            hit = 1;
+                            goto hitDone;
+                        }
+                    }
+                    if ((entry->flags & MOBJ_FLAG_HIT_HEAD) && hitJump == hitPtr) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_HEAD;
+                        hit = 1;
+                        goto hitDone;
+                    }
+                    if ((entry->flags & MOBJ_FLAG_HIT_STAND) && mario->hitobjStandOn == hitPtr) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_STAND;
+                        hit = 1;
+                        goto hitDone;
+                    }
+                    if ((entry->flags & MOBJ_FLAG_HIT_SPIN_JUMP) && mario->hitobjStandOn == hitPtr && marioChkHipBump()) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_SPIN_JUMP;
+                        hit = 1;
+                        goto hitDone;
+                    }
+if ((entry->flags & MOBJ_FLAG_HIT_A_BUTTON) && mario->hitobjFront == hitPtr &&
+                        (mario->buttonTrg & PAD_BUTTON_A) && !partyFlag) {
+entry->hitFlag = MOBJ_FLAG_HIT_A_BUTTON;
+                        hit = 1;
+                        goto hitDone;
+                    }
+                    if ((entry->flags & MOBJ_FLAG_HIT_PARTY) && party != NULL) {
+                        if (party->hitobjAction == hitPtr) {
+                            entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
+                            hit = 1;
+                            goto hitDone;
+                        } else if (party->hitobjAction != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                            if (PSVECDistance(&party->position, &entry->position) <
+                                entry->hitObj[0].hitObject->radius + party->width) {
+                                entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
+                                hit = 1;
+                                goto hitDone;
+                            }
+                        }
+                    }
+                    if ((entry->flags & MOBJ_FLAG_HIT_BOBBERY) && party != NULL && (s32)(u8)party->currentMemberId == PARTY_MEMBER_BOBBERY) {
+                        if (party->hitobjAction == hitPtr) {
+                            entry->hitFlag = MOBJ_FLAG_HIT_BOBBERY;
+                            hit = 1;
+                            goto hitDone;
+                        } else if (party->hitobjAction != NULL) {
+                            if (PSVECDistance(&party->position, &entry->position) <
+                                entry->hitObj[0].hitObject->radius + party->width) {
+                                entry->hitFlag = MOBJ_FLAG_HIT_PARTY;
+                                hit = 1;
+                                goto hitDone;
+                            }
+                        }
+                    }
+                } else {
+                    if (entry->flags & MOBJ_FLAG_HIT_KOOPA_HEAD) {
+                        for (k = 0; k < 10; k++) {
+                            if (kpaGetHitobjHead(k) == hitPtr) {
+                                entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_HEAD;
+                                hit = 1;
+                                break;
+                            }
+                        }
+                    }
+                    if (entry->flags & MOBJ_FLAG_HIT_KOOPA_HIP) {
+                        for (k = 0; k < 10 && hit == 0; k++) {
+                            if (kpaGetHitobjRide(k) == hitPtr && kpaHipAttackCheck()) {
+                                entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_HIP;
+                                hit = 1;
+                                break;
+                            }
+                        }
+                    }
+                    if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_BODY_LV3) && kpaGetHitobj() == hitPtr && kpaGetLevel() == 3) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_BODY_LV3;
+                        hit = 1;
+                    } else if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FLAME) && kpaGetHitFlame() == hitPtr) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_FLAME;
+                        hit = 1;
+                    } else if ((entry->flags & MOBJ_FLAG_HIT_KOOPA_FRONT) && mario->hitobjFront == hitPtr) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_KOOPA_FRONT;
+                        hit = 1;
+                    } else if ((entry->flags & MOBJ_FLAG_HIT_STAND) && mario->hitobjStandOn == hitPtr) {
+                        entry->hitFlag = MOBJ_FLAG_HIT_STAND;
+                        hit = 1;
+                    }
+                }
+            hitDone:
+                if (hit != 0) {
+                    entry->flags |= MOBJ_FLAG_HIT;
+                }
+            }
+            if (entry->flags & MOBJ_FLAG_HIT_EVERY_FRAME) {
+                entry->flags &= ~MOBJ_FLAG_HIT;
+            }
+            if ((u32)marioStGetSystemLevel() != 0) {
+                entry->flags &= ~MOBJ_FLAG_HIT;
+            }
+if (entry->mainFunc != NULL) {
+                if (entry->mainFunc(entry) == -1) {
+                    continue;
+                }
+            }
+        }
+        if (!(entry->flags & MOBJ_FLAG_ACTIVE)) {
+            continue;
+        }
+        if (!koopaRunFlag && !(entry->flags & (MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_HIDDEN))) {
+            MapWork* mw = mapGetWork();
+            s32 shadowId;
+            mapGetBlend(&blend1);
+            mapGetBlend2(&blend2);
+            if ((mw->entries[0].flags & MAP_ENTRY_BLEND) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND) && blend1.a != 0xff) {
+            } else if ((mw->entries[0].flags & MAP_ENTRY_BLEND2) && !(animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_NO_MAP_BLEND2) &&
+                       blend2.a != 0xff) {
+            } else {
+                shadowId = shadowEntry(entry->position.x, entry->position.y, entry->position.z,
+                                       10.0f * entry->scale.x * entry->scale2.x / 25.0f);
+                if (entry->flags & MOBJ_FLAG_HIT_HEAD) {
+                    shadowSetType(shadowId, 1);
+                    shadowSetSize(shadowId, 10.0f * entry->scale.x * entry->scale2.x / 20.0f);
+                }
+            }
+        }
+        animPoseMain(entry->poseId);
+        evt = animPoseGetMaterialEvtColor(entry->poseId);
+        if (entry->flags & MOBJ_FLAG_NO_DISP) {
+            continue;
+        }
+        if (!(entry->flags & MOBJ_FLAG_NO_CULL)) {
+            PSMTXMultVec(camGetPtr(CAMERA_3D)->view, &entry->position, &camPos);
+            PSMTX44MultVec(camGetPtr(CAMERA_3D)->projection, &camPos, &camPos);
+            if (__fabs(camPos.x) > 1.5 || __fabs(camPos.y) > 1.5 || __fabs(camPos.z) > 1.0) {
+                continue;
+            }
+        }
+        if ((entry->flags & MOBJ_FLAG_BLINK) && ((gp->retraceCount >> 3) & 1)) {
+            continue;
+        }
+        if (entry->offscreenId == -1) {
+            if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
+                dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDispXLU, entry);
+            } else {
+                dispEntry(entry->camId, dispCalcZ(&entry->position), 0, mobjDisp, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), 1, mobjDisp, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDisp, entry);
+            }
+        } else {
+            if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
+            } else {
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 0, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 1, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
+            }
+        }
+    }
+}
+#else
 void mobjMain(void) {
     MapObjectWork* wp;
     MapObjectEntry* entry;
@@ -937,6 +1244,7 @@ void mobjMain(void) {
         }
     }
 }
+#endif
 
 
 /** Returns the map object with this name; one past the table when there is none (the name is expected to exist). */
@@ -980,11 +1288,29 @@ MapObjectEntry* mobjNameToPtrNoAssert(const char* name) {
 }
 
 MapObjectEntry* mobjHitObjPtrToPtr(HitEntry* hitObj) {
+#if VERSION <= VERSION_DEMO_US
+    int i;
+    s32 entryCount;
+    MapObjectEntry* entry;
+    MapObjectWork* wp = mobjGetWork();
+
+    entryCount = wp->count;
+    entry = wp->entries;
+    for (i = 0; i < entryCount; i++, entry++) {
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) && hitObj == entry->hitObj[0].hitObject) {
+            break;
+        }
+#else
     if (hitObj->attributes & HIT_ATTR_MOBJ) {
         return hitObj->mobj;
+#endif
     }
 
+#if VERSION <= VERSION_DEMO_US
+    return entry;
+#else
     return NULL;
+#endif
 }
 
 /**
@@ -1079,11 +1405,17 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
 }
 
 BOOL mobjGetHint(MapObjectEntry* entry) {
+#if VERSION <= VERSION_DEMO_US
+return (entry->flags & MOBJ_FLAG_HINT) != 0;
+#else
     if (entry == NULL) {
         return FALSE;
+#endif
     }
+#if VERSION > VERSION_DEMO_US
     return (entry->flags >> 5) & 1; // MOBJ_FLAG_SHOW_HINT, normalized to BOOL
 }
+#endif
 
 /** Returns TRUE while any map object is busy (MOBJ_FLAG_BUSY); the pause menu does not open then. */
 BOOL mobjCheckExec(void) {
@@ -1132,6 +1464,53 @@ s32 mobjCheckItemboxOpen(MapObjectEntry* entry) {
 }
 
 
+#if VERSION <= VERSION_DEMO_US
+void mobjStrippedFallPool(MapObjectEntry* entry) {
+    entry->velocity.y = 0.0f;
+    entry->position.y = 1.0f;
+    entry->position.x = 10.0f;
+    entry->position.z = -10.0f;
+    entry->velocity.x = -0.5f;
+    if (__fabs(entry->velocity.y) <= 2.0) {
+        entry->velocity.z = 0.0f;
+    }
+}
+MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude) {
+    int entryCount;
+    Vec pos;
+    Vec dist;
+    Vec _pos;
+    MapObjectEntry* entry;
+    MapObjectWork* wp = mobjGetWork();
+    MapObjectEntry* ret;
+    int i;
+    float mag;
+
+    entryCount = wp->count;
+    entry = wp->entries;
+    ret = NULL;
+
+    _pos = (Vec){0.0f, 0.0f, 0.0f};
+    _pos.x = x;
+    _pos.y = y;
+    _pos.z = z;
+    pos = _pos;
+
+    for (i = 0; i < entryCount; i++, entry++) {
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
+            continue;
+
+        VECSubtract(&entry->position, &pos, &dist);
+        mag = VECMag(&dist);
+        if (mag < minMagnitude) {
+            minMagnitude = mag;
+            ret = entry;
+        }
+    }
+
+    return ret;
+}
+#endif
 MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names) {
     int entryCount;
     Vec pos;
@@ -1148,9 +1527,11 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     entryCount = wp->count;
     entry = wp->entries;
     ret = NULL;
+#if VERSION > VERSION_DEMO_US
 
     // FAKE: unusedVec is never read and the position goes through the zeroed copy _pos; setting pos.x/y/z directly changes the object
     unusedVec = (Vec){ 0.0f, 0.0f, 0.0f };
+#endif
     _pos = (Vec){ 0.0f, 0.0f, 0.0f };
     _pos.x = x;
     _pos.y = y;
@@ -1158,9 +1539,15 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
     pos = _pos;
 
     for (i = 0; i < entryCount; i++, entry++) {
+#if VERSION <= VERSION_DEMO_US
+        if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0)
+#else
         if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0) {
+#endif
             continue;
+#if VERSION > VERSION_DEMO_US
         }
+#endif
 
         animName = names;
         while (*animName != NULL) {
@@ -1185,6 +1572,9 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
                 if (mag < minMagnitude) {
                     minMagnitude = mag;
                     ret = entry;
+#if VERSION <= VERSION_DEMO_US
+                    break;
+#endif
                 }
                 break;
             }
@@ -1199,6 +1589,7 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
 const char kururinName[] = "MOBJ_KururinFloor";
 
 // FAKE: stand-in, never called (in neither symbol map; the linker strips it); it only places its literals in the .sdata2 pool
+#if VERSION > VERSION_DEMO_US
 void mobjStrippedFallPool(MapObjectEntry* entry) {
     entry->velocity.y = 0.0f;
     entry->position.y = 10.0f;
@@ -1206,3 +1597,4 @@ void mobjStrippedFallPool(MapObjectEntry* entry) {
     entry->position.z = -1.0f;
     entry->velocity.x = -0.5f;
 }
+#endif

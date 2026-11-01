@@ -25,6 +25,7 @@ extern void qqsort(void* array, s32 num, s32 size, void* compare);
  * Max HP of each partner by partner id (row) and HP level
  * (column: levels 0 to 2, then 200 for the cap).
  */
+#if VERSION == VERSION_DEMO_JP
 s16 _party_max_hp_table[8][4] = {
     {0, 0, 0, 0},
     {10, 20, 30, 200},
@@ -35,6 +36,30 @@ s16 _party_max_hp_table[8][4] = {
     {15, 20, 30, 200},
     {15, 20, 25, 200}
 };
+#elif VERSION == VERSION_DEMO_US
+s16 _party_max_hp_table[9][4] = {
+{0, 0, 0, 0},
+    {10, 20, 30, 200},
+    {10, 15, 25, 200},
+    {20, 30, 40, 200},
+    {10, 20, 30, 200},
+    {15, 25, 35, 200},
+    {15, 20, 30, 200},
+    {15, 20, 25, 200},
+{0, 0, 0, 0},
+};
+#else
+s16 _party_max_hp_table[8][4] = {
+    {0, 0, 0, 0},
+    {10, 20, 30, 200},
+    {10, 15, 25, 200},
+    {20, 30, 40, 200},
+    {10, 20, 30, 200},
+    {15, 25, 35, 200},
+    {15, 20, 30, 200},
+    {15, 20, 25, 200}
+};
+#endif
 
 /** The pouch (Mario's save data: items, badges, stats, partners, mail), allocated by pouchInit. */
 PouchData* pouchGetPtr(void) {
@@ -237,7 +262,12 @@ BOOL pouchGetItem(ItemType type) {
         return 1;
     }
     if (type == ITEM_PIANTA_TOKEN) {
+#if VERSION <= VERSION_DEMO_US
+if (yuwp->tokens < 0x7FFFFFFF)
+{
+#else
         if (yuwp->tokens < 99999) {
+#endif
             yuwp->tokens++;
         }
         return 1;
@@ -258,7 +288,11 @@ BOOL pouchGetItem(ItemType type) {
         if (mpp->currentFP < mpp->maximumFP) {
             mpp->currentFP++;
             // FAKE: dead store (function returns right after); steers register allocation
+#if VERSION <= VERSION_DEMO_US
+            itemLists[1] = (void*)0;
+#else
             itemLists[1] = NULL;
+#endif
         }
         return 1;
     }
@@ -270,48 +304,90 @@ BOOL pouchGetItem(ItemType type) {
         mpp->shineSpriteCount++;
         return 1;
     }
+#if VERSION <= VERSION_DEMO_US
+    if (((type == ITEM_BOOTS) || (type == ITEM_SUPER_BOOTS)) || (type == ITEM_ULTRA_BOOTS)) {
+#else
     if (type == ITEM_BOOTS || type == ITEM_SUPER_BOOTS || type == ITEM_ULTRA_BOOTS) {
+#endif
         switch (type) {
             case ITEM_BOOTS:
                 mpp->jumpLevel = 1;
                 break;
+#if VERSION <= VERSION_DEMO_US
+#endif
             case ITEM_SUPER_BOOTS:
                 mpp->jumpLevel = 2;
                 break;
+#if VERSION <= VERSION_DEMO_US
+#endif
             case ITEM_ULTRA_BOOTS:
                 mpp->jumpLevel = 3;
                 break;
         }
+#if VERSION <= VERSION_DEMO_US
+
+    } else if (((type == ITEM_HAMMER) || (type == ITEM_SUPER_HAMMER)) || (type == ITEM_ULTRA_HAMMER)) {
+#else
     } else if (type == ITEM_HAMMER || type == ITEM_SUPER_HAMMER || type == ITEM_ULTRA_HAMMER) {
+#endif
         switch (type) {
             case ITEM_HAMMER:
                 mpp->hammerLevel = 1;
                 break;
+#if VERSION <= VERSION_DEMO_US
+#endif
             case ITEM_SUPER_HAMMER:
                 mpp->hammerLevel = 2;
                 break;
+#if VERSION <= VERSION_DEMO_US
+#endif
             case ITEM_ULTRA_HAMMER:
                 mpp->hammerLevel = 3;
                 break;
         }
+#if VERSION <= VERSION_DEMO_US
+#endif
     } else if (type == ITEM_BOWSER_BROS_MEAT) {
         return 1;
+#if VERSION <= VERSION_DEMO_US
+    } else if ((type >= BADGE_MIN) && (type < BADGE_MAX)) {
+#else
     } else if (type >= BADGE_MIN && type < BADGE_MAX) {
+#endif
         swSet(type - 0x70);
     }
     size = 0;
+#if VERSION <= VERSION_DEMO_US
+    itemLists[0] = (void*)0;
+    itemLists[1] = (void*)0;
+    if ((type >= ITEM_MIN) && (type < ITEM_MAX)) {
+#else
     itemLists[0] = NULL;
     itemLists[1] = NULL;
     if (type >= ITEM_MIN && type < ITEM_MAX) {
+#endif
         itemLists[0] = mpp->heldItems;
+#if VERSION <= VERSION_DEMO_US
+        size = (pouchCheckItem(ITEM_STRANGE_SACK)) ? (20) : (10);
+#else
         size = pouchCheckItem(ITEM_STRANGE_SACK) ? MAX_HELD_ITEMS : HELD_ITEM_COUNT_BASE;
+#endif
         ok = 1;
+#if VERSION <= VERSION_DEMO_US
+    } else if ((type >= KEY_ITEM_MIN) && (type < KEY_ITEM_MAX)) {
+        itemLists[1] = (void*)0;
+#else
     } else if (type >= KEY_ITEM_MIN && type < KEY_ITEM_MAX) {
         itemLists[1] = NULL;
+#endif
         size = MAX_KEY_ITEMS;
         ok = 1;
         itemLists[0] = mpp->keyItems;
+#if VERSION <= VERSION_DEMO_US
+    } else if ((type >= BADGE_MIN) && (type < BADGE_MAX)) {
+#else
     } else if (type >= BADGE_MIN && type < BADGE_MAX) {
+#endif
         size = MAX_BADGES;
         ok = 1;
         itemLists[0] = mpp->badges;
@@ -424,6 +500,21 @@ BOOL pouchRemoveItem(ItemType type) {
  * battle and evt_pouch) and closes the gap; FALSE if the slot holds another item.
  * Badges drop their worn state too.
  */
+#if VERSION <= VERSION_DEMO_US
+static inline void pouchShiftDemo(s16* table1, s16* table2, int i, s32 maximum) {
+    table1[i] = ITEM_NULL;
+    if (table2 != 0)
+        table2[i] = ITEM_NULL;
+    for (; i < maximum - 1; i++) {
+        table1[i] = table1[i + 1];
+        table1[i + 1] = ITEM_NULL;
+        if (table2 != 0) {
+            table2[i] = table2[i + 1];
+            table2[i] = ITEM_NULL;
+        }
+    }
+}
+#endif
 BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     s16* table1, * table2, * p;
     BOOL valid;
@@ -460,7 +551,11 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     }
     for (i = index; i < maximum; p++, i++) {
         if (type == *p) {
+#if VERSION <= VERSION_DEMO_US
+pouchShiftDemo(table1, table2, i, maximum);
+#else
             pouchShift(table1, table2, i, maximum);
+#endif
             return TRUE;
         }
     }
@@ -472,6 +567,7 @@ char* strupr(char* str);
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_800d06b4, JP 0x800D06B4. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 void pouchHiraToKata(const char* src, char* dst) {
     u16 c;
     s32 len = strlen(src) / 2;
@@ -567,6 +663,8 @@ void pouchHiraToKata(const char* src, char* dst) {
     dst[i * 2] = 0;
 }
 #endif
+#endif
+
 
 // PAL calls pouchHiraToKata; JP and US inline their own copy of the conversion
 static inline void pouchAiueoConv(const char* src, char* dst) {
@@ -622,15 +720,26 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 #endif
 #endif
 
+#if VERSION <= VERSION_DEMO_US
+static s32 comp_aiueo(const void* a, const void* b) {
+#else
 s32 comp_aiueo(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
+#endif
     s16 ia = *(s16*)a;
     s16 ib = *(s16*)b;
+#if VERSION <= VERSION_DEMO_US
+    s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
+    if (r > 0)
+        return 1;
+    return -(r < 0);
+#else
 
     pouchAiueoConv(msgSearch(itemDataTable[ia].name), bufA);
     pouchAiueoConv(msgSearch(itemDataTable[ib].name), bufB);
     return strcmp(bufA, bufB);
+#endif
 }
 
 /** qqsort comparator: items by type_sort_order from the item table, ascending (pouchSortItem modes 1 and 3). */
@@ -644,15 +753,26 @@ s32 comp_kind(s16* a, s16* b) {
 }
 
 /** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
+#if VERSION <= VERSION_DEMO_US
+static s32 comp_aiueo_r(const void* a, const void* b) {
+#else
 s32 comp_aiueo_r(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
+#endif
     s16 ia = *(s16*)a;
     s16 ib = *(s16*)b;
+#if VERSION <= VERSION_DEMO_US
+    s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
+    if (r < 0)
+        return 1;
+    return -(r > 0);
+#else
 
     pouchAiueoConv(msgSearch(itemDataTable[ia].name), bufA);
     pouchAiueoConv(msgSearch(itemDataTable[ib].name), bufB);
     return strcmp(bufB, bufA);
+#endif
 }
 
 /** qqsort comparator: items by type_sort_order, descending (pouchSortItem modes 8 and 10). */
@@ -671,6 +791,114 @@ s32 comp_kind_r(s16* a, s16* b) {
  * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost then kind. Badges keep their worn state.
  * JP compares internal ids for badge names.
  */
+#if VERSION <= VERSION_DEMO_US
+void pouchSortItem(s32 mode) {
+    s32 k;
+    s16 items[MAX_HELD_ITEMS];
+    s16 keys[MAX_KEY_ITEMS];
+    s16 badges[MAX_BADGES];
+    s16 equipped[MAX_BADGES];
+    s32 n, i, j;
+    BOOL swap;
+    s16 t2, t1;
+    PouchData* pp[1];
+pp[0] = mpp;
+    if ((u32)mode <= 1 || mode == 7 || mode == 8) {
+        n = 0;
+        for (j = 0; j < MAX_HELD_ITEMS; j++) {
+            if (pp[0]->heldItems[j] != 0) {
+                items[n++] = pp[0]->heldItems[j];
+            }
+        }
+        for (k = n; k < MAX_HELD_ITEMS; k++) {
+            items[k] = 0;
+        }
+        if (mode == 0)
+            qqsort(items, n, 2, comp_aiueo);
+        else if (mode == 1)
+            qqsort(items, n, 2, comp_kind);
+        else if (mode == 7)
+            qqsort(items, n, 2, comp_aiueo_r);
+        else if (mode == 8)
+            qqsort(items, n, 2, comp_kind_r);
+        memcpy(pp[0]->heldItems, items, sizeof(items));
+    }
+    if ((u32)(mode - 2) <= 1 || mode == 9 || mode == 10) {
+        n = 0;
+        for (j = 0; j < MAX_KEY_ITEMS; j++) {
+            if (pp[0]->keyItems[j] != 0) {
+                keys[n++] = pp[0]->keyItems[j];
+            }
+        }
+        for (k = n; k < MAX_KEY_ITEMS; k++) {
+            keys[k] = 0;
+        }
+        if (mode == 2)
+            qqsort(keys, n, 2, comp_aiueo);
+        else if (mode == 3)
+            qqsort(keys, n, 2, comp_kind);
+        else if (mode == 9)
+            qqsort(keys, n, 2, comp_aiueo_r);
+        else if (mode == 10)
+            qqsort(keys, n, 2, comp_kind_r);
+        memcpy(pp[0]->keyItems, keys, sizeof(keys));
+    }
+if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
+            i = 0;
+            for (n = 0; n < MAX_BADGES; n++) {
+                if (pp[0]->badges[n] != 0) {
+                    badges[i] = pp[0]->badges[n];
+                    i++;
+                    equipped[i - 1] = pp[0]->equippedBadges[n];
+                }
+            }
+            for (n = i; n < MAX_BADGES; n++) {
+                badges[n] = 0;
+                equipped[n] = 0;
+            }
+            for (n = 0; n < i - 1; n++) {
+                for (j = n + 1; j < i; j++) {
+                    ItemData* a = &itemDataTable[badges[n]];
+                    ItemData* b = &itemDataTable[badges[j]];
+                    s32 ca = a->bp_cost;
+                    s32 cb = b->bp_cost;
+                    const char* ida = a->id;
+                    const char* idb = b->id;
+                    swap = FALSE;
+                    if (mode == 4) {
+                        if (strcmp(ida, idb) > 0)
+                            swap = TRUE;
+                    } else if (mode == 11) {
+                        if (strcmp(ida, idb) < 0)
+                            swap = TRUE;
+                    } else if (mode == 5) {
+                        if (a->type_sort_order > b->type_sort_order)
+                            swap = TRUE;
+                    } else if (mode == 12) {
+                        if (a->type_sort_order < b->type_sort_order)
+                            swap = TRUE;
+} else if (mode == 6) {
+                        if (ca > cb)
+                            swap = TRUE;
+                    } else if (mode == 13) {
+                        if (ca < cb)
+                            swap = TRUE;
+                    }
+if (swap) {
+                        t1 = badges[n];
+                        t2 = equipped[n];
+                        badges[n] = badges[j];
+                        equipped[n] = equipped[j];
+                        badges[j] = t1;
+                        equipped[j] = t2;
+                    }
+                }
+memcpy(pp[0]->badges, badges, sizeof(badges));
+                memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
+            }
+}
+}
+#else
 void pouchSortItem(s32 mode) {
     s32 k;
     s16 items[MAX_HELD_ITEMS];
@@ -906,6 +1134,7 @@ void pouchSortItem(s32 mode) {
         memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
     }
 }
+#endif
 
 /** Mario's coins. */
 s32 pouchGetCoin(void) {
@@ -1122,36 +1351,75 @@ s32 pouchGetPartyAttackLv(PartyId partyId) {
 }
 
 BOOL pouchAddKeepItem(s32 id) {
+#if VERSION <= VERSION_DEMO_US
+    s32 i;
+#else
     s32 i, j;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    for (i = 0; i < MAX_STORED_ITEMS; i++) {
+#else
     for (i = MAX_STORED_ITEMS - 1; i >= 0; i--) {
+#endif
         if (mpp->storedItems[i] == 0) {
+#if VERSION <= VERSION_DEMO_US
+            break;
+#else
             for (j = i; j > 0; j--) {
                 mpp->storedItems[j] = mpp->storedItems[j - 1];
+#endif
             }
+#if VERSION > VERSION_DEMO_US
             mpp->storedItems[0] = id;
             return TRUE;
+#endif
         }
+#if VERSION <= VERSION_DEMO_US
+    if (i < MAX_STORED_ITEMS) {
+        mpp->storedItems[i] = id;
+        return TRUE;
+#endif
     }
     return FALSE;
 }
 
 /** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
+#if VERSION <= VERSION_DEMO_US
+BOOL pouchRemoveKeepItem(s32 id) {
+    s32 i;
+#else
 BOOL pouchRemoveKeepItem(s32 id, s32 index) {
     s32 i, j;
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+    for (i = 0; i < MAX_STORED_ITEMS; i++) {
+#else
     if (mpp->storedItems[index] != id) {
         return FALSE;
     }
     for (i = index; i < MAX_STORED_ITEMS; i++) {
+#endif
         if (mpp->storedItems[i] == id) {
+#if VERSION <= VERSION_DEMO_US
+            break;
+#else
             mpp->storedItems[i] = 0;
             for (j = i; j < MAX_STORED_ITEMS - 1; j++) {
                 mpp->storedItems[j] = mpp->storedItems[j + 1];
                 mpp->storedItems[j + 1] = 0;
+#endif
             }
+#if VERSION > VERSION_DEMO_US
             return TRUE;
+#endif
         }
+#if VERSION <= VERSION_DEMO_US
+    if (i < MAX_STORED_ITEMS) {
+        mpp->storedItems[i] = 0;
+        return TRUE;
+#endif
     }
     return FALSE;
 }
@@ -1274,6 +1542,7 @@ BOOL pouchEquipBadgeID(s32 badgeId) {
 }
 
 // Descriptive name (not in the symbol maps).
+#if VERSION > VERSION_DEMO_US
 BOOL pouchUnEquipBadgeID(s32 badgeId) {
     int i;
 
@@ -1287,9 +1556,14 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
     }
     return FALSE;
 }
+#endif
 
 s32 pouchArriveBadge(s32 id) {
+#if VERSION <= VERSION_DEMO_US
+return badgeShop_add(bdsw->bargain_table, (s16)id, 1);
+#else
     return badgeShop_add(bdsw->special_table, (s16)id, 1);
+#endif
 }
 
 /**

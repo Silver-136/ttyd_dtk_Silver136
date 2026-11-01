@@ -119,6 +119,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /** Status vulnerability of the Koopatrol (percent chance to take each status): resists most statuses. */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 70, 60, 100, 60, 100, 100, 60, 100, 70, 100, 70, 100, 70, 70, 60, 60, 100, 60, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     75, // stop
@@ -143,6 +146,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 /** Defence of the Koopatrol (flipped over): no damage reduction. */
 static BattleUnitDefense defence_turn = {0};

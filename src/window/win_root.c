@@ -82,7 +82,11 @@ u8 enemy_monoshiri_sort_table[] = {
 #include "driver/swdrv.h"
 #include "mario/mario_party.h"
 #include "memory.h"
+#if VERSION <= VERSION_DEMO_US
 #include "evt/evt_lottery.h"
+#else
+#include "evt/evt_lottery.h"
+#endif
 #include "icon_ids.h"
 #include "driver/animdrv.h"
 
@@ -1150,6 +1154,7 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
                         luigi_book_list[w->item.bookIdx][w->item.bookPage * 2]);
         winFontSetLabel((Vec){220.0f + lx, y - 14.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0xFF},
                         luigi_book_list[w->item.bookIdx][w->item.bookPage * 2 + 1]);
+#if VERSION > VERSION_DEMO_US
         pose = ((MessageWork*)msgGetWork())->poseId;
         anim = animPoseGetAnimDataPtr(pose);
         if (w->item.bookPage < w->item.bookPages - 1) {
@@ -1160,6 +1165,7 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
         animPoseSetLocalTime(pose, gp->retraceCount % (s32)anim->loopInfo[2]);
         animPoseMain(pose);
         animPoseDraw(pose, 425.0f + x, y - 275.0f, 0.0f, 180.0f, 5.0f, 2);
+#endif
     }
 }
 
@@ -1598,6 +1604,16 @@ WinSortData sort_6[] = {
     {NULL, NULL},
 };
 /** Sort options of the Tattle Log: by number, by where the enemy appears most, or by name. */
+#if VERSION <= VERSION_DEMO_US
+static void sort_4_3_func(WindowWork* wp) {
+    pouchSortItem(!wp->sortRev ? 4 : 11);
+    pouchSortItem(!wp->sortRev ? 6 : 13);
+    wp->sortRev = 1 - wp->sortRev;
+    winMakeEquipList(wp);
+    wp->badge.sel[1] = 0;
+    wp->badge.page[1] = wp->badge.sel[1] / 8;
+}
+#endif
 WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
     {"msg_menu_sort_place", sort_7_2_func},
@@ -2148,6 +2164,7 @@ void sort_7_2_func(WindowWork* wp) {
 }
 
 /** Tattle Log by name, retail: katakana-folded, with Doopliss's entries under his current name. */
+#if VERSION > VERSION_DEMO_US
 s32 compare_func3(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -2172,7 +2189,9 @@ s32 compare_func3(const void* a, const void* b) {
     }
     return strcmp(buf1, buf2);
 }
+#endif
 
+#if VERSION > VERSION_DEMO_US
 s32 compare_func3_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -2197,8 +2216,31 @@ s32 compare_func3_r(const void* a, const void* b) {
     }
     return strcmp(buf2, buf1);
 }
+#endif
 
 /** Tattle Log by name (by number first, then by name). */
+#if VERSION <= VERSION_DEMO_US
+static s32 compare_func3(const void* a, const void* b) {
+    const WinSortEnt* ea = a;
+    const WinSortEnt* eb = b;
+    TattleEntry* ta = battleGetUnitMonosiriPtr(ea->id);
+    TattleEntry* tb = battleGetUnitMonosiriPtr(eb->id);
+    const char* sa = msgSearch(ta->enemyTag);
+    const char* sb = msgSearch(tb->enemyTag);
+
+    return strcmp(sa, sb);
+}
+static s32 compare_func3_r(const void* a, const void* b) {
+    const WinSortEnt* ea = a;
+    const WinSortEnt* eb = b;
+    TattleEntry* ta = battleGetUnitMonosiriPtr(ea->id);
+    TattleEntry* tb = battleGetUnitMonosiriPtr(eb->id);
+    const char* sa = msgSearch(ta->enemyTag);
+    const char* sb = msgSearch(tb->enemyTag);
+
+    return strcmp(sb, sa);
+}
+#endif
 void sort_7_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->log.enemy, wp->log.enemyNum, sizeof(WinSortEnt), compare_func1);
@@ -2572,6 +2614,100 @@ void winZClear(void) {
  * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
  * its picture (flags 0x1000) and scroll arrows.
  */
+#if VERSION <= VERSION_DEMO_US
+static void winMailDisp(WindowWork* wp) {
+    s32 i;
+    s32 id;
+    s32 kind;
+    GXColor col;
+    MailData* mail;
+
+    if (wp->item.mailX < 320.0f && wp->item.mailY > -240.0f) {
+        winMailGX(wp, wp->item.mailX, wp->item.mailY);
+        if (wp->item.state != 202) {
+            for (i = 0; i < wp->item.mailNum; i++) {
+                GXColor white;
+
+                id = wp->item.mail[i].id;
+                kind = wp->item.mail[i].kind;
+                mail = mailGetPtr(id);
+                {
+                    GXColor black = {0x00, 0x00, 0x00, 0xFF};
+                    if (mail->flags & MAIL_FLAG_PEACH) {
+                        col = (GXColor){0xD7, 0xAC, 0xBC, 0xFF};
+                    } else if (mail->flags & MAIL_FLAG_TROUBLE) {
+                        col = (GXColor){0xD3, 0xD7, 0xAC, 0xFF};
+                    } else if (mail->flags & MAIL_FLAG_INFO) {
+                        col = (GXColor){0xAC, 0xC2, 0xD7, 0xFF};
+                    } else {
+                        col = (GXColor){0xE1, 0xE1, 0xE1, 0xFF};
+                    }
+                    winTexInit((TEXPalette*)*wp->res->data);
+                    winTexSet(0x77, (Vec){4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+                    white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+                    winTexSet((u32)((s32)pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+                    winTexSet(0x65 + (kind + 1) / 10, (Vec){2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+                    winTexSet(0x65 + (kind + 1) % 10, (Vec){2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+                    winFontInit();
+winFontSetLabel((Vec){120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
+}
+            }
+            GXSetScissor(0, 0, 0x260, 0x1E0);
+        } else {
+            s32 kind2 = wp->item.mail[wp->item.mailSel].kind;
+            GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
+            GXColor black = {0x00, 0x00, 0x00, 0xFF};
+            GXColor col;
+
+            mail = mailGetPtr(wp->item.mail[wp->item.mailSel].id);
+            if (mail->flags & MAIL_FLAG_PEACH) {
+                col = (GXColor){0xD7, 0xAC, 0xBC, 0xFF};
+            } else if (mail->flags & MAIL_FLAG_TROUBLE) {
+                col = (GXColor){0xD3, 0xD7, 0xAC, 0xFF};
+            } else if (mail->flags & MAIL_FLAG_INFO) {
+                col = (GXColor){0xAC, 0xC2, 0xD7, 0xFF};
+            } else {
+                col = (GXColor){0xE1, 0xE1, 0xE1, 0xFF};
+            }
+            winTexInit((TEXPalette*)*wp->res->data);
+            winTexSet(0x77, (Vec){4.0f + (208.0f + wp->item.mailX), wp->item.mailY - 56.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+            winTexSet(0x5E, (Vec){72.0f + wp->item.mailX, wp->item.mailY - 56.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+            winTexSet(0x65 + (kind2 + 1) / 10, (Vec){2.0f + (88.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+            winTexSet(0x65 + (kind2 + 1) % 10, (Vec){2.0f + (104.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+            winFontInit();
+winFontSetLabel((Vec){120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
+GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158, 0xAE);
+winTexInit((TEXPalette*)*wp->res->data);
+            winTexSet(0x77, (Vec){4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f}, (Vec){1.0f, 7.5f, 1.0f}, col);
+            winFontInit();
+winFontSetLabel((Vec){80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, (GXColor){0x00, 0x00, 0x00, 0xFF}, mail->body);
+if (mail->flags & MAIL_FLAG_PICTURE) {
+                winTexInit((TEXPalette*)*wp->mailRes->data);
+winTexSet(mail->icon, (Vec){210.0f + wp->item.mailX, (wp->item.mailY - (f32)((wp->item.mailLines - 3) * 21)) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+}
+            GXSetScissor(0, 0, 0x260, 0x1E0);
+{
+                winIconInit();
+                if (wp->item.mailLine == 0) {
+                    if ((gp->retraceCount & 0x1F) < 0x14) {
+                        winIconSet(ICON_ARROW_DOWN, (Vec){360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    }
+} else if (wp->item.mailLine + 8 == wp->item.mailLines) {
+if ((gp->retraceCount & 0x1F) < 0x14) {
+                        winIconSet(ICON_ARROW_UP, (Vec){360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    }
+                } else {
+                    if ((gp->retraceCount & 0x1F) < 0x14) {
+                        winIconSet(ICON_ARROW_UP, (Vec){360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                        winIconSet(ICON_ARROW_DOWN, (Vec){360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+                    }
+                }
+                winIconSet(ICON_SUBSTICK_NEUTRAL, (Vec){360.0f + wp->item.mailX, 20.0f + (wp->item.mailY - 230.0f), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            }
+        }
+    }
+}
+#else
 void winMailDisp(WindowWork* wp) {
     s32 i;
     s32 id;
@@ -2677,8 +2813,10 @@ void winMailDisp(WindowWork* wp) {
         }
     }
 }
+#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_8014d5dc, JP 0x8014D5DC. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
     GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
     GXSetTexCopyDst(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE);
@@ -2694,12 +2832,14 @@ void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
     mapDispOff();
     camDispOff(CAMERA_3D);
 }
+#endif
 
 /**
  * Draws the frame captured by winRootBgCaptureDisp full screen as the menu's backdrop,
  * queued each frame by winRootMain, so the field can stay switched off while the menu is open.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8014d338, JP 0x8014D338. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 void winRootBgDrawDisp(s32 unused, WindowWork* bg) {
     GXTexObj obj;
     f32 w;
@@ -2749,3 +2889,4 @@ void winRootBgDrawDisp(s32 unused, WindowWork* bg) {
         GXTexCoord2f32(0.0f, 0.0f);
     }
 }
+#endif

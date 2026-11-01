@@ -59,8 +59,16 @@ static EvtWord dmg_first_attack_pos[19];
 static EvtWord yarn_event[44];
 static EvtWord entry_event[48];
 static EvtWord damage_event[10];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[183];
+#else
 static EvtWord dead_event[189];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord blow_dead_event[98];
+#else
 static EvtWord blow_dead_event[104];
+#endif
 static EvtWord battle_end_event[7];
 static EvtWord yure_event[76];
 static EvtWord move_kuutei_event[83];
@@ -77,7 +85,11 @@ static EvtWord renzoku_attack_event[149];
 static EvtWord renzoku_attack_event_sub[55];
 static EvtWord renzoku_attack_event_sub_no_last[10];
 static EvtWord renzoku_attack_event_sub_last[79];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event[6];
+#else
 static EvtWord wait_event[7];
+#endif
 
 /**
  * Script helper that allocates the Pider's yarn drawing state and keeps it in the unit's countersetWeapon slot,
@@ -123,26 +135,66 @@ BattleUnitKind unit_piders = {
     9999, // pbSoftCap
     46, // width
     56, // height
+#if VERSION <= VERSION_DEMO_US
+    0,
+    56,
+    0.0f,
+    28.0f,
+    0.0f,
+    0,
+    0,
+#else
     {0, 56}, // hitOffset
     {0.0f, 28.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {23.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    23.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    18.0f,
+    0.0f,
+    0.0f,
+    13.0f,
+    32.0f,
+    0.0f,
+    0.0f,
+    28.0f,
+    0.0f,
+#else
     {18.0f, 0.0f, 0.0f}, // bintaHitOffset
     {13.0f, 32.0f, 0.0f}, // kissHitOffset
     {0.0f, 28.0f, 0.0f}, // cutBaseOffset
+#endif
     46.0f, // cutWidth
     56.0f, // cutHeight
     0, // turnOrder
     0, // turnOrderVariance
     0, // swallowChance
     2, // swallowAttributes
+#if VERSION > VERSION_DEMO_US
     100, // hammerKnockbackChance
+#endif
     0, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+0,
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_PAIDA_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -164,6 +216,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type reactions of the Pider: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {90, 100, 50, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 90, 90, 100, 70, 100, 90, 100, 100, 95};
+#else
 static StatusVulnerability regist = {
     90, // sleep
     90, // stop
@@ -188,6 +243,7 @@ static StatusVulnerability regist = {
     100, // invisible
     95, // ohko
 };
+#endif
 
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "PAI_N_1"},
@@ -630,7 +686,9 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_SetPos, LW(10), 0, -1000, 0)
+#endif
     CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
@@ -654,7 +712,11 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     ADD(LW(1), 40)
+#if VERSION <= VERSION_DEMO_US
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_CUBIC_IN, 0, -1)
+#else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_CUBIC_IN, 0, MOVE_SOUND_FROM_TABLE)
+#endif
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
     CALL(btlevtcmd_GetExp, LW(10), LW(0))
@@ -664,7 +726,9 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_SetPos, LW(10), 0, -1000, 0)
+#endif
     CALL(btlevtcmd_KillUnit, LW(10), 1)
     RETURN
 EVT_END()
@@ -952,10 +1016,24 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
+    IF_INT_EQUAL(LW(0), 1)
+        CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
+    ELSE
+        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
+        IF_INT_EQUAL(LW(0), 1)
+            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 40, 0)
+        ELSE
+            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
+        END_IF
+    END_IF
+#else
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(1))
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
+#endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 0, 110, 5)
     LOOP(5)
@@ -1001,10 +1079,23 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
+#if VERSION <= VERSION_DEMO_US
+IF_INT_EQUAL(LW(0), 1)
+        CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
+    ELSE
+        CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
+        IF_INT_EQUAL(LW(0), 1)
+            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 40, 0)
+        ELSE
+            CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 30, 0)
+        END_IF
+    END_IF
+#else
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(1))
     SET_FLOAT_VALUE(LW(0), FLOAT(30.0f))
     MULTIPLY_FLOAT(LW(0), LW(1))
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
+#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WINDUP_ANGLE, LW(0))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, LW(0), 100, 5)
@@ -1221,5 +1312,9 @@ EVT_END()
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+#else
 EVT_END_PAD()
+#endif
 

@@ -84,6 +84,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Damage-type reactions of the Spunia: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {70, 90, 70, 150, 70, 150, 150, 70, 150, 70, 150, 70, 150, 70, 70, 90, 90, 150, 70, 0, 0, 30};
+#else
 static StatusVulnerability regist = {
     70, // sleep
     90, // stop
@@ -108,6 +111,7 @@ static StatusVulnerability regist = {
     0, // invisible
     30, // ohko
 };
+#endif
 
 /**
  * Event data table of the Spunia: scripts that replace the standard handling for an attacker being hurt by

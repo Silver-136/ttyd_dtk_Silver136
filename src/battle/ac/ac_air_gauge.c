@@ -42,6 +42,8 @@ GaugeKey _table_4[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0
 GaugeKey _table_5[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_6[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+#define GAUGE_TABLE_DEMO {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}}
 typedef struct AirPw {
     s32 frame;
     f32 gauge;
@@ -49,6 +51,15 @@ typedef struct AirPw {
     u32 hold;
     s32 flag;
 } AirPw;
+#else
+typedef struct AirPw {
+    s32 frame;
+    f32 gauge;
+    s32 hit;
+    u32 hold;
+    s32 flag;
+} AirPw;
+#endif
 
 static void actionCommandDisp(f32 x, f32 y);
 f32 _GetGaugeDecValue(void);
@@ -209,7 +220,11 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
     return 1;
 }
 
+#if VERSION <= VERSION_DEMO_US
+static f32 _GetGaugeDecValue(void) {
+#else
 f32 _GetGaugeDecValue(void) {
+#endif
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
     AirPw* pw = (AirPw*)ac->work;
@@ -217,15 +232,48 @@ f32 _GetGaugeDecValue(void) {
     f32 base;
 
     switch ((u32)ac->params[7]) {
+#if VERSION <= VERSION_DEMO_US
+case 0:
+            base = 0.0f;
+            t = _table_0;
+            break;
+        case 1:
+            base = 0.2f;
+            t = _table_1;
+            break;
+        case 2:
+            base = 0.3f;
+            t = _table_2;
+            break;
+        case 3:
+            base = 0.4f;
+            t = _table_3;
+            break;
+        case 4:
+            base = 0.45f;
+            t = _table_4;
+            break;
+        case 5:
+            base = 0.45f;
+            t = _table_5;
+            break;
+#else
         case 0: base = 0.3f; t = _table_0; break;
         case 1: base = 0.33f; t = _table_1; break;
         case 2: base = 0.36f; t = _table_2; break;
         case 3: base = 0.4f; t = _table_3; break;
         case 4: base = 0.44f; t = _table_4; break;
         case 5: base = 0.47f; t = _table_5; break;
+#endif
         case 6:
+#if VERSION <= VERSION_DEMO_US
+        default:
+            t = _table_6;
+            base = 0.45f;
+#else
         default: t = _table_6;
         base = 0.5f;
+#endif
         break;
     }
     while (pw->hold > t->frame) {

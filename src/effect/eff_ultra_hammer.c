@@ -42,6 +42,7 @@ s16 wakka_texcoord0_tbl[];
 
 #ifdef __MWERKS__
 
+#if VERSION > VERSION_DEMO_US
 s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     24347, 0, -8825, // 0
     20710, 0, -15961, // 1
@@ -86,7 +87,54 @@ s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 0, -13714, // 40
     0, 0, -26514, // 41
 };
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
+    24347, 2284, -8524,
+    20710, 4131, -15417,
+    15047, 5596, -20888,
+    7910, 6538, -24400,
+    0, 6862, -25610,
+    -7910, 6538, -24400,
+    -15047, 5596, -20888,
+    -20710, 4131, -15417,
+    -24347, 2284, -8524,
+    -25600, 236, -883,
+    -24347, -1810, 6758,
+    -20710, -3657, 13651,
+    -15047, -5123, 19121,
+    -7910, -6064, 22634,
+    0, -6389, 23844,
+    7910, -6064, 22634,
+    15047, -5123, 19121,
+    20710, -3657, 13651,
+    24347, -1810, 6758,
+    25600, 236, -883,
+    12173, 1260, -4703,
+    10355, 2183, -8150,
+    7523, 2916, -10885,
+    3955, 3387, -12641,
+    0, 3549, -13246,
+    -3955, 3387, -12641,
+    -7523, 2916, -10885,
+    -10355, 2183, -8150,
+    -12173, 1260, -4703,
+    -12800, 236, -883,
+    -12173, -787, 2937,
+    -10355, -1710, 6384,
+    -7523, -2443, 9119,
+    -3955, -2914, 10875,
+    0, -3076, 11480,
+    3955, -2914, 10875,
+    7523, -2443, 9119,
+    10355, -1710, 6384,
+    12173, -787, 2937,
+    12800, 236, -883,
+    0, 3549, -13246,
+    0, 6862, -25610,
+};
+#endif
 s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
     24576, 0, // 0
     25600, 0, // 1
@@ -130,6 +178,14 @@ s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
     23552, 8192, // 39
     28672, 0, // 40
     28672, 8192, // 41
+#if VERSION <= VERSION_DEMO_US
+    0, 0,
+    0, 0,
+    0, 0,
+    0, 0,
+    0, 0,
+    0, 0,
+#endif
 };
 
 /** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
@@ -166,7 +222,11 @@ f32 scroll_tbl[] = {
 };
 
 s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
+#if VERSION <= VERSION_DEMO_US
+    0, 61, 16,
+#else
     0, 64, 0, // 0
+#endif
 };
 
 u8 wakka_color0_tbl[] ATTRIBUTE_ALIGN(32) = {
@@ -420,6 +480,15 @@ u8 wakka_dl_0_size_tbl[] = {
 
 #endif
 
+#if VERSION <= VERSION_DEMO_US
+static f32 scale_tbl[] = {
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+    1.2f, 1.4f, 1.6f, 1.8f, 2.0f,
+    2.2f, 2.4f, 2.6f, 2.8f, 3.0f,
+    3.2f, 3.4f, 3.6f, 3.8f, 4.0f,
+    4.2f, 4.4f, 4.6f, 4.8f, 5.0f,
+};
+#endif
 void effUltraHammerMain(EffectEntry* effect);
 void effUltraHammerDisp(CameraId camId, void* param);
 
@@ -468,7 +537,11 @@ EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 
  * Counts down and fades alpha in the last 16 frames;
  * each of the three rings waits for its start delay, then runs its 25-step scroll/scale table and repeats.
  */
+#if VERSION <= VERSION_DEMO_US
+static void effUltraHammerMain(EffectEntry* effect) {
+#else
 void effUltraHammerMain(EffectEntry* effect) {
+#endif
     EffUltraHammerData* data;
     Vec position;
     int i;
@@ -492,7 +565,11 @@ void effUltraHammerMain(EffectEntry* effect) {
         } else {
             if (data->scroll < 25) {
                 data->offsetX = scroll_tbl[data->scroll];
+#if VERSION <= VERSION_DEMO_US
+data->scale = scale_tbl[data->scroll];
+#else
                 data->scale = 3.5f;
+#endif
                 data->scroll += 1;
             } else {
                 data->update = 15;

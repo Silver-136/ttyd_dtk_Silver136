@@ -75,9 +75,15 @@ typedef struct SplineWork {
     s32 manual;    // 0x28
 } SplineWork;
 
+#if VERSION > VERSION_DEMO_US
 #pragma force_active on
+#endif
+#if VERSION > VERSION_DEMO_US
 static const char coin_fmt[] = "%f%f%f";
+#endif
+#if VERSION > VERSION_DEMO_US
 #pragma force_active reset
+#endif
 
 /** Black text colour of the "You got N coins!" line in the coin reward window (coingetDisp). */
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
@@ -94,6 +100,14 @@ s32 evt_sub_mail_event_end[1];
  * Sway of a hammered tree, one row per frame for 25 frames: the trunk's tilt in degrees and the leaves' two
  * offsets, swinging out and settling back to rest. tree_evt reads it.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_sub_stopwatch)
+    LOOP(0)
+        WAIT_FRAMES(1)
+    END_LOOP
+    RETURN
+EVT_END()
+#endif
 s32 tree_data[] = {
     -230000000, -230000000, -230000000, -230000547, -229998519, -229998338, -230001199, -229996749,
     -229996348, -230001643, -229995557, -229995012, -230001570, -229995811, -229995310, -230000702,
@@ -111,17 +125,87 @@ s32 tree_data[] = {
  * Stopwatch script that just waits a frame forever: scripts spawn it with SPAWN_EVENT_GET_ID
  * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(evt_sub_stopwatch)
     LOOP(0)
         WAIT_FRAMES(1)
     END_LOOP
     RETURN
 EVT_END()
+#endif
 
 /**
  * Sideways sway of a checked bush, one offset per frame for 12 frames, out and back to rest;
  * kusa_evt reads it.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(tree_evt)
+    SET_VALUE(LF(0), 0)
+    IF_INT_NOT_EQUAL(LW(3), 0)
+        SET_VALUE(LF(0), 1)
+    END_IF
+    IF_INT_NOT_EQUAL(LW(4), 0)
+        SET_VALUE(LF(0), 1)
+    END_IF
+    IF_INT_EQUAL(LF(0), 1)
+        CALL(evt_mapobj_get_position, LW(2), LW(13), LW(14), LW(15))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_HIT_TREE1"), LW(13), LW(14), LW(15), 0)
+        CALL(evt_snd_sfxon_3d, STRING("SFX_HIT_TREE1_LEAVES1"), LW(13), LW(14), LW(15), 0)
+        CALL(evt_mapobj_get_position, LW(2), LW(13), LW(14), LW(15))
+        CALL(evt_mapobj_get_position, LW(3), LW(10), LW(11), LW(12))
+        SET_VALUE(LW(14), LW(11))
+        CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
+        SET_VALUE(LW(15), LW(12))
+        SUBTRACT(LW(14), 25)
+        SWITCH(LW(0))
+            CASE_EQUAL(0)
+            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 0, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
+            CASE_EQUAL(1)
+            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 3, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
+            CASE_EQUAL(2)
+            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 4, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
+            CASE_EQUAL(3)
+            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 4, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
+            CASE_EQUAL(4)
+            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 3, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
+            CASE_EQUAL(5)
+            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 2, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
+            CASE_EQUAL(6)
+            CALL(evt_eff64, 0, STRING("fall_leaf_n64"), 2, LW(13), LW(14), LW(15), 60, 0, 0, 0, 0, 0, 0, 0)
+        END_SWITCH
+    END_IF
+    IF_INT_NOT_EQUAL(LW(5), 0)
+        SPAWN_EVENT(LW(5))
+    END_IF
+    SET_INT_READ_ADDR(PTR(tree_data))
+    LOOP(25)
+        READ_INT3(LW(10), LW(11), LW(12))
+        IF_INT_NOT_EQUAL(LW(2), 0)
+            CALL(evt_mapobj_rotate, 1, LW(2), FLOAT(0.0f), FLOAT(0.0f), LW(10))
+        END_IF
+        IF_INT_NOT_EQUAL(LW(3), 0)
+            CALL(evt_mapobj_trans, 1, LW(3), LW(11), FLOAT(0.0f), FLOAT(0.0f))
+        END_IF
+        IF_INT_NOT_EQUAL(LW(4), 0)
+            CALL(evt_mapobj_trans, 1, LW(4), LW(12), FLOAT(0.0f), FLOAT(0.0f))
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+    RETURN
+EVT_END()
+EVT_BEGIN(evt_sub_tree_access_entry)
+    SET_INT_READ_ADDR(LW(0))
+    LOOP(0)
+        READ_INT3(LW(0), LW(1), LW(2))
+        READ_INT3(LW(3), LW(4), LW(5))
+        IF_INT_EQUAL(LW(0), 7)
+            BREAK_LOOP
+        END_IF
+        CALL(evt_run_case_evt, CASE_HAMMER, 1, LW(1), 0, PTR(tree_evt), 0)
+    END_LOOP
+    RETURN
+EVT_END()
+#endif
 static s32 kusa_data[] = {
     -230000000, -230001918, -230003070, -230002273, -230000794, -230000000, -230000794, -230002273,
     -230003070, -230002501, -230001249, -230000000,
@@ -131,6 +215,36 @@ static s32 kusa_data[] = {
  * The pale yellow "You got N coins!" window that evt_sub_get_coin opens for coin rewards;
  * coingetDisp draws it.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(kusa_evt)
+    CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
+    CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(10), LW(11), LW(12), 0)
+    IF_INT_NOT_EQUAL(LW(3), 0)
+        SPAWN_EVENT(LW(3))
+    END_IF
+    SET_INT_READ_ADDR(PTR(kusa_data))
+    LOOP(12)
+        READ_INT(LW(10))
+        IF_INT_NOT_EQUAL(LW(2), 0)
+            CALL(evt_mapobj_trans, 1, LW(2), LW(10), FLOAT(0.0f), FLOAT(0.0f))
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+    RETURN
+EVT_END()
+EVT_BEGIN(evt_sub_kusa_access_entry)
+    SET_INT_READ_ADDR(LW(0))
+    LOOP(0)
+        READ_INT3(LW(0), LW(1), LW(2))
+        READ_INT(LW(3))
+        IF_INT_EQUAL(LW(0), 4)
+            BREAK_LOOP
+        END_IF
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(kusa_evt), 0)
+    END_LOOP
+    RETURN
+EVT_END()
+#endif
 WinMgrDesc coinget_window_desc[] = {
     {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, coingetDisp},
 };
@@ -141,6 +255,7 @@ WinMgrDesc coinget_window_desc[] = {
  * then sways map objects LW(2) (trunk, rotated)
  * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(tree_evt)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)
@@ -196,12 +311,14 @@ EVT_BEGIN(tree_evt)
     END_LOOP
     RETURN
 EVT_END()
+#endif
 
 /**
  * Map setup helper: walks the tree table at LW(0) (rows of six words: leaf variant 0-6, hit object, trunk,
  * leaves, leaves, drop script; a first word of 7 ends it)
  * and registers a hammer case on each hit object that runs tree_evt.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(evt_sub_tree_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -214,12 +331,14 @@ EVT_BEGIN(evt_sub_tree_access_entry)
     END_LOOP
     RETURN
 EVT_END()
+#endif
 
 /**
  * Shakes a bush Mario checks: plays the grass sound at Mario, spawns the optional drop script in LW(3),
  * and sways map object LW(2) sideways through kusa_data for 12 frames.
  * Run per bush by evt_sub_kusa_access_entry.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(kusa_evt)
     SET_TYPE(0)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -237,12 +356,14 @@ EVT_BEGIN(kusa_evt)
     END_LOOP
     RETURN
 EVT_END()
+#endif
 
 /**
  * Map setup helper: walks the bush table at LW(0) (rows of four words: kind, hit object, map object,
  * drop script; a first word of 4 ends it) and registers an A-button case in front of each one that runs
  * kusa_evt.
  */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(evt_sub_kusa_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -255,7 +376,348 @@ EVT_BEGIN(evt_sub_kusa_access_entry)
     END_LOOP
     RETURN
 EVT_END()
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_sub_starstone)
+    // Mario stops and the star goes into his pouch; the Doopliss scene (-1) adds nothing.
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_party_stop, 0)
+    SWITCH(LW(0))
+        CASE_EQUAL(1)
+        CALL(evt_pouch_get_starstone, 1)
+        CALL(evt_pouch_add_item, ITEM_DIAMOND_STAR, LW(2))
+        CASE_EQUAL(2)
+        CALL(evt_pouch_get_starstone, 2)
+        CALL(evt_pouch_add_item, ITEM_EMERALD_STAR, LW(2))
+        CASE_EQUAL(3)
+        CALL(evt_pouch_get_starstone, 3)
+        CALL(evt_pouch_add_item, ITEM_GOLD_STAR, LW(2))
+        CASE_EQUAL(4)
+        CALL(evt_pouch_get_starstone, 4)
+        CALL(evt_pouch_add_item, ITEM_RUBY_STAR, LW(2))
+        CASE_EQUAL(5)
+        CALL(evt_pouch_get_starstone, 5)
+        CALL(evt_pouch_add_item, ITEM_SAPPHIRE_STAR, LW(2))
+        CASE_EQUAL(6)
+        CALL(evt_pouch_get_starstone, 6)
+        CALL(evt_pouch_add_item, ITEM_GARNET_STAR, LW(2))
+        CASE_EQUAL(7)
+        CALL(evt_pouch_get_starstone, 7)
+        CALL(evt_pouch_add_item, ITEM_CRYSTAL_STAR, LW(2))
+        CASE_EQUAL(-1)
+    END_SWITCH
+    // Remember which star this is for the rest of the scene.
+    IF_INT_EQUAL(LW(0), 1)
+        SET_VALUE(LF(1), 1)
+    END_IF
+    IF_INT_EQUAL(LW(0), 2)
+        SET_VALUE(LF(2), 1)
+    END_IF
+    IF_INT_EQUAL(LW(0), 3)
+        SET_VALUE(LF(3), 1)
+    END_IF
+    IF_INT_EQUAL(LW(0), 4)
+        SET_VALUE(LF(4), 1)
+    END_IF
+    IF_INT_EQUAL(LW(0), 5)
+        SET_VALUE(LF(5), 1)
+    END_IF
+    IF_INT_EQUAL(LW(0), 6)
+        SET_VALUE(LF(6), 1)
+    END_IF
+    IF_INT_EQUAL(LW(0), 7)
+        SET_VALUE(LF(7), 1)
+    END_IF
+    IF_INT_EQUAL(LW(0), -1)
+        SET_VALUE(LF(8), 1)
+    END_IF
+    // The fanfare lasts at least 9.7 seconds; the screen flashes white with a chime.
+    CALL(set_stop, 0)
+    BEGIN_INLINE_EVENT
+        WAIT_MS(9700)
+        CALL(set_stop, 1)
+    END_INLINE_EVENT
+    CALL(evt_snd_sfxon, STRING("SFX_EVT_STARSTONE_WHITEOUT1"), 0)
+    CALL(evt_fade_entry, FADE_OUT_BLACK, 300, 255, 255, 255)
+    CALL(evt_fade_end_wait)
+    // In the flash the star appears beside Mario (or Doopliss posing as him), he strikes a pose and the
+    // Crystal Star fanfare starts.
+    IF_INT_EQUAL(LF(8), 1)
+        CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
+    ELSE
+        CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
+    END_IF
+    CALL(evt_sub_get_sincos, 0, LW(5), LW(6))
+    MULTIPLY_FLOAT(LW(5), FLOAT(40.0f))
+    MULTIPLY_FLOAT(LW(6), FLOAT(40.0f))
+    ADD_FLOAT(LW(5), LW(2))
+    ADD_FLOAT(LW(6), LW(4))
+    CALL(evt_item_set_position, LW(1), LW(5), LW(3), LW(6))
+    CALL(evt_mario_adjust_dir)
+    WAIT_MS(500)
+    IF_INT_EQUAL(LF(8), 0)
+        CALL(evt_mario_set_pose, STRING("M_N_3"))
+    END_IF
+    // Fade back in; the camera closes in while the star spirals up around him, spinning,
+    // until it hovers overhead.
+    CALL(evt_fade_entry, 9, 300, 255, 255, 255)
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_STARSTONE1"))
+    CALL(bgm_start_wait)
+    IF_INT_EQUAL(LF(8), 1)
+        CALL(evt_cam3d_evt_set_npc_rel, STRING("にせマリオ"), 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
+    ELSE
+        CALL(evt_cam3d_evt_set_rel, 0, 50, 397, 0, 70, 25, 2000, EASING_SINE_IN_OUT)
+    END_IF
+    CALL(evt_snd_sfxon_3d, STRING("SFX_SE2_EVT_STARSTONE_GET1"), LW(5), LW(3), LW(6), 0)
+    SET_VALUE(LW(7), LW(1))
+    SET_FLOAT_VALUE(LW(8), FLOAT(35.0f))
+    SET_FLOAT_VALUE(LW(9), LW(3))
+    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 0, 3600, 170)
+    LOOP(171)
+        CALL(evt_sub_intpl_get_value)
+        IF_INT_EQUAL(LF(8), 1)
+            CALL(evt_npc_get_position, STRING("にせマリオ"), LW(2), LW(3), LW(4))
+        ELSE
+            CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
+        END_IF
+        CALL(evt_sub_get_sincos, LW(0), LW(5), LW(6))
+        MULTIPLY_FLOAT(LW(5), LW(8))
+        MULTIPLY_FLOAT(LW(6), LW(8))
+        ADD_FLOAT(LW(5), LW(2))
+        ADD_FLOAT(LW(6), LW(4))
+        CALL(evt_item_set_position, LW(7), LW(5), LW(9), LW(6))
+        CALL(stone_ry, LW(7), LW(0))
+        SUBTRACT_FLOAT(LW(8), FLOAT(0.205078125f))
+        ADD_FLOAT(LW(9), FLOAT(0.2822265625f))
+        WAIT_FRAMES(1)
+    END_LOOP
+    // Mario cheers and holds the star high in a burst of light, and the chapter's "You got a Crystal Star!"
+    // message shows.
+    IF_INT_NOT_EQUAL(LF(8), 1)
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY1"), LW(0), LW(1), LW(2), 0)
+    END_IF
+    IF_INT_EQUAL(LF(8), 1)
+        CALL(evt_npc_set_anim, STRING("にせマリオ"), STRING("EM_I_1"))
+    ELSE
+        CALL(evt_mario_set_pose, STRING("M_P_2"))
+    END_IF
+    CALL(evt_item_get_position, LW(7), LW(0), LW(1), LW(2))
+    ADD(LW(1), 16)
+    CALL(evt_eff64, STRING("sub_hikari"), STRING("radiation_n64"), 12, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
+    ADD(LW(2), -10)
+    CALL(evt_eff, STRING("sub_bg"), STRING("itemget"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(stone_bg, LW(7))
+    IF_INT_EQUAL(LF(1), 1)
+        CALL(evt_msg_print, 0, STRING("stg1_gon_33_18"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(2), 1)
+        CALL(evt_msg_print, 0, STRING("stg2_mri_e25_03"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(3), 1)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_475"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(4), 1)
+        CALL(evt_msg_print, 0, STRING("stg4_jin_39"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(5), 1)
+        CALL(evt_msg_print, 0, STRING("stg5_dou_29_01"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(6), 1)
+        CALL(evt_msg_print, 0, STRING("stg6_pik_20"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(7), 1)
+        CALL(evt_msg_print, 0, STRING("stg7_aji_42_02"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(8), 1)
+        CALL(evt_msg_print, 0, STRING("stg4_jin_10_02"), 0, 0)
+    END_IF
+    // Wait out the fanfare, then the stage-clear jingle plays and the light fades.
+    LOOP(0)
+        CALL(get_stop, LW(0))
+        IF_INT_EQUAL(LW(0), 1)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STAGE_CLEAR1"))
+    CALL(evt_eff_softdelete, STRING("sub_hikari"))
+    CALL(stone_bg_open, LW(7))
+    // The curtain comes down (the map's own star object is hidden behind it),
+    // STAGE CLEAR appears and Mario cheers.
+    BEGIN_INLINE_EVENT
+        IF_INT_EQUAL(LF(1), 1)
+            SET_VALUE(LW(0), STRING("gon_11_S"))
+        END_IF
+        IF_INT_EQUAL(LF(2), 1)
+            SET_VALUE(LW(0), STRING("S"))
+        END_IF
+        IF_INT_EQUAL(LF(3), 1)
+            SET_VALUE(LW(0), STRING("S"))
+        END_IF
+        IF_INT_EQUAL(LF(4), 1)
+            SET_VALUE(LW(0), STRING("S_jin04"))
+        END_IF
+        IF_INT_EQUAL(LF(5), 1)
+            SET_VALUE(LW(0), STRING("S"))
+        END_IF
+        IF_INT_EQUAL(LF(6), 1)
+            SET_VALUE(LW(0), STRING("S"))
+        END_IF
+        IF_INT_EQUAL(LF(7), 1)
+            SET_VALUE(LW(0), STRING("S_aji_14"))
+        END_IF
+        IF_INT_EQUAL(LF(8), 1)
+            SET_VALUE(LW(0), STRING("S_jin04"))
+        END_IF
+        WAIT_FRAMES(10)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
+    END_INLINE_EVENT
+    CALL(evt_fade_entry, 34, 0, 0, 0, 0)
+    CALL(evt_fade_end_wait)
+    WAIT_MS(1000)
+    CALL(evt_eff, STRING("sub_clear"), STRING("stageclear"), 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(stageclear_wait)
+    IF_INT_NOT_EQUAL(LF(8), 1)
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAPPY2"), LW(0), LW(1), LW(2), 0)
+    END_IF
+    WAIT_MS(2000)
+    // The curtain closes and the chapter's diary page sums up what happened.
+    CALL(evt_fade_entry, 30, 0, 0, 0, 0)
+    CALL(evt_fade_end_wait)
+    CALL(evt_item_delete, LW(7))
+    WAIT_MS(1000)
+    IF_INT_EQUAL(LF(1), 1)
+        CALL(evt_msg_print, 0, STRING("stg1_gon_34"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(2), 1)
+        CALL(evt_msg_print, 0, STRING("stg2_mri_e25_04"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(3), 1)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_475_01"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(4), 1)
+        CALL(evt_msg_print, 0, STRING("stg4_jin_39_01"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(5), 1)
+        CALL(evt_msg_print, 0, STRING("stg5_dou_29_02"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(6), 1)
+        CALL(evt_msg_print, 0, STRING("stg6_pik_20_01"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(7), 1)
+        CALL(evt_msg_print, 0, STRING("stg7_aji_42_03"), 0, 0)
+    END_IF
+    IF_INT_EQUAL(LF(8), 1)
+        CALL(evt_msg_print, 0, STRING("stg4_jin_10_03"), 0, 0)
+    END_IF
+    // Offer to save; the save kind tells which chapter was just finished.
+    WAIT_MS(1000)
+    IF_INT_EQUAL(LF(1), 1)
+        SET_VALUE(LW(0), 1)
+    END_IF
+    IF_INT_EQUAL(LF(2), 1)
+        SET_VALUE(LW(0), 4)
+    END_IF
+    IF_INT_EQUAL(LF(3), 1)
+        SET_VALUE(LW(0), 7)
+    END_IF
+    IF_INT_EQUAL(LF(4), 1)
+        SET_VALUE(LW(0), 10)
+    END_IF
+    IF_INT_EQUAL(LF(5), 1)
+        SET_VALUE(LW(0), 13)
+    END_IF
+    IF_INT_EQUAL(LF(6), 1)
+        SET_VALUE(LW(0), 16)
+    END_IF
+    IF_INT_EQUAL(LF(7), 1)
+        SET_VALUE(LW(0), 19)
+    END_IF
+    IF_INT_EQUAL(LF(8), 1)
+        SET_VALUE(LW(0), 22)
+    END_IF
+    SET_VALUE(LF(10), 0)
+    CALL_CHILD(evt_memcard_save)
+    // Move on: Peach's interlude (aji_10) after chapters 1-3, then usu_00, muj_12, pik_03 and pik_01 after
+    // chapters 4-7. The Doopliss scene instead fades back in where it is.
+    CALL(evt_mario_init_camid)
+    CALL(evt_party_init_camid, 0)
+    CALL(evt_party_init_camid, 1)
+    IF_INT_EQUAL(LF(1), 1)
+        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+        CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
+        CALL(evt_snd_sfx_all_stop)
+        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
+        CALL(evt_fade_end_wait)
+        WAIT_MS(2000)
+        CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
+        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
+    END_IF
+    IF_INT_EQUAL(LF(2), 1)
+        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+        CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
+        CALL(evt_snd_sfx_all_stop)
+        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
+        CALL(evt_fade_end_wait)
+        WAIT_MS(2000)
+        CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
+        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
+    END_IF
+    IF_INT_EQUAL(LF(3), 1)
+        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+        CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
+        CALL(evt_snd_sfx_all_stop)
+        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
+        CALL(evt_fade_end_wait)
+        WAIT_MS(2000)
+        CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
+        CALL(evt_bero_mapchange, STRING("aji_10"), 0)
+    END_IF
+    IF_INT_EQUAL(LF(4), 1)
+        CALL(evt_fade_set_mapchange_type, 1, 17, 800, 16, 800)
+        CALL(evt_bero_mapchange, STRING("usu_00"), 0)
+    END_IF
+    IF_INT_EQUAL(LF(5), 1)
+        CALL(evt_fade_set_mapchange_type, 1, 17, 800, 16, 800)
+        CALL(evt_bero_mapchange, STRING("muj_12"), 0)
+    END_IF
+    IF_INT_EQUAL(LF(6), 1)
+        CALL(evt_fade_set_mapchange_type, 0, 17, 800, 16, 800)
+        CALL(evt_bero_mapchange, STRING("pik_03"), STRING("next"))
+    END_IF
+    IF_INT_EQUAL(LF(7), 1)
+        CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+        CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
+        CALL(evt_snd_sfx_all_stop)
+        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
+        CALL(evt_fade_end_wait)
+        WAIT_MS(2000)
+        CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
+        CALL(evt_bero_mapchange, STRING("pik_01"), 0)
+    END_IF
+    IF_INT_EQUAL(LF(8), 1)
+        CALL(evt_fade_entry, FADE_OUT_WHITE, 1000, 0, 0, 0)
+        CALL(evt_fade_end_wait)
+        WAIT_MS(2000)
+        CALL(evt_eff_delete, STRING("sub_bg"))
+        CALL(evt_eff_delete, STRING("sub_clear"))
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_jin04"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_fade_reset, 1)
+        CALL(evt_npc_set_camid, STRING("にせマリオ"), 4)
+        CALL(evt_mario_set_pose, STRING("M_D_2"))
+        CALL(evt_fade_entry, 16, 1000, 0, 0, 0)
+        CALL(evt_fade_end_wait)
+    END_IF
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(evt_sub_starstone)
     // Mario stops and the star goes into his pouch; the Doopliss scene (-1) adds nothing.
     CALL(evt_mario_key_onoff, 0)
@@ -633,6 +1095,7 @@ EVT_BEGIN(evt_sub_starstone)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
+#endif
 
 /**
  * Rumbles controller 0 in ten bursts of ten 50 ms pulses with two seconds between,
@@ -1053,7 +1516,11 @@ EVT_BEGIN(mail_evt_tou_01)
 EVT_END()
 
 EVT_BEGIN(mail_evt_usu_01)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_MAIL_RDM_ISSUE3_SENT), 1)
+#else
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
+#endif
         RETURN
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1062,15 +1529,24 @@ EVT_BEGIN(mail_evt_usu_01)
         SET_VALUE(LW(11), LW(1))
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 300, -2000, 300, 2000, LW(5))
+IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_04_01_PAPER_MAGE_TUBE_MOD)
+#else
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 110, -2000, 110, 2000, LW(5))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
+#endif
             IF_INT_EQUAL(LW(5), 1)
                 BREAK_LOOP
             END_IF
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_MAIL_RDM_ISSUE3_SENT), 1)
+#else
     SET_VALUE(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
+#endif
     CALL(evt_pouch_receive_mail, 29)
     CALL_CHILD(mail_evt)
     RETURN
@@ -1894,6 +2370,9 @@ USER_FUNC(evt_sub_get_coin) {
     MarioWork* mario = marioGetPtr();
     Vec a = mario->position;
     Vec b = a;
+#if VERSION <= VERSION_DEMO_US
+Vec scr;
+#endif
     f32 rad = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
     f32 s;
     f32 c;
@@ -1921,24 +2400,39 @@ USER_FUNC(evt_sub_get_coin) {
     work = event->wInterpWork;
     switch (state) {
     case 0:
+#if VERSION <= VERSION_DEMO_US
+iconEntry2D("iraiCoin", ICON_ITEM_COIN);
+            getScreenPoint(&b, &scr);
+            iconSetPos("iraiCoin", scr.x, scr.y, scr.z);
+            iconFlagOn("iraiCoin", ICON_FLAG_CAM_EFFECT_A);
+#else
         iconEntry("iraiCoin", ICON_ITEM_COIN);
         iconSetPos("iraiCoin", b.x, b.y, b.z);
         iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN | ICON_FLAG_CAM_EFFECT_A);
         ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
+#endif
         marioChgGetItemMotion();
         event->userdata3 = winMgrEntry(coinget_window_desc);
         winMgrOpen(event->userdata3);
         winMgrSetParam(event->userdata3, work);
         work[0] = coin;
         work[1] = 0;
+#if VERSION <= VERSION_DEMO_US
+            psndBGMOff(PSND_FADE_DIP_TO(3));
+#else
         psndBGMOff(PSND_SILENT | PSND_SILENT_LEVEL(3));
+#endif
         psndBGMOn(PSND_FADEOUT | PSND_SLOT(1), "BGM_FF_GET_ITEM1");
         event->userdata[2] = 200;
         event->savedTime = gp->renderTime;
         event->userdata[0] = 1;
         return EVT_RETURN_BLOCK;
     case 1:
+#if VERSION <= VERSION_DEMO_US
+            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
+#else
         if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
+#endif
             iconFlagOff("iraiCoin", ICON_FLAG_HIDDEN);
             work[1] = 1;
             event->userdata[2] = 500;
@@ -1947,7 +2441,11 @@ USER_FUNC(evt_sub_get_coin) {
         }
         return EVT_RETURN_BLOCK;
     case 2:
+#if VERSION <= VERSION_DEMO_US
+            if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) / (OS_TIMER_CLOCK / 1000)) > event->userdata[2]) {
+#else
         if ((s32)OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime) > event->userdata[2]) {
+#endif
             event->userdata[0] = 10;
         }
         return EVT_RETURN_BLOCK;

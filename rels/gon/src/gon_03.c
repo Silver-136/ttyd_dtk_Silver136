@@ -63,7 +63,9 @@ static USER_FUNC(senkaronFlagOffMesPushing);
 static USER_FUNC(senkaronFlagOnMesPushing);
 static USER_FUNC(senkaronGetMarioPushedFlag);
 static USER_FUNC(senkaronToEscape);
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(leader_touch_check);
+#endif
 void nokotaro_callback(s32 type);
 static void senkaron_ext_init(void);
 static void senkaron_ext_main(void);
@@ -324,12 +326,20 @@ EVT_END()
 
 static EVT_BEGIN(senkaron_event)
     // Only before the Dry Bones leader fight has happened: the swarm is set up and the music stops.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_11_1000_DRY_BONES)
+#else
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)
+#endif
         CALL(senkaronFlagOffMesPushing)
         SET_VALUE(GW(14), 0)
         SET_VALUE(GW(15), 1)
         CALL(evt_npc_change_interrupt, STRING("リチャード"), 6, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(senkaron_entry_event)
+#else
         CALL_CHILD(PTR(senkaron_entry_event))
+#endif
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         // Mario freezes while the Dry Bones leader collapses and rebuilds himself, then threatens the
@@ -420,8 +430,13 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
         CALL(evt_mario_key_onoff, 1)
         SET_VALUE(LW(0), STRING("w_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_off)
+        IF_INT_EQUAL(GSWF(GSWF_GON03_PUSHING_COMMENT), 0)
+#else
         CALL_CHILD(PTR(bero_case_switch_off))
         IF_INT_EQUAL(GSWF_GON_03_PUSHING_TALK_DONE, 0)
+#endif
             CALL(evt_mario_cont_onoff, 0)
             CALL(senkaronFlagOnMesPushing)
             CALL(evt_mario_get_party, LW(3))
@@ -431,7 +446,11 @@ static EVT_BEGIN(senkaron_event)
                 CASE_EQUAL(2)
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12"), 0, STRING("party"))
             END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_GON03_PUSHING_COMMENT), 1)
+#else
             SET_VALUE(GSWF_GON_03_PUSHING_TALK_DONE, 1)
+#endif
             CALL(senkaronFlagOffMesPushing)
             CALL(evt_mario_cont_onoff, 1)
         END_IF
@@ -471,8 +490,13 @@ static EVT_BEGIN(senkaron_event)
         // reaching it shoves him back to gon_01.
         LOOP(0)
             WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            IF_INT_GREATER_OR_EQUAL(LW(0), 350)
+#else
             CALL(leader_touch_check)
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+#endif
                 BREAK_LOOP
             END_IF
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -498,11 +522,21 @@ static EVT_BEGIN(senkaron_event)
                         WAIT_FRAMES(1)
                     END_LOOP
                 END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+                SET_VALUE(GSWF(GSWF_GON03_PUSHED_OUT), 1)
+                IF_INT_EQUAL(GSWF(GSWF_GON03_PUSHED_OUT_ONCE), 0)
+                    SET_VALUE(GSWF(GSWF_GON03_PUSHED_OUT_ONCE), 1)
+#else
                 SET_VALUE(GSWF_GON_03_PUSHED_OUT_PENDING, 1)
                 IF_INT_EQUAL(GSWF_GON_03_PUSHED_OUT_ONCE, 0)
                     SET_VALUE(GSWF_GON_03_PUSHED_OUT_ONCE, 1)
+#endif
                     ELSE
+#if VERSION <= VERSION_DEMO_US
+                    SET_VALUE(GSWF(GSWF_GON03_PUSHED_OUT_TWICE), 1)
+#else
                     SET_VALUE(GSWF_GON_03_PUSHED_OUT_AGAIN, 1)
+#endif
                 END_IF
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 ADD(LW(1), 50)
@@ -524,13 +558,26 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_npc_change_interrupt, STRING("リチャード"), 6, PTR(richard_talk_event))
         CALL(evt_npc_set_position, STRING("リーダー"), 0, -1000, 0)
         CALL(evt_snd_sfxon, STRING("SFX_STG1_HONE_ESCAPE1"), 0)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(senkaron_escape_event)
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_11_1000_DRY_BONES)
+#else
         SPAWN_EVENT(PTR(senkaron_escape_event))
         SET_VALUE(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)
+#endif
         CALL(evt_map_playanim, STRING("m_door01_a"), MAP_ANIM_PLAY_ONCE, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_on)
+#else
         CALL_CHILD(PTR(bero_case_switch_on))
+#endif
         SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(bero_case_switch_on)
+#else
         CALL_CHILD(PTR(bero_case_switch_on))
+#endif
     END_IF
     RETURN
 EVT_END()
@@ -779,6 +826,7 @@ void nokotaro_callback(s32 type) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_gon_00000374, JP gon .text+0x290. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(leader_touch_check) {
     NpcEntry* npc = marioGetTouchNpcPtr();
     BOOL off = FALSE;
@@ -796,6 +844,7 @@ USER_FUNC(leader_touch_check) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /** Random float in [min, max] from rand(). */
 static f32 randf(f32 min, f32 max) {

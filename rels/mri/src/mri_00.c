@@ -414,14 +414,29 @@ EVT_END()
  * after the Puni praise he says a thank-you line.
  */
 static EVT_BEGIN(guide_talk)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_03_THE_GREAT_TREE)
         SPAWN_EVENT(PTR(seal_bigtree))
+#endif
         CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(seal_bigtree)
+        CASE_EQUAL(STG2_03_01_SEALED_ENTRANCE)
+        SPAWN_EVENT(seal_bigtree2)
+        CASE_EQUAL(STORY_STG2_10_SECRET_ENTRANCE_REVEALED)
+#else
         SPAWN_EVENT(PTR(seal_bigtree2))
         CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
+#endif
         CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
+#if VERSION <= VERSION_DEMO_US
+CASE_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
+#else
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
+#endif
         CALL(evt_msg_print, 0, STRING("stg2_mri_e26_00_07"), 0, STRING("me"))
     END_SWITCH
     RETURN
@@ -931,10 +946,20 @@ static USER_FUNC(evt_cloud_main) {
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
+#if VERSION <= VERSION_DEMO_US
+if (party->currentMemberId != 5) {
+        return EVT_RETURN_BLOCK;
+    }
+hit0 = (HitEntry*)cloudGetHitBreathout(0);
+    hit1 = (HitEntry*)cloudGetHitBreathout(1);
+    hit2 = (HitEntry*)cloudGetHitBreathout(2);
+    hit3 = (HitEntry*)cloudGetHitBreathout(3);
+#else
     hit0 = cloudGetHitBreathout(0);
     hit1 = cloudGetHitBreathout(1);
     hit2 = cloudGetHitBreathout(2);
     hit3 = cloudGetHitBreathout(3);
+#endif
     switch (wp->state) {
         case 0:
             if ((s32)cloud_once_flag == 1) {
@@ -1004,7 +1029,9 @@ static USER_FUNC(evt_cloud_main) {
                 break;
             }
             hit = hitNameToPtr(wp->hitName);
+#if VERSION > VERSION_DEMO_US
             // A brief loss of contact still builds progress until the grace timer expires.
+#endif
             if (hit0 != hit && hit1 != hit && hit2 != hit && hit3 != hit) {
                 if (wp->timer == 0) {
                     wp->state = 10;
@@ -1279,7 +1306,11 @@ EVT_BEGIN(mario_see_you)
     CALL(evt_cam3d_evt_set, 180, 130, 567, 180, 44, 127, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_puni_wait_systemmode, 2)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(mario_see_you_init)
+#else
     CALL_CHILD(PTR(mario_see_you_init))
+#endif
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1311,8 +1342,12 @@ EVT_BEGIN(mario_see_you)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_26_PRAISE_FROM_THE_PUNI)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1494,8 +1529,15 @@ EVT_END()
  * and the game moves on to tou_01 (Mario arrives through sekai_yami1).
  */
 static EVT_BEGIN(sekai_yami_evt)
+#if VERSION <= VERSION_DEMO_US
+    // The Punies are set up and Mario is hidden.
+#endif
     CALL(evt_puni_wait_systemmode, 2)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(puni_set)
+#else
     SPAWN_EVENT(PTR(puni_set))
+#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -1529,25 +1571,57 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(anim_tevcallback, STRING("ガイド"), 1)
     CALL(anim_tevcallback, STRING("ガイド妹"), 1)
     CALL(anim_tevcallback, STRING("プニ族長老"), 1)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LSWF(3), 1)
+#else
     SET_VALUE(LSWF_MRI_00_DARKNESS_ON, 1)
+#endif
     SET_VALUE(GW(0), -800)
     SET_VALUE(LW(0), STRING("ライバル"))
+#if VERSION <= VERSION_DEMO_US
+    // The NPCs and the Punies of the yard are lined up, all facing left, to watch the darkness arrive.
+    SPAWN_EVENT(sekai_yami_npc)
+#else
     SPAWN_EVENT(PTR(sekai_yami_npc))
+#endif
     SET_VALUE(LW(0), STRING("ガイド"))
     SPAWN_EVENT_GET_ID(PTR(sekai_yami_npc), GW(1))
     SET_VALUE(LW(0), STRING("ガイド妹"))
     SPAWN_EVENT_GET_ID(PTR(sekai_yami_npc), GW(2))
     SET_VALUE(LW(0), STRING("プニ族長老"))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(sekai_yami_npc)
+#else
     SPAWN_EVENT(PTR(sekai_yami_npc))
+#endif
     SET_VALUE(LW(0), 6)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(sekai_yami_puni)
+#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
+#endif
     SET_VALUE(LW(0), 39)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(sekai_yami_puni)
+#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
+#endif
     SET_VALUE(LW(0), 88)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(sekai_yami_puni)
+#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
+#endif
     SET_VALUE(LW(0), 46)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(sekai_yami_puni)
+#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
+#endif
     SET_VALUE(LW(0), 64)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(sekai_yami_puni)
+#else
     SPAWN_EVENT(PTR(sekai_yami_puni))
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
@@ -1562,6 +1636,7 @@ static EVT_BEGIN(sekai_yami_evt)
         END_LOOP
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
+#endif
     CALL(evt_snd_sfxon, STRING("SFX_STG8_WORLD_DARK1"), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -800, 800, 5000)
     LOOP(0)
@@ -1576,6 +1651,9 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -150, 74, 650, -150, 40, 150, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    // The dark view has swept in; the NPC scripts are stopped.
+#endif
     DELETE_EVENT(GW(1))
     DELETE_EVENT(GW(2))
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
@@ -1583,10 +1661,16 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("ガイド"))
     CALL(evt_npc_wait_pera, STRING("ガイド妹"))
+#if VERSION <= VERSION_DEMO_US
+    // Punio's sister and Punio talk about the darkened world.
+#endif
     CALL(evt_msg_print, 0, STRING("stg8_dark_02"), 0, STRING("ガイド妹"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg8_dark_02_01"), 0, STRING("ガイド"))
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    // The screen fades out and the game moves on to tou_01.
+#endif
     CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
     CALL(evt_bero_mapchange, STRING("tou_01"), STRING("sekai_yami1"))
     CALL(evt_mario_key_onoff, 1)
@@ -1600,7 +1684,11 @@ EVT_END()
  */
 static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_puni_wait_systemmode, 2)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(puni_set)
+#else
     SPAWN_EVENT(PTR(puni_set))
+#endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -1614,7 +1702,9 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_ry, STRING("プニ族長老"), 270)
     CALL(evt_npc_set_position, STRING("ライバル"), -100, 0, 225)
     CALL(evt_npc_set_ry, STRING("ライバル"), 270)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
+#endif
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -1622,7 +1712,11 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(anim_tevcallback, STRING("ガイド"), 1)
     CALL(anim_tevcallback, STRING("ガイド妹"), 1)
     CALL(anim_tevcallback, STRING("プニ族長老"), 1)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LSWF(3), 1)
+#else
     SET_VALUE(LSWF_MRI_00_DARKNESS_ON, 1)
+#endif
     CALL(yami_view, 800)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
     CALL(evt_cam3d_evt_set, -150, 258, 1648, -150, 180, 150, 0, EASING_SINE_IN_OUT)
@@ -1789,6 +1883,129 @@ static USER_FUNC(sysflag) {
  * Fabio and the dancers), the doors, the clouds, the FP Plus badge and the language-specific sign,
  * and starts the chapter 2 scenes and the chapter 8 Puni crowd scenes depending on the story progress.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(mri_00_init_evt)
+    CALL(sysflag)
+    CALL(evt_puni_mem_init)
+    CALL(evt_puni_set_yuka, 0, 0, -310, -1000, -1000, 0, 0)
+    SET_VALUE(LW(6), 0)
+    SET_VALUE(LW(7), 0)
+    SET_VALUE(LW(8), 0)
+    SET_VALUE(LW(9), 0)
+    // Start the Puni system, the switches and the doors.
+    CALL_CHILD(mri_puni_init)
+    CALL_CHILD(evt_switch_init)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_cam_road_reset)
+    // After Bowser's Petalburg scene and the boss, set up the Punies' thank-you scenes (mario_see_you).
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_05_BOWSER_PETALBURG)
+        CALL(evt_mario_get_party, LW(15))
+        IF_INT_EQUAL(LW(15), PARTY_MEMBER_NONE)
+            CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
+            CALL(evt_party_run, 0)
+CALL(evt_pouch_mario_recovery)
+            CALL(evt_pouch_all_party_recovery)
+END_IF
+SPAWN_EVENT(mario_see_you)
+    END_IF
+IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STORY_STG2_26_PRAISE_FROM_THE_PUNI)
+BEGIN_INLINE_EVENT
+                CALL(evt_puni_wait_systemmode, 2)
+                SPAWN_EVENT(mario_see_you_init)
+            END_INLINE_EVENT
+        END_IF
+CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("kawa_sibu_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("kawa_01"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("kawa_02"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("neon"), MAP_ANIM_PLAY_LOOP, 0)
+    SET_VALUE(LW(0), -220)
+    SET_VALUE(LW(1), 1)
+    SET_VALUE(LW(2), -295)
+    SET_FLOAT_VALUE(LW(3), FLOAT(1.0f))
+    // The waterfall effects play on the tree.
+    SPAWN_EVENT(mri_waterfall_effect)
+    SET_VALUE(LW(0), 531)
+    SET_VALUE(LW(1), 1)
+    SET_VALUE(LW(2), 118)
+    SET_FLOAT_VALUE(LW(3), FLOAT(1.0f))
+    SPAWN_EVENT(mri_waterfall_effect)
+    SET_VALUE(LF(0), 0)
+    // Chapter 8 music: the witch theme or the voices theme, depending on which door Mario came through.
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+            SET_VALUE(LF(0), 1)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+            SET_VALUE(LF(0), 1)
+        END_IF
+    END_IF
+    IF_INT_EQUAL(LF(0), 0)
+        IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_02_TO_THE_GREAT_TREE)
+            // Chapter 2 music and ambience for the Great Tree.
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
+        ELSE
+            BEGIN_INLINE_EVENT
+                WAIT_MS(2000)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
+            END_INLINE_EVENT
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
+        END_IF
+    END_IF
+    // The FP Plus badge sits on the ground until Mario picks it up.
+    CALL(evt_item_entry, STRING("i"), ITEM_FP_PLUS, 528, 0, 110, ITEM_TYPE_GROUND, GSWF(GSWF_MRI00_FP_PLUS_TAKEN), 0)
+    CALL(evt_npc_setup, PTR(npcEnt))
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_10_SECRET_ENTRANCE_REVEALED)
+        IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
+            IF_INT_EQUAL(GSWF(GSWF_MRI00_PUNIO_FOLLOWING), 1)
+                // While Punio follows Mario, the three dancer Punies dance in the yard.
+                CALL_CHILD(odoriko_1_init)
+                CALL_CHILD(odoriko_2_init)
+                CALL_CHILD(odoriko_3_init)
+            END_IF
+        END_IF
+    END_IF
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_02_TO_THE_GREAT_TREE)
+        // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
+        // capture waits for Flurrie's gust.
+        // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
+        // capture waits for Flurrie's gust.
+        // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
+        // capture waits for Flurrie's gust.
+        SPAWN_EVENT(first_bigtree)
+    END_IF
+    IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_09_FLURRIE_JOINS)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mri_cloud_init)
+        CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze"), PTR(open_bigtree))
+        SET_VALUE(LW(0), STRING("ne_bero"))
+        CALL_CHILD(bero_case_switch_off)
+    ELSE
+        CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kesu"), MAP_OBJ_FLAG_HIDDEN)
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+            // In chapter 8 the dark-world scene or the voices scene runs, depending on the entrance.
+            SPAWN_EVENT(sekai_yami_evt)
+        END_IF
+        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+            SPAWN_EVENT(minnnanokoe_evt)
+        END_IF
+    END_IF
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(mri_00_init_evt)
     CALL(sysflag)
     CALL(evt_puni_mem_init)
@@ -1936,3 +2153,4 @@ EVT_BEGIN(mri_00_init_evt)
 #endif
     RETURN
 EVT_END()
+#endif

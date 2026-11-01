@@ -461,7 +461,11 @@ void main_target(void) {
  * hearts add 1 to Mario's HP total (big ones 3), partner icons to the partner's HP, flowers to FP,
  * and a poison mushroom makes Mario dizzy. The audience cheers or boos.
  */
+#if VERSION <= VERSION_DEMO_US
+static void main_weapon(s32 idx) {
+#else
 void main_weapon(s32 idx) {
+#endif
     GenkiWork* w = get_ptr();
     GenkiWeapon* wp = &w->weapon[idx];
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -502,7 +506,11 @@ void main_weapon(s32 idx) {
                 break;
             }
         }
+#if VERSION <= VERSION_DEMO_US
+            BtlUnit_snd_se(mario, "SFX_BTL_SAC_HEART_SHOOT2", -250000000, 0);
+#else
         BtlUnit_snd_se(mario, "SFX_BTL_SAC_HEART_SHOOT2", EVT_NULLPTR, 0);
+#endif
     case 2:
         wp->pos.x += wp->vel.x;
         wp->pos.y += wp->vel.y;
@@ -552,52 +560,84 @@ void main_weapon(s32 idx) {
         wp->state = 3;
         o->state = 3;
         effStardustN64Entry(5, o->pos.x, o->pos.y, o->pos.z, 10.0f);
+#if VERSION <= VERSION_DEMO_US
+effHitEntry(0, 10, o->pos.x, o->pos.y, o->pos.z, 1.0f);
+#else
         effHitEntry(0, 5, o->pos.x, o->pos.y, o->pos.z, 1.0f);
+#endif
         switch (o->kind) {
         case 0:
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0xA64, &wp->pos);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
+#endif
             w->score0 += 1;
             if (w->score0 >= 99) {
                 w->score0 = 99;
             }
             break;
         case 1:
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0xA66, &wp->pos);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
+#endif
             w->score0 += 3;
             if (w->score0 >= 99) {
                 w->score0 = 99;
             }
             break;
         case 2:
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0xA64, &wp->pos);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT3), &wp->pos);
+#endif
             w->score1 += 1;
             if (w->score1 >= 99) {
                 w->score1 = 99;
             }
             break;
         case 3:
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0xA66, &wp->pos);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT5), &wp->pos);
+#endif
             w->score1 += 3;
             if (w->score1 >= 99) {
                 w->score1 = 99;
             }
             break;
         case 4:
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0xA65, &wp->pos);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT4), &wp->pos);
+#endif
             w->score2 += 1;
             if (w->score2 >= 99) {
                 w->score2 = 99;
             }
             break;
         case 5:
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0xA67, &wp->pos);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT6), &wp->pos);
+#endif
             w->score2 += 3;
             if (w->score2 >= 99) {
                 w->score2 = 99;
             }
             break;
         case 6:
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0xA68, &wp->pos);
+#else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_BTL_SAC_HEART_SHOOT7), &wp->pos);
+#endif
             w->marioState = 3;
             break;
         }

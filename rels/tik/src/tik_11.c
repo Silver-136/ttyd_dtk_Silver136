@@ -51,7 +51,9 @@ static USER_FUNC(wariai_enzan_0f);
 static USER_FUNC(wariai_enzan_0);
 static USER_FUNC(wariai_enzan_1);
 
+#if VERSION > VERSION_DEMO_US
 EvtWord powerdownya_face_left[16];
+#endif
 #if VERSION >= VERSION_US
 EvtWord powerdownya_mario_level_rtn[639];
 #else
@@ -274,6 +276,7 @@ static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(powerdownya_face_left)
     LOOP(0)
         CALL(evt_party_set_dir_pos, 0, -9, 0)
@@ -282,6 +285,7 @@ EVT_BEGIN(powerdownya_face_left)
     END_LOOP
     RETURN
 EVT_END()
+#endif
 
 /**
  * Chet Rippo's stat trade for Mario. Refuses if Mario has fewer than 39 coins (powerdown_04).
@@ -291,6 +295,200 @@ EVT_END()
  * sets the new HP, FP and BP (unitwin_setmariolevel), and says it removed all badges because BP ran low
  * (powerdown_10) when that happened, else that it is finished (powerdown_13).
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(powerdownya_mario_level_rtn)
+    // Chet Rippo turns Mario away if he cannot pay 39 coins.
+    CALL(evt_pouch_get_coin, LW(0))
+    IF_INT_LESS(LW(0), 39)
+CALL(evt_msg_print, 0, STRING("powerdown_04"), 0, STRING("me"))
+RETURN
+    END_IF
+    // Mario picks the stat to raise and the stat to lower, and confirms the trade.
+    CALL(evt_msg_continue)
+    CALL(evt_win_coin_on, 0, LW(12))
+    LOOP(0)
+        CALL(evt_win_other_select, 9)
+        IF_INT_EQUAL(LW(0), 0)
+            CALL(evt_win_coin_off, LW(12))
+            CALL(evt_msg_print, 0, STRING("powerdown_03_01"), 0, STRING("me"))
+            RETURN
+        END_IF
+        WAIT_MS(240)
+        SET_VALUE(GW(1), LW(1))
+        CALL(evt_win_other_select, 10)
+        IF_INT_EQUAL(LW(0), 0)
+            WAIT_MS(240)
+            CONTINUE_LOOP
+        END_IF
+CALL(evt_msg_print_insert, 0, STRING("powerdown_06"), 0, STRING("me"), LW(2), LW(3), 39)
+CALL(evt_msg_select, 0, STRING("powerdown_09"))
+        IF_INT_EQUAL(LW(0), 0)
+            BREAK_LOOP
+        END_IF
+        CALL(evt_msg_continue)
+    END_LOOP
+    // Mario pays 39 coins, the music stops and Chet Rippo starts his chant.
+    CALL(evt_pouch_get_coin, LW(0))
+    SUBTRACT(LW(0), 39)
+    CALL(evt_pouch_set_coin, LW(0))
+    CALL(evt_win_coin_wait, LW(12))
+    WAIT_MS(500)
+    CALL(evt_win_coin_off, LW(12))
+    CALL(enzan_lw_save)
+CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
+    CALL(evt_msg_print_add, 0, STRING("powerdown_11"))
+    CALL(bgScrollControll, 0)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -20, 500)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
+        CALL(evt_mapobj_trans, 1, STRING("down_pira"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(5), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    WAIT_MS(500)
+    // The power-down music plays, the walls of the house fold open and the camera pulls back over the light.
+    CALL(evt_snd_bgmoff, PSND_PAUSE)
+    CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_POWERDOWN1"))
+    CALL(bgm_start_wait)
+    CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -9, 49, 0, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
+    WAIT_MS(500)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
+    WAIT_FRAMES(5)
+    CALL(evt_msg_print, 0, STRING("powerdown_12"), 0, STRING("me"))
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 255, 0, 1200)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value)
+            CALL(evt_mapobj_color, 1, STRING("S"), 255, 255, 255, LW(0))
+            CALL(evt_mapobj_color, 1, STRING("down_pira"), 255, 255, 255, 255)
+            CALL(evt_mapobj_color, 1, STRING("ie_naka"), 255, 255, 255, 255)
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 90, 1600)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
+            CALL(evt_mapobj_rotate, 1, STRING("ie_l"), 0, 0, LW(0))
+            MULTIPLY(LW(0), -1)
+            CALL(evt_mapobj_rotate, 1, STRING("ie_o"), LW(0), 0, 0)
+            CALL(evt_mapobj_rotate, 1, STRING("ie_r"), 0, 0, LW(0))
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
+    END_INLINE_EVENT
+    CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, EASING_SINE_IN_OUT)
+    WAIT_MS(1600)
+    // For seven seconds the camera turns around Mario while crystal waves pulse and he glows.
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 7000)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
+            CALL(enzan_cam_turn_keisan_f, LW(0))
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        SET_VALUE(LW(6), 7000)
+        DIVIDE(LW(6), 1000)
+        ADD(LW(6), 1)
+        LOOP(LW(6))
+            CALL(evt_eff64, 0, STRING("crystal_n64"), 3, -9, 49, 0, FLOAT(1.0f), 60, 0, 0, 0, 0, 0, 0)
+            WAIT_MS(1000)
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
+        SET_FLOAT_VALUE(LW(7), LW(4))
+        ADD_FLOAT(LW(7), FLOAT(18.0f))
+        CALL(evt_eff64, STRING("cccx"), STRING("pokopi_pcharge_n64"), 2, LW(3), LW(7), LW(5), 1, -1, 0, 0, 0, 0, 0, 0)
+        WAIT_MS(500)
+        CALL(evt_mario_set_pose, STRING("M_I_Z"))
+    END_INLINE_EVENT
+    WAIT_MS(7000)
+    // The light fades, the house closes up again and the camera returns.
+    CALL(evt_eff_softdelete, STRING("aaax"))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
+    WAIT_MS(500)
+    CALL(evt_eff64, STRING("dddx"), STRING("release_n64"), 65283, -9, 49, 0, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
+    WAIT_MS(1500)
+    CALL(evt_eff_softdelete, STRING("cccx"))
+    CALL(evt_mario_set_pose, STRING("M_I_1"))
+    CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
+    SET_FLOAT_VALUE(LW(7), LW(4))
+    ADD_FLOAT(LW(7), FLOAT(18.0f))
+    CALL(effect_stardust, 0, LW(3), LW(7), LW(5), FLOAT(50.0f), FLOAT(50.0f), 20, 120)
+    BEGIN_INLINE_EVENT
+        WAIT_MS(400)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1200)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value)
+            CALL(evt_mapobj_color, 1, STRING("S"), 255, 255, 255, LW(0))
+            CALL(evt_mapobj_color, 1, STRING("down_pira"), 255, 255, 255, 255)
+            CALL(evt_mapobj_color, 1, STRING("ie_naka"), 255, 255, 255, 255)
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 90, 0, 1600)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
+            CALL(evt_mapobj_rotate, 1, STRING("ie_l"), 0, 0, LW(0))
+            MULTIPLY(LW(0), -1)
+            CALL(evt_mapobj_rotate, 1, STRING("ie_o"), LW(0), 0, 0)
+            CALL(evt_mapobj_rotate, 1, STRING("ie_r"), 0, 0, LW(0))
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+        CALL(bgScrollControll, 1)
+    END_INLINE_EVENT
+    CALL(evt_cam3d_evt_off, 1600, EASING_SINE_IN_OUT)
+    WAIT_MS(1400)
+    CALL(evt_mario_set_pose, STRING("M_S_1"))
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -20, 0, 500)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
+        CALL(evt_mapobj_trans, 1, STRING("down_pira"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(5), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    // Mario poses, the music comes back and the new HP, FP and BP are set; Chet Rippo says if badges came off.
+    CALL(evt_mario_set_pose, STRING("M_V_2"))
+    WAIT_MS(1500)
+    CALL(evt_mario_set_pose, STRING("M_S_1"))
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
+CALL(enzan_lw_load)
+    CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
+    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    CALL(unitwin_setmariolevel, LW(5), LW(6), LW(7), LW(8))
+    IF_INT_NOT_EQUAL(LW(8), 0)
+        CALL(evt_msg_print, 0, STRING("powerdown_10"), 0, STRING("me"))
+    ELSE
+        CALL(evt_msg_print, 0, STRING("powerdown_13"), 0, STRING("me"))
+    END_IF
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(powerdownya_mario_level_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
@@ -496,7 +694,288 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     END_IF
     RETURN
 EVT_END()
+#endif
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(powerdownya_party_lank_rtn)
+    // Chet Rippo turns Mario away if he cannot pay 39 coins (or, from JP on, if no partner can lose a rank).
+    CALL(evt_pouch_get_coin, LW(0))
+    IF_INT_LESS(LW(0), 39)
+        CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
+        RETURN
+    END_IF
+CALL(evt_msg_continue)
+    CALL(evt_win_coin_on, 0, LW(12))
+    LOOP(0)
+        CALL(evt_win_other_select, 7)
+        IF_INT_EQUAL(LW(0), 0)
+            CALL(evt_win_coin_off, LW(12))
+            CALL(evt_msg_print, 0, STRING("powerdown_03_01"), 0, STRING("me"))
+            RETURN
+        END_IF
+        WAIT_MS(240)
+        SET_VALUE(GW(1), LW(1))
+        CALL(evt_win_other_select, 8)
+        IF_INT_EQUAL(LW(0), 0)
+            WAIT_MS(240)
+            CONTINUE_LOOP
+        END_IF
+CALL(evt_msg_print_insert, 0, STRING("powerdown_08"), 0, STRING("me"), LW(3), LW(4), 39)
+CALL(evt_msg_select, 0, STRING("powerdown_09"))
+        IF_INT_EQUAL(LW(0), 0)
+            BREAK_LOOP
+        END_IF
+        CALL(evt_msg_continue)
+    END_LOOP
+    // Mario pays 39 coins, the partner losing a rank is brought out and Chet Rippo starts his chant.
+    CALL(evt_pouch_get_coin, LW(0))
+    SUBTRACT(LW(0), 39)
+    CALL(evt_pouch_set_coin, LW(0))
+    CALL(evt_win_coin_wait, LW(12))
+    WAIT_MS(500)
+    CALL(evt_win_coin_off, LW(12))
+    CALL(enzan_lw_save)
+    CALL(evt_mario_get_party, LW(0))
+    IF_INT_NOT_EQUAL(LW(1), LW(0))
+        CALL(evt_mario_goodbye_party, 0)
+        CALL(evt_mario_hello_party, 0, LW(1))
+    END_IF
+    CALL(evt_msg_print_add, 0, STRING("powerdown_11"))
+    CALL(bgScrollControll, 0)
+    CALL(evt_mario_goodbye_party, 0)
+    CALL(evt_mario_hello_party, 0, LW(2))
+CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -20, 500)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
+        CALL(evt_mapobj_trans, 1, STRING("down_pira"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(5), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    WAIT_MS(500)
+CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -9, 49, 0, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
+    WAIT_MS(500)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
+CALL(evt_msg_print, 0, STRING("powerdown_12"), 0, STRING("me"))
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 255, 0, 1200)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value)
+            CALL(evt_mapobj_color, 1, STRING("S"), 255, 255, 255, LW(0))
+            CALL(evt_mapobj_color, 1, STRING("down_pira"), 255, 255, 255, 255)
+            CALL(evt_mapobj_color, 1, STRING("ie_naka"), 255, 255, 255, 255)
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 90, 1600)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
+            CALL(evt_mapobj_rotate, 1, STRING("ie_l"), 0, 0, LW(0))
+            MULTIPLY(LW(0), -1)
+            CALL(evt_mapobj_rotate, 1, STRING("ie_o"), LW(0), 0, 0)
+            CALL(evt_mapobj_rotate, 1, STRING("ie_r"), 0, 0, LW(0))
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1600)
+    END_INLINE_EVENT
+    CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, EASING_SINE_IN_OUT)
+    WAIT_MS(1600)
+    // For seven seconds the camera turns: the partner losing a rank spins away, then the other one glows.
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 7000)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
+            CALL(enzan_cam_turn_keisan_f, LW(0))
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        SET_VALUE(LW(6), 7000)
+        DIVIDE(LW(6), 1000)
+        ADD(LW(6), 1)
+        LOOP(LW(6))
+            CALL(evt_eff64, 0, STRING("crystal_n64"), 3, -9, 49, 0, FLOAT(1.0f), 60, 0, 0, 0, 0, 0, 0)
+            WAIT_MS(1000)
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_mario_get_party, LW(0))
+        SWITCH(LW(0))
+            CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
+            CALL(evt_party_set_pose, 0, STRING("PKR_I_1"))
+            CASE_EQUAL(PARTY_MEMBER_KOOPS)
+            CALL(evt_party_set_pose, 0, STRING("PNK_I_1"))
+            CASE_EQUAL(PARTY_MEMBER_BOBBERY)
+            CALL(evt_party_set_pose, 0, STRING("I_1"))
+            CASE_EQUAL(PARTY_MEMBER_YOSHI)
+            CALL(evt_party_set_pose, 0, STRING("PYS_I_1"))
+            CASE_EQUAL(PARTY_MEMBER_FLURRIE)
+            CALL(evt_party_set_pose, 0, STRING("PWD_I_1"))
+            CASE_EQUAL(PARTY_MEMBER_VIVIAN)
+            CALL(evt_party_set_pose, 0, STRING("PTR_I_1"))
+            CASE_EQUAL(PARTY_MEMBER_MS_MOWZ)
+            CALL(evt_party_set_pose, 0, STRING("PCH_I_1"))
+        END_SWITCH
+        WAIT_MS(500)
+CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
+        CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
+        CALL(effect_stardust, 4, LW(3), LW(4), LW(5), FLOAT(50.0f), FLOAT(50.0f), 14, 60)
+        CALL(evt_party_get_dispdir, 0, LW(9))
+        SET_FLOAT_VALUE(LW(10), LW(9))
+        ADD_FLOAT(LW(10), 1440)
+        CALL(evt_party_flg_onoff, 0, 33554432, 1)
+        SET_VALUE(LW(6), 60)
+        LOOP(LW(6))
+            CALL(wariai_enzan_1f, LW(6), 60, 0, 40, LW(7))
+            CALL(wariai_enzan_1f, LW(6), 60, LW(9), LW(10), LW(8))
+            ADD_FLOAT(LW(7), LW(4))
+            CALL(evt_party_set_pos, 0, LW(3), LW(7), LW(5))
+            CALL(evt_party_set_dispdir, 0, LW(8))
+            WAIT_FRAMES(1)
+        END_LOOP
+        CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 0)
+        CALL(evt_party_flg_onoff, 0, 33554432, 0)
+        CALL(evt_mario_goodbye_party, 0)
+        CALL(evt_mario_hello_party, 0, LW(1))
+        WAIT_MS(500)
+CALL(evt_mario_get_party, LW(1))
+        SWITCH(LW(1))
+            CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
+            CALL(evt_party_set_pose, 0, STRING("PKR_C_1"))
+            CASE_EQUAL(PARTY_MEMBER_KOOPS)
+            CALL(evt_party_set_pose, 0, STRING("PNK_C_1"))
+            CASE_EQUAL(PARTY_MEMBER_BOBBERY)
+            CALL(evt_party_set_pose, 0, STRING("C_1"))
+            CASE_EQUAL(PARTY_MEMBER_YOSHI)
+            CALL(evt_party_set_pose, 0, STRING("PYS_C_1"))
+            CASE_EQUAL(PARTY_MEMBER_FLURRIE)
+            CALL(evt_party_set_pose, 0, STRING("PWD_C_1"))
+            CASE_EQUAL(PARTY_MEMBER_VIVIAN)
+            CALL(evt_party_set_pose, 0, STRING("PTR_C_1"))
+            CASE_EQUAL(PARTY_MEMBER_MS_MOWZ)
+            CALL(evt_party_set_pose, 0, STRING("PCH_C_1"))
+        END_SWITCH
+        CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
+        SET_FLOAT_VALUE(LW(7), LW(4))
+        ADD_FLOAT(LW(7), FLOAT(18.0f))
+        CALL(evt_eff64, STRING("cccx"), STRING("pokopi_pcharge_n64"), 2, LW(3), LW(7), LW(5), 1, -1, 0, 0, 0, 0, 0, 0)
+        WAIT_MS(2000)
+        CALL(evt_party_set_breed_pose, 0, 1)
+    END_INLINE_EVENT
+    // The light fades, the house closes up again and the camera returns, and the partner cheers.
+    WAIT_MS(7000)
+    CALL(evt_eff_softdelete, STRING("aaax"))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
+    WAIT_MS(500)
+    CALL(evt_eff64, STRING("dddx"), STRING("release_n64"), 65283, -9, 49, 0, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
+    WAIT_MS(1500)
+    CALL(evt_eff_softdelete, STRING("cccx"))
+    CALL(evt_mario_get_party, LW(0))
+    SWITCH(LW(0))
+        CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
+        CALL(evt_party_set_pose, 0, STRING("PKR_I_1"))
+        CASE_EQUAL(PARTY_MEMBER_KOOPS)
+        CALL(evt_party_set_pose, 0, STRING("PNK_I_1"))
+        CASE_EQUAL(PARTY_MEMBER_BOBBERY)
+        CALL(evt_party_set_pose, 0, STRING("I_1"))
+        CASE_EQUAL(PARTY_MEMBER_YOSHI)
+        CALL(evt_party_set_pose, 0, STRING("PYS_I_1"))
+        CASE_EQUAL(PARTY_MEMBER_FLURRIE)
+        CALL(evt_party_set_pose, 0, STRING("PWD_I_1"))
+        CASE_EQUAL(PARTY_MEMBER_VIVIAN)
+        CALL(evt_party_set_pose, 0, STRING("PTR_I_1"))
+        CASE_EQUAL(PARTY_MEMBER_MS_MOWZ)
+        CALL(evt_party_set_pose, 0, STRING("PCH_I_1"))
+    END_SWITCH
+    CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
+    SET_FLOAT_VALUE(LW(7), LW(4))
+    ADD_FLOAT(LW(7), FLOAT(18.0f))
+    CALL(effect_stardust, 0, LW(3), LW(7), LW(5), FLOAT(50.0f), FLOAT(50.0f), 20, 120)
+    BEGIN_INLINE_EVENT
+        WAIT_MS(400)
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1200)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value)
+            CALL(evt_mapobj_color, 1, STRING("S"), 255, 255, 255, LW(0))
+            CALL(evt_mapobj_color, 1, STRING("down_pira"), 255, 255, 255, 255)
+            CALL(evt_mapobj_color, 1, STRING("ie_naka"), 255, 255, 255, 255)
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 90, 0, 1600)
+        LOOP(0)
+            CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
+            CALL(evt_mapobj_rotate, 1, STRING("ie_l"), 0, 0, LW(0))
+            MULTIPLY(LW(0), -1)
+            CALL(evt_mapobj_rotate, 1, STRING("ie_o"), LW(0), 0, 0)
+            CALL(evt_mapobj_rotate, 1, STRING("ie_r"), 0, 0, LW(0))
+            WAIT_FRAMES(1)
+            IF_INT_EQUAL(LW(1), 0)
+                BREAK_LOOP
+            END_IF
+        END_LOOP
+        CALL(bgScrollControll, 1)
+    END_INLINE_EVENT
+    CALL(evt_cam3d_evt_off, 1600, EASING_SINE_IN_OUT)
+    WAIT_MS(1400)
+    CALL(evt_party_set_breed_pose, 0, 1)
+    CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -20, 0, 500)
+    LOOP(0)
+        CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
+        CALL(evt_mapobj_trans, 1, STRING("down_pira"), 0, LW(0), 0)
+        WAIT_FRAMES(1)
+        IF_INT_EQUAL(LW(5), 0)
+            BREAK_LOOP
+        END_IF
+    END_LOOP
+    CALL(evt_mario_get_party, LW(0))
+    SWITCH(LW(0))
+        CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
+        CALL(evt_party_set_pose, 0, STRING("PKR_Y_1"))
+        CASE_EQUAL(PARTY_MEMBER_KOOPS)
+        CALL(evt_party_set_pose, 0, STRING("PNK_Y_1"))
+        CASE_EQUAL(PARTY_MEMBER_BOBBERY)
+        CALL(evt_party_set_pose, 0, STRING("Y_1"))
+        CASE_EQUAL(PARTY_MEMBER_YOSHI)
+        CALL(evt_party_set_pose, 0, STRING("PYS_Y_1"))
+        CASE_EQUAL(PARTY_MEMBER_FLURRIE)
+        CALL(evt_party_set_pose, 0, STRING("PWD_Y_1"))
+        CASE_EQUAL(PARTY_MEMBER_VIVIAN)
+        CALL(evt_party_set_pose, 0, STRING("PTR_Y_1"))
+        CASE_EQUAL(PARTY_MEMBER_MS_MOWZ)
+        CALL(evt_party_set_pose, 0, STRING("PCH_Y_1"))
+    END_SWITCH
+    WAIT_MS(1500)
+    CALL(evt_party_set_breed_pose, 0, 1)
+    CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
+CALL(enzan_lw_load)
+CALL(unitwin_getpartylank, LW(1), LW(0))
+    ADD(LW(0), 1)
+    CALL(unitwin_setpartylank, LW(1), LW(0))
+    CALL(unitwin_getpartylank, LW(2), LW(0))
+    SUBTRACT(LW(0), 1)
+    CALL(unitwin_setpartylank, LW(2), LW(0))
+    CALL(evt_msg_print, 0, STRING("powerdown_13"), 0, STRING("me"))
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(powerdownya_party_lank_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins (or, from JP on, if no partner can lose a rank).
     CALL(evt_pouch_get_coin, LW(0))
@@ -806,6 +1285,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(evt_msg_print, 0, STRING("powerdown_13"), 0, STRING("me"))
     RETURN
 EVT_END()
+#endif
 
 EVT_BEGIN(powerdownya_table_talk)
     CALL(setmertn, STRING("パワーダウン屋"))

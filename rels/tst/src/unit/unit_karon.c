@@ -61,23 +61,58 @@ BattleUnitKind unit_karon = {
     30, // level
     0, // bonusExp
     2, // bonusCoin
+#if VERSION <= VERSION_DEMO_US
+100,
+#else
     70, // bonusCoinRate
+#endif
     2, // baseCoin
     50, // runRate
     9999, // pbSoftCap
     36, // width
     40, // height
+#if VERSION <= VERSION_DEMO_US
+    -4,
+    40,
+    0.0f,
+    20.0f,
+    0.0f,
+    0,
+    0,
+#else
     {-4, 40}, // hitOffset
     {0.0f, 20.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {18.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    18.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    15.0f,
+    0.0f,
+    0.0f,
+    9.0f,
+    24.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    0.0f,
+#else
     {15.0f, 0.0f, 0.0f}, // bintaHitOffset
     {9.0f, 24.0f, 0.0f}, // kissHitOffset
     {0.0f, 20.0f, 0.0f}, // cutBaseOffset
+#endif
     36.0f, // cutWidth
     40.0f, // cutHeight
     0, // turnOrder
@@ -86,7 +121,13 @@ BattleUnitKind unit_karon = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_HONENOKO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -105,6 +146,9 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Element response of the Dry Bones: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 70, 60, 0, 60, 100, 100, 60, 100, 60, 100, 60, 100, 60, 60, 10, 70, 100, 60, 100, 100, 90};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     75, // stop
@@ -129,6 +173,7 @@ static StatusVulnerability regist = {
     100, // invisible
     90, // ohko
 };
+#endif
 
 /** Body parts of the Dry Bones: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {

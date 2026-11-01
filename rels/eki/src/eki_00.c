@@ -701,12 +701,18 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if ((*pose->mtx)[1][3] > mario->position.y + mario->wPlayerCollisionBox.y) {
         return 0;
     }
+#if VERSION <= VERSION_DEMO_US
+    if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (mario->wPlayerCollisionBox.x + 20.0f) / 2 && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) && wp->bounceCount < 2) {
+#else
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (mario->wPlayerCollisionBox.x + 20.0f) / 2
         && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING)
         && wp->bounceCount < 2) {
         if (mario->currMotionId != MARIO_MOTION_ROLL && mario->currMotionId != MARIO_MOTION_YOSHI) {
+#endif
             marioChgMot(MARIO_MOTION_JUMP_SW);
+#if VERSION > VERSION_DEMO_US
         }
+#endif
         wp->bounceCount++;
         return 1;
     }
@@ -862,7 +868,11 @@ static void ext_moamoa_main(void) {
             mm->flags |= MOAMOA_FLAG_ESCAPING;
         }
 
+#if VERSION <= VERSION_DEMO_US
+        if (wp->escapeEvt == ((void*)0)) {
+#else
         if (wp->escapeEvt == NULL) {
+#endif
             wp->escapeEvt = evtEntry(evt_moamoa_escape, 0, 0);
         }
     }
@@ -872,27 +882,52 @@ static void ext_moamoa_main(void) {
     for (i = 0; i < wp->count; i++, pose++, moa++) {
         wp->angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
         wp->dist = distABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+#if VERSION <= VERSION_DEMO_US
+if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!hit)) && (!(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
+#else
         if ((((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!marioKeyOffChk())) && (!marioCtrlOffChk())) && (!hit)) && (!(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
+#endif
             ret = moamoa_hit_check(pose, moa);
             if (ret == 1) {
                 moa->flags |= MOAMOA_FLAG_HIT;
                 moa->state = MOAMOA_STATE_STOMPED;
                 wp->hitCount++;
+#if VERSION <= VERSION_DEMO_US
+                moamoa_pose_change(moa, (char*)"c_n_moa_a", (char*)"D_1");
+#else
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
+#endif
                 hit = 1;
+#if VERSION <= VERSION_DEMO_US
+            } else if ((ret == 2) || (ret == 4)) {
+                moa->flags |= MOAMOA_FLAG_HIT | MOAMOA_FLAG_KNOCKED_AWAY;
+#else
             } else
               if ((ret == 2) || (ret == 4)) {
                 moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_KNOCKED_AWAY);
+#endif
                 moa->state = MOAMOA_STATE_KNOCKED_AWAY;
                 wp->hitCount++;
+#if VERSION <= VERSION_DEMO_US
+                moamoa_pose_change(moa, (char*)"c_n_moa_a", (char*)"D_1");
+#else
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
+#endif
                 if (ret != 4) {
                     hit = 1;
                 }
+#if VERSION <= VERSION_DEMO_US
+            } else if (ret == 3) {
+#else
             } else
               if (ret == 3) {
+#endif
                 angle = (wp->breathDir + wp->angle) / 2.0f;
+#if VERSION <= VERSION_DEMO_US
+                moa->flags |= MOAMOA_FLAG_HIT | MOAMOA_FLAG_BLOWN;
+#else
                 moa->flags |= (MOAMOA_FLAG_HIT | MOAMOA_FLAG_BLOWN);
+#endif
                 moa->state = MOAMOA_STATE_BLOWN_DRIFT;
                 moa->target = moamoa_zero_vec;
                 spd = randf(0.1f, 0.2f);
@@ -902,7 +937,11 @@ static void ext_moamoa_main(void) {
                 moa->gravity = spd * (-polyCosf(rad));
                 moa->jumpTimer = 120;
                 wp->hitCount++;
+#if VERSION <= VERSION_DEMO_US
+                moamoa_pose_change(moa, (char*)"c_n_moa_a", (char*)"D_1");
+#else
                 moamoa_pose_change(moa, "c_n_moa_a", "D_1");
+#endif
                 hit = 1;
             }
         }
@@ -1037,8 +1076,12 @@ static void ext_moamoa_main(void) {
                             }
                         }
                     }
+#if VERSION <= VERSION_DEMO_US
+            } break;
+#else
                 }
                 break;
+#endif
 
             case MOAMOA_STATE_APPROACH: {
                     f32 z;
@@ -1135,8 +1178,12 @@ static void ext_moamoa_main(void) {
                             moamoa_jump(pose, moa, moa->state + 1, 1, ty, y, z, (r1 * k) + 1.0f, (r2 * k) + 1.0f);
                         }
                     }
+#if VERSION <= VERSION_DEMO_US
+            } break;
+#else
                 }
                 break;
+#endif
 
             case MOAMOA_STATE_SHRINK:
                 if ((++moa->timer) < 30) {
@@ -1152,7 +1199,14 @@ static void ext_moamoa_main(void) {
                     f32 rad;
                     s = rand() / 32767.0f;
                     dist = randf(300.0f, 500.0f);
+#if VERSION <= VERSION_DEMO_US
+                {
+                    f32 k;
+                    rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f;
+                }
+#else
                     { f32 k; rad = (6.2831855f * ((s * (k = 225.0f - 135.0f)) + 135.0f)) / 360.0f; }
+#endif
                     x = (dist * polySinf(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[2][3] - (dist * polyCosf(rad));
                 }
@@ -1171,7 +1225,11 @@ static void ext_moamoa_main(void) {
                     pos.x = (*pose->mtx)[0][3];
                     pos.y = (*pose->mtx)[1][3];
                     pos.z = (*pose->mtx)[2][3];
+#if VERSION <= VERSION_DEMO_US
+                    psndSFXOn_3D((const char*)0x6c3, &pos);
+#else
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_STG6_MOAMOA_DAMAGED1), &pos);
+#endif
                     sndFlag = 1;
                 }
                 dist = -100.0f;
@@ -1242,15 +1300,26 @@ static void ext_moamoa_main(void) {
                         grav = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
                         {
                             f32 k;
+#if VERSION <= VERSION_DEMO_US
+                        f32 k2;
+#endif
                             f32 r1 = rand() / 32767.0f;
                             f32 r2 = rand() / 32767.0f;
+#if VERSION <= VERSION_DEMO_US
+                        moamoa_jump(pose, moa, moa->state, 1, x, 0.0f, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * (k2 = 1.0f - 1.0f)) + 1.0f);
+#else
                             moamoa_jump(pose, moa, moa->state, 1, x, 0.0f, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
+#endif
                         }
                     } else {
                         moa->state = MOAMOA_STATE_GONE;
                     }
+#if VERSION <= VERSION_DEMO_US
+            } break;
+#else
                 }
                 break;
+#endif
 
             case MOAMOA_STATE_GONE:
                 moa->flags |= MOAMOA_FLAG_GONE;
@@ -1291,7 +1360,8 @@ static void ext_moamoa_main(void) {
                     moa->state = MOAMOA_STATE_GONE;
                 }
                 break;
-
+#if VERSION <= VERSION_DEMO_US
+#endif
         }
 
         if (!(moa->flags & (MOAMOA_FLAG_KNOCKED_AWAY | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_BLOWN))) {
@@ -1313,11 +1383,15 @@ static void ext_moamoa_main(void) {
     }
 
     moamoa_pose_main();
+#if VERSION <= VERSION_DEMO_US
+{
+#else
     if (wp->flags & MOAMOA_WORK_FLAG_PARTY_IN_USE) {
         mario->floorMove.x = 0.0f;
         mario->floorMove.y = 0.0f;
         mario->floorMove.z = 0.0f;
     } else {
+#endif
         pv = (Vec){mario->floorMove.x, mario->floorMove.y, mario->floorMove.z};
         if (PSVECMag(&pv) > 2.0f) {
             PSVECNormalize(&pv, &pv);
@@ -1420,9 +1494,17 @@ static BeroEntry bero_data[] = {
 
 EVT_BEGIN(evt_bridge)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_normalize)
+SET_VALUE(GSWF(GSWF_EKI00_BRIDGE_LOWER_SCENE), 1)
+#else
     WAIT_MS(500)
     SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
+#endif
     CALL(evt_bero_mapchange, STRING("hom_00"), STRING("n_bero_2"))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_key_onoff, 1)
+#endif
     RETURN
 EVT_END()
 
@@ -1484,10 +1566,18 @@ static EVT_BEGIN(evt_origami)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("kaidann_A"), 1, 1)
     CALL(evt_map_checkanim, STRING("anm_ori"), LW(0), LW(1))
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(LW(1))
+#else
     WAIT_MS(1600)
+#endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF(GSWF_EKI00_BRIDGE_SWITCH_PRESSED))
+#else
     CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
+#endif
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_OBJ_SWITCH_APPEAR1"), -220, 60, 0, 0)
     CALL(evt_mobj_set_scale, STRING("bridge_sw"), FLOAT(0.099609375f), FLOAT(0.099609375f), FLOAT(0.099609375f))
     CALL(evt_sub_intpl_msec_init, EASING_WAVE_SHRINKING_FASTER, 100, 1000, 1000)
@@ -1499,7 +1589,11 @@ static EVT_BEGIN(evt_origami)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
+#endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_mario_key_onoff, 1)
@@ -1736,7 +1830,11 @@ EVT_BEGIN(evt_elv_down)
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING("anm_ere_1"), MAP_ANIM_PLAY_ONCE, 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_elv_rumble)
+#else
     SPAWN_EVENT(PTR(evt_elv_rumble))
+#endif
     CALL(evt_map_checkanim, STRING("anm_ere_1"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1747,7 +1845,11 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_00"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_07"), STRING("offscreen"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_40_SWATTING_SMORGS)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
+#endif
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_ACTIVE)
         CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
@@ -1773,7 +1875,11 @@ EVT_BEGIN(evt_elv_down)
     // The lower floor replaces the picture and the swarm becomes active on it. The lever works only at the
     // Smorg-swatting step and is shown pulled after it, the bridge switch appears at the origami-stairs step,
     // the uncollected Close Call P is moved down out of the way, and the stairs show by story step.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_40_SWATTING_SMORGS)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
+#endif
         CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_ACTIVE)
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
@@ -1781,15 +1887,32 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_00"), 1, 0)
+#if VERSION <= VERSION_DEMO_US
+IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
+#else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_40_SWATTING_SMORGS)
         CASE_EQUAL(STG6_40_SWATTING_SMORGS)
+#endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_lever"), 0, PTR(evt_origami), GW(10))
+#if VERSION <= VERSION_DEMO_US
+    ELSE
+#else
         CASE_DEFAULT
+#endif
         CALL(evt_mapobj_rotate, 1, STRING("s_lever"), 0, 0, -80)
+#if VERSION <= VERSION_DEMO_US
+    END_IF
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_40_SWATTING_SMORGS)
+        CALL(evt_del_case_evt, 0, GW(10))
+    END_IF
+IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
+        CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF(GSWF_EKI00_BRIDGE_SWITCH_PRESSED))
+#else
     END_SWITCH
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
         CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
+#endif
     END_IF
     CALL(evt_item_delete_check, STRING("item"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1797,7 +1920,11 @@ EVT_BEGIN(evt_elv_down)
         SUBTRACT(LW(1), 2000)
         CALL(evt_item_set_position, STRING("item"), LW(0), LW(1), LW(2))
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
+#endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
@@ -1833,10 +1960,19 @@ EVT_BEGIN(evt_elv_down)
     WAIT_MS(500)
     // On the first ride down Mario and the partner first see the Smorgs (which sets the encounter step);
     // while the story is at that step the danger music plays on arrival.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_39_SMORG_1ST_ENCOUNTER)
+        CALL_CHILD(evt_meet_moamoa)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_39_SMORG_1ST_ENCOUNTER)
         CALL_CHILD(PTR(evt_meet_moamoa))
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_39_SMORG_1ST_ENCOUNTER)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_39_SMORG_1ST_ENCOUNTER)
+#endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     END_IF
     CALL(evt_map_checkanim, STRING("anm_ere_door_2"), LW(0), LW(1))
@@ -1884,7 +2020,11 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_07"), STRING("offscreen"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_40_SWATTING_SMORGS)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
+#endif
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_ACTIVE)
         CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
@@ -1907,7 +2047,11 @@ EVT_BEGIN(evt_elv_up)
         END_IF
     END_LOOP
     CALL(evt_img_onoff, STRING("capture_img"), 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_40_SWATTING_SMORGS)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
+#endif
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
     // The elevator moves with its motion sound and rumble, then the bell rings.
@@ -1919,7 +2063,11 @@ EVT_BEGIN(evt_elv_up)
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING("anm_ere_2"), MAP_ANIM_PLAY_ONCE, 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_elv_rumble)
+#else
     SPAWN_EVENT(PTR(evt_elv_rumble))
+#endif
     CALL(evt_map_checkanim, STRING("anm_ere_2"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1949,9 +2097,17 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_img_onoff, STRING("capture_img"), 0)
     // The upper floor replaces the picture: the lower floor's bridge switch is removed, the uncollected
     // Close Call P is moved back up, and the floors' hit areas swap.
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
+#else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
+#endif
         CALL(evt_mobj_delete, STRING("bridge_sw"))
     END_IF
     CALL(evt_item_delete_check, STRING("item"), LW(0))
@@ -1964,10 +2120,12 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_hitobj_onoff, STRING("a_eki_07"), 1, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_eki_00"), 1, 1)
+#if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_del_case_evt, 0, GW(10))
     END_IF
     // The partner and Mario walk out of the cage and the doors close behind them.
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_party_jump_pos, 0, 190, 0, -65, 500, 0, -1000)
         CALL(evt_party_stop, 0)
@@ -2001,22 +2159,39 @@ static s32 item_tbl[] = {
  */
 EVT_BEGIN(evt_elv)
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_38_RIDE_THE_ELEVATOR)
+CALL(evt_win_item_select, PTR(item_tbl), LW(1))
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_38_RIDE_THE_ELEVATOR)
         CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)
+#endif
         IF_INT_EQUAL(LW(1), -1)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
         CALL(evt_pouch_remove_item, ITEM_ELEVATOR_KEY_0x1A, LW(0))
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_38_RIDE_THE_ELEVATOR)
+#else
         SET_VALUE(GSW_STORY_PROGRESS, STG6_38_RIDE_THE_ELEVATOR)
+#endif
         CALL(evt_snd_sfxon, STRING("SFX_STG6_ELEVATOR_KEY1"), 0)
         CALL(evt_msg_print, 0, STRING("stg6_eki_07"), 0, 0)
     END_IF
     IF_INT_EQUAL(GF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_elv_down)
+#else
         CALL_CHILD(PTR(evt_elv_down))
+#endif
         SET_VALUE(GF(0), 1)
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(evt_elv_up)
+#else
         CALL_CHILD(PTR(evt_elv_up))
+#endif
         SET_VALUE(GF(0), 0)
     END_IF
     CALL(evt_party_run, 0)

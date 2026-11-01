@@ -728,11 +728,15 @@ EVT_END()
 
 /** NPC init for the second camera operator: stands at (80, 200, -125), or (30, 200, -60) before the arena intro. */
 EVT_BEGIN(init_cam2)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_npc_set_position, STRING("me"), 80, 200, -125)
+#else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
         CALL(evt_npc_set_position, STRING(("me")), 80, 200, -125)
         ELSE
         CALL(evt_npc_set_position, STRING(("me")), 30, 200, -60)
     END_IF
+#endif
     RETURN
 EVT_END()
 
@@ -852,6 +856,95 @@ EVT_END()
  * league, the stg3_npc_re_031/032 lines. With Yoshi as the partner the _yos variants address him by the Yoshi's
  * name (LW(10)).
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(talk_kino5)
+    CALL(evt_pouch_get_yoshiname, LW(10))
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_LESS(STG3_04_GONZALES_IS_BORN)
+        // Before Gonzales debuts the son is a fan of Prince Mush.
+        CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_01"), 0, 0)
+        CASE_LESS(STG3_32_BOSS_BATTLE)
+        // Up to the title match the line follows Mario's rank, naming the Yoshi when he is the partner.
+        CALL(evt_tou_get_ranking, LW(0))
+        SWITCH(LW(0))
+            CASE_GREATER(15)
+            CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_02"), 0, 0)
+            CASE_GREATER(10)
+            CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_03"), 0, 0)
+            CASE_GREATER(5)
+            CALL(evt_mario_get_party, LW(0))
+            IF_INT_EQUAL(LW(0), 4)
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_04_yos"), 0, 0, LW(10))
+            ELSE
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_04"), 0, 0, LW(10))
+            END_IF
+            CASE_GREATER(0)
+            CALL(evt_mario_get_party, LW(0))
+            IF_INT_EQUAL(LW(0), 4)
+CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05_yos"), 0, 0, LW(10), LW(10))
+ELSE
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_05"), 0, 0, LW(10))
+            END_IF
+            CASE_DEFAULT
+            CALL(evt_mario_get_party, LW(0))
+            IF_INT_EQUAL(LW(0), 4)
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_06_yos"), 0, 0, LW(10))
+            ELSE
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_06"), 0, 0, LW(10))
+            END_IF
+        END_SWITCH
+        CASE_DEFAULT
+        // After chapter 3: a farewell, or comments on Mario's return to the league.
+        IF_INT_EQUAL(GSWF(GSWF_TOU_REENTERED_LEAGUE), 0)
+            CALL(evt_mario_get_party, LW(0))
+            IF_INT_EQUAL(LW(0), 4)
+                CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_07_yos"), 0, 0, LW(10))
+            ELSE
+                CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_07"), 0, 0)
+            END_IF
+        ELSE
+            CALL(evt_tou_get_ranking, LW(0))
+            SWITCH(LW(0))
+                CASE_EQUAL(0)
+                CALL(evt_mario_get_party, LW(0))
+                IF_INT_EQUAL(LW(0), 4)
+                    CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_yos"), 0, 0)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg3_npc_re_032"), 0, 0)
+                END_IF
+                CASE_LESS_OR_EQUAL(10)
+                CALL(evt_mario_get_party, LW(0))
+                IF_INT_EQUAL(LW(0), 4)
+                    CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1_yos"), 0, 0)
+                ELSE
+                    CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1"), 0, 0)
+                END_IF
+                CASE_DEFAULT
+                IF_INT_EQUAL(GSWF(GSWF_TOU_REMATCH_PROMOTED), 0)
+                    CALL(evt_mario_get_party, LW(0))
+                    IF_INT_EQUAL(LW(0), 4)
+                        CALL(evt_msg_print_insert, 0, STRING("stg3_npc_re_031_yos"), 0, 0, LW(10))
+                    ELSE
+                        CALL(evt_msg_print, 0, STRING("stg3_npc_re_031"), 0, 0)
+                    END_IF
+WAIT_MS(300)
+                    CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
+                    WAIT_MS(600)
+                    CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
+ELSE
+                    CALL(evt_mario_get_party, LW(0))
+                    IF_INT_EQUAL(LW(0), 4)
+                        CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1_yos"), 0, 0)
+                    ELSE
+                        CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1"), 0, 0)
+                    END_IF
+                END_IF
+            END_SWITCH
+        END_IF
+    END_SWITCH
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(talk_kino5)
     CALL(evt_pouch_get_yoshiname, LW(10))
     SWITCH(GSW_STORY_PROGRESS)
@@ -951,6 +1044,7 @@ EVT_BEGIN(talk_kino5)
     END_SWITCH
     RETURN
 EVT_END()
+#endif
 
 /** NPC init for Toadette (kinopiko): placed at (-490, 0, 25). */
 EVT_BEGIN(init_kinopiko)
@@ -1051,11 +1145,21 @@ EVT_END()
  * otherwise hidden at y = -1000.
  */
 EVT_BEGIN(init_chu)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+CASE_LESS(STG3_20_08_MS_MOWZ)
+CALL(evt_npc_set_position, STRING("me"), 245, 0, 125)
+#else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_20_05_MAJORS_4TH_PL)
         CALL(evt_npc_set_position, STRING(("me")), 245, 0, 125)
+#endif
         CASE_DEFAULT
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+#else
         CALL(evt_npc_set_position, STRING(("me")), 0, -1000, 0)
+#endif
     END_SWITCH
     RETURN
 EVT_END()
@@ -1536,7 +1640,11 @@ EVT_BEGIN(evt_tougi2)
     CALL(evt_party_stop, 0)
     SET_VALUE(LF(0), 0)
     CALL(evt_bero_get_entername, LW(0))
+#if VERSION <= VERSION_DEMO_US
+    IF_STR_EQUAL(LW(0), STRING("n_bero_2"))
+#else
     IF_STR_EQUAL(LW(0), STRING(("n_bero_2")))
+#endif
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
@@ -1556,14 +1664,26 @@ EVT_BEGIN(evt_tougi2)
     // The door opens and they step into the lobby.
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 2)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_open_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         IF_INT_EQUAL(LF(0), 1)
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(n_2_door_open)
+#else
             CALL_CHILD(PTR(n_2_door_open))
+#endif
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(n_1_door_open)
+#else
             CALL_CHILD(PTR(n_1_door_open))
+#endif
         END_IF
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
@@ -1581,55 +1701,111 @@ EVT_BEGIN(evt_tougi2)
     END_INLINE_EVENT
     WAIT_MS(700)
     SET_VALUE(LW(1), 2)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_close_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         IF_INT_EQUAL(LF(0), 1)
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(n_2_door_close)
+#else
             CALL_CHILD(PTR(n_2_door_close))
+#endif
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL_CHILD(n_1_door_close)
+#else
             CALL_CHILD(PTR(n_1_door_close))
+#endif
         END_IF
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
     // The partner asks how to get the Crystal Star, steal it or fight to the top, and answers Mario's choice.
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_msg_print_party, STRING("stg3_tou_33"))
+    CALL(evt_msg_select, 0, STRING("stg3_tou_33_yn"))
+#else
     CALL(evt_msg_print_party, STRING(("stg3_tou_33")))
     CALL(evt_msg_select, 0, STRING(("stg3_tou_33_yn")))
+#endif
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mario_get_party, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_kur"))
+#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_34_kur")))
+#endif
             CASE_EQUAL(PARTY_MEMBER_KOOPS)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_nok"))
+#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_34_nok")))
+#endif
             CASE_EQUAL(PARTY_MEMBER_FLURRIE)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_add, 0, STRING("stg3_tou_34_win"))
+#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_34_win")))
+#endif
         END_SWITCH
         ELSE
         CALL(evt_mario_get_party, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_kur"))
+#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_35_kur")))
+#endif
             CASE_EQUAL(PARTY_MEMBER_KOOPS)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_nok"))
+#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_35_nok")))
+#endif
             CASE_EQUAL(PARTY_MEMBER_FLURRIE)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print_add, 0, STRING("stg3_tou_35_win"))
+#else
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_35_win")))
+#endif
         END_SWITCH
     END_IF
     // Mario nods, the partner sums up and the story moves on.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_mario_set_pose, STRING("M_N_2"))
+#else
     CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_NOD1_4")), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING(("M_N_2")))
+#endif
     WAIT_MS(800)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mario_set_pose, STRING("M_S_1"))
+    CALL(evt_msg_print_party, STRING("stg3_tou_36"))
+#else
     CALL(evt_mario_set_pose, STRING(("M_S_1")))
     CALL(evt_msg_print_party, STRING(("stg3_tou_36")))
+#endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSWF(GSWF_TOU_ARENA_INTRO_TO_LOBBY), 0)
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_01_ARENA_INTRO_1F)
+#else
     SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1675,7 +1851,11 @@ ExtTexInfo ext_fan_data[] = {
  * a random facing, a random Toad, Toadette or Lakitu walk animation and a random spot within 100 of the centre,
  * and starts the crowd noise SFX_STG3_AUDIENCE_FAN1, keeping its full volume.
  */
+#if VERSION <= VERSION_DEMO_US
+static void ext_fan_init(void) {
+#else
 void ext_fan_init(void) {
+#endif
     s32 i;
     ExtdrvPose* pose;
     Fan* fan;
@@ -1689,7 +1869,11 @@ void ext_fan_init(void) {
     pose = extGetPosePtr();
     fan = fan_wp->fans;
     for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
+#if VERSION <= VERSION_DEMO_US
+        pose->flags |= 7;
+#else
         pose->flags |= (EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD | EXT_POSE_FLAG_NO_SHADOW);
+#endif
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
         (*pose->mtx)[1][3] = 0.0f;
@@ -1714,9 +1898,14 @@ void ext_fan_init(void) {
             pos.x = randf(-100.0f, 100.0f);
             pos.z = randf(-100.0f, 100.0f);
             fan->pos = pos;
+#if VERSION > VERSION_DEMO_US
             fan->vel = (Vec){0.0f, 0.0f, 0.0f};
+#endif
         }
     }
+#if VERSION <= VERSION_DEMO_US
+extGetPosePtr()->flags &= ~1;
+#endif
     fan_wp->sfxId = psndSFXOn_3D("SFX_STG3_AUDIENCE_FAN1", &(Vec){0.0f, 0.0f, 0.0f});
     fan_wp->vol = psndSFX_get_vol(fan_wp->sfxId);
 }
@@ -1733,13 +1922,22 @@ void fan_disp(CameraId camera, void* param) {
 
 #pragma opt_propagation off
 static Vec fan_zero;
+#if VERSION <= VERSION_DEMO_US
+static void ext_fan_main(void) {
+#else
 void ext_fan_main(void) {
+#endif
     MarioWork* mario = marioGetPtr();
     Fan* fan;
+#if VERSION > VERSION_DEMO_US
     ExtdrvPose* pose;
     s32 li;
     Fan* lfan;
+#endif
     s32 i;
+#if VERSION <= VERSION_DEMO_US
+    ExtdrvPose* pose;
+#endif
     Vec dir;
     Vec target = {0.0f, 0.0f, 0.0f};
 
@@ -1748,6 +1946,7 @@ void ext_fan_main(void) {
     } else {
         fan_wp->hammerTimer = 0;
     }
+#if VERSION > VERSION_DEMO_US
     if (evtGetValue(NULL, GF(10))) {
         ExtdrvPose* pose = extGetPosePtr();
         Fan* fan = fan_wp->fans;
@@ -1785,46 +1984,86 @@ void ext_fan_main(void) {
             }
         }
     }
-
+#endif
     {
+#if VERSION <= VERSION_DEMO_US
+        Fan* fan = fan_wp->fans;
+#else
 
         Fan* fan;
+#endif
         s32 i;
+#if VERSION <= VERSION_DEMO_US
+
+        // the first fan stands in for Mario
+        fan->pos = mario->position;
+        if (evtGetValue(NULL, GF(10))) {
+            target = fan->pos;
+        } else {
+            target = npcNameToPtr("\203`\203\203\203\223\203s\203\207\203\223")->position;
+        }
+#endif
 
         for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
             if (fan->state == 0) {
                 PSVECSubtract(&target, &fan->pos, &dir);
+#if VERSION <= VERSION_DEMO_US
+                if (PSVECMag(&dir) > 50.0f) {
+#else
                 if (PSVECMag(&dir)) {
+#endif
                     PSVECNormalize(&dir, &dir);
                     dir.y = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+                    PSVECScale(&dir, &dir, 0.4f);
+#else
                     PSVECScale(&dir, &dir, 0.1f);
+#endif
                     PSVECAdd(&fan->vel, &dir, &fan->vel);
                 }
             }
         }
     }
 
+#if VERSION > VERSION_DEMO_US
     {
-
+#endif
         for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
             if (fan->state == 0) {
                 s32 j;
                 Fan* other;
+#if VERSION <= VERSION_DEMO_US
+            f32 d;
+#endif
 
                 for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
+#if VERSION <= VERSION_DEMO_US
+                if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
+#else
                     if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
+#endif
                         PSVECSubtract(&fan->pos, &other->pos, &dir);
+#if VERSION <= VERSION_DEMO_US
+                    if (d == 0.0f) {
+                        dir.x = d = 1.0f;
+                    }
+#endif
                         dir.y = 0.0f;
+#if VERSION <= VERSION_DEMO_US
+                    PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
+#else
                         PSVECNormalize(&dir, &dir);
                         PSVECScale(&dir, &dir, 5.0f);
+#endif
                         PSVECAdd(&fan->vel, &dir, &fan->vel);
                         PSVECSubtract(&other->vel, &dir, &other->vel);
                     }
                 }
             }
         }
+#if VERSION > VERSION_DEMO_US
     }
-
+#endif
     {
         f32 angle;
         f32 dist;
@@ -1872,10 +2111,18 @@ void ext_fan_main(void) {
                         angle = angleABf(mario->position.x, mario->position.z, fan->pos.x, fan->pos.z);
                         dir2 = cloudGetBreathDir();
                         fan->state = 20;
+#if VERSION <= VERSION_DEMO_US
+                        dir2 = (angle + dir2) / 2.0f;
+#else
                         angle = (angle + dir2) / 2.0f;
+#endif
                         fan->target = fan_zero;
                         spd = randf(0.1f, 0.2f);
+#if VERSION <= VERSION_DEMO_US
+                        angle = 6.2831855f * dir2 / 360.0f;
+#else
                         angle = 6.2831855f * angle / 360.0f;
+#endif
                         fan->param.x = spd * polySinf(angle);
                         fan->param.y = randf(0.03f, 0.06f);
                         fan->param.z = spd * -polyCosf(angle);
@@ -1888,15 +2135,30 @@ void ext_fan_main(void) {
             }
         }
     }
+#if VERSION > VERSION_DEMO_US
     // Exclude hidden anchor fans and every fan that has left the walking state.
+#endif
     fan_wp->count = fan_wp->num;
 
+#if VERSION > VERSION_DEMO_US
     {
         f32 angle;
         f32 dist;
         f32 h;
-
+#endif
         pose = extGetPosePtr();
+#if VERSION <= VERSION_DEMO_US
+    fan = fan_wp->fans;
+    for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
+        f32 angle;
+
+        switch (fan->state) {
+            case 0:
+                PSVECAdd(&fan->pos, &fan->vel, &fan->pos);
+                PSVECScale(&fan->vel, &fan->vel, 0.6f);
+                if (fan->pos.z < -190.0f) {
+                    fan->pos.z = -190.0f;
+#else
         lfan = fan_wp->fans;
         for (li = 0; li < fan_wp->num; li++, pose++, lfan++) {
             switch (lfan->state) {
@@ -1917,7 +2179,12 @@ void ext_fan_main(void) {
                         lfan->pos.z += lfan->vel.z;
                         lfan->vel.x *= 0.6f;
                         lfan->vel.z *= 0.6f;
+#endif
                     }
+#if VERSION <= VERSION_DEMO_US
+                if (fan->pos.z > 190.0f) {
+                    fan->pos.z = 190.0f;
+#else
                     if (lfan->pos.x < -350.0f) {
                         lfan->pos.x = -350.0f;
                     }
@@ -1926,21 +2193,46 @@ void ext_fan_main(void) {
                     }
                     if (lfan->pos.z > (h = 195.0f + li / 100.0f)) {
                         lfan->pos.z = h;
+#endif
                     }
                     break;
+#if VERSION > VERSION_DEMO_US
                 }
+#endif
                 case 10:
+#if VERSION <= VERSION_DEMO_US
+                fan->pos.y += fan->param.x;
+                fan->param.x -= fan->param.z;
+                angle = angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
+#else
                     lfan->pos.y += lfan->param.x;
                     lfan->param.x -= lfan->param.z;
                     angle = angleABf(lfan->pos.x, lfan->pos.z, lfan->target.x, lfan->target.z);
+#endif
                     angle = 6.2831855f * angle / 360.0f;
+#if VERSION <= VERSION_DEMO_US
+                fan->pos.x += fan->param.y * polySinf(angle);
+                fan->pos.z += fan->param.y * -polyCosf(angle);
+                if (--fan->timer < 0) {
+                    fan->state = 100;
+#else
                     lfan->pos.x += lfan->param.y * polySinf(angle);
                     lfan->pos.z += lfan->param.y * -polyCosf(angle);
                     if (--lfan->timer < 0) {
                         lfan->state = 100;
+#endif
                     }
                     break;
                 case 20:
+#if VERSION <= VERSION_DEMO_US
+                if (--fan->timer > 0) {
+                    fan->target.x += fan->param.x;
+                    fan->target.y += fan->param.y;
+                    fan->target.z += fan->param.z;
+                    fan->pos.x += fan->target.x;
+                    fan->pos.y += fan->target.y;
+                    fan->pos.z += fan->target.z;
+#else
                     if (--lfan->timer > 0) {
                         lfan->target.x += lfan->param.x;
                         lfan->target.y += lfan->param.y;
@@ -1948,28 +2240,53 @@ void ext_fan_main(void) {
                         lfan->pos.x += lfan->target.x;
                         lfan->pos.y += lfan->target.y;
                         lfan->pos.z += lfan->target.z;
+#endif
                     } else {
+#if VERSION <= VERSION_DEMO_US
+                    fan->state = 100;
+#else
                         lfan->state = 100;
+#endif
                     }
                     break;
                 case 100:
+#if VERSION <= VERSION_DEMO_US
+                pose->flags &= ~3;
+                fan->state++;
+#else
                     pose->flags &= ~(EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
                     lfan->state++;
+#endif
                     break;
                 case 101:
                     break;
             }
+#if VERSION <= VERSION_DEMO_US
+        if (fan->state != 0) {
+#else
             if (lfan->flags & 1) {
                 fan_wp->count--;
             } else if (lfan->state != 0) {
+#endif
                 fan_wp->count--;
             }
+#if VERSION <= VERSION_DEMO_US
+        (*pose->mtx)[0][3] = fan->pos.x;
+        (*pose->mtx)[1][3] = fan->pos.y;
+        (*pose->mtx)[2][3] = fan->pos.z;
+        pose->dir = angleABf(target.x, target.z, fan->pos.x, fan->pos.z);
+#else
             (*pose->mtx)[0][3] = lfan->pos.x;
             (*pose->mtx)[1][3] = lfan->pos.y;
             (*pose->mtx)[2][3] = lfan->pos.z;
             pose->dir = angleABf(target.x, target.z, lfan->pos.x, lfan->pos.z);
+#endif
         }
+#if VERSION <= VERSION_DEMO_US
+    pose_main();
+#else
     }
+#endif
     psndSFX_pos(fan_wp->sfxId, &target);
     psndSFX_vol(fan_wp->sfxId, fan_wp->vol * fan_wp->count / fan_wp->num);
 }
@@ -1984,11 +2301,23 @@ EVT_BEGIN(mario_momikucha_msg)
         ADD(LW(0), 2)
         MULTIPLY(LW(0), 1000)
         WAIT_MS(LW(0))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_get_pos, 0, LW(5), LW(7), LW(8))
+        CALL(evt_sub_random, 100, LW(0))
+        CALL(evt_sub_random, 100, LW(1))
+#else
         CALL(evt_sub_random, 200, LW(0))
         CALL(evt_sub_random, 200, LW(1))
+#endif
         SUBTRACT(LW(0), 50)
         SUBTRACT(LW(1), 50)
+#if VERSION <= VERSION_DEMO_US
+ADD(LW(5), LW(0))
+        ADD(LW(8), LW(1))
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(5), LW(7), LW(8))
+#else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), 30, LW(1))
+#endif
         CALL(evt_end_count, LW(0))
         IF_INT_LESS(LW(0), 10)
             RETURN
@@ -1996,17 +2325,41 @@ EVT_BEGIN(mario_momikucha_msg)
         BEGIN_INLINE_EVENT
             SWITCH(LW(10))
                 CASE_EQUAL(0)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg3_tou_236"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_236")), 0, 0)
+#endif
                 CASE_EQUAL(1)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg3_tou_237"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_237")), 0, 0)
+#endif
                 CASE_EQUAL(2)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg3_tou_238"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_238")), 0, 0)
+#endif
                 CASE_EQUAL(3)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg3_tou_239"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_239")), 0, 0)
+#endif
                 CASE_EQUAL(4)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg3_tou_240"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_240")), 0, 0)
+#endif
                 CASE_EQUAL(5)
+#if VERSION <= VERSION_DEMO_US
+                CALL(evt_msg_print, 0, STRING("stg3_tou_240_01"), 0, 0)
+#else
                 CALL(evt_msg_print, 0, STRING(("stg3_tou_240_01")), 0, 0)
+#endif
             END_SWITCH
         END_INLINE_EVENT
         ADD(LW(10), 1)
@@ -2021,17 +2374,28 @@ EVT_END()
 EVT_BEGIN(evt_momikucha)
     SET_VALUE(LF(0), 0)
     SET_VALUE(GF(10), 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_06_1ST_MATCH)
+        IF_INT_EQUAL(GSWF(GSWF_TOU02_LOBBY_CROWD_SEEN), 0)
+            SET_VALUE(GSWF(GSWF_TOU02_LOBBY_CROWD_SEEN), 1)
+#else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
         IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 0)
             SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
+#endif
             SET_VALUE(LF(0), 1)
             SET_VALUE(GF(10), 0)
         END_IF
     END_IF
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+        IF_INT_EQUAL(GSWF(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN), 0)
+            SET_VALUE(GSWF(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN), 1)
+#else
         IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 0)
             SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
+#endif
             SET_VALUE(LF(0), 1)
             SET_VALUE(GF(10), 1)
         END_IF
@@ -2039,6 +2403,15 @@ EVT_BEGIN(evt_momikucha)
     IF_INT_EQUAL(LF(0), 0)
         RETURN
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_npc_entry, STRING("fan"), STRING("c_kinopio"))
+    CALL(evt_npc_entry, STRING("fan2"), STRING("c_kinopiko"))
+    CALL(evt_npc_entry, STRING("fan3"), STRING("c_jugemu"))
+    CALL(evt_npc_set_position, STRING("fan"), 0, -1000, 0)
+    CALL(evt_npc_set_position, STRING("fan2"), 0, -1000, 0)
+    CALL(evt_npc_set_position, STRING("fan3"), 0, -1000, 0)
+CALL(evt_ext_entry, 250, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
+#else
     CALL(evt_npc_entry, STRING(("fan")), STRING(("c_kinopio")))
     CALL(evt_npc_entry, STRING(("fan2")), STRING(("c_kinopiko")))
     CALL(evt_npc_entry, STRING(("fan3")), STRING(("c_jugemu")))
@@ -2046,11 +2419,21 @@ EVT_BEGIN(evt_momikucha)
     CALL(evt_npc_set_position, STRING(("fan2")), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING(("fan3")), 0, -1000, 0)
     CALL(evt_ext_entry, 200, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
+#endif
     IF_INT_EQUAL(GF(10), 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_set_position, STRING("チャンピョン"), 0, 0, 0)
+        CALL(evt_npc_change_interrupt, STRING("チャンピョン"), 1, PTR(move_champ))
+#else
         CALL(evt_npc_set_position, STRING(("\203`\203\203\203\223\203s\203\207\203\223")), 0, 0, 0)
         CALL(evt_npc_change_interrupt, STRING(("\203`\203\203\203\223\203s\203\207\203\223")), 1, PTR(move_champ))
+#endif
         ELSE
+#if VERSION <= VERSION_DEMO_US
+        SPAWN_EVENT(mario_momikucha_msg)
+#else
         SPAWN_EVENT(PTR(mario_momikucha_msg))
+#endif
     END_IF
     RETURN
 EVT_END()
@@ -2113,13 +2496,21 @@ static EVT_BEGIN(evt_key)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+static void ext_fan_dispent(void) {
+#else
 void ext_fan_dispent(void) {
     pose_main();
+#endif
     dispEntry(CAMERA_3D, 0.0f, 1, fan_disp, NULL);
 }
 
 #pragma opt_propagation off
+#if VERSION <= VERSION_DEMO_US
+static s32 check_hammer(Fan* fan) {
+#else
 s32 check_hammer(Fan* fan) {
+#endif
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
     f32 rot;
@@ -2130,9 +2521,11 @@ s32 check_hammer(Fan* fan) {
     Vec pos;
 
     if (mario->position.y > 0.0f) {
+#if VERSION > VERSION_DEMO_US
         return 0;
     }
     if (fan->flags & 1) {
+#endif
         return 0;
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER && fan_wp->hammerTimer > 10) {

@@ -63,6 +63,7 @@ USER_FUNC(evt_pouch_remove_item) {
  * and re-clamps stats; args[2] gets 0 on success or -1 if that slot holds something else.
  */
 // Descriptive name (not in the symbol maps).
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(evt_pouch_remove_item_index) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -76,6 +77,7 @@ USER_FUNC(evt_pouch_remove_item_index) {
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Puts item args[0] into storage (the items kept at the Rogueport item storage);
@@ -93,12 +95,21 @@ USER_FUNC(evt_pouch_add_keepitem) {
 
 USER_FUNC(evt_pouch_remove_keepitem) {
     EvtWord* args = event->args;
+#if VERSION <= VERSION_DEMO_US
+if (pouchRemoveKeepItem(evtGetValue(event, args[0]))) {
+        evtSetValue(event, args[1], 0);
+#else
     s32 id = evtGetValue(event, args[0]);
     s32 index = evtGetValue(event, args[1]);
     if (pouchRemoveKeepItem(id, index)) {
         evtSetValue(event, args[2], 0);
+#endif
     } else {
+#if VERSION <= VERSION_DEMO_US
+        evtSetValue(event, args[1], -1);
+#else
         evtSetValue(event, args[2], -1);
+#endif
     }
     return EVT_RETURN_DONE;
 }
@@ -110,12 +121,19 @@ USER_FUNC(evt_pouch_check_item) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION <= VERSION_DEMO_US
+GETTER(evt_pouch_get_max_ap, RAW_GET(pouchGetMaxAP))
+SETTER(evt_pouch_set_ap, RAW_SET(pouchSetAP))
+#else
 GETTER(evt_pouch_get_hp, pouchGetHP)
 SETTER(evt_pouch_set_hp, pouchSetHP)
 GETTER(evt_pouch_get_max_ap, pouchGetMaxAP)
 SETTER(evt_pouch_set_ap, pouchSetAP)
+#endif
 SETTER(evt_pouch_party_join, partyJoin)
 SETTER(evt_pouch_party_left, partyLeft)
+#if VERSION <= VERSION_DEMO_US
+#endif
 
 USER_FUNC(evt_pouch_mario_recovery) {
     pouchSetHP(pouchGetMaxHP());

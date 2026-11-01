@@ -17,7 +17,11 @@
 
 BattleUnitKind unit_yami_noko;
 static PoseTableEntry pose_table[18];
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table_turn[15];
+#else
 static PoseTableEntry pose_table_turn[17];
+#endif
 static BattleDataEntry data_table[3];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -46,24 +50,59 @@ BattleUnitKind unit_yami_noko = {
     1, // perilHP
     16, // level
     0, // bonusExp
+#if VERSION <= VERSION_DEMO_US
+2,
+#else
     1, // bonusCoin
+#endif
     70, // bonusCoinRate
     1, // baseCoin
     50, // runRate
     9999, // pbSoftCap
     36, // width
     40, // height
+#if VERSION <= VERSION_DEMO_US
+    -4,
+    40,
+    0.0f,
+    20.0f,
+    0.0f,
+    0,
+    0,
+#else
     {-4, 40}, // hitOffset
     {0.0f, 20.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {9.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    9.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    18.0f,
+    0.0f,
+    0.0f,
+    11.0f,
+    24.0f,
+    0.0f,
+    0.0f,
+    20.0f,
+    0.0f,
+#else
     {18.0f, 0.0f, 0.0f}, // bintaHitOffset
     {11.0f, 24.0f, 0.0f}, // kissHitOffset
     {0.0f, 20.0f, 0.0f}, // cutBaseOffset
+#endif
     36.0f, // cutWidth
     40.0f, // cutHeight
     0, // turnOrder
@@ -72,7 +111,13 @@ BattleUnitKind unit_yami_noko = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_NOKO_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -125,8 +170,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "NKT_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
     {POSE_TYPE_DAMAGE, "NKT_D_1"},
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_RUN, "NKT_R_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
+#endif
     {POSE_TYPE_DANGER, "NKT_K_2"},
     {POSE_TYPE_PERIL, "NKT_K_2"},
     {POSE_TYPE_TALK, "NKT_S_2"},
@@ -161,6 +208,9 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefense defence_turn = {0};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {75, 80, 75, 100, 75, 100, 100, 75, 100, 75, 100, 75, 100, 75, 80, 80, 70, 100, 75, 100, 100, 70};
+#else
 static StatusVulnerability regist = {
     75, // sleep
     80, // stop
@@ -185,6 +235,7 @@ static StatusVulnerability regist = {
     100, // invisible
     70, // ohko
 };
+#endif
 
 /** Part of the Dark Koopa: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
@@ -208,7 +259,11 @@ static BattleWeapon weapon_nokonoko_attack = {
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
+#if VERSION <= VERSION_DEMO_US
+    TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
+#else
     TARGET_CLASS_SINGLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
+#endif
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, // element
     ATTACKPATTERN_SHELL_ATTACK, // damagePattern
@@ -216,7 +271,11 @@ static BattleWeapon weapon_nokonoko_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
+#if VERSION <= VERSION_DEMO_US
+COUNTER_RESIST_ALL,
+#else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
+#endif
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance

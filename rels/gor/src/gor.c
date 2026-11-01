@@ -28,8 +28,12 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
+#if VERSION > VERSION_DEMO_US
 static s32 gor_inemuri_snd_id;
+#endif
+#if VERSION > VERSION_DEMO_US
 static char* gor_msg_cat_buf;
+#endif
 
 void _unresolved(void);
 void _epilog(void);
@@ -83,6 +87,7 @@ void _unresolved(void) {
 
 /** Script helper (Japanese release and later): frees the string built by evt_gor_msg_cat_alloc, if there is one. */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000050c, JP gor .text+0x440. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(evt_gor_msg_cat_free) {
     if (gor_msg_cat_buf == NULL) {
         return EVT_RETURN_DONE;
@@ -91,6 +96,7 @@ USER_FUNC(evt_gor_msg_cat_free) {
     gor_msg_cat_buf = NULL;
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper (Japanese release and later): builds one string out of args[0],
@@ -99,6 +105,7 @@ USER_FUNC(evt_gor_msg_cat_free) {
  * Used to put fixed text around a looked-up message in Rogueport scripts.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000041c, JP gor .text+0x350. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(evt_gor_msg_cat_alloc) {
     EvtWord* args = event->args;
     const char* head = (const char*)evtGetValue(event, args[0]);
@@ -112,6 +119,7 @@ USER_FUNC(evt_gor_msg_cat_alloc) {
     evtSetValue(event, args[3], (EvtWord)gor_msg_cat_buf);
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper for the wandering Rogueport villagers:
@@ -182,22 +190,26 @@ USER_FUNC(evt_goki_sub_intpl_get_value) {
  * so it can be stopped later (-1 for none).
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_00000104, JP gor .text+0x38. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(evt_gor_inemuri_snd_set) {
     gor_inemuri_snd_id = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Script helper (Japanese release and later): stops the snoring sound effect saved by evt_gor_inemuri_snd_set,
  * if any.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_000000cc, JP gor .text+0x0. See docs/NAME_PROVENANCE.md.
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(evt_gor_inemuri_snd_off) {
     if (gor_inemuri_snd_id != -1) {
         psndSFXOff(gor_inemuri_snd_id);
     }
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * NPC regular event shared by Rogueport villagers:
@@ -215,11 +227,17 @@ EVT_END()
  * The Japanese release and later also remember the sound's id so it can be cut off when he wakes.
  */
 EVT_BEGIN(inemuri_snd)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_gor_inemuri_snd_set, -1)
+#endif
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
+#else
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), LW(3))
     CALL(evt_gor_inemuri_snd_set, LW(3))
+#endif
     WAIT_FRAMES(140)
     GOTO(0)
     RETURN
@@ -297,7 +315,9 @@ EVT_BEGIN(mario_and_party_sleep)
     // Luigi has finished: the snoring stops.
     IF_INT_NOT_EQUAL(LW(15), -1)
         DELETE_EVENT(LW(15))
+#if VERSION > VERSION_DEMO_US
         CALL(evt_gor_inemuri_snd_off)
+#endif
     END_IF
     // The partner wakes up.
     IF_INT_LESS_OR_EQUAL(LW(2), 0)
@@ -352,39 +372,94 @@ EVT_END()
  */
 EVT_BEGIN(luigi_gor_first_talk)
     CALL(evt_party_stop, 0)
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_GOR_LUIGI_FIRST_TALK), 0)
+#else
     IF_INT_EQUAL(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 0)
+#endif
         CALL(evt_msg_print, 0, STRING("gor_luigi_00"), 0, STRING("me"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_16_THE_RETURN_OF_THE_QUEEN)
+            CALL(evt_msg_print, 0, STRING("gor_luigi_01"), 0, STRING("me"))
+#else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)
             SET_VALUE(LW(2), STRING("gor_luigi_01"))
+#endif
             ELSE
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_msg_print, 0, STRING("gor_luigi_01_1"), 0, STRING("me"))
+#else
             SET_VALUE(LW(2), STRING("gor_luigi_01_1"))
+#endif
         END_IF
+#if VERSION > VERSION_DEMO_US
         CALL(evt_msg_print, 0, LW(2), 0, STRING("me"))
+#endif
         CALL(evt_mario_set_pose, STRING("M_N_5B"))
         WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
+        SET_VALUE(GSWF(GSWF_GOR_LUIGI_FIRST_TALK), 1)
+#else
         SET_VALUE(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 1)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG2_24_BOSS_BATTLE)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("gor_luigi_02"), 0, STRING("me"))
+#else
         SET_VALUE(LW(2), STRING("gor_luigi_02"))
+#endif
         CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG3_31_GRUBBAS_PLANS)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("gor_luigi_03"), 0, STRING("me"))
+#else
         SET_VALUE(LW(2), STRING("gor_luigi_03"))
+#endif
         CASE_BETWEEN(STG3_32_BOSS_BATTLE, STG4_15_04_SHADOW_SIRENS_DOOPLISS)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("gor_luigi_04"), 0, STRING("me"))
+#else
         SET_VALUE(LW(2), STRING("gor_luigi_04"))
+#endif
         CASE_BETWEEN(STG4_15_05_PEACH_X_NAUT_PHD_REPORT, STG5_42_PIRATES_VS_X_NAUTS)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("gor_luigi_05"), 0, STRING("me"))
+#else
         SET_VALUE(LW(2), STRING("gor_luigi_05"))
+#endif
         CASE_BETWEEN(STG5_43_X_NAUTS_RETREAT, STG6_53_THE_REAL_GARNET_STAR)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("gor_luigi_06"), 0, STRING("me"))
+#else
         SET_VALUE(LW(2), STRING("gor_luigi_06"))
+#endif
         CASE_BETWEEN(STG6_54_WELCOME_BACK, STG7_19_THE_DOOR_TO_LORD_CRUMP)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("gor_luigi_07"), 0, STRING("me"))
+        CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STORY_STG8_15_GRODUS)
+        CALL(evt_msg_print, 0, STRING("gor_luigi_08"), 0, STRING("me"))
+#else
         SET_VALUE(LW(2), STRING("gor_luigi_07"))
         CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG8_15_GRODUS)
         SET_VALUE(LW(2), STRING("gor_luigi_08"))
+#endif
         CASE_GREATER_OR_EQUAL(STG8_16_THE_RETURN_OF_THE_QUEEN)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_msg_print, 0, STRING("gor_luigi_09"), 0, STRING("me"))
+#else
         SET_VALUE(LW(2), STRING("gor_luigi_09"))
+#endif
     END_SWITCH
+#if VERSION > VERSION_DEMO_US
     CALL(evt_msg_print, 0, LW(2), 0, STRING("me"))
+#endif
     CALL(evt_msg_select, 0, STRING("gor_luigi_yesno"))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("gor_luigi_12"))
@@ -407,7 +482,11 @@ EVT_BEGIN(luigi_gor_first_talk)
         SET_VALUE(LW(10), 1)
     END_IF
     SET_VALUE(GF(0), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(mario_and_party_sleep)
+#else
     SPAWN_EVENT(PTR(mario_and_party_sleep))
+#endif
     CALL(evt_msg_print, 0, LW(1), 0, STRING("me"))
     SET_VALUE(GF(0), 1)
     WAIT_WHILE(GF(0))

@@ -170,7 +170,11 @@ static EVT_BEGIN(evt_first)
     WAIT_FRAMES(1)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_F_1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(party_damage_pose)
+#else
     CALL_CHILD(PTR(party_damage_pose))
+#endif
     WAIT_FRAMES(1)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -205,7 +209,11 @@ static EVT_BEGIN(evt_first)
         CALL(evt_eff, 0, STRING("kemuri_test"), 14, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_MARIO_MOON_FALL1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 300)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(party_damage_pose2)
+#else
         CALL_CHILD(PTR(party_damage_pose2))
+#endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 5620, 1000)
@@ -251,8 +259,10 @@ static EVT_BEGIN(evt_first)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(party_reset)
         CALL(evt_party_jump_pos, 0, LW(0), 0, LW(2), 500, 0, -1000)
+#if VERSION > VERSION_DEMO_US
         DEBUG_PUT_MSG(STRING("ビビアンしっぽ有効"))
         CALL(evt_party_vivian_tail, 0, 1)
+#endif
     END_INLINE_EVENT
     WAIT_MS(500)
     LOOP(3)
@@ -306,12 +316,18 @@ static EVT_BEGIN(evt_first)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
     // Control returns, the story advances and the Moon banner appears.
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_06_TO_THE_MOON)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG7_06_TO_THE_MOON)
+#endif
     CALL(evt_telop_entry, 14)
     RETURN
 EVT_END()

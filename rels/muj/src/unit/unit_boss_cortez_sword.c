@@ -19,7 +19,11 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 BattleWeapon weapon_cortez_sword_float_attack;
+#if VERSION <= VERSION_DEMO_US
+static PoseTableEntry pose_table[4];
+#else
 static PoseTableEntry pose_table[6];
+#endif
 PoseTableEntry pose_table_otitabuki[4];
 static PoseTableEntry pose_table_break[4];
 static BattleDataEntry data_table[21];
@@ -98,6 +102,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Cortez Sword: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 80, 95, 100, 90, 100, 100, 50, 0, 0, 100, 0, 100, 50, 50, 0, 90, 100, 50, 0, 0, 0};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     80, // stop
@@ -122,6 +129,7 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /**
  * Weapon of Cortez Sword (float attack): targets one unit for 2 damage; used by attack_event.
@@ -163,8 +171,10 @@ BattleWeapon weapon_cortez_sword_float_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
+#if VERSION > VERSION_DEMO_US
     {POSE_TYPE_STOP, "KRT_Z_1"},
     {POSE_TYPE_FREEZE, "KRT_Z_1"},
+#endif
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
     {POSE_TYPE_DAMAGE, "KRT_S_1"},
@@ -199,7 +209,11 @@ static PoseTableEntry pose_table_break[] = {
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, cortez_weapon_dead_event},
+#if VERSION <= VERSION_DEMO_US
+{70, cortez_weapon_break_event},
+#else
     {UNIT_DATA_WEAPON_BREAK_EVENT, cortez_weapon_break_event},
+#endif
     {UNIT_DATA_BLOW_DEAD_EVENT, cortez_weapon_blow_dead_event},
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, cortez_weapon_counter_damage_event},
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, cortez_weapon_counter_damage_event},
@@ -347,23 +361,37 @@ EVT_BEGIN(cortez_weapon_unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_OWNER, LW(0))
+#if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(0), -1)
             RETURN
         END_IF
+#endif
         CALL(btlevtcmd_GetUnitWork, LW(0), CORTEZ_UNIT_WORK_MODE, LW(1))
         IF_INT_GREATER_OR_EQUAL(LW(1), 4)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(9))
+#if VERSION <= VERSION_DEMO_US
+CALL_CHILD(cortez_weapon_get_home_height)
+#else
                 IF_INT_EQUAL(LW(9), -1)
                     RETURN
                 END_IF
                 CALL_CHILD(PTR(cortez_weapon_get_home_height))
+#endif
                 IF_INT_NOT_EQUAL(LW(1), LW(5))
                     CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
+#if VERSION <= VERSION_DEMO_US
+                    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, -1)
+#else
                     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
+#endif
                     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(5), LW(2))
+#if VERSION <= VERSION_DEMO_US
+                    CALL_CHILD(cortez_weapon_set_formation_attribute)
+#else
                     CALL_CHILD(PTR(cortez_weapon_set_formation_attribute))
+#endif
                     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
                     RETURN
                 END_IF

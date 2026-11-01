@@ -40,7 +40,11 @@ static EvtWord wait_event[6];
  */
 BattleUnitKind unit_kurikuri = {
     UNIT_GOOMBA_GLITZVILLE, // unitType
+#if VERSION <= VERSION_DEMO_US
+"btl_un_kurikuri",
+#else
     "btl_un_kuriboo", // name
+#endif
     2, // maxHp
     0, // maxFp
     1, // dangerHP
@@ -54,17 +58,48 @@ BattleUnitKind unit_kurikuri = {
     9999, // pbSoftCap
     23, // width
     25, // height
+#if VERSION <= VERSION_DEMO_US
+    5,
+    25,
+    0.0f,
+    12.0f,
+    0.0f,
+    0,
+    0,
+#else
     {5, 25}, // hitOffset
     {0.0f, 12.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {12.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    12.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    11.5f,
+    0.0f,
+    0.0f,
+    12.0f,
+    18.0f,
+    0.0f,
+    0.0f,
+    12.0f,
+    0.0f,
+#else
     {11.5f, 0.0f, 0.0f}, // bintaHitOffset
     {12.0f, 18.0f, 0.0f}, // kissHitOffset
     {0.0f, 12.0f, 0.0f}, // cutBaseOffset
+#endif
     23.0f, // cutWidth
     25.0f, // cutHeight
     0, // turnOrder
@@ -73,7 +108,13 @@ BattleUnitKind unit_kurikuri = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_KURI_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -127,6 +168,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type reactions of the Goomba Bros.: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
+#else
 static StatusVulnerability regist = {
     100, // sleep
     110, // stop
@@ -151,6 +195,7 @@ static StatusVulnerability regist = {
     100, // invisible
     150, // ohko
 };
+#endif
 
 /**
  * Parts of the Goomba Bros.: a single body part (part 1, model c_kuribo), each with its defense tables,

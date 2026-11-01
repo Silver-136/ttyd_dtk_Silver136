@@ -26,6 +26,9 @@ static BattleUnitKindPart parts[] = {
  * It has no HP gauge, locked HP and is ignored when checking for a cleared battle;
  * it exists to run battle-wide scripts.
  */
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+#endif
 BattleUnitKind unit_system = {
     UNIT_SYSTEM, // unitType
     "btl_un_system", // name
@@ -99,6 +102,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /** Status chances for the system unit: all 0, so no status can ever land on it. */
+#if VERSION > VERSION_DEMO_US
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -123,6 +127,7 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /** Hit reaction: nothing; the system unit cannot be hurt (its HP is locked). */
 static EVT_BEGIN(damage_event)

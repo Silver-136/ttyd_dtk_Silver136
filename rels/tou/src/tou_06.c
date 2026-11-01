@@ -241,7 +241,11 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x13, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -281,9 +285,13 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -100, 50, -60)
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 270)
     CALL(evt_seq_wait, SEQ_GAME)
+#if VERSION <= VERSION_DEMO_US
+WAIT_MS(1000)
+#else
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(200)
     CALL(evt_party_stop, 0)
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir_npc, STRING("チュチュリーナ"))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -291,7 +299,11 @@ EVT_BEGIN(evt_chuchu)
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
+#else
         CALL(evt_party_set_dir, 0, 270, 300)
+#endif
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("p"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     CALL(evt_set_dir_to_target, STRING("チュチュリーナ"), STRING("mario"))
@@ -354,7 +366,11 @@ EVT_BEGIN(evt_chuchu)
     // She walks out through the north door, which swings open and shut behind her.
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 0, -140, 0, FLOAT(80.0f), 1)
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_open_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_open_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -371,7 +387,11 @@ EVT_BEGIN(evt_chuchu)
     END_INLINE_EVENT
     WAIT_MS(500)
     SET_VALUE(LW(1), 0)
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(bero_close_door_play_se)
+#else
     SPAWN_EVENT(PTR(bero_close_door_play_se))
+#endif
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 180, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -384,7 +404,11 @@ EVT_BEGIN(evt_chuchu)
     END_LOOP
     // The Glitz Pit music returns and the partner wonders what she meant.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+#else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+#endif
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     CALL(evt_msg_print_party, STRING("stg3_tou_316"))
     // Mail arrives: the mail jingle plays and Mario waits with a "!" until A is pressed.
@@ -440,7 +464,11 @@ EVT_BEGIN(evt_chuchu)
     WAIT_MS(500)
     CALL(evt_pouch_receive_mail, 12)
     CALL(evt_pouch_open_mail, 12)
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_08_MS_MOWZ)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_08_MS_MOWZ)
+#endif
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -556,6 +584,160 @@ EVT_END()
  * Map init for tou_06, the storage room: NPCs, the floor hole (evt_ana), the containers (cloud-blown),
  * the Lv1 big blocks, the job 13 trunks, and the scene to run from story progress.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(tou_06_init_evt)
+    // Doors, Ms. Mowz and the hole in the floor that drops Mario into Grubba's office.
+    SET_VALUE(LW(0), PTR(bero_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    CALL(evt_npc_setup, PTR(npcEnt))
+    CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("ana"), 0, PTR(evt_ana), 0)
+    // The first container until Flurrie blows it away, then the second, labelled container.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_09_BLOWING_CONTAINERS)
+        CALL(evt_cloud_init)
+        CALL(evt_cloud_ent, 0, STRING("kontena"), STRING("a_kon_H"), PTR(evt_kontena))
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kontena"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_hitobj_onoff, STRING("a_kon_H"), 1, 0)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_CONTAINER_BLOWN), 0)
+        IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_20_09_BLOWING_CONTAINERS)
+            CALL(evt_cloud_init)
+        END_IF
+        CALL(evt_cloud_ent, 1, PTR(&cloud_kontena2_list), STRING("a_kon_N"), PTR(evt_kontena2))
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kontena_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_hitobj_onoff, STRING("a_kon_N"), 1, 0)
+    END_IF
+    // The big blocks on the floor, each kept broken by its own flag.
+    CALL(evt_mobj_lv_blk, STRING("i"), 126, -1, -126, 0, GSWF(GSWF_TOU06_BLOCK_I_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("j"), 176, -1, -76, 0, GSWF(GSWF_TOU06_BLOCK_J_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_I_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("i"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_J_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("j"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    CALL(evt_mobj_lv_blk, STRING("a"), -126, -1, -126, 0, GSWF(GSWF_TOU06_BLOCK_A_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("b"), -76, -1, -126, 0, GSWF(GSWF_TOU06_BLOCK_B_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("c"), -176, -1, -76, 0, GSWF(GSWF_TOU06_BLOCK_C_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("d"), -126, -1, -76, 0, GSWF(GSWF_TOU06_BLOCK_D_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("e"), -76, -1, -76, 0, GSWF(GSWF_TOU06_BLOCK_E_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("f"), -176, -1, -26, 0, GSWF(GSWF_TOU06_BLOCK_F_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("g"), -126, -1, -26, 0, GSWF(GSWF_TOU06_BLOCK_G_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("h"), -76, -1, -26, 0, GSWF(GSWF_TOU06_BLOCK_H_BROKEN), STRING("MOBJ_Lv1BigBlock"))
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_A_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("a"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_B_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("b"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_C_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("c"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_D_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("d"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_E_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("e"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_F_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("f"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_G_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("g"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_TOU06_BLOCK_H_BROKEN), 0)
+        CALL(evt_mobj_flag_onoff, 0, STRING("h"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    // Until the stairway appears: the blue switch, the hidden stairs and their paper-unfold image.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_10_HIDDEN_STAIRWAY)
+        CALL(evt_mobj_switch_blue, 0, STRING("sw"), -165, 0, -115, PTR(evt_kaidan), GSWF(GSWF_TOU06_STAIR_SWITCH_HIT))
+        CALL(evt_mobj_flag_onoff, 0, STRING("sw"), MOBJ_FLAG_GRAVITY)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kaidan"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_hitobj_onoff, STRING("a_kaidan"), 1, 0)
+        CALL(evt_paper_entry, STRING("OFF_d_ori"))
+        CALL(evt_img_entry, STRING("img"))
+        CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_ori"))
+        CALL(evt_img_onoff, STRING("img"), 0)
+    END_IF
+    // The huge block on the upper floor until it is broken, and the door lock until the key is used.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_11_HOLE_IN_THE_FLOOR)
+        CALL(evt_mobj_lv_blk, STRING("aa"), -450, 200, 55, PTR(evt_block_broken), GSWF(GSWF_TOU06_BIG_BLOCK_BROKEN), STRING("MOBJ_Lv1BigBigBlock"))
+        CALL(evt_mobj_flag_onoff, 0, STRING("aa"), MOBJ_FLAG_GRAVITY)
+    END_IF
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_15_UNLOCKING_THE_DOOR)
+        CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x13, 95, 210, 50, -80, PTR(evt_chk), PTR(evt_lock), GSWF(GSWF_TOU06_LOCK_OPEN))
+        SET_VALUE(LW(0), 1)
+        CALL_CHILD(bero_case_switch_off)
+    END_IF
+    // Shine Sprite block, the spinning floor panel to the Star Piece, and the HP Plus P and Charge P badges.
+    CALL(evt_mobj_powerupblk, STRING("pblk00"), -30, 260, -30, 0, GSWF(GSWF_TOU06_SHINE_SPRITE), 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 50, 0, 0, STRING("tou_6_sita"), 125, GSWF(GSWF_TOU06_STAR_PIECE_PANEL))
+    CALL(evt_hitobj_attr_onoff, 0, 1, STRING("MOBJ_kururin1"), 4194304)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_HP_PLUS_P, -450, 250, -25, ITEM_TYPE_STILL, GSWF(GSWF_TOU06_HP_PLUS_P), 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_CHARGE_P, 175, 0, -125, ITEM_TYPE_STILL, GSWF(GSWF_TOU06_CHARGE_P), 0)
+    // Arriving through the "fall" entrance: Mario and the partner drop in and control returns on landing.
+    CALL(evt_bero_get_entername, LW(0))
+    IF_STR_EQUAL(LW(0), STRING("fall"))
+        CALL(evt_mario_key_onoff, 0)
+        CALL(evt_mario_set_pos, 125, 0, -30)
+        CALL(evt_cam_road_reset)
+        CALL(evt_mario_cam_off)
+        CALL(evt_mario_set_pos, 125, 100, -30)
+        CALL(evt_party_set_pos, 0, 125, 100, -30)
+        CALL(evt_mario_cont_onoff, 0)
+        CALL(evt_party_cont_onoff, 0, 0)
+        BEGIN_INLINE_EVENT
+            CALL(evt_seq_wait, SEQ_GAME)
+            CALL(evt_mario_cont_onoff, 1)
+CALL(evt_mario_wait_landon)
+CALL(evt_mario_key_onoff, 1)
+            CALL(evt_mario_cam_on)
+END_INLINE_EVENT
+        BEGIN_INLINE_EVENT
+            CALL(evt_seq_wait, SEQ_GAME)
+            CALL(evt_party_cont_onoff, 0, 1)
+        END_INLINE_EVENT
+END_IF
+    // The flies over the garbage and, from JP on, Trouble Center job 13.
+    CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
+CALL(evt_sub_get_system_flag, LW(0))
+    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
+        RETURN
+    END_IF
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_08_MS_MOWZ)
+        SPAWN_EVENT(evt_chuchu)
+    ELSE
+        IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
+            CALL(evt_snd_bgmoff, PSND_FADEOUT)
+            CALL(evt_snd_envoff, PSND_FADEOUT)
+        ELSE
+            SWITCH(GSW(GSW_STORY_PROGRESS))
+                CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+                CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
+CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+                CASE_DEFAULT
+                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
+            END_SWITCH
+        END_IF
+    END_IF
+CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
+    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), 13)
+        CALL_CHILD(iri_13_init)
+    END_IF
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(tou_06_init_evt)
     // Doors, Ms. Mowz and the hole in the floor that drops Mario into Grubba's office.
     SET_VALUE(LW(0), PTR(bero_data))
@@ -730,6 +912,7 @@ EVT_BEGIN(tou_06_init_evt)
     END_IF
     RETURN
 EVT_END()
+#endif
 
 // The returned pointer uses one shared buffer; callers consume the name before requesting the next.
 USER_FUNC(iri_13_make_name) {

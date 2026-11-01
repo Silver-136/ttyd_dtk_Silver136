@@ -275,7 +275,11 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("トゲノコＡ"), 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("トゲノコＢ"), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kpa_01_door_open)
+#else
     CALL_CHILD(PTR(kpa_01_door_open))
+#endif
     CALL(evt_cam3d_evt_set, -470, 60, 269, -683, 65, 24, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_cam3d_evt_set, -430, 60, 234, -644, 65, -11, 2800, EASING_SINE_IN_OUT)
@@ -284,13 +288,21 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_LAUGH2_2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     CALL(evt_msg_print, 0, STRING("kpa_stg1_000"), 0, STRING("mario"))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(kpa_01_door_close)
+#else
     CALL_CHILD(PTR(kpa_01_door_close))
+#endif
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     WAIT_MS(100)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_001"), 0, STRING("トゲノコＡ"))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_19_01_BOWSER_BOWSER_CASTLE)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_19_01_BOWSER_BOWSER_CASTLE)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
+#endif
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgm_scope, 0, 0)
     RETURN
@@ -329,7 +341,11 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     WAIT_FRAMES(1)
     // Kammy Koopa arrives out of breath; the door shuts behind her.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_021"), 0, STRING("ババ"))
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(kpa_01_door_close)
+#else
     SPAWN_EVENT(PTR(kpa_01_door_close))
+#endif
     CALL(evt_npc_move_position, STRING("ババ"), -480, 0, 0, FLOAT(90.0f), 0)
     CALL(evt_mario_set_pos, 625, 30, 0)
     CALL(evt_mario_set_dir, 270, 0, 0)
@@ -386,10 +402,18 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
         CALL(evt_msg_print, 0, STRING("kpa_stg1_033_1"), 0, STRING("mario"))
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LSWF(1), 0)
+#else
     SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
+#endif
     BEGIN_INLINE_EVENT_GET_ID(LW(0))
         LOOP(0)
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_NOT_EQUAL(LSWF(1), 0)
+#else
             IF_INT_NOT_EQUAL(LSWF_KPA_01_MSG_CUE, 0)
+#endif
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -402,7 +426,11 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_034"), PTR(kpa_stg1_034_cb), STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("S_1"), STRING("T_1"))
     DELETE_EVENT(LW(0))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LSWF(1), 0)
+#else
     SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 800)
     END_INLINE_EVENT
@@ -427,10 +455,18 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_ANGRY2_1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
     CALL(evt_msg_print, 0, STRING("kpa_stg1_035"), 0, STRING("mario"))
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(LSWF(1), 0)
+#else
     SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
+#endif
     BEGIN_INLINE_EVENT
         LOOP(0)
+#if VERSION <= VERSION_DEMO_US
+            IF_INT_NOT_EQUAL(LSWF(1), 0)
+#else
             IF_INT_NOT_EQUAL(LSWF_KPA_01_MSG_CUE, 0)
+#endif
                 BREAK_LOOP
             END_IF
             WAIT_FRAMES(1)
@@ -782,9 +818,11 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
             GOTO(10)
         END_IF
     END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
         CALL(evt_npc_kamek_kemuri2, STRING("ババ"), 1500, 1)
     END_INLINE_EVENT
+#endif
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -1152,12 +1190,20 @@ EVT_BEGIN(kpa_01_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_zou_2"), 0, PTR(douzou_2_touch_evt), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_zou_3"), 0, PTR(douzou_3_touch_evt), 0)
     CALL_CHILD(shan_init)
+#if VERSION <= VERSION_DEMO_US
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+#else
     SWITCH(GSW_STORY_PROGRESS)
+#endif
         CASE_EQUAL(STG1_19_PEACH_TEC)
         SPAWN_EVENT(kpa_01_touzyo_evt)
         SPAWN_EVENT(kpa_01_pos_check)
         CASE_EQUAL(STG1_19_01_BOWSER_BOWSER_CASTLE)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(7))
+#else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
+#endif
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("player"))
             CALL(evt_mario_set_pos, -700, 0, 0)
@@ -1174,6 +1220,9 @@ EVT_BEGIN(kpa_01_init_evt)
         END_IF
     END_SWITCH
     RETURN
+#if VERSION <= VERSION_DEMO_US
+EVT_END()
+#else
 EVT_END_PAD()
 
 /**
@@ -1188,11 +1237,22 @@ static USER_FUNC(make_name) {
     evtSetValue(event, args[1], (EvtWord)name);
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF(1),
  * which lets the Hammer Bro turn toward Bowser.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(make_name) {
+    EvtWord* args = event->args;
+    static char name[8];
+
+    sprintf(name, "hi_%d", evtGetValue(event, args[0]));
+    evtSetValue(event, args[1], (EvtWord)name);
+    return EVT_RETURN_DONE;
+}
+#endif
 void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 

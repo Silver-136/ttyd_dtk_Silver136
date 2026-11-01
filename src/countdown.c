@@ -102,10 +102,12 @@ void countDownMain(void) {
             }
             break;
         case 1:
+#if VERSION > VERSION_DEMO_US
             if ((wp->flags & COUNTDOWN_FLAG_TIME_UP) != 0) {
                 psndSFXOff(wp->sfxId);
                 wp->sfxId = -1;
             }
+#endif
             break;
         case 2:
             if (++wp->counter < 30) {
@@ -119,11 +121,24 @@ void countDownMain(void) {
             break;
         }
         if ((wp->flags & COUNTDOWN_FLAG_STOPPED) == 0 && marioStGetSystemLevel() == 0) {
+#if VERSION <= VERSION_DEMO_US
+            wp->elapsed += (s32)((u32)gp->renderTime - (u32)wp->prevTime);
+#else
             wp->elapsed += OSDiffTick(gp->renderTime, wp->prevTime);
+#endif
         }
         wp->prevTime = gp->renderTime;
+#if VERSION <= VERSION_DEMO_US
+        {
+            CountdownWork* work = wp;
+            if (work->elapsed / (OS_TIMER_CLOCK / 1000) >= wp->limit) {
+#else
         if (OSTicksToMilliseconds(wp->elapsed) >= wp->limit) {
+#endif
             wp->flags |= COUNTDOWN_FLAG_TIME_UP;
+#if VERSION <= VERSION_DEMO_US
+            }
+#endif
         }
         dispEntry(CAMERA_2D, 1000.0f, 0, countDownDisp, NULL);
     }

@@ -68,7 +68,11 @@ static USER_FUNC(make_list) {
 }
 
 static EVT_BEGIN(w_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -76,7 +80,11 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 static EVT_BEGIN(w_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_2"), 0, 0, LW(0))
@@ -84,7 +92,11 @@ static EVT_BEGIN(w_door_open)
 EVT_END()
 
 static EVT_BEGIN(e_door_close)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_2"), 0, 0, LW(0))
@@ -92,7 +104,11 @@ static EVT_BEGIN(e_door_close)
 EVT_END()
 
 static EVT_BEGIN(e_door_open)
+#if VERSION <= VERSION_DEMO_US
+MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
+#endif
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_2"), 0, 0, LW(0))
@@ -162,13 +178,21 @@ EVT_BEGIN(evt_machine)
         RETURN
     END_IF
     CALL(make_list)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_list), LW(10))
+#else
     CALL(evt_win_item_select, 0, PTR(key_list), LW(10), 0)
+#endif
     SWITCH(LW(10))
         CASE_EQUAL(ITEM_CARD_KEY_0x1D)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 1)
+#else
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
+#endif
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
@@ -180,7 +204,11 @@ EVT_BEGIN(evt_machine)
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 1)
+#else
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
+#endif
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
@@ -192,7 +220,11 @@ EVT_BEGIN(evt_machine)
         IF_INT_EQUAL(LW(0), 2)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+            SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 1)
+#else
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
+#endif
             CALL(evt_pouch_remove_item, LW(10), LW(1))
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DOOR_UNLOCK1"), LW(0), LW(1), LW(2), 0)
@@ -202,13 +234,24 @@ EVT_BEGIN(evt_machine)
         END_IF
         CASE_DEFAULT
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 1)
+        IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 1)
+            IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 1)
+                SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_16_FACTORY_DOOR)
+#else
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
         IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
             IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
                 SET_VALUE(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)
+#endif
                 CALL(evt_del_case_evt, 0, GW(10))
                 SET_VALUE(LW(0), STRING("e_bero"))
+#if VERSION <= VERSION_DEMO_US
+                CALL_CHILD(bero_case_switch_on)
+#else
                 CALL_CHILD(PTR(bero_case_switch_on))
+#endif
                 CALL(evt_cam3d_evt_set, -140, 90, 369, 150, 60, -98, 500, EASING_SINE_IN_OUT)
                 WAIT_MS(1200)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
@@ -291,6 +334,104 @@ static USER_FUNC(sysflag) {
  * In that last stretch, entering from e_bero puts a partner back with Mario if he has none,
  * heals Mario and the partners, and starts evt_koopa_after.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(aji_18_init_evt)
+    CALL(sysflag)
+    // The fortress music and ambience start and the exits are set up.
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
+SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    // From the factory-door story point on, all three card-key slots count as filled; each slot shows green
+    // when filled and red when empty.
+    IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_16_FACTORY_DOOR)
+        SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 1)
+        SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 1)
+        SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 1)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 1)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 1)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 1)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    SET_VALUE(LW(0), 0)
+    CALL(evt_pouch_check_item, ITEM_CARD_KEY_0x1D, LW(1))
+    ADD(LW(0), LW(1))
+    CALL(evt_pouch_check_item, ITEM_CARD_KEY_0x1E, LW(1))
+    ADD(LW(0), LW(1))
+    CALL(evt_pouch_check_item, ITEM_CARD_KEY_0x1F, LW(1))
+    ADD(LW(0), LW(1))
+    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 0)
+        SET_VALUE(LW(0), 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_machine), 0)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 0)
+        SET_VALUE(LW(0), 1)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi2"), 0, PTR(evt_machine), 0)
+    END_IF
+    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 0)
+        SET_VALUE(LW(0), 2)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi3"), 0, PTR(evt_machine), 0)
+    END_IF
+    // Before the factory door opens, the east exit is locked behind the key slots, and the light panels show
+    // red.
+    IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_16_FACTORY_DOOR)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), GW(10))
+        SET_VALUE(LW(0), STRING("e_bero"))
+        CALL_CHILD(bero_case_switch_off)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
+    ELSE
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
+    END_IF
+    // Between Lord Crump's defeat and the story point after the Moon, the east exit is locked again.
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), 0)
+        SET_VALUE(LW(0), STRING("e_bero"))
+        CALL_CHILD(bero_case_switch_off)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
+    END_SWITCH
+    // In that stretch, entering from the east door gives Mario a partner back if he has none, heals everyone
+    // and starts evt_koopa_after.
+    SWITCH(GSW(GSW_STORY_PROGRESS))
+        CASE_BETWEEN(STG7_20_LORD_CRUMP_DEFEATED, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_EQUAL(LW(0), STRING("e_bero"))
+            CALL(evt_mario_get_party, LW(15))
+            IF_INT_EQUAL(LW(15), 0)
+                CALL(evt_mario_set_party, 0, 1)
+                CALL(evt_party_run, 0)
+CALL(evt_pouch_mario_recovery)
+                CALL(evt_pouch_all_party_recovery)
+END_IF
+SPAWN_EVENT(evt_koopa_after)
+        END_IF
+    END_SWITCH
+    // The emergency lights start.
+    SPAWN_EVENT(evt_emergency)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
     // The fortress music and ambience start and the exits are set up.
@@ -391,4 +532,5 @@ EVT_BEGIN(aji_18_init_evt)
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()
+#endif
 

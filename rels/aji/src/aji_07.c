@@ -259,8 +259,10 @@ EVT_BEGIN(evt_tensou2)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP1_2"), LW(2), LW(3), LW(4), 0)
+#endif
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_party_get_pos, 0, LW(5), LW(6), LW(7))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 70, 0, 1000)
@@ -325,6 +327,44 @@ static EVT_BEGIN(evt_haguruma)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(aji_07_init_evt)
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
+SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(evt_bero_info_run)
+    CALL_CHILD(tensou_init)
+    CALL(evt_map_playanim, STRING("anm_PC"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_terop"), MAP_ANIM_PLAY_LOOP, 0)
+    CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
+    IF_INT_EQUAL(GSWF(GSWF_AJI07_COG_TAKEN), 0)
+        CALL(evt_item_entry, STRING("haguruma"), ITEM_COG, -65, 100, -120, ITEM_TYPE_STILL, -1, PTR(evt_haguruma))
+    END_IF
+    CALL(evt_bero_get_entername, LW(0))
+    IF_STR_EQUAL(LW(0), STRING("tenjo"))
+        CALL(evt_cam_letter_box_disable, 1)
+        CALL(evt_mario_key_onoff, 0)
+        CALL(evt_mario_cont_onoff, 0)
+        CALL(evt_party_cont_onoff, 0, 0)
+        CALL(evt_party_cont_onoff, 1, 0)
+        CALL(evt_mario_set_pos, 180, 200, -125)
+        CALL(evt_party_set_pos, 0, 190, 200, -115)
+        CALL(evt_party_set_pos, 1, 200, 200, -105)
+        BEGIN_INLINE_EVENT
+            CALL(evt_seq_wait, SEQ_GAME)
+            CALL(evt_mario_cont_onoff, 1)
+            CALL(evt_party_cont_onoff, 0, 1)
+            CALL(evt_party_cont_onoff, 1, 1)
+            CALL(evt_mario_wait_landon)
+CALL(evt_mario_key_onoff, 1)
+            CALL(evt_cam_letter_box_disable, 0)
+        END_INLINE_EVENT
+    END_IF
+    SPAWN_EVENT(evt_emergency)
+    RETURN
+EVT_END()
+#else
 EVT_BEGIN(aji_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
@@ -376,4 +416,5 @@ EVT_BEGIN(aji_07_init_evt)
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()
+#endif
 

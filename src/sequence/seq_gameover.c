@@ -75,6 +75,42 @@ EVT_BEGIN(_fall_char_last)
     RETURN
 EVT_END()
 
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(fall_gameover)
+    SET_VALUE(LW(0), STRING("g"))
+    SPAWN_EVENT(_fall_char)
+WAIT_FRAMES(10)
+SET_VALUE(LW(0), STRING("a"))
+    SPAWN_EVENT(_fall_char)
+WAIT_FRAMES(20)
+SET_VALUE(LW(0), STRING("m"))
+    SPAWN_EVENT(_fall_char)
+WAIT_FRAMES(10)
+SET_VALUE(LW(0), STRING("e"))
+    SPAWN_EVENT(_fall_char)
+WAIT_FRAMES(10)
+SET_VALUE(LW(0), STRING("o"))
+    SPAWN_EVENT(_fall_char)
+WAIT_FRAMES(10)
+SET_VALUE(LW(0), STRING("v"))
+    SPAWN_EVENT(_fall_char)
+WAIT_FRAMES(10)
+SET_VALUE(LW(0), STRING("e2"))
+    SPAWN_EVENT(_fall_char)
+WAIT_FRAMES(30)
+SET_VALUE(LW(0), STRING("r"))
+    SPAWN_EVENT_GET_ID(PTR(_fall_char_last), LW(10))
+    LOOP(0)
+        IS_EVENT_RUNNING(LW(10), LW(11))
+        IF_INT_EQUAL(LW(11), 0)
+            BREAK_LOOP
+        END_IF
+        WAIT_FRAMES(1)
+    END_LOOP
+WAIT_FRAMES(120)
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(fall_gameover)
     SET_VALUE(LW(0), STRING("g"))
     SPAWN_EVENT(_fall_char)
@@ -141,6 +177,7 @@ EVT_BEGIN(fall_gameover)
 #endif
     RETURN
 EVT_END()
+#endif
 
 #if VERSION >= VERSION_US
 EVT_BEGIN(fall_gameover_es)
@@ -194,6 +231,51 @@ EVT_END()
  * hides the letters of the other language, sets the camera,
  * plays the dust animation and runs the falling-letters script.
  */
+#if VERSION <= VERSION_DEMO_US
+EVT_BEGIN(evt_gameover)
+    CALL(evt_mario_key_onoff, 0)
+    CALL(evt_mario_normalize)
+    CALL(evt_mario_cont_onoff, 0)
+    CALL(evt_mario_set_pos, 0, 0, 0)
+    CALL(evt_cam_road_reset)
+    CALL(evt_party_cont_onoff, 0, 0)
+    CALL(evt_party_set_pos, 0, 0, -1000, 0)
+    CALL(evt_mario_kill_party, 0)
+    CALL(evt_party_cont_onoff, 1, 0)
+    CALL(evt_party_set_pos, 1, 0, -1000, 0)
+    CALL(evt_mario_clear_party, 1)
+    WAIT_FRAMES(1)
+CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
+    CALL(evt_mario_set_pose, STRING("M_D_2"))
+    CALL(evt_mario_set_dir, 180, 0, 0)
+    CALL(evt_mario_adjust_dir)
+CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("f"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("i"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("d"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("l"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("j"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("u"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("g1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("o289"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_trans, 1, STRING("g"), 0, 200, 0)
+        CALL(evt_mapobj_trans, 1, STRING("a"), 0, 200, 0)
+        CALL(evt_mapobj_trans, 1, STRING("m"), 0, 200, 0)
+        CALL(evt_mapobj_trans, 1, STRING("e"), 0, 200, 0)
+        CALL(evt_mapobj_trans, 1, STRING("o"), 0, 200, 0)
+        CALL(evt_mapobj_trans, 1, STRING("v"), 0, 200, 0)
+        CALL(evt_mapobj_trans, 1, STRING("e2"), 0, 200, 0)
+        CALL(evt_mapobj_trans, 1, STRING("r"), 0, 200, 0)
+CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
+    CALL(evt_cam3d_evt_set, 0, 208, 653, 0, 91, -30, 0, EASING_SINE_IN_OUT)
+    WAIT_FRAMES(1)
+    CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
+CALL_CHILD(fall_gameover)
+RETURN
+EVT_END()
+#else
 EVT_BEGIN(evt_gameover)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -274,6 +356,7 @@ EVT_BEGIN(evt_gameover)
 #endif
     RETURN
 EVT_END()
+#endif
 
 void seq_gameOverMain(SequenceWork* work) {
     CameraEntry* camera;
@@ -326,6 +409,9 @@ void seq_gameOverMain(SequenceWork* work) {
             mapLoad("sys_00");
             camera = camGetPtr(CAMERA_3D);
             mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
+            {
+#endif
             camera->marioPos.x = 0.0f;
             camera->marioPos.y = 0.01f;
             camera->marioPos.z = 0.0f;
@@ -334,6 +420,9 @@ void seq_gameOverMain(SequenceWork* work) {
             camera->marioAt.z = camera->marioPos.z;
             mario->position = (Vec){0.0f, 0.0f, 0.0f};
             mario->camTarget = mario->position;
+#if VERSION <= VERSION_DEMO_US
+            }
+#endif
             camRoadReset();
             camShiftReset();
             work->state++;
@@ -351,12 +440,17 @@ void seq_gameOverMain(SequenceWork* work) {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(FADE_IN_BLACK, 1000, color);
             }
+#if VERSION <= VERSION_DEMO_US
+psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
+#endif
             marioReset();
             marioEntry();
+#if VERSION > VERSION_DEMO_US
             psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
             }
+#endif
             wp->evt = evtEntryType(evt_gameover, 0, 0, 0);
             work->state++;
             break;
@@ -370,13 +464,18 @@ void seq_gameOverMain(SequenceWork* work) {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(36, 0, color);
             }
+#if VERSION > VERSION_DEMO_US
             psndBGMOff_f_d(PSND_FADEOUT, 4000, FALSE);
+#endif
             work->state++;
             break;
         case 6:
             if (!fadeIsFinish()) {
                 break;
             }
+#if VERSION <= VERSION_DEMO_US
+gp->resetType = 1;
+#else
             _relUnLoad();
             _unload("sys_00", NULL, NULL);
             strcpy(gp->beroEnterName, "");
@@ -389,6 +488,7 @@ void seq_gameOverMain(SequenceWork* work) {
             } else {
                 seqSetSeq(SEQ_TITLE, NULL, NULL);
             }
+#endif
             break;
     }
 }

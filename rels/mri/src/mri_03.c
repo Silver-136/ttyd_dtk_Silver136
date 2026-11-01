@@ -811,7 +811,11 @@ s32 key_table00[] = {
 EVT_BEGIN(evt_check00)
     CALL(evt_pouch_check_item, ITEM_RED_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, PTR(key_table00), LW(0))
+#else
         CALL(evt_win_item_select, 0, PTR(key_table00), LW(0), 0)
+#endif
         IF_INT_EQUAL(LW(0), -1)
             CALL(evt_mobj_exec_cancel, STRING("me"))
         END_IF
@@ -889,7 +893,11 @@ s32 key_table01[] = {
 EVT_BEGIN(evt_check01)
     CALL(evt_win_item_maketable, PTR(key_table01), LW(10))
     IF_INT_NOT_EQUAL(LW(10), 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_win_item_select, LW(10), LW(0))
+#else
         CALL(evt_win_item_select, 0, LW(10), LW(0), 0)
+#endif
         SWITCH(LW(0))
             CASE_EQUAL(ITEM_BLUE_KEY)
             CASE_EQUAL(ITEM_RED_KEY)
@@ -897,7 +905,11 @@ EVT_BEGIN(evt_check01)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg2_mri_e14_15"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
+            CALL(evt_puni_get_lsw_index, LSW(0), 0, LW(0), LW(1), LW(2), LW(3))
+#else
             CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, 0, LW(0), LW(1), LW(2), LW(3))
+#endif
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
                 CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -1456,7 +1468,9 @@ EVT_END()
 EVT_BEGIN(toraware_elder)
     // Mario enters the prison; Punio and the Punies find the Elder locked in her cell.
     CALL(evt_mario_key_onoff, 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_puni_wait_systemmode, 2)
+#endif
     CALL(evt_bero_exec_wait, 65536)
     WAIT_WHILE(GF(0))
     BEGIN_INLINE_EVENT
@@ -1465,6 +1479,7 @@ EVT_BEGIN(toraware_elder)
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 270, 200)
     END_INLINE_EVENT
+#if VERSION > VERSION_DEMO_US
     CALL_CHILD(PTR(mri_guide_hagure_check))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, 0, 0, 0, 0, 0)
@@ -1475,6 +1490,7 @@ EVT_BEGIN(toraware_elder)
         CALL(evt_puni_move_position, 1, 240, 40, FLOAT(120.0f))
         CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     END_IF
+#endif
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_anim, 1, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
@@ -1570,7 +1586,11 @@ EVT_BEGIN(toraware_elder)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     // The story advances and Mario regains control.
+#if VERSION <= VERSION_DEMO_US
+    SET_VALUE(GSW(GSW_STORY_PROGRESS), STG2_12_02_PUNI_ELDER_IMPRISONED)
+#else
     SET_VALUE(GSW_STORY_PROGRESS, STG2_12_02_PUNI_ELDER_IMPRISONED)
+#endif
     CALL(evt_npc_restart_regular_event, STRING("ガイド妹"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)

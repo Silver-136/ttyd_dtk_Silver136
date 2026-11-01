@@ -226,11 +226,16 @@ EVT_BEGIN(water_shikake)
     // The blue switch has been pressed: controls off and the music dips; Punies already on the lower level are
     // put at fixed spots there.
     CALL(evt_mario_key_onoff, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_mario_normalize)
+CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(3))
+#else
     BEGIN_INLINE_EVENT
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_set_mov_spd, FLOAT(0.0f))
     END_INLINE_EVENT
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(3))
+#endif
     SET_VALUE(LW(10), 1)
     LOOP(0)
         SET_VALUE(LF(0), 1)
@@ -281,7 +286,11 @@ EVT_BEGIN(water_shikake)
     WAIT_MS(LW(1))
     // The water is gone; the stairs and ledges become solid and a jingle plays.
     DELETE_EVENT(LW(10))
+#if VERSION <= VERSION_DEMO_US
+    CALL_CHILD(cam_shake2)
+#else
     CALL_CHILD(PTR(cam_shake2))
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
@@ -400,7 +409,11 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_SHRINK_STOMP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
+#if VERSION <= VERSION_DEMO_US
+CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
+#endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)

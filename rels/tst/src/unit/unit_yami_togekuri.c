@@ -49,24 +49,63 @@ BattleUnitKind unit_yami_togekuri = {
     1, // perilHP
     13, // level
     0, // bonusExp
+#if VERSION <= VERSION_DEMO_US
+1,
+#else
     2, // bonusCoin
+#endif
     70, // bonusCoinRate
+#if VERSION <= VERSION_DEMO_US
+1,
+#else
     0, // baseCoin
+#endif
     50, // runRate
     9999, // pbSoftCap
     23, // width
     30, // height
+#if VERSION <= VERSION_DEMO_US
+    5,
+    30,
+    0.0f,
+    15.0f,
+    0.0f,
+    0,
+    0,
+#else
     {5, 30}, // hitOffset
     {0.0f, 15.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {12.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    12.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    11.5f,
+    0.0f,
+    0.0f,
+    11.5f,
+    18.0f,
+    0.0f,
+    0.0f,
+    15.0f,
+    0.0f,
+#else
     {11.5f, 0.0f, 0.0f}, // bintaHitOffset
     {11.5f, 18.0f, 0.0f}, // kissHitOffset
     {0.0f, 15.0f, 0.0f}, // cutBaseOffset
+#endif
     23.0f, // cutWidth
     30.0f, // cutHeight
     0, // turnOrder
@@ -75,7 +114,13 @@ BattleUnitKind unit_yami_togekuri = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_TOGEKURI_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -100,6 +145,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {80, 100, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 100, 100, 100, 80, 100, 100, 80};
+#else
 static StatusVulnerability regist = {
     80, // sleep
     90, // stop
@@ -124,6 +172,7 @@ static StatusVulnerability regist = {
     100, // invisible
     80, // ohko
 };
+#endif
 
 /** Part of the Spiky Gloomba: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {

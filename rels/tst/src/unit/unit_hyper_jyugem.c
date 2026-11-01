@@ -54,25 +54,65 @@ BattleUnitKind unit_hyper_jyugem = {
     1, // dangerHP
     1, // perilHP
     26, // level
+#if VERSION <= VERSION_DEMO_US
+0,
+#endif
     1, // bonusExp
+#if VERSION > VERSION_DEMO_US
     2, // bonusCoin
+#endif
     70, // bonusCoinRate
+#if VERSION <= VERSION_DEMO_US
+2,
+#else
     1, // baseCoin
+#endif
     50, // runRate
     9999, // pbSoftCap
     32, // width
     30, // height
+#if VERSION <= VERSION_DEMO_US
+    4,
+    42,
+    0.0f,
+    15.0f,
+    0.0f,
+    0,
+    0,
+#else
     {4, 42}, // hitOffset
     {0.0f, 15.0f, 0.0f}, // centerOffset
     {0, 0}, // hpGaugeOffset
     {0.0f, 0.0f, 0.0f}, // talkTogeBaseOffset
     {16.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
+#endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    16.0f,
+    0.0f,
+    -10.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    0.0f,
+    16.0f,
+    0.0f,
+    0.0f,
+    10.0f,
+    38.0f,
+    0.0f,
+    0.0f,
+    21.0f,
+    0.0f,
+#else
     {16.0f, 0.0f, 0.0f}, // bintaHitOffset
     {10.0f, 38.0f, 0.0f}, // kissHitOffset
     {0.0f, 21.0f, 0.0f}, // cutBaseOffset
+#endif
     32.0f, // cutWidth
     42.0f, // cutHeight
     0, // turnOrder
@@ -81,7 +121,13 @@ BattleUnitKind unit_hyper_jyugem = {
     2, // swallowAttributes
     100, // hammerKnockbackChance
     20, // itemStealParam
+#if VERSION <= VERSION_DEMO_US
+    0.0f,
+    0.0f,
+    0.0f,
+#else
     {0.0f, 0.0f, 0.0f}, // starPointDispOffset
+#endif
     "SFX_ENM_JUGEMU_DAMAGED1", // damageSfxName
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
@@ -100,6 +146,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Dark Lakitu: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {60, 70, 80, 100, 60, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 70, 80, 100, 60, 100, 100, 50};
+#else
 static StatusVulnerability regist = {
     60, // sleep
     70, // stop
@@ -124,6 +173,7 @@ static StatusVulnerability regist = {
     100, // invisible
     50, // ohko
 };
+#endif
 
 /** Pose table of the Dark Lakitu: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
@@ -502,17 +552,35 @@ EVT_END()
  * and 30:30:10 afterwards.
  */
 static EVT_BEGIN(attack_event)
+#if VERSION <= VERSION_DEMO_US
+    // Uses a held item if it has one to use.
+#endif
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         GOTO(99)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // Draws lots on whether to try calling a Spiny this turn (the odds depend on the turn number).
+#endif
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 116)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 90)
+#endif
     ELSE
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 82)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 70)
+#endif
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // If it won, it scans the stage to one side and then the other for a free spot and calls a Spiny there
+    // (friend_event).
+#endif
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -526,7 +594,11 @@ static EVT_BEGIN(attack_event)
                 SUBTRACT(LW(2), 10)
                 CALL(btlevtcmd_CheckSpace, LW(3), LW(0), LW(1), LW(2), 40, 0, 0, 0)
                 IF_INT_EQUAL(LW(3), -1)
+#if VERSION <= VERSION_DEMO_US
+                    CALL_CHILD(friend_event)
+#else
                     CALL_CHILD(PTR(friend_event))
+#endif
                     GOTO(99)
                 END_IF
             ELSE
@@ -542,7 +614,11 @@ static EVT_BEGIN(attack_event)
                 ADD(LW(2), 10)
                 CALL(btlevtcmd_CheckSpace, LW(3), LW(0), LW(1), LW(2), 40, 0, 0, 0)
                 IF_INT_EQUAL(LW(3), -1)
+#if VERSION <= VERSION_DEMO_US
+                    CALL_CHILD(friend_event)
+#else
                     CALL_CHILD(PTR(friend_event))
+#endif
                     GOTO(99)
                 END_IF
             ELSE
@@ -551,30 +627,64 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         LABEL(10)
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    // If unit work 2 says it just charged, it throws at once.
+#endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBOUND_SPAWN, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(normal_attack_event)
+#else
         CALL_CHILD(PTR(normal_attack_event))
+#endif
         GOTO(99)
     END_IF
+#if VERSION <= VERSION_DEMO_US
+    // Otherwise it chooses at random between a plain egg throw, a throw that hatches a Spiny when guarded, and
+    // charging up.
+#endif
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_DrawLots, LW(0), 3, 33, 33, 50)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 30)
+#endif
     ELSE
+#if VERSION <= VERSION_DEMO_US
+CALL(btlevtcmd_DrawLots, LW(0), 3, 33, 33, 16)
+#else
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 10)
+#endif
     END_IF
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBOUND_SPAWN, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(normal_attack_event)
+#else
         CALL_CHILD(PTR(normal_attack_event))
+#endif
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBOUND_SPAWN, 1)
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(normal_attack_event)
+#else
         CALL_CHILD(PTR(normal_attack_event))
+#endif
         CASE_EQUAL(2)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHARGED, 1)
         SET_VALUE(LW(9), PTR(&weapon_jyugem_charge))
+#if VERSION <= VERSION_DEMO_US
+        CALL_CHILD(charge_event)
+#else
         CALL_CHILD(PTR(charge_event))
+#endif
     END_SWITCH
+#if VERSION <= VERSION_DEMO_US
+    // Back to waiting.
+#endif
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

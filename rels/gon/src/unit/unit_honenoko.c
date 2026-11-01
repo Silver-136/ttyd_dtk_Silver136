@@ -99,6 +99,9 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Elemental reactions of the Dull Bones: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+#if VERSION <= VERSION_DEMO_US
+static StatusVulnerability regist = {0, 60, 50, 0, 50, 100, 100, 90, 100, 90, 100, 90, 100, 90, 90, 10, 90, 100, 90, 100, 100, 50};
+#else
 static StatusVulnerability regist = {
     0, // sleep
     95, // stop
@@ -123,6 +126,7 @@ static StatusVulnerability regist = {
     100, // invisible
     50, // ohko
 };
+#endif
 
 /**
  * Parts of the Dull Bones: part 1 is its body, part 2 the bone it throws, part 3 the piece it flings off when

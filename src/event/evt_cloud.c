@@ -72,13 +72,20 @@ static USER_FUNC(evt_cloud_main) {
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
+#if VERSION <= VERSION_DEMO_US
+if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
+        return EVT_RETURN_BLOCK;
+    }
+#endif
     hit0 = cloudGetHitBreathout(0);
     hit1 = cloudGetHitBreathout(1);
     hit2 = cloudGetHitBreathout(2);
     hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
+#if VERSION > VERSION_DEMO_US
             // FAKE: no-op (s32) cast; the plain comparison changes the object
+#endif
             if ((s32)cloud_once_flag == 1) {
                 break;
             }
@@ -129,7 +136,9 @@ static USER_FUNC(evt_cloud_main) {
                 uh = wp->h;
                 w = uw;
                 h = uh;
+#if VERSION > VERSION_DEMO_US
                 // FAKE: (u32)/(s32) casts on the half sizes; (f32)(uw >> 1) changes the object
+#endif
                 x = (s32)(pos.x - (f32)(s32)((u32)uw >> 1));
                 y = (s32)(pos.y - (f32)(s32)(uh >> 1));
                 if (x < 0) {
@@ -138,11 +147,21 @@ static USER_FUNC(evt_cloud_main) {
                 if (y < 0) {
                     y = 0;
                 }
+#if VERSION <= VERSION_DEMO_US
+if (w > gp->fbWidth) {
+                    w = gp->fbWidth;
+#else
                 if (w > gp->fbWidth - x) {
                     w = gp->fbWidth - x;
+#endif
                 }
+#if VERSION <= VERSION_DEMO_US
+                if (h > gp->efbHeight) {
+                    h = gp->efbHeight;
+#else
                 if (h > gp->efbHeight - y) {
                     h = gp->efbHeight - y;
+#endif
                 }
             } else {
                 h = 0;
