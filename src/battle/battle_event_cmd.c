@@ -7073,16 +7073,19 @@ USER_FUNC(btlevtcmd_snd_voice) {
     BattleWork* wp = _battleWorkPointer;
     s32 id, type;
     BattleUnit* unit;
+    s32 r;
 
     id = evtGetValue(event, args[0]);
     type = evtGetValue(event, args[1]);
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     switch (type) {
         case 1:
-            BtlUnit_snd_se(unit, _mario_acrobat_voice_table[irand(5)], EVTDAT_POINTER_MAX, 0);
+            r = irand(5);
+            BtlUnit_snd_se(unit, _mario_acrobat_voice_table[r], EVTDAT_POINTER_MAX, 0);
             break;
         case 2:
-            BtlUnit_snd_se(unit, _mario_attack_voice_table[irand(10)], EVTDAT_POINTER_MAX, 0);
+            r = irand(10);
+            BtlUnit_snd_se(unit, _mario_attack_voice_table[r], EVTDAT_POINTER_MAX, 0);
             break;
     }
     return EVT_RETURN_DONE;

@@ -87,9 +87,15 @@ void battleAcDelete_TimingA(BattleWork* work) {
  */
 void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
+#if VERSION <= VERSION_DEMO_US
+    BattleActions* ac = &work->actionCommands;
+    BattleACDispParams* disp = &ac->disp;
+    switch (ac->acState) {
+#else
     BattleACDispParams* disp = &work->actionCommands.disp;
     int iconSlot;
     switch (work->actionCommands.acState) {
+#endif
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
 #if VERSION > VERSION_DEMO_US

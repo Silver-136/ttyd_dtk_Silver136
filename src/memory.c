@@ -83,8 +83,13 @@ BOOL g_bFirstSmartAlloc;
 #define MAPBASE_PARAM void* base_,
 #define MAPBASE ((MapAllocEntry*)base_)
 #else
+#if VERSION <= VERSION_DEMO_US
+static u16 count;
+#define COUNT count
+#else
 u32 count;
 #define COUNT (*(u16*)&count)
+#endif
 #define MAPBASE_PARAM
 #define MAPBASE mapalloc_base_ptr
 #endif

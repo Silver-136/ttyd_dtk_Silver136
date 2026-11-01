@@ -398,10 +398,12 @@ void marioSetForceMove(f32 dir, s32 time, f32 speed) {
 #else
         marioChgMot(speed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #endif
+#if VERSION >= VERSION_JP
         mario->moveDirection = dir;
         mario->directionView = dir;
         mario->forceMoveTimer = time;
         mario->baseSpeed = speed;
+#endif
     }
 }
 

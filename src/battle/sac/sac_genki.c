@@ -1253,19 +1253,6 @@ static void disp_3D_alpha(CameraId cam, void* param) {
 
 
 
-EVT_BEGIN(marioAttackEvent_Genki0)
-    SET_VALUE(LW(15), 0)
-    CALL_CHILD(genki_evt_common)
-    RETURN
-EVT_END()
-
-/** Attack event of Sweet Feast (marioWeapon_Genki1): runs genki_evt_common in mode 1. */
-EVT_BEGIN(marioAttackEvent_Genki1)
-    SET_VALUE(LW(15), 1)
-    CALL_CHILD(genki_evt_common)
-    RETURN
-EVT_END()
-
 EVT_BEGIN(genki_evt_common)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(13))
     CALL(btlevtcmd_GetBodyId, LW(13), LW(14))
@@ -1363,6 +1350,19 @@ EVT_BEGIN(genki_evt_common)
     WAIT_MS(1000)
     CALL(end_genki)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+    RETURN
+EVT_END()
+
+EVT_BEGIN(marioAttackEvent_Genki0)
+    SET_VALUE(LW(15), 0)
+    CALL_CHILD(genki_evt_common)
+    RETURN
+EVT_END()
+
+/** Attack event of Sweet Feast (marioWeapon_Genki1): runs genki_evt_common in mode 1. */
+EVT_BEGIN(marioAttackEvent_Genki1)
+    SET_VALUE(LW(15), 1)
+    CALL_CHILD(genki_evt_common)
     RETURN
 EVT_END()
 

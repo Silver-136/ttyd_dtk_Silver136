@@ -3493,7 +3493,7 @@ s32 mobj_breaking_floor(MapObjectEntry* mobj) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
 #if VERSION <= VERSION_DEMO_US
-            psndSFXOn_3D(SFX_NAME_WORD(0x1E8 | PSND_SFX_KEEP), &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(0x1E8), &mobj->position);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(0x1E8 | PSND_SFX_KEEP), &mobj->position);
 #endif

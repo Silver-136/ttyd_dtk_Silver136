@@ -22,6 +22,13 @@ effN64Vtx size150x20_tex32x32[] = {
     {150, 10, 0, 0, 1024, 255, 255, 255, 255},
 };
 
+/* Three effN64Vtx records (0x2A bytes) written as halfwords: the last two halfwords of each record hold its r,g and b,a bytes. effRadiationDisp casts it to effN64Vtx*. */
+s16 size300x40_tex32x32[] = {
+    0, 0, 0, 16, 0, -1, -1,
+    300, 20, 0, 0, 1024, -5121, -2816,
+    300, -20, 0, 1024, 1024, -5121, -2816,
+};
+
 /**
  * Fixed pose of each of the 16 spinning rays, five numbers per ray: X, Y and Z tilt in degrees,
  * an unused value and the Z spin speed in tenths of a degree per frame.
@@ -43,13 +50,6 @@ s32 r_data[] = {
     -10, 20, 247, 1, -18,
     -20, 10, 292, -1, 9,
     -10, 20, 337, 1, 1,
-};
-
-/* Three effN64Vtx records (0x2A bytes) written as halfwords: the last two halfwords of each record hold its r,g and b,a bytes. effRadiationDisp casts it to effN64Vtx*. */
-s16 size300x40_tex32x32[] = {
-    0, 0, 0, 16, 0, -1, -1,
-    300, 20, 0, 0, 1024, -5121, -2816,
-    300, -20, 0, 1024, 1024, -5121, -2816,
 };
 
 /**

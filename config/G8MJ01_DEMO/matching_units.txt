@@ -111,6 +111,7 @@ MarioSt/battle/ac/ac_signal_timing
 MarioSt/battle/ac/ac_stick_keep_left
 MarioSt/battle/ac/ac_stick_rotate
 MarioSt/battle/ac/ac_table
+MarioSt/battle/ac/ac_timing_a
 MarioSt/battle/ac/ac_timing_wide
 MarioSt/battle/battle
 MarioSt/battle/battle_ac
@@ -125,6 +126,7 @@ MarioSt/battle/battle_damage
 MarioSt/battle/battle_detect
 MarioSt/battle/battle_disp
 MarioSt/battle/battle_enemy_item
+MarioSt/battle/battle_event_cmd
 MarioSt/battle/battle_event_subset
 MarioSt/battle/battle_icon
 MarioSt/battle/battle_information
@@ -142,6 +144,7 @@ MarioSt/battle/battle_weapon_power
 MarioSt/battle/sac/sac_bakugame
 MarioSt/battle/sac/sac_common
 MarioSt/battle/sac/sac_deka
+MarioSt/battle/sac/sac_genki
 MarioSt/battle/sac/sac_muki
 MarioSt/battle/sac/sac_scissor
 MarioSt/battle/sac/sac_suki
@@ -206,6 +209,7 @@ MarioSt/effect/eff_breath_fire
 MarioSt/effect/eff_butterfly
 MarioSt/effect/eff_charge
 MarioSt/effect/eff_confetti
+MarioSt/effect/eff_damage_star
 MarioSt/effect/eff_energy
 MarioSt/effect/eff_fire
 MarioSt/effect/eff_gonbaba_breath
@@ -294,6 +298,7 @@ MarioSt/effect/n64/eff_guruguru_n64
 MarioSt/effect/n64/eff_hagetaka_flush_n64
 MarioSt/effect/n64/eff_hit_n64
 MarioSt/effect/n64/eff_hokori_n64
+MarioSt/effect/n64/eff_holography_n64
 MarioSt/effect/n64/eff_horao_spell_n64
 MarioSt/effect/n64/eff_ice_n64
 MarioSt/effect/n64/eff_kameki_tornade_n64
@@ -316,6 +321,7 @@ MarioSt/effect/n64/eff_magic2_n64
 MarioSt/effect/n64/eff_magic3_n64
 MarioSt/effect/n64/eff_magic_horao_n64
 MarioSt/effect/n64/eff_n64
+MarioSt/effect/n64/eff_onpu_n64
 MarioSt/effect/n64/eff_opuku_jetwrain_n64
 MarioSt/effect/n64/eff_opuku_wcurtain_n64
 MarioSt/effect/n64/eff_opuku_wgun_n64
@@ -326,6 +332,8 @@ MarioSt/effect/n64/eff_pokopi_pcharge_n64
 MarioSt/effect/n64/eff_pokopi_pipo_n64
 MarioSt/effect/n64/eff_pokopi_thunder_n64
 MarioSt/effect/n64/eff_pturn_n64
+MarioSt/effect/n64/eff_radiation_n64
+MarioSt/effect/n64/eff_rappa_n64
 MarioSt/effect/n64/eff_recover_heart_n64
 MarioSt/effect/n64/eff_release_n64
 MarioSt/effect/n64/eff_ripple_n64
@@ -333,6 +341,7 @@ MarioSt/effect/n64/eff_rothammer_fail_n64
 MarioSt/effect/n64/eff_rothammer_success_n64
 MarioSt/effect/n64/eff_rubble_n64
 MarioSt/effect/n64/eff_shock_n64
+MarioSt/effect/n64/eff_small_star_n64
 MarioSt/effect/n64/eff_snow_dust_n64
 MarioSt/effect/n64/eff_snow_n64
 MarioSt/effect/n64/eff_snowfall_n64
@@ -340,6 +349,7 @@ MarioSt/effect/n64/eff_snowman_n64
 MarioSt/effect/n64/eff_sstar_n64
 MarioSt/effect/n64/eff_stamp_n64
 MarioSt/effect/n64/eff_star_power_n64
+MarioSt/effect/n64/eff_stardust2_n64
 MarioSt/effect/n64/eff_stardust_n64
 MarioSt/effect/n64/eff_stone_smoke_n64
 MarioSt/effect/n64/eff_sunlight_n64
@@ -370,10 +380,12 @@ MarioSt/event/evt_img
 MarioSt/event/evt_item
 MarioSt/event/evt_johoya
 MarioSt/event/evt_kinopio
+MarioSt/event/evt_lecture
 MarioSt/event/evt_light
 MarioSt/event/evt_lottery
 MarioSt/event/evt_map
 MarioSt/event/evt_memcard
+MarioSt/event/evt_mobj
 MarioSt/event/evt_movefloor
 MarioSt/event/evt_msg
 MarioSt/event/evt_npc
@@ -382,6 +394,7 @@ MarioSt/event/evt_paper
 MarioSt/event/evt_party
 MarioSt/event/evt_pouch
 MarioSt/event/evt_seq
+MarioSt/event/evt_shop
 MarioSt/event/evt_telop
 MarioSt/event/evt_twoddisp
 MarioSt/event/evt_uranaisi
@@ -408,6 +421,7 @@ MarioSt/gx/GXTransform
 MarioSt/gxsub
 MarioSt/himo
 MarioSt/koopa
+MarioSt/koopa_hit
 MarioSt/koopa_motion
 MarioSt/kpa_act
 MarioSt/main
@@ -423,7 +437,9 @@ MarioSt/mario/mario_kemuri
 MarioSt/mario/mario_motion
 MarioSt/mario/mario_party
 MarioSt/mario/mario_pouch
+MarioSt/mario/mario_sbr
 MarioSt/mario/mariost
+MarioSt/memory
 MarioSt/motion/mot_damage
 MarioSt/motion/mot_dokan
 MarioSt/motion/mot_hammer
@@ -497,6 +513,7 @@ MarioSt/os/OSTime
 MarioSt/os/__ppc_eabi_init
 MarioSt/os/__start
 MarioSt/pad/Pad
+MarioSt/pad/Padclamp
 MarioSt/parse
 MarioSt/party/party_chuchu
 MarioSt/party/party_hit
@@ -512,6 +529,7 @@ MarioSt/sdk/DEMOInit
 MarioSt/sdk/DEMOPad
 MarioSt/sdk/arc
 MarioSt/sdk/texPalette
+MarioSt/sequence/seq_battle
 MarioSt/sequence/seq_demo
 MarioSt/sequence/seq_game
 MarioSt/sequence/seq_logo
@@ -519,6 +537,7 @@ MarioSt/sequence/seqdef
 MarioSt/si/SIBios
 MarioSt/si/SISamplingRate
 MarioSt/sound
+MarioSt/statuswindow
 MarioSt/system
 MarioSt/thp/THPAudio
 MarioSt/thp/THPDec

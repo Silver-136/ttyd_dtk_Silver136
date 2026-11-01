@@ -79,13 +79,14 @@ USER_FUNC(lect_cam_save) {
 /** s32 msec */
 // s32 msec
 USER_FUNC(lect_cam_load) {
+    EvtWord* args = event->args;
     s32 msec;
     CameraEntry* camera;
     MarioWork* mario;
     PartyEntry* party;
     PartyEntry* extra;
 
-    msec = evtGetValue(event, *event->args);
+    msec = evtGetValue(event, *args++);
     camera = camGetPtr(CAMERA_3D);
     mario = marioGetPtr();
     party = partyGetPtr(marioGetPartyId());

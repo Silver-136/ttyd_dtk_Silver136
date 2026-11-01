@@ -39,6 +39,11 @@
 
 #if VERSION <= VERSION_DEMO_US
 static void battle_init(void);
+BOOL bmapPreLoad(const char* map, const char* map2);
+static const char bti01[7];
+static const char bti02[7];
+static const char bti03[7];
+static const char bti04[7];
 #endif
 
 s32 debug_battle_flag;
@@ -55,8 +60,31 @@ static inline BOOL loadTpl(const char* path) {
 void seq_battleInit(SequenceWork* work) {
     FieldBattleData* fbat;
     NpcEntry* npc;
+#if VERSION <= VERSION_DEMO_US
+    MapData* map;
+#endif
 
     debug_battle_flag = gp->debugBattle;
+#if VERSION <= VERSION_DEMO_US
+    // the demo starts reading the battle map now
+    fbatGetPointer();
+    switch (pouchGetPtr()->rank) {
+        case 0:
+            map = mapDataPtr(bti01);
+            break;
+        case 1:
+            map = mapDataPtr(bti02);
+            break;
+        case 2:
+            map = mapDataPtr(bti03);
+            break;
+        case 3:
+        default:
+            map = mapDataPtr(bti04);
+            break;
+    }
+    bmapPreLoad(map->mapName, NULL);
+#endif
     fbat = fbatGetPointer();
     npc = fbat->target;
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) {
@@ -69,6 +97,7 @@ void seq_battleInit(SequenceWork* work) {
     padRumbleOff(0);
     evtStopAll(4);
     psndSetFlag(PSND_FLAG_MUTE_SFX);
+#if VERSION >= VERSION_JP
     switch (fbatGetPointer()->hitKind) {
         case FBAT_HIT_BOMB:
         case FBAT_HIT_SHELL:
@@ -79,6 +108,7 @@ void seq_battleInit(SequenceWork* work) {
             }
             break;
     }
+#endif
 }
 
 /** Leaves the battle sequence; battle_exit tears the battle down and restores the field. */

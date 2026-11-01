@@ -1271,13 +1271,21 @@ USER_FUNC(disp_list) {
         winMgrOpen(event->userdata[0]);
         winMgrOpen(event->userdata[1]);
         winMgrOpen(event->userdata[2]);
+#if VERSION <= VERSION_DEMO_US
+        psndSFXOn(SFX_NAME_WORD(0x12));
+#else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
+#endif
     }
     if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
         winMgrCloseAutoDelete(event->userdata[0]);
         winMgrCloseAutoDelete(event->userdata[1]);
         winMgrCloseAutoDelete(event->userdata[2]);
+#if VERSION <= VERSION_DEMO_US
+        psndSFXOn(SFX_NAME_WORD(0x13));
+#else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
+#endif
         return EVT_RETURN_YIELD;
     }
     return EVT_RETURN_BLOCK;
