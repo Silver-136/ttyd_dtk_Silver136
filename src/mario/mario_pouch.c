@@ -768,7 +768,6 @@ s32 comp_kind_r(s16* a, s16* b) {
  * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost then kind. Badges keep their worn state.
  * JP compares internal ids for badge names.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Sorts a pouch list for the item and badge menus (win_root.c).
  * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
@@ -785,119 +784,7 @@ void pouchSortItem(s32 mode) {
     BOOL swap;
     s16 t2, t1;
     PouchData* pp[1];
-    pp[0] = mpp;
-    if ((u32)mode <= 1 || mode == 7 || mode == 8) {
-        n = 0;
-        for (j = 0; j < MAX_HELD_ITEMS; j++) {
-            if (pp[0]->heldItems[j] != 0) {
-                items[n++] = pp[0]->heldItems[j];
-            }
-        }
-        for (k = n; k < MAX_HELD_ITEMS; k++) {
-            items[k] = 0;
-        }
-        if (mode == 0)
-            qqsort(items, n, 2, comp_aiueo);
-        else if (mode == 1)
-            qqsort(items, n, 2, (QSortCompare)comp_kind);
-        else if (mode == 7)
-            qqsort(items, n, 2, comp_aiueo_r);
-        else if (mode == 8)
-            qqsort(items, n, 2, (QSortCompare)comp_kind_r);
-        memcpy(pp[0]->heldItems, items, sizeof(items));
-    }
-    if ((u32)(mode - 2) <= 1 || mode == 9 || mode == 10) {
-        n = 0;
-        for (j = 0; j < MAX_KEY_ITEMS; j++) {
-            if (pp[0]->keyItems[j] != 0) {
-                keys[n++] = pp[0]->keyItems[j];
-            }
-        }
-        for (k = n; k < MAX_KEY_ITEMS; k++) {
-            keys[k] = 0;
-        }
-        if (mode == 2)
-            qqsort(keys, n, 2, comp_aiueo);
-        else if (mode == 3)
-            qqsort(keys, n, 2, (QSortCompare)comp_kind);
-        else if (mode == 9)
-            qqsort(keys, n, 2, comp_aiueo_r);
-        else if (mode == 10)
-            qqsort(keys, n, 2, (QSortCompare)comp_kind_r);
-        memcpy(pp[0]->keyItems, keys, sizeof(keys));
-    }
-    if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
-            i = 0;
-            for (n = 0; n < MAX_BADGES; n++) {
-                if (pp[0]->badges[n] != 0) {
-                    badges[i] = pp[0]->badges[n];
-                    i++;
-                    equipped[i - 1] = pp[0]->equippedBadges[n];
-                }
-            }
-            for (n = i; n < MAX_BADGES; n++) {
-                badges[n] = 0;
-                equipped[n] = 0;
-            }
-            for (n = 0; n < i - 1; n++) {
-                for (j = n + 1; j < i; j++) {
-                    ItemData* a = &itemDataTable[badges[n]];
-                    ItemData* b = &itemDataTable[badges[j]];
-                    s32 ca = a->bp_cost;
-                    s32 cb = b->bp_cost;
-                    const char* ida = a->id;
-                    const char* idb = b->id;
-                    swap = FALSE;
-                    if (mode == 4) {
-                        if (strcmp(ida, idb) > 0)
-                            swap = TRUE;
-                    } else if (mode == 11) {
-                        if (strcmp(ida, idb) < 0)
-                            swap = TRUE;
-                    } else if (mode == 5) {
-                        if (a->type_sort_order > b->type_sort_order)
-                            swap = TRUE;
-                    } else if (mode == 12) {
-                        if (a->type_sort_order < b->type_sort_order)
-                            swap = TRUE;
-} else if (mode == 6) {
-                        if (ca > cb)
-                            swap = TRUE;
-                    } else if (mode == 13) {
-                        if (ca < cb)
-                            swap = TRUE;
-                    }
-                    if (swap) {
-                        t1 = badges[n];
-                        t2 = equipped[n];
-                        badges[n] = badges[j];
-                        equipped[n] = equipped[j];
-                        badges[j] = t1;
-                        equipped[j] = t2;
-                    }
-                }
-                memcpy(pp[0]->badges, badges, sizeof(badges));
-                memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
-            }
-}
-}
-#else
-/**
- * Sorts a pouch list for the item and badge menus (win_root.c).
- * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
- * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost then kind. Badges keep their worn state.
- * JP compares internal ids for badge names.
- */
-void pouchSortItem(s32 mode) {
-    s32 k;
-    s16 items[MAX_HELD_ITEMS];
-    s16 keys[MAX_KEY_ITEMS];
-    s16 badges[MAX_BADGES];
-    s16 equipped[MAX_BADGES];
-    s32 n, i, j;
-    BOOL swap;
-    s16 t2, t1;
-    PouchData* pp[1];
+#if VERSION > VERSION_DEMO_US
 #if VERSION == VERSION_EU
     char keyA[0x80];
     s16 bj;
@@ -917,6 +804,7 @@ void pouchSortItem(s32 mode) {
     s32 cb;
 #endif
 
+#endif
     pp[0] = mpp;
     if ((u32)mode <= 1 || mode == 7 || mode == 8) {
         n = 0;
@@ -928,6 +816,16 @@ void pouchSortItem(s32 mode) {
         for (k = n; k < MAX_HELD_ITEMS; k++) {
             items[k] = 0;
         }
+#if VERSION <= VERSION_DEMO_US
+        if (mode == 0)
+            qqsort(items, n, 2, comp_aiueo);
+        else if (mode == 1)
+            qqsort(items, n, 2, (QSortCompare)comp_kind);
+        else if (mode == 7)
+            qqsort(items, n, 2, comp_aiueo_r);
+        else if (mode == 8)
+            qqsort(items, n, 2, (QSortCompare)comp_kind_r);
+#else
         if (mode == 0) {
             qqsort(items, n, sizeof(s16), comp_aiueo);
         } else if (mode == 1) {
@@ -937,6 +835,7 @@ void pouchSortItem(s32 mode) {
         } else if (mode == 8) {
             qqsort(items, n, sizeof(s16), (QSortCompare)comp_kind_r);
         }
+#endif
         memcpy(pp[0]->heldItems, items, sizeof(items));
     }
     if ((u32)(mode - 2) <= 1 || mode == 9 || mode == 10) {
@@ -949,6 +848,16 @@ void pouchSortItem(s32 mode) {
         for (k = n; k < MAX_KEY_ITEMS; k++) {
             keys[k] = 0;
         }
+#if VERSION <= VERSION_DEMO_US
+        if (mode == 2)
+            qqsort(keys, n, 2, comp_aiueo);
+        else if (mode == 3)
+            qqsort(keys, n, 2, (QSortCompare)comp_kind);
+        else if (mode == 9)
+            qqsort(keys, n, 2, comp_aiueo_r);
+        else if (mode == 10)
+            qqsort(keys, n, 2, (QSortCompare)comp_kind_r);
+#else
         if (mode == 2) {
             qqsort(keys, n, sizeof(s16), comp_aiueo);
         } else if (mode == 3) {
@@ -958,11 +867,68 @@ void pouchSortItem(s32 mode) {
         } else if (mode == 10) {
             qqsort(keys, n, sizeof(s16), (QSortCompare)comp_kind_r);
         }
+#endif
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
-#if VERSION == VERSION_EU
     // PAL sorts badge names by the pouchHiraToKata key
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
+#if VERSION <= VERSION_DEMO_US
+        i = 0;
+        for (n = 0; n < MAX_BADGES; n++) {
+            if (pp[0]->badges[n] != 0) {
+                badges[i] = pp[0]->badges[n];
+                i++;
+                equipped[i - 1] = pp[0]->equippedBadges[n];
+            }
+        }
+        for (n = i; n < MAX_BADGES; n++) {
+            badges[n] = 0;
+            equipped[n] = 0;
+        }
+        for (n = 0; n < i - 1; n++) {
+            for (j = n + 1; j < i; j++) {
+                ItemData* a = &itemDataTable[badges[n]];
+                ItemData* b = &itemDataTable[badges[j]];
+                s32 ca = a->bp_cost;
+                s32 cb = b->bp_cost;
+                const char* ida = a->id;
+                const char* idb = b->id;
+                swap = FALSE;
+                if (mode == 4) {
+                    if (strcmp(ida, idb) > 0)
+                        swap = TRUE;
+                } else if (mode == 11) {
+                    if (strcmp(ida, idb) < 0)
+                        swap = TRUE;
+                } else if (mode == 5) {
+                    if (a->type_sort_order > b->type_sort_order)
+                        swap = TRUE;
+                } else if (mode == 12) {
+                    if (a->type_sort_order < b->type_sort_order)
+                        swap = TRUE;
+} else if (mode == 6) {
+                    if (ca > cb)
+                        swap = TRUE;
+                } else if (mode == 13) {
+                    if (ca < cb)
+                        swap = TRUE;
+                }
+                if (swap) {
+                    t1 = badges[n];
+                    t2 = equipped[n];
+                    badges[n] = badges[j];
+                    equipped[n] = equipped[j];
+                    badges[j] = t1;
+                    equipped[j] = t2;
+                }
+            }
+            memcpy(pp[0]->badges, badges, sizeof(badges));
+            memcpy(pp[0]->equippedBadges, equipped, sizeof(equipped));
+        }
+}
+}
+#else
+#if VERSION == VERSION_EU
         count = 0;
         for (n = 0; n < MAX_BADGES; n++) {
             if (pp[0]->badges[n] != 0) {
@@ -972,9 +938,31 @@ void pouchSortItem(s32 mode) {
             }
         }
         for (n = count; n < MAX_BADGES; n++) {
+#else
+#if VERSION >= VERSION_US
+        /* FAKE: block-scoped (shadowing j/i) locals and separate sort counter m steer register colouring */
+        ItemData* a;
+        ItemData* b;
+        s32 m;
+        s32 j;
+        s32 i;
+        const char* ida;
+
+#endif
+        i = 0;
+        for (n = 0; n < MAX_BADGES; n++) {
+            if (pp[0]->badges[n] != 0) {
+                badges[i] = pp[0]->badges[n];
+                i++;
+                equipped[i - 1] = pp[0]->equippedBadges[n];
+            }
+        }
+        for (n = i; n < MAX_BADGES; n++) {
+#endif
             badges[n] = 0;
             equipped[n] = 0;
         }
+#if VERSION == VERSION_EU
         for (j = 0; j < count - 1; j++) {
             for (l = j + 1; l < count; l++) {
                 BOOL swap;
@@ -1026,29 +1014,6 @@ void pouchSortItem(s32 mode) {
                     badges[l] = t1;
                     equipped[l] = t2;
 #else
-    if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
-#if VERSION >= VERSION_US
-        /* FAKE: block-scoped (shadowing j/i) locals and separate sort counter m steer register colouring */
-        ItemData* a;
-        ItemData* b;
-        s32 m;
-        s32 j;
-        s32 i;
-        const char* ida;
-
-#endif
-        i = 0;
-        for (n = 0; n < MAX_BADGES; n++) {
-            if (pp[0]->badges[n] != 0) {
-                badges[i] = pp[0]->badges[n];
-                i++;
-                equipped[i - 1] = pp[0]->equippedBadges[n];
-            }
-        }
-        for (n = i; n < MAX_BADGES; n++) {
-            badges[n] = 0;
-            equipped[n] = 0;
-        }
 #if VERSION >= VERSION_US
         for (m = 0; m < i - 1; m++) {
             for (j = m + 1; j < i; j++) {

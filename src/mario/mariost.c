@@ -897,6 +897,15 @@ u32 marioStGetSystemLevel(void) {
  * JP and later also reset when the drive reports a fatal status.
  */
 static void viPostCallback(u32 retraceCount) {
+#else
+/**
+ * Runs after every vertical retrace: advances the play-time clocks (each stops while its system level is
+ * paused), records the retrace count, watches the console's Reset button
+ * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
+ * JP and later also reset when the drive reports a fatal status.
+ */
+void viPostCallback(u32 retraceCount) {
+#endif
     OSTime time;
     u32 reset = PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_START;
 
@@ -906,6 +915,7 @@ static void viPostCallback(u32 retraceCount) {
     if (gp->retraceLocalTime > (OS_TIMER_CLOCK * (OSTime)359999999)) {
         gp->retraceLocalTime = (OS_TIMER_CLOCK * (OSTime)359999999);
     }
+#if VERSION <= VERSION_DEMO_US
     if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
         gp->systemLv3Time += gp->retraceDeltaTime;
     }
@@ -965,22 +975,6 @@ exitcheck:
     psndMainInt();
 }
 #else
-/**
- * Runs after every vertical retrace: advances the play-time clocks (each stops while its system level is
- * paused), records the retrace count, watches the console's Reset button
- * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
- * JP and later also reset when the drive reports a fatal status.
- */
-void viPostCallback(u32 retraceCount) {
-    OSTime time;
-    u32 reset = PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_START;
-
-    time = OSGetTime();
-    gp->retraceDeltaTime = time - gp->retraceTime;
-    gp->retraceLocalTime += gp->retraceDeltaTime;
-    if (gp->retraceLocalTime > (OS_TIMER_CLOCK * (OSTime)359999999)) {
-        gp->retraceLocalTime = (OS_TIMER_CLOCK * (OSTime)359999999);
-    }
 #if VERSION >= VERSION_US
     if (!gp->dvdError && !winCheck()) {
         if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
@@ -1068,7 +1062,21 @@ exitcheck:
  * US and PAL wait until the status has been steady for 10 frames before drawing.
  */
 static void* gcDvdCheckThread(void* param) {
-const char* message;
+#else
+/**
+ * Background thread started by marioStInit that polls the disc drive:
+ * on cover open, no or wrong disc, retry or fatal error it sets gp->dvdError,
+ * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
+ * US and PAL wait until the status has been steady for 10 frames before drawing.
+ */
+void* gcDvdCheckThread(void* param) {
+#if VERSION >= VERSION_US
+    s32 prevStatus = 0;
+    s32 stableCount = 0;
+    u32 prevRetrace = 0;
+#endif
+#endif
+    const char* message;
     s32 msgId;
     s32 width;
     f32 xpos;
@@ -1078,35 +1086,90 @@ const char* message;
         msgId = 0;
         switch (DVDGetDriveStatus()) {
             case DVD_STATE_COVER_OPEN:
-            msgId = 5;
-            gp->dvdError = TRUE;
+#if VERSION <= VERSION_DEMO_US
+                msgId = 5;
+#else
+#if VERSION >= VERSION_US
+                msgId = 10;
+#else
+                msgId = 5;
+#endif
+#endif
+                gp->dvdError = TRUE;
                 break;
             case DVD_STATE_NO_DISK:
-            msgId = 6;
-            gp->dvdError = TRUE;
+#if VERSION <= VERSION_DEMO_US
+                msgId = 6;
+#else
+#if VERSION >= VERSION_US
+                msgId = 11;
+#else
+                msgId = 6;
+#endif
+#endif
+                gp->dvdError = TRUE;
                 break;
             case DVD_STATE_WRONG_DISK:
-            msgId = 6;
-            gp->dvdError = TRUE;
+#if VERSION <= VERSION_DEMO_US
+                msgId = 6;
+#else
+#if VERSION >= VERSION_US
+                msgId = 11;
+#else
+                msgId = 6;
+#endif
+#endif
+                gp->dvdError = TRUE;
                 break;
             case DVD_STATE_RETRY:
-            msgId = 7;
-            gp->dvdError = TRUE;
+#if VERSION <= VERSION_DEMO_US
+                msgId = 7;
+#else
+#if VERSION >= VERSION_US
+                msgId = 12;
+#else
+                msgId = 7;
+#endif
+#endif
+                gp->dvdError = TRUE;
                 break;
-                case DVD_STATE_FATAL_ERROR:
+            case DVD_STATE_FATAL_ERROR:
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+                msgId = 13;
+#else
+                msgId = 8;
+#endif
+                gp->dvdError = TRUE;
+#endif
                 break;
-default:
+            default:
                 gp->dvdError = FALSE;
                 break;
             case DVD_STATE_BUSY:
                 break;
         }
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+        if (DVDGetDriveStatus() != prevStatus) {
+            prevStatus = DVDGetDriveStatus();
+            stableCount = 0;
+        } else if (VIGetRetraceCount() != prevRetrace) {
+            prevRetrace = VIGetRetraceCount();
+            stableCount++;
+            if (stableCount > 100) {
+                stableCount = 100;
+            }
+        }
+#endif
+#endif
         if (gp->dvdError) {
             SoundOpenCover();
         } else {
             SoundCloseCover();
         }
         if (gp->dvdError) {
+#if VERSION <= VERSION_DEMO_US
             DEMOBeforeRender();
             if (msgId) {
                 message = romFontGetMessage(msgId);
@@ -1124,91 +1187,6 @@ default:
     }
 }
 #else
-/**
- * Background thread started by marioStInit that polls the disc drive:
- * on cover open, no or wrong disc, retry or fatal error it sets gp->dvdError,
- * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
- * US and PAL wait until the status has been steady for 10 frames before drawing.
- */
-void* gcDvdCheckThread(void* param) {
-#if VERSION >= VERSION_US
-    s32 prevStatus = 0;
-    s32 stableCount = 0;
-    u32 prevRetrace = 0;
-#endif
-    const char* message;
-    s32 msgId;
-    s32 width;
-    f32 xpos;
-    Mtx44 mtx;
-
-    while (1) {
-        msgId = 0;
-        switch (DVDGetDriveStatus()) {
-            case DVD_STATE_COVER_OPEN:
-#if VERSION >= VERSION_US
-                msgId = 10;
-#else
-                msgId = 5;
-#endif
-                gp->dvdError = TRUE;
-                break;
-            case DVD_STATE_NO_DISK:
-#if VERSION >= VERSION_US
-                msgId = 11;
-#else
-                msgId = 6;
-#endif
-                gp->dvdError = TRUE;
-                break;
-            case DVD_STATE_WRONG_DISK:
-#if VERSION >= VERSION_US
-                msgId = 11;
-#else
-                msgId = 6;
-#endif
-                gp->dvdError = TRUE;
-                break;
-            case DVD_STATE_RETRY:
-#if VERSION >= VERSION_US
-                msgId = 12;
-#else
-                msgId = 7;
-#endif
-                gp->dvdError = TRUE;
-                break;
-            case DVD_STATE_FATAL_ERROR:
-#if VERSION >= VERSION_US
-                msgId = 13;
-#else
-                msgId = 8;
-#endif
-                gp->dvdError = TRUE;
-                break;
-            default:
-                gp->dvdError = FALSE;
-                break;
-            case DVD_STATE_BUSY:
-                break;
-        }
-#if VERSION >= VERSION_US
-        if (DVDGetDriveStatus() != prevStatus) {
-            prevStatus = DVDGetDriveStatus();
-            stableCount = 0;
-        } else if (VIGetRetraceCount() != prevRetrace) {
-            prevRetrace = VIGetRetraceCount();
-            stableCount++;
-            if (stableCount > 100) {
-                stableCount = 100;
-            }
-        }
-#endif
-        if (gp->dvdError) {
-            SoundOpenCover();
-        } else {
-            SoundCloseCover();
-        }
-        if (gp->dvdError) {
             if (cardIsExec()) {
                 gp->dvdError = FALSE;
             }

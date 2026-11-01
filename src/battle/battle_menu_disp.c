@@ -431,7 +431,11 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
 #if VERSION <= VERSION_DEMO_US
 /** Retail signature: y selects the name squeezing described above. */
 static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party) {
-BattleWork* wp = _battleWorkPointer;
+#else
+/** Retail signature: y selects the name squeezing described above. */
+void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y) {
+#endif
+    BattleWork* wp = _battleWorkPointer;
     CameraEntry* cam;
     BattleCursor* cursor = menu->cursor;
     f32 frac;
@@ -457,7 +461,11 @@ BattleWork* wp = _battleWorkPointer;
     s32 n;
 
     cam = camGetPtr(CAMERA_2D);
+#if VERSION <= VERSION_DEMO_US
     frac = menu->scrollPos - ((s32)menu->scrollPos);
+#else
+    frac = menu->scrollPos - (s32)menu->scrollPos;
+#endif
     alpha = 0xFF;
     if (i == 0) {
         alpha = 255.0f * (1.0f - frac);
@@ -465,7 +473,11 @@ BattleWork* wp = _battleWorkPointer;
     if (i == 6) {
         alpha = 255.0f * frac;
     }
+#if VERSION <= VERSION_DEMO_US
     j = ((s32)menu->scrollPos) + i;
+#else
+    j = (s32)menu->scrollPos + i;
+#endif
     if (j == cursor->absPos) {
         r = seleItemCoordCol.r;
         g = seleItemCoordCol.g;
@@ -475,7 +487,11 @@ BattleWork* wp = _battleWorkPointer;
         b = 0xFF;
         g = 0xFF;
         r = 0xFF;
+#if VERSION <= VERSION_DEMO_US
         a = (144.0f * ((u8)alpha)) / 255.0f;
+#else
+        a = 144.0f * alpha / 255.0f;
+#endif
     }
     btlDispGXInit2D();
     PSMTXConcat(cam->view, m, out);
@@ -491,7 +507,11 @@ BattleWork* wp = _battleWorkPointer;
     PSMTXScale(scl, 0.5f, 0.5f, 1.0f);
     PSMTXConcat(m, trn, out);
     PSMTXConcat(out, scl, out);
+#if VERSION <= VERSION_DEMO_US
     if (!((u16)icon)) {
+#else
+    if (!(u16)icon) {
+#endif
         icon = ICON_ITEM_COIN;
     }
     if (enabled == 1) {
@@ -510,6 +530,7 @@ BattleWork* wp = _battleWorkPointer;
         FontDrawColor(fc);
     }
     PSMTXTrans(trn, -104.0f, 22.0f, 0.0f);
+#if VERSION <= VERSION_DEMO_US
     PSMTXScale(scl, 0.8f, 0.8f, 0.8f);
     PSMTXConcat(m, trn, out);
     PSMTXConcat(out, scl, out);
@@ -666,87 +687,6 @@ BattleWork* wp = _battleWorkPointer;
     }
 }
 #else
-/** Retail signature: y selects the name squeezing described above. */
-void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y) {
-    BattleWork* wp = _battleWorkPointer;
-    CameraEntry* cam;
-    BattleCursor* cursor = menu->cursor;
-    f32 frac;
-    u8 alpha;
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-    Mtx scl;
-    Mtx trn;
-    Mtx out;
-    GXTexObj texobj;
-    s32 d1[3];
-    s32 o1[3];
-    s32 d2[3];
-    s32 o2[3];
-    s32 d3[3];
-    s32 o3[3];
-    char buf1[2];
-    char buf2[2];
-    char buf3[2];
-    s32 j;
-    s32 n;
-
-    cam = camGetPtr(CAMERA_2D);
-    frac = menu->scrollPos - (s32)menu->scrollPos;
-    alpha = 0xFF;
-    if (i == 0) {
-        alpha = 255.0f * (1.0f - frac);
-    }
-    if (i == 6) {
-        alpha = 255.0f * frac;
-    }
-    j = (s32)menu->scrollPos + i;
-    if (j == cursor->absPos) {
-        r = seleItemCoordCol.r;
-        g = seleItemCoordCol.g;
-        b = seleItemCoordCol.b;
-        a = alpha;
-    } else {
-        b = 0xFF;
-        g = 0xFF;
-        r = 0xFF;
-        a = 144.0f * alpha / 255.0f;
-    }
-    btlDispGXInit2D();
-    PSMTXConcat(cam->view, m, out);
-    GXLoadPosMtxImm(out, GX_PNMTX0);
-    TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, 2);
-    GXLoadTexObj(&texobj, GX_TEXMAP0);
-    btlDispGXQuads2D(-152.0f, 24.0f, -136.0f, 0.0f, r, g, b, a);
-    btlDispGXQuads2D(152.0f, 24.0f, 136.0f, 0.0f, r, g, b, a);
-    TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, 3);
-    GXLoadTexObj(&texobj, GX_TEXMAP0);
-    btlDispGXQuads2D(-136.0f, 24.0f, 136.0f, 0.0f, r, g, b, a);
-    PSMTXTrans(trn, -119.0f, 2.0f, 0.0f);
-    PSMTXScale(scl, 0.5f, 0.5f, 1.0f);
-    PSMTXConcat(m, trn, out);
-    PSMTXConcat(out, scl, out);
-    if (!(u16)icon) {
-        icon = ICON_ITEM_COIN;
-    }
-    if (enabled == 1) {
-        iconDispGxCol(out, ICON_FLAG_2D, icon, (GXColor){0xFF, 0xFF, 0xFF, alpha});
-    } else {
-        iconDispGxCol(out, ICON_FLAG_2D | ICON_FLAG_GRAY, icon, (GXColor){0xFF, 0xFF, 0xFF, alpha});
-    }
-    FontDrawStart();
-    {
-        GXColor fc;
-        if (enabled == 1) {
-            fc = (GXColor){0x00, 0x00, 0x00, alpha};
-        } else {
-            fc = (GXColor){0x40, 0x40, 0x40, alpha};
-        }
-        FontDrawColor(fc);
-    }
-    PSMTXTrans(trn, -104.0f, 22.0f, 0.0f);
 #if VERSION == VERSION_EU
     if (y != 0) {
         PSMTXScale(scl, FontGetMessageWidth(name) > y ? 0.8f * y / FontGetMessageWidth(name) : 0.8f, 0.8f, 0.8f);

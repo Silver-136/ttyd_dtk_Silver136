@@ -1539,8 +1539,8 @@ EVT_BEGIN(powerupya_orb_use)
 #endif
     CALL(evt_msg_print, 0, STRING("powerup_ev_07"), 0, STRING("me"))
     CALL(evt_pouch_remove_item, ITEM_UP_ARROW, LW(0))
-#if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
+#if VERSION <= VERSION_DEMO_US
     ELSE
     CALL(evt_msg_print, 0, STRING("powerup_ev_03"), 0, STRING("me"))
     END_IF
@@ -1549,7 +1549,6 @@ EVT_BEGIN(powerupya_orb_use)
     END_IF
     CALL(evt_msg_print, 0, STRING("powerup_05"), 0, STRING("me"))
 #else
-    SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
     // Control returns to the player and the shop music resumes.
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)

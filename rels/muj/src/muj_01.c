@@ -2022,95 +2022,6 @@ static USER_FUNC(starstone_set_ry) {
  * four sailors run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
  * and the game returns to pik_01 at "sekai_yami2".
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * The world-goes-dark cutaway at STG8_15_GRODUS (entered from "sekai_yami2"):
- * control is taken, the camp is drawn dark with the camera shaking and a quake sound,
- * four sailors run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
- * and the game returns to pik_01 at "sekai_yami2".
- */
-static EVT_BEGIN(sekai_yami_evt)
-    // The darkening of the world: Mario loses control and the island starts to shake.
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_mario_set_pos, 0, -1000, 0)
-    CALL(evt_party_set_pos, 0, 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING("ボロ水夫A"), 0, -1000, 0)
-    CALL(evt_npc_set_position, STRING("ガラの悪い水夫"), 0, 0, 170)
-    CALL(evt_npc_status_onoff, 1, STRING("ガラの悪い水夫"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_status_onoff, 1, STRING("水夫D"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_status_onoff, 1, STRING("オドオド水夫"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_status_onoff, 1, STRING("店員"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(anim_tevcallback, STRING("ガラの悪い水夫"), 1)
-    CALL(anim_tevcallback, STRING("水夫D"), 1)
-    CALL(anim_tevcallback, STRING("オドオド水夫"), 1)
-    CALL(anim_tevcallback, STRING("店員"), 1)
-    CALL(anim_tevcallback_mobj, STRING("mobj_save"), 1)
-    CALL(evt_bg_set_color, 64, 64, 64, 255)
-    CALL(yami_view, -800)
-    CALL(sekai_yami_omise)
-    CALL(evt_cam3d_evt_set, 0, 120, 795, 0, 70, 348, 0, EASING_SINE_IN_OUT)
-    SPAWN_EVENT(sekai_yami_shake)
-    CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(0))
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            CALL(evt_npc_move_position, STRING("ガラの悪い水夫"), 155, 170, 0, FLOAT(120.0f), 0)
-            WAIT_FRAMES(1)
-            CALL(evt_npc_move_position, STRING("ガラの悪い水夫"), -150, 170, 0, FLOAT(120.0f), 0)
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            CALL(evt_npc_move_position, STRING("水夫D"), -70, 76, 0, FLOAT(120.0f), 0)
-            WAIT_FRAMES(1)
-            CALL(evt_npc_move_position, STRING("水夫D"), 120, 76, 0, FLOAT(120.0f), 0)
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        LOOP(0)
-            CALL(evt_npc_move_position, STRING("オドオド水夫"), -60, 82, 0, FLOAT(120.0f), 0)
-            WAIT_FRAMES(1)
-            CALL(evt_npc_move_position, STRING("オドオド水夫"), -90, 82, 0, FLOAT(120.0f), 0)
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_set_position, STRING("店員"), 4, 0, -69)
-        LOOP(0)
-            CALL(evt_npc_move_position, STRING("店員"), -124, -69, 0, FLOAT(120.0f), 0)
-            WAIT_FRAMES(1)
-            CALL(evt_npc_move_position, STRING("店員"), 4, -69, 0, FLOAT(120.0f), 0)
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("stg8_dark_06"), 0, 0)
-    BEGIN_INLINE_EVENT
-        WAIT_MS(1000)
-        LOOP(2)
-            CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
-            CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
-            WAIT_MS(100)
-            CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-            WAIT_MS(100)
-            END_LOOP
-    END_INLINE_EVENT
-    WAIT_MS(3000)
-    CALL(evt_snd_sfxoff, LW(0))
-    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
-    // Fade out and continue the scene at pik_01.
-    CALL(evt_bero_mapchange, STRING("pik_01"), STRING("sekai_yami2"))
-    CALL(evt_mario_key_onoff, 1)
-    RETURN
-EVT_END()
-#else
 /**
  * The world-goes-dark cutaway at STG8_15_GRODUS (entered from "sekai_yami2"):
  * control is taken, the camp is drawn dark with the camera shaking and a quake sound,
@@ -2181,6 +2092,25 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg8_dark_06"), 0, 0)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+        WAIT_MS(1000)
+        LOOP(2)
+            CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
+            CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
+            WAIT_MS(100)
+            CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
+            WAIT_MS(100)
+            END_LOOP
+    END_INLINE_EVENT
+    WAIT_MS(3000)
+    CALL(evt_snd_sfxoff, LW(0))
+    CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
+    // Fade out and continue the scene at pik_01.
+    CALL(evt_bero_mapchange, STRING("pik_01"), STRING("sekai_yami2"))
+    CALL(evt_mario_key_onoff, 1)
+    RETURN
+EVT_END()
+#else
 #if VERSION >= VERSION_US
         WAIT_MS(100)
         LOOP(1)

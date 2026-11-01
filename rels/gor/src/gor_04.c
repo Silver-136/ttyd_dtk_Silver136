@@ -2210,115 +2210,6 @@ EVT_END()
  * Also starts Peach's mail scene, the Bowser interlude and, after STG6_55_04_BOWSER_RAWK_HAWK,
  * heals Mario and his partners.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Init script of gor_04, the station: music (Bowser's tune at STG4_15_05_PEACH_X_NAUT_PHD_REPORT,
- * otherwise the Rogueport tune except on arriving by blimp), exits, Luigi and his companion, the NPCs,
- * a save block, the spinning panel with a Star Piece, a second Star Piece, and the blimp ride trigger.
- * Depending on how Mario entered (blimp return, train return trip, n_bero door) it sets the train flags
- * and starts the matching scene.
- * Also starts Peach's mail scene, the Bowser interlude and, after STG6_55_04_BOWSER_RAWK_HAWK,
- * heals Mario and his partners.
- */
-EVT_BEGIN(gor_04_init_evt)
-    // Pick the music: Bowser's tune during the Bowser interlude, otherwise the Rogueport tune (unless Mario
-    // arrived by blimp).
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
-        CALL(evt_snd_bgm_scope, 0, 1)
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-    ELSE
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_NOT_EQUAL(LW(0), STRING("hikousen_return"))
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-        END_IF
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-    END_IF
-    CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-    // Set up the exits, Luigi, and the NPCs of the station.
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    CALL_CHILD(luigi_npcEnt)
-    CALL(evt_npc_setup, PTR(npcEnt))
-    // A save block is placed, except during the Bowser interlude.
-    IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_mobj_save_blk, STRING("mobj_save"), 140, 60, 85, 0, 0)
-    END_IF
-    // The spinning panel with a Star Piece, and another Star Piece on the floor, are placed.
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -510, 80, 120, STRING("S_ground"), 125, GSWF_STARPIECE_16)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_17, 0)
-    SPAWN_EVENT(evt_wing)
-    // Stepping on the blimp platform starts the blimp ride.
-    CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
-    CALL(evt_bero_get_entername, LW(0))
-    // Arriving back by blimp starts the blimp-landing scene; otherwise the second gondola is hidden.
-    IF_STR_EQUAL(LW(0), STRING("hikousen_return"))
-        SPAWN_EVENT(evt_hikousen_return)
-    ELSE
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
-    END_IF
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_bero_get_entername, LW(0))
-    // Entering through the train door means this is the return trip, and the train is at Rogueport.
-    IF_STR_EQUAL(LW(0), STRING("n_bero"))
-        SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
-        SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-        SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
-    ELSE
-        SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
-    END_IF
-    // Arriving from Poshley Heights on the train plays the station-arrival scene.
-    IF_STR_EQUAL(LW(0), STRING("resha_return"))
-        SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
-        CALL_CHILD(hom_10_evt_resha_left)
-        CALL_CHILD(hom_10_evt_resha_stop)
-        SPAWN_EVENT(evt_train2)
-        SET_VALUE(LW(0), STRING("n_bero"))
-        CALL_CHILD(bero_case_switch_on)
-    ELSE
-        // Otherwise, the train sits at the platform in the correct state for the trip direction.
-        IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
-            CALL_CHILD(hom_10_evt_resha_left)
-            SET_VALUE(LW(0), STRING("n_bero"))
-            CALL_CHILD(bero_case_switch_on)
-            CALL(evt_npc_set_position, STRING("駅員"), -400, 80, 100)
-        ELSE
-            CALL_CHILD(hom_10_evt_resha_right)
-            SET_VALUE(LW(0), STRING("n_bero"))
-            CALL_CHILD(bero_case_switch_off)
-        END_IF
-    END_IF
-    // After the train ride, Peach's mail scene begins.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
-        SPAWN_EVENT(peach_mail)
-    END_IF
-    // Bowser interlude: Bowser is the player character, Kammy's broom is placed, and her story scene starts.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        CALL(evt_mario_set_mode, 2)
-        CALL(evt_mario_kill_party, 0)
-        CALL(evt_npc_entry, STRING("houki"), STRING("c_kamek_be"))
-        CALL(evt_npc_set_anim, STRING("houki"), STRING("H_1"))
-        CALL(evt_npc_set_position, STRING("houki"), 0, -1000, 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_HIT)
-        SPAWN_EVENT(gor_04_koopa_evt)
-    END_IF
-    // At this story stage Mario and his partners are fully healed.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
-        CALL(evt_mario_get_party, LW(15))
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_set_party, 0, 1)
-            CALL(evt_party_run, 0)
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-        END_IF
-    END_IF
-    // The mail event runs in the background.
-    SPAWN_EVENT(evt_sub_mail_event)
-    RETURN
-EVT_END()
-#else
 /**
  * Init script of gor_04, the station: music (Bowser's tune at STG4_15_05_PEACH_X_NAUT_PHD_REPORT,
  * otherwise the Rogueport tune except on arriving by blimp), exits, Luigi and his companion, the NPCs,
@@ -2365,7 +2256,9 @@ EVT_BEGIN(gor_04_init_evt)
     IF_STR_EQUAL(LW(0), STRING("n_bero"))
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
         SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
+#if VERSION > VERSION_DEMO_US
         SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
+#endif
         SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
         ELSE
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
@@ -2407,6 +2300,16 @@ EVT_BEGIN(gor_04_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_pouch_mario_recovery)
+        CALL(evt_pouch_all_party_recovery)
+    END_IF
+END_IF
+// The mail event runs in the background.
+SPAWN_EVENT(evt_sub_mail_event)
+RETURN
+EVT_END()
+#else
 #if VERSION >= VERSION_US
         END_IF
 #endif

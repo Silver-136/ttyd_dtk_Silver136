@@ -1154,7 +1154,6 @@ EVT_BEGIN(chusan_move)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Init script of dmo_00, the opening demo map: starts demo_init, places Peach, the mysterious person,
  * the golden treasure box and a few townsfolk (Roten, a Goomba and Chu-san, hidden until needed),
@@ -1180,75 +1179,10 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_set_position, STRING("hako"), -125, 0, 450)
     CALL(evt_npc_flag_onoff, 1, STRING("hako"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_pera_onoff, STRING("hako"), 0)
-    CALL(evt_npc_entry, STRING("ロテン１"), STRING("c_roten"))
-    CALL(evt_npc_set_tribe, STRING("ロテン１"), STRING("ロテン"))
-    CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_status_onoff, 1, STRING("ロテン１"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_change_interrupt, STRING("ロテン１"), 1, PTR(roten_move))
-    CALL(evt_npc_entry, STRING("クリボー１"), STRING("c_kuribo_n"))
-    CALL(evt_npc_set_tribe, STRING("クリボー１"), STRING("NPCクリボー"))
-    CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_status_onoff, 1, STRING("クリボー１"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_change_interrupt, STRING("クリボー１"), 1, PTR(kuribo_move))
-    CALL(evt_npc_entry, STRING("チューさん１"), STRING("c_tyusan"))
-    CALL(evt_npc_set_tribe, STRING("チューさん１"), STRING("チューさん"))
-    CALL(evt_npc_flag_onoff, 1, STRING("チューさん１"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_status_onoff, 1, STRING("チューさん１"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_change_interrupt, STRING("チューさん１"), 1, PTR(chusan_move))
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_mario_set_pos, 0, -1000, 0)
-    CALL(evt_party_set_pos, 0, 0, -1000, 0)
-    CALL(evt_paper_entry, STRING("OFF_d_meku_right"))
-    CALL(evt_cam3d_evt_set, 0, 385, 1473, 0, 100, 0, 0, EASING_SINE_IN_OUT)
-    CALL(evt_cam_letter_box_onoff, 1, 1)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_bg_disp_onoff, 0)
-    CALL(evt_npc_flag_onoff, 1, STRING("peach"), NPC_FLAG_NO_DRAW)
-    CALL(evt_npc_flag_onoff, 1, STRING("nazo"), NPC_FLAG_NO_DRAW)
-    CALL(evt_npc_flag_onoff, 1, STRING("hako"), NPC_FLAG_NO_DRAW)
-    CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), NPC_FLAG_NO_DRAW)
-    CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
-    CALL(evt_npc_flag_onoff, 1, STRING("チューさん１"), NPC_FLAG_NO_DRAW)
-    BEGIN_INLINE_EVENT_GET_ID(GW(0))
-        SET_TYPE(0)
-        CALL(demo_draw)
-    END_INLINE_EVENT
-    SPAWN_EVENT(demo_evt)
-    SPAWN_EVENT(koushukei_dai)
-    BEGIN_INLINE_EVENT
-        CALL(evt_sub_animgroup_async, STRING("OFF_d_maku_center"))
-    END_INLINE_EVENT
-    RETURN
-EVT_END_PAD()
-#else
-/**
- * Init script of dmo_00, the opening demo map: starts demo_init, places Peach, the mysterious person,
- * the golden treasure box and a few townsfolk (Roten, a Goomba and Chu-san, hidden until needed),
- * sets up the camera, and spawns the drawing and the narration script (demo_evt).
- */
-EVT_BEGIN(dmo_00_init_evt)
-    CALL(demo_init)
-    CALL(evt_npc_entry, STRING("peach"), STRING("c_peach"))
-    CALL(evt_npc_set_tribe, STRING("peach"), STRING("デモピーチ標準2"))
-    CALL(evt_npc_set_ry, STRING("peach"), 90)
-    CALL(evt_npc_set_position, STRING("peach"), -2, 0, 550)
-    CALL(evt_npc_status_onoff, 1, STRING("peach"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_flag_onoff, 1, STRING("peach"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_entry, STRING("nazo"), STRING("c_nazo"))
-    CALL(evt_npc_set_tribe, STRING("nazo"), STRING("謎の人"))
-    CALL(evt_npc_set_ry, STRING("nazo"), 90)
-    CALL(evt_npc_set_position, STRING("nazo"), -145, 0, 450)
-    CALL(evt_npc_status_onoff, 1, STRING("nazo"), NPC_STATUS_FACE_MOVE_DIR)
-    CALL(evt_npc_flag_onoff, 1, STRING("nazo"), NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_set_height, STRING("nazo"), 40)
-    CALL(evt_npc_entry, STRING("hako"), STRING("MOBJ_GoldenTreasureBox"))
-    CALL(evt_npc_set_anim, STRING("hako"), STRING("S_1"))
-    CALL(evt_npc_set_position, STRING("hako"), -125, 0, 450)
-    CALL(evt_npc_flag_onoff, 1, STRING("hako"), NPC_FLAG_NO_WALL_COLLISION)
-    CALL(evt_npc_pera_onoff, STRING("hako"), 0)
+#if VERSION > VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("hako"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, 0, 0)
     CALL(evt_mobj_flag_onoff, 1, STRING("hako"), MOBJ_FLAG_NO_DISP)
+#endif
     CALL(evt_npc_entry, STRING("ロテン１"), STRING("c_roten"))
     CALL(evt_npc_set_tribe, STRING("ロテン１"), STRING("ロテン"))
     CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
@@ -1283,6 +1217,10 @@ EVT_BEGIN(dmo_00_init_evt)
         SET_TYPE(0)
         CALL(demo_draw)
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(demo_evt)
+    SPAWN_EVENT(koushukei_dai)
+#else
 #if VERSION >= VERSION_US
     SPAWN_EVENT(PTR(demo_evt))
     SPAWN_EVENT(PTR(koushukei_dai))
@@ -1290,9 +1228,14 @@ EVT_BEGIN(dmo_00_init_evt)
     SPAWN_EVENT(demo_evt)
     SPAWN_EVENT(koushukei_dai)
 #endif
+#endif
     BEGIN_INLINE_EVENT
         CALL(evt_sub_animgroup_async, STRING("OFF_d_maku_center"))
     END_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
+    RETURN
+EVT_END_PAD()
+#else
 #if VERSION >= VERSION_US
     CALL(evt_fade_set_mapchange_type, 1, -1, -1, -1, 900)
     RETURN

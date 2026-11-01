@@ -348,11 +348,23 @@ static s32 nameMain(void) {
     s32 off;
     s32 idx;
 
+#else
+/** The demo has no cursor travel check, no all-blank name check and no default partner name. */
+s32 nameMain(void) {
+    s32 len;
+    s32 j;
+    s32 off;
+    s32 idx;
+    f32 dist;
+
+    dist = distABf(wp->x2, wp->y2, wp->x1, wp->y1);
+#endif
     switch (wp->state) {
         case 0:
             if ((wp->flags & NAMEENT_FLAG_INPUT_ON) && gp->debugFlag == 0) {
                 if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                     off = wp->cursorX;
+#if VERSION <= VERSION_DEMO_US
                     if (off >= 10 && wp->cursorY >= 4) {
                         switch (wp->cursorY) {
                             case 4:
@@ -505,20 +517,6 @@ static s32 nameMain(void) {
     return 0;
 }
 #else
-/** The demo has no cursor travel check, no all-blank name check and no default partner name. */
-s32 nameMain(void) {
-    s32 len;
-    s32 j;
-    s32 off;
-    s32 idx;
-    f32 dist;
-
-    dist = distABf(wp->x2, wp->y2, wp->x1, wp->y1);
-    switch (wp->state) {
-        case 0:
-            if ((wp->flags & NAMEENT_FLAG_INPUT_ON) && gp->debugFlag == 0) {
-                if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                    off = wp->cursorX;
 #if VERSION >= VERSION_US
                     // FAKE: no-op (s32) cast; the plain ?: changes the object
                     if (off >= 10 && wp->cursorY >= (s32)((u32)gp->language == LANGUAGE_JP ? 4 : 6)) {
@@ -891,11 +889,21 @@ s32 nameMain(void) {
  * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
  */
 static void nameEntDisp(CameraId cameraId, void* param) {
+#else
+/**
+ * Draws the name entry screen in 2D: background, the name boxes with the 8 typed characters, the character grid,
+ * the side buttons, the caret, the prompt window for this type and, while confirming,
+ * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
+ */
+void nameEntDisp(CameraId cameraId, void* param) {
+#endif
     GXColor white2;
     GXColor white;
     GXColor whiteInit = {0xFF, 0xFF, 0xFF, 0xFF};
     const char* str;
+#if VERSION <= VERSION_DEMO_US
     s32 k;
+#endif
     s32 n;
     s32 j;
     s32 i;
@@ -907,9 +915,12 @@ static void nameEntDisp(CameraId cameraId, void* param) {
     const char* ok;
     const char* yes;
     const char* no;
+#if VERSION <= VERSION_DEMO_US
     u16 width;
+#endif
     f32 w;
 
+    // FAKE: opaque white copied through whiteInit, white and white2; one initialized local changes the object
     white = whiteInit;
     white2 = white;
     saved = *camGetCurPtr();
@@ -931,10 +942,15 @@ static void nameEntDisp(CameraId cameraId, void* param) {
     for (j = 0; j < 9; j++) {
         for (n = 0; n < NAMEENT_COLS; n++) {
             if (wp->charTable[j * NAMEENT_COLS + n]) {
+#if VERSION <= VERSION_DEMO_US
                 FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);
-}
+#else
+                FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30 + (24 - FontGetMessageWidth(wp->charTable[j * NAMEENT_COLS + n])) / 2), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);
+#endif
+            }
         }
     }
+#if VERSION <= VERSION_DEMO_US
     for (j = 0; j < 4; j++) {
         if (wp->cursorX >= 10 && wp->cursorY - 4 == j) {
             winTexInit(*wp->tplFile->data);
@@ -989,55 +1005,6 @@ static void nameEntDisp(CameraId cameraId, void* param) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 #else
-/**
- * Draws the name entry screen in 2D: background, the name boxes with the 8 typed characters, the character grid,
- * the side buttons, the caret, the prompt window for this type and, while confirming,
- * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
- */
-void nameEntDisp(CameraId cameraId, void* param) {
-    GXColor white2;
-    GXColor white;
-    GXColor whiteInit = {0xFF, 0xFF, 0xFF, 0xFF};
-    const char* str;
-    s32 n;
-    s32 j;
-    s32 i;
-    CameraEntry saved;
-    f32 proj[GX_PROJECTION_SZ];
-    f32 vp[GX_VIEWPORT_SZ];
-    char buf[16];
-    CameraEntry* cam;
-    const char* ok;
-    const char* yes;
-    const char* no;
-    f32 w;
-
-    // FAKE: opaque white copied through whiteInit, white and white2; one initialized local changes the object
-    white = whiteInit;
-    white2 = white;
-    saved = *camGetCurPtr();
-    GXGetProjectionv(proj);
-    GXGetViewportv(vp);
-    cam = camGetPtr(CAMERA_2D);
-    *camGetCurPtr() = *cam;
-    cam = camGetPtr(CAMERA_2D);
-    GXSetProjection(camGetPtr(CAMERA_2D)->projection, cam->projType);
-    nameBG();
-    winTexInit(*wp->tplFile->data);
-    winTexSet(0x2a, (Vec){-130.0f, 160.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    for (i = 0; i < 8; i++) {
-        winTexSet(0x29, (Vec){(f32)(i * 32 - 106), 160.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2);
-    }
-    winTexSet(0x2b, (Vec){142.0f, 160.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    nameKirinukiGX(-240.0f, 120.0f, 480.0f, 270.0f);
-    FontDrawStart();
-    for (j = 0; j < 9; j++) {
-        for (n = 0; n < NAMEENT_COLS; n++) {
-            if (wp->charTable[j * NAMEENT_COLS + n]) {
-                FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30 + (24 - FontGetMessageWidth(wp->charTable[j * NAMEENT_COLS + n])) / 2), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);
-            }
-        }
-    }
 #if VERSION >= VERSION_US
     for (j = (u32)gp->language == LANGUAGE_JP ? 0 : 2; j < 4; j++) {
 #else

@@ -1035,7 +1035,6 @@ EVT_BEGIN(s_en1_turn)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Map init for yuu_02 (Tube Mode room): starts the animations and the S_en1 rotation,
  * the minigame set-up and the NPC script, and (US and later) hides all
@@ -1049,22 +1048,10 @@ EVT_BEGIN(yuu_02_init_evt)
     SPAWN_EVENT(s_en1_turn)
     SPAWN_EVENT(minigame03_main)
     CALL_CHILD(evt_yuunpc_minigame3)
+#if VERSION <= VERSION_DEMO_US
     RETURN
 EVT_END()
 #else
-/**
- * Map init for yuu_02 (Tube Mode room): starts the animations and the S_en1 rotation,
- * the minigame set-up and the NPC script, and (US and later) hides all
- * but the current game-language sign graphics.
- */
-EVT_BEGIN(yuu_02_init_evt)
-    CALL(evt_map_playanim, STRING("den1"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_map_playanim, STRING("den2"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_map_playanim, STRING("kumo"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_map_playanim, STRING("wakka"), MAP_ANIM_PLAY_LOOP, 0)
-    SPAWN_EVENT(s_en1_turn)
-    SPAWN_EVENT(minigame03_main)
-    CALL_CHILD(evt_yuunpc_minigame3)
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)

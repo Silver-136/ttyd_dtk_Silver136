@@ -2106,7 +2106,6 @@ HitEntry* marioSearchHead_jabara(Vec* pos, f32* h, s32* side, f32 d) {
  * Sets hitobjFront / hitobjWall, and hitobjPush once he has pushed a wall for 20 frames (10 for pipes, "dokan",
  * from the US release on). Ends with marioChkWallAround and the Pirate's Grotto spear check (dou10_yoko_yari).
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Moves Mario dx units (his speed) in direction dz (degrees) and stops him at walls,
  * from mario.c and koopa.c each frame.
@@ -2158,6 +2157,7 @@ void marioCheckWall(f32 dx, f32 dz) {
         } else {
             mario->frontWallDist = h;
             mario->hitobjWall = hit;
+#if VERSION <= VERSION_DEMO_US
             if (++mario->wallPushTimer >= 20) {
                 mario->wallPushTimer = 20;
                 if (!(hitGetAttr(hit) & HIT_ATTR_SHIP_ONLY) ? TRUE : marioGetPtr()->currMotionId == MARIO_MOTION_SHIP) {
@@ -2173,57 +2173,6 @@ void marioCheckWall(f32 dx, f32 dz) {
     dou10_yoko_yari(&mario->frontWallDist);
 }
 #else
-/**
- * Moves Mario dx units (his speed) in direction dz (degrees) and stops him at walls,
- * from mario.c and koopa.c each frame.
- * Sets hitobjFront / hitobjWall, and hitobjPush once he has pushed a wall for 20 frames (10 for pipes, "dokan",
- * from the US release on). Ends with marioChkWallAround and the Pirate's Grotto spear check (dou10_yoko_yari).
- */
-void marioCheckWall(f32 dx, f32 dz) {
-    Vec pos;
-    f32 h;
-    HitEntry* hit;
-    MarioWork* mario = marioGetPtr();
-    mario->frontWallDist = 1000.0f;
-    if (dx && mario->airTimer == 0) {
-        if (mario->wallPushDist < dx) {
-            mario->wallPushDist = dx;
-            mario->wallPushDir = dz;
-            mario->wallPushHold = 14;
-        } else {
-            if (--mario->wallPushHold <= 0) {
-                mario->wallPushHold = 0;
-                mario->wallPushDist = dx;
-                mario->wallPushDir = dz;
-            }
-        }
-        mario->moveDirection = mario->wallPushDir;
-    } else {
-        mario->wallPushDist = 0.0f;
-    }
-    if (!dx) {
-        marioSearchFrontWall_staying(dz);
-        dou10_yoko_yari(&mario->frontWallDist);
-        return;
-    }
-    pos = mario->position;
-    mario->hitobjFrontWall = NULL;
-    hit = searchFrontWall(&pos, &h, dx, dz, mario->wPlayerCollisionBox.z);
-    if (hit) {
-        if (mario->hitobjFrontWall) {
-            mario->hitobjFront = mario->hitobjFrontWall;
-        } else {
-            mario->hitobjFront = hit;
-        }
-        if (marioChkBero(hit)) {
-            if (dx) {
-                mario->hitobjPush = hit;
-                mario->hitobjWall = hit;
-            }
-            movePos(&mario->position.x, &mario->position.z, dx, dz);
-        } else {
-            mario->frontWallDist = h;
-            mario->hitobjWall = hit;
 #if VERSION >= VERSION_US
             {
                 s32 lim = strncmp(hitGetName(hit), "dokan", 5) != 0 ? 20 : 10;

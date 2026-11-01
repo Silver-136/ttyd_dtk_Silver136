@@ -270,125 +270,15 @@ void mot_walk(void) {
  * dropping back to walking for a small stick tilt or with the Slow Go badge,
  * with the pushing pose against pushable objects.
  */
+/**
+ * Running motion: like mot_walk at marioGetDashSpd,
+ * dropping back to walking for a small stick tilt or with the Slow Go badge,
+ * with the pushing pose against pushable objects.
+ */
+void mot_dash(void) {
 #if VERSION <= VERSION_DEMO_US
-/**
- * Running motion: like mot_walk at marioGetDashSpd,
- * dropping back to walking for a small stick tilt or with the Slow Go badge,
- * with the pushing pose against pushable objects.
- */
-void mot_dash(void) {
     f32 dashSpeed;
-    u32 trigFlags;
-    BOOL pushCaseActive;
-    s32 seInterval;
-    s8 characterId;
-    s8 stickDir2;
-    s8 stickDir1;
-    MarioWork* player;
-    CaseEntry* caseEntry;
-
-    player = marioGetPtr();
-    characterId = player->characterId;
-    if (characterId == CHARACTER_BOWSER) {
-        kpa_dash();
-        return;
-    }
-    if (characterId == CHARACTER_PEACH) {
-        peach_dash();
-        return;
-    }
-    if (player->hitobjPush == NULL) {
-        pushCaseActive = FALSE;
-    } else {
-        caseEntry = caseCheckHitObj(player->hitobjPush);
-        if (caseEntry != NULL && caseEntry->conditionId == CASE_PUSH) {
-            pushCaseActive = TRUE;
-        } else {
-            pushCaseActive = FALSE;
-        }
-    }
-    if (!pushCaseActive && player->hitobjPush == NULL) {
-        player->flags = player->flags & ~MARIO_FLAG_IS_PUSHING;
-        if (marioChkPushAnime() && !marioBgmodeChk()) {
-            marioChgPose("M_R_1");
-        }
-    }
-    trigFlags = player->trigFlags;
-    if (trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
-        player->trigFlags = trigFlags & ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        player->flags = player->flags & ~(MARIO_FLAG_HAS_INPUT_JUMP | MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING |
-                                        MARIO_FLAG_IS_STEPPING);
-        marioResetCamFollowRate();
-        if (player->flags & MARIO_FLAG_PAPER_MODE) {
-            motSlitContinue();
-        }
-        if (player->playerGravity == 1.0f) {
-            if (player->flags & MARIO_FLAG_IS_PUSHING) {
-                if (!marioChkPushAnime()) {
-                    marioChgPose("M_O_1");
-                }
-            } else if (!marioBgmodeChk()) {
-                marioChgPose("M_R_1");
-            }
-        } else if (player->flags & MARIO_FLAG_IS_PUSHING) {
-            if (!marioChkPushAnime()) {
-                marioChgPose("M_O_1");
-            }
-        } else {
-            marioChgPose("M_W_1");
-        }
-        if (player->forceMoveTimer == 0) {
-            player->baseSpeed = marioGetDashSpd();
-        }
-    }
-    if (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA) {
-        marioChgMot(MARIO_MOTION_STAY);
-        return;
-    }
-    if (player->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) {
-        marioChgMot(MARIO_MOTION_WALK);
-        return;
-    }
-    if (marioSlitAbilityChk() && marioSlitButton() == 1) {
-        marioChgMot(MARIO_MOTION_SLIT);
-        return;
-    }
-    if (!marioChkItemMotion()) {
-        marioChkJump();
-        marioChkTransform();
-        if (player->hitobjStandOn != NULL) {
-            if (player->playerGravity == 1.0f) {
-                seInterval = 0x14;
-            } else {
-                seInterval = 0x28;
-            }
-            marioWalkDashSe(player->hitobjStandOn, seInterval);
-        }
-        player->multiTimer = player->multiTimer + 1;
-        if (!(player->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-            stickDir1 = player->wStickDir1;
-            stickDir2 = player->wStickDir2;
-            if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1) {
-                marioChgMot(MARIO_MOTION_WALK);
-                return;
-            }
-            player->directionView = player->controlStickAngle;
-            if ((player->flags & MARIO_FLAG_IS_PUSHING) && !marioChkPushAnime()) {
-                marioChgPose("M_O_1");
-            }
-            if (!player->controlStickSensitivity) {
-                marioChgMot(MARIO_MOTION_STAY);
-            }
-        }
-    }
-}
-#else
-/**
- * Running motion: like mot_walk at marioGetDashSpd,
- * dropping back to walking for a small stick tilt or with the Slow Go badge,
- * with the pushing pose against pushable objects.
- */
-void mot_dash(void) {
+#endif
     u32 trigFlags;
     BOOL pushCaseActive;
     s32 seInterval;
@@ -452,8 +342,12 @@ void mot_dash(void) {
             player->baseSpeed = marioGetDashSpd();
         }
     }
+#if VERSION <= VERSION_DEMO_US
+    if (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA) {
+#else
     if (!(player->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) &&
         (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA)) {
+#endif
         marioChgMot(MARIO_MOTION_STAY);
         return;
     }
@@ -480,6 +374,22 @@ void mot_dash(void) {
         if (!(player->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             stickDir1 = player->wStickDir1;
             stickDir2 = player->wStickDir2;
+#if VERSION <= VERSION_DEMO_US
+            if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1) {
+                marioChgMot(MARIO_MOTION_WALK);
+                return;
+            }
+            player->directionView = player->controlStickAngle;
+            if ((player->flags & MARIO_FLAG_IS_PUSHING) && !marioChkPushAnime()) {
+                marioChgPose("M_O_1");
+            }
+            if (!player->controlStickSensitivity) {
+                marioChgMot(MARIO_MOTION_STAY);
+            }
+        }
+    }
+}
+#else
 #if VERSION >= VERSION_US
             if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1 || pouchEquipCheckBadge(ITEM_SLOW_GO)) {
 #else

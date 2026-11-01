@@ -70,7 +70,6 @@ BOOL marioChkDeepSleep(void) {
  * After 50 seconds without input Mario yawns and then naps (M_N_5A, snoring).
  * Bowser and Peach run their own versions.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Standing motion: idle pose (tired at low HP, with breathing sounds), turning into Paper Mode,
  * starting the spin hammer, Spring Jump, jumps, items and partner actions,
@@ -95,6 +94,14 @@ void mot_stay(void) {
         peach_stay();
         return;
     }
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+    if (!(mario->buttonHold & PAD_BUTTON_A)) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_MOVE_CHK;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_START_JABARA_SPIN;
+    }
+#endif
+#endif
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP | MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING);
@@ -103,13 +110,31 @@ void mot_stay(void) {
         mario->airTimer = 0;
         mario->multiTimer = 0;
         mario->currSubMotionId = 0;
+#if VERSION <= VERSION_DEMO_US
         mario->lastGroundPos = mario->position;
         mario->stay.jabaraWait = 0;
         mario->stay.holdTimer = 0;
         mario->stay.deepSleepTimer = 0;
+#else
+#if VERSION >= VERSION_US
+        if (marioPriCheckJabara()) {
+            mario->wMotionTimer = (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) ? 10 : 0;
+        } else {
+            mario->wMotionTimer = 0;
+        }
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
+#else
+        mario->wMotionTimer = 0;
+#endif
+        mario->lastGroundPos = mario->position;
+        MARIO_STAY(mario).jabaraWait = 0;
+        MARIO_STAY(mario).holdTimer = 0;
+        MARIO_STAY(mario).deepSleepTimer = 0;
+#endif
         mario->idleKeyTimer = 0;
         marioSoundInit();
         marioResetCamFollowRate();
+#if VERSION <= VERSION_DEMO_US
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                 motSlitContinue();
             } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
@@ -130,10 +155,57 @@ void mot_stay(void) {
             } else {
                 marioChgPoseTime("M_U_2", 10);
             }
+#else
+        if (mario->flags & MARIO_FLAG_IS_8_BIT) {
+            marioChgPose("M_S_1");
             if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+                mario->baseSpeed = 0.0f;
+            }
+            mario->flags &= ~MARIO_FLAG_IS_PUSHING;
+        } else {
+            if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+                motSlitContinue();
+            } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
+                marioChgMot2(MARIO_MOTION_SLIT);
+                motSlitCancel();
+            }
+            if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
+                if (pouchGetHP() == 0) {
+                    marioChgPose("M_I_S");
+                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FURAFURA1), &mario->position);
+                } else if (lowHP() && marioChkKey()) {
+                    mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+                    marioChgPose("M_S_3");
+                    mario->idleTimer = 0;
+                } else if (strcmp(mario->animName, "M_I_Y") != 0) {
+                    marioChgPose("M_S_1");
+                }
+            } else {
+                marioChgPoseTime("M_U_2", 10);
+            }
+        }
+#endif
+        if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             mario->baseSpeed = 0.0f;
         }
         mario->flags &= ~MARIO_FLAG_IS_PUSHING;
+#if VERSION > VERSION_DEMO_US
+    }
+    if (mario->flags & MARIO_FLAG_IS_8_BIT) {
+        marioChkJump();
+        if (mario->controlStickSensitivity > 0.0f) {
+            if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 > 0xBD1) {
+                if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
+                    marioChgMot(MARIO_MOTION_DASH);
+                } else {
+                    marioChgMot(MARIO_MOTION_WALK);
+                }
+            } else {
+                marioChgMot(MARIO_MOTION_WALK);
+            }
+        }
+        return;
+#endif
     }
     frames = sysMsec2Frame(1000);
     if (++mario->idleKeyTimer > frames && !(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && marioChkKey()) {
@@ -153,6 +225,7 @@ void mot_stay(void) {
     if (strcmp(mario->animName, "M_S_3") == 0 && marioChkKey()) {
         m = marioGetPtr();
         m->idleTimer = m->idleTimer + 1;
+#if VERSION <= VERSION_DEMO_US
         if (m->idleTimer > 240) {
             m->idleTimer = 0;
         }
@@ -270,127 +343,6 @@ void mot_stay(void) {
     }
 }
 #else
-/**
- * Standing motion: idle pose (tired at low HP, with breathing sounds), turning into Paper Mode,
- * starting the spin hammer, Spring Jump, jumps, items and partner actions,
- * and walking or dashing when the stick moves.
- * After 50 seconds without input Mario yawns and then naps (M_N_5A, snoring).
- * Bowser and Peach run their own versions.
- */
-void mot_stay(void) {
-    MarioWork* mario;
-    MarioWork* m;
-    BOOL newMot;
-    s32 frames;
-    BOOL held;
-
-    mario = marioGetPtr();
-    newMot = FALSE;
-    if (mario->characterId == CHARACTER_BOWSER) {
-        kpa_stay();
-        return;
-    }
-    if (mario->characterId == CHARACTER_PEACH) {
-        peach_stay();
-        return;
-    }
-#if VERSION >= VERSION_US
-    if (!(mario->buttonHold & PAD_BUTTON_A)) {
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_MOVE_CHK;
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_START_JABARA_SPIN;
-    }
-#endif
-    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        mario->flags &= ~(MARIO_FLAG_HAS_INPUT_JUMP | MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING);
-        marioClearJumpPara();
-        newMot = TRUE;
-        mario->airTimer = 0;
-        mario->multiTimer = 0;
-        mario->currSubMotionId = 0;
-#if VERSION >= VERSION_US
-        if (marioPriCheckJabara()) {
-            mario->wMotionTimer = (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) ? 10 : 0;
-        } else {
-            mario->wMotionTimer = 0;
-        }
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
-#else
-        mario->wMotionTimer = 0;
-#endif
-        mario->lastGroundPos = mario->position;
-        MARIO_STAY(mario).jabaraWait = 0;
-        MARIO_STAY(mario).holdTimer = 0;
-        MARIO_STAY(mario).deepSleepTimer = 0;
-        mario->idleKeyTimer = 0;
-        marioSoundInit();
-        marioResetCamFollowRate();
-        if (mario->flags & MARIO_FLAG_IS_8_BIT) {
-            marioChgPose("M_S_1");
-            if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-                mario->baseSpeed = 0.0f;
-            }
-            mario->flags &= ~MARIO_FLAG_IS_PUSHING;
-        } else {
-            if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-                motSlitContinue();
-            } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
-                marioChgMot2(MARIO_MOTION_SLIT);
-                motSlitCancel();
-            }
-            if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
-                if (pouchGetHP() == 0) {
-                    marioChgPose("M_I_S");
-                    psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_FURAFURA1), &mario->position);
-                } else if (lowHP() && marioChkKey()) {
-                    mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
-                    marioChgPose("M_S_3");
-                    mario->idleTimer = 0;
-                } else if (strcmp(mario->animName, "M_I_Y") != 0) {
-                    marioChgPose("M_S_1");
-                }
-            } else {
-                marioChgPoseTime("M_U_2", 10);
-            }
-        }
-        if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-            mario->baseSpeed = 0.0f;
-        }
-        mario->flags &= ~MARIO_FLAG_IS_PUSHING;
-    }
-    if (mario->flags & MARIO_FLAG_IS_8_BIT) {
-        marioChkJump();
-        if (mario->controlStickSensitivity > 0.0f) {
-            if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 > 0xBD1) {
-                if (pouchEquipCheckBadge(ITEM_SLOW_GO) == 0) {
-                    marioChgMot(MARIO_MOTION_DASH);
-                } else {
-                    marioChgMot(MARIO_MOTION_WALK);
-                }
-            } else {
-                marioChgMot(MARIO_MOTION_WALK);
-            }
-        }
-        return;
-    }
-    frames = sysMsec2Frame(1000);
-    if (++mario->idleKeyTimer > frames && !(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && marioChkKey()) {
-        if (lowHP()) {
-            if (strcmp(mario->animName, "M_S_3") != 0) {
-                mario->idleTimer = 0;
-            }
-            mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
-            marioChgPose("M_S_3");
-        } else if ((s32)mario->currSubMotionId == 0 && mario->idleKeyTimer != 0) {
-            mario->idleKeyTimer = 0;
-            if (strcmp(mario->animName, "M_I_Y") != 0) {
-                marioChgPose("M_S_1");
-            }
-        }
-    }
-    if (strcmp(mario->animName, "M_S_3") == 0 && marioChkKey()) {
-        m = marioGetPtr();
-        m->idleTimer = m->idleTimer + 1;
 #if VERSION >= VERSION_US
         if (m->idleTimer >= gp->framerate * 4) {
             m->idleTimer = 0;

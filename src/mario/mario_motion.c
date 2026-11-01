@@ -657,7 +657,6 @@ void marioJump(void) {
  * a passing jabara check (marioPriCheckJabara, stick rub) turns the landing into the jabara motion.
  * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Per-frame fall (marioMain and Peach): slows air drift, stops it off screen,
  * steps the fall speed and lands Mario on the floor below (marioLandOn);
@@ -717,7 +716,20 @@ void marioFall(void) {
         mot_fall_roll();
         return;
     }
+#if VERSION <= VERSION_DEMO_US
     rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
+#else
+#if VERSION >= VERSION_US
+    if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {
+        rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
+        if (mario->buttonHold & PAD_BUTTON_A) {
+            mario->trigFlags |= MARIO_TRIG_FLAG_START_JABARA_SPIN;
+        }
+    }
+#else
+    rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
+#endif
+#endif
     spd = marioGetFallSpd();
     hit = marioChkLandon(&y, spd);
     if (hit) {
@@ -727,6 +739,7 @@ void marioFall(void) {
             mario->position.y += spd;
         } else {
             mario->position.y = y;
+#if VERSION <= VERSION_DEMO_US
             if (marioPriCheckJabara() && a != -1 && rub >= 0) {
                 marioChgMot(MARIO_MOTION_JABARA);
                 return;
@@ -744,84 +757,6 @@ void marioFall(void) {
     }
 }
 #else
-/**
- * Per-frame fall (marioMain and Peach): slows air drift, stops it off screen,
- * steps the fall speed and lands Mario on the floor below (marioLandOn);
- * a passing jabara check (marioPriCheckJabara, stick rub) turns the landing into the jabara motion.
- * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
- */
-void marioFall(void) {
-    MarioWork* mario = marioGetPtr();
-    s32 rub;
-    f32 spd;
-    s32 b;
-    s32 a;
-    f32 c;
-    f32 y;
-    void* hit;
-
-    if (!strcmp(gp->currentMapName, "kpa_03") && mario->characterId == CHARACTER_BOWSER) {
-        mario->hitobjStandOn = NULL;
-        kpaClearHitobjRide();
-        spd = marioGetFallSpd();
-        hit = marioChkLandon(&y, spd);
-        if (hit) {
-            mario->hitobjStandOn = hit;
-            mario->hitobjJumpFrom = NULL;
-            mario->position.y = y;
-        } else {
-            mario->position.y += spd;
-        }
-        if (mario->hitobjStandOn) {
-            marioLandOn();
-        }
-        return;
-    }
-    if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT) && !marioChkInScreen(mario->screenX, mario->screenY)) {
-        mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
-        mario->baseSpeed += 0.1f * -mario->baseSpeed;
-    }
-    if (getRollEvtFlag()) {
-        return;
-    }
-    if (mario->currMotionId == MARIO_MOTION_HIP || mario->currMotionId == MARIO_MOTION_HIP_2) {
-        return;
-    }
-    if ((!marioKeyOffChk() || !marioCtrlOffChk()) && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
-        f32 s = mario->baseSpeed;
-        s = s + 0.01f * (-0.5f - s);
-        if (s < 0.0f) {
-            s = 0.0f;
-        }
-        mario->baseSpeed = s;
-    }
-    mario->hitobjStandOn = NULL;
-    if (mario->characterId == CHARACTER_BOWSER) {
-        kpaClearHitobjRide();
-    }
-    if (marioChkSts(MARIO_STS_ROLL) == TRUE) {
-        mot_fall_roll();
-        return;
-    }
-#if VERSION >= VERSION_US
-    if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {
-        rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
-        if (mario->buttonHold & PAD_BUTTON_A) {
-            mario->trigFlags |= MARIO_TRIG_FLAG_START_JABARA_SPIN;
-        }
-    }
-#else
-    rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
-#endif
-    spd = marioGetFallSpd();
-    hit = marioChkLandon(&y, spd);
-    if (hit) {
-        mario->hitobjStandOn = hit;
-        mario->hitobjJumpFrom = NULL;
-        if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
-            mario->position.y += spd;
-        } else {
-            mario->position.y = y;
 #if VERSION >= VERSION_US
             if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) && marioPriCheckJabara() && a != -1 && rub >= 0) {
 #else
@@ -851,7 +786,6 @@ void marioFall(void) {
  * walk or stand from the stick, Bowser's quake, re-entering the slit in paper mode.
  * Bowser and the tube also call it.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Mario touches down: plays the landing sound for the floor type, clears the jump state,
  * and picks the next motion: damage on hazard or spike floors, the red switch or blue spring objects,
@@ -898,7 +832,11 @@ void marioLandOn(void) {
         } else {
             sfx = 0x14f;
         }
+#if VERSION <= VERSION_DEMO_US
         psndSFXOn_3D((const char*)sfx, &pos);
+#else
+        psndSFXOn_3D(SFX_NAME_WORD(sfx), &pos);
+#endif
     }
     if (mario->flags & MARIO_FLAG_TUBE_MODE) {
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING);
@@ -936,7 +874,11 @@ void marioLandOn(void) {
             return;
         }
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+#if VERSION <= VERSION_DEMO_US
             marioChgMotSub(MARIO_MOTION_STAY, FALSE);
+#else
+            marioSlitReenter();
+#endif
             return;
         }
         if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
@@ -944,6 +886,7 @@ void marioLandOn(void) {
         }
         return;
     }
+#if VERSION <= VERSION_DEMO_US
     if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
         if (mario->characterId == CHARACTER_BOWSER) {
             if (kpaFireAttackCheck()) {
@@ -984,98 +927,6 @@ marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after land
     }
 }
 #else
-/**
- * Mario touches down: plays the landing sound for the floor type, clears the jump state,
- * and picks the next motion: damage on hazard or spike floors, the red switch or blue spring objects,
- * walk or stand from the stick, Bowser's quake, re-entering the slit in paper mode.
- * Bowser and the tube also call it.
- */
-void marioLandOn(void) {
-    MarioWork* mario = marioGetPtr();
-    MapObjectEntry* mobj;
-    Vec pos;
-    s32 attr;
-    u32 flags;
-    s32 sfx;
-    void* stand;
-
-    if (!(hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
-        marioClearJumpPara();
-    }
-    mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-    mario->flags &= ~MARIO_FLAG_USE_FORCE_DIRECTION;
-    mario->airTimer = 0;
-    mario->jumpPeakAirTime = 0;
-    if (mario->characterId != CHARACTER_BOWSER) {
-        if (!marioBgmodeChk()) {
-            camFollowYOn();
-        }
-    } else {
-        kpaCamFollow();
-    }
-    stand = mario->hitobjStandOn;
-    pos = mario->position;
-    if (stand) {
-        attr = hitGetAttr(stand);
-        if (attr & HIT_ATTR_SHALLOW_WATER) {
-            sfx = 0x150;
-        } else if (attr & HIT_ATTR_WOOD) {
-            sfx = 0x151;
-        } else if (attr & HIT_ATTR_SNOW) {
-            sfx = 0x152;
-        } else if (attr & HIT_ATTR_GRASS) {
-            sfx = 0x153;
-        } else if (attr & 0x400000) {
-            sfx = 0x154;
-        } else {
-            sfx = 0x14f;
-        }
-        psndSFXOn_3D(SFX_NAME_WORD(sfx), &pos);
-    }
-    if (mario->flags & MARIO_FLAG_TUBE_MODE) {
-        mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING);
-        mario->hitobjJumpFrom = NULL;
-        return;
-    }
-    mario->mot.jump.dist = __fabsf(distABf(mario->position.x, mario->position.z, mario->lastGroundPos.x, mario->lastGroundPos.z));
-    attr = hitGetAttr(mario->hitobjStandOn);
-    if (mario->currMotionId != MARIO_MOTION_DAMAGE && (attr & HIT_ATTR_WATER_HAZARD)) {
-        set_damage_root_ypos(mario->position.y);
-        marioChgMot(MARIO_MOTION_DAMAGE);
-        return;
-    }
-    if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
-        set_damage_root_ypos(mario->position.y);
-        marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
-        return;
-    }
-    if (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_MOBJ) {
-        mobj = mobjHitObjPtrToPtr(mario->hitobjStandOn);
-        if (!strcmp(mobj->animName, "MOBJ_RedSwitch")) {
-            marioChgMot(MARIO_MOTION_JUMP_SW);
-            return;
-        }
-        if (!strcmp(mobj->animName, "MOBJ_BlueJumpStand")) {
-            marioChgJumpStandMotion(100.0f);
-            return;
-        }
-        if (mario->characterId == CHARACTER_BOWSER) {
-            marioChgMot(MARIO_MOTION_STAY);
-            return;
-        }
-        if (mario->currMotionId != MARIO_MOTION_SLIT) {
-            marioChgMot(MARIO_MOTION_STAY);
-            return;
-        }
-        if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-            marioSlitReenter();
-            return;
-        }
-        if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) && !marioChkSlitEnd()) {
-            motSlitCancel();
-        }
-        return;
-    }
 #if VERSION >= VERSION_US
     if (mario->controlStickSensitivity > 0.0f && !(mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
 #else
@@ -1137,6 +988,11 @@ void marioLandOn(void) {
 }
 #endif
 
+/**
+ * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;
+ * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
+ * Peach uses peach_talk, Bowser his own pose.
+ */
 #if VERSION <= VERSION_DEMO_US
 static f32 marioDemoHalf(f32 x) {
     if (x < 0.0) {
@@ -1149,6 +1005,7 @@ static f32 marioDemoHalf(f32 x) {
  * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
  * Peach uses peach_talk, Bowser his own pose.
  */
+#endif
 void mot_talk(void) {
     MarioWork* mario = marioGetPtr();
     NpcEntry* npc;
@@ -1193,6 +1050,7 @@ void mot_talk(void) {
         if (fbat != NULL) {
             marioChgPose(((NpcEntry*)fbat)->checkPose);
         }
+#if VERSION <= VERSION_DEMO_US
         if (!strcmp(mario->animName, "M_I_2")) {
             mario->multiTimer = 60;
             mario->currSubMotionId = 10;
@@ -1211,55 +1069,6 @@ void mot_talk(void) {
     }
 }
 #else
-/**
- * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;
- * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
- * Peach uses peach_talk, Bowser his own pose.
- */
-void mot_talk(void) {
-    MarioWork* mario = marioGetPtr();
-    NpcEntry* npc;
-    f32 camYaw;
-    f32 angle;
-    NpcEntry* fbat;
-
-    if (mario->characterId == CHARACTER_PEACH) {
-        peach_talk();
-        return;
-    }
-    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
-        mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-        mario->multiTimer = 0;
-        mario->airTimer = 0;
-        mario->currSubMotionId = 0;
-        mario->baseSpeed = 0.0f;
-        npc = marioGetTouchNpcPtr();
-        if (npc == NULL) {
-            marioAdjustMoveDir();
-        } else {
-            camYaw = camGetPtr(CAMERA_3D)->viewYaw;
-            angle = revise360(270.0f - (s32)(10.0f * (angleABf(mario->position.x, mario->position.z,
-                ((NpcEntry*)npc)->position.x, ((NpcEntry*)npc)->position.z) - camYaw) + 0.5f) / 10.0f);
-            if (angle >= 90.0f && angle <= 270.0f) {
-                mario->moveDirection = toMovedir(90.0f);
-                mario->directionView = mario->moveDirection;
-                mario->displayDirectionTarget = 180.0f;
-            } else {
-                mario->moveDirection = toMovedir(90.0f);
-                mario->directionView = mario->moveDirection;
-                mario->displayDirectionTarget = 0.0f;
-            }
-        }
-        if (mario->characterId == CHARACTER_BOWSER) {
-            kpaChgPose("KPA_S_1", "KPA2_S_1");
-            return;
-        }
-        // BUG: fbatGetPointer()->npc is whichever NPC Mario last talked to or battled, from any map. If that
-        // NPC slot is unused on the current map, checkPose is not valid and marioChgPose can crash.
-        fbat = fbatGetPointer()->npc;
-        if (fbat != NULL) {
-            marioChgPose(((NpcEntry*)fbat)->checkPose);
-        }
 #if VERSION == VERSION_EU
         if (!strcmp(mario->animName, "M_I_3")) {
 #else

@@ -343,114 +343,13 @@ static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
  * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
  */
 static void statusWinDisp(CameraId camId, void* param) {
-    alwaysDtEntry* e;
-    s32 i;
-    s32 blinkOn;
-    s32 blink;
-    f32 x, y, y2;
-    Mtx m, s;
-    Mtx m2, s2;
-
-    x = wp->x;
-    y = wp->y;
-    blinkOn = 1;
-    if (wp->blinkTimer > 0) {
-        wp->blinkTimer--;
-        blinkOn = (wp->blinkTimer % 16) >= 6;
-    }
-
-    e = alwaysDt;
-    for (i = 0; i < sizeof(alwaysDt) / sizeof(alwaysDt[0]); i++, e++) {
-        if (e->iconId == ICON_STATUS_SP_BANNER && !pouchGetPtr()->starPowersObtained) {
-            break;
-        }
-        if (!blinkOn) {
-            blink = wp->blink;
-            if (blink & 1 && i == 1) {
-                continue;
-            }
-            if (blink & 2 && i == 4) {
-                continue;
-            }
-            if (blink & 0x10 && i == 8) {
-                continue;
-            }
-            if (blink & 4 && i == 12) {
-                continue;
-            }
-        }
-        MTXTrans(m, x + (f32)e->xpos, y - (f32)e->ypos, 0.0f);
-        MTXScale(s, e->scale, e->scale, e->scale);
-        MTXConcat(m, s, m);
-        iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    }
-
-    if (!(wp->blink & 1) || blinkOn) {
-        numDisp(120.0f + x - 6.0f - 10.0f, 2.0f + (y - 38.0f), wp->cur.hp, 0);
-    }
-    numDisp(186.0f + x - 6.0f - 10.0f, 3.0f + (y - 38.0f), wp->cur.maxHp, 1);
-    if (!(wp->blink & 2) || blinkOn) {
-        numDisp(292.0f + x - 6.0f, 2.0f + (y - 38.0f), wp->cur.fp, 0);
-    }
-    numDisp(358.0f + x - 6.0f, 3.0f + (y - 38.0f), wp->cur.maxFp, 1);
-    numDisp(462.0f + x, 2.0f + (y - 38.0f), wp->cur.starPoints, 0);
-    if (!(wp->blink & 0x10) || blinkOn) {
-        numDisp(572.0f + x, 2.0f + (y - 38.0f), wp->cur.coins, 0);
-    }
-    if (!(wp->blink & 4) || blinkOn) {
-        gaugeDisp(wp->cur.ap, 260.0f + x, 4.0f + (y - 87.0f));
-    }
-
-    if (wp->cur.party) {
-        partysDt[1].iconId = party_icon[wp->cur.party];
-        if (wp->cur.party == PARTNER_YOSHI) {
-            switch (pouchGetPartyColor(PARTNER_YOSHI)) {
-                case 0:
-                    partysDt[1].iconId = ICON_STATUS_YOSHI;
-                    break;
-                case 1:
-                    partysDt[1].iconId = ICON_STATUS_YOSHI_1;
-                    break;
-                case 2:
-                    partysDt[1].iconId = ICON_STATUS_YOSHI_2;
-                    break;
-                case 3:
-                    partysDt[1].iconId = ICON_STATUS_YOSHI_3;
-                    break;
-                case 4:
-                    partysDt[1].iconId = ICON_STATUS_YOSHI_4;
-                    break;
-                case 5:
-                    partysDt[1].iconId = ICON_STATUS_YOSHI_5;
-                    break;
-                case 6:
-                default:
-                    partysDt[1].iconId = ICON_STATUS_YOSHI_6;
-                    break;
-            }
-        }
-        e = partysDt;
-        for (i = 0; i < sizeof(partysDt) / sizeof(partysDt[0]); i++, e++) {
-            if (wp->blink & 8 && !blinkOn && i == 1) {
-                continue;
-            }
-            MTXTrans(m, x + (f32)e->xpos, y - (f32)e->ypos, 0.0f);
-            MTXScale(s, e->scale, e->scale, e->scale);
-            MTXConcat(m, s, m);
-            iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        }
-        if (!(wp->blink & 8) || blinkOn) {
-            numDisp(120.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyHp, 0);
-        }
-        numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
-    }
-}
 #else
 /**
  * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
  * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
  */
 void statusWinDisp(CameraId camId, void* param) {
+#endif
     alwaysDtEntry* e;
     s32 i;
     s32 blinkOn;
@@ -552,6 +451,9 @@ void statusWinDisp(CameraId camId, void* param) {
         }
         numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
     }
+#if VERSION <= VERSION_DEMO_US
+    }
+#else
 
     if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {
         y2 = -180.0f + (wp->openY - wp->y);

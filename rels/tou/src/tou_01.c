@@ -3555,208 +3555,6 @@ static EVT_BEGIN(mobj_box00)
 EVT_END()
 
 // Set up map objects and localized assets before selecting entrance-specific scenes.
-#if VERSION <= VERSION_DEMO_US
-/**
- * Map init for tou_01, Glitzville's front plaza:
- * sets up the blocks, Star Pieces, Inn Coupon, doors,
- * NPCs (spectators, vendors, the egg and the blimp) and their talk scripts,
- * and chooses the scene to run from the entrance and the story progress (the ship shadow, the gondola ride,
- * the Chapter 3 intro, etc.).
- */
-EVT_BEGIN(tou_01_init_evt)
-    // Entrances, blocks, the Star Piece panel, the Star Pieces and the Inn Coupon.
-    SET_VALUE(LW(0), PTR(bero_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_save_blk, STRING("mobj_save"), -225, 70, -225, 0, 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk01"), 245, 100, -220, 0, GSWF_SHINE_21, 0)
-    CALL(evt_mobj_brick, STRING("hblk01"), 245, 10, -220, ITEM_COIN, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_TOU_01_COIN_HIDDEN_BLOCK)
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 700, 160, -10, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_TOU_01_POWER_PLUS_P_CHEST)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 0, 0, 800, STRING("jimen"), 125, GSWF_STARPIECE_55)
-    CALL(evt_item_entry, STRING("item_03"), ITEM_STAR_PIECE, 675, 10, -165, ITEM_TYPE_STILL, GSWF_STARPIECE_51, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -785, 10, 390, ITEM_TYPE_STILL, GSWF_STARPIECE_52, 0)
-    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, 60, 30, -365, ITEM_TYPE_STILL, GSWF_STARPIECE_53, 0)
-    CALL(evt_item_entry, STRING("item_04"), ITEM_STAR_PIECE, 615, 160, -75, ITEM_TYPE_STILL, GSWF_STARPIECE_54, 0)
-    CALL(evt_item_entry, STRING("item_05"), ITEM_INN_COUPON, 450, 10, -90, ITEM_TYPE_STILL, GSWF_TOU_01_INN_COUPON, 0)
-    // The NPCs are left out when Mario arrives for the chapter 8 scenes.
-    SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
-            SET_VALUE(LF(0), 1)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            SET_VALUE(LF(0), 1)
-        END_IF
-    END_IF
-    IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_npc_setup, PTR(npcEnt))
-        CALL_CHILD(init_roten_1)
-        CALL(evt_npc_change_interrupt, STRING("ロテン1"), 6, PTR(talk_roten_1))
-    END_IF
-    // Hot Sauce left on the ground after the salaryman's request.
-    IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE), 1)
-        CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF_TOU_01_HOT_SAUCE_REWARD, 0)
-    END_IF
-    // The shop and tavern doors, the looping map animations, the searchlights and the telephone box.
-    SET_VALUE(LW(0), PTR(&door_1))
-    CALL_CHILD(evt_door_entry)
-    SET_VALUE(LW(0), PTR(&door_2))
-    CALL_CHILD(evt_door_entry)
-    CALL(evt_map_playanim, STRING("anm_kemuri"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_map_playanim, STRING("anm_aisu"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_map_playanim, STRING("anm_den"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_map_playanim, STRING("anm_denden"), MAP_ANIM_PLAY_LOOP, 0)
-    CALL(evt_map_playanim, STRING("anm_raito"), MAP_ANIM_PLAY_LOOP, 0)
-    SET_VALUE(LW(0), STRING("sati_1"))
-    SPAWN_EVENT(evt_search_light)
-    SET_VALUE(LW(0), STRING("sati_2"))
-    SPAWN_EVENT(evt_search_light)
-    SPAWN_EVENT(evt_kanban)
-    CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_telbox"), 0, PTR(evt_telbox), 0)
-    // The Storage Key lies on the plaza during Rawk Hawk's warning.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_06_RAWK_HAWKS_WARNING)
-        CALL(evt_item_entry, STRING("key"), ITEM_STORAGE_KEY_0x12, -745, 20, 435, ITEM_TYPE_STILL, -1, PTR(evt_key))
-    END_IF
-    // The item shop, the airship's shadow and the airship landing spot.
-    CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
-    SPAWN_EVENT(evt_ship_shadow)
-    CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
-    // Until the hidden switch is spun, the neon sign hangs loose and the tavern stairs are blocked;
-    // afterwards it is fixed.
-    IF_INT_EQUAL(GSWF_TOU_01_TORNADO_SWITCH_PRESSED, 0)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("neon_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_sak_kaidan"), 1, 0)
-        CALL(evt_mobj_tornadoswitch_blue, 0, STRING("dummy_sw"), 735, 10, 455, PTR(evt_dummy_sw), GSWF_TOU_01_TORNADO_SWITCH_PRESSED)
-        SET_VALUE(GF(10), 0)
-        SPAWN_EVENT(evt_kanban2)
-    ELSE
-        CALL(evt_map_playanim, STRING("anm_kan"), MAP_ANIM_PLAY_AT_END, 0)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_2"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("neon_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_sak_kaidan"), 1, 1)
-        CALL(evt_hitobj_onoff, STRING("a_hasira"), 1, 0)
-    END_IF
-    // The hot dog counter sells Hot Dogs, except while the runaway egg story is under way.
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
-        CALL(evt_tou_get_ranking, LW(0))
-        IF_INT_LESS_OR_EQUAL(LW(0), 15)
-        ELSE
-            CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
-        END_IF
-    END_IF
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
-    END_IF
-    // The blimp gondola starts raised and hidden.
-    CALL(evt_hit_bind_mapobj, STRING("a_gondora"), STRING("gondora"))
-    CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)
-    CALL(evt_hit_bind_update, STRING("a_gondora"))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 615, 160, -10, 0, 0)
-    CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
-        RETURN
-    END_IF
-    CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
-    ELSE
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_NOT_EQUAL(LW(0), STRING("a_door_mon"))
-            IF_INT_EQUAL(LF(0), 0)
-                SPAWN_EVENT(evt_gondora)
-            END_IF
-        ELSE
-            CALL(evt_cam_road_reset)
-        END_IF
-    END_IF
-    // Music: the chapter 8 themes, the egg tune while the egg story runs, or the plaza theme.
-    SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH1"))
-            CALL(evt_snd_envoff, PSND_FADEOUT)
-            SET_VALUE(LF(0), 1)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
-            CALL(evt_snd_envoff, PSND_FADEOUT)
-            SET_VALUE(LF(0), 1)
-        END_IF
-    END_IF
-    IF_INT_EQUAL(LF(0), 0)
-        CALL(evt_tou_get_ranking, LW(0))
-        IF_INT_LESS_OR_EQUAL(LW(0), 15)
-            SWITCH(GSW_STORY_PROGRESS)
-                CASE_LESS(STG3_10_MINORS_5TH_PL_EGG)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))
-                CALL(evt_snd_envoff, PSND_FADEOUT)
-                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-                SPAWN_EVENT(evt_tamago)
-                SPAWN_EVENT(evt_tamago_sleep)
-                CASE_LESS(STG3_11_RUNAWAY_EGG)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_EGG1"))
-                CALL(evt_snd_envoff, PSND_FADEOUT)
-                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-                SPAWN_EVENT(evt_tamago_move)
-                SPAWN_EVENT(evt_tamago_sleep)
-                CALL(evt_npc_set_position, STRING("ホットドッグ"), -288, 10, -110)
-                CALL(evt_npc_change_interrupt, STRING("ホットドッグ"), 1, PTR(hot_move_evt))
-                CALL(evt_npc_restart_regular_event, STRING("ホットドッグ"))
-                CASE_LESS(STG3_12_THE_MINI_YOSHI_EGG)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_URN1"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
-                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-                CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
-                CALL(evt_npc_set_position, STRING("たまご"), -400, 110, -120)
-                CALL(evt_npc_set_position, STRING("ホットドッグ"), -288, 10, -110)
-                CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("たまご"))
-                CALL(evt_npc_change_interrupt, STRING("たまご"), 6, PTR(talk_tamago))
-                CALL(eff_sleep_on)
-                SPAWN_EVENT(evt_tamago_sleep)
-                CASE_DEFAULT
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_URN1"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
-                CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-            END_SWITCH
-        ELSE
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_URN1"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
-            CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
-        END_IF
-    END_IF
-    // After the Peach interlude the party is healed and Mario and the partner come back into the plaza.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
-        CALL(evt_mario_get_party, LW(15))
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_set_party, 0, PARTNER_GOOMBELLA)
-            CALL(evt_party_run, 0)
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-        END_IF
-SPAWN_EVENT(evt_peach_after)
-    END_IF
-    // Chapter 8 scenes: the darkness over Glitzville, or everyone's voices.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
-            CALL_CHILD(sekai_yami_npc_init)
-            SPAWN_EVENT(sekai_yami_evt)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            CALL_CHILD(minnnanokoe_npc_entry)
-            SPAWN_EVENT(minnnanokoe_evt)
-        END_IF
-    END_IF
-    // Incoming e-mail check.
-    SPAWN_EVENT(evt_sub_mail_event)
-    RETURN
-EVT_END()
-#else
 EVT_BEGIN(tou_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -3840,6 +3638,9 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)
     CALL(evt_hit_bind_update, STRING("a_gondora"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION <= VERSION_DEMO_US
+    CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 615, 160, -10, 0, 0)
+#else
 #if VERSION >= VERSION_US
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 610, 160, 0, 0, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_hot"), MAP_OBJ_FLAG_DISABLED)
@@ -4030,6 +3831,7 @@ EVT_BEGIN(tou_01_init_evt)
 #else
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 610, 160, 20, 0, 0)
 #endif
+#endif
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
@@ -4106,6 +3908,29 @@ EVT_BEGIN(tou_01_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, PARTNER_GOOMBELLA)
             CALL(evt_party_run, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_pouch_mario_recovery)
+        CALL(evt_pouch_all_party_recovery)
+    END_IF
+SPAWN_EVENT(evt_peach_after)
+END_IF
+// Chapter 8 scenes: the darkness over Glitzville, or everyone's voices.
+IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
+    CALL(evt_bero_get_entername, LW(0))
+    IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+        CALL_CHILD(sekai_yami_npc_init)
+        SPAWN_EVENT(sekai_yami_evt)
+    END_IF
+    IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+        CALL_CHILD(minnnanokoe_npc_entry)
+        SPAWN_EVENT(minnnanokoe_evt)
+    END_IF
+END_IF
+// Incoming e-mail check.
+SPAWN_EVENT(evt_sub_mail_event)
+RETURN
+EVT_END()
+#else
 #if VERSION >= VERSION_US
         END_IF
 #endif

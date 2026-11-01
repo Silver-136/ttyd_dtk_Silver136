@@ -53,6 +53,13 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
  * wait, restore) and deletes the effect when the animation has looped.
  */
 static void effMajinaiMain(EffectEntry* effect) {
+#else
+/**
+ * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map and make Mario glow,
+ * wait, restore) and deletes the effect when the animation has looped.
+ */
+void effMajinaiMain(EffectEntry* effect) {
+#endif
     EffMajinaiWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -62,7 +69,7 @@ static void effMajinaiMain(EffectEntry* effect) {
     s32 color;
     MarioWork* mario;
 
-    position = (Vec){work->position.x, work->position.y, work->position.z};
+    position = (Vec){ work->position.x, work->position.y, work->position.z };
     inBattle = gp->inBattle ? TRUE : FALSE;
 
     // soft delete
@@ -80,7 +87,11 @@ static void effMajinaiMain(EffectEntry* effect) {
             if (!animGroupBaseAsync("MOBJ_EFF_majinai", inBattle, NULL)) {
                 return;
             }
+#if VERSION <= VERSION_DEMO_US
             work->poseId = animPoseEntry("MOBJ_EFF_majinai", (u32)inBattle);
+#else
+            work->poseId = animPoseEntry("MOBJ_EFF_majinai", inBattle);
+#endif
             animPoseSetAnim(work->poseId, "A_1", TRUE);
             work->state++;
             break;
@@ -91,10 +102,11 @@ static void effMajinaiMain(EffectEntry* effect) {
             if (color < 64) {
                 color = 64;
             }
-            map->entries[0].color = (GXColor){color, color, color, 0xFF};
+            map->entries[0].color = (GXColor){ color, color, color, 0xFF };
             map->entries[0].flags |= 8;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
+#if VERSION <= VERSION_DEMO_US
                 for (i = 0; i < 5; i++) {
                     animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
                 }
@@ -144,53 +156,6 @@ work->state++;
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMajinaiDisp, effect);
 }
 #else
-/**
- * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map and make Mario glow,
- * wait, restore) and deletes the effect when the animation has looped.
- */
-void effMajinaiMain(EffectEntry* effect) {
-    EffMajinaiWork* work = effect->userdata;
-    Vec position;
-    BOOL inBattle;
-    BattleUnit* unit;
-    MapWork* map;
-    s32 i;
-    s32 color;
-    MarioWork* mario;
-
-    position = (Vec){ work->position.x, work->position.y, work->position.z };
-    inBattle = gp->inBattle ? TRUE : FALSE;
-
-    // soft delete
-    if (effect->flags & EFFECT_FLAG_SOFT_DELETE) {
-        effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
-        if (work->poseId != -1) {
-            animPoseRelease(work->poseId);
-        }
-        mapGetWork()->entries[0].flags &= ~8;
-        effDelete(effect);
-        return;
-    }
-    switch (work->state) {
-        case 0:
-            if (!animGroupBaseAsync("MOBJ_EFF_majinai", inBattle, NULL)) {
-                return;
-            }
-            work->poseId = animPoseEntry("MOBJ_EFF_majinai", inBattle);
-            animPoseSetAnim(work->poseId, "A_1", TRUE);
-            work->state++;
-            break;
-        case 1:
-            // darken the map and make Mario glow
-            map = mapGetWork();
-            color = map->entries[0].color.r - 5;
-            if (color < 64) {
-                color = 64;
-            }
-            map->entries[0].color = (GXColor){ color, color, color, 0xFF };
-            map->entries[0].flags |= 8;
-            if (!gp->inBattle) {
-                mario = marioGetPtr();
 #if VERSION == VERSION_EU
                 for (i = 0; i < 3; i++) {
                     if (mario->paperAnimGroupId[i] != -1) {

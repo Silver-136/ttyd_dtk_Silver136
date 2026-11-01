@@ -764,9 +764,9 @@ EVT_BEGIN(unkeep_evt)
     RETURN
 EVT_END()
 
-#if VERSION >= VERSION_US
 /** Counter menu option that tells Mario how many shop points he has. */
 EVT_BEGIN(point_evt)
+#if VERSION >= VERSION_US
     CALL(get_shop_point, LW(1))
     CALL(get_msg, LW(10), 25, LW(14))
     CALL(evt_sub_get_language, LW(0))
@@ -782,8 +782,6 @@ EVT_BEGIN(point_evt)
     0 // US: the object is 0x8C bytes (trailing zero word)
 };
 #else
-/** Counter menu option that tells Mario how many shop points he has. */
-EVT_BEGIN(point_evt)
     CALL(get_shop_point, LW(0))
     CALL(get_msg, LW(10), 25, LW(14))
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(0))

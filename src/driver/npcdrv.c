@@ -712,6 +712,15 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
  * Then on-screen culling, draw, shadow, blur and offscreen registration.
  * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
  */
+/**
+ * Per-frame NPC update (from mariost.c).
+ * For each live NPC: timers, wall-checked movement, gravity, pushing Mario aside,
+ * walk/run/stay animations from its speed, half speed in the low part of kpa_03;
+ * then the event interrupts: blown by Flurrie (8), left its territory (4),
+ * lost Mario while chasing (2) or spotted him (1), handed to npcCheckInterrupt.
+ * Then on-screen culling, draw, shadow, blur and offscreen registration.
+ * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
+ */
 #if VERSION <= VERSION_DEMO_US
 /** ok = whether Mario can trigger an encounter now (no event, in the game sequence, not on the boat, Vivian not hiding him). */
 #define NPC_CHKMARIO(ok)                                             \
@@ -752,6 +761,7 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
  * Then on-screen culling, draw, shadow, blur and offscreen registration.
  * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
  */
+#endif
 void npcMain(void) {
     const char* kpaSfx;
     NpcWork* npcwork;
@@ -766,6 +776,9 @@ void npcMain(void) {
     Vec dv2;
 
     npcwork = gp->inBattle ? &work.battle : &work.field;
+#if VERSION > VERSION_DEMO_US
+    marioGetPtr()->targetNpc = NULL;
+#endif
     kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
 
     npcMainCount++;
@@ -787,7 +800,11 @@ void npcMain(void) {
             }
 
             if (entry->wFbatHitCheckRelated) {
+#if VERSION <= VERSION_DEMO_US
                 entry->wFbatHitCheckRelated = entry->wFbatHitCheckRelated - 1;
+#else
+                entry->wFbatHitCheckRelated--;
+#endif
             }
 
             if (entry->statusFlags & NPC_STATUS_UPDATE) {
@@ -806,7 +823,6 @@ void npcMain(void) {
                 entry->jumpElapsed = (f32)(OSTicksToMicroseconds(entry->jumpTicks)) / 1000000.0f;
                 entry->moveDt = (f32)(OSTicksToMicroseconds(entry->dtTicks)) / 1000000.0f;
                 entry->lastUpdateTime = (f32)(OSTicksToMicroseconds(entry->lastUpdateTicks)) / 1000000.0f;
-
             } else {
                 entry->lastUpdateTicks = gp->renderTime;
             }
@@ -850,9 +866,18 @@ void npcMain(void) {
                                 entry->position.x += mx;
                                 entry->position.z += mz;
                             } else {
+#if VERSION <= VERSION_DEMO_US
                                 entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
                                                                  &entry->moveDir, mx, mz);
-}
+#else
+#if VERSION >= VERSION_US
+                                npcMoveSide(entry, mx, mz);
+#else
+                                entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
+                                                                        &entry->moveDir, mx, mz);
+#endif
+#endif
+                            }
                             entry->moveOffset.x = 0.0f;
                             entry->moveOffset.z = 0.0f;
                             npcMoveG(entry);
@@ -861,7 +886,6 @@ void npcMain(void) {
                             npcCheckHitMarioSide(entry);
                         }
                         {
-
                             PSVECSubtract(&entry->position, &entry->prevPosition, &dv);
                             if (entry->flags & NPC_FLAG_AUTO_MOVE_ANIM && entry->moveDt > 0.0f) {
                                 f32 spd = sqrtf(dv.x * dv.x + dv.z * dv.z) / entry->moveDt;
@@ -904,6 +928,8 @@ void npcMain(void) {
                                 f32 tz = entry->territoryBase.z - entry->position.z;
                                 f32 tx = entry->territoryBase.x - entry->position.x;
                                 f32 d = sqrtf(tx * tx + tz * tz);
+                                // Both arms read territoryHoming.x (the circle always uses the homing radius); the square check below reads territoryLoiter
+                                // outside the find event
                                 if (d > (st == NPC_EVENT_FIND ? entry->territoryHoming.x : entry->territoryHoming.x)) {
                                     trig = 1;
                                 }
@@ -945,7 +971,38 @@ void npcMain(void) {
                             trig = 0;
                             {
                                 s32 marioFindable;
+#if VERSION <= VERSION_DEMO_US
                                 NPC_CHKMARIO(marioFindable);
+#else
+                                do {
+                                    m = marioGetPtr();
+                                    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (gp->mapEventId != 0) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (seqGetSeq() != SEQ_GAME) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (m->currMotionId == MARIO_MOTION_SHIP) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {
+                                        marioFindable = 0;
+                                    } else {
+                                        marioFindable = 1;
+                                    }
+                                } while (0);
+#endif
                                 if (!marioFindable) {
                                     trig = 1;
                                 } else {
@@ -974,21 +1031,77 @@ void npcMain(void) {
                             f32 dx, dy, dz;
                             int trig;
                             Vec dv;
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+                            f32 sd;
+#endif
+#endif
                             dx = m->position.x - entry->position.x;
                             dz = m->position.z - entry->position.z;
                             dy = m->position.y - entry->position.y;
+#if VERSION <= VERSION_DEMO_US
                             dist = dx * dx + dz * dz;
                             sqrtf(dist);
+#else
+#if VERSION >= VERSION_US
+                            // US: in the Bowser levels the search range shrinks with kpaGetLevel()
+                            dist = sqrtf(dx * dx + dz * dz);
+                            sd = dist;
+                            if (entry->flags & NPC_FLAG_2D) {
+                                f32 kpaRange[4] = {0.0f, 0.0f, 30.0f, 100.0f};
+                                sd = dist - kpaRange[kpaGetLevel()];
+                                if (sd < 0.0f) {
+                                    sd = 0.0f;
+                                }
+                            }
+#else
+                            dist = dx * dx + dz * dz;
+                            // FAKE: discarded sqrtf call; removing it changes the object
+                            sqrtf(dist);
+#endif
+#endif
                             PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
                             dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
                             trig = 1;
                             {
                                 s32 marioFindable;
+#if VERSION <= VERSION_DEMO_US
                                 NPC_CHKMARIO(marioFindable);
+#else
+                                do {
+                                    m = marioGetPtr();
+                                    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (gp->mapEventId != 0) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (seqGetSeq() != SEQ_GAME) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (m->currMotionId == MARIO_MOTION_SHIP) {
+                                        marioFindable = 0;
+                                        break;
+                                    }
+                                    if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {
+                                        marioFindable = 0;
+                                    } else {
+                                        marioFindable = 1;
+                                    }
+                                } while (0);
+#endif
                                 if (!marioFindable) {
                                     trig = 0;
                                 } else {
                                     f32 angleToMario;
+#if VERSION <= VERSION_DEMO_US
                                     dist = sqrtf(dist);
                                     if (dist > 0.25f * entry->searchRange) {
                                         if (dist > entry->searchRange) {
@@ -1178,328 +1291,6 @@ void npcMain(void) {
     }
 }
 #else
-/**
- * Per-frame NPC update (from mariost.c).
- * For each live NPC: timers, wall-checked movement, gravity, pushing Mario aside,
- * walk/run/stay animations from its speed, half speed in the low part of kpa_03;
- * then the event interrupts: blown by Flurrie (8), left its territory (4),
- * lost Mario while chasing (2) or spotted him (1), handed to npcCheckInterrupt.
- * Then on-screen culling, draw, shadow, blur and offscreen registration.
- * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
- */
-void npcMain(void) {
-    const char* kpaSfx;
-    NpcWork* npcwork;
-    FieldBattleData* fbat;
-    NpcEntry* entry;
-    int i;
-    int total;
-    f32 dir;
-    f32 prio;
-    f32 dist;
-    Vec dv;
-    Vec dv2;
-
-    npcwork = gp->inBattle ? &work.battle : &work.field;
-    marioGetPtr()->targetNpc = NULL;
-    kpaSfx = "SFX_KUPPA_3RD_WATER_FALL1";
-
-    npcMainCount++;
-
-    total = npcwork->total;
-    for (i = 0, entry = npcwork->entries; i < total; i++, entry++) {
-        if (entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_READY) {
-            if (entry->flags & NPC_FLAG_INSTANT_TURN) {
-                animPoseGetAnimPosePtr(entry->poseId)->flags |= ANIM_POSE_FLAG_INSTANT_TURN;
-            } else {
-                animPoseGetAnimPosePtr(entry->poseId)->flags &= ~ANIM_POSE_FLAG_INSTANT_TURN;
-            }
-
-            if (!(entry->flags & NPC_FLAG_UPDATE_BY_EVENT)) {
-                entry->statusFlags |= NPC_STATUS_UPDATE;
-            }
-            if (entry->statusFlags & NPC_STATUS_STOPPED) {
-                entry->statusFlags &= ~NPC_STATUS_UPDATE;
-            }
-
-            if (entry->wFbatHitCheckRelated) {
-                entry->wFbatHitCheckRelated--;
-            }
-
-            if (entry->statusFlags & NPC_STATUS_UPDATE) {
-                entry->dtTicks = gp->renderTime - entry->lastUpdateTicks;
-                if (OSTicksToMilliseconds(entry->dtTicks) > 500) {
-                    entry->dtTicks = OSMillisecondsToTicks(16);
-                }
-                if (entry->flags & NPC_FLAG_GRAVITY) {
-                    entry->jumpTicks += entry->dtTicks;
-                } else {
-                    entry->jumpTicks = 0;
-                }
-                entry->moveTicks += entry->dtTicks;
-                entry->lastUpdateTicks = gp->renderTime;
-                entry->moveElapsed = (f32)(OSTicksToMicroseconds(entry->moveTicks)) / 1000000.0f;
-                entry->jumpElapsed = (f32)(OSTicksToMicroseconds(entry->jumpTicks)) / 1000000.0f;
-                entry->moveDt = (f32)(OSTicksToMicroseconds(entry->dtTicks)) / 1000000.0f;
-                entry->lastUpdateTime = (f32)(OSTicksToMicroseconds(entry->lastUpdateTicks)) / 1000000.0f;
-            } else {
-                entry->lastUpdateTicks = gp->renderTime;
-            }
-
-            if (entry->flags & NPC_FLAG_READY) {
-                if (entry->statusFlags & NPC_STATUS_IN_WATER) {
-                    entry->statusFlags |= NPC_STATUS_WAS_IN_WATER;
-                } else {
-                    entry->statusFlags &= ~NPC_STATUS_WAS_IN_WATER;
-                }
-                entry->statusFlags &= ~NPC_STATUS_IN_WATER;
-                {
-                    f32 speedScale;
-                    if (!strcmp(gp->currentMapName, "kpa_03") && !(entry->position.y > 365.0f)) {
-                        entry->statusFlags |= NPC_STATUS_IN_WATER;
-                        if (!(entry->statusFlags & NPC_STATUS_WAS_IN_WATER) && (entry->statusFlags & NPC_STATUS_IN_WATER)) {
-                            psndSFXOn_3D(kpaSfx, &entry->position);
-                        }
-                    }
-                    if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
-                        entry->maxFallSpeed = 100.0f;
-                        speedScale = 0.5f;
-                    } else {
-                        speedScale = 1.0f;
-                    }
-                    if (entry->statusFlags & NPC_STATUS_IN_WATER) {
-                        entry->hazardFlags |= KPA_ENCOUNT_STOMP;
-                    }
-                    if (entry->statusFlags & NPC_STATUS_UPDATE) {
-                        if (entry->moveDt > 0.0f) {
-                            f32 mx = entry->moveOffset.x;
-                            f32 mz = entry->moveOffset.z;
-                            if (entry->statusFlags & NPC_STATUS_IN_WATER && !(entry->statusFlags & NPC_STATUS_NO_WATER_DRAG)) {
-                                mx *= 0.5f;
-                                mz *= 0.5f;
-                            }
-                            if (entry->flags & NPC_FLAG_2D) {
-                                mz = 0.0f;
-                            }
-                            if (entry->flags & NPC_FLAG_NO_WALL_COLLISION) {
-                                entry->position.x += mx;
-                                entry->position.z += mz;
-                            } else {
-#if VERSION >= VERSION_US
-                                npcMoveSide(entry, mx, mz);
-#else
-                                entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
-                                                                        &entry->moveDir, mx, mz);
-#endif
-                            }
-                            entry->moveOffset.x = 0.0f;
-                            entry->moveOffset.z = 0.0f;
-                            npcMoveG(entry);
-                        }
-                        if (!(entry->flags & NPC_FLAG_ENEMY) && !(entry->flags & NPC_FLAG_NO_HIT) && !(entry->flags & NPC_FLAG_NO_PUSH_MARIO_UNUSED)) {
-                            npcCheckHitMarioSide(entry);
-                        }
-                        {
-                            PSVECSubtract(&entry->position, &entry->prevPosition, &dv);
-                            if (entry->flags & NPC_FLAG_AUTO_MOVE_ANIM && entry->moveDt > 0.0f) {
-                                f32 spd = sqrtf(dv.x * dv.x + dv.z * dv.z) / entry->moveDt;
-                                if (spd < 0.1f) {
-                                    if (entry->moveAnimState != 1) {
-                                        animPoseSetAnim(entry->poseId, entry->tribe->stayAnim, TRUE);
-                                        entry->moveAnimState = 1;
-                                    }
-                                } else if (spd < entry->tribe->runStartSpeed * speedScale) {
-                                    if (entry->moveAnimState != 2) {
-                                        animPoseSetAnim(entry->poseId, entry->tribe->walkAnimation, TRUE);
-                                        entry->moveAnimState = 2;
-                                    }
-                                } else {
-                                    if (entry->moveAnimState != 3) {
-                                        animPoseSetAnim(entry->poseId, entry->tribe->runAnimation, TRUE);
-                                        entry->moveAnimState = 3;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (entry->regularEvtId) {
-                    EventEntry* evt = evtGetPtrID(entry->regularEvtId);
-                    if (evt && !(evt->flags & EVENT_STOPPED)) {
-                        s32 st = evt->wNpcEventType;
-                        if (entry->blowEvent && st != NPC_EVENT_BLOW && st != NPC_EVENT_DEAD) {
-                            int trig;
-                            trig = npcCheckBlow(entry);
-                            if (trig) {
-                                entry->interruptFlags |= NPC_INTERRUPT_BLOW;
-                                goto interrupt;
-                            }
-                        }
-                        if (entry->territoryType != NPC_TERRITORY_TYPE_NOTHING && (st == NPC_EVENT_MOVE || st == NPC_EVENT_FIND)) {
-                            int trig;
-                            trig = 0;
-                            if (entry->territoryType == NPC_TERRITORY_TYPE_CIRCLE) {
-                                f32 tz = entry->territoryBase.z - entry->position.z;
-                                f32 tx = entry->territoryBase.x - entry->position.x;
-                                f32 d = sqrtf(tx * tx + tz * tz);
-                                // Both arms read territoryHoming.x (the circle always uses the homing radius); the square check below reads territoryLoiter
-                                // outside the find event
-                                if (d > (st == NPC_EVENT_FIND ? entry->territoryHoming.x : entry->territoryHoming.x)) {
-                                    trig = 1;
-                                }
-                            } else if (entry->territoryType == NPC_TERRITORY_TYPE_SQUARE) {
-                                if (st == NPC_EVENT_FIND) {
-                                    if (entry->position.x < entry->territoryBase.x - entry->territoryHoming.x ||
-                                        entry->position.x > entry->territoryBase.x + entry->territoryHoming.x ||
-                                        entry->position.z < entry->territoryBase.z - entry->territoryHoming.z ||
-                                        entry->position.z > entry->territoryBase.z + entry->territoryHoming.z) {
-                                        trig = 1;
-                                    }
-                                } else {
-                                    if (entry->position.x < entry->territoryBase.x - entry->territoryLoiter.x ||
-                                        entry->position.x > entry->territoryBase.x + entry->territoryLoiter.x ||
-                                        entry->position.z < entry->territoryBase.z - entry->territoryLoiter.z ||
-                                        entry->position.z > entry->territoryBase.z + entry->territoryLoiter.z) {
-                                        trig = 1;
-                                    }
-                                }
-                            }
-                            if (trig) {
-                                entry->interruptFlags |= NPC_INTERRUPT_RETURN;
-                                goto interrupt;
-                            }
-                        }
-                        if (st == NPC_EVENT_FIND) {
-                            MarioWork* m = marioGetPtr();
-                            f32 dx = m->position.x - entry->position.x;
-                            f32 dy = m->position.y - entry->position.y;
-                            f32 dz = m->position.z - entry->position.z;
-                            int trig;
-                            PSVECSubtract(&entry->prevPosition, &entry->position, &dv2);
-                            dir = entry->direction;
-                            if (entry->statusFlags & NPC_STATUS_FACE_MOVE_DIR) {
-                                if (sqrtf(dv2.x * dv2.x + dv2.z * dv2.z) > 0.05f) {
-                                    dir = entry->moveDir;
-                                }
-                            }
-                            trig = 0;
-                            {
-                                s32 marioFindable;
-                                do {
-                                    m = marioGetPtr();
-                                    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (gp->mapEventId != 0) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (seqGetSeq() != SEQ_GAME) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (m->currMotionId == MARIO_MOTION_SHIP) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {
-                                        marioFindable = 0;
-                                    } else {
-                                        marioFindable = 1;
-                                    }
-                                } while (0);
-                                if (!marioFindable) {
-                                    trig = 1;
-                                } else {
-                                    dist = sqrtf(dx * dx + dz * dz);
-                                    if (dist > 0.25f * entry->homingRange) {
-                                        if (dy > entry->territoryLoiter.y) {
-                                            trig = 1;
-                                        } else if (-dy > entry->territoryHoming.y) {
-                                            trig = 1;
-                                        } else if (dist > entry->homingRange) {
-                                            trig = 1;
-                                        } else if ((dist = angleABf(0.0f, 0.0f, dx, dz), __fabsf(compAngle(dir, dist))) >
-                                                   0.5f * entry->homingAngle) {
-                                            trig = 1;
-                                        }
-                                    }
-                                }
-                            }
-                            if (trig) {
-                                entry->interruptFlags |= NPC_INTERRUPT_LOST;
-                                goto interrupt;
-                            }
-                        }
-                        if (st == NPC_EVENT_MOVE || st == NPC_EVENT_RETURN) {
-                            MarioWork* m = marioGetPtr();
-                            f32 dx, dy, dz;
-                            int trig;
-                            Vec dv;
-#if VERSION >= VERSION_US
-                            f32 sd;
-#endif
-                            dx = m->position.x - entry->position.x;
-                            dz = m->position.z - entry->position.z;
-                            dy = m->position.y - entry->position.y;
-#if VERSION >= VERSION_US
-                            // US: in the Bowser levels the search range shrinks with kpaGetLevel()
-                            dist = sqrtf(dx * dx + dz * dz);
-                            sd = dist;
-                            if (entry->flags & NPC_FLAG_2D) {
-                                f32 kpaRange[4] = {0.0f, 0.0f, 30.0f, 100.0f};
-                                sd = dist - kpaRange[kpaGetLevel()];
-                                if (sd < 0.0f) {
-                                    sd = 0.0f;
-                                }
-                            }
-#else
-                            dist = dx * dx + dz * dz;
-                            // FAKE: discarded sqrtf call; removing it changes the object
-                            sqrtf(dist);
-#endif
-                            PSVECSubtract(&entry->prevPosition, &entry->position, &dv);
-                            dir = reviseAngle(entry->direction) < 180.0f ? 90.0f : 270.0f;
-                            trig = 1;
-                            {
-                                s32 marioFindable;
-                                do {
-                                    m = marioGetPtr();
-                                    if (m->flags & (MARIO_FLAG_BG_MODE | MARIO_FLAG_IS_8_BIT)) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (m->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (gp->mapEventId != 0) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (seqGetSeq() != SEQ_GAME) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (m->currMotionId == MARIO_MOTION_SHIP) {
-                                        marioFindable = 0;
-                                        break;
-                                    }
-                                    if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {
-                                        marioFindable = 0;
-                                    } else {
-                                        marioFindable = 1;
-                                    }
-                                } while (0);
-                                if (!marioFindable) {
-                                    trig = 0;
-                                } else {
-                                    f32 angleToMario;
 #if VERSION >= VERSION_US
                                     if (sd > 0.25f * entry->searchRange) {
                                         if (sd > entry->searchRange) {

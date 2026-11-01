@@ -3606,7 +3606,6 @@ EVT_END()
  * a quake rumbles with the camera shaking, a villager screams (stg8_dark_05)
  * and the game moves on to muj_01 (entrance sekai_yami2).
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Final-chapter scene ("sekai yami", the world goes dark)
  * when the map is entered through sekai_yami2 at STG8_15_GRODUS:
@@ -3640,6 +3639,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_cam3d_evt_set, 0, 80, 687, 0, 70, -13, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
     LOOP(2)
         CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
         CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
@@ -3690,39 +3690,6 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 #else
-/**
- * Final-chapter scene ("sekai yami", the world goes dark)
- * when the map is entered through sekai_yami2 at STG8_15_GRODUS:
- * with Mario and the partner off stage the town is drawn in darkness (envSetYami),
- * the light flickers with SFX_STG8_LIGHT1 (once from US on, twice before),
- * villagers A to E turn about in panic (sekai_yami_npc), crows C, D and E fly off,
- * a quake rumbles with the camera shaking, a villager screams (stg8_dark_05)
- * and the game moves on to muj_01 (entrance sekai_yami2).
- */
-static EVT_BEGIN(sekai_yami_evt)
-    // The town is drawn in darkness and the light flickers.
-    CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_cont_onoff, 0)
-    CALL(evt_party_cont_onoff, 0, 0)
-    CALL(evt_mario_set_pos, 0, -1000, 0)
-    CALL(evt_party_set_pos, 0, 0, -1000, 0)
-    CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_usu00"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_usu00"), MAP_OBJ_FLAG_DISPLAY_LIST)
-    CALL(anim_tevcallback, STRING("村人Ａ"), 1)
-    CALL(anim_tevcallback, STRING("村人Ｂ"), 1)
-    CALL(anim_tevcallback, STRING("村人Ｃ"), 1)
-    CALL(anim_tevcallback, STRING("村人Ｄ"), 1)
-    CALL(anim_tevcallback, STRING("村人Ｅ"), 1)
-    CALL(anim_tevcallback, STRING("村人Ｋ"), 1)
-    CALL(anim_tevcallback, STRING("カラスＣ"), 1)
-    CALL(anim_tevcallback, STRING("カラスＤ"), 1)
-    CALL(anim_tevcallback, STRING("カラスＥ"), 1)
-    CALL(evt_bg_set_color, 64, 64, 64, 255)
-    CALL(yami_view, -800)
-    CALL(evt_cam3d_evt_set, 0, 80, 687, 0, 70, -13, 0, EASING_SINE_IN_OUT)
-    CALL(evt_seq_wait, SEQ_GAME)
-    WAIT_MS(1000)
 #if VERSION >= VERSION_US
     LOOP(1)
 #else
@@ -4118,227 +4085,6 @@ EVT_END()
  * picks BGM by story progress, registers the pipe, doors and bero exits, spawns NPCs and items,
  * and starts Chapter 4 and Bowser interlude cutscenes.
  */
-#if VERSION <= VERSION_DEMO_US
-/**
- * Map init script of Twilight Town's main street:
- * picks BGM by story progress, registers the pipe, doors and bero exits, spawns NPCs and items,
- * and starts Chapter 4 and Bowser interlude cutscenes.
- */
-EVT_BEGIN(usu_00_init_evt)
-    // In Bowser's interlude (from Peach's talk with TEC to Bowser's town visit) Mario is Bowser; GF(1) marks it.
-    SET_VALUE(GF(1), 0)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_47_PEACH_TEC_TALK)
-        IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_48_BOWSER_TWILIGHT_TOWN)
-            CALL(evt_mario_set_mode, 2)
-            SET_VALUE(GF(1), 1)
-        END_IF
-    END_IF
-    // Music: the Shadow Sirens' theme while Mario has lost his name, chapter 8 voices or silence in the darkness
-    // scenes, otherwise the town theme.
-    IF_INT_EQUAL(GF(1), 0)
-        SWITCH(GSW_STORY_PROGRESS)
-            CASE_BETWEEN(STG4_10_02_TRADING_PLACES, STG4_11_SUPERBOMBBOMB_LOST)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
-            CALL(evt_snd_envoff, PSND_FADEOUT)
-            CASE_EQUAL(STG4_11_02_WAITING_DOOPLISS)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
-            CASE_BETWEEN(STG4_12_VIVIAN, STG4_12_01_SUPERBOMBBOMB_FOUND)
-            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
-            CASE_EQUAL(STG8_15_GRODUS)
-            SET_VALUE(LF(1), 0)
-            CALL(evt_bero_get_entername, LW(0))
-            IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
-                CALL(evt_snd_bgmoff, PSND_FADEOUT)
-                CALL(evt_snd_envoff, PSND_FADEOUT)
-                SET_VALUE(LF(1), 1)
-            END_IF
-            IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
-                CALL(evt_snd_envoff, PSND_FADEOUT)
-                SET_VALUE(LF(1), 1)
-            END_IF
-            IF_INT_EQUAL(LF(1), 0)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
-                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
-            END_IF
-            CASE_DEFAULT
-            IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-                CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
-            END_IF
-            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
-        END_SWITCH
-    ELSE
-        CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
-        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
-    END_IF
-    IF_INT_EQUAL(GF(1), 0)
-        CALL(evt_kagemario_init)
-    END_IF
-    // Register the exits; in Bowser's visit the pipe becomes his scene and the doors, bushes and exits are shut.
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GF(1), 1)
-        SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(bero_case_switch_off)
-        CALL(evt_bero_overwrite, STRING("dokan_1"), PTR(bero_koopa_dokan))
-        SET_VALUE(LW(0), STRING("dokan_1"))
-        CALL_CHILD(bero_case_switch_on)
-        SET_VALUE(LW(0), 1)
-        CALL_CHILD(bero_case_switch_off)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bero"), MAP_OBJ_FLAG_HIDDEN)
-    END_IF
-    // Save block, Star Piece, NPCs, house doors (Bowser gets locked-out scripts) and the inn.
-    IF_INT_EQUAL(GF(1), 0)
-        CALL(evt_mobj_save_blk, STRING("mobj_save"), 365, 60, -50, 0, 0)
-    END_IF
-    IF_INT_EQUAL(GF(1), 0)
-        CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -220, 0, -225, ITEM_TYPE_STILL, GSWF_STARPIECE_62, 0)
-    END_IF
-    CALL_CHILD(evt_usu_kagemario_party_kill)
-    CALL(evt_npc_setup, PTR(npcEnt))
-    IF_INT_EQUAL(GF(1), 1)
-        CALL_CHILD(koopa_npc_entry)
-    END_IF
-    IF_INT_EQUAL(GF(1), 0)
-        SET_VALUE(LW(0), PTR(&door_1))
-        CALL_CHILD(evt_door_entry)
-        SET_VALUE(LW(0), PTR(&door_2))
-        CALL_CHILD(evt_door_entry)
-        SET_VALUE(LW(0), PTR(&door_3))
-        CALL_CHILD(evt_door_entry)
-    ELSE
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie1door"), 0, PTR(door_ie1_koopa_evt), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie2door"), 0, PTR(door_ie2_koopa_evt), 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie3door"), 0, PTR(door_ie3_koopa_evt), 0)
-    END_IF
-    IF_INT_EQUAL(GF(1), 0)
-        CALL(evt_kinopio_setup, PTR(&kino_dt))
-    END_IF
-    // Trees and bushes.
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki1"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki2"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki3"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki4"), MAP_OBJ_FLAG_CLIP)
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ki5"), MAP_OBJ_FLAG_CLIP)
-    CALL_CHILD(usu_00_kusa_init)
-    CALL_CHILD(usu_00_tree_init)
-    // Story scenes: the chapter 4 arrival, the pig Mayor, Mario's talk with the Mayor while a shadow, the Shadow
-    // Sirens, Vivian crying, the lost Super Bombomb in bush 7 and Doopliss found again.
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
-        SPAWN_EVENT(usu00_stage4_coming_event)
-        CASE_BETWEEN(STG4_01_00_GATEKEEPER_CONVERSATION, STG4_01_00_GATEKEEPER_CONVERSATION)
-        SPAWN_EVENT(chief_pig_event)
-    END_SWITCH
-    SWITCH(GSW_STORY_PROGRESS)
-        CASE_BETWEEN(STG4_11_02_WAITING_DOOPLISS, STG4_13_04_THE_LETTER_P)
-        CALL_CHILD(chief_mario_talk_init)
-        SPAWN_EVENT(chief_mario_talk)
-    END_SWITCH
-    CALL(evt_bero_get_entername, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("evt_majo3"))
-        CALL_CHILD(usu00_3witch_init)
-        SPAWN_EVENT(usu00_3witch_event)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_11_02_WAITING_DOOPLISS)
-        SPAWN_EVENT(usu00_vivian_cry_event)
-    END_IF
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG4_12_01_SUPERBOMBBOMB_FOUND)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kusa_07"), 0, PTR(usu_00_touch_ichikorori_ball), 0)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_03_THE_RUBY_STAR)
-        CALL_CHILD(usu00_3witch_init)
-        SPAWN_EVENT(gra00_2witch_find_ranpel_event)
-    END_IF
-    // Background watchers for Vivian and the crows; the pipe is blocked while Doopliss has Mario's name, and the
-    // pig villagers' material loop runs outside Bowser's visit.
-    SPAWN_EVENT(usu00_check_vivian)
-    SET_VALUE(GW(0), 0)
-    SET_VALUE(GW(1), 0)
-    SPAWN_EVENT(usu00_crowAB_talk_event)
-    SPAWN_EVENT(usu00_crowCDE_talk_event)
-    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_10_DOOPLISS_BATTLE)
-        IF_INT_LESS(GSW_STORY_PROGRESS, STG4_15_02_BACK_TO_NORMAL)
-            SET_VALUE(LW(0), STRING("dokan_1"))
-            CALL_CHILD(bero_case_switch_off)
-            CALL(evt_bero_overwrite, STRING("dokan_1"), PTR(bero_oshimodo))
-            SET_VALUE(LW(0), STRING("dokan_1"))
-            CALL_CHILD(bero_case_switch_on)
-        END_IF
-    END_IF
-    IF_INT_EQUAL(GF(1), 0)
-        BEGIN_INLINE_EVENT
-            CALL(booboo_main)
-        END_INLINE_EVENT
-    END_IF
-    // Bowser's interlude: Crump's arrival and Bowser's two scenes with Kammy.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_47_PEACH_TEC_TALK)
-        CALL(evt_npc_change_interrupt, STRING("カンブー"), 1, PTR(kanbu_regl))
-        CALL(evt_npc_restart_regular_event, STRING("カンブー"))
-        CALL(evt_mario_kill_party, 0)
-        SPAWN_EVENT(usu_00_koopa_first_evt)
-        CALL(evt_cam_road_reset)
-    END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_48_BOWSER_TWILIGHT_TOWN)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("player"))
-            CALL(evt_npc_change_interrupt, STRING("カンブー"), 1, PTR(kanbu_regl))
-            CALL(evt_npc_restart_regular_event, STRING("カンブー"))
-            CALL(evt_mario_set_pos, 0, 0, 50)
-            CALL(evt_mario_set_dir, 90, 0, 0)
-            CALL(evt_npc_set_position, STRING("ババ"), -100, 25, 100)
-        ELSE
-            CALL(evt_mario_set_pos, 30, 0, 180)
-            CALL(evt_mario_set_dir, 90, 0, 0)
-            CALL(evt_npc_set_position, STRING("ババ"), -100, 25, 100)
-            BEGIN_INLINE_EVENT
-                CALL(evt_seq_wait, SEQ_GAME)
-                WAIT_MS(1000)
-                SPAWN_EVENT(usu_00_koopa_second_evt)
-            END_INLINE_EVENT
-        END_IF
-        CALL(evt_cam_road_reset)
-    END_IF
-    // After the Peach and Bowser interludes the party is healed and the Mayor's farewell scene plays.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_08_BOWSER_ROGUEPORT_DOCK)
-        CALL(evt_mario_get_party, LW(15))
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_set_party, 0, 1)
-            CALL(evt_party_run, 0)
-            CALL(evt_pouch_mario_recovery)
-            CALL(evt_pouch_all_party_recovery)
-        END_IF
-            CALL(evt_party_stop, 0)
-        CALL(evt_party_set_pos, 0, -130, 0, -60)
-        SPAWN_EVENT(evt_after_peach)
-    END_IF
-    // Chapter 8: the world going dark and the townsfolk's voices cheering Mario.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
-        CALL(evt_bero_get_entername, LW(0))
-        IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
-            CALL_CHILD(sekai_yami_npc_init)
-            SPAWN_EVENT(sekai_yami_evt)
-        END_IF
-        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
-            CALL_CHILD(minnnanokoe_npc_entry)
-            SPAWN_EVENT(minnnanokoe_evt)
-        END_IF
-    END_IF
-    // Epilogue scene, then the NPC hide/show loop.
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
-        CALL(evt_mario_kill_party, 0)
-        CALL_CHILD(epilogue_npc_entry)
-        SPAWN_EVENT(epilogue_evt)
-    END_IF
-    BEGIN_INLINE_EVENT
-        CALL(npc_process)
-    END_INLINE_EVENT
-    RETURN
-EVT_END()
-#else
 /**
  * Map init script of Twilight Town's main street:
  * picks BGM by story progress, registers the pipe, doors and bero exits, spawns NPCs and items,
@@ -4409,6 +4155,7 @@ EVT_BEGIN(usu_00_init_evt)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bero"), MAP_OBJ_FLAG_HIDDEN)
+#if VERSION > VERSION_DEMO_US
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("e_bero"), 8388612)
         CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_02"), 1)
         CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_03"), 1)
@@ -4428,6 +4175,7 @@ EVT_BEGIN(usu_00_init_evt)
         CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_18"), 1)
         CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_19"), 1)
         CALL(evt_hitobj_flag_onoff, 1, 1, STRING("A_kusa_20"), 1)
+#endif
     END_IF
     // Save block, Star Piece, NPCs, house doors (Bowser gets locked-out scripts) and the inn.
     IF_INT_EQUAL(GF(1), 0)
@@ -4543,6 +4291,38 @@ EVT_BEGIN(usu_00_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_pouch_mario_recovery)
+        CALL(evt_pouch_all_party_recovery)
+    END_IF
+        CALL(evt_party_stop, 0)
+    CALL(evt_party_set_pos, 0, -130, 0, -60)
+    SPAWN_EVENT(evt_after_peach)
+END_IF
+// Chapter 8: the world going dark and the townsfolk's voices cheering Mario.
+IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
+    CALL(evt_bero_get_entername, LW(0))
+    IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
+        CALL_CHILD(sekai_yami_npc_init)
+        SPAWN_EVENT(sekai_yami_evt)
+    END_IF
+    IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+        CALL_CHILD(minnnanokoe_npc_entry)
+        SPAWN_EVENT(minnnanokoe_evt)
+    END_IF
+END_IF
+// Epilogue scene, then the NPC hide/show loop.
+IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
+    CALL(evt_mario_kill_party, 0)
+    CALL_CHILD(epilogue_npc_entry)
+    SPAWN_EVENT(epilogue_evt)
+END_IF
+BEGIN_INLINE_EVENT
+    CALL(npc_process)
+END_INLINE_EVENT
+RETURN
+EVT_END()
+#else
 #if VERSION >= VERSION_US
         END_IF
 #endif

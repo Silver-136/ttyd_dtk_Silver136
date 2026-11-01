@@ -207,163 +207,20 @@ void seq_logoExit(SequenceWork* work) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-/**
- * US and PAL logo sequence: the story screen, the three logos (1 s each, 500 ms fades) while sound groups load,
- * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
- */
-void seq_logoMain(SequenceWork* work) {
-    static OSTime time; // time instance 1
-    u32 size;
-    u8* decode;
-    FileEntry* first;
-    FileEntry* ret;
-    int ok;
-
-    switch (work->state) {
-        case 0:
-            fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-            DVDMgrSetupCallback(psndPushGroup);
-            work->state++;
-            break;
-
-        case 1:
-            if (fadeIsFinish() && !wp->progressive) {
-                work->state++;
-                time = gp->renderTime;
-}
-            break;
-
-        case 2:
-            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
-                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                work->state++;
-            }
-            break;
-
-        case 3:
-            if (fadeIsFinish()) {
-                fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                work->state++;
-                wp->logoId = 1;
-            }
-            break;
-
-        case 4:
-            if (fadeIsFinish()) {
-                work->state++;
-                time = gp->renderTime;
-            }
-            break;
-
-        case 5:
-            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
-                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                work->state++;
-            }
-            break;
-
-        case 6:
-            if (fadeIsFinish()) {
-                fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                work->state++;
-                wp->logoId = 2;
-            }
-            break;
-
-        case 7:
-            if (fadeIsFinish()) {
-                work->state++;
-                time = gp->renderTime;
-            }
-            break;
-
-        case 8:
-            if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
-                fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
-                wp->skipStory = FALSE;
-                work->state++;
-            }
-            break;
-
-        case 9:
-            if (keyGetButtonTrg(0) & (PAD_BUTTON_START | PAD_BUTTON_A)) {
-                wp->skipStory = TRUE;
-            }
-            if ((u32)psndPushGroup() == 0U) {
-                DVDMgrSetupCallback(NULL);
-                if (fadeIsFinish()) {
-                    if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
-                        VIConfigure(&GXNtsc480IntDfMarioSt);
-                        VIFlush();
-                    } else {
-                        VIConfigure(&GXNtsc480ProgMarioSt);
-                        VIFlush();
-                    }
-                    VISetBlack(TRUE);
-                    dispEntry(CAMERA_BACKGROUND, 0.0f, 0, dummy_draw, NULL);
-                    work->state++;
-                }
-            }
-            break;
-
-        case 10:
-            VISetBlack(FALSE);
-            VIWaitForRetrace();
-            ret = (FileEntry*)logoAsyncFirst();
-            if (ret == 0U) {
-                ok = 0;
-            } else if ((s32)ret == -1) {
-                ok = 1;
-            } else {
-                ok = 1;
-            }
-            if (!ok) {
-                break;
-            }
-            first = fileAllocf(FILE_TYPE_RAW, "%s/b/first", getMarioStDvdRoot());
-            if (first) {
-                decode = *first->data;
-                size = *(u32*)decode;
-                size = ((size << 16) & 0xFF0000) | (size & 0xFF00) | ((size >> 16) & 0xFF);
-                LZ77Decode(*first->data, decode = __memAlloc(HEAP_DEFAULT, size));
-                arcEntry(0, decode, size);
-                fileFree(first);
-            }
-            if (!(gp->flags & GW_FLAG_E3)) {
-                if (!wp->skipStory) { // play story demo
-                    seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
-                    return;
-                } else { // continue to title screen
-                    fadeEntry(FADE_OUT_WHITE, 500, (GXColor){0, 0, 0, 0xFF});
-                    work->state++;
-                    return;
-                }
-            } else {
-                seqSetSeq(SEQ_E3, NULL, NULL);
-                return;
-            }
-            break;
-
-        case 11:
-            if (fadeIsFinish()) {
-                seqSetSeq(SEQ_TITLE, NULL, NULL);
-            }
-            break;
-    }
-
-    if (work->state < 10) {
-        dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, NULL);
-        dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
-    }
-}
-#else
 /**
  * US and PAL logo sequence: the story screen, the three logos (1 s each, 500 ms fades) while sound groups load,
  * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
  */
 void seq_logoMain(SequenceWork* work) {
     static OSTime time;
+#if VERSION <= VERSION_DEMO_US
+    u32 size;
+    u8* decode;
+    FileEntry* first;
+    FileEntry* ret;
+    int ok;
+
+#else
 #if VERSION < VERSION_US
     u32 size;
     u8* decode;
@@ -372,6 +229,7 @@ void seq_logoMain(SequenceWork* work) {
     int ok;
 #endif
 
+#endif
     switch (work->state) {
         case 0:
             fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
@@ -380,6 +238,15 @@ void seq_logoMain(SequenceWork* work) {
             break;
 
         case 1:
+#if VERSION <= VERSION_DEMO_US
+            if (fadeIsFinish() && !wp->progressive) {
+                work->state++;
+                time = gp->renderTime;
+}
+            break;
+
+        case 2:
+#else
 #if VERSION >= VERSION_US
             work->state++;
             break;
@@ -455,20 +322,32 @@ void seq_logoMain(SequenceWork* work) {
 
         case 2:
 #endif
+#endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
             }
             break;
 
+#if VERSION <= VERSION_DEMO_US
+        case 3:
+#else
 #if VERSION >= VERSION_US
         case 11:
 #else
         case 3:
 #endif
+#endif
             if (fadeIsFinish()) {
                 fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
+#if VERSION <= VERSION_DEMO_US
+                wp->logoId = 1;
+            }
+            break;
+
+        case 4:
+#else
 #if VERSION >= VERSION_US
                 wp->page = 3;
 #else
@@ -482,16 +361,21 @@ void seq_logoMain(SequenceWork* work) {
 #else
         case 4:
 #endif
+#endif
             if (fadeIsFinish()) {
                 work->state++;
                 time = gp->renderTime;
             }
             break;
 
+#if VERSION <= VERSION_DEMO_US
+        case 5:
+#else
 #if VERSION >= VERSION_US
         case 13:
 #else
         case 5:
+#endif
 #endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
@@ -499,14 +383,25 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
+#if VERSION <= VERSION_DEMO_US
+        case 6:
+#else
 #if VERSION >= VERSION_US
         case 14:
 #else
         case 6:
 #endif
+#endif
             if (fadeIsFinish()) {
                 fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
+#if VERSION <= VERSION_DEMO_US
+                wp->logoId = 2;
+            }
+            break;
+
+        case 7:
+#else
 #if VERSION >= VERSION_US
                 wp->page = 4;
 #else
@@ -520,16 +415,21 @@ void seq_logoMain(SequenceWork* work) {
 #else
         case 7:
 #endif
+#endif
             if (fadeIsFinish()) {
                 work->state++;
                 time = gp->renderTime;
             }
             break;
 
+#if VERSION <= VERSION_DEMO_US
+        case 8:
+#else
 #if VERSION >= VERSION_US
         case 16:
 #else
         case 8:
+#endif
 #endif
             if (OSTicksToMilliseconds(gp->renderTime - time) > 1000) {
                 fadeEntry(FADE_OUT_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
@@ -538,10 +438,14 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
+#if VERSION <= VERSION_DEMO_US
+        case 9:
+#else
 #if VERSION >= VERSION_US
         case 17:
 #else
         case 9:
+#endif
 #endif
             if (keyGetButtonTrg(0) & (PAD_BUTTON_START | PAD_BUTTON_A)) {
                 wp->skipStory = TRUE;
@@ -563,6 +467,31 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
+#if VERSION <= VERSION_DEMO_US
+        case 10:
+            VISetBlack(FALSE);
+            VIWaitForRetrace();
+            ret = (FileEntry*)logoAsyncFirst();
+            if (ret == 0U) {
+                ok = 0;
+            } else if ((s32)ret == -1) {
+                ok = 1;
+            } else {
+                ok = 1;
+            }
+            if (!ok) {
+                break;
+            }
+            first = fileAllocf(FILE_TYPE_RAW, "%s/b/first", getMarioStDvdRoot());
+            if (first) {
+                decode = *first->data;
+                size = *(u32*)decode;
+                size = ((size << 16) & 0xFF0000) | (size & 0xFF00) | ((size >> 16) & 0xFF);
+                LZ77Decode(*first->data, decode = __memAlloc(HEAP_DEFAULT, size));
+                arcEntry(0, decode, size);
+                fileFree(first);
+            }
+#else
 #if VERSION >= VERSION_US
         case 18:
             VISetBlack(FALSE);
@@ -592,6 +521,7 @@ void seq_logoMain(SequenceWork* work) {
                 fileFree(first);
             }
 #endif
+#endif
             if (!(gp->flags & GW_FLAG_E3)) {
                 if (!wp->skipStory) { //play story demo
                     seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
@@ -608,10 +538,14 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
+#if VERSION <= VERSION_DEMO_US
+        case 11:
+#else
 #if VERSION >= VERSION_US
         case 19:
 #else
         case 11:
+#endif
 #endif
             if (fadeIsFinish()) {
                 seqSetSeq(SEQ_TITLE, NULL, NULL);
@@ -619,6 +553,13 @@ void seq_logoMain(SequenceWork* work) {
             break;
     }
 
+#if VERSION <= VERSION_DEMO_US
+    if (work->state < 10) {
+        dispEntry(CAMERA_2D, 1.0f, 0, logoDisp, NULL);
+        dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
+    }
+}
+#else
 #if VERSION >= VERSION_US
     if (work->state >= 2 && work->state < 4) {
         dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);

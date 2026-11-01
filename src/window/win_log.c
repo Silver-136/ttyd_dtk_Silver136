@@ -2161,6 +2161,14 @@ void capture(CameraId camera, void* param) {
  * and where it is found.
  */
 static void monosiri_disp(CameraId camera, void* param) {
+#else
+/**
+ * Draws the Tattle card: the half-book page, the captured portrait with a soft edge and fade-in alpha,
+ * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the demos),
+ * and where it is found.
+ */
+void monosiri_disp(CameraId camera, void* param) {
+#endif
     MonosiriWork* m = param;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};
     char buf[256];
@@ -2172,13 +2180,16 @@ static void monosiri_disp(CameraId camera, void* param) {
     f32 y;
     f32 s;
     f32 w;
+#if VERSION <= VERSION_DEMO_US
     f32 xx;
+#endif
     s32 mtx;
     s32 i;
     s32 id;
     TattleEntry* te;
     u16 tw;
     u16 th;
+#if VERSION <= VERSION_DEMO_US
     s32 d;
     GXColor c0;
     GXColor c;
@@ -2186,6 +2197,12 @@ static void monosiri_disp(CameraId camera, void* param) {
     x = m->curX;
     y = m->curY;
 {
+#else
+
+    x = m->curX;
+    y = m->curY;
+    if (m->file1) {
+#endif
         winHalfBookGX(*(TEXPalette**)m->file1->data, 0, x, y);
         TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
         tw = GXGetTexObjWidth(&tex);
@@ -2255,6 +2272,7 @@ static void monosiri_disp(CameraId camera, void* param) {
         }
         id = m->id;
         te = battleGetUnitMonosiriPtr(id);
+#if VERSION <= VERSION_DEMO_US
         sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
         w = 0.75f * FontGetMessageWidth(buf);
         winFontInit();
@@ -2265,102 +2283,6 @@ static void monosiri_disp(CameraId camera, void* param) {
 }
 }
 #else
-/**
- * Draws the Tattle card: the half-book page, the captured portrait with a soft edge and fade-in alpha,
- * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the demos),
- * and where it is found.
- */
-void monosiri_disp(CameraId camera, void* param) {
-    MonosiriWork* m = param;
-    GXColor black = {0x00, 0x00, 0x00, 0xFF};
-    char buf[256];
-    Mtx t1;
-    Mtx sc;
-    Mtx t2;
-    GXTexObj tex;
-    f32 x;
-    f32 y;
-    f32 s;
-    f32 w;
-    s32 mtx;
-    s32 i;
-    s32 id;
-    TattleEntry* te;
-    u16 tw;
-    u16 th;
-
-    x = m->curX;
-    y = m->curY;
-    if (m->file1) {
-        winHalfBookGX(*(TEXPalette**)m->file1->data, 0, x, y);
-        TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
-        tw = GXGetTexObjWidth(&tex);
-        th = GXGetTexObjHeight(&tex);
-        TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
-        GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        GXLoadTexObj(&tex, GX_TEXMAP0);
-        GXInitTexObj(&tex, m->smart->address, tw, th, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
-        GXInitTexObjLOD(&tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-        GXLoadTexObj(&tex, GX_TEXMAP1);
-        GXSetNumTexGens(8);
-        for (i = 0; i < 8; i++) {
-            mtx = GX_TEXMTX0 + i * 3;
-            s = 1.0f - 0.04f * (7 - i);
-            PSMTXTrans(t1, 0.5f, 0.5f, 0.0f);
-            PSMTXScale(sc, s, s, s);
-            PSMTXTrans(t2, -0.5f, -0.5f, 0.0f);
-            PSMTXConcat(t1, sc, t1);
-            PSMTXConcat(t1, t2, t1);
-            GXLoadTexMtxImm(t1, mtx, GX_MTX2x4);
-            GXSetTexCoordGen2(i, GX_TG_MTX2x4, GX_TG_TEX0, mtx, GX_FALSE, GX_PTIDENTITY);
-        }
-        GXSetTevColor(GX_TEVREG0, (GXColor){0xCF, 0xBC, 0x9E, 0xFF});
-        GXSetTevColor(GX_TEVREG1, (GXColor){0x00, 0x00, 0x00, m->alpha});
-        GXSetNumTevStages(12);
-        for (i = 0; i < 8; i++) {
-            GXSetTevOrder(i, i, GX_TEXMAP1, GX_COLOR_NULL);
-            GXSetTevColorOp(i, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevAlphaOp(i, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-            GXSetTevColorIn(i, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
-            GXSetTevAlphaIn(i, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, i == 0 ? GX_CA_ZERO : GX_CA_APREV);
-            GXSetTevKAlphaSel(i, GX_TEV_KASEL_1_8);
-        }
-        GXSetTevOrder(GX_TEVSTAGE8, GX_TEXCOORD7, GX_TEXMAP1, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE8, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE8, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE8, GX_CC_CPREV, GX_CC_TEXC, GX_CC_TEXA, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE8, GX_CA_APREV, GX_CA_ZERO, GX_CA_TEXA, GX_CA_TEXA);
-        GXSetTevOrder(GX_TEVSTAGE9, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE9, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE9, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE9, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
-        GXSetTevAlphaIn(GX_TEVSTAGE9, GX_CA_ZERO, GX_CA_APREV, GX_CA_A1, GX_CA_ZERO);
-        GXSetTevOrder(GX_TEVSTAGE10, GX_TEXCOORD7, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE10, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE10, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE10, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE10, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_APREV);
-        GXSetTevOrder(GX_TEVSTAGE11, GX_TEXCOORD7, GX_TEXMAP0, GX_COLOR_NULL);
-        GXSetTevColorOp(GX_TEVSTAGE11, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevAlphaOp(GX_TEVSTAGE11, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-        GXSetTevColorIn(GX_TEVSTAGE11, GX_CC_TEXC, GX_CC_CPREV, GX_CC_APREV, GX_CC_ZERO);
-        GXSetTevAlphaIn(GX_TEVSTAGE11, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-        {
-            f32 x1 = 32.0f + x;
-            f32 y1 = y - 8.0f;
-            f32 qw = 216.0f;
-            GXPosition3f32(x1, y1, 0.0f);
-            GXTexCoord2f32(0.0f, 0.0f);
-            GXPosition3f32(x1, y1 - 160.0f, 0.0f);
-            GXTexCoord2f32(0.0f, 1.0f);
-            GXPosition3f32(x1 + qw, y1 - 160.0f, 0.0f);
-            GXTexCoord2f32(1.0f, 1.0f);
-            GXPosition3f32(x1 + qw, y1, 0.0f);
-            GXTexCoord2f32(1.0f, 0.0f);
-        }
-        id = m->id;
-        te = battleGetUnitMonosiriPtr(id);
         if (id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || id == UNIT_DOOPLISS_CHAPTER8) {
             if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_14_NAME_GUESSING) {
 #if VERSION >= VERSION_US

@@ -1534,7 +1534,6 @@ EVT_BEGIN(npc_entry)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Ambush played after a won match at rank 7 until the second mail is read:
  * two Iron Cleft-type fighters ("Ran") burst in, Grubba comments,
@@ -1545,26 +1544,68 @@ EVT_BEGIN(evt_random_battle)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_set_position, STRING("乱"), 370, 0, 210)
     CALL(evt_npc_set_position, STRING("乱２"), 390, 0, 235)
     CALL(evt_msg_print, 0, STRING("stg3_tou_403"), 0, STRING("乱"))
+#else
+#if VERSION >= VERSION_US
+    CALL(evt_npc_set_position, STRING("乱"), 370, 0, 210)
+    CALL(evt_npc_set_position, STRING("乱２"), 390, 0, 235)
+    CALL(evt_msg_print, 0, STRING("stg3_tou_403"), 0, STRING("乱"))
+#else
+    CALL(evt_npc_set_position, STRING("\227\220"), 370, 0, 210)
+    CALL(evt_npc_set_position, STRING("\227\220\202Q"), 390, 0, 235)
+    CALL(evt_msg_print, 0, STRING("stg3_tou_403"), 0, STRING("\227\220"))
+#endif
+#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 300, 134, 732, 300, 38, 190, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_npc_move_position, STRING("乱２"), 290, 235, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_jump_position_nohit, STRING("乱２"), 200, 60, 192, 500, 30)
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("乱"), 270, 210, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_jump_position_nohit, STRING("乱"), 180, 60, 167, 500, 30)
+#else
+#if VERSION >= VERSION_US
+        CALL(evt_npc_move_position, STRING("乱２"), 290, 235, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_jump_position_nohit, STRING("乱２"), 200, 60, 192, 500, 30)
+    END_INLINE_EVENT
+    CALL(evt_npc_move_position, STRING("乱"), 270, 210, 0, FLOAT(80.0f), 1)
+    CALL(evt_npc_jump_position_nohit, STRING("乱"), 180, 60, 167, 500, 30)
+#else
+        CALL(evt_npc_move_position, STRING("\227\220\202Q"), 290, 235, 0, FLOAT(80.0f), 1)
+        CALL(evt_npc_jump_position_nohit, STRING("\227\220\202Q"), 200, 60, 192, 500, 30)
+    END_INLINE_EVENT
+    CALL(evt_npc_move_position, STRING("\227\220"), 270, 210, 0, FLOAT(80.0f), 1)
+    CALL(evt_npc_jump_position_nohit, STRING("\227\220"), 180, 60, 167, 500, 30)
+#endif
+#endif
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_I_Y"))
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_npc_move_position, STRING("乱２"), 75, 75, 0, FLOAT(80.0f), 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("乱"), 55, 50, 0, FLOAT(80.0f), 1)
+#else
+#if VERSION >= VERSION_US
+        CALL(evt_npc_move_position, STRING("乱２"), 75, 75, 0, FLOAT(80.0f), 1)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_npc_move_position, STRING("乱"), 55, 50, 0, FLOAT(80.0f), 1)
+#else
+        CALL(evt_npc_move_position, STRING("\227\220\202Q"), 75, 75, 0, FLOAT(80.0f), 1)
+    END_INLINE_EVENT
+    BEGIN_INLINE_EVENT
+        CALL(evt_npc_move_position, STRING("\227\220"), 55, 50, 0, FLOAT(80.0f), 1)
+#endif
+#endif
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     WAIT_MS(300)
@@ -1578,15 +1619,31 @@ EVT_BEGIN(evt_random_battle)
     END_LOOP
     CALL(evt_cam3d_evt_set, 0, 130, 62, 0, 115, -22, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("ガンス"))
+#else
+#if VERSION >= VERSION_US
+    CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("ガンス"))
+#else
+    CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("\203K\203\223\203X"))
+#endif
+#endif
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 40, 155, 320, 40, 96, -8, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("乱"))
+#else
+#if VERSION >= VERSION_US
+    CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("乱"))
+#else
+    CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("\227\220"))
+#endif
+#endif
     WAIT_MS(300)
-    // The gong rings and the battle starts.
     CALL(evt_snd_sfxon, STRING("SFX_STG3_GONG1"), 0)
     WAIT_MS(500)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_set_battle_info, STRING("乱"), 10)
     CALL(evt_npc_battle_start, STRING("乱"))
     CALL(evt_npc_wait_battle_end)
@@ -1625,86 +1682,6 @@ EVT_BEGIN(evt_random_battle)
     RETURN
 EVT_END()
 #else
-/**
- * Ambush played after a won match at rank 7 until the second mail is read:
- * two Iron Cleft-type fighters ("Ran") burst in, Grubba comments,
- * a gong rings and a battle starts (battle setup 10); afterwards Grubba reacts to whether Mario won or lost.
- */
-EVT_BEGIN(evt_random_battle)
-    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
-    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    WAIT_MS(1000)
-#if VERSION >= VERSION_US
-    CALL(evt_npc_set_position, STRING("乱"), 370, 0, 210)
-    CALL(evt_npc_set_position, STRING("乱２"), 390, 0, 235)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_403"), 0, STRING("乱"))
-#else
-    CALL(evt_npc_set_position, STRING("\227\220"), 370, 0, 210)
-    CALL(evt_npc_set_position, STRING("\227\220\202Q"), 390, 0, 235)
-    CALL(evt_msg_print, 0, STRING("stg3_tou_403"), 0, STRING("\227\220"))
-#endif
-    WAIT_MS(300)
-    CALL(evt_cam3d_evt_set, 300, 134, 732, 300, 38, 190, 1000, EASING_SINE_IN_OUT)
-    WAIT_MS(1000)
-    BEGIN_INLINE_EVENT
-#if VERSION >= VERSION_US
-        CALL(evt_npc_move_position, STRING("乱２"), 290, 235, 0, FLOAT(80.0f), 1)
-        CALL(evt_npc_jump_position_nohit, STRING("乱２"), 200, 60, 192, 500, 30)
-    END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING("乱"), 270, 210, 0, FLOAT(80.0f), 1)
-    CALL(evt_npc_jump_position_nohit, STRING("乱"), 180, 60, 167, 500, 30)
-#else
-        CALL(evt_npc_move_position, STRING("\227\220\202Q"), 290, 235, 0, FLOAT(80.0f), 1)
-        CALL(evt_npc_jump_position_nohit, STRING("\227\220\202Q"), 200, 60, 192, 500, 30)
-    END_INLINE_EVENT
-    CALL(evt_npc_move_position, STRING("\227\220"), 270, 210, 0, FLOAT(80.0f), 1)
-    CALL(evt_npc_jump_position_nohit, STRING("\227\220"), 180, 60, 167, 500, 30)
-#endif
-    CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-    CALL(evt_mario_set_pose, STRING("M_I_Y"))
-    SET_VALUE(GF(0), 0)
-    BEGIN_INLINE_EVENT
-#if VERSION >= VERSION_US
-        CALL(evt_npc_move_position, STRING("乱２"), 75, 75, 0, FLOAT(80.0f), 1)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("乱"), 55, 50, 0, FLOAT(80.0f), 1)
-#else
-        CALL(evt_npc_move_position, STRING("\227\220\202Q"), 75, 75, 0, FLOAT(80.0f), 1)
-    END_INLINE_EVENT
-    BEGIN_INLINE_EVENT
-        CALL(evt_npc_move_position, STRING("\227\220"), 55, 50, 0, FLOAT(80.0f), 1)
-#endif
-        SET_VALUE(GF(0), 1)
-    END_INLINE_EVENT
-    WAIT_MS(300)
-    CALL(evt_cam3d_evt_set, 0, 180, 517, 0, 95, -145, 0, EASING_SINE_IN_OUT)
-    WAIT_FRAMES(1)
-    LOOP(0)
-        IF_INT_EQUAL(GF(0), 1)
-            BREAK_LOOP
-        END_IF
-        WAIT_FRAMES(1)
-    END_LOOP
-    CALL(evt_cam3d_evt_set, 0, 130, 62, 0, 115, -22, 0, EASING_SINE_IN_OUT)
-    WAIT_FRAMES(1)
-#if VERSION >= VERSION_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("ガンス"))
-#else
-    CALL(evt_msg_print, 0, STRING("stg3_tou_403_01"), 0, STRING("\203K\203\223\203X"))
-#endif
-    WAIT_MS(300)
-    CALL(evt_cam3d_evt_set, 40, 155, 320, 40, 96, -8, 0, EASING_LINEAR)
-    WAIT_FRAMES(1)
-#if VERSION >= VERSION_US
-    CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("乱"))
-#else
-    CALL(evt_msg_print, 0, STRING("stg3_tou_404"), 0, STRING("\227\220"))
-#endif
-    WAIT_MS(300)
-    CALL(evt_snd_sfxon, STRING("SFX_STG3_GONG1"), 0)
-    WAIT_MS(500)
 #if VERSION >= VERSION_US
     CALL(evt_npc_set_battle_info, STRING("乱"), 10)
     CALL(evt_npc_battle_start, STRING("乱"))
@@ -2134,7 +2111,6 @@ EVT_BEGIN(burst_wangwang)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Main script of a match, run when the ring is entered with a match reserved.
  * It plays the matching opening (special scenes the first time for the Goomba Bros, Iron Clefts and Rawk Hawk,
@@ -2144,40 +2120,49 @@ EVT_END()
  * by the player's rank).
  */
 EVT_BEGIN(evt_match)
+#if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_FF_ENV_TOU1"))
+#else
+#if VERSION >= VERSION_US
+    BEGIN_INLINE_EVENT
+        CALL(evt_seq_wait, SEQ_GAME)
+        CALL(evt_mario_set_pos, -600, 0, 0)
+        CALL(evt_party_set_pos, 0, -610, 0, -10)
+    END_INLINE_EVENT
+#endif
+#endif
     SWITCH(GSW_GLITZ_PIT_OPPONENT)
         CASE_EQUAL(19)
         IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 0)
             SET_VALUE(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 1)
-            CALL_CHILD(evt_kurikuri_opening)
-        ELSE
-            CALL_CHILD(evt_default_opening)
+            CALL_CHILD(PTR(evt_kurikuri_opening))
+            ELSE
+            CALL_CHILD(PTR(evt_default_opening))
         END_IF
         CASE_EQUAL(10)
         IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
             SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 1)
-            CALL_CHILD(evt_shinemon_opening)
-        ELSE
-            CALL_CHILD(evt_default_opening)
+            CALL_CHILD(PTR(evt_shinemon_opening))
+            ELSE
+            CALL_CHILD(PTR(evt_default_opening))
         END_IF
         CASE_EQUAL(0)
         IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
             SET_VALUE(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-                CALL_CHILD(evt_champ_opening)
-            ELSE
-                CALL_CHILD(evt_champ_opening_re)
+                CALL_CHILD(PTR(evt_champ_opening))
+                ELSE
+                CALL_CHILD(PTR(evt_champ_opening_re))
             END_IF
-        ELSE
-            CALL_CHILD(evt_default_opening)
+            ELSE
+            CALL_CHILD(PTR(evt_default_opening))
         END_IF
         CASE_DEFAULT
-        CALL_CHILD(evt_default_opening)
+        CALL_CHILD(PTR(evt_default_opening))
     END_SWITCH
-    // The battle itself, under the match's special rule;
-    // until the Goomba Bros.' surprise attack has been seen, the opponents strike first.
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN, 0)
+#if VERSION <= VERSION_DEMO_US
         CALL(evt_npc_set_attack_mode, STRING("敵１"), 16)
         CALL(_firstattack_setting)
     END_IF
@@ -2306,53 +2291,6 @@ EVT_BEGIN(evt_match)
     RETURN
 EVT_END()
 #else
-/**
- * Main script of a match, run when the ring is entered with a match reserved.
- * It plays the matching opening (special scenes the first time for the Goomba Bros, Iron Clefts and Rawk Hawk,
- * otherwise the default one), starts the battle with the reserved rule, handles the rule result,
- * plays the win or lose scene, updates the ranking, advances story progress after the first match,
- * may trigger the rank 7 and rank 5 ambushes, and finally warps to the locker room map (tou_07, tou_08 or tou_10
- * by the player's rank).
- */
-EVT_BEGIN(evt_match)
-#if VERSION >= VERSION_US
-    BEGIN_INLINE_EVENT
-        CALL(evt_seq_wait, SEQ_GAME)
-        CALL(evt_mario_set_pos, -600, 0, 0)
-        CALL(evt_party_set_pos, 0, -610, 0, -10)
-    END_INLINE_EVENT
-#endif
-    SWITCH(GSW_GLITZ_PIT_OPPONENT)
-        CASE_EQUAL(19)
-        IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 0)
-            SET_VALUE(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN, 1)
-            CALL_CHILD(PTR(evt_kurikuri_opening))
-            ELSE
-            CALL_CHILD(PTR(evt_default_opening))
-        END_IF
-        CASE_EQUAL(10)
-        IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
-            SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 1)
-            CALL_CHILD(PTR(evt_shinemon_opening))
-            ELSE
-            CALL_CHILD(PTR(evt_default_opening))
-        END_IF
-        CASE_EQUAL(0)
-        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
-            SET_VALUE(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 1)
-            IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-                CALL_CHILD(PTR(evt_champ_opening))
-                ELSE
-                CALL_CHILD(PTR(evt_champ_opening_re))
-            END_IF
-            ELSE
-            CALL_CHILD(PTR(evt_default_opening))
-        END_IF
-        CASE_DEFAULT
-        CALL_CHILD(PTR(evt_default_opening))
-    END_SWITCH
-    CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
-    IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN, 0)
 #if VERSION >= VERSION_US
         CALL(evt_npc_set_attack_mode, STRING("敵１"), 16)
         CALL(_firstattack_setting)

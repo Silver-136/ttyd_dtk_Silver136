@@ -932,24 +932,61 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
  * the prompt message and the wobbling cursor (hidden while a card script runs).
  */
 static void loadDraw(CameraId camera, void* param) {
+#else
+/**
+ * Draws the file menu: the four save slot windows (name, level, play time, crystal star icons;
+ * new or corrupted file messages), the copy/delete/back buttons, the sound and rumble options,
+ * the prompt message and the wobbling cursor (hidden while a card script runs).
+ */
+void loadDraw(CameraId camera, void* param) {
+#endif
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXColor white = {255, 255, 255, 255};
     GXColor gray = {160, 160, 160, 255};
     GXColor dark = {128, 128, 128, 128};
-char buf[0x20];
-Mtx m;
+#if VERSION <= VERSION_DEMO_US
+    char buf[0x20];
+    Mtx m;
+        Mtx s;
+    f32 y;
+        f32 w;
+        u64 sec;
+        WinDt* win1;
+        s32 i;
+        s32 j;
+#else
+    f32 vp[GX_VIEWPORT_SZ];
+    f32 proj[GX_PROJECTION_SZ];
+    CameraEntry saved;
+    char buf[0x20];
+    char buf2[0x100];
+    Mtx m;
     Mtx s;
-f32 y;
+    f32 x;
     f32 w;
     u64 sec;
+#if VERSION >= VERSION_US
+    WinDt* win1[1]; // FAKE: one-element array, so IRO turns win1 into an @ temp: the address of win_dt is computed into
+                    // win1 itself and loop 1 walks a copy of it (the addi r30 / mr r24,r30 direction of the target)
+    s32 i;
+#else
     WinDt* win1;
     s32 i;
     s32 j;
+#endif
+#endif
     s32 k;
 
     if (wp->state >= 0x20 && wp->state < 0x28) {
         return;
     }
+#if VERSION > VERSION_DEMO_US
+    GXGetViewportv(vp);
+    GXGetProjectionv(proj);
+    GXSetProjection(cam->projection, cam->projType);
+    saved = *camGetCurPtr();
+    *camGetCurPtr() = *cam;
+#endif
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetZCompLoc(GX_FALSE);
     GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
@@ -966,22 +1003,45 @@ f32 y;
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+#if VERSION <= VERSION_DEMO_US
     // FAKE: win1 reused as a cam alias before its win_dt web, so the win_dt web becomes a lifetime-split temp
     // (addi straight into win1's register, loop 1 iterates a copy) as in the target
     win1 = (WinDt*)cam;
     GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
+#else
+#if VERSION >= VERSION_US
+    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
+#else
+    // FAKE: win1 reused as a cam alias before its win_dt web, so the win_dt web becomes a lifetime-split temp
+    // (addi straight into win1's register, loop 1 iterates a copy) as in the target
+    win1 = (WinDt*)cam;
+    GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
+#endif
+#endif
     GXSetCurrentMtx(GX_PNMTX0);
     loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
     loadDrawBg(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
     loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
 
+#if VERSION <= VERSION_DEMO_US
     win1 = win_dt;
+#else
+#if VERSION >= VERSION_US
+    win1[0] = win_dt;
+#else
+    win1 = win_dt;
+#endif
+#endif
     for (i = 0; i < 9; i++) {
         GXColor col = gray;
         if (i == wp->slot) {
             col = white;
         }
+#if VERSION <= VERSION_DEMO_US
         if (wp->state == 0x29 && (i == wp->copyFrom || i == wp->copyTo)) {
+#else
+        if (wp->state == 0x33 && (i == wp->copyFrom || i == wp->copyTo)) {
+#endif
             col = white;
         }
         if (i == 4 && (wp->flags & LOAD_FLAG_NO_DELETE)) {
@@ -990,6 +1050,7 @@ f32 y;
         if (i == 5 && (wp->flags & LOAD_FLAG_NO_COPY)) {
             col = dark;
         }
+#if VERSION <= VERSION_DEMO_US
         switch (win1[i].tex) {
             case 10:
             case 11:
@@ -1177,93 +1238,6 @@ const char* str;
     }
 }
 #else
-/**
- * Draws the file menu: the four save slot windows (name, level, play time, crystal star icons;
- * new or corrupted file messages), the copy/delete/back buttons, the sound and rumble options,
- * the prompt message and the wobbling cursor (hidden while a card script runs).
- */
-void loadDraw(CameraId camera, void* param) {
-    CameraEntry* cam = camGetPtr(CAMERA_2D);
-    GXColor white = {255, 255, 255, 255};
-    GXColor gray = {160, 160, 160, 255};
-    GXColor dark = {128, 128, 128, 128};
-    f32 vp[GX_VIEWPORT_SZ];
-    f32 proj[GX_PROJECTION_SZ];
-    CameraEntry saved;
-    char buf[0x20];
-    char buf2[0x100];
-    Mtx m;
-    Mtx s;
-    f32 x;
-    f32 w;
-    u64 sec;
-#if VERSION >= VERSION_US
-    WinDt* win1[1]; // FAKE: one-element array, so IRO turns win1 into an @ temp: the address of win_dt is computed into
-                    // win1 itself and loop 1 walks a copy of it (the addi r30 / mr r24,r30 direction of the target)
-    s32 i;
-#else
-    WinDt* win1;
-    s32 i;
-    s32 j;
-#endif
-    s32 k;
-
-    if (wp->state >= 0x20 && wp->state < 0x28) {
-        return;
-    }
-    GXGetViewportv(vp);
-    GXGetProjectionv(proj);
-    GXSetProjection(cam->projection, cam->projType);
-    saved = *camGetCurPtr();
-    *camGetCurPtr() = *cam;
-    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
-    GXSetZCompLoc(GX_FALSE);
-    GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){255, 255, 255, 255});
-    GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
-    GXSetCullMode(GX_CULL_NONE);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-#if VERSION >= VERSION_US
-    GXLoadPosMtxImm(cam->view, GX_PNMTX0);
-#else
-    // FAKE: win1 reused as a cam alias before its win_dt web, so the win_dt web becomes a lifetime-split temp
-    // (addi straight into win1's register, loop 1 iterates a copy) as in the target
-    win1 = (WinDt*)cam;
-    GXLoadPosMtxImm(((CameraEntry*)win1)->view, GX_PNMTX0);
-#endif
-    GXSetCurrentMtx(GX_PNMTX0);
-    loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
-    loadDrawBg(0x34, -272.0f, 240.0f, 272.0f, -240.0f);
-    loadDrawBg(0x36, 272.0f, 240.0f, 304.0f, -240.0f);
-
-#if VERSION >= VERSION_US
-    win1[0] = win_dt;
-#else
-    win1 = win_dt;
-#endif
-    for (i = 0; i < 9; i++) {
-        GXColor col = gray;
-        if (i == wp->slot) {
-            col = white;
-        }
-        if (wp->state == 0x33 && (i == wp->copyFrom || i == wp->copyTo)) {
-            col = white;
-        }
-        if (i == 4 && (wp->flags & LOAD_FLAG_NO_DELETE)) {
-            col = dark;
-        }
-        if (i == 5 && (wp->flags & LOAD_FLAG_NO_COPY)) {
-            col = dark;
-        }
 #if VERSION >= VERSION_US
         switch (win1[0][i].tex) {
 #else

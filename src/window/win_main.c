@@ -149,7 +149,6 @@ static const WinLangTbl winLangTbl;
  * runs winRootMain, and on close restores control.
  * It also starts the item-use and Ragged Diary scenes, swaps partners, and opens the Pianta Parlor window.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Per-frame pause menu driver.
  * In the field it reads the pad, opens the menu on Start
@@ -160,6 +159,12 @@ static const WinLangTbl winLangTbl;
 void winMain(void) {
     MarioWork* mario;
     s32 i;
+#if VERSION > VERSION_DEMO_US
+#if VERSION == VERSION_EU
+    WindowPartyDt* list[7];
+#endif
+
+#endif
     mario = marioGetPtr();
     if (!(wp->flags & WINDOW_FLAG_OPEN_DISABLE) && seqGetSeq() == SEQ_GAME && !seqCheckSeq()) {
         wp->buttonTrg = keyGetButtonTrg(0);
@@ -221,11 +226,16 @@ void winMain(void) {
                         if (keyGetButton(0) & PAD_TRIGGER_Z) {
                             break;
                         }
-                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) {
+#if VERSION > VERSION_DEMO_US
+                        if (strcmp(gp->currentAreaName, "yuu") == 0) {
+                            break;
+                        }
+#endif
+                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) { // GSW_STORY_PROGRESS
                             wp->menuSel = 1;
                         } else if (wp->buttonTrg & PAD_BUTTON_UP) {
                             wp->menuSel = 2;
-                        } else if ((wp->buttonTrg & PAD_BUTTON_RIGHT) && (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt())) {
+                        } else if ((wp->buttonTrg & PAD_BUTTON_RIGHT) && (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt())) { // GSW_STORY_PROGRESS
                             wp->menuSel = 3;
                         } else if (wp->buttonTrg & PAD_BUTTON_DOWN) {
                             wp->menuSel = 4;
@@ -236,8 +246,17 @@ void winMain(void) {
                     if (keyGetButton(0) & PAD_TRIGGER_L) {
                         break;
                     }
-}
-camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+                    if ((gp->flags & GW_FLAG_E3) && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG0_07_GOOMBELLA_JOINS) {
+                        break;
+                    }
+#endif
+                } else {
+                    wp->menuSel = 0;
+#endif
+                }
+                camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
                 if (gp->flags & GW_FLAG_E3) {
                     wp->menuSel = 1;
                 }
@@ -247,7 +266,19 @@ camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
                     npcStopForEvent();
                 }
                 fbatChangeMode(7);
+#if VERSION <= VERSION_DEMO_US
                 marioCtrlOff2();
+#else
+                if (mario->characterId == CHARACTER_BOWSER) {
+                    if (!kpaGetStageViewType()) {
+                        marioCtrlOff();
+                    } else {
+                        marioCtrlOff2();
+                    }
+                } else {
+                    marioCtrlOff2();
+                }
+#endif
                 partyCtrlOff();
                 psndSetFlag(PSND_FLAG_MUTE_SFX);
                 if (mario->characterId == CHARACTER_BOWSER) {
@@ -261,11 +292,26 @@ camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
                 for (i = 0; i < 4; i++) {
                     padRumbleHardOff(i);
                 }
+#if VERSION <= VERSION_DEMO_US
                 fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/mail.tpl", getMarioStDvdRoot());
 {
 const char* name = winGetMapTplName();
                     fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), name);
-}
+#else
+#if VERSION >= VERSION_US
+                fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
+#else
+                fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
+#endif
+                {
+#if VERSION >= VERSION_US
+                    fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
+#else
+                    const char* name = winGetMapTplName();
+                    fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), name);
+#endif
+#endif
+                }
                 wp->active = 0;
                 if (strncmp(gp->currentMapName, "yuu_", 4) == 0) {
                     wp->menuState = WIN_MENU_YUU;
@@ -278,10 +324,17 @@ const char* name = winGetMapTplName();
                 WinLangTbl lang = winLangTbl;
                 BOOL ok;
 
+#if VERSION <= VERSION_DEMO_US
                 if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
                     ok = FALSE;
                 } else {
                     wp->res = fileAllocf(FILE_TYPE_TPL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+#else
+                if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
+                    ok = FALSE;
+                } else {
+                    wp->res = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
+#endif
                     ok = TRUE;
                 }
                 if (ok) {
@@ -291,7 +344,11 @@ const char* name = winGetMapTplName();
             }
 
             case WIN_MENU_ROOT:
+#if VERSION <= VERSION_DEMO_US
                 if (!marioGetPtr()->characterId) {
+#else
+                if (marioGetPtr()->characterId == CHARACTER_MARIO) {
+#endif
                     switch (winRootMain(wp)) {
                         case -1:
                             wp->menuState++;
@@ -315,7 +372,19 @@ const char* name = winGetMapTplName();
 
             case WIN_MENU_CLOSE:
                 camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
+#if VERSION <= VERSION_DEMO_US
                 marioCtrlOn2();
+#else
+                if (mario->characterId == CHARACTER_BOWSER) {
+                    if (!kpaGetStageViewType()) {
+                        marioCtrlOn();
+                    } else {
+                        marioCtrlOn2();
+                    }
+                } else {
+                    marioCtrlOn2();
+                }
+#endif
                 partyCtrlOn();
                 fbatChangeMode(1);
                 psndClearFlag(PSND_FLAG_MUTE_SFX);
@@ -356,13 +425,26 @@ const char* name = winGetMapTplName();
                 break;
 
             case WIN_MENU_ITEM_USE: {
-WindowPartyDt* list[7];
-WindowPartyDt* p;
+#if VERSION <= VERSION_DEMO_US
+                WindowPartyDt* list[7];
+                WindowPartyDt* p;
+                                WindowPartyDt* base;
+#else
+#if VERSION != VERSION_EU
+#if VERSION >= VERSION_US
+                WindowPartyDt* list[11]; /* FAKE */ // US frame is 96 bytes; only 7 entries used
+#else
+                WindowPartyDt* list[7];
+#endif
+                WindowPartyDt* p;
                 WindowPartyDt* base;
+#endif
+#endif
                 s32 partyId;
                 s32 n;
 
                 partyId = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
+#if VERSION <= VERSION_DEMO_US
                 base = winPartyDt;
                 n = 0;
                 for (i = 0, p = base; i < 7; i++, p++) {
@@ -430,263 +512,6 @@ WindowPartyDt* p;
     }
 }
 #else
-/**
- * Per-frame pause menu driver.
- * In the field it reads the pad, opens the menu on Start
- * or a D-pad shortcut (Party, Items, Badges, Journal tabs), freezes Mario and partners, loads win.tpl,
- * runs winRootMain, and on close restores control.
- * It also starts the item-use and Ragged Diary scenes, swaps partners, and opens the Pianta Parlor window.
- */
-void winMain(void) {
-    MarioWork* mario;
-    s32 i;
-#if VERSION == VERSION_EU
-    WindowPartyDt* list[7];
-#endif
-
-    mario = marioGetPtr();
-    if (!(wp->flags & WINDOW_FLAG_OPEN_DISABLE) && seqGetSeq() == SEQ_GAME && !seqCheckSeq()) {
-        wp->buttonTrg = keyGetButtonTrg(0);
-        wp->buttonRep = keyGetButtonRep(0);
-        wp->dirTrg = keyGetDirTrg(0);
-        wp->dirRep = keyGetDirRep(0);
-
-        if (keyGetButtonTrg(0) & PAD_BUTTON_LEFT) {
-            wp->dirTrg |= DEMO_STICK_LEFT;
-        }
-        if (keyGetButtonTrg(0) & PAD_BUTTON_RIGHT) {
-            wp->dirTrg |= DEMO_STICK_RIGHT;
-        }
-        if (keyGetButtonTrg(0) & PAD_BUTTON_UP) {
-            wp->dirTrg |= DEMO_STICK_UP;
-        }
-        if (keyGetButtonTrg(0) & PAD_BUTTON_DOWN) {
-            wp->dirTrg |= DEMO_STICK_DOWN;
-        }
-
-        if (keyGetButtonRep(0) & PAD_BUTTON_LEFT) {
-            wp->dirRep |= DEMO_STICK_LEFT;
-        }
-        if (keyGetButtonRep(0) & PAD_BUTTON_RIGHT) {
-            wp->dirRep |= DEMO_STICK_RIGHT;
-        }
-        if (keyGetButtonRep(0) & PAD_BUTTON_UP) {
-            wp->dirRep |= DEMO_STICK_UP;
-        }
-        if (keyGetButtonRep(0) & PAD_BUTTON_DOWN) {
-            wp->dirRep |= DEMO_STICK_DOWN;
-        }
-
-        winLectureKeyMask();
-
-        switch (wp->menuState) {
-            case WIN_MENU_IDLE:
-                if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
-                    if (marioStGetSystemLevel() != 0) {
-                        break;
-                    }
-                    if (marioCheckMenuDisable()) {
-                        break;
-                    }
-                    if (mobjCheckExec()) {
-                        break;
-                    }
-                    if (!fadeIsFinish()) {
-                        break;
-                    }
-                    if (mario->characterId == CHARACTER_BOWSER) {
-                        if (!(wp->buttonTrg & PAD_BUTTON_START)) {
-                            break;
-                        }
-                        wp->menuSel = 0;
-                    } else if (wp->buttonTrg & PAD_BUTTON_START) {
-                        wp->menuSel = 0;
-                    } else {
-                        if (keyGetButton(0) & PAD_TRIGGER_Z) {
-                            break;
-                        }
-                        if (strcmp(gp->currentAreaName, "yuu") == 0) {
-                            break;
-                        }
-                        if ((wp->buttonTrg & PAD_BUTTON_LEFT) && (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA))) { // GSW_STORY_PROGRESS
-                            wp->menuSel = 1;
-                        } else if (wp->buttonTrg & PAD_BUTTON_UP) {
-                            wp->menuSel = 2;
-                        } else if ((wp->buttonTrg & PAD_BUTTON_RIGHT) && (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt())) { // GSW_STORY_PROGRESS
-                            wp->menuSel = 3;
-                        } else if (wp->buttonTrg & PAD_BUTTON_DOWN) {
-                            wp->menuSel = 4;
-                        } else {
-                            break;
-                        }
-                    }
-                    if (keyGetButton(0) & PAD_TRIGGER_L) {
-                        break;
-                    }
-#if VERSION >= VERSION_US
-                    if ((gp->flags & GW_FLAG_E3) && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG0_07_GOOMBELLA_JOINS) {
-                        break;
-                    }
-#endif
-                } else {
-                    wp->menuSel = 0;
-                }
-                camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-                if (gp->flags & GW_FLAG_E3) {
-                    wp->menuSel = 1;
-                }
-                if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
-                    marioStSystemLevel(4);
-                } else {
-                    npcStopForEvent();
-                }
-                fbatChangeMode(7);
-                if (mario->characterId == CHARACTER_BOWSER) {
-                    if (!kpaGetStageViewType()) {
-                        marioCtrlOff();
-                    } else {
-                        marioCtrlOff2();
-                    }
-                } else {
-                    marioCtrlOff2();
-                }
-                partyCtrlOff();
-                psndSetFlag(PSND_FLAG_MUTE_SFX);
-                if (mario->characterId == CHARACTER_BOWSER) {
-                    kpaPauseSE2();
-                }
-                if (mario->flags & MARIO_FLAG_IS_8_BIT) {
-                    wp->flags |= WINDOW_FLAG_8BIT;
-                } else {
-                    wp->flags &= ~WINDOW_FLAG_8BIT;
-                }
-                for (i = 0; i < 4; i++) {
-                    padRumbleHardOff(i);
-                }
-#if VERSION >= VERSION_US
-                fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
-#else
-                fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
-#endif
-                {
-#if VERSION >= VERSION_US
-                    fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
-#else
-                    const char* name = winGetMapTplName();
-                    fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/%s", getMarioStDvdRoot(), name);
-#endif
-                }
-                wp->active = 0;
-                if (strncmp(gp->currentMapName, "yuu_", 4) == 0) {
-                    wp->menuState = WIN_MENU_YUU;
-                } else {
-                    wp->menuState++;
-                }
-                break;
-
-            case WIN_MENU_LOAD: {
-                WinLangTbl lang = winLangTbl;
-                BOOL ok;
-
-                if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
-                    ok = FALSE;
-                } else {
-                    wp->res = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
-                    ok = TRUE;
-                }
-                if (ok) {
-                    wp->menuState++;
-                }
-                break;
-            }
-
-            case WIN_MENU_ROOT:
-                if (marioGetPtr()->characterId == CHARACTER_MARIO) {
-                    switch (winRootMain(wp)) {
-                        case -1:
-                            wp->menuState++;
-                            break;
-                        case -2:
-                            wp->menuState = WIN_MENU_PARTY_LOAD;
-                            break;
-                        case -3:
-                            if (wp->item.useItem == ITEM_RAGGED_DIARY) {
-                                wp->menuState = WIN_MENU_DIARY;
-                            } else {
-                                wp->menuState = WIN_MENU_ITEM_USE;
-                            }
-                            break;
-                    }
-                } else if (wp->buttonTrg & PAD_BUTTON_START) {
-                    kpaPauseSE2();
-                    wp->menuState = WIN_MENU_CLOSE;
-                }
-                break;
-
-            case WIN_MENU_CLOSE:
-                camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-                if (mario->characterId == CHARACTER_BOWSER) {
-                    if (!kpaGetStageViewType()) {
-                        marioCtrlOn();
-                    } else {
-                        marioCtrlOn2();
-                    }
-                } else {
-                    marioCtrlOn2();
-                }
-                partyCtrlOn();
-                fbatChangeMode(1);
-                psndClearFlag(PSND_FLAG_MUTE_SFX);
-                statusWinForceUpdate();
-                if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
-                    marioStSystemLevel(0);
-                } else {
-                    npcStartForEvent();
-                }
-                if (wp->res) {
-                    fileFree(wp->res);
-                }
-                wp->res = NULL;
-                wp->flags = 0;
-                wp->menuState = WIN_MENU_IDLE;
-                break;
-
-            case WIN_MENU_PARTY_LOAD:
-                if (marioBgmodeChk()) {
-                    MarioWork* m = marioGetPtr();
-                    m->prevPartyMemberId[0] = wp->party.partyIds[wp->party.cursor];
-                    wp->menuState = WIN_MENU_CLOSE;
-                } else if (animGroupBaseAsync(partyDataTbl[wp->party.partyIds[wp->party.cursor]].name, 2, NULL)) {
-                    wp->menuState++;
-                }
-                break;
-
-            case WIN_MENU_PARTY_OUT:
-                marioPartyGoodbye();
-                wp->menuState++;
-                break;
-
-            case WIN_MENU_PARTY_IN:
-                if (!marioGetParty()) {
-                    marioPartyHello(wp->party.partyIds[wp->party.cursor]);
-                    wp->menuState = WIN_MENU_CLOSE;
-                }
-                break;
-
-            case WIN_MENU_ITEM_USE: {
-#if VERSION != VERSION_EU
-#if VERSION >= VERSION_US
-                WindowPartyDt* list[11]; /* FAKE */ // US frame is 96 bytes; only 7 entries used
-#else
-                WindowPartyDt* list[7];
-#endif
-                WindowPartyDt* p;
-                WindowPartyDt* base;
-#endif
-                s32 partyId;
-                s32 n;
-
-                partyId = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
 #if VERSION == VERSION_EU
                 n = 0;
                 for (i = 0; i < 7; i++) {

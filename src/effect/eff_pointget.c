@@ -164,24 +164,95 @@ void effPointGetMain(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_US
 /** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
 static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
+#else
+/** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
+void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
+#if VERSION >= VERSION_US
+    f32 w;
+    f32 w1;
+#endif
+#endif
     EffPointGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     f32 scale = work->scale;
+#if VERSION <= VERSION_DEMO_US
     f32 wide;
     f32 width;
     f32 ox;
     f32 oy;
     f32 x;
+#else
+#if VERSION >= VERSION_US
+    f32 pos;
+    f32 total;
+    f32 ox;
+    f32 oy;
+    f32 h;
+    GXColor color;
+#else
+    f32 base;
+    f32 y1;
+    f32 width;
+    f32 wide;
+    f32 x0;
+    f32 ox;
+    f32 oy;
+#endif
+#endif
     GXTexObj texObj;
     Mtx mtx;
     Mtx scaleMtx;
     Mtx baseMtx;
+#if VERSION <= VERSION_DEMO_US
     s32 digits[3];
     s32 n;
     s32 i;
     s32 shown;
     s32 pass;
 
+#else
+    char buf[32];
+    s32 i;
+    s32 pass;
+#if VERSION >= VERSION_US
+    s32 j;
+    // FAKE: the digit table is read with one flat index over the rows' three words
+    // (language * 3 + slot) through row 0's tbl[], as the target computes it; the natural
+    // texid_tbl[gp->language].tbl[slot] shares the row address with .count and differs.
+    PointGetTex* tbl = texid_tbl[0].tbl[gp->language * 3 + (work->number > 1 ? 1 : 0)];
+    s32 count = texid_tbl[gp->language].count;
+    s32 kind;
+    s32 id;
+    s32 idShadow;
+
+    sprintf(buf, "%d", work->number);
+    total = 0.0f;
+    for (i = 0; i < count; i++) {
+        kind = tbl[i].kind;
+        id = tbl[i].id;
+        switch (kind) {
+            case 0:
+                effGetTexObj(id, &texObj);
+                w = (f32)strlen(buf) * GXGetTexObjWidth(&texObj) / 10.0f;
+                total += w / 2.0f;
+                break;
+            case 1:
+                effGetTexObj(id, &texObj);
+                total += GXGetTexObjWidth(&texObj) / 2.0f;
+                break;
+            case -1:
+                total += 5.0f;
+                break;
+        }
+    }
+    if (total > 200.0f) {
+        scale *= 200.0f / total;
+    }
+#else
+    sprintf(buf, "%d", work->number);
+    width = 32.0f * (f32)strlen(buf);
+#endif
+#endif
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXScale(scaleMtx, scale, scale, scale);
     PSMTXConcat(mtx, scaleMtx, baseMtx);
@@ -201,6 +272,7 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+#if VERSION <= VERSION_DEMO_US
     wide = 352.0f;
     width = 48.0f;
     for (pass = 1; pass >= 0; pass--) {
@@ -271,95 +343,6 @@ static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 #else
-/** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
-void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
-#if VERSION >= VERSION_US
-    f32 w;
-    f32 w1;
-#endif
-    EffPointGetWork* work = effect->userdata;
-    CameraEntry* camera = camGetPtr(cameraId);
-    f32 scale = work->scale;
-#if VERSION >= VERSION_US
-    f32 pos;
-    f32 total;
-    f32 ox;
-    f32 oy;
-    f32 h;
-    GXColor color;
-#else
-    f32 base;
-    f32 y1;
-    f32 width;
-    f32 wide;
-    f32 x0;
-    f32 ox;
-    f32 oy;
-#endif
-    GXTexObj texObj;
-    Mtx mtx;
-    Mtx scaleMtx;
-    Mtx baseMtx;
-    char buf[32];
-    s32 i;
-    s32 pass;
-#if VERSION >= VERSION_US
-    s32 j;
-    // FAKE: the digit table is read with one flat index over the rows' three words
-    // (language * 3 + slot) through row 0's tbl[], as the target computes it; the natural
-    // texid_tbl[gp->language].tbl[slot] shares the row address with .count and differs.
-    PointGetTex* tbl = texid_tbl[0].tbl[gp->language * 3 + (work->number > 1 ? 1 : 0)];
-    s32 count = texid_tbl[gp->language].count;
-    s32 kind;
-    s32 id;
-    s32 idShadow;
-
-    sprintf(buf, "%d", work->number);
-    total = 0.0f;
-    for (i = 0; i < count; i++) {
-        kind = tbl[i].kind;
-        id = tbl[i].id;
-        switch (kind) {
-            case 0:
-                effGetTexObj(id, &texObj);
-                w = (f32)strlen(buf) * GXGetTexObjWidth(&texObj) / 10.0f;
-                total += w / 2.0f;
-                break;
-            case 1:
-                effGetTexObj(id, &texObj);
-                total += GXGetTexObjWidth(&texObj) / 2.0f;
-                break;
-            case -1:
-                total += 5.0f;
-                break;
-        }
-    }
-    if (total > 200.0f) {
-        scale *= 200.0f / total;
-    }
-#else
-    sprintf(buf, "%d", work->number);
-    width = 32.0f * (f32)strlen(buf);
-#endif
-    PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
-    PSMTXScale(scaleMtx, scale, scale, scale);
-    PSMTXConcat(mtx, scaleMtx, baseMtx);
-    PSMTXConcat(camera->view, baseMtx, baseMtx);
-    GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-    GXSetCullMode(GX_CULL_NONE);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 #if VERSION >= VERSION_US
     for (pass = 1; pass >= 0; pass--) {
         ox = (f32)(pass * 4);

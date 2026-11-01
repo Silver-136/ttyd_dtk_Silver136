@@ -601,10 +601,27 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
  * When the table is full a dropped coin, heart or flower is replaced. Returns the entry or NULL.
  */
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
+#else
+/**
+ * Spawns field item itemId at (x, y, z) named name (generated if NULL);
+ * type (ItemEntryType) picks how it appears and how long it stays,
+ * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
+ * When the table is full a dropped coin, heart or flower is replaced. Returns the entry or NULL.
+ */
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
+#endif
     ItemWork* wp = itemGetWork();
     int i;
     ItemEntry* entry;
-BOOL isGswf, isLswf;
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+    // FAKE: e/base and the explicit coin/flower search loops (the heart search uses the helper) steer register
+    // numbering: the search pointer must be a named local and the entries base a named web.
+    ItemEntry* e;
+    ItemEntry* base;
+#endif
+#endif
+    BOOL isGswf, isLswf;
     char itemName[8];
 
     isGswf = FALSE;
@@ -639,6 +656,7 @@ BOOL isGswf, isLswf;
             break;
         }
     }
+#if VERSION <= VERSION_DEMO_US
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
             break;
@@ -789,57 +807,6 @@ BOOL isGswf, isLswf;
     return entry;
 }
 #else
-/**
- * Spawns field item itemId at (x, y, z) named name (generated if NULL);
- * type (ItemEntryType) picks how it appears and how long it stays,
- * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
- * When the table is full a dropped coin, heart or flower is replaced. Returns the entry or NULL.
- */
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
-    ItemWork* wp = itemGetWork();
-    int i;
-    ItemEntry* entry;
-#if VERSION >= VERSION_US
-    // FAKE: e/base and the explicit coin/flower search loops (the heart search uses the helper) steer register
-    // numbering: the search pointer must be a named local and the entries base a named web.
-    ItemEntry* e;
-    ItemEntry* base;
-#endif
-    BOOL isGswf, isLswf;
-    char itemName[8];
-
-    isGswf = FALSE;
-    isLswf = FALSE;
-    if (collectFlag != -1) {
-        if (collectFlag >= GSWF(0) && collectFlag <= EVTDAT_GSWF_MAX) {
-            collectFlag += EVTDAT_GSWF_BASE;
-            isGswf = TRUE;
-            if (swGet(collectFlag)) {
-                return NULL;
-            }
-        } else if (collectFlag >= LSWF(0) && collectFlag <= EVTDAT_LSWF_MAX) {
-            collectFlag += EVTDAT_LSWF_BASE;
-            isLswf = TRUE;
-            if (_swGet(collectFlag)) {
-                return NULL;
-            }
-        }
-    }
-
-    if (name == NULL) {
-        wp->currId++;
-        if (wp->currId >= 0xFFFFF) {
-            wp->currId = 1;
-        }
-        sprintf(itemName, "_i%05x", wp->currId);
-        name = itemName;
-    }
-
-    for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (entry->flags & ITEM_FLAG_ACTIVE && !strcmp(entry->name, name)) {
-            break;
-        }
-    }
 
 #if VERSION >= VERSION_US
     base = wp->entries;

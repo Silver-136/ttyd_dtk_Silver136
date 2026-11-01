@@ -1605,7 +1605,6 @@ static inline void partyChgRunM(PartyEntry* party) {
  * p_dokan_y for the vertical pipe kinds (Mario's dokanType 0-3) and p_dokan_x for the sideways ones (4, 5).
  * Ends Vivian's tail effect.
  */
-#if VERSION <= VERSION_DEMO_US
 /**
  * Puts the partner in the pipe with Mario (run mode 10):
  * she takes Mario's position facing backwards and turns into the spinning pipe paper,
@@ -1614,27 +1613,81 @@ static inline void partyChgRunM(PartyEntry* party) {
  */
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
+#if VERSION > VERSION_DEMO_US
 
+#if VERSION >= VERSION_US
+    party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
+    party->displayDirection = mario->displayDirection;
+    party->moveDir = mario->moveDirection;
+    party->position = mario->position;
+#endif
+#endif
     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
     switch (mario->dokanType) {
         case 2:
         case 3:
             partyPaperOn(party, "p_dokan_y");
+#if VERSION <= VERSION_DEMO_US
             party->spinSpeed = 30.0f;
             party->motionStep = 0;
+#else
+#if VERSION >= VERSION_US
+            partyChgPaper(party, "PM_D_1A");
+            partyChgPoseId(party, 0);
+            party->spinSpeed = 30.0f;
+            party->motionStep = 0;
+            party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
+            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
+#else
+            party->spinSpeed = 30.0f;
+            party->motionStep = 0;
+#endif
+#endif
             break;
         case 0:
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
+#if VERSION <= VERSION_DEMO_US
+            case 1:
+                partyPaperOn(party, "p_dokan_y");
+                party->spinSpeed = 30.0f;
+                party->motionStep = 0;
+#else
+#if VERSION >= VERSION_US
+            party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
+            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
+        case 1:
+            partyPaperOn(party, "p_dokan_y");
+            partyChgPaper(party, "PM_D_1A");
+            partyChgPoseId(party, 0);
+            party->spinSpeed = 30.0f;
+            party->motionStep = 0;
+            party->position = mario->position;
+            party->scale = (Vec){1.0f, 1.0f, 1.0f};
+            party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
+            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
+            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
+#else
         case 1:
             partyPaperOn(party, "p_dokan_y");
             party->spinSpeed = 30.0f;
             party->motionStep = 0;
+#endif
+#endif
             break;
         case 5:
             partyPaperOn(party, "p_dokan_x");
+#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_US
+            partyChgPaper(party, "PM_D_1A");
+            partyChgPoseId(party, 0);
+#endif
+#endif
             party->spinSpeed = 26.0f;
             party->motionStep = 10;
             party->rotOfsY = 10.0f;
+#if VERSION <= VERSION_DEMO_US
             break;
         case 4:
             partyPaperOn(party, "p_dokan_x");
@@ -1662,72 +1715,6 @@ s32 partyDokanInit(PartyEntry* party) {
     return 0;
 }
 #else
-/**
- * Puts the partner in the pipe with Mario (run mode 10):
- * she takes Mario's position facing backwards and turns into the spinning pipe paper,
- * p_dokan_y for the vertical pipe kinds (Mario's dokanType 0-3) and p_dokan_x for the sideways ones (4, 5).
- * Ends Vivian's tail effect.
- */
-s32 partyDokanInit(PartyEntry* party) {
-    MarioWork* mario = party->playerPtr;
-
-#if VERSION >= VERSION_US
-    party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
-    party->displayDirection = mario->displayDirection;
-    party->moveDir = mario->moveDirection;
-    party->position = mario->position;
-#endif
-    party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-    switch (mario->dokanType) {
-        case 2:
-        case 3:
-            partyPaperOn(party, "p_dokan_y");
-#if VERSION >= VERSION_US
-            partyChgPaper(party, "PM_D_1A");
-            partyChgPoseId(party, 0);
-            party->spinSpeed = 30.0f;
-            party->motionStep = 0;
-            party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
-            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
-#else
-            party->spinSpeed = 30.0f;
-            party->motionStep = 0;
-#endif
-            break;
-        case 0:
-            party->scale = (Vec){0.0f, 0.0f, 0.0f};
-#if VERSION >= VERSION_US
-            party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
-            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
-        case 1:
-            partyPaperOn(party, "p_dokan_y");
-            partyChgPaper(party, "PM_D_1A");
-            partyChgPoseId(party, 0);
-            party->spinSpeed = 30.0f;
-            party->motionStep = 0;
-            party->position = mario->position;
-            party->scale = (Vec){1.0f, 1.0f, 1.0f};
-            party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
-            party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-            animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
-#else
-        case 1:
-            partyPaperOn(party, "p_dokan_y");
-            party->spinSpeed = 30.0f;
-            party->motionStep = 0;
-#endif
-            break;
-        case 5:
-            partyPaperOn(party, "p_dokan_x");
-#if VERSION >= VERSION_US
-            partyChgPaper(party, "PM_D_1A");
-            partyChgPoseId(party, 0);
-#endif
-            party->spinSpeed = 26.0f;
-            party->motionStep = 10;
-            party->rotOfsY = 10.0f;
 #if VERSION >= VERSION_US
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;

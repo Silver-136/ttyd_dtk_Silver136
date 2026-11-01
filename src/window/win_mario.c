@@ -467,20 +467,70 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
 }
 
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,
  * the Star Power gauge, Star Points, coins, Star Pieces, Shine Sprites and play time (capped at 99:59),
  * Mario's model, and the special-move list when open.
  * US: every float live range has its own variable (register order); rowC is the second value of rowB
  */
+// US: every float live range has its own variable (register order); rowC is the second value of rowB
 void winMarioDisp(s32 camId, void* param, s32 idx) {
+#if VERSION <= VERSION_DEMO_US
     static s32 pri[6] = {3, 2, 8, 10, 7, 9};
+#else
+#if VERSION >= VERSION_US
+    f32 rowC;
+    // FAKE: q1/q2 hold copies of row0/row1 for the dead guards after the specialCount block (register order, no code)
+    f32 q1[1];
+    f32 q2[1];
+    static s32 pri[6] = {3, 2, 8, 10, 7, 9};
+    f32 rowL;
+    f32 y2;
+    f32 x2;
+    f32 cx6;
+    f32 cx5;
+    f32 cx4;
+    f32 cx3;
+    f32 cx2;
+    f32 nameW3;
+    f32 rowB;
+    f32 rowA;
+    f32 row0;
+    f32 row1;
+    f32 row2;
+    f32 nameW2;
+    f32 left;
+    f32 col7;
+    f32 col6;
+    f32 col5;
+    f32 col4;
+    f32 col3;
+    f32 col2;
+    f32 rowA3;
+    f32 rowA2;
+    f32 row0b;
+    f32 rowB3;
+    f32 rowB2;
+    f32 row1b;
+    f32 row2b;
+    f32 x;
+    f32 y;
+    f32 cx;
+    f32 col;
+    f32 nameW;
+    f32 numX;
+    f32 row3;
+    f32 rubyW;
+#else
+    static s32 pri[6] = {3, 2, 8, 10, 7, 9};
+#endif
+#endif
     WindowWork* w;
     GXColor white;
     GXColor black;
     PouchData* pouch;
-f32 left;
+#if VERSION <= VERSION_DEMO_US
+    f32 left;
     f32 x;
     f32 y;
     f32 rowA;
@@ -494,7 +544,25 @@ f32 left;
     f32 row3;
     f32 numX;
     f32 rubyW;
-s32 i;
+#else
+#if VERSION < VERSION_US
+    f32 x;
+    f32 y;
+    f32 rowA;
+    f32 rowB;
+    f32 cx;
+    f32 col;
+    f32 row0;
+    f32 row1;
+    f32 row2;
+    f32 nameW;
+    f32 left;
+    f32 numX;
+    f32 row3;
+    f32 rubyW;
+#endif
+#endif
+    s32 i;
     s64 secs;
     u64 tsecs;
     s32 hour;
@@ -504,8 +572,15 @@ s32 i;
     char buf[0x100];
 
     w = param;
+#if VERSION <= VERSION_DEMO_US
     // FAKE: dead store; makes y the first float referenced, so its later web (the wazaOpen list label x) is split before x's (register order)
     y = 0.0f;
+#else
+#if VERSION < VERSION_US
+    // FAKE: dead store; makes y the first float referenced, so its later web (the mode label x) is split before x's (register order)
+    y = 0.0f;
+#endif
+#endif
     pouch = pouchGetPtr();
     white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
     black = (GXColor){0x00, 0x00, 0x00, 0xFF};
@@ -522,15 +597,42 @@ s32 i;
     winIconSet(ICON_MARIO, (Vec){cx, 142.0f + y, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
     cx += 20.0f;
     winFontInit();
+#if VERSION <= VERSION_DEMO_US
     winFontSetEdge((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_level"));
     sprintf(buf, "%s", winZenkakuStr(pouch->level));
     winFontInit();
     winFontSetEdge((Vec){(190.0f + (x - 265.0f)) - 0.8f * FontGetMessageWidth(buf) - 10.0f, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, buf);
+#else
+#if VERSION >= VERSION_US
+    winFontSetEdgeWidth((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, 45.0f, msgSearch("msg_menu_mario_level"));
+    sprintf(buf, "%s", winZenkakuStr(pouch->level));
+    nameW = FontGetMessageWidth(buf);
+    if (nameW > 20.0f) {
+        nameW = 20.0f;
+    }
+    winFontInit();
+    winFontSetEdgeWidth((Vec){(190.0f + (x - 265.0f)) - nameW - 10.0f, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, 20.0f, buf);
+#else
+    winFontSetEdge((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_level"));
+    sprintf(buf, "%s", winZenkakuStr(pouch->level));
+    winFontInit();
+    winFontSetEdge((Vec){(190.0f + (x - 265.0f)) - 0.8f * FontGetMessageWidth(buf) - 10.0f, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, buf);
+#endif
+#endif
     winTexInit(*w->res->data);
     winTexSet(0xB0, (Vec){x - 255.0f, 112.0f + y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
     winFontInit();
+#if VERSION <= VERSION_DEMO_US
     winFontSet((Vec){x - 240.0f, 124.0f + y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch(BattleGetRankNameLabel(pouch->level)));
 
+#else
+#if VERSION >= VERSION_US
+    winFontSetWidth((Vec){x - 240.0f, 124.0f + y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, 140.0f, msgSearch(BattleGetRankNameLabel(pouch->level)));
+#else
+    winFontSet((Vec){x - 240.0f, 124.0f + y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch(BattleGetRankNameLabel(pouch->level)));
+#endif
+
+#endif
     for (i = 0; i < 6; i++) {
         if (w->marioSel != pri[i]) {
             fukidashi(w, pri[i], x, y);
@@ -543,15 +645,42 @@ s32 i;
     for (i = 0; i < 3; i++) {
         GXColor cols[3] = {{0xCB, 0x8C, 0xA2, 0xFE}, {0xCB, 0xBE, 0x89, 0xFE}, {0x94, 0xB9, 0xC7, 0xFE}};
         GXColor reds[3] = {{0xA7, 0x3C, 0x3C, 0xFF}, {0x37, 0x69, 0x1E, 0xFF}, {0x0F, 0x21, 0x7A, 0xFF}};
+#if VERSION <= VERSION_DEMO_US
+const char* const stat_name_tbl[3] = {"ＨＰ", "ＦＰ", "ＢＰ"};
+const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
+
+rowA = 50.0f + (x - 270.0f) - 2.0f;
+nameW = FontGetMessageWidth(stat_name_tbl[i]);
+#else
+#if VERSION >= VERSION_US
+// Descriptive name (not in the symbol maps).
+        const char* const stat_name_tbl[7][3] = {
+            {"ＨＰ", "ＦＰ", "ＢＰ"},
+            {"HP", "FP", "BP"},
+            {"KP", "BP", "OP"},
+            {"PC", "PF", "PB"},
+            {"PC", "PF", "PM"},
+            {"PV", "PF", "PT"},
+            {"HP", "FP", "BP"},
+        };
+#else
         const char* const stat_name_tbl[3] = {"ＨＰ", "ＦＰ", "ＢＰ"};
+#endif
         const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
 
+#if VERSION >= VERSION_US
+        rowL = 50.0f + (x - 270.0f) - 2.0f;
+        nameW2 = FontGetMessageWidth(stat_name_tbl[gp->language][i]);
+#else
         rowA = 50.0f + (x - 270.0f) - 2.0f;
         nameW = FontGetMessageWidth(stat_name_tbl[i]);
+#endif
+#endif
         rubyW = 0.5f * FontGetMessageWidth(msgSearch(ruby[i]));
         winTexInit(*w->res->data);
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+#if VERSION <= VERSION_DEMO_US
         winTexSet(0xAF, (Vec){rowA, (cx = (y - 38.0f) - (f32)(i * 34)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
         winFontInit();
         winFontSet((Vec){col - nameW / 2.0f, 12.0f + cx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, stat_name_tbl[i]);
@@ -583,9 +712,70 @@ s32 i;
     winFontSet((Vec){col, row2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumHP));
     winFontSet((Vec){col, rowB, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumFP));
 
+#else
+#if VERSION >= VERSION_US
+        winTexSet(0xAF, (Vec){rowL, (cx2 = (y - 38.0f) - (f32)(i * 34)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
+        winFontInit();
+        winFontSet((Vec){col - nameW2 / 2.0f, 12.0f + cx2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, stat_name_tbl[gp->language][i]);
+        winFontSet((Vec){col - rubyW / 2.0f, 21.0f + cx2, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, reds[i], msgSearch(ruby[i]));
+#else
+        winTexSet(0xAF, (Vec){rowA, (cx = (y - 38.0f) - (f32)(i * 34)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
+        winFontInit();
+        winFontSet((Vec){col - nameW / 2.0f, 12.0f + cx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, stat_name_tbl[i]);
+        winFontSet((Vec){col - rubyW / 2.0f, 21.0f + cx, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, reds[i], msgSearch(ruby[i]));
+#endif
+    }
+
+    winIconInit();
+#if VERSION >= VERSION_US
+    winIconSet(ICON_HP, (Vec){col2 = 110.0f + (x - 270.0f), row0 = 4.0f + (y - 38.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+    winIconSet(ICON_FP, (Vec){col2, row1 = 4.0f + (rowB = (y - 38.0f) - 34.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+    winIconSet(ICON_BP, (Vec){col2, 4.0f + (rowA = (y - 38.0f) - 68.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+    winFontInit();
+    winFontSetR((Vec){col3 = 130.0f + (x - 270.0f), row2 = 4.0f + (12.0f + (y - 38.0f)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->currentHP));
+    winFontSetR((Vec){col3, rowC = 4.0f + (12.0f + rowB), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->currentFP));
+    winFontSetR((Vec){col3, 4.0f + (12.0f + rowA), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumBP));
+    winTexInit(*w->res->data);
+    col4 = 190.0f + (x - 270.0f);
+    winTexSet(0x10, (Vec){col4, row0, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+    // FAKE: copies read only by the dead guards below; they keep two coalesced FPR nodes live across rowC (register order)
+    q1[0] = row0;
+    q2[0] = row1;
+    winTexSet(0x10, (Vec){col4, row1, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+    winFontInit();
+    winFontSet((Vec){col5 = 200.0f + (x - 270.0f), row2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumHP));
+    winFontSet((Vec){col5, rowC, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumFP));
+#else
+    col = 110.0f + (x - 270.0f);
+    row0 = 4.0f + (y - 38.0f);
+    winIconSet(ICON_HP, (Vec){col, row0, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+    rowB = (y - 38.0f) - 34.0f;
+    row1 = 4.0f + rowB;
+    winIconSet(ICON_FP, (Vec){col, row1, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+    rowA = (y - 38.0f) - 68.0f;
+    winIconSet(ICON_BP, (Vec){col, 4.0f + rowA, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
+    winFontInit();
+    col = 130.0f + (x - 270.0f);
+    row2 = 4.0f + (12.0f + (y - 38.0f));
+    winFontSetR((Vec){col, row2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->currentHP));
+    rowB = 4.0f + (12.0f + rowB);
+    winFontSetR((Vec){col, rowB, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->currentFP));
+    winFontSetR((Vec){col, 4.0f + (12.0f + rowA), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumBP));
+    winTexInit(*w->res->data);
+    col = 190.0f + (x - 270.0f);
+    winTexSet(0x10, (Vec){col, row0, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+    winTexSet(0x10, (Vec){col, row1, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
+    winFontInit();
+    col = 200.0f + (x - 270.0f);
+    winFontSet((Vec){col, row2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumHP));
+    winFontSet((Vec){col, rowB, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumFP));
+#endif
+
+#endif
     if (w->mario.specialCount > 0) {
         winKirinukiGX(w, 0, 10.0f + x, (20.0f + (130.0f + y)) - 20.0f, 260.0f, 80.0f);
         winIconInit();
+#if VERSION <= VERSION_DEMO_US
         col = 10.0f + (40.0f + x);
         rowB = 106.0f + y;
         winIconSet(ICON_MENU_SP, (Vec){col, rowB, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
@@ -676,234 +866,6 @@ s32 i;
 }
 }
 #else
-/**
- * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,
- * the Star Power gauge, Star Points, coins, Star Pieces, Shine Sprites and play time (capped at 99:59),
- * Mario's model, and the special-move list when open.
- * US: every float live range has its own variable (register order); rowC is the second value of rowB
- */
-// US: every float live range has its own variable (register order); rowC is the second value of rowB
-void winMarioDisp(s32 camId, void* param, s32 idx) {
-#if VERSION >= VERSION_US
-    f32 rowC;
-    // FAKE: q1/q2 hold copies of row0/row1 for the dead guards after the specialCount block (register order, no code)
-    f32 q1[1];
-    f32 q2[1];
-    static s32 pri[6] = {3, 2, 8, 10, 7, 9};
-    f32 rowL;
-    f32 y2;
-    f32 x2;
-    f32 cx6;
-    f32 cx5;
-    f32 cx4;
-    f32 cx3;
-    f32 cx2;
-    f32 nameW3;
-    f32 rowB;
-    f32 rowA;
-    f32 row0;
-    f32 row1;
-    f32 row2;
-    f32 nameW2;
-    f32 left;
-    f32 col7;
-    f32 col6;
-    f32 col5;
-    f32 col4;
-    f32 col3;
-    f32 col2;
-    f32 rowA3;
-    f32 rowA2;
-    f32 row0b;
-    f32 rowB3;
-    f32 rowB2;
-    f32 row1b;
-    f32 row2b;
-    f32 x;
-    f32 y;
-    f32 cx;
-    f32 col;
-    f32 nameW;
-    f32 numX;
-    f32 row3;
-    f32 rubyW;
-#else
-    static s32 pri[6] = {3, 2, 8, 10, 7, 9};
-#endif
-    WindowWork* w;
-    GXColor white;
-    GXColor black;
-    PouchData* pouch;
-#if VERSION < VERSION_US
-    f32 x;
-    f32 y;
-    f32 rowA;
-    f32 rowB;
-    f32 cx;
-    f32 col;
-    f32 row0;
-    f32 row1;
-    f32 row2;
-    f32 nameW;
-    f32 left;
-    f32 numX;
-    f32 row3;
-    f32 rubyW;
-#endif
-    s32 i;
-    s64 secs;
-    u64 tsecs;
-    s32 hour;
-    s32 min;
-    AnimData* anim;
-    Mtx mtx;
-    char buf[0x100];
-
-    w = param;
-#if VERSION < VERSION_US
-    // FAKE: dead store; makes y the first float referenced, so its later web (the mode label x) is split before x's (register order)
-    y = 0.0f;
-#endif
-    pouch = pouchGetPtr();
-    white = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    black = (GXColor){0x00, 0x00, 0x00, 0xFF};
-    x = w->menu[idx].x;
-    y = w->menu[idx].y;
-    winBgGX(w, 0, x, y);
-    winNameGX(w, 2, x - 265.0f, 154.0f + y, 190.0f, 24.0f);
-    cx = 10.0f + (x - 265.0f);
-    winFontInit();
-    winFontSetEdge((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("name_mario"));
-    cx += 0.8f * FontGetMessageWidth(msgSearch("name_mario"));
-    cx += 20.0f;
-    winIconInit();
-    winIconSet(ICON_MARIO, (Vec){cx, 142.0f + y, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
-    cx += 20.0f;
-    winFontInit();
-#if VERSION >= VERSION_US
-    winFontSetEdgeWidth((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, 45.0f, msgSearch("msg_menu_mario_level"));
-    sprintf(buf, "%s", winZenkakuStr(pouch->level));
-    nameW = FontGetMessageWidth(buf);
-    if (nameW > 20.0f) {
-        nameW = 20.0f;
-    }
-    winFontInit();
-    winFontSetEdgeWidth((Vec){(190.0f + (x - 265.0f)) - nameW - 10.0f, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, 20.0f, buf);
-#else
-    winFontSetEdge((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_level"));
-    sprintf(buf, "%s", winZenkakuStr(pouch->level));
-    winFontInit();
-    winFontSetEdge((Vec){(190.0f + (x - 265.0f)) - 0.8f * FontGetMessageWidth(buf) - 10.0f, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, buf);
-#endif
-    winTexInit(*w->res->data);
-    winTexSet(0xB0, (Vec){x - 255.0f, 112.0f + y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    winFontInit();
-#if VERSION >= VERSION_US
-    winFontSetWidth((Vec){x - 240.0f, 124.0f + y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, 140.0f, msgSearch(BattleGetRankNameLabel(pouch->level)));
-#else
-    winFontSet((Vec){x - 240.0f, 124.0f + y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch(BattleGetRankNameLabel(pouch->level)));
-#endif
-
-    for (i = 0; i < 6; i++) {
-        if (w->marioSel != pri[i]) {
-            fukidashi(w, pri[i], x, y);
-        }
-    }
-    fukidashi(w, w->marioSel, x, y);
-
-    winKirinukiGX(w, 0, x - 270.0f, y - 10.0f, 264.0f, 110.0f);
-    col = 50.0f + (x - 270.0f);
-    for (i = 0; i < 3; i++) {
-        GXColor cols[3] = {{0xCB, 0x8C, 0xA2, 0xFE}, {0xCB, 0xBE, 0x89, 0xFE}, {0x94, 0xB9, 0xC7, 0xFE}};
-        GXColor reds[3] = {{0xA7, 0x3C, 0x3C, 0xFF}, {0x37, 0x69, 0x1E, 0xFF}, {0x0F, 0x21, 0x7A, 0xFF}};
-#if VERSION >= VERSION_US
-// Descriptive name (not in the symbol maps).
-        const char* const stat_name_tbl[7][3] = {
-            {"ＨＰ", "ＦＰ", "ＢＰ"},
-            {"HP", "FP", "BP"},
-            {"KP", "BP", "OP"},
-            {"PC", "PF", "PB"},
-            {"PC", "PF", "PM"},
-            {"PV", "PF", "PT"},
-            {"HP", "FP", "BP"},
-        };
-#else
-        const char* const stat_name_tbl[3] = {"ＨＰ", "ＦＰ", "ＢＰ"};
-#endif
-        const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
-
-#if VERSION >= VERSION_US
-        rowL = 50.0f + (x - 270.0f) - 2.0f;
-        nameW2 = FontGetMessageWidth(stat_name_tbl[gp->language][i]);
-#else
-        rowA = 50.0f + (x - 270.0f) - 2.0f;
-        nameW = FontGetMessageWidth(stat_name_tbl[i]);
-#endif
-        rubyW = 0.5f * FontGetMessageWidth(msgSearch(ruby[i]));
-        winTexInit(*w->res->data);
-        GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
-        GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-#if VERSION >= VERSION_US
-        winTexSet(0xAF, (Vec){rowL, (cx2 = (y - 38.0f) - (f32)(i * 34)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
-        winFontInit();
-        winFontSet((Vec){col - nameW2 / 2.0f, 12.0f + cx2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, stat_name_tbl[gp->language][i]);
-        winFontSet((Vec){col - rubyW / 2.0f, 21.0f + cx2, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, reds[i], msgSearch(ruby[i]));
-#else
-        winTexSet(0xAF, (Vec){rowA, (cx = (y - 38.0f) - (f32)(i * 34)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
-        winFontInit();
-        winFontSet((Vec){col - nameW / 2.0f, 12.0f + cx, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, stat_name_tbl[i]);
-        winFontSet((Vec){col - rubyW / 2.0f, 21.0f + cx, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, reds[i], msgSearch(ruby[i]));
-#endif
-    }
-
-    winIconInit();
-#if VERSION >= VERSION_US
-    winIconSet(ICON_HP, (Vec){col2 = 110.0f + (x - 270.0f), row0 = 4.0f + (y - 38.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
-    winIconSet(ICON_FP, (Vec){col2, row1 = 4.0f + (rowB = (y - 38.0f) - 34.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
-    winIconSet(ICON_BP, (Vec){col2, 4.0f + (rowA = (y - 38.0f) - 68.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
-    winFontInit();
-    winFontSetR((Vec){col3 = 130.0f + (x - 270.0f), row2 = 4.0f + (12.0f + (y - 38.0f)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->currentHP));
-    winFontSetR((Vec){col3, rowC = 4.0f + (12.0f + rowB), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->currentFP));
-    winFontSetR((Vec){col3, 4.0f + (12.0f + rowA), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumBP));
-    winTexInit(*w->res->data);
-    col4 = 190.0f + (x - 270.0f);
-    winTexSet(0x10, (Vec){col4, row0, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    // FAKE: copies read only by the dead guards below; they keep two coalesced FPR nodes live across rowC (register order)
-    q1[0] = row0;
-    q2[0] = row1;
-    winTexSet(0x10, (Vec){col4, row1, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    winFontInit();
-    winFontSet((Vec){col5 = 200.0f + (x - 270.0f), row2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumHP));
-    winFontSet((Vec){col5, rowC, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumFP));
-#else
-    col = 110.0f + (x - 270.0f);
-    row0 = 4.0f + (y - 38.0f);
-    winIconSet(ICON_HP, (Vec){col, row0, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
-    rowB = (y - 38.0f) - 34.0f;
-    row1 = 4.0f + rowB;
-    winIconSet(ICON_FP, (Vec){col, row1, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
-    rowA = (y - 38.0f) - 68.0f;
-    winIconSet(ICON_BP, (Vec){col, 4.0f + rowA, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
-    winFontInit();
-    col = 130.0f + (x - 270.0f);
-    row2 = 4.0f + (12.0f + (y - 38.0f));
-    winFontSetR((Vec){col, row2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->currentHP));
-    rowB = 4.0f + (12.0f + rowB);
-    winFontSetR((Vec){col, rowB, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->currentFP));
-    winFontSetR((Vec){col, 4.0f + (12.0f + rowA), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumBP));
-    winTexInit(*w->res->data);
-    col = 190.0f + (x - 270.0f);
-    winTexSet(0x10, (Vec){col, row0, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    winTexSet(0x10, (Vec){col, row1, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-    winFontInit();
-    col = 200.0f + (x - 270.0f);
-    winFontSet((Vec){col, row2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumHP));
-    winFontSet((Vec){col, rowB, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, "%s", winZenkakuStr(pouch->maximumFP));
-#endif
-
-    if (w->mario.specialCount > 0) {
-        winKirinukiGX(w, 0, 10.0f + x, (20.0f + (130.0f + y)) - 20.0f, 260.0f, 80.0f);
-        winIconInit();
 #if VERSION >= VERSION_US
         col6 = 10.0f + (40.0f + x);
         nameW3 = 106.0f + y;
