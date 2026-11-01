@@ -887,7 +887,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                 if (PSVECDistance(&endPos, &hit->centerWorld) > reach + hit->radius) {
                     continue;
                 }
-                if (hit->joint->drawMode->cullMode == 1) {
+                if (hit->joint->drawMode->cullMode == MAP_CULL_BACK) {
                     query->singleSided = 1;
                 } else {
                     query->singleSided = 0;
@@ -919,7 +919,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                 if (PSVECDistance(&endPos, &hit2->centerWorld) > reach + hit2->radius) {
                     continue;
                 }
-                if (hit2->joint->drawMode->cullMode == 1) {
+                if (hit2->joint->drawMode->cullMode == MAP_CULL_BACK) {
                     query->singleSided = 1;
                 } else {
                     query->singleSided = 0;
@@ -951,7 +951,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                 if (PSVECDistance(&endPos, &hit3->centerWorld) > reach + hit3->radius) {
                     continue;
                 }
-                if (hit3->joint->drawMode->cullMode == 1) {
+                if (hit3->joint->drawMode->cullMode == MAP_CULL_BACK) {
                     query->singleSided = 1;
                 } else {
                     query->singleSided = 0;
@@ -979,7 +979,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
         while (entry != NULL) {
             if (callback == NULL || callback(query, entry)) {
                 if (!(PSVECDistance(&endPos, &entry->centerWorld) > reach + entry->radius)) {
-                    if (entry->joint->drawMode->cullMode == 1) {
+                    if (entry->joint->drawMode->cullMode == MAP_CULL_BACK) {
                         query->singleSided = 1;
                     } else {
                         query->singleSided = 0;
@@ -1006,7 +1006,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
             while (entry != NULL) {
                 if (callback == NULL || callback(query, entry)) {
                     if (!(PSVECDistance(&endPos, &entry->centerWorld) > reach + entry->radius)) {
-                        if (entry->joint->drawMode->cullMode == 1) {
+                        if (entry->joint->drawMode->cullMode == MAP_CULL_BACK) {
                             query->singleSided = 1;
                         } else {
                             query->singleSided = 0;
@@ -1031,7 +1031,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
             while (entry != NULL) {
                 if (callback == NULL || callback(query, entry)) {
                     if (!(PSVECDistance(&endPos, &entry->centerWorld) > reach + entry->radius)) {
-                        if (entry->joint->drawMode->cullMode == 1) {
+                        if (entry->joint->drawMode->cullMode == MAP_CULL_BACK) {
                             query->singleSided = 1;
                         } else {
                             query->singleSided = 0;
@@ -1060,7 +1060,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
         while (entry != NULL) {
             if (callback == NULL || callback(query, entry)) {
                 if (!(PSVECDistance(&endPos, &entry->centerWorld) > (reach + entry->radius))) {
-                    if (entry->joint->drawMode->cullMode == 1) {
+                    if (entry->joint->drawMode->cullMode == MAP_CULL_BACK) {
                         query->singleSided = 1;
                     } else {
                         query->singleSided = 0;
@@ -1205,7 +1205,7 @@ BOOL hitCheckVecHitObjXZ(HitCheckQuery* query, HitEntry* entry) {
     int i;
     HitVector* vector;
 
-    if (entry->joint->drawMode->cullMode == 1) {
+    if (entry->joint->drawMode->cullMode == MAP_CULL_BACK) {
         query->singleSided = 1;
     } else {
         query->singleSided = 0;
@@ -1311,7 +1311,7 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     fl = -1;
     query->targetPos = center;
     query->targetDistance = distance;
-    if (bestEntry->joint->drawMode->cullMode == 1) {
+    if (bestEntry->joint->drawMode->cullMode == MAP_CULL_BACK) {
         query->singleSided = 1;
     } else {
         query->singleSided = 0;
