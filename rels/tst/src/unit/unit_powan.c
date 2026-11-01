@@ -541,9 +541,9 @@ static USER_FUNC(powan_rider_follow) {
         y = -1000.0f;
         z = 0.0f;
     } else {
-        x = (*pose->worldPositions)[idx].x;
-        y = (*pose->worldPositions)[idx].y;
-        z = (*pose->worldPositions)[idx].z;
+        x = ((Vec*)pose->worldPositions->address)[idx].x;
+        y = ((Vec*)pose->worldPositions->address)[idx].y;
+        z = ((Vec*)pose->worldPositions->address)[idx].z;
     }
     BtlUnit_SetPartsPos(part, x, y, z);
 return EVT_RETURN_DONE;

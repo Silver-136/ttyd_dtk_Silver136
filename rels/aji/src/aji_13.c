@@ -59,33 +59,21 @@ USER_FUNC(hit_group_chk);
 #endif
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_close[];
-#else
 static EvtWord w_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_open[];
-#else
 static EvtWord w_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_close[];
-#else
 static EvtWord e_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_open[];
-#else
 static EvtWord e_door_open[22];
-#endif
 EvtWord evt_snd_stop[12];
 static EvtWord evt_haikei_in[16];
 static BeroEntry bero_entry_data[15];
 static const char* name_tbl[13];
 const char* name_tbl2[6];
 EvtWord move_left_right[128];
+#if VERSION == VERSION_DEMO_JP
+EvtWord move_up_down[128];
+#else
 EvtWord move_up_down[226];
+#endif
 EvtWord move_r[84];
 /* moving-floor gimmick read by shikake_init: hit, mapobj, two motion params, time; a NULL mapobj ends the table */
 typedef struct ShikakeMove {
@@ -118,7 +106,7 @@ EvtWord evt_bcv_sw[99];
 EvtWord evt_key_get[5];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_msg[];
+static EvtWord evt_door_msg[85];
 #else
 static EvtWord evt_door_msg[87];
 #endif

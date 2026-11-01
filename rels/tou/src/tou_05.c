@@ -68,7 +68,7 @@ static EvtWord evt_kinoshikowa[222];
 static EvtWord evt_sensyu[430];
 EvtWord evt_sensyu2[208];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_1st_leagu[];
+static EvtWord evt_1st_leagu[456];
 #else
 static EvtWord evt_1st_leagu[467];
 #endif

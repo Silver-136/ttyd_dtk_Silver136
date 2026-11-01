@@ -67,27 +67,19 @@ static EvtWord entry_event[48];
 static EvtWord damage_event[10];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[];
-#else
 static EvtWord dead_event[183];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[];
+static EvtWord dead_event[183];
 #else
 static EvtWord dead_event[189];
 #endif
 #endif
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord blow_dead_event[];
-#else
 static EvtWord blow_dead_event[98];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord blow_dead_event[];
+static EvtWord blow_dead_event[98];
 #else
 static EvtWord blow_dead_event[104];
 #endif
@@ -100,12 +92,12 @@ static EvtWord unison_phase_event[120];
 static EvtWord attack_event[72];
 static EvtWord damage_check_event_sub[157];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord piders_attack_common_event1[];
+static EvtWord piders_attack_common_event1[187];
 #else
 static EvtWord piders_attack_common_event1[163];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord piders_attack_common_event1_2[];
+static EvtWord piders_attack_common_event1_2[128];
 #else
 static EvtWord piders_attack_common_event1_2[109];
 #endif

@@ -143,7 +143,7 @@ EvtWord anm_entotsu[33];
 EvtWord anm_neji[33];
 EvtWord anm_yure[];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_prologue[];
+static EvtWord evt_prologue[172];
 #else
 static EvtWord evt_prologue[182];
 #endif

@@ -32,26 +32,10 @@ s32 key_list[4];
 static USER_FUNC(make_list);
 static USER_FUNC(sysflag);
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_close[];
-#else
 static EvtWord w_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_open[];
-#else
 static EvtWord w_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_close[];
-#else
 static EvtWord e_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_open[];
-#else
 static EvtWord e_door_open[22];
-#endif
 static BeroEntry bero_entry_data[3];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_machine[];
@@ -63,7 +47,11 @@ static EvtWord evt_koopa_after[118];
 #if VERSION >= VERSION_US
 EvtWord aji_18_init_evt[301];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord aji_18_init_evt[296];
+#else
 EvtWord aji_18_init_evt[299];
+#endif
 #endif
 
 /**

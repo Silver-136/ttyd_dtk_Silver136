@@ -51,16 +51,7 @@ typedef struct TstBattleWork {
 } TstBattleWork;
 
 #define TST_BATTLE_UNIT(unit) ((TstBattleUnit*)(unit))
-#if VERSION <= VERSION_DEMO_US
 #define TST_BATTLE_WORK(work) ((TstBattleWork*)(work))
-typedef struct TstDemoBattleWork {
-    u8 pad_00000[0x19F0];         // 0x0
-    BattleActions actionCommands; // 0x19F0
-} TstDemoBattleWork;
-#define TST_DEMO_BATTLE_WORK(work) ((TstDemoBattleWork*)(work))
-#else
-#define TST_BATTLE_WORK(work) ((TstBattleWork*)(work))
-#endif
 
 #if VERSION <= VERSION_DEMO_US
 // The JP demo's tst places BattleWork's actionCommands 0x2A0 lower than the game, at 0x19F0 (main 0x1C90).

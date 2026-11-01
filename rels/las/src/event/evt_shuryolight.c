@@ -22,6 +22,7 @@ static USER_FUNC(evt_shuryolight_get_status);
 static USER_FUNC(evt_shuryolight_get_anim_time);
 static s32 shuryolightRunEvt(EvtWord* code, s32 id);
 static void shuryolightSetAnim(s32 index, s32 anim);
+#include "version.h"
 static void shuryolight_callback(void* param, s32 group, Mtx* modeling);
 
 static const char* green_light_anim[5];
@@ -176,12 +177,7 @@ EVT_END()
  * Display callback for Grodus's lamps: when the pose group being drawn is one of the lamp locators,
  * draws that lamp's shape (on newer versions after advancing its animation).
  */
-#include "version.h"
-#if VERSION <= VERSION_DEMO_US
-static void shuryolight_callback(void* param, s32 group) {
-#else
 static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
-#endif
     ShuryoLight* lights = param;
     s32 i;
 

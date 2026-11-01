@@ -26,14 +26,10 @@ static EvtWord init_event_clauda[50];
 EvtWord damage_event_clauda[22];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event_clauda[];
-#else
 static EvtWord dead_event_clauda[156];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event_clauda[];
+static EvtWord dead_event_clauda[156];
 #else
 static EvtWord dead_event_clauda[177];
 #endif

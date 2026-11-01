@@ -243,7 +243,7 @@ static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord hom_10_init_evt[];
+static EvtWord hom_10_init_evt[104];
 #else
 static EvtWord hom_10_init_evt[140];
 #endif

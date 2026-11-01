@@ -29,7 +29,7 @@ static EvtWord evt_origami[129];
 static s32 key_tbl[2];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_chk[];
+static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif

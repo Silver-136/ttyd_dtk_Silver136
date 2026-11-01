@@ -22,7 +22,7 @@ static BeroEntry bero_data_c[2];
 static EvtWord init_unten[6];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_unten[];
+static EvtWord talk_unten[8];
 #else
 static EvtWord talk_unten[19];
 #endif

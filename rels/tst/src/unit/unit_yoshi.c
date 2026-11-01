@@ -1454,7 +1454,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 15, 1, 0)
     // The camera frames Yoshi and the target, then the command starts.
     CALL(evt_btl_camera_set_mode, 0, 10)
-    CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, BTL_UNIT_NONE, 0)
+    CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, -1, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     WAIT_FRAMES(22)

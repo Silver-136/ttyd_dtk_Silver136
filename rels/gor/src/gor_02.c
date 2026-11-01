@@ -228,14 +228,22 @@ EvtWord powerupya_party_lank_rtn[786];
 #if VERSION >= VERSION_US
 EvtWord powerupya_party_rtn[170];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord powerupya_party_rtn[152];
+#else
 EvtWord powerupya_party_rtn[167];
+#endif
 #endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord powerupya_table_talk[];
 #else
 EvtWord powerupya_table_talk[91];
 #endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord powerupya_direct_talk[103];
+#else
 EvtWord powerupya_direct_talk[96];
+#endif
 #if VERSION > VERSION_DEMO_US
 s32 powerupya_item_tbl[2];
 #endif
@@ -253,11 +261,15 @@ EvtWord powerupya_init[58];
 #if VERSION >= VERSION_US
 EvtWord johoyaperfect_talk[169];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord johoyaperfect_talk[133];
+#else
 EvtWord johoyaperfect_talk[146];
+#endif
 #endif
 static EvtWord kurihakase_init[134];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord kurihakase_talk[];
+static EvtWord kurihakase_talk[418];
 #else
 static EvtWord kurihakase_talk[421];
 #endif
@@ -268,7 +280,7 @@ EvtWord tozokudan1_talk[285];
 EvtWord tozokudan2_init[24];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_chk[];
+static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
@@ -320,12 +332,12 @@ static EvtWord evt_door_01_01[12];
 static EvtWord evt_wall_01[15];
 static const char* door_data_01_npc[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_01_open[];
+static EvtWord evt_door_01_open[86];
 #else
 static EvtWord evt_door_01_open[88];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_01_close[];
+static EvtWord evt_door_01_close[83];
 #else
 static EvtWord evt_door_01_close[85];
 #endif
@@ -354,10 +366,14 @@ static const char* door_data_03_mobj[2];
 #if VERSION == VERSION_EU
 static EvtWord evt_door_03_close[178];
 #else
+#if VERSION == VERSION_DEMO_JP
+static EvtWord evt_door_03_close[144];
+#else
 static EvtWord evt_door_03_close[166];
 #endif
+#endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_03_open[];
+static EvtWord evt_door_03_open[12];
 #else
 static EvtWord evt_door_03_open[14];
 #endif
@@ -381,12 +397,20 @@ static EvtWord evt_wall_04[38];
 #if VERSION >= VERSION_US
 static EvtWord evt_door_04_open[19];
 #else
+#if VERSION == VERSION_DEMO_JP
+static EvtWord evt_door_04_open[12];
+#else
 static EvtWord evt_door_04_open[14];
+#endif
 #endif
 #if VERSION >= VERSION_US
 static EvtWord evt_door_04_close[21];
 #else
+#if VERSION == VERSION_DEMO_JP
+static EvtWord evt_door_04_close[14];
+#else
 static EvtWord evt_door_04_close[16];
+#endif
 #endif
 static const char* door_data_04_npc[2];
 static const char* door_data_04_item[4];
@@ -458,38 +482,62 @@ EvtWord epigraphy_map[];
 #if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage1[258];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord epigraphy_map_after_stage1[246];
+#else
 EvtWord epigraphy_map_after_stage1[251];
+#endif
 #endif
 #if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage2[400];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord epigraphy_map_after_stage2[388];
+#else
 EvtWord epigraphy_map_after_stage2[393];
+#endif
 #endif
 #if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage3[368];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord epigraphy_map_after_stage3[356];
+#else
 EvtWord epigraphy_map_after_stage3[361];
+#endif
 #endif
 #if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage4[297];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord epigraphy_map_after_stage4[285];
+#else
 EvtWord epigraphy_map_after_stage4[290];
+#endif
 #endif
 #if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage5[225];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord epigraphy_map_after_stage5[213];
+#else
 EvtWord epigraphy_map_after_stage5[218];
 #endif
+#endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord epigraphy_map_after_stage6[225];
+#else
 EvtWord epigraphy_map_after_stage6[245];
+#endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord kurihakase_after3minutes[172];
+#else
 EvtWord kurihakase_after3minutes[177];
+#endif
 static HitDamageReturn hitDmgRetPoints[13];
 static EvtWord gor_goki1_urouro[116];
 static EvtWord gor_goki2_urouro[109];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box01[];
-#else
 static EvtWord mobj_box01[34];
-#endif
 s32 stg0_list[1];
 s32 stg1_list[4];
 #if VERSION <= VERSION_DEMO_US

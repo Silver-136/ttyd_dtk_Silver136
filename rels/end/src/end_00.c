@@ -109,7 +109,11 @@ ExtTexInfo* end_moa_ext_data;
 EndMoa* end_moa_tbl;
 #endif
 extern EndWork* end_wp;
+#if VERSION <= VERSION_DEMO_US
+extern CreditMsg end_staff_roll_msg_tbl[];
+#else
 extern CreditMsg end_staff_roll_msg_tbl[50];
+#endif
 #if VERSION <= VERSION_DEMO_US
 extern CreditNpc R_credits_npc_info[151];
 #else

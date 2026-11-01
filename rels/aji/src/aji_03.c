@@ -39,16 +39,8 @@ USER_FUNC(evt_sousa_icon);
 USER_FUNC(item_chk);
 USER_FUNC(evt_itemNameToItemID);
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_close[];
-#else
 static EvtWord e_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_open[];
-#else
 static EvtWord e_door_open[22];
-#endif
 static BeroEntry bero_entry_data[2];
 EvtWord evt_kaitentou[44];
 EvtWord evt_kaitentou2[44];
@@ -73,7 +65,7 @@ EvtWord evt_sw1[72];
 EvtWord evt_sw2[72];
 s32 haguruma_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_haguruma[];
+static EvtWord evt_haguruma[130];
 #else
 static EvtWord evt_haguruma[132];
 #endif

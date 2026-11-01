@@ -59,11 +59,7 @@ static BattleWeapon weapon_mahorn_dekadeka_magic;
 static BattleWeapon weapon_mahorn_katikati_magic;
 static BattleWeapon weapon_mahorn_recover_magic;
 static BattleUnitSetup entry_mahorn;
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event[];
-#else
 static EvtWord attack_event[239];
-#endif
 static EvtWord attack_event_bunsin[7];
 static PoseTableEntry pose_table[17];
 static BattleDataEntry data_table[5];
@@ -97,14 +93,10 @@ static EvtWord yokeyoke_magic_event[49];
 static EvtWord recover_magic_event[70];
 static EvtWord bunsin_event[152];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord spawn_event[];
-#else
 static EvtWord spawn_event[72];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord spawn_event[];
+static EvtWord spawn_event[72];
 #else
 static EvtWord spawn_event[76];
 #endif

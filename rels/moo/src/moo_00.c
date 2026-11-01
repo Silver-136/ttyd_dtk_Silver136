@@ -44,7 +44,7 @@ static f32 spline_dt[9];
 static EvtWord party_damage_pose[52];
 EvtWord party_damage_pose2[52];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_first[];
+static EvtWord evt_first[517];
 #else
 static EvtWord evt_first[525];
 #endif

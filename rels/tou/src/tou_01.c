@@ -167,7 +167,7 @@ static EvtWord talk_kiza[60];
 static EvtWord init_sarary[12];
 EvtWord select_number[44];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_sarary[];
+static EvtWord talk_sarary[478];
 #else
 static EvtWord talk_sarary[479];
 #endif
@@ -223,7 +223,7 @@ static EvtWord sekai_yami_npc_init[84];
 static EvtWord sekai_yami_npc[65];
 static EvtWord sekai_yami_evt[215];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord minnnanokoe_npc_entry[];
+static EvtWord minnnanokoe_npc_entry[163];
 #else
 static EvtWord minnnanokoe_npc_entry[175];
 #endif
@@ -236,7 +236,7 @@ EvtWord evt_telbox[124];
 EvtWord evt_mail[175];
 static EvtWord evt_key[7];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box00[];
+static EvtWord mobj_box00[34];
 #else
 static EvtWord mobj_box00[36];
 #endif

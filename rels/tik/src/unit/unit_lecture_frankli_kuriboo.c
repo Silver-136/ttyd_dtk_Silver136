@@ -27,14 +27,10 @@ static EvtWord init_event[53];
 static EvtWord entry_event[29];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
-#else
 static EvtWord phase_event[148];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
+static EvtWord phase_event[148];
 #else
 static EvtWord phase_event[160];
 #endif

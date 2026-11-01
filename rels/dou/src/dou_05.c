@@ -42,7 +42,7 @@ static void alpha_tev(MapTevCallbackInfo* info);
 static BeroEntry bero_entry_data[5];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_chk[];
+static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif

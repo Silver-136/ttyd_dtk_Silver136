@@ -27,11 +27,7 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord rousoku_init[];
-#else
 static EvtWord rousoku_init[46];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_06_init_evt[];
 #else

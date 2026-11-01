@@ -76,7 +76,11 @@ EvtWord marco_kyorokyoro[28];
 #if VERSION >= VERSION_US
 static EvtWord marco_talk[848];
 #else
+#if VERSION == VERSION_DEMO_JP
+static EvtWord marco_talk[788];
+#else
 static EvtWord marco_talk[831];
+#endif
 #endif
 static EvtWord megane_init[14];
 static EvtWord megane_talk[54];

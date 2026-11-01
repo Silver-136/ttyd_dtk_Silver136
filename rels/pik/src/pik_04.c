@@ -56,7 +56,7 @@ EvtWord evt_door2_h[19];
 EvtWord evt_wall_h[12];
 const char* hotel_npc[3];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord door_2_open[];
+static EvtWord door_2_open[12];
 #else
 static EvtWord door_2_open[18];
 #endif

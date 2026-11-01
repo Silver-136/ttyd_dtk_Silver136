@@ -673,19 +673,11 @@ USER_FUNC(firebar_entry) {
             ball->pos = (Vec){0.0f, 0.0f, 0.0f};
             animPoseSetAnim(ball->pose, "FRB_S_1", TRUE);
         }
-#if VERSION <= VERSION_DEMO_US
-        event->userdata[0] = wp;
-#else
         event->userdata[0] = (EvtWord)wp;
-#endif
     }
-#if VERSION <= VERSION_DEMO_US
     // FAKE: storing through &wp keeps wp in a stack slot for the whole function, as in the original
     // code; it is the same as wp = event->userdatap[0].
-    *(FirebarWork**)&wp = event->userdata[0];
-#else
     *(s32*)&wp = event->userdata[0];
-#endif
     if (wp->flags & 8) {
         if (psndSFXChk(wp->sfxId) == 0) {
             psndSFXOff(wp->sfxId);

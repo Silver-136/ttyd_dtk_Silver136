@@ -30,26 +30,10 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 static USER_FUNC(mario_chk);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_close[];
-#else
 static EvtWord w_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_open[];
-#else
 static EvtWord w_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_close[];
-#else
 static EvtWord e_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_open[];
-#else
 static EvtWord e_door_open[22];
-#endif
 static BeroEntry bero_entry_data[3];
 EvtWord evt_hajimete[33];
 #if VERSION <= VERSION_DEMO_US

@@ -31,11 +31,7 @@ static EvtWord evt_switch_01_init[26];
 static EvtWord evt_switch_01_after[11];
 static EvtWord evt_switch_01[56];
 #include "version.h"
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box01[];
-#else
 static EvtWord mobj_box01[34];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_17_init_evt[];
 #else

@@ -31,7 +31,7 @@ static BeroEntry bero_entry_data[6];
 EvtWord guide_bigtree[336];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord peach_mail[];
+static EvtWord peach_mail[242];
 #else
 static EvtWord peach_mail[257];
 #endif

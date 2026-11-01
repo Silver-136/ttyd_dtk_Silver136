@@ -49,7 +49,7 @@ EvtWord bonbaba_evt[819];
 EvtWord bonbaba_init[62];
 static NpcSetupInfo npcEnt[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord sekai_yami_evt[];
+static EvtWord sekai_yami_evt[113];
 #else
 static EvtWord sekai_yami_evt[118];
 #endif

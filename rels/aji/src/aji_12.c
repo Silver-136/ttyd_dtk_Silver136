@@ -31,16 +31,8 @@ static USER_FUNC(hikaru_off);
 static USER_FUNC(mario_chk);
 static USER_FUNC(thunder_main);
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_close[];
-#else
 static EvtWord e_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e_door_open[];
-#else
 static EvtWord e_door_open[22];
-#endif
 static BeroEntry bero_entry_data[2];
 const char* hit_list[50];
 static EvtWord evt_box[89];

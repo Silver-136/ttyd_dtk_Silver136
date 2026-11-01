@@ -77,7 +77,11 @@ extern EvtWord christine_hei_01[];
 EvtWord christine_hei_01[46];
 #endif
 #if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+EvtWord hei_01_init_evt[148];
+#else
 EvtWord hei_01_init_evt[138];
+#endif
 #else
 EvtWord hei_01_init_evt[148];
 #endif

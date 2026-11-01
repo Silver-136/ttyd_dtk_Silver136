@@ -42,20 +42,16 @@ static void callback(s32 type, void** work);
 void kuti_callback(s32 type, void** work);
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_close[];
-#else
 static EvtWord w_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_open[];
-#else
 static EvtWord w_door_open[22];
-#endif
 static BeroEntry bero_entry_data[2];
 EvtWord sekizou_kaiten[81];
 EvtWord sekizou_kaiten2[56];
+#if VERSION == VERSION_DEMO_JP
+EvtWord sekizou_talk[69];
+#else
 EvtWord sekizou_talk[2];
+#endif
 EvtWord evt_item[5];
 static EvtWord evt_down_snd[116];
 static EvtWord evt_up_snd_[12];
@@ -85,7 +81,11 @@ EvtWord UNK_0x00022c3c[66];
 #if VERSION >= VERSION_US
 EvtWord kuizu_sekizou[980];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord kuizu_sekizou[874];
+#else
 EvtWord kuizu_sekizou[920];
+#endif
 #endif
 EvtWord sekizou_init[47];
 #if VERSION <= VERSION_DEMO_US

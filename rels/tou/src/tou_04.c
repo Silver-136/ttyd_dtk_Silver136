@@ -117,7 +117,7 @@ EvtWord init_g_11[29];
 EvtWord talk_g_11[25];
 static EvtWord init_champ[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord init_brots[];
+static EvtWord init_brots[54];
 #else
 static EvtWord init_brots[58];
 #endif
@@ -136,7 +136,7 @@ static EvtWord evt_toile[107];
 static EvtWord evt_toile2[107];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_chk[];
+static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
@@ -148,7 +148,11 @@ EvtWord out_from_tou_10_re[22];
 #if VERSION >= VERSION_US
 EvtWord tou_04_init_evt[652];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord tou_04_init_evt[662];
+#else
 EvtWord tou_04_init_evt[668];
+#endif
 #endif
 
 /**

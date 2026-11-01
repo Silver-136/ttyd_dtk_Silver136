@@ -38,12 +38,12 @@ EvtWord ashioto[35];
 EvtWord gorotuki_sanninngumi[694];
 EvtWord wall_bomb00[139];
 EvtWord wall_bomb01[140];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box00[];
-#else
 static EvtWord mobj_box00[34];
-#endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord tik_01_init_evt[205];
+#else
 EvtWord tik_01_init_evt[208];
+#endif
 
 /**
  * Short scene after Goombella's badge lecture: Mario's partner walks to (-375, -105),

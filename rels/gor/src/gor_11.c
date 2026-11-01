@@ -20,7 +20,7 @@
 
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord epilogue_evt[];
+static EvtWord epilogue_evt[58];
 #else
 static EvtWord epilogue_evt[62];
 #endif

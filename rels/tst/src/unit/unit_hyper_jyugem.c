@@ -40,11 +40,7 @@ static EvtWord unison_phase_event[139];
 static EvtWord avoid_counter_thorn_head_event[61];
 static EvtWord dmg_first_attack_pos_event[19];
 #include "version.h"
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event[];
-#else
 static EvtWord attack_event[221];
-#endif
 static EvtWord normal_attack_event[585];
 static EvtWord friend_event[263];
 static EvtWord charge_event[102];

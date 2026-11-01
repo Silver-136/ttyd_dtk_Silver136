@@ -72,7 +72,11 @@ EvtWord evt_toile_door2[136];
 #if VERSION >= VERSION_US
 EvtWord evt_champion_win[290];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord evt_champion_win[269];
+#else
 EvtWord evt_champion_win[271];
+#endif
 #endif
 static EvtWord bed_entry[10];
 EvtWord evt_tou_08_cake[53];

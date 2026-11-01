@@ -18,6 +18,9 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "tik.h"
+#if VERSION <= VERSION_DEMO_US
+#include "evt/evt_snd.h"
+#endif
 
 
 static EvtWord oshimodo_event[32];

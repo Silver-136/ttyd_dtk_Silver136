@@ -81,12 +81,20 @@ EvtWord evt_garnet[562];
 static EvtWord evt_sw[89];
 EvtWord evt_kaiga[14];
 static EvtWord evt_daiza[27];
+#if VERSION == VERSION_DEMO_JP
+EvtWord pik_02_koopa_evt[1245];
+#else
 EvtWord pik_02_koopa_evt[1256];
+#endif
 EvtWord nise_starstone_init[18];
 #if VERSION >= VERSION_US
 EvtWord pik_02_init_evt[172];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord pik_02_init_evt[181];
+#else
 EvtWord pik_02_init_evt[166];
+#endif
 #endif
 
 /**

@@ -27,11 +27,7 @@ static EvtWord w_door_close[12];
 static BeroEntry bero_data[2];
 static EvtWord evt_kinoshikowa[111];
 #include "version.h"
-#if VERSION <= VERSION_DEMO_US
-static EvtWord evt_block_broken[];
-#else
 static EvtWord evt_block_broken[57];
-#endif
 static EvtWord init_michel[22];
 EvtWord init_michel_dummy[12];
 static EvtWord talk_michel[8];

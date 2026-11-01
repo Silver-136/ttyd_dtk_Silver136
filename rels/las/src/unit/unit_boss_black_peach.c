@@ -255,7 +255,11 @@ extern EvtWord queen_4_hp_msg_evt[];
 #else
 EvtWord queen_4_hp_msg_evt[39];
 #endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord queen_dead_hp_msg_evt[24];
+#else
 EvtWord queen_dead_hp_msg_evt[88];
+#endif
 EvtWord queen_phase_event[208];
 EvtWord queen_attack_black_thunder[197];
 EvtWord queen_attack_charge[166];
@@ -323,7 +327,11 @@ EvtWord queen_hand_2_dead_event[41];
 EvtWord queen_hand_2_wait_event[6];
 EvtWord queen_hand_small_init_event[96];
 EvtWord queen_hand_small_drag_attack[];
+#if VERSION == VERSION_DEMO_JP
+EvtWord queen_hand_small_1000hand_attack[254];
+#else
 EvtWord queen_hand_small_1000hand_attack[VERSION_PICK(266, 274)];
+#endif
 EvtWord queen_hand_small_attack_event[35];
 EvtWord queen_hand_small_damage_event[48];
 #if VERSION <= VERSION_DEMO_US
@@ -3301,7 +3309,7 @@ EVT_BEGIN(queen_attack_black_wave)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_peach_black_wave_attack))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, BTL_UNIT_NONE)
+    CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
 #else
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
 #endif
@@ -3461,7 +3469,7 @@ EVT_BEGIN(queen_attack_black_energy)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, BTL_UNIT_NONE)
+    CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
 #else
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
 #endif

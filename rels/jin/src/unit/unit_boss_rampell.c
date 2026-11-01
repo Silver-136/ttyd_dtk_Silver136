@@ -50,14 +50,10 @@ static EvtWord dead_event[74];
 static EvtWord phase_event[106];
 static EvtWord attack_event[24];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord ogg_attack_event[];
-#else
 static EvtWord ogg_attack_event[481];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord ogg_attack_event[];
+static EvtWord ogg_attack_event[481];
 #else
 static EvtWord ogg_attack_event[491];
 #endif

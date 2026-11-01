@@ -26,21 +26,13 @@ static EvtWord attack_event[46];
 static PoseTableEntry pose_table[18];
 static BattleDataEntry data_table[2];
 static EvtWord init_event[23];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord twink_event[];
-#else
 static EvtWord twink_event[56];
-#endif
 static EvtWord damage_event[10];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord song_event[];
-#else
 static EvtWord song_event[298];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord song_event[];
+static EvtWord song_event[298];
 #else
 static EvtWord song_event[300];
 #endif

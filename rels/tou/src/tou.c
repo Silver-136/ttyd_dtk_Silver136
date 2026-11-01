@@ -214,7 +214,11 @@ static EvtWord evt_tamago_scale[89];
 static EvtWord evt_tamago_scale2[83];
 EvtWord evt_tamago_byebye[160];
 EvtWord talk_gardman[191];
+#if VERSION == VERSION_DEMO_JP
+static EvtWord evt_gardman[357];
+#else
 static EvtWord evt_gardman[VERSION_PICK(318, 335)];
+#endif
 EvtWord evt_gardman_spawn[4];
 EvtWord evt_tou_match_make_default_sub[];
 #if VERSION <= VERSION_DEMO_US
@@ -241,7 +245,11 @@ EvtWord evt_michel_4[312];
 EvtWord evt_michel_5[42];
 EvtWord evt_michel_6[42];
 EvtWord evt_michel_7[42];
+#if VERSION == VERSION_DEMO_JP
+EvtWord evt_michel_8[606];
+#else
 EvtWord evt_michel_8[VERSION_PICK(620, 616)];
+#endif
 EvtWord evt_michel_9[40];
 EvtWord evt_mail_1[157];
 EvtWord evt_mail_2[154];
@@ -263,7 +271,11 @@ EvtWord evt_mail_5[157];
 EvtWord evt_tamago_hello[41];
 EvtWord evt_tamago_hello2[75];
 EvtWord evt_tou_ranking_msg[62];
+#if VERSION == VERSION_DEMO_JP
+EvtWord evt_tou_match_after_default[1472];
+#else
 EvtWord evt_tou_match_after_default[VERSION_PICK(1474, 1621)];
+#endif
 
 /**
  * Glitz Pit REL prolog: runs the static constructors,
@@ -335,15 +347,11 @@ static void rankingInit(void) {
         }
         if (swGet(GSWF_TOU_RANKING_SAVED)) { // GSWF_GLITZ_PIT_RANKING_SAVED
             for (j = 0; j < 2; j++) {
-#if VERSION <= VERSION_DEMO_US
-                entry->points.bytes[j] = swByteGet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE));
-#else
                 entry->sw[j] = swByteGet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE));
-#endif
             }
         } else {
 #if VERSION <= VERSION_DEMO_US
-            entry->points.total = fighterDt[entry->id].score;
+            entry->score = fighterDt[entry->id].score;
 #else
             entry->score = fighterDt[entry->id].score;
 #endif
@@ -739,7 +747,7 @@ static USER_FUNC(evt_tou_get_rule_info) {
 
 #if VERSION <= VERSION_DEMO_US
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-for (i = 0; i < rank_wp->count; i++) {
+for (i = 0; i < rank_wp->num; i++) {
             if (rank_wp->entries[i].flags & 4) {
                 break;
             }
@@ -794,7 +802,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
 
 #if VERSION <= VERSION_DEMO_US
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-for (i = 0; i < rank_wp->count; i++) {
+for (i = 0; i < rank_wp->num; i++) {
             if (rank_wp->entries[i].flags & 4) {
                 break;
             }

@@ -40,12 +40,12 @@ EvtWord gra_05_out_02[149];
 #endif
 static EvtWord in_evt[5];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord out_evt[];
+static EvtWord out_evt[148];
 #else
 static EvtWord out_evt[113];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord out_evt2[];
+static EvtWord out_evt2[130];
 #else
 static EvtWord out_evt2[150];
 #endif

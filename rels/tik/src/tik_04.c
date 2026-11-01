@@ -41,11 +41,7 @@ EvtWord plane_tobashi_check[87];
 EvtWord tik04_wall_blow_evt[5];
 EvtWord kaidan_pera[122];
 EvtWord tik_04_switch_evt[41];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box00[];
-#else
 static EvtWord mobj_box00[34];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_04_init_evt[];
 #else

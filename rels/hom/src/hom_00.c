@@ -68,7 +68,7 @@ static NpcSetupInfo npc_data[9];
 EvtWord evt_bridge_down[144];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_chk[];
+static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
@@ -81,7 +81,11 @@ EvtWord evt_hom_touchaku_nidome[56];
 #if VERSION >= VERSION_US
 EvtWord hom_00_init_evt[259];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord hom_00_init_evt[223];
+#else
 EvtWord hom_00_init_evt[247];
+#endif
 #endif
 
 /**

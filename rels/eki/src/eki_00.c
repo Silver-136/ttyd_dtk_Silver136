@@ -175,11 +175,7 @@ extern EvtWord evt_bridge[];
 EvtWord evt_bridge[14];
 #endif
 EvtWord evt_bridge2[118];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord evt_origami[];
-#else
 static EvtWord evt_origami[198];
-#endif
 static EvtWord evt_moamoa_init[29];
 static EvtWord evt_meet_moamoa[215];
 static EvtWord evt_moamoa_escape[47];

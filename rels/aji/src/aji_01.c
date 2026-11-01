@@ -41,46 +41,14 @@ USER_FUNC(get_password);
 static USER_FUNC(peach_evt_toumei);
 static USER_FUNC(peach_set_pose);
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w1_door_open[];
-#else
 static EvtWord w1_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w1_door_close[];
-#else
 static EvtWord w1_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e1_door_open[];
-#else
 static EvtWord e1_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e1_door_close[];
-#else
 static EvtWord e1_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w2_door_open[];
-#else
 static EvtWord w2_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w2_door_close[];
-#else
 static EvtWord w2_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e2_door_open[];
-#else
 static EvtWord e2_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e2_door_close[];
-#else
 static EvtWord e2_door_close[22];
-#endif
 static EvtWord n1_door_open[22];
 static EvtWord n1_door_close[22];
 static EvtWord n2_door_open[22];
@@ -99,16 +67,8 @@ extern EvtWord w3_door_close[];
 #else
 EvtWord w3_door_close[22];
 #endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e3_door_open[];
-#else
 static EvtWord e3_door_open[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord e3_door_close[];
-#else
 static EvtWord e3_door_close[22];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord w4_door_open[];
 #else
@@ -168,14 +128,22 @@ EvtWord ele1_door_close[139];
 #if VERSION >= VERSION_US
 EvtWord ele_1[607];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord ele_1[591];
+#else
 EvtWord ele_1[595];
+#endif
 #endif
 EvtWord ele2_door_open[139];
 EvtWord ele2_door_close[139];
 #if VERSION >= VERSION_US
 EvtWord ele_2[634];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord ele_2[618];
+#else
 EvtWord ele_2[622];
+#endif
 #endif
 static EvtWord evt_elv_init[271];
 EvtWord key_lock[14];

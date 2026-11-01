@@ -43,7 +43,7 @@ static EvtWord init_madam[52];
 static s32 item_tbl_madam[2];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_madam_ring_return[];
+static EvtWord talk_madam_ring_return[65];
 #else
 static EvtWord talk_madam_ring_return[67];
 #endif
@@ -58,12 +58,12 @@ static const char* access_tbl[5];
 static const char* access_tbl[7];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_access[];
+static EvtWord evt_access[14];
 #else
 static EvtWord evt_access[25];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_access_entry[];
+static EvtWord evt_access_entry[23];
 #else
 static EvtWord evt_access_entry[24];
 #endif

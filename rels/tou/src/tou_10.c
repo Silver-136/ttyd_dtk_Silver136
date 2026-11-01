@@ -99,7 +99,11 @@ EvtWord evt_rec[274];
 #if VERSION >= VERSION_US
 static EvtWord evt_gardman[202];
 #else
+#if VERSION == VERSION_DEMO_JP
+static EvtWord evt_gardman[237];
+#else
 static EvtWord evt_gardman[198];
+#endif
 #endif
 EvtWord evt_match_make_sub[138];
 #if VERSION <= VERSION_DEMO_US

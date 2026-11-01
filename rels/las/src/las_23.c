@@ -27,7 +27,11 @@ static HitDamageReturn dmgRetPoint[6];
 #if VERSION >= VERSION_US
 EvtWord las_23_init_evt[98];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord las_23_init_evt[90];
+#else
 EvtWord las_23_init_evt[93];
+#endif
 #endif
 
 /**

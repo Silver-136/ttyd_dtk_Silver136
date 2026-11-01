@@ -93,14 +93,10 @@ static EvtWord yokeyoke_magic_event[49];
 static EvtWord recover_magic_event[70];
 static EvtWord bunsin_event[152];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord spawn_event[];
-#else
 static EvtWord spawn_event[72];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord spawn_event[];
+static EvtWord spawn_event[72];
 #else
 static EvtWord spawn_event[76];
 #endif

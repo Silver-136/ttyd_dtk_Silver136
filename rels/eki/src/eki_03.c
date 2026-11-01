@@ -62,7 +62,11 @@ EvtWord evt_poster_15[7];
 #if VERSION >= VERSION_US
 EvtWord eki_03_init_evt[470];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord eki_03_init_evt[476];
+#else
 EvtWord eki_03_init_evt[471];
+#endif
 #endif
 
 /**
@@ -692,7 +696,7 @@ static USER_FUNC(test_glare) {
         envGlareFilter(0, 0, 0, 0, 0);
     } else {
 #if VERSION <= VERSION_DEMO_US
-        ((EnvGlareFilterS16Fn)envGlareFilter)(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
+        envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
 envGlareFilterZ(0.998f);
 #else
         envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);

@@ -56,14 +56,10 @@ static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[12];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord init_event2[];
-#else
 static EvtWord init_event2[142];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord init_event2[];
+static EvtWord init_event2[142];
 #else
 static EvtWord init_event2[148];
 #endif
@@ -75,40 +71,28 @@ static EvtWord attack_event[546];
 static EvtWord wait_event[6];
 static EvtWord damage_event_ceil[49];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord counter_damage_event_ceil[];
-#else
 static EvtWord counter_damage_event_ceil[70];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord counter_damage_event_ceil[];
+static EvtWord counter_damage_event_ceil[70];
 #else
 static EvtWord counter_damage_event_ceil[76];
 #endif
 #endif
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord ceil_fall_ready_event[];
-#else
 static EvtWord ceil_fall_ready_event[152];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord ceil_fall_ready_event[];
+static EvtWord ceil_fall_ready_event[152];
 #else
 static EvtWord ceil_fall_ready_event[158];
 #endif
 #endif
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event_ceil[];
-#else
 static EvtWord attack_event_ceil[461];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event_ceil[];
+static EvtWord attack_event_ceil[461];
 #else
 static EvtWord attack_event_ceil[467];
 #endif

@@ -60,7 +60,7 @@ static EvtWord door_1_open[12];
 static EvtWord door_1_close[14];
 static DoorParam door_1;
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_prologue[];
+static EvtWord evt_prologue[644];
 #else
 static EvtWord evt_prologue[713];
 #endif

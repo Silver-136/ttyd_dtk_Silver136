@@ -54,15 +54,11 @@ EvtWord oumu_check[176];
 static NpcSetupInfo npcEnt[2];
 static s32 lock_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord lock_item_check[];
+static EvtWord lock_item_check[21];
 #else
 static EvtWord lock_item_check[23];
 #endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box01[];
-#else
 static EvtWord mobj_box01[34];
-#endif
 static EvtWord mobj_box02[34];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord jin_08_init_evt[];

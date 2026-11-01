@@ -72,10 +72,22 @@ static EvtWord _restore_koura_pose[47];
 static EvtWord _koura_rotate_start[199];
 static EvtWord _koura_rotate_stop[13];
 EvtWord partyNokotarouAttack_FirstAttack[236];
+#if VERSION == VERSION_DEMO_JP
+EvtWord partyNokotarouAttack_NormalAttack[769];
+#else
 EvtWord partyNokotarouAttack_NormalAttack[VERSION_PICK(793, 804)];
+#endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord partyNokotarouAttack_SyubibinKoura[667];
+#else
 EvtWord partyNokotarouAttack_SyubibinKoura[VERSION_PICK(691, 702)];
+#endif
 EvtWord partyNokotarouAttack_KouraGuard[];
+#if VERSION == VERSION_DEMO_JP
+EvtWord partyNokotarouAttack_TsuranukiKoura[901];
+#else
 EvtWord partyNokotarouAttack_TsuranukiKoura[VERSION_PICK(931, 942)];
+#endif
 EvtWord nokotarou_appeal_event[34];
 static EvtWord party_win_reaction[16];
 static EvtWord attack_audience_event[263];

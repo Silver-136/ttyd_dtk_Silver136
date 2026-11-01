@@ -162,14 +162,10 @@ EvtWord damage_sub_event[148];
 static EvtWord phase_event[28];
 EvtWord monster_before_phase_event[195];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[];
-#else
 static EvtWord dead_event[126];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[];
+static EvtWord dead_event[126];
 #else
 static EvtWord dead_event[165];
 #endif
@@ -206,14 +202,10 @@ EvtWord batten_leader_shikaeshi_attack_event[176];
 EvtWord batten_leader_yokeyoke_attack_event[176];
 EvtWord batten_leader_stop_attack_event[328];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event[];
-#else
 static EvtWord wait_event[15];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord wait_event[];
+static EvtWord wait_event[15];
 #else
 static EvtWord wait_event[16];
 #endif

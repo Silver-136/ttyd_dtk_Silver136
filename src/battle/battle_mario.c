@@ -110,10 +110,18 @@ static EvtWord marioAttackEvent_NormalJump[VERSION_PICK(889, 963)];
 static EvtWord marioAttackEvent_KururinJump[1210];
 EvtWord marioAttackEvent_JyabaraJump[];
 EvtWord marioAttackEvent_GatsuDokaJump[VERSION_PICK(624, 638)];
+#if VERSION == VERSION_DEMO_JP
+EvtWord marioAttackEvent_TatsumakiJump[1661];
+#else
 EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
+#endif
 EvtWord marioAttackEvent_RenzokuJump[840];
 EvtWord marioAttackEvent_TugiTugiJump[VERSION_PICK(793, 775)];
+#if VERSION == VERSION_DEMO_JP
+EvtWord marioAttackEvent_NormalHammer_Core[1312];
+#else
 EvtWord marioAttackEvent_NormalHammer_Core[VERSION_PICK(1326, 1333)];
+#endif
 static EvtWord marioAttackEvent_KaitenHammer[1060];
 EvtWord marioAttackEvent_FirstAttackKaitenHammer[19];
 EvtWord marioAttackEvent_JishinHammer[VERSION_PICK(834, 845)];

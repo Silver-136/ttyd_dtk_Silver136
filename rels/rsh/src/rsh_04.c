@@ -56,14 +56,22 @@ EvtWord evt_shorui_funshitu[362];
 EvtWord evt_shorui_funshitu[352];
 #endif
 static s32 item_tbl[2];
+#if VERSION == VERSION_DEMO_JP
+EvtWord evt_daijisouna_kami[206];
+#else
 EvtWord evt_daijisouna_kami[208];
+#endif
 EvtWord evt_syasyou_auto_talk[27];
 static EvtWord init_syashou[56];
 static s32 item_tbl2[2];
 #if VERSION >= VERSION_US
 static EvtWord talk_syashou[413];
 #else
+#if VERSION == VERSION_DEMO_JP
+static EvtWord talk_syashou[354];
+#else
 static EvtWord talk_syashou[367];
+#endif
 #endif
 EvtWord talk_sarary_repeat[43];
 static EvtWord init_sarary[55];
@@ -80,7 +88,11 @@ s32 item_tbl3[2];
 #if VERSION >= VERSION_US
 static EvtWord talk_konari[265];
 #else
+#if VERSION == VERSION_DEMO_JP
+static EvtWord talk_konari[217];
+#else
 static EvtWord talk_konari[219];
+#endif
 #endif
 EvtWord talk_powan_repeat[43];
 static EvtWord init_powan[64];
@@ -106,12 +118,12 @@ typedef struct ShelfAccessTbl3 {
 } ShelfAccessTbl3;
 static ShelfAccessTbl3 access_tbl;
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_access[];
+static EvtWord evt_access[21];
 #else
 static EvtWord evt_access[32];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_access_entry[];
+static EvtWord evt_access_entry[24];
 #else
 static EvtWord evt_access_entry[25];
 #endif

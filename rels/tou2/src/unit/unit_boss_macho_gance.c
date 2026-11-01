@@ -69,11 +69,7 @@ static EvtWord init_event[79];
 static EvtWord entry_event[62];
 static EvtWord damage_event[97];
 EvtWord base_size_change[99];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
-#else
 static EvtWord phase_event[482];
-#endif
 static EvtWord dead_event[64];
 #if VERSION > VERSION_DEMO_US
 EvtWord macho_gance_damage_event[238];

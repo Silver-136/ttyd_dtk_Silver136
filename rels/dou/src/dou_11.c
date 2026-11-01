@@ -104,7 +104,7 @@ EvtWord escapeway_event[98];
 #endif
 EvtWord bombwall_escape_move[58];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord bombwall_bomb[];
+static EvtWord bombwall_bomb[181];
 #else
 static EvtWord bombwall_bomb[187];
 #endif

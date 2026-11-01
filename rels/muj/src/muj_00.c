@@ -230,7 +230,11 @@ f32 dai3_taisan_spline_dt01[9];
 EvtWord nameraka_rotate[48];
 EvtWord dai3_taisan_move_trace00[69];
 EvtWord dai3_taisan_move_trace01[69];
+#if VERSION == VERSION_DEMO_JP
+EvtWord dai3_beat_back[199];
+#else
 EvtWord dai3_beat_back[194];
+#endif
 s32 leave_island_suifupos[380];
 EvtWord move_ship_se00[20];
 EvtWord move_ship_se01[20];

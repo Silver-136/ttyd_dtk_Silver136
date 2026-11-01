@@ -131,7 +131,7 @@ EvtWord nopush_evt[5];
 static EvtWord evt_key[5];
 static s32 lock_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord lock_item_check[];
+static EvtWord lock_item_check[21];
 #else
 static EvtWord lock_item_check[23];
 #endif

@@ -233,7 +233,7 @@ static EvtWord door_close[10];
 DoorParam door;
 static BeroEntry bero_entry_data[3];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord first_evt[];
+static EvtWord first_evt[146];
 #else
 static EvtWord first_evt[148];
 #endif
@@ -264,7 +264,7 @@ EvtWord open_hatch[83];
 static f32 spline_dt[9];
 const char* oh_data[8];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_taihou[];
+static EvtWord evt_taihou[2440];
 #else
 static EvtWord evt_taihou[2446];
 #endif

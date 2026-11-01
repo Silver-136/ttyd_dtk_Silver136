@@ -88,7 +88,11 @@ EvtWord evt_toron_catch2[359];
 #if VERSION >= VERSION_US
 EvtWord evt_toron_appear[437];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord evt_toron_appear[408];
+#else
 EvtWord evt_toron_appear[414];
+#endif
 #endif
 #if VERSION == VERSION_EU
 static EvtWord evt_daiji_kami[96];
@@ -99,7 +103,7 @@ static EvtWord evt_yuka_simi[45];
 static EvtWord evt_access[14];
 static EvtWord evt_access2[44];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_access_entry[];
+static EvtWord evt_access_entry[21];
 #else
 static EvtWord evt_access_entry[62];
 #endif

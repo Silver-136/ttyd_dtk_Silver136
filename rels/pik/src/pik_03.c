@@ -29,7 +29,7 @@ EvtWord bero_out[53];
 static BeroEntry bero_data[2];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_daiza[];
+static EvtWord evt_daiza[21];
 #else
 static EvtWord evt_daiza[28];
 #endif

@@ -70,12 +70,12 @@ static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord hom_10_init_evt[];
+static EvtWord hom_10_init_evt[104];
 #else
 static EvtWord hom_10_init_evt[140];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_train[];
+static EvtWord evt_train[252];
 #else
 static EvtWord evt_train[284];
 #endif
@@ -112,7 +112,11 @@ EvtWord gor_04_koopa_evt[1123];
 #if VERSION >= VERSION_US
 EvtWord gor_04_init_evt[255];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord gor_04_init_evt[244];
+#else
 EvtWord gor_04_init_evt[253];
+#endif
 #endif
 
 /**

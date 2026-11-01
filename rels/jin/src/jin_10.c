@@ -30,7 +30,7 @@ static EvtWord door_open[12];
 static BeroEntry bero_entry_data[3];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord push_evt[];
+static EvtWord push_evt[126];
 #else
 static EvtWord push_evt[132];
 #endif

@@ -52,7 +52,11 @@ EvtWord first_gra06jin[138];
 #if VERSION >= VERSION_US
 EvtWord teresa_oidasare_evt[282];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord teresa_oidasare_evt[272];
+#else
 EvtWord teresa_oidasare_evt[274];
+#endif
 #endif
 EvtWord gra_06_init_evt[148];
 

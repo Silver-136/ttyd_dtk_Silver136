@@ -74,7 +74,11 @@ s32 item_tbl_waitless[2];
 #if VERSION >= VERSION_US
 EvtWord talk_waitless_pias_return[158];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord talk_waitless_pias_return[110];
+#else
 EvtWord talk_waitless_pias_return[112];
+#endif
 #endif
 static EvtWord talk_waitless[268];
 EvtWord move_waitless[49];
@@ -106,7 +110,11 @@ EvtWord evt_shop_open[267];
 #if VERSION >= VERSION_US
 EvtWord evt_shop_close[420];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord evt_shop_close[294];
+#else
 EvtWord evt_shop_close[317];
+#endif
 #endif
 EvtWord evt_shop_door_init[36];
 static EvtWord evt_yuka_simi[45];
@@ -116,12 +124,12 @@ static const char* access_tbl[11];
 static const char* access_tbl[16];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_access[];
+static EvtWord evt_access[14];
 #else
 static EvtWord evt_access[25];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_access_entry[];
+static EvtWord evt_access_entry[23];
 #else
 static EvtWord evt_access_entry[24];
 #endif
@@ -145,7 +153,11 @@ EvtWord rsh_03_c_init_evt[71];
 #if VERSION >= VERSION_US
 EvtWord rsh_03_init_evt_nidome[219];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord rsh_03_init_evt_nidome[139];
+#else
 EvtWord rsh_03_init_evt_nidome[140];
+#endif
 #endif
 EvtWord rsh_03_a_init_evt_nidome[23];
 EvtWord rsh_03_b_init_evt_nidome[11];

@@ -68,4 +68,5 @@ void BattleBreakSlot_PointInc(void);
 // Names from LLCOOLT's tree.
 enum {
     BREAK_SLOT_FLAG_LECTURE = 1,
+    BREAK_SLOT_FLAG_QUEEN_FORCE_STAR = 1 << 1,
 };

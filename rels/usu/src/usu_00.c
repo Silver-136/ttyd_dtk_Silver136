@@ -128,7 +128,7 @@ EvtWord chief_mario_talk[55];
 static EvtWord vivian_init[44];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord vivian_talk[];
+static EvtWord vivian_talk[27];
 #else
 static EvtWord vivian_talk[29];
 #endif
@@ -164,12 +164,20 @@ EvtWord usu00_check_vivian[33];
 #if VERSION >= VERSION_US
 EvtWord usu00_crowAB_talk_event[338];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord usu00_crowAB_talk_event[291];
+#else
 EvtWord usu00_crowAB_talk_event[299];
+#endif
 #endif
 #if VERSION >= VERSION_US
 EvtWord usu00_crowCDE_talk_event[346];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord usu00_crowCDE_talk_event[299];
+#else
 EvtWord usu00_crowCDE_talk_event[307];
+#endif
 #endif
 EvtWord chief_pig_event[66];
 static KinopioData kino_dt;
@@ -232,7 +240,7 @@ static EvtWord sekai_yami_evt[260];
 static EvtWord minnnanokoe_npc_entry[94];
 static EvtWord minnnanokoe_evt[381];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_after_peach[];
+static EvtWord evt_after_peach[149];
 #else
 static EvtWord evt_after_peach[151];
 #endif
@@ -242,7 +250,11 @@ static EvtWord epilogue_evt[73];
 #if VERSION >= VERSION_US
 EvtWord usu_00_init_evt[660];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord usu_00_init_evt[544];
+#else
 EvtWord usu_00_init_evt[658];
+#endif
 #endif
 
 /**

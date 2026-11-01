@@ -134,9 +134,21 @@ EvtWord evt_mon_open[112];
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
 EvtWord usu01_check_vivian[36];
+#if VERSION == VERSION_DEMO_JP
+EvtWord usu01_crowFG_talk_event[347];
+#else
 EvtWord usu01_crowFG_talk_event[VERSION_PICK(355, 394)];
+#endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord usu01_crowHI_talk_event[246];
+#else
 EvtWord usu01_crowHI_talk_event[VERSION_PICK(250, 289)];
+#endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord usu01_crowJ_talk_event[222];
+#else
 EvtWord usu01_crowJ_talk_event[VERSION_PICK(226, 265)];
+#endif
 const char* minka_npc[6];
 const char* minka_item[2];
 const char* shop_npc[6];
@@ -173,7 +185,7 @@ EvtWord evt_monban_buta2[17];
 EvtWord evt_monban_look[119];
 static s32 lock_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord lock_item_check[];
+static EvtWord lock_item_check[39];
 #else
 static EvtWord lock_item_check[41];
 #endif
@@ -188,12 +200,12 @@ static BoobooName booboo_name[8];
 EvtWord evt_roll_get[2];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_majin[];
+static EvtWord evt_majin[325];
 #else
 static EvtWord evt_majin[330];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_majin2[];
+static EvtWord evt_majin2[239];
 #else
 static EvtWord evt_majin2[237];
 #endif
@@ -203,11 +215,7 @@ static EvtWord evt_ki_2[20];
 static EvtWord evt_ki_3[20];
 static TreeAccess tree_tbl[5];
 EvtWord usu_01_tree_init[7];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box00[];
-#else
 static EvtWord mobj_box00[34];
-#endif
 EvtWord usu_01_init_evt[350];
 
 /** Init script of villager F: enables move/talk animation. */

@@ -29,12 +29,12 @@ static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_majin[];
+static EvtWord evt_majin[485];
 #else
 static EvtWord evt_majin[487];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_majin2[];
+static EvtWord evt_majin2[239];
 #else
 static EvtWord evt_majin2[237];
 #endif

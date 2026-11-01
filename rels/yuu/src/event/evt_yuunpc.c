@@ -1497,10 +1497,7 @@ static inline void yuunpc_stop(YuuNpc* npc) {
         (npc)->vy = 6.5f;                                                                                                                  \
         (npc)->dir.x = 1.0f;                                                                                                               \
         (npc)->dir.z = 0.0f;                                                                                                               \
-        if (!(c26 & 0x1f)) {                                                                                                               \
-            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_JUMP1), &(npc)->pos);                                                    \
-        }                                                                                                                                  \
-        c26++;                                                                                                                             \
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_EVT_GAME_SLIT_NPC_JUMP1), &(npc)->pos);                                                        \
     } while (0)
 #else
 #define YUU_JUMP(npc)                                                                                                                      \

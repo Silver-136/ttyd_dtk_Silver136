@@ -225,7 +225,11 @@ extern EvtWord stg_08_1_init_sub_event[];
 EvtWord stg_08_1_init_sub_event[97];
 #endif
 EvtWord stg_08_1_init_event[4];
+#if VERSION == VERSION_DEMO_JP
+EvtWord stg_08_6_init_sub_event[154];
+#else
 EvtWord stg_08_6_init_sub_event[46];
+#endif
 EvtWord stg_08_6_init_event[4];
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000775c, JP las .text+0x7690. See docs/NAME_PROVENANCE.md.

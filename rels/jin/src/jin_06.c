@@ -29,11 +29,7 @@ static BeroEntry bero_entry_data[2];
 EvtWord jin_06_wall_open_evt[5];
 EvtWord jin_06_jumpstand[53];
 #include "version.h"
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box00[];
-#else
 static EvtWord mobj_box00[34];
-#endif
 EvtWord jin_06_init_evt[165];
 
 /**

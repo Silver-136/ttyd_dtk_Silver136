@@ -28,14 +28,10 @@ static BattleDataEntry data_table[2];
 static EvtWord init_event[21];
 static EvtWord damage_event[10];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord song_event[];
-#else
 static EvtWord song_event[298];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord song_event[];
+static EvtWord song_event[298];
 #else
 static EvtWord song_event[300];
 #endif

@@ -56,7 +56,7 @@ static EvtWord baba_init[7];
 static EvtWord baba_talk[8];
 static NpcSetupInfo npcEnt[5];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord first_evt[];
+static EvtWord first_evt[168];
 #else
 static EvtWord first_evt[170];
 #endif
@@ -77,11 +77,7 @@ extern EvtWord koopa_evt[];
 EvtWord koopa_evt[1671];
 #endif
 static EvtWord shuryolight_init[18];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord shan_init[];
-#else
 static EvtWord shan_init[46];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_28_init_evt[];
 #else

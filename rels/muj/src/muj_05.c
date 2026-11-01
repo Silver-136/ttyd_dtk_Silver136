@@ -57,7 +57,7 @@ static EvtWord sanders_init[51];
 static s32 itemsel_table01[2];
 EvtWord sanders_talk_sub[70];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord sanders_talk[];
+static EvtWord sanders_talk[170];
 #else
 static EvtWord sanders_talk[178];
 #endif

@@ -107,11 +107,7 @@ EvtWord pik_01_koopa_evt[241];
 #endif
 static EvtWord delete_npc_regl_evt[35];
 static EvtWord sekai_yami_shake[11];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord sekai_yami_evt[];
-#else
 static EvtWord sekai_yami_evt[140];
-#endif
 static EvtWord minnnanokoe_evt[391];
 static EvtWord evt_switch_init[17];
 EvtWord iri_27_npc_entry[26];

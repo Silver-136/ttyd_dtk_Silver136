@@ -42,14 +42,10 @@ static EvtWord chain_event[23];
 static EvtWord damage_event[33];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord counter_damage_event[];
-#else
 static EvtWord counter_damage_event[115];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord counter_damage_event[];
+static EvtWord counter_damage_event[115];
 #else
 static EvtWord counter_damage_event[68];
 #endif
@@ -60,14 +56,10 @@ static EvtWord wait_event[476];
 static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord wait_sound_event2[];
-#else
 static EvtWord wait_sound_event2[11];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord wait_sound_event2[];
+static EvtWord wait_sound_event2[11];
 #else
 static EvtWord wait_sound_event2[12];
 #endif

@@ -20,11 +20,7 @@ static EvtWord check_roll[16];
 static BeroEntry bero_entry_data[2];
 EvtWord item_box_00[34];
 #include "version.h"
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box01[];
-#else
 static EvtWord mobj_box01[34];
-#endif
 EvtWord jin_05_init_evt[63];
 
 /**

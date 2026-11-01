@@ -68,7 +68,11 @@ void _prolog(void);
 #if VERSION >= VERSION_US
 EvtWord jon_init_evt[400];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord jon_init_evt[329];
+#else
 EvtWord jon_init_evt[391];
+#endif
 #endif
 u8 enemy_100[100];
 NpcSetupInfo npcEnt_kuriboo[2];
@@ -116,7 +120,11 @@ EvtWord idouya_setup[38];
 #if VERSION >= VERSION_US
 EvtWord talk_gyousyou[219];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord talk_gyousyou[186];
+#else
 EvtWord talk_gyousyou[207];
+#endif
 #endif
 NpcSetupInfo npcEnt_gyousyou[2];
 EvtWord gyousyou_setup[47];
@@ -3562,17 +3570,10 @@ WAIT_MS(4000)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY)
-#if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
-    IF_INT_EQUAL(GSWF_TROUBLE_WORK(GSW_TROUBLE_ACTIVE), 12)
-        IF_INT_EQUAL(GSWF(5406), 1)
-            IF_INT_EQUAL(GSWF(5407), 0)
-#else
     SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
-#endif
                 CALL(evt_npc_get_reglid, STRING("マッキノ"), LW(0))
                 DELETE_EVENT(LW(0))
                 CALL(evt_npc_change_interrupt, STRING("マッキノ"), 1, 0)

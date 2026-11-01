@@ -13,6 +13,9 @@
 #include "mot/mot_slit.h"
 #include "mot/mot_roll.h"
 #include "driver/npcdrv.h"
+#if VERSION <= VERSION_DEMO_US
+#include "evt/evt_window.h"
+#endif
 
 #include "mario/mario.h"
 #include "manager/evtmgr_cmd.h"

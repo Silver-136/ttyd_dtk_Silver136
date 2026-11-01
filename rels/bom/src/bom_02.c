@@ -78,7 +78,7 @@ static EvtWord evt_taihou[190];
 EvtWord urotuku_white[190];
 static EvtWord init_soncho[13];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_soncho[];
+static EvtWord talk_soncho[416];
 #else
 static EvtWord talk_soncho[421];
 #endif
@@ -95,7 +95,7 @@ static EvtWord talk_murabito_g[81];
 static EvtWord init_murabito_h[2];
 s32 iri_26_item_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_murabito_h[];
+static EvtWord talk_murabito_h[149];
 #else
 static EvtWord talk_murabito_h[151];
 #endif
@@ -110,7 +110,7 @@ EvtWord mario_jump_tail[6];
 #endif
 s32 iri_25_item_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_white[];
+static EvtWord talk_white[115];
 #else
 static EvtWord talk_white[117];
 #endif
@@ -124,7 +124,7 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
 #if VERSION <= VERSION_DEMO_US
-static EvtWord sekai_yami_evt[];
+static EvtWord sekai_yami_evt[465];
 #else
 static EvtWord sekai_yami_evt[459];
 #endif

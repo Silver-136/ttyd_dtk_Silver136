@@ -21,6 +21,10 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+#if VERSION <= VERSION_DEMO_US
+#include "driver/itemdrv.h"
+#include "evt/evt_item.h"
+#endif
 
 #include "party.h"
 #include "mario/mario.h"

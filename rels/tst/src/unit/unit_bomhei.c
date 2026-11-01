@@ -31,53 +31,37 @@ static BattleWeapon weapon_bomhei_attack;
 static BattleWeapon weapon_bomhei_bomb;
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord bomb_event[];
+static EvtWord bomb_event[102];
 #else
 static EvtWord bomb_event[106];
 #endif
 static EvtWord init_event[42];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[];
-#else
 static EvtWord damage_event[55];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event[];
+static EvtWord damage_event[55];
 #else
 static EvtWord damage_event[58];
 #endif
 #endif
 static EvtWord change_spark_event[70];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event[];
-#else
 static EvtWord attack_event[440];
-#endif
 static EvtWord wait_event[6];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event_spark[];
-#else
 static EvtWord damage_event_spark[22];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord damage_event_spark[];
+static EvtWord damage_event_spark[22];
 #else
 static EvtWord damage_event_spark[25];
 #endif
 #endif
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event_spark[];
-#else
 static EvtWord attack_event_spark[286];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event_spark[];
+static EvtWord attack_event_spark[286];
 #else
 static EvtWord attack_event_spark[288];
 #endif

@@ -110,16 +110,12 @@ static EvtWord key_evt[5];
 static s32 key_tbl[2];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord key_check_evt[];
+static EvtWord key_check_evt[21];
 #else
 static EvtWord key_check_evt[23];
 #endif
 static EvtWord unlock_evt[10];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord shan_init[];
-#else
 static EvtWord shan_init[68];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_05_init_evt[];
 #else

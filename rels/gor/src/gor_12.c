@@ -19,7 +19,11 @@
 
 
 static EvtWord epilogue_evt[49];
+#if VERSION == VERSION_DEMO_JP
+EvtWord gor_12_init_evt[27];
+#else
 EvtWord gor_12_init_evt[35];
+#endif
 
 /**
  * Ending sequence on the final sea view: starts the sea ambience, freezes and hides Mario and the partner,

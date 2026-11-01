@@ -118,14 +118,10 @@ static EvtWord damage_event[70];
 EvtWord cortez_ac_counter_damage_event[98];
 static EvtWord avoid_thorn_event[89];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
-#else
 static EvtWord phase_event[184];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
+static EvtWord phase_event[184];
 #else
 static EvtWord phase_event[196];
 #endif
@@ -138,14 +134,10 @@ EvtWord at2_hone_rain_attack_event[605];
 EvtWord _bone_rain_event[114];
 EvtWord attack_event_mode3[52];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_audience_event[];
-#else
 static EvtWord attack_audience_event[198];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord attack_audience_event[];
+static EvtWord attack_audience_event[198];
 #else
 static EvtWord attack_audience_event[247];
 #endif
@@ -161,14 +153,10 @@ BattleUnitSetup entry_saber;
 EvtWord cortez_reset_pose_table[450];
 static EvtWord cortez_damage_sub_event[153];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[];
-#else
 static EvtWord dead_event[1007];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord dead_event[];
+static EvtWord dead_event[1007];
 #else
 static EvtWord dead_event[1033];
 #endif

@@ -112,16 +112,8 @@ static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t);
 #define SAVE_EVT evt_memcard_save
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_close[];
-#else
 static EvtWord w_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_open[];
-#else
 static EvtWord w_door_open[22];
-#endif
 static BeroEntry bero_entry_data[2];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_emergency[];
@@ -163,7 +155,11 @@ static EvtWord teshita2_init[9];
 static EvtWord syuryo_init[9];
 static NpcSetupInfo npcEnt[4];
 EvtWord tec_talk[36];
+#if VERSION == VERSION_DEMO_JP
+EvtWord aji_17_init_evt[250];
+#else
 EvtWord aji_17_init_evt[VERSION_PICK(253, 255)];
+#endif
 
 #pragma defer_codegen off
 /**

@@ -56,11 +56,7 @@ extern EvtWord mega_attack_event[];
 EvtWord mega_attack_event[256];
 #endif
 static EvtWord charge_event[55];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event[];
-#else
 static EvtWord attack_event[237];
-#endif
 static EvtWord wait_event[6];
 
 /**

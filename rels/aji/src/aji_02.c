@@ -39,16 +39,8 @@ static USER_FUNC(thunder_main);
 static USER_FUNC(loop_onoff);
 
 #include "version.h"
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_close[];
-#else
 static EvtWord w_door_close[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord w_door_open[];
-#else
 static EvtWord w_door_open[22];
-#endif
 static BeroEntry bero_entry_data[2];
 u8 root_0[10];
 u8 root_1[14];

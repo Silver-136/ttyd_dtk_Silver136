@@ -31,6 +31,9 @@
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
 #include "evt/evt_uranaisi.h"
+#if VERSION <= VERSION_DEMO_US
+#include "evt/evt_win.h"
+#endif
 
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario.h"
@@ -145,7 +148,11 @@ EvtWord uranaisi_init[10];
 EvtWord starmaniac_init[14];
 #endif
 EvtWord starmaniac_get_event[5];
+#if VERSION == VERSION_DEMO_JP
+EvtWord starmaniac_talk[192];
+#else
 EvtWord starmaniac_talk[VERSION_PICK(227, 238)];
+#endif
 EvtWord johoyaketi_talk[VERSION_PICK(186, 209)];
 EvtWord kuribo5_init[2];
 EvtWord kuribo5_talk[76];
@@ -205,7 +212,7 @@ extern EvtWord evt_open_04_open[];
 EvtWord evt_open_04_open[179];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_04_close[];
+static EvtWord evt_door_04_close[85];
 #else
 static EvtWord evt_door_04_close[87];
 #endif
@@ -231,11 +238,7 @@ EvtWord hashira_bomb_sub[144];
 EvtWord hashira_bomb[45];
 static EvtWord epilogue_npc_entry[25];
 static EvtWord epilogue_evt[127];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box01[];
-#else
 static EvtWord mobj_box01[34];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_00_init_evt[];
 #else

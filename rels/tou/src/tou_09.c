@@ -31,7 +31,7 @@ EvtWord evt_in[68];
 static BeroEntry bero_data[4];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_toile[];
+static EvtWord evt_toile[161];
 #else
 static EvtWord evt_toile[201];
 #endif

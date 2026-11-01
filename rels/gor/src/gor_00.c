@@ -136,7 +136,7 @@ static EvtWord peton_talk[28];
 static EvtWord marco_init[32];
 EvtWord marco_party_move[120];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord marco_talk[];
+static EvtWord marco_talk[362];
 #else
 static EvtWord marco_talk[364];
 #endif
@@ -165,7 +165,11 @@ static EvtWord suifu_d_talk[8];
 EvtWord suifubomb_a_urouro2[31];
 EvtWord suifubomb_a_init[53];
 EvtWord suifubomb_a_regl[30];
+#if VERSION == VERSION_DEMO_JP
+EvtWord suifubomb_a_talk[224];
+#else
 EvtWord suifubomb_a_talk[VERSION_PICK(226, 218)];
+#endif
 EvtWord suifubomb_b_urouro2[27];
 EvtWord suifubomb_b_init[39];
 EvtWord suifubomb_b_regl[60];
@@ -192,7 +196,11 @@ static EvtWord borodo2_init[42];
 static EvtWord borodo2_escape[43];
 static EvtWord borodo2_talk[13];
 EvtWord mokorim_init[28];
+#if VERSION == VERSION_DEMO_JP
+EvtWord mokorim_talk[521];
+#else
 EvtWord mokorim_talk[546];
+#endif
 static EvtWord baba_init[9];
 static EvtWord luigi_init[18];
 static EvtWord luigi_talk[4];
@@ -247,11 +255,7 @@ extern EvtWord into_gor_ship[];
 EvtWord into_gor_ship[265];
 #endif
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mony_peton_event[];
-#else
 static EvtWord mony_peton_event[251];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mony_run_away[];
@@ -280,23 +284,15 @@ EvtWord gor_muj_ship_pera[115];
 EvtWord gor_muj_ship_start[258];
 EvtWord tsumini[212];
 static HitDamageReturn dmgRetPoint[VERSION_PICK(4, 6)];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box00[];
-#else
 static EvtWord mobj_box00[34];
-#endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord epilogue_npc_entry[];
+static EvtWord epilogue_npc_entry[365];
 #else
 static EvtWord epilogue_npc_entry[340];
 #endif
 EvtWord punio_kinoko[22];
 EvtWord puniko_kinoko[22];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord epilogue_evt[];
-#else
 static EvtWord epilogue_evt[1520];
-#endif
 EvtWord epilogue_npc_entry2[30];
 static EvtWord epilogue_evt2[74];
 EvtWord return_gorotsuki_town_init[25];
@@ -305,7 +301,11 @@ extern EvtWord return_gorotsuki_town[];
 #else
 EvtWord return_gorotsuki_town[625];
 #endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord gor_00_init_evt[535];
+#else
 EvtWord gor_00_init_evt[VERSION_PICK(537, 540)];
+#endif
 
 /**
  * Sprite entries for the extra townsfolk of the harbor (evt_nannpc_init): the c_zako_n model with its S_1

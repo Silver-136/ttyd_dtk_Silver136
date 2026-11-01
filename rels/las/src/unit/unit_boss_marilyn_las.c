@@ -40,11 +40,7 @@ static EvtWord damage_event[22];
 static EvtWord dead_event[152];
 static EvtWord unison_phase_event[83];
 static EvtWord phase_event[2];
-#if VERSION <= VERSION_DEMO_US
-static EvtWord attack_event[];
-#else
 static EvtWord attack_event[93];
-#endif
 #if VERSION >= VERSION_US
 static EvtWord kagenuke_attack_event[241];
 #else

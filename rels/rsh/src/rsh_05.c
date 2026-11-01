@@ -171,23 +171,15 @@ EvtWord evt_moamoa_help[166];
 EvtWord evt_moamoa_escape0[15];
 EvtWord evt_moamoa_escape1[15];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord evt_moamoa_escape[];
-#else
 static EvtWord evt_moamoa_escape[205];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_moamoa_escape[];
+static EvtWord evt_moamoa_escape[205];
 #else
 static EvtWord evt_moamoa_escape[228];
 #endif
 #endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord init_syashou[];
-#else
 static EvtWord init_syashou[30];
-#endif
 static EvtWord talk_syashou[19];
 static EvtWord init_waitless[30];
 static EvtWord talk_waitless[19];

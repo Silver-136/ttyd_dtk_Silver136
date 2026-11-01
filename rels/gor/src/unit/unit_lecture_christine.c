@@ -43,7 +43,11 @@ static EvtWord wait_event[6];
 static EvtWord attack_event[19];
 BattleWeapon lec_weapon_zutsuki_1;
 BattleWeapon lec_weapon_zutsuki_2;
+#if VERSION == VERSION_DEMO_JP
+EvtWord lecture_zutsuki_attack_event[554];
+#else
 EvtWord lecture_zutsuki_attack_event[570];
+#endif
 
 /**
  * Script helper that converts the defence action command result of the battle into the tutorial's own code:

@@ -119,7 +119,11 @@ EvtWord nise_mario_init[29];
 #if VERSION >= VERSION_US
 EvtWord last_evt_3[1349];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord last_evt_3[1376];
+#else
 EvtWord last_evt_3[1379];
+#endif
 #endif
 EvtWord b_peach_fuwafuwa[39];
 #if VERSION >= VERSION_US
@@ -144,7 +148,11 @@ EvtWord shuryolight_delete[20];
 #if VERSION >= VERSION_US
 EvtWord las_29_init_evt[180];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord las_29_init_evt[161];
+#else
 EvtWord las_29_init_evt[182];
+#endif
 #endif
 
 /**

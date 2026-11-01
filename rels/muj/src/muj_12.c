@@ -55,7 +55,7 @@ EvtWord korutesu_blur[43];
 static EvtWord starstone_fuwafuwa[53];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
-static EvtWord korutesu_event[];
+static EvtWord korutesu_event[616];
 #else
 static EvtWord korutesu_event[627];
 #endif

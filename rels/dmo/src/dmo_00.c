@@ -89,7 +89,11 @@ EvtWord chusan_move[25];
 #if VERSION >= VERSION_US
 EvtWord dmo_00_init_evt[268];
 #else
+#if VERSION == VERSION_DEMO_JP
+EvtWord dmo_00_init_evt[247];
+#else
 EvtWord dmo_00_init_evt[262];
+#endif
 #endif
 
 #if VERSION <= VERSION_DEMO_US

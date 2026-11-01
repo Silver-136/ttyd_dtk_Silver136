@@ -204,7 +204,11 @@ EvtWord maffiaboss_nekomu00[14];
 EvtWord maffiaboss_nekomu01[14];
 EvtWord maffiaboss_nekomu02[14];
 EvtWord maffia1_init[23];
+#if VERSION == VERSION_DEMO_JP
+EvtWord maffia1_talk[116];
+#else
 EvtWord maffia1_talk[128];
+#endif
 EvtWord maffia2_init[23];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord maffia2_talk[];
@@ -249,7 +253,11 @@ extern EvtWord bteresa_talk_sub_minigame[];
 #else
 EvtWord bteresa_talk_sub_minigame[245];
 #endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord bteresa_talk_sub_keihin[202];
+#else
 EvtWord bteresa_talk_sub_keihin[VERSION_PICK(220, 242)];
+#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord bteresa_table_talk[];
 #else
@@ -263,7 +271,11 @@ EvtWord kyaku4_init[2];
 EvtWord kyaku4_talk[66];
 f32 montemedalzpos[2];
 EvtWord slot_fall_monte[4];
+#if VERSION == VERSION_DEMO_JP
+EvtWord slot_set[154];
+#else
 EvtWord slot_set[VERSION_PICK(148, 168)];
+#endif
 EvtWord slot1_set[7];
 EvtWord slot2_set[7];
 SlotDrum drumname[2];
@@ -275,7 +287,11 @@ extern EvtWord ranking_set[];
 #else
 EvtWord ranking_set[65];
 #endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord exchange_set[200];
+#else
 EvtWord exchange_set[VERSION_PICK(195, 210)];
+#endif
 EvtWord roten_4_init[13];
 EvtWord roten_4_regl[19];
 EvtWord roten_4_talk[68];
@@ -284,7 +300,7 @@ EvtWord kinopiko_a_talk[68];
 static EvtWord kinopiko_b_init[13];
 EvtWord kinopiko_b_regl[19];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord kinopiko_b_talk[];
+static EvtWord kinopiko_b_talk[148];
 #else
 static EvtWord kinopiko_b_talk[159];
 #endif
@@ -306,8 +322,16 @@ EvtWord evt_door_01_10[39];
 static const char* door_data_01_npc[2];
 EvtWord evt_door_01_0_open[31];
 EvtWord evt_door_01_0_close[69];
+#if VERSION == VERSION_DEMO_JP
+EvtWord evt_door_01_1_open[25];
+#else
 EvtWord evt_door_01_1_open[132];
+#endif
+#if VERSION == VERSION_DEMO_JP
+EvtWord evt_door_01_1_close[39];
+#else
 EvtWord evt_door_01_1_close[146];
+#endif
 DoorParam door_data_01_0;
 DoorParam door_data_01_1;
 EvtWord evt_door_01_entry[39];
@@ -352,12 +376,12 @@ EvtWord door_data_03_close[19];
 static DoorParam door_data_03;
 static EvtWord evt_door_03_caseopen[6];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_03_open[];
+static EvtWord evt_door_03_open[165];
 #else
 static EvtWord evt_door_03_open[170];
 #endif
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_03_close[];
+static EvtWord evt_door_03_close[14];
 #else
 static EvtWord evt_door_03_close[19];
 #endif
@@ -367,7 +391,7 @@ static EvtWord evt_door_04_00[12];
 static EvtWord evt_wall_04[28];
 static const char* door_data_04_npc[3];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_04_open[];
+static EvtWord evt_door_04_open[12];
 #else
 static EvtWord evt_door_04_open[17];
 #endif
@@ -379,7 +403,7 @@ EvtWord evt_door_04_close_snd[19];
 static DoorParam door_data_04;
 EvtWord evt_door_04_caseclose[6];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_door_04_close[];
+static EvtWord evt_door_04_close[65];
 #else
 static EvtWord evt_door_04_close[70];
 #endif
@@ -441,7 +465,11 @@ extern EvtWord monte_evt_door_close[];
 EvtWord monte_evt_door_close[16];
 #endif
 EvtWord monte_evt_door_entry[73];
+#if VERSION == VERSION_DEMO_JP
+EvtWord gor_03_init_evt[451];
+#else
 EvtWord gor_03_init_evt[VERSION_PICK(462, 681)];
+#endif
 
 /**
  * Script helper that makes the NPC named args[0] the owner of this script (event->ownerNPC),
@@ -4603,7 +4631,7 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_check, STRING("pblk2"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_mobj_flag_onoff, 1, STRING("pblk2"), MOBJ_FLAG_INVISIBLE | MOBJ_FLAG_NO_SHADOW)
+        CALL(evt_mobj_flag_onoff, 1, STRING("pblk2"), MOBJ_FLAG_NO_DISP | MOBJ_FLAG_NO_SHADOW)
     END_IF
     RETURN
 EVT_END()
@@ -4615,7 +4643,7 @@ CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG
     CALL(evt_snd_env_lpf, 0, 0)
     CALL(evt_mobj_check, STRING("pblk2"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        CALL(evt_mobj_flag_onoff, 0, STRING("pblk2"), MOBJ_FLAG_INVISIBLE | MOBJ_FLAG_NO_SHADOW)
+        CALL(evt_mobj_flag_onoff, 0, STRING("pblk2"), MOBJ_FLAG_NO_DISP | MOBJ_FLAG_NO_SHADOW)
     END_IF
     RETURN
 EVT_END()

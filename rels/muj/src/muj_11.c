@@ -10,6 +10,9 @@
 #include "party/party_motion.h"
 #include "evt/evt_map.h"
 #include "pmario_sound.h"
+#if VERSION <= VERSION_DEMO_US
+#include "evt/evt_mobj.h"
+#endif
 
 
 static EvtWord w_close[12];

@@ -45,14 +45,10 @@ static EvtWord init_event_sub[47];
 static EvtWord dmg_avoid_counter_thorn_head_event[76];
 static EvtWord damage_event[102];
 #if VERSION <= VERSION_DEMO_US
-#if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
-#else
 static EvtWord phase_event[164];
-#endif
 #else
 #if VERSION <= VERSION_DEMO_US
-static EvtWord phase_event[];
+static EvtWord phase_event[164];
 #else
 static EvtWord phase_event[188];
 #endif

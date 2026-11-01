@@ -93,7 +93,7 @@ static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord hom_10_init_evt[];
+static EvtWord hom_10_init_evt[104];
 #else
 static EvtWord hom_10_init_evt[140];
 #endif
@@ -102,7 +102,7 @@ static BeroEntry bero_data[3];
 static const char* name_tbl[6];
 EvtWord evt_pik_yajirushi[71];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord evt_train[];
+static EvtWord evt_train[252];
 #else
 static EvtWord evt_train[295];
 #endif
@@ -118,7 +118,7 @@ static EvtWord talk_papa[141];
 static EvtWord init_mama[8];
 s32 iri_29_item_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_mama[];
+static EvtWord talk_mama[316];
 #else
 static EvtWord talk_mama[318];
 #endif
@@ -127,13 +127,13 @@ static EvtWord talk_konari[58];
 static EvtWord init_madam[8];
 static s32 item_tbl_madam[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_madam_ring_return[];
+static EvtWord talk_madam_ring_return[52];
 #else
 static EvtWord talk_madam_ring_return[54];
 #endif
 s32 iri_23_item_tbl[2];
 #if VERSION <= VERSION_DEMO_US
-static EvtWord talk_madam[];
+static EvtWord talk_madam[183];
 #else
 static EvtWord talk_madam[185];
 #endif
@@ -162,11 +162,7 @@ extern EvtWord evt_seacret[];
 #else
 EvtWord evt_seacret[131];
 #endif
-#if VERSION <= VERSION_DEMO_US
-static EvtWord mobj_box00[];
-#else
 static EvtWord mobj_box00[34];
-#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord pik_00_init_evt[];
 #else
