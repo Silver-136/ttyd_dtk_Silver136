@@ -7665,13 +7665,13 @@ void puniCountDisp(CameraId unused, void* param) {
 #if VERSION <= VERSION_DEMO_US
 iconDispGxCol(m, 4, VERSION_PICK(0x203, 0x20A), c1);
 #else
-    iconDispGxCol(m, 0x10, VERSION_PICK(0x203, 0x20A), c1);
+    iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x203, 0x20A), c1);
 #endif
     PSMTXTrans(m, -232.0f, -178.0f, 0.0f);
 #if VERSION <= VERSION_DEMO_US
 iconDispGxCol(m, 4, VERSION_PICK(0x204, 0x20B), c2);
 #else
-    iconDispGxCol(m, 0x10, VERSION_PICK(0x204, 0x20B), c2);
+    iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x204, 0x20B), c2);
 #endif
     PSMTXTrans(m, -160.0f, -178.0f, 0.0f);
     if (Punigp->showRemaining) {
@@ -7685,7 +7685,7 @@ iconDispGxCol(m, 4, VERSION_PICK(0x204, 0x20B), c2);
 #if VERSION <= VERSION_DEMO_US
 iconDispGxCol(m, 4, VERSION_PICK(0x1D8, 0x1E0), c3);
 #else
-    iconDispGxCol(m, 0x10, VERSION_PICK(0x1D8, 0x1E0), c3);
+    iconDispGxCol(m, ICON_FLAG_2D, VERSION_PICK(0x1D8, 0x1E0), c3);
 #endif
     PSMTXTrans(m, -90.0f, -178.0f, 0.0f);
     iconNumberDispGx(m, num1, TRUE, c3);

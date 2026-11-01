@@ -383,7 +383,7 @@ CALL(evt_party_stop, 0)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     // After the fight a cry of "Grodus!" is heard and the scene whites out to the Moon.
     CALL(evt_msg_print, 0, STRING("stg7_aji_42"), 0, STRING("ロボット"))
-    CALL(evt_fade_set_mapchange_type, 1, 17, 900, 16, 900)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(17), 900, FADE_NUM(16), 900)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_snd_sfxoff, LW(10))

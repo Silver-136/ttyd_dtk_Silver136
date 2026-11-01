@@ -222,7 +222,7 @@ CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
         CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("<diary><nowinse><once_stop>"), 0, 0)
         CALL(evt_msg_print_add, 0, STRING("pro_04"))
         CALL(evt_cam_letter_box_camid, 10)
-        CALL(evt_fade_set_mapchange_type, 1, 17, 800, 16, 800)
+        CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(17), 800, FADE_NUM(16), 800)
         CALL(evt_bero_mapchange, STRING("aaa_00"), STRING("prologue2"))
     END_INLINE_EVENT
     RETURN

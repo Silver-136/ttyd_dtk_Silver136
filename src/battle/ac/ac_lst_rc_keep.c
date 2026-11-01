@@ -290,30 +290,30 @@ static void actionCommandDisp(f32 x, f32 y, s32 n) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -168.0f + x;
         pos.y = 70.0f + y;
-        iconDispGx(&pos, 0x10, ICON_SUBSTICK_RIGHT, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_SUBSTICK_RIGHT, 1.0f);
     } else {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -168.0f + x;
         pos.y = 70.0f + y;
-        iconDispGx(&pos, 0x10, ICON_SUBSTICK_NEUTRAL, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_SUBSTICK_NEUTRAL, 1.0f);
     }
     if (n < 3) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -232.0f + x;
         pos.y = 70.0f + y;
-        iconDispGx(&pos, 0x10, ICON_STICK_LEFT, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_STICK_LEFT, 1.0f);
     } else {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -232.0f + x;
         pos.y = 70.0f + y;
-        iconDispGx(&pos, 0x10, ICON_STICK_NEUTRAL, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_STICK_NEUTRAL, 1.0f);
     }
     {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         y = 25.0f + y;
         pos.y = y;
-        iconDispGx(&pos, 0x10, ICON_AC_BAR_MIDDLE, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_BAR_MIDDLE, 1.0f);
     }
     i = 0;
     off = 0;
@@ -322,24 +322,24 @@ static void actionCommandDisp(f32 x, f32 y, s32 n) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = x + (f32)(off - 0x102);
             pos.y = y;
-            iconDispGx(&pos, 0x10, ICON_AC_LAMP_1 + i, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_LAMP_1 + i, 1.0f);
         } else {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = x + (f32)(off - 0x102);
             pos.y = y;
-            iconDispGx(&pos, 0x10, ICON_AC_OFF, 0.5f);
+            iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_OFF, 0.5f);
         }
     }
     if (n < 3) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -151.0f + x;
         pos.y = y;
-        iconDispGx(&pos, 0x10, ICON_AC_OFF, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_OFF, 1.0f);
     } else {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -151.0f + x;
         pos.y = y;
-        iconDispGx(&pos, 0x10, ICON_AC_ON, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_ON, 1.0f);
     }
 }
 #pragma optimize_for_size reset

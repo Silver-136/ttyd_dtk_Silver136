@@ -717,7 +717,7 @@ EVT_BEGIN(s_bero_out)
         CALL(evt_fade_entry, FADE_NUM(10), 300, 0, 0, 0)
         CALL(evt_fade_end_wait)
         WAIT_MS(1000)
-        CALL(evt_fade_set_mapchange_type, 0, 0, 0, 9, 300)
+        CALL(evt_fade_set_mapchange_type, 0, 0, 0, FADE_NUM(9), 300)
         CALL(evt_bero_mapchange, STRING("aji_17"), STRING("w_bero"))
         ELSE
 #if VERSION < VERSION_US

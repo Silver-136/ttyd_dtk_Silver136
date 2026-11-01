@@ -268,7 +268,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = px;
         pos.y = py;
-        iconDispGx(&pos, 0x10, ICON_AC_GAUGE_FRAME, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_FRAME, 1.0f);
     }
     full = 0;
     ratio = g->gauge / 100.0f;
@@ -311,7 +311,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             Vec pos = {0.0f, 0.0f, 0.0f};
             pos.x = px;
             pos.y = 70.0f + y;
-            iconDispGx(&pos, 0x10, icon, 1.0f);
+            iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
             break;
         }
         case 1000:
@@ -319,12 +319,12 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = px;
                 pos.y = 70.0f + y;
-                iconDispGx(&pos, 0x10, pressedIcon, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, pressedIcon, 1.0f);
             } else {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 pos.x = px;
                 pos.y = 70.0f + y;
-                iconDispGx(&pos, 0x10, icon, 1.0f);
+                iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
             }
             break;
     }
@@ -337,6 +337,6 @@ static void actionCommandDisp(f32 x, f32 y) {
         pos = (Vec){0.0f, 0.0f, 0.0f};
         pos.x = 120.0f + px;
         pos.y = py;
-        iconDispGx(&pos, 0x10, id, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, id, 1.0f);
     }
 }

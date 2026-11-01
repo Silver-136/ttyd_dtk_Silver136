@@ -546,7 +546,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 ADD(LW(1), 50)
                 CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
-                CALL(evt_fade_set_mapchange_type, 0, 4, 500, 9, 300)
+                CALL(evt_fade_set_mapchange_type, 0, 4, 500, FADE_NUM(9), 300)
                 CALL(evt_bero_mapchange, STRING("gon_01"), STRING("e_bero"))
             END_IF
         END_LOOP

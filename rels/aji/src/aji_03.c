@@ -1291,7 +1291,7 @@ void icon_disp(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_US
 iconDispGx2(trans, 0x4, ICON_ARROW);
 #else
-        iconDispGx2(trans, 0x10, ICON_ARROW);
+        iconDispGx2(trans, ICON_FLAG_2D, ICON_ARROW);
 #endif
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
@@ -1299,7 +1299,7 @@ iconDispGx2(trans, 0x4, ICON_ARROW);
 #if VERSION <= VERSION_DEMO_US
 iconDispGx2(trans, 0x4, ICON_BUTTON_A);
 #else
-        iconDispGx2(trans, 0x10, ICON_BUTTON_A);
+        iconDispGx2(trans, ICON_FLAG_2D, ICON_BUTTON_A);
 #endif
     } else {
         PSMTXTrans(trans, event->userdata[1] - 30, event->userdata[2] + 100, 0.0f);
@@ -1310,7 +1310,7 @@ iconDispGx2(trans, 0x4, ICON_BUTTON_A);
 #if VERSION <= VERSION_DEMO_US
 iconDispGx2(trans, 0x4, ICON_ARROW);
 #else
-        iconDispGx2(trans, 0x10, ICON_ARROW);
+        iconDispGx2(trans, ICON_FLAG_2D, ICON_ARROW);
 #endif
         PSMTXTrans(trans, event->userdata[1], event->userdata[2], 0.0f);
         PSMTXScale(scale, 1.5f, 1.5f, 1.5f);
@@ -1318,7 +1318,7 @@ iconDispGx2(trans, 0x4, ICON_ARROW);
 #if VERSION <= VERSION_DEMO_US
 iconDispGx2(trans, 0x4, ICON_BUTTON_B);
 #else
-        iconDispGx2(trans, 0x10, ICON_BUTTON_B);
+        iconDispGx2(trans, ICON_FLAG_2D, ICON_BUTTON_B);
 #endif
     }
 }

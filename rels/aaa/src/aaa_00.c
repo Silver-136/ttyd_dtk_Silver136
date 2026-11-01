@@ -417,7 +417,7 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_msg_print, 0, STRING("pro_03"), 0, STRING("ルイージ"))
     WAIT_MS(300)
     CALL(evt_cam_letter_box_camid, 10)
-    CALL(evt_fade_set_mapchange_type, 1, 17, 800, 16, 800)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(17), 800, FADE_NUM(16), 800)
     CALL(evt_bero_mapchange, STRING("gor_10"), 0)
     RETURN
 EVT_END()
@@ -510,7 +510,7 @@ EVT_BEGIN(evt_prologue2)
     // The music fades out, the story progress is set, and the game moves on to muj_20.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff, PSND_FADEOUT)
-    CALL(evt_fade_set_mapchange_type, 1, 49, 0, 50, 0)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(49), 0, FADE_NUM(50), 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
     CALL(evt_bero_mapchange, STRING("muj_20"), STRING("prologue"))
     RETURN

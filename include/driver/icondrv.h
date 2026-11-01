@@ -32,10 +32,24 @@ typedef struct IconBinary {
 
 // flags, 1 = in use, 0x10 = 2D, 0x1000 = animated(?), 0x2000 = ?(something to do with bin)
 
+#include "version.h"
+
 // IconEntry.flags (iconFlagOn/iconFlagOff)
 typedef enum IconFlags {
     ICON_FLAG_ACTIVE = (1 << 0),             // 0x1, slot in use
     ICON_FLAG_HIDDEN = (1 << 1),             // 0x2, not drawn
+#if VERSION <= VERSION_DEMO_US
+    // The demos number these differently (values from LLCOOLT's tree, confirmed by their code).
+    ICON_FLAG_2D = (1 << 2),
+    ICON_FLAG_FLIP_X = (1 << 3),
+    ICON_FLAG_FLIP_Y = (1 << 4),
+    ICON_FLAG_GRAY = (1 << 5),
+    ICON_FLAG_CAM_EFFECT_A = (1 << 6),
+    ICON_FLAG_ITEM_NO_MAP_BLEND = (1 << 7),
+    ICON_FLAG_CAM_EFFECT_B = (1 << 8),
+    ICON_FLAG_CULL_BACK = (1 << 9),
+    ICON_FLAG_CULL_FRONT = (1 << 10),
+#else
     ICON_FLAG_FLIP_X = (1 << 2),             // 0x4
     ICON_FLAG_FLIP_Y = (1 << 3),             // 0x8
     ICON_FLAG_2D = (1 << 4),                 // 0x10, iconEntry2D: 2D camera, no light, fog or Z
@@ -46,6 +60,7 @@ typedef enum IconFlags {
     ICON_FLAG_CAM_EFFECT_B = (1 << 9),       // 0x200, drawn by CAMERA_3D_EFFECTB
     ICON_FLAG_CULL_BACK = (1 << 10),         // 0x400
     ICON_FLAG_CULL_FRONT = (1 << 11),        // 0x800
+#endif
     ICON_FLAG_ANIMATED = (1 << 12),          // 0x1000, frames advance (icon data type bit 0)
     ICON_FLAG_DATA_PENDING = (1 << 13),      // 0x2000, the icon data was not loaded yet at the entry
 } IconFlags;

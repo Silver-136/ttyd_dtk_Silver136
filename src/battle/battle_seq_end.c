@@ -1107,9 +1107,9 @@ EVT_BEGIN(_curtain_close_event)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_fade_entry, 22, 1000, 0, 0, 0) // demo fade types are 2 lower
+        CALL(evt_fade_entry, FADE_NUM(22), 1000, 0, 0, 0) // demo fade types are 2 lower
 #else
-        CALL(evt_fade_entry, 24, 1000, 0, 0, 0)
+        CALL(evt_fade_entry, FADE_NUM(24), 1000, 0, 0, 0)
 #endif
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
@@ -1250,12 +1250,12 @@ EVT_BEGIN(_curtain_close_event)
         CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
         CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_fade_entry, 23, 1000, 0, 0, 0) // demo fade types are 2 lower
+        CALL(evt_fade_entry, FADE_NUM(23), 1000, 0, 0, 0) // demo fade types are 2 lower
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, LW(0))
 #else
         CALL(evt_batstage_set_aud_dark, 0, 60, 0)
-        CALL(evt_fade_entry, 25, 1000, 0, 0, 0)
+        CALL(evt_fade_entry, FADE_NUM(25), 1000, 0, 0, 0)
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
 #endif

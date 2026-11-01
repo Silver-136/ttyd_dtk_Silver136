@@ -2233,7 +2233,7 @@ EVT_BEGIN(gor_04_koopa_evt)
     WAIT_MS(300)
     CALL(evt_npc_set_autotalkpose, STRING(/*"ババ"*/"\x83\x6F\x83\x6F"), STRING("P_1"), STRING("T_6"))
     CALL(evt_msg_print, 0, STRING("kpa_stg4_006"), 0, STRING(/*"ババ"*/"\x83\x6F\x83\x6F"))
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 300, FADE_NUM(9), 300)
     CALL(evt_bero_mapchange, STRING("tou_00"), STRING(""))
     CALL(evt_mario_key_onoff, 1)
     RETURN

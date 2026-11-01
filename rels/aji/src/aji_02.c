@@ -261,7 +261,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1500)
-    CALL(evt_fade_set_mapchange_type, 0, 12, 100, 11, 100)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(12), 100, FADE_NUM(11), 100)
     CALL(evt_bero_mapchange, STRING("aji_16"), STRING("peach_evt_stg1"))
     RETURN
 EVT_END()

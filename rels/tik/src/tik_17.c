@@ -251,7 +251,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_FP_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
+CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
 #endif

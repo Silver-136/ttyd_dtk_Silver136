@@ -404,7 +404,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         d1 = (Vec){0.0f, 0.0f, 0.0f};
         pos.x = (-288.0f + x) + ((f32)gw->width) * target / 100.0f;
         pos.y = y3;
-        iconDispGx(&pos, 0x10, iconId, 0.75f);
+        iconDispGx(&pos, ICON_FLAG_2D, iconId, 0.75f);
     }
 
     pressedIcon = BattleACGetButtonIcon(PAD_BUTTON_A, 1);
@@ -421,7 +421,7 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec e1 = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);
                 p.y = 55.0f + y;
-                iconDispGx(&p, 0x10, icon, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, icon, 1.0f);
                 break;
         }
         case 1000:
@@ -432,12 +432,12 @@ static void actionCommandDisp(f32 x, f32 y) {
                 Vec e1 = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);
                 p.y = 55.0f + y;
-                iconDispGx(&p, 0x10, pressedIcon, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, pressedIcon, 1.0f);
             } else {
                 Vec p = {0.0f, 0.0f, 0.0f};
                 p.x = 28.0f + (-225.0f + x);
                 p.y = 55.0f + y;
-                iconDispGx(&p, 0x10, icon, 1.0f);
+                iconDispGx(&p, ICON_FLAG_2D, icon, 1.0f);
             }
             break;
     }

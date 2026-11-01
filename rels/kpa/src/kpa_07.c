@@ -429,7 +429,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
     CALL(evt_mario_set_mode, 0)
-    CALL(evt_fade_set_mapchange_type, 1, 59, 0, 58, 0)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(59), 0, FADE_NUM(58), 0)
     CALL(evt_bero_mapchange, STRING("gor_04"), STRING("resha_return"))
     RETURN
 EVT_END()

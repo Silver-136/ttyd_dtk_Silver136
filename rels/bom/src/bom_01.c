@@ -3696,7 +3696,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_wait_pera, STRING(("\203{\203\200\203w\203CD")))
     CALL(evt_msg_print, 0, STRING(("stg8_las_148_71")), 0, STRING(("\221\272\222\267")))
     WAIT_MS(2000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 300, FADE_NUM(9), 300)
     CALL(evt_bero_mapchange, STRING(("las_29")), STRING(("minnnanokoe")))
 #endif
     RETURN

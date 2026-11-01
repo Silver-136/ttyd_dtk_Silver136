@@ -806,7 +806,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_fade_tec_onoff, 1, 1)
     WAIT_MS(1000)
     WAIT_MS(1000)
-    CALL(evt_fade_set_mapchange_type, 0, 12, 100, 11, 100)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(12), 100, FADE_NUM(11), 100)
     // The scene fades out and the game returns to the central hall.
     CALL(evt_bero_mapchange, STRING("aji_01"), STRING("peach_evt_stg1"))
     RETURN

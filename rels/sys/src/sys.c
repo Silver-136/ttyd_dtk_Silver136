@@ -1249,8 +1249,8 @@ EVT_BEGIN(sys_01_init_evt)
         CALL(display, LW(0))
     END_INLINE_EVENT
     WAIT_MS(3000)
-    CALL(evt_fade_set_mapchange_type, 0, 17, 1800, 16, 1800)
-    CALL(evt_fade_set_mapchange_type, 1, 17, 1800, 16, 1800)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(17), 1800, FADE_NUM(16), 1800)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(17), 1800, FADE_NUM(16), 1800)
     SPAWN_EVENT(PTR(evt_start))
     RETURN
 EVT_END()
@@ -1288,8 +1288,8 @@ EVT_BEGIN(evt_start)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_fade_set_mapchange_type, 0, 19, 500, 18, 500)
-    CALL(evt_fade_set_mapchange_type, 1, 19, 500, 18, 500)
+    CALL(evt_fade_set_mapchange_type, 0, FADE_NUM(19), 500, FADE_NUM(18), 500)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(19), 500, FADE_NUM(18), 500)
     CALL(evt_bero_get_entername, LW(1))
     IF_STR_EQUAL(LW(1), STRING("prologue"))
         SET_VALUE(LW(0), 0)

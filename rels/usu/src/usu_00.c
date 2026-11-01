@@ -1471,7 +1471,7 @@ EVT_BEGIN(gra00_2witch_find_ranpel_event)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_sfx_all_stop)
-    CALL(evt_fade_set_mapchange_type, 1, 55, 0, 54, 0)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(55), 0, FADE_NUM(54), 0)
     CALL(evt_bero_mapchange, STRING("aji_10"), 0)
     RETURN
 EVT_END()
@@ -3703,7 +3703,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     CALL_CHILD(PTR(evt_memcard_save))
 #endif
     CALL(evt_mario_set_mode, 0)
-    CALL(evt_fade_set_mapchange_type, 1, 59, 0, 58, 0)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(59), 0, FADE_NUM(58), 0)
     CALL(evt_bero_mapchange, STRING("muj_00"), STRING(""))
     RETURN
 EVT_END()

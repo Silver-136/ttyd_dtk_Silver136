@@ -366,11 +366,11 @@ static void actionCommandDisp(f32 x, f32 y) {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 58.0f + y;
-        iconDispGx(&pos, 0x10, ICON_BUTTON_A_PRESSED, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A_PRESSED, 1.0f);
     } else {
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = -200.0f + x;
         pos.y = 58.0f + y;
-        iconDispGx(&pos, 0x10, ICON_BUTTON_A, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_BUTTON_A, 1.0f);
     }
 }

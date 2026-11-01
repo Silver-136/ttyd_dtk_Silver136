@@ -3310,7 +3310,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_wait_pera, STRING("キノシコワ"))
     CALL(evt_msg_print, 0, STRING("stg8_dark_03"), 0, STRING("キノシコワ"))
     WAIT_MS(1000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 300, FADE_NUM(9), 300)
     CALL(evt_bero_mapchange, STRING("las_29"), STRING("sekai_yami1"))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -3493,7 +3493,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(300)
     CALL(evt_npc_set_stay_anim, STRING("キノシコワ"))
     WAIT_MS(2000)
-    CALL(evt_fade_set_mapchange_type, 1, 10, 300, 9, 300)
+    CALL(evt_fade_set_mapchange_type, 1, FADE_NUM(10), 300, FADE_NUM(9), 300)
     CALL(evt_bero_mapchange, STRING("usu_00"), STRING("minnnanokoe"))
     RETURN
 EVT_END()
@@ -3717,7 +3717,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_PLUS_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
+CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
 #endif
