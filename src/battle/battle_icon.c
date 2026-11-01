@@ -21,7 +21,7 @@ BattleIcon* BtlIconGetPtr(s32 index) {
 
     for (i = 0; i < 16; i++) {
         icon = &_battleWorkPointer->icons[i];
-        if ((icon->flags & 1) && icon->index == index) {
+        if ((icon->flags & BATTLE_ICON_FLAG_ACTIVE) && icon->index == index) {
             return icon;
         }
     }
@@ -45,11 +45,11 @@ void BattleIconMain(void) {
     wp = _battleWorkPointer;
     for (i = 0; i < 16; i++) {
         icon = &wp->icons[i];
-        if (icon->flags & 1) { // in use
+        if (icon->flags & BATTLE_ICON_FLAG_ACTIVE) { // in use
             if (icon->base) {
                 iconSetPos(icon->base->name, icon->position.x, icon->position.y, icon->position.z);
                 iconSetScale(icon->base->name, icon->scale * icon->scaleMul);
-                if (icon->flags & 2) {
+                if (icon->flags & BATTLE_ICON_FLAG_HIDDEN) {
                     iconFlagOn(icon->base->name, ICON_FLAG_HIDDEN);
                 } else {
                     iconFlagOff(icon->base->name, ICON_FLAG_HIDDEN);
@@ -76,7 +76,7 @@ BattleIcon* BtlIcon_Entry(u16 iconId, f32 x, f32 y, f32 z) {
 
     for (i = 0; i < 16; i++) {
         icon = &_battleWorkPointer->icons[i];
-        if (!(icon->flags & 1)) {
+        if (!(icon->flags & BATTLE_ICON_FLAG_ACTIVE)) {
             break; // free slot
         }
     }
@@ -85,7 +85,7 @@ BattleIcon* BtlIcon_Entry(u16 iconId, f32 x, f32 y, f32 z) {
     }
     memset(icon, 0, sizeof(BattleIcon));
     icon->index = i;
-    icon->flags = 1;
+    icon->flags = BATTLE_ICON_FLAG_ACTIVE;
     icon->scale = 1.0f;
     icon->scaleMul = 1.0f;
     icon->position.x = x;
@@ -101,9 +101,9 @@ BattleIcon* BtlIcon_Entry(u16 iconId, f32 x, f32 y, f32 z) {
 
 /** Removes a live battle icon's icondrv icon and frees its slot; safe on an unused slot. */
 void BtlIcon_Delete(BattleIcon* icon) {
-    if (icon->flags & 1) {
+    if (icon->flags & BATTLE_ICON_FLAG_ACTIVE) {
         iconDelete(icon->base->name);
-        icon->flags &= ~1;
+        icon->flags &= ~BATTLE_ICON_FLAG_ACTIVE;
     }
 }
 

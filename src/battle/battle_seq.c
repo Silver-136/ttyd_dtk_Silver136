@@ -2768,12 +2768,12 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
     count = 0;
     for (i = 0; i < 3; i++) {
         wp->alliances[i].clearConditionMet = 0;
-        if (wp->alliances[i].allianceId == 0) {
+        if (wp->alliances[i].allianceId == ALLIANCE_CLEAR_NONE) {
             wp->alliances[i].clearConditionMet = 1;
             count++;
             continue;
         }
-        if (wp->alliances[i].allianceId & 1) {
+        if (wp->alliances[i].allianceId & ALLIANCE_CLEAR_ALL_OUT) {
             for (j = 0; j < BATTLE_UNIT_MAX; j++) {
                 unit = BattleGetUnitPtr(wp, j);
                 if (unit && unit->alliance == i &&
@@ -2789,7 +2789,7 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
                 continue;
             }
         }
-        if (wp->alliances[i].allianceId & 2) {
+        if (wp->alliances[i].allianceId & ALLIANCE_CLEAR_LEADER_OUT) {
             for (j = 0; j < BATTLE_UNIT_MAX; j++) {
                 unit = BattleGetUnitPtr(wp, j);
                 if (unit && unit->alliance == i &&

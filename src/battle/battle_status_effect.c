@@ -590,11 +590,11 @@ void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     msg->changed = changed;
     id = unit->currentKind;
     if (id == UNIT_MARIO) {
-        msg->flags |= 1;
+        msg->flags |= ST_CHG_MSG_MARIO;
     } else if (id >= TYPE_PARTNER_MIN && id < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER) {
-        msg->flags |= 2;
+        msg->flags |= ST_CHG_MSG_PARTNER;
     } else {
-        msg->flags |= 4;
+        msg->flags |= ST_CHG_MSG_OTHER;
     }
 }
 

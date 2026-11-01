@@ -2040,9 +2040,9 @@ void BattleAudienceItemCtrlProcess(void) {
                     goto s4;
                 }
                 if (it->itemType >= ITEM_MIN && it->itemType < ITEM_MAX) {
-                    BattleAudience_SetPresentItemType(0);
+                    BattleAudience_SetPresentItemType(PRESENT_ITEM_GET);
                 } else if (it->itemType >= ITEM_AUDIENCE_CAN && it->itemType < BADGE_MIN) {
-                    BattleAudience_SetPresentItemType(1);
+                    BattleAudience_SetPresentItemType(PRESENT_ITEM_DAMAGE);
                 }
                 BattleAudience_SetPresentTargetUnitId(BtlUnit_GetUnitId((BattleUnit*)aud));
                 switch (it->itemType) {
@@ -2065,12 +2065,12 @@ void BattleAudienceItemCtrlProcess(void) {
                 }
                 BattleAudience_SetPresentItemNo(it->itemType);
                 switch (BattleAudience_GetPresentItemType()) {
-                case 0:
+                case PRESENT_ITEM_GET:
                     it->flags &= ~AUDIENCE_ITEM_FLAG_VISIBLE;
                     it->timer = 5;
                     it->state = 7;
                     break;
-                case 1:
+                case PRESENT_ITEM_DAMAGE:
                     BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_L);
                     BattleAudienceSoundStop(AUD_SOUND_ITEM_THROW_R);
                     if (it->velocity.x < 0.0f) {

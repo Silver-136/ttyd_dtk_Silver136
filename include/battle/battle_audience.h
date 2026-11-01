@@ -189,6 +189,12 @@ typedef struct BattleAudienceStar {
     u8 pad_5D[0x60 - 0x5D];
 } BattleAudienceStar;
 
+// BattleAudience.presentItemType: a landed audience throw is a gift or junk that does damage.
+enum {
+    PRESENT_ITEM_GET = 0,
+    PRESENT_ITEM_DAMAGE = 1,
+};
+
 #define AUDIENCE_MEMBER_MAX 200
 
 // BattleAudience_SetAnim ids: index into BattleAudienceMember.animTable (battle_audience_kind_data). Kinds fill only

@@ -258,9 +258,9 @@ s32 _damage(EventEntry* event, BOOL isFirstCall) {
  */
 void* btlataudGetMoveEventPtr(s32 id) {
     switch (BattleAudience_GetPresentItemType()) {
-        case 1:
+        case PRESENT_ITEM_DAMAGE:
             return btlataudevtPresentItem_Damage;
-        case 0:
+        case PRESENT_ITEM_GET:
         default:
             return btlataudevtPresentItem_Get;
     }

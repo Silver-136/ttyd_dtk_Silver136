@@ -223,9 +223,9 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
     setup = wp->fbatInfo->setup;
     groupSetup = setup->groupSetup;
     pouch = pouchGetPtr();
-    wp->alliances[0].allianceId = 2;
-    wp->alliances[1].allianceId = 1;
-    wp->alliances[2].allianceId = 0;
+    wp->alliances[0].allianceId = ALLIANCE_CLEAR_LEADER_OUT;
+    wp->alliances[1].allianceId = ALLIANCE_CLEAR_ALL_OUT;
+    wp->alliances[2].allianceId = ALLIANCE_CLEAR_NONE;
     wp->alliances[0].attackDirection = 1;
     wp->alliances[1].attackDirection = -1;
     wp->alliances[2].attackDirection = 1;

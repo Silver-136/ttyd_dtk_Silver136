@@ -135,6 +135,20 @@ typedef struct BattleActRecord {   // u8 counters for the battle-condition rules
     u8 turnCount;              // 0x1F, cond 58/59
 } BattleActRecord;
 
+// StChgMsg.flags: whose status changed.
+enum {
+    ST_CHG_MSG_MARIO = 1,
+    ST_CHG_MSG_PARTNER = 2,
+    ST_CHG_MSG_OTHER = 4,
+};
+
+// BattleAlliance.allianceId holds the side's clear condition bits (BattleSeq checks them for clearConditionMet).
+enum {
+    ALLIANCE_CLEAR_NONE = 0,
+    ALLIANCE_CLEAR_ALL_OUT = 1,    // every unit of the side is out
+    ALLIANCE_CLEAR_LEADER_OUT = 2, // Mario's side: Mario is out
+};
+
 typedef struct StChgMsg {
     s8 type;     // 0x0, -1 = free
     u8 flags;    // 0x1
