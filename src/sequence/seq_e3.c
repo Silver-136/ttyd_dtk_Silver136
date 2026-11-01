@@ -779,18 +779,7 @@ void e3Disp(CameraId cameraId, void* param) {
         {
             // PAL: per-language title texture
             s32 tbl[6] = {11, 11, 12, 13, 14, 15};
-        if (alpha < 0) {
-            alpha = 0;
-        }
-        if (alpha > 255) {
-            alpha = 255;
-        }
-
-        winTexInit(*wp->handle->data);
-            winTexSet(tbl[gp->language], (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-        pressStartGX(alpha, 0.0f, -110.0f);
-        }
-#else
+#endif
         if (alpha < 0) {
             alpha = 0;
         }
@@ -800,11 +789,17 @@ void e3Disp(CameraId cameraId, void* param) {
 
         winTexInit(*wp->handle->data);
 #if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+            winTexSet(tbl[gp->language], (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#else
         winTexSet(12, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#endif
 #else
         winTexSet(MODE_11, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
         pressStartGX(alpha, 0.0f, -110.0f);
+#if VERSION == VERSION_EU
+    }
 #endif
     } else {
         // Tiled background: 40 columns x 32 rows of 16-unit tiles, from x = -304 and down from y = 240

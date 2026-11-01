@@ -1458,45 +1458,9 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         sub = evtEntry(minigame01_floor_delete, 0, 0);
         sub->lwData[0] = event->lwData[0];
         if ((u16)((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId) != MARIO_MOTION_PLANE) {
-            data->result = 1;
-            data->coins = yuucounter_get_data();
-            if (!strcmp("A_dai_01", hitGetName(mario->hitobjStandOn))) {
-                data->result = 2;
-            }
-            if (!strcmp("A_dai_02", hitGetName(mario->hitobjStandOn))) {
-                data->result = 2;
-            }
-            if (!strcmp("A_dai_03", hitGetName(mario->hitobjStandOn))) {
-                data->result = 2;
-            }
-            if (!strcmp("A_dai_04", hitGetName(mario->hitobjStandOn))) {
-                data->result = 2;
-            }
-            if (!strcmp("A_dai_05", hitGetName(mario->hitobjStandOn))) {
-                data->result = 3;
-            }
-            if (!strcmp(yuu00_gnd_02, hitGetName(mario->hitobjStandOn))) {
-                data->result = -5;
-            }
-            if (!strcmp(yuu00_gnd_05, hitGetName(mario->hitobjStandOn))) {
-                data->result = -5;
-            }
-            if (!strcmp(yuu00_gnd_03, hitGetName(mario->hitobjStandOn))) {
-                data->result = -10;
-            }
-            if (!strcmp(yuu00_gnd_06, hitGetName(mario->hitobjStandOn))) {
-                data->result = -15;
-            }
-            if (!strcmp(yuu00_gnd_04, hitGetName(mario->hitobjStandOn))) {
-                data->result = -20;
-            }
-            marioKeyOff();
-            partyKeyOff();
-            yuucounter_flag_on(2);
-            return TRUE;
-        }
 #else
     if (mario->hitobjStandOn != NULL && (u16)((mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) ? mario->prevMotionId : mario->currMotionId) != MARIO_MOTION_PLANE) {
+#endif
         data->result = 1;
         data->coins = yuucounter_get_data();
         if (!strcmp("A_dai_01", hitGetName(mario->hitobjStandOn))) {
@@ -1509,10 +1473,18 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             data->result = 2;
         }
         if (!strcmp("A_dai_04", hitGetName(mario->hitobjStandOn))) {
+#if VERSION >= VERSION_US
+            data->result = 2;
+#else
             data->result = 3;
+#endif
         }
         if (!strcmp("A_dai_05", hitGetName(mario->hitobjStandOn))) {
+#if VERSION >= VERSION_US
+            data->result = 3;
+#else
             data->result = 5;
+#endif
         }
         if (!strcmp(yuu00_gnd_02, hitGetName(mario->hitobjStandOn))) {
             data->result = -5;
@@ -1533,6 +1505,8 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         partyKeyOff();
         yuucounter_flag_on(2);
         return TRUE;
+#if VERSION >= VERSION_US
+    }
 #endif
     }
     return FALSE;

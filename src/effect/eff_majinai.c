@@ -97,7 +97,7 @@ void effMajinaiMain(EffectEntry* effect) {
 #if VERSION == VERSION_EU
                 for (i = 0; i < 3; i++) {
                     if (mario->paperAnimGroupId[i] != -1) {
-                    animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
+                        animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
                     }
 #else
                 for (i = 0; i < 5; i++) {
@@ -137,7 +137,7 @@ void effMajinaiMain(EffectEntry* effect) {
 #if VERSION == VERSION_EU
                 for (i = 0; i < 3; i++) {
                     if (mario->paperAnimGroupId[i] != -1) {
-                    animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
+                        animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
                     }
 #else
                 for (i = 0; i < 5; i++) {

@@ -430,5 +430,3 @@ void seq_gameOverMain(SequenceWork* work) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-#endif

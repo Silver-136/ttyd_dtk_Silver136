@@ -1490,9 +1490,6 @@ static StatusVulnerability regist = {
 #endif
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
-#if VERSION <= VERSION_DEMO_US
-#endif
-/** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()

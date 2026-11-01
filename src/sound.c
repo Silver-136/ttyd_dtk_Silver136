@@ -1561,40 +1561,11 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #if VERSION <= VERSION_DEMO_US
                 if (result >= 0) {
                     SoundIntOff();
-                    entry->offset += entry->requestLength;
-                    entry->loadedLen[1 - entry->curBuf] = entry->requestLength;
-                    entry->loaded = 1;
-                    if (entry->offset >= entry->size) {
-                        entry->offset = entry->loopStart;
-                        if (stream->flags & SOUND_STREAM_FLAG_LOOP) {
-                            if (ch == 0) {
-                                stream->flags &= ~SOUND_STREAM_FLAG_READ_L;
-                            } else {
-                                stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
-                            }
-                        } else {
-                            stream->flags |= SOUND_STREAM_FLAG_READ_END;
-                        }
-                    } else if (ch == 0) {
-                        stream->flags &= ~SOUND_STREAM_FLAG_READ_L;
-                    } else {
-                        stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
-                    }
-                    SoundIntOn();
-                    if (stream->count == 2) {
-                        if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
-                            sound.coverState = 0;
-                        }
-                    } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
-                        sound.coverState = 0;
-                    }
-                    continue;
-                }
-                return;
 #else
                 if (result < 0) {
                     goto end;
                 }
+#endif
                 entry->offset += entry->requestLength;
                 entry->loadedLen[1 - entry->curBuf] = entry->requestLength;
                 entry->loaded = 1;
@@ -1614,6 +1585,9 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
                 } else {
                     stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
                 }
+#if VERSION <= VERSION_DEMO_US
+                SoundIntOn();
+#endif
                 if (stream->count == 2) {
                     if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
                         sound.coverState = 0;
@@ -1621,6 +1595,11 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
                 } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
                     sound.coverState = 0;
                 }
+#if VERSION <= VERSION_DEMO_US
+                continue;
+            }
+            return;
+#else
                 break;
 #endif
             }

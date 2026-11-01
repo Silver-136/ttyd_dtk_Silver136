@@ -1341,6 +1341,9 @@ EVT_END()
 
 #if VERSION >= VERSION_US
 EVT_BEGIN(evt_sub_mail_event)
+#else
+EvtWord evt_sub_mail_event[] = {
+#endif
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_E3)
         RETURN
@@ -1351,132 +1354,122 @@ EVT_BEGIN(evt_sub_mail_event)
     END_IF
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nok_01"))
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_nok_01))
+#else
+        CALL_CHILD(mail_evt_nok_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_03"))
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_gor_03))
+#else
+        CALL_CHILD(mail_evt_gor_03)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_02"))
+#if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(mail_evt_gor_02))
         CALL_CHILD(PTR(mail_evt_gor_02_2))
+#else
+        SPAWN_EVENT(mail_evt_gor_02)
+        CALL_CHILD(mail_evt_gor_02_2)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_01"))
+#if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(mail_evt_gor_01_2))
         CALL_CHILD(PTR(mail_evt_gor_01))
+#else
+        SPAWN_EVENT(mail_evt_gor_01_2)
+        CALL_CHILD(mail_evt_gor_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_gor_04))
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_02_a"))
         CALL_CHILD(PTR(mail_evt_rsh_03_a))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
-        CALL_CHILD(PTR(mail_evt_rsh_03_a_2))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("hom_00"))
-        CALL_CHILD(PTR(mail_evt_hom_00))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("bom_01"))
-        CALL_CHILD(PTR(mail_evt_bom_01))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("tik_00"))
-        CALL_CHILD(PTR(mail_evt_tik_00))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("win_01"))
-        CALL_CHILD(PTR(mail_evt_win_01))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("tou_01"))
-        CALL_CHILD(PTR(mail_evt_tou_01))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("usu_01"))
-        CALL_CHILD(PTR(mail_evt_usu_01))
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("pik_00"))
-        CALL_CHILD(PTR(mail_evt_pik_00))
-        RETURN
-    END_IF
-    RETURN
-EVT_END()
 #else
-EvtWord evt_sub_mail_event[] = {
-    CALL(evt_sub_get_system_flag, LW(0))
-    IF_BITS_SET(LW(0), GW_FLAG_E3)
-        RETURN
-    END_IF
-    CALL(evt_mario_get_mode, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        RETURN
-    END_IF
-    CALL(evt_sub_get_mapname, LW(0))
-    IF_STR_EQUAL(LW(0), STRING("nok_01"))
-        CALL_CHILD(mail_evt_nok_01)
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_03"))
-        CALL_CHILD(mail_evt_gor_03)
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_02"))
-        SPAWN_EVENT(mail_evt_gor_02)
-        CALL_CHILD(mail_evt_gor_02_2)
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_01"))
-        SPAWN_EVENT(mail_evt_gor_01_2)
-        CALL_CHILD(mail_evt_gor_01)
-        RETURN
-    END_IF
-    IF_STR_EQUAL(LW(0), STRING("gor_04"))
         CALL_CHILD(mail_evt_gor_04)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(mail_evt_rsh_03_a_2))
+#else
         CALL_CHILD(mail_evt_rsh_03_a_2)
         CALL_CHILD(mail_evt_rsh_03_a)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(mail_evt_hom_00))
+#else
         CALL_CHILD(mail_evt_hom_00)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("bom_01"))
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(mail_evt_bom_01))
+#else
         CALL_CHILD(mail_evt_bom_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tik_00"))
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(mail_evt_tik_00))
+#else
         CALL_CHILD(mail_evt_tik_00)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("win_01"))
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(mail_evt_win_01))
+#else
         CALL_CHILD(mail_evt_win_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tou_01"))
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(mail_evt_tou_01))
+#else
         CALL_CHILD(mail_evt_tou_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("usu_01"))
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(mail_evt_usu_01))
+#else
         CALL_CHILD(mail_evt_usu_01)
+#endif
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
+#if VERSION >= VERSION_US
+        CALL_CHILD(PTR(mail_evt_pik_00))
+#else
         CALL_CHILD(mail_evt_pik_00)
+#endif
         RETURN
     END_IF
     RETURN
+#if VERSION >= VERSION_US
+EVT_END()
+#else
 };
 #endif
 
