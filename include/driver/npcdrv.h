@@ -413,6 +413,13 @@ enum {
     FBAT_MODE_EVENT_MOBJ_ACTIVE = 8, // like EVENT, but mobjdrv keeps its objects running
 };
 
+// FieldBattleInfo.ruleKeepResult, set by BtlActRec_JudgeRuleKeep. The Glitz Pit reads bit 0x4 (evt_tou_set_rule_result).
+typedef enum RuleKeepResult {
+    RULE_KEEP_BROKEN = 1,       // outside both bounds
+    RULE_KEEP_WITHIN_LOOSE = 2, // missed ruleParam but within ruleParam2
+    RULE_KEEP_KEPT = 6,         // met ruleParam
+} RuleKeepResult;
+
 typedef struct FieldBattleInfo {
     u32 mode; //0x0, unused
     BattleUnitType party; //0x4
@@ -421,7 +428,7 @@ typedef struct FieldBattleInfo {
     u32 result; //0x10, BattleResult
     u32 coins; //0x14, BattleStoreCoin
     u8 ruleType; //0x18, NpcBattleInfo.battleRule[0], index into the _rule_msg tables
-    u8 ruleKeepResult; //0x19
+    u8 ruleKeepResult; //0x19, RuleKeepResult
     u8 ruleParam; //0x1A, battleRule[1], printed in the rule message
     u8 ruleParam2; //0x1B, battleRule[2], secondary threshold used by battle_actrecord condition checks
 } FieldBattleInfo;
