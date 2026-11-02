@@ -166,6 +166,7 @@ static void effSstarMain(EffectEntry* effect) {
 #else
 void effSstarMain(EffectEntry* effect) {
 #endif
+
     EffSstarN64Work* w = effect->userdata;
     MarioWork* mario = marioGetPtr();
     Vec pos;

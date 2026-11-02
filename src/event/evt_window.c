@@ -22,6 +22,7 @@
 #include "nameent.h"
 #include "statuswindow.h"
 #include "icon_ids.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "mario/mariost.h"
 #endif
@@ -42,6 +43,7 @@ typedef struct OneMsgWin {
 #if VERSION > VERSION_DEMO_US
 s32 coinwin_se_wait;
 #endif
+
 s32 unk_80418b3c;
 static void coin_disp(WinMgrEntry* entry);
 static void oneMessageDisp(WinMgrEntry* entry);

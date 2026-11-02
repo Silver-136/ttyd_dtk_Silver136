@@ -54,6 +54,7 @@ typedef enum winTexMode {
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/pad.h>
 #endif
+
 typedef struct seq_e3_entry {
     s32 id; // 0x0
     f32 x;  // 0x4
@@ -81,6 +82,7 @@ seq_e3_entry e3_tbl[3] = {
     { 35, 140.0f, 100.0f },
     { 96, 0.0f, -100.0f },
 #endif
+
 };
 #if VERSION < VERSION_US
 #if VERSION <= VERSION_DEMO_US

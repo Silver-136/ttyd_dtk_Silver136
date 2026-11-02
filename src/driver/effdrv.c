@@ -72,6 +72,7 @@ static const char* str_teresa[] = {"テレサ", "影の女王・衝撃波", NULL
 static const char* str_gonbaba_breath[] = {"通常", "ポイズン", "メガ", "コールド", "混乱", "眠り", "ミニミニ", "クッパ", NULL};
 static const char* str_ultra_hammer[] = {"左回り", "右回り", NULL};
 #endif
+
 EffectSet eff_set_table[] = {
 #if VERSION <= VERSION_DEMO_US
     {0, "kemuri", "けむり", str_kemuri},

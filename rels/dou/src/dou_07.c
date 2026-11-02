@@ -37,15 +37,18 @@ static USER_FUNC(bgm_start_wait);
 static void majin_callback(s32 type);
 
 static EvtWord erumosu_regl[2];
+
 #if VERSION >= VERSION_US
 EvtWord erumosu_dead[28];
 #else
 EvtWord erumosu_dead[25];
 #endif
+
 static NpcSetupInfo npcEnt[2];
 static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
 EvtWord apper_elmos[43];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord peramajin_before[];
 extern EvtWord peramajin_after[];
@@ -53,6 +56,7 @@ extern EvtWord peramajin_after[];
 EvtWord peramajin_before[396];
 EvtWord peramajin_after[297];
 #endif
+
 EvtWord dou_07_init_evt[89];
 
 /** Empty regular-event script of the Ember (エルモス, erumosu); npcEnt does not use it (bubble_move_event). */

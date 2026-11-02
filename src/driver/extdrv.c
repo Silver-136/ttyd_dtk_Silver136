@@ -481,6 +481,7 @@ static f32 shadow_vtx[16] = {
 #else
 __declspec(section ".sdata") static f32 shadow_vtx[16] = {
 #endif
+
     -1.2f, 0.0f, -1.2f,
     -1.2f, 0.0f, 1.2f,
     1.2f, 0.0f, 1.2f,

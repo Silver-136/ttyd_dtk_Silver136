@@ -41,6 +41,7 @@ static u8 color_rotation_data[] = {
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
 #endif
+
 /**
  * Keyframes of the recovery icon over 79 frames: it grows from nothing while dropping into place,
  * bounces, holds, then dips and shoots upward at the end.
@@ -165,6 +166,7 @@ static u8 color_rotation_data[] = {
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
 #endif
+
 /** The recovery icon's square plane that carries the heart or flower texture. */
 s16 recovery_effFace_pPlane2_q007_0[] = {
     4, // vertex count
@@ -338,6 +340,7 @@ static void effRecoveryMain(EffectEntry* effect) {
 #else
 void effRecoveryMain(EffectEntry* effect) {
 #endif
+
     RecoveryWork* work = effect->userdata;
     RecoveryWork* p;
     s32 i;

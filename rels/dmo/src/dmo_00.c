@@ -80,15 +80,18 @@ USER_FUNC(demo_draw);
 USER_FUNC(demo_init);
 
 EvtWord buttonCheck[32];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord demo_evt[];
 #else
 EvtWord demo_evt[1489];
 #endif
+
 static EvtWord koushukei_dai[63];
 EvtWord roten_move[25];
 EvtWord kuribo_move[25];
 EvtWord chusan_move[25];
+
 #if VERSION >= VERSION_US
 EvtWord dmo_00_init_evt[268];
 #else
@@ -110,6 +113,7 @@ static USER_FUNC(demo_init) {
 #else
 USER_FUNC(demo_init) {
 #endif
+
     if (isFirstCall) {
         memset(wp, 0, sizeof(DemoWork));
         wp->bookRot = 0.0f;

@@ -143,6 +143,7 @@ typedef struct SeqDemoWork {
 } SeqDemoWork;
 static SeqDemoWork work;
 #endif
+
 THPSimple SimpleControl;
 s32 WorkBuffer[16];
 s16 SoundBuffer[2][SAMPLES_PER_AUDIO_FRAME * 2] ATTRIBUTE_ALIGN(32);
@@ -1060,6 +1061,7 @@ void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 text
     GXTexCoord2u16(0, 1);
     GXEnd();
 }
+
 #if VERSION <= VERSION_DEMO_US
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

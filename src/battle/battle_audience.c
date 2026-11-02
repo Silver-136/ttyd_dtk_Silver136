@@ -96,11 +96,13 @@ s32 BattleAudience_GetPPAudienceNum_L(void);
 s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 offset);
 BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id);
 double sqrt(double);
+
 #if VERSION <= VERSION_DEMO_US
 static void BattleAudienceNumToTargetSub(void);
 #else
 s32 BattleAudienceNumToTargetSub(void);
 #endif
+
 void BattleAudienceAddTargetNumSub(f32 value);
 void BattleAudienceAddPuni(s32 num);
 void BattleAudienceAddPhaseEvtList(s32 type);

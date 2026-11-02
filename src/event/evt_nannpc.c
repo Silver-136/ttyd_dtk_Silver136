@@ -54,6 +54,7 @@ static inline NanNPC* nanNPCSearch2(char* name) {
     return NULL;
 }
 #endif
+
 /**
  * Finds the crowd NPC with the given name.
  * Names are strings; a value without the top address bit is treated as a number

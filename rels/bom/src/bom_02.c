@@ -46,9 +46,11 @@
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
+
 #if VERSION == VERSION_EU
 static USER_FUNC(nice_effect_shrink);
 #endif
+
 static USER_FUNC(yami_view);
 
 EvtWord evt_ie1_door_1[12];
@@ -76,45 +78,55 @@ static EvtWord evt_kime_pose[52];
 static EvtWord evt_taihou[190];
 EvtWord urotuku_white[190];
 static EvtWord init_soncho[13];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_soncho[416];
 #else
 static EvtWord talk_soncho[421];
 #endif
+
 static EvtWord init_murabito_e[2];
+
 #if VERSION >= VERSION_US
 static EvtWord talk_murabito_e[281];
 #else
 static EvtWord talk_murabito_e[253];
 #endif
+
 static EvtWord init_murabito_f[2];
 static EvtWord talk_murabito_f[44];
 static EvtWord init_murabito_g[17];
 static EvtWord talk_murabito_g[81];
 static EvtWord init_murabito_h[2];
 s32 iri_26_item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_murabito_h[149];
 #else
 static EvtWord talk_murabito_h[151];
 #endif
+
 static EvtWord init_murabito_i[2];
 static EvtWord talk_murabito_i[44];
 EvtWord init_tenin[8];
 EvtWord talk_tenin[2];
 static EvtWord init_white[83];
 EvtWord mario_jump[];
+
 #if VERSION < VERSION_US
 #if VERSION > VERSION_DEMO_US
 EvtWord mario_jump_tail[6];
 #endif
 #endif
+
 s32 iri_25_item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_white[115];
 #else
 static EvtWord talk_white[117];
 #endif
+
 EvtWord iri_25_white_bed[363];
 EvtWord evt_white_bed[505];
 static EvtWord kiza_talk[28];
@@ -124,13 +136,16 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord sekai_yami_evt[465];
 #else
 static EvtWord sekai_yami_evt[459];
 #endif
+
 static EvtWord minnnanokoe_evt[183];
 static KinopioData kino_dt;
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord bom_02_init_evt[];
 #else
@@ -1030,6 +1045,7 @@ EvtWord mario_jump[] = {
     CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_get_position, STRING("ホワイト"), LW(0), LW(1), LW(2))
 #endif
+
     ADD(LW(1), 20)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP1"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 2, -1000)

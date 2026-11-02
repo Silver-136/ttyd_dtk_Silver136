@@ -24,11 +24,13 @@ EvtWord n1_close[12];
 EvtWord n1_open[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord cam_shake[62];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_kaidan_temae[];
 #else
 EvtWord evt_kaidan_temae[144];
 #endif
+
 EvtWord jin_02_init_evt[33];
 
 /**

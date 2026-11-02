@@ -29,6 +29,7 @@ static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord init_0[37];
+
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
@@ -38,6 +39,7 @@ static EvtWord main_0[489];
 static EvtWord main_0[491];
 #endif
 #endif
+
 EvtWord gon_09_init_evt[239];
 
 /**

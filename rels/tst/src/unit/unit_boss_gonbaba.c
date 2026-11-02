@@ -52,10 +52,12 @@ BattleWeapon weapon_gonbaba_kamituki_attack;
 #else
 #define GONBABA_DEFENSE_ATTR kPartUnitWorkDefense
 #endif
+
 BattleUnitKind unit_boss_gonbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[7];
 static PoseTableEntry pose_table_weak[7];
@@ -63,16 +65,19 @@ static PoseTableEntry pose_table_weak[7];
 static PoseTableEntry pose_table[9];
 static PoseTableEntry pose_table_weak[9];
 #endif
+
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[3];
 extern EvtWord negotiation_event[];
 extern EvtWord gon_extra_eaten_event[];
 extern EvtWord gonbaba_damage_sub_event[];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[281];
 #else
 static EvtWord dead_event[283];
 #endif
+
 static EvtWord init_event[160];
 static EvtWord attack_event[56];
 static EvtWord fumituke_attack_event[386];

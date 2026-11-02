@@ -123,11 +123,13 @@ EvtWord elmos_a_kakushuku[63];
 EvtWord elmos_a_kaku[13];
 EvtWord elmos_a_shuku[13];
 static ExtTexInfo ext_entry_data[21];
+
 #if VERSION <= VERSION_DEMO_US
 static s16 elmos_animtbl[21];
 #else
 static s16 elmos_animtbl[22];
 #endif
+
 static EvtWord nannpc_mode_setup[35];
 s32 mist_pos[91];
 EvtWord mist_setup[45];
@@ -142,14 +144,17 @@ EvtWord anm_wakka[40];
 EvtWord anm_entotsu[33];
 EvtWord anm_neji[33];
 EvtWord anm_yure[];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_prologue[172];
 #else
 static EvtWord evt_prologue[182];
 #endif
+
 static EvtWord epilogue_npc_entry[25];
 EvtWord fune_move[136];
 static EvtWord epilogue_evt[97];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord muj_20_init_evt[];
 #else
@@ -2437,6 +2442,7 @@ static USER_FUNC(logo) {
 #else
 USER_FUNC(logo) {
 #endif
+
     LogoWork* wp;
 
     if (isFirstCall) {

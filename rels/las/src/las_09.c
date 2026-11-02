@@ -46,11 +46,13 @@ static EvtWord n_door_close[22];
 static EvtWord n_door_open[22];
 static BeroEntry bero_entry_data[8];
 static HitDamageReturn dmgRetPoint[58];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord first_evt[208];
 #else
 static EvtWord first_evt[210];
 #endif
+
 EvtWord bomb_wanwan[149];
 EvtWord bomb_wanwan1_evt[27];
 EvtWord bomb_wanwan2_evt[27];
@@ -64,6 +66,7 @@ static NpcSetupInfo npcEnt[4];
 EvtWord majyorin_evt_npc_entry[26];
 EvtWord majyorin_evt_main[652];
 EvtWord majyorin_evt[55];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_09_init_evt[];
 #else

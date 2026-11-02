@@ -24,11 +24,13 @@
 
 
 static BeroEntry bero_entry_data[4];
+
 #if VERSION == VERSION_EU
 static EvtWord yari_trap_sub[129];
 #else
 static EvtWord yari_trap_sub[119];
 #endif
+
 static EvtWord yari_trap[11];
 static EvtWord dou_puka_event_init0[8];
 static EvtWord dou_puka_event_0[24];

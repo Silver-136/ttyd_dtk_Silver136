@@ -393,9 +393,11 @@ extern BattleWork* _battleWorkPointer;
 void battleMain(void);
 
 void battle_exit(void);
+
 #if VERSION > VERSION_DEMO_US
 BOOL battle_init(void);
 #endif
+
 void BattleAfterReactionQueueInit(void);
 
 BattleUnit* BattleGetPartnerPtr(BattleWork* work, BattleUnit* unit);
@@ -416,6 +418,7 @@ void* BattleAlloc(u32 size);
 #define BTL_ALLOC(size) __memAlloc(HEAP_BATTLE, size)
 #define BTL_FREE(ptr) __memFree(HEAP_BATTLE, ptr)
 #endif
+
 void BattleIncSeq(BattleWork* wp, BattleSequence seq);
 s32 BattleGetSeq(BattleWork* wp, BattleSequence seq);
 f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z);

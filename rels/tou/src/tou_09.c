@@ -30,11 +30,13 @@ static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
 EvtWord evt_in[68];
 static BeroEntry bero_data[4];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_toile[161];
 #else
 static EvtWord evt_toile[201];
 #endif
+
 static EvtWord evt_toile2[136];
 static EvtWord evt_tojikome_msg[30];
 EvtWord tou_09_init_evt[84];

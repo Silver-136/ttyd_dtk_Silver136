@@ -30,6 +30,7 @@ static BeroEntry bero_entry_data[2];
 static EvtWord box_evt[30];
 static EvtWord bomb_wall_evt[206];
 static EvtWord hint_plate[14];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_16_init_evt[];
 #else

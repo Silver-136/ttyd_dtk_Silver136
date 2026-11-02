@@ -33,6 +33,7 @@
 #include "assets/_mariost_icon_tex.inc"
 #include "assets/_mariost_icon_tlut.inc"
 #include "assets/_mariost_banner_tex.inc"
+
 #if VERSION <= VERSION_DEMO_US
 #include "../src/manager/cardmgr_demo.inc"
 #else

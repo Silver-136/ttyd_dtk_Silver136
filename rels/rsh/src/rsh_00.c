@@ -84,11 +84,13 @@ static BeroEntry bero_data_c[2];
 EvtWord evt_handle[107];
 EvtWord regu_unten[210];
 static EvtWord init_unten[17];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_unten[235];
 #else
 static EvtWord talk_unten[236];
 #endif
+
 static NpcSetupInfo npc_data[2];
 static const char* access_tbl[5];
 static EvtWord evt_access[14];

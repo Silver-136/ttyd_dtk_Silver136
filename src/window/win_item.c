@@ -137,6 +137,7 @@ static WinMgrDesc window_desc[2] = {
     {0, 0, 8, -70, 150, 350, 264, {0xF0, 0xF0, 0xF0, 0xFF}, 0, itemUseDisp},
     {2, 0, 8, -280, 145, 200, 50, {0xFF, 0x99, 0x00, 0xFF}, 0, itemUseDisp2},
 };
+
 #if VERSION >= VERSION_US
 #define WI_SLASH (gp->language != LANGUAGE_JP ? "/" : "\201^")
 #else

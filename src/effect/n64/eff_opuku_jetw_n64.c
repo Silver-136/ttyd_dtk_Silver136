@@ -124,6 +124,7 @@ static struct {
 #if VERSION <= VERSION_DEMO_US
 static s32 jetw_ry_tbl[] = {0, 40, 55, 190, 20, 130, 270, 300};
 #endif
+
 /** 16x16 quad drawn for the central blob and for every blob in the spray streams. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 255, 255, 255, 255},

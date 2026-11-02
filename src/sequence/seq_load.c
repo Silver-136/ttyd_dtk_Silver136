@@ -43,9 +43,11 @@
 #include "win/win_main.h"
 #include "sdk/texPalette.h"
 #include "icon_ids.h"
+
 #if VERSION < VERSION_US
 #include "evt/evt_cmd.h"
 #endif
+
 // LoadWork.flags (file select)
 typedef enum LoadWorkFlags {
     LOAD_FLAG_DIM = (1 << 0),          // 0x1
@@ -90,11 +92,13 @@ typedef struct WinDt {
 } WinDt;
 
 void FontDrawString(f32 x, f32 y, const char* str);
+
 #if VERSION <= VERSION_DEMO_US
 static BOOL loadMain(SequenceWork* seq);
 #else
 void loadMain(SequenceWork* seq);
 #endif
+
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);
 
@@ -112,6 +116,7 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 #endif
+
 WinDt win_dt[9] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {7, 2, 1, 1}},
     {140.0f, 75.0f, -120.0f, 60.0f, 12, 0, {8, 3, 0, 0}},
@@ -146,6 +151,7 @@ WinDt win_dt3[4] = {
 static LoadWork work;
 /** Points at the file-select (load) sequence's work. */
 static LoadWork* wp = &work;
+
 #if VERSION >= VERSION_US
 __declspec(section ".sdata2") const u32 seq_logo_zero_color[2];
 #endif

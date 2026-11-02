@@ -151,6 +151,7 @@ static USER_FUNC(main_deka) {
  */
 USER_FUNC(main_deka) {
 #endif
+
     EvtWord* args;
     DekaWork* w = get_ptr();
     s32 i;

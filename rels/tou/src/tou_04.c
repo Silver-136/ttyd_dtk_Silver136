@@ -64,37 +64,45 @@ static EvtWord n1_door_close[22];
 static EvtWord n2_door_open[22];
 static EvtWord n2_door_close[22];
 static BeroEntry bero_data[12];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord move_g[];
 #else
 EvtWord move_g[233];
 #endif
+
 EvtWord move_g_1_dokimasen[25];
 EvtWord init_g_1[59];
 EvtWord move_g_1_dokimasu[51];
 EvtWord talk_g_1[90];
 EvtWord move_g_1[52];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord init_g_2[];
 #else
 EvtWord init_g_2[26];
 #endif
+
 EvtWord talk_g_2[59];
 EvtWord move_g_2[56];
 EvtWord init_g_3[30];
 EvtWord talk_g_3[39];
 EvtWord move_g_3[37];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord move_g_4_dokimasen[];
 #else
 EvtWord move_g_4_dokimasen[36];
 #endif
+
 EvtWord init_g_4[];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord talk_g_4[];
 #else
 EvtWord talk_g_4[271];
 #endif
+
 EvtWord move_g_4[81];
 EvtWord init_g_5[2];
 EvtWord talk_g_5[2];
@@ -116,11 +124,13 @@ EvtWord talk_g_10[25];
 EvtWord init_g_11[29];
 EvtWord talk_g_11[25];
 static EvtWord init_champ[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_brots[54];
 #else
 static EvtWord init_brots[58];
 #endif
+
 static EvtWord talk_brots[149];
 static NpcSetupInfo npcEnt[16];
 EvtWord evt_drop[33];
@@ -135,16 +145,19 @@ EvtWord evt_gardman4[177];
 static EvtWord evt_toile[107];
 static EvtWord evt_toile2[107];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
+
 static EvtWord evt_lock[14];
 EvtWord evt_souko_talk[272];
 EvtWord evt_bred_nigeru[116];
 EvtWord boss_msg[14];
 EvtWord out_from_tou_10_re[22];
+
 #if VERSION >= VERSION_US
 EvtWord tou_04_init_evt[652];
 #else

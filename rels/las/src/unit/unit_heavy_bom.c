@@ -58,6 +58,7 @@ static EvtWord phase_event[126];
 static EvtWord attack_event[175];
 static EvtWord wait_event[6];
 static EvtWord dead_event[52];
+
 #if VERSION >= VERSION_US
 static EvtWord explosion_event[254];
 #else

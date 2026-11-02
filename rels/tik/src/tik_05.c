@@ -1024,6 +1024,7 @@ static void tiz_broken_draw(CameraId cameraId, void* param) {
 #else
 void tiz_broken_draw(CameraId cameraId, void* param) {
 #endif
+
     GXTexObj tex;
     Mtx mtx;
     Mtx scale;

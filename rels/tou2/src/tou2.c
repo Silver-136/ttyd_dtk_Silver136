@@ -1315,12 +1315,14 @@ static void rankingInit(void) {
             }
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
         }
+
 #if VERSION <= VERSION_DEMO_US
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #else
         // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {
 #endif
+
             rank_wp->entries[FIGHTER_BANDITS].flags |= RANK_HIDDEN;
             rank_wp->entries[FIGHTER_SPINIA].flags &= ~RANK_HIDDEN;
 

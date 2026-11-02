@@ -44,6 +44,7 @@ static f32 yoshiSignTbl[16] = {
 };
 static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 #endif
+
 f32 ofs_PYS_S_2[52] = {
     0.0f, -0.011f, -0.042f, -0.087f, -0.142f, -0.202f, -0.262f, -0.317f, -0.362f, -0.393f, -0.404f, -0.404f, -0.404f,
     -0.404f, -0.404f, -0.387f, -0.341f, -0.276f, -0.202f, -0.128f, -0.063f, -0.017f, 0.0f, 0.0f, 0.0f, 0.0f,
@@ -54,6 +55,7 @@ f32 ofs_PYS_S_2[52] = {
 #if VERSION > VERSION_DEMO_US
 static f32 marioJumpStandData[10] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 #endif
+
 f32 ofs_PYS_R_2[10] = {0.0f, 0.0f, 0.366f, 0.555f, 0.38f, 0.0f, 0.0f, 0.366f, 0.555f, 0.38f};
 f32 ofs_PYS_F_1[10] = {0.0f, 0.0f, 0.433f, 0.557f, 0.512f, 0.0f, 0.0f, 0.433f, 0.557f, 0.512f};
 
@@ -87,6 +89,7 @@ void searchGround(PartyEntry* party);
 void searchGround2(PartyEntry* party);
 void checkWall(PartyEntry* party, f32 spd, f32 dir);
 void getStick(PartyEntry* party, f32* angle, f32* speed);
+
 #if VERSION <= VERSION_DEMO_US
 void yoshiFlyMove(PartyEntry* party, f32* angle);
 #else

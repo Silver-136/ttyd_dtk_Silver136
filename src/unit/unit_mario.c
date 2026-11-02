@@ -33,6 +33,7 @@ PoseTableEntry pose_table_mario_stay[32];
 #else
 PoseTableEntry pose_table_mario_stay[34];
 #endif
+
 BattleDataEntry data_table_mario[10];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
@@ -43,20 +44,24 @@ BattleUnitKind unitdata_Mario;
 static EvtWord battle_entry_event[73];
 EvtWord mario_ride_btl_entry_event[120];
 static EvtWord init_event[75];
+
 #if VERSION >= VERSION_US
 EvtWord mario_dead_event[67];
 #else
 EvtWord mario_dead_event[57];
 #endif
+
 EvtWord mario_emergency_revival_event[130];
 EvtWord mario_appeal_event[30];
 static EvtWord attack_audience_event[15];
 EvtWord btlataudevtMarioJump[237];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord btlataudevtMarioHammer[309];
 #else
 EvtWord btlataudevtMarioHammer[356];
 #endif
+
 static PoseSoundTiming pose_sound_timing_table[2];
 static EvtWord damage_event[10];
 static EvtWord attack_event[2];
@@ -89,6 +94,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 #endif
+
 /**
  * Mario's pose table: animations for each status (sleep, stop, dizzy, poison, confusion, freeze, instant KO),
  * the hurt poses, walking and running, item use, the low-HP pants, the Happy Heart / Happy Flower
@@ -141,6 +147,7 @@ PoseTableEntry pose_table_object[] = {
     {POSE_TYPE_ACTION, "KRN_H_1"},
 };
 #endif
+
 /**
  * Mario's data events: Appeal, the audience attack reaction, First Strike (nothing), Life Shroom revival,
  * death, the victory pose, the readied jump attack, the Yoshi-riding battle entry
@@ -334,12 +341,14 @@ EVT_BEGIN(mario_ride_btl_entry_event)
 EVT_END()
 
 s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
+
 #if VERSION <= VERSION_DEMO_US
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 #endif
+
 /** Empty: Mario's actions come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -535,6 +544,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Mario's death (data tag 49): camera zooms in on him, he collapses with the fainted voice and pose,
  * and the unit is killed about four seconds later.
@@ -625,6 +635,7 @@ EVT_BEGIN(mario_win_reaction)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Audience-attack reaction (data tag 6): picks at random between jumping on (btlataudevtMarioJump)
  * or hammering (btlataudevtMarioHammer) an audience member.

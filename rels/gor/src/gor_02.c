@@ -218,14 +218,18 @@ static void alpha_tev(MapTevCallbackInfo* info) {
 EvtWord gor_02_hitobj_off[27];
 EvtWord gor_02_hitobj_on[54];
 #endif
+
 EvtWord gor_02_event_00[18];
 EvtWord gor_02_event_01[30];
 static BeroEntry bero_entry_data[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord powerupya_party_lank_rtn[];
 #else
 EvtWord powerupya_party_lank_rtn[786];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord powerupya_party_rtn[170];
 #else
@@ -235,16 +239,22 @@ EvtWord powerupya_party_rtn[152];
 EvtWord powerupya_party_rtn[167];
 #endif
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord powerupya_table_talk[];
 #else
 EvtWord powerupya_table_talk[91];
 #endif
+
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord powerupya_direct_talk[103];
 #else
 EvtWord powerupya_direct_talk[96];
 #endif
+
+
 #if VERSION > VERSION_DEMO_US
 s32 powerupya_item_tbl[2];
 EvtWord powerupya_stardust[32];
@@ -255,8 +265,10 @@ EvtWord powerupya_talk[119];
 #else
 extern EvtWord powerupya_orb_use[];
 #endif
+
 EvtWord mapball_init[19];
 EvtWord powerupya_init[58];
+
 #if VERSION >= VERSION_US
 EvtWord johoyaperfect_talk[169];
 #else
@@ -266,50 +278,61 @@ EvtWord johoyaperfect_talk[133];
 EvtWord johoyaperfect_talk[146];
 #endif
 #endif
+
 static EvtWord kurihakase_init[134];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord kurihakase_talk[418];
 #else
 static EvtWord kurihakase_talk[421];
 #endif
+
 EvtWord oyabun_init[7];
 EvtWord oyabun_talk[364];
 EvtWord tozokudan1_init[36];
 EvtWord tozokudan1_talk[285];
 EvtWord tozokudan2_init[24];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
+
 EvtWord tozokudan2_house_door[139];
 EvtWord mario_yokeru[127];
 EvtWord evt_unlock_mario[78];
 static EvtWord evt_unlock[6];
 EvtWord evt_unlock_npc[97];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tozokudan2_talk[];
 #else
 EvtWord tozokudan2_talk[121];
 #endif
+
 EvtWord tozokudan3_init[17];
 EvtWord tozokudan3_talk[22];
 EvtWord sanders_open_door[56];
 static EvtWord sanders_init[37];
+
 #if VERSION == VERSION_EU
 static EvtWord sanders_talk[580];
 #else
 static EvtWord sanders_talk[574];
 #endif
+
 EvtWord kuribo4_init[13];
 EvtWord kuribo4_regl[19];
 static s32 item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kuribo4_talk[];
 #else
 EvtWord kuribo4_talk[276];
 #endif
+
 EvtWord chusan3_init[2];
 EvtWord chusan3_talk[76];
 EvtWord roten3_init[2];
@@ -330,6 +353,7 @@ static EvtWord evt_door_01_00[12];
 static EvtWord evt_door_01_01[12];
 static EvtWord evt_wall_01[15];
 static const char* door_data_01_npc[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_01_open[86];
 static EvtWord evt_door_01_close[83];
@@ -337,11 +361,13 @@ static EvtWord evt_door_01_close[83];
 static EvtWord evt_door_01_open[88];
 static EvtWord evt_door_01_close[85];
 #endif
+
 static DoorParam door_data_01;
 static EvtWord evt_door_02_00[12];
 EvtWord evt_door_02_01[12];
 static EvtWord evt_wall_02[15];
 static const char* door_data_02_npc[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_02_open[];
 extern EvtWord evt_door_02_close[];
@@ -349,6 +375,7 @@ extern EvtWord evt_door_02_close[];
 EvtWord evt_door_02_open[127];
 EvtWord evt_door_02_close[76];
 #endif
+
 static DoorParam door_data_02;
 EvtWord evt_door_02_entry[64];
 static EvtWord evt_door_03_00[12];
@@ -356,6 +383,7 @@ EvtWord evt_door_03_01[12];
 static EvtWord evt_wall_03[15];
 static const char* door_data_03_npc[2];
 static const char* door_data_03_mobj[2];
+
 #if VERSION == VERSION_EU
 static EvtWord evt_door_03_close[178];
 #else
@@ -365,21 +393,26 @@ static EvtWord evt_door_03_close[144];
 static EvtWord evt_door_03_close[166];
 #endif
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_03_open[12];
 #else
 static EvtWord evt_door_03_open[14];
 #endif
+
 static DoorParam door_data_03;
 EvtWord evt_door_sanders_open[27];
 EvtWord evt_door_sanders_close[27];
 static EvtWord evt_door_03_entry[64];
 static EvtWord evt_door_03_caseopen[51];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_03_roll_open[];
 #else
 EvtWord evt_door_03_roll_open[163];
 #endif
+
 EvtWord evt_door_03_roll_close[12];
 EvtWord evt_wall_03_roll[15];
 static DoorParam door_data_03_roll;
@@ -387,6 +420,7 @@ EvtWord evt_door_03_roll_entry[20];
 static EvtWord evt_door_04_00[12];
 static EvtWord evt_door_04_01[12];
 static EvtWord evt_wall_04[38];
+
 #if VERSION >= VERSION_US
 static EvtWord evt_door_04_open[19];
 static EvtWord evt_door_04_close[21];
@@ -399,6 +433,7 @@ static EvtWord evt_door_04_open[14];
 static EvtWord evt_door_04_close[16];
 #endif
 #endif
+
 static const char* door_data_04_npc[2];
 static const char* door_data_04_item[4];
 static DoorParam door_data_04;
@@ -411,6 +446,7 @@ EvtWord evt_door_05_00[12];
 EvtWord evt_wall_05[28];
 const char* door_data_05_npc[4];
 const char* door_data_05_npc_01[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_05_open[];
 extern EvtWord evt_door_05_close[];
@@ -418,6 +454,7 @@ extern EvtWord evt_door_05_close[];
 EvtWord evt_door_05_open[14];
 EvtWord evt_door_05_close[23];
 #endif
+
 DoorParam door_data_05;
 EvtWord evt_door_06_00[12];
 EvtWord evt_wall_06_00[62];
@@ -426,6 +463,7 @@ EvtWord evt_wall_06_02[62];
 EvtWord evt_wall_06[12];
 const char* door_data_06_npc[2];
 const char* door_data_06_npc_01[1];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_06_open[];
 extern EvtWord evt_door_06_close[];
@@ -433,6 +471,7 @@ extern EvtWord evt_door_06_close[];
 EvtWord evt_door_06_open[14];
 EvtWord evt_door_06_close[16];
 #endif
+
 DoorParam door_data_06;
 EvtWord evt_gor_door_open_sanders[80];
 EvtWord evt_gor_door_open_sub[44];
@@ -450,16 +489,19 @@ EvtWord kurihakase_first_talk[787];
 EvtWord kurihakase_wall_remove[257];
 EvtWord kurihakase_lecture[286];
 EvtWord kurihakase_door[84];
+
 #if VERSION >= VERSION_US
 EvtWord kurihakase_lecture_badge[282];
 #else
 EvtWord kurihakase_lecture_badge[272];
 #endif
+
 EvtWord Mario_Party_position[33];
 EvtWord book_open[42];
 EvtWord book_close[42];
 EvtWord book_center_init[22];
 EvtWord epigraphy_map[];
+
 #if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage1[258];
 EvtWord epigraphy_map_after_stage2[400];
@@ -481,6 +523,8 @@ EvtWord epigraphy_map_after_stage4[290];
 EvtWord epigraphy_map_after_stage5[218];
 #endif
 #endif
+
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord epigraphy_map_after_stage6[225];
 EvtWord kurihakase_after3minutes[172];
@@ -488,25 +532,31 @@ EvtWord kurihakase_after3minutes[172];
 EvtWord epigraphy_map_after_stage6[245];
 EvtWord kurihakase_after3minutes[177];
 #endif
+
 static HitDamageReturn hitDmgRetPoints[13];
 static EvtWord gor_goki1_urouro[116];
 static EvtWord gor_goki2_urouro[109];
 static EvtWord mobj_box01[34];
 s32 stg0_list[1];
 s32 stg1_list[4];
+
 #if VERSION <= VERSION_DEMO_US
 s32 stg2_list[3];
 #else
 s32 stg2_list[4];
 #endif
+
 s32 stg3_list[1];
+
 #if VERSION <= VERSION_DEMO_US
 s32 stg4_list[1];
 s32 stg5_list[3];
 #else
 s32 stg5_list[2];
 #endif
+
 s32 stg6_list[1];
+
 #if VERSION <= VERSION_DEMO_US
 s32 stg7_list[9];
 s32 stg8_list[9];
@@ -516,6 +566,7 @@ s32 stg7_list[6];
 s32 stg8_list[10];
 MonosiriFollow follow[8];
 #endif
+
 EvtWord evt_monosiri[39];
 EvtWord evt_monosiri_follow[18];
 EvtWord evt_cloud[10];
@@ -526,6 +577,7 @@ static EvtWord epilogue_evt[101];
 EvtWord dearu_event[13];
 EvtWord front_wall_keshi[27];
 EvtWord tobiori_check[48];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gor_02_init_evt[];
 #else
@@ -1478,6 +1530,7 @@ EVT_BEGIN(powerupya_direct_talk)
                 CALL(evt_msg_print, 0, STRING("powerup_ev_05"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
 #endif
+
     SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
 
     // The blue stone turns red; in JP and later, the ceremony music fades.
@@ -4597,6 +4650,7 @@ static USER_FUNC(evt_set_bgtpl) {
 #else
 USER_FUNC(evt_set_bgtpl) {
 #endif
+
     char path[64];
     const char* name = (const char*)evtGetValue(event, event->args[0]);
 

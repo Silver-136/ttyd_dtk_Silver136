@@ -162,6 +162,7 @@ static void effKemuri10Main(EffectEntry* effect) {
 #else
 void effKemuri10Main(EffectEntry* effect) {
 #endif
+
     EffKemuri10N64Work* work;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

@@ -557,6 +557,7 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
 #else
 #define KEY_REPEAT_FRAMES(n) (n)
 #endif
+
 /**
  * Reads the controllers once per frame (DEMOPadRead) into the global input state:
  * held, newly pressed, released and auto-repeat (24 frames first, then every 6) for buttons

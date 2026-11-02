@@ -49,9 +49,11 @@ static USER_FUNC(_anime_load_wait);
 USER_FUNC(_gullible_party_info_init);
 USER_FUNC(_load_param);
 USER_FUNC(_save_param);
+
 #if VERSION >= VERSION_US
 USER_FUNC(faker_mario_sync_max_moves);
 #endif
+
 static USER_FUNC(vivian_comeback);
 extern BattleUnitSetup entryunit_party[];
 extern BattleUnitKind unit_gullible_christine;

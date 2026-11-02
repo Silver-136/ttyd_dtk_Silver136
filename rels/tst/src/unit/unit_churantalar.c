@@ -61,6 +61,7 @@ static EvtWord dmg_first_attack_pos[19];
 static EvtWord yarn_event[44];
 static EvtWord entry_event[48];
 static EvtWord damage_event[10];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[183];
 static EvtWord blow_dead_event[98];
@@ -68,6 +69,7 @@ static EvtWord blow_dead_event[98];
 static EvtWord dead_event[189];
 static EvtWord blow_dead_event[104];
 #endif
+
 static EvtWord battle_end_event[7];
 static EvtWord unison_phase_event[120];
 static EvtWord attack_event[72];

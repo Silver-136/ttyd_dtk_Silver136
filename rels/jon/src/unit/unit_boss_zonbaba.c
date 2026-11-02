@@ -30,6 +30,7 @@ BattleUnitKind unit_boss_zonbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[7];
 static PoseTableEntry pose_table_weak[7];
@@ -37,6 +38,7 @@ static PoseTableEntry pose_table_weak[7];
 static PoseTableEntry pose_table[9];
 static PoseTableEntry pose_table_weak[9];
 #endif
+
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[2];
 BattleWeapon weapon_zonbaba_fumituke_attack;

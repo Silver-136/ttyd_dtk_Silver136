@@ -625,6 +625,7 @@ ItemDropData battle_item_churantalar[] = {
     {0},
 };
 #endif
+
 /** Cleft: held items and drops by weight, after a first row of no item. */
 ItemDropData battle_item_monochrome_sinemon[] = {
     {ITEM_NULL, 200, 300},
@@ -782,6 +783,7 @@ ItemDropData battle_item_super_killer_cannon[] = {
     {0},
 };
 #endif
+
 /** Bob-omb: held items and drops by weight, after a first row of no item. */
 ItemDropData battle_item_bomhei[] = {
     {ITEM_NULL, 200, 300},
@@ -998,6 +1000,7 @@ ItemDropData battle_item_yamitogedaruma[] = {
     {0},
 };
 #endif
+
 /**
  * Hearts after a won battle, by Mario's HP (rows up to 20/30/50/80/100%): overall chance, then 2 rolls.
  * The lookup stops at the first row that fits, so rows after the first 100% one are never read;
@@ -1561,6 +1564,7 @@ ItemDropData battle_item_zonbaba[] = {
 ItemDropData battle_item_default_param_list[] = {
     {0},
 };
+
 #if VERSION <= VERSION_DEMO_US
 ItemDropData battle_item_kinoko[] = {
     {0},

@@ -40,16 +40,19 @@ EvtWord clouda_house_out[19];
 EvtWord cloud_out[12];
 EvtWord cloud_in[12];
 static BeroEntry bero_entry_data[5];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord lookat_house[];
 #else
 EvtWord lookat_house[45];
 #endif
+
 static EvtWord cloud_toujou[76];
 EvtWord cloud_lostitem[215];
 EvtWord tree_evt_01[20];
 static TreeAccess tree_access_data[5];
 EvtWord dummy_event[4];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord win_03_init_evt[];
 #else

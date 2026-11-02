@@ -65,6 +65,7 @@ static Monte* monte_p; /* monte_p */
 #if VERSION > VERSION_DEMO_US
 static Monte* icon_monte_p;
 #endif
+
 extern MonteTable montetable[];
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
@@ -83,21 +84,26 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
 USER_FUNC(yuu_02_icon_monte_onoff);
 
 Vec fukkipoint[15];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord yuu_02_icon_monte_entry_evt[4];
 #endif
+
 static MonteTable montetable[11];
 static EvtWord minigame_view_monte[4];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord yuu_02_jumpret[];
 #else
 EvtWord yuu_02_jumpret[164];
 #endif
+
 EvtWord yuu_02_kaijo_init[12];
 EvtWord yuu_02_kaijo_init2[12];
 EvtWord minigame03_main[33];
 EvtWord minigame03_start_cam[40];
 EvtWord minigame03_start_cam_cancel[17];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame03_start[];
 extern EvtWord minigame03_end[];
@@ -105,7 +111,9 @@ extern EvtWord minigame03_end[];
 EvtWord minigame03_start[193];
 EvtWord minigame03_end[217];
 #endif
+
 EvtWord s_en1_turn[30];
+
 #if VERSION >= VERSION_US
 EvtWord yuu_02_init_evt[262];
 #else

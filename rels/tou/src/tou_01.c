@@ -78,9 +78,11 @@ static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 USER_FUNC(yami_oowareru_check);
+
 #if VERSION >= VERSION_US
 USER_FUNC(tou_01_kanban_moji_flag_sync);
 #endif
+
 static USER_FUNC(yami_view);
 void envSetYami(MapTevCallbackInfo* info);
 
@@ -100,11 +102,13 @@ EvtWord evt_sakaba_1[26];
 EvtWord evt_sakaba_2[26];
 EvtWord evt_sakaba_3[26];
 EvtWord evt_sakaba_4[29];
+
 #if VERSION >= VERSION_US
 EvtWord evt_wall2[38];
 #else
 EvtWord evt_wall2[19];
 #endif
+
 const char* sakaba_npc[7];
 const char* sakaba_item[2];
 EvtWord evt_door_2_open[12];
@@ -116,11 +120,13 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_hotdog[];
 #else
 EvtWord evt_hotdog[86];
 #endif
+
 EvtWord evt_ship_shadow[91];
 EvtWord init_hikuu[12];
 EvtWord talk_hikuu[84];
@@ -156,27 +162,33 @@ EvtWord init_jugem_1[8];
 EvtWord talk_jugem_1[112];
 EvtWord init_jugem_2[12];
 EvtWord talk_jugem_2[112];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord init_bijyo[];
 #else
 EvtWord init_bijyo[40];
 #endif
+
 EvtWord talk_bijyo[112];
 static EvtWord init_kiza[21];
 static EvtWord talk_kiza[60];
 static EvtWord init_sarary[12];
 EvtWord select_number[44];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_sarary[478];
 #else
 static EvtWord talk_sarary[479];
 #endif
+
 static NpcSetupInfo npcEnt[20];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_uron[];
 #else
 EvtWord evt_uron[195];
 #endif
+
 EvtWord evt_tamago_sleep[56];
 EvtWord dummy[2];
 EvtWord hot_move_evt[66];
@@ -185,6 +197,7 @@ EvtWord evt_oyaji_move[60];
 static EvtWord evt_tamago_scale[89];
 static EvtWord evt_tamago_scale2[83];
 s32 yoshi_data[30];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_tamago_move[];
 extern EvtWord evt_tamago[];
@@ -194,8 +207,10 @@ EvtWord evt_tamago_move[306];
 EvtWord evt_tamago[100];
 EvtWord talk_tamago[321];
 #endif
+
 EvtWord evt_gondora_updown[143];
 EvtWord evt_gondora_mon[62];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_gondora[];
 extern EvtWord evt_gondora2[];
@@ -203,34 +218,43 @@ extern EvtWord evt_gondora2[];
 EvtWord evt_gondora[169];
 EvtWord evt_gondora2[200];
 #endif
+
 EvtWord evt_search_light[82];
 EvtWord evt_dummy_sw[178];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_peach_after[];
 #else
 EvtWord evt_peach_after[92];
 #endif
+
 static EvtWord sekai_yami_npc_init[84];
 static EvtWord sekai_yami_npc[65];
 static EvtWord sekai_yami_evt[215];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord minnnanokoe_npc_entry[163];
 #else
 static EvtWord minnnanokoe_npc_entry[175];
 #endif
+
 static EvtWord minnnanokoe_evt[446];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_telbox[];
 #else
 EvtWord evt_telbox[124];
 #endif
+
 EvtWord evt_mail[175];
 static EvtWord evt_key[7];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord mobj_box00[34];
 #else
 static EvtWord mobj_box00[36];
 #endif
+
 EvtWord tou_01_init_evt[];
 
 /** Script helper: turns off projected-texture shading (the blimp shadow) on Mario's and the partners' models. */
@@ -2297,6 +2321,7 @@ static USER_FUNC(rankingReset) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Idle loop of the egg NPC: while the story is at STG3_11_RUNAWAY_EGG it pulses its scale between 100%
  * and 120% to look like it breathes in its sleep.

@@ -40,11 +40,13 @@ static EvtWord init_event2[18];
 static EvtWord init_event_sub[47];
 static EvtWord dmg_avoid_counter_thorn_head_event[76];
 static EvtWord damage_event[102];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord phase_event[196];
 #else
 static EvtWord phase_event[188];
 #endif
+
 static EvtWord attack_event[385];
 static EvtWord wait_event[6];
 

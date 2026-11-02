@@ -35,6 +35,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #include "evt/evt_npc.h"
@@ -50,11 +51,13 @@ EvtWord mony_peton_setup[139];
 EvtWord lost_wedding_ring_sub[4];
 EvtWord lost_wedding_ring[395];
 static s32 itemsel_table00[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord wedding_ring_consign[];
 #else
 EvtWord wedding_ring_consign[30];
 #endif
+
 EvtWord find_wedding_ring[];
 static EvtWord mony_init[19];
 EvtWord mony_peton_regl[97];
@@ -71,6 +74,7 @@ static EvtWord evt_kusa_2[20];
 static EvtWord evt_kusa_6[20];
 static TreeAccess tree_tbl[7];
 static KusaAccess kusa_tbl[7];
+
 #if VERSION >= VERSION_US
 EvtWord muj_02_init_evt[115];
 #else

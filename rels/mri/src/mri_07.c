@@ -26,11 +26,13 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord chibitoge_nakama[];
 #else
 EvtWord chibitoge_nakama[287];
 #endif
+
 static EvtWord chibitoge_init[29];
 static EvtWord chibitoge_talk[4];
 EvtWord punishop_init[12];

@@ -50,6 +50,7 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, 16, 0, 0, 1024, 0, 0, 0, 255},
 };
 #endif
+
 void effKemuri9Main(EffectEntry* effect);
 void effKemuri9Disp(CameraId cameraId, EffectEntry* effect);
 
@@ -116,6 +117,7 @@ static void effKemuri9Main(EffectEntry* effect) {
 #else
 void effKemuri9Main(EffectEntry* effect) {
 #endif
+
     EffKemuri9N64Work* work = effect->userdata;
     s32 i;
     s32 ir;

@@ -82,15 +82,19 @@ static PoseTableEntry pose_table[15];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 BattleWeapon weapon_chorobon_gundan_attack;
+
 #if VERSION > VERSION_DEMO_US
 EvtWord chorogun_dead_reward[73];
 #endif
+
 static EvtWord init_event[26];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[80];
 #else
 static EvtWord damage_event[59];
 #endif
+
 static EvtWord attack_event[217];
 static EvtWord wait_event[6];
 ExtTexInfo chorogun_ext_entry_data[21];

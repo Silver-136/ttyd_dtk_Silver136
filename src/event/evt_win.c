@@ -1,6 +1,7 @@
 // Script commands for the unit windows (unitwin): the shop, partner and item list windows.
 
 #include "version.h"
+
 #if VERSION <= VERSION_DEMO_US
 #define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
@@ -8,6 +9,7 @@
 #else
 #include "evt/evt_cmd.h"
 #endif
+
 #include "driver/icondrv.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -33,16 +35,19 @@
 #include <dolphin/mtx.h>
 #include <stdio.h>
 #include <string.h>
+
 #if VERSION <= VERSION_DEMO_US
 #include <stdlib.h>
 #include "icon_ids.h"
 #else
 #include "icon_ids.h"
 #endif
+
 #include "mario/mario_party.h"
 #include "driver/itemdrv.h"
 #include "statuswindow.h"
 #include "win/win_main.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "driver/casedrv.h"
 #include "evt/evt_case.h"
@@ -50,7 +55,9 @@
 #else
 #include "data_tables.h"
 #endif
+
 #include <dolphin/pad.h>
+
 #if VERSION <= VERSION_DEMO_US
 #include "demo/DEMOPad.h"
 #endif
@@ -150,11 +157,13 @@ s32 unitwin_coin_se_wait;
 static UnitWinWork* _wp;
 
 USER_FUNC(evt_unitwin_main_func);
+
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_unitwin_select_func);
 #else
 USER_FUNC(evt_unitwin_select_func);
 #endif
+
 void evt_unitwin_disp_func(CameraId cameraId, void* param);
 
 void unitwin_help_main(WinMgrEntry* entry);
@@ -358,6 +367,7 @@ static const char* party_name_table_rtn(s32 i) {
     return name;
 }
 #endif
+
 /**
  * Sets up the unit window work (_wp), the pointing-finger cursor icon,
  * and the HP/FP/BP pointers to Mario's base stats for the stat windows.
@@ -1077,6 +1087,7 @@ USER_FUNC(unitwin_window_select_func) {
                     if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
                         ng = 1;
 #endif
+
             }
         }
     }

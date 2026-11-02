@@ -12,6 +12,7 @@
 #include "libc_decls.h"
 #include <string.h>
 #include "eff/eff_magic1_n64.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
@@ -21,6 +22,7 @@
 #if VERSION <= VERSION_DEMO_US
 u32 aramMemArray[8];
 #endif
+
 SND_AUX_REVERBHI revH;
 SND_AUX_REVERBSTD revS;
 SND_AUX_CHORUS cho;

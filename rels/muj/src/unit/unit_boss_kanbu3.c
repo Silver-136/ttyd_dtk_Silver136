@@ -52,16 +52,20 @@ BattleUnitSetup entry_group2;
 BattleUnitSetup entry_group3;
 static EvtWord init_event[59];
 static EvtWord entry_event[45];
+
 #if VERSION >= VERSION_US
 static EvtWord damage_event[337];
 #else
 static EvtWord damage_event[315];
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[393];
 #else
 static EvtWord dead_event[402];
 #endif
+
 static EvtWord phase_event[55];
 EvtWord call_event[284];
 static EvtWord attack_event[136];

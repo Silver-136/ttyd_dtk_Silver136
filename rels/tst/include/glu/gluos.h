@@ -11,6 +11,7 @@
 BOOL __assert(const char* filename, s32 line, const char* assertion);
 
 #undef assert
+
 #if VERSION <= VERSION_DEMO_US
 #define assert(expr) ((void)0)
 #else

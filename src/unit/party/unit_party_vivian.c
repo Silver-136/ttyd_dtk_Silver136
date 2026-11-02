@@ -72,6 +72,7 @@ BattleWeapon partyWeapon_VivianNormalAttack;
 BattleWeapon partyWeapon_VivianShadowGuard;
 BattleWeapon partyWeapon_VivianMagicalPowder;
 BattleWeapon partyWeapon_VivianCharmKissAttack;
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyVivianAttack_NormalAttack[610];
 extern EvtWord partyVivianAttack_ShadowGuard[];
@@ -79,6 +80,7 @@ extern EvtWord partyVivianAttack_ShadowGuard[];
 EvtWord partyVivianAttack_NormalAttack[581];
 EvtWord partyVivianAttack_ShadowGuard[430];
 #endif
+
 EvtWord partyVivianAttack_MagicalPowder[VERSION_PICK(442, 448)];
 EvtWord partyVivianAttack_CharmKissAttack[464];
 EvtWord vivian_shadow_tail_event[78];
@@ -90,6 +92,7 @@ static EvtWord attack_audience_event[189];
 #if VERSION <= VERSION_DEMO_US
 static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
 #endif
+
 /**
  * Vivian's pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze, instant KO),
  * the hurt poses, gliding and fast gliding, low HP, the failed Run Away tumble, talking, item use,
@@ -427,6 +430,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Shade Fist (0 FP): a punch from the shadows on any single enemy; damage by rank 3, 4 or 5
  * (the same whether or not the action command succeeds); only a successful command burns it for 2 turns.

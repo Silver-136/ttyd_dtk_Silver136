@@ -65,6 +65,7 @@ static TreeAccess tree_access_data[10];
 EvtWord iri_28_enemy_all_dead[148];
 EvtWord iri_28_enemy_dead[13];
 EvtWord iri_28_init[60];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord win_00_init_evt[];
 #else

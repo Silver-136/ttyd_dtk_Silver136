@@ -71,11 +71,13 @@ typedef struct MoamoaWork {
     f32 scale;
 } MoamoaWork;
 static MoamoaWork* wp;
+
 #if VERSION == VERSION_EU
 // PAL: a seeded generator for the swarm's start positions (moamoa_srand / moamoa_randf)
 static u32 moamoa_rand_prev;
 static u32 moamoa_rand_cur;
 #endif
+
 void moamoa_mainUnitIdClear(void);
 static f32 randf(f32 min, f32 max);
 USER_FUNC(moamoa1_on);

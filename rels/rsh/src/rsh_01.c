@@ -42,16 +42,19 @@ static EvtWord init_toron[70];
 static EvtWord talk_toron[63];
 static EvtWord init_madam[52];
 static s32 item_tbl_madam[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_madam_ring_return[65];
 #else
 static EvtWord talk_madam_ring_return[67];
 #endif
+
 static EvtWord talk_madam[195];
 static NpcSetupInfo npc_data[7];
 NpcSetupInfo npc_data_2[3];
 static EvtWord evt_daiji_kami[41];
 EvtWord evt_pikary_arrival[141];
+
 #if VERSION <= VERSION_DEMO_US
 static const char* access_tbl[5];
 static EvtWord evt_access[14];
@@ -63,24 +66,29 @@ static EvtWord evt_access[25];
 static EvtWord evt_access_entry[24];
 EvtWord rsh_01_init_evt[190];
 #endif
+
 EvtWord rsh_01_a_init_evt[103];
 EvtWord rsh_01_b_init_evt[14];
 static const char* window_tbl[3];
 EvtWord rsh_01_c_init_evt[24];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord talk_syasyou[];
 #else
 EvtWord talk_syasyou[19];
 #endif
+
 static BeroEntry bero_data_a_return[4];
 static BeroEntry bero_data_b_return[4];
 static BeroEntry bero_data_c_return[4];
 BeroEntry gor_bero[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_01_init_evt_nidome[];
 #else
 EvtWord rsh_01_init_evt_nidome[206];
 #endif
+
 EvtWord rsh_01_a_init_evt_nidome[49];
 EvtWord rsh_01_b_init_evt_nidome[31];
 EvtWord rsh_01_c_init_evt_nidome[41];

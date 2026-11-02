@@ -109,11 +109,13 @@ EvtWord e1_close[12];
 EvtWord e2_open[12];
 EvtWord e2_close[12];
 EvtWord jin_00_dai[16];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord jin_00_dai_in_sub[];
 #else
 EvtWord jin_00_dai_in_sub[83];
 #endif
+
 EvtWord jin_00_dai_in[9];
 static EvtWord check_roll[16];
 EvtWord teresa_n_fadein[48];
@@ -129,11 +131,13 @@ static EvtWord push_evt[297];
 EvtWord nopush_evt[5];
 static EvtWord evt_key[5];
 static s32 lock_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord lock_item_check[21];
 #else
 static EvtWord lock_item_check[23];
 #endif
+
 static EvtWord evt_unlock[10];
 EvtWord tyuou_teresa_kusukusu[42];
 EvtWord tyuou_teresa_look_mario[14];
@@ -144,11 +148,13 @@ EvtWord temae_teresa_init[21];
 EvtWord atomic_teresa_init[2];
 static NpcSetupInfo npcEnt[12];
 static ExtTexInfo senteresa_ext_entry_data[47];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord senteresa_evt[];
 #else
 EvtWord senteresa_evt[1248];
 #endif
+
 EvtWord jin_00_init_evt[221];
 
 /**

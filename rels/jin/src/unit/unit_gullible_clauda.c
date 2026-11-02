@@ -25,11 +25,13 @@ static BattleDataEntry data_table_clauda[2];
 static BattleUnitKindPart parts_clauda[1];
 static EvtWord init_event_clauda[50];
 EvtWord damage_event_clauda[22];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event_clauda[156];
 #else
 static EvtWord dead_event_clauda[177];
 #endif
+
 static EvtWord attack_event_clauda[393];
 static EvtWord wait_event_clauda[6];
 

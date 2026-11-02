@@ -23,6 +23,7 @@ PiantaParlorWork yuugijouwork;
 
 //.sbss
 PiantaParlorWork* yuwp;
+
 #if VERSION > VERSION_DEMO_US
 EvtWord* yuu_window_evt;
 #endif

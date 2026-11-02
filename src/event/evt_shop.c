@@ -81,6 +81,7 @@ WinMgrDesc list_desc[3];
 static EvtWord buy_evt[VERSION_PICK(326, 366)];
 EvtWord shopper_talk_evt[];
 EvtWord first_shopping_evt[86];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord sell_evt[193];
 EvtWord keep_evt[145];
@@ -90,6 +91,7 @@ static EvtWord sell_evt[VERSION_PICK(196, 207)];
 EvtWord keep_evt[VERSION_PICK(148, 167)];
 EvtWord unkeep_evt[147];
 #endif
+
 EvtWord point_evt[VERSION_PICK(15, 35)];
 EvtWord evt_shoplist[10];
 static EvtWord main_evt[4];
@@ -150,6 +152,7 @@ EVT_BEGIN(evt_shoplist)
     RETURN
 EVT_END()
 #endif
+
 static EVT_BEGIN(buy_evt)
     // Mario stops and the item's highlight goes away;
     // a first-time shopper hears the shopping explanation instead.
@@ -854,6 +857,7 @@ void point_disp(WinMgrEntry* entry) {
         return;
     }
     PSMTXTrans(m, 10.0f + (30.0f + entry->x), entry->y - 36.0f, 0.0f);
+
 #if VERSION >= VERSION_US
     PSMTXScale(s, gp->language != LANGUAGE_JP ? 0.8f : 1.1f, 1.1f, 1.1f);
     PSMTXConcat(m, s, m);
@@ -869,6 +873,7 @@ void point_disp(WinMgrEntry* entry) {
         iconDispGx2(m, ICON_FLAG_2D, ICON_20A);
     }
 #endif
+
     PSMTXTrans(m, 124.0f + entry->x, entry->y - 38.0f, 0.0f);
     iconNumberDispGx(m, wp->points, FALSE, shop_point_num_color);
     diff = pouch->shopPoints - wp->points;
@@ -884,6 +889,7 @@ void point_disp(WinMgrEntry* entry) {
 /** Draws the title of the shop point prize list window (msg_shop_point_list4), centred; retail squeezes it to fit. */
 void title_disp(WinMgrEntry* entry) {
     const char* msg;
+
 #if VERSION >= VERSION_US
     f32 w;
     Mtx m;
@@ -894,12 +900,15 @@ void title_disp(WinMgrEntry* entry) {
         return;
     }
     msg = msgSearch("msg_shop_point_list4");
+
 #if VERSION >= VERSION_US
     w = FontGetMessageWidth(msg);
 #endif
+
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_title_color);
+
 #if VERSION >= VERSION_US
     if (w > entry->width - 20) {
         PSMTXTrans(m, entry->x + 10, entry->y - 12, 0.0f);
@@ -913,6 +922,7 @@ void title_disp(WinMgrEntry* entry) {
 #else
     FontDrawMessage(entry->x + (entry->width - FontGetMessageWidth(msg)) / 2, entry->y - 12, msg);
 #endif
+
     FontDrawEdgeOff();
 }
 
@@ -924,6 +934,7 @@ void title_disp(WinMgrEntry* entry) {
 void list_disp(WinMgrEntry* entry) {
     PouchData* pouch;
     const char* msg;
+
 #if VERSION >= VERSION_US
     s32 i;
     ItemData* item;
@@ -933,6 +944,7 @@ void list_disp(WinMgrEntry* entry) {
     s32 i;
     ItemData* item;
 #endif
+
     char buf[256];
     Mtx m;
     Mtx s;
@@ -943,12 +955,15 @@ void list_disp(WinMgrEntry* entry) {
     pouch = pouchGetPtr();
     i = 0;
     msg = msgSearch("msg_shop_point_list5");
+
 #if VERSION >= VERSION_US
     w = FontGetMessageWidth(msg);
 #endif
+
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_list_head5_color);
+
 #if VERSION >= VERSION_US
     if (w > 80.0f) {
         PSMTXTrans(m, 10.0f + (entry->x + 10), entry->y + 13, 0.0f);
@@ -967,9 +982,11 @@ void list_disp(WinMgrEntry* entry) {
     FontDrawEdgeOff();
     msg = msgSearch("msg_shop_point_list6");
 #endif
+
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_list_head6_color);
+
 #if VERSION >= VERSION_US
     if (w > 80.0f) {
         PSMTXTrans(m, 10.0f + (entry->x + entry->width / 2 - 10), entry->y + 13, 0.0f);
@@ -983,6 +1000,7 @@ void list_disp(WinMgrEntry* entry) {
 #else
     FontDrawMessage(entry->x + entry->width / 2 - 10 + (100 - FontGetMessageWidth(msg)) / 2, entry->y + 13, msg);
 #endif
+
     FontDrawEdgeOff();
     FontDrawStart();
     for (; shopPointList[i].pts != -1; i++) {

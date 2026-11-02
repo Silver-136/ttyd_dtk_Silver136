@@ -524,6 +524,7 @@ f32 scroll_tbl[] = {
     -2.9166667f, -3.0625f, -3.2083333f, -3.3541667f, -3.5f
 };
 #endif
+
 void effUltraHammerMain(EffectEntry* effect);
 void effUltraHammerDisp(CameraId camId, void* param);
 
@@ -577,6 +578,7 @@ static void effUltraHammerMain(EffectEntry* effect) {
 #else
 void effUltraHammerMain(EffectEntry* effect) {
 #endif
+
     EffUltraHammerData* data;
     Vec position;
     int i;

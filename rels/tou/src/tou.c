@@ -194,11 +194,13 @@ void _epilog(void);
 void _prolog(void);
 
 const char* lockerDt[46];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_close[];
 #else
 EvtWord evt_close[188];
 #endif
+
 static EvtWord evt_open[VERSION_PICK(165, 173)];
 EvtWord evt_tou_locker_init[109];
 EvtWord evt_tou_monitor_on[18];
@@ -214,21 +216,28 @@ static EvtWord evt_tamago_scale[89];
 static EvtWord evt_tamago_scale2[83];
 EvtWord evt_tamago_byebye[160];
 EvtWord talk_gardman[191];
+
 #if VERSION == VERSION_DEMO_JP
 static EvtWord evt_gardman[357];
 #else
 static EvtWord evt_gardman[VERSION_PICK(318, 335)];
 #endif
+
+
 #if VERSION > VERSION_DEMO_US
 EvtWord evt_gardman_spawn[4];
 #endif
+
 EvtWord evt_tou_match_make_default_sub[];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_tou_match_make_default[];
 #else
 EvtWord evt_tou_match_make_default[303];
 #endif
+
 EvtWord evt_talk_doku_cake[14];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_eat_doku_cake[];
 extern EvtWord evt_doku_cake[];
@@ -236,6 +245,7 @@ extern EvtWord evt_doku_cake[];
 EvtWord evt_eat_doku_cake[270];
 EvtWord evt_doku_cake[234];
 #endif
+
 EvtWord evt_michel_1[39];
 EvtWord evt_michel_2[42];
 EvtWord evt_michel_3_sub[97];
@@ -244,14 +254,17 @@ EvtWord evt_michel_4[312];
 EvtWord evt_michel_5[42];
 EvtWord evt_michel_6[42];
 EvtWord evt_michel_7[42];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord evt_michel_8[606];
 #else
 EvtWord evt_michel_8[VERSION_PICK(620, 616)];
 #endif
+
 EvtWord evt_michel_9[40];
 EvtWord evt_mail_1[157];
 EvtWord evt_mail_2[154];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_eat_cake[];
 extern EvtWord evt_cake_init[];
@@ -259,6 +272,7 @@ extern EvtWord evt_cake_init[];
 EvtWord evt_eat_cake[157];
 EvtWord evt_cake_init[31];
 #endif
+
 EvtWord evt_cake[37];
 static EvtWord evt_koopa_after[5];
 EvtWord evt_mail_3[157];
@@ -267,6 +281,7 @@ EvtWord evt_mail_5[157];
 EvtWord evt_tamago_hello[41];
 EvtWord evt_tamago_hello2[75];
 EvtWord evt_tou_ranking_msg[62];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord evt_tou_match_after_default[1472];
 #else

@@ -100,21 +100,26 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_06_02_off[2];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_06_03_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_07_01_off[2];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_08_01_off[2];
+
 #if VERSION > VERSION_DEMO_US
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_08_02_off[2];
 #endif
+
 NpcBattleSelect btlgrpsel_hei_btlno_hei_09_01_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_09_03_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_10_01_off[2];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_11_01_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_11_03_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_12_01_off[2];
+
 #if VERSION > VERSION_DEMO_US
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_12_02_off[2];
 #endif
+
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_02_off[5];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_03_off[4];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_04_off[4];
+
 #if VERSION <= VERSION_DEMO_US
 NpcSetupBattleInfo btlsetup_hei_tbl[26];
 NpcTerritoryInfo btl_hei_setup_no_tbl[26];

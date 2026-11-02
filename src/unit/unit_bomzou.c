@@ -29,11 +29,13 @@ static EvtWord init_event[70];
 static EvtWord phase_event[67];
 static EvtWord wait_event[57];
 EvtWord end_battle_evt[19];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord explosion_event[172];
 #else
 static EvtWord explosion_event[173];
 #endif
+
 static BattleDataEntry data_table[4];
 static EvtWord damage_event[10];
 static EvtWord attack_event[5];
@@ -235,6 +237,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 #endif
+
 /**
  * The bomb's single part: the bomb model (c_bakudan), the main target,
  * which cannot be tattled or have its HP shown.
@@ -279,6 +282,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * At the start of each player phase, burns one turn off the fuse and swaps the pose table to the shorter fuse;
  * when the fuse reaches 0 it takes the phase, plays the "B_2" pose for 36 frames and explodes.
@@ -316,6 +320,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Idle loop: plays the fuse pose, and once only one turn is left on the fuse puffs a sweat effect above the bomb
  * every 45-89 frames as a warning.
@@ -348,6 +353,7 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Battle-end data event (tag 63, run by the battle end sequence):
  * stops the fuse sizzle loop whose sound id Bobbery's Bomb Squad throw stored in unit work 1,

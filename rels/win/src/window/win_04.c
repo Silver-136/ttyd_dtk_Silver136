@@ -78,17 +78,21 @@ static EvtWord out_w_bero[12];
 BeroEntry bero_witchtrio[1];
 static BeroEntry bero_entry_data[3];
 EvtWord meet_clouda[76];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord meet_clouda2[];
 #else
 EvtWord meet_clouda2[139];
 #endif
+
 EvtWord clouda_inai[17];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord clouda_irai[];
 #else
 EvtWord clouda_irai[444];
 #endif
+
 EvtWord clouda_irai_ato[20];
 EvtWord mirror_trans[35];
 EvtWord mirror_rotate[41];
@@ -96,11 +100,13 @@ EvtWord mario_move_wait[63];
 EvtWord dummy1_jump[26];
 EvtWord dummy2_jump[32];
 static s32 item_list[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord clouda_nakama[];
 #else
 EvtWord clouda_nakama[1556];
 #endif
+
 EvtWord touch_door[39];
 EvtWord mirror_ball_event[18];
 static u32 texture_0[1248];
@@ -109,6 +115,7 @@ f32 rose_table[120];
 EvtWord flower_event[28];
 EvtWord flower_disp_pos[21];
 static EvtWord cloud_toujou[95];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord win_04_init_evt[];
 #else

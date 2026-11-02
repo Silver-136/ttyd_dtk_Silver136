@@ -72,9 +72,11 @@ Vec blurPos[8];
 //.sbss
 s32 unk_804186EC;
 MarioWork* mp;
+
 #if VERSION > VERSION_DEMO_US
 Vec R_last_position;
 #endif
+
 s32 blurPosId;
 
 //local prototypes

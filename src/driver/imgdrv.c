@@ -100,6 +100,7 @@ static void imgDisp(CameraId camId, void* param) {
 #else
 void imgDisp(CameraId camId, void* param) {
 #endif
+
     ImageEntry* entry = param;
     ImageShadow* sh;
     GXTexObj* texs[3];
@@ -340,6 +341,7 @@ static void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #else
 void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #endif
+
     ImageShadow* sh = &entry->shadows[id];
 #if VERSION <= VERSION_DEMO_US
     void* src;

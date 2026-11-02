@@ -53,6 +53,7 @@ static USER_FUNC(pre_kurio_use) {
 #else
 USER_FUNC(pre_kurio_use) {
 #endif
+
     void* hit;
     char* msg;
     MarioWork* mario;

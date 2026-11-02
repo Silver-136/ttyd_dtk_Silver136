@@ -45,22 +45,27 @@ static BeroEntry bero_entry_data[2];
 EvtWord ranperu_toujou[338];
 EvtWord starstone_jump_se[15];
 EvtWord irekawatta_mario_init[67];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord irekawatta_mario[];
 #else
 EvtWord irekawatta_mario[495];
 #endif
+
 EvtWord yoshi_color[65];
 EvtWord ranperu_lastbattle[378];
 EvtWord hontonosugata_mario_init[125];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hontonosugata_mario[];
 #else
 EvtWord hontonosugata_mario[948];
 #endif
+
 EvtWord ranperu_init[20];
 EvtWord nisemario_init[22];
 static NpcSetupInfo npcEnt[7];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord jin_04_jumpstand[];
 extern EvtWord jin_04_init_evt[];

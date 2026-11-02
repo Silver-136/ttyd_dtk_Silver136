@@ -73,20 +73,25 @@ EvtWord init_ramp[17];
 EvtWord patakuri_init[7];
 static EvtWord baba_init[7];
 static NpcSetupInfo npc_data[7];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_garnet[];
 #else
 EvtWord evt_garnet[562];
 #endif
+
 static EvtWord evt_sw[89];
 EvtWord evt_kaiga[14];
 static EvtWord evt_daiza[27];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord pik_02_koopa_evt[1245];
 #else
 EvtWord pik_02_koopa_evt[1256];
 #endif
+
 EvtWord nise_starstone_init[18];
+
 #if VERSION >= VERSION_US
 EvtWord pik_02_init_evt[172];
 #else

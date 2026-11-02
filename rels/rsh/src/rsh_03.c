@@ -60,15 +60,18 @@ static BeroEntry bero_data_b[3];
 static BeroEntry bero_data_c[3];
 EvtWord init_cook[29];
 s32 item_tbl_cook[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord talk_cook_nabe_return[];
 #else
 EvtWord talk_cook_nabe_return[47];
 #endif
+
 s32 iri_22_item_tbl[4];
 EvtWord talk_cook[];
 static EvtWord init_waitless[29];
 s32 item_tbl_waitless[2];
+
 #if VERSION >= VERSION_US
 EvtWord talk_waitless_pias_return[158];
 #else
@@ -78,6 +81,7 @@ EvtWord talk_waitless_pias_return[110];
 EvtWord talk_waitless_pias_return[112];
 #endif
 #endif
+
 static EvtWord talk_waitless[268];
 EvtWord move_waitless[49];
 static NpcSetupInfo npc_data[4];
@@ -88,11 +92,13 @@ EvtWord evt_lanch_missing[761];
 static EvtWord talk_powan[184];
 NpcSetupInfo npc_data_lunch[7];
 static const char* msg_tbl[10];
+
 #if VERSION >= VERSION_US
 EvtWord evt_lunch_talk[113];
 #else
 EvtWord evt_lunch_talk[101];
 #endif
+
 EvtWord evt_shop_moamoa_talk[59];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
@@ -100,11 +106,14 @@ static ShopDb trade_list[18];
 static ShopperData35 shopper_data;
 EvtWord shop_door_open[27];
 EvtWord shop_door_close[31];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_shop_open[];
 #else
 EvtWord evt_shop_open[267];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord evt_shop_close[420];
 #else
@@ -114,8 +123,10 @@ EvtWord evt_shop_close[294];
 EvtWord evt_shop_close[317];
 #endif
 #endif
+
 EvtWord evt_shop_door_init[36];
 static EvtWord evt_yuka_simi[45];
+
 #if VERSION <= VERSION_DEMO_US
 static const char* access_tbl[11];
 static EvtWord evt_access[14];
@@ -125,7 +136,9 @@ static const char* access_tbl[16];
 static EvtWord evt_access[25];
 static EvtWord evt_access_entry[24];
 #endif
+
 EvtWord rsh_03_init_evt[269];
+
 #if VERSION >= VERSION_US
 EvtWord rsh_03_a_init_evt[141];
 EvtWord rsh_03_b_init_evt[90];

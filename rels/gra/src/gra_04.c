@@ -22,6 +22,7 @@
 USER_FUNC(roll_release_check);
 
 static EvtWord in_evt[5];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord out_evt[120];
 static EvtWord out_evt2[82];
@@ -29,6 +30,7 @@ static EvtWord out_evt2[82];
 static EvtWord out_evt[142];
 static EvtWord out_evt2[110];
 #endif
+
 static BeroEntry bero_entry_data[5];
 EvtWord gra_04_tree_open_evt[41];
 static const char* fukitobashi_tbl[6];

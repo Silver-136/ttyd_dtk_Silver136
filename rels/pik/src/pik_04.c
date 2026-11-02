@@ -55,14 +55,17 @@ EvtWord evt_door_h[22];
 EvtWord evt_door2_h[19];
 EvtWord evt_wall_h[12];
 const char* hotel_npc[3];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord door_2_open[12];
 #else
 static EvtWord door_2_open[18];
 #endif
+
 static EvtWord door_2_close[14];
 static DoorParam door_2;
 EvtWord imginit[46];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord imgstart[];
 extern EvtWord imgend[];
@@ -74,6 +77,7 @@ EvtWord imgend[129];
 EvtWord evt_up[402];
 EvtWord evt_down[404];
 #endif
+
 EvtWord init_miyage[8];
 EvtWord talk_miyage[2];
 static EvtWord talk_musume[20];
@@ -92,17 +96,20 @@ EvtWord talk_takun3[28];
 static EvtWord init_kiza[13];
 static EvtWord talk_kiza[8];
 static NpcSetupInfo npc_data[9];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_roten[];
 #else
 EvtWord evt_roten[113];
 #endif
+
 EvtWord evt_kinopio_to_bed[29];
 EvtWord evt_kinopio_from_bed[27];
 static KinopioData kino_dt;
 static EvtWord epilogue_npc_entry[169];
 static EvtWord epilogue_evt_sub[91];
 static EvtWord epilogue_evt[63];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord pik_04_init_evt[];
 #else

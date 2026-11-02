@@ -171,4 +171,5 @@ void fadeSetNarrowFast(void);
 extern const f32 float_1_8041f770;
 
 #endif
+
 void fadeSetAnimVirtualPos(f32 x, f32 y, f32 z);

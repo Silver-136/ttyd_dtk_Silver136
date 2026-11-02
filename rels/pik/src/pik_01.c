@@ -69,11 +69,13 @@ EvtWord miyageya_init[24];
 s32 iri_29_item_tbl1[2];
 s32 iri_29_item_tbl2[2];
 s32 iri_29_item_tbl3[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord konarikin_talk[];
 #else
 EvtWord konarikin_talk[426];
 #endif
+
 EvtWord konarikin_init[29];
 EvtWord narikin_papa_mama_talk[55];
 EvtWord narikin_papa_init[23];
@@ -94,6 +96,7 @@ EvtWord resaresa_talk[8];
 EvtWord resaresa_entry[35];
 EvtWord sebaschan_talk[8];
 EvtWord sebaschan_entry[35];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord koopa_door_evt[];
 extern EvtWord pik_01_koopa_evt[];
@@ -101,12 +104,14 @@ extern EvtWord pik_01_koopa_evt[];
 EvtWord koopa_door_evt[227];
 EvtWord pik_01_koopa_evt[241];
 #endif
+
 static EvtWord delete_npc_regl_evt[35];
 static EvtWord sekai_yami_shake[11];
 static EvtWord sekai_yami_evt[140];
 static EvtWord minnnanokoe_evt[391];
 static EvtWord evt_switch_init[17];
 EvtWord iri_27_npc_entry[26];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord pik_01_init_evt[];
 #else

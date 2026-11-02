@@ -56,6 +56,7 @@ EvtWord starstone_rotate_exec[13];
 static EvtWord starstone_fuwafuwa[71];
 EvtWord npc_dokan[209];
 static EvtWord punipuni_mario_halt[33];
+
 #if VERSION >= VERSION_US
 EvtWord time_bomb[931];
 #else
@@ -65,16 +66,19 @@ EvtWord time_bomb[938];
 EvtWord time_bomb[937];
 #endif
 #endif
+
 EvtWord bomb_check[14];
 static EvtWord yuka_move[96];
 static EvtWord yuka_check[116];
 static KusaAccess ueki_access_data[7];
 static EvtWord punipuni_ball00_init[35];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord punipuni_ball00[70];
 #else
 static EvtWord punipuni_ball00[57];
 #endif
+
 EvtWord mri_14_init_evt[179];
 
 /**

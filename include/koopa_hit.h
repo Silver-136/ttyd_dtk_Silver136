@@ -19,6 +19,7 @@ typedef enum KpaEnemyHit {
 #if VERSION <= VERSION_DEMO_US
 HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz);
 #endif
+
 s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w);
 HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r);
 HitEntry* kpaGetHitFlame(void);

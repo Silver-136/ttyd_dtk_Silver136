@@ -29,11 +29,13 @@ static BattleUnitKindPart parts[1];
 static StatusVulnerability regist;
 static BattleWeapon weapon_basabasa_attack;
 static PoseSoundTiming pose_sound_timing_table[9];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_event[72];
 #else
 static EvtWord init_event[78];
 #endif
+
 static EvtWord dmg_first_attack_pos[12];
 static EvtWord damage_event[10];
 static EvtWord damage_event_ceil[51];

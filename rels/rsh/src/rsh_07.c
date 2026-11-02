@@ -24,20 +24,24 @@ static BeroEntry bero_data_a[2];
 static BeroEntry bero_data_b[2];
 static BeroEntry bero_data_c[2];
 static EvtWord init_unten[6];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_unten[8];
 #else
 static EvtWord talk_unten[19];
 #endif
+
 static NpcSetupInfo npc_data[2];
 static const char* access_tbl[5];
 static EvtWord evt_access[14];
 static EvtWord evt_access_entry[23];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_07_init_evt[];
 #else
 EvtWord rsh_07_init_evt[113];
 #endif
+
 EvtWord rsh_07_a_init_evt[11];
 EvtWord rsh_07_b_init_evt[11];
 static const char* window_tbl[5];

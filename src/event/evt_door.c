@@ -72,6 +72,7 @@ EvtWord in_houseanim[80];
 EvtWord out_houseanim[72];
 EvtWord in_dooranim[134];
 EvtWord out_dooranim[121];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord house_in[];
 extern EvtWord house_out[];
@@ -79,21 +80,26 @@ extern EvtWord house_out[];
 EvtWord house_in[216];
 EvtWord house_out[196];
 #endif
+
 EvtWord evt_door_setup[56];
 EvtWord door_dark[34];
 EvtWord door_dark2[34];
 EvtWord door_light[30];
 EvtWord door_light2[30];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_open[];
 #else
 EvtWord evt_door_open[508];
 #endif
+
+
 #if VERSION == VERSION_JP
 EvtWord evt_door_open_bom_01[338];
 #else
 EvtWord evt_door_open_bom_01[336];
 #endif
+
 EvtWord evt_door_open_roll[225];
 EvtWord evt_door_close[447];
 EvtWord evt_door_close_roll[247];
@@ -285,6 +291,7 @@ EVT_BEGIN(house_close_se)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(evt_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LOOP(0)
@@ -1871,6 +1878,7 @@ static USER_FUNC(snd_door_out) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Copies the DoorParam in args[0] onto the map heap and returns the copy in args[1],
  * so a map can change it with evt_door_set_param (Rogueport, gor_01/gor_02).

@@ -173,7 +173,9 @@ extern EvtWord tegami_init_evt[];
 #else
 EvtWord tegami_init_evt[78];
 #endif
+
 EvtWord evt_mezame[226];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mezame_init_evt[];
 extern EvtWord gor_10_init_evt[];

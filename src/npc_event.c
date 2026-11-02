@@ -265,29 +265,35 @@ EvtWord enemy_event_dead_event_sub[36];
 EvtWord enemy_common_blow_event[13];
 EvtWord enemy_2d_common_dead_event[415];
 EvtWord _2d_dead_rotate_event[];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord testenemynpc_move_event[];
 #else
 EvtWord testenemynpc_move_event[13];
 #endif
+
 EvtWord npc_urouro_move_event[21];
 EvtWord npc_urouro_return_event[37];
 EvtWord kuriboo_move_event[39];
 EvtWord kuriboo_find_event[54];
 EvtWord kuriboo_lost_event[31];
 EvtWord kuriboo_return_event[37];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord patakuri_move_event[];
 #else
 EvtWord patakuri_move_event[148];
 #endif
+
 EvtWord patakuri_find_event[90];
 EvtWord patakuri_lost_event[31];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord patakuri_return_event[];
 #else
 EvtWord patakuri_return_event[170];
 #endif
+
 EvtWord nokonoko_shell_return_event[50];
 EvtWord nokonoko_init_event[28];
 EvtWord nokonoko_move_event[58];
@@ -315,19 +321,23 @@ EvtWord met_move_event[54];
 EvtWord met_find_event[269];
 EvtWord met_lost_event[43];
 EvtWord met_return_event[51];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord patamet_move_event[];
 #else
 EvtWord patamet_move_event[151];
 #endif
+
 EvtWord patamet_find_event[108];
 EvtWord patamet_lost_event[34];
 EvtWord patamet_return_event[143];
+
 #if VERSION >= VERSION_US
 EvtWord chorobon_move_event[71];
 #else
 EvtWord chorobon_move_event[69];
 #endif
+
 EvtWord chorobon_find_event[63];
 EvtWord chorobon_lost_event[14];
 EvtWord chorobon_return_event[43];
@@ -374,6 +384,7 @@ EvtWord togedaruma_find_event[61];
 EvtWord togedaruma_lost_event[38];
 EvtWord togedaruma_return_event[44];
 EvtWord barriern_init_event[37];
+
 #if VERSION >= VERSION_US
 EvtWord barriern_move_event[90];
 EvtWord barriern2_move_event[90];
@@ -381,6 +392,7 @@ EvtWord barriern2_move_event[90];
 EvtWord barriern_move_event[89];
 EvtWord barriern2_move_event[70];
 #endif
+
 EvtWord barriern_dead_event[17];
 EvtWord barriern_find_event[];
 EvtWord barriern_lost_event[];
@@ -391,6 +403,7 @@ EvtWord piders_find_event[206];
 EvtWord piders_blow_event[13];
 EvtWord pakkun_attack_event[74];
 EvtWord pakkun_init_event[34];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord pakkun_move_event[];
 extern EvtWord pakkun_find_event[];
@@ -400,39 +413,49 @@ EvtWord pakkun_move_event[17];
 EvtWord pakkun_find_event[106];
 EvtWord pakkun_return_event[81];
 #endif
+
 EvtWord dokugassun_init_event[14];
 EvtWord dokugassun_move_event[153];
 EvtWord dokugassun_find_event[69];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord dokugassun_lost_event[];
 #else
 EvtWord dokugassun_lost_event[27];
 #endif
+
 EvtWord dokugassun_return_event[158];
 EvtWord basabasa_init_event[17];
+
 #if VERSION >= VERSION_US
 EvtWord basabasa_move_event[72];
 #else
 EvtWord basabasa_move_event[67];
 #endif
+
 EvtWord basabasa_find_event[69];
 EvtWord basabasa_lost_event[31];
 EvtWord basabasa_return_event[44];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord basabasa2_move_event[];
 #else
 EvtWord basabasa2_move_event[148];
 #endif
+
 EvtWord basabasa2_find_event[60];
 EvtWord basabasa2_lost_event[31];
 EvtWord basabasa2_return_event[140];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord teresa_move_event[];
 #else
 EvtWord teresa_move_event[165];
 #endif
+
 EvtWord teresa_find_event[60];
 EvtWord teresa_lost_event[31];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord teresa_return_event[];
 extern EvtWord bubble_move_event[];
@@ -440,6 +463,7 @@ extern EvtWord bubble_move_event[];
 EvtWord teresa_return_event[104];
 EvtWord bubble_move_event[159];
 #endif
+
 EvtWord bubble_find_event[63];
 EvtWord bubble_lost_event[34];
 EvtWord bubble_return_event[151];
@@ -449,11 +473,13 @@ EvtWord hbom_lost_event[31];
 EvtWord hbom_return_event[37];
 EvtWord zakowiz_init_event[38];
 EvtWord zakowiz_move_event[70];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord zakowiz_find_event[];
 #else
 EvtWord zakowiz_find_event[159];
 #endif
+
 EvtWord zakowiz_lost_event[18];
 EvtWord zakowiz_return_event[37];
 EvtWord zakowiz_blow_event[19];
@@ -462,21 +488,25 @@ EvtWord hannya_find_event[86];
 EvtWord hannya_lost_event[23];
 EvtWord hannya_return_event[29];
 EvtWord mahoon_init_event[120];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mahoon_move_event[];
 #else
 EvtWord mahoon_move_event[259];
 #endif
+
 EvtWord mahoon_dead_event[24];
 EvtWord mahoon_find_event[177];
 EvtWord mahoon_lost_event[142];
 EvtWord mahoon_return_event[251];
 EvtWord kamec_init_event[54];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kamec_move_event[];
 #else
 EvtWord kamec_move_event[177];
 #endif
+
 EvtWord kamec_find_event[150];
 EvtWord kamec_lost_event[31];
 EvtWord kamec_return_event[150];
@@ -530,11 +560,13 @@ EvtWord kuriboo2D_init_event[22];
 EvtWord kuriboo2D_move_event[72];
 EvtWord kuriboo2D_find_event[70];
 EvtWord zako2D_init_event[27];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord zako2D_move_event[];
 #else
 EvtWord zako2D_move_event[244];
 #endif
+
 EvtWord zako2D_find_event[74];
 EvtWord dokan2D_init_event[19];
 EvtWord dokan2D_regl_event[48];
@@ -542,12 +574,14 @@ EvtWord fall2D_init_event[19];
 EvtWord fall2D_regl_event[34];
 EvtWord zakoM2D_init_event[37];
 EvtWord zakoM2D_move_event[95];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord zakoM2D_find_event[179];
 EvtWord zakoM2D_find_start_event[88];
 #else
 extern EvtWord zakoM2D_find_start_event[];
 #endif
+
 EvtWord gesso2D_init_event[34];
 EvtWord gesso2D_move_event[262];
 
@@ -644,6 +678,7 @@ EVT_BEGIN(enemy_slave_common_dead_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Blow event of most field enemies, run when Flurrie's Gale Force catches them without blowing them away:
  * confused pose, spins until the blow ends, waits 2 s and resumes.
@@ -845,6 +880,7 @@ EVT_BEGIN(testenemynpc_init_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Move event of the stationary test enemy tribe:
  * sets the enemy flags (and, outside the demos, its standing pose) and then does nothing.
@@ -874,6 +910,7 @@ EVT_BEGIN(npc_urouro_init_event)
     RETURN
 EVT_END()
 #endif
+
 /** Move event of the generic wandering event NPC: wanders within 100 units of where it stands with evt_urouro. */
 EVT_BEGIN(npc_urouro_move_event)
     CALL_CHILD(PTR(npc_urouro_init_event))
@@ -910,6 +947,7 @@ EVT_BEGIN(kuriboo_init_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Move event of Goombas, Spiky Goombas, X-Nauts and Bandits:
  * every half second walks 100 units in a new direction turned 120 to 240 degrees from the last.
@@ -977,6 +1015,7 @@ EVT_BEGIN(patakuri_init_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Move event of Paragoombas: flies in a direction turned 120 to 240 degrees from the last,
  * in four bobbing 25-unit glides 50 above the floor, then rests 0.5 s.
@@ -1359,6 +1398,7 @@ EVT_BEGIN(patapata_init_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Move event of Koopa Paratroopas: flies five pairs of bobbing 30-unit glides 50 above the floor,
  * veering up to 20 degrees, then rests 0.5 s.
@@ -1695,6 +1735,7 @@ EVT_BEGIN(patamet_init_event)
     RETURN
 EVT_END()
 #endif
+
 /** Move event of Parabuzzies: same bobbing flight as the Paragoomba's. */
 EVT_BEGIN(patamet_move_event)
 #if VERSION > VERSION_DEMO_US
@@ -1804,6 +1845,7 @@ EVT_BEGIN(chorobon_init_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(chorobon_move_event)
     CALL(evt_npc_set_scale, STRING("me"), 1, 1, 1)
     CALL(evt_npc_set_walk_anim, STRING("me"))
@@ -1886,6 +1928,7 @@ EVT_BEGIN(pansy_init_event)
     RETURN
 EVT_END()
 #endif
+
 /** Move event of Crazee Dayzees: wanders like a Goomba. */
 EVT_BEGIN(pansy_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
@@ -1949,6 +1992,7 @@ EVT_BEGIN(twinkling_pansy_init_event)
     RETURN
 EVT_END()
 #endif
+
 /** Move event of Amazy Dayzees: wanders like a Goomba. */
 EVT_BEGIN(twinkling_pansy_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
@@ -2055,6 +2099,7 @@ EVT_BEGIN(karon_dead_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Find event of bone-throwing Dry Bones: "!" balloon,
  * turns to Mario and throws its spinning bone in an arc at where he stands (the bone attacks in mode 12),
@@ -2351,6 +2396,7 @@ EVT_BEGIN(sambo_init_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(sambo_move_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
@@ -2624,6 +2670,7 @@ EVT_BEGIN(togedaruma_init_event)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(togedaruma_move_event)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
@@ -2885,6 +2932,7 @@ static USER_FUNC(kamec_fire_magic) {
 #else
 USER_FUNC(kamec_fire_magic) {
 #endif
+
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
     s32 y = evtGetValue(event, args[1]);

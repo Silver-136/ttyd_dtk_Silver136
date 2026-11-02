@@ -69,6 +69,7 @@ EvtWord ukishima_watari_run[458];
 EvtWord ukishima_watari[186];
 EvtWord ukishima_check[40];
 static EvtWord ukishima_apper[286];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord ukishima_init1[];
 extern EvtWord ukishima_part1[];
@@ -82,6 +83,7 @@ EvtWord ukishima_part2[50];
 EvtWord ukishima_switch1_evt[23];
 EvtWord ukishima_switch2_evt[23];
 #endif
+
 EvtWord torinoko_suifu_pukapuka[69];
 EvtWord _suifu_sakebu[101];
 EvtWord torinoko_suifu_sakebu[103];
@@ -89,12 +91,14 @@ EvtWord torinoko_suifu_init[192];
 EvtWord torinoko_suifu[172];
 EvtWord suifu_orei[339];
 EvtWord escapeway_event[98];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord bombwall_escape_move[58];
 static EvtWord bombwall_bomb[187];
 #else
 static EvtWord bombwall_bomb[181];
 #endif
+
 static EvtWord bombwall_init[128];
 EvtWord bombwall_suifuout_secheck[77];
 EvtWord bombwall_suifuout[212];
@@ -135,6 +139,7 @@ EvtWord pukapuka_watari_init01[70];
 EvtWord pukapuka_watari_init02[70];
 HitDamageReturn hitDmgRetPoints_1st[17];
 static HitDamageReturn hitDmgRetPoints[17];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord dou_11_init_evt[];
 #else

@@ -37,6 +37,7 @@ static BeroEntry w_bero_mapchg[1];
 EvtWord floatblk_stop_se[47];
 EvtWord floatblk_shake[27];
 EvtWord floatblk_evt[336];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord floatblk21_1_evt[];
 extern EvtWord floatblk21_2_evt[];

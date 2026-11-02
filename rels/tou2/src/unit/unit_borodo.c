@@ -33,11 +33,13 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[20];
 static PoseTableEntry pose_table_item_have[18];
+
 #if VERSION >= VERSION_US
 static BattleDataEntry data_table[2];
 #else
 static BattleDataEntry data_table[1];
 #endif
+
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[57];
 static EvtWord damage_event[10];

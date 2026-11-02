@@ -35,11 +35,13 @@ s32* audience_anim_kuriboo[19];
 s32* audience_anim_pakkun[19];
 s32* audience_anim_luigi[19];
 BattleAudienceItemKind audience_item_kinopio[12];
+
 #if VERSION <= VERSION_DEMO_US
 BattleAudienceItemKind audience_item_heiho[18];
 #else
 BattleAudienceItemKind audience_item_heiho[17];
 #endif
+
 BattleAudienceItemKind audience_item_puni[11];
 BattleAudienceItemKind audience_item_nokonoko[8];
 BattleAudienceItemKind audience_item_luigi[12];

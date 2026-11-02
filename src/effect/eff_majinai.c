@@ -52,6 +52,7 @@ static void effMajinaiMain(EffectEntry* effect) {
 #else
 void effMajinaiMain(EffectEntry* effect) {
 #endif
+
     EffMajinaiWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;

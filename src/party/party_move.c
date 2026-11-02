@@ -146,6 +146,7 @@ static void getTargetPos(s32 id, Vec* pos) {
     }
     if (other) {
 #endif
+
         pos->x = other->position.x;
         pos->y = other->position.y;
         pos->z = other->position.z;

@@ -100,6 +100,7 @@ static inline void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 #else
 static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 #endif
+
     if (mode != NULL) {
         rmodeobj = *mode;
         rmode = &rmodeobj;

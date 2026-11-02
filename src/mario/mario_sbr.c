@@ -234,20 +234,24 @@ void marioAdjustMoveDir(void) {
     MarioWork* mario = marioGetPtr();
 
     if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
+
 #if VERSION >= VERSION_US
         mario->moveDirection = toMovedir(180.0f);
 #else
         mario->moveDirection = toMovedir(90.0f);
 #endif
+
         mario->directionView = mario->moveDirection;
         mario->displayDirection = 180.0f;
         mario->displayDirectionTarget = 180.0f;
     } else {
+
 #if VERSION >= VERSION_US
         mario->moveDirection = toMovedir(0.0f);
 #else
         mario->moveDirection = toMovedir(90.0f);
 #endif
+
         mario->directionView = mario->moveDirection;
         mario->displayDirection = 0.0f;
         mario->displayDirectionTarget = 0.0f;
@@ -423,17 +427,21 @@ void marioSetForceMove(f32 dir, s32 time, f32 speed) {
     if (mario->currMotionId == MARIO_MOTION_SHIP || (mario->currMotionId == MARIO_MOTION_SLIT || mario->currMotionId == MARIO_MOTION_ROLL) || mario->currMotionId == MARIO_MOTION_YOSHI) {
         return;
     } else {
+
 #if VERSION >= VERSION_US
         marioChgMot(speed >= mario->baseDashSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #else
         marioChgMot(speed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #endif
+
+
 #if VERSION >= VERSION_JP
         mario->moveDirection = dir;
         mario->directionView = dir;
         mario->forceMoveTimer = time;
         mario->baseSpeed = speed;
 #endif
+
     }
 }
 
@@ -482,11 +490,13 @@ void marioUpdateKeyData(void) {
             mario->analogB = 0;
         }
     }
+
 #if VERSION <= VERSION_DEMO_US
     if ((mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) || !marioChkKey()) {
 #else
     if ((mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_CTRL_OFF_2 | MARIO_FLAG_KEY_OFF)) || !marioChkKey()) {
 #endif
+
         mario->wStickDir1 = 0;
         mario->wStickDir2 = 0;
         mario->substickX = 0;

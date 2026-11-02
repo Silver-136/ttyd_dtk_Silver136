@@ -35,6 +35,7 @@ static BOOL partyChkMarioFollowY(MarioWork* mario);
 void partyChgMotSlitFloor(PartyEntry* party);
 
 static s32 unk_804189f4;
+
 #if VERSION > VERSION_DEMO_US
 static f32 touch_wall_ct;
 static s32 upstairs_count;
@@ -752,6 +753,7 @@ static inline BOOL partyChkMarioFollowYDemo(MarioWork* mario) {
 #else
 static inline BOOL partyChkMarioFollowY(MarioWork* mario) {
 #endif
+
     if (mario->airTimer != 0 && mario->baseSpeed == 0.0f) {
         return FALSE;
     }

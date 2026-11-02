@@ -59,6 +59,7 @@ EffectEntry* effMugiEntry(void) {
     return effect;
 }
 #endif
+
 /** Spawns the wheat/flower smoke puffs behind Mario at (x, y, z) heading `angle`; called from mario_kemuri.c. */
 EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
     EffectEntry* effect;

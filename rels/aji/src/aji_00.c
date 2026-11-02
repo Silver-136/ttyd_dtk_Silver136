@@ -34,6 +34,7 @@ static BeroEntry bero_entry_data[3];
 static EvtWord first_evt[333];
 static EvtWord evt_door_msg[14];
 static NpcSetupInfo npcEnt[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_00_init_evt[];
 #else

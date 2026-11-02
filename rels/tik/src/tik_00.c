@@ -31,6 +31,7 @@
 #include "driver/casedrv.h"
 #include "driver/itemdrv.h"
 #include "evt/evt_uranaisi.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "evt/evt_win.h"
 #endif
@@ -103,6 +104,7 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord uranaisi_next_evt[];
 extern EvtWord uranaisi_starpiece_evt[];
@@ -112,35 +114,44 @@ EvtWord uranaisi_next_evt[152];
 EvtWord uranaisi_starpiece_evt[60];
 EvtWord uranaisi_supercoin_evt[60];
 #endif
+
 typedef struct CardName {
     const char* name;
     s32 value;
 } CardName;
 static CardName name_tbl[9];
 EvtWord evt_uranai_cap[4];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord uranai_init[];
 #else
 EvtWord uranai_init[147];
 #endif
+
 EvtWord uranai_main[595];
 EvtWord uranai_exit[98];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord uranaisi_table_talk[];
 #else
 EvtWord uranaisi_table_talk[226];
 #endif
+
 EvtWord uranaisi_direct_talk[8];
 EvtWord uranaisi_init[10];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord starmaniac_init[14];
 #endif
+
 EvtWord starmaniac_get_event[5];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord starmaniac_talk[192];
 #else
 EvtWord starmaniac_talk[VERSION_PICK(227, 238)];
 #endif
+
 EvtWord johoyaketi_talk[VERSION_PICK(186, 209)];
 EvtWord kuribo5_init[2];
 EvtWord kuribo5_talk[76];
@@ -163,11 +174,13 @@ EvtWord evt_wall_01_01[66];
 EvtWord evt_wall_01_02[66];
 static const char* door_data_01_npc[2];
 static EvtWord evt_wall_01[12];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_open_01[];
 #else
 EvtWord evt_open_01[39];
 #endif
+
 EvtWord evt_close_01[60];
 static DoorParam door_data_01;
 static EvtWord evt_door_02_00[12];
@@ -194,6 +207,7 @@ static DoorParam door_data_03;
 static EvtWord evt_door_04_00[12];
 static EvtWord evt_door_04_01[12];
 static EvtWord evt_wall_04[15];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_open_04_open[];
 static EvtWord evt_door_04_close[85];
@@ -201,29 +215,35 @@ static EvtWord evt_door_04_close[85];
 EvtWord evt_open_04_open[179];
 static EvtWord evt_door_04_close[87];
 #endif
+
 static DoorParam door_data_04;
 EvtWord evt_door_stg7_open[27];
 EvtWord evt_door_stg7_close[7];
 static EvtWord evt_door_04_entry[64];
 EvtWord tensou_return[243];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tensou_init_event[];
 #else
 EvtWord tensou_init_event[182];
 #endif
+
 EvtWord tensou_event[209];
 EvtWord tensou_anim_event[30];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tensou_sw_event[];
 #else
 EvtWord tensou_sw_event[94];
 #endif
+
 EvtWord kurihakase_event[221];
 EvtWord hashira_bomb_sub[144];
 EvtWord hashira_bomb[45];
 static EvtWord epilogue_npc_entry[25];
 static EvtWord epilogue_evt[127];
 static EvtWord mobj_box01[34];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_00_init_evt[];
 #else

@@ -46,6 +46,7 @@ static EvtWord e3_door_close[12];
 static EvtWord e3_door_open[12];
 static BeroEntry bero_entry_data[6];
 EvtWord evt_gon_04flowblock_updown1_init[37];
+
 #if VERSION >= VERSION_US
 EvtWord evt_gon_04flowblock_updown1[465];
 #else
@@ -55,7 +56,9 @@ EvtWord evt_gon_04flowblock_updown1[489];
 EvtWord evt_gon_04flowblock_updown1[491];
 #endif
 #endif
+
 EvtWord evt_gon_04flowblock_updown2_init[37];
+
 #if VERSION >= VERSION_US
 EvtWord evt_gon_04flowblock_updown2[465];
 #else
@@ -65,6 +68,7 @@ EvtWord evt_gon_04flowblock_updown2[489];
 EvtWord evt_gon_04flowblock_updown2[491];
 #endif
 #endif
+
 KemuriPos kemuri_pos1[5];
 KemuriPos kemuri_pos2[5];
 EvtWord evt_kaidan_pera_anime[203];
@@ -75,11 +79,13 @@ EvtWord evt_hashi_pera0[16];
 EvtWord evt_hashi_pera1[16];
 EvtWord evt_hashi[50];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
+
 static EvtWord evt_unlock[10];
 static EvtWord key_get[5];
 EvtWord gon_04_init_evt[382];

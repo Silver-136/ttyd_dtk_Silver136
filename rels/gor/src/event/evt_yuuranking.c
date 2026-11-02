@@ -27,6 +27,7 @@
 
 /** White colour, kept from the original but never used. */
 const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
+
 #if VERSION >= VERSION_US
 // US keeps separate rankings for 60Hz (record rows 0-3) and 50Hz (rows 4-7) play.
 #define RANKING_ROW(f) ((f) + (gp->framerate == 50 ? 1 : 0) * 4)

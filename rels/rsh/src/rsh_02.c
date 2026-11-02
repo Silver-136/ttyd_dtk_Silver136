@@ -58,11 +58,13 @@ EvtWord init_yuurei[250];
 static EvtWord evt_shake[39];
 EvtWord evt_shake2[6];
 static s32 item_tbl2[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord talk_yuurei[];
 #else
 EvtWord talk_yuurei[451];
 #endif
+
 static EvtWord init_toron[41];
 static EvtWord talk_toron[8];
 static EvtWord talk_sarary[8];
@@ -74,17 +76,22 @@ EvtWord evt_1day_end[68];
 EvtWord evt_2day_end[68];
 EvtWord evt_normal_yado[119];
 EvtWord evt_bed[22];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_toron_catch[];
 #else
 EvtWord evt_toron_catch[281];
 #endif
+
 static s32 item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_toron_catch2[];
 #else
 EvtWord evt_toron_catch2[359];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord evt_toron_appear[437];
 #else
@@ -94,39 +101,50 @@ EvtWord evt_toron_appear[408];
 EvtWord evt_toron_appear[414];
 #endif
 #endif
+
+
 #if VERSION == VERSION_EU
 static EvtWord evt_daiji_kami[96];
 #else
 static EvtWord evt_daiji_kami[88];
 #endif
+
 static EvtWord evt_yuka_simi[45];
 static EvtWord evt_access[14];
 static EvtWord evt_access2[44];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_access_entry[21];
 #else
 static EvtWord evt_access_entry[62];
 #endif
+
 EvtWord rsh_02_init_evt[247];
+
 #if VERSION >= VERSION_US
 EvtWord rsh_02_a_init_evt[687];
 #else
 EvtWord rsh_02_a_init_evt[685];
 #endif
+
 EvtWord rsh_02_b_init_evt[168];
 static const char* window_tbl[4];
 EvtWord rsh_02_c_init_evt[142];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_02_init_evt_nidome[];
 #else
 EvtWord rsh_02_init_evt_nidome[208];
 #endif
+
 EvtWord rsh_02_a_init_evt_nidome[337];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_02_b_init_evt_nidome[];
 #else
 EvtWord rsh_02_b_init_evt_nidome[213];
 #endif
+
 EvtWord rsh_02_c_init_evt_nidome[136];
 EvtWord evt_nidome_bed[126];
 

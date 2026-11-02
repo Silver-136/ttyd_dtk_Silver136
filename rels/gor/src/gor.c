@@ -29,6 +29,7 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
+
 #if VERSION > VERSION_DEMO_US
 static s32 gor_inemuri_snd_id;
 static char* gor_msg_cat_buf;
@@ -39,6 +40,7 @@ void _epilog(void);
 void _prolog(void);
 
 EvtWord gor_villager_urouro[19];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord inemuri_snd[];
 extern EvtWord mario_and_party_sleep[];

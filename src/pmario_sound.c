@@ -8976,6 +8976,7 @@ const char psdb_sfx_txt[0x28] = "%s/sound/proj/pmario_sound_sfx_txt.db";
 #if VERSION <= VERSION_DEMO_US
 s32 silent_tbl[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 #endif
+
 static f32 angleABTBL[] = {
     1.0f, 1.273187f, 1.27303f, 1.272768f, 1.272402f, 1.271932f, 1.271358f,
     1.270681f, 1.269902f, 1.269021f, 1.268038f, 1.266956f, 1.265774f, 1.2644939f,
@@ -9432,6 +9433,7 @@ void psndMapChange(void) {
     }
 }
 #endif
+
 /** Fades out every playing effect except environment sounds and those marked to survive a map change. */
 void psndSFXAllOff(void) {
     PaperSoundWork* wp = &psnd;
@@ -9646,6 +9648,7 @@ BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
 BOOL psndBGMOn_f(u32 flags, const char* bgm_name, u32 fadetime, s32 unused) {
     return psndBGMOn_f_d(flags, bgm_name, fadetime, 750, unused);
 #endif
+
 }
 
 /** Returns a free stream channel for a new BGM, stopping streams that are fading out if none is free. */

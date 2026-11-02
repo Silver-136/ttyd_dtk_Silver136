@@ -170,11 +170,13 @@ static EvtWord e_door_open[12];
 static EvtWord s_door_close[22];
 static EvtWord s_door_open[22];
 static BeroEntry bero_data[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_bridge[];
 #else
 EvtWord evt_bridge[14];
 #endif
+
 EvtWord evt_bridge2[118];
 static EvtWord evt_origami[198];
 static EvtWord evt_moamoa_init[29];
@@ -182,6 +184,7 @@ static EvtWord evt_meet_moamoa[215];
 static EvtWord evt_moamoa_escape[47];
 EvtWord evt_elv_rumble[60];
 static EvtWord evt_elv_init[49];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_elv_down[];
 extern EvtWord evt_elv_up[];
@@ -189,12 +192,15 @@ extern EvtWord evt_elv_up[];
 EvtWord evt_elv_down[554];
 EvtWord evt_elv_up[456];
 #endif
+
 static s32 item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_elv[];
 #else
 EvtWord evt_elv[61];
 #endif
+
 EvtWord evt_elv_nomsg[14];
 static EvtWord evt_head[42];
 static EvtWord evt_kanban[14];

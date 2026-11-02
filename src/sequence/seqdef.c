@@ -19,6 +19,7 @@ SequenceCallback seq_data[9][3] = {
 #else
 SequenceCallback seq_data[8][3] = {
 #endif
+
     {seq_logoInit, seq_logoMain, seq_logoExit},
     {seq_titleInit, seq_titleMain, seq_titleExit},
     {seq_gameInit, seq_gameMain, seq_gameExit},

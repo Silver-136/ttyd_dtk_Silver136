@@ -30,12 +30,15 @@ static EvtWord e2_door_open[22];
 static BeroEntry bero_entry_data[5];
 static BeroEntry w_bero_mapchg[1];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord key_check_evt[21];
 #else
 static EvtWord key_check_evt[23];
 #endif
+
 static EvtWord unlock_evt[10];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_25_init_evt[];
 #else

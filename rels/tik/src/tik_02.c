@@ -59,11 +59,13 @@ char geso_checkpose[];
 static EvtWord ukishima_apper[294];
 EvtWord geso_battle[676];
 static EvtWord wall_bomb[142];
+
 #if VERSION <= VERSION_DEMO_US
 static HitDamageReturn hitDmgRetPoints[6];
 #else
 static HitDamageReturn hitDmgRetPoints[7];
 #endif
+
 EvtWord tik_02_init_evt[207];
 
 /**

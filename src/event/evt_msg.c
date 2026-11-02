@@ -189,6 +189,7 @@ const char* partyMsgStr[] = {"", "_kur", "_nok", "_bom", "_yos", "_win", "_viv",
  * (Goombella, Koops, Yoshi, Flurrie, Vivian, Bobbery, Ms. Mowz).
  */
 const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom", "_chu"};
+
 #if VERSION < VERSION_US
 /** Unused padding table in the Japanese release. */
 #if VERSION > VERSION_DEMO_US

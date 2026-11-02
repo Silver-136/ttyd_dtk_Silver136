@@ -61,17 +61,21 @@ const char* cloud_kontena2_list[5];
 EvtWord evt_kontena2[23];
 static EvtWord evt_block_broken[5];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
+
 static EvtWord evt_lock[14];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_chuchu[];
 #else
 EvtWord evt_chuchu[626];
 #endif
+
 static s32 list[75];
 EvtWord iri_13_pants_00_evt[5];
 EvtWord iri_13_init[124];

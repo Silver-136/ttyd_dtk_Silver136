@@ -28,6 +28,7 @@ static inline void kpaWallSlide(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz
     *mz = 0.5f * (vz - dot * nz);
 }
 #endif
+
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
 }

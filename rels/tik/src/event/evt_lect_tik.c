@@ -14,6 +14,7 @@
 #include "mot/mot_slit.h"
 #include "mot/mot_roll.h"
 #include "driver/npcdrv.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "evt/evt_window.h"
 #endif
@@ -97,6 +98,7 @@ static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord plane_majin_lecture_init[73];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord plane_majin_lecture[];
 #else
@@ -957,6 +959,7 @@ static USER_FUNC(lect_push_r_check) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Script helper (normal change).
  * Cancels Mario's roll and paper mode so he is back to normal,

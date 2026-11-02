@@ -57,6 +57,7 @@ static EvtWord evt_box[95];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[83];
 static EvtWord peach_evt_stg1[56];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_02_init_evt[];
 #else

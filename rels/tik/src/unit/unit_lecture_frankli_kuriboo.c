@@ -26,11 +26,13 @@ static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[53];
 static EvtWord entry_event[29];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord phase_event[148];
 #else
 static EvtWord phase_event[160];
 #endif
+
 static EvtWord damage_event[10];
 static EvtWord wait_event[6];
 

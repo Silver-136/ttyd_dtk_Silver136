@@ -82,6 +82,7 @@ u8 finish_type[] = {0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x00, 0x00};
 u8 retire_type[] = {0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x00, 0x00};
 u8* type_tbl[] = {start_type, finish_type, retire_type};
 #endif
+
 /**
  * Squash-and-stretch keys for a landing banner letter: a pair of size percentages per frame, read by
  * effMiniGameMain as the letter bounces (poyon: boing) and settles back to full size.

@@ -20,6 +20,7 @@
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include "mario/mario_sbr.h"
 
 /** TRUE when Mario is at 5 HP or less, which switches his idle to the tired pose (M_S_3) and breathing sounds. */

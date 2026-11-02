@@ -14,6 +14,7 @@
 BeroEntry bero_data_a_nidome[2];
 BeroEntry bero_data_b_nidome[2];
 BeroEntry bero_data_c_nidome[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_08_a_init_evt[];
 #else

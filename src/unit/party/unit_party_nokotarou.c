@@ -49,11 +49,13 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 PoseTableEntry pose_table_nokotarou_stay[26];
 PoseTableEntry pose_table_nokotarou_turn[12];
+
 #if VERSION <= VERSION_DEMO_US
 static BattleDataEntry data_table[11];
 #else
 static BattleDataEntry data_table[12];
 #endif
+
 BattleUnitKindPart unitpartsdata_Party_Nokotarou[1];
 BattleUnitKind unitdata_Party_Nokotarou;
 static EvtWord battle_entry_event[59];
@@ -72,6 +74,7 @@ static EvtWord _restore_koura_pose[47];
 static EvtWord _koura_rotate_start[199];
 static EvtWord _koura_rotate_stop[13];
 EvtWord partyNokotarouAttack_FirstAttack[236];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyNokotarouAttack_NormalAttack[769];
 EvtWord partyNokotarouAttack_SyubibinKoura[667];
@@ -79,18 +82,23 @@ EvtWord partyNokotarouAttack_SyubibinKoura[667];
 EvtWord partyNokotarouAttack_NormalAttack[VERSION_PICK(793, 804)];
 EvtWord partyNokotarouAttack_SyubibinKoura[VERSION_PICK(691, 702)];
 #endif
+
 EvtWord partyNokotarouAttack_KouraGuard[];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyNokotarouAttack_TsuranukiKoura[901];
 #else
 EvtWord partyNokotarouAttack_TsuranukiKoura[VERSION_PICK(931, 942)];
 #endif
+
 EvtWord nokotarou_appeal_event[34];
 static EvtWord party_win_reaction[16];
 static EvtWord attack_audience_event[263];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord nokotarou_revive_event[16];
 #endif
+
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static BattleUnitDefense defence_turn;
@@ -126,6 +134,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 #endif
+
 PoseTableEntry pose_table_nokotarou_stay[] = {
     {POSE_TYPE_FREEZE, "PNK_D_5"},
     {POSE_TYPE_STOP, "PNK_D_5"},
@@ -297,6 +306,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Run when Koops is switched into battle (data tag 4):
  * if he was still flipped on his back (overturn count 1 or more),
@@ -368,6 +378,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Koops's First Strike weapon (no menu name), run by partyNokotarouAttack_FirstAttack when he hits an enemy in the
  * field: always hits the frontmost ground enemy for 2-5 by rank, no action command, shatters ice.
@@ -1332,6 +1343,7 @@ BattleUnitSetup entry_koura = {
     NULL, // itemDropTable
 };
 #endif
+
 EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     // Find Mario as the target and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))

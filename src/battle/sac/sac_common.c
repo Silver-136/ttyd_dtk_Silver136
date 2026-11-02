@@ -78,6 +78,7 @@ EVT_BEGIN(sac_start_stardust)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(sac_mario_item_on_end_evt)
     CALL(evt_eff_delete, STRING("sac_itemget"))
     CALL(evt_eff_delete, STRING("sac_treasure"))

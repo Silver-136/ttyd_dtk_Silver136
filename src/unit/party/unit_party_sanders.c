@@ -39,11 +39,13 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 PoseTableEntry pose_table_sanders_stay[25];
 PoseTableEntry pose_table_counter_sanders[20];
+
 #if VERSION <= VERSION_DEMO_US
 static BattleDataEntry data_table[8];
 #else
 static BattleDataEntry data_table[9];
 #endif
+
 BattleUnitKindPart unitpartsdata_Party_Sanders[1];
 BattleUnitKind unitdata_Party_Sanders;
 static EvtWord battle_entry_event[59];
@@ -56,11 +58,14 @@ BattleWeapon partyWeapon_SandersTimeBombSet;
 BattleWeapon partyWeapon_SandersCounterSet;
 BattleWeapon partyWeapon_SandersSuperBombAttack;
 EvtWord partySandersAttack_FirstAttack[321];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord partySandersAttack_NormalAttack[946];
 #else
 EvtWord partySandersAttack_NormalAttack[970];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord partySandersAttack_SuperBombAttack[1118];
 EvtWord partySandersAttack_CounterSet[242];
@@ -70,6 +75,7 @@ EvtWord partySandersAttack_SuperBombAttack[1116];
 EvtWord partySandersAttack_CounterSet[201];
 EvtWord partySandersAttack_TimeBombSet[290];
 #endif
+
 EvtWord _shot_bomb_event[155];
 EvtWord sanders_appeal_event[121];
 static EvtWord attack_audience_event[284];
@@ -107,6 +113,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 #endif
+
 /**
  * Bobbery's normal pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze,
  * instant KO), the hurt poses, walking and running, low HP, the failed Run Away tumble, talking, item use,
@@ -1353,6 +1360,7 @@ BattleUnitSetup entry_bomzou = {
     NULL, // itemDropTable
 };
 #endif
+
 /**
  * Bobbery's Bomb Squad: for each successful action command he throws one of up to three bombs (unit_bomzou)
  * along the aimed arc (_shot_bomb_event); bombs that land off the stage are removed, the rest explode next turn.
@@ -1566,6 +1574,7 @@ static EVT_BEGIN(party_win_reaction)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Audience-attack reaction (data tag 6): Bobbery runs offstage, reappears in the audience,
  * lights his fuse for a second and explodes on the chosen audience member,

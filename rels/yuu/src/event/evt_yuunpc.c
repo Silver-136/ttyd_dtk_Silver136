@@ -1048,6 +1048,7 @@ s32 hitcheck(YuuNpc* npc) {
 #if VERSION > VERSION_DEMO_US
 #pragma dont_inline on
 #endif
+
 /**
  * Applies gravity to a racing NPC (0.533 per frame, terminal speed 16.7)
  * and lands it on the floor height under it. Returns -1 when it lands, else 0.
@@ -1110,6 +1111,7 @@ static void errper_set_rtn(YuuNpc* npc) {
 #else
 void errper_set_rtn(YuuNpc* npc) {
 #endif
+
     switch (npc->state) {
         case 0:
         case 2:

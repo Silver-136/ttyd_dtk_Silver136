@@ -39,6 +39,7 @@ EvtWord gorotuki_sanninngumi[694];
 EvtWord wall_bomb00[139];
 EvtWord wall_bomb01[140];
 static EvtWord mobj_box00[34];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord tik_01_init_evt[205];
 #else

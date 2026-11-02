@@ -31,11 +31,13 @@ void DrawMainMenu(BattleWork* wp);
 #include "driver/camdrv.h"
 #include "driver/icondrv.h"
 #include "pmario_sound.h"
+
 #if VERSION <= VERSION_DEMO_US
 static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party);
 #else
 void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y);
 #endif
+
 void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v, f32 s);
 void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s);
 void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
@@ -50,6 +52,7 @@ void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 #define FRAMES(n) (n)
 #define FRAMES_STEP(jp, n, x) ((jp) * (x))
 #endif
+
 void FontDrawStringCenterMtx(Mtx mtx, const char* msg);
 /**
  * Angles in degrees of the command icons around the battle menu's ring, one row each for 3, 4 and 5 commands
@@ -401,6 +404,7 @@ static void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, c
 #else
 void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party, s32 y) {
 #endif
+
     Mtx out[7];
     Mtx m;
     BattleWork* wp = _battleWorkPointer;

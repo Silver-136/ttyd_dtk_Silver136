@@ -49,6 +49,7 @@ static BeroEntry bero_entry_data[3];
 static NpcSetupInfo npcEnt[2];
 static TreeAccess tree_tbl[2];
 EvtWord evt_majin_key[5];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gra_00_init_evt[];
 #else

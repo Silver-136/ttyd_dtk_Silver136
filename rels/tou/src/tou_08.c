@@ -60,12 +60,15 @@ static NpcSetupInfo npcEnt[7];
 static EvtWord evt_sensyu[70];
 EvtWord evt_1st_sub[107];
 static EvtWord evt_1st_leagu[747];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_toile_door[];
 #else
 EvtWord evt_toile_door[236];
 #endif
+
 EvtWord evt_toile_door2[136];
+
 #if VERSION >= VERSION_US
 EvtWord evt_champion_win[290];
 #else
@@ -75,6 +78,7 @@ EvtWord evt_champion_win[269];
 EvtWord evt_champion_win[271];
 #endif
 #endif
+
 static EvtWord bed_entry[10];
 EvtWord evt_tou_08_cake[53];
 static EvtWord epilogue_npc_entry[84];

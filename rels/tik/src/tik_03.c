@@ -28,11 +28,13 @@
 
 EvtWord bero_05_custom_in[30];
 EvtWord bero_05_custom_out[12];
+
 #if VERSION <= VERSION_DEMO_US
 static BeroEntry bero_entry_data[6];
 #else
 static BeroEntry bero_entry_data[3];
 #endif
+
 static BeroEntry bero_entry_data2[2];
 static EvtWord guide_init[48];
 static EvtWord guide_talk[11];

@@ -107,6 +107,7 @@ void seq_titleInit(SequenceWork* work) {
     gp->flags &= ~GW_FLAG_E3;
 }
 #endif
+
 /** Leaves the title sequence: frees mariost.tpl and fades out all sound unless going on to the file select. */
 void seq_titleExit(SequenceWork* work) {
     fileFree(wp2->texture);
@@ -195,6 +196,7 @@ void titleMain(SequenceWork* work) {
                 && animGroupBaseAsync("OFF_d_maku_left_right", 2, 0)
                 && animGroupBaseAsync("OFF_d_maku_center", 2, 0)) {
 #endif
+
                 if (seqGetPrevSeq() == SEQ_LOAD) {
                     fadeEntry(FADE_CURTAIN_SIDES_A2_TOP, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(FADE_CURTAIN_CENTER_Z2_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});

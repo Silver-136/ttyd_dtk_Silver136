@@ -40,11 +40,13 @@ static BeroEntry bero_entry_data[2];
 static EvtWord chibitoge_init[21];
 static EvtWord chibitoge_talk[111];
 static NpcSetupInfo npcEnt[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord chuchurina_sogu[812];
 #else
 static EvtWord chuchurina_sogu[814];
 #endif
+
 EvtWord black_shadow[341];
 static EvtWord evt_ueki_02[20];
 static KusaAccess ueki_access_data[5];

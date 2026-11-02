@@ -36,11 +36,14 @@
 
 BeroEntry bero_bluejail[1];
 static BeroEntry bero_entry_data[5];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord wall_roll_sub[];
 #else
 EvtWord wall_roll_sub[96];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord wall_roll[272];
 #else
@@ -50,11 +53,14 @@ EvtWord wall_roll[262];
 EvtWord wall_roll[264];
 #endif
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord breakyuka_init[11];
 #else
 static EvtWord breakyuka_init[17];
 #endif
+
 static EvtWord breakyuka_main[9];
 static KusaAccess ueki_access_data[6];
 EvtWord slot00_event[52];
@@ -63,6 +69,7 @@ EvtWord slot02_event[52];
 EvtWord slot03_event[52];
 EvtWord slot_event[66];
 EvtWord get_blue_jail_key[143];
+
 #if VERSION >= VERSION_US
 EvtWord mri_09_init_evt[230];
 #else

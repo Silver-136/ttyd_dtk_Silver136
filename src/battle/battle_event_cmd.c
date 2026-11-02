@@ -29,9 +29,11 @@
 #include "battle/battle_detect.h"
 #include "battle/battle_seq_command.h"
 #include "battle/battle_enemy_item.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include "battle/battle_ac_help.h"
 #include "pmario_sound.h"
 #include <math.h>
@@ -7121,6 +7123,7 @@ USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Script: slides the battle stage's background objects off screen (args[0] = 0: sideways 450 units for the back
  * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.

@@ -5,9 +5,11 @@
 #include "eff/eff_n64.h"
 #include "driver/arcdrv.h"
 #include "manager/dvdmgr.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include "memory.h"
 #include "system.h"
 #include <stdlib.h>
@@ -76,6 +78,7 @@ static const char* pokopi_pipo_patname[] = {"a", "b", NULL};
 static const char* str_fireflower[] = {"\217\207\225\373\214\374", "\213t\225\373\214\374", NULL};
 static const char* str_fall_leaf[] = {"\227\216\202\277\227t64-1", "\227\216\202\277\227t64-2", "\227\216\202\277\227t GC-1", "\227\216\202\277\227t GC-2", "\227\216\202\277\227t GC-3", NULL};
 #endif
+
 eff_set eff_set_n64[] = {
 #if VERSION <= VERSION_DEMO_US
     {0, "expbom_n64", "\223G\202\252\202\265\202\361\202\266\202\341\202\244\202\306\202\253", NULL},

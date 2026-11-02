@@ -1,6 +1,7 @@
 // Shadow driver: blob, cylinder, projected and depth shadows (shadowInit, shadowMain, shadowDisp).
 
 #include "version.h"
+
 #if VERSION <= VERSION_DEMO_US
 #define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
@@ -8,6 +9,7 @@
 #else
 #include "driver/shadowdrv.h"
 #endif
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/hitdrv.h"
@@ -131,6 +133,7 @@ u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
     0x00,
 };
 #endif
+
 static f32 vertex_tbl[180] ATTRIBUTE_ALIGN(32) = {
     0.0f, 0.0f, 0.0f,
     0.0f, 0.0f, 1.0f,
@@ -213,6 +216,7 @@ ProjShadowWork* pswp = &proj_shadow_work;
 DepthShadowWork* dswp = &depth_shadow_work;
 /** Side lengths of the square shadow textures (400, 256, 128, 64 pixels) that a shadow config picks from. */
 u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
+
 #if VERSION > VERSION_DEMO_US
 u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x38, 0x01, 0x39, 0x01, 0x3A, 0x01, 0x3B, 0x01, 0x00,
@@ -222,6 +226,7 @@ u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
     0x02, 0x3A, 0x01, 0x38, 0x02, 0x3B, 0x01, 0x39, 0x02, 0x38, 0x01, 0x00,
 };
 #endif
+
 static GXColor color_tbl[3] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x6E}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x16},
 };
@@ -845,6 +850,7 @@ static void cylinderShadowDraw(CameraId cameraId, void* param) {
 #else
 void cylinderShadowDraw(CameraId cameraId, void* param) {
 #endif
+
     ShadowEntry* entry = cswp->entries;
     f32 (*view)[4];
     s32 i;

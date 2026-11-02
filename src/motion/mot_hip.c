@@ -335,6 +335,7 @@ void mot_hip(void) {
 #if VERSION > VERSION_DEMO_US
 #pragma dont_inline on
 #endif
+
 /**
  * Landing check for the spin jump: 0 while in the air,
  * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.

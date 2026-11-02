@@ -38,12 +38,15 @@ static EvtWord haguruma_evt[194];
 EvtWord cloud_blk_evt[10];
 EvtWord break_floor_evt[5];
 EvtWord jump_evt[68];
+
 #if VERSION >= VERSION_US
 static EvtWord dai_evt[17];
 #else
 static EvtWord dai_evt[13];
 #endif
+
 static EvtWord box_evt[33];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_24_init_evt[];
 #else

@@ -72,6 +72,7 @@ static EvtWord garawaru_init[39];
 static EvtWord garawaru_talk[270];
 static EvtWord marco_init[31];
 EvtWord marco_kyorokyoro[28];
+
 #if VERSION >= VERSION_US
 static EvtWord marco_talk[848];
 #else
@@ -81,6 +82,7 @@ static EvtWord marco_talk[788];
 static EvtWord marco_talk[831];
 #endif
 #endif
+
 static EvtWord megane_init[14];
 static EvtWord megane_talk[54];
 static EvtWord odoodo_init[14];
@@ -108,11 +110,13 @@ static EvtWord musume_c_entry[30];
 static NpcSetupInfo npcEnt[17];
 static EvtWord bero_in_event[5];
 static BeroEntry bero_entry_data[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord muj_00_door_open[];
 #else
 EvtWord muj_00_door_open[247];
 #endif
+
 EvtWord muj_00_door_close[22];
 static const char* mise_npc[2];
 EvtWord mise_data_open[32];

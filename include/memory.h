@@ -42,6 +42,7 @@ void memInit(void);
 void memClear(HEAP_TYPE heap);
 void* __memAlloc(HEAP_TYPE heap, u32 size);
 void __memFree(HEAP_TYPE heap, void* ptr);
+
 #if VERSION >= VERSION_US // US: the map heap functions take the heap base; these macros pass mapalloc_base_ptr
 extern void* mapalloc_base_ptr;
 void* _mapAlloc(void* base, u32 size);
@@ -55,6 +56,7 @@ void* _mapAlloc(u32 size);
 void* _mapAllocTail(u32 size);
 void _mapFree(void* alloc);
 #endif
+
 void smartInit(void);
 void smartReInit(void);
 // smartAlloc groups: smartAutoFree frees a whole group.
@@ -76,5 +78,6 @@ extern BOOL g_bFirstSmartAlloc;
 #if VERSION >= VERSION_US
 extern void* R_battlemapalloc_base_ptr;
 #endif
+
 void battleMapAlloc(void);
 void battleMapFree(void);

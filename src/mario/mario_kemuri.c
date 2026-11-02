@@ -132,6 +132,7 @@ void mario_land_kemuri(void) {
 #if VERSION <= VERSION_DEMO_US
 static inline
 #endif
+
 void mario_kemuri_landon(void) {
     static s32 cnt = 0;
     static s32 cnt2 = 10;

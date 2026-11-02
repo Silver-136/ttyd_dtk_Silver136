@@ -77,6 +77,7 @@ static void effMagic1Main(EffectEntry* effect) {
 #else
 void effMagic1Main(EffectEntry* effect) {
 #endif
+
     EffMagic1N64Work* work = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

@@ -35,6 +35,7 @@ EvtWord enemy2_dead_evt[11];
 EvtWord enemy3_dead_evt[11];
 EvtWord enemy4_dead_evt[102];
 static EvtWord hint_plate[24];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_17_init_evt[];
 #else

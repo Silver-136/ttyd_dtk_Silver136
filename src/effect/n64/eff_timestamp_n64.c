@@ -38,6 +38,7 @@ static u8 colr[17] = {255, 255, 255, 198, 138, 130, 130, 130, 130, 130, 175, 215
 static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255, 255, 225, 198, 159, 130};
 static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};
 #endif
+
 /**
  * Layout of the ten pieces, three numbers each: X and Y offset from the centre
  * and the frames before it fades in.

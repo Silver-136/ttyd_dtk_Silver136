@@ -80,11 +80,13 @@ static BattleUnitSetup entry_rocket_punch;
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[216];
 #else
 static EvtWord dead_event[234];
 #endif
+
 static EvtWord entry_event[78];
 static EvtWord attack_event[150];
 EvtWord stamp_attack_event[352];

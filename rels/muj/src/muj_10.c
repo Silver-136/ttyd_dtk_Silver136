@@ -51,12 +51,15 @@ static EvtWord door_custom[53];
 static EvtWord bero_in_event[80];
 static BeroEntry bero_entry_data[3];
 EvtWord nazo_event[178];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord oidasare_event[];
 #else
 EvtWord oidasare_event[156];
 #endif
+
 ExtTexInfo test_ext_entry_data[31];
+
 #if VERSION <= VERSION_DEMO_US
 static s16 suifu_animtbl[41];
 static s16 elmos_animtbl[21];
@@ -64,15 +67,19 @@ static s16 elmos_animtbl[21];
 static s16 suifu_animtbl[42];
 static s16 elmos_animtbl[22];
 #endif
+
 s32 senin_event_suifupos[380];
 s32 senin_event_erumospos[180];
+
 #if VERSION >= VERSION_US
 EvtWord senin_event[282];
 #else
 EvtWord senin_event[374];
 #endif
+
 static EvtWord dai3_shurai_after[46];
 static HitDamageReturn hitDmgRetPoints[7];
+
 #if VERSION >= VERSION_US
 EvtWord muj_10_init_evt[207];
 #else

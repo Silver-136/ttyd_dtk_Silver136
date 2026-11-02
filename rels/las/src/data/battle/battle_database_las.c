@@ -217,17 +217,21 @@ NpcBattleSelect btlgrpsel_las_btlno_las_25_06_off[2];
 NpcSetupBattleInfo btlsetup_las_tbl[61];
 NpcTerritoryInfo btl_las_setup_no_tbl[61];
 EvtWord bgset_las_gear_event[38];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord stg_08_1_init_sub_event[];
 #else
 EvtWord stg_08_1_init_sub_event[97];
 #endif
+
 EvtWord stg_08_1_init_event[4];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord stg_08_6_init_sub_event[154];
 #else
 EvtWord stg_08_6_init_sub_event[46];
 #endif
+
 EvtWord stg_08_6_init_event[4];
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000775c, JP las .text+0x7690. See docs/NAME_PROVENANCE.md.
@@ -3592,6 +3596,7 @@ EVT_BEGIN(stg_08_6_init_sub_event)
     RETURN
 EVT_END()
 #endif
+
 USER_FUNC(check_battle_end) {
     return battleSeqEndCheck() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

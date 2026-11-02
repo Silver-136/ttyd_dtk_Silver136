@@ -24,12 +24,15 @@ static BattleDataEntry data_table_yoshi[2];
 static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[24];
 EvtWord damage_event_yoshi[22];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event_yoshi[156];
 #else
 static EvtWord dead_event_yoshi[177];
 #endif
+
 static EvtWord attack_event_yoshi[748];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord wait_event_yoshi[6];
 #else

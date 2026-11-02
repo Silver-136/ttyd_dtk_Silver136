@@ -4,6 +4,7 @@
 #include <dolphin/types.h>
 
 extern f32 queen_uv[];
+
 #if VERSION <= VERSION_DEMO_US
 #include <dolphin/gx.h>
 BOOL gxsubMiscSetGX(s32 mode);

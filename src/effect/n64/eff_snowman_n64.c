@@ -64,6 +64,7 @@ static SnowmanJumpStep adata[] = {
     {0, 28, -78, 100, 100}, {5, 30, -96, 100, 100}, {8, 30, -96, 100, 100}, {10, 30, -96, 100, 100},
 };
 #endif
+
 void effSnowmanMain(EffectEntry* effect);
 void effSnowmanDisp(CameraId cameraId, EffectEntry* effect);
 

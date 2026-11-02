@@ -61,12 +61,14 @@ typedef struct MarioMotTblEntry {
 void mot_talk(void);
 void mot_getItem(void);
 void mot_kaze(void);
+
 #if VERSION <= VERSION_DEMO_US
 static void mot_bottomless(void);
 static void mot_cloud_post(void);
 #else
 void mot_bottomless(void);
 #endif
+
 void mot_forceReset(void);
 void mot_shadow(void);
 void mot_partyUse(void);

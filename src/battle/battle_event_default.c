@@ -46,20 +46,24 @@ EvtWord btldefaultevt_ChangeParty[174];
 EvtWord btldefaultevt_BiribiriMove[29];
 EvtWord btldefaultevt_guard_move[85];
 EvtWord btldefaultevt_guard_return[98];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord btldefaultevt_Appeal[114];
 #else
 EvtWord btldefaultevt_Appeal[145];
 #endif
+
 EvtWord _Defence_core[81];
 EvtWord btldefaultevt_Escape[657];
 EvtWord btldefaultevt_Confuse[19];
 EvtWord btldefaultevt_CantMoveZeroGravity[44];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord btldefaultevt_SuitoruBadgeEffect[100];
 #else
 EvtWord btldefaultevt_SuitoruBadgeEffect[122];
 #endif
+
 EvtWord btldefaultevt_avoid_counter_event[34];
 EvtWord btldefaultevt_ProtectPartner[10];
 EvtWord btldefaultevt_Dummy[2];
@@ -591,6 +595,7 @@ EVT_BEGIN(btldefaultevt_ProtectPartner)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Jitters the unit sideways for electric-shock paralysis ("biribiri"), then restarts its wait event.
  * battle_seq would run it for Electric units, but its chance there is irand(100) < 0, so it never plays.
@@ -678,6 +683,7 @@ EVT_BEGIN(btldefaultevt_LectureEnd)
     RETURN
 EVT_END()
 #endif
+
 /** Action for a unit that does nothing this turn: restarts its wait event. */
 EVT_BEGIN(btldefaultevt_Appeal)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -770,6 +776,7 @@ EVT_BEGIN(btldefaultevt_DefendParty)
     RETURN
 EVT_END()
 #endif
+
 /**
  * The Run Away command: Mario and the partner turn and run in place
  * while the escape action command plays (the gauge uses the enemy group's run rate).

@@ -47,10 +47,12 @@ typedef struct HikokiWork {
     s32 monteCount;
     EventEntry* viewEvent;
 } HikokiWork;
+
 #if VERSION >= VERSION_US
 USER_FUNC(yuuminigame1_floor_chk);
 USER_FUNC(yuuminigame1_floor_on_off);
 #endif
+
 typedef struct MonteTable {
     f32 x0;
     f32 x1;
@@ -79,6 +81,7 @@ EvtWord light_sub_event[497];
 EvtWord minigame01_main[35];
 EvtWord minigame01_start_cam[40];
 EvtWord minigame01_start_cam_cancel[20];
+
 #if VERSION >= VERSION_US
 EvtWord minigame01_start[1504];
 EvtWord minigame01_end[224];

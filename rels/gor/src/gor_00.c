@@ -112,6 +112,7 @@ void gor_stg4_018_cb(s32 type, smartEntry* smart);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);
 f32 lineardec_type(s32 step, s32 total, f32 start, f32 end);
 static void alpha_tev(MapTevCallbackInfo* info);
+
 #if VERSION >= VERSION_US
 
 // US/PAL: map save blocks call the save wrapper script
@@ -126,25 +127,33 @@ s16 dai3_run_animtbl[VERSION_PICK(22, 42)];
 EvtWord no00_custom[48];
 static BeroEntry bero_entry_data[2];
 static EvtWord mony_init[18];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord gor_00_mony_regl[VERSION_PICK(9, 11)];
 #endif
+
 EvtWord mony_peton_talk[286];
 static EvtWord mony_talk[28];
 static EvtWord peton_init[18];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord gor_00_peton_regl[VERSION_PICK(9, 11)];
 #endif
+
 static EvtWord peton_talk[28];
 static EvtWord marco_init[32];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord marco_party_move[120];
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord marco_talk[362];
 #else
 static EvtWord marco_talk[364];
 #endif
+
 EvtWord garawaru_urouro2[25];
 static EvtWord garawaru_init[74];
 EvtWord garawaru_regl[60];
@@ -170,11 +179,13 @@ static EvtWord suifu_d_talk[8];
 EvtWord suifubomb_a_urouro2[31];
 EvtWord suifubomb_a_init[53];
 EvtWord suifubomb_a_regl[30];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord suifubomb_a_talk[224];
 #else
 EvtWord suifubomb_a_talk[VERSION_PICK(226, 218)];
 #endif
+
 EvtWord suifubomb_b_urouro2[27];
 EvtWord suifubomb_b_init[39];
 EvtWord suifubomb_b_regl[60];
@@ -185,27 +196,33 @@ static EvtWord sanders_init[42];
 static EvtWord sanders_talk[8];
 static EvtWord korutesu_init[19];
 static EvtWord korutesu_talk[33];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tentyou_init[];
 #else
 EvtWord tentyou_init[36];
 #endif
+
 EvtWord tentyou_talk[14];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tenin_init[];
 #else
 EvtWord tenin_init[36];
 #endif
+
 EvtWord tenin_talk[14];
 static EvtWord borodo2_init[42];
 static EvtWord borodo2_escape[43];
 static EvtWord borodo2_talk[13];
 EvtWord mokorim_init[28];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord mokorim_talk[521];
 #else
 EvtWord mokorim_talk[546];
 #endif
+
 static EvtWord baba_init[9];
 static EvtWord luigi_init[18];
 static EvtWord luigi_talk[4];
@@ -224,17 +241,21 @@ EvtWord ship_a_animation[132];
 static EvtWord ship_pera[119];
 EvtWord enter_gorotsuki_town_init[58];
 EvtWord christine_osoware_setup[82];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord enter_gorotsuki_town[];
 #else
 EvtWord enter_gorotsuki_town[594];
 #endif
+
 EvtWord christine_osoware[357];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gundan1000tai_beforebattle[];
 #else
 EvtWord gundan1000tai_beforebattle[524];
 #endif
+
 static EvtWord _kemuri_sub[56];
 EvtWord gundan1000tai_kemuri[VERSION_PICK(20, 16)];
 EvtWord gundan1000tai_zaza_se[61];
@@ -252,10 +273,13 @@ static s16 suifu_animtbl[42];
 static s16 suifu_run_animtbl[22];
 Vec suifu100kaidanDOWN[];
 Vec suifu100kaidanUP[];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord marco_run_away[100];
 #endif
+
 EvtWord gorotsuki_kikan[];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord into_gor_ship[];
 static EvtWord mony_peton_event[251];
@@ -263,16 +287,21 @@ static EvtWord mony_peton_event[251];
 EvtWord into_gor_ship[265];
 EvtWord mony_run_away[108];
 #endif
+
+
 #if VERSION > VERSION_DEMO_US
 EvtWord peton_run_away[88];
 EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
 #endif
+
 EvtWord gor_00_koopa_evt[1095];
+
 #if VERSION == VERSION_EU
 static EvtWord peach_mail[215];
 #else
 static EvtWord peach_mail[209];
 #endif
+
 f32 gor_ship_puka_data[];
 EvtWord gor_ship_puka[21];
 EvtWord gor_muj_ship_sub[53];
@@ -283,22 +312,27 @@ EvtWord gor_muj_ship_start[258];
 EvtWord tsumini[212];
 static HitDamageReturn dmgRetPoint[VERSION_PICK(4, 6)];
 static EvtWord mobj_box00[34];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord epilogue_npc_entry[365];
 #else
 static EvtWord epilogue_npc_entry[340];
 #endif
+
 EvtWord punio_kinoko[22];
 EvtWord puniko_kinoko[22];
 static EvtWord epilogue_evt[1520];
 EvtWord epilogue_npc_entry2[30];
 static EvtWord epilogue_evt2[74];
 EvtWord return_gorotsuki_town_init[25];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord return_gorotsuki_town[];
 #else
 EvtWord return_gorotsuki_town[625];
 #endif
+
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord gor_00_init_evt[535];
 #else
@@ -4926,6 +4960,7 @@ static EVT_BEGIN(mony_peton_event)
  */
 EVT_BEGIN(mony_run_away)
 #endif
+
     CALL(evt_npc_jump_position_nohit, STRING("モニー"), 145, 15, 225, 400, 20)
     CALL(evt_npc_set_ry, STRING("モニー"), 270)
     CALL(evt_npc_move_position, STRING("モニー"), -130, 200, 0, FLOAT(240.0f), 0)

@@ -26,18 +26,23 @@ USER_FUNC(camera_curve_off);
 USER_FUNC(camera_curve_on);
 
 EvtWord gra_05_in_01[5];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gra_05_out_01[];
 #else
 EvtWord gra_05_out_01[149];
 #endif
+
 EvtWord gra_05_in_02[5];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gra_05_out_02[];
 #else
 EvtWord gra_05_out_02[149];
 #endif
+
 static EvtWord in_evt[5];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord out_evt[148];
 static EvtWord out_evt2[130];
@@ -45,6 +50,7 @@ static EvtWord out_evt2[130];
 static EvtWord out_evt[113];
 static EvtWord out_evt2[150];
 #endif
+
 static BeroEntry bero_entry_data[7];
 EvtWord gra_05_futa_open_evt[28];
 EvtWord evt_gra_05iwa_move_init[31];

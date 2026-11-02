@@ -38,9 +38,11 @@ GXTexObj projTexObj;
 void* projTexImgRef;
 Mtx projMtx;
 BOOL __mapdrv_make_dl;
+
 #if VERSION > VERSION_DEMO_US
 BOOL disableMapDraw;
 #endif
+
 s32 error_count;
 BOOL error_flag;
 MapObject* current_mp;
@@ -255,6 +257,7 @@ static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 i
 #else
 MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 #endif
+
     MapWork* wp = &mapWork[activeGroup];
     MapObject* obj;
     s32 i;

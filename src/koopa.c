@@ -326,6 +326,7 @@ static void kpa2DMain(void) {
 #else
 void kpa2DMain(void) {
 #endif
+
     MarioWork* mp = marioGetPtr();
     Vec diff;
     Vec saved;

@@ -96,13 +96,16 @@ typedef struct CreditActor {
     Mtx mtx;
 } CreditActor;
 EndWork end_work;
+
 #if VERSION > VERSION_DEMO_US
 s32 (*end_moa_chain_group)[2];
 s32* end_moa_chain_count;
 ExtTexInfo* end_moa_ext_data;
 EndMoa* end_moa_tbl;
 #endif
+
 extern EndWork* end_wp;
+
 #if VERSION <= VERSION_DEMO_US
 extern CreditMsg end_staff_roll_msg_tbl[];
 extern CreditNpc R_credits_npc_info[151];
@@ -110,6 +113,7 @@ extern CreditNpc R_credits_npc_info[151];
 extern CreditMsg end_staff_roll_msg_tbl[50];
 extern CreditNpc R_credits_npc_info[152];
 #endif
+
 static inline f32 tanf(f32 x) { return tan(x); }
 s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 typedef void (*voidfunctionptr)(void);

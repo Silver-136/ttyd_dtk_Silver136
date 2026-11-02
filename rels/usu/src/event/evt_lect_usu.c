@@ -113,6 +113,7 @@ EvtWord all_party_lecture[474];
 EvtWord roll_majin_lecture_init[26];
 EvtWord roll_majin_lecture_sub01[29];
 EvtWord roll_majin_lecture_sub02[65];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord roll_majin_lecture[];
 #else

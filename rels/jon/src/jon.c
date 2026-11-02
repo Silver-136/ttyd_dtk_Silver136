@@ -74,6 +74,7 @@ EvtWord jon_init_evt[329];
 EvtWord jon_init_evt[391];
 #endif
 #endif
+
 u8 enemy_100[100];
 NpcSetupInfo npcEnt_kuriboo[2];
 NpcSetupInfo npcEnt_patakuri[2];
@@ -101,22 +102,27 @@ NpcSetupInfo npcEnt_basabasa2[2];
 NpcSetupInfo npcEnt_togedaruma[2];
 NpcSetupInfo npcEnt_pansy[2];
 NpcSetupInfo npcEnt_zonbaba[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord enemy_setup[];
 #else
 EvtWord enemy_setup[1055];
 #endif
+
 s32 treasure_tbl[10];
 EvtWord evt_open_box[46];
 static EvtWord move_event[55];
 EvtWord get_map_name[111];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord talk_idouya[];
 #else
 EvtWord talk_idouya[141];
 #endif
+
 NpcSetupInfo npcEnt_idouya[2];
 EvtWord idouya_setup[38];
+
 #if VERSION >= VERSION_US
 EvtWord talk_gyousyou[219];
 #else
@@ -126,6 +132,7 @@ EvtWord talk_gyousyou[186];
 EvtWord talk_gyousyou[207];
 #endif
 #endif
+
 NpcSetupInfo npcEnt_gyousyou[2];
 EvtWord gyousyou_setup[47];
 EvtWord shikake_setup[117];
@@ -171,6 +178,7 @@ EvtWord evt_iri_30_bomb_rakugaki[154];
 static EvtWord gonbaba_standup_shake[23];
 static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord zonbaba_first_event[];
 #else

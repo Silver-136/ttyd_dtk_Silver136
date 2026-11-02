@@ -41,12 +41,15 @@ static void alpha_tev(MapTevCallbackInfo* info);
 
 static BeroEntry bero_entry_data[5];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
+
 static EvtWord evt_unlock[7];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord bigdoor_event_init[];
 extern EvtWord bigdoor_event[];
@@ -54,6 +57,7 @@ extern EvtWord bigdoor_event[];
 EvtWord bigdoor_event_init[36];
 EvtWord bigdoor_event[152];
 #endif
+
 static HitDamageReturn hitDmgRetPoints[6];
 static EvtWord mobj_box00[28];
 EvtWord waterfall_main[30];

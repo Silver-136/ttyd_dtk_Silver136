@@ -44,9 +44,11 @@
 #include "evt/evt_audience.h"
 #include "eff/eff_pointget.h"
 #include "icon_ids.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include <stdio.h>
 #include <string.h>
 #include "battle/battle_mario.h"
@@ -1455,6 +1457,7 @@ EVT_BEGIN(_koura_delete_event)
     END_IF
     RETURN
 EVT_END()
+
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(_rank_up_event)
     CALL(_get_rank_up_msg, LW(0))
@@ -1978,6 +1981,7 @@ s32 _keta_get(s32 n) {
 #define LVOBJ_TEX2 0x24
 #define LVOBJ_TEX(n, tbl) (0x27 + (n))
 #endif
+
 #define LVOBJ_PLANE(o, n, tbl)                                                         \
     if ((o)->blinkOn) {                                                                \
         PSMTXIdentity(m);                                                              \

@@ -41,6 +41,7 @@ int select_comp_bteresa(void* a, void* b);
 #endif
 
 void select_main(WinMgrEntry* entry);
+
 #if VERSION <= VERSION_DEMO_US
 static void select_disp(WinMgrEntry* entry);
 static void select_disp_party(WinMgrEntry* entry);
@@ -48,21 +49,26 @@ static void select_disp_party(WinMgrEntry* entry);
 void select_disp(WinMgrEntry* entry);
 void select_disp_party(WinMgrEntry* entry);
 #endif
+
 void select_disp_mario(WinMgrEntry* entry);
+
 #if VERSION <= VERSION_DEMO_US
 static void select_disp_luigi(WinMgrEntry* entry);
 #else
 void select_disp_luigi(WinMgrEntry* entry);
 #endif
+
 void select_disp2(WinMgrEntry* entry);
 void select_main3(WinMgrEntry* entry);
 void select_disp3(WinMgrEntry* entry);
 void select_disp3_party(WinMgrEntry* entry);
+
 #if VERSION <= VERSION_DEMO_US
 static void select_disp3_mario(WinMgrEntry* entry);
 #else
 void select_disp3_mario(WinMgrEntry* entry);
 #endif
+
 void winMgrSeq(WinMgrEntry* entry);
 int select_comp_type(void* a, void* b);
 int select_comp_starpiece(void* a, void* b);
@@ -73,9 +79,11 @@ static s16* mario_status_point_table[3];
 
 //.sdata
 static WinMgrWork* wp = &work;
+
 #if VERSION <= VERSION_DEMO_US
 static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
 #endif
+
 static u16 party_id_table[] = {
     PARTNER_GOOMBELLA, PARTNER_KOOPS, PARTNER_FLURRIE, PARTNER_YOSHI,
     PARTNER_VIVIAN, PARTNER_BOBBERY, PARTNER_MSMOWZ, PARTNER_NONE
@@ -84,6 +92,7 @@ static u16 party_icon_table[] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_PA
 static const char* party_labelname_table[] = {"_kur", "_nok", "_win", "_yos", "_viv", "_bom", "_chu"};
 static s32 mario_status_icon_table[] = {ICON_HP, ICON_FP, ICON_BP};
 static const char* mario_status_labelname_table[] = {"_hp", "_fp", "_bp"};
+
 #if VERSION >= VERSION_US
 static const char* mario_status_name_table[][3] = {
     {"ＨＰ", "ＦＰ", "ＢＰ"},
@@ -99,6 +108,7 @@ static const char* mario_status_name_table[][3] = {
 static const char* mario_status_name_table[] = {"ＨＰ", "ＦＰ", "ＢＰ"};
 #define MARIO_STATUS_NAME(id) mario_status_name_table[id]
 #endif
+
 /** What a level-up adds to Mario's HP, FP and BP: 5, 5 and 3. */
 static s32 mario_status_henka_table[] = {5, 5, 3};
 /** The ceiling of Mario's HP, FP and BP (200, 200 and 99). */
@@ -970,9 +980,11 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                     sel->items[sel->numItems++].id = i + 1;
                 }
             }
+
 #if VERSION >= VERSION_US
             qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_bteresa);
 #endif
+
             break;
         case SELECT_TYPE_INFORMANT_PERFECT:
         case SELECT_TYPE_INFORMANT_LUIGI:
@@ -1328,12 +1340,14 @@ void select_main(WinMgrEntry* entry) {
             if (prev != sel->cursor) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
+
 #if VERSION == VERSION_EU
             // PAL: moving the cursor resets the help window's text
             if (prev != sel->cursor && sel->numDescriptors >= 3) {
                 winMgrHelpInit(&wp->entries[sel->descriptorId[2]]);
             }
 #endif
+
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 if (sel->items[sel->cursor].flags & SELECT_ITEM_DISABLED) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));
@@ -1539,6 +1553,7 @@ void select_disp(WinMgrEntry* entry) {
                 msg = msgSearch("msg_window_title_1");
                 break;
         }
+
 #if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 120.0f) {
@@ -1552,6 +1567,7 @@ void select_disp(WinMgrEntry* entry) {
         winFontInit();
         winFontSetEdge((Vec){entry->x + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
+
         switch (sel->type) {
             case SELECT_TYPE_ITEM_SELL:
             case SELECT_TYPE_BADGE_BUY:
@@ -1649,9 +1665,11 @@ void select_disp_party(WinMgrEntry* entry) {
     GXColor iconcol;
     GXColor tmp;
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
+
 #if VERSION > VERSION_DEMO_US
     s32 i;
 #endif
+
     s32 j;
     const char* msg;
     u16 w;

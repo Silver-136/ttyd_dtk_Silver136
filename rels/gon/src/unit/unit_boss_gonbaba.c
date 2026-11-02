@@ -48,6 +48,7 @@ BattleUnitKind unit_boss_gonbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[7];
 static PoseTableEntry pose_table_weak[7];
@@ -55,17 +56,20 @@ static PoseTableEntry pose_table_weak[7];
 static PoseTableEntry pose_table[9];
 static PoseTableEntry pose_table_weak[9];
 #endif
+
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[3];
 static EvtWord battle_entry_event[375];
 EvtWord negotiation_event[1786];
 EvtWord gon_extra_eaten_event[389];
 static EvtWord damage_event[10];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gonbaba_damage_sub_event[];
 #else
 EvtWord gonbaba_damage_sub_event[574];
 #endif
+
 static EvtWord dead_event[283];
 static EvtWord init_event[160];
 static EvtWord phase_event[2];

@@ -72,19 +72,24 @@ EvtWord e5_door_close[22];
 static BeroEntry bero_entry_data[15];
 BeroEntry e_bero_5_peach[2];
 s32 elv_key1[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord elv_unlock1[];
 #else
 EvtWord elv_unlock1[131];
 #endif
+
 s32 elv_key2[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord elv_unlock2[];
 #else
 EvtWord elv_unlock2[131];
 #endif
+
 EvtWord ele1_door_open[139];
 EvtWord ele1_door_close[139];
+
 #if VERSION >= VERSION_US
 EvtWord ele_1[607];
 #else
@@ -94,8 +99,10 @@ EvtWord ele_1[591];
 EvtWord ele_1[595];
 #endif
 #endif
+
 EvtWord ele2_door_open[139];
 EvtWord ele2_door_close[139];
+
 #if VERSION >= VERSION_US
 EvtWord ele_2[634];
 #else
@@ -105,6 +112,7 @@ EvtWord ele_2[618];
 EvtWord ele_2[622];
 #endif
 #endif
+
 static EvtWord evt_elv_init[271];
 EvtWord key_lock[14];
 EvtWord last_key_lock[36];
@@ -132,6 +140,7 @@ static EvtWord teshita3_init[46];
 EvtWord teshita3_talk[14];
 EvtWord teshita3_regl[35];
 static NpcSetupInfo npcEnt[4];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_01_init_evt[];
 #else

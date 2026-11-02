@@ -26,6 +26,7 @@
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
 #include "evt/evt_cam.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "party/party_bomhei.h"
 #endif
@@ -60,6 +61,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 #endif
+
 static inline BOOL isBombRock(HitEntry* hit) {
     CaseEntry* c;
     if (hit == NULL) {
@@ -280,6 +282,7 @@ void bomhei_use_post(PartyEntry* party) {
     bomheiFree(party);
 }
 #endif
+
 void bomhei_use_main(PartyEntry* party);
 void mario_controll(PartyEntry* party);
 HitEntry* check_front(PartyEntry* party);

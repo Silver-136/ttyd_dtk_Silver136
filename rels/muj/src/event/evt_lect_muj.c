@@ -93,11 +93,13 @@ static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord sanders_party_lecture_init[48];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord sanders_party_lecture[];
 #else
 EvtWord sanders_party_lecture[71];
 #endif
+
 static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[492];
 

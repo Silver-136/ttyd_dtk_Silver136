@@ -33,11 +33,13 @@ static EvtWord dmg_turn_event[64];
 static EvtWord wakeup_event[67];
 static EvtWord init_event_nokotarou[62];
 static EvtWord damage_event_nokotarou[24];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event_nokotarou[156];
 #else
 static EvtWord dead_event_nokotarou[177];
 #endif
+
 static EvtWord _change_koura_pose[34];
 static EvtWord _change_koura_pose_fast[34];
 static EvtWord _restore_koura_pose[47];

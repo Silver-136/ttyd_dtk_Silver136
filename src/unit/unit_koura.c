@@ -21,11 +21,13 @@ PoseTableEntry pose_table_crack_lv1[5];
 PoseTableEntry pose_table_crack_lv2[5];
 static BattleUnitKindPart parts[2];
 static EvtWord init_event[46];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord phase_event[22];
 #else
 static EvtWord phase_event[38];
 #endif
+
 EvtWord koura_open[72];
 EvtWord koura_close[79];
 EvtWord damage_core[92];
@@ -178,6 +180,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 #endif
+
 /**
  * Parts of the shell: part 1 is the shell itself (main target, cannot be tattled); part 2 is a hidden,
  * untargetable copy that plays the second half in the break animation.
@@ -215,6 +218,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Opens the shell off Mario before the player phase and closes it again after.
  * Since the US release it skips both when the shell has no HP left.
@@ -308,6 +312,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Shell Shield damage reaction (data tag 9): picks the intact,
  * cracked or badly cracked pose table from the shell's HP (above 6, 4-6, 3 or less),

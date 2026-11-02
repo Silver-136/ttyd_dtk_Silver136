@@ -1,6 +1,7 @@
 /* Build date and time stamps. This object is linked ahead of system.o and holds the first 0x18 bytes of
    .rodata. */
 #include "version.h"
+
 #if VERSION >= VERSION_US
 #if VERSION == VERSION_EU
 const char R_build_date[] = "Sep 26 2004";

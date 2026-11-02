@@ -70,6 +70,7 @@ EvtWord talk_iron[30];
 EvtWord init_iron2[45];
 EvtWord talk_iron2[30];
 static NpcSetupInfo npcEnt[11];
+
 #if VERSION >= VERSION_US
 EvtWord evt_saisyo_after[733];
 EvtWord evt_saisyo_after_re[367];
@@ -93,12 +94,15 @@ static EvtWord evt_gardman[237];
 static EvtWord evt_gardman[198];
 #endif
 #endif
+
 EvtWord evt_match_make_sub[138];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_match_make[];
 #else
 EvtWord evt_match_make[116];
 #endif
+
 static EvtWord bed_entry[10];
 EvtWord evt_okorareru[301];
 EvtWord evt_syorui[92];

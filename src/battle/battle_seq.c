@@ -743,6 +743,7 @@ static void btlseqTurn(BattleWork* wp) {
 #else
 void btlseqTurn(BattleWork* wp) {
 #endif
+
     Vec pos;
     f32 hpX;
     f32 hpY;

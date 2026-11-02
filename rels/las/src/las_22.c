@@ -38,13 +38,16 @@ EvtWord kaitendai_evt[312];
 static EvtWord dai_evt[13];
 static s32 key_tbl[2];
 static EvtWord key_evt[5];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord key_check_evt[21];
 #else
 static EvtWord key_check_evt[23];
 #endif
+
 static EvtWord unlock_evt[10];
 static EvtWord mobj_box00[34];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_22_init_evt[];
 #else

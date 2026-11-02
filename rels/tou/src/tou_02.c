@@ -119,11 +119,13 @@ EvtWord init_repo[8];
 EvtWord talk_repo[112];
 EvtWord init_cam1[8];
 EvtWord talk_cam1[112];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord init_cam2[];
 #else
 EvtWord init_cam2[19];
 #endif
+
 EvtWord talk_cam2[112];
 EvtWord init_kino4[13];
 EvtWord reg_kino4[31];
@@ -151,17 +153,21 @@ EvtWord talk_ironB[13];
 EvtWord init_borodo[32];
 EvtWord talk_borodo[13];
 static NpcSetupInfo npcEnt[17];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_tougi2[];
 #else
 EvtWord evt_tougi2[285];
 #endif
+
 ExtTexInfo ext_fan_data[28];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mario_momikucha_msg[];
 #else
 EvtWord mario_momikucha_msg[111];
 #endif
+
 EvtWord evt_momikucha[105];
 static EvtWord evt_key[173];
 static EvtWord evt_poster_1[5];
@@ -1710,6 +1716,7 @@ static void ext_fan_init(void) {
 #else
 void ext_fan_init(void) {
 #endif
+
     s32 i;
     ExtdrvPose* pose;
     Fan* fan;

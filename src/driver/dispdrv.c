@@ -26,6 +26,7 @@ f32 offset_tbl[] = {
 #else
 static f32 offset_tbl[] = {
 #endif
+
     400000.0f, 400000.0f, 600000.0f, 100000.0f, 100000.0f,
     300000.0f, 900000.0f, 1100000.0f, 1000000.0f, 500000.0f,
 #if VERSION > VERSION_DEMO_US

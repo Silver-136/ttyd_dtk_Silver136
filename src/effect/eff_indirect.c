@@ -1,9 +1,11 @@
 // Screen distortion (Indirect): copies the frame buffer and redraws it over a point through a texture; types 0-1.
 
 #include "version.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include "eff/eff_indirect.h"
 #include "driver/dispdrv.h"
 #include "memory.h"
@@ -100,6 +102,7 @@ static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
+
     EffIndirectWork* work = effect->userdata;
     CameraEntry* camera;
     s32 type;

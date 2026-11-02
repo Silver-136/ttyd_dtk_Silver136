@@ -78,6 +78,7 @@ static EvtWord evt_unlock[7];
 static NpcSetupInfo npcEnt[2];
 static ExtTexInfo senteresa_ext_entry_data[5];
 EvtWord evt_teresa_box_open[576];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord jin_07_init_evt[];
 #else

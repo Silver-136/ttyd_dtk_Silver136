@@ -466,6 +466,7 @@ static void main_weapon(s32 idx) {
 #else
 void main_weapon(s32 idx) {
 #endif
+
     GenkiWork* w = get_ptr();
     GenkiWeapon* wp = &w->weapon[idx];
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);

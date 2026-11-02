@@ -70,6 +70,7 @@ static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord hom_10_init_evt[104];
 static EvtWord evt_train[252];
@@ -79,6 +80,7 @@ static EvtWord hom_10_init_evt[140];
 static EvtWord evt_train[284];
 EvtWord evt_train2[287];
 #endif
+
 static EvtWord peach_mail[235];
 static BeroEntry bero_entry_data[5];
 EvtWord hikosenkakari_init[5];
@@ -104,6 +106,7 @@ EvtWord evt_hikousen[224];
 static EvtWord evt_wing[97];
 EvtWord evt_hikousen_return[490];
 EvtWord gor_04_koopa_evt[1123];
+
 #if VERSION >= VERSION_US
 EvtWord gor_04_init_evt[255];
 #else

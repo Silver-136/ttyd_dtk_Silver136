@@ -59,6 +59,7 @@ void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 #else
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 #endif
+
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
@@ -91,6 +92,7 @@ USER_FUNC(_wait_yoshig_complete);
 USER_FUNC(_wait_yoshig_run);
 USER_FUNC(_check_swallow_attribute);
 USER_FUNC(_get_swallow_param);
+
 #if VERSION >= VERSION_JP
 USER_FUNC(_get_nomikomi_hit_position);
 #endif

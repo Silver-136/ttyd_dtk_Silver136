@@ -103,6 +103,7 @@ EvtWord hikari_on_evt[63];
 EvtWord flush_on[106];
 EvtWord flush_off[106];
 EvtWord last_evt_1[1078];
+
 #if VERSION >= VERSION_US
 EvtWord last_evt_2[358];
 EvtWord last_evt_3[1349];
@@ -125,9 +126,11 @@ EvtWord koe_evt[65];
 EvtWord majo_kyorokyoro[84];
 EvtWord last_evt_3_2[1821];
 #endif
+
 EvtWord last_evt_4[1836];
 static EvtWord shuryolight_init[14];
 EvtWord shuryolight_delete[20];
+
 #if VERSION >= VERSION_US
 EvtWord las_29_init_evt[180];
 #else

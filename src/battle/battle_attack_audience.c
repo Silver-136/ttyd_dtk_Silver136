@@ -5,10 +5,12 @@
 #include "driver/camdrv.h"
 #include "evt/evt_msg.h"
 #include "battle/battle_sub.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #include <string.h>
 #endif
+
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
 #include "battle/battle_database_common.h"
@@ -269,6 +271,7 @@ void* btlataudGetMoveEventPtr(s32 id) {
 #if VERSION < VERSION_US
 __declspec(section ".data") static s32 btlataudevtDummyPad[1] = {0};
 #endif
+
 /** Fallback audience attack for units without their own: hit the member holding the item and resume. */
 EVT_BEGIN(btlataudevtDummy)
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))

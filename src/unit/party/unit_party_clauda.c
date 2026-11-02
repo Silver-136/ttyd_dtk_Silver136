@@ -275,6 +275,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 #endif
+
 PoseTableEntry pose_table_clauda_stay[] = {
     {POSE_TYPE_FREEZE, "PWD_D_5"},
     {POSE_TYPE_STOP, "PWD_D_5"},
@@ -432,6 +433,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Flurrie's Body Slam: she floats over the enemy and drops onto it,
  * the action command deciding whether the slam connects at full strength, then floats back home.
@@ -1229,6 +1231,7 @@ static EVT_BEGIN(party_win_reaction)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Audience-attack reaction (data tag 6): Flurrie body slams an audience member about to throw junk
  * or nothing (attack_bad_audience_event) and kisses one holding a real item (attack_good_audience_event).

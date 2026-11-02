@@ -37,6 +37,7 @@ static EvtWord door03_close[12];
 static EvtWord door03_open[12];
 static BeroEntry bero_entry_data[4];
 static EvtWord init_0[37];
+
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
@@ -46,14 +47,18 @@ static EvtWord main_0[489];
 static EvtWord main_0[491];
 #endif
 #endif
+
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
+
 static EvtWord evt_unlock[10];
 EvtWord nokkosu_init[16];
+
 #if VERSION >= VERSION_US
 EvtWord nokkosu_talk[226];
 #else
@@ -63,6 +68,7 @@ EvtWord nokkosu_talk[115];
 EvtWord nokkosu_talk[157];
 #endif
 #endif
+
 static NpcSetupInfo npcEnt[2];
 EvtWord gon_08_init_evt[220];
 

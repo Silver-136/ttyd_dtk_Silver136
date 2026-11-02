@@ -17,6 +17,7 @@ s32 THPSimpleDecode(s32 audioTrack);
 s32 THPSimpleDrawCurrentFrame(GXRenderModeObj* rmode, u32 x, u32 y, u32 polygonW, u32 polygonH);
 u32 THPSimpleGetTotalFrame(void);
 BOOL THPSimpleSetVolume(s32 vol, s32 time);
+
 #if VERSION <= VERSION_DEMO_US
 #include "driver/seqdrv.h"
 void seq_demoInit(SequenceWork* work);

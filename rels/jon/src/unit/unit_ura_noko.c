@@ -28,11 +28,13 @@ static USER_FUNC(eff_aura);
 
 BattleUnitKind unit_ura_noko;
 static PoseTableEntry pose_table[18];
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[15];
 #else
 static PoseTableEntry pose_table_turn[17];
 #endif
+
 static BattleDataEntry data_table[3];
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;

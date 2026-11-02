@@ -93,11 +93,13 @@ EvtWord aunt_init[22];
 EvtWord aunt_pig_init[29];
 EvtWord iri_20_out_house[407];
 EvtWord iri_20_aunt_to_house[149];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aunt_talk[];
 #else
 EvtWord aunt_talk[687];
 #endif
+
 EvtWord childA_init[7];
 EvtWord childA_talk[31];
 EvtWord childB_init[7];
@@ -125,15 +127,18 @@ EvtWord musume_c_pig_entry[15];
 static EvtWord urouro_move[24];
 EvtWord urouro_move_semai[24];
 static NpcSetupInfo npcEnt[24];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord village_chief_change_pig_event[];
 #else
 EvtWord village_chief_change_pig_event[166];
 #endif
+
 EvtWord evt_mon_open[112];
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
 EvtWord usu01_check_vivian[36];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord usu01_crowFG_talk_event[347];
 EvtWord usu01_crowHI_talk_event[246];
@@ -143,6 +148,7 @@ EvtWord usu01_crowFG_talk_event[VERSION_PICK(355, 394)];
 EvtWord usu01_crowHI_talk_event[VERSION_PICK(250, 289)];
 EvtWord usu01_crowJ_talk_event[VERSION_PICK(226, 265)];
 #endif
+
 const char* minka_npc[6];
 const char* minka_item[2];
 const char* shop_npc[6];
@@ -178,11 +184,13 @@ EvtWord evt_monban_buta[18];
 EvtWord evt_monban_buta2[17];
 EvtWord evt_monban_look[119];
 static s32 lock_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord lock_item_check[39];
 #else
 static EvtWord lock_item_check[41];
 #endif
+
 EvtWord unlock[13];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
@@ -193,6 +201,7 @@ EvtWord shopper_talk2[11];
 static BoobooName booboo_name[8];
 EvtWord evt_roll_get[2];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_majin[325];
 static EvtWord evt_majin2[239];
@@ -200,6 +209,7 @@ static EvtWord evt_majin2[239];
 static EvtWord evt_majin[330];
 static EvtWord evt_majin2[237];
 #endif
+
 EvtWord tree_onoff[57];
 static EvtWord evt_ki_1[12];
 static EvtWord evt_ki_2[20];

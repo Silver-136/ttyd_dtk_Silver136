@@ -55,13 +55,16 @@ static EvtWord talk_gans[2];
 static NpcSetupInfo npcEnt[4];
 static EvtWord evt_sensyu[169];
 static EvtWord evt_champion[578];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_champion_re[];
 #else
 EvtWord evt_champion_re[308];
 #endif
+
 static EvtWord evt_dakuto[39];
 EvtWord evt_dakuto2[44];
+
 #if VERSION >= VERSION_US
 EvtWord evt_tou_bed[440];
 #else
@@ -71,8 +74,10 @@ EvtWord evt_tou_bed[428];
 EvtWord evt_tou_bed[432];
 #endif
 #endif
+
 static EvtWord bed_entry[10];
 static EvtWord mobj_box00[34];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tou_07_init_evt[];
 #else

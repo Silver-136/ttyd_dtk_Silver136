@@ -68,25 +68,31 @@ static EvtWord rival_init[30];
 static EvtWord rival_talk[8];
 static EvtWord elder_init[39];
 s32 puni_return_data[204];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord puni_return[];
 #else
 EvtWord puni_return[99];
 #endif
+
 EvtWord elder_talk_sub[376];
 s32 irai_item_tbl[2];
 static s32 iri_17_item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord elder_talk[173];
 #else
 static EvtWord elder_talk[177];
 #endif
+
 EvtWord puni_1_init[24];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord puni_1_talk[];
 #else
 EvtWord puni_1_talk[43];
 #endif
+
 EvtWord puni_2_init[24];
 EvtWord puni_2_talk[20];
 EvtWord puni_init[9];
@@ -102,11 +108,13 @@ static EvtWord bero_01_doa_close[10];
 static EvtWord bero_01_doa_open[10];
 EvtWord out_mri_event[5];
 static BeroEntry bero_entry_data[4];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord bigtree_firstbattle[];
 #else
 EvtWord bigtree_firstbattle[734];
 #endif
+
 EvtWord meet_rival[2247];
 EvtWord rival_nakama[1137];
 EvtWord elder_kaisetsu[206];
@@ -121,11 +129,13 @@ EvtWord starstone_item[19];
 EvtWord boss_robot_electro[43];
 EvtWord boss_robot_kemuri[49];
 EvtWord boss_battle_win_init[49];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord boss_battle_win[];
 #else
 EvtWord boss_battle_win[1493];
 #endif
+
 static EvtWord door_switch_init[17];
 EvtWord ueki_puni_nigeru[100];
 EvtWord evt_ueki_01[18];
@@ -187,6 +197,7 @@ static USER_FUNC(elder_talk_sub_punicheck) {
 #else
 USER_FUNC(elder_talk_sub_punicheck) {
 #endif
+
     EvtWord* args = event->args;
     s32* punigp = puniGetPunigp();
     s32 i;

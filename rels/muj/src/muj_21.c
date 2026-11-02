@@ -36,6 +36,7 @@ EvtWord peach_init[12];
 static NpcSetupInfo npcEnt[2];
 EvtWord fune_yure[42];
 static EvtWord epilogue_evt[344];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord muj_21_init_evt[];
 #else

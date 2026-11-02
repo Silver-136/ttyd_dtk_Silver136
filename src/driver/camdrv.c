@@ -678,6 +678,7 @@ static void camEffMain(CameraEntry* camera) {
 #else
 void camEffMain(CameraEntry* camera) {
 #endif
+
     CameraEntry* camera3D = camGetPtr(CAMERA_3D);
 
     camera->cameraPos = camera3D->cameraPos;

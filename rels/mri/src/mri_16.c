@@ -36,11 +36,13 @@ static USER_FUNC(ss_set);
 static BeroEntry bero_entry_data[7];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord water_shikake[];
 #else
 EvtWord water_shikake[312];
 #endif
+
 EvtWord bar_shikake[7];
 EvtWord bar_shikake_up[7];
 EvtWord switch_up_down[106];

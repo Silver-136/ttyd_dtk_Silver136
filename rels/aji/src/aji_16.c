@@ -48,6 +48,7 @@ static EvtWord peach_evt_stg2[107];
 static EvtWord peach_evt_stg3[158];
 static EvtWord peach_evt_stg6[138];
 static EvtWord peach_evt_door_stop[18];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_16_init_evt[];
 #else

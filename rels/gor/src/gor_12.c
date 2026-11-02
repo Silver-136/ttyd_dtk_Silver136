@@ -21,6 +21,7 @@
 
 
 static EvtWord epilogue_evt[49];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord gor_12_init_evt[27];
 #else

@@ -19,6 +19,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 #include "tik.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "evt/evt_snd.h"
 #endif
@@ -32,6 +33,7 @@ static EvtWord iri_12_makkino_talk[7];
 static EvtWord iri_12_init[85];
 static EvtWord evt_kanban[16];
 static EvtWord evt_kanban2[45];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tik_06_init_evt[];
 #else

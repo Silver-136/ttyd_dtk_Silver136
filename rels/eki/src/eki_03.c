@@ -51,14 +51,17 @@ static EvtWord evt_poster_8[7];
 static EvtWord evt_poster_9[7];
 EvtWord evt_poster_10[12];
 EvtWord evt_poster_11[27];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_poster_12[];
 #else
 EvtWord evt_poster_12[22];
 #endif
+
 EvtWord evt_poster_13[7];
 EvtWord evt_poster_14[7];
 EvtWord evt_poster_15[7];
+
 #if VERSION >= VERSION_US
 EvtWord eki_03_init_evt[470];
 #else

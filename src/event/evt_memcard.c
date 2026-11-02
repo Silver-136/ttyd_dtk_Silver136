@@ -199,12 +199,15 @@ USER_FUNC(memcard_write) {
 }
 
 EvtWord evt_memcard_nosave[19];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_memcard_check[];
 #else
 EvtWord evt_memcard_check[322];
 #endif
+
 EvtWord evt_memcard_start[32];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_memcard_delete[];
 extern EvtWord evt_memcard_copy[];

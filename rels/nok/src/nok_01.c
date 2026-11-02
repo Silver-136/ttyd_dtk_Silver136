@@ -66,23 +66,29 @@ static EvtWord nokotarou_talk[36];
 EvtWord nokopapa_init[19];
 EvtWord nokopapa_talk[72];
 EvtWord nokonoko_K_talk[69];
+
 #if VERSION >= VERSION_US
 EvtWord boss_noko_open_gate[184];
 #else
 EvtWord boss_noko_open_gate[181];
 #endif
+
 static s32 iri_17_item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord boss_noko_talk[];
 #else
 EvtWord boss_noko_talk[352];
 #endif
+
 EvtWord nokorin_init[30];
+
 #if VERSION == VERSION_US
 EvtWord nokorin_talk[281];
 #else
 EvtWord nokorin_talk[267];
 #endif
+
 static EvtWord odoriko_1_talk[44];
 static EvtWord odoriko_1_init[33];
 static EvtWord odoriko_2_talk[44];
@@ -104,11 +110,13 @@ static const char* ie_npc[2];
 static const char* ie_map[2];
 static HouseParam ie_data;
 static HitDamageReturn hitDmgRetPoints[13];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord nokotarou_tabidachi[];
 #else
 EvtWord nokotarou_tabidachi[328];
 #endif
+
 EvtWord nokotarou_tabidachi_init[89];
 static EvtWord sekai_yami_npc[59];
 static EvtWord sekai_yami_evt[234];

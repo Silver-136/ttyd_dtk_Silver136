@@ -434,9 +434,11 @@ void partyDokanEnd(s32 id, s32 dir);
 s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z);
 s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z);
 void partyHello(PartyEntry* party);
+
 #if VERSION <= VERSION_DEMO_US
 void allPartyRideJabara(void);
 #endif
+
 void partyInit(void);
 s32 partyKill2(s32 id);
 void partyMain(void);

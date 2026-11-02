@@ -32,6 +32,7 @@
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "mario/mario_kemuri.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "mario/mario_hit.h"
 #endif

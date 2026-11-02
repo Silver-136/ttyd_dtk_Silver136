@@ -72,9 +72,11 @@ SysWork* g_wp;
 USER_FUNC(bg);
 USER_FUNC(display);
 USER_FUNC(init);
+
 #if VERSION >= VERSION_US
 USER_FUNC(sys_01_start_end_wait);
 #endif
+
 USER_FUNC(start);
 void sys_01_release(void);
 static void _unresolved(void);
@@ -82,11 +84,13 @@ static void _epilog(void);
 void _prolog(void);
 
 EvtWord dummy_evt[2];
+
 #if VERSION >= VERSION_US
 static u32 niji_tbl[6];
 #else
 static u32 niji_tbl[2];
 #endif
+
 static const char* msg_tbl[9];
 s8 prologue_jp_tbl[6];
 s8 stage1_jp_tbl[6];
@@ -99,6 +103,7 @@ s8 stage7_jp_tbl[6];
 s8 stage8_jp_tbl[6];
 s8* texid_jp_tbl[9];
 s8 prologue_us_tbl[9];
+
 #if VERSION >= VERSION_US
 s8 stage1_us_tbl[10];
 s8 stage2_us_tbl[10];
@@ -164,7 +169,9 @@ s8* texid_us_tbl[9];
 s8** lang_tbl[2];
 const char* lang_prefix[2];
 #endif
+
 EvtWord sys_01_init_evt[135];
+
 #if VERSION >= VERSION_US
 EvtWord evt_start[191];
 #else

@@ -33,6 +33,7 @@ EvtWord evt_slit1[15];
 EvtWord evt_slit2[15];
 static BeroEntry bero_entry_data[5];
 EvtWord heya_tenura_onoff[68];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_08_init_evt[];
 #else

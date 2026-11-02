@@ -21,6 +21,7 @@
 #include "system.h"
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "driver/itemdrv.h"
 #include "evt/evt_item.h"
@@ -46,11 +47,13 @@ BeroEntry bero_data_peach1[2];
 EvtWord peach_evt_bero_out2[25];
 BeroEntry bero_data_peach2[2];
 EvtWord evt_kou1[115];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_kou2[];
 #else
 EvtWord evt_kou2[155];
 #endif
+
 const char* rokka_data[21];
 EvtWord evt_rokka_open[127];
 EvtWord evt_rokka_close[165];

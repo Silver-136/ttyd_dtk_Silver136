@@ -160,6 +160,7 @@ MayaHermitKey ice_effHermit_1[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 1
 #include "../src/effect/eff_ice_face.inc"
@@ -205,6 +206,7 @@ MayaHermitKey ice_effHermit_2[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 2
 #include "../src/effect/eff_ice_face.inc"
@@ -250,6 +252,7 @@ MayaHermitKey ice_effHermit_3[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 3
 #include "../src/effect/eff_ice_face.inc"
@@ -295,6 +298,7 @@ MayaHermitKey ice_effHermit_4[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 4
 #include "../src/effect/eff_ice_face.inc"
@@ -340,6 +344,7 @@ MayaHermitKey ice_effHermit_5[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 5
 #include "../src/effect/eff_ice_face.inc"
@@ -385,6 +390,7 @@ MayaHermitKey ice_effHermit_6[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 6
 #include "../src/effect/eff_ice_face.inc"
@@ -430,6 +436,7 @@ MayaHermitKey ice_effHermit_7[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 7
 #include "../src/effect/eff_ice_face.inc"
@@ -475,6 +482,7 @@ MayaHermitKey ice_effHermit_8[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 8
 #include "../src/effect/eff_ice_face.inc"
@@ -520,6 +528,7 @@ MayaHermitKey ice_effHermit_9[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 9
 #include "../src/effect/eff_ice_face.inc"
@@ -565,6 +574,7 @@ MayaHermitKey ice_effHermit_10[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 10
 #include "../src/effect/eff_ice_face.inc"
@@ -610,6 +620,7 @@ MayaHermitKey ice_effHermit_11[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 11
 #include "../src/effect/eff_ice_face.inc"
@@ -655,6 +666,7 @@ MayaHermitKey ice_effHermit_12[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 12
 #include "../src/effect/eff_ice_face.inc"
@@ -700,6 +712,7 @@ MayaHermitKey ice_effHermit_13[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 13
 #include "../src/effect/eff_ice_face.inc"
@@ -745,6 +758,7 @@ MayaHermitKey ice_effHermit_14[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 14
 #include "../src/effect/eff_ice_face.inc"
@@ -790,6 +804,7 @@ MayaHermitKey ice_effHermit_15[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 15
 #include "../src/effect/eff_ice_face.inc"
@@ -835,6 +850,7 @@ MayaHermitKey ice_effHermit_16[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 16
 #include "../src/effect/eff_ice_face.inc"
@@ -880,6 +896,7 @@ MayaHermitKey ice_effHermit_17[] = {
         },
     },
 };
+
 #if VERSION <= VERSION_DEMO_US
 #define ICE_FACE 17
 #include "../src/effect/eff_ice_face.inc"
@@ -907,9 +924,11 @@ MayaPoly ice_effAnimRST[] = {
     {3, ice_effHermit_16, 1, &ice_effFaceDt_pPlane16},
     {3, ice_effHermit_17, 1, &ice_effFaceDt_pPlane17},
 };
+
 #if VERSION > VERSION_DEMO_US
 #include "../src/effect/eff_ice_face.inc"
 #endif
+
 /** Joint list of the ice block animation. */
 MayaKeyList ice_effAnimRSTDt = {18, ice_effAnimRST};
 /**

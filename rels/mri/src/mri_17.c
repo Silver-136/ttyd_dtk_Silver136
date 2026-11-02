@@ -50,26 +50,33 @@ static NpcSetupInfo npcEnt[4];
 static KusaAccess ueki_access_data[4];
 s16 trap_position[204];
 EvtWord trap_main[122];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord trap_restore[59];
 #endif
+
 EvtWord wana_kemuri[130];
 EvtWord wana_offscreen[219];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord trap_event[];
 #else
 EvtWord trap_event[716];
 #endif
+
 EvtWord trap_check[185];
 static EvtWord punipuni_ball00_init[34];
 static EvtWord punipuni_ball00[45];
 static EvtWord breakyuka_init[11];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord breakyuka_main[135];
 #else
 static EvtWord breakyuka_main[131];
 #endif
+
 EvtWord strange_statue[56];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord switch_event[];
 extern EvtWord mri_17_init_evt[];

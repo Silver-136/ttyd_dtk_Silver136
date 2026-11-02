@@ -375,6 +375,7 @@ s32 marioRollCancel(void) {
  */
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
+
 #if VERSION <= VERSION_DEMO_US
     MarioWork* m;
 #else
@@ -390,6 +391,7 @@ void mot_roll_post(void) {
 #endif
     }
 #endif
+
     m = marioGetPtr();
     m->camShiftTargetZ = 0.0f;
     m->camShiftRate.z = 0.004f;

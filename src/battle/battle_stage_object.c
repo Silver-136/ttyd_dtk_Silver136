@@ -62,9 +62,11 @@ USER_FUNC(_fall_frame_delete);
 USER_FUNC(_fall_frame);
 USER_FUNC(_fall_frame_wait_unit_ready);
 USER_FUNC(_fall_frame_wait);
+
 #if VERSION < VERSION_US
 USER_FUNC(_announce_wall_message);
 #endif
+
 USER_FUNC(_nozzle_turn);
 USER_FUNC(_set_mobj_shake);
 USER_FUNC(_bgset_audience_bgset_access);
@@ -2454,6 +2456,7 @@ EVT_BEGIN(_object_turn_event_B)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(_object_turn_event_core)
     CALL(_set_mobj_shake_init, LW(9))
     CALL(_set_mobj_shake, LW(9))
@@ -2531,6 +2534,7 @@ EVT_BEGIN(_close_wall_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * The iron frame over the stage falls: waits for other attacks and nozzle work,
  * runs every unit's ceiling-fall reaction script, drops the frame, damages everyone the frame weapon reaches,
@@ -2585,6 +2589,7 @@ EVT_BEGIN(_nozzle_work_event_1)
     RETURN
 EVT_END()
 #endif
+
 /**
  * The three nozzles fire (smoke, a silent effect or fire, by nozzleType) or, for type 0 with LW(10) = 1,
  * fog starts.
@@ -2748,6 +2753,7 @@ EVT_BEGIN(_nozzle_work_event_1)
 EVT_END()
 #endif
 #endif
+
 USER_FUNC(_set_mobj_rotate_x) {
     const char* fall1;
     const char* fall3;

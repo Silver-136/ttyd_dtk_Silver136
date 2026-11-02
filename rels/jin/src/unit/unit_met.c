@@ -24,11 +24,13 @@
 BattleUnitKind unit_met;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_ceil[18];
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[15];
 #else
 static PoseTableEntry pose_table_turn[17];
 #endif
+
 static BattleDataEntry data_table[3];
 static BattleDataEntry data_table_ceil[14];
 static BattleWeapon weapon_met_attack;

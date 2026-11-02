@@ -111,6 +111,7 @@ static void effPointGetMain(EffectEntry* effect) {
 #else
 void effPointGetMain(EffectEntry* effect) {
 #endif
+
     EffPointGetWork* work = effect->userdata;
     Vec position;
     Vec tmp = { 0.0f, 0.0f, 0.0f };

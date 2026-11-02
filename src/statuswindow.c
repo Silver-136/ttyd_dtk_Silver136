@@ -59,6 +59,7 @@ u16 party_icon[8] = { ICON_STATUS_GOOMBELLA, ICON_STATUS_GOOMBELLA, ICON_STATUS_
 u16 gauge_back[8] = { ICON_SP_ORB_1, ICON_SP_ORB_2, ICON_SP_ORB_3, ICON_SP_ORB_4, ICON_SP_ORB_5, ICON_SP_ORB_6, ICON_SP_ORB_7, ICON_SP_ORB_8 };
 u16 gauge_wakka[16] = { ICON_SP_ORB_PART_0, ICON_SP_ORB_PART_1, ICON_SP_ORB_PART_2, ICON_SP_ORB_PART_3, ICON_SP_ORB_PART_4, ICON_SP_ORB_PART_5, ICON_SP_ORB_PART_6, ICON_SP_ORB_PART_7,
                         ICON_SP_ORB_PART_8, ICON_SP_ORB_PART_9, ICON_SP_ORB_PART_10, ICON_SP_ORB_PART_11, ICON_SP_ORB_PART_12, ICON_SP_ORB_PART_13, ICON_SP_ORB_PART_14, ICON_SP_ORB_PART_15 };
+
 #if VERSION >= VERSION_US
                         // US: pause-menu icons per language
                         s16 party_icon_tbl[6] = { ICON_MENU_PARTY, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
@@ -320,6 +321,7 @@ static void statusWinDisp(CameraId camId, void* param) {
 #else
 void statusWinDisp(CameraId camId, void* param) {
 #endif
+
     alwaysDtEntry* e;
     s32 i;
     s32 blinkOn;

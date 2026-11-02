@@ -55,11 +55,13 @@ EvtWord majo_unison_phase_event[238];
 static EvtWord unison_phase_event[83];
 static EvtWord phase_event[332];
 static EvtWord attack_event[389];
+
 #if VERSION >= VERSION_US
 static EvtWord kagenuke_attack_event[225];
 #else
 static EvtWord kagenuke_attack_event[222];
 #endif
+
 static EvtWord blizzard_attack_event[243];
 static EvtWord powder_attack_check[16];
 static EvtWord powder_attack_event[179];

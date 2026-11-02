@@ -10,6 +10,7 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+
 #if VERSION >= VERSION_US
 /**
  * Animation group of the rank-up effect by language

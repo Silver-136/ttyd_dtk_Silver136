@@ -32,6 +32,7 @@ static EvtWord damage_event[10];
 static EvtWord phase_event[681];
 static EvtWord attack_event[5];
 static EvtWord wait_event[6];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord lecAttackEvent_Jump[];
 extern EvtWord lecAttackEvent_Hammer[];
@@ -39,6 +40,7 @@ extern EvtWord lecAttackEvent_Hammer[];
 EvtWord lecAttackEvent_Jump[735];
 EvtWord lecAttackEvent_Hammer[651];
 #endif
+
 EvtWord lecture_end_event[51];
 
 /**

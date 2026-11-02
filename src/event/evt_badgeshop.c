@@ -2,6 +2,7 @@
  * Part of the backend for the shops (badge shop functions for event scripts).
  */
 #include "version.h"
+
 #if VERSION <= VERSION_DEMO_US
 #define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
@@ -9,6 +10,7 @@
 #else
 #include "evt/evt_badgeshop.h"
 #endif
+
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
 #include "mario/mario_pouch.h"
@@ -89,6 +91,7 @@ s32 badge_bottakuru_table[] = { //Charlieton Rogueport
     ITEM_SLOW_GO, ITEM_MEGA_RUSH, ITEM_TIMING_TUTOR, ITEM_W_EMBLEM, ITEM_NULL
 };
 #endif
+
 /** Charlieton's stock in the Pit of 100 Trials: basic recovery and attack items. */
 s32 badge_bottakuru100_table[] = { //Charlieton Pit of 100 Trials
     ITEM_MUSHROOM, ITEM_SUPER_SHROOM, ITEM_HONEY_SYRUP, ITEM_MAPLE_SYRUP,
@@ -138,6 +141,7 @@ s32 badge_bteresa_table_nedan[] = {
     0
 };
 #endif
+
 BadgeShopWork badgeshopwork;
 
 //.sbss
@@ -641,6 +645,7 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
 }
 
 #pragma opt_common_subs reset
+
 #if VERSION <= VERSION_DEMO_US
 /** the demo counts the thrown badges through an inline copy of badgeShop_ThrowCheck (with its bug: always 0) */
 static inline s32 badgeShop_ThrowCount(s32 itemId) {
@@ -655,6 +660,7 @@ static inline s32 badgeShop_ThrowCount(s32 itemId) {
     return count;
 }
 #endif
+
 /**
  * Counts how many different badges are left in the Lovely Howz bargain_table and writes it to args[0].
  * The demo also subtracts badgeShop_ThrowCount from each badge's stock first, which is always 0.

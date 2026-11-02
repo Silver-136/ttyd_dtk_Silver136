@@ -968,6 +968,7 @@ static s32 scissor_damage(EventEntry* evt, BOOL first) {
 #else
 s32 scissor_damage(EventEntry* evt, BOOL first) {
 #endif
+
     BattleWork* wp;
     BattleUnit* mario;
     BattleUnit* unit;

@@ -16,11 +16,13 @@ USER_FUNC(_turn_tree);
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
 static EvtWord damage_event[14];
+
 #if VERSION <= VERSION_DEMO_US
 static s32 _data[34];
 #else
 static s32 _data[35];
 #endif
+
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
@@ -211,11 +213,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 #endif
+
 /** The tree never acts on its own turn; it just returns to its (empty) idle script. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
+
 #if VERSION <= VERSION_DEMO_US
 static s32 _data[] = {
     -5, 0, 15, 0, -15, 0, 14, 0,

@@ -52,11 +52,13 @@ EvtWord kusa_dokan[59];
 static const char* name_tbl[25];
 EvtWord bridge_evt_02[192];
 EvtWord bridge_evt[30];
+
 #if VERSION >= VERSION_US
 EvtWord nokotaro_get[73];
 #else
 EvtWord nokotaro_get[55];
 #endif
+
 EvtWord nokotaro_kanyu[40];
 EvtWord nokotaro_nakama[276];
 static EvtWord nokotarou_init[7];
@@ -67,12 +69,15 @@ EvtWord nokorin_pose[57];
 EvtWord evt_nokorin[869];
 static NpcSetupInfo npcEnt[3];
 static HitDamageReturn hitDmgRetPoints[3];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord peach_mail[250];
 #else
 static EvtWord peach_mail[287];
 #endif
+
 EvtWord christine_hei_01[46];
+
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
 EvtWord hei_01_init_evt[148];

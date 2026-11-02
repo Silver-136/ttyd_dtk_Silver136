@@ -232,6 +232,7 @@ static EvtWord door_open[9];
 static EvtWord door_close[10];
 DoorParam door;
 static BeroEntry bero_entry_data[3];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord first_evt[146];
 extern EvtWord evt_bom_01_karakara[];
@@ -239,16 +240,19 @@ extern EvtWord evt_bom_01_karakara[];
 static EvtWord first_evt[148];
 EvtWord evt_bom_01_karakara[123];
 #endif
+
 static ExtTexInfo ext_data[31];
 EvtWord evt_bom1000[15];
 EvtWord gamen_shake[8];
 EvtWord gamen_shake2[26];
 EvtWord mario_tobideru[54];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mario_shot[];
 #else
 EvtWord mario_shot[160];
 #endif
+
 EvtWord effect_delete[11];
 static EvtWord mario_kemuri[29];
 EvtWord evt_depth[4];
@@ -260,11 +264,13 @@ EvtWord effect_1[84];
 EvtWord open_hatch[83];
 static f32 spline_dt[9];
 const char* oh_data[8];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_taihou[2440];
 #else
 static EvtWord evt_taihou[2446];
 #endif
+
 static EvtWord init_soncho[13];
 static EvtWord talk_soncho[24];
 EvtWord init_nitoro[8];
@@ -293,11 +299,13 @@ static EvtWord musume_b_entry[26];
 static EvtWord musume_c_entry[26];
 static NpcSetupInfo npcEnt[7];
 EvtWord bom1000_minnnanokoe[21];
+
 #if VERSION == VERSION_US
 static EvtWord minnnanokoe_evt[466];
 #else
 static EvtWord minnnanokoe_evt[450];
 #endif
+
 static EvtWord evt_door[14];
 EvtWord bom_01_init_evt[189];
 

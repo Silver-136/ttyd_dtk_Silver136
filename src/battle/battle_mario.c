@@ -110,18 +110,22 @@ static EvtWord marioAttackEvent_NormalJump[VERSION_PICK(889, 963)];
 static EvtWord marioAttackEvent_KururinJump[1210];
 EvtWord marioAttackEvent_JyabaraJump[];
 EvtWord marioAttackEvent_GatsuDokaJump[VERSION_PICK(624, 638)];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord marioAttackEvent_TatsumakiJump[1661];
 #else
 EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
 #endif
+
 EvtWord marioAttackEvent_RenzokuJump[840];
 EvtWord marioAttackEvent_TugiTugiJump[VERSION_PICK(793, 775)];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord marioAttackEvent_NormalHammer_Core[1312];
 #else
 EvtWord marioAttackEvent_NormalHammer_Core[VERSION_PICK(1326, 1333)];
 #endif
+
 static EvtWord marioAttackEvent_KaitenHammer[1060];
 EvtWord marioAttackEvent_FirstAttackKaitenHammer[19];
 EvtWord marioAttackEvent_JishinHammer[VERSION_PICK(834, 845)];
@@ -3599,6 +3603,7 @@ EVT_BEGIN(marioAttackEvent_DokanJump)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Tornado Jump badge attack: a stomp on the chosen enemy,
  * then on a successful second command Mario spins into a tornado (_tatsumaki_effect) that hits every airborne
@@ -4179,6 +4184,7 @@ EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Power Bounce badge attack: Mario keeps bouncing on one enemy while each timed press succeeds.
  * The number of bounces allowed is capped by mario_get_renzoku_count_max,
@@ -4730,6 +4736,7 @@ EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Shared hammer attack: walk up to the front enemy, wind up with the hold-and-release command, swing and return.
  * Also runs as Mario's first strike (battle flag 2) with marioDefaultWeapon_Hammer.
@@ -6766,6 +6773,7 @@ EVT_BEGIN(marioAttackEvent_NormalChargeP)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Super Charge and Super Charge P: the same pose and spin as Charge with the super charge sound
  * and the weapon in LW(12). No map, chest or shop in the tree gives ITEM_SUPER_CHARGE or ITEM_SUPER_CHARGE_P.

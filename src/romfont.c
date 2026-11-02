@@ -6,9 +6,12 @@
 #include "dolphin/mtx.h"
 #include "dolphin/types.h"
 #include "memory.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 #include "mario/mariost.h"
 #include <dolphin/os.h>

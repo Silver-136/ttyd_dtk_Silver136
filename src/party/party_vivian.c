@@ -32,6 +32,7 @@
 #endif
 
 s32 vivian_cancel_req;
+
 #if VERSION > VERSION_DEMO_US
 #pragma explicit_zero_data on
 
@@ -261,6 +262,7 @@ void vivianShadow(PartyEntry* party) {
 
     if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN) {
 #endif
+
         dx = 0.1f * (party->position.x - party->trailPos.x);
         dy = 0.1f * (party->position.y - party->trailPos.y);
         dz = 0.1f * (party->position.z - party->trailPos.z);

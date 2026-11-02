@@ -31,11 +31,13 @@ EvtWord evt_dokan1_message[52];
 EvtWord evt_dokan1[11];
 static BeroEntry bero_entry_data[6];
 EvtWord guide_bigtree[336];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord peach_mail[242];
 #else
 static EvtWord peach_mail[257];
 #endif
+
 EvtWord ki_data_evt_03[20];
 static TreeAccess tree_access_data[5];
 EvtWord win_01_init_evt[46];

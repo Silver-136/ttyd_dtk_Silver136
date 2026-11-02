@@ -76,9 +76,11 @@ typedef struct SplineWork {
 } SplineWork;
 
 #pragma force_active on
+
 #if VERSION > VERSION_DEMO_US
 static const char coin_fmt[] = "%f%f%f";
 #endif
+
 #pragma force_active reset
 
 /** Black text colour of the "You got N coins!" line in the coin reward window (coingetDisp). */
@@ -108,6 +110,7 @@ EVT_BEGIN(evt_sub_stopwatch)
     RETURN
 EVT_END()
 #endif
+
 s32 tree_data[] = {
     -230000000, -230000000, -230000000, -230000547, -229998519, -229998338, -230001199, -229996749,
     -229996348, -230001643, -229995557, -229995012, -230001570, -229995811, -229995310, -230000702,
@@ -217,6 +220,7 @@ EVT_BEGIN(evt_sub_tree_access_entry)
     RETURN
 EVT_END()
 #endif
+
 static s32 kusa_data[] = {
     -230000000, -230001918, -230003070, -230002273, -230000794, -230000000, -230000794, -230002273,
     -230003070, -230002501, -230001249, -230000000,
@@ -266,6 +270,7 @@ EVT_BEGIN(evt_sub_kusa_access_entry)
     RETURN
 EVT_END()
 #endif
+
 WinMgrDesc coinget_window_desc[] = {
     {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, coingetDisp},
 };
@@ -1356,6 +1361,7 @@ EVT_BEGIN(evt_sub_mail_event)
 #else
 EvtWord evt_sub_mail_event[] = {
 #endif
+
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_E3)
         RETURN
@@ -1486,11 +1492,13 @@ EVT_END()
 #endif
 
 #pragma force_active on
+
 #if VERSION < VERSION_US
 __declspec(section ".data") s32 evt_sub_mail_event_end[] = {
     1,
 };
 #endif
+
 #pragma force_active reset
 
 /**

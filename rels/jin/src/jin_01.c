@@ -28,11 +28,13 @@ static EvtWord s2_close[12];
 static EvtWord s2_open[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord cam_shake[62];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_kaidan_oku[];
 #else
 EvtWord evt_kaidan_oku[144];
 #endif
+
 static EvtWord ki_data_evt_01[20];
 static TreeAccess ki_data[2];
 EvtWord jin_01_init_evt[41];

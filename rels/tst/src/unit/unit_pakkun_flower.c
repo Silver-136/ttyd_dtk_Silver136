@@ -36,11 +36,13 @@ static EvtWord init_event[31];
 static EvtWord dmg_avoid_counter_thorn_head_event[71];
 static EvtWord damage_event[10];
 static EvtWord counter_damage_event[30];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord return_event[244];
 #else
 static EvtWord return_event[256];
 #endif
+
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 

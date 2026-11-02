@@ -39,6 +39,7 @@
 #define PARTS_WORK_TARGET_PART 5 // part 1: first of the target part ids (slots 5-9), paired with PARTS_WORK_TARGET_UNIT
 #define PARTS_WORK_TARGET_HIT 10 // part 1: first of the per-target hit flags (slots 10-14): 1 once that target was hit; the last shot then hits it without a damage check
 #define PARTS_WORK_SFX 15        // shot parts (7..): id of the SFX_ENM_BARRI_ATTACK7/8 sound, stopped when the shot ends
+
 #if VERSION >= VERSION_US
 #define BARRIERN_ALLOC(size) BattleAlloc(size)
 #define BARRIERN_FREE(p) BattleFree(p)

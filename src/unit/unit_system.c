@@ -30,6 +30,7 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 #endif
+
 BattleUnitKind unit_system = {
     UNIT_SYSTEM, // unitType
     "btl_un_system", // name

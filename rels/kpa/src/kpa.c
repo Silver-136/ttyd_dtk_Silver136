@@ -52,6 +52,7 @@ void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
 #else
 #define KPA_ICON_2D 0x10
 #endif
+
 f32 kpaGetWidth(s32 type);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
@@ -65,11 +66,13 @@ EvtWord kpa_init[49];
 EvtWord kpa_read_mobj[291];
 EvtWord kpa_coin_evt[7];
 EvtWord kpa_read_item[34];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kpa_dead[];
 #else
 EvtWord kpa_dead[168];
 #endif
+
 EvtWord kpa_fall_sub[37];
 EvtWord kpa_bgm_change[180];
 EvtWord kpa_stage_start[168];

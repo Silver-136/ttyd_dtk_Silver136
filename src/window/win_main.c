@@ -36,9 +36,11 @@
 #include "evt/evt_sub.h"
 #include "win/win_root.h"
 #include "driver/itemdrv.h"
+
 #if VERSION >= VERSION_US
 char* strstr(const char* str, const char* sub);
 #endif
+
 #include "driver/msgdrv.h"
 #include "mario/mario_pouch.h"
 #include "mario/mariost.h"

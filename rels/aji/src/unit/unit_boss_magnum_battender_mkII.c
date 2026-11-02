@@ -74,11 +74,13 @@ s32 jetCount;
 static s32* list;
 EffectEntry* eff_suikomi;
 s32 screamId;
+
 #if VERSION > VERSION_DEMO_US
 s32 scream_fade_timer;
 u8 scream_fade_start_vol;
 u8 scream_fade_vol;
 #endif
+
 TargetWork* wp_target;
 s32 targetSoundId;
 static EffectEntry* eff_charge;
@@ -120,20 +122,24 @@ EvtWord aud_no_hit_event[16];
 static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[216];
 #else
 static EvtWord dead_event[234];
 #endif
+
 static EvtWord entry_event[78];
 static EvtWord attack_event[320];
 EvtWord drill_attack_event[392];
 EvtWord boomerang_attack_event[324];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aud_attack_event[];
 #else
 EvtWord aud_attack_event[823];
 #endif
+
 EvtWord aud_attack_event_sub[139];
 static EvtWord arm_bunri_event[199];
 static EvtWord arm_return_event[151];
@@ -700,6 +706,7 @@ static USER_FUNC(aud_suikomi) {
 #else
 USER_FUNC(aud_suikomi) {
 #endif
+
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     s32 done = 0;
     BattleAudienceMember* mem;

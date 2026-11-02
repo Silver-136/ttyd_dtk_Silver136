@@ -90,6 +90,7 @@ EvtWord firebar_coin[68];
 FirebarSetup firebardesc[7];
 EvtWord firebar_evt[102];
 static HitDamageReturn dmgRetPoint[4];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_04_init_evt[];
 #else
@@ -616,6 +617,7 @@ static USER_FUNC(firebar_entry) {
 #else
 USER_FUNC(firebar_entry) {
 #endif
+
     FirebarSetup* setup = (FirebarSetup*)evtGetValue(event, event->args[0]);
     FirebarWork* wp;
     FirebarBall* ball;

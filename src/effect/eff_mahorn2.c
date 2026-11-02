@@ -184,6 +184,7 @@ static void effMahorn2Disp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
 #endif
+
     effMahorn2Data *data = effect->userdata;
     Mtx mtx;
     Mtx rot;

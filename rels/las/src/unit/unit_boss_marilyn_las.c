@@ -43,13 +43,16 @@ static EvtWord dead_event[152];
 static EvtWord unison_phase_event[83];
 static EvtWord phase_event[2];
 static EvtWord attack_event[93];
+
 #if VERSION >= VERSION_US
 static EvtWord kagenuke_attack_event[241];
 #else
 static EvtWord kagenuke_attack_event[238];
 #endif
+
 static EvtWord thunder_attack_event[235];
 static EvtWord charge_attack_event[58];
+
 #if VERSION >= VERSION_US
 static EvtWord wait_event[7];
 #else

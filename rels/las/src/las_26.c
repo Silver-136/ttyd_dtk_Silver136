@@ -41,19 +41,24 @@ static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[3];
 static EvtWord box_evt[30];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord bonbaba_evt[];
 #else
 EvtWord bonbaba_evt[819];
 #endif
+
 EvtWord bonbaba_init[62];
 static NpcSetupInfo npcEnt[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord sekai_yami_evt[113];
 #else
 static EvtWord sekai_yami_evt[118];
 #endif
+
 EvtWord bomb_wall[155];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_26_init_evt[];
 #else

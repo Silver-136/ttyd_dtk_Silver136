@@ -33,11 +33,13 @@ static USER_FUNC(evt_chuchu_back_loop);
 static EvtWord door_close[12];
 static EvtWord door_open[12];
 static BeroEntry bero_entry_data[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord chuchurina_sogu[598];
 #else
 static EvtWord chuchurina_sogu[610];
 #endif
+
 EvtWord chuchurina_talk[2];
 static NpcSetupInfo npcEnt[2];
 static EvtWord item_get00[37];

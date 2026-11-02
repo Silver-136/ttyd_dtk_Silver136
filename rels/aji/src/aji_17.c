@@ -68,9 +68,11 @@ DanceData dance_dt;
 
 static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(bgm_start_wait);
+
 #if VERSION == VERSION_EU
 static USER_FUNC(wait_move_end_50hz);
 #endif
+
 s32 btn_check(EventEntry* event, BOOL isFirstCall);
 s32 compute_horogram_pos(EventEntry* event, BOOL isFirstCall);
 s32 compute_move_pos(EventEntry* event, BOOL isFirstCall);
@@ -105,6 +107,7 @@ s32 set_npc_pos(EventEntry* event, BOOL isFirstCall);
 static s32 viewport(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(viewport);
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t);
+
 #if VERSION >= VERSION_US
 // US: map save blocks call the US save wrapper script
 #define SAVE_EVT evt_memcard_save_wrapper
@@ -151,6 +154,7 @@ static EvtWord teshita2_init[9];
 static EvtWord syuryo_init[9];
 static NpcSetupInfo npcEnt[4];
 EvtWord tec_talk[36];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord aji_17_init_evt[250];
 #else

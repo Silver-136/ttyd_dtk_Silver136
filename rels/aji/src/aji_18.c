@@ -37,13 +37,16 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_machine[];
 #else
 EvtWord evt_machine[266];
 #endif
+
 EvtWord key_lock_koujyou[14];
 static EvtWord evt_koopa_after[118];
+
 #if VERSION >= VERSION_US
 EvtWord aji_18_init_evt[301];
 #else

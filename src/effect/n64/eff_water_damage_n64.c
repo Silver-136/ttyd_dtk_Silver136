@@ -263,6 +263,7 @@ static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
+
     EffWaterDamageN64Work* work;
     CameraEntry* cam;
 #if VERSION > VERSION_DEMO_US

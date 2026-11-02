@@ -35,13 +35,16 @@ static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
 EvtWord evt_robot_waku[34];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_boss[778];
 #else
 static EvtWord evt_boss[797];
 #endif
+
 EvtWord evt_boss2[147];
 static NpcSetupInfo npcEnt[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_14_init_evt[];
 #else

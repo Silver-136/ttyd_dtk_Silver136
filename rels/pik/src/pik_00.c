@@ -64,9 +64,11 @@ USER_FUNC(img_flag);
 static USER_FUNC(ramp_r);
 USER_FUNC(under);
 static USER_FUNC(zoom);
+
 #if VERSION >= VERSION_US
 USER_FUNC(pik_00_statuswin_force_off);
 #endif
+
 void irai_29_15_cb(s32 type, smartEntry* smart);
 static void resha_tev(MapTevCallbackInfo* info);
 
@@ -92,51 +94,63 @@ static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord hom_10_init_evt[104];
 #else
 static EvtWord hom_10_init_evt[140];
 #endif
+
 EvtWord resha_noru[8];
 static BeroEntry bero_data[3];
 static const char* name_tbl[6];
 EvtWord evt_pik_yajirushi[71];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_train[252];
 #else
 static EvtWord evt_train[295];
 #endif
+
 EvtWord init_ekiin[8];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord talk_ekiin[];
 #else
 EvtWord talk_ekiin[146];
 #endif
+
 static EvtWord init_papa[8];
 EvtWord talk_papa_taihou_kyoka[VERSION_PICK(403, 405)];
 static EvtWord talk_papa[141];
 static EvtWord init_mama[8];
 s32 iri_29_item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_mama[316];
 #else
 static EvtWord talk_mama[318];
 #endif
+
 static EvtWord init_konari[13];
 static EvtWord talk_konari[58];
 static EvtWord init_madam[8];
 static s32 item_tbl_madam[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_madam_ring_return[52];
 #else
 static EvtWord talk_madam_ring_return[54];
 #endif
+
 s32 iri_23_item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord talk_madam[183];
 #else
 static EvtWord talk_madam[185];
 #endif
+
 static EvtWord init_sarary[12];
 static EvtWord talk_sarary[8];
 static NpcSetupInfo npc_data[7];
@@ -157,12 +171,15 @@ static DoorParam door_2;
 EvtWord evt_rot_door_sub[63];
 EvtWord evt_rot_door[9];
 EvtWord evt_pik_00_arrival[86];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_seacret[];
 #else
 EvtWord evt_seacret[131];
 #endif
+
 static EvtWord mobj_box00[34];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord pik_00_init_evt[];
 #else

@@ -49,6 +49,7 @@ static u8 scale_data[] = {
 #if VERSION <= VERSION_DEMO_US
 char data[768] = ".......+..............@.#...........$%&.*=..........-...;>.........,'....)!.......~~......{.......~~......]@@^....~/........(_......#:<.....+.......[}|.....+.......1.......23......45.....677......8......7.......90......7.......a22b...c...........deee............f++++..........ff....+........ff......+........+......+.......+.......ff......+........+...f++.........+..ff...........+f..+............+.ff............+..+............+..f+.f+++f.....+....+f..+......+.......+.......+.......+.......+........+++++++f.....gh............+g.ggg..........g...hh..........g....g..........hh..hh.hh.......g..hg+ghgg......hghg.g...g.......hggg.....+.....g+.h......g....g..........g....g..........g.....g.........g.....g.........hgg...g...........g...g.........hg.....gggggggggh...";
 #endif
+
 /** RGB colours the Peach dust particles cycle through (pinks, purples and blues), three bytes per step. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
@@ -180,6 +181,7 @@ static void effPeachDustMain(EffectEntry* effect) {
 #else
 void effPeachDustMain(EffectEntry* effect) {
 #endif
+
     EffPeachDustParticle* p = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

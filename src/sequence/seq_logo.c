@@ -4,9 +4,11 @@
 #include "seq/seq_logo.h"
 #include "libc_decls.h"
 #include "driver/arcdrv.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "driver/animdrv.h"
 #endif
+
 #include "driver/effdrv.h"
 #include "driver/envdrv.h"
 #include "driver/fadedrv.h"
@@ -28,11 +30,13 @@
 #if VERSION >= VERSION_US
 static inline s32* logoStoryTime(void);
 #endif
+
 //.sbss
 static LogoWork work;
 
 //.sdata
 static LogoWork* wp = &work;
+
 #if VERSION == VERSION_EU
 // PAL: per-language logo screen textures {logo, story text}
 static s32 logoTexTbl[6][2] = {{24, 25}, {24, 25}, {26, 27}, {28, 29}, {30, 31}, {32, 33}};

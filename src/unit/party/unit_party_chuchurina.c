@@ -55,6 +55,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast;
 BattleWeapon partyWeapon_ChuchurinaMadowaseAttack;
 BattleWeapon partyWeapon_ChuchurinaItemSteal;
 BattleWeapon partyWeapon_ChuchurinaKiss;
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyChuchurinaAttack_NormalAttack[1578];
 EvtWord partyChuchurinaAttack_MadowaseAttack[2030];
@@ -62,12 +63,15 @@ EvtWord partyChuchurinaAttack_MadowaseAttack[2030];
 EvtWord partyChuchurinaAttack_NormalAttack[1590];
 EvtWord partyChuchurinaAttack_MadowaseAttack[2020];
 #endif
+
 EvtWord partyChuchurinaAttack_ItemSteal[VERSION_PICK(788, 961)];
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyChuchurinaAttack_Kiss[490];
 #else
 EvtWord partyChuchurinaAttack_Kiss[568];
 #endif
+
 EvtWord chuchurina_appeal_event[86];
 static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[VERSION_PICK(204, 205)];
@@ -123,6 +127,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 #endif
+
 PoseTableEntry pose_table_chuchurina_stay[] = {
     {POSE_TYPE_FREEZE, "PCH_D_4"},
     {POSE_TYPE_STOP, "PCH_D_4"},
@@ -281,6 +286,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+
 BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     "btl_wn_pcr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -1176,6 +1182,7 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 #endif
+
 EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))

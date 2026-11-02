@@ -32,6 +32,7 @@ typedef struct TelopWork {
 #define TELOP_TEX_A 0x81
 #define TELOP_TEX_B 0x80
 #endif
+
 /**
  * Message labels of the area name banners, one per area id
  * (Rogueport, Petal Meadows, Petalburg and so on up to the Palace of Shadow).

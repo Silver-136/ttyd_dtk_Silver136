@@ -37,6 +37,7 @@ EvtWord door05_close[12];
 EvtWord door05_open[12];
 static BeroEntry bero_entry_data[7];
 static EvtWord init_0[37];
+
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
@@ -46,7 +47,9 @@ static EvtWord main_0[489];
 static EvtWord main_0[491];
 #endif
 #endif
+
 EvtWord init_1[37];
+
 #if VERSION >= VERSION_US
 EvtWord main_1[465];
 #else
@@ -56,19 +59,24 @@ EvtWord main_1[489];
 EvtWord main_1[491];
 #endif
 #endif
+
 s32 key_tbl00[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_chk00[];
 #else
 EvtWord evt_chk00[23];
 #endif
+
 static EvtWord evt_unlock00[10];
 s32 key_tbl01[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_chk01[];
 #else
 EvtWord evt_chk01[23];
 #endif
+
 static EvtWord evt_unlock01[10];
 static EvtWord key_get[5];
 EvtWord gon_05_init_evt[338];

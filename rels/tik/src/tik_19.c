@@ -31,6 +31,7 @@ static void majin_callback(s32 type);
 
 static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_majin[485];
 static EvtWord evt_majin2[239];
@@ -38,6 +39,7 @@ static EvtWord evt_majin2[239];
 static EvtWord evt_majin[487];
 static EvtWord evt_majin2[237];
 #endif
+
 EvtWord tik_19_init_evt[52];
 
 /** Doors of this room: the south exit back to tik_04. */

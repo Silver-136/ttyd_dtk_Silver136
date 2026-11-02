@@ -91,6 +91,7 @@ static void npc_report_pos(NpcEntry* npc) {
     OSReport("%f%f%f", npc->position.x, npc->position.y, npc->position.z);
 }
 #endif
+
 /** const char* lookupName */
 USER_FUNC(evt_npc_delete) {
     const char* name;

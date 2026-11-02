@@ -279,12 +279,16 @@ USER_FUNC(btlevtcmd_SacBgsetMove);
 USER_FUNC(btlevtcmd_SamplingEnemy);
 USER_FUNC(btlevtcmd_SetDiveSound);
 USER_FUNC(btlevtcmd_SetEventCeilFall);
+
 #if VERSION == VERSION_EU
 USER_FUNC(btlevtcmd_SetCounterAcCallBack);
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 USER_FUNC(btlevtcmd_SetCounterAcCallBack);
 #endif
+
 USER_FUNC(btlevtcmd_SetFallAccel);
 USER_FUNC(btlevtcmd_SetJumpSpeed);
 USER_FUNC(btlevtcmd_SetMoveSoundDataWork);

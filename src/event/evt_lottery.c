@@ -247,9 +247,11 @@ USER_FUNC(evt_lottery_buy) {
     lot->days[1] = 115 - rand() % 30;
     lot->days[2] = 35 - rand() % 10;
     lot->days[3] = 10 - rand() % 6;
+
 #if VERSION <= VERSION_DEMO_US
     lot->flags |= LOTTERY_FLAG_TICKET;
 #endif
+
     if (lot->flags & LOTTERY_FLAG_CLOCK_ERROR) {
         lot->flags |= LOTTERY_FLAG_REBOUGHT;
 #if VERSION > VERSION_DEMO_US
@@ -258,6 +260,7 @@ USER_FUNC(evt_lottery_buy) {
         lot->times[1] = now;
 #endif
     }
+
 #if VERSION > VERSION_DEMO_US
     if (lot->flags & LOTTERY_FLAG_TICKET) {
         lot->flags |= LOTTERY_FLAG_REBOUGHT;
@@ -267,6 +270,7 @@ USER_FUNC(evt_lottery_buy) {
     }
     lot->flags |= LOTTERY_FLAG_TICKET;
 #endif
+
     evtSetValue(event, args[0], lot->number);
     return EVT_RETURN_DONE;
 }

@@ -991,6 +991,7 @@ void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* s
 #else
 void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
 #endif
+
     s8 status_turns = 0;
     s8 status_strength = 0;
 

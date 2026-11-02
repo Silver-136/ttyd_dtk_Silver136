@@ -68,11 +68,13 @@ typedef struct CloudWork {
     f32 lastFrame;
 } CloudWork;
 static CloudWork* cloud;
+
 #if VERSION <= VERSION_DEMO_US
 static s8 cloud_once_flag;
 #else
 static u8 cloud_once_flag;
 #endif
+
 static void _mapsetofs_all(CloudWork* wp);
 static void _mapclsofs_all(CloudWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
@@ -91,11 +93,13 @@ static EvtWord gonbaba_standup_shake[23];
 static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
 #include "version.h"
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gonbaba_event[];
 #else
 EvtWord gonbaba_event[1410];
 #endif
+
 static const char* capturemap[2];
 static Vec v_list[8];
 static EvtWord evt_cloud_main_evt[4];
@@ -103,6 +107,7 @@ EvtWord iri_16_box_evt[33];
 EvtWord iri_16_cloud_evt[36];
 EvtWord iri_16_touch_evt[2];
 static EvtWord iri_16_init[57];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gon_11_init_evt[];
 #else
@@ -833,6 +838,7 @@ static USER_FUNC(evt_cloud_main) {
 #else
 static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
 #endif
+
     HitEntry *hit0;
     HitEntry *hit1;
     HitEntry *hit2;

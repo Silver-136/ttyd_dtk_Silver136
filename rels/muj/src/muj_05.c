@@ -48,19 +48,23 @@ USER_FUNC(evt_dokuroiwa_command_set);
 
 EvtWord sanders_rotate[28];
 EvtWord sanders_nakama_sub[13];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord sanders_nakama[];
 #else
 EvtWord sanders_nakama[173];
 #endif
+
 static EvtWord sanders_init[51];
 static s32 itemsel_table01[2];
 EvtWord sanders_talk_sub[70];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord sanders_talk[170];
 #else
 static EvtWord sanders_talk[178];
 #endif
+
 static EvtWord marco_init[24];
 static EvtWord marco_talk[146];
 static EvtWord erumosu_regl[4];
@@ -82,11 +86,13 @@ EvtWord redeye_flush[78];
 EvtWord dokuroiwa_flush[51];
 s32 command_seikai[7];
 static s32 itemsel_table[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord dokuroiwa_touch[];
 #else
 EvtWord dokuroiwa_touch[127];
 #endif
+
 EvtWord case_event_entry[45];
 EvtWord case_event_delete[42];
 EvtWord penalty_event[187];

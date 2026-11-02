@@ -116,20 +116,25 @@ EvtWord mri_ueki_entry[32];
 EvtWord mri_puni_save[6];
 s32 mri_itemsel_table[2];
 EvtWord mri_punipuni_setup[16];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mri_punipuni_itemselect[];
 #else
 EvtWord mri_punipuni_itemselect[40];
 #endif
+
 EvtWord mri_punipuni_itemset[36];
 EvtWord mri_punipuni_itemremove[29];
 EvtWord mri_hikari_color[66];
+
 #if VERSION >= VERSION_US
 EvtWord mri_countdown[176];
 #else
 EvtWord mri_countdown[174];
 #endif
+
 EvtWord mri_waterfall_effect[26];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mri_guide_hagure_check[];
 extern EvtWord mri_guide_goryu[];
@@ -137,6 +142,7 @@ extern EvtWord mri_guide_goryu[];
 EvtWord mri_guide_hagure_check[50];
 EvtWord mri_guide_goryu[63];
 #endif
+
 EvtWord mri_puni_walk_se[20];
 EvtWord mri_puni_jump_se[15];
 

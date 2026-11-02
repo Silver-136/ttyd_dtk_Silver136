@@ -5,9 +5,11 @@
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/os.h>
@@ -184,6 +186,7 @@ static void effSnowfallMain(EffectEntry* effect) {
 #else
 void effSnowfallMain(EffectEntry* effect) {
 #endif
+
     s32 i, life, count, h;
     f32 hf;
     Vec position;

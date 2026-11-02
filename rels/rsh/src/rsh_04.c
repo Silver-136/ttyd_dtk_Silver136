@@ -41,32 +41,41 @@ static BeroEntry bero_data_c[3];
 static const char* door_3[7];
 static const char* door_4[7];
 static const char* door_5[7];
+
 #if VERSION >= VERSION_US
 EvtWord evt_rsh_konarikin_irai_party_talk[89];
 #else
 EvtWord evt_rsh_konarikin_irai_party_talk[85];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord evt_allow_kamotsu[77];
 #else
 EvtWord evt_allow_kamotsu[73];
 #endif
+
 EvtWord evt_mario_chuumoku[10];
 EvtWord evt_party_chuumoku[11];
+
 #if VERSION >= VERSION_US
 EvtWord evt_shorui_funshitu[362];
 #else
 EvtWord evt_shorui_funshitu[352];
 #endif
+
 static s32 item_tbl[2];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord evt_daijisouna_kami[206];
 #else
 EvtWord evt_daijisouna_kami[208];
 #endif
+
 EvtWord evt_syasyou_auto_talk[27];
 static EvtWord init_syashou[56];
 static s32 item_tbl2[2];
+
 #if VERSION >= VERSION_US
 static EvtWord talk_syashou[413];
 #else
@@ -76,6 +85,7 @@ static EvtWord talk_syashou[354];
 static EvtWord talk_syashou[367];
 #endif
 #endif
+
 EvtWord talk_sarary_repeat[43];
 static EvtWord init_sarary[55];
 static EvtWord talk_sarary[72];
@@ -88,6 +98,7 @@ static EvtWord init_mama[37];
 static EvtWord talk_mama[57];
 static EvtWord init_konari[46];
 s32 item_tbl3[2];
+
 #if VERSION >= VERSION_US
 static EvtWord talk_konari[265];
 #else
@@ -97,15 +108,18 @@ static EvtWord talk_konari[217];
 static EvtWord talk_konari[219];
 #endif
 #endif
+
 EvtWord talk_powan_repeat[43];
 static EvtWord init_powan[64];
 static EvtWord talk_powan[204];
 static NpcSetupInfo npc_data[7];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_tana_5[];
 #else
 EvtWord evt_tana_5[50];
 #endif
+
 /* Shelf access rows: hit, msg, event (READ_INT3 in demos); retail adds a second msg (READ_INT4). A NULL hit ends the table. */
 typedef struct ShelfAccess {
     const char* hit;
@@ -120,6 +134,7 @@ typedef struct ShelfAccessTbl3 {
     const char* end[1];
 } ShelfAccessTbl3;
 static ShelfAccessTbl3 access_tbl;
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_access[21];
 static EvtWord evt_access_entry[24];
@@ -127,34 +142,43 @@ static EvtWord evt_access_entry[24];
 static EvtWord evt_access[32];
 static EvtWord evt_access_entry[25];
 #endif
+
 static EvtWord evt_door_msg[102];
 EvtWord evt_narikin_room[87];
 EvtWord evt_powan_room[83];
+
 #if VERSION >= VERSION_US
 EvtWord rsh_04_init_evt[214];
 #else
 EvtWord rsh_04_init_evt[201];
 #endif
+
 EvtWord rsh_04_a_init_evt[96];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_04_b_init_evt[];
 #else
 EvtWord rsh_04_b_init_evt[44];
 #endif
+
 static const char* window_tbl[4];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_04_c_init_evt[];
 #else
 EvtWord rsh_04_c_init_evt[67];
 #endif
+
 static BeroEntry bero_data_a_return[3];
 static BeroEntry bero_data_b_return[3];
 static BeroEntry bero_data_c_return[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_04_init_evt_nidome[];
 #else
 EvtWord rsh_04_init_evt_nidome[149];
 #endif
+
 EvtWord rsh_04_a_init_evt_nidome[28];
 EvtWord rsh_04_b_init_evt_nidome[28];
 EvtWord rsh_04_c_init_evt_nidome[38];

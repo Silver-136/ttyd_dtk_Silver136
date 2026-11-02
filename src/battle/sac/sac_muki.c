@@ -107,6 +107,7 @@ EVT_BEGIN(nice_event_pow)
     RETURN
 EVT_END()
 #endif
+
 static BattleWeapon weapon = {
     "btl_wn_sac_mukimuki_body", // name
     ICON_SAC_MUKI, // icon
@@ -357,6 +358,7 @@ static void main_cursor(void) {
 #else
 void main_cursor(void) {
 #endif
+
     MukiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));

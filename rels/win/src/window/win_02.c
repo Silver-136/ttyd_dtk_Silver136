@@ -22,6 +22,7 @@
 
 
 static BeroEntry bero_entry_data[5];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_hikou_nobiru_init[];
 extern EvtWord evt_hikou_nobiru[];
@@ -29,6 +30,7 @@ extern EvtWord evt_hikou_nobiru[];
 EvtWord evt_hikou_nobiru_init[89];
 EvtWord evt_hikou_nobiru[203];
 #endif
+
 static TreeAccess tree_access_data[3];
 EvtWord win_02_init_evt[87];
 

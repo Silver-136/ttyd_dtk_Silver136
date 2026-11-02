@@ -36,11 +36,13 @@ static EvtWord s_door_close[22];
 static BeroEntry bero_entry_data[2];
 EvtWord tensou_ride[245];
 EvtWord tensou_switch[62];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_tensou2[];
 #else
 EvtWord evt_tensou2[216];
 #endif
+
 EvtWord tensou_init[69];
 static EvtWord evt_haguruma[5];
 EvtWord aji_07_init_evt[];

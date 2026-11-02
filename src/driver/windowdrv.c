@@ -75,6 +75,7 @@ void windowTexSetup(void) {
 void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
 #endif
+
     s32 i;
 
 #if VERSION <= VERSION_DEMO_US

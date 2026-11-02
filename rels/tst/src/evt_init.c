@@ -87,6 +87,7 @@ void tess_test(void);
 #if VERSION >= VERSION_JP
 TessTestWork* tess_test_work;
 #endif
+
 char item_name[32];
 
 /** Init event of the tst_00 test map: puts Mario at (-525, 0, -15). */

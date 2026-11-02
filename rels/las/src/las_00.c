@@ -29,12 +29,15 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord first_evt[182];
 #else
 static EvtWord first_evt[184];
 #endif
+
 static EvtWord shan_init[46];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_00_init_evt[];
 #else

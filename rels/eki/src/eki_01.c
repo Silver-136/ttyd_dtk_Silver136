@@ -28,11 +28,13 @@ static EvtWord n_open[12];
 static BeroEntry bero_data[4];
 static EvtWord evt_origami[129];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
+
 static EvtWord evt_lock[10];
 EvtWord evt_kami_1[5];
 EvtWord evt_kami_2[5];

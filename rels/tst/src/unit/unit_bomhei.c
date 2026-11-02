@@ -30,20 +30,25 @@ static BattleUnitKindPart parts[1];
 static StatusVulnerability regist;
 static BattleWeapon weapon_bomhei_attack;
 static BattleWeapon weapon_bomhei_bomb;
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord bomb_event[102];
 #else
 static EvtWord bomb_event[106];
 #endif
+
 static EvtWord init_event[42];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[55];
 #else
 static EvtWord damage_event[58];
 #endif
+
 static EvtWord change_spark_event[70];
 static EvtWord attack_event[440];
 static EvtWord wait_event[6];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event_spark[22];
 static EvtWord attack_event_spark[286];
@@ -51,6 +56,7 @@ static EvtWord attack_event_spark[286];
 static EvtWord damage_event_spark[25];
 static EvtWord attack_event_spark[288];
 #endif
+
 static EvtWord wait_event_spark[27];
 
 /** Unit data of the Bob-omb: stats, sounds, attributes, parts, init script and data table. */

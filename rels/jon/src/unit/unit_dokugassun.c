@@ -35,11 +35,13 @@ static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_dokugassun_attack;
 static BattleWeapon weapon_dokugassun_poisongas_attack;
 static EvtWord attack_event[69];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord poisongas_event[274];
 #else
 static EvtWord poisongas_event[303];
 #endif
+
 static PoseTableEntry pose_table[17];
 static BattleDataEntry data_table[3];
 static EvtWord init_event[37];
@@ -50,6 +52,7 @@ static EvtWord counter_event[2];
 static EvtWord unison_phase_event[140];
 static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord wait_event[12];
 #else

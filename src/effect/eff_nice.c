@@ -32,6 +32,7 @@ const char* anim_us[] = {
     NULL,
     "EFF_lucky_us"
 };
+
 #if VERSION >= VERSION_US
 const char* anim_lang3[] = {
     "EFF_nice_D",

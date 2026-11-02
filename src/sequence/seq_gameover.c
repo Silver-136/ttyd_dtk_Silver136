@@ -19,9 +19,11 @@
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
 #include "statuswindow.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "win/win_main.h"
 #endif
+
 #include "countdown.h"
 #include "cam_road.h"
 #include "cam_shift.h"

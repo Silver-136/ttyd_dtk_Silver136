@@ -34,6 +34,7 @@ static BeroEntry bero_entry_data[8];
 #else
 static BeroEntry bero_entry_data[5];
 #endif
+
 static EvtWord puni_walk_se[20];
 EvtWord puni_soguu_1[102];
 EvtWord puni_soguu_2[146];

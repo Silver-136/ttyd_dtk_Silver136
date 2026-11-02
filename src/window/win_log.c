@@ -170,6 +170,7 @@ TubuDt tubuDt[] = {
 #else
 static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
 #endif
+
 s32 stone_tbl[] = {ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
 
 /**
@@ -330,6 +331,7 @@ void winLogInit(WindowWork* w) {
     TattleEntry* t;
     EffectEntry* e;
 #endif
+
     WinSortEnt tmp;
 
     w->log.state = 0;

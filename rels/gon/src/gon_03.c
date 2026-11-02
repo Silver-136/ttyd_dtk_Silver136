@@ -78,11 +78,13 @@ static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 const char* nokotaro_pose[2];
 EvtWord tegami_event[305];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord senkaron_event[583];
 #else
 static EvtWord senkaron_event[579];
 #endif
+
 static EvtWord key_get[5];
 EvtWord gon_03_init_evt[256];
 EvtWord richard_init_event[29];

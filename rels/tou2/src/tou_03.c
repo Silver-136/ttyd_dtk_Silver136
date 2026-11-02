@@ -241,39 +241,50 @@ static BeroEntry bero_data[5];
 EvtWord evt_tougi[777];
 EvtWord init_kinosikowa[13];
 static NpcSetupInfo npcEnt[5];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_damage_pose[];
 #else
 EvtWord evt_damage_pose[63];
 #endif
+
 static EvtWord evt_kime_pose[56];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord npc_entry[];
 #else
 EvtWord npc_entry[623];
 #endif
+
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord evt_random_battle[317];
 #else
 EvtWord evt_random_battle[VERSION_PICK(335, 338)];
 #endif
+
 EvtWord evt_random_battle2[VERSION_PICK(317, 326)];
 EvtWord evt_teki_nyuujyou[107];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_teki_nyuujyou_default[];
 #else
 EvtWord evt_teki_nyuujyou_default[183];
 #endif
+
 EvtWord burst_chain_entry[289];
 EvtWord burst_wangwang[69];
 EvtWord evt_match[VERSION_PICK(362, 381)];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_kurikuri_opening[];
 #else
 EvtWord evt_kurikuri_opening[442];
 #endif
+
 EvtWord evt_kurikuri_win[231];
 EvtWord evt_kurikuri_lose[];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_shinemon_opening[];
 extern EvtWord evt_shinemon_win[];
@@ -281,7 +292,9 @@ extern EvtWord evt_shinemon_win[];
 EvtWord evt_shinemon_opening[647];
 EvtWord evt_shinemon_win[199];
 #endif
+
 EvtWord evt_shinemon_lose[];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_champ_opening[];
 extern EvtWord evt_champ_opening_re[];
@@ -289,30 +302,37 @@ extern EvtWord evt_champ_opening_re[];
 EvtWord evt_champ_opening[556];
 EvtWord evt_champ_opening_re[767];
 #endif
+
 EvtWord evt_champ_win[335];
 EvtWord evt_champ_lose[];
 EvtWord evt_default_opening[];
 EvtWord evt_default_win[];
 EvtWord evt_default_lose[VERSION_PICK(137, 138)];
+
 #if VERSION == VERSION_DEMO_JP
 static EvtWord evt_champion[358];
 #else
 static EvtWord evt_champion[VERSION_PICK(365, 376)];
 #endif
+
 EvtWord evt_champion2[VERSION_PICK(178, 189)];
 const char* block_data[9];
 static EvtWord evt_shake[39];
 EvtWord evt_boss_stone[63];
+
 #if VERSION == VERSION_DEMO_JP
 static EvtWord evt_boss[1901];
 #else
 static EvtWord evt_boss[VERSION_PICK(1916, 1919)];
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_watch_match[];
 #else
 EvtWord evt_watch_match[515];
 #endif
+
 EvtWord evt_kyaku_1[56];
 EvtWord evt_kyaku_2[56];
 EvtWord evt_kyaku_3[56];
@@ -321,9 +341,11 @@ EvtWord evt_kyaku_5[56];
 EvtWord evt_kyaku_6[56];
 EvtWord evt_kyaku_7[56];
 EvtWord evt_kyaku_8[88];
+
 #if VERSION >= VERSION_US
 EvtWord evt_kyaku_check[];
 #endif
+
 EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
 
 /**

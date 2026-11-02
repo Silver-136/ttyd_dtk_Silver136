@@ -38,6 +38,7 @@ const char* hit_list[50];
 static EvtWord evt_box[89];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[40];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_12_init_evt[];
 #else

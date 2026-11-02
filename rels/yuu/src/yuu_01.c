@@ -104,6 +104,7 @@ EvtWord yuu_01_kaijo_init2[12];
 EvtWord minigame02_main[37];
 EvtWord minigame02_start_cam[40];
 EvtWord minigame02_start_cam_cancel[17];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame02_start[];
 extern EvtWord minigame02_end[];
@@ -111,6 +112,7 @@ extern EvtWord minigame02_end[];
 EvtWord minigame02_start[101];
 EvtWord minigame02_end[172];
 #endif
+
 EvtWord yuu_01_init_evt[VERSION_PICK(1076, 1166)];
 
 /**

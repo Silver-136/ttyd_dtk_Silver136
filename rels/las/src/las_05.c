@@ -109,13 +109,16 @@ EvtWord kurokaron_talk[13];
 static NpcSetupInfo npcEnt[3];
 static EvtWord key_evt[5];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord key_check_evt[21];
 #else
 static EvtWord key_check_evt[23];
 #endif
+
 static EvtWord unlock_evt[10];
 static EvtWord shan_init[68];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_05_init_evt[];
 #else

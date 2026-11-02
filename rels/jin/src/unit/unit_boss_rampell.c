@@ -49,11 +49,13 @@ static EvtWord damage_event[10];
 static EvtWord dead_event[74];
 static EvtWord phase_event[106];
 static EvtWord attack_event[24];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord ogg_attack_event[481];
 #else
 static EvtWord ogg_attack_event[491];
 #endif
+
 static EvtWord wait_event[6];
 static BattleUnitDefense defence_fmario;
 static BattleUnitDefenseAttr defence_attr_fmario;

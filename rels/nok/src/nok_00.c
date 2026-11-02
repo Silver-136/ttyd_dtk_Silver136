@@ -69,11 +69,13 @@ EvtWord nokonoko_C_talk[44];
 EvtWord nokonoko_D_talk[52];
 s32 iri_15_item_tbl1[2];
 s32 iri_15_item_tbl2[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord nokonoko_F_talk[];
 #else
 EvtWord nokonoko_F_talk[318];
 #endif
+
 static EvtWord init_white[24];
 static EvtWord talk_white[36];
 static EvtWord kizayarou_regl[19];
@@ -94,11 +96,13 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
 static KinopioData kino_dt;
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord first_time_camera[];
 #else
 EvtWord first_time_camera[195];
 #endif
+
 static HitDamageReturn hitDmgRetPoints[10];
 EvtWord nok_00_koopa_npc_entry[35];
 EvtWord nok_00_koopa_evt[1250];

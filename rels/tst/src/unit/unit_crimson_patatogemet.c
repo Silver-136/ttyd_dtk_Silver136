@@ -41,11 +41,13 @@ static EvtWord attack_event_pata[339];
 static EvtWord wait_event_pata[6];
 static PoseTableEntry pose_table[17];
 static PoseTableEntry pose_table_ceil[17];
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[14];
 #else
 static PoseTableEntry pose_table_turn[16];
 #endif
+
 static BattleDataEntry data_table[4];
 static BattleDataEntry data_table_ceil[14];
 static BattleWeapon weapon_met_attack;
@@ -57,11 +59,13 @@ static BattleUnitDefenseAttr defence_attr_turn;
 static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[12];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_event2[142];
 #else
 static EvtWord init_event2[148];
 #endif
+
 static EvtWord dmg_avoid_counter_thorn_head_event[61];
 static EvtWord damage_event[10];
 static EvtWord dmg_turn_event[82];
@@ -69,6 +73,7 @@ static EvtWord wakeup_event[96];
 static EvtWord attack_event[546];
 static EvtWord wait_event[6];
 static EvtWord damage_event_ceil[49];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord counter_damage_event_ceil[70];
 static EvtWord ceil_fall_ready_event[157];
@@ -78,6 +83,7 @@ static EvtWord counter_damage_event_ceil[76];
 static EvtWord ceil_fall_ready_event[163];
 static EvtWord attack_event_ceil[426];
 #endif
+
 static EvtWord wait_event_ceil[6];
 
 /**

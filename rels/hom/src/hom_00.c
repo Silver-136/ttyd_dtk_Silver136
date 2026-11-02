@@ -68,17 +68,20 @@ EvtWord talk_ekiin2[28];
 static NpcSetupInfo npc_data[9];
 EvtWord evt_bridge_down[144];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
 #endif
+
 static EvtWord evt_lock[10];
 EvtWord evt_train_door[13];
 static EvtWord evt_train[262];
 EvtWord evt_train_nidome[307];
 EvtWord evt_hom_touchaku[460];
 EvtWord evt_hom_touchaku_nidome[56];
+
 #if VERSION >= VERSION_US
 EvtWord hom_00_init_evt[259];
 #else

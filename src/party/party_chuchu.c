@@ -141,6 +141,7 @@ static USER_FUNC(search_result) {
 #else
 USER_FUNC(search_result) {
 #endif
+
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
     if (isFirstCall) {

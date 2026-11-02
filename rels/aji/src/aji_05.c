@@ -40,6 +40,7 @@ static EvtWord hikaru_on[4];
 static EvtWord hikaru_off[4];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[48];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_05_init_evt[];
 #else

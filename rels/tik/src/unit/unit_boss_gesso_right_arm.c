@@ -30,16 +30,20 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[4];
+
 #if VERSION > VERSION_DEMO_US
 BattleDataEntry gesso_right_arm_data_table[13];
 #endif
+
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
 static EvtWord damage_event[31];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord gesso_right_arm_damage_event[93];
 #endif
+
 static EvtWord phase_event[2];
 BattleWeapon weapon_gesso_right_arm_front_attack;
 BattleWeapon weapon_gesso_right_arm_rear_attack;

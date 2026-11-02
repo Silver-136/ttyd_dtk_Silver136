@@ -37,11 +37,13 @@ static EvtWord change_spark_event[70];
 static EvtWord attack_event[440];
 static EvtWord wait_event[6];
 static EvtWord damage_event_spark[25];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord attack_event_spark[292];
 #else
 static EvtWord attack_event_spark[288];
 #endif
+
 static EvtWord wait_event_spark[27];
 
 /** Unit data of the Bob-omb: stats, sounds, attributes, parts, init script and data table. */

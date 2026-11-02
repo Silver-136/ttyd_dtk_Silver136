@@ -33,6 +33,7 @@ static BeroEntry bero_entry_data[3];
 static EvtWord rousoku_init[46];
 static EvtWord mobj_box01[34];
 static EvtWord mobj_box02[34];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_30_init_evt[];
 #else

@@ -40,11 +40,13 @@ extern EvtWord gold_chorobon_rabbit_move[];
 BattleUnitSetup entry_chorogun;
 extern EvtWord call_chorogun_event[];
 static EvtWord init_event[43];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord damage_event[104];
 #else
 static EvtWord damage_event[131];
 #endif
+
 static EvtWord counter_damage_event[30];
 static EvtWord return_event[24];
 static EvtWord attack_event[500];

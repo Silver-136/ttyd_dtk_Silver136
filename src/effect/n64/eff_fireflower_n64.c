@@ -36,6 +36,7 @@ typedef struct EffFireFlowerN64Work {
 #if VERSION <= VERSION_DEMO_US
 static s8 scale_data[] = "27<AFKPUZ_dgigd";
 #endif
+
 /**
  * Small red 4x4 spark quad, drawn only for a spark of type 0;
  * every spark is spawned with type 1, so it goes unused.

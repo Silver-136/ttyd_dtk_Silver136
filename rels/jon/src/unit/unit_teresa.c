@@ -41,11 +41,13 @@ static EvtWord attack_event[153];
 static EvtWord normal_attack_event[354];
 static EvtWord trans_myself_event[196];
 static EvtWord trans_event[289];
+
 #if VERSION == VERSION_EU
 static EvtWord move_event[101];
 #else
 static EvtWord move_event[84];
 #endif
+
 static EvtWord move_event_sub[103];
 static EvtWord wait_event[6];
 

@@ -48,11 +48,13 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_furafura[18];
+
 #if VERSION <= VERSION_DEMO_US
 static BattleDataEntry data_table[2];
 #else
 static BattleDataEntry data_table[15];
 #endif
+
 static BattleUnitKindPart parts[1];
 BattleWeapon weapon_gance_macho_speed;
 BattleWeapon weapon_gance_build_up;
@@ -71,9 +73,11 @@ static EvtWord damage_event[97];
 EvtWord base_size_change[99];
 static EvtWord phase_event[482];
 static EvtWord dead_event[64];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord macho_gance_damage_event[238];
 #endif
+
 static EvtWord attack_event[151];
 EvtWord gance_macho_speed_attack_event[119];
 EvtWord gance_build_up_attack_event[119];

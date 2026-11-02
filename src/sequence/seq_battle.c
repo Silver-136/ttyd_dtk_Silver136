@@ -33,6 +33,7 @@
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
 #include "seq/seq_battle.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "data/mapdata.h"
 
@@ -349,6 +350,7 @@ void seq_battleMain(SequenceWork* work) {
 /** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
 static void battle_init(void) {
 #endif
+
     FieldBattleData* fbat;
     NpcEntry* npc;
     PouchData* pouch;

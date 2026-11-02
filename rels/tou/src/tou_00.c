@@ -38,11 +38,13 @@ static USER_FUNC(npc_set_pos);
 static EvtWord evt_tou_balloon[85];
 static EvtWord evt_light[66];
 static EvtWord evt_wing[125];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_to_tou[];
 #else
 EvtWord evt_to_tou[293];
 #endif
+
 EvtWord evt_pos_keep[39];
 EvtWord evt_to_gor[247];
 const char* kemuri_name[5];

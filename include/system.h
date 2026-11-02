@@ -5,9 +5,11 @@
 #include <dolphin/mtx.h>
 
 const char* getMarioStDvdRoot(void);
+
 #if VERSION == VERSION_EU
 void sysDebugReport(const char* filename, int line, const char* format, ...);
 #endif
+
 f32 reviseAngle(f32 angle);
 f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2);
 f32 compAngle(f32 angle1, f32 angle2);

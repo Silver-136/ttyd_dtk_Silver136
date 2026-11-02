@@ -95,11 +95,13 @@ static EvtWord trans_magic_event[49];
 static EvtWord yokeyoke_magic_event[49];
 static EvtWord recover_magic_event[70];
 static EvtWord bunsin_event[152];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord spawn_event[72];
 #else
 static EvtWord spawn_event[76];
 #endif
+
 static EvtWord wait_event[386];
 
 /** Unit data of the Elite Wizzerd: stats, sounds, attributes, parts, init script and data table. */

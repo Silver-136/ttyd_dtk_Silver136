@@ -182,6 +182,7 @@ static void effStardust2Main(EffectEntry* effect) {
 #else
 void effStardust2Main(EffectEntry* effect) {
 #endif
+
     EffStardust2N64Work* w = effect->userdata;
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};

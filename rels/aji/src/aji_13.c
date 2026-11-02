@@ -42,9 +42,11 @@
 #include "mario/mario_pouch.h"
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
+
 #if VERSION >= VERSION_US
 #include "memory.h"
 #endif
+
 typedef struct {
     Vec pos;
     Vec delta;
@@ -65,11 +67,13 @@ static BeroEntry bero_entry_data[15];
 static const char* name_tbl[13];
 const char* name_tbl2[6];
 EvtWord move_left_right[128];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord move_up_down[128];
 #else
 EvtWord move_up_down[226];
 #endif
+
 EvtWord move_r[84];
 /* moving-floor gimmick read by shikake_init: hit, mapobj, two motion params, time; a NULL mapobj ends the table */
 typedef struct ShikakeMove {
@@ -101,6 +105,7 @@ static EvtWord evt_ramp[68];
 EvtWord evt_bcv_sw[99];
 EvtWord evt_key_get[5];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_msg[85];
 extern EvtWord aji_13_init_evt[];
@@ -1194,6 +1199,7 @@ static USER_FUNC(bg_cam_chk) {
 #else
 USER_FUNC(bg_cam_chk) {
 #endif
+
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 #if VERSION <= VERSION_DEMO_US
     if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW)) {

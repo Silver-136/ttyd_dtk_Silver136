@@ -54,6 +54,8 @@ static USER_FUNC(wariai_enzan_1);
 #if VERSION > VERSION_DEMO_US
 EvtWord powerdownya_face_left[16];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord powerdownya_mario_level_rtn[639];
 EvtWord powerdownya_party_lank_rtn[963];
@@ -68,6 +70,7 @@ EvtWord powerdownya_party_lank_rtn[937];
 #endif
 EvtWord powerdownya_table_talk[84];
 #endif
+
 EvtWord powerdownya_direct_talk[8];
 EvtWord powerdownya_init[10];
 static NpcSetupInfo npcEnt[2];

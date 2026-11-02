@@ -50,6 +50,7 @@ void kpa_stg1_034_cb(s32 type, smartEntry* smart);
 
 EvtWord kpa_01_door_open[219];
 EvtWord kpa_01_door_close[237];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kpa_01_touzyo_evt[];
 extern EvtWord kpa_01_syuppatu_evt[];
@@ -57,6 +58,7 @@ extern EvtWord kpa_01_syuppatu_evt[];
 EvtWord kpa_01_touzyo_evt[217];
 EvtWord kpa_01_syuppatu_evt[1729];
 #endif
+
 EvtWord kpa_01_pos_check[23];
 EvtWord douzou_1_touch_evt[19];
 EvtWord douzou_2_touch_evt[19];

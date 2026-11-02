@@ -75,6 +75,7 @@ static BeroEntry e3_bero[2];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
 EvtWord evt_snd[234];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord moji_msg[];
 static EvtWord switch_evt[303];
@@ -96,15 +97,18 @@ EvtWord setting_moon_stone[43];
 static s32 itemsel_table01[2];
 EvtWord moon_stone_set_event[68];
 #endif
+
 static EvtWord ki_data_evt_01[20];
 EvtWord ki_data_evt_02[20];
 static TreeAccess ki_data[4];
 static NpcSetupInfo npcEnt[2];
+
 #if VERSION >= VERSION_US
 EvtWord hei_00_koopa_evt[272];
 #else
 EvtWord hei_00_koopa_evt[269];
 #endif
+
 static EvtWord epilogue_npc_entry[30];
 static EvtWord epilogue_evt[90];
 EvtWord hei_00_init_evt[297];

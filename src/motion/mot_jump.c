@@ -10,9 +10,11 @@
 #include "mot/mot_jump.h"
 #include "mot/mot_stay.h"
 #include "mot/mot_jabara.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "mario/mario.h"

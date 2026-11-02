@@ -50,10 +50,12 @@ void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front);
 void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front);
+
 #if VERSION <= VERSION_DEMO_US
 static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front);
 #endif
+
 void BattleAudienceCtrlProcessKinopioSingSub(s32 index);
 void BattleAudienceCtrlProcessKinopioFireSub(s32 index);
 

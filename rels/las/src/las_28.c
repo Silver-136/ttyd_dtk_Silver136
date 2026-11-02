@@ -54,21 +54,26 @@ EvtWord koopa_talk[8];
 static EvtWord baba_init[7];
 static EvtWord baba_talk[8];
 static NpcSetupInfo npcEnt[5];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord first_evt[168];
 #else
 static EvtWord first_evt[170];
 #endif
+
 EvtWord syuryo_thunder[419];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord syuryo_evt[];
 #else
 EvtWord syuryo_evt[1254];
 #endif
+
 EvtWord gareki_fall[45];
 EvtWord koopa_evt[1671];
 static EvtWord shuryolight_init[18];
 static EvtWord shan_init[46];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_28_init_evt[];
 #else

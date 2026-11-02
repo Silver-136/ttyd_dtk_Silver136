@@ -87,9 +87,11 @@ EvtWord* irai_start_event[30];
 EvtWord irai_end_event_null[2];
 EvtWord irai_end_event01[13];
 EvtWord irai_end_event04[8];
+
 #if VERSION >= VERSION_US
 EvtWord irai_end_event19[15];
 #endif
+
 EvtWord* irai_end_event[30];
 EvtWord gor_irai_init[18];
 EvtWord gor_irai_lecture[40];
@@ -913,6 +915,7 @@ static inline f32 iraiAddI(f32 a, s32 b) {
 void irai_window_disp(CameraId camera, void* param) {
     f32 negX;
 #endif
+
     IraiWork* wp = param;
     u32 left;
     u32 top;

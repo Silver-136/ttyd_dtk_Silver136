@@ -126,14 +126,17 @@ static const char* capturemap[4];
 static EvtWord evt_cloud_main_evt[4];
 f32 guide_move_data[15];
 EvtWord open_bigtree[446];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mario_see_you[];
 #else
 EvtWord mario_see_you[210];
 #endif
+
 EvtWord puni_set[59];
 static EvtWord sekai_yami_npc[59];
 EvtWord sekai_yami_puni[70];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord sekai_yami_evt[286];
 static EvtWord minnnanokoe_evt[614];
@@ -141,7 +144,9 @@ static EvtWord minnnanokoe_evt[614];
 static EvtWord sekai_yami_evt[322];
 static EvtWord minnnanokoe_evt[620];
 #endif
+
 static EvtWord evt_switch_init[17];
+
 #if VERSION >= VERSION_US
 EvtWord mri_00_init_evt[377];
 #else

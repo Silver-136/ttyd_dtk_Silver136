@@ -56,6 +56,7 @@ static SmartWork* wp = &smartWork;
 OSHeapHandle heapHandle[HEAP_COUNT];
 void* heapStart[HEAP_COUNT];
 void* heapEnd[HEAP_COUNT];
+
 #if VERSION >= VERSION_US
 // uninitialized .sbss is laid out in reverse definition order
 u32 mapalloc_size;
@@ -361,6 +362,7 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
 #if VERSION >= VERSION_US
 #pragma dont_inline on // US battleMapFree calls it
 #endif
+
 void (_mapFree)(MAPBASE_PARAM void* alloc) {
     MapAllocEntry* loopEntry;
     MapAllocEntry* nextEntry;
@@ -398,6 +400,7 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
     entry->size = newSize;
     entry->inuse = 0;
 }
+
 #if VERSION >= VERSION_US
 #pragma dont_inline reset
 #endif

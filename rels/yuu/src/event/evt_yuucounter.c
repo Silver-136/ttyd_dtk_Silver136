@@ -52,6 +52,7 @@ USER_FUNC(evt_yuucounter_main_func);
 USER_FUNC(yuucounter_disp_flag_onoff);
 
 static EvtWord main_evt[4];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord yuucounter_window_disp_evt[6];
 EvtWord yuucounter_window_null_evt[2];
@@ -192,6 +193,7 @@ static void evt_yuucounter_disp_func(CameraId camera, void* param) {
 #else
 void evt_yuucounter_disp_func(CameraId camera, void* param) {
 #endif
+
     YuuCounterWork* wp = param;
     GXColor color = white;
     GXColor numColor;

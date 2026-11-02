@@ -39,9 +39,11 @@ EvtWord subsetevt_dead[595];
 EvtWord subsetevt_dead[608];
 #endif
 #endif
+
 EvtWord subsetevt_dead_core[193];
 EvtWord subsetevt_dead_core_nospin_norotate[125];
 EvtWord btldefaultevt_avoid_guard[92];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord subsetevt_damage[];
 extern EvtWord subsetevt_counter_damage[];
@@ -55,23 +57,28 @@ EvtWord btldefaultevt_ChangePosition[186];
 EvtWord subsetevt_happy_heart[53];
 EvtWord subsetevt_happy_flower[53];
 #endif
+
 EvtWord subsetevt_terror[51];
 EvtWord subsetevt_blow_damage[69];
 EvtWord subsetevt_blow_dead[76];
 EvtWord subsetevt_shot_damage[31];
 EvtWord subsetevt_shot_damage_kaiten[288];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord subsetevt_shot_damage_ultra[];
 #else
 EvtWord subsetevt_shot_damage_ultra[429];
 #endif
+
 EvtWord subsetevt_swallow_failed_damage[55];
 EvtWord subsetevt_swallow_spew_damage[55];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord subsetevt_swallow_shot_damage[];
 #else
 EvtWord subsetevt_swallow_shot_damage[342];
 #endif
+
 EvtWord subset_ultra_hammer_acrobat_damage_event[63];
 EvtWord subsetevt_confuse_flustered[43];
 EvtWord subsetevt_binta_damage_left[48];
@@ -79,9 +86,11 @@ EvtWord subsetevt_binta_damage_right[48];
 EvtWord subsetevt_binta_damage_left_last[69];
 EvtWord subsetevt_binta_damage_right_last[69];
 EvtWord subsetevt_status_recovery[48];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord subsetevt_check_target_movable[57];
 #endif
+
 EvtWord subsetevt_nodamage_motion[6];
 EvtWord subsetevt_regeneration[4];
 EvtWord subset_attack_ready_jump_event[2];
@@ -866,6 +875,7 @@ EVT_BEGIN(subsetevt_nodamage_motion)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Swaps Mario and the partner (the front-and-back switch):
  * both arc to each other's home positions and the Koops shell shield follows Mario.
@@ -995,6 +1005,7 @@ EVT_BEGIN(subsetevt_regeneration)
     RETURN
 EVT_END()
 #endif
+
 /** Fright: the unit hops, runs off the edge of the stage and is removed from the battle (no coins or Star Points). */
 EVT_BEGIN(subsetevt_terror)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))

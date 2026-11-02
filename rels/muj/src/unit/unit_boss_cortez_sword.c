@@ -23,11 +23,13 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 BattleWeapon weapon_cortez_sword_float_attack;
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[4];
 #else
 static PoseTableEntry pose_table[6];
 #endif
+
 PoseTableEntry pose_table_otitabuki[4];
 static PoseTableEntry pose_table_break[4];
 static BattleDataEntry data_table[21];
@@ -37,11 +39,13 @@ static EvtWord damage_event[10];
 static EvtWord avoid_thorn_event[33];
 EvtWord cortez_weapon_get_home_height[144];
 EvtWord cortez_weapon_set_formation_attribute[27];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord cortez_weapon_unison_phase_event[];
 #else
 EvtWord cortez_weapon_unison_phase_event[79];
 #endif
+
 EvtWord cortez_weapon_phase_event[115];
 static EvtWord attack_event[862];
 static EvtWord wait_event[10];

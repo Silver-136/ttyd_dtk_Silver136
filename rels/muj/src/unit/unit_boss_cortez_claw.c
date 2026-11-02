@@ -26,11 +26,13 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 BattleWeapon weapon_cortez_claw_float_attack;
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[4];
 #else
 static PoseTableEntry pose_table[6];
 #endif
+
 static BattleDataEntry data_table[18];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[47];

@@ -115,20 +115,24 @@ EvtWord villagerK_talk[65];
 EvtWord village_chief_init[20];
 EvtWord village_chief_pig_init[27];
 s32 iri_15_item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord village_chief_talk[];
 #else
 EvtWord village_chief_talk[199];
 #endif
+
 EvtWord chief_mario_talk_init[183];
 EvtWord chief_mario_talk[55];
 static EvtWord vivian_init[44];
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord vivian_talk[27];
 #else
 static EvtWord vivian_talk[29];
 #endif
+
 EvtWord nise_mario_talk[8];
 EvtWord christine_talk[8];
 EvtWord nokotaro_talk[8];
@@ -145,15 +149,18 @@ EvtWord usu00_stage4_coming_event[839];
 EvtWord usu00_3witch_init[41];
 EvtWord usu00_3witch_event[275];
 EvtWord gra00_2witch_find_ranpel_event[197];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord usu00_vivian_cry_event[];
 #else
 EvtWord usu00_vivian_cry_event[58];
 #endif
+
 EvtWord usu00_vivian_joinup_event[608];
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
 EvtWord usu00_check_vivian[33];
+
 #if VERSION >= VERSION_US
 EvtWord usu00_crowAB_talk_event[338];
 EvtWord usu00_crowCDE_talk_event[346];
@@ -166,6 +173,7 @@ EvtWord usu00_crowAB_talk_event[299];
 EvtWord usu00_crowCDE_talk_event[307];
 #endif
 #endif
+
 EvtWord chief_pig_event[66];
 static KinopioData kino_dt;
 static const char* yado_npc[2];
@@ -226,14 +234,17 @@ static EvtWord sekai_yami_shake[11];
 static EvtWord sekai_yami_evt[260];
 static EvtWord minnnanokoe_npc_entry[94];
 static EvtWord minnnanokoe_evt[381];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_after_peach[149];
 #else
 static EvtWord evt_after_peach[151];
 #endif
+
 static EvtWord epilogue_npc_entry[48];
 static EvtWord epilogue_evt_sub[167];
 static EvtWord epilogue_evt[73];
+
 #if VERSION >= VERSION_US
 EvtWord usu_00_init_evt[660];
 #else

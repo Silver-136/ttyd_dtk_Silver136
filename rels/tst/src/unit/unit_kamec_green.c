@@ -95,11 +95,13 @@ static EvtWord trans_magic_event[7];
 static EvtWord recover_magic_event[142];
 static EvtWord all_recover_magic_event[180];
 static EvtWord bunsin_magic_event[160];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord spawn_event[62];
 #else
 static EvtWord spawn_event[66];
 #endif
+
 static EvtWord wait_event[55];
 
 /**

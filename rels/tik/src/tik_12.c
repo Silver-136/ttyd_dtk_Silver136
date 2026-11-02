@@ -38,17 +38,21 @@ static USER_FUNC(setmertn);
 s32 majinaisi_ryokin_kaisu_tbl[6];
 static BeroEntry bero_entry_data[2];
 EvtWord suisyou_kirakira[30];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord majinaisi_table_talk[];
 #else
 EvtWord majinaisi_table_talk[877];
 #endif
+
 s32 iri_14_item_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord majinaisi_direct_talk[];
 #else
 EvtWord majinaisi_direct_talk[108];
 #endif
+
 EvtWord majinaisi_init[10];
 static NpcSetupInfo npcEnt[2];
 EvtWord tik_12_init_evt[58];

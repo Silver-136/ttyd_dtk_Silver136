@@ -69,11 +69,13 @@ EvtWord screw_attack_event[295];
 EvtWord flying_chop_attack_event[326];
 EvtWord foot_stamp_attack_event[467];
 EvtWord healing_event[209];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord roof_shake_attack_event[];
 #else
 EvtWord roof_shake_attack_event[386];
 #endif
+
 static EvtWord wait_event[6];
 
 /**

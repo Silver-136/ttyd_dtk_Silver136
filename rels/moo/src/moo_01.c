@@ -23,6 +23,7 @@
 
 
 static BeroEntry bero_entry_data[3];
+
 #if VERSION < VERSION_US
 static EvtWord rock_main[79];
 static EvtWord rock_evt0[21];
@@ -31,6 +32,7 @@ static EvtWord rock_evt1[21];
 static EvtWord rock_evt0[15];
 static EvtWord rock_evt1[15];
 #endif
+
 EvtWord moo_01_init_evt[93];
 
 /** Exits of moo_01: west road w_bero to moo_00 (e_bero); east road e_bero to moo_05 (w_bero). */

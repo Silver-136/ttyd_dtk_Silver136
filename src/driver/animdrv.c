@@ -232,6 +232,7 @@ void* vivihimoData[4] = {
     _vivihimoData[2],
 };
 #endif
+
 const s32 g_moamoa_chain_num = 0x2F;
 MoaChain g_moamoa_chain_tbl[47] = {
     { "joint_00", "jointdai1_A01" },
@@ -286,6 +287,7 @@ MoaChain g_moamoa_chain_tbl[47] = {
 //.bss
 extern Mtx g_modeling_mtx_stack[32];
 extern AnimationWork work;
+
 #if VERSION <= VERSION_DEMO_US
 f32 tanfTbl[0xB2];
 #else
@@ -296,6 +298,7 @@ extern f32 tanfTbl[0xB2];
 #if VERSION > VERSION_DEMO_US
 s32 vivihimoTailGroupNo[4] ATTRIBUTE_ALIGN(32) = { 0, 2, -1, -1 };
 #endif
+
 /**
  * Vivian's hair (himo) swing data for each type:
  * entry 0 none, 1-3 the three blocks of _vivihimoData (two floats per animation),
@@ -309,11 +312,13 @@ void* vivihimoData[4] = {
     _vivihimoData[2],
 };
 #endif
+
 /** Points at the animation driver's work (files, textures, pose pool, scratch buffers). */
 #if VERSION <= VERSION_DEMO_US
 AnimationWork work;
 Mtx g_modeling_mtx_stack[32];
 #endif
+
 static AnimationWork* wp = &work;
 
 //.sbss
@@ -1083,6 +1088,7 @@ static inline void apmCopyTo(void* dst, void* src, s32 count, s32 size) {
         memcpy_as4(dst, src, count * size);
 }
 #endif
+
 /** the demo converts the s8 deltas with plain casts (no fast-cast setup) and walks the keyframes and deltas by index */
 void animPoseMain(s32 poseId) {
     s32 frame;

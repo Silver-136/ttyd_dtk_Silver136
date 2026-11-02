@@ -126,6 +126,8 @@ EvtWord zaiko_buy_evt[151];
 static EvtWord sell_evt[VERSION_PICK(135, 146)];
 EvtWord zaiko_buy_evt[VERSION_PICK(174, 185)];
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord buy_evt[41];
 extern EvtWord badgeshopper_talk_evt[];
@@ -133,24 +135,29 @@ extern EvtWord badgeshopper_talk_evt[];
 static EvtWord buy_evt[53];
 EvtWord badgeshopper_talk_evt[38];
 #endif
+
 EvtWord badgemaster_init[36];
 EvtWord badgemaster_talk[76];
 EvtWord kinoji_init[2];
 EvtWord kinoji_talk[76];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord nancy_init_check[585];
 #else
 EvtWord nancy_init_check[608];
 #endif
+
 EvtWord nancy_init[58];
 EvtWord nancy_door_anime[99];
 EvtWord nancy_regl[35];
 s32 item_tbl_nancy[2];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord nancy_talk[173];
 #else
 EvtWord nancy_talk[175];
 #endif
+
 static EvtWord marco_init[14];
 static EvtWord marco_talk[519];
 EvtWord master_init[12];
@@ -183,16 +190,20 @@ EvtWord chusan2_init[2];
 EvtWord chusan2_talk[76];
 static EvtWord bomhei_init[2];
 EvtWord bomhei_talk[76];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord bottakuru_init[];
 #else
 EvtWord bottakuru_init[25];
 #endif
+
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord bottakuru_talk[231];
 #else
 EvtWord bottakuru_talk[VERSION_PICK(292, 314)];
 #endif
+
 static EvtWord luigi_init[43];
 static EvtWord luigi_talk[4];
 static EvtWord luigi_npcEnt[46];
@@ -233,17 +244,21 @@ EvtWord evt_door_02_f2_junbityu[14];
 EvtWord evt_door_02_00_f2[12];
 EvtWord evt_wall_02_f2[41];
 const char* badgemise_npc[3];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord evt_badge_dummy[139];
 #else
 EvtWord evt_badge_dummy[VERSION_PICK(128, 139)];
 #endif
+
 UnitWinSell uwnobj_list[6];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_open_02_01_f2[];
 #else
 EvtWord evt_open_02_01_f2[22];
 #endif
+
 EvtWord evt_close_sub[6];
 EvtWord evt_close_02_01_f2[16];
 DoorParam door_data_02_f2;
@@ -292,11 +307,13 @@ EvtWord bar_door_anime[99];
 EvtWord christine_nakama_init[58];
 EvtWord christine_nakama[760];
 EvtWord maffia_turn[84];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord maffia_assault[];
 #else
 EvtWord maffia_assault[797];
 #endif
+
 EvtWord christine_nakama_after[82];
 EvtWord box_copy[19];
 EvtWord ultrahammer_check[222];
@@ -312,38 +329,50 @@ static EvtWord sekai_yami_npc[59];
 static EvtWord sekai_yami_evt[185];
 static EvtWord minnnanokoe_evt[397];
 EvtWord iri_09_init[10];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord iri_09_tentyo_talk[];
 #else
 EvtWord iri_09_tentyo_talk[172];
 #endif
+
 s32 iri_16_item_tbl[2];
 static EvtWord iri_16_init[34];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord iri_16_tyutyu_talk[443];
 #else
 EvtWord iri_16_tyutyu_talk[445];
 #endif
+
 EvtWord marco_jewel[22];
 static EvtWord epilogue_npc_entry[48];
 static EvtWord epilogue_evt_sub[160];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord epilogue_evt[312];
 #else
 static EvtWord epilogue_evt[313];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord dai_disp[52];
 #endif
+
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord gor_01_init_evt[542];
 #else
 EvtWord gor_01_init_evt[VERSION_PICK(546, 548)];
 #endif
+
+
 #if VERSION > VERSION_DEMO_US
 SimpleRecipe R_simple_recipe_table[26];
 CookRecipe R_cookbook_recipe_table[VERSION_PICK(289, 292)];
 #endif
+
 s32 R_mystery_cook_list[20];
 s32 special_cook_list[16];
 EvtWord cooking_evt_sub[284];
@@ -374,6 +403,7 @@ static USER_FUNC(nancy_block_init_func) {
 #else
 USER_FUNC(nancy_block_init_func) {
 #endif
+
     NpcEntry* npc = evtNpcNameToPtr(event, "\203i\203\223\203V\201[");
     f32 z;
 

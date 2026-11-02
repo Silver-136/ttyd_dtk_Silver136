@@ -45,6 +45,7 @@ void item_appear_force(BreakSlotReel* reel, s32 item);
 u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
 u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
 #endif
+
 /** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
 EVT_BEGIN(kinoko_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))

@@ -19,9 +19,11 @@
 
 #include "mario/mario_party.h"
 #include "mario/mario_sbr.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include <math.h>
 
 

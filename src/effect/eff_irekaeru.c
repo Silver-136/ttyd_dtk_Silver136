@@ -1,9 +1,11 @@
 // Swap effect (irekaeru: swap places): plays the language-specific EFF_Irekae animation at a point, fading in and out.
 
 #include "version.h"
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include "eff/eff_irekaeru.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"
@@ -12,6 +14,7 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+
 #if VERSION >= VERSION_US
 /**
  * Animation group of the partner-swap effect by language

@@ -29,11 +29,13 @@ BattleUnitKind unit_boss_bunbaba;
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[7];
 #else
 static PoseTableEntry pose_table[9];
 #endif
+
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[2];
 BattleWeapon weapon_bunbaba_fumituke_attack;

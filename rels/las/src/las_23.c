@@ -24,6 +24,7 @@ static EvtWord e2_door_open[22];
 static BeroEntry bero_entry_data[6];
 static BeroEntry w_bero_mapchg[1];
 static HitDamageReturn dmgRetPoint[6];
+
 #if VERSION >= VERSION_US
 EvtWord las_23_init_evt[98];
 #else

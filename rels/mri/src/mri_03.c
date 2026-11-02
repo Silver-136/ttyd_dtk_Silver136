@@ -77,45 +77,57 @@ EvtWord evt_opendoor00[19];
 static EvtWord evt_unlock00[6];
 EvtWord evt_unlock00_01[4];
 s32 key_table00[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_check00[];
 #else
 EvtWord evt_check00[23];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord blue_jail_open[60];
 #else
 EvtWord blue_jail_open[65];
 #endif
+
 EvtWord evt_opendoor01[19];
+
 #if VERSION >= VERSION_US
 static EvtWord evt_unlock01[9];
 #else
 static EvtWord evt_unlock01[8];
 #endif
+
 s32 key_table01[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_check01[];
 #else
 EvtWord evt_check01[90];
 #endif
+
 EvtWord bluejail_alpha[119];
 EvtWord bluejail_event[249];
 static EvtWord mario_kirimomi_event[50];
 EvtWord party_kirimomi_event[57];
 s32 JailAwayTable_New[15];
 EvtWord kinoko_small[35];
+
 #if VERSION >= VERSION_US
 EvtWord guide_sister[769];
 #else
 EvtWord guide_sister[775];
 #endif
+
 EvtWord elder_shaberi[13];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord toraware_elder[];
 #else
 EvtWord toraware_elder[423];
 #endif
+
 EvtWord guide_sister_before[128];
 static KusaAccess ueki_access_data[5];
 EvtWord mri_03_init_evt[206];

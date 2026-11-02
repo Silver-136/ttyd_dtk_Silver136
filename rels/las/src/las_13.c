@@ -33,6 +33,7 @@ EvtWord switch_check[114];
 static EvtWord switch1_evt[11];
 static EvtWord switch2_evt[15];
 static EvtWord hint_plate[14];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_13_init_evt[];
 #else

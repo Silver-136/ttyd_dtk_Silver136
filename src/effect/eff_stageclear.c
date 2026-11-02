@@ -104,14 +104,17 @@ static s32* texid_tbl[] = {tex_jp, tex_shadow_jp, tex_us, tex_shadow_us};
 /** Rainbow (niji) texture laid over the banner letters, Japanese then English. */
 static u32 niji_tbl[] = {0xAC, 0xB0};
 #endif
+
 /** Shake pattern handed to an ordinary letter's camera-shake event in LW 0; evt_shake does not read it. */
 #if VERSION > VERSION_DEMO_US
 s32 shake_dt[] = {2, 6, 2, 0, -1};
 #endif
+
 /** Stronger shake pattern handed to the last letter's shake event; also unread. */
 #if VERSION > VERSION_DEMO_US
 s32 shake_dt2[] = {12, 36, 12, 0, -1};
 #endif
+
 /** Size percentages per frame as a banner letter pops in: it overshoots to 120% and settles near 100%. */
 static u8 scale_dt[] = {0x00, 0x00, 0x16, 0x2E, 0x47, 0x5D, 0x6E, 0x78, 0x77, 0x6E, 0x66};
 

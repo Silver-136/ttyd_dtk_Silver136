@@ -61,11 +61,13 @@ EvtWord kami_offscreen_check[41];
 EvtWord evt_rsh_door_init[23];
 EvtWord evt_rsh_door_entry[46];
 EvtWord evt_rsh_door_open[];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_rsh_door_close[];
 #else
 EvtWord evt_rsh_door_close[404];
 #endif
+
 EvtWord evt_rsh_window[30];
 RshRndNpc rsh_01_rnd_npc_1[5];
 RshRndNpc rsh_01_rnd_npc_2[3];

@@ -65,14 +65,17 @@ EvtWord evt_sw0[72];
 EvtWord evt_sw1[72];
 EvtWord evt_sw2[72];
 s32 haguruma_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_haguruma[130];
 #else
 static EvtWord evt_haguruma[132];
 #endif
+
 EvtWord badge_evt[5];
 EvtWord badge_evt2[5];
 EvtWord badge_evt3[5];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_03_init_evt[];
 #else
@@ -1185,6 +1188,7 @@ static void icon_disp(CameraId camera, void* param) {
 #else
 void icon_disp(CameraId camera, void* param) {
 #endif
+
     EventEntry* event = param;
     Mtx trans;
     Mtx scale;

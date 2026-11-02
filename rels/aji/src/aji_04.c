@@ -43,11 +43,13 @@ static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
 EvtWord sekizou_kaiten[81];
 EvtWord sekizou_kaiten2[56];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord sekizou_talk[69];
 #else
 EvtWord sekizou_talk[2];
 #endif
+
 EvtWord evt_item[5];
 static EvtWord evt_down_snd[116];
 static EvtWord evt_up_snd_[12];
@@ -55,19 +57,26 @@ static EvtWord evt_up_snd__[76];
 EvtWord offscreen_to_kuizu[127];
 static EvtWord offscreen_to_normal[121];
 QuizEntry kuizu_data[7];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord UNK_0x00022a90[46];
 #endif
+
 EvtWord quiz_ok[19];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord quiz_ng[];
 #else
 EvtWord quiz_ng[21];
 #endif
+
+
 #if VERSION > VERSION_DEMO_US
 EvtWord UNK_0x00022be8[21];
 EvtWord UNK_0x00022c3c[66];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord kuizu_sekizou[980];
 #else
@@ -77,7 +86,9 @@ EvtWord kuizu_sekizou[874];
 EvtWord kuizu_sekizou[920];
 #endif
 #endif
+
 EvtWord sekizou_init[47];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_04_init_evt[];
 #else
@@ -230,6 +241,7 @@ EVT_BEGIN(sekizou_talk)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Pick-up event of the elevator key dropped after the quiz (ITEM_ELEVATOR_KEY_0x1C):
  * sets the story to STG7_14_ELEVATOR_KEY_B.

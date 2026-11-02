@@ -47,11 +47,13 @@ EvtWord yuka_slot[113];
 EvtWord yuka_shake[11];
 EvtWord yuka_shake2[68];
 static EvtWord yuka_check[133];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord yuka_event[];
 #else
 EvtWord yuka_event[421];
 #endif
+
 static EvtWord evt_f1_ueki_01[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_13_init_evt[205];

@@ -341,9 +341,11 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
 void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
+
 #if VERSION == VERSION_EU
 void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
+
 void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color);
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot);

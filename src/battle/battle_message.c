@@ -10,6 +10,7 @@
 #include "manager/fontmgr.h"
 #include <stdio.h>
 #include "evt/evt_msg.h"
+
 #if VERSION >= VERSION_US
 #include <string.h>
 #include "mario/mariost.h"

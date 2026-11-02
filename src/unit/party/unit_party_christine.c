@@ -56,16 +56,20 @@ BattleWeapon partyWeapon_ChristineKiss;
 EvtWord partyChristineAttack_NormalAttack[824];
 EvtWord christine_dictionary_event[26];
 EvtWord partyChristineAttack_Monosiri[397];
+
 #if VERSION >= VERSION_US
 EvtWord partyChristineAttack_RenzokuAttack[1078];
 #else
 EvtWord partyChristineAttack_RenzokuAttack[1071];
 #endif
+
+
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyChristineAttack_Kiss[442];
 #else
 EvtWord partyChristineAttack_Kiss[546];
 #endif
+
 EvtWord christine_appeal_event[71];
 static EvtWord party_win_reaction[14];
 static EvtWord attack_audience_event[392];
@@ -101,6 +105,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 #endif
+
 PoseTableEntry pose_table_christine_stay[] = {
     {POSE_TYPE_FREEZE, "PKR_D_5"},
     {POSE_TYPE_STOP, "PKR_D_5"},
@@ -137,6 +142,7 @@ PoseTableEntry pose_table_dictionary_page[] = {
     {BTL_POSE_STAY_DEFAULT, "ZYO_Z_1"},
 };
 #endif
+
 /**
  * Goombella's battle data events: Appeal (5), the reaction when an audience member is attacked (6), her move
  * menu builder (1), nothing on a First Strike (48), the victory cheer (64), an empty step run after a move's
@@ -258,6 +264,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Headbonk (btl_wn_pkr_normal), Goombella's free basic move, run by partyChristineAttack_NormalAttack:
  * a jump on one enemy that is not on the ceiling, a timed A press before each landing for a second bonk,
@@ -1693,6 +1700,7 @@ static USER_FUNC(_set_hustle) {
 #else
 USER_FUNC(_set_hustle) {
 #endif
+
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
     s32 id;

@@ -393,6 +393,7 @@ static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
 void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     WindowWork* p0;
 #endif
+
     ItemData* item;
     s8* cost;
     s32 j;

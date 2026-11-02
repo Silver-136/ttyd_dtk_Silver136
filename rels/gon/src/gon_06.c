@@ -43,12 +43,15 @@ static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord evt_ori_open[130];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tsuritenjo_event[];
 #else
 EvtWord tsuritenjo_event[143];
 #endif
+
 static s32 key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_majin[404];
 static EvtWord evt_majin2[243];
@@ -56,6 +59,7 @@ static EvtWord evt_majin2[243];
 static EvtWord evt_majin[409];
 static EvtWord evt_majin2[241];
 #endif
+
 EvtWord gon_06_init_evt[340];
 
 /**

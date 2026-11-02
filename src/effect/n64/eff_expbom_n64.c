@@ -153,6 +153,7 @@ static void effExpBomDisp(CameraId camId, void* param) {
 #else
 void effExpBomDisp(CameraId camId, void* param) {
 #endif
+
     f32* scl;
     f32* ry;
     effExpBomData* data;

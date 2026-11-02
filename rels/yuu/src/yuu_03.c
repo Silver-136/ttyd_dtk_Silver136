@@ -59,9 +59,11 @@ typedef struct RyushiWork {
 static void* yuunpc_wp;
 s32 ryuwp;
 RyushiWork* xwp;
+
 #if VERSION > VERSION_DEMO_US
 Monte* yuu_03_monte_p;
 #endif
+
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v);
 static f32 randf(f32 min, f32 max);
 USER_FUNC(evt_ryushi_init);
@@ -85,12 +87,14 @@ USER_FUNC(yuu_03_icon_monte_restart);
 #if VERSION > VERSION_DEMO_US
 EvtWord yuu_03_icon_monte_entry_evt[4];
 #endif
+
 EvtWord ryushi_event[25];
 EvtWord yuu_03_kaijo_init[12];
 EvtWord yuu_03_kaijo_init2[12];
 EvtWord minigame04_main[33];
 EvtWord minigame04_start_cam[40];
 EvtWord minigame04_start_cam_cancel[20];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame04_start[];
 extern EvtWord minigame04_end[];
@@ -98,6 +102,7 @@ extern EvtWord minigame04_end[];
 EvtWord minigame04_start[91];
 EvtWord minigame04_end[256];
 #endif
+
 EvtWord yuu_03_init_evt[VERSION_PICK(26, 140)];
 
 /** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
@@ -477,6 +482,7 @@ static USER_FUNC(evt_ryushi) {
 #else
 USER_FUNC(evt_ryushi) {
 #endif
+
     RyushiWork* hdr = xwp;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};

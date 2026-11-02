@@ -64,6 +64,7 @@ EvtWord tenkyugi_evt[311];
 EvtWord tenkyugi_evt2[134];
 EvtWord kagi_rotate[69];
 s32 kagi_tbl[9];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi1_evt[];
 extern EvtWord kagi2_evt[];
@@ -83,6 +84,7 @@ EvtWord kagi6_evt[80];
 EvtWord kagi7_evt[80];
 EvtWord kagi8_evt[80];
 #endif
+
 EvtWord daiza_up[201];
 EvtWord kagi_8_off[48];
 const char* daiza_name[25];
@@ -90,6 +92,7 @@ EvtWord kagi_8_on[365];
 EvtWord kagi_8_init[11];
 EvtWord kagi_8_syutugen[19];
 s32 daiza_key_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord daiza_evt[];
 extern EvtWord las_10_init_evt[];

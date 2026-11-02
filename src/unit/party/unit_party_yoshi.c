@@ -34,9 +34,11 @@
 #include "battle/battle_damage.h"
 
 typedef struct YoshiGundanPart YoshiGundanPart;
+
 #if VERSION > VERSION_DEMO_US
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 #endif
+
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
@@ -57,6 +59,7 @@ typedef struct YoshiGundanWork {
     s32 pad3004;
     f32 meanX; // sum of the parts' x, then the mean (/ 256)
 } YoshiGundanWork;
+
 #if VERSION <= VERSION_DEMO_US
 static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 #endif
@@ -112,11 +115,13 @@ EvtWord partyYoshiAttack_NormalAttack[1025];
 EvtWord partyYoshiAttack_Nomikomi[1000];
 EvtWord partyYoshiAttack_EggAttack[1266];
 EvtWord _egg_attack_event[195];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord partyYoshiAttack_CallGuard[];
 #else
 EvtWord partyYoshiAttack_CallGuard[553];
 #endif
+
 EvtWord yoshi_appeal_event[39];
 static EvtWord party_win_reaction[25];
 static EvtWord attack_audience_event[290];
@@ -132,6 +137,7 @@ u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 #endif
+
 PoseTableEntry pose_table_yoshi_stay[] = {
     {POSE_TYPE_FREEZE, "PYS_D_5"},
     {POSE_TYPE_STOP, "PYS_D_5"},
@@ -252,6 +258,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 #endif
+
 BattleUnitKindPart unitpartsdata_Party_Yoshi[] = {
     {1, "btl_un_yoshi", "c_babyyoshi", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_yoshi_stay},
     {2, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
@@ -372,6 +379,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #endif
+
 BattleWeapon partyWeapon_YoshiNormalAttack = {
     "btl_wn_pys_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -2532,6 +2540,7 @@ static USER_FUNC(_gundan_yoshi_run_effect) {
 #else
 USER_FUNC(_gundan_yoshi_run_effect) {
 #endif
+
     BattleUnit* unit;
     YoshiGundanWork* w;
     YoshiGundanPart* p;

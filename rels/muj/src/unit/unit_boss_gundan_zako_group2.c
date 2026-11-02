@@ -50,11 +50,13 @@ typedef struct ZakoGun {
     u8 field_0x58[0x64 - 0x58];
     Vec rot;
 } ZakoGun;
+
 #if VERSION >= VERSION_US
 #define ZAKOGUNWORK_PAD 0x54
 #else
 #define ZAKOGUNWORK_PAD 0x48
 #endif
+
 typedef struct ZakoGunWork {
     s32 flag;
     s32 targetId;

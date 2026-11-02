@@ -59,27 +59,35 @@ static const char* ie_npc[2];
 static EvtWord door_1_open[12];
 static EvtWord door_1_close[14];
 static DoorParam door_1;
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_prologue[644];
 #else
 static EvtWord evt_prologue[713];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord evt_prologue2[196];
 #else
 EvtWord evt_prologue2[193];
 #endif
+
+
 #if VERSION >= VERSION_US
 static EvtWord epilogue_evt[328];
 #else
 static EvtWord epilogue_evt[318];
 #endif
+
 static EvtWord epilogue_npc_entry[68];
+
 #if VERSION >= VERSION_US
 static EvtWord epilogue_evt2[500];
 #else
 static EvtWord epilogue_evt2[495];
 #endif
+
 static TreeAccess ki_data[2];
 static KusaAccess kusa_data[11];
 static BeroEntry bero_entry_data[2];

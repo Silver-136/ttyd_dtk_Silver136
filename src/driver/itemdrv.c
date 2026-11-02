@@ -150,12 +150,14 @@ static inline BOOL itemGetPouch(ItemEntry* entry) {
 static inline void itemGetEnd(ItemEntry* entry) {
     marioStSystemLevel(0);
     psndClearFlag(PSND_FLAG_MUTE_SFX);
+
 #if VERSION > VERSION_DEMO_US
     if (entry->flags2 & ITEM_FLAG2_CTRL_OFF) {
         entry->flags2 &= ~ITEM_FLAG2_CTRL_OFF;
         marioCtrlOn();
     }
 #endif
+
     marioKeyOn();
     marioChgStayMotion();
     camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
@@ -317,6 +319,7 @@ static BOOL itemGetNokoCheck(ItemEntry* entry) {
 #else
 BOOL itemGetNokoCheck(ItemEntry* entry) {
 #endif
+
     MarioWork* mario = marioGetPtr();
 
 #if VERSION <= VERSION_DEMO_US

@@ -36,6 +36,7 @@ static EvtWord evt_open[73];
 EvtWord evt_open_kagi[73];
 static EvtWord evt_unlock[11];
 EvtWord oumu_init[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord oumu_talk[];
 extern EvtWord oumu_juyo_talk[];
@@ -45,13 +46,16 @@ EvtWord oumu_talk[61];
 EvtWord oumu_juyo_talk[37];
 EvtWord oumu_check[176];
 #endif
+
 static NpcSetupInfo npcEnt[2];
 static s32 lock_tbl[2];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord lock_item_check[21];
 #else
 static EvtWord lock_item_check[23];
 #endif
+
 static EvtWord mobj_box01[34];
 static EvtWord mobj_box02[34];
 EvtWord jin_08_init_evt[138];

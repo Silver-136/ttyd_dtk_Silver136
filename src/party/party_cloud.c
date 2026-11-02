@@ -222,6 +222,7 @@ static void getHitBreatheout2(PartyEntry* party, f32 tilt);
 struct HitEntry* cloudGetHitBreathout(s32 which) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
 #endif
+
     struct HitEntry* hitBreathout;
 
     if (party == NULL) {

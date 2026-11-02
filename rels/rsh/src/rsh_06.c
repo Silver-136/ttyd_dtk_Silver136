@@ -243,6 +243,7 @@ static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord hom_10_init_evt[104];
 extern EvtWord evt_resha_init[];
@@ -250,6 +251,7 @@ extern EvtWord evt_resha_init[];
 static EvtWord hom_10_init_evt[140];
 EvtWord evt_resha_init[13];
 #endif
+
 static BeroEntry bero_data_a[2];
 static EvtWord evt_moamoa_init[187];
 EvtWord evt_great_moamoa[737];
@@ -257,11 +259,13 @@ const char* pose_name[8];
 EvtWord moamoa_debug[230];
 EvtWord rsh_06_init_evt[84];
 EvtWord rsh_06_a_init_evt[32];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_06_init_evt_nidome[];
 #else
 EvtWord rsh_06_init_evt_nidome[41];
 #endif
+
 EvtWord rsh_06_a_init_evt_nidome[11];
 
 /**

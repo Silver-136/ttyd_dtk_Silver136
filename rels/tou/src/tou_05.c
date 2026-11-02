@@ -43,10 +43,13 @@ void gans_msg_callback(s32 type, void** work);
 static EvtWord evt_dakuto[90];
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
+
 #if VERSION > VERSION_DEMO_US
 EvtWord n_bero_match_reset[14];
 #endif
+
 static BeroEntry bero_data[3];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_takurami[];
 extern EvtWord evt_hiki_close[];
@@ -56,6 +59,7 @@ EvtWord evt_takurami[352];
 EvtWord evt_hiki_close[86];
 EvtWord evt_hiki_open[193];
 #endif
+
 static EvtWord init_gans[29];
 static EvtWord talk_gans[182];
 static EvtWord init_kinoshikowa[18];
@@ -64,14 +68,17 @@ static NpcSetupInfo npcEnt[3];
 static EvtWord evt_kinoshikowa[222];
 static EvtWord evt_sensyu[430];
 EvtWord evt_sensyu2[208];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_1st_leagu[456];
 #else
 static EvtWord evt_1st_leagu[467];
 #endif
+
 EvtWord evt_nozoki_msg[33];
 EvtWord evt_nozoki[769];
 EvtWord evt_sensyu_reentry[293];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tou_05_init_evt[];
 #else

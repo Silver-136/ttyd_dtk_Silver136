@@ -94,14 +94,17 @@ s32 msgWindowOpen_SE_Data[] = {
 
 //.sbss
 MessageWork msgWork;
+
 #if VERSION <= VERSION_DEMO_US
 static smartEntry dummySmartList;
 #endif
+
 BOOL msgSEflag; //msgSEInit and related functions are unused
 void* msgSortDvdData;
 
 //.sdata
 MessageWork* msgw = &msgWork;
+
 #if VERSION <= VERSION_DEMO_US
 static char NoMessage[] = "";
 const char* ErrMessage[VERSION_PICK(2, 7)] = {
@@ -113,6 +116,7 @@ const char* ErrMessage[VERSION_PICK(2, 7)] = {
     R_no_messages_DE, R_no_messages_FR, R_no_messages_ES, R_no_messages_IT, R_no_messages_DU
 #endif
 #endif
+
 };
 const char* paperPoseTbl[6] = {
     "PM_Y_1B", "PM_Y_2B", "PM_F_1B",

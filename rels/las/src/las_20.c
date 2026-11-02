@@ -40,6 +40,7 @@ EvtWord hosi_06_sw_evt[15];
 EvtWord hosi_07_sw_evt[15];
 EvtWord hosi_08_sw_evt[15];
 EvtWord hosi_init[175];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord las_20_init_evt[];
 #else

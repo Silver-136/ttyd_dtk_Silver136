@@ -74,9 +74,11 @@ GlobalWork* gp = &marioSt;
 //.sbss
 OSTime none_key;
 s32 _mariostSystemLevel;
+
 #if VERSION >= VERSION_US
 BOOL R_bReset; // before DvdCheckTreadOn: .sbss is emitted in reverse
 #endif
+
 BOOL DvdCheckTreadOn;
 
 //.data

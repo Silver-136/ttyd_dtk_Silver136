@@ -74,6 +74,7 @@ static EvtWord teshita3_init[9];
 EvtWord kanbu_init[9];
 static EvtWord syuryo_init[24];
 static NpcSetupInfo npcEnt[9];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_10_init_evt[];
 #else

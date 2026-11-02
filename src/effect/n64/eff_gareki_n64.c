@@ -33,6 +33,7 @@ void effGarekiDisp(CameraId cameraId, EffectEntry* effect);
 #if VERSION <= VERSION_DEMO_US
 static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
 #endif
+
 /** Starting (x, y) offset of each of the eight rubble pieces from the chunk's centre. */
 static f32 trans_data[] = {-5.0f, -4.0f, -3.0f, -2.0f, 2.0f, -3.0f, 5.0f, -4.0f, -4.0f, 2.0f, -1.0f, 4.0f, 3.0f, 2.0f, 5.0f, 4.0f};
 

@@ -39,11 +39,13 @@ static EvtWord attack_event_pata[339];
 static EvtWord wait_event_pata[6];
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_ceil[18];
+
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_turn[15];
 #else
 static PoseTableEntry pose_table_turn[17];
 #endif
+
 static BattleDataEntry data_table[3];
 static BattleDataEntry data_table_ceil[14];
 static BattleWeapon weapon_met_attack;
@@ -55,17 +57,20 @@ static BattleUnitDefenseAttr defence_attr_turn;
 static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[12];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord init_event2[142];
 #else
 static EvtWord init_event2[148];
 #endif
+
 static EvtWord damage_event[10];
 static EvtWord dmg_turn_event[71];
 static EvtWord wakeup_event[85];
 static EvtWord attack_event[546];
 static EvtWord wait_event[6];
 static EvtWord damage_event_ceil[49];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord counter_damage_event_ceil[70];
 static EvtWord ceil_fall_ready_event[152];
@@ -75,6 +80,7 @@ static EvtWord counter_damage_event_ceil[76];
 static EvtWord ceil_fall_ready_event[158];
 static EvtWord attack_event_ceil[467];
 #endif
+
 static EvtWord wait_event_ceil[6];
 
 /** Unit data of the Parabuzzy: 5 HP, level 20; the battle starts it from init_event_pata. */

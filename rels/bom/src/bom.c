@@ -74,6 +74,7 @@ static USER_FUNC(bress) {
 #else
 USER_FUNC(bress) {
 #endif
+
     static f32 offset[8] = {0.0f, 10.0f, 24.0f, 10.0f, 15.0f, 20.0f, 20.0f, 10.0f};
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);

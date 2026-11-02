@@ -27,6 +27,7 @@
 #if VERSION >= VERSION_JP
 double cos(float);
 #endif
+
 HitEntry* hitEstimate(s32* out);
 
 // hitEstimate's *out: what the swing will hit; it picks the pose, the effect and the swing length.

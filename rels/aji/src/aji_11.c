@@ -41,14 +41,17 @@ EvtWord evt_gajigaji_anim[13];
 EvtWord evt_gajigaji_main[96];
 EvtWord evt_gajigaji[50];
 static s32 item_list[2];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord peach_evt_disksys[];
 #else
 EvtWord peach_evt_disksys[164];
 #endif
+
 EvtWord peach_evt_tana1[50];
 EvtWord peach_evt_tana2[31];
 static EvtWord peach_evt_stg5[105];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_11_init_evt[];
 #else

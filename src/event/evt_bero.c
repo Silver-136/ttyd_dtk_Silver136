@@ -41,11 +41,13 @@ s32 BeroCAM; // pipe camera handshake: bero_case_exec_pipe_sub pokes it and poll
 f32 BeroOX, BeroOY, BeroOZ; //offset position
 f32 BeroSX, BeroSY, BeroSZ; //start position
 f32 BeroEX, BeroEY, BeroEZ; //end position
+
 #if VERSION <= VERSION_DEMO_US
 extern Vec BeroPT, BeroAT;
 #else
 Vec BeroPT, BeroAT;
 #endif
+
 BOOL BeroMarioGO;
 
 /**
@@ -122,6 +124,7 @@ BeroEntry bero_null[] = {
     },
 };
 #endif
+
 /**
  * Sets where Mario respawns after falling into a bottomless pit; args are x, y, z as whole numbers.
  * Retail only (the demos lack it).
@@ -755,6 +758,7 @@ static USER_FUNC(bero_get_position_pipe_pure) {
 #else
 USER_FUNC(bero_get_position_pipe_pure) {
 #endif
+
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
     s32 a = evtGetFloat(event, args[1]);

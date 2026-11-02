@@ -22,6 +22,7 @@
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "eff/eff_kemu_test.h"
 #endif
@@ -109,6 +110,7 @@ USER_FUNC(tobikakaru_init);
 static void alpha_tev(MapTevCallbackInfo* info);
 
 static ExtTexInfo ext_entry_data[59];
+
 #if VERSION <= VERSION_DEMO_US
 static s16 suifu_animtbl[41];
 s16 suifu_animtbl_run[21];
@@ -122,6 +124,7 @@ static s16 elmos_animtbl[22];
 static s16 dai3_animtbl[42];
 s16 dai3_animtbl_run[22];
 #endif
+
 static EvtWord nannpc_mode_setup[98];
 static EvtWord back_dark[27];
 static EvtWord back_light[27];
@@ -149,6 +152,7 @@ static EvtWord mony_init[2];
 static EvtWord mony_talk[30];
 static EvtWord peton_init[2];
 static EvtWord peton_talk[30];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord koburon_init[];
 extern EvtWord koburon_regp[];
@@ -156,29 +160,36 @@ extern EvtWord koburon_regp[];
 EvtWord koburon_init[31];
 EvtWord koburon_regp[140];
 #endif
+
 EvtWord koburon_talk[87];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord koburon_dead[];
 #else
 EvtWord koburon_dead[139];
 #endif
+
 EvtWord koburon_evt[24];
 static EvtWord kiza_talk[8];
 static EvtWord kiza_entry[30];
 static NpcSetupInfo npcEnt[15];
 static BeroEntry bero_entry_data[4];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mujinto_hyochaku[];
 #else
 EvtWord mujinto_hyochaku[297];
 #endif
+
 s32 suifu_random_setup[380];
 EvtWord suifu_random_sub[123];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord tama_shoot[];
 #else
 EvtWord tama_shoot[69];
 #endif
+
 EvtWord npc_kyorokyoro[39];
 EvtWord dai3_shurai_sub[1112];
 EvtWord dai3_shurai[53];
@@ -216,11 +227,13 @@ f32 dai3_taisan_spline_dt01[9];
 EvtWord nameraka_rotate[48];
 EvtWord dai3_taisan_move_trace00[69];
 EvtWord dai3_taisan_move_trace01[69];
+
 #if VERSION == VERSION_DEMO_JP
 EvtWord dai3_beat_back[199];
 #else
 EvtWord dai3_beat_back[194];
 #endif
+
 s32 leave_island_suifupos[380];
 EvtWord move_ship_se00[20];
 EvtWord move_ship_se01[20];
@@ -234,14 +247,17 @@ EvtWord muj_gor_ship_sub[33];
 static EvtWord muj_gor_ship[53];
 static EvtWord ship_pera[115];
 EvtWord muj_gor_ship_start[245];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord into_muj_ship[];
 #else
 EvtWord into_muj_ship[173];
 #endif
+
 EvtWord mony_peton_boarding_sub[67];
 EvtWord mony_peton_boarding[115];
 static HitDamageReturn hitDmgRetPoints[8];
+
 #if VERSION >= VERSION_US
 EvtWord muj_00_init_evt[550];
 #else

@@ -11,6 +11,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_map.h"
 #include "pmario_sound.h"
+
 #if VERSION <= VERSION_DEMO_US
 #include "evt/evt_mobj.h"
 #endif
@@ -22,6 +23,7 @@ static EvtWord e_close[12];
 static EvtWord e_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord warning_event[38];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord muj_11_init_evt[];
 #else

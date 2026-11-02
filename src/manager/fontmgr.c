@@ -38,6 +38,7 @@ s32 charspace[VERSION_PICK(2, 7)] = {
     2, 2, 2, 2, 2
 #endif
 };
+
 #if VERSION >= VERSION_US
 const char* fontname[7] = {"papermarioset_JPN", "papermarioset_US", "papermarioset_EU", "papermarioset_EU",
     "papermarioset_EU", "papermarioset_EU", "papermarioset_US"};
@@ -373,6 +374,7 @@ void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
 // FAKE: auto_inline off keeps the wrappers from inlining FontDrawStringVecPitch (the US wrappers call it)
 #pragma auto_inline off
 #endif
+
 /**
  * Draws a single-line string from pos, fixed pitch or (pitch < 0) proportional;
  * the shared body of FontDrawString and FontDrawStringPitch in the US and PAL releases,
@@ -442,6 +444,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
         }
     }
 }
+
 #if VERSION >= VERSION_US
 #pragma auto_inline reset
 #endif

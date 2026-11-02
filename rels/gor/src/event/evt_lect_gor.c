@@ -123,20 +123,25 @@ EvtWord christine_party_lecture[125];
 EvtWord chuchulina_party_lecture_init[51];
 EvtWord chuchulina_party_lecture[236];
 #endif
+
 static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[482];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hammer_lv3_juyoitem_lecture_init[];
 #else
 EvtWord hammer_lv3_juyoitem_lecture_init[107];
 #endif
+
 EvtWord hammer_lv3_juyoitem_lecture_sub01[29];
 EvtWord hammer_lv3_juyoitem_lecture_sub02[65];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord hammer_lv3_juyoitem_lecture[];
 #else
 EvtWord hammer_lv3_juyoitem_lecture[718];
 #endif
+
 EvtWord all_juyoitem_lecture_rel[252];
 
 /**

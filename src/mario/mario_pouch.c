@@ -12,9 +12,11 @@
 #include "data/item_data.h"
 #include "memory.h"
 #include <string.h>
+
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
+
 #include "driver/swdrv.h"
 
 
@@ -35,6 +37,7 @@ s16 _party_max_hp_table[9][4] = {
 #else
 s16 _party_max_hp_table[8][4] = {
 #endif
+
     {0, 0, 0, 0},
     {10, 20, 30, 200},
     {10, 15, 25, 200},

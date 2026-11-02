@@ -18,11 +18,13 @@ static EvtWord kpa_act_stg2_mobj[209];
 EvtWord kpa_act_stg2_item[85];
 static EvtWord kpa_fall[41];
 EvtWord kairyu_evt[38];
+
 #if VERSION == VERSION_EU
 static EvtWord jumpstand_evt[62];
 #else
 static EvtWord jumpstand_evt[60];
 #endif
+
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_03_init_evt[44];
 

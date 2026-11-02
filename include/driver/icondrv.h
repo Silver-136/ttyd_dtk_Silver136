@@ -66,9 +66,11 @@ typedef enum IconFlags {
 } IconFlags;
 
 #include "version.h"
+
 #if VERSION <= VERSION_DEMO_US
 #define ICON_FLAG_NO_MAP_BLEND 0x80
 #endif
+
 typedef struct IconEntry {
     union {
         s16 flags;    // 0x0, IconFlags

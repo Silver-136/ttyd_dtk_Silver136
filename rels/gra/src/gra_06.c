@@ -33,19 +33,24 @@
 EvtWord ne_close[22];
 EvtWord ne_open[22];
 EvtWord gra_06_ido[12];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord gra_06_ido_in_sub[];
 #else
 EvtWord gra_06_ido_in_sub[77];
 #endif
+
 EvtWord gra_06_ido_in[7];
 static BeroEntry bero_entry_data[4];
 EvtWord gra_06_saku_open[];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord first_gra06jin[];
 #else
 EvtWord first_gra06jin[138];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord teresa_oidasare_evt[282];
 #else
@@ -55,6 +60,7 @@ EvtWord teresa_oidasare_evt[272];
 EvtWord teresa_oidasare_evt[274];
 #endif
 #endif
+
 EvtWord gra_06_init_evt[148];
 
 /**

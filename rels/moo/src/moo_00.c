@@ -43,11 +43,14 @@ static BeroEntry bero_entry_data[3];
 static f32 spline_dt[9];
 static EvtWord party_damage_pose[52];
 EvtWord party_damage_pose2[52];
+
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_first[517];
 #else
 static EvtWord evt_first[525];
 #endif
+
+
 #if VERSION >= VERSION_US
 EvtWord rock_main[105];
 static EvtWord rock_evt0[15];
@@ -57,6 +60,7 @@ static EvtWord rock_main[79];
 static EvtWord rock_evt0[21];
 static EvtWord rock_evt1[21];
 #endif
+
 EvtWord moo_00_init_evt[133];
 
 /** Exits of moo_00: west road w_bero to moo_07 (e_bero); east road e_bero to moo_01 (w_bero). */
@@ -332,6 +336,7 @@ EVT_BEGIN(rock_main)
 #else
 static EVT_BEGIN(rock_main)
 #endif
+
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mapobj_get_position, LW(10), LW(0), LW(1), LW(2))

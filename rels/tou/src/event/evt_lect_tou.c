@@ -110,11 +110,13 @@ static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord yoshi_party_lecture_init[43];
+
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord yoshi_party_lecture[];
 #else
 EvtWord yoshi_party_lecture[271];
 #endif
+
 static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[474];
 EvtWord hammer_lv2_juyoitem_lecture_init[104];

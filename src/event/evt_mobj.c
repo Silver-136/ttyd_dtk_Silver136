@@ -65,6 +65,7 @@ s32 mobj_lock(MapObjectEntry* mobj);
 #define MOBJ_EXTRA_OBJS 0
 #endif
 #endif
+
 #if MOBJ_EXTRA_OBJS
 static s32 mobj_breaking_rock(MapObjectEntry* mobj);
 static s32 mobj_trap_floor(MapObjectEntry* mobj);
@@ -125,6 +126,7 @@ extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u
                                 RETURN
                             EVT_END()
 #endif
+
 /** Event that runs fire_func with LW(0)-LW(3) to spawn a fire effect for Bowser's stage objects. */
 #if VERSION > VERSION_DEMO_US
 EVT_BEGIN(evt_fire)
@@ -142,6 +144,7 @@ EVT_END()
 extern EvtWord kpa_powerup_evt[];
 extern EvtWord evt_fire[];
 #endif
+
 /** Creates a bare map object. args: name, animation group. Waits (blocks) until the animation group has loaded. */
 USER_FUNC(evt_mobj_entry) {
     EvtWord* args = event->args;
@@ -743,6 +746,7 @@ static s32 mobj_timerswitch(MapObjectEntry* mobj) {
 #else
 s32 mobj_timerswitch(MapObjectEntry* mobj) {
 #endif
+
     MapObjectEntry* other = mobjNameToPtr(mobj->linkedName);
     switch (mobj->state) {
     case 0:
