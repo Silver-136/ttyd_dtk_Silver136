@@ -1071,10 +1071,9 @@ EVT_BEGIN(maffiaboss_ticket_check)
         CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
     END_IF
 
-    // BUG: this walk has Mario contact on in every version. It ends at once when Don Pianta is within one step
-    // of (-198, -80), but the relative walks of maffiaboss_airship_ticket and the truncated LW(10)/LW(12) can
-    // leave him further off. If his next step then enters Mario's contact circle from outside,
-    // npcCheckHitMarioSide undoes it every frame without moving Mario, whose controls are off: no return.
+    // Don Pianta is already here in normal play (maffiaboss_init places him at this spot, and the earlier walks return
+    // him to it), so this walk ends at once. Mario contact is on in every version: if he were ever further than a
+    // step away, a step entering Mario's contact circle from outside would be undone every frame, with no return.
     CALL(evt_npc_move_position, STRING("マフィアボス"), -198, -80, 0, FLOAT(60.0f), 0)
     WAIT_MS(500)
 
