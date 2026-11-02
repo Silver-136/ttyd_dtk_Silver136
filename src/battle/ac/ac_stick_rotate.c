@@ -404,7 +404,6 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
 }
 
 // no automatic inlining for _get_icon_id, actionCommandDisp, actionCommandDisp2, as in the original (the object differs without it)
-#pragma auto_inline off
 /** Icon of the stick tilted in direction 1-8 (see _GetInputDir), or centred for anything else. */
 u16 _get_icon_id(s8 dir) {
     switch (dir) {
@@ -521,7 +520,6 @@ void actionCommandDisp2(f32 x, f32 y) {
     }
 }
 
-#pragma auto_inline reset
 /** Called by btlevtcmd_StopAC: starts the slide-out and the 60-frame end wait. */
 void battleAcDelete_StickRotate(BattleWork* work) {
     work->actionCommands.acState = AC_STATE_RUN + 4;
