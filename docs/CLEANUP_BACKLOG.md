@@ -191,10 +191,11 @@ never copied in). What the raw counts above mean for the libraries:
 - A few column-0 statements remain inside guarded or macro text; guard indentation elsewhere was normalised by tool.
 
 ## 9. Codex round 20: order of work (decided 2026-11-01)
-Codex finishes part A only (room comments, battle-family samples, `src/` documentation, outstanding comment judgments),
-still pinned to 9ccd43c0d. After its handoff: apply A, merge our work, empty lines around version blocks in declaration
-lists, clean rebuild of all five versions, push. Then a NEW brief pinned to that commit for the parts below, dropping
-anything done meanwhile. These parts are not cancelled:
+Part A (comments against the code) is done and applied (2026-11-02: 3,898 comment edits in 587 files; its 3,891
+evidence-dependent defers stay open, not certified). Empty lines around file-scope version blocks and above comments that
+follow code are in. Open from the comment decision: comments sitting inside a version side that describe shared flow
+(about 600 starts) should move out; this goes with part B. The parts below go to Codex in a new brief pinned to the
+pushed commit (cleanup_notes, round 22):
 - B: integration shapes (includes cardmgr_demo.inc and CARD_FLAG_* duplicates)
 - C: the 476 `other` review notes
 - D: libs/ review
