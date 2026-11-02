@@ -1767,7 +1767,9 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             break;
         }
         if ((flags & DAMAGE_RESULT_FINAL_HIT) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
-            // BUG: irand(100) < 0 never holds, so this freeze-crush hit never happens
+            // BUG: irand(100) < 0 never holds, so this hit never happens, though many attacks carry SPECIAL_FREEZE_CRUSH.
+            // With a real chance, the last hit of such an attack would break the target's freeze and defeat it outright
+            // at any HP (DEATH | ZERO_HP); btldefaultevt_Damage plays the ice burst. Life Shroom revival still applies.
             code2 = DAMAGE_RESULT_FREEZE_CRUSH | DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT |
                     DAMAGE_CODE_NORMAL;
             _checkDamageCode_EmergencyRevival(target, &code2);

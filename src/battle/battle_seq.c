@@ -2302,7 +2302,9 @@ void btlseqAct(BattleWork* wp) {
                 !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
                 (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
-                // BUG: irand(100) < 0 never holds, so an electrified unit never runs btldefaultevt_BiribiriMove
+                // BUG: irand(100) < 0 never holds, so an electrified unit never runs btldefaultevt_BiribiriMove.
+                // With a real chance, the shock would replace the unit's action for the turn, like the status tests
+                // above. Feeling Fine blocks Electric along with the harmful statuses (BattleSetStatusDamage).
                 if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC) && irand(100) < 0) {
                     evt = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
                 } else if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && irand(100) < 50) {
