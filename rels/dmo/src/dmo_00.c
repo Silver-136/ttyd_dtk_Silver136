@@ -126,15 +126,15 @@ USER_FUNC(demo_init) {
         wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/demo.tpl", getMarioStDvdRoot());
 #if VERSION <= VERSION_DEMO_US
         if (seqGetPrevSeq() == SEQ_LOGO) {
-            gp->areaFadeOutType = FADE_IN_BLACK;
-            gp->areaFadeOutDuration = 500;
+            gp->areaFadeInType = FADE_IN_BLACK;
+            gp->areaFadeInDuration = 500;
         } else {
-            gp->areaFadeOutType = FADE_IN_WHITE;
-            gp->areaFadeOutDuration = 500;
+            gp->areaFadeInType = FADE_IN_WHITE;
+            gp->areaFadeInDuration = 500;
         }
 #else
-        gp->areaFadeOutType = FADE_IN_BLACK;
-        gp->areaFadeOutDuration = 500;
+        gp->areaFadeInType = FADE_IN_BLACK;
+        gp->areaFadeInDuration = 500;
 #endif
         return EVT_RETURN_DONE;
     }

@@ -356,14 +356,14 @@ void titleMain(SequenceWork* work) {
             if (fadeIsFinish()) {
                 fadeReset(1);
 #if VERSION <= VERSION_DEMO_US
-                gp->areaFadeInType = FADE_OUT_WHITE;
+                gp->areaFadeOutType = FADE_OUT_WHITE;
 #else
                 if (pouchGetHP() <= 0) {
                     pouchSetHP(1);
                 }
-                gp->areaFadeInType = FADE_OUT_BLACK;
+                gp->areaFadeOutType = FADE_OUT_BLACK;
 #endif
-                gp->areaFadeInDuration = 0;
+                gp->areaFadeOutDuration = 0;
                 seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
             }
             break;

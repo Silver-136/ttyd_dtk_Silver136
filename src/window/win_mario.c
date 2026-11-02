@@ -793,7 +793,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winFontSetR((Vec){numX, row2, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouch->starPieceCount);
     winFontSetR((Vec){numX, row3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouch->shineSpriteCount);
 
-    secs = gp->retraceLocalTime / OS_TIMER_CLOCK;
+    secs = gp->playTime / OS_TIMER_CLOCK;
     tsecs = (u64)secs / 3600;
     min = (u64)secs % 3600 / 60;
     if (tsecs > 99) {
@@ -863,7 +863,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
 #endif
     winFontSetR((Vec){numX, row3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStr(pouch->shineSpriteCount));
 
-    tsecs = OSTicksToSeconds(gp->retraceLocalTime);
+    tsecs = OSTicksToSeconds(gp->playTime);
     if (tsecs > 359999) {
         hour = 99;
         min = 59;

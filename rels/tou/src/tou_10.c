@@ -177,7 +177,7 @@ USER_FUNC(setYoshiColor) {
     for (i = 0; i < 8; i++) {
         ((u8*)&start)[i] = swByteGet(i + 508);
     }
-    minutes = (s32)OSTicksToSeconds(gp->retraceLocalTime - start) / 60;
+    minutes = (s32)OSTicksToSeconds(gp->playTime - start) / 60;
     // The elapsed whole-minute count repeats every 20 minutes across the seven color intervals.
     minutes %= 20;
     if (minutes <= 5) {

@@ -1933,7 +1933,7 @@ USER_FUNC(evt_sub_status_gauge_force_update) {
 USER_FUNC(evt_sub_save_playtime) {
     s32 base = event->args[0]; // a GSW(n) script value: base + EVTDAT_GSW_BASE is n
     u8 buf[8];
-    *(s64*)buf = gp->retraceLocalTime;
+    *(s64*)buf = gp->playTime;
     swByteSet(base + EVTDAT_GSW_BASE + 0, buf[0]);
     swByteSet(base + EVTDAT_GSW_BASE + 1, buf[1]);
     swByteSet(base + EVTDAT_GSW_BASE + 2, buf[2]);
@@ -1962,7 +1962,7 @@ USER_FUNC(evt_sub_load_progresstime) {
     buf[5] = swByteGet(base + EVTDAT_GSW_BASE + 5);
     buf[6] = swByteGet(base + EVTDAT_GSW_BASE + 6);
     buf[7] = swByteGet(base + EVTDAT_GSW_BASE + 7);
-    ms = OSTicksToMilliseconds(gp->retraceLocalTime - *(s64*)buf);
+    ms = OSTicksToMilliseconds(gp->playTime - *(s64*)buf);
     if (ms > 86400000) {
         ms = 86400000;
     }
@@ -2324,7 +2324,7 @@ USER_FUNC(evt_sub_check_intersect) {
         for (i = 0; i < 8; i++) {                                  \
             u.b[i] = swByteGet(base + i);                          \
         }                                                          \
-        if (OSTicksToSeconds(gp->retraceLocalTime - u.t) > 7200) { \
+        if (OSTicksToSeconds(gp->playTime - u.t) > 7200) { \
             ret = 1;                                               \
             if (arg) {                                             \
                 swSet(done);                                       \

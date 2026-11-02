@@ -310,8 +310,8 @@ void seq_gameOverMain(SequenceWork* work) {
             if (work->mapName == NULL) {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(FADE_OUT_IRIS, 1000, color);
-                gp->areaFadeInType = FADE_OUT_BLACK;
-                gp->areaFadeInDuration = 300;
+                gp->areaFadeOutType = FADE_OUT_BLACK;
+                gp->areaFadeOutDuration = 300;
             }
             mapPreLoad("sys_00");
             work->state++;
@@ -322,7 +322,7 @@ void seq_gameOverMain(SequenceWork* work) {
             }
             _relUnLoad();
             _unload(gp->currentMapName, NULL, NULL);
-            strcpy(gp->currentAreaName + 0x10, gp->currentMapName);
+            strcpy(gp->lastMapBeforeTitle, gp->currentMapName);
             statusWinForceOff();
             statusWinDispOff();
             camera = camGetPtr(CAMERA_3D);
