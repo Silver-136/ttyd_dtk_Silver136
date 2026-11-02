@@ -163,7 +163,7 @@ static BeroEntry bero_data[] = {
 
 /**
  * Cutscene when Mario unfolds the paper staircase (Riverside Station):
- * the camera moves to the stairs, the "dann" and "n_origami" map objects are hidden
+ * the camera moves to the stairs, the "dann" map object is shown and "n_origami" is hidden
  * and the anm_kaidan animation plays while step sounds (SFX_STG6_PERA_KAI_DOWN1/2) play,
  * and the story moves to STG6_30_ORIGAMI_STAIRS.
  */

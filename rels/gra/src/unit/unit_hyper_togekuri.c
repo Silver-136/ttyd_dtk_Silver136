@@ -332,6 +332,7 @@ static f32 SinTable[] = {
  * with a charge option (weapon_togekuri_charge) at the start unless it is already charged (STATUS_CHARGE).
  */
 static EVT_BEGIN(attack_event)
+
     // Already charged: it goes straight to the roll attack.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -558,8 +559,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Script helper: computes the facing direction (degrees) from point (args[0], args[1]) to (args[2], args[3])
- * and stores it in args[4]; if both points coincide args[4] is left as it was.
+ * Script helper: computes the direction (degrees) opposite the X/Y displacement from point (args[0], args[1])
+ * to (args[2], args[3]) and stores it in args[4]; if both points coincide args[4] is left as it was.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;

@@ -1,4 +1,4 @@
-// moo_02 (月, the Moon): the field with the way into the X-Naut Fortress (aji_00); paths to moo_05 and moo_06.
+// moo_02 (月, the Moon): the field with the way into the X-Naut Fortress (aji_19); paths to moo_05 and moo_06.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -54,7 +54,7 @@ EVT_END()
 
 /**
  * Bero-out script of the north exit (n_bero): takes control from Mario
- * and changes the map to aji_19 (the X-Naut Fortress), entering at w_bero; returns 1 in LW(0).
+ * and changes the map to aji_19 (the X-Naut Fortress), entering at w_bero.
  */
 EVT_BEGIN(n_bero_out)
     CALL(evt_mario_key_onoff, 0)
@@ -65,7 +65,8 @@ EVT_END()
 
 /**
  * Exits of moo_02: west road w_bero to moo_05 (e_bero); dokan_1 (scripted pipe); dokan_2 (scripted pipe);
- * north gate n_bero to aji_00 (w_bero); east road e_bero to moo_06 (w_bero).
+ * north gate n_bero has aji_00 (w_bero) as its table destination, but n_bero_out sends Mario to aji_19 (w_bero);
+ * east road e_bero to moo_06 (w_bero).
  */
 static BeroEntry bero_entry_data[] = {
     {
@@ -213,8 +214,9 @@ static EVT_BEGIN(dokan_evt)
 EVT_END()
 
 #if VERSION < VERSION_US
+
 /**
- * Rock-blasting script (JP only): the rock crumbles into an offscreen animation,
+ * Rock-blasting script (JP and demos): the rock crumbles into an offscreen animation,
  * then the model and collision of the rock in LW(10)/LW(11) are removed.
  */
 static EVT_BEGIN(rock_main)

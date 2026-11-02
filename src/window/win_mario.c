@@ -164,7 +164,6 @@ void winMarioExit(WindowWork* w) {
     animPoseRelease(w->mario.poseId);
 }
 
-// A macro, not an inline function: as a function the function-local static names renumber (code identical; needs config renames).
 #define COLOR_ANIM(var, base)            \
     if (strcmp(base, "S_1") == 0) {      \
         switch (marioGetColor()) {       \
@@ -201,7 +200,7 @@ void winMarioExit(WindowWork* w) {
  * The D-pad moves between the entries in linkDt (skipping gear and curses Mario lacks),
  * sets the help text and poses Mario to match (hammer swing, boots, ...);
  * A on the special moves entry opens the list of Star Powers with their descriptions.
- * Returns -1 on B, -2 on Start, else 0.
+ * Returns -1 on B from the main entries, -2 on Start, else 0.
  */
 s32 winMarioMain(WindowWork* w) {
     const char* anims[2];
@@ -319,8 +318,7 @@ s32 winMarioMain(WindowWork* w) {
 void winMarioMain2(void) {
 }
 
-/** US: plain ASCII digits */
-// US: plain ASCII digits
+/** US and PAL use ASCII digits; JP and the demos use full-width digits. */
 const char* winZenkakuStr(s32 n) {
 #if VERSION <= VERSION_DEMO_US
     const char* tbl[10] = {"０", "１", "２", "３", "４",
@@ -359,10 +357,10 @@ const char* winZenkakuStr(s32 n) {
     return tmp2;
 }
 
+/** Formats n zero-padded to digits places (the play time's hours and minutes); returns a shared static buffer. */
 #if VERSION >= VERSION_US
 char winZenkakuStrPad_buf[0x100];
 
-/** Formats n zero-padded to digits places (the play time's hours and minutes); returns a shared static buffer. */
 // Descriptive name (not in the symbol maps); placeholder unk_8016af5c, JP 0x8016AF5C. See docs/NAME_PROVENANCE.md.
 char* winZenkakuStrPad(s32 n, s32 digits) {
     char buf[0x100];
@@ -375,10 +373,8 @@ char* winZenkakuStrPad(s32 n, s32 digits) {
 char winZenkakuStrPad_tmp[0x100];
 #endif
 
-/** Formats n zero-padded to digits places (the play time's hours and minutes); returns a shared static buffer. */
 // Descriptive name (not in the symbol maps); placeholder unk_8016af5c, JP 0x8016AF5C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Formats n zero-padded to digits places (the play time's hours and minutes); returns a shared static buffer. */
 char* winZenkakuStrPad(s32 n, s32 digits) {
     const char* tbl[10] = {"０", "１", "２", "３", "４",
                            "５", "６", "７", "８", "９"};
@@ -470,9 +466,7 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
  * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,
  * the Star Power gauge, Star Points, coins, Star Pieces, Shine Sprites and play time (capped at 99:59),
  * Mario's model, and the special-move list when open.
- * US: every float live range has its own variable (register order); rowC is the second value of rowB
  */
-// US: every float live range has its own variable (register order); rowC is the second value of rowB
 void winMarioDisp(s32 camId, void* param, s32 idx) {
 #if VERSION >= VERSION_US
     f32 rowC;

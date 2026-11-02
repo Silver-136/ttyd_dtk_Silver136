@@ -87,7 +87,7 @@ static USER_FUNC(piders_yarn_init) {
 }
 
 /**
- * Unit kind of Arantula: 16 max HP, level 38. The battle engine reads it when the unit spawns:
+ * Unit kind of Arantula: 16 max HP, level 38 in the demos and 34 in retail. The battle engine reads it when the unit spawns:
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_churantalar = {
@@ -174,6 +174,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of Arantula (the demos), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -182,6 +183,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 80, 30, 100, 70, 100, 100, 30};
 #else
+
 /**
  * Status vulnerability of Arantula (the final versions), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -500,7 +502,7 @@ static BattleWeapon weapon_piders_renzoku_attack = {
 
 /**
  * Init script of the Arantula: installs the wait, unison-phase, attack, damage, confusion and entry handlers,
- * sets its work values (unit work 0 = 0, 1 = 255 yarn length, 2 = 0, 3 = 1),
+ * sets its work values (unit work 0 = 0, 1 = 255 yarn alpha, 2 = 0, 3 = 1),
  * initialises the shared yarn state (piders_yarn_init) and spawns yarn_event to draw its thread.
  */
 static EVT_BEGIN(init_event)
@@ -533,8 +535,8 @@ static EVT_BEGIN(dmg_first_attack_pos)
 EVT_END()
 
 /**
- * Background loop that draws the Arantula's silk thread every frame (piders_draw_yarn) with the length in unit
- * work 1; while it is below 255 the length shrinks by 2 per frame down to 2.
+ * Background loop that draws the Arantula's silk thread every frame (piders_draw_yarn) with the alpha in unit
+ * work 1; while it is below 255 the alpha drops by 2 per frame down to 2.
  * Ends when the unit no longer exists.
  */
 static EVT_BEGIN(yarn_event)
@@ -683,7 +685,7 @@ static EVT_BEGIN(blow_dead_event)
     RETURN
 EVT_END()
 
-/** Battle-end script: sets unit work 1 (the yarn length) to 254 so the thread starts to shorten. */
+/** Battle-end script: sets unit work 1 (the yarn alpha) to 254 so the thread starts to fade. */
 static EVT_BEGIN(battle_end_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_YARN_ALPHA, 254)
     RETURN

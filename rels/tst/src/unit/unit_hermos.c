@@ -57,6 +57,7 @@ static EvtWord wait_event[6];
  * and resets the new unit's HP gauge to match.
  */
 static USER_FUNC(bubble_copy_status) {
+
     // Copy capped current HP and size-change state, then synchronize the new HP gauge.
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
@@ -299,7 +300,7 @@ static BattleWeapon weapon_bubble_fire_attack = {
 };
 
 /**
- * Weapon data for the Ember's unused wall of flames: 2 damage, fire element, every target, may inflict burn
+ * Weapon data for the Ember's wall of flames: 2 damage, fire element, every target, may inflict burn
  * (75%).
  */
 static BattleWeapon weapon_bubble_all_fire_attack = {
@@ -472,7 +473,8 @@ EVT_END()
  * (weapon_bubble_attack) below 50, the fireball (weapon_bubble_fire_attack) below 80
  * and the fire wall on everyone (weapon_bubble_all_fire_attack) otherwise.
  */
-// After item use, choose normal, single-fire or all-fire with weights 50, 30 and 20.
+
+// If no item script is selected, choose normal, single-fire or all-fire with weights 50, 30 and 20.
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -510,6 +512,7 @@ EVT_END()
  * (A_1B) and hits it with the usual dodge and guard checks, then hops back home.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -530,7 +533,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared and protecting-unit movement is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -689,6 +692,7 @@ static USER_FUNC(eff_fire) {
  * (75% chance of a 3-turn burn), with a smoke puff at the target.
  */
 static EVT_BEGIN(fire_attack_event)
+
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -709,7 +713,7 @@ static EVT_BEGIN(fire_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared and protecting-unit movement is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -843,8 +847,10 @@ EVT_END()
  * 75% chance of a 3-turn burn): it hops to x = -40, shakes, lights a row of ten flames in front of itself
  * (all_fire_attackEvent_sub) and hits each target with the usual dodge and guard checks, then hops home.
  */
+
 // Only the hit branch advances to the next target; avoidance exits the entire sweep.
 static EVT_BEGIN(all_fire_attack_event)
+
     // Choose a target (this move reaches every opposing unit).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -865,7 +871,7 @@ static EVT_BEGIN(all_fire_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared on all targets; the camera pulls back and the guard window opens.
+    // The attack is declared on all targets; the camera pulls back and protecting-unit movement is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)

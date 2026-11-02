@@ -143,7 +143,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Idle event of the Flurrie stage actor: shows the unit's table pose for state 1. */
+/** Idle event of the Flurrie stage actor: shows the unit's table pose for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

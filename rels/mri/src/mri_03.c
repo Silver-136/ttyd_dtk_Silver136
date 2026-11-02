@@ -122,7 +122,7 @@ EvtWord mri_03_init_evt[206];
 
 /**
  * TEV callback for the prison's see-through wall:
- * adds a stage that multiplies the previous color by the alpha value kept in _ap,
+ * adds a stage that multiplies the previous alpha by the alpha value kept in _ap,
  * so the front wall can be faded out.
  */
 static void alpha_tev(MapTevCallbackInfo* info) {
@@ -169,8 +169,8 @@ EVT_BEGIN(jail_alpha_mario_check)
 EVT_END()
 
 /**
- * Prepares the prison's fade-out wall: marks the map objects, Mario,
- * the partner and the Puni NPCs so they are not blended,
+ * Prepares the prison's fade-out wall: exempts the S map group, Mario,
+ * the partner and the Puni NPCs from blending, but leaves the cell meshes affected,
  * then every frame moves the map blend alpha 5 steps per frame toward GW(2) (or GW(3) while GF(2) is set, for
  * scripted scenes).
  */
@@ -287,7 +287,7 @@ f32 spline_dt1[] = {
  * Cutscene when Mario opens the red cell: the Puni elder, swollen and grumbling, is freed;
  * Punio and the sister Puni run up; the screen fades while the party rests
  * and the elder walks off along a spline with Punio.
- * The Puni elder joins the Puni group and the story is set to STG2_14_PUNI_ELDER_FREED.
+ * Punio rejoins the Puni group and the story is set to STG2_14_PUNI_ELDER_FREED.
  */
 EVT_BEGIN(elder_rescue)
     // Mario opens the red cell; Punio and his sister run up to the swollen Elder inside.
@@ -411,10 +411,6 @@ EVT_BEGIN(elder_rescue)
 
     // The lecture ends; Punio finally gets to say they came to rescue everyone and the Elder asks to be let
     // out.
-    // The lecture ends; Punio finally gets to say they came to rescue everyone and the Elder asks to be let
-    // out.
-    // The lecture ends; Punio finally gets to say they came to rescue everyone and the Elder asks to be let
-    // out.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e14_07"), 0, STRING("プニ族長老"))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e14_08"), 0, STRING("ガイド"))
     CALL(evt_npc_get_position, STRING("プニ族長老"), LW(0), LW(1), LW(2))
@@ -442,10 +438,6 @@ EVT_BEGIN(elder_rescue)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     CALL(evt_npc_status_onoff, 1, STRING("プニ族長老"), NPC_STATUS_FACE_MOVE_DIR)
 
-    // The Elder walks out along a path, then Punio follows another; he promises his sister he will come back
-    // for her.
-    // The Elder walks out along a path, then Punio follows another; he promises his sister he will come back
-    // for her.
     // The Elder walks out along a path, then Punio follows another; he promises his sister he will come back
     // for her.
     CALL(evt_sub_spline_init, 0, 0, PTR(spline_dt), 8, 30, 0)
@@ -501,7 +493,7 @@ EVT_BEGIN(elder_rescue)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 
-    // The Elder joins the Puni group, the story advances and Mario regains control.
+    // Punio rejoins the Puni group, the story advances and Mario regains control.
     SET_VALUE(GSW_STORY_PROGRESS, STG2_14_PUNI_ELDER_FREED)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
@@ -547,7 +539,7 @@ EVT_END()
 /**
  * Regular (per-frame) script of the sister Puni:
  * returns at once during the dark-figure part (STG2_12_01_A_DARK_FIGURE)
- * and the Jabble part (STG2_18_JABBLE), otherwise just yields forever.
+ * and the Jabble part (STG2_18_JABBLE), otherwise faces the guide Puni every frame.
  */
 EVT_BEGIN(sister_regl)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_01_A_DARK_FIGURE)
@@ -663,9 +655,9 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * Custom door script for the door to mri_04: while the story is at the dark figure
- * (STG2_12_01_A_DARK_FIGURE) the door triggers are switched off for 3 seconds,
- * so Mario cannot leave during the entry scene. GF(0) is set while it runs. Returns 0 in LW(0).
+ * Custom entry script used by the dokan pipe: at STG2_12_01_A_DARK_FIGURE it disables exit mask 4
+ * for 3 seconds and mask 2 for the last second. GF(0) is set on entry and cleared after that delay
+ * only in this story case. Returns 0 in LW(0).
  */
 EVT_BEGIN(bero_custom_00)
     SET_VALUE(GF(0), 1)
@@ -771,7 +763,7 @@ EVT_END()
 
 /**
  * Opens the red cell door: sets GSWF_MRI03_RED_CELL_DOOR_OPEN,
- * swings the door open with a sound and turns on its collisions. Called when the door unlocks.
+ * swings the door open with a sound and turns off its collision groups. Called when the door unlocks.
  */
 EVT_BEGIN(red_jail_open)
     SET_VALUE(GSWF_MRI_03_RED_JAIL_OPENED, 1)
@@ -842,7 +834,7 @@ EVT_END()
 
 /**
  * Opens the blue cell door: sets GSWF_MRI03_BLUE_CELL_DOOR_OPEN, swings the door open with a sound,
- * enables its collisions and runs the scene with Punio's sister (guide_sister).
+ * disables its collision groups and runs the scene with Punio's sister (guide_sister).
  */
 EVT_BEGIN(blue_jail_open)
     SET_VALUE(GSWF_MRI_03_BLUE_JAIL_OPENED, 1)
@@ -905,7 +897,7 @@ s32 key_table01[] = {
 
 /**
  * Key check for the blue cell door: builds a menu of the Red Key and Blue Key and lets Mario pick;
- * a wrong key gives a message from Punio and his sister, the right one opens the cell.
+ * a wrong key gives a rejection message, sometimes followed by Punio and his sister; the right one opens the cell.
  */
 EVT_BEGIN(evt_check01)
     CALL(evt_win_item_maketable, PTR(key_table01), LW(10))
@@ -940,7 +932,7 @@ EVT_END()
 
 /**
  * Sets the prison's wall blend flags for the blue-cell scene:
- * the same setup as jail_alpha but only for the cells that are still locked.
+ * the same mesh and character flag setup as jail_alpha, with lock-object flags set only while each cell is locked.
  */
 EVT_BEGIN(bluejail_alpha)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -972,7 +964,7 @@ EVT_END()
 
 /**
  * Cutscene inside the blue cell (story STG2_18_JABBLE):
- * after the fade clears, a Puni in the cell gives Mario a Dried Shroom and talks with Punio's sister.
+ * after the fade clears, a Puni talks with Punio's sister, who brings out a Dried Shroom.
  * Sets the story to STG2_19_INSIDE_THE_BLUE_CELL and changes map with an iris wipe.
  */
 EVT_BEGIN(bluejail_event)
@@ -1095,9 +1087,9 @@ s32 JailAwayTable_New[] = {
 };
 
 /**
- * Puni mode used in the blue-cell scene: each Puni walks to the nearest point of JailAwayTable_New
- * and follows its path to the line, then stops;
- * in step 10 it is pushed away from the point (-160, 40), then faces left or right depending on the side.
+ * Puni mode used in the blue-cell scene: each Puni starts from the nearest of the first four points of
+ * JailAwayTable_New and follows its path to the line, then stops;
+ * in step 10 it is pushed away from (-160, 40) while within 70 units, then faces left or right depending on the side.
  */
 void puniModeEventparent(PuniData* puni) {
     s32* tbl = JailAwayTable_New;
@@ -1469,7 +1461,7 @@ EVT_BEGIN(guide_sister)
     RETURN
 EVT_END()
 
-/** Dialog loop for the imprisoned elder: prints the line "stg2_mri_e12_26_06" in LW(10) and repeats it forever. */
+/** Dialog loop for the imprisoned elder: prints "stg2_mri_e12_26_06" using the speaker in LW(10) and repeats it forever. */
 EVT_BEGIN(elder_shaberi)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_26_06"), 0, LW(10))
     LOOP(0)
@@ -1538,10 +1530,6 @@ EVT_BEGIN(toraware_elder)
     DELETE_EVENT(LW(9))
     WAIT_WHILE(GF(0))
 
-    // The Elder, calm in her cell, welcomes Punio; he asks why she is not afraid and she shrugs off the
-    // rescue.
-    // The Elder, calm in her cell, welcomes Punio; he asks why she is not afraid and she shrugs off the
-    // rescue.
     // The Elder, calm in her cell, welcomes Punio; he asks why she is not afraid and she shrugs off the
     // rescue.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_26_02"), 0, LW(10))

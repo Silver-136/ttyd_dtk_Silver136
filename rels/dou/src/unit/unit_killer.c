@@ -230,14 +230,15 @@ EVT_END()
  * The Bullet Bill's suicide charge.
  * It picks a target (the first-attack target on a pre-emptive strike),
  * charges up with SFX_ENM_KILLER_CHARGE1 and flies at it.
- * If the pre-damage check says the attack misses or is guarded,
- * it flies past the target with the avoid animation; on a hit it deals damage with a camera shake.
- * Either way it ends by exploding (smoke effect, then coin, exp and star points are paid out)
- * and KillUnit removes it.
+ * If the pre-damage check selects a miss branch,
+ * it flies past the target, with an avoid animation for some results; on a hit it deals damage with a camera shake.
+ * Only the hit path explodes (smoke effect, then coin, exp and star points are paid out);
+ * common hit/miss cleanup then calls KillUnit. Item-use and confused no-target returns bypass that cleanup.
  */
 // Common attack cleanup removes the projectile, including the no-target path.
 static EVT_BEGIN(attack_event)
-    // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
+
+    // Use the First Strike target; otherwise run a selected item action or pick a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -254,7 +255,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_killer_charge_attack), LW(3), LW(4))
     END_IF
 
-    // No valid target: a confused Bullet Bill is flustered, otherwise the turn is skipped.
+    // No valid target: a confused Bullet Bill is flustered, otherwise cleanup removes it.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -304,7 +305,7 @@ static EVT_BEGIN(attack_event)
     END_SWITCH
     LABEL(90)
 
-    // Miss: it flies at the target, which dodges, and shoots on past and off the stage.
+    // Miss: it flies at the target, which dodges for some results, and shoots on past and off the stage.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))

@@ -282,10 +282,11 @@ EVT_END()
  * She uses an item if the enemy item check says so;
  * otherwise she picks a target, jumps onto it (aiming a little off when the action command is not successful),
  * squashes flat on impact with a camera shake, then walks back home.
- * Missed or blocked hits trigger the target's avoid reaction.
+ * Pre-check results 3, 6 and 2 trigger the target's avoid reaction; other non-hit results do not.
  */
 // Body Slam uses the shared attack-level power callback, then restores position and facing.
 static EVT_BEGIN(attack_event_clauda)
+
     // She may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -348,7 +349,7 @@ static EVT_BEGIN(attack_event_clauda)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
 
-        // Impact: she lands flat (PWD_A1_2, PWD_D_3) and the camera shakes as the slam hits for its damage.
+        // Missed impact: she lands flat (PWD_A1_2, PWD_D_3), waits, then walks home without applying damage.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A1_2"))
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))

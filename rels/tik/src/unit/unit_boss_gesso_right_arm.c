@@ -112,7 +112,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of the R. Tentacle (percent chance to take each status):
+ * Status vulnerability of the R. Tentacle (multipliers for each status's base chance):
  * immune to sleep, stop, dizzy, poison, confusion, electric shock, freeze, growing huge, shrinking, attack up,
  * attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
  * invisibility and instant kill.
@@ -182,7 +182,7 @@ static BattleUnitKindPart parts[] = {
 
 /**
  * Init script of the Blooper's right tentacle.
- * Registers its damage, phase and attack scripts and starts it waiting.
+ * Registers its damage, wait and attack scripts and starts it waiting.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -332,7 +332,7 @@ BattleWeapon weapon_gesso_right_arm_rear_attack = {
 };
 
 /**
- * Attack script of the right tentacle: uses an enemy item if it has one;
+ * Attack script of the right tentacle: may use an enemy item;
  * otherwise picks the front or rear weapon
  * at random (they prefer front or back targets) and samples a target. The first time it targets Mario (unit kind
  * 0xDE, tracked in the Blooper's unit work 5) the Blooper asks whether Mario thinks it would taste good, with a
@@ -340,6 +340,7 @@ BattleWeapon weapon_gesso_right_arm_rear_attack = {
  * stage (_check_zenei_kouei) and damage-checks the targets.
  */
 static EVT_BEGIN(attack_event)
+
     // The tentacle may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -362,7 +363,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is announced and the guard timing is awaited.
+    // The attack is announced and bodyguard movement is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -423,7 +424,7 @@ static EVT_BEGIN(attack_event)
 #endif
     WAIT_FRAMES(LW(0))
 
-    // The swat lands unless the target dodges; then the damage is dealt.
+    // Check whether the swat hits; only a hit reaches damage handling.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 1)
         SWITCH(LW(5))
@@ -456,7 +457,7 @@ EVT_END()
 /**
  * Death script shared by the two tentacles.
  * Plays the arm's retreat sound and pose (GSO_F1_1),
- * clears the body's slot that pointed to this arm (the left arm waits 50 frames, the right 80) and
+ * clears the body's slot that pointed to this arm (the left arm waits 80 frames, the right 50) and
  * then runs the fall check; finally kills the arm unit.
  */
 EVT_BEGIN(gesso_arm_dead_event)

@@ -149,7 +149,7 @@ static EVT_BEGIN(rousoku_init)
 EVT_END()
 
 /**
- * Map init script for las_02: music and ambience, the doors to las_01 and las_03, the Shooting Star badge block,
+ * Map init script for las_02: music and ambience, the doors to las_01 and las_03, the Shooting Star ? block,
  * links the two Bombshell Bill Blasters if they exist, and lights the 18 torches.
  */
 EVT_BEGIN(las_02_init_evt)

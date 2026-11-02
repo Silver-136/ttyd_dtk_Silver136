@@ -197,9 +197,10 @@ static BeroEntry bero_data[] = {
 
 /**
  * Toilet stall scene (going in): control is taken, the stall doors' hit objects are disabled,
- * Mario and the partner walk to the stall door (200, 130),
- * the wooden door (door_2) swings open and shut behind them as they walk to (270, 130),
- * the doors are re-enabled and control returns. The pre-JP versions use slightly different coordinates.
+ * In JP and later, Mario walks to (200, 130) and the partner to (200, 110);
+ * the wooden door (door_2) swings open and shut behind them as Mario walks to (270, 130)
+ * and the partner to (265, 110). The doors are re-enabled and control returns.
+ * The pre-JP versions use slightly different coordinates.
  */
 static EVT_BEGIN(evt_toile)
     CALL(evt_cam_letter_box_disable, 1)
@@ -280,7 +281,7 @@ EVT_END()
 
 /**
  * Toilet stall scene (coming out): the wooden door (door_2) swings open and shut again while Mario
- * and the partner walk to (200, 130), then control returns.
+ * walks to (200, 130) and the partner to (200, 110), then control returns.
  */
 static EVT_BEGIN(evt_toile2)
     CALL(evt_cam_letter_box_disable, 1)

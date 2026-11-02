@@ -290,7 +290,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 };
 
 /**
- * Brings a Swoopula down from the ceiling when it is first hit or attacks:
+ * Brings a Swoopula down from the ceiling when it is hit, countered, the ceiling falls, or init starts it flying:
  * if its ceiling attribute is still set (attribute 2) it clears it, sets the flying attribute (4),
  * switches to the flying pose table and moves it 30 units down with new hit, cursor,
  * kiss and status icon offsets. Leaves its home position in LW(0) to LW(2).
@@ -368,7 +368,7 @@ EVT_END()
 
 /**
  * Damage event of the Swoopula while it hangs from the ceiling:
- * runs the default damage handling and then, unless the hit was a counter-type hit (512 without 2048)
+ * runs the default damage handling and then, unless the hit leaves it at zero HP without revival (512 without 2048)
  * or did no damage, makes it drop to its flying position (ceil_sky_event) and dive down.
  */
 static EVT_BEGIN(damage_event_ceil)
@@ -459,6 +459,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 1)
+
         // Take off and fly toward the target in a dive.
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
         WAIT_FRAMES(1)
@@ -537,7 +538,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LF(0), 1)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
 
-        // Deal the damage, reduced by the action command defence.
+        // Record the action command defence and run the zero-damage bite that triggers the counter.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_basabasa_attack))
         SET_VALUE(LW(9), PTR(&weapon_basabasa_drain_attack_biribiri_counterd))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))

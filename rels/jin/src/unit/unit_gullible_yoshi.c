@@ -278,10 +278,12 @@ EVT_END()
 /**
  * Attack script of the Doopliss-controlled Yoshi: a flutter-jump stomp.
  * After an item check he picks a target, runs in place, hops and flutter-jumps over it, spins,
- * and dives onto it. While the hit connects he bounces up and dives again for a random one to four total stomps.
+ * and dives onto it. While the hits connect he bounces up and dives again for one to five intermediate stomps
+ * followed by a separate final stomp (two to six stomps in all).
  * A miss or block makes him tumble back, and he then walks home.
  */
 static EVT_BEGIN(attack_event_yoshi)
+
     // He may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -317,6 +319,7 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     BEGIN_INLINE_EVENT_GET_ID(LW(13))
         LOOP(0)
+
             // He runs in place with a patter of steps, then hops.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), EVT_NULLPTR, 0, EVT_NULLPTR)
             WAIT_FRAMES(2)
@@ -454,7 +457,7 @@ static EVT_BEGIN(attack_event_yoshi)
         GOTO(95)
     END_IF
     IF_INT_LESS(LW(10), LW(11))
-        // Hit: the stomp lands; he bounces up and dives again until the last one deals the damage.
+        // Intermediate hit: the stomp deals damage, then he bounces up and dives again.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 0, LW(5))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -468,7 +471,7 @@ static EVT_BEGIN(attack_event_yoshi)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
 
-    // Miss: he tumbles back (the target dodges for some kinds of miss).
+    // After the final successful hit, he tumbles back.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

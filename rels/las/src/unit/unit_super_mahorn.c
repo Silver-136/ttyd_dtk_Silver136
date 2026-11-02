@@ -25,16 +25,14 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_BUNSIN 4       // 1 on a clone (spawned by the bunsin event), 0 on the real one; clones skip attack/wait and die when hit
+#define UNIT_WORK_BUNSIN 4       // 1 on a clone (spawned by the bunsin event), 0 on the real one; clones skip attacks and die when hit
 #define UNIT_WORK_KILL_BUNSIN 5  // damage_event: 1 if the real one was hit while clones exist; after the damage all clones are killed
-#define UNIT_WORK_FADING 6       // clone: 1 once bunsin_kill_event has faded it out, so it fades only once
+#define UNIT_WORK_FADING 6       // clone: 1 once bunsin_kill_event has started its fade-out, so it fades only once
 #define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry of the magic shot (effMahorn2Entry); eff_magic_get_posX reads its type-3 element's x
 
 double __fabs(double x);
-/**
- * Absolute value of a double, via the C library's __fabs (kept as an inline wrapper so the compiler does not
- * turn it into the fabs instruction).
- */
+
+/** Absolute value of a double via __fabs. */
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 
 static USER_FUNC(hand_ctrl);
@@ -618,10 +616,10 @@ static BattleUnitSetup entry_mahorn = {
 };
 
 /**
- * Attack event of the Dark Wizzerd: when confused it punches.
+ * Attack event of the Dark Wizzerd: on a first strike it punches.
  * Illusion copies (unit work 4 set) do nothing here.
- * Otherwise it can use an item; when it is the last Wizzerd alive it creates illusions (bunsin_event);
- * when illusions exist it picks one of its spells to buff them (Dekadeka or Katikati);
+ * Otherwise it can use an item; when it is the only enemy-side unit not knocked out it creates illusions (bunsin_event);
+ * when illusions exist it casts its single-target magic;
  * else it draws a weighted number among the punch, the magic ball at one target,
  * the lightning on all targets and its support spells (Dekadeka, Katikati, Trans, Yokeyoke, Recover).
  */
@@ -648,7 +646,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // When it is the only Dark Wizzerd left, it conjures its illusions (bunsin_event).
+    // When it is the only enemy-side unit not knocked out, it conjures its illusions (bunsin_event).
     CALL(mahorn_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(bunsin_event))
@@ -906,7 +904,7 @@ EVT_END()
 
 /**
  * Damage event of the Dark Wizzerd: when an illusion copy is hit it disappears (bunsin_kill_event)
- * and the real one is not hurt; when the real one is hit all the copies vanish with it
+ * and the real one is not hurt; when the real one is hit all the copies vanish
  * (mahorn_subset_bunsin_all_kill) and the default damage handling runs.
  */
 static EVT_BEGIN(damage_event)
@@ -1242,8 +1240,8 @@ EVT_END()
 /**
  * Common script of the Dark Wizzerd's magic attack on one target:
  * all four hands charge (attack_enemy_common_event_sub1),
- * a magic ball flies from it to the target and the target either dodges
- * or is hit with the action command defence check and the damage.
+ * a magic ball flies from it to the target and the spell either misses
+ * or hits with the action command defence check and the damage.
  */
 static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -1290,7 +1288,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // The ball misses or is blocked: the target dodges as it passes, and every caster's ball fizzles out.
+        // The ball misses or is blocked: results 3, 6 or 2 trigger avoidance, and every caster's ball fizzles out.
         LABEL(90)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(60)
@@ -1603,7 +1601,7 @@ static EVT_BEGIN(attack_magic_event)
 EVT_END()
 
 /**
- * Confused version of the Wizzerd's magic: it picks a target among all units (including allies)
+ * Confused version of the Wizzerd's magic: it samples targets using the current weapon's target flags
  * and runs attack_enemy_common_event.
  */
 static EVT_BEGIN(confuse_magic_event)
@@ -1887,7 +1885,7 @@ EVT_END()
 /**
  * Wait event of the Dark Wizzerd and its copies:
  * plays the idle pose from the table for the body and for each copy,
- * and changes the hand poses according to the statuses (asleep, stopped, frozen, shrunk or grown)
+ * and changes the hand poses according to the statuses (asleep, stopped or frozen)
  * before looping.
  */
 static EVT_BEGIN(wait_event)
@@ -1910,8 +1908,7 @@ static EVT_BEGIN(wait_event)
         END_IF
     END_IF
 
-    // If it is frozen, stopped or asleep, the hands droop and flap limply (MAH_S_4A and MAH_S_4B at random
-    // intervals).
+    // If it is frozen, stopped or asleep, the hands hold still (MAH_Z_2).
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(13))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(14))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_STOP, LW(15))
@@ -2070,8 +2067,8 @@ static USER_FUNC(eff_magic) {
 }
 
 /**
- * Script helper: copies HP, status counters (0x1E bytes starting at sleepTurns)
- * and the HP gauge display from the unit in args[0] to the unit in args[1],
+ * Script helper: copies HP and status counters (0x1E bytes starting at sleepTurns)
+ * from the unit in args[0] to the unit in args[1] and resets the destination's HP gauge,
  * so a clone of the Dark Wizzerd matches the original.
  */
 static USER_FUNC(mahorn_copy_status) {
@@ -2165,7 +2162,7 @@ static USER_FUNC(mahorn_get_bunsin) {
 /**
  * Script helper: sets where hand args[1] (part 2..5 of the Dark Wizzerd, one per hand) should float:
  * stores the offset (-x, y, z) in the hand's destination block,
- * scaled by 1.25 when the unit is shrunk or 0.75 when it is grown (STATUS_HUGE and STATUS_TINY).
+ * scaled by 1.25 when the unit is grown or 0.75 when it is shrunk (STATUS_HUGE and STATUS_TINY).
  */
 static USER_FUNC(set_hand_dest) {
     s32 hand;

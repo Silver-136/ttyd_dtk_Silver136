@@ -113,7 +113,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Rumble sequence after the Black Key is taken:
- * a chain of camera shakes (strength 0.0049, 1000 ms each) whose gaps shrink from 2000 ms to 600 ms.
+ * a chain of camera shakes (strength 0.0049) with 2000, 1600, 1200 and 600 ms gaps, ending in a continuous shake.
  */
 static EVT_BEGIN(shake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1000)
@@ -251,7 +251,7 @@ static EVT_BEGIN(item_evt)
         END_LOOP
     END_INLINE_EVENT
 
-    // Mario escaped (or the loop ended): control returns and the partner follows.
+    // Control returns while the escape monitor runs, and the partner follows.
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)

@@ -1147,7 +1147,6 @@ EVT_BEGIN(ele_1)
     CALL(evt_party_set_dir, 0, 270, 300)
 
     // A voice announces the elevator and the player picks a floor; backing out walks them out again.
-    // A voice announces the elevator and the player picks a floor; backing out walks them out again.
     CALL(evt_msg_print, 0, STRING("stg7_aji_66"), 0, 0)
     SWITCH(LW(5))
         CASE_EQUAL(0)

@@ -149,8 +149,8 @@ static BattleWeapon weapon_patapata_attack = {
 static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 
 /**
- * Defense of the KP Paratroopa against normal, fire, ice, explosion and electric attacks in its winged
- * form: none, so it takes full damage from every element.
+ * Damage-type reactions of the KP Paratroopa against normal, fire, ice, explosion and electric attacks
+ * in its winged form: no special reaction to any element.
  */
 static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 
@@ -254,7 +254,7 @@ EVT_END()
 /**
  * Fall reaction when the Paratroopa loses its wings:
  * it drops with SFX_ENM_FALL1 and becomes a Koopa Troopa, taking the walking data tables,
- * attack and walk/run sounds; after a hit of at most 1 HP of damage it lands on its feet,
+ * attack and walk/run sounds; when its HP-damage hit count is at most 1 it lands on its feet,
  * otherwise it is also flipped (dmg_turn_event).
  */
 static EVT_BEGIN(dmg_fall_event)
@@ -317,6 +317,7 @@ EVT_END()
  * a miss makes it fly past, a hit applies the damage, and it returns to its stance.
  */
 static EVT_BEGIN(attack_event_patapata)
+
     // Use the target of the opening first attack if there was one; otherwise use an enemy item, or choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -359,7 +360,7 @@ static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.5f))
 
-    // The Paratroopa flies up and around to a spot behind its target.
+    // The Paratroopa flies up and around to a spot in front of its target.
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -656,7 +657,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Flips the Koopa onto its back when it is hit while helpless:
+ * Flips the Koopa onto its back when a hit overturns it:
  * it switches to the upside-down defence and pose tables (NKT_D_1, then NKT_S_2),
  * sets the flipped status flag and a flipped-over counter of 2 turns, lowers its hit offset,
  * and bounces with SFX_ENM_INSIDE1.
@@ -790,6 +791,7 @@ EVT_END()
  * and it returns to its stance.
  */
 static EVT_BEGIN(attack_event)
+
     // If the Koopa is flipped over, it first rights itself with wakeup_event.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

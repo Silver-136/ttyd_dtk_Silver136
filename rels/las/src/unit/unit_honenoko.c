@@ -243,7 +243,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Init event of the Dull Bones: installs its wait, attack, damage and confusion events,
- * sets the thrown-bone part poses (KRN_H_1) and the landing sound,
+ * sets the landing sound,
  * and clears unit work 1 (the flag that the death reward was already given).
  */
 static EVT_BEGIN(init_event)
@@ -328,7 +328,7 @@ EVT_END()
  * Event when the Dull Bones runs out of HP but can rebuild itself:
  * it moves to its home position, awards the reward once,
  * collapses into a pile of bones (KRN_D_2, crumble sound),
- * stays there for a second and sets unit work 2 to 2 or 3,
+ * stays there for a second and sets unit work 2 to 2, 3 or 4,
  * the number of turns until rebirth_event brings it back.
  */
 static EVT_BEGIN(fake_dead_event)
@@ -395,7 +395,7 @@ static EVT_BEGIN(rebirth_event)
 EVT_END()
 
 /**
- * Attack event of the Dull Bones: when confused it throws a plain bone;
+ * Attack event of the Dull Bones: on a first strike it throws a plain bone;
  * when collapsed it rebuilds itself (rebirth_event);
  * otherwise it can use an item, or draws a random number weighted 85 for the bone throw
  * and 15 for calling a Dull Bones friend, which needs room beside it (btlevtcmd_CheckSpace).
@@ -494,6 +494,7 @@ EVT_END()
  * and the bone then bounces off.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // The Dull Bones chooses who to throw a bone at (fixed by the field encounter when the battle opened with
     // its own first strike).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -506,6 +507,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_honenoko_attack), LW(3), LW(4))
     END_IF
     IF_INT_EQUAL(LW(3), -1)
+
         // With no target left, a confused Dull Bones is flustered and does nothing else.
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -570,7 +572,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The bone misses: the target dodges as it flies past, and it lands on the stage floor beyond.
+    // The bone misses: the target may dodge as it flies past, and it lands on the stage floor beyond.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -624,7 +626,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
 
-    // The bone stops spinning and the part is switched back on.
+    // The bone stops spinning and the part is hidden again.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
@@ -640,6 +642,7 @@ static EVT_BEGIN(normal_attack_event)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
+
     // The camera zooms in on the Dull Bones as it starts calling for help.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

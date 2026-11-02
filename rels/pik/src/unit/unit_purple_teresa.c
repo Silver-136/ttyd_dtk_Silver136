@@ -441,7 +441,8 @@ EVT_END()
 
 /**
  * Attack event of the Dark Boo.
- * Uses an enemy item if it has one, otherwise rolls among four options:
+ * Outside a first strike, runs a selected enemy-item script if one is returned,
+ * otherwise rolls among four options:
  * turning itself invisible (25, only if it is not already invisible, STATUS_INVISIBLE),
  * turning another Boo invisible (25, if teresa_check_trans finds one; not while it is confused, STATUS_CONFUSE),
  * the group move (15, if teresa_check_move allows it; not while confused) and the plain attack (the rest, 50).
@@ -517,6 +518,7 @@ EVT_END()
  * and applies the damage with the action command defence check. It then turns around and floats back home.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -613,7 +615,8 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // The target dodged: the Dark Boo pauses, then slumps in its missed pose.
+
+        // Miss or dodge: the Dark Boo pauses, then slumps in its missed pose.
         LABEL(90)
         WAIT_FRAMES(30)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("X_1"))
@@ -645,7 +648,7 @@ EVT_END()
 /**
  * The Dark Boo's move that turns itself invisible.
  * It dips and shows pose A_1, fades its alpha down (unless it was already invisible, STATUS_INVISIBLE),
- * turns around in two 90 degree steps (15 degrees x 6 frames each) with pose S_1,
+ * turns around in two 90 degree steps (15 degrees x 6 frames each), switching to pose S_1 between them,
  * and applies weapon_teresa_trans_myself to itself (invisibleChance 100, invisibleTime 2), which makes it
  * invisible for two turns.
  */
@@ -782,7 +785,7 @@ EVT_END()
 /**
  * The Dark Boo's group move: for every Boo that has not moved yet (unit work 0 = 0) it starts move_event_sub,
  * adding 20 frames to the wait each time, then waits 80 frames plus that before returning to the S_1 pose.
- * The EU release also counts the Boos and guarantees a minimum wait of 145 frames,
+ * The EU release also counts the Boos and contains a 145-frame minimum-wait check,
  * but its count is cleared on every pass and never reaches 2.
  */
 static EVT_BEGIN(move_event)
@@ -833,7 +836,7 @@ EVT_END()
 
 /**
  * Per-Boo part of move_event, for the unit in LW(3):
- * after a random 60 to 79 frame delay it sets that unit's work 0 to 1,
+ * after a random 60 to 80 frame delay it sets that unit's work 0 to 1,
  * spins it at 12 degrees per frame for 60 frames and dives it to height 40, which becomes its home position.
  * The casting Dark Boo itself has no delay and does not spin, and plays T_1 half a second in.
  */
@@ -871,7 +874,7 @@ static EVT_BEGIN(move_event_sub)
     RETURN
 EVT_END()
 
-/** Idle event: shows the unit's table pose for state 1. */
+/** Idle event: shows the unit's table pose for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

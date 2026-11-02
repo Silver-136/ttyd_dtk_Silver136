@@ -249,9 +249,10 @@ EVT_END()
  * It can use an item; otherwise it draws a number and picks one of the weighted launches:
  * from the front barrel (friend_event), or from the upper barrel (friend_event_sky) after raising it;
  * LW(12) = 1 selects the charged shot with extra charging flashes.
- * If no free space is found on either side nothing is launched.
+ * If none of the tested positions is free, nothing is launched.
  */
 static EVT_BEGIN(attack_event)
+
     // If the AI wants to use a held item, the Blaster does that instead and ends its turn.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

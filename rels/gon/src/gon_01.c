@@ -347,7 +347,7 @@ EVT_END()
 
 /**
  * Cutscene played the first time Mario enters the castle courtyard:
- * castle music and a slow camera pan, the chapter title card,
+ * castle music and a slow camera pan, the area name banner,
  * then Mario and the partner walk up to the gate
  * and the partner remarks on the castle (stg1_gon_00 and stg1_gon_01).
  * If Mario had no partner, Goombella joins him.

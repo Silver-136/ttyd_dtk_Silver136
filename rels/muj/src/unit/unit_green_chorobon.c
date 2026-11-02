@@ -733,7 +733,7 @@ static EVT_BEGIN(drain_attack_event)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
 
-        // It hops home in two bounces.
+        // It hops in place in two bounces.
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK3"), 0, 0, -1, -1, 0, 0)
         LOOP(2)
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)

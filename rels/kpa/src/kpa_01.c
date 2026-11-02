@@ -37,6 +37,11 @@
 #include "kpa.h"
 
 USER_FUNC(get_togenoko_pos);
+
+/**
+ * Script helper: args[0] = number, returns "hi_<number>" in args[1],
+ * the name of a wall fire object (shan_init walks 1..12).
+ */
 static USER_FUNC(make_name);
 void kpa_stg1_008_cb(s32 type, smartEntry* smart);
 void kpa_stg1_014_2_cb(s32 type, smartEntry* smart);
@@ -74,7 +79,7 @@ EvtWord kpa_01_init_evt[];
 
 /**
  * Throne-room door opens: the two Spiny guards walk to their posts and swing the double door open,
- * the door objects rotating 180 degrees over 2 s with a sound at the door. Used by the arrival cutscene.
+ * each door leaf rotating about 100 degrees over 2 s with a sound at the door. Used by the arrival cutscene.
  */
 EVT_BEGIN(kpa_01_door_open)
     BEGIN_INLINE_EVENT
@@ -189,6 +194,7 @@ EVT_BEGIN(kpa_01_door_close)
         CALL(evt_mapobj_rotate, 0, STRING("door_2"), 0, 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+
         // The first Spiny guard walks back to its post beside the door.
         CALL(evt_npc_set_anim, STRING("トゲノコＡ"), STRING("W_3"))
         LOOP(0)
@@ -207,6 +213,7 @@ EVT_BEGIN(kpa_01_door_close)
         CALL(evt_npc_set_stop_anim, STRING("トゲノコＡ"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+
         // The second guard does the same on the other side.
         CALL(evt_npc_set_anim, STRING("トゲノコＢ"), STRING("W_3"))
         LOOP(0)
@@ -312,6 +319,7 @@ EVT_END()
  * Plays when Bowser reaches x = 625 or re-enters from the other side.
  */
 EVT_BEGIN(kpa_01_syuppatu_evt)
+
     // The big castle door swings open and Bowser is startled by the person on the other side.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("door"), LW(0), LW(1), LW(2))
@@ -521,7 +529,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_043"), 0, STRING("ババ"))
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
 
-    // Bowser storms off; the Spiny guards break through the wall as he leaves in his airship.
+    // Bowser storms off and breaks through the wall in his airship while the Spiny guards react.
     CALL(evt_msg_print, 0, STRING("kpa_stg1_044"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, 430, 180, 517, 430, 90, 0, 1500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -1198,10 +1206,6 @@ EVT_END()
 #else
 EVT_END_PAD()
 
-/**
- * Script helper: args[0] = number, returns "hi_<number>" in args[1],
- * the name of a wall fire object (shan_init walks 1..12).
- */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
     static char name[8];
@@ -1212,10 +1216,6 @@ static USER_FUNC(make_name) {
 }
 #endif
 
-/**
- * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF(1),
- * which lets the Hammer Bro turn toward Bowser.
- */
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
@@ -1226,6 +1226,7 @@ static USER_FUNC(make_name) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF(1),
  * which lets the Hammer Bro turn toward Bowser.
@@ -1272,7 +1273,7 @@ void kpa_stg1_036_cb(s32 type, smartEntry* smart) {
 }
 
 /**
- * Message callback for kpa_stg1_034: sets LSWF(1) once the text reaches entry 117,
+ * Message callback for kpa_stg1_034: sets LSWF(1) once the text entry index exceeds 117,
  * the cue for Kammy's next animation.
  */
 void kpa_stg1_034_cb(s32 type, smartEntry* smart) {
@@ -1314,6 +1315,7 @@ USER_FUNC(get_togenoko_pos) {
 }
 
 #if VERSION == VERSION_EU
+
 /** PAL only: called at the start of kpa_03's jumpstand_evt. */
 USER_FUNC(kpa_cancel_attack_mode) {
     kpaCancelAttackMode();

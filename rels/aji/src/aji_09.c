@@ -833,7 +833,7 @@ EVT_BEGIN(aji_09_init_evt)
     ELSE
         SET_VALUE(GF(0), 0)
 
-        // Otherwise the two changing booths get their curtain scripts and the lockers are set up.
+        // Otherwise the two changing booths get their curtain scripts; the lockers are set up in either case below.
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_omo"), 0, PTR(evt_kou1), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou1_ka_ura"), 0, PTR(evt_kou1), 0)
         SET_VALUE(GF(1), 0)

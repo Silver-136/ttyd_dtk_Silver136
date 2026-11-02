@@ -146,8 +146,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event data table of the Goomba Bros.: no custom reactions, so the standard battle handlers run for every
- * event.
+ * Event data table of the Goomba Bros.: a dummy First Strike position handler and no other custom entries.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
@@ -314,6 +313,7 @@ EVT_END()
  * It then walks home.
  */
 static EVT_BEGIN(attack_event)
+
     // In a first strike it waits, then uses the target of that strike; otherwise it chooses a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -358,7 +358,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
 
-    // It walks around behind its target, then turns back to face it and pauses.
+    // It moves to a spot in front of its target, then turns to face it and pauses.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))

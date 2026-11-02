@@ -297,6 +297,7 @@ static f32 SinTable[] = {
  * and it hops back to its place.
  */
 static EVT_BEGIN(attack_event)
+
     // The Spiky Goomba may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -394,7 +395,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: it lands past the target, recovers from its curl and hops away.
+    // The attack missed: it lands past the target, recovers from its curl and hops away.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KURI_LANDING_MISS1"), EVT_NULLPTR, 0, EVT_NULLPTR)

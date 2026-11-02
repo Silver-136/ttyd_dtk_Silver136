@@ -235,7 +235,7 @@ BattleWeapon weapon_gold_chorobon_attack = {
 
 /**
  * Sound timing of the Gold Fuzzy:
- * the sound effect played at set points of its idle, walk and run animations.
+ * the sound effect played at set points of its idle animation.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"CBN_S_1", 0.5833333f, NULL, "SFX_BOSS_G_CHORO_MOVE1", 0, 1},
@@ -247,7 +247,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 /**
  * Hop-walk used by the Gold Fuzzy's attack: squashes,
  * then jumps in steps of LW(8) units toward x=LW(5) (height LW(6), depth LW(7)), squashing between hops,
- * and finishes with the attack jump onto the target with its attack sound.
+ * and finishes with a jump to the requested position with its attack sound.
  */
 EVT_BEGIN(gold_chorobon_rabbit_move)
     LOOP(2)
@@ -335,7 +335,7 @@ EVT_BEGIN(call_chorogun_event)
 EVT_END()
 
 /**
- * Script for the Gold Fuzzy's end: after two seconds it releases the Fuzzy Horde (paying its reward),
+ * Script for the Gold Fuzzy's end: after two seconds it releases the Fuzzy Horde (paying its reward in JP and later),
  * sends all the Fuzzies running off the stage and removes the horde unit;
  * marks the unit work so it only happens once (JP and later).
  */
@@ -386,7 +386,7 @@ EVT_END()
 
 /**
  * Damage event of the Gold Fuzzy: while the swarm is out (work 0)
- * and he is hit by a counter-type attack (512 without 2048),
+ * and he takes a non-reviving lethal hit (512 without 2048),
  * the swarm unit is removed with its reward (chorogun_dead_reward in JP and later) and the horde flees.
  * After the default damage handling, the first time his HP drops to 7
  * or less (but not 0) he spawns the Fuzzy swarm (entry_chorogun) and calls it in (call_chorogun_event);
@@ -516,7 +516,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 100)
 
-    // It hops over to the target in two hops.
+    // It hops over to the target in short hops.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.5996094f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(5), LW(6), LW(7))

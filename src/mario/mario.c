@@ -435,6 +435,7 @@ BOOL marioFrontActionValidChk(void) {
 static inline s32 marioChkCtrl2(void) {
     return mp->ctrlOffCount ? 0 : 1;
 }
+
 /** TRUE while a marioCtrlOff is outstanding. */
 static inline BOOL marioCtrlDisable(void) {
     return marioChkCtrl2() ? 0 : 1;
@@ -1784,10 +1785,6 @@ void marioChgEvtPose(const char* name) {
     }
 }
 
-/**
- * Maps a normal Mario pose (idle, stand, walk, run, jump) to the matching 8-bit pose for his outfit colour;
- * NULL for poses 8-bit Mario lacks.
- */
 #if VERSION <= VERSION_DEMO_US
 const char* dotMarioPose[4][6] = {
     {"Z_1", "S_1", "W_1", "R_1", "U_1", "J_1"},
@@ -1796,6 +1793,7 @@ const char* dotMarioPose[4][6] = {
     {"Z_18", "S_4", "W_18", "R_18", "U_4", "J_4"}
 };
 #endif
+
 /**
  * Maps a normal Mario pose (idle, stand, walk, run, jump) to the matching 8-bit pose for his outfit colour;
  * NULL for poses 8-bit Mario lacks.
@@ -2303,7 +2301,7 @@ inline BOOL marioChkRevDir(f32 angle) {
 }
 
 /**
- * Draws one ghost of Mario's motion-blur trail at recorded position blurId, more transparent the older it is;
+ * Draws one ghost of Mario's motion-blur trail at recorded position blurId, more transparent for a higher slot index;
  * used by marioDispBlur.
  */
 void marioDispBlurSub(Mtx unused, s32 blurId) {
@@ -2382,8 +2380,9 @@ void marioDispBlurSub(Mtx unused, s32 blurId) {
 }
 
 #pragma opt_dead_assignments off
+
 /**
- * Draw callback for Mario with motion blur: draws the seven older trail positions as fading ghosts through
+ * Draw callback for Mario with motion blur: draws trail slots 7 through 1 as fading ghosts through
  * marioDispBlurSub. The angle values it computes are never used.
  */
 void marioDispBlur(CameraId camId, void* param) {

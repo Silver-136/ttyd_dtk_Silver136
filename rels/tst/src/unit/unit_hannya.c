@@ -240,7 +240,7 @@ EVT_END()
  * shakes in place for ten rounds (SFX_ENM_HANNYA_CHARGE1) and
  * then rolls through the target (SFX_ENM_HANNYA_MOVE1) and on to the far side of the stage,
  * dealing damage as it passes.
- * It reappears at x 300 (SFX_ENM_HANNYA_MOVE2) and rolls home in three decreasing steps.
+ * It reappears at x 300 (SFX_ENM_HANNYA_MOVE2), makes three decreasing offset moves, then moves home.
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(attack_event)
@@ -356,7 +356,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_snd_sfxoff, LW(15))
 
-    // It reappears at the other edge and rolls home in three decreasing steps.
+    // It reappears at the other edge, makes three decreasing offset moves, then moves home.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HANNYA_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 300, LW(1), LW(2))

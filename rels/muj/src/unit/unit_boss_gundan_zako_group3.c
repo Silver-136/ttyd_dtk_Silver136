@@ -29,7 +29,7 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_REACHED_TARGET 0 // 1 once the group's x reaches the current target (zakogun_ext_main3); hit_check_event waits for it, checks damage and clears it
+#define UNIT_WORK_REACHED_TARGET 0 // 1 once the group's x reaches the current target (zakogun_attack3_2); hit_check_event waits for it, checks damage and clears it
 
 typedef struct ZakoGun {
     s8 field_0x0;
@@ -54,6 +54,7 @@ typedef struct ZakoGunWork {
 #if VERSION >= VERSION_US
     u8 us_pad08[0xC];
 #endif
+
     // US: 12 more bytes here
     s32 state;
     s32 timer;
@@ -108,7 +109,7 @@ USER_FUNC(zakogun_kanbu_on_ball) {
 
 /**
  * Script helper: starts formation 3 (the 500 X-Nauts in a ring):
- * selects it (work->flag = 2), places each member on a circle with random offsets around the leader
+ * selects it (work->flag = 2), assigns each member a jittered grid home position, pushing nearby positions away from the leader
  * and initialises its pose.
  */
 USER_FUNC(zakogun_ext_init3) {
@@ -206,10 +207,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of X-Nauts (percent chance each status takes hold): immune to sleep, stop, dizzy,
+ * Status vulnerability of X-Nauts (susceptibility multipliers): immune to sleep, stop, dizzy,
  * poison, confusion, electrified, burn, freeze, Huge, Tiny, Attack Up, Attack Down, Defense Up,
- * Defense Down, allergic, fright, Gale Force, Fast, Slow, Dodgy, Invisible, instant KO;
- * the rest take hold at 80% or better.
+ * Defense Down, allergic, fright, Gale Force, Fast, Slow, Dodgy, Invisible, instant KO.
  */
 static StatusVulnerability regist = {
     0, // sleep
@@ -748,7 +748,7 @@ USER_FUNC(zakogun_attack3_1) {
 
 /**
  * Script helper, second step of group 3 attack (args[0] = sound id):
- * moves the ring toward the target with a sound until it arrives.
+ * moves the ring toward the target with a sound, then rolls back and pauses before finishing.
  */
 USER_FUNC(zakogun_attack3_2) {
     BattleUnit* unit = zakogun_get_ptr();

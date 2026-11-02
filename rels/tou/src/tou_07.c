@@ -96,7 +96,6 @@ USER_FUNC(tou_07_mario_keyoff_check) {
 /** Script helper: re-enables sound effects (clears the SFX mute flag). */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006bd8, JP tou .text+0x6B14. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Script helper: re-enables sound effects (clears the SFX mute flag). */
 USER_FUNC(tou_07_snd_on) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
@@ -106,7 +105,6 @@ USER_FUNC(tou_07_snd_on) {
 /** Script helper: mutes sound effects (sets the SFX mute flag), used while Mario sleeps in the bed. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006c00, JP tou .text+0x6B3C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Script helper: mutes sound effects (sets the SFX mute flag), used while Mario sleeps in the bed. */
 USER_FUNC(tou_07_snd_off) {
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
@@ -397,7 +395,7 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
 
-    // The camera sweeps around the room as the two trade thoughts about it.
+    // The camera sweeps around the room while two messages are shown.
     CALL(evt_cam3d_evt_set, -75, 68, 270, 59, 78, 2, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     LOOP(2)
@@ -418,7 +416,7 @@ static EVT_BEGIN(evt_champion)
         WAIT_MS(1500)
     END_INLINE_EVENT
 
-    // The jingle of Mario's phone mail sounds and he starts to vibrate; a "!" balloon appears over his head.
+    // The jingle of Mario's phone mail sounds and the controller rumbles; a "!" balloon appears over his head.
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION2"))
     SPAWN_EVENT_GET_ID(PTR(evt_sub_mail_vibration), LW(10))
@@ -433,7 +431,7 @@ static EVT_BEGIN(evt_champion)
     END_LOOP
     CALL(evt_mario_balloon_bikkuri)
 
-    // Mario waits for A to be pressed, then the mail arrives with a rumble.
+    // Mario waits for A to be pressed, then the mail-reception sequence continues and the controller rumble stops.
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
         IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
@@ -516,9 +514,9 @@ EVT_BEGIN(evt_champion_re)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_npc_delete, STRING("ベルト"))
     CALL(evt_eff_delete, STRING("belt"))
-
-// She guesses he means to move on and keeps him registered to defend his title.
 #endif
+
+    // She guesses he means to move on and keeps him registered to defend his title.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_141"), 0, STRING("キノシコワ"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(300)
@@ -610,7 +608,7 @@ EVT_END()
 
 /**
  * Rest in the Glitz Pit bed (stg3_yado_00/01, with a yes/no prompt):
- * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,
+ * partners leave, Mario hops in and sleeps (with sound effects muted in JP and later), HP and FP are restored,
  * and the partners return.
  */
 EVT_BEGIN(evt_tou_bed)
@@ -637,8 +635,7 @@ EVT_BEGIN(evt_tou_bed)
         SET_VALUE(LF(2), 1)
     END_IF
 
-    // The attendant asks whether Mario wants to rest; saying no ends the scene.
-    // The attendant asks whether Mario wants to rest; saying no ends the scene.
+    // The prompt asks whether Mario wants to rest; saying no ends the scene.
     CALL(evt_msg_print, 0, STRING("stg3_yado_00"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg3_yado_01"))
     CALL(evt_msg_continue)
@@ -800,7 +797,7 @@ EVT_BEGIN(tou_07_init_evt)
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
     CALL(evt_npc_setup, PTR(npcEnt))
 
-    // If Mario has no rank left to climb, the story jumps to the new-champion point.
+    // If no match has just ended, rank 0 advances an earlier story stage to the new-champion point.
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -932,7 +929,6 @@ static USER_FUNC(paper_on) {
 /** Script helper: hides the belt item's icon. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006cfc, JP tou .text+0x6C38. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Script helper: hides the belt item's icon. */
 USER_FUNC(tou_07_icon_off) {
     iconFlagOn(itemNameToPtr("belt")->name, ICON_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
@@ -941,16 +937,10 @@ USER_FUNC(tou_07_icon_off) {
 
 /**
  * Script helper: moves the belt's star stone effect ("belt")
- * and the belt NPC (ベルト) to camera 7 (CAMERA_3D_EFFECTB),
- * the camera itemdrv also puts Mario on while an important item is being received, so they are drawn with him.
+ * and the belt NPC (ベルト) to camera 7 (CAMERA_3D_EFFECTB).
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006d34, JP tou .text+0x6C70. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Script helper: moves the belt's star stone effect ("belt")
- * and the belt NPC (ベルト) to camera 7 (CAMERA_3D_EFFECTB),
- * the camera itemdrv also puts Mario on while an important item is being received, so they are drawn with him.
- */
 USER_FUNC(tou_07_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");
     // ベルト

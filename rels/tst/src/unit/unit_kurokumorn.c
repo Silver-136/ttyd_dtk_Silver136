@@ -256,6 +256,7 @@ EVT_END()
  * with the damage decided by the pre-damage check and CheckDamage per target.
  */
 static EVT_BEGIN(thunder_event)
+
     // The thunder reaches every opposing unit: a target is chosen only to aim at.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -271,7 +272,7 @@ static EVT_BEGIN(thunder_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared on all targets and the guard window opens.
+    // The attack is declared on all targets, then it waits for any protecting unit to finish moving.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -356,7 +357,7 @@ static EVT_BEGIN(thunder_event)
     SET_VALUE(LW(6), 0)
     LABEL(0)
 
-    // Each target in turn gets the hit check and then the damage; the action-command result is read once.
+    // Each target gets the hit check; only targets reaching the hit branch take the damage check, with the guard timing checked on the first one.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -545,6 +546,7 @@ EVT_END()
  * guards or takes the hit (pre-damage check and action-command defence); then it bounces off and floats home.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -565,7 +567,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared, then it waits for any protecting unit to finish moving.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)

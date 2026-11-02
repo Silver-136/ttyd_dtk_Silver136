@@ -97,6 +97,7 @@ s32 marioUseParty(void) {
 
 // Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Runs from partyMain while a partner is out: after the partner button,
  * counts down partyUseDelay and then calls partyDoWork to use the partner's field ability (returns its result,
@@ -205,6 +206,7 @@ void marioPartyKill(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Demo partner button check: X arms MARIO_TRIG_FLAG_JABARA_CHK with a 5-frame partyUseDelay
  * while Mario stands, walks or dashes with a usable partner.
@@ -264,6 +266,7 @@ s32 marioUseParty(void) {
     return 0;
 }
 #endif
+
 /**
  * The PartyMember kind of the partner out with Mario (PARTY_MEMBER_GOOMBELLA, ...), or 0 when none.
  * Used by the pause menu, item menu and status window.

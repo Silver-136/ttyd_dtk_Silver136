@@ -190,7 +190,7 @@ static PoseTableEntry pose_table_break[] = {
 /**
  * Event table of Cortez Sabre: cortez_damage_sub_event, cortez_weapon_dead_event,
  * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event,
- * cortez_weapon_counter_damage_event (35),
+ * cortez_weapon_counter_damage_event (36),
  * avoid_thorn_event (38).
  */
 static BattleDataEntry data_table[] = {
@@ -267,7 +267,8 @@ EVT_END()
  * Otherwise it picks a target with weapon_cortez_saber_float_attack,
  * winds up with a tilt of 60 degrees and a swing of 135,
  * dives onto the target and slashes down with the sword-dance sound.
- * It plays the avoid pose on a dodge, or applies the damage with the action command defence check,
+ * On a miss it waits for the current animation to finish; on a hit it applies damage with the
+ * action command defence check.
  * A superguarded saber recoils home at once; otherwise it returns home and straightens.
  */
 static EVT_BEGIN(attack_event)
@@ -342,7 +343,7 @@ static EVT_BEGIN(attack_event)
         GOTO(91)
     END_SWITCH
 
-    // The slash misses or is blocked: the Sabre plays its dodge reaction.
+    // The slash misses: the Sabre waits for its current animation to finish.
     LABEL(90)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     GOTO(95)
@@ -420,7 +421,7 @@ EVT_END()
 
 /**
  * Idle event of Cortez's saber: waits for the loop timing of its animation
- * and plays the pose table pose for state 1.
+ * and plays the pose table pose for part 1.
  */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)

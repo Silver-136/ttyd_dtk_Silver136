@@ -65,9 +65,11 @@ void windowInit(void) {
 
 #if VERSION <= VERSION_DEMO_US
 void windowLoadTpl(const char* name);
+
 /** the demo loads msgWindow.tpl synchronously */
 void windowTexSetup(void) {
 #else
+
 /** Completion callback of the msgWindow.tpl DVD read in windowTexSetup. */
 // Descriptive name (not in the symbol maps); placeholder unk_8007f204, JP 0x8007F204. See docs/NAME_PROVENANCE.md.
 void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
@@ -116,7 +118,6 @@ void windowTexSetup(void) {
 #else
 }
 
-/** inlined into windowTexSetup; the linker strips the unreferenced copy */
 void windowLoadTpl(const char* name) {
     DVDEntry* entry;
     u32 size;
@@ -1109,7 +1110,7 @@ end:
 }
 
 #if VERSION > VERSION_DEMO_US
-BOOL tpl_loaded; // TRUE once msgWindow.tpl is unpacked and wakuTexObj is built (new in retail)
+BOOL tpl_loaded; // Set by the asynchronous setup callback after msgWindow.tpl is unpacked and wakuTexObj is built.
 #endif
 TEXPalette* winTpl;
 

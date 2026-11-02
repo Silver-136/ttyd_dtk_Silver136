@@ -55,6 +55,7 @@ void chorogun_ext_init(void);
 extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;
+
 // The demo has no padding after these three (the retail sizes are aligned up).
 typedef struct {
     BattleUnitDefense v;
@@ -180,7 +181,7 @@ static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}};
 static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}, {0}};
 #endif
 
-/** Status vulnerability of the Fuzzy Horde: immune to every status. */
+/** Status vulnerability of the Fuzzy Horde: immune to the statuses listed in this table. */
 #if VERSION <= VERSION_DEMO_US
 static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 #else
@@ -293,9 +294,9 @@ EVT_END()
 /**
  * Damage event of the Fuzzy Horde: for each point of damage taken it either flags the horde as shrinking (unit
  * work 0 = 1, once at most 50 Fuzzies are alive) or makes a Fuzzy escape (chorogun_escape);
- * if the damage killed (damage code
- * 256) and at most 500 Fuzzies remain, the whole swarm flees (escape_chorogun_event). The demos instead remove the
- * unit as soon as work 0 is set.
+ * on the final hit of an attack (damage-result flag 256), if at most 500 Fuzzies remain,
+ * the whole swarm flees (escape_chorogun_event). On that final hit the demos instead remove the
+ * unit when work 0 is set.
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
@@ -335,13 +336,14 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack event of the Fuzzy Horde: uses an enemy item if it has one;
+ * Attack event of the Fuzzy Horde: uses an enemy item if one is selected;
  * otherwise the swarm flies at one target (weapon_chorobon_gundan_attack).
- * The pre-damage check decides between a dodge and a hit,
- * and a hit swoops (alive count + 100) / 200 groups of Fuzzies onto the target in turn,
- * the last one dealing the damage.
+ * The pre-damage check decides between a miss or dodge and a connecting attack,
+ * which swoops max(1, (alive count + 100) / 200) groups of Fuzzies onto the target in turn,
+ * each checking damage, with the final-hit flag on the last group.
  */
 static EVT_BEGIN(attack_event)
+
     // It may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -351,7 +353,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
-    // Target: it picks one for its attack; with none, a confused one flusters, otherwise the attack ends.
+    // Target: it picks one for its attack; with none, the attack ends.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_gundan_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_chorobon_gundan_attack), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -367,7 +369,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, LW(3), -1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
 
-    // The swarm flies up to the target; the pre-damage check decides between a dodge and a hit.
+    // The swarm flies up to the target; the pre-damage check decides between a miss or dodge and a hit.
     CALL(chorogun_set_target_id, LW(3))
     CALL(chorogun_approach_target)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -414,7 +416,7 @@ static EVT_BEGIN(attack_event)
         CALL(chorogun_dive_target, 30, LW(6))
         WAIT_FRAMES(30)
 
-        // The last group deals the damage.
+        // Each group checks damage; the last group sets the final-hit flag.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_gundan_attack))
         IF_INT_EQUAL(LW(14), LW(15))
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -845,7 +847,7 @@ USER_FUNC(chorogun_approach_target) {
 
 /**
  * Battle script helper: picks a random living Fuzzy,
- * aims it at the target unit's position so that it lands after args[0] frames,
+ * sets its dive toward the target with a timer of args[0] frames,
  * plays the attack sound and returns the chosen Fuzzy's index in args[1].
  */
 USER_FUNC(chorogun_dive_target) {
@@ -882,6 +884,7 @@ USER_FUNC(chorogun_dive_target) {
     p = &pose[sel];
     row = (*p->mtx)[2];
     dx = x - (*p->mtx)[0][3];
+
     // Both offsets use the current Z translation, including the vertical calculation.
     dy = y - row[3];
     dz = z - row[3];
@@ -925,8 +928,8 @@ USER_FUNC(chorogun_after_attack) {
 }
 
 /**
- * Battle script helper: removes the 50 living Fuzzies nearest the unit's home position (or fewer if less than 50
- * are close) from the horde; they run off the stage as the horde loses members.
+ * Battle script helper: selects up to 50 living Fuzzies using distance comparisons and removes them
+ * from the horde; they run off the stage as the horde loses members.
  */
 USER_FUNC(chorogun_escape) {
     f32 dist[1000];

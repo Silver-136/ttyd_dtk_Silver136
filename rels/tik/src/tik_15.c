@@ -145,10 +145,10 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 /**
  * Map init script of tik_15, the large junction room.
- * Sets the fall-recovery points (hit damage return), the wall- climbing gazigazi hooks and the water animation.
+ * Sets the fall-recovery points (hit damage return), creates the Gazigazi hazard NPC and starts the water animation.
  * Removes the resident Goombas, Paragoombas and Spiky Goombas once the father
  * and son are reunited (STG1_17), and the Hammer Bro and Magikoopa before STG5_43_X_NAUTS_RETREAT.
- * Places two large blocks and two badge blocks (Mushroom, Fire Flower).
+ * Places two large blocks and two item blocks (Mushroom, Fire Flower).
  */
 EVT_BEGIN(tik_15_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))

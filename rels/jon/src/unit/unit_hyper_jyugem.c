@@ -21,7 +21,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_HOLD 0          // 1 while it holds the thrown part (part 2) overhead: unison_phase_event sets it with the top-spiky counter and pose_table_hold; a throw, or a hit that does damage or stuns, clears it (damage_event drops the part)
 #define UNIT_WORK_REBOUND_SPAWN 1 // 1: when the throw is guarded, the part rebounds to free space and becomes an entry_togezo unit (SFX_ENM_JUGEM_REBOUND1); 0: no rebound
-#define UNIT_WORK_CHARGED 2       // 1 once it has used charge_event (weapon_jyugem_charge); from then on attack_event throws without the rebound spawn (never cleared)
+#define UNIT_WORK_CHARGED 2       // 1 when charge is selected (weapon_jyugem_charge); after item-use and friend-spawn choices, attack_event throws without rebound spawning (never cleared)
 
 static USER_FUNC(togezo_copy_status);
 extern BattleUnitKind unit_hyper_togezo;
@@ -309,6 +309,7 @@ EVT_END()
  * the holding state; the default damage then runs.
  */
 static EVT_BEGIN(damage_event)
+
     // While the Dark Lakitu is not holding an egg it just takes the default damage.
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -340,6 +341,7 @@ static EVT_BEGIN(damage_event)
         CALL(btlevtcmd_CheckStatus, LW(10), STATUS_STOP, LW(14))
         OR(LW(15), LW(14))
         IF_INT_NOT_EQUAL(LW(15), 0)
+
             // The egg part is thrown away behind the Dark Lakitu.
             BEGIN_INLINE_EVENT
                 CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden | kNoShadow)
@@ -599,6 +601,7 @@ EVT_END()
  * Otherwise the egg hops and lands behind the target and is picked up again.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Pick a target; a confused Dark Lakitu with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_jyugem_attack))
@@ -622,6 +625,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HOLD, LW(10))
     IF_INT_EQUAL(LW(10), 0)
+
         // If it is not already holding an egg it reaches for one first (JGM_A_1, A_2).
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_JUGEM_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("JGM_A_1"))
@@ -684,6 +688,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_jyugem_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBOUND_SPAWN, LW(0))
     IF_INT_EQUAL(LW(0), 1)
+
         // If this egg was meant to hatch and the target guarded it, the egg bounces off toward a free spot.
         CALL(btlevtcmd_CheckDamageCode, LW(3), DAMAGE_RESULT_GUARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

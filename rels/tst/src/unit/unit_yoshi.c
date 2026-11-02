@@ -765,7 +765,8 @@ PoseSoundTiming posesound_normal_attack[] = {
  * Its weapon name btl_wn_pys_normal is Ground Pound in English (description msg_pys_hip_drop).
  */
 EVT_BEGIN(partyYoshiAttack_NormalAttack)
-    // The enemy chosen in the menu is the target; the attack is declared and the guard check is waited out.
+
+    // The enemy chosen in the menu is the target; the attack is declared and protecting-unit movement is waited out.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -792,7 +793,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(posesound_normal_attack))
     CALL(btlevtcmd_AcSetOutputParam, 1, 0)
 
-    // He winds up in place, the slide sound ramping up over 25 frames, then switches to the run pose.
+    // He winds up in place and switches to the run pose while the slide sound ramps up over 25 frames.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_W_1"))
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(0), 0)
@@ -1090,10 +1091,11 @@ EVT_END()
  * If a roll of 0 to 99 reaches its swallow value he spits it out (partyWeapon_YoshiNomikomi_Shot,
  * or _Spew when its swallow attribute lacks bit 2);
  * else it is eaten outright (Star Points kept, unit killed),
- * and an eaten enemy with swallow attribute 4 makes him breathe fire at every enemy
+ * and an eaten enemy with swallow attribute 4, but not attribute 1, makes him breathe fire at every enemy
  * (partyWeapon_YoshiNomikomi_Fire). partyWeapon_YoshiNomikomi_Involved is not used here.
  */
 EVT_BEGIN(partyYoshiAttack_Nomikomi)
+
     // The enemy chosen in the menu is the target; Gulp is declared and its FP cost paid.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1339,7 +1341,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         END_IF
     END_IF
 
-    // An enemy with swallow flag 4 (a fire-type) makes him breathe fire on every enemy.
+    // An enemy with swallow flag 4 (a fire-type), but not flag 1, makes him breathe fire on every enemy.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_4"))
     WAIT_FRAMES(22)
     BEGIN_SIBLING_EVENT
@@ -1421,6 +1423,7 @@ EVT_END()
  * each flight run by _egg_attack_event.
  */
 EVT_BEGIN(partyYoshiAttack_EggAttack)
+
     // The target is chosen; the attack is declared and its FP cost paid.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -1735,7 +1738,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
         GOTO(30)
     END_IF
 
-    // After the last egg he waits for the action command to end.
+    // After the last egg he stops the action command and checks the Stylish timing window.
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 20)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
@@ -1847,6 +1850,7 @@ EVT_END()
  * and each sampled enemy takes as many hits as the command's output gives, the last with the last-hit flag.
  */
 EVT_BEGIN(partyYoshiAttack_CallGuard)
+
     // Stampede is declared and its FP cost paid; all ground enemies are targeted.
     SET_VALUE(LW(12), PTR(&partyWeapon_YoshiCallGuard))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1906,7 +1910,6 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     CALL(btlevtcmd_AcSetFlag, 64)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
 
-    // The camera frames Yoshi as he starts to shout; the command begins.
     // The camera frames Yoshi as he starts to shout; the command begins.
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, 1)
@@ -2404,6 +2407,7 @@ void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
 }
 
 #if VERSION >= VERSION_JP // the JP demo has no _get_nomikomi_hit_position
+
 /**
  * Script helper: args[0] is Yoshi, args[1] the swallowed target;
  * args[3]-args[5] receive the world position of the target's hit offset (bintaHitOffset scaled by its size,
@@ -2493,7 +2497,7 @@ USER_FUNC(_set_yoshi_anim_time) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: args[0] is Yoshi; blocks until the Stampede herd exists and its timer has started. */
+/** Script helper: args[0] is Yoshi; blocks until the Stampede herd exists and its average x is positive. */
 USER_FUNC(_wait_yoshig_run) {
     BattleUnit* unit;
     YoshiGundanWork* w;
@@ -2617,6 +2621,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
     } while (0);
     return EVT_RETURN_BLOCK;
 }
+
 /**
  * Updates herd member i of the Stampede for one frame.
  * State 0 places it in a row of 16 behind the left edge (x = -300 minus 30 per row, plus up to 10 at random;

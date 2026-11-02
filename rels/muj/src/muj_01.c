@@ -771,7 +771,7 @@ EVT_END()
 
 /**
  * Regular event of sailor D: once the story reaches STG5_59_ROGUEPORT_DOCK he wanders around his spawn
- * point (urouro) within a radius of 100 by 30 units.
+ * point (urouro) with a radius of 100 units and a movement speed of 30.
  */
 EVT_BEGIN(suifu_d_regl)
     SWITCH(GSW_STORY_PROGRESS)
@@ -2038,12 +2038,6 @@ static USER_FUNC(starstone_set_ry) {
 }
 
 /**
- * The world-goes-dark cutaway at STORY_STG8_15_GRODUS (entered from "sekai_yami2"):
- * control is taken, the camp is drawn dark with the camera shaking and a quake sound,
- * four sailors run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
- * and the game returns to pik_01 at "sekai_yami2".
- */
-/**
  * The world-goes-dark cutaway at STG8_15_GRODUS (entered from "sekai_yami2"):
  * control is taken, the camp is drawn dark with the camera shaking and a quake sound,
  * four sailors run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
@@ -2128,7 +2122,7 @@ static EVT_BEGIN(sekai_yami_evt)
 #endif
 #endif
 
-            // The screen flashes white several times.
+            // The screen flashes white once in US/PAL, twice in JP and the demos.
             CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
             CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
             WAIT_MS(100)

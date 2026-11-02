@@ -159,7 +159,7 @@ static BattleUnitKindPart parts[] = {
     {2, "btl_un_dark_keeper", "c_monban_t", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
-/** Attack data for the Dark Craw's charge: 6 damage. */
+/** Attack data for the Dark Craw's charge: 6 damage in retail builds, 5 in the demo builds. */
 static BattleWeapon weapon_monban_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -200,7 +200,7 @@ static BattleWeapon weapon_monban_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data for the Dark Craw's spear throw: 6 damage. */
+/** Attack data for the Dark Craw's spear throw: 6 damage in retail builds, 5 in the demo builds. */
 static BattleWeapon weapon_monban_throw_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -266,7 +266,7 @@ EVT_END()
 
 /**
  * Plays the "toge_flush" spark effect over the Dark Craw 30 frames after an attacker is hurt by its spikes,
- * with the offset in front of it and the height raised more for its size statuses 10
+ * with the offset in front of it and the height adjusted for its size statuses 10
  * (Huge) and 11 (Tiny).
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
@@ -340,6 +340,7 @@ EVT_END()
  * then laughs three times (pose T_1, SFX_ENM_MONBAN_LAUGH1).
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
     // confused Dark Craw with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -470,6 +471,7 @@ EVT_END()
  * The part is checked as it flies, hits or is dodged, and the Craw laughs three times afterwards.
  */
 static EVT_BEGIN(throw_attack_event)
+
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
     // confused Dark Craw with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

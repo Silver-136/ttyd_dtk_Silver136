@@ -452,11 +452,12 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack event of the Atomic Boo: uses an enemy item if it has one.
+ * Attack event of the Atomic Boo: runs a selected enemy-item script if one is returned.
  * While its face is visible (unit work 0 is 0) it picks 30/70 kaokakusi_event (hides its face),
  * 20/70 press_event and 20/70 bikkuri_event; while its face is hidden it picks 50/50 between surprise_event
  * and breath_event.
  */
+
 // Face exposed: choose hide/press/scare with weights 30/20/20; face hidden: choose surprise/breath equally.
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -920,7 +921,8 @@ EVT_END()
  * checks whether the breath would hit, plays the avoid animation (38, 39 or 40) when the target dodges,
  * or applies the damage.
  */
-// Each selected target gets one precheck, then two intermediate damage calls and a final hit.
+
+// Each selected target gets one precheck; a hit result leads to two intermediate damage calls and a final hit.
 EVT_BEGIN(breath_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_breath), 0, LW(5))
     SWITCH(LW(5))
@@ -990,7 +992,7 @@ s32 target_parts_id[] = {
 };
 
 /**
- * Size the small Boo sprites of the Atomic Boo's attacks grow or shrink toward each frame; 1.0 is full size.
+ * Size the Atomic Boo grows or shrinks toward each frame; 1.0 is full size.
  */
 f32 atmic_teresa_scale = 1.0f;
 

@@ -134,8 +134,8 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Where Mario is put back after damage from falling: the floor panels A_yuka_02 and A_yuka_03 send him to
- * the point set at y = -1000 (the spike pit below).
+ * Where Mario is put back after damage from falling: for floor panels A_yuka_02 and A_yuka_03,
+ * y = -1000 tells the damage-return helper to use each hit object's own position.
  */
 static HitDamageReturn dmgRetPoint[] = {
     {"A_yuka_02", {0.0f, -1000.0f, 0.0f}},
@@ -271,6 +271,7 @@ USER_FUNC(get_toge_name) {
     evtSetValue(event, args[2], (EvtWord)toge_data[idx * 2 + 1]);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: returns in args[1] whether bit args[0] (a trap index) of toge_flag is set,
  * that is whether that spike trap is currently active.
@@ -282,6 +283,7 @@ USER_FUNC(toge_check_flag) {
     evtSetValue(event, args[1], toge_flag & (1 << bit));
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: sets (args[1] nonzero) or clears the bit args[0] in toge_flag,
  * marking one spike trap as active or idle.

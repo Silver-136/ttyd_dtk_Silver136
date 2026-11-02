@@ -198,7 +198,7 @@ static const char* booboo_name[] = {
 
 /**
  * Init script of gra_02, the pig's shed: trail music and ambience, the exits, two Star Pieces,
- * the Shop Key (until the story passes STG4_03_SHOP_KEY),
+ * the Shop Key (before the story reaches STG4_03_SHOP_KEY),
  * the straw (S_wara) that Flurrie can blow away (until STG4_05_STRAW_TEPEE) and the pig NPC's lighting.
  */
 EVT_BEGIN(gra_02_init_evt)

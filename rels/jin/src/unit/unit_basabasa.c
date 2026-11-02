@@ -303,6 +303,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
  * switches to the flying pose table and moves it 30 units down with new hit, cursor,
  * kiss and status icon offsets. Leaves its home position in LW(0) to LW(2).
  */
+
 // Permanently leave the ceiling: switch attributes, pose/damage handlers, offsets, and home position.
 static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
@@ -376,9 +377,10 @@ EVT_END()
 
 /**
  * Damage event of the Swooper while it hangs from the ceiling:
- * runs the default damage handling and then, unless the hit was a counter-type hit (512 without 2048)
- * or did no damage, makes it drop to its flying position (ceil_sky_event) and dive down.
+ * runs the default damage handling and then, unless the damage code marks zero HP without revival
+ * or no damage was dealt, makes it drop to its flying position (ceil_sky_event) and dive down.
  */
+
 // Leave the ceiling after nonzero damage, unless zero HP without revival ends this damage path.
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), -2)
@@ -428,12 +430,13 @@ static EVT_BEGIN(ceil_fall_ready_event)
 EVT_END()
 
 /**
- * The Swooper's swoop attack (weapon_basabasa_attack): uses an enemy item if it has one;
+ * The Swooper's swoop attack (weapon_basabasa_attack): uses an enemy item if the item-use check selects one;
  * otherwise, dropping from the ceiling first if it still hangs there,
  * it flaps up and down twice and dives into one target.
  * The pre-damage check decides between a dodge and a hit, then it flies back home.
  */
 static EVT_BEGIN(attack_event)
+
     // It may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

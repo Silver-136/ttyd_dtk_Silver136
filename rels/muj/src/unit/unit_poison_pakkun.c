@@ -280,6 +280,7 @@ EVT_END()
  * 2 damage and a 50% chance of Poison (1 a turn for 10 turns); then it returns (return_event).
  */
 static EVT_BEGIN(breath_event)
+
     // Choose the targets for the breath; if there are none a confused plant is flustered and the turn ends.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -294,7 +295,7 @@ static EVT_BEGIN(breath_event)
         GOTO(99)
     END_IF
 
-    // The breath is announced and the guard timing is awaited.
+    // The breath is announced and protecting-unit movement is awaited.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_poison_pakkun_breath_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -373,7 +374,7 @@ static EVT_BEGIN(breath_event)
         END_IF
     END_SIBLING_EVENT
 
-    // Check each target in turn: dodged targets are skipped, the rest take the damage (and maybe poison).
+    // Check each target in turn: missed or avoided targets are skipped; hit results take the damage (and maybe poison).
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
     LABEL(10)
@@ -675,6 +676,7 @@ EVT_END()
  * strike) and bites it for 3 damage, then returns (return_event).
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -696,7 +698,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is announced and the guard timing is awaited.
+    // The attack is announced and protecting-unit movement is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -774,7 +776,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The bite missed (the target dodged).
+    // The bite missed or was avoided.
     LABEL(90)
     GOTO(98)
 
@@ -853,8 +855,8 @@ static USER_FUNC(shadow_scale_memory) {
 }
 
 /**
- * Script helper: writes 0 to args[0] if the stage ceiling frame has been knocked away
- * (STAGE_OBJ_FLAG_IRON_FRAME_GONE), otherwise 1;
+ * Script helper: writes 0 to args[0] if the stage iron frame is unavailable
+ * (STAGE_FLAG_NO_IRON_FRAME), otherwise 1;
  * the plant uses it to decide whether it can hang from the ceiling.
  */
 static USER_FUNC(pakkun_ceil_exist) {

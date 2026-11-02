@@ -218,7 +218,7 @@ void computeMtx(ExtdrvPose* pose, f32 angle) {
 }
 
 /**
- * Fades a Boo of the swarm in or out depending on its angle to the camera
+ * Fades a Boo of the swarm in or out depending on the Mario-to-Boo angle
  * and Mario's facing direction (alpha 128..255); returns 1 when it is fully visible, else 0.
  */
 s32 computeAlpha(Teresa* ter, MarioWork* mp, f32 angle) {
@@ -480,7 +480,7 @@ EVT_BEGIN(jin_00_dai_in)
 EVT_END()
 
 /**
- * Exit event of the roll-through doorways: returns 0 in LW(0), which blocks the exit,
+ * Exit event of the roll-through doorways: returns 0 in LW(0), which allows the exit,
  * while Mario is in motion 22 (MARIO_MOTION_ROLL, the paper-roll form), and 1 otherwise.
  */
 static EVT_BEGIN(check_roll)
@@ -1054,7 +1054,7 @@ EVT_END()
 /**
  * Talk script of the central Boo: asks whether to carry on (stg4_jin_54),
  * then the Boo is startled and swells to four times its size (stg4_jin_56..57),
- * vanishes and starts the 1000-Boos swarm (senteresa_evt); when it ends the story becomes "1000 Boos".
+ * vanishes and starts the 1000-Boos swarm (senteresa_evt); after its appearance barrier the story becomes "1000 Boos".
  */
 EVT_BEGIN(tyuou_teresa_talk)
     // The central Boo asks Mario whether he means to be mean to it; a no sends him away.
@@ -1151,7 +1151,7 @@ EVT_BEGIN(tyuou_teresa_talk)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg4_jin_57"), 0, STRING("中央テレサ"))
 
-    // The Boo fades out and the swarm of Boos starts; the story advances once it ends.
+    // The Boo fades out and the swarm of Boos starts; the story advances after its appearance barrier.
     CALL(evt_cam3d_evt_set, 70, 400, 1125, 70, 200, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
@@ -1378,8 +1378,8 @@ static ExtTexInfo senteresa_ext_entry_data[] = {
 /**
  * Per-frame update of the 200-Boo swarm (the "1000 Boos" scene): a lagging swarm centre follows Mario's
  * walking, and each Boo runs its sequence: 0 start delay, 1 fade in around Mario, 2 wait until all 200 are in,
- * 3 staggered start, 4 circle Mario ever faster (now and then a short A_2 turn in 9), 5 fly at Mario (not while
- * a partner ability is in use), 6 cling to him until the spin hammer knocks it off (10, falling away; once 20
+ * 3 staggered start, 4 circle Mario ever faster (now and then a short A_2 turn in 9), 5 fly at Mario (attaching only when
+ * no partner ability is in use), 6 cling to him until the spin hammer knocks it off (10, falling away; once 20
  * are knocked off the circling Boos stop attacking), 20-22 gather at the central Boo and shake there
  * (senteresa_syugo, the Atomic Boo forming), 30 blown away (senteresa_huttobu), 80 lifting Mario
  * (senteresa_turiageru).
@@ -1864,8 +1864,8 @@ USER_FUNC(senteresa_get_random_position) {
 }
 
 /**
- * Script helper: stops the Boos from closing in (all but those clinging to Mario go to sequence 4 with an
- * endless wait).
+ * Script helper: stops the Boos from closing in (all but the knocked-away Boos in sequence 10 go to sequence 4
+ * with a wait of 99999).
  */
 // Keep already knocked-away Boos in state 10; delay all other poses in orbit state 4.
 USER_FUNC(senteresa_tikaduku_stop) {
@@ -1931,7 +1931,7 @@ USER_FUNC(senteresa_dispoff) {
 
 /**
  * Script helper: sets every Boo to fly out of the Atomic Boo's position with random upward
- * and sideways speeds (blown away after the fight), with a random sound for every second one.
+ * and sideways speeds (blown away after the fight), with a sound for every second one.
  */
 USER_FUNC(senteresa_huttobu) {
     ExtdrvPose* pose = extGetPosePtr();
@@ -2466,7 +2466,7 @@ USER_FUNC(senteresa_end) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: blocks until all 200 Boos have reached their final state (g_nNumEndProc is 200). */
+/** Script helper: blocks until the current phase's completion counter g_nNumEndProc equals 200. */
 USER_FUNC(senteresa_wait_end_seq) {
     return g_nNumEndProc[0] == 200 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

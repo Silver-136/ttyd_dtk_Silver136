@@ -198,7 +198,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Status vulnerability of the Swooper (percent chance to take each status): extra prone to gale force;
+ * Status vulnerability multipliers of the Swooper: extra prone to gale force in the demos;
  * resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_US
@@ -500,7 +500,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Swooper flies past it.
+    // The swoop missed: the Swooper flies past the target.
     LABEL(90)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.5f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

@@ -226,9 +226,9 @@ const char* nokotaro_pose[] = {
 /**
  * Cutscene run when Mario walks into the hall for the first time (before STG1_10_FATHERS_LETTER):
  * the partner is switched to Koops, who takes a skeleton for his father and finds a letter in its hand,
- * reads it out (stg1_gon_02 to stg1_gon_08: Hooktail cannot stand crickets, an item tied to that weakness is
+ * if Mario agrees, reads it out (stg1_gon_02 to stg1_gon_08: Hooktail cannot stand crickets, an item tied to that weakness is
  * hidden in the castle, and it will try tricks when beaten), then realizes it is not his father after all
- * (stg1_gon_09), and the story advances to STG1_10_FATHERS_LETTER.
+ * (stg1_gon_09). The story is set to STG1_10_FATHERS_LETTER before the conversation.
  */
 EVT_BEGIN(tegami_event)
     // Wait until Mario walks far enough into the hall.
@@ -808,10 +808,10 @@ void nokotaro_callback(s32 type) {
 // Descriptive name (not in the symbol maps); placeholder unk_gon_00000374, JP gon .text+0x290. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 /**
- * Script helper (US and later): writes 1 into LW(0)
+ * Script helper (retail versions): writes 1 into LW(0)
  * when Mario is touching the Dry Bones leader (the NPC marioGetTouchNpcPtr finds) while he has control,
  * otherwise 0.
- * The swarm scene polls it to start the fight; earlier versions started the fight
+ * The swarm scene polls it to start the fight; the demo versions started the fight
  * when Mario simply reached x = 350.
  */
 USER_FUNC(leader_touch_check) {
@@ -870,9 +870,8 @@ static void senkaron_ext_init(void) {
 /**
  * Per-frame update of the Dry Bones swarm: each bone falls from the ceiling and lands,
  * then once the attack starts shuffles toward Mario and shoves him west (marioPushedFlag);
- * hits from Mario's hammer or jumps knock bones into the air,
- * and when the swarm escapes the bones run off toward the room's edge
- * and drop away (the knock-back and escape states 0x61 and 0x62 are read from the code only).
+ * hits from Mario's hammer knock bones into the air,
+ * and when the swarm escapes the landed bones run off toward the room's edge and stop moving.
  */
 static void senkaron_ext_main(void) {
     MarioWork* mario;
@@ -1128,7 +1127,7 @@ static void senkaron_ext_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
-/** Draw callback for the swarm's shadows: draws every bone flattened with a fixed shadow matrix. */
+/** Draw callback for the swarm's shadows: draws the eligible bones' shadows with a fixed shadow matrix. */
 static void senkaron_ext_shadow_disp(CameraId camera, void* param) {
     static Mtx mt = {
         {10.0f, 0.0f, 0.0f, 0.0f},
@@ -1164,7 +1163,7 @@ static USER_FUNC(senkaronFlagOffMesPushing) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: sets senkaronAttackStartFlag so the Dry Bones start moving in on Mario. */
+/** Script helper: sets senkaronAttackStartFlag so the Dry Bones begin their fall delays. */
 static USER_FUNC(senkaronAttackStart) {
     senkaronAttackStartFlag = 1;
     return EVT_RETURN_DONE;

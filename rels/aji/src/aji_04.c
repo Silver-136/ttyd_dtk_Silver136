@@ -484,6 +484,10 @@ EVT_BEGIN(UNK_0x00022be8)
     RETURN
 EVT_END()
 
+/**
+ * From the JP release on, makes the statue's mouth (kuti, kuti2) open to 70 degrees and close again
+ * in two 100 ms sweeps; spawned from kuti_callback while the statue's message is being printed.
+ */
 EVT_BEGIN(UNK_0x00022c3c)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 70, 100)
     LABEL(0)
@@ -651,7 +655,7 @@ EVT_BEGIN(kuizu_sekizou)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
         ADD(LW(13), 1)
 
-        // A right answer earns a fanfare; the statue reacts to the first, fourth and fifth correct answers.
+        // A right answer earns a fanfare; the statue uses different reactions for the first three, fourth and fifth correct answers.
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, 11)
         WAIT_MS(500)
@@ -731,10 +735,10 @@ SPAWN_EVENT(quiz_ng)
             CALL_CHILD(PTR(quiz_ok))
         ELSE
 #endif
+            // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
             IF_INT_EQUAL(LW(15), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)
             ELSE
-                // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND1"), 0)
             END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)

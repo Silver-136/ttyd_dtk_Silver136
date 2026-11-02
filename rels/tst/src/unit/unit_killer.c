@@ -228,15 +228,16 @@ EVT_END()
 
 /**
  * Attack of the Bullet Bill: picks a target (the fixed first target in a flag-2 battle,
- * otherwise a sampled enemy; uses an enemy item first if it has one), zooms the camera on it,
+ * otherwise a sampled enemy; uses an enemy item first if the item-use check selects one), zooms the camera on it,
  * charges for 30 frames and then flies into it.
- * The Bill always ends up removed from the battle:
+ * Its hit/miss cleanup removes the Bill from battle; item-use and confused no-target returns bypass it:
  * after a miss it flies past the target and off, after a hit it explodes in smoke, banks its coins,
  * experience and star points and is killed (KillUnit) once the damage has been dealt.
  */
 // Common attack cleanup removes the projectile, including the no-target path.
 static EVT_BEGIN(attack_event)
-    // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
+
+    // Use the First Strike target; otherwise run a selected item action or pick a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -253,7 +254,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_killer_charge_attack), LW(3), LW(4))
     END_IF
 
-    // No valid target: a confused Bullet Bill is flustered, otherwise the turn is skipped.
+    // No valid target: a confused Bullet Bill is flustered, otherwise cleanup removes it.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -303,7 +304,7 @@ static EVT_BEGIN(attack_event)
     END_SWITCH
     LABEL(90)
 
-    // Miss: it flies at the target, which dodges, and shoots on past and off the stage.
+    // Miss: it flies at the target, which dodges for some results, and shoots on past and off the stage.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))

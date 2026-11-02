@@ -13,8 +13,8 @@ void _accrobat_timing_icon_disp(CameraId camId, void* param);
 
 /**
  * Arms a Stylish timing check for unitId (btlevtcmd_ACRStart's first call):
- * the A press counts inside frames windowStartFrame..windowEndFrame, the check gives up at endFrame,
- * and a press recorded in the earlyFrames frames before the start already counts as too early.
+ * the A press counts after windowStartFrame through windowEndFrame, and the check gives up at endFrame.
+ * On the first update, the earlyFrames history slots (including the current frame) are checked for an early press.
  * Clears the frame counter and result; always returns 0.
  */
 s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,

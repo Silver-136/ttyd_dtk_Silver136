@@ -546,11 +546,6 @@ EVT_BEGIN(evt_gon_04flowblock_updown2_init)
     RETURN
 EVT_END()
 
-/**
- * Runs when Mario hits the floating-block switch for mobj_fltbl02:
- * flips that block between its low and high position (200 units apart) with the floating-block sound
- * and camera shake, and flips the state flag LSWF(7).
- */
 // This switch moves block 2 only after the large level-1 block has been broken.
 /**
  * Runs when Mario hits the floating-block switch for mobj_fltbl02:
@@ -791,7 +786,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
     RETURN
 EVT_END()
 
-/** Positions (x, z) where dust puffs rise when the first folding stairs land. */
+/** Positions (x, y) where dust puffs rise when the first folding stairs land. */
 KemuriPos kemuri_pos1[] = {
     {150, 20},
     {130, 55},
@@ -800,7 +795,7 @@ KemuriPos kemuri_pos1[] = {
     {185, 75},
 };
 
-/** Positions (x, z) where dust puffs rise when the second folding stairs land. */
+/** Positions (x, y) where dust puffs rise when the second folding stairs land. */
 KemuriPos kemuri_pos2[] = {
     {315, 75},
     {270, 30},

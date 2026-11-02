@@ -152,8 +152,8 @@ EVT_BEGIN(yuu_00_kaijo_init2)
 EVT_END()
 
 /**
- * Spins up the stage spotlights ("light02" and "light_c") in a background inline event;
- * the rotation speeds up in steps and stops when GF(0) is cleared.
+ * Runs both pairs of stage spotlights ("light01" / "light_b" and "light02" / "light_c") in background inline events;
+ * they sweep and pause in a repeating cycle, then return to rest when GF(0) is cleared.
  */
 EVT_BEGIN(light_sub_event)
     SET_VALUE(GF(0), 1)
@@ -384,7 +384,7 @@ EVT_END()
 
 /**
  * Phase 1 of Plane Mode: builds the five floating platforms (S_dai_01 to S_dai_05;
- * US and later pick a random height and direction for each), plays the opening camera (skippable),
+ * US and later pick a random travel time and direction for each), plays the opening camera (skippable),
  * shows the countdown effect, switches Mario into plane mode and starts the coin counter.
  */
 EVT_BEGIN(minigame01_start)
@@ -1003,8 +1003,8 @@ EVT_BEGIN(minigame01_end)
 #endif
 #endif
 
-    // Crashing on the ground (a negative score) plays the failure effect;
-    // landing on a platform plays the success effect and Mario poses by how well he did.
+    // A negative distance-counter value plays the failure effect;
+    // otherwise the success effect plays and Mario poses according to the landing result.
     CALL(evt_mario_adjust_dir)
     IF_INT_LESS(LW(0), 0)
         CALL(eff_call_minigame, 2, 0, 0, 500)
@@ -1185,7 +1185,7 @@ USER_FUNC(yuu_00_cam_shift_reset) {
 
 /**
  * Names of the floor areas below the course for yuuminigame1_gamerule;
- * landing on one scores -5 (02, 05), -10 (03), -15 (06) or -20 (04).
+ * landing on one sets the result to -5 (02, 05), -10 (03), -15 (06) or -20 (04).
  */
 static const char yuu00_gnd_02[] = "A_ground_02";
 static const char yuu00_gnd_05[] = "A_ground_05";
@@ -1223,7 +1223,7 @@ static inline void monte_disp(CameraId camera, void* param) {
 /**
  * Frame-by-frame coin spawner and collector for Plane Mode.
  * On first call it allocates the Monte array and scatters coins at random spots within the rectangles of
- * montetable (at least 20 units apart), then each frame it checks Mario against every coin,
+ * montetable (at least 20 units apart within each rectangle), then each frame it checks Mario against every coin,
  * counting and hiding collected ones with a 3D sound. Blocks forever as a view event.
  */
 static USER_FUNC(fall_rtn) {

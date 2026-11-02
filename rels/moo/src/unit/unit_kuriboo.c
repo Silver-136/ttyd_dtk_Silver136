@@ -259,7 +259,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_kuriboo_attack))
 
-    // The Goomba trots to a spot 100 units behind its target.
+    // The Goomba trots to a spot 100 units in the direction its target faces.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)
@@ -373,8 +373,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Script helper: stores in args[4] the direction angle from the point (args[0], args[1]) to (args[2], args[3])
- * (X and Z coordinates), or leaves args[4] unchanged if the two points are the same.
+ * Script helper: stores in args[4] the angle from point (args[2], args[3]) toward (args[0], args[1]),
+ * or leaves args[4] unchanged if the two points are the same. The jump caller supplies X and Y coordinates.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;

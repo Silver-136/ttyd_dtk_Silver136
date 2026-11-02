@@ -179,7 +179,7 @@ static BattleWeapon weapon_patamet_attack = {
 
 /**
  * Defence of the Spiky Parabuzzy while it still has its wings: 4 against normal, ice and electric hits;
- * immune to fire and explosions (defence 99 cancels the hit).
+ * immune to fire and explosions (the element-response table supplies immunity).
  */
 static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 
@@ -318,7 +318,7 @@ EVT_END()
  * Fall reaction of the flying Spiky Parabuzzy (data event 14), run when it loses its wings.
  * It clears its flying attribute, switches to the walking pose table, data table and parts, drops to the floor,
  * and changes its unit kind to the Spike Top, which re-runs init_event for the grounded form.
- * If the hit did more than 1 HP damage it also lands flipped over (dmg_turn_event).
+ * If its HP-damage count is above 1 it also lands flipped over (dmg_turn_event).
  */
 static EVT_BEGIN(dmg_fall_event_pata)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -372,7 +372,8 @@ EVT_END()
  * then flies back up and returns to its home position. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event_pata)
-    // After a First Strike it attacks right away; otherwise it uses an item if it has one, or picks a target
+
+    // After a First Strike it attacks right away; otherwise it runs a selected item-use event, or picks a target
     // (a confused Spiky Parabuzzy with nobody to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -660,7 +661,7 @@ static BattleWeapon weapon_met_ceil_attack = {
 
 /**
  * Defence of the Spiky Parabuzzy once it has lost its wings: 4 against normal, ice and electric hits;
- * immune to fire and explosions (defence 99 cancels the hit).
+ * immune to fire and explosions (the element-response table supplies immunity).
  */
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
@@ -885,6 +886,7 @@ EVT_END()
  * Afterwards it walks home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
+
     // If the Spiky Parabuzzy is lying on its back it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -1056,8 +1058,8 @@ EVT_END()
 
 /**
  * Damage script of the Spike Top form of the Spiky Parabuzzy while on the ceiling:
- * runs the default damage handling, then, if the attack did real damage (and its damage code is not the 512-only
- * code), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
+ * runs the default damage handling, then, if the attack did real damage (and its damage code does not have DAMAGE_RESULT_ZERO_HP
+ * without DAMAGE_RESULT_REVIVAL), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
  */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -1153,9 +1155,10 @@ EVT_END()
  * it moves above the target, drops onto it (SFX_ENM_MET_FALL1 and its landing sound) and, if the hit connects,
  * deals damage.
  * After 60 frames it loses the ceiling attributes and tables for good,
- * hops back to its original x position and runs init_event2 to continue as a floor unit.
+ * takes two hops near the target, then walks back to its original x position and runs init_event2 to continue as a floor unit.
  */
 static EVT_BEGIN(attack_event_ceil)
+
     // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Spiky
     // Parabuzzy with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -1266,7 +1269,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 25)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MET_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 
-    // Two hops back to its old column, then it walks home and restarts as a floor unit.
+    // Two hops near the target, then it walks home and restarts as a floor unit.
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 20, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.5f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

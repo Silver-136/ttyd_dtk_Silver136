@@ -266,6 +266,7 @@ EVT_END()
  * before dropping back to its resting pose.
  */
 static EVT_BEGIN(thunder_event)
+
     // Dark Puff gets ready to strike the whole party with lightning.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -557,10 +558,11 @@ EVT_END()
 
 /**
  * The Puff's plain attack with the weapon in LW(9):
- * picks a target and plays the A_2A and A_1A attack poses with SFX_ENM_KUMO_MOVE1 to 3 without leaving its spot;
+ * picks a target and plays the A_2A and A_1A attack poses with SFX_ENM_KUMO_MOVE1 to 3 while pulling back and diving at the target;
  * the damage check decides between a miss and a hit, then it returns to S_1.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -685,7 +687,7 @@ EVT_END()
 /**
  * Charges the Dark Puff: zooms the camera onto it,
  * sets the charged flag (part counter attribute 1024) with SFX_ENM_KUMO_CHARGE1 and the A_2A/A_2B poses,
- * so its next attack is the thunder.
+ * so it selects thunder on its next turn if the item-use check does not select an item.
  */
 static EVT_BEGIN(charge_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)

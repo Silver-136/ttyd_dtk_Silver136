@@ -143,7 +143,7 @@ static StatusVulnerability regist = {
 #endif
 
 /**
- * Weapon data for the Poison Pokey's head slam when it has 4 segments: 4 damage, one target, may inflict
+ * Weapon data for the Poison Pokey's head slam when it has 4 segments: 3 damage in retail (4 in demos), one target, may inflict
  * poison (60%).
  */
 static BattleWeapon weapon_sambo_mummy_head_attack_4 = {
@@ -190,7 +190,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_4 = {
 };
 
 /**
- * Weapon data for the Poison Pokey's head slam when it has 3 segments: 4 damage, one target, may inflict
+ * Weapon data for the Poison Pokey's head slam when it has 3 segments: 3 damage in retail (4 in demos), one target, may inflict
  * poison (60%).
  */
 static BattleWeapon weapon_sambo_mummy_head_attack_3 = {
@@ -237,7 +237,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_3 = {
 };
 
 /**
- * Weapon data for the Poison Pokey's head slam when it has 2 segments: 4 damage, a shell-toss-type hit, one
+ * Weapon data for the Poison Pokey's head slam when it has 2 segments: 3 damage in retail (4 in demos), a shell-toss-type hit, one
  * target, may inflict poison (60%).
  */
 static BattleWeapon weapon_sambo_mummy_head_attack_2 = {
@@ -326,7 +326,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon data for the Poison Pokey's segment throw when it has 4 segments: 3 damage, one target. */
+/** Weapon data for the Poison Pokey's segment throw when it has 4 segments: 4 damage in retail (3 in demos), one target. */
 static BattleWeapon weapon_sambo_mummy_spike_attack_4 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -367,7 +367,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_4 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon data for the Poison Pokey's segment throw when it has 3 segments: 3 damage, one target. */
+/** Weapon data for the Poison Pokey's segment throw when it has 3 segments: 4 damage in retail (3 in demos), one target. */
 static BattleWeapon weapon_sambo_mummy_spike_attack_3 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -408,7 +408,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_3 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon data for the Poison Pokey's segment throw when it has 2 segments: 3 damage, one target. */
+/** Weapon data for the Poison Pokey's segment throw when it has 2 segments: 4 damage in retail (3 in demos), one target. */
 static BattleWeapon weapon_sambo_mummy_spike_attack_2 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -544,7 +544,7 @@ static PoseTableEntry pose_table_body1[] = {
 };
 
 /**
- * Pose table of the Poison Pokey's hidden body parts and the thrown segment: they all just show the segment
+ * Pose table of the Poison Pokey's thrown segment (part 5): it shows the segment
  * pose (SNB_B_1).
  */
 static PoseTableEntry pose_table_parts[] = {
@@ -586,7 +586,7 @@ static BattleUnitKindPart parts[] = {
  * Init script of the Poison Pokey.
  * Registers its wait, attack, damage and confusion scripts, starts it with 4 body segments (unit work 0),
  * sets its height from that count through _body_param_set,
- * clears unit work 1 (the number of friends it has called), and sets its run and walk sounds.
+ * clears unit work 1 (its inherited summon depth), and sets its run and walk sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -648,7 +648,7 @@ EVT_END()
 
 /**
  * Damage reaction that knocks a segment off the Poison Pokey's stack.
- * With one segment left (unit work 0 is 1) it only plays the damage pose;
+ * With one segment left (unit work 0 is 1) it plays a damage or no-damage reaction;
  * otherwise it drops one segment (unit work 0 minus 1), recomputes the height with _body_param_set,
  * moves the status icon, cut and kiss offsets for the shorter stack and hands the hit to the next part down.
  * The lost segment (part 5) hops to the floor twice and blinks 40 times before disappearing.
@@ -897,10 +897,10 @@ EVT_END()
 
 /**
  * Damage reaction when the Poison Pokey is swallowed (Yoshi's Gulp):
- * with one segment left it plays the hurt pose 39,
+ * with one segment left it plays the hurt pose 39 if damaged, otherwise the no-damage reaction,
  * otherwise the segment handling of damage_event_bodylost applies (a segment is dropped,
  * the height and hit offsets shrink to the shorter stack,
- * the lost segment hops and blinks away) after a 3-frame wait.
+ * the lost segment dives forward and is hidden) after a 3-frame wait.
  */
 static EVT_BEGIN(damage_swallow_body)
     SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
@@ -975,8 +975,8 @@ EVT_END()
 
 /**
  * Turn script of the Poison Pokey. After an item-use check it works from the segment count (unit work 0).
- * With a full stack of 4 and at most one friend called so far,
- * it has a 20 percent chance to call a friend (call_friend_event) if there is room beside it.
+ * With a full stack of 4 and an inherited summon depth of at most 1,
+ * it has a 20 percent chance to call a friend (call_friend_event) if there is room 40 units ahead at a positive x coordinate.
  * With 2 or more segments it then rolls 0 to 69 and, on 30 or less,
  * throws its head segments (attack_head_2_event) if a target is available;
  * otherwise it uses the spike attack (attack_spike_event). A single segment always uses attack_head_1_event.
@@ -1086,7 +1086,7 @@ static EVT_BEGIN(attack_head_2_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens; the weapon cost is paid.
+    // The attack is declared and it waits for any protecting-unit movement; the weapon cost is paid.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     SWITCH(LW(10))
@@ -1180,7 +1180,7 @@ static EVT_BEGIN(attack_head_2_event)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_mummy_head_attack_2), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
 
-    // Hit check: a miss lets the target avoid, a hit goes on to the damage.
+    // Hit check: some misses play an avoid pose, a hit goes on to the damage.
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
         GOTO(90)
@@ -1287,7 +1287,7 @@ static EVT_BEGIN(attack_head_1_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens; the camera follows the Pokey.
+    // The attack is declared and it waits for any protecting-unit movement; the camera follows the Pokey.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_sambo_mummy_head_attack_1))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1308,7 +1308,7 @@ static EVT_BEGIN(attack_head_1_event)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_mummy_head_attack_1), DAMAGE_RESULT_FINAL_HIT, LW(5))
 
-    // Hit check: a miss lets the target avoid, a hit goes on to the damage.
+    // Hit check: some misses play an avoid pose, a hit goes on to the damage.
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
         GOTO(90)
@@ -1485,7 +1485,7 @@ static EVT_BEGIN(attack_spike_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens; the weapon cost is paid.
+    // The attack is declared and it waits for any protecting-unit movement; the weapon cost is paid.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     SWITCH(LW(10))
@@ -1582,7 +1582,7 @@ static EVT_BEGIN(attack_spike_event)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_mummy_spike_attack_2), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
 
-    // Hit check: a miss lets the target avoid, a hit goes on to the damage.
+    // Hit check: some misses play an avoid pose, a hit goes on to the damage.
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
         GOTO(90)
@@ -1734,8 +1734,8 @@ static EVT_BEGIN(call_friend_event)
         CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
     END_INLINE_EVENT
 
-    // A new Pokey pops up out of the ground beside the caller in a puff of smoke, and the caller counts one
-    // more friend called (unit work 1).
+    // A new Pokey pops up out of the ground beside the caller in a puff of smoke, and the new unit inherits
+    // the caller's summon depth plus one (unit work 1).
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_sambo), 0)
     SET_VALUE(LW(0), LW(6))
     SET_VALUE(LW(1), LW(7))

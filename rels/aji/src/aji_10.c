@@ -478,7 +478,9 @@ EVT_BEGIN(monitor_init)
 EVT_END()
 
 static EVT_BEGIN(peach_evt_stg1)
-    // The scene opens with the viewport expanding from 1 by 1 to the full screen.
+
+    // The scene opens: Peach is led through the fortress by X-Naut underlings.
+    // The viewport expands from 1 by 1 to the full screen.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_fade_tec_onoff, 1, 0)
     CALL(viewport, 0, 0, 1, 1)

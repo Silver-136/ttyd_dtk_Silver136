@@ -231,7 +231,7 @@ static BeroEntry w_bero_mapchg[] = {
 
 /**
  * Event script: plays the stop sound of a floating block (LW(15)) when it reaches its end height;
- * the big green, purple and orange blocks use their own sound.
+ * playback tests the descending flag LF(1), not the block-colour flag computed in LF(0).
  */
 EVT_BEGIN(floatblk_stop_se)
     CALL(evt_mobj_get_position, LW(15), LW(0), LW(1), LW(2))
@@ -272,7 +272,7 @@ EVT_END()
  * Event script: moves a floating block between two heights.
  * LW(0) is the block object, LW(1) its hit object, LW(2) the switch that started it,
  * LW(3) and LW(4) the start and end Y. The block accelerates up to 2 units per frame, plays the move sound,
- * carries Mario and the partner standing on it,
+ * applies carry offsets to Mario and the partner standing on it while descending,
  * reverses if one of them hits its underside while it is coming down, and shakes the camera when it lands.
  */
 EVT_BEGIN(floatblk_evt)
@@ -323,8 +323,8 @@ EVT_BEGIN(floatblk_evt)
         SET_VALUE(LW(8), -1)
     END_IF
 
-    // Each frame the block speeds up to 2 units per frame and carries Mario and his partner if they stand on
-    // it.
+    // Each frame the block speeds up to 2 units per frame; descending movement also applies carry offsets to
+    // Mario and his partner if they stand on it.
     CALL(evt_mobj_get_y_position, LW(15), LW(7))
     LOOP(0)
         SET_VALUE(LF(0), 0)
@@ -403,7 +403,7 @@ EVT_BEGIN(floatblk_evt)
         WAIT_FRAMES(1)
     END_LOOP
 
-    // It lands at the end height; the move sound stops and the landing sound plays.
+    // It reaches the end height; the move sound stops and the stop-sound event is started.
     CALL(evt_snd_sfxoff, LW(8))
     SPAWN_EVENT(PTR(floatblk_stop_se))
     IF_INT_EQUAL(LF(1), 1)
@@ -486,7 +486,7 @@ EVT_END()
 /**
  * Map init script for las_21: music (first or third Palace theme by story), the doors to las_19,
  * las_23 and las_20, and before STG8_06_MOVING_PLANETS hides the lower floor.
- * Afterwards the floating blocks of las_19 and las_21 are placed from the las_19 switch states,
+ * Afterwards the las_19 blocks use the las_19 switch states and both las_21 blocks start lowered,
  * with their float switches and a blue jump stand.
  */
 EVT_BEGIN(las_21_init_evt)
@@ -559,6 +559,7 @@ static USER_FUNC(set_party_y_pos) {
     party->position.y = evtGetFloat(event, args[0]);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: sets the Y of the map object named args[0] to args[1] and recomputes its matrix. */
 USER_FUNC(set_mobj_y_position) {
     EvtWord* args = event->args;

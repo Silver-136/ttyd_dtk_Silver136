@@ -224,7 +224,7 @@ EVT_END()
 
 /**
  * Wait event of the Mini Z-Yux: plays its idle pose and,
- * from time to time (every 30 to 150 frames) while its unit work 1 flag is set and it can act and is not asleep,
+ * from time to time (every 30 to 150 frames) while its unit work 1 flag is set and it can act and is not confused,
  * glows (S_4) for 180 frames.
  */
 static EVT_BEGIN(wait_event)

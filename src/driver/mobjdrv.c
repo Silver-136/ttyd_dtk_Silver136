@@ -68,6 +68,7 @@ typedef struct CubeVtxData18 {
     s32 count;
     Vec v[18];
 } CubeVtxData18;
+
 /** Corners of the built-in unit collision cube (1 wide and deep, 1 tall, base at the origin). */
 CubeVtxData34 cubeDVP = {
     8,
@@ -265,10 +266,11 @@ u32 cubeDN[1230] = {
 /** Mesh of the full collision cube: all six faces. */
 CubeMesh cubeDP = {0, {0}, 0, 6, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820], &cubeDN[1025]}};
 
-/** Joint of the solid cube collision (type 0) that mobjHitEntry copies into a block's hit object. */
 #if VERSION <= VERSION_DEMO_US
 CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
 #endif
+
+/** Joint of the solid cube collision (type 0) that mobjHitEntry copies into a block's hit object. */
 CubeJoint cubeDJ = {
     {NULL, NULL, NULL, NULL, NULL, NULL, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f},
      {-0.5f, 0.0f, -0.5f}, {0.5f, 1.0f, 0.5f}, {0}, &cubeMSJ.mode, 1},
@@ -295,10 +297,11 @@ CubeJoint frontDJ = {
     {NULL, (MapFileMesh*)&frontDP},
 };
 
-/** Mesh of a two-part object's second hit part: the five faces other than the front one. */
 #if VERSION <= VERSION_DEMO_US
 CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
 #endif
+
+/** Mesh of a two-part object's second hit part: the five faces other than the front one. */
 CubeMesh front2DP = {0, {0}, 0, 5, 0, cubeDDT, {cubeDN, &cubeDN[205], &cubeDN[410], &cubeDN[615], &cubeDN[820]}};
 
 /** Joint of a two-part object's second hit part (type 2), copied in by mobjHitEntry. */
@@ -570,7 +573,7 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
 
 /**
  * Creates a named map object (blocks, switches, boxes, save blocks, ...) drawing animation pose animPoseName,
- * reusing the slot if the name exists; returns its index. Called by the evt_mobj entry commands.
+ * using the first free slot; returns its index. Called by the evt_mobj entry commands.
  */
 s32 mobjEntry(const char* name, const char* animPoseName) {
     MapObjectWork* wp = mobjGetWork();
@@ -586,7 +589,6 @@ s32 mobjEntry(const char* name, const char* animPoseName) {
     }
     // the search for an active entry with the same name has no effect: its result is not used
 
-    // SPM uses this to assert the name isn't duplicate, here it's just pointless
     for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {
         if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0) {
             break;
@@ -614,7 +616,7 @@ s32 mobjEntry(const char* name, const char* animPoseName) {
     return idx;
 }
 
-/** Removes the named map object and its collision and frees its pose. */
+/** Removes the named map object and its collision. */
 void mobjDelete(const char* name) {
     MapObjectWork* wp = mobjGetWork();
     s32 entryCount;
@@ -639,7 +641,7 @@ void mobjDelete(const char* name) {
     }
 }
 
-/** Moves the named map object to (x, y, z) and updates its collision. */
+/** Moves the named map object to (x, y, z). */
 void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
     MapObjectWork* wp = mobjGetWork();
     MapObjectEntry* entry;
@@ -789,9 +791,8 @@ void mobjMain(void) {
             hit = 0;
             hitPtr = entry->hitObj[0].hitObject;
             if (mario->characterId != CHARACTER_BOWSER) {
-                // The first hit kind that applies wins. The goto is kept: the hammer and partner checks
-                // fall through to the next kind when their inner test fails, and no if/else-if form of
-                // that gives the same code (the partner blocks merge or re-test the flag).
+                // The first hit kind that applies wins. The hammer and partner checks
+                // fall through to the next kind when their inner test fails.
                 if ((entry->flags & MOBJ_FLAG_HIT_HAMMER) && mario->hitobjHammer == hitPtr) {
                     if (marioGetPtr()->position.y <= 5.0f + entry->position.y) {
                         entry->hitFlag = MOBJ_FLAG_HIT_HAMMER;
@@ -1169,6 +1170,7 @@ BOOL mobjCheckExec(void) {
 }
 
 #if VERSION > VERSION_DEMO_US
+
 /**
  * For a MOBJ_KururinFloor object returns 2 while its item is still there to find,
  * 1 once its item is out or its flag is set, and 0 for any other object. The demo keeps it as a real function.
@@ -1218,6 +1220,7 @@ void mobjStrippedFallPool(MapObjectEntry* entry) {
         entry->velocity.z = 0.0f;
     }
 }
+
 /** demo only: the nearest active mobj within minMagnitude of (x, y, z) */
 MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude) {
     int entryCount;
@@ -1320,6 +1323,7 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * For a MOBJ_KururinFloor object returns 2 while its item is still there to find,
  * 1 once its item is out or its flag is set, and 0 for any other object. The demo keeps it as a real function.

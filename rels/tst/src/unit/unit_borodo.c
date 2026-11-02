@@ -161,16 +161,16 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
 /**
- * Status vulnerability of Bandit (the demos), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability of Bandit (the demos), as percentage multipliers for the attack's base status chance:
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 70, Stop 90, Dizzy 90, Confuse 90, Freeze 70, Tiny 90, Attack Down 90, Defense Down 90,
  * Allergic 90, Fright 95, Gale Force 80, Slow 90 and instant KO 95.
  */
 static StatusVulnerability regist = {70, 90, 90, 100, 90, 100, 100, 70, 100, 90, 100, 90, 100, 90, 90, 95, 80, 100, 90, 100, 100, 95};
 #else
 /**
- * Status vulnerability of Bandit (the final versions), as the percent chance a status takes hold:
- * always hit by Sleep, Poison, Confuse, Electric, Burn, Huge, Attack Up, Defense Up, Defense Down, Fast,
+ * Status vulnerability of Bandit (the final versions), as percentage multipliers for the attack's base status chance:
+ * 100 for Sleep, Poison, Confuse, Electric, Burn, Huge, Attack Up, Defense Up, Defense Down, Fast,
  * Dodgy and Invisible; otherwise Stop 90, Dizzy 70, Freeze 70, Tiny 95, Attack Down 95, Allergic 90,
  * Fright 95, Gale Force 80, Slow 90 and instant KO 95.
  */
@@ -179,7 +179,7 @@ static StatusVulnerability regist = {100, 90, 70, 100, 100, 100, 100, 70, 100, 9
 
 /**
  * Pose table of Bandit: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to animation
- * names, 22 entries such as N_1, Y_1, K_1, X_1.
+ * names, 20 entries such as N_1, Y_1, K_1, X_1.
  */
 static PoseTableEntry pose_table[] = {
     {1, "N_1"},
@@ -211,7 +211,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Pose table of Bandit while it holds a stolen item: maps its battle pose types (stay, walk, hurt, dead,
- * talk and so on) to animation names, 20 entries such as N_1, Y_1, K_1, I_1.
+ * talk and so on) to animation names, 18 entries such as N_1, Y_1, K_1, I_1.
  */
 static PoseTableEntry pose_table_item_have[] = {
     {1, "N_1"},
@@ -295,7 +295,7 @@ EVT_END()
 
 /**
  * Chooses the Bandit's action: if it carries a stolen item (unit flag 0x40000000) it runs away with it
- * (escape_event); otherwise it uses an item if it has one, a confused Bandit makes a plain attack,
+ * (escape_event); otherwise it uses an item if the item-use check selects one, a confused Bandit makes a plain attack,
  * and normally it makes the plain attack (_borodo_normal_attack) about 11% of the time
  * and the stealing attack (_borodo_steal_attack) otherwise.
  */
@@ -654,7 +654,6 @@ static EVT_BEGIN(_borodo_steal_attack)
         GOTO(99)
     END_IF
 
-    // If it got the loot it laughs and switches to its item-carrying poses.
     // If it got the loot it laughs and switches to its item-carrying poses.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("O_2"))
     WAIT_FRAMES(14)

@@ -119,6 +119,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Pale Piranha (100% is the normal chance): resists Dizzy 80%, Confusion 95%,
  * Tiny 90%, Attack Down 90%, Defense Down 90%, Allergic 90%, Fright 40%, Gale Force 60%, Slow 90% and instant
@@ -175,7 +176,8 @@ static BattleWeapon weapon_pakkun_flower_attack = {
 };
 
 /**
- * Attack entry of the Pale Piranha: with a first-strike battle flag, or after any item use check,
+ * Attack entry of the Pale Piranha: with a first-strike battle flag, or when the item-use check
+ * returns no item event,
  * it runs normal_attack_event with its single weapon (weapon_pakkun_flower_attack),
  * then returns to the wait event.
  */
@@ -479,6 +481,7 @@ EVT_END()
  * Then it burrows back with return_event.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Picks the target: the preset first-attack target (after a short pause) when battle flag 2 is set, otherwise a
     // random opposing unit; with none it does nothing (or is flustered when confused).
     CALL(btlevtcmd_check_battleflag, LW(0), 2)
@@ -552,7 +555,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1C"))
 
-    // Checks the outcome of the hit: a miss, dodge or guard goes to the no-damage branch; a connecting hit applies
+    // Checks the outcome of the hit: a miss or dodge goes to the no-damage branch; a connecting hit applies
     // the Action Command defence result and deals the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))

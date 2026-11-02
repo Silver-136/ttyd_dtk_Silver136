@@ -110,10 +110,11 @@ EVT_END()
  * who flattens him with a hip attack that also knocks Kammy down.
  * The star falls and breaks in two, Kammy sees it is a fake made of glass, and the flattened Rawk Hawk says
  * Gonzales has the real one (kpa_stg6_009 to 023).
- * The story advances to STG6_55_04_BOWSER_RAWK_HAWK, the game is saved,
+ * The story advances to STG6_55_04_BOWSER_RAWK_HAWK, saving is offered,
  * and play goes to Rogueport (gor_04).
  */
 EVT_BEGIN(kpa_07_evt)
+
     // The scene opens on the empty room; Kammy is hidden until she catches up with Bowser.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -249, 0, 0)
@@ -424,7 +425,7 @@ EVT_BEGIN(kpa_07_evt)
     END_INLINE_EVENT
     WAIT_MS(2000)
 
-    // The story advances; the game is saved and the scene ends in Rogueport (gor_04).
+    // The story advances; saving is offered and the scene ends in Rogueport (gor_04).
     SET_VALUE(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)
@@ -469,12 +470,14 @@ void kpa_stg6_014_cb(s32 type, smartEntry* smart) {
     switch (type) {
         case 3:
             if (info->curPage == 1) {
+
                 // ブレッドハート
                 npc = npcNameToPtr("ブレッドハート");
                 strcpy(npc->stayAnim, "S_5");
                 strcpy(npc->talkAnim, "T_5");
             }
             if (info->curPage == 2) {
+
                 // ブレッドハート
                 npc = npcNameToPtr("ブレッドハート");
                 strcpy(npc->stayAnim, "S_1");
@@ -490,11 +493,13 @@ void kpa_stg6_012_1_cb(s32 type, smartEntry* smart) {
 
     switch (type) {
         case 0:
+
             // ババ
             animPoseSetAnim(npcNameToPtr("ババ")->poseId, "A_2B", TRUE);
             break;
         case 5:
             if (info->nextEntry == 8) {
+
                 // ババ
                 animPoseSetAnim(npcNameToPtr("ババ")->poseId, "T_1", TRUE);
             }

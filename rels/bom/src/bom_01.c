@@ -74,7 +74,7 @@ typedef struct SightWork {
     s32 count2;
 } SightWork;
 SightWork* sight_wp;
-// make_name's sprintf buffer; file scope so .bss keeps the target order lp, name, sight_wp (a function static is emitted first)
+// make_name's sprintf buffer.
 static char name[64];
 typedef struct BomAnim {
     char name[8];
@@ -304,7 +304,7 @@ EvtWord bom_01_init_evt[189];
 /**
  * Draws one textured 2D quad from the cannon-sight texture file (taihou.tpl) at screen position (x, y),
  * scaled by (sx, sy) and rotated by rot degrees; a negative scale mirrors it.
- * Texture 0 is drawn with a constant alpha.
+ * Texture 0 is drawn in black with inverse texture alpha.
  */
 void drawBG(s32 id, f32 x, f32 y, f32 sx, f32 sy, f32 rot) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
@@ -898,6 +898,7 @@ EVT_END()
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+
 /**
  * Extension-draw init for the 1000-Bob-omb crowd of the cannon scene:
  * allocates BomWork and scatters every sprite on a ring 500 to 900 units from the origin in the "R_1" pose.
@@ -974,6 +975,7 @@ void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+
 /**
  * Per-frame logic of the crowd: state 0 walks each Bob-omb towards the middle,
  * states 1 to 3 hop it onto the pile in three stages, 100 runs the hop arc,
@@ -1137,7 +1139,7 @@ static ExtTexInfo ext_data[] = {
 };
 
 /**
- * Registers the 1000-sprite Bob-omb crowd of the cannon scene as extension 1000 (make_ext_table frames,
+ * Registers the 1000-sprite Bob-omb crowd of the cannon scene (make_ext_table frames,
  * ext_init, ext_main, ext_dispent).
  */
 EVT_BEGIN(evt_bom1000)
@@ -1248,7 +1250,7 @@ static EVT_BEGIN(mario_kemuri)
     RETURN
 EVT_END()
 
-/** Starts the depth (screen blur) display; it keeps running for the rest of the map. */
+/** Starts the depth (screen blur) display; it runs until its script event is deleted. */
 EVT_BEGIN(evt_depth)
     CALL(depth)
     RETURN
@@ -1371,7 +1373,7 @@ EVT_BEGIN(open_hatch)
     RETURN
 EVT_END()
 
-/** Control points of the camera path (a spline) used in the cannon launch scene. */
+/** Control points of Mario's flight path (a spline) used in the cannon launch scene. */
 static f32 spline_dt[] = {
     -200.0f, 0.0f, 650.0f, 590.0f, 200.0f, -2150.0f, 1380.0f, 100.0f,
     -4950.0f,
@@ -1505,7 +1507,7 @@ static EVT_BEGIN(evt_taihou)
     END_LOOP
     WAIT_MS(500)
 
-    // White orders positions, and the crew answer (stg7_bom_66 and 67).
+    // The mayor orders positions, and the crew answer (stg7_bom_66 and 67).
     CALL(evt_msg_print, 0, STRING("stg7_bom_66"), 0, STRING("me"))
     SET_VALUE(GF(0), 0)
     CALL(evt_npc_flag_onoff, 0, STRING("\203z\203\217\203C\203g"), NPC_FLAG_TALK_ANIM)
@@ -2013,7 +2015,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_MARIO_FLY1"), 200, 0, -650, LW(5))
     SET_FLOAT_VALUE(LW(6), FLOAT(0.0f))
 
-    // He flies toward the Moon along the camera spline, then vanishes in a flash of light.
+    // He flies toward the Moon along the spline, then vanishes in a flash of light.
     CALL(evt_sub_spline_init, 1, 11, PTR(spline_dt), 3, 0, 2000)
     LABEL(20)
     CALL(evt_sub_spline_get_value, LW(0), LW(1), LW(2), LW(3))
@@ -2500,6 +2502,7 @@ s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+
 /**
  * Full-screen blur: copies the frame buffer into a texture and redraws it as eight overlapping copies,
  * each shifted by GW(5)/10000 of the screen in a ring (45 degrees apart) and blended at 1/8 strength.
@@ -2821,7 +2824,7 @@ static s32 starstone_set_ry(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Spawns the cheering crowd: builds its frame table, adds a dummy c_bom_sen NPC below the map,
- * and registers extension 250 with the crowd callbacks.
+ * and registers 250 sprites with the crowd callbacks.
  */
 EVT_BEGIN(bom1000_minnnanokoe)
     CALL(make_ext_table_minnnanokoe)

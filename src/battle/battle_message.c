@@ -19,7 +19,6 @@
 void _disp(CameraId cameraId, void* param);
 
 /** s32 type, s32 x, s32 y, const char* msg, s32 frames */
-// s32 type, s32 x, s32 y, const char* msg, s32 frames
 USER_FUNC(btlevtcmd_AnnounceMessage) {
     BattleAnnounce* announce = &_battleWorkPointer->announce;
 #if VERSION >= VERSION_US
@@ -101,7 +100,6 @@ void _disp(CameraId cameraId, void* param) {
 }
 
 /** s32 index, s32 value */
-// s32 index, s32 value
 USER_FUNC(btlevtcmd_AnnounceSetParam) {
     EvtWord* args = event->args;
     BattleAnnounce* announce = &_battleWorkPointer->announce;

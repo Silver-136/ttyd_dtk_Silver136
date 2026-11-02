@@ -198,7 +198,7 @@ static BattleWeapon weapon_heavy_bomb_guard = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data for the Bulky Bob-omb's second guard stance, which raises its own defence: no damage. */
+/** Attack data for the Bulky Bob-omb's second guard stance, which raises its own attack: no damage. */
 static BattleWeapon weapon_heavy_bomb_guard_2 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -240,7 +240,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data for the Bulky Bob-omb's third guard stance, which raises its own defence: no damage. */
+/** Attack data for the Bulky Bob-omb's third guard stance, which charges its next attack: no damage. */
 static BattleWeapon weapon_heavy_bomb_guard_3 = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -320,7 +320,7 @@ EVT_END()
  * experience and star points are awarded once (unit work 1 guards it);
  * then it tips over and the unit is killed: KO'd and deleted
  * when the hit defeated it for good (damage flag 0x400,
- * which a reviving unit only gets from fire or explosions), otherwise only marked inactive (KILL_UNIT_INACTIVE).
+ * also set by certain counter and instant-kill results, not just fire or explosions), otherwise only marked inactive (KILL_UNIT_INACTIVE).
  */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -378,7 +378,7 @@ EVT_END()
  * Event when the Dry Bones runs out of HP but can rebuild itself:
  * it moves to its home position, awards the reward once,
  * collapses into a pile of bones (KRN_D_2, crumble sound),
- * stays there for a second and sets unit work 2 to 2 or 3,
+ * stays there for a second and sets unit work 2 to 2, 3 or 4,
  * the number of turns until rebirth_event brings it back.
  */
 static EVT_BEGIN(fake_dead_event)
@@ -445,7 +445,7 @@ static EVT_BEGIN(rebirth_event)
 EVT_END()
 
 /**
- * Attack event of the Dry Bones: when confused it throws a plain bone;
+ * Attack event of the Dry Bones: for a first strike it throws a plain bone;
  * when collapsed it rebuilds itself (rebirth_event);
  * otherwise it can use an item, or draws a number from 0 to 99:
  * bone throw (50), three-bone throw (30) or calling a Dry Bones friend (20).
@@ -546,10 +546,11 @@ EVT_END()
  * Attack of the Dry Bones: it picks a target (weapon_honenoko_attack),
  * winds up (KRN_A_1, KRN_A_2) and throws a spinning bone (part 2) in an arc;
  * the target can dodge as the bone passes (start_avoid).
- * If the bone is not avoided it lands on the target with the action command defence check,
+ * On pre-check result 1 it lands on the target with the action command defence check,
  * and the bone then bounces off.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // The Dry Bones chooses who to throw a bone at (fixed by the field encounter when the battle opened with
     // its own first strike).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -562,6 +563,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_honenoko_attack), LW(3), LW(4))
     END_IF
     IF_INT_EQUAL(LW(3), -1)
+
         // With no target left, a confused Dry Bones is flustered and does nothing else.
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -605,7 +607,7 @@ static EVT_BEGIN(normal_attack_event)
         END_LOOP
     END_SIBLING_EVENT
 
-    // Decide now whether the bone will miss, be blocked or hit.
+    // Check whether the bone will miss, enter the hit branch or skip the impact.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -626,7 +628,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The bone misses: the target dodges as it flies past, and it lands on the stage floor beyond.
+    // The bone misses: the target may dodge as it flies past, and it lands on the stage floor beyond.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -680,7 +682,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
 
-    // The bone stops spinning and the part is switched back on.
+    // The bone stops spinning and its part is hidden.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
@@ -758,10 +760,11 @@ EVT_END()
 /**
  * One bone of the three-bone throw of the Dry Bones: LW(12) is the bone part (2, 3 or 4).
  * Wind-up, a spinning arc to the target and dodge or hit handling as in normal_attack_event;
- * the third bone does the damage check, and if an earlier bone hit,
- * unit work 3 makes the following ones hit too.
+ * every bone that enters the hit branch does a damage check; on the third bone,
+ * unit work 3 can bypass its pre-check result if an earlier bone hit.
  */
 static EVT_BEGIN(link_attack_event_sub)
+
     // Wind-up for this bone: arm back (KRN_A_1), then forward (KRN_A_2).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
@@ -789,8 +792,8 @@ static EVT_BEGIN(link_attack_event_sub)
         END_LOOP
     END_SIBLING_EVENT
 
-    // Only the third bone of the volley decides the real hit; if an earlier bone already hit, the later ones
-    // hit as well.
+    // Check each bone; only the third can enter the hit branch regardless of its pre-check result
+    // when an earlier bone has hit.
     IF_INT_EQUAL(LW(13), 3)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_link_attack), DAMAGE_RESULT_FINAL_HIT, LW(11))
     ELSE
@@ -803,7 +806,7 @@ static EVT_BEGIN(link_attack_event_sub)
         END_IF
     END_IF
 
-    // Branch on the pre-check result: miss or block, hit, or nothing.
+    // Branch on the pre-check result: miss, hit, or no impact.
     SWITCH(LW(11))
         CASE_OR_EQUAL(4)
         GOTO(90)
@@ -823,7 +826,7 @@ static EVT_BEGIN(link_attack_event_sub)
         CASE_END
     END_SWITCH
 
-    // The bone misses: the target dodges as it flies past, and it lands on the stage floor beyond.
+    // The bone misses: the target may dodge as it flies past, and it lands on the stage floor beyond.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -881,7 +884,7 @@ static EVT_BEGIN(link_attack_event_sub)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
 
-    // The bone stops spinning and the part is switched back on.
+    // Hide this bone; the third also stops the spin loops and marks the volley finished.
     LABEL(98)
     IF_INT_EQUAL(LW(13), 3)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
@@ -894,6 +897,7 @@ static EVT_BEGIN(link_attack_event_sub)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
+
     // The camera zooms in on the Dry Bones as it starts calling for help.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -976,7 +980,7 @@ static EVT_BEGIN(call_friend_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_S_1"))
 
-    // A Dull Bones joins the battle where the pile stood and inherits the caller's size status.
+    // A Dry Bones joins the battle where the pile stood and inherits the caller's size status.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_honenoko), 0)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 6, kHidden | kNoShadow)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))

@@ -1,4 +1,4 @@
-// mri_05 (巨木の中, The Great Tree): the soap-bubble room: Mario rides bubbles (evt_shabon_s) over the water;
+// mri_05 (巨木の中, The Great Tree): the soap-bubble room: Mario rides bubbles (mario_shabon_check) over the water;
 // Punies 4 and 5, a Puni-ball switch, and the door with the light lock.
 
 #include "version.h"
@@ -292,7 +292,7 @@ static EVT_BEGIN(door_switch)
 EVT_END()
 
 /**
- * Planter hit script 4: the first time it is hit it launches a Thunder Rage out of the planter;
+ * Planter search script 4: the first time it is searched it launches a Thunder Rage out of the planter;
  * remembered with a flag.
  */
 static EVT_BEGIN(evt_ueki_04)
@@ -554,7 +554,7 @@ USER_FUNC(evt_pcharge_pos) {
 /**
  * Decorative soap bubbles rising from the bottom of the room:
  * three independent loops spawn a Puni balloon effect at a random spot, raise it over about 7 seconds,
- * delete it and show a small pop when it reaches the top.
+ * delete it and show a small pop only when the chosen endpoint parameter is below 40.
  */
 EVT_BEGIN(evt_shabon_s)
     BEGIN_INLINE_EVENT
@@ -566,10 +566,8 @@ EVT_BEGIN(evt_shabon_s)
             ADD(LW(3), -80)
             ADD(LW(2), 55)
 
-            // First loop: a bubble effect rises from the bottom of the room at a random spot, then pops near
-            // the top.
-            // First loop: a bubble effect rises from the bottom of the room at a random spot, then pops near
-            // the top.
+            // First loop: a bubble effect rises from the bottom of the room at a random spot, then pops
+            // only when the chosen endpoint parameter is below 40.
             CALL(evt_eff, STRING("shabon1eff"), STRING("puni_balloon"), 0, LW(3), -319, LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
             CALL(evt_sub_random, 280, LW(4))
             ADD(LW(4), -69)

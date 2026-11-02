@@ -119,7 +119,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Planter hit script 8: the first time it is hit it launches a Power Punch badge out of the planter;
+ * Planter search script 8: the first time it is searched it launches a Power Punch item out of the planter;
  * remembered with a flag.
  */
 static EVT_BEGIN(evt_ueki_08)

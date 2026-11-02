@@ -442,7 +442,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Damage handler for Beldam: records in GW(11) when she took the "knocked out" damage code (1024),
+ * Damage handler for Beldam: records in GW(11) when a hit carries the death flag (1024),
  * then runs the default damage script.
  */
 static EVT_BEGIN(damage_event)
@@ -511,6 +511,7 @@ EVT_END()
  * and writes each sister's new slot back to her unit work 5.
  */
 EVT_BEGIN(majo_unison_phase_event)
+
     // Read the HP of each sister still standing (Vivian, Marilyn, Beldam) under the
     // formation slot she holds now.
     SET_VALUE(LW(0), -1)
@@ -654,11 +655,12 @@ EVT_END()
  * below 66% Beldam herself complains (btl_majo3_03), all living sisters get unit work 7 (enraged) and,
  * the first time, her next attack is the blizzard (unit work 8 = 3);
  * Marilyn below 50% gets ordered to hit Mario (btl_majo3_04, Marilyn grunts if she can act)
- * and Vivian below 50% gets scolded (btl_majo3_06, she apologizes), each setting that sister's unit work 7.
+ * and Vivian below 50% gets scolded (btl_majo3_06, she apologizes if she can act), each setting that sister's unit work 7.
  */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
+
         // After the player's phase Beldam counts down her blizzard cooldown.
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -697,7 +699,6 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_LOW_HP_ATTACK, 1)
                 END_IF
 
-                // Vivian below 50% HP: Beldam scolds her (btl_majo3_06) and Vivian apologizes (btl_majo3_07).
                 IF_INT_EQUAL(GW(13), 0)
                     CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_LOW_HP_ATTACK, 1)
                 END_IF
@@ -739,6 +740,8 @@ static EVT_BEGIN(phase_event)
                 END_IF
             END_IF
         END_IF
+
+        // Vivian below 50% HP: Beldam scolds her (btl_majo3_06) and Vivian apologizes (btl_majo3_07).
         IF_INT_EQUAL(GW(13), 0)
             CALL(btlevtcmd_GetUnitWork, GW(10), MAJO_WORK_LOW_HP_TALK_DONE, LW(0))
             IF_INT_EQUAL(LW(0), 0)
@@ -778,13 +781,15 @@ EVT_END()
  * Beldam's attack choice: uses an item if the AI picks one;
  * otherwise unit work 8 runs a fixed opening of shadow slip, shrinking powder on an enemy,
  * then enlarging powder on an ally,
- * and afterwards a weighted pick: shadow slip 40, enlarging powder 20 (if a target is not already Huge),
- * shrinking powder 20 (if a target is not already Tiny),
- * and the blizzard 20 once she is enraged (unit work 7) and its cooldown (unit work 9) is over.
+ * and afterwards a roll whose range size starts at 40 and grows by 20 for each useful powder and for the blizzard
+ * when she is enraged (unit work 7) and its cooldown (unit work 9) is over.
+ * The selection cutoffs stay fixed at 40 for shadow slip, 60 for enlarging powder and 80 for shrinking powder,
+ * with the blizzard otherwise.
  * Unit work 8 = 3 (set when she drops below 66% HP) uses the blizzard next;
  * the blizzard sets a two-phase cooldown.
  */
 static EVT_BEGIN(attack_event)
+
     // Use an item if the AI decided to.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -817,9 +822,10 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
         CALL_CHILD(PTR(blizzard_attack_event))
         CASE_EQUAL(4)
-        // After the opening, a weighted pick: shadow slip 40,
+
+        // After the opening, build the roll-range size from 40,
         // plus 20 for each powder still useful and 20 for the blizzard once she is
-        // angry and its cooldown is over.
+        // angry and its cooldown is over; selection below still uses fixed cutoffs.
         SET_VALUE(LW(14), 40)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack1))
         CALL_CHILD(PTR(powder_attack_check))
@@ -1132,7 +1138,7 @@ static EVT_BEGIN(powder_attack_event)
     RETURN
 EVT_END()
 
-/** Wait event of Beldam: switches to pose table entry 1 (idle). */
+/** Wait event of Beldam: restores automatic pose-table animation selection for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1140,7 +1146,7 @@ EVT_END()
 
 /**
  * Background loop that keeps Beldam's shadow-tail position (unit work 0..2) following her position on the stage
- * floor each frame, until the unit is gone.
+ * floor each frame while the shadow-tail hold flag is clear, until the unit is gone.
  */
 EVT_BEGIN(majo3_shadow_tail_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

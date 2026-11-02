@@ -510,9 +510,10 @@ EVT_END()
  * and applies the damage with the action command defence check. It then turns around and floats back home.
  */
 static EVT_BEGIN(normal_attack_event)
+
+    // Pick a target for the attack; a confused unit that has none flusters.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // Pick a target for the attack; a confused unit that has none flusters.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -777,7 +778,7 @@ EVT_END()
 /**
  * The Boo's group move: for every Boo that has not moved yet (unit work 0 = 0) it starts move_event_sub,
  * adding 20 frames to the wait each time, then waits 80 frames plus that before returning to the S_1 pose.
- * The EU release also counts the Boos and guarantees a minimum wait of 145 frames,
+ * The EU release also counts the Boos and attempts to enforce a minimum wait of 145 frames,
  * but its count is cleared on every pass and never reaches 2.
  */
 static EVT_BEGIN(move_event)
@@ -828,7 +829,7 @@ EVT_END()
 
 /**
  * Per-Boo part of move_event, for the unit in LW(3):
- * after a random 60 to 79 frame delay it sets that unit's work 0 to 1,
+ * after a random 60 to 80 frame delay it sets that unit's work 0 to 1,
  * spins it at 12 degrees per frame for 60 frames and dives it to height 40, which becomes its home position.
  * The casting Boo itself has no delay and does not spin, and plays T_1 half a second in.
  */
@@ -866,7 +867,7 @@ static EVT_BEGIN(move_event_sub)
     RETURN
 EVT_END()
 
-/** Idle event: shows the unit's table pose for state 1. */
+/** Idle event: restores automatic pose-table animation selection for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

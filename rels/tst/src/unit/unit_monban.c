@@ -233,7 +233,7 @@ static BattleWeapon weapon_monban_throw_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Sound timing of Gus: the sound effect played at set points of its idle, walk and run animations. */
+/** Sound timing of Gus: the sound effect played at a set point of its idle animation. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"S_2", 0.6666667f, NULL, "SFX_ENM_MONBAN_WAIT1", 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},
@@ -317,7 +317,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Attack event of Gus: uses an enemy item if he has one,
+ * Attack event of Gus: uses an enemy item if the item-use check selects one,
  * otherwise 50% weapon_monban_attack (normal_attack_event)
  * and 50% weapon_monban_throw_attack (throw_attack_event).
  */
@@ -352,6 +352,7 @@ EVT_END()
  * Afterwards he walks home and laughs three times.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Target: the first-strike target if the battle opened that way, otherwise one picked for his attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -456,7 +457,6 @@ static EVT_BEGIN(normal_attack_event)
     GOTO(98)
 
     // He walks back to his home position, laughs at the result and stands idle again.
-    // Gus laughs at the result and stands idle again.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -479,6 +479,7 @@ EVT_END()
  * the pre-damage check decides between a dodge and a hit, then he laughs and returns to idle.
  */
 static EVT_BEGIN(throw_attack_event)
+
     // Target: the first-strike target if the battle opened that way, otherwise one picked for his attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

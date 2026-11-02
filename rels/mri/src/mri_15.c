@@ -37,7 +37,7 @@ EvtWord ueki_evt_01[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_15_init_evt[156];
 
-/** Closes the south door (S_doa); used as the door-close script of the south loading zone. */
+/** Closes the door (S_doa); used as the door-close script of the west loading zone. */
 static EVT_BEGIN(bero_s_doa_close)
     SET_VALUE(LW(9), 0)
     SET_VALUE(LW(10), STRING("S_doa"))
@@ -45,7 +45,7 @@ static EVT_BEGIN(bero_s_doa_close)
     RETURN
 EVT_END()
 
-/** Opens the south door (S_doa); used as the door-open script of the south loading zone. */
+/** Opens the door (S_doa); used as the door-open script of the west loading zone. */
 static EVT_BEGIN(bero_s_doa_open)
     SET_VALUE(LW(9), 0)
     SET_VALUE(LW(10), STRING("S_doa"))
@@ -170,7 +170,7 @@ EVT_END()
 
 /**
  * The chase and fight in mri_15 (story STG2_23_TIME_BOMB_ACTIVATED): Lord Crump runs off,
- * then when Mario steps onto the platform the two X-Naut grunts (battle info 11) attack;
+ * then once Mario is on A_yuka at x <= 20 and BeroEXEC equals 65536, the two X-Naut grunts (battle info 11) attack;
  * afterwards they are removed. Sets the story to STG2_23_01_X_NAUT_BATTLE.
  */
 EVT_BEGIN(dai3_battle)

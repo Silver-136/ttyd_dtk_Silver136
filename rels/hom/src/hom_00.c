@@ -928,7 +928,7 @@ EVT_BEGIN(hom_00_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
 
-    // From the drawbridge-down step on, the bridge is lowered and the train door can be used.
+    // From the drawbridge-down step on, the bridge is lowered; at that step, the train's boarding event is registered.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_42_DRAWBRIDGE_DOWN)
         CALL(evt_map_playanim, STRING("hasi"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF

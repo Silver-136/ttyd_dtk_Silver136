@@ -79,7 +79,7 @@ EVT_END()
 
 /**
  * Map init script of tik_09.
- * Starts with the pipe sunk 30 units (hit area bound to it), starts the music and ambience,
+ * Starts with the pipe translated 30 units upward (hit area bound to it), starts the music and ambience,
  * sets up the exits and runs evt_tik09_dokan.
  */
 EVT_BEGIN(tik_09_init_evt)

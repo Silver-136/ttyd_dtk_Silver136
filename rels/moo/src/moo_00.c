@@ -106,8 +106,8 @@ static f32 spline_dt[] = {
 };
 
 /**
- * Event script: puts the active partner (by party id: Goombella, Koops, Flurrie, Yoshi, Vivian, Bobbery,
- * Ms. Mowz) into its first "hurt" pose, used while they lie on the ground after the crash landing.
+ * Event script: puts the active partner (by party id: Goombella, Koops, Bobbery, Yoshi, Flurrie, Vivian,
+ * Ms. Mowz) into its first "hurt" pose, used while they tumble down in the crash landing.
  */
 static EVT_BEGIN(party_damage_pose)
     CALL(evt_mario_get_party, LW(0))
@@ -322,14 +322,14 @@ static EVT_BEGIN(evt_first)
     RETURN
 EVT_END()
 
+/**
+ * Rock-blasting script: Bobbery's explosion breaks a rock into an offscreen crumble animation,
+ * then its model and collision are removed. US and PAL skip the animation if the capture has zero width or height.
+ * LW(10) is the map object and LW(11) the collision object of the rock.
+ */
 #if VERSION >= VERSION_US
 EVT_BEGIN(rock_main)
 #else
-/**
- * Rock-blasting script (JP version): Bobbery's explosion breaks a rock into an offscreen crumble animation,
- * then its model and collision are removed.
- * LW(10) is the map object and LW(11) the collision object of the rock.
- */
 static EVT_BEGIN(rock_main)
 #endif
     BEGIN_INLINE_EVENT

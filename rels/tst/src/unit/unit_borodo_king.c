@@ -163,6 +163,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of Big Bandit (the demos), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -171,6 +172,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 60, 100, 80, 100, 80, 100, 80, 80, 85, 70, 100, 80, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of Big Bandit (the final versions), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -182,7 +184,7 @@ static StatusVulnerability regist = {90, 80, 60, 100, 90, 100, 100, 60, 100, 90,
 
 /**
  * Pose table of Big Bandit: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
- * animation names, 22 entries such as N_1, Y_1, K_1, X_1.
+ * animation names, 20 entries such as N_1, Y_1, K_1, X_1.
  */
 static PoseTableEntry pose_table[] = {
     {1, "N_1"},
@@ -214,7 +216,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Pose table of Big Bandit while it holds a stolen item: maps its battle pose types (stay, walk, hurt,
- * dead, talk and so on) to animation names, 20 entries such as N_1, Y_1, K_1, I_1.
+ * dead, talk and so on) to animation names, 18 entries such as N_1, Y_1, K_1, I_1.
  */
 static PoseTableEntry pose_table_item_have[] = {
     {1, "N_1"},
@@ -298,7 +300,7 @@ EVT_END()
 
 /**
  * Chooses the Big Bandit's action: if it carries a stolen item (unit flag 0x40000000) it runs away with it
- * (escape_event); otherwise it uses an item if it has one, a confused Bandit makes a plain attack,
+ * (escape_event); otherwise it uses an item when the item check selects one, a confused Bandit makes a plain attack,
  * and normally it makes the plain attack (_borodo_normal_attack) about 35% of the time
  * and the stealing attack (_borodo_steal_attack) otherwise.
  */
@@ -658,7 +660,6 @@ static EVT_BEGIN(_borodo_steal_attack)
     END_IF
 
     // If it got the loot it laughs and switches to its item-carrying poses.
-    // If it got the loot it laughs and switches to its item-carrying poses.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("O_2"))
     WAIT_FRAMES(14)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_LAUGH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -680,7 +681,7 @@ EVT_END()
 
 /**
  * The Bandit runs away with the stolen item: it turns around (SFX_ENM_BORODO_WAIT1, pose R_3), hops,
- * blurs with SFX_ENM_BORODO_ESCAPE1 and dashes 300 units off the stage at speed 9,
+ * blurs with SFX_ENM_BORODO_ESCAPE1 and dashes off the stage to X = 300 at speed 9,
  * then removes itself from the battle (KillUnit), taking the item with it.
  */
 static EVT_BEGIN(escape_event)
@@ -723,8 +724,8 @@ EVT_END()
 /**
  * Script helper for the Big Bandit's steal.
  * args[0] is the thief, args[1] the victim; args[2]-args[4] receive the item id, its icon and the amount taken.
- * 40% of the time it takes up to 10 coins, otherwise a random held item
- * or badge (equipped badges are removed from the party member wearing them).
+ * 40% of the time it takes up to 10 coins, otherwise a random held item.
+ * The badge-selection branch is not reached by this held-item-only draw.
  */
 static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;

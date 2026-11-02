@@ -82,14 +82,14 @@ BattleUnitKind unit_hennya = {
     data_table, // dataTable
 };
 
-/** Defence of the Spunia: 2 damage points off every hit. */
+/** Defence of the Spunia: base defence 2 against every element. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 /** Element reactions of the Spunia: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of the Spunia (percent chance to take each status): immune to dodgy and invisibility;
+ * Status vulnerability of the Spunia (percentage multipliers on status-infliction chances): immune to dodgy and invisibility;
  * extra prone to poison, electric shock, burn, growing huge, attack up, defence up and speed up;
  * resists most other statuses.
  */
@@ -251,6 +251,7 @@ EVT_END()
  * A flustered (confused) unit with no target runs subsetevt_confuse_flustered.
  */
 static EVT_BEGIN(attack_event)
+
     // Choose the target: the First Strike target if the battle opened with one,
     // otherwise it may use an item or pick a normal target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -269,7 +270,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_hannya_attack), LW(3), LW(4))
     END_IF
 
-    // No target left: a confused Spania is flustered; either way it ends its turn.
+    // No target left: a confused Spunia is flustered; either way it ends its turn.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -279,7 +280,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // The camera frames the Spania and its target, and the attack is announced.
+    // The camera frames the Spunia and its target, and the attack is announced.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -337,7 +338,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Spania zooms on past it.
+    // The charge missed: the Spunia zooms on past the target.
     LABEL(90)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     MULTIPLY(LW(14), 500)
@@ -346,7 +347,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     GOTO(98)
 
-    // The charge hits: the camera shakes, the damage is dealt and the Spania carries on past.
+    // The charge hits: the camera shakes, the damage is dealt and the Spunia carries on past.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)

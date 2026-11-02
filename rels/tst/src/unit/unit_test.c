@@ -29,14 +29,14 @@ static EvtWord wakeup_event[67];
 static EvtWord attack_event[190];
 static EvtWord wait_event[7];
 
-/** Defence of the test unit `test`: none, every hit does its full damage. */
+/** Base defence of the test unit `test`: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element modifiers of the test unit `test`: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Defence of the test unit `test` while it is flipped on its back: none, every hit does its full damage.
+ * Base defence of the test unit `test` while it is flipped on its back: no damage reduction.
  */
 static BattleUnitDefense defence_turn = {{0, 0, 0, 0, 0}};
 

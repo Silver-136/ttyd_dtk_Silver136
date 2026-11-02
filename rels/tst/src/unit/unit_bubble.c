@@ -56,6 +56,7 @@ static EvtWord wait_event[6];
  * and resets the new unit's HP gauge to match.
  */
 static USER_FUNC(bubble_copy_status) {
+
     // Copy capped current HP and size-change state, then synchronize the new HP gauge.
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
@@ -90,7 +91,7 @@ BattleUnitKind unit_bubble = {
     2, // bonusCoin
     70, // bonusCoinRate
 #endif
-    1, // baseCoin
+    1, // bonusCoin in demos; baseCoin in retail
 #if VERSION <= VERSION_DEMO_US
     70,
     2,
@@ -297,7 +298,7 @@ static BattleWeapon weapon_bubble_fire_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Setup for the Lava Bubble that splits off when the Lava Bubble is hit by fire or an explosion. */
+/** Setup for the Lava Bubble that splits off when the Lava Bubble is hit by fire. */
 static BattleUnitSetup entry_bubble = {
     &unit_bubble, // unitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -346,9 +347,9 @@ static EVT_BEGIN(avoid_fire_event)
 EVT_END()
 
 /**
- * Reaction script bound to data-table entry 11 (hit by fire or an explosion):
- * plays pose A_2B, then looks along the stage for a free spot, first toward the front then toward the back,
- * in 10-unit steps; at the first free spot it runs friend_event
+ * Reaction script bound to data-table entry 11 (a fire hit):
+ * plays pose A_2B, then looks for a free spot, first opposite its facing direction and then along it,
+ * changing x by 40 and z by 10 per check; at the first free spot it runs friend_event
  * and the Lava Bubble splits into a second Lava Bubble.
  * Ends if no free spot is found.
  */
@@ -459,6 +460,7 @@ EVT_END()
  * (A_1B) and hits it with the usual dodge and guard checks, then hops back home.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -595,7 +597,7 @@ EVT_END()
 /**
  * Script helper, run as a sibling event for the Lava Bubble's fire attack:
  * creates a fire effect on the first call and keeps it at part 2's position,
- * growing it by 0.1 per frame up to the unit's size multiplier. Never finishes; the attack script ends it.
+ * growing it by 0.1 times the unit's size multiplier per call, up to that multiplier. Never finishes; the attack script ends it.
  */
 static USER_FUNC(eff_fire) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
@@ -638,6 +640,7 @@ static USER_FUNC(eff_fire) {
  * (75% chance of a 3-turn burn), with a smoke puff at the target.
  */
 static EVT_BEGIN(fire_attack_event)
+
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -789,12 +792,14 @@ EVT_END()
 
 /**
  * Unused fire-wall attack of the Lava Bubble (attack_event never picks it): it hops to x = -40, shakes,
- * lights a row of ten flames in front of itself (all_fire_attackEvent_sub) and hits every target with the weapon
- * in LW(9), then hops home.
+ * lights a row of ten flames in front of itself (all_fire_attackEvent_sub) and checks selected targets with the weapon
+ * in LW(9), stopping at the first avoidance, then hops home.
  */
+
 // Only the hit branch advances to the next target; avoidance exits the entire sweep.
 static EVT_BEGIN(all_fire_attack_event)
-    // Choose a target (this move reaches every opposing unit).
+
+    // Choose the first target for the sweep; avoidance can end it before later targets.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -862,7 +867,7 @@ static EVT_BEGIN(all_fire_attack_event)
     SET_VALUE(LW(10), 0)
     LABEL(0)
 
-    // Each target in turn gets the hit check and then the damage.
+    // Check selected targets in turn; only hits take damage and advance, while avoidance ends the sweep.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)

@@ -159,10 +159,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of X-Nauts (percent chance each status takes hold): immune to sleep, stop, dizzy,
+ * Status vulnerability of X-Nauts (susceptibility multipliers): immune to sleep, stop, dizzy,
  * poison, confusion, electrified, burn, freeze, Huge, Tiny, Attack Up, Attack Down, Defense Up,
- * Defense Down, allergic, fright, Gale Force, Fast, Slow, Dodgy, Invisible, instant KO;
- * the rest take hold at 80% or better.
+ * Defense Down, allergic, fright, Gale Force, Fast, Slow, Dodgy, Invisible, instant KO.
  */
 static StatusVulnerability regist = {
     0, // sleep
@@ -587,7 +586,7 @@ USER_FUNC(up_ceil) {
 
 /**
  * Script helper: makes the lowered stage objects if_body and if_wire shudder between height 130
- * and 135 over 9 frames.
+ * and 135 in an 18-update cycle.
  */
 USER_FUNC(shake_ceil) {
     BattleStageObject* body = BattleSearchObjectPtr("if_body");
@@ -1003,8 +1002,8 @@ EVT_BEGIN(hit_check_event2)
 EVT_END()
 
 /**
- * One hit of a group 2 attack: starts the target's avoid pose on a dodge,
- * otherwise applies the hit with the action-command defence (the last hit when LW(15) is 1).
+ * One hit of a group 2 attack: checks for a miss (playing an avoid pose for some miss results),
+ * or applies the hit with the action-command defence (the last hit when LW(15) is 1).
  * In the fall attack the first landed hit sets unit work 1, after which the last hit skips the dodge check.
  */
 EVT_BEGIN(hit_check_event_sub)

@@ -278,7 +278,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-/** Attack event of the Smorg's mouth: uses an enemy item if it has one, otherwise runs evt_attack. */
+/** Attack event of the Smorg's mouth: uses an enemy item if the item-use check selects one, otherwise runs evt_attack. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -479,7 +479,7 @@ static EVT_BEGIN(evt_attack)
     RETURN
 EVT_END()
 
-/** Idle event: shows the unit's table pose for state 1. */
+/** Idle event: selects the current-state pose for part 1 from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

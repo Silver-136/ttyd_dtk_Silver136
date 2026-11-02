@@ -156,7 +156,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack of the placeholder unit: uses an enemy item if it has one (and then ends its turn),
+ * Attack of the placeholder unit: uses an enemy item if the item-use check selects one (and then ends its turn),
  * otherwise does nothing and just restarts the wait event.
  */
 static EVT_BEGIN(attack_event)

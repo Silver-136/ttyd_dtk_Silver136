@@ -89,7 +89,7 @@ BattleUnitKind unit_togedaruma = {
 
 /**
  * Defence of the Bristle's body: 4 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{4, 99, 4, 4, 4}};
 
@@ -323,6 +323,7 @@ EVT_END()
  * rolls it backwards over 10 frames if it was not already flipped,
  * hops and rests on its back at y = 10 (pose TGD_S_5).
  */
+
 // Refresh the flipped countdown to two; only a newly flipped unit plays the initial rotation.
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), -2)
@@ -407,13 +408,14 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Attack event of the Bristle: gets up first if it is flipped over;
- * otherwise it uses an enemy item if it has one,
+ * Attack event of the Bristle: counts down its recovery turn if it is flipped over;
+ * otherwise it may run a selected enemy-item script,
  * or curls up (TGD_J_1, A_1) and rolls at one target (weapon_togedaruma_attack).
  * The pre-damage check decides between a dodge and a hit with the action-command result, then it returns home.
  */
 static EVT_BEGIN(attack_event)
-    // Flipped over: it gets up instead of attacking.
+
+    // Flipped over: it counts down its recovery turn instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)
@@ -426,6 +428,7 @@ static EVT_BEGIN(attack_event)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
+
         // It may use an enemy item instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

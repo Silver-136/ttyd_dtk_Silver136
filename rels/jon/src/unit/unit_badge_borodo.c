@@ -53,7 +53,7 @@ static EvtWord wait_event[26];
  * args[0] = thief, args[1] = target, args[2..4] = variables that receive the stolen item id,
  * its icon and a coin count.
  * 40% of the time it takes up to 10 coins; otherwise it picks at random among all the badges
- * and held items in the pouch, removes the chosen one (unequipping it from Mario or a partner if it was worn and
+ * in the pouch, removes the chosen one (unequipping it from Mario or a partner if it was worn and
  * refreshing their stats) and keeps it in the unit's heldItem.
  */
 static USER_FUNC(_steal_item) {
@@ -413,7 +413,7 @@ EVT_END()
  * Attack script of the Badge Bandit.
  * If it already carries loot (unit flag 0x40000000) it runs escape_event and leaves the battle.
  * Otherwise it checks for an item use, always uses the plain attack while confused,
- * and else draws a random number to choose between the plain attack (about 70 in 209) and the steal attack.
+ * and else draws a random number to choose between the plain attack (about 70 in 210) and the steal attack.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
@@ -451,6 +451,7 @@ EVT_END()
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(_borodo_normal_attack)
+
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -606,6 +607,7 @@ EVT_END()
  * If nothing was taken it just bows, then returns home.
  */
 static EVT_BEGIN(_borodo_steal_attack)
+
     // Pick a target; a confused Badge Bandit with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -722,6 +724,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
         CALL(_steal_item, UNIT_ID_SELF, LW(3), LW(8), LW(9), LW(7))
         IF_INT_NOT_EQUAL(LW(8), 0)
+
             // Something was taken: the "item lost" message appears and the loot flies off toward the Badge
             // Bandit, which now carries it.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_SUCCESS1"), EVT_NULLPTR, 0, EVT_NULLPTR)

@@ -114,7 +114,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Doopliss' entrance (case script when Mario steps on the floor, before the first Doopliss battle):
- * Doopliss (Rampell in the scripts) is on the stairs, speaks with Mario and Goombella, jumps down to Mario,
+ * Doopliss (Rampell in the scripts) is on the stairs, speaks with Mario and his current partner, jumps down to Mario,
  * and the first Doopliss battle starts.
  * Afterwards the Mario-swap scene (irekawatta_mario) runs and the story becomes "Doopliss battle".
  */
@@ -1077,6 +1077,7 @@ static USER_FUNC(getYoshiColor) {
     evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: sets a flag in Vivian's party data so she is treated as having left the party. */
 USER_FUNC(vivian_away) {
     pouchGetPtr()->partyData[PARTNER_VIVIAN].flags |= 2;

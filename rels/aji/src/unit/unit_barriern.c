@@ -33,6 +33,7 @@
 #define UNIT_WORK_BARRIER_EFFECT 3    // barrier EffectEntry (effSyuryouEntry) while a satellite is alive; deleted when none is left (SFX_ENM_BARRI_BARRIER_BREAK1)
 #define UNIT_WORK_SATELLITE 4         // first of the satellite unit ids (slots 4..5), -1 = none
 #define UNIT_WORK_SATELLITE_SPLINE 10 // first of the per-satellite BarriernSpline pointers (slot 10 + n) of a move in progress; freed after 60 frames
+
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_TARGET_UNIT 0 // part 1: first of the target unit ids (slots 0-4) of the current attack
 #define PARTS_WORK_TARGET_PART 5 // part 1: first of the target part ids (slots 5-9), paired with PARTS_WORK_TARGET_UNIT
@@ -915,6 +916,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
     {
+
         // The satellite body uses the owner counter; its afterimages use n + 1 below.
         f32 s = intplGetValue(EASING_QUADRATIC_OUT, 0.8f, scale, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
@@ -1932,6 +1934,7 @@ static USER_FUNC(barriern_wawawa_set_target) {
         i++;
         barriern_wawawa_get_next_target(&unitIdx[i], &partIdx[i]);
     }
+
     // Fill five target pairs even though this unit fires only three shots.
     for (i = 0; i < 5; i++) {
         s32 r = irand(num);
@@ -2046,7 +2049,7 @@ static USER_FUNC(_check_satellite) {
 
 /**
  * Script function: returns the starting offset of satellite index args[2]
- * when the Yux has args[1] satellites (1 to 4 laid out as a fixed pattern 25 units apart,
+ * when the Yux has args[1] satellites (1 to 4 laid out as a fixed pattern with x/y offsets of 0 and ±25,
  * mirrored by the facing direction) in the variables args[3] to args[5] as x, y and z.
  */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {

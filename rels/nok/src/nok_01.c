@@ -126,7 +126,7 @@ EvtWord nok_01_init_evt[337];
 
 /**
  * Message callback for the Trouble Center request 8 (irai_08_001) text:
- * when the text reaches character 9 it clears GF(0),
+ * when the message advances to page index 9 it clears GF(0),
  * which releases the parallel thread that puts Mario to sleep (evt_mario_sleep_on) while Mayor Kroop talks.
  */
 void iri_08_msg(s32 type, void** work) {
@@ -565,6 +565,7 @@ EVT_BEGIN(boss_noko_talk)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             ELSE
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
+
                     // Request 17: the mayor takes the Routing Slip from Mario.
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
@@ -589,13 +590,14 @@ EVT_BEGIN(boss_noko_talk)
         END_IF
     END_IF
 
-    // With no request pending, his talk follows the story.
+    // If neither request branch returns, his talk follows the story.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_02_TALKING_WITH_KROOP)
         CALL_CHILD(PTR(boss_noko_open_gate))
         CASE_LESS(STG1_08_OPENING_THE_PATH)
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
             IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
+
                 // After the Sun Stone and Moon Stone errand he congratulates Mario.
                 CALL(evt_msg_print, 0, STRING("stg1_nok_56"), 0, 0)
                 RETURN
@@ -652,6 +654,7 @@ EVT_BEGIN(nokorin_talk)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(evt_msg_print, 0, STRING("stg1_nok_64_01"), 0, 0)
             ELSE
+
             // She confides her worries about her boyfriend Koops.
             CALL(evt_msg_print, 0, STRING("stg1_nok_65"), 0, 0)
             IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 0)
@@ -692,7 +695,8 @@ EVT_BEGIN(nokorin_talk)
     CASE_LESS(STG2_00_BOGGLY_WOODS)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
-        // Chapter 2 on: she cheers Koops on and asks Mario to look after him.
+
+        // Before chapter 2: she cheers Koops on and asks Mario to look after him.
         CALL(evt_msg_print, 0, STRING("stg1_nok_71"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_72"), 0, 0)
@@ -714,6 +718,7 @@ EVT_BEGIN(nokorin_talk)
     CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
+
         // The late game: she wonders whether Koops has changed.
         CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
         ELSE
@@ -828,7 +833,7 @@ static EVT_BEGIN(odoriko_3_init)
     RETURN
 EVT_END()
 
-/** NPCs of the east village: the mayor, the gate guard, Koops, Koops's father and Koopie Koo. */
+/** NPCs of the east village: four other Koopas, the mayor, the gate guard, Koops, Koops's father and Koopie Koo. */
 static NpcSetupInfo npcEnt[] = {
     {
         "ノコノコG", // name
@@ -1120,8 +1125,9 @@ static HitDamageReturn hitDmgRetPoints[] = {
 /**
  * Cutscene after Mario returns from Hooktail: Mario, Koops's father, Koopie Koo,
  * Kroop and Goombella gather in Petalburg and Koops says goodbye.
- * Both partners are walked off and deleted, the story becomes STG1_20_KOOPS_LEAVES,
- * the party is cleared and control is returned (JP and later also record the respawn position).
+ * The temporary Koops and Goombella NPCs are replaced by partner forms: the first is sent away,
+ * the second stays active, and the story becomes STG1_20_KOOPS_LEAVES.
+ * Control is returned (JP and later also record the respawn position).
  */
 EVT_BEGIN(nokotarou_tabidachi)
     CALL(evt_mario_key_onoff, 0)
@@ -1247,7 +1253,7 @@ static USER_FUNC(yami_view) {
 /**
  * Reaction of one villager (name in LW(0)) in the darkening-world cutscene:
  * waits until the darkness sweep (GW(0), set by sekai_yami_evt) passes his x position, stops his regular script,
- * shows a surprise bubble and then turns around at random intervals (100 to 499 ms) forever.
+ * shows a surprise bubble and then turns around at random intervals (100 to 500 ms) forever.
  */
 static EVT_BEGIN(sekai_yami_npc)
     LOOP(0)
@@ -1816,6 +1822,7 @@ EVT_BEGIN(nok_01_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+
             // The chapter 8 finale scenes start from here.
             SPAWN_EVENT(PTR(sekai_yami_evt))
         END_IF

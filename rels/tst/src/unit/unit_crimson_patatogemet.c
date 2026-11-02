@@ -207,6 +207,7 @@ static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the R. Parabuzzy in its winged state (the demos),
  * as the percent chance a status takes hold: immune to Burn;
@@ -216,6 +217,7 @@ static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
  */
 static StatusVulnerability regist_pata = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of the R. Parabuzzy in its winged state (the final versions),
  * as the percent chance a status takes hold: immune to Burn;
@@ -273,7 +275,7 @@ static BattleUnitKindPart parts_pata[] = {
 };
 
 /**
- * Sound cues of the R. Parabuzzy's animations: for each of its 9 animation names,
+ * Sound cues of the R. Parabuzzy's animations: for each of its 8 animation names,
  * the sound effect that plays with it (SFX_ENM_PATAMET_WAIT1).
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -394,7 +396,8 @@ EVT_END()
 static EVT_BEGIN(attack_event_pata)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // The winged R. Parabuzzy checks for a held item, then picks a target.
+
+        // On a First Strike, the winged R. Parabuzzy uses the first-strike target without an item check.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -556,7 +559,7 @@ static PoseTableEntry pose_table_ceil[] = {
 
 /**
  * Pose table of the R. Parabuzzy flipped onto its back: maps its battle pose types (stay, walk, hurt,
- * dead, talk and so on) to animation names, 16 entries such as TMT_Y_2, TMT_S_3, TMT_Q_2, TMT_A_1.
+ * dead, talk and so on) to animation names, 14 entries in demos and 16 in retail, such as TMT_Y_2, TMT_S_3, TMT_Q_2, TMT_A_1.
  */
 static PoseTableEntry pose_table_turn[] = {
     {1, "TMT_Y_2"},
@@ -715,6 +718,7 @@ static BattleUnitDefense defence_turn = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr_turn = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the R. Parabuzzy (the demos), as the percent chance a status takes hold:
  * immune to Burn; always hit by Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -723,6 +727,7 @@ static BattleUnitDefenseAttr defence_attr_turn = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of the R. Parabuzzy (the final versions),
  * as the percent chance a status takes hold: immune to Burn;
@@ -896,6 +901,7 @@ EVT_END()
  * if it hits it deals damage with the guard-timing check and bounces off, then walks home.
  */
 static EVT_BEGIN(attack_event)
+
     // If the R. Parabuzzy is lying on its back it spends its turn getting back up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -1167,10 +1173,11 @@ EVT_END()
  * drops with the fall and landing sounds and hits it (guard check and damage), waits a second,
  * then jumps back down, restores the ground form (init_event2) and walks home.
  */
-// Hanging from the ceiling, the R. Parabuzzy first checks whether to use a held item.
+// Hanging from the ceiling, the R. Parabuzzy checks, unless it is making a First Strike, whether to use a held item.
 static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
+
         // It picks a target; with none, it ends the turn (or flusters when confused).
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE

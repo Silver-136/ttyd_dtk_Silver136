@@ -21,6 +21,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_SOUND_VOLUME 1 // volume of its wait sounds (sound volume): 127 at init and each attack; sound_gensui_event reduces it each wait cycle to about 70 % (min 32)
 #define UNIT_WORK_CHAIN_MODE 2   // how chain_main places the chain links: 2 record their shape relative to the stake (then 1), 1 keep that shape, 0 hang them between chomp and stake
+
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_OFFSET_X 0 // chain links (parts 1-8): x offset from the stake (part 9) recorded in chain mode 2
 #define PARTS_WORK_OFFSET_Y 1 // chain links (parts 1-8): y offset from the stake (part 9) recorded in chain mode 2
@@ -145,14 +146,14 @@ BattleUnitKind unit_burst_wanwan = {
     data_table, // dataTable
 };
 
-/** Defence of the Red Chomp: 3 damage points off every hit. */
+/** Base defence of the Red Chomp: 3 for every element in the demos; retail uses 99 for fire and ice and 3 for the other elements. */
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else
 static BattleUnitDefense defence = {{3, 99, 99, 3, 3}};
 #endif
 
-/** Element reactions of the Red Chomp: no special reaction to any element. */
+/** Element reactions of the Red Chomp: normal in the demos; immune to fire and ice in retail. */
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 #else
@@ -446,6 +447,7 @@ EVT_END()
  * A confused unit with no target runs subsetevt_confuse_flustered. It always ends back in the wait event.
  */
 static EVT_BEGIN(attack_event)
+
     // Choose the target: the First Strike target if the battle opened with one,
     // otherwise it may use an item or pick a normal target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -550,7 +552,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Chomp falls short and pulls back in.
+    // The bite missed: the Chomp falls short and pulls back in.
     LABEL(90)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(14), 0, EVT_NULLPTR)
@@ -793,6 +795,7 @@ static USER_FUNC(chain_main) {
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &x, &y, &z);
     BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 9), x - 20.0f * unit->faceDirection, y, z);
+
     // 2: remember the chain's shape relative to the stake
     if (unit->work[UNIT_WORK_CHAIN_MODE] == 2) {
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
@@ -804,6 +807,7 @@ static USER_FUNC(chain_main) {
         }
         unit->work[UNIT_WORK_CHAIN_MODE] = 1;
     }
+
     // 1: keep that shape
     if (unit->work[UNIT_WORK_CHAIN_MODE] == 1) {
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
@@ -813,6 +817,7 @@ static USER_FUNC(chain_main) {
         }
         return EVT_RETURN_DONE;
     }
+
     // otherwise hang the links between the chomp and the stake
     BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x1, &y1, &z1);
     BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x2, &y2, &z2);
@@ -901,7 +906,8 @@ static USER_FUNC(chain_init) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &x, &y, &z);
-    // the chain links all start at the chomp
+
+    // Intermediate links 2 through 7 start at the chomp.
     for (i = 2; i <= 7; i++) {
         part = BtlUnit_GetPartsPtr(unit, i);
         BtlUnit_SetPartsPos(part, x, y, z);

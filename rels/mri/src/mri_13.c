@@ -162,7 +162,7 @@ static EVT_BEGIN(punipuni_ball00_init)
 EVT_END()
 
 /**
- * Hit/talk script of the orb pedestal in the water room:
+ * A-button script of the orb pedestal in the water room:
  * if empty, Mario picks an item to put on it (cancel ends the script)
  * and the orb is placed at the current pedestal height with the beam of light; if full, Mario takes it back.
  * GF(0) is set while the orb is set down. Mario is frozen during this.
@@ -215,7 +215,7 @@ EVT_END()
 /**
  * Runs the three-digit display on the wall of the elevator room:
  * shows the count GW(0) (Punies still needed) with the ones, tens and hundreds drums turned to match,
- * hides the hundreds drum while the count is under 10 and plays a click when the number changes.
+ * shows the S_isk_03_c cover below 10 and hides it at 10 or more, and plays a click when the number changes.
  */
 EVT_BEGIN(yuka_slot)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
@@ -338,9 +338,9 @@ EVT_BEGIN(yuka_shake2)
 EVT_END()
 
 /**
- * Counts every frame the Punies standing on the platform (alive, not lost, not in mode 13,
+ * Counts every frame the active Punies on the platform, excluding Jabble and mode 13,
  * within the platform area and height band; the band moves down by 309 after the water has been drained)
- * and drives the platform with that weight.
+ * and sets GW(0) to 101 minus that count, clamped from 0 to 101.
  */
 static EVT_BEGIN(yuka_check)
     LOOP(0)
@@ -398,10 +398,10 @@ EVT_END()
 
 /**
  * Elevator event: waits until the Puni Orb is on the pedestal,
- * the counter GW(0) has reached 0 (every Puni is standing on the platform) and Mario
+ * the counter GW(0) has reached 0 (at least 101 eligible Punies were counted) and Mario
  * and the partner are on it too.
  * Then Mario stops, the Punies freeze, the floor starts moving with a quake and the camera pans down,
- * and the platform, Puni Orb and light move 309 units down over 10 seconds.
+ * and the platform, Puni Orb and light move 309.5 units down over 10 seconds.
  * Afterwards the Punies are released and the story is set to STG2_21_06_WATER_SWITCH.
  */
 EVT_BEGIN(yuka_event)
@@ -409,12 +409,8 @@ EVT_BEGIN(yuka_event)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_area_check, 1, -50, 60, 60, LW(0), LW(2), LW(14))
 
-        // Wait until the Puni Orb is on the pedestal, every Puni is on the platform and Mario and his partner
-        // stand on it too.
-        // Wait until the Puni Orb is on the pedestal, every Puni is on the platform and Mario and his partner
-        // stand on it too.
-        // Wait until the Puni Orb is on the pedestal, every Puni is on the platform and Mario and his partner
-        // stand on it too.
+        // Wait until the Puni Orb is on the pedestal, the counter is zero and Mario and his partner
+        // stand on the platform too.
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_area_check, 1, -50, 60, 60, LW(0), LW(2), LW(15))
         IF_INT_EQUAL(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
@@ -473,7 +469,7 @@ EVT_BEGIN(yuka_event)
     CALL(evt_hit_bind_mapobj, STRING("A_dai"), STRING("S_dai"))
     CALL(evt_hit_bind_mapobj, STRING("A_dai_02"), STRING("S_dai"))
 
-    // The platform, the Puni Orb and the light move down 309 units over ten seconds.
+    // The platform, the Puni Orb and the light move down 309.5 units over ten seconds.
     CALL(evt_snd_sfxon, STRING("SFX_STG2_FLOOR_MOVE1"), GW(2))
     CALL(evt_item_get_position, STRING("punipuni"), LW(3), LW(4), LW(5))
     BEGIN_INLINE_EVENT
@@ -545,7 +541,7 @@ EVT_BEGIN(yuka_event)
 EVT_END()
 
 /**
- * Planter hit script 1: the first time it is hit it launches a Mushroom out of the planter (remembered with a
+ * Planter search script 1: the first time it is searched it launches a Mushroom out of the planter (remembered with a
  * flag).
  */
 static EVT_BEGIN(evt_f1_ueki_01)

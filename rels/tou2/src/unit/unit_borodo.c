@@ -272,7 +272,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of the Bandit: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of the Bandit (percent chance to take each status): resists most statuses. */
+/** Status vulnerability multipliers of the Bandit: resists most statuses. */
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {90, 90, 80, 100, 90, 100, 100, 70, 100, 90, 100, 90, 100, 90, 90, 95, 80, 100, 90, 100, 100, 95};
 #else
@@ -413,7 +413,7 @@ EVT_END()
 /**
  * Attack event of the Bandit: if it already carries loot (unit flag 0x40000000) it runs away with escape_event.
  * Otherwise it uses an enemy item if one fits; a confused Bandit always uses the plain attack;
- * else a roll of 0-223 under 25 picks the plain attack (about 11%) and anything higher the steal attack.
+ * else a roll of 0-224 under 25 picks the plain attack (about 11%) and anything higher the steal attack.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
@@ -444,7 +444,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Bandit's plain attack: walks around behind the target, then runs at it for a shoulder charge,
+ * The Bandit's plain attack: walks around in front of the target, then runs at it for a shoulder charge,
  * stepping with the run sounds.
  * If the pre-check says a pre-emptive spike stops it (result 5) it still charges in and takes the damage check.
  * A miss makes it hop past and trot home; a hit knocks the Bandit tumbling head over heels away from the target
@@ -474,7 +474,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
 
-    // The Bandit walks around to a spot behind the target.
+    // The Bandit walks around to a spot in front of the target.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 60)
@@ -547,7 +547,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Bandit hops past in two hops.
+    // The charge missed: the Bandit hops past in two hops.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -625,7 +625,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_borodo_attack))
 
-    // The Bandit walks around to a spot behind the target.
+    // The Bandit walks around to a spot in front of the target.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 60)
@@ -698,7 +698,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Bandit hops past in two hops.
+    // The charge missed: the Bandit hops past in two hops.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)

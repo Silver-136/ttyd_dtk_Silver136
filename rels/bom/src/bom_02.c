@@ -215,7 +215,7 @@ EVT_END()
 
 /**
  * Door callback for the shop: LW(0) is the door angle;
- * scales and negates it to tilt the front wall object S_ie2_kai.
+ * scales it by 0.5 to tilt the front wall object S_ie2_kai.
  */
 EVT_BEGIN(evt_ie2_wall)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
@@ -533,8 +533,8 @@ EVT_END()
 
 /**
  * Talk script of the mayor in the east village: before STG6_71_01 stg7_bom_20_00;
- * before STG7_02_MAYOR_BOB the first conversation (stg7_bom_20 to 33,
- * which ends by setting STG7_02_MAYOR_BOB, with the partner answering);
+ * before STG7_02_MAYOR_BOB the first conversation (stg7_bom_20 onward,
+ * continuing through 33 and setting STG7_02_MAYOR_BOB when Bobbery is present, with the partner answering);
  * then he talks about General White and the cannon (stg7_bom_34 onward,
  * depending on GSWF_PIK00_GOLDBOB_CANNON_APPROVAL and GSWF_BOM02_GENERAL_WHITE_WOKEN)
  * until the cannon story point.
@@ -660,6 +660,7 @@ static EVT_BEGIN(talk_soncho)
             END_IF
             CASE_EQUAL(1)
             IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
+
                 // Hints about where to find Goldbob and General White (stg7_bom_38_01 and 38_02).
                 CALL(evt_msg_print, 0, STRING("stg7_bom_38_01"), 0, STRING("me"))
             END_IF
@@ -667,6 +668,7 @@ static EVT_BEGIN(talk_soncho)
                 IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 0)
                     CALL(evt_msg_print, 0, STRING("stg7_bom_38_02"), 0, STRING("me"))
                 ELSE
+
                     // Once both are found, White's wandering scene runs.
                     CALL_CHILD(PTR(urotuku_white))
                 END_IF
@@ -689,6 +691,7 @@ EVT_END()
  * while that job is active, with a short walk-up of Mario and the partner.
  */
 static EVT_BEGIN(talk_murabito_e)
+
     // Trouble Center job 30: the villager asks Mario to erase the graffiti on the 50th floor of the Pit of 100
     // Trials.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
@@ -785,6 +788,7 @@ static EVT_BEGIN(talk_murabito_e)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
+
         // Otherwise his remarks change with the story, up to the cannon.
         CALL(evt_msg_print, 0, STRING("stg7_bom_10_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
@@ -1007,12 +1011,12 @@ static EVT_BEGIN(init_white)
     RETURN
 EVT_END()
 
-#if VERSION >= VERSION_US
 /**
- * One hop of Mario onto General White's bed: Mario jumps to White's position with a "nice" rating effect
+ * One pair of bounces onto General White's bed: Mario jumps twice above White's position with rating effects
  * and stars, shakes the camera, then jumps down beside the bed at (335, 30, -130).
- * White is made intangible during the hop.
+ * White is made intangible during the bounces.
  */
+#if VERSION >= VERSION_US
 EVT_BEGIN(mario_jump)
     CALL(evt_mario_cam_keep_on)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -1101,7 +1105,7 @@ s32 iri_25_item_tbl[] = {
 };
 
 /**
- * Talk script of General White for Trouble Center job 25, once he is awake (GSWF_TROUBLE_WORK_4) and before the
+ * Talk script of General White for Trouble Center job 25, used once he is awake, with GSWF_TROUBLE_WORK_4 set and before the
  * package is delivered (GSWF_TROUBLE_WORK_6): he apologizes for the chase if Mario woke him on the bed
  * (GSWF_TROUBLE_WORK_5, irai_25_19), then an item menu asks for the package (ITEM_PACKAGE);
  * when it is handed in he
@@ -1155,7 +1159,7 @@ EVT_END()
 /**
  * Trouble Center job 25 (the package for White):
  * the player is asked repeatedly whether to keep jumping on White's bed;
- * after eleven hops General White wakes (irai_25_14 to 17) and
+ * after eleven pairs of bed bounces General White wakes (irai_25_14 to 17) and
  * then takes the package via talk_white (GSWF_TROUBLE_WORK_5). Saying no ends it early.
  */
 EVT_BEGIN(iri_25_white_bed)
@@ -1273,7 +1277,7 @@ EVT_BEGIN(iri_25_white_bed)
     WAIT_MS(1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
 
-    // White learns that Mario has brought a delivery from Goldbob (irai_25_16 and 17) and takes the package.
+    // White learns that Mario has brought a delivery from Goldbob (irai_25_16 and 17), then Mario can hand over the package.
     CALL(evt_msg_print, 0, STRING("irai_25_16"), 0, STRING("ホワイト"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
@@ -1460,6 +1464,7 @@ EVT_BEGIN(evt_white_bed)
         ADD(LW(0), 1)
     END_IF
     IF_INT_EQUAL(LW(0), 2)
+
         // Once both Goldbob's approval and White's waking are done, the story advances.
         SET_VALUE(GSW_STORY_PROGRESS, STG7_03_GOLDBOB)
     END_IF
@@ -1677,6 +1682,7 @@ static USER_FUNC(yami_view) {
  * the mayor speaks stg8_dark_08 and the map changes to las_26 at the sekai_yami2 entrance.
  */
 static EVT_BEGIN(sekai_yami_evt)
+
     // Mario and the partner are parked off-stage while the mayor and three villagers are placed in the village.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

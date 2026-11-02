@@ -171,9 +171,11 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Status vulnerability of the Pider in the demo builds: resists most statuses. */
 static StatusVulnerability regist = {80, 100, 90, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 90, 90, 100, 70, 100, 90, 100, 100, 95};
 #else
+
 /** Status vulnerability of the Pider in the retail builds: resists most statuses. */
 static StatusVulnerability regist = {90, 90, 50, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 95, 90, 100, 70, 100, 90, 100, 100, 95};
 #endif
@@ -672,7 +674,7 @@ static EVT_BEGIN(blow_dead_event)
     RETURN
 EVT_END()
 
-/** Battle-end event: sets unit work 1 to 254 so the thread stops being drawn. */
+/** Battle-end event: sets unit work 1 to 254 so the thread starts fading out. */
 static EVT_BEGIN(battle_end_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_ALPHA, 254)
     RETURN
@@ -838,7 +840,7 @@ EVT_END()
 
 /**
  * Attack AI of the Pider: clears its rapid-fire hit flags (unit work 11 to 13),
- * uses an enemy item if it has one,
+ * uses an enemy item if one is selected by the item-use check,
  * otherwise attacks with a single web shot (50%) or a rapid-fire web attack (renzoku, 50%).
  */
 static EVT_BEGIN(attack_event)
@@ -872,7 +874,7 @@ EVT_END()
 
 /**
  * Resolves one web ball (part LW(7)) at the target LW(3), LW(4) with the weapon in LW(9):
- * on a miss the ball flies on and is hidden while the target's avoid animation starts;
+ * on a miss the ball flies on and is hidden (results 2, 3 and 6 also start the target's avoid animation);
  * on a hit the ball is hidden, the guard result is applied and the damage dealt,
  * with the last-hit flag (0x100) when LW(8) is 1.
  * When LW(10) is 1 it also marks that target as hit in unit work 11 to 13 (the slot of its entry in work 5 to 7
@@ -1129,7 +1131,7 @@ EVT_END()
  * The Pider's rapid-fire web attack (weapon in LW(9)):
  * piders_renzoku_attack_set_target picks three random targets (repeats allowed),
  * stored as units in unit work 5 to 7 and parts in 8 to 10.
- * It declares the attack on the first, winds up and throws three web balls 30 frames apart (parts 3, 4 and 5),
+ * It declares the attack on the first, winds up and throws three web balls (parts 3, 4 and 5), waiting 30 frames after each projectile's flight,
  * each resolved in parallel by renzoku_attack_event_sub, then lowers its arm.
  */
 static EVT_BEGIN(renzoku_attack_event)

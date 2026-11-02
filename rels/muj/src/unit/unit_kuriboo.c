@@ -119,8 +119,8 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of the Goomba (percent chance to take each status):
- * extra prone to stop, fright, gale force and instant kill.
+ * Status vulnerability of the Goomba (percent multipliers on each status's base chance):
+ * extra prone to stop, fright and instant kill; the demos also increase its gale force vulnerability.
  */
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
@@ -330,7 +330,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Goomba bounces on past it in two shrinking hops.
+    // The attack missed: the Goomba bounces on past the target in two shrinking hops.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -381,7 +381,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Script helper: writes the facing angle from point (args[0], args[1]) to point (args[2], args[3]) to args[4];
+ * Script helper: writes the angle from point (args[2], args[3]) toward (args[0], args[1]) to args[4];
  * if the points coincide it keeps the current value.
  */
 static USER_FUNC(krb_get_dir) {

@@ -120,7 +120,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
  * Map init script of tik_18, the passage between tik_06, tik_07 and tik_17.
  * Sets up the cloud covering a window (hidden once blown away),
  * removes the enemy NPCs that do not belong to the story step (before or after STG5_43_X_NAUTS_RETREAT),
- * and places two badge blocks (Slow Shroom, Gradual Syrup).
+ * and places two item blocks (Slow Shroom, Gradual Syrup).
  */
 EVT_BEGIN(tik_18_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))

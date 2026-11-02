@@ -555,8 +555,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Sound table of the Bulky Bob-omb: which sound each of its poses (idle, walk, run, attack and so on) plays,
- * and when.
+ * Sound table of the Bulky Bob-omb: sound timing for the S_3A and S_4A poses.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"S_3A", 0.01f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},

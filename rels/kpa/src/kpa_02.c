@@ -21,7 +21,7 @@ static NpcSetupInfo npcEnt[1];
 EvtWord kpa_02_init_evt[36];
 
 /**
- * Blocks, hidden blocks, pipes and obstacle blocks of side-scrolling stage 1, listed from left to right,
+ * Blocks, hidden blocks, pipes and obstacle blocks of side-scrolling stage 1,
  * ending at the goal pole.
  */
 EvtWord kpa_act_stg1_mobj[] = {
@@ -45,7 +45,7 @@ EvtWord kpa_act_stg1_mobj[] = {
     KPA_OBJ_POLE(1237.5f, 0.0f, kpa_goal), KPA_OBJ_END,
 };
 
-/** Coins Bowser can collect in side-scrolling stage 1, as x and z positions. */
+/** Coins Bowser can collect in side-scrolling stage 1, as x and y positions. */
 EvtWord kpa_act_stg1_item[] = {
     KPA_ITEM(-687.5f, 112.5f), KPA_ITEM(-650.0f, 112.5f), KPA_ITEM(-500.0f, 137.5f),
     KPA_ITEM(-462.5f, 137.5f), KPA_ITEM(-225.0f, 62.5f), KPA_ITEM(-187.5f, 62.5f), KPA_ITEM(150.0f, 125.0f),
@@ -83,7 +83,7 @@ EVT_END()
  * Goal of the first Bowser stage: locks the controls,
  * sets the story progress to STG2_25_04_BOWSER_ACTION_STAGE
  * and changes the map to Petalburg (nok_00, entrance w_bero)
- * after a 300 ms pause that also removes the letterbox.
+ * while an inline event restores normal letterbox handling after 300 ms.
  * In kiosk demo mode it instead ends with the game over sequence.
  */
 static EVT_BEGIN(kpa_goal)
@@ -112,7 +112,7 @@ static NpcSetupInfo npcEnt[] = {
 /**
  * Map init for kpa_02, side-scrolling stage 1: starts Bowser at x = -1450,
  * builds the stage's blocks and coins from kpa_act_stg1_mobj/item, and starts the pit watcher, the HUD,
- * the intro and the clock. Reaching the goal goes to Petalburg (nok_00).
+ * the intro and the clock. Outside E3 mode, reaching the goal goes to Petalburg (nok_00).
  */
 EVT_BEGIN(kpa_02_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))

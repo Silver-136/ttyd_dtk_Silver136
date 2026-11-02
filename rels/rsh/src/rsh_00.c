@@ -104,7 +104,7 @@ EvtWord rsh_00_b_init_evt_nidome[11];
 EvtWord rsh_00_c_init_evt_nidome[16];
 
 /**
- * Figure table of the Smorg (moamoa) effect at the cab window: model c_n_moa_a with one animation offset per
+ * Figure table of the Smorg (moamoa) effect at the cab window: models c_n_moa_a and c_n_moa_b with one animation offset per
  * entry.
  */
 ExtTexInfo moamoa_data[] = {
@@ -192,10 +192,11 @@ ExtTexInfo moamoa_data[] = {
 };
 
 #pragma dont_inline on
+
 /**
  * Builds the work area's animation table (wp->defs) from moamoa_data:
  * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture frame,
- * frame count, speed, looping unless the animation name starts with J). Kept out of line to match the original.
+ * frame count, last sampled frame, looping unless the animation name starts with J).
  */
 // Build one definition for each contiguous model/animation group in the texture table.
 static void moamoa_pose_init(void) {
@@ -233,6 +234,7 @@ static void moamoa_pose_init(void) {
 }
 
 #pragma dont_inline reset
+
 /**
  * Per-frame update of every Smorg (moamoa) sprite:
  * converts the time since the pose started into a texture frame index (looping or clamped at the end)
@@ -737,8 +739,9 @@ EVT_BEGIN(evt_handle)
 EVT_END()
 
 /**
- * Regular (idle) event of the driver NPC: every one to two seconds it picks one of three handles at random
- * and eases it to a new random angle or position, so the driver seems to steer.
+ * Regular (idle) event of the driver NPC: it picks one of three handles at random
+ * and eases it to a new random angle or position, so the driver seems to steer,
+ * then waits one to three seconds before repeating.
  * It does nothing during the stages where the train is stopped or the driver is busy.
  */
 // Randomly animate one control per iteration; the three empty day-3 tests do not gate those actions.
@@ -750,6 +753,7 @@ EVT_BEGIN(regu_unten)
     SET_VALUE(LW(6), 0)
     SET_VALUE(LW(7), 0)
     LOOP(0)
+
         // The driver stays still during the stages when the train is stopped or he is busy.
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_27_RIVERSIDE_STATION)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG6_43_CONDUCTOR_APPEARS)
@@ -775,7 +779,8 @@ EVT_BEGIN(regu_unten)
         CALL(evt_sub_random, 300, LW(10))
         SWITCH(LW(10))
             CASE_LESS(100)
-            // Otherwise he pulls the three handles to random settings so he seems to steer.
+
+            // Otherwise he moves a handle to a random setting so he seems to steer.
             IF_INT_LESS(GSW_STORY_PROGRESS, STG6_45_DAY_3_STARTS)
             END_IF
             SET_VALUE(LW(2), LW(3))
@@ -831,7 +836,7 @@ EVT_END()
 
 /**
  * Init event of the driver: during the Smorg stages (STG6_46_ENGINEER to
- * STG6_47_ESCAPING_THE_SMORGS) turns on his move and talk animations and puts him in the B_2 panic pose.
+ * STG6_47_ESCAPING_THE_SMORGS) turns off his automatic movement and talk-pose animations and puts him in the B_2 panic pose.
  */
 static EVT_BEGIN(init_unten)
     SWITCH(GSW_STORY_PROGRESS)
@@ -853,6 +858,7 @@ static EVT_BEGIN(talk_unten)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
+
             // His greeting alternates and early lines mention Pennington's assistant.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_00"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 1)
@@ -865,10 +871,10 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_10_THE_CONDUCTOR_ZIP_TOAD)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         CASE_LESS(STG6_11_OBTAIN_AUTOGRAPH)
-#if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_ANIM)
 
         // He signs the autograph and gives it to Mario.
+#if VERSION <= VERSION_DEMO_US
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_ANIM)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, 0)
 #else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, STRING("me"))
@@ -923,6 +929,7 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_253"), 0, 0)
         CASE_DEFAULT
+
         // After the story he comments on where the train is.
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
@@ -984,7 +991,7 @@ EVT_END()
 
 /**
  * Registers the cab's signboard triggers from access_tbl (hit name, message):
- * each row runs evt_access when Mario faces it.
+ * each row runs evt_access when Mario presses A while facing it.
  */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
@@ -1067,7 +1074,7 @@ EVT_END()
 
 /**
  * Init script of rsh_00_a (first visit): sets up the door to rsh_01_a, runs the shared init,
- * and from day 3 on sets up the Smorg effect (shown at once from the engineer stage on).
+ * and from STG6_45_DAY_3_STARTS through STG6_47_ESCAPING_THE_SMORGS sets up the Smorg effect (shown at once from the engineer stage on).
  */
 EVT_BEGIN(rsh_00_a_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_a))

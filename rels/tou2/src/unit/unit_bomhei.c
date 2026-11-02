@@ -324,7 +324,7 @@ EVT_END()
  * explosion or electric (damage codes 24, 25 and 27) sets it off with bomb_event.
  * Anything else is a normal damage reaction, after
  * which a unit that can still act (and is not marked with the instant-kill status,
- * 27) lights its fuse with change_spark_event.
+ * 27) lights its fuse with change_spark_event only for a final hit that dealt at least 1 HP.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -388,6 +388,7 @@ EVT_END()
  * A confused unit with no target runs subsetevt_confuse_flustered.
  */
 static EVT_BEGIN(attack_event)
+
     // The Bob-omb may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -467,7 +468,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: it runs on past in three slowing steps, then stands dazed for a moment.
+    // The charge missed: it runs on past in three slowing steps, then stands dazed for a moment.
     LABEL(90)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
@@ -552,6 +553,7 @@ EVT_END()
  * In both cases it explodes afterwards with bomb_event, removing itself.
  */
 static EVT_BEGIN(attack_event_spark)
+
     // The lit Bob-omb may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -631,7 +633,7 @@ static EVT_BEGIN(attack_event_spark)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Bob-omb runs on past it and explodes where it stops.
+    // The charge missed: the Bob-omb runs on past it and explodes where it stops.
     LABEL(90)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(10.0f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 500)

@@ -47,8 +47,7 @@ static EvtWord wait_event[6];
 
 /**
  * Script helper: args[0] = source unit, args[1] = destination unit.
- * Copies the size-change status (turns and strength) from the Bones unit to the unit it has just spawned in its
- * place (entry_honenoko).
+ * Copies the size-change status (turns and strength) from the Bones unit to the unit it has just summoned (entry_honenoko).
  */
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;
@@ -325,7 +324,7 @@ EVT_END()
  * Collapse script of the Dull Bones (data event 15):
  * it walks home, pays its coins and experience out once (unit work 1), shows the star-point effect,
  * crumbles into a pile of bones (KRN_D_2, SFX_ENM_HONENOKO_CRUMBLE1)
- * and is taken off the field for 2 to 3 turns (unit work 2), after which rebirth_event brings it back.
+ * and is taken off the field for 2 to 4 turns (unit work 2), after which rebirth_event brings it back.
  * Its hit offset is lowered by 20.
  */
 static EVT_BEGIN(fake_dead_event)
@@ -492,6 +491,7 @@ EVT_END()
  * After a first strike it pauses first. When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // After a First Strike it pauses a moment; otherwise it picks a target (a confused Dull Bones with nobody
     // to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -567,7 +567,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss or dodge: the target ducks aside as the bone reaches it and the bone clatters down behind.
+    // Miss or dodge: the target may duck aside as the bone reaches it and the bone clatters down behind.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)

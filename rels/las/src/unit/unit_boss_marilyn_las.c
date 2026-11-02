@@ -110,7 +110,7 @@ BattleUnitKind unit_boss_marilyn_las = {
 
 /**
  * Defence of Marilyn against each element (normal, fire, ice, explosion, electric):
- * none, so every hit does its full damage.
+ * none, so this table applies no damage reduction.
  */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
@@ -172,8 +172,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Data table of Marilyn: event scripts and values the battle looks up by tag (damage reactions, dodge, first
- * strike and so on).
+ * Data table of Marilyn: her defeat handler, looked up by the battle's dead-event tag.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -346,7 +345,7 @@ EVT_END()
 
 /**
  * Damage handler for Marilyn: sets GW(12) (her state for the sisters' scripts) to 1
- * when the hit carries damage code 1024, then runs the default damage script.
+ * when the hit carries the death flag (0x400), then runs the default damage script.
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
@@ -464,7 +463,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Marilyn's turn: uses an enemy item if she has one;
+ * Marilyn's turn: uses an enemy item if the item-use check selects one;
  * otherwise draws lots between the shadow-slip attack,
  * the lightning attack and a charge-up (weights 40/35/25 in the retail releases, 50/25/25 in the demos).
  * The charge-up has weight 25 only while she has charged fewer than twice in a row (unit work 9 counts charges
@@ -513,7 +512,7 @@ EVT_END()
  * Marilyn's shadow-slip attack (weapon in LW(9)):
  * she sinks into her shadow, rises 30 units in front of a randomly chosen target,
  * claps her hands at it (one hit, guardable), then sinks again and returns home.
- * The US release places her 5 units further forward in depth.
+ * The US and PAL releases place her 5 units further forward in depth.
  */
 static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -681,7 +680,7 @@ EVT_END()
 
 /**
  * Marilyn charges up (weapon in LW(9), weapon_marilyn_charge1):
- * camera on her, power-up pose and sound, then the weapon hits herself to apply a charge of +2 to her next
+ * camera on her, power-up pose and sound, then the weapon hits herself to apply a charge of +7 to her next
  * attack.
  */
 static EVT_BEGIN(charge_attack_event)
@@ -703,7 +702,7 @@ static EVT_BEGIN(charge_attack_event)
     RETURN
 EVT_END()
 
-/** Wait event of Marilyn: switches to pose table entry 1 (idle). */
+/** Wait event of Marilyn: restores automatic pose-table animation selection for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

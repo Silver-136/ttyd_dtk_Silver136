@@ -19,7 +19,7 @@ static EvtWord kpa_goal[22];
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_06_init_evt[56];
 
-/** Blocks, pipes and obstacle blocks of the second half of stage 3, ending at the goal pole. */
+/** Blocks and pipes of the second half of stage 3, ending at the goal pole. */
 static EvtWord kpa_act_stg3_mobj[] = {
     KPA_OBJ_DOKAN_0(-225.0f, 0.0f), KPA_OBJ_BRICK_2(-175.0f, 0.0f), KPA_OBJ_BRICK_2(-125.0f, 0.0f),
     KPA_OBJ_BRICK_2(-125.0f, 50.0f), KPA_OBJ_BRICK_2(-75.0f, 0.0f), KPA_OBJ_BRICK_2(-75.0f, 50.0f),
@@ -61,7 +61,7 @@ EVT_END()
 /**
  * Goal of the third Bowser stage: locks the controls,
  * sets the story progress to STG6_55_03_BOWSER_ACTION_STAGE and changes the map to kpa_07
- * after a 300 ms pause that also removes the letterbox.
+ * while an inline event restores normal letterbox handling after 300 ms.
  */
 static EVT_BEGIN(kpa_goal)
     CALL(evt_mario_key_onoff, 0)

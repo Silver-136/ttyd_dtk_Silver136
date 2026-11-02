@@ -128,6 +128,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Frost Piranha (100% is the normal chance): immune to Freeze; resists Sleep 80%,
  * Stop 80%, Dizzy 60%, Confusion 75%, Tiny 70%, Attack Down 70%, Defense Down 70%, Allergic 70%, Fright 20%,
@@ -147,7 +148,8 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Attack data of the Frost Piranha's bite: hits every opposing unit for 5 damage; may inflict Freeze (30%, 2
+ * Attack data of the Frost Piranha's bite: normal_attack_event uses it against one selected opposing unit
+ * for 5 damage; may inflict Freeze (30%, 2
  * turns).
  */
 static BattleWeapon weapon_ice_pakkun_attack = {
@@ -191,7 +193,7 @@ static BattleWeapon weapon_ice_pakkun_attack = {
 
 /**
  * Attack script of the Frost Piranha: when battle flag 2 is set it attacks straight away;
- * otherwise, after the item-use check, it always uses its normal attack (weapon_ice_pakkun_attack).
+ * otherwise it uses a selected item event, or its normal attack (weapon_ice_pakkun_attack) if none is returned.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -485,6 +487,7 @@ EVT_END()
  * and it returns home with return_event.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Picks the target: the preset first-attack target (after a short pause) when battle flag 2 is set, otherwise a
     // random opposing unit; with none it does nothing (or is flustered when confused).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -558,7 +561,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1C"))
 
-    // Checks the outcome of the hit: a miss, dodge or guard goes to the no-damage branch; a connecting hit applies
+    // Checks the outcome of the hit: a miss or dodge goes to the no-damage branch; a connecting hit applies
     // the Action Command defence result and deals the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))

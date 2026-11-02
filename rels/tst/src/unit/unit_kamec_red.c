@@ -668,7 +668,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-/** Init script of a Magikoopa clone (bunsin). Same as init_event but the clone uses the sky data table (it floats). */
+/** Shared init script of the real Magikoopa and its clones: selects ground or sky tables from UNIT_WORK_SKY and UNIT_WORK_BUNSIN. */
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -746,8 +746,8 @@ EVT_END()
 
 /**
  * Damage reaction of the Magikoopa.
- * Runs the default damage; if it is a clone that was hit, or the real one died,
- * it kills the clones (bunsin_kill_event, kamec_subset_bunsin_all_kill).
+ * A hit clone runs bunsin_kill_event and returns without default damage handling.
+ * The real unit runs default damage, then removes existing clones through kamec_subset_bunsin_all_kill.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -809,7 +809,7 @@ EVT_END()
 /**
  * Death handler shared by the dead events, for the unit in LW(10):
  * runs its data-table death event if it has one (slot 50), takes its back item, clears its statuses,
- * removes its clones and then kills the unit (kill mode 2, or 0 when the damage code says it was blown away).
+ * removes its clones and then kills the unit (kill mode 2, or 0 when DAMAGE_RESULT_DEATH is set).
  */
 static EVT_BEGIN(kamec_subset_dead_event)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
@@ -934,7 +934,7 @@ EVT_END()
 /**
  * Runs when a damaging hit knocks the airborne Magikoopa out of the sky:
  * clears the airborne flags, plays the fall pose, restores the ground pose and data tables,
- * fades in a second part, drops the unit to y = 0 with a fall sound and calls init_event2 again
+ * shows and fades out a second part, drops the unit to y = 0 with a fall sound and calls init_event2 again
  * so it behaves as a grounded unit.
  */
 static EVT_BEGIN(dmg_fall_event)
@@ -999,6 +999,7 @@ EVT_END()
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
+
     // At the start of a first strike the Magikoopa goes straight into its attack spell.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1018,7 +1019,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // Alone on the stage (no clones), it casts the attack spell, heals itself or makes clones of itself.
+    // Alone on the stage (no clones), it casts the attack spell or makes clones of itself.
     CALL(kamec_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         LABEL(10)
@@ -1046,7 +1047,8 @@ static EVT_BEGIN(attack_event)
             GOTO(99)
         END_IF
     ELSE
-        // With clones about, it rolls for its spell: the attack spell first,
+
+        // With clones about, it flusters if confused or uses the attack spell; without clones, it rolls for a spell:
         CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -1150,6 +1152,7 @@ EVT_END()
  * and the magic sounds (SFX_ENM_KAMEKU_MAGIC1, 4 and 8).
  */
 static EVT_BEGIN(ground_magic_common_event1)
+
     // Casting begins on the ground: the casting sound repeats while the staff glows on the caster and each clone.
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -1302,6 +1305,7 @@ EVT_END()
  * the KMR_A_3A to KMR_A_3D poses played in step on all of them, and the magic sounds.
  */
 static EVT_BEGIN(sky_magic_common_event)
+
     // Casting begins in the air: the casting sound repeats while the staff glows on the caster and each clone.
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -1461,11 +1465,12 @@ EVT_END()
  * it picks the target (the first-strike target during a first strike, otherwise a sampled enemy;
  * flustered when confused with none), declares the attack and casts with its clones,
  * then fires a magic shot (SFX_ENM_KAMEKU_MAGIC3_2) from itself and every clone.
- * On a miss the shots fly past to the stage edge while a sibling event starts the target's avoid reaction
+ * On a miss the shots fly past to the stage edge while a sibling event starts the target's avoid reaction for results 3, 6 or 2
  * when the caster's shot reaches it; on a hit all shots land on the target after 45 frames and the guard result
  * and damage are applied. Then all of them return to their normal pose.
  */
 static EVT_BEGIN(attack_magic_event)
+
     // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1519,7 +1524,8 @@ static EVT_BEGIN(attack_magic_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // The spell missed: the bolts fly on past the target, which gets out of their way.
+
+        // The spell missed: the bolts fly on past the target, which gets out of their way for results 3, 6 or 2.
         LABEL(90)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(1)
@@ -1909,6 +1915,7 @@ static USER_FUNC(eff_magic) {
     EffectEntry* eff;
 
     BtlUnit_GetPos(unit, &x, &y, &z);
+
     // from the tip of the wand
     x += 25.0f * unit->sizeMultiplier * unit->faceDirection;
     y += 20.0f * unit->sizeMultiplier;

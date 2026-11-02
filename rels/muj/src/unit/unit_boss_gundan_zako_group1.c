@@ -57,6 +57,7 @@ typedef struct ZakoGunWork {
 #if VERSION >= VERSION_US
     u8 us_pad08[0xC];
 #endif
+
     // US: 12 more bytes here
     s32 state;
     s32 timer;
@@ -254,10 +255,9 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of X-Nauts (percent chance each status takes hold): immune to sleep, stop, dizzy,
+ * Status vulnerability of X-Nauts (susceptibility multipliers): immune to sleep, stop, dizzy,
  * poison, confusion, electrified, burn, freeze, Huge, Tiny, Attack Up, Attack Down, Defense Up,
- * Defense Down, allergic, fright, Gale Force, Fast, Slow, Dodgy, Invisible, instant KO;
- * the rest take hold at 80% or better.
+ * Defense Down, allergic, fright, Gale Force, Fast, Slow, Dodgy, Invisible, instant KO.
  */
 static StatusVulnerability regist = {
     0, // sleep
@@ -347,7 +347,7 @@ BattleWeapon weapon_gundan_zako_group1_attack = {
 
 /**
  * Init event of X-Naut group 1: installs its wait, attack, damage and confusion events,
- * clears unit work 0 (the landed-hit counter) and moves it to z = 15;
+ * clears unit work 0 (the pre-landing hit cue) and moves it to z = 15;
  * Lord Crump's init already registered the X-Naut crowd.
  */
 static EVT_BEGIN(init_event)
@@ -414,7 +414,7 @@ EVT_END()
 
 /**
  * Damage event for the horde in group 1 when Mario hits it with a spin hammer:
- * plays the hurt animation (zakogun_damage_pose), opens a gap in the formation (zakogun_start_sukima),
+ * when damage was dealt, plays the hurt animation (zakogun_damage_pose), opens a gap in the formation (zakogun_start_sukima),
  * then restores the X-Nauts and closes the gap.
  */
 EVT_BEGIN(damage_event_kaiten_hammer)
@@ -511,8 +511,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Hit check of X-Naut group 1's attack: waits until the lead X-Naut lands on the target (unit work 0, counted by
- * the X-Naut update), then starts the target's avoid pose on a dodge
+ * Hit check of X-Naut group 1's attack: waits for the lead X-Naut's pre-landing cue (unit work 0, raised when
+ * its landing timer reaches 10), then starts the target's avoid pose on a dodge
  * or applies the hit with the action-command defence.
  */
 static EVT_BEGIN(hit_check_event)
@@ -1307,8 +1307,7 @@ USER_FUNC(zakogun_escape1) {
 }
 
 /**
- * Script helper (sukima, an opening): holds each X-Naut of group 1 that is not dying
- * or fleeing (state outside 80 to 89) still at its formation spot,
+ * Script helper (sukima, an opening): holds each X-Naut of group 1 whose state is outside 80 to 89 still at its formation spot,
  * shaking it from side to side (state 96) when args[0] is 1 or just holding it (state 95) otherwise.
  */
 USER_FUNC(zakogun_start_sukima) {
@@ -1329,7 +1328,7 @@ USER_FUNC(zakogun_start_sukima) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: returns each X-Naut of group 1 that is not dying or fleeing to the normal formation state (20). */
+/** Script helper: returns each X-Naut of group 1 whose state is outside 80 to 89 to the normal formation state (20). */
 USER_FUNC(zakogun_end_sukima) {
     s32 i;
 

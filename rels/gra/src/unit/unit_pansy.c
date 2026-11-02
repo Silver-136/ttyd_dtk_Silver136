@@ -178,7 +178,7 @@ BattleWeapon weapon_pansy_attack = {
 };
 
 /**
- * Attack event of the Crazee Dayzee: uses an enemy item if it has one;
+ * Attack event of the Crazee Dayzee: uses an enemy item if the item-use check selects one;
  * otherwise at 1 HP it flees (escape_event) and above that 70% sings (song_event with weapon_pansy_attack)
  * and 30% flees.
  */
@@ -317,7 +317,7 @@ static EVT_BEGIN(song_event)
     SET_VALUE(LW(6), 0)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
 
-    // The pre-damage check decides between a dodge and a hit for each target in turn.
+    // The pre-damage check decides between a miss and a hit for each target in turn.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -365,6 +365,7 @@ static EVT_BEGIN(song_event)
     SET_VALUE(LW(1), 255)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 256)
+
             // The notes stop and the map fades back to normal.
             BREAK_LOOP
         END_IF

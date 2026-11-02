@@ -2478,6 +2478,7 @@ s32 yoshi_data[] = {
  */
 // Two close approaches at jump endpoints end the chase; intervening misses do not reset the count.
 EVT_BEGIN(evt_tamago_move)
+
     // The egg leaps out of the hot dog stand and bounces around the plaza along the yoshi_data points.
     CALL(evt_npc_flag_onoff, 1, STRING("たまご"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("たまご"), -400, 10, -135)
@@ -3573,6 +3574,7 @@ EVT_END()
  * the Chapter 3 intro, etc.).
  */
 EVT_BEGIN(tou_01_init_evt)
+
     // Entrances, blocks, the Star Piece panel, the Star Pieces and the Inn Coupon.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -3884,7 +3886,8 @@ EVT_BEGIN(tou_01_init_evt)
         END_IF
     END_IF
 
-    // Music: the chapter 8 themes, the egg tune while the egg story runs, or the plaza theme.
+    // Music: the chapter 8 themes, the egg tune before STG3_11_RUNAWAY_EGG at rank 15 or better,
+    // or the plaza theme.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
@@ -3941,7 +3944,8 @@ EVT_BEGIN(tou_01_init_evt)
         END_IF
     END_IF
 
-    // After the Peach interlude, restore a missing partner and heal in that branch, then run the return scene.
+    // After the Peach interlude, restore a missing partner, heal and run the return scene.
+    // JP and both demos heal only when restoring a missing partner; US and PAL heal either way.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)
@@ -3972,6 +3976,8 @@ EVT_BEGIN(tou_01_init_evt)
             SPAWN_EVENT(PTR(minnnanokoe_evt))
         END_IF
     END_IF
+
+    // Incoming e-mail check.
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     RETURN
 EVT_END()

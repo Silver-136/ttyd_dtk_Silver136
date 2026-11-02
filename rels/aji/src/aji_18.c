@@ -438,7 +438,7 @@ EVT_BEGIN(aji_18_init_evt)
             END_IF
 #endif
 
-            // US recovery is outside the missing-partner branch; the other version keeps it inside.
+            // US and PAL recovery is outside the missing-partner branch; JP and the demos keep it inside.
             CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
 #if VERSION >= VERSION_US

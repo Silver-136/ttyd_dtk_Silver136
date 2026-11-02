@@ -106,7 +106,7 @@ extern EvtWord evt_tana_5[];
 #else
 EvtWord evt_tana_5[50];
 #endif
-/* shelf access table read by READ_INT4: hit, msg, event, second msg; a NULL hit ends it */
+/* Shelf access rows: hit, msg, event (READ_INT3 in demos); retail adds a second msg (READ_INT4). A NULL hit ends the table. */
 typedef struct ShelfAccess {
     const char* hit;
     const char* msg;
@@ -423,12 +423,6 @@ EVT_END()
  * the screen blurs as the mystery deepens and the story advances to STG6_22_DOCUMENT.
  */
 // Each timed speech signals GF(0); the main movement waits for it before starting the next speech.
-/**
- * Cutscene of the lost documents (shorui funshitu) in cabin 3 at STG6_21_DAY_2:
- * Pennington questions the salaryman while the camera frames them,
- * the salaryman paces and mumbles (stg6_rsh_169_xx),
- * the screen blurs as the mystery deepens and the story advances to STG6_22_DOCUMENT.
- */
 EVT_BEGIN(evt_shorui_funshitu)
     // The lost documents scene: Pennington's theme plays and he questions the salaryman.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
@@ -558,12 +552,6 @@ static s32 item_tbl[] = {
  * and the story advances to STG6_24_A_VITAL_CLUE.
  */
 // Cancelling leaves the clue unresolved; accepting displays a temporary paper without consuming the pouch item.
-/**
- * Cutscene when Mario brings the important-looking paper (Vital Paper) to the cabin:
- * the camera frames the NPCs, Mario chooses the paper from the item menu,
- * the salaryman recognises it and says thanks (stg6_rsh_172 to 177),
- * and the story advances to STG6_24_A_VITAL_CLUE.
- */
 EVT_BEGIN(evt_daijisouna_kami)
     CALL(evt_cam3d_evt_set, 220, 107, 165, 220, 45, -180, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -766,13 +754,14 @@ static EVT_BEGIN(talk_syashou)
             CALL(evt_item_get_item, STRING("orei"))
             CALL(evt_item_get_item_end_wait, STRING("orei"))
 
-            // Lines for day 2, day 3 and the return trip.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_145"), 0, 0)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_19_GIVE_BLANKET)
             CALL(evt_pouch_remove_item, ITEM_BLANKET, LW(0))
         END_IF
         CASE_LESS(STG6_20_END_OF_DAY_1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_145"), 0, 0)
+
+        // Lines for day 2, day 3 and the return trip.
         CASE_LESS(STG6_27_RIVERSIDE_STATION)
         IF_INT_EQUAL(LSWF_RSH_04_CONDUCTOR_DAY2_TOGGLE, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_158"), 0, 0)
@@ -891,7 +880,7 @@ EVT_END()
  * Shared conversation of the Narikin parents and their child when Mario talks to either parent:
  * Mama, Papa and Bub speak (stg6_rsh_86 to 88_01), the partner steps aside,
  * and Bub asks a yes/no question (stg6_rsh_94_yn) that moves the story to STG6_09_BUBS_REQUEST (accepted)
- * or to STG6_07_SYLVIA or STG6_08_BUB.
+ * or to STG6_08_BUB when declined (after writing STG6_07_SYLVIA).
  */
 EVT_BEGIN(talk_papa_mama)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -1405,7 +1394,7 @@ static ShelfAccessTbl3 access_tbl = {
     {NULL},
 };
 
-/** Trigger script for the shelves: prints the message in LW(1). */
+/** Trigger script for the shelves: runs LW(2) when present; otherwise prints LW(1), or retail LW(3) from STG6_56_ROGUEPORT_STATION onward. */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(LW(2), 0)
@@ -1652,7 +1641,7 @@ EVT_END()
 
 /**
  * Init script of rsh_04_a (first visit): doors, shared init, the Smorg window effect,
- * the conductor's automatic talk at STG6_17_GHOST_DIARY and the locked west door message on day 3.
+ * and the locked west door message on day 3.
  */
 EVT_BEGIN(rsh_04_a_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_a))

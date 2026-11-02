@@ -23,7 +23,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_HOLD 0          // 1 while it holds the thrown part (part 2) overhead: unison_phase_event sets it with the top-spiky counter and pose_table_hold; a throw, or a hit that does damage or stuns, clears it (damage_event drops the part)
 #define UNIT_WORK_REBOUND_SPAWN 1 // 1: when the throw is guarded, the part rebounds to free space and becomes an entry_togezo unit (SFX_ENM_JUGEM_REBOUND1); 0: no rebound
-#define UNIT_WORK_CHARGED 2       // 1 once it has used charge_event (weapon_jyugem_charge); from then on attack_event throws without the rebound spawn (never cleared)
+#define UNIT_WORK_CHARGED 2       // 1 when charge is selected (weapon_jyugem_charge); after item-use and friend-spawn choices, attack_event throws without rebound spawning (never cleared)
 
 static USER_FUNC(togezo_copy_status);
 
@@ -355,8 +355,8 @@ EVT_END()
  * electric, freeze or stop knocks the egg out of its hands:
  * part 2 is thrown 200 units behind it to the floor and hidden, the hold (unit work 0),
  * its spiky counter attribute, pose table and hit offset are reset, then the default damage reaction runs.
- * Otherwise, unless the damage code is 22, 30, 31 (an attacker hurt by its spikes), 38 (lucky),
- * 39 (dodged) or 41 (guarded), a poison, burn, Tiny, defense-down,
+ * Otherwise, unless the damage code is 22 (status only), 30 (no damage), 31 (attack stopped by top spikes),
+ * 38 (lucky), 39 (dodgy) or 41 (protected), a poison, burn, Tiny, defense-down,
  * slow or allergic status only makes the egg pop up and vanish again; the Dark Lakitu keeps holding it.
  */
 static EVT_BEGIN(damage_event)
@@ -391,6 +391,7 @@ static EVT_BEGIN(damage_event)
         CALL(btlevtcmd_CheckStatus, LW(10), STATUS_STOP, LW(14))
         OR(LW(15), LW(14))
         IF_INT_NOT_EQUAL(LW(15), 0)
+
             // The egg is flung backward to the floor and hidden, and Dark Lakitu loses its hold on it.
             BEGIN_INLINE_EVENT
                 CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden | kNoShadow)
@@ -410,7 +411,7 @@ static EVT_BEGIN(damage_event)
             CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
             CALL_CHILD(PTR(btldefaultevt_Damage))
         ELSE
-            // Hits where the attacker was hurt by spikes, or that were lucky, dodged or guarded, leave the egg alone.
+            // Status-only, no-damage, top-spike-stopped, Lucky, Dodgy and Protected results leave the egg alone.
             CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
             IF_INT_EQUAL(LW(0), DAMAGE_CODE_STATUS_ONLY)
                 GOTO(90)
@@ -717,6 +718,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_jyugem_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBOUND_SPAWN, LW(0))
     IF_INT_EQUAL(LW(0), 1)
+
         // If the target guarded the egg, it rebounds to a free spot near Dark Lakitu and hatches into a Sky-Blue Spiny.
         CALL(btlevtcmd_CheckDamageCode, LW(3), DAMAGE_RESULT_GUARD, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

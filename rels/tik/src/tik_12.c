@@ -473,7 +473,7 @@ EVT_END()
 
 /**
  * Script helper.
- * Spawns a star-dust particle burst: args are the type, X, Y, Z, X and Y velocities, particle count and camera.
+ * Spawns a star-dust particle burst: args are the type, X, Y, Z, X and Y velocities, particle count and lifetime.
  */
 static USER_FUNC(effect_stardust) {
     EvtWord* args = event->args;
@@ -489,11 +489,13 @@ static USER_FUNC(effect_stardust) {
     effStardustEntry(type, count, lifetime, x, y, z, vx, vy);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper. Sets the running event's owner NPC to the NPC named by args[0] (Merlee). */
 static USER_FUNC(setmertn) {
     event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper.
  * Reads Merlee's price list: for the menu index args[0],

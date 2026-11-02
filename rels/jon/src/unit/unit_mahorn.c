@@ -27,7 +27,7 @@
 #define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry* of the magic shot (effMahorn2Entry, eff_magic); eff_magic_get_posX reads the x of its type-3 element
 
 double __fabs(double x);
-/** Absolute value of a double, wrapped so the compiler emits the same code as the original. */
+/** Absolute value of a double. */
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 
 static USER_FUNC(hand_ctrl);
@@ -786,7 +786,7 @@ static EVT_BEGIN(attack_punch_event)
 EVT_END()
 
 /**
- * Plays the avoid reaction on the target in LW(3) (animation 38, 39 or 40) according to the pre-damage result in
+ * Plays the avoid reaction on the target in LW(3) (damage code 38, 39 or 40) according to the pre-damage result in
  * LW(5): 3, 6 or 2.
  */
 static EVT_BEGIN(start_avoid)
@@ -805,9 +805,9 @@ EVT_END()
 /**
  * The Wizzerd's single-target spell: it and its copies (found by mahorn_get_bunsin) all charge up
  * (SFX_ENM_MAHO_CHARGE1, attack_enemy_common_event_sub1) and cast (SFX_ENM_MAHO_MAGIC2);
- * the copies' orbs fly past the target to the edge of the stage (attack_enemy_common_event_sub_no_hit)
- * while the real one's orb flies to the target (attack_enemy_common_event_sub_hit).
- * The target gets its avoid reaction when the orb reaches it, and takes the damage.
+ * on a miss, all their orbs fly past the target to the edge of the stage (attack_enemy_common_event_sub_no_hit).
+ * On a hit, all their orbs fly towards the target's x position (attack_enemy_common_event_sub_hit)
+ * and the damage is dealt. On a miss, any avoid reaction is timed to the orb reaching the target.
  */
 static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -859,7 +859,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // Miss or dodge: the target dodges as the orb arrives and the orbs fly on past.
+        // Miss or dodge: any avoid reaction is timed to the orb's arrival as the orbs fly on past.
         LABEL(90)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(60)
@@ -896,8 +896,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CALL_CHILD(attack_enemy_common_event_sub_no_hit)
         GOTO(98)
 
-        // Hit: the real orb strikes the target and the damage is dealt; the copies' orbs fly past to the edge
-        // of the stage.
+        // Hit: the real orb and the copies' orbs head towards the target's x position, and the damage is dealt.
         LABEL(91)
         CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
         SET_VALUE(LW(15), LW(11))
@@ -936,7 +935,7 @@ EVT_END()
 /**
  * The Wizzerd's spell on all enemies: it charges up (SFX_ENM_MAHO_CHARGE1, attack_enemy_common_event_sub1),
  * casts (attack_enemy_common_event_sub2) and then a "thunder_n64" bolt strikes each target in turn,
- * damaging them (the defence action command result is taken once, at the first target).
+ * damaging those hit (the defence action command result is taken once, at the first target hit).
  */
 static EVT_BEGIN(attack_enemy_all_common_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -1030,7 +1029,7 @@ EVT_END()
 /**
  * Casting gesture of the Wizzerd in LW(15) (-2 for itself):
  * in pose MAH_A_1 its four hands sweep to and fro in turn, 20 units each way, offset by 7,
- * 10 and 15 frames from each other, before a 55-frame pause.
+ * 10 and 15 frames from each other, while the main script waits 55 frames.
  */
 static EVT_BEGIN(attack_enemy_common_event_sub2)
     IF_INT_EQUAL(LW(15), -1)
@@ -1110,7 +1109,7 @@ static EVT_BEGIN(attack_enemy_common_event_sub2)
 EVT_END()
 
 /**
- * A copy's spell: the Wizzerd in LW(15) sends its magic orb (eff_magic, 40 frames) to the far edge of the stage
+ * A missed spell: the Wizzerd in LW(15), original or copy, sends its magic orb (eff_magic, 40 frames) to the far edge of the stage
  * and does the casting gesture (attack_enemy_common_event_sub2) with SFX_ENM_MAHO_MAGIC1 and MAGIC3,
  * so it looks like a real attack.
  */
@@ -1135,7 +1134,7 @@ static EVT_BEGIN(attack_enemy_common_event_sub_no_hit)
 EVT_END()
 
 /**
- * The real spell: the Wizzerd in LW(15) sends its magic orb (eff_magic, 20 frames) at the target's hit position
+ * A hit spell: the Wizzerd in LW(15), original or copy, sends its magic orb (eff_magic, 20 frames) towards the target's hit-position x
  * and does the casting gesture (attack_enemy_common_event_sub2) with SFX_ENM_MAHO_MAGIC1 and MAGIC3.
  */
 static EVT_BEGIN(attack_enemy_common_event_sub_hit)
@@ -1434,7 +1433,7 @@ EVT_END()
 
 /**
  * Wait script of the Wizzerd: unless it is a plain copy (unit work 4 set) its copies also play their idle pose,
- * and each of the four hands bobs between two positions and poses at random intervals of 15 to 29 frames.
+ * and each of the four hands bobs between two positions and poses at random intervals of 15 to 30 frames.
  * Under statuses 1, 2 or 9 the hands hold still (MAH_Z_2).
  */
 static EVT_BEGIN(wait_event)
@@ -1594,8 +1593,8 @@ static USER_FUNC(eff_magic_get_posX) {
 }
 
 /**
- * Script helper: args[0] = unit, args[1..3] = target x, y, z, args[4] = travel time in frames.
- * Starts the Wizzerd's magic effect from its wand towards the target and stores it in work[7];
+ * Script helper: args[0] = unit, args[1] = target x, args[2..3] are unused, args[4] = travel time in frames.
+ * Starts the Wizzerd's magic effect from its wand towards the target x at its starting y and z and stores it in work[7];
  * the speed is derived from the distance and time.
  */
 static USER_FUNC(eff_magic) {

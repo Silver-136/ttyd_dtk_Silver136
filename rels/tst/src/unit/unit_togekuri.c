@@ -112,12 +112,14 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Spiky Goomba in the demo builds:
  * extra prone to stop, fright, Gale Force and instant KO.
  */
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else
+
 /**
  * Status vulnerability of the Spiky Goomba in the retail builds:
  * extra prone to stop, fright, Gale Force and instant KO.
@@ -278,7 +280,7 @@ EVT_END()
 
 /**
  * Sine table for 0 to 90 degrees, one entry per degree;
- * krb_get_dir looks angles up in it to tilt the Spiky Goomba along its jump.
+ * krb_comp_dir looks angles up in it to recover a direction.
  */
 static f32 SinTable[] = {
     0.0f, 0.017452f, 0.034899f, 0.052336f, 0.069756f, 0.087156f, 0.104528f, 0.121869f,
@@ -302,7 +304,8 @@ static f32 SinTable[] = {
  * a miss lands it on the floor (TGK_D_1) before it hops back. Then it walks home.
  */
 static EVT_BEGIN(attack_event)
-    // If the Spiky Goomba holds an item, it uses that instead of attacking.
+
+    // If an enemy-item script is selected, the Spiky Goomba runs it instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -379,7 +382,7 @@ static EVT_BEGIN(attack_event)
     // It comes down on the target head first.
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 28, -1)
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; some misses send the target into its dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_togekuri_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -441,6 +444,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     LOOP(4)
+
         // It squashes against the target for a moment.
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.07910156f), FLOAT(-0.119140625f), 0)
         WAIT_FRAMES(1)
@@ -488,8 +492,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Script helper for the Goomba family: args[0], args[1] are the x and z of one point and args[2],
- * args[3] those of another; args[4] receives the angle between them (angleABf of the x/z difference, degrees).
+ * Script helper for the Goomba family: args[0], args[1] are the x and y of one point and args[2],
+ * args[3] those of another; args[4] receives the angle between them (angleABf of the x/y difference, degrees).
  * When the two points coincide, args[4] keeps the value it already held.
  */
 static USER_FUNC(krb_get_dir) {
@@ -511,7 +515,7 @@ static USER_FUNC(krb_get_dir) {
 }
 
 /**
- * Direction of the vector (x, z) in whole degrees (0-359):
+ * Direction of the vector (x, z) in whole degrees (0-360):
  * binary-searches SinTable (0-90 degrees) for |z| / length and mirrors the result into the quadrant that x
  * and z select.
  */

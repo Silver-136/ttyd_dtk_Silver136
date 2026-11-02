@@ -851,8 +851,8 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print_add, 0, STRING("op_book_24"))
     CALL(demo_winonoff, 0)
 
-    // The storybook scene ends; the Rogueport square is shown, with Peach, the mysterious person and the box
-    // still hidden.
+    // The storybook scene ends; rendering of the Rogueport square, Peach, the mysterious person and the box
+    // is enabled.
     CALL(evt_bg_disp_onoff, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ie_01_naka"), MAP_OBJ_FLAG_HIDDEN)
@@ -1153,7 +1153,7 @@ EVT_BEGIN(roten_move)
     RETURN
 EVT_END()
 
-/** Wander script for the demo Goomba: starts at the origin and wanders in a 100 by 30 area. */
+/** Wander script for the demo Goomba: starts at the origin and wanders around it with radius 100 at speed 30. */
 EVT_BEGIN(kuribo_move)
     CALL(evt_npc_set_position, STRING("クリボー１"), 0, 0, 0)
     CALL(evt_npc_get_position, STRING("クリボー１"), LW(0), LW(1), LW(2))
@@ -1162,7 +1162,7 @@ EVT_BEGIN(kuribo_move)
     RETURN
 EVT_END()
 
-/** Wander script for the demo Chu-san (mouse): starts at (-175, 100) and wanders in a 100 by 30 area. */
+/** Wander script for the demo Chu-san (mouse): starts at (-175, 100) and wanders around it with radius 100 at speed 30. */
 EVT_BEGIN(chusan_move)
     CALL(evt_npc_set_position, STRING("チューさん１"), -175, 0, 100)
     CALL(evt_npc_get_position, STRING("チューさん１"), LW(0), LW(1), LW(2))

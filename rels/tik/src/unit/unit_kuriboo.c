@@ -119,8 +119,8 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of the Goomba (percent chance to take each status):
- * extra prone to stop, fright, gale force and instant kill.
+ * Status vulnerability of the Goomba (percentage multipliers on a move's status chance):
+ * extra prone to stop, fright and instant kill; the demos also raise gale-force susceptibility.
  */
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
@@ -225,10 +225,11 @@ EVT_END()
 /**
  * The Goomba's headbutt (jump on Mario or the target, with action-command defence).
  * It picks a target (the first- attack target on a pre-emptive strike), runs to it, spins and jumps;
- * the pre-damage check decides between a miss (the Goomba hops past, avoid animation on the target)
+ * the pre-damage check decides between a miss (the Goomba hops past, with an avoid reaction for some results)
  * and a hit (camera shake, SFX_ENM_KURI_ATTACK1, damage), then the Goomba hops back to its place.
  */
 static EVT_BEGIN(attack_event)
+
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -332,7 +333,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Goomba bounces on past it in two shrinking hops.
+    // Miss: the Goomba bounces on past the target in two shrinking hops.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)

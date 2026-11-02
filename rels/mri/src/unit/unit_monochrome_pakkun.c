@@ -177,7 +177,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
 
 /**
  * Attack event of the Pale Piranha. When it is attacking first (an ambush) it goes straight to the bite.
- * Otherwise it uses an enemy item if it has one, else it bites (normal_attack_event).
+ * Otherwise it runs a selected enemy-item script if one is returned, else it bites (normal_attack_event).
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -281,7 +281,7 @@ EVT_END()
 
 /**
  * Returns in args[0] whether the iron frame ceiling above the plant is still there:
- * 0 once it has fallen away (STAGE_OBJ_FLAG_IRON_FRAME_GONE), otherwise 1.
+ * 0 when the frame is unavailable (STAGE_FLAG_NO_IRON_FRAME), otherwise 1.
  */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
@@ -381,7 +381,7 @@ EVT_END()
 
 /**
  * Event after the Pale Piranha takes a counter hit:
- * plays the hurt pose for a second, then unless the damage code is a certain hit (damage codes 512 and 2048) it
+ * plays the hurt pose for a second, then unless DAMAGE_RESULT_ZERO_HP is set without DAMAGE_RESULT_REVIVAL it
  * goes back to hiding (return_event).
  */
 static EVT_BEGIN(counter_damage_event)
@@ -512,7 +512,7 @@ EVT_END()
 /**
  * The Pale Piranha's bite.
  * It picks a target (the first-strike target on an ambush), burrows (shrinking its shadow),
- * pops out next to the target (45 degrees to its side), plays the bite poses (A_1A, 1B, 1C) with the bite sound,
+ * pops out next to the target (45 units to its side), plays the bite poses (A_1A, 1B, 1C) with the bite sound,
  * and the damage and result checks run; then it hides again (return_event).
  */
 static EVT_BEGIN(normal_attack_event)
@@ -606,7 +606,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The bite misses or is blocked.
+    // The bite misses or is avoided.
     LABEL(90)
     GOTO(98)
 

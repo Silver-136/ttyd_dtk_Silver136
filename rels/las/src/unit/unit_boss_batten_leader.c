@@ -103,6 +103,7 @@ static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[7];
 EvtWord hakai_snd_event[9];
 BattleUnitSetup entry_batten_satellite;
+
 /* light blink sequence read by the light event: {mapobj name, frames} steps, then a NULL name */
 typedef struct LightStep {
     const char* name;
@@ -578,7 +579,7 @@ BattleUnitKind unit_boss_batten_leader = {
 
 /**
  * Defence of Grodus against each element (normal, fire, ice, explosion, electric):
- * 1 against every element, so each hit is cut by 1.
+ * base defence is 1 against every element.
  */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
@@ -719,6 +720,7 @@ USER_FUNC(evt_eff_pokopi_thunder) {
     effPokopiThunderN64Entry(1, 30, x, top, z, x, y, z, 1.0f);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: recolours the cloud effect named args[0] to white fading to yellow and lifts it 65 units up
  * and 10 units forward; used for Grodus's lightning cloud.
@@ -737,6 +739,7 @@ USER_FUNC(evt_eff_colorchange00) {
 
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: sets the scale of Grodus's barrier effect named args[0] to args[1]. */
 USER_FUNC(evt_eff_barriersizechange) {
     EvtWord* args = event->args;
@@ -745,9 +748,10 @@ USER_FUNC(evt_eff_barriersizechange) {
     ((EffSyuryouWork*)eff->userdata)->scale = evtGetFloat(event, args[1]);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper (runs every frame until done): steers the fire effect named args[0] toward the target point
- * (args[2], args[3]) in a wobbling path at 15 units per frame, turning at most 15 degrees per frame.
+ * (args[2], args[3]) in a wobbling path at 15 units per frame, limiting turns to 15 degrees per frame except when resetting direction.
  * With mode args[1] set to 0 it finishes on arrival;
  * otherwise it then flies off to the left edge (X -270) and is deleted.
  * Used for the fireballs of Grodus's fire spell.
@@ -847,6 +851,7 @@ USER_FUNC(evt_eff_firechange00) {
     }
     return 0;
 }
+
 /**
  * Script helper: creates the wand-tip barrier glow effect at the end of Grodus's staff,
  * sized by the unit's size multiplier.
@@ -867,11 +872,12 @@ static USER_FUNC(eff_staff) {
     barrier[4] = unit->sizeMultiplier;
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: counts Grodus's living satellites (his unit work 9..12) and updates his invulnerability.
- * With all four present the barrier effect appears around him and he becomes immune to damage and status;
+ * With all four present the barrier effect appears around him and he becomes immune to damage and negative statuses;
  * once a satellite is gone the barrier shatters (with glass effects and a break sound)
- * and his defence is recalculated from the stored values plus the number of satellites left.
+ * and his normal-element defence is recalculated from its stored value plus the number of satellites left.
  */
 USER_FUNC(check_satellite) {
     s32 id = BattleTransID(event, UNIT_ID_SELF);
@@ -972,6 +978,7 @@ USER_FUNC(check_satellite) {
     }
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: returns the starting offset (x, y, z, mirrored by the unit's facing) of satellite args[2]
  * when args[1] satellites surround the unit args[0], from a fixed layout for 1 to 4 satellites.
@@ -989,15 +996,19 @@ USER_FUNC(battleGetBattenSatelliteInitPos) {
     s32 i;
     s32 j;
     static const Vec VecData[] = {
+
         // 1 satellite
         {38.0f, 45.0f, 5.0f},
+
         // 2 satellites
         {38.0f, 45.0f, 5.0f},
         {-38.0f, 45.0f, 5.0f},
+
         // 3 satellites
         {0.0f, 83.0f, 5.0f},
         {38.0f, 7.0f, 5.0f},
         {-38.0f, 7.0f, 5.0f},
+
         // 4 satellites
         {38.0f, 83.0f, 5.0f},
         {-38.0f, 83.0f, 5.0f},
@@ -1112,11 +1123,12 @@ LightSeq4 btl_shuryolight_rod_normal = {{{"L_3C", 0}, {"L_3B", 1000}, {"L_3D", 0
 LightSeq1 btl_shuryolight_rod_off = {{{"L_3A", -1}}, NULL};
 
 /**
- * Event script: animates Grodus's lamp parts from a sequence table (pointer in LW(6),
+ * Event script: animates Grodus's lamp parts from sequence tables (pointers in LW(5..8),
  * a list of animation names with durations; durations are in ms, 0 waits for the animation to end, -1 ends,
- * -2 blinks randomly, -3 and -4 are random waits). Runs the table forever in a sibling event.
+ * -2 blinks randomly, -3 and -4 are random waits). The three head tables run in sibling events; the power table runs in the main event.
  */
 EVT_BEGIN(light_anim_rtn)
+
     // First head lamp (part 4): play the animation sequence given in LW(6) over and over.
     BEGIN_SIBLING_EVENT
         SET_INT_READ_ADDR(LW(6))
@@ -1385,14 +1397,14 @@ EVT_END()
 
 /**
  * Event script: when Grodus's body pose changes, chooses the matching lamp sequences.
- * For the casting poses A_1B and A_1C the lamps blink quickly and the power lamp is steady;
- * other poses use the normal sequences; restarts the lamp events accordingly.
+ * For the casting poses A_1B and A_1C the head lamps use their blinking sequences and the power lamp its normal sequence;
+ * other poses select their own normal, quick, random, lit, dark or blinking sequences; restarts the lamp events accordingly.
  */
 EVT_BEGIN(light_pose_change)
     CALL(enzan_lw_save2)
     CALL(btlevtcmd_AnimeGetPose, UNIT_ID_SELF, 1, LW(0))
 
-    // Casting poses A_1B and A_1C: the head lamps blink quickly and the power lamp stays steady.
+    // Casting poses A_1B and A_1C: the head lamps use blinking sequences and the power lamp its normal sequence.
     IF_STR_EQUAL(LW(0), STRING("A_1B"))
         CALL(enzan_lw_save)
         SET_VALUE(LW(5), PTR(&btl_shuryolight_pow_normal))
@@ -1644,8 +1656,9 @@ EVT_END()
  * Event script: Grodus's reaction when hit. A zero-damage hit plays the miss sound.
  * A body hit (part 1) plays the damage pose; a hit on another part (the staff) switches the staff lamp off
  * and plays pose D_2.
- * Hits that carry damage code 256 raise his HP gauge flag (JP and later)
- * and add ten times the damage to his work[2] counter, capped at 100.
+ * Hits that carry damage code 256 raise his HP gauge flag (JP and later).
+ * Final hits on a non-body part set work[2] to 100 if it was negative;
+ * otherwise they add ten times the total damage to it, capped at 100.
  */
 EVT_BEGIN(damage_sub_event)
 #if VERSION > VERSION_DEMO_US
@@ -1791,8 +1804,9 @@ EVT_END()
 
 /**
  * Dead event of Sir Grodus: his satellites are killed, the status window is hidden,
- * he speaks his last line (stg8_las_69) and the slow death sequence runs;
- * if the killing blow had damage code 512 the satellites go without the death sequence.
+ * he speaks his last line (stg8_las_69) and the slow death sequence runs.
+ * In retail, a satellite whose own damage code already has 512 skips the extra death sequence;
+ * the demo branch kills satellites directly.
  */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -2072,8 +2086,8 @@ static Vec splineTableOut4_4[] = {
 };
 
 /**
- * Event script: puts the blur attribute (0x4000000) on the satellite in the unit work slot LW(2), part LW(4),
- * so it is drawn blurred while it spins.
+ * Event script: puts the blur attribute (0x4000000) on the body parts of satellites in unit work slots 9..12,
+ * so they are drawn blurred while they spin.
  */
 static EVT_BEGIN(satellite_blur_on)
     SET_VALUE(LW(2), 9)
@@ -2811,6 +2825,7 @@ USER_FUNC(btlevtcmd_AnimeGetPose) {
     evtSetValue(event, args[2], (EvtWord)animPoseGetCurrentAnim(part->poseId));
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: saves the 16 local variables LW(0..15) of the running event into the static array xlw
  * so a sub-script can use the registers and restore them.
@@ -2823,6 +2838,7 @@ static USER_FUNC(enzan_lw_save) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: restores LW(0..15) from the array saved by enzan_lw_save. */
 static USER_FUNC(enzan_lw_load) {
     s32 i;
@@ -2832,6 +2848,7 @@ static USER_FUNC(enzan_lw_load) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: saves LW(0..15) into a second static array xlw2 (a separate slot from enzan_lw_save). */
 USER_FUNC(enzan_lw_save2) {
     s32 i;
@@ -2841,6 +2858,7 @@ USER_FUNC(enzan_lw_save2) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: restores LW(0..15) from the second array saved by enzan_lw_save2. */
 USER_FUNC(enzan_lw_load2) {
     s32 i;
@@ -2850,6 +2868,7 @@ USER_FUNC(enzan_lw_load2) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: copies the string args[0] (at most 16 characters) into the static buffer xmemo. */
 USER_FUNC(datastrcopy) {
     s8* s = (s8*)evtGetValue(event, event->args[0]);
@@ -2861,6 +2880,7 @@ USER_FUNC(datastrcopy) {
     xmemo[i] = 0;
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: starts maiframeanimcheck as a new event for this unit,
  * storing it in xevt and giving it the xmemo buffer to compare poses against.
@@ -2875,11 +2895,13 @@ USER_FUNC(pose_check_evt_run) {
     xevt->ufBase = event->ufBase;
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: stops the pose-watching event that pose_check_evt_run started. */
 USER_FUNC(pose_check_evt_stop) {
     evtDeleteID(xevt->eventId);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: sets hitOffsetX of part args[1] of the unit args[0] to args[2]. */
 USER_FUNC(btl_hitoffsetx) {
     s32 id;
@@ -2895,6 +2917,7 @@ USER_FUNC(btl_hitoffsetx) {
     part->hitOffsetX = evtGetValue(event, args[2]);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: hooks the display callback _light_point_callback onto Grodus's body pose
  * and hides the five lamp parts (3..7), which are drawn through the callback instead.
@@ -2923,6 +2946,7 @@ static USER_FUNC(_set_draw_callback) {
     p7->attributes |= kHidden;
     return EVT_RETURN_DONE;
 }
+
 /**
  * Display callback for Grodus: when the pose group being drawn is one of his five lamp locators (locator6, 9, 8,
  * 7, 5), draws the matching lamp part's plane shape at that locator.
@@ -2982,8 +3006,10 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
             break;
     }
 }
+
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000d538, JP las .text+0xD46C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Script helper: sets the HP gauge flag 1 on the unit args[0] (JP and later),
  * used when a part that shows the gauge is hit.
@@ -3002,6 +3028,7 @@ USER_FUNC(_hp_gauge_flag_on) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Starts moving satellite n of the unit along a spline:
  * allocates a 5-point spline from table, remembers the table on the satellite's body part,
@@ -3014,6 +3041,7 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
     }
+
     // BUG: n goes up to 3, so the fourth satellite's spline is stored in work[16], one past the 16 work slots
     // (it lands on currentTarget)
     unit->work[UNIT_WORK_SATELLITE_SPLINE + n] = (EvtWord)sp;
@@ -3024,6 +3052,7 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[1] = (EvtWord)table;
     return TRUE;
 }
+
 /**
  * Advances satellite n of the unit one frame along its spline,
  * moving over 60 frames relative to the unit's position and facing, and frees the spline when finished.
@@ -3060,6 +3089,7 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
     sp->count++;
     return TRUE;
 }
+
 /**
  * Script helper: pulls the satellites in to Grodus along the "in" splines paired with the "out" splines they
  * left by; blocks until all have arrived.
@@ -3120,6 +3150,7 @@ USER_FUNC(battenSatelliteToInside) {
     }
     return moving == FALSE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
+
 /**
  * Script helper: sends args[1] satellites out from Grodus to their outer positions along the "out" splines for
  * that many satellites; blocks until all have arrived.

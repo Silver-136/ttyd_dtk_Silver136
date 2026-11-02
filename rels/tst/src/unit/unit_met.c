@@ -491,10 +491,11 @@ EVT_END()
  * otherwise it checks for an item use and samples a target.
  * It then curls up and spins (unit work 1 and 2 hold the stop flag and spin speed for a background rotation
  * loop), trailing smoke, and slides along the floor into the target.
- * A miss or block makes it bounce away, a hit deals damage and knocks it back in two hops.
+ * A miss makes it bounce away, a hit deals damage and knocks it back in two hops.
  * Afterwards it walks home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
+
     // Flipped over: it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -508,6 +509,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         WAIT_FRAMES(30)
     ELSE
+
         // It may use an enemy item instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -535,7 +537,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_met_attack))
 
-    // The attack is declared and it walks to a spot in front of the target.
+    // The attack is declared and it turns to face the target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_met_attack))
@@ -667,8 +669,8 @@ EVT_END()
 
 /**
  * Damage script of the Buzzy Beetle while on the ceiling:
- * runs the default damage handling, then, if the attack did real damage (and its damage code is not the 512-only
- * code), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
+ * runs the default damage handling and returns if the zero-HP bit is set without the revival bit.
+ * Otherwise, if total damage is nonzero and the ceiling attribute is still set, it falls via ceil_fall_ready_event.
  */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), -2)
@@ -770,11 +772,13 @@ EVT_END()
  * hops back to its original x position and runs init_event2 to continue as a floor unit.
  */
 static EVT_BEGIN(attack_event_ceil)
+
     // First Strike: the first-attack target is already fixed and the camera pulls in on it.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
+
         // It may use an enemy item instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

@@ -21,7 +21,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_SPIN_DONE 0       // 1 ends the sibling loop that spins the thrown bone part
 #define UNIT_WORK_REWARD_GIVEN 1    // 1 once coins, exp and star points were paid out; dead_event and fake_dead_event pay only while 0
-#define UNIT_WORK_REBIRTH_TURNS 2   // turns until it rebuilds itself: fake_dead_event sets 2-3, rebirth_event counts down and at 0 revives with full HP; attack_event runs rebirth_event while >= 1
+#define UNIT_WORK_REBIRTH_TURNS 2   // turns until it rebuilds itself: fake_dead_event sets 2-4, rebirth_event counts down and at 0 revives with full HP; attack_event runs rebirth_event while >= 1
 #define UNIT_WORK_LINK_HIT 3        // 1 once a bone of the link attack hit; the third bone then hits without the avoid check
 #define UNIT_WORK_LINK_BONE_COUNT 4 // bones thrown so far in the link attack (each link_attack_event_sub adds 1); the third sets -1 when done and link_attack_event waits for -1
 
@@ -391,7 +391,7 @@ EVT_END()
  * Collapse script of the Dry Bones (data event 15):
  * it walks home, pays its coins and experience out once (unit work 1), shows the star-point effect,
  * crumbles into a pile of bones (KRN_D_2, SFX_ENM_HONENOKO_CRUMBLE1)
- * and is taken off the field for 2 to 3 turns (unit work 2), after which rebirth_event brings it back.
+ * and is taken off the field for 2 to 4 turns (unit work 2), after which rebirth_event brings it back.
  * Its hit offset is lowered by 20.
  */
 static EVT_BEGIN(fake_dead_event)
@@ -563,6 +563,7 @@ EVT_END()
  * After a first strike it pauses first. When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // After a First Strike it pauses a moment; otherwise it picks a target (a confused Dry Bones with nobody
     // to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -638,7 +639,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss or dodge: the target ducks aside as the bone reaches it and the bone clatters down behind.
+    // Miss or dodge: the target may duck aside as the bone reaches it and the bone clatters down behind.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -771,10 +772,11 @@ EVT_END()
  * One bone throw of the link attack, with the bone part in LW(12).
  * The Dry Bones rears back (KRN_A_1 and A_2) and throws a bone (SFX_ENM_HONENOKO_BONE_THROW3) that spins at the
  * target.
- * The target is checked in turn; only the last bone (LW(13) = 3) reads the defence action command result
- * and uses the full damage argument 256. Each bone lands behind the target and is hidden again.
+ * The target is checked in turn; each hit reads the defence action command result;
+ * only the last bone (LW(13) = 3) uses the final-hit flag 256. Each bone lands behind the target and is hidden again.
  */
 static EVT_BEGIN(link_attack_event_sub)
+
     // The Dry Bones rears back and throws one of its three bones.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
@@ -802,7 +804,8 @@ static EVT_BEGIN(link_attack_event_sub)
         END_LOOP
     END_SIBLING_EVENT
     IF_INT_EQUAL(LW(13), 3)
-        // Find out whether this bone hits (only the last bone reads the defence command).
+
+        // Find out whether this bone hits.
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_link_attack), DAMAGE_RESULT_FINAL_HIT, LW(11))
     ELSE
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_link_attack), DAMAGE_RESULT_FINAL_HIT, LW(11))
@@ -832,7 +835,7 @@ static EVT_BEGIN(link_attack_event_sub)
         CASE_END
     END_SWITCH
 
-    // Miss or dodge: the target ducks aside as the bone reaches it and the bone clatters down behind.
+    // Miss or dodge: the target may duck aside as the bone reaches it and the bone clatters down behind.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -1000,8 +1003,8 @@ EVT_END()
 
 /**
  * Script helper: args[0] = source unit, args[1] = destination unit.
- * Copies the size-change status (turns and strength) from the Bones unit to the unit it has just spawned in its
- * place (entry_honenoko).
+ * Copies the size-change status (turns and strength) from the Bones unit to the friend it has just spawned
+ * (entry_honenoko).
  */
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;

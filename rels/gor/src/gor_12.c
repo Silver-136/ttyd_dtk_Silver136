@@ -1,4 +1,4 @@
-// gor_12 (ゴロツキタウン, Rogueport): final epilogue sea scene (ending, story flag 402); on finish goes to aaa_00 (title).
+// gor_12 (ゴロツキタウン, Rogueport): final epilogue sea scene (ending, story flag 402); on finish goes to aaa_00 (Mario Bros.' house).
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -28,8 +28,8 @@ EvtWord gor_12_init_evt[35];
 
 /**
  * Ending sequence on the final sea view: starts the sea ambience, freezes and hides Mario and the partner,
- * waits 7 seconds while music and ambience fade out over 8 seconds,
- * then fades to black and changes the map to aaa_00.
+ * waits 7 seconds, then starts 8-second fades of the music and ambience,
+ * fades to black and changes the map to aaa_00.
  */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_MUJ1"))
@@ -50,7 +50,7 @@ EVT_END()
 /**
  * Init script of gor_12, the final sea view of the ending:
  * plays the sea and sparkle animations and, when the story is at STG8_END_AFTER_THE_BATTLE,
- * removes the partner and runs the epilogue (7 seconds, then everything fades out to aaa_00, the title).
+ * removes the partner and runs the epilogue (7 seconds, then everything fades out to aaa_00, Mario Bros.' house).
  * JP and later skip it if map events are being skipped.
  */
 EVT_BEGIN(gor_12_init_evt)

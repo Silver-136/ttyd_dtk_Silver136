@@ -32,6 +32,7 @@
 #define UNIT_WORK_BARRIER_EFFECT 3    // barrier EffectEntry (effSyuryouEntry) while a satellite is alive; deleted when none is left (SFX_ENM_BARRI_BARRIER_BREAK1)
 #define UNIT_WORK_SATELLITE 4         // first of the satellite unit ids (slots 4..7), -1 = none
 #define UNIT_WORK_SATELLITE_SPLINE 10 // first of the per-satellite BarriernSpline pointers (slot 10 + n) of a move in progress; freed after 60 frames
+
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_TARGET_UNIT 0 // part 1: first of the target unit ids (slots 0-4) of the current attack
 #define PARTS_WORK_TARGET_PART 5 // part 1: first of the target part ids (slots 5-9), paired with PARTS_WORK_TARGET_UNIT
@@ -262,7 +263,7 @@ static BattleWeapon weapon_wakka_attack = {
 
 /**
  * Weapon of the Z-Yux (combined ring attack: five rings, from it and its four Mini-Z-Yux):
- * targets every unit for 2 damage, ignores Defense;
+ * fires at five randomly selected targets for 2 damage per ring, ignores Defense;
  * used by wawawa_attack_event.
  */
 static BattleWeapon weapon_wawawa_attack = {
@@ -650,8 +651,7 @@ static USER_FUNC(barriern_zanzou3) {
 }
 
 /**
- * Wrapper around intplGetValue (interpolation mode, start, end, current frame, total frames)
- * so the compiler keeps the float arguments in order.
+ * Wrapper around intplGetValue (interpolation mode, start, end, current frame, total frames).
  */
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline f32 intpl_ff(f32 start, f32 end, s32 mode, s32 cur, s32 total) {

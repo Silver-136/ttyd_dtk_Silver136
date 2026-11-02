@@ -80,8 +80,8 @@ void fire_bros_get_target(s32* unitIdx, s32* partIdx) {
 
 /**
  * Script helper for the Fire Bro's throwing barrage (nagemakuri):
- * collects the possible targets and writes five random (unit, part) pairs, one per fireball,
- * into the script variables passed as arguments.
+ * collects the possible targets and writes five random (unit, part) pairs
+ * into the script variables passed as arguments; the barrage stores five pairs per fireball part.
  */
 USER_FUNC(fire_bros_nagemakuri_set_target) {
     EvtWord* args = event->args;
@@ -162,8 +162,8 @@ BattleUnitKind unit_fire_bros = {
 };
 
 /**
- * Defence of the Fire Bro: 1 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * Defence of the Fire Bro: 1 against every element in retail; demos use fire defence 99
+ * and a fire-immunity attribute, with defence 1 against the other elements.
  */
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
@@ -171,7 +171,7 @@ static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 #endif
 
-/** Damage-type reactions of the Fire Bro: immune to fire. */
+/** Damage-type reactions of the Fire Bro: immune to fire in demos; no special element reaction in retail. */
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 #else
@@ -517,7 +517,7 @@ static EVT_BEGIN(damage_check_sub)
     RETURN
 EVT_END()
 
-/** Checks a boomerang hit that is not the last one (LW(7) = 0): runs damage_check_sub. */
+/** Checks a fireball hit that is not the last one (LW(7) = 0): runs damage_check_sub. */
 static EVT_BEGIN(damage_check_no_last)
     SET_VALUE(LW(7), 0)
     CALL_CHILD(PTR(damage_check_sub))
@@ -578,7 +578,7 @@ EVT_END()
 
 /**
  * Flight of one Fire Bro fireball (part LW(15)) at the target in LW(3)/LW(4):
- * it starts at the Bro and bounces along the floor in 100-unit hops (five hops, of height 6 or 5 chosen at
+ * it starts at the Bro and bounces along the floor in 100-unit hops (up to five hops, at speed 6 or 5 chosen at
  * random), spinning, with a bounce sound each hop.
  * A sibling loop checks the target as the fireball passes its hit position (damage_check_last when LW(14) is 1,
  * else damage_check_no_last); a hit hides the fireball and ends the flight,
@@ -601,7 +601,8 @@ EVT_BEGIN(fire_move_event)
     SUBTRACT(LW(9), LW(0))
     SET_VALUE(LW(10), 0)
 
-    // In parallel, the fireball is checked against the party every frame; it ends if it hits someone or leaves the screen.
+    // In parallel, the fireball's position is polled each frame; one hit check runs when it passes its selected target,
+    // then it ends on a hit or after leaving the screen.
     BEGIN_SIBLING_EVENT
         LOOP(0)
             WAIT_FRAMES(1)
@@ -803,7 +804,7 @@ EVT_END()
 
 /**
  * The Fire Bro's two-fireball attack (weapon_fire_bros_renzoku_attack):
- * throws one fireball, 12 frames later a second one, spawning fire_move_event each time,
+ * throws one fireball, 32 frames later a second one, spawning fire_move_event each time,
  * and waits until both have reported back (unit work 1 reaches 2).
  */
 static EVT_BEGIN(renzoku_attack_event)
@@ -858,7 +859,7 @@ EVT_END()
 /**
  * The Fire Bro's barrage (weapon_fire_bros_nagemakuri_attack, every target):
  * after declaring the attack it stores a target from fire_bros_nagemakuri_set_target in the work of each
- * fireball part 2 to 7, then throws the six fireballs one after another (BRO_A_2A, 15 frames apart),
+ * fireball part 2 to 7, then throws the six fireballs one after another (BRO_A_2A, 35 frames apart),
  * each with nagemakuri_judge_last_attack_event deciding whether it is the last at its target
  * and fire_move_event flying it. It waits until unit work 1 shows all six have finished.
  */
@@ -884,7 +885,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_fire_bros_nagemakuri_attack))
     SET_VALUE(LW(10), 2)
 
-    // Aim up to eight fireballs, each at a target in the party.
+    // Aim six fireballs, each at a target in the party.
     LOOP(0)
         IF_INT_GREATER(LW(10), 7)
             BREAK_LOOP

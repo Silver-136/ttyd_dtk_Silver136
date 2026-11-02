@@ -88,7 +88,7 @@ BattleUnitKind unit_monochrome_sinemon = {
 
 /**
  * Defence of the Cleft: 2 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
@@ -354,6 +354,7 @@ EVT_END()
  * on a miss it overshoots, on a hit it bounces back twice, then walks home.
  */
 static EVT_BEGIN(attack_event)
+
     // A Cleft lying on its back only spends its turn getting up (wakeup_event).
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -361,7 +362,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // A First Strike aims at the first-strike target; otherwise the Cleft uses an item if it has one or
+    // A First Strike aims at the first-strike target; otherwise the Cleft uses an item if one is selected or
     // picks the front-most target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -434,7 +435,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     DELETE_EVENT(LW(15))
 
-    // Damage pre-check: the target either sidesteps the charge or takes it.
+    // Damage pre-check: determines whether the charge connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinemon_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -498,7 +499,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Wait event of the Cleft: switches to pose table entry 1 (idle; the upside-down pose while flipped). */
+/** Wait event of the Cleft: shows the pose from its pose table (idle; the upside-down pose while flipped). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

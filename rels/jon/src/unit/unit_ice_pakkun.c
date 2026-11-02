@@ -375,7 +375,7 @@ EVT_END()
 
 /**
  * The Frost Piranha burrows into the ground and comes back at its home position.
- * If a ceiling-hanging plant exists (pakkun_ceil_exist) a random roll decides between the floor and the ceiling;
+ * If the stage iron frame is available (pakkun_ceil_exist) a random roll decides between the floor and the ceiling;
  * on the ceiling (height 130) it gets the ceiling-fall handler, upside-down hit offsets,
  * attributes and pose table.
  */
@@ -446,6 +446,7 @@ static EVT_BEGIN(return_event)
 EVT_END()
 
 static EVT_BEGIN(normal_attack_event)
+
     // After a First Strike it pauses a moment; otherwise it picks a target (a confused Frost Piranha with
     // nobody to bite gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

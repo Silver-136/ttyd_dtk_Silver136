@@ -297,8 +297,9 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack event of the X-Naut: uses an enemy item if it has one;
- * otherwise picks its attack at random: 50% charging attack (normal_attack_event), 30% jump attack,
+ * Attack event of the X-Naut: uses the basic attack for a First Strike;
+ * otherwise uses an enemy item when selected by the item-use check, or picks at random:
+ * 50% charging attack (normal_attack_event), 30% jump attack,
  * 20% dekadeka_event, which it skips while it is already Huge (STATUS_HUGE).
  */
 static EVT_BEGIN(attack_event)
@@ -348,7 +349,7 @@ EVT_END()
 
 /**
  * Shared wind-up of the X-Naut's attacks: pays the weapon cost, zooms the camera onto the target,
- * faces it and runs towards it kicking up dust with the run sounds, then switches to the attack pose.
+ * faces it and kicks up dust with the run sounds, then switches to the attack pose and runs towards it.
  */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -410,7 +411,7 @@ EVT_END()
 /**
  * The X-Naut's basic attack (weapon_gundan_zako_attack):
  * picks a target, runs at it, hops and strikes (SFX_ENM_3RD1_ATTACK1);
- * the pre-damage check decides between a dodge animation and a hit with the action-command result,
+ * the pre-damage check decides between a miss or evasion and a hit with the action-command result,
  * then it returns home through attack_common_event2.
  * Falls back to the flustered reaction when confused with nothing to hit.
  */
@@ -480,7 +481,8 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // The swing misses or is blocked: the X-Naut stumbles past (D_2), then shakes itself off (D_3).
+
+        // The swing misses: the X-Naut stumbles past (D_2), then shakes itself off (D_3).
         LABEL(90)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_MISS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)

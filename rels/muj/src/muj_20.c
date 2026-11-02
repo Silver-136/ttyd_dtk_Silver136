@@ -722,7 +722,7 @@ void elmos1000tai_seq00(NanNPC* npc) {
 
 /**
  * Script helper that places a drifting mist effect near (args[0], args[1], args[2]) with a random offset of up
- * to 75 units, and keeps fading it in and out with random 3 to 4 second durations.
+ * to 75 units, then requests its deletion after a random 3 to 4 second wait.
  */
 USER_FUNC(mist_func) {
     EvtWord* args = event->args;
@@ -1951,11 +1951,6 @@ static USER_FUNC(fune_eff) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_muj_00004328, JP muj .text+0x4264. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Script helper: bends a ship position (GW(0), GW(1), GW(2)) onto a large circle of radius 6000
- * so the ship follows the curve of the horizon,
- * writing the result to LW(7) to LW(9) and the added heading to LW(0).
- */
 USER_FUNC(fune_curve_pos) {
     f32 x = evtGetFloat(event, GW(0));
     f32 y = evtGetFloat(event, GW(1));
@@ -2106,7 +2101,7 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
 
 /**
  * Display callback for the title logo: draws the logo texture for the current language
- * and the Press Start text with the wp alpha.
+ * and, in the demos, the Press Start text using the wp alpha.
  */
 static void draw(CameraId camera, void* param) {
     LogoWork* wp = param;

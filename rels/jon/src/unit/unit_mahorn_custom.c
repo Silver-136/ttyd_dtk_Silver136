@@ -31,7 +31,8 @@
 #define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry* of the magic bolt (effMahorn2Entry); eff_magic_get_posX reads the bolt's x from it
 
 double __fabs(double x);
-/** Absolute value of a double, wrapped so the compiler emits the same code as the original. */
+
+/** Absolute value of a double. */
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 
 static USER_FUNC(hand_ctrl);
@@ -615,7 +616,7 @@ static BattleUnitSetup entry_mahorn = {
  * Its copies (unit work 4 set) do nothing.
  * After an item check, if it is the only unit of its side left it splits into copies (bunsin_event);
  * if it has copies it casts its single-target magic (or is flustered when confused with no target);
- * otherwise it draws a spell: punch (30 in 120), single-target magic (60), and 10 each for magic on all enemies,
+ * otherwise it draws a spell: punch (30 in 150), single-target magic (60), and 10 each for magic on all enemies,
  * size-up, defence-up, invisibility, dodgy and heal.
  */
 static EVT_BEGIN(attack_event)
@@ -631,7 +632,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // Use an item if it has one.
+    // Use the item selected by the item-use check.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -889,7 +890,7 @@ EVT_END()
  * Damage script of the Elite Wizzerd.
  * When the real Wizzerd is hit while copies exist it remembers that (unit work 5),
  * and after the default damage handling all its copies vanish (mahorn_subset_bunsin_all_kill).
- * When a copy is hit it disappears (bunsin_kill_event) before the damage is dealt.
+ * When a copy is hit it disappears (bunsin_kill_event) instead of running the default damage reaction.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
@@ -1216,7 +1217,7 @@ static EVT_BEGIN(attack_punch_event)
 EVT_END()
 
 /**
- * Plays the avoid reaction on the target in LW(3) (animation 38, 39 or 40) according to the pre-damage result in
+ * Plays the avoid reaction on the target in LW(3) (damage code 38, 39 or 40) according to the pre-damage result in
  * LW(5): 3, 6 or 2.
  */
 static EVT_BEGIN(start_avoid)
@@ -1235,9 +1236,9 @@ EVT_END()
 /**
  * The Elite Wizzerd's single-target spell: it and its copies (found by mahorn_get_bunsin) all charge up
  * (SFX_ENM_MAHO_CHARGE1, attack_enemy_common_event_sub1) and cast (SFX_ENM_MAHO_MAGIC2);
- * the copies' orbs fly past the target to the edge of the stage (attack_enemy_common_event_sub_no_hit)
- * while the real one's orb flies to the target (attack_enemy_common_event_sub_hit).
- * The target gets its avoid reaction when the orb reaches it, and takes the damage.
+ * on a hit all their orbs fly to the target (attack_enemy_common_event_sub_hit),
+ * while on a miss all fly past it to the edge of the stage (attack_enemy_common_event_sub_no_hit).
+ * The target gets an avoid reaction for results 3, 6 or 2; on a hit it takes the damage.
  */
 static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -1289,7 +1290,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // Miss or dodge: the target dodges as the orb arrives and the orbs fly on past.
+        // Miss or dodge: results 3, 6 or 2 trigger avoidance as the orb arrives; all orbs fly on past.
         LABEL(90)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(60)
@@ -1326,8 +1327,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CALL_CHILD(attack_enemy_common_event_sub_no_hit)
         GOTO(98)
 
-        // Hit: the real orb strikes the target and the damage is dealt; the copies' orbs fly past to the edge
-        // of the stage.
+        // Hit: all casters' orbs head for the target, and the real Wizzerd deals the damage.
         LABEL(91)
         CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
         SET_VALUE(LW(15), LW(11))
@@ -1367,7 +1367,7 @@ EVT_END()
  * The Elite Wizzerd's spell on all enemies: it charges up (SFX_ENM_MAHO_CHARGE1,
  * attack_enemy_common_event_sub1),
  * casts (attack_enemy_common_event_sub2) and then a "thunder_n64" bolt strikes each target in turn,
- * damaging them (the defence action command result is taken once, at the first target).
+ * damaging them (the defence action command result is taken once, at the first target hit).
  */
 static EVT_BEGIN(attack_enemy_all_common_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -1461,7 +1461,7 @@ EVT_END()
 /**
  * Casting gesture of the Elite Wizzerd in LW(15) (-2 for itself):
  * in pose MAH_A_1 its four hands sweep to and fro in turn, 20 units each way, offset by 7,
- * 10 and 15 frames from each other, before a 55-frame pause.
+ * 10 and 15 frames from each other, while the parent script waits 55 frames.
  */
 static EVT_BEGIN(attack_enemy_common_event_sub2)
     IF_INT_EQUAL(LW(15), -1)
@@ -1795,7 +1795,7 @@ EVT_END()
 
 /**
  * The Elite Wizzerd's heal: it casts the support spell (support_friend_common_event) on itself
- * and recovers 6 HP with the "recovery" effect.
+ * and recovers 10 HP with the "recovery" effect.
  */
 static EVT_BEGIN(recover_magic_event)
     SET_VALUE(LW(3), -2)
@@ -1908,7 +1908,7 @@ EVT_END()
 
 /**
  * Wait script of the Elite Wizzerd: unless it is a plain copy (unit work 4 set) its copies also play their idle
- * pose, and each of the four hands bobs between two positions and poses at random intervals of 15 to 29 frames.
+ * pose, and each of the four hands bobs between two positions and poses at random intervals of 15 to 30 frames.
  * Under statuses 1, 2 or 9 the hands hold still (MAH_Z_2).
  */
 static EVT_BEGIN(wait_event)
@@ -2068,7 +2068,8 @@ static USER_FUNC(eff_magic_get_posX) {
 }
 
 /**
- * Script helper: args[0] = unit, args[1..3] = target x, y, z, args[4] = travel time in frames.
+ * Script helper: args[0] = unit, args[1] = target x, args[4] = travel time in frames;
+ * args[2..3] are read but do not affect the effect's target y and z, which use its starting y and z.
  * Starts the Wizzerd's magic effect from its wand towards the target and stores it in work[7];
  * the speed is derived from the distance and time.
  */

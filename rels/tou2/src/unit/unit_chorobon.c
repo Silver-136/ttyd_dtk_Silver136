@@ -596,6 +596,7 @@ static EVT_BEGIN(drain_attack_event)
         ADD(LW(6), 45)
         ADD(LW(7), 10)
         IF_INT_EQUAL(LW(9), PTR(&weapon_chorobon_drain_attack))
+
             // The Fuzzy hops off and swells up, healing itself with the points it drained.
             CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, LW(1), LW(10))
             CALL(evt_eff, STRING(""), STRING("recovery"), 7, LW(5), LW(6), LW(7), LW(10), 0, 0, 0, 0, 0, 0, 0)

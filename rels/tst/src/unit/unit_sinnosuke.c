@@ -98,7 +98,7 @@ BattleUnitKind unit_sinnosuke = {
 
 /**
  * Defence of the Bald Cleft: 2 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
@@ -109,11 +109,13 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 static BattleUnitDefense defence_turn = {0};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Bald Cleft in the demo builds: immune to burn; resists most other statuses.
  */
 static StatusVulnerability regist = {40, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 80, 80, 50, 30, 100, 80, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of the Bald Cleft in the retail builds: immune to burn; resists most other statuses.
  */
@@ -361,7 +363,8 @@ static EVT_BEGIN(attack_event)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
-        // If the Bald Cleft holds an item, it uses that instead of attacking.
+
+        // If an enemy-item script is selected, the Bald Cleft runs it instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))
@@ -426,7 +429,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, -1, 0)
     DELETE_EVENT(LW(15))
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; some misses send the target into its dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinnosuke_attack), 256, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)

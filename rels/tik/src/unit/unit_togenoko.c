@@ -572,7 +572,7 @@ static BattleUnitSetup entry_togenoko = {
  * based on its state, the number of Koopatrols alive (togenoko_getnum) and random chances.
  */
 static EVT_BEGIN(attack_event)
-    // In a forced (confused or scripted) turn it just attacks normally.
+    // In a First Strike it just attacks normally.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_togenoko_normal_attack))
@@ -600,8 +600,8 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
     ELSE
-        // A Koopatrol that is not guarding checks its state: one that is bothered by a status mostly uses its
-        // shell attack, otherwise it may use an item.
+        // A Koopatrol that is not guarding checks its state: a charged one chooses equally between its normal
+        // and shell attacks, otherwise it may use an item.
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(0), 0)
@@ -721,7 +721,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Koopatrol's normal attack: it runs up to the target (R_3), thrusts (A_2) with SFX_ENM_TOGENOKO_MOVE5,
+ * The Koopatrol's normal attack: it winds up (R_3), then lunges at the target (A_2) with SFX_ENM_TOGENOKO_MOVE5,
  * and the pre-damage check decides between a miss and a hit; then it hops back.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -746,7 +746,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is announced and the guard timing is awaited, and the camera frames the Koopatrol
+    // The attack is announced and protecting-unit movement is awaited, and the camera frames the Koopatrol
     // and its target.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -759,7 +759,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
 
-    // It marches up to the target with a stamping tread, then lunges with its spear.
+    // It takes its stamping R_3 pose, then lunges at the target with its spear.
     BEGIN_SIBLING_EVENT
         LOOP(10)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -801,7 +801,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Koopatrol runs on past, reappears from the far side and walks home.
+    // The thrust missed or was dodged: the Koopatrol runs on past, reappears from the far side and walks home.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 500)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
@@ -934,7 +934,7 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 0)
     SET_VALUE(LW(6), 0)
 
-    // It slides through each target in turn: those that dodge are slipped past, the rest take the damage.
+    // It slides through each target in turn: missed or dodging targets are slipped past, while connecting hits deal damage.
     LABEL(10)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(12.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

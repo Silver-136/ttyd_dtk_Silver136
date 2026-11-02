@@ -51,7 +51,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Init script of gra_03: trail music, a coin brick block, a hidden Earth Quake badge block,
+ * Init script of gra_03: trail music, a coin brick block, an Earth Quake question block,
  * the exits and the shadow Mario party removal.
  */
 EVT_BEGIN(gra_03_init_evt)

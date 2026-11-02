@@ -93,7 +93,7 @@ static f32 spline_dt[] = {
 /**
  * Chapter title scene for any other entrance: Mario and the partner are hidden,
  * the blimp (Hikousen) appears after 2 seconds and flies along the spline path spline_dt for 10 seconds
- * while bobbing up and down, and 20 seconds in the blimp sounds stop and the map changes to tou_00.
+ * while bobbing up and down, and 20 seconds after it appears (22 seconds in) the blimp sounds stop and the map changes to tou_00.
  */
 EVT_BEGIN(evt_anim2)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)

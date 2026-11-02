@@ -233,7 +233,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Map init script for las_07: music and ambience,
- * the four doors (two to las_06 and las_08 each of which can be the wrong door of the Palace's door puzzle),
+ * the four doors (one to las_06 and three to las_08, each of which can be the wrong door of the Palace's door puzzle),
  * and three hidden blocks with a Coin, Jammin' Jelly and P-Up, D-Down, P.
  */
 EVT_BEGIN(las_07_init_evt)

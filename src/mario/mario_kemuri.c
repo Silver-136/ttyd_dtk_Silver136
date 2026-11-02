@@ -102,6 +102,7 @@ void mario_simple_kemuri(void) {
  * a 0x1000-floor effect, a water splash, or a dust puff, depending on the floor.
  * Skipped once if MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI is set, which it clears.
  */
+
 // Descriptive name (not in the symbol maps); placeholder unk_80130374, JP 0x80130374. See docs/NAME_PROVENANCE.md.
 void mario_land_kemuri(void) {
     MarioWork* mario = marioGetPtr();
@@ -215,7 +216,7 @@ void kemuri_mugi(void) {
 
 /**
  * Normal dust: a puff when Mario lands on a floor after being airborne,
- * and trailing dust every 7 frames while dashing.
+ * and trailing dust every eight calls while Mario dashes (Bowser's interval depends on his size level).
  * For Bowser (characterId 2) the landing puff and the dash dust grow with his size level (kpaGetLevel).
  */
 void kemuri(void) {
@@ -292,8 +293,8 @@ void kemuri(void) {
 
 /**
  * Dust trail behind the partner, run each frame from party.c:
- * every 7 frames while it walks at speed 2 or more, or while Yoshi carries Mario.
- * The demo version also puffs over water and at any system level.
+ * every eight qualifying updates while it walks at speed 2 or more, or while Yoshi carries Mario.
+ * The JP and demo versions also puff over water and at any system level.
  */
 void party_kemuri(PartyEntry* party) {
 

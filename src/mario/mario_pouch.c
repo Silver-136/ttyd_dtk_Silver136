@@ -244,8 +244,8 @@ static inline BOOL pouchAdd(s16 *t1, s16 *t2, s32 size, ItemType type) {
 
 /**
  * Gives Mario an item (pickups, scripts, battle audience gifts).
- * Coins (max 999), Pianta tokens (max 99999; the demo has no cap),
- * hearts and flowers (1 HP / FP to Mario and the current partner),
+ * Coins (max 999), Pianta tokens (max 99999; demos cap at 0x7FFFFFFF),
+ * hearts (1 HP to Mario and the current partner) and flowers (1 FP to Mario),
  * Star Pieces and Shine Sprites only bump counters.
  * Boots and hammers set the jump/hammer level, badges set their found flag (GSWF id - 0x70),
  * and both join a list. Returns FALSE when the list is full or the id is not a pouch item.
@@ -454,6 +454,7 @@ BOOL pouchRemoveItem(ItemType type) {
  * Badges drop their worn state too.
  */
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * The demo's pouchRemoveItemIndex shifts the second table wrongly:
  * it clears the slot it has just filled instead of the one it moved from (the demo's own bug;
@@ -473,6 +474,7 @@ static inline void pouchShiftDemo(s16* table1, s16* table2, int i, s32 maximum) 
     }
 }
 #endif
+
 /**
  * Removes the item id from list slot index (the item used or thrown away, from the item menu,
  * battle and evt_pouch) and closes the gap; FALSE if the slot holds another item.
@@ -685,6 +687,7 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** The demo compares the item names as they are, without the kana conversion. */
 static s32 comp_aiueo(const void* a, const void* b) {
 #else
@@ -751,8 +754,8 @@ s32 comp_kind_r(s16* a, s16* b) {
 /**
  * Sorts a pouch list for the item and badge menus (win_root.c).
  * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
- * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost then kind. Badges keep their worn state.
- * JP compares internal ids for badge names.
+ * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost (retail breaks ties by kind). Badges keep their worn state.
+ * JP and the demos compare internal ids for badge names.
  */
 void pouchSortItem(s32 mode) {
     s32 k;
@@ -1249,7 +1252,10 @@ s32 pouchGetPartyAttackLv(PartyId partyId) {
     return ((PouchPartyData*)((u8*)mpp + partyId * sizeof(PouchPartyData)))->attackLevel;
 }
 
-/** The demo stores into the first empty slot and removes by id alone, without shifting the list. */
+/**
+ * Adds a stored item: demos fill the first empty slot; retail shifts entries down and inserts at the front.
+ * Returns FALSE if storage is full. Removal differs by version in pouchRemoveKeepItem below.
+ */
 BOOL pouchAddKeepItem(s32 id) {
     s32 i, j;
 
@@ -1276,7 +1282,7 @@ BOOL pouchAddKeepItem(s32 id) {
     return FALSE;
 }
 
-/** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
+/** Removes a stored item: demos clear the first matching id; retail requires id at index and closes the gap. FALSE if not found. */
 #if VERSION <= VERSION_DEMO_US
 BOOL pouchRemoveKeepItem(s32 id) {
     s32 i;
@@ -1433,6 +1439,7 @@ BOOL pouchEquipBadgeID(s32 badgeId) {
 
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Unequips the first worn copy of a badge; FALSE if none is worn.
  * The Game Over sequence takes off Slow Go with it. Not in the US demo.
@@ -1468,8 +1475,8 @@ s32 pouchArriveBadge(s32 id) {
 }
 
 /**
- * Script command evt_pouch_majinai_set: gives Merlee curseCount charm uses unless more are already left,
- * and restarts her countdown (majinai: charm).
+ * Script command evt_pouch_majinai_set: when fewer than curseCount charm uses remain,
+ * sets that many uses and restarts her countdown (majinai: charm).
  */
 void pouchMajinaiInit(s32 curseCount) {
     if (mpp->merleeCurseUsesRemaining < curseCount) {

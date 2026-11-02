@@ -225,8 +225,7 @@ static PoseTableEntry pose_table_dead[] = {
 };
 
 /**
- * Data table of Bowser: event scripts and values the battle looks up by tag (damage reactions, dodge, first
- * strike and so on).
+ * Data table of Bowser: the defeat event handler keyed by tag.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -433,10 +432,10 @@ EVT_END()
 
 /**
  * Init event of Bowser: installs his wait, phase, attack, damage, confusion and entry events,
- * spawns Kammy Koopa (entry_kamec_obaba, her unit id in GW(9)) and clears his unit work:
- * 1 (the first-hit cutscene state: 1 once Mario first hurts him, 2 after first_mario_damage_event),
- * 2 (the HP threshold for his half-HP line),
- * 3 (that line already said) and the attack stage counter.
+ * spawns Kammy Koopa (entry_kamec_obaba, her unit id in GW(9)) and initializes his unit work:
+ * 1 (the first-hit cutscene state: 1 once he first hurts Mario, 2 after first_mario_damage_event),
+ * 2 (half his max HP, the threshold for his half-HP line),
+ * 3 (that line already said) and the attack stage counter (both cleared).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -511,8 +510,8 @@ EVT_END()
 
 /**
  * Dead event of Bowser: the status window is hidden, the camera goes to Bowser,
- * and depending on how the fight ended (GW(11)) he says stg8_las_100_02 or stg8_las_100_04,
- * and the common slow-death sequence runs with GW(10) set to 2 (the fight is over).
+ * and depending on Kammy's death state (GW(11)) he says stg8_las_100_02 or stg8_las_100_04,
+ * and the common slow-death sequence runs with GW(10) set to 2 (Bowser's defeat sequence has reached its final stage).
  */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -570,8 +569,8 @@ EVT_END()
 
 /**
  * Phase event of Bowser: skipped while he is knocked out (STATUS_INSTANT_KILL, instant KO).
- * Before the player phase it handles Kammy's broom flag (unit work 0),
- * and runs harf_hp_event so he can speak when his HP gets low.
+ * Before the player phase (after turn 1), while he can act, it handles his leaning state (unit work 0).
+ * After the player phase it runs harf_hp_event so he can speak when his HP gets low.
  */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
@@ -623,7 +622,7 @@ EVT_END()
 
 /**
  * Event of Bowser when his HP first falls below the threshold stored in unit work 2:
- * he groans (KPA_U_3), the camera zooms in and he speaks (stg8_las_100) in a new stance (KPA_T_3, KPA_S_4).
+ * if leaning forward, he groans and straightens up (KPA_U_3); the camera zooms in and he speaks (stg8_las_100) in a new stance (KPA_T_3, KPA_S_4).
  */
 static EVT_BEGIN(harf_hp_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HALF_HP_TALKED, LW(1))
@@ -659,7 +658,7 @@ EVT_END()
 /**
  * Attack event of Bowser: can use an item; otherwise the first three turns go in order (fire breath, bite, hip
  * drop) and afterwards he draws lots among the hip drop, bite, critical bite and fire breath.
- * A first-hit reaction from Mario (first_mario_damage_event) can interrupt.
+ * A reaction to first damaging Mario (first_mario_damage_event) follows.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -790,7 +789,7 @@ static EVT_BEGIN(hip_attack_event)
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
 
-    // He lands with a crash and the camera shakes.
+    // He lands with a crash.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
     WAIT_MS(500)
     GOTO(98)
@@ -950,7 +949,7 @@ EVT_END()
 
 /**
  * Critical bite attack of Bowser (weapon_koopa_critical_bite_attack):
- * a stronger bite on one target, with the same dodge or defence check.
+ * a bite with a longer wind-up on one target, with the same dodge or defence check.
  */
 static EVT_BEGIN(critical_bite_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1031,8 +1030,8 @@ EVT_END()
 
 /**
  * Fire breath attack of Bowser (weapon_koopa_fire_attack):
- * he inhales (KPA_A_1A) and breathes a stream of fire at one target,
- * which can dodge or takes the damage with the action command defence check.
+ * he inhales (KPA_A_1A) and breathes a stream of fire at the sampled targets,
+ * which can dodge or take damage; the action command defence check runs for the first sampled target if the hit connects.
  */
 static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1161,8 +1160,8 @@ EVT_END()
 /**
  * Event script (Bowser's first-damage watcher):
  * if Bowser's work[1] is 0 and work[5] is 222, then
- * when the damage dealt to him is nonzero it sets work[1] to 1,
- * flagging that Mario has hurt him for the first time.
+ * when the damage dealt to that Mario target is nonzero it sets work[1] to 1,
+ * flagging that Bowser has hurt Mario for the first time.
  */
 EVT_BEGIN(first_mario_damage_check)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_HIT_TALK, LW(0))
@@ -1179,8 +1178,8 @@ EVT_BEGIN(first_mario_damage_check)
 EVT_END()
 
 /**
- * Event script: the cutscene after Mario first damages Bowser (work[1] is 1, then set to 2).
- * The camera zooms on Bowser, who laughs the hit off and speaks (stg8_las_98), then on Kammy Koopa,
+ * Event script: the cutscene after Bowser first damages Mario (work[1] is 1, then set to 2).
+ * The camera zooms on Bowser, who laughs and speaks (stg8_las_98), then on Kammy Koopa,
  * who adds a line (stg8_las_99) if she is still in the battle (GW(11) is 0).
  */
 EVT_BEGIN(first_mario_damage_event)
@@ -1306,9 +1305,9 @@ static USER_FUNC(_icon_jump_icon) {
 }
 
 /**
- * Script helper: Bowser disables one of the partner's commands for 3 turns at random (a coin flip between two
- * choices; the US version stores the turn count on the partner unit given in args[1]).
- * Returns in args[0] the id of the weapon/message of the disabled command and puts the matching string in LW(0).
+ * Script helper: Bowser disables the partner's technique command for 3 turns (irand(1) always selects it;
+ * US and later versions store the turn count on the partner unit given in args[1]).
+ * Returns in args[0] the command icon id of the disabled command and puts the matching announcement message key in LW(0).
  */
 static USER_FUNC(party_cannot_use_command) {
     BattleWork* wp = _battleWorkPointer;
@@ -1353,8 +1352,8 @@ static USER_FUNC(party_cannot_use_command) {
 }
 
 /**
- * Script helper: Bowser disables one of Mario's three commands (the first three command slots) for 3 turns at
- * random. Returns in args[0] the id of the matching weapon/message and puts the command's name string in LW(0).
+ * Script helper: Bowser disables Mario's jump or hammer command (the first two command slots) for 3 turns at
+ * random. Returns in args[0] the matching command icon id and puts the announcement message key in LW(0).
  */
 static USER_FUNC(mario_cannot_use_command) {
     BattleWork* wp = _battleWorkPointer;

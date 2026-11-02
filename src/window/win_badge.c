@@ -133,7 +133,7 @@ void mario_change(WindowWork* w, s32 unused) {
  * Badges window input.
  * State 0 picks the "All Badges" / "Equipped" tab,
  * state 10 moves through the list (L/R page) and equips or removes the badge on A if BP allows,
- * state 1000 runs the Z sort menu. Returns -1 on B (back), -2 on Start (close the menu), else 0.
+ * state 1000 runs the Z sort menu. Returns -1 on B from the tab selection, -2 on Start (close the menu), else 0.
  */
 s32 winBadgeMain(WindowWork* w) {
     PouchData* pouch = pouchGetPtr();
@@ -354,6 +354,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     winFontInit();
 #if VERSION >= VERSION_US
     {
+
         // US: BP label per language (indexed by gp->language)
         const char* bpLabel[7] = {"\202a\202o", "BP", "OP", "PB", "PM", "PT", "BP"};
         winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, bpLabel[gp->language]);

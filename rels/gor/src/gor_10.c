@@ -1,4 +1,4 @@
-// gor_10 (ゴロツキタウン, Rogueport): prologue scenes (the letter and Mario waking up), leading to pro_04 and then gor_00.
+// gor_10 (ゴロツキタウン, Rogueport): prologue scenes (the letter and Mario waking up), leading to aaa_00 (prologue2) and then gor_00.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -91,9 +91,8 @@ void tegami_delete(void) {
 #pragma opt_propagation off
 /**
  * Draw callback of the wake-up blur: copies the frame to a texture
- * and draws eight copies of it shifted in a circle by GW(0)/100 units, each at 1/8 weight,
+ * and samples it eight times around a circle of radius GW(0)/10000 in texture coordinates, each at 1/8 weight,
  * giving the dizzy double vision of Mario waking up.
- * Compiled with propagation and lifetime optimisations off to match the original.
  */
 static void depthDisp(CameraId camera, void* param) {
     f32 amp = evtGetFloat(NULL, GW(0)) / 100.0f;
@@ -259,7 +258,7 @@ USER_FUNC(mabuta) {
 /**
  * Script helper that makes the camera sway like a ship at sea:
  * nudges the 3D camera's vertical view offset with a slow sine
- * and plays a ship creak each time it crosses its start height. Never finishes.
+ * and plays a ship creak when it falls below its start height after rising above it. Never finishes.
  */
 USER_FUNC(cam_yure) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);

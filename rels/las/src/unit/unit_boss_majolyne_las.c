@@ -278,7 +278,7 @@ static BattleWeapon weapon_majolyne_blizzard_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of Beldam's powder that changes its target's size: damage 2 to 4; inflicts a size change. */
+/** Weapon of Beldam's powder that changes its target's size: inflicts a size change. */
 static BattleWeapon weapon_majolyne_powder_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -317,7 +317,7 @@ static BattleWeapon weapon_majolyne_powder_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of Beldam's powder that changes its target's size: damage 2 to 4; inflicts a size change. */
+/** Weapon of Beldam's powder that changes its target's size: inflicts a size change. */
 static BattleWeapon weapon_majolyne_powder_attack2 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -361,7 +361,7 @@ static BattleWeapon weapon_majolyne_powder_attack2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of Beldam's poison powder: damage 2 to 4; inflicts Poison. */
+/** Weapon of Beldam's poison powder: inflicts Poison. */
 BattleWeapon weapon_majolyne_powder_attack3 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -405,7 +405,7 @@ BattleWeapon weapon_majolyne_powder_attack3 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of Beldam's powder that slows its target: damage 2 to 4; inflicts Slow. */
+/** Weapon of Beldam's powder that slows its target: inflicts Slow. */
 BattleWeapon weapon_majolyne_powder_attack4 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -449,7 +449,7 @@ BattleWeapon weapon_majolyne_powder_attack4 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of Beldam's powder that speeds its target up: damage 2 to 4; inflicts Fast. */
+/** Weapon of Beldam's powder that speeds its target up: inflicts Fast. */
 BattleWeapon weapon_majolyne_powder_attack5 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -514,7 +514,7 @@ static EVT_BEGIN(majolyne_up)
     RETURN
 EVT_END()
 
-/** Camera helper of the Shadow Sirens fight: moves the battle camera to a close view at the X in LW(0). */
+/** Camera helper of the Shadow Sirens fight: moves the battle camera to a close view at the X position of the unit id supplied in LW(0). */
 static EVT_BEGIN(majo3_zoom)
     CALL(btlevtcmd_GetPos, LW(0), LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -771,8 +771,8 @@ EVT_END()
 
 /**
  * Phase event of Beldam: after the player phase it handles her counters (unit work 6 and 9),
- * speaks about her allies' state (btl_majo3_03 and btl_majo3_04 when they fall low on HP)
- * and sets unit work 7 of Marilyn and the third Siren so they react.
+ * speaks when her own HP is low (btl_majo3_03), or when Marilyn or the third Siren has low HP,
+ * and sets their unit work 7 so they react. Replies are conditional on their ability to act.
  */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
@@ -829,7 +829,7 @@ static EVT_BEGIN(phase_event)
                 IF_INT_LESS(LW(1), LW(0))
                     CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_LOW_HP_TALK_DONE, 1)
 
-                    // Beldam asks after Marilyn, who groans in reply.
+                    // Beldam asks after Marilyn, who groans in reply if she can act.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL_CHILD(PTR(btl_majolyne_zoom))
                     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, GW(9), -1, FACE_DIR_TOWARD_UNIT, LW(15))
@@ -861,7 +861,7 @@ static EVT_BEGIN(phase_event)
                 IF_INT_LESS(LW(1), LW(0))
                     CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_LOW_HP_TALK_DONE, 1)
 
-                    // Beldam scolds the third Siren for letting her HP fall, who apologises.
+                    // Beldam scolds the third Siren for letting her HP fall, who apologises if she can act.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL_CHILD(PTR(btl_majolyne_zoom))
                     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, GW(10), -1, FACE_DIR_TOWARD_UNIT, LW(15))
@@ -889,9 +889,9 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Attack event of Beldam: can use an item; otherwise she follows an order in unit work 8:
- * blizzard first, then powder attacks (weapon_majolyne_powder_attack1 to 5,
- * depending on where each of the Sirens stands), and blizzard again, repeating the cycle.
+ * Attack event of Beldam: can use an item; otherwise unit work 8 selects her opening:
+ * blizzard, Slow powder (weapon_majolyne_powder_attack4), then Fast powder (weapon_majolyne_powder_attack5).
+ * It then stays at step 4 for random choices; a fallback blizzard does not restart the opening.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -913,7 +913,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack4))
 
-        // Then comes a powder attack, whose kind depends on where the Sirens stand.
+        // Then comes the Slow powder attack.
         CALL_CHILD(PTR(powder_attack_check))
         CALL_CHILD(PTR(powder_attack_event))
         CASE_EQUAL(2)
@@ -926,7 +926,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
 
-        // Another blizzard follows.
+        // Step 3, if selected, performs another blizzard.
         CALL_CHILD(PTR(blizzard_attack_event))
         CASE_EQUAL(4)
         SET_UW_BASE(GW(15))
@@ -1045,7 +1045,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
 
-            // The cycle ends with a blizzard and starts over.
+            // The random-choice fallback is a blizzard; the attack step remains 4.
             CALL_CHILD(PTR(blizzard_attack_event))
         END_IF
     END_SWITCH
@@ -1137,8 +1137,8 @@ EVT_END()
 
 /**
  * Blizzard attack of Beldam (weapon_majolyne_blizzard_attack1):
- * she raises her arms (MJR_A1_2 to A1_4) and blasts a blizzard at one target,
- * which can dodge or takes the damage with the action command defence check and may be frozen.
+ * she raises her arms (MJR_A1_2 to A1_4) and blasts a blizzard at the selected targets,
+ * which can dodge or take the damage with the action command defence check and may be frozen.
  */
 static EVT_BEGIN(blizzard_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1219,7 +1219,7 @@ static EVT_BEGIN(blizzard_attack_event)
 EVT_END()
 
 /**
- * Target check for Beldam's powder attacks: picks a target among the party for the weapon in LW(9)
+ * Target check for Beldam's powder attacks: picks an eligible target for the weapon in LW(9)
  * and returns it in LW(3) and LW(4).
  */
 static EVT_BEGIN(powder_attack_check)
@@ -1230,7 +1230,7 @@ static EVT_BEGIN(powder_attack_check)
 EVT_END()
 
 /**
- * Powder attack of Beldam (weapon_majolyne_powder_attack1 to 5, one per place of the Siren in the unison line):
+ * Powder attack of Beldam (using one of weapon_majolyne_powder_attack1 to 5):
  * she throws her powder at the chosen target (MJR_A2_1, MJR_A2_2) and the cloud hits it with the dodge
  * or defence check, with its status effect.
  */

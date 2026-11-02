@@ -156,7 +156,8 @@ EVT_END()
 
 /**
  * Where fall_rtn places the Tube Mode coins: ten areas of the course (x range, z range, coin count)
- * with the coins set on the floor below; coins of type 2 start hidden. A zero type ends the table.
+ * with the coins set on the floor below; each type 2 row selects which accumulated candidates remain visible.
+ * A zero type ends the table.
  */
 static MonteTable montetable[] = {
     {1500.0f, 990.0f, -200.0f, -300.0f, 1, 1},
@@ -186,7 +187,6 @@ USER_FUNC(yuu_02_cam_shift_reset) {
 }
 #endif
 
-/** Shows the one-entry arrow icon array (icon_monte_p[idx]). */
 // Descriptive name (not in the symbol maps); placeholder fn_31_112C, JP yuu .text+0x112C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 /** Shows the one-entry arrow icon array (icon_monte_p[idx]). */
@@ -195,7 +195,6 @@ void yuu_02_icon_monte_on(s32 idx) {
 }
 #endif
 
-/** Hides the arrow icon array entry idx. */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_000011e0, JP yuu .text+0x1114. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 /** Hides the arrow icon array entry idx. */
@@ -204,10 +203,6 @@ void yuu_02_icon_monte_off(s32 idx) {
 }
 #endif
 
-/**
- * args[0] = on/off, args[1] = icon index.
- * Shows or hides that entry of the arrow icon array if it has been created.
- */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00001160, JP yuu .text+0x1094. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 /**
@@ -258,10 +253,6 @@ void yuu_02_icon_monte_disp(CameraId camera, void* param) {
 }
 #endif
 
-/**
- * View event that creates the single hidden arrow icon on its first call,
- * registers yuu_02_icon_monte_disp as a 2D draw callback and then blocks forever.
- */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00000f1c, JP yuu .text+0xE50. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 /**
@@ -329,7 +320,8 @@ static void monte_disp(CameraId camera, void* param) {
 /**
  * Frame-by-frame coin spawner and collector for Tube Mode.
  * On first call it scatters coins on the course according to montetable (checking by a downward floor probe that
- * each coin sits over solid ground; type 2 zones keep only some of their candidates visible),
+ * candidates lie over solid ground, with a fallback position of (0, 0, 0) after 500 failed attempts;
+ * type 2 zones keep only some of their candidates visible),
  * then each frame it checks Mario against every coin, counting and hiding collected ones with a 3D sound.
  * Blocks forever as a view event.
  */
@@ -512,7 +504,7 @@ USER_FUNC(yuuminigame3_set_phase) {
     return EVT_RETURN_DONE;
 }
 
-/** Script call that locks Mario's rolling speed/direction for the course (marioRollFixOn). */
+/** Script call that prevents Mario from unrolling during the course (marioRollFixOn). */
 USER_FUNC(yuuminigame3_roll_fix_on) {
     marioRollFixOn();
     return EVT_RETURN_DONE;
@@ -624,7 +616,7 @@ void yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall) {
     }
 }
 
-/** Draw callback for minigame 3: draws the collected-coin counter (monteCountDisp). */
+/** Draw callback for minigame 3: draws the Pianta token-balance counter (monteCountDisp). */
 void yuuminigame_disp_3roll(CameraId camera, void* param) {
     monteCountDisp();
 }
@@ -643,7 +635,7 @@ USER_FUNC(yuu_roll_reset) {
  * Per-frame rules of Tube Mode: when Mario falls off the course (y <= -50) it starts yuu_02_jumpret to put him
  * back at the last checkpoint (fukkipoint) and counts a penalty;
  * otherwise it tracks the checkpoint index as he rolls along the course (JP and later also allow going
- * backwards). Returns TRUE when the counter runs out or the last checkpoint is reached.
+ * backwards). Outside the fall-recovery event, returns TRUE when the counter runs out or checkpoint index 13 is reached.
  */
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data) {
     MarioWork* mario = marioGetPtr();
@@ -780,7 +772,7 @@ EVT_END()
 
 /**
  * Puts Mario back on the start spot after the opening camera
- * or between rounds (x 200 on US and later, 300 in the US demo, z 300).
+ * or between rounds (x 200 in retail, 300 in both demos, z 300).
  */
 EVT_BEGIN(yuu_02_kaijo_init2)
 #if VERSION <= VERSION_DEMO_US
@@ -851,7 +843,7 @@ EVT_END()
 /**
  * Phase 1 of Tube Mode: starts the two moving platforms (ugo1, ugo2), plays the opening camera (skippable),
  * starts the minigame music, shows the countdown effect,
- * locks the rolling controls and starts the 70-second coin counter.
+ * prevents Mario from unrolling and starts the 180-second countdown timer.
  */
 EVT_BEGIN(minigame03_start)
     CALL(yuu_atai_init)

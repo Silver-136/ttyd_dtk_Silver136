@@ -254,6 +254,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
 };
 
 #if VERSION >= VERSION_JP
+
 /**
  * Reward script run when a Fuzzy from the horde is defeated (unit LW(10)):
  * plays its death sound, pays out its coins and EXP and spawns the star point effect above it.
@@ -295,9 +296,10 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Damage handler of the Fuzzy Horde: for each point of damage one Fuzzy leaves the swarm (chorogun_escape)
+ * Damage handler of the Fuzzy Horde: for each point of damage up to 50 Fuzzies leave the swarm (chorogun_escape)
  * while more than 50 remain; once 50 or fewer are left it sets unit work 0 to 1.
- * After a lethal hit, it runs escape_chorogun_event if 500 or fewer are alive.
+ * On the final hit of an attack, it runs escape_chorogun_event if 500 or fewer are alive;
+ * the demos instead remove the unit on that final hit when unit work 0 is set.
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
@@ -340,10 +342,11 @@ EVT_END()
  * Attack script of the Fuzzy Horde: after the item-use check,
  * picks a target and the swarm flies in (chorogun_approach_target);
  * if the attack connects it dives onto the target (alive count + 100) / 200 times (at least once),
- * each time with the guard check, and the last dive deals the damage.
+ * each time with the guard check and a damage check, with the final-hit flag on the last dive.
  * Misses wait one second; the swarm then returns (chorogun_after_attack).
  */
 static EVT_BEGIN(attack_event)
+
     // The Fuzzy Horde first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -353,7 +356,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
-    // It picks a target; with none, it ends the turn (or flusters when confused).
+    // It picks a target; with none, it ends the turn.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_gundan_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_chorobon_gundan_attack), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -431,7 +434,7 @@ static EVT_BEGIN(attack_event)
     END_LOOP
     GOTO(98)
 
-    // The last dive deals the damage; the swarm flies back home and the camera resets.
+    // The swarm flies back home and the camera resets.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(chorogun_after_attack)
@@ -851,8 +854,7 @@ USER_FUNC(chorogun_approach_target) {
 
 /**
  * Script helper: args[0] is the flight time in frames.
- * Picks a random living Fuzzy, launches it at the target unit on a ballistic arc that lands
- * after that many frames, plays the attack sound and writes the Fuzzy's index to args[1].
+ * Picks a random living Fuzzy, launches it at the target unit on a ballistic arc with that frame timer, plays the attack sound and writes the Fuzzy's index to args[1].
  */
 USER_FUNC(chorogun_dive_target) {
     ExtdrvPose* pose;
@@ -930,8 +932,8 @@ USER_FUNC(chorogun_after_attack) {
 }
 
 /**
- * Script helper: makes the (up to) 50 living Fuzzies nearest the Horde unit's home position run away:
- * they stop counting as alive and go to state 60. With 50 or more alive, only those within 50 units qualify.
+ * Script helper: selects up to 50 living Fuzzies using distance comparisons and makes them run away:
+ * they stop counting as alive and go to state 60. The first 50 living Fuzzies encountered are candidates regardless of distance; later ones must be within 50 units.
  */
 USER_FUNC(chorogun_escape) {
     f32 dist[1000];

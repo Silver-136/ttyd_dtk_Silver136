@@ -1,4 +1,4 @@
-// Pause menu: the item window (items, important items, mail and the Koopa book).
+// Pause menu: the item window (items, important items, mail and the Super Luigi books).
 
 #include "version.h"
 #include "evt/evt_story.h"
@@ -243,7 +243,7 @@ void winItemExit(WindowWork* w) {
  * 100 pages through one of Luigi's books; 200-202 pick and read mail (Mailbox SP);
  * 300 picks who gets a field-usable item and 301 blinks while it is applied in the menu;
  * 1000 is the Z sort menu.
- * Returns -1 on B, -2 to close the menu (also to use an item or read the Ragged Diary in the field), else 0.
+ * Returns -1 on B from tab selection (state 0), -2 to close the menu (also to use an item or read the Ragged Diary in the field), else 0.
  * Luigi's books are the Super Luigi key items.
  */
 s32 winItemMain(WindowWork* w) {
@@ -884,6 +884,7 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
 }
 
 #if VERSION >= VERSION_US
+
 /**
  * HP and FP labels by game language: Japanese (full-width), English, German, French, Spanish, Italian,
  * and an unused seventh row.

@@ -110,7 +110,7 @@ static NpcSetupInfo npcEnt[] = {
 
 /**
  * Door-swing callback for the house door: scales the animation value in LW(0) by -0.5546875 then -1.0
- * and applies it as the S_ie_door map object's X rotation.
+ * and applies it as the S_ie_door map object's Y rotation.
  */
 static EVT_BEGIN(evt_door)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5546875f))
@@ -139,7 +139,7 @@ static EVT_BEGIN(evt_wall)
     RETURN
 EVT_END()
 
-/** Actors that stay in view during the house door scenes: Luigi. */
+/** Actors kept lit while the house door darkens the room: Luigi. */
 static const char* ie_npc[] = {
     "ルイージ",
     NULL,
@@ -190,10 +190,9 @@ static DoorParam door_1 = {
 
 /**
  * Opening of the prologue in Mario's house: starts the house BGM and ambience, letterboxes the screen,
- * hides Luigi and Parakarry for now, places Mario and the camera and runs a 4-second camera interpolation,
- * then waits for GF(0), which the title-picture draw callback raises once the picture is fully faded in.
- * Afterwards it fades out the music, sets the story progress to STG0_02_MARIOS_HOUSE
- * and changes map to muj_20 with the "prologue" entrance.
+ * places Mario and the camera and runs a 5-second camera interpolation as the trees slide apart.
+ * Parakarry delivers the mail, Luigi brings the letter inside and starts to read it,
+ * and the scene ends with a white fade to gor_10.
  */
 static EVT_BEGIN(evt_prologue)
     // The house music fades in and the screen is letterboxed; Luigi and Parakarry are hidden for now.
@@ -258,7 +257,7 @@ static EVT_BEGIN(evt_prologue)
     END_INLINE_EVENT
 #endif
 
-    // Parakarry glides in to the mailbox, with a wing-beat sound at intervals until he lands.
+    // Parakarry glides in to the mailbox, with wing-beat sounds at intervals in the retail versions.
     CALL(evt_npc_glide_position, STRING("パレッタ"), 210, 25, -30, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)
 
     // The mailbox shakes as she drops the mail in.
@@ -554,7 +553,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
 
-    // A mail arrives: the mail jingle plays and the controller rumbles until A is pressed.
+    // A mail arrives: the mail jingle and vibration sequence start while the script waits for A.
     CALL(evt_mario_balloon_bikkuri)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION3"))
@@ -789,7 +788,7 @@ static TreeAccess ki_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
-/** The ten grass patches around the house that can be cut, ending with a terminator entry. */
+/** The ten grass patches around the house that can be shaken, ending with a terminator entry. */
 static KusaAccess kusa_data[] = {
     {0, "A_kusa_01", "S_kusa_01", NULL},
     {0, "A_kusa_02", "S_kusa_02", NULL},

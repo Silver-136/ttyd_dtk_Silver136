@@ -302,9 +302,11 @@ EVT_END()
 /**
  * The Goombella double's attack: uses an enemy item if she has one,
  * otherwise a Mario-style headbonk on a target (enemyWeapon_ChristineNormalAttack,
- * with a random 0 to 4 bonus hops, 20% chance) and the pre-damage check decides between a dodge and a hit.
+ * with a 20% chance of one to five intermediate hops before the final hit) and the pre-damage check decides
+ * between a dodge and a hit.
  */
 static EVT_BEGIN(attack_event_christine)
+
     // She may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -449,7 +451,7 @@ static EVT_BEGIN(attack_event_christine)
     END_IF
 
     // Hit: she squashes against the target and the camera zooms in; she stomps again for each bonus hop,
-    // the last one dealing the damage.
+    // each successful hop dealing damage and the last one marked as the final hit.
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     LOOP(4)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.07910156f), FLOAT(-0.119140625f), 0)
@@ -519,7 +521,7 @@ static EVT_BEGIN(attack_event_christine)
 EVT_END()
 
 /**
- * Battle script helper: computes the angle (degrees) of the vector from (args[0], args[1]) to (args[2], args[3])
+ * Battle script helper: computes the angle (degrees) opposite the vector from (args[0], args[1]) to (args[2], args[3])
  * into args[4]; leaves the old value in place when the two points coincide.
  */
 static USER_FUNC(_krb_get_dir) {

@@ -1,4 +1,4 @@
-// Battle unit Ice Puff (ブリザード): bom.rel's copy.
+// Battle unit Ice Puff (ブリザード): tst.rel's copy.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -314,7 +314,8 @@ EVT_END()
  * effect) and checks the damage for each in turn (usually with its freeze effect), then moves back home.
  */
 static EVT_BEGIN(bllizard_event)
-    // Its blast reaches every opposing unit: a target is chosen only to aim the camera.
+
+    // Sample the opposing targets and check that a target is available for the blast.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -586,10 +587,11 @@ EVT_END()
 /**
  * The Ice Puff's normal attack: picks a target, shrinks and shakes,
  * then dives at it in a swooping arc (SFX_ENM_KUMO_ATTACK1 and MOVE2)
- * and either misses (avoid animation on the target) or hits with the damage check and guard flag 256,
+ * and either misses or hits with the damage check and final-hit flag 256,
  * then returns home and restores its scale.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

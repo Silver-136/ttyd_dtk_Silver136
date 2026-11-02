@@ -798,7 +798,7 @@ static USER_FUNC(ramp_r) {
 
 /**
  * Texture-environment callback for the train's lights (the pika objects):
- * hands the TEV info to envAddTev with stage 7.
+ * hands the TEV info to envAddTev with effect type 7.
  */
 static void resha_tev(MapTevCallbackInfo* info) {
     envAddTev(7, info);

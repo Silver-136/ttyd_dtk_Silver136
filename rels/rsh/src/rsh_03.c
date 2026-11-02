@@ -361,8 +361,8 @@ static BeroEntry bero_data_c[] = {
 
 /**
  * Init event of the cook: moves him out of the way (below the floor) on day 3
- * until the Smorg miasma stage (STG6_45_DAY_3_STARTS to STG6_48_SMORG_MIASMA) and turns jumping off
- * when he is already on the ground.
+ * until the Smorg miasma stage (STG6_45_DAY_3_STARTS to STG6_48_SMORG_MIASMA) and disables gravity
+ * when his Y coordinate is negative.
  */
 EVT_BEGIN(init_cook)
     SWITCH(GSW_STORY_PROGRESS)
@@ -413,6 +413,7 @@ EVT_BEGIN(talk_cook)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             IF_INT_EQUAL(LW(1), 0)
+
                 // Trouble Center request 22: the cook asks for the ingredients of his dish.
                 CALL(evt_msg_print, 0, STRING("irai_22_00"), 0, 0)
             ELSE
@@ -440,6 +441,7 @@ EVT_BEGIN(talk_cook)
                     DEBUG_PUT_MSG(STRING("iri_22 status ???"))
                 END_SWITCH
             ELSE
+
                 // Mario picks which ingredient to hand over.
                 CALL(evt_msg_print, 0, STRING("irai_22_09"), 0, 0)
                 GOTO(0)
@@ -454,6 +456,7 @@ EVT_BEGIN(talk_cook)
 #endif
         SWITCH(LW(1))
             CASE_EQUAL(ITEM_GOLDEN_LEAF)
+
             // The Golden Leaf, Mystic Egg and Keel Mango are taken one at a time.
             CALL(evt_pouch_remove_item, ITEM_GOLDEN_LEAF, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_10"), 0, 0)
@@ -544,7 +547,7 @@ EVT_END()
 
 /**
  * Init event of the waitress: parked below the floor from day 3 to the Smorg miasma;
- * turns jumping off when she stands on the floor.
+ * disables gravity when her Y coordinate is negative.
  */
 static EVT_BEGIN(init_waitless)
     SWITCH(GSW_STORY_PROGRESS)
@@ -628,6 +631,7 @@ EVT_BEGIN(talk_waitless_pias_return)
 EVT_END()
 
 static EVT_BEGIN(talk_waitless)
+
     // From Pennington's assistant on, the waitress asks Mario for help.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(GSWF_RSH_WAITRESS_REQUEST_ACCEPTED, 0)
@@ -717,8 +721,8 @@ static EVT_BEGIN(talk_waitless)
 EVT_END()
 
 /**
- * Regular event of the waitress between STG6_01_THE_CONDUCTOR and STG6_05_GALLEY_KETTLE_DISCOVERED:
- * she paces back and forth between two points of the dining car at 24 units per second.
+ * Regular event of the waitress: returns without pacing from STG6_01_THE_CONDUCTOR until
+ * STG6_05_GALLEY_KETTLE_DISCOVERED (exclusive); otherwise she paces back and forth between two points of the dining car at 24 units per second.
  */
 EVT_BEGIN(move_waitless)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
@@ -740,7 +744,7 @@ EVT_BEGIN(move_waitless)
     RETURN
 EVT_END()
 
-/** NPCs of the dining car: the cook and the waitress. */
+/** NPCs of the dining car: the cook, the waitress and the shop clerk. */
 static NpcSetupInfo npc_data[] = {
     {
         "コック", // name
@@ -819,7 +823,7 @@ EVT_END()
 
 /**
  * Cutscene of the missing lunch mystery in the dining car:
- * Pennington questions the cook, the waitress, Toron and the salaryman in turn, each with a reaction jingle,
+ * Pennington questions the cook, the waitress, the salaryman and Toron in turn, each with a reaction jingle,
  * and the case ends with Pennington's conclusion (stg6_rsh_23 onwards).
  */
 EVT_BEGIN(evt_lanch_missing)
@@ -1176,9 +1180,10 @@ static const char* msg_tbl[] = {
 };
 
 /**
- * Loop that runs while the lunch is missing (STG6_01_THE_CONDUCTOR to STG6_04_GRILLING_HEFF_T):
- * each time Mario talks to the cook, Toron, the salaryman,
- * the waitress or Pennington it prints that person's stg6_rsh_18_xx line from msg_tbl.
+ * Ambient loop started while the lunch is missing (STG6_01_THE_CONDUCTOR to STG6_04_GRILLING_HEFF_T):
+ * randomly selects the cook, Toron, the salaryman, the waitress or Pennington
+ * and prints that person's stg6_rsh_18_xx line from msg_tbl unless mario_flag identifies them as the
+ * cached last talk target; the message closes if that target matches.
  */
 EVT_BEGIN(evt_lunch_talk)
     SET_VALUE(GF(10), 0)
@@ -1449,7 +1454,7 @@ EVT_BEGIN(evt_shop_close)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_SHOP_OUT1"), LW(0), LW(1), LW(2), 0)
 
-    // The door closes behind them and the page turns back to the dining car.
+
     END_INLINE_EVENT
 #if VERSION > VERSION_DEMO_US
     BEGIN_INLINE_EVENT
@@ -1464,6 +1469,8 @@ EVT_BEGIN(evt_shop_close)
         END_LOOP
     END_INLINE_EVENT
 #endif
+
+    // The page turns back to the dining car.
     CALL(evt_img_clear_virtual_point, STRING("capture_img"))
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
@@ -1560,6 +1567,8 @@ EVT_BEGIN(evt_shop_close)
         CALL(evt_party_move_pos, 1, LW(10), LW(12), 300)
     END_INLINE_EVENT
     WAIT_MS(500)
+
+    // The door closes behind them.
     CALL_CHILD(PTR(shop_door_close))
     CALL(evt_hitobj_attr_onoff, 0, 0, STRING("tobira_omise"), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 0, STRING("tobira_omise_heya"), 8388608)
@@ -1667,7 +1676,7 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
-/** Registers the shelf triggers from access_tbl; each runs evt_access when Mario faces it. */
+/** Registers the shelf triggers from access_tbl; each runs evt_access when Mario presses A while facing it. */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
@@ -1741,9 +1750,10 @@ EVT_BEGIN(rsh_03_init_evt)
 
     // Set up the shelf signs.
     CALL_CHILD(PTR(evt_access_entry))
+
+    // Pick the music for the story stage.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_02_A_CASE_OF_LOST_STEW, STG6_04_GRILLING_HEFF_T)
-        // Pick the music for the story stage.
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
         CASE_BETWEEN(STG6_22_DOCUMENT, STG6_26_ZIP_TOAD_CAUGHT)

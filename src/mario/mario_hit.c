@@ -69,6 +69,7 @@ static inline f32 marioHitNrmAngle(Vec* nrm) {
 
 /** marioHitNrmAngle without the local copies: sets groundRot from the normal and returns the slope in degrees. */
 #if VERSION <= VERSION_DEMO_US
+
 /** Demo-only form of marioHitNrmAngle taking the normal as three floats (the demo's tube ground and landing checks). */
 static inline f32 marioHitNrmAngleXYZ(f32 nx, f32 ny, f32 nz) {
     MarioWork* mario = marioGetPtr();
@@ -78,6 +79,7 @@ static inline f32 marioHitNrmAngleXYZ(f32 nx, f32 ny, f32 nz) {
     return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
 #endif
+
 /** marioHitNrmAngle without the local copies: sets groundRot from the normal and returns the slope in degrees. */
 static inline f32 marioHitNrmAnglePtr(Vec* nrm) {
     MarioWork* mario = marioGetPtr();
@@ -298,7 +300,7 @@ HitEntry* marioHitCheck(f32* ox, f32* oy, f32* oz, f32* dist, f32* nx, f32* ny, 
     return hit;
 }
 
-/** marioHitCheckVecInl with chkFilterAttr2: the ray only hits 0x4 surfaces that lack 0x800000. */
+/** marioHitCheckVecInl with chkFilterAttr2: skips 0x4 surfaces that lack 0x800000. */
 static inline HitEntry* marioHitCheckAttr2Inl(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
     HitCheckQuery query;
     HitEntry* hit;
@@ -405,6 +407,7 @@ BOOL marioChkBero(HitEntry* hit) {
 }
 
 #pragma inline_max_size(1000)
+
 /**
  * Tube mode on the ground: casts down from 10 above Mario
  * and stores the floor's tilt in roll_grx / roll_grz for the rolling tube (mot_roll.c).
@@ -712,8 +715,9 @@ void marioChkGnd2(void) {
 
 
 /**
- * The demo always probes at 0.375 of the collision width, allows steeper ground only in the slit,
- * and takes the first ground it finds.
+ * Five-point ground search: demos probe at 0.375 of the collision width and return the first accepted floor.
+ * Retail uses 0.425 in paper mode (0.375 otherwise) and keeps the highest accepted floor.
+ * Demos allow slopes below 75 degrees in paper mode (50 otherwise); retail also allows 75 in slit display or hip-drop motion.
  */
 HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     f32 dist;
@@ -971,8 +975,10 @@ static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm,
 }
 
 /**
- * The demo probes three points (on flat ground the three points 3 units ahead) with the landon ray check
- * and takes the first ground it finds.
+ * Tube ground search: demos test three points and return the first accepted floor;
+ * on flat ground the centre stays put and the two side probes move 3 units ahead.
+ * Retail tests four points on nearly flat ground or three on slopes, skips slopes of 75–105 degrees,
+ * and keeps the highest accepted floor.
  */
 HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
 #if VERSION <= VERSION_DEMO_US
@@ -1412,7 +1418,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
     return NULL;
 }
 
-/** The demo's version is the five-point probe of marioLandonChk_old with its own sizes. */
+/** Five-point landing probe with a vertical ofs: demos use the older LandonRay form; retail uses marioHitCheckVecInl. */
 HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
 #if VERSION <= VERSION_DEMO_US
     LandonRay ray;
@@ -1813,10 +1819,10 @@ static inline void marioSearchHeadOfs(MarioWork* mario, f32 deg, f32* px, f32* p
 
 /**
  * Finds a ceiling over pos: five rays up from half of *h (Mario's height) for up to *h + dd,
- * ignoring walls (slopes of 50-130 degrees).
+ * ignoring walls outside tube mode (slopes of 50-130 degrees normally, 75-105 in paper/slit mode).
  * If his head reaches it, pos->y is set to the ceiling, *h to 0 and the hit is returned;
  * otherwise *h gets the gap (-1 if none).
- * The US and PAL releases also ignore ceilings while falling faster than 10 per frame.
+ * The US and PAL releases also ignore non-tube ceilings while falling faster than 10 per frame.
  */
 HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
     Vec p;
@@ -2339,6 +2345,7 @@ static inline HitEntry* marioChkFrontInl(const Vec* pos, f32 s, f32 c, Vec* outP
     }
     return hit;
 }
+
 /**
  * Casts a horizontal ray from pos in direction angle (degrees) for up to dist.
  * Returns the hit and its flat distance in *out, or NULL with *out = -1.
@@ -2657,6 +2664,7 @@ HitEntry* dou10_yoko_yari2(f32* out) {
  */
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Spear check on dou_10 for tube mode (mario.c): unfiltered rays 40 along +z from 10 ahead of and behind Mario;
  * a hit becomes hitobjFront, and mario.c hurts him if it has the spike attribute 0x800.
@@ -2831,6 +2839,7 @@ static inline void wallCopy(Vec* out, Vec* in) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** The demo has no mode argument: the push is always limited to 1/8 of the width. */
 BOOL marioChkWallAround(Vec* pos, f32 unused, f32 dir, f32 w, f32 h) {
 #else
@@ -3032,7 +3041,7 @@ BOOL marioSlitChkWallAround(void) {
 /**
  * marioCheckWall for the paper boat (mot_ship.c):
  * moves it dx in direction dz against walls, pushes it out of nearby ones at a height of 4,
- * and caps the total movement at the boat's dash speed.
+ * and caps the wall-around correction at the boat's dash speed.
  */
 void marioCheckWallShip(f32 dx, f32 dz) {
     Vec pos;

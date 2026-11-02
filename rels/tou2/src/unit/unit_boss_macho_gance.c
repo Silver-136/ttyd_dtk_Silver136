@@ -86,7 +86,7 @@ EvtWord gance_body_attack_attack_event[515];
 static EvtWord wait_event[6];
 
 /**
- * Unit kind of the Macho Grubba (HP 60, level 70):
+ * Unit kind of the Macho Grubba (HP 60, level 71; 70 in the demos):
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
 BattleUnitKind unit_boss_macho_gance = {
@@ -223,8 +223,8 @@ static PoseTableEntry pose_table_furafura[] = {
 };
 
 /**
- * Data table of the Macho Grubba: event handlers for the counter-hit reactions,
- * its damage reaction and being defeated.
+ * Data table of the Macho Grubba: the defeat handler,
+ * plus counter-hit damage reactions in JP and later.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -764,6 +764,7 @@ EVT_END()
  * At 25% or below (2 to 3) he switches to the wobbly pose table (pose_table_furafura) and says stg3_tou_471_19.
  */
 static EVT_BEGIN(phase_event)
+
     // Only runs after the player's phase, and while Macho Grubba is able to act.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
@@ -777,6 +778,7 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+
         // Phase 0: at three quarters of his HP the camera zooms in and Grubba strikes his entry pose
         // with a flex sound, then speaks.
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
@@ -804,6 +806,7 @@ static EVT_BEGIN(phase_event)
             WAIT_MS(1000)
         END_IF
         CASE_EQUAL(1)
+
         // Phase 1: at half his HP the camera zooms in, he speaks, and then he blurs and swells.
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
         MULTIPLY(LW(0), 50)
@@ -900,6 +903,7 @@ static EVT_BEGIN(phase_event)
             WAIT_MS(1000)
         END_IF
         CASE_EQUAL(2)
+
         // Phase 2: at a quarter of his HP he becomes wobbly (his tired poses) and says his last line.
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
         MULTIPLY(LW(0), 25)
@@ -953,6 +957,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Data events 24 to 36 (JP and later), which the standard damage reaction runs for the counter-damage codes 43
  * to 55, with the damage code in LW(0) and the unit in LW(10):
@@ -1251,6 +1256,7 @@ EVT_END()
  * jumps onto it and lands with a hip drop that hits once, bounces off, and walks back home.
  */
 EVT_BEGIN(gance_attack_attack_event)
+
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))
@@ -1356,7 +1362,7 @@ EVT_BEGIN(gance_attack_attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: he lands beside it in a heavy hip drop that shakes the camera, then bounces away.
+    // The attack missed: he lands beside it in a heavy hip drop that shakes the camera, then bounces away.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(x_flag_set, 0, 1)
@@ -1456,6 +1462,7 @@ EVT_END()
  * hitting each selected target once as he reaches it, and walks back home.
  */
 EVT_BEGIN(gance_rariat_attack_attack_event)
+
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))
@@ -1479,7 +1486,7 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
     CALL(evt_eff_delete, STRING("hikari"))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
 
-    // Choose the targets; a confused Grubba with none is flustered.
+    // Sample the targets; if LW(3) is -1, a confused Grubba is flustered and the action ends.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     IF_INT_EQUAL(LW(3), -1)
@@ -1608,6 +1615,7 @@ EVT_END()
  * and lands on it with a hip drop that hits once, bounces off, and walks back home.
  */
 EVT_BEGIN(gance_body_attack_attack_event)
+
     // Macho Grubba strikes a pose in a flare of light, flexing with a long sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GANSU_PAUSING1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("E_1A"))
@@ -1711,7 +1719,7 @@ EVT_BEGIN(gance_body_attack_attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: he lands beside it in a hip drop that shakes the camera.
+    // The attack missed: he lands beside it in a hip drop that shakes the camera.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(x_flag_set, 0, 1)
@@ -1891,7 +1899,7 @@ USER_FUNC(wariai_enzan_1f_intpl_w) {
  * Curve blend of args[2] and args[3] at step args[0] of args[1]:
  * args[5] is an intplGetValue mode (0 to 13; 14 to 27 run mode minus 14 mirrored;
  * 28 or more give args[2] outright), and args[4] receives (1 - r) * args[2] + r * args[3] as a float,
- * r running from 1 at step 1 toward 0. gance_body_attack_attack_event uses it with mode 5 for its roll.
+ * with curve time args[1] - (args[0] - 1). gance_body_attack_attack_event uses it with mode 5 for its roll.
  */
 static USER_FUNC(wariai_enzan_1f_intpl) {
     EvtWord* args = event->args;

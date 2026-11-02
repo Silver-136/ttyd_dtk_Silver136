@@ -132,11 +132,13 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Putrid Piranha in the demo builds: immune to poison; resists most other statuses.
  */
 static StatusVulnerability regist = {90, 90, 70, 0, 85, 100, 100, 90, 100, 80, 100, 80, 100, 80, 80, 30, 40, 100, 80, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of the Putrid Piranha in the retail builds: immune to poison; extra prone to sleep;
  * resists most other statuses.
@@ -286,7 +288,8 @@ EVT_END()
  * It then closes its mouth (PKF_A_3C) and burrows back with return_event.
  */
 static EVT_BEGIN(breath_event)
-    // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
+
+    // Choose a target from the opposing party for the breath.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_poison_pakkun_breath_attack))
@@ -310,6 +313,7 @@ static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_poison_pakkun_breath_attack))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
+
         // It sinks into the ground, its shadow shrinking.
         CALL(shadow_scale_small, UNIT_ID_SELF)
     END_SIBLING_EVENT
@@ -381,7 +385,7 @@ static EVT_BEGIN(breath_event)
     SET_VALUE(LW(10), 0)
     LABEL(10)
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; only avoid results send the target into its dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_poison_pakkun_breath_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -405,7 +409,7 @@ static EVT_BEGIN(breath_event)
         CASE_END
     END_SWITCH
 
-    // A miss: this target dodges the breath.
+    // A miss or dodge: this target avoids the breath.
     LABEL(90)
     GOTO(97)
 
@@ -586,7 +590,8 @@ EVT_END()
  * when the stage's overhead iron frame falls (_fall_frame_event): it clears itself,
  * sinks into the ceiling (PKF_E_4 with the move sound, shadow shrunk, hidden),
  * moves its position and home to its home x/z on the ground (y = 0),
- * then pops back up standing (PKF_E_1, then PKF_S_1) with the ground hit, cursor, status-icon and kiss offsets,
+ * then pops back up standing (PKF_E_1, then PKF_S_1) with the ground hit, cursor and status-icon offsets
+ * (and kiss offsets in JP and later),
  * the ceiling attributes cleared and the ground pose table.
  */
 static EVT_BEGIN(ceil_fall_ready_event)
@@ -715,6 +720,7 @@ EVT_END()
  * Then it burrows back with return_event.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -741,6 +747,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
+
         // It sinks out of sight, from the ground or the ceiling.
         CALL(shadow_scale_small, UNIT_ID_SELF)
     END_SIBLING_EVENT
@@ -783,7 +790,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1C"))
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; only avoid results send the target into its dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -807,7 +814,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // A miss: the target dodges the bite.
+    // A miss or dodge: the bite does not connect.
     LABEL(90)
     GOTO(98)
 

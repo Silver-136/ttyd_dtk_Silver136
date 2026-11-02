@@ -84,7 +84,7 @@ BattleUnitKind unit_monochrome_sinemon = {
 
 /**
  * Defence of the Cleft: 2 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
@@ -262,8 +262,9 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
 EVT_END()
 
 /**
- * Damage script of the Cleft: if the hit does damage it plays the hurt pose (SIN_D_1, or SIN_D_2 when it is
- * flipped over) and hops twice, then runs the default damage handling.
+ * Damage script of the Cleft: positive damage plays SIN_D_1.
+ * When flipped over it plays SIN_D_2 and hops twice, independently of that damage test,
+ * then runs the default damage handling.
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
@@ -350,6 +351,7 @@ EVT_END()
  * afterwards it hops back past the target to its home position.
  */
 static EVT_BEGIN(attack_event)
+
     // If the Cleft is still on its back it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -357,7 +359,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // After a First Strike it waits a moment; otherwise it uses an item if it has one, or picks a target (a
+    // After a First Strike it waits a moment; otherwise it uses an item if one is selected, or picks a target (a
     // confused Cleft with nobody to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

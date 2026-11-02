@@ -94,8 +94,9 @@ WinMgrDesc itemdrv_window_desc[4] = {
 #define itemGetWork() (gp->inBattle ? &work[1] : &work[0])
 
 /**
- * The demo puts a removed badge item on sale at the badge shop (pouchArriveBadge, the bargain table)
- * when its ITEM_FLAG_BADGE_RETURN bit (0x100) is clear, in or out of battle.
+ * Puts a removed badge item on sale at the badge shop through pouchArriveBadge:
+ * demos do so when ITEM_FLAG_BADGE_RETURN (0x100) is clear, in or out of battle;
+ * retail does so only outside battle and when the same bit is set.
  */
 inline void itemCheckBadge(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
@@ -115,6 +116,7 @@ inline void itemCheckBadge(ItemEntry* entry) {
 #endif
 
 void itemseq_Bound(ItemEntry* entry);
+
 /**
  * Puts the item into the pouch; FALSE if the pouch is full.
  * On success sets its collect flag (GSWF or LSWF) and starts its pickup script.
@@ -178,8 +180,8 @@ void itemInit(void) {
 }
 
 /**
- * Clears the current item table on map change; on the field it first puts dropped badges
- * (ITEM_FLAG_BADGE_RETURN) on sale at the badge shop (itemCheckBadge).
+ * Clears the current item table on map change; on the field it first puts eligible dropped badges
+ * on sale at the badge shop, using itemCheckBadge's per-version flag test.
  */
 void itemReInit(void) {
     ItemWork* wp = itemGetWork();
@@ -188,7 +190,7 @@ void itemReInit(void) {
 
     if (!gp->inBattle) {
         for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-            if (entry->flags & ITEM_FLAG_ACTIVE) { // badges flagged LOST_BADGE_TO_SHOP go back to the shop
+            if (entry->flags & ITEM_FLAG_ACTIVE) { // eligible badges go back to the shop (itemCheckBadge's per-version flag test)
                 itemCheckBadge(entry);
             }
         }
@@ -221,7 +223,7 @@ void itemCoinDrop(Vec* position) {
 /**
  * Returns whether Mario may pick up this item now:
  * not in water or lava, Mario has control (later versions skip that for Bowser when his stage flag bit 0 is
- * set), no map event or other sequence runs, Mario is not on the boat or plane panel, hiding with Vivian,
+ * set), no map event or other sequence runs, Mario is not on the boat (or, in retail, the plane panel), hiding with Vivian,
  * taking damage or holding Koops's item, no other get is in progress, and field battle state allows it.
  */
 #if VERSION <= VERSION_DEMO_US
@@ -566,6 +568,7 @@ void itemModeChange(ItemEntry* entry, u16 mode) {
 }
 
 #if VERSION >= VERSION_US
+
 /**
  * Returns the first replaceable dropped item (coin, heart, flower) with this item id,
  * so itemEntry can reuse its slot when the table is full; NULL if none.
@@ -590,7 +593,8 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
  * Spawns field item itemId at (x, y, z) named name (generated if NULL);
  * type (ItemEntryType) picks how it appears and how long it stays,
  * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
- * When the table is full a dropped coin, heart or flower is replaced. Returns the entry or NULL.
+ * When the table is full, US/PAL may replace a dropped coin or flower; JP and the demos only try
+ * the first slot for a replaceable coin, flower or heart. Returns the entry or NULL.
  */
 #if VERSION <= VERSION_DEMO_US
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
@@ -889,8 +893,8 @@ ItemEntry* itemNameToPtr(char* name) {
 }
 
 /**
- * Returns an item that is within range of (x, y, z)
- * and not cut off from it by a wall (checked with a collision ray), or NULL;
+ * Returns an eligible item within range of (x, y, z), or NULL;
+ * for an item above y, checks an upward collision ray from (x, y, z), not a ray toward the item;
  * evt_mobj uses it to see whether an item sits on a block.
  */
 ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
@@ -993,7 +997,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 
 /**
  * Draws the "You got X!" box during an item get, with "badge" wording for badges;
- * this version formats the message per language and sizes the box by its line count.
+ * US/PAL format the message per language and size the box by its line count; JP and the demos use sprintf and fixed height.
  */
 void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
@@ -1087,7 +1091,7 @@ void winHelpMain(WinMgrEntry* win) {
     winMgrHelpMain(win);
 }
 
-/** Draws the got item's description in the help box, once the name box has finished opening. */
+/** Draws the got item's description in the help box, once the help box has finished animating. */
 void winHelpDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
 
@@ -1097,7 +1101,7 @@ void winHelpDisp(WinMgrEntry* win) {
     }
 }
 
-/** the demo has no badge-full message */
+/** Draws the full-pouch warning: retail chooses item or badge wording; the demos always use the item-full message. */
 #if VERSION <= VERSION_DEMO_US
 static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry;
@@ -1137,6 +1141,7 @@ void winFullDisp(WinMgrEntry* win) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
  * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
@@ -1575,6 +1580,7 @@ void itemseq_GetItem(ItemEntry* entry) {
 
 // FAKE: unused file-scope static; removing it changes the object
 static s32 _move_dir_1090;
+
 /**
  * Moves a bouncing or falling item: gravity, bouncing off floors (with fewer, lower bounces each time),
  * walls and ceilings, landing on map objects, water and lava, and despawning where needed;
@@ -1903,8 +1909,8 @@ void itemSetPosition(ItemEntry* entry, f32 x, f32 y, f32 z) {
 }
 
 /**
- * Plays an item's pickup sound and sparkle: coins, hearts and flowers have their own sounds;
- * others use the default get sound.
+ * Plays the pickup sound for coins, Pianta tokens, hearts and flowers, with sparkles for coins and tokens;
+ * other items play no pickup sound here.
  */
 void itemGetSound(ItemEntry* entry) {
     Vec pos;

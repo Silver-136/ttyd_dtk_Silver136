@@ -70,7 +70,7 @@ static USER_FUNC(teresa_check_teresa) {
 
 /**
  * Script helper: args[0] receives 1 when at least one Boo
- * or Dark Boo (kinds 0x4B, 0x6A) is still free to act (its work[0] is 0), else 0.
+ * or Dark Boo (kinds 0x4B, 0x6A) has not yet joined the group lift (its work[0] is 0), else 0.
  */
 static USER_FUNC(teresa_check_move) {
     EvtWord* args = event->args;
@@ -206,9 +206,11 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Status vulnerability of the Boo in the demo builds: immune to poison; resists most other statuses. */
 static StatusVulnerability regist = {50, 50, 90, 0, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 95, 100, 10, 100, 100, 10};
 #else
+
 /**
  * Status vulnerability of the Boo in the retail builds: immune to poison; extra prone to dizzy;
  * resists most other statuses.
@@ -430,7 +432,8 @@ EVT_END()
 
 /**
  * The Boo's turn (also used when confused): on a first strike it attacks;
- * otherwise uses a held item if the AI wants to, then rolls 0-114:
+ * otherwise it uses a held item if the AI wants to and ends its turn;
+ * with no item event it rolls 0-114:
  * under 25 it turns itself invisible if it is not already, under 50 it turns another visible Boo invisible,
  * under 65 it lifts the Boos into the air if one is still grounded.
  * A roll whose move cannot be done falls through to the next check, and finally to the attack.
@@ -506,6 +509,7 @@ EVT_END()
  * On a miss or dodge it holds its surprised pose; then it turns around and floats home.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -576,7 +580,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     WAIT_FRAMES(15)
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; some miss results trigger a dodge reaction.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_teresa_attack), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -800,7 +804,8 @@ EVT_END()
 /**
  * Spawned by move_event for the Boo in LW(3): marks its unit work 0,
  * makes it untargetable by hammer and shell-toss attacks and raises it to height 40 as its new home.
- * The acting Boo goes at once in its T_1 pose; the others wait 60-80 frames and spin as they rise.
+ * The acting Boo starts rising at once and changes to T_1 after 30 frames;
+ * the others wait 60-80 frames and spin as they rise.
  */
 static EVT_BEGIN(move_event_sub)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(1))

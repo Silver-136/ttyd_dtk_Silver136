@@ -209,6 +209,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of X-Yux (the demos), as the percent chance a status takes hold:
  * immune to Sleep, Stop, Dizzy, Poison, Confuse, Electric, Burn, Freeze, Fright and Gale Force;
@@ -217,6 +218,7 @@ static BattleUnitKindPart parts[] = {
  */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 100, 10, 100, 10, 100, 10, 10, 0, 0, 100, 10, 100, 100, 10};
 #else
+
 /**
  * Status vulnerability of X-Yux (the final versions), as the percent chance a status takes hold:
  * immune to Sleep, Stop, Dizzy, Poison, Confuse, Electric, Burn, Freeze, Tiny, Attack Down, Defense Down,
@@ -605,8 +607,8 @@ static Vec splineTableOut4_4[] = {
 
 /**
  * Init script of a Yux (also used by the X-Yux and Z-Yux):
- * registers its wait, unison-phase, attack, damage and confusion handlers, shrinks its body part to 0.8,
- * empties its two satellite slots (unit work 4 and 5 = -1)
+ * registers its wait, unison-phase, attack, damage and confusion handlers, sets its body part scale to 1.0,
+ * empties its four satellite slots (unit work 4 to 7 = -1)
  * and spawns as many Mini-X-Yux satellites as unit work 0 asks for.
  * Each satellite gets the Yux's unit id in its unit work 0 and 1 in its unit work 1,
  * and is placed around the Yux (battleGetBarriernSatelliteInitPos) before the satellite orbit spline is set up.
@@ -672,7 +674,7 @@ EVT_END()
 /**
  * Turns on the afterimage blur (SetPartsBlur) and the blur attribute 67108864 on the body part of each
  * Mini-X-Yux
- * satellite (unit work 4 and 5) so their movement leaves trails.
+ * satellite (unit work 4 to 7) so their movement leaves trails.
  */
 static EVT_BEGIN(satellite_blur_on)
     SET_VALUE(LW(2), UNIT_WORK_SATELLITE)
@@ -688,7 +690,7 @@ static EVT_BEGIN(satellite_blur_on)
     RETURN
 EVT_END()
 
-/** Turns the blur attribute 67108864 off again on the body part of each Mini-X-Yux satellite (unit work 4 and 5). */
+/** Turns the blur attribute 67108864 off again on the body part of each Mini-X-Yux satellite (unit work 4 to 7). */
 static EVT_BEGIN(satellite_blur_off)
     SET_VALUE(LW(2), UNIT_WORK_SATELLITE)
     LOOP(4)
@@ -956,8 +958,8 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
 
 /**
  * Start-of-turn event of the Yux (not on turn 1 and only while it can act):
- * after a short random delay, if it has fewer than two satellites,
- * the satellites merge into it (SFX_ENM_BARRI_ATTACK9 and SPLIT1) and it spawns one new Mini-X-Yux,
+ * after a short random delay, if it has fewer than four satellites,
+ * the satellites merge into it (SFX_ENM_BARRI_ATTACK9 and SPLIT1) and it spawns up to two new Mini-X-Yux,
  * then the satellites spread out again around it (SFX_ENM_BARRI_SPLIT2) with their afterimage blur on;
  * unit work 0 is updated to the new satellite count.
  */
@@ -1029,8 +1031,8 @@ static EVT_BEGIN(unison_phase_event)
 EVT_END()
 
 /**
- * Chooses the X-Yux's attack: on a first strike it always makes the ring attack (wakka_attack_event); otherwise it
- * uses an item if it has one, then counts its four satellite slots holding a Mini-X-Yux that can act and is not
+ * Chooses the X-Yux's attack: on a first strike it always makes the ring attack (wakka_attack_event); otherwise,
+ * if an item-use script is selected, it runs it and returns; if none is selected, it counts its four satellite slots holding a Mini-X-Yux that can act and is not
  * confused: with four it makes the group attack (wawawa_attack_event), otherwise a 100/0 pick between the single
  * ring attack and healing itself (recovery_event), so it always makes the ring attack.
  */
@@ -1081,7 +1083,7 @@ EVT_END()
 
 /**
  * The Yux heals itself: zooms the camera onto it, shows the S_3 pose for 120 frames,
- * restores 1 HP (RecoverHp) and plays the recovery effect above it.
+ * calls RecoverHp with 0 HP and plays the recovery effect above it.
  */
 static EVT_BEGIN(recovery_event)
     CALL(evt_btl_camera_set_mode, 0, 7)
@@ -1122,12 +1124,13 @@ EVT_END()
  * The part of the Yux's ring attack when the shot misses:
  * the attacking part (LW(15)) takes the Z_3 pose
  * and is launched at the target (its attribute 16777216 cleared while it flies),
- * the Yux plays A_5 and the avoid animation starts for the target;
+ * the Yux plays A_5 and results 3, 6 or 2 start the target's avoid reaction;
  * afterwards the satellites' state (unit work 1) decides whether the part is hidden again.
  * The code name wakka is Japanese for "ring".
  */
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
-    // The ring part is set up on the Yux: faded out when the satellites are out, then placed on the Yux in its Z_3 pose.
+
+    // The ring part is set up on the Yux: with motion blur enabled for the group attack, then placed on the Yux in its Z_3 pose.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
@@ -1144,7 +1147,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
     END_IF
 
-    // The Yux plays its A_5 pose, and a watcher starts the target's dodge as soon as the ring flies past it.
+    // The Yux plays its A_5 pose, and a watcher starts avoidance for results 3, 6 or 2 as soon as the ring flies past it.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_5"))
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -1168,7 +1171,7 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
         END_LOOP
     END_SIBLING_EVENT
 
-    // Without satellites out, the ring swells and shrinks as it hops to the far end of the stage past the target.
+    // In the single-ring attack, the ring swells and shrinks as it hops to the far end of the stage past the target.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
@@ -1193,7 +1196,8 @@ static EVT_BEGIN(wakka_attack_common_event_no_hit)
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(15), 0, 4, 0)
         CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(15), LW(6), LW(7), LW(8), 0, -1)
     ELSE
-        // With satellites out, the ring pulses faster, hops past the target and is then hidden below the stage.
+
+        // In the group attack, the ring pulses faster, hops past the target and is then hidden below the stage.
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
         CALL(btlevtcmd_GetStageSize, LW(6), EVT_NULLPTR, EVT_NULLPTR)
         MULTIPLY(LW(6), 1)
@@ -1286,7 +1290,7 @@ EVT_END()
 /**
  * Resolves one Yux shot against the target in LW(3) and LW(4) with the weapon in LW(9):
  * pre-damage check, a miss runs wakka_attack_common_event_no_hit,
- * a hit runs wakka_attack_common_event_hit and applies the damage (with the action- command defence when LW(10)
+ * a hit runs wakka_attack_common_event_hit and applies the damage (with the final-hit flag when LW(10)
  * is 1).
  */
 static EVT_BEGIN(damage_check_event_sub)
@@ -1623,8 +1627,8 @@ EVT_END()
 
 /**
  * One ring of the wawawa attack: records the target, plays SFX_ENM_BARRI_ATTACK4 and 8,
- * and walks through the stored targets calling the no-last variant for every target
- * but the last (the last one gets wawawa_attack_event_sub_last), then counts the shot in unit work 2.
+ * and scans the stored target records to choose one no-last or last variant for this ring,
+ * then counts the shot in unit work 2.
  */
 static EVT_BEGIN(wawawa_attack_event_sub)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, LW(13), LW(3))
@@ -1667,7 +1671,7 @@ EVT_END()
 
 /**
  * The last ring of the wawawa attack: a hit runs wakka_attack_common_event_hit and applies ResultACDefence
- * and CheckDamage with weapon_wawawa_attack, then hides the ring part and makes it targetable again;
+ * and CheckDamage with weapon_wawawa_attack, then turns off its motion blur and hides the ring part;
  * otherwise it resolves the shot with damage_check_event_sub (LW(10) = 1).
  */
 static EVT_BEGIN(wawawa_attack_event_sub_last)
@@ -2084,7 +2088,7 @@ static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
 
 /**
  * Script helper run from the Yux's wait event.
- * Drops satellites (work[4], work[5]) that no longer exist;
+ * Drops satellites (work[4] to work[7]) that no longer exist;
  * with none left the barrier breaks (the body loses its damage immunity,
  * the barrier effect in work[3] is deleted and glass shards fly) and args[0] receives 0.
  * While satellites live it raises the barrier (immune body part, barrier effect kept under the Yux)

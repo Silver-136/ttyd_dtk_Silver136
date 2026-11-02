@@ -381,7 +381,7 @@ EVT_END()
 
 /**
  * Idle event of Cortez's claw: waits for the loop timing of its animation
- * and plays the pose table pose for state 1.
+ * and selects the pose for part 1 from its pose table according to its current state.
  */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)

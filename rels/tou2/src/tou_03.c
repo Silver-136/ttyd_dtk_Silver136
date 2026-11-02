@@ -508,7 +508,7 @@ static f32 randf(f32 min, f32 max) {
  * each placement attempt chooses near-floor candidates when __tou_rand() % 100 < 30, otherwise farther candidates,
  * and retries until its downward ray meets the required map hit geometry;
  * hides spectators with z > 350 unless the entrance is s_bero_2,
- * and gives each a random animation (Toad, Toadette, vendor Toad or Lakitu).
+ * and gives each a random animation (Toad, female Toad, vendor Toad or Lakitu).
  */
 void ext_kyaku_init(void) {
     s32 far;
@@ -2761,7 +2761,7 @@ EVT_END()
 
 /**
  * Scene after losing to the Iron Clefts: confetti falls,
- * the announcer prints stg3_tou_118_61 (or PAL's stg3_tou_re_118_61),
+ * the announcer prints stg3_tou_118_61 (PAL uses stg3_tou_re_118_61 after the return to Rogueport),
  * then the fighters print stg3_tou_274 and stg3_tou_274_01.
  */
 EVT_BEGIN(evt_shinemon_lose)
@@ -3376,7 +3376,7 @@ EVT_END()
  * the camera surveys the ring, the opponent team walks in,
  * and the announcer introduces the fighters with texts from the fighter tables (different lines before and after
  * the return to Rogueport; Rawk Hawk is introduced with his belt).
- * The party may comment on first appearances, then both sides speak their pre-match lines.
+ * The party may comment, then both sides speak their pre-match lines.
  */
 EVT_BEGIN(evt_default_opening)
     // The announcer waits in the ring; Mario and the partner wait at the west steps, the opponents at the east.
@@ -3426,7 +3426,7 @@ EVT_BEGIN(evt_default_opening)
         END_IF
     END_IF
 
-    // The music starts; Mario and the partner hop up into the ring while the opponents walk in.
+    // In retail the music starts here; Mario and the partner hop up into the ring while the opponents walk in.
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU1"))
@@ -3638,7 +3638,7 @@ EVT_END()
 /**
  * Victory scene for every ordinary match: the belt is hidden when the champion lost, confetti falls,
  * Mario strikes his victory pose, the announcer declares Mario winner
- * and the party (or announcer after the story point) comments.
+ * and a party message follows (only with a partner before the story point).
  */
 EVT_BEGIN(evt_default_win)
     CALL(evt_cam3d_evt_set, 0, 220, 533, 0, 125, -8, 0, EASING_LINEAR)
@@ -3806,6 +3806,8 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
+
+    // Grubba opens the main event and announces Rawk Hawk.
 #if VERSION >= VERSION_US
     CALL(evt_npc_status_onoff, 1, STRING("ガンス"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_set_position, STRING("ガンス"), 0, 60, 0)
@@ -3821,7 +3823,6 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_party_set_pos, 0, -610, 0, -10)
     WAIT_MS(2000)
 
-    // Grubba opens the main event and announces Rawk Hawk.
     CALL(evt_npc_flag_onoff, 0, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 155, 327, 0, 96, -8, 0, EASING_LINEAR)
     WAIT_FRAMES(1)
@@ -3830,7 +3831,6 @@ static EVT_BEGIN(evt_champion)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_412"), 0, STRING("ガンス"))
 
-    // The east door opens and Rawk Hawk marches into the ring while the crowd cheers him.
     CALL(evt_npc_set_position, STRING("敵１"), 550, 0, 0)
 #else
     CALL(evt_npc_status_onoff, 1, STRING("\203K\203\223\203X"), NPC_STATUS_FACE_MOVE_DIR)
@@ -3853,6 +3853,8 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_msg_print, 0, STRING("stg3_tou_412"), 0, STRING("\203K\203\223\203X"))
     CALL(evt_npc_set_position, STRING("\223G\202P"), 550, 0, 0)
 #endif
+
+    // The east door opens and Rawk Hawk marches into the ring while the crowd cheers him.
     SET_FLOAT_VALUE(LW(0), FLOAT(-180.0f))
     CALL_CHILD(PTR(e_door_open))
     CALL(evt_cam3d_evt_set, 475, 134, 533, 475, 38, -8, 0, EASING_LINEAR)
@@ -4095,8 +4097,8 @@ void GXSetTexCoordGen(GXTexCoordID dst, GXTexGenType func, GXTexGenSrc src, u32 
 
 /**
  * TEV callback for the "monittor" map object, the big arena monitor.
- * It draws the captured frame (or, in Grubba's finale, scrolling static noise) with scan-line texture,
- * and zooms and pans the picture to random targets every 200 frames.
+ * It draws the captured frame (or, in Grubba's finale, changing static noise) with scan-line texture.
+ * In live-picture mode it can choose new zoom or pan targets every 200 ready draws.
  */
 void screen_tev(MapTevCallbackInfo* info) {
     GXTexObj tex;
@@ -4227,8 +4229,8 @@ s32 tribe_chk(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Script helper (blocks forever) that moves the chain links of the Chain Chomp NPC in arg0 (arg1 = chain
- * number): link 0 follows the head and each next link is dragged to within 10 units of the one before it,
- * sagging 3 units each frame but kept above the floor.
+ * number): link 0 follows the head; each next link sags 3 units and is adjusted using a 10-unit separation
+ * before its height is clamped to the floor.
  */
 s32 burst_chain(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
@@ -4743,10 +4745,11 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 155, 288, 0, 105, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
+    // Grubba powers up: the machine whirs faster, the screen shakes and he swells.
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_466"), 0, STRING("ガンス"))
 
-    // Grubba powers up: the machine whirs faster, the screen shakes and he swells.
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_anim, STRING("ガンス"), STRING("P_1"))
@@ -4925,12 +4928,13 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_kill_party, 1)
 
-    // After the battle Grubba is back to normal size, slumped on the floor and wondering how he lost.
 #else
     CALL(evt_npc_set_battle_info, STRING("\203}\203b\203`\203\207\203K\203\223\203X"), 23)
     CALL(evt_npc_battle_start, STRING("\203}\203b\203`\203\207\203K\203\223\203X"))
     CALL(evt_npc_wait_battle_end)
 #endif
+
+    // After the battle Grubba is back to normal size, slumped on the floor and wondering how he lost.
     CALL(evt_snd_sfxon, STRING("SFX_STG3_ABSORB_DEVICE2"), LW(15))
     CALL(evt_snd_sfx_vol, LW(15), 38)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
@@ -5036,12 +5040,13 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, -320, 95, 287, -320, 40, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(333)
+
+    // Jolene climbs into the ring and demands answers; Grubba admits what he did to her brother, Prince Mush.
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -25, 197, 574, -25, 105, -8, 3000, EASING_SINE_IN_OUT)
 
-    // Jolene climbs into the ring and demands answers; Grubba admits what he did to her brother, Prince Mush.
     CALL(evt_npc_move_position, STRING("キノシコワ"), -280, 20, 0, FLOAT(60.0f), 1)
     CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -250, 20, 20, 500, 30)
     CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -215, 40, 20, 500, 30)
@@ -5329,10 +5334,11 @@ EVT_END()
 /**
  * Idle ring loop when no match is reserved: two sparring fighters ("player 1" and "player 2") repeat one of
  * three brawl routines at random (hit-and-retreat, chase with several hits, or a mid-air clash),
- * with hit effects and sounds. The announcer is placed at the ring edge.
+ * with hit effects and sounds. Grubba is placed at the ring edge before the return to Rogueport;
+ * afterwards the announcer is placed there, in demos only if the post-chapter departure flag is set.
  */
 EVT_BEGIN(evt_watch_match)
-    // Grubba (or later the announcer) stands at the edge of the ring to watch.
+    // Grubba (or later the announcer, conditionally in demos) stands at the edge of the ring to watch.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING("\203K\203\223\203X"), 0, 60, -130)
         ELSE
@@ -5373,7 +5379,7 @@ EVT_BEGIN(evt_watch_match)
             CALL(evt_npc_jump_position_nohit, STRING("\221I\216\3502"), -30, 60, 0, 300, 20)
             CALL(evt_npc_move_position, STRING("\221I\216\3502"), 80, 0, 0, FLOAT(200.0f), 0)
 
-            // They clash in the middle, then trade up to three more blows while chasing across the ring.
+            // They clash in the middle, then trade one to five more blows while chasing across the ring.
             CASE_EQUAL(1)
             BEGIN_INLINE_EVENT_GET_ID(LW(12))
                 CALL(evt_npc_move_position, STRING("\221I\216\3501"), -10, 0, 300, 0, 0)
@@ -5502,7 +5508,7 @@ EVT_BEGIN(evt_kyaku_1)
     RETURN
 EVT_END()
 
-/** Talk script of audience Toadette kyaku2, with different lines by story progress and the player's rank. */
+/** Talk script of audience female Toad kyaku2, with different lines by story progress and the player's rank. */
 EVT_BEGIN(evt_kyaku_2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("kyaku2"), STRING("mario"))
@@ -5609,7 +5615,7 @@ EVT_BEGIN(evt_kyaku_5)
 EVT_END()
 
 /**
- * Second talk script for the Toadette spectator (kyaku2 slot),
+ * Second talk script for the female Toad spectator (kyaku2 slot),
  * with different lines by story progress and the player's rank.
  */
 EVT_BEGIN(evt_kyaku_6)
@@ -5696,8 +5702,9 @@ EVT_END()
 
 #if VERSION >= VERSION_US
 /**
- * Background loop (US and later) that shows Mario's "..." balloon whenever he stands in front of a talkable
- * spectator and nobody is using a partner action, and removes it when he turns away.
+ * Background loop (US and later) that shows Mario's "..." balloon when he stands in front of a talkable
+ * spectator and nobody is using a partner action (PAL also requires motion 0, 1 or 2),
+ * and removes it when those conditions no longer hold.
  */
 EVT_BEGIN(evt_kyaku_check)
     SET_VALUE(LW(0), 0)
@@ -5758,6 +5765,7 @@ EVT_BEGIN(evt_kyaku_check)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Map init script of tou_03, the Glitz Pit ring.
  * It sets the ambience, lights and the monitor, spawns the audience, registers the exit doors,

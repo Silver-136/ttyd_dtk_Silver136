@@ -494,7 +494,7 @@ EVT_END()
  * Exit helper for the promotion scene (evt_1st_leagu):
  * the NPC named in LW(0) (Jolene or the champion) turns intangible,
  * walks to the door at (0, -130) with Mario turning to watch,
- * opens it (180 degrees for Jolene, 260 for anyone else) with the door sounds, walks out and is parked off-map,
+ * opens it (callback angle 180 for Jolene, 260 for anyone else) with the door sounds, walks out and is parked off-map,
  * and the door closes.
  */
 EVT_BEGIN(evt_1st_sub)
@@ -548,6 +548,7 @@ EVT_END()
  * the Glitz Pit music resumes and the story advances to STG3_20_MAJORS_10TH_PLACE.
  */
 static EVT_BEGIN(evt_1st_leagu)
+
     // Jolene opens the door and leads Mario and the partner into the major-league locker room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -793,6 +794,7 @@ EVT_END()
  * Otherwise Mario and the partner walk to the door, it opens with a wood-door sound,
  * they step through into the restroom and it shuts.
  */
+
 // This entrance is available only for the first title-match escape; the return path is separate.
 EVT_BEGIN(evt_toile_door)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
@@ -998,6 +1000,7 @@ EVT_END()
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(tou_08_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");
+
     // ベルト
     NpcEntry* npc = npcNameToPtr("ベルト");
 
@@ -1221,6 +1224,7 @@ static EVT_BEGIN(epilogue_evt)
 EVT_END()
 
 #if VERSION >= VERSION_US
+
 // Pause/restart these regular events only when Hammer Bros. exists; the post-match child always starts.
 EVT_BEGIN(evt_match_after_stop_npcs)
     SPAWN_EVENT_GET_ID(PTR(evt_tou_match_after_default), LW(10))
@@ -1252,6 +1256,7 @@ EVT_END()
 #endif
 
 EVT_BEGIN(tou_08_init_evt)
+
     // The story is moved up to match Mario's rank, then the debug story-skip flags are applied.
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
@@ -1287,7 +1292,7 @@ EVT_BEGIN(tou_08_init_evt)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
     END_IF
 
-    // Doors, the Ice Storm badge, lockers, the fighters, the match terminal and monitor,
+    // Doors, the Ice Storm item, lockers, the fighters, the match terminal and monitor,
     // the restroom doors and the bed.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

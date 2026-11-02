@@ -123,7 +123,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Map-init helper for the floating block blk_0 and its switch (sw_0):
- * if the local flag LSWF(1) says the switch has been used,
+ * if the local flag LSWF(1) is clear,
  * it lifts the block 200 units above its resting height.
  */
 // With this configuration, a clear moved flag places the block 200 units above its base position.

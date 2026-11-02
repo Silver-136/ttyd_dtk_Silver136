@@ -229,9 +229,8 @@ BattleWeapon weapon_gold_chorobon_attack = {
 };
 
 /**
- * Sound cues of Gold Fuzzy's animations: for each of its 4 animation names,
- * the sound effect that plays with it (SFX_BOSS_G_CHORO_MOVE1, SFX_BOSS_G_CHORO_WAIT2 and
- * SFX_BOSS_G_CHORO_WAIT1).
+ * Sound cues of Gold Fuzzy's CBN_S_1 animation: 3 timing entries for
+ * SFX_BOSS_G_CHORO_MOVE1, SFX_BOSS_G_CHORO_WAIT2 and SFX_BOSS_G_CHORO_WAIT1.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"CBN_S_1", 0.5833333f, NULL, "SFX_BOSS_G_CHORO_MOVE1", 0, 1},
@@ -384,9 +383,9 @@ EVT_END()
 /**
  * Damage handler of the Gold Fuzzy.
  * If its Fuzzy horde has been summoned and this hit would knock it out (damage flag 0x200 without the Life
- * Shroom flag 0x800), it hands out the horde's rewards (chorogun_dead_reward),
+ * Shroom flag 0x800), it hands out the horde's rewards in JP and later (chorogun_dead_reward),
  * makes all the Fuzzies escape and removes the horde unit.
- * Otherwise it runs the default damage script, and the first time its HP drops to 7
+ * It then runs the default damage script, and the first time its HP drops to 7
  * or less (but not 0) it spawns the Fuzzy horde (entry_chorogun) with call_chorogun_event.
  */
 static EVT_BEGIN(damage_event)
@@ -489,6 +488,7 @@ EVT_END()
  * after which it bounces twice on the target and hops home with return_event.
  */
 static EVT_BEGIN(attack_event)
+
     // The Gold Fuzzy first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

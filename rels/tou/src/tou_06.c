@@ -287,6 +287,7 @@ EVT_END()
  * Mail 12 is received and opened and the story advances to STG3_20_08_MS_MOWZ.
  */
 EVT_BEGIN(evt_chuchu)
+
     // Ms. Mowz waits on the crates with her theme playing; Mario and the partner spot her.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_CYUCYURINA1"))
@@ -502,8 +503,8 @@ EVT_END()
  * Sets up Trouble Center job 13 (Jolene's storeroom garbage) when the room loads,
  * unless GSWF_TROUBLE_WORK_1 shows Mario already reported all 20:
  * places Battle Trunks for the ones Mario is still missing out of 20 at spots taken from the shuffled position
- * list (make_tbl, get_pos), shows the flies (gor_hae) and plays a fly buzz every 3 to 4 seconds
- * while any trunks lie in the room.
+ * list (make_tbl, get_pos), shows the flies (gor_hae) and starts a fly buzz every 3 to 4 seconds
+ * if any trunks were placed; the buzz loop does not recheck pickups.
  * While GSWF_TROUBLE_WORK_3 is unset, spot 0 comes first and its trunks run iri_13_pants_00_evt when picked up.
  */
 EVT_BEGIN(iri_13_init)
@@ -587,6 +588,7 @@ EVT_END()
  * the Lv1 big blocks, the job 13 trunks, and the scene to run from story progress.
  */
 EVT_BEGIN(tou_06_init_evt)
+
     // Doors, Ms. Mowz and the hole in the floor that drops Mario into Grubba's office.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -594,7 +596,7 @@ EVT_BEGIN(tou_06_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("ana"), 0, PTR(evt_ana), 0)
 
-    // The first container until Flurrie blows it away, then the second, labelled container.
+    // Flurrie can blow away each container; the labelled second container has its own removal flag.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_09_BLOWING_CONTAINERS)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("kontena"), STRING("a_kon_H"), PTR(evt_kontena))
@@ -687,7 +689,8 @@ EVT_BEGIN(tou_06_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_HP_PLUS_P, -450, 250, -25, ITEM_TYPE_STILL, GSWF_TOU_06_HP_PLUS_P, 0)
     CALL(evt_item_entry, STRING("item_02"), ITEM_CHARGE_P, 175, 0, -125, ITEM_TYPE_STILL, GSWF_TOU_06_CHARGE_P, 0)
 
-    // Arriving through the "fall" entrance: Mario and the partner drop in and control returns on landing.
+    // Arriving through the "fall" entrance: Mario and the partner drop in; control returns after Mario lands,
+    // with PAL first lowering the partner if they are too high above him.
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))
         CALL(evt_mario_key_onoff, 0)
@@ -732,7 +735,7 @@ EVT_BEGIN(tou_06_init_evt)
         END_INLINE_EVENT
     END_IF
 
-    // The flies over the garbage and, from JP on, Trouble Center job 13.
+    // Animate the flies over the garbage; retail sets up Trouble Center job 13 here, demos do so below.
     CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
@@ -817,6 +820,7 @@ static USER_FUNC(get_pos) {
 }
 
 /** Script helper: builds a shuffled table of the 25 candidate locations for the Battle Trunks. */
+
 // Shuffle indices with 50 random pair swaps; this is not a Fisher-Yates shuffle.
 USER_FUNC(make_tbl) {
     s32 i;
@@ -835,6 +839,7 @@ USER_FUNC(make_tbl) {
         tbl[a] = tbl[b];
         tbl[b] = tmp;
     }
+
     // Before the special pickup is recorded, keep coordinate entry zero first.
     if (!evtGetValue(NULL, GSWF_TROUBLE_WORK(3))) {
         for (i = 0; i < 25; i++) {

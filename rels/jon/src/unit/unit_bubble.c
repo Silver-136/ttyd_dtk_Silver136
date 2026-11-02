@@ -125,7 +125,7 @@ BattleUnitKind unit_bubble = {
     data_table, // dataTable
 };
 
-/** Damage reduction of the Lava Bubble: none, every attack type does full damage. */
+/** Damage reduction of the Lava Bubble: no numerical defence; elemental responses still apply. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /**
@@ -330,7 +330,7 @@ EVT_END()
 
 /**
  * Data event 40 of the Lava Bubble: plays SFX_ENM_BUBBLE_FIRE1 and its A_2B pose for a second
- * when it avoids a fire attack.
+ * when an attack is stopped by its fiery body (damage code 0x22).
  */
 static EVT_BEGIN(avoid_fire_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_FIRE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -340,10 +340,10 @@ static EVT_BEGIN(avoid_fire_event)
 EVT_END()
 
 /**
- * Data event 11 of the Lava Bubble: when hit by fire or an explosion it splits.
- * It first checks the space next to it, stepping the position right (up to x 170) and then left (down to x 10),
- * and calls friend_event for the first free slot, so one Lava Bubble becomes two.
- * The loops stop as soon as nothing more fits.
+ * Data event 11 of the Lava Bubble: after a fire hit it tries to split.
+ * It first steps opposite its facing direction, then along it, changing x by 40 and z by 10 per check.
+ * The first search tests x <= 170 and the second x >= 10.
+ * At the first free slot it calls friend_event, so one Lava Bubble becomes two, and returns.
  */
 static EVT_BEGIN(damage_fire_explosion_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
@@ -448,11 +448,12 @@ EVT_END()
 /**
  * The Lava Bubble's contact attack: it floats up to the target (SFX_ENM_BUBBLE_MOVE1)
  * and bursts into flame in front of it, with several flame pulses (A_1B) and SFX_ENM_BUBBLE_FIRE1 sounds;
- * the damage is dealt on the last burst. It then hops over and behind the target and floats back home.
+ * the damage is dealt on the first burst, followed by three more pulses. It then hops over and behind the target and floats back home.
  * When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
-    // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Lava
+
+    // Pick the First Strike target or a sampled enemy; a confused Lava
     // Bubble with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -626,7 +627,8 @@ static USER_FUNC(eff_fire) {
  * The ball bursts into smoke on the target and deals the burning damage.
  */
 static EVT_BEGIN(fire_attack_event)
-    // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Lava
+
+    // Pick the First Strike target or a sampled enemy; a confused Lava
     // Bubble with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -773,13 +775,14 @@ EVT_END()
 
 /**
  * An attack that sets all of the party on fire:
- * it moves to x -40, shakes in place for 20 rounds while spawning ten flames (all_fire_attackEvent_sub),
- * then checks every target in turn and damages them (the defence action command result is taken once,
- * for the first target). It then returns home.
+ * it moves to x -40, shakes in place for 20 rounds, then spawns ten flames (all_fire_attackEvent_sub).
+ * It checks selected targets in turn, stopping at the first avoidance; on a hit it deals damage
+ * (the defence action command result is taken once, for the first target). It then returns home.
  * Nothing in the unit's tables or attack_event calls it, so it is unused.
  */
 static EVT_BEGIN(all_fire_attack_event)
-    // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Lava
+
+    // Pick the First Strike target or a sampled enemy; a confused Lava
     // Bubble with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -818,7 +821,7 @@ static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It shakes in place while a row of ten flames springs up.
+    // It shakes in place before a row of ten flames springs up.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2A"))
     LOOP(20)

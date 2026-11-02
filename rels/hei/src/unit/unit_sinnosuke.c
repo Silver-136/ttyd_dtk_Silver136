@@ -85,7 +85,7 @@ BattleUnitKind unit_sinnosuke = {
 
 /**
  * Defence of the Bald Cleft's body: 2 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
@@ -234,7 +234,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-/** Damage event of the Bald Cleft: runs damage_event_sub (hurt and flipped poses), then the default damage handling. */
+/** Damage event of the Bald Cleft: performs the hurt and flipped-pose reactions, then the default damage handling. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     IF_INT_GREATER_OR_EQUAL(LW(15), 1)
@@ -304,6 +304,7 @@ EVT_END()
  * restores the normal defence and pose tables and ground position with SFX_ENM_INSIDE2 and a hop;
  * while still flipped he just goes back to waiting.
  */
+
 // Flipped attack turns count down from two; the recovery turn restores the upright state instead of attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -336,6 +337,7 @@ EVT_END()
  * otherwise uses an item or dashes at one target with weapon_sinnosuke_attack) but with faster movement speeds.
  */
 static EVT_BEGIN(attack_event)
+
     // Flipped over: it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -412,7 +414,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(5), EVT_NULLPTR)
 
-    // The dash carries it into the target; the pre-damage check decides between a dodge and a hit.
+    // The dash carries it into the target; the pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     DELETE_EVENT(LW(15))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinnosuke_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))

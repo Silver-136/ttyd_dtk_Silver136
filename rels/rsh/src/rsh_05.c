@@ -1,5 +1,5 @@
 // rsh_05 (列車, Excess Express): car where Smorg (moamoa) is first met and flees; conductor, waitress and ghost NPCs, a
-// ghost diary and the Power Punch badge; doors to rsh_04 and rsh_06.
+// ghost diary and the Power Punch item; doors to rsh_04 and rsh_06.
 
 #include "version.h"
 #include "sfx_name_word.h"
@@ -61,11 +61,12 @@ static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
+
 /**
  * Polynomial approximation of sin(x) for an angle in radians in [0, 2*pi);
- * the Smorg (moamoa) swarm code uses its own sine to keep results identical on every frame without calling the
- * libm. Inlined into the swarm code.
+ * used by the Smorg (moamoa) swarm code without calling libm. Inlined into the swarm code.
  */
+
 // Same body as polySinf/polyCosf (poly_trig.h), kept as a second pair: using the shared pair for these calls too
 // changes the code, so this unit inlined two distinct copies.
 static inline f32 moa_sin(f32 x) {
@@ -208,7 +209,7 @@ EvtWord rsh_05_init_evt_nidome[59];
 EvtWord rsh_05_a_init_evt_nidome[29];
 
 /**
- * Animation table of the swarm of small Smorgs (c_n_moa_a): the figure, its animation set and a start offset
+ * Animation table of the swarm of small Smorgs (c_n_moa_a and c_n_moa_b): the figure, its animation set and a start offset
  * for each.
  */
 static ExtTexInfo ext_moamoa_data[] = {
@@ -262,12 +263,13 @@ static ExtTexInfo ext_moamoa_data[] = {
 };
 
 #pragma dont_inline on
+
 /**
  * Builds the swarm's animation table (wp->defs) from ext_moamoa_data:
  * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture frame,
- * frame count, speed, and looping unless the animation name starts with J).
- * Kept out of line to match the original.
+ * frame count, last sampled frame, and looping unless the animation name starts with J).
  */
+
 // Group contiguous model/animation samples; the last sampled frame becomes the playback duration.
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = ext_moamoa_data;
@@ -446,6 +448,7 @@ static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
 }
 
 /** Script helper: blocks the calling script until every Moamoa has finished leaving (MOAMOA_FLAG_GONE). */
+
 // Block until every member has entered GONE; the escape scene resets the ext controller afterward.
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     s32 i;
@@ -549,7 +552,7 @@ static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Debug leftover: instantly puts every Moamoa into the fully merged state with kind models,
- * skipping the gathering. Used by moamoa_debug.
+ * skipping the gathering.
  */
 static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
     s32 i;
@@ -629,6 +632,7 @@ static void ext_moamoa_init(void) {
     }
     wp->mobj = mapGetMapObj("ressha");
     wp->mobjY = wp->mobj->animMtx[1][3];
+
     // Pre-run 600 simulation updates; this does not wait for 600 rendered frames.
     for (i = 0; i < 600; i++) {
         ext_moamoa_main();
@@ -662,7 +666,7 @@ static void ext_disp(CameraId camera, void* param) {
 
 /**
  * Draw callback of the swarm's shadows: loads the shadow matrix and TEV state
- * and draws the flat shadow of every sprite (also records the bounding box for the offscreen camera).
+ * and draws the flat shadow of each sprite whose shadow is enabled (also records the bounding box for the offscreen camera).
  */
 static void ext_shadow_disp(CameraId camera, void* param) {
     static Mtx mt = {
@@ -728,6 +732,7 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+
 /**
  * Checks whether something hits one Moamoa.
  * Returns 0 for nothing, 1 for Mario jumping on it (Mario bounces), 2 for a hammer swing or Koops's shell,
@@ -830,6 +835,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
+
 /**
  * Per-frame callback of the Smorg swarm.
  * Tracks hammer and idle time, Flurrie's breath and partner use, counts hits on the swarm's targets,
@@ -898,6 +904,7 @@ static void ext_moamoa_main(void) {
         wp->breathPos.y = party->position.y;
         wp->breathPos.z = party->position.z - wp->breathDist * polyCosf(6.2831855f * wp->breathDir / 360.0f);
     }
+
     // Each captive is freed after more than 50 nearby hits; cleared targets redirect to the other side.
     if (wp->targetHits[0] > 50) {
         wp->target[0] = wp->target[1];
@@ -934,6 +941,7 @@ static void ext_moamoa_main(void) {
             wp->escapeEvt = evtEntry(evt_moamoa_escape, 0, 0);
         }
     }
+
 
     // One ordinary hit per update; Bobbery's hit code 4 deliberately leaves that latch clear.
     pose = extGetPosePtr();
@@ -1472,6 +1480,7 @@ static void ext_moamoa_dispent(void) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+
 /**
  * Script helper: moves the named NPC in a hop to (x, y, z).
  * Args: name, x, y, z, horizontal speed, gravity, duration in milliseconds. Blocks until the NPC lands.
@@ -1512,7 +1521,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
             speed = dist / t;
         }
         vy = dy / t + gravity * t / 2.0f;
-        // The floats are stored as their bit patterns through the word view (a float store gives different code).
+        // The floats are stored as their bit patterns through the word view.
         event->userdata[0] = *(s32*)&t;
         event->userdata[1] = *(s32*)&vy;
         event->userdata[2] = *(s32*)&speed;
@@ -1616,8 +1625,8 @@ EVT_END()
 
 /**
  * Script run for a freed NPC (name in LW(0): the waitress or the conductor):
- * the NPC thanks Mario (stg6_rsh_249_00 / 249_01),
- * then hops away from the swarm in three shrinking jumps (400, 200 and 100 ms) in a random direction,
+ * the NPC thanks Mario (stg6_rsh_249_00 / 249_01) while
+ * hopping away from the swarm in three shrinking jumps (400, 200 and 100 ms) in a random direction,
  * and ends in a relieved pose.
  */
 EVT_BEGIN(evt_moamoa_help)
@@ -1967,7 +1976,7 @@ static BeroEntry bero_data_c[] = {
     {0},
 };
 
-/** NPCs of the car: the conductor. */
+/** NPCs of the car: the conductor and the waitress. */
 static NpcSetupInfo npc_data[] = {
     {
         "車掌", // name
@@ -1999,8 +2008,8 @@ EVT_BEGIN(evt_ghost_diary)
 EVT_END()
 
 /**
- * Reading the Ragged Diary: asks whether to read it (stg6_rsh_130_yn),
- * then shows its pages (stg6_rsh_131 to 133) and the ghost's remark (stg6_rsh_134).
+ * Reading the Ragged Diary: asks whether to read it and continue (stg6_rsh_130_yn) before each page.
+ * If all three prompts are accepted, shows its pages (stg6_rsh_131 to 133) and the ghost's remark (stg6_rsh_134).
  */
 EVT_BEGIN(evt_ghost_diary_read)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_130"), 0, 0)
@@ -2045,7 +2054,7 @@ static EVT_BEGIN(evt_access)
 EVT_END()
 
 /**
- * Trigger for the bottle shelf (bin_2): the first time (LSWF 12) Mario finds a Power Punch badge (stg6_rsh_277,
+ * Trigger for the bottle shelf (bin_2): the first time (LSWF 12) Mario finds a Power Punch item (stg6_rsh_277,
  * item-get); afterwards it only prints stg6_rsh_279.
  */
 static EVT_BEGIN(evt_access2)
@@ -2121,7 +2130,7 @@ EVT_END()
  * Init script of rsh_05 on the first trip (it is the only variant; the door back to rsh_04 goes to variant a,
  * b or c depending on the story stage).
  * Sets up the NPCs, the swarm at STG6_46_ENGINEER (with the meeting cutscene)
- * and STG6_47_00_BAGGAGE_CAR_SMORGS, locks the doors while the swarm is active,
+ * and STG6_47_00_BAGGAGE_CAR_SMORGS, keeps the west exit disabled before and during the active swarm,
  * and places the Ragged Diary until it is picked up.
  */
 EVT_BEGIN(rsh_05_a_init_evt)

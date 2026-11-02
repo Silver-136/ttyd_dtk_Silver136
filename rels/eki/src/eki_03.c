@@ -271,7 +271,7 @@ EVT_END()
 /**
  * Case event when poster 10 is blown off the wall by Flurrie:
  * sets GSWF_EKI03_POSTER_10_BLOWN, turns off the hit area of the poster behind it (a_kami_13)
- * and checks whether all posters are gone.
+ * and checks whether posters 5 to 15 are gone.
  */
 EVT_BEGIN(evt_poster_10)
     SET_VALUE(GSWF_EKI_03_POSTER_10_BLOWN_AWAY, 1)
@@ -283,7 +283,7 @@ EVT_END()
 /**
  * Case event when poster 11 is blown off: sets its flag,
  * turns off the hit areas of the four neighbouring posters (a_kami_14, a_kami_15, a_kami_6, a_kami_7) it
- * covered, then checks whether all are gone.
+ * covered, then checks whether posters 5 to 15 are gone.
  */
 EVT_BEGIN(evt_poster_11)
     SET_VALUE(GSWF_EKI_03_POSTER_11_BLOWN_AWAY, 1)
@@ -298,7 +298,7 @@ EVT_END()
 /**
  * Case event when poster 12 is blown off: sets its flag,
  * turns off the hit areas of the posters it covered (a_kami_8, a_kami_9, a_kami_5;
- * the demo versions also a_kami_2), then checks whether all are gone.
+ * the demo versions also a_kami_2), then checks whether posters 5 to 15 are gone.
  */
 EVT_BEGIN(evt_poster_12)
     SET_VALUE(GSWF_EKI_03_POSTER_12_BLOWN_AWAY, 1)
@@ -314,21 +314,21 @@ EVT_BEGIN(evt_poster_12)
     RETURN
 EVT_END()
 
-/** Case event when poster 13 is blown off: sets GSWF_EKI03_POSTER_13_BLOWN and checks whether all posters are gone. */
+/** Case event when poster 13 is blown off: sets GSWF_EKI03_POSTER_13_BLOWN and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_13)
     SET_VALUE(GSWF_EKI_03_POSTER_13_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
-/** Case event when poster 14 is blown off: sets GSWF_EKI03_POSTER_14_BLOWN and checks whether all posters are gone. */
+/** Case event when poster 14 is blown off: sets GSWF_EKI03_POSTER_14_BLOWN and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_14)
     SET_VALUE(GSWF_EKI_03_POSTER_14_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
-/** Case event when poster 15 is blown off: sets GSWF_EKI03_POSTER_15_BLOWN and checks whether all posters are gone. */
+/** Case event when poster 15 is blown off: sets GSWF_EKI03_POSTER_15_BLOWN and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_15)
     SET_VALUE(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
@@ -339,7 +339,7 @@ EVT_END()
  * Map init for eki_03: sets up the doors to eki_01 and eki_04, the HP Plus item,
  * the Shine Sprite block (power-up block), the brick blocks (one holds a Thunder Rage),
  * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
- * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
+ * Posters already blown are hidden; the wall behind them is opened by evt_chk once posters 5 to 15 are gone.
  */
 EVT_BEGIN(eki_03_init_evt)
     // Doors, music and ambience; the music is dipped in volume.
@@ -453,7 +453,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
 
-    // Posters 10 to 13 also open up extra hit areas once blown away.
+    // Posters 10 to 12 also open up extra hit areas once blown away.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_10_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_10"), STRING("a_kami_10"), PTR(evt_poster_10))
     ELSE
@@ -496,7 +496,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
 
-    // Poster 15; then the wall behind the posters is closed until all are gone.
+    // Poster 15; then the wall behind the posters is closed until posters 5 to 15 are gone.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_15"), STRING("a_kami_11"), PTR(evt_poster_15))
     ELSE

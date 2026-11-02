@@ -208,7 +208,7 @@ static BattleWeapon weapon_patamet_attack = {
 
 /**
  * Defence of the Parabuzzy while it still has its wings: 4 against normal, ice and electric hits;
- * immune to fire and explosions (defence 99 cancels the hit).
+ * immune to fire and explosions (the element-response table supplies immunity).
  */
 static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 
@@ -326,8 +326,9 @@ EVT_END()
  * Runs when the winged unit is knocked out of the air.
  * It drops the flying state, swaps in the grounded pose table, data table and part,
  * falls to the floor and turns into unit kind 72 (UNIT_BUZZY_BEETLE).
- * If it took more than 1 HP damage it also flips over through dmg_turn_event.
+ * If its HP-damage count is above 1 it also flips over through dmg_turn_event.
  */
+
 // Replace winged parts/data with the ground form before the optional turnover path.
 static EVT_BEGIN(dmg_fall_event_pata)
     SET_VALUE(LW(10), -2)
@@ -379,6 +380,7 @@ EVT_END()
  * passes it (avoid) or hits it with SFX_ENM_PATAMET_ATTACK1 damage, then flies back home.
  */
 static EVT_BEGIN(attack_event_pata)
+
     // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -405,7 +407,7 @@ static EVT_BEGIN(attack_event_pata)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and it waits for any protecting unit to finish moving.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -685,7 +687,7 @@ static BattleWeapon weapon_met_ceil_attack = {
 
 /**
  * Defence of the Parabuzzy once it has lost its wings: 4 against normal, ice and electric hits;
- * immune to fire and explosions (defence 99 cancels the hit).
+ * immune to fire and explosions (the element-response table supplies immunity).
  */
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
@@ -842,6 +844,7 @@ EVT_END()
  * Once it reaches 0 the beetle restores its normal defence and pose tables,
  * clears status flag 1 and jumps back onto its feet; while it is still above 0 it just goes back to waiting.
  */
+
 // A flipped attack turn runs this countdown/recovery path instead of attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -874,6 +877,7 @@ EVT_END()
  * It then walks back to its home position.
  */
 static EVT_BEGIN(attack_event)
+
     // A unit lying on its back spends the turn getting up.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -908,7 +912,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and it waits for any protecting unit to finish moving.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1146,10 +1150,12 @@ EVT_END()
  * Attack of the ceiling Buzzy Beetle.
  * It slides over the target and drops on it (SFX_ENM_MET_FALL1),
  * with a miss or hit decided by the pre-damage check, then swings back and forth,
- * leaves the ceiling state and hops back to its home position on the floor.
+ * leaves the ceiling state, takes two hops near the target, then walks back to its home position on the floor.
  */
+
 // A completed drop attack restores the upright ground form, not the flipped damage-fall state.
 static EVT_BEGIN(attack_event_ceil)
+
     // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1176,7 +1182,7 @@ static EVT_BEGIN(attack_event_ceil)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and it waits for any protecting unit to finish moving.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(7), LW(8), LW(9))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))

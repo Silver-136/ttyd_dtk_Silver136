@@ -21,6 +21,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_SOUND_VOLUME 1 // volume of the wait sounds (SFX_ENM_WAN_*): 127 at init and each attack, sound_gensui_event lowers it to 70 % per loop, at least 32
 #define UNIT_WORK_CHAIN_STATE 2  // chain_main mode: 0 the links hang free between parts 1 and 9; 2 records each link's offset from part 9 and becomes 1, which keeps them there (damage, sleep, stop and freeze)
+
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_OFFSET_X 0 // parts 1-8: x offset from part 9 recorded by chain_main for UNIT_WORK_CHAIN_STATE 1
 #define PARTS_WORK_OFFSET_Y 1 // parts 1-8: y offset from part 9 recorded by chain_main for UNIT_WORK_CHAIN_STATE 1
@@ -147,7 +148,7 @@ BattleUnitKind unit_wanwan = {
 
 /**
  * Defence of the Chain-Chomp: 5 against normal, explosion and electric hits;
- * immune to fire and ice (defence 99 cancels the hit).
+ * 99 against fire and ice, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{5, 99, 99, 5, 5}};
 
@@ -434,6 +435,7 @@ static EVT_BEGIN(attack_event)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
+
         // If the AI wants to use a held item, it does that instead and ends its turn.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -486,7 +488,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_S_1A"))
     END_SIBLING_EVENT
 
-    // It lunges forward at the target with its chain stretched out behind it.
+    // It hops back to wind up for the lunge at the target, with its chain stretched out behind it.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_ATTACK1"), LW(14), 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 40)
@@ -526,7 +528,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The bite misses or is blocked: it drops to the ground in front of the target and growls.
+    // The bite misses: it growls, then drops back to the ground at the unit's base position.
     LABEL(90)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(14), 0, EVT_NULLPTR)
@@ -621,7 +623,8 @@ static EVT_BEGIN(wait_event)
     OR(LW(15), LW(13))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)
-        // Normally it bounces on the spot, barking and landing with a thud on each hop (WAN_A_1 and WAN_S_1A).
+
+        // For these statuses it bounces on the spot, barking and landing with a thud on each hop, using the status-selected pose.
         BEGIN_SIBLING_EVENT
             LABEL(3)
             CALL_CHILD(sound_gensui_event)
@@ -776,6 +779,7 @@ static USER_FUNC(chain_main) {
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &x, &y, &z);
     BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 9), x - 20.0f * unit->faceDirection, y, z);
+
     // 2: remember the chain's shape relative to the stake
     if (unit->work[UNIT_WORK_CHAIN_STATE] == 2) {
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
@@ -787,6 +791,7 @@ static USER_FUNC(chain_main) {
         }
         unit->work[UNIT_WORK_CHAIN_STATE] = 1;
     }
+
     // 1: keep that shape
     if (unit->work[UNIT_WORK_CHAIN_STATE] == 1) {
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
@@ -796,6 +801,7 @@ static USER_FUNC(chain_main) {
         }
         return EVT_RETURN_DONE;
     }
+
     // otherwise hang the links between the chomp and the stake
     BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x1, &y1, &z1);
     BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x2, &y2, &z2);
@@ -885,6 +891,7 @@ static USER_FUNC(chain_init) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &x, &y, &z);
+
     // Initialize intermediate links 2 through 7 at the chomp.
     for (i = 2; i <= 7; i++) {
         part = BtlUnit_GetPartsPtr(unit, i);

@@ -154,7 +154,7 @@ EvtWord mri_00_init_evt[296];
 
 /**
  * Calls the script function evt_img_alloc_capture with the given arguments (name, shadow id, offscreen name,
- * unused, and the box x, y, w, h) from C code by building a throwaway event with the argument array filled in.
+ * allocation mode, and the box x, y, w, h) from C code by building a throwaway event with the argument array filled in.
  */
 static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, EvtWord allocMode, EvtWord x, EvtWord y, EvtWord w, EvtWord h) {
     EventEntry event;
@@ -750,7 +750,7 @@ EVT_END()
 /**
  * Exit script of the northeast door (to mri_01):
  * the first time through, Punio is hidden and the party member takes his place,
- * then he is marked as following Mario (GSWF_MRI00_PUNIO_FOLLOWING). Returns 0 to the door code in LW(0).
+ * then he is marked as following Mario (GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO). Returns 0 to the door code in LW(0).
  */
 EVT_BEGIN(out_ne_bero)
     IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 0)
@@ -1030,6 +1030,7 @@ static USER_FUNC(evt_cloud_main) {
                 break;
             }
             hit = hitNameToPtr(wp->hitName);
+
             // A brief loss of contact still builds progress until the grace timer expires.
             if (hit0 != hit && hit1 != hit && hit2 != hit && hit3 != hit) {
                 if (wp->timer == 0) {
@@ -1254,7 +1255,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
-    // Punio runs to the hidden door and unlocks it; the lamp lights and the secret door (S_doa) swings open.
+    // Punio runs to the hidden door and unlocks it; the lamp lights and the secret door (S_doa) slides open.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_02"), 0, STRING("ガイド"))
     CALL(evt_cam3d_evt_set, 140, 90, 193, 140, 45, -154, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -1781,6 +1782,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_cam3d_evt_set, -150, 74, 650, -150, 40, 150, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     BEGIN_SIBLING_EVENT
+
         // BUG: textbox limit. Every message here opens a window (msgWindow_Entry), and there are only
         // 7 window slots; windowEntry returns -1 when all are in use and msgWindow_Entry does not check it.
         // A new one opens every 300 ms with no other check, which is not always enough for old ones to close.
@@ -1843,7 +1845,6 @@ EVT_BEGIN(mri_00_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_cam_road_reset)
 
-    // After Bowser's Petalburg scene and the boss, set up the Punies' thank-you scenes (mario_see_you).
     // After Bowser's Petalburg scene and the boss, set up the Punies' thank-you scenes (mario_see_you).
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
         CALL(evt_mario_get_party, LW(15))
@@ -1917,6 +1918,7 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
+
             // Chapter 2 music and ambience for the Great Tree.
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
@@ -1935,6 +1937,7 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_10_SECRET_ENTRANCE_REVEALED)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
             IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 1)
+
                 // While Punio follows Mario, the three dancer Punies dance in the yard.
                 CALL_CHILD(PTR(odoriko_1_init))
                 CALL_CHILD(PTR(odoriko_2_init))
@@ -1943,10 +1946,7 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
-        // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
-        // capture waits for Flurrie's gust.
-        // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
-        // capture waits for Flurrie's gust.
+
         // The first arrival scene plays; until Flurrie joins, the clouds hide the secret door and the wind
         // capture waits for Flurrie's gust.
         SPAWN_EVENT(PTR(first_bigtree))
@@ -1965,6 +1965,7 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+
             // In chapter 8 the dark-world scene or the voices scene runs, depending on the entrance.
             SPAWN_EVENT(PTR(sekai_yami_evt))
         END_IF

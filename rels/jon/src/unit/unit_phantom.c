@@ -332,7 +332,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Plays the flame sound and the 2B pose for one second; the reaction of a Phantom Ember that avoids a fire hit. */
+/** Plays the flame sound and the 2B pose for one second during the Phantom Ember's fiery-contact counter reaction. */
 static EVT_BEGIN(avoid_fire_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_FIRE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
@@ -344,7 +344,7 @@ EVT_END()
  * Data table tag 11: btldefaultevt_Damage runs it instead of the usual reaction
  * when a fire hit (damage code 0x18)
  * lands on the Phantom Ember.
- * It scans along z in both directions from the unit's position for a free spot (btlevtcmd_CheckSpace) and,
+ * It scans in both directions from the unit's position for a free spot (btlevtcmd_CheckSpace) and,
  * on finding one, calls friend_event to split off a new flame there.
  */
 static EVT_BEGIN(damage_fire_explosion_event)
@@ -420,7 +420,7 @@ static EVT_BEGIN(friend_event)
 EVT_END()
 
 /**
- * Attack event of the Phantom Ember: uses an enemy item if it has one,
+ * Attack event of the Phantom Ember: runs a selected enemy-item script if one is returned,
  * otherwise rolls 0 to 99 and does the bubble attack (normal_attack_event) below 70,
  * else the fire attack (fire_attack_event).
  */
@@ -455,7 +455,8 @@ EVT_END()
  * then swoops back and returns to its idle pose.
  */
 static EVT_BEGIN(normal_attack_event)
-    // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Phantom
+
+    // Pick the target (the First Strike target or a sampled enemy); a confused Phantom
     // Ember with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -628,7 +629,8 @@ static USER_FUNC(eff_fire) {
  * On a hit it makes a smoke puff and applies the damage with the action command defence check.
  */
 static EVT_BEGIN(fire_attack_event)
-    // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Phantom
+
+    // Pick the target (the First Strike target or a sampled enemy); a confused Phantom
     // Ember with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -771,7 +773,8 @@ static EVT_BEGIN(all_fire_attackEvent_sub)
 EVT_END()
 
 static EVT_BEGIN(all_fire_attack_event)
-    // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Phantom
+
+    // Pick the target (the First Strike target or a sampled enemy); a confused Phantom
     // Ember with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -810,7 +813,7 @@ static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It shakes in place while a row of ten flames springs up.
+    // It shakes in place, then a row of ten flames springs up.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2A"))
     LOOP(20)
@@ -835,7 +838,7 @@ static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
 
-    // Check each party member in turn for avoidance and damage.
+    // Check party members in turn for avoidance and damage, stopping when one misses.
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -888,7 +891,7 @@ static EVT_BEGIN(all_fire_attack_event)
     RETURN
 EVT_END()
 
-/** Idle event: shows the unit's table pose for state 1. */
+/** Idle event: shows the unit's table pose for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

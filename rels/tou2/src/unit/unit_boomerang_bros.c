@@ -22,7 +22,7 @@
 #define UNIT_WORK_TARGET2_PART 4    // part id of the second target
 #define UNIT_WORK_TARGET1_HIT 5     // 1 if the outbound pass hit the first target; the last boomerang's return pass then damages it without a new check (damage_check_last)
 #define UNIT_WORK_TARGET2_HIT 6     // 1 if the outbound pass hit the second target (same use as UNIT_WORK_TARGET1_HIT)
-#define UNIT_WORK_AC_DEFENCE_DONE 7 // 1 once btlevtcmd_ResultACDefence ran for the current pass; attack_event clears it and boomerang_move_event clears it when the boomerang turns back
+#define UNIT_WORK_AC_DEFENCE_DONE 7 // 1 once btlevtcmd_ResultACDefence ran for the current pass; attack_event clears it and boomerang_move_event clears it while its second-target return-check state is active
 
 
 BattleUnitKind unit_boomerang_bros;
@@ -581,7 +581,7 @@ EVT_END()
 
 /**
  * Two-throw attack of the Boomerang Bro (weapon_boomerang_bros_renzoku_attack):
- * selects its targets like normal_attack_event, then throws the boomerang twice, 750 ms apart,
+ * selects its targets like normal_attack_event, then throws the boomerang twice, with a 750 ms pause before the second 27-frame wind-up,
  * spawning boomerang_move_event each time and waiting until both have returned (unit work 0 reaches 2).
  * Aimed at its own side (confusion) it runs normal_attack_event_confuse.
  */
@@ -655,7 +655,7 @@ EVT_END()
  * it turns around and throws the boomerang (part 2) out to x 250 and back to its home position,
  * without the per-target tracking of boomerang_move_event.
  * Then for each selected target a dodge plays the matching avoid reaction,
- * and a hit gets two damage checks 30 to 39 frames apart (the guard result is taken once, unit work 7).
+ * and a hit gets two damage checks 30 to 40 frames apart (the guard result is taken once, unit work 7).
  */
 EVT_BEGIN(normal_attack_event_confuse)
     // The attack is announced and the guard timing is awaited, with the targets being those of its own side.
@@ -766,7 +766,7 @@ EVT_END()
 /**
  * Confused version of the two-throw attack: throws the boomerang out to x 250 and back twice,
  * then for each selected target a dodge plays the avoid reaction
- * and a hit gets four damage checks 30 to 39 frames apart.
+ * and a hit gets four damage checks 30 to 40 frames apart.
  * Nothing in this unit runs it; renzoku_attack_event uses normal_attack_event_confuse instead.
  */
 EVT_BEGIN(renzoku_attack_event_confuse)

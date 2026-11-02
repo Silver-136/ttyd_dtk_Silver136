@@ -321,7 +321,7 @@ static void majin_callback(s32 type) {
 }
 
 
-/** Script helper. Blocks until the music on channel 1 has started. */
+/** Script helper. Blocks while music channel 1 has a track that has not started. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

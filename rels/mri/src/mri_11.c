@@ -69,7 +69,7 @@ EVT_BEGIN(toge_7_init)
 EVT_END()
 
 /**
- * Talk script of Jabbi villager 7: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * Talk script of Jabbi villager 7: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
 EVT_BEGIN(toge_7_talk)
@@ -101,7 +101,7 @@ EVT_BEGIN(toge_8_init)
 EVT_END()
 
 /**
- * Talk script of Jabbi villager 8: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * Talk script of Jabbi villager 8: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
 EVT_BEGIN(toge_8_talk)
@@ -133,7 +133,7 @@ EVT_BEGIN(toge_9_init)
 EVT_END()
 
 /**
- * Talk script of Jabbi villager 9: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * Talk script of Jabbi villager 9: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
 EVT_BEGIN(toge_9_talk)
@@ -166,7 +166,7 @@ EVT_END()
 
 /**
  * Regular script of Jabbi villager 10: has it wander back
- * and forth around its spot (about 100 by 30 units, urouro walk).
+ * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
 EVT_BEGIN(toge_10_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -176,7 +176,7 @@ EVT_BEGIN(toge_10_regl)
 EVT_END()
 
 /**
- * Talk script of Jabbi villager 10: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * Talk script of Jabbi villager 10: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
 EVT_BEGIN(toge_10_talk)
@@ -209,7 +209,7 @@ EVT_END()
 
 /**
  * Regular script of Jabbi villager 11: has it wander back
- * and forth around its spot (about 100 by 30 units, urouro walk).
+ * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
 EVT_BEGIN(toge_11_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -219,7 +219,7 @@ EVT_BEGIN(toge_11_regl)
 EVT_END()
 
 /**
- * Talk script of Jabbi villager 11: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * Talk script of Jabbi villager 11: a message without a speech-bubble tail followed by the Jabbi's
  * own line, with a second pair after the chapter 8 finale.
  */
 EVT_BEGIN(toge_11_talk)
@@ -387,7 +387,8 @@ EVT_END()
 
 /**
  * Victory scene of the second Puni-versus-Jabbi fight; the mirror image of the one in mri_08.
- * Waits until every Puni has landed, the camera moves to the crowd, Punio speaks (stg2_mri_e17_01_04),
+ * Waits for all active Punies to be at y=0 in the demos, or no higher than y=0 in retail;
+ * the camera moves to the crowd, Punio speaks (stg2_mri_e17_01_04),
  * the crowd charges the hive on the left, the beacon breaks,
  * the music returns and the fight is marked won (GSWF_MRI11_JABBI_FIGHT2_WON). Mario gets control back.
  */
@@ -527,8 +528,9 @@ EVT_END()
 
 /**
  * Brings the second wave of Jabbi into the arena:
- * ten rounds in which two groups of five (slots from 110) enter from the sides,
- * 14 units further apart each round, with half-second pauses (toge_enter_sub starts each group),
+ * ten rounds in which two groups of five (slots from 110) enter from the left,
+ * with paired z offsets moving 14 units toward the centre each round and half-second pauses
+ * (toge_enter_sub starts each group),
  * then waits 3 seconds.
  */
 static EVT_BEGIN(toge_enter)
@@ -556,7 +558,7 @@ static EVT_BEGIN(toge_enter)
 EVT_END()
 
 /**
- * Waits for Mario to walk left of x=-100, then lets the Punies attack (evt_puni_attack_on),
+ * Waits for Mario to reach x=-100 or farther left, then lets the Punies attack (evt_puni_attack_on),
  * shows the Jabbi message (stg2_mri_e17_01_03) and starts the win-or-lose check.
  */
 static EVT_BEGIN(puni_vs_toge_battlewait)

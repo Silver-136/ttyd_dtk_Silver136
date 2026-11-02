@@ -466,10 +466,10 @@ EVT_END()
 /**
  * Attack script of the Lakitu.
  * After an item check it draws a random number:
- * 20 in 100 to throw an egg that hatches a Spiny into a free spot next to it (friend_event,
- * trying the space to its right first and then to its left);
- * otherwise it throws an egg at a target, hatching a Spiny from the egg 15 times in 80 (unit work 1 set)
- * and just damaging with it 65 times in 80.
+ * 20 in 100 to try throwing an egg that hatches a Spiny into a free spot next to it (friend_event,
+ * searching in its facing direction first and then behind it); if no spot is found, it attacks a target.
+ * For a target attack, 15 in 80 sets unit work 1 so a guarded egg can hatch if a free spot is found;
+ * the other 65 in 80 uses the non-hatching throw.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))

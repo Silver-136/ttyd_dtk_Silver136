@@ -262,10 +262,11 @@ EVT_END()
 /**
  * Runs when the Paratroopa is knocked out of the air.
  * It drops the flying state, swaps in the grounded Koopa pose table, data table and part,
- * falls to the floor and turns into unit kind 14 (Koopa Troopa).
- * If it took more than 1 HP damage it ends up flipped over;
- * otherwise it re-registers its ground wait and attack scripts and run and walk sounds.
+ * changes to unit kind 14 (Koopa Troopa), then falls to the floor.
+ * It re-registers its ground wait and attack scripts and run and walk sounds;
+ * if its HP-damage count is above 1 it also ends up flipped over.
  */
+
 // Grounding installs the Koopa form; a damage count above one also runs its flip event.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
@@ -328,6 +329,7 @@ EVT_END()
  * the pre-damage check decides between an avoid animation on the target and a hit, then it flies back home.
  */
 static EVT_BEGIN(attack_event_patapata)
+
     // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -699,6 +701,7 @@ EVT_END()
  * While it is still above 0 the Koopa struggles in place and goes back to waiting;
  * at 0 it restores its normal defence and pose tables, clears status flag 1 and jumps back onto its feet.
  */
+
 // Each flipped turn counts down; even the turn that restores the shell consumes the attack.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -727,7 +730,7 @@ EVT_END()
 
 /**
  * Pre-emptive strike by the Koopa: retreats into its shell, spins into the first-attack target and hits it,
- * with the miss/hit result from the pre-damage and damage checks.
+ * using the damage check directly, without a pre-damage check.
  */
 static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -803,6 +806,7 @@ EVT_END()
  * a miss makes it bounce past and a hit damages the target, after which it returns to its home position.
  */
 static EVT_BEGIN(attack_event)
+
     // A unit lying on its back spends the turn getting up.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

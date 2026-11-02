@@ -131,6 +131,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of Mini-Yux (the demos), as the percent chance a status takes hold:
  * immune to Poison, Burn, Freeze and Fright; always hit by Stop, Dizzy, Electric, Huge, Attack Up,
@@ -139,6 +140,7 @@ static BattleUnitKindPart parts[] = {
  */
 static StatusVulnerability regist = {80, 100, 100, 0, 90, 100, 0, 0, 100, 90, 100, 90, 100, 90, 90, 0, 100, 100, 90, 100, 100, 100};
 #else
+
 /**
  * Status vulnerability of Mini-Yux (the final versions), as the percent chance a status takes hold:
  * immune to Poison, Burn, Freeze and Fright; always hit by Stop, Dizzy, Electric, Huge, Attack Up,
@@ -229,7 +231,7 @@ EVT_END()
 
 /**
  * Idle event of a Mini-Yux: shows its pose from the pose table, then at random intervals of 30 to 150 frames,
- * if its unit work 1 is set (the parent told it to idle) and it can act and is not asleep,
+ * if its unit work 1 is set (the parent told it to idle) and it can act and is not confused,
  * holds the S_4 pose for 180 frames before returning to the table pose.
  */
 static EVT_BEGIN(wait_event)

@@ -959,6 +959,8 @@ EVT_END()
 EVT_BEGIN(peach_evt_kusuri_nomu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_adjust_dir)
+
+    // Peach drinks the potion and a cloud of smoke appears near her.
     CALL(peach_chg_pose, STRING("P_M_1"))
     WAIT_MS(500)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bika"), MAP_OBJ_FLAG_HIDDEN)

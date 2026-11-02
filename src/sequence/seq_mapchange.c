@@ -45,7 +45,7 @@ char _next_area[0x20];
 char _next_map[0x20];
 char _next_bero[0x20];
 
-/** Started after loading a save: waits two sequence frames and for the fade to end, then gives Mario back key input. */
+/** Started after loading a save: waits for SEQ_GAME and for the fade to end, then gives Mario back key input. */
 EVT_BEGIN(key_off)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
@@ -67,7 +67,7 @@ static const char mc_jon[4];
 
 /**
  * Name of the REL to load for the next area: normally its three-letter prefix,
- * but Glitzville (tou) uses the tou2 REL when entered from the title sequence or into tou_03.
+ * but Glitzville (tou) uses the tou2 REL when the current sequence is SEQ_TITLE or the target map is tou_03.
  */
 static inline const char* getAreaName(void) {
     const char* area_name = _next_area;
@@ -82,9 +82,9 @@ static inline const char* getAreaName(void) {
 }
 
 /**
- * Enters the map change sequence: stores the target area, map and entrance (bero) names, fades out the ambience,
- * and rerolls the Rogueport badge shop's bargain and Charlieton stock on entering gor_01
- * after any map except gor_01.
+ * Enters the map change sequence: stores the target area, map and entrance (bero) names and fades out the ambience.
+ * Entering gor_01 rerolls the Rogueport badge shop's bargain and Charlieton stock when BADGESHOP_RESTOCK_PENDING is set;
+ * a change from a nonempty map other than gor_01 to another map other than gor_01 sets that flag.
  */
 void seq_mapChangeInit(SequenceWork* work) {
     strcpy(_next_area, "");
@@ -122,6 +122,7 @@ void seq_mapChangeExit(SequenceWork* work) {
 typedef struct {
     const char* s[VERSION_PICK(2, 7)];
 } LangTbl;
+
 /** Folder name of each language, used to load that language's window textures (win.tpl) on a map change. */
 static const LangTbl lang_tbl = {{
     "jp", "us",
@@ -129,10 +130,12 @@ static const LangTbl lang_tbl = {{
     "ge", "fr", "sp", "it", "du"
 #endif
 }};
+
 /**
- * The demo's map change differs in the DEMO blocks below:
- * no SFX stop, the REL is unloaded inline and the sound mode is not set in step 1,
- * psndMapChange runs right after the unload, and the respawn point is not set.
+ * Map-change state machine: fades out, unloads the old map and area REL, loads the next REL and map,
+ * starts the map and NPC initialization scripts, then enters SEQ_GAME (or SEQ_TITLE for a title target).
+ * The demos do not stop SFX, unload the REL inline and do not set the sound mode in step 1;
+ * they run psndMapChange right after the unload and do not set the respawn point.
  */
 void seq_mapChangeMain(SequenceWork* work) {
 #if VERSION <= VERSION_DEMO_US
@@ -579,6 +582,7 @@ static const char mc_tou2[] = "tou2";
 #endif
 static const char mc_tou_03[] = "tou_03";
 static const char mc_rel_fmt[] = "%s/rel/%s.rel";
+
 /**
  * Names the map change compares and builds with: Glitzville and the tou2 REL it switches to for tou_03,
  * the area REL path, and the test (tst) and Pit of 100 Trials (jon) areas, whose REL gets its own buffer.

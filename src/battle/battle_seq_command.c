@@ -87,6 +87,7 @@ void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type);
 
 /** Jump badges listed in Mario's Jump menu, in menu order, when equipped (_btlcmd_MakeSelectWeaponTable). */
 s32 _jump_badge_table[8] = {ITEM_POWER_JUMP, ITEM_MULTIBOUNCE, ITEM_SHRINK_STOMP, ITEM_SLEEPY_STOMP, ITEM_SOFT_STOMP, ITEM_TORNADO_JUMP, ITEM_POWER_BOUNCE, ITEM_MEGA_JUMP};
+
 /** Hammer badges listed in Mario's Hammer menu, in menu order, when equipped (_btlcmd_MakeSelectWeaponTable). */
 s32 _hammer_badge_table[9] = {ITEM_POWER_SMASH, ITEM_PIERCING_BLOW, ITEM_HAMMER_THROW, ITEM_HEAD_RATTLE, ITEM_ICE_SMASH, ITEM_FIRE_DRIVE, ITEM_QUAKE_HAMMER, ITEM_MEGA_SMASH, ITEM_MEGA_QUAKE};
 
@@ -368,6 +369,7 @@ void _btlcmd_GetCursorPtr(BattleCommand* cmd, u32 type, BattleCursor** out) {
 }
 
 #pragma dont_inline on
+
 /** Icon of the jump moves in the weapon list: normal, Super or Ultra Boots by the pouch jumpLevel. */
 s32 _getJumpIconId(void) {
     switch (pouchGetPtr()->jumpLevel) {
@@ -382,6 +384,7 @@ s32 _getJumpIconId(void) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+
 /** Icon of the hammer moves in the weapon list: normal, Super or Ultra Hammer by the pouch hammerLevel. */
 s32 _getHammerIconId(void) {
     switch (pouchGetPtr()->hammerLevel) {
@@ -696,11 +699,11 @@ BattleCheckPartyEntry _checkPartyTable[8] = {
     {UNIT_MS_MOWZ, "btl_cmd_pt_chuchurina", ICON_PARTY_MS_MOWZ, "btl_hlp_cmd_operation_party7"},
 };
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Started by BattleCommandInput when the player picks a greyed-out command:
  * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
  */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
@@ -935,8 +938,9 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     }
 }
 
-// propagation optimisation off for _btlcmd_MakeMultiItemTable: the original register allocation and scheduling need it
+
 #pragma opt_propagation off
+
 /**
  * Builds the menu shown before the item list when Double Dip or Triple Dip is equipped:
  * a single item, then Double Dip and Triple Dip with their FP cost (the P versions' names and icons for a
@@ -1013,6 +1017,7 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
 #pragma opt_propagation reset
 
 #pragma dont_inline on
+
 /**
  * Menu icon of a partner kind from _checkPartyTable; Yoshi's follows the colour he hatched with.
  * 0 for a kind that is not a partner.
@@ -1527,6 +1532,7 @@ void BattleCommandDisplay(BattleWork* wp) {
 }
 
 #pragma dont_inline on
+
 /** Puts a menu cursor back on the first entry. */
 void _cursor_init(BattleCursor* cursor) {
     cursor->absPos = 0;
@@ -1535,6 +1541,7 @@ void _cursor_init(BattleCursor* cursor) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+
 /**
  * Opens the action menu: rebuilds its entries, starts the menu display (a = 1 when coming back from a submenu)
  * and shows all enemy HP.
@@ -1765,6 +1772,7 @@ void BattleCommandDisplay_ActMenuEnd(BattleWork* wp) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+
 /** Opens the weapon list of menu type `type`: builds it, starts its display (a is passed on) and shows all enemy HP. */
 void BattleCommandDisplay_WeaponSelectMenuSetup(BattleWork* wp, s32 type, s32 a) {
     BattleCommand* cmd = &wp->commandMenu;
@@ -1895,6 +1903,7 @@ void BattleCommandDisplay_WeaponSelectMenuEnd(BattleWork* wp) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+
 /**
  * Resets the Yes/No cursor of the prompt shown when B is pressed in the item list in the middle of a Double
  * or Triple Dip.
@@ -2009,6 +2018,7 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
 }
 
 #pragma dont_inline on
+
 /** Opens the Tactics menu: builds its entries, starts its display (a is passed on) and shows all enemy HP. */
 void BattleCommandDisplay_OperationMenuSetup(BattleWork* wp, s32 a) {
     _btlcmd_MakeOperationTable(wp);
@@ -2127,6 +2137,7 @@ void BattleCommandDisplay_OperationMenuEnd(BattleWork* wp) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+
 /** Opens the Double/Triple Dip menu: builds its entries and starts its display (a is passed on). */
 void BattleCommandDisplay_MultiItemMenuSetup(BattleWork* wp, s32 a) {
     _btlcmd_MakeMultiItemTable(wp);
@@ -2223,7 +2234,7 @@ void BattleCommandDisplay_MultiItemMenuEnd(BattleWork* wp) {
 }
 #pragma dont_inline reset
 
-/** Opens the Change Partner list display (flag is passed to its init) and shows all enemy HP. */
+/** Opens the Change Partner list display and shows all enemy HP. */
 void BattleCommandDisplay_ChangePartySelectMenuSetup(BattleWork* wp) {
     BattleMenuDisp_ChangePartySelect_Init(wp);
     wp->commandMenu.flags |= (CMD_MENU_CHANGE_PARTY | CMD_MENU_ENEMY_HP);
@@ -2440,6 +2451,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
 }
 
 #pragma dont_inline on
+
 /** Ends target selection: resets the battle camera and clears the target-select and show-all-enemy-HP flags. */
 void BattleCommandDisplay_TargetSelectMenuEnd(BattleWork* wp) {
     BattleCommand* cmd = &wp->commandMenu;
@@ -2493,6 +2505,7 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuEnd(BattleWork* wp) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+
 /**
  * Hides every command menu except the Double Dip menu at once;
  * _check_present_item calls it when an audience item interrupts input.
@@ -2819,7 +2832,7 @@ s32 _check_present_item(void) {
 void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color);
 
 /**
- * Draw callback for the HP number and bar under each living unit the player has Tattled that has a gauge:
+ * Draw callback for the HP number and bar under each living unit that passes the Tattle/Peekaboo check and has a gauge:
  * all of them while a menu shows all enemy HP, otherwise only those with their gauge on,
  * fading over its last 20 frames. During command input the gauges sit at the units' home positions.
  */
@@ -2879,6 +2892,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
 }
 
 #pragma dont_inline on
+
 /**
  * Draws one HP bar at screen position pos: the frame texture, then the fill by barRatio,
  * with a black trail for recent damage while it drains (mode 1).
@@ -2919,7 +2933,8 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
  * a random enabled command other than Items or Special,
  * then a random single-target move usable while confused aimed at a random target, or Defend,
  * Run Away or Change Partner from Tactics.
- * Enemies, and cases with no valid pick, get subsetevt_confuse_flustered.
+ * Enemies and some invalid picks get subsetevt_confuse_flustered; no eligible move returns NULL for a retry,
+ * as does no eligible Change Partner choice in retail.
  * The US and PAL releases first drop a Double or Triple Dip in progress.
  */
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
@@ -3108,6 +3123,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
 }
 
 #pragma dont_inline on
+
 /**
  * Records the current menu state in cmd->recCommand;
  * while an audience action is pending, clears it
@@ -3132,6 +3148,7 @@ void _commandRestoreRec(void) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+
 /**
  * X during command input: unless in zero gravity or Mario is veiled,
  * targets the audience member BattleAudience_GetItemOn reports,

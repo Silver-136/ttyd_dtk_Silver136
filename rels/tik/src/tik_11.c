@@ -1,4 +1,4 @@
-// tik_11 (埋没した都市, Rogueport Sewers): the power-down shop (powerdownya), which lowers Mario's level or a partner's rank.
+// tik_11 (埋没した都市, Rogueport Sewers): the power-down shop (powerdownya), which trades Mario's stats or partners' ranks.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -85,7 +85,7 @@ static USER_FUNC(setmertn) {
 
 /**
  * Script helper.
- * Spawns a star-dust particle burst: args are the type, X, Y, Z, X and Y velocities, particle count and camera.
+ * Spawns a star-dust particle burst: args are the type, X, Y, Z, X and Y velocities, particle count and lifetime.
  */
 static USER_FUNC(effect_stardust) {
     EvtWord* args = event->args;
@@ -270,7 +270,7 @@ static USER_FUNC(bgScrollControll) {
 }
 
 
-/** Script helper. Blocks until the music on channel 1 has started. */
+/** Script helper. Blocks until the music on channel 1 has started, or returns immediately if the channel is empty. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
@@ -299,6 +299,7 @@ EVT_END()
  * (powerdown_10) when that happened, else that it is finished (powerdown_13).
  */
 EVT_BEGIN(powerdownya_mario_level_rtn)
+
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
@@ -544,7 +545,6 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         RETURN
     END_IF
 
-    // Mario picks the stat to raise and the stat to lower, and confirms the trade.
     // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(12))
@@ -580,6 +580,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_IF
         CALL(evt_msg_continue)
     END_LOOP
+
     // Mario pays 39 coins, the partner losing a rank is brought out and Chet Rippo starts his chant.
     CALL(evt_pouch_get_coin, LW(0))
     SUBTRACT(LW(0), 39)

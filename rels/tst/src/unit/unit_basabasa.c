@@ -236,6 +236,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of Swooper (the demos), as the percent chance a status takes hold:
  * always hit by Dizzy, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Gale Force, Fast,
@@ -244,6 +245,7 @@ static BattleUnitKindPart parts[] = {
  */
 static StatusVulnerability regist = {70, 85, 100, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 80, 110, 100, 80, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of Swooper (the final versions), as the percent chance a status takes hold:
  * always hit by Dizzy, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -291,7 +293,7 @@ static BattleWeapon weapon_basabasa_attack = {
 };
 
 /**
- * Sound cues of Swooper's animations: for each of its 9 animation names,
+ * Sound cues of Swooper's animations: for each of its 8 animation names,
  * the sound effect that plays with it (SFX_ENM_BASA_WAIT1 and SFX_ENM_BASA_MOVE1).
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -394,8 +396,8 @@ EVT_END()
 
 /**
  * Damage reaction of the bat while it still hangs from the ceiling:
- * after the default damage handling, if the hit did damage (and was not of the kind that spares it,
- * damage code bits 512 without 2048), it drops from the ceiling (ceil_sky_event)
+ * after the default damage handling, unless the damage code marks zero HP without revival
+ * (bits 512 without 2048) or no damage was dealt, it drops from the ceiling (ceil_sky_event)
  * and glides down to its home position over 60 frames.
  */
 static EVT_BEGIN(damage_event_ceil)
@@ -453,6 +455,7 @@ EVT_END()
  * afterwards it returns to its idle pose BSA_S_1 (BSA_S_2 if it is still on the ceiling).
  */
 static EVT_BEGIN(attack_event)
+
     // The Swooper first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

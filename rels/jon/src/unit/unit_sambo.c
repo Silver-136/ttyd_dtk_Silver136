@@ -544,7 +544,7 @@ static BattleUnitKindPart parts[] = {
 /**
  * Init event of the Pokey: installs its wait, attack, damage and confusion events,
  * sets unit work 0 (its body length, in segments) to 4, applies the matching height (_body_param_set),
- * clears unit work 1 (how many Pokeys it has called) and sets its run and walk sounds.
+ * clears unit work 1 (its inherited summon depth) and sets its run and walk sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -684,7 +684,7 @@ EVT_END()
 
 /**
  * Part of the Pokey losing a segment, run by its segment-losing damage events: plays pose type LW(14), lifts the
- * stack by 18 and lets it drop back over 11 frames with a small bounce, ending where it started.
+ * stack by 18 and lets it drop back over 15 frames with a small bounce, ending where it started.
  */
 static EVT_BEGIN(subset_dmg_sambo_fall)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
@@ -739,6 +739,7 @@ EVT_END()
  * marioWeapon_UltraHammerFinish hit then lands on the Pokey itself.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
+
     // With only its head left, the hammer blow just does its damage (or nothing, if it deals none).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -749,6 +750,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
             CALL_CHILD(subsetevt_nodamage_motion)
         END_IF
     ELSE
+
         // Otherwise it loses its top segment, and the loose segment starts to fall.
         SET_VALUE(LW(12), LW(11))
         CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_BODY_COUNT, LW(0))
@@ -922,8 +924,8 @@ static EVT_BEGIN(damage_swallow_body)
 EVT_END()
 
 /**
- * Attack event of the Pokey: uses an enemy item if it has one.
- * A full-length Pokey (4 segments) that has called at most one friend has a 30 percent chance to call another
+ * Attack event of the Pokey: runs a selected enemy-item script if one is returned.
+ * A full-length Pokey (4 segments) with inherited summon depth at most 1 has a 30 percent chance to call another
  * Pokey (call_friend_event) when there is a free spot to its side.
  * Otherwise, with two or more segments it does the head attack of its length (attack_head_2_event, about 30 in
  * 70) or else the spike attack, and a lone head does attack_head_1_event.
@@ -1004,6 +1006,7 @@ EVT_END()
  * The weapon used is weapon_sambo_head_attack_2 to 4 according to the body length (unit work 0).
  */
 static EVT_BEGIN(attack_head_2_event)
+
     // Choose a target with the weapon that matches the stack height (2 to 4 segments).
     SET_VALUE(LW(6), LW(11))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(5))
@@ -1117,6 +1120,7 @@ static EVT_BEGIN(attack_head_2_event)
     END_IF
     SWITCH(LW(10))
         CASE_EQUAL(4)
+
         // Find out whether the attack will connect or miss.
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_head_attack_4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_EQUAL(3)
@@ -1168,6 +1172,7 @@ static EVT_BEGIN(attack_head_2_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     SWITCH(LW(10))
         CASE_EQUAL(4)
+
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_sambo_head_attack_4))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_head_attack_4), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -1370,7 +1375,7 @@ static EVT_BEGIN(attack_head_1_event)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.89941406f))
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
 
-    // Bounce on the spot with shrinking hops.
+    // Bounce back with shrinking hops.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 40)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
@@ -1525,6 +1530,7 @@ static EVT_BEGIN(attack_spike_event)
     WAIT_FRAMES(5)
     SWITCH(LW(10))
         CASE_EQUAL(3)
+
         // Find out whether the attack will connect or miss.
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_spike_attack_4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_EQUAL(2)
@@ -1646,6 +1652,7 @@ static EVT_BEGIN(attack_spike_event)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
+
     // The Pokey sways back and forth, calling to a friend.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_SEND_GROUP1_3"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1714,7 +1721,7 @@ static EVT_BEGIN(call_friend_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CALL_DEPTH, LW(4))
     ADD(LW(4), 1)
 
-    // Count one more called friend on the new Pokey.
+    // Set the new Pokey's summon depth one higher than its caller's.
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_CALL_DEPTH, LW(4))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 90, -30, 14)
@@ -1775,7 +1782,7 @@ EVT_END()
 
 /**
  * Helper of attack_head_1_event: hops the unit along x toward LW(5) in steps of at most LW(8) units
- * (JumpPosition with a jump height of 0, y = LW(6)) until it is within one step, then lands at LW(5), LW(6),
+ * (JumpPosition with duration argument 0, y = LW(6)) until it is within one step, then lands at LW(5), LW(6),
  * LW(7).
  */
 static EVT_BEGIN(sambo_rabbit_move)

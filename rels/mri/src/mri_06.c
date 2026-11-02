@@ -204,7 +204,7 @@ EVT_END()
 
 /**
  * Regular script of villager Puni 10: has it wander back
- * and forth around its spot (about 100 by 30 units, urouro walk).
+ * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
 EVT_BEGIN(puni_10_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -240,7 +240,7 @@ EVT_END()
 
 /**
  * Regular script of villager Puni 11: has it wander back
- * and forth around its spot (about 100 by 30 units, urouro walk).
+ * and forth around its spot (radius 100, move speed 30, urouro walk).
  */
 EVT_BEGIN(puni_11_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -550,8 +550,8 @@ EVT_BEGIN(paiders_a)
 EVT_END()
 
 /**
- * Script of the second Piders (spider): the same drop and climb loop as the first,
- * starting at (-235, 130, 60) and two seconds later.
+ * Script of the second Piders (spider): the same drop and climb pattern as the first,
+ * starting at (-235, 130, 60) after an initial two-second delay, but waiting down for three seconds instead of two.
  */
 EVT_BEGIN(paiders_b)
     SET_VALUE(LW(0), STRING("パイダースB"))
@@ -580,7 +580,7 @@ EVT_END()
 /**
  * Runs when Mario returns here after losing one of the Jabbi fights:
  * the guide Puni says a line (a different line if Mario still has 11 or fewer Punies after the second fight),
- * with the Puni crowd paused while he speaks, and the loss flags are cleared.
+ * with the guide Puni's scripted-animation flag set while he speaks, and the loss flags are cleared.
  */
 static EVT_BEGIN(puni_lose)
     SET_VALUE(LW(0), GSWF_MRI_08_JABBI_BATTLE_LOST)
@@ -613,7 +613,7 @@ static EVT_BEGIN(puni_lose)
 EVT_END()
 
 /**
- * Cutscene when Mario enters mri_06 during story STG2_16: a Jabbi runs across the room and away;
+ * Cutscene when Mario enters mri_06 during story STG2_16_THE_PUNI_ELDERS_POWERS: a Jabbi runs across the room and away;
  * Punio ("ガイドsp") then runs up and rejoins the party. Sets the story to STG2_17_BUBBLES.
  */
 EVT_BEGIN(apper_toge)

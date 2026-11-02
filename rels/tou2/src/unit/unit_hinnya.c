@@ -244,10 +244,10 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack event of the Spinia, a single spinning charge. It uses the Spania's weapon, weapon_hannya_attack.
+ * Attack event of the Spinia, a single spinning charge. It uses its own weapon_hannya_attack.
  * During a first strike it waits 30 frames and takes the first-strike target;
  * otherwise it uses an enemy item if it holds a usable one, else picks a target.
- * It shakes in place for 20 frames with the charge sound,
+ * It shakes in place for 40 frames with the charge sound,
  * rushes along the floor to the target (a dodge plays the avoid reaction,
  * a hit takes the guard result and the damage) and carries on 500 units past it.
  * It then reappears at x = 300 and glides back to its home position in four slowing steps.

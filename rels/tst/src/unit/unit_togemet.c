@@ -366,6 +366,7 @@ EVT_END()
  * and its hit and cursor offsets move down by 50.
  * Both cases set the run and walk sounds and clear its flip count.
  */
+
 // Install ground or ceiling handlers; the ceiling branch also replaces the pose and data tables.
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, LW(15))
@@ -410,6 +411,7 @@ EVT_END()
  * at a height that depends on its size statuses 10 (Huge) and 11 (Tiny),
  * so the spark follows the changed size.
  */
+
 // Position the spike flash for Huge, Tiny, or normal size, checking Huge first.
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
@@ -472,6 +474,7 @@ EVT_END()
  * At 0 it restores the normal tables and pose, clears status flag 1, hops upright with SFX_ENM_INSIDE2,
  * and turns the spike counter attribute of part 1 back on.
  */
+
 // Restore normal defense once the predecremented overturn counter reaches zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -509,6 +512,7 @@ EVT_END()
  * Afterwards it walks home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
+
     // If the Spike Top is still on its back it just gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -680,8 +684,8 @@ EVT_END()
 
 /**
  * Damage script of the Spike Top while on the ceiling:
- * runs the default damage handling, then, if the attack did real damage (and its damage code is not the 512-only
- * code), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
+ * runs the default damage handling, then, if the attack did real damage (and its damage code does not have DAMAGE_RESULT_ZERO_HP
+ * without DAMAGE_RESULT_REVIVAL), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
  */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), -2)
@@ -739,6 +743,7 @@ EVT_END()
  * re-runs init_event2 for the floor, and lands on its back,
  * flipped over for 1 turn with the flipped tables and without its spike counter attribute.
  */
+
 // Drop from the ceiling into the flipped ground state with zeroed defense tables.
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -782,9 +787,10 @@ EVT_END()
  * it moves above the target, drops onto it (SFX_ENM_MET_FALL1 and its landing sound) and, if the hit connects,
  * deals damage.
  * After 60 frames it loses the ceiling attributes and tables for good,
- * hops back to its original x position and runs init_event2 to continue as a floor unit.
+ * takes two hops near the target, then walks back to its original x position and runs init_event2 to continue as a floor unit.
  */
 static EVT_BEGIN(attack_event_ceil)
+
     // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Spike
     // Top with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -892,7 +898,7 @@ static EVT_BEGIN(attack_event_ceil)
 #endif
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
 
-    // Two hops back to its old column, then it walks home and restarts as a floor unit.
+    // Two hops near the target, then it walks home and restarts as a floor unit.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 25)

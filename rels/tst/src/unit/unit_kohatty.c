@@ -178,7 +178,7 @@ BattleWeapon weapon_kohatty_attack = {
 };
 
 /**
- * Battle init script for the Hatty: installs the wait,
+ * Battle init script for kohatty: installs the wait,
  * attack and damage handlers (confusion uses the default one), shrinks the model with a base scale of about 0.3,
  * starts the wait event and lifts the unit and its home position to y = 10.
  */
@@ -208,7 +208,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Empty attack: the Hatty has no attack, so its turn only restarts the wait event. */
+/** Empty attack: kohatty has no attack, so its turn only restarts the wait event. */
 static EVT_BEGIN(attack_event)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

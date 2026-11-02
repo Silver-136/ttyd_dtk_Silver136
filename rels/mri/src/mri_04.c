@@ -52,7 +52,7 @@ EvtWord item_mri_04[34];
 EvtWord mri_04_init_evt[178];
 
 /**
- * Door script for the loading zone: returns 1 in LW(0) (use the custom entry)
+ * Door script for the loading zone: returns 1 in LW(0) to skip the default walk-in
  * while the elder is imprisoned (STG2_12_02_PUNI_ELDER_IMPRISONED), otherwise 0.
  */
 static EVT_BEGIN(bero_custom)
@@ -130,7 +130,7 @@ static EVT_BEGIN(chibitoge_talk)
     RETURN
 EVT_END()
 
-/** The single NPC of the room, Jabble (ちびトゲ), the little Jabbi. */
+/** NPC setup entry for Jabble (ちびトゲ), the little Jabbi. */
 static NpcSetupInfo npcEnt[] = {
     {
         "ちびトゲ", // name
@@ -173,8 +173,8 @@ static USER_FUNC(evt_chuchu_back_loop) {
 /**
  * Cutscene when Mario comes through the loading zone while the elder is imprisoned:
  * Ms. Mowz (Chuchurina) and a Third Force underling are in the room,
- * Ms. Mowz greets him and kisses him (the kiss surprises Mario), he and his partner walk in and Punio follows;
- * the scene plays the conversation (stg2_mri_e13_00 to 05) and hands the story on from there.
+ * Mario and his partner walk in and Punio follows; Ms. Mowz greets Mario and kisses him (the kiss surprises him).
+ * The scene plays the conversation (stg2_mri_e13_00 to 07) and hands the story on from there.
  */
 static EVT_BEGIN(chuchurina_sogu)
     // Mario enters through the loading zone; Ms. Mowz and an X-Naut underling are already in the room.
@@ -338,7 +338,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_cam3d_evt_set, 125, 90, 262, 125, 40, 0, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
 
-    // The music ends; Mario's partner reacts and Ms. Mowz slips away.
+    // Ms. Mowz has slipped away and her theme fades out; Mario's partner reacts.
     CALL(evt_msg_print_party, STRING("stg2_mri_e13_06"))
     CALL(evt_mario_set_dir, 270, 100, 0)
     WAIT_MS(500)
@@ -391,7 +391,7 @@ static EVT_BEGIN(chuchurina_sogu)
 EVT_END()
 
 /**
- * Chapter 2 cutscene on first entering mri_04 (story STG2_12):
+ * Chapter 2 cutscene on first entering mri_04 (story STG2_12_RIVAL_ARRIVAL):
  * Ms. Mowz, shown as a dark silhouette, leaps in and knocks out an X-Naut grunt with a strike
  * and a camera shake. Sets the story to STG2_12_01_A_DARK_FIGURE and returns to mri_03.
  */
@@ -475,7 +475,7 @@ EVT_BEGIN(black_shadow)
     RETURN
 EVT_END()
 
-/** Planter hit script 2: the first time it is hit it launches a coin out of the planter (remembered with a flag). */
+/** Planter search script 2: the first time it is searched it launches a coin out of the planter (remembered with a flag). */
 static EVT_BEGIN(evt_ueki_02)
     CALL(evt_item_delete_check, STRING("item_ueki_02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

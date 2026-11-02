@@ -116,11 +116,9 @@ void seq_logoInit(SequenceWork* work) {
 #endif
 
 
-/**
- * Leaves the logo sequence: sets up the font, window, fade, icon,
- * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
- */
+
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * The demos always start interlaced; the US demo also starts the logo files loading
  * and preloads the E3 demo's models and textures.
@@ -149,6 +147,11 @@ void seq_logoInit(SequenceWork* work) {
 #endif
 }
 #endif
+
+/**
+ * Leaves the logo sequence: sets up the font, window, fade, icon,
+ * environment and effect textures and Mario's poses for the rest of the game, and frees the logo texture.
+ */
 void seq_logoExit(SequenceWork* work) {
     fontmgrTexSetup();
     windowTexSetup();
@@ -164,8 +167,9 @@ void seq_logoExit(SequenceWork* work) {
 }
 
 /**
- * US and PAL logo sequence: the story screen, the three logos (1 s each, 500 ms fades) while sound groups load,
+ * Logo sequence: the three logos (1 s each, 500 ms fades) while sound groups load,
  * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
+ * US and PAL first show the story screen; JP and the demos read and decode the first data archive before leaving.
  */
 void seq_logoMain(SequenceWork* work) {
     static OSTime time;
@@ -760,11 +764,13 @@ void logoDisp(CameraId camId, void* param) {
 
 
 #if VERSION < VERSION_US
+
 /** JP and the demo start reading the first data file while the logos show */
 static s32 logoAsyncFirst(void) {
     return fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
 }
 #endif
+
 /**
  * Background draw callback queued for the frame the video mode switches:
  * sets the display copy and a 608x480 viewport and scissor for the interlaced
@@ -793,19 +799,19 @@ void dummy_draw(CameraId camId, void* param) {
     GXSetViewport(0.0f, 0.0f, 608.0f, 480.0f, 0.0f, 1.0f);
 }
 
-#if VERSION < VERSION_US
 /**
- * JP and demo progressive-scan prompt: asks whether to display in progressive scan (left/right toggles,
- * A confirms, 10 s idle picks the current choice), shows the result for 2 s and switches the video mode.
- * param is unused
+ * Video-mode prompt: left/right toggles, A confirms, and 10 s idle picks the current choice.
+ * PAL selects 50 or 60 Hz; the other versions select interlaced or progressive scan.
+ * JP and the demos show the result for 2 s before switching the video mode.
+ * param is unused.
  */
+#if VERSION < VERSION_US
 #if VERSION <= VERSION_DEMO_US
 static void progDisp(CameraId camId, void* param) {
 #else
 void progDisp(CameraId camId, void* param) {
 #endif
 #else
-/** param is unused */
 void progDisp(CameraId camId, void* param) {
 #endif
     static OSTime time;

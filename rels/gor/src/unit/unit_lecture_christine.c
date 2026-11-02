@@ -152,7 +152,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Goombella's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of Goombella: immune to every status. */
+/** Status vulnerability of Goombella: immune to the 22 statuses covered by this table. */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -455,7 +455,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
 
-// Guard lesson: he asks Mario to press the A button as she lands, and waits for it.
+        // Guard lesson: he asks Mario to press the A button as she lands, and waits for it.
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, UNIT_ID_LECTURE)
 #else
@@ -620,7 +620,7 @@ static USER_FUNC(_battle_set_lecture_unit_id) {
 
 /**
  * Script helper that turns on the lecture mode of the battle:
- * locks Goombella's (the active unit's) HP and sets lectureMode.
+ * locks Mario's HP and sets lectureMode.
  */
 USER_FUNC(_set_lecture_mode) {
     BattleWork* wp = _battleWorkPointer;

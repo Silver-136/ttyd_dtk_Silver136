@@ -97,7 +97,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of the placeholder command_heiho: none, every element hits normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of the placeholder command_heiho: every status effect always lands (100%). */
+/** Status vulnerability of the placeholder command_heiho: 100% multipliers for every status effect. */
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 /**

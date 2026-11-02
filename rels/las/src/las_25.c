@@ -264,7 +264,7 @@ EVT_END()
  * Map init script for las_25, a junction room: music (by story), the doors to las_26 and las_27,
  * the Phantoms (before and after the planets scene), the lock of door e_bero_2 that needs Palace Key 0x30,
  * a blue jump stand, a Life Shroom, a Shooting Star and a save block.
- * After STG8_06_MOVING_PLANETS it uses the moved layout with an airport harbour exit.
+ * After STG8_06_MOVING_PLANETS it uses the moved layout with a Plane Mode panel.
  */
 EVT_BEGIN(las_25_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)

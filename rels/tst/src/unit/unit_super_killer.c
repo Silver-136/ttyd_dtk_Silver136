@@ -240,6 +240,7 @@ static EVT_BEGIN(attack_event)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
+
         // If the AI wants to use a held item, the Bill does that instead and ends its turn.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -295,7 +296,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The Bill misses or is blocked: it flies past the target, the target dodges, and it speeds off past the
+    // The Bill misses: it flies past the target, which dodges for results 3, 6 and 2, and it speeds off past the
     // edge of the screen.
     LABEL(90)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)

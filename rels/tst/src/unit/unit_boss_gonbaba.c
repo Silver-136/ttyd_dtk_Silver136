@@ -45,6 +45,7 @@ USER_FUNC(_wait_damage_event_end);
 BattleWeapon weapon_gonbaba_fumituke_attack;
 BattleWeapon weapon_gonbaba_firebreath_attack;
 BattleWeapon weapon_gonbaba_kamituki_attack;
+
 // tst's copy of Hooktail still has the older bit for the same attribute.
 #if VERSION == VERSION_DEMO_JP
 #define GONBABA_DEFENSE_ATTR (1 << 5)
@@ -312,6 +313,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of Hooktail (the demos), as the percent chance a status takes hold:
  * immune to Stop, Poison, Freeze, Huge, Tiny, Attack Down, Defense Down, Fright, Gale Force, Slow, Dodgy,
@@ -320,6 +322,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {10, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 100, 0, 100, 0, 0, 100, 0, 0, 0, 0};
 #else
+
 /**
  * Status vulnerability of Hooktail (the final versions), as the percent chance a status takes hold:
  * immune to Stop, Poison, Freeze, Huge, Tiny, Attack Down, Defense Down, Fright, Gale Force, Slow, Dodgy,
@@ -331,7 +334,7 @@ static StatusVulnerability regist = {20, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 
 
 /**
  * Pose table of Hooktail: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
- * animation names, 9 entries such as GNB_N_1, GNB_X_1, GNB_Z_1, GNB_S_3.
+ * animation names, 7 entries in the demos and 9 in retail, such as GNB_N_1, GNB_X_1, GNB_Z_1, GNB_S_3.
  */
 static PoseTableEntry pose_table[] = {
     {1, "GNB_N_1"},
@@ -850,7 +853,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_ftomsec, 32, LW(0))
     WAIT_MS(LW(0))
 
-    // The audience panics: each remaining member jumps up and scrambles away from the stage, then is removed.
+    // The audience panics: most remaining members jump up and scramble away from the stage, then are removed; spectator 43 stays behind.
     CALL(evt_snd_sfxon, STRING("SFX_AUDIENCE_GNB_PANIC1"), 0)
     SET_VALUE(LW(0), 0)
     LOOP(100)
@@ -952,7 +955,7 @@ EVT_BEGIN(negotiation_event)
         ADD(LW(0), 1)
     END_LOOP
 
-    // Any audience members left are removed.
+    // Spectators in slots 100 through 199 are removed.
     LOOP(100)
         CALL(evt_audience_delete, LW(0))
         CALL(evt_audience_num_updown_in_event, FLOAT(-1.0f))
@@ -1100,6 +1103,7 @@ USER_FUNC(_set_gonbaba_light) {
  * Each removed member except 32 lowers the audience count by one.
  */
 EVT_BEGIN(gon_extra_eaten_event)
+
     // The audience member is startled and lifted out of the crowd.
     WAIT_FRAMES(14)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_EATEN_AUDIENCE, 6)
@@ -1259,6 +1263,7 @@ EVT_END()
  * surrender (unit work 3) once with stg1_gon_31_04.
  */
 EVT_BEGIN(gonbaba_damage_sub_event)
+
     // A hit with the cricket chirp (Attack FX R) is recognised: Hooktail's weak spot.
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ATTACK_FX_R, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1368,7 +1373,8 @@ EVT_BEGIN(gonbaba_damage_sub_event)
 #if VERSION >= VERSION_JP
     CALL(btlevtcmd_WaitAttackEnd)
 #endif
-    // When the cricket sound finishes her off for the first or second time she complains about the awful chirping.
+
+    // On the first two qualifying final hits with the cricket sound she complains about the awful chirping.
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_4"))
     CALL(evt_btl_camera_set_prilimit, 1)
@@ -1618,6 +1624,7 @@ EVT_END()
  * moved her unit.
  */
 static EVT_BEGIN(fumituke_attack_event)
+
     // Hooktail picks a target and declares the stomp.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_fumituke_attack))
@@ -1742,6 +1749,7 @@ EVT_END()
  * (SFX_BOSS_GNB_BREATH_FIRE1); each target in turn then dodges or takes weapon_gonbaba_firebreath_attack.
  */
 EVT_BEGIN(firebreath_attack_event)
+
     // Hooktail declares the fire breath on every target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_firebreath_attack))
@@ -1826,6 +1834,7 @@ EVT_BEGIN(firebreath_attack_event)
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_NOT_EQUAL(LW(3), -1)
+
         // Each target in turn dodges or takes the burn.
         WAIT_FRAMES(20)
         ADD(LW(10), 1)

@@ -47,7 +47,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Spike floor trap loop of tik_21: every cycle it makes the floor solid for the spikes (a_yuka),
+ * Spike floor trap loop of tik_21: every cycle it marks the floor (a_yuka) as spiked,
  * pops the spikes (s_toge) up 35 units in 150 ms, holds them for 1.5 seconds,
  * drops them again in 300 ms and waits about two seconds before repeating.
  * The trap sounds are SFX_MOBJ_FLOOR_TRAP1 and 2.

@@ -253,7 +253,7 @@ void winPartyExit(WindowWork* wp) {
  * Left/Right turn the partner carousel; A asks to switch to the selected partner
  * and closes the menu (winMain then swaps partners);
  * X opens the move list, where Up/Down show each move's description.
- * Returns -1 on B or with no partners, -2 to close the menu, else 0.
+ * Returns -1 on B from the carousel or with no partners, -2 to close the menu, else 0.
  */
 s32 winPartyMain(WindowWork* wp) {
     s32 i;
@@ -365,6 +365,7 @@ void winPartyMain2(WindowWork* wp) {
  */
 static const GXColor winPartyWhiteC = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor winPartyBlackC = {0x00, 0x00, 0x00, 0xFF};
+
 /**
  * Draws the Party window (menu slot idx): the selected partner's HP
  * and rank (one Shine Sprite icon per rank-up), the partner carousel with shadows (others shrunk and grayed),

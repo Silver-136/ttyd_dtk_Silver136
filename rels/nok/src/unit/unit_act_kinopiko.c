@@ -1,4 +1,4 @@
-// Battle unit a Toadette (キノピコ) as an actor in Flurrie's stage play in the epilogue (nok.rel): it only plays its
+// Battle unit for a female Toad (キノピコ model) as an actor in Flurrie's stage play in the epilogue (nok.rel): it only plays its
 // scripted part.
 
 #include "battle/battle_unit.h"
@@ -21,7 +21,7 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 
 /**
- * Unit kind of the Toadette actor (HP 10, level 1):
+ * Unit kind of the female Toad actor (HP 10, level 1):
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
 BattleUnitKind unit_act_kinopiko = {
@@ -72,14 +72,14 @@ BattleUnitKind unit_act_kinopiko = {
     data_table, // dataTable
 };
 
-/** Defence of the Toadette actor: no damage reduction. */
+/** Defence of the female Toad actor: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
-/** Element reactions of the Toadette actor: no special reaction to any element. */
+/** Element reactions of the female Toad actor: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of the Toadette actor (percent chance to take each status):
+ * Status vulnerability of the female Toad actor (percent chance to take each status):
  * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
  * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
  * invisibility and instant kill.
@@ -119,18 +119,18 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KNF_S_1"},
 };
 
-/** Data table of the Toadette actor: empty; it has no event hooks. */
+/** Data table of the female Toad actor: empty; it has no event hooks. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
-/** Body part of the Toadette actor (model c_kinopiko): hit position, defences, attributes and pose table. */
+/** Body part of the female Toad actor (model c_kinopiko): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_teresa", "c_kinopiko", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
 /**
- * Init event of the Toadette stage actor: installs only its wait event and starts it;
+ * Init event of the female Toad stage actor: installs only its wait event and starts it;
  * this unit never attacks or takes damage.
  */
 static EVT_BEGIN(init_event)
@@ -139,22 +139,22 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-/** Damage event of the Toadette stage actor: does nothing. */
+/** Damage event of the female Toad stage actor: does nothing. */
 static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Phase event of the Toadette stage actor: does nothing. */
+/** Phase event of the female Toad stage actor: does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-/** Attack event of the Toadette stage actor: does nothing. */
+/** Attack event of the female Toad stage actor: does nothing. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Idle event of the Toadette stage actor: shows the unit's table pose for state 1. */
+/** Idle event of the female Toad stage actor: shows the unit's table pose for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

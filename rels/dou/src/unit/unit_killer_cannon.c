@@ -38,6 +38,7 @@ static EvtWord wait_event[6];
  * Bill args[1] it has just spawned; HP is not copied.
  */
 static USER_FUNC(killer_copy_status) {
+
     // Transfer only the size-change duration and strength to the spawned projectile.
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
@@ -254,9 +255,10 @@ EVT_END()
  * It can use an item; otherwise it draws a number and picks one of the weighted launches:
  * from the front barrel (friend_event), or from the upper barrel (friend_event_sky) after raising it;
  * LW(12) = 1 selects the charged shot with extra charging flashes.
- * If no free space is found on either side nothing is launched.
+ * If none of the tested positions is free, nothing is launched.
  */
 static EVT_BEGIN(attack_event)
+
     // It uses an item instead if one is ready.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

@@ -40,7 +40,7 @@ EvtWord las_30_init_evt[71];
 #endif
 
 /**
- * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * Unused closing animation script for the west door.
  * LW(0) holds the angle step of the swing, and the script turns the door panels S_door2_1 and S_door2_2 by it,
  * the second one the opposite way.
  */
@@ -53,7 +53,7 @@ static EVT_BEGIN(w_door_close)
 EVT_END()
 
 /**
- * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * Unused opening animation script for the west door.
  * LW(0) holds the angle step of the swing, and the script turns the door panels S_door2_1 and S_door2_2 by it,
  * the second one the opposite way.
  */
@@ -214,9 +214,9 @@ EVT_BEGIN(las_30_init_evt)
 EVT_END()
 #else
 EVT_END_PAD()
+#endif
 
 /** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
-#endif
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US

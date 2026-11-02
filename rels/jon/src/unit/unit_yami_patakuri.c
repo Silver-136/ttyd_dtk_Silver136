@@ -217,7 +217,7 @@ static BattleDataEntry data_table_patakuri[] = {
 };
 
 /**
- * Sound table of the Paragloomba once it has lost its wings (a Gloomba):
+ * Sound table of the flying Paragloomba:
  * for each pose name, the sound that plays with its animation.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -415,7 +415,7 @@ static EVT_BEGIN(attack_event_patakuri)
     RETURN
 EVT_END()
 
-/** Idle event of the flying Paragloomba: shows the table pose for state 1 and then idles forever in 30 frame steps. */
+/** Idle event of the flying Paragloomba: selects the status-dependent pose for body part 1, then waits forever in 30-frame steps. */
 static EVT_BEGIN(wait_event_patakuri)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)
@@ -594,7 +594,7 @@ EVT_END()
  * Attack event of the Paragloomba once it has lost its wings (installed by init_event after dmg_fall_event turns
  * it
  * into a Gloomba): picks a target (the first attack target during a first strike),
- * flusters if there is none, and uses an enemy item first if it has one.
+ * flusters if there is none and it is confused, and uses an enemy item first if the item-use check selects one.
  * Otherwise it runs at the target, then leaps onto it in a 32-frame arc,
  * tilting along its path every frame (krb_get_dir gives the angle).
  * A miss lands it nearby; a hit applies weapon_kuriboo_attack with the action command defence check.
@@ -754,16 +754,16 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Idle event: shows the unit's table pose for state 1. */
+/** Idle event: selects the unit's status-dependent pose for body part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
 /**
- * Script helper: args[0..1] = x, z of the first point, args[2..3] = x, z of the second,
+ * Script helper: args[0..1] = x, y of the first point, args[2..3] = x, y of the second,
  * args[4] = angle in and out.
- * Returns the angle (degrees) from the first point towards the second; unchanged if the points coincide.
+ * Returns the angle (degrees) from the second point towards the first; unchanged if the points coincide.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;

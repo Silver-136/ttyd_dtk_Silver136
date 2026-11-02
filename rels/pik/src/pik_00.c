@@ -421,8 +421,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
     WAIT_MS(200)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
 
-    // The departure sound and the first speeds depend on the station (Rogueport, Riverside or Poshley
-    // Heights).
+    // The departure sound depends on the station (Rogueport, Riverside or Poshley Heights).
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1"), 0)
@@ -525,7 +524,7 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
     WAIT_MS(200)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_BELL1"), LW(0), LW(1), LW(2), 0)
 
-    // The departure sound and the first speeds depend on the station.
+    // The departure sound depends on the station.
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1"), 0)
@@ -1155,7 +1154,7 @@ EVT_BEGIN(talk_ekiin)
     RETURN
 EVT_END()
 
-/** Init for Goldbob's husband (ナリキンパパ, Mr. Goldbob): puts him at (-195, 0, 350). */
+/** Init for Goldbob (ナリキンパパ, Mr. Goldbob): puts him at (-195, 0, 350). */
 static EVT_BEGIN(init_papa)
     CALL(evt_npc_set_position, STRING("me"), -195, 0, 350)
     RETURN
@@ -1529,8 +1528,8 @@ static EVT_BEGIN(talk_mama)
 EVT_END()
 
 /**
- * Init for Bub (コナリ), the Goldbobs' son: puts him at (-150, 0, 400), unless Trouble Center request 29 is active,
- * when he keeps his position from npc_data.
+ * Init for Bub (コナリキン), the Goldbobs' son: puts him at (-150, 0, 400), unless Trouble Center request 29 is active,
+ * when this init leaves his position unchanged.
  */
 static EVT_BEGIN(init_konari)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
@@ -1964,12 +1963,6 @@ EVT_BEGIN(evt_rot_door)
     RETURN
 EVT_END()
 
-/**
- * Cutscene when the Excess Express pulls into Poshley Heights (entered through "resha"):
- * Mario and the partner are hidden, the camera pulls back over the station with the "Poshley Heights" title
- * card, and after ten seconds the game
- * changes to a train map where Mario steps off (which one depends on story progress).  Sets GSWF_TRAIN_AT_POSHLEY.
- */
 #if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(erase_house)
     IF_INT_EQUAL(GF(11), 1)
@@ -1995,6 +1988,13 @@ static EVT_BEGIN(appear_house)
     RETURN
 EVT_END()
 #endif
+
+/**
+ * Cutscene when the Excess Express pulls into Poshley Heights (entered through "resha"):
+ * Mario and the partner are hidden, the camera pulls back over the station with the "Poshley Heights" title
+ * card, and after ten seconds the game
+ * changes to a train map where Mario steps off (which one depends on story progress).  Sets GSWF_TRAIN_AT_POSHLEY.
+ */
 EVT_BEGIN(evt_pik_00_arrival)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_cont_onoff, 0)
@@ -2099,7 +2099,7 @@ EVT_END()
  * depending on the story and on the door Mario came in through), starts the arrow signs, music, NPCs,
  * save block, star piece panel, the HP Drain P chest and two Star Pieces, the two villa doors and the entrances,
  * the spinning platform, the secret floor trigger, pit-fall return points,
- * and sets GF(11) so the villa roof stays visible when entering through n_bero.
+ * and temporarily sets GF(11) so the villa roof stays hidden when entering through n_bero.
  */
 EVT_BEGIN(pik_00_init_evt)
 #if VERSION > VERSION_DEMO_US
@@ -2248,8 +2248,8 @@ USER_FUNC(img_flag) {
 
 #if VERSION > VERSION_DEMO_US
 /**
- * The demo's version: while Yoshi is ridden it updates the hit object under Mario,
- * which the house floor's case events (erase_house, appear_house) react to.
+ * Retail house-floor watcher: hides ie_1 while Mario is over a_home_yuka or GF(11) is set,
+ * restores it after he leaves, and keeps running.
  */
 USER_FUNC(under) {
     HitEntry* hit;
@@ -2278,10 +2278,6 @@ USER_FUNC(under) {
 }
 #endif
 
-/**
- * Message callback for Trouble Center request 29 (irai_29_15):
- * when the second page of the text appears it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
- */
 #if VERSION <= VERSION_DEMO_US
 /**
  * The demo's version: while Yoshi is ridden it updates the hit object under Mario,
@@ -2296,6 +2292,7 @@ static USER_FUNC(under) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Message callback for Trouble Center request 29 (irai_29_15):
  * when the second page of the text appears it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
@@ -2309,7 +2306,7 @@ void irai_29_15_cb(s32 type, smartEntry* smart) {
 }
 
 #if VERSION >= VERSION_US
-/** Script helper: force-closes the status window (statusWinForceOff). */
+/** Script helper: releases the status window's forced-open or forced-close state (statusWinForceOff). */
 USER_FUNC(pik_00_statuswin_force_off) {
     statusWinForceOff();
     return EVT_RETURN_DONE;

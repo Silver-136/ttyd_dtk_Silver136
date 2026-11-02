@@ -1095,7 +1095,7 @@ EVT_END()
 
 /**
  * The Arantula's normal attack: the web throw.
- * It picks a target (the first-strike target on a first strike), winds up (piders_attack_common_event1),
+ * It skips the throw on a first strike; otherwise it picks a target and winds up (piders_attack_common_event1),
  * has the arm drop in the background and throws the web at the target,
  * then checks the damage and finishes with a short pause.
  */
@@ -1141,6 +1141,7 @@ EVT_END()
  * and a throw can pick the same target again.
  */
 static EVT_BEGIN(renzoku_attack_event)
+
     // Pick targets; a confused Arantula with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))

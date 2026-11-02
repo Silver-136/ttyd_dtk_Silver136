@@ -103,7 +103,7 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
-/** Door animation script that does nothing; the west door of this room is animated by the lock event instead. */
+/** Door animation script that does nothing. */
 EVT_BEGIN(door_dummy)
     RETURN
 EVT_END()
@@ -288,8 +288,8 @@ EVT_END()
 /**
  * Event script: the turntable (kaitendai) of the gear room.
  * Spins the big centre platform and four smaller platforms in opposite directions at half a degree per frame,
- * and carries Mario and the partner with whichever platform they stand on by adding the platform's movement each
- * frame.
+ * and explicitly carries Mario and the partner standing on the four smaller platforms by adding each platform's
+ * movement each frame.
  */
 EVT_BEGIN(kaitendai_evt)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
@@ -355,8 +355,7 @@ EVT_BEGIN(kaitendai_evt)
         CALL(evt_hit_bind_update, STRING("A_hgm_dai_04"))
         CALL(evt_hit_bind_update, STRING("A_hgm_dai_05"))
 
-        // Turn the centre platform and the small ones in opposite directions and move whoever is standing on
-        // them along.
+        // Apply the four small platforms' position changes to Mario and the partner riding them.
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_hit_get_position, LW(2), LW(10), LW(11), LW(12))
             SUBTRACT_FLOAT(LW(10), LW(3))
@@ -394,7 +393,7 @@ EVT_END()
 
 /**
  * Event script: starts the moving platform S_move_dai (hit object A_move_dai) of the room via move_dai,
- * with a movement time of 2200.
+ * with a hold time of 2200 milliseconds between its outward and return movements.
  */
 static EVT_BEGIN(dai_evt)
     SET_VALUE(LW(0), STRING("S_move_dai"))
@@ -409,7 +408,7 @@ static s32 key_tbl[] = {
     ITEM_PALACE_KEY_0x2F, -1,
 };
 
-/** Event script: run when the key is used in the lock of the door; sets the story progress to STG8_09_KEY. */
+/** Event script: run when Palace Key 0x2F is collected; sets the story progress to STG8_09_KEY. */
 static EVT_BEGIN(key_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_09_KEY)
     RETURN

@@ -219,8 +219,8 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Gets the direction angle from point (args[0], args[1]) to (args[2], args[3]) into args[4];
- * if both points are the same it keeps the old angle. Used to turn the rolling Goomba toward where it is moving.
+ * Gets the angle from point (args[2], args[3]) toward (args[0], args[1]) into args[4];
+ * if both points are the same it keeps the old angle. Used to tilt the Goomba during its jump.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;
@@ -256,7 +256,7 @@ EVT_END()
 /**
  * Attack event of the Goomba.
  * It picks a target (the first-strike target when it ambushes Mario), uses an enemy item if it has one,
- * runs to a point 100 units behind the target, then leaps at it in a 32-frame arc to hit it.
+ * runs to a point 100 units in the direction the target faces, then leaps at it in a 32-frame arc to hit it.
  * It tilts along its path as it goes (krb_get_dir gives the angle from its travel direction every frame);
  * the damage and result checks follow, then it returns home. If confused with no target it is flustered.
  */
@@ -296,7 +296,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_kuriboo_attack))
 
-    // The Goomba trots to a spot 100 units behind its target.
+    // The Goomba trots to a spot 100 units in the direction its target faces.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)

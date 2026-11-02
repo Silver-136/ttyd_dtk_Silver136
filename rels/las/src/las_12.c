@@ -91,7 +91,7 @@ EVT_END()
 
 /**
  * Event script: the switch of las_12 was hit.
- * The camera shows the spot at X -150 and the key chest drops in (box_syutugen).
+ * The camera shows the spot at X -150 and the key chest rises out of the floor (box_syutugen).
  */
 static EVT_BEGIN(switch_evt)
     CALL(evt_mario_key_onoff, 0)

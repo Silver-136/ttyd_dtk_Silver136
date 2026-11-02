@@ -327,7 +327,7 @@ EVT_END()
 
 /**
  * Reaction when the Frost Piranha is hurt by a counter:
- * plays the damage pose PKF_D_1 for a second and, if the hit carries damage code 512 (and not 2048),
+ * plays the damage pose PKF_D_1 for a second and, unless DAMAGE_RESULT_ZERO_HP is set without DAMAGE_RESULT_REVIVAL,
  * returns to its place via return_event.
  */
 static EVT_BEGIN(counter_damage_event)
@@ -459,9 +459,10 @@ EVT_END()
  * The Frost Piranha's bite: picks a target (the first-attack target on a pre-emptive strike),
  * rises from its position (ground or ceiling), swings its head in the bite poses (PKF_A_1A to 1C,
  * SFX_ENM_PAKKUN_ATTACK1) and checks the damage;
- * a miss makes the target dodge, a hit applies it with guard flag 256; then it returns via return_event.
+ * some misses make the target dodge, a hit applies it with final-hit flag 256; then it returns via return_event.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -483,7 +484,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared and protecting-unit movement is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -640,8 +641,8 @@ static USER_FUNC(shadow_scale_memory) {
 }
 
 /**
- * Script helper: returns in args[0] 0 if the stage's iron frame (the ceiling the piranha hangs from) has been
- * destroyed, otherwise 1.
+ * Script helper: returns in args[0] 0 if the stage's iron frame (the ceiling the piranha hangs from) is
+ * unavailable, otherwise 1.
  */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;

@@ -181,7 +181,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
 };
 
 /**
- * Attack entry of the Pale Piranha: with a first-strike battle flag, or after any item use check,
+ * Attack entry of the Pale Piranha: with a first-strike battle flag, or when its item check selects no script,
  * it runs normal_attack_event with its single weapon (weapon_pakkun_flower_attack),
  * then returns to the wait event.
  */
@@ -448,6 +448,7 @@ EVT_END()
  * post.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // In a first strike it waits, then uses the target of that strike; otherwise it chooses a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -541,7 +542,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The bite missed: the target dodges it.
+    // The bite missed or was avoided.
     LABEL(90)
     GOTO(98)
 
@@ -622,7 +623,7 @@ static USER_FUNC(shadow_scale_memory) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: arg0 receives 1 if the arena's ceiling iron frame still exists, 0 once it has been removed. */
+/** Script helper: arg0 receives 1 if the arena's ceiling iron frame is available, 0 otherwise. */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 

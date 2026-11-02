@@ -23,7 +23,7 @@
 #define UNIT_WORK_SPIN_DONE 0    // 1 ends the sibling loop that spins a thrown bone part (25 degrees per frame); the throw sets 0, the landing 1
 #define UNIT_WORK_REWARD_GIVEN 1 // 1 once its coins and EXP were paid out (first collapse or death), so they are paid only once
 #define UNIT_WORK_REVIVE_TURNS 2 // turns until it rebuilds itself: fake_dead_event sets 2-4; rebirth_event counts down and revives at 0; attack_event runs rebirth_event while >= 1
-#define UNIT_WORK_LINK_HIT 3     // link attack: 1 once a bone hit the target; the third bone then hits without the avoid check
+#define UNIT_WORK_LINK_HIT 3     // link attack: 1 once a bone hit the target; the third bone may enter the hit branch regardless of its pre-check result
 #define UNIT_WORK_BONES_THROWN 4 // link attack: bones thrown so far (+1 per link_attack_event_sub); -1 after the third finishes, which ends link_attack_event's wait
 
 static USER_FUNC(honenoko_copy_status);
@@ -106,7 +106,7 @@ BattleUnitKind unit_black_karon = {
 
 /**
  * Defence of the Dark Bones against each element (normal, fire, ice, explosion, electric):
- * 2 against every element, so each hit is cut by 2.
+ * base defense 2 against every element.
  */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
@@ -311,7 +311,7 @@ EVT_END()
  * experience and star points are awarded once (unit work 1 guards it);
  * then it tips over and the unit is killed: KO'd and deleted
  * when the hit defeated it for good (damage flag 0x400,
- * which a reviving unit only gets from fire or explosions), otherwise only marked inactive (KILL_UNIT_INACTIVE).
+ * also set by certain counter and instant-kill results, not just fire or explosions), otherwise only marked inactive (KILL_UNIT_INACTIVE).
  */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -369,7 +369,7 @@ EVT_END()
  * Event when the Dark Bones runs out of HP but can rebuild itself:
  * it moves to its home position, awards the reward once,
  * collapses into a pile of bones (KRN_D_2, crumble sound),
- * stays there for a second and sets unit work 2 to 2 or 3,
+ * stays there for a second and sets unit work 2 to 2, 3 or 4,
  * the number of turns until rebirth_event brings it back.
  */
 static EVT_BEGIN(fake_dead_event)
@@ -436,7 +436,7 @@ static EVT_BEGIN(rebirth_event)
 EVT_END()
 
 /**
- * Attack event of the Dark Bones: when confused it throws a plain bone;
+ * Attack event of the Dark Bones: for a first strike it throws a plain bone;
  * when collapsed it rebuilds itself (rebirth_event);
  * otherwise it can use an item, or draws a number from 0 to 99:
  * bone throw (50), three-bone throw (30) or calling a Dry Bones friend (20).
@@ -537,7 +537,7 @@ EVT_END()
  * Attack of the Dark Bones: it picks a target (weapon_honenoko_attack),
  * winds up (KRN_A_1, KRN_A_2) and throws a spinning bone (part 2) in an arc;
  * the target can dodge as the bone passes (start_avoid).
- * If the bone is not avoided it lands on the target with the action command defence check,
+ * On pre-check result 1 it lands on the target with the action command defence check,
  * and the bone then bounces off.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -625,6 +625,7 @@ static EVT_BEGIN(normal_attack_event)
                 CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
                 IF_INT_LESS_OR_EQUAL(LW(0), LW(6))
+
                     // The target can dodge as the bone passes.
                     CALL_CHILD(start_avoid)
                     BREAK_LOOP
@@ -667,7 +668,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 
-    // Deal the damage, reduced by the action command defence.
+    // Check the action command defence and apply the damage result.
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -756,10 +757,11 @@ EVT_END()
 /**
  * One bone of the three-bone throw of the Dark Bones: LW(12) is the bone part (2, 3 or 4).
  * Wind-up, a spinning arc to the target and dodge or hit handling as in normal_attack_event;
- * the third bone does the damage check, and if an earlier bone hit,
- * unit work 3 makes the following ones hit too.
+ * every bone that enters the hit branch does a damage check; on the third bone,
+ * unit work 3 can bypass its pre-check result if an earlier bone hit.
  */
 static EVT_BEGIN(link_attack_event_sub)
+
     // Wind up and raise a bone above its head.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
@@ -823,6 +825,7 @@ static EVT_BEGIN(link_attack_event_sub)
                 CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
                 IF_INT_LESS_OR_EQUAL(LW(0), LW(6))
+
                     // The target can dodge as the bone passes.
                     CALL_CHILD(start_avoid2)
                     BREAK_LOOP
@@ -887,6 +890,7 @@ static EVT_BEGIN(link_attack_event_sub)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
+
     // The camera zooms in on the Dark Bones.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -894,6 +898,7 @@ static EVT_BEGIN(call_friend_event)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     SET_VALUE(LW(10), 0)
     LOOP(6)
+
         // It throws up pieces of itself, one by one, and they pile up beside it.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_3"))
         WAIT_FRAMES(5)

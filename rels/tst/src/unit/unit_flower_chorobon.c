@@ -113,6 +113,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of Flower Fuzzy (the demos), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -121,6 +122,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {90, 90, 80, 100, 80, 100, 100, 65, 100, 70, 100, 70, 100, 65, 65, 85, 85, 100, 65, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of Flower Fuzzy (the final versions), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -297,7 +299,7 @@ EVT_END()
 
 /**
  * The Flower Fuzzy's magic attack (weapon_chorobon_magic_attack, all targets):
- * it recovers 2 FP, floats up on the spot and fires three shock rings with the magic sound
+ * it spends 2 FP, floats up on the spot and fires three shock rings with the magic sound
  * while the camera shakes, then each target in turn gets the avoid, guard or hit check,
  * with the guard-timing result for the first one.
  */
@@ -510,8 +512,8 @@ static EVT_BEGIN(rabbit_move)
 EVT_END()
 
 /**
- * Sound cues of Flower Fuzzy's animations: for each of its 4 animation names,
- * the sound effect that plays with it (SFX_ENM_CHORO2_MOVE1, SFX_ENM_CHORO2_WAIT2 and
+ * Sound cues of Flower Fuzzy's CBN_S_1 animation: three timing entries for
+ * the sound effects (SFX_ENM_CHORO2_MOVE1, SFX_ENM_CHORO2_WAIT2 and
  * SFX_ENM_CHORO2_WAIT1).
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -759,6 +761,8 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_drain_attack))
+
+    // It takes FP from the target if it has any (otherwise HP) and heals itself by the amount drained (HP, or FP for the FP-draining weapon), with a recovery effect.
     CALL(btlevtcmd_GetFp, LW(3), LW(0))
     IF_INT_GREATER(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_chorobon_drain_attack_fp))
@@ -805,7 +809,7 @@ static EVT_BEGIN(drain_attack_event)
         LOOP(20)
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(-0.024414062f), FLOAT(-0.024414062f), 0)
 
-            // It takes FP from the target if it has any (otherwise HP) and heals itself by the amount drained (HP, or FP for the FP-draining weapon), with a recovery effect.
+
             WAIT_FRAMES(1)
         END_LOOP
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(1))

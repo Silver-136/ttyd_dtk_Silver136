@@ -223,7 +223,7 @@ EVT_END()
 
 /**
  * Talk script of Makkino for Trouble Center request 12:
- * runs the final conversation with LW(0) = 1, so Makkino steps toward Mario first.
+ * runs the final conversation with LW(0) = 1, so Makkino first steps 20 units away along a quantized direction from Mario.
  */
 static EVT_BEGIN(iri_12_makkino_talk)
     SET_VALUE(LW(0), 1)
@@ -298,7 +298,7 @@ EVT_END()
 /**
  * Map init script of tik_06, the room in front of the Pit of 100 Trials.
  * Starts the ambience (music only in the demo), sets up the exits and the Trouble request 12 characters,
- * two signboards (one shows the Pit record: deepest floor and best times) and a Star Piece.
+ * two signboards (one shows deepest floor, Power Bounce record and Star Piece count) and a Star Piece.
  */
 EVT_BEGIN(tik_06_init_evt)
 #if VERSION <= VERSION_DEMO_US

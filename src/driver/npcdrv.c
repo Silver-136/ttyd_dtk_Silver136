@@ -595,6 +595,7 @@ s32 npcEntry(const char* description, const char* animName) {
 }
 
 #if VERSION < VERSION_US
+
 /** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
@@ -689,6 +690,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 void npcKoopaModeMain(void);
 #if VERSION >= VERSION_US
+
 /** US and later: probe the wall from a copy of the position first, then slide along it. */
 static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
     f32 wx = entry->position.x;
@@ -703,6 +705,7 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
     }
 }
 #endif
+
 /**
  * Per-frame NPC update (from mariost.c).
  * For each live NPC: timers, wall-checked movement, gravity, pushing Mario aside,
@@ -1257,6 +1260,7 @@ void npcMain(void) {
 }
 
 #if VERSION >= VERSION_US
+
 /** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
@@ -1584,7 +1588,7 @@ static inline void npcSideSlide(f32* outX, f32* outZ, f32 dx, f32 dz, f32 nx, f3
 
 /**
  * Moves an NPC by (dx, dz) from its position into *outX / *outZ with wall collision:
- * rays at 20%, 40% and 75% of its height (the middle one only for steep walls), slide along a hit wall and,
+ * rays at 20% (capped at 10 units), 40% and 75% of its height (the middle one only for steep walls), slide along a hit wall and,
  * with NPC_FLAG_WALL_BOUNCE, reflect *angle off it. Returns the wall hit, or NULL after the full move.
  */
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz) {
@@ -1870,7 +1874,7 @@ static inline BOOL fbat_setHit(NpcEntry* npc) {
  * 2) finds the friendly NPC Mario faces close enough to talk to (wp->talkTarget, turning it toward him)
  * and starts talking (mode 2) on A; 3) hammering
  * or jumping on a friendly NPC that reacts runs its hit event (mode 3); 4) the Bowser stage checks.
- * Not while the system level is raised, Mario is locked or (JP and later) picking up an item.
+ * Not while the system level is raised, Mario is locked (unless NPC_WORK_ALWAYS_ENCOUNT is set), or (JP and later) picking up an item.
  */
 void fbatEncountCheck(void) {
     NpcWork* wp = gp->inBattle ? &work.battle : &work.field;
@@ -2589,6 +2593,7 @@ NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Position of Mario's hammer head at frame f (0-10) of the swing; angle is the swing direction, r the reach. */
 static inline void npcHammerPos(f32 f, f32 r, f32 angle, f32* x, f32* y, f32* z) {
     MarioWork* mario = marioGetPtr();
@@ -2695,6 +2700,7 @@ static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
         continue;                                                       \
     if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD)      \
         continue;
+
 /** Position of the hammer head during the spin hammer in the demos. */
 static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) {
     MarioWork* mario = marioGetPtr();
@@ -2706,6 +2712,7 @@ static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) 
     *y = r * c + mario->position.y;
 }
 #endif
+
 /**
  * Finds the NPC Mario or the partner hits this frame.
  * flags pick the checks: 0x20 touch/jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,
@@ -2713,7 +2720,8 @@ static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) 
  * 0x1 tests only the current hammer frame instead of the whole swing,
  * 0x1000 tests enemies instead of friendly NPCs, 0x2000 only NPCs whose reactionFlags allow that hit,
  * without setting the banner.
- * Returns the closest NPC hit and writes the FbatHitResult (kind first) to the second argument if given.
+ * Returns the selected NPC hit and writes the FbatHitResult (kind first) to the second argument if given;
+ * touch/jump checks keep the closest hit, while the other checks stop at their first matching NPC.
  */
 void* fbatHitCheck(u32 flags, void* result) {
     u32 f1000a;
@@ -3501,7 +3509,7 @@ void npcExecAllInitEvt(void) {
 
 /**
  * On map load: activates each NPC whose init event has finished (or that has none).
- * Returns TRUE once no init event was running at the start of the check.
+ * Returns TRUE once no inactive NPC had a nonzero init-event ID at the start of the check.
  */
 BOOL npcWaitAllInitEvtEnd(void) {
     NpcWork* wp;

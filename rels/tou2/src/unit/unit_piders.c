@@ -32,7 +32,7 @@
 #define UNIT_WORK_WINDUP_ANGLE 4 // part 2 rotation (degrees) reached at the end of the wind-up (piders_attack_common_event1); piders_attack_common_event1_2 starts from it
 #define UNIT_WORK_TARGET_UNIT 5  // first of three slots (5-7): target unit of each shot of renzoku_attack_event (slots 5-7)
 #define UNIT_WORK_TARGET_PART 8  // first of three slots (8-10): target part of each shot of renzoku_attack_event (slots 8-10)
-#define UNIT_WORK_TARGET_HIT 11  // first of three slots (11-13): 1 once a shot hit that target; the last shot at a target that was hit only plays the hit (renzoku_attack_event_sub_last) (slots 11-13)
+#define UNIT_WORK_TARGET_HIT 11  // first of three slots (11-13): 1 once a shot hit that target; the last shot at a target that was hit skips the precheck and applies final-hit damage (renzoku_attack_event_sub_last) (slots 11-13)
 
 #include "unit/unit_piders.h"
 static void piders_draw_yarn_sub(CameraId camera, void* param);
@@ -114,6 +114,7 @@ void GXPosition3f32_(f32 x, f32 y, f32 z) {
 }
 
 /** Out-of-line stand-in for the SDK's GXEnd inline, which does nothing. */
+
 // GXEnd_ is empty; GXPosition3f32_ writes three coordinates to the graphics FIFO.
 void GXEnd_(void) {
 }
@@ -1079,7 +1080,7 @@ EVT_END()
 
 /**
  * Winds the web back after the attack: turns the Pider to face the target,
- * eases the web's rotation back to zero over 15 frames, returns to PAI_S_1 and makes the web part targetable.
+ * eases the web's rotation back to zero over 15 frames, returns to PAI_S_1 and hides the web part.
  */
 static EVT_BEGIN(piders_attack_common_event2)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
@@ -1208,8 +1209,9 @@ static EVT_BEGIN(renzoku_attack_event)
 EVT_END()
 
 /**
- * Walks through the target records saved in unit work (6 slots, 5 to 10),
- * calling the no-last variant for each target but the last, which gets renzoku_attack_event_sub_last.
+ * Resolves one shot using the target records saved in unit work (6 slots, 5 to 10):
+ * calls the no-last variant if a later shot targets the same unit and part, otherwise
+ * renzoku_attack_event_sub_last.
  */
 static EVT_BEGIN(renzoku_attack_event_sub)
     SET_VALUE(LW(0), LW(5))

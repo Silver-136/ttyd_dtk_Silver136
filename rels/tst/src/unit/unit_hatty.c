@@ -120,7 +120,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of the test enemy hatty: none, every element hits normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of the test enemy hatty: every status effect always lands (100%). */
+/** Status vulnerability of the test enemy hatty: normal susceptibility multipliers (100%) for every status. */
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 /**
@@ -298,6 +298,7 @@ EVT_END()
  * guard-timing damage check and the flight home) is therefore never reached.
  */
 static EVT_BEGIN(attack_event)
+
     // hatty first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

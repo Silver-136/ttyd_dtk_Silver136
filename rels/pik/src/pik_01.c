@@ -141,7 +141,7 @@ static HitDamageReturn dmgReturnPt[] = {
 };
 
 /**
- * Door callback of the Pennington's office door (evtIn):
+ * Door callback of the sanctum gate (exit animation):
  * rotates the double door objects door_1_b and door_1_a in opposite directions by the angle in LW(0) scaled by
  * 0.38867188.
  */
@@ -153,7 +153,7 @@ static EVT_BEGIN(n_door_open)
     RETURN
 EVT_END()
 
-/** Door callback of the same door (evtOut): the reverse of n_door_open. */
+/** Door callback of the same gate (entrance animation): the reverse of n_door_open. */
 static EVT_BEGIN(n_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1_b"), 0, LW(0), 0)
@@ -248,6 +248,7 @@ EVT_BEGIN(evt_powan)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
+
         // Mario's partner comments.
         CALL(evt_msg_print, 0, STRING("stg6_pik_07_0"), 0, STRING("party"))
         CASE_EQUAL(2)
@@ -296,6 +297,7 @@ EVT_BEGIN(evt_powan)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
+
         // Mario's partner comments again.
         CALL(evt_msg_print, 0, STRING("stg6_pik_09_0"), 0, STRING("party"))
         CASE_EQUAL(2)
@@ -361,7 +363,7 @@ EVT_END()
 
 /**
  * Talk script for the souvenir shop owner (土産屋).
- * During Trouble Center request 27 the owner first asks for help;
+ * During Trouble Center request 27 the owner asks for help if Mario does not look like Luigi;
  * once Mario looks like Luigi (chk_luigi_color) a longer scene plays in which the real Luigi (ルイージ) shows up,
  * the owner gives Mario a Choco Cake (handed over, or put on the shop counter if the inventory is full)
  * and the request is marked solved.
@@ -370,10 +372,12 @@ EVT_END()
  */
 EVT_BEGIN(miyageya_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_WANNA_MEET_LUIGI)
+
         // Once Mario looks like Luigi, a longer scene plays.
         CALL(chk_luigi_color, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
+
                 // Trouble Center request 27: the shop owner asks for help.
                 CALL(evt_msg_print, 0, STRING("irai_27_001"), 0, 0)
                 CALL(evt_mario_set_pose, STRING("M_N_5B"))
@@ -429,6 +433,7 @@ EVT_BEGIN(miyageya_talk)
                 SET_VALUE(LW(4), 20)
             END_IF
             IF_INT_LESS(LW(3), LW(4))
+
                 // The owner rewards Mario with a Choco Cake.
                 CALL(evt_msg_print, 0, STRING("irai_27_006"), 0, 0)
                 CALL(evt_item_entry, STRING("sc"), ITEM_CHOCO_CAKE, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -561,15 +566,16 @@ s32 iri_29_item_tbl3[] = {
 /**
  * Talk script for Little Narikin (コナリキン).
  * During Trouble Center request 29 he asks for a gift:
- * the choice made in the first question (stored in GSW_TROUBLE_WORK_FIRST) decides whether he wants a Shroom
+ * the choice made in the first question (stored in GSW_TROUBLE_WORK(0)) decides whether he wants a Shroom
  * Cake, Keelhaul Mango or Fright Mask; Mario hands the item over, receives a Present for it,
- * and on the second visit gets 3 coins and the request is solved.
+ * and once GSWF_TROUBLE_WORK(1) is set gets 3 coins and the request is solved.
  * During the Bowser interlude he reacts to Bowser, and depending on the answer runs away.
  */
 EVT_BEGIN(konarikin_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
+
                 // Trouble Center request 29: Little Narikin asks for a gift.
                 CALL(evt_msg_print, 0, STRING("irai_29_00"), 0, 0)
                 CALL(evt_msg_select, 0, STRING("irai_29_00_s"))
@@ -588,6 +594,7 @@ EVT_BEGIN(konarikin_talk)
                 END_IF
                 SWITCH(GSW_TROUBLE_WORK(0))
                     CASE_EQUAL(0)
+
                     // He may ask for a Shroom Cake, a Keelhaul Mango or a Fright Mask, depending on Mario's
                     // first answer.
                     CALL(evt_pouch_check_item, ITEM_SHROOM_CAKE, LW(0))
@@ -649,7 +656,8 @@ EVT_BEGIN(konarikin_talk)
                 END_SWITCH
             END_IF
         ELSE
-            // On the second visit Mario is paid 3 coins.
+
+            // Once GSWF_TROUBLE_WORK(1) is set, Mario is paid 3 coins.
             CALL(evt_msg_print, 0, STRING("irai_29_12"), 0, 0)
             CALL(evt_mario_set_pose, STRING("M_N_2"))
             WAIT_MS(500)
@@ -892,7 +900,7 @@ EVT_BEGIN(takun6_talk)
     RETURN
 EVT_END()
 
-/** NPCs of the town square: Detective Pennington and the souvenir shop owner. */
+/** NPCs of the town square: Detective Pennington, the souvenir shop owner, the Narikin family, the madam and Kammy. */
 static NpcSetupInfo npc_data[] = {
     {
         "ポワン探偵", // name
@@ -1042,7 +1050,7 @@ EVT_BEGIN(sebaschan_entry)
 EVT_END()
 
 /**
- * Bowser interlude: Bowser walks up to the padlock ("lock") on the sanctum gate, roars at it,
+ * Bowser interlude: Bowser roars at the padlock ("lock") on the sanctum gate,
  * the lock is opened and the gate swings open, and the scene continues into the sanctum map (pik_02).
  */
 EVT_BEGIN(koopa_door_evt)
@@ -1341,7 +1349,7 @@ static EVT_BEGIN(delete_npc_regl_evt)
     RETURN
 EVT_END()
 
-/** Shakes the 3D camera sideways by a small amount every 500 ms, forever; used in the dark ending scene. */
+/** Shakes the 3D camera vertically by a small amount every 500 ms, forever; used in the dark ending scene. */
 static EVT_BEGIN(sekai_yami_shake)
     LOOP(0)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
@@ -1586,6 +1594,7 @@ EVT_BEGIN(pik_01_init_evt)
                 SET_VALUE(LF(1), 1)
             END_IF
             IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+
                 // Pick the music, including the dark chapter 8 finale tracks.
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
                 CALL(evt_snd_envoff, PSND_FADEOUT)

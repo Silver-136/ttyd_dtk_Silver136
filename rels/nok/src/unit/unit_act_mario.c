@@ -202,7 +202,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Idle event of the Mario stage actor: shows the unit's table pose for state 1. */
+/** Idle event of the Mario stage actor: shows the unit's table pose for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -210,7 +210,7 @@ EVT_END()
 
 /**
  * Cast of Flurrie's epilogue stage play: Flurrie as Clauda, two Boos, the Atomic Boo, two Toads,
- * Toadette and Goombella, with their starting spots.
+ * a female Toad and Goombella, with their starting spots.
  */
 BattleUnitSetup entry_unit_data[] = {
     {
@@ -300,7 +300,7 @@ BattleUnitSetup entry_unit_data[] = {
  * hides the status window, places Mario's actor at Mario's spot
  * and moves the real Mario off the left edge of the stage, and keeps its own unit id in unit work 0.
  * It spawns the eight other actors of entry_unit_data (Flurrie as Clauda, two Boos, the Atomic Boo, two Toads,
- * Toadette and Goombella), keeping their unit ids in unit work 1 to 8, and starts _battle_event.
+ * a female Toad and Goombella), keeping their unit ids in unit work 1 to 8, and starts _battle_event.
  * After two seconds the narration (ep_39) tells of Flurrie's hit play about the adventure,
  * with Doopliss in the troupe; then battle flag 32 is set.
  */
@@ -348,7 +348,7 @@ EVT_END()
  * Looping stage-play script: Mario jumps on an enemy actor,
  * then Flurrie (Clauda) attacks (a body press or her breath, 50/50) and strikes a pose,
  * then the two Boos (Teresas) and the Atomic Boo each take a turn,
- * and a Toad and Toadette each say a line (talk pose).
+ * and a male and a female Toad each say a line (talk pose).
  * It repeats forever; nothing in it ends the battle.
  */
 EVT_BEGIN(_battle_event)
@@ -495,6 +495,7 @@ EVT_END()
  * then bounces off and poses (PWD_Y_1) with the audience cheering and floats home; the victim springs back up.
  */
 EVT_BEGIN(_act_clauda_press_attack)
+
     // Flurrie pauses on stage, picks a random actor to flatten and turns toward it.
     CALL(btlevtcmd_AnimeChangePoseType, LW(5), LW(6), POSE_TYPE_TALK)
     WAIT_MS(1000)
@@ -771,7 +772,7 @@ EVT_END()
 
 /**
  * Script helper: spawns the smoke puff effect (effKumokumoN64Entry, blue-to-violet colours) in front of the
- * current battle unit that is about to breathe.
+ * current event's owning unit (UNIT_ID_SELF).
  * Stores the effect pointer in the script variable args[0] so the script can delete it later.
  */
 static USER_FUNC(_clauda_breath_effect_fire) {
@@ -801,7 +802,7 @@ static USER_FUNC(_clauda_breath_effect_fire) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: spawns the smaller smoke puff effect in front of Clauda while she winds up her breath attack. */
+/** Script helper: spawns the smaller smoke puff effect in front of the current event's owning unit during the breath windup. */
 static USER_FUNC(_clauda_breath_effect_ready) {
     BattleWork* wp = _battleWorkPointer;
     s32 id;

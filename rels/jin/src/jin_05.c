@@ -23,8 +23,8 @@ static EvtWord mobj_box01[34];
 EvtWord jin_05_init_evt[63];
 
 /**
- * Exit event of the roll-through doorway: returns 0 in LW(0), which blocks the exit,
- * while Mario is in motion 22 (MARIO_MOTION_ROLL, the paper-roll form), and 1 otherwise.
+ * Exit event of the roll-through doorway: returns 0 in LW(0), allowing the exit,
+ * while Mario is in motion 22 (MARIO_MOTION_ROLL, the paper-roll form), and 1 to block it otherwise.
  */
 static EVT_BEGIN(check_roll)
     CALL(evt_mario_get_motion, LW(0))

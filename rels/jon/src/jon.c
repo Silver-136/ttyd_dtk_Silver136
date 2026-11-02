@@ -1674,7 +1674,10 @@ EVT_BEGIN(get_map_name)
     RETURN
 EVT_END()
 
-/** The demo's mover takes 10 coins for every trip and picks the destination before checking the coins. */
+/**
+ * Mover conversation. The demo's mover takes 10 coins for every trip and picks the destination before checking the coins.
+ * Retail charges 10, 30 or 10 coins for the three travel choices and picks the destination after payment.
+ */
 EVT_BEGIN(talk_idouya)
     CALL(evt_msg_print, 0, STRING("msg_jon_mover"), 0, 0)
     CALL(evt_msg_select, 0, STRING("msg_jon_mover_select"))

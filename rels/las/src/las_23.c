@@ -233,7 +233,7 @@ static BeroEntry w_bero_mapchg[] = {
     },
 };
 
-/** Where Mario is put back after falling into the pits A_oti_01 to A_oti_03 (a point far below the floor). */
+/** Where Mario is put back after falling into the pits A_oti_01 to A_oti_05 (each hit object's position, selected by the y -1000 sentinel). */
 static HitDamageReturn dmgRetPoint[] = {
     {"A_oti_01", {0.0f, -1000.0f, 0.0f}},
     {"A_oti_02", {0.0f, -1000.0f, 0.0f}},
@@ -247,7 +247,7 @@ static HitDamageReturn dmgRetPoint[] = {
  * Map init script for las_23, a junction room of the Palace:
  * music (first or third Palace theme by story), the doors, return points for the bottomless pits,
  * and before STG8_06_MOVING_PLANETS it hides the lower floor and pipe;
- * afterwards it switches to the moved layout with the west door leading to a different room (w_bero_mapchg).
+ * afterwards it switches to the moved layout with the west door leading to a different entrance in las_21 (w_bero_mapchg).
  */
 EVT_BEGIN(las_23_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)

@@ -1064,8 +1064,9 @@ EVT_END()
 
 /**
  * Cortez's damage event for the counterattack (action command) phase:
- * when he is hit while swinging, he recovers into his idle pose and dives back to his home position,
- * with a different path depending on the damage code, then continues in the normal damage flow.
+ * in earlier forms it holds the damage pose for 500 ms and returns.
+ * In the final form he recovers into his idle pose after a short recoil;
+ * fatal damage without revival returns there, otherwise he dives back to his home position.
  */
 EVT_BEGIN(cortez_ac_counter_damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
@@ -1125,7 +1126,7 @@ static EVT_BEGIN(avoid_thorn_event)
 EVT_END()
 
 /**
- * Phase event of Cortez: after the enemy phase it rolls a new weapon formation (unit work 8, 0 to 2,
+ * Phase event of Cortez: after the enemy phase it rolls a new weapon formation (unit work 8, 0 to 3,
  * read by cortez_weapon_get_home_height).
  * Before the player's turn, in the second form's middle or lower stance (unit work 5 = 2 or 3)
  * and not hit since the last turn (unit work 7, cleared here),
@@ -1133,7 +1134,7 @@ EVT_END()
  * Otherwise it counts down the turns the ribs stay open (unit work 11) and closes them when it reaches 0.
  */
 static EVT_BEGIN(phase_event)
-    // After the enemy phase Cortez rolls a new formation for his weapons (a random number from 0 to 2).
+    // After the enemy phase Cortez rolls a new formation for his weapons (a random number from 0 to 3).
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_ENEMY)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_sub_random, 3, LW(0))
@@ -1392,9 +1393,9 @@ EVT_BEGIN(at2_hone_charge_event)
 EVT_END()
 
 /**
- * Cortez's bone rain (mode 2): declares an attack on all enemies,
+ * Cortez's bone rain (mode 2): clears the pending charge flag, declares an attack on all enemies,
  * throws his bones into the air and has them fall on the player's side in a shower (spawned through
- * _bone_rain_event), then clears the pending flag.
+ * _bone_rain_event).
  */
 EVT_BEGIN(at2_hone_rain_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, 0)
@@ -1496,7 +1497,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
 
-    // For each target, the bones that reach it either miss (the target dodges) or hit.
+    // For each target, the bones that reach it either miss or hit.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -1604,8 +1605,8 @@ EVT_BEGIN(at2_hone_rain_attack_event)
 EVT_END()
 
 /**
- * One falling bone of the bone rain: starts after a random delay, picks a random start above Cortez,
- * flies to a random spot around the target and spins as it falls, then lands and damages.
+ * One falling bone of the bone rain: uses a random flight duration, picks a random start above Cortez,
+ * flies to a random spot around the target and spins as it falls, then lands and hides its part.
  */
 EVT_BEGIN(_bone_rain_event)
     CALL(evt_sub_random, 20, LW(10))
@@ -1904,7 +1905,7 @@ EVT_BEGIN(at1_normal_attack)
 EVT_END()
 
 /**
- * Cortez's flurry slash (mode 1, midaregiri): shakes his sword with three swishes
+ * Cortez's flurry slash (mode 1, midaregiri): shakes his sword with four swishes
  * then cuts through the target with a multi-hit slash,
  * with a different pose for the front and back guard targets.
  */
@@ -2752,8 +2753,8 @@ static USER_FUNC(_check_zenei_kouei) {
 
 /**
  * Script helper for the audience drain (runs until finished):
- * resets the 100 audience seat markers, waits for all of them to settle,
- * then deletes each seat's audience member and subtracts it from the audience target count.
+ * resets the 100 audience seat markers and immediately proceeds to delete each occupied seat's audience member
+ * and subtract it from the audience target count.
  */
 USER_FUNC(_cortez_recovery_audience) {
     BattleWork* wp = _battleWorkPointer;
@@ -2968,7 +2969,6 @@ USER_FUNC(_cortez_check_drain_audience) {
 /** Script helper: writes the current volume of sound effect args[0] to args[1]. */
 // Descriptive name (not in the symbol maps); placeholder unk_muj_0000652c, JP muj .text+0x6468. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Script helper: writes the current volume of sound effect args[0] to args[1]. */
 USER_FUNC(_cortez_get_sfx_vol) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

@@ -25,13 +25,14 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_BUNSIN 4       // 1 on a clone (spawned by the bunsin event), 0 on the real one; clones skip attack/wait and die when hit
+#define UNIT_WORK_BUNSIN 4       // 1 on a clone (spawned by the bunsin event), 0 on the real one; clones skip attack decisions, still move their hands while waiting, and die when hit
 #define UNIT_WORK_KILL_BUNSIN 5  // damage_event: 1 if the real one was hit while clones exist; after the damage all clones are killed
-#define UNIT_WORK_FADING 6       // clone: 1 once bunsin_kill_event has faded it out, so it fades only once
+#define UNIT_WORK_FADING 6       // clone: 1 when bunsin_kill_event starts fading it out, so it fades only once
 #define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry of the magic shot (effMahorn2Entry); eff_magic_get_posX reads its type-3 element's x
 
 double __fabs(double x);
-/** Absolute value of a double, wrapped so the compiler emits the same code as the original. */
+
+/** Absolute value of a double. */
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 
 static USER_FUNC(hand_ctrl);
@@ -598,11 +599,11 @@ static BattleUnitSetup entry_mahorn = {
 };
 
 /**
- * Attack event of the Dark Wizzerd. A copy (unit work 4 set) does nothing here.
- * The real one uses an enemy item if it has one;
+ * Attack event of the Dark Wizzerd. On a first strike it punches; otherwise a copy (unit work 4 set) does nothing here.
+ * The real one runs a selected enemy-item script if one is returned;
  * if it is the only unit left on its side it splits into copies (bunsin_event);
- * if it already has copies it always casts single-target magic.
- * Otherwise it rolls among nine options by weight:
+ * if it already has copies it casts single-target magic unless confused.
+ * Otherwise it rolls among eight options by weight:
  * punch 30, magic 60, all-target magic 10 and 8 each for the dekadeka, katikati, trans,
  * yokeyoke and recover support spells, all cast on itself.
  * Their weapons give Huge (size +2), Defense +3, Invisible and Dodgy for 3 turns each,
@@ -611,7 +612,8 @@ static BattleUnitSetup entry_mahorn = {
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // A copy of the Dark Wizzerd only throws a punch; the real one decides below.
+
+        // On a first strike, the Dark Wizzerd throws a punch.
         SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_punch))
         CALL_CHILD(PTR(attack_punch_event))
         GOTO(99)
@@ -621,7 +623,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // The real wizard uses an enemy item if it has one.
+    // The real wizard runs a selected enemy-item script if one is returned.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -635,7 +637,8 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(bunsin_event))
         RETURN
     ELSE
-        // Once it has copies, it always casts single-target magic at one opponent.
+
+        // Once it has copies, it casts single-target magic at one opponent unless confused.
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -884,9 +887,9 @@ EVT_END()
 
 /**
  * Damage event of the Dark Wizzerd: remembers in unit work 5 whether it has copies.
- * If it has, a hit also removes the copy that was targeted (bunsin_kill_event)
- * before the default damage handling runs; if the damage leaves the unit alone on its side it removes all its
- * copies.
+ * A targeted copy removes itself (bunsin_kill_event) and returns without default damage handling.
+ * The real one runs default damage handling, then removes all its copies if it still exists and had copies
+ * before the hit.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
@@ -1074,6 +1077,7 @@ EVT_END()
 static EVT_BEGIN(attack_punch_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
+
         // Pick a target for the attack; a confused unit that has none flusters.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
@@ -1091,7 +1095,6 @@ static EVT_BEGIN(attack_punch_event)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
 
-    // Announce the attack; the camera swings to follow it.
     // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1183,6 +1186,7 @@ static EVT_BEGIN(attack_punch_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+
         // The attack misses or is dodged.
         LABEL(90)
         WAIT_FRAMES(30)
@@ -1276,6 +1280,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+
         // The orbs sail past the target.
         LABEL(90)
         BEGIN_SIBLING_EVENT
@@ -1336,6 +1341,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         LABEL(98)
         CALL(mahorn_get_bunsin, LW(11), LW(12), LW(13), LW(14), LW(0))
         IF_INT_NOT_EQUAL(LW(11), -1)
+
             // The copies go back to waiting.
             CALL(btlevtcmd_StartWaitEvent, LW(11))
         END_IF
@@ -1568,7 +1574,7 @@ EVT_END()
 
 /**
  * Single-target magic: picks the target (the first attack target if that flag is set,
- * else sampled from the weapon in LW(9)), flusters if there is none, otherwise runs attack_enemy_common_event.
+ * else sampled from the weapon in LW(9)), if there is none, flusters only when confused and ends; otherwise runs attack_enemy_common_event.
  */
 static EVT_BEGIN(attack_magic_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -1616,7 +1622,7 @@ static EVT_BEGIN(confuse_magic_event)
 EVT_END()
 
 /**
- * All-target magic: samples the enemies from the weapon in LW(9), flusters if there are none,
+ * All-target magic: samples the enemies from the weapon in LW(9), if there are none, flusters only when confused and ends;
  * otherwise runs attack_enemy_all_common_event.
  */
 static EVT_BEGIN(all_attack_magic_event)
@@ -1798,7 +1804,7 @@ EVT_END()
 
 /**
  * Splits the Dark Wizzerd into copies (bunsin):
- * casts, fades out, walks along z in both directions from its position spawning a copy (spawn_event) at every
+ * casts, fades out, checks x positions in both directions from its position, with staggered z offsets, spawning a copy (spawn_event) at every
  * free spot found, shuffles the positions of the real one and its copies (mahorn_shuffle)
  * so the real one is hidden, and fades everyone back in.
  */
@@ -1886,9 +1892,10 @@ EVT_END()
  * Idle event of the Dark Wizzerd and its copies:
  * plays the table pose for the main unit and its copies,
  * and makes the four hands bob with random delays (MAH_S_4A/4B), or hold still in MAH_Z_2 while it is asleep,
- * confused or dizzy (statuses 1, 2 and 9).
+ * stopped or frozen (statuses 1, 2 and 9).
  */
 static EVT_BEGIN(wait_event)
+
     // The wizard and its copies take their idle pose.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1908,7 +1915,7 @@ static EVT_BEGIN(wait_event)
         END_IF
     END_IF
 
-    // If asleep, confused or dizzy, the four hands hold still.
+    // If asleep, stopped or frozen, the four hands hold still.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(13))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(14))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_STOP, LW(15))
@@ -1920,6 +1927,7 @@ static EVT_BEGIN(wait_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("MAH_Z_2"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 5, STRING("MAH_Z_2"))
     ELSE
+
         // Otherwise each of the four hands bobs up and down on its own random timing.
         BEGIN_SIBLING_EVENT
             LABEL(10)
@@ -2044,7 +2052,7 @@ static USER_FUNC(eff_magic_get_posX) {
 }
 
 /**
- * Script helper: args[0] = unit, args[1..3] = target x, y, z, args[4] = travel time in frames.
+ * Script helper: args[0] = unit, args[1] = target x, args[2..3] are unused, args[4] = travel time in frames.
  * Starts the Wizzerd's magic effect from its wand towards the target and stores it in work[7];
  * the speed is derived from the distance and time.
  */

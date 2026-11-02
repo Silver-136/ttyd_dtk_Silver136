@@ -114,7 +114,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Planter hit script 4: the first time the planter is hit it launches a Power Punch badge out of it;
+ * Planter search script 4: the first time the planter is searched it launches a Power Punch item out of it;
  * it is remembered with a flag so it comes out only once.
  */
 static EVT_BEGIN(evt_ueki_04)
@@ -320,7 +320,8 @@ EVT_END()
 /**
  * Counts the Punies standing on the weight platform every frame
  * and keeps the dial value GW(0) at 10 minus the count (clamped to 0 to 10).
- * Each Puni that is alive, not lost and within the platform's square and height band reduces the number by one.
+ * Each active Puni except Jabble whose reported position is within radius 50 of (0, -20) in XZ,
+ * and between -20 and 20 in Y, reduces the number by one.
  * The negative count is passed to setPuniWeight as the weight on the switch,
  * but only once the orb is on the pedestal; the dial click sound plays whenever the value changes.
  */

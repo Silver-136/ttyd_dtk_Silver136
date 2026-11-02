@@ -106,7 +106,6 @@ EvtWord first_tamago[52];
 static EvtWord evt_block[5];
 EvtWord tou_10_init_evt[254];
 
-/** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e5c, JP tou .text+0x6D98. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
@@ -128,16 +127,14 @@ s32 tou_10_mario_talk_end_wait(void) {
     return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 #endif
-/**
- * Script helper: waits until Mario has been free (idle, walking or dashing, with no lockout) for a total of 240
- * frames.
- */
+
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006ec8, JP tou .text+0x6E04. See docs/NAME_PROVENANCE.md.
+
 // Accumulate 241 eligible checks; blocked controls or other motions pause rather than reset the count.
 #if VERSION > VERSION_DEMO_US
 /**
- * Script helper: waits until Mario has been free (idle, walking or dashing, with no lockout) for a total of 240
- * frames.
+ * Script helper: waits for 241 eligible checks with Mario idle, walking or dashing and neither input nor control
+ * locked out. Ineligible checks pause the count.
  */
 USER_FUNC(tou_10_mario_free_wait) {
     MarioWork* mario = marioGetPtr();
@@ -178,6 +175,7 @@ USER_FUNC(setYoshiColor) {
         ((u8*)&start)[i] = swByteGet(i + 508);
     }
     minutes = (s32)OSTicksToSeconds(gp->retraceLocalTime - start) / 60;
+
     // The elapsed whole-minute count repeats every 20 minutes across the seven color intervals.
     minutes %= 20;
     if (minutes <= 5) {
@@ -756,6 +754,7 @@ static NpcSetupInfo npcEnt[] = {
  * and the story advances to STG3_07_MINORS_9TH_PL.
  */
 EVT_BEGIN(evt_saisyo_after)
+
     // Mario, the partner, Grubba and Jolene are placed in the room after the first match.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
@@ -811,6 +810,7 @@ EVT_BEGIN(evt_saisyo_after)
     CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("キノシコワ"), -55, -95, 0, FLOAT(80.0f), 1)
     IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_FIRST_WIN, 1)
+
         // After a win: 3 coins and how to reserve the next match.
         CALL(evt_msg_print, 0, STRING("stg3_tou_90"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
@@ -850,6 +850,7 @@ EVT_BEGIN(evt_saisyo_after)
         WAIT_MS(600)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
     ELSE
+
         // After a loss: 1 coin and her parting words.
         CALL(evt_msg_print, 0, STRING("stg3_tou_93_2"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
@@ -989,6 +990,7 @@ EVT_BEGIN(evt_saisyo_after)
 EVT_END()
 
 EVT_BEGIN(evt_saisyo_after_re)
+
     // Mario, the partner and Jolene are placed in the room after the comeback's first match.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -90, 0, -95)
@@ -1004,6 +1006,7 @@ EVT_BEGIN(evt_saisyo_after_re)
     // Jolene's verdict and the fight money depend on whether Mario won.
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_LESS(LW(0), 20)
+
         // A win: the crowd needed more excitement, and 3 coins.
         CALL(evt_msg_print, 0, STRING("stg3_tou_re_028"), 0, STRING("キノシコワ"))
         CALL(evt_msg_print, 0, STRING("stg3_tou_re_029"), 0, STRING("キノシコワ"))
@@ -1039,6 +1042,7 @@ EVT_BEGIN(evt_saisyo_after_re)
         WAIT_MS(600)
         CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
     ELSE
+
         // A loss: retire or reclaim his glory, and 1 coin.
         CALL(evt_msg_print, 0, STRING("stg3_tou_re_032"), 0, STRING("キノシコワ"))
         CALL(evt_msg_print, 0, STRING("stg3_tou_re_033"), 0, STRING("キノシコワ"))
@@ -1122,6 +1126,7 @@ EVT_END()
  * it is stored with evt_pouch_set_yoshiname and Yoshi joins as partner 4 (all_party_lecture).
  */
 EVT_BEGIN(evt_tou_chibi_yoshi)
+
     // Yoshi's colour comes from the hatching time and the matching baby Yoshi is created off-screen.
     CALL(setYoshiColor)
     CALL(getYoshiColor, LW(0))
@@ -1509,8 +1514,9 @@ EVT_BEGIN(evt_rec)
 EVT_END()
 
 /**
- * Spawned once the first match is reserved: in the pre-US versions it first waits for Mario to be free for 240
- * frames.
+ * Spawned once the first match is reserved: demos first perform 241 one-frame waits, pausing each iteration
+ * while Mario's input is disabled, then wait for an idle, walking or dashing motion.
+ * Retail waits for 241 eligible idle, walking or dashing checks with input and control enabled.
  * If Mario stands by the door (x within 35, z at or below -60) he is bounced back to (40, 0, -120);
  * the guard (ガードマン) opens the door, walks in and closes it, calls Mario to his match (stg3_tou_74),
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
@@ -1545,7 +1551,7 @@ static EVT_BEGIN(evt_gardman)
 #else
     CALL(tou_10_mario_free_wait)
 
-    // Take control once Mario has landed and finished talking.
+    // Lock input, wait for landing and, in US/PAL, also wait for talking to end.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
 #if VERSION >= VERSION_US
@@ -1613,7 +1619,6 @@ static EVT_BEGIN(evt_gardman)
     END_LOOP
 
     // The guard calls Mario to his match and Jolene says Security will escort him.
-    // The guard calls Mario to his match and Jolene says Security will escort him.
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_74"), 0, STRING("ガードマン"))
     WAIT_MS(300)
@@ -1668,9 +1673,9 @@ EVT_BEGIN(evt_match_make_sub)
 EVT_END()
 
 /**
- * Registration console interaction: Mario and the partner step to the console,
- * the prompt (stg3_tou_103) asks whether to change the match,
- * and the chosen opponent and rule are announced (stg3_tou_104_01).
+ * Registration console interaction: the partner steps to the console and the prompt (stg3_tou_103) offers
+ * match registration. Confirming an already reserved match prints its opponent and rule (stg3_tou_104_01);
+ * otherwise the first-match booking helper brings Mario to the console.
  */
 EVT_BEGIN(evt_match_make)
 #if VERSION > VERSION_DEMO_US
@@ -1722,6 +1727,7 @@ static EVT_BEGIN(bed_entry)
 EVT_END()
 
 EVT_BEGIN(evt_okorareru)
+
     // Jolene waits in the room until Mario comes back out through the broken wall.
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -85)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
@@ -1873,6 +1879,7 @@ static EVT_BEGIN(evt_block)
 EVT_END()
 
 EVT_BEGIN(tou_10_init_evt)
+
     // Music for the story stage, and the debug skip straight to the Yoshi egg stage.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)

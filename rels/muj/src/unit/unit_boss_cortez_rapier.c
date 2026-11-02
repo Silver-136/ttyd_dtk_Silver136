@@ -184,7 +184,7 @@ static PoseTableEntry pose_table[] = {
 /**
  * Event table of Cortez Rapier: cortez_damage_sub_event, cortez_weapon_dead_event,
  * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event,
- * cortez_weapon_counter_damage_event (35),
+ * cortez_weapon_counter_damage_event (36),
  * avoid_thorn_event (38).
  */
 static BattleDataEntry data_table[] = {
@@ -456,7 +456,7 @@ EVT_END()
 
 /**
  * Idle event of Cortez's rapier: waits for the loop timing of its animation
- * and plays the pose table pose for state 1.
+ * and plays the pose table pose for part 1.
  */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)

@@ -130,6 +130,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Bill Blaster (100% is the normal chance): immune to Sleep, Stop, Dizzy, Poison,
  * Confusion and Fright; resists Freeze 50%, Tiny 50%, Attack Down 50%, Defense Down 50%, Allergic 50%, Gale
@@ -151,8 +152,8 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Spawn record for a new Bill Blaster, created by the unit's own script when it calls or splits off another
- * one (unit_killer, enemy side, parked off-screen until the script places it).
+ * Spawn record for a new Bullet Bill fired by the unit's scripts
+ * (unit_killer, enemy side, parked off-screen until the script places it).
  */
 static BattleUnitSetup entry_killer = {
     &unit_killer, // unitKindParams
@@ -227,13 +228,14 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack AI of the Bill Blaster: uses an enemy item if it has one,
+ * Attack AI of the Bill Blaster: runs a selected enemy-item script if one is returned,
  * otherwise draws a weighted random choice (15, 0, 10, 20, 0, 10) of firing a Bullet Bill from the front cannon
  * (friend_event) or the "sky" cannon (part 2, friend_event_sky), in a normal or a charged form (LW(12) = 1).
- * It tries three firing positions (changing the fall-off angle and distance)
- * and fires from the first one with room for the Bullet Bill; if none is free it does nothing this turn.
+ * It tries three firing positions (changing the fall-off angle and distance).
+ * Some choices stop after the first free spot, while others scan all three; if none is free it fires nothing.
  */
 static EVT_BEGIN(attack_event)
+
     // Uses a held item if it has one to use.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

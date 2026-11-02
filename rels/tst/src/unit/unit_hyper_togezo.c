@@ -17,10 +17,10 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_GUARD 0      // 1 while in the guard stance (guard_event and the end of normal_attack_event set it; guard_cancel_event clears it); attack_event then cancels the guard
+#define UNIT_WORK_GUARD 0      // 1 while guarding (guard_event and normal_attack_event set it; guard_cancel_event clears it); attack_event cancels it only after flipped recovery and item-use checks
 #define UNIT_WORK_SPINNING 1   // 1 keeps the sibling loop that rolls it during normal_attack_event turning; 0 ends it
 #define UNIT_WORK_SPIN_SPEED 2 // degrees per frame of that roll (+-36, or +-18 slowing by 1 every 2-3 frames; times the face direction)
-#define UNIT_WORK_CHARGED 3    // 1 after charge_event; the next attack_event clears it and always uses normal_attack_event
+#define UNIT_WORK_CHARGED 3    // 1 when charge is selected; after recovery, item-use and guard checks, attack_event clears it and uses normal_attack_event
 
 
 BattleUnitKind unit_hyper_togezo;
@@ -186,7 +186,7 @@ static StatusVulnerability regist_turn = {
 
 /**
  * Defence of the Sky-Blue Spiny while it is curled up guarding:
- * defence 99 against every kind of hit, so no attack does damage.
+ * defence 99 against every kind of hit; the separate element-attribute table supplies immunity.
  */
 static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 
@@ -505,8 +505,8 @@ EVT_END()
 
 /**
  * Attack script of the Sky-Blue Spiny.
- * If it is flipped over it gets up first; then, after an item check,
- * if it is guarding (unit work 0) it unfolds (guard_cancel_event).
+ * If it is flipped over it runs its wake-up event and ends the turn. Otherwise, if no item script is selected,
+ * guarding (unit work 0) makes it unfold (guard_cancel_event) and end the turn.
  * If it has just charged (unit work 3) it makes its normal attack and clears the flag.
  * Otherwise it draws lots between the normal attack (40),
  * guarding (40) and charging up (20 on the first turn, 6 afterwards), which sets the charged flag.
@@ -560,11 +560,12 @@ EVT_END()
  * The Sky-Blue Spiny's rolling attack: it curls into a ball (TGZ_P_1),
  * spins up (SFX_ENM_TOGEZO_ROLL1) and rolls into the target, spinning along the ground (ROLL2 to ROLL5).
  * The target takes the damage when it is reached.
- * It then bounces back in two hops, unrolls (TGZ_S_1)
- * and returns home spinning on the way (SFX_ENM_TOGEZO_ROLL3),
- * after which it rests in guard (swapping to the guard tables with unit work 0 set) 50 percent of the time.
+ * After a hit it bounces back in two hops. It then either unrolls (TGZ_S_1) and walks home,
+ * or returns home spinning (SFX_ENM_TOGEZO_ROLL3) and rests in guard
+ * (swapping to the guard tables with unit work 0 set), with a 50 percent chance of the latter.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
     // confused Sky-Blue Spiny with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -812,7 +813,7 @@ EVT_END()
 /**
  * The Sky-Blue Spiny curls up into its guard stance:
  * plays the curl sound and a half-spin into TGZ_P_1,
- * then swaps in the guarding defence (99 to every element, so no hit hurts it),
+ * then swaps in the guarding defence (99 to every element, with immunity supplied by the element-attribute table),
  * defence attributes, status resistances, pose and data tables,
  * clears the shelled part attribute (0x1000) and sets unit work 0 to 1.
  */

@@ -223,7 +223,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 
 /**
  * Init script of the Paragoomba.
- * Registers its wait, attack, damage and fall scripts, sets the flying movement sounds and starts waiting.
+ * Registers its wait, attack, damage and confusion scripts, sets the flying movement sounds and starts waiting.
  */
 static EVT_BEGIN(init_event_patakuri)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_patakuri))
@@ -282,7 +282,7 @@ EVT_END()
 
 /**
  * The Paragoomba's dive attack: it flies up, swoops down on the target with SFX_ENM_PATAKURI_MOVE2 and MOVE3,
- * and the pre-damage check decides between a miss (avoid animation)
+ * and the pre-damage check decides between a miss (with an avoid animation for some results)
  * and a hit (damage with the action-command result); then it returns to its place.
  */
 static EVT_BEGIN(attack_event_patakuri)
@@ -724,8 +724,8 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 /**
- * Battle script helper: computes the angle (degrees) of the vector from (args[0], args[1]) to (args[2], args[3])
- * into args[4], used to face the Paragoomba toward its target;
+ * Battle script helper: computes the angle (degrees) of the vector from (args[2], args[3]) to (args[0], args[1])
+ * into args[4], used to tilt the Paragoomba along its jump path;
  * leaves the old value in place when the two points coincide.
  */
 static USER_FUNC(krb_get_dir) {

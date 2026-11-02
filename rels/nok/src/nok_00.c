@@ -105,8 +105,8 @@ EvtWord nok_00_koopa_evt[1250];
 EvtWord nok_00_init_evt[205];
 
 /**
- * Message callback for Bowser's line kpa_stg2_013 in the Petalburg cutscene.
- * Once the text has printed past its 49th character it sets the local flag LSWF(2),
+ * Message callback for Kammy's line kpa_stg2_013 in the Petalburg cutscene.
+ * Once the message entry index exceeds 49 it sets the local flag LSWF(2),
  * which releases the parallel thread waiting to switch Kammy's animation.
  */
 void nok_stg2_013_cb(s32 type, void** work) {
@@ -218,8 +218,8 @@ EVT_END()
 
 /**
  * Runs when Mario hits Koopa B with the hammer:
- * he plays a startled animation and says "Eek, don't touch me!" for 200 ms,
- * then goes back to his idle animation.
+ * he plays a startled animation and says "Eek, don't touch me!",
+ * then waits 200 ms before going back to his idle animation.
  */
 EVT_BEGIN(nokonoko_B_damage)
     CALL(evt_npc_set_anim, STRING("me"), STRING("KNP_O_1"))
@@ -294,10 +294,12 @@ s32 iri_15_item_tbl2[] = {
 EVT_BEGIN(nokonoko_F_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_THE_FOOD_I_WANT)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
+
             // Bub-ulber introduces himself and asks Mario to bring him something to eat.
             CALL(evt_msg_print, 0, STRING("irai_15_001"), 0, 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
         ELSE
+
             // He asks whether Mario has brought something; Mario picks an item.
             CALL(evt_msg_print, 0, STRING("irai_15_002"), 0, 0)
             SET_VALUE(LF(0), 0)
@@ -317,7 +319,8 @@ EVT_BEGIN(nokonoko_F_talk)
                 IF_INT_EQUAL(LW(0), 159)
                     CALL(evt_pouch_remove_item, ITEM_HOT_DOG, LW(0))
                     IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
-                        // A Hot Dog: Bub-ulber is delighted, then asks for a Mousse Cake.
+
+                        // A Hot Dog: Bub-ulber is delighted; another Hot Dog is required before the Mousse Cake.
                         CALL(evt_msg_print, 0, STRING("irai_15_003"), 0, 0)
                         SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                     ELSE
@@ -359,6 +362,7 @@ EVT_BEGIN(nokonoko_F_talk)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_THE_FOOD_I_WANT), 1)
+
         // After the request, he offers to swap another Dried Bouquet for a Hot Dog.
         CALL(evt_msg_print, 0, STRING("irai_15_010"), 0, 0)
         CALL(evt_msg_select, 0, STRING("irai_15_010_sel"))
@@ -398,6 +402,7 @@ EVT_BEGIN(nokonoko_F_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
+
         // Without a request, he chats about the weather; the lines change as the story advances.
         CALL(evt_msg_print, 0, STRING("stg1_nok_17"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
@@ -508,7 +513,7 @@ static EVT_BEGIN(kizayarou_init)
     RETURN
 EVT_END()
 
-/** NPCs of the west village: General White. */
+/** NPCs of the west village, including General White. */
 static NpcSetupInfo npcEnt[] = {
     {
         "ノコノコA", // name
@@ -883,9 +888,10 @@ EVT_END()
  * Kammy flies in over the village, Koopa A flees into the shops, and Bowser is led to the Peach poster.
  * Koopa A jumps up and hangs the poster (via pposter_nok_on), the music slows down and fades,
  * and the story advances to STG2_25_05_BOWSER_PETALBURG.
- * The game is saved and the scene continues into the next Bowser action stage (mri_00).
+ * Saving is offered and the scene continues into the next Bowser action stage (mri_00).
  */
 EVT_BEGIN(nok_00_koopa_evt)
+
     // The Bowser interlude begins in the quiet village.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))
@@ -1185,7 +1191,7 @@ EVT_BEGIN(nok_00_koopa_evt)
         GOTO(99)
     END_IF
 
-    // The story advances and the game is saved.
+    // The story advances and saving is offered.
     SET_VALUE(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
@@ -1210,8 +1216,8 @@ EVT_END()
  * or the Bowser interlude when that is the story state), the NPCs, doors of the inn, shop and house,
  * the item shop, the inn's Kinopio, the save block, ambient butterflies,
  * the pit-fall return points and the star piece panel.
- * During the Trouble Center era before the father-and-son reunion it also starts the Kizayarou-style
- * running-around sequence.
+ * Between STG1_00_PETAL_MEADOWS and STG1_17_FATHER_SON_REUNITED (inclusive), it also starts the
+ * Show-off Koopa's talk and wander scripts.
  */
 EVT_BEGIN(nok_00_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_04_BOWSER_ACTION_STAGE)
@@ -1279,6 +1285,7 @@ USER_FUNC(pposter_init) {
     poster = _mapAlloc(sizeof(PosterWork));
     memset(poster, 0, sizeof(PosterWork));
     poster->shape = animPoseGetShapeIdx(npcNameToPtr("poster")->poseId, "pPlaneShape2");
+
     // ノコノコA
     npc = npcNameToPtr("ノコノコA");
     poster->group = animPoseGetGroupIdx(npc->poseId, "locator7");

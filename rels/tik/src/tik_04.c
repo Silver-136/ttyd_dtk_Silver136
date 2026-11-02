@@ -391,7 +391,7 @@ EVT_END()
  * Map init script of tik_04.
  * Starts the sewer music, sets up exits, runs the two Puni glimpses at their story steps,
  * the airplane tutorial watcher, the cloud, the blue switch for the paper stairs, the black key, the big block,
- * the Happy Heart P chest, two Pretty Lucky blocks and a Star Piece.
+ * the Happy Heart P chest, one Pretty Lucky block and a Star Piece.
  */
 EVT_BEGIN(tik_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))

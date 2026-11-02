@@ -178,7 +178,7 @@ static BattleWeapon weapon_twinkling_pansy_attack = {
 };
 
 /**
- * Attack event of the Amazy Dayzee: uses an enemy item if it has one,
+ * Attack event of the Amazy Dayzee: uses an enemy item if the item-use check selects one,
  * otherwise rolls 0 to 99 and sings its attack song (song_event, weapon_twinkling_pansy_attack) below 20,
  * else runs away (escape_event).
  */
@@ -341,7 +341,7 @@ static EVT_BEGIN(song_event)
     SET_VALUE(LW(6), 0)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
 
-    // Check every target in turn: a miss makes it dodge, a hit deals damage.
+    // Check every target in turn: a miss skips that target, a hit deals damage.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -373,6 +373,7 @@ static EVT_BEGIN(song_event)
     // The attack connects.
     LABEL(91)
     IF_INT_EQUAL(LW(6), 0)
+
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         SET_VALUE(LW(6), 1)

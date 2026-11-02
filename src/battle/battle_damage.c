@@ -37,7 +37,7 @@ s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags);
 
 /**
  * Applies a finished hit to target: clamps damage to +-99, credits the attacker's totals,
- * spawns the damage-star popups (HP, and FP for Mario's side), plays the Attack FX,
+ * spawns the damage-star popups (HP and FP), plays the Attack FX,
  * guard or element damage sound, lowers HP and FP (negative damage heals),
  * may wake a sleeping target (half the time, when flag is set) and tells the audience about big hits,
  * KOs and partner downs. unitId -5 means no attacker (counter damage, hazards).
@@ -430,7 +430,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         return 0;
     }
     damage = weapon->hpDamageWork[0];
-    // retail tests fn again here (fn == NULL returned above)
+    // This tests fn again here (fn == NULL returned above)
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
@@ -658,7 +658,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
         !(wp->actionCommands.result & AC_RESULT_SUCCESS)) {
         return 0;
     }
-    // retail tests fn again here (fn == NULL returned above)
+    // This tests fn again here (fn == NULL returned above)
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
@@ -976,7 +976,7 @@ u8 _getRegistStatus(BattleUnit* unit, s32 type) {
 }
 
 
-// A macro, not an inline function: as a function BattleSetStatusDamage changes size.
+
 #define STAMP_COL(e, r0, g0, b0, r1, g1, b1)      \
     ((EffStampN64Work*)(e)->userdata)->r = (r0);  \
     ((EffStampN64Work*)(e)->userdata)->g = (g0);  \
@@ -990,7 +990,7 @@ u8 _getRegistStatus(BattleUnit* unit, s32 type) {
  * difference), for time turns at strength; on success sets the status, plays its effect and announcement,
  * and records it in *result.
  * Also handles the stat buffs (charge, attack/defence up/down, size, fast/slow, HP/FP regen) and their stacking.
- * Returns whether it took.
+ * Returns 1 after the immunity and chance checks pass, independently of the status setter's return value.
  */
 s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u32 special, s32 type, s32 rate, s32 levelDiff, s8 time, s8 strength) {
     s32 ok;

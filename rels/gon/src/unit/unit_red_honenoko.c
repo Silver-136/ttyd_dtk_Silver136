@@ -286,7 +286,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Init event of the Red Bones: installs its wait, attack, damage and confusion events,
- * sets the thrown-bone part poses (KRN_H_1) and the landing sound,
+ * sets the landing sound,
  * and clears unit work 1 (the flag that the death reward was already given).
  */
 static EVT_BEGIN(init_event)
@@ -371,7 +371,7 @@ EVT_END()
  * Event when the Red Bones runs out of HP but can rebuild itself:
  * it moves to its home position, awards the reward once,
  * collapses into a pile of bones (KRN_D_2, crumble sound),
- * stays there for a second and sets unit work 2 to 2 or 3,
+ * stays there for a second and sets unit work 2 to 2, 3 or 4,
  * the number of turns until rebirth_event brings it back.
  */
 static EVT_BEGIN(fake_dead_event)
@@ -417,6 +417,7 @@ EVT_END()
  * reassembles it (KRN_D_3 and KRN_D_4 with the reunite sounds),
  * clears attribute 0x20000 and restores its HP to the maximum.
  */
+
 // Reassembly consumes this attack turn, even when the countdown reaches zero.
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REVIVE_TURNS, LW(0))
@@ -439,7 +440,7 @@ static EVT_BEGIN(rebirth_event)
 EVT_END()
 
 /**
- * Attack event of the Red Bones: when confused it throws a plain bone;
+ * Attack event of the Red Bones: on a first strike it throws a plain bone;
  * when collapsed it rebuilds itself (rebirth_event);
  * otherwise it can use an item, or draws a random number weighted 60 for the bone throw
  * and 40 for calling a Dull Bones friend, which needs room beside it (btlevtcmd_CheckSpace).
@@ -538,6 +539,7 @@ EVT_END()
  * and the bone then bounces off.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -615,7 +617,7 @@ static EVT_BEGIN(normal_attack_event)
     END_SWITCH
     LABEL(90)
 
-    // A side event watches the bone and makes the target dodge as the bone reaches its position.
+    // A side event watches the bone and may make the target dodge as the bone reaches its position.
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(0))
@@ -685,6 +687,7 @@ static EVT_BEGIN(normal_attack_event)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
+
     // The camera zooms in on the skeleton.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -765,7 +768,7 @@ static EVT_BEGIN(call_friend_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_S_1"))
 
-    // A new unit of the same kind appears where the pile stood and copies the caller's status.
+    // A new Dull Bones appears where the pile stood and copies the caller's status.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_honenoko), 0)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kHidden | kNoShadow)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))

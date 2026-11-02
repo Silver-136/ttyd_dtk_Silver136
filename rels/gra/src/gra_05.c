@@ -190,14 +190,14 @@ EVT_BEGIN(gra_05_out_02)
     RETURN
 EVT_END()
 
-/** Enter event of the ana_1 and ana_2 holes: just returns 1 in LW(0) so the transition goes ahead. */
+/** Enter event of the ana_1 and ana_2 holes: returns 1 in LW(0) so the default walk-in is skipped. */
 static EVT_BEGIN(in_evt)
     SET_VALUE(LW(0), 1)
     RETURN
 EVT_END()
 
 /**
- * Exit event of the hole ana_1: the partners walk to the hole and are removed,
+ * Exit event of the hole ana_1: the main partner walks to the hole (both partners in the demos), then both are removed,
  * Mario enters background mode and reappears at the other hole ana_2 (50 units lower) with the jump voice,
  * hopping out to (-140, 60, -450) before control returns. Returns 1 in LW(0).
  */

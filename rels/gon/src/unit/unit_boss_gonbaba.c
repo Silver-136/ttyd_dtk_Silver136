@@ -451,6 +451,7 @@ static BattleUnitKindPart parts[] = {
  * before the battle starts.
  */
 static EVT_BEGIN(battle_entry_event)
+
     // The opening cutscene: the camera moves in on the stage as the map animation replays.
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_map_replayanim, 0, STRING("dontyo"))
@@ -590,8 +591,8 @@ USER_FUNC(_btlgon_get_escape_param) {
  * (yes/no prompts stg1_gon_24, stg1_gon_26, stg1_gon_28).
  * Accepting any offer walks Mario up to her and she bites
  * him (stg1_gon_30, the partner calls her a coward, stg1_gon_30_03, stg1_gon_30_04); refusing all three gets
- * stg1_gon_31. Either way unit work 3 is set to 1 so the real defeat plays next time, she eats eight audience
- * members (gon_extra_eaten_event, spawned eight times) and recovers to 10 HP.
+ * stg1_gon_31. Either way unit work 3 is set to 1 so the real defeat plays next time, she draws eight audience
+ * members into the eating scene (gon_extra_eaten_event, spawned eight times; two escape) and recovers to 10 HP.
  */
 EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -631,8 +632,6 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_msg_continue)
 
     // Yes: she says money makes the world turn (stg1_gon_25) and moves on to her trap.
-    // Yes: she says of course he wants it (stg1_gon_27) and moves on to her trap.
-    // Yes: she says she thought so (stg1_gon_29) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 0)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_25"), 0, -2)
@@ -653,6 +652,8 @@ EVT_BEGIN(negotiation_event)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_26_yesno1"))
     CALL(evt_msg_continue)
+
+    // Yes: she says of course he wants it (stg1_gon_27) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 1)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_27"), 0, -2)
@@ -673,6 +674,8 @@ EVT_BEGIN(negotiation_event)
     WAIT_FRAMES(20)
     CALL(evt_msg_select, 0, STRING("stg1_gon_28_yesno1"))
     CALL(evt_msg_continue)
+
+    // Yes: she says she thought so (stg1_gon_29) and moves on to her trap.
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(5), 2)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_gon_29"), 0, -2)
@@ -774,7 +777,6 @@ EVT_BEGIN(negotiation_event)
 
     // She laughs at their gullibility (stg1_gon_30_03), then admits things look bad and that she had better
     // act (stg1_gon_30_04).
-    // She announces that her strength has returned (stg1_gon_31_01).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -431, 10, 735, 56, 125, 37, 1, 0)
     WAIT_FRAMES(5)
@@ -859,7 +861,7 @@ EVT_BEGIN(negotiation_event)
     END_INLINE_EVENT
     SET_VALUE(LW(0), 13)
 
-    // She swallows spectators: gon_extra_eaten_event plays once for each of eight of them.
+    // The eating scene plays gon_extra_eaten_event for eight spectators; spectators 32 and 53 escape.
     SPAWN_EVENT(gon_extra_eaten_event)
     SET_VALUE(LW(0), 14)
     SPAWN_EVENT(gon_extra_eaten_event)
@@ -900,8 +902,8 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_snd_sfxon, STRING("SFX_AUDIENCE_GNB_PANIC1"), 0)
     SET_VALUE(LW(0), 0)
 
-    // The spectators scream and run for the exits one by one, each with panic and running sounds, and are
-    // removed.
+    // The spectators panic and most run for the exits and are removed; indices divisible by ten get running
+    // sounds, while spectator 43 stays behind.
     LOOP(100)
         CALL(evt_audience_flag_check, LW(0), 1, LW(4))
         IF_INT_EQUAL(LW(4), 0)
@@ -1001,7 +1003,7 @@ EVT_BEGIN(negotiation_event)
         ADD(LW(0), 1)
     END_LOOP
 
-    // Any spectators still left are removed.
+    // Spectators in slots 100 through 199 are removed.
     LOOP(100)
         CALL(evt_audience_delete, LW(0))
         CALL(evt_audience_num_updown_in_event, FLOAT(-1.0f))
@@ -1041,7 +1043,7 @@ EVT_BEGIN(negotiation_event)
     CALL(btlevtcmd_ftomsec, 284, LW(0))
     WAIT_MS(LW(0))
 
-    // The camera moves in on her and her partner reacts (stg1_gon_31_00_kur, _nok).
+    // The camera moves in on Hooktail and Mario's partner reacts (stg1_gon_31_00_kur, _nok).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, -115, 50, 200, -115, -30, -670, 20, 0)
     WAIT_FRAMES(25)
@@ -1058,6 +1060,8 @@ EVT_BEGIN(negotiation_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 40, 98, 686, 57, 125, 182, 1, 0)
     WAIT_FRAMES(1)
+
+    // She announces that her strength has returned (stg1_gon_31_01).
     CALL(btlevtcmd_SetTogeOffset, UNIT_ID_SELF, 310, 60, 0)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_5"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("GNB_S_5"))
@@ -1136,9 +1140,9 @@ USER_FUNC(_set_gonbaba_light) {
 }
 
 /**
- * Plays one spectator being swallowed in Hooktail's finishing scene:
- * the audience member jumps up, is lifted toward her mouth and spins as it goes in.
- * The defeat event starts it eight times for different spectators.
+ * Plays one spectator in Hooktail's audience-eating scene:
+ * the audience member jumps up and is lifted toward her mouth; spectators 32 and 53 escape, while the others
+ * are removed. negotiation_event starts it eight times for different spectators.
  */
 EVT_BEGIN(gon_extra_eaten_event)
     WAIT_FRAMES(14)
@@ -1480,7 +1484,7 @@ EVT_END()
 /**
  * Dead event of Hooktail. The first time she would die (unit work 3 is 0) it runs negotiation_event instead.
  * Otherwise she collapses (GNB_X_1), the camera closes in on her, she speaks her last line (stg1_gon_32),
- * the death animation plays (GNB_D_3, GNB_H_1), exp and coins are stored and the unit is removed with KillUnit.
+ * the death animation plays (GNB_D_3, GNB_H_1), exp is stored and the unit is marked defeated with KillUnit.
  */
 // The first defeat enters negotiation; only a defeat after negotiation takes the final death path.
 static EVT_BEGIN(dead_event)
@@ -1621,7 +1625,7 @@ EVT_END()
 
 /**
  * Attack event of Hooktail: can use an item.
- * Unit work 5 tracks her opening: the first turn is the fire breath, the second the stomp,
+ * Unit work 5 tracks her opening non-item attacks: the first is the fire breath, the second the stomp,
  * and from then on she picks the stomp or the fire breath at random (50 percent each).
  */
 static EVT_BEGIN(attack_event)
@@ -1653,9 +1657,10 @@ EVT_END()
 /**
  * Stomp attack of Hooktail (fumituke): she steps forward with two leg-smoke steps and camera shakes,
  * raises a foot (GNB_A_3) and stamps on one target (weapon_gonbaba_fumituke_attack),
- * which avoids it or takes the damage according to the action command defence check; she then steps back.
+ * which is checked for a miss or dodge before the action-command defence and damage; she then steps back.
  */
 static EVT_BEGIN(fumituke_attack_event)
+
     // Choose a target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_fumituke_attack))
@@ -1705,7 +1710,7 @@ static EVT_BEGIN(fumituke_attack_event)
     CALL(btlevtcmd_ftomsec, 47, LW(0))
     WAIT_MS(LW(0))
 
-    // Hit check: a miss or dodge makes the target avoid, a hit goes on to the damage.
+    // Hit check: results 3, 6 and 2 start an avoid; result 4 skips it, and result 1 goes on to the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_fumituke_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1784,6 +1789,7 @@ EVT_END()
  * and the partner (all targets), then returns her to her normal pose.
  */
 EVT_BEGIN(firebreath_attack_event)
+
     // Choose targets: the breath reaches Mario and his partner.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_gonbaba_firebreath_attack))
@@ -1836,7 +1842,8 @@ EVT_BEGIN(firebreath_attack_event)
     SET_VALUE(LW(10), 0)
     LABEL(10)
 
-    // Each target in turn gets the hit check and then the damage; the action-command result is read once.
+    // Each target gets the hit check; result 1 proceeds to damage, and the action-command result is read only
+    // when that hit is on the first target in the list.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gonbaba_firebreath_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)

@@ -94,8 +94,7 @@ void camInit(void) {
     camPtrTbl[12] = camEntryPersp(NULL, 25.0f, 1.2666666f, 1.0f, 32768.0f, 0.0f, 1.0f, "dbg3d");
 }
 
-/** near/far is perspective, nearZ/farZ is projection */
-// near/far: clip planes of the projection; nearZ/farZ: depth range of the viewport
+/** near/far: clip planes of the perspective projection; nearZ/farZ: depth range of the viewport. */
 CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 near, f32 far, f32 nearZ, f32 farZ,
                            const char* name) {
     CameraEntry* camera = __memAlloc(HEAP_DEFAULT, sizeof(CameraEntry));

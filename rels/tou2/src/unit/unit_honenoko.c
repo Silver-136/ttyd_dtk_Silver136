@@ -48,7 +48,7 @@ static EvtWord wait_event[6];
 /**
  * Script helper: arg0 = source unit, arg1 = destination unit;
  * copies the size-change status (Mini/Giant turns and strength),
- * used when a Dull Bones is rebuilt after collapsing.
+ * used when a Dull Bones summons a new friend.
  */
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;
@@ -474,11 +474,12 @@ EVT_END()
 /**
  * The Dull Bones' bone throw (weapon_honenoko_attack):
  * winds up for half a second, then throws a bone (part 2) spinning at the target.
- * A miss triggers the target's dodge when the bone passes and it flies on to the edge of the stage;
+ * On a miss the bone flies on to the edge of the stage; results 3, 6 and 2 trigger the target's dodge as it passes;
  * a hit drops the bone on the target (guard judged with ResultACDefence), which bounces off.
  * The bone is then hidden and the Dull Bones returns to its stance.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -553,7 +554,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The throw missed: the bone sails past the target, and anyone it passes jumps out of its way.
+    // The throw missed: the bone sails past the target, which dodges for pre-check results 3, 6 and 2.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -620,8 +621,8 @@ static EVT_BEGIN(normal_attack_event)
 EVT_END()
 
 /**
- * The Dull Bones calls a friend: it throws six bones (parts 3 and 4 alternately with different poses) one
- * after another at the free spot, which pile up there;
+ * The Dull Bones calls a friend: it throws six bones with part 3, one after another at the free spot,
+ * where part 4 shows the growing pile;
  * they then reunite with the unite sounds and a new Dull Bones is spawned from entry_honenoko at that spot,
  * copying the status of the caller (honenoko_copy_status).
  */

@@ -21,6 +21,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_SOUND_VOLUME 1 // volume of its wait sounds (sound volume): 127 at init and each attack; sound_gensui_event cuts it to 70 % (min 32) while asleep or stopped
 #define UNIT_WORK_CHAIN_MODE 2   // how chain_main places the chain links: 2 record their shape relative to the stake (then 1), 1 keep that shape, 0 hang them between chomp and stake
+
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_OFFSET_X 0 // chain links (parts 1-8): x offset from the stake (part 9) recorded in chain mode 2
 #define PARTS_WORK_OFFSET_Y 1 // chain links (parts 1-8): y offset from the stake (part 9) recorded in chain mode 2
@@ -325,7 +326,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Counter-damage script of the Red Chomp (data events 25 to 33):
+ * Counter-damage script of the Red Chomp (data events 25 to 36):
  * flings the head up in the knocked-back pose (39) and, in the demo builds, drops it back with two hops.
  * Unless the damage code is 512 without 2048 it then goes back to waiting.
  */
@@ -435,7 +436,8 @@ EVT_END()
  * After a first strike it pauses 750 ms first.
  */
 static EVT_BEGIN(attack_event)
-    // After a First Strike it waits a moment first; otherwise it uses an item if it has one, or picks a target
+
+    // After a First Strike it waits a moment first; otherwise it uses an item when the item check selects one, or picks a target
     // (a confused Red Chomp with nobody to bite gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -664,6 +666,7 @@ static EVT_BEGIN(wait_event)
         GOTO(98)
     END_IF
     BEGIN_SIBLING_EVENT
+
         // Normal state: it hops around on its chain, barking, at random intervals.
         LABEL(4)
         CALL_CHILD(sound_gensui_event)
@@ -748,7 +751,7 @@ EVT_END_PAD()
  * Per-frame script helper that animates the Chomp's chain (parts 2-9). args[0] = unit.
  * Part 9 is the stake, behind the chomp; when work[2] is 2 the current link layout is recorded relative to the
  * stake and when it is 1 the links keep that shape (the Chomp has been pulled away).
- * Otherwise the links hang as a sagging chain between the Chomp (part 1, kept below y = 110) and the stake,
+ * Otherwise the links hang as a sagging chain between the Chomp (part 1, capped at y = 110 in retail) and the stake,
  * each link moved to a fixed distance from its neighbour and held above the floor.
  */
 static USER_FUNC(chain_main) {
@@ -784,6 +787,7 @@ static USER_FUNC(chain_main) {
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &x, &y, &z);
     BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 9), x - 20.0f * unit->faceDirection, y, z);
+
     // 2: remember the chain's shape relative to the stake
     if (unit->work[UNIT_WORK_CHAIN_MODE] == 2) {
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
@@ -795,6 +799,7 @@ static USER_FUNC(chain_main) {
         }
         unit->work[UNIT_WORK_CHAIN_MODE] = 1;
     }
+
     // 1: keep that shape
     if (unit->work[UNIT_WORK_CHAIN_MODE] == 1) {
         BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x, &y, &z);
@@ -804,6 +809,7 @@ static USER_FUNC(chain_main) {
         }
         return EVT_RETURN_DONE;
     }
+
     // otherwise hang the links between the chomp and the stake
     BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 1), &x1, &y1, &z1);
     BtlUnit_GetPartsPos(BtlUnit_GetPartsPtr(unit, 9), &x2, &y2, &z2);
@@ -892,6 +898,7 @@ static USER_FUNC(chain_init) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &x, &y, &z);
+
     // Initialize intermediate links 2 through 7 at the chomp.
     for (i = 2; i <= 7; i++) {
         part = BtlUnit_GetPartsPtr(unit, i);

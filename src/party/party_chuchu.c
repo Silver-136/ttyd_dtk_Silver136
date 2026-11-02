@@ -225,6 +225,7 @@ USER_FUNC(set_msg) {
     event->lwData[1] = 0;
     if (!cp) {
 #else
+
 /**
  * The demo stops at the first item or block in range and has no buried treasure table.
  * Script helper: looks for an item and then a block from mobj_list within 150 units of Mario, then anywhere;

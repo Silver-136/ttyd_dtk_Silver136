@@ -145,9 +145,9 @@ void bomhei_init_800BFBB0(PartyEntry* party) {
 }
 
 /**
- * Bobbery's state for scripts (evt_party.c): 0 when there is no partner or Bobbery is out
- * but not using his ability, 1 on the frame his bomb explodes (use motion 60),
- * 2 otherwise (bomb in progress, or another partner is out).
+ * Bobbery's state for scripts (evt_party.c): 0 when there is no partner, or Bobbery is out
+ * but not using his ability. Otherwise returns 1 for use motion 60 (Bobbery's blast), 2 for other motions;
+ * the motion-60 test itself does not require the selected partner to be Bobbery.
  */
 u8 bomheiGetStatus(void) {
     u32 partyId = marioGetPartyId();
@@ -182,6 +182,7 @@ void bomhei_exit(PartyEntry* party) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Party table exit handler (demo): drops Mario's carry flag, stops the bomb sounds and frees the use work. */
 void bomhei_exit(PartyEntry* party) {
     party->playerPtr->flags &= ~(MARIO_FLAG_ACTIVE << 13);
@@ -189,11 +190,12 @@ void bomhei_exit(PartyEntry* party) {
     bomheiFree(party);
 }
 #endif
+
 /**
- * Cancels a bomb in progress (demo): back to run mode 2 unless in run mode 9,
+ * Cancels a bomb in progress: back to run mode 2 unless in run mode 9,
  * clears the use flags and frees the use work.
  * Called before plane, ship and bellows rides and on run-mode changes (party_move.c).
- * Unlike the release versions it leaves Mario's carry flag and the sounds alone.
+ * The demos leave Mario's carry flag and sounds alone; retail clears the carry flag and stops the two bomb sounds.
  */
 void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
@@ -214,7 +216,7 @@ void bomhei_use_cancel(void) {
 }
 
 /**
- * Cancels a bomb only while Mario is carrying Bobbery (demo),
+ * Cancels a bomb only while Mario is carrying Bobbery,
  * putting Mario back in his standing pose and stopping the sounds.
  * Called when Mario takes damage (mot_damage.c).
  */
@@ -234,8 +236,9 @@ void bomhei_use_cancel2(void) {
 }
 
 /**
- * Party table post-use handler (demo): drops Mario's carry flag with a standing pose,
- * stops the sounds and frees the use work.
+ * Party table post-use handler: drops Mario's carry flag, stops the sounds and frees the use work.
+ * Demos restore a standing pose when carried; retail chooses walk, dash, jump or standing from Mario's state
+ * and repositions Bobbery near Mario during use motions 70-99.
  */
 #if VERSION > VERSION_DEMO_US
 void bomhei_use_post(PartyEntry* party) {
@@ -282,7 +285,7 @@ void mario_controll(PartyEntry* party);
 HitEntry* check_front(PartyEntry* party);
 
 /**
- * Party table use handler (demo), run every frame of the bomb ability:
+ * Party table use handler, run every frame of the bomb ability:
  * steps bomhei_use_main, keeps Bobbery on the ground while he walks or blows,
  * faces him at the skull's tongue on Keelhaul Key's muj_05 (A_dokuro_bero),
  * and drives Mario's carry poses unless Mario is in a damage motion (state 0x66).
@@ -371,10 +374,9 @@ typedef struct BomheiWork {
 #define BOMHEI_WORK(p) ((BomheiWork*)(p)->useStruct)
 
 /**
- * The demo checks only the first hit object present.
- * Ends the fuse early when the first of Bobbery's front,
- * head or floor hits present has attribute 0xC00 (use motion 60, explode)
- * or his floor has 0x200 (use motion 40, the splash).
+ * Ends the fuse early on attribute 0xC00 (use motion 60, explode), or floor attribute 0x200
+ * without 0xC00 (use motion 40, the splash). Retail checks front, then head, then floor until one applies;
+ * the demos inspect only the first hit object present.
  * 0x200 is the hazard water that sinks Mario (mario_hit.c, MARIO_MOTION_DAMAGE) and 0x800 the spikes
  * (MARIO_MOTION_DAMAGE_TOGE). Guess: 0x400, the other bit of 0xC00, is a further hazard.
  */
@@ -449,7 +451,7 @@ static inline void bomheiSetHoldPos(PartyEntry* party) {
 /**
  * The bomb ability's motion steps (party->useMotionId).
  * 0-2: Bobbery hops onto Mario's head; 10: held there with a 3 s fuse while X is held;
- * 20-22: thrown 38 units ahead on release; 30-32: walks forward slowly (X again cuts the fuse to 0.5 s);
+ * 20-22: thrown 38 units ahead on release; 30-32: walks forward slowly (X again starts the last-moment pose);
  * 40-42: lands in water with a splash; 50-51: A_3 last-moment pose for 40 frames,
  * then check_front picks the hit; 60: the blast (Sanders effect at the partner attack level, camera shake,
  * field enemy hit); 70-71: flies off the top of the screen; 80-82: 0.8 s later drops back near Mario; 100: done.
@@ -972,9 +974,9 @@ void mario_controll(PartyEntry* party) {
 }
 
 /**
- * The demo probes straight down from the moved point and keeps the point itself.
- * Whether there is floor without attribute 0xE00 just below the point dist units from pos along angle;
- * if so moves pos there (the demo keeps the probed height, it does not snap to the floor).
+ * Tests floor without attribute 0xE00 just below the point dist units from pos along angle.
+ * Both versions probe 4 units down from 2 above that point. Demos keep the moved point's original height;
+ * retail moves pos to the floor hit, rounded to 0.001 units.
  */
 static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
 #if VERSION <= VERSION_DEMO_US
@@ -1108,7 +1110,8 @@ void partyGetReturnPos(Vec* out) {
 /**
  * Picks the hit object Bobbery's blast acts on (party->hitobjAction, read by the case triggers):
  * a bomb rock within 30 units (50 when the direction is sideways to the camera) in eight directions around his
- * facing, else the floor below if it is a bomb rock or any floor, else his floor hit.
+ * facing, else a bomb rock below, else a bomb rock he stands on;
+ * otherwise the floor below, or his standing floor hit if no floor was found below.
  */
 HitEntry* check_front(PartyEntry* party) {
     const s32 angles[8] = {0, 45, -45, 90, -90, 135, -135, 180};

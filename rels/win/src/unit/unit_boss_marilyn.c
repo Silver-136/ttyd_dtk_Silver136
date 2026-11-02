@@ -333,7 +333,7 @@ EVT_END()
 
 /**
  * Damage handler for Marilyn: sets GW(12) (her state for the sisters' scripts) to 1
- * when the hit carries damage code 1024, then runs the default damage script.
+ * when the hit carries the death flag (1024), then runs the default damage script.
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
@@ -448,7 +448,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Marilyn's turn: uses an item if she has one, else follows unit work 8:
+ * Marilyn's turn: uses an item if the item-use check selects one, else follows unit work 8:
  * first turn the shadow slap, then she charges every turn
  * until Beldam's phase script sets her unit work 7 (a sister fell below the HP threshold),
  * which forces a lightning strike and switches her to a random pick (slap 50, lightning 20 once triggered,
@@ -523,7 +523,7 @@ EVT_END()
  * Marilyn's shadow-slip attack (weapon in LW(9)):
  * she sinks into her shadow, rises 30 units in front of a randomly chosen target,
  * claps her hands at it (one hit, guardable), then sinks again and returns home.
- * The US release places her 5 units further forward in depth.
+ * The US and PAL releases place her 5 units further forward in depth.
  */
 static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -715,7 +715,7 @@ static EVT_BEGIN(charge_attack_event)
     RETURN
 EVT_END()
 
-/** Wait event of Marilyn: switches to pose table entry 1 (idle). */
+/** Wait event of Marilyn: restores automatic pose-table animation selection for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

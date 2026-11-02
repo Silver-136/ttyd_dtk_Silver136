@@ -352,7 +352,7 @@ BattleUnitKind unit_boss_kamec_obaba = {
 
 /**
  * Defence of Kammy Koopa against each element (normal, fire, ice, explosion, electric):
- * none, so every hit does its full damage.
+ * zero base defense against every element.
  */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
@@ -447,8 +447,7 @@ static PoseTableEntry pose_table_dead[] = {
 };
 
 /**
- * Data table of Kammy Koopa: event scripts and values the battle looks up by tag (damage reactions, dodge,
- * first strike and so on).
+ * Data table of Kammy Koopa: the defeat event handler, looked up by tag.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -479,7 +478,7 @@ EVT_END()
 
 /**
  * Init event of Kammy Koopa: installs her wait, phase, attack,
- * damage and confusion events and sets her unit work: 0 = 1 (flying), 1 and 2 = 0 (turn counters).
+ * damage and confusion events and sets her unit work: 0 = 1 (flying), 1 = 0 (aerial damage) and 2 = 0 (ground turns).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -498,8 +497,8 @@ EVT_END()
 
 /**
  * Damage event of Kammy Koopa: default damage handling,
- * then if she is flying and the hit is strong enough (total damage compared to a limit) she is knocked off her
- * broom and dmg_fall_event runs.
+ * then, on a final hit while she is flying and not knocked out, damage is added to her aerial-damage counter.
+ * Once that counter exceeds 1 she is knocked off her broom and dmg_fall_event runs.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -575,8 +574,9 @@ EVT_END()
 
 /**
  * Dead event of Kammy Koopa: if she was still flying she first falls.
- * Depending on how far the fight has gone (GW(10)), she says stg8_las_100_01 or stg8_las_100_03,
- * sets GW(11) so Bowser reacts to it, and the common slow death sequence runs.
+ * GW(11) is set to 1 at entry. With GW(10) = 0 she says stg8_las_100_01; with 2 she says stg8_las_100_03;
+ * with 1 she waits for Bowser's death sequence to reach 2 without either line.
+ * Each branch then sets GW(11) to 2 and runs the common slow death sequence.
  */
 static EVT_BEGIN(dead_event)
     DEBUG_PUT_MSG(STRING("カメックオババ　死亡"))
@@ -711,7 +711,8 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // Kammy uses an enemy item if she has one.
+
+        // Kammy uses the selected enemy item.
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -812,7 +813,7 @@ static EVT_BEGIN(attack_event)
             GOTO(10)
         END_IF
 
-        // She casts the chosen spell (heal, Defense up, electric charge, invisibility or growth).
+        // She casts the chosen healing spell.
         CALL_CHILD(PTR(recover_magic_event))
         GOTO(99)
     END_IF
@@ -858,7 +859,7 @@ EVT_END()
 /**
  * Casting animation, ground version, first half:
  * Kammy raises her wand through the A_1A to A_1E poses with the spell sparkles,
- * and a different effect is shown when the spell is the attack magic.
+ * and an extra support effect is shown when the spell is not the attack magic.
  */
 static EVT_BEGIN(ground_magic_common_event1)
     BEGIN_SIBLING_EVENT
@@ -946,8 +947,8 @@ static EVT_BEGIN(sky_magic_common_event)
 EVT_END()
 
 /**
- * Common casting script of Kammy Koopa when the target is a different unit than the caster:
- * runs the ground or the air animation depending on whether she is flying (unit work 0).
+ * Common casting script of Kammy Koopa: while grounded, uses ground sequence 2 when LW(3) equals
+ * her resolved unit id, or sequence 1 otherwise; while flying (unit work 0), uses the air animation.
  */
 static EVT_BEGIN(magic_common_event1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, LW(0))
@@ -998,7 +999,7 @@ EVT_END()
 /**
  * Magic attack of Kammy Koopa (weapon_kamec_obaba_attack_magic):
  * she casts a blast at one party member, who can dodge it
- * or takes the damage with the action command defence check.
+ * or is missed without a dodge; a connecting hit runs the action command defence and damage checks.
  */
 static EVT_BEGIN(attack_magic_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1047,6 +1048,7 @@ static EVT_BEGIN(attack_magic_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+
         // The attack misses or is dodged.
         LABEL(90)
         BEGIN_SIBLING_EVENT
@@ -1057,6 +1059,7 @@ static EVT_BEGIN(attack_magic_event)
                     CALL(eff_magic_get_posX, UNIT_ID_SELF, LW(0))
                     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
                     IF_INT_LESS_OR_EQUAL(LW(0), LW(6))
+
                         // The party member can dodge it as it passes.
                         CALL_CHILD(start_avoid)
                         BREAK_LOOP
@@ -1093,7 +1096,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL(eff_magic, UNIT_ID_SELF, LW(10), LW(11), LW(12), 45)
         WAIT_FRAMES(45)
 
-        // Deal the damage, reduced by the action command defence.
+        // Check the action command defence, then apply the damage result.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
@@ -1304,6 +1307,7 @@ static USER_FUNC(eff_magic) {
     EffectEntry* eff;
 
     BtlUnit_GetPos(unit, &x, &y, &z);
+
     // from the tip of the wand
     x += 28.0f * unit->sizeMultiplier * unit->faceDirection;
     y += 20.0f * unit->sizeMultiplier;

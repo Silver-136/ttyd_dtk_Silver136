@@ -523,6 +523,7 @@ EVT_END()
  * officer the dodgy bottle or the regen bottle.
  */
 static EVT_BEGIN(attack_event)
+
     // After a First Strike it always throws the fire bottle.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -634,7 +635,7 @@ EVT_END()
 /**
  * Shared start of the X-Naut PhD's bottle throws:
  * pays for the attack, aims the camera, faces the target (or the target side),
- * plays the throw wind-up sounds and poses A_1A to A_4A.
+ * plays the throw wind-up sounds and poses A_1A to A_5A.
  */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -687,10 +688,11 @@ EVT_END()
 /**
  * Shared bottle throw at an opposing target: lobs the bottle part (part 2) in a high arc to the target's hit
  * position, then either it shatters on a dodged or missed target (glass shards, SFX_ENM_3RD2_CRASH1)
- * or applies the damage and status to the target with the 256 guard flag;
+ * or applies the damage and status to the target with the 256 final-hit flag;
  * ends by resetting the camera and facing.
  */
 static EVT_BEGIN(attack_common_event2)
+
     // Pick the bottle's pose for the bottle being thrown (fire or Defense-down).
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1A"))
@@ -792,8 +794,8 @@ static EVT_BEGIN(attack_common_event2)
 EVT_END()
 
 /**
- * Shared bottle throw at an ally: the bottle part (part 2) is thrown in a short low arc to the target's hit
- * position, shatters in glass shards and applies the weapon's effect to the target.
+ * Shared bottle throw at an ally: the bottle part (part 2) is thrown in a short low arc to ground level at the target's
+ * X and Z, shatters in glass shards and applies the weapon's effect to the target.
  */
 static EVT_BEGIN(attack_common_event3)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_yokeyoke_bottle))
@@ -947,7 +949,7 @@ EVT_END()
 
 /**
  * Minimini bottle: throws a bottle that shrinks every opposing target in turn (size change of -2 for 3 turns,
- * 75% chance), shattering over each one.
+ * 75% chance), with the bottle shattering over the opposing side before the target checks.
  */
 static EVT_BEGIN(minimini_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_minimini_bottle))
@@ -1039,7 +1041,7 @@ static EVT_BEGIN(minimini_bottle_event)
         GOTO(97)
         LABEL(91)
 
-        // Defence is requested only for the first selected target, even if that target misses.
+        // Defence is requested only for the first selected target, when it reaches the hit branch.
         IF_INT_EQUAL(LW(10), 0)
             CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         END_IF

@@ -594,9 +594,9 @@ static BattleUnitSetup entry_togenoko = {
 /**
  * The Dark Koopatrol's action: it wakes up first if it is on its back;
  * while guarding (unit work 0 = 1) it mostly (80%) stands up again (guard_cancel_event);
- * when confused it makes a normal or shell attack;
- * otherwise it uses an item, or, when a free spot exists beside it and fewer Dark Koopatrols are on the field,
- * may call a friend (friend_event), and otherwise picks between the normal attack, the shell attack,
+ * when charged it makes a normal or shell attack;
+ * otherwise it may use an item; recruitment checks use zero thresholds, so this chooser never calls a friend.
+ * It otherwise picks between the normal attack, the shell attack,
  * the charge (charge_event) and curling into guard (guard_event) by weighted chance.
  */
 static EVT_BEGIN(attack_event)
@@ -615,7 +615,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // While curled up in its guard, it usually (80%) stands up again; otherwise it carries on below.
+    // While curled up in its guard, it usually (80%) stands up again; otherwise it stays guarding; either branch ends the action.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(0), 80)
@@ -628,7 +628,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
     ELSE
-        // A confused Dark Koopatrol just picks between the normal attack and the shell attack.
+        // A charged Dark Koopatrol just picks between the normal attack and the shell attack.
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(0), 0)
@@ -688,7 +688,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         LABEL(10)
 
-        // If there is room and fewer Dark Koopatrols are on the field, it may call a friend to join the battle.
+        // Recruitment is disabled here: all three thresholds for calling a friend are zero.
         CALL(togenoko_getnum, LW(10))
         CALL(evt_sub_random, 99, LW(11))
         SWITCH(LW(10))

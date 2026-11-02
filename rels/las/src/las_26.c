@@ -410,7 +410,7 @@ USER_FUNC(bonbaba_wait_landon) {
     return npcNameToPtr("ボンババ")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
-/** The single NPC of the room, Gloomtail (ボンババ), who always stays visible and never turns to face Mario. */
+/** The single NPC of the room, Gloomtail (ボンババ), whose rendering skips view-volume culling and camera-angle correction. */
 static NpcSetupInfo npcEnt[] = {
     {
         "ボンババ", // name

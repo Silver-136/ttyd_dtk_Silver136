@@ -350,12 +350,13 @@ EVT_END()
 
 /**
  * Attack script of the Boo. With a first-strike flag it only does the normal attack.
- * Otherwise it checks for an item use, then rolls a random number:
- * roughly 25 in 114 to turn itself invisible (trans_myself_event, only if it is not already invisible),
- * 25 in 114 to make another Boo invisible (trans_event, only if one exists that is not),
- * 15 in 114 for the group move (move_event, only if some Boo has not moved yet),
+ * Otherwise it checks for an item use and ends its turn if one is used; if not, it rolls a random number:
+ * roughly 25 in 115 to turn itself invisible (trans_myself_event, only if it is not already invisible),
+ * 25 in 115 to make another Boo invisible (trans_event, only if one exists that is not),
+ * 15 in 115 for the group move (move_event, only if some Boo has not moved yet),
  * and otherwise the normal attack. The two special options are skipped while it has STATUS_CONFUSE.
  */
+
 // Unavailable special actions fall through to later choices using the same random roll.
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -429,6 +430,7 @@ EVT_END()
  * It then turns around and floats back home.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Pick the target (the one already chosen after a First Strike, otherwise sampled from the enemies); a
     // confused Boo with nobody to hit just gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -731,8 +733,8 @@ EVT_END()
 /**
  * Per-Boo part of move_event for the unit in LW(3):
  * after a delay (none for the casting Boo itself,
- * 60 to 79 frames for the others) it sets that Boo's unit work 0 to 1, sets attributes 0x600000 on part 1,
- * spins it for 60 frames while the caster speaks (pose T_1), and raises it to y 40 with SFX_ENM_TELESA_MOVE1,
+ * 60 to 80 frames for the others) it sets that Boo's unit work 0 to 1, sets attributes 0x600000 on part 1,
+ * spins the other Boos for 60 frames while the caster speaks (pose T_1), and raises it to y 40 with SFX_ENM_TELESA_MOVE1,
  * which becomes its new home position.
  */
 static EVT_BEGIN(move_event_sub)
@@ -806,6 +808,7 @@ static USER_FUNC(teresa_check_trans) {
     }
     return EVT_RETURN_DONE;
 }
+
 /**
  * Battle script helper: sets args[0] to 1 when at least one Boo
  * or Dark Boo has not yet used its move (unit work 0 is 0), else 0.
@@ -833,6 +836,7 @@ static USER_FUNC(teresa_check_move) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Battle script helper: sets args[1] to 1 when the unit args[0] exists and is a Boo or Dark Boo, else 0. */
 static USER_FUNC(teresa_check_teresa) {
     EvtWord* args = event->args;

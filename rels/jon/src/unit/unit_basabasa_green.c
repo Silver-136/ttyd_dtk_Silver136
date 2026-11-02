@@ -281,7 +281,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
  * Takes the Swampire off the ceiling.
  * If it still hangs from it (attribute 2) the script clears that, sets the flying attribute 4,
  * restores the flying pose table, offsets and normal damage script,
- * and lowers it and its home position by 70 units; the home position ends up in LW(0..2) either way.
+ * and lowers it by 30 units and its home position by 70; the home position ends up in LW(0..2) either way.
  * Called when it is hit, countered, or when the ceiling falls, and at init if it starts already in the air.
  */
 static EVT_BEGIN(ceil_sky_event)
@@ -407,7 +407,8 @@ static EVT_BEGIN(ceil_fall_ready_event)
 EVT_END()
 
 static EVT_BEGIN(attack_event)
-    // Use an item if it has one; otherwise pick a target (a confused Swampire with nobody to bite gets
+
+    // Use the item event selected by the item-use check; otherwise pick a target (a confused Swampire with nobody to bite gets
     // flustered).
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

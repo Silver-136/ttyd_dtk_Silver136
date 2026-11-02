@@ -341,8 +341,8 @@ EVT_END()
 
 /**
  * Shared run-up of the Elite X-Naut's physical attacks:
- * pays for the attack, aims the camera, and runs toward the target with dust puffs
- * and footstep sounds (pose R_2), then switches to the attack pose A_1 and moves to the target's hit position.
+ * pays for the attack, aims the camera, and kicks up dust puffs
+ * with footstep sounds (pose R_2), then switches to the attack pose A_1 and runs toward the target's hit position.
  */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -410,7 +410,7 @@ EVT_END()
  * The Elite X-Naut's normal attack: picks a target (the first attack target if battle flag 2 is set),
  * runs up (attack_common_event1) and jumps at the target;
  * a miss or dodge ends in the D_2/D_3 stumble poses with SFX_ENM_3RD1_MISS1,
- * a hit applies the damage with the 256 guard flag, then it returns through attack_common_event2.
+ * a hit applies the damage with the final-hit flag, then it returns through attack_common_event2.
  */
 static EVT_BEGIN(normal_attack_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_attack))

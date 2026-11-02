@@ -88,13 +88,13 @@ BattleUnitKind unit_hyper_sinnosuke = {
 
 /**
  * Defence of the Hyper Bald Cleft: 2 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
 /**
- * Defense of the Hyper Bald Cleft against normal, fire, ice, explosion and electric attacks while it is
- * flipped onto its back: none, so it takes full damage from every element.
+ * Base defence of the Hyper Bald Cleft against normal, fire, ice, explosion and electric attacks while it is
+ * flipped onto its back: zero for every element; the separate fire-immunity attribute remains active.
  */
 static BattleUnitDefense defence_turn = {0};
 
@@ -381,12 +381,13 @@ EVT_END()
 /**
  * Attack event of the Hyper Bald Cleft: a flipped unit runs wakeup_event.
  * Otherwise it uses an enemy item if one fits, or picks a target (the first-strike target in a first strike),
- * walks around behind the target with stamping steps,
+ * moves to a spot in front of the target with stamping steps,
  * rears up and dashes along the floor into the target (weapon_sinnosuke_attack).
  * A miss runs on past it; a hit shakes the camera and the Cleft bounces off in two hops. Then it returns home.
  */
 static EVT_BEGIN(attack_event)
-    // If the Hyper Bald Cleft is flipped over, it first rights itself with wakeup_event.
+
+    // If the Hyper Bald Cleft is flipped over, it counts down its recovery turn instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)
@@ -478,7 +479,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
 
-    // The Cleft walks around behind its target.
+    // The Cleft moves to a spot in front of its target.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))

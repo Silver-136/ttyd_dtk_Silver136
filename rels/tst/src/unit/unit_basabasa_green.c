@@ -14,7 +14,7 @@
 
 // Unit work slots of the Green Swoopula.
 enum {
-    UNIT_WORK_START_FLYING = 0, // set by the battle setup: 1 when it starts hanging from the ceiling
+    UNIT_WORK_START_FLYING = 0, // set by the battle setup: 1 when it starts already flying
 };
 
 BattleUnitKind unit_basabasa_green;
@@ -42,7 +42,8 @@ static EvtWord attack_event[683];
 static EvtWord wait_event[6];
 
 /**
- * Unit kind of Swampire: 20 max HP, level 46. The battle engine reads it when the unit spawns:
+ * Unit kind of Swampire: 20 max HP, level 46 in the demos and 35 in retail.
+ * The battle engine reads it when the unit spawns:
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_basabasa_green = {
@@ -246,6 +247,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of Swampire (the demos), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -254,6 +256,7 @@ static BattleUnitKindPart parts[] = {
  */
 static StatusVulnerability regist = {40, 55, 70, 100, 50, 100, 100, 50, 100, 50, 100, 50, 100, 50, 50, 50, 80, 100, 50, 100, 100, 20};
 #else
+
 /**
  * Status vulnerability of Swampire (the final versions), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -301,7 +304,7 @@ static BattleWeapon weapon_basabasa_attack = {
 };
 
 /**
- * Sound cues of Swampire's animations: for each of its 9 animation names,
+ * Sound cues of Swampire's animations: for each of its 8 animation names,
  * the sound effect that plays with it (SFX_ENM_BASA_WAIT1 and SFX_ENM_BASA_MOVE1).
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -404,8 +407,8 @@ EVT_END()
 
 /**
  * Damage reaction of the bat while it still hangs from the ceiling:
- * after the default damage handling, if the hit did damage (and was not of the kind that spares it,
- * damage code bits 512 without 2048), it drops from the ceiling (ceil_sky_event)
+ * after the default damage handling, if the hit did damage and did not knock it out without revival
+ * (damage code 512 without 2048), it drops from the ceiling (ceil_sky_event)
  * and glides down to its home position over 60 frames.
  */
 static EVT_BEGIN(damage_event_ceil)
@@ -464,6 +467,7 @@ EVT_END()
  * it applies weapon_basabasa_drain_attack_biribiri_counterd instead and drains nothing.
  */
 static EVT_BEGIN(attack_event)
+
     // The Swampire first checks whether to use a held item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

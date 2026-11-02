@@ -127,6 +127,7 @@ EVT_END()
  * he gasps, switches to his surprised pose and talk poses, and the camera is released.
  */
 EVT_BEGIN(name_seikai)
+
     // Doopliss gasps and strikes his surprised pose.
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
@@ -349,6 +350,7 @@ EVT_END()
  * The later rounds use the name-entry screen and move the story to STG4_14_NAME_GUESSING.
  */
 EVT_BEGIN(evt_machibuse)
+
     // Waits until Mario steps into the strip of road where Doopliss ambushes him.
     SET_VALUE(LF(0), 0)
     LOOP(0)
@@ -533,7 +535,7 @@ EVT_BEGIN(evt_machibuse)
     CALL(evt_npc_battle_start, STRING("にせマリオ"))
     CALL(evt_npc_wait_battle_end)
 
-    // After the fight the story advances and Doopliss shoves Mario out of the area, back to Twilight Town
+    // After the fight the story advances at the relevant early steps, and Doopliss shoves Mario out of the area, back to Twilight Town
     // or the previous trail screen.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_11_02_WAITING_DOOPLISS)
@@ -640,7 +642,7 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
-/** Pickup callback of the Black Key: sets GSWF_GRA00_BLACK_KEY_TAKEN so the key is not spawned again. */
+/** Pickup callback of the Black Key: sets GSWF_GRA_00_BLACK_KEY so the key is not spawned again. */
 EVT_BEGIN(evt_majin_key)
     SET_VALUE(GSWF_GRA_00_BLACK_KEY, 1)
     RETURN
@@ -679,7 +681,7 @@ EVT_BEGIN(gra_00_init_evt)
 EVT_END()
 
 /**
- * Script helper that rolls the 3D camera: args[0] is the roll angle in degrees (0 resets the camera).
+ * Script helper that rolls the 3D camera: args[0] is the roll angle in degrees (0 resets the roll and z view offset).
  * While rolled it also bobs the camera with the frame counter and lowers the camera to y 97 looking at y 45.
  * Used for the tilted camera in Doopliss's scenes.
  */
@@ -770,6 +772,7 @@ USER_FUNC(camera_yure) {
         event->userdata[0] = 0;
         event->userdata[1] = frames;
     }
+
     // shake three times, fading out
     amp = sin(18.849556f * event->userdata[0] / event->userdata[1]);
     left = event->userdata[1] - event->userdata[0];

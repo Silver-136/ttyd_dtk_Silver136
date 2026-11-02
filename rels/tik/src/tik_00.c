@@ -340,6 +340,7 @@ static ShopperData35 shopper_data = {
 typedef struct UranaiTag {
     char s[4];
 } UranaiTag;
+
 /**
  * Four-byte copy of the string "pos", placed here so the string sits
  * before the fortune-teller scripts' strings in read-only data.
@@ -351,7 +352,7 @@ static const UranaiTag uranaisi_pos_tag = { "pos" };
  * Merluvlee's "next" reading, run after the card minigame. Prints the hint for the current story step.
  * If no hint text exists for it, shows a plain Japanese message with the current event number
  * and pays the reading's fee back as coins (this branch reads like a development fallback).
- * From the return to Rogueport (chapter 9) on, she only says uranaisi_17 and pays the fee back.
+ * In JP and later, from the return to Rogueport (chapter 9) on, she only says uranaisi_17 and pays the fee back.
  */
 EVT_BEGIN(uranaisi_next_evt)
 #if VERSION > VERSION_DEMO_US
@@ -588,10 +589,10 @@ USER_FUNC(evt_uranaisi_msg_alloc) {
 }
 
 /**
- * Script helper for her price menu (US and later).
+ * Script helper for her price menu.
  * args[0] is the message id, args[1] receives the formatted string.
- * It scans the message for her position tags and pads the three reading prices to their column using the font's
- * text width, then formats the result into the buffer from evt_uranaisi_msg_alloc.
+ * In US and later, it scans the message for her position tags and pads the three reading prices to their column
+ * using the font's text width. Earlier versions format the three prices directly into the buffer from evt_uranaisi_msg_alloc.
  */
 USER_FUNC(evt_uranaisi_msg_set) {
     EvtWord* args = event->args;
@@ -749,7 +750,7 @@ USER_FUNC(uranai_exit_func) {
 
 /**
  * Draw callback that renders Merluvlee's model into a small texture.
- * It sets up a perspective camera aimed at her, draws her pose three times at the model's own scale,
+ * It sets up a perspective camera aimed at her and draws her pose in three passes with scale set from the capture width and model bounding-box width,
  * copies the frame buffer into an RGB5A3 texture held in the work area and restores the GX state.
  * The texture is later put on the middle card.
  */
@@ -1342,7 +1343,7 @@ EVT_BEGIN(uranaisi_table_talk)
             CALL_CHILD(PTR(uranaisi_supercoin_evt))
         END_SWITCH
 
-        // The table is cleared and Mario is free to move again.
+        // The table is cleared; JP and later return to the reading menu, while the demos restore Mario's controls.
 #if VERSION <= VERSION_DEMO_US
         CALL_CHILD(uranai_exit)
 #else
@@ -1371,6 +1372,7 @@ EVT_BEGIN(uranaisi_init)
 EVT_END()
 
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Init script for Dazzle (starmaniac, the Star Piece collector).
  * Before the badge tutorial step he is placed at (400, -20, 175) instead of his default spot.
@@ -1385,7 +1387,7 @@ EVT_BEGIN(starmaniac_init)
 EVT_END()
 #endif
 
-/** Dazzle's trade event slot. Only returns; his trading is in the talk script. */
+/** Dazzle's trade event slot. Sets ssf to 1; his trading is in the talk script. */
 EVT_BEGIN(starmaniac_get_event)
     CALL(ss_set, 1)
     RETURN
@@ -1595,7 +1597,7 @@ EVT_BEGIN(johoyaketi_talk)
     RETURN
 EVT_END()
 
-/** Init script for a Goomba resident of the sewers; uses the shared NPC init script. */
+/** Init script for a Goomba resident of the sewers. */
 EVT_BEGIN(kuribo5_init)
     RETURN
 EVT_END()
@@ -2510,7 +2512,7 @@ EVT_END()
  * Runs when the teleporter house (ie_4) opens.
  * Chooses which of its wall variants (ie_4_1 or ie_4_2) and
  * which glow objects (sui__1, sui__2, wa_pu) show from the story progress and from GW(10),
- * which the teleporter scripts set once its animation has played.
+ * which the activation script sets before starting its animation.
  * After the hideout explodes (chapter 7) the other variant shows.
  * The releases add a third state from the return to Rogueport onwards.
  */
@@ -2649,7 +2651,8 @@ static DoorParam door_data_04 = {
 
 /**
  * Door trigger for the teleporter house after the X-Naut hideout has exploded.
- * The first time, Mario reads the sign message tik_000; then the normal door opening runs.
+ * While GSWF_TIK_00_STG7_DOOR_OPENED is clear, Mario reads the sign message tik_000 and the event returns;
+ * the normal door opening runs only after that flag is set.
  */
 EVT_BEGIN(evt_door_stg7_open)
     IF_INT_EQUAL(GSWF_TIK_00_STG7_DOOR_OPENED, 0)
@@ -2852,6 +2855,7 @@ USER_FUNC(card_camid) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_000005e8, JP tik .text+0x524. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Script helper (JP and later).
  * Sets the blend mode of the "supotto" spotlight map object to 10
@@ -2867,6 +2871,7 @@ USER_FUNC(supotto_blendmode) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_000005c0, JP tik .text+0x4FC. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+
 /** Script helper (JP and later). Mutes sound effects (PSND_FLAG_MUTE_SFX). */
 USER_FUNC(tik_snd_off) {
     psndSetFlag(PSND_FLAG_MUTE_SFX);
@@ -2876,6 +2881,7 @@ USER_FUNC(tik_snd_off) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_00000598, JP tik .text+0x4D4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+
 /** Script helper (JP and later). Unmutes sound effects (clears PSND_FLAG_MUTE_SFX). */
 USER_FUNC(tik_snd_on) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
@@ -2999,7 +3005,7 @@ EVT_BEGIN(tensou_anim_event)
 EVT_END()
 
 /**
- * Runs when Mario steps on the floor switch (a_sui) of the teleporter.
+ * Runs when Mario presses A while facing the teleporter's floor switch (a_sui).
  * Before the hideout explosion, and after the epilogue starts,
  * it plays the animation and lets the pad accept Mario;
  * in between it shows the message stg7_tik_01_01 and does nothing.
@@ -3232,7 +3238,7 @@ EVT_END()
 
 /**
  * Map init script of tik_00, the underground town.
- * Starts the town music and ambience (not after the hideout explosion or the ending), sets up the exits,
+ * Starts the town music and ambience except at STG7_26_THE_HIDEOUT_EXPLODES or STG8_END_AFTER_THE_BATTLE, and sets up the exits,
  * the fortune teller, the doors of the four houses, the teleporter, the shop, the moving floor, the pillar,
  * the Shine Sprite power block, the Soft Stomp chest, the Star Pieces and the roaming residents.
  * In the epilogue (after the final battle) it places Goombella and runs her walk-in scene,

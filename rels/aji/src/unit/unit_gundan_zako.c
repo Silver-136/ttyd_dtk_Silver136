@@ -321,6 +321,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
+
         // Reroll this selection if already huge instead of consuming the turn on another bottle.
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(2))
         IF_INT_EQUAL(LW(2), 0)
@@ -336,8 +337,8 @@ EVT_END()
 
 /**
  * Shared run-up of the X-Naut's physical attacks:
- * pays for the attack, aims the camera, and runs toward the target with dust puffs
- * and footstep sounds (pose R_2), then switches to the attack pose A_1 and moves to the target's hit position.
+ * pays for the attack, aims the camera, and kicks up dust puffs
+ * with footstep sounds (pose R_2), then switches to the attack pose A_1 and runs toward the target.
  */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -405,7 +406,7 @@ EVT_END()
  * The X-Naut's normal attack: picks a target (the first attack target if battle flag 2 is set),
  * runs up (attack_common_event1) and jumps at the target;
  * a miss or dodge ends in the D_2/D_3 stumble poses with SFX_ENM_3RD1_MISS1,
- * a hit applies the damage with the 256 guard flag, then it returns through attack_common_event2.
+ * a hit applies the damage with the final-hit flag, then it returns through attack_common_event2.
  */
 static EVT_BEGIN(normal_attack_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_attack))

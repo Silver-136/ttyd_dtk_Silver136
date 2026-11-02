@@ -65,6 +65,7 @@ typedef struct MonteTable {
 static void* yuunpc_wp;
 static Monte* monte_p;
 static void monte_disp(CameraId camera, void* param);
+
 /**
  * Returns TRUE when two points are within 20 units in 3D and within 20 in height,
  * i.e. the boat is touching a floating coin.
@@ -198,8 +199,8 @@ EVT_BEGIN(yuu_01_kaijo_init)
 EVT_END()
 
 /**
- * Puts Mario back on the start spot after the opening camera or between rounds (x -800 on US and later,
- * -670 in the US demo, z 200).
+ * Puts Mario back on the start spot after the opening camera or between rounds (x -800 in retail,
+ * -670 in both demos, z 200).
  */
 EVT_BEGIN(yuu_01_kaijo_init2)
 #if VERSION <= VERSION_DEMO_US
@@ -270,7 +271,7 @@ EVT_END()
 
 /**
  * Phase 1 of Boat Mode: plays the opening camera (skippable), starts the minigame music,
- * shows the countdown effect, gives Mario control and starts the 70-second coin counter.
+ * shows the countdown effect, gives Mario control and starts the 120-second countdown timer.
  */
 EVT_BEGIN(minigame02_start)
     CALL(yuuminigame2_opening_chk, LW(0), LW(1))
@@ -396,7 +397,7 @@ EVT_BEGIN(yuu_01_init_evt)
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("nagare"), MAP_ANIM_PLAY_LOOP, 0)
 
-    // The four big whirlpools (S_dai_uzu1-4) each drift on their own path; the demos move them more slowly.
+    // The four big whirlpools (S_dai_uzu1-4) have version-dependent paths and travel times.
     CALL(yuuminigame2_get_name, 1, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))
@@ -839,7 +840,7 @@ EVT_END()
  * Per-frame rules of Boat Mode: detects Mario's boat touching a big whirlpool (index 1 to 4,
  * which drags him down and back and costs a point) or a small whirlpool (5 to 12, which spins the boat),
  * applies the movement, and ends the round (TRUE) when Mario reaches the far end (x <= -700, z <= 0)
- * or the counter runs out.
+ * or the counter runs out, while no whirlpool is holding Mario.
  */
 BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, FuneWork* data) {
     MarioWork* mario = marioGetPtr();
@@ -1165,7 +1166,7 @@ static USER_FUNC(re_fall_rtn) {
 /**
  * Frame-by-frame coin spawner and collector for Boat Mode.
  * On first call it allocates the Monte array and scatters coins at random spots in the montetable rectangles (at
- * least 20 units apart), then each frame it checks the boat against every coin,
+ * least 20 units apart within each rectangle), then each frame it checks the boat against every coin,
  * counting and hiding collected ones with a 3D sound. Blocks forever as a view event.
  */
 static USER_FUNC(fall_rtn) {
@@ -1282,7 +1283,6 @@ static BOOL get_monte_check(Vec* a, Vec* b) {
     return FALSE;
 }
 
-/** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00005268, JP yuu .text+0x519C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 /** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */

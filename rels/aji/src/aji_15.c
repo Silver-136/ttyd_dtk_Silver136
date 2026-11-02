@@ -88,7 +88,8 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Spawns kemuri_test type 1 at randomized positions every 0.7 seconds until the event is deleted.
+ * Puffs steam (kemuri_test type 1) at random spots above the bath every 0.7 seconds while Peach is bathing.
+ * The emission loop runs until the shower scene deletes the event.
  */
 EVT_BEGIN(peach_evt_yuge)
     LOOP(0)
@@ -117,6 +118,8 @@ USER_FUNC(peach_set_pos) {
 }
 
 EVT_BEGIN(peach_evt_syawa_main)
+
+    // The music dips and Peach is led to the tub.
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(2))
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_mario_key_onoff, 0)
@@ -127,7 +130,7 @@ EVT_BEGIN(peach_evt_syawa_main)
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_2"), STRING("P_T_2"))
     END_IF
 
-    // She comments on the shower (peach_aji_35, or 35_1 when she has already showered).
+    // She comments on the shower (peach_aji_35, or 35_1 when she has already examined it).
     IF_INT_EQUAL(GSWF_AJI_15_PEACH_SHOWER_EXAMINED, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_35"), 0, STRING("mario"))
     ELSE
@@ -150,6 +153,8 @@ EVT_BEGIN(peach_evt_syawa_main)
     IF_INT_GREATER_OR_EQUAL(LW(0), 25)
         CALL(evt_mario_mov_pos2, 25, -41, FLOAT(48.0f))
     END_IF
+
+    // Peach walks up to the tub.
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -28, -45, FLOAT(48.0f))
     END_INLINE_EVENT
@@ -198,6 +203,8 @@ EVT_BEGIN(peach_evt_syawa_main)
     CALL(evt_mapobj_trans, 1, STRING("p_fuku"), 0, -10, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("p_fuku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, -10, 0, 100)
+
+    // She hangs her dress.
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_mapobj_trans, 1, STRING("p_fuku"), 0, LW(0), 0)

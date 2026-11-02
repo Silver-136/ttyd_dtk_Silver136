@@ -84,10 +84,10 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of the Bone Pile (percent chance each status takes hold): immune to sleep, dizzy,
+ * Status vulnerability of the Bone Pile (multipliers on status chances): immune to sleep, dizzy,
  * confusion, Huge, Tiny, Attack Down, fright, Gale Force, Dodgy, Invisible, instant KO;
- * resists freeze (50%), Defense Down (40%), allergic (50%), Slow (50%); the rest take hold at 80%
- * or better.
+ * resists freeze (50%), Defense Down (40%), allergic (50%), Slow (50%); the remaining multipliers are 80%
+ * or higher.
  */
 static StatusVulnerability regist = {
     0, // sleep

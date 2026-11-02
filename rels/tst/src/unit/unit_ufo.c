@@ -97,7 +97,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element modifiers of the test UFO unit: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of the test UFO unit: immune to every status. */
+/** Status vulnerability of the test UFO unit: immune to the 22 statuses covered by this table. */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /** Pose table of the UFO itself (part 1): maps the battle poses to its CAT_* animations. */

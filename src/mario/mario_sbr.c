@@ -39,9 +39,10 @@ typedef struct RubWork {
 RubWork rubwork;
 
 /**
- * The demo has no respawn position in MarioWork:
- * falling out of eki_04, gon_10 or muj_00 puts Mario at a fixed spot for that map,
- * and anywhere else at (0, 74, 0) with the partners.
+ * Handles falling to y <= -2000: background mode enters the bottomless motion.
+ * Demos otherwise use fixed positions for eki_04, gon_10 and muj_00, or (0, 74, 0) elsewhere;
+ * only the generic fallback also moves the partners. Retail reloads the map when requested,
+ * otherwise restores Mario and his partners to bottomlessResetPosition and force-resets his motion.
  */
 void marioBottomless(void) {
     MarioWork* mario = marioGetPtr();
@@ -98,6 +99,7 @@ void marioBottomless(void) {
  */
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Saves where Mario respawns after falling out of the map:
  * an entrance (evt_bero.c) or the boat's landing spot, 37 units above the given point.
@@ -114,6 +116,7 @@ void marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
 /** Saves the bottomless-pit respawn point as given; set from seq_mapchange.c to 10 above Mario on map entry. */
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+
 /** Saves the bottomless-pit respawn point as given; set from seq_mapchange.c to 10 above Mario on map entry. */
 void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
     MarioWork* mario = marioGetPtr();
@@ -130,6 +133,7 @@ void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
  */
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Makes falling out of the map reload the current map at its entrance instead of respawning;
  * set when Mario enters a map as the boat.
@@ -143,6 +147,7 @@ void marioReloadMapOnBottomlessOn(void) {
 /** Goes back to respawning at the saved point after a fall; cleared when the boat lands. */
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
+
 /** Goes back to respawning at the saved point after a fall; cleared when the boat lands. */
 void marioReloadMapOnBottomlessOff(void) {
     MarioWork* mario = marioGetPtr();
@@ -271,7 +276,7 @@ f32 revise360(f32 angle) {
 
 /**
  * Converts a screen-relative angle in degrees into a world move direction (270 - angle + camera yaw, wrapped).
- * In paper mode the result is forced to 0 or 180 from the side Mario faces.
+ * In paper mode the input angle is forced to 0 or 180 from the side Mario faces before that conversion.
  * The US and PAL releases round to 0.001 degree; JP and the demos to 0.01.
  */
 f32 toMovedir(f32 angle) {
@@ -433,8 +438,9 @@ void marioSetForceMove(f32 dir, s32 time, f32 speed) {
 }
 
 /**
- * Per-frame: copies controller 0's sticks, triggers and buttons into MarioWork, masked by enableKeyMask,
- * and blanks them while Mario's controls are off; also records the demo pad's new presses.
+ * Per-frame: copies controller 0's sticks and triggers into MarioWork and masks its buttons by enableKeyMask.
+ * Controls-off blanks analog input; it also clears buttons unless enableKeyMask is set, with a slit-mode R override.
+ * Also records the demo pad's new presses.
  */
 void marioUpdateKeyData(void) {
     MarioWork* mario = marioGetPtr();
@@ -539,6 +545,7 @@ void marioGetStick(f32* dir, f32* mag) {
 }
 
 #if VERSION > VERSION_DEMO_US
+
 /**
  * How far the main stick is pushed: 0 neutral, 1 a little, 2 past radius 55;
  * partner walking picks its walk or run pose from it.
@@ -686,7 +693,7 @@ s32 checkOneRevolution(s32 dir) {
     return ret;
 }
 
-/** Fills the rub history with the angle v, restarting the turn count from there. */
+/** Fills the rub history with the angle v. */
 static inline void rubClearHist(s32 v) {
     u32 i;
     s16* p = rubwork.hist;

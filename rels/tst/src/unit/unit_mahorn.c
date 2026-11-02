@@ -149,6 +149,7 @@ static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Wizzerd (100% is the normal chance): resists Sleep 10%, Stop 50%, Dizzy 50%,
  * Confusion 40%, Freeze 40%, Tiny 40%, Attack Down 40%, Defense Down 40%, Allergic 40%, Fright 30%, Gale
@@ -215,7 +216,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data of the Wizzerd's all-target magic attack: hits every opposing unit for 2 electric damage. */
+/** Attack data of the Wizzerd's all-target magic attack: hits every opposing unit for 2 electric damage in the demos, 6 in retail. */
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -428,8 +429,8 @@ static BattleWeapon weapon_mahorn_recover_magic = {
 };
 
 /**
- * Attack AI of the Wizzerd. In a fixed-attack battle it always casts the attack spell.
- * Otherwise it uses an enemy item if it has one, then draws one of:
+ * Attack AI of the Wizzerd. On a first strike it always casts the attack spell.
+ * Otherwise, if no enemy-item script is selected, it draws one of:
  * attack spell (50), spell on all targets (30), Huge (10), Defense up (10), confuse (10) or heal an ally (10).
  * The first two weights are 60 and 10 in the demo versions.
  */
@@ -584,7 +585,7 @@ EVT_END()
 
 /**
  * Fades the Wizzerd whose unit id is in LW(0) out over 30 frames on all five of its parts (alpha 255 down to 0),
- * then flags the parts so they are no longer drawn; LW(0) = -1 does nothing.
+ * then disables their shadows; LW(0) = -1 does nothing.
  */
 static EVT_BEGIN(alpha_down_event)
     IF_INT_EQUAL(LW(0), -1)
@@ -691,6 +692,7 @@ EVT_END()
  * Afterwards the Wizzerd jumps back home.
  */
 static EVT_BEGIN(attack_punch_event)
+
     // Picks the target: the preset first-attack target when battle flag 2 is set, otherwise a random opposing unit;
     // with no target it does nothing (or is flustered when confused).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -808,6 +810,7 @@ static EVT_BEGIN(attack_punch_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+
         // Miss branch: a short pause after the flurry.
         LABEL(90)
         WAIT_FRAMES(30)
@@ -853,10 +856,11 @@ EVT_END()
  * Shared body of the single-target spells. The weapon is in LW(9) and the target in LW(3), LW(4).
  * The Wizzerd and every clone charge up (attack_enemy_common_event_sub1) and wave their hands (sub2),
  * and then each casts a magic shot at the target:
- * shots that will miss fly past while a sibling event starts the avoid animation when one reaches the target,
+ * shots that will miss fly past while a sibling event starts any applicable avoid animation when one reaches the target,
  * shots that hit land and the damage is resolved. Finally the clones return to their wait event.
  */
 static EVT_BEGIN(attack_enemy_common_event)
+
     // Declares the magic attack, pays its cost and turns to face the target.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -907,6 +911,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+
         // Miss branch: the bolts fly on and the target dodges when they get level with it.
         LABEL(90)
         BEGIN_SIBLING_EVENT
@@ -1405,8 +1410,8 @@ static EVT_BEGIN(trans_magic_event)
 EVT_END()
 
 /**
- * Unused stub of the dodge ("yokeyoke") spell: it samples a target for the weapon in LW(9),
- * declares the attack and waits for the guard move, then just ends; it never casts anything.
+ * Unused implementation of the dodge ("yokeyoke") spell: it samples a target for the weapon in LW(9),
+ * declares the attack and waits for the guard move, then runs support_friend_common_event and applies the weapon through CheckDamage.
  * Nothing in this file runs it and the file has no yokeyoke weapon (the Elite Wizzerd's full version is in
  * unit_mahorn_custom.c).
  */
@@ -1477,6 +1482,7 @@ EVT_END()
  * otherwise each hand flips between two poses at random 15 to 30 frame intervals.
  */
 static EVT_BEGIN(wait_event)
+
     // Unless the unit is a clone (unit work 4 set), it also puts its clones back into their idle poses.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_EQUAL(LW(0), 0)

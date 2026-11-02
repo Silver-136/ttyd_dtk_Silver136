@@ -27,8 +27,7 @@ static NpcSetupInfo npcEnt[1];
 EvtWord kpa_03_init_evt[44];
 
 /**
- * Blocks, hidden blocks, pipes and obstacle blocks of side-scrolling stage 2 by the sea, listed from left to
- * right.
+ * Blocks, pipes and obstacle blocks of side-scrolling stage 2 by the sea.
  */
 static EvtWord kpa_act_stg2_mobj[] = {
     KPA_OBJ_SANGO(-1275.0f, 0.0f), KPA_OBJ_BRICK_2(-1100.0f, 200.0f), KPA_OBJ_SANGO(-1100.0f, 250.0f),
@@ -57,7 +56,7 @@ static EvtWord kpa_act_stg2_mobj[] = {
     KPA_OBJ_BRICK_2(1475.0f, 350.0f), KPA_OBJ_END,
 };
 
-/** Coins Bowser can collect in side-scrolling stage 2, as x and z positions. */
+/** Coins Bowser can collect in side-scrolling stage 2, as x and y positions. */
 EvtWord kpa_act_stg2_item[] = {
     KPA_ITEM(-1050.0f, 212.5f), KPA_ITEM(-1000.0f, 212.5f), KPA_ITEM(-875.0f, 12.5f),
     KPA_ITEM(-875.0f, 62.5f), KPA_ITEM(-825.0f, 12.5f), KPA_ITEM(-825.0f, 62.5f), KPA_ITEM(-775.0f, 12.5f),
@@ -124,8 +123,8 @@ EVT_END()
  * kills the stage clock (kpa_time, its event id in GW(15)),
  * saves Bowser's current power level (evt_koopa_get_level), loads kpa_04 after 600 ms,
  * turns the camera off once he is above y = 400
- * and launches him up with evt_mario_jump_jumpstand 700 units above the platform (a lower launch speed in the US
- * demo and earlier). The EU release also cancels the attack mode first.
+ * and launches him up with evt_mario_jump_jumpstand 700 units above the platform, using a shorter duration argument
+ * and a different jump mode in the demos. The EU release also cancels the attack mode first.
  */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))

@@ -25,7 +25,7 @@ void BattleInformationSetParty(FieldBattleInfo* info, BattleUnitType party) {
 /**
  * Stores how the battle started: seq_battle passes 0 when no first strike happened, else 1, 2, 3, ...
  * from the field hit kind (fbat->hitKind) that began it.
- * The field is named partyId but holds this first-strike kind.
+ * The firstAttack field holds this first-strike kind.
  */
 void BattleInformationSetFirstAttack(FieldBattleInfo* info, u32 type) {
     info->firstAttack = type;
@@ -83,7 +83,8 @@ const ItemHogTable item_hog_table = {
  * a random pick from the enemy's drop table and one of the enemy's held items.
  * Item Hog multiplies the item weights (by 2n+2 for n badges in the demos, n+1 later)
  * and adds a pick from item_hog_table: in the demos and JP only when the held-item roll finds nothing to drop,
- * from US on whenever no item dropped. From JP on, nothing drops before Frankly's house.
+ * from US on whenever no item dropped. From JP on, before Frankly's house the normal held/random item roll
+ * is disabled, but hearts and flowers are not.
  */
 void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     NpcBattleInfo* setup = info->setup;

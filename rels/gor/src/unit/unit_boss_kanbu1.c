@@ -227,6 +227,7 @@ EVT_END()
  * after Mario's first successful action command (001) and after his first failed one (002).
  */
 static EVT_BEGIN(phase_event)
+
     // Turn 1, before the player's phase: the camera swings to Mario, who turns round.
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -332,7 +333,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack event of Lord Crump: uses an enemy item if he has one,
+ * Attack event of Lord Crump: uses an enemy item if one is selected,
  * otherwise always runs normal_attack_event with weapon_kanbu1_attack.
  */
 static EVT_BEGIN(attack_event)
@@ -497,6 +498,7 @@ static PoseTableEntry pose_table_guard[] = {
  * Falls back to the flustered reaction when confused with nothing to hit.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Target: the first-strike target if the battle opened that way, otherwise one picked for his attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -561,6 +563,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+
         // Miss: he comes down without hitting (the target dodges for some kinds of miss).
         LABEL(90)
         GOTO(98)
@@ -615,7 +618,8 @@ USER_FUNC(_mario_ac_success_check) {
     evtSetValue(event, event->args[0], _battleWorkPointer->marioAcSuccess);
     return EVT_RETURN_DONE;
 }
-/** Script helper: stores in args[0] whether Mario's last action command failed (the battle work's marioAcFailed). */
+
+/** Script helper: stores in args[0] Mario's cumulative failed-action-command count (the battle work's marioAcFailed). */
 USER_FUNC(_mario_ac_failed_check) {
     evtSetValue(event, event->args[0], _battleWorkPointer->marioAcFailed);
     return EVT_RETURN_DONE;

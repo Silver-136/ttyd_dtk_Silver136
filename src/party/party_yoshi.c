@@ -415,8 +415,9 @@ void yoshi_init(PartyEntry* party) {
 
 // Descriptive name (inline helper; not in the symbol maps).
 static void searchHead(PartyEntry* party);
+
 /**
- * How far Mario sits above Yoshi this frame: twice the bob table entry for Yoshi's pose (PYS_S_2, PYS_R_2 or
+ * Mario's vertical ride bob this frame: twice the bob table entry for Yoshi's pose (PYS_S_2, PYS_R_2 or
  * PYS_F_1) at the shared pose time.
  */
 // Descriptive name (inline helper; not in the symbol maps).
@@ -435,8 +436,10 @@ static inline f32 getOfs(PartyEntry* party) {
 }
 
 /**
- * The demo version of this routine is older: no head search, the fly bob adds the speed straight to the height,
- * and the move speed is cut to 3/4 while bit 0x80 is set.
+ * Runs Yoshi's ride: mounting, ground movement, flutter and jump-stand motion, dismounting and water handling.
+ * Demos omit the head search and add the fly bob speed directly to the height;
+ * retail accumulates a bob offset around a ground/base height. The demos also scale ordinary ride movement
+ * to 3/4 while party bit 0x80 (shallow water) is set.
  */
 void yoshi_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -1149,6 +1152,7 @@ void yoshi_use(PartyEntry* party) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** The demo version works the fly angle in the caller's variable (passed by pointer). */
 void yoshiFlyMove(PartyEntry* party, f32* angle) {
 #else
@@ -1278,6 +1282,7 @@ void inertia(PartyEntry* party) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** The demo searches 11 up into locals and has the older landing and step code. */
 static void searchGround(PartyEntry* party) {
 #else
@@ -1420,6 +1425,7 @@ void searchGround(PartyEntry* party) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** The demo searches into locals, always records the hit object, and stops the flutter sound on landing. */
 static void searchGround2(PartyEntry* party) {
 #else

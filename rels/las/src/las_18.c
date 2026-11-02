@@ -186,7 +186,7 @@ USER_FUNC(get_mobj_seq) {
 
 /**
  * Event script: the switch of las_18 was hit.
- * The switch-alpha effect is turned off, the camera shows the spot and the key chest drops in (box_syutugen).
+ * The switch-alpha effect is turned off, the camera shows the spot and the key chest rises out of the floor (box_syutugen).
  */
 static EVT_BEGIN(switch_evt)
     CALL(switch_alpha_off)

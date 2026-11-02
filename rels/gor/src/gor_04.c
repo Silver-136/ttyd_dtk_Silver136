@@ -355,6 +355,7 @@ EVT_END()
  * plays the engine sounds and ramps the wheel speeds GW(0) and GW(1) up to -15 (leftward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start)
+
     // The train is marked as moving and no longer at any station.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -468,6 +469,7 @@ EVT_END()
  * but ramps the speeds up to +15 (rightward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start2)
+
     // The train is marked as moving and no longer at any station.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -518,13 +520,14 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
         BEGIN_INLINE_EVENT
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
             LOOP(0)
-                // The train accelerates over 20 seconds to its cruising speed.
                 ADD_FLOAT(LW(0), GW(0))
                 CALL(evt_mapobj_trans, 1, STRING("train"), LW(0), 0, 0)
                 WAIT_FRAMES(1)
             END_LOOP
         END_INLINE_EVENT
     END_IF
+
+    // The train accelerates over 20 seconds to its cruising speed.
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 1500, 20000)
@@ -535,14 +538,14 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
         WAIT_FRAMES(1)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(0)
-
-        // After 1.5 seconds the cars start to sway for a moment, then settle.
         END_IF
         LOOP(0)
             SET_FLOAT_VALUE(GW(0), FLOAT(15.0f))
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+
+    // After 1.5 seconds the cars start to sway for a moment, then settle.
     BEGIN_INLINE_EVENT
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
         LOOP(0)
@@ -736,8 +739,9 @@ static const char* pika_tbl_rsh_06[] = {
 
 /**
  * Common start of the train-exterior scenes: marks the train as not moving,
- * zeroes the wheel speeds and spawns the wheel, rod,
- * background and star scripts (plus lamp and sparks on the maps that have them).
+ * zeroes the wheel speeds and spawns the wheel, rod and star scripts
+ * (plus lamp and sparks on the maps that have them). The background script
+ * is spawned only on hom_10, hom_11, hom_12 and rsh_06_a.
  */
 static EVT_BEGIN(hom_10_evt_resha_sub)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 0)
@@ -944,6 +948,7 @@ EVT_END()
  * Sets the train arrival flags and starts Peach's mail scene (peach_mail) until STG6_57_A_MAIL_FROM_PEACH.
  */
 EVT_BEGIN(evt_train2)
+
     // Control is taken away and Mario and the partners are hidden while the train pulls in.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1054,8 +1059,6 @@ EVT_BEGIN(evt_train2)
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
-
-    // Until Mario reads it, Peach's mail scene plays.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_57_A_MAIL_FROM_PEACH)
         SPAWN_EVENT(peach_mail)
 #else
@@ -1520,7 +1523,7 @@ static EVT_BEGIN(luigi_npcEnt)
     RETURN
 EVT_END()
 
-/** Init event of Luigi's companion (ス・クリーミ) NPC: puts him at (105, 0, 120) facing the player. */
+/** Init event of Luigi's companion (ス・クリーミ) NPC: puts him at (105, 0, 120) facing camera-left. */
 EVT_BEGIN(scream_init)
     CALL(evt_npc_set_position, STRING("me"), 105, 0, 120)
     CALL(evt_npc_set_ry_lr, STRING("me"), 0)
@@ -2227,10 +2230,11 @@ EVT_END()
  * a save block, the spinning panel with a Star Piece, a second Star Piece, and the blimp ride trigger.
  * Depending on how Mario entered (blimp return, train return trip, n_bero door) it sets the train flags
  * and starts the matching scene.
- * Also starts Peach's mail scene, the Bowser interlude and, after STG6_55_04_BOWSER_RAWK_HAWK,
- * heals Mario and his partners.
+ * Also starts Peach's mail scene, the Bowser interlude and, at STG6_55_04_BOWSER_RAWK_HAWK,
+ * heals Mario and his partners (in JP and the demos, only when a partner is supplied).
  */
 EVT_BEGIN(gor_04_init_evt)
+
     // Pick the music: Bowser's tune during the Bowser interlude, otherwise the Rogueport tune (unless Mario
     // arrived by blimp).
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
@@ -2298,6 +2302,7 @@ EVT_BEGIN(gor_04_init_evt)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
         ELSE
+
         // Otherwise, the train sits at the platform in the correct state for the trip direction.
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
             CALL_CHILD(PTR(hom_10_evt_resha_left))

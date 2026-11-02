@@ -501,6 +501,7 @@ EVT_END()
  * A miss rolls on past and turns back; a hit bounces it off in two hops. Then it returns home.
  */
 static EVT_BEGIN(attack_event)
+
     // If the Red Spike Top is flipped over, it first rights itself with wakeup_event.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -769,9 +770,10 @@ EVT_END()
 /**
  * Attack event while hanging from the ceiling: picks a target, moves over it along the ceiling,
  * lets go and drops onto it (weapon_met_ceil_attack), then waits 60 frames and returns to the floor tables.
- * It hops twice to its home and sets up the floor events again with init_event2.
+ * It hops twice near the target, then walks home and sets up the floor events again with init_event2.
  */
 static EVT_BEGIN(attack_event_ceil)
+
     // Use the target of the opening first attack if there was one; otherwise use an enemy item, or choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

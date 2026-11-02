@@ -281,8 +281,8 @@ static BattleWeapon weapon_bomhei_bomb = {
  * stops the fuse hiss (unit work 0 is the sound handle, then -1),
  * plays SFX_BTL_ENEMY_DIE1_2 and SFX_BTL_ENM_BOMB_ATTACK2 with the sandars blast effect, clears any fog,
  * stores its coin and experience rewards, waits one second and removes itself from the battle.
- * When it was set off by its own attack (LW(15) = 1 in the later versions) it first waits for that attack to
- * end.
+ * Before removal, demos wait for the active unit's attack to end; later versions do so only when
+ * LW(15) is 1.
  */
 static EVT_BEGIN(bomb_event)
     CALL(evt_btl_camera_shake_w, 0, 5, 0, 15, 0)
@@ -336,10 +336,10 @@ EVT_END()
 
 /**
  * Damage script of the Bob-omb.
- * A damaging hit (damage code 256) of kind 24, 25 or 27 (a fire, explosion or electric hit) sets it off at once
+ * A final-hit result (flag 256) of kind 24, 25 or 27 (a fire, explosion or electric hit) sets it off at once
  * (bomb_event).
  * Otherwise it takes the default damage and, if it is still able to act and not in STATUS_INSTANT_KILL (KO),
- * lights its fuse (change_spark_event).
+ * lights its fuse (change_spark_event) only for a final hit that dealt at least 1 HP.
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -405,7 +405,8 @@ EVT_END()
  * a miss lets it dodge past, a hit applies the damage with SFX_ENM_BOMB_MOVE3, and it walks back.
  */
 static EVT_BEGIN(attack_event)
-    // Use an item if it has one; otherwise pick a target (a confused Bob-omb with nobody to bump gets
+
+    // Use an item if the item-use check selects one; otherwise pick a target (a confused Bob-omb with nobody to bump gets
     // flustered).
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -545,7 +546,7 @@ EVT_END()
 
 /**
  * Damage script of the Bob-omb with its fuse lit:
- * a damaging hit (damage code 256) detonates it (bomb_event), otherwise the default damage handling runs.
+ * a result with the final-hit flag (256) detonates it (bomb_event), otherwise the default damage handling runs.
  */
 static EVT_BEGIN(damage_event_spark)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -570,7 +571,8 @@ EVT_END()
  * dealing the bomb weapon's damage to the target when it connects.
  */
 static EVT_BEGIN(attack_event_spark)
-    // Use an item if it has one; otherwise pick a target (a confused Bob-omb with nobody to hit gets
+
+    // Use an item if the item-use check selects one; otherwise pick a target (a confused Bob-omb with nobody to hit gets
     // flustered).
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

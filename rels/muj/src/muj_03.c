@@ -216,7 +216,7 @@ static KusaAccess kusa_tbl[] = {
 
 /**
  * Map init for muj_03 (the jungle path): starts the jungle music and ambience, registers the exits,
- * the coin and badge blocks (Thunder Rage), a hidden brick, a Shine Sprite block and the NPCs.
+ * the coin and Thunder Rage ? blocks, a hidden brick, a Shine Sprite block and the NPCs.
  */
 EVT_BEGIN(muj_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))

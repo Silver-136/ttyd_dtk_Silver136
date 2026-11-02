@@ -254,7 +254,7 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
 };
 
 /**
- * Weapon data for the Pokey's lone-head hop attack, used when it has one segment left: 3 damage, a
+ * Weapon data for the Pokey's lone-head hop attack, used when it has one segment left: 3 damage in the demos or 4 in retail, a
  * shell-toss-type hit, one target.
  */
 static BattleWeapon weapon_sambo_head_attack_1 = {
@@ -503,7 +503,7 @@ static PoseTableEntry pose_table_body1[] = {
 };
 
 /**
- * Pose table of the Pokey's hidden body parts and the thrown segment: they all just show the segment pose
+ * Pose table of the Pokey's loose/thrown segment (part 5): it shows the segment pose
  * (SNB_B_1).
  */
 static PoseTableEntry pose_table_parts[] = {
@@ -620,7 +620,7 @@ static BattleUnitKindPart parts[] = {
  * Init script of the Pokey.
  * Registers its wait, attack, damage and confusion scripts, starts it with 4 body segments (unit work 0),
  * sets its height from that count through _body_param_set,
- * clears unit work 1 (the number of friends it has called), and sets its run and walk sounds.
+ * clears unit work 1 (its inherited summon depth), and sets its run and walk sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -812,6 +812,7 @@ EVT_END()
  * the Pokey also takes marioWeapon_UltraHammerFinish.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
+
     // With only the head left (unit work 0 is 1) the hit just plays the shot reaction, or the no-damage
     // flinch.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
@@ -823,6 +824,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
             CALL_CHILD(subsetevt_nodamage_motion)
         END_IF
     ELSE
+
         // Otherwise the Pokey loses its top segment: its segment count drops by one.
         SET_VALUE(LW(12), LW(11))
         CALL(btlevtcmd_GetUnitWork, LW(10), UNIT_WORK_BODY_COUNT, LW(0))
@@ -1007,7 +1009,7 @@ EVT_END()
 
 /**
  * Turn script of the Pokey. After an item-use check it works from the segment count (unit work 0).
- * With a full stack of 4 and at most one friend called so far,
+ * With a full stack of 4 and inherited summon depth at most 1,
  * it has a 30 percent chance to call a friend (call_friend_event) if there is room beside it.
  * With 2 or more segments it then rolls 0 to 69 and, on 30 or less,
  * throws its head segments (attack_head_2_event) if a target is available;
@@ -1118,7 +1120,7 @@ static EVT_BEGIN(attack_head_2_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens; the weapon cost is paid.
+    // The attack is declared and protecting-unit movement is awaited; the weapon cost is paid.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     SWITCH(LW(10))
@@ -1304,6 +1306,7 @@ EVT_END()
  * guard and hit results from the pre-damage check and the action command defence, and hops home.
  */
 static EVT_BEGIN(attack_head_1_event)
+
     // A Pokey reduced to a single segment attacks alone: it chooses a target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_sambo_head_attack_1))
@@ -1319,7 +1322,7 @@ static EVT_BEGIN(attack_head_1_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens; the camera follows the Pokey.
+    // The attack is declared and protecting-unit movement is awaited; the camera follows the Pokey.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_sambo_head_attack_1))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1490,6 +1493,7 @@ EVT_END()
  * bounces back and rolls away; on a miss it flies on off the stage. It is hidden afterwards.
  */
 static EVT_BEGIN(attack_spike_event)
+
     // The throw depends on how many segments the Pokey has left (unit work 0): pick the weapon and a target.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(10))
     SWITCH(LW(10))
@@ -1517,7 +1521,7 @@ static EVT_BEGIN(attack_spike_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens; the weapon cost is paid.
+    // The attack is declared and protecting-unit movement is awaited; the weapon cost is paid.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     SWITCH(LW(10))
@@ -1723,6 +1727,7 @@ static EVT_BEGIN(attack_spike_event)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
+
     // The Pokey rocks its stack from side to side, with a calling sound for each swing.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_SEND_GROUP1_3"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1766,8 +1771,8 @@ static EVT_BEGIN(call_friend_event)
         CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
     END_INLINE_EVENT
 
-    // A new Pokey pops up out of the ground beside the caller in a puff of smoke, and the caller counts one
-    // more friend called (unit work 1).
+    // A new Pokey pops up out of the ground beside the caller in a puff of smoke, and the new Pokey receives a summon depth one
+    // greater than its caller's (unit work 1).
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_sambo), 0)
     SET_VALUE(LW(0), LW(6))
     SET_VALUE(LW(1), LW(7))
@@ -1878,6 +1883,7 @@ static EVT_BEGIN(sambo_rabbit_move)
 EVT_END()
 
 /** Sets the Pokey's height and cut height to 20, 40, 60 or 80 units for 1, 2, 3 or 4 body segments (unit work 0). */
+
 // Body counts 4, 3, 2, 1 select stack parts 1, 2, 3, 4; part 5 is the detached body.
 static EVT_BEGIN(_body_param_set)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))

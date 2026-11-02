@@ -211,8 +211,7 @@ s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
             result = (kurokaron_move_index + 1) % 6;
         }
     }
-    // BUG: with no candidate (cnt == 0) and curDiff >= nextDiff, result is never set and the
-    // function returns whatever its caller left in the register result lives in.
+    // BUG: with no candidate (cnt == 0) and curDiff >= nextDiff, result is never initialised before it is returned.
     return result;
 }
 
@@ -310,8 +309,8 @@ void _kurokaron_next_move_index(void) {
 
 /**
  * Script helper: walks the NPC named args[0] toward (args[1], args[2]) at speed args[3] each frame.
- * It slows Dark Bones to a stop for a second after Vivian's shadow form ends next to him,
- * starts the flee mode (350 frames at 1.8 times speed) when Mario comes within 80 units, handles wall hits,
+ * It stops Dark Bones for 60 frames after Vivian's shadow form ends next to him,
+ * starts flee mode with a 350-frame boost to 1.8 times speed when Mario comes within 80 units, handles wall hits,
  * and finishes when the waypoint is reached; it also plays footsteps.
  * Returns EVT_RETURN_DONE when a new waypoint is needed.
  */
@@ -689,7 +688,7 @@ f32 kurokaron_move_list[6][2] = {
 
 /**
  * Event script: the patrol of Dark Bones in las_05. He moves between six waypoints, pausing when he runs.
- * After 60 seconds (six ten-second periods) he gets faster
+ * After 60 seconds (six ten-second periods) he gets slower
  * and waits longer between runs (speed GW(0) 70 to 50 and waits GW(1) 200 to 300).
  */
 EVT_BEGIN(kurokaron_move)
@@ -738,8 +737,8 @@ EVT_BEGIN(kurokaron_move)
 EVT_END()
 
 /**
- * Texture overrides for the swarm of Dull Bones: the head part c_karon_h gets a different frame of the
- * KRN_R_1 animation for each of the 26 skeletons.
+ * Texture overrides for the swarm of Dull Bones: 24 frames of KRN_R_1 for the head part c_karon_h,
+ * followed by one KRN_D_1 frame and a terminator.
  */
 static ExtTexInfo senkaron_ext_entry_data[] = {
     {"c_karon_h", "KRN_R_1", 0.0f},
@@ -770,7 +769,7 @@ static ExtTexInfo senkaron_ext_entry_data[] = {
     {0},
 };
 
-/** Distance thresholds used to decide how hard the Dull Bones swarm pushes Mario at a given range. */
+/** Index boundaries used to split the swarm's cell and overlap checks across 20 frame groups. */
 s32 move_check_list[] = {
     25, 52, 79, 107, 136, 166, 197, 229,
     263, 298, 335, 374, 416, 461, 510, 565,
@@ -779,8 +778,8 @@ s32 move_check_list[] = {
 
 /**
  * Per-frame update callback of the bone swarm (senkaron_ext_main):
- * lets each of the 1000 bones fall from the ceiling, run toward the room's centre and then toward Mario, bounce,
- * and get knocked away by Mario's hammer, jumps or partner attacks;
+ * lets each of the 1000 bones fall from the ceiling, move toward Mario,
+ * and get knocked away by Mario's hammer or partner attacks;
  * also pushes Mario sideways when the bones collide with him (marioPushed) and plays the clatter sounds.
  */
 static void senkaron_ext_main(void) {
@@ -1172,6 +1171,7 @@ static void senkaron_ext_shadow_disp(CameraId camera, void* param) {
 }
 
 static EVT_BEGIN(senkaron_event)
+
     // First visit: controls are off and Dark Bones appears with a rattling sound.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_00_START)
         CALL(evt_mario_key_onoff, 0)
@@ -1445,7 +1445,7 @@ static EVT_BEGIN(senkaron_event)
         LOOP(0)
             WAIT_FRAMES(1)
 
-            // The partner is knocked about by the swarm and keeps getting back on its feet.
+            // Wait for Koops or Bobbery to hit Dark Bones, or for Mario to approach him outside Vivian's hiding states.
             CALL(party_hit, LW(0))
             IF_INT_EQUAL(LW(0), 1)
                 BREAK_LOOP
@@ -1651,7 +1651,7 @@ USER_FUNC(party_hit) {
 
 /**
  * Talk event of Dark Bones: starts the cutscene where a thousand Dry Bones fall into the room
- * and Dark Bones hunts Mario, and switches an interrupt on the NPC "me"
+ * and Dark Bones hunts Mario, and disables the talk interrupt on the NPC "me"
  * while the story is at the start of the Palace.
  */
 EVT_BEGIN(kurokaron_talk)
@@ -1688,7 +1688,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * Event script: run when the key is used in the lock of the east door;
+ * Event script: run when Palace Key 0x2E is collected;
  * sets the story progress to STG8_01_01_KEY.
  */
 static EVT_BEGIN(key_evt)

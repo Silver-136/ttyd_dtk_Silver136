@@ -153,7 +153,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 /** Defence of the Koopa Troopa (flipped over): no damage reduction. */
 static BattleUnitDefense defence_turn = {0};
 
-/** Status vulnerability of the Koopa Troopa (percent chance to take each status): resists most statuses. */
+/** Status vulnerability of the Koopa Troopa (percentage multipliers on status-infliction chances): resists some statuses. */
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 100, 90, 100, 95, 100, 100, 95, 100, 95, 100, 95, 100, 95, 95, 100, 90, 100, 95, 100, 100, 100};
 #else
@@ -383,6 +383,7 @@ EVT_END()
  * A confused unit with no target runs subsetevt_confuse_flustered.
  */
 static EVT_BEGIN(attack_event)
+
     // A Koopa flipped onto its back spends its turn getting back on its feet instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -500,7 +501,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the shell slides past, slows to a stop and hops back upright.
+    // The attack missed: the shell slides past, slows to a stop and hops back upright.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 100)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_NONE, 1)

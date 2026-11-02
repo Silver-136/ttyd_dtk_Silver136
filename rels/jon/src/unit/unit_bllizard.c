@@ -268,6 +268,7 @@ EVT_END()
  * It then returns home.
  */
 static EVT_BEGIN(bllizard_event)
+
     // Pick the party as the target; a confused Ice Puff with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -461,7 +462,7 @@ static EVT_BEGIN(dmg_first_attack_pos)
 EVT_END()
 
 /**
- * Damage script of the Ice Puff: a hit that is not a 512-only damage code breaks its ice barrier (clears counter
+ * Damage script of the Ice Puff: a hit with DAMAGE_RESULT_ZERO_HP set and DAMAGE_RESULT_REVIVAL clear breaks its ice barrier (clears counter
  * attribute 64 and removes the effect) before the default damage handling runs.
  */
 static EVT_BEGIN(damage_event)
@@ -535,7 +536,8 @@ EVT_END()
  * either way it floats back up and home.
  */
 static EVT_BEGIN(normal_attack_event)
-    // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Ice Puff
+
+    // Pick the target (the First Strike target or a sampled enemy); a confused Ice Puff
     // with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

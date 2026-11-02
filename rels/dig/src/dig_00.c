@@ -61,7 +61,7 @@ EvtWord dig_00_init_evt[107];
  * gives it a buffer from the map heap, preloads and starts the audio at volume 80.
  * Skipped on a development unit with an IS-Viewer attached (EXI channel 0 device 2), which has no movie.
  */
-// dig_00 (JP demo and JP release only; the US release drops this REL): a credits test left on the disc. It plays
+// dig_00 (JP demo, JP and PAL releases; both US versions drop this REL): a credits test left on the disc. It plays
 // demo.thp (Super Mario Sunshine's credits video) while TTYD characters pop up, like the real staff roll in end_00.
 void dig_thpInit(void) {
     u32 type;

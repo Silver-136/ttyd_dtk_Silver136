@@ -223,6 +223,7 @@ EVT_END()
  * usual dodge and guard checks, bounces off and walks home.
  */
 static EVT_BEGIN(attack_event)
+
     // Choose the target: the one a First Strike picked, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -377,8 +378,8 @@ EVT_END()
 
 /**
  * Script helper: args[4] is an angle in/out.
- * Writes the angle from (x1, z1) towards (x2, z2) given in args[0..3] into args[4],
- * or leaves it unchanged when the two points coincide.
+ * Writes the direction from (x2, y2) back toward (x1, y1), given in args[0..3], into args[4].
+ * The attack supplies X/Y positions for the body tilt; coincident points leave the angle unchanged.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;

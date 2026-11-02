@@ -606,14 +606,11 @@ USER_FUNC(evt_mario_get_dir) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Turns Mario's sprite to face arg 0 (degrees) over arg 1 ms, blocking during the turn;
- * arg 2 non-zero waits one more call and then zeroes the view and move directions. With 0 ms he turns at once.
- */
 #if VERSION <= VERSION_DEMO_US
 extern const f32 evt_mario_full_turn;
 extern const f32 evt_mario_half_turn;
 #endif
+
 /**
  * Turns Mario's sprite to face arg 0 (degrees) over arg 1 ms, blocking during the turn;
  * arg 2 non-zero waits one more call and then zeroes the view and move directions. With 0 ms he turns at once.
@@ -671,7 +668,7 @@ USER_FUNC(evt_mario_set_dir) {
     return EVT_RETURN_DONE;
 }
 
-/** Realigns Mario's move direction to his display direction, then zeroes directionView and moveDirection. */
+/** Snaps Mario's display facing with marioAdjustMoveDir, then zeroes directionView and moveDirection. */
 USER_FUNC(evt_mario_set_reardir) {
     MarioWork* mp = marioGetPtr();
     marioAdjustMoveDir();
@@ -735,12 +732,15 @@ USER_FUNC(evt_mario_set_dir_pos) {
 }
 #endif
 
-/** Realigns Mario's move direction with the way his sprite faces (marioAdjustMoveDir). */
 #if VERSION <= VERSION_DEMO_US
 const f32 evt_mario_full_turn = 360.0f;
 const f32 evt_mario_half_turn = 180.0f;
 #endif
-/** Realigns Mario's move direction with the way his sprite faces (marioAdjustMoveDir). */
+
+/**
+ * Snaps Mario's display direction to 0 or 180 degrees and updates movement direction.
+ * US and PAL derive movement from the snapped direction; JP and the demos use toMovedir(90) for either facing.
+ */
 USER_FUNC(evt_mario_adjust_dir) {
     marioAdjustMoveDir();
     return EVT_RETURN_DONE;
@@ -1125,7 +1125,11 @@ static inline f32 doorAngle(f32 cam) {
     return 270.0f;
 }
 
-/** the demo turns the partners behind Mario by the camera only, without close-follow mode */
+/**
+ * Moves Mario through a door to x = args[0], z = args[1] at the requested speed args[2] (reduced in background mode),
+ * while the partners follow closely, then positions them behind him.
+ * The demos choose their direction from the camera yaw; retail adds map-specific partner directions.
+ */
 USER_FUNC(evt_mario_party_door_move) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1296,7 +1300,11 @@ USER_FUNC(evt_mario_party_door_move) {
     return ret;
 }
 
-/** the demo moves the partners behind Mario without close-follow mode or the ride-kind angles */
+/**
+ * Moves Mario through an entrance to x = args[0], z = args[1] at the requested speed args[2] (reduced in background mode),
+ * keeping the partners close, then positions them behind him.
+ * The demos use the same angle rule for both move kinds; retail varies the angles by moveKind.
+ */
 USER_FUNC(evt_mario_party_bero_move) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();

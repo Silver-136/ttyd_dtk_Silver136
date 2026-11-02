@@ -51,8 +51,8 @@ static EvtWord wait_event[26];
 /**
  * Script helper for the Big Bandit's steal attack: arg0 = thief unit, arg1 = victim unit;
  * arg2/arg3/arg4 receive the stolen item id, icon id and count.
- * With a 40% chance it takes up to 10 coins, otherwise it takes a random item or badge from Mario's pouch
- * and equips the victim without it.
+ * With a 40% chance it takes up to 10 coins, otherwise it takes a random held item from Mario's pouch,
+ * refreshing the victim's equipment if the stolen item is a badge.
  */
 static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;
@@ -412,7 +412,7 @@ EVT_END()
 
 /**
  * Attack event of the Big Bandit: same as the Bandit's,
- * but a roll of 0-213 under 75 picks the plain attack (about 35%) and the rest the steal attack.
+ * but a roll of 0-214 under 75 picks the plain attack (about 35%) and the rest the steal attack.
  * A Big Bandit already carrying loot runs away with escape_event.
  */
 static EVT_BEGIN(attack_event)
@@ -451,6 +451,7 @@ EVT_END()
  * target before it gets up. The weapon is weapon_borodo_attack.
  */
 static EVT_BEGIN(_borodo_normal_attack)
+
     // Choose a target; a confused Bandit with none is flustered, and either way the turn ends.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -547,7 +548,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Bandit hops past in two hops.
+    // The charge missed: the Bandit hops past in two hops.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -602,6 +603,7 @@ static EVT_BEGIN(_borodo_normal_attack)
 EVT_END()
 
 static EVT_BEGIN(_borodo_steal_attack)
+
     // Choose a target; a confused Bandit with none is flustered, and either way the turn ends.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -698,7 +700,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Bandit hops past in two hops.
+    // The charge missed: the Bandit hops past in two hops.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.39941406f))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
@@ -719,6 +721,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
         CALL(_steal_item, UNIT_ID_SELF, LW(3), LW(8), LW(9), LW(7))
         IF_INT_NOT_EQUAL(LW(8), 0)
+
             // A stolen item: the success jingle plays, a message announces what was lost
             // and the item flies off the target into the Bandit's loot.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_SUCCESS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -823,6 +826,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 #if VERSION >= VERSION_US
+
 /**
  * Revival when the Big Bandit holds a Life Shroom (US and later):
  * the knocked-out unit spins, uses the item, is cured of all status, recovers HP and gets back up.

@@ -213,7 +213,7 @@ static StatusVulnerability regist_turn = {
 
 /**
  * Defence of the Dark Koopatrol while it is withdrawn into its shell:
- * defence 99 against every kind of hit, so no attack does damage.
+ * defence 99 against every kind of hit; the element-attribute table supplies immunity.
  */
 static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 
@@ -622,8 +622,8 @@ static BattleUnitSetup entry_togenoko = {
  * If it is flipped over it wakes up.
  * While guarding (unit work 0 = 1) it leaves the guard with 80 percent chance.
  * If it is Charged (STATUS_CHARGE), it picks the normal or shell attack at 50/35.
- * Otherwise it uses an enemy item if it has one, may call a friend (friend_event) when it is the only one,
- * and else rolls among the normal attack, shell attack, charge and guard.
+ * Otherwise it runs a selected enemy-item script if one is returned, then rolls among normal attack, shell attack and charge
+ * if none is selected. The friend_event and guard options have zero chance in this script.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -636,6 +636,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+
         // A flipped-over Dark Koopatrol gets back on its feet.
         CALL_CHILD(PTR(wakeup_event))
         RETURN
@@ -647,6 +648,7 @@ static EVT_BEGIN(attack_event)
         SUBTRACT(LW(0), 1)
         CALL(evt_sub_random, LW(0), LW(1))
         IF_INT_LESS(LW(1), 80)
+
             // While guarding, it usually drops the guard first.
             CALL_CHILD(PTR(guard_cancel_event))
             GOTO(99)
@@ -674,6 +676,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
+
             // It uses an enemy item if it has one.
             CALL_CHILD(LW(0))
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -715,7 +718,8 @@ static EVT_BEGIN(attack_event)
         SWITCH(LW(10))
             CASE_EQUAL(1)
             IF_INT_LESS(LW(11), 0)
-                // Alone on its side, it may call a friend.
+
+                // Disabled friend-call option (zero chance).
                 CALL_CHILD(PTR(friend_event))
                 GOTO(99)
             END_IF
@@ -734,7 +738,7 @@ static EVT_BEGIN(attack_event)
             CASE_END
         END_SWITCH
 
-        // Otherwise it rolls among the normal attack, the shell attack, charging and guarding.
+        // Otherwise it rolls among the normal attack, the shell attack and charging; guarding has zero weight.
         LABEL(11)
         SET_VALUE(LW(0), 0)
         ADD(LW(0), 50)
@@ -770,8 +774,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Dark Koopatrol's normal attack: it runs up to the target (R_3), thrusts (A_2) with SFX_ENM_TOGENOKO_MOVE5,
- * and the pre-damage check decides between a miss and a hit; then it hops back.
+ * The Dark Koopatrol's normal attack: it winds up in R_3, then moves up to the target in the thrust pose A_2 with SFX_ENM_TOGENOKO_MOVE5,
+ * and the pre-damage check decides between a miss and a hit; on a hit it then hops back.
  */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -796,7 +800,6 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
 
     // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -808,7 +811,8 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     BEGIN_SIBLING_EVENT
         LOOP(10)
-            // Run up to the target.
+
+            // Wind up with running sounds.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
             WAIT_FRAMES(3)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_MOVE4"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -951,7 +955,8 @@ static EVT_BEGIN(shell_attack_event)
         LOOP(0)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(15))
             IF_INT_EQUAL(LW(15), 1)
-                // Spinning in its shell, it speeds at the target.
+
+
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
                 BREAK_LOOP
             END_IF
@@ -976,6 +981,7 @@ static EVT_BEGIN(shell_attack_event)
             WAIT_FRAMES(3)
         END_LOOP
     END_SIBLING_EVENT
+    // Spinning in its shell, it speeds at the target.
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(12.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(5), EVT_NULLPTR)
@@ -1019,6 +1025,7 @@ static EVT_BEGIN(shell_attack_event)
     // The attack connects.
     LABEL(91)
     IF_INT_EQUAL(LW(6), 0)
+
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         SET_VALUE(LW(6), 1)
@@ -1062,7 +1069,7 @@ EVT_END()
 
 /**
  * The Dark Koopatrol's Charge: a self buff (weapon_togenoko_charge targets only itself,
- * charge strength 2) that makes its next attack stronger by 2.
+ * charge strength 5) that makes its next attack stronger by 5.
  * It winds up with SFX_ENM_TOGENOKO_CHARGE1 and applies the weapon to itself.
  */
 static EVT_BEGIN(charge_event)

@@ -21,7 +21,7 @@
 enum {
     UNIT_WORK_SPIN_DONE = 0,    // set to 1 when the thrown bone lands: ends the bone's spin loop
     UNIT_WORK_REWARD_GIVEN = 1, // 1 once its coins and experience were paid out
-    UNIT_WORK_REVIVE_TURNS = 2, // turns left while collapsed (2 or 3); at 0 it rebuilds itself
+    UNIT_WORK_REVIVE_TURNS = 2, // turns left while collapsed (2, 3 or 4); at 0 it rebuilds itself
 };
 
 static USER_FUNC(honenoko_copy_status);
@@ -126,12 +126,14 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Red Bones in the demo builds: immune to poison and instant KO;
  * resists sleep, stop and confusion.
  */
 static StatusVulnerability regist = {50, 50, 100, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0};
 #else
+
 /**
  * Status vulnerability of the Red Bones in the retail builds: immune to sleep, poison, fright and instant KO;
  * resists most other statuses.
@@ -140,8 +142,8 @@ static StatusVulnerability regist = {0, 85, 40, 0, 40, 100, 90, 80, 100, 90, 100
 #endif
 
 /**
- * Parts of the Red Bones: the body (part 1), the bone it throws (part 2)
- * and the two bones (parts 3 and 4) it tosses up and reassembles when it calls a friend.
+ * Parts of the Red Bones: the body (part 1), the bone it throws (part 2),
+ * the piece it tosses up (part 3) and part 4 used for reassembly at the landing position when it calls a friend.
  */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_red_honenoko", "c_karon_r_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER, 0, pose_table},
@@ -326,7 +328,7 @@ EVT_END()
  * Called when the Red Bones is knocked down but not truly defeated:
  * it walks back to its home position, and the first time awards its coins, experience and star points.
  * Then it collapses into a pile of bones (KRN_D_2 pose with the crumble sound),
- * picks 2 or 3 turns to stay down in unit work 2, lowers its hit offset and restarts the wait event.
+ * picks 2, 3 or 4 turns to stay down in unit work 2, lowers its hit offset and restarts the wait event.
  */
 static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
@@ -395,7 +397,7 @@ EVT_END()
 /**
  * Attack AI. In a fixed-attack battle it throws a bone (normal_attack_event).
  * If it is collapsed (unit work 2 at least
- * 1) it takes its turn to rebuild itself with rebirth_event. Otherwise it uses an enemy item if it has one, then draws
+ * 1) it takes its turn to rebuild itself with rebirth_event. Otherwise it uses an enemy item if selected by the item-use check, or draws
  * a bone throw (60) or calling a Dull Bones (40) if there is room beside it.
  */
 static EVT_BEGIN(attack_event)
@@ -487,10 +489,11 @@ EVT_END()
 /**
  * Bone throw at one target: faces it, raises the bone part (part 2) and spins it
  * while it flies as a projectile to the target.
- * A sibling event starts the target's avoid animation when the bone passes it.
+ * A sibling event starts the target's avoid animation for pre-check results 3, 6 or 2 when the bone passes it.
  * On a hit the bone lands, the damage is resolved and it bounces back; the bone part is hidden again at the end.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), 2)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -544,7 +547,7 @@ static EVT_BEGIN(normal_attack_event)
         END_LOOP
     END_SIBLING_EVENT
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; pre-check results 3, 6 and 2 start the target's dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -565,7 +568,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // A miss: the bone sails past the target, which dodges as it goes by.
+    // A miss: the bone sails past the target, which may dodge as it goes by.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -641,6 +644,7 @@ EVT_END()
  * position in LW(0) to LW(2) with this unit's status copied by honenoko_copy_status.
  */
 static EVT_BEGIN(call_friend_event)
+
     // The camera zooms in on the Red Bones.
     CALL(evt_btl_camera_set_mode, 0, 7)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)

@@ -275,7 +275,7 @@ static StatusVulnerability regist = {
 };
 #endif
 
-/** Status vulnerability of the White Magikoopa for its clones: immune to every status effect. */
+/** Status vulnerability of the White Magikoopa for its clones: immune to the 22 statuses in this table. */
 static StatusVulnerability regist_bunsin = {0};
 
 static PoseTableEntry pose_table[] = {
@@ -668,7 +668,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-/** Init script of a Magikoopa clone (bunsin). Same as init_event but the clone uses the sky data table (it floats). */
+/** Shared init script of the real Magikoopa and its clones; selects the sky pose/data tables and floating attributes only when UNIT_WORK_SKY is set. */
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -746,8 +746,8 @@ EVT_END()
 
 /**
  * Damage reaction of the Magikoopa.
- * Runs the default damage; if it is a clone that was hit, or the real one died,
- * it kills the clones (bunsin_kill_event, kamec_subset_bunsin_all_kill).
+ * A hit clone vanishes without running the default damage event; the real one runs the default damage
+ * and removes any existing clones (bunsin_kill_event, kamec_subset_bunsin_all_kill).
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -985,11 +985,12 @@ EVT_END()
 
 /**
  * Attack script of the Magikoopa.
- * Chooses a spell: usually the attack magic (weapon_kamec_attack_magic), or the heal, buff, Huge, Electric,
- * Invisible or defence spells for its allies, or creates its clones (bunsin_magic_event) depending on how many
+ * Chooses a spell: usually the attack magic (weapon_kamec_attack_magic), or healing spells
+ * for its allies, or creates its clones (bunsin_magic_event) depending on how many
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
+
     // At the start of a first strike the Magikoopa goes straight into its attack spell.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1037,7 +1038,7 @@ static EVT_BEGIN(attack_event)
             GOTO(99)
         END_IF
     ELSE
-        // With clones about, it rolls for its spell: the attack spell first,
+        // With clones about, it casts the attack spell (or is flustered if confused); without clones it rolls for a spell.
         CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -1140,6 +1141,7 @@ EVT_END()
  * the clone spell (LW(15) = 1) shows the charge sparkle on the caster only (eff_staff2).
  */
 static EVT_BEGIN(ground_magic_common_event1)
+
     // Casting begins on the ground: the casting sound repeats while the staff glows on the caster and each clone.
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -1293,6 +1295,7 @@ EVT_END()
  * with the poses KMW_A_3A to 3D and SFX_ENM_KAMEKU_MAGIC1, MAGIC8 and MAGIC7, copied by every clone.
  */
 static EVT_BEGIN(sky_magic_common_event)
+
     // Casting begins in the air: the casting sound repeats while the staff glows on the caster and each clone.
     BEGIN_SIBLING_EVENT
         LOOP(2)
@@ -1451,7 +1454,7 @@ EVT_END()
  * The Magikoopa's magic blast (weapon in LW(9)): picks a target (the first-strike target in a first strike),
  * casts with its clones (magic_common_event1), plays SFX_ENM_KAMEKU_MAGIC3_2 and checks the hit in advance.
  * On a miss (results 2, 3, 4, 6) the caster and every clone fire a bolt across the stage
- * (attack_magic_event_sub_no_hit) and the target dodges as the caster's bolt passes it;
+ * (attack_magic_event_sub_no_hit); for results 2, 3 or 6, the target dodges as the caster's bolt passes it;
  * on a hit (result 1) they all fire at the target (attack_magic_event_sub_hit) and the damage is applied once.
  * Everyone then takes pose type 43.
  */
@@ -1509,7 +1512,9 @@ static EVT_BEGIN(attack_magic_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // The spell missed: the bolts fly on past the target, which gets out of their way.
+
+        // The spell missed: the bolts fly on past the target;
+        // for pre-check results 3, 6 or 2, the target starts its avoid reaction.
         LABEL(90)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(1)
@@ -1887,6 +1892,7 @@ static USER_FUNC(eff_magic) {
     EffectEntry* eff;
 
     BtlUnit_GetPos(unit, &x, &y, &z);
+
     // from the tip of the wand
     x += 25.0f * unit->sizeMultiplier * unit->faceDirection;
     y += 20.0f * unit->sizeMultiplier;

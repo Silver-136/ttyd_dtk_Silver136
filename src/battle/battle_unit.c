@@ -349,7 +349,7 @@ s32 BtlUnit_GetUnitId(BattleUnit* unit) {
     return unit->unitId;
 }
 
-/** Finds the part with the given part number; a negative number, a one-part unit or no match gives the first part. */
+/** Finds the part with the given part number; a negative number or a one-part unit gives the first part, while no match returns NULL. */
 BattleUnitPart* BtlUnit_GetPartsPtr(BattleUnit* unit, s32 partNum) {
     BattleUnitPart* part = unit->parts;
 
@@ -1130,7 +1130,8 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
  * Stores a status effect's turns and strength (Charge adds to its strength, capped 0..99).
  * Burn and freeze cancel each other, as do Fast and Slow, without applying the new one,
  * and a zero strength for a size, attack or defense change clears an effect of that sign.
- * Returns FALSE when nothing was applied; retail versions also return FALSE when Charge drops below 0
+ * Cancellation and zero-strength clear paths return FALSE; unhandled types return TRUE without changing a status.
+ * Retail versions also return FALSE when Charge drops below 0
  * or Allergic or Payback is set to 0 turns, which the demos treat as set.
  */
 #if VERSION <= VERSION_DEMO_US
@@ -1728,7 +1729,7 @@ BOOL BtlUnit_CanActStatus(BattleUnit* unit) {
 }
 
 /**
- * Loads Mario's or a partner's HP and FP from the save data (pouch) into the battle unit;
+ * Loads Mario's HP and FP, or a partner's HP, from the save data (pouch) into the battle unit;
  * partners also get back the size, status flags
  * and status turns saved in the battle's party info (and, in US and PAL, the disabled commands) and are KO'd
  * if their HP is 0.
@@ -1760,8 +1761,9 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
 }
 
 /**
- * Recomputes max HP and FP from the base values plus 5 per HP Plus
- * and FP Plus badge (from the pouch for Mario and the partners) and clamps current HP and FP to them.
+ * Recomputes max HP from base HP plus 5 per HP Plus and clamps current HP to it.
+ * Mario and partners take base HP from the pouch; partners also reload current HP from it.
+ * For Mario and non-partner units, also recomputes max FP plus 5 per FP Plus and clamps current FP.
  */
 void BtlUnit_ReviseHpFp(BattleUnit* unit) {
     PouchData* pouch = pouchGetPtr();
@@ -1799,7 +1801,7 @@ void BtlUnit_ReviseHpFp(BattleUnit* unit) {
 }
 
 /**
- * Writes Mario's or a partner's HP and FP back to the save data (pouch) and keeps a partner's size,
+ * Writes Mario's HP and FP, or a partner's HP, back to the save data (pouch) and keeps a partner's size,
  * status flags and status turns (and, in US and PAL, disabled commands) in the battle's party info for
  * when it is switched back in.
  */
@@ -2117,7 +2119,7 @@ void BtlUnit_ResetMoveStatus(BattleUnit* unit) {
 
 /**
  * Loads the sound set for a scripted move from the unit's move sound table:
- * with kind -1, mode 0, 1 or 3 picks entries 0-2 and mode 2 the jump sounds; kind -2 only restarts the timer;
+ * with kind -1, mode 0, 1 or 3 picks entries 0-2 and mode 2 the jump sounds; kind -2 restarts the timer;
  * anything else silences it. Called by the btlevtcmd move helpers.
  */
 void BtlUnit_LoadSeMode(s32 mode, s32 kind, BtlPoseSoundTable* table, BecSndWork* work) {
@@ -2220,11 +2222,12 @@ void BtlUnit_PoseSoundInit(BattleUnitPart* part) {
 #pragma push
 // propagation optimisation off for BtlUnit_ControlPoseSoundMain, BtlUnit_snd_se, BtlUnit_snd_se_pos and 4 more: the original register allocation and scheduling need it
 #pragma opt_propagation off
+
 /**
  * Plays the sound effects tied to a part's current animation:
  * each frame, entries in the part's pose sound table whose time (in seconds of the animation) was just passed
  * fire their sound or callback, restarting on each loop.
- * Sounds of units outside the current phase play at 70% volume.
+ * Entries with flag 1 play at 70% volume when the unit is outside the current phase.
  */
 void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
     BattleWork* wp = _battleWorkPointer;

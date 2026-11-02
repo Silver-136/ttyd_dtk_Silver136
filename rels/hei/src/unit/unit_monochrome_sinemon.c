@@ -87,7 +87,7 @@ BattleUnitKind unit_monochrome_sinemon = {
 
 /**
  * Defence of the Cleft's body: 2 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
@@ -244,6 +244,7 @@ EVT_END()
  * it waits 30 frames, then places the flash above the head at a height that depends on whether the unit has
  * STATUS_HUGE or STATUS_TINY.
  */
+
 // Place the spike flash using Huge, Tiny, or normal offsets after the counter delay.
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
@@ -324,6 +325,7 @@ EVT_END()
  * ground position and counter attribute with SFX_ENM_INSIDE2 and a hop;
  * while still flipped it just goes back to waiting.
  */
+
 // Flipped attack turns count down from two; the recovery turn restores the upright state instead of attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -354,10 +356,11 @@ EVT_END()
 
 /**
  * Attack event of the Cleft: gets up first if it is flipped over;
- * otherwise it uses an enemy item if it has one, or dashes at one target (SFX_ENM_EMON_DASH1) and rams it.
- * The pre-damage check decides between a dodge and a hit with the action-command result, then it hops back home.
+ * otherwise it uses an enemy item if the item-use check selects one, or dashes at one target (SFX_ENM_EMON_DASH1) and rams it.
+ * The pre-damage check decides between a miss and a hit; a hit then checks the action-command defence result before the return hops.
  */
 static EVT_BEGIN(attack_event)
+
     // Flipped over: it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -373,6 +376,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
+
         // It may use an enemy item instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

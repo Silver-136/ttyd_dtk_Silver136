@@ -110,7 +110,7 @@ GXRenderModeObj sRMObjHReso = {
     8, 8, 10, 12, 10, 8, 8, //vfilter
 };
 
-/** Video mode of the boot logo screens in 60Hz mode (EURGB60), set by seq_logo after a hot reset. */
+/** Video mode of the boot logo screens for NTSC progressive scan or PAL EURGB60, set by seq_logo after a hot reset. */
 GXRenderModeObj sRMObjHReso_prog = {
 #if VERSION == VERSION_EU
     VI_TVMODE_EURGB60_INT, //viTVmode
@@ -168,7 +168,7 @@ GXRenderModeObj GXNtsc480IntDfMarioSt = {
     8, 8, 10, 12, 10, 8, 8, //vfilter
 };
 
-/** The game's main video mode in 60Hz (EURGB60), used by marioStInit after a hot reset. */
+/** The game's main video mode for NTSC progressive scan or PAL EURGB60, used by marioStInit after a hot reset. */
 GXRenderModeObj GXNtsc480ProgMarioSt = {
 #if VERSION == VERSION_EU
     VI_TVMODE_EURGB60_INT, //viTVmode
@@ -657,7 +657,7 @@ exitcheck:
 
 /**
  * Background thread started by marioStInit that polls the disc drive:
- * on cover open, no or wrong disc, retry or fatal error it sets gp->dvdError,
+ * on cover open, no or wrong disc, retry or (retail only) fatal error it sets gp->dvdError,
  * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
  * US and PAL wait until the status has been steady for 10 frames before drawing.
  */

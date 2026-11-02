@@ -405,7 +405,7 @@ EVT_END()
 
 /**
  * Vivian's defeat: she walks back to her home spot if displaced.
- * If a sister is in the middle of her own defeat (state 1) she waits for it and says nothing;
+ * If Beldam is mid-defeat, or Beldam is defeated and Marilyn is mid-defeat, she waits and says nothing;
  * if both sisters are dead she screams (btl_majo3_13);
  * otherwise she apologizes (btl_majo3_10). Then GW(13) = 2 and the shared no-spin dead sequence runs.
  */
@@ -535,7 +535,7 @@ EVT_END()
 /**
  * Vivian's attack choice: uses an item if the AI picks one.
  * Otherwise she always uses the shadow slip (unit work 8 = 0)
- * until Beldam's phase script sets her unit work 7 (below 50% HP);
+ * until Beldam's phase script sets her unit work 7 (from her low-HP check or the group-enrage branch);
  * then her next attack is the flame and from then on she picks shadow slip 70% or flame 30%.
  */
 static EVT_BEGIN(attack_event)
@@ -656,7 +656,7 @@ EVT_END()
 /**
  * Vivian's flame attack (weapon_vivian_flame_attack1, 1 damage to every enemy,
  * piercing defense and unguardable):
- * she raises her hands with the magic sound, then smoke appears on each target in turn as it is hit or dodges;
+ * she raises her hands with the magic sound, then smoke appears on each target in turn before its hit check;
  * with no valid targets it ends (or flusters her when confused).
  */
 EVT_BEGIN(flame_attack_event)
@@ -725,7 +725,7 @@ EVT_BEGIN(flame_attack_event)
     RETURN
 EVT_END()
 
-/** Wait event of Vivian: switches to pose table entry 1 (idle). */
+/** Wait event of Vivian: restores automatic pose-table animation selection for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

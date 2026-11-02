@@ -29,7 +29,7 @@ EvtWord kpa_00_init_evt[24];
 /**
  * Opening cutscene of the Bowser interludes: the camera pans across Bowser's Castle to a BGM_STGK_CASTLE1 start,
  * then the game moves on to kpa_01.
- * Runs at the start of the first interlude (story progress below STG1_19_01_BOWSER_BOWSER_CASTLE).
+ * Runs at the start of the first interlude (story progress STG1_19_PEACH_TEC).
  */
 EVT_BEGIN(kpa_00_first_evt)
     CALL(evt_mario_cont_onoff, 0)
@@ -53,12 +53,13 @@ EVT_END()
 
 /**
  * Closing cutscene of the first interlude: the flying Bowser NPC (飛クッパ) bobs up and away and grows from 0.1 to
- * 0.6 scale, with the airship engine sound (SFX_KUPPA_AIRSHIP_MOVE1) following its position,
+ * 0.6 scale, with the airship engine sound (SFX_KUPPA_AIRSHIP_MOVE1) following its x and y position,
  * while Kammy Koopa flies alongside with her broom sound and a smoke trail.
- * The story advances to STG1_19_02_BOWSER_CASTLE_INT, the game is saved,
+ * The story advances to STG1_19_02_BOWSER_CASTLE_INT, saving is offered,
  * and play returns to Petalburg (nok_01).
  */
 EVT_BEGIN(kpa_00_fly_evt)
+
     // Cutscene start: controls are off and Mario is moved out of sight; Bowser's airship and Kammy are placed
     // small and far away.
     CALL(evt_mario_key_onoff, 0)
@@ -163,7 +164,7 @@ EVT_BEGIN(kpa_00_fly_evt)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
 
-    // The airship flies across the screen with its engine sound following it.
+    // The airship flies across the screen with its engine sound following its x and y movement.
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_AIRSHIP_MOVE1"), 0, 0, 0, LW(3))
     SET_VALUE(LW(4), -1000)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 210, 3000)
@@ -183,7 +184,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     WAIT_MS(800)
 
     // The story advances to Bowser's castle interior; the music fades, the screen closes to a spot, and the
-    // game is saved.
+    // player is offered a save.
     SET_VALUE(GSW_STORY_PROGRESS, STG1_19_02_BOWSER_CASTLE_INT)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 1000)

@@ -33,6 +33,7 @@
 #define UNIT_WORK_BARRIER_EFFECT 3    // effSyuryouEntry barrier effect shown while any satellite lives (EffectEntry*, 0 none); _check_satellite creates, moves and deletes it
 #define UNIT_WORK_SATELLITE 4         // first of four slots (4-7): unit id of satellite n (entry_barriern_satellite), -1 none (slots 4-7)
 #define UNIT_WORK_SATELLITE_SPLINE 10 // first of four slots (10-13): BarriernSpline* moving satellite n in or out (barriernSatelliteTo_Init allocates; _Main frees it after 60 frames) (slots 10-13)
+
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_TARGET_UNIT 0 // part 1, first of five slots (0-4): target unit of each ring (wakka_attack_event uses slot 0 only) (slots 0-4)
 #define PARTS_WORK_TARGET_PART 5 // part 1, first of five slots (5-9): target part of each ring (slots 5-9)
@@ -919,6 +920,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
     {
+
         // The satellite body uses the owner counter; its afterimages use n + 1 below.
         f32 s = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, scale, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
@@ -948,7 +950,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
  * Unison phase script of the X-Yux, run before the player's phase:
  * skipped on turn 1 and when the X-Yux cannot act, and does nothing if all 4 satellites are alive.
  * After a short random delay it pulls its satellites into its body (SFX_ENM_BARRI_SPLIT1),
- * spawns 2 replacement Mini-X-Yux, sends the satellites back out to their orbit positions (SFX_ENM_BARRI_SPLIT2)
+ * spawns up to 2 replacement Mini-X-Yux, sends the satellites back out to their orbit positions (SFX_ENM_BARRI_SPLIT2)
  * and restores the wait event.
  */
 static EVT_BEGIN(unison_phase_event)
@@ -1936,6 +1938,7 @@ static USER_FUNC(barriern_wawawa_set_target) {
         i++;
         barriern_wawawa_get_next_target(&unitIdx[i], &partIdx[i]);
     }
+
     // Choose each shot independently, so several shots may select the same target.
     for (i = 0; i < 5; i++) {
         s32 r = irand(num);
@@ -1974,7 +1977,7 @@ static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
 
 /**
  * Script function: updates the Yux's barrier from its satellites.
- * If no satellite (work[4], work[5]) is left, the barrier breaks (SFX_ENM_BARRI_BARRIER_BREAK1, glass shards,
+ * If no satellite (work[4] to work[7]) is left, the barrier breaks (SFX_ENM_BARRI_BARRIER_BREAK1, glass shards,
  * damage immunity of the body removed) and args[0] = 0;
  * while one is left, the body is immune to damage and status and the barrier effect (work[3]) follows the unit,
  * args[0] = 1.
@@ -2050,7 +2053,7 @@ static USER_FUNC(_check_satellite) {
 
 /**
  * Script function: returns the starting offset of satellite index args[2]
- * when the Yux has args[1] satellites (1 to 4 laid out as a fixed pattern 25 units apart,
+ * when the Yux has args[1] satellites (1 to 4 laid out as a fixed pattern with 25-unit offsets,
  * mirrored by the facing direction) in the variables args[3] to args[5] as x, y and z.
  */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {

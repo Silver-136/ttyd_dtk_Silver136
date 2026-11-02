@@ -145,7 +145,7 @@ static BattleWeapon weapon_patapata_attack = {
 /** Defence of the Paratroopa (Paratroopa form): 1 damage points off every hit. */
 static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 
-/** Defence of the Paratroopa (Paratroopa form): no damage reduction. */
+/** Element reactions of the Paratroopa (Paratroopa form): no special reaction to any element. */
 static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 
 /**
@@ -252,6 +252,7 @@ EVT_END()
  * It then installs the Koopa's wait, attack, damage and confusion events and footstep sounds.
  * If its HP damage count is above 1 it also runs dmg_turn_event so it lands flipped over.
  */
+
 // Replace the winged form with the grounded form, then also overturn it if this damage has multiple hits.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
@@ -319,6 +320,7 @@ EVT_END()
  * the Paratroopa somersaults away (a 24-frame spin) and then returns to its home position.
  */
 static EVT_BEGIN(attack_event_patapata)
+
     // Choose the target: the First Strike target if the battle opened with one,
     // otherwise it may use an item or pick a normal target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -378,7 +380,7 @@ static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, EASING_LINEAR, 0, MOVE_SOUND_NONE)
     WAIT_FRAMES(11)
 
-    // It dives at the target (a First Strike dive cannot miss).
+    // It dives at the target (a First Strike dive skips the normal evasion checks).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PATA_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTP_A_4"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -414,7 +416,7 @@ static EVT_BEGIN(attack_event_patapata)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Paratroopa flies on past and climbs back up.
+    // The dive missed: the Paratroopa flies on past and climbs back up.
     LABEL(90)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -690,6 +692,7 @@ EVT_END()
  * at 0 it restores the normal defence table and pose table, clears the overturn flag, plays the wake-up sound,
  * hops upright and restarts the wait event.
  */
+
 // Use this turn to reduce the overturned count; reaching zero restores the standing form without attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -801,6 +804,7 @@ EVT_END()
  * A confused unit with no target runs subsetevt_confuse_flustered.
  */
 static EVT_BEGIN(attack_event)
+
     // A Koopa flipped onto its back spends its turn getting back on its feet instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -918,7 +922,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the shell slides past, slows to a stop and hops back upright.
+    // The shell missed: it slides past, slows to a stop and hops back upright.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 100)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_NONE, 1)

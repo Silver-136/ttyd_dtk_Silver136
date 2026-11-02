@@ -913,11 +913,7 @@ void marioLandOn(void) {
     }
 }
 
-/**
- * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;
- * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
- * Peach uses peach_talk, Bowser his own pose.
- */
+
 #if VERSION <= VERSION_DEMO_US
 static f32 marioDemoHalf(f32 x) {
     if (x < 0.0) {
@@ -926,6 +922,12 @@ static f32 marioDemoHalf(f32 x) {
     return 0.5 * x * (3.0 - x);
 }
 #endif
+
+/**
+ * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;
+ * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
+ * Peach uses peach_talk, Bowser his own pose.
+ */
 void mot_talk(void) {
     MarioWork* mario = marioGetPtr();
     NpcEntry* npc;
@@ -1061,7 +1063,8 @@ BOOL marioChkJump(void) {
 
 /**
  * On Y, turns Mario into the boat or the plane when he stands on a matching panel and has the Boat
- * or Plane Curse (retail: not while a partner use is pending).
+ * or Plane Curse (retail: a pending partner use blocks it unless
+ * MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON is set).
  * Returns TRUE only when Y was pressed and no panel took it; callers (mot_stay, mot_walk) ignore it.
  */
 BOOL marioChkTransform(void) {
@@ -1113,7 +1116,7 @@ BOOL marioChkItemMotion(void) {
     if (mario->flags & (MARIO_FLAG_PAPER_MODE | MARIO_FLAG_TUBE_MODE)) {
         return FALSE;
     }
-    // retail repeats this test (trig is known nonzero here)
+    // This repeats the test (trig is known nonzero here)
     if (!trig) {
         return FALSE;
     }
@@ -1179,8 +1182,9 @@ void marioChgMotJump2(void) {
     }
 }
 
-/** TRUE for display angles strictly between 90 and 270 degrees, so mot_kaze ends facing 180 rather than 0. */
+
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * In the demo the Flurrie motion lives here: party_cloud.c has no mot_cloud yet,
  * and the motion's post function resets the camera target.
@@ -1196,11 +1200,13 @@ static void mot_cloud(void) {
         mario->currSubMotionId = 0;
     }
 }
+
 /** Leaving the demo's Flurrie motion: puts the camera target back on Mario (cloudResetAt). */
 static void mot_cloud_post(void) {
     cloudResetAt();
 }
 #endif
+
 /** TRUE for display angles strictly between 90 and 270 degrees, so mot_kaze ends facing 180 rather than 0. */
 static inline BOOL marioChkBackAngle(f32 a) {
     BOOL ret = FALSE;

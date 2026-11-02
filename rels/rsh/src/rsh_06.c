@@ -59,13 +59,13 @@ static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
 static void ext_moamoa_main(void);
 #pragma inline_max_total_size(100000)
+
 /**
  * Polynomial approximation of sin(x) for an angle in radians in [0, 2*pi);
- * the Smorg (moamoa) swarm code uses its own sine to keep results identical on every frame without calling the
- * libm. Inlined into the swarm code.
+ * the Smorg (moamoa) swarm code uses its own sine without calling libm. Inlined into the swarm code.
  */
-// moa_sin/moa_cos and moa_sinx/moa_cosx: two copies of the polySinf/polyCosf bodies (poly_trig.h); one shared
-// pair changes the code, so this unit inlined distinct copies.
+
+// moa_sin/moa_cos and moa_sinx/moa_cosx: two copies of the polySinf/polyCosf bodies (poly_trig.h).
 static inline f32 moa_sin(f32 x) {
     f32 a = 0.00761f;
     f32 b = 0.16605f;
@@ -139,7 +139,7 @@ static inline f32 moa_cos(f32 x) {
 }
 
 /**
- * Variant of moa_sin that reduces its argument in place instead of using a second local;
+ * Variant of moa_sin using the same in-place argument reduction;
  * same polynomial sine for an angle in radians in [0, 2*pi).
  */
 static inline f32 moa_sinx(f32 x) {
@@ -265,8 +265,8 @@ EvtWord rsh_06_init_evt_nidome[41];
 EvtWord rsh_06_a_init_evt_nidome[11];
 
 /**
- * Animation table of the swarm of small Smorgs (c_n_moa_a) that merge into the giant Smorg:
- * the figure, its animation set and a start offset for each.
+ * Animation table of the small Smorgs (c_n_moa_a and c_n_moa_b) and the swallowed passengers:
+ * the model, its animation and a sampled frame for each.
  */
 static ExtTexInfo ext_moamoa_data[] = {
     {"c_n_moa_a", "S_1", 0.0f},
@@ -344,11 +344,11 @@ static ExtTexInfo ext_moamoa_data[] = {
 
 
 #pragma dont_inline on
+
 /**
  * Builds the swarm's animation table (wp->defs) from ext_moamoa_data:
- * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture frame,
- * frame count, speed, and looping unless the animation name starts with J).
- * Kept out of line to match the original.
+ * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture index,
+ * sampled-frame count, duration in frames, and a loop flag cleared when the animation name starts with J).
  */
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = ext_moamoa_data;
@@ -384,6 +384,7 @@ static void moamoa_pose_init(void) {
     wp->numDefs++;
 }
 #pragma dont_inline reset
+
 /**
  * Per-frame update of every Moamoa sprite's animation:
  * turns the time since its pose started into a texture frame index in the sprite's ExtdrvPose.
@@ -614,8 +615,8 @@ static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Prepares the giant Smorg's body: turns on world-position evaluation for the "base" NPC's skeleton,
- * hides its joints, sets up the chains of Moamoa along the bones and divides the swarm among them.
- * Gives some chains the models of the swallowed passengers (kinds 1 to 9).
+ * initializes its stored joint positions below the scene, sets up the chains of Moamoa along the bones
+ * and divides the swarm among them. Gives some chains the models of the swallowed passengers (kinds 2 to 9).
  */
 void evalOn(void) {
     NpcEntry* npc = npcNameToPtr("base");
@@ -803,6 +804,7 @@ static void ext_shadow_disp(CameraId camera, void* param) {
     }
 }
 #pragma dont_inline on
+
 /**
  * Starts a hop for one Moamoa toward (x, y, z) with the given horizontal speed and gravity:
  * optionally snaps y to the ground below the target, computes the flight time and initial vertical speed,
@@ -844,11 +846,13 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 #pragma dont_inline reset
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+
 /**
  * Checks whether something hits one Moamoa.
- * Returns 0 for nothing, 1 for Mario jumping on it (Mario bounces), 2 for a hammer swing or Koops's shell,
+ * Returns 0 for nothing, 1 for Mario jumping on it (requests a bounce except while rolling or riding Yoshi in retail),
+ * 2 for a hammer swing or Koops's shell,
  * 3 for Flurrie's breath and 4 for Bobbery's bomb.
- * As a side effect it also pushes Mario out when he walks into a Moamoa on the ground.
+ * As a side effect it restores an overlapping Moamoa's previous X/Z and computes Mario's floorMove correction.
  */
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     MarioWork* mario = marioGetPtr();
@@ -947,12 +951,12 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
 #pragma opt_dead_assignments off // FAKE: keeps the named in-argument holder `aa` of case 15 (dead store otherwise dropped by IRO), so the sum is a low-numbered named vreg as in the target
 static inline f32 mmI(f32 x) { return x; } // FAKE: identity; replaces the dead `(k = A - B)` holders of the hand-inlined randf sites, which opt_dead_assignments off would otherwise keep as named vregs
+
 /**
  * Per-frame callback of the Smorg swarm.
- * Tracks hammer and idle time, Flurrie's breath and partner use, counts hits on the swarm's targets,
+ * Tracks hammer and idle time, Flurrie's breath and partner use, records hits,
  * and runs each Moamoa's state machine (idle hopping toward its target or Mario, jumps, damage and knock-off,
- * escape, gathering and merging, being blown away).
- * When both targets have been freed it starts the swarm's escape.
+ * gathering and merging, being blown away).
  */
 static void ext_moamoa_main(void) {
     MarioWork* mario = marioGetPtr();
@@ -1363,6 +1367,7 @@ static void ext_moamoa_main(void) {
                 }
                 break;
             case MOAMOA_STATE_RESPAWN:
+
                 // Reuse a randomly chosen on-roof wander/jump member; retry until one is found.
                 PSMTXIdentity(*pose->mtx);
                 { Moamoa* mm;
@@ -1480,6 +1485,7 @@ static void ext_moamoa_main(void) {
 }
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
+
 /**
  * Registers the swarm's draw callbacks each frame (sprites and shadows on the 3D camera and, if enabled,
  * on the offscreen camera).
@@ -1551,6 +1557,7 @@ static SharinData sharinDt[] = {
  * LW(1) picks the wheel's radius and LW(2) picks which wheel speed, GW(0) or GW(1), drives it;
  * every frame the angle grows by speed over radius and the object is rotated.
  */
+
 // GW(0)/GW(1) supply per-update travel; radius converts it to wheel angle.
 static EVT_BEGIN(evt_sharin_main)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
@@ -1763,6 +1770,7 @@ EVT_END()
  * plays the engine sounds and ramps the wheel speeds GW(0) and GW(1) up to -15 (leftward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start)
+
     // The train starts moving: the station flags are cleared and the bell rings.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -1777,6 +1785,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1"), 0)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
+
         // The engine sounds start and the wheel speeds ramp up to the left (outbound).
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2"), 0)
@@ -1867,6 +1876,7 @@ EVT_END()
  * but ramps the speeds up to +15 (rightward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start2)
+
     // The train starts moving on the return trip: the station flags are cleared.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -1934,6 +1944,7 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+
         // The wheel speeds ramp up to the right.
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
         LOOP(0)
@@ -2181,7 +2192,7 @@ EVT_END()
 
 /**
  * Copy of the hom_10 init event (the outside view of the train at the start of the second trip) that this module
- * does not use: the train drives past a fixed camera for about 4 seconds,
+ * does not use: the train drives past while the camera pans for about 4 seconds,
  * then the map changes to rsh_02_a (entrance nidome).
  */
 static EVT_BEGIN(hom_10_init_evt)

@@ -70,6 +70,7 @@ EvtWord muj_12_init_evt[60];
 
 /** White fade-out colour of the screen flash in the Cortez scenes. */
 static const GXColor evtflash_col1 = {0xFF, 0xFF, 0xFF, 0xFF};
+
 /** White fade-in colour of the screen flash in the Cortez scenes. */
 static const GXColor evtflash_col2 = {0xFF, 0xFF, 0xFF, 0xFF};
 
@@ -217,7 +218,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-/** Shakes the camera and plays a ship-shaking sound at Cortez until GF(0) is cleared, to show him thrashing. */
+/** Shakes the camera and plays a ship-shaking sound at Cortez until GF(0) is set, to show him thrashing. */
 EVT_BEGIN(korutesu_yure)
     CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_SHAKE2"), LW(0), LW(1), LW(2), LW(10))
@@ -240,7 +241,7 @@ EVT_BEGIN(korutesu_yure)
     RETURN
 EVT_END()
 
-/** Flashes the screen (evtflash) at random intervals while GF(0) is set, as Cortez shows his power. */
+/** Flashes the screen (evtflash) at random intervals until GF(0) is set, as Cortez shows his power. */
 EVT_BEGIN(korutesu_flush)
     LOOP(0)
         CALL(evt_snd_sfxon, STRING("SFX_STG5_KOR_APPEAR_LIGHT1"), 0)
@@ -778,7 +779,7 @@ EVT_END()
 
 /**
  * Loop that makes Cortez's treasure pile glitter:
- * picks one of ten spots at random and spawns a hagetaka flush effect there.
+ * picks one of eleven spots at random and spawns a hagetaka flush effect there.
  */
 EVT_BEGIN(coin_effect)
     LOOP(0)
@@ -933,8 +934,8 @@ USER_FUNC(muj_item_move_3d_position) {
 }
 
 /**
- * Script helper that flashes the screen white: fades out in 20 frames with colour evtflash_col1 (white),
- * holds 50 ms, then fades back in over 80 frames with evtflash_col2. Blocks until finished.
+ * Script helper that flashes the screen white: fades out in 20 ms with colour evtflash_col1 (white),
+ * holds 50 ms, then fades back in over 80 ms with evtflash_col2. Blocks until finished.
  */
 static USER_FUNC(evtflash) {
     if (isFirstCall) {

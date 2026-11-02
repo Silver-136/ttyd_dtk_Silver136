@@ -134,7 +134,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-/** Spots Mario is put back on after falling into one of this room's hazards (each object's own position). */
+/** Spots Mario is put back on after falling into this room's hazards; y -1000 uses the object's position, other entries use the listed coordinates. */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_1", {0.0f, -1000.0f, 0.0f}},
     {"mod_2", {-250.0f, 0.0f, 0.0f}},

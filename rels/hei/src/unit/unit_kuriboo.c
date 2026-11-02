@@ -230,6 +230,7 @@ EVT_END()
  * kinds); then it walks home.
  */
 static EVT_BEGIN(attack_event)
+
     // Target: the first-strike target if the battle opened that way, otherwise one picked for its attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -383,9 +384,9 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Battle script helper: computes the angle (degrees) of the vector from (args[0], args[1]) to (args[2], args[3])
- * into args[4], used to face the Goomba toward its target;
- * leaves the old value in place when the two points coincide.
+ * Script helper: computes the direction (degrees) from (args[2], args[3]) back toward (args[0], args[1])
+ * and stores it in args[4]; the attack supplies X/Y positions for the body tilt.
+ * If both points coincide args[4] is left as it was.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;

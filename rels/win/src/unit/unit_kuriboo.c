@@ -240,6 +240,7 @@ EVT_END()
  * bounces off and walks back home.
  */
 static EVT_BEGIN(attack_event)
+
     // A First Strike aims at the first-strike target;
     // otherwise the Goomba picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -393,8 +394,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Script helper: from point (args[0], args[1]) to point (args[2], args[3]) in x/z,
- * writes the facing angle to args[4]; if the two points coincide it leaves the incoming angle in args[4]
+ * Script helper: from point (args[2], args[3]) back to point (args[0], args[1]) in x/y,
+ * writes the direction angle to args[4]; if the two points coincide it leaves the incoming angle in args[4]
  * unchanged.
  */
 static USER_FUNC(krb_get_dir) {
@@ -415,7 +416,7 @@ static USER_FUNC(krb_get_dir) {
     return EVT_RETURN_DONE;
 }
 
-/** Wait event of the Goomba: switches to pose-table entry 1 (KUR_N_1, its idle pose). */
+/** Wait event of the Goomba: returns part 1 to the status-based pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -344,7 +344,7 @@ BattleUnitKind unit_boss_black_peach = {
 
 /**
  * Defence of the Shadow Queen (possessing Peach) against each element (normal, fire, ice, explosion,
- * electric): none, so every hit does its full damage.
+ * electric): base defence is 0 against each element.
  */
 BattleUnitDefense peach_defence = {{0, 0, 0, 0, 0}};
 
@@ -1023,7 +1023,7 @@ BattleUnitKind unit_boss_shadow_queen = {
 
 /**
  * Defence of the Shadow Queen against each element (normal, fire, ice, explosion, electric):
- * 1 against every element, so each hit is cut by 1.
+ * base defence is 1 against every element.
  */
 BattleUnitDefense queen_defence = {{1, 1, 1, 1, 1}};
 
@@ -1124,7 +1124,7 @@ BattleDataEntry queen_data_table[] = {
     {0, NULL},
 };
 
-/** Parts of the Shadow Queen: 6 parts with their hit boxes, defence tables and pose tables. */
+/** Parts of the Shadow Queen: 5 parts with their hit boxes, defence tables and pose tables. */
 BattleUnitKindPart queen_parts[] = {
 #if VERSION <= VERSION_DEMO_US
     {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, 0.0f, 47.0f, 0.0f, 0.0f, 47.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
@@ -1149,7 +1149,7 @@ f32 hair_offset[] = {
     0.0f, 13.0f, 0.0f, -21.0f,
 };
 
-/** inline helper for pose_init: defined here so its Vec template lands at this .rodata position */
+/** Initializes the hand lighting vector used by pose_init. */
 inline void hand_light_init(void) {
     Mtx mtx;
     u8* light = lightGetPaperCraft();
@@ -1250,7 +1250,7 @@ BattleUnitKind unit_boss_shadow_hand_1 = {
 
 /**
  * Defence of the Shadow Queen's first big hand against each element (normal, fire, ice, explosion,
- * electric): none, so every hit does its full damage.
+ * electric): base defence is 0 against each element.
  */
 BattleUnitDefense queen_hand_1_defence = {{0, 0, 0, 0, 0}};
 
@@ -1400,7 +1400,7 @@ BattleUnitKind unit_boss_shadow_hand_2 = {
 
 /**
  * Defence of the Shadow Queen's second big hand against each element (normal, fire, ice, explosion,
- * electric): none, so every hit does its full damage.
+ * electric): base defence is 0 against each element.
  */
 BattleUnitDefense queen_hand_2_defence = {{0, 0, 0, 0, 0}};
 
@@ -1550,7 +1550,7 @@ BattleUnitKind unit_boss_shadow_hand_small = {
 
 /**
  * Defence of the Shadow Queen's small hand against each element (normal, fire, ice, explosion, electric):
- * none, so every hit does its full damage.
+ * base defence is 0 against each element.
  */
 BattleUnitDefense queen_hand_small_defence = {{0, 0, 0, 0, 0}};
 
@@ -1672,8 +1672,8 @@ BattleUnitSetup entry_shadow_hand_small = {
 
 /**
  * Event script: init of the Shadow Queen (possessing Peach), the first phase of the final fight:
- * spawns the Shadow Queen unit that hides behind her, connects the queen's head and hand parts to her pose,
- * starts the hand swarm, and plays the idle animation.
+ * connects her shadow head and hand parts to her pose, starts the hand swarm, and plays the idle animation.
+ * With a nonzero setup work[0], it instead spawns the Shadow Queen unit and hides the Peach unit.
  */
 EVT_BEGIN(peach_init_event)
     SET_VALUE(GW(8), -1)
@@ -1767,6 +1767,7 @@ EVT_BEGIN(peach_damage_event)
 EVT_END()
 
 EVT_BEGIN(peach_change_evt)
+
     // The status window is hidden and the camera moves in on the Shadow Queen (possessing Peach).
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -1879,7 +1880,7 @@ EVT_BEGIN(peach_change_evt)
     CALL(btlevtcmd_SetPartsDefenceAttrTable, GW(8), 1, PTR(&queen_muteki_defence_attr))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, GW(9), 1, PTR(&queen_muteki_defence_attr))
 
-    // The whole group becomes invulnerable while she speaks.
+    // The queen and her hands become invulnerable.
     CALL(btlevtcmd_SetRegistStatus, UNIT_ID_SELF, PTR(&queen_muteki_regist))
     CALL(btlevtcmd_SetRegistStatus, GW(8), PTR(&queen_muteki_regist))
     CALL(btlevtcmd_SetRegistStatus, GW(9), PTR(&queen_muteki_regist))
@@ -1975,7 +1976,6 @@ EVT_BEGIN(peack_attack_black_thunder)
         RETURN
     END_IF
 
-    // Announce the attack; the camera swings to follow it.
     // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -2279,7 +2279,7 @@ EVT_BEGIN(peack_attack_drain)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
 
-    // A big hand rises out of the floor beside her.
+    // A big hand rises out of the floor beside the target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 6, STRING("KRT_S_1"))
     CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 6, 0)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 6, kHidden)
@@ -2393,8 +2393,8 @@ EVT_BEGIN(peack_attack_drain)
 EVT_END()
 
 /**
- * Attack event of the Shadow Queen (possessing Peach): picks one of her attacks with a random draw and runs
- * it.
+ * Attack event of the Shadow Queen (possessing Peach): opens with thunder, black energy and dark drag,
+ * then picks an attack with a random draw.
  */
 EVT_BEGIN(peach_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
@@ -2438,7 +2438,7 @@ EVT_BEGIN(peach_wait_event)
 EVT_END()
 
 /**
- * Init event of the Shadow Queen unit (spawned behind Peach):
+ * Init event of the Shadow Queen unit:
  * sets the shared state in GW (GW(11) form, GW(12) attack counter, GW(8)/GW(9) the two big hands,
  * GW(10) the small hand, GW(13) the queen), spawns the two big hands and starts the queen's mist.
  */
@@ -2680,7 +2680,7 @@ EVT_BEGIN(queen_change_hand_big_evt)
     RETURN
 EVT_END()
 
-/** Event script: respawns whichever big hand (GW(8) or GW(9)) has been destroyed. */
+/** Event script: respawns missing big hands (GW(8)/GW(9)); the demo branch requires both to be gone. */
 EVT_BEGIN(queen_hand_big_life_check_evt)
     CALL(btlevtcmd_GetUnitWork, GW(13), UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
@@ -2767,6 +2767,7 @@ EVT_BEGIN(queen_hp_drain_evt)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(8), -1)
+
             // The big hand leaves the stage.
             CALL_CHILD(PTR(queen_hand_1_dead_event))
         END_IF
@@ -2777,6 +2778,7 @@ EVT_BEGIN(queen_hp_drain_evt)
         END_IF
     END_INLINE_EVENT
     IF_INT_EQUAL(GW(10), -1)
+
         // A swarm of small hands appears.
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_small), 0)
         SET_VALUE(GW(10), LW(0))
@@ -2889,7 +2891,7 @@ EVT_END()
 
 /**
  * Event script: the queen's reaction the first time she is damaged (stg8_las_163,
- * the partner's stg8_las_164 and stg8_las_165).
+ * the partner's stg8_las_164, then the queen's stg8_las_165).
  */
 EVT_BEGIN(queen_first_damage_evt)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -2982,12 +2984,8 @@ EVT_BEGIN(queen_dead_hp_msg_evt)
 EVT_END()
 #endif
 
-/**
- * Phase event of the Shadow Queen: updates her HP-stage counter (work[2] of the queen unit),
- * runs the story messages in order as her HP drops, and decides when the HP drain or the hands swap happens;
- * at the enemy phase it advances the form.
- */
 #if VERSION <= VERSION_DEMO_US
+
 /** Event script: the queen's line when she is about to die (stg8_las_168). */
 EVT_BEGIN(queen_dead_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, 0)
@@ -3000,9 +2998,10 @@ EVT_BEGIN(queen_dead_hp_msg_evt)
     RETURN
 EVT_END()
 #endif
+
 /**
  * Phase event of the Shadow Queen: updates her HP-stage counter (work[2] of the queen unit),
- * runs the story messages in order as her HP drops, and decides when the HP drain or the hands swap happens;
+ * runs the applicable story messages as her HP drops, and decides when the HP drain or the hands swap happens;
  * at the enemy phase it advances the form.
  */
 EVT_BEGIN(queen_phase_event)
@@ -3046,7 +3045,7 @@ EVT_BEGIN(queen_phase_event)
                 SET_VALUE(GW(11), 3)
                 SET_VALUE(GW(14), 1)
 
-                // At the right HP stage she drains the HP of the audience.
+                // With the counter above 200 and an audience present, she drains the audience's HP.
                 CALL_CHILD(PTR(queen_hp_drain_evt))
             ELSE
                 CALL_CHILD(PTR(queen_hp_drain_evt_miss))
@@ -3065,7 +3064,8 @@ EVT_BEGIN(queen_phase_event)
         CASE_EQUAL(1)
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_EQUAL(LW(0), 1)
-            // Hand swaps: when the big hands are gone small hands take over, and the other way round.
+
+            // Respawn missing big hands before the player phase.
             CALL_CHILD(PTR(queen_hand_big_life_check_evt))
         END_IF
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
@@ -3113,14 +3113,6 @@ EVT_BEGIN(queen_attack_black_thunder)
         RETURN
     END_IF
 
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
     // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -3245,10 +3237,11 @@ EVT_BEGIN(queen_attack_black_wave)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     IF_INT_NOT_EQUAL(GW(10), -1)
+
         // If the small hand is out, it is removed first.
         CALL_CHILD(PTR(queen_hand_small_dead_event))
 
-        // The big hand rises beside the queen.
+        // The two big hands rise beside the queen.
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_1), 0)
         SET_VALUE(GW(8), LW(0))
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_hand_2), 0)
@@ -3258,6 +3251,7 @@ EVT_BEGIN(queen_attack_black_wave)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_L_1"))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_T_3"))
     IF_INT_NOT_EQUAL(GW(8), -1)
+
         // She and her hand rear back, gathering dark energy.
         CALL(btlevtcmd_AnimeChangePose, GW(8), 1, STRING("KRT_A_3"))
     END_IF
@@ -3770,8 +3764,8 @@ EVT_BEGIN(queen_attack_bress3)
 EVT_END()
 
 /**
- * Attack event of the Shadow Queen: chooses her next attack with weighted draws (btlevtcmd_DrawLots) depending
- * on the current form and which stage she has reached (work[0]), then runs that attack script.
+ * Attack event of the Shadow Queen: runs the opening attacks set by the current form and work[0],
+ * then chooses later attacks with weighted draws (btlevtcmd_DrawLots).
  */
 EVT_BEGIN(queen_attack_event)
     IF_INT_EQUAL(GW(11), 0)
@@ -3886,12 +3880,12 @@ EVT_BEGIN(queen_dead_event)
     CALL_CHILD(PTR(queen_dead_hp_msg_evt))
     CALL(evt_eff_softdelete, STRING("m_q"))
     SET_VALUE(GF(0), 0)
+
+    // Her head, body and hands sink away as the mist fades out.
     BEGIN_INLINE_EVENT
 #if VERSION > VERSION_DEMO_US
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("KRT_S_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_SELF, STRING("KRT_S_1"))
-
-        // Her head, body and hands sink away as the mist fades out.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_S_1"))
 #endif
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_O_1"))
@@ -3948,6 +3942,7 @@ EVT_BEGIN(queen_dead_event)
     BEGIN_INLINE_EVENT
 #endif
         IF_INT_NOT_EQUAL(GW(8), -1)
+
             // The big hand is removed.
             CALL_CHILD(PTR(queen_hand_1_dead_event))
         END_IF
@@ -3959,6 +3954,7 @@ EVT_BEGIN(queen_dead_event)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         IF_INT_NOT_EQUAL(GW(10), -1)
+
             // The small hand is removed.
             CALL_CHILD(PTR(queen_hand_small_dead_event))
         END_IF
@@ -3996,7 +3992,7 @@ EVT_BEGIN(queen_dead_event)
     RETURN
 EVT_END()
 
-/** Wait event of the Shadow Queen: plays her idle pose from the pose table. */
+/** Wait event of the Shadow Queen: selects her poses from the pose tables. */
 EVT_BEGIN(queen_wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 3)
@@ -4082,6 +4078,7 @@ EVT_BEGIN(queen_hand_1_press_attack)
     CALL(evt_eff_softdelete, LW(10))
     SET_VALUE(LW(0), 255)
     LOOP(15)
+
         // The big hand fades out of its place.
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 1, LW(0))
         ADD(LW(0), -16)
@@ -4164,6 +4161,7 @@ EVT_BEGIN(queen_hand_1_press_attack)
     CALL(evt_eff_softdelete, LW(10))
     SET_VALUE(LW(0), 255)
     LOOP(15)
+
         // After the slam it fades out and comes back to its place.
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 1, LW(0))
         ADD(LW(0), -16)
@@ -4203,6 +4201,7 @@ EVT_BEGIN(queen_hand_1_drain_attack)
     CALL(evt_eff_softdelete, LW(10))
     SET_VALUE(LW(0), 255)
     LOOP(15)
+
         // The big hand fades out of its place.
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 1, LW(0))
         ADD(LW(0), -16)
@@ -4303,6 +4302,7 @@ EVT_BEGIN(queen_hand_1_drain_attack)
     CALL(evt_eff_softdelete, LW(10))
     SET_VALUE(LW(0), 255)
     LOOP(15)
+
         // The hand fades out and returns to its place.
         CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 1, LW(0))
         ADD(LW(0), -16)
@@ -5560,7 +5560,7 @@ USER_FUNC(queen_get_aud_num) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: deletes every audience member and reduces the audience's target count by one for each. */
+/** Script helper: deletes system-controlled audience members and reduces the temporary extra count by one for each. */
 USER_FUNC(queen_kankyaku_delete_evt) {
     s32 i;
 
@@ -5654,7 +5654,7 @@ USER_FUNC(peach_hand1000_dark_drag_1_evt) {
     return EVT_RETURN_BLOCK;
 }
 
-/** Script helper: sets the alpha of the queen effect "m_q2" to args[0]. */
+/** Script helper: sets maxAlpha of the queen effect "m_q2" to args[0]. */
 USER_FUNC(eff_queen_set_alpha_evt) {
     s32 alpha = evtGetValue(event, *event->args);
 
@@ -5690,7 +5690,7 @@ USER_FUNC(queen_drain) {
 }
 
 /**
- * Script helper: calls a lightning strike down at (args[0], args[1], args[2]):
+ * Script helper: calls a lightning strike down at X/Z (args[0], args[2]), with sound at (args[0], args[1], args[2]):
  * a sound, a pink pokopi thunder bolt with a ground shock, and a camera shake.
  */
 USER_FUNC(queen_thunder) {
@@ -5737,7 +5737,7 @@ USER_FUNC(change_pose) {
     return EVT_RETURN_DONE;
 }
 
-/** same body as pose_main; hand_main inlines it (register/stack order only match this way) */
+/** Advances the hand animations and positions; inlined by hand_main. */
 inline void hand_pose_inl(void) {
     ExtdrvPose* pose;
     HandElem* elem;
@@ -5773,6 +5773,7 @@ inline void hand_pose_inl(void) {
         }
     }
 }
+
 /**
  * Ext update callback of the hand swarm: advances every hand's animation and position (inlined hand_pose_inl),
  * then queues the draw callback.
@@ -5794,7 +5795,7 @@ void hand_draw(CameraId cameraId, void* param) {
 
 /**
  * Ext init callback of the hand swarm: allocates the work area and the hand list,
- * builds the animation table via pose_init and gives every hand a random animation start and flip.
+ * builds the animation table via pose_init and gives every hand a random animation start with flip set to 0.
  */
 static void hand_init(void) {
     s32 i;
@@ -5820,7 +5821,7 @@ static void hand_init(void) {
 
 /**
  * Advances every hand pose: computes the animation frame from the elapsed render time
- * and places the hand at its position, offset by the position of the unit in GW(10) if there is one.
+ * and places the hand at its position, offset by the displacement from home of the unit in GW(10) if there is one.
  */
 static void pose_main(void) {
     ExtdrvPose* pose;
@@ -5870,8 +5871,7 @@ static void pose_init(void) {
     s32 i = 0;
     s32 start;
 
-    // hand_light_init is an inline helper defined by hand before EVT_BEGIN(shadow_queen_1000) in the
-    // rels/ source: its (Vec){-200, 100, 500} template must sit there in .rodata
+    // Initialize the paper-craft light position for the hands.
     hand_light_init();
     strcpy(name, "");
     strcpy(anim, "");
@@ -5898,8 +5898,7 @@ static void pose_init(void) {
 }
 
 /**
- * Script helper: fills hand_data with one entry per third frame of the queen's KRT_S_1 animation,
- * giving every hand its own animation start offset.
+ * Script helper: fills hand_data with one entry per third frame of the queen's KRT_S_1 animation.
  */
 USER_FUNC(make_pattern) {
     ExtTexInfo* d = hand_data;

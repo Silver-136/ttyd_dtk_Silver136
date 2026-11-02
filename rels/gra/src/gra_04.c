@@ -34,7 +34,7 @@ EvtWord gra_04_tree_open_evt[41];
 static const char* fukitobashi_tbl[6];
 EvtWord gra_04_init_evt[64];
 
-/** Enter event of the w_bero_1 and w_bero_2 doors: just returns 1 in LW(0) so the door transition goes ahead. */
+/** Enter event of the w_bero_1 and w_bero_2 doors: returns 1 in LW(0) so the default walk-in is skipped. */
 static EVT_BEGIN(in_evt)
     SET_VALUE(LW(0), 1)
     RETURN
@@ -294,6 +294,7 @@ EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_gra_00000530, JP gra .text+0x46C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Script helper used by the exit scripts of this map:
  * stores 1 in args[0] when marioRollCancelDisable() is 0, i.e. when Mario's roll may be cancelled,

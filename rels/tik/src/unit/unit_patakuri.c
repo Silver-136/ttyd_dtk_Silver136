@@ -223,7 +223,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 
 /**
  * Init script of the Paragoomba.
- * Registers its wait, attack, damage and fall scripts, sets the flying movement sounds and starts waiting.
+ * Registers its wait, attack, damage and confusion scripts, sets the flying movement sounds and starts waiting.
  */
 static EVT_BEGIN(init_event_patakuri)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_patakuri))
@@ -239,6 +239,7 @@ EVT_END()
  * Reaction when a Paragoomba loses its wings: it drops with SFX_ENM_FALL1, lands with a hop,
  * and its pose table and data switch to those of the walking Goomba.
  */
+
 // Losing the wings installs the ground Goomba parts, data and event handlers.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -282,10 +283,11 @@ EVT_END()
 
 /**
  * The Paragoomba's dive attack: it flies up, swoops down on the target with SFX_ENM_PATAKURI_MOVE2 and MOVE3,
- * and the pre-damage check decides between a miss (avoid animation)
+ * and the pre-damage check decides between a miss (with an avoid animation for some results)
  * and a hit (damage with the action-command result); then it returns to its place.
  */
 static EVT_BEGIN(attack_event_patakuri)
+
     // The Paragoomba may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -363,7 +365,7 @@ static EVT_BEGIN(attack_event_patakuri)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Paragoomba swoops past and then pulls up.
+    // A miss or dodge: the Paragoomba swoops past and then pulls up.
     LABEL(90)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PATAKURI_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
@@ -449,7 +451,7 @@ static BattleUnitDefenseAttr defence_attr = {0};
 
 /**
  * Status vulnerability of the Paragoomba (percent chance to take each status):
- * extra prone to stop, fright, gale force and instant kill.
+ * extra prone to stop, fright and instant kill; also gale force in the demos.
  */
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
@@ -568,6 +570,7 @@ EVT_END()
 
 /** The Goomba-form headbutt attack, the same as the Goomba's. */
 static EVT_BEGIN(attack_event)
+
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -671,7 +674,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: the Goomba bounces on past it in two shrinking hops.
+    // A miss or dodge: the Goomba bounces on past it in two shrinking hops.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)

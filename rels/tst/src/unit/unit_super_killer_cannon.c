@@ -136,6 +136,7 @@ static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the B. Bill Blaster in the demo builds:
  * immune to sleep, stop, dizzy, poison, confusion and fright; extra prone to electric;
@@ -143,6 +144,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 5, 100, 40, 100, 100, 90};
 #else
+
 /**
  * Status vulnerability of the B. Bill Blaster in the retail builds:
  * immune to sleep, stop, dizzy, poison, confusion and fright; extra prone to electric;
@@ -242,7 +244,8 @@ EVT_END()
  * The charged-Bill variants (LW(12) = 1) have weight 0 and are never picked.
  */
 static EVT_BEGIN(attack_event)
-    // If the B. Bill Blaster holds an item, it uses that instead of attacking.
+
+    // If the item-use check selects an item event, the B. Bill Blaster uses it instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -271,6 +274,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
             MULTIPLY(LW(4), LW(5))
             IF_INT_LESS(LW(4), LW(5))
+
                 // It looks for a free spot in front of it: first 160 units away, then 120, then 80.
                 CALL(btlevtcmd_CheckSpace, LW(3), LW(0), LW(1), LW(2), 40, 0, 0, 0)
                 ADD(LW(2), LW(13))

@@ -269,7 +269,7 @@ EVT_END()
 
 /**
  * Attack event of the Gloomba: picks a target (the first attack target during a first strike),
- * flusters if there is none, and uses an enemy item first if it has one.
+ * flusters if there is none, and uses a selected enemy-item script if one is returned.
  * Otherwise it runs at the target, then leaps onto it in a 32-frame arc,
  * tilting along its path every frame (krb_get_dir gives the angle).
  * A miss lands it nearby; a hit applies weapon_kuriboo_attack with the action command defence check.
@@ -297,7 +297,8 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // It uses an enemy item if it has one.
+
+        // It runs the selected enemy-item script.
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -429,16 +430,16 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Idle event: shows the unit's table pose for state 1. */
+/** Idle event: selects the unit's pose-table animation for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
 /**
- * Script helper: args[0..1] = x, z of the first point, args[2..3] = x, z of the second,
+ * Script helper: args[0..1] = coordinates of the first point, args[2..3] = coordinates of the second,
  * args[4] = angle in and out.
- * Returns the angle (degrees) from the first point towards the second; unchanged if the points coincide.
+ * Returns the angle (degrees) from the second point towards the first; unchanged if the points coincide.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;

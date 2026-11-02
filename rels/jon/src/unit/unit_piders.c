@@ -32,7 +32,7 @@
 #define UNIT_WORK_WINDUP_ANGLE 4 // part 2 rotation (degrees) reached at the end of the wind-up (piders_attack_common_event1); piders_attack_common_event1_2 starts from it
 #define UNIT_WORK_TARGET_UNIT 5  // first of three slots (5-7): target unit of each shot of renzoku_attack_event (slots 5-7)
 #define UNIT_WORK_TARGET_PART 8  // first of three slots (8-10): target part of each shot of renzoku_attack_event (slots 8-10)
-#define UNIT_WORK_TARGET_HIT 11  // first of three slots (11-13): 1 once a shot hit that target; the last shot at a target that was hit only plays the hit (renzoku_attack_event_sub_last) (slots 11-13)
+#define UNIT_WORK_TARGET_HIT 11  // first of three slots (11-13): 1 once a shot hit that target; the last shot at a target that was hit skips the precheck and applies final-hit damage (renzoku_attack_event_sub_last) (slots 11-13)
 
 #include "unit/unit_piders.h"
 static void piders_draw_yarn_sub(CameraId camera, void* param);
@@ -597,7 +597,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Death of the Pider: plays the die sound, spins it three times (48 frames), plays an explosion effect,
+ * Death of the Pider: plays the die sound, spins it twice (48 frames), plays an explosion effect,
  * hands out its coins and experience, shows the star points, tilts it over for 30 frames,
  * hides it and kills the unit.
  */
@@ -849,7 +849,7 @@ static EVT_BEGIN(unison_phase_event)
 EVT_END()
 
 /**
- * Attack event of the Pider. Uses an enemy item if it has one.
+ * Attack event of the Pider. Uses an enemy item if one is selected by the item-use check.
  * Otherwise a 50 percent chance for a single web-wad (normal_attack_event)
  * and 50 percent for the three-target combo (renzoku_attack_event).
  */
@@ -884,8 +884,8 @@ EVT_END()
 
 /**
  * Checks the result of one hit against the target (LW(3), LW(4)):
- * a miss, guard or dodge (results 2, 3, 4 and 6) starts the dodge pose on the target (38, 39 or 40)
- * and lets the attack part continue; a hit applies the damage check, remembering which target was hit,
+ * results 2, 3 and 6 start the dodge pose on the target (38, 39 or 40)
+ * and let the attack part continue; result 4 lets it continue without starting an avoid pose; a hit applies the damage check, remembering which target was hit,
  * with the action-command guard bonus when it applies.
  */
 static EVT_BEGIN(damage_check_event_sub)
@@ -1138,7 +1138,7 @@ EVT_END()
 
 /**
  * The Pider's combo attack: picks three random targets from the group, stores them in its unit work,
- * declares the attack and winds up, then spits three web-wads, 30 frames apart, each with its own damage check,
+ * declares the attack and winds up, then spits three web-wads, waiting 30 frames after each projectile's flight, each with its own damage check,
  * and finally swings back.
  */
 static EVT_BEGIN(renzoku_attack_event)
@@ -1190,7 +1190,8 @@ EVT_END()
 
 /**
  * Resolves one shot of the combo (target slots in work):
- * checks whether it is the last shot and picks the version for the last shot or for an earlier one.
+ * checks whether a later shot targets the same unit and part and picks the last-shot version only
+ * for the final shot at that target.
  */
 static EVT_BEGIN(renzoku_attack_event_sub)
     SET_VALUE(LW(0), LW(5))
@@ -1225,8 +1226,8 @@ static EVT_BEGIN(renzoku_attack_event_sub_no_last)
 EVT_END()
 
 /**
- * Resolves the last shot of the combo: waits for its target slot and runs the common damage check;
- * the check applies the damage and result for that last target.
+ * Resolves the last shot of the combo: finds the matching target slot and, if an earlier shot hit it,
+ * applies the guard result and final-hit damage directly; otherwise it runs the common damage check.
  */
 static EVT_BEGIN(renzoku_attack_event_sub_last)
     SET_VALUE(LW(0), 5)

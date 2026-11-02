@@ -160,12 +160,14 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Badge Bandit (percent chance per status, 0 would be immune): every status
  * effect can land. Demo values (sleep 50%, dizzy 70%, freeze 50%).
  */
 static StatusVulnerability regist = {50, 70, 70, 100, 70, 100, 100, 50, 100, 70, 100, 70, 100, 70, 80, 75, 60, 100, 70, 100, 100, 60};
 #else
+
 /**
  * Status vulnerability of the Badge Bandit (percent chance per status, 0 would be immune): every status
  * effect can land. Released game values (sleep 80%, dizzy 50%, freeze 50%).
@@ -283,7 +285,7 @@ EVT_END()
 
 /**
  * Chooses the Badge Bandit's action: if it carries a stolen item (unit flag 0x40000000) it runs away with it
- * (escape_event); otherwise it uses an item if it has one, a confused Bandit makes a plain attack,
+ * (escape_event); otherwise it uses an item when the item check selects one, a confused Bandit makes a plain attack,
  * and normally it makes the plain attack (_borodo_normal_attack) about 33% of the time
  * and the stealing attack (_borodo_steal_attack) otherwise.
  */
@@ -643,7 +645,6 @@ static EVT_BEGIN(_borodo_steal_attack)
     END_IF
 
     // It laughs over its loot and switches to the loot-carrying poses.
-    // It laughs over its loot and switches to the loot-carrying poses.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("O_2"))
     WAIT_FRAMES(14)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_LAUGH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -665,7 +666,7 @@ EVT_END()
 
 /**
  * The Bandit runs away with the stolen item: it turns around (SFX_ENM_BORODO_WAIT1, pose R_3), hops,
- * blurs with SFX_ENM_BORODO_ESCAPE1 and dashes 300 units off the stage at speed 9,
+ * blurs with SFX_ENM_BORODO_ESCAPE1 and dashes off the stage to X = 300 at speed 9,
  * then removes itself from the battle (KillUnit), taking the item with it.
  */
 static EVT_BEGIN(escape_event)

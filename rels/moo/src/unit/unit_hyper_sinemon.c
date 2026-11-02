@@ -397,11 +397,12 @@ EVT_END()
  * Attack event of the Hyper Cleft: gets up first if it is flipped over;
  * on a field first strike it goes straight for the first attack target, otherwise,
  * unless it is already charged (STATUS_CHARGE), it may use an enemy item
- * or draw lots (25% on turn 1, 25/25 later) to spend the turn charging (weapon_sinemon_charge, crystal effect).
+ * or draw lots (75% on turn 1, 25/25 later) to spend the turn charging (weapon_sinemon_charge, crystal effect).
  * Otherwise it dashes at a target (SFX_ENM_EMON_DASH1);
  * the pre-damage check decides between a dodge and a hit, then it hops back home.
  */
 static EVT_BEGIN(attack_event)
+
     // If the Hyper Cleft is lying flipped on its back, it spends the turn getting back up (wakeup_event).
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -417,6 +418,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
+
         // Unless it is already charged, it may use a held item.
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
         IF_INT_EQUAL(LW(0), 1)
@@ -429,7 +431,7 @@ static EVT_BEGIN(attack_event)
             RETURN
         END_IF
 
-        // Then it draws lots (25% on the first turn, 25% after that) to spend the turn charging up instead of
+        // Then it draws lots (75% on the first turn, 50% after that) to spend the turn charging up instead of
         // attacking.
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 1)

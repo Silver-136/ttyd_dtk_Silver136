@@ -404,7 +404,7 @@ EVT_END()
 
 /**
  * Talk script of the shopkeeper: one line until Mario leaves Twilight Town (stg4_usu_61_5),
- * another after the story's end (stg4_usu_61_6).
+ * then stg4_usu_61_6 through the story's end and stg4_usu_61_7 afterwards.
  */
 EVT_BEGIN(shop_man_talk)
     SWITCH(GSW_STORY_PROGRESS)
@@ -871,9 +871,10 @@ EVT_BEGIN(aunt_talk)
 #if VERSION > VERSION_DEMO_US
             END_INLINE_EVENT
 
-// She explains she wants to meet her former love Podley (irai_20_002);
-// "Purehearted Eve" was her stage name (irai_20_003).
 #endif
+
+            // She explains she wants to meet her former love Podley (irai_20_002);
+            // "Purehearted Eve" was her stage name (irai_20_003).
             CALL(evt_msg_print, 0, STRING("irai_20_002"), 0, STRING("me"))
             CALL(evt_mario_set_pose, STRING("M_N_1"))
             WAIT_MS(500)
@@ -996,7 +997,7 @@ EVT_BEGIN(aunt_talk)
         RETURN
     END_IF
 
-    // No trouble active: her words depend on how far the story has gone.
+    // Trouble 20 is not active: her words depend on how far the story has gone.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
@@ -1823,7 +1824,7 @@ EVT_BEGIN(evt_mon_open)
 EVT_END()
 
 /**
- * Raises the 3D camera and its target by 85 units over 500 ms, then waits 600 ms;
+ * Raises the 3D camera and its target by 85 units over 500 ms while waiting 600 ms overall;
  * the crow watchers use it before a crow speaks from its perch.
  */
 static EVT_BEGIN(cam_up)
@@ -1969,6 +1970,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
+
                 // Before the name guessing, crow F says the Mario with the mayor is really the
                 // villain and crow G adds that only a soul locked under Creepy Steeple knows
                 // his name (stg4_usu_137 to 140).
@@ -2141,16 +2143,19 @@ EVT_BEGIN(usu01_crowHI_talk_event)
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
+
                 // Before the name guessing, crow H tells crow I that her oldest, Ronnie,
                 // is taking his SATs (stg4_usu_143) and crow I is impressed (144).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_143"), 0, STRING("カラスＨ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_144"), 0, STRING("カラスＩ"))
                 CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
+
                 // Later, crow H says he is even going to a test prep center (145) and crow I thinks about a
                 // college fund for little Billy (146).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_145"), 0, STRING("カラスＨ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_146"), 0, STRING("カラスＩ"))
                 CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
+
                 // After Franklys's house, crow H laments that Ronnie did poorly on his SATs (146_1) and crow
                 // I consoles her (146_2); the last lines follow the ending.
                 CALL(evt_msg_print, 0, STRING("stg4_usu_146_1"), 0, STRING("カラスＨ"))
@@ -2277,10 +2282,12 @@ EVT_BEGIN(usu01_crowJ_talk_event)
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_CROW_HOWL1"), LW(0), LW(1), LW(2), 0)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_LESS(STG4_14_NAME_GUESSING)
+
                 // Before the name guessing, crow J laments that the twilit world is
                 // full of pain (stg4_usu_147).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_147"), 0, STRING("カラスＪ"))
                 CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
+
                 // Later it finds small sparks of hope in the gloom (stg4_usu_148),
                 // then (after Franklys's house) decides to go on an epic journey (148_1 and 148_1_1).
                 CALL(evt_msg_print, 0, STRING("stg4_usu_148"), 0, STRING("カラスＪ"))
@@ -2800,7 +2807,7 @@ static USER_FUNC(npc_process) {
  * Going from the shop into the storeroom (A at "A_usu01_ie2_door3", once it is unlocked):
  * the storeroom stays lit, the Inn Coupon ("item_05") is moved out of sight,
  * Mario and the partner walk through the door "S_usu01_ie2_door3", which swings open and shut;
- * the quarrel chatter stops, the shop's goods (once STG4_04) and people are dimmed,
+ * the quarrel chatter stops, the shop's goods (once STG4_04) are hidden and its people are dimmed,
  * the wall "S_usu01_ie2_mkabe" slides away and the door folds down.
  */
 EVT_BEGIN(evt_ie2_door2_1)
@@ -2880,7 +2887,7 @@ EVT_END()
 /**
  * Going back from the storeroom into the shop (A at "A_usu01_ie2_door3_u"): the reverse of evt_ie2_door2_1.
  * The door stands up, the wall "S_usu01_ie2_mkabe" slides back,
- * the shop's goods (once STG4_04) and people are lit again and the quarrel chatter restarts;
+ * the shop's goods (once STG4_04) are shown again, its people are lit again and the quarrel chatter restarts;
  * Mario and the partner walk back through the door, and the Inn Coupon ("item_05") is put back.
  */
 EVT_BEGIN(evt_ie2_door2_2)
@@ -3228,7 +3235,7 @@ static EVT_BEGIN(lock_item_check)
 EVT_END()
 
 /**
- * Unlocks the shop storage door: runs the door script when Mario faces door A_usu01_ie2_door3
+ * Unlocks the shop storage door: registers an A-button trigger at A_usu01_ie2_door3 to run the door script
  * and sets STG4_04_STORAGE_ROOM_UNLOCKED.
  */
 EVT_BEGIN(unlock)
@@ -3523,7 +3530,7 @@ EVT_END()
  * Message callback for the black chest's ("pera_box") lines:
  * starts its A_2 animation when the message opens (type 0),
  * restarts it each time it has looped while the text runs (type 5) and returns it to S_1
- * when the message ends (type 2).
+ * when the text reaches a page's key-wait point (type 2).
  */
 static void majin_callback(s32 type) {
     MapObjectEntry* mobj = mobjNameToPtr("pera_box");

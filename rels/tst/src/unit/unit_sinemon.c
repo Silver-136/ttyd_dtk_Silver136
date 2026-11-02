@@ -89,7 +89,7 @@ static BattleUnitDefense defence = {{5, 99, 5, 5, 5}};
 /** Element modifiers of the Moon Cleft: fire hits do no damage. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
-/** Defence of the Moon Cleft while it is flipped on its back: none, every hit does its full damage. */
+/** Defence of the Moon Cleft while flipped: no numerical defence; its fire-immunity attribute remains active. */
 static BattleUnitDefense defence_turn = {0};
 
 #if VERSION <= VERSION_DEMO_US
@@ -370,7 +370,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
-        // If the Moon Cleft holds an item, it uses that instead of attacking.
+        // If the item-use check selects an item, it uses that instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))
@@ -435,7 +435,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, -1, 0)
     DELETE_EVENT(LW(15))
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinemon_attack), 256, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)

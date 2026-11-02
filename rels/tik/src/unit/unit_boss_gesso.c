@@ -739,6 +739,7 @@ USER_FUNC(_ikasumi_effect) {
 }
 
 #if VERSION < VERSION_US
+
 /**
  * Debug routine (JP and earlier).
  * Lets the d-pad select the Blooper or one of its two tentacles,

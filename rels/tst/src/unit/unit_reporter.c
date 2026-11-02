@@ -90,12 +90,12 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element modifiers of the placeholder unit `reporter`: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of the placeholder unit `reporter`: immune to every status. */
+/** Status vulnerability of the placeholder unit `reporter`: immune to the 22 statuses covered by this table. */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /**
  * Pose table of the placeholder unit `reporter`:
- * maps each battle pose (waiting, hurt, running...) to one of its EM_* animations.
+ * maps each battle pose (waiting, hurt, running...) to one of its EM_* or KNP_* animations.
  */
 static PoseTableEntry pose_table[] = {
     {28, "EM_S_1"},

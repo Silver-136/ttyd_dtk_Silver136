@@ -37,8 +37,10 @@
 #define UNIT_WORK_ARM_1_UNUSED 4     // unit id of the rocket punch launched as arm 1; never read
 #define UNIT_WORK_STAMP_TALK_DONE 5  // 1 after the first stamp attack showed stg2_mri_e24_11; while 0 attack_event always stamps
 #define UNIT_WORK_LOW_HP_TALK_DONE 6 // 1 once damage_event showed its low-HP line (dead_event sets it too)
+
 // ... and of the rocket punch units it launches (unit_boss_rocket_punch below; the *_r and arm_event* events)
 #define ROCKET_PUNCH_WORK_SIDE 0     // which arm: 0/1, or 2/3 for an arm spawned by arm_return_event (no fly-in); arm_check reads it
+
 // attack_event_r subtracts 1 and waits while the result is 1 or more; set to 1 at launch and after each attack
 #define ROCKET_PUNCH_WORK_WAIT 1
 
@@ -279,7 +281,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
-/** Parts of Magnus: 4 parts (model c_mb_robo_1b). */
+/** Parts of Magnus: 3 parts (model c_mb_robo_1b). */
 static BattleUnitKindPart parts[] = {
 #if VERSION >= VERSION_US
     {1, "btl_un_magnum_battender", "c_mb_robo_1b", 0.0f, 0.0f, 0.0f, 37.0f, 103.0f, 30.0f, 37.0f, 113.0f, 61.0f, 106, 174, 255, &defence, &defence_attr, 0x600019, 0, pose_table},
@@ -327,7 +329,7 @@ static USER_FUNC(waku_main) {
 }
 
 /**
- * Looks for a living rocket arm (X-Fist) on one side:
+ * Looks for a registered rocket arm unit (X-Fist or X-Punch) on one side:
  * args[0] = 0 for the left (arm slot 0 or 2), 1 for the right (slot 1 or 3).
  * Writes the unit index of the first one found to args[1], or -1.
  */
@@ -497,7 +499,7 @@ static EVT_BEGIN(waku_event)
 EVT_END()
 
 /**
- * Damage event of Magnus: marks the frame as non-targetable while a hit with damage pattern 10 is processed,
+ * Damage event of Magnus: hides the frame while a hit with damage pattern 10 is processed,
  * runs the default damage reaction, then the first time its HP drops to 7
  * or below (work 6) the status window closes, the camera moves in
  * and Magnus speaks his low-HP line (stg2_mri_e24_15) before the fight goes on.
@@ -693,11 +695,11 @@ EVT_END()
 
 /**
  * Attack event of Magnus.
- * If the arms are out (work 0 = 1) and both have returned,
+ * If the arms are out (work 0 = 1) and neither arm unit is found,
  * a counter counts down and when it is spent the arms are brought back (arm_return_event).
- * Then uses an enemy item if it has one.
- * With the arms on it uses the stamp (a stomp, always the first attack, with a line);
- * once the stamp scene has been done it rolls to either stamp again or shoot the arms off (arm_bunri_event);
+ * Then runs an enemy item script if one is selected.
+ * With the arms on it uses the stamp (a stomp with a line) until the stamp scene is done, and also while HP exceeds 20;
+ * at 20 HP or below it first shoots the arms off (arm_bunri_event), then on later attached-arm turns rolls to stamp again or shoot them off;
  * with the arms out it does the shaking ceiling attack (shake_attack_event).
  */
 static EVT_BEGIN(attack_event)
@@ -764,7 +766,7 @@ EVT_END()
 
 /**
  * The stamp attack: Magnus picks a target, the first time he says his line (stg2_mri_e24_11),
- * steps back 50 units, lifts a leg with the sounds and poses MGN_A2_1 to A2_4, and stamps the target;
+ * moves to x = -50, lifts a leg with the sounds and poses MGN_A2_1 to A2_4, and stamps the target;
  * the damage and result checks follow and he steps back to his place.
  */
 EVT_BEGIN(stamp_attack_event)
@@ -807,7 +809,7 @@ EVT_BEGIN(stamp_attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
 
-    // He steps back 50 units to give himself room.
+    // He moves to x = -50 to give himself room.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -50, 0, 0, 120, MOVE_SOUND_FROM_TABLE, 1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -863,7 +865,7 @@ EVT_BEGIN(stamp_attack_event)
         CASE_END
     END_SWITCH
 
-    // The stomp misses or is blocked: the target jumps clear.
+    // The stomp misses; results 3, 6 or 2 start the target's avoid reaction.
     LABEL(90)
     GOTO(95)
 
@@ -891,7 +893,7 @@ EVT_BEGIN(stamp_attack_event)
 EVT_END()
 
 /**
- * The shake attack (weapon_batten_shake_attack, which hits every target on the other side):
+ * The shake attack (weapon_batten_shake_attack, which targets non-floating units on the other side):
  * Magnus pounds the ground (poses MGN_A3_3 and A3_4, quake sound, camera shake) and dust falls from the ceiling.
  * Mario, if he can act and is not Invisible, is put into his pose M_I_O while it runs;
  * then the damage check runs on each target in turn.
@@ -915,6 +917,8 @@ static EVT_BEGIN(shake_attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_batten_shake_attack))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A3_3"))
     WAIT_MS(900)
+
+    // Mario, if he can act and is not Invisible, is put into his flinching pose while the quake runs.
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_MARIO, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckStatus, UNIT_ID_MARIO, STATUS_INVISIBLE, LW(0))
@@ -932,7 +936,6 @@ static EVT_BEGIN(shake_attack_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A3_4"))
 
-    // Mario, if he can act, is put into his flinching pose while the quake runs.
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(20)
         CALL(eff_hokori, 100, 250, 0, 80)
@@ -962,7 +965,7 @@ static EVT_BEGIN(shake_attack_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(6), 0)
 
-    // For each target: a miss means they just recover, a hit applies the damage (the Action Command result is
+    // For each target: a miss skips damage, a hit applies the damage (the Action Command result is
     // applied once).
     LABEL(10)
     IF_INT_EQUAL(LW(3), -1)
@@ -1011,7 +1014,7 @@ static EVT_BEGIN(shake_attack_event)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(10)
 
-    // The camera resets after a one second pause.
+    // The camera resets before a one second pause.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(1000)
@@ -1299,10 +1302,10 @@ static BattleWeapon weapon_batten_rocket_attack = {
 };
 
 /**
- * Init script of a rocket arm (X-Fist), run when arm_bunri_event spawns it:
+ * Init script of a rocket arm (X-Fist), run when arm_bunri_event or arm_return_event spawns it:
  * plays its pose, sets its base rotation, creates the trail effect for its side, starts the arm_event loop and,
- * depending on which arm it is, flies it out from beside Magnus with the fly sound
- * and settles it at its resting place: the flight of the arm being fired off.
+ * for arm sides 0 and 1, flies it out from beside Magnus with the fly sound
+ * and settles it at its resting place: the flight of the arm being fired off. Sides 2 and 3 skip that flight.
  */
 static EVT_BEGIN(init_event_r)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)

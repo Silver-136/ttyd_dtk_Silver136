@@ -255,7 +255,7 @@ static void majin_callback(s32 type) {
 }
 
 
-/** Script helper: blocks until the lecture/cutscene music (BGM channel 1) has actually started. */
+/** Script helper: blocks until BGM channel 1 has started, or returns immediately if the channel is empty. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
@@ -364,8 +364,9 @@ static EVT_BEGIN(evt_majin)
 #else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 
-// Mario backs out of the menu and the chest tells him to use the key.
 #endif
+
+            // Mario backs out of the menu and the chest tells him to use the key.
             IF_INT_EQUAL(LW(0), -1)
                 CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
                 ADD(LW(1), 30)
@@ -402,9 +403,7 @@ EVT_END()
  * Event after the black chest is opened: Mario receives the Paper Curse item (ITEM_PAPER_CURSE),
  * the Paper Mage's music starts and the Paper Mage appears from the paper image OFF_d_kusya
  * and gives his lecture (slit_majin_lecture), then leaves.
- * The story advances to STG1_13_01_01_PAPER_MAGE_2 (or STG1_13_A_SUSPICIOUS_ROOM if it is already
- * past that), the bero case and ceiling events are started,
- * five Dry Bones NPCs (KRN_Z_2) are entered in the cell and the red cell switch (mobj_switch1) is placed.
+ * The story is set to STG1_13_01_01_PAPER_MAGE_2 and the opened-chest flag is set.
  */
 static EVT_BEGIN(evt_majin2)
     CALL(evt_npc_change_fbat_mode, 7)

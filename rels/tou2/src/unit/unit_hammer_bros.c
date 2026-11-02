@@ -376,9 +376,9 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Attack event of the Hammer Bro: clears unit work 10 to 14, a first strike uses normal_attack_event,
- * then an enemy item is used if one fits.
- * With 3 HP or less it picks the multi-throw renzoku_attack_event half the time (roll under 50 of 0-98)
+ * Attack event of the Hammer Bro: clears unit work 10 to 14; a first strike uses normal_attack_event.
+ * Otherwise an enemy item is used if one fits.
+ * With 3 HP or less it picks the multi-throw renzoku_attack_event half the time (roll under 50 of 0-99)
  * and the all-target nagemakuri_attack_event otherwise; with more HP it always uses normal_attack_event.
  */
 static EVT_BEGIN(attack_event)
@@ -439,7 +439,7 @@ EVT_END()
 /**
  * A thrown hammer that misses (hammer part LW(15), target position LW(6..8)):
  * the hammer appears at the Bro with the throw sound, spins and flies in a 60-frame arc to the target,
- * triggers the target's dodge (start_avoid) when it passes the target's position, flies on past,
+ * triggers any target avoid reaction (start_avoid) when it passes the target's position, flies on past,
  * bounces twice along the floor and is hidden again.
  */
 static EVT_BEGIN(hammer_bros_attack_common_event1)
@@ -666,7 +666,8 @@ EVT_END()
 
 /**
  * The Hammer Bro's four-hammer attack on one target (weapon_hammer_bros_renzoku_attack):
- * throws four hammers 250 ms apart (parts 2 to 5), the last one marked as the last hit, then waits 1.5 seconds.
+ * throws four hammers (parts 2 to 5), with a 250 ms pause before each subsequent 27-frame wind-up;
+ * the last one is marked as the last hit, then it waits 1.5 seconds.
  */
 static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -747,7 +748,7 @@ EVT_END()
 /**
  * The Hammer Bro's all-target barrage (nagemakuri, "throwing spree", weapon_hammer_bros_nagemakuri_attack):
  * selects every enemy, stores their ids and parts in unit work 0 to 9 with hammer_bros_nagemakuri_set_target,
- * then throws four hammers 250 ms apart, each turning toward the next stored target
+ * then throws four hammers, with a 250 ms pause before each subsequent 27-frame wind-up, each turning toward the next stored target
  * and resolved by nagemakuri_attack_event_sub, and waits 1.5 seconds.
  */
 static EVT_BEGIN(nagemakuri_attack_event)

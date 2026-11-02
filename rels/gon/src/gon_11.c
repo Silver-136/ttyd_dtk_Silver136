@@ -226,7 +226,7 @@ EVT_END()
 
 /**
  * Shake for Hooktail collapsing: plays SFX_STG1_GNB_DOWN1
- * and DOWN2 at her position (the second fading out over 10 seconds) while the camera shakes strongly and
+ * and a positioned DOWN2 (the second fading out over 10 seconds) while the camera shakes strongly and
  * then settles to a small rumble.
  */
 static EVT_BEGIN(gonbaba_down_shake)
@@ -697,8 +697,8 @@ static Vec v_list[] = {
 };
 
 /**
- * Event script: runs the cloud-blowing mechanism (evt_cloud_main) of las_14,
- * the room where Flurrie's gust uncovers the way.
+ * Event script: runs the cloud-blowing mechanism (evt_cloud_main)
+ * for this room's Trouble Center request 16 cloud.
  */
 static EVT_BEGIN(evt_cloud_main_evt)
     CALL(evt_cloud_main)
@@ -821,7 +821,8 @@ static void _mapclsofs_all(CloudWork* wp) {
  * Running script of one dark cloud entry: waits for Flurrie's breath to touch the cloud's hit area,
  * then builds a paper-cloud image of the scenery under it and counts how long the breath keeps hitting it;
  * when the count reaches the limit the cloud plays its blow-away animation,
- * runs the end event (iri_16_cloud_evt) and the entry is released. If the breath stops first the cloud resets.
+ * runs the end event (iri_16_cloud_evt) and the entry is released. Brief contact gaps keep advancing the counter;
+ * the cloud resets when the loss-of-contact grace period expires or Mario leaves the gust motion.
  */
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_cloud_main) {
@@ -1129,7 +1130,7 @@ EVT_END()
  * Map init for gon_11 (Hooktail's lair): sets up the door back to gon_10, the music and ambience,
  * and the Hooktail and Koops' father NPCs.
  * Before Hooktail is beaten (STG1_16_HOOKTAIL) it enlarges Hooktail and starts gonbaba_event;
- * afterwards both NPCs are moved off the map.
+ * afterwards Hooktail is moved below the map; retail versions then delete both NPCs.
  * Also sets up the Trouble Center request 16 cloud and chest (iri_16_init).
  */
 EVT_BEGIN(gon_11_init_evt)

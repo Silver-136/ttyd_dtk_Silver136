@@ -385,13 +385,14 @@ static EVT_BEGIN(first_attack_event)
 EVT_END()
 
 /**
- * Attack event of the Koopa Troopa: gets up first if it is flipped over;
- * otherwise it uses an enemy item if it has one, or hops into its shell,
+ * Attack event of the Koopa Troopa: runs its recovery event instead if it is flipped over;
+ * otherwise it uses an enemy item if the item-use check selects one, or hops into its shell,
  * spins up with a smoke trail and dashes into one target.
- * The pre-damage check decides between a dodge (it overshoots and turns back)
+ * The pre-damage check decides between a miss (it overshoots and turns back)
  * and a hit (camera shake, bounces off); then it walks home.
  */
 static EVT_BEGIN(attack_event)
+
     // Flipped over: it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -405,6 +406,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         WAIT_FRAMES(30)
     ELSE
+
         // It may use an enemy item instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -479,7 +481,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(5), EVT_NULLPTR)
 
-    // It dashes into the target in its shell; the pre-damage check decides between a dodge and a hit.
+    // It dashes into the target in its shell; the pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 1)
     DELETE_EVENT(LW(13))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_nokonoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))

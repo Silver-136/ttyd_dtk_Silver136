@@ -1,4 +1,4 @@
-// rsh_01 (列車, Excess Express): car joining the driver's cab (rsh_00) and rsh_02: Toron, Madam, conductor, cook and
+// rsh_01 (列車, Excess Express): car joining the driver's cab (rsh_00) and rsh_02: Toron, Madam, Detective Pennington, conductor, cook and
 // waitress NPCs; doors to Rogueport (gor_04), Riverside (hom_00) and Poshley Heights (pik_00) stations.
 
 #include "version.h"
@@ -318,7 +318,7 @@ static const char* door_4[] = {
 };
 
 /**
- * Init event of Zip Toad (Toron) in rsh_01: places him at (-45, 0, -175) before the first stage
+ * Init event of Zip Toad (Toron) in rsh_01: places him at (-45, 0, -175) before STG6_01_THE_CONDUCTOR
  * and again from the Galley Pot stage to the end of day 1; at other stages he is parked below the floor.
  */
 static EVT_BEGIN(init_toron)
@@ -393,8 +393,9 @@ static s32 item_tbl_madam[] = {
 /**
  * Talk script used when Mario holds a Gold Ring: opens the item menu;
  * giving the ring pays Mario 30 coins and she thanks him (stg6_rsh_201, 202), cancelling prints stg6_rsh_201_2,
- * then the music dip is restored.
+ * then the station-dependent music state is applied.
  */
+
 // Item-selection cancellation gives no reward; a non-cancelled selection pays 30 coins, then removes the ring.
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -490,7 +491,7 @@ static EVT_BEGIN(talk_madam)
     RETURN
 EVT_END()
 
-/** NPCs of the car on the first visit: Toron and the madam. */
+/** NPCs of the car on the first visit: Toron, the madam, Detective Pennington, the conductor, the cook and the waitress. */
 static NpcSetupInfo npc_data[] = {
     {
         "トロン", // name
@@ -643,7 +644,8 @@ EVT_BEGIN(evt_pikary_arrival)
     RETURN
 EVT_END()
 
-// Triples: interaction hit, message before Rogueport Station, message from that story point onward.
+// Retail triples: interaction hit, message before Rogueport Station, message from that story point onward.
+// The demos use pairs containing only the interaction hit and its message.
 static const char* access_tbl[] = {
     "tana_5",
     "stg6_rsh_262",
@@ -680,7 +682,7 @@ EVT_END()
 
 /**
  * Registers the shelf triggers from access_tbl (hit name and message rows);
- * each runs evt_access when Mario faces it.
+ * each runs evt_access when Mario presses A while facing it.
  */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
@@ -774,10 +776,11 @@ EVT_BEGIN(rsh_01_init_evt)
 EVT_END()
 
 /**
- * Init script of rsh_01_a (first visit): sets the doors (during the Smorg miasma stage the west door is only a
- * case trigger), runs the shared init, swaps the paper and plain floors, starts the Smorg window effect,
- * gives the Vital Paper from the a_kami spot at STG6_22_DOCUMENT and,
- * if the story is before STG6_00_START, places Mario and the partner in the car and starts it.
+ * Init script of rsh_01_a (first visit): sets the doors (during the Smorg miasma stage it arms the exits and
+ * starts the arrival scene instead of the normal entrance flow), runs the shared init and swaps the paper and plain floors.
+ * It requests the Smorg window effect during STG6_46_ENGINEER through STG6_47_ESCAPING_THE_SMORGS
+ * and gives the Vital Paper from the a_kami spot at STG6_22_DOCUMENT.
+ * If the story is before STG6_00_START, it places Mario and the partner in the car and advances the story to that stage.
  */
 EVT_BEGIN(rsh_01_a_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1107,6 +1110,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+
                 // Wait for the Bero execution bit before replacing the side exit with its interaction message.
                 BEGIN_INLINE_EVENT
                     CALL(evt_bero_exec_wait, 65536)

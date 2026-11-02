@@ -19,7 +19,7 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_GUARD 0      // 1 while in the guard stance (guard_event, or the attack ending in guard); guard_cancel_event clears it
 #define UNIT_WORK_ROLLING 1    // 1 keeps the sibling loop that rolls it during the attack; 0 stops it
-#define UNIT_WORK_ROLL_SPEED 2 // degrees per frame of that roll (-36/36 times the direction; ramped by 1 per step after a miss or hit)
+#define UNIT_WORK_ROLL_SPEED 2 // degrees per frame of that roll (initially -36 times the direction; ramped by 1 per step after a miss or hit)
 
 
 BattleUnitKind unit_togezo;
@@ -162,7 +162,7 @@ static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 /**
  * Status vulnerability of the Spiny while flipped over:
- * percent chance that each status takes hold (100 is normal).
+ * percentage multiplier on each move's status chance (100 is normal).
  */
 static StatusVulnerability regist_turn = {
     100, // sleep
@@ -203,7 +203,7 @@ static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
 
 /**
  * Status vulnerability of the Spiny while guarding:
- * percent chance that each status takes hold (100 is normal).
+ * percentage multiplier on each move's status chance (100 is normal).
  */
 static StatusVulnerability regist_guard = {
     100, // sleep
@@ -449,8 +449,9 @@ static EVT_BEGIN(dmg_turn_event)
 EVT_END()
 
 /**
- * Flips the Spiny back onto its feet: counts the over-turn down by one,
- * restores the normal tables and counter attributes (the reverse of dmg_turn_event) and hops back up.
+ * Counts the over-turn down by one; while it is still nonzero, returns to waiting.
+ * At zero it flips the Spiny back onto its feet, restores the normal tables and counter attributes
+ * (the reverse of dmg_turn_event) and hops back up.
  */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -480,7 +481,7 @@ EVT_END()
 
 /**
  * Attack event of the Spiny: if flipped over it only wakes up.
- * Otherwise it uses an enemy item if it has one;
+ * Otherwise it uses an enemy item if the item-use check selects one;
  * a guarding Spiny (unit work 0 = 1) leaves its guard, and an unguarded one rolls 0 to 99:
  * below 50 the roll attack (normal_attack_event), else it curls up to guard (guard_event).
  */
@@ -521,12 +522,13 @@ EVT_END()
  * The Spiny's roll attack (weapon_togezo_attack): it curls up (TGZ_P_1, TURN1 sound),
  * rolls at the target spinning in z (ROLL sounds),
  * and either misses and rolls past or hits with the defence check and rebounds with two hops (JUMP1),
- * then uncurls (TURN2, TGZ_S_1) and returns home.
+ * then returns home, either uncurled (TURN2, TGZ_S_1) or in guard after 30% of hits.
  */
 static EVT_BEGIN(normal_attack_event)
+
+    // Pick a target for the attack; a confused unit that has none flusters.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // Pick a target for the attack; a confused unit that has none flusters.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

@@ -256,12 +256,13 @@ static inline void noko_star(PartyEntry* party, s32 n) {
             body                                                                                                   \
         }                                                                                                          \
     }
+
 /**
  * Shell Toss, run every frame while Koops is in use.
  * He tucks into his shell beside Mario, shoots forward 120 units (picking up the first item it touches),
  * stops spinning in place while X is held (or while an event holds it),
  * then slides back to a safe spot next to Mario; hitting a wall ends the throw early.
- * Off screen, he is placed near Mario and the toss ends at once.
+ * Outside event use, an off-screen shell is placed near Mario and the toss ends when Mario's keys are off.
  * nokonokoGetStatus reports the state; the US release reworked the wall push-out.
  */
 void nokonoko_use(PartyEntry* party) {
@@ -930,7 +931,7 @@ void nokonoko_use(PartyEntry* party) {
 
 /**
  * Ends Shell Toss if Koops is in use: runs nokonoko_use_post, then returns him to follow mode,
- * or to run mode 0 when the toss was started by an event.
+ * or to run mode 0 when the toss was started by an event; run mode 9 keeps its current mode.
  */
 void nokonoko_finish(PartyEntry* party) {
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {

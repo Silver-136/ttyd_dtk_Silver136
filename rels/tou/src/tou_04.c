@@ -186,7 +186,7 @@ static EVT_BEGIN(w_door_close)
     RETURN
 EVT_END()
 
-/** Swings door_1 open (case-event handler for the corridor's first door). */
+/** Swings door_1 open (bero animation callback for the corridor's first door). */
 EVT_BEGIN(_1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
@@ -639,7 +639,7 @@ EVT_BEGIN(move_g)
     RETURN
 EVT_END()
 
-/** Guard 1 refuses to move: he is placed at (-580, 0, 350), then walks to (-580, 300) when Mario enters. */
+/** Guard 1 refuses to move: he is placed at (-580, 0, 350), then walks to (-580, 300) when the door transition starts. */
 EVT_BEGIN(move_g_1_dokimasen)
     CALL(evt_npc_set_position, STRING("me"), -580, 0, 350)
     CALL(evt_bero_exec_wait, 65536)
@@ -765,7 +765,7 @@ EVT_BEGIN(move_g_1)
     RETURN
 EVT_END()
 
-/** NPC init for guard 2: placed at (-520, 0, 70) or (-520, 0, 0), depending on how Mario entered. */
+/** NPC init for guard 2: in JP and later, placed at (-520, 0, 70) during Grubba's Plans when entered through n_bero_2; otherwise at (-520, 0, 0), including both demos. */
 EVT_BEGIN(init_g_2)
 #if VERSION > VERSION_DEMO_US
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
@@ -905,7 +905,7 @@ EVT_END()
 
 /**
  * Guard 4 (the main hall guard) refuses to move:
- * placed at (-300, 0, -530) and walks to (-350, -530) when Mario enters.
+ * placed at (-300, 0, -530) and walks to (-350, -530) when the door transition starts.
  */
 EVT_BEGIN(move_g_4_dokimasen)
     CALL(evt_npc_set_position, STRING("me"), -300, 0, -530)
@@ -982,11 +982,12 @@ EVT_END()
  * and gives story- dependent lines about the league, Grubba and the rematch.
  */
 EVT_BEGIN(talk_g_4)
-    // Before the match with Grubba is arranged, the guard lets Mario through the first time he asks to become
-    // a fighter.
+
+    // Before STG3_03_GRUBBA, the guard lets Mario through the first time he asks to become a fighter.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
-        // He steps aside, out of the doorway, and a door to Grubba's office opens for Mario.
+
+        // He steps aside, out of the doorway; in JP and later, the passage to Grubba's office is enabled for Mario.
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
         IF_INT_EQUAL(LW(3), -350)
@@ -1014,9 +1015,10 @@ EVT_BEGIN(talk_g_4)
             // On later visits he only tells Mario to go talk to Mr. Grubba.
             CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
         END_IF
-        CASE_LESS(STG3_04_GONZALES_IS_BORN)
-        // While Grubba's plans unfold the guard sends Mario to Grubba, saying he ran by toward the ring,
+
+        // Across the following story branches, the guard sends Mario to Grubba, says he ran by toward the ring,
         // or that the office is closed to visitors.
+        CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
         CALL(evt_msg_print, 0, STRING("stg3_tou_102_02"), 0, 0)
@@ -1085,8 +1087,8 @@ EVT_END()
  * he steps out of Mario's way (move_g) while Grubba's escort or Jolene's first or majors escort is pending,
  * from STG3_03_GRUBBA to before the first match,
  * and from STG3_31_GRUBBAS_PLANS to STG3_33_06_BOWSER_TREASURE.
- * At STG3_30_04_AIR_DUCT_EXIT, when Mario comes out of the office,
- * he starts at (-400, 0, -530) and walks back in front of the door once Mario is through.
+ * At STG3_30_04_AIR_DUCT_EXIT, on entry through s_bero_5 from the office,
+ * he starts at (-400, 0, -530) and waits for a door transition to start before walking back in front of the door.
  */
 EVT_BEGIN(move_g_4)
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
@@ -1122,7 +1124,7 @@ EVT_BEGIN(move_g_4)
     RETURN
 EVT_END()
 
-/** NPC init for guard 5 (unused; empty). */
+/** NPC init for guard 5 (empty). */
 EVT_BEGIN(init_g_5)
     RETURN
 EVT_END()
@@ -1132,7 +1134,7 @@ EVT_BEGIN(talk_g_5)
     RETURN
 EVT_END()
 
-/** Movement script of guard 5 (unused; empty). */
+/** Movement script of guard 5 (empty). */
 EVT_BEGIN(move_g_5)
     RETURN
 EVT_END()
@@ -2094,7 +2096,7 @@ EVT_BEGIN(evt_gardman3)
     CALL(evt_msg_print, 0, STRING("stg3_tou_408"), 0, STRING("ガードマン３"))
     WAIT_MS(300)
 
-    // The other guards stand aside (intangible) as the guard leads Mario along the long corridor,
+    // The other guards become intangible as the guard leads Mario along the long corridor,
     // and the partner protests.
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン４"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン５"), NPC_FLAG_NO_HIT)
@@ -2143,7 +2145,7 @@ EVT_BEGIN(evt_gardman3)
         END_IF
     END_LOOP
 
-    // They walk through, and the map changes to the title match room.
+    // Their walk through starts in an inline event as the map changes to the title match room.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("ガードマン３"), 590, 300, 0, FLOAT(60.0f), 1)
         CALL(evt_mario_mov_pos2, 590, 300, FLOAT(90.0f))
@@ -2221,7 +2223,7 @@ EVT_END()
 
 /**
  * Toilet pipe cutscene to tou_08: the camera starts at the toilet at x=450 and pans over to x=-450 in 5 seconds
- * while the draining sound plays, with two guards (ガードマン６ then ４) shown in speech bubbles,
+ * while the draining sound plays, with speech-bubble effects on two guards (ガードマン６ then ４),
  * then the map changes to tou_08 (bero dokan).
  */
 static EVT_BEGIN(evt_toile)
@@ -2257,7 +2259,7 @@ EVT_END()
 
 /**
  * Toilet pipe cutscene to tou_09: the mirror image of evt_toile;
- * the camera pans from x=-450 to 450 with the draining sound, the bubbles show ガードマン４ then ６,
+ * the camera pans from x=-450 to 450 with the draining sound, with speech-bubble effects on ガードマン４ then ６,
  * and the map changes to tou_09 (bero dokan).
  */
 static EVT_BEGIN(evt_toile2)
@@ -2407,7 +2409,7 @@ EVT_END()
 /**
  * Rawk Hawk's warning, run at STG3_20_05_MAJORS_4TH_PL:
  * the champion (チャンピョン) waits at (-550, 0, -400),
- * and when Mario enters he warns him to stop stealing the spotlight (stg3_tou_297_27_00)
+ * and after the door transition starts he warns Mario to stop stealing the spotlight (stg3_tou_297_27_00)
  * and dashes off down the corridor; the partner wonders if he sent the threatening letters (stg3_tou_297_27_01)
  * and the story advances to STG3_20_06_RAWK_HAWKS_WARNING.
  */
@@ -2452,8 +2454,8 @@ EVT_END()
 
 /**
  * Run after STG3_34_RETURN_TO_ROGUEPORT when Mario comes out of the minor-league locker room (s_bero_7) at
- * rank 10, just promoted: guard 1 starts at (-590, 0, 350)
- * and walks back to (-590, 300) in front of the door once Mario is through.
+ * rank 10: guard 1 starts at (-590, 0, 350)
+ * and walks back to (-590, 300) in front of the door when the door transition starts.
  */
 EVT_BEGIN(out_from_tou_10_re)
     CALL(evt_npc_set_position, STRING("ガードマン１"), -590, 0, 350)
@@ -2544,7 +2546,7 @@ EVT_BEGIN(tou_04_init_evt)
         END_IF
     END_IF
 
-    // Reset the guard-escort flags so only the one for the trip about to run stays set.
+    // For a booked title match, keep only guard 3's title-room escort flag; clear all four for either toilet warp.
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
         SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
         SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
@@ -2592,8 +2594,8 @@ EVT_BEGIN(tou_04_init_evt)
         SPAWN_EVENT(PTR(evt_gardman4))
     END_IF
 
-    // Coming back from the toilets, Mario appears by the toilet door
-    // and its scene runs instead of the usual setup.
+    // Coming back from the toilets, Mario appears by the toilet door;
+    // its scene runs and the remaining door, lock and entry-scene setup is skipped.
     IF_INT_EQUAL(GSWF_TOU_09_TOILET_WARP_PENDING, 1)
         CALL(evt_mario_set_pos, 530, 0, 530)
         CALL(evt_party_set_pos, 0, 530, 0, 530)
@@ -2609,8 +2611,8 @@ EVT_BEGIN(tou_04_init_evt)
         RETURN
     END_IF
 
-    // Close every door and open only those that fit the story: Grubba's office early on,
-    // then the door for Mario's current ranking.
+    // Disable every corridor exit and enable only those that fit the story: Grubba's office early on,
+    // then the exit for Mario's current ranking.
     SET_VALUE(LW(2), 0)
     LOOP(11)
         SET_VALUE(LW(0), LW(2))
@@ -2639,8 +2641,8 @@ EVT_BEGIN(tou_04_init_evt)
         END_SWITCH
     END_SWITCH
 
-    // Always-open doors, and the special doors for the minor-league return, the first Rawk Hawk match
-    // and Grubba's plans.
+    // Enable the side exits by default, then apply special access for the minor-league return,
+    // the first Rawk Hawk match and Grubba's plans.
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_on))
     SET_VALUE(LW(0), 8)
@@ -2678,7 +2680,8 @@ EVT_BEGIN(tou_04_init_evt)
 #endif
     END_IF
 
-    // After Grubba's plans, the guard's office door stays shut unless Mario was called back by Jolene.
+    // From Grubba's plans onward, enable the office while GSWF_TOU_LEFT_AFTER_CHAPTER is clear.
+    // Afterwards require trouble or rematch permission; in JP and later, rematch permission applies only before re-registering.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(LW(0), 5)
@@ -2702,7 +2705,8 @@ EVT_BEGIN(tou_04_init_evt)
         END_IF
     END_IF
 
-    // Housekeeping: a poisoned partner is removed, and a pending match sends the partner away.
+    // Housekeeping: remove partner slot 0 while poison-cake recovery is pending;
+    // a reserved match hides, stops and clears partner slot 1.
     CALL(evt_cam_road_reset)
     IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
@@ -2715,8 +2719,9 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_mario_clear_party, 1)
     END_IF
 
-    // The storage room is locked until Mario has the key;
-    // when he is a top-eleven fighter the storage-room talk starts.
+    // Until the storage-room-unlocked story stage, install the Storage Key lock and disable the passage.
+    // Start the storage-room talk while rank is at most 11 and the story is still before unlocking,
+    // provided neither the majors nor champion-room escort is pending.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
         CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x12, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_04_STORAGE_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("s_bero_4"))
@@ -2736,7 +2741,7 @@ EVT_BEGIN(tou_04_init_evt)
         END_IF
     END_IF
 
-    // Rawk Hawk's escape scene and the rematch return from the ring play at their story points.
+    // Rawk Hawk's escape scene and the rank-10 return from the minor-league locker room play at their story points.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_05_MAJORS_4TH_PL)
         SPAWN_EVENT(PTR(evt_bred_nigeru))
     END_IF

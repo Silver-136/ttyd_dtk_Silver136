@@ -165,14 +165,14 @@ static f32 randf(f32 min, f32 max) {
 
 /**
  * EU only: seeds the boss swarm's own random generator (two-word state),
- * so the EU version gets the same swarm placement on every run.
+ * making the swarm placement reproducible for a given seed.
  */
 void moamoa_srand(u32 seed) {
     moamoa_rand_prev = seed;
     moamoa_rand_cur = seed + 0x37E35F7D;
 }
 
-/** EU only: returns a float between min and max parent the boss swarm's own generator seeded by moamoa_srand. */
+/** EU only: returns a float between min and max using the boss swarm's own generator seeded by moamoa_srand. */
 f32 moamoa_randf(f32 min, f32 max) {
     s32 cur = moamoa_rand_cur;
     s32 next = moamoa_rand_prev + cur + 0x195B31B7;
@@ -282,8 +282,7 @@ BattleUnitKind unit_boss_moamoa = {
 BattleUnitDefense moamoa_defence = {{2, 2, 2, 2, 2}};
 
 /**
- * Empty defence table (all zeros) given to a tentacle's or mouth's part so it takes damage as normal
- * while the arms are out.
+ * Zero base-defence table for the exposed main body's part when its attacking parts are gone.
  */
 s32 moamoa_defence_no_parts[] = {
     0, 0,
@@ -551,7 +550,7 @@ EVT_END()
 
 /**
  * Animation names (S_1_2, then L_1_4; NULL separates steps) Smorg's body plays, in order,
- * when it leaves its first form.
+ * during its defeat sequence.
  */
 const char* MOAMOA_TAIJOU[] = {
     "S_1_2",
@@ -671,7 +670,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 /**
- * Animation names (L_2_1 to L_2_5, then S_2) Smorg's body plays in order while it changes into its second form.
+ * Animation names (L_2_1, L_2_3, L_2_4, L_2_5, then S_2) Smorg's mouth plays in order while it changes into its second form.
  */
 const char* moamoa2_change_tbl[] = {
     "L_2_1",
@@ -742,7 +741,7 @@ EVT_END()
  * Phase event of the Smorg boss (called from its phase_event): grows the mouth.
  * Plays the restore sound, the V_2 pose, spawns the mouth unit (entry_boss_moamoa_mouth) linked through unit
  * work 6, attaches the swarm Moamoa chains to it (moamoa2_on),
- * and switches to moamoa2_defence and the mouth's pose-change table.
+ * and sets the main body's moamoa2_defence and moamoa1_pose_table before playing the mouth's transformation sequence.
  */
 EVT_BEGIN(moamoa_mouth_on)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_RESTORE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -788,9 +787,10 @@ EVT_BEGIN(moamoa_mouth_on)
 EVT_END()
 
 /**
- * Phase event of the Smorg main body: once the mouth
- * and all tentacles are gone it checks the HP threshold in unit work 2 and, when it fires,
- * regrows the tentacles (moamoa_tentacl_on) and the mouth (moamoa_mouth_on).
+ * Phase event of the Smorg main body: while it can act, after the player's turn with the mouth
+ * and all tentacles gone, counts down its regrowth delay. When the delay expires it regrows
+ * either the three tentacles (moamoa_tentacl_on) or the mouth (moamoa_mouth_on).
+ * At that point, first-form Smorg at half HP or less switches to the mouth form.
  */
 // Count regrowth turns only while all limbs are absent; at regrowth, half HP selects mouth form.
 static EVT_BEGIN(phase_event)
@@ -860,13 +860,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Idle event of the Smorg main body: shows the unit's table pose for state 1. */
+/** Idle event of the Smorg main body: shows the unit's table pose on part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
-/** Animation and bone data for each of the 89 swarm segments that make up Smorg's body. */
+/** Model, animation and starting-frame presets for the swarm sprites: 88 presets plus the terminating empty entry. */
 static ExtTexInfo ext_moamoa_data[] = {
     {"c_n_moa_a", "S_1", 0.0f},
     {"c_n_moa_a", "S_1", 2.0f},
@@ -1191,7 +1191,7 @@ USER_FUNC(moamoa2_on) {
  * Script helper: creates the boss's swarm.
  * Allocates 750 Moamoa with small random offsets (EU: from its own seeded generator), reads the main body pose,
  * sets up the bone chains and the animation groups from ext_moamoa_data,
- * and attaches the chains to the tentacles (moamoa1_on) and the passengers' models (types 1 to 10).
+ * and attaches the chains to the tentacles (moamoa1_on); types 1 to 9 select alternate Moamoa and passenger models.
  */
 USER_FUNC(moamoa_on) {
     s32 i;

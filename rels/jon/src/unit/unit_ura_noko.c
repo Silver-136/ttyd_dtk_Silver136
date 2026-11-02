@@ -441,27 +441,30 @@ static EVT_BEGIN(first_attack_event)
 EVT_END()
 
 /**
- * Attack event of the Shady Koopa: wakes up first if it is flipped.
+ * Attack event of the Shady Koopa: handles its flipped turn first if it is flipped.
  * In the forced-attack case it uses the first attack target after a half-second pause,
- * otherwise it uses an enemy item if it has one or samples a target.
+ * otherwise it uses a selected enemy-item script if available or samples a target.
  * It then spins into its shell and rams the target (NKT_A_1, with a smoke puff),
  * the hit being checked with weapon_nokonoko_attack, and returns home.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        // A flipped-over Koopa only gets back on its feet.
+
+        // A flipped-over Koopa attacks from its back or gets up when its counter reaches zero.
         CALL_CHILD(wakeup_event)
         RETURN
     END_IF
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
+
         // Pick a target for the attack; a confused unit that has none flusters.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         WAIT_FRAMES(30)
     ELSE
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
+
             // It uses an enemy item if it has one.
             CALL_CHILD(LW(0))
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -507,7 +510,8 @@ static EVT_BEGIN(attack_event)
         LOOP(0)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(15))
             IF_INT_EQUAL(LW(15), 1)
-                // Spinning in its shell, it rams the target.
+
+
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
                 BREAK_LOOP
             END_IF
@@ -532,6 +536,8 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(5), EVT_NULLPTR)
+
+    // Spinning in its shell, it rams the target.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 1)
     DELETE_EVENT(LW(13))
 
@@ -643,6 +649,7 @@ static EVT_BEGIN(ura_attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(100)
     BEGIN_SIBLING_EVENT
+
         // Hop up and start spinning on its shell, with an aura around it.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5f))
@@ -748,6 +755,7 @@ static EVT_BEGIN(ura_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     IF_INT_EQUAL(LW(6), 0)
+
         // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_ura_noko_ura_attack))
         SET_VALUE(LW(6), 1)

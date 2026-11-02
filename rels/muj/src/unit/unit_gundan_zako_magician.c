@@ -163,7 +163,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
-/** Parts of the X-Naut PhD: 3 parts (model c_zako_m). */
+/** Parts of the X-Naut PhD: 2 parts (model c_zako_m). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gundan_zako_magician", "c_zako_m", 0.0f, 0.0f, 0.0f, 0.0f, 28.0f, 0.0f, 0.0f, 38.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 #if VERSION <= VERSION_DEMO_US
@@ -501,9 +501,10 @@ EVT_END()
  * fire bottle 20, defense-down bottle 10, dodgy potion on itself 10 (only if not already Dodgy),
  * shrinking bottle 20, healing one ally 10, healing all allies 5.
  * With Crump present: fire bottle 60, a dodgy potion for Crump 20 and an HP-regen potion for Crump 20,
- * each only if he lacks that status. A pick that is not allowed rolls again.
+ * each only if he lacks that status. An unavailable Dodgy choice falls through to the later options; it rolls again only if none of them runs.
  */
 static EVT_BEGIN(attack_event)
+
     // In a first strike the X-Naut PhD simply throws its fire bottle.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -541,12 +542,14 @@ static EVT_BEGIN(attack_event)
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
+
         // Fire bottle: a flaming bottle at one target.
         CALL_CHILD(PTR(fire_bottle_event))
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
+
         // Hunyahunya bottle thrown at one target.
         CALL_CHILD(PTR(hunyahunya_bottle_event))
         GOTO(99)
@@ -555,6 +558,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_LESS(LW(1), LW(0))
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DODGY, LW(2))
         IF_INT_EQUAL(LW(2), 0)
+
             // Yokeyoke potion: it makes itself Dodgy.
             CALL_CHILD(PTR(yokeyoke_bottle_event))
             GOTO(99)
@@ -562,18 +566,21 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
+
         // Minimini bottle: a shrinking bottle at the whole opposing side.
         CALL_CHILD(PTR(minimini_bottle_event))
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
+
         // It heals one ally.
         CALL_CHILD(PTR(one_recover_event))
         GOTO(99)
     END_IF
     ADD(LW(0), 5)
     IF_INT_LESS(LW(1), LW(0))
+
         // It heals every ally.
         CALL_CHILD(PTR(all_recover_event))
         GOTO(99)
@@ -591,6 +598,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 60)
     IF_INT_LESS(LW(1), LW(0))
+
         // Fire bottle at one target.
         CALL_CHILD(PTR(fire_bottle_event))
         GOTO(99)
@@ -600,6 +608,7 @@ static EVT_BEGIN(attack_event)
         CALL(kanbu_get_id, LW(3), LW(4))
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DODGY, LW(2))
         IF_INT_EQUAL(LW(2), 0)
+
             // A Dodgy potion handed to Lord Crump.
             CALL_CHILD(PTR(yokeyoke_bottle_event_with_kanbu))
             GOTO(99)
@@ -610,6 +619,7 @@ static EVT_BEGIN(attack_event)
         CALL(kanbu_get_id, LW(3), LW(4))
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_HP_REGEN, LW(2))
         IF_INT_EQUAL(LW(2), 0)
+
             // An HP-regen potion handed to Lord Crump.
             CALL_CHILD(PTR(ziwaziwa_bottle_event))
             GOTO(99)
@@ -683,6 +693,7 @@ EVT_END()
  */
 static EVT_BEGIN(attack_common_event2)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
+
         // The X-Naut PhD takes the bottle in hand (part 2): a flaming one or a hunyahunya one.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1A"))
     END_IF
@@ -736,6 +747,7 @@ static EVT_BEGIN(attack_common_event2)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+
         // The bottle misses or is blocked: it flies past, smashes into glass shards and the part is put back.
         LABEL(90)
         CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, 2)
@@ -1042,7 +1054,7 @@ static EVT_BEGIN(minimini_bottle_event)
             GOTO(0)
         END_IF
 
-        // The camera resets after a pause.
+        // The camera resets, then it pauses.
         LABEL(98)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(60)

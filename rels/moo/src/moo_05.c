@@ -66,8 +66,9 @@ static BeroEntry bero_entry_data[] = {
 };
 
 #if VERSION < VERSION_US
+
 /**
- * Rock-blasting script (JP only): the rock crumbles into an offscreen animation,
+ * Rock-blasting script (JP and demos): the rock crumbles into an offscreen animation,
  * then the model and collision of the rock in LW(10)/LW(11) are removed.
  */
 static EVT_BEGIN(rock_main)

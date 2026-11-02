@@ -311,7 +311,7 @@ EVT_END()
 
 /**
  * X-Naut's turn: on a first strike (battle flag 2) always the body slam;
- * otherwise uses an item if it has one, else picks the body slam (50%),
+ * otherwise uses an item if the item-use check selects one, else picks the body slam (50%),
  * the jump attack (30%) or drinking its growth potion (20%, rerolled while already huge).
  */
 static EVT_BEGIN(attack_event)
@@ -361,7 +361,7 @@ EVT_END()
 
 /**
  * Shared run-up for both X-Naut attacks (weapon in LW(9), target in LW(3)/LW(4)):
- * declares the attack, points the camera at the target, scuffs its feet in place for 9 dust puffs,
+ * declares the attack, points the camera at the target, scuffs its feet in place for 10 dust puffs,
  * then runs to the target's hit position.
  */
 static EVT_BEGIN(attack_common_event1)
@@ -669,7 +669,7 @@ static EVT_BEGIN(dekadeka_event)
     RETURN
 EVT_END()
 
-/** Wait event of the X-Naut: switches to pose table entry 1 (idle). */
+/** Wait event of the X-Naut: sets the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

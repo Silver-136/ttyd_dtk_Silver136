@@ -97,7 +97,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of the placeholder black_heiho: none, every element hits normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of the placeholder black_heiho: every status effect always lands (100%). */
+/** Status vulnerability of the placeholder black_heiho: 100% multipliers for every status effect. */
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 /**
@@ -150,7 +150,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Attack event: uses an item if it has one; otherwise it does nothing and goes back to idling. */
+/** Attack event: uses an item if the item-use check selects one; otherwise it does nothing and goes back to idling. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

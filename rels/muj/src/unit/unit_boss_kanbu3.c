@@ -414,6 +414,7 @@ static EVT_BEGIN(damage_event)
 #endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     IF_INT_EQUAL(LW(0), 0)
+
         // With the first group in play, the first hit that leaves him at 15 HP or less makes him call it off.
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
@@ -526,6 +527,7 @@ static EVT_BEGIN(dead_event)
         END_IF
         CALL(check_exist_group, LW(0))
         IF_INT_NOT_EQUAL(LW(0), -1)
+
             // Group 1 is called off (group 2 flees as the ceiling rises).
             CALL(zakogun_escape1)
             CALL(btlevtcmd_KillUnit, LW(0), 0)
@@ -655,6 +657,7 @@ EVT_END()
  * he plays the call-back sound and pose C_1 and brings in horde group 1, 2 or 3 according to unit work 0.
  */
 EVT_BEGIN(call_event)
+
     // If no X-Naut group is on the stage yet, Lord Crump waves them in.
     CALL(check_exist_group, LW(15))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
@@ -681,6 +684,7 @@ EVT_BEGIN(call_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+
         // He beckons (C_1, C_2) and the X-Nauts answer his call.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
@@ -759,7 +763,7 @@ EVT_END()
  * 0 guard (so guard_event is never chosen) and 30 calling the group (call_event);
  * if the group is already present he rolls again.
  * While guarding he lowers his guard or waits (no_event), 50/50.
- * With group 3 in play he uses his normal attack or charges (charge_event), 50/50.
+ * With group 3 in play the roll is 0 to 49, so he always uses his normal attack.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -804,6 +808,7 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
     ELSE
+
         // The random range ends at 49, so this branch always chooses the normal attack.
         SET_VALUE(LW(0), 50)
         ADD(LW(0), 0)
@@ -1025,7 +1030,8 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // He misses or is blocked: the target gets out of the way and he comes down on the spot.
+
+        // He misses and comes down on the spot; some miss results play a target avoid pose.
         LABEL(90)
         GOTO(98)
 
@@ -1094,6 +1100,7 @@ USER_FUNC(check_exist_group) {
     evtSetValue(event, args[0], id);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: writes the battle unit id of the unit of kind 0x77 to args[0],
  * or -1 if none exists (the name suggests a researcher unit).

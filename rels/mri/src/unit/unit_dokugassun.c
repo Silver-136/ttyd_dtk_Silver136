@@ -234,7 +234,7 @@ static BattleWeapon weapon_dokugassun_attack = {
 
 /**
  * Weapon of the Poison Puff (poisongas attack): targets every unit for 10 damage, ignores Defense,
- * may inflict Poison (50%, 10 turns); used by attack_event.
+ * may inflict Poison (50% base chance in demos, 70% in retail, for 10 turns); used by attack_event.
  */
 static BattleWeapon weapon_dokugassun_poisongas_attack = {
     NULL, 0, // name..icon
@@ -324,12 +324,13 @@ EVT_END()
 
 /**
  * Poison gas attack: the Poison Puff, already charged, breathes poison gas on all targets.
- * From JP it first slides back 40 units.
+ * From JP it first slides to x = -40.
  * It faces the opponents, plays the wind-up poses with the charge sounds, turns off the charge,
  * then puffs 20 clouds of gas (one every 3 frames) over the target side while the damage
  * and poison checks run for each target.
  */
 static EVT_BEGIN(poisongas_event)
+
     // The Poison Puff picks the whole opposing side as its target (it is already charged up).
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -388,7 +389,7 @@ static EVT_BEGIN(poisongas_event)
     SET_VALUE(LW(6), 0)
 
     // Each target is checked in turn: a miss, or a hit that applies damage and possible Poison (the defence
-    // result counts for the first target only).
+    // check is made only for the first connecting target).
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -603,7 +604,7 @@ EVT_END()
 
 /**
  * Body slam of the Poison Puff: it picks a target (or uses the first-strike target),
- * shakes and shrinks for 40 frames, then dives to a spot behind itself and flies at the target to strike it;
+ * shakes and shrinks for 40 frames while diving to a spot behind itself, then flies at the target to strike it;
  * the damage and result checks follow, and the Puff returns to its home position afterwards.
  */
 static EVT_BEGIN(normal_attack_event)

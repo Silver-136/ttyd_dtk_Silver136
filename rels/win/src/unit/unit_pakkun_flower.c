@@ -197,7 +197,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
 };
 
 /**
- * Attack entry of the Piranha Plant: with a first-strike battle flag, or after any item use check,
+ * Attack entry of the Piranha Plant: with a first-strike battle flag, or when its item check selects no script,
  * it runs normal_attack_event with its single weapon (weapon_pakkun_flower_attack),
  * then returns to the wait event.
  */
@@ -469,6 +469,7 @@ EVT_END()
  * handles the guard and avoid cases, then runs return_event.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // A First Strike aims at the first-strike target after a short pause;
     // otherwise the plant picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -584,7 +585,7 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
-/** Wait event of the Piranha Plant: switches to pose-table entry 1 (PKF_N_1 on the floor, PKF_N_2 on the ceiling). */
+/** Wait event of the Piranha Plant: selects the current pose-table animation for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -641,7 +642,7 @@ static USER_FUNC(shadow_scale_memory) {
 }
 
 /**
- * Script helper: writes 0 to args[0] if the stage's ceiling iron frame has been knocked away
+ * Script helper: writes 0 to args[0] if the stage's ceiling iron frame is unavailable
  * (STAGE_OBJ_FLAG_IRON_FRAME_GONE), otherwise 1;
  * the plant uses it to decide whether it can hang from the ceiling.
  */

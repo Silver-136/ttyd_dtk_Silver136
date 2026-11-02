@@ -542,7 +542,7 @@ static BattleUnitKindPart parts[] = {
 /**
  * Init script of a Pokey: registers its wait, attack, damage and confusion handlers,
  * starts it with four body segments (unit work 0 = 4, applied through _body_param_set),
- * clears unit work 1 (the count of summons it has made) and sets the rustling walk/run sounds.
+ * clears unit work 1 (its inherited summon depth) and sets the rustling walk/run sounds.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -605,7 +605,7 @@ EVT_END()
  * if only the head is left (unit work 0 = 1) it reacts as a plain hit,
  * otherwise the segment count goes down by one and the parts, status icon height,
  * kiss hit offset and swallow attribute are rebuilt for the shorter Pokey (_body_param_set),
- * then subset_dmg_sambo_fall makes the lost segment fall.
+ * then subset_dmg_sambo_fall settles the remaining body.
  */
 static EVT_BEGIN(damage_event_bodylost)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
@@ -682,8 +682,8 @@ static EVT_BEGIN(damage_event_bodylost)
 EVT_END()
 
 /**
- * Makes the lost Pokey segment fall: switches the pose of the dropped part (LW(14), pose type 39)
- * and plays the fall.
+ * Makes the remaining Pokey body settle after a segment falls off: applies pose type LW(14)
+ * to part LW(11) and lowers the unit with a small bounce.
  */
 static EVT_BEGIN(subset_dmg_sambo_fall)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
@@ -924,8 +924,8 @@ EVT_END()
 
 /**
  * Chooses the Pokey's attack from its segment count (unit work 0): item use first;
- * with 4 segments and a summon count (unit work 1) of at most 1 there is a 30% chance it calls a friend
- * (call_friend_event, when there is a free spot 40 units ahead);
+ * with 4 segments and an inherited summon depth (unit work 1) of at most 1 there is a 30% chance it calls a friend
+ * (call_friend_event, when there is a free spot 40 units ahead with a positive x coordinate);
  * with 2 or more segments a 31-in-70 chance of the body slam (attack_head_2_event, when its weapon finds a
  * target) and otherwise the spike ball (attack_spike_event); a lone head uses attack_head_1_event.
  */

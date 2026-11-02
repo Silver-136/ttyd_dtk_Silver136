@@ -250,7 +250,7 @@ EVT_END()
 
 /**
  * Death of Smorg's tentacle A: it plays the arm-down sound and the R_1A pose,
- * clears the main body's slot for it (unit work 5 = -1), then, like the other parts,
+ * clears the main body's slot for it (unit work 5 = -1), then, if all three tentacle slots are empty,
  * gives the main body the no-parts defence table and weakness pose table,
  * plays the BIG sounds and V_1 pose on it, and kills the tentacle unit.
  */
@@ -290,7 +290,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-/** Attack event of Smorg's tentacle A: uses an enemy item if it has one, otherwise runs evt_attack. */
+/** Attack event of Smorg's tentacle A: runs a selected enemy item-use script when one is available, otherwise runs evt_attack. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -552,7 +552,7 @@ static EVT_BEGIN(evt_attack)
 EVT_END()
 
 /**
- * Idle event of Smorg's tentacle A: shows its table pose for state 1,
+ * Idle event of Smorg's tentacle A: shows its table pose on part 1,
  * and does the same for the other two tentacles (main body unit work 4 and 3) while they still exist.
  */
 static EVT_BEGIN(wait_event)

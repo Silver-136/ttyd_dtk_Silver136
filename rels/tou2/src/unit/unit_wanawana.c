@@ -111,7 +111,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of the Trap, as the percent chance each status takes hold: every status lands at
+ * Status vulnerability of the Trap, as percentages of each status's base chance: every status lands at
  * the normal rate.
  */
 static StatusVulnerability regist = {
@@ -288,7 +288,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-/** Attack event: uses an item if it has one; otherwise it does nothing and goes back to idling. */
+/** Attack event: uses an item if the item-use check selects one; otherwise it does nothing and goes back to idling. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

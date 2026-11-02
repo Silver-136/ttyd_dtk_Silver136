@@ -208,6 +208,8 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_mov_pos2, -420, 0, FLOAT(80.0f))
     WAIT_MS(1000)
+
+    // Lord Crump waits in the boss room, laughing, as the boss music starts.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MAGNUM_APP1"))
     CALL(evt_msg_print, 0, STRING("stg7_aji_36"), 0, STRING("幹部"))
     WAIT_MS(300)

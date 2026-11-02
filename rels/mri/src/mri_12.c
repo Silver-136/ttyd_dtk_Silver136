@@ -140,7 +140,7 @@ static EVT_BEGIN(punipuni_ball00_init)
 EVT_END()
 
 /**
- * Hit/talk script of the orb pedestal: if empty, Mario picks an item to put on it (cancel ends the script),
+ * A-button script of the orb pedestal: if empty, Mario picks an item to put on it (cancel ends the script),
  * the orb appears and the light beam is shown; if full, Mario takes the orb back and the beam is hidden.
  * Mario is frozen during this.
  */
@@ -165,7 +165,7 @@ static EVT_BEGIN(punipuni_ball00)
     RETURN
 EVT_END()
 
-/** Planter hit script 1: the first time it is hit it launches a coin out of the planter (remembered with a flag). */
+/** Planter search script 1: the first time it is searched it launches a coin out of the planter (remembered with a flag). */
 static EVT_BEGIN(evt_f1_ueki_01)
     CALL(evt_item_delete_check, STRING("item_ueki_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

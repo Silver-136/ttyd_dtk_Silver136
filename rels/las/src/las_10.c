@@ -1318,7 +1318,7 @@ EVT_BEGIN(kagi_8_syutugen)
     RETURN
 EVT_END()
 
-/** Item list for the pedestal key window: Palace Key 0x25 (-1 ends the list). */
+/** Item list for the pedestal key window: Star Key (0x25; -1 ends the list). */
 s32 daiza_key_tbl[] = {
     37, -1,
 };
@@ -1470,8 +1470,8 @@ USER_FUNC(check_party_pos) {
 }
 
 /**
- * Script helper: each frame hides the near walls of the tower and shows only the ones in the camera's octant
- * and its two neighbours, so walls do not block the view of Mario.
+ * Script helper: each frame hides the near walls in the camera's octant and its two neighbours,
+ * so walls do not block the view of Mario.
  */
 USER_FUNC(temae_kesu) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);

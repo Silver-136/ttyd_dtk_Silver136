@@ -256,7 +256,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Event script: a satellite's reaction when it is hit:
- * flags the unit, plays the miss sound for pose 43 (otherwise picks a pose type by the hit kind),
+ * flags the unit, plays the miss sound for damage code 43 (otherwise picks a pose type by the hit kind),
  * plays the damage pose type, runs the unit's data event 10 alongside
  * and turns the satellite to face the hit direction, and starts it falling with acceleration 1.
  */
@@ -541,9 +541,11 @@ static USER_FUNC(bts_wariai_enzan_0) {
 }
 
 /**
- * Script helper: two-stage ramp blend between c = args[2] and d = args[3]:
- * the weights r1 (from time args[5]) and r2 (from time args[6]) each rise from 0 to 1 and fall back
- * after 14 frames, and the result c * (1 - w) + d * w with w = r1 * r2 is returned as a float in args[4].
+ * Script helper: blends c = args[2] and d = args[3] with weight w = r1 * r2, returning a float in args[4].
+ * args[5] and args[6] select interpolation modes, not elapsed frames; each interpolation uses step b - a
+ * out of b, where a = args[0] - 1 and b = args[1]. Values at least 14 select a complemented interpolation.
+ * The second such branch derives its mode from the adjusted first value minus 14, not the second value;
+ * either branch returns c if its adjusted value is at least 14.
  */
 USER_FUNC(bts_wariai_enzan_1f_intpl_w) {
     EvtWord* args = event->args;
@@ -584,9 +586,10 @@ USER_FUNC(bts_wariai_enzan_1f_intpl_w) {
 }
 
 /**
- * Script helper: single-stage ramp blend between c = args[2]
- * and d = args[3] with the weight rising over the first 14 frames of args[5] and falling again over the next 14;
- * returns the float in args[4], c after 28 frames.
+ * Script helper: blends c = args[2] and d = args[3], returning a float in args[4].
+ * args[5] selects the interpolation mode, evaluated at step b - a out of b, where a = args[0] - 1
+ * and b = args[1]. Values at least 14 subtract 14 from the mode and complement the interpolation;
+ * values at least 28 return c directly.
  */
 static USER_FUNC(bts_wariai_enzan_1f_intpl) {
     EvtWord* args = event->args;

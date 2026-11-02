@@ -258,8 +258,8 @@ s16 trap_position[] = {
 };
 
 /**
- * After the cage trap has sprung (stories STG2_21 to 21_03):
- * puts every Puni that was caught (trap index 1) back inside the trap at its saved position, and moves Punio,
+ * After the cage trap has sprung (STG2_21_BUBBLES_2 through STG2_21_03_SUPER_BOOTS):
+ * puts every Puni that was caught (trap index 1) back inside the trap at a preset position, and moves Punio,
  * his sister and the rival Puni NPCs to the cage with the Puni of the same slot.
  */
 EVT_BEGIN(trap_main)
@@ -399,7 +399,7 @@ EVT_BEGIN(wana_offscreen)
 EVT_END()
 
 /**
- * The cage trap (story up to STG2_20): when Mario and his partner walk in with the Puni Orb in place,
+ * The cage trap (story up to STG2_20_PUNIO_PETUNI): when Mario and his partner walk in with the Puni Orb in place,
  * the cage falls on the Punies, Lord Crump and two X-Nauts drop in front of it and taunt the party,
  * and the guide Puni answers. Sets the story to STG2_21_BUBBLES_2.
  */
@@ -409,7 +409,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
 
-    // Mario and his partner walk in with the Puni Orb in place; Punio runs ahead.
+    // Mario and his partner are inside with the Puni Orb in place; the cage drops before Punio moves ahead.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     WAIT_MS(500)
@@ -688,7 +688,7 @@ static EVT_BEGIN(punipuni_ball00_init)
 EVT_END()
 
 /**
- * Hit/talk script of the orb pedestal: if empty,
+ * A-button interaction script of the orb pedestal: if empty,
  * Mario picks an item to put on it (cancel ends the script) and the orb is placed; if full, Mario takes it back.
  * Mario is frozen during this.
  */

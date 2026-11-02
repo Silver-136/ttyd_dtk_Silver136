@@ -194,7 +194,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
-/** Parts of the Phantom Ember: 1 part (model c_phantom). */
+/** Parts of the Phantom Ember: 2 parts (model c_phantom). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_phantom", "c_phantom", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kWeakToIcePower, kCounterFiery, pose_table},
     {2, NULL, "c_phantom", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -332,7 +332,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Event (data table entry) for when the Phantom Ember is hit by fire and shrugs it off:
+ * Event (data table entry) for the Phantom Ember's fiery-contact counter reaction:
  * plays the fire sound and the A_2B pose for a second.
  */
 static EVT_BEGIN(avoid_fire_event)
@@ -450,7 +450,7 @@ EVT_END()
 /**
  * Attack of the Phantom Ember: the body charge.
  * It flies at the target in two dives, gives off the fire sound,
- * and either misses (with the dodge reaction) or hits with the action command defence check,
+ * and either misses (with a dodge reaction for results 3, 6 and 2) or hits with the action command defence check,
  * then flies back to its home position.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -530,7 +530,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The attack misses or is blocked: it still breathes its flame (A_1B), but the target avoids it.
+    // The attack misses: it still breathes its flame (A_1B); results 3, 6 and 2 also make the target avoid it.
     LABEL(90)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_FIRE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LOOP(4)
@@ -585,7 +585,7 @@ EVT_END()
 /**
  * Script helper (runs every frame while blocked):
  * keeps a fire effect on the Phantom Ember's part 2
- * and grows it by 0.1 per frame up to the unit's size multiplier. The first call creates the effect.
+ * and grows it by 0.1 times the unit's size multiplier per frame, up to that multiplier. The first call creates the effect.
  */
 static USER_FUNC(eff_fire) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
@@ -624,7 +624,7 @@ static USER_FUNC(eff_fire) {
 /**
  * Attack of the Phantom Ember: the fire ball.
  * It shoots a fire ball (part 2, with the fire effect) in an arc to the target,
- * which either dodges it or takes the damage with a smoke puff at the hit point.
+ * which may miss (with dodge reactions for results 3, 6 and 2) or deal damage with a smoke puff at the hit point.
  */
 static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -651,6 +651,7 @@ static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     BEGIN_SIBLING_EVENT
+
         // The Phantom Ember tilts back (T_1) for a moment while it conjures a fireball.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("T_1"))
         WAIT_FRAMES(30)
@@ -676,7 +677,7 @@ static EVT_BEGIN(fire_attack_event)
     ADD_FLOAT(LW(0), LW(10))
     ADD_FLOAT(LW(2), LW(12))
 
-    // The fireball flies toward the target in three arcing dives that get shorter as it closes in.
+    // The fireball flies toward the target in three arcing dives.
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 40, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 5)
@@ -763,7 +764,7 @@ static USER_FUNC(eff_all_fire) {
 }
 
 /**
- * Helper of all_fire_attack_event: spawns the fire shower effect (eff_all_fire) for the count in LW(0)
+ * Helper of all_fire_attack_event: spawns the fire shower effect (eff_all_fire) for the index in LW(0)
  * and waits 120 frames.
  */
 static EVT_BEGIN(all_fire_attackEvent_sub)
@@ -777,7 +778,7 @@ EVT_END()
 /**
  * Attack of the Phantom Ember on every target; unused, as nothing in the file calls it:
  * it shakes while charging, then fire rains on the whole opposing side (ten eff_all_fire showers),
- * and each target gets its dodge or hit check in turn. It then returns to its home position.
+ * and targets get their dodge or hit checks in turn until one misses. It then returns to its home position.
  */
 static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -830,6 +831,7 @@ static EVT_BEGIN(all_fire_attack_event)
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(0), 0)
         LOOP(10)
+
             // Ten fireballs shoot out one after another across the stage.
             SPAWN_EVENT(all_fire_attackEvent_sub)
             WAIT_FRAMES(2)
@@ -844,7 +846,7 @@ static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
 
-    // Each target is checked in turn: a miss, or a hit that applies damage (the defence result counts for the
+    // Targets are checked in turn until one misses; hits apply damage (the defence result counts for the
     // first target only).
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))

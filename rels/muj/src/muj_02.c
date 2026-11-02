@@ -134,7 +134,7 @@ static BeroEntry bero_entry_data[] = {
 /**
  * Positions Mario, his partner, Mony and Peton for a conversation with the couple:
  * walks Mario and the partner to a spot beside whichever side of the path they are on (decided by LW(10))
- * and hides Mario's shadow flag while moving.
+ * and locks Mario's pose after he moves into place.
  */
 EVT_BEGIN(mony_peton_setup)
     IF_INT_EQUAL(LW(10), 0)
@@ -182,8 +182,8 @@ EVT_BEGIN(mony_peton_setup)
 EVT_END()
 
 /**
- * Display event for the ring-search counter: runs countDisp so the number of rings
- * or tries is drawn on screen each frame.
+ * Display event for Peeton's repeated declaration: runs countDisp so the repetition
+ * count is drawn on screen each frame.
  */
 EVT_BEGIN(lost_wedding_ring_sub)
     CALL(countDisp)
@@ -193,7 +193,8 @@ EVT_END()
 /**
  * The lost wedding ring request (STG5_64_LOST_WEDDING_RING):
  * Peton and Mony ask Mario to find the ring they lost in the jungle (stg5_muj_171 onwards),
- * then they head off the left edge of the screen so Mario can search. Control returns when both have left.
+ * then one of them moves back to their jungle position, depending on whether Mario has the ring.
+ * Their regular events restart and Mario's pose lock is cleared before the partner resumes.
  */
 EVT_BEGIN(lost_wedding_ring)
     CALL(evt_party_stop, 0)
@@ -642,7 +643,7 @@ static KusaAccess kusa_tbl[] = {
 
 /**
  * Map init for muj_02 (the jungle): starts the jungle music and ambience, registers the exits, NPCs,
- * hidden badge blocks (Head Rattle, Courage Shell), the Keel Mango tree and grass patches,
+ * a Head Rattle badge block and a Courage Shell ? block, the Keel Mango tree and grass patches,
  * and removes the Chorobon enemy NPCs once the story is past STG5_59_ROGUEPORT_DOCK.
  */
 EVT_BEGIN(muj_02_init_evt)
@@ -746,7 +747,7 @@ void printCount(CameraId camera, void* param) {
 }
 
 /**
- * Debug display callback: queues a draw of the 2D print counter each frame (always blocks, so it runs until
+ * Display callback for Peeton's declaration count: queues a 2D draw each frame (always blocks, so it runs until
  * killed).
  */
 USER_FUNC(countDisp) {

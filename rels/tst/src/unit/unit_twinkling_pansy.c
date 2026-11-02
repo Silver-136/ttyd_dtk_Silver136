@@ -1,4 +1,4 @@
-// Battle unit Amazy Dayzee (きらめくパンジーさん): gra.rel's copy.
+// Battle unit Amazy Dayzee (きらめくパンジーさん): tst.rel's copy.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -176,7 +176,7 @@ static BattleWeapon weapon_twinkling_pansy_attack = {
 };
 
 /**
- * Attack event of the Amazy Dayzee: uses an enemy item if it has one;
+ * Attack event of the Amazy Dayzee: uses an enemy item if the item-use check selects one;
  * otherwise 20% sings (song_event with weapon_twinkling_pansy_attack) and 80% flees (escape_event).
  */
 static EVT_BEGIN(attack_event)
@@ -283,7 +283,7 @@ EVT_END()
 
 /**
  * The Amazy Dayzee's lullaby: identical to the Crazee Dayzee's song_event except the map blend fades with a
- * different tint (red and blue channels changed together).
+ * different tint (only red changes, while green and blue stay at 255).
  */
 static EVT_BEGIN(song_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -345,7 +345,7 @@ static EVT_BEGIN(song_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
 #endif
 
-    // The pre-damage check decides between a dodge and a hit for each target in turn.
+    // The pre-damage check decides between a miss and a hit for each target in turn.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -393,6 +393,7 @@ static EVT_BEGIN(song_event)
     SET_VALUE(LW(1), 255)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 256)
+
             // The notes stop and the map fades back to normal.
             BREAK_LOOP
         END_IF

@@ -411,6 +411,7 @@ EVT_END()
  * Afterwards it walks back home.
  */
 static EVT_BEGIN(attack_event)
+
     // The Iron Cleft uses an enemy item if it holds one that fits.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -564,6 +565,7 @@ static USER_FUNC(get_id) {
     evtSetValue(event, args[1], id2);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: arg0 receives 1 if Yoshi is in Mario's party data, else 0. */
 static USER_FUNC(yoshi_exist) {
     EvtWord* args = event->args;

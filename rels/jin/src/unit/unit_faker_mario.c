@@ -609,7 +609,7 @@ static EVT_BEGIN(fmario_zoom)
 EVT_END()
 
 /**
- * Camera shot on the Goombella unit (x = 130): sets the battle camera to a fixed position
+ * Camera shot on the current partner double (x = 130): sets the battle camera to a fixed position
  * and waits 37 frames for it to arrive.
  */
 static EVT_BEGIN(gparty_zoom)
@@ -722,9 +722,9 @@ EVT_END()
 
 /**
  * Death event of the fake Mario in the second battle:
- * he returns to his home position, the first time Vivian is released from the party (vivian_comeback)
+ * he returns to his home position, the first time Vivian returns to the party (vivian_comeback)
  * and her unit is spawned at (-140, 0, 5).
- * Depending on GW(20) (whether the double Goombella is still alive) the camera shows him or the double
+ * Depending on GW(20) (the current partner double's death state) the camera shows him or the double
  * and they speak stg4_jin_26_05 (a line per partner double);
  * then he falls over (dead_event_fmario_down) and GW(19) is set to 2.
  */
@@ -822,6 +822,7 @@ EVT_END()
  * (stg4_jin_26_01), below 25% he says he is nearly beaten (stg4_jin_26_02).
  */
 EVT_BEGIN(phase_event_fmario)
+
     // Before the player's phase on turn 3: Vivian makes her choice.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -913,9 +914,10 @@ EVT_BEGIN(phase_event_fmario)
         END_IF
         SWITCH(LW(2))
             CASE_EQUAL(0)
+
             // The fake Mario's HP has dropped low:
             // the camera zooms to the partner double in front (Goombella, Koops, Flurrie or Yoshi)
-            // and she calls out to him.
+            // and they call out to him.
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_66, LW(1))
             IF_INT_LESS(LW(0), LW(1))
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_TALK_STEP, 1)
@@ -964,7 +966,7 @@ EVT_BEGIN(phase_event_fmario)
 EVT_END()
 
 /**
- * Attack event of the fake Mario: uses an enemy item if he has one,
+ * Attack event of the fake Mario: uses the enemy-item event selected by the item-use check,
  * otherwise draws one of Mario's moves with weights 50/50/20/20:
  * jump, hammer, spin jump (kururin) and spin hammer (kaiten).
  */
@@ -1012,7 +1014,7 @@ EVT_END()
 /**
  * The fake Mario's jump attack (weapon_masao_jump):
  * walks to the take-off point and jumps onto the target with the Mario jump voice;
- * the pre-damage check decides between a dodge (he falls back down) and a hit,
+ * the pre-damage check decides between a miss (he falls back down) and a hit,
  * after which he bounces back in three small hops and returns home.
  */
 static EVT_BEGIN(marioAttackEvent_NormalJump)
@@ -1053,7 +1055,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     ADD(LW(2), 5)
 
     // He jumps with a Mario jump cry and comes down on the target;
-    // the pre-damage check decides between a dodge and a hit.
+    // the pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_J_1B"))
     CALL_CHILD(jump_attack_voice)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1159,7 +1161,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
 
-    // First hop: he jumps and comes down on the target; the pre-damage check decides between a dodge
+    // First hop: he jumps and comes down on the target; the pre-damage check decides between a miss
     // and a hit.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_J_1B"))
     CALL_CHILD(jump_attack_voice)
@@ -1261,7 +1263,7 @@ EVT_END()
 /**
  * The fake Mario's hammer attack (weapon_masao_hammer):
  * walks next to the target, raises the hammer (EM_A_1A to 1C, SFX_BOSS_NM_HAMMER_FURU2 and DON2) and swings it;
- * the pre-damage check decides between a dodge and a hit, then he returns home.
+ * the pre-damage check decides between a miss and a hit, then he returns home.
  */
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1314,7 +1316,7 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_HAMMER_DON2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(100)
 
-    // The pre-damage check decides between a dodge and a hit.
+    // The pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1366,7 +1368,7 @@ EVT_END()
 
 /**
  * The fake Mario's spinning hammer attack: the script is identical to marioAttackEvent_NormalHammer;
- * only the weapon in LW(9) (weapon_masao_kaiten_hammer, set by attack_event) differs.
+ * only the weapon in LW(9) (weapon_masao_kaiten_hammer, set by attack_event_fmario) differs.
  */
 static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1419,7 +1421,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_HAMMER_DON2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(100)
 
-    // The pre-damage check decides between a dodge and a hit.
+    // The pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1571,8 +1573,8 @@ USER_FUNC(_gullible_party_info_init) {
 }
 
 #if VERSION >= VERSION_US
-/** US only: restore the moves of the unit for this turn. */
-// US only: set this turn's maximum move count to the remaining-move count.
+
+// US/PAL: set this turn's maximum move count to the remaining-move count.
 USER_FUNC(faker_mario_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);

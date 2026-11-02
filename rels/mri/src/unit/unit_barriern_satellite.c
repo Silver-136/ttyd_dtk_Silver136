@@ -61,8 +61,8 @@ BattleUnitKind unit_barriern_satellite = {
     {8.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
 #endif
-    0.0f, // vivianOffsetX
-    0.0f, // vivianOffsetZ
+    0.0f, // centerOffset.x in demos; vivianOffsetX in retail
+    0.0f, // centerOffset.y in demos; vivianOffsetZ in retail
 #if VERSION <= VERSION_DEMO_US
     0.0f,
 0,
@@ -225,8 +225,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Idle loop of the Mini-Yux: plays its idle pose and, every 30 to 150 frames, if its flag is set and it can act,
- * plays the S_4 pose for 3 seconds.
+ * Idle loop of the Mini-Yux: plays its idle pose and, after each 30 to 150 frame wait,
+ * if its work flag is set, it can act and it is not confused, plays the S_4 pose for 3 seconds.
  */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)

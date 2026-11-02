@@ -103,20 +103,22 @@ BattleUnitKind unit_togedaruma = {
 
 /**
  * Defence of the Bristle: 4 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{4, 99, 4, 4, 4}};
 
 /** Element modifiers of the Bristle: fire hits do no damage. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
-/** Defence of the Bristle while it is flipped on its back: none, every hit does its full damage. */
+/** Base defence of the Bristle while it is flipped on its back: zero; its separate fire-immunity attribute remains active. */
 static BattleUnitDefense defence_turn = {0};
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Status vulnerability of the Bristle in the demo builds: immune to burn; resists most other statuses. */
 static StatusVulnerability regist = {40, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 70, 70, 50, 75, 100, 70, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of the Bristle in the retail builds: immune to burn; resists most other statuses.
  */
@@ -408,6 +410,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+
         // If it is flipped over it tries to get up instead of attacking.
         CALL_CHILD(wakeup_event)
         RETURN
@@ -419,7 +422,8 @@ static EVT_BEGIN(attack_event)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
-        // If the Bristle holds an item, it uses that instead of attacking.
+
+        // If an enemy-item script is selected, the Bristle runs it instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))
@@ -464,7 +468,7 @@ static EVT_BEGIN(attack_event)
     // It slides at the target.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; some misses send the target into its dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_togedaruma_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)

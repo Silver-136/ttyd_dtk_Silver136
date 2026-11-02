@@ -218,7 +218,7 @@ static BattleWeapon weapon_kurokumorn_thunder_attack = {
 };
 
 /**
- * Dark Puff's turn: uses an item if it has one;
+ * Dark Puff's turn: uses an item if the item-use check selects one;
  * if it is charged (electric counter attribute on) it releases the lightning attack;
  * otherwise 50% the body tackle, 50% it charges up.
  */
@@ -258,6 +258,7 @@ EVT_END()
  * then hits each target in turn.
  */
 static EVT_BEGIN(thunder_event)
+
     // The Puff picks a target from the opposing side; with none it gives up (flustered if confused).
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -278,7 +279,7 @@ static EVT_BEGIN(thunder_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
 
-    // It turns toward the targets and charges for two seconds while the charge sound plays.
+    // It turns toward the targets and charges for 80 frames while the charge sound plays.
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -554,6 +555,7 @@ EVT_END()
  * it shivers and squashes, rises, dives into the target, then floats back up and home.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // A First Strike aims at the first-strike target;
     // otherwise the Puff picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -613,7 +615,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
 
-    // Dive onto the target; the pre-check decides whether it is dodged or the hit lands.
+    // Dive onto the target; the pre-check decides between a miss and a hit.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE2"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))
@@ -676,7 +678,7 @@ EVT_END()
 
 /**
  * Dark Puff charges up: camera on it, charge sound and poses, and turns on its electric counter attribute,
- * so touching it shocks and its next turn is the lightning attack.
+ * so touching it shocks and it selects lightning on its next turn if the item-use check does not select an item.
  */
 static EVT_BEGIN(charge_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -696,7 +698,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
-/** Wait event of the Dark Puff: switches to pose table entry 1 (idle) and resets its scale to 1. */
+/** Wait event of the Dark Puff: selects a status-based pose-table animation for part 1 and resets its scale to 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)

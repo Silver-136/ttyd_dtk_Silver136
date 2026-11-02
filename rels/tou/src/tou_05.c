@@ -135,7 +135,7 @@ static EVT_BEGIN(n_door_close)
 EVT_END()
 
 /**
- * Entrance script: cancels a registered but unplayed match (clears GSWF_TOU_MATCH_RESERVED)
+ * Exit script: cancels a registered but unplayed match (clears GSWF_TOU_MATCH_RESERVED)
  * when Mario leaves through the door.
  */
 #if VERSION > VERSION_DEMO_US
@@ -202,9 +202,9 @@ static BeroEntry bero_data[] = {
 EVT_BEGIN(evt_takurami)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_mario_key_onoff, 0)
-
-// The partner spots a paper in the drawer and Mario takes it out.
 #endif
+
+    // The partner spots a paper in the drawer and Mario takes it out.
     CALL(evt_msg_print_party, STRING("stg3_tou_456_01"))
     CALL(evt_party_stop, 0)
     CALL(evt_party_move_pos2, 0, 100, 60, FLOAT(60.0f))
@@ -257,7 +257,7 @@ EVT_BEGIN(evt_takurami)
         END_LOOP
     END_INLINE_EVENT
 
-    // The camera cuts to Grubba, who is caught red-handed and speaks.
+    // The camera cuts to Grubba as he confronts Mario about the secret paper.
     CALL(evt_cam3d_evt_set, 0, 82, 150, 0, 37, -112, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -558,6 +558,7 @@ static EVT_BEGIN(init_kinoshikowa)
 EVT_END()
 
 static EVT_BEGIN(talk_kinoshikowa)
+
     // First confirm all 20 trunks; after that acknowledgement, reward the player only once none remain.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
@@ -783,6 +784,7 @@ static EVT_BEGIN(evt_kinoshikowa)
 EVT_END()
 
 static EVT_BEGIN(evt_sensyu)
+
     // The map's music fades out and, after a pause, Grubba's theme starts as he notices Mario.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -910,8 +912,9 @@ static EVT_BEGIN(evt_sensyu)
 EVT_END()
 
 /**
- * Chapter 3 intro scene: Grubba welcomes Mario and offers to enter him in the Glitz Pit (stg3_tou_51 to 55),
- * asks yes/no, and advances the story to STG3_03_GRUBBA.
+ * Chapter 3 intro scene: Grubba welcomes Mario and offers to enter him in the Glitz Pit (stg3_tou_51 to 56).
+ * Choice 1 advances to STG3_03_GRUBBA and installs talk_gans; the other choice advances to
+ * STG3_04_GONZALES_IS_BORN and runs evt_kinoshikowa.
  */
 EVT_BEGIN(evt_sensyu2)
     CALL(evt_mario_key_onoff, 0)
@@ -972,6 +975,7 @@ EVT_BEGIN(evt_sensyu2)
 EVT_END()
 
 static EVT_BEGIN(evt_1st_leagu)
+
     // Mario and his partner stand in Grubba's office; the camera frames the desk.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1146,6 +1150,7 @@ EVT_END()
  * On later visits Mario just looks until A is pressed.
  */
 EVT_BEGIN(evt_nozoki)
+
     // Mario freezes in place; the first time, Grubba and Jolene are placed in the office below.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1443,6 +1448,7 @@ EVT_END()
  * and chooses the scene to run from the story progress.
  */
 EVT_BEGIN(tou_05_init_evt)
+
     // Set up the doors, the camera animation and the Star Piece on the floor.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -1616,7 +1622,7 @@ EVT_BEGIN(tou_05_init_evt)
         END_IF
     END_IF
 
-    // Switch on the hidden walls and doors.
+    // Disable collision for the hidden walls and doors.
     CALL(evt_hitobj_onoff, STRING("haiku_kabe"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("kore"), 1, 0)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 4)

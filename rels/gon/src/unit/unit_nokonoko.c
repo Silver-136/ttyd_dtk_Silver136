@@ -328,7 +328,7 @@ EVT_END()
 /**
  * Pre-emptive strike by the Koopa (used when the battle starts with the enemy's attack):
  * retreats into its shell, spins into the first-attack target and hits it,
- * with the miss/hit result from the pre-damage and damage checks.
+ * with the action-command defence and damage checks.
  */
 static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -399,11 +399,12 @@ static EVT_BEGIN(first_attack_event)
 EVT_END()
 
 /**
- * The Koopa's shell attack. If it is overturned it only wakes up.
+ * The Koopa's shell attack. If it is overturned it spends the action in its recovery event.
  * Otherwise it jumps into its shell and spins at the target while a smoke trail follows it,
  * a miss makes it bounce past and a hit damages the target, after which it returns to its home position.
  */
 static EVT_BEGIN(attack_event)
+
     // A unit lying on its back spends the turn getting up.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

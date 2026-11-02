@@ -58,8 +58,8 @@ BattleUnitKind unit_barriern_satellite = {
     {8.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
 #endif
-    0.0f, // vivianOffsetX
-    0.0f, // vivianOffsetZ
+    0.0f, // centerOffset.x in demos; vivianOffsetX in retail
+    0.0f, // centerOffset.y in demos; vivianOffsetZ in retail
 #if VERSION <= VERSION_DEMO_US
     0.0f,
 0,
@@ -236,7 +236,7 @@ EVT_END()
 
 /**
  * Idle script of the Mini-Yux: loops the idle pose and,
- * every 0.5 to 2.5 seconds while its work 1 is set and it can act with no bad status,
+ * after each 0.5 to 2.5 second wait, if its work 1 is set, it can act and is not confused,
  * plays the S_4 pose for 3 seconds.
  */
 static EVT_BEGIN(wait_event)
@@ -263,7 +263,7 @@ EVT_END()
 
 /**
  * Script function: returns the starting offset of satellite index args[2]
- * when the Yux has args[1] satellites (1 to 4 laid out as a fixed pattern 25 units apart,
+ * when the Yux has args[1] satellites (1 to 4 laid out as a fixed pattern with offsets of 25 units,
  * mirrored by the facing direction) in the variables args[3] to args[5] as x, y and z.
  */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {

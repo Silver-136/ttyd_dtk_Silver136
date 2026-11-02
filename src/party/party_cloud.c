@@ -81,6 +81,7 @@ static inline void cloudCalcPos(PartyEntry* party) {
 }
 
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Mario's motion while Flurrie gusts (MARIO_MOTION_CLOUD):
  * on its first frame clears his jump, step and fall flags and timers so he stands still.
@@ -125,9 +126,8 @@ void cloudResetAt(void) {
 #endif
 
 /**
- * Gale Force state for evt_party.c's script wait:
- * 0 when there is no partner or Flurrie is not gusting, 1 while the gust is in its start state (10),
- * otherwise 2 (also when the partner is not Flurrie).
+ * Gale Force state for evt_party.c's script wait: 0 when there is no partner, or Flurrie is out but not in use.
+ * Otherwise 1 for use motion 10, 2 for other motions; the motion-10 test does not require the partner to be Flurrie.
  */
 #if VERSION > VERSION_DEMO_US
 u8 cloudGetStatus(void) {
@@ -148,7 +148,7 @@ u8 cloudGetStatus(void) {
 
 /**
  * Direction of Flurrie's gust in movement degrees:
- * -1 while she is still moving into position, 0 when there is no gust work. No callers in this tree.
+ * -1 while she is still moving into position, 0 when there is no gust work.
  */
 #if VERSION > VERSION_DEMO_US
 f32 cloudGetBreathDir(void) {
@@ -249,7 +249,6 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
 
 /**
  * Current reach of Flurrie's gust in units (grows 2 per frame up to 120), or 0 when she is not mid-gust.
- * No callers in this tree.
  */
 f32 cloudGetBreathDist(void) {
 #if VERSION <= VERSION_DEMO_US
@@ -277,14 +276,16 @@ f32 cloudGetBreathDist(void) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Resets Flurrie's idle bob: phase 0 degrees, advancing 4.25 degrees per frame. */
 static inline void cloud_hover_init(PartyEntry* party) {
 #else
 #if VERSION >= VERSION_US
+
 /**
  * Lets Flurrie follow and bob again after a cutscene froze her,
  * and puts her back in her standing pose (PWD_S_1).
- * Called by the US-only evt_party_cloud_lock_animations_on_off script helper.
+ * Called by the US/PAL evt_party_cloud_lock_animations_on_off script helper.
  */
 // Descriptive name (not in the symbol maps).
 void cloudLockAnimationsOff(PartyEntry* party) {
@@ -294,7 +295,7 @@ void cloudLockAnimationsOff(PartyEntry* party) {
 
 /**
  * Freezes Flurrie for a cutscene: cloud_move stops following and bobbing, and she takes pose PWD_Z_1.
- * Called by the US-only evt_party_cloud_lock_animations_on_off script helper.
+ * Called by the US/PAL evt_party_cloud_lock_animations_on_off script helper.
  */
 // Descriptive name (not in the symbol maps).
 void cloudLockAnimationsOn(PartyEntry* party) {
@@ -716,6 +717,7 @@ void cloud_exit(PartyEntry* party) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Gust strength (0-100) at a point: nonzero only while Flurrie is mid-gust,
  * the point is within 10 units of 18 below her,
@@ -760,7 +762,7 @@ f32 cloudGetBreathPower(Vec pos, f32 width) {
 
 /**
  * Direction of Flurrie's gust in movement degrees:
- * -1 while she is still moving into position, 0 when there is no gust work. No callers in this tree.
+ * -1 while she is still moving into position, 0 when there is no gust work.
  */
 f32 cloudGetBreathDir() {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
@@ -792,6 +794,7 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofsX, ofsZ;
 #else
+
 /**
  * Per-frame gust update: casts the straight ray at one of three heights (8, 20, 40 above Mario, cycling each
  * frame), places and scales the cloud effect in front of Flurrie, then casts the two swinging side rays.
@@ -892,16 +895,11 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
     }
     CLOUD_WORK(party)->hitSweep[1] = hit;
 }
-/**
- * Called by marioCamZoomUp: while the 3D camera's stateA is 0, remembers the given look-at point in cloud_at;
- * otherwise replaces it with the remembered point.
- * Does nothing with no partner or when Flurrie is out but not gusting.
- */
 #if VERSION <= VERSION_DEMO_US
+
 /**
- * Gale Force state for evt_party.c's script wait:
- * 0 when there is no partner or Flurrie is not gusting, 1 while the gust is in its start state (10),
- * otherwise 2 (also when the partner is not Flurrie).
+ * Gale Force state for evt_party.c's script wait: 0 when there is no partner, or Flurrie is out but not in use.
+ * Otherwise 1 for use motion 10, 2 for other motions; the motion-10 test does not require the partner to be Flurrie.
  */
 u8 cloudGetStatus() {
     u32 partyId = marioGetPartyId();
@@ -939,6 +937,11 @@ void cloudResetAt() {
 }
 #endif
 
+/**
+ * Called by marioCamZoomUp: with Mario's ZOOM flag clear, while the 3D camera's stateA is 0, remembers the given look-at point in cloud_at;
+ * otherwise replaces it with the remembered point.
+ * Does nothing with no partner or when Flurrie is out but not gusting.
+ */
 void cloudGetAt(Vec* position) {
     MarioWork* mario = marioGetPtr();
     u32 partyId = marioGetPartyId();

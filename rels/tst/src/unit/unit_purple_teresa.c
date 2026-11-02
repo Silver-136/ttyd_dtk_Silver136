@@ -126,12 +126,14 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Dark Boo in the demo builds: immune to poison and slow;
  * resists most other statuses.
  */
 static StatusVulnerability regist = {40, 40, 80, 0, 40, 100, 100, 40, 100, 50, 100, 50, 100, 50, 50, 40, 85, 100, 0, 100, 100, 10};
 #else
+
 /**
  * Status vulnerability of the Dark Boo in the retail builds: immune to poison and slow;
  * resists most other statuses.
@@ -355,10 +357,10 @@ EVT_END()
 
 /**
  * Attack AI of the Dark Boo: in a fixed-attack battle it just attacks.
- * Otherwise it uses an enemy item if it has one,
- * then checks what it can do (it can make itself invisible only if it is not already,
+ * Otherwise it runs a selected enemy-item script if one is returned,
+ * otherwise checks what it can do (it can make itself invisible only if it is not already,
  * make another Boo invisible only if one is eligible,
- * and change places with the other Boos only when teresa_check_move allows) and draws:
+ * and raise eligible Boos only when teresa_check_move allows) and draws:
  * make itself invisible (25), make another Boo invisible (25),
  * move (15) or a normal attack (the rest of the 115).
  */
@@ -434,6 +436,7 @@ EVT_END()
  * It then turns away and floats back home.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -504,7 +507,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     WAIT_FRAMES(15)
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; results 3, 6 and 2 send the target into its dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_teresa_attack), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -526,6 +529,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+
         // A miss: the Dark Boo shies away from the target (pose X_1).
         LABEL(90)
         WAIT_FRAMES(30)
@@ -617,7 +621,7 @@ EVT_END()
 
 /**
  * The Dark Boo turns another Boo invisible: samples allies until it finds a Boo that is not already invisible,
- * fades out, reappears next to it and applies the trans weapon's invisible status to it, then floats back home.
+ * fades out, reappears next to it and applies weapon_teresa_trans_myself's invisible status to it, then floats back home.
  */
 static EVT_BEGIN(trans_event)
     LABEL(0)
@@ -809,6 +813,7 @@ static USER_FUNC(teresa_check_trans) {
     }
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: args[0] receives 1 when at least one Boo
  * or Dark Boo (kinds 0x4B, 0x6A) is still free to act (its work[0] is 0), else 0.
@@ -836,6 +841,7 @@ static USER_FUNC(teresa_check_move) {
     }
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: args[0] is a unit id; args[1] receives 1 when that unit is a Boo
  * or Dark Boo (kinds 0x4B and 0x6A), else 0.

@@ -92,8 +92,8 @@ static BattleUnitDefense defence = {{4, VERSION_PICK(4, 99), 4, 4, 4}};
 static BattleUnitDefenseAttr defence_attr = {{0, VERSION_PICK(0, 2), 0, 0, 0}};
 
 /**
- * Defence of the Dark Bristle while flipped over against each element (normal, fire, ice, explosion,
- * electric): none, so every hit does its full damage.
+ * Base defence of the Dark Bristle while flipped over against each element (normal, fire, ice, explosion,
+ * electric): zero; its separate element attributes still apply.
  */
 static BattleUnitDefense defence_turn = {0};
 
@@ -392,7 +392,7 @@ EVT_END()
 /**
  * Attack event of the Dark Bristle: while flipped it only runs wakeup_event.
  * During a first strike it pauses 750 ms and uses the first attack target;
- * otherwise it uses an enemy item or samples a target for weapon_togedaruma_attack (flusters if none).
+ * otherwise it uses an enemy item or samples a target for weapon_togedaruma_attack (flusters if none and confused).
  * It crouches (TGD_J_1), curls into a ball and rolls at the target at speed 7 (TGD_A_1);
  * a miss makes it bounce just past the target in a 60-frame hop and sit there in the TGD_N_1 pose for 1.5 s;
  * a hit shakes the camera and applies the damage with the action command defence check.
@@ -401,7 +401,8 @@ EVT_END()
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        // A flipped-over Dark Bristle only gets back on its feet.
+
+        // If the Dark Bristle is flipped over, it counts down its recovery turn instead of attacking.
         CALL_CHILD(wakeup_event)
         RETURN
     END_IF
@@ -414,7 +415,8 @@ static EVT_BEGIN(attack_event)
     ELSE
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-            // It uses an enemy item if it has one.
+
+            // It uses the enemy item selected by the item-use check.
             CALL_CHILD(LW(0))
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             RETURN
@@ -526,7 +528,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Idle event of the Dark Bristle: shows the table pose for state 1
+ * Idle event of the Dark Bristle: selects the status-based table pose for part 1
  * and keeps its part's pre-emptive front spike counter (counter attribute 2) on,
  * but switches it off while it is asleep, stopped, dizzy, poisoned, confused or frozen (statuses 1 to 5 and 9),
  * checking again every frame.

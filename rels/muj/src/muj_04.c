@@ -54,7 +54,7 @@ static TreeAccess tree_tbl[3];
 static KusaAccess kusa_tbl[5];
 EvtWord muj_04_init_evt[131];
 
-/** NPCs of the rope bridge: the nervous sailor, the bespectacled sailor and the two Embers. */
+/** NPCs of the rope bridge: Admiral Bobbery, the nervous sailor, the bespectacled sailor and the two Embers. */
 static NpcSetupInfo npcEnt[] = {
     {
         "サンダース", // name
@@ -282,8 +282,8 @@ EVT_BEGIN(erumos01_attack)
 EVT_END()
 
 /**
- * Admiral Bobbery (Sanders) lashes out at the Embers:
- * repeatedly spawns hit effects at random offsets around him and spins him round while the Embers are attacked.
+ * Admiral Bobbery (Sanders) is attacked by the Embers:
+ * repeatedly spawns hit effects at random offsets around him and spins him round while they attack him.
  */
 EVT_BEGIN(sanders_attack)
     WAIT_MS(600)
@@ -416,7 +416,7 @@ EVT_BEGIN(sanders_funto)
         CALL(evt_npc_flag_onoff, 0, STRING("めがね水夫"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         CALL(evt_npc_get_position, STRING("めがね水夫"), LW(0), LW(1), LW(2))
 
-        // Bobbery throws a bomb at the Embers.
+        // The bespectacled sailor is thrown toward Mario.
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_THUNDERS_THROW1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_set_ry, STRING("めがね水夫"), 270)

@@ -394,7 +394,7 @@ EVT_BEGIN(init_ramp)
 EVT_END()
 
 /**
- * Init for the Paragoomba NPC (パタクリ, Patakuri): turns on bit 2 of the status flags (flies / hovers);
+ * Init for the Paragoomba NPC (パタクリ, Patakuri): turns on NPC_STATUS_FACE_MOVE_DIR so he faces his movement direction;
  * he is only placed on screen by the Bowser interlude.
  */
 EVT_BEGIN(patakuri_init)
@@ -877,7 +877,7 @@ EVT_END()
  * (kpa_stg7_018); Pennington reveals the star is a fake, it falls and breaks,
  * and he says he gave the real one to
  * "Luigi"; a Paragoomba (パタクリ) crashes in to report that Mario has the seven Crystal Stars and is heading for
- * the Thousand-Year Door. The story becomes STG7_25_00_1_BOWSER_POSHLEY_SANCTUM, the game is saved and the
+ * the Thousand-Year Door. The story becomes STG7_25_00_1_BOWSER_POSHLEY_SANCTUM, saving is offered and the
  * map changes to aji_18.
  */
 EVT_BEGIN(pik_02_koopa_evt)
@@ -1062,7 +1062,7 @@ EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg7_026"), 0, STRING("ババ"))
     WAIT_MS(500)
 
-    // Pennington reveals that the star is a fake; it falls and breaks.
+    // After the fake star falls and breaks, Pennington explains that he gave the real one to "Luigi".
     CALL(evt_msg_print, 0, STRING("kpa_stg7_027"), 0, STRING("ポワン探偵"))
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     WAIT_MS(300)
@@ -1198,7 +1198,7 @@ EVT_BEGIN(pik_02_koopa_evt)
     WAIT_MS(800)
     CALL(evt_msg_print, 0, STRING("kpa_stg7_036"), 0, STRING("ポワン探偵"))
 
-    // The story advances and the game is saved.
+    // The story advances and saving is offered.
     SET_VALUE(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)

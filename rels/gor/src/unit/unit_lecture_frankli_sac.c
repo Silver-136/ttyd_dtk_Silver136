@@ -124,7 +124,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Prof. Frankly's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of Prof. Frankly: immune to every status. */
+/** Status vulnerability of Prof. Frankly: immune to the 22 statuses covered by this table. */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -269,8 +269,8 @@ USER_FUNC(aud_dec) {
 }
 
 /**
- * Script helper that lets audience seat 48 throw a hammer (item 0xEF) onto the stage;
- * blocks until it has been thrown, then freezes the audience again.
+ * Script helper that readies audience seat 48 to throw a hammer (item 0xEF) onto the stage;
+ * blocks until the hammer is readied, then freezes the audience again.
  */
 USER_FUNC(hammer_on) {
     BattleAudience* aud = BattleAudienceBaseGetPtr();
@@ -401,7 +401,7 @@ EVT_END()
 /**
  * Init event of Professor Frankly in the special-action-command tutorial:
  * starts lecture mode, registers himself as the lecture unit, hooks actend_event on Mario and the partner,
- * clears work 0 to 2 and forbids movement.
+ * clears work 0 to 2 and sets his maximum action count to zero.
  */
 static EVT_BEGIN(init_event)
     CALL(lecture_init)
@@ -425,7 +425,7 @@ EVT_END()
 /**
  * Phase event that scripts the Star Power lesson: unit work 0 is the lesson step.
  * On turn 1 he introduces the AP gauge (mac_0_b_t3_000, 001) with a spotlight on it (spot_square),
- * then later steps explain the special action command, branching on unit work 1 and 2.
+ * actend_event handles the later steps, branching on unit work 1 and 2.
  */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
@@ -473,9 +473,9 @@ EVT_END()
 EVT_BEGIN(actend_event)
 #if VERSION > VERSION_DEMO_US
     CALL_CHILD(PTR(stop_wait_event))
-
-// After a special move: Frankly points to the emptied Star Power gauge and says it can be filled again.
 #endif
+
+    // After a special move: Frankly points to the emptied Star Power gauge and says it can be filled again.
     CALL(get_actkind, LW(0))
     IF_INT_EQUAL(LW(0), 4)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, UNIT_WORK_LESSON, LW(0))
@@ -654,8 +654,8 @@ EVT_END()
 
 /**
  * Damage event of Professor Frankly in the Star Power tutorial:
- * runs the default damage handling, then, once the lesson is at step 2
- * and the action command result (get_ac_result) is 1,
+ * runs the default damage handling, then, once the lesson is at step 2,
+ * the successful-action-command count is 2 and the action command result (get_ac_result) is 1,
  * he comments mac_0_b_t3_011 and 012 with a spotlight on the area.
  */
 static EVT_BEGIN(damage_event)

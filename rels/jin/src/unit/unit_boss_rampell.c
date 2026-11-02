@@ -97,8 +97,8 @@ static USER_FUNC(_mario_makkuro_set) {
 }
 
 #if VERSION >= VERSION_US
-/** US only: restore the moves of the unit for this turn. */
-// US only: set this turn's maximum move count to the remaining-move count.
+
+// US/PAL: set this turn's maximum move count to the remaining-move count.
 USER_FUNC(boss_rampell_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);
@@ -514,7 +514,7 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 /**
- * Attack event of Doopliss: uses an enemy item if he has one,
+ * Attack event of Doopliss: uses the enemy-item event selected by the item-use check,
  * otherwise always the claw attack (weapon_rampell_attack, via ogg_attack_event).
  */
 static EVT_BEGIN(attack_event)
@@ -534,7 +534,7 @@ EVT_END()
  * Doopliss's flying claw attack on one target (weapon in LW(9)):
  * he winds up (A_1A, A_1B), spins up and flies over the target at 2x motion speed (SFX_BOSS_RNPL_FLY1),
  * then drops onto it with SFX_BOSS_RNPL_FALL1.
- * The pre-damage check decides between a dodge and a hit with the action-command result, then he returns home.
+ * The pre-damage check decides between a miss and a hit with the action-command result, then he returns home.
  */
 static EVT_BEGIN(ogg_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -610,7 +610,7 @@ static EVT_BEGIN(ogg_attack_event)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.009765625f))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 15, MOVE_SOUND_FROM_TABLE)
 
-    // The pre-damage check decides between a dodge and a hit.
+    // The pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1053,7 +1053,7 @@ EVT_END()
 
 /**
  * Attack event of the fake Mario in the first battle:
- * uses an enemy item if he has one, otherwise draws a jump
+ * uses the enemy-item event selected by the item-use check, otherwise draws a jump
  * or a hammer (50/50) from Mario's attacks (the spin variants in the switch are never drawn).
  */
 // The two-entry selector chooses normal jump or hammer; the extra switch cases are retained below.
@@ -1101,7 +1101,7 @@ EVT_END()
 /**
  * The fake Mario's jump attack (weapon_masao_jump):
  * walks to the take-off point and jumps onto the target with the Mario jump voice;
- * the pre-damage check decides between a dodge (he falls back down) and a hit,
+ * the pre-damage check decides between a miss (he falls back down) and a hit,
  * after which he bounces back in three small hops and returns home.
  */
 static EVT_BEGIN(marioAttackEvent_NormalJump)
@@ -1142,7 +1142,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     ADD(LW(2), 5)
 
     // He jumps with a Mario jump cry and comes down on the target;
-    // the pre-damage check decides between a dodge and a hit.
+    // the pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_J_1B"))
     CALL_CHILD(jump_attack_voice)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1248,7 +1248,7 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
 
-    // First hop: he jumps and comes down on the target; the pre-damage check decides between a dodge
+    // First hop: he jumps and comes down on the target; the pre-damage check decides between a miss
     // and a hit.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("EM_J_1B"))
     CALL_CHILD(jump_attack_voice)
@@ -1350,7 +1350,7 @@ EVT_END()
 /**
  * The fake Mario's hammer attack (weapon_masao_hammer):
  * walks next to the target, raises the hammer (EM_A_1A to 1C, SFX_BOSS_NM_HAMMER_FURU2 and DON2) and swings it;
- * the pre-damage check decides between a dodge and a hit, then he returns home.
+ * the pre-damage check decides between a miss and a hit, then he returns home.
  */
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1403,7 +1403,7 @@ static EVT_BEGIN(marioAttackEvent_NormalHammer)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_HAMMER_DON2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(100)
 
-    // The pre-damage check decides between a dodge and a hit.
+    // The pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1455,7 +1455,7 @@ EVT_END()
 
 /**
  * The fake Mario's spinning hammer attack: the script is identical to marioAttackEvent_NormalHammer;
- * only the weapon in LW(9) (weapon_masao_kaiten_hammer, set by attack_event) differs.
+ * only the weapon in LW(9) (weapon_masao_kaiten_hammer, set by attack_event_fmario) differs.
  */
 static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1508,7 +1508,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_HAMMER_DON2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(100)
 
-    // The pre-damage check decides between a dodge and a hit.
+    // The pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)

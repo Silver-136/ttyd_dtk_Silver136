@@ -78,7 +78,7 @@ static EvtWord punipuni_ball00[57];
 EvtWord mri_14_init_evt[179];
 
 /**
- * Screen flash: fades out over 20 frames, holds for 50 ms, then fades back in over 80 frames.
+ * Screen flash: fades out over 20 ms, holds for 50 ms, then fades back in over 80 ms.
  * Used for the light bursts while the Crystal Star appears.
  */
 static USER_FUNC(evtflash) {
@@ -121,7 +121,7 @@ static USER_FUNC(evtflash) {
 /**
  * Entry script of the west loading zone: at STG2_22_LORD_CRUMP_APPEARS,
  * if the time bomb scene is still pending, Mario and his partner are placed inside the room,
- * the loading zone flickers off and on, and they walk in; returns 1 in LW(0) to skip the normal entry.
+ * exit execution is briefly disabled and re-enabled, and they walk in; returns 1 in LW(0) to skip the normal entry.
  * Otherwise returns 0.
  */
 static EVT_BEGIN(first_time_w_bero)
@@ -351,7 +351,7 @@ EVT_BEGIN(starstone_rotate_exec)
     RETURN
 EVT_END()
 
-/** Makes the Star Piece (item00) bob up and down by 5 units in a half-second cycle, forever. */
+/** Makes the Crystal Star (item00) bob up and down by 5 units in a one-second cycle, forever. */
 static EVT_BEGIN(starstone_fuwafuwa)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 500, 500)
@@ -637,7 +637,6 @@ EVT_BEGIN(time_bomb)
     SET_VALUE(LW(10), STRING("第三勢力幹部"))
 
     // He gloats, then reveals a remote time bomb switch to bury Mario and the Punies.
-    // He gloats, then reveals a remote time bomb switch to bury Mario and the Punies.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e23_01"), 0, LW(10))
     WAIT_MS(500)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), LW(10), 0, 0, 0, 0, 0, 0, 0, 60)
@@ -791,7 +790,7 @@ static EVT_BEGIN(yuka_move)
 EVT_END()
 
 /**
- * Counts the Punies standing on the weight platform every frame (alive, not lost,
+ * Counts the Punies standing on the weight platform every frame (active, excluding PUNI_FLAG_NPC_CHIBI_TOGE,
  * within the platform's area and height band) and keeps GW(0), the number of Punies still missing,
  * at 101 minus the count (clamped to 0 to 101). The counter click sound plays whenever the value changes.
  */

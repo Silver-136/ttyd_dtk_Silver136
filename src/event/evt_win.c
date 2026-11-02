@@ -103,7 +103,7 @@ typedef struct UnitWinWork {
     f32 cursorY;           // 0x40
     f32 scroll;            // 0x44
     u8 pad48[4];           // 0x48
-    s32 skipEntry;         // 0x4C, never written (0 after the memset); both lists skip the entry equal to it
+    s32 skipEntry;         // retail offset 0x4C; starts at 0, demos set it from the excluded-list entry argument
     s32 mode;              // 0x50
     u16 flags2;            // 0x54, UNITWIN_FREE_*
 #if VERSION <= VERSION_DEMO_US
@@ -161,7 +161,7 @@ static const char* mario_status_labelname_table[3] = {"_hp", "_fp", "_bp"};
 static const char* mario_status_name_table[3] = {"\202g\202o", "\202e\202o", "\202a\202o"};
 static s32 mario_status_henka_table[3] = {5, 5, 3};
 
-/** Demo: the unit window's per-frame event (evt_unitwin_alloc starts it); runs evt_unitwin_main_func. */
+/** Unit-window update event, started by evt_unitwin_alloc unless retail selects window-manager mode; runs evt_unitwin_main_func. */
 static EVT_BEGIN(main_evt)
     CALL(evt_unitwin_main_func)
     RETURN
@@ -214,7 +214,6 @@ static void unitwin_fmt(char* buf, const char* name, s32 n) {
 /** Help window update: runs the shared help-window logic. */
 // Descriptive name (not in the symbol maps); placeholder unk_8017597c, JP 0x8017597C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Help window update: runs the shared help-window logic. */
 void unitwin_help_main(WinMgrEntry* entry) {
     winMgrHelpMain(entry);
 }
@@ -223,7 +222,6 @@ void unitwin_help_main(WinMgrEntry* entry) {
 /** Help window draw: shows the description of the item at the selected counter slot. */
 // Descriptive name (not in the symbol maps); placeholder unk_801758fc, JP 0x801758FC. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Help window draw: shows the description of the item at the selected counter slot. */
 void unitwin_help_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     s32 idx = wp->goodsIdx * sizeof(s32); // FAKE: byte offset of the goods slot computed before winMgrAction (slwi ahead of the call, lwzx after), as in the target; goods[wp->goodsIdx] and an index local both scale after the call
@@ -242,11 +240,6 @@ void unitwin_help_disp(WinMgrEntry* entry) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_80175710, JP 0x80175710. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Draws the shop-point window: the points label and the count,
- * which steps a tenth of the way to Mario's shop points each frame.
- * The label icon differs between Japanese (language 0) and other text.
- */
 void unitwin_point_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
@@ -309,6 +302,7 @@ static s32 iconid_conv(s32 icon) {
     }
     return icon;
 }
+
 /**
  * Returns the display name of the partner in list row i (Goombella, Koops, Flurrie,
  * Yoshi by the player's chosen name, Vivian, Bobbery, Ms. Mowz order).
@@ -342,8 +336,9 @@ static const char* party_name_table_rtn(s32 i) {
 }
 #endif
 /**
- * Demo: sets up the unit window work (_wp), the pointing-finger cursor icon and the per-frame main_evt,
- * and points the HP/FP/BP table at Mario's base stats for the stat windows.
+ * Sets up the unit window work (_wp), the pointing-finger cursor icon,
+ * and the HP/FP/BP pointers to Mario's base stats for the stat windows.
+ * Retail args[0] selects window-manager mode when nonzero; otherwise, as in the demos, it starts main_evt.
  * Must run before the other unitwin commands.
  */
 USER_FUNC(evt_unitwin_alloc) {
@@ -380,9 +375,9 @@ USER_FUNC(evt_unitwin_alloc) {
 }
 
 /**
- * Demo: tears the unit window down.
- * Blocks until main_evt has stopped, then removes the counter item icons and their case events,
- * the cursor icon and the work.
+ * Tears the unit window down.
+ * Blocks until a unit-window event acknowledges the free request, then removes the counter item icons,
+ * the demos' case events or retail window-manager windows, the cursor icon and the work.
  */
 USER_FUNC(evt_unitwin_free) {
 #if VERSION > VERSION_DEMO_US
@@ -429,9 +424,10 @@ USER_FUNC(evt_unitwin_free) {
 }
 
 /**
- * Demo: puts goods on a shop counter.
+ * Puts goods on a shop counter.
  * args[0] is a null-terminated table of (map object, hit object, script) rows, args[1] the item id for each row;
- * shows each item's icon over its map object and registers a case on its hit object that runs select_evt.
+ * shows each item's icon over its map object. The demos register a hit-object case that runs select_evt;
+ * retail starts select_evt to poll the counter and creates three window-manager windows.
  */
 USER_FUNC(evt_unitwin_selltable_setup) {
     s32 i;
@@ -479,8 +475,8 @@ USER_FUNC(evt_unitwin_selltable_setup) {
 }
 
 /**
- * Shows (args[0] nonzero) or hides the coin counter window,
- * starting it from Mario's current coins so it counts up or down to later changes.
+ * Demo counter selection callback: uses the hit case's slot index, starts its purchase script on A,
+ * and waits for that script before restoring Mario's keys.
  */
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_unitwin_select_func) {
@@ -508,6 +504,7 @@ static USER_FUNC(evt_unitwin_select_func) {
     return EVT_RETURN_YIELD;
 }
 #endif
+
 /**
  * Shows (args[0] nonzero) or hides the coin counter window,
  * starting it from Mario's current coins so it counts up or down to later changes.
@@ -543,10 +540,6 @@ USER_FUNC(unitwincoin_wait) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8017524c, JP 0x8017524C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Shows (args[0] nonzero) or hides the lottery ticket number (from evt_lottery) in the unit window;
- * it is drawn only while the lottery reports a ticket.
- */
 USER_FUNC(unitwin_lottery_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp = _wp;
@@ -565,10 +558,6 @@ USER_FUNC(unitwin_lottery_disp_onoff) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_801751f8, JP 0x801751F8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Tells the counter whether the purchase script finished with a sale:
- * args[0] is the unit window work, args[1] nonzero marks the slot sold so its item disappears.
- */
 USER_FUNC(unitwin_set_bought) {
     EvtWord* args = event->args;
     UnitWinWork* wp = (UnitWinWork*)evtGetValue(event, args[0]);
@@ -686,7 +675,6 @@ USER_FUNC(unitwin_window_select_func) {
     s32 t;
     s32 id;
     InformantWork* jdt = &_jdt;
-    // FAKE: `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() || !marioChkKey() changes the object
     if (isFirstCall) {
         wp->mode = arg;
         wp->cursor = 0.0f;
@@ -1153,7 +1141,7 @@ USER_FUNC(unitwin_window_select_func) {
 }
 
 /**
- * Demo: per-frame loop of the unit window: counts the name/description timer down
+ * Unit-window update loop: counts the name/description timer down
  * and queues evt_unitwin_disp_func for drawing, until evt_unitwin_free asks it to stop.
  */
 USER_FUNC(evt_unitwin_main_func) {
@@ -1230,11 +1218,12 @@ static inline const char* unitwin_party_name(s32 i) {
     }
     return name;
 }
+
 /**
  * Draws the unit window each frame: the item name and description for the highlighted counter slot with prices,
  * the counter window that counts toward Mario's coins (or Star Pieces, or pouchGetSuperCoin with flag 0x4000),
- * the demo's Shine Sprite counter, the lottery number (not in the demos), and the list windows by mode:
- * badge lists (2-3, 11-16), the informant's rumour lists (17-18),
+ * the optional Shine Sprite counter, the lottery number (not in the demos), and the list windows by mode:
+ * item lists (2-3), badge/shop lists (11-16), the informant's rumour lists (17-18),
  * the partner lists (5-7) and the HP/FP/BP lists (8-10),
  * with the finger cursor and the help text of the highlighted row.
  */

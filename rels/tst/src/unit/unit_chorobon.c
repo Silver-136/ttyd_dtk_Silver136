@@ -107,16 +107,16 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
 /**
- * Status vulnerability of Fuzzy (the demos), as the percent chance a status takes hold:
- * always hit by Sleep, Stop, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy,
+ * Status vulnerability of Fuzzy (the demos), as percentage multipliers for the attack's base status chance:
+ * 100 for Sleep, Stop, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy,
  * Invisible and instant KO; otherwise Dizzy 90, Confuse 90, Freeze 75, Tiny 80, Attack Down 80,
  * Defense Down 75, Allergic 75, Fright 95, Gale Force 95 and Slow 75.
  */
 static StatusVulnerability regist = {100, 100, 90, 100, 90, 100, 100, 75, 100, 80, 100, 80, 100, 75, 75, 95, 95, 100, 75, 100, 100, 100};
 #else
 /**
- * Status vulnerability of Fuzzy (the final versions), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy,
+ * Status vulnerability of Fuzzy (the final versions), as percentage multipliers for the attack's base status chance:
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy,
  * Invisible and instant KO; otherwise Sleep 95, Stop 95, Dizzy 90, Confuse 95, Freeze 80, Tiny 90,
  * Attack Down 90, Defense Down 95, Allergic 70, Fright 95, Gale Force 90 and Slow 90.
  */
@@ -316,7 +316,7 @@ static EVT_BEGIN(rabbit_move)
 EVT_END()
 
 /**
- * Sound cues of Fuzzy's animations: for each of its 4 animation names,
+ * Sound cues of Fuzzy's CBN_S_1 animation: three timed entries specifying
  * the sound effect that plays with it (SFX_ENM_CHORO1_MOVE1, SFX_ENM_CHORO1_WAIT2 and
  * SFX_ENM_CHORO1_WAIT1).
  */
@@ -602,14 +602,14 @@ static EVT_BEGIN(drain_attack_event)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         LOOP(20)
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(-0.024414062f), FLOAT(-0.024414062f), 0)
-
-            // It heals itself by the amount drained (HP, or FP for the FP-draining weapon), with a recovery effect.
             WAIT_FRAMES(1)
         END_LOOP
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(1))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
         ADD(LW(6), 45)
         ADD(LW(7), 10)
+
+        // It heals itself by the amount drained (HP, or FP for the FP-draining weapon), with a recovery effect.
         IF_INT_EQUAL(LW(9), PTR(&weapon_chorobon_drain_attack))
             CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, LW(1), LW(10))
             CALL(evt_eff, STRING(""), STRING("recovery"), 7, LW(5), LW(6), LW(7), LW(10), 0, 0, 0, 0, 0, 0, 0)

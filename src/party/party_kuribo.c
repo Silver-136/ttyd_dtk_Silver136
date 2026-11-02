@@ -46,7 +46,7 @@ BOOL christineGetStatus(void) {
  * otherwise it looks at the map object Mario pushes, faces or stands on and picks the hint for that block,
  * switch, chest or sign, falling back to the "msg_kuri_map" comment on the map itself.
  * Mutes sound effects for the duration; retail also lifts her off the floor collision,
- * and returns early when she is in paper form (the US demo instead requires her on the ground).
+ * and returns early when she is in paper form (the demos instead require her on the ground).
  */
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(pre_kurio_use) {
@@ -249,6 +249,7 @@ s32 fbatNpcTalkCheck(void);
 
 
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
  * retail clears the floor-collision overrides kuribo_use may have set; empty in the demos.
@@ -347,17 +348,15 @@ void kuribo_use(PartyEntry* party) {
 }
 #endif
 
-/**
- * Goodbye routine shared by Goombella, Flurrie, Vivian, Ms. Mowz and the walking NPC followers:
- * plays the standard leave-the-party motion and switches to run mode 14 once it ends.
- */
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
  * retail clears the floor-collision overrides kuribo_use may have set; empty in the demos.
  */
 void kuribo_use_post(PartyEntry* party) {
 }
+
 /** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
 void kuribo_use(PartyEntry* party) {
     EventEntry* evt;
@@ -395,6 +394,7 @@ void kuribo_use(PartyEntry* party) {
     partyChkGnd(party);
 }
 #endif
+
 /**
  * Goodbye routine shared by Goombella, Flurrie, Vivian, Ms. Mowz and the walking NPC followers:
  * plays the standard leave-the-party motion and switches to run mode 14 once it ends.

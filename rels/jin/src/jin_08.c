@@ -237,7 +237,7 @@ EVT_BEGIN(oumu_talk)
 EVT_END()
 
 /**
- * Special talk with the parrot, triggered by walking up to it with Vivian once she has joined (before the Peach
+ * Special talk with the parrot, triggered by approaching while Vivian hides Mario after she has joined (before the Peach
  * report step): it speaks (stg4_jin_43 the first time, stg4_jin_44 afterwards)
  * and LSWF(1) is set for the jin_07 follow-up.
  */
@@ -259,7 +259,7 @@ EVT_END()
 
 /**
  * Per-frame watcher near the parrot: shows an "..." balloon when Mario stands within 50 units of it
- * and lets him talk with A (oumu_talk); when Vivian is out with him it starts the special Vivian talk
+ * and lets him talk with A (oumu_talk); when Vivian is hiding Mario it starts the special Vivian talk
  * and waits for her to return.
  */
 // Nearby Mario can talk normally unless Vivian is hiding him; hiding enables the story-gated secret dialogue.

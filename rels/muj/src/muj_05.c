@@ -113,7 +113,7 @@ EvtWord muj_05_init_evt[146];
 /**
  * Script helper for the skull rock puzzle: compares the seven eye strikes Mario has made (command_work) with the
  * correct sequence (command_seikai).
- * Writes 0 to args[0] if fewer than seven have been entered, 1 if one of them is wrong and 2 if all seven match.
+ * Writes 0 to args[0] at the first empty slot, 1 at the first mismatch encountered before it, and 2 if all seven match.
  */
 USER_FUNC(evt_dokuroiwa_command_check) {
     s32 result;
@@ -284,7 +284,7 @@ static s32 itemsel_table01[] = {
 };
 
 /**
- * Bobbery's first talk after being found in the cave (STG5_15_RUNAWAY_SAILORS):
+ * Bobbery's talk after being offered Chuckola Cola (from STG5_15_RUNAWAY_SAILORS):
  * he falls asleep to the music-box tune (stg5_muj_45, 46) and the story moves to STG5_18_BOBBERY_RESCUE_2.
  */
 EVT_BEGIN(sanders_talk_sub)
@@ -1096,7 +1096,7 @@ EVT_BEGIN(iwa01_hammer)
     RETURN
 EVT_END()
 
-/** Jumping onto the big blue-eye rock with A: plays the rock jump sound while the Skull Gem is not yet placed. */
+/** Jumping onto the big blue-eye rock with A: plays the rock jump sound while the Skull Gem is placed. */
 EVT_BEGIN(iwa01_ride_a)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
@@ -1142,7 +1142,7 @@ EVT_BEGIN(iwa02_ride)
     RETURN
 EVT_END()
 
-/** Hammering the small red-eye rock: plays the small rock hit sound while the Skull Gem is not yet placed. */
+/** Hammering the small red-eye rock: plays the small rock hit sound while the Skull Gem is placed. */
 EVT_BEGIN(iwa02_hammer)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
@@ -1154,7 +1154,7 @@ EVT_END()
 
 /**
  * Jumping onto the red-eye rock with A after a hip bump:
- * plays the small rock jump sound while the Skull Gem is not yet placed.
+ * plays the small rock jump sound while the Skull Gem is placed.
  */
 EVT_BEGIN(iwa02_ride_a)
     CALL(evt_mario_chk_hipbump, LW(0))
@@ -1423,8 +1423,8 @@ EVT_BEGIN(yure_yashi_ha1)
 EVT_END()
 
 /**
- * Sways the palm tree (S_treeA_05) and its leaves when it is hit;
- * after STG5_15_RUNAWAY_SAILORS it keeps swaying until the tree is stopped.
+ * Sways the palm tree (S_treeA_05) and its leaves repeatedly before STG5_15_RUNAWAY_SAILORS;
+ * it returns once that story stage is reached.
  */
 EVT_BEGIN(yure_yashi)
     LOOP(0)

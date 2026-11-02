@@ -94,7 +94,7 @@ static BeroEntry bero_data[] = {
 };
 
 /**
- * Spawned by the map init: waits until the partner has stopped reacting,
+ * Spawned by the map init: waits until the field NPC count is zero,
  * then plays the box (anm_hako) opening with a camera shot
  * and creates the three counting switches (MOBJ_eki_06_su1 to su3) it reveals,
  * and advances the story to STG6_34_3_BLUE_BLOCKS. Does nothing when that step has already been reached.
@@ -238,8 +238,8 @@ s32 sw_cnt(MapObjectEntry* mobj) {
 
 /**
  * Called when a switch has been hit too many times:
- * sets the switches back to their idle poses and clears the counters of the ones that were at their trigger
- * count (1, 10 and 3 hits).
+ * sets the switches back to their idle poses and clears the counters of the ones one hit past their target
+ * count (2, 11 and 4 hits).
  */
 void sw_reset(void) {
     MapObjectEntry* mobj;
@@ -277,7 +277,7 @@ void sw_reset(void) {
  * When hit (stomp, hammer or partner action) it counts the hit and plays its press animation,
  * locking the other switches meanwhile; the puzzle is solved when the three switches have been hit exactly 1,
  * 10 and 3 times (evt_sw_complete is then started), otherwise the switch pops back up,
- * and an overcount resets all counters.
+ * and an overcount resets only counters one hit past their targets.
  */
 s32 sw_main(MapObjectEntry* mobj) {
     switch (mobj->state) {

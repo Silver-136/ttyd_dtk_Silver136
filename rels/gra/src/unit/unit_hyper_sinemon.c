@@ -86,7 +86,7 @@ BattleUnitKind unit_hyper_sinemon = {
     data_table, // dataTable
 };
 
-/** Defence of the Hyper Cleft's body per damage type: 3 against every damage type. */
+/** Defence of the Hyper Cleft's body per damage type: 3 against every damage type in the demos; in retail, fire has defence 99. */
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else
@@ -96,7 +96,7 @@ static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
 /** Defence of the Hyper Cleft's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
-/** Defence attributes of the Hyper Cleft's body: none, so every damage type is dealt normally. */
+/** Defence attributes of the Hyper Cleft's body: none in the demos; retail fire has the immunity attribute. */
 #if VERSION <= VERSION_DEMO_US
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
@@ -394,11 +394,12 @@ EVT_END()
  * Attack event of the Hyper Cleft: gets up first if it is flipped over;
  * on a field first strike it goes straight for the first attack target, otherwise,
  * unless it is already charged (STATUS_CHARGE), it may use an enemy item
- * or draw lots (25% on turn 1, 25/25 later) to spend the turn charging (weapon_sinemon_charge, crystal effect).
+ * or draw lots (75% on turn 1, 25/25 later) to spend the turn charging (weapon_sinemon_charge, crystal effect).
  * Otherwise it dashes at a target (SFX_ENM_EMON_DASH1);
  * the pre-damage check decides between a dodge and a hit, then it hops back home.
  */
 static EVT_BEGIN(attack_event)
+
     // Flipped over: it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -414,6 +415,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
+
         // Already charged: it goes straight to the dash attack.
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
         IF_INT_EQUAL(LW(0), 1)

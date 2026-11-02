@@ -83,9 +83,9 @@ static BeroEntry bero_data[] = {
 };
 
 /**
- * Scene when Mario steps into the back room: Jolene (キノシコワ) stands by the half-open door,
- * notices him and runs out (a "!" balloon, then she leaves toward x=-250 and the door slams shut with a wood
- * sound); the partner remarks stg3_tou_307_13_00 and control returns.
+ * Scene started after the block is broken: Jolene (キノシコワ) stands by the half-open door.
+ * When Mario's X is less than -55, she notices him and runs out (a "!" balloon, then she leaves toward
+ * x=-250 and the door slams shut with a wood sound); the partner remarks stg3_tou_307_13_00 and control returns.
  */
 static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -200, 0, 10)
@@ -153,7 +153,7 @@ EVT_END()
 
 /**
  * NPC init for Michel (マイケル, a Koopa fighter): before STG3_32_BOSS_BATTLE he lies flattened at (175, 0,
- * -20) in the "NKT_Z_1" pose, rotated 80 degrees.
+ * -20) in the "NKT_Z_1" pose, rotated -80 degrees about X.
  */
 static EVT_BEGIN(init_michel)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
@@ -307,7 +307,7 @@ static NpcSetupInfo npcEnt[] = {
 
 /**
  * Map init for tou_12, the back room beside the storage room:
- * music by story stage, NPCs, a Star Piece, and the big block that Mario breaks open until the boss battle.
+ * music by story stage, NPCs, a Star Piece, and the big block created only before STG3_20_16_FLATTENED.
  */
 EVT_BEGIN(tou_12_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)

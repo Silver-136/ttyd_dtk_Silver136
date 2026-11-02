@@ -406,7 +406,7 @@ s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
 }
 
 /**
- * Checks the whole fire bar (a capsule along the line from the first to the last ball) against Mario;
+ * Checks the whole fire bar (an extended rectangular strip from the first to the last ball) against Mario;
  * returns 1 on a hit. Same invulnerability and Vivian exceptions as _firebar_hitCheck.
  */
 s32 _firebar_hitCheck2(FirebarWork* wp) {
@@ -460,7 +460,7 @@ s32 _firebar_hitCheck2(FirebarWork* wp) {
  * Per-frame update of a rotating fire bar (type 0):
  * advances the animation poses, places each ball on the circle around the pivot at the current angle,
  * steps the angle by speed (faster after each jump over the bar),
- * and tests for a hit (callback type 2) or for Mario passing over the tip (callback type 1, counted in
+ * and tests for a hit (callback type 2) or for Mario passing over the bar (callback type 1, counted in
  * hitCount).
  */
 void _firebar_rot(FirebarWork* wp) {
@@ -606,7 +606,7 @@ void _firebar_trans(FirebarWork* wp) {
 /**
  * Script helper: creates and runs one fire bar from the FirebarSetup in args[0].
  * The first call allocates the work area and the fire ball poses; every call updates the bar and blocks.
- * When flags has bit 8 (set after the bar has been jumped over ten times) it puffs smoke,
+ * When flags has bit 8 (set after the bar has been jumped over ten times) it puffs smoke in JP and later,
  * frees everything and finishes.
  * Mario's invulnerability motions or invincibility timer set the "no damage" bit;
  * the fire-bar sound plays while Mario is within 120 units in X.
@@ -671,6 +671,7 @@ USER_FUNC(firebar_entry) {
         }
         event->userdata[0] = (EvtWord)wp;
     }
+
     // FAKE: storing through &wp keeps wp in a stack slot for the whole function, as in the original
     // code; it is the same as wp = event->userdatap[0].
     *(s32*)&wp = event->userdata[0];
@@ -823,8 +824,8 @@ void firebar_cb(FirebarWork* wp, s32 type) {
 }
 
 /**
- * Where Mario is put back after falling into the pits A_oti_01 to A_oti_03 of the fire-bar hall
- * (a point far below the floor).
+ * Where Mario is put back after falling into the pits A_oti_01 to A_oti_03 of the fire-bar hall:
+ * y = -1000 tells the damage-return helper to use each hit object's own position.
  */
 static HitDamageReturn dmgRetPoint[] = {
     {"A_oti_01", {0.0f, -1000.0f, 0.0f}},

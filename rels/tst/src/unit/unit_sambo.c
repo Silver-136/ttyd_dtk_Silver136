@@ -18,7 +18,7 @@
 // Unit work slots of the Pokey (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
     UNIT_WORK_BODY_COUNT = 0,       // body segments left (4 at the start); picks the target part and the height
-    UNIT_WORK_CALL_DEPTH = 1, // Pokeys called in so far (call_friend_event); a new one inherits it
+    UNIT_WORK_CALL_DEPTH = 1, // Inherited summon depth (call_friend_event); a new Pokey gets its caller's value + 1
 };
 
 BattleUnitKind unit_sambo;
@@ -112,9 +112,11 @@ static BattleUnitDefense defence = {0};
 static BattleUnitDefenseAttr defence_attr = {0};
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Status vulnerability of the Pokey in the demo builds: resists most statuses. */
 static StatusVulnerability regist = {90, 80, 90, 100, 90, 100, 100, 50, 100, 90, 100, 90, 100, 90, 90, 100, 90, 100, 90, 100, 100, 100};
 #else
+
 /** Status vulnerability of the Pokey in the retail builds: resists most statuses. */
 static StatusVulnerability regist = {95, 80, 80, 100, 90, 100, 100, 60, 100, 90, 100, 90, 100, 95, 90, 100, 90, 100, 90, 100, 100, 100};
 #endif
@@ -230,7 +232,7 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data of the Pokey's headbutt with 1 segment: 3 damage. */
+/** Attack data of the Pokey's headbutt with 1 segment: 3 damage in the demos, 4 in retail. */
 static BattleWeapon weapon_sambo_head_attack_1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -797,6 +799,7 @@ EVT_END()
  * With a single segment left it only plays the knock-back (subsetevt_shot_damage) or no-damage reaction.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
+
     // With only the head left there is nothing to knock off: just the knock-back or no-damage reaction plays.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -898,6 +901,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
         CALL(btlevtcmd_OnPartsAttribute, LW(10), 5, PART_ATTR_HIDDEN)
         CALL(btlevtcmd_CheckDamagePattern, LW(10), 16, LW(5))
         IF_INT_NOT_EQUAL(LW(5), 0)
+
             // After an Ultra Hammer hit the Pokey also takes the finishing blow.
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), PTR(marioWeapon_UltraHammerFinish), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         END_IF
@@ -985,8 +989,8 @@ static EVT_BEGIN(damage_swallow_body)
 EVT_END()
 
 /**
- * Attack AI of the Pokey. It uses an enemy item if it has one.
- * At 4 segments, if it has called friends at most once,
+ * Attack AI of the Pokey. It runs a selected enemy-item script if one is returned.
+ * At 4 segments, if its inherited summon depth is at most 1,
  * it has a 30% chance to call another Pokey (call_friend_event) when there is room beside it.
  * With 2 or more segments it then draws: about 30 in 69 for a head attack (attack_head_2_event,
  * with the weapon matching the segment count), otherwise it fires its spike (attack_spike_event);
@@ -1185,6 +1189,7 @@ static EVT_BEGIN(attack_head_2_event)
     END_IF
     SWITCH(LW(10))
         CASE_EQUAL(4)
+
         // Check whether the attack will connect; a miss sends the target into its dodge.
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_head_attack_4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_EQUAL(3)
@@ -1473,6 +1478,7 @@ EVT_END()
  * If the target Superguards (CheckDamage result 21), the segment flies back and hits the Pokey itself.
  */
 static EVT_BEGIN(attack_spike_event)
+
     // The weapon depends on how many segments the stack has (4, 3 or 2).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(10))
     SWITCH(LW(10))
@@ -1518,6 +1524,7 @@ static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
+
         // The segment about to be thrown (part 5) is smaller when the Pokey is Tiny.
         CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, 5, FLOAT(0.69921875f), FLOAT(0.69921875f), FLOAT(1.0f))
     ELSE
@@ -1588,6 +1595,7 @@ static EVT_BEGIN(attack_spike_event)
     WAIT_FRAMES(5)
     SWITCH(LW(10))
         CASE_EQUAL(3)
+
         // Check whether the attack will connect; a miss sends the target into its dodge.
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sambo_spike_attack_4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_EQUAL(2)
@@ -1710,6 +1718,7 @@ EVT_END()
  * at most 1 call).
  */
 static EVT_BEGIN(call_friend_event)
+
     // The Pokey sways left and right in widening arcs.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("SNB_S_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_SAMBO_SEND_GROUP1_3"), EVT_NULLPTR, 0, EVT_NULLPTR)

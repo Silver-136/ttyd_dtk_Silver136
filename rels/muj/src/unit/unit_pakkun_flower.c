@@ -460,6 +460,7 @@ EVT_END()
  * then returns (return_event).
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -481,7 +482,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is announced and the guard timing is awaited.
+    // The attack is announced and protecting-unit movement is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -559,7 +560,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The bite missed (the target dodged).
+    // The bite missed or was avoided.
     LABEL(90)
     GOTO(98)
 
@@ -639,7 +640,7 @@ static USER_FUNC(shadow_scale_memory) {
 }
 
 /**
- * Script helper: writes 0 to args[0] if the stage ceiling frame has been knocked away
+ * Script helper: writes 0 to args[0] if the stage ceiling frame is unavailable
  * (STAGE_OBJ_FLAG_IRON_FRAME_GONE), otherwise 1;
  * the plant uses it to decide whether it can hang from the ceiling.
  */

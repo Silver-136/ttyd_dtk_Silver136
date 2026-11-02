@@ -351,7 +351,7 @@ EVT_END()
 
 /**
  * Init event of the gourmet Toad: parked below the floor during the Riverside stages
- * and from the end of day 2 to the Smorg miasma; turns jumping off when he is on the floor.
+ * and from the end of day 2 to the Smorg miasma; disables gravity when he is below the floor.
  */
 static EVT_BEGIN(init_gurume)
     SWITCH(GSW_STORY_PROGRESS)
@@ -460,7 +460,8 @@ EVT_BEGIN(init_yuurei)
         IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 0)
             SET_VALUE(LW(0), 0)
             LOOP(0)
-                // Once Mario has been inside cabin 4 with Vivian for a while, the ghost fades in.
+
+                // Once Mario has used Vivian's field ability inside cabin 4 for a while, the ghost fades in.
                 IF_INT_EQUAL(GSWF_RSH_02_IN_ROOM_4, 1)
                     CALL(evt_mario_party_use_check, LW(1))
                     IF_INT_EQUAL(LW(1), 6)
@@ -511,7 +512,7 @@ EVT_BEGIN(init_yuurei)
                 GOTO(2)
             END_IF
 
-            // She then pulses her transparency forever, pausing while Mario talks to her.
+            // She then pulses her transparency forever, pausing while GSWF_RSH_GHOST_FADE_HOLD is set.
             IF_INT_EQUAL(GSWF_RSH_GHOST_FADE_HOLD, 1)
                 SET_VALUE(GSWF_RSH_GHOST_FADE_HELD, 1)
                 LOOP(0)
@@ -599,6 +600,7 @@ EVT_BEGIN(talk_yuurei)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_121"))
         END_IF
         CASE_LESS(STG6_17_GHOST_DIARY)
+
         // She asks for her Ragged Diary.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_122"), 0, 0)
         CASE_LESS(STG6_18_BLANKET_EXCHANGE)
@@ -609,6 +611,7 @@ EVT_BEGIN(talk_yuurei)
         CALL(evt_win_item_select, 0, PTR(item_tbl2), LW(1), 0)
 #endif
         IF_INT_NOT_EQUAL(LW(1), -1)
+
             // She takes the diary and gives Mario a Blanket in return.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_136"), 0, 0)
             CALL(evt_npc_set_anim, STRING("ゆうれい"), STRING("A_1"))
@@ -781,7 +784,7 @@ static EVT_BEGIN(talk_sarary)
     RETURN
 EVT_END()
 
-/** NPCs of the passenger car: the gourmet Toad, the ghost and Toron. */
+/** NPCs of the passenger car: the gourmet Toad, Pennington, the ghost, Toron and the salaryman. */
 static NpcSetupInfo npc_data[] = {
     {
         "グルメキノピオ", // name
@@ -933,6 +936,7 @@ void yuurei_callback(s32 type, void* param) {
  * Message-window callback for Pennington's speech in evt_nabe:
  * on the second page turn it starts evt_powan_msg (counts pages in LW(10)).
  */
+
 // Start the reaction on the second type-3 notification (the counter starts at zero).
 void powan_callback(s32 type, void* param) {
     MsgWinData* work = *(MsgWinData**)param;
@@ -1048,6 +1052,7 @@ EVT_END()
  * then the story advances to STG6_26_ZIP_TOAD_CAUGHT and the map changes to rsh_02_b.
  */
 EVT_BEGIN(evt_toron_catch)
+
     // GF(0) requests the jumping loop to stop; GF(1) acknowledges its cleanup.
     SET_VALUE(LW(10), 0)
     SET_VALUE(GF(0), 0)
@@ -1226,9 +1231,10 @@ EVT_BEGIN(evt_toron_catch2)
             BREAK_LOOP
         END_IF
 
-        // The salaryman gets his briefcase back.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_190"), 0, STRING("サラリーマン"))
     END_LOOP
+
+    // The salaryman gets his briefcase back.
     CALL(evt_pouch_remove_item, ITEM_BRIEFCASE, LW(0))
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     CALL(evt_mario_mov_pos2, -225, -130, FLOAT(60.0f))
@@ -1267,7 +1273,7 @@ EVT_END()
 /**
  * Spawned by the map init during STG6_24: loops until the story has reached STG6_24_02_ANOTHER_CLUE
  * and Mario stands at x -110 or less (not below -330 in JP and later), z -70 or less, hidden with Vivian's
- * ability (partner 6) for over 300 frames; then Toron (トロン) rises into view with an appear sound at one of two
+ * ability (partner 6) for at least 300 frames; then Toron (トロン) rises into view with an appear sound at one of two
  * spots (sinking away again if Mario comes out within 60 frames). Once Mario leaves the shadow, Toron jumps out
  * and taunts him (stg6_rsh_181), the story moves to STG6_25_ZIP_TOAD_APPEARS, the chase music starts and
  * evt_toron_catch is spawned.
@@ -1417,7 +1423,6 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
 
     // Toron jumps out and taunts Mario.
-    // Toron jumps out and taunts Mario.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_181"), 0, STRING("トロン"))
     WAIT_MS(500)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
@@ -1543,7 +1548,8 @@ EVT_END()
 /**
  * Shared map init for the three variants of rsh_02 on the first trip:
  * registers the three cabin doors (3 to 5), the NPCs, the pot shelf trigger (tana_3),
- * the bed (from STG6_01_THE_CONDUCTOR on), the shelf signs, and the music for the story stage.
+ * the bed (from STG6_01_THE_CONDUCTOR on, except at STG6_25_ZIP_TOAD_APPEARS),
+ * the shelf signs, and the music for the story stage.
  */
 EVT_BEGIN(rsh_02_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1635,6 +1641,7 @@ EVT_END()
  * and the Smorg window effect.
  */
 EVT_BEGIN(rsh_02_a_init_evt)
+
     // Decide whether a scripted entry is pending, then run the shared car init.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_20_END_OF_DAY_1)
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
@@ -1778,6 +1785,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
                 CALL(evt_mario_get_party, LW(0))
                 SWITCH(LW(0))
                     CASE_EQUAL(1)
+
                     // On day 3 the partner speaks.
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_230_0"), 0, STRING("party"))
                     CASE_EQUAL(2)
@@ -1931,7 +1939,7 @@ EVT_END()
 /**
  * Shared map init for rsh_02 on the second visit:
  * plays the outbound or return-trip scenery, registers the doors, bed (evt_nidome_bed), NPCs,
- * shelf signs and the music for the station the train has reached.
+ * shelf signs (retail only) and the music for the station the train has reached.
  */
 EVT_BEGIN(rsh_02_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -2019,6 +2027,7 @@ EVT_END()
  * or Rogueport (gor_04) depending on the direction of the trip; otherwise it uses the normal doors.
  */
 EVT_BEGIN(rsh_02_a_init_evt_nidome)
+
     // Second visit: run the shared init and show the clean floors.
     CALL_CHILD(PTR(rsh_02_init_evt_nidome))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
@@ -2071,6 +2080,7 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_CHIME1"), LW(0), LW(1), LW(2), 0)
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
+
                     // Waking up on the way sends the train on to Poshley Heights or Rogueport.
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_c_03"), 0, 0)
                 ELSE
@@ -2238,7 +2248,7 @@ EVT_END()
  * Bed on the second trip. At a station (Poshley Heights or Rogueport) it is the normal inn bed.
  * While the train is running, asking to sleep fades out,
  * restores HP/FP and changes the map to Riverside Station (hom_10, hom_11 or hom_12),
- * setting GSW_TRAIN_LEG to the next leg of the trip.
+ * setting GSW_TRAIN_LEG to the next leg only when stopped at Riverside.
  */
 EVT_BEGIN(evt_nidome_bed)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)

@@ -25,8 +25,7 @@ static NpcSetupInfo npcEnt[1];
 EvtWord kpa_05_init_evt[44];
 
 /**
- * Blocks, hidden blocks, pipes and obstacle blocks of side-scrolling stage 3 over lava, listed from left to
- * right.
+ * Blocks, pipes and obstacle blocks of side-scrolling stage 3 over lava.
  */
 static EvtWord kpa_act_stg3_mobj[] = {
     KPA_OBJ_FIREBAR_DODAI_0(-1062.5f, 100.0f, 3, -229998976),
@@ -46,7 +45,7 @@ static EvtWord kpa_act_stg3_mobj[] = {
     KPA_OBJ_BRICK_3(1300.0f, 25.0f), KPA_OBJ_DOKAN_2(1475.0f, 200.0f), KPA_OBJ_END,
 };
 
-/** Coins Bowser can collect in side-scrolling stage 3, as x and z positions. */
+/** Coins Bowser can collect in side-scrolling stage 3, as x and y positions. */
 EvtWord kpa_act_stg3_item[] = {
     KPA_ITEM(-175.0f, 175.0f), KPA_ITEM(-125.0f, 175.0f), KPA_ITEM(-25.0f, 175.0f), KPA_ITEM(25.0f, 175.0f),
     KPA_ITEM(250.0f, 0.0f), KPA_ITEM(300.0f, 0.0f), KPA_ITEM(350.0f, 0.0f), KPA_ITEM(350.0f, 25.0f),
@@ -103,8 +102,8 @@ EVT_END()
  * Script of the stage's red jump stand (KPA_OBJ_JUMPSTAND_RED), run when Bowser stands on it:
  * kills the stage clock (kpa_time, its event id in GW(15)), saves Bowser's power level,
  * loads kpa_06 after 500 ms, turns the camera off once he is above y = 400
- * and launches him up with evt_mario_jump_jumpstand 800 units above the platform (a lower launch speed in the US
- * demo and earlier).
+ * and launches him up with evt_mario_jump_jumpstand 800 units above the platform, using a shorter duration argument
+ * and a different jump mode in the demos.
  */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))

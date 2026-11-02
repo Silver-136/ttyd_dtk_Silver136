@@ -205,7 +205,7 @@ EVT_BEGIN(evt_kaidan_oku)
 EVT_END()
 
 /**
- * Reward script for the golden tree: if the item has not been taken yet,
+ * Reward script for the golden tree: if no item named item_ki01 is present,
  * drops a Golden Leaf from it (flag LSWF(2)) when Mario hits the tree.
  */
 static EVT_BEGIN(ki_data_evt_01)

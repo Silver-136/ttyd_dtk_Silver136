@@ -221,12 +221,14 @@ static BattleUnitKindPart parts[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Atomic Boo (both demos), as the percent chance each status takes hold:
  * immune to Huge, Tiny, Attack Down and Fright; resists 12 statuses (down to 5% of the normal chance).
  */
 static StatusVulnerability regist = {40, 40, 40, 40, 40, 40, 100, 30, 0, 0, 100, 0, 100, 40, 40, 0, 10, 100, 40, 100, 100, 5};
 #else
+
 /**
  * Status vulnerability of the Atomic Boo (the retail releases), as the percent chance each status takes
  * hold: immune to Huge, Tiny, Attack Down and Fright; resists 10 statuses (down to 5% of the normal
@@ -415,7 +417,7 @@ BattleWeapon weapon_atmic_teresa_breath = {
 /**
  * Init script of the Atomic Boo boss: registers its wait,
  * attack and damage handlers (confusion uses the default handler),
- * assigns the unit ids of its small Boos (atmic_teresa_id_set),
+ * stores its own unit id (atmic_teresa_id_set),
  * builds the flock of small Boos (teresa_entry) and starts the idle event.
  */
 static EVT_BEGIN(init_event)
@@ -526,8 +528,8 @@ EVT_END()
 /**
  * The Atomic Boo's Press: it declares an attack on every target, flies to x -125 at height 100 (R_1) and drops
  * onto the ground there (Z_1) with a long camera shake.
- * Each target in turn dodges or takes weapon_atmic_teresa_press (the guard result is applied on the first hit
- * only); then it floats home to its waiting pose.
+ * Each target in turn dodges or takes weapon_atmic_teresa_press (the guard result is applied on the first target
+ * only, if it is hit); then it floats home to its waiting pose.
  */
 EVT_BEGIN(press_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -615,11 +617,12 @@ EVT_END()
  * The Atomic Boo's surprise attack (surprise_event), used while its face is covered:
  * it turns its back and backs off, uncovers its face
  * (unit work 0 = 0, normal pose table), lunges to x 0 in pose A_2 with SFX_BOSS_ATMTLSA_SURPRISED1 and a strong
- * camera shake, and each target dodges or takes weapon_atmic_teresa_surprise (the guard result on the first hit
- * only).
+ * camera shake, and each target dodges or takes weapon_atmic_teresa_surprise (the guard result on the first target
+ * only, if it is hit).
  * Then it floats home.
  */
 EVT_BEGIN(surprise_event)
+
     // The Atomic Boo picks its targets for the surprise attack, which hits the whole party.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_atmic_teresa_surprise))
@@ -731,6 +734,7 @@ EVT_END()
  * (SFX_BOSS_ATMTLSA_UNION1), restoring its size.
  */
 EVT_BEGIN(bikkuri_event)
+
     // The Atomic Boo picks its targets for the split-up attack, which hits the whole party.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_atmic_teresa_bikkuri))
@@ -961,7 +965,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-/** Unit id of the Atomic Boo, stored when it starts an attack so that the small Boos' code can find it. */
+/** Unit id of the Atomic Boo, stored during initialization so that the small Boos' code can find it. */
 s32 atmic_teresa_id[] = {
     -1,
 };

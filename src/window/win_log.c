@@ -198,14 +198,6 @@ static inline void winLogAddMenu(WindowWork* w, s32 id) {
     }
 }
 
-/**
- * Sets up the Journal when the pause menu opens:
- * adds the entries unlocked by story progress (map always; Tattle log once Goombella joins;
- * Crystal Stars at Frankly's; badge log after the badge tutorial;
- * recipe log once unlocked), spawns the seven Crystal Star effects (unowned ones dark),
- * finds Mario's spot on the world map for the current area, and builds the sorted badge,
- * recipe and Tattle lists with their found counts.
- */
 #if VERSION <= VERSION_DEMO_US
 #define TUBU_TYPE(t) 0
 #define TUBU_SEQ_361 360
@@ -304,6 +296,7 @@ TubuDt tubuDt[] = {
     {-33, -62, 0, 0, 382, "gor"},
     {-33, -74, 1, 0, 382, "las"},
 };
+
 /**
  * Sets up the Journal when the pause menu opens:
  * adds the entries unlocked by story progress (map always; Tattle log once Goombella joins;
@@ -320,6 +313,15 @@ s32 j;
     const char* area;
     TattleEntry* t;
 #else
+
+/**
+ * Sets up the Journal when the pause menu opens:
+ * adds the entries unlocked by story progress (map always; Tattle log once Goombella joins;
+ * Crystal Stars at Frankly's; badge log after the badge tutorial;
+ * recipe log once unlocked), spawns the seven Crystal Star effects (unowned ones dark),
+ * finds Mario's spot on the world map for the current area, and builds the sorted badge,
+ * recipe and Tattle lists with their found counts.
+ */
 void winLogInit(WindowWork* w) {
     u32 k;
     const char* area;
@@ -1297,6 +1299,7 @@ const char* winGetMapTplName(void) {
 }
 
 double __fabs(double);
+
 /** Local fabs on the __fabs intrinsic, used for the map arrows' bobbing offset. */
 static inline double fabs(double x) { return __fabs(x); }
 
@@ -1443,7 +1446,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
 /**
  * Draws the Tattle log page: the known/total count,
  * 16 entries in two columns with their log numbers (unknown enemies as "???",
- * Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
+ * in retail, Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
  */
 #if VERSION <= VERSION_DEMO_US
 static void monoshiriGX(WindowWork* w, f32 x, f32 y) {

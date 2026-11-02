@@ -17,10 +17,10 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_GUARD 0      // 1 while in the guard stance (guard_event and the end of normal_attack_event set it; guard_cancel_event clears it); attack_event then cancels the guard
+#define UNIT_WORK_GUARD 0      // 1 while guarding (guard_event and normal_attack_event set it; guard_cancel_event clears it); attack_event cancels it only after flipped recovery and item-use checks
 #define UNIT_WORK_SPINNING 1   // 1 keeps the sibling loop that rolls it during normal_attack_event turning; 0 ends it
 #define UNIT_WORK_SPIN_SPEED 2 // degrees per frame of that roll (+-36, or +-18 slowing by 1 every 2-3 frames; times the face direction)
-#define UNIT_WORK_CHARGED 3    // 1 after charge_event; the next attack_event clears it and always uses normal_attack_event
+#define UNIT_WORK_CHARGED 3    // 1 when charge is selected; after recovery, item-use and guard checks, attack_event clears it and uses normal_attack_event
 
 
 BattleUnitKind unit_hyper_togezo;
@@ -188,7 +188,7 @@ static StatusVulnerability regist_turn = {
 
 /**
  * Defence of the Sky-Blue Spiny while it is curled up guarding:
- * defence 99 against every kind of hit, so no attack does damage.
+ * defence 99 against every kind of hit; the separate element-attribute table supplies immunity.
  */
 static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 
@@ -561,6 +561,7 @@ EVT_END()
  * otherwise it unrolls, returns home and stands up.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -787,7 +788,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPINNING, 0)
 
-    // It ends in its guarded ball form, using its spiked-ball defense, status and pose tables until its next turn.
+    // It ends in its guarded ball form, using its spiked-ball defense, status and pose tables until guard_cancel_event runs.
     CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 1, PTR(&defence_guard))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&defence_attr_guard))
     CALL(btlevtcmd_SetRegistStatus, UNIT_ID_SELF, PTR(&regist_guard))

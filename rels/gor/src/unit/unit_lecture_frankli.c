@@ -99,7 +99,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Prof. Frankly's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
-/** Status vulnerability of Prof. Frankly: immune to every status. */
+/** Status vulnerability of Prof. Frankly: immune to the statuses listed in this table. */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -137,7 +137,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
-/** Prof. Frankly's jump: damage from Mario's level to a single target, a jump-style hit. */
+/** Prof. Frankly's jump: damage from Mario's boot level to a single target, a jump-style hit. */
 BattleWeapon _lec_weapon_jump = {
     "btl_wn_mario_normal_jump", // name
     ICON_ITEM_BOOTS, // icon
@@ -175,7 +175,7 @@ BattleWeapon _lec_weapon_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Prof. Frankly's hammer: damage from Mario's level to a single target, a hammer-style hit. */
+/** Prof. Frankly's hammer: damage from Mario's hammer level to a single target, a hammer-style hit. */
 BattleWeapon _lec_weapon_hammer = {
     "btl_wn_mario_normal_hammer", // name
     ICON_ITEM_HAMMER, // icon
@@ -238,7 +238,7 @@ static BattleUnitKindPart parts[] = {
 /**
  * Init event of Professor Frankly in the action-command tutorial:
  * installs phase, attack, damage and confusion events,
- * forbids movement and starts the lesson state (unit work 1) at 0.
+ * gives him no actions per turn and starts the lesson state (unit work 1) at 0.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -265,12 +265,13 @@ EVT_END()
  * Phase event that scripts the action-command lesson: unit work 1 is the step (0 to 9).
  * Each step waits for the right phase and then has Frankly talk (mac_0_b_t2_000 to 023) with the camera framed
  * on Mario or Goombella, then moves to the next step;
- * the last steps repeat prompts depending on how many tries the player has made.
+ * the last steps repeat feedback based on the stored attack or guard timing result.
  */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+
         // Step 0, before the player's phase: Frankly introduces the Jump action command
         // and asks Mario to jump on an enemy.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
@@ -292,6 +293,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(2)
+
         // Step 1, after Mario's jump: Frankly points out the NICE rating,
         // then asks Goombella to take her turn and she answers.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
@@ -335,6 +337,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(4)
+
         // Step 2, before the player's phase: Frankly explains the Guard action command Mario just did.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -351,6 +354,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(6)
+
         // Step 3, after the attack: Frankly praises the Action Command,
         // then asks Goombella to attack Mario once more for the Superguard lesson.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
@@ -404,6 +408,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(8)
+
         // Step 4, before the player's phase: Frankly explains the Superguard
         // and offers more practice (a yes or no choice).
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
@@ -435,6 +440,7 @@ static EVT_BEGIN(phase_event)
             END_IF
         END_IF
         CASE_EQUAL(9)
+
         // Step 5, before the player's phase: Frankly's feedback on Mario's practice try (nicely done,
         // a little early or a little late).
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
@@ -495,13 +501,13 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 /**
- * Mario's Jump in the Action Command tutorial, the attack script of _lec_weapon_jump (data table tag 67):
+ * Mario's Jump in the Action Command tutorial, the attack script of _lec_weapon_jump (data table tag 67 in demos, 68 in retail):
  * approaches
  * the target with Professor Frankly's explanation (mac_0_b_t2_001),
  * freezes just before landing for his prompt to
- * press A (mac_0_b_t2_002), stores the timing result in the lecture's unit work 2 and, on a success,
+ * press A (mac_0_b_t2_002), clears the lecture's unit work 2 and stores the timing result there during free practice; on a success,
  * stomps a second
- * time; at the end it moves the lecture progress on to 2.
+ * time; at the end it advances lecture step 1 to 2.
  */
 EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
@@ -558,6 +564,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
+
             // Frankly freezes the action and tells Mario to press A just before landing,
             // then waits for the button.
             BEGIN_SIBLING_EVENT_GET_ID(LW(0))
@@ -622,6 +629,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     END_IF
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
+
         // The stomp lands for its damage.
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
@@ -684,6 +692,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 1)
+
         // A last bounce and the lecture moves on to its next step.
         BEGIN_SIBLING_EVENT_GET_ID(LW(14))
             CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
@@ -729,11 +738,11 @@ EVT_BEGIN(lecAttackEvent_Jump)
 EVT_END()
 
 /**
- * Mario's Hammer in the Action Command tutorial, the attack script of _lec_weapon_hammer (data table tag 68):
+ * Mario's Hammer in the Action Command tutorial, the attack script of _lec_weapon_hammer (data table tag 68 in demos, 69 in retail):
  * Professor Frankly prompts the player to tilt and hold the stick left (mac_0_b_t2_008, 009) and to release it
  * when
- * the light comes on (mac_0_b_t2_010); the result goes to the lecture's unit work 2
- * and the progress moves on to 6.
+ * the light comes on (mac_0_b_t2_010); unit work 2 is cleared, then receives the timing result during free practice,
+ * and lecture step 5 advances to 6.
  */
 EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -895,6 +904,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 9)
+
         // The release is judged and stored for the lecture.
         CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
         SWITCH(LW(0))
@@ -914,6 +924,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND2"), 0)
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
+
         // The hit lands for its damage.
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))

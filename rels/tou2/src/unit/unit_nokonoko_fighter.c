@@ -260,7 +260,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Flips the Koopa onto its back when it is hit while helpless:
+ * Flips the Koopa onto its back when the hit requests a shell flip:
  * it switches to the upside-down defence and pose tables (NKT_D_1, then NKT_S_2),
  * sets the flipped status flag and a flipped-over counter of 2 turns, lowers its hit offset,
  * and bounces with SFX_ENM_INSIDE1.
@@ -388,13 +388,14 @@ static EVT_BEGIN(first_attack_event)
 EVT_END()
 
 /**
- * The Koopa's attack: while it is flipped over it just wakes up (wakeup_event);
+ * The Koopa's attack: while it is flipped over it spends the action in wakeup_event, getting up only when its counter reaches zero;
  * otherwise it uses an item or picks a target, pulls into its shell (SFX_ENM_NOKO_SHELL1) and spins into it,
  * kicking up kemuri_test dust; a miss lets it slide past, a hit applies the damage,
  * and it returns to its stance.
  */
 static EVT_BEGIN(attack_event)
-    // If KP Koopa is flipped over, it first rights itself with wakeup_event.
+
+    // If KP Koopa is flipped over, wakeup_event counts down and gets it up only at zero.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)

@@ -63,7 +63,7 @@ static BeroEntry bero_entry_data[] = {
 /**
  * Cutscene on the first visit after Vivian has joined:
  * Vivian is placed behind Mario, runs up and says her first trail line (stg4_gra_16_01);
- * sets GSWF_GRA01_VIVIAN_FIRST_TRAIL_TALK so it plays once.
+ * sets GSWF_GRA_01_AFTER_DOOPLISS_SCENE_SEEN so it plays once.
  */
 EVT_BEGIN(gra_01_after_ranpel2)
     CALL(evt_mario_key_onoff, 0)

@@ -187,7 +187,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack event of the Piranha Plant: uses an enemy item if it has one, else it bites (normal_attack_event). */
+/** Attack event of the Piranha Plant: on a first strike it bites; otherwise it runs a selected enemy-item script if one is returned, else it bites (normal_attack_event). */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -290,7 +290,7 @@ EVT_END()
 
 /**
  * Returns in args[0] whether the iron frame ceiling above the plant is still there:
- * 0 once it has fallen away, otherwise 1.
+ * 0 when the frame is unavailable, otherwise 1.
  */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
@@ -390,7 +390,7 @@ EVT_END()
 
 /**
  * Event after the Piranha Plant takes a counter hit:
- * plays the hurt pose for a second, then unless the damage code is a certain hit (codes 512 and 2048) it goes
+ * plays the hurt pose for a second, then unless DAMAGE_RESULT_ZERO_HP is set without DAMAGE_RESULT_REVIVAL it goes
  * back to hiding (return_event).
  */
 static EVT_BEGIN(counter_damage_event)
@@ -613,7 +613,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The bite misses or is blocked.
+    // The bite misses or is avoided.
     LABEL(90)
     GOTO(98)
 

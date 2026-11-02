@@ -144,7 +144,7 @@ static BattleWeapon weapon_patapata_attack = {
 
 /**
  * Defence of the flying Dark Paratroopa against each element (normal, fire, ice, explosion, electric):
- * 2 against every element, so each hit is cut by 2.
+ * base defence 2 against every element.
  */
 static BattleUnitDefense defence_patapata = {{2, 2, 2, 2, 2}};
 
@@ -224,7 +224,7 @@ static BattleDataEntry data_table_patapata[] = {
 };
 
 /**
- * Sound table of the Dark Paratroopa once it has lost its wings (a Dark Koopa):
+ * Sound table of the flying Dark Paratroopa:
  * for each pose name, the sound that plays with its animation.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -321,12 +321,14 @@ EVT_END()
 static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
+
         // Pick a target for the attack; a confused unit that has none flusters.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         WAIT_FRAMES(50)
     ELSE
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
+
             // It uses an enemy item if it has one.
             CALL_CHILD(LW(0))
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -384,6 +386,7 @@ static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
+
         // Find out whether the attack will connect or miss.
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_patapata_attack), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
     ELSE
@@ -433,7 +436,7 @@ static EVT_BEGIN(attack_event_patapata)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
 
-    // Deal the damage, reduced by the action command defence.
+    // Check the action-command defence result, then deal the damage.
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_patapata_attack))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_patapata_attack), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
@@ -546,7 +549,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Defence of the Dark Paratroopa once it has lost its wings (a Dark Koopa) against each element (normal,
- * fire, ice, explosion, electric): 2 against every element, so each hit is cut by 2.
+ * fire, ice, explosion, electric): base defence 2 against every element.
  */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
@@ -807,26 +810,29 @@ EVT_END()
 
 /**
  * Attack event of the Dark Paratroopa: wakes up first if it is flipped.
- * In the forced-attack case it uses the first attack target after a half-second pause,
- * otherwise it uses an enemy item if it has one or samples a target.
+ * In the First Strike case it uses the first attack target after a half-second pause,
+ * otherwise it uses an enemy item if one is selected or samples a target.
  * It then spins into its shell and rams the target (NKT_A_1, with a smoke puff),
  * the hit being checked with weapon_nokonoko_attack, and returns home.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
+
         // A flipped-over Koopa only gets back on its feet.
         CALL_CHILD(wakeup_event)
         RETURN
     END_IF
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
+
         // Pick a target for the attack; a confused unit that has none flusters.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         WAIT_FRAMES(30)
     ELSE
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
+
             // It uses an enemy item if it has one.
             CALL_CHILD(LW(0))
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -872,7 +878,6 @@ static EVT_BEGIN(attack_event)
         LOOP(0)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, LW(15))
             IF_INT_EQUAL(LW(15), 1)
-                // Spinning in its shell, it rams the target.
                 CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
                 BREAK_LOOP
             END_IF
@@ -897,6 +902,8 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(5), EVT_NULLPTR)
+
+    // Spinning in its shell, it rams the target.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 1)
     DELETE_EVENT(LW(13))
 
@@ -946,7 +953,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
 
-    // Deal the damage, reduced by the action command defence.
+    // Check the action-command defence result, then deal the damage.
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_nokonoko_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_nokonoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_SPEED, 10)

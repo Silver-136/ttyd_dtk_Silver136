@@ -276,7 +276,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Sine of 0 to 90 degrees in one-degree steps; the Spiky Gloomba's krb_get_dir searches it to turn a slope
+ * Sine of 0 to 90 degrees in one-degree steps; the Spiky Gloomba's krb_comp_dir searches it to turn a slope
  * into an angle.
  */
 static f32 SinTable[] = {
@@ -295,8 +295,8 @@ static f32 SinTable[] = {
 };
 
 /**
- * Attack event of the Spiky Gloomba (weapon_togekuri_attack): uses an enemy item if it has one,
- * otherwise picks a target and flusters if there is none.
+ * Attack event of the Spiky Gloomba (weapon_togekuri_attack): uses an enemy item if the item-use check selects one,
+ * otherwise picks a target and, if confused, flusters if there is none.
  * Otherwise it runs at the target and tumbles onto it with its spikes (krb_get_dir gives the spin).
  * A miss makes it land on its back (TGK_D_1) and roll upright again (TGK_A_2, TGK_K_1);
  * a hit applies the damage with the action command defence check. It then hops off and walks back to its place.
@@ -304,7 +304,8 @@ static f32 SinTable[] = {
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // It uses an enemy item if it has one.
+
+        // It uses the enemy item selected by the item-use check.
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -441,6 +442,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     LOOP(4)
+
         // The landing squashes it flat for a moment.
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.07910156f), FLOAT(-0.119140625f), 0)
         WAIT_FRAMES(1)
@@ -492,9 +494,9 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Script helper: args[0..1] = x, z of the first point, args[2..3] = x, z of the second,
+ * Script helper: args[0..1] = X, Y of the first point, args[2..3] = X, Y of the second,
  * args[4] = angle in and out.
- * Returns the angle (degrees) from the first point towards the second; unchanged if the points coincide.
+ * Returns the angle (degrees) opposite the displacement from the first point to the second; unchanged if the points coincide.
  */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;
@@ -570,7 +572,7 @@ static USER_FUNC(get_attacker) {
     return EVT_RETURN_DONE;
 }
 
-/** Idle event: shows the unit's table pose for state 1. */
+/** Idle event: shows the unit's table pose for part 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

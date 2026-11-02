@@ -119,7 +119,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
 /**
- * Status vulnerability of the Dull Bones (100% is the normal chance): immune to Sleep and Poison; resists
+ * Status vulnerability of the Dull Bones (multipliers on status chances): immune to Sleep and Poison; uses
  * Stop 60%, Dizzy 50%, Confusion 50%, Freeze 90%, Tiny 90%, Attack Down 90%, Defense Down 90%, Allergic 90%,
  * Fright 10%, Gale Force 90%, Slow 90% and instant KO 50%.
  */
@@ -318,7 +318,7 @@ EVT_END()
  * and the first time pays out the coins, experience and star points (unit work 1 = 1) with a smoke puff.
  * It then plays the crumbled pose KRN_D_2 with the crumble sound, waits a second,
  * makes the unit unavailable (KillUnit mode 2),
- * and picks a random 0 or 1 in unit work 2 (the time it stays collapsed).
+ * and sets unit work 2 to a random 2 to 4 (the countdown before it rebuilds).
  */
 static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
@@ -386,7 +386,7 @@ EVT_END()
 
 /**
  * Attack script of Dull Bones: when battle flag 2 is set it uses the normal attack;
- * if it is still collapsed (unit work 2 is 1 or more) it first rebuilds itself with rebirth_event.
+ * if it is still collapsed (unit work 2 is 1 or more), it runs rebirth_event and ends the turn, even if it stays down.
  * After the item-use check it picks the normal attack 85 percent of the time;
  * otherwise, if there is free space on the stage, it calls a friend (call_friend_event) from either side.
  */
@@ -479,10 +479,11 @@ EVT_END()
 /**
  * Dull Bones' normal attack (weapon_honenoko_attack):
  * it picks a target, plays KRN_A_1 and KRN_A_2 and throws its bone (part 2, KRN_H_1) spinning across the stage
- * with the bone-throw sound; the target dodges as the bone passes it,
+ * with the bone-throw sound; pre-check results 3, 6 and 2 make the target dodge as the bone passes it,
  * and a hit applies the damage with the guard-timing check. The bone bounces and returns to the unit.
  */
 static EVT_BEGIN(normal_attack_event)
+
     // Picks the target: the preset first-attack target (after a short pause) when battle flag 2 is set, otherwise a
     // random opposing unit; with none it does nothing (or is flustered when confused).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -537,7 +538,7 @@ static EVT_BEGIN(normal_attack_event)
         END_LOOP
     END_SIBLING_EVENT
 
-    // Checks the outcome of the hit: a miss, dodge or guard goes to the no-damage branch; a connecting hit applies
+    // Checks the outcome of the hit: a miss or dodge goes to the no-damage branch; a connecting hit applies
     // the Action Command defence result and deals the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), 256, LW(5))
     SWITCH(LW(5))
@@ -559,8 +560,8 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss branch: the bone flies past the target and lands at the far edge of the stage, and the target starts its
-    // dodge when the bone gets level with it.
+    // Miss branch: the bone flies past the target and lands at the far edge of the stage; for results 3, 6 and 2,
+    // the target starts its dodge when the bone gets level with it.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)

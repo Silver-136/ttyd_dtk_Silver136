@@ -256,10 +256,11 @@ EVT_END()
 
 /**
  * Reaction when the Koopa Paratroopa loses its wings:
- * it drops with SFX_ENM_FALL1 and lands, then its pose table,
- * data and parts switch to the Koopa Troopa form (kind 14), and its wait, attack,
+ * its pose table, data and parts switch to the Koopa Troopa form (kind 14),
+ * then it drops with SFX_ENM_FALL1 and lands; its wait, attack,
  * damage and confusion events and shell-walk sounds are those of the Troopa.
  */
+
 // Install the ground Koopa tables and events; multiple damage hits also invoke the flip event.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
@@ -326,12 +327,14 @@ EVT_END()
  * and it returns to its place.
  */
 static EVT_BEGIN(attack_event_patapata)
+
     // Target: the first-strike target if the battle opened that way, otherwise one picked for its attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         WAIT_FRAMES(50)
     ELSE
+
         // It may use an enemy item instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -692,6 +695,7 @@ EVT_END()
  * while above 0 it shows the struggling pose NKT_S_3 and keeps waiting,
  * and at 0 it restores the normal defence and pose tables and hit offset with SFX_ENM_INSIDE2 and a hop.
  */
+
 // A flipped turn decrements the recovery counter; even the final recovery returns without attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -793,12 +797,14 @@ EVT_END()
 
 /**
  * Attack event of the Koopa Paratroopa: gets up first if it is flipped over;
- * otherwise it uses an enemy item if it has one, or hops into its shell,
+ * otherwise, outside a first strike, it can run a selected enemy-item script;
+ * if none is selected it hops into its shell,
  * spins up with a smoke trail and dashes into one target.
  * The pre-damage check decides between a dodge (it overshoots and turns back)
  * and a hit (camera shake, bounces off); then it walks home.
  */
 static EVT_BEGIN(attack_event)
+
     // Flipped over: it gets up instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -812,6 +818,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
         WAIT_FRAMES(30)
     ELSE
+
         // It may use an enemy item instead of attacking.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -839,7 +846,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_nokonoko_attack))
 
-    // The attack is declared and it walks to a spot in front of the target.
+    // The attack is declared and it turns to face the target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_nokonoko_attack))

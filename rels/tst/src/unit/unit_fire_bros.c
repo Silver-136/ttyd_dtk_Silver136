@@ -164,9 +164,10 @@ BattleUnitKind unit_fire_bros = {
 };
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Defence of the Fire Bro: 1 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * immune to fire (its fire-immunity attribute cancels the hit).
  */
 static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
 
@@ -181,6 +182,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
  */
 static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 40, 60, 100, 80, 100, 100, 95};
 #else
+
 /**
  * Defence of Fire Bro per element (normal, fire, ice, explosion, electric), subtracted from each hit:
  * 1 against every element.
@@ -439,7 +441,7 @@ EVT_END()
 
 /**
  * Resolves one fireball against the target LW(3), LW(4) (weapon in LW(6)) and returns LW(0) = 1 on a hit.
- * On a dodge (pre-check results 2, 3, 4, 6) the target starts its avoid animation and nothing else happens.
+ * On pre-check results 2, 3 or 6 the target starts its avoid animation; result 4 skips the hit without starting one.
  * A hit is marked for damage_check_last (parts work 10 of part 2 for the double throw; with LW(8) = 1, the
  * barrage, the mark of that target's slot in the fireball parts' work), then the guard result and the damage
  * are applied, as the last hit when LW(7) = 1.
@@ -579,6 +581,7 @@ EVT_END()
  * Then it is hidden and unit work 1 goes up by one.
  */
 EVT_BEGIN(fire_move_event)
+
     // The fireball leaves the Bro's hand with the throw sound, spinning.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FIREB_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -612,6 +615,7 @@ EVT_BEGIN(fire_move_event)
                     END_IF
                 END_IF
                 IF_INT_EQUAL(LW(14), 0)
+
                     // When the fireball reaches the target it either hits and vanishes, or is dodged and flies on.
                     CALL_CHILD(damage_check_no_last)
                 ELSE
@@ -854,7 +858,7 @@ EVT_END()
  * The Fire Bro's barrage (weapon_fire_bros_nagemakuri_attack): it declares the attack on all targets and gives
  * each fireball part (2 to 7) five random targets (fire_bros_nagemakuri_set_target) in its parts work, of which
  * only the first is used.
- * It then throws the six fireballs 15 frames apart with BRO_A_2A, turning toward each one's target
+ * It then throws the six fireballs 35 frames apart with BRO_A_2A, turning toward each one's target
  * (nagemakuri_judge_last_attack_event decides the last hits), and finishes once all six are done (unit work 1
  * reaches 6).
  */
@@ -924,7 +928,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
                 END_LOOP
             END_IF
 
-            // He turns toward each fireball's target and throws it, one every 15 frames.
+            // He turns toward each fireball's target and throws it, one every 35 frames.
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BRO_A_2A"))
             WAIT_FRAMES(20)
             CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(15), LW(10), LW(3))
@@ -948,6 +952,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // After the last fireball he waits for them all to land.
     LOOP(0)
         WAIT_FRAMES(1)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRE_DONE, LW(0))
@@ -957,7 +962,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
     END_LOOP
     WAIT_FRAMES(30)
 
-    // After the last fireball he waits for them all to land.
+
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN

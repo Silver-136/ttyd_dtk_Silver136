@@ -188,7 +188,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Init of Princess Peach's NPC in las_29: sets her talking and idle poses (S_3 and T_4)
+ * Init of Sir Grodus's NPC in las_29: sets his idle and talking poses (S_3 and T_4)
  * and starts the idle animation after the sequence is ready.
  */
 static EVT_BEGIN(syuryo_init)
@@ -278,7 +278,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * The 40 candles of the chamber (their positions and ids), sorted by X so all_hikari_onoff can light and
+ * The 40 candles of the chamber (their positions and ids), sorted by X so hikari_onoff can light and
  * snuff them in waves.
  */
 HikariList40 hikari_data = {
@@ -387,7 +387,7 @@ EVT_END()
 
 /**
  * Event script: lights candle LW(0) (its fire effect grows to 0.65 over 150 ms, then settles at 0.5,
- * with the candle- on sound); LW(1) selects the dark variant.
+ * with the candle-off sound); LW(1) selects the dark variant.
  */
 EVT_BEGIN(hikari_on_evt)
     SET_VALUE(LW(10), LW(0))
@@ -679,7 +679,7 @@ void b_peach_msgcb(s32 type, void* param) {
 
 /**
  * Script helper: makes the Shadow Queen (possessing Peach) bob up and down.
- * args[0] picks the direction (0 up, 1 down) and args[1] the step number;
+ * args[0] picks the phase (0 starts upward, 1 starts downward) and args[1] the step number;
  * it nudges her Y offset by an eased amount each call.
  */
 USER_FUNC(add_vy) {
@@ -838,7 +838,7 @@ static USER_FUNC(starstone_set_ry) {
 
 /**
  * Script helper: builds the message label "stg8_las_148_74_NN" for the voice number args[0] (wrapping to the
- * first voice if the number is 18 and Vivian has not joined) and returns it in args[1].
+ * first voice if the number is 18 and Ms. Mowz has not joined) and returns it in args[1].
  */
 USER_FUNC(make_koe_label) {
     static char name[32];
@@ -855,7 +855,7 @@ USER_FUNC(make_koe_label) {
 }
 
 /**
- * Script helper: picks a random position on the floor within about 200 by 190 units of the centre
+ * Script helper: picks a random screen position within about 200 by 190 units of the centre
  * where the next cheering voice message bubble appears; returns X, Y and Z (0) in args[0..2].
  */
 USER_FUNC(make_koe_pos) {
@@ -997,6 +997,7 @@ EVT_END()
  * and the party is taken to gor_01 (sekai_yami1).
  */
 EVT_BEGIN(last_evt_1)
+
     // Mario and his partner walk in through the west door and it closes behind them.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1334,7 +1335,8 @@ EVT_END()
  * and the map changes to usu_00 (sekai_yami2).
  */
 EVT_BEGIN(last_evt_2)
-    // The Shadow Queen speaks through Peach and orders Grodus around.
+
+    // The Shadow Queen speaks and orders Grodus around.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -310, 0, 0)
@@ -1443,6 +1445,7 @@ EVT_END()
  * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
  */
 EVT_BEGIN(last_evt_3)
+
     // Light floods the hall; the Shadow Queen is reborn in Peach's body.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1842,8 +1845,8 @@ EVT_BEGIN(last_evt_3)
 EVT_END()
 
 /**
- * Event script: makes the Shadow Queen (possessing Peach) float up and down forever (60 frames up, 60 frames
- * down), pausing while GF(2) is set.
+ * Event script: makes the Shadow Queen (possessing Peach) float up and down forever in two 60-step
+ * phases, pausing while GF(2) is set.
  */
 EVT_BEGIN(b_peach_fuwafuwa)
     LOOP(0)
@@ -1871,6 +1874,7 @@ EVT_END()
  * voices of everyone) to continue with last_evt_3_2.
  */
 EVT_BEGIN(last_evt_3_1)
+
     // The defeated Shadow Queen hovers over the floor.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2031,7 +2035,8 @@ EVT_END()
 
 /**
  * Event script: shows the cheering voices of everyone Mario has met as speech bubbles at random places around
- * him, one every 300 ms with at most six on screen, cycling through the voice messages stg8_las_148_74_NN.
+ * him, at least 300 ms apart, cycling through the voice messages stg8_las_148_74_NN.
+ * After each spawn it waits until fewer than six voice messages remain active.
  */
 EVT_BEGIN(koe_evt)
     SET_VALUE(LW(0), 1)
@@ -2112,12 +2117,13 @@ EVT_END()
 
 /**
  * Event script: the scene where everyone's voices call to Mario and heal him.
- * The partner and the three Sirens speak, Peach answers,
+ * The partner speaks while the three Sirens look around, and Peach answers,
  * Mario's party is fully healed with evt_pouch_all_party_recovery, the Shadow Queen (possessing Peach) is
  * angered, and the second fight with her (battle 17) follows;
  * afterwards the story becomes STG8_16_THE_RETURN_OF_THE_QUEEN and last_evt_4 starts.
  */
 EVT_BEGIN(last_evt_3_2)
+
     // Voices of everyone Mario met call out to him in the darkness.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2153,7 +2159,7 @@ EVT_BEGIN(last_evt_3_2)
 
     // BUG: textbox limit. Every message here opens a window (msgWindow_Entry), and there are only
     // 7 window slots; windowEntry returns -1 when all are in use and msgWindow_Entry does not check it.
-    // This opens ten, 200 ms apart, so it always runs past the limit while the earlier ones are open.
+    // This starts ten message events, 200 ms apart, without waiting for earlier windows to close.
     LOOP(10)
         CALL(make_koe_label, LW(0), LW(1))
         CALL(make_koe_pos, LW(2), LW(3), LW(4))
@@ -2622,6 +2628,7 @@ EVT_END()
  * then the story is set to STG8_END_AFTER_THE_BATTLE and the map changes to gor_11.
  */
 EVT_BEGIN(last_evt_4)
+
     // The Shadow Queen is gone: the music stops and the Sirens and Mario's partners speak.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
@@ -3162,8 +3169,8 @@ EVT_BEGIN(last_evt_4)
 EVT_END()
 
 /**
- * Init of Peach's glow in las_29: at STORY_STG8_15_GRODUS,
- * sets up the glow effect around Peach and runs it with the blinking power table.
+ * Init of Sir Grodus's glow in las_29: at STORY_STG8_15_GRODUS,
+ * sets up the glow effect around Sir Grodus and runs it with the blinking power table.
  */
 static EVT_BEGIN(shuryolight_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
@@ -3173,7 +3180,7 @@ static EVT_BEGIN(shuryolight_init)
     RETURN
 EVT_END()
 
-/** Event script: removes Sir Grodus's NPC and his light effect if he still exists after a short wait. */
+/** Event script: if Sir Grodus's NPC exists, waits briefly and removes him and his light effect. */
 EVT_BEGIN(shuryolight_delete)
     CALL(evt_npc_check, STRING("シュリョー"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

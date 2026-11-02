@@ -100,7 +100,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of the L. Tentacle (percent chance to take each status):
+ * Status vulnerability of the L. Tentacle (multipliers for each status's base chance):
  * immune to sleep, stop, dizzy, poison, confusion, electric shock, freeze, growing huge, shrinking, attack up,
  * attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
  * invisibility and instant kill.
@@ -168,7 +168,7 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_gesso_left_arm", "c_gesso3", 0.0f, 0.0f, 0.0f, 270.0f, 20.0f, 0.0f, 270.0f, 20.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, VERSION_PICK(PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_UNTATTLEABLE, PART_ATTR_MAIN | PART_ATTR_GUARD_COVER | PART_ATTR_UNTATTLEABLE | PART_ATTR_NO_SHADOW), 0, pose_table},
 };
 
-/** Init script of the Blooper's left tentacle. Registers its damage, phase and attack scripts and starts it waiting. */
+/** Init script of the Blooper's left tentacle. Registers its damage, wait and attack scripts and starts it waiting. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -202,7 +202,7 @@ EVT_END()
  * Damage reaction of the Blooper's left tentacle (JP and later).
  * Plays the hit pose (38 or 39 depending on the damage pattern), runs the damage and,
  * if the tentacle was defeated, the death event; otherwise it returns to the wait pose.
- * Afterwards the body is told to wait again when no tentacle fall is in progress.
+ * Afterwards the body is told to wait again when its busy work value is nonpositive.
  */
 EVT_BEGIN(gesso_left_arm_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -285,7 +285,7 @@ BattleWeapon weapon_gesso_left_arm_attack = {
 };
 
 /**
- * Attack script of the left tentacle: uses an enemy item if it has one; otherwise samples a target for
+ * Attack script of the left tentacle: may use an enemy item; otherwise samples a target for
  * weapon_gesso_left_arm_attack, swings (GSO_A1_1) with the arm-move and attack sounds,
  * damage-checks the target (and each further one if the weapon hits several) and waits for the pose to finish.
  */

@@ -98,7 +98,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
 /**
  * Defence of the Moon Cleft while flipped over against each element (normal, fire, ice, explosion,
- * electric): none, so every hit does its full damage.
+ * electric): no numerical defence; its fire-immunity attribute remains active.
  */
 static BattleUnitDefense defence_turn = {0};
 
@@ -248,8 +248,8 @@ EVT_END()
 
 /**
  * Waits half a second, then shows the toge_flush spike flash on the Moon Cleft's head;
- * the flash sits higher and farther out for a big (STATUS_HUGE)
- * or small (STATUS_TINY) Moon Cleft than for a normal one.
+ * the flash sits higher and farther out for a big (STATUS_HUGE) Moon Cleft,
+ * and lower and nearer for a small (STATUS_TINY) one than for a normal one.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
@@ -361,7 +361,7 @@ EVT_END()
 
 /**
  * Attack event of the Moon Cleft: if flipped over it only wakes up (wakeup_event).
- * Otherwise it uses an enemy item if it has one, else picks a target with weapon_sinemon_attack,
+ * Otherwise it uses an enemy item if the item-use check selects one, else picks a target with weapon_sinemon_attack,
  * backs away with a short hop, then charges at the target (dash sound, speed 5).
  * A miss runs it past the target; a hit shakes the camera
  * and applies the damage with the action command defence check,
@@ -382,7 +382,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
-        // It uses an enemy item instead if it has one.
+        // It uses an enemy item instead if the item-use check selects one.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))

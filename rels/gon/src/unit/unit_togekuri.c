@@ -402,6 +402,7 @@ static f32 SinTable[] = {
  * and it hops back to its place.
  */
 static EVT_BEGIN(attack_event)
+
     // It may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -475,7 +476,7 @@ static EVT_BEGIN(attack_event)
     ADD(LW(2), 2)
     SUBTRACT(LW(1), 4)
 
-    // It jumps onto the target; the pre-damage check decides between a dodge and a hit.
+    // It jumps onto the target; the pre-damage check decides between a miss and a hit.
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 28, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_togekuri_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -496,6 +497,7 @@ static EVT_BEGIN(attack_event)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+
         // Label 98 is not defined in this attack script.
         GOTO(98)
         CASE_END

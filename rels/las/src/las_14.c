@@ -107,7 +107,7 @@ static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, 
 
 /**
  * Projects the eight corners of a 100 by 100 by 100 box around the hit object named name to the screen
- * and returns in x, y, w, h the rectangle that bounds them, clamped to the 608 by 480 capture buffer.
+ * and returns in x, y, w, h their screen rectangle, with partial edge clamping against the 608 by 480 capture buffer.
  * Always returns TRUE.
  */
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h) {
@@ -292,7 +292,7 @@ EVT_END()
 
 /**
  * Event script: the cloud puzzle of las_14 is solved.
- * The key chest becomes visible and solid, the collision A_kura is turned on,
+ * The key chest becomes visible and solid, the collision A_kura is turned off,
  * GSWF_LAS14_FLURRIE_GUST_SOLVED is set and a success jingle plays.
  */
 static EVT_BEGIN(cloud_evt)
@@ -355,9 +355,9 @@ EVT_END()
 /**
  * Script helper (runs as its own event, one per cloud): the state machine of the cloud puzzle.
  * While Flurrie is the partner and her gust hits the cloud's hit area, it captures the cloud's paper animation,
- * plays the wind sound, and counts how long she keeps blowing;
- * once the count passes the limit (180) it runs the end event and the cloud disappears for good.
- * If she stops for more than half a second it resets.
+ * plays the wind sound, and advances a counter by 2 per update in the blowing state, including brief hit losses;
+ * once the count passes the limit (180) while the gust hits, it runs the end event and the cloud disappears for good.
+ * Leaving gust motion starts cleanup immediately; losing all hit matches uses a 30-update grace counter.
  */
 static USER_FUNC(evt_cloud_main) {
     CloudWork* wp = (CloudWork*)event->lwData[0];

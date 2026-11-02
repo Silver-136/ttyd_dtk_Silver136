@@ -921,8 +921,9 @@ USER_FUNC(evt_party_yoshi_ride) {
 }
 
 /**
- * While Mario rides Yoshi, flutters Yoshi at speed args[1] for args[2] milliseconds and blocks
- * until the flutter ends.
+ * While Mario rides Yoshi, scripts his flutter at speed args[1] and blocks while its control value is nonnegative.
+ * args[2] passes through sysMsec2Frame here and again in evt_set_yoshi_frm; it is not a countdown duration.
+ * Landing sets the stored value to -1.
  */
 USER_FUNC(evt_party_yoshi_fly) {
     PartyEntry* p;
@@ -1099,8 +1100,9 @@ USER_FUNC(evt_party_cloud_breathout) {
 }
 
 #if VERSION >= VERSION_US
-/** US only. */
-// US only.
+
+/** US and PAL only. */
+// US and PAL only.
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_party_cloud_lock_animations_on_off) {
     PartyEntry* p;

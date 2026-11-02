@@ -278,8 +278,8 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Where Mario is put back after falling through any of the 58 floor panels (mod_00 and up) that fall away
- * when the Shadow Sirens battle ends; all send him to a point far below the floor.
+ * Where Mario is put back after falling through the 57 listed floor panels (mod_00 and up) that fall away
+ * when the Shadow Sirens battle ends; y = -1000 uses each hit object's own position.
  */
 static HitDamageReturn dmgRetPoint[] = {
     {"mod_00", {0.0f, -1000.0f, 0.0f}},
@@ -478,7 +478,7 @@ EVT_END()
 
 /**
  * Event script: Bobbery explodes the first Chain Chomp statue (map object wan3, hit object A_wan1).
- * Hides the letterbox, locks Mario's controls, runs bomb_wanwan and sets GSWF_LAS09_CHOMP_STATUE_1_BOMBED.
+ * Disables automatic letterboxing, locks Mario's controls, runs bomb_wanwan and sets GSWF_LAS09_CHOMP_STATUE_1_BOMBED.
  */
 EVT_BEGIN(bomb_wanwan1_evt)
     CALL(evt_cam_letter_box_disable, 1)
@@ -517,6 +517,7 @@ EVT_END()
  * plays a success jingle if the other switch is already pressed.
  */
 EVT_BEGIN(switch_1_evt)
+
     // Controls off; the camera swings to the platforms the first switch controls.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 400, 1368, 0, -40, 700, 1000, EASING_SINE_IN_OUT)
@@ -528,7 +529,8 @@ EVT_BEGIN(switch_1_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 1500)
     CALL(evt_snd_sfxoff, LW(10))
     BEGIN_INLINE_EVENT
-        // The third platform segment fades in and flips into place.
+
+        // The third platform segment becomes translucent and flips into place.
         CALL(evt_mapobj_get_position, STRING("S_daizadai1_3"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR1"), LW(0), LW(1), LW(2), 0)
         BEGIN_SIBLING_EVENT
@@ -630,6 +632,7 @@ EVT_END()
  * which is made walkable.
  */
 EVT_BEGIN(switch_2_evt)
+
     // Controls off; the camera swings to the platforms the second switch controls.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 450, 45, 0, -75, -558, 1000, EASING_SINE_IN_OUT)
@@ -641,7 +644,8 @@ EVT_BEGIN(switch_2_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0048828125f), 1500)
     CALL(evt_snd_sfxoff, LW(10))
     BEGIN_INLINE_EVENT
-        // The third platform segment fades in and flips into place.
+
+        // The third platform segment becomes translucent and flips into place.
         CALL(evt_mapobj_get_position, STRING("S_daizadai2_3"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PORT_APPEAR1"), LW(0), LW(1), LW(2), 0)
         BEGIN_SIBLING_EVENT
@@ -753,7 +757,7 @@ EVT_BEGIN(goikkou_talk)
 EVT_END()
 
 /**
- * Init event of Beldam (Majolyne): clears her battle-info flag and sets status bit 2,
+ * Init event of Beldam (Majolyne): clears her stop-for-event flag and sets status bit 2,
  * which makes her turn to face the way she moves (the evt_npc move commands check it).
  */
 EVT_BEGIN(majyorin_init)
@@ -763,7 +767,7 @@ EVT_BEGIN(majyorin_init)
 EVT_END()
 
 /**
- * Init of the Marilyn NPC: clears its battle info flag and sets status bit 2 (evt_npc_status_onoff),
+ * Init of the Marilyn NPC: clears its stop-for-event flag and sets status bit 2 (evt_npc_status_onoff),
  * which makes it turn to face the way it moves (the evt_npc move commands check it).
  */
 static EVT_BEGIN(maririn_init)
@@ -772,7 +776,7 @@ static EVT_BEGIN(maririn_init)
     RETURN
 EVT_END()
 
-/** Init event of Doopliss (Rampell): same as Beldam's (no battle info, turns to face the way he moves). */
+/** Init event of Doopliss (Rampell): same as Beldam's (clears the stop-for-event flag, turns to face the way he moves). */
 EVT_BEGIN(ranpel_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)

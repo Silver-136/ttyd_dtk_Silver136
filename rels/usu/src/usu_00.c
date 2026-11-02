@@ -255,8 +255,8 @@ static USER_FUNC(getYoshiColor) {
 }
 
 /**
- * Script helper: clears the TEV-callback material flags on Mario's paper-anim group,
- * so the shadow tint applied during the night scenes no longer applies to him.
+ * Script helper: clears the TEV-callback material flags on the active partner's paper-anim group,
+ * so the shadow tint applied during the night scenes no longer applies to the partner.
  */
 USER_FUNC(party_tev) {
     animPoseSetMaterialFlagOff(partyGetPtr(PARTY_SLOT_PARTY)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK_MASK);
@@ -845,7 +845,7 @@ EVT_BEGIN(crow_e_init)
 EVT_END()
 
 /**
- * Wandering script of Villagers C and E, the pig villagers A, D and E, and Vivian while she searches:
+ * Wandering script of Villagers C and E, the pig villagers A, D, E and K, the pig Mayor, and Vivian while she searches:
  * from where it stands, the NPC wanders within 50 units of that spot at speed 30 with the shared urouro helpers.
  */
 static EVT_BEGIN(urouro_move)
@@ -1082,9 +1082,10 @@ static NpcSetupInfo npcEnt[] = {
 
 /**
  * Chapter 4 opening cutscene: Mario arrives in Twilight Town, a human villager turns out to be a pig,
- * the Mayor explains and Mario's party reacts; the town gate rotates open at the end.
+ * the Mayor explains and Mario's party reacts; his house door opens and closes as he enters.
  */
 EVT_BEGIN(usu00_stage4_coming_event)
+
     // The camera drops from the sky as Mario and the party arrive by pipe; the partner looks around.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -1336,7 +1337,7 @@ EVT_END()
  * Cutscene in Twilight Town (Mario and the partner moved off screen):
  * Beldam gloats that the Super Bombomb will win them Mario's map and asks Vivian for it (stg4_usu_97 to 99);
  * Vivian never had it (100, 102; she switches to the troubled tribe "ビビアン困る"),
- * Beldam calls her a liar and sends her to find it or be punished (101, 103 to 106),
+ * Beldam calls her a liar and sends her to find it or be punished (101, 103, 104, 106),
  * with Marilyn grunting along (98, 107).
  * Beldam and Marilyn vanish, the story becomes STG4_11_SUPERBOMBBOMB_LOST and the map changes to gra_06.
  */
@@ -1472,10 +1473,11 @@ EVT_END()
 
 /**
  * Cutscene where Vivian asks about the Super Bombomb:
- * Mario can hand it over from the item menu, she thanks him and (on yes) the item is spent
- * and she joins the party.
+ * Mario can hand it over from the item menu and she thanks him. The item is spent before his answer,
+ * and she joins the party after either answer.
  */
 EVT_BEGIN(usu00_vivian_joinup_event)
+
     // Vivian hears Mario found the Super Bombomb; he holds it out and she takes it, then notices it is broken.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_NO_HIT)
@@ -1669,7 +1671,7 @@ static EVT_BEGIN(cam_down)
 EVT_END()
 
 /**
- * Background loop: while Vivian is the active partner (id 6) but not in a normal status,
+ * Background loop: while Vivian is the active partner (id 6) but her ability status is not 2,
  * it clears the crow-talk gates GW(0) and GW(1).
  */
 EVT_BEGIN(usu00_check_vivian)
@@ -1691,10 +1693,11 @@ EVT_END()
 
 /**
  * Background watcher for crows A and B: when Mario is near (area depends on his mode)
- * and Vivian is not the partner, the crow talks ("kpa_stg5_009_7_1" in the Bowser interlude,
+ * and A is pressed with no partner ability in use, the crow talks ("kpa_stg5_009_7_1" in the Bowser interlude,
  * "stg4_jin_152" otherwise); GW(0) gates repeats.
  */
 EVT_BEGIN(usu00_crowAB_talk_event)
+
     // Wait until this crow pair is allowed to talk again.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -1832,6 +1835,7 @@ EVT_END()
 
 /** Background watcher for crows C, D and E; same as the A/B watcher but using GW(1) as its gate. */
 EVT_BEGIN(usu00_crowCDE_talk_event)
+
     // Wait until this crow trio is allowed to talk again.
     SET_VALUE(LW(15), 0)
     LABEL(0)
@@ -2052,7 +2056,7 @@ static EVT_BEGIN(evt_door_1_1)
     RETURN
 EVT_END()
 
-/** Empty door script (evtOut of door_1); just returns. */
+/** Empty door script; just returns and is not registered in door_1. */
 static EVT_BEGIN(evt_door_1_2)
     RETURN
 EVT_END()
@@ -2398,7 +2402,7 @@ static BeroEntry bero_oshimodo[] = {
 
 /**
  * Bowser interlude: Bowser's (the player slot's) pipe attempt;
- * plays "kpa_stg5_009_2", runs the pipe, then loops on the pipe cases until the scene is done.
+ * plays "kpa_stg5_009_2", runs the pipe, then disables its case until Bowser's motion reaches 3 or 10.
  */
 EVT_BEGIN(koopa_dokan_evt)
     CALL(evt_mario_key_onoff, 0)
@@ -2531,7 +2535,7 @@ EVT_END()
 
 /**
  * Bush "kusa_01" script: during the Bowser interlude,
- * Bowser touching it plays "kpa_stg5_009_7" when the bush is touched and ends the BGM.
+ * Bowser pressing A in front of it plays "kpa_stg5_009_7" and ends the BGM.
  */
 EVT_BEGIN(kusa_01_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_48_BOWSER_TWILIGHT_TOWN)
@@ -2608,8 +2612,8 @@ EVT_BEGIN(evt_ichikorori_ball_get)
 EVT_END()
 
 /**
- * Touch trigger for the loose Super Bombomb ("ichikorori" ball):
- * once Vivian has joined, it bounces the item away from Mario, with gravity and bounce rate set,
+ * A-button trigger for the loose Super Bombomb ("ichikorori" ball):
+ * from STG4_12_VIVIAN, it bounces the item away from Mario, with gravity and bounce rate set,
  * until he picks it up.
  */
 EVT_BEGIN(usu_00_touch_ichikorori_ball)
@@ -2692,7 +2696,7 @@ ExtTexInfo kpaSen_ext_entry_data[] = {
 
 /**
  * Init of the Koopa-troop crowd effect used in the Bowser interlude:
- * allocates 200 sprite records and lays them out in rows (100 troopers, 100 spiky ones).
+ * allocates 200 sprite records and lays them out in rows (100 troopers, 100 mixed Koopatrols, Hammer Bros and Magikoopas).
  */
 void kpaSen_ext_init(void) {
     ExtdrvPose* pose = extGetPosePtr();
@@ -2893,7 +2897,7 @@ USER_FUNC(kpaSen_zako_syugo) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: resets crowd sprites 100 to 199 (the spiky ones) to state 0 so they gather again. */
+/** Script helper: resets crowd sprites 100 to 199 (Kammy's mixed troops) to state 0 so they gather again. */
 USER_FUNC(kpaSen_toge_syugo) {
     s32 i;
 
@@ -3610,15 +3614,6 @@ EVT_END()
 
 /**
  * Final-chapter scene ("sekai yami", the world goes dark)
- * when the map is entered through sekai_yami2 at STORY_STG8_15_GRODUS:
- * with Mario and the partner off stage the town is drawn in darkness (envSetYami),
- * the light flickers with SFX_STG8_LIGHT1 (once from US on, twice before),
- * villagers A to E turn about in panic (sekai_yami_npc), crows C, D and E fly off,
- * a quake rumbles with the camera shaking, a villager screams (stg8_dark_05)
- * and the game moves on to muj_01 (entrance sekai_yami2).
- */
-/**
- * Final-chapter scene ("sekai yami", the world goes dark)
  * when the map is entered through sekai_yami2 at STG8_15_GRODUS:
  * with Mario and the partner off stage the town is drawn in darkness (envSetYami),
  * the light flickers with SFX_STG8_LIGHT1 (once from US on, twice before),
@@ -3627,6 +3622,7 @@ EVT_END()
  * and the game moves on to muj_01 (entrance sekai_yami2).
  */
 static EVT_BEGIN(sekai_yami_evt)
+
     // The town is drawn in darkness and the light flickers.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -3700,7 +3696,6 @@ static EVT_BEGIN(sekai_yami_evt)
     END_INLINE_EVENT
 
     // The ground quakes and a villager cries out, then the game moves on to muj_01.
-    // The ground quakes and a villager cries out, then the game moves on to muj_01.
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(0))
     SPAWN_EVENT(PTR(sekai_yami_shake))
     WAIT_MS(2000)
@@ -3754,6 +3749,7 @@ EVT_END()
  * and the game moves on to muj_01 (entrance minnnanokoe).
  */
 static EVT_BEGIN(minnnanokoe_evt)
+
     // Set up the dark town with the townsfolk and a spinning Crystal Star effect over the square.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -4055,6 +4051,7 @@ EVT_END()
  * and starts Chapter 4 and Bowser interlude cutscenes.
  */
 EVT_BEGIN(usu_00_init_evt)
+
     // In Bowser's interlude (from Peach's talk with TEC to Bowser's town visit) Mario is Bowser; GF(1) marks it.
     SET_VALUE(GF(1), 0)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_47_PEACH_TEC_TALK)
@@ -4064,7 +4061,7 @@ EVT_BEGIN(usu_00_init_evt)
         END_IF
     END_IF
 
-    // Music: the Shadow Sirens' theme while Mario has lost his name, chapter 8 voices or silence in the darkness
+    // Music: the Shadow Sirens' theme from STG4_10_02_TRADING_PLACES through STG4_12_01_SUPERBOMBBOMB_FOUND, chapter 8 voices or silence in the darkness
     // scenes, otherwise the town theme.
     IF_INT_EQUAL(GF(1), 0)
         SWITCH(GSW_STORY_PROGRESS)
@@ -4261,7 +4258,8 @@ EVT_BEGIN(usu_00_init_evt)
         CALL(evt_cam_road_reset)
     END_IF
 
-    // After the Peach and Bowser interludes the party is healed and the Mayor's farewell scene plays.
+    // After the Peach and Bowser interludes the Mayor's farewell scene plays; US and later always heal the party,
+    // while earlier versions heal it only if no partner is active on entry.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_08_BOWSER_ROGUEPORT_DOCK)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)

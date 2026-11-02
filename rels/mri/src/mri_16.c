@@ -51,7 +51,6 @@ EvtWord mri_16_init_evt[282];
 /**
  * Reads the bar-switch state ssf for the script:
  * returns it as a float in args[0] (0 idle, 1 Mario is riding the bar switch, 2 he left it).
- * The odd extra statements only keep the compiled order of the original.
  */
 static USER_FUNC(ss_check) {
     s32 a;
@@ -391,8 +390,8 @@ EVT_BEGIN(switch_up_down)
 EVT_END()
 
 /**
- * Where Mario is put back after damage from falling through the floor panels: the lower floor on either
- * side, or a point far below the room.
+ * Where Mario is put back after damage from falling through the floor panels: upper-floor points on either
+ * side, a lower-floor point, or a point far below the room.
  */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"S_f2_yuka01_l", {-248.0f, 80.0f, 27.0f}},
@@ -405,7 +404,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 /**
  * Script when the treasure chest is opened: the Shrink Stomp badge appears above the chest
  * and Mario collects it with the normal item fanfare.
- * From US on the badge can return to the chest if Mario leaves it.
+ * In retail, an uncollected badge is marked for the badge shop on leaving the map.
  */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)

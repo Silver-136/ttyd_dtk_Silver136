@@ -871,6 +871,7 @@ EVT_BEGIN(talk_kino5)
     CALL(evt_pouch_get_yoshiname, LW(10))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
+
         // Before Gonzales debuts the son is a fan of Prince Mush.
         CALL(evt_msg_print, 0, STRING("stg3_npc_02_06_01"), 0, 0)
         CASE_LESS(STG3_32_BOSS_BATTLE)
@@ -1771,6 +1772,7 @@ void fan_disp(CameraId camera, void* param) {
 
 #pragma opt_propagation off
 static Vec fan_zero;
+
 /**
  * Updates the crowd toward Mario when GF(10) is set, otherwise チャンピョン, with repulsion between walking fans.
  * check_hammer results 1 and 2 start the arc and drift states, then hide the sprite.

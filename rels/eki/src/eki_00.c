@@ -68,6 +68,7 @@ static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
 static void ext_moamoa_main(void);
 #pragma inline_max_total_size(100000)
+
 /**
  * Polynomial sine used by the Smorg swarm code (fast approximation, input in radians 0 to 2 pi),
  * inlined where the swarm moves.
@@ -200,7 +201,7 @@ static EvtWord evt_kanban[14];
 EvtWord eki_00_init_evt[99];
 
 /**
- * Smorg (moamoa) sprite entries for the swarm in the cutscene: the c_n_moa_a model with its S_1 animation,
+ * Smorg (moamoa) sprite entries for the swarm in the cutscene: the c_n_moa_a and c_n_moa_b models with S_1 and D_1 animations,
  * one entry per animation phase offset.
  */
 static ExtTexInfo ext_moamoa_data[] = {
@@ -255,10 +256,11 @@ static ExtTexInfo ext_moamoa_data[] = {
 
 
 #pragma dont_inline on
+
 /**
  * Splits the flat ext_moamoa_data table (one row per animation frame) into wp->defs:
  * one MoamoaPoseDef per model and animation name, holding its first frame, frame count,
- * speed and whether it loops (animation names starting with J play once).
+ * duration in frames and a loop flag (cleared for animation names starting with J).
  */
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = ext_moamoa_data;
@@ -294,6 +296,7 @@ static void moamoa_pose_init(void) {
     wp->numDefs++;
 }
 #pragma dont_inline reset
+
 /**
  * Per-frame animation step for every Smorg in the swarm:
  * turns the elapsed render time into a position in the current pose's frame range
@@ -420,8 +423,8 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
 }
 
 /**
- * Script helper: sends every Moamoa to its merge point (state 14, staggered timers) and blocks
- * until all have gathered; then it marks them all as merged into the big Smorg
+ * Script helper: sets every Moamoa to state 14 with staggered timers and blocks
+ * until all have MOAMOA_FLAG_FUSION_ARRIVED; then it marks them all as merged into the big Smorg
  * and gives them the c_n_moa_a standing pose.
  */
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
@@ -554,6 +557,7 @@ static f32 randf(f32 min, f32 max) {
 __declspec(section ".rodata") static Vec ext_moamoa_t0 = {0.0f, 0.0f, 10.0f};
 __declspec(section ".rodata") static Vec ext_moamoa_t1 = {0.0f, 0.0f, 10.0f};
 __declspec(section ".rodata") static Vec ext_moamoa_t2 = {0.0f, 0.0f, 10.0f};
+
 /**
  * Ext-pose init callback for the Smorg swarm (registered by evt_moamoa_init):
  * allocates the work area and one Moamoa per pose, scatters them randomly around the first swarm target,
@@ -603,6 +607,7 @@ static void ext_moamoa_init(void) {
     }
 }
 #pragma opt_lifetimes reset
+
 /**
  * Draw callback for the swarm: loads the ext-pose render state, vertices, textures and TEV, draws all poses and,
  * when drawing into the offscreen camera, adds the bounding box to the "offscreen" buffer.
@@ -655,6 +660,7 @@ static void ext_shadow_disp(CameraId camera, void* param) {
     }
 }
 #pragma dont_inline on
+
 /**
  * Starts one Smorg's hop to (x, y, z): optionally snaps the destination to the floor below it,
  * computes the jump time from the distance and speed and the initial vertical speed from the height difference
@@ -694,6 +700,7 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 }
 #pragma dont_inline reset
 #pragma opt_lifetimes off
+
 /**
  * Tests one Smorg against Mario and the partners:
  * returns 1 when Mario lands on it, 2 when a hammer swing or a Koops shell hits it,
@@ -800,6 +807,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 #pragma opt_lifetimes reset
 #pragma opt_lifetimes off
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
+
 /**
  * Per-frame update of the whole Smorg swarm: tracks Mario's idle and hammer time and Flurrie's breath,
  * applies hit results (stomp, hammer, shell, breath, bomb) to each Smorg
@@ -1709,13 +1717,14 @@ EVT_END()
 /**
  * Elevator ride from the upper floor to the lower one:
  * opens the doors, walks Mario and the partner in, closes the doors,
- * fades the capture image of the old floor out while the cage moves, then fades a capture of the new floor in
+ * fades the capture image of the old floor out as the doors close, then moves the cage and fades a capture of the new floor in
  * as the doors open there. Before the Smorgs are swatted (story below STG6_40_SWATTING_SMORGS) the
  * swarm, which lives on the lower floor, is drawn into that picture and then made active. On arrival it sets
  * up the lower floor for the story step: the lever, the bridge switch and the origami stairs; the uncollected
  * Close Call P of the upper floor is moved 2000 units down while Mario is below.
  */
 EVT_BEGIN(evt_elv_down)
+
     // The elevator doors open and Mario walks to the doorway.
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1741,7 +1750,7 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_mario_mov_pos2, 190, -160, FLOAT(60.0f))
     CALL(evt_mario_set_dir, 270, 200, 0)
 
-    // The upper floor is captured into a picture that will fade away over the ride.
+    // The upper floor is captured into a picture that will fade away as the doors close.
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_00"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_07"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
@@ -1913,6 +1922,7 @@ EVT_END()
  * cage.
  */
 EVT_BEGIN(evt_elv_up)
+
     // The music fades; the doors open and Mario walks to the doorway.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     BEGIN_INLINE_EVENT
@@ -1942,7 +1952,7 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_mario_set_dir, 270, 0, 0)
     WAIT_MS(500)
 
-    // The lower floor is captured into a picture that will fade away over the ride; before the Smorgs are
+    // The lower floor is captured into a picture that will fade away as the doors close; before the Smorgs are
     // swatted the swarm stops and is drawn into that picture.
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_00"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_07"), STRING("offscreen"))

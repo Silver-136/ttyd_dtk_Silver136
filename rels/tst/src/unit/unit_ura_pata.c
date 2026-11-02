@@ -264,7 +264,7 @@ EVT_END()
 /**
  * Fall reaction when the Shady Paratroopa loses its wings:
  * it drops with SFX_ENM_FALL1 and becomes a Shady Koopa, taking the walking data tables,
- * attack and walk/run sounds; after a hit of at most 1 HP of damage it lands on its feet,
+ * attack and walk/run sounds; when its HP-damage counter is at most 1 it lands on its feet,
  * otherwise it is also flipped (dmg_turn_event).
  */
 static EVT_BEGIN(dmg_fall_event)
@@ -328,6 +328,7 @@ EVT_END()
  * a miss makes it fly past, a hit applies the damage, and it returns to its stance.
  */
 static EVT_BEGIN(attack_event_patapata)
+
     // Use the target of the opening first attack if there was one; otherwise use an enemy item, or choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -721,7 +722,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Flips the Koopa onto its back when it is hit while helpless:
+ * Flips the Koopa onto its back in its turn-over damage reaction:
  * it switches to the upside-down defence and pose tables (NKT_D_1, then NKT_S_2),
  * sets the flipped status flag and a flipped-over counter of 2 turns, lowers its hit offset,
  * and bounces with SFX_ENM_INSIDE1.
@@ -847,13 +848,14 @@ static EVT_BEGIN(first_attack_event)
 EVT_END()
 
 /**
- * The Koopa's attack: while it is flipped over it just wakes up (wakeup_event);
+ * The Koopa's attack: while flipped it runs wakeup_event, attacking again while the counter remains nonzero or righting itself at zero;
  * otherwise it uses an item or picks a target, pulls into its shell (SFX_ENM_NOKO_SHELL1) and spins into it,
  * kicking up kemuri_test dust; a miss lets it slide past, a hit applies the damage,
  * and it returns to its stance.
  */
 static EVT_BEGIN(attack_event)
-    // If the Koopa is flipped over, it first rights itself with wakeup_event.
+
+    // If flipped over, it runs wakeup_event: another shell attack unless the counter reaches zero.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)
@@ -1050,6 +1052,7 @@ static EVT_BEGIN(ura_attack_event)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(100)
     BEGIN_SIBLING_EVENT
+
         // The Shady Koopa hops up and spins around into its shell.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_NOKO_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5f))

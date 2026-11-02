@@ -29,11 +29,6 @@ typedef struct StChgMsgData {
     const char* msg0;
 } StChgMsgData;
 
-/**
- * Message for each status change announcement (the Japanese status name is only a label):
- * msg1 when the status took hold, msg0 when not; only Charge differs ("...But it had no effect!").
- * Ends with type -1.
- */
 #if VERSION <= VERSION_DEMO_US
 s8 _st_pri_data[] = {
     STATUS_CHARGE, //charge is elevated
@@ -63,6 +58,12 @@ s8 _st_pri_data[] = {
     -1,
 };
 #endif
+
+/**
+ * Message for each status change announcement (the Japanese status name is only a label):
+ * msg1 when the change is marked changed, msg0 otherwise; only Charge differs ("...But it had no effect!").
+ * Ends with type -1.
+ */
 StChgMsgData _st_chg_msg_data[] = {
     { 4, "\202\307\202\255", "msg_st_chg_poison", "msg_st_chg_poison" },
     { 16, "\203`\203\203\201[\203W", "msg_st_chg_charge", "msg_st_chg_charge3" },
@@ -447,8 +448,8 @@ BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
 
 /**
  * Empties the unit's six-entry status-change queue (statusChangeInfo).
- * Called when the unit enters battle, from BtlUnit_ClearStatus and (not in the demos)
- * after the status messages have been shown.
+ * Called when the unit enters battle and from BtlUnit_ClearStatus; in JP and later,
+ * status-message processing also clears it while a message is active.
  */
 void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
     s32 i;

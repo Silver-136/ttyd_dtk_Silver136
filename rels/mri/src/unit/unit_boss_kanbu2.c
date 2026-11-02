@@ -90,8 +90,8 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 /**
- * Status vulnerability of Lord Crump (percent chance each status takes hold): immune to fright, Gale Force,
- * instant KO; the rest take hold at 80% or better.
+ * Status vulnerability of Lord Crump (multipliers on status chances): immune to fright, Gale Force,
+ * and instant KO; the rest have 100% multipliers.
  */
 static StatusVulnerability regist = {
     100, // sleep
@@ -193,7 +193,7 @@ EVT_END()
 /**
  * Lord Crump's defeat script (data table entry 49):
  * prints a Japanese debug message ("after this he is due to ride the Magnus von Grapple"),
- * hops off 300 units to the right and removes himself from the battle.
+ * hops off to x = 300 and removes himself from the battle.
  */
 static EVT_BEGIN(dead_event)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("このあと\nまぐなむばってんだーに　のるよてい<key>"), 0, 0)
@@ -204,7 +204,7 @@ static EVT_BEGIN(dead_event)
 EVT_END()
 
 /**
- * Lord Crump's turn: uses an enemy item if he has one,
+ * Lord Crump's turn: uses an enemy item when the item-use check selects one,
  * otherwise always performs the basic attack (weapon_kanbu2_attack).
  */
 static EVT_BEGIN(attack_event)
@@ -248,7 +248,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
-/** Poses of Lord Crump while he is guarding (set by guard_event). */
+/** Poses of Lord Crump while he is guarding. */
 static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -339,7 +339,8 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
-        // He misses or is blocked: the target gets out of the way and he comes down on the spot.
+
+        // He misses: the target dodges for results 3, 6 and 2, and he comes down on the spot.
         LABEL(90)
         GOTO(98)
 

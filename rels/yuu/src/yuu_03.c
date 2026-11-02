@@ -101,9 +101,9 @@ EvtWord minigame04_end[256];
 EvtWord yuu_03_init_evt[VERSION_PICK(26, 140)];
 
 /** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
+
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000371c, JP yuu .text+0x3650. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
 USER_FUNC(yuu_03_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;
@@ -135,12 +135,9 @@ void yuu_03_icon_monte_disp(CameraId camera, void* param) {
  * View event that creates the single marker icon on its first call,
  * keeps it 40 units above Mario every frame and draws it through yuu_03_icon_monte_disp. Blocks forever.
  */
+
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_000034bc, JP yuu .text+0x33F0. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * View event that creates the single marker icon on its first call,
- * keeps it 40 units above Mario every frame and draws it through yuu_03_icon_monte_disp. Blocks forever.
- */
 USER_FUNC(yuu_03_icon_monte_entry) {
     BOOL exists = FALSE;
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
@@ -191,12 +188,9 @@ USER_FUNC(yuu_03_icon_monte_entry) {
  * Rebuilds the marker icon view event for the next round:
  * stops the old event, frees the icon array and starts a new one.
  */
+
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000341c, JP yuu .text+0x3350. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Rebuilds the marker icon view event for the next round:
- * stops the old event, frees the icon array and starts a new one.
- */
 USER_FUNC(yuu_03_icon_monte_restart) {
     SlitWork* data;
 
@@ -237,7 +231,7 @@ USER_FUNC(evt_slit_cancel) {
     return EVT_RETURN_DONE;
 }
 
-/** Script call that re-runs the Paper Mode NPC (Pianta) set-up for the next round (ext_yuunpc_minigame4_init_sub). */
+/** Script call that re-runs the Paper Mode racer set-up for the next round (ext_yuunpc_minigame4_init_sub). */
 USER_FUNC(re_init_yuunpc) {
     ext_yuunpc_minigame4_init_sub();
     return EVT_RETURN_DONE;
@@ -245,7 +239,7 @@ USER_FUNC(re_init_yuunpc) {
 
 /**
  * Script call that clears bit 1 of the NPC work flags (yuunpc_wp_flag_off),
- * letting the Pianta NPC move once the game starts.
+ * letting the racers move once the game starts.
  */
 USER_FUNC(yuunpc_go) {
     yuunpc_wp_flag_off(YUUNPC_WP_FLAG_WAIT);
@@ -253,8 +247,8 @@ USER_FUNC(yuunpc_go) {
 }
 
 /**
- * Script call that returns Mario to his normal form:
- * cancels any roll and the paper-mode slit squeeze, then blocks until he is no longer in a slit.
+ * Script call that requests cancellation of Tube Mode and the paper-mode slit squeeze,
+ * then waits for roll transitions and the slit display flag to clear.
  * "nomal cange" is "normal change".
  */
 static USER_FUNC(evt_nomal_cange) {
@@ -701,7 +695,8 @@ EVT_END()
 
 /**
  * Phase 1 of Paper Mode: plays the opening camera (skippable), starts the minigame music,
- * shows the countdown effect, gives Mario control, lets the Pianta NPC go and starts the counter (limit 701).
+ * shows the countdown effect, gives Mario control, lets the racers go and starts the rank counter at (0, 70),
+ * with a start count of 701.
  */
 EVT_BEGIN(minigame04_start)
     CALL(yuuminigame4_opening_chk, LW(0), LW(1))
@@ -787,11 +782,11 @@ EVT_BEGIN(minigame04_end)
             END_INLINE_EVENT
 #endif
 
-        // If Mario finished in time and is above the course, he walks on to the goal side (x 1650) on landing;
+        // Retail walks Mario to x 1650 after landing if his final rank is below 701 and y is above -100;
+        // otherwise it waits for him to stand and normalizes him. Demos attempt the goal walk without those rank/height tests.
 #if VERSION <= VERSION_DEMO_US
         BEGIN_INLINE_EVENT
 #else
-        // otherwise the event just waits until he is standing on something.
         IF_INT_LESS(LW(0), 701)
 #endif
             LOOP(0)
@@ -831,7 +826,7 @@ EVT_BEGIN(minigame04_end)
         END_IF
     END_INLINE_EVENT
 
-    // Running the counter out to 701 plays the failure effect; otherwise the success effect plays.
+    // A final rank value of 701 or more plays the failure effect; otherwise the success effect plays.
     IF_INT_GREATER_OR_EQUAL(LW(0), 701)
         CALL(eff_call_minigame, 2, 0, 0, 500)
         WAIT_MS(4000)
@@ -953,8 +948,8 @@ void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Per-frame state machine for Paper Mode: phase 1 starts minigame04_start, phase 2 picks the first wind delay,
- * phases 2 and 3 run the rules check, phase 4 launches minigame04_end with the final counter
- * and a result code chosen from the coin total (special repeated-digit totals pay out more).
+ * phases 2 and 3 run the rules check, phase 4 launches minigame04_end with the final zero-based race rank
+ * and a result code chosen from that rank (special repeated-digit finishing places pay out more).
  * It also spins the "puro" and "pera" map objects (the course's turning bars) every frame.
  */
 void yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall) {
@@ -1061,7 +1056,7 @@ void yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall) {
     mapObjRotate("pera_9", 0.0f, 0.0f, data->rot2);
 }
 
-/** Draw callback for minigame 4: draws the collected-coin counter (monteCountDisp). */
+/** Draw callback for minigame 4: draws Mario's Pianta token balance (monteCountDisp). */
 void yuuminigame_disp_4slit(CameraId camera, void* param) {
     monteCountDisp();
 }

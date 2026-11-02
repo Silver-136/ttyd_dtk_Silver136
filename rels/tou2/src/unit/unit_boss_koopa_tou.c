@@ -640,7 +640,7 @@ static EVT_BEGIN(hip_attack_event)
         CASE_END
     END_SWITCH
 
-    // The target dodged: Bowser lands next to it and waits.
+    // The attack missed or was dodged: Bowser lands next to it and waits.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
@@ -657,7 +657,7 @@ static EVT_BEGIN(hip_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
     WAIT_MS(300)
 
-    // If Mario guards poorly, one of his commands is sealed: its icon is tossed across the screen
+    // If Mario or his partner guards poorly, one of their commands is sealed: its icon is tossed across the screen
     // and an announcement tells which.
     CALL(btlevtcmd_GetResultACDefence, LW(7))
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
@@ -939,7 +939,7 @@ static EVT_BEGIN(fire_attack_event)
     SET_VALUE(LW(10), 0)
     LABEL(10)
 
-    // Each target is checked in turn: those who dodge duck out of the flames, the rest take the damage.
+    // Each target is checked in turn: a miss can skip the damage without an avoid pose, while dodges duck out of the flames and connecting hits deal damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1071,10 +1071,9 @@ static USER_FUNC(_icon_jump_icon) {
 
 /**
  * Script helper for Bowser's command-sealing attack when it hits the partner:
- * at random it seals the partner's special-move
- * or item command for 3 turns (before US in BattleWork commandDisabled[3] or [4];
- * in US and later in usCommandDisabled[0] or [1] of the partner unit passed in args[1]).
- * LW(0) receives the announcement message key (btl_party_tech_cmd_disable or btl_party_item_cmd_disable)
+ * it seals the partner's special-move command for 3 turns (before US in BattleWork commandDisabled[3];
+ * in US and later in usCommandDisabled[0] of the partner unit passed in args[1]).
+ * LW(0) receives the announcement message key (btl_party_tech_cmd_disable)
  * and args[0] the id of the command icon that the attack script tosses at the partner.
  */
 static USER_FUNC(party_cannot_use_command) {
@@ -1121,9 +1120,8 @@ static USER_FUNC(party_cannot_use_command) {
 
 /**
  * Script helper for Bowser's command-sealing attack when it hits Mario:
- * at random it seals his jump, hammer or item command for 3 turns (BattleWork commandDisabled[0..2]).
- * LW(0) receives the announcement message key (btl_jump_cmd_disable,
- * btl_hammer_cmd_disable or btl_item_cmd_disable)
+ * at random it seals his jump or hammer command for 3 turns (BattleWork commandDisabled[0..1]).
+ * LW(0) receives the announcement message key (btl_jump_cmd_disable or btl_hammer_cmd_disable)
  * and args[0] the id of the command icon that the attack script tosses at Mario (the ids differ before US).
  */
 static USER_FUNC(mario_cannot_use_command) {

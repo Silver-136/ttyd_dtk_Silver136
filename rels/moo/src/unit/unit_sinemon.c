@@ -344,8 +344,8 @@ EVT_END()
 
 /**
  * Attack event of the Moon Cleft: gets up first if it is flipped over;
- * otherwise it uses an enemy item if it has one, or dashes at one target (SFX_ENM_EMON_DASH1) and rams it.
- * The pre-damage check decides between a dodge and a hit with the action-command result, then it hops back home.
+ * otherwise it uses an enemy item if the item-use check selects one, or dashes at one target (SFX_ENM_EMON_DASH1) and rams it.
+ * The pre-damage check decides between a miss and a hit; a hit then checks the action-command defence result before the return hops.
  */
 static EVT_BEGIN(attack_event)
     // If the Moon Cleft is lying flipped on its back, it spends the turn getting back up (wakeup_event).

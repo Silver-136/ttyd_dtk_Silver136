@@ -588,7 +588,7 @@ EVT_END()
 /**
  * Init event of Doopliss in his own form: installs his wait, phase, attack, damage,
  * confusion and entry events and clears his unit work,
- * including the form record (unit work 4) and the shadow state.
+ * including the form record (unit work 12) and the shadow state.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -674,10 +674,9 @@ EVT_END()
 
 /**
  * Dead event of Doopliss in any form: he returns to his own look,
- * the camera moves to him and he speaks his last line (btl_majo3_13 when a Siren is already down,
- * otherwise btl_majo3_10), then the slow death sequence runs.
- * It also respawns Beldam as a ghost (entry_majolyne) when the fight is not over
- * and sets the shared Siren state in GW.
+ * the shared Siren states determine whether the camera moves to him and he speaks btl_majo3_13 (both states are 2),
+ * btl_majo3_10 (GW(11) is 0 and GW(12) is 2), or waits for a state change and skips his line.
+ * He then sets GW(13) to 2 and the slow death sequence runs.
  */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -787,8 +786,8 @@ EVT_END()
 /**
  * Phase event of the Sirens' unison move for Doopliss:
  * after the player phase it lets the shared unison event run,
- * and when the ranking of the Sirens' HP (unit work 4 and 5) changes he sinks into his shadow
- * and comes up in the spot matching his new rank.
+ * and when the ranking of the Sirens' HP (unit work 4 and 5) changes, it sets his home and current
+ * position to the spot matching his new rank.
  */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
@@ -824,8 +823,8 @@ static EVT_BEGIN(unison_phase_event)
 EVT_END()
 
 /**
- * Phase event of Doopliss: after the player phase it checks whether Mario's shadow guard is in effect
- * (mario_shadow_guard_check) and manages the transformation,
+ * Phase event of Doopliss: after the player phase it manages the transformation, checking Mario's shadow guard
+ * (mario_shadow_guard_check) only in JP and later,
  * so that he changes into another character at the right time.
  */
 static EVT_BEGIN(phase_event)
@@ -899,10 +898,6 @@ static EVT_BEGIN(ogg_attack_event)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
 
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
-    // Announce the attack; the camera swings to follow it.
     // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1389,8 +1384,8 @@ EVT_END()
 
 /**
  * Attack event of Doopliss as Mario: can use an item;
- * otherwise it picks, from a random number, one of Mario's moves:
- * a normal jump (weapon_masao_jump), a spin jump (Kururin), or a hammer attack (normal or spin hammer).
+ * otherwise the item check's zero result selects a normal jump (weapon_masao_jump).
+ * The switch also contains normal hammer, spin jump (Kururin) and spinning hammer branches.
  */
 static EVT_BEGIN(attack_event_fmario)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -2099,7 +2094,7 @@ EVT_END()
 static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // Doopliss, as Goombella, uses an enemy item if he has one.
+        // Doopliss, as Goombella, uses an enemy item when the item check selects one.
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -2108,7 +2103,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
-    // Pick a target for the attack; a confused unit that has none flusters.
+    // Pick a target for the attack; without one, go to the wait/return tail.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -2116,7 +2111,6 @@ static EVT_BEGIN(attack_event_christine)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
 
-    // Announce the attack; the camera swings to follow it.
     // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -2264,7 +2258,7 @@ static EVT_BEGIN(attack_event_christine)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
 
-    // The attack misses or is dodged.
+    // After the final hit, she tumbles off the target.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, EVT_NULLPTR, LW(6))
@@ -2716,7 +2710,7 @@ EVT_END()
 static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // Doopliss, as Koops, uses an enemy item if he has one.
+        // Doopliss, as Koops, uses an enemy item when the item check selects one.
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -2724,7 +2718,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     SET_VALUE(LW(12), PTR(&enemyWeapon_NokotarouKouraAttack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
-    // Pick a target for the attack; a confused unit that has none flusters.
+    // Pick a target for the attack; without one, go to the wait/return tail.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -2797,7 +2791,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
 
-        // After the hit he bounces back with a hop.
+        // After the miss he bounces back with a hop.
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         GOTO(99)
     END_IF
@@ -2806,7 +2800,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
 
-    // The attack misses or is dodged.
+    // After the hit, he hops back.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2837,12 +2831,12 @@ EVT_END()
 
 /**
  * Shell toss attack of Doopliss as Koops (enemyWeapon_NokotarouShubibinAttack, "shubibin"):
- * he spins his shell and throws it at one target, with the dodge or defence check.
+ * he spins his shell and throws it across the selected targets, with the dodge or defence check.
  */
 static EVT_BEGIN(attack_event_nokotarou_shubibin)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // Doopliss, as Koops, uses an enemy item if he has one.
+        // Doopliss, as Koops, uses an enemy item when the item check selects one.
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -2850,7 +2844,7 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     SET_VALUE(LW(12), PTR(&enemyWeapon_NokotarouShubibinAttack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
-    // Pick a target for the attack; a confused unit that has none flusters.
+    // Pick a target for the attack; without one, go to the wait/return tail.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -2929,7 +2923,7 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     LABEL(80)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
 
-    // Guess: on a miss the shell flies off toward the left edge of the stage.
+    // Guess: after passing the targets, the shell flies off toward the left edge of the stage.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -400, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -3129,7 +3123,7 @@ EVT_END()
 static EVT_BEGIN(attack_event_clauda)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // Doopliss, as Flurrie, uses an enemy item if he has one.
+        // Doopliss, as Flurrie, uses an enemy item when the item check selects one.
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -3137,7 +3131,7 @@ static EVT_BEGIN(attack_event_clauda)
     SET_VALUE(LW(12), PTR(&enemyWeapon_ClaudaNormalAttack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
-    // Pick a target for the attack; a confused unit that has none flusters.
+    // Pick a target for the attack; without one, go to the wait/return tail.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -3145,7 +3139,6 @@ static EVT_BEGIN(attack_event_clauda)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
 
-    // Announce the attack; the camera swings to follow it.
     // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -3427,7 +3420,7 @@ EVT_END()
 static EVT_BEGIN(attack_event_yoshi)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        // Doopliss, as Yoshi, uses an enemy item if he has one.
+        // Doopliss, as Yoshi, uses an enemy item when the item check selects one.
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
@@ -3436,7 +3429,7 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
 
-    // Pick a target for the attack; a confused unit that has none flusters.
+    // Pick a target for the attack; without one, go to the wait/return tail.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -3581,7 +3574,7 @@ static EVT_BEGIN(attack_event_yoshi)
         SUBTRACT(LW(15), LW(1))
         DIVIDE(LW(15), 10)
 
-        // He plunges onto the target and the camera shakes.
+        // He plunges to the floor and the camera shakes.
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(15), 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_1"))
         CALL(btlevtcmd_SetDispOffset, UNIT_ID_SELF, 0, -7, 0)
@@ -3609,7 +3602,7 @@ static EVT_BEGIN(attack_event_yoshi)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
 
-    // The attack misses or is dodged.
+    // After the final hit, he hops back.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -4777,6 +4770,7 @@ static USER_FUNC(eff_scanning) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000855c, JP las .text+0x8490. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+
 /**
  * Script helper: returns 1 in args[0] if Mario currently has a shadow guard (the Vivian partner's protective
  * status) and 0 otherwise. JP and later.
@@ -4792,6 +4786,7 @@ USER_FUNC(mario_shadow_guard_check) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Script helper: clears flag 2 on Vivian's partner data so she can rejoin Mario's party
  * after the fight (the pouch's partyData[6] flags).
@@ -4802,7 +4797,8 @@ static USER_FUNC(vivian_comeback) {
 }
 
 #if VERSION >= VERSION_US
-/** US only: restore the moves of the unit for this turn. */
+
+/** US and PAL: sets the unit's maximum moves this turn to its remaining moves. */
 USER_FUNC(boss_rampell_las_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);
@@ -4816,6 +4812,7 @@ USER_FUNC(boss_rampell_las_sync_max_moves) {
     return EVT_RETURN_DONE;
 }
 #endif
+
 /**
  * Script helper: computes a facing direction in args[4] from the points (args[0], args[1])
  * and (args[2], args[3]) (angle of the vector between them); keeps the old value if the points coincide.

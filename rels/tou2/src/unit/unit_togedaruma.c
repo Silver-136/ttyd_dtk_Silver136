@@ -89,7 +89,7 @@ BattleUnitKind unit_togedaruma = {
 
 /**
  * Defence of the Bristle: 4 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{4, 99, 4, 4, 4}};
 
@@ -97,8 +97,8 @@ static BattleUnitDefense defence = {{4, 99, 4, 4, 4}};
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
 /**
- * Defense of the Bristle against normal, fire, ice, explosion and electric attacks while it is flipped
- * onto its back: none, so it takes full damage from every element.
+ * Base defence of the Bristle against normal, fire, ice, explosion and electric attacks while it is flipped
+ * onto its back: zero for every element; the separate fire-immunity attribute remains active.
  */
 static BattleUnitDefense defence_turn = {0};
 
@@ -415,7 +415,8 @@ EVT_END()
  * and it lands back in its stance (TGD_J_2, TGD_S_4).
  */
 static EVT_BEGIN(attack_event)
-    // If the Bristle is flipped over, it first rights itself with wakeup_event.
+
+    // If the Bristle is flipped over, it counts down its recovery turn instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)

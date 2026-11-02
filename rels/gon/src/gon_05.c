@@ -284,7 +284,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Map-init helper for the floating block blk_0 and its switch (sw_0):
- * if the local flag LSWF(4) says the switch has been used,
+ * while the local flag LSWF(4) is clear,
  * it lifts the block 525 units above its resting height.
  */
 // Block 0 starts 525 units above its placed position when its area flag is clear.
@@ -309,8 +309,8 @@ EVT_END()
  * Handler of the sw_0 switch for the floating block blk_0:
  * the camera shakes with rumble while the block rises
  * or falls 525 units (the direction follows LSWF(4), which is toggled), with block-float sounds;
- * if Mario or his partner bumps the block with the head during the move,
- * it reverses and the switch is cancelled. Ends with a landing sound and the final shake.
+ * if the descending block's head-contact check matches,
+ * it reverses and the switch is cancelled. Ends with a landing sound and the final shake when descending.
  */
 static EVT_BEGIN(main_0)
 #if VERSION > VERSION_DEMO_US
@@ -431,7 +431,7 @@ static EVT_BEGIN(main_0)
             GOTO(2)
             LABEL(1)
 
-            // If a falling block lands on Mario or his partner it turns around and rises again, and the switch
+            // If a descending block's head-contact check matches, it turns around and rises again, and the switch
             // is cancelled.
             IF_INT_EQUAL(LW(10), 1)
                 SET_FLOAT_VALUE(LW(5), LW(2))
@@ -573,7 +573,7 @@ EVT_END()
 /**
  * Runs when Mario hits the floating-block switch sw_1:
  * lifts or lowers blk_1 by 489 units with its sound and a camera shake, and flips the saved state LSWF(5).
- * If the block cannot move the switch press is cancelled.
+ * A descending head-contact match reverses the block and cancels the switch press.
  */
 EVT_BEGIN(main_1)
 #if VERSION > VERSION_DEMO_US
@@ -599,7 +599,7 @@ EVT_BEGIN(main_1)
             END_IF
         END_IF
 
-        // Work out the target height, 525 units from here, and the speed.
+        // Work out the target height, 489 units from here, and the speed.
         IF_INT_EQUAL(LW(10), 0)
             CALL(evt_mobj_get_y_position, STRING("blk_1"), LW(2))
             SET_FLOAT_VALUE(LW(3), LW(2))
@@ -694,7 +694,7 @@ EVT_BEGIN(main_1)
             GOTO(2)
             LABEL(1)
 
-            // If a falling block lands on Mario or his partner it turns around and rises again, and the switch
+            // If a descending block's head-contact check matches, it turns around and rises again, and the switch
             // is cancelled.
             IF_INT_EQUAL(LW(10), 1)
                 SET_FLOAT_VALUE(LW(5), LW(2))

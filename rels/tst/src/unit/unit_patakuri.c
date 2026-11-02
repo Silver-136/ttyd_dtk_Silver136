@@ -119,12 +119,14 @@ static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Paragoomba while it still has its wings in the demo builds:
  * extra prone to stop, dizzy, fright, Gale Force and instant KO.
  */
 static StatusVulnerability regist_patakuri = {100, 120, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 150, 100, 100, 100, 100, 150};
 #else
+
 /**
  * Status vulnerability of the Paragoomba while it still has its wings in the retail builds:
  * extra prone to stop, dizzy, fright, Gale Force and instant KO.
@@ -223,7 +225,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 
 /**
  * Init script of the Paragoomba.
- * Registers its wait, attack, damage and fall scripts, sets the flying movement sounds and starts waiting.
+ * Registers its wait, attack, damage and confusion scripts, sets the flying movement sounds and starts waiting.
  */
 static EVT_BEGIN(init_event_patakuri)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_patakuri))
@@ -281,11 +283,12 @@ EVT_END()
 
 /**
  * The Paragoomba's dive attack: it flies up, swoops down on the target with SFX_ENM_PATAKURI_MOVE2 and MOVE3,
- * and the pre-damage check decides between a miss (avoid animation)
+ * and the pre-damage check decides between a miss (with an avoid animation for some results)
  * and a hit (damage with the action-command result); then it returns to its place.
  */
 static EVT_BEGIN(attack_event_patakuri)
-    // If the Paragoomba holds an item, it uses that instead of attacking.
+
+    // If the item-use check selects an item event, the Paragoomba uses it instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -340,7 +343,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PATAKURI_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 5, 4, 0, 0)
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; some miss results make the target dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_patakuri_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -458,12 +461,14 @@ static BattleUnitDefense defence = {0};
 static BattleUnitDefenseAttr defence_attr = {0};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of the Paragoomba once its wings are gone in the demo builds:
  * extra prone to stop, fright, Gale Force and instant KO.
  */
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else
+
 /**
  * Status vulnerability of the Paragoomba once its wings are gone in the retail builds:
  * extra prone to stop, fright and instant KO.
@@ -559,6 +564,7 @@ EVT_END()
 
 /** The Goomba-form headbutt attack, the same as the Goomba's. */
 static EVT_BEGIN(attack_event)
+
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
     CALL(btlevtcmd_check_battleflag, LW(0), 2)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -580,7 +586,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // If the Goomba holds an item, it uses that instead of attacking.
+    // If the item-use check selects an item event, the Goomba uses it instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -639,7 +645,7 @@ static EVT_BEGIN(attack_event)
     // It comes down on the target head first.
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 32, -1)
 
-    // Check whether the attack will connect; a miss sends the target into its dodge.
+    // Check whether the attack will connect; some miss results make the target dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_kuriboo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -721,8 +727,8 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 /**
- * Script helper for the Goomba family: args[0], args[1] are the x and z of one point and args[2],
- * args[3] those of another; args[4] receives the angle between them (angleABf of the x/z difference, degrees).
+ * Script helper for the Goomba family: args[0], args[1] are the x and y of one point and args[2],
+ * args[3] those of another; args[4] receives the angle between them (angleABf of the x/y difference, degrees).
  * When the two points coincide, args[4] keeps the value it already held.
  */
 static USER_FUNC(krb_get_dir) {

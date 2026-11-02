@@ -1,4 +1,4 @@
-// Battle unit Hyper Paragoomba (ハイパーパタクリボー): gra.rel's copy.
+// Battle unit Hyper Paragoomba (ハイパーパタクリボー): tst.rel's copy.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -266,7 +266,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 
 /**
  * Init script of the Paragoomba.
- * Registers its wait, attack, damage and fall scripts, sets the flying movement sounds and starts waiting.
+ * Registers its wait, attack, damage and confusion scripts, sets the flying movement sounds and starts waiting.
  */
 static EVT_BEGIN(init_event_patakuri)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_patakuri))
@@ -329,6 +329,7 @@ EVT_END()
  * it can instead spend its turn charging (weapon_patakuri_charge) unless it is already charged (STATUS_CHARGE).
  */
 static EVT_BEGIN(attack_event_patakuri)
+
     // Already charged: it goes straight to the dive attack.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -689,6 +690,7 @@ EVT_END()
 
 /** The Hyper Goomba-form attack: the Goomba headbutt, with the same charge option as the winged form. */
 static EVT_BEGIN(attack_event)
+
     // Target: the first-strike target if the battle opened that way, otherwise one picked for its attack.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -892,7 +894,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 /**
- * Script helper: computes the facing direction (degrees) from point (args[0], args[1]) to (args[2], args[3])
+ * Script helper: computes the direction (degrees) from point (args[2], args[3]) to (args[0], args[1])
  * and stores it in args[4]; if both points coincide args[4] is left as it was.
  */
 static USER_FUNC(krb_get_dir) {

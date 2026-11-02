@@ -784,6 +784,7 @@ USER_FUNC(aud_suikomi) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_00007668, JP aji .text+0x75A4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
+
 /** Script function (JP and later): fades the audience scream sound (screamId) out over 120 frames after the suction. */
 USER_FUNC(aud_scream_fadeout) {
     if (isFirstCall) {
@@ -1003,7 +1004,7 @@ static USER_FUNC(eff_dead_delete) {
  * Battle init for Magnus von Grapple 2.0: registers its wait, entry, attack, damage and confusion events,
  * sets the part 3 pose MGN_L_1, starts the frame event (waku_event) and the arm physics (arm_init)
  * and clears its unit work flags: 0 = arms detached, 1 = turns until the fists return,
- * 2 = arms have separated once, 5 and 6 are phase flags (6 is set when the boss is defeated).
+ * 2 = arms have separated once, and 5 = the drill announcement has played.
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
@@ -1086,9 +1087,9 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Defeat sequence of Magnus von Grapple 2.0: sets the defeated flag (unit work 6),
+ * Defeat sequence of Magnus von Grapple 2.0: sets the low-HP dialogue flag (unit work 6),
  * plays the explosion effect over the body, zooms the camera,
- * speaks stg7_aji_41_07 and runs the common defeat handling (subsetevt_dead_core).
+ * speaks stg7_aji_41_07, runs subsetevt_dead_core for surviving fists, and handles the boss's rewards and removal locally.
  */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_TALK_DONE, 1)

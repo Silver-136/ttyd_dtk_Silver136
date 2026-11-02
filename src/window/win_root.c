@@ -788,6 +788,7 @@ void winMsgMain(WindowWork* wp) {
             break;
     }
 }
+
 /**
  * Draws the help box at offset (x, y): the frame, the item icon when msgItem > 0,
  * the title plate when msgName is set (shifted left for msgItem -2;
@@ -936,6 +937,7 @@ static inline void winRootTexQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f
 }
 
 #pragma inline_max_total_size(100000)
+
 /**
  * Draws a "kirinuki" (cut-out) inset panel of w x h at (x, y) from 8-pixel corner and edge pieces,
  * used for the boxes inside the pages.
@@ -1007,6 +1009,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 
 /** Absolute value in double precision, for NAME_TEX below. */
 static inline double fabs_d(double x) { return __fabs(x); }
+
 /** Float absolute value that goes through fabs_d (double), for NAME_TEX below. */
 static inline float fabsf_(float x) { return (float)fabs_d((double)x); }
 
@@ -1603,12 +1606,14 @@ WinSortData sort_1[] = {
     {"msg_menu_sort_kind", sort_1_2_func},
     {NULL, NULL},
 };
+
 /** Sort options of the Important Items list: by name or by type. */
 WinSortData sort_2[] = {
     {"msg_menu_sort_aiueo", sort_2_1_func},
     {"msg_menu_sort_kind", sort_2_2_func},
     {NULL, NULL},
 };
+
 /** Sort options of the full badge list: by name, by type or by BP cost. */
 WinSortData sort_3[] = {
     {"msg_menu_sort_aiueo", sort_3_1_func},
@@ -1616,6 +1621,7 @@ WinSortData sort_3[] = {
     {"msg_menu_sort_bp", sort_3_3_func},
     {NULL, NULL},
 };
+
 /** Sort options of the equipped badge list: by name, by type or by BP cost. */
 WinSortData sort_4[] = {
     {"msg_menu_sort_aiueo", sort_4_1_func},
@@ -1623,6 +1629,7 @@ WinSortData sort_4[] = {
     {"msg_menu_sort_bp", sort_4_3_func},
     {NULL, NULL},
 };
+
 /** Sort options of the Journal's badge log: by name, by type or by BP cost. */
 WinSortData sort_5[] = {
     {"msg_menu_sort_aiueo", sort_5_1_func},
@@ -1630,6 +1637,7 @@ WinSortData sort_5[] = {
     {"msg_menu_sort_bp", sort_5_3_func},
     {NULL, NULL},
 };
+
 /** Sort options of the Journal's recipe log: by name or by type. */
 WinSortData sort_6[] = {
     {"msg_menu_sort_aiueo", sort_6_1_func},
@@ -1655,6 +1663,7 @@ u8 enemy_monoshiri_sort_table[] = {
     0xE0, 0xE1, 0xE2, 0xE3, 0xE4, 0xE5, 0xE6,
 };
 #else
+
 /** Sort options of the Tattle Log: by number, by where the enemy appears most, or by name. */
 WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
@@ -1662,6 +1671,7 @@ WinSortData sort_7[] = {
     {"msg_menu_sort_aiueo", sort_7_3_func},
     {NULL, NULL},
 };
+
 /** Sort options of the mail list: by name or by number. */
 WinSortData sort_8[] = {
     {"msg_menu_sort_aiueo", sort_8_1_func},
@@ -1768,12 +1778,14 @@ void sort_3_3_func(WindowWork* wp) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** The demo sorts the equipped list through the pouch, like the owned list. */
 static void sort_4_1_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 4 : 11);
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
 #else
+
 /**
  * qqsort compare for the equipped badge list (WinBadgeEnt) by name;
  * names go through pouchHiraToKata so hiragana and katakana sort together.
@@ -1831,7 +1843,7 @@ s32 compare_func4_2_r(const void* a, const void* b) {
     return 0;
 }
 
-/** The demo sorts the equipped list through the pouch, like the owned list. */
+/** Sorts the equipped badge list by name through compare_func4_1 (or its reverse). */
 void sort_4_1_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_1);
@@ -1845,13 +1857,15 @@ void sort_4_1_func(WindowWork* wp) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Equipped badges by type, through the pouch (modes 5/12). */
 static void sort_4_2_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 5 : 12);
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
 #else
-/** Demo: equipped badges by type, through the pouch (modes 5/12). */
+
+/** Sorts the equipped badge list by type through compare_func4_2 (or its reverse). */
 void sort_4_2_func(WindowWork* wp) {
     if (!wp->sortRev) {
         qqsort(wp->badge.list, wp->badge.count, sizeof(WinBadgeEnt), compare_func4_2);
@@ -1865,6 +1879,7 @@ void sort_4_2_func(WindowWork* wp) {
 }
 
 #if VERSION <= VERSION_DEMO_US
+
 /** Equipped badges by name, then by BP cost, through the pouch. */
 static void sort_4_3_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 4 : 11);
@@ -1872,7 +1887,8 @@ static void sort_4_3_func(WindowWork* wp) {
     wp->sortRev = 1 - wp->sortRev;
     winMakeEquipList(wp);
 #else
-/** Demo: equipped badges by name, then by BP cost, through the pouch. */
+
+/** Sorts the equipped badge list by BP cost, breaking ties by type_sort_order (or reversing both). */
 void sort_4_3_func(WindowWork* wp) {
     ItemData* db;
     ItemData* da;
@@ -1932,7 +1948,7 @@ void sort_4_3_func(WindowWork* wp) {
 }
 
 
-/** Journal badge log by name, retail: names folded to katakana first. */
+/** Journal badge log by name, retail: names normalized through pouchHiraToKata first. */
 s32 compare_func5_1(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
@@ -1959,7 +1975,7 @@ s32 compare_func5_1(const void* a, const void* b) {
 #endif
 }
 
-/** Reverse of compare_func5_1 (demo). */
+/** Reverse of compare_func5_1. */
 s32 compare_func5_1_r(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
@@ -2124,7 +2140,7 @@ void sort_5_3_func(WindowWork* wp) {
     wp->log.badge.idx = wp->log.badge.cursor / 28;
 }
 
-/** Journal recipe log by name, retail: names folded to katakana first. */
+/** Journal recipe log by name, retail: names normalized through pouchHiraToKata first. */
 s32 compare_func6_1(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
@@ -2151,7 +2167,7 @@ s32 compare_func6_1(const void* a, const void* b) {
 #endif
 }
 
-/** Reverse of compare_func6_1 (demo). */
+/** Reverse of compare_func6_1. */
 s32 compare_func6_1_r(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_US
     const s16* ea = a;
@@ -2347,7 +2363,7 @@ void sort_7_2_func(WindowWork* wp) {
     wp->log.enemyPage = wp->log.enemySel / 16;
 }
 
-/** Tattle Log by name, retail: katakana-folded, with Doopliss's entries under his current name. */
+/** Tattle Log by name, retail: normalized, with Doopliss's entries under his current name. */
 #if VERSION > VERSION_DEMO_US
 s32 compare_func3(const void* a, const void* b) {
     char buf1[128];
@@ -2376,7 +2392,8 @@ s32 compare_func3(const void* a, const void* b) {
 #endif
 
 #if VERSION > VERSION_DEMO_US
-/** Reverse of compare_func3 (demo). */
+
+/** Reverse of compare_func3 (retail). */
 s32 compare_func3_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -2403,9 +2420,9 @@ s32 compare_func3_r(const void* a, const void* b) {
 }
 #endif
 
-/** Tattle Log by name (by number first, then by name). */
 #if VERSION <= VERSION_DEMO_US
-/** Tattle Log by name, retail: katakana-folded, with Doopliss's entries under his current name. */
+
+/** Demo Tattle Log name comparison: compares the entries' enemyTag messages directly. */
 static s32 compare_func3(const void* a, const void* b) {
     const WinSortEnt* ea = a;
     const WinSortEnt* eb = b;
@@ -2416,6 +2433,7 @@ static s32 compare_func3(const void* a, const void* b) {
 
     return strcmp(sa, sb);
 }
+
 /** Reverse of compare_func3 (demo). */
 static s32 compare_func3_r(const void* a, const void* b) {
     const WinSortEnt* ea = a;
@@ -2428,6 +2446,7 @@ static s32 compare_func3_r(const void* a, const void* b) {
     return strcmp(sb, sa);
 }
 #endif
+
 /** Tattle Log by name (by number first, then by name). */
 void sort_7_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
@@ -2963,10 +2982,6 @@ void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8014d338, JP 0x8014D338. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Draws the frame captured by winRootBgCaptureDisp full screen as the menu's backdrop,
- * queued each frame by winRootMain, so the field can stay switched off while the menu is open.
- */
 void winRootBgDrawDisp(s32 unused, WindowWork* bg) {
     GXTexObj obj;
     f32 w;

@@ -164,7 +164,7 @@ static BattleWeapon weapon_chorobon_drain_attack = {
 };
 
 /**
- * Attack event of the Fuzzy: uses an enemy item if it has one,
+ * Attack event of the Fuzzy: uses an enemy item if the item-use check selects one,
  * otherwise always runs drain_attack_event with weapon_chorobon_drain_attack.
  */
 static EVT_BEGIN(attack_event)
@@ -307,7 +307,7 @@ static EVT_BEGIN(rabbit_move)
     RETURN
 EVT_END()
 
-/** Sound timing of the Fuzzy: the sound effect played at set points of its idle, walk and run animations. */
+/** Sound timing of the Fuzzy: the sound effect played at set points of its idle animation. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"CBN_S_1", 0.5833333f, NULL, "SFX_ENM_CHORO1_MOVE1", 0, 1},
     {"CBN_S_1", 0.8333333f, NULL, "SFX_ENM_CHORO1_WAIT2", 0, 1},
@@ -399,7 +399,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
 
-    // It flutters across to the target in two hops.
+    // It flutters across to the target in short hops.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.5996094f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(5), LW(6), LW(7))
@@ -585,7 +585,8 @@ static EVT_BEGIN(drain_attack_event)
         ADD(LW(6), 45)
         ADD(LW(7), 10)
         IF_INT_EQUAL(LW(9), PTR(&weapon_chorobon_drain_attack))
-            // The damage dealt is added to its own HP (and FP) with a recovery effect.
+
+            // The damage dealt is added to its own HP with a recovery effect.
             CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, LW(1), LW(10))
             CALL(evt_eff, STRING(""), STRING("recovery"), 7, LW(5), LW(6), LW(7), LW(10), 0, 0, 0, 0, 0, 0, 0)
         ELSE
@@ -599,6 +600,7 @@ static EVT_BEGIN(drain_attack_event)
         ADD(LW(1), 30)
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_CHORO1_ATTACK3"), 0, 0, -1, -1, 0, 0)
         LOOP(2)
+
             // It bounces back in smaller hops, shrinking to normal size.
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
             WAIT_FRAMES(1)

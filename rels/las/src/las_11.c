@@ -90,7 +90,7 @@ EVT_END()
 
 /**
  * Event script: the floating switch of las_11 was hit.
- * The camera shows the spot, the key chest drops into the room (box_syutugen),
+ * The camera shows the spot, the key chest rises out of the floor (box_syutugen),
  * a success jingle plays and the camera returns.
  */
 static EVT_BEGIN(switch_evt)

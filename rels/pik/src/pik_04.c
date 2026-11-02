@@ -425,7 +425,7 @@ EVT_BEGIN(imgend)
 EVT_END()
 
 /**
- * Elevator ride up to the inn room (US and later):
+ * Elevator ride up to the inn room:
  * the elevator doors open, the box "hako" (with its hit area a_hako) rises 1325 units over ten seconds carrying
  * Mario and the partner, the lobby fades through imgend,
  * and the doors open on the upper floor and Mario walks out.
@@ -613,8 +613,8 @@ EVT_BEGIN(evt_up)
 EVT_END()
 
 /**
- * Elevator ride back down from the inn room (US and later): the reverse of evt_up.
- * The camera follows the box down, the doors open at the bottom and Mario walks out onto the street.
+ * Elevator ride back down from the inn room: the reverse of evt_up.
+ * In retail versions the camera follows the box down; the doors open at the bottom and Mario walks out onto the street.
  */
 EVT_BEGIN(evt_down)
     // The ride down: the elevator doors slide open.
@@ -818,7 +818,7 @@ EVT_END()
 
 /**
  * Init for the souvenir stall owner (土産屋), who sells Fresh Pasta at the stall a_roten (evt_roten): places the
- * owner at (-363, 10, 142) (y 15 in the demos).
+ * owner at (-363, 10, 142) (y 15 in JP and the demos).
  */
 EVT_BEGIN(init_miyage)
 #if VERSION >= VERSION_US

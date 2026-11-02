@@ -237,7 +237,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 
 /**
  * Init script of the Paragoomba.
- * Registers its wait, attack, damage and fall scripts, sets the flying movement sounds and starts waiting.
+ * Registers its wait, attack, damage and confusion scripts, sets the flying movement sounds and starts waiting.
  */
 static EVT_BEGIN(init_event_patakuri)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_patakuri))
@@ -253,6 +253,7 @@ EVT_END()
  * Reaction when a Paragoomba loses its wings: it drops with SFX_ENM_FALL1, lands with a hop,
  * and its pose table and data switch to those of the walking Goomba.
  */
+
 // Losing wings installs the grounded Goomba part/data tables, then reinitializes its events.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
@@ -296,10 +297,11 @@ EVT_END()
 
 /**
  * The Paragoomba's dive attack: it flies up, swoops down on the target with SFX_ENM_PATAKURI_MOVE2 and MOVE3,
- * and the pre-damage check decides between a miss (avoid animation)
+ * and the pre-damage check decides between a miss (with an avoid animation for some results)
  * and a hit (damage with the action-command result); then it returns to its place.
  */
 static EVT_BEGIN(attack_event_patakuri)
+
     // It uses an item instead of attacking when one is ready.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -569,8 +571,8 @@ EVT_END()
 
 /**
  * Script helper for the Paragoomba's battle scripts:
- * args[0], args[1] and args[2], args[3] are two (x, z) positions;
- * writes into args[4] the facing angle between them (angleABf of their difference),
+ * args[0], args[1] and args[2], args[3] are two (x, y) positions;
+ * writes into args[4] the angle between them (angleABf of their difference),
  * leaving args[4] unchanged when the two positions coincide.
  */
 static USER_FUNC(krb_get_dir) {
@@ -611,6 +613,7 @@ EVT_END()
  * usual dodge and guard checks, bounces off and walks home.
  */
 static EVT_BEGIN(attack_event)
+
     // Choose the target: the one a First Strike picked, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

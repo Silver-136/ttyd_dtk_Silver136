@@ -211,7 +211,7 @@ static PoseTableEntry pose_table_break[] = {
 /**
  * Event table of Cortez Sword: cortez_damage_sub_event, cortez_weapon_dead_event,
  * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event,
- * cortez_weapon_counter_damage_event (35),
+ * cortez_weapon_counter_damage_event (36),
  * avoid_thorn_event (38).
  */
 static BattleDataEntry data_table[] = {
@@ -289,7 +289,7 @@ EVT_END()
 
 /**
  * Works out the height one of Cortez's weapons (unit LW(9)) should hover at (LW(5), 20 or 60) from the formation
- * Cortez rolled after the enemy phase (unit work 8 of the owner, 0 to 2) and the weapon's slot (unit work 2).
+ * Cortez rolled after the enemy phase (unit work 8 of the owner, 0 to 3) and the weapon's slot (unit work 2).
  */
 EVT_BEGIN(cortez_weapon_get_home_height)
     SET_VALUE(LW(5), 0)
@@ -548,7 +548,7 @@ static EVT_BEGIN(attack_event)
         GOTO(41)
     END_SWITCH
 
-    // First slash: the target dodges or blocks it.
+    // First slash misses: wait for the current animation to finish.
     LABEL(40)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     GOTO(45)
@@ -661,7 +661,7 @@ static EVT_BEGIN(attack_event)
         GOTO(91)
     END_SWITCH
 
-    // Second slash: the target dodges or blocks it.
+    // Second slash misses: wait for the current animation to finish.
     LABEL(90)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     GOTO(95)

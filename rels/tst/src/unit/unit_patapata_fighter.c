@@ -254,7 +254,7 @@ EVT_END()
 /**
  * Fall reaction when the Paratroopa loses its wings:
  * it drops with SFX_ENM_FALL1 and becomes a Koopa Troopa, taking the walking data tables,
- * attack and walk/run sounds; after a hit of at most 1 HP of damage it lands on its feet,
+ * attack and walk/run sounds; when its HP-damage counter is at most 1 it lands on its feet,
  * otherwise it is also flipped (dmg_turn_event).
  */
 static EVT_BEGIN(dmg_fall_event)
@@ -317,6 +317,7 @@ EVT_END()
  * a miss makes it fly past, a hit applies the damage, and it returns to its stance.
  */
 static EVT_BEGIN(attack_event_patapata)
+
     // Use the target of the opening first attack if there was one; otherwise use an enemy item, or choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -660,7 +661,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Flips the Koopa onto its back when it is hit while helpless:
+ * Flips the Koopa onto its back in its turn-over damage reaction:
  * it switches to the upside-down defence and pose tables (NKT_D_1, then NKT_S_2),
  * sets the flipped status flag and a flipped-over counter of 2 turns, lowers its hit offset,
  * and bounces with SFX_ENM_INSIDE1.
@@ -794,7 +795,8 @@ EVT_END()
  * and it returns to its stance.
  */
 static EVT_BEGIN(attack_event)
-    // If the Koopa is flipped over, it first rights itself with wakeup_event.
+
+    // If flipped over, it runs wakeup_event: wriggles until the counter reaches zero, then rights itself.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)

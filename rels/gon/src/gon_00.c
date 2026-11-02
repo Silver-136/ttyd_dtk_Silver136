@@ -97,7 +97,7 @@ static BeroEntry e3_bero[] = {
 /**
  * Map init for gon_00 (castle entrance): sets up the doors to gon_01 and the Hooktail route log flag,
  * the save block, recovery block and blue jump pad, the drifting dust animation, and the room's sounds.
- * In the kiosk demo build the west exit is rerouted back to the same room instead of leading to Petal Meadows.
+ * With the E3 system flag set, the west exit is rerouted back to the same room instead of leading to Petal Meadows.
  */
 EVT_BEGIN(gon_00_init_evt)
 #if VERSION > VERSION_DEMO_US

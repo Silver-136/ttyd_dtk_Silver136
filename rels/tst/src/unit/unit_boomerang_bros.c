@@ -122,6 +122,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 #if VERSION <= VERSION_DEMO_US
+
 /**
  * Status vulnerability of Boomerang Bro (the demos), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -130,6 +131,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
  */
 static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 40, 60, 100, 80, 100, 100, 95};
 #else
+
 /**
  * Status vulnerability of Boomerang Bro (the final versions), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -280,9 +282,9 @@ EVT_END()
 
 /**
  * Chooses the Boomerang Bro's attack: in a battle with battle flag 2 set it always makes the normal throw;
- * otherwise it uses an item if it has one, and with 3 HP
- * or less has a 30% chance of the double-throw renzoku_attack_event,
- * else the normal boomerang throw (normal_attack_event). Clears unit work 7 (damage already applied) first.
+ * otherwise it runs a selected enemy-item script if one is returned, ending the turn.
+ * If no item script is returned, with 3 HP or less it has a 30% chance of the double-throw renzoku_attack_event,
+ * else the normal boomerang throw (normal_attack_event). Clears unit work 7 (action-command defence result already taken) first.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AC_DEFENCE_DONE, 0)
@@ -373,8 +375,9 @@ EVT_END()
 
 /**
  * Boomerang hit on the last target of the pass:
- * if the action-command result is still pending in unit work 7 it applies it (ResultACDefence and CheckDamage),
- * otherwise it resolves the hit with damage_check_sub (LW(7) = 1).
+ * if the outbound pass already hit (LW(0) = 1), it applies CheckDamage directly,
+ * taking ResultACDefence first only if unit work 7 is clear. If the outbound pass did not hit,
+ * it resolves the hit with damage_check_sub (LW(7) = 1).
  */
 static EVT_BEGIN(damage_check_last)
     IF_INT_EQUAL(LW(0), 1)
@@ -399,6 +402,7 @@ EVT_END()
  * Then the boomerang is hidden (ATTACK4) and unit work 0 goes up by one.
  */
 EVT_BEGIN(boomerang_move_event)
+
     // The Bro hurls the boomerang: it appears in his hand with the throw sound and starts to spin.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -465,6 +469,7 @@ EVT_BEGIN(boomerang_move_event)
                 END_IF
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, LW(0))
                 IF_INT_EQUAL(LW(14), 0)
+
                     // On the way back it strikes the second target again.
                     CALL_CHILD(damage_check_no_last)
                 ELSE
@@ -485,6 +490,7 @@ EVT_BEGIN(boomerang_move_event)
                 END_IF
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, LW(0))
                 IF_INT_EQUAL(LW(14), 0)
+
                     // And finally the first target again.
                     CALL_CHILD(damage_check_no_last)
                 ELSE
@@ -664,9 +670,10 @@ EVT_END()
 /**
  * Throw used by both attacks when the chosen target is on the Bro's own side (it is confused): it turns toward
  * its allies and throws one boomerang out to x 250 and back home, then hits every selected target twice, the
- * second time as the last hit 30 to 39 frames later (the guard result is applied once).
+ * second time as the last hit 30 to 40 frames later (the guard result is applied once).
  */
 EVT_BEGIN(normal_attack_event_confuse)
+
     // The confused Bro turns toward his own side and winds up for a throw.
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_attack))
@@ -746,6 +753,7 @@ EVT_BEGIN(normal_attack_event_confuse)
         ADD(LW(10), 1)
     END_IF
     BEGIN_SIBLING_EVENT
+
         // Every ally is hit twice, the second time as the last hit a moment later.
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_boomerang_bros_attack), 0, LW(5))
         CALL(evt_sub_random, 10, LW(0))
@@ -774,6 +782,7 @@ EVT_END()
  * hit.
  */
 EVT_BEGIN(renzoku_attack_event_confuse)
+
     // The confused Bro turns toward his own side and winds up for a throw.
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_renzoku_attack))
@@ -856,6 +865,7 @@ EVT_BEGIN(renzoku_attack_event_confuse)
     END_IF
     BEGIN_SIBLING_EVENT
         LOOP(3)
+
             // Every ally is hit three times and once more as the last hit.
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_boomerang_bros_renzoku_attack), 0, LW(5))
             CALL(evt_sub_random, 10, LW(0))

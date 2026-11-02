@@ -86,8 +86,8 @@ EVT_BEGIN(gra_06_ido)
 EVT_END()
 
 /**
- * Moves Mario and his partners above the hole's landing spot and makes them jump down to it,
- * then waits 1.5 seconds.
+ * Places Mario and his partners below the hole's landing spot and makes them jump up to it,
+ * waiting 1.5 seconds while their staggered jumps run.
  */
 EVT_BEGIN(gra_06_ido_in_sub)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -182,6 +182,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(gra_06_saku_open)
+
     // The gate and its chain rattle, as if the gate were locked.
     CALL(evt_mapobj_get_position, STRING("kusari"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_GATE_CLOSED1"), LW(10), LW(11), LW(12), 0)
@@ -339,6 +340,7 @@ EVT_END()
  * control returns and the Steeple door's n_bero case is switched on again.
  */
 EVT_BEGIN(teresa_oidasare_evt)
+
     // Mario and his partner are placed high above the trail, as if dropped out of the Steeple.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

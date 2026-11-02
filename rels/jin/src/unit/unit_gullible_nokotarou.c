@@ -500,7 +500,7 @@ EVT_END()
 
 /**
  * Attack script of the Doopliss-controlled Koops.
- * If he is still flipped over he just gets up (wakeup_event);
+ * If he is still flipped over he spends the action in wakeup_event, getting up only when its counter reaches zero;
  * otherwise he draws lots between the single-target shell attack (80 percent)
  * and the all-target spin attack (20 percent), then returns to waiting.
  */
@@ -524,11 +524,12 @@ EVT_END()
 /**
  * Koops's shell attack: after an item check he picks a target, pulls into his shell,
  * spins up (SFX_BTL_NOKO_ATTACK1/2) with the camera zooming in, then slides into the target.
- * If the attack misses or is blocked he overshoots and walks home;
+ * If the pre-damage check returns a non-hit result he overshoots and walks home;
  * a hit deals the damage, and he then tumbles back in three decreasing hops,
  * comes out of the shell and walks home.
  */
 static EVT_BEGIN(attack_event_nokotarou_koura)
+
     // He may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -617,7 +618,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
 
-    // Miss: he slides on past the target (which dodges for some kinds of miss).
+    // After the successful hit, he prepares to hop back from the target.
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -649,12 +650,13 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
 EVT_END()
 
 /**
- * Koops's second attack (shubibin): a spinning shell slide that hits every enemy.
+ * Koops's second attack (shubibin): a spinning shell slide that attempts to hit every selected enemy.
  * He pulls into his shell, spins up (SFX_BTL_NOKO_SHUBIBIN1/2), then slides through the targets in turn,
- * damaging each, and off the edge of the stage;
+ * damaging those whose pre-check returns 1, and off the edge of the stage;
  * he reappears on the opposite side, returns home and comes out of the shell.
  */
 static EVT_BEGIN(attack_event_nokotarou_shubibin)
+
     // He may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

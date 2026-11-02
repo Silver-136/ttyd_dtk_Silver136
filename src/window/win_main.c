@@ -1008,7 +1008,7 @@ USER_FUNC(itemUseFunc2) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
+/** Sets args[0] to 1 if Mario is in his 8-bit form (WINDOW_FLAG_8BIT), else 0; picks the partner pose script. */
 #if VERSION == VERSION_DEMO_US
 static USER_FUNC(famicom_check) {
 #else
@@ -1044,13 +1044,13 @@ USER_FUNC(all_party_slit_off) {
 }
 #endif
 
-#if VERSION == VERSION_DEMO_US
-static USER_FUNC(cam_r) {
-#else
 /**
  * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
  */
+#if VERSION == VERSION_DEMO_US
+static USER_FUNC(cam_r) {
+#else
 USER_FUNC(cam_r) {
 #endif
     CameraEntry* cam;
@@ -1117,6 +1117,7 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION <= VERSION_DEMO_US
     FontDrawMessageMtx(trans, buf);
 }
+
 /** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
@@ -1202,6 +1203,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION <= VERSION_DEMO_US
     FontDrawStringMtx(trans, buf);
 }
+
 /** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
@@ -1218,8 +1220,8 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #endif
 }
 
-/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 #if VERSION == VERSION_EU
+
 /** PAL: right-aligned like winFontSetR, squeezed horizontally to fit width */
 void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...) {
     char buf[0x1000];
@@ -1254,9 +1256,12 @@ void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* 
     FontDrawStringMtx(trans, msg);
 }
 
-/** Draws formatted text as a plain string with the font's outline (edge) turned on. */
 #endif
-/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
+
+/**
+ * Draws formatted text as a plain string with the font's outline (edge) turned on.
+ * Before US it always formats into a 1 KB buffer; US and later format only strings containing "%", into a 4 KB buffer.
+ */
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
     char buf[0x1000];
@@ -1373,6 +1378,7 @@ FontDrawScaleVec(scale);
 }
 #endif
 #endif
+
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 void winTexInit(TEXPalette* texture) {
     winTexTpl = texture;
@@ -1468,6 +1474,7 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     GXTexCoord2f32(0.0f, 0.0f);
 }
 #if VERSION > VERSION_DEMO_US
+
 // Descriptive name (not in the symbol maps); placeholder unk_80177008, JP 0x80177008. See docs/NAME_PROVENANCE.md.
 void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
@@ -1747,14 +1754,16 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * evt_lecture_msg step: blocks until the tutorial has reached step args[0].
- * While waiting it lets input through (clears WIN_FLAG_LECTURE_KEY_MASK), and masks it again once the step is reached.
+ * In JP and later it clears WINDOW_FLAG_LECTURE_KEY_MASK on the first call and sets it once the step is reached;
+ * the demos do not change that flag here.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(lecture_step_wait) {
     s32 n = evtGetValue(event, event->args[0]);
 #else
+
 // Descriptive name (not in the symbol maps); placeholder unk_80175eb0, JP 0x80175EB0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(lecture_step_wait) {
     s32 n = evtGetValue(event, event->args[0]);
@@ -1769,11 +1778,12 @@ USER_FUNC(lecture_step_wait) {
 #if VERSION <= VERSION_DEMO_US
     return EVT_RETURN_DONE;
 }
+
 /**
  * Badge tutorial input filter, run by winMain each frame:
  * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
  * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
- * through while WIN_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
+ * through while WINDOW_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
  */
 static void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {
@@ -1792,7 +1802,7 @@ USER_FUNC(lecture_key_mask_off) {
  * Badge tutorial input filter, run by winMain each frame:
  * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
  * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
- * through while WIN_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
+ * through while WINDOW_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
  */
 void winLectureKeyMask(void) {
     if (wp->flags & WINDOW_FLAG_LECTURE) {

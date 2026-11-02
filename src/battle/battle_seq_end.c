@@ -143,6 +143,7 @@ EVT_BEGIN(_event_MajinaiEnd)
 EVT_END()
 
 #if VERSION >= VERSION_US
+
 /**
  * Label textures of the HP, FP and BP level-up blocks, one per text language (gp->language),
  * drawn by _lvup_select_object_disp.
@@ -152,8 +153,8 @@ s32 fp_tex_tbl[6] = {56, 56, 57, 58, 58, 58};
 s32 bp_tex_tbl[6] = {59, 59, 60, 61, 62, 63};
 #endif
 
+/** Prints Mario's current rank-up message. */
 #if VERSION > VERSION_DEMO_US
-/** Defined after _koura_delete_event, where the demo's .data places it (retail keeps it in .sdata). */
 EVT_BEGIN(_rank_up_event)
     CALL(_get_rank_up_msg, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, 0)
@@ -213,7 +214,7 @@ extern PoseTableEntry pose_table_nokotarou_stay[];
  * decides the result (win, loss, fled or interrupted),
  * runs the field's post-battle event and Merlee's Star Point charm, counts the Star Points into the pouch,
  * then plays the level-up show with the HP/FP/BP choice and the rank-up message,
- * fades out and hands Mario's and the partner's state back to the field. A loss goes to the game over sequence.
+ * fades out and hands Mario's and the partner's state back to the field. A loss goes to the game over sequence unless NPC_BATTLE_NO_GAME_OVER is set.
  */
 void btlseqEnd(BattleWork* wp) {
     BattleSeqEndWork* work = (BattleSeqEndWork*)wp->seqEndWork;
@@ -949,7 +950,10 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
     iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
 }
 
-/** The demo has this function but never calls it (the linker strips it; its strings stay). */
+/**
+ * Draws the selected HP, FP or BP level-up help message, or its cap-error message at HP/FP 200 or BP 99.
+ * Retail queues it while SEQEND_DISP_LVUP_HELP is set; the demos do not queue it.
+ */
 void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;
     PouchData* pouch;
