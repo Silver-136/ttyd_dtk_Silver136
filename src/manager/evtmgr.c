@@ -105,6 +105,7 @@ static void make_jump_table(EventEntry* entry) {
                 n++;
                 break;
         }
+
         // FAKE: empty test with no effect; without it the object changes in both versions
         if (n >= 16) {
             "unused";

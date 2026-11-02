@@ -55,6 +55,7 @@ static void oneMessageDisp(WinMgrEntry* entry);
 WinMgrDesc one_msg_desc = {
     0, 0, 8, -175, 120, 350, 42, {0xD7, 0xD0, 0x88, 0xFF}, NULL, oneMessageDisp
 };
+
 /**
  * The small counter window for coins, Shine Sprites or Star Pieces that shops show while buying;
  * see evt_win_coin_on.

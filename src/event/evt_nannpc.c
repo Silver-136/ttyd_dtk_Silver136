@@ -39,6 +39,7 @@ static inline char* nanNPCEntryName(char* name) {
     }
     return name;
 }
+
 /** the demo search through that helper */
 static inline NanNPC* nanNPCSearch2(char* name) {
     s32 i;
@@ -190,6 +191,7 @@ void nanNPCOption(void) {
             }
         }
     }
+
     // FAKE: r (loop 3 start) assigned in loop 2's exit test, as the target loads it there (no mr copy); w->npc is not changed by loop 2
     for (p = w->npc; p < (r = w->npc) + w->num; p++) {
         if (p->flags & NANNPC_FLAG_WALK) {
@@ -722,6 +724,7 @@ USER_FUNC(evt_nannpc_jump_position) {
         event->userdataf[1] = -4.0f * height;
         event->userdataf[2] = y - (f32)npc->ipos[1] - event->userdataf[1];
     }
+
     // FAKE: el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object
     el = OSTicksToMilliseconds((u32)gp->renderTime - (u32)npc->startTime);
     uel = el;

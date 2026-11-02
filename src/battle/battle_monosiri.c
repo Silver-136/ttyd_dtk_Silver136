@@ -403,6 +403,7 @@ void battleSetUnitMonosiriFlag(BattleUnitType kind) {
             }
         }
     }
+
     // no group holds the kind: set its own tattle flag only
     swSet(kind + GSWF_TATTLE_BASE);
     wp->tattledUnitTypeFlags[kind / 32] |= 1 << (kind % 32);

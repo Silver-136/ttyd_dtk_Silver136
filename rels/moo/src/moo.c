@@ -43,6 +43,7 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+
 /** Unresolved-symbol stub of the moon module; does nothing. */
 void _unresolved(void) {
 }

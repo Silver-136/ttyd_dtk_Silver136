@@ -997,6 +997,7 @@ static EVT_BEGIN(shell_attack_event)
             WAIT_FRAMES(3)
         END_LOOP
     END_SIBLING_EVENT
+
     // Spinning in its shell, it speeds at the target.
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(12.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

@@ -171,6 +171,7 @@ void marioChgMoveMotion(void) {
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         return;
     }
+
     // At zero speed this calls the stay transition and then continues into the walk/dash selection below (no return).
     if (!mario->baseSpeed) {
         marioChgStayMotion();
@@ -967,6 +968,7 @@ void mot_talk(void) {
             kpaChgPose("KPA_S_1", "KPA2_S_1");
             return;
         }
+
         // BUG: fbatGetPointer()->npc is whichever NPC Mario last talked to or battled, from any map. If that
         // NPC slot is unused on the current map, checkPose is not valid and marioChgPose can crash.
         fbat = fbatGetPointer()->npc;
@@ -1117,6 +1119,7 @@ BOOL marioChkItemMotion(void) {
     if (mario->flags & (MARIO_FLAG_PAPER_MODE | MARIO_FLAG_TUBE_MODE)) {
         return FALSE;
     }
+
     // This repeats the test (trig is known nonzero here)
     if (!trig) {
         return FALSE;

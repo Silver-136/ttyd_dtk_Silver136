@@ -650,6 +650,7 @@ void _disp_2D(s32 side, s32 idx) {
     if (side == 1 && b->state != 2) {
         return;
     }
+
     // FAKE: each case builds the icon id in the s32 temporary t; assigning icon directly changes the object
     switch (b->button) {
     case PAD_BUTTON_A:

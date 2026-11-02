@@ -692,6 +692,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                 audience->checkPhaseReactionState = 15;
                 break;
             }
+
             /* fallthrough */
         case 5:
             for (counter = 0, i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
@@ -708,6 +709,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             } else {
                 audience->checkPhaseReactionState = 7;
             }
+
             /* fallthrough */
         case 6:
         case 7:
@@ -1938,6 +1940,7 @@ void BattleAudienceItemCtrlProcess(void) {
             }
             it->state++;
         }
+
         /* fallthrough */
         case 1: {
             if (it->timer <= 0) {
@@ -2092,6 +2095,7 @@ void BattleAudienceItemCtrlProcess(void) {
                 break;
             }
         }
+
         /* fallthrough */
         case 4:
         s4: {
@@ -3569,6 +3573,7 @@ BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id) {
     if (!(u8)BattleAudience_GetExist(id)) {
         return FALSE;
     }
+
     // FAKE: one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object
     if (member->status >= AUDIENCE_STATUS_SLEEP && member->status <= AUDIENCE_STATUS_SLEEP) {
         return FALSE;
@@ -5262,6 +5267,7 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
                     audience->targetAudienceCount -= 1.0f;
                 }
             }
+
             /* fallthrough */
         default:
             if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {

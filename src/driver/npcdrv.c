@@ -1810,6 +1810,7 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
             p++;
         }
     }
+
     // FAKE: the products go through the mulf() inline; plain multiplications change the object
     windowDispGX_Waku_col(0, firstStrike->color, mulf(0.1f, shakeX - 10.0f - width / 2),
                           mulf(shakeY, 0.1f), mulf(20 + width, 0.1f), mulf(height, 0.1f), 1.0f);
@@ -2449,6 +2450,7 @@ void fbatBattleMode(void) {
 #if VERSION > VERSION_DEMO_US
                     }
                 }
+
                 // FAKE: dead int guard (COLOURING W; folded after RA, no code). The arm redefines stolen (dead in
                 // the arm), so its 6 division temps raise only res/info4 (simplify pass 2), and `res = 0` keeps
                 // res a named web numbered between mario and info (declared after win)

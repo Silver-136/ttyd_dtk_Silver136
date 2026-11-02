@@ -4991,6 +4991,7 @@ static EVT_BEGIN(evt_boss)
 #endif
     WAIT_MS(300)
 #endif
+
     // The music-box theme plays and Jolene runs in, thanks Mario and admits she sent him the mysterious emails.
     SET_VALUE(GF(10), 1)
     CALL(evt_cam3d_evt_set, -130, 140, 385, -130, 105, -11, 700, EASING_SINE_IN_OUT)

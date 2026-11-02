@@ -71,6 +71,7 @@ void effRippleDisp(CameraId cameraId, EffectEntry* effect) {
     } else {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, work->alpha});
     }
+
     // FAKE: the type local is reused for the scroll offset; passing work->offset directly changes the object
     type = work->offset;
     PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);

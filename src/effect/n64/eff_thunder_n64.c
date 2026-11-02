@@ -634,6 +634,7 @@ EffectEntry* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
         if (type == 1) {
             work->flare = effThunderflareN64Entry(0, -1, -118.0f, 184.0f, 79.0f, 1.0f);
         }
+
         // FAKE: second test of type instead of else; else changes the object
         if (type != 1) {
             work->charge = effAkariChargeN64Entry(0, 0, -120.0f, 189.0f, 72.0f, 1.0f);

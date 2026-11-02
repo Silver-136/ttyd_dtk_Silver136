@@ -164,6 +164,7 @@ void btlDispGXQuads2D(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a) {
     btlDispGXPoint2D(x1, y1, r, g, b, a, 1.0f, 1.0f);
     btlDispGXPoint2D(x0, y1, r, g, b, a, 0.0f, 1.0f);
 }
+
 /**
  * GX state for the battle texture planes: textured, vertex colour from the vertices,
  * alpha from the material register.
@@ -589,6 +590,7 @@ next:
                 if (scale < 10.0f) scale = 8.0f;
                 shadowEntry(spos.x, 10.0f + h, spos.z, scale);
             }
+
             // FAKE: unsigned range tests written out by hand; k >= a && k <= b changes the object
             {
                 s32 k = unit->currentKind;

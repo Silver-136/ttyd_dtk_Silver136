@@ -2065,6 +2065,7 @@ USER_FUNC(yuka_anim_reverse_play) {
             yuka_anim.anim->frame = frame;
         }
     }
+
     // Refresh the time baseline even while reverse playback is paused.
     yuka_anim.anim->time = YUKA_NOW();
     return EVT_RETURN_BLOCK;

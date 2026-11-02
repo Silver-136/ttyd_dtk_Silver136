@@ -336,6 +336,7 @@ void btlseqEnd(BattleWork* wp) {
         }
         BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_UNIT_EVENTS);
     }
+
     // fall through
     case SEQ_END_WIN_UNIT_EVENTS: {
         BattleUnit* mario;
@@ -410,6 +411,7 @@ void btlseqEnd(BattleWork* wp) {
             psndBGMOn(PSND_SLOT(1), "BGM_BATTLE_WIN2");
         }
     }
+
     // fall through
     case SEQ_END_POINTS_DELAY:
         work->timer = work->timer - 1;
@@ -605,6 +607,7 @@ void btlseqEnd(BattleWork* wp) {
         }
         break;
     }
+
     // Yes/No confirmation of the level-up choice (_LvupParamConfirmDisp); no step moves here
     case SEQ_END_LEVEL_UP_CONFIRM_UNUSED:
         if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
@@ -725,6 +728,7 @@ void btlseqEnd(BattleWork* wp) {
         work->rankUpEvtId = e->eventId;
         BattleSetSeq(wp, SEQ_END, SEQ_END_RANK_UP_WAIT);
     }
+
     // fall through
     case SEQ_END_RANK_UP_WAIT:
         if (evtCheckID(work->rankUpEvtId)) break;
@@ -786,6 +790,7 @@ void btlseqEnd(BattleWork* wp) {
         BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT_WAIT);
         psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
     }
+
     // fall through
     case SEQ_END_FADE_OUT_WAIT:
         if (!fadeIsFinish()) break;
@@ -907,6 +912,7 @@ void _MarioExpDisp(CameraId camId, void* param) {
             u32 len = strlen(buf);
             width = 12.5f * len + 65.0f;
         }
+
         // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
         ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(180.0f, -160.0f, width, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 
@@ -978,6 +984,7 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
             }
             break;
     }
+
 // FAKE: the linker strips this function from the demos; their pool keeps its strings but not its numbers
 #if VERSION > VERSION_DEMO_US
     width = FontGetMessageWidthLine(msg, &lines);

@@ -41,6 +41,7 @@ static u8 scale_data[] = {
     0x32, 0x37, 0x3C, 0x46, 0x50, 0x64, 0x96, 0xDC, 0xF0, 0xC8,
     0x8C, 0x64, 0x8C, 0xA0, 0x8C, 0x96, 0x9B, 0x96, 0x94, 0x96,
 };
+
 /**
  * Twelve pastel RGB tints (pink, peach, lilac, blue, cyan, green) the spark stars cycle through, one step
  * per frame and offset per star, so the burst shimmers. Read by effDamageStarDisp.
@@ -134,6 +135,7 @@ MayaHermitKey damageStar_effHermit_0[] = {
         },
     },
 };
+
 /**
  * Keyframes of the damage badge itself: it pops in with a squash and stretch, tips over around frame 40,
  * then shrinks to nothing by frame 65. The damage number is drawn on this joint.
@@ -250,6 +252,7 @@ MayaHermitKey damageStar_effHermit_1[] = {
         },
     },
 };
+
 /** The damage badge's square face: four corners with texture coordinates. */
 s16 damageStar_effFace_pPlane168_0[] = {
     4, // vertex count
@@ -264,6 +267,7 @@ MayaPoly damageStar_effAnimRST[] = {
     {7, damageStar_effHermit_0, 0, NULL},
     {10, damageStar_effHermit_1, 1, &damageStar_effFaceDt_pPlane168},
 };
+
 /** Joint list of the damage badge animation. */
 MayaKeyList damageStar_effAnimRSTDt = {2, damageStar_effAnimRST};
 /** The damage badge animation (65 frames), started by effDamageStarEntry and positioning the number. */

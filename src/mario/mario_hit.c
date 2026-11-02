@@ -1088,6 +1088,7 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
                 movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
                 break;
         }
+
         // FAKE: the dead guard keeps rx/rz their own webs, so x and z load before the volatile template copy
         // (rz declared before rx so the loads colour f1/f0 as in the demo)
         rx = x;
@@ -1550,6 +1551,7 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
                 return hit;
             }
         }
+
         // FAKE: dead re-definition (gz is 0) at the loop end gives zero/mone two reaching defs in IRO pass 0, so they stay named
         // vregs (callee-saved order f27/f28) instead of being constant-propagated; the same guard before the loop shifts the
         // prepass schedule so box.x*-sn lands in f1 instead of f0
@@ -2998,6 +3000,7 @@ BOOL marioSlitChkWallAround(void) {
             flags[i] = 1;
         }
     }
+
     // FAKE: spare temporary k; the plain `pos.y = mario->position.y + 5.0f;` changes the object
     {
         f32 k = 5.0f;

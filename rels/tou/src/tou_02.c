@@ -2002,6 +2002,7 @@ void ext_fan_main(void) {
             }
         }
     }
+
     // Count walking fans; retail also excludes flagged actor anchors.
     fan_wp->count = fan_wp->num;
 

@@ -118,6 +118,7 @@ void effBalloonHeihoDisp(CameraId cameraId, EffectEntry* effect) {
             effGetTexObjN64(0x62, &texObj);
             break;
     }
+
     // texObj is set only for type 0..2 above; any other type loads it uninitialized.
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetNumChans(0);

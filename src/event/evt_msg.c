@@ -767,6 +767,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
         strcpy(tmp, buf);
         break;
     }
+
     // BUG: when the text has none of the markers its language looks for (or the language has no case), tmp is
     // never written and buf receives uninitialized stack data.
     strcpy(buf, tmp);
@@ -961,6 +962,7 @@ void evtMsgFmtInt(char* buf, s32 count) {
         strcpy(msg_plural_buf, buf);
         break;
     }
+
     // BUG: when none of its language's markers is found (or the language has no case), msg_plural_buf still holds an
     // earlier call's text; language 0 copies buf itself, dropping the <NUM> substitution made in msg_num_buf.
     strcpy(buf, msg_plural_buf);

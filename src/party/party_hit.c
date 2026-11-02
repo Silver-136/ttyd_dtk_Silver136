@@ -699,6 +699,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
             break;
         }
     }
+
     // This probe loop has no break, so hit keeps the last height's result (the +45 loop above stops at its first hit).
     if (hit) {
 #if VERSION >= VERSION_US

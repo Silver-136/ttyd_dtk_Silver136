@@ -17,10 +17,12 @@ f32 vaporUnused[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f
 static s8 dx_data[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -15, -21, -26, -30, -34, -37, -39, -40, -41, -42, -43, -44, -45, -46, -47, -48, -49, -50, -51, -52, -53, -54, -55, -56, -57, -58, -59, -60, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
+
 /** Size of the steam puff in percent over its first 30 frames, one row of 30 per type. */
 static u8 scale_data[] = {
     40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 52, 55, 57, 60, 62, 65, 67, 70, 72, 75, 77, 80, 82, 85, 87, 90, 92, 95, 97, 100, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69
 };
+
 /**
  * Position in the smoke animation strip over the puff's first 30 frames, one row of 30 per type;
  * the draw cross-fades between neighbouring frames.
@@ -28,6 +30,7 @@ static u8 scale_data[] = {
 static u8 seq_data[] = {
     0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 190, 195, 210, 208, 211, 214, 217, 220, 223, 226, 229, 232, 235, 238, 241, 244, 247, 250, 253, 255, 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 190, 195, 210, 208, 211, 214, 217, 220, 223, 226, 229, 232, 235, 238, 241, 244, 247, 250, 253, 255, 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 190, 195, 210, 208, 211, 214, 217, 220, 223, 226, 229, 232, 235, 238, 241, 244, 247, 250, 253, 255
 };
+
 /**
  * Twist of the steam puff in degrees over its first 30 frames, one row per type:
  * type 1 leans further and further as it drifts, type 2 is turned upside down.
@@ -247,6 +250,7 @@ void effVaporDisp(CameraId cameraId, EffectEntry* effect) {
     if (n >= 30) {
         n = 29;
     }
+
     // FAKE: rows indexed as (table + type * 30)[n]; table[type * 30 + n] changes the object
     s = 0.01f * (scale_data + type * 30)[n];
     f = -(f32)rz_data[type][n];

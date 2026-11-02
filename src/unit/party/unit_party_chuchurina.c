@@ -2548,6 +2548,7 @@ USER_FUNC(_chuchu_item_steal) {
         evtSetValue(event, out, 0);
         return EVT_RETURN_DONE;
     }
+
     // FAKE: no-op (u16) cast (item is u16); the plain call changes the object
     if (pouchGetItem((u16)item) == 0) {
         evtSetValue(event, out, 0);
@@ -2574,6 +2575,7 @@ USER_FUNC(_chuchu_item_steal) {
             BtlUnit_EquipItem(unit, EQUIP_RESET, 0);
         }
     }
+
     // FAKE: no-op (u16) cast (item is u16); the plain call changes the object
     evtSetValue(event, out, (u16)item);
     return EVT_RETURN_DONE;

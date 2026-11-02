@@ -271,6 +271,7 @@ static inline void effFallRelease(EffectEntry* effect) {
         psndSFXOff(e->sfx);
     }
 }
+
 // FAKE: the seven sfx names are spelled SFX_NAME_WORD("lit") at each call (no locals) so each becomes a hoisted
 // loop-invariant temporary; plain literals in calls are not hoisted. Same string addresses.
 void effFallMain(EffectEntry* effect) {
@@ -659,6 +660,7 @@ void effFallMain(EffectEntry* effect) {
                             e->pose1 = animPoseEntry("EFF_inseki", group);
                             animPoseSetAnim(e->pose1, "Z_2", 1);
                         }
+
                         // fall through: once the poses exist, state 0 sets up the first jump like states 2, 4 and 6
                     case 2:
                     case 4:

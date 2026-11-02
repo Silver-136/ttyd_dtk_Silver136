@@ -145,6 +145,7 @@ ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
             break;
         }
     }
+
     // entry is still NULL here when all entries are in use; the pool is assumed to have room.
     memset(entry, 0, sizeof(ARAMEntry));
     size = OSRoundUp32B(size);

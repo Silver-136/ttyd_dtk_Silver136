@@ -767,6 +767,7 @@ USER_FUNC(_test_rtn) {
     if (isFirstCall) {
         event->userdata[0] = 0;
     }
+
     // debug: pick a unit with the d-pad, then scale and move it
     if (BattlePadMultiCheckTrigger(2, PAD_BUTTON_LEFT)) {
         event->userdata[0]++;

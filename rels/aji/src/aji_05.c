@@ -350,6 +350,7 @@ static USER_FUNC(loop_onoff) {
         event->userdata[1] = 0;
         event->userdata[2] = 0;
     }
+
     // light the panels up one after another, twice
     event->userdata[0]++;
     if (event->userdata[0] > 2) {

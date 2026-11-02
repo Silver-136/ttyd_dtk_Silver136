@@ -436,6 +436,7 @@ USER_FUNC(map_anim_flag_off) {
     anim->flags &= ~mask;
     return EVT_RETURN_DONE;
 }
+
 /** Script function: sets Mario's scale to 0 on all axes, making the player (Peach) invisible. */
 static USER_FUNC(peach_evt_toumei) {
     MarioWork* mario = marioGetPtr();

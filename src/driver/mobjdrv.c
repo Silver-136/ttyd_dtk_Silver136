@@ -587,6 +587,7 @@ s32 mobjEntry(const char* name, const char* animPoseName) {
             break;
         }
     }
+
     // the search for an active entry with the same name has no effect: its result is not used
 
     for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {

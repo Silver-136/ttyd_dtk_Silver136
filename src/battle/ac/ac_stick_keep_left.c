@@ -116,6 +116,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                             break;
                         }
                     }
+
                     // irand(100) is never negative: a confused auto-play always fails
                     if (irand(100) >= 0) {
                         work->actionCommands.result = 0;

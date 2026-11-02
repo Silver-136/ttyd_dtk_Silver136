@@ -61,6 +61,7 @@ static effN64Vtx size10x10_tex32x32_2_vtx[] = {
     {10, 5, 0, 0, 4096, 0, 0, 0, 255},
     {0, 5, 0, 1024, 4096, 0, 0, 0, 255},
 };
+
 /** Long 128-unit streak quad for types 6-8 and 11. */
 static effN64Vtx size128x10_tex32x32_vtx[] = {
     {0, -5, 0, 0, 0, 0, 0, 0, 255},
@@ -80,6 +81,7 @@ static effN64Vtx size128x10_tex32x32_vtx[] = {
     {128, 5, 0, 1024, 4096, 0, 0, 0, 255},
     {0, 5, 0, 0, 4096, 0, 0, 0, 255},
 };
+
 /** The long streak quad flipped horizontally, drawn for type 10. */
 static effN64Vtx size128x10_tex32x32_2_vtx[] = {
     {0, -5, 0, 1024, 0, 0, 0, 0, 255},

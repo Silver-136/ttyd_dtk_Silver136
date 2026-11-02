@@ -188,6 +188,7 @@ static BattleDataEntry data_table[] = {
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_tree", "b_mario", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
+
 /**
  * Init for a stage tree the player can hit (spawned by battle_stage_object.c as _entry_tree_data):
  * registers the wait, attack and damage scripts, never moves, and idles. Its part is hidden and has no shadow.

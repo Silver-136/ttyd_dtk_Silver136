@@ -161,6 +161,7 @@ USER_FUNC(_set_offset) {
     evtSetValue(event, outVar, step);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: sets flag 8 in the battle stage object work so the stage objects are destroyed
  * when the battle ends.

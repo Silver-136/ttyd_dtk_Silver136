@@ -375,6 +375,7 @@ static inline void shadowBegin(ProjShadowWork* wp, BOOL depth) {
     } else {
         C_MTXOrtho(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
     }
+
     // FAKE: byte-offset view of shadowConfig[wp->configIdx]; the indexed form changes the object
     GXSetProjection(wp->proj, ((ShadowConfig*)((u8*)shadowConfig + wp->configIdx * sizeof(ShadowConfig)))->projType);
     PSMTXCopy(camGetCurPtr()->view, tmp_view);

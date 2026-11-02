@@ -498,6 +498,7 @@ USER_FUNC(evt_npc_move_position) {
         if (npc->moveSpeed <= 0.1f && npc->moveTime == 0.0f) {
             npc->moveSpeed = 1.0f;
         }
+
         // Time given but no speed -> derive speed, then run as speed-mode
         if (npc->moveSpeed <= 0.1f) {
             npc->moveSpeed = dist / npc->moveTime;
@@ -2672,6 +2673,7 @@ USER_FUNC(evt_npc_kamek_move_position) {
         if (npc->moveSpeed <= 0.1f && npc->moveTime == 0.0f) {
             npc->moveSpeed = 1.0f;
         }
+
         // Time given but no speed -> derive speed, then run as speed-mode
         if (npc->moveSpeed <= 0.1f) {
             npc->moveSpeed = dist / npc->moveTime;

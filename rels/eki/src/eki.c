@@ -43,6 +43,7 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+
 /** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 void _unresolved(void) {
 }

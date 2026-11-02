@@ -339,6 +339,7 @@ void camEvalNearFar(CameraEntry* camera) {
         if (far < 1.0f) {
             far = 1.0f;
         }
+
         // near is written twice: the 1.0f is overwritten at once by the computed value
         camera->near = 1.0f;
         camera->near = near;

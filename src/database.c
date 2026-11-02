@@ -90,6 +90,7 @@ BOOL setupDataCheck(void) {
     parsePop();
     return TRUE;
 }
+
 /** Looks up mapName in _map_attr_data; returns the NULL-named terminator entry when the map is not listed. */
 static inline MapAttrEntry* findMapAttr(const char* name) {
     MapAttrEntry* p = _map_attr_data;

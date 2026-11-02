@@ -617,6 +617,7 @@ void effStarStoneMain(EffectEntry* effect) {
             GXCallDisplayList(*d2, *s2 << 5); \
         }                                     \
     }
+
 // The same loop with the caller's k, dq and sq
 #define LOOPK(tbl, sz, n)                 \
     k = 0;                                \
@@ -625,6 +626,7 @@ void effStarStoneMain(EffectEntry* effect) {
     for (; k < n##U; k++, sq++, dq++) {   \
         GXCallDisplayList(*dq, *sq << 5); \
     }
+
 /**
  * Draws the round stone (types 0 and 6): a 10% larger untextured shell, then the textured stone.
  * Each loop walks a display-list table and its size table (32-byte units).

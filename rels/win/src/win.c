@@ -218,6 +218,7 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+
 /** Handler called when an unresolved import in win.rel is hit; does nothing. */
 void _unresolved(void) {
 }

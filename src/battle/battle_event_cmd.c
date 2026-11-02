@@ -4566,6 +4566,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
                 if (type == 2) {
                     unit->moveTotalFrames *= 1.12;
                 }
+
                 // FAKE: the same field is stored twice; one store changes the object
                 unit->jumpBaseY = 0.0f;
                 unit->jumpBaseY = 0.0f;
@@ -4581,6 +4582,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
                 if (type == 4) {
                     unit->moveTotalFrames *= 1.25;
                 }
+
                 // FAKE: the same field is stored twice; one store changes the object
                 unit->jumpBaseY = 0.0f;
                 unit->jumpBaseY = 0.0f;
@@ -6931,6 +6933,7 @@ const char* _mario_acrobat_voice_table[5] = {
     "SFX_VOICE_MARIO_AC3_1", "SFX_VOICE_MARIO_AC3_2", "SFX_VOICE_MARIO_AC3_3",
     "SFX_VOICE_MARIO_AC3_4", "SFX_VOICE_MARIO_AC3_5",
 };
+
 /**
  * Mario's voice clips for ordinary attacks, two sets of five;
  * btlevtcmd_snd_voice type 2 plays one at random.
@@ -6941,6 +6944,7 @@ const char* _mario_attack_voice_table[10] = {
     "SFX_VOICE_MARIO_AC2_2", "SFX_VOICE_MARIO_AC2_3", "SFX_VOICE_MARIO_AC2_4",
     "SFX_VOICE_MARIO_AC2_5",
 };
+
 /** Stops the looping movement sound in the work, if one is playing. */
 void _MoveSoundControlEndCore(BattleUnit* unit, BecSndWork* work) {
     if ((u32)work->sfxId != 0xFFFFFFFF) {

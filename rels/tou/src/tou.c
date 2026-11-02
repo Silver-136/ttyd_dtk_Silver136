@@ -141,6 +141,7 @@ static void insert(s32* list, s32 num, s32 from, s32 to);
             }                                                                             \
         }                                                                                 \
     }
+
 // Find the first listed fighter carrying the requested FighterData flag.
 #define FIND_FLAG(k, list, n, flag)                                 \
     for (k = 0; k < n; k++) {                                       \
@@ -800,6 +801,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
             break;
         }
     }
+
     // An unknown rule ID uses the final entry of the selected division table.
     if (i == num) {
         i = num - 1;

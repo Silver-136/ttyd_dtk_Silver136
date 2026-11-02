@@ -808,6 +808,7 @@ static void disp_2D(CameraId cam, void* param) {
             b = 0xA0;
             a = 0xFF;
         }
+
         // FAKE: frac *= 80.0f inside the argument; plain frac * 80.0f changes the object
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
         t = w->t24 % 12;
@@ -863,6 +864,7 @@ static void disp_2D(CameraId cam, void* param) {
             b = 0xF0;
             a = 0xFF;
         }
+
         // FAKE: frac *= 80.0f inside the argument; plain frac * 80.0f changes the object
         btlDispGXQuads2DRasta(x, 8.0f + y, x + (frac *= 80.0f), y - 8.0f, r, g, b, a);
         t = w->t28 % 12;

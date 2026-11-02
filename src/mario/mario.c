@@ -1971,6 +1971,7 @@ BOOL marioChkInScreen(s32 x, s32 y) {
     if (x >= 0 && x <= 600 && y >= 0 && y <= 535) {
         valid = TRUE;
     }
+
     // FAKE: redundant compare with FALSE; return valid changes the object
     return valid != FALSE;
 }

@@ -1544,6 +1544,7 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
 /** Status 21, demos only: empty (Guess: a no-gravity state, from the name); retail drops the case. */
 static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front) {
 }
+
 /** Status 22, demos only: empty; whatever the "audience ball" event was, it was cut. */
 static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front) {
 }

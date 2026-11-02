@@ -137,6 +137,7 @@ GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 0}, {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 127},
     {255, 255, 255, 204},
 };
+
 /** The round cloud model's four display lists. */
 void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
 /** Size in 32-byte units of each of the round cloud model's four display lists. */

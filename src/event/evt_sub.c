@@ -1991,6 +1991,7 @@ USER_FUNC(evt_sub_animgroup_async) {
     if (r == 0) {
         return EVT_RETURN_BLOCK;
     }
+
     // FAKE: redundant test (r is nonzero here); returning EVT_RETURN_DONE directly changes the object
     if (r != 0) {
         return EVT_RETURN_DONE;

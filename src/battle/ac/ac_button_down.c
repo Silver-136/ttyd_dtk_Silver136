@@ -142,6 +142,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                             break;
                         }
                     }
+
                     // irand(100) is never negative: a confused auto-play always fails
                     if (irand(100) >= 0) {
                         ac->result = 0;

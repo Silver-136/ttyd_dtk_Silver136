@@ -130,6 +130,7 @@ static u16 VolumeTable[] = {
     25484, 25941, 26402, 26868, 27337, 27810, 28288, 28769,
     29255, 29744, 30238, 30736, 31238, 31744, 32254, 32768
 };
+
 // clang-format on
 
 //.bss
@@ -1100,6 +1101,7 @@ void seq_demoInit(SequenceWork* seq) {
     THPSimplePreLoad(FALSE);
     THPSimpleAudioStart();
 }
+
 /** Leaves the movie sequence: frees icons and heap memory, shows the status bar again and frees mariost.tpl. */
 void seq_demoExit(SequenceWork* seq) {
     iconReInit();
@@ -1107,6 +1109,7 @@ void seq_demoExit(SequenceWork* seq) {
     statusWinDispOn();
     fileFree(wp->tpl);
 }
+
 /**
  * Per-frame movie sequence: fades in, plays until A or Start or the movie's end, stops and closes the player,
  * fades out and returns to the title screen. Queues demoDisp while the movie plays.
@@ -1145,6 +1148,7 @@ void seq_demoMain(SequenceWork* seq) {
         dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, demoDisp, NULL);
     }
 }
+
 /**
  * 2D-camera draw callback: decodes the next movie frame
  * and draws it centred (or twice at half size at two offsets),

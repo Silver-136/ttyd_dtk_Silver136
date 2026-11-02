@@ -1038,6 +1038,7 @@ EVT_BEGIN(mario_jump)
     CALL(evt_npc_flag_onoff, 1, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_get_position, STRING("ホワイト"), LW(0), LW(1), LW(2))
 #else
+
 /* JP: the script continues in mario_jump_tail (separate symbol); its last CALL is split across the two */
 EvtWord mario_jump[] = {
     CALL(evt_mario_cam_keep_on)

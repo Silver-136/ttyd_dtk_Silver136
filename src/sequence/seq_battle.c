@@ -347,6 +347,7 @@ void seq_battleMain(SequenceWork* work) {
             break;
     }
 }
+
 /** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
 static void battle_init(void) {
 #endif

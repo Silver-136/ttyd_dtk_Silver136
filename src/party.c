@@ -839,6 +839,7 @@ void partyReInit(void) {
 #endif
     }
 }
+
 /**
  * Runs the partner's member post function if she is in the middle of her field ability (run mode 3),
  * to end it cleanly (from Mario's battle and map-exit code).
@@ -1058,6 +1059,7 @@ static inline s32 partyCountActive(void) {
     }
     return count;
 }
+
 /**
  * Per-frame partner update from Mario's main loop:
  * when any partner is active (the full game also runs marioUsePartyMain first),
@@ -1270,6 +1272,7 @@ void driveParty(PartyEntry* party) {
     party->floorMove = (Vec){0.0f, 0.0f, 0.0f};
     partyPreDisp(party);
 }
+
 /**
  * Starts and runs the partner's appear (run modes 4-7):
  * modes 4 and 5 pop her out of Mario from scale 0, mode 7 starts later in the sequence, and if Mario is rolling,
@@ -1945,6 +1948,7 @@ void allPartyRideJabara(void) {
         partyChgRunMode(party, PARTY_RUN_RIDE);
     }
 }
+
 /**
  * Where the partner rides with Mario: behind him on Yoshi (the follower behind the main partner),
  * above him in plane mode, in front of the boat in boat mode (not in the demos), otherwise 20 above him.
@@ -2361,6 +2365,7 @@ void partyRideMain(PartyEntry* party) {
 
     party->trailPos = party->position;
 }
+
 /** Resets the partner's scale and display offset when she leaves the ride mode. */
 #if VERSION > VERSION_DEMO_US
 static inline void partyChgRunMo(PartyEntry* party) {
@@ -2378,14 +2383,17 @@ extern s32 marioPlaneGetFlyingDir(void);
 static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     return hit == NULL ? FALSE : (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) == 0;
 }
+
 /** Slope angle in degrees of the floor normal n (partyNrmToAngle on a copy). */
 static inline f32 partyAppearNrmAngle(Vec n) {
     return partyNrmToAngle(&n);
 }
+
 /** Moves out by d units against direction ang (behind it). */
 static inline void partyAppearMoveBack(Vec* out, f32 d, f32 ang) {
     movePos(&out->x, &out->z, -d, ang);
 }
+
 /**
  * Demo copy of the appear-position search (retail has it in party_move.c):
  * finds a free spot with floor 30 units from Mario for the partner to land on, trying behind him first,
@@ -2581,6 +2589,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
     }
     return FALSE;
 }
+
 /**
  * Demo copy of the spot search for a partner placed directly (partyEntry, landing from plane mode):
  * 30 units behind Mario, or beside him when a follower is present, needing floor within one step below.
@@ -2660,6 +2669,7 @@ BOOL partyGetAppearPos2(PartyEntry* party, Vec* out) {
     }
     return FALSE;
 }
+
 /**
  * Demo copy of the search for a free spot around Mario (Goombella's and Ms. Mowz's moves,
  * the partner motion code): tries nine directions starting diagonally behind him, needing open space,
@@ -2719,6 +2729,7 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
     }
     return FALSE;
 }
+
 /**
  * Demo copy of the search for a spot near the partner's home direction (partner motion code):
  * starts from Mario, or from the other partner for a follower, and tries eleven directions around it;
@@ -3006,6 +3017,7 @@ void party_damage_return(PartyEntry* party) {
                 party->position.y += 200.0f;
                 party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
             }
+
             // bit 9 of the attributes is HIT_ATTR_WATER_HAZARD
             if (party->hitobjStandOn && !((hitGetAttr(party->hitobjStandOn) >> 9) & 1)) {
 #if VERSION > VERSION_DEMO_US

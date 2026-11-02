@@ -494,6 +494,7 @@ void envDisp_DepthOfField(void) {
                 GXSetTevAlphaIn((GXTevStageID)stage2[0], GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, first2[0] ? GX_CA_ZERO : GX_CA_APREV);
                 GXSetTevSwapMode((GXTevStageID)stage2[0], GX_TEV_SWAP0, GX_TEV_SWAP0);
             }
+
             /* FAKE: dead guard (gz2 is 0) that keeps mg alive through the front end */
             gz2 = 0;
             if (gz2) coord2[0] = mg[0];
@@ -1228,6 +1229,7 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
     return info->mapObj;
 }
+
 /** A map object's parent object. */
 // FAKE: one-use inline helper for obj->parent; writing it out changes the object
 static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }

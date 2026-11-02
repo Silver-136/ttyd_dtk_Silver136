@@ -1028,6 +1028,7 @@ static void ext_moamoa_main(void) {
                 tmp.z = (*pose->mtx)[2][3];
                 sp2_ = tmp;
             }
+
             // FAKE: integer cast hoists the literal as an @ temp (same values)
             psndSFXOn_3D(SFX_NAME_WORD("SFX_STG6_MOAMOA_VOICE1"), &sp2_);
         }

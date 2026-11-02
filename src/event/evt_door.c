@@ -1580,6 +1580,7 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
         } else {
             w = d.z / 2.0f;
         }
+
         // FAKE: self-assignment through t; removing it changes the object
         t = w;
         w = t;

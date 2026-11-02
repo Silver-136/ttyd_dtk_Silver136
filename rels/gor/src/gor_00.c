@@ -4954,6 +4954,7 @@ static EVT_BEGIN(mony_peton_event)
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
 #else
+
 /**
  * Francesca (Mony) hops off the ship, runs along the pier, up the back stairs and out of the map,
  * then is hidden below it. JP and later releases.

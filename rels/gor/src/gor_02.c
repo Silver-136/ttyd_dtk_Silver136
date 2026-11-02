@@ -1509,6 +1509,7 @@ EVT_BEGIN(powerupya_orb_use)
     WAIT_MS(1500)
     CALL(evt_eff_softdelete, STRING("aaax"))
 #else
+
 /**
  * In the demos, Merlon takes the Up Arrow in this talk event and changes the shop's blue crystal to red.
  * This talk event has the name that retail gives to its door animation.
@@ -1555,6 +1556,7 @@ EVT_BEGIN(powerupya_direct_talk)
     END_IF
     CALL(evt_msg_print, 0, STRING("powerup_05"), 0, STRING("me"))
 #else
+
     // Control returns to the player and the shop music resumes.
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)

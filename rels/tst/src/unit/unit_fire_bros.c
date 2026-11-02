@@ -953,6 +953,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
             BREAK_LOOP
         END_IF
     END_LOOP
+
     // After the last fireball he waits for them all to land.
     LOOP(0)
         WAIT_FRAMES(1)

@@ -2798,6 +2798,7 @@ USER_FUNC(_cortez_recovery_audience) {
                     }
                 }
             }
+
             // No branch above clears done, so this call falls through to audience deletion.
             if (!done) {
                 break;

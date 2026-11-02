@@ -129,6 +129,7 @@ USER_FUNC(evt_dokuroiwa_command_check) {
     // retail runs this empty loop (mtctr/bdnz).
     for (i = 0; i < 7; i++) {
     }
+
     // Report 0 for the first unfilled slot, 1 for a mismatch, or 2 when all seven match.
     result = 2;
     for (i = 0; i < 7; i++) {

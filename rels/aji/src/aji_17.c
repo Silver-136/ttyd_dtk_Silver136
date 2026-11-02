@@ -254,6 +254,7 @@ static BeroEntry bero_entry_data[] = {
     },
     {0},
 };
+
 /** Script function: sets the viewport of the 3D and 2D cameras to x, y, width and height from args[0] to args[3]. */
 static s32 viewport(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;

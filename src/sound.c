@@ -1352,6 +1352,7 @@ static void SoundDVDSetPanCh(s32 chan, u8 pan) {
     if (pan < 64) {
         right = (((f32)pan * dvd->vol) / 63.0f);
     }
+
     // FAKE: sign-bit test for pan >= 64; the plain comparison changes the object
     if (!((u32)(pan - 64) >> 31)) {
         left = (((f32)(127 - pan) * dvd->vol) / 63.0f);
@@ -1807,6 +1808,7 @@ u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 cou
     }
     return src;
 }
+
 /** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
 #if VERSION <= VERSION_DEMO_US
 static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
@@ -1942,6 +1944,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 }
             }
         }
+
         // FAKE: loop 2 reads through its own copy of src8; the copy takes the pre-RA scheduler's cycle-1 slot so `mr dst,buffer2`
         // issues after mulhwu (magic constant and dst then share r3, as in the target); the copy itself colours to a self-move (FAKES.md)
         src8b = src8;

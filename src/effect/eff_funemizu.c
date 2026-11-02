@@ -337,6 +337,7 @@ static inline void funemizuCallDL(u32 *p_u) {
     }
     *p_u = u;
 }
+
 /** Draws the wake ripple mesh tinted with the map's water colour. */
 #if VERSION <= VERSION_DEMO_US
 static void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {

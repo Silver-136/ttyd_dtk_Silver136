@@ -1285,6 +1285,7 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     } else {
         mainCursor = &wp->commandMenu.cursor[1];
     }
+
     // FAKE: no-op (s32) cast on the min; `n = (6 <= cursor->count) ? 6 : cursor->count;` changes the object
     n = (s32)((6 <= cursor->count) ? 6 : cursor->count);
     prev = cursor->relPos;

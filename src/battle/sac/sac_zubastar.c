@@ -581,6 +581,7 @@ USER_FUNC(zubastar_main) {
         } else {
             w->lend.x = f;
         }
+
         // BUG: bi is the widest gap along the bottom edge (dbot), but the point is taken from top[] and dtop[]
         f = top[bi] + dtop[bi] * rand() / 32767.0f;
         if (-240.0f == w->lstart.y) {

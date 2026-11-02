@@ -287,6 +287,7 @@ void effRadiationMain(EffectEntry* effect) {
                 p->rotVelZ = 0.1f * (f32)r_data[k++];
                 p->delay = 0;
             }
+
             // FAKE: comma expression for the decrement test; --p->delay <= 0 changes the object
             if (p->delay <= 0 || (--p->delay, p->delay <= 0)) {
                 p->rotX += p->rotVelX;

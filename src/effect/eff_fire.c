@@ -41,6 +41,7 @@ FireScaleKey scale1[] = {
     { 70, 1.05f },   { 80, 1.025f },  { 100, 1.1f },   { 120, 1.0f },   { 130, 1.025f },
     { 160, 0.95f },  { 180, 1.025f }, { 200, 1.0f },
 };
+
 /**
  * Eight vertex colours of the layered flame for the spark-throwing types: orange fire (type 5), blue (6)
  * and green (7). Read by effFireDisp3.

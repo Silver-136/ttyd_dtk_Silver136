@@ -41,6 +41,7 @@ void _epilog(void) {
     }
     dig_thpStop();
 }
+
 /**
  * Module unresolved-symbol stub: if a relocation could not be resolved the REL linker points it here;
  * it does nothing.

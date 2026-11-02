@@ -93,6 +93,7 @@ effN64Vtx size16x24_tex32x32_l_flower_vtx[] = {
     {4, 9, 0, 1024, 1024, 36, 190, 20, 255},
     {-16, 9, 0, 0, 1024, 36, 190, 20, 255},
 };
+
 /** Green quad for the right-hand digit of a two-digit amount on the flower. */
 effN64Vtx size16x24_tex32x32_r_flower_vtx[] = {
     {-4, -15, 0, 0, 0, 36, 190, 20, 255},
@@ -285,6 +286,7 @@ void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
             GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_RASC, GX_CC_ZERO);
             GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
         }
+
         // FAKE: tex first holds the type test, then the texture id; testing the condition directly changes the object
         tex = (type == 0 || type == 2);
         if (tex) {

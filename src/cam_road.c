@@ -764,6 +764,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
     }
     return ret;
 }
+
 // FAKE: cos through an inline so the first-block cs is an inline @ temp (numbered above the hoisted +-1 constants, f15 as in the target)
 static inline f32 camRoadCos(f32 x) { return (f32)cos(x); }
 // FAKE: l2 through an inline so it is an inline @ temp (numbered with the sgn ?: temps) -> 2nd-web lim1/lim2 colour f27/f25 as in the target
@@ -781,6 +782,7 @@ static inline f32 camRoadSolve(f32 ax, f32 az, Vec* dB, Vec* v2, f32* sp) {
     }
     return t;
 }
+
 // FAKE: sgn1/sgn2 as if/else locals of an inline: inline locals get their @ labels at definition time, so the sgn webs
 // are numbered above l2 (crMul) and below cs; with ax/az numbered low this gives the target l2 f14 / sgn1 f15 / sgn2 f28
 static inline void camRoadSgn2(f32 s, f32 t, f32* p1, f32* p2) {
@@ -1314,6 +1316,7 @@ void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadSta
         out->pos.y = to->pos.y;
         out->pos.z = to->pos.z;
     }
+
     // FAKE: spare temporary a2; a0 = (f32)atan2(...) directly changes the object
     a2 = (f32)atan2(from->dir.x, from->dir.z);
     a0 = a2;

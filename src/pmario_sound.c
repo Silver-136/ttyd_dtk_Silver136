@@ -9548,6 +9548,7 @@ void psndBGMMain(void) {
         if (bgm->scopeTimer == 0) {
             vol = psnd.bgmVolume;
         }
+
         // FAKE: f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object
         {
             PaperSoundFade* f0 = &bgm->fade;
@@ -9671,6 +9672,7 @@ static inline s32 psndSSFindCh(void) {
     }
     return -1;
 }
+
 /** Returns a free song channel, or -1. */
 static inline s32 psndSongFindCh(void) {
     u32 ch;
@@ -9681,6 +9683,7 @@ static inline s32 psndSongFindCh(void) {
     }
     return -1;
 }
+
 /** Looks BGM name up in psbgmlist (or decodes a numeric id) into *pi. */
 #if VERSION <= VERSION_DEMO_US
 static inline s32 psndBGMSearch(char* name) {
@@ -9711,6 +9714,7 @@ static inline void psndBGMSearchP(const char* name, s32* pi) {
     }
     return i;
 }
+
 /** JP, US and PAL form of psndBGMOn_f_d above; fadeout is the fade-out time for the BGM being replaced. */
 BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
     PaperSoundBGM* bgm;
@@ -9733,6 +9737,7 @@ BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
         *pi = 0;
     }
 }
+
 /** JP, US and PAL form of psndBGMOn_f_d above; fadeout is the fade-out time for the BGM being replaced. */
 BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 unused) {
     PaperSoundBGM* bgm;
@@ -10490,6 +10495,7 @@ sgfound:
             }
         }
     }
+
     // FAKE: w is a copy of the walker sfx[0], and the two never-true gz blocks compile to no code; without them the
     // object changes.
     w[0] = sfx[0];
@@ -10543,6 +10549,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOn
             sfx = t;
             idx = i;
         }
+
         // FAKE: dead int guard (COLOURING W): its division temps add pre-RA interference at the loop-1 tail (one more neighbour for the loop pointer); folded after RA, no code
         { s32 gz = 0; if (gz != 0) { delay = (i / sid) / (sid / i); } }
     }
@@ -10897,6 +10904,7 @@ static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
         }
     }
 }
+
 /** the ENV sound has finished: wait for its next play */
 static inline void psndENVRestart(PaperSoundEnv* e) {
     e->sfx = -1;
@@ -11049,6 +11057,7 @@ void psndENVMain(void) {
                     if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START))
                         break;
                 }
+
                 // the demo does not restart a one-shot ambient sound: it stays in its last state
                 e->sfx = -1;
                 e->state++;
@@ -11304,6 +11313,7 @@ static inline s32 psndENVSearch(const char** names, const char* name) {
     }
     return id;
 }
+
 /** Returns a free environment sound entry, or NULL when all 16 are in use. */
 static inline PaperSoundEnv* psndENVGetFree(void) {
     PaperSoundEnv* p = psenv;
@@ -11316,6 +11326,7 @@ static inline PaperSoundEnv* psndENVGetFree(void) {
     }
     return NULL;
 }
+
 /**
  * Starts the environment (ambient sounds of a map such as wind or waves) called name on channel flags & 0xF:
  * keeps it if already running, otherwise stops the old one
@@ -11349,6 +11360,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
     if (psnd.flags & PSND_FLAG_ENV_OFF) {
         return FALSE;
     }
+
     // FAKE: env is computed as a byte-offset sum (the same address as &psnd.envId[idx]), and the offset
     // idx * sizeof(u16) is a named local o (declared after fade) shared with the envLpf/envFreq stores below (same
     // addresses); indexing the arrays directly changes the object.

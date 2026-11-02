@@ -69,6 +69,7 @@ s32 marioUseParty(void) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
+
     // party can be NULL (marioGetPartyId may return -1 even with a partner slot set); it is dereferenced here before the NULL check below.
     if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) || party->slitOn == 1) {
         return 0;
@@ -80,6 +81,7 @@ s32 marioUseParty(void) {
     if (party == NULL) {
         return 0;
     }
+
     // 1 = PARTY_MEMBER_GOOMBELLA, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
     if (party->currentMemberId == PARTY_MEMBER_GOOMBELLA && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;
@@ -246,6 +248,7 @@ s32 marioUseParty(void) {
     if (party == NULL) {
         return 0;
     }
+
     // 1 = PARTY_MEMBER_GOOMBELLA, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
     if (party->currentMemberId == 1 && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;

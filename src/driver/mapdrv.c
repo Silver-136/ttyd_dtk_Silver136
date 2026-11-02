@@ -784,6 +784,7 @@ static inline void mapLoadHeader_(MapWork* wp, BOOL group) {
         }
     }
 }
+
 // FAKE: chunk search written out here with k declared last, for the target k/w register order; same search
 static inline void mapLoadAnim_(BOOL group) {
     MapWork* w;
@@ -1126,6 +1127,7 @@ BOOL mapPreLoad(const char* map) {
     }
     return TRUE;
 }
+
 /**
  * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
  * The demo first unpacks the map's compressed archive.
@@ -1158,6 +1160,7 @@ void mapLoad(const char* map) {
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
 }
+
 /**
  * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
@@ -1658,6 +1661,7 @@ static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, MapMaterial* 
         break;
     }
 }
+
 /**
  * Applies an alpha animation at the animation's current time to the material,
  * stored as 255 minus the animated value in blendColor.r.
@@ -1688,6 +1692,7 @@ static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMateri
         break;
     }
 }
+
 /**
  * Applies a light animation at the animation's current time to the light's position (x10 to world scale)
  * and rotation.

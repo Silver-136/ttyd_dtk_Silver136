@@ -193,6 +193,7 @@ static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
         animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);
     }
 }
+
 /** Switches lamp index to the given animation number and starts it looping on that lamp's pose. */
 static void shuryolightSetAnim(s32 index, s32 anim) {
     ShuryoLight* light = &slhp->lights[index];
@@ -200,6 +201,7 @@ static void shuryolightSetAnim(s32 index, s32 anim) {
     light->status = anim;
     animPoseSetAnim(light->npc->poseId, light->anims[anim], TRUE);
 }
+
 /**
  * Starts the event code as a new event, first deleting the previous lamp event with the given id
  * if it is still running; returns the new event id.
@@ -210,6 +212,7 @@ static s32 shuryolightRunEvt(EvtWord* code, s32 id) {
     }
     return evtEntryType(code, 0, 0, 0)->eventId;
 }
+
 /**
  * Script helper: creates Grodus's five lamp NPCs (power lamp, three head lamps, staff lamp,
  * all with model c_shuryo) and attaches them to his body pose.
@@ -269,6 +272,7 @@ USER_FUNC(evt_shuryolight_init) {
     animPoseSetDispCallBack(base->poseId, shuryolight_callback, lights);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: sets the animation of lamp args[0] to args[1]. */
 static USER_FUNC(evt_shuryolight_set_anim) {
     EvtWord* args = event->args;
@@ -277,6 +281,7 @@ static USER_FUNC(evt_shuryolight_set_anim) {
     shuryolightSetAnim(index, evtGetValue(event, args[1]));
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: blocks until the animation of lamp args[0] has played through once. */
 static USER_FUNC(evt_shuryolight_wait_anim_end) {
     s32 index = evtGetValue(event, event->args[0]);
@@ -287,6 +292,7 @@ static USER_FUNC(evt_shuryolight_wait_anim_end) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: returns in args[1] the length in milliseconds of one loop of lamp args[0]'s current animation. */
 static USER_FUNC(evt_shuryolight_get_anim_time) {
     EvtWord* args = event->args;
@@ -297,6 +303,7 @@ static USER_FUNC(evt_shuryolight_get_anim_time) {
     evtSetValue(event, args[1], 1000.0f * (data->loopInfo->end - data->loopInfo->start) / 60.0f);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: returns in args[1] the current animation number of lamp args[0]. */
 static USER_FUNC(evt_shuryolight_get_status) {
     EvtWord* args = event->args;
@@ -306,6 +313,7 @@ static USER_FUNC(evt_shuryolight_get_status) {
     evtSetValue(event, args[1], light->status);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script helper: starts the power lamp, head lamp and staff lamp events given in args[0],
  * args[1] and args[2] (a null pointer leaves that lamp alone), replacing any events started before.
@@ -327,6 +335,7 @@ USER_FUNC(evt_shuryolight_run_evt) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: replaces the power lamp event with the script in args[0]. */
 static USER_FUNC(evt_shuryolight_run_power_evt) {
     EvtWord* code = (EvtWord*)evtGetValue(event, event->args[0]);
@@ -334,6 +343,7 @@ static USER_FUNC(evt_shuryolight_run_power_evt) {
     slhp->powerEvt = shuryolightRunEvt(code, slhp->powerEvt);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: replaces the head lamps event with the script in args[0]. */
 USER_FUNC(evt_shuryolight_run_head_evt) {
     EvtWord* code = (EvtWord*)evtGetValue(event, event->args[0]);
@@ -341,6 +351,7 @@ USER_FUNC(evt_shuryolight_run_head_evt) {
     slhp->headEvt = shuryolightRunEvt(code, slhp->headEvt);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: replaces the staff lamp event with the script in args[0]. */
 static USER_FUNC(evt_shuryolight_run_tue_evt) {
     EvtWord* code = (EvtWord*)evtGetValue(event, event->args[0]);
@@ -348,6 +359,7 @@ static USER_FUNC(evt_shuryolight_run_tue_evt) {
     slhp->tueEvt = shuryolightRunEvt(code, slhp->tueEvt);
     return EVT_RETURN_DONE;
 }
+
 /** Script helper: stops all lamp events, deletes the five lamp NPCs and frees the work area. */
 USER_FUNC(evt_shuryolight_delete) {
     s32 i;

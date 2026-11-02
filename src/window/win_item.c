@@ -899,6 +899,7 @@ static const char* hpfp_name_table[7][2] = {
     {"PV", "PF"},
     {"HP", "FP"},
 };
+
 // The HP/FP labels in the menu language (JP: full-width only). Kept as macros: the same lookup through an
 // inline function changes register allocation in itemUseDisp (US).
 #define WI_HP_NAME hpfp_name_table[gp->language][0]

@@ -500,6 +500,7 @@ static inline AnimationPoseFile* apeFreeFile(s32* id) {
 found:
     return q;
 }
+
 /**
  * Creates a pose for animation file animName (e.g. "c_kuribo") and returns its id,
  * or -2 if it could not be loaded. type picks the archive and clock: 0 field, 1 battle, 2 shared.
@@ -548,6 +549,7 @@ s32 animPoseEntry(const char *animName, s32 type) {
             goto poseFound;
         }
     }
+
     // With no free pose slot, pose stays NULL and is written through below.
     pose = NULL;
     poseId[0] = -1;
@@ -1074,11 +1076,13 @@ static inline void apmCopy4(void* src, void* dst, s32 count, s32 size) {
     if (count != 0)
         memcpy_as4(dst, src, count * size);
 }
+
 /** Copies count bytes of a frame buffer when there are any (demo animPoseMain helper). */
 static inline void apmCopy(void* src, void* dst, s32 count) {
     if (count != 0)
         memcpy(dst, src, count);
 }
+
 /**
  * Copies count elements of size bytes from src to dst, 4 bytes at a time,
  * when there are any (demo animPoseMain helper).
@@ -1859,6 +1863,7 @@ void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
         PSMTXTrans(trans, tx, ty, tz);
         flags |= 1;
     }
+
     // BUG: the z test is == where x and y test !=, so a parent scale that differs from 1 only in z is not compensated
     if (1.0f != sx || 1.0f != sy || 1.0f == sz) {
         if (sx && sy && sz) {
@@ -1868,6 +1873,7 @@ void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
         }
         flags |= 2;
     }
+
     // BUG: same z test as above: a node scale that differs from 1 only in z is not applied
     if (1.0f != nsx || 1.0f != nsy || 1.0f == nsz) {
         PSMTXScale(scale, nsx, nsy, nsz);
@@ -2068,6 +2074,7 @@ static void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     PSMTXConcat(tmp, scale, trans);
     PSMTXConcat(g_modeling_mtx_stack[g_modeling_mtx_lv - 1], trans, g_modeling_mtx_stack[g_modeling_mtx_lv]);
 }
+
 /**
  * Pushes the modelling matrix of a joint node (translation, two rotations and a scale,
  * cancelling the parent's scale): demo version, which always builds and concatenates every matrix.
@@ -2114,6 +2121,7 @@ static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 s
     PSMTXConcat(tmp, scale, trans);
     PSMTXConcat(g_modeling_mtx_stack[g_modeling_mtx_lv - 1], trans, g_modeling_mtx_stack[g_modeling_mtx_lv]);
 }
+
 /**
  * the demo sets up each texture object, then builds the full texture matrix
  * unless the animation is the identity.
@@ -2521,6 +2529,7 @@ void materialProc(s32 shapeId, s32 xluStage) {
 static inline AnimationPoseData* rpCurData(void) {
     return wp->curPoseData;
 }
+
 /**
  * Draws shape shapeId of the current pose: points GX at the pose's evaluated vertex positions and normals
  * and the file's colours and texture coordinates, then sends its polygons.
@@ -3101,6 +3110,7 @@ static inline void apdScratchN(s32 posNum, s32 nrmNum) {
         wp->floatScratchWP += nrmNum;
     }
 }
+
 // FAKE: the C0 block of animPoseDrawMtx written as an inline helper; its locals become inline temps, which gives the target nonvolatile colours (m/data) and stack slots
 static inline void apdEval(AnimationPose* pose, Mtx matrix, f32 rotY, f32 scale) {
     Mtx tmp;
@@ -3357,6 +3367,7 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     if (!(arg->flags & ANIM_POSE_FLAG_ACTIVE)) {
         return;
     }
+
     // FAKE: dead int-guarded re-definition (COLOURING M). The second reaching def stops IRO pass-0 copy
     // propagation, so 'pose' stays a named local (numbered above d) instead of the low parameter vreg;
     // the arm is folded away (t is reassigned before its next use). Behaviour-identical.
@@ -3576,6 +3587,7 @@ void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame,
     if (right > DEMOGetRenderModeObj()->fbWidth - 2) {
         right = DEMOGetRenderModeObj()->fbWidth - 2;
     }
+
     // BUG: limits top where animPaperPoseDispSub limits bottom; bottom is never limited to the frame height
     if (top > DEMOGetRenderModeObj()->efbHeight - 2) {
         top = DEMOGetRenderModeObj()->efbHeight - 2;
@@ -3646,6 +3658,7 @@ BOOL animGroupBaseAsync(const char* name, s32 group, void* callback) {
     if (model == -1) {
         return TRUE;
     }
+
     // FAKE: (u32) cast (unsigned compare); plain model == 0 changes the object
     if ((u32)model == 0) {
         return FALSE;

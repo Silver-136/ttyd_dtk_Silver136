@@ -1453,6 +1453,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     } else {
                         glyph = hankakuSearch(-48);
                     }
+
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                     iw = scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
                     entry->glyph = glyph;

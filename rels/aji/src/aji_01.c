@@ -2684,6 +2684,7 @@ static USER_FUNC(peach_set_pose) {
     marioChgPose(pose);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script function: sets Mario's scale to 0 on all axes, making him invisible (toumei = transparent);
  * used in Peach's sneaking scenes.

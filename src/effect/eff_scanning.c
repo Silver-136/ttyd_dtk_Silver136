@@ -64,6 +64,7 @@ void effScanningMain(EffectEntry* effect) {
             if (!animGroupBaseAsync("EFF_Scan", inBattle, NULL)) {
                 return;
             }
+
             // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
             data->animId = animPoseEntry("EFF_Scan", (u32)inBattle);
             animPoseSetAnim(data->animId, "Z_1", TRUE);

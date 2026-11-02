@@ -158,6 +158,7 @@ MayaHermitKey recovery_effHermit_0[] = {
         },
     },
 };
+
 /** Twelve pastel colours the recovery sparkles cycle through, one step per frame. */
 #if VERSION > VERSION_DEMO_US
 static u8 color_rotation_data[] = {
@@ -180,6 +181,7 @@ s16* recovery_effFaceDt_pPlane2_q007 = recovery_effFace_pPlane2_q007_0;
 MayaPoly recovery_effAnimRST[] = {
     {10, recovery_effHermit_0, 1, &recovery_effFaceDt_pPlane2_q007},
 };
+
 /** Part list of the recovery icon animation. */
 MayaKeyList recovery_effAnimRSTDt = {1, recovery_effAnimRST};
 /** Recovery icon animation (79 frames), started by effRecoveryEntry and drawn under each icon. */

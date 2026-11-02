@@ -210,6 +210,7 @@ USER_FUNC(_2d_get_dead_jump_offset) {
     } else {
         d = 1.0f;
     }
+
     // FAKE: spare temporary k for 20.0f * d; the plain (s32)(20.0f * d) changes the object
     k = 20.0f;
     k *= d;
@@ -2977,6 +2978,7 @@ static USER_FUNC(kamec_fire_magic_delete) {
     effSoftDelete((EffectEntry*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
+
 /** Lost event of Yux: hovers through its standing poses for 2 s and resumes. */
 EVT_BEGIN(barriern_lost_event)
 #else

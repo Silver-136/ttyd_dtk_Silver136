@@ -926,6 +926,7 @@ static USER_FUNC(peach_set_pose) {
     marioChgPose(pose);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script function: returns in args[2] whether the booth entered is the one that matters for the current story
  * point: 1 when Peach has taken the uniform at STG3_33_01_PEACH_TECS_REQUEST,

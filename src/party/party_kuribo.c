@@ -186,6 +186,7 @@ USER_FUNC(pre_kurio_use) {
         } else {
             msg = "msg_kuri_map";
         }
+
         // FAKE: msg is always set by the chain above; dropping the test changes the object
         if (msg) {
             event->lwData[0] = (EvtWord)msg;

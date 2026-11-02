@@ -7016,6 +7016,7 @@ static USER_FUNC(cook_chk) {
     evtSetValue(event, (volatile u32)args[2], itemNameToID(result2));
     return EVT_RETURN_DONE;
 }
+
 /**
  * Zess T.'s two-ingredient recipe lookup: given items args[0] and args[1] (in either order),
  * returns the dish in args[2] or 0 if the pair has no recipe.

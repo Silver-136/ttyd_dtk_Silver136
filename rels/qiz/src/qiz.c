@@ -35,6 +35,7 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+
 /** Placeholder the linker points unresolved relocations at; it does nothing. */
 void _unresolved(void) {
 }

@@ -670,6 +670,7 @@ USER_FUNC(bero_get_position_normal) {
             f32 c0 = (f32) cos(rad);
             tmp.z = start.z - (30.0f * (-c0));
         }
+
         // FAKE: repeated store of dist and a spare pointer to hx; dropping both changes the object
         dist = 1000000.0f;
         hxPtr = &hx;

@@ -518,6 +518,7 @@ static void memcard_probe(void) {
             result = CARD_RESULT_FATAL_ERROR;
             break;
         }
+
         // FAKE: self-assignment with no effect; without it the object changes
         timeout = (u32)timeout;
     }

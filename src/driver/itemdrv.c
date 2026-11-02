@@ -1780,6 +1780,7 @@ void itemseq_Bound(ItemEntry* entry) {
                 hit = NULL;
                 entry->position.y += dy;
             }
+
             // FAKE: no-op u32 cast so the earlier masked flags2 value is not reused (target reloads flags2 here)
             else if (*(u32*)&entry->flags2 & ITEM_FLAG2_SUNK) {
                 hit = NULL;

@@ -102,6 +102,7 @@ void effRankupMain(EffectEntry* effect) {
             }
             break;
     }
+
     // fade out over the last part of the animation
     if (!(animPoseGetLoopTimes(work->poseId) < 0.61538464f)) {
         work->alpha -= 20;

@@ -36,6 +36,7 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+
 /** Stub the linker needs for unresolved symbols; does nothing. */
 void _unresolved(void) {
 }

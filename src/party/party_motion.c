@@ -527,6 +527,7 @@ void party_motion_stay(PartyEntry* party) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                         partyClearFootmark2();
                     }
+
                 // 3 = PARTY_MEMBER_BOBBERY, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
                 } else if (other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
@@ -5103,6 +5104,7 @@ void party_motion_stay(PartyEntry* party) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                         partyClearFootmark2();
                     }
+
                     // 3 = PARTY_MEMBER_BOBBERY, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
                 } else if (other->currentMemberId == 3 && other->runMode == PARTY_RUN_USE) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
@@ -5114,6 +5116,7 @@ void party_motion_stay(PartyEntry* party) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                     }
                 }
+
                 // d is only set in the branch above: on this path the demo compares an uninitialised value (the demo's own bug)
                 if (marioChkSlitThrouh() || d >= lim) {
                     partyChgMot(party, PARTY_MOTION_WALK);

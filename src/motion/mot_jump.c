@@ -40,6 +40,7 @@ static inline void chgPoseB(MarioWork* mario) {
         marioChgPose("M_J_1B");
     }
 }
+
 /** Switches to the falling jump pose M_J_1C, only for plain Mario (not Bowser, and not while carrying Bobbery). */
 static inline void chgPoseC(MarioWork* mario) {
     if (!(mario->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) && mario->characterId == CHARACTER_MARIO) {

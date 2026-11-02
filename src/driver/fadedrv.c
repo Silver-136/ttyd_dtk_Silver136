@@ -115,6 +115,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     if (!type) {
         return;
     }
+
     // types 16-21 are types 9, 10, 11, 12, 14 and 15 in near-white (0xF0F0F0)
     if (type == FADE_IN_WHITE) {
         type = FADE_IN_BLACK;
@@ -156,6 +157,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
 #endif
         duration = 1000;
     }
+
     // no default: a type without a case here would go on with entry and id uninitialised
     switch (type) {
 #if VERSION <= VERSION_DEMO_US

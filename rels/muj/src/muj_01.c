@@ -543,6 +543,7 @@ static EVT_BEGIN(marco_talk)
 #if VERSION > VERSION_DEMO_US
         CALL(evt_party_run, 1)
 #endif
+
         // Flavio stammers an excuse and paces nervously.
         CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
         LOOP(3)

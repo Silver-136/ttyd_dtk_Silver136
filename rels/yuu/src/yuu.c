@@ -39,6 +39,7 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+
 /** Linker stub for unresolved imports; does nothing. */
 void _unresolved(void) {
 }

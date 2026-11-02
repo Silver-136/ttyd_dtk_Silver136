@@ -1434,6 +1434,7 @@ void select_disp(WinMgrEntry* entry) {
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
+
             // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
@@ -1690,6 +1691,7 @@ void select_disp_party(WinMgrEntry* entry) {
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
+
             // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
@@ -1806,6 +1808,7 @@ void select_disp_mario(WinMgrEntry* entry) {
             if ((f32)entry->y < py - 32.0f || (f32)(entry->y - entry->height) > py + 32.0f) {
                 continue;
             }
+
             // FAKE: no-op update of ofs (always 0.0f); removing it changes the object
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;

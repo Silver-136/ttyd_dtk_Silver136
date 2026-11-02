@@ -242,6 +242,7 @@ static inline void jabTail(BOOL stay) {
         marioGetPtr()->motStruct = NULL;
     }
 }
+
 // A macro, not an inline function: as a function the instruction order in mot_jabara changes.
 #define JAB_LAND(HIT, Y)    \
     marioPaperOff();        \

@@ -1845,6 +1845,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
         x1 = p->screenRect[2];
         y1 = p->screenRect[3];
     }
+
     // BUG: when no parent is a group (MAP_OBJ_FLAG_GROUP) the loop above ends with x0..y1 never set,
     // and they are read uninitialised here.
     if (x0 == 0x3FF || y0 == 0x3FF || x1 == 0x3FF || y1 == 0x3FF) {
@@ -1863,6 +1864,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     if (y1 > gp->efbHeight) {
         y1 = gp->efbHeight;
     }
+
     // Copy the even-aligned screen rectangle into a half-resolution RGB5A3 reflection texture.
     width = x1 - x0;
     height = y1 - y0;

@@ -733,6 +733,7 @@ USER_FUNC(aud_suikomi) {
                 n++;
             }
         }
+
         // Shuffle the occupied-seat IDs before taking the first twenty.
         for (i = 0; i < 1000; i++) {
             s32 a = irand(n);

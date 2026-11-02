@@ -847,6 +847,7 @@ state_end:
                     w->hvy = -v200 / 20.0f;
                     accel = -2.0f;
                 }
+
                 // BUG: accel is set only on frame 26; on the later frames (later calls of this function) it is read
                 // uninitialized.
                 if (w->frame >= 26) {

@@ -136,6 +136,7 @@ USER_FUNC(e3PoseSetAnim) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Starts the action animation on the first call, then waits until every character has played it once. */
 USER_FUNC(e3PoseWaitAction) {
     s32 i;
@@ -152,11 +153,13 @@ USER_FUNC(e3PoseWaitAction) {
     }
     return EVT_RETURN_DONE;
 }
+
 /** Turns the characters to the given angle. */
 USER_FUNC(e3PoseSetRotY) {
     wp->poseRotY = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
+
 /**
  * US demo title screen loop: the four characters walk,
  * then every 5-15 s play their action animation and turn to face the other way and back.
@@ -998,6 +1001,7 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
 static f32 e3BlinkTime(void) {
     return (f32)gp->retraceCount / 15.0f;
 }
+
 /** Draws the shadow under a character on the demo's title screen. */
 static void e3DispShadow(f32 x, f32 y, f32 z) {
     Mtx mtx;

@@ -259,6 +259,7 @@ USER_FUNC(camAtY) {
     evtSetValue(event, args[0], camGetPtr(CAMERA_3D)->cameraAt.y);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Script function: waits until paper-mode Mario is at a slit position (x below -200 or above 300, height strictly between
  * 160 and 169), then switches off the 3D camera control and suspends the event whose ID is in LW(0),

@@ -795,6 +795,7 @@ EVT_BEGIN(slit_majin_lecture)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_continue)
 #endif
+
         // No: the genie scolds him and the lesson repeats.
         IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US

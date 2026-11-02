@@ -133,6 +133,7 @@ s32 lightEntry(const char* name, s32 type, Vec* position, Vec* rotation, const G
             break;
         }
     }
+
     // BUG: a name already in use gets "_%04d" appended until a free name is found, but from the second try
     // `name` points at uniqueName itself, so sprintf reads its own destination and the suffixes pile up
     if (i < LIGHT_ENTRY_COUNT) {

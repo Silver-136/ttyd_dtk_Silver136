@@ -747,6 +747,7 @@ EVT_BEGIN(kuizu_sekizou)
             CALL_CHILD(PTR(quiz_ok))
         ELSE
 #endif
+
             // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
             IF_INT_EQUAL(LW(15), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)

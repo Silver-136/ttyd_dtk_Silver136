@@ -557,6 +557,7 @@ skip:
         if (wp->majinaiState == MAJINAI_DEFENCE_UP && target->currentKind == UNIT_MARIO) {
             defense += 3;
         }
+
         // JP tests bit 0x20 here; Hooktail's parts carry kPartUnitWorkDefense (0x80) in both versions
         if (part->attributes & VERSION_PICK(0x20, kPartUnitWorkDefense)) {
             if ((defense += target->work[UNIT_WORK_PART_DEFENSE]) < 0) {
@@ -659,6 +660,7 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
         !(wp->actionCommands.result & AC_RESULT_SUCCESS)) {
         return 0;
     }
+
     // This tests fn again here (fn == NULL returned above)
     if (fn) {
         damage = fn(attacker, weapon, target, part);

@@ -1095,6 +1095,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
 #if VERSION >= VERSION_US
         CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #else
+
         // BUG: without NPC_FLAG_NO_HIT, npcCheckHitMarioSide puts Don Pianta back on his previous position
         // when a step would enter Mario's contact circle, and moves Mario only if that previous position was
         // already inside. Mario's controls are off and evt_npc_move_position has no other exit, so with

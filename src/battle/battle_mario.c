@@ -2513,6 +2513,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
 #if VERSION >= VERSION_US
+
     // Outside JP a Stylish press is possible on the backflip.
     SET_VALUE(LW(6), 32)
     BEGIN_SIBLING_EVENT

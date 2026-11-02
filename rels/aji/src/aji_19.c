@@ -258,6 +258,7 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
     if (strcmp(target->joint->name, node->joint->name) == 0) {
         return TRUE;
     }
+
     // A child search returns immediately, so this node's siblings are not searched afterward.
     if (node->child != NULL) {
         return _hitIsGroupSub(target, node->child, TRUE);

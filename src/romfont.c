@@ -616,6 +616,7 @@ s32 romFontGetWidth(const char* message) {
         } else {
             i += 1;
         }
+
         // BUG: after a newline or a skipped control byte, glyph still holds the previous character (it is
         // uninitialized if the string starts with one), and that width is added again.
         width += glyph->width;

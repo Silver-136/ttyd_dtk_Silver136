@@ -106,6 +106,7 @@ void effIrekaeruMain(EffectEntry* effect) {
             }
             break;
     }
+
     // fade in, then fade out over the last quarter of the animation
     if (animPoseGetLoopTimes(work->poseId) < 0.75f) {
         work->alpha += 20;

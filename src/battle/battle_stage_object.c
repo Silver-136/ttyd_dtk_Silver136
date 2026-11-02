@@ -2838,6 +2838,7 @@ USER_FUNC(_set_mobj_rotate_x) {
     }
     return busy ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
+
 /* US: these three scripts sit after _set_mobj_rotate_x so the message string pools after its Vec literal */
 #if VERSION >= VERSION_US
 EVT_BEGIN(_close_wall_event)
@@ -3329,6 +3330,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
                 if (evt) {
                     evt->unitId = unit->unitId;
                 }
+
                 // Read outside the if (evt) block above (evtEntry never returns NULL; a full pool gives the one-past entry).
                 unit->ceilFallEventId = evt->eventId;
             }
@@ -3530,6 +3532,7 @@ USER_FUNC(_nozzle_work_effect) {
                     } else {
                         event->userWork[5] = -1;
                     }
+
                     // FAKE: the sum goes through rot first; rot = reviseAngle(90.0f + angle1) changes the object
                     rot = 90.0f + angle1;
                     rot = reviseAngle(rot);
@@ -3576,6 +3579,7 @@ USER_FUNC(_nozzle_work_effect) {
                     } else {
                         event->userWork[7] = -1;
                     }
+
                     // FAKE: z and rot swap roles here (z holds the angle); the left/centre nozzle form changes the object
                     z = reviseAngle(90.0f + angle3);
                     rot = 10.0f * sinfd(angle3) + obj->position.z;

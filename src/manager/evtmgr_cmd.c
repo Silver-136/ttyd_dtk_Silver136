@@ -1074,6 +1074,7 @@ s32 evt_subf(EventEntry* entry) { // 59
 
     return EVT_RETURN_DONE;
 }
+
 /** MULTIPLY_FLOAT(var, expr): var *= expr in floats. */
 s32 evt_mulf(EventEntry* entry) { // 60
     EvtWord* args = entry->args;

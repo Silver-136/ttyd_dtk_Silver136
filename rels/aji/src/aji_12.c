@@ -335,6 +335,7 @@ static USER_FUNC(mario_chk) {
         event->userdata[0] = 0;
         event->userdata[1] = 0;
     }
+
     // The ordered route revisits panels; clamp its final step rather than wrapping this lookup.
     n = 0;
     j = event->userdata[0];

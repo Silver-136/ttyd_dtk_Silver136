@@ -1437,6 +1437,7 @@ EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_end_npc_silhouette_on, STRING("batten"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -4000, 4000, 5000)
 #else
+
 /**
  * Release parade script for the second robot model (c_mb_robo_2a):
  * falls down the screen as a silhouette.

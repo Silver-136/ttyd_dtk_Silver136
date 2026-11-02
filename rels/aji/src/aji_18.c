@@ -73,6 +73,7 @@ static USER_FUNC(make_list) {
     if ((s32)pouchCheckItem(ITEM_CARD_KEY_0x1F) > 0) {
         key_list[n++] = ITEM_CARD_KEY_0x1F;
     }
+
     // At most three available keys precede the item-selection sentinel.
     key_list[n] = -1;
     return EVT_RETURN_DONE;

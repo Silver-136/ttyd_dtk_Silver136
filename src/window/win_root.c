@@ -487,6 +487,7 @@ void winRootDisp(s32 camId, WindowWork* wp) {
             if (i > 0 && wp->menu[i - 1].state == 100) {
                 continue;
             }
+
             // FAKE: hand-written unsigned range test for the closing states 10 and 11;
             // state == 10 || state == 11 changes the object
             if (i > 0 && (u32)(state - 10) <= 1) {
@@ -1399,6 +1400,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
         if (scroll + (y - j * 56) - py > 400.0f || scroll + (y - j * 56) - py < -400.0f) {
             continue;
         }
+
         // ofs is a * 13 (0 or 13 in the two normal modes), so ofs != 1 always holds and page 3 always takes this branch.
         if ((ofs != 0 && p == 2) || (ofs != 1 && p == 3)) {
             winBookTex(w, (a * 13 + 0x7B), x, y + scroll - p * 232, 56.0f, 56.0f);

@@ -172,6 +172,7 @@ EVT_BEGIN(subsetevt_dead)
                 END_SIBLING_EVENT
                 WAIT_FRAMES(90)
 #if VERSION > VERSION_DEMO_US
+
                 // In the retail releases the partner's event 67 also runs (Koops uses it to stand upright).
                 CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
                 IF_INT_NOT_EQUAL(LW(0), 0)
@@ -726,6 +727,7 @@ EVT_BEGIN(subsetevt_damage)
         RETURN
     ELSE
 #if VERSION > VERSION_DEMO_US
+
         // In the retail releases a no-damage last hit fades the HP gauge out.
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

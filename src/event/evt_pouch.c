@@ -166,6 +166,7 @@ USER_FUNC(evt_pouch_set_yoshiname) {
     pouchSetYoshiName((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
+
 /** Returns a pointer to the Yoshi partner's name string in args[0], for messages that print it. */
 USER_FUNC(evt_pouch_get_yoshiname) {
     EvtWord* args = event->args;

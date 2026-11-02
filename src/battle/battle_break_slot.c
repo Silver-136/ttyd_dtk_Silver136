@@ -580,6 +580,7 @@ void BattleBreakSlot_Main(void) {
                     BattleAudienceSoundStop(AUD_SOUND_RUN);
                 }
             }
+
             // BUG: k is set only by the loop on the frame where phaseTimer is 210; here (220) it is read uninitialized
             if (slot->phaseTimer == count + 100 && k == 200) {
                 btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);

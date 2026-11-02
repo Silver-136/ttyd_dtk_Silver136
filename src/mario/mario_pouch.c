@@ -833,6 +833,7 @@ void pouchSortItem(s32 mode) {
         }
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
+
     // PAL sorts badge names by the pouchHiraToKata key
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
 #if VERSION <= VERSION_DEMO_US

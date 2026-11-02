@@ -120,6 +120,7 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
     if (kpaEnemyFireHitChk(x, y, z, h, w)) {
         return KPA_ENEMY_HIT_FIRE;
     }
+
     // FAKE: no-op self-assignment; fixes the scheduling of the position.y load
     mario->wPlayerCollisionBox.y = mario->wPlayerCollisionBox.y;
     dh = 0.5f * (mario->wPlayerCollisionBox.y + h);

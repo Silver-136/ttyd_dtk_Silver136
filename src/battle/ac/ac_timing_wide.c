@@ -286,6 +286,7 @@ void battleAcDelete_TimingWide(BattleWork* work) {
         pos.y = 50.0f + y;                          \
         iconDispGx(&pos, ICON_FLAG_2D, (id), 1.0f); \
     }
+
 /**
  * Draws the button or stick icon, flipping between its two poses as the cue
  * while the window is open (acFlags bit 4 swaps them after the input).

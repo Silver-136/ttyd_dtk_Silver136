@@ -2877,6 +2877,7 @@ static s32 mobj_blk(MapObjectEntry* mobj) {
     }
     return 0;
 }
+
 /**
  * Places a plain block that runs an event when hit from below.
  * args: name, x, y, z, kind (0 yellow MOBJ_Block, 1 MOBJ_PinkBlock), event, flag variable. Not in JP.
@@ -3823,6 +3824,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     }
     return 0;
 }
+
 /**
  * Places a flipping floor panel.
  * args: name, x, y, z, map group under it (flagged 0x400000), unused,
@@ -5034,6 +5036,7 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
             npc->scale.z = npc->scale.y = npc->scale.x;
             npc->jumpTargetPos.y -= 0.2f;
         }
+
         // npc is the last fire bar NPC from the loop above; with typeData[1] == 0 the loop never sets it.
         if (npc->moveTime <= npc->moveElapsed) {
             mobj->state = 99;

@@ -144,12 +144,14 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+
 /**
  * Module unresolved-symbol stub: if a relocation could not be resolved the REL linker points it here;
  * it does nothing.
  */
 void _unresolved(void) {
 }
+
 /**
  * Script helper: stores the bobbing offset for step LW(0) (taken modulo 16) from dou_normal_puka_data into
  * args[0] as a float.
@@ -159,6 +161,7 @@ USER_FUNC(evt_dou_normal_puka) {
     evtSetFloat(event, event->args[0], dou_normal_puka_data[event->lwData[0] & 0xF]);
     return EVT_RETURN_DONE;
 }
+
 /**
  * Debug script function named for printing Mario's position with OSReport: in this build it only looks up
  * Mario and reads the button trigger, prints nothing and blocks forever.

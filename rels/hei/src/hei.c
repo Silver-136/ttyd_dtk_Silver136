@@ -51,6 +51,7 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+
 /** Linker stub for unresolved symbols; does nothing. */
 void _unresolved(void) {
 }

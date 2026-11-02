@@ -64,6 +64,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
+
     // params: 0 unit id, 1 parts id
     unit = BattleGetUnitPtr(work, work->actionCommands.params[MONOSIRI_TARGET_PARAM_UNIT_ID]);
     parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[MONOSIRI_TARGET_PARAM_PARTS_ID]);
@@ -127,6 +128,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             if (cw->sfxId != -1) {
                 psndSFXOff(cw->sfxId);
             }
+
         // fall through
         case AC_STATE_RUN + 3:
             cw->endTimer--;

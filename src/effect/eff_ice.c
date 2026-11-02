@@ -121,6 +121,7 @@ MayaHermitKey ice_effHermit_0[] = {
         },
     },
 };
+
 /**
  * Keyframes of ice shard 1 (top-left quarter, top triangle): still until the ice breaks at frame 99,
  * then it flies up and left, spinning a full turn about Y, and shrinks away.
