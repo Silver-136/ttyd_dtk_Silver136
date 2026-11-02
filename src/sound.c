@@ -1120,7 +1120,7 @@ void SoundEfxSetVolume(s32 chan, u8 vol) {
 /** Returns the volume last set for the effect on chan. */
 u8 SoundEfxGetVolume(s32 chan) {
     s32 off = chan * sizeof(SoundEffect);
-    return (u8)*(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, vol)); // FAKE: byte-offset load from the chan * sizeof offset (sound.effects[chan].vol schedules differently)
+    return *(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, vol)); // FAKE: byte-offset load from the chan * sizeof offset (sound.effects[chan].vol schedules differently)
 }
 
 /** Sets the reverb send of the effect on chan. */

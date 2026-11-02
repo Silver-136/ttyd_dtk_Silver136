@@ -276,7 +276,6 @@ void nokonoko_use(PartyEntry* party) {
     f32 dir;
     f32 spd;
     f32 s2x;
-    u8* moveDistPtr;
     f32 s2y;
     f32 s2z;
     f32 s3x;
@@ -524,8 +523,6 @@ void nokonoko_use(PartyEntry* party) {
         break;
     }
 
-    // FAKE: moveDistance is accessed through this byte pointer in the cases below; party->moveDistance changes the object
-    moveDistPtr = (u8*)&party->moveDistance;
     switch (party->useMotionId) {
     case 50:
         partyClearJumpPara(party);
