@@ -99,6 +99,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
             break;
         case AC_STATE_START:
             if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
+                // irand(100) is never negative: a confused auto-play always fails
                 if (irand(100) >= 0) {
                     ac->setupParam = 30;
                     pw->autoSuccess = 0;

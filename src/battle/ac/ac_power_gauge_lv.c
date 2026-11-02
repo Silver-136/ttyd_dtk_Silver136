@@ -50,6 +50,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
             break;
         case AC_STATE_START:
             if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
+                // irand(100) is never negative: a confused auto-play always fails; the random level below never runs
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
                     work->actionCommands.outputParams[0] = 0;

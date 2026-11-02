@@ -71,7 +71,7 @@ f32 _GetGaugeDecValue(void);
  * While params[1] frames run, each A press lifts the gauge for a moment (see _GetGaugeDecValue) and it
  * otherwise drains.
  * Sets outputParams[0] to the level reached against thresholds params[3..6] (params[2] levels), [1] to A held,
- * [2] to the final gauge (0..100). Returns 0 when finished; confused partners get a random outcome instead.
+ * [2] to the final gauge (0..100). Returns 0 when finished; a confused auto-play skips the input and always gets level 0.
  */
 s32 battleAcMain_AirGauge(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
@@ -101,6 +101,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
             break;
         case AC_STATE_START:
             if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
+                // irand(100) is never negative: a confused auto-play always gets level 0; the random level below never runs
                 if (irand(100) >= 0) {
                     ac->setupParam = ac->params[3] / 2;
                     ac->outputParams[0] = 0;

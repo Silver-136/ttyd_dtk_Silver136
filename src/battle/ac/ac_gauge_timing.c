@@ -114,7 +114,8 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
         case AC_STATE_WAIT_START:
             break;
         case AC_STATE_START:
-            if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
+            if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
+                // irand(100) is never negative: a confused auto-play always fails
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
                     cw->passed = 0;

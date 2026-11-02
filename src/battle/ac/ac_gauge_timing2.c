@@ -27,7 +27,7 @@ typedef struct GT2Work {
     s8 flag[8];      // 0x40
     u32 sfx[8];      // 0x48
     u16 width;       // 0x68
-    s8 miss;         // 0x6A
+    s8 autoSuccess;  // 0x6A, result of the confused auto-play (1 = success)
     u8 pad;
     s32 endTimer; // 0x6C
 } GT2Work;
@@ -97,11 +97,12 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
 
         case AC_STATE_START:
             if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
+                // irand(100) is never negative: a confused auto-play always fails; the random level below never runs
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
-                    gw->miss = 0;
+                    gw->autoSuccess = 0;
                 } else {
-                    gw->miss = 1;
+                    gw->autoSuccess = 1;
                     work->actionCommands.setupParam = 30;
                 }
                 work->actionCommands.acState = AC_STATE_RUN + 1;
@@ -217,7 +218,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
         case AC_STATE_RUN + 1:
             work->actionCommands.setupParam--;
             if (work->actionCommands.setupParam < 0) {
-                if (gw->miss) {
+                if (gw->autoSuccess) {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
                     work->actionCommands.resultCount++;
                     work->actionCommands.outputParams[0] = irand(work->actionCommands.params[2]) + 1;
