@@ -1455,7 +1455,7 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
 
 /**
  * Puts a badge on sale at the badge shop (Lovely Howz)
- * when a dropped badge item carrying ITEM_FLAG_BADGE_RETURN goes away uncollected (itemdrv.c itemCheckBadge),
+ * when a dropped badge item carrying ITEM_FLAG_LOST_BADGE_TO_SHOP goes away uncollected (itemdrv.c itemCheckBadge),
  * so it is not lost for good.
  * In retail those are the badges field enemies drop when beaten (enemy_common_dead_event).
  * Adds it to the special table outside battle; the demo adds it to the bargain table, in or out of battle.

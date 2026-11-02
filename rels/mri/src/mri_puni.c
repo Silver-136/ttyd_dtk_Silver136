@@ -7337,9 +7337,9 @@ USER_FUNC(evt_puni_pera_onoff) {
     EvtWord* args = event->args;
     PuniData* p = &Punidat[evtGetValue(event, args[0])];
     if (evtGetValue(event, args[1])) {
-        p->npc->flags &= ~NPC_FLAG_ACTIVE;
+        p->npc->flags &= ~NPC_FLAG_READY;
     } else {
-        p->npc->flags |= NPC_FLAG_ACTIVE;
+        p->npc->flags |= NPC_FLAG_READY;
     }
     return EVT_RETURN_DONE;
 }

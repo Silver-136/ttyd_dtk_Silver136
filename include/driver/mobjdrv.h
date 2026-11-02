@@ -125,6 +125,5 @@ struct EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode);
 
 // Names from LLCOOLT's tree.
 enum {
-    MOBJ_FLAG_HINT = 32,
     MOBJ_FLAG_BUSY = 512,
 };

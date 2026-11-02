@@ -4900,8 +4900,8 @@ EVT_END()
 static EVT_BEGIN(mony_peton_event)
     CALL(evt_msg_print, 0, STRING("mac_5_038"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("mac_5_039"), 0, STRING("ピートン"))
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_INTANGIBLE)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_ry, STRING("モニー"), 270)
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
@@ -5914,14 +5914,14 @@ static HitDamageReturn dmgRetPoint[] = {
 
 /**
  * Opens the chest mobj_box00 and gives Mario the HP Drain badge (ITEM_HP_DRAIN_BADGE;
- * the US and later releases add ITEM_FLAG_BADGE_RETURN).
+ * the US and later releases add ITEM_FLAG_LOST_BADGE_TO_SHOP).
  */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_HP_DRAIN_BADGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item00"), 258)
 #endif

@@ -2342,7 +2342,7 @@ EVT_BEGIN(senteresa_evt)
     // marked as defeated.
     CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_JIN_00_LUCKY_START, 0)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_BADGE_RETURN)
+    CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
     SET_VALUE(GSWF_JIN_00_LUCKY_START, 1)
 #endif
     CALL(senteresa_huttobu)

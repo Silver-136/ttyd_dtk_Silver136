@@ -1319,7 +1319,7 @@ EVT_BEGIN(powerupya_orb_use)
         ADD(LW(3), 20)
     END_IF
     CALL(evt_item_entry, STRING("watasu"), ITEM_UP_ARROW, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("watasu"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("watasu"), ITEM_FLAG_NO_TOUCH_GET)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("watasu"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -5530,7 +5530,7 @@ EVT_BEGIN(kurihakase_first_talk)
     ADD(LW(1), 20)
     ADD(LW(2), 10)
     CALL(evt_item_entry, STRING("item00"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5498047f))
     WAIT_MS(660)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -5793,7 +5793,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
     // Frankly steps up to his desk; the camera moves in and he hands Mario a Power Smash badge.
     CALL(evt_npc_set_position, STRING("クリハカセ"), -215, 0, -93)
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_SMASH, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         LOOP(0)
             CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
@@ -6068,7 +6068,7 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
     ADD(LW(2), 10)
     CALL(evt_item_entry, STRING("item_map"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item_map"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item_map"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_set_scale, STRING("item_map"), FLOAT(0.5498047f))
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         LOOP(0)
@@ -6802,14 +6802,14 @@ EVT_END()
 
 /**
  * Opens the chest mobj_box01 and gives Mario the Double Dip badge (ITEM_DOUBLE_DIP;
- * the US and later releases add ITEM_FLAG_BADGE_RETURN).
+ * the US and later releases add ITEM_FLAG_LOST_BADGE_TO_SHOP).
  */
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_DOUBLE_DIP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item01"), 258)
 #endif

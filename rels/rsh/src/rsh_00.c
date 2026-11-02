@@ -866,7 +866,7 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         CASE_LESS(STG6_11_OBTAIN_AUTOGRAPH)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_ANIM)
+        CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
 
         // He signs the autograph and gives it to Mario.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, 0)
@@ -888,7 +888,7 @@ static EVT_BEGIN(talk_unten)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_11_OBTAIN_AUTOGRAPH)
-        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_ANIM)
+        CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
 #else
         CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, STRING("me"))
         SET_VALUE(GSW_STORY_PROGRESS, STG6_11_OBTAIN_AUTOGRAPH)

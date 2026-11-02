@@ -1348,7 +1348,7 @@ void npcSetTalkPose(char* name) {
 /**
  * Called by msgdrv when a speaker stops talking:
  * puts the named speaker back into its idle animation ("party" / "extparty" use pose 1,
- * "mario" uses MarioStayPose, an NPC with NPC_FLAG_TALK_ANIM its stayAnim).
+ * "mario" uses MarioStayPose, an NPC with NPC_FLAG_TALK_POSE its stayAnim).
  * Empty names and "(^x^)party" are ignored.
  */
 void npcSetStayPose(char* name) {
@@ -1465,7 +1465,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 /**
  * Vertical movement for one frame: the script's moveOffset.y plus the jump arc (gravity 980 units/s^2 x
  * jumpGravity, limited by maxFallSpeed, slowed in the low part of kpa_03).
- * With NPC_FLAG_LAND_ON_FLOOR it lands on the floor found below (US and later also probe both side edges)
+ * With NPC_FLAG_FLOOR_COLLISION it lands on the floor found below (US and later also probe both side edges)
  * and sets NPC_STATUS_AIRBORNE while off the floor; otherwise it just moves, no lower than -1000.
  */
 void npcMoveG(NpcEntry* npc) {

@@ -151,15 +151,15 @@ EvtWord tst_npc_env_evt[] = {
 
 /**
  * Init event of the NPC test map: gives NPC_01 the Goomba-style testnpc_move_event as its move interrupt and
- * tst_npc_talk_evt as its defeat interrupt (type 8), sets its reaction flag 2 and NPC_FLAG_MOVE_ANIM and
- * NPC_FLAG_TALK_ANIM, sets the field-battle (fbat) mode to 1
+ * tst_npc_talk_evt as its defeat interrupt (type 8), sets its reaction flag 2 and NPC_FLAG_AUTO_MOVE_ANIM and
+ * NPC_FLAG_TALK_POSE, sets the field-battle (fbat) mode to 1
  * and starts the ambient sound loop (tst_npc_env_evt).
  */
 EVT_BEGIN(tst_npc_init_evt)
     CALL(evt_npc_change_interrupt, STRING("NPC_01"), 1, PTR(testnpc_move_event))
     CALL(evt_npc_change_interrupt, STRING("NPC_01"), 8, PTR(tst_npc_talk_evt))
     CALL(evt_npc_reaction_flag_onoff, 1, STRING("NPC_01"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("NPC_01"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("NPC_01"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SPAWN_EVENT(tst_npc_env_evt)
     RETURN

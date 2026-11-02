@@ -962,7 +962,7 @@ BeroEntry yuu_03_data[] = {
  */
 EVT_BEGIN(maffiaboss_ticket_put)
     CALL(evt_item_entry, STRING("ticket"), ITEM_BLIMP_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_JINGLE)
+    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_GET_BGM)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_KEYITEM1"))
         WAIT_MS(2000)
@@ -1701,7 +1701,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
 
     // Don Pianta gives Mario the Train Ticket.
     CALL(evt_item_entry, STRING("ticket"), ITEM_TRAIN_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_JINGLE)
+    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_GET_BGM)
     BEGIN_INLINE_EVENT
 #if VERSION > VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_PAUSE)

@@ -1674,7 +1674,7 @@ EVT_BEGIN(pik_01_init_evt)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         CALL(evt_mobj_entry, STRING("lock"), STRING("MOBJ_Lock"))
-        CALL(evt_mobj_flag_onoff, 1, STRING("lock"), MOBJ_FLAG_HINT)
+        CALL(evt_mobj_flag_onoff, 1, STRING("lock"), MOBJ_FLAG_SHOW_HINT)
         CALL(evt_mobj_set_position, STRING("lock"), 226, 30, -216)
         CALL(evt_mobj_set_anim, STRING("lock"), STRING("Z_1"))
         CALL(set_r)

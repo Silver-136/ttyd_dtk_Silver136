@@ -634,10 +634,10 @@ EVT_BEGIN(evt_kyaku)
         CALL(evt_npc_set_position, STRING("kyaku3"), 20, 0, 370)
         CALL(evt_npc_set_position, STRING("kyaku4"), 50, 0, 360)
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING("kyaku1"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 1, STRING("kyaku2"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 1, STRING("kyaku3"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 1, STRING("kyaku4"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("kyaku1"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("kyaku2"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("kyaku3"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("kyaku4"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
     CALL(evt_ext_entry, 1000, PTR(ext_kyaku_data), PTR(ext_kyaku_init), PTR(ext_kyaku_main), PTR(ext_kyaku_dispent))
     CALL(evt_hitobj_onoff, STRING("group246"), 1, 0)
     RETURN
@@ -5337,9 +5337,9 @@ EVT_BEGIN(evt_watch_match)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING("選手1"), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("選手1"), NPC_FLAG_NO_HIT)
 #else
-    CALL(evt_npc_flag_onoff, 1, STRING("\221I\216\3501"), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("\221I\216\3501"), NPC_FLAG_NO_HIT)
 #endif
 
     // The two fighters spar forever, picking one of three routines at random each round.

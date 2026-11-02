@@ -3733,7 +3733,7 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
         event->userdata[0] = time;
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
 #if VERSION <= VERSION_DEMO_US
-        itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
+        itemFlagOn(event->userdatap[1], ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
         return EVT_RETURN_BLOCK;
     }
@@ -3785,7 +3785,7 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, pos.x, pos.y, pos.z);
         effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
 #if VERSION <= VERSION_DEMO_US
-        itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
+        itemFlagOn(event->userdatap[1], ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
         if (kind == UNIT_MARIO) {
             psndSFXOn_3D("SFX_ITEM_MARIO_USE1", &pos);

@@ -1139,12 +1139,12 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
 }
 
 /**
- * Returns whether a map object shows the "!" hint balloon over Mario when he is near (MOBJ_FLAG_HINT).
+ * Returns whether a map object shows the "!" hint balloon over Mario when he is near (MOBJ_FLAG_SHOW_HINT).
  * Later versions accept NULL.
  */
 BOOL mobjGetHint(MapObjectEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
-    return (entry->flags & MOBJ_FLAG_HINT) != 0;
+    return (entry->flags & MOBJ_FLAG_SHOW_HINT) != 0;
 }
 #else
     if (entry == NULL) {

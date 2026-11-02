@@ -1721,18 +1721,18 @@ static EVT_BEGIN(evt_moamoa_escape)
         CALL(evt_npc_move_position, STRING("車掌"), -80, 22, 1000, 0, 1)
         CALL(evt_npc_set_ry, STRING("車掌"), 90)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_NO_HIT)
 #endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_flag_onoff, 1, STRING("ウェイトレス"), NPC_FLAG_INTANGIBLE)
+        CALL(evt_npc_flag_onoff, 1, STRING("ウェイトレス"), NPC_FLAG_NO_HIT)
 #endif
         CALL(evt_npc_status_onoff, 1, STRING(("ウェイトレス")), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING(("ウェイトレス")), 0, 15, 1000, 0, 1)
         CALL(evt_npc_set_ry, STRING(("ウェイトレス")), 270)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 0, STRING("ウェイトレス"), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 0, STRING("ウェイトレス"), NPC_FLAG_NO_HIT)
 #endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -1776,7 +1776,7 @@ static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_party_run, 0)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 0, STRING(("ウェイトレス")), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 0, STRING(("ウェイトレス")), NPC_FLAG_NO_HIT)
 #endif
     CALL(evt_npc_change_interrupt, STRING("車掌"), 6, PTR(talk_syashou))
     CALL(evt_npc_change_interrupt, STRING(("ウェイトレス")), 6, PTR(talk_waitless))

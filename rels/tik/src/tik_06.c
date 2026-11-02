@@ -172,7 +172,7 @@ EVT_BEGIN(iri_12_kino_makkino_talk)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("irai_12_001_6"), 0, STRING("マッキノ"))
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_SKIP_HIT_ATTR4 | NPC_FLAG_INTANGIBLE)
+        CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_PASS_NPC_ONLY_WALLS | NPC_FLAG_NO_HIT)
         CALL(evt_npc_move_position, STRING("マッキノ"), 220, 0, 0, 60, 4)
         CALL(evt_npc_jump_position_nohit, STRING("マッキノ"), 254, 15, 0, 400, 15)
         CALL(evt_npc_jump_position_nohit, STRING("マッキノ"), 285, 30, 0, 400, 15)
@@ -187,7 +187,7 @@ EVT_BEGIN(iri_12_kino_makkino_talk)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_SKIP_HIT_ATTR4 | NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("キーノ"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_PASS_NPC_ONLY_WALLS | NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("キーノ"), 220, 0, 0, 60, 4)
     CALL(evt_npc_jump_position_nohit, STRING("キーノ"), 254, 15, 0, 400, 15)
     CALL(evt_npc_jump_position_nohit, STRING("キーノ"), 285, 30, 0, 400, 15)

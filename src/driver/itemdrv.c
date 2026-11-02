@@ -96,7 +96,7 @@ WinMgrDesc itemdrv_window_desc[4] = {
 
 /**
  * The demo puts a removed badge item on sale at the badge shop (pouchArriveBadge, the bargain table)
- * when its ITEM_FLAG_BADGE_RETURN bit (0x100) is clear, in or out of battle.
+ * when its ITEM_FLAG_LOST_BADGE_TO_SHOP bit (0x100) is clear, in or out of battle.
  */
 inline void itemCheckBadge(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
@@ -180,7 +180,7 @@ void itemInit(void) {
 
 /**
  * Clears the current item table on map change; on the field it first puts dropped badges
- * (ITEM_FLAG_BADGE_RETURN) on sale at the badge shop (itemCheckBadge).
+ * (ITEM_FLAG_LOST_BADGE_TO_SHOP) on sale at the badge shop (itemCheckBadge).
  */
 void itemReInit(void) {
     ItemWork* wp = itemGetWork();
@@ -962,7 +962,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 #if VERSION <= VERSION_DEMO_US
         if (!(entry->flags & ITEM_FLAG_ACTIVE))
             continue;
-        if (entry->flags & ITEM_FLAG_NO_TOUCH)
+        if (entry->flags & ITEM_FLAG_NO_TOUCH_GET)
         continue;
         if (entry->flags2 & ITEM_FLAG2_CARRIED)
             continue;

@@ -447,7 +447,7 @@ EVT_BEGIN(evt_rsh_door_open)
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
                 CALL(evt_npc_check, STRING("トロン"), LW(10))
                 IF_INT_EQUAL(LW(10), 1)
-                    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_INTANGIBLE)
+                    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_NO_HIT)
                 END_IF
             END_IF
 #endif
@@ -476,7 +476,7 @@ EVT_BEGIN(evt_rsh_door_open)
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
                 CALL(evt_npc_check, STRING("トロン"), LW(10))
                 IF_INT_EQUAL(LW(10), 1)
-                    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_INTANGIBLE)
+                    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_NO_HIT)
                 END_IF
 #endif
             END_IF

@@ -1217,8 +1217,8 @@ EVT_BEGIN(onryo_event)
     CALL(evt_set_nami_anim_rate, FLOAT(0.69921875f))
     WAIT_MS(1000)
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_TALK_POSE)
 #endif
     WAIT_MS(1500)
     CALL(evt_msg_print, 0, STRING("stg5_sea_03"), 0, STRING("ガラの悪い水夫"))
@@ -1357,8 +1357,8 @@ EVT_BEGIN(onryo_event)
     CALL(evt_msg_print, 0, STRING("stg5_sea_11"), 0, STRING("ガラの悪い水夫"))
     WAIT_WHILE(GF(0))
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_TALK_POSE)
 #endif
     CALL(evt_npc_set_anim, STRING("ガラの悪い水夫"), STRING("R_1"))
     CALL(muj_npc_guruguru, STRING("ガラの悪い水夫"), -52, -90, 0, FLOAT(-12.0f), 3000)
