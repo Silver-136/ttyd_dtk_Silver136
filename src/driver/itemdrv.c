@@ -1792,7 +1792,7 @@ void itemseq_Bound(ItemEntry* entry) {
                 }
             }
             if (hit) {
-                if (hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID)) {
+                if (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID)) {
                     entry->flags2 |= ITEM_FLAG2_SUNK;
                     {
                         Vec sndPos = (Vec){0.0f, 0.0f, 0.0f};

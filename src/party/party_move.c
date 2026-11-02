@@ -88,11 +88,11 @@ static inline void partyModeTail(PartyEntry* party) {
         party->splashTimer = 0;
     }
     if (party->runMode != PARTY_RUN_DAMAGE_RETURN) {
-        if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_TOGE)) {
+        if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SPIKES)) {
             partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
-        } else if (party->hitobjFront && (hitGetAttr(party->hitobjFront) & HIT_ATTR_TOGE)) {
+        } else if (party->hitobjFront && (hitGetAttr(party->hitobjFront) & HIT_ATTR_SPIKES)) {
             partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
-        } else if (party->hitobjHead && (hitGetAttr(party->hitobjHead) & HIT_ATTR_TOGE)) {
+        } else if (party->hitobjHead && (hitGetAttr(party->hitobjHead) & HIT_ATTR_SPIKES)) {
             partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
         }
     }
@@ -2002,7 +2002,7 @@ static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     if (!hit) {
         return FALSE;
     }
-    if (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE)) {
+    if (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) {
         return FALSE;
     }
     if (partyChkNoStandMobj(hit)) {

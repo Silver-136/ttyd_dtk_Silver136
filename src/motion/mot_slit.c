@@ -439,7 +439,6 @@ BOOL marioGetMotSlitCancel3(void) {
     return r;
 }
 
-#define CLR_DISP ~ (MARIO_DISP_FLAG_SLIT | MARIO_DISP_FLAG_FIXED_MIRRORED | MARIO_DISP_FLAG_FIXED_UNMIRRORED)
 static inline void slitClearFlags(MarioWork* m) {
     m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
     m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
@@ -469,7 +468,7 @@ void marioSlitForceCancel(void) {
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
 #if VERSION <= VERSION_DEMO_US
         m->wPlayerCollisionBox.x = 20.0f;
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #else
         m->wPlayerCollisionBox.x = 10.0f;
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
@@ -525,8 +524,8 @@ void mot_slit_post(void) {
 #if VERSION <= VERSION_DEMO_US
             mario->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
             mario->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-            mario->dispFlags &= CLR_DISP;
-            mario->dispFlags &= CLR_DISP;
+            mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
+            mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #else
             slitClearFlags(mario);
 #endif
@@ -545,7 +544,7 @@ void mot_slit_post(void) {
 #if VERSION <= VERSION_DEMO_US
     } else {
         id = mario->currMotionId;
-        if (id == 1 || (u16)(id - 2) <= 5 || mario->currMotionId == MARIO_MOTION_JUMP_3) {
+        if (id == MARIO_MOTION_WALK || (u16)(id - MARIO_MOTION_DASH) <= MARIO_MOTION_JUMP_2 - MARIO_MOTION_DASH || mario->currMotionId == MARIO_MOTION_JUMP_3) {
             return;
         }
 #else
@@ -562,13 +561,8 @@ void mot_slit_post(void) {
         }
         mario->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         mario->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-#if VERSION <= VERSION_DEMO_US
-        mario->dispFlags &= CLR_DISP;
-        mario->dispFlags &= CLR_DISP;
-#else
         mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
-#endif
         marioPaperOff();
         mapResetPaperAmbColor();
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
@@ -1302,7 +1296,7 @@ void mot_slit(void) {
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
 #if VERSION <= VERSION_DEMO_US
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #else
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #endif
@@ -1373,7 +1367,7 @@ void mot_slit(void) {
         m->mot.slit.resumeState = m->slitState;
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #else
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
@@ -1432,7 +1426,7 @@ void mot_slit(void) {
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
         m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
 #if VERSION <= VERSION_DEMO_US
-        m->dispFlags &= CLR_DISP;
+        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #else
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #endif

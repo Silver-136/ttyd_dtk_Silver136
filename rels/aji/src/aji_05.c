@@ -105,7 +105,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Item-box script for the chest at "box": gives Mario the card key (ITEM_CARD_KEY_0x1D),
- * sets GSWF_AJI_05_LIT_FLOOR_DONE and clears HIT_ATTR_TOGE on the A_no1 hit group,
+ * sets GSWF_AJI_05_LIT_FLOOR_DONE and clears HIT_ATTR_SPIKES on the A_no1 hit group,
  * switches off the floor lights and makes the floor visibly flash between two states five times
  * while Mario turns to face east.
  */
@@ -115,7 +115,7 @@ static EVT_BEGIN(evt_box)
     CALL(evt_item_entry, STRING("dummy"), ITEM_CARD_KEY_0x1D, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_item_get_item, STRING("dummy"))
-    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_TOGE)
+    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_SPIKES)
     SET_VALUE(GSWF_AJI_05_LIT_FLOOR_DONE, 1)
     WAIT_FRAMES(1)
     CALL_CHILD(PTR(hikaru_off))
@@ -161,7 +161,7 @@ static HitDamageReturn dmgReturnPt[] = {
  */
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
-    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no1"), HIT_ATTR_TOGE)
+    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no1"), HIT_ATTR_SPIKES)
     CALL(evt_mobj_itembox, STRING("box"), -255, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_05_CARD_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     BEGIN_INLINE_EVENT
@@ -199,7 +199,7 @@ EVT_BEGIN(aji_05_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
         CALL_CHILD(PTR(hikaru_off))
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_TOGE)
+        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_SPIKES)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)

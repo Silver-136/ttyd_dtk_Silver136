@@ -808,7 +808,7 @@ void marioLandOn(void) {
         marioChgMot(MARIO_MOTION_DAMAGE);
         return;
     }
-    if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
+    if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_SPIKES)) {
         set_damage_root_ypos(mario->position.y);
         marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         return;

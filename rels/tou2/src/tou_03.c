@@ -4644,19 +4644,11 @@ static EVT_BEGIN(evt_boss)
     // The ring blocks sink and Grubba's power-absorbing machine rises with him on top.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("butai_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("butai_1"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION >= VERSION_US
     CALL(evt_map_playanim, STRING("tyuubu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("guruguru"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hakkou"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("souti"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_playanim, STRING("comp"), MAP_ANIM_PLAY_LOOP, 0)
-#else
-    CALL(evt_map_playanim, STRING("tyuubu"), 1, 0)
-    CALL(evt_map_playanim, STRING("guruguru"), 1, 0)
-    CALL(evt_map_playanim, STRING("hakkou"), 1, 0)
-    CALL(evt_map_playanim, STRING("souti"), 0, 0)
-    CALL(evt_map_playanim, STRING("comp"), 1, 0)
-#endif
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
         WAIT_MS(4000)
@@ -5785,15 +5777,9 @@ EVT_BEGIN(tou_03_init_evt)
     IF_STR_NOT_EQUAL(LW(0), STRING("s_bero_2"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ue"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-#if VERSION >= VERSION_US
     CALL(evt_map_playanim, STRING("light_coloer"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("light_l"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("light_r"), MAP_ANIM_PLAY_LOOP, 0)
-#else
-    CALL(evt_map_playanim, STRING("light_coloer"), 1, 0)
-    CALL(evt_map_playanim, STRING("light_l"), 1, 0)
-    CALL(evt_map_playanim, STRING("light_r"), 1, 0)
-#endif
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL_CHILD(PTR(evt_kyaku))
         WAIT_FRAMES(1)

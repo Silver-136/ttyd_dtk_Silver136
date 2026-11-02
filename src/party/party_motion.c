@@ -852,7 +852,7 @@ void partyFlyAdjustY(PartyEntry* party) {
     hit = partySearchGround(party, 10.0f, 0.0f);
     if (hit) {
         attr = hitGetAttr(hit);
-        if (attr & HIT_ATTR_TOGE) {
+        if (attr & HIT_ATTR_SPIKES) {
             partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             return;
         }
@@ -1086,7 +1086,7 @@ void party_motion_homing_walk(PartyEntry* party) {
         t = fm->pos;
         dir = angleABf(px, pz, t.x, t.z);
         attr = partyGetFrontAttr(party, dir);
-        if (!(attr & HIT_ATTR_TOGE)) {
+        if (!(attr & HIT_ATTR_SPIKES)) {
             goto found;
         }
         partyNextReadId(id);
@@ -1218,7 +1218,7 @@ found:
                 } else {
                     party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
                 }
-                if (attr & HIT_ATTR_TOGE) {
+                if (attr & HIT_ATTR_SPIKES) {
                     partyChgMot(party, PARTY_MOTION_STAY);
                     break;
                 }
@@ -1376,7 +1376,7 @@ found:
                 party->trigFlags |= PARTY_TRIG_SPLASH;
                 party->flags |= PARTY_FLAG_FORCE_FALL;
             }
-        } else if (attr & HIT_ATTR_TOGE) {
+        } else if (attr & HIT_ATTR_SPIKES) {
             partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             return;
         }
@@ -1767,7 +1767,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                 } else {
                     party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
                 }
-                if (attr & HIT_ATTR_TOGE) {
+                if (attr & HIT_ATTR_SPIKES) {
                     partyChgMot(party, PARTY_MOTION_STAY);
                     break;
                 }
@@ -1814,7 +1814,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         } else {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         }
-        if (attr & HIT_ATTR_TOGE) {
+        if (attr & HIT_ATTR_SPIKES) {
             partyChgMot(party, PARTY_MOTION_STAY);
             break;
         }
@@ -1870,7 +1870,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
         if (party->moveSpeed) {
             attr = partyGetFrontAttrFar(party);
-            if (!(attr & HIT_ATTR_DEEP_WATER)) {
+            if (!(attr & HIT_ATTR_WATER_HAZARD)) {
                 v.x = party->position.x;
                 v.z = party->position.z;
                 movePos(&v.x, &v.z, party->moveSpeed, party->targetDir);
@@ -1984,13 +1984,13 @@ void party_motion_homing_fly(PartyEntry* party) {
     hit = _partySearchGround(party, &v.y, &d3, 10.0f, 10.0f);
     if (hit) {
         attr = hitGetAttr(hit);
-        if (attr & HIT_ATTR_DEEP_WATER) {
+        if (attr & HIT_ATTR_WATER_HAZARD) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;
                 party->flags |= PARTY_FLAG_FORCE_FALL;
             }
-        } else if (attr & HIT_ATTR_TOGE) {
+        } else if (attr & HIT_ATTR_SPIKES) {
 #else
 #if VERSION >= VERSION_US
     // US: on las_10 the partner is pushed down out of low ceilings
@@ -2012,7 +2012,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     hit = partySearchGround(party, 10.0f, 10.0f);
     if (hit) {
         attr = hitGetAttr(hit);
-        if (attr & HIT_ATTR_TOGE) {
+        if (attr & HIT_ATTR_SPIKES) {
 #endif
             partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             return;
@@ -4011,7 +4011,7 @@ void party_motion_jump(PartyEntry* party) {
             }
             if (party->velY <= 0.0f) {
                 hit = _partySearchGround(party, &gy, &d, __fabsf(party->velY), 0.0f);
-                if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+                if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
                     if (!party->splashTimer) {
                         party->trigFlags |= PARTY_TRIG_SPLASH;
                         party->flags |= PARTY_FLAG_FORCE_FALL;
@@ -4093,7 +4093,7 @@ void party_motion_jump2(PartyEntry* party) {
             party->position.z = pos.z;
             if (party->velY <= 0.0f) {
                 hit = _partySearchGround(party, &pos.y, &d, __fabsf(party->velY), 0.0f);
-                if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+                if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
                     if (!party->splashTimer) {
                         party->trigFlags |= PARTY_TRIG_SPLASH;
                         party->flags |= PARTY_FLAG_FORCE_FALL;
@@ -4231,7 +4231,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
         party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         hit = _partySearchGround(party, &py, &dd, 100.0f, 100.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
         }
         party->hitobjStandOn = hit;
@@ -4264,7 +4264,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         partyGetAppearPos3(party, &ap);
         dir = angleABf(party->position.x, party->position.z, ap.x, ap.z);
         hit = _partySearchGround(party, &ap.y, &dd, 10.0f, 0.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
         }
         if (hit) {
@@ -4349,7 +4349,7 @@ s32 party_motion_fall(PartyEntry* party) {
     if (!(party->flags & PARTY_FLAG_FORCE_FALL)) {
         hit = _partySearchGround(party, &gy, &depth, 10.0f, __fabsf(party->velY));
     }
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
         hit = NULL;
         if (party->moveKind == 0 && !party->splashTimer) {
             party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -4623,7 +4623,7 @@ void party_motion_behind_mario(PartyEntry* party) {
             }
         }
         hit = _partySearchGround(party, &gy, &dist, 10.0f, 0.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -4739,7 +4739,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         partyMoveCheckWall(party);
         partyChgWalkPose(party, party->moveSpeed);
         hit = _partySearchGround(party, &gy, &sp, 10.0f, 0.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -4898,7 +4898,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
     }
     hit = _partySearchGround(party, &gy, &depth, 100.0f, 100.0f);
     if (hit) {
-        if (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER) {
+        if (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -4979,7 +4979,7 @@ void party_motion_beside_mario(PartyEntry* party) {
         partyMoveCheckWall(party);
         partyChgWalkPose(party, party->moveSpeed);
         hit = _partySearchGround(party, &y, &sp, 10.0f, 0.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;
@@ -5202,7 +5202,7 @@ static void partyStayChkGnd(PartyEntry* party) {
     if (!(party->flags & PARTY_FLAG_DISABLE_FLOORS)) {
         party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         hit = _partySearchGround(party, &g2.y, &depth2, 10.0f, 0.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_DEEP_WATER)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
             hit = NULL;
             if (!party->splashTimer) {
                 party->trigFlags |= PARTY_TRIG_SPLASH;

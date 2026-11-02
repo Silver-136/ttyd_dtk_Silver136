@@ -190,7 +190,7 @@ BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry) {
  */
 BOOL chkfilterVecVivian(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
-    if ((entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_TOGE | HIT_ATTR_ROLL_THROUGH)) && !(entry->attributes & HIT_ATTR_BERO)) {
+    if ((entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_SPIKES | HIT_ATTR_ROLL_THROUGH)) && !(entry->attributes & HIT_ATTR_BERO)) {
         return FALSE;
     }
     if (!(entry->attributes & HIT_ATTR_MOBJ)) {
@@ -578,7 +578,7 @@ void marioChkGnd(void) {
         marioChgMot(MARIO_MOTION_DAMAGE);
         return;
     }
-    if (mario->hitobjStandOn && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_TOGE)) {
+    if (mario->hitobjStandOn && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_SPIKES)) {
         if (vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_RISING) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
@@ -1246,21 +1246,21 @@ void marioChkToge(void) {
     }
     if (mario->hitobjFront != NULL) {
         attr = hitGetAttr(mario->hitobjFront);
-        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE) && mario->frontWallDist < 0.5f * mario->wPlayerCollisionBox.x) {
+        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_SPIKES) && mario->frontWallDist < 0.5f * mario->wPlayerCollisionBox.x) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
     if (mario->hitobjWall != NULL) {
         attr = hitGetAttr(mario->hitobjWall);
-        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
+        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_SPIKES)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
     if (mario->hitobjHead != NULL) {
         attr = hitGetAttr(mario->hitobjHead);
-        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
+        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_SPIKES)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
@@ -2577,27 +2577,27 @@ HitEntry* dou10_yoko_yari(f32* out) {
             Vec dir = {0.0f, -1.0f, 0.0f};
             hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
         }
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
             *out = 0.8f;
         }
         pos = mario->position;
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
             *out = 0.8f;
         }
         pos = mario->position;
         movePos(&pos.x, &pos.z, step, 270.0f);
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
             *out = 0.8f;
         }
         pos = mario->position;
         movePos(&pos.x, &pos.z, step, 90.0f);
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
             *out = 0.8f;
         }
@@ -2624,27 +2624,27 @@ HitEntry* dou10_yoko_yari2(f32* out) {
         Vec dir = {0.0f, -1.0f, 0.0f};
         hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
     }
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = mario->position;
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = mario->position;
     movePos(&pos.x, &pos.z, 8.0f, 270.0f);
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = mario->position;
     movePos(&pos.x, &pos.z, 8.0f, 90.0f);
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
         *out = 0.8f;
     }

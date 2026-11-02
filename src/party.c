@@ -2375,7 +2375,7 @@ extern f32 partyNrmToAngle(Vec* n);
 extern s32 marioPlaneGetFlyingDir(void);
 /** TRUE when hit is a floor the partner may stand on (not flagged with hit attributes 0x200 or 0x800). */
 static inline BOOL partyAppearChkFloor(HitEntry* hit) {
-    return hit == NULL ? FALSE : (hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_SPIKES)) == 0;
+    return hit == NULL ? FALSE : (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) == 0;
 }
 /** Slope angle in degrees of the floor normal n (partyNrmToAngle on a copy). */
 static inline f32 partyAppearNrmAngle(Vec n) {

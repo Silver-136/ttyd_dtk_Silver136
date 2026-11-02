@@ -6151,11 +6151,7 @@ EVT_BEGIN(gor_01_init_evt)
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), 2)
 #else
-#if VERSION >= VERSION_US
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), ITEM_FLAG_NO_TOUCH)
-#else
-        CALL(evt_item_flag_on, STRING("ドクロジュエル"), 2)
-#endif
         CALL(evt_item_status_on, STRING("ドクロジュエル"), ITEM_FLAG2_NO_PARTNER)
 #endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))

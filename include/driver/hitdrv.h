@@ -47,7 +47,8 @@ typedef enum HitAttributes {
     HIT_ATTR_SHIP_ONLY = (1 << 7),         // 0x80, only the paper boat collides
     HIT_ATTR_SHALLOW_WATER = (1 << 8),     // 0x100
     HIT_ATTR_WATER_HAZARD = (1 << 9),      // 0x200, deep water: falling in respawns Mario
-    HIT_ATTR_TOGE = (1 << 11),             // 0x800, spikes (marioChkToge)
+    HIT_ATTR_DAMAGE_LIQUID = (1 << 10),    // 0x400
+    HIT_ATTR_SPIKES = (1 << 11),           // 0x800, spikes (marioChkToge)
     HIT_ATTR_GRASS = (1 << 12),            // 0x1000, footstep and effect material
     HIT_ATTR_SLIT = (1 << 13),             // 0x2000, paper slit (tube/slit) passage
     HIT_ATTR_SHIP_PANEL1 = (1 << 14),      // 0x4000
@@ -137,9 +138,3 @@ void hitObjFlagOn(const char* name, u16 mask);
 HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
 HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx);
 
-// Names from LLCOOLT's tree.
-enum {
-    HIT_ATTR_DAMAGE_LIQUID = 1024,
-    HIT_ATTR_SPIKES = 2048,
-    HIT_ATTR_DEEP_WATER = 512,
-};

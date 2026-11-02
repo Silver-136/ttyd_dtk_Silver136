@@ -296,7 +296,7 @@ static USER_FUNC(mario_chk) {
         mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
     }
     for (i = 0; i < 50; i++) {
-        hitGrpAttrOn((const char*)hit_list[i], HIT_ATTR_TOGE);
+        hitGrpAttrOn((const char*)hit_list[i], HIT_ATTR_SPIKES);
     }
 #if VERSION <= VERSION_DEMO_US
     if (mario->hitobjUnder == NULL) {
@@ -314,7 +314,7 @@ static USER_FUNC(mario_chk) {
 #endif
         mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
-        hitGrpAttrOff("A_hikaru_01", HIT_ATTR_TOGE);
+        hitGrpAttrOff("A_hikaru_01", HIT_ATTR_SPIKES);
         event->userdata[2] = 0;
 #if VERSION <= VERSION_DEMO_US
     } else if (strncmp(hitGetName(mario->hitobjUnder), "A_hikaru_", strlen("A_hikaru_")) != 0) {
@@ -323,7 +323,7 @@ static USER_FUNC(mario_chk) {
 #endif
         mapGrpFlagOff("hikaru_01", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
-        hitGrpAttrOff("A_hikaru_01", HIT_ATTR_TOGE);
+        hitGrpAttrOff("A_hikaru_01", HIT_ATTR_SPIKES);
         event->userdata[2] = 0;
 #if VERSION <= VERSION_DEMO_US
     } else if (strcmp(hitGetName(mario->hitobjUnder), "A_hikaru_01") == 0 && event->userdata[2] == 0) {
@@ -346,7 +346,7 @@ static USER_FUNC(mario_chk) {
     sprintf(name, "nashi_%02d", n);
     mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
-    hitGrpAttrOff(name, HIT_ATTR_TOGE);
+    hitGrpAttrOff(name, HIT_ATTR_SPIKES);
     j++;
     if (j >= 50) {
         j = 49;
@@ -357,7 +357,7 @@ static USER_FUNC(mario_chk) {
     sprintf(name, "nashi_%02d", n);
     mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
-    hitGrpAttrOff(name, HIT_ATTR_TOGE);
+    hitGrpAttrOff(name, HIT_ATTR_SPIKES);
 #if VERSION >= VERSION_US
     // This version exposes a third route entry; the other version exposes two.
     j++;
@@ -370,7 +370,7 @@ static USER_FUNC(mario_chk) {
     sprintf(name, "nashi_%02d", n);
     mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
-    hitGrpAttrOff(name, HIT_ATTR_TOGE);
+    hitGrpAttrOff(name, HIT_ATTR_SPIKES);
 #endif
     event->userdata[1]++;
     // The strict threshold advances after 21 or 61 calls, depending on whether the start was entered.
@@ -394,9 +394,9 @@ static USER_FUNC(hikaru_off) {
         sprintf(name, "nashi_%02d", i);
         mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "A_hikaru_%02d", i);
-        hitGrpAttrOff(name, HIT_ATTR_TOGE);
+        hitGrpAttrOff(name, HIT_ATTR_SPIKES);
     }
-    hitGrpAttrOff("A_no1", HIT_ATTR_TOGE);
+    hitGrpAttrOff("A_no1", HIT_ATTR_SPIKES);
     return EVT_RETURN_DONE;
 }
 

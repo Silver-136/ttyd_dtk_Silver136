@@ -989,7 +989,7 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
     movePos(&x, &z, dist, angle);
     d = 4.0f;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &d, &nx, &ny, &nz, x, 2.0f + y, z, 0.0f, -1.0f, 0.0f);
-    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         pos->x = x;
         pos->y = y;
         pos->z = z;
@@ -1014,7 +1014,7 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
         query.targetDir = dir;
     }
     hit = hitCheckVecFilter(&query, NULL);
-    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         if (query.hitPos.x >= 0.0f) {
             rf = 0.5f;
         } else {

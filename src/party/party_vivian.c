@@ -320,7 +320,7 @@ void vivian_use(PartyEntry* party) {
 
     marioGetScreenPos(mario->position, &sx, &sy, &sz);
     hit = marioSearchGround(&groundY, &gy, &gz, 37.0f, -37.0f);
-    if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE))) {
+    if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES))) {
         mario->hitobjStandOn = hit;
         mario->position.y = groundY;
         if (mario->floorMove.y < 0.0f) {
@@ -507,7 +507,7 @@ void vivian_use(PartyEntry* party) {
     case 10:
 #if VERSION <= VERSION_DEMO_US
         hit = marioSearchGround(&gx, &gy, &gz, 100.0f, -100.0f);
-        if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE))) {
+        if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES))) {
             if (m->floorMove.y || m->floorMove.x) {
                 if ((f32)m->screenY > 480.0f || (f32)m->screenY < 50.0f) {
                     camFollowYOn();

@@ -281,7 +281,7 @@ void mot_hip(void) {
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
             }
-            if (attr & HIT_ATTR_TOGE) {
+            if (attr & HIT_ATTR_SPIKES) {
                 set_damage_root_ypos(mario->position.y);
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
@@ -380,7 +380,7 @@ s32 chkground(void) {
             marioChgMot(MARIO_MOTION_DAMAGE);
             return 1;
         }
-        if (attr & (HIT_ATTR_TOGE | 0x400)) {
+        if (attr & (HIT_ATTR_SPIKES | 0x400)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             return 1;

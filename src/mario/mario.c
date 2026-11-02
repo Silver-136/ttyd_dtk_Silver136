@@ -1714,7 +1714,7 @@ void marioMoveMain(void) {
         }
 #if VERSION > VERSION_DEMO_US
         dou10_yoko_yari3(&wp->frontWallDist);
-        if (wp->hitobjFront && (hitGetAttr(wp->hitobjFront) & HIT_ATTR_TOGE)) {
+        if (wp->hitobjFront && (hitGetAttr(wp->hitobjFront) & HIT_ATTR_SPIKES)) {
             set_damage_root_ypos(wp->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             return;
