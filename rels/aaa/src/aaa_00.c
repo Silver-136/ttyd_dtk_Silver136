@@ -516,9 +516,9 @@ EVT_BEGIN(evt_prologue2)
 EVT_END()
 
 /**
- * Epilogue scene, first part: Mario stands in the house with Luigi, opens the door,
- * reads a mail from Peach (the mail-received jingle and vibration), the dialogue ep_31 to ep_35 plays,
- * Mario jumps and Luigi follows, then the map changes to gor_02.
+ * Epilogue scene, first part: Mario and Luigi talk in the house (ep_31 to ep_33; the front door is opened after ep_31),
+ * a mail arrives (the mail-received jingle and vibration until A is pressed), Luigi asks about it (ep_34),
+ * Mario jumps and Luigi follows, Goombella's mail is read (ep_35), then the map changes to gor_02.
  */
 static EVT_BEGIN(epilogue_evt)
     // The ending ambience starts; Mario and Luigi are placed in the house.
@@ -640,8 +640,8 @@ EVT_END()
 
 /**
  * Epilogue scene, second part (entered as "epilogue2"):
- * Mario and Luigi are in the house, Toadsworth and Peach come in through the front door
- * and talk (ep_47 to ep_54), then walk away; the ending BGM starts, a spotlight fades out on Mario,
+ * Mario and Luigi are in the house, the end of Goombella's mail is read (ep_47), Luigi answers (ep_48),
+ * Toadsworth and Peach knock, come in through the front door and talk (ep_49 to ep_54), then walk away; the ending BGM starts, a spotlight fades out on Mario,
  * the story progress is set to STORY_STG9_00_EPILOGUE and the map changes to end_00.
  */
 static EVT_BEGIN(epilogue_evt2)
