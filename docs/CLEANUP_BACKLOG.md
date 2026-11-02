@@ -189,3 +189,16 @@ never copied in). What the raw counts above mean for the libraries:
 - `src/manager/cardmgr_demo.inc` holds the demo view of a whole file (about 1,430 lines); per-function guards might be smaller.
 - Tables kept once in `.inc` files for demo data order (`eff_ice_face`, `battle_audience_*`, `battle_monosiri_*`).
 - A few column-0 statements remain inside guarded or macro text; guard indentation elsewhere was normalised by tool.
+
+## 9. Codex round 20: order of work (decided 2026-11-01)
+Codex finishes part A only (room comments, battle-family samples, `src/` documentation, outstanding comment judgments),
+still pinned to 9ccd43c0d. After its handoff: apply A, merge our work, empty lines around version blocks in declaration
+lists, clean rebuild of all five versions, push. Then a NEW brief pinned to that commit for the parts below, dropping
+anything done meanwhile. These parts are not cancelled:
+- B: integration shapes (includes cardmgr_demo.inc and CARD_FLAG_* duplicates)
+- C: the 476 `other` review notes
+- D: libs/ review
+- E: layout debt in game code
+- F: prototypes, casts, placeholder fields, pragmas, FAKE rows
+- G: the 107 library sources built in no version
+- H: one inventory for the progress numbers
