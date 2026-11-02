@@ -1178,7 +1178,6 @@ void marioChgMotJump2(void) {
     }
 }
 
-/** TRUE for display angles strictly between 90 and 270 degrees, so mot_kaze ends facing 180 rather than 0. */
 #if VERSION <= VERSION_DEMO_US
 /**
  * In the demo the Flurrie motion lives here: party_cloud.c has no mot_cloud yet,
@@ -1214,6 +1213,8 @@ static inline BOOL marioChkBackAngle(f32 a) {
  * then slows him to a stop and stands.
  * No code in the tree enters MARIO_MOTION_KAZE; marioChkSts 0x20 only tests for it.
  * Guess: a whirlwind, from the name ("kaze", wind).
+ * Resembles Paper Mario 64's spin (action_update_spin: Z, the sprite turning, ending at 0 or 180 degrees), but this one
+ * stays in place: no movement, sound, effect or attack. Same code in all five versions.
  */
 void mot_kaze(void) {
     MarioWork* mario = marioGetPtr();
@@ -1257,6 +1258,8 @@ void mot_kaze(void) {
 /**
  * Unused: lays Mario flat (rot.x 90, pose M_S_1, slit display flag cleared) until B stands him back up.
  * No code in the tree enters MARIO_MOTION_SHADOW. Guess: lying flat as a shadow, from the name.
+ * The look is like Paper Mario 64's KnockDownPlayer map scripts, but those draw a separate rotating sprite during a
+ * cutscene; this only tilts Mario and waits for B. Same code in all five versions.
  */
 void mot_shadow(void) {
     MarioWork* mario = marioGetPtr();
