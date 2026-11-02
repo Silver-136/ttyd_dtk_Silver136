@@ -115,7 +115,7 @@ void effUpdownMain(EffectEntry* effect) {
         p->y = work->position.y;
         p->z = work->position.z;
         if (work->alpha != 0xFF) {
-            mode = 2;
+            mode = DISP_MODE_XLU;
         }
         dispEntry(CAMERA_3D, dispCalcZ(p), mode, (DispCallback)effUpdownDisp, effect);
     }

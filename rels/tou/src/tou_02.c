@@ -2304,7 +2304,7 @@ static void ext_fan_dispent(void) {
 void ext_fan_dispent(void) {
     pose_main();
 #endif
-    dispEntry(CAMERA_3D, 0.0f, 1, fan_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, fan_disp, NULL);
 }
 
 #pragma opt_propagation off
@@ -2423,11 +2423,7 @@ static EVT_BEGIN(evt_poster_8)
         CALL(evt_item_set_gravity, STRING("key"), FLOAT((1.0f)))
         CALL(evt_item_set_bound_rate, STRING("key"), FLOAT(0.5996094f))
         CALL(evt_item_set_jump_power, STRING("key"), FLOAT(500.0f))
-#if VERSION >= VERSION_US
         CALL(evt_item_status_on, STRING("key"), ITEM_STATUS_CUSTOM_LAUNCH)
-#else
-        CALL(evt_item_status_on, STRING("key"), 16)
-#endif
     END_IF
     RETURN
 EVT_END()
@@ -2454,7 +2450,7 @@ static EVT_BEGIN(evt_after_peach)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_1_a"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_1_b"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("stg3_tou_479_00_01"), 0, STRING("\203L\203m\203V\203R\203\217"))
@@ -2516,7 +2512,7 @@ EVT_BEGIN(tou_02_init_evt)
     IF_INT_EQUAL(GSWF_TOU_02_ARENA_TOUR_RETURN, 1)
         CALL_CHILD(PTR(bero_case_entry))
         SPAWN_EVENT(PTR(evt_tougi2))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
 
@@ -2634,49 +2630,49 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_cloud_init)
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_2_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_2"), STRING("a_p_m_2"), PTR(evt_poster_2))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_2"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_2"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_3_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_3"), STRING("a_p_m_3"), PTR(evt_poster_3))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_3"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_3"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_4_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_4"), STRING("a_p_m_4"), PTR(evt_poster_4))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_4"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_4"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_5_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_5"), STRING("a_p_m_5"), PTR(evt_poster_5))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_5"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_5"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_6_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_6"), STRING("a_p_m_6"), PTR(evt_poster_6))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_6"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_6"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_7_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_7"), STRING("a_p_m_7"), PTR(evt_poster_7))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_7"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_7"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_8"), STRING("a_p_m_8"), PTR(evt_poster_8))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_8"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_8"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_9_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_9"), STRING("a_p_m_9"), PTR(evt_poster_9))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_9"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_9"), 1, 0)
             END_IF
@@ -2689,7 +2685,7 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_cloud_init)
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_1_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_1"), STRING("a_p_m_1"), PTR(evt_poster_1))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_1"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_1"), 1, 0)
             END_IF
@@ -2700,7 +2696,7 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
         END_SWITCH
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_1"), MAP_OBJ_FLAG_DISABLED)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_2"), MAP_OBJ_FLAG_DISABLED)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_3"), MAP_OBJ_FLAG_DISABLED)
@@ -2715,49 +2711,49 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_cloud_init)
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_2_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_2_e"), STRING("a_p_m_2"), PTR(evt_poster_2))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_2_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_2"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_3_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_3_e"), STRING("a_p_m_3"), PTR(evt_poster_3))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_3_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_3"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_4_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_4_e"), STRING("a_p_m_4"), PTR(evt_poster_4))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_4_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_4"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_5_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_5_e"), STRING("a_p_m_5"), PTR(evt_poster_5))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_5_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_5"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_6_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_6_e"), STRING("a_p_m_6"), PTR(evt_poster_6))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_6_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_6"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_7_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_7_e"), STRING("a_p_m_7"), PTR(evt_poster_7))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_7_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_7"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_8_e"), STRING("a_p_m_8"), PTR(evt_poster_8))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_8_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_8"), 1, 0)
             END_IF
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_9_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_9_e"), STRING("a_p_m_9"), PTR(evt_poster_9))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_9_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_9"), 1, 0)
             END_IF
@@ -2770,7 +2766,7 @@ EVT_BEGIN(tou_02_init_evt)
             CALL(evt_cloud_init)
             IF_INT_EQUAL(GSWF_TOU_02_POSTER_1_REMOVED, 0)
                 CALL(evt_cloud_ent, 0, STRING("p_m_1_e"), STRING("a_p_m_1"), PTR(evt_poster_1))
-                ELSE
+            ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_1_e"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_hitobj_onoff, STRING("a_p_m_1"), 1, 0)
             END_IF
@@ -2794,49 +2790,49 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_cloud_init)
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_2_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_2"), STRING("a_p_m_2"), PTR(evt_poster_2))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_2"), 1, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_3_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_3"), STRING("a_p_m_3"), PTR(evt_poster_3))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_3"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_3"), 1, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_4_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_4"), STRING("a_p_m_4"), PTR(evt_poster_4))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_4"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_4"), 1, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_5_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_5"), STRING("a_p_m_5"), PTR(evt_poster_5))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_5"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_5"), 1, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_6_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_6"), STRING("a_p_m_6"), PTR(evt_poster_6))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_6"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_6"), 1, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_7_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_7"), STRING("a_p_m_7"), PTR(evt_poster_7))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_7"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_7"), 1, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_8_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_8"), STRING("a_p_m_8"), PTR(evt_poster_8))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_8"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_8"), 1, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_9_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_9"), STRING("a_p_m_9"), PTR(evt_poster_9))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_9"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_9"), 1, 0)
         END_IF
@@ -2849,7 +2845,7 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_cloud_init)
         IF_INT_EQUAL(GSWF_TOU_02_POSTER_1_REMOVED, 0)
             CALL(evt_cloud_ent, 0, STRING("p_m_1"), STRING("a_p_m_1"), PTR(evt_poster_1))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("p_m_1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_m_1"), 1, 0)
         END_IF

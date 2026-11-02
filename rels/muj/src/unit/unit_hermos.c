@@ -135,7 +135,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  * Defence attributes of the Ember: fire hits heal it; ice hits do one extra damage;
  * explosion hits do one extra damage.
  */
-static BattleUnitDefenseAttr defence_attr = {{0, 3, 1, 1, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_ABSORB, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {50, 90, 75, 25, 75, 100, 0, 50, 100, 75, 100, 75, 100, 75, 75, 50, 90, 100, 75, 100, 100, 95};
@@ -232,7 +232,7 @@ static BattleWeapon weapon_bubble_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #endif
     COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     3, // burnTime
@@ -278,7 +278,7 @@ static BattleWeapon weapon_bubble_fire_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
     75, // burnChance
@@ -565,20 +565,20 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -633,7 +633,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     WAIT_MS(400)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -747,20 +747,20 @@ static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -784,7 +784,7 @@ static EVT_BEGIN(fire_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(400)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -896,20 +896,20 @@ static EVT_BEGIN(all_fire_attack_event)
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -943,7 +943,7 @@ static EVT_BEGIN(all_fire_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(400)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

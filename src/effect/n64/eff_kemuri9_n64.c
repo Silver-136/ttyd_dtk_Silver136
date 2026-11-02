@@ -158,7 +158,7 @@ void effKemuri9Main(EffectEntry* effect) {
         work->position.y += work->velY;
         work->position.z = (f32)ir * work->dirZ;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri9Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri9Disp, effect);
 }
 
 #if VERSION <= VERSION_DEMO_US

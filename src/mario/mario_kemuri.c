@@ -260,7 +260,7 @@ void kemuri(void) {
     } else if (--ct <= 0) {
         f32 scale, dist;
         sincosf(&s, &c, 6.2831855f * reviseAngle(-mario->directionView) / 360.0f);
-        sincosf(&s, &c, toMovedirSimple(180.0f + (kpaGetStageViewType() == 0 ? mario->displayDirectionTarget : mario->displayDirection)));
+        sincosf(&s, &c, toMovedirSimple(180.0f + (kpaGetStageViewType() == KPA_VIEW_SIDE ? mario->displayDirectionTarget : mario->displayDirection)));
         switch (kpaGetLevel()) {
         case 0:
             ct = 4;
@@ -300,9 +300,9 @@ void party_kemuri(PartyEntry* party) {
 
 #if VERSION >= VERSION_US
     if (marioStGetSystemLevel() == 0) {
-        if (party->runMode != 10) {
+        if (party->runMode != PARTY_RUN_PIPE) {
             if (party->moveKind != 1) {
-                if (party->runMode == 3 && party->currentMemberId == PARTY_MEMBER_YOSHI) {
+                if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_MEMBER_YOSHI) {
                     if (party->hitobjStandOn != NULL) {
                         if (!(hitGetAttr(party->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER)) {
                             if (party->moveSpeed < 2.0f) {
@@ -337,7 +337,7 @@ void party_kemuri(PartyEntry* party) {
                 }
 #else
     if (party->moveKind != 1) {
-        if (party->runMode == 3 && party->currentMemberId == PARTY_MEMBER_YOSHI) {
+        if (party->runMode == PARTY_RUN_USE && party->currentMemberId == PARTY_MEMBER_YOSHI) {
             if (party->hitobjStandOn != NULL) {
                 if (party->moveSpeed < 2.0f) {
                     party->kemuriTimer = 7;

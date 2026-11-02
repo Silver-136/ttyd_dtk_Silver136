@@ -181,7 +181,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -224,7 +224,7 @@ BattleWeapon marioWeapon_KururinJump = {
     "msg_ac_k_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -273,7 +273,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
     "msg_ac_k_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -327,7 +327,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     "msg_ac_j_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -377,7 +377,7 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -417,7 +417,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackKaitenHammer = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -457,7 +457,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -498,7 +498,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -542,7 +542,7 @@ BattleWeapon marioWeapon_KaitenHammer = {
     "msg_ac_kaiten_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -632,7 +632,7 @@ BattleWeapon marioWeapon_UltraHammer = {
     "msg_ac_ultra_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -718,7 +718,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -734,7 +734,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
 BattleWeapon badgeWeapon_TugitugiJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    241, // itemId
+    ITEM_MULTIBOUNCE, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -745,7 +745,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {0, 0, 1, 1, 2, 2, 241, 1}, // hpDamageWork
+    {0, 0, 1, 1, 2, 2, ITEM_MULTIBOUNCE, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -756,7 +756,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -776,7 +776,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
 BattleWeapon badgeWeapon_GatsunJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    240, // itemId
+    ITEM_POWER_JUMP, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -787,7 +787,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {1, 2, 2, 4, 3, 6, 240, 2}, // hpDamageWork
+    {1, 2, 2, 4, 3, 6, ITEM_POWER_JUMP, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -798,7 +798,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -814,7 +814,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
 BattleWeapon badgeWeapon_DokanJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    332, // itemId
+    ITEM_MEGA_JUMP, // itemId
     NULL, // description
     100, // baseAccuracy
     6, // baseFpCost
@@ -825,7 +825,7 @@ BattleWeapon badgeWeapon_DokanJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {1, 2, 2, 4, 3, 6, 332, 4}, // hpDamageWork
+    {1, 2, 2, 4, 3, 6, ITEM_MEGA_JUMP, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -836,7 +836,7 @@ BattleWeapon badgeWeapon_DokanJump = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -852,7 +852,7 @@ BattleWeapon badgeWeapon_DokanJump = {
 BattleWeapon badgeWeapon_RenzokuJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    242, // itemId
+    ITEM_POWER_BOUNCE, // itemId
     NULL, // description
     100, // baseAccuracy
     3, // baseFpCost
@@ -863,7 +863,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {0, 0, 1, 1, 2, 2, 242, 1}, // hpDamageWork
+    {0, 0, 1, 1, 2, 2, ITEM_POWER_BOUNCE, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -874,7 +874,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -894,7 +894,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
 BattleWeapon badgeWeapon_TatsumakiJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    243, // itemId
+    ITEM_TORNADO_JUMP, // itemId
     NULL, // description
     100, // baseAccuracy
     3, // baseFpCost
@@ -909,7 +909,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
-    {0, 1, 1, 3, 2, 5, 243, 1}, // hpDamageWork
+    {0, 1, 1, 3, 2, 5, ITEM_TORNADO_JUMP, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -920,7 +920,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     "msg_ac_tatsumaki_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -968,7 +968,7 @@ BattleWeapon badgeWeapon_TatsumakiJumpInvolved = {
 BattleWeapon badgeWeapon_MiniminiFumi = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    244, // itemId
+    ITEM_SHRINK_STOMP, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -990,7 +990,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, // burnTime..freezeTime
@@ -1016,7 +1016,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
 BattleWeapon badgeWeapon_NemuraseFumi = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    245, // itemId
+    ITEM_SLEEPY_STOMP, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1038,7 +1038,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
 #if VERSION <= VERSION_DEMO_US
     95,
 #else
@@ -1063,7 +1063,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
 BattleWeapon badgeWeapon_FunyafunyaJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    246, // itemId
+    ITEM_SOFT_STOMP, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1085,7 +1085,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     "msg_ac_jump", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1113,7 +1113,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
 BattleWeapon badgeWeapon_GatsunHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    247, // itemId
+    ITEM_POWER_SMASH, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1124,7 +1124,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {1, 2, 2, 4, 3, 6, 247, 2}, // hpDamageWork
+    {1, 2, 2, 4, 3, 6, ITEM_POWER_SMASH, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1135,7 +1135,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1151,7 +1151,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
 BattleWeapon badgeWeapon_DokanHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    333, // itemId
+    ITEM_MEGA_SMASH, // itemId
     NULL, // description
     100, // baseAccuracy
     6, // baseFpCost
@@ -1162,7 +1162,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {1, 2, 2, 4, 3, 6, 333, 4}, // hpDamageWork
+    {1, 2, 2, 4, 3, 6, ITEM_MEGA_SMASH, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1173,7 +1173,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1192,7 +1192,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
 BattleWeapon badgeWeapon_JishinHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    248, // itemId
+    ITEM_QUAKE_HAMMER, // itemId
     NULL, // description
     100, // baseAccuracy
     3, // baseFpCost
@@ -1207,7 +1207,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 248, 2}, // hpDamageWork
+    {0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 0xFFFFFFFF, 0, ITEM_QUAKE_HAMMER, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1218,7 +1218,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1234,7 +1234,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
 BattleWeapon badgeWeapon_UltraJishinHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    334, // itemId
+    ITEM_MEGA_QUAKE, // itemId
     "msg_ultra_attack", // description
     100, // baseAccuracy
     7, // baseFpCost
@@ -1245,7 +1245,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {3, 6, 3, 6, 3, 6, 334, 4}, // hpDamageWork
+    {3, 6, 3, 6, 3, 6, ITEM_MEGA_QUAKE, 4}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1256,7 +1256,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     "msg_ac_ultra_jishin_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1272,7 +1272,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
 BattleWeapon badgeWeapon_HammerNageru = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    249, // itemId
+    ITEM_HAMMER_THROW, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1283,7 +1283,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-    {0, 1, 1, 3, 2, 5, 249, 1}, // hpDamageWork
+    {0, 1, 1, 3, 2, 5, ITEM_HAMMER_THROW, 1}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_SINGLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1294,7 +1294,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
     "msg_ac_hammer_nageru", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1309,7 +1309,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
 BattleWeapon badgeWeapon_TsuranukiNaguri = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    250, // itemId
+    ITEM_PIERCING_BLOW, // itemId
     NULL, // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1331,7 +1331,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1350,7 +1350,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
 BattleWeapon badgeWeapon_ConfuseHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    251, // itemId
+    ITEM_HEAD_RATTLE, // itemId
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1376,7 +1376,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, // poisonStrength
 #if VERSION <= VERSION_DEMO_US
@@ -1402,7 +1402,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
 BattleWeapon badgeWeapon_FireNaguri = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    252, // itemId
+    ITEM_FIRE_DRIVE, // itemId
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1430,7 +1430,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
         {0}, // fpDamageWork
         TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_MULTIPLE, // targetClassFlags
 #else
-    {0xFFFFFFFF, 3, 0, 3, 1, 3, 252, 2}, // hpDamageWork
+    {0xFFFFFFFF, 3, 0, 3, 1, 3, ITEM_FIRE_DRIVE, 2}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
     TARGET_CLASS_MULTIPLE | TARGET_CLASS_NO_SELF | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_TREE_OR_SWITCH, // targetClassFlags
@@ -1443,7 +1443,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     "msg_ac_fire_naguri", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
 #if VERSION <= VERSION_DEMO_US
@@ -1472,7 +1472,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
 BattleWeapon badgeWeapon_FireNaguriFailed = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    252, // itemId
+    ITEM_FIRE_DRIVE, // itemId
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1513,7 +1513,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
 #if VERSION <= VERSION_DEMO_US
@@ -1538,7 +1538,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
 BattleWeapon badgeWeapon_IceNaguri = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    253, // itemId
+    ITEM_ICE_SMASH, // itemId
     NULL, // description
     100, // baseAccuracy
     3, // baseFpCost
@@ -1561,7 +1561,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, // burnTime
@@ -1588,7 +1588,7 @@ BattleWeapon badgeWeapon_Charge = {
     "btl_wn_mario_normal_charge", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
-    256, // itemId
+    ITEM_CHARGE, // itemId
     "btl_hlp_cmd_operation_charge", // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1614,7 +1614,7 @@ BattleWeapon badgeWeapon_Charge = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1632,7 +1632,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     "btl_wn_mario_normal_charge", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
-    257, // itemId
+    ITEM_CHARGE_P, // itemId
     "btl_hlp_cmd_operation_charge", // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1658,7 +1658,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1676,7 +1676,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     "btl_wn_mario_super_charge", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
-    337, // itemId
+    ITEM_SUPER_CHARGE, // itemId
     "btl_hlp_cmd_operation_super_charge", // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1698,7 +1698,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1716,7 +1716,7 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     "btl_wn_mario_super_charge", // name
     ICON_ITEM_BOOTS, // icon
     {0}, // pad_06
-    338, // itemId
+    ITEM_SUPER_CHARGE_P, // itemId
     "btl_hlp_cmd_operation_super_charge", // description
     100, // baseAccuracy
     2, // baseFpCost
@@ -1738,7 +1738,7 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1759,7 +1759,7 @@ BattleWeapon badgeWeapon_2KaiItem = {
     "btl_wn_2kai_item", // name
     0, // icon
     {0}, // pad_06
-    254, // itemId
+    ITEM_DOUBLE_DIP, // itemId
     NULL, // description
     100, // baseAccuracy
     4, // baseFpCost
@@ -1775,7 +1775,7 @@ BattleWeapon badgeWeapon_2KaiItem = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1791,7 +1791,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     "btl_wn_3kai_item", // name
     0, // icon
     {0}, // pad_06
-    329, // itemId
+    ITEM_TRIPLE_DIP, // itemId
     NULL, // description
     100, // baseAccuracy
 #if VERSION <= VERSION_DEMO_US
@@ -1811,7 +1811,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_IGNORE_VULNERABILITY | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1830,7 +1830,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
 BattleWeapon badgeWeapon_DefenceCommand = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    335, // itemId
+    ITEM_UNUSED_DEFEND_BADGE, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
@@ -1846,7 +1846,7 @@ BattleWeapon badgeWeapon_DefenceCommand = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1869,7 +1869,7 @@ BattleWeapon badgeWeapon_DefenceCommand = {
 BattleWeapon badgeWeapon_DefenceCommandP = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    336, // itemId
+    ITEM_UNUSED_DEFEND_BADGE_P, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
@@ -1885,7 +1885,7 @@ BattleWeapon badgeWeapon_DefenceCommandP = {
     NULL, // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -2360,12 +2360,12 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(4)
-        CASE_OR_EQUAL(6)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -2417,14 +2417,14 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     END_IF
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -2650,12 +2650,12 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(4)
-        CASE_OR_EQUAL(6)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -2692,14 +2692,14 @@ static EVT_BEGIN(marioAttackEvent_KururinJump)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
 
         // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-        IF_INT_NOT_EQUAL(LW(5), 1)
-            IF_INT_EQUAL(LW(5), 3)
+        IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+            IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             END_IF
-            IF_INT_EQUAL(LW(5), 6)
+            IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             END_IF
-            IF_INT_EQUAL(LW(5), 2)
+            IF_INT_EQUAL(LW(5), PRECHECK_MISS)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
             END_IF
             CALL(btlevtcmd_StopAC)
@@ -3139,14 +3139,14 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
 
     // A dodge or miss: the enemy plays its dodge, Mario tumbles off, falls flat and gets up.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -3433,12 +3433,12 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -3474,14 +3474,14 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -3646,12 +3646,12 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -3666,14 +3666,14 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(6), 0, MOVE_SOUND_FROM_TABLE)
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -3962,14 +3962,14 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
             END_IF
             CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT, LW(5))
             SWITCH(LW(5))
-                CASE_EQUAL(2)
+                CASE_EQUAL(PRECHECK_MISS)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-                CASE_EQUAL(3)
+                CASE_EQUAL(PRECHECK_LUCKY)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-                CASE_EQUAL(6)
+                CASE_EQUAL(PRECHECK_DODGY)
                 CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-                CASE_EQUAL(4)
-                CASE_EQUAL(1)
+                CASE_EQUAL(PRECHECK_INTANGIBLE)
+                CASE_EQUAL(PRECHECK_HIT)
                 CALL(btlevtcmd_GetResultAC, LW(0))
                 IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
                     CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
@@ -4226,12 +4226,12 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -4301,14 +4301,14 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
     END_IF
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -4484,12 +4484,12 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     // Each stomp starts here (label 10); the game first checks whether it will land.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -4575,14 +4575,14 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     END_SWITCH
 
     // A dodge or miss: the enemy plays its dodge, Mario lands hard and the attack ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -4847,7 +4847,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_EQUAL(LW(6), 5)
+    IF_INT_EQUAL(LW(6), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_StopAC)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
@@ -4958,14 +4958,14 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     END_IF
 
     // If the attack misses, the target plays its dodge reaction and no damage is dealt.
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(90)
@@ -5010,7 +5010,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
         END_IF
         WAIT_FRAMES(10)
         GOTO(95)
-        END_IF
+    END_IF
 #else
 #if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(LW(0), 10)
@@ -5265,7 +5265,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(7))
-    IF_INT_EQUAL(LW(7), 5)
+    IF_INT_EQUAL(LW(7), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_StopAC)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
@@ -5326,14 +5326,14 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
 
     // If the attack misses, the target plays its dodge reaction and no damage is dealt.
-    IF_INT_NOT_EQUAL(LW(7), 1)
-        IF_INT_EQUAL(LW(7), 3)
+    IF_INT_NOT_EQUAL(LW(7), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(7), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(7), 6)
+        IF_INT_EQUAL(LW(7), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(7), 2)
+        IF_INT_EQUAL(LW(7), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(90)
@@ -5396,7 +5396,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
         END_SIBLING_EVENT
 
         // If the swing did not connect, Mario spins to a stop and stands for a moment.
-        IF_INT_NOT_EQUAL(LW(7), 1)
+        IF_INT_NOT_EQUAL(LW(7), PRECHECK_HIT)
             WAIT_FRAMES(50)
             DELETE_EVENT(LW(9))
             BEGIN_SIBLING_EVENT
@@ -5441,7 +5441,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     ELSE
         // Super Hammer: a missed swing spins to a stop as above; on a hit a whirlwind rises and the Stylish window
         // opens.
-        IF_INT_NOT_EQUAL(LW(7), 1)
+        IF_INT_NOT_EQUAL(LW(7), PRECHECK_HIT)
             CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(0))
             MULTIPLY(LW(0), 36)
             BEGIN_SIBLING_EVENT_GET_ID(LW(9))
@@ -5532,7 +5532,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
         GOTO(99)
     END_IF
-    IF_INT_NOT_EQUAL(LW(7), 1)
+    IF_INT_NOT_EQUAL(LW(7), PRECHECK_HIT)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_CheckToken, LW(3), kKnockedAway, LW(0))
@@ -5785,7 +5785,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     END_IF
     LABEL(51)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_EQUAL(LW(6), 1)
+    IF_INT_EQUAL(LW(6), PRECHECK_HIT)
         CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 2, 0)
         BEGIN_INLINE_EVENT
             WAIT_FRAMES(42)
@@ -5796,13 +5796,13 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
             END_IF
         END_INLINE_EVENT
     ELSE
-        IF_INT_EQUAL(LW(6), 3)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
     END_IF
@@ -5825,7 +5825,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 17, 17, 0)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     SWITCH(LW(6))
-        CASE_GREATER_OR_EQUAL(2)
+        CASE_GREATER_OR_EQUAL(PRECHECK_MISS)
         CASE_DEFAULT
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
@@ -6087,7 +6087,7 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
     END_IF
     LABEL(51)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_EQUAL(LW(6), 1)
+    IF_INT_EQUAL(LW(6), PRECHECK_HIT)
         CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 2, 0)
         BEGIN_INLINE_EVENT
             WAIT_FRAMES(42)
@@ -6098,13 +6098,13 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
             END_IF
         END_INLINE_EVENT
     ELSE
-        IF_INT_EQUAL(LW(6), 3)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
     END_IF
@@ -6226,7 +6226,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru)
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 0)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     SWITCH(LW(6))
-        CASE_GREATER_OR_EQUAL(2)
+        CASE_GREATER_OR_EQUAL(PRECHECK_MISS)
         CASE_DEFAULT
         CALL(evt_audience_acrobat_notry)
         WAIT_MS(1000)
@@ -6668,7 +6668,7 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
     // The enemy it reaches takes the hit (more after a successful Action Command) and the pillars get smaller;
     // enemies that avoid it play their dodge reaction.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_EQUAL(LW(6), 1)
+    IF_INT_EQUAL(LW(6), PRECHECK_HIT)
         CALL(btlevtcmd_GetResultAC, LW(0))
         IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
             CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
@@ -6679,13 +6679,13 @@ EVT_BEGIN(marioAttackEvent_FireNaguri_object)
             SUBTRACT(LW(13), 1)
         END_IF
     ELSE
-        IF_INT_EQUAL(LW(6), 3)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
     END_IF
@@ -7320,11 +7320,11 @@ USER_FUNC(_fire_wave) {
 USER_FUNC(_majinai_powerup_check) {
     BattleWork* wp = _battleWorkPointer;
     s32 ret = *event->args;
-    if (pouchGetPtr()->merleeNextCurseType != 1) {
+    if (pouchGetPtr()->merleeNextCurseType != MAJINAI_POWER_UP) {
         evtSetValue(event, ret, 0);
     } else {
         evtSetValue(event, ret, 1);
-        wp->majinaiState = 1;
+        wp->majinaiState = MAJINAI_POWER_UP;
         BattleMajinaiDone();
         BattleMajinaiEndCheck();
     }

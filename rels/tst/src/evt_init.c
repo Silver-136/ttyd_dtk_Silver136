@@ -40,6 +40,7 @@
 #include "npc_event.h"
 #include "evt/evt_snd.h"
 #include "driver/mapdrv.h"
+#include "driver/npcdrv.h"
 GXColor HSV2RGB(GXColor hsv);
 extern EvtWord testnpc_move_event[];
 
@@ -150,16 +151,16 @@ EvtWord tst_npc_env_evt[] = {
 
 /**
  * Init event of the NPC test map: gives NPC_01 the Goomba-style testnpc_move_event as its move interrupt and
- * tst_npc_talk_evt as its defeat interrupt (type 8), sets its reaction flag 2 and NPC_FLAG_MOVE_ANIM and
- * NPC_FLAG_TALK_ANIM, sets the field-battle (fbat) mode to 1
+ * tst_npc_talk_evt as its defeat interrupt (type 8), sets its reaction flag 2 and NPC_FLAG_AUTO_MOVE_ANIM and
+ * NPC_FLAG_TALK_POSE, sets the field-battle (fbat) mode to 1
  * and starts the ambient sound loop (tst_npc_env_evt).
  */
 EVT_BEGIN(tst_npc_init_evt)
     CALL(evt_npc_change_interrupt, STRING("NPC_01"), 1, PTR(testnpc_move_event))
     CALL(evt_npc_change_interrupt, STRING("NPC_01"), 8, PTR(tst_npc_talk_evt))
     CALL(evt_npc_reaction_flag_onoff, 1, STRING("NPC_01"), 2)
-    CALL(evt_npc_flag_onoff, 1, STRING("NPC_01"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_flag_onoff, 1, STRING("NPC_01"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SPAWN_EVENT(tst_npc_env_evt)
     RETURN
 EVT_END()
@@ -462,7 +463,7 @@ void tess_test_line_disp(CameraId cameraId, void* param) {
 
 /** Copies the screen into the texture the filled polygon is drawn with. */
 void tess_test_capture(CameraId cameraId, void* param) {
-    tess_test_work->capture = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_I8, GX_FALSE, 0), 1);
+    tess_test_work->capture = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_I8, GX_FALSE, 0), SMART_GROUP_MAP);
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(608, 480, GX_TF_I8, GX_FALSE);
     GXCopyTex(tess_test_work->capture->address, GX_FALSE);
@@ -532,12 +533,12 @@ USER_FUNC(tess_test_draw) {
                 for (j = 0; j < i; j++) {
                     tess_test_work->vertices[j] = tess_test_work->vertices[tess_test_work->vertexCount - 1];
                 }
-                dispEntry(CAMERA_2D, 0.0f, 0, tess_test_capture, NULL);
+                dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, tess_test_capture, NULL);
                 return EVT_RETURN_DONE;
             }
         }
     }
-    dispEntry(CAMERA_2D, 0.0f, 0, tess_test_line_disp, NULL);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, tess_test_line_disp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -592,7 +593,7 @@ USER_FUNC(tess_test_run) {
 
 /** Script helper: queues the tessellated polygon draw (tess_test_disp) on the second offscreen camera. */
 USER_FUNC(tess_test_disp_entry) {
-    dispEntry(CAMERA_OFFSCREEN2, 0.0f, 1, tess_test_disp, NULL);
+    dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_ALPHA_TEST, tess_test_disp, NULL);
     return EVT_RETURN_DONE;
 }
 

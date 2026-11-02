@@ -352,7 +352,7 @@ BattleUnitDefense peach_defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Shadow Queen (possessing Peach) per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr peach_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr peach_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability peach_regist = {30, 30, 30, 100, 30, 100, 50, 0, 100, 50, 100, 50, 100, 30, 30, 0, 0, 100, 30, 100, 100, 0};
@@ -460,7 +460,7 @@ BattleWeapon weapon_peach_black_thunder_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -504,7 +504,7 @@ BattleWeapon weapon_peach_black_energy_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     0, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, // burnTime..sizeChangeStrength
@@ -551,7 +551,7 @@ BattleWeapon weapon_peach_drain_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -587,7 +587,7 @@ BattleWeapon weapon_peach_dark_drag_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -632,7 +632,7 @@ BattleWeapon weapon_peach_dark_drag_last_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CANNOT_MISS | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -709,7 +709,7 @@ BattleWeapon weapon_peach_black_wave_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -749,7 +749,7 @@ BattleWeapon weapon_peach_black_sigh_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -795,7 +795,7 @@ BattleWeapon weapon_peach_black_temptation_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, // poisonStrength
 #if VERSION >= VERSION_US
@@ -842,7 +842,7 @@ BattleWeapon weapon_peach_black_poison_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
 #if VERSION >= VERSION_US
     75, // poisonChance
@@ -890,7 +890,7 @@ BattleWeapon weapon_peach_black_press_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -935,7 +935,7 @@ BattleWeapon weapon_peach_black_1000hand_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1031,7 +1031,7 @@ BattleUnitDefense queen_defence = {{1, 1, 1, 1, 1}};
  * Damage modifiers of the Shadow Queen per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr queen_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability queen_regist = {30, 30, 30, 100, 30, 100, 50, 0, 100, 0, 100, 0, 100, 30, 30, 0, 0, 100, 30, 0, 0, 0};
@@ -1072,7 +1072,7 @@ BattleUnitDefense queen_muteki_defence = {{99, 99, 99, 99, 99}};
  * Damage modifiers of the Shadow Queen while she is invincible per element (normal, fire, ice, explosion,
  * electric): normal: immune, fire: immune, ice: immune, explosion: immune, electric: immune.
  */
-BattleUnitDefenseAttr queen_muteki_defence_attr = {{2, 2, 2, 2, 2}};
+BattleUnitDefenseAttr queen_muteki_defence_attr = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
  * Status vulnerability of the Shadow Queen while she is invincible:
@@ -1258,7 +1258,7 @@ BattleUnitDefense queen_hand_1_defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Shadow Queen's first big hand per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_1_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr queen_hand_1_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability queen_hand_1_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
@@ -1408,7 +1408,7 @@ BattleUnitDefense queen_hand_2_defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Shadow Queen's second big hand per element (normal, fire, ice, explosion,
  * electric): none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_2_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr queen_hand_2_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability queen_hand_2_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
@@ -1558,7 +1558,7 @@ BattleUnitDefense queen_hand_small_defence = {{0, 0, 0, 0, 0}};
  * Damage modifiers of the Shadow Queen's small hand per element (normal, fire, ice, explosion, electric):
  * none, so no element is a weakness, an immunity or a heal.
  */
-BattleUnitDefenseAttr queen_hand_small_defence_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr queen_hand_small_defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 StatusVulnerability queen_hand_small_regist = {30, 30, 30, 0, 30, 0, 100, 0, 0, 0, 0, 0, 0, 30, 30, 0, 0, 0, 0, 0, 0, 0};
@@ -1988,20 +1988,20 @@ EVT_BEGIN(peack_attack_black_thunder)
     WAIT_MS(80)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_thunder_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -2131,20 +2131,20 @@ EVT_BEGIN(peack_attack_dark_drag)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -2318,20 +2318,20 @@ EVT_BEGIN(peack_attack_drain)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_drain_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -3133,20 +3133,20 @@ EVT_BEGIN(queen_attack_black_thunder)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("KRT_S_1"))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_thunder_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -3323,20 +3323,20 @@ EVT_BEGIN(queen_attack_black_wave)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_wave_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -3487,20 +3487,20 @@ EVT_BEGIN(queen_attack_bress1)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_sigh_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -3597,20 +3597,20 @@ EVT_BEGIN(queen_attack_bress2)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_temptation_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -3708,20 +3708,20 @@ EVT_BEGIN(queen_attack_bress3)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_poison_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -4117,20 +4117,20 @@ EVT_BEGIN(queen_hand_1_press_attack)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_black_press_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -4249,20 +4249,20 @@ EVT_BEGIN(queen_hand_1_drain_attack)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_drain_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -4551,20 +4551,20 @@ EVT_BEGIN(queen_hand_small_drag_attack)
     // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -4681,17 +4681,17 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     WAIT_MS(400)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_peach_dark_drag_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -4701,14 +4701,14 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     LABEL(90)
     LOOP(4)
         SWITCH(LW(5))
-            CASE_OR_EQUAL(4)
+            CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
             CASE_END
-            CASE_EQUAL(3)
+            CASE_EQUAL(PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             CASE_END
-            CASE_EQUAL(6)
+            CASE_EQUAL(PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-            CASE_EQUAL(2)
+            CASE_EQUAL(PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_SWITCH
         WAIT_MS(500)
@@ -5281,7 +5281,7 @@ USER_FUNC(queen_hand_small_entry_evt) {
 
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(slot_init) {
-BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
+    BattleBreakSlotGetPtr()->flags |= BREAK_SLOT_FLAG_QUEEN_FORCE_STAR;
 #else
 USER_FUNC(slot_init) {
     BattleBreakSlotGetPtr()->flags |= 4;
@@ -5383,13 +5383,13 @@ USER_FUNC(queen_hp_drain_4_evt) {
         case 0:
             event->userdata[1] = 0;
             event->userdata[0]++;
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 if ((u8)BattleAudience_GetSysCtrl(i)) {
-                    BattleAudience_SetAnim(i, 9, TRUE);
+                    BattleAudience_SetAnim(i, AUD_ANIM_DAMAGE_FRONT, TRUE);
                 }
             }
         case 1:
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 if ((u8)BattleAudience_GetSysCtrl(i)) {
                     BattleAudience_GetPosition(i, &x, &y, &z);
                     BattleAudience_SetPosition(i, x, y - 1.0f, z);
@@ -5401,7 +5401,7 @@ USER_FUNC(queen_hp_drain_4_evt) {
             }
             break;
         case 2:
-            for (i = 0; i < 200; i++) {
+            for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                 if ((u8)BattleAudience_GetSysCtrl(i)) {
                     BattleAudience_Delete(i);
                     BattleAudienceAddTargetNum(0.0f, -1.0f);
@@ -5564,7 +5564,7 @@ USER_FUNC(queen_get_aud_num) {
 USER_FUNC(queen_kankyaku_delete_evt) {
     s32 i;
 
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         if ((u8)BattleAudience_GetSysCtrl(i)) {
             BattleAudience_Delete(i);
             BattleAudienceAddTargetNum(0.0f, -1.0f);
@@ -5719,7 +5719,7 @@ USER_FUNC(queen_thunder) {
     ((EffShockN64Work*)eff->userdata)->col1[0] = 255;
     ((EffShockN64Work*)eff->userdata)->col1[1] = 160;
     ((EffShockN64Work*)eff->userdata)->col1[2] = 192;
-    btl_camera_shake_w(0, 1.0f, 1.0f, 8, 0);
+    btl_camera_shake_w(BTL_CAM_PRI_NORMAL, 1.0f, 1.0f, 8, 0);
     return EVT_RETURN_DONE;
 }
 
@@ -5780,7 +5780,7 @@ inline void hand_pose_inl(void) {
  */
 void hand_main(void) {
     hand_pose_inl();
-    dispEntry(CAMERA_3D, 0.0f, 1, hand_draw, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, hand_draw, NULL);
 }
 
 /** Draw callback of the hand swarm: loads the ext render mode, vertex, texture and TEV set-up and draws all hands. */

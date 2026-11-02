@@ -88,7 +88,7 @@ BattleUnitKind unit_reporter = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element modifiers of the placeholder unit `reporter`: none, no element is special to it. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability of the placeholder unit `reporter`: immune to the 22 statuses covered by this table. */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};

@@ -1160,11 +1160,11 @@ USER_FUNC(tiz_broken) {
     if (isFirstCall) {
         memset(broken_wp, 0, sizeof(BrokenWork));
 #if VERSION <= VERSION_DEMO_US
-        broken_wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), 1);
+        broken_wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), SMART_GROUP_MAP);
 #else
-        broken_wp->tex = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+        broken_wp->tex = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
 #endif
-        broken_wp->pieces = smartAlloc(sizeof(BrokenPiece) * 31 * 39, 1);
+        broken_wp->pieces = smartAlloc(sizeof(BrokenPiece) * 31 * 39, SMART_GROUP_MAP);
         broken_wp->copied = 0;
         p = broken_wp->pieces->address;
         for (y = 0; y < 30; y++) {
@@ -1282,7 +1282,7 @@ USER_FUNC(tiz_broken) {
         smartFree(broken_wp->pieces);
         return EVT_RETURN_DONE;
     }
-    dispEntry(CAMERA_2D, 0.0f, 0, tiz_broken_draw, NULL);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, tiz_broken_draw, NULL);
     return EVT_RETURN_BLOCK;
 }
 #pragma opt_propagation reset
@@ -1477,16 +1477,17 @@ USER_FUNC(cam_mahojin_kaiten_main) {
             cur = total;
         }
 #if VERSION > VERSION_DEMO_US
-}}
-elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
-if (elapsed > msec) {
-    elapsed = msec;
-}
-event->lwData[14] = sysMsec2Frame(elapsed);
-#else
+        }
     }
-}
-event->lwData[14]++;
+    elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
+    if (elapsed > msec) {
+        elapsed = msec;
+    }
+    event->lwData[14] = sysMsec2Frame(elapsed);
+#else
+        }
+    }
+    event->lwData[14]++;
 #endif
     if (frames == event->lwData[14]) {
         cont = 0;
@@ -2040,7 +2041,7 @@ EVT_END()
 EVT_BEGIN(fake_fade)
     CALL(evt_cam3d_evt_set, 0, 225, 469, 0, 100, -270, 2000, EASING_SINE_IN_OUT)
     WAIT_MS(1200)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 0, 1, 500)
     RETURN
@@ -2230,7 +2231,7 @@ EVT_BEGIN(mahojin_event)
     CALL(evt_pouch_get_starstone, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 1000)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 0, 1, 500)
     SET_VALUE(GSW_STORY_PROGRESS, STG0_15_THE_PEDESTAL)

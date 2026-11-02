@@ -1,6 +1,7 @@
 // Mario's pouch (save data): items, badges, coins, HP/FP, Star Points and level, partners, Star Pieces and
 // Shine Sprites, the item and badge sorts.
 
+#include "evt/evt_story.h"
 #include "version.h"
 #include "system.h"
 #include "mario/mario_pouch.h"
@@ -46,7 +47,7 @@ s16 _party_max_hp_table[8][4] = {
     {15, 20, 25, 200}
 #else
     {15, 20, 25, 200},
-{0, 0, 0, 0},
+    {0, 0, 0, 0},
 #endif
 #else
     {15, 20, 25, 200}
@@ -326,7 +327,7 @@ BOOL pouchGetItem(ItemType type) {
     } else if (type == ITEM_BOWSER_BROS_MEAT) {
         return 1;
     } else if (type >= BADGE_MIN && type < BADGE_MAX) {
-        swSet(type - 0x70);
+        swSet(type - BADGE_MIN + GSWF_BADGE_FOUND_BASE);
     }
     size = 0;
     itemLists[0] = NULL;
@@ -1461,7 +1462,7 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
 
 /**
  * Puts a badge on sale at the badge shop (Lovely Howz)
- * when a dropped badge item carrying ITEM_FLAG_BADGE_RETURN goes away uncollected (itemdrv.c itemCheckBadge),
+ * when a dropped badge item carrying ITEM_FLAG_LOST_BADGE_TO_SHOP goes away uncollected (itemdrv.c itemCheckBadge),
  * so it is not lost for good.
  * In retail those are the badges field enemies drop when beaten (enemy_common_dead_event).
  * Adds it to the special table outside battle; the demo adds it to the bargain table, in or out of battle.
@@ -1482,7 +1483,7 @@ void pouchMajinaiInit(s32 curseCount) {
     if (mpp->merleeCurseUsesRemaining < curseCount) {
         mpp->merleeCurseUsesRemaining = (u8)curseCount;
         mpp->turnsUntilMerleeActivation = -1;
-        mpp->merleeNextCurseType = 0;
+        mpp->merleeNextCurseType = MAJINAI_NONE;
     }
 }
 

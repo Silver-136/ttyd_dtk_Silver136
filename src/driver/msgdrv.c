@@ -86,7 +86,7 @@ MsgIcon msgIcon[] = {
 /** Sound effects of the message windows by window type: the sound when it opens, then the one when it closes. */
 #if VERSION > VERSION_DEMO_US
 s32 msgWindowOpen_SE_Data[] = {
-    0x16, 0x17, 0x1A, 0x1B, 0x20, 0x21, 0x1C, 0x1D,
+    PSND_SFX_WINDOW_NORMAL_OPEN1, PSND_SFX_WINDOW_NORMAL_CLOSE1, PSND_SFX_WINDOW_WHISPER_OPEN1, PSND_SFX_WINDOW_WHISPER_CLOSE1, PSND_SFX_WINDOW_SIGNBOARD_OPEN1, PSND_SFX_WINDOW_SIGNBOARD_CLOSE1, PSND_SFX_WINDOW_SYSTEM_OPEN1, PSND_SFX_WINDOW_SYSTEM_CLOSE1,
     0x20, 0x21, 0x1C, 0x1D, 0x18, 0x19, 0x22, 0x23,
     0x24, 0x25, 0x26, 0x27, 0x1E, 0x1F, -1, -1
 };
@@ -194,7 +194,7 @@ void msgLoad(const char* filename, s32 index) {
         dvd = DVDMgrOpen(dvdpath, 2, 0);
         if (dvd) {
             entry->length = DVDMgrGetLength(dvd);
-            entry->address = smartAlloc(OSRoundUp32B(entry->length), 0);
+            entry->address = smartAlloc(OSRoundUp32B(entry->length), SMART_GROUP_PERMANENT);
             DVDMgrRead(dvd, entry->address->address, OSRoundUp32B(entry->length), 0);
             DVDMgrClose(dvd);
         }
@@ -301,10 +301,10 @@ void msgLoad(const char* filename, s32 index) {
         if (entry->lookup) {
             smartFree(entry->lookup);
         }
-        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
+        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), SMART_GROUP_PERMANENT);
         str = msgEntryText(entry);
 #else
-        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), 0);
+        entry->lookup = smartAlloc(entry->count * sizeof(MsgLookupEntry), SMART_GROUP_PERMANENT);
         str = entry->address;
 #endif
         lookup = entry->lookup->address;
@@ -846,7 +846,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     char paper2[0x20];
     s32 step;
 #if VERSION <= VERSION_DEMO_US
-f32 scale;
+    f32 scale;
 #else
 #if VERSION >= VERSION_US
     Vec scale; // US: x and y scale apart (<scaleX>)
@@ -938,7 +938,7 @@ f32 scale;
         case WINDOW_TYPE_SYSTEM: {
             static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
 #if VERSION <= VERSION_DEMO_US
-                    entry->value = *((const u32*)(&c));
+            entry->value = *((const u32*)(&c));
 #else
             entry->value = *(u32*)&c;
 #endif
@@ -947,7 +947,7 @@ f32 scale;
         case WINDOW_TYPE_TEC: {
             static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
 #if VERSION <= VERSION_DEMO_US
-                    entry->value = *((const u32*)(&c));
+            entry->value = *((const u32*)(&c));
 #else
             entry->value = *(u32*)&c;
 #endif
@@ -965,7 +965,7 @@ f32 scale;
 
     while (TRUE) {
 #if VERSION <= VERSION_DEMO_US
-{
+        {
             s32 gz = 0;
             if (gz != 0) {
                 y = 0;
@@ -1066,7 +1066,7 @@ f32 scale;
             entry->glyph = MSG_GLYPH_NEWLINE;
             entry->time = time;
 #if VERSION <= VERSION_DEMO_US
-                x = 0;
+            x = 0;
 #else
 #if VERSION < VERSION_US
             x = 0;
@@ -1076,8 +1076,8 @@ f32 scale;
                 maxScale = 1.0f;
             }
 #if VERSION <= VERSION_DEMO_US
-                y -= 32.0f * maxScale;
-                savedScroll -= 32.0f * maxScale;
+            y -= 32.0f * maxScale;
+            savedScroll -= 32.0f * maxScale;
 #else
 #if VERSION >= VERSION_US
             if (data->flags & MSG_WIN_FLAG_SMALL) {
@@ -1103,8 +1103,8 @@ f32 scale;
                 flags |= MSG_CHAR_SEL_ROW(data->numSel);
                 data->numSel++;
 #if VERSION <= VERSION_DEMO_US
-}
-continue;
+            }
+            continue;
             case '<':
                 next = msgGetCommand((char*)msg + 1, tag, args);
 #else
@@ -1124,6 +1124,7 @@ continue;
             next = msgGetCommand(msg + 1, tag, args);
 #endif
             msg = next;
+#if VERSION <= VERSION_DEMO_US
             /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
                (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
             {
@@ -1132,8 +1133,9 @@ continue;
                     msg++;
                 }
             }
+#endif
 #if VERSION <= VERSION_DEMO_US
-                if ((strcmp(tag, "k") == 0) || (strcmp(tag, "key") == 0)) {
+            if ((strcmp(tag, "k") == 0) || (strcmp(tag, "key") == 0)) {
 #else
             if (strcmp(tag, "k") == 0 || strcmp(tag, "key") == 0) {
 #endif
@@ -1147,7 +1149,7 @@ continue;
             } else if (strcmp(tag, "keyxon") == 0) {
                 data->flags |= MSG_WIN_FLAG_KEY_X;
 #if VERSION <= VERSION_DEMO_US
-                } else if ((strcmp(tag, "p") == 0) || (strcmp(tag, "scrl_auto") == 0)) {
+            } else if ((strcmp(tag, "p") == 0) || (strcmp(tag, "scrl_auto") == 0)) {
 #else
             } else if (strcmp(tag, "p") == 0 || strcmp(tag, "scrl_auto") == 0) {
 #endif
@@ -1163,7 +1165,7 @@ continue;
                     data->charCount++;
                 }
 #if VERSION <= VERSION_DEMO_US
-                } else if ((strcmp(tag, "o") == 0) || (strcmp(tag, "once_stop") == 0)) {
+            } else if ((strcmp(tag, "o") == 0) || (strcmp(tag, "once_stop") == 0)) {
 #else
             } else if (strcmp(tag, "o") == 0 || strcmp(tag, "once_stop") == 0) {
 #endif
@@ -1178,12 +1180,12 @@ continue;
                 if (posY != 999) {
                     y = topY - posY;
 #if VERSION <= VERSION_DEMO_US
-                    }
-                    savedScroll = -posY;
-} else if (strcmp(tag, "scale") == 0) {
-                    sscanf(args, "%f", &scale);
-                } else if (strcmp(tag, "/scale") == 0) {
-                    scale = 1.0f;
+                }
+                savedScroll = -posY;
+            } else if (strcmp(tag, "scale") == 0) {
+                sscanf(args, "%f", &scale);
+            } else if (strcmp(tag, "/scale") == 0) {
+                scale = 1.0f;
 #else
 #if VERSION >= VERSION_US
                     savedScroll = -posY;
@@ -1340,11 +1342,11 @@ continue;
             } else if (strcmp(tag, "nowinse") == 0) {
                 window->flags |= WINDOW_FLAG_NOWINSE;
 #if VERSION <= VERSION_DEMO_US
-                } else if (strcmp(tag, "icon") == 0) {
+            } else if (strcmp(tag, "icon") == 0) {
 #if VERSION == VERSION_DEMO_JP
-                    isHM = FALSE;
+                isHM = FALSE;
 #endif
-                    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
+                if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
 #else
 #if VERSION == VERSION_EU
             } else if (strcmp(tag, "center") == 0) {
@@ -1368,9 +1370,9 @@ continue;
                     sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-                        if (strcmp(name, "HM") == 0) {
-                            isHM = TRUE;
-                        }
+                    if (strcmp(name, "HM") == 0) {
+                        isHM = TRUE;
+                    }
 #endif
 #else
                     if (strcmp(name, "HM") == 0) {
@@ -1384,16 +1386,16 @@ continue;
                 }
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-                    if (!isHM)
+                if (!isHM)
 #endif
-{
-                        entry->value = iconId;
-                        // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
-                        ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
-                        entry->glyph = MSG_GLYPH_ICON;
-                        entry->x = (x + ((0.5f * iw) * iconScale)) + iconOffX;
-                        x += 0x28;
-                        entry->y = y - (ih * iconScale);
+                {
+                    entry->value = iconId;
+                    // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
+                    ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
+                    entry->glyph = MSG_GLYPH_ICON;
+                    entry->x = (x + ((0.5f * iw) * iconScale)) + iconOffX;
+                    x += 0x28;
+                    entry->y = y - (ih * iconScale);
 #else
                 if (!isHM) {
                     entry->value = iconId;
@@ -1411,28 +1413,28 @@ continue;
                     entry++;
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-                        time += step;
-                        data->charCount++;
-                    }
-                    else {
-                        glyph = kanjiSearch(0x94B5);
-                        iw = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
-                        entry->glyph = glyph;
-                        entry->x = x;
-                        entry->y = y - (s16)(10.0f * scale);
-                        entry->scale = scale;
-                        entry->value = flags;
-                        entry->value |= MSG_CHAR_TALK;
-                        if (flags & MSG_CHAR_DYNAMIC) {
+                    time += step;
+                    data->charCount++;
+                }
+                else {
+                    glyph = kanjiSearch(0x94B5);
+                    iw = scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
+                    entry->glyph = glyph;
+                    entry->x = x;
+                    entry->y = y - (s16)(10.0f * scale);
+                    entry->scale = scale;
+                    entry->value = flags;
+                    entry->value |= MSG_CHAR_TALK;
+                    if (flags & MSG_CHAR_DYNAMIC) {
 
-                            entry->rot = fv;
-                        }
-                        if (maxScale < scale) {
-                            maxScale = scale;
-                        }
-                        entry->time = time;
-                        entry++;
-                        x += iw;
+                        entry->rot = fv;
+                    }
+                    if (maxScale < scale) {
+                        maxScale = scale;
+                    }
+                    entry->time = time;
+                    entry++;
+                    x += iw;
 #endif
 #else
 #if VERSION >= VERSION_US
@@ -1488,7 +1490,7 @@ continue;
                 entry->value = animPoseEntry(anim1, 2);
                 animPoseSetAnim(entry->value, anim2, 1);
 #if VERSION <= VERSION_DEMO_US
-                    animPoseSetMaterialFlagOn(entry->value, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
+                animPoseSetMaterialFlagOn(entry->value, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
 #else
                 animPoseSetMaterialFlagOn(entry->value, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
 #endif
@@ -1502,7 +1504,7 @@ continue;
                 entry->y = topY - animY;
                 entry->scale = animScale;
 #if VERSION <= VERSION_DEMO_US
-                    entry->rot = (animFlip == 0) ? (0.0f) : (180.0f);
+                entry->rot = (animFlip == 0) ? (0.0f) : (180.0f);
 #else
                 entry->rot = (animFlip == 0) ? 0.0f : 180.0f;
 #endif
@@ -1524,15 +1526,15 @@ continue;
                 data->charCount++;
             } else if (strcmp(tag, "r") == 0) {
 #if VERSION <= VERSION_DEMO_US
-                    data2 = data;
+                data2 = data;
 #endif
                 if (data->window->type != WINDOW_TYPE_SMALL) {
                     rubyX = x;
                 }
 #if VERSION <= VERSION_DEMO_US
-                } else if ((((s8*)tag)[0] == 'R') || ((((s8*)tag)[0] == '/') && (((u32)((s8*)tag)[0]) == 0x2F72))) {
-                    // BUG: the closing test compares one character with '/r' (0x2F72, a two-character constant), so it
-                    // is always false and only <R...> tags are handled here
+            } else if ((((s8*)tag)[0] == 'R') || ((((s8*)tag)[0] == '/') && (((u32)((s8*)tag)[0]) == 0x2F72))) {
+                // BUG: the closing test compares one character with '/r' (0x2F72, a two-character constant), so it
+                // is always false and only <R...> tags are handled here
 #else
             } else if (((s8*)tag)[0] == 'R' || (((s8*)tag)[0] == '/' && (u32)((s8*)tag)[0] == 0x2F72)) {
                 // BUG: the second test compares one byte with 0x2F72 ("/r" as a halfword), so it is never true:
@@ -1553,11 +1555,11 @@ continue;
                 for (k = 0; k < half; k++) {
                     glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
 #if VERSION <= VERSION_DEMO_US
-                        total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
-                        j += 2;
-                    }
-                    total = (u16)total - (0.55f * (4.0f * scale));
-                    rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
+                    total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
+                    j += 2;
+                }
+                total = (u16)total - (0.55f * (4.0f * scale));
+                rubyX = ((rubyX + x) - 4.0f * scale - (u16)total) / 2;
 #else
 #if VERSION >= VERSION_US
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
@@ -1597,7 +1599,7 @@ continue;
                     }
                     glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
 #if VERSION <= VERSION_DEMO_US
-                        wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
+                    wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
 #else
 #if VERSION >= VERSION_US
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
@@ -1611,7 +1613,7 @@ continue;
                     entry->x = rubyX;
                     entry->y = ys[0];
 #if VERSION <= VERSION_DEMO_US
-                        entry->scale = 0.55f * scale;
+                    entry->scale = 0.55f * scale;
 #else
 #if VERSION >= VERSION_US
                     entry->scale = 0.55f * scale.x;
@@ -1634,7 +1636,7 @@ continue;
                 continue;
             }
 #if VERSION <= VERSION_DEMO_US
-                if ((*((const s8*)next)) == '\n') {
+            if ((*((const s8*)next)) == '\n') {
 #else
             if (*(s8*)next == '\n') {
 #endif
@@ -1643,7 +1645,7 @@ continue;
             continue;
         default:
 #if VERSION <= VERSION_DEMO_US
-                if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
+            if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
 #else
             if (gp->language == LANGUAGE_JP && (s8)check >= '0' && (s8)check <= '9') {
                 // full-width digit: '0' + 0x821F is Shift-JIS 0x824F, the full-width zero
@@ -1653,13 +1655,13 @@ continue;
                 glyphD = hankakuSearch(check);
             }
 #if VERSION <= VERSION_DEMO_US
-                wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
-                entry->glyph = glyphD;
-                entry->x = x;
-                entry->y = y - (s16)(10.0f * scale);
-                entry->scale = scale;
-                entry->value = flags;
-                if ((*((const s8*)msg)) != ' ') {
+            wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
+            entry->glyph = glyphD;
+            entry->x = x;
+            entry->y = y - (s16)(10.0f * scale);
+            entry->scale = scale;
+            entry->value = flags;
+            if ((*((const s8*)msg)) != ' ') {
 #else
 #if VERSION >= VERSION_US
             // FAKE: (u16)(glyphD + 0) re-truncates the argument; kanjiGetWidth(glyphD) changes the object
@@ -1685,9 +1687,9 @@ continue;
                 entry->rot = fv;
             }
 #if VERSION <= VERSION_DEMO_US
-                if (maxScale < scale) {
-                    maxScale = scale;
-                }
+            if (maxScale < scale) {
+                maxScale = scale;
+            }
 #else
 #if VERSION >= VERSION_US
             if (maxScale < scale.y) {
@@ -1861,13 +1863,13 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     window = windowGetPointer(id);
     window->main = msgWindow_Main;
     window->delete = msgWindow_Delete;
-    window->state = 5;
+    window->state = MSG_WIN_STATE_OPEN;
     window->type = -1;
     window->flags |= WINDOW_FLAG_BUSY;
     // BUG: the copy gets strlen(msg) bytes, so strcpy writes the terminator one byte past the requested size
     copy = __memAlloc(HEAP_DEFAULT, strlen(msg));
     strcpy(copy, msg);
-    smart = smartAlloc(sizeof(MsgWinData), 1);
+    smart = smartAlloc(sizeof(MsgWinData), SMART_GROUP_MAP);
     data = smart->address;
     memset(data, 0, sizeof(MsgWinData));
     data->window = window;
@@ -1962,7 +1964,7 @@ void msgWindow_Add(char* msg, s32 id) {
 
     ((MsgWinData*)smart->address)->lastUpdateTime = gp->renderTime;
     msgAnalize(smart, msg);
-    window->state = 1;
+    window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
 }
 
@@ -1971,7 +1973,7 @@ void msgWindow_Continue(s32 id) {
     WindowEntry* window = windowGetPointer(id);
     MsgWinData* data;
 
-    window->state = 1;
+    window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
     data = window->userdata->address;
     data->lastUpdateTime = gp->renderTime;
@@ -1982,7 +1984,7 @@ void msgWindow_Repeat(s32 id) {
     WindowEntry* window = windowGetPointer(id);
     MsgWinData* data;
 
-    window->state = 1;
+    window->state = MSG_WIN_STATE_PRINT;
     window->flags |= WINDOW_FLAG_BUSY;
     data = window->userdata->address;
     data->lastUpdateTime = gp->renderTime;
@@ -1999,12 +2001,12 @@ void msgWindow_ForceClose(const char* name) {
     MsgWinData* data;
     s32 i;
 
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < WINDOW_MAX; i++) {
         window = windowGetPointer(i);
         if (window->flags && window->state && window->userdata &&
             ((MsgWinData*)window->userdata->address)->tag &&
             !strcmp(((MsgWinData*)window->userdata->address)->tag, name)) {
-            window->state = 7;
+            window->state = MSG_WIN_STATE_CLOSE;
             data = window->userdata->address;
             if (data->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(data->unitId);
@@ -2073,7 +2075,7 @@ void msgWindow_Main(WindowEntry* window) {
     }
 
     switch (window->state) {
-    case 5:
+    case MSG_WIN_STATE_OPEN:
         if (!(window->flags & WINDOW_FLAG_NOWINSE)) {
             se = msgWindowOpen_SE_Data[window->type * 2];
             if (se >= 0) {
@@ -2081,19 +2083,19 @@ void msgWindow_Main(WindowEntry* window) {
             }
         }
         window->timestamp = gp->renderTime;
-        window->state = 6;
+        window->state = MSG_WIN_STATE_FADE_IN;
         // fall through
-    case 6:
+    case MSG_WIN_STATE_FADE_IN:
         window->flags |= WINDOW_FLAG_BUSY;
         window->alpha = OSTicksToMilliseconds(gp->renderTime - window->timestamp) * 255 / 200;
         if (window->alpha > 255) {
             window->alpha = 255;
-            window->state = 1;
+            window->state = MSG_WIN_STATE_PRINT;
             data->openTime = gp->renderTime;
             data->lastUpdateTime = gp->renderTime;
         }
         break;
-    case 7:
+    case MSG_WIN_STATE_CLOSE:
         if (!(window->flags & WINDOW_FLAG_NOWINSE)) {
             se = msgWindowOpen_SE_Data[window->type * 2 + 1];
             if (se >= 0) {
@@ -2101,9 +2103,9 @@ void msgWindow_Main(WindowEntry* window) {
             }
         }
         window->timestamp = gp->renderTime;
-        window->state = 8;
+        window->state = MSG_WIN_STATE_FADE_OUT;
         // fall through
-    case 8:
+    case MSG_WIN_STATE_FADE_OUT:
         if (window->alpha == 0) {
             windowDelete(window);
             return;
@@ -2113,18 +2115,18 @@ void msgWindow_Main(WindowEntry* window) {
             window->alpha = 0;
         }
         break;
-    case 1:
+    case MSG_WIN_STATE_PRINT:
         switch (msgMain(window->userdata)) {
         case 0:
-            window->state = 7;
+            window->state = MSG_WIN_STATE_CLOSE;
             if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
             } else {
                 npcSetStayPose(WIN_DATA(window)->speakerName);
             }
             break;
-        case 1:
-            window->state = 2;
+        case MSG_WIN_STATE_PRINT:
+            window->state = MSG_WIN_STATE_WAIT_TAG;
             window->flags &= ~WINDOW_FLAG_BUSY;
             if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                 BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
@@ -2132,21 +2134,21 @@ void msgWindow_Main(WindowEntry* window) {
                 npcSetStayPose(WIN_DATA(window)->speakerName);
             }
             break;
-        case 2:
-            window->state = 3;
+        case MSG_WIN_STATE_WAIT_TAG:
+            window->state = MSG_WIN_STATE_KEY_WAIT;
             break;
-        case 3:
+        case MSG_WIN_STATE_KEY_WAIT:
             break;
         }
         break;
-    case 3:
+    case MSG_WIN_STATE_KEY_WAIT:
         target = PAD_BUTTON_A;
         if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
             target = PAD_BUTTON_A | PAD_BUTTON_X;
         }
         trg = keyGetButtonTrg(0);
         if (trg & (target | PAD_BUTTON_B)) {
-            window->state = 1;
+            window->state = MSG_WIN_STATE_PRINT;
             data->pageState = 2;
             if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 if (!(data->flags & MSG_WIN_FLAG_NO_SKIP)) {
@@ -2161,25 +2163,25 @@ void msgWindow_Main(WindowEntry* window) {
             data->page = data->pageCount - 1;
             // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
             if (msgWinPrevPage(window) != 0U) {
-                window->state = 9;
+                window->state = MSG_WIN_STATE_REVIEW_UP;
                 window->timestamp = gp->renderTime;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
                 data->flags |= MSG_WIN_FLAG_REVIEW;
             }
         }
         break;
-    case 9:
+    case MSG_WIN_STATE_REVIEW_UP:
         target = data->pageY[data->page];
         if (data->scrollPos >= target) {
             data->scrollPos = data->scrollPos - 0.6f * OSTicksToMilliseconds(gp->renderTime - window->timestamp);
             window->timestamp = gp->renderTime;
             if (data->scrollPos <= target) {
                 data->scrollPos = target;
-                window->state = 11;
+                window->state = MSG_WIN_STATE_REVIEW_KEY_WAIT;
             }
         }
         break;
-    case 10:
+    case MSG_WIN_STATE_REVIEW_DOWN:
         target = data->pageY[data->page];
         if (data->scrollPos <= target) {
             data->scrollPos = data->scrollPos + 0.6f * OSTicksToMilliseconds(gp->renderTime - window->timestamp);
@@ -2187,22 +2189,22 @@ void msgWindow_Main(WindowEntry* window) {
             if (data->scrollPos >= target) {
                 data->scrollPos = target;
                 if (data->page == data->pageCount - 1) {
-                    window->state = 3;
+                    window->state = MSG_WIN_STATE_KEY_WAIT;
                     data->flags &= ~MSG_WIN_FLAG_REVIEW;
                 } else {
-                    window->state = 11;
+                    window->state = MSG_WIN_STATE_REVIEW_KEY_WAIT;
                 }
             }
         }
         break;
-    case 11:
+    case MSG_WIN_STATE_REVIEW_KEY_WAIT:
         target = PAD_BUTTON_A;
         if (WIN_DATA(window)->flags & MSG_WIN_FLAG_KEY_X) {
             target = PAD_BUTTON_A | PAD_BUTTON_X;
         }
         trg = keyGetButtonTrg(0);
         if (trg & target) {
-            window->state = 10;
+            window->state = MSG_WIN_STATE_REVIEW_DOWN;
             window->timestamp = gp->renderTime;
             msgWinNextPage(window);
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
@@ -2211,7 +2213,7 @@ void msgWindow_Main(WindowEntry* window) {
         else // US: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-            window->state = 10;
+            window->state = MSG_WIN_STATE_REVIEW_DOWN;
             window->timestamp = gp->renderTime;
             data->page = data->pageCount - 1;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
@@ -2220,7 +2222,7 @@ void msgWindow_Main(WindowEntry* window) {
         else // US: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
-            window->state = 9;
+            window->state = MSG_WIN_STATE_REVIEW_UP;
             window->timestamp = gp->renderTime;
             // FAKE: unsigned compare of the BOOL result; `if (msgWinPrevPage(window))` changes the object
             if (msgWinPrevPage(window) != 0U) {
@@ -2229,7 +2231,7 @@ void msgWindow_Main(WindowEntry* window) {
         }
         break;
     }
-    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, msgWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, DISP_MODE_OPAQUE, msgWindow_Disp, window);
 }
 
 #pragma opt_common_subs reset
@@ -2241,14 +2243,14 @@ void msgWindow_Clear_Main(WindowEntry* window) {
     MsgWinData* data = WIN_DATA(window);
 
     switch (window->state) {
-    case 5:
-        window->state = 1;
+    case MSG_WIN_STATE_OPEN:
+        window->state = MSG_WIN_STATE_PRINT;
         window->timestamp = gp->renderTime;
         data->openTime = gp->renderTime;
         data->lastUpdateTime = gp->renderTime;
         // fall through
-    case 1:
-    case 6:
+    case MSG_WIN_STATE_PRINT:
+    case MSG_WIN_STATE_FADE_IN:
         window->flags |= WINDOW_FLAG_BUSY;
         if (window->alpha < 255) {
             window->alpha = OSTicksToMilliseconds(gp->renderTime - window->timestamp) * 255 / 200;
@@ -2256,10 +2258,10 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 window->alpha = 255;
             }
         }
-        if (window->state != 2) {
+        if (window->state != MSG_WIN_STATE_WAIT_TAG) {
             switch (msgMain(window->userdata)) {
             case 0:
-                window->state = 7;
+                window->state = MSG_WIN_STATE_CLOSE;
                 window->timestamp = gp->renderTime;
                 if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
@@ -2268,7 +2270,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 }
                 break;
             case 1:
-                window->state = 2;
+                window->state = MSG_WIN_STATE_WAIT_TAG;
                 window->flags &= ~WINDOW_FLAG_BUSY;
                 if (WIN_DATA(window)->flags & MSG_WIN_FLAG_BATTLE_UNIT) {
                     BtlUnit_ChangeStayAnim(WIN_DATA(window)->unitId);
@@ -2277,14 +2279,14 @@ void msgWindow_Clear_Main(WindowEntry* window) {
                 }
                 break;
             case 2:
-                window->state = 3;
+                window->state = MSG_WIN_STATE_KEY_WAIT;
                 break;
             case 3:
                 break;
             }
         }
         break;
-    case 7:
+    case MSG_WIN_STATE_CLOSE:
         if (window->alpha == 0) {
             windowDelete(window);
             return;
@@ -2295,7 +2297,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
         }
         break;
     }
-    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, msgWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, DISP_MODE_OPAQUE, msgWindow_Disp, window);
 }
 
 /**
@@ -2426,14 +2428,14 @@ void selectWindow_Main(WindowEntry* window) {
 
     msgMain(window->userdata);
     switch (window->state) {
-    case 5:
+    case MSG_WIN_STATE_OPEN:
         window->alpha += 25;
         if (window->alpha > 255) {
             window->alpha = 255;
-            window->state = 1;
+            window->state = MSG_WIN_STATE_PRINT;
         }
         break;
-    case 1:
+    case MSG_WIN_STATE_PRINT:
         prev = data->sel;
         if ((keyGetButtonTrg(0) & PAD_BUTTON_UP) || (keyGetDirTrg(0) & DEMO_STICK_UP)) {
             data->sel--;
@@ -2464,23 +2466,23 @@ void selectWindow_Main(WindowEntry* window) {
                 break;
             case -2:
                 data->sel = -1;
-                window->state = 7;
+                window->state = MSG_WIN_STATE_CLOSE;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 break;
             default:
                 data->sel = data->cancel;
-                window->state = 7;
+                window->state = MSG_WIN_STATE_CLOSE;
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
                 break;
             }
         } else if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-            window->state = 7;
+            window->state = MSG_WIN_STATE_CLOSE;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
         }
         break;
-    case 7:
+    case MSG_WIN_STATE_CLOSE:
         if (window->alpha == 0) {
-            window->state = 4;
+            window->state = MSG_WIN_STATE_SELECT_DONE;
             window->flags &= ~WINDOW_FLAG_BUSY;
             return;
         }
@@ -2489,10 +2491,10 @@ void selectWindow_Main(WindowEntry* window) {
             window->alpha = 0;
         }
         break;
-    case 4:
+    case MSG_WIN_STATE_SELECT_DONE:
         return;
     }
-    dispEntry(CAMERA_2D, 400.0f - window->priority, 0, selectWindow_Disp, window);
+    dispEntry(CAMERA_2D, 400.0f - window->priority, DISP_MODE_OPAQUE, selectWindow_Disp, window);
 }
 
 /**

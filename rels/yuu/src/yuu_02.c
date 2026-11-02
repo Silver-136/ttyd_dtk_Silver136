@@ -289,7 +289,7 @@ USER_FUNC(yuu_02_icon_monte_entry) {
     for (i = 0; i < icon_monte_p->num; i++) {
     }
     if (!exists) {
-        dispEntry(CAMERA_2D, 0.0f, 0, yuu_02_icon_monte_disp, icon_monte_p);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, yuu_02_icon_monte_disp, icon_monte_p);
     }
     return EVT_RETURN_BLOCK;
 }
@@ -470,7 +470,7 @@ static USER_FUNC(fall_rtn) {
         }
     }
     if (!exists) {
-        dispEntry(CAMERA_3D, 0.0f, 1, monte_disp, monte_p);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, monte_disp, monte_p);
     }
     return EVT_RETURN_BLOCK;
 }

@@ -24,6 +24,7 @@
 #include "mot/mot_stay.h"
 #include "mot/mot_slit.h"
 #include "mario/mario_kemuri.h"
+#include "mot/mot_jabara.h"
 
 
 typedef struct MotJabaraWork {
@@ -105,24 +106,24 @@ EVT_END()
  * Items and the hit code also check it.
  */
 s32 marioGetJabaraState(void) {
-    s32 state = 7;
+    s32 state = JABARA_STATE_OTHER;
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId != MARIO_MOTION_JABARA) {
-        state = 0;
+        state = JABARA_STATE_NONE;
     } else {
         s32 id = mario->currSubMotionId;
         if (id == 0x14) {
-            state = 1;
+            state = JABARA_STATE_RISING;
         } else if (id >= 0x46 && id <= 0x47) {
-            state = 2;
+            state = JABARA_STATE_GRAB_CEILING;
         } else if (id == 0x50) {
-            state = 3;
+            state = JABARA_STATE_HANG_MOVE;
         } else if (id >= 0x28 && id <= 0x2b) {
-            state = 4;
+            state = JABARA_STATE_BUMP_CEILING;
         } else if (id >= 0x32 && id <= 0x34) {
-            state = 5;
+            state = JABARA_STATE_SWING;
         } else if (id >= 0x1e && id <= 0x1f) {
-            state = 6;
+            state = JABARA_STATE_FALLING;
         }
     }
     return state;
@@ -311,7 +312,7 @@ void mot_jabara(void) {
 #if VERSION <= VERSION_DEMO_US
         mario->multiTimer = 8;
         mario->lastGroundPos = mario->position;
-        psndSFXOn_3D(SFX_NAME_WORD(0x182), &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_BELLOWS1_1), &mario->position);
         jabaraSetSpd(0.2f, 0.005f, 1.5f);
         marioChkGnd();
         break;
@@ -329,7 +330,7 @@ void mot_jabara(void) {
             break;
         }
         L_allPartyRideOn();
-        psndSFXOn_3D((const char*)(0x182), &mario->position);
+        psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS1_1), &mario->position);
         jabaraSetSpd(0.2f, 0.005f, 1.5f);
         mario->multiTimer = 8;
         mario->currSubMotionId = 11;
@@ -357,7 +358,7 @@ void mot_jabara(void) {
         if (mario->hammerChargeTimer == 3) {
             if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_3)) {
                 marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_3;
-                psndSFXOn_3D((const char*)(0x184), &mario->position);
+                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS1_3), &mario->position);
             }
             marioChgPaper("PM_J_3B");
             mario->hammerChargeLv = 3;
@@ -365,7 +366,7 @@ void mot_jabara(void) {
         } else if (mario->hammerChargeTimer == 2) {
             if (!(marioGetPtr()->motJabara->flags & JABARA_FLAG_CHARGE_2)) {
                 marioGetPtr()->motJabara->flags |= JABARA_FLAG_CHARGE_2;
-                psndSFXOn_3D((const char*)(0x183), &mario->position);
+                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS1_2), &mario->position);
             }
             marioChgPaper("PM_J_2B");
             mario->hammerChargeLv = 2;
@@ -411,8 +412,8 @@ void mot_jabara(void) {
         camFollowYOff();
         marioChgPose("M_J_5A");
         marioChgPaper("PM_J_1C");
-        psndSFXOn_3D((const char*)(0x20185), &mario->position);
-        psndSFXOn_3D((const char*)(0x200b5), &mario->position);
+        psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS2 | PSND_SFX_BYPASS_MUTE), &mario->position);
+        psndSFXOn_3D((const char*)(PSND_SFX_VOICE_MARIO_AC3_5 | PSND_SFX_BYPASS_MUTE), &mario->position);
         if (mario->hammerChargeLv == 3) {
             mario->jumpVelocityY = 10.45f;
             mario->jumpAccelerationY = 0.278f;
@@ -490,7 +491,7 @@ void mot_jabara(void) {
             camFollowYOn();
             mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
             marioChgPose("M_J_5A");
-            psndSFXOn_3D((const char*)(0x186), &mario->position);
+            psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS_CATCH1), &mario->position);
             jabaraSwingStart(overheadHit);
         } else {
             mario->currSubMotionId = 0x28;
@@ -529,12 +530,12 @@ void mot_jabara(void) {
     switch (mario->currSubMotionId) {
     case 0x28:
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D(SFX_NAME_WORD(0x188), &mario->position);
+        psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_BELLOWS3), &mario->position);
 #else
         if (strcmp(gp->currentMapName, "eki_02") == 0 && mario->position.x >= -450.0f && mario->position.x <= -190.0f) {
             mario->flags |= MARIO_FLAG_WALLS_DISABLED;
         }
-        psndSFXOn_3D((const char*)(0x188), &mario->position);
+        psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS3), &mario->position);
 #endif
         evtEntryType(quake_evt, 0, 0, 0);
         marioClearJumpPara();
@@ -603,11 +604,11 @@ void mot_jabara(void) {
         }
         if (changed) {
             if (marioGetPtr()->motJabara->wobbleCount == 1) {
-                psndSFXOn_3D((const char*)(0x189), &mario->position);
+                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS4), &mario->position);
             } else if (marioGetPtr()->motJabara->wobbleCount == 2) {
-                psndSFXOn_3D((const char*)(0x18a), &mario->position);
+                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS5), &mario->position);
             } else if (marioGetPtr()->motJabara->wobbleCount == 3) {
-                psndSFXOn_3D((const char*)(0x18b), &mario->position);
+                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS6), &mario->position);
             }
         }
         mario->dispOfs.x += step * (f32)cos(3.1415927f * mario->targetYaw / 180.0f);
@@ -784,10 +785,10 @@ void mot_jabara(void) {
                                 }
                             }
                             if (mario->mot.jabara.animFrame == 0) {
-                                psndSFXOn_3D((const char*)(0x187), &mario->position);
+                                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS_MOVE1), &mario->position);
                             }
                             if (mario->mot.jabara.animFrame == 0x10) {
-                                psndSFXOn_3D((const char*)(0x187), &mario->position);
+                                psndSFXOn_3D((const char*)(PSND_SFX_MARIO_BELLOWS_MOVE1), &mario->position);
                             }
                         }
                     }

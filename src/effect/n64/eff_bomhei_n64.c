@@ -82,7 +82,7 @@ void effBomheiMain(EffectEntry* effect) {
         return;
     }
     work->rotation += work->rotSpeed;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBomheiDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBomheiDisp, effect);
 }
 
 /**

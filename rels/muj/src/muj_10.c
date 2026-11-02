@@ -623,7 +623,7 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(1000)
 
     // The sailors say they are coming too.
@@ -659,7 +659,7 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
 #if VERSION < VERSION_US
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(1000)
 
     // The sailors say they are coming too.
@@ -702,7 +702,7 @@ EVT_END()
  */
 EVT_BEGIN(korutesu_appear_event)
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_01"), 0, STRING("水夫D"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_02"), 0, STRING("モニー"))
@@ -765,7 +765,7 @@ EVT_BEGIN(muj_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ8"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ8"))
     END_IF
@@ -813,7 +813,7 @@ EVT_BEGIN(muj_10_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hasi_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_10_sui02_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hasi_ita"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hasi_zan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_10_sui02_02"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

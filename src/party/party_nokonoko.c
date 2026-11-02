@@ -103,7 +103,7 @@ void nokonoko_bye(PartyEntry* party) {
         partyGoodbyeInit(party);
     }
     if (partyGoodbyeMain(party)) {
-        partyChgRunMode(party, 14);
+        partyChgRunMode(party, PARTY_RUN_DELETE);
     }
 }
 
@@ -179,8 +179,8 @@ void nokonoko_use_cancel(void) {
             party->work.nokonoko.word17C = 0;
             party->work.nokonoko.word180 = 0;
         }
-        if (party->runMode != 8 && party->runMode != 13) {
-            partyChgRunMode(party, 2);
+        if (party->runMode != PARTY_RUN_GOODBYE && party->runMode != PARTY_RUN_DAMAGE_RETURN) {
+            partyChgRunMode(party, PARTY_RUN_MOVE);
             party->moveMode = PARTY_MOVE_MODE_STAY;
         }
     }
@@ -277,7 +277,6 @@ void nokonoko_use(PartyEntry* party) {
     f32 dir;
     f32 spd;
     f32 s2x;
-    u8* moveDistPtr;
     f32 s2y;
     f32 s2z;
     f32 s3x;
@@ -478,7 +477,7 @@ void nokonoko_use(PartyEntry* party) {
             break;
         }
 #if VERSION <= VERSION_DEMO_US
-        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)0x92c, &party->position); noko_star(party, 1); noko_se_off(); break;)
+        NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position); noko_star(party, 1); noko_se_off(); break;)
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
 #else
@@ -525,8 +524,6 @@ void nokonoko_use(PartyEntry* party) {
         break;
     }
 
-    // FAKE: moveDistance is accessed through this byte pointer in the cases below; party->moveDistance changes the object
-    moveDistPtr = (u8*)&party->moveDistance;
     switch (party->useMotionId) {
     case 50:
         partyClearJumpPara(party);
@@ -551,7 +548,7 @@ void nokonoko_use(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
             marioChkWallAround(&party->position, spd, dir, party->width, party->height);
             party->useMotionId = 70;
-            psndSFXOn_3D((const char*)0x92c, &party->position);
+            psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position);
 #else
 #if VERSION >= VERSION_US
             partyChkWallAround(party, &party->position, spd, dir, party->width, party->height);
@@ -936,13 +933,13 @@ void nokonoko_use(PartyEntry* party) {
 void nokonoko_finish(PartyEntry* party) {
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         nokonoko_use_post(party);
-        if (party->runMode != 9) {
+        if (party->runMode != PARTY_RUN_FORCE_WALK) {
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
-                partyChgRunMode(party, 2);
+                partyChgRunMode(party, PARTY_RUN_MOVE);
                 party->moveMode = PARTY_MOVE_MODE_STAY;
             } else {
                 party->flags &= ~PARTY_FLAG_IS_EVT_USE;
-                partyChgRunMode(party, 0);
+                partyChgRunMode(party, PARTY_RUN_MOVE_RESET);
             }
         }
     }

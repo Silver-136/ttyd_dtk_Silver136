@@ -42,7 +42,7 @@ void BattleAcHelpMain(void) {
     // FAKE: spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object
     s32* type = &wp->acHelpDispType;
     if (wp->acHelpMsg && *type && !(wp->flags & BATTLE_FLAG_FIRST_ATTACK)) {
-        dispEntry(CAMERA_2D, 498.0f, 1, _ac_help_disp, NULL);
+        dispEntry(CAMERA_2D, 498.0f, DISP_MODE_ALPHA_TEST, _ac_help_disp, NULL);
     }
 }
 
@@ -61,7 +61,7 @@ void _ac_help_disp(CameraId cameraId, void* param) {
     // FAKE: spare pointer to acHelpMsg; msgSearch(wp->acHelpMsg) changes the object
     const char **help = &wp->acHelpMsg;
     alpha = 0xFF;
-    if (wp->acHelpDispType == 1) {
+    if (wp->acHelpDispType == AC_HELP_DISP_XLU) {
         alpha = 0x80;
     }
     msgs[0] = msgSearch(*help);

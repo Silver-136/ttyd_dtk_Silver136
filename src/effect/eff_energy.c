@@ -102,7 +102,7 @@ void effEnergyMain(EffectEntry* effect) {
         work->brightness = 0;
         work->brightSpeed = 32;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effEnergyDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effEnergyDisp, effect);
 }
 
 /** Draws the orb as a camera-facing sprite rotated around Z, with colours chosen by type. */

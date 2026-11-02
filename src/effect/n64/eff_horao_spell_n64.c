@@ -144,7 +144,7 @@ void effHoraoSpellMain(EffectEntry* effect) {
     if (frame < 16) {
         work->alpha = frame * 16 + 15;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHoraoSpellDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHoraoSpellDisp, effect);
 }
 
 /**
@@ -223,7 +223,7 @@ void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect) {
         s = sin(6.2831855f * (78.75f + (f32)(frame * 8)) / 360.0f);
         PSMTXRotRad(rot, 'y', 0.017453292f * (-30.0f * s));
         PSMTXConcat(mtx, rot, mtx2);
-        vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
+        vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
         for (j = 0; j < 16; j++) {
             k = j * 2;
             PSMTXTrans(mtx, 8.0f, 0.0f, 0.0f);

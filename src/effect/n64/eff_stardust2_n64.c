@@ -314,7 +314,7 @@ void effStardust2Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(camera, dispCalcZ(&position), 2, (DispCallback)effStardust2Disp, effect);
+    dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStardust2Disp, effect);
 }
 
 /**

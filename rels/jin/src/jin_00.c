@@ -1448,7 +1448,7 @@ static void senteresa_ext_main(void) {
             }
         }
     }
-    bero = (bero_get_BeroEXEC() & 3) != 0;
+    bero = (bero_get_BeroEXEC() & (BERO_EXEC_BUSY | BERO_EXEC_MARIO_MOVING)) != 0;
     party = 0;
     if (partyGetPtr(0) != NULL && (partyGetPtr(0)->flags & PARTY_FLAG_IS_BEING_USED)) {
         party = 1;
@@ -1781,7 +1781,7 @@ static void senteresa_ext_main(void) {
 
 /** Registers the swarm's draw callback with the 3D camera. */
 static void senteresa_ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, senteresa_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, senteresa_ext_disp, NULL);
 }
 
 /** Sets the GX blend and alpha-compare mode for drawing the Boos (alpha-blended, with alpha-tested edges). */
@@ -2342,7 +2342,7 @@ EVT_BEGIN(senteresa_evt)
     // marked as defeated.
     CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_JIN_00_LUCKY_START, 0)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_BADGE_RETURN)
+    CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
     SET_VALUE(GSWF_JIN_00_LUCKY_START, 1)
 #endif
     CALL(senteresa_huttobu)

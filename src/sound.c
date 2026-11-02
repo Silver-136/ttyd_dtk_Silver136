@@ -140,7 +140,7 @@ void SoundInit(void) {
     sound.fadeOut = 500;
     sound.dataId = 0;
     sound.slibId = 0;
-    sound.coverState = 0;
+    sound.coverState = SOUND_COVER_CLOSED;
     sound.slotCount = 0;
     sound.nextGroupId = 0;
 
@@ -819,7 +819,7 @@ void SoundSetOutputMode(SND_OUTPUTMODE mode) {
 /** Called when the disc cover opens: mutes sound until it is closed. */
 void SoundOpenCover(void) {
     if (!sound.coverState) {
-        sound.coverState = 1;
+        sound.coverState = SOUND_COVER_OPEN;
     }
 }
 
@@ -832,7 +832,7 @@ void SoundCloseCover(void) {
     BOOL close;
     int i;
 
-    if (sndIsInstalled() && sound.coverState == 1) {
+    if (sndIsInstalled() && sound.coverState == SOUND_COVER_OPEN) {
         close = FALSE;
         for (i = 0; i < 3; i++) {
             stream = &sound.streams[i];
@@ -846,9 +846,9 @@ void SoundCloseCover(void) {
             }
         }
         if (close) {
-            sound.coverState = 2;
+            sound.coverState = SOUND_COVER_RELOADING;
         } else {
-            sound.coverState = 0;
+            sound.coverState = SOUND_COVER_CLOSED;
         }
     }
 }
@@ -1120,7 +1120,7 @@ void SoundEfxSetVolume(s32 chan, u8 vol) {
 /** Returns the volume last set for the effect on chan. */
 u8 SoundEfxGetVolume(s32 chan) {
     s32 off = chan * sizeof(SoundEffect);
-    return (u8)*(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, vol)); // FAKE: byte-offset load from the chan * sizeof offset (sound.effects[chan].vol schedules differently)
+    return *(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, vol)); // FAKE: byte-offset load from the chan * sizeof offset (sound.effects[chan].vol schedules differently)
 }
 
 /** Sets the reverb send of the effect on chan. */
@@ -1590,11 +1590,11 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
                 SoundIntOn();
 #endif
                 if (stream->count == 2) {
-                    if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
-                        sound.coverState = 0;
+                    if (sound.coverState == SOUND_COVER_RELOADING && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
+                        sound.coverState = SOUND_COVER_CLOSED;
                     }
-                } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
-                    sound.coverState = 0;
+                } else if (sound.coverState == SOUND_COVER_RELOADING && stream->entries[0].loaded == 1) {
+                    sound.coverState = SOUND_COVER_CLOSED;
                 }
 #if VERSION <= VERSION_DEMO_US
                 continue;
@@ -2183,20 +2183,20 @@ void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
             stream->loopStart = 0;
         }
         switch (type) {
-            case 0:
+            case SOUND_STREAM_TYPE_RAW:
                 stream->entries[0].size = stream->loopEnd;
                 stream->entries[1].size = stream->loopEnd;
                 stream->entries[0].loopStart = stream->loopStart;
                 stream->entries[1].loopStart = stream->loopStart;
                 stream->dataOffset = 0x40;
                 break;
-            case 1:
+            case SOUND_STREAM_TYPE_DPCM:
                 stream->flags |= SOUND_STREAM_FLAG_DPCM;
                 stream->entries[0].hist = stream->entries[0].initHist;
                 stream->entries[1].hist = stream->entries[1].initHist;
                 stream->dataOffset = 0x40;
                 break;
-            case 2:
+            case SOUND_STREAM_TYPE_ADPCM:
                 stream->flags |= SOUND_STREAM_FLAG_ADPCM;
                 src = (u8*)&header->coef0;
                 dst = (u8*)&stream->entries[0].info;
@@ -2545,11 +2545,11 @@ void SoundSSMainInt(void) {
                 stream->entries[1].offset = stream->entries[0].offset;
             }
             if (stream->count == 2) {
-                if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
-                    sound.coverState = 0;
+                if (sound.coverState == SOUND_COVER_RELOADING && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
+                    sound.coverState = SOUND_COVER_CLOSED;
                 }
-            } else if (sound.coverState == 2 && stream->entries[0].loaded == 1) {
-                sound.coverState = 0;
+            } else if (sound.coverState == SOUND_COVER_RELOADING && stream->entries[0].loaded == 1) {
+                sound.coverState = SOUND_COVER_CLOSED;
 #else
         if ((stream->flags & SOUND_STREAM_FLAG_STARTED) && !(stream->flags & SOUND_STREAM_FLAG_MUTE) && (stream->flags & SOUND_STREAM_FLAG_PLAY)) {
             if (stream->entries[0].srcPos != 0 && stream->entries[0].loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_L)) {

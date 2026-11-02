@@ -24,6 +24,7 @@
 #include "unit/unit_barriern.h"
 #include "system.h"
 #include "driver/mapdrv.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of this unit (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
@@ -182,7 +183,7 @@ BattleUnitKind unit_barriern = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Damage-type reactions of the Yux: none, so every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Parts of the Yux: 11 parts: parts 1 to 11 (model c_baria), each with its defense tables, attributes and
@@ -241,9 +242,9 @@ static BattleWeapon weapon_wakka_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special (JP value; US/PAL aji adds SPECIAL_PIERCE_DEFENSE)
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special (JP value; US/PAL aji adds SPECIAL_PIERCE_DEFENSE)
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -278,7 +279,7 @@ static BattleWeapon weapon_wawawa_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special (JP value; US/PAL aji adds SPECIAL_PIERCE_DEFENSE)
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special (JP value; US/PAL aji adds SPECIAL_PIERCE_DEFENSE)
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -629,7 +630,7 @@ EVT_END()
 /** Damage reaction of a Yux: resets its colour to white (SetRGB 255) and runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -1267,17 +1268,17 @@ EVT_END()
 static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

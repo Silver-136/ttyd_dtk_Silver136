@@ -16,6 +16,7 @@
 #include "battle/battle_sub.h"
 #include "evt/evt_msg.h"
 #include "tst.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of the Gold Fuzzy (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
@@ -126,7 +127,7 @@ BattleUnitKind unit_gold_chorobon = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of Gold Fuzzy: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of Gold Fuzzy, as the percent chance a status takes hold:
@@ -214,9 +215,9 @@ BattleWeapon weapon_gold_chorobon_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
     0, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -389,7 +390,7 @@ EVT_END()
  * or less (but not 0) it spawns the Fuzzy horde (entry_chorogun) with call_chorogun_event.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
 #if VERSION <= VERSION_DEMO_US
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, LW(0))
@@ -458,7 +459,7 @@ EVT_END()
  */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(subsetevt_counter_damage)
@@ -540,20 +541,20 @@ static EVT_BEGIN(attack_event)
     // The damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_gold_chorobon_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

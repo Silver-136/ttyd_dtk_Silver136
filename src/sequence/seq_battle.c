@@ -188,8 +188,8 @@ void seq_battleMain(SequenceWork* work) {
             if (fbat->firstStrike.enabled != 0) {
                 BOOL ok = TRUE;
                 switch (fbat->firstStrike.type) {
-                    case 1:
-                    case 2:
+                    case FIRST_STRIKE_ENEMY:
+                    case FIRST_STRIKE_MARIO:
                         if (fbat->firstStrike.hitKind != 0) {
                             ok = FALSE;
                         }
@@ -302,7 +302,7 @@ void seq_battleMain(SequenceWork* work) {
             battle_init();
             work->state++;
         case 3: {
-Vec pos;
+            Vec pos;
             if (battleSeqEndCheck()) {
                 work->counter = 0;
                 work->state++;
@@ -394,7 +394,7 @@ static void battle_init(void) {
 #else
     pouch = pouchGetPtr();
 #endif
-    camSetMode(CAMERA_3D, 2);
+    camSetMode(CAMERA_3D, CAM_MODE_BATTLE);
     if (gp->debugBattle) {
         const char* msg = DbgBtlSel_GetMsgDataPtr();
         if (msg) {
@@ -407,7 +407,7 @@ static void battle_init(void) {
     battleMapAlloc();
 #else
     memClear(HEAP_BATTLE);
-    smartAutoFree(2);
+    smartAutoFree(SMART_GROUP_BATTLE);
 #endif
     _battleWorkPointer = NULL;
     animPoseBattleInit();
@@ -430,7 +430,7 @@ static void battle_init(void) {
     if (party) {
         s32 id = party->currentMemberId;
         BattleUnitType kind = BattleTransPartyIdToUnitKind(id);
-        if (!(pouch->partyData[id].flags & 2)) {
+        if (!(pouch->partyData[id].flags & POUCH_PARTY_FLAG_AWAY)) {
             BattleInformationSetParty(info, kind);
         }
     }
@@ -498,16 +498,16 @@ void battle_exit(void) {
     BattleEnd();
 #if VERSION >= VERSION_US
     battleMapFree();
-    smartAutoFree(2);
+    smartAutoFree(SMART_GROUP_BATTLE);
 #endif
     itemReInit();
     iconReInit();
     extReset();
     bmapUnLoad();
     if (camGetPtr(CAMERA_3D)->flags & CAMERA_FLAG_ROAD) {
-        camSetMode(CAMERA_3D, 1);
+        camSetMode(CAMERA_3D, CAM_MODE_FIELD);
     } else {
-        camSetMode(CAMERA_3D, 3);
+        camSetMode(CAMERA_3D, CAM_MODE_NO_ROAD);
     }
     npcReset(TRUE);
     mobjReset(TRUE);

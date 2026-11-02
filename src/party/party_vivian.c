@@ -127,9 +127,9 @@ void mot_vivian_post(void) {
                 Vec zero2 = {0.0f, 0.0f, 0.0f};
                 party->dispOfs = zero2;
             }
-            partyChgRunMode(party, 2);
+            partyChgRunMode(party, PARTY_RUN_MOVE);
             party->moveMode = PARTY_MOVE_MODE_STAY;
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
             partyVivianTailStart(party);
         }
 #if VERSION <= VERSION_DEMO_US
@@ -171,22 +171,22 @@ s32 vivianGetStatus(void) {
     u8 st;
 
     if (party == NULL) {
-        return 0;
+        return VIVIAN_STATUS_INACTIVE;
     }
     if (party->currentMemberId != PARTY_MEMBER_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        return 0;
+        return VIVIAN_STATUS_INACTIVE;
     }
     st = party->useMotionId;
     if (st < 10) {
-        return 1;
+        return VIVIAN_STATUS_SINKING;
     }
     if (st == 10) {
-        return 2;
+        return VIVIAN_STATUS_HIDDEN;
     }
     if (st >= 20 && st <= 27) {
-        return 3;
+        return VIVIAN_STATUS_RISING;
     }
-    return 4;
+    return VIVIAN_STATUS_OTHER;
 }
 
 /**
@@ -323,7 +323,7 @@ void vivian_use(PartyEntry* party) {
 
     marioGetScreenPos(mario->position, &sx, &sy, &sz);
     hit = marioSearchGround(&groundY, &gy, &gz, 37.0f, -37.0f);
-    if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE))) {
+    if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES))) {
         mario->hitobjStandOn = hit;
         mario->position.y = groundY;
         if (mario->floorMove.y < 0.0f) {
@@ -511,7 +511,7 @@ void vivian_use(PartyEntry* party) {
     case 10:
 #if VERSION <= VERSION_DEMO_US
         hit = marioSearchGround(&gx, &gy, &gz, 100.0f, -100.0f);
-        if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE))) {
+        if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES))) {
             if (m->floorMove.y || m->floorMove.x) {
                 if ((f32)m->screenY > 480.0f || (f32)m->screenY < 50.0f) {
                     camFollowYOn();
@@ -709,9 +709,9 @@ void vivian_use(PartyEntry* party) {
             party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_NODECAY;
             party->work.vivian.shadowSize = 10.0f;
             party->dispOfs.y = 0.0f;
-            partyChgRunMode(party, 2);
+            partyChgRunMode(party, PARTY_RUN_MOVE);
             party->moveMode = PARTY_MOVE_MODE_STAY;
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
             party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         }
         break;

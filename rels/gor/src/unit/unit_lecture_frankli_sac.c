@@ -122,7 +122,7 @@ BattleUnitKind unit_lecture_frankli_sac = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of Prof. Frankly's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability of Prof. Frankly: immune to the 22 statuses covered by this table. */
 static StatusVulnerability regist = {
@@ -224,7 +224,7 @@ static USER_FUNC(lecture_init) {
 
     slot->flags |= 1;
     aud->flags |= AUDIENCE_FLAG_EVENT_CTRL;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         BattleAudience_Delete(i);
     }
     for (i = 0; i < 11; i++) {
@@ -336,7 +336,7 @@ USER_FUNC(spot_square) {
     if (darkCount >= fadeFrames + holdFrames && darkCount <= holdFrames + fadeFrames * 2) {
         dark = intplGetValue(EASING_LINEAR, 192.0f, 0.0f, darkCount - (fadeFrames + holdFrames), fadeFrames);
     }
-    dispEntry(CAMERA_2D, 500.0f, 2, spot_square_disp, NULL);
+    dispEntry(CAMERA_2D, 500.0f, DISP_MODE_XLU, spot_square_disp, NULL);
     return darkCount >= holdFrames + fadeFrames * 2 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 

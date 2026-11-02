@@ -1217,8 +1217,8 @@ EVT_BEGIN(onryo_event)
     CALL(evt_set_nami_anim_rate, FLOAT(0.69921875f))
     WAIT_MS(1000)
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_TALK_POSE)
 #endif
     WAIT_MS(1500)
     CALL(evt_msg_print, 0, STRING("stg5_sea_03"), 0, STRING("ガラの悪い水夫"))
@@ -1357,8 +1357,8 @@ EVT_BEGIN(onryo_event)
     CALL(evt_msg_print, 0, STRING("stg5_sea_11"), 0, STRING("ガラの悪い水夫"))
     WAIT_WHILE(GF(0))
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_TALK_POSE)
 #endif
     CALL(evt_npc_set_anim, STRING("ガラの悪い水夫"), STRING("R_1"))
     CALL(muj_npc_guruguru, STRING("ガラの悪い水夫"), -52, -90, 0, FLOAT(-12.0f), 3000)
@@ -1625,7 +1625,7 @@ EVT_BEGIN(onryo_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_SINK1"), LW(0), LW(1), LW(2), LW(10))
     SPAWN_EVENT(marcoship_shizumu)
     WAIT_MS(4500)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_snd_sfxoff, LW(10))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -2502,7 +2502,7 @@ USER_FUNC(logo) {
             return EVT_RETURN_DONE;
     }
     if (wp->tpl) {
-        dispEntry(CAMERA_2D, 1000.0f, 0, draw, wp);
+        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, draw, wp);
     }
     return EVT_RETURN_BLOCK;
 }

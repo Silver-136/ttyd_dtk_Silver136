@@ -239,7 +239,7 @@ void effSplashMain(EffectEntry* effect) {
     position = v;
     type = work->type;
     if (work->hasColor == 0) {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 8, (DispCallback)effSplashGetCol, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effSplashGetCol, effect);
         return;
     }
     switch (type) {
@@ -318,7 +318,7 @@ void effSplashMain(EffectEntry* effect) {
             break;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 1, (DispCallback)effSplashDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effSplashDisp, effect);
 }
 
 /**

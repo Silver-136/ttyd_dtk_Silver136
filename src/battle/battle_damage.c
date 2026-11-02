@@ -21,6 +21,7 @@
 #include "eff/eff_hit.h"
 #include "eff/eff_miss_star.h"
 #include "eff/n64/eff_kemuri12_n64.h"
+#include "battle/battle_sub.h"
 #include <string.h>
 #include "battle/battle_mario.h"
 #include "system.h"
@@ -47,7 +48,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     BattleUnit* attacker;
     Vec pos;
 
-    if (unitId != -5) {
+    if (unitId != UNIT_ID_SYSTEM) {
         attacker = BattleGetUnitPtr(wp, unitId);
     } else {
         attacker = NULL;
@@ -118,7 +119,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     }
                 }
             }
-            if (unitId != -5 && attacker && attacker->badgesEquipped.MegaRush &&
+            if (unitId != UNIT_ID_SYSTEM && attacker && attacker->badgesEquipped.MegaRush &&
                 attacker->currentHp <= attacker->kindParams->perilHP) {
                 f32 x2, y2, z2;
                 BtlUnit_GetHitPos(target, part, &x2, &y2, &z2);
@@ -434,7 +435,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     if (fn) {
         damage = fn(attacker, weapon, target, part);
     }
-    if (wp->majinaiState == 1 && (weapon->special & SPECIAL_STATUS_POWER)) {
+    if (wp->majinaiState == MAJINAI_POWER_UP && (weapon->special & SPECIAL_STATUS_POWER)) {
         damage += 3;
     }
     if (weapon->special & SPECIAL_BADGE_POWER) {
@@ -553,7 +554,7 @@ skip:
                 defense = 0;
             }
         }
-        if (wp->majinaiState == 2 && target->currentKind == UNIT_MARIO) {
+        if (wp->majinaiState == MAJINAI_DEFENCE_UP && target->currentKind == UNIT_MARIO) {
             defense += 3;
         }
         // JP tests bit 0x20 here; Hooktail's parts carry kPartUnitWorkDefense (0x80) in both versions
@@ -1472,7 +1473,7 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
     s8 strength;
 
     if (!(flags & DAMAGE_RESULT_NO_STATUS)) {
-        for (i = 0; i < 28; i++) {
+        for (i = 0; i < STATUS_INVALID; i++) {
             _getSickStatusParam(attacker, weapon, i, &time, &strength);
             rate = (s8)_getSickStatusRate(weapon, i);
             levelDiff = 0;
@@ -1618,7 +1619,7 @@ s32 _checkDamageCode_EmergencyRevival(BattleUnit* unit, u32* flags) {
 s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* part, BattleWeapon* weapon, u32 flags) {
     BattleWork* wp = _battleWorkPointer;
     u32 pattern;
-    s32 ret = -1;
+    s32 ret = CHECK_DAMAGE_COUNTERED;
     u32 status = 0;
     s32 damage;
     s32 fpDamage;
@@ -1641,13 +1642,13 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     cwp = &cw;
     BattleInitCounterPreCheckWork(cwp);
     if (!target) {
-        return 18;
+        return CHECK_DAMAGE_HIT;
     }
     if (part) {
         target->currentTarget = part;
     }
     damage = 0;
-    if (!(weapon->special & SPECIAL_UNGUARDABLE) && BtlUnit_GetACPossibility(target) && BattleActionCommandGetDefenceResult() == 5) {
+    if (!(weapon->special & SPECIAL_UNGUARDABLE) && BtlUnit_GetACPossibility(target) && BattleActionCommandGetDefenceResult() == GUARD_RESULT_SUPERGUARD) {
         BtlUnit_GetHitPos(target, part, &hit.x, &hit.y, &hit.z);
         eff = effNiceEntry(NICE_EFFECT_GREAT, hit.x - 60.0f, 45.0f + hit.y, hit.z - 10.0f);
         ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
@@ -1660,12 +1661,12 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             case 2:
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
-                return 21;
+                return CHECK_DAMAGE_SUPERGUARDED;
             case 3:
                 flags |= DAMAGE_RESULT_FINAL_HIT;
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
-                return 21;
+                return CHECK_DAMAGE_SUPERGUARDED;
             case 4:
                 flags |= DAMAGE_RESULT_FINAL_HIT;
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
@@ -1673,16 +1674,16 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
                 if (attacker->hitEventCode) {
                     BattleRunHitEventDirect(attacker, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, attacker->hitEventCode);
                 } else {
-                    BattleDamageDirect(-5, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
+                    BattleDamageDirect(UNIT_ID_SYSTEM, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
                 }
-                return -1;
+                return CHECK_DAMAGE_COUNTERED;
             case 1:
             default:
                 flags |= DAMAGE_RESULT_FINAL_HIT;
                 result = flags | DAMAGE_CODE_SUPERGUARDED;
                 BattleDamageDirect(attacker->unitId, target, part, 0, 0, result, weapon->damagePattern, 0);
-                BattleDamageDirect(-5, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
-                return -1;
+                BattleDamageDirect(UNIT_ID_SYSTEM, attacker, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_SUPERGUARD_COUNTER, 0, 1);
+                return CHECK_DAMAGE_COUNTERED;
         }
     }
     BattleCheckCounter(cwp, attacker, target, part, weapon, &flags);
@@ -1690,14 +1691,14 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (flags & DAMAGE_RESULT_FINAL_HIT) {
             if (part->counterAttributes & kCounterVolatileExplosive) {
                 BattleRunHitEvent(target, DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_EXPLOSION);
-                ret = 18;
+                ret = CHECK_DAMAGE_HIT;
                 break;
             }
             if ((part->counterAttributes & kCounterExplosive) &&
                 (weapon->element == ELEMENT_EXPLOSION || weapon->element == ELEMENT_ELECTRIC || weapon->element == ELEMENT_FIRE ||
                  ((weapon->special & SPECIAL_IGNITABLE) && BtlUnit_CheckStatus(attacker, STATUS_BURN)))) {
                 BattleRunHitEvent(target, DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_EXPLOSION);
-                ret = 18;
+                ret = CHECK_DAMAGE_HIT;
                 break;
             }
         }
@@ -1762,25 +1763,27 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             target->damagePattern = ATTACKPATTERN_NULL;
             _checkDamageCode_EmergencyRevival(target, &code);
             BattleRunHitEvent(target, code);
-            ret = 18;
+            ret = CHECK_DAMAGE_HIT;
             break;
         }
         if ((flags & DAMAGE_RESULT_FINAL_HIT) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
-            // BUG: irand(100) < 0 never holds, so this freeze-crush hit never happens
+            // BUG: irand(100) < 0 never holds, so this hit never happens, though many attacks carry SPECIAL_FREEZE_CRUSH.
+            // With a real chance, the last hit of such an attack would break the target's freeze and defeat it outright
+            // at any HP (DEATH | ZERO_HP); btldefaultevt_Damage plays the ice burst. Life Shroom revival still applies.
             code2 = DAMAGE_RESULT_FREEZE_CRUSH | DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT |
                     DAMAGE_CODE_NORMAL;
             _checkDamageCode_EmergencyRevival(target, &code2);
             BattleRunHitEvent(target, code2);
-            ret = 18;
+            ret = CHECK_DAMAGE_HIT;
             break;
         }
         if (!status && !damage && !fpDamage && !pierce) {
-            ret = 19;
+            ret = CHECK_DAMAGE_NO_EFFECT;
             if (target->currentKind >= UNIT_GOOMBA && target->currentKind < UNIT_UNUSED_TREE && weapon->damagePattern != ATTACKPATTERN_NO_DAMAGE_FINISH) {
                 BattleAudience_Case_EnemyNoDamage();
             }
         } else {
-            ret = 18;
+            ret = CHECK_DAMAGE_HIT;
             if (target->currentKind >= UNIT_GOOMBA && target->currentKind < UNIT_UNUSED_TREE && (damage > 0 || status)) {
                 BattleAudience_Case_EnemyDamage(damage);
             }
@@ -1848,13 +1851,13 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             BattleFogForceStop();
         }
         BattleActionCommandStop(wp);
-        BattleAcHelpSetDispType(0);
-        BattleDamageDirect(-5, attacker, NULL, cw.count, 0, cw.msg, 0, 1);
+        BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
+        BattleDamageDirect(UNIT_ID_SYSTEM, attacker, NULL, cw.count, 0, cw.msg, 0, 1);
         if (cw.hitEvent) {
             target->damagePattern = ATTACKPATTERN_NULL;
             BattleRunHitEvent(target, cw.hitEvent);
         }
-        return -1;
+        return CHECK_DAMAGE_COUNTERED;
     }
     return ret;
 }
@@ -2131,17 +2134,17 @@ s32 BattleCheckCounter(CounterWork* work, BattleUnit* attacker, BattleUnit* targ
         }
     }
     switch (work->type) {
-        case DAMAGE_CODE_COUNTER_TOP_SPIKY: return 8;
-        case DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY: return 7;
-        case DAMAGE_CODE_COUNTER_FRONT_SPIKY: return 9;
-        case DAMAGE_CODE_COUNTER_FIERY: return 10;
-        case DAMAGE_CODE_COUNTER_ICY: return 11;
-        case DAMAGE_CODE_COUNTER_EXPLOSIVE: return 12;
-        case DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE: return 13;
-        case DAMAGE_CODE_COUNTER_ELECTRIFIED: return 14;
-        case DAMAGE_CODE_COUNTER_POISON: return 15;
-        case DAMAGE_CODE_COUNTER_PAYBACK: return 16;
-        case DAMAGE_CODE_COUNTER_HOLD_FAST: return 17;
+        case DAMAGE_CODE_COUNTER_TOP_SPIKY: return CHECK_COUNTER_TOP_SPIKY;
+        case DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY: return CHECK_COUNTER_PREEMPTIVE_SPIKY;
+        case DAMAGE_CODE_COUNTER_FRONT_SPIKY: return CHECK_COUNTER_FRONT_SPIKY;
+        case DAMAGE_CODE_COUNTER_FIERY: return CHECK_COUNTER_FIERY;
+        case DAMAGE_CODE_COUNTER_ICY: return CHECK_COUNTER_ICY;
+        case DAMAGE_CODE_COUNTER_EXPLOSIVE: return CHECK_COUNTER_EXPLOSIVE;
+        case DAMAGE_CODE_COUNTER_VOLATILE_EXPLOSIVE: return CHECK_COUNTER_VOLATILE_EXPLOSIVE;
+        case DAMAGE_CODE_COUNTER_ELECTRIFIED: return CHECK_COUNTER_ELECTRIFIED;
+        case DAMAGE_CODE_COUNTER_POISON: return CHECK_COUNTER_POISON;
+        case DAMAGE_CODE_COUNTER_PAYBACK: return CHECK_COUNTER_PAYBACK;
+        case DAMAGE_CODE_COUNTER_HOLD_FAST: return CHECK_COUNTER_HOLD_FAST;
     }
     return 0;
 }

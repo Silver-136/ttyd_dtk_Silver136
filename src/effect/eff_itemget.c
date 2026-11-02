@@ -186,9 +186,9 @@ void effItemGetMain(EffectEntry* effect) {
             effDelete(effect);
             return;
         }
-        dispEntry(camera, dispCalcZ(&tmp), 2, (DispCallback)effItemUseDisp, effect);
+        dispEntry(camera, dispCalcZ(&tmp), DISP_MODE_XLU, (DispCallback)effItemUseDisp, effect);
     } else {
-        dispEntry(camera, dispCalcZ(&tmp), 2, (DispCallback)effItemGetDisp, effect);
+        dispEntry(camera, dispCalcZ(&tmp), DISP_MODE_XLU, (DispCallback)effItemGetDisp, effect);
     }
 }
 

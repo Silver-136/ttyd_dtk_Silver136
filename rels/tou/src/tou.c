@@ -1421,7 +1421,7 @@ static USER_FUNC(evt_tou_print_ranking) {
     }
     dwp->targetY = dwp->page * 220;
     dwp->y += (dwp->targetY - dwp->y) / 8.0f;
-    dispEntry(CAMERA_2D, 300.0f, 0, disp_proc, NULL);
+    dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, disp_proc, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -2056,7 +2056,7 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         END_INLINE_EVENT
         CALL(evt_mario_mov_pos2, 35, -96, FLOAT(80.0f))
         CALL(evt_mario_mov_pos2, 38, -99, FLOAT(80.0f))
-        ELSE
+    ELSE
         CALL(evt_cam3d_evt_set, -75, 91, 188, -75, 57, -1, 1000, EASING_SINE_IN_OUT)
         BEGIN_INLINE_EVENT
             CALL(evt_party_move_pos2, 0, -50, -96, FLOAT(80.0f))
@@ -2132,7 +2132,7 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(1))
-                ELSE
+            ELSE
 #if VERSION == VERSION_EU
                 IF_INT_EQUAL(LF(3), 0)
 #endif
@@ -2146,7 +2146,7 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             ELSE
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361_01"), 0, STRING("キノシコワ"), LW(1))
-                ELSE
+            ELSE
 #if VERSION == VERSION_EU
                 IF_INT_EQUAL(LF(3), 0)
 #endif
@@ -2786,7 +2786,7 @@ USER_FUNC(make_monitor) {
     }
     wp = event->userdatap[0];
     gans_wp = wp;
-    wp->buf = smartAlloc(GXGetTexBufferSize(0x80, 0x80, GX_TF_RGB5A3, GX_FALSE, 0), 3);
+    wp->buf = smartAlloc(GXGetTexBufferSize(0x80, 0x80, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXInitTexObj(&wp->tex, wp->buf->address, 0x80, 0x80, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->tex, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     if (gans_wp->onoff) {
@@ -2800,7 +2800,7 @@ USER_FUNC(make_monitor) {
             gans_wp->alpha = 0;
         }
     }
-    dispEntry(CAMERA_SHADOW, 0.0f, 3, gans_tex, wp);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, gans_tex, wp);
     return EVT_RETURN_BLOCK;
 }
 

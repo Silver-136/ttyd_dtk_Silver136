@@ -700,7 +700,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
         wp->flags |= 2;
         return EVT_RETURN_DONE;
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, evt_yuuranking_disp_func, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_yuuranking_disp_func, wp);
     if (wp->mode == 0) {
         switch (wp->phase) {
             case 0:

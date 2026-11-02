@@ -14,6 +14,7 @@
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#include "driver/npcdrv.h"
 
 
 static BeroEntry bero_entry_data[3];
@@ -102,7 +103,7 @@ EVT_BEGIN(hei_06_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SET_VALUE(LW(0), PTR(ki_data))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     SET_VALUE(LW(0), PTR(kusa_data))

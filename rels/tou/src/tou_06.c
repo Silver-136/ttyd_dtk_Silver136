@@ -298,7 +298,7 @@ EVT_BEGIN(evt_chuchu)
 #if VERSION <= VERSION_DEMO_US
     WAIT_MS(1000)
 #else
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(200)
     CALL(evt_party_stop, 0)
 #endif

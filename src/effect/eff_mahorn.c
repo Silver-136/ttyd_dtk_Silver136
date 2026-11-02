@@ -109,7 +109,7 @@ void effMahornMain(EffectEntry* effect) {
         work->scale2 += (20.0f - work->scale2) / 8.0f;
         work->alpha += -work->alpha / 64;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMahornDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMahornDisp, effect);
 }
 
 /** Draws each ring as a camera-facing textured quad (effect texture 0x82) with its own scale and alpha. */

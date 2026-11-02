@@ -4,6 +4,7 @@
 #include "evt/evt_save_flags.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_fade.h"
 #include "evt/evt_npc.h"
@@ -299,7 +300,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(get_ryoukin, LW(10))
     CALL(get_npcname, LW(11))
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
     CALL(msg_no, 0, LW(0))
     CALL(evt_msg_print_insert, 0, LW(0), 0, LW(11), LW(10))
     CALL(msg_no, 6, LW(0))
@@ -406,7 +407,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_flag_onoff, 1, 768)
 #else
-    CALL(evt_snd_sfxon_3d, 131230, LW(0), LW(1), LW(2), 0)
+    CALL(evt_snd_sfxon_3d, PSND_SFX_VOICE_MARIO_FLD_JUMP2 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL | MARIO_FLAG_WALLS_DISABLED)
 #endif
     CALL(get_bed, LW(0), LW(1), LW(2))
@@ -428,9 +429,9 @@ EVT_BEGIN(kinopio_house_talk_evt)
         WAIT_MS(200)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
 #else
-        CALL(evt_snd_sfxon_3d, 132026, LW(0), LW(1), LW(2), 0)
+        CALL(evt_snd_sfxon_3d, PSND_SFX_OFF_MARIO_SLEEP1 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
         WAIT_MS(200)
-        CALL(evt_snd_sfxon_3d, 132027, LW(0), LW(1), LW(2), 0)
+        CALL(evt_snd_sfxon_3d, PSND_SFX_OFF_MARIO_SLEEP2 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
 #endif
     END_INLINE_EVENT
 
@@ -441,7 +442,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
 #if VERSION >= VERSION_US
     CALL(evt_fade_entry, FADE_OUT_SPOT, 6000, 0, 0, 0)
 #else
-    CALL(evt_fade_entry, 4, 3000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT, 3000, 0, 0, 0)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))

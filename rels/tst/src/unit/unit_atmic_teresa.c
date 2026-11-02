@@ -27,6 +27,7 @@
 #include "evt/evt_sub.h"
 #include "system.h"
 #include "libc_decls.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of the Atomic Boo (btlevtcmd_SetUnitWork / GetUnitWork)
 enum {
@@ -160,7 +161,7 @@ BattleUnitKind unit_atmic_teresa = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Damage-type reactions of the Atomic Boo: none, so every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Pose table of the Atomic Boo: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
 static PoseTableEntry pose_table[] = {
@@ -260,7 +261,7 @@ BattleWeapon weapon_atmic_teresa_press = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
@@ -304,9 +305,9 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
@@ -354,9 +355,9 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_US
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_TARGET | SPECIAL_PIERCE_DEFENSE, // special
 #endif
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, 0, 0, 0, 0, 0, // targetWeightFlags..poisonChance
@@ -400,9 +401,9 @@ BattleWeapon weapon_atmic_teresa_breath = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -436,7 +437,7 @@ EVT_END()
  * and LW(11) = 1.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -565,21 +566,21 @@ EVT_BEGIN(press_event)
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_press), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -671,21 +672,21 @@ EVT_BEGIN(surprise_event)
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_surprise), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -779,20 +780,20 @@ EVT_BEGIN(bikkuri_event)
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_bikkuri), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -923,20 +924,20 @@ EVT_END()
 EVT_BEGIN(breath_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_breath), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -1398,7 +1399,7 @@ void teresa_ext_main(void) {
                 break;
         }
     }
-    dispEntry(4, 0.0f, 1, teresa_ext_disp, NULL);
+    dispEntry(4, 0.0f, DISP_MODE_ALPHA_TEST, teresa_ext_disp, NULL);
 }
 
 /**

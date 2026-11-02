@@ -417,7 +417,7 @@ void cloud_use(PartyEntry* party) {
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
         partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
     } else {
-        partyChgPose(party, partyChgPoseId(party, 1));
+        partyChgPose(party, partyChgPoseId(party, PARTY_POSE_STAND));
         partyChgRunMode(party, PARTY_RUN_MOVE);
         partyChgMot(party, PARTY_MOTION_STAY);
     }
@@ -512,7 +512,7 @@ void _cloud_use(PartyEntry* party) {
             mario->camShiftTargetX = 70.0f * (revise360(270.0f - mario->displayDirectionTarget) <= 180.0f ? -1.0f : 1.0f);
         }
 #if VERSION <= VERSION_DEMO_US
-        CLOUD_WORK(party)->sfxId = psndSFXOn_3D((const char*)0x930, &mario->position);
+        CLOUD_WORK(party)->sfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_CLAUD_WIND1, &mario->position);
 #else
         if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId == 0xFFFFFFFF) {
             CLOUD_WORK(party)->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CLAUD_WIND1), &party->playerPtr->position);

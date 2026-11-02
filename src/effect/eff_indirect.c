@@ -47,7 +47,7 @@ EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     work->position.z = z;
     work->scale = 0.0f;
     work->alpha = 255;
-    work->work = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), 0);
+    work->work = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_PERMANENT);
     work->rotX = 0.0f;
     work->rotY = 0.0f;
     work->rotZ = 0.0f;
@@ -91,7 +91,7 @@ void effIndirectMain(EffectEntry* effect) {
 #endif
             break;
     }
-    dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), 2, (DispCallback)effIndirectDisp, effect);
+    dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effIndirectDisp, effect);
 }
 
 /** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
@@ -143,7 +143,7 @@ void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     // copy the framebuffer for the distortion
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
-    buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 3)->address;
+    buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     GXCopyTex(buffer, GX_FALSE);
     GXPixModeSync();
     GXInitTexObj(&texObj, buffer, 304, 240, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);

@@ -241,7 +241,7 @@ void effBlowMain(EffectEntry* effect) {
         work->life = 10;
         work->age = 0;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBlowDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBlowDisp, effect);
 }
 
 /** Draws each streak as a rotated, stretched camera-facing quad tinted light cyan. */

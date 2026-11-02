@@ -98,7 +98,7 @@ void effQueenMain(EffectEntry* effect) {
     if (work->alpha < 0) {
         work->alpha = 0;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effQueenDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effQueenDisp, effect);
 }
 
 /** Draws the tornado pose in three segments scaled by 10. */

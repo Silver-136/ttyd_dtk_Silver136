@@ -13,6 +13,7 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_snd.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of this unit (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
@@ -262,13 +263,13 @@ static BattleWeapon weapon_met_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE, // special
 #if VERSION <= VERSION_DEMO_US
     COUNTER_RESIST_ALL,
 #else
     COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
 #endif
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -303,7 +304,7 @@ static BattleWeapon weapon_met_ceil_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
 #if VERSION <= VERSION_DEMO_US
     COUNTER_RESIST_ALL,
 #else
@@ -328,7 +329,7 @@ static BattleWeapon weapon_met_ceil_attack = {
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
 /** Element reactions of Red Buzzy: fire immune and explosion immune; the other elements hit normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 /**
  * Defence of Red Buzzy flipped onto its back per element (normal, fire, ice, explosion, electric),
@@ -337,7 +338,7 @@ static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
 static BattleUnitDefense defence_turn = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of Red Buzzy flipped onto its back: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr_turn = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_turn = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 
@@ -428,7 +429,7 @@ EVT_END()
  * (LW(10) = -2, LW(11) = 1).
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -440,7 +441,7 @@ EVT_END()
  * plays the shell sound, and drops it to the ground in two bounces.
  */
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
@@ -463,7 +464,7 @@ EVT_END()
  * plays the wake-up sound and hops back to the ground; otherwise it keeps lying flipped and waits.
  */
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)
@@ -587,20 +588,20 @@ static EVT_BEGIN(attack_event)
     // The damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -669,7 +670,7 @@ EVT_END()
  * revive (0x800) it runs ceil_fall_ready_event when it took damage while still on the ceiling, so it falls.
  */
 static EVT_BEGIN(damage_event_ceil)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -709,7 +710,7 @@ static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL_CHILD(init_event2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(subsetevt_counter_damage)
@@ -741,7 +742,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
     CALL_CHILD(init_event2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
@@ -826,20 +827,20 @@ static EVT_BEGIN(attack_event_ceil)
     // The damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_ceil_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

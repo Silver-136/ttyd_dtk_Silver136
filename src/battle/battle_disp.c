@@ -501,28 +501,28 @@ next:
                 }
                 part->poseState = 0;
                 if (part->animFlags & PART_ANIM_PERA) {
-                    part->poseType = 0;
+                    part->look = PART_LOOK_NONE;
                 } else {
-                    part->poseType = 1;
+                    part->look = PART_LOOK_NORMAL;
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
-                        part->poseType = 7;
+                        part->look = PART_LOOK_XLU;
                         xlu = 1;
                     }
                 }
                 if (!(part->animFlags & PART_ANIM_EVENT_POSE) || (part->animFlags & PART_ANIM_DAMAGE_POSE) || (part->animFlags & PART_ANIM_COMMAND_POSE)) {
-                    part->poseType = 1;
+                    part->look = PART_LOOK_NORMAL;
                     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || part->color.a != 0xFF) {
-                        part->poseType = 7;
+                        part->look = PART_LOOK_XLU;
                         xlu = 1;
                     }
                     if (BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
-                        part->poseType = 4;
+                        part->look = PART_LOOK_DODGY;
                         xlu = 1;
                     }
                 }
                 if (xlu && (part->attributes & kNoTranslucentLook)) {
                     xlu = 0;
-                    part->poseType = 0;
+                    part->look = PART_LOOK_NONE;
                 }
                 if (!(part->animFlags & PART_ANIM_PERA)) {
                     if (xlu && !(part->animFlags & PART_ANIM_XLU)) {
@@ -550,16 +550,16 @@ next:
                 if (!(part->attributes & kMainPart) || !(unit->attributeFlags & kVeiled)) {
                     if (part->dispColor.a < 0xFF || animPoseTestXLU(part->poseId)) {
                         if (!(part->animFlags & PART_ANIM_NO_DISP)) {
-                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), 2, (DispCallback)btlUnitPartsDisp, part);
+                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_XLU, (DispCallback)btlUnitPartsDisp, part);
                         }
                     } else {
                         if (!(part->animFlags & PART_ANIM_NO_DISP)) {
-                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), 1, (DispCallback)btlUnitPartsDisp, part);
+                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_ALPHA_TEST, (DispCallback)btlUnitPartsDisp, part);
                         }
                     }
                 }
                 if (part->attributes & kMotionBlur) {
-                    dispEntry(CAMERA_3D, wz, 2, (DispCallback)btlUnitPartsBlurDisp, part);
+                    dispEntry(CAMERA_3D, wz, DISP_MODE_XLU, (DispCallback)btlUnitPartsBlurDisp, part);
                 }
             }
             if (!(unit->attributeFlags & kUnitNoShadow) && !(part->attributes & kNoShadow)) {
@@ -607,12 +607,12 @@ next:
         }
         if (unit->heldItem) {
             if ((unit->flags & BATTLE_UNIT_FLAG_STOLEN_ITEM) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
-                dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitStolenItemDisp, unit);
+                dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitStolenItemDisp, unit);
             } else if ((!(unit->flags & BATTLE_UNIT_FLAG_ACTING) || (unit->flags & BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING)) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
-                dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp, unit);
+                dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitItemDisp, unit);
             }
         } else if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) {
-            dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)btlUnitItemDisp2, unit);
+            dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitItemDisp2, unit);
         }
     }
     BattleStockExpDisp();
@@ -935,11 +935,10 @@ void btlUnitItemDisp2(CameraId camId, BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
     s32 kind = unit->currentKind;
 
-    // FAKE: goto chain; the single condition changes the object
-    if (kind >= UNIT_GOOMBA && kind < UNIT_UNUSED_TREE) goto disp;
-    if (kind >= UNIT_MARIO && kind < TYPE_PARTNER_MIN) goto disp;
-    if (kind < TYPE_PARTNER_MIN || kind >= TYPE_PARTNER_MAX) return;
-disp:
+    if (!((kind >= UNIT_GOOMBA && kind < UNIT_UNUSED_TREE) || (kind >= UNIT_MARIO && kind < TYPE_PARTNER_MIN) ||
+          (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX))) {
+        return;
+    }
     if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) {
         btlUnitItemDisp(camId, unit);
     } else {
@@ -1068,7 +1067,7 @@ void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose)
 /** Plays a paper effect animation (pera) on a part, for flattened and similar effects, with the plain draw type. */
 void btlDispChangePeraAnime(BattleUnitPart* part, const char* name) {
     part->animFlags |= PART_ANIM_PERA;
-    part->poseType = 0;
+    part->look = PART_LOOK_NONE;
     animPoseSetEffectAnim(part->poseId, name, 1);
 }
 
@@ -1148,17 +1147,17 @@ f32 getFloatDispOffset(BattleUnitPart* part) {
  * one-shot effects for types 2, 3 and 7, cycling effects for 4 to 6, default (no effect) otherwise.
  */
 void statusPoseControl(BattleUnitPart* part) {
-    switch (part->poseType) {
-        case 0:
+    switch (part->look) {
+        case PART_LOOK_NONE:
             break;
-        case 2:
-        case 3:
-        case 7:
+        case PART_LOOK_PM_C_UNUSED:
+        case PART_LOOK_PM_F_UNUSED:
+        case PART_LOOK_XLU:
             _pose_one_pattern(part);
             break;
-        case 4:
-        case 5:
-        case 6:
+        case PART_LOOK_DODGY:
+        case PART_LOOK_PM_C2_UNUSED:
+        case PART_LOOK_PM_F2_UNUSED:
             _pose_two_pattern(part);
             break;
         default:
@@ -1190,16 +1189,16 @@ void _pose_one_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
     case 0:
         part->poseState = 1;
-        switch (part->poseType) {
-            case 2:
+        switch (part->look) {
+            case PART_LOOK_PM_C_UNUSED:
                 animPoseSetEffect(part->poseId, "p_b_st", 1);
                 animPoseSetEffectAnim(part->poseId, "PM_C_1A", 1);
                 break;
-            case 3:
+            case PART_LOOK_PM_F_UNUSED:
                 animPoseSetEffect(part->poseId, "p_b_st", 1);
                 animPoseSetEffectAnim(part->poseId, "PM_F_1A", 1);
                 break;
-            case 7:
+            case PART_LOOK_XLU:
                 animPoseSetEffect(part->poseId, "p_b_st", 1);
                 animPoseSetEffectAnim(part->poseId, "PM_Y_1A", 1);
                 break;
@@ -1217,18 +1216,18 @@ void _pose_two_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
         case 0:
             part->poseState = 1;
-            switch (part->poseType) {
-                case 4:
+            switch (part->look) {
+                case PART_LOOK_DODGY:
                     animPoseSetEffect(part->poseId, "p_b_st", 1);
                     animPoseSetEffectAnim(part->poseId, "PM_Y_1B", 1);
                     part->poseTimer = sysMsec2Frame(2200);
                     break;
-                case 5:
+                case PART_LOOK_PM_C2_UNUSED:
                     animPoseSetEffect(part->poseId, "p_b_st", 1);
                     animPoseSetEffectAnim(part->poseId, "PM_C_1A", 1);
                     part->poseTimer = (irand(4) + 6) * sysMsec2Frame(2200);
                     break;
-                case 6:
+                case PART_LOOK_PM_F2_UNUSED:
                     animPoseSetEffect(part->poseId, "p_b_st", 1);
                     animPoseSetEffectAnim(part->poseId, "PM_F_2", 1);
                     part->poseTimer = (irand(4) + 7) * 22;
@@ -1236,15 +1235,15 @@ void _pose_two_pattern(BattleUnitPart* part) {
             }
             break;
         case 1:
-            switch (part->poseType) {
-                case 4:
+            switch (part->look) {
+                case PART_LOOK_DODGY:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         animPoseSetEffectAnim(part->poseId, "PM_Y_1B", 1);
                         part->poseTimer = sysMsec2Frame(2200);
                     }
                     break;
-                case 5:
+                case PART_LOOK_PM_C2_UNUSED:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 2;
@@ -1252,7 +1251,7 @@ void _pose_two_pattern(BattleUnitPart* part) {
                         part->poseTimer = 22;
                     }
                     break;
-                case 6:
+                case PART_LOOK_PM_F2_UNUSED:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 2;
@@ -1263,22 +1262,22 @@ void _pose_two_pattern(BattleUnitPart* part) {
             }
             break;
         case 2:
-            switch (part->poseType) {
-                case 4:
+            switch (part->look) {
+                case PART_LOOK_DODGY:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 0;
                         _pose_two_pattern(part);
                     }
                     break;
-                case 5:
+                case PART_LOOK_PM_C2_UNUSED:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 0;
                         _pose_two_pattern(part);
                     }
                     break;
-                case 6:
+                case PART_LOOK_PM_F2_UNUSED:
                     part->poseTimer--;
                     if (part->poseTimer == 0) {
                         part->poseState = 0;
@@ -1387,7 +1386,7 @@ void BattleStockExpDisp(void) {
         }
     }
     if (wp->dispFlags & BATTLE_DISP_FLAG_STAR_POINTS) {
-        dispEntry(CAMERA_2D, 901.0f, 1, _btlStockExpDisp, NULL);
+        dispEntry(CAMERA_2D, 901.0f, DISP_MODE_ALPHA_TEST, _btlStockExpDisp, NULL);
     }
 }
 

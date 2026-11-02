@@ -217,7 +217,7 @@ static USER_FUNC(main_star) {
         d->rot.z = w->star.rot.z;
         d->scale = 1.5f * w->star.scale.x;
     }
-    dispEntry(CAMERA_3D, 0.0f, 2, zubaStarDispStar, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, zubaStarDispStar, NULL);
     return 0;
 }
 
@@ -415,7 +415,7 @@ USER_FUNC(zubastar_main) {
     s32 audience = BattleAudience_GetAudienceNum();
     s32 i;
     if (isFirstCall) {
-        w->capture = smartAlloc(GXGetTexBufferSize(400, 480, 4, 0, 0), 1);
+        w->capture = smartAlloc(GXGetTexBufferSize(400, 480, 4, 0, 0), SMART_GROUP_MAP);
         pts[0] = (Vec){-96.0f, 240.0f, 0.0f};
         pts[1] = (Vec){304.0f, 240.0f, 0.0f};
         pts[2] = (Vec){304.0f, -240.0f, 0.0f};
@@ -627,7 +627,7 @@ USER_FUNC(zubastar_main) {
         if (w->cursor.timer == 30) {
             w->phase = 38;
             w->phaseCount = 60;
-            btl_camera_shake_h(0, 5.0f, 5.0f, 60, 0);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 5.0f, 60, 0);
         }
         break;
     case 38:
@@ -702,11 +702,11 @@ USER_FUNC(zubastar_main) {
             w->cursor.timer = 27;
             w->cursor.f4 = 0;
 #if VERSION <= VERSION_DEMO_US
-            // The demo flashes the screen from here (15 = FADE_OUT_WHITE: demo fade types are 2 lower).
-            fadeEntry(15, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-            btl_camera_shake_h(0, 5.0f, 0.0f, 30, 0);
+            // The demo flashes the screen from here.
+            fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 30, 0);
 #else
-            btl_camera_shake_h(0, 8.0f, 0.0f, 30, 0);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 8.0f, 0.0f, 30, 0);
 #endif
         }
         break;
@@ -719,7 +719,7 @@ USER_FUNC(zubastar_main) {
     case 28:
         w->cursor.timer = 30;
 #if VERSION <= VERSION_DEMO_US
-        fadeEntry(14, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}); // 14 = FADE_IN_WHITE in the demo
+        fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #endif
     case 30:
         w->cursor.pos = (Vec){0.0f, -1000.0f, 0.0f};
@@ -826,7 +826,7 @@ USER_FUNC(zubastar_main) {
             break;
         }
     }
-    dispEntry(CAMERA_2D, 900.0f, 1, zubastar_disp2D, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, zubastar_disp2D, NULL);
     return 0;
 }
 
@@ -844,7 +844,7 @@ USER_FUNC(zubastar_bomb) {
     s32 i;
     s32 k;
     if (isFirstCall) {
-        dispEntry(CAMERA_2D, 0.0f, 0, zubastar_capture, NULL);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, zubastar_capture, NULL);
         w->phase = 0;
         return 0;
     }
@@ -908,7 +908,7 @@ USER_FUNC(zubastar_bomb) {
             break;
         }
     }
-    dispEntry(CAMERA_2D, 0.0f, 1, zubastar_disp_bomb, NULL);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_ALPHA_TEST, zubastar_disp_bomb, NULL);
     return 0;
 }
 

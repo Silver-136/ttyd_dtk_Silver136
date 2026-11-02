@@ -746,7 +746,7 @@ s32 star_control(EventEntry* evt, BOOL first) {
         e->scale = 1.5f * w->star.scale.x;
     }
     if (w->star.state >= 4 && w->star.state <= 6) {
-        dispEntry(CAMERA_2D, 0.0f, 2, star_disp2D, NULL);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_XLU, star_disp2D, NULL);
     }
     return 0;
 }
@@ -947,13 +947,13 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
                     smartFree(w->smart);
                     w->smart = NULL;
                 }
-                w->smart = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_RGB565, GX_FALSE, 0), 1);
-                dispEntry(CAMERA_2D, 0.0f, 0, scissor_capture, NULL);
+                w->smart = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_MAP);
+                dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, scissor_capture, NULL);
                 return 2;
             }
         }
     }
-    dispEntry(CAMERA_2D, 0.0f, 0, scissor_disp_control, NULL);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, scissor_disp_control, NULL);
     return 0;
 }
 
@@ -1046,7 +1046,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
         if (w->audienceVolume >= 100) {
             w->audienceVolume = 100;
         }
-        BattleAudienceSoundSetVol(4, w->audienceVolume, 30);
+        BattleAudienceSoundSetVol(AUD_SOUND_CHEER_A, w->audienceVolume, 30);
     }
     return 2;
 }
@@ -1276,7 +1276,7 @@ void scissor_disp_control(CameraId camera, void* param) {
 /** Registers scissor_disp_region on the off-screen camera to draw the closed loop. */
 s32 scissor_offscreen(void) {
     GetScissorPtr();
-    dispEntry(CAMERA_OFFSCREEN2, 0.0f, 1, scissor_disp_region, NULL);
+    dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_ALPHA_TEST, scissor_disp_region, NULL);
     return 2;
 }
 

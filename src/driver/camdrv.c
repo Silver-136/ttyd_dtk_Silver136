@@ -109,8 +109,8 @@ CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 ne
     camera->viewYaw = 0.0f;
     camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
     camera->callback = callback;
-    camera->mode = 0;
-    camera->stateA = 0;
+    camera->mode = CAM_MODE_OFF;
+    camera->stateA = CAM_MOVE_NONE;
     camera->progressA = 0.0f;
     camera->fovY = fovY;
     camera->aspect = aspect;
@@ -169,7 +169,7 @@ inline CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect,
     camera->viewYaw = 0.0f;
     camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
     camera->callback = callback;
-    camera->mode = 0;
+    camera->mode = CAM_MODE_OFF;
     camera->rollAngle = 0.0f;
     camera->viewOffset.z = 0.0f;
     camera->viewOffset.y = 0.0f;
@@ -387,17 +387,17 @@ void camLoadRoad(CameraId cameraId, const char* filename) {
     camera->blendPos.x = 0.0f;
     if (camRoadSetup(filename)) {
         camera->flags |= CAMERA_FLAG_ROAD;
-        camGetPtr(cameraId)->mode = 1;
+        camGetPtr(cameraId)->mode = CAM_MODE_FIELD;
     } else {
         camera->flags &= ~CAMERA_FLAG_ROAD;
-        camGetPtr(cameraId)->mode = 3;
+        camGetPtr(cameraId)->mode = CAM_MODE_NO_ROAD;
     }
     camera->fovY = 25.0f;
     camera->rollAngle = 0.0f;
     camera->viewOffset.z = 0.0f;
     camera->viewOffset.y = 0.0f;
     camera->viewOffset.x = 0.0f;
-    camera->stateA = 0;
+    camera->stateA = CAM_MOVE_NONE;
     camera->curveA = EASING_SINE_IN_OUT;
     camera->progressA = 0.0f;
     camera->curveB = EASING_SINE_IN_OUT;
@@ -411,8 +411,8 @@ void camLoadRoad(CameraId cameraId, const char* filename) {
 void camUnLoadRoad(CameraId cameraId) {
     CameraEntry* camera = camGetPtr(cameraId);
     camera->flags &= ~CAMERA_FLAG_ROAD;
-    camGetPtr(cameraId)->mode = 0;
-    camera->stateA = 0;
+    camGetPtr(cameraId)->mode = CAM_MODE_OFF;
+    camera->stateA = CAM_MOVE_NONE;
     camera->progressA = 0.0f;
     camera->fovY = 25.0f;
     camera->rollAngle = 0.0f;
@@ -448,35 +448,35 @@ void cam3dMain(CameraEntry* camera) {
     }
 
     switch (camera->mode) {
-        case 1:
+        case CAM_MODE_FIELD:
             switch (camera->stateA) {
-                case 1:
+                case CAM_MOVE_BACK:
                     if (camera->durationA > 0) {
                         camera->progressA = 1.0f - (f32)(gp->renderTime - camera->startTimeA) / (f32)camera->durationA;
                         if (camera->progressA < 0.0f) {
                             camera->progressA = 0.0f;
-                            camera->stateA = 0;
+                            camera->stateA = CAM_MOVE_NONE;
                         }
                     } else {
                         camera->progressA = 0.0f;
-                        camera->stateA = 0;
+                        camera->stateA = CAM_MOVE_NONE;
                     }
                     break;
-                case 2:
-                case 3:
+                case CAM_MOVE_TO_UNUSED:
+                case CAM_MOVE_TO_STORED:
                     if (camera->durationA > 0) {
                         camera->progressA = (f32)(gp->renderTime - camera->startTimeA) / (f32)camera->durationA;
                         if (camera->progressA > 1.0f) {
                             camera->progressA = 1.0f;
-                            camera->stateA = 0;
+                            camera->stateA = CAM_MOVE_NONE;
                         }
                     } else {
                         camera->progressA = 1.0f;
-                        camera->stateA = 0;
+                        camera->stateA = CAM_MOVE_NONE;
                     }
                     break;
 
-                case 0:
+                case CAM_MOVE_NONE:
                     break;
             }
 
@@ -566,9 +566,9 @@ void cam3dMain(CameraEntry* camera) {
                 work.at.z = camera->storedAt.z;
 
                 switch (camera->stateA) {
-                    case 0:
-                    case 1:
-                    case 2:
+                    case CAM_MOVE_NONE:
+                    case CAM_MOVE_BACK:
+                    case CAM_MOVE_TO_UNUSED:
                         if (camera->flags & CAMERA_FLAG_ROAD) {
                             MarioWork* mario = marioGetPtr();
                             f32 bank = 0.0f;
@@ -591,7 +591,7 @@ void cam3dMain(CameraEntry* camera) {
                         }
                         break;
 
-                    case 3:
+                    case CAM_MOVE_TO_STORED:
                         work2.fovY = work.fovY;
                         work2.aspect = work.aspect;
                         work2.far = work.far;
@@ -633,7 +633,7 @@ void cam3dMain(CameraEntry* camera) {
             }
             break;
 
-        case 2:
+        case CAM_MODE_BATTLE:
             if (gp->inBattle) {
                 battleCameraMain();
                 camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
@@ -650,8 +650,8 @@ void cam3dMain(CameraEntry* camera) {
                 }
             }
             break;
-        case 0:
-        case 3:
+        case CAM_MODE_OFF:
+        case CAM_MODE_NO_ROAD:
             break;
     }
 
@@ -806,7 +806,7 @@ void camLetterBoxDraw(CameraId cameraId, void* param) {
 void camLetterBox(void) {
     CameraEntry* camera = camPtrTbl[CAMERA_2D];
     PartyEntry* party = partyGetPtr(0);
-    if (!(camera->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & 1)) {
+    if (!(camera->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & BERO_EXEC_BUSY)) {
         // FAKE: `party &&` repeats the null test; dropping it changes the object
         if ((seqGetSeq() == SEQ_GAME) && (!marioChkKey() || !marioChkCtrl()) &&
             (!party || (party && !(party->flags & PARTY_FLAG_IS_BEING_USED)))) {
@@ -826,17 +826,17 @@ void camLetterBox(void) {
     if (camera->flags & CAMERA_FLAG_LETTER_BOX) {
         camera->letterBoxAlpha = 0xFF;
         camera->letterBoxTop += 3;
-        if (camera->letterBoxTop > 0x31) {
-            camera->letterBoxTop = 0x31;
+        if (camera->letterBoxTop > LETTER_BOX_TOP_HEIGHT) {
+            camera->letterBoxTop = LETTER_BOX_TOP_HEIGHT;
         }
         camera->letterBoxBottom += 3;
-        if (camera->letterBoxBottom > 0x2C) {
-            camera->letterBoxBottom = 0x2C;
+        if (camera->letterBoxBottom > LETTER_BOX_BOTTOM_HEIGHT) {
+            camera->letterBoxBottom = LETTER_BOX_BOTTOM_HEIGHT;
         }
         if (camera->flags & CAMERA_FLAG_LETTER_BOX_INSTANT) {
             camera->flags &= ~CAMERA_FLAG_LETTER_BOX_INSTANT;
-            camera->letterBoxTop = 0x31;
-            camera->letterBoxBottom = 0x2C;
+            camera->letterBoxTop = LETTER_BOX_TOP_HEIGHT;
+            camera->letterBoxBottom = LETTER_BOX_BOTTOM_HEIGHT;
         }
     } else {
         camera->letterBoxAlpha -= ((0xFF / gp->framerate) * 2);
@@ -848,7 +848,7 @@ void camLetterBox(void) {
             camera->letterBoxAlpha = 0;
         }
     }
-    dispEntry(camera->letterBoxCamId, 0.0f, 3, &camLetterBoxDraw, NULL);
+    dispEntry(camera->letterBoxCamId, 0.0f, DISP_MODE_OPAQUE_NO_Z, &camLetterBoxDraw, NULL);
 }
 
 /** A zero vector; unused leftover helper. */

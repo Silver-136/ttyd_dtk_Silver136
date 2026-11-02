@@ -250,7 +250,7 @@ EVT_BEGIN(oumu_juyo_talk)
         CALL(evt_msg_print, 0, STRING("stg4_jin_43"), 0, STRING("オウム"))
         SET_VALUE(GSWF_JIN_08_PARROT_SECRET_HEARD, 1)
         SET_VALUE(LSWF_JIN_PARROT_SCENE_PENDING, 1)
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg4_jin_44"), 0, STRING("オウム"))
     END_IF
     CALL(evt_mario_key_onoff, 1)
@@ -455,7 +455,7 @@ EVT_BEGIN(jin_08_init_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_mobj_itembox, STRING("mobj_box01"), 80, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -80, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)
-SPAWN_EVENT(oumu_check)
+    SPAWN_EVENT(oumu_check)
 #else
     CALL(evt_mobj_itembox, STRING("mobj_box01"), 60, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -65, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)

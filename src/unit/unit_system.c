@@ -95,7 +95,7 @@ EVT_END()
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element response of the system unit: immune to every kind of hit. */
-static BattleUnitDefenseAttr defence_attr = {{2, 2, 2, 2, 2}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /** Data events for the system unit: none. */
 static BattleDataEntry data_table[] = {

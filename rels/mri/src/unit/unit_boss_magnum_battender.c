@@ -194,7 +194,7 @@ BattleUnitKind unit_boss_magnum_battender = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Defence attributes of Magnus: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 50, 50, 0, 50, 0, 100, 30, 0, 0, 100, 0, 100, 50, 50, 0, 0, 100, 40, 0, 0, 0};
@@ -641,7 +641,7 @@ static EVT_BEGIN(dead_event)
             END_INLINE_EVENT
         END_IF
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
 #else
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -844,20 +844,20 @@ EVT_BEGIN(stamp_attack_event)
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 60, 0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_stamp_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -973,20 +973,20 @@ static EVT_BEGIN(shake_attack_event)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_shake_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -1199,7 +1199,7 @@ BattleUnitKind unit_boss_rocket_punch = {
 static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of Magnus' rocket fist: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_r = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_r = {0, 80, 80, 80, 80, 80, 100, 80, 0, 0, 100, 0, 100, 80, 80, 0, 110, 100, 80, 0, 0, 0};
@@ -1285,7 +1285,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #if VERSION <= VERSION_DEMO_US
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
 #else
     COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
@@ -1439,20 +1439,20 @@ static EVT_BEGIN(attack_event_r)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A1_4"))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_rocket_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

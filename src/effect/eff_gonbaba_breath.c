@@ -352,7 +352,7 @@ void effGonbabaBreathMain(EffectEntry* effect) {
                 break;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effGonbabaBreathDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effGonbabaBreathDisp, effect);
 }
 
 /** Draws the particles as camera-facing quads, coloured by type; companion layers sit slightly off the camera plane. */

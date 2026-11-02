@@ -385,15 +385,15 @@ void mobjDisp(CameraId camId, void* param) {
     }
     disp = dispGetCurWork();
     switch (disp->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
             animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
                          10.0f * entry->scale.x, 1);
             break;
-        case 1:
+        case DISP_MODE_ALPHA_TEST:
             animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
                          10.0f * entry->scale.x, 2);
             break;
-        case 2:
+        case DISP_MODE_XLU:
         default:
             animPoseDraw(entry->poseId, entry->position.x, entry->position.y, entry->position.z, entry->rotation.y,
                          10.0f * entry->scale.x, 3);
@@ -742,13 +742,13 @@ void mobjMain(void) {
             continue;
         }
 #if VERSION <= VERSION_DEMO_US
-        if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)))) {
+        if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > FBAT_MODE_FIELD && fbat != FBAT_MODE_EVENT_MOBJ_ACTIVE)))) {
 #else
         // retail (US on) reads inBattle again; `gp->inBattle != 0 ||` is always false here
 #if VERSION >= VERSION_US
-        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
+        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > FBAT_MODE_FIELD && fbat != FBAT_MODE_EVENT_MOBJ_ACTIVE)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
 #else
-        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8))) {
+        if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > FBAT_MODE_FIELD && fbat != FBAT_MODE_EVENT_MOBJ_ACTIVE))) {
 #endif
             goto afterHit;
         }
@@ -940,7 +940,7 @@ void mobjMain(void) {
                 shadowId = shadowEntry(entry->position.x, entry->position.y, entry->position.z,
                                        10.0f * entry->scale.x * entry->scale2.x / 25.0f);
                 if (entry->flags & MOBJ_FLAG_HIT_HEAD) {
-                    shadowSetType(shadowId, 1);
+                    shadowSetType(shadowId, SHADOW_TYPE_CUBE);
                     shadowSetSize(shadowId, 10.0f * entry->scale.x * entry->scale2.x / 20.0f);
                 }
             }
@@ -962,19 +962,19 @@ void mobjMain(void) {
         }
         if (entry->offscreenId == -1) {
             if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
-                dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDispXLU, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDispXLU, entry);
             } else {
-                dispEntry(entry->camId, dispCalcZ(&entry->position), 0, mobjDisp, entry);
-                dispEntry(entry->camId, dispCalcZ(&entry->position), 1, mobjDisp, entry);
-                dispEntry(entry->camId, dispCalcZ(&entry->position), 2, mobjDisp, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_OPAQUE, mobjDisp, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, mobjDisp, entry);
+                dispEntry(entry->camId, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp, entry);
             }
         } else {
             if ((animPoseGetMaterialFlag(entry->poseId) & MAP_OBJ_FLAG_COLOR) && evt.a != 0xff) {
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp_OffscreenXLU, entry);
             } else {
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 0, mobjDisp_OffscreenXLU, entry);
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 1, mobjDisp_OffscreenXLU, entry);
-                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), 2, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_OPAQUE, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, mobjDisp_OffscreenXLU, entry);
+                dispEntry(CAMERA_OFFSCREEN2, dispCalcZ(&entry->position), DISP_MODE_XLU, mobjDisp_OffscreenXLU, entry);
             }
         }
     }
@@ -1140,12 +1140,12 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
 }
 
 /**
- * Returns whether a map object shows the "!" hint balloon over Mario when he is near (MOBJ_FLAG_HINT).
+ * Returns whether a map object shows the "!" hint balloon over Mario when he is near (MOBJ_FLAG_SHOW_HINT).
  * Later versions accept NULL.
  */
 BOOL mobjGetHint(MapObjectEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
-    return (entry->flags & MOBJ_FLAG_HINT) != 0;
+    return (entry->flags & MOBJ_FLAG_SHOW_HINT) != 0;
 }
 #else
     if (entry == NULL) {

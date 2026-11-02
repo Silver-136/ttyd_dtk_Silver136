@@ -76,7 +76,7 @@ BattleUnitKind unit_npc_christine = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of Goombella's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability of Goombella: immune to every status. */
 static StatusVulnerability regist = {

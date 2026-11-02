@@ -122,7 +122,7 @@ void effQueen2Main(EffectEntry* effect) {
             work->alpha = 0;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effQueen2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effQueen2Disp, effect);
 }
 
 /** Draws the dark sphere scaled by the camera distance so it keeps its apparent size. */

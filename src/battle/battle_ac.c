@@ -45,7 +45,7 @@ void BattleActionCommandManager(BattleWork* wp) {
 
         disp = wp->actionCommands.dispcb;
         if (disp) {
-            dispEntry(CAMERA_2D, 900.0f, 1, disp, wp);
+            dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, disp, wp);
         }
     }
 }
@@ -97,7 +97,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
     entry = ActionCommandList;
     work->actionCommands.acUnit = unit;
     work->actionCommands.setupFlags = setupFlags;
-    work->actionCommands.acState = 0;
+    work->actionCommands.acState = AC_STATE_INIT;
     work->actionCommands.resultCount = 0;
     work->actionCommands.result = AC_RESULT_RUNNING;
     work->actionCommands.maincb = NULL;
@@ -121,7 +121,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
 
 /** Starts the prepared action command (state 100 tells its main callback to begin). */
 void BattleActionCommandStart(BattleWork* work) {
-    work->actionCommands.acState = 100;
+    work->actionCommands.acState = AC_STATE_START;
 }
 
 /** Ends the active action command early through its delete callback. */
@@ -155,7 +155,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     done = 0;
     wp = _battleWorkPointer;
     pad = &wp->actionCommands.pad;
-    wp->actionCommands.defenseResult = 0;
+    wp->actionCommands.defenseResult = GUARD_RESULT_NONE;
     diff = unit->badgesEquipped.Unsimplifier + 3;
     diff -= unit->badgesEquipped.Simplifier;
     if (diff < 0) {
@@ -171,10 +171,10 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
         if (wp->actionCommands.countdown > 0) {
             wp->actionCommands.countdown--;
             done = 1;
-            wp->actionCommands.defenseResult = 5;
+            wp->actionCommands.defenseResult = GUARD_RESULT_SUPERGUARD;
         } else if (unit->badgesEquipped.AutoCommand) {
             done = 1;
-            wp->actionCommands.defenseResult = 5;
+            wp->actionCommands.defenseResult = GUARD_RESULT_SUPERGUARD;
         } else {
             for (i = 0; i < superguard; i++) {
                 if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_B)) {
@@ -193,7 +193,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
                 if (count < 2) {
                     done = 1;
-                    wp->actionCommands.defenseResult = 5;
+                    wp->actionCommands.defenseResult = GUARD_RESULT_SUPERGUARD;
                 }
             }
         }
@@ -202,7 +202,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     if (!done) {
         if (wp->actionCommands.countdown > 0) {
             wp->actionCommands.countdown--;
-            wp->actionCommands.defenseResult = 4;
+            wp->actionCommands.defenseResult = GUARD_RESULT_GUARD;
         } else {
             count = 0;
             for (i = 0; i < 15; i++) {
@@ -214,7 +214,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
             }
             if (count >= 2) {
-                wp->actionCommands.defenseResult = 1;
+                wp->actionCommands.defenseResult = GUARD_RESULT_MASHED;
             } else {
                 for (i = 0; i < normal; i++) {
                     if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_A)) {
@@ -223,12 +223,12 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
                 if (i >= normal) {
                     if (count > 0) {
-                        wp->actionCommands.defenseResult = 1;
+                        wp->actionCommands.defenseResult = GUARD_RESULT_MASHED;
                     } else {
-                        wp->actionCommands.defenseResult = 2;
+                        wp->actionCommands.defenseResult = GUARD_RESULT_NO_PRESS;
                     }
                 } else {
-                    wp->actionCommands.defenseResult = 4;
+                    wp->actionCommands.defenseResult = GUARD_RESULT_GUARD;
                 }
             }
         }
@@ -253,7 +253,7 @@ s32 BattleActionCommandGetDefenceResult(void) {
  */
 void BattleActionCommandResetDefenceResult(void) {
     BattleWork* wp = _battleWorkPointer;
-    wp->actionCommands.defenseResult = 0;
+    wp->actionCommands.defenseResult = GUARD_RESULT_NONE;
     BtlPad_WorkInit(&wp->actionCommands.pad);
 }
 

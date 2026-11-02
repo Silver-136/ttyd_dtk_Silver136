@@ -98,7 +98,7 @@ BattleUnitKind unit_boss_cortez_saber = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of Cortez Sabre: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 80, 95, 100, 90, 100, 100, 50, 0, 0, 100, 0, 100, 50, 50, 0, 90, 100, 50, 0, 0, 0};
@@ -327,16 +327,16 @@ static EVT_BEGIN(attack_event)
     WAIT_FRAMES(7)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_DEFAULT
@@ -354,7 +354,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
 
     // A superguard cancels the swing and restores both rotation axes during recoil.
-    IF_INT_EQUAL(LW(5), 21)
+    IF_INT_EQUAL(LW(5), CHECK_DAMAGE_SUPERGUARDED)
         DELETE_EVENT(LW(15))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 50)

@@ -40,7 +40,6 @@
 #include "evt/evt_damage.h"
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
-BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 USER_FUNC(geso_set_checkpose);
 USER_FUNC(hokori_color_func);

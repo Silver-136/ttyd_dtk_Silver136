@@ -24,6 +24,7 @@
 #include "unit/unit_barriern.h"
 #include "system.h"
 #include "driver/mapdrv.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of the X-Yux (btlevtcmd_SetUnitWork / GetUnitWork, unit->work)
 enum {
@@ -188,7 +189,7 @@ BattleUnitKind unit_barriern_custom = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Element reactions of X-Yux: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Body parts of X-Yux: 11 parts (model c_baria_c); the first is the body.
@@ -251,9 +252,9 @@ static BattleWeapon weapon_wakka_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
 #if VERSION <= VERSION_DEMO_US
     100,
@@ -295,7 +296,7 @@ static BattleWeapon weapon_wawawa_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_SHATTERS_FREEZE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
@@ -656,7 +657,7 @@ EVT_END()
 /** Damage reaction of a Yux: resets its colour to white (SetRGB 255) and runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -1296,17 +1297,17 @@ EVT_END()
 static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

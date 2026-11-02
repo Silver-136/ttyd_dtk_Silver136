@@ -836,7 +836,7 @@ EVT_BEGIN(majyorin_evt_main)
     CALL(evt_mario_normalize)
     CALL(evt_mario_wait_landon)
     CALL(evt_npc_stop_for_event)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
         LOOP(0)
@@ -985,7 +985,7 @@ EVT_BEGIN(majyorin_evt_main)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     RETURN
 EVT_END()
@@ -1075,7 +1075,7 @@ EVT_BEGIN(las_09_init_evt)
             CALL(evt_party_set_dir, 0, 90, 0)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_bero_exec_wait, 65536)
+                CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
                 SPAWN_EVENT(PTR(majyorin_evt_main))
             END_INLINE_EVENT
         ELSE

@@ -11,6 +11,7 @@
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of the Green Swoopula.
 enum {
@@ -127,7 +128,7 @@ BattleUnitKind unit_basabasa_green = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of Swampire: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Attack data of Swampire's basabasa drain attack biribiri counterd attack: no damage, 100% accuracy. */
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
@@ -289,7 +290,7 @@ static BattleWeapon weapon_basabasa_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE, // special
     0, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -399,7 +400,7 @@ EVT_END()
  * and LW(11) = 1.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -412,7 +413,7 @@ EVT_END()
  * and glides down to its home position over 60 frames.
  */
 static EVT_BEGIN(damage_event_ceil)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -438,7 +439,7 @@ EVT_END()
  */
 static EVT_BEGIN(counter_damage_event)
     CALL_CHILD(ceil_sky_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(subsetevt_counter_damage)
@@ -451,7 +452,7 @@ EVT_END()
  * and glides to its home position over 60 frames.
  */
 static EVT_BEGIN(ceil_fall_ready_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     CALL_CHILD(ceil_sky_event)
@@ -535,20 +536,20 @@ static EVT_BEGIN(attack_event)
     // The damage check decides between a miss (it sails past) and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -570,10 +571,10 @@ static EVT_BEGIN(attack_event)
     // On a hit, it checks whether the target would counter the bite (Electrified or Hold Fast); if so, the counter damage is dealt instead and nothing is drained.
     SET_VALUE(LF(0), 0)
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), 256, LW(5))
-    IF_INT_EQUAL(LW(5), 17)
+    IF_INT_EQUAL(LW(5), CHECK_COUNTER_HOLD_FAST)
         SET_VALUE(LF(0), 1)
     END_IF
-    IF_INT_EQUAL(LW(5), 14)
+    IF_INT_EQUAL(LW(5), CHECK_COUNTER_ELECTRIFIED)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)

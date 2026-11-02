@@ -18,6 +18,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
 #include "data_tables.h"
+#include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_FUSE_LIT 0   // 1 once attack_event lit it (with BATTLE_UNIT_FLAG_FUSE_LIT_UNUSED); freeze puts it out; phase_event counts down only while 1; _fire_point_callback draws the flame only while 1
@@ -157,7 +158,7 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
+    TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -303,7 +304,7 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Elemental reactions of the Bulky Bob-omb: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 50, 70, 0, 70, 150, 100, 70, 100, 70, 100, 70, 100, 70, 70, 80, 20, 100, 70, 100, 100, 95};
@@ -599,7 +600,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -644,7 +645,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(phase_event)
-    CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
+    CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_LIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -810,7 +811,7 @@ static EVT_BEGIN(explosion_event)
     SET_VALUE(LW(10), 0)
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_heavy_bomb_super_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 1)
+    IF_INT_EQUAL(LW(5), PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_heavy_bomb_super_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))

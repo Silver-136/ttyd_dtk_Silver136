@@ -99,7 +99,7 @@ BattleUnitKind unit_boss_cortez_rapier = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of Cortez Rapier: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 80, 95, 100, 90, 100, 100, 50, 0, 0, 100, 0, 100, 50, 50, 0, 90, 100, 50, 0, 0, 0};
@@ -158,7 +158,7 @@ BattleWeapon weapon_cortez_rapier_float_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
+    TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -367,19 +367,19 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_DEFAULT
         GOTO(97)
@@ -397,7 +397,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
 
     // If a target Superguarded, the Rapier is repelled: it tumbles backwards and recoils home at once.
-    IF_INT_EQUAL(LW(5), 21)
+    IF_INT_EQUAL(LW(5), CHECK_DAMAGE_SUPERGUARDED)
         DELETE_EVENT(LW(13))
         CALL(evt_snd_sfxoff, LW(9))
         DELETE_EVENT(LW(14))

@@ -2187,13 +2187,13 @@ void bossrobot_batu(CameraId camera, void* param) {
     animPoseSetMaterialFlagOn(batu->poseId, MAP_OBJ_FLAG_COLOR);
     animPoseSetMaterialEvtColor(batu->poseId, (GXColor){0xFF, 0xFF, 0xFF, *alpha});
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
             animPoseDrawMtx(batu->poseId, mtx, 1, 0.0f, 2.0f);
             break;
-        case 1:
+        case DISP_MODE_ALPHA_TEST:
             animPoseDrawMtx(batu->poseId, mtx, 2, 0.0f, 2.0f);
             break;
-        case 2:
+        case DISP_MODE_XLU:
             animPoseDrawMtx(batu->poseId, mtx, 3, 0.0f, 2.0f);
             break;
     }
@@ -2231,9 +2231,9 @@ USER_FUNC(bossrobot) {
     maru->position = (Vec){mtxs[idx][0][3], mtxs[idx][1][3], mtxs[idx][2][3]};
     pos = (Vec){0.0f, 0.0f, 0.0f};
     *bp = alpha;
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), 0, bossrobot_batu, bp);
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), 1, bossrobot_batu, bp);
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, bossrobot_batu, bp);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_OPAQUE, bossrobot_batu, bp);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, bossrobot_batu, bp);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, bossrobot_batu, bp);
     return EVT_RETURN_BLOCK;
 }
 
@@ -3463,7 +3463,7 @@ EVT_BEGIN(mri_01_koopa_first_evt)
     CALL(evt_npc_set_ry, STRING("プニ族B"), 270)
     CALL(evt_cam3d_evt_set, -126, 134, 399, -126, 65, 8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_off))
@@ -3725,7 +3725,7 @@ EVT_BEGIN(mri_01_koopa_second_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
-    CALL(evt_fade_entry, 6, 300, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT_3D, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)

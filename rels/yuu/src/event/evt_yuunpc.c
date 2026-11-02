@@ -2310,7 +2310,7 @@ void yuunpc_disp(CameraId camera, void* param) {
 
 /** Queues yuunpc_disp for drawing. */
 void ext_yuunpc_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, yuunpc_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, yuunpc_disp, NULL);
 }
 
 /** Per-frame callback of the Plane Mode crowd ext; forwards to yuunpc_pose_minigame1_main. */

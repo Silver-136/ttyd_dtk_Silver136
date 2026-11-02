@@ -300,7 +300,7 @@ void imgDisp_ProjPlane(CameraId camId, void* param) {
 /**
  * Copies capture slot sh's rectangle of the frame buffer into a texture,
  * allocating the buffer from the smart heap (allocMode 1 or 2 pick the heap kind)
- * or as a type-3 block that smartAutoFree(3) reclaims.
+ * or as a type-3 block that smartAutoFree(SMART_GROUP_TEMP) reclaims.
  */
 static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
     s32 fmt, dstFmt, alloc;
@@ -319,9 +319,9 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
     GXSetTexCopySrc(sh->rect.left, sh->rect.top, w, h);
     GXSetTexCopyDst(w, h, dstFmt, GX_FALSE);
     size = GXGetTexBufferSize(w, h, fmt, GX_FALSE, 0);
-    if (alloc == 1) data = smartAlloc(size, 1);
-    else if (alloc == 2) data = smartAlloc(size, 0);
-    else data = smartAlloc(size, 3);
+    if (alloc == 1) data = smartAlloc(size, SMART_GROUP_MAP);
+    else if (alloc == 2) data = smartAlloc(size, SMART_GROUP_PERMANENT);
+    else data = smartAlloc(size, SMART_GROUP_TEMP);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GXCopyTex(data->address, GX_FALSE);
     GXPixModeSync();
@@ -366,9 +366,9 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
                     fmt = GXGetTexObjFmt(obj);
                     size = GXGetTexBufferSize(w, h, fmt, GX_FALSE, 0);
                     if (sh->allocMode == 1) {
-                        sh->data = smartAlloc(size, 1);
+                        sh->data = smartAlloc(size, SMART_GROUP_MAP);
                     } else if (sh->allocMode == 2) {
-                        sh->data = smartAlloc(size, 0);
+                        sh->data = smartAlloc(size, SMART_GROUP_PERMANENT);
                     }
 #if VERSION <= VERSION_DEMO_US
                     memcpy(sh->data->address, src, size);
@@ -543,22 +543,22 @@ void imgMain(void) {
                 }
                 if (shadow != 3) {
 #if VERSION <= VERSION_DEMO_US
-                    dispEntry(entry->camId, 0.0f, 1, imgDisp, entry);
+                    dispEntry(entry->camId, 0.0f, DISP_MODE_ALPHA_TEST, imgDisp, entry);
 #else
-                    dispEntry(entry->camId, entry->order, 1, imgDisp, entry);
+                    dispEntry(entry->camId, entry->order, DISP_MODE_ALPHA_TEST, imgDisp, entry);
 #endif
                     switch (entry->shadowId) {
                         case 0:
                             animPoseSetMaterialFlagOff(entry->poseId, MAP_OBJ_FLAG_DEPTH_SHADOW);
                             break;
                         case 1:
-                            dispEntry(CAMERA_SHADOW, 0.0f, 1, imgShadowDisp, entry);
-                            dispEntry(CAMERA_3D_IMAGE, 0.0f, 5, imgDisp_ProjPlane, entry);
+                            dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_ALPHA_TEST, imgShadowDisp, entry);
+                            dispEntry(CAMERA_3D_IMAGE, 0.0f, DISP_MODE_XLU_BEFORE_OPAQUE, imgDisp_ProjPlane, entry);
                             break;
                         case 2:
                             animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_DEPTH_SHADOW);
-                            dispEntry(CAMERA_SHADOW, 0.0f, 6, imgShadowDisp, entry);
-                            dispEntry(CAMERA_3D_IMAGE, 0.0f, 5, imgDisp_ProjPlane, entry);
+                            dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_CUSTOM_FIRST, imgShadowDisp, entry);
+                            dispEntry(CAMERA_3D_IMAGE, 0.0f, DISP_MODE_XLU_BEFORE_OPAQUE, imgDisp_ProjPlane, entry);
                             break;
                     }
                 }
@@ -567,7 +567,7 @@ void imgMain(void) {
     }
 
     for (i = 0; i < CAMERA_MAX; i++) {
-        dispEntry(i, 0.0f, 7, imgCapture, NULL);
+        dispEntry(i, 0.0f, DISP_MODE_CUSTOM_LAST, imgCapture, NULL);
     }
 }
 

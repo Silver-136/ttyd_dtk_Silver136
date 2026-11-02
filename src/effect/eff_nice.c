@@ -329,7 +329,7 @@ void effNiceMain(EffectEntry* effect) {
     if (type == 7) {
         acrobatMain(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), 8, effNiceDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, effNiceDisp, effect);
     }
 }
 
@@ -466,7 +466,7 @@ void acrobatMain(EffectEntry* effect) {
     if (done >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), 8, effAcrobatDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, effAcrobatDisp, effect);
     }
 }
 

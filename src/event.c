@@ -608,7 +608,7 @@ void stg0_00_init(void) {
     badgeShop_init();
     yuugijou_init();
     johoya_init();
-    gp->retraceLocalTime = 0;
+    gp->playTime = 0;
     marioSetCharMode(CHARACTER_MARIO);
     statusWinForceUpdate();
 }
@@ -1159,7 +1159,7 @@ void stg3_12_init__4(void) {
     swByteSet(GSW_TOU_LAST_OPPONENT_ID, 20 - i); // GSW_GLITZ_PIT_LAST_OPPONENT
     swSet(GSWF_TOU_RANK14_SCENE); // GSWF_TOU_RANK_14_KING_K_TALK_DONE
     swSet(GSWF_TOU_EGG_STORY_SKIP); // GSWF_TOU_10_JUMP_STORY_TO_EGG
-    *(u64*)timeBytes = (u64)gp->retraceLocalTime;
+    *(u64*)timeBytes = (u64)gp->playTime;
     for (i = 0; i < 8; i++) {
         swByteSet(GSW_TOU_EGG_TIME + i, timeBytes[i]); // GSW_TOU_EGG_RECEIVED_TIME (8 bytes)
     }
@@ -2072,7 +2072,7 @@ void stg6_70_init(void) {
 void stg6_71_01_init(void) {
     swSet(0xE); // GSWF_MAIL_ZIP_TOAD_SENT
     pouchReceiveMail(0x17);
-    gp->retraceLocalTime += (OSTime)OS_TIMER_CLOCK * 180;
+    gp->playTime += (OSTime)OS_TIMER_CLOCK * 180;
 }
 
 /** Story point STG6_72 "A Way to the Moon" (gor_02): empty; this point needs no setup beyond the earlier ones. */

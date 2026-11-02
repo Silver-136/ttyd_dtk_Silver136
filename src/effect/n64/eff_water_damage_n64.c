@@ -247,9 +247,9 @@ void effWaterDamageMain(EffectEntry* effect) {
         }
     }
     if (variant == 0) {
-        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 8, (DispCallback)effWaterDamageDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, (DispCallback)effWaterDamageDisp, effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 8, (DispCallback)effWaterDamageDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, (DispCallback)effWaterDamageDisp2, effect);
     }
 }
 
@@ -328,7 +328,7 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetCullMode(GX_CULL_NONE);
     work++;
 #if VERSION <= VERSION_DEMO_US
-    buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 4)->address;
+    buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP_KEEP)->address;
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
     GXCopyTex(buffer, GX_FALSE);

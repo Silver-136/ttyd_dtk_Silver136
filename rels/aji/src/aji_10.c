@@ -337,7 +337,7 @@ void monitor_cap_capture(CameraId cameraId, void* param) {
  * never finishes (blocks).
  */
 USER_FUNC(monitor_cap_evt) {
-    dispEntry(CAMERA_3D, 1000.0f, 0, monitor_cap_capture, NULL);
+    dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_OPAQUE, monitor_cap_capture, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -504,7 +504,7 @@ static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_peach_set_condition, 4)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_kill_party, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_mario_set_pos, -420, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(500)
@@ -859,7 +859,7 @@ static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 273, 972, 0, 100, -13, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_fade_end_wait)
     CALL(evt_npc_flag_onoff, 0, STRING("研究員"), NPC_FLAG_INSTANT_TURN)
     WAIT_MS(2000)
@@ -1117,7 +1117,7 @@ static EVT_BEGIN(peach_evt_stg4)
     CALL(evt_npc_flag_onoff, 1, STRING("研究員"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, 0, 273, 972, 0, 100, -13, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_fade_end_wait)
     CALL(evt_npc_flag_onoff, 0, STRING("研究員"), NPC_FLAG_INSTANT_TURN)
     WAIT_MS(2000)
@@ -1514,7 +1514,7 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_npc_set_ry, STRING("みはり"), 270)
         CALL(evt_npc_flag_onoff, 1, STRING("みはり"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
         BEGIN_INLINE_EVENT
-            CALL(evt_bero_exec_wait, 65536)
+            CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
             SET_VALUE(LW(0), STRING("e_bero"))
             CALL_CHILD(PTR(bero_case_switch_off))
             CALL(evt_bero_overwrite, STRING("e_bero"), PTR(bero_peach_data))

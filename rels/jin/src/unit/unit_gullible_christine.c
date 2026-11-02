@@ -134,7 +134,7 @@ static BattleWeapon enemyWeapon_ChristineNormalAttack = {
 static BattleUnitDefense defence_christine = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Goombella double's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr_christine = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_christine = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_christine = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
@@ -232,7 +232,7 @@ EVT_BEGIN(damage_event_christine)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -366,12 +366,12 @@ static EVT_BEGIN(attack_event_christine)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH

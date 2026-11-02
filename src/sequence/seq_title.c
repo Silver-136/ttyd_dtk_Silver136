@@ -282,7 +282,7 @@ void titleMain(SequenceWork* work) {
                 wp2->fadeAlpha = 1.0f;
             }
             if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
-                psndSFXOn((const char*)0x12);
+                psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
                 wp2->state = 10;
             } else if (++wp2->idle > VERSION_PICK(60, gp->framerate) * 20 - VERSION_PICK(60, gp->framerate)) {
                 wp2->state = 20;
@@ -291,16 +291,16 @@ void titleMain(SequenceWork* work) {
 #if VERSION >= VERSION_US
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
-            wp2->fadeAlpha += 0.1f;
-            if (wp2->fadeAlpha > 1.0f) {
-                wp2->fadeAlpha = 1.0f;
-            }
-            if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
-                psndSFXOn(SFX_NAME_WORD(PSND_SFX_PRESS_START1));
-                wp2->state = 10;
-            } else if (++wp2->idle > TITLE_FRAMES_PER_SEC * 20 - TITLE_FRAMES_PER_SEC) {
-                wp2->state = 20;
-            }
+                wp2->fadeAlpha += 0.1f;
+                if (wp2->fadeAlpha > 1.0f) {
+                    wp2->fadeAlpha = 1.0f;
+                }
+                if (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START)) {
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_PRESS_START1));
+                    wp2->state = 10;
+                } else if (++wp2->idle > TITLE_FRAMES_PER_SEC * 20 - TITLE_FRAMES_PER_SEC) {
+                    wp2->state = 20;
+                }
             }
 #else
             wp2->fadeAlpha += 0.1f;
@@ -356,21 +356,21 @@ void titleMain(SequenceWork* work) {
             if (fadeIsFinish()) {
                 fadeReset(1);
 #if VERSION <= VERSION_DEMO_US
-                gp->areaFadeInType = FADE_OUT_WHITE;
+                gp->areaFadeOutType = FADE_OUT_WHITE;
 #else
                 if (pouchGetHP() <= 0) {
                     pouchSetHP(1);
                 }
-                gp->areaFadeInType = FADE_OUT_BLACK;
+                gp->areaFadeOutType = FADE_OUT_BLACK;
 #endif
-                gp->areaFadeInDuration = 0;
+                gp->areaFadeOutDuration = 0;
                 seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
             }
             break;
     }
     if (wp2->state != 12 && work->state < 14) {
-        dispEntry(CAMERA_3D, 0.0f, 0, disp1, NULL);
-        dispEntry(CAMERA_3D_EFFECTB, 0.0f, 0, disp2, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, disp1, NULL);
+        dispEntry(CAMERA_3D_EFFECTB, 0.0f, DISP_MODE_OPAQUE, disp2, NULL);
 #if VERSION > VERSION_DEMO_US
         // a button sequence on the title screen turns on debug mode (getDebugMode)
         switch (wp2->debug) {

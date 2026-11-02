@@ -41,6 +41,7 @@
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
+#include "driver/camdrv.h"
 
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
@@ -633,7 +634,7 @@ EVT_BEGIN(evt_train_nidome)
     SET_VALUE(GF(15), 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("eki_03_S"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_party_cont_onoff, 1, 0)
@@ -965,7 +966,7 @@ static void sun_tev(MapTevCallbackInfo* info) {
 
     // a scrolling sine-wave warp texture for the sun's heat haze
     if (ind_lp == NULL) {
-        ind_lp = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), 1);
+        ind_lp = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), SMART_GROUP_MAP);
     }
     buf = ind_lp->address;
     for (i = 0; i < 64; i++) {

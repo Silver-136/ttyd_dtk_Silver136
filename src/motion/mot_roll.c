@@ -408,7 +408,7 @@ void mot_roll_post(void) {
         }
     }
     marioSetSpec();
-    mario->rollFlags = 0;
+    mario->rollFlags = ROLL_STATE_NONE;
     mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
     mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
     mario->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -465,7 +465,7 @@ void marioRollForceCancel(void) {
             }
         }
         marioSetSpec();
-        mario->rollFlags = 0;
+        mario->rollFlags = ROLL_STATE_NONE;
         mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
         mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
         mario->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -528,7 +528,7 @@ void marioReInit_roll(void) {
     mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     mario->currMotionId = MARIO_MOTION_ROLL;
     mario->flags |= MARIO_FLAG_TUBE_MODE;
-    mario->rollFlags = 0x10;
+    mario->rollFlags = ROLL_STATE_ROLLING;
     marioPaperOn("p_roll");
     marioChgPose("M_I_U");
     marioChgPaper("PM_R_1B");
@@ -638,7 +638,7 @@ void mot_roll(void) {
 #endif
         marioGetRubInit();
         mario->flags |= MARIO_FLAG_TUBE_MODE;
-        mario->rollFlags = 0x10;
+        mario->rollFlags = ROLL_STATE_ROLLING;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         marioPaperOn("p_roll");
@@ -737,7 +737,7 @@ void mot_roll(void) {
         marioChgPaper("PM_R_1C");
         marioPaperLightOff();
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((char*)0x17a, &mario->position);
+        psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_ROLL2, &mario->position);
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL2), &mario->position);
 #endif
@@ -781,7 +781,7 @@ void mot_roll(void) {
                 mario->directionView = 90.0f;
             }
             marioSetSpec();
-            mario->rollFlags = 0;
+            mario->rollFlags = ROLL_STATE_NONE;
 #if VERSION <= VERSION_DEMO_US
             mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
             mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
@@ -912,7 +912,7 @@ void mot_roll(void) {
         if (mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             {
 #else
-        if (!(hitGetAttr(mario->hitobjStandOn) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE)) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
+        if (!(hitGetAttr(mario->hitobjStandOn) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) && mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             if (!(strcmp(gp->currentMapName, "eki_04") == 0 && __fabsf(mario->groundSlope) >= 40.0f)) {
 #endif
                 MarioWork* m = marioGetPtr();
@@ -924,7 +924,7 @@ void mot_roll(void) {
                 m->flags |= MARIO_FLAG_IS_JUMPING;
                 m->airTimer = 1;
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D((char*)0x17c, &marioGetPtr()->position);
+                psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_JUMP1, &marioGetPtr()->position);
 #else
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_JUMP1), &marioGetPtr()->position);
                 mario->hitobjJumpFrom = mario->hitobjStandOn;
@@ -1230,7 +1230,7 @@ void mot_roll(void) {
         MarioWork* m = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
         if ((u32)m->mot.roll.sfxId == (u32)-1) {
-            m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)0x17b, &m->position);
+            m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_MOVE1, &m->position);
 #else
 #if VERSION >= VERSION_US
         if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId == (u32)-1) {

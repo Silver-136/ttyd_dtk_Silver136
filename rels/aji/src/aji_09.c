@@ -693,7 +693,7 @@ EVT_BEGIN(s_bero_out)
                 SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
                 CALL_CHILD(PTR(s_door_open))
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(s_door_open))
             END_IF
         END_LOOP
@@ -708,7 +708,7 @@ EVT_BEGIN(s_bero_out)
         WAIT_MS(1000)
         CALL(evt_fade_set_mapchange_type, 0, 0, 0, FADE_IN_BLACK, 300)
         CALL(evt_bero_mapchange, STRING("aji_17"), STRING("w_bero"))
-        ELSE
+    ELSE
 #if VERSION < VERSION_US
         CALL(evt_mario_key_onoff, 0)
 #endif
@@ -761,7 +761,7 @@ static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_omo"), 0, PTR(peach_evt_kou2_in), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kou2_ka_ura"), 0, PTR(peach_evt_kou2_out), 0)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_33_03_PEACH_GRODUS)
         SET_VALUE(LW(0), STRING("s_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))

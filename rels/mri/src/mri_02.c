@@ -29,6 +29,7 @@
 #include "evt/evt_sub.h"
 #include "mri.h"
 #include "data_tables.h"
+#include "driver/npcdrv.h"
 
 typedef struct Mri02Switch {
     f32 base;
@@ -470,11 +471,11 @@ EVT_BEGIN(mri_02_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_16_THE_PUNI_ELDERS_POWERS)
         SPAWN_EVENT(PTR(dokan_init))
         BEGIN_INLINE_EVENT
-            CALL(evt_bero_exec_wait, 65536)
+            CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
             CALL(evt_puni_dokan_onoff, STRING("dokan2"), 1)
         END_INLINE_EVENT
     END_IF
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SET_VALUE(LW(0), STRING("S_sui_l_02"))
     SET_RAW_VALUE(LW(1), GW(0))
     SET_VALUE(LW(2), 9)

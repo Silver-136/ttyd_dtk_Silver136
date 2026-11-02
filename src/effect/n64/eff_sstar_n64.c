@@ -223,7 +223,7 @@ void effSstarMain(EffectEntry* effect) {
     if (w->life < 0) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effSstarDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effSstarDisp, effect);
     }
 }
 

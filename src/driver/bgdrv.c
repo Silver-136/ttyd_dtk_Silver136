@@ -174,7 +174,7 @@ void bgMain(void) {
         yawScroll = 4.0f * (camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
         transX = ((f32)width * yawScroll) + transX;
         bgwork->trans_x = transX;
-        dispEntry(CAMERA_BACKGROUND, 0.0f, 3, bgDisp, NULL);
+        dispEntry(CAMERA_BACKGROUND, 0.0f, DISP_MODE_OPAQUE_NO_Z, bgDisp, NULL);
     }
 }
 

@@ -83,7 +83,6 @@ static inline f32 chb_sin(f32 x) {
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a;
         a = a * y;
         a = -a;
     } else {
@@ -91,7 +90,6 @@ static inline f32 chb_sin(f32 x) {
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a;
         a = a * y;
         a = -a;
     }
@@ -119,7 +117,6 @@ static inline f32 chb_cos(f32 x) {
             x2 = y * y;
             a = a * x2 - b;
             a = a * x2 + c;
-            a = a;
             a = -a;
         }
     } else if (x < 4.712389f) {
@@ -127,7 +124,6 @@ static inline f32 chb_cos(f32 x) {
         x2 = y * y;
         a = a * x2 - b;
         a = a * x2 + c;
-        a = a;
         a = -a;
     } else {
         y = 1.5707964f - (x - 4.712389f);
@@ -472,7 +468,7 @@ static inline void chb_zero(Vec* v) {
 
 /** Registers the swarm's draw callback with the 3D camera. */
 static void ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
 }
 
 /** Script helper: switches every Fuzzy of the swarm to the fleeing state. */
@@ -651,13 +647,13 @@ EVT_BEGIN(evt_golden)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     DIVIDE_FLOAT(LW(0), FLOAT(4.0f))
     SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
-    CALL(evt_npc_flag_onoff, 1, STRING("ゴールドチョロボン"), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(evt_npc_flag_onoff, 1, STRING("ゴールドチョロボン"), NPC_FLAG_GRAVITY | NPC_FLAG_FLOOR_COLLISION)
     LOOP(3)
         ADD_FLOAT(LW(3), LW(0))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_CHORO_MOVE1"), LW(3), LW(1), LW(2), 0)
         CALL(evt_npc_jump_position, STRING("ゴールドチョロボン"), LW(3), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
     END_LOOP
-    CALL(evt_npc_flag_onoff, 1, STRING("ゴールドチョロボン"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("ゴールドチョロボン"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_NO_HIT)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 30)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -667,7 +663,7 @@ EVT_BEGIN(evt_golden)
     WAIT_MS(500)
     CALL(evt_npc_get_position, STRING("ゴールドチョロボン"), LW(3), LW(4), LW(5))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_CHORO_MOVE1"), LW(3), LW(4), LW(5), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("ゴールドチョロボン"), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(evt_npc_flag_onoff, 0, STRING("ゴールドチョロボン"), NPC_FLAG_GRAVITY | NPC_FLAG_FLOOR_COLLISION)
     CALL(npc_jump, STRING("ゴールドチョロボン"), LW(0), LW(1), LW(2), FLOAT(3.5f), FLOAT(2.0f), 0)
     CALL(evt_npc_battle_start, STRING("ゴールドチョロボン"))
     CALL(evt_npc_wait_battle_end)
@@ -688,7 +684,7 @@ EVT_BEGIN(evt_golden)
         SET_FLOAT_VALUE(LW(2), FLOAT(500.0f))
         DIVIDE_FLOAT(LW(2), FLOAT(40.0f))
         SET_FLOAT_VALUE(LW(3), FLOAT(0.0f))
-        CALL(evt_npc_flag_onoff, 0, STRING("ゴールドチョロボン"), NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR)
+        CALL(evt_npc_flag_onoff, 0, STRING("ゴールドチョロボン"), NPC_FLAG_GRAVITY | NPC_FLAG_FLOOR_COLLISION)
         LOOP(40)
             ADD_FLOAT(LW(3), LW(2))
             CALL(npc_jump, STRING("ゴールドチョロボン"), LW(0), LW(1), LW(3), FLOAT(0.7998047f), FLOAT(1.0f), 0)
@@ -718,7 +714,7 @@ EVT_BEGIN(hei_10_init_evt)
         IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG1_06_01_GOLD_FUZZY)
                 CALL(evt_npc_set_position, STRING("ゴールドチョロボン"), 0, -15, 0)
-                CALL(evt_npc_change_fbat_mode, 1)
+                CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
                 SPAWN_EVENT(PTR(evt_golden))
             END_IF
         END_IF

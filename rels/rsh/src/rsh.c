@@ -447,7 +447,7 @@ EVT_BEGIN(evt_rsh_door_open)
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
                 CALL(evt_npc_check, STRING("トロン"), LW(10))
                 IF_INT_EQUAL(LW(10), 1)
-                    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_INTANGIBLE)
+                    CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_NO_HIT)
                 END_IF
             END_IF
 #endif
@@ -476,7 +476,7 @@ EVT_BEGIN(evt_rsh_door_open)
             IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_25_ZIP_TOAD_APPEARS)
                 CALL(evt_npc_check, STRING("トロン"), LW(10))
                 IF_INT_EQUAL(LW(10), 1)
-                    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_INTANGIBLE)
+                    CALL(evt_npc_flag_onoff, 1, STRING("トロン"), NPC_FLAG_NO_HIT)
                 END_IF
 #endif
             END_IF
@@ -1866,7 +1866,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     height = y1 - y0;
     halfWidth = width / 2;
     halfHeight = height / 2;
-    buf = smartAlloc(GXGetTexBufferSize(halfWidth, halfHeight, GX_TF_RGB5A3, GX_FALSE, 0), 3)->address;
+    buf = smartAlloc(GXGetTexBufferSize(halfWidth, halfHeight, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     GXSetTexCopySrc(x0, y0, width, height);
     GXSetTexCopyDst(halfWidth, halfHeight, GX_TF_RGB5A3, GX_TRUE);
     GXCopyTex(buf, GX_FALSE);

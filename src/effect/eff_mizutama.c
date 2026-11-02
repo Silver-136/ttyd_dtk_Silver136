@@ -125,7 +125,7 @@ void effMizutamaMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMizutamaDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMizutamaDisp, effect);
 }
 
 /** Draws each bubble as a camera-facing textured quad (effect texture 0x3F). */

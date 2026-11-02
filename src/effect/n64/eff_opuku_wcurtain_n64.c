@@ -107,7 +107,7 @@ void effOpukuWcurtainMain(EffectEntry* effect) {
             work->speed[i] += 0.1f * (5.0f - work->speed[i]);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuWcurtainDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuWcurtainDisp, effect);
 }
 
 /**
@@ -149,7 +149,7 @@ void effOpukuWcurtainDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
     GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
     GXSetCullMode(GX_CULL_NONE);
-    p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, 3)->address;
+    p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, SMART_GROUP_TEMP)->address;
     vtx = p;
     for (i = 0; i < 12; i++) {
         t = (frame + i * 4) << 5;

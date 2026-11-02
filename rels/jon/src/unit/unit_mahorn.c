@@ -131,7 +131,7 @@ BattleUnitKind unit_mahorn = {
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 
 /** Element response of the Wizzerd: none, every attack type is treated normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {10, 50, 50, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 30, 75, 100, 40, 100, 100, 40};
@@ -633,7 +633,7 @@ EVT_END()
 
 /** Damage script of the Wizzerd: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -743,20 +743,20 @@ static EVT_BEGIN(attack_punch_event)
     // The hands pull back; find out whether the flurry connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -781,7 +781,7 @@ static EVT_BEGIN(attack_punch_event)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
         WAIT_FRAMES(45)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -843,17 +843,17 @@ static EVT_BEGIN(attack_enemy_common_event)
     // Find out whether the spell reaches the target.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -961,20 +961,20 @@ static EVT_BEGIN(attack_enemy_all_common_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(evt_eff64, STRING(""), STRING("thunder_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -1177,7 +1177,7 @@ static EVT_BEGIN(attack_magic_event)
     END_IF
     CALL_CHILD(PTR(attack_enemy_common_event))
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1200,7 +1200,7 @@ static EVT_BEGIN(confuse_magic_event)
     END_IF
     CALL_CHILD(PTR(attack_enemy_common_event))
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1223,7 +1223,7 @@ static EVT_BEGIN(all_attack_magic_event)
     END_IF
     CALL_CHILD(PTR(attack_enemy_all_common_event))
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1300,7 +1300,7 @@ static EVT_BEGIN(dekadeka_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1331,7 +1331,7 @@ static EVT_BEGIN(katikati_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1362,7 +1362,7 @@ static EVT_BEGIN(trans_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1393,7 +1393,7 @@ static EVT_BEGIN(yokeyoke_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1427,7 +1427,7 @@ static EVT_BEGIN(recover_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

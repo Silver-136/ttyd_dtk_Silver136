@@ -5,6 +5,8 @@
 #include <dolphin/types.h>
 #include "battle/battle_database_common.h"
 
+#define ITEM_USABLE_MENU 4 // usable_locations: usable from the pause menu (win_item)
+
 typedef struct ItemData {
     const char* id; //0x0, japanese name of the item
     const char* name; //0x4

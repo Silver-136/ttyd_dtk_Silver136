@@ -182,7 +182,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_party_stop, 0)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_onoff, 0, 2)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
 #endif
     CALL(evt_mario_normalize)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -75, 0, 30)
@@ -217,7 +217,7 @@ static EVT_BEGIN(chuchurina_sogu)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_bero_exec_onoff, 0, 2)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
 #endif
         CALL(evt_puni_wait_systemmode, 2)
         CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
@@ -229,13 +229,13 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_puni_set_dir, 1, 270)
         CALL(evt_puni_move_position2, 1, 175, LW(2), FLOAT(120.0f))
         CALL(evt_puni_set_anim, 1, 0)
-        CALL(evt_bero_exec_onoff, 1, 2)
+        CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_seq_wait, 2)
 #endif
     CALL(evt_npc_set_anim, STRING("第三勢力部下"), STRING("D_2"))
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(1500)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
 

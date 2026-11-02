@@ -268,11 +268,11 @@ void effConfettiMain(EffectEntry* effect) {
         w->position.z += w->velocity.z;
     }
     if (type < 10) {
-        dispEntry(camId, dispCalcZ(&position), 2, (DispCallback)effConfettiDisp, effect);
+        dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effConfettiDisp, effect);
     } else if (type < 20) {
-        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), 2, (DispCallback)effConfettiDisp, effect);
+        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effConfettiDisp, effect);
     } else {
-        dispEntry(CAMERA_2D, dispCalcZ(&position), 2, (DispCallback)effConfettiDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effConfettiDisp, effect);
     }
 }
 

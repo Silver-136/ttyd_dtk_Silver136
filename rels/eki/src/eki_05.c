@@ -238,7 +238,7 @@ EVT_BEGIN(eki_05_init_evt)
 #if VERSION == VERSION_EU
     BEGIN_INLINE_EVENT
         CALL(evt_seq_wait, 2)
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         SET_VALUE(LW(0), STRING("w_bero_1"))
         CALL_CHILD(bero_case_switch_off)
         CALL(evt_hitobj_attr_onoff, 0, 0, STRING("w_bero_1"), 8388612)

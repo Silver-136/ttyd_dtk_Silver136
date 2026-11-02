@@ -205,7 +205,7 @@ void effIbukiMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effIbukiDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effIbukiDisp, effect);
 }
 
 /** Draws the puffs from display lists, fading by per-puff alpha. */

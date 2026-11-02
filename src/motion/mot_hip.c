@@ -281,13 +281,13 @@ void mot_hip(void) {
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
             }
-            if (attr & HIT_ATTR_TOGE) {
+            if (attr & HIT_ATTR_SPIKES) {
                 set_damage_root_ypos(mario->position.y);
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
             }
 #if VERSION <= VERSION_DEMO_US
-            psndSFXOn_3D((char*)0x159, &mario->position);
+            psndSFXOn_3D((char*)PSND_SFX_MARIO_HIO_DROP2, &mario->position);
             evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIO_DROP2), &mario->position);
@@ -380,7 +380,7 @@ s32 chkground(void) {
             marioChgMot(MARIO_MOTION_DAMAGE);
             return 1;
         }
-        if (attr & (HIT_ATTR_TOGE | 0x400)) {
+        if (attr & (HIT_ATTR_SPIKES | 0x400)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             return 1;

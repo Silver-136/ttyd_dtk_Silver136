@@ -307,9 +307,9 @@ EVT_BEGIN(nokonoko_F_talk)
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
 #if VERSION <= VERSION_DEMO_US
-                CALL(evt_win_item_select, 1, LW(0))
+                CALL(evt_win_item_select, SELECT_TYPE_ITEM, LW(0))
 #else
-                CALL(evt_win_item_select, 0, 1, LW(0), 0)
+                CALL(evt_win_item_select, 0, SELECT_TYPE_ITEM, LW(0), 0)
 #endif
             ELSE
                 SET_VALUE(LW(0), -1)
@@ -373,9 +373,9 @@ EVT_BEGIN(nokonoko_F_talk)
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
 #if VERSION <= VERSION_DEMO_US
-                CALL(evt_win_item_select, 1, LW(0))
+                CALL(evt_win_item_select, SELECT_TYPE_ITEM, LW(0))
 #else
-                CALL(evt_win_item_select, 0, 1, LW(0), 0)
+                CALL(evt_win_item_select, 0, SELECT_TYPE_ITEM, LW(0), 0)
 #endif
             ELSE
                 SET_VALUE(LW(0), -1)
@@ -1193,7 +1193,7 @@ EVT_BEGIN(nok_00_koopa_evt)
 
     // The story advances and saving is offered.
     SET_VALUE(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
-    CALL(evt_fade_entry, 6, 300, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT_3D, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)

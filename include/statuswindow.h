@@ -5,6 +5,15 @@
 #include "version.h"
 #include <dolphin/mtx.h>
 
+// StatusWindow blink / pendingBlink: the values that blink (valueCheck, statusMarioHPBlink and the others)
+enum {
+    STATUS_BLINK_MARIO_HP = 0x1,
+    STATUS_BLINK_FP = 0x2,
+    STATUS_BLINK_STAR_POWER = 0x4,
+    STATUS_BLINK_PARTY_HP = 0x8,
+    STATUS_BLINK_COINS = 0x10,
+};
+
 typedef struct StatusValue {
     s16 hp;         // 0x0
     s16 maxHp;      // 0x2

@@ -243,7 +243,7 @@ static USER_FUNC(main_star) {
         e->rot.z = w->star.rot.z;
         e->scale = 1.5f * w->star.scale.x;
     }
-    dispEntry(CAMERA_3D, 0.0f, 2, bakuGameDispStar, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, bakuGameDispStar, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -376,7 +376,7 @@ USER_FUNC(bakuGameMain) {
             w->flags |= 1;
         }
         flag = 0;
-        for (i = 0; i < 200; i++) {
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             if (bakuGameAudienceCanThrowPos(i) == 1 && BattleAudience_GetWaiting(i) == 1) {
                 flag = 1;
             }
@@ -691,7 +691,7 @@ state_end:
             w->pos.y = w->to.y;
             w->holder = 0;
             bakuGameMarioSurprise(mario, party);
-            btl_camera_shake_h(0, 4.0f, 0.0f, 10, 4);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 4.0f, 0.0f, 10, 4);
             psndSFXOn("SFX_BTL_SAC_TIME2");
             BtlUnit_snd_se_pos(mario, "SFX_VOICE_MARIO_SURPRISED1", 0x7F, 0, &mario->position);
         }
@@ -1077,7 +1077,7 @@ state_end:
             w->phase = 30;
             w->pos = w->to;
             w->holder = w->throwTarget;
-            btl_camera_shake_h(0, w->bombScale, 0.0f, 10, 4);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, w->bombScale, 0.0f, 10, 4);
             psndSFXOn("SFX_BTL_SAC_TIME2");
             if (!psndSFXChk(w->sfx2)) {
                 psndSFXOff(w->sfx2);
@@ -1098,7 +1098,7 @@ state_end:
         break;
     case 40:
         effSandarsEntry(3, w->pos.x, w->pos.y, w->pos.z, 0.0f);
-        btl_camera_shake_h(0, w->bombScale, 0.0f, 30, 4);
+        btl_camera_shake_h(BTL_CAM_PRI_NORMAL, w->bombScale, 0.0f, 30, 4);
         psndSFXOn("SFX_BTL_SAC_TIME5");
         if (!psndSFXChk(w->sfx1)) {
             psndSFXOff(w->sfx1);
@@ -1123,8 +1123,8 @@ main_end:
     if (w->poseId != -1) {
         animPoseMain(w->poseId);
     }
-    dispEntry(CAMERA_2D, 900.0f, 1, bakuGameDisp2D, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, bakuGameDisp2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, bakuGameDisp3D, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -1183,7 +1183,7 @@ USER_FUNC(bakuGameHeihoReturn) {
         }
         break;
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, bakuGameDisp3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, bakuGameDisp3D, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -1344,14 +1344,14 @@ void bakuGameAudienceSurprise(void) {
             m->flags |= AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
             memset(&m->interpFrameCounter, 0, 0x34); // interpFrameCounter..interpType
             if (!bakuGameAudienceCanThrowPos(i)) {
-                BattleAudience_SetAnim(i, 7, 0);
+                BattleAudience_SetAnim(i, AUD_ANIM_RUN_FRONT, 0);
                 if (irand(2) == 0) {
                     m->angle = 90.0f;
                 } else {
                     m->angle = 270.0f;
                 }
             } else {
-                BattleAudience_SetAnim(i, 3, 0);
+                BattleAudience_SetAnim(i, AUD_ANIM_JUMP_BACK, 0);
             }
         }
     }

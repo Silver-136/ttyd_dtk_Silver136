@@ -276,7 +276,7 @@ void effKemuri1Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, (DispCallback)effKemuri1Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, (DispCallback)effKemuri1Disp, effect);
 }
 
 /**

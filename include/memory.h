@@ -57,6 +57,15 @@ void _mapFree(void* alloc);
 #endif
 void smartInit(void);
 void smartReInit(void);
+// smartAlloc groups: smartAutoFree frees a whole group.
+enum {
+    SMART_GROUP_PERMANENT = 0,  // never auto-freed
+    SMART_GROUP_MAP = 1,        // seq_mapchange, seq_demo
+    SMART_GROUP_BATTLE = 2,     // seq_battle
+    SMART_GROUP_TEMP = 3,       // also freed by the first smartAlloc after smartInit
+    SMART_GROUP_TEMP_KEEP = 4,  // smartFree demotes it to TEMP instead of freeing
+};
+
 void smartAutoFree(s32 allocType);
 void smartFree(smartEntry* entry);
 smartEntry* smartAlloc(u32 size, u8 type);

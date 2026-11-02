@@ -108,7 +108,7 @@ void effLaserMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effLaserDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effLaserDisp, effect);
 }
 
 /** Draws the MOBJ_EFF_laser pose billboarded toward the camera. */

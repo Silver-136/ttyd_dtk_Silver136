@@ -13,6 +13,7 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_sub.h"
 #include "battle/unit_work.h"
+#include "battle/battle_damage.h"
 
 
 static BattleUnitDefense defence;
@@ -42,7 +43,7 @@ static EvtWord dead_event[6];
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** The bomb has no elemental defence. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** The bomb has no status vulnerabilities (all zero). */
 #if VERSION > VERSION_DEMO_US
@@ -272,7 +273,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -301,7 +302,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("B_2"))
             WAIT_FRAMES(36)
             CALL_CHILD(PTR(explosion_event))
-            ELSE
+        ELSE
             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         END_IF
     END_IF
@@ -401,7 +402,7 @@ static EVT_BEGIN(explosion_event)
         GOTO(80)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_bomzou_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 1)
+    IF_INT_EQUAL(LW(5), PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_bomzou_explosion), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     LABEL(80)
@@ -433,7 +434,7 @@ static BattleDataEntry data_table[] = {
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 #if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN

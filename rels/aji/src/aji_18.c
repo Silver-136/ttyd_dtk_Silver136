@@ -288,7 +288,7 @@ EVT_END()
 static EVT_BEGIN(evt_koopa_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, 75, 0, FLOAT(80.0f))
     END_INLINE_EVENT
@@ -363,21 +363,21 @@ EVT_BEGIN(aji_18_init_evt)
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -409,7 +409,7 @@ EVT_BEGIN(aji_18_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

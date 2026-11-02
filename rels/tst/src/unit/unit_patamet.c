@@ -213,7 +213,7 @@ static BattleWeapon weapon_patamet_attack = {
 static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 
 /** Elemental reactions of the Parabuzzy: is immune to fire and explosion attacks. */
-static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr_pata = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_pata = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 95, 100, 75, 100, 100, 95};
@@ -316,7 +316,7 @@ EVT_END()
 
 /** Damage reaction of the winged form: the default damage script. */
 static EVT_BEGIN(damage_event_pata)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -331,7 +331,7 @@ EVT_END()
 
 // Replace winged parts/data with the ground form before the optional turnover path.
 static EVT_BEGIN(dmg_fall_event_pata)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_OffAttribute, LW(10), kFloating)
     CALL(btlevtcmd_OffPartsAttribute, LW(10), LW(11), kIsWinged)
@@ -440,20 +440,20 @@ static EVT_BEGIN(attack_event_pata)
     // Hit check: a miss goes on to the fly-by, a hit to the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_patamet_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -487,7 +487,7 @@ static EVT_BEGIN(attack_event_pata)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -632,7 +632,7 @@ static BattleWeapon weapon_met_attack = {
 #else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
 #endif
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -692,7 +692,7 @@ static BattleWeapon weapon_met_ceil_attack = {
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
 /** Elemental reactions of the Buzzy Beetle: is immune to fire and explosion attacks. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
 /** Defence of the Buzzy Beetle while it lies flipped on its back: none against any element. */
 static BattleUnitDefense defence_turn = {0};
@@ -810,7 +810,7 @@ EVT_END()
  * reaction (btldefaultevt_Damage) for itself.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -822,7 +822,7 @@ EVT_END()
  * sets the overturned counter to 1 and hops to the floor.
  */
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
@@ -847,7 +847,7 @@ EVT_END()
 
 // A flipped attack turn runs this countdown/recovery path instead of attacking.
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)
@@ -976,20 +976,20 @@ static EVT_BEGIN(attack_event)
     // Hit check: a miss goes on to the overshoot, a hit to the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -1041,7 +1041,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1058,7 +1058,7 @@ EVT_END()
  * calls ceil_fall_ready_event so the Buzzy Beetle drops to the ground.
  */
 static EVT_BEGIN(damage_event_ceil)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -1099,7 +1099,7 @@ static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL_CHILD(PTR(init_event2))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(PTR(subsetevt_counter_damage))
@@ -1130,7 +1130,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
     CALL_CHILD(init_event2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(10), LW(11), PTR(&defence_attr_turn))
@@ -1219,20 +1219,20 @@ static EVT_BEGIN(attack_event_ceil)
     // Hit check: a miss leaves the target untouched, a hit goes on to the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_ceil_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -1300,7 +1300,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(7), 0, LW(9), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL_CHILD(init_event2)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

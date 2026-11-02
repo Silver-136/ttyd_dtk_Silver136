@@ -135,7 +135,7 @@ void extEntry(s32 poseNum, ExtTexInfo* texInfo, void (*initFunc)(void), void (*m
         wp->poses[i].mtx = &wp->mtxs[i];
     }
     PSMTXIdentity(wp->shadowMtx);
-    dispEntry(CAMERA_OFFSCREEN, 0.0f, 1, extMakeTexture, texInfo);
+    dispEntry(CAMERA_OFFSCREEN, 0.0f, DISP_MODE_ALPHA_TEST, extMakeTexture, texInfo);
     if (initFunc != NULL) {
         initFunc();
     }

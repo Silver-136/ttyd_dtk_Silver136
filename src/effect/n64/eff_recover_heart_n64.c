@@ -224,7 +224,7 @@ void effRecoverHeartMain(EffectEntry* effect) {
         }
         work->frame++;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRecoverHeartDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRecoverHeartDisp, effect);
 }
 
 /**

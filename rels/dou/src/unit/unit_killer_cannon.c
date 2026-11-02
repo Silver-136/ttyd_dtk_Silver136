@@ -86,9 +86,9 @@ BattleUnitKind unit_killer_cannon = {
     0.0f,
     0.0f,
     0.0f,
-0.0f,
     0.0f,
-26.0f,
+    0.0f,
+    26.0f,
     0.0f,
     0.0f,
     26.0f,
@@ -135,7 +135,7 @@ BattleUnitKind unit_killer_cannon = {
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 /** Elemental reactions of the Bill Blaster: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 50, 100, 50, 100, 50, 100, 50, 50, 0, 15, 100, 50, 100, 100, 95};

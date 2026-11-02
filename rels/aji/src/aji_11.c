@@ -366,7 +366,7 @@ static EVT_BEGIN(peach_evt_stg5)
         END_IF
     END_IF
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_off))
     CALL(evt_bero_overwrite, STRING("w_bero"), PTR(bero_peach_data))

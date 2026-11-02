@@ -73,11 +73,11 @@ void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback,
     entry->param = param;
 
     switch (renderMode) {
-        case 2:
-        case 5:
+        case DISP_MODE_XLU:
+        case DISP_MODE_XLU_BEFORE_OPAQUE:
 #if VERSION > VERSION_DEMO_US
-        case 9:
-        case 10:
+        case DISP_MODE_XLU_BEFORE:
+        case DISP_MODE_XLU_AFTER:
 #endif
             entry->order = offset_tbl[renderMode] + order;
             break;
@@ -136,35 +136,35 @@ void dispDraw(CameraId camId) {
             }
             GXSetZScaleOffset(DISP_ONE, 0.0f);
             switch (entry->renderMode) {
-                case 0:
+                case DISP_MODE_OPAQUE:
                     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);
                     GXSetZCompLoc(GX_TRUE);
                     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
                     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
                     break;
-                case 3:
+                case DISP_MODE_OPAQUE_NO_Z:
                     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
                     GXSetZCompLoc(GX_TRUE);
                     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
                     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
                     break;
-                case 1:
+                case DISP_MODE_ALPHA_TEST:
                     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
                     GXSetZCompLoc(GX_FALSE);
                     GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
                     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
                     break;
-                case 4:
+                case DISP_MODE_ALPHA_TEST_NO_Z:
                     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
                     GXSetZCompLoc(GX_FALSE);
                     GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
                     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
                     break;
-                case 2:
-                case 5:
+                case DISP_MODE_XLU:
+                case DISP_MODE_XLU_BEFORE_OPAQUE:
 #if VERSION > VERSION_DEMO_US
-                case 9:
-                case 10:
+                case DISP_MODE_XLU_BEFORE:
+                case DISP_MODE_XLU_AFTER:
 #endif
                     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
                     GXSetZCompLoc(GX_TRUE);

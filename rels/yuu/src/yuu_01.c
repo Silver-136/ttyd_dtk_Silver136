@@ -1253,7 +1253,7 @@ static USER_FUNC(fall_rtn) {
         }
     }
     if (!exists) {
-        dispEntry(CAMERA_3D, 0.0f, 1, monte_disp, monte_p);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, monte_disp, monte_p);
     }
     return EVT_RETURN_BLOCK;
 }

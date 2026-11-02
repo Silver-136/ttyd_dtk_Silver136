@@ -244,7 +244,7 @@ BattleUnitDefense defence_mode1 = {{1, 1, 1, 1, 1}};
  * Defence attributes of Cortez's bone pile and its flying bones (parts 3 to 19): none,
  * every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode1 = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr defence_attr_mode1 = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of Cortez's head (part 1) in his second form, upper stance: 1 against every kind of hit. */
 BattleUnitDefense defence_mode2_upper_head = {{1, 1, 1, 1, 1}};
@@ -265,7 +265,7 @@ BattleUnitDefense defence_mode2_upper_rib_open = {0};
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, upper stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_upper_rib_open = {{1, 1, 1, 1, 1}};
+BattleUnitDefenseAttr defence_attr_mode2_upper_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, upper stance: 3
@@ -277,7 +277,7 @@ BattleUnitDefense defence_mode2_upper_rib_close = {{3, 3, 3, 3, 3}};
  * Defence attributes of Cortez's rib cage (part 2) with the ribs closed in his second form, upper stance:
  * none, every element hits it normally.
  */
-BattleUnitDefenseAttr defence_attr_mode2_upper_rib_close = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr defence_attr_mode2_upper_rib_close = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Defence of Cortez's head (part 1) in his second form, middle stance: 1 against every kind of hit. */
 BattleUnitDefense defence_mode2_middle_head = {{1, 1, 1, 1, 1}};
@@ -298,7 +298,7 @@ BattleUnitDefense defence_mode2_middle_rib_open = {0};
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, middle stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_middle_rib_open = {{1, 1, 1, 1, 1}};
+BattleUnitDefenseAttr defence_attr_mode2_middle_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, middle stance: 3
@@ -331,7 +331,7 @@ BattleUnitDefense defence_mode2_lower_rib_open = {0};
  * Defence attributes of Cortez's rib cage (part 2) with the ribs open in his second form, lower stance:
  * every kind of hit does one extra damage.
  */
-BattleUnitDefenseAttr defence_attr_mode2_lower_rib_open = {{1, 1, 1, 1, 1}};
+BattleUnitDefenseAttr defence_attr_mode2_lower_rib_open = {{DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK}};
 
 /**
  * Defence of Cortez's rib cage (part 2) with the ribs closed in his second form, lower stance: 3
@@ -355,7 +355,7 @@ BattleUnitDefenseAttr defence_attr_mode3 = {0};
 BattleUnitDefense defence_honeduka = {{1, 1, 1, 1, 1}};
 
 /** Defence attributes of Cortez's body in his first form (part 1): none, every element hits it normally. */
-BattleUnitDefenseAttr defence_honeduka_attr = {{0, 0, 0, 0, 0}};
+BattleUnitDefenseAttr defence_honeduka_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Weapon of Cortez (normal front attack): targets one unit for 4 damage; used by at1_normal_attack. */
 BattleWeapon weapon_cortez_normal_front_attack = {
@@ -386,7 +386,7 @@ BattleWeapon weapon_cortez_normal_front_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
+    TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -427,7 +427,7 @@ BattleWeapon weapon_cortez_normal_rear_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_BACK, // targetWeightFlags
+    TARGET_WEIGHT_BACK, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -585,7 +585,7 @@ BattleWeapon weapon_cortez_mode2_bone_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
+    TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -1325,16 +1325,16 @@ EVT_BEGIN(at2_head_bat_event)
     WAIT_MS(1116)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_DEFAULT
@@ -1501,19 +1501,19 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_DEFAULT
         GOTO(90)
@@ -1789,16 +1789,16 @@ EVT_BEGIN(at3_kamitsuki_attack)
     WAIT_MS(LW(0))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_DEFAULT
@@ -1809,7 +1809,7 @@ EVT_BEGIN(at3_kamitsuki_attack)
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 21)
+    IF_INT_EQUAL(LW(5), CHECK_DAMAGE_SUPERGUARDED)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_A3_1"))
         GOTO(98)
     END_IF
@@ -1873,16 +1873,16 @@ EVT_BEGIN(at1_normal_attack)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_DEFAULT
@@ -1972,16 +1972,16 @@ EVT_BEGIN(at1_midaregiri_attack)
         WAIT_MS(LW(0))
     END_SWITCH
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_DEFAULT
@@ -2222,7 +2222,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(1)
@@ -2233,7 +2233,7 @@ static EVT_BEGIN(cortez_damage_sub_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3D_3"))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3D3_1"))
             END_IF
         END_SWITCH
@@ -2871,7 +2871,7 @@ USER_FUNC(_cortez_collect_energy) {
                 if (aid != -1) {
                     member = BattleAudienceGetPtr(aid);
                     member->flags |= (AUDIENCE_MEMBER_FLAG_NOT_EXIST | AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL);
-                    BattleAudience_SetAnim(aid, 9, TRUE);
+                    BattleAudience_SetAnim(aid, AUD_ANIM_DAMAGE_FRONT, TRUE);
                     work->wait[i] = irand(60) + 30;
                     work->srcPos[i] = member->position;
                     BtlUnit_GetPos(unit, &work->dstPos[i].x, &work->dstPos[i].y, &work->dstPos[i].z);

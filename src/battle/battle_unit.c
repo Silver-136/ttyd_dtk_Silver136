@@ -44,7 +44,7 @@ BOOL BtlUnit_Init(void) {
     int i;
     BattleWork* wp = _battleWorkPointer;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         BattleSetUnitPtr(wp, i, NULL);
     }
     return TRUE;
@@ -194,7 +194,7 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
         part->poseName[0] = 0;
         part->animSpeed = 1.0f;
         part->animSpeed2 = 1.0f;
-        part->poseType = 0;
+        part->look = PART_LOOK_NONE;
         part->poseState = 0;
         part->handle = -1;
         part->partName = part->kindPartParams->partName;
@@ -315,7 +315,7 @@ BattleUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 flags) {
     unit = BtlUnit_Entry(setup);
     if (!unit) return unit;
     if (flags & 2) {
-        unit->moveState = 0;
+        unit->moveState = MOVE_STATE_NORMAL;
         id = unit->unitId;
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             if (id == -1) break;
@@ -328,7 +328,7 @@ BattleUnit* BtlUnit_Spawn(BattleUnitSetup* setup, s32 flags) {
             id = tmp;
         }
     } else if (flags & 1) {
-        unit->moveState = 0;
+        unit->moveState = MOVE_STATE_NORMAL;
         id = unit->unitId;
         for (i = 63; i >= 0; i--) {
             if (id == -1) break;
@@ -2088,7 +2088,7 @@ BattleUnit* BtlUnit_GetGuardKouraPtr(BattleUnit* unit) {
 void BtlUnit_ResetMoveStatus(BattleUnit* unit) {
     s32 n;
 
-    unit->moveState = 0;
+    unit->moveState = MOVE_STATE_NORMAL;
     unit->movesRemaining = unit->maxMoveCount;
     if (BtlUnit_CheckStatus(unit, STATUS_FAST)) {
         unit->movesRemaining *= 2;
@@ -2103,17 +2103,17 @@ void BtlUnit_ResetMoveStatus(BattleUnit* unit) {
             }
             if (unit->activeTurns >= n) {
                 unit->movesRemaining = 1;
-                unit->moveState = 0;
+                unit->moveState = MOVE_STATE_NORMAL;
             } else {
                 unit->movesRemaining = 0;
-                unit->moveState = 10;
+                unit->moveState = MOVE_STATE_DONE;
             }
         }
     }
     unit->maxMovesThisTurn = unit->movesRemaining;
     if (!unit->maxMovesThisTurn) {
         unit->movesRemaining = 0;
-        unit->moveState = 10;
+        unit->moveState = MOVE_STATE_DONE;
     }
 }
 

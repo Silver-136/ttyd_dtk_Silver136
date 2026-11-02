@@ -256,7 +256,7 @@ void winMain(void) {
                 } else {
                     npcStopForEvent();
                 }
-                fbatChangeMode(7);
+                fbatChangeMode(FBAT_MODE_EVENT);
 #if VERSION <= VERSION_DEMO_US
                 marioCtrlOff2();
 #else
@@ -373,7 +373,7 @@ void winMain(void) {
                 }
 #endif
                 partyCtrlOn();
-                fbatChangeMode(1);
+                fbatChangeMode(FBAT_MODE_FIELD);
                 psndClearFlag(PSND_FLAG_MUTE_SFX);
                 statusWinForceUpdate();
                 if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
@@ -493,13 +493,13 @@ void winMain(void) {
             switch (marioGetPtr()->characterId) {
                 case CHARACTER_MARIO:
                     if (!(wp->flags & WINDOW_FLAG_LECTURE)) {
-                        dispEntry(CAMERA_2D, 250.0f, 0, winDisp, NULL);
+                        dispEntry(CAMERA_2D, 250.0f, DISP_MODE_OPAQUE, winDisp, NULL);
                     } else {
-                        dispEntry(CAMERA_2D, 500.0f, 0, winDisp, NULL);
+                        dispEntry(CAMERA_2D, 500.0f, DISP_MODE_OPAQUE, winDisp, NULL);
                     }
                     break;
                 case CHARACTER_BOWSER:
-                    dispEntry(CAMERA_2D, 250.0f, 0, winDispKoopa, NULL);
+                    dispEntry(CAMERA_2D, 250.0f, DISP_MODE_OPAQUE, winDispKoopa, NULL);
                     break;
             }
         }
@@ -800,7 +800,7 @@ EVT_BEGIN(evt_diary_read)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_APPEAR1"), LW(0), LW(1), LW(2), 0)
 #else
-    CALL(evt_snd_sfxon_3d, 132773, LW(0), LW(1), LW(2), 0)
+    CALL(evt_snd_sfxon_3d, PSND_SFX_STG6_GHOST_APPEAR1 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
 #endif
     WAIT_MS(200)
     CALL(evt_mario_set_pose, STRING("M_I_O"))
@@ -814,7 +814,7 @@ EVT_BEGIN(evt_diary_read)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_SHAKE1"), LW(0), LW(1), LW(2), LW(3))
 #else
-    CALL(evt_snd_sfxon, 132770, LW(3))
+    CALL(evt_snd_sfxon, PSND_SFX_STG6_GHOST_SHAKE1 | PSND_SFX_BYPASS_MUTE, LW(3))
 #endif
     BEGIN_INLINE_EVENT
         CALL(cam_r)
@@ -1329,16 +1329,9 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
         FontDrawColor(color);
         FontDrawMessageMtx(trans, msgSearch(msg));
     }
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
 }
-#endif
-#else
-}
-#endif
 
 #if VERSION < VERSION_US
-#if VERSION == VERSION_DEMO_JP
 void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     va_list args;
@@ -1347,36 +1340,12 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
     vsprintf(buf, fmt, args);
     FontDrawColor(color);
     FontDrawScaleVec(scale);
-    FontDrawStringVecPitch(&pos, buf, pitch);
-}
-#elif VERSION == VERSION_DEMO_US
-}
-void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-    char buf[0x400];
+#if VERSION == VERSION_DEMO_US
+    ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
 #else
-void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-    char buf[0x400];
-    va_list args;
-
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    FontDrawColor(color);
-    FontDrawScaleVec(scale);
     FontDrawStringVecPitch(&pos, buf, pitch);
+#endif
 }
-#endif
-#endif
-
-#if VERSION <= VERSION_DEMO_US
-#if VERSION != VERSION_DEMO_JP
-va_list args;
-va_start(args, fmt);
-vsprintf(buf, fmt, args);
-FontDrawColor(color);
-FontDrawScaleVec(scale);
-((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
-}
-#endif
 #endif
 
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
@@ -1385,15 +1354,7 @@ void winTexInit(TEXPalette* texture) {
     GXSetCullMode(GX_CULL_NONE);
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     GXSetNumChans(0);
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-#else
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
-#endif
-#else
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-#endif
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -1401,18 +1362,8 @@ void winTexInit(TEXPalette* texture) {
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
     GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
     GXSetNumTexGens(1);
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-#else
-    GXSetNumTexGens(1u);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-#endif
-#else
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-#endif
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
@@ -1451,18 +1402,8 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-#else
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
-#endif
-#else
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -1541,18 +1482,8 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
     PSMTXConcat(trans, r, m);
     PSMTXConcat(m, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-#else
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
-#endif
-#else
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -1572,18 +1503,8 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
 void winTexInit_x2(TEXPalette* texture) {
     winTexInit(texture);
     GXSetNumTexGens(2);
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-#else
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-#endif
-#else
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-#endif
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -1623,18 +1544,8 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-#else
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
-#endif
-#else
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -1728,18 +1639,8 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-#if VERSION <= VERSION_DEMO_US
-#if VERSION == VERSION_DEMO_JP
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-#else
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
-#endif
-#else
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);

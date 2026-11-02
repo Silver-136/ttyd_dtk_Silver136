@@ -236,7 +236,7 @@ void effMugiKemuriMain(EffectEntry* effect) {
         return;
     }
 
-    dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, effMugiKemuriDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, effMugiKemuriDisp, effect);
 }
 
 /** Per frame: same as effMugiKemuriMain for the second form, with sideways drift scaled by the vertical speed. */
@@ -329,7 +329,7 @@ void effMugiKemuri2Main(EffectEntry* effect) {
         }
     }
 
-    dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, effMugiKemuri2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, effMugiKemuri2Disp, effect);
 }
 
 /** Draws each puff's animation pose at its position, rotation and scale. */

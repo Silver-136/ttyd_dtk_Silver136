@@ -97,7 +97,7 @@ BattleWeapon partyWeapon_ClaudaNormalAttack = {
     "msg_ac_body_press", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -139,9 +139,9 @@ BattleWeapon partyWeapon_ClaudaBreathAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_breath", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_UNUSED_200 | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_SHATTERS_FREEZE | SPECIAL_UNUSED_200 | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -193,7 +193,7 @@ BattleWeapon partyWeapon_ClaudaPredationAttack = {
     "msg_ac_sexy_kiss", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -235,7 +235,7 @@ BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     "msg_ac_kumogakure", // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, // poisonStrength..electricTime
     100, // dodgyChance
@@ -419,7 +419,7 @@ EVT_END()
 /** Hit reaction: straightens her rotation (left over from her moves), then runs the default damage script. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -483,7 +483,7 @@ EVT_BEGIN(partyClaudaAttack_NormalAttack)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_NOT_EQUAL(LW(5), 1)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
         GOTO(10)
     END_IF
     CALL(btlevtcmd_GetResultAC, LW(0))
@@ -755,16 +755,16 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
     LABEL(10)
     CALL(btlevtcmd_SetDispOffset, LW(3), 0, 0, 0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
             GOTO(51)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
             GOTO(51)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
             GOTO(51)
         END_IF
@@ -948,7 +948,7 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 17, 1, 60)
     WAIT_FRAMES(22)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 5)
+    IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
         MULTIPLY_FLOAT(LW(6), 40)
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -975,22 +975,22 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
     END_SWITCH
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A3_2"))
@@ -999,15 +999,15 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
     END_IF
     CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
     SWITCH(LW(0))
-        CASE_OR_EQUAL(7)
-        CASE_OR_EQUAL(8)
-        CASE_OR_EQUAL(9)
-        CASE_OR_EQUAL(10)
-        CASE_OR_EQUAL(11)
-        CASE_OR_EQUAL(12)
-        CASE_OR_EQUAL(13)
-        CASE_OR_EQUAL(14)
-        CASE_OR_EQUAL(15)
+        CASE_OR_EQUAL(CHECK_COUNTER_PREEMPTIVE_SPIKY)
+        CASE_OR_EQUAL(CHECK_COUNTER_TOP_SPIKY)
+        CASE_OR_EQUAL(CHECK_COUNTER_FRONT_SPIKY)
+        CASE_OR_EQUAL(CHECK_COUNTER_FIERY)
+        CASE_OR_EQUAL(CHECK_COUNTER_ICY)
+        CASE_OR_EQUAL(CHECK_COUNTER_EXPLOSIVE)
+        CASE_OR_EQUAL(CHECK_COUNTER_VOLATILE_EXPLOSIVE)
+        CASE_OR_EQUAL(CHECK_COUNTER_ELECTRIFIED)
+        CASE_OR_EQUAL(CHECK_COUNTER_POISON)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A3_2"))
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_END
@@ -1389,7 +1389,7 @@ EVT_END()
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Flurrie's element reactions: none special, every element hits her normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Flurrie's status vulnerabilities: base rate (100) for every status. */
 #if VERSION > VERSION_DEMO_US

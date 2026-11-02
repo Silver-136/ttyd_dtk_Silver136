@@ -516,12 +516,12 @@ USER_FUNC(evt_party_jump_pos) {
         if (q == NULL) {
             return EVT_RETURN_DONE;
         }
-        if (q->runMode == 0xB) {
+        if (q->runMode == PARTY_RUN_RIDE) {
             return EVT_RETURN_DONE;
         }
         event->userdata3 = 0;
         partyChgMot(q, 8);
-        partyChgRunMode(q, 9);
+        partyChgRunMode(q, PARTY_RUN_FORCE_WALK);
     } else {
         args++;
     }
@@ -547,7 +547,7 @@ USER_FUNC(evt_party_jump_pos) {
         if (mode == 0) {
             p->moveDir = p->targetDir;
         }
-        partyChgPoseId(p, 4);
+        partyChgPoseId(p, PARTY_POSE_JUMP);
         dy = y - p->position.y;
         half = 0.5f * ff;
         if (__fabsf(dy) < 1.0f) {
@@ -611,7 +611,7 @@ USER_FUNC(evt_party_jump_pos) {
             p->position.y += p->velY;
         }
         if (--event->userdata[2] <= 0) {
-            partyChgPoseId(p, 1);
+            partyChgPoseId(p, PARTY_POSE_STAND);
             p->gravity = 0.0f;
             p->work.common.accelY = 0.0f;
             p->moveSpeed = 0.0f;
@@ -687,7 +687,7 @@ USER_FUNC(evt_party_set_pose) {
 USER_FUNC(evt_party_sleep_on) {
     PartyEntry* p = GETPARTY(event->args);
     if (p != NULL) {
-        partyChgPoseId(p, 6);
+        partyChgPoseId(p, PARTY_POSE_SLEEP);
         p->flags |= PARTY_FLAG_SLEEP_ON;
     }
     return EVT_RETURN_DONE;
@@ -697,7 +697,7 @@ USER_FUNC(evt_party_sleep_on) {
 USER_FUNC(evt_party_sleep_off) {
     PartyEntry* p = GETPARTY(event->args);
     if (p != NULL) {
-        partyChgPoseId(p, 1);
+        partyChgPoseId(p, PARTY_POSE_STAND);
         p->flags &= ~PARTY_FLAG_SLEEP_ON;
     }
     return EVT_RETURN_DONE;
@@ -730,7 +730,7 @@ USER_FUNC(evt_party_dokan) {
         return EVT_RETURN_DONE;
     }
     dst = args[1];
-    if (p->runMode == 0xB || p->runMode == 0xC) {
+    if (p->runMode == PARTY_RUN_RIDE || p->runMode == PARTY_RUN_RIDE_YOSHI) {
         v = 0;
     } else {
         v = 1;
@@ -818,7 +818,7 @@ USER_FUNC(evt_party_thunders_use) {
         }
         p->flags |= PARTY_FLAG_IS_EVT_USE;
         p->flags |= PARTY_FLAG_IS_BEING_USED;
-        partyChgRunMode(p, 3);
+        partyChgRunMode(p, PARTY_RUN_USE);
     }
     if (bomheiGetStatus() != 0) {
         return EVT_RETURN_BLOCK;
@@ -835,14 +835,14 @@ USER_FUNC(evt_party_vivian_hold) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (vivianGetStatus() != 0) {
+        if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE) {
             return EVT_RETURN_DONE;
         }
         p->flags |= PARTY_FLAG_IS_EVT_USE;
         p->flags |= PARTY_FLAG_IS_BEING_USED;
-        partyChgRunMode(p, 3);
+        partyChgRunMode(p, PARTY_RUN_USE);
     }
-    if (vivianGetStatus() != 2) {
+    if (vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -857,11 +857,11 @@ USER_FUNC(evt_party_vivian_unhold) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (vivianGetStatus() == 2) {
+        if (vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
             vivianUnhold(p);
         }
     }
-    return vivianGetStatus() == 0 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return vivianGetStatus() == VIVIAN_STATUS_INACTIVE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 /**
@@ -901,7 +901,7 @@ USER_FUNC(evt_party_yoshi_ride) {
             }
             p->flags |= PARTY_FLAG_IS_EVT_USE;
             p->flags |= PARTY_FLAG_IS_BEING_USED;
-            partyChgRunMode(p, 3);
+            partyChgRunMode(p, PARTY_RUN_USE);
         } else {
             marioGetoffYoshi();
         }
@@ -968,7 +968,7 @@ USER_FUNC(evt_party_nokotaro_kick) {
         p->actionTime = 0;
         p->flags |= PARTY_FLAG_IS_EVT_USE;
         p->flags |= PARTY_FLAG_IS_BEING_USED;
-        partyChgRunMode(p, 3);
+        partyChgRunMode(p, PARTY_RUN_USE);
     }
     if (nokonokoGetStatus(p) == 0) {
         p->flags &= ~PARTY_FLAG_IS_EVT_USE;
@@ -998,7 +998,7 @@ USER_FUNC(evt_party_nokotaro_kick_hold) {
         p->actionTime = 5000;
         p->flags |= PARTY_FLAG_IS_EVT_USE;
         p->flags |= PARTY_FLAG_IS_BEING_USED;
-        partyChgRunMode(p, 3);
+        partyChgRunMode(p, PARTY_RUN_USE);
     }
     if (nokonokoGetStatus(p) == 0) {
         p->flags &= ~PARTY_FLAG_IS_EVT_USE;
@@ -1090,7 +1090,7 @@ USER_FUNC(evt_party_cloud_breathout) {
         p->actionTime = args[1];
         p->flags |= PARTY_FLAG_IS_EVT_USE;
         p->flags |= PARTY_FLAG_IS_BEING_USED;
-        partyChgRunMode(p, 3);
+        partyChgRunMode(p, PARTY_RUN_USE);
     }
     if (cloudGetStatus() == 0) {
         p->flags &= ~PARTY_FLAG_IS_EVT_USE;

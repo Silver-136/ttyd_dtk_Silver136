@@ -117,7 +117,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
         loop = 0;
         got = 0;
         switch (ac->acState) {
-            case 0:
+            case AC_STATE_INIT:
                 ac->result = AC_RESULT_RUNNING;
                 memset(disp, 0, sizeof(BattleACDispParams));
                 disp->iconX = -300.0f;
@@ -175,18 +175,18 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                         w->button = w->buttons[0];
                 }
 
-                ac->acState = 99;
+                ac->acState = AC_STATE_WAIT_START;
                 break;
 
-            case 99:
+            case AC_STATE_WAIT_START:
                 break;
 
-            case 100:
+            case AC_STATE_START:
                 if (work->actionCommands.countdown > 0) {
                     work->actionCommands.countdown--;
                     ac->result = AC_RESULT_SUCCESS;
                     loop = 1;
-                    ac->acState = 1002;
+                    ac->acState = AC_STATE_RUN + 2;
                     break;
                 }
                 w->rangeStart = w->index * work->actionCommands.params[SIGNAL_PARAM_STEP];
@@ -194,9 +194,9 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 w->okStart = w->rangeStart;
                 j = _get_ok_frame_range(w->difficulty) - 1;
                 w->okEnd = w->okStart + j;
-                ac->acState = 1000;
+                ac->acState = AC_STATE_RUN;
 
-            case 1000:
+            case AC_STATE_RUN:
                 w->nextRangeEnd = ((w->next + 1) * work->actionCommands.params[SIGNAL_PARAM_STEP]) - 1;
                 w->next++;
                 if (w->next < (work->actionCommands.params[SIGNAL_PARAM_LEAD] + 1)) {
@@ -207,9 +207,9 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     psndSFXOn(sfxPone);
                 }
                 w->pressed = 0;
-                ac->acState = 1001;
+                ac->acState = AC_STATE_RUN + 1;
 
-            case 1001:
+            case AC_STATE_RUN + 1:
                 w->frame++;
                 if (w->pressed) {
                     w->okFlag = 0;
@@ -267,7 +267,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                                 ac->result |= AC_RESULT_SUCCESS;
                             }
                             loop = 1;
-                            ac->acState = 1002;
+                            ac->acState = AC_STATE_RUN + 2;
                         }
                     } else if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
 #if VERSION > VERSION_DEMO_US
@@ -313,7 +313,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 }
                 if (w->frame >= (w->next * work->actionCommands.params[SIGNAL_PARAM_STEP])) {
                     if (w->next < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
-                        ac->acState = 1000;
+                        ac->acState = AC_STATE_RUN;
                     } else {
                         work->actionCommands.outputParams[SIGNAL_OUT_HITS] = w->hits;
                         ac->result &= ~AC_RESULT_RUNNING;
@@ -321,33 +321,33 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                             ac->result |= AC_RESULT_SUCCESS;
                         }
                         loop = 1;
-                        ac->acState = 1002;
+                        ac->acState = AC_STATE_RUN + 2;
                     }
                 }
                 break;
 
-            case 1002:
-                ac->acState = 1003;
+            case AC_STATE_RUN + 2:
+                ac->acState = AC_STATE_RUN + 3;
                 break;
 
-            case 1003:
+            case AC_STATE_RUN + 3:
                 break;
 
-            case 1004:
+            case AC_STATE_RUN + 4:
                 work->actionCommands.doneFlags |= 1;
                 w->okFlag = 0;
                 w->endTimer = 60;
-                ac->acState = 1005;
+                ac->acState = AC_STATE_RUN + 5;
                 break;
 
-            case 1005:
+            case AC_STATE_RUN + 5:
                 w->endTimer--;
                 if (w->endTimer <= 0) {
-                    ac->acState = 1006;
+                    ac->acState = AC_STATE_RUN + 6;
                 }
                 break;
 
-            case 1006:
+            case AC_STATE_RUN + 6:
                 ac->maincb = NULL;
                 ac->dispcb = NULL;
                 ac->resultcb = NULL;
@@ -373,22 +373,22 @@ void battleAcDisp_SignalTiming(CameraId cameraId, void* param) {
     BattleACDispParams* disp = &ac->disp;
 
     switch (ac->acState) {
-        case 99:
-        case 100:
+        case AC_STATE_WAIT_START:
+        case AC_STATE_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
-        case 1000:
-        case 1001:
-        case 1002:
-        case 1003:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
+        case AC_STATE_RUN + 2:
+        case AC_STATE_RUN + 3:
             actionCommandDisp(30.0f, 0.0f);
             break;
-        case 1004:
-        case 1005:
+        case AC_STATE_RUN + 4:
+        case AC_STATE_RUN + 5:
             if (disp->slideTimer >= 40) {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
@@ -404,7 +404,7 @@ void battleAcDisp_SignalTiming(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: marks the command done and starts the 60-frame end wait. */
 void battleAcDelete_SignalTiming(BattleWork* work) {
-    work->actionCommands.acState = 1004;
+    work->actionCommands.acState = AC_STATE_RUN + 4;
 }
 
 /**

@@ -373,7 +373,7 @@ EVT_BEGIN(evt_machibuse)
         IF_INT_LESS(LW(0), -48)
             CALL(evt_mario_set_dir, 90, 200, 0)
             CALL(evt_party_set_dir, 0, 90, 200)
-            ELSE
+        ELSE
             CALL(evt_mario_set_dir, 270, 200, 0)
             CALL(evt_party_set_dir, 0, 270, 200)
         END_IF
@@ -382,7 +382,7 @@ EVT_BEGIN(evt_machibuse)
     CALL(evt_npc_set_position, STRING("にせマリオ"), -125, 240, -25)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
         CALL(evt_msg_print, 0, STRING("stg4_gra_05"), 0, STRING("にせマリオ"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg4_gra_00"), 0, STRING("にせマリオ"))
     END_IF
     CALL(evt_npc_set_position, STRING("にせマリオ"), 0, -1000, 0)
@@ -396,25 +396,25 @@ EVT_BEGIN(evt_machibuse)
     CALL_CHILD(PTR(evt_yabure_on))
     IF_INT_LESS(LW(0), -48)
         SET_VALUE(LF(0), 1)
-        ELSE
+    ELSE
         SET_VALUE(LF(0), 0)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         CALL(evt_mario_set_pos, -100, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_mario_set_pos, 0, 0, 0)
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_EQUAL(LF(0), 1)
         ADD(LW(0), -40)
-        ELSE
+    ELSE
         ADD(LW(0), 40)
     END_IF
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_EQUAL(LF(0), 1)
         ADD(LW(0), 75)
-        ELSE
+    ELSE
         ADD(LW(0), -75)
     END_IF
     WAIT_MS(200)
@@ -453,7 +453,7 @@ EVT_BEGIN(evt_machibuse)
         CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 900, EASING_SINE_IN_OUT)
         WAIT_MS(900)
         CALL(evt_msg_print, 0, STRING("stg4_gra_02"), 0, STRING("にせマリオ"))
-        ELSE
+    ELSE
         CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
         CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 1200, EASING_SINE_IN_OUT)
         WAIT_MS(200)
@@ -564,7 +564,7 @@ EVT_BEGIN(evt_machibuse)
         WAIT_MS(800)
         CALL(evt_msg_print, 0, STRING("stg4_gra_11"), 0, STRING("にせマリオ"))
         CALL(evt_bero_mapchange, STRING("usu_01"), STRING("e_bero"))
-        ELSE
+    ELSE
         CALL(evt_cam3d_evt_set, 186, 149, 534, 186, 54, -8, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
         CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_NO_HIT)

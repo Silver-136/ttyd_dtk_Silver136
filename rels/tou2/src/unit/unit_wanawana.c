@@ -108,7 +108,7 @@ BattleUnitKind unit_wanawana = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Damage-type reactions of the Trap: none, so every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of the Trap, as percentages of each status's base chance: every status lands at
@@ -246,7 +246,7 @@ USER_FUNC(replace_evt) {
     w += w & 1;
     h += h & 1;
     wp = BTL_ALLOC(sizeof(WanaWork));
-    wp->tex = smartAlloc(GXGetTexBufferSize(w / 2, h / 2, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+    wp->tex = smartAlloc(GXGetTexBufferSize(w / 2, h / 2, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     wp->poseId = part->poseId;
     wp->part = part;
     GXInitTexObj(&wp->obj, wp->tex->address, w / 2, h / 2, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -257,7 +257,7 @@ USER_FUNC(replace_evt) {
     unit->countersetWeapon = (struct BattleWeapon*)wp; // reused as the WanaWork pointer
     unit->screenTexBuf = wp->tex;
     wp->ready = 0;
-    dispEntry(CAMERA_SHADOW, 0.0f, 0, replace_disp, wp);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, replace_disp, wp);
     return EVT_RETURN_DONE;
 }
 

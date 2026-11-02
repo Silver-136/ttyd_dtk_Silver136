@@ -247,8 +247,7 @@ void marioChgJumpStandMotion(f32 v) {
     if (marioChkSts(MARIO_STS_ROLL)) {
         mario->mot.jump.standHeight = v;
 #if VERSION <= VERSION_DEMO_US
-    } else
-if (mario->currMotionId == MARIO_MOTION_YOSHI) {
+    } else if (mario->currMotionId == MARIO_MOTION_YOSHI) {
 #else
         effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
         marioChgMot(MARIO_MOTION_JUMP_STAND);
@@ -294,7 +293,7 @@ BOOL marioChkItemGetMotion(void) {
             ret = TRUE;
         }
     } else if (cur == MARIO_MOTION_SHIP) {
-        if (marioShipChanging() == 3) {
+        if (marioShipChanging() == SHIP_STATUS_SAILING) {
             ret = TRUE;
         }
     }
@@ -783,17 +782,17 @@ void marioLandOn(void) {
     if (stand) {
         attr = hitGetAttr(stand);
         if (attr & HIT_ATTR_SHALLOW_WATER) {
-            sfx = 0x150;
+            sfx = PSND_SFX_MARIO_LANDING2;
         } else if (attr & HIT_ATTR_WOOD) {
-            sfx = 0x151;
+            sfx = PSND_SFX_MARIO_LANDING3;
         } else if (attr & HIT_ATTR_SNOW) {
-            sfx = 0x152;
+            sfx = PSND_SFX_MARIO_LANDING4;
         } else if (attr & HIT_ATTR_GRASS) {
-            sfx = 0x153;
+            sfx = PSND_SFX_MARIO_LANDING5;
         } else if (attr & 0x400000) {
-            sfx = 0x154;
+            sfx = PSND_SFX_MARIO_LANDING6;
         } else {
-            sfx = 0x14f;
+            sfx = PSND_SFX_MARIO_LANDING1;
         }
         psndSFXOn_3D(SFX_NAME_WORD(sfx), &pos);
     }
@@ -809,7 +808,7 @@ void marioLandOn(void) {
         marioChgMot(MARIO_MOTION_DAMAGE);
         return;
     }
-    if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
+    if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_SPIKES)) {
         set_damage_root_ypos(mario->position.y);
         marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         return;
@@ -1221,6 +1220,8 @@ static inline BOOL marioChkBackAngle(f32 a) {
  * then slows him to a stop and stands.
  * No code in the tree enters MARIO_MOTION_KAZE; marioChkSts 0x20 only tests for it.
  * Guess: a whirlwind, from the name ("kaze", wind).
+ * Resembles Paper Mario 64's spin (action_update_spin: Z, the sprite turning, ending at 0 or 180 degrees), but this one
+ * stays in place: no movement, sound, effect or attack. Same code in all five versions.
  */
 void mot_kaze(void) {
     MarioWork* mario = marioGetPtr();
@@ -1264,6 +1265,8 @@ void mot_kaze(void) {
 /**
  * Unused: lays Mario flat (rot.x 90, pose M_S_1, slit display flag cleared) until B stands him back up.
  * No code in the tree enters MARIO_MOTION_SHADOW. Guess: lying flat as a shadow, from the name.
+ * The look is like Paper Mario 64's KnockDownPlayer map scripts, but those draw a separate rotating sprite during a
+ * cutscene; this only tilts Mario and waits for B. Same code in all five versions.
  */
 void mot_shadow(void) {
     MarioWork* mario = marioGetPtr();

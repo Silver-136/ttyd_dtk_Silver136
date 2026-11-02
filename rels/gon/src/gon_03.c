@@ -478,7 +478,7 @@ static EVT_BEGIN(senkaron_event)
                         IF_INT_EQUAL(LW(7), 0)
                             CALL(evt_mario_set_pose, STRING("M_S_1"))
                         END_IF
-                        ELSE
+                    ELSE
                         SET_VALUE(LW(7), 0)
                     END_IF
                 END_IF
@@ -526,7 +526,7 @@ static EVT_BEGIN(senkaron_event)
                 SET_VALUE(GSWF_GON_03_PUSHED_OUT_PENDING, 1)
                 IF_INT_EQUAL(GSWF_GON_03_PUSHED_OUT_ONCE, 0)
                     SET_VALUE(GSWF_GON_03_PUSHED_OUT_ONCE, 1)
-                    ELSE
+                ELSE
                     SET_VALUE(GSWF_GON_03_PUSHED_OUT_AGAIN, 1)
                 END_IF
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -590,7 +590,7 @@ EVT_BEGIN(gon_03_init_evt)
         CALL_CHILD(PTR(bero_case_switch_on))
     END_IF
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_10_FATHERS_LETTER)
         SPAWN_EVENT(PTR(tegami_event))
     END_IF
@@ -1113,8 +1113,8 @@ static void senkaron_ext_main(void) {
 
 /** Queues the swarm's draw and shadow callbacks into the 3D camera every frame. */
 static void senkaron_ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, senkaron_ext_disp, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 2, senkaron_ext_shadow_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, senkaron_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, senkaron_ext_shadow_disp, NULL);
 }
 
 /** Draw callback for the swarm: loads the ext-pose render state, vertices, textures and TEV and draws all the bones. */

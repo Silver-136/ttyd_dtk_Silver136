@@ -544,7 +544,7 @@ USER_FUNC(evt_npc_move_position) {
 
     // Face the move direction (not the field-battle target while the fbat mode is 5 or 6)
     if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
-        if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
+        if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != FBAT_MODE_BATTLE && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
         }
     }
@@ -729,7 +729,7 @@ USER_FUNC(evt_npc_jump_position) {
 
     // ---- per-frame ----
     if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
-        if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
+        if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != FBAT_MODE_BATTLE && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
         }
     }
@@ -922,7 +922,7 @@ USER_FUNC(evt_npc_glide_position) {
     if (npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) {
         if (dx || dz) {
             if (npc != fbatGetPointer()->target ||
-                (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
+                (fbatGetPointer()->mode != FBAT_MODE_BATTLE && fbatGetPointer()->mode != 6)) {
                 // BUG: passes dx as both components (dz is ignored)
                 npcTuningRy(npc, angleABf(0.0f, 0.0f, dx, dx));
             }
@@ -1034,7 +1034,7 @@ USER_FUNC(evt_npc_homing_target) {
         // Face the move direction (not the field-battle target while the fbat mode is 5 or 6)
         if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed) {
             if (npc != fbatGetPointer()->target ||
-                (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
+                (fbatGetPointer()->mode != FBAT_MODE_BATTLE && fbatGetPointer()->mode != 6)) {
                 npcTuningRy(npc, npc->moveDir);
             }
         }
@@ -1079,7 +1079,7 @@ USER_FUNC(evt_npc_homing_target) {
 
         if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed) {
             if (npc != fbatGetPointer()->target ||
-                (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
+                (fbatGetPointer()->mode != FBAT_MODE_BATTLE && fbatGetPointer()->mode != 6)) {
                 npcTuningRy(npc, npc->moveDir);
             }
         }
@@ -2714,7 +2714,7 @@ USER_FUNC(evt_npc_kamek_move_position) {
 
     // Face the move direction (not the field-battle target while the fbat mode is 5 or 6)
     if ((npc->statusFlags & NPC_STATUS_FACE_MOVE_DIR) && npc->moveSpeed > 0.1f) {
-        if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != 5 && fbatGetPointer()->mode != 6)) {
+        if (npc != fbatGetPointer()->target || (fbatGetPointer()->mode != FBAT_MODE_BATTLE && fbatGetPointer()->mode != 6)) {
             npcTuningRy(npc, npc->moveDir);
         }
     }

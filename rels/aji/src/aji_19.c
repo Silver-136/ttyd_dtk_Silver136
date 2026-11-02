@@ -25,7 +25,6 @@
 #include "evt/evt_bero.h"
 #include "driver/seqdrv.h"
 
-BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 
 static USER_FUNC(mario_chk);
@@ -160,7 +159,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(evt_hajimete)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(1000)
     CALL(evt_party_stop, 0)
     WAIT_MS(200)

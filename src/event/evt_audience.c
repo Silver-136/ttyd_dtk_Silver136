@@ -360,7 +360,7 @@ USER_FUNC(evt_audience_entry) {
     id = evtGetValue(event, args[0]);
     type = (AudienceMemberType)evtGetValue(event, args[1]);
     if (BattleAudience_Entry(id, type, AUDIENCE_STATUS_WAIT) == TRUE) {
-        BattleAudience_SetAnim(id, 1, TRUE);
+        BattleAudience_SetAnim(id, AUD_ANIM_WAIT_BACK, TRUE);
     }
     return EVT_RETURN_DONE;
 }
@@ -395,7 +395,7 @@ USER_FUNC(evt_audience_reflesh_natural_all) {
     evtGetValue(event, args[2]); //unused
     i = 0;
     member = BattleAudienceGetPtr(0);
-    for (; i < 200; i++, member++) {
+    for (; i < AUDIENCE_MEMBER_MAX; i++, member++) {
         if (member->flags & AUDIENCE_MEMBER_FLAG_USED && member->status == AUDIENCE_STATUS_SLEEP && member->step == 1 && irand(100) < chance) {
             member->step = 2;
         }
@@ -419,7 +419,7 @@ USER_FUNC(evt_audience_abnormal_natural_all) {
     evtGetValue(event, args[2]); //unused
     i = 0;
     member = BattleAudienceGetPtr(0);
-    for (; i < 200; i++, member++) {
+    for (; i < AUDIENCE_MEMBER_MAX; i++, member++) {
         if ((u8)BattleAudience_GetSysCtrl(i)) {
             status = member->status;
             if ((status <= AUDIENCE_STATUS_WAIT_JUMP || (u8)(status - AUDIENCE_STATUS_JOY_RAISE_ARM) <= 2 || status == AUDIENCE_STATUS_ITEM_ON) && irand(100) < chance) {

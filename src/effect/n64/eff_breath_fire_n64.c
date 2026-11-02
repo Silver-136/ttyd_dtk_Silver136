@@ -147,7 +147,7 @@ void effBreathFireMain(EffectEntry* effect) {
             work->alpha = remaining * 224 / lifetime;
             work->scale += work->scaleRate * (work->targetScale - work->scale);
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBreathFireDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBreathFireDisp, effect);
     }
 }
 

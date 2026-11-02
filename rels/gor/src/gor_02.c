@@ -1087,10 +1087,10 @@ EVT_END()
  * and loops until Mario stops or has fewer than 3 sprites; JP and later also stop automatically when no partner can be raised.
  */
 EVT_BEGIN(powerupya_party_rtn)
-    CALL(evt_win_coin_on, 1, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_SHINE_SPRITES, LW(12))
     LOOP(0)
         CALL(evt_party_set_dir_pos, 0, -362, -200)
-        CALL(evt_win_other_select, 6)
+        CALL(evt_win_other_select, SELECT_TYPE_PARTY_RANK_UP)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_win_coin_off, LW(12))
             CALL(evt_msg_print, 0, STRING("powerup_13_01"), 0, STRING("me"))
@@ -1156,7 +1156,7 @@ EVT_BEGIN(powerupya_party_rtn)
                 END_IF
             END_IF
 #endif
-            CALL(evt_win_coin_on, 1, LW(12))
+            CALL(evt_win_coin_on, COIN_WINDOW_SHINE_SPRITES, LW(12))
         END_IF
     END_LOOP
     RETURN
@@ -1184,18 +1184,18 @@ EVT_BEGIN(powerupya_table_talk)
         CALL(evt_msg_print, 0, STRING("powerup_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_MERLON_FIRST_TALK_DONE, 1)
         SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
             CALL(evt_msg_print, 0, STRING("powerup_00_01"), 0, STRING("me"))
             SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("powerup_00_02"), 0, STRING("me"))
         END_IF
     END_IF
     CALL(evt_pouch_get_supercoin, LW(2))
     IF_INT_LESS(LW(2), 3)
         CALL(evt_msg_print_add, 0, STRING("powerup_01"))
-        ELSE
+    ELSE
         CALL(evt_msg_continue)
         CALL_CHILD(PTR(powerupya_party_rtn))
     END_IF
@@ -1315,11 +1315,11 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(get_mario_dir_target, LW(6))
     IF_FLOAT_EQUAL(LW(6), FLOAT(0.0f))
         ADD(LW(3), -20)
-        ELSE
+    ELSE
         ADD(LW(3), 20)
     END_IF
     CALL(evt_item_entry, STRING("watasu"), ITEM_UP_ARROW, LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("watasu"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("watasu"), ITEM_FLAG_NO_TOUCH_GET)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("watasu"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1393,7 +1393,7 @@ EVT_BEGIN(powerupya_orb_use)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(0), -365)
             CALL(evt_mario_set_dir, 90, 200, 0)
-            ELSE
+        ELSE
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_IF
     END_INLINE_EVENT
@@ -1401,7 +1401,7 @@ EVT_BEGIN(powerupya_orb_use)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(0), -365)
             CALL(evt_party_set_dir, 0, 90, 200)
-            ELSE
+        ELSE
             CALL(evt_party_set_dir, 0, 270, 200)
         END_IF
     END_INLINE_EVENT
@@ -1471,7 +1471,7 @@ EVT_BEGIN(powerupya_direct_talk)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_pouch_check_item, ITEM_UP_ARROW, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, FUKIDASHI_AT_MARIO, STRING("powerup_ev_04"), 0, STRING("me"))
@@ -1589,7 +1589,7 @@ EVT_BEGIN(powerupya_init)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
             CALL(evt_npc_set_position, STRING("パワーアップ屋"), -320, 0, -10)
             SET_VALUE(LW(0), PTR(&door_data_01))
-            CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
             IF_INT_NOT_EQUAL(LW(1), 0)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
             END_IF
@@ -1619,8 +1619,8 @@ EVT_BEGIN(johoyaperfect_talk)
 #if VERSION <= VERSION_DEMO_US
     END_IF
         CALL(johoya_data_alloc, STRING("jperfect_code"))
-        CALL(evt_win_coin_on, 0, LW(12))
-        CALL(evt_win_other_select, 17)
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
+        CALL(evt_win_other_select, SELECT_TYPE_INFORMANT_PERFECT)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_win_coin_off, LW(12))
             CALL(evt_msg_print, 0, STRING("johoyaperfect_03"), 0, STRING("me"))
@@ -1663,8 +1663,8 @@ EVT_BEGIN(johoyaperfect_talk)
     END_IF
     LOOP(0)
         CALL(johoya_data_alloc, STRING("jperfect_code"))
-        CALL(evt_win_coin_on, 0, LW(12))
-        CALL(evt_win_other_select, 17)
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
+        CALL(evt_win_other_select, SELECT_TYPE_INFORMANT_PERFECT)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_win_coin_off, LW(12))
             CALL(evt_msg_print, 0, STRING("johoyaperfect_03"), 0, STRING("me"))
@@ -1794,7 +1794,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
         IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
             CALL(evt_msg_print, 0, STRING("gor_02_019"), 0, STRING("me"))
-            ELSE
+        ELSE
             IF_INT_EQUAL(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 0)
                 // After the Twilight Town pipe rejects Mario: the partner speaks up, Frankly stares in surprise,
                 // then answers.
@@ -1807,7 +1807,7 @@ static EVT_BEGIN(kurihakase_talk)
                 CALL(evt_msg_print, 0, STRING("mac_3_010"), 0, STRING("me"))
                 SET_VALUE(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 1)
                 CALL(evt_party_run, 0)
-                ELSE
+            ELSE
                 // Later Chapter 3 lines.
                 CALL(evt_msg_print, 0, STRING("gor_02_020"), 0, STRING("me"))
             END_IF
@@ -1858,7 +1858,7 @@ static EVT_BEGIN(kurihakase_talk)
                 CASE_BETWEEN(150000, 179999)
                 CALL(evt_msg_print, 0, STRING("mac_6_006_06"), 0, STRING("クリハカセ"))
             END_SWITCH
-            ELSE
+        ELSE
             // After at least three minutes, the screen goes to letterbox and the follow-up scene starts.
             CALL(evt_cam_letter_box_disable, 1)
             CALL(evt_cam_letter_box_onoff, 1, 0)
@@ -1874,7 +1874,7 @@ static EVT_BEGIN(kurihakase_talk)
             CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, 0, STRING("gor_02_026_01"), 0, STRING("me"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("gor_02_026"), 0, STRING("me"))
             END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -1902,7 +1902,7 @@ static EVT_BEGIN(kurihakase_talk)
             CALL(evt_msg_print, 0, STRING("gor_02_029_02"), 0, STRING("me"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             SET_VALUE(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 1)
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_02_029_03"), 0, STRING("me"))
         END_IF
     END_SWITCH
@@ -2196,10 +2196,10 @@ EVT_BEGIN(tozokudan2_house_door)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_06_naka"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), PTR(&door_data_06))
     SPAWN_EVENT(PTR(door_open_se))
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -2215,13 +2215,13 @@ EVT_BEGIN(tozokudan2_house_door)
         END_INLINE_EVENT
     END_IF
     WAIT_MS(500)
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
             SPAWN_EVENT(PTR(door_close_se))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
@@ -3648,7 +3648,7 @@ EVT_BEGIN(evt_door_02_close)
     END_IF
     LABEL(100)
     WAIT_MS(500)
-    CALL(evt_door_param, LW(0), 5, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_OUT_POS, LW(1), LW(2), LW(3))
     CALL(evt_mario_party_door_move, LW(1), LW(3), FLOAT(135.0f))
     RETURN
 EVT_END()
@@ -3684,14 +3684,14 @@ static DoorParam door_data_02 = {
  * evt_door_open (outside) when Mario presses A in front of the door.
  */
 EVT_BEGIN(evt_door_02_entry)
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 8)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)
@@ -3902,14 +3902,14 @@ EVT_END()
  * and evt_door_sanders_open in front of the door's two spots.
  */
 static EVT_BEGIN(evt_door_03_entry)
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_sanders_close), 0)
@@ -3974,7 +3974,7 @@ EVT_BEGIN(evt_door_03_roll_open)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set_xyz, 65, 10, -55, 0, 150, EASING_SINE_IN_OUT)
     WAIT_MS(150)
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     CALL(evt_hitobj_onoff, STRING("A_i03_rol"), 1, 1)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4009,10 +4009,10 @@ EVT_BEGIN(evt_door_03_roll_open)
 #endif
         CALL(evt_msg_print, 0, STRING("mac_4_049"), 0, STRING("サンダース"))
     END_IF
-    CALL(evt_cam_ctrl_onoff, 4, 1)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     RETURN
@@ -4067,7 +4067,7 @@ static DoorParam door_data_03_roll = {
  * registers the stand-on case event (evt_door_03_caseopen) that opens it when Mario steps on the spot in front.
  */
 EVT_BEGIN(evt_door_03_roll_entry)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     RETURN
@@ -5533,7 +5533,7 @@ EVT_BEGIN(kurihakase_first_talk)
     ADD(LW(1), 20)
     ADD(LW(2), 10)
     CALL(evt_item_entry, STRING("item00"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5498047f))
     WAIT_MS(660)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -5796,7 +5796,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
     // Frankly steps out of the house; the camera moves in and he hands Mario a Power Smash badge.
     CALL(evt_npc_set_position, STRING("クリハカセ"), -215, 0, -93)
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_SMASH, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         LOOP(0)
             CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
@@ -5961,13 +5961,13 @@ EVT_BEGIN(epigraphy_map)
     WAIT_MS(2000)
 
     // The screen irises out, then back in on the inside of Frankly's house.
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
     SPAWN_EVENT(PTR(evt_door_open_quick))
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
 
@@ -6071,7 +6071,7 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
     ADD(LW(2), 10)
     CALL(evt_item_entry, STRING("item_map"), ITEM_MAGICAL_MAP_LARGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item_map"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item_map"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_set_scale, STRING("item_map"), FLOAT(0.5498047f))
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         LOOP(0)
@@ -6149,7 +6149,7 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     WAIT_MS(2000)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_1_004"), 0, 0)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
     SPAWN_EVENT(PTR(evt_door_open_quick))
@@ -6158,7 +6158,7 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mapobj_rotate, 1, STRING("S_open_book_r"), 0, 0, 180)
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL_CHILD(PTR(book_close))
@@ -6223,13 +6223,13 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     // A caption narrates the visit; the screen irises out and back in on the inside of the house.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_2_002_01"), 0, 0)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
     SPAWN_EVENT(PTR(evt_door_open_quick))
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL_CHILD(PTR(book_close))
@@ -6343,7 +6343,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     // A caption narrates the visit; the screen irises out and back in on the inside of the house.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_3_001_01"), 0, 0)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
     CALL_CHILD(PTR(evt_door_open_quick))
@@ -6351,7 +6351,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     CALL_CHILD(PTR(book_center_init))
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
 
@@ -6456,13 +6456,13 @@ EVT_BEGIN(epigraphy_map_after_stage4)
     WAIT_MS(2000)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_4_001_01"), 0, 0)
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
     SPAWN_EVENT(PTR(evt_door_open_quick))
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("mac_4_001_02"), 0, STRING("クリハカセ"))
@@ -6534,13 +6534,13 @@ EVT_BEGIN(epigraphy_map_after_stage5)
     WAIT_MS(2000)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_5_002"), 0, STRING("クリハカセ"))
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
     SPAWN_EVENT(PTR(evt_door_open_quick))
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL_CHILD(PTR(book_close))
@@ -6595,7 +6595,7 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     WAIT_MS(2000)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_6_002_00"), 0, STRING("クリハカセ"))
-    CALL(evt_fade_entry, 2, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
     CALL_CHILD(PTR(evt_door_open_quick))
@@ -6603,7 +6603,7 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     CALL_CHILD(PTR(book_center_init))
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_fade_entry, 1, 500, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_IN_IRIS, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("mac_6_002"), 0, STRING("クリハカセ"))
@@ -6805,14 +6805,14 @@ EVT_END()
 
 /**
  * Opens the chest mobj_box01 and gives Mario the Double Dip badge (ITEM_DOUBLE_DIP;
- * the JP and later releases add ITEM_FLAG_BADGE_RETURN).
+ * the JP and later releases add ITEM_FLAG_LOST_BADGE_TO_SHOP).
  */
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_DOUBLE_DIP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item01"), 258)
 #endif
@@ -6858,7 +6858,7 @@ s32 stg5_list[] = {
 
 #if VERSION <= VERSION_DEMO_US
 s32 stg5_list[] = {
-93, 94, 99,
+    93, 94, 99,
 };
 #endif
 
@@ -7126,7 +7126,7 @@ EVT_BEGIN(gor_02_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)
         SPAWN_EVENT(PTR(dearu_event))
-        ELSE
+    ELSE
         SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
     END_IF
 
@@ -7180,17 +7180,17 @@ EVT_BEGIN(gor_02_init_evt)
     SET_VALUE(LW(0), GW(11))
     IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc))
-        ELSE
+    ELSE
         CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc_01))
     END_IF
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)
@@ -7201,13 +7201,13 @@ EVT_BEGIN(gor_02_init_evt)
     END_IF
     IF_INT_EQUAL(GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED, 0)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_HOUSE_KEY, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(&door_data_06))
         CALL(evt_door_data_copy, LW(0), LW(1))
         SET_VALUE(LW(0), LW(1))
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_NEED_A_KEY), 0)
             CALL(evt_door_set_param, LW(0), 0, PTR(&door_data_06_npc))
-            ELSE
+        ELSE
             CALL(evt_door_set_param, LW(0), 0, PTR(&door_data_06_npc_01))
         END_IF
         CALL_CHILD(PTR(evt_door_entry))
@@ -7259,16 +7259,16 @@ EVT_BEGIN(gor_02_init_evt)
                 END_IF
                 CALL(evt_cloud_get_mode, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), -1)
-                    IF_INT_EQUAL(LW(0), 0)
+                    IF_INT_EQUAL(LW(0), CLOUD_STATE_WAIT_BREATH)
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
-                        ELSE
+                    ELSE
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i04_ura_01B"), MAP_OBJ_FLAG_HIDDEN)
                     END_IF
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
         END_INLINE_EVENT
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(&door_data_04_ura))
         CALL_CHILD(PTR(evt_door_entry))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_kabe_msk"), MAP_OBJ_FLAG_HIDDEN)

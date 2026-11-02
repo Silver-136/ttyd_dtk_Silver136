@@ -484,7 +484,7 @@ void BattleBreakSlot_Main(void) {
                 slot->phaseTimer == 100 || slot->phaseTimer == 120) {
 #endif
                 psndSFXOn("SFX_BTL_SYS_BREAK1");
-                btl_camera_shake_h(0, 5.0f, 0.0f, 10, 0);
+                btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 10, 0);
             }
 #if VERSION == VERSION_EU
             count *= i; // now the frame of the last hit
@@ -533,7 +533,7 @@ void BattleBreakSlot_Main(void) {
                     case 3:
                     case 4:
                         btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE);
-                        btl_camera_set_moveSpeedLv(0, 2);
+                        btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
                         break;
                 }
                 if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
@@ -564,7 +564,7 @@ void BattleBreakSlot_Main(void) {
             }
             if (slot->phaseTimer == count + 90) {
                 if (!(_battleWorkPointer->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H)) {
-                    btl_camera_shake_h(0, 2.0f, 2.0f, 1000, 0);
+                    btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 2.0f, 2.0f, 1000, 0);
                 }
                 for (k = 0; k < AUDIENCE_MEMBER_MAX; k++) {
                     if ((u8)BattleAudience_GetExist(k) == 1) {
@@ -575,14 +575,14 @@ void BattleBreakSlot_Main(void) {
                     }
                 }
                 if (k == 200) {
-                    btl_camera_noshake(0);
-                    BattleAudienceSoundStop(13);
+                    btl_camera_noshake(BTL_CAM_PRI_NORMAL);
+                    BattleAudienceSoundStop(AUD_SOUND_RUN);
                 }
             }
             // BUG: k is set only by the loop on the frame where phaseTimer is 210; here (220) it is read uninitialized
             if (slot->phaseTimer == count + 100 && k == 200) {
                 btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
-                btl_camera_noshake(0);
+                btl_camera_noshake(BTL_CAM_PRI_NORMAL);
             }
             if (slot->phaseTimer == count + 150) {
                 BattleAudienceAddTargetNum(0.0f, updown);
@@ -848,7 +848,7 @@ void BattleBreakSlot_Main(void) {
 
 /** Queues the Bingo reel drawing on the 2D camera. */
 void BattleBreakSlot_Disp(void) {
-    dispEntry(CAMERA_2D, 490.0f, 0, BattleBreakSlotDispReel, NULL);
+    dispEntry(CAMERA_2D, 490.0f, DISP_MODE_OPAQUE, BattleBreakSlotDispReel, NULL);
 }
 
 /**
@@ -1058,7 +1058,7 @@ u8 BattleBreakSlot_CheckReaction(void) {
         return TRUE;
     }
     btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
-    btl_camera_set_moveSpeedLv(0, 2);
+    btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
     BattleAudienceNumToTarget();
     slot->evt = NULL;
     return FALSE;

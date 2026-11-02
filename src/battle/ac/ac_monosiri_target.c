@@ -69,7 +69,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[MONOSIRI_TARGET_PARAM_PARTS_ID]);
 
     switch (work->actionCommands.acState) {
-        case 0:
+        case AC_STATE_INIT:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
@@ -81,16 +81,16 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             cw->targetPos = cw->hitPos;
             cw->inRange = 0;
             cw->angle = 0.0f;
-            work->actionCommands.acState = 99;
+            work->actionCommands.acState = AC_STATE_WAIT_START;
             work->actionCommands.result = AC_RESULT_RUNNING;
             cw->sfxId = -1;
             break;
-        case 100:
+        case AC_STATE_START:
             cw->frame = 0;
             cw->sfxId = psndSFXOn("SFX_AC_CURSOR_MOVE1");
-            work->actionCommands.acState = 1000;
+            work->actionCommands.acState = AC_STATE_RUN;
         // fall through
-        case 1000:
+        case AC_STATE_RUN:
             cw->frame++;
             cw->pos.x = (cw->hitPos.x - 80.0f) + intplGetValue(EASING_LINEAR, 0.0f, 160.0f, cw->frame, cw->maxFrames);
             if (__fabs(cw->pos.x - cw->targetPos.x) < 28.0) {
@@ -105,7 +105,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             }
             if (cw->frame >= cw->maxFrames) {
                 work->actionCommands.result = 0;
-                work->actionCommands.acState = 1002;
+                work->actionCommands.acState = AC_STATE_RUN + 2;
                 break;
             }
             if (BattlePadCheckTrigger(PAD_BUTTON_A) || autoCommand) {
@@ -118,23 +118,23 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
                     }
                     work->actionCommands.result = 0;
                 }
-                work->actionCommands.acState = 1002;
+                work->actionCommands.acState = AC_STATE_RUN + 2;
             }
             break;
-        case 1002:
+        case AC_STATE_RUN + 2:
             cw->endTimer = 60;
-            work->actionCommands.acState = 1003;
+            work->actionCommands.acState = AC_STATE_RUN + 3;
             if (cw->sfxId != -1) {
                 psndSFXOff(cw->sfxId);
             }
         // fall through
-        case 1003:
+        case AC_STATE_RUN + 3:
             cw->endTimer--;
             if (cw->endTimer <= 0) {
-                work->actionCommands.acState = 1004;
+                work->actionCommands.acState = AC_STATE_RUN + 4;
             }
             break;
-        case 1004:
+        case AC_STATE_RUN + 4:
             work->actionCommands.maincb = NULL;
             work->actionCommands.dispcb = NULL;
             work->actionCommands.resultcb = NULL;
@@ -153,7 +153,7 @@ s32 battleAcResult_MonosiriTarget(BattleWork* work) {
 void battleAcDisp_MonosiriTarget(CameraId cameraId, void* param) {
     BattleWork* work = _battleWorkPointer;
     switch (work->actionCommands.acState) {
-        case 1000:
+        case AC_STATE_RUN:
             actionCommandDisp(0.0f, 0.0f);
             break;
     }
@@ -161,7 +161,7 @@ void battleAcDisp_MonosiriTarget(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: stops the cursor sound and starts the 60-frame end wait. */
 void battleAcDelete_MonosiriTarget(BattleWork* work) {
-    work->actionCommands.acState = 1002;
+    work->actionCommands.acState = AC_STATE_RUN + 2;
 }
 
 /**

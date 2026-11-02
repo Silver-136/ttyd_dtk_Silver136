@@ -116,7 +116,7 @@ BattleUnitKind unit_boss_vivian = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element attributes of Vivian: none, so every element does its normal damage. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 80, 70, 100, 70, 100, 100, 60, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
@@ -397,7 +397,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(13), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -424,7 +424,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -572,7 +572,7 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(PTR(flame_attack_event))
         END_IF
     END_SWITCH
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -617,20 +617,20 @@ static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_VIVI_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -684,20 +684,20 @@ EVT_BEGIN(flame_attack_event)
     CALL(evt_eff, STRING(""), STRING("kemuri_test"), 6, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

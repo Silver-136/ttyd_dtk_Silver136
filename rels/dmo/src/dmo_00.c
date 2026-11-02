@@ -126,15 +126,15 @@ USER_FUNC(demo_init) {
         wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/demo.tpl", getMarioStDvdRoot());
 #if VERSION <= VERSION_DEMO_US
         if (seqGetPrevSeq() == SEQ_LOGO) {
-            gp->areaFadeOutType = FADE_IN_BLACK;
-            gp->areaFadeOutDuration = 500;
+            gp->areaFadeInType = FADE_IN_BLACK;
+            gp->areaFadeInDuration = 500;
         } else {
-            gp->areaFadeOutType = FADE_IN_WHITE;
-            gp->areaFadeOutDuration = 500;
+            gp->areaFadeInType = FADE_IN_WHITE;
+            gp->areaFadeInDuration = 500;
         }
 #else
-        gp->areaFadeOutType = FADE_IN_BLACK;
-        gp->areaFadeOutDuration = 500;
+        gp->areaFadeInType = FADE_IN_BLACK;
+        gp->areaFadeInDuration = 500;
 #endif
         return EVT_RETURN_DONE;
     }
@@ -515,12 +515,12 @@ void demo_window(CameraId cameraId, void* param) {
  * Never finishes.
  */
 USER_FUNC(demo_draw) {
-    dispEntry(CAMERA_3D, 9.0f, 7, demo_desk, NULL);
-    dispEntry(CAMERA_3D, 8.0f, 7, demo_book, NULL);
+    dispEntry(CAMERA_3D, 9.0f, DISP_MODE_CUSTOM_LAST, demo_desk, NULL);
+    dispEntry(CAMERA_3D, 8.0f, DISP_MODE_CUSTOM_LAST, demo_book, NULL);
     if (wp->fade != 0.0f) {
-        dispEntry(CAMERA_3D_EFFECTB, 0.0f, 7, demo_img, NULL);
+        dispEntry(CAMERA_3D_EFFECTB, 0.0f, DISP_MODE_CUSTOM_LAST, demo_img, NULL);
     }
-    dispEntry(CAMERA_2D, 0.0f, 3, demo_window, NULL);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE_NO_Z, demo_window, NULL);
     return EVT_RETURN_BLOCK;
 }
 

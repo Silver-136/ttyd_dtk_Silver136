@@ -174,7 +174,7 @@ void marioSetCharMode(s32 mode) {
     if (mode == CHARACTER_BOWSER) {
         kpaPreInit();
         marioCharPoseRelease(wp);
-        wp->paperAnimGroupId[0] = animPoseEntry(kpaGetStageViewType() == 1 ? "c_koopa" : "c_koopa2", 2);
+        wp->paperAnimGroupId[0] = animPoseEntry(kpaGetStageViewType() == KPA_VIEW_3D ? "c_koopa" : "c_koopa2", 2);
         wp->characterId = CHARACTER_BOWSER;
         npcSetMarioAutoTalkPose("KPA_S_1", "KPA_T_1");
         kpaSetLevel(1);
@@ -417,7 +417,7 @@ BOOL marioCaseEventValidChk(void) {
     if (mp->currMotionId == MARIO_MOTION_PLANE) {
         return FALSE;
     } else {
-        return vivianGetStatus() == 0;
+        return vivianGetStatus() == VIVIAN_STATUS_INACTIVE;
     }
 }
 
@@ -500,10 +500,10 @@ BOOL marioCheckMenuDisable(void) {
     if (wp->currMotionId == MARIO_MOTION_JABARA) {
         return TRUE;
     }
-    if (marioGetPlaneStatus() == 1) {
+    if (marioGetPlaneStatus() == PLANE_STATUS_TRANSITION) {
         return TRUE;
     }
-    if (marioShipChanging() == 1 || marioShipChanging() == 2) {
+    if (marioShipChanging() == SHIP_STATUS_FOLDING || marioShipChanging() == SHIP_STATUS_SETTLING) {
         return TRUE;
     }
     if (wp->currMotionId == MARIO_MOTION_DAMAGE || wp->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
@@ -518,7 +518,7 @@ BOOL marioCheckMenuDisable(void) {
 #if VERSION >= VERSION_US
     if (vivianGetStatus()) {
         if (!(partyGetPtr(marioGetPartyId())->flags & PARTY_FLAG_IS_EVT_USE)) {
-            if (vivianGetStatus() == 2) {
+            if (vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
                 return FALSE;
             }
         } else {
@@ -526,7 +526,7 @@ BOOL marioCheckMenuDisable(void) {
         }
     }
 #else
-    if (vivianGetStatus() && vivianGetStatus() == 2) {
+    if (vivianGetStatus() && vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
         return FALSE;
     }
 #endif
@@ -554,7 +554,7 @@ BOOL marioChkKey(void) {
     if (mp->keyOffCount) {
         return FALSE;
     }
-    if (marioShipChanging() == 1 || marioShipChanging() == 2) {
+    if (marioShipChanging() == SHIP_STATUS_FOLDING || marioShipChanging() == SHIP_STATUS_SETTLING) {
         return FALSE;
     }
     if (!marioRollKeyDisable()) {
@@ -1543,7 +1543,7 @@ void marioMove(void) {
                 stick = stick * stick;
                 if (stick < 25) {
                     marioChgPose("M_Z_1");
-                } else if (stick < 3025) {
+                } else if (stick < STICK_DASH_MIN_SQ) {
                     marioChgPose("M_W_1");
                 } else {
                     marioChgPose("M_R_1");
@@ -1715,7 +1715,7 @@ void marioMoveMain(void) {
         }
 #if VERSION > VERSION_DEMO_US
         dou10_yoko_yari3(&wp->frontWallDist);
-        if (wp->hitobjFront && (hitGetAttr(wp->hitobjFront) & HIT_ATTR_TOGE)) {
+        if (wp->hitobjFront && (hitGetAttr(wp->hitobjFront) & HIT_ATTR_SPIKES)) {
             set_damage_root_ypos(wp->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
             return;
@@ -2223,13 +2223,13 @@ void marioPreDisp(void) {
         }
         if (t > 0) {
             if (!(t & 2)) {
-                dispEntry(marioGetCamId(), z, 1, marioDisp, wp);
+                dispEntry(marioGetCamId(), z, DISP_MODE_ALPHA_TEST, marioDisp, wp);
             }
         } else {
-            dispEntry(marioGetCamId(), z, 1, marioDisp, wp);
+            dispEntry(marioGetCamId(), z, DISP_MODE_ALPHA_TEST, marioDisp, wp);
         }
     } else {
-        dispEntry(marioGetCamId(), z, 2, marioDispBlur, wp);
+        dispEntry(marioGetCamId(), z, DISP_MODE_XLU, marioDispBlur, wp);
     }
     if (wp->dispFlags & MARIO_DISP_FLAG_SHADOW_OFF) {
         return;
@@ -2238,7 +2238,7 @@ void marioPreDisp(void) {
         return;
     }
     if (wp->currMotionId == MARIO_MOTION_PLANE) {
-        shadowEntryMode(2, wp->position.x, wp->groundY, wp->position.z, 13.333333f);
+        shadowEntryMode(SHADOW_MODE_CYLINDER, wp->position.x, wp->groundY, wp->position.z, 13.333333f);
         return;
     }
     if (wp->characterId == CHARACTER_BOWSER) {
@@ -2267,9 +2267,9 @@ void marioPreDisp(void) {
         } else {
             sz = size;
         }
-        t = 2;
+        t = SHADOW_MODE_CYLINDER;
         if (bit) {
-            t = 0;
+            t = SHADOW_MODE_POLYGON;
         }
         shadowEntryMode(t, wp->position.x + xo, wp->position.y, wp->position.z + zo, sz);
     } else {
@@ -2280,9 +2280,9 @@ void marioPreDisp(void) {
                 size = 0.0f;
             }
             if (size) {
-                t = 2;
+                t = SHADOW_MODE_CYLINDER;
                 if (wp->flags & MARIO_FLAG_BG_MODE) {
-                    t = 0;
+                    t = SHADOW_MODE_POLYGON;
                 }
                 shadowEntryMode(t, wp->position.x + xo, wp->position.y, wp->position.z + zo, size);
             }

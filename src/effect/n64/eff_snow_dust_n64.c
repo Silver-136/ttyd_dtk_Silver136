@@ -326,7 +326,7 @@ void effSnowDustMain(EffectEntry* effect) {
                 break;
         }
     }
-    dispEntry(camId, dispCalcZ(&position), 2, (DispCallback)effSnowDustDisp, effect);
+    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSnowDustDisp, effect);
 }
 
 /**

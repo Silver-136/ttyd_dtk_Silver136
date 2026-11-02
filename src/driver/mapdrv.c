@@ -21,6 +21,7 @@
 #include "libc_decls.h"
 #include "driver/hitdrv.h"
 #include <string.h>
+#include "driver/dispdrv.h"
 
 
 #define TWO_PI 6.28318530717958647692528676655900576839433879875021f
@@ -222,9 +223,6 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
             sampler->tex->height = desc->textureHeader->height;
             switch (desc->textureHeader->format) {
                 case 4: sampler->tex->format = 0; break;
-                // FAKE: unreachable empty `if (!k) { }` between two cases; removing it changes the object
-                if (!k) {
-                }
                 case 5: sampler->tex->format = 1; break;
                 case 6: sampler->tex->format = 2; break;
                 case 14: sampler->tex->format = 3; break;
@@ -1236,28 +1234,28 @@ void bmapUnLoad(void) {
             j = 0;
         }
     }
-        wp2 = mapWork;
-        activeGroup = j;
-        for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
+    wp2 = mapWork;
+    activeGroup = j;
+    for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
 
-            // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
-            if (entry3->datAram) {
-                entry3->dat = _mapAllocTail(entry3->datSize);
-                entry3->tpl = _mapAllocTail(entry3->tplSize);
-                aramMgrToMram(entry3->datAram, entry3->dat);
-                aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
-                entry3->datAram = NULL;
-                MAPENT_TPLARAM(entry3) = NULL;
-            } else {
-                entry3->arcData = _mapAllocTail(entry3->arcSize);
-                aramMgrToMram(entry3->arcAram, entry3->arcData);
-                entry3->arcAram = NULL;
-            }
-            makeDisplayList(j);
+        // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
+        if (entry3->datAram) {
+            entry3->dat = _mapAllocTail(entry3->datSize);
+            entry3->tpl = _mapAllocTail(entry3->tplSize);
+            aramMgrToMram(entry3->datAram, entry3->dat);
+            aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
+            entry3->datAram = NULL;
+            MAPENT_TPLARAM(entry3) = NULL;
+        } else {
+            entry3->arcData = _mapAllocTail(entry3->arcSize);
+            aramMgrToMram(entry3->arcAram, entry3->arcData);
+            entry3->arcAram = NULL;
         }
-        if (wp2->entries->arcData) {
-            arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
-        }
+        makeDisplayList(j);
+    }
+    if (wp2->entries->arcData) {
+        arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
+    }
 }
 #else
     wp = mapWork;
@@ -2032,7 +2030,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
     mode = obj->blendMode;
     if (obj->joints->partCount > 0) {
         if (mapObjIsTranslucent(obj->flags, obj->color, obj->joints->parts[0].material->blendColor)) {
-            mode = 2;
+            mode = DISP_MODE_XLU;
         }
     }
     switch (mode) {
@@ -2108,7 +2106,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
             mesh = obj->joints->parts[i].mesh;
             material = obj->joints->parts[i].material;
             mapSetTextureMatrix(material);
-            mapSetMaterialLastStageBlend(obj->flags, obj->color, ((MapMaterial*)material)->blendColor);
+            mapSetMaterialLastStageBlend(obj->flags, obj->color, material->blendColor);
             mapSetPolygonVtxDesc(obj, mesh);
             GXCallDisplayList(obj->displayList[i], obj->displayListSize[i]);
             callPackedLists(mesh);
@@ -2118,7 +2116,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
             material = obj->joints->parts[i].material;
             mesh = obj->joints->parts[i].mesh;
             mapSetTextureMatrix(material);
-            mapSetMaterialLastStageBlend(obj->flags, obj->color, ((MapMaterial*)material)->blendColor);
+            mapSetMaterialLastStageBlend(obj->flags, obj->color, material->blendColor);
             mapSetMaterial(obj, material);
             mapSetPolygon(obj, mesh);
         }
@@ -2290,7 +2288,6 @@ static inline BOOL mapClipTest(Vec* v) {
     return FALSE;
 }
 
-void dispEntry(CameraId camera, f32 order, s32 renderMode, void* callback, void* param);
 #define MAP_CLIP_IN(v) ((v).z > -1.0f && (v).z < 0.0f && (v).x >= -1.0f && (v).x <= 1.0f && (v).y >= -1.0f && (v).y <= 1.0f)
 
 /**
@@ -2411,17 +2408,17 @@ void mapDisp(void) {
             if (obj->joints->partCount > 0) {
                 if (mapObjIsTranslucent(obj->flags, obj->color,
                         obj->joints->parts[0].material->blendColor)) {
-                    mode = 2;
+                    mode = DISP_MODE_XLU;
                 }
             }
             if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
-                dispEntry(CAMERA_OFFSCREEN2, 5000.0f, 3, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox, obj);
+                dispEntry(CAMERA_OFFSCREEN2, 5000.0f, DISP_MODE_OPAQUE_NO_Z, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox), obj);
             }
             if (obj->flags & MAP_OBJ_FLAG_OFFSCREEN) {
-                dispEntry(CAMERA_OFFSCREEN2, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off, obj);
+                dispEntry(CAMERA_OFFSCREEN2, z, mode, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off), obj);
             }
             if (!(obj->flags & MAP_OBJ_FLAG_HIDDEN)) {
-                dispEntry(obj->cameraId, z, mode, !(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp, obj);
+                dispEntry(obj->cameraId, z, mode, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp), obj);
             }
         }
     }
@@ -3862,7 +3859,7 @@ void mapObjFlagOff(const char* name, u32 flags) {
  */
 #if VERSION <= VERSION_DEMO_US
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
-        obj->flags |= flags;
+    obj->flags |= flags;
 #else
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {

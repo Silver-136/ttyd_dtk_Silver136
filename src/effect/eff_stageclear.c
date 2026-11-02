@@ -276,9 +276,9 @@ void effStageClearMain(EffectEntry* effect) {
         }
     }
     if (type < 10) {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effStageClearDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effStageClearDisp, effect);
     } else {
-        dispEntry(CAMERA_3D_EFFECTA, dispCalcZ(&pos), 8, (DispCallback)effStageClearDisp, effect);
+        dispEntry(CAMERA_3D_EFFECTA, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, (DispCallback)effStageClearDisp, effect);
     }
 }
 

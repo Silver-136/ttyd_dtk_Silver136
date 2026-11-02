@@ -13,6 +13,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_sub.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of this unit (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
@@ -172,7 +173,7 @@ BattleUnitKind unit_fire_bros = {
 static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
 
 /** Element reactions of Fire Bro: fire immune; the other elements hit normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of Fire Bro (the demos), as the percent chance a status takes hold:
@@ -190,7 +191,7 @@ static StatusVulnerability regist = {60, 80, 80, 100, 80, 100, 100, 80, 100, 80,
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Element reactions of Fire Bro: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of Fire Bro (the final versions), as the percent chance a status takes hold:
@@ -272,7 +273,7 @@ BattleWeapon weapon_fire_bros_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -312,7 +313,7 @@ BattleWeapon weapon_fire_bros_renzoku_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -352,7 +353,7 @@ BattleWeapon weapon_fire_bros_nagemakuri_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -386,7 +387,7 @@ EVT_END()
  * (LW(10) = -2, LW(11) = 1).
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -450,20 +451,20 @@ static EVT_BEGIN(damage_check_sub)
     SET_VALUE(LW(0), 0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(6), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

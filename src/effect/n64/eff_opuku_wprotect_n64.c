@@ -177,7 +177,7 @@ void effOpukuWprotectMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuWprotectDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuWprotectDisp, effect);
 }
 
 /**
@@ -259,7 +259,7 @@ void effOpukuWprotectDisp(CameraId cameraId, EffectEntry* effect) {
     alpha = work->alpha;
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXConcat(camera->view, mtx, mtx);
-    vtx = p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 80, 3)->address;
+    vtx = p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 80, SMART_GROUP_TEMP)->address;
     pd = point_data;
     r = gp->retraceCount >> 1;
     for (i = 0; i < 40; i++) {

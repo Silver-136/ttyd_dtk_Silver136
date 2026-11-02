@@ -340,10 +340,10 @@ void npcDisp(CameraId camId, void* param) {
         animPoseSetMaterialFlagOn(entry->poseId, MAP_OBJ_FLAG_COLOR);
     }
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
 #else
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
             color = entry->color;
             if (entry->statusFlags & NPC_STATUS_DARKEN) {
                 color.r /= 2;
@@ -358,10 +358,10 @@ void npcDisp(CameraId camId, void* param) {
             animPoseMain(entry->poseId);
             animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
             break;
-        case 1:
+        case DISP_MODE_ALPHA_TEST:
             animPoseDrawMtx(entry->poseId, mtx, 2, rotY, 2.0f);
             break;
-        case 2:
+        case DISP_MODE_XLU:
             animPoseDrawMtx(entry->poseId, mtx, 3, rotY, 2.0f);
             break;
     }
@@ -413,10 +413,10 @@ void npcDisp_offscreen(CameraId camId, void* param) {
 #if VERSION >= VERSION_US
     npcDimColor(entry);
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
 #else
     switch (dispGetCurWork()->renderMode) {
-        case 0:
+        case DISP_MODE_OPAQUE:
             npcDimColor(entry);
 #endif
 
@@ -424,10 +424,10 @@ void npcDisp_offscreen(CameraId camId, void* param) {
             animPoseMain(entry->poseId);
             animPoseDrawMtx(entry->poseId, mtx, 1, rotY, 2.0f);
             break;
-        case 1:
+        case DISP_MODE_ALPHA_TEST:
             animPoseDrawMtx(entry->poseId, mtx, 2, rotY, 2.0f);
             break;
-        case 2:
+        case DISP_MODE_XLU:
             animPoseDrawMtx(entry->poseId, mtx, 3, rotY, 2.0f);
             break;
     }
@@ -501,7 +501,7 @@ void npcInit(void) {
     data = __memAlloc(HEAP_DEFAULT, sizeof(FieldBattleData));
     gp->fbatData = data;
     memset(gp->fbatData, 0, sizeof(FieldBattleData));
-    data->mode = 0;
+    data->mode = FBAT_MODE_OFF;
     npcMainCount = 0;
 }
 
@@ -514,7 +514,7 @@ void npcReset(BOOL inBattle) {
     memset(wp->entries, 0, sizeof(NpcEntry) * wp->total);
     wp->count = 0;
     if (!inBattle) {
-        gp->fbatData->mode = 0;
+        gp->fbatData->mode = FBAT_MODE_OFF;
     }
     npcMainCount = 0;
 }
@@ -937,7 +937,7 @@ void npcMain(void) {
                                         marioFindable = 0;
                                         break;
                                     }
-                                    if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {
+                                    if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
                                         marioFindable = 0;
                                     } else {
                                         marioFindable = 1;
@@ -1020,7 +1020,7 @@ void npcMain(void) {
                                         marioFindable = 0;
                                         break;
                                     }
-                                    if (vivianGetStatus() != 0 && vivianGetStatus() != 1) {
+                                    if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() != VIVIAN_STATUS_SINKING) {
                                         marioFindable = 0;
                                     } else {
                                         marioFindable = 1;
@@ -1112,11 +1112,11 @@ void npcMain(void) {
                         if (!(entry->flags & NPC_FLAG_NO_DRAW) &&
                             (!(entry->wFbatHitCheckRelated & 2) || (entry->statusFlags & NPC_STATUS_STOPPED))) {
                             if (entry->color.a != 0xFF) {
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp_xlu, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_XLU, npcDisp_xlu, entry);
                             } else {
-                                dispEntry((CameraId)entry->cameraId, prio, 0, npcDisp, entry);
-                                dispEntry((CameraId)entry->cameraId, prio, 1, npcDisp, entry);
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_OPAQUE, npcDisp, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_ALPHA_TEST, npcDisp, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_XLU, npcDisp, entry);
                             }
                             if (!(entry->flags & NPC_FLAG_VIVIAN_TYPE)) {
                                 if (!(entry->flags & NPC_FLAG_NO_SHADOW)) {
@@ -1153,23 +1153,23 @@ void npcMain(void) {
                                 }
                             }
                             if (entry->flags & NPC_FLAG_BLUR) {
-                                dispEntry((CameraId)entry->cameraId, prio, 2, npcDisp_blur, entry);
+                                dispEntry((CameraId)entry->cameraId, prio, DISP_MODE_XLU, npcDisp_blur, entry);
                             }
                         }
                         if (entry->offscreenId != -1) {
                             if (entry->color.a != 0xFF) {
 #if VERSION <= VERSION_DEMO_US
-                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen_xlu, entry);
+                                dispEntry((CameraId)1, prio, DISP_MODE_XLU, npcDisp_offscreen_xlu, entry);
                             } else {
-                                dispEntry((CameraId)1, prio, 0, npcDisp_offscreen, entry);
-                                dispEntry((CameraId)1, prio, 1, npcDisp_offscreen, entry);
-                                dispEntry((CameraId)1, prio, 2, npcDisp_offscreen, entry);
+                                dispEntry((CameraId)1, prio, DISP_MODE_OPAQUE, npcDisp_offscreen, entry);
+                                dispEntry((CameraId)1, prio, DISP_MODE_ALPHA_TEST, npcDisp_offscreen, entry);
+                                dispEntry((CameraId)1, prio, DISP_MODE_XLU, npcDisp_offscreen, entry);
 #else
-                                dispEntry(CAMERA_OFFSCREEN2, prio, 2, npcDisp_offscreen_xlu, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, DISP_MODE_XLU, npcDisp_offscreen_xlu, entry);
                             } else {
-                                dispEntry(CAMERA_OFFSCREEN2, prio, 0, npcDisp_offscreen, entry);
-                                dispEntry(CAMERA_OFFSCREEN2, prio, 1, npcDisp_offscreen, entry);
-                                dispEntry(CAMERA_OFFSCREEN2, prio, 2, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, DISP_MODE_OPAQUE, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, DISP_MODE_ALPHA_TEST, npcDisp_offscreen, entry);
+                                dispEntry(CAMERA_OFFSCREEN2, prio, DISP_MODE_XLU, npcDisp_offscreen, entry);
 #endif
                             }
                         }
@@ -1193,7 +1193,7 @@ void npcMain(void) {
         FirstStrikeInfo* firstStrike = &fbat->firstStrike;
         if (firstStrike->enabled) {
             switch (firstStrike->type) {
-                case 2:
+                case FIRST_STRIKE_MARIO:
 #if VERSION <= VERSION_DEMO_US
                     (firstStrike->timer)++;
                     if (firstStrike->timer < 30) {
@@ -1217,14 +1217,14 @@ void npcMain(void) {
                     }
                     firstStrike->y = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
                     break;
-                case 1:
+                case FIRST_STRIKE_ENEMY:
                     (firstStrike->timer)++;
 #else
-                    dispEntry(CAMERA_FADE, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
                     break;
-                case 1:
+                case FIRST_STRIKE_ENEMY:
                     firstStrike->timer++;
 #endif
                     if (firstStrike->timer > 60) {
@@ -1234,22 +1234,22 @@ void npcMain(void) {
                     firstStrike->x = 0.0f;
                     firstStrike->y = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-                    dispEntry((CameraId)9, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    dispEntry((CameraId)9, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
 #else
-                    dispEntry(CAMERA_FADE, 0.0f, 2, _fbatFirstAttackAnnouceDisp, firstStrike);
+                    dispEntry(CAMERA_FADE, 0.0f, DISP_MODE_XLU, _fbatFirstAttackAnnouceDisp, firstStrike);
 #endif
                     break;
             }
         }
         switch (fbat->mode) {
-            case 1:
+            case FBAT_MODE_FIELD:
                 npcKoopaModeMain();
                 break;
-            case 2:
-            case 3:
+            case FBAT_MODE_TALK:
+            case FBAT_MODE_REACTION_TALK:
                 fbatTalkMode();
                 break;
-            case 5:
+            case FBAT_MODE_BATTLE:
                 fbatBattleMode();
                 break;
             case 6:
@@ -1332,12 +1332,12 @@ void npcSetTalkPose(char* name) {
     if (!strcmp(name, "party")) {
         party = partyGetPtr(marioGetPartyId());
         if (party) {
-            partyChgPoseId(party, 7);
+            partyChgPoseId(party, PARTY_POSE_TALK);
         }
     } else if (!strcmp(name, "extparty")) {
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
-            partyChgPoseId(party, 7);
+            partyChgPoseId(party, PARTY_POSE_TALK);
         }
     } else if (!strcmp(name, "mario")) {
         marioChgPose(MarioTalkPose);
@@ -1352,7 +1352,7 @@ void npcSetTalkPose(char* name) {
 /**
  * Called by msgdrv when a speaker stops talking:
  * puts the named speaker back into its idle animation ("party" / "extparty" use pose 1,
- * "mario" uses MarioStayPose, an NPC with NPC_FLAG_TALK_ANIM its stayAnim).
+ * "mario" uses MarioStayPose, an NPC with NPC_FLAG_TALK_POSE its stayAnim).
  * Empty names and "(^x^)party" are ignored.
  */
 void npcSetStayPose(char* name) {
@@ -1369,12 +1369,12 @@ void npcSetStayPose(char* name) {
     if (!strcmp(name, "party")) {
         party = partyGetPtr(marioGetPartyId());
         if (party) {
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
         }
     } else if (!strcmp(name, "extparty")) {
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
-            partyChgPoseId(party, 1);
+            partyChgPoseId(party, PARTY_POSE_STAND);
         }
     } else if (!strcmp(name, "mario")) {
         marioChgPose(MarioStayPose);
@@ -1469,7 +1469,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 /**
  * Vertical movement for one frame: the script's moveOffset.y plus the jump arc (gravity 980 units/s^2 x
  * jumpGravity, limited by maxFallSpeed, slowed in the low part of kpa_03).
- * With NPC_FLAG_LAND_ON_FLOOR it lands on the floor found below (US and later also probe both side edges)
+ * With NPC_FLAG_FLOOR_COLLISION it lands on the floor found below (US and later also probe both side edges)
  * and sets NPC_STATUS_AIRBORNE while off the floor; otherwise it just moves, no lower than -1000.
  */
 void npcMoveG(NpcEntry* npc) {
@@ -1729,16 +1729,16 @@ void fbatSetAttackAnnounce(s32 hitKind) {
         case FBAT_HIT_SHELL:
         case FBAT_HIT_BOMB:
             firstStrike->msg_tag = "fb_sensei_shita"; // You struck first!
-            firstStrike->type = 2;
+            firstStrike->type = FIRST_STRIKE_MARIO;
             firstStrike->color = (GXColor){ 0xFF, 0x80, 0x80, 0xFF };
             break;
         case FBAT_HIT_ENEMY_FIRST:
             firstStrike->msg_tag = "fb_sensei_sareta"; // Your foe struck first!
-            firstStrike->type = 1;
+            firstStrike->type = FIRST_STRIKE_ENEMY;
             firstStrike->color = (GXColor){ 0x80, 0x80, 0xFF, 0xFF };
             break;
         default:
-            firstStrike->type = 0;
+            firstStrike->type = FIRST_STRIKE_NONE;
             break;
     }
 }
@@ -1858,10 +1858,10 @@ static inline f32 fbat_camAngle(void) {
  */
 static inline BOOL fbat_setHit(NpcEntry* npc) {
     FieldBattleData* d = gp->fbatData;
-    if (d->mode != 1) {
+    if (d->mode != FBAT_MODE_FIELD) {
         return FALSE;
     }
-    d->mode = 5;
+    d->mode = FBAT_MODE_BATTLE;
     d->subState = 0;
     d->npc = npc;
     d->target = npc;
@@ -1906,7 +1906,7 @@ void fbatEncountCheck(void) {
     data = gp->fbatData;
     kind = (u32*)&data->hitKind;
     npc = fbatHitCheck(FBAT_CHECK_ENEMY | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_SPIN_HAMMER | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_TOUCH | FBAT_CHECK_CURRENT, kind);
-    if (npc && (data->mode == 1)) {
+    if (npc && (data->mode == FBAT_MODE_FIELD)) {
         AnimationPose *pose;
         f32 rel;
         f32 ang;
@@ -2115,10 +2115,10 @@ void fbatEncountCheck(void) {
         if (wp->talkTarget && (keyGetButtonTrg(0) & PAD_BUTTON_A)) {
             npc = wp->talkTarget;
             data = gp->fbatData;
-            if (data->mode != 1) {
+            if (data->mode != FBAT_MODE_FIELD) {
                 return;
             }
-            data->mode = 2;
+            data->mode = FBAT_MODE_TALK;
             data->subState = 0;
             data->npc = npc;
             npc->fbatHitKind = 0;
@@ -2126,18 +2126,18 @@ void fbatEncountCheck(void) {
         }
     }
     data = gp->fbatData;
-    if (data->mode == 1) {
+    if (data->mode == FBAT_MODE_FIELD) {
         u32 *kind = (u32*)&data->hitKind;
 #if VERSION <= VERSION_DEMO_US
         npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
 #else
         npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
 #endif
-        if (npc && (data->mode == 1)) {
+        if (npc && (data->mode == FBAT_MODE_FIELD)) {
             u32 k = *kind;
             FieldBattleData *d = gp->fbatData;
-            if (d->mode == 1) {
-                d->mode = 3;
+            if (d->mode == FBAT_MODE_FIELD) {
+                d->mode = FBAT_MODE_REACTION_TALK;
                 d->subState = 0;
                 d->npc = npc;
                 npc->fbatHitKind = k;
@@ -2179,7 +2179,7 @@ void fbatTalkMode(void) {
             marioKeyOff();
             partyKeyOff();
             switch (data->mode) {
-                case 3:
+                case FBAT_MODE_REACTION_TALK:
                     evt = evtEntry(npc->deadEvent, 0, 0);
                     evt->wNpcEventType = NPC_EVENT_TALK;
                     break;
@@ -2208,7 +2208,7 @@ void fbatTalkMode(void) {
                 marioKeyOn();
                 partyKeyOn();
                 marioChgStayMotion();
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 npcGetWorkPtrInline()->talkTarget = NULL;
             }
             break;
@@ -2302,19 +2302,19 @@ void fbatBattleMode(void) {
     switch (data->subState) {
         case 0:
             if (dbg_battleskip == 1) {
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 break;
             }
             if (!cur->battleInfo.groupSetup) {
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 break;
             }
             if (gp->systemLevelFlags & SYSTEM_LEVEL_NO_FIELD_BATTLE) {
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 break;
             }
             if (!cur->deadEvent) {
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 break;
             }
 #if VERSION <= VERSION_DEMO_US
@@ -2376,7 +2376,7 @@ void fbatBattleMode(void) {
             if (!gp->inBattle) {
                 data->merleeCoinBonus = 0;
                 result = BattleInformationGetResult(&data->info);
-                if (pouch->merleeNextCurseType == 4 && result == BATTLE_RESULT_WIN) {
+                if (pouch->merleeNextCurseType == MAJINAI_COIN_UP && result == BATTLE_RESULT_WIN) {
                     data->subState = 3;
                     data->merleeCoinBonus = 1;
                     evt = evtEntry(_evt_majinai_coin_up_effect, 0, 0);
@@ -2461,7 +2461,7 @@ void fbatBattleMode(void) {
 #endif
                     }
                 }
-                data->mode = 1;
+                data->mode = FBAT_MODE_FIELD;
                 if (res == BATTLE_RESULT_WIN || res == BATTLE_RESULT_WIN_FIELD) {
                     mult = 1;
                     if (BattleInformationGetResult(info4) == BATTLE_RESULT_WIN) {
@@ -2808,7 +2808,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                         !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
                         hit = npc;
                         res.dist = dist;
-                        if (marioGetJabaraState() == 6) {
+                        if (marioGetJabaraState() == JABARA_STATE_FALLING) {
                             res.kind = FBAT_HIT_JUMP;
                             if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
                         } else if (mario->currMotionId == MARIO_MOTION_HIP) {
@@ -2818,7 +2818,7 @@ void* fbatHitCheck(u32 flags, void* result) {
                             res.kind = FBAT_HIT_JUMP;
                             if (!soft) fbatSetAttackAnnounce(FBAT_HIT_JUMP);
                         }
-                    } else if (marioGetJabaraState() == 6 && !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
+                    } else if (marioGetJabaraState() == JABARA_STATE_FALLING && !(npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)) {
                         res.kind = FBAT_HIT_JUMP;
                         hit = npc;
                         res.dist = dist;
@@ -3759,7 +3759,7 @@ void npcKoopaModeEncountCheck(void) {
     wp = npcGetWorkPtrInline();
     total = wp->total;
 
-    if (data->mode == 1) {
+    if (data->mode == FBAT_MODE_FIELD) {
         entry = wp->entries;
         for (i = 0; i < total; i++, entry++) {
             if (entry && entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_2D && !(entry->statusFlags & NPC_STATUS_DEAD)) {

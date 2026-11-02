@@ -1086,7 +1086,7 @@ void seq_demoInit(SequenceWork* seq) {
     iconReInit();
     memClear(HEAP_MALLOC);
     memClear(HEAP_EXT);
-    smartAutoFree(1);
+    smartAutoFree(SMART_GROUP_MAP);
     statusWinDispOff();
     wp->frame = 0;
     wp->fullScreen = rand() % 100 <= 50;
@@ -1140,7 +1140,7 @@ void seq_demoMain(SequenceWork* seq) {
             break;
     }
     if (seq->state < 2) {
-        dispEntry(CAMERA_2D, 0.0f, 0, demoDisp, NULL);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, demoDisp, NULL);
     }
 }
 /**

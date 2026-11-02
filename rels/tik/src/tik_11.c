@@ -313,9 +313,9 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
 
     // Mario picks the stat to raise and the stat to lower, and confirms the trade.
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
     LOOP(0)
-        CALL(evt_win_other_select, 9)
+        CALL(evt_win_other_select, SELECT_TYPE_STAT_SWAP_UP)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_win_coin_off, LW(12))
             CALL(evt_msg_print, 0, STRING("powerdown_03_01"), 0, STRING("me"))
@@ -323,7 +323,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         END_IF
         WAIT_MS(240)
         SET_VALUE(GW(1), LW(1))
-        CALL(evt_win_other_select, 10)
+        CALL(evt_win_other_select, SELECT_TYPE_STAT_SWAP_DOWN)
         IF_INT_EQUAL(LW(0), 0)
             WAIT_MS(240)
             CONTINUE_LOOP
@@ -547,9 +547,9 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
 
     // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(12))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
     LOOP(0)
-        CALL(evt_win_other_select, 7)
+        CALL(evt_win_other_select, SELECT_TYPE_PARTY_SWAP_RANK_UP)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_win_coin_off, LW(12))
             CALL(evt_msg_print, 0, STRING("powerdown_03_01"), 0, STRING("me"))
@@ -557,7 +557,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_IF
         WAIT_MS(240)
         SET_VALUE(GW(1), LW(1))
-        CALL(evt_win_other_select, 8)
+        CALL(evt_win_other_select, SELECT_TYPE_PARTY_SWAP_RANK_DOWN)
         IF_INT_EQUAL(LW(0), 0)
             WAIT_MS(240)
             CONTINUE_LOOP

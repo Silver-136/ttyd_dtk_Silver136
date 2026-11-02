@@ -3379,7 +3379,7 @@ EVT_BEGIN(dai3_beat_back)
     WAIT_MS(3000)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
     DELETE_EVENT(LW(10))
-    CALL(evt_fade_entry, 6, 1000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT_3D, 1000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1500)
     SET_VALUE(LF(10), 0)
@@ -4163,15 +4163,15 @@ EVT_BEGIN(muj_00_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)
         IF_INT_EQUAL(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
-            ELSE
+        ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
         END_IF
-        ELSE
+    ELSE
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_10_HAUNTED)
             IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_49_BOWSER_TWILIGHT_TOWN_2)
                 IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
                     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_BOSS_STG5_KORTESS1"))
-                    ELSE
+                ELSE
                     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
                 END_IF
             END_IF
@@ -4222,13 +4222,13 @@ EVT_BEGIN(muj_00_init_evt)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_35_ESCAPE_ROUTE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_iwa_s011"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_iwa_09"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_42_PIRATES_VS_X_NAUTS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_iwa_before"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_iwa_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)

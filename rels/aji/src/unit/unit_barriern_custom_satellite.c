@@ -62,9 +62,9 @@ BattleUnitKind unit_barriern_custom_satellite = {
     0.0f, // centerOffset.y in demos; vivianOffsetZ in retail
 #if VERSION <= VERSION_DEMO_US
     0.0f,
-0,
+    0,
     -16,
-0.0f,
+    0.0f,
     0.0f,
     0.0f,
     8.0f,
@@ -114,7 +114,7 @@ BattleUnitKind unit_barriern_custom_satellite = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Elemental reactions of the Mini-X-Yux: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Parts of the Mini-X-Yux: part 1 is its body and parts 2 to 6 are the five ghost rings drawn as afterimages

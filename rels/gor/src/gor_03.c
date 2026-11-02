@@ -963,7 +963,7 @@ BeroEntry yuu_03_data[] = {
  */
 EVT_BEGIN(maffiaboss_ticket_put)
     CALL(evt_item_entry, STRING("ticket"), ITEM_BLIMP_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_JINGLE)
+    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_GET_BGM)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_KEYITEM1"))
         WAIT_MS(2000)
@@ -1048,6 +1048,10 @@ EVT_BEGIN(maffiaboss_ticket_check)
 #if VERSION >= VERSION_US
         CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #else
+        // BUG: without NPC_FLAG_NO_HIT, npcCheckHitMarioSide puts Don Pianta back on his previous position
+        // when a step would enter Mario's contact circle, and moves Mario only if that previous position was
+        // already inside. Mario's controls are off and evt_npc_move_position has no other exit, so with
+        // Mario standing within that circle of the target (x = Mario's, z = -68) the script never continues.
         CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_WALL_COLLISION)
 #endif
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1067,6 +1071,10 @@ EVT_BEGIN(maffiaboss_ticket_check)
         CALL_CHILD(PTR(maffiaboss_ticket_put))
         CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
     END_IF
+
+    // Don Pianta is already here in normal play (maffiaboss_init places him at this spot, and the earlier walks return
+    // him to it), so this walk ends at once. Mario contact is on in every version: if he were ever further than a
+    // step away, a step entering Mario's contact circle from outside would be undone every frame, with no return.
     CALL(evt_npc_move_position, STRING("マフィアボス"), -198, -80, 0, FLOAT(60.0f), 0)
     WAIT_MS(500)
 
@@ -1694,7 +1702,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
 
     // Don Pianta gives Mario the Train Ticket.
     CALL(evt_item_entry, STRING("ticket"), ITEM_TRAIN_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_JINGLE)
+    CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_GET_BGM)
     BEGIN_INLINE_EVENT
 #if VERSION > VERSION_DEMO_US
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -2700,7 +2708,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
 
     // Mario picks a prize from the list.
     CALL(yuugijou_set_yupflag, 1)
-    CALL(evt_win_other_select, 16)
+    CALL(evt_win_other_select, SELECT_TYPE_BADGE_PIANTA_TOKEN)
     CALL(yuugijou_set_yupflag, 0)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_74"), 0, STRING("me"))
@@ -2744,14 +2752,14 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
 #else
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(3), LW(2), LW(4))
-            ELSE
+        ELSE
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(2), LW(3), LW(4))
         END_IF
         ELSE
         CALL(evt_sub_get_language, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(3), LW(2))
-            ELSE
+        ELSE
         END_IF
         CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(2), LW(3))
 #endif
@@ -2768,7 +2776,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     IF_INT_EQUAL(LW(0), -1)
         IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_72"))
-            ELSE
+        ELSE
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_73"))
         END_IF
         GOTO(0)
@@ -3589,7 +3597,7 @@ static EVT_BEGIN(kinopiko_b_talk)
 #if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_072_01"), 0, STRING("me"))
-            ELSE
+        ELSE
 #endif
             CALL(evt_msg_print, 0, STRING("gor_03_072"), 0, STRING("me"))
 #if VERSION > VERSION_DEMO_US
@@ -3598,43 +3606,43 @@ static EVT_BEGIN(kinopiko_b_talk)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_073_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_073"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_074_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_074"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG5_43_X_NAUTS_RETREAT)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_075_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_075"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG6_54_WELCOME_BACK)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_076_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_076"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_077_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_077"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_078_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_078"), 0, STRING("me"))
         END_IF
         CASE_DEFAULT
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_079_01"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_079"), 0, STRING("me"))
         END_IF
     END_SWITCH
@@ -4328,7 +4336,7 @@ DoorParam door_data_01_1 = {
  * door_data_01_1 when the clerk unlocks the back door.
  */
 EVT_BEGIN(evt_door_01_entry)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_close), 0)
@@ -4810,7 +4818,7 @@ static EVT_BEGIN(evt_door_03_open)
     END_INLINE_EVENT
     CALL(evt_mario_jump_pos, 183, 20, -394, 500, 0, -1000)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION > VERSION_DEMO_US
@@ -4863,7 +4871,7 @@ static DoorParam door_data_03_roll = {
  * and binds the drawer's collision A_i03_tan_hiki to its map object S_i03_tan_hiki so it moves with it.
  */
 static EVT_BEGIN(evt_door_03_entry)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     CALL(evt_hit_bind_mapobj, STRING("A_i03_tan_hiki"), STRING("S_i03_tan_hiki"))
@@ -4966,7 +4974,7 @@ static EVT_BEGIN(evt_door_04_close)
     CALL(evt_mario_mov_pos2, LW(10), -400, FLOAT(60.0f))
     CALL(evt_mario_wait_landon)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(evt_door_04_caseclose), 0)
 #if VERSION > VERSION_DEMO_US
@@ -5004,7 +5012,7 @@ DoorParam door_data_04_roll = {
  * and installs evt_door_04_caseclose as the front-of-door case event.
  */
 static EVT_BEGIN(evt_door_04_entry)
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(evt_door_04_caseclose), 0)
     RETURN
@@ -5407,7 +5415,7 @@ EVT_BEGIN(yuureturn_rtn)
     SPAWN_EVENT(PTR(evt_door_open_quick))
     SET_VALUE(LW(0), PTR(&door_data_02_0l))
     SPAWN_EVENT(PTR(evt_door_open_quick))
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(1000)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
     SUBTRACT(LW(5), 40)
@@ -5930,7 +5938,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
     CALL(evt_lottery_flag, LW(0))
     IF_BITS_SET(LW(0), LOTTERY_FLAG_NEW_DAY)
         SET_VALUE(LW(0), 0)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 1)
     END_IF
     IF_INT_EQUAL(LW(0), 0)
@@ -6044,7 +6052,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
                 CALL(evt_item_get_item, STRING("kuzi"))
                 CALL(evt_item_get_item_end_wait, STRING("kuzi"))
                 CALL(evt_msg_print, 0, STRING("kuji_bomb_032"), 0, STRING("グルメボム兵"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print, 0, STRING("kuji_bomb_029"), 0, STRING("グルメボム兵"))
             END_IF
             CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
@@ -6178,14 +6186,14 @@ EVT_BEGIN(monte_evt_door_close)
 EVT_END()
 
 EVT_BEGIN(monte_evt_door_entry)
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(monte_evt_door_close), 0)
@@ -6194,7 +6202,7 @@ EVT_BEGIN(monte_evt_door_entry)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_open), 0)
     END_IF
-    CALL(evt_door_param, LW(0), 9, LW(1))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_FLAGS, LW(1))
     IF_BITS_SET(LW(1), 1)
     END_IF
     RETURN
@@ -6208,7 +6216,7 @@ EVT_BEGIN(gor_03_init_evt)
     IF_INT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
@@ -6531,7 +6539,7 @@ static USER_FUNC(fall_rtn) {
         }
     }
     if (done < monte_p->owner->monteCount) {
-        dispEntry(CAMERA_3D, 0.0f, 1, monte_disp, monte_p);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, monte_disp, monte_p);
         return EVT_RETURN_BLOCK;
     }
     monte_p->owner->monteCount = 0;
@@ -7095,17 +7103,20 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             data->extra[0] = data->extra[1] = data->extra[2] = 0;
             if (data->flags & 1) {
                 data->flags &= ~1;
-                {s32 n; CaseSetup* s = &setup;
-                for (n = 0; n < 2; n++) {
-                    s->conditionId = 0x8009;
-                    s->hitObjName = drumname[n].anim;
-                    s->swFlag = 0;
-                    s->activeFunc = NULL;
-                    s->evtCode = slotevttbl[n];
-                    s->priority = 0;
-                    memcpy(s->lwData, event->lwData, sizeof(s->lwData));
-                    data->caseId[n] = caseEntry(s);
-                }
+                {
+                    s32 n;
+                    CaseSetup* s = &setup;
+
+                    for (n = 0; n < 2; n++) {
+                        s->conditionId = 0x8009;
+                        s->hitObjName = drumname[n].anim;
+                        s->swFlag = 0;
+                        s->activeFunc = NULL;
+                        s->evtCode = slotevttbl[n];
+                        s->priority = 0;
+                        memcpy(s->lwData, event->lwData, sizeof(s->lwData));
+                        data->caseId[n] = caseEntry(s);
+                    }
                 }
             }
             if (data->flags & 8) {

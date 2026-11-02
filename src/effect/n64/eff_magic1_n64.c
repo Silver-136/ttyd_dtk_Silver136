@@ -88,7 +88,7 @@ void effMagic1Main(EffectEntry* effect) {
     position = tmp;
 #if VERSION > VERSION_DEMO_US
     if (marioStGetSystemLevel() != 0) {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic1Disp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagic1Disp, effect);
         return;
     }
 #endif
@@ -115,7 +115,7 @@ void effMagic1Main(EffectEntry* effect) {
     work->offset.x += work->velocity.x;
     work->offset.y += work->velocity.y;
     work->offset.z += work->velocity.z;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic1Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagic1Disp, effect);
 }
 
 /** Draws three trailing rings of three spinning glow sprites (texture 0x10) with colors that pulse over time. */

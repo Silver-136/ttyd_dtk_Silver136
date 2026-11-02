@@ -14,6 +14,16 @@ typedef union BeroINFO {
 #define BERO_TYPE_KIND_MASK 0xFFF // BeroEntry.type: the exit kind
 #define BERO_TYPE_BG_MODE 0x1000  // BeroEntry.type: Mario is in BG mode at this exit (evt_mario_bgmode_on)
 
+// BeroEXEC bits. evt_bero_exec_onoff's first argument is reversed: 0 sets the mask, 1 clears it.
+enum {
+    BERO_EXEC_BUSY = 0x1,              // an entrance or exit is playing
+    BERO_EXEC_MARIO_MOVING = 0x2,      // Mario is walking through it
+    BERO_EXEC_KEEP_MOVING = 0x4,       // a map script owns MARIO_MOVING; the shared scripts leave it alone
+    BERO_EXEC_EXIT_DONE = 0x8,         // the exit script finished
+    BERO_EXEC_ENTRY_DONE = 0x10000,    // arrival finished; cleared when an exit starts (room scripts wait for it)
+    BERO_EXEC_MRI_DOOR_GO = 0x10000000, // only mri: set by the door script, waited for by mri_puni
+};
+
 typedef struct BeroEntry {
     const char* hitName; //0x0
     u16 type; //0x4, BERO_TYPE_KIND_MASK: the exit kind (1 walk-off edge w_/e_/s_bero, 2 pipe dokan, 0xF00 holes

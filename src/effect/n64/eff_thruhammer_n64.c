@@ -166,7 +166,7 @@ void effThruHammerMain(EffectEntry* effect) {
             work->texS = 128.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effThruHammerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effThruHammerDisp, effect);
 }
 
 /**

@@ -44,14 +44,14 @@ void seq_gameMain(SequenceWork* wp) {
                 evtEntryType(maku_spread, 0, 0, 0);
                 gp->flags &= ~GW_FLAG_CURTAIN_OPEN;
             } else if (!gp->didAreaChange) {
-                fadeEntry(gp->mapFadeOutType, gp->mapFadeOutDuration, (GXColor){0, 0, 0, 0xFF});
+                fadeEntry(gp->mapFadeInType, gp->mapFadeInDuration, (GXColor){0, 0, 0, 0xFF});
             } else {
-                fadeEntry(gp->areaFadeOutType, gp->areaFadeOutDuration, (GXColor){0, 0, 0, 0xFF});
+                fadeEntry(gp->areaFadeInType, gp->areaFadeInDuration, (GXColor){0, 0, 0, 0xFF});
             }
-            gp->mapFadeOutType = FADE_IN_BLACK;
-            gp->mapFadeOutDuration = 300;
-            gp->areaFadeOutType = FADE_IN_BLACK;
-            gp->areaFadeOutDuration = 300;
+            gp->mapFadeInType = FADE_IN_BLACK;
+            gp->mapFadeInDuration = 300;
+            gp->areaFadeInType = FADE_IN_BLACK;
+            gp->areaFadeInDuration = 300;
             wp->state++;
             break;
 

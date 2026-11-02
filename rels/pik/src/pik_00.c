@@ -2084,7 +2084,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mobj_get_position, STRING("mobj_badge_gat"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_HP_DRAIN_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item00"), 258)
 #endif
@@ -2111,7 +2111,7 @@ EVT_BEGIN(pik_00_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("resha"))
             SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
@@ -2124,7 +2124,7 @@ EVT_BEGIN(pik_00_init_evt)
                 CALL_CHILD(PTR(hom_10_evt_resha_right))
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(hom_10_evt_resha_left))
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
@@ -2144,7 +2144,7 @@ EVT_BEGIN(pik_00_init_evt)
                 CALL_CHILD(PTR(hom_10_evt_resha_right))
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(hom_10_evt_resha_left))
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
@@ -2192,7 +2192,7 @@ EVT_BEGIN(pik_00_init_evt)
         SPAWN_EVENT(PTR(evt_pik_00_arrival))
         CALL_CHILD(PTR(hom_10_evt_resha_stop))
         RETURN
-        ELSE
+    ELSE
         SET_VALUE(LW(0), PTR(bero_data))
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(evt_bero_info_run))

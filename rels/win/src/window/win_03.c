@@ -31,6 +31,7 @@
 #include "party/party_motion.h"
 #include "data_tables.h"
 #include "driver/seqdrv.h"
+#include "driver/npcdrv.h"
 
 USER_FUNC(camera_action);
 
@@ -183,14 +184,14 @@ EVT_BEGIN(lookat_house)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_02"), 0, STRING("extparty"))
     SET_VALUE(GSW_STORY_PROGRESS, STG2_04_EXTENDING_PLANE_PANEL)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -259,7 +260,7 @@ static EVT_BEGIN(cloud_toujou)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL(evt_cam3d_evt_set, -10, 150, 491, -10, 90, -6, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -285,7 +286,7 @@ EVT_BEGIN(cloud_lostitem)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL(evt_npc_check, STRING("パックン1"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

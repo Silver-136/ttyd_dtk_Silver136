@@ -165,7 +165,7 @@ static EVT_BEGIN(buy_evt)
     // The shopkeeper turns to Mario, the coin and point windows open, and he names the item and its price.
     CALL(shopper_name, LW(9))
     CALL(evt_set_dir_to_target, LW(9), STRING("mario"))
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     CALL(point_disp_onoff, 1)
     CALL(get_value, LW(10), LW(11), LW(12), LW(13))
     CALL(get_msg, LW(10), 0, LW(14))
@@ -182,7 +182,7 @@ static EVT_BEGIN(buy_evt)
 #else
     IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(13), LW(11))
-        ELSE
+    ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
     END_IF
 #endif
@@ -273,7 +273,7 @@ static EVT_BEGIN(buy_evt)
             ELSE
             CALL(get_msg, LW(10), 34, LW(14))
             CALL(evt_msg_print, 0, LW(14), 0, LW(9))
-            CALL(evt_win_coin_on, 0, LW(8))
+            CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
             CALL(point_disp_onoff, 1)
             CALL(reset_shop_point)
             CALL(evt_win_coin_wait, LW(8))
@@ -404,7 +404,7 @@ EVT_BEGIN(shopper_talk_evt)
             END_IF
             IF_INT_EQUAL(LF(10), 0)
                 CALL(evt_msg_print, 0, LW(14), 0, 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(10), 0)
                 CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
                 CALL(evt_msg_print_add, 0, LW(14))
@@ -418,7 +418,7 @@ EVT_BEGIN(shopper_talk_evt)
             CALL(get_msg, LW(10), 29, LW(14))
             IF_INT_EQUAL(LF(10), 0)
                 CALL(evt_msg_print, 0, LW(14), 0, 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(10), 0)
                 CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
                 CALL(evt_msg_print_add, 0, LW(14))
@@ -504,7 +504,7 @@ EVT_BEGIN(first_shopping_evt)
     CALL(get_msg, LW(10), 30, LW(14))
     IF_INT_EQUAL(LF(10), 0)
         CALL(evt_msg_print, 0, LW(14), 0, LW(9))
-        ELSE
+    ELSE
         SET_VALUE(LF(10), 0)
         CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         CALL(evt_msg_print_add, 0, LW(14))
@@ -517,7 +517,7 @@ EVT_BEGIN(first_shopping_evt)
         IF_INT_EQUAL(LW(0), 0)
             CALL(get_msg, LW(10), 32, LW(14))
             CALL(evt_msg_print_add, 0, LW(14))
-            ELSE
+        ELSE
             CALL(get_msg, LW(10), 33, LW(14))
             CALL(evt_msg_print_add, 0, LW(14))
             RETURN
@@ -535,13 +535,13 @@ static EVT_BEGIN(sell_evt)
     END_IF
     CALL(get_msg, LW(10), 7, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     LABEL(0)
     CALL(item_data_db_arrange)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, 3, LW(1))
+    CALL(evt_win_item_select, SELECT_TYPE_ITEM_SELL, LW(1))
 #else
-    CALL(evt_win_item_select, 1, 3, LW(1), LW(4))
+    CALL(evt_win_item_select, 1, SELECT_TYPE_ITEM_SELL, LW(1), LW(4))
 #endif
     CALL(item_data_db_restore)
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
@@ -567,7 +567,7 @@ static EVT_BEGIN(sell_evt)
 #else
     IF_INT_NOT_EQUAL(LW(0), LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(3), LW(2))
-        ELSE
+    ELSE
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
     END_IF
 #endif
@@ -603,7 +603,7 @@ static EVT_BEGIN(sell_evt)
         RETURN
     END_IF
     CALL(evt_msg_continue)
-    CALL(evt_win_coin_on, 0, LW(8))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     GOTO(0)
     RETURN
 EVT_END()
@@ -629,7 +629,7 @@ EVT_BEGIN(keep_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
     LABEL(0)
-    CALL(evt_win_item_select, 4, LW(1))
+    CALL(evt_win_item_select, SELECT_TYPE_ITEM_STORE, LW(1))
 #else
 #if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
@@ -644,7 +644,7 @@ EVT_BEGIN(keep_evt)
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
 #endif
     LABEL(0)
-    CALL(evt_win_item_select, 1, 4, LW(1), LW(4))
+    CALL(evt_win_item_select, 1, SELECT_TYPE_ITEM_STORE, LW(1), LW(4))
 #endif
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
@@ -704,9 +704,9 @@ EVT_BEGIN(unkeep_evt)
     CALL(evt_msg_print_add, 0, LW(14))
     LABEL(0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_win_item_select, 5, LW(1))
+    CALL(evt_win_item_select, SELECT_TYPE_ITEM_RETRIEVE, LW(1))
 #else
-    CALL(evt_win_item_select, 1, 5, LW(1), LW(4))
+    CALL(evt_win_item_select, 1, SELECT_TYPE_ITEM_RETRIEVE, LW(1), LW(4))
 #endif
     IF_INT_LESS_OR_EQUAL(LW(1), 0)
         CALL(get_msg, LW(10), 22, LW(14))
@@ -1067,7 +1067,7 @@ USER_FUNC(disp_list) {
         winMgrOpen(event->userdata[1]);
         winMgrOpen(event->userdata[2]);
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn(SFX_NAME_WORD(0x12));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
 #else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
 #endif
@@ -1077,7 +1077,7 @@ USER_FUNC(disp_list) {
         winMgrCloseAutoDelete(event->userdata[1]);
         winMgrCloseAutoDelete(event->userdata[2]);
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn(SFX_NAME_WORD(0x13));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
 #else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
 #endif
@@ -1477,8 +1477,8 @@ USER_FUNC(evt_shop_main_func) {
     hit = mario->hitobjStandOn;
     wp->flags &= ~1;
     trg = keyGetButtonTrg(0);
-    // FAKE: the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
-    if ((BOOL)(!marioChkCtrl() & 0x7ffffff) || (BOOL)(!marioChkKey() & 0x7ffffff)) {
+    // FAKE: the masks do nothing (!x is 0 or 1); !marioChkCtrl() || !marioChkKey() changes the object
+    if ((!marioChkCtrl() & 0x7ffffff) || (!marioChkKey() & 0x7ffffff)) {
         trg = 0;
     }
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&

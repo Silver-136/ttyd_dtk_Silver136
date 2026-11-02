@@ -155,9 +155,9 @@ void effAkariChargeMain(EffectEntry* effect) {
         p->index = rand() % 16;
     }
     if (type == 0) {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effAkariChargeDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effAkariChargeDisp, effect);
     } else {
-        dispEntry(CAMERA_2D, dispCalcZ(&position), 2, (DispCallback)effAkariChargeDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effAkariChargeDisp, effect);
     }
 }
 

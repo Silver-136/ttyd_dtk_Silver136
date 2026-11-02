@@ -46,15 +46,15 @@ typedef struct LinkDt {
 LinkDt linkDt[18] = {
     {-268, 142, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_lv", {6, 1, 11, 9}},
     {-268, 118, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_star_r", {0, 2, 11, 7}},
-    {-272, 68, "M_H_1", NULL, "R_1", 9, 0, NULL, {1, 3, 11, 7}},
-    {-242, 24, "M_R_1", NULL, "R_1", 6, 0, NULL, {2, 4, 11, 8}},
+    {-272, 68, "M_H_1", NULL, "R_1", ITEM_HAMMER, 0, NULL, {1, 3, 11, 7}},
+    {-242, 24, "M_R_1", NULL, "R_1", ITEM_BOOTS, 0, NULL, {2, 4, 11, 8}},
     {-270, -34, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_hp", {3, 5, 13, 13}},
     {-270, -68, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_fp", {4, 6, 13, 13}},
     {-270, -102, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_bp", {5, 0, 13, 13}},
-    {-100, 90, "M_S_1", "M_S_1", "S_1", 2, 0, "msg_slit", {9, 10, 2, 9}},
-    {-100, 20, "M_S_1", "M_S_1", "S_1", 4, 0, "msg_plane", {10, 4, 3, 10}},
-    {-50, 130, "M_S_1", "M_S_1", "S_1", 5, 0, "msg_ship", {0, 7, 0, 11}},
-    {-50, 60, "M_S_1", "M_S_1", "S_1", 3, 0, "msg_roll", {7, 8, 8, 12}},
+    {-100, 90, "M_S_1", "M_S_1", "S_1", ITEM_PAPER_CURSE, 0, "msg_slit", {9, 10, 2, 9}},
+    {-100, 20, "M_S_1", "M_S_1", "S_1", ITEM_PLANE_CURSE, 0, "msg_plane", {10, 4, 3, 10}},
+    {-50, 130, "M_S_1", "M_S_1", "S_1", ITEM_BOAT_CURSE, 0, "msg_ship", {0, 7, 0, 11}},
+    {-50, 60, "M_S_1", "M_S_1", "S_1", ITEM_TUBE_CURSE, 0, "msg_roll", {7, 8, 8, 12}},
     {20, 106, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_star_power", {17, 12, 9, 0}},
     {20, 70, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_waza", {11, 13, 10, 0}},
     {3, 10, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_star_p", {12, 14, 4, 4}},
@@ -787,7 +787,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winFontSetR((Vec){numX, row2, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouch->starPieceCount);
     winFontSetR((Vec){numX, row3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouch->shineSpriteCount);
 
-    secs = gp->retraceLocalTime / OS_TIMER_CLOCK;
+    secs = gp->playTime / OS_TIMER_CLOCK;
     tsecs = (u64)secs / 3600;
     min = (u64)secs % 3600 / 60;
     if (tsecs > 99) {
@@ -857,7 +857,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
 #endif
     winFontSetR((Vec){numX, row3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStr(pouch->shineSpriteCount));
 
-    tsecs = OSTicksToSeconds(gp->retraceLocalTime);
+    tsecs = OSTicksToSeconds(gp->playTime);
     if (tsecs > 359999) {
         hour = 99;
         min = 59;

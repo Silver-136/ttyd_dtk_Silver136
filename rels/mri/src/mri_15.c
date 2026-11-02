@@ -180,7 +180,7 @@ EVT_BEGIN(dai3_battle)
     END_IF
 
     // LW(10), initially the escape event ID, is reused below for Mario's X coordinate.
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     LOOP(0)
         CALL(evt_mario_get_name_hitobj_ride, LW(0))
         CALL(evt_bero_exec_get, LW(1))

@@ -135,12 +135,12 @@ s32 marioPlaneGetFlyingDir(void) {
 s32 marioGetPlaneStatus(void) {
     MarioWork* mp = marioGetPtr();
     if (mp->currMotionId != MARIO_MOTION_PLANE) {
-        return 0;
+        return PLANE_STATUS_NONE;
     }
     if (mp->currSubMotionId >= 12 && mp->currSubMotionId < 20) {
-        return 2;
+        return PLANE_STATUS_GLIDING;
     }
-    return 1;
+    return PLANE_STATUS_TRANSITION;
 }
 
 /**

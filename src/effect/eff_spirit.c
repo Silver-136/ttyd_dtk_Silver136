@@ -165,7 +165,7 @@ void effSpiritMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSpiritDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSpiritDisp, effect);
 }
 
 /** Draws the orb as one additive, camera-facing quad tinted with the current colour. */

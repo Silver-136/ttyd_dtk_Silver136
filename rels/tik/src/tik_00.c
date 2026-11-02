@@ -363,13 +363,13 @@ EVT_BEGIN(uranaisi_next_evt)
         IF_INT_EQUAL(LW(0), 1)
             CALL(uranaisi_next_makelabel, 0, LW(1))
             CALL(evt_msg_print, 0, LW(1), 0, STRING("me"))
-            ELSE
+        ELSE
             IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
                 CALL(evt_unitwin_alloc)
                             CALL(unitwincoin_disp_onoff, 1)
 #else
-                CALL(evt_win_coin_on, 0, LW(12))
+                CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
                 CALL(evt_osreport, 0, LW(1))
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("ゆうこうな　データが\n見つかりませんでした\nメッセージを　とうろく　してください\n<key>\n<scrl_auto>\n<once_stop>\n"), 0, STRING("me"))
@@ -393,7 +393,7 @@ EVT_BEGIN(uranaisi_next_evt)
                 CALL(evt_unitwin_alloc)
                             CALL(unitwincoin_disp_onoff, 1)
 #else
-                CALL(evt_win_coin_on, 0, LW(12))
+                CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
                 CALL(evt_osreport, 0, LW(1))
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("ゆうこうな　データが\nじゅうふくして　みつかりました\nゆうこうな　メッセージは　１つにしてください\n<key>\n<scrl_auto>\n<once_stop>"), 0, STRING("me"))
@@ -425,7 +425,7 @@ EVT_BEGIN(uranaisi_next_evt)
 #if VERSION > VERSION_DEMO_US
         ELSE
         CALL(evt_msg_print, 0, STRING("uranaisi_17"), 0, STRING("me"))
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
         WAIT_MS(500)
         CALL(uranaisi_ryokin, 0, LW(2))
         CALL(evt_pouch_add_coin, LW(2))
@@ -450,7 +450,7 @@ EVT_BEGIN(uranaisi_starpiece_evt)
         CALL(evt_unitwin_alloc)
         CALL(unitwincoin_disp_onoff, 1)
 #else
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
         CALL(evt_msg_print, 0, STRING("uranaisi_14"), 0, STRING("me"))
         CALL(uranaisi_ryokin, 1, LW(2))
@@ -490,7 +490,7 @@ EVT_BEGIN(uranaisi_supercoin_evt)
         CALL(evt_unitwin_alloc)
         CALL(unitwincoin_disp_onoff, 1)
 #else
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
         CALL(evt_msg_print, 0, STRING("uranaisi_16"), 0, STRING("me"))
         CALL(uranaisi_ryokin, 2, LW(2))
@@ -815,7 +815,7 @@ void uranai_cap(CameraId cameraId, void* param) {
     animPoseDrawMtx(npc->poseId, ident, 3, 0.0f, scale);
     animPosePeraOn(npc->poseId);
     PSMTXCopy(saved.view, camGetCurPtr()->view);
-    uranai_wp->buf = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), 3);
+    uranai_wp->buf = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXSetTexCopySrc(0, 0, w, h);
     GXSetTexCopyDst(w, h, GX_TF_RGB5A3, GX_FALSE);
     GXCopyTex(uranai_wp->buf->address, GX_TRUE);
@@ -833,7 +833,7 @@ void uranai_cap(CameraId cameraId, void* param) {
  * Queues the uranai_cap draw callback on the shadow camera and blocks, so the capture runs every frame.
  */
 USER_FUNC(uranai_cap_evt) {
-    dispEntry(CAMERA_SHADOW, 0.0f, 3, uranai_cap, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, uranai_cap, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -1243,7 +1243,7 @@ EVT_BEGIN(uranaisi_table_talk)
                 IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
                     CALL(evt_msg_print, 0, STRING("uranaisi_01"), 0, STRING("me"))
                     SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
-                    ELSE
+                ELSE
                     CALL(evt_msg_print, 0, STRING("uranaisi_19"), 0, STRING("me"))
                 END_IF
             END_IF
@@ -1266,7 +1266,7 @@ EVT_BEGIN(uranaisi_table_talk)
         CALL(evt_unitwin_alloc)
     CALL(unitwincoin_disp_onoff, 1)
 #else
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
 #endif
         CALL(evt_uranaisi_msg_alloc)
         CALL(evt_uranaisi_msg_set, STRING("uranaisi_04"), LW(1))
@@ -1433,8 +1433,8 @@ EVT_BEGIN(starmaniac_talk)
     // Mario picks which badge to trade for from the list; backing out earns a "LAME!" and ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
     LABEL(0)
-    CALL(evt_win_coin_on, 2, LW(12))
-    CALL(evt_win_other_select, 13)
+    CALL(evt_win_coin_on, COIN_WINDOW_STAR_PIECES, LW(12))
+    CALL(evt_win_other_select, SELECT_TYPE_BADGE_STAR_PIECE)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("starmaniac_08"), 0, STRING("me"))
@@ -1561,7 +1561,7 @@ EVT_BEGIN(johoyaketi_talk)
 #else
         CALL(evt_msg_print_insert, 0, STRING("johoyaketi_01"), 0, STRING("me"), LW(5), LW(4), LW(3))
 #endif
-        CALL(evt_win_coin_on, 0, LW(12))
+        CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
         CALL(evt_msg_select, 0, STRING("johoyaketi_02"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_pouch_get_coin, LW(0))
@@ -2530,7 +2530,7 @@ EVT_BEGIN(evt_open_04_open)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
@@ -2543,7 +2543,7 @@ EVT_BEGIN(evt_open_04_open)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
@@ -2673,14 +2673,14 @@ EVT_BEGIN(evt_door_stg7_close)
 EVT_END()
 
 static EVT_BEGIN(evt_door_04_entry)
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
         SET_VALUE(LW(15), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(2), 0, PTR(evt_door_stg7_close), 0)
@@ -3021,7 +3021,7 @@ EVT_BEGIN(tensou_sw_event)
         SPAWN_EVENT(PTR(tensou_anim_event))
         CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
         CALL(evt_exit_case_evt)
-        ELSE
+    ELSE
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
@@ -3029,7 +3029,7 @@ EVT_BEGIN(tensou_sw_event)
             SPAWN_EVENT(PTR(tensou_anim_event))
             CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
             CALL(evt_exit_case_evt)
-            ELSE
+        ELSE
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg7_tik_01_01"), 0, 0)

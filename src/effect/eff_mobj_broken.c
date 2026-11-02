@@ -208,9 +208,9 @@ static void effMObjBrokenMain(EffectEntry* effect) {
         return;
     }
     if (type != 7) {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos2), 8, (DispCallback)effMObjBrokenDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_CUSTOM_MID, (DispCallback)effMObjBrokenDisp, effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos2), 8, (DispCallback)effMObjBrokenDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_CUSTOM_MID, (DispCallback)effMObjBrokenDisp2, effect);
     }
 }
 

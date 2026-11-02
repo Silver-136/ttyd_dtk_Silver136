@@ -161,7 +161,7 @@ BattleUnitKind unit_churantalar = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element response of the Arantula: none, every attack type is treated normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 80, 30, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 80, 30, 100, 70, 100, 100, 30};
@@ -283,7 +283,7 @@ static USER_FUNC(piders_draw_yarn) {
     BtlUnit_GetHomePos(unit, &yarn->x0, &yarn->y0, &yarn->z0);
     yarn->y0 = 400.0f;
     yarn->alpha = alpha;
-    dispEntry(CAMERA_3D, 0.0f, 2, piders_draw_yarn_sub, yarn);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, piders_draw_yarn_sub, yarn);
     return EVT_RETURN_DONE;
 }
 
@@ -583,7 +583,7 @@ EVT_END()
 
 /** Damage script of the Arantula: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -872,7 +872,7 @@ static EVT_BEGIN(attack_event)
     CALL_CHILD(PTR(renzoku_attack_event))
     GOTO(99)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -880,20 +880,20 @@ EVT_END()
 static EVT_BEGIN(damage_check_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(0))
     SWITCH(LW(0))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

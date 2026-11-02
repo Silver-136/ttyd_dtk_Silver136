@@ -47,7 +47,7 @@ EvtWord win_01_init_evt[46];
  * and the story becomes STG2_03_05_TO_FLURRIES_PLACE.
  */
 EVT_BEGIN(evt_dokan1_message)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 1)
     CALL(evt_party_stop, 0)

@@ -120,7 +120,7 @@ void effRotHammerSuccessMain(EffectEntry* effect) {
         work->position.z = 0.0f;
         work->rot += work->rotVel;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRotHammerSuccessDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRotHammerSuccessDisp, effect);
 }
 
 /**

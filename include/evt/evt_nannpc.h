@@ -110,6 +110,9 @@ typedef struct NanNPCWork {
     void (*func1c)();  // 0x1C
 } NanNPCWork;
 
+// NanNPCWork.flags
+#define NANNPC_WORK_DEPTH_SORT 1 // depth-sorted drawing
+
 extern NanNPCWork* nanNPCWork;
 void nanNPCOption(void);
 void evt_nannpc_set_animtbl_sub(NanNPC* npc, s16* tbl);

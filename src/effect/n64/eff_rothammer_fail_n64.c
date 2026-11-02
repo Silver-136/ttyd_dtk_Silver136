@@ -106,7 +106,7 @@ void effRotHammerFailMain(EffectEntry* effect) {
         work->position.y += work->velocity.y;
         work->position.z = scale * work->velocity.z;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRotHammerFailDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRotHammerFailDisp, effect);
 }
 
 /**

@@ -12,6 +12,12 @@
 #include "cam_road.h"
 #include "addr_word.h"
 #include <math.h>
+
+// CamRoad work state: the road file's format, from its version string ("1.01" or older).
+enum {
+    CAM_ROAD_FORMAT_OLD = 0x64,
+    CAM_ROAD_FORMAT_101 = 0x65, // curves carry off and fixYOn
+};
 typedef struct CamRoadHit {
     f32 t;                 // 0x00
     f32 f_04;              // 0x04
@@ -87,9 +93,9 @@ s32 camRoadSetup(const char* name) {
         ADDR_WORD(wp->map->extra) += (AddrWord)wp->map;
     }
     if (strcmp(wp->map->version, "1.01") == 0) {
-        wp->state = 0x65;
+        wp->state = CAM_ROAD_FORMAT_101;
     } else {
-        wp->state = 0x64;
+        wp->state = CAM_ROAD_FORMAT_OLD;
     }
     return 1;
 }
@@ -156,9 +162,9 @@ s32 camRoadSetup(const char* name) {
         ADDR_WORD(wp->map->extra) += (AddrWord)wp->map;
     }
     if (strcmp(wp->map->version, "1.01") == 0) {
-        wp->state = 0x65;
+        wp->state = CAM_ROAD_FORMAT_101;
     } else {
-        wp->state = 0x64;
+        wp->state = CAM_ROAD_FORMAT_OLD;
     }
     return 1;
 }
@@ -867,7 +873,7 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
     for (i = 0; i < wp->map->curveNum; i++, curve++) {
         grp = &wp->map->groups[curve->grpOfs];
         n = curve->grpNum;
-        if (wp->state == 0x65 && curve->off != 0) {
+        if (wp->state == CAM_ROAD_FORMAT_101 && curve->off != 0) {
             continue;
         }
         if (n == 0) {
@@ -921,7 +927,7 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
             return;
         }
         x = a;
-        if (wp->state == 0x65 && curve != NULL && curve->fixYOn != 0) {
+        if (wp->state == CAM_ROAD_FORMAT_101 && curve != NULL && curve->fixYOn != 0) {
             y = curve->f_24;
         } else {
             y = b;
@@ -946,7 +952,7 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
         rot = curve->rot;
         dist = curve->f_58;
         x = hit.pos.x;
-        if (wp->state == 0x65 && curve->fixYOn != 0) {
+        if (wp->state == CAM_ROAD_FORMAT_101 && curve->fixYOn != 0) {
             y = curve->f_24;
         } else {
             y = b;
@@ -1338,7 +1344,7 @@ void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadSta
         wp->start = src;                                                                          \
         wp->prev = wp->next;                                                                      \
         if (wp->prev.hitFlags || wp->start.hitFlags ||                                                    \
-            (wp->state == 0x65 &&                                                                 \
+            (wp->state == CAM_ROAD_FORMAT_101 &&                                                                 \
              ((wp->prev.cam && wp->prev.cam->fixYOn) || (wp->start.cam && wp->start.cam->fixYOn))) || \
             (wp->prev.cam && wp->prev.cam->shiftXRate) || (wp->start.cam && wp->start.cam->shiftXRate)) {     \
             wp->hokanType = 1;                                                                    \
@@ -1456,7 +1462,7 @@ void camRoadReset(void) {
 void camRoadCurveOn(const char* name) {
     CamRoadCurve* c = wp->map->curves;
     s32 i;
-    if (wp->state == 0x65) {
+    if (wp->state == CAM_ROAD_FORMAT_101) {
         for (i = 0; i < wp->map->curveNum; i++, c++) {
             if (strcmp(c->name, name) == 0) {
                 c->off = 0;
@@ -1470,7 +1476,7 @@ void camRoadCurveOn(const char* name) {
 void camRoadCurveOff(const char* name) {
     CamRoadCurve* c = wp->map->curves;
     s32 i;
-    if (wp->state == 0x65) {
+    if (wp->state == CAM_ROAD_FORMAT_101) {
         for (i = 0; i < wp->map->curveNum; i++, c++) {
             if (strcmp(c->name, name) == 0) {
                 c->off = 1;

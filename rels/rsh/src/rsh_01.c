@@ -1113,7 +1113,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
 
                 // Wait for the Bero execution bit before replacing the side exit with its interaction message.
                 BEGIN_INLINE_EVENT
-                    CALL(evt_bero_exec_wait, 65536)
+                    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
                     SET_VALUE(LW(0), STRING("s_bero"))
                     CALL_CHILD(PTR(bero_case_switch_off))
                     SET_VALUE(LW(1), STRING("stg6_rsh_261"))

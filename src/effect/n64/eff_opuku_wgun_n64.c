@@ -178,7 +178,7 @@ void effOpukuWgunMain(EffectEntry* effect) {
             work->alphas[i] = (u8)(255.0f - 255.0f * t);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuWgunDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuWgunDisp, effect);
 }
 
 /**
@@ -221,7 +221,7 @@ void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevColor(GX_TEVREG0, (GXColor){work->colorR, work->colorG, work->colorB, work->alpha});
     GXSetTevColor(GX_TEVREG1, (GXColor){work->color2R, work->color2G, work->color2B, 200});
     GXSetCullMode(GX_CULL_NONE);
-    p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, 3)->address;
+    p = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, SMART_GROUP_TEMP)->address;
     vtx = p;
     for (i = 0; i < 12; i++) {
         // FAKE: the duplicated i == 0 test; the single test changes the object

@@ -285,7 +285,7 @@ static USER_FUNC(lecture_button_rtn) {
     if (done >= 2) {
         return EVT_RETURN_DONE;
     }
-    dispEntry(CAMERA_2D, 0.0f, 1, lecture_button_disp, NULL);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_ALPHA_TEST, lecture_button_disp, NULL);
     return EVT_RETURN_BLOCK;
 }
 

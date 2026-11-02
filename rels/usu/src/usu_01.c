@@ -644,10 +644,10 @@ EVT_BEGIN(iri_20_out_house)
         SPAWN_EVENT(PTR(door_light2))
     END_IF
     SPAWN_EVENT(PTR(door_up_se))
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(8), 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 180, 0, 500)
             LABEL(3)
             CALL(evt_sub_intpl_msec_get_value)
@@ -659,14 +659,14 @@ EVT_BEGIN(iri_20_out_house)
             END_IF
         END_INLINE_EVENT
     END_IF
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(9), 0)
         BEGIN_INLINE_EVENT
             WAIT_MS(400)
             SPAWN_EVENT(PTR(house_close_se))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             SET_VALUE(LW(6), 0)
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 180, 0, 500)
             LABEL(2)
@@ -689,10 +689,10 @@ EVT_BEGIN(iri_20_out_house)
         SPAWN_EVENT(PTR(door_light))
     END_IF
     SPAWN_EVENT(PTR(door_open_se))
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
@@ -710,7 +710,7 @@ EVT_BEGIN(iri_20_out_house)
 
     // The aunt walks out of the door, along the path to (-368, 0), and turns toward Mario;
     // Mario and his partner follow her out to x -420 and -450 and face her.
-    CALL(evt_door_param, LW(0), 5, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_OUT_POS, LW(1), LW(2), LW(3))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("おばさん"), LW(1), LW(3), 0, 60, 0)
         CALL(evt_npc_move_position, STRING("おばさん"), -368, 0, 0, 60, 0)
@@ -729,13 +729,13 @@ EVT_BEGIN(iri_20_out_house)
 
     // After a long pause the door closes again with its sound.
     WAIT_MS(2000)
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
             SPAWN_EVENT(PTR(door_close_se))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 180, 0, 500)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -754,7 +754,7 @@ EVT_BEGIN(iri_20_out_house)
     // The camera returns, the door's map objects are restored and Mario's controls come back.
     CALL(evt_cam3d_evt_xyz_off, 100, EASING_SINE_IN_OUT)
     CALL(door_dark_flag, LW(0), 0)
-    CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_INSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         IF_INT_NOT_EQUAL(LW(15), 1)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
@@ -765,16 +765,16 @@ EVT_BEGIN(iri_20_out_house)
     IF_INT_NOT_EQUAL(LW(2), 0)
         CALL(evt_hitobj_onoff, LW(2), 1, 0)
     END_IF
-    CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_OUTSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
     END_IF
-    CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
-    CALL(evt_door_param, LW(0), 2, LW(1), LW(2))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_OUTSIDE, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_door_load_mapflag, LW(1))
     END_IF
@@ -793,10 +793,10 @@ EVT_BEGIN(iri_20_aunt_to_house)
     CALL(evt_npc_move_position, STRING("me"), -390, -20, 0, 60, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     SPAWN_EVENT(PTR(door_open_se))
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, 0, 180, 500)
             LABEL(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -815,13 +815,13 @@ EVT_BEGIN(iri_20_aunt_to_house)
         CALL(evt_npc_move_position, STRING("おばさん"), -390, -185, 0, 60, 0)
     END_INLINE_EVENT
     WAIT_MS(500)
-    CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+    CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
     IF_INT_NOT_EQUAL(LW(7), 0)
         BEGIN_INLINE_EVENT
             SPAWN_EVENT(PTR(door_close_se))
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
-            CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))
+            CALL(evt_door_param, LW(0), DOOR_PARAM_EVTS, LW(7), LW(8), LW(9))
             CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 180, 0, 500)
             LABEL(1)
             CALL(evt_sub_intpl_msec_get_value)
@@ -3140,7 +3140,7 @@ EVT_BEGIN(evt_monban_buta)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL_CHILD(PTR(evt_monban_buta_main))
     CALL(evt_mario_key_onoff, 1)
     RETURN

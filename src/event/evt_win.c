@@ -78,6 +78,29 @@ typedef enum UnitWinFlags {
 #define UNITWIN_FREE_REQUEST (1 << 0)
 #define UNITWIN_FREE_OK (1 << 1)
 
+// UnitWinWork.mode. 2 and up are set only by unitwin_window_select_func, which no script calls.
+typedef enum UnitWinMode {
+    UNITWIN_MODE_IDLE = 0,
+    UNITWIN_MODE_GOODS_EVENT = 1,                  // a goods entry's event runs (evt_unitwin_select_func)
+    UNITWIN_MODE_ITEM_SELL_UNUSED = 2,             // pouchHaveItem, sell_price
+    UNITWIN_MODE_ITEM_STORE_UNUSED = 3,            // pouchHaveItem, no price, msg_window_select_3
+    UNITWIN_MODE_ITEM_RETRIEVE_UNUSED = 4,         // pouchKeepItem
+    UNITWIN_MODE_PARTY_RANK_UP_UNUSED = 5,         // joined partners
+    UNITWIN_MODE_PARTY_RANK_UP2_UNUSED = 6,        // handled the same as 5 here
+    UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED = 7,       // joined partners but lwData[1]
+    UNITWIN_MODE_STAT_UP_UNUSED = 8,               // HP/FP/BP
+    UNITWIN_MODE_STAT_UP2_UNUSED = 9,              // handled the same as 8 here
+    UNITWIN_MODE_STAT_DOWN_UNUSED = 10,            // the stats but lwData[1]
+    UNITWIN_MODE_BADGE_BUY_UNUSED = 11,            // bargain_table, buy_price
+    UNITWIN_MODE_BADGE_SELL_UNUSED = 12,           // pouchHaveBadge
+    UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED = 13,     // starmaniac_table, star_piece_price
+    UNITWIN_MODE_BADGE_CHARLIETON_UNUSED = 14,     // bottakuru_table, buy_price * 12 / 10
+    UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED = 15, // badge_bottakuru100_table, price by GSW_PIT_FLOOR
+    UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED = 16,   // bteresa_table
+    UNITWIN_MODE_INFORMANT_PERFECT_UNUSED = 17,    // msg_window_select_8
+    UNITWIN_MODE_INFORMANT_LUIGI_UNUSED = 18,      // msg_window_select_7
+} UnitWinMode;
+
 typedef struct UnitWinWork {
     u16 flags;             // 0x0, UnitWinFlags
     u16 pad2;              // 0x2
@@ -104,7 +127,7 @@ typedef struct UnitWinWork {
     f32 scroll;            // 0x44
     u8 pad48[4];           // 0x48
     s32 skipEntry;         // retail offset 0x4C; starts at 0, demos set it from the excluded-list entry argument
-    s32 mode;              // 0x50
+    s32 mode;              // 0x50, UnitWinMode
     u16 flags2;            // 0x54, UNITWIN_FREE_*
 #if VERSION <= VERSION_DEMO_US
     u8 pad4A[2];           // 0x4A
@@ -347,7 +370,7 @@ USER_FUNC(evt_unitwin_alloc) {
 #endif
     UnitWinWork* wp = _mapAlloc(sizeof(UnitWinWork));
     memset(wp, 0, sizeof(UnitWinWork));
-    wp->mode = 0;
+    wp->mode = UNITWIN_MODE_IDLE;
     _wp = wp;
 #if VERSION > VERSION_DEMO_US
     if (useWinMgr) {
@@ -481,7 +504,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(evt_unitwin_select_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
-    if (wp->mode == 0) {
+    if (wp->mode == UNITWIN_MODE_IDLE) {
         wp->goodsIdx = event->lwData[1];
         if (wp->goods[wp->goodsIdx] != 0) {
             wp->timer = 1;
@@ -490,7 +513,7 @@ static USER_FUNC(evt_unitwin_select_func) {
                 marioKeyOff();
                 wp->childEvt = evtEntry(wp->entries[wp->goodsIdx].evt, 0, 0);
                 wp->childEvt->lwData[0] = (EvtWord)wp;
-                wp->mode = 1;
+                wp->mode = UNITWIN_MODE_GOODS_EVENT;
                 return EVT_RETURN_BLOCK;
             }
         }
@@ -499,7 +522,7 @@ static USER_FUNC(evt_unitwin_select_func) {
     if (evtCheckID(wp->childEvt->eventId)) {
         return EVT_RETURN_BLOCK;
     }
-    wp->mode = 0;
+    wp->mode = UNITWIN_MODE_IDLE;
     marioKeyOn();
     return EVT_RETURN_YIELD;
 }
@@ -643,7 +666,7 @@ USER_FUNC(evt_unitwin_select_func) {
         wp->flags &= ~UNITWIN_FLAG_BUYING;
         marioKeyOn();
         if (wp->bought) {
-            wp->itemFlags[wp->goodsIdx] |= 1;
+            wp->itemFlags[wp->goodsIdx] |= UNITWIN_ITEM_UNAVAILABLE;
         }
     }
     for (i = 0; i < wp->goodsMax; i++) {
@@ -686,8 +709,8 @@ USER_FUNC(unitwin_window_select_func) {
         return EVT_RETURN_BLOCK;
     }
     switch (wp->mode) {
-        case 2:
-        case 3:
+        case UNITWIN_MODE_ITEM_SELL_UNUSED:
+        case UNITWIN_MODE_ITEM_STORE_UNUSED:
             wp->count = 0;
             for (k = 0; k < 20; k++) {
                 if (pouchHaveItem(k)) {
@@ -695,7 +718,7 @@ USER_FUNC(unitwin_window_select_func) {
                 }
             }
             break;
-        case 12:
+        case UNITWIN_MODE_BADGE_SELL_UNUSED:
             wp->count = 0;
             for (k = 0; k < 200; k++) {
                 if (pouchHaveBadge(k)) {
@@ -703,7 +726,7 @@ USER_FUNC(unitwin_window_select_func) {
             }
         }
         break;
-    case 11:
+    case UNITWIN_MODE_BADGE_BUY_UNUSED:
         wp->count = 0;
         for (k = 0; k < 99; k++) {
             if ((s16)badgeShop_get(bdsw->bargain_table, k + 0xF0) - badgeShop_ThrowCheck(k + 0xF0) > 0) {
@@ -711,11 +734,11 @@ USER_FUNC(unitwin_window_select_func) {
             }
         }
     break;
-    case 17:
-    case 18:
+    case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
+    case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED:
     wp->count = jdt->count;
     break;
-    case 13:
+    case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
     wp->count = 0;
     for (k = 0; k < 99; k++) {
         if ((s16)badgeShop_get(bdsw->starmaniac_table, k + 0xF0) > 0) {
@@ -723,7 +746,7 @@ USER_FUNC(unitwin_window_select_func) {
         }
     }
     break;
-    case 14:
+    case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
     wp->count = 0;
     for (k = 0; k < 0x152; k++) {
         if ((s16)badgeShop_get(bdsw->bottakuru_table, k + 1) > 0) {
@@ -731,13 +754,13 @@ USER_FUNC(unitwin_window_select_func) {
         }
     }
     break;
-    case 15:
+    case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
     wp->count = 0;
     for (k = 0; badge_bottakuru100_table[k] != 0; k++) {
         wp->count++;
     }
     break;
-    case 16:
+    case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
     wp->count = 0;
     for (k = 0; k < 0x152; k++) {
         if ((s16)badgeShop_get(bdsw->bteresa_table, k + 1) > 0) {
@@ -745,7 +768,7 @@ USER_FUNC(unitwin_window_select_func) {
         }
     }
     break;
-    case 4:
+    case UNITWIN_MODE_ITEM_RETRIEVE_UNUSED:
     wp->count = 0;
     for (k = 0; k < 32; k++) {
         if (pouchKeepItem(k)) {
@@ -753,8 +776,8 @@ USER_FUNC(unitwin_window_select_func) {
         }
     }
     break;
-    case 5:
-    case 6:
+    case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
+    case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
     wp->count = 0;
     for (k = 0; (id = party_id_table[k]) != 0; k++) {
         if (partyChkJoin(id)) {
@@ -762,7 +785,7 @@ USER_FUNC(unitwin_window_select_func) {
         }
     }
     break;
-    case 7:
+    case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED:
     wp->skipEntry = event->lwData[1];
     wp->count = 0;
     for (k = 0; (id = party_id_table[k]) != 0; k++) {
@@ -771,11 +794,11 @@ USER_FUNC(unitwin_window_select_func) {
         }
     }
     break;
-    case 8:
-    case 9:
+    case UNITWIN_MODE_STAT_UP_UNUSED:
+    case UNITWIN_MODE_STAT_UP2_UNUSED:
     wp->count = 3;
     break;
-    case 10:
+    case UNITWIN_MODE_STAT_DOWN_UNUSED:
     wp->skipEntry = event->lwData[1];
     wp->count = 2;
     break;
@@ -789,7 +812,7 @@ USER_FUNC(unitwin_window_select_func) {
         wp->cursor -= 1.0f;
     }
     if (prev != (s32)wp->cursor) {
-        psndSFXOn((const char*)5);
+        psndSFXOn((const char*)PSND_SFX_CURSOR_MOVE1);
     }
     if (wp->cursor >= wp->count) {
         wp->cursor = 0.0f;
@@ -817,8 +840,8 @@ USER_FUNC(unitwin_window_select_func) {
     if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
         n = 0;
         switch (wp->mode) {
-    case 2:
-    case 3:
+    case UNITWIN_MODE_ITEM_SELL_UNUSED:
+    case UNITWIN_MODE_ITEM_STORE_UNUSED:
         statusWinForceOff();
         for (i = 0; i < 20; i++) {
             if (pouchHaveItem(i)) {
@@ -832,9 +855,9 @@ USER_FUNC(unitwin_window_select_func) {
         event->lwData[1] = pouchHaveItem(i);
         event->lwData[2] = (EvtWord)itemDataTable[pouchHaveItem(i)].id;
         event->lwData[3] = itemDataTable[pouchHaveItem(i)].sell_price;
-        wp->mode = 0;
+        wp->mode = UNITWIN_MODE_IDLE;
         return EVT_RETURN_YIELD;
-    case 12:
+    case UNITWIN_MODE_BADGE_SELL_UNUSED:
         statusWinForceOff();
         for (i = 0; i < 200; i++) {
             if (pouchHaveBadge(i)) {
@@ -848,9 +871,9 @@ USER_FUNC(unitwin_window_select_func) {
         event->lwData[1] = pouchHaveBadge(i);
         event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
         event->lwData[3] = itemDataTable[event->lwData[1]].sell_price;
-        wp->mode = 0;
+        wp->mode = UNITWIN_MODE_IDLE;
         return EVT_RETURN_YIELD;
-    case 11:
+    case UNITWIN_MODE_BADGE_BUY_UNUSED:
         statusWinForceOff();
         for (i = 0; i < 99; i++) {
             if ((s16)badgeShop_get(bdsw->bargain_table, i + 0xF0) - badgeShop_ThrowCheck(i + 0xF0) > 0) {
@@ -865,9 +888,9 @@ USER_FUNC(unitwin_window_select_func) {
         event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
         event->lwData[3] = itemDataTable[event->lwData[1]].buy_price;
         event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-        wp->mode = 0;
+        wp->mode = UNITWIN_MODE_IDLE;
         return EVT_RETURN_YIELD;
-    case 17:
+    case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
         statusWinForceOff();
         j = wp->cursor;
         sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
@@ -881,11 +904,11 @@ USER_FUNC(unitwin_window_select_func) {
             } else {
                 event->lwData[4] = jdt->info[j].cost;
             }
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 18:
+        case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED:
             statusWinForceOff();
-            psndSFXOn((const char*)0x12);
+            psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
             j = wp->cursor;
             sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
             jdt->curIndex = j;
@@ -898,9 +921,9 @@ USER_FUNC(unitwin_window_select_func) {
             } else {
                 event->lwData[4] = 1;
             }
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 13:
+        case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
             statusWinForceOff();
             for (i = 0; i < 99; i++) {
                 if ((s16)badgeShop_get(bdsw->starmaniac_table, i + 0xF0) > 0) {
@@ -918,9 +941,9 @@ USER_FUNC(unitwin_window_select_func) {
             event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
             event->lwData[3] = itemDataTable[event->lwData[1]].star_piece_price;
             event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 14:
+        case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
             statusWinForceOff();
             for (i = 0; i < 0x152; i++) {
                 if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
@@ -935,9 +958,9 @@ USER_FUNC(unitwin_window_select_func) {
             event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
             event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 12) / 10;
             event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 15:
+        case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
             statusWinForceOff();
             for (i = 0; badge_bottakuru100_table[i] != 0; i++) {
                 if (n == wp->cursor) {
@@ -950,9 +973,9 @@ USER_FUNC(unitwin_window_select_func) {
             event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
             event->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[event->lwData[1]].buy_price) / 10;
             event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 16:
+        case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
             statusWinForceOff();
             for (i = 0; i < 0x152; i++) {
                 if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
@@ -967,9 +990,9 @@ USER_FUNC(unitwin_window_select_func) {
             event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
             event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 2 + 2) / 3;
             event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 4:
+        case UNITWIN_MODE_ITEM_RETRIEVE_UNUSED:
             statusWinForceOff();
             for (i = 0; i < 32; i++) {
                 if (pouchKeepItem(i)) {
@@ -982,10 +1005,10 @@ USER_FUNC(unitwin_window_select_func) {
             event->lwData[0] = 1;
             event->lwData[1] = pouchKeepItem(i);
             event->lwData[2] = (EvtWord)itemDataTable[pouchKeepItem(i)].id;
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 5:
-        case 6:
+        case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
+        case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
             pouch = pouchGetPtr();
             for (i = 0; (id = party_id_table[i]) != 0; i++) {
                 if (partyChkJoin(id)) {
@@ -1018,9 +1041,9 @@ USER_FUNC(unitwin_window_select_func) {
                 name = party_name_table_rtn(i);
                 event->lwData[3] = (EvtWord)name;
             }
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 7:
+        case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED:
             pouch = pouchGetPtr();
             for (i = 0, p = party_id_table; (id = *p) != 0; p++, i++) {
                 if (partyChkJoin(id) && wp->skipEntry != *p) {
@@ -1038,9 +1061,9 @@ USER_FUNC(unitwin_window_select_func) {
             event->lwData[2] = party_id_table[i];
             name = party_name_table_rtn(i);
             event->lwData[4] = (EvtWord)name;
-            wp->mode = 0;
+            wp->mode = UNITWIN_MODE_IDLE;
             return EVT_RETURN_YIELD;
-        case 8:
+        case UNITWIN_MODE_STAT_UP_UNUSED:
             pouchGetPtr();
             for (i = 0; i < wp->count; i++) {
                 if (n == wp->cursor) {
@@ -1074,9 +1097,9 @@ USER_FUNC(unitwin_window_select_func) {
             event->lwData[5 + j] = *mario_status_point_table[j] - mario_status_henka_table[j];
         }
     }
-    wp->mode = 0;
+    wp->mode = UNITWIN_MODE_IDLE;
     return EVT_RETURN_YIELD;
-    case 9:
+    case UNITWIN_MODE_STAT_UP2_UNUSED:
     pouchGetPtr();
     for (i = 0; i < wp->count; i++) {
         if (n == wp->cursor) {
@@ -1106,9 +1129,9 @@ USER_FUNC(unitwin_window_select_func) {
             event->lwData[5 + j] = *mario_status_point_table[j];
         }
     }
-    wp->mode = 0;
+    wp->mode = UNITWIN_MODE_IDLE;
     return EVT_RETURN_YIELD;
-    case 10:
+    case UNITWIN_MODE_STAT_DOWN_UNUSED:
     pouchGetPtr();
     for (i = 0; i < 3; i++) {
         if (i != wp->skipEntry) {
@@ -1126,14 +1149,14 @@ USER_FUNC(unitwin_window_select_func) {
     event->lwData[1] = i;
     event->lwData[3] = (EvtWord)mario_status_name_table[i];
     event->lwData[5 + i] = *mario_status_point_table[i] - mario_status_henka_table[i];
-    wp->mode = 0;
+    wp->mode = UNITWIN_MODE_IDLE;
     return EVT_RETURN_YIELD;
         }
     } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
         statusWinForceOff();
-        psndSFXOn((const char*)0x13);
+        psndSFXOn((const char*)PSND_SFX_CURSOR_CANCEL1);
         event->lwData[0] = 0;
-        wp->mode = 0;
+        wp->mode = UNITWIN_MODE_IDLE;
         return EVT_RETURN_YIELD;
     }
 #endif
@@ -1155,7 +1178,7 @@ USER_FUNC(evt_unitwin_main_func) {
     } else {
         wp->flags &= ~UNITWIN_FLAG_SELECTED;
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, evt_unitwin_disp_func, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, evt_unitwin_disp_func, wp);
     return EVT_RETURN_BLOCK;
 }
 
@@ -1377,10 +1400,10 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
     }
 #endif
     switch (mode = wp->mode) {
-        case 0:
-        case 1:
+        case UNITWIN_MODE_IDLE:
+        case UNITWIN_MODE_GOODS_EVENT:
             break;
-        case 4: {
+        case UNITWIN_MODE_ITEM_RETRIEVE_UNUSED: {
             const char* desc;
             s32 h;
             u32 sl, st, sw, sh;
@@ -1419,14 +1442,14 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             break;
         }
-        case 2:
-        case 3:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-        case 16: {
+        case UNITWIN_MODE_ITEM_SELL_UNUSED:
+        case UNITWIN_MODE_ITEM_STORE_UNUSED:
+        case UNITWIN_MODE_BADGE_BUY_UNUSED:
+        case UNITWIN_MODE_BADGE_SELL_UNUSED:
+        case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
+        case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
+        case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
+        case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED: {
             s32 h;
             s32* tbl;
             const char* title;
@@ -1437,29 +1460,29 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
             row = 0;
             desc = NULL;
-            if (mode == 2 || mode == 3) {
+            if (mode == UNITWIN_MODE_ITEM_SELL_UNUSED || mode == UNITWIN_MODE_ITEM_STORE_UNUSED) {
                 h = (8 - pouchGetHaveItemCnt() > 0 ? 8 - pouchGetHaveItemCnt() : 0) * 24;
                 max = MAX_HELD_ITEMS;
                 title = msgSearch("msg_window_title_1");
                 titleX = 30;
-            } else if (mode == 12) {
+            } else if (mode == UNITWIN_MODE_BADGE_SELL_UNUSED) {
                 h = (8 - pouchGetHaveBadgeCnt() > 0 ? 8 - pouchGetHaveBadgeCnt() : 0) * 24;
                 max = MAX_BADGES;
                 title = msgSearch("msg_window_title_2");
                 titleX = 40;
-            } else if (mode == 14) {
+            } else if (mode == UNITWIN_MODE_BADGE_CHARLIETON_UNUSED) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
                 max = ITEM_TYPE_MAX - 1;
                 title = msgSearch("msg_window_title_3");
                 titleX = 20;
-            } else if (mode == 15) {
+            } else if (mode == UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
                 max = wp->count;
                 title = msgSearch("msg_window_title_3");
                 titleX = 20;
-            } else if (mode == 16) {
+            } else if (mode == UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED) {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
                 max = ITEM_TYPE_MAX - 1;
@@ -1479,7 +1502,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             FontDrawString(titleX + 51, 111.0f, title);
             FontDrawEdgeOff();
-            if (wp->mode != 3) {
+            if (wp->mode != UNITWIN_MODE_ITEM_STORE_UNUSED) {
                 Mtx mtx;
                 Mtx scale;
                 s32 icon;
@@ -1487,9 +1510,9 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
                 PSMTXConcat(mtx, scale, mtx);
                 iconDispGxCol(mtx, ICON_FLAG_2D, ICON_CURRENCY_PLATE, (GXColor){0xF0, 0xF0, 0xF0, 0xFF});
-                if (wp->mode == 13) {
+                if (wp->mode == UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED) {
                     icon = ICON_ITEM_STAR_PIECE;
-                } else if (wp->mode == 16) {
+                } else if (wp->mode == UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED) {
                     icon = ICON_ITEM_PIANTA_TOKEN;
                 } else {
                     icon = ICON_ITEM_COIN;
@@ -1506,14 +1529,14 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 ItemData* item;
                 flag = 0;
                 switch (wp->mode) {
-                    case 2:
-                    case 3:
+                    case UNITWIN_MODE_ITEM_SELL_UNUSED:
+                    case UNITWIN_MODE_ITEM_STORE_UNUSED:
                         id = pouchHaveItem(i);
                         break;
-                    case 12:
+                    case UNITWIN_MODE_BADGE_SELL_UNUSED:
                         id = pouchHaveBadge(i);
                         break;
-                    case 11:
+                    case UNITWIN_MODE_BADGE_BUY_UNUSED:
                         id = (s16)badgeShop_get(bdsw->bargain_table, i + BADGE_MIN);
                         if (id - badgeShop_ThrowCheck(i + BADGE_MIN) > 0) {
                             id = i + BADGE_MIN;
@@ -1521,24 +1544,24 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                             id = 0;
                         }
                         break;
-                    case 13:
+                    case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
                         if ((s16)badgeShop_get(bdsw->starmaniac_table, i + BADGE_MIN) > 0) {
                             id = i + BADGE_MIN;
                         } else {
                             id = 0;
                         }
                         break;
-                    case 14:
+                    case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
                         if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
                             id = i + 1;
                         } else {
                             id = 0;
                         }
                         break;
-                    case 15:
+                    case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
                         id = tbl[i];
                         break;
-                    case 16:
+                    case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
                         if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
                             id = i + 1;
                         } else {
@@ -1548,7 +1571,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 }
                 item = &itemDataTable[id];
                 if (id) {
-                    if (wp->mode == 13 && item->star_piece_price > pouchGetStarPiece()) {
+                    if (wp->mode == UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED && item->star_piece_price > pouchGetStarPiece()) {
                         color = (GXColor){0xA0, 0xA0, 0xA0, 0xFF};
                         flag = ICON_FLAG_GRAY;
                     }
@@ -1559,37 +1582,37 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     FontDrawScale(0.8f);
                     FontDrawColor(color);
                     FontDrawString(36.0f, wp->scroll + (80 - row * 24) - 2.0f, item->id);
-                    if (wp->mode != 3) {
+                    if (wp->mode != UNITWIN_MODE_ITEM_STORE_UNUSED) {
                         char buf[32];
                         f32 sc;
                         s32 xoff;
                         switch (wp->mode) {
-                            case 14:
+                            case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
                                 sprintf(buf, "%2d", item->buy_price * 12 / 10);
                                 sc = 1.0f;
                                 xoff = 0;
                                 break;
-                            case 15:
+                            case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
                                 sprintf(buf, "%3d", item->buy_price * (evtGetValue(NULL, GSW_PIT_FLOOR) + 11) / 10);
                                 sc = 1.0f;
                                 xoff = -14;
                                 break;
-                            case 16:
+                            case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
                                 sprintf(buf, "%4d", (item->buy_price * 2 + 2) / 3);
                                 sc = 0.8f;
                                 xoff = -20;
                                 break;
-                            case 11:
+                            case UNITWIN_MODE_BADGE_BUY_UNUSED:
                                 sprintf(buf, "%2d", item->buy_price);
                                 sc = 1.0f;
                                 xoff = 0;
                                 break;
-                            case 13:
+                            case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
                                 sprintf(buf, "%2d", item->star_piece_price);
                                 sc = 1.0f;
                                 xoff = 0;
                                 break;
-                            case 12:
+                            case UNITWIN_MODE_BADGE_SELL_UNUSED:
                             default:
                                 sprintf(buf, "%2d", item->sell_price);
                                 xoff = 0;
@@ -1615,8 +1638,8 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             break;
         }
-        case 17:
-        case 18: {
+        case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
+        case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED: {
             InformantWork* jdt = &_jdt;
             InformantInfo* info;
             u8* tbl;
@@ -1627,7 +1650,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 
             n = 8 - wp->count;
             h = (n > 0 ? n : 0) * 24;
-            if (mode == 17) {
+            if (mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
                 title = msgSearch("msg_window_title_5");
                 tbl = jdt->readFlags.perfectRead;
             } else {
@@ -1641,7 +1664,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             FontDrawString(71.0f, 111.0f, title);
             FontDrawEdgeOff();
-            if (wp->mode == 17) {
+            if (wp->mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
                 Mtx mtx;
                 Mtx scale;
                 PSMTXTrans(mtx, 244.0f, 82.0f, 0.0f);
@@ -1672,7 +1695,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 FontDrawScale(0.8f);
                 FontDrawString(1.0f, wp->scroll + (80 - i * 24), info->initEndPos);
                 info->initEndPos[info->tagEndPos] = c;
-                if (wp->mode == 17) {
+                if (wp->mode == UNITWIN_MODE_INFORMANT_PERFECT_UNUSED) {
                     FontDrawStart();
                     FontDrawColor(color);
                     FontDrawString(221.0f, wp->scroll + (80 - i * 24), buf);
@@ -1681,9 +1704,9 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             GXSetScissor(sl, st, sw, sh);
             break;
         }
-        case 5:
-        case 6:
-        case 7: {
+        case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
+        case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
+        case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED: {
             char msgName[64] = {0};
             s32 lv;
             s32 row = 0;
@@ -1714,7 +1737,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                 char buf[32];
                 char help[16];
                 char dir[16];
-                if (wp->mode == 5 || wp->mode == 6) {
+                if (wp->mode == UNITWIN_MODE_PARTY_RANK_UP_UNUSED || wp->mode == UNITWIN_MODE_PARTY_RANK_UP2_UNUSED) {
                     if (!partyChkJoin(party_id_table[i])) {
                         continue;
                     }
@@ -1771,7 +1794,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     } else {
                         sprintf(help, "helperr");
                     }
-                    if (wp->mode == 5 || wp->mode == 6) {
+                    if (wp->mode == UNITWIN_MODE_PARTY_RANK_UP_UNUSED || wp->mode == UNITWIN_MODE_PARTY_RANK_UP2_UNUSED) {
                         sprintf(dir, "lankup");
                     } else {
                         sprintf(dir, "lankdown");
@@ -1788,7 +1811,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             break;
         }
-        case 8: {
+        case UNITWIN_MODE_STAT_UP_UNUSED: {
             char msgName[64] = {0};
             s32 h;
             u32 sl, st, sw, sh;
@@ -1894,7 +1917,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             break;
         }
-        case 9: {
+        case UNITWIN_MODE_STAT_UP2_UNUSED: {
             char msgName[64] = {0};
             s32 row = 0;
             s32 h;
@@ -1973,7 +1996,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             break;
         }
-        case 10: {
+        case UNITWIN_MODE_STAT_DOWN_UNUSED: {
             char msgName[64] = {0};
             s32 row = 0;
             s32 h;
@@ -2051,7 +2074,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
     }
 
-    if (wp->mode != 0 && wp->mode != 1) {
+    if (wp->mode != UNITWIN_MODE_IDLE && wp->mode != UNITWIN_MODE_GOODS_EVENT) {
         char text[136];
         char* line1;
         char* line2 = NULL;
@@ -2060,48 +2083,48 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         s32 w2;
 
         switch (wp->mode) {
-            case 0:
-            case 1:
+            case UNITWIN_MODE_IDLE:
+            case UNITWIN_MODE_GOODS_EVENT:
                 break;
-            case 11:
-            case 14:
-            case 15:
+            case UNITWIN_MODE_BADGE_BUY_UNUSED:
+            case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
+            case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_6"));
                 break;
-            case 17:
+            case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_8"));
                 break;
-            case 18:
+            case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_7"));
                 break;
-            case 13:
-            case 16:
+            case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
+            case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_10"));
                 break;
-            case 2:
-            case 12:
+            case UNITWIN_MODE_ITEM_SELL_UNUSED:
+            case UNITWIN_MODE_BADGE_SELL_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_2"));
                 break;
-            case 3:
+            case UNITWIN_MODE_ITEM_STORE_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_3"));
                 break;
-            case 4:
+            case UNITWIN_MODE_ITEM_RETRIEVE_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_4"));
                 break;
-            case 5:
+            case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_11"));
                 break;
-            case 6:
+            case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_11"));
                 break;
-            case 7:
+            case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_12"));
                 break;
-            case 8:
-            case 9:
+            case UNITWIN_MODE_STAT_UP_UNUSED:
+            case UNITWIN_MODE_STAT_UP2_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_9"));
                 break;
-            case 10:
+            case UNITWIN_MODE_STAT_DOWN_UNUSED:
                 strcpy(text, msgSearch("msg_window_select_9_1"));
                 break;
         }

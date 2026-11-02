@@ -1408,7 +1408,7 @@ EVT_BEGIN(las_10_init_evt)
                 CALL(evt_party_set_pos, 0, -123, 400, 255)
                 CALL(evt_cam_road_reset)
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_bero_exec_wait, 65536)
+                CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
                 SPAWN_EVENT(PTR(tenkyugi_evt))
             END_INLINE_EVENT
         END_IF

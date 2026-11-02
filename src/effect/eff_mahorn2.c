@@ -175,7 +175,7 @@ void effMahorn2Main(EffectEntry *effect) {
                 break;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMahorn2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMahorn2Disp, effect);
 }
 
 /** Draws the travelling elements as textured quads (effect textures 0x8F and 0x90). */

@@ -65,9 +65,9 @@ BattleUnitKind unit_barriern_satellite = {
     0.0f, // centerOffset.y in demos; vivianOffsetZ in retail
 #if VERSION <= VERSION_DEMO_US
     0.0f,
-0,
+    0,
     -16,
-0.0f,
+    0.0f,
     0.0f,
     0.0f,
     8.0f,
@@ -117,7 +117,7 @@ BattleUnitKind unit_barriern_satellite = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Mini-Yux: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Parts of the Mini-Yux: 6 parts (model c_baria). */
 static BattleUnitKindPart parts[] = {

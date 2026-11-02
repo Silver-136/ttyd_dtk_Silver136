@@ -237,7 +237,7 @@ EVT_BEGIN(evt_gameover)
         CALL(evt_mapobj_trans, 1, STRING("e4"), 0, 200, 0)
         CALL(evt_mapobj_trans, 1, STRING("g1"), 0, 200, 0)
         CALL(evt_mapobj_trans, 1, STRING("o289"), 0, 200, 0)
-        ELSE
+    ELSE
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("f"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("i"), MAP_OBJ_FLAG_HIDDEN)
@@ -269,7 +269,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), LANGUAGE_SP)
         CALL_CHILD(fall_gameover_es)
-        ELSE
+    ELSE
 #endif
     CALL_CHILD(fall_gameover)
 #if VERSION >= VERSION_US
@@ -309,9 +309,9 @@ void seq_gameOverMain(SequenceWork* work) {
         case 0:
             if (work->mapName == NULL) {
                 GXColor color = {0, 0, 0, 255};
-                fadeEntry(2, 1000, color);
-                gp->areaFadeInType = FADE_OUT_BLACK;
-                gp->areaFadeInDuration = 300;
+                fadeEntry(FADE_OUT_IRIS, 1000, color);
+                gp->areaFadeOutType = FADE_OUT_BLACK;
+                gp->areaFadeOutDuration = 300;
             }
             mapPreLoad("sys_00");
             work->state++;
@@ -322,7 +322,7 @@ void seq_gameOverMain(SequenceWork* work) {
             }
             _relUnLoad();
             _unload(gp->currentMapName, NULL, NULL);
-            strcpy(gp->currentAreaName + 0x10, gp->currentMapName);
+            strcpy(gp->lastMapBeforeTitle, gp->currentMapName);
             statusWinForceOff();
             statusWinDispOff();
             camera = camGetPtr(CAMERA_3D);
@@ -411,7 +411,7 @@ void seq_gameOverMain(SequenceWork* work) {
                 break;
             }
 #if VERSION <= VERSION_DEMO_US
-            gp->resetType = 1;
+            gp->resetType = RESET_TYPE_SOFT;
 #else
             _relUnLoad();
             _unload("sys_00", NULL, NULL);

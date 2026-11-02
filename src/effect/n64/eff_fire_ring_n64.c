@@ -195,7 +195,7 @@ void effFireRingMain(EffectEntry* effect) {
         if (work->uv[3] < 0.0f) {
             work->uv[3] += 128.0f;
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireRingDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireRingDisp, effect);
     }
 }
 

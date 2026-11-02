@@ -17,6 +17,12 @@ typedef struct BattleStageObjectData {
     u8 pad_16[2]; //0x16
 } BattleStageObjectData;
 
+// BattleStageObject.flags
+typedef enum BattleStageObjectFlags {
+    STAGE_OBJECT_FLAG_HIDDEN = (1 << 0), // 0x1, map group hidden with the object (_mobj_destroy, battle_seq_end)
+    STAGE_OBJECT_FLAG_UPDATE = (1 << 1), // 0x2, BattleStageObjectMain rebuilds the transform once
+} BattleStageObjectFlags;
+
 typedef struct BattleStageObject {
     s32 id; //0x0
     Vec position; //0x4
@@ -28,7 +34,7 @@ typedef struct BattleStageObject {
     Vec prevRotation; //0x4C
     Vec prevPositionOffset2; //0x58
     BattleStageObjectData* data; //0x64
-    u32 flags; //0x68
+    u32 flags; //0x68, BattleStageObjectFlags
     s32 battleUnitIdx; //0x6C
     u8 numFramesToStartFalling; //0x70
     u8 numFramesFalling; //0x71
@@ -59,6 +65,15 @@ typedef enum StageFallObjectType {
     STAGE_FALL_METEOR = 7,
     STAGE_FALL_STAGE_LIGHT = 8,
 } StageFallObjectType;
+
+// BattleStageObjectWork.nozzleDir/nozzleNextDir; the index picked from BattleStageNozzleData.dirRate.
+// Yaw while turning in the turn event: 1 +45, 2 0, 3 -45; 0 is the raised nozzle (no jet).
+typedef enum BattleNozzleDir {
+    NOZZLE_DIR_RAISED = 0,
+    NOZZLE_DIR_PLUS_45 = 1,
+    NOZZLE_DIR_CENTER = 2,
+    NOZZLE_DIR_MINUS_45 = 3,
+} BattleNozzleDir;
 
 // Stage nozzle jets (BattleStageNozzleData.typeRate/weapons index; nozzleType)
 typedef enum StageNozzleType {
@@ -102,8 +117,8 @@ typedef struct BattleStageObjectWork {
     BattleStageFallObjectData* fallObjectData; //0x38
     BattleWeapon* nozzleWeapons[2]; //0x3C
     BattleWeapon nozzleWeaponWork[2]; //0x44
-    u8 nozzleDir[3]; //0x1C4
-    u8 nozzleNextDir[3]; //0x1C7
+    u8 nozzleDir[3]; //0x1C4, BattleNozzleDir
+    u8 nozzleNextDir[3]; //0x1C7, BattleNozzleDir
     s8 nozzleType; //0x1CA
     s32 nozzleTurnEvtId[3]; //0x1CC
     s32 nozzleWorkEvtId; //0x1D8

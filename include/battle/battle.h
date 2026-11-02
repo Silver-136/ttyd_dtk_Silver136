@@ -75,6 +75,61 @@ typedef enum BattleSequence {
     SEQ_END = 7
 } BattleSequence;
 
+// BattleSetSeq(wp, SEQ_UNKNOWN, ...): the battle's top-level stage (BattleSequenceManager).
+enum {
+    BATTLE_STAGE_INIT = 0,
+    BATTLE_STAGE_FIRST_ACT = 1,
+    BATTLE_STAGE_TURN = 2,
+    BATTLE_STAGE_END = 3,
+    BATTLE_STAGE_DONE = 4,
+};
+
+// SEQ_INIT steps (btlseqInit).
+enum {
+    SEQ_INIT_START = 0x1000000,
+    SEQ_INIT_UNIT_SETUP = 0x1000001,
+    SEQ_INIT_UNIT_INIT_WAIT = 0x1000002,
+    SEQ_INIT_LOAD_ANIMS = 0x1000003,
+    SEQ_INIT_PAUSE = 0x1000004,
+    SEQ_INIT_FINISH = 0x1000005,
+};
+
+// SEQ_END steps (btlseqEnd).
+enum {
+    SEQ_END_START = 0x7000000,
+    SEQ_END_LOSE_FADE = 0x7000001,
+    SEQ_END_LOSE_FADE_WAIT = 0x7000002,
+    SEQ_END_POST_EVENT_START = 0x7000003,
+    SEQ_END_POST_EVENT_WAIT = 0x7000004,
+    SEQ_END_WIN_CLEAR_STATUS = 0x7000005,
+    SEQ_END_WIN_UNIT_EVENTS = 0x7000006,
+    SEQ_END_EXP_UP_WAIT = 0x7000007,
+    SEQ_END_POINTS_INIT = 0x7000008,
+    SEQ_END_POINTS_DELAY = 0x7000009,
+    SEQ_END_POINTS_SHOW = 0x700000A,
+    SEQ_END_POINTS_COUNT = 0x700000B,
+    SEQ_END_POINTS_HOLD = 0x700000C,
+    SEQ_END_POINTS_HIDE = 0x700000D,
+    SEQ_END_MAJINAI_END_START = 0x700000E,
+    SEQ_END_MAJINAI_END_WAIT = 0x700000F,
+    SEQ_END_LEVEL_UP_CHECK = 0x7000010,
+    SEQ_END_LEVEL_UP_CURTAIN = 0x7000011,
+    SEQ_END_LEVEL_UP_SELECT = 0x7000012,
+    SEQ_END_LEVEL_UP_CONFIRM_UNUSED = 0x7000013,
+    SEQ_END_LEVEL_UP_JUMP_WAIT = 0x7000014,
+    SEQ_END_LEVEL_UP_APPLY = 0x7000015,
+    SEQ_END_LEVEL_UP_SHOW = 0x7000016,
+    SEQ_END_RANK_UP_START = 0x7000017,
+    SEQ_END_RANK_UP_WAIT = 0x7000018,
+    SEQ_END_VICTORY_POSE = 0x7000019,
+    SEQ_END_VICTORY_POSE_WAIT = 0x700001A,
+    SEQ_END_RUN_OFF = 0x700001B,
+    SEQ_END_LEAVE = 0x700001C,
+    SEQ_END_FADE_OUT = 0x700001D,
+    SEQ_END_FADE_OUT_WAIT = 0x700001E,
+    SEQ_END_CLEANUP = 0x700001F,
+};
+
 // BattleDebugCtrl.flags: debug switches that force a stage or audience effect
 typedef enum BattleDebugFlags {
     BATTLE_DEBUG_FORCE_OBJECT_FALL = (1 << 0),        // 0x1
@@ -135,6 +190,20 @@ typedef struct BattleActRecord {   // u8 counters for the battle-condition rules
     u8 turnCount;              // 0x1F, cond 58/59
 } BattleActRecord;
 
+// StChgMsg.flags: whose status changed.
+enum {
+    ST_CHG_MSG_MARIO = 1,
+    ST_CHG_MSG_PARTNER = 2,
+    ST_CHG_MSG_OTHER = 4,
+};
+
+// BattleAlliance.clearFlags: BattleSeq checks them for clearConditionMet.
+enum {
+    ALLIANCE_CLEAR_NONE = 0,
+    ALLIANCE_CLEAR_ALL_OUT = 1,    // every unit of the side is out
+    ALLIANCE_CLEAR_LEADER_OUT = 2, // Mario's side: Mario is out
+};
+
 typedef struct StChgMsg {
     s8 type;     // 0x0, -1 = free
     u8 flags;    // 0x1
@@ -168,7 +237,7 @@ typedef struct BattleAnnounce {
 } BattleAnnounce;
 
 struct BattleAlliance {
-    u16 allianceId;     // 0x0
+    u16 clearFlags;     // 0x0
     s8 attackDirection; // 0x2
     // pad 1 byte
     BOOL clearConditionMet; // 0x4

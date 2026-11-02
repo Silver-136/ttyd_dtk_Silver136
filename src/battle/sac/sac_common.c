@@ -150,18 +150,18 @@ USER_FUNC(sac_handbeat) {
         count2 = 60;
         handBeatEnable = 1;
         volPer = 0;
-        if (BattleAudienceSoundCheck(4) == 1) {
-            BattleAudienceSoundStop(4);
+        if (BattleAudienceSoundCheck(AUD_SOUND_CHEER_A) == 1) {
+            BattleAudienceSoundStop(AUD_SOUND_CHEER_A);
         }
-        if (BattleAudienceSoundCheck(5) == 1) {
-            BattleAudienceSoundStop(5);
+        if (BattleAudienceSoundCheck(AUD_SOUND_CHEER_B) == 1) {
+            BattleAudienceSoundStop(AUD_SOUND_CHEER_B);
         }
         BattleAudienceSoundCheer(-1, 0);
-        BattleAudienceSoundSetVol(4, 0, 1);
+        BattleAudienceSoundSetVol(AUD_SOUND_CHEER_A, 0, 1);
     }
-    BattleAudienceSoundSetVol(4, volPer, 1);
+    BattleAudienceSoundSetVol(AUD_SOUND_CHEER_A, volPer, 1);
     if (!handBeatEnable) {
-        sound = BattleAudienceSoundGetPtr(4);
+        sound = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_A);
         sound->fadeoutTime = sound->duration = 180;
         return EVT_RETURN_DONE;
     }
@@ -202,20 +202,20 @@ USER_FUNC(sac_cheer) {
         count2 = 60;
         cheerEnable = 1;
         volPer = 0;
-        if (BattleAudienceSoundCheck(4) == 1) {
-            BattleAudienceSoundStop(4);
+        if (BattleAudienceSoundCheck(AUD_SOUND_CHEER_A) == 1) {
+            BattleAudienceSoundStop(AUD_SOUND_CHEER_A);
         }
-        if (BattleAudienceSoundCheck(5) == 1) {
-            BattleAudienceSoundStop(5);
+        if (BattleAudienceSoundCheck(AUD_SOUND_CHEER_B) == 1) {
+            BattleAudienceSoundStop(AUD_SOUND_CHEER_B);
         }
         BattleAudienceSoundCheer(-1, 0);
-        BattleAudienceSoundSetVol(4, 0, 1);
+        BattleAudienceSoundSetVol(AUD_SOUND_CHEER_A, 0, 1);
     }
     if (!flag) {
-        BattleAudienceSoundSetVol(4, volPer, 1);
+        BattleAudienceSoundSetVol(AUD_SOUND_CHEER_A, volPer, 1);
     }
     if (!cheerEnable) {
-        sound = BattleAudienceSoundGetPtr(4);
+        sound = BattleAudienceSoundGetPtr(AUD_SOUND_CHEER_A);
         sound->fadeoutTime = sound->duration = 180;
         return EVT_RETURN_DONE;
     }
@@ -284,12 +284,12 @@ USER_FUNC(sac_enemy_slide_return) {
 
 /** Switches the action-command help display to the special-move style (type 2), which hides the audience window. */
 USER_FUNC(sac_ac_help_on) {
-    BattleAcHelpSetDispType(2);
+    BattleAcHelpSetDispType(AC_HELP_DISP_ON);
     return EVT_RETURN_DONE;
 }
 
 /** Restores the normal action-command help display (type 0) and shows the audience window again. */
 USER_FUNC(sac_ac_help_off) {
-    BattleAcHelpSetDispType(0);
+    BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
     return EVT_RETURN_DONE;
 }

@@ -332,7 +332,7 @@ BattleWeapon partyWeapon_SandersFirstAttack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -374,7 +374,7 @@ BattleWeapon partyWeapon_SandersNormalAttack = {
     "msg_ac_bakuhatsu", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PREEMPTIVE_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -416,7 +416,7 @@ BattleWeapon partyWeapon_SandersTimeBombSet = {
     "msg_ac_jigen_bakudan", // acHelpMsg
     SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -510,7 +510,7 @@ BattleWeapon partyWeapon_SandersSuperBombAttack = {
     "msg_ac_super_bakuhatsu", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_BOMB_FLIPPABLE | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -705,7 +705,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
 
     // A pre-emptive spiky enemy: he walks into its spikes first and is hurt.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 5)
+    IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_2"))
         CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(5))
         MULTIPLY_FLOAT(LW(5), 35)
@@ -733,12 +733,12 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     WAIT_FRAMES(60)
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -766,14 +766,14 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_StageDispellFog)
 
     // A miss: the enemy plays its dodge reaction.
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(90)
@@ -973,7 +973,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
 
     // A pre-emptive spiky enemy in front: he walks into its spikes and the move ends there.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 5)
+    IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_2"))
         CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
         MULTIPLY_FLOAT(LW(6), 35)
@@ -1048,12 +1048,12 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_StopAC)
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -1079,14 +1079,14 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     SET_VALUE(LW(10), 0)
     LABEL(10)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(50)
@@ -1661,7 +1661,7 @@ EVT_END()
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Bobbery's defence attributes: normal (0) against every element, no weakness or immunity. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Bobbery's status chances: 100 for every status (badges lower them in battle). */
 #if VERSION > VERSION_DEMO_US

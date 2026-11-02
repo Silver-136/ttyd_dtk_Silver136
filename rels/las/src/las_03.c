@@ -221,7 +221,7 @@ EVT_BEGIN(toge_evt)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     END_LOOP
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     LOOP(0)
         CALL(evt_mario_get_motion, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 32)

@@ -156,7 +156,7 @@ void effFallLeafMain(EffectEntry* effect) {
         work->position.x += work->vx;
         work->position.y += work->vy;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFallLeafDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFallLeafDisp, effect);
 }
 
 /** Draws each leaf as a camera-facing sprite with texture 0x14; the type picks the leaf tint. */

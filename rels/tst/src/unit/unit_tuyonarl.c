@@ -91,7 +91,7 @@ BattleUnitKind unit_tuyonarl = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element modifiers of the placeholder unit `tuyonarl`: none, no element is special to it. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability of the placeholder unit `tuyonarl`: every status lands at the normal rate. */
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
@@ -132,7 +132,7 @@ EVT_END()
 
 /** Damage reaction of tuyonarl: the default damage script (the words after its RETURN are never reached). */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN

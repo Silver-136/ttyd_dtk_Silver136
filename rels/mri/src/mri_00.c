@@ -904,7 +904,7 @@ EVT_BEGIN(first_bigtree)
     CALL(evt_mario_mov_pos2, -618, LW(2), FLOAT(120.0f))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GF(0), 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_snd_bgm_scope, 0, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_03_THE_GREAT_TREE)
     CALL(evt_mario_key_onoff, 1)
@@ -1855,9 +1855,9 @@ EVT_BEGIN(mri_00_init_evt)
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
     END_IF
-SPAWN_EVENT(mario_see_you)
-END_IF
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
+        SPAWN_EVENT(mario_see_you)
+    END_IF
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
 #else
 #if VERSION >= VERSION_US
         END_IF
@@ -1922,7 +1922,7 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
             // Chapter 2 music and ambience for the Great Tree.
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
-            ELSE
+        ELSE
             BEGIN_INLINE_EVENT
                 WAIT_MS(2000)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
@@ -1957,7 +1957,7 @@ IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
         CALL(evt_mri_cloud_ent, PTR(&capturemap), STRING("A_kaze"), PTR(open_bigtree))
         SET_VALUE(LW(0), STRING("ne_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("light"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

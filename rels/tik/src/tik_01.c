@@ -51,7 +51,7 @@ EvtWord tik_01_init_evt[208];
  */
 EVT_BEGIN(lecture_badge_after_00_evt)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_party_stop, 0)
     CALL(evt_party_move_pos2, 0, -375, -105, FLOAT(120.0f))
     CALL(evt_party_set_dir, 0, 270, 200)

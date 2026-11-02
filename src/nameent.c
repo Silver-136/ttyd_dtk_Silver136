@@ -333,7 +333,7 @@ void nameEntMain(void) {
             break;
     }
     if (wp->loadState > 1) {
-        dispEntry(CAMERA_3D, 0.0f, 7, nameEntDisp, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_CUSTOM_LAST, nameEntDisp, NULL);
     }
 }
 
@@ -484,26 +484,26 @@ s32 nameMain(void) {
                             wp->cursorY = 7;
                         }
 #if VERSION <= VERSION_DEMO_US
-                        psndSFXOn((const char*)0xA);
+                        psndSFXOn((const char*)PSND_SFX_FILE_MOJI_SET1);
                     } else if (wp->nameLen == 8) {
                         ((u16*)wp->name)[wp->nameLen - 1] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
                         wp->cursorX = 10;
                         wp->cursorY = 7;
-                        psndSFXOn((const char*)0xA);
+                        psndSFXOn((const char*)PSND_SFX_FILE_MOJI_SET1);
                     }
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_START) {
                     wp->cursorX = 10;
                     wp->cursorY = 7;
                     wp->confirmSel = 1;
                     wp->state = 100;
-                    psndSFXOn((const char*)0x12);
+                    psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                     if (wp->nameLen > 0) {
                         wp->nameLen--;
                         ((u16*)wp->name)[wp->nameLen] = *(u16*)"　";
-                        psndSFXOn((const char*)0xB);
+                        psndSFXOn((const char*)PSND_SFX_FILE_MOJI_DELETE1);
                     } else if (wp->nameLen == 0 && wp->type == 0) {
-                        psndSFXOn((const char*)0x13);
+                        psndSFXOn((const char*)PSND_SFX_CURSOR_CANCEL1);
                         wp->state = 101;
                         wp->flags |= NAMEENT_FLAG_CANCELLED;
                     }
@@ -519,7 +519,7 @@ s32 nameMain(void) {
                     } else if (wp->cursorX < 0) {
                         wp->cursorX = 13;
                     }
-                    psndSFXOn((const char*)5);
+                    psndSFXOn((const char*)PSND_SFX_CURSOR_MOVE1);
                 } else if (keyGetDirRep(0) & DEMO_STICK_RIGHT) {
                     wp->cursorX++;
                     if (wp->cursorY > 3) {
@@ -532,13 +532,13 @@ s32 nameMain(void) {
                     } else if (wp->cursorX >= NAMEENT_COLS) {
                         wp->cursorX = 0;
                     }
-                    psndSFXOn((const char*)5);
+                    psndSFXOn((const char*)PSND_SFX_CURSOR_MOVE1);
                 } else if (keyGetDirRep(0) & DEMO_STICK_UP) {
                     wp->cursorY--;
                     if (wp->cursorY < 0) {
                         wp->cursorY = wp->cursorX > 9 ? 7 : 8;
                     }
-                    psndSFXOn((const char*)5);
+                    psndSFXOn((const char*)PSND_SFX_CURSOR_MOVE1);
                 } else if (keyGetDirRep(0) & DEMO_STICK_DOWN) {
                     wp->cursorY++;
                     if (wp->cursorX > 9) {
@@ -551,7 +551,7 @@ s32 nameMain(void) {
                     } else if (wp->cursorY >= 9) {
                         wp->cursorY = 0;
                     }
-                    psndSFXOn((const char*)5);
+                    psndSFXOn((const char*)PSND_SFX_CURSOR_MOVE1);
 #else
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_SET1));
                     } else if (wp->nameLen == 8) {
@@ -769,10 +769,10 @@ s32 nameMain(void) {
                 if (wp->confirmSel == 0) {
                     wp->state++;
 #if VERSION <= VERSION_DEMO_US
-                    psndSFXOn((const char*)0x12);
+                    psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
                 } else {
                     wp->state = 0;
-                    psndSFXOn((const char*)0x13);
+                    psndSFXOn((const char*)PSND_SFX_CURSOR_CANCEL1);
 #else
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                 } else {
@@ -783,10 +783,10 @@ s32 nameMain(void) {
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 wp->state = 0;
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn((const char*)0x13);
+                psndSFXOn((const char*)PSND_SFX_CURSOR_CANCEL1);
             } else if (keyGetDirRep(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
                 wp->confirmSel = 1 - wp->confirmSel;
-                psndSFXOn((const char*)5);
+                psndSFXOn((const char*)PSND_SFX_CURSOR_MOVE1);
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
             } else if (keyGetDirRep(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {

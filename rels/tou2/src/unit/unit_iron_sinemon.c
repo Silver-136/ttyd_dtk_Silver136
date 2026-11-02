@@ -110,7 +110,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  * Damage-type reactions of the Iron Cleft: immune to normal, fire, ice, explosion and electric unless the
  * attack pierces.
  */
-static BattleUnitDefenseAttr defence_attr = {{4, 4, 4, 4, 4}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP}};
 
 /**
  * Defense of the Iron Cleft against normal, fire, ice, explosion and electric attacks while it is flipped
@@ -185,7 +185,7 @@ static BattleWeapon weapon_iron_sinemon_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -367,7 +367,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_266"))
-                ELSE
+            ELSE
                 CALL(evt_msg_print_battle_party, STRING("stg3_tou_267"))
             END_IF
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -383,7 +383,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_SetTalkPoseType, LW(0), POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, LW(0), POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_269"), 0, LW(0))
-                ELSE
+            ELSE
                 CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
                 CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, -2)
@@ -471,20 +471,20 @@ static EVT_BEGIN(attack_event)
     // Then it charges into the target; find out how the target reacts.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_iron_sinemon_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

@@ -77,7 +77,7 @@ USER_FUNC(tegami) {
     if (wp->alpha > 128) {
         wp->alpha = 128;
     }
-    dispEntry(CAMERA_2D, 0.0f, 0, draw, wp);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, draw, wp);
     return EVT_RETURN_BLOCK;
 }
 
@@ -97,7 +97,7 @@ void tegami_delete(void) {
 static void depthDisp(CameraId camera, void* param) {
     f32 amp = evtGetFloat(NULL, GW(0)) / 100.0f;
     CameraEntry* cam = camGetPtr(camera);
-    smartEntry* buf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGB565, GX_FALSE, 0), 3);
+    smartEntry* buf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXTexObj obj;
     Mtx mtx;
     f32 a;
@@ -164,7 +164,7 @@ static void depthDisp(CameraId camera, void* param) {
 
 /** Script helper that queues depthDisp every frame (priority 1200). Never finishes. */
 static USER_FUNC(depth) {
-    dispEntry(CAMERA_2D, 1200.0f, 0, depthDisp, NULL);
+    dispEntry(CAMERA_2D, 1200.0f, DISP_MODE_OPAQUE, depthDisp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -193,7 +193,7 @@ EVT_BEGIN(tegami_init_evt)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
@@ -251,7 +251,7 @@ void mabutaDisp(CameraId camera, void* param) {
 
 /** Script helper that queues mabutaDisp every frame (priority 1100). Never finishes. */
 USER_FUNC(mabuta) {
-    dispEntry(CAMERA_2D, 1100.0f, 0, mabutaDisp, NULL);
+    dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, mabutaDisp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -447,7 +447,7 @@ EVT_BEGIN(gor_10_init_evt)
 #endif
     IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
         CALL_CHILD(PTR(tegami_init_evt))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(mezame_init_evt))
     END_IF
     RETURN

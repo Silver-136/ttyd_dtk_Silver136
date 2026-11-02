@@ -410,7 +410,7 @@ EVT_BEGIN(aji_15_init_evt)
         CALL(evt_npc_check_delete, STRING("軍団ザコエリート"))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF

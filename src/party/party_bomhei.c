@@ -399,12 +399,12 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
         attr = hitGetAttr(party->hitobjStandOn);
 #else
     hit = party->hitobjFront;
-    if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
+    if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         party->useMotionId = 60;
         return TRUE;
     }
     hit = party->hitobjHead;
-    if (hit != NULL && (hitGetAttr(hit) & 0xC00)) {
+    if (hit != NULL && (hitGetAttr(hit) & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         party->useMotionId = 60;
         return TRUE;
     }
@@ -542,7 +542,7 @@ void bomhei_use_main(PartyEntry* party) {
     switch (party->useMotionId) {
     case 20:
 #if VERSION <= VERSION_DEMO_US
-        party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)0x939, &party->playerPtr->position);
+        party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_THROW1, &party->playerPtr->position);
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_THROW1), &party->playerPtr->position);
 #endif
@@ -633,7 +633,7 @@ void bomhei_use_main(PartyEntry* party) {
         if (BOMHEI_WORK(party)->timer == (s16)sysMsec2Frame(2500)) {
             BOMHEI_WORK(party)->flags |= 2;
 #if VERSION <= VERSION_DEMO_US
-            party->work.bomhei.sfxId = psndSFXOn_3D((const char*)0x93C, &party->playerPtr->position);
+            party->work.bomhei.sfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE1, &party->playerPtr->position);
 #else
             if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
                 party->work.bomhei.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE1), &party->playerPtr->position);
@@ -688,7 +688,7 @@ void bomhei_use_main(PartyEntry* party) {
             party->work.bomhei.sfxId = -1;
         }
 #if VERSION <= VERSION_DEMO_US
-        party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)0x93D, &party->playerPtr->position);
+        party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE2, &party->playerPtr->position);
 #else
         if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
             party->work.bomhei.sfxId2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE2), &party->playerPtr->position);
@@ -741,7 +741,7 @@ void bomhei_use_main(PartyEntry* party) {
             evtEntryType(quake_evt, 0, 0, 0);
         }
 #if VERSION <= VERSION_DEMO_US
-        psndSFXOn_3D((const char*)0x93B, &party->position);
+        psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_BOMB1, &party->position);
         eff = effSandarsEntry(pouchGetPartyAttackLv((PartyId)3), party->position.x,
 #else
         eff = effSandarsEntry(pouchGetPartyAttackLv(PARTNER_BOBBERY), party->position.x,
@@ -991,7 +991,7 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
     movePos(&x, &z, dist, angle);
     d = 4.0f;
     hit = hitCheckFilter(NULL, &hx, &hy, &hz, &d, &nx, &ny, &nz, x, 2.0f + y, z, 0.0f, -1.0f, 0.0f);
-    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         pos->x = x;
         pos->y = y;
         pos->z = z;
@@ -1016,7 +1016,7 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
         query.targetDir = dir;
     }
     hit = hitCheckVecFilter(&query, NULL);
-    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
+    if (hit != NULL && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES))) {
         if (query.hitPos.x >= 0.0f) {
             rf = 0.5f;
         } else {

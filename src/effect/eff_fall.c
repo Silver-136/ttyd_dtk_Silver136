@@ -429,7 +429,7 @@ void effFallMain(EffectEntry* effect) {
                         done++;
                         break;
                 }
-                e->vtx = smartAlloc(32 * sizeof(EffFallVtx), 3);
+                e->vtx = smartAlloc(32 * sizeof(EffFallVtx), SMART_GROUP_TEMP);
                 {
                     EffFallVtx* v = e->vtx->address;
                     for (j = 0; j < 32; j++, v++) {
@@ -782,18 +782,18 @@ void effFallMain(EffectEntry* effect) {
     }
     switch (type) {
         case 3:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), 2, (DispCallback)effFallDispWater, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDispWater, effect);
             break;
         case 4:
         case 5:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), 0, (DispCallback)effFallDisp, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_OPAQUE, (DispCallback)effFallDisp, effect);
             break;
         case 7:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), 2, (DispCallback)effFallDispInseki, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDispInseki, effect);
             break;
         case 6:
         default:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), 2, (DispCallback)effFallDisp, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDisp, effect);
             break;
     }
 }

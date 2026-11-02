@@ -178,7 +178,7 @@ void effHibashiraMain(EffectEntry* effect) {
             work->alpha = 0;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHibashiraDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHibashiraDisp, effect);
 }
 
 /** Draws each pillar's animation pose at its offset, faded by the effect's alpha. */

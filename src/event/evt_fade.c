@@ -106,43 +106,43 @@ USER_FUNC(evt_fade_set_anim_virtual_pos) {
 
 /**
  * Sets the fades used on the next map change (args[0] 0) or area change (nonzero):
- * args[1] fade-in type, args[2] its duration, args[3] fade-out type, args[4] its duration;
- * -1 keeps the current value.
+ * args[1] fade-out type (leaving the map), args[2] its duration, args[3] fade-in type (entering the next map),
+ * args[4] its duration; -1 keeps the current value.
  */
 USER_FUNC(evt_fade_set_mapchange_type) {
     EvtWord* args = event->args;
-    s32 area, inType, inDuration, outType, outDuration;
+    s32 area, outType, outDuration, inType, inDuration;
 
     area = evtGetValue(event, args[0]);
-    inType = evtGetValue(event, args[1]);
-    inDuration = evtGetValue(event, args[2]);
-    outType = evtGetValue(event, args[3]);
-    outDuration = evtGetValue(event, args[4]);
+    outType = evtGetValue(event, args[1]);
+    outDuration = evtGetValue(event, args[2]);
+    inType = evtGetValue(event, args[3]);
+    inDuration = evtGetValue(event, args[4]);
     if (!area) {
-        if (inType != -1) {
-            gp->mapFadeInType = inType;
-        }
-        if (inDuration != -1) {
-            gp->mapFadeInDuration = inDuration;
-        }
         if (outType != -1) {
             gp->mapFadeOutType = outType;
         }
         if (outDuration != -1) {
             gp->mapFadeOutDuration = outDuration;
         }
-    } else {
         if (inType != -1) {
-            gp->areaFadeInType = inType;
+            gp->mapFadeInType = inType;
         }
         if (inDuration != -1) {
-            gp->areaFadeInDuration = inDuration;
+            gp->mapFadeInDuration = inDuration;
         }
+    } else {
         if (outType != -1) {
             gp->areaFadeOutType = outType;
         }
         if (outDuration != -1) {
             gp->areaFadeOutDuration = outDuration;
+        }
+        if (inType != -1) {
+            gp->areaFadeInType = inType;
+        }
+        if (inDuration != -1) {
+            gp->areaFadeInDuration = inDuration;
         }
     }
     return EVT_RETURN_DONE;

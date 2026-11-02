@@ -261,7 +261,7 @@ void effBrokenBarrierMain(EffectEntry* effect) {
         work->velocity.y += 0.04f * (work->targetVel.y - work->velocity.y);
         work->velocity.z += 0.04f * (work->targetVel.z - work->velocity.z);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBrokenBarrierDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBrokenBarrierDisp, effect);
 }
 
 /** Draws the shard cloud three times: as is, and rotated by +/-120 degrees about a tilted axis. */

@@ -115,7 +115,7 @@ BattleUnitKind unit_barriern_custom_satellite = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element reactions of Mini-X-Yux: none, every element hits normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Body parts of Mini-X-Yux: 6 parts (model c_baria_c); the first is the body.
@@ -203,7 +203,7 @@ EVT_END()
  * and LW(11) = 1.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN

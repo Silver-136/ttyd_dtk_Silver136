@@ -798,7 +798,7 @@ EVT_END()
  * enemy_common_flag_init_event; nothing in the game references it
  */
 EVT_BEGIN(testnpc_move_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_JUMPING | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_GRAVITY | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     CALL(evt_sub_random, 360, LW(3))
     LABEL(0)
@@ -818,7 +818,7 @@ EVT_END()
  * enemy) and status 2. Demo position of the retail definition below.
  */
 EVT_BEGIN(enemy_common_flag_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_STOP_FOR_EVENT | NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_JUMPING | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_STOP_FOR_EVENT | NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_GRAVITY | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -827,7 +827,7 @@ EVT_END()
  * enemy_common_flag_init_event; nothing in the game references it
  */
 EVT_BEGIN(testnpc_move_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_JUMPING | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_GRAVITY | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     CALL(evt_sub_random, 360, LW(3))
     LABEL(0)
@@ -869,7 +869,7 @@ EVT_END()
  * Demo position of the retail definition below.
  */
 EVT_BEGIN(npc_urouro_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -972,7 +972,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 /** Init event of Paragoombas: script-driven flying enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(patakuri_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -1354,7 +1354,7 @@ EVT_END()
  * Demo position of the retail definition below.
  */
 EVT_BEGIN(patapata_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_WALL_BOUNCE | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_WALL_BOUNCE | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -1690,7 +1690,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 /** Init event of Parabuzzies: flying enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(patamet_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -1799,7 +1799,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 /** Init event of Fuzzies: jumping enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(chorobon_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_JUMPING | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_GRAVITY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -2050,7 +2050,7 @@ EVT_END()
  * Demo position of the retail definition below.
  */
 EVT_BEGIN(karon_dead_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_HIDDEN)
+    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
@@ -2347,7 +2347,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(sambo_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION)
     RETURN
 EVT_END()
 #endif
@@ -2777,7 +2777,7 @@ EVT_BEGIN(barriern_find_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_FIND)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #endif
     LABEL(0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_2"))
@@ -2870,7 +2870,7 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
  */
 USER_FUNC(piders_draw_yawn) {
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
-    dispEntry(CAMERA_3D, 0.0f, 1, piders_draw_yarn_sub, npc);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, piders_draw_yarn_sub, npc);
     return EVT_RETURN_DONE;
 }
 
@@ -2934,7 +2934,7 @@ EVT_BEGIN(barriern_lost_event)
 #else
 EVT_BEGIN(barriern_lost_event)
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #endif
 #endif
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_3"))
@@ -2947,7 +2947,7 @@ EVT_END()
 
 EVT_BEGIN(barriern_return_event)
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #endif
     CALL(evt_set_dir_to_home, STRING("me"))
     CALL(evt_npc_get_dir, STRING("me"), LW(3))
@@ -2965,7 +2965,7 @@ EVT_END()
 
 EVT_BEGIN(barriern_blow_event)
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #endif
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 0)
     CALL(evt_npc_set_position, STRING("slave_0"), 0, -1000, 0)
@@ -2979,7 +2979,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(piders_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
-    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 #endif
@@ -3362,7 +3362,7 @@ EVT_BEGIN(basabasa_dead_event)
     RETURN
 EVT_END()
 EVT_BEGIN(basabasa2_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -3453,7 +3453,7 @@ EVT_BEGIN(basabasa2_dead_event)
     RETURN
 EVT_END()
 EVT_BEGIN(teresa_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -3558,7 +3558,7 @@ EVT_BEGIN(teresa_dead_event)
     RETURN
 EVT_END()
 EVT_BEGIN(bubble_init_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR | NPC_FLAG_ENEMY)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
     RETURN
 EVT_END()
@@ -3741,7 +3741,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(zakowiz_dead_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_HIDDEN)
+    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
@@ -4093,7 +4093,7 @@ EVT_END()
 
 EVT_BEGIN(kamec_init_event)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
 #endif
@@ -4222,7 +4222,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(kamec_dead_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_HIDDEN)
+    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
@@ -4332,7 +4332,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(kamec2_dead_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_HIDDEN)
+    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
@@ -4376,7 +4376,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(hbross_dead_event)
-    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_HIDDEN)
+    CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
 EVT_END()
@@ -5504,8 +5504,8 @@ EVT_BEGIN(zakoM2D_find_start_event)
         CALL(evt_npc_facedirection_add, STRING("me"), LW(0), 10)
         ADD(LW(1), 20)
         CALL(evt_npc_set_position, STRING("slave_0"), LW(0), LW(1), LW(2))
-        CALL(evt_npc_flag_onoff, 0, STRING("slave_0"), NPC_FLAG_INTANGIBLE)
-        CALL(evt_npc_flag_onoff, 0, STRING("slave_0"), NPC_FLAG_HIDDEN)
+        CALL(evt_npc_flag_onoff, 0, STRING("slave_0"), NPC_FLAG_NO_HIT)
+        CALL(evt_npc_flag_onoff, 0, STRING("slave_0"), NPC_FLAG_NO_DRAW)
         IF_INT_GREATER_OR_EQUAL(LW(10), 200)
             CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
             CALL(evt_npc_facedirection_add, STRING("me"), LW(0), 100)
@@ -5520,10 +5520,10 @@ EVT_BEGIN(zakoM2D_find_start_event)
         CALL(evt_eff, STRING(""), STRING("toge_flush"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_npc_set_anim, STRING("slave_0"), STRING("B_2"))
         WAIT_FRAMES(10)
-        CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_HIDDEN)
+        CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
         WAIT_FRAMES(60)
         CALL(evt_npc_set_position, STRING("slave_0"), 0, -1000, 0)
-        CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_INTANGIBLE)
+        CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_HIT)
     END_INLINE_EVENT
 #else
     SPAWN_EVENT(zakoM2D_find_event)

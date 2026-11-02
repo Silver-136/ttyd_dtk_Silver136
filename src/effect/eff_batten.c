@@ -181,9 +181,9 @@ void effBattenMain(EffectEntry* effect) {
             effDelete(effect);
             return;
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&tmp), 2, (DispCallback)effBattenDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&tmp), DISP_MODE_XLU, (DispCallback)effBattenDisp, effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&tmp), 2, (DispCallback)effBattenDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&tmp), DISP_MODE_XLU, (DispCallback)effBattenDisp2, effect);
     }
 }
 

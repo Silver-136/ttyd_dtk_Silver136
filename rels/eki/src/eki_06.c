@@ -22,6 +22,7 @@
 #include "string.h"
 #include "evt/evt_bero.h"
 #include "eki.h"
+#include "driver/npcdrv.h"
 
 static s32 lock;
 
@@ -412,7 +413,7 @@ EVT_BEGIN(eki_06_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI2"))
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     SPAWN_EVENT(PTR(evt_box_open))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_34_3_BLUE_BLOCKS)

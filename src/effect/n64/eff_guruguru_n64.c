@@ -96,7 +96,7 @@ void effGuruguruMain(EffectEntry* effect) {
                 work->angle -= 360;
             }
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effGuruguruDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effGuruguruDisp, effect);
     }
 }
 

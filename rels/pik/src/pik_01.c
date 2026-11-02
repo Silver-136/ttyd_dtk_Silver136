@@ -1156,7 +1156,7 @@ EVT_BEGIN(pik_01_koopa_evt)
     CALL(evt_cam3d_evt_set, -273, 145, 196, -273, 69, -237, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
     SET_VALUE(GF(0), 0)
@@ -1683,7 +1683,7 @@ EVT_BEGIN(pik_01_init_evt)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         CALL(evt_mobj_entry, STRING("lock"), STRING("MOBJ_Lock"))
-        CALL(evt_mobj_flag_onoff, 1, STRING("lock"), MOBJ_FLAG_HINT)
+        CALL(evt_mobj_flag_onoff, 1, STRING("lock"), MOBJ_FLAG_SHOW_HINT)
         CALL(evt_mobj_set_position, STRING("lock"), 226, 30, -216)
         CALL(evt_mobj_set_anim, STRING("lock"), STRING("Z_1"))
         CALL(set_r)

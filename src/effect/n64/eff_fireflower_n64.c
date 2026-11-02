@@ -244,7 +244,7 @@ void effFireFlowerMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireFlowerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireFlowerDisp, effect);
 }
 
 /**

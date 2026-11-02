@@ -41,6 +41,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | src/mario/mario_pouch.c | pouchSortItem | US: block-scoped locals (shadowing j/i) and a separate sort counter m steer register colouring | see comment |
 | US | src/party/party_hit.c | partyChkBetweenWalls | US: `party_addf` inline add keeps the original fadds operand order (pos.y, 10.0f) | see comment |
 | Both | src/npc_event.c | _2d_dead_jump | `if (...) { d.y = d.y; } else { d.y = d.y; }` around the moveDir computation | no if, a plain if, removing the then-branch self-assignment (an empty else is equivalent) |
+| Both | src/koopa_hit.c | kpaChkHitobjRide | dead test (both branches return r); dropping it changes the object | see comment |
 | Both | src/mario/mario_pouch.c | pouchGetPartyAttackLv | the partyData[partyId] address is formed by hand from mpp and sizeof(PouchPartyData) (same address), so the field offset is added to the scaled index before the base (addi + lhax) | `mpp->partyData[partyId].attackLevel` (add + lha 10) |
 | Both | libs/dolsdk2004/src/gx/GXGeometry.c | GXGetCullMode | `// fake match?` in the non-default branch: decodes genMode with `((hwMode >> 0xD) & 0x2) | (((int)hwMode >> 0xE) & 0x2) >> 1` instead of the readable switch | see comment |
 | Both | libs/dolsdk2004/src/mcc/mcc.c | 17 functions (MCCInit .. MCCWrite, MailboxCheck, ...) | `int unused[N];` dead local in each function (comment "fake but blah"): pads the stack frame to the original size (the unit is not built: no configure entry; the original debug records show no such locals) | see comment |
@@ -93,7 +94,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_stage.c | BattleStageDispLight | copy propagation off and the 2.0f held in a named local `two`, so the constant numbers below `width` (a propagated constant load is an unnamed temp numbered above every named local); `s` is taken directly rather than through STG ... | 9 shapes with propagation on (named/const/static const two, width in block/shadowed/moved): all propagate back to the same temp; prop off alone 36 rows; prop off + two through STG 26 rows (GPR) |
 | Both | src/battle/battle_stage.c | BattleStageLightRelease | l first holds the stage pointer (two defs), so with propagation on the stage base and idx * 232 + 4 stay separate adds as in the target; this replaces the old opt_propagation off pragma, under which the {0,0,0} template also left ... | see comment |
 | Both | src/battle/battle_stage_object.c | _object_fall_attack | comma expr makes the literal an early @ temp (same pointer); integer cast (SFX_NAME_WORD) makes the literal a hoisted @ temp (same pointer); no-op self-assign (no code) raises w spill cost | zero-instruction forms; declsearch over decl orders |
-| Both | src/battle/battle_status_effect.c | BattleStatusChangeInfoSetAnnouce | no-op `(s8)(u8)e[i].type` round trip on the s8 field before `_get_pri` (load/extend order as in the target) | `_get_pri(e[i].type)` |
+| Both | src/battle/battle_status_effect.c | BattleStatusChangeInfoSetAnnouce | no-op `(s8)e[i].type` cast on the s8 field before `_get_pri` (load/extend order as in the target) | `_get_pri(e[i].type)` |
 | Both | src/battle/battle_unit.c | BtlUnit_SetParamToPouch | partner HP stored by byte offset (`(u8*)pouch + id * sizeof(PouchPartyData) + offsetof(PouchPartyData, currentHP)`) so the field offset folds into the index (addi/sthx) | `pouch->partyData[id].currentHP` (add/sth) |
 | Both | src/battle/sac/sac_bakugame.c | bakuGameDecideWeapon | same-value second def of q (q == &wp->sleepChance already). It keeps q a named multi-def pointer (addi r28) with no in-block copy. That keeps the q addi at height 1, so lis issues before `mr w,r3` and takes r4, as in the target. | file 20/21 100% (report 21/21); link_check probe8 LINK OK 32 files |
 | Both | src/cam_road.c | calcCamRoad | cos through an inline so the first-block cs is an inline @ temp (numbered above the hoisted +-1 constants, f15 as in the target); sgn1/sgn2 as if/else locals of an inline: inline locals get their @ labels at definition time, so the sgn webs are numbered above l2 (crMul) and below cs; with ax/az numbered low this gives the target l2 f14 / sgn1 f15 / sgn2 f28 (+4 more FAKE comment(s)) | see comment |
@@ -114,7 +115,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/itemdrv.c | itemHitCheck | empty `do { } while (0);` before the `flags & 2` continue (an extra block that keeps the target schedule) | removing it changes the object in both versions |
 | Both | src/driver/mapdrv.c | _mapLoad | chunk search still written out with k declared last; redundant owner-pointer copy in header rawFile store removed | fresh US/JP direct-owner store probes; chunk-search concern remains |
 | Both | src/driver/mapdrv.c | bmapUnLoad | opt_common_subs off for this function only. With CSE on, `wp = mapWork` (last loop) becomes a CSE temp created before the lifetime-split temps, so wp's register lands above i's. With it off, the second web of the reused `wp` is a ... | 120 decl orders, separate counters, `activeGroup = i = 0`, last loop as static inline (phases 3-4); wp reuse or `i = 0` first alone: 99.62; CSE off without reuse: 22 rows |
-| Both | src/driver/msgdrv.c | msgAnalize | nn, fp, fx, ys and yx are one-element arrays (IRO scalarizes them into @ temps). nn is the ruby index copy; dead int guard (COLOURING W): msg is redefined in the arm while next is still live; called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter); (u32) index casts here and in the second loop stop the IR optimizer from strength-reducing tag[j]/tag[i]; the backend does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target ...; 100% (A22, 10-22): #pragma opt_lifetimes off around msgAnalize keeps total as one web so the rubyW conversion int (total = (u16)total - E) shares the loop-1 accumulator register; the webs the target splits are split by hand (glyphD, wwD, wwR, kR declared first so they take the split temps numbers); write-only one-element int arrays zz/z3/z4 read back as 0 + 1 + 2 - 3 for the kR init leave three pre-RA-only li fillers so li kR schedules after the rubyW clrlwi; a one-trip j loop around animPoseSetGXFunc enables array-to-register, which drops their stores. | see comment |
+| Both | src/driver/msgdrv.c | msgAnalize | nn, fp, fx, ys and yx are one-element arrays (IRO scalarizes them into @ temps). nn is the ruby index copy; dead int guard, demos only since 2026-11-01 (COLOURING W): msg is redefined in the arm while next is still live; called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter); (u32) index casts here and in the second loop stop the IR optimizer from strength-reducing tag[j]/tag[i]; the backend does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target ...; 100% (A22, 10-22): #pragma opt_lifetimes off around msgAnalize keeps total as one web so the rubyW conversion int (total = (u16)total - E) shares the loop-1 accumulator register; the webs the target splits are split by hand (glyphD, wwD, wwR, kR declared first so they take the split temps numbers); write-only one-element int arrays zz/z3/z4 read back as 0 + 1 + 2 - 3 for the kR init leave three pre-RA-only li fillers so li kR schedules after the rubyW clrlwi; a one-trip j loop around animPoseSetGXFunc enables array-to-register, which drops their stores. | see comment |
 | Both | src/driver/npcdrv.c | _npcHitCheckHammerAllMotion | volatile copy needed for 100% (87.59 with a plain struct copy) | plain struct copy `tbl = sSinTbl`: 87.59 (G5) |
 | Both | src/driver/npcdrv.c | fbatBattleMode | the recovered-item loop as a static inline helper (counter = inline-local @ temp, ptr r30), with the stored zero held in a local z kept alive by a dead int guard (COLOURING M; folded after RA, no code): i = 0 / z = 0 share a ...; dead int-guarded re-definition keeps mario a named web (COLOURING M); the stolen check as a loop with break over a byte offset (int counter): MWCC unrolls it into the if/else chain with every offset folded into cur, and the 8 loads share one vreg (an indexed `stolenItems[k]` loop is ... (+1 more FAKE comment(s)) | see comment |
 | Both | src/driver/npcdrv.c | fbatEncountCheck | dead int-guarded re-definition inside the loop keeps dir a named web (COLOURING M; no code, no preheader split) | guard between def and loop (block split, li j before lfs: 99.73), dead stores, ternary guard, facing/j guards (Q8) |
@@ -256,13 +257,12 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_audience.c | BattleAudienceItemCtrlProcess | s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceDispAudience | block-local degrees-to-radians temporary (shadows s32 k); the constant written directly changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceDispApSrc | star holds the BattleAudience pointer until the loop; a separate BattleAudience* variable changes the object | see comment |
-| Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment |
+| Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment; tried 2026-11-01: switch with one case: cmpwi + beq, target is cmplwi + blt + bgt |
 | Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
 | Both | src/battle/battle_break_slot.c | BattleBreakSlot_Init | i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object | see comment |
 | Both | src/battle/battle_break_slot.c | BattleBreakSlotDispReel | i is set before the reel pointer; `for (i = 0; ...)` changes the object | see comment |
 | Both | src/battle/battle_detect.c | BattleGetFirstAttackUnit | tmp holds the getter result across the swap; assigning it directly changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlUnitItemDisp | per-function opt_dead_assignments off keeps the unused height store; without it the object changes | see comment |
-| Both | src/battle/battle_disp.c | btlUnitItemDisp2 | goto chain; the single condition changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlUnitStolenItemDisp | float-first cast of iconDispGx; the plain call changes the object | see comment |
 | Both | src/battle/battle_disp.c | btlDispAnimeSpeed | unused constant local kept by a per-function opt_dead_assignments off; without them the object changes | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_GetRGB | args is reused to hold the blue index; indexB = args[4] changes the object | see comment |
@@ -289,18 +289,16 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_seq_command.c | _btlcmd_SelectWeaponDecide | (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object | BattleSamplingEnemy with s32 belong (7 units change) |
 | Both | src/battle/battle_seq_command.c | BattleCommandDisplay_WeaponMultiItemCancelCheckDisp | called through a cast that puts the float arguments first; the plain call changes the object | see comment |
 | Both | src/battle/battle_seq_command.c | _btlcmd_SetAttackEvent | compares the pointers as signed integers (cmpw); the plain pointer compare changes the object | see comment |
-| Both | src/battle/battle_seq_end.c | btlseqEnd | dead `i >= STATUS_INVALID` test; `if (i < STATUS_FRIGHT)` changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _MarioExpDisp | windowDispGX_Waku_col called through a float-first cast; the plain call changes the object | see comment |
 | Both | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
 | US | src/battle/battle_seq_end.c | _draw_select_one_to_upgrade_text | 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object | see comment |
-| Both | src/battle/battle_seq_end.c | _set_confetti_control_evtid | empty triple NULL test of seqEndWork; removing it changes the object | see comment |
+| Both | src/battle/battle_seq_end.c | _set_confetti_control_evtid | empty triple NULL test of seqEndWork; removing it changes the object | see comment; tried 2026-11-01: removal or swapped declarations: args and work loads swap; demos have the same empty test, no evidence of an assert macro |
 | Both | src/sound.c | SoundInit | spare temporary tempsong; songs = sndMalloc(...); sound.songs = songs changes the object | see comment |
 | Both | src/sound.c | SoundLoadDVD2 | dead store; removing it changes the object | see comment |
 | Both | src/sound.c | SoundDVDSetPanCh | sign-bit test for pan >= 64; the plain comparison changes the object | see comment |
 | Both | src/sound.c | SoundDVDMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
 | Both | src/sound.c | ssDecodeDPCM | no-op (s32) cast; without it the object changes | see comment |
 | Both | src/sound.c | SoundSSMain | u32 counter with a signed compare; a plain int counter changes the object | see comment |
-| Both | src/statuswindow.c | statusWinInit | empty null check after the memset; removing it changes the object | see comment |
 | Both | src/statuswindow.c | statusWinMain | (x ? FALSE : TRUE) for !x; the plain negation changes the object | see comment |
 | Both | src/statuswindow.c | gaugeDisp | iconDispGx called through a scale-first function pointer cast (the scale is in f1 either way), which evaluates the arguments in the retail order; the plain call changes the object. | see comment |
 | Both | src/statuswindow.c | statusWinEase | unreferenced (dead-stripped at link); it only sets the order of the float constants in the pool, and the object changes without it. | see comment |
@@ -336,7 +334,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/animdrv.c | animGroupBaseAsync | (u32) cast (unsigned compare); plain model == 0 changes the object | u32 model local; fileAsyncf returning u32 |
 | Both | src/driver/arcdrv.c | arcOpen | info used through the pointer infop; passing &info directly changes the object | see comment |
 | Both | src/driver/camdrv.c | camMain | dead zero store (every field is set below); removing it changes the object | see comment |
-| Both | src/driver/camdrv.c | camLetterBox | `party &&` repeats the null test; dropping it changes the object | see comment |
+| Both | src/driver/camdrv.c | camLetterBox | `party &&` repeats the null test; dropping it changes the object | see comment; tried 2026-11-01: inline partyIsBeingUsed(party) in !party || !used: materializes the bool, longer |
 | Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object | see comment |
 | Both | src/driver/envdrv.c | envWaterParent | one-use inline helper for obj->parent; writing it out changes the object | see comment |
 | Both | src/driver/fadedrv.c | fadeEntry | types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the object | see comment |
@@ -348,7 +346,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/icondrv.c | iconDispGxAlpha | iconId++ then iconId-- (no net change); without them the object changes | see comment |
 | Both | src/driver/itemdrv.c | itemMain | f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY); `hitDist = 20.0 + __fabs(-1.0)` changes the object | see comment |
 | Both | src/driver/itemdrv_pad.c | (file scope) | 24 zero bytes of JP .rodata at 0x802CAE68 with no known owner, kept alive with force_active | see comment |
-| Both | src/driver/mapdrv.c | mapBuildTexture | unreachable empty `if (!k) { }` between two cases; removing it changes the object | see comment |
 | Both | src/driver/mapdrv.c | mapHdrSizeOk_ | the file-size check goes through this helper so the header's size stays the left operand of the compare; the same `==` written in place on wp->entries[group].header swaps the operands and changes the object | see comment |
 | Both | src/driver/mapdrv.c | mapLoadHeader_ | header is the address of a member and never NULL; removing the test changes the object | mapGetWork() at the declaration / after sysWaitDrawSync / in the memset |
 | Both | src/driver/mapdrv.c | mapLoad | wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object | mapGetWork() at the declaration / after sysWaitDrawSync / in the memset |
@@ -470,27 +467,27 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_npc.c | evt_npc_jump_position_nohit | no-op (s32) casts on the s32 elapsed; the plain arguments change the object | see comment |
 | Both | src/event/evt_npc.c | evt_npc_flag_onoff | no-op (u32) cast; the plain form changes the object | u32 mask local |
 | Both | src/event/evt_npc.c | evt_npc_status_onoff | no-op (u32) cast; the plain form changes the object | plain ~mask |
-| Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment |
-| Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment |
+| Both | src/event/evt_party.c | evt_party_move_pos | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
+| Both | src/event/evt_party.c | evt_party_move_pos2 | hand-written range test (waits for runMode 0, 1 or 2); the plain comparisons change the object | see comment; tried 2026-11-01: switch on runMode: different compare shape |
 | Both | src/event/evt_party.c | evtPartyStrippedPool | stand-in that nothing calls (in neither symbol map); it only fixes the order of these literals in the constant pool; removing it changes the object | see comment |
 | Both | src/event/evt_shop.c | evt_shop_setup | block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object | see comment |
 | Both | src/event/evt_shop.c | evt_shop_main_func | the masks and BOOL casts do nothing (!x is 0 or 1); !marioChkCtrl() // !marioChkKey() changes the object | see comment |
 | Both | src/event/evt_sub.c | evt_sub_animgroup_async | redundant test (r is nonzero here); returning EVT_RETURN_DONE directly changes the object | see comment |
 | Both | src/manager/cardmgr.c | cardBufReset | extra volatile flags read (unused destination local removed); dropping the read changes the object | see comment |
 | Both | src/manager/cardmgr.c | memcard_probe | self-assignment with no effect; without it the object changes | see comment |
-| Both | src/manager/cardmgr.c | make_data | i is never -1 here; the plain save = &cardGetFilePtr()->saves[i] changes the object | see comment |
+| Both | src/manager/cardmgr.c | make_data | i is never -1 here; the plain save = &cardGetFilePtr()->saves[i] changes the object | see comment; tried 2026-11-01: slot-or-write-buffer inline shared with cardErase (whole-body, getter with returns, with local, ternary, swapped declarations): cardErase matches, make_data swaps r30/r31 (offset and save) |
 | Both | src/manager/evtmgr_cmd.c | evtGetValue | result stored back into index; return (mask & data) != 0 changes the object | see comment |
 | Both | src/manager/filemgr.c | fileGarbageDataAdrSet | no-op (u16) cast on the u16 counter; the plain comparison changes the object | int i without the cast |
 | Both | src/manager/fontmgr.c | fontDrawPairXI | spare s16 copies of the s16 parameters (and a no-op cast); using x and y directly changes the object | see comment |
 | Both | src/manager/fontmgr.c | fontDrawPairYI | spare s16 copies of the s16 parameters; using x and y directly changes the object | see comment |
 | Both | src/manager/fontmgr.c | fontDrawPairX | no-op (s16) casts on iy; the plain argument changes the object | see comment |
 | Both | src/manager/fontmgr.c | fontDrawPairY | no-op (s16) casts on ix; the plain argument changes the object | see comment |
-| Both | src/manager/fontmgr.c | FontGetMessageWidthLine | empty dead test of code; removing it changes the object | see comment |
+| Both | src/manager/fontmgr.c | FontGetMessageWidthLine | empty dead test of code; removing it changes the object | see comment; tried 2026-11-01: demos checked: same empty test, no code in any version; __assert/__assert2 are UNUSED in the JP demo map; no evidence of a macro |
 | Both | src/manager/winmgr.c | winMgrSelectDelete | spare copies of sel, sel->items and a heap-id local (redundant inner heap assignment removed); the plain __memFree(HEAP_DEFAULT, sel->items); __memFree(HEAP_DEFAULT, sel); changes the object | see comment |
 | Both | src/manager/winmgr.c | select_disp | white copied through a spare tmp; iconcol = white changes the object | see comment |
 | Both | src/manager/winmgr.c | select_disp_party | white copied through a spare tmp; iconcol = white changes the object | see comment |
 | Both | src/manager/winmgr.c | select_disp_mario | white copied through a spare tmp; iconcol = white changes the object | see comment |
-| Both | src/event/evt_win.c | evt_unitwin_select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment |
+| Both | src/event/evt_win.c | evt_unitwin_select_func | `x ? FALSE : TRUE` in place of `!x`; !marioChkCtrl() // !marioChkKey() changes the object | see comment; tried 2026-11-01: shared inline marioNoCtrl/NoKey (return !x, local, ternary): the materialized cntlzw is lost |
 | Both | src/mario/mario.c | N_marioChkUseParty | (u16) cast on the u32 buttonNew (all tested bits are in the low half); the plain test changes the object | see comment |
 | Both | src/mario/mario.c | marioReInit | spare copy t of paperPoseId; testing poseId directly changes the object | see comment |
 | Both | src/mario/mario.c | marioMain | spare copy drop of pos; passing &pos changes the object | see comment |
@@ -530,7 +527,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_move.c | partyRecordFootmark | call through a no-op function-pointer cast; the plain call changes the object | see comment |
 | Both | src/party/party_move.c | partyUpdSpd2 | copy of partyUpdSpd with its locals declared in another order; using partyUpdSpd in partyChkUpdSpd changes the object | see comment |
 | Both | src/party/party_move.c | partyChgMoveMode | the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object | see comment |
-| Both | src/party/party_nokonoko.c | nokonoko_use | moveDistance is accessed through this byte pointer in the cases below; party->moveDistance changes the object | see comment |
 | Both | src/party/party_nokonoko.c | ccwall | assignment inside the expression and the spare copy k of 30.0f; the plain statements change the object | see comment |
 | Both | src/party/party_nokonoko.c | lookupSafetyPos3 | the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes | see comment |
 | Both | src/party/party_vivian.c | marioForceVivianAnime | padding constant kept in .sdata2 by explicit_zero_data and the (void)& use; removing it changes the section layout | see comment |
@@ -541,7 +537,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/sequence/seq_e3.c | seq_e3Main | a second loop counter; reusing the function's i changes the object | see comment |
 | Both | src/sequence/seq_e3.c | e3Disp | the (u32) cast on the 8; plain i + 8 changes the object in the JP demo only (retail versions stay the same without it) | see comment |
 | Both | src/sequence/seq_e3.c | forceSdata | stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object | see comment |
-| JP | src/sequence/seq_logo.c | seq_logoInit | empty if with dead tests of wp; removing it changes the object | see comment |
 | Both | src/unit/party/unit_party_yoshi.c | yoshiStrippedPool | stand-in that nothing calls; its s32-to-f32 conversion likely shapes the constant pool (as kpaStrippedPool does in koopa.c); removing it changes the object | see comment |
 | Both | src/window/win_item.c | itemUseDisp | white is copied through the spare white2 into white3; white3 = white changes the object | see comment |
 | Both | src/window/win_log.c | winLogDisp | wk is reloaded before each position store; one load changes the object | see comment |
@@ -551,7 +546,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | JP | src/window/win_mario.c | winZenkakuStr | (s8) cast on a digit character; without it the object changes | see comment |
 | JP | src/window/win_mario.c | winZenkakuStrPad | (s8) cast on a digit character; without it the object changes | see comment |
 | Both | src/window/win_root.c | winRootStrippedPool | stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool. Removing it changes the object. | see comment |
-| Both | src/window/win_root.c | winRootDisp | hand-written unsigned range test for the closing states 10 and 11; state == 10 // state == 11 changes the object | see comment |
+| Both | src/window/win_root.c | winRootDisp | hand-written unsigned range test for the closing states 10 and 11; state == 10 // state == 11 changes the object | see comment; tried 2026-11-01: if (i > 0) switch (state) with case 10/11: longer, range subtract lost |
 | Both | src/window/win_root.c | winMsgDisp | the != 0 test is redundant; wp->msgItem > 0 alone changes the object | see comment |
 | Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
 | Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |

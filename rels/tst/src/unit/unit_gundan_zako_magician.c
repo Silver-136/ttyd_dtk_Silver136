@@ -138,7 +138,7 @@ BattleUnitKind unit_gundan_zako_magician = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Elemental reactions of the X-Naut PhD: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {70, 80, 70, 100, 80, 100, 100, 70, 100, 75, 100, 75, 100, 70, 70, 90, 80, 100, 70, 100, 100, 95};
@@ -730,20 +730,20 @@ static EVT_BEGIN(attack_common_event2)
     // Hit check: a miss or dodge shatters the bottle, a hit goes on to the damage and status.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -789,7 +789,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(30)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -832,20 +832,20 @@ static EVT_BEGIN(attack_common_event3)
     END_LOOP
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -867,7 +867,7 @@ static EVT_BEGIN(attack_common_event3)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(30)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -1018,20 +1018,20 @@ static EVT_BEGIN(minimini_bottle_event)
     // once.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -1059,7 +1059,7 @@ static EVT_BEGIN(minimini_bottle_event)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(60)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -1101,7 +1101,7 @@ static EVT_BEGIN(one_recover_event)
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1154,7 +1154,7 @@ static EVT_BEGIN(all_recover_event)
     WAIT_FRAMES(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(60)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

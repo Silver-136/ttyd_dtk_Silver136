@@ -248,19 +248,19 @@ void iconMain(void) {
             }
             if (!(entry->uflags & ICON_FLAG_HIDDEN)) {
                 if (entry->uflags & ICON_FLAG_2D) {
-                    dispEntry(CAMERA_2D, 200.0f, 1, iconDisp, entry);
+                    dispEntry(CAMERA_2D, 200.0f, DISP_MODE_ALPHA_TEST, iconDisp, entry);
                 } else if (entry->uflags & ICON_FLAG_CAM_EFFECT_A) {
                     shadowEntry(entry->position.x, entry->position.y, entry->position.z, 10.0f);
-                    dispEntry(CAMERA_3D_EFFECTA, dispCalcZ(&entry->position), 1, iconDisp, entry);
+                    dispEntry(CAMERA_3D_EFFECTA, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, iconDisp, entry);
                 } else if (entry->uflags & ICON_FLAG_CAM_EFFECT_B) {
                     shadowEntry(entry->position.x, entry->position.y, entry->position.z, 10.0f);
-                    dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&entry->position), 1, iconDisp, entry);
+                    dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, iconDisp, entry);
                 } else {
                     shadowEntry(entry->position.x, entry->position.y, entry->position.z, 10.0f);
                     if (entry->color.a != 0xFF) {
-                        dispEntry(CAMERA_3D, dispCalcZ(&entry->position), 2, iconDisp, entry);
+                        dispEntry(CAMERA_3D, dispCalcZ(&entry->position), DISP_MODE_XLU, iconDisp, entry);
                     } else {
-                        dispEntry(CAMERA_3D, dispCalcZ(&entry->position), 1, iconDisp, entry);
+                        dispEntry(CAMERA_3D, dispCalcZ(&entry->position), DISP_MODE_ALPHA_TEST, iconDisp, entry);
                     }
                 }
             }

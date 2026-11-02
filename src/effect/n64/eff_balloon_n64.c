@@ -148,7 +148,7 @@ void effBalloonMain(EffectEntry* effect) {
     } else {
         work->offsetY = 1.2f * scale;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBalloonDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBalloonDisp, effect);
 }
 
 /**
@@ -160,7 +160,7 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffBalloonN64Work* work = effect->userdata;
     s32 lifetime;
-    effN64Vtx* vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
+    effN64Vtx* vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, SMART_GROUP_TEMP)->address;
     Vec v0;
     Vec v1;
     Vec v2;

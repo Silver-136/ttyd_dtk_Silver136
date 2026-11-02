@@ -3733,7 +3733,7 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
         event->userdata[0] = time;
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
 #if VERSION <= VERSION_DEMO_US
-        itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
+        itemFlagOn(event->userdatap[1], ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
         return EVT_RETURN_BLOCK;
     }
@@ -3785,7 +3785,7 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, pos.x, pos.y, pos.z);
         effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
 #if VERSION <= VERSION_DEMO_US
-        itemFlagOn(event->userdatap[1], ITEM_FLAG_BADGE_RETURN);
+        itemFlagOn(event->userdatap[1], ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
         if (kind == UNIT_MARIO) {
             psndSFXOn_3D("SFX_ITEM_MARIO_USE1", &pos);
@@ -4161,7 +4161,7 @@ USER_FUNC(btlevtcmd_DamageDirect) {
     damage = evtGetValue(event, args[2]);
     result = args[3];
     pattern = evtGetValue(event, args[4]);
-    BattleDamageDirect(-5, unit, part, damage, 0, result, pattern, evtGetValue(event, args[5]));
+    BattleDamageDirect(UNIT_ID_SYSTEM, unit, part, damage, 0, result, pattern, evtGetValue(event, args[5]));
     return EVT_RETURN_DONE;
 }
 
@@ -5221,7 +5221,7 @@ USER_FUNC(btlevtcmd_StartAC) {
     s32 help = evtGetValue(event, event->args[0]);
     BattleActionCommandStart(wp);
     if (help && !(wp->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
-        BattleAcHelpSetDispType(2);
+        BattleAcHelpSetDispType(AC_HELP_DISP_ON);
     }
     return EVT_RETURN_DONE;
 }
@@ -5229,7 +5229,7 @@ USER_FUNC(btlevtcmd_StartAC) {
 /** Script: stops the action command and hides its help text. */
 USER_FUNC(btlevtcmd_StopAC) {
     BattleActionCommandStop(_battleWorkPointer);
-    BattleAcHelpSetDispType(0);
+    BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
     return EVT_RETURN_DONE;
 }
 
@@ -5243,7 +5243,7 @@ USER_FUNC(btlevtcmd_ResultAC) {
     if (wp->actionCommands.result & AC_RESULT_RUNNING) {
         return EVT_RETURN_BLOCK;
     }
-    BattleAcHelpSetDispType(0);
+    BattleAcHelpSetDispType(AC_HELP_DISP_OFF);
     return EVT_RETURN_DONE;
 }
 
@@ -5482,7 +5482,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
             w = 180.0f;
             eff = 4;
             break;
-default: return EVT_RETURN_DONE;
+        default: return EVT_RETURN_DONE;
     }
     w *= scale;
     h = w / 2.0f;
@@ -5655,7 +5655,7 @@ USER_FUNC(btlevtcmd_ac_timing_get_success_frame) {
 USER_FUNC(btlevtcmd_ACHelpSet) {
     BattleWeapon* weapon = (BattleWeapon*)evtGetValue(event, event->args[0]);
     BattleAcHelpSetHelp(weapon->acHelpMsg);
-    BattleAcHelpSetDispType(2);
+    BattleAcHelpSetDispType(AC_HELP_DISP_ON);
     return EVT_RETURN_DONE;
 }
 
@@ -5793,9 +5793,9 @@ USER_FUNC(btlevtcmd_AnimeChangePoseDirect) {
     part->animFlags &= ~PART_ANIM_COMMAND_POSE;
     part->animFlags &= ~PART_ANIM_BURNT;
     animPoseSetAnim(part->poseId, name, TRUE);
-    part->poseType = 1;
+    part->look = PART_LOOK_NORMAL;
     if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
-        part->poseType = 7;
+        part->look = PART_LOOK_XLU;
     }
     return EVT_RETURN_DONE;
 }

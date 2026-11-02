@@ -43,6 +43,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_audience.h"
 #include "eff/eff_pointget.h"
+#include "icon_ids.h"
 #if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
@@ -53,12 +54,6 @@
 #include "battle/battle_actrecord.h"
 #include "battle/battle_camera.h"
 #include "battle/battle_seq.h"
-
-#if VERSION >= VERSION_US
-#define EXP_ICON 0x194
-#else
-#define EXP_ICON 0x18C
-#endif
 
 void FontDrawString(f32 x, f32 y, const char* msg);
 
@@ -80,17 +75,6 @@ typedef enum SeqEndDispFlags {
 #endif
 
 void _GetExpIcon_Init(BattleSeqEndWork* work);
-
-typedef struct SeqEndUnitSetup {
-    u8* kind;                 // 0x0
-    u8 setupRest[0x30 - 0x4]; // 0x4
-} SeqEndUnitSetup;
-
-typedef struct SeqEndGroup {
-    s32 count;              // 0x0
-    SeqEndUnitSetup* units; // 0x4
-} SeqEndGroup;
-
 
 void _GetExpIcon_Main(BattleWork* wp);
 void _LvupParamConfirmDisp(CameraId camId, void* param);
@@ -223,7 +207,7 @@ void btlseqEnd(BattleWork* wp) {
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
-    case 0x7000000: {
+    case SEQ_END_START: {
         s32 marioBelong;
         s32 enemyBelong;
         u32 flags;
@@ -248,20 +232,20 @@ void btlseqEnd(BattleWork* wp) {
         switch (BattleInformationGetResult(info)) {
         case BATTLE_RESULT_WIN:
             if (fbatGetPointer()->postBattleEvent != NULL) {
-                BattleSetSeq(wp, SEQ_END, 0x7000003);
+                BattleSetSeq(wp, SEQ_END, SEQ_END_POST_EVENT_START);
                 return;
             }
             _check_audience_battle_end_exec();
-            BattleSetSeq(wp, SEQ_END, 0x7000005);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_CLEAR_STATUS);
             _BattleMarioKouraDelete();
             break;
         case BATTLE_RESULT_LOSE:
-            BattleSetSeq(wp, SEQ_END, 0x7000001);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_LOSE_FADE);
             break;
         case BATTLE_RESULT_ESCAPE:
         default:
             _ExecAllUnitBattleEndEvent();
-            BattleSetSeq(wp, SEQ_END, 0x700001D);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT);
             BattleAudienceSoundSetVolAll(0, 30);
             break;
         }
@@ -274,24 +258,24 @@ void btlseqEnd(BattleWork* wp) {
         nw->confettiEvtId = 0;
         break;
     }
-    case 0x7000003: {
+    case SEQ_END_POST_EVENT_START: {
         FieldBattleData* fb = fbatGetPointer();
         EventEntry* e = evtEntry(fb->postBattleEvent, 10, 0);
         fb->postBattleEventId = e->eventId;
-        BattleSetSeq(wp, SEQ_END, 0x7000004);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_POST_EVENT_WAIT);
         return;
     }
-    case 0x7000004: {
+    case SEQ_END_POST_EVENT_WAIT: {
         FieldBattleData* fb = fbatGetPointer();
         BattleSeqEndWork* nw;
         if (evtCheckID(fb->postBattleEventId)) break;
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
         if (fb->postBattleMode) {
             BattleSetSeq(wp, SEQ_TURN, 0x3000001);
-            BattleSetSeq(wp, SEQ_UNKNOWN, 2);
+            BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_TURN);
             return;
         }
-        BattleSetSeq(wp, SEQ_END, 0x7000005);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_CLEAR_STATUS);
         _BattleMarioKouraDelete();
         nw = BattleAlloc(sizeof(BattleSeqEndWork));
         wp->seqEndWork = nw;
@@ -299,25 +283,25 @@ void btlseqEnd(BattleWork* wp) {
         nw->state = 0;
         return;
     }
-    case 0x7000001: {
+    case SEQ_END_LOSE_FADE: {
         _ExecAllUnitBattleEndEvent();
         btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
         btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFEAT);
         btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
         fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
         psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
-        BattleSetSeq(wp, SEQ_END, 0x7000002);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LOSE_FADE_WAIT);
         break;
     }
-    case 0x7000002:
+    case SEQ_END_LOSE_FADE_WAIT:
         if (!fadeIsFinish()) break;
         if (!((u32)wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_GAME_OVER)) {
             seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
             break;
         }
-        BattleSetSeq(wp, SEQ_END, 0x700001F);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_CLEANUP);
         break;
-    case 0x7000005: {
+    case SEQ_END_WIN_CLEAR_STATUS: {
         BattleUnit* mario = BattleGetMarioPtr(wp);
         BattleUnit* party = BattleGetPartyPtr(wp);
         s8 i;
@@ -328,10 +312,15 @@ void btlseqEnd(BattleWork* wp) {
         }
         BattleConsumeReserveItem();
         for (i = 0; i < STATUS_INVALID; i++) {
-            // FAKE: dead `i >= STATUS_INVALID` test; `if (i < STATUS_FRIGHT)` changes the object
-            if (i >= STATUS_INVALID || i < STATUS_FRIGHT) {
-                if (party) BtlUnit_SetStatus(party, i, 0, 0);
-                BtlUnit_SetStatus(mario, i, 0, 0);
+            switch (i) {
+                case STATUS_FRIGHT:
+                case STATUS_GALE_FORCE:
+                case STATUS_INSTANT_KILL:
+                    break;
+                default:
+                    if (party) BtlUnit_SetStatus(party, i, 0, 0);
+                    BtlUnit_SetStatus(mario, i, 0, 0);
+                    break;
             }
         }
         if ((u32)mario->attributeFlags & kVeiled) {
@@ -343,10 +332,10 @@ void btlseqEnd(BattleWork* wp) {
             p2->attackEventId = e->eventId;
             break;
         }
-        BattleSetSeq(wp, SEQ_END, 0x7000006);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_UNIT_EVENTS);
     }
     // fall through
-    case 0x7000006: {
+    case SEQ_END_WIN_UNIT_EVENTS: {
         BattleUnit* mario;
         PouchData* pp;
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
@@ -355,30 +344,30 @@ void btlseqEnd(BattleWork* wp) {
         BattleInformationSetDropMaterial(info);
         pp = pouchGetPtr();
         mario = BattleGetMarioPtr(wp);
-        if (pp->merleeNextCurseType == 3) {
+        if (pp->merleeNextCurseType == MAJINAI_EXP_UP) {
             EventEntry* e;
-            wp->majinaiState = 3;
+            wp->majinaiState = MAJINAI_EXP_UP;
             BattleMajinaiDone();
             BattleMajinaiEndCheck();
             e = evtEntry(marioAttackEvent_MajinaiExpUp, 10, 0);
             e->unitId = mario->unitId;
             mario->attackEventId = e->eventId;
-            BattleSetSeq(wp, SEQ_END, 0x7000007);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_EXP_UP_WAIT);
             break;
         }
-        BattleSetSeq(wp, SEQ_END, 0x7000008);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_INIT);
         break;
     }
-    case 0x7000007:
+    case SEQ_END_EXP_UP_WAIT:
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
-        BattleSetSeq(wp, SEQ_END, 0x7000008);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_INIT);
         break;
-    case 0x7000008: {
+    case SEQ_END_POINTS_INIT: {
         s32 flag;
         BattleFogForceStop();
         work->levelUp = 0;
         work->exp = BattleGetStockExp(wp);
-        if (wp->majinaiState == 3) {
+        if (wp->majinaiState == MAJINAI_EXP_UP) {
             work->exp = work->exp * 2;
         }
         if (pouch->level >= LEVEL_MAX) {
@@ -400,7 +389,7 @@ void btlseqEnd(BattleWork* wp) {
             btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_VICTORY_AUDIENCE);
         }
         btl_camera_set_posoffset(BTL_CAM_PRI_NORMAL, 0.0f, 0.0f, 0.0f);
-        BattleSetSeq(wp, SEQ_END, 0x7000009);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_DELAY);
         BattleAudienceSoundCheer(0x3C, 0x3C);
         BattleAudienceSoundClap(-1, 0);
         BattleAudienceSoundWhistle();
@@ -420,12 +409,12 @@ void btlseqEnd(BattleWork* wp) {
         }
     }
     // fall through
-    case 0x7000009:
+    case SEQ_END_POINTS_DELAY:
         work->timer = work->timer - 1;
         if (work->timer > 0) break;
-        BattleSetSeq(wp, SEQ_END, 0x700000A);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_SHOW);
         break;
-    case 0x700000A:
+    case SEQ_END_POINTS_SHOW:
         if (work->exp > 0) {
             BattleUnit* mario = BattleGetMarioPtr(wp);
             BattleUnit* party = BattleGetPartyPtr(wp);
@@ -444,16 +433,16 @@ void btlseqEnd(BattleWork* wp) {
             if (!work->expEffect) {
                 work->expEffect = effPointGetEntry(0, 0.0f, 90.0f, 0.0f, work->exp, 0);
             }
-            BattleSetSeq(wp, SEQ_END, 0x700000B);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_COUNT);
             break;
         }
         if (!(wp->flags & BATTLE_FLAG_MAJINAI_END)) {
-            BattleSetSeq(wp, SEQ_END, 0x7000019);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_VICTORY_POSE);
             break;
         }
-        BattleSetSeq(wp, SEQ_END, 0x700000E);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_MAJINAI_END_START);
         break;
-    case 0x700000B:
+    case SEQ_END_POINTS_COUNT:
         if (work->expDisp > 0) {
             work->timer = work->timer + 1;
             if (BattlePadCheckNow(PAD_BUTTON_A | PAD_BUTTON_B) != 0) {
@@ -482,14 +471,14 @@ void btlseqEnd(BattleWork* wp) {
         } else {
             work->timer = 0x14;
         }
-        BattleSetSeq(wp, SEQ_END, 0x700000C);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_HOLD);
         break;
-    case 0x700000C:
+    case SEQ_END_POINTS_HOLD:
         work->timer = work->timer - 1;
         if (work->timer > 0) break;
         work->timer = 0x3C;
         _GetExpIcon_End(work);
-        BattleSetSeq(wp, SEQ_END, 0x700000D);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_POINTS_HIDE);
         effSoftDelete(work->expEffect);
         if (work->levelUp) {
             work->timer = 0x3C;
@@ -497,32 +486,32 @@ void btlseqEnd(BattleWork* wp) {
         }
         work->timer = 5;
         break;
-    case 0x700000D:
+    case SEQ_END_POINTS_HIDE:
         work->timer = work->timer - 1;
         if (work->timer > 0) break;
         work->expEffect = NULL;
-        BattleSetSeq(wp, SEQ_END, 0x700000E);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_MAJINAI_END_START);
         break;
-    case 0x700000E:
+    case SEQ_END_MAJINAI_END_START:
         if (wp->flags & BATTLE_FLAG_MAJINAI_END) {
             BattleUnit* mario = BattleGetMarioPtr(wp);
             EventEntry* e = evtEntry(_event_MajinaiEnd, 10, 0);
             e->unitId = mario->unitId;
             mario->attackEventId = e->eventId;
-            BattleSetSeq(wp, SEQ_END, 0x700000F);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_MAJINAI_END_WAIT);
             break;
         }
-        BattleSetSeq(wp, SEQ_END, 0x7000010);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_CHECK);
         break;
-    case 0x700000F:
+    case SEQ_END_MAJINAI_END_WAIT:
         if (!BattleWaitAllActiveEvtEnd(wp)) break;
         if (work->exp > 0) {
-            BattleSetSeq(wp, SEQ_END, 0x7000010);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_CHECK);
             break;
         }
-        BattleSetSeq(wp, SEQ_END, 0x7000019);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_VICTORY_POSE);
         break;
-    case 0x7000010:
+    case SEQ_END_LEVEL_UP_CHECK:
         work->flags &= ~1;
         if (work->levelUp) {
             work->selected = 1;
@@ -531,12 +520,12 @@ void btlseqEnd(BattleWork* wp) {
             work->timer = 0;
             BattleAudience_WinSetActive(0);
             BattleBreakSlot_HideReel();
-            BattleSetSeq(wp, SEQ_END, 0x7000011);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_CURTAIN);
             break;
         }
-        BattleSetSeq(wp, SEQ_END, 0x7000019);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_VICTORY_POSE);
         break;
-    case 0x7000011:
+    case SEQ_END_LEVEL_UP_CURTAIN:
         if (work->timer == 0) {
             EventEntry* e = evtEntry(_curtain_close_event, 10, 0);
             work->evtId = e->eventId;
@@ -549,9 +538,9 @@ void btlseqEnd(BattleWork* wp) {
         work->evtId = 0;
         BattleStatusWindowSystemOn();
         BattleStatusWindowEventOn();
-        BattleSetSeq(wp, SEQ_END, 0x7000012);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_SELECT);
         break;
-    case 0x7000012: {
+    case SEQ_END_LEVEL_UP_SELECT: {
         s32 sel = work->selected;
         EventEntry* e;
         if (work->evtId) {
@@ -607,7 +596,7 @@ void btlseqEnd(BattleWork* wp) {
                 work->unk28 = 0;
                 work->cursorCount = 2;
                 work->flags &= ~SEQEND_DISP_LVUP_HELP;
-                BattleSetSeq(wp, SEQ_END, 0x7000014);
+                BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_JUMP_WAIT);
                 e = evtEntry(_jump_event, 10, 0);
                 work->evtId = e->eventId;
             }
@@ -615,7 +604,7 @@ void btlseqEnd(BattleWork* wp) {
         break;
     }
     // Yes/No confirmation of the level-up choice (_LvupParamConfirmDisp); no step moves here
-    case 0x7000013:
+    case SEQ_END_LEVEL_UP_CONFIRM_UNUSED:
         if (BattlePadCheckTrigger(BATTLE_PAD_STICK_DOWN)) {
             work->cursor = work->cursor + 1;
             if (work->cursor >= work->cursorCount) {
@@ -630,24 +619,24 @@ void btlseqEnd(BattleWork* wp) {
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_B)) {
             work->flags &= ~SEQEND_DISP_LVUP_CONFIRM_UNUSED;
-            BattleSetSeq(wp, SEQ_END, 0x7000012);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_SELECT);
         }
         if (BattlePadCheckTrigger(PAD_BUTTON_A)) {
             if (work->cursor == 0) {
                 work->flags &= ~(SEQEND_DISP_LVUP_SELECT | SEQEND_DISP_LVUP_CONFIRM_UNUSED);
-                BattleSetSeq(wp, SEQ_END, 0x7000015);
+                BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_APPLY);
                 break;
             }
             work->flags &= ~SEQEND_DISP_LVUP_CONFIRM_UNUSED;
-            BattleSetSeq(wp, SEQ_END, 0x7000012);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_SELECT);
         }
         break;
-    case 0x7000014:
+    case SEQ_END_LEVEL_UP_JUMP_WAIT:
         if (evtCheckID(work->evtId)) break;
         work->evtId = 0;
-        BattleSetSeq(wp, SEQ_END, 0x7000015);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_APPLY);
         break;
-    case 0x7000015: {
+    case SEQ_END_LEVEL_UP_APPLY: {
         BattleUnit* party;
         BattleUnit* party2;
         s32 ok;
@@ -700,7 +689,7 @@ void btlseqEnd(BattleWork* wp) {
         BtlUnit_SetBodyAnim(BattleGetMarioPtr(wp), "M_V_2");
         BattleAudienceSoundCheer(0xB4, 0x28);
         work->timer = 0xB4;
-        BattleSetSeq(wp, SEQ_END, 0x7000016);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LEVEL_UP_SHOW);
         mario = BattleGetMarioPtr(wp);
         party = BattleGetPartyPtr(wp);
         if (mario) {
@@ -711,7 +700,7 @@ void btlseqEnd(BattleWork* wp) {
         }
         break;
     }
-    case 0x7000016:
+    case SEQ_END_LEVEL_UP_SHOW:
         work->timer = work->timer - 1;
         if (work->timer == 0x78) {
             BattleUnit* mario = BattleGetMarioPtr(wp);
@@ -721,25 +710,25 @@ void btlseqEnd(BattleWork* wp) {
         }
         if (work->timer > 0) break;
         if (work->confettiEvtId) evtDeleteID(work->confettiEvtId);
-        BattleSetSeq(wp, SEQ_END, 0x7000017);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_RANK_UP_START);
         break;
-    case 0x7000017: {
+    case SEQ_END_RANK_UP_START: {
         EventEntry* e;
         if (!_get_rank_data(pouch->level)) {
-            BattleSetSeq(wp, SEQ_END, 0x700001C);
+            BattleSetSeq(wp, SEQ_END, SEQ_END_LEAVE);
             break;
         }
         pouch->rank = _get_rank_data(pouch->level)->rankId;
         e = evtEntry(_rank_up_event, 10, 0);
         work->rankUpEvtId = e->eventId;
-        BattleSetSeq(wp, SEQ_END, 0x7000018);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_RANK_UP_WAIT);
     }
     // fall through
-    case 0x7000018:
+    case SEQ_END_RANK_UP_WAIT:
         if (evtCheckID(work->rankUpEvtId)) break;
-        BattleSetSeq(wp, SEQ_END, 0x700001C);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LEAVE);
         break;
-    case 0x7000019: {
+    case SEQ_END_VICTORY_POSE: {
         s32 ok = 1;
         NpcBattleInfo* fd = wp->fbatInfo->setup;
         BattleUnit* mario = BattleGetMarioPtr(wp);
@@ -761,10 +750,10 @@ void btlseqEnd(BattleWork* wp) {
         }
         BtlUnit_SetBodyAnim(BattleGetMarioPtr(wp), "M_V_1");
         work->timer = 0x3C;
-        BattleSetSeq(wp, SEQ_END, 0x700001A);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_VICTORY_POSE_WAIT);
         break;
     }
-    case 0x700001A:
+    case SEQ_END_VICTORY_POSE_WAIT:
         if (--work->timer > 0) break;
         BtlUnit_SetBodyAnimType(BattleGetMarioPtr(wp), POSE_TYPE_RUN);
         if (BattleGetPartyPtr(wp)) {
@@ -773,15 +762,15 @@ void btlseqEnd(BattleWork* wp) {
                 BtlUnit_SetBodyAnimType(BattleGetPartyPtr(wp), POSE_TYPE_RUN);
             }
         }
-        BattleSetSeq(wp, SEQ_END, 0x700001B);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_RUN_OFF);
         break;
-    case 0x700001B:
-        BattleSetSeq(wp, SEQ_END, 0x700001C);
+    case SEQ_END_RUN_OFF:
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LEAVE);
         break;
-    case 0x700001C: {
+    case SEQ_END_LEAVE: {
         FieldBattleData* fb;
         NpcEntry* p;
-        BattleSetSeq(wp, SEQ_END, 0x700001D);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT);
         BattleAudienceSoundSetVolAll(0, 30);
 #if VERSION > VERSION_DEMO_US
         fb = fbatGetPointer();
@@ -790,17 +779,17 @@ void btlseqEnd(BattleWork* wp) {
 #endif
         break;
     }
-    case 0x700001D: {
+    case SEQ_END_FADE_OUT: {
         fadeEntry(FADE_OUT_BLACK, 200, (GXColor){0, 0, 0, 255});
-        BattleSetSeq(wp, SEQ_END, 0x700001E);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT_WAIT);
         psndBGMOff(PSND_FADEOUT | PSND_SLOT(1));
     }
     // fall through
-    case 0x700001E:
+    case SEQ_END_FADE_OUT_WAIT:
         if (!fadeIsFinish()) break;
-        BattleSetSeq(wp, SEQ_END, 0x700001F);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_CLEANUP);
         break;
-    case 0x700001F: {
+    case SEQ_END_CLEANUP: {
         BattleUnit* party = BattleGetPartyPtr(wp);
         s32 kind;
         s32 id;
@@ -822,7 +811,7 @@ void btlseqEnd(BattleWork* wp) {
         BattleSetMarioParamToFieldBattle(wp);
         BattleFree(wp->seqEndWork);
         wp->seqEndWork = NULL;
-        BattleSetSeq(wp, SEQ_UNKNOWN, 4);
+        BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_DONE);
         mw = marioGetPtr();
         mw->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
         if (kind) {
@@ -833,7 +822,7 @@ void btlseqEnd(BattleWork* wp) {
         pe = partyGetPtr(marioGetPartyId());
         if (pe) pe->flags2 &= ~PARTY_DISP_FLAG_HIDE;
         BtlActRec_JudgeRuleKeep();
-        BattleAudienceSoundStop(1);
+        BattleAudienceSoundStop(AUD_SOUND_CLAP);
         break;
     }
     }
@@ -880,21 +869,21 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
     if (work) {
         if (work->flags & SEQEND_DISP_EXP_ICON) {
             _GetExpIcon_Main(wp);
-            dispEntry(camId, 900.0f, 1, _GetExpIcon_Disp, wp);
+            dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _GetExpIcon_Disp, wp);
         }
         if (work->flags & SEQEND_DISP_MARIO_EXP_UNUSED) {
-            dispEntry(camId, 900.0f, 1, _MarioExpDisp, wp);
+            dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _MarioExpDisp, wp);
         }
         if (work->flags & SEQEND_DISP_LVUP_SELECT) {
             Vec pos = {0.0f, 0.0f, 0.0f};
-            dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, _lvup_select_object_disp, wp);
+            dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, _lvup_select_object_disp, wp);
         }
         if (work->flags & SEQEND_DISP_LVUP_CONFIRM_UNUSED) {
-            dispEntry(camId, 900.0f, 1, _LvupParamConfirmDisp, wp);
+            dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _LvupParamConfirmDisp, wp);
         }
 #if VERSION > VERSION_DEMO_US
         if (work->flags & SEQEND_DISP_LVUP_HELP) {
-            dispEntry(camId, 900.0f, 1, _LvupParamHelpMsgDisp, wp);
+            dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _LvupParamHelpMsgDisp, wp);
         }
 #endif
     }
@@ -919,7 +908,7 @@ void _MarioExpDisp(CameraId camId, void* param) {
         // FAKE: windowDispGX_Waku_col called through a float-first cast; the plain call changes the object
         ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(180.0f, -160.0f, width, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 
-        iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
+        iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 1.0f);
         FontDrawStart();
         FontDrawString(225.0f, -163.0f, buf);
     }
@@ -947,7 +936,7 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
     pos.x = -40.0f;
     pos.y = -50 - (*cursorPtr) * 25;
     pos.z = 0.0f;
-    iconDispGx(&pos, ICON_FLAG_2D, EXP_ICON, 1.0f);
+    iconDispGx(&pos, ICON_FLAG_2D, ICON_STAR_POINT, 1.0f);
 }
 
 /**
@@ -1009,7 +998,7 @@ void _GetExpIcon_Init(BattleSeqEndWork* work) {
 
     for (i = 0; i < 10; i++) {
         sprintf(name, "_Bgsp%d", i);
-        iconEntry2D(name, EXP_ICON);
+        iconEntry2D(name, ICON_STAR_POINT);
         work->icons[i] = iconNameToPtr(name);
         iconSetScale(name, 0.9f);
         iconFlagOn(name, ICON_FLAG_HIDDEN);
@@ -1021,7 +1010,7 @@ void _GetExpIcon_Init(BattleSeqEndWork* work) {
     }
     for (i = 10; i < 19; i++) {
         sprintf(name, "_Bgsp%d", i);
-        iconEntry2D(name, EXP_ICON);
+        iconEntry2D(name, ICON_STAR_POINT);
         work->icons[i] = iconNameToPtr(name);
         iconSetScale(name, 0.45f);
         iconFlagOn(name, ICON_FLAG_HIDDEN);
@@ -1506,7 +1495,7 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
  */
 // Descriptive name (not in the symbol maps).
 USER_FUNC(_display_select_one_to_upgrade_text) {
-    dispEntry(CAMERA_2D, 900.0f, 1, _draw_select_one_to_upgrade_text, _battleWorkPointer);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _draw_select_one_to_upgrade_text, _battleWorkPointer);
     return 2;
 }
 #endif
@@ -1554,7 +1543,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
     EventEntry* evt;
     s32 kind;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (!unit) continue;
         if (unit->flags & BATTLE_UNIT_FLAG_BROKEN) continue;
@@ -1581,7 +1570,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
     obj = BattleSearchObjectPtr("if_body");
     if (obj) {
         wp->stageObjectWork.flags |= STAGE_FLAG_NO_IRON_FRAME;
-        obj->flags |= 1;
+        obj->flags |= STAGE_OBJECT_FLAG_HIDDEN;
         mapGrpFlagOn("if_body", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("if_wire", MAP_OBJ_FLAG_HIDDEN);
     }
@@ -1984,11 +1973,9 @@ s32 _keta_get(s32 n) {
 
 #if VERSION >= VERSION_US
 #define LVOBJ_TEX2 0x31
-#define LVOBJ_ICON 0x16B
 #define LVOBJ_TEX(n, tbl) (tbl[gp->language])
 #else
 #define LVOBJ_TEX2 0x24
-#define LVOBJ_ICON 0x163
 #define LVOBJ_TEX(n, tbl) (0x27 + (n))
 #endif
 #define LVOBJ_PLANE(o, n, tbl)                                                         \
@@ -2079,7 +2066,7 @@ void _lvup_select_object_disp(CameraId camId, void* param) {
                     PSMTXTrans(m3, pos3.x, pos3.y, pos3.z);
                     PSMTXScale(ms, -0.6f, 0.6f, 1.0f);
                     PSMTXConcat(m3, ms, m3);
-                    iconDispGxCol(m3, 0, LVOBJ_ICON, obj->color);
+                    iconDispGxCol(m3, 0, ICON_ARROW, obj->color);
                 }
             } else if (obj->paramDisp == 2 || obj->paramDisp == 5) {
                 pos2 = obj->pos;
@@ -2127,27 +2114,27 @@ void _audience_Whistle_control(void) {
         // BUG: work->state is only ever set to 0 (btlseqEnd); the SEQ_END step lives in wp->seqEndValue, so no case
         // matches and this timed whistle never plays
         switch (work->state) {
-        case 0x7000007:
-        case 0x7000008:
-        case 0x7000009:
-        case 0x700000A:
-        case 0x700000B:
-        case 0x700000C:
-        case 0x700000D:
-        case 0x700000E:
-        case 0x700000F:
-        case 0x7000010:
-        case 0x7000011:
-        case 0x7000012:
-        case 0x7000013:
-        case 0x7000014:
-        case 0x7000015:
-        case 0x7000016:
-        case 0x7000017:
-        case 0x7000018:
-        case 0x7000019:
-        case 0x700001A:
-        case 0x700001B:
+        case SEQ_END_EXP_UP_WAIT:
+        case SEQ_END_POINTS_INIT:
+        case SEQ_END_POINTS_DELAY:
+        case SEQ_END_POINTS_SHOW:
+        case SEQ_END_POINTS_COUNT:
+        case SEQ_END_POINTS_HOLD:
+        case SEQ_END_POINTS_HIDE:
+        case SEQ_END_MAJINAI_END_START:
+        case SEQ_END_MAJINAI_END_WAIT:
+        case SEQ_END_LEVEL_UP_CHECK:
+        case SEQ_END_LEVEL_UP_CURTAIN:
+        case SEQ_END_LEVEL_UP_SELECT:
+        case SEQ_END_LEVEL_UP_CONFIRM_UNUSED:
+        case SEQ_END_LEVEL_UP_JUMP_WAIT:
+        case SEQ_END_LEVEL_UP_APPLY:
+        case SEQ_END_LEVEL_UP_SHOW:
+        case SEQ_END_RANK_UP_START:
+        case SEQ_END_RANK_UP_WAIT:
+        case SEQ_END_VICTORY_POSE:
+        case SEQ_END_VICTORY_POSE_WAIT:
+        case SEQ_END_RUN_OFF:
             if (--work->whistleTimer < 0) {
                 work->whistleTimer = irand(120) + 60;
                 BattleAudienceSoundWhistle();

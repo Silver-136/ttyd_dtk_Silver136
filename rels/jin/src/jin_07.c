@@ -135,7 +135,7 @@ EVT_BEGIN(jin_07_juyo_oumu_vivian)
         SET_VALUE(LSWF_JIN_PARROT_SCENE_PENDING, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_seq_wait, SEQ_GAME)
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         CALL(evt_party_stop, 0)
         CALL(evt_mario_set_dir, 270, 300, 0)
         CALL(evt_cam3d_evt_set, -214, 129, 454, -214, 57, 48, 500, EASING_SINE_IN_OUT)
@@ -394,7 +394,7 @@ static void senteresa_ext_main(void) {
 
 /** Registers the swarm's draw callback with the 3D camera. */
 static void senteresa_ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, senteresa_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, senteresa_ext_disp, NULL);
 }
 
 /** Draw callback of the Boo swarm: loads the ext-pose render setup, vertices, textures and TEV setup and draws them. */

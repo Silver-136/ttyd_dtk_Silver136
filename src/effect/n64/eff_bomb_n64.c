@@ -159,7 +159,7 @@ static void effBombMain(EffectEntry* effect) {
         }
     }
     work->rot += work->rotAdd;
-    dispEntry(camId, dispCalcZ(&position), 2, (DispCallback)effBombDisp, effect);
+    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBombDisp, effect);
 }
 
 /** Draws the flash quad for types 1-2, then the burst sprite which cycles through three textures frame by frame. */

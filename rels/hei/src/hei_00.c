@@ -189,11 +189,11 @@ USER_FUNC(make_gonbaba_projection_evt) {
         event->userdata[0] = (EvtWord)_mapAlloc(sizeof(GonbabaProj));
     }
     wp = (GonbabaProj*)event->userdata[0];
-    wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), 3);
+    wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXInitTexObj(&wp->obj, wp->tex->address, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     mapSetProjTexObj(&wp->obj, wp->tex);
-    dispEntry(CAMERA_SHADOW, 0.0f, 3, make_gonbaba_projection, wp);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, make_gonbaba_projection, wp);
     return EVT_RETURN_BLOCK;
 }
 
@@ -412,7 +412,7 @@ static EVT_BEGIN(first_evt)
     WAIT_FRAMES(1)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_party_stop, 0)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -1235,7 +1235,7 @@ EVT_BEGIN(hei_00_koopa_evt)
     CALL(evt_npc_set_position, STRING("ババ"), -500, 75, 0)
     CALL(evt_cam3d_evt_set, -148, 195, 539, -148, 95, -22, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #if VERSION >= VERSION_US
     CALL(evt_mario_kill_party, 0)
 #endif

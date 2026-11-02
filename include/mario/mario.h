@@ -4,6 +4,23 @@
 #include <dolphin/mtx.h>
 #include "driver/dispdrv.h"
 
+// Squared control stick magnitude (55 * 55) that separates walking from dashing.
+#define STICK_DASH_MIN_SQ 3025
+
+// Danger: at or below this HP Mario stands in his tired pose.
+#define MARIO_DANGER_HP 5
+
+// MarioWork.dokanType, the argument of evt_mario_paper_pose_dokan: spellings from the game's own name table there.
+// IN comes into the room out of the pipe, OUT leaves through it; TATE vertical, YOKO sideways.
+typedef enum DokanType {
+    DOKAN_TATE_DOWNIN = 0,
+    DOKAN_TATE_UPIN = 1,
+    DOKAN_TATE_DOWNOUT = 2,
+    DOKAN_TATE_UPOUT = 3,
+    DOKAN_YOKO_IN = 4,
+    DOKAN_YOKO_OUT = 5,
+} DokanType;
+
 #pragma enumsalwaysint off
 typedef enum MarioMotion {
     MARIO_MOTION_STAY,         // 0x0
@@ -124,6 +141,12 @@ typedef enum MarioTrigFlags {
 
 /* ---- (1) per-motion scratch views: MarioWork.mot, 0x2A0 JP / 0x2B8 US, 0x1C bytes ----
  * Each motion reuses the block with its own types. Offsets are relative to the block. */
+// MarioWork.rollFlags: evt_mario waits for NONE
+enum {
+    ROLL_STATE_NONE = 0,
+    ROLL_STATE_ROLLING = 0x10,
+};
+
 typedef struct MarioMotJabara {    // mot_jabara.c (spring jump)
     s32 reserved_0;                      // 0x00, cleared on entry
     f32 dir;                       // 0x04, displayDirectionTarget at the start
@@ -484,7 +507,7 @@ typedef struct MarioWork {
     s32 wallPushHold;              // 0x1D0, frames the push is held (14)
 #if VERSION <= VERSION_DEMO_US
     struct NpcEntry* touchNpc;
-struct HitEntry* hitobjFrontA;      // 0x1DC, wall in front found on an A press
+    struct HitEntry* hitobjFrontA;      // 0x1DC, wall in front found on an A press
     struct HitEntry* hitobjFront;       // 0x1E0
     struct HitEntry* hitobjStandOn;     // 0x1E4, 0x1E8 US
     struct HitEntry* hitobjJumpFrom;    // 0x1E8, 0x1EC US
@@ -677,9 +700,6 @@ void marioDisp(CameraId camId, void* param);
 #define MARIO_STAY(mp) ((mp)->mot.stay)
 // Names from LLCOOLT's tree.
 enum {
-    MARIO_DISP_FLAG_FIXED_UNMIRRORED = 1024,
-    MARIO_DISP_FLAG_FIXED_MIRRORED = 2048,
-    MARIO_DISP_FLAG_ANIM_SET_2 = 268435456,
     MARIO_DISP_FLAG_POSE_UNUSED = 536870912,
 };
 

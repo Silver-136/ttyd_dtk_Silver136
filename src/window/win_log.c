@@ -306,7 +306,7 @@ TubuDt tubuDt[] = {
  * recipe and Tattle lists with their found counts.
  */
 void winLogInit(WindowWork* w) {
-s32 j;
+    s32 j;
     s32 i;
     u32 k;
     EffectEntry* e;
@@ -475,7 +475,7 @@ void winLogInit(WindowWork* w) {
         if (itemDataTable[i].type_sort_order != -1) {
             w->log.recipeIds[w->log.recipe.num++] = i - ITEM_SHROOM_FRY;
 #if VERSION >= VERSION_US
-            if (swGet(i - ITEM_SHROOM_FRY + 0x41)) {
+            if (swGet(i - ITEM_SHROOM_FRY + GSWF_RECIPE_FOUND_BASE)) {
                 w->log.recipe.page++;
             }
 #endif
@@ -974,7 +974,7 @@ s32 winLogMain(WindowWork* w) {
         }
         w->helpTgtX = w->log.recipe.cursor % 28 % 7 * 56 - 140;
         w->helpTgtY = 90 - w->log.recipe.cursor % 28 / 7 * 56;
-        if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
+        if (swGet(w->log.recipeIds[w->log.recipe.cursor] + GSWF_RECIPE_FOUND_BASE)) {
             winMsgEntry(w, -2, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].menu_description, itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].name);
         } else {
             winMsgEntry(w, -2, "msg_menu_stone_none_help", "msg_menu_stone_none_name");
@@ -1261,7 +1261,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
 #endif
         winTexInit(*w->res->data);
         winTexSet(0x96, (Vec){x + w->log.recipe.iconX, y + w->log.recipe.iconY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
-        if (swGet(w->log.recipeIds[w->log.recipe.cursor] + 0x41)) {
+        if (swGet(w->log.recipeIds[w->log.recipe.cursor] + GSWF_RECIPE_FOUND_BASE)) {
             winIconInit();
             winIconSet(itemDataTable[w->log.recipeIds[w->log.recipe.cursor] + ITEM_SHROOM_FRY].icon_id, (Vec){x + w->log.recipe.iconX, (y + w->log.recipe.iconY) - 10.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, c2);
         }
@@ -1634,7 +1634,7 @@ void monosiriMain(MonosiriWork* m) {
         m->state++;
 #endif
         TEXGetGXTexObjFromPalette(*(TEXPalette**)m->file1->data, &tex, 0x37);
-        m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), GX_TF_RGB5A3, GX_FALSE, 0), 0);
+        m->smart = smartAlloc(GXGetTexBufferSize(GXGetTexObjWidth(&tex), GXGetTexObjHeight(&tex), GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_PERMANENT);
         break;
     case 1:
         t = battleGetUnitMonosiriPtr(m->id);
@@ -1656,7 +1656,7 @@ void monosiriMain(MonosiriWork* m) {
                 animPoseSetAnim(m->pose1, t->poseName, 1);
                 animPoseMain(m->pose1);
             }
-            dispEntry(CAMERA_SHADOW, 0.0f, 6, capture, m);
+            dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_CUSTOM_FIRST, capture, m);
         }
         break;
     case 2:
@@ -1667,7 +1667,7 @@ void monosiriMain(MonosiriWork* m) {
     m->curX += (m->x - m->curX) / FPS_EASE(6.0f);
     m->curY += (m->y - m->curY) / FPS_EASE(6.0f);
     if (m->state > 0) {
-        dispEntry(CAMERA_2D, 0.0f, 0, monosiri_disp, m);
+        dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, monosiri_disp, m);
     }
 }
 
@@ -1832,8 +1832,8 @@ void capture(CameraId camera, void* param) {
     animPosePeraOn(m->pose1);
     if (m->id == UNIT_SMORG) {
         gpos = (Vec*)animPoseGetAnimPosePtr(m->pose1)->worldPositions->address;
-        cnt = smartAlloc(g_moamoa_chain_num * 4, 3)->address;
-        idx = smartAlloc(2000, 3)->address;
+        cnt = smartAlloc(g_moamoa_chain_num * 4, SMART_GROUP_TEMP)->address;
+        idx = smartAlloc(2000, SMART_GROUP_TEMP)->address;
         memset(cnt, 0, g_moamoa_chain_num * 4);
         // FAKE: reversed loop compare; i < 500 changes the object
         for (i = 0; 500 > i; i++) {

@@ -2,6 +2,14 @@
 #pragma once
 
 #include "evt/evt_cmd.h"
+#include "manager/winmgr.h"
+
+// evt_win_coin_on args[0]: which pouch counter the window shows (coin_disp).
+typedef enum CoinWindowType {
+    COIN_WINDOW_COINS = 0,         // pouchGetCoin
+    COIN_WINDOW_SHINE_SPRITES = 1, // pouchGetSuperCoin
+    COIN_WINDOW_STAR_PIECES = 2,   // pouchGetStarPiece
+} CoinWindowType;
 
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);

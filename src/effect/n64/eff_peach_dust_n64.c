@@ -228,7 +228,7 @@ void effPeachDustMain(EffectEntry* effect) {
     if (dead >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPeachDustDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPeachDustDisp, effect);
     }
 }
 

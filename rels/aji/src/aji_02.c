@@ -192,7 +192,7 @@ static EVT_BEGIN(evt_box)
     CALL(evt_item_get_item, STRING("dummy"))
     SET_VALUE(GSW_STORY_PROGRESS, STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
     WAIT_FRAMES(1)
-    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no01"), HIT_ATTR_TOGE)
+    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no01"), HIT_ATTR_SPIKES)
     CALL(all_flag_off)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
@@ -224,7 +224,7 @@ static HitDamageReturn dmgReturnPt[] = {
  */
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
-    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no01"), HIT_ATTR_TOGE)
+    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no01"), HIT_ATTR_SPIKES)
     CALL(evt_mobj_itembox, STRING("box"), 160, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_02_ELEVATOR_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
@@ -241,7 +241,7 @@ static EvtWord hikaru_yuka_init[] = {
     END_SWITCH
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL_CHILD(hikaru_yuka)
     CALL(evt_mario_key_onoff, 1)
     BEGIN_INLINE_EVENT
@@ -283,7 +283,7 @@ EVT_BEGIN(aji_02_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     END_IF
@@ -307,7 +307,7 @@ EVT_BEGIN(aji_02_init_evt)
         SPAWN_EVENT(PTR(hikaru_yuka_init))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_FRAMES(1)
-        ELSE
+    ELSE
         CALL_CHILD(PTR(hikaru_off))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
@@ -465,7 +465,7 @@ USER_FUNC(all_flag_off) {
         sprintf(name, "nashi_%02d", i);
         mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "A_hikaru_%02d", i);
-        hitGrpAttrOff(name, 0x800);
+        hitGrpAttrOff(name, HIT_ATTR_SPIKES);
     }
     return EVT_RETURN_DONE;
 }
@@ -490,7 +490,7 @@ USER_FUNC(hikaru_on_func) {
                 sprintf(name, "nashi_%02d", i);
                 mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
                 sprintf(name, "A_hikaru_%02d", i);
-                hitGrpAttrOff(name, 0x800);
+                hitGrpAttrOff(name, HIT_ATTR_SPIKES);
                 break;
             }
         }
@@ -500,7 +500,7 @@ USER_FUNC(hikaru_on_func) {
             sprintf(name, "nashi_%02d", i);
             mapGrpFlagOff(name, MAP_OBJ_FLAG_HIDDEN);
             sprintf(name, "A_hikaru_%02d", i);
-            hitGrpAttrOn(name, 0x800);
+            hitGrpAttrOn(name, HIT_ATTR_SPIKES);
         }
     }
     return EVT_RETURN_DONE;

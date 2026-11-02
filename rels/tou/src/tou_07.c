@@ -696,7 +696,7 @@ EVT_BEGIN(evt_tou_bed)
 #endif
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
-        CALL(evt_fade_entry, 4, 1000, 0, 0, 0)
+        CALL(evt_fade_entry, FADE_OUT_SPOT, 1000, 0, 0, 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
         CALL(evt_fade_end_wait)

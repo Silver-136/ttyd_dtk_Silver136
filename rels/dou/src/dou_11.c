@@ -1639,11 +1639,11 @@ EVT_END()
 EVT_BEGIN(escapeway_event)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_mario_normalize)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_01"), 0, STRING("水夫D"))
@@ -2892,7 +2892,7 @@ EVT_BEGIN(dou_11_init_evt)
     CALL(evt_map_entry_airport_harbor, 0, STRING("S_hikou"), STRING("A_hikou"))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
         CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints_1st))
-        ELSE
+    ELSE
         CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     END_IF
     CALL_CHILD(PTR(evt_gazigazi_entry))
@@ -2935,7 +2935,7 @@ EVT_BEGIN(dou_11_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
-SPAWN_EVENT(pukapuka_watari_init02)
+        SPAWN_EVENT(pukapuka_watari_init02)
 #else
     IF_INT_GREATER_OR_EQUAL(LW(0), 2)
         SPAWN_EVENT(PTR(pukapuka_watari_init02))

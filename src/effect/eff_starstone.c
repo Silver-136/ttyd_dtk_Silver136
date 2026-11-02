@@ -572,10 +572,10 @@ void effStarStoneMain(EffectEntry* effect) {
         switch (type) {
         case 0:
         case 6:
-            dispEntry(cam, dispCalcZ(&pos), 2, (DispCallback)effStarStoneDisp_1, effect);
+            dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effStarStoneDisp_1, effect);
             break;
         default:
-            dispEntry(cam, dispCalcZ(&pos), 2, (DispCallback)effStarStoneDisp_2, effect);
+            dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effStarStoneDisp_2, effect);
             break;
         }
     }
@@ -612,7 +612,7 @@ void effStarStoneMain(EffectEntry* effect) {
  */
 #if VERSION <= VERSION_DEMO_US
 static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
-u32 i;
+    u32 i;
     u8* size;
     u8** list;
 #else

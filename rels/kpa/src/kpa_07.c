@@ -428,7 +428,7 @@ EVT_BEGIN(kpa_07_evt)
     // The story advances; saving is offered and the scene ends in Rogueport (gor_04).
     SET_VALUE(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
-    CALL(evt_fade_entry, 6, 300, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT_3D, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(GF(0), 1)
     WAIT_MS(2000)

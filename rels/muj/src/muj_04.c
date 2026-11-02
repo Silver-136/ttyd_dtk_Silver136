@@ -115,7 +115,7 @@ static NpcSetupInfo npcEnt[] = {
  */
 static EVT_BEGIN(evt_haikei_in)
     BEGIN_INLINE_EVENT
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         WAIT_FRAMES(10)
         CALL(evt_mario_cam_keep_off)
         CALL(evt_mario_cam_y_on)
@@ -345,8 +345,8 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_npc_set_position, STRING("めがね水夫"), 25, 112, -20)
     CALL(evt_npc_set_ry, STRING("めがね水夫"), 90)
 #if VERSION == VERSION_EU
-    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_NO_HIT)
-    CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_NO_HIT)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), NPC_FLAG_NO_HIT)
@@ -361,7 +361,7 @@ EVT_BEGIN(sanders_funto)
 
     // Mario arrives at the bridge: control is taken and the exit is waited out.
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
 

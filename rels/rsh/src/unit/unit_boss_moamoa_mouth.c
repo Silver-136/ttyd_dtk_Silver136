@@ -81,8 +81,8 @@ BattleUnitKind unit_boss_moamoa_mouth = {
     0.0f,
     0.0f,
     0.0f,
-250.0f,
-0.0f,
+    250.0f,
+    0.0f,
     100.0f,
     0.0f,
     0.0f,
@@ -122,7 +122,7 @@ BattleUnitKind unit_boss_moamoa_mouth = {
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Element reactions of the Smorg Miasma (mouth): no special reaction to any element. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of the Smorg Miasma (mouth) (percent chance to take each status):
@@ -439,7 +439,7 @@ static EVT_BEGIN(evt_attack)
     LOOP(0)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_moamoa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
         SWITCH(LW(5))
-            CASE_EQUAL(1)
+            CASE_EQUAL(PRECHECK_HIT)
             IF_INT_EQUAL(LW(10), 0)
                 CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_moamoa_attack))
             END_IF

@@ -1201,7 +1201,7 @@ EVT_BEGIN(pik_02_koopa_evt)
     // The story advances and saving is offered.
     SET_VALUE(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
-    CALL(evt_fade_entry, 6, 300, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT_3D, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)
@@ -1285,7 +1285,7 @@ EVT_BEGIN(pik_02_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
         BEGIN_INLINE_EVENT
-            CALL(evt_bero_exec_wait, 65536)
+            CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
             CALL(evt_fade_set_mapchange_type, 1, FADE_STORY_MARIO_A1, 0, FADE_STORY_MARIO_A3, 0)
             SET_VALUE(LW(0), STRING("s_bero"))
             CALL_CHILD(PTR(bero_case_switch_off))

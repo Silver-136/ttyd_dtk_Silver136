@@ -76,7 +76,7 @@ void countDownStart(u32 limit, u32 restart) {
     wp->restart = restart;
     wp->prevTime = gp->renderTime;
     wp->elapsed = 0;
-    wp->state = 0;
+    wp->state = COUNTDOWN_STATE_SLIDE_IN;
     wp->counter = 0;
     wp->offX = 0.0f;
     wp->offY = 0.0f;
@@ -105,7 +105,7 @@ void countDownSetRestartTime(u32 restart) {
 void countDownMain(void) {
     if ((wp->flags & COUNTDOWN_FLAG_RUNNING) != 0) {
         switch (wp->state) {
-        case 0:
+        case COUNTDOWN_STATE_SLIDE_IN:
             if (++wp->counter < 30) {
                 wp->offX = intplGetValue(EASING_SINE_IN_OUT, 300.0f, 0.0f, wp->counter, 30);
             } else {
@@ -113,7 +113,7 @@ void countDownMain(void) {
                 wp->state++;
             }
             break;
-        case 1:
+        case COUNTDOWN_STATE_RUN:
 #if VERSION > VERSION_DEMO_US
             if ((wp->flags & COUNTDOWN_FLAG_TIME_UP) != 0) {
                 psndSFXOff(wp->sfxId);
@@ -121,7 +121,7 @@ void countDownMain(void) {
             }
 #endif
             break;
-        case 2:
+        case COUNTDOWN_STATE_SLIDE_OUT:
             if (++wp->counter < 30) {
                 wp->offX = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 300.0f, wp->counter, 30);
             } else {
@@ -139,7 +139,7 @@ void countDownMain(void) {
         if (OSTicksToMilliseconds(wp->elapsed) >= wp->limit) {
             wp->flags |= COUNTDOWN_FLAG_TIME_UP;
         }
-        dispEntry(CAMERA_2D, 1000.0f, 0, countDownDisp, NULL);
+        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, countDownDisp, NULL);
     }
 }
 
@@ -210,7 +210,7 @@ s32 countDownGetStatus(void) {
 /** Slides a running countdown off screen and stops its sound (state 2 of countDownMain). */
 void countDownEnd(void) {
     if ((wp->flags & COUNTDOWN_FLAG_RUNNING) != 0) {
-        wp->state = 2;
+        wp->state = COUNTDOWN_STATE_SLIDE_OUT;
     }
 }
 

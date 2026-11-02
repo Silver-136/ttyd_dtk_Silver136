@@ -231,9 +231,9 @@ BattleUnitKind unit_boss_moamoa = {
     0.0f,
     0.0f,
     0.0f,
-250.0f,
+    250.0f,
     0.0f,
-80.0f,
+    80.0f,
     0.0f,
     0.0f,
 #else
@@ -292,7 +292,7 @@ s32 moamoa_defence_no_parts[] = {
 BattleUnitDefense moamoa2_defence = {{1, 1, 1, 1, 1}};
 
 /** Element reactions of the Smorg: no special reaction to any element. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of the Smorg (percent chance to take each status):
@@ -542,7 +542,7 @@ EVT_END()
  * target.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -636,7 +636,7 @@ static EVT_BEGIN(dead_event)
     // The swarm swirls up, smoke puffs out and the party is paid its coins, experience and star points.
     CALL(moamoa_guruguru)
     WAIT_MS(500)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     ADD(LW(2), 10)
@@ -1537,7 +1537,7 @@ static void ext_moamoa_main(void) {
             }
         }
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, moamoa_draw, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, moamoa_draw, NULL);
 }
 
 /** Draw callback of the boss swarm: loads the ext driver state and draws all sprites. */

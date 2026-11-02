@@ -206,7 +206,7 @@ void effCrystalMain(EffectEntry* effect) {
         work->scale += work->scaleVel;
         break;
     }
-    dispEntry(work->camera, dispCalcZ(&position), 2, (DispCallback)effCrystalDisp, effect);
+    dispEntry(work->camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effCrystalDisp, effect);
 }
 
 /** Outer 108x108 glint quad of the crystal shine, spun slowly with texture 0x6D (types below 3). */

@@ -10,6 +10,7 @@
 #include "party/party_motion.h"
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
+#include "driver/npcdrv.h"
 
 void hei_test_water_tev(MapTevCallbackInfo* info);
 
@@ -64,7 +65,7 @@ EVT_BEGIN(hei_11_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_TORIDE1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI3"))
     CALL(evt_snd_set_rev_mode, 1)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(hei_test_water_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("mizu"), MAP_OBJ_TEV_CALLBACK(1))

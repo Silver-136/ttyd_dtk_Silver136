@@ -112,7 +112,7 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -128,7 +128,7 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
 static BattleUnitDefense defence_yoshi = {{0, 0, 0, 0, 0}};
 
 /** Defence attributes of the Yoshi double's body: none, so every damage type is dealt normally. */
-static BattleUnitDefenseAttr defence_attr_yoshi = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_yoshi = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_yoshi = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
@@ -203,7 +203,7 @@ EVT_BEGIN(damage_event_yoshi)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(20), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -390,12 +390,12 @@ static EVT_BEGIN(attack_event_yoshi)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
     END_SWITCH
     IF_INT_LESS_OR_EQUAL(LW(10), 0)
@@ -431,14 +431,14 @@ static EVT_BEGIN(attack_event_yoshi)
     END_IF
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 4, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

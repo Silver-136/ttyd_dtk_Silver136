@@ -1176,7 +1176,7 @@ USER_FUNC(evt_sousa_icon) {
     event->userdata[0] = type;
     event->userdata[1] = x;
     event->userdata[2] = y;
-    dispEntry(CAMERA_2D, 0.0f, 0, icon_disp, event);
+    dispEntry(CAMERA_2D, 0.0f, DISP_MODE_OPAQUE, icon_disp, event);
     return EVT_RETURN_YIELD;
 }
 

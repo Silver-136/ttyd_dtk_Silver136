@@ -245,7 +245,7 @@ EVT_END()
 /** Hit reaction: straightens her rotation (left over from tilted jumps), then runs the default damage script. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -289,7 +289,7 @@ BattleWeapon partyWeapon_ChristineNormalAttack = {
     "msg_ac_zutsuki", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -489,16 +489,16 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     LABEL(10)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -542,7 +542,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         END_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, MOVE_SOUND_NONE)
-        ELSE
+    ELSE
         // First bonk: she leans along her jump arc, or flips round fully if the stylish was hit.
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 14, 0)
         CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
@@ -555,7 +555,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
                 CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
                 IF_INT_EQUAL(LW(15), 1)
                     SET_VALUE(LW(9), -15)
-                    ELSE
+                ELSE
                     SET_VALUE(LW(9), 15)
                 END_IF
                 CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(5), LW(6), LW(7))
@@ -565,7 +565,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
                     WAIT_FRAMES(1)
                 END_LOOP
             END_SIBLING_EVENT
-            ELSE
+        ELSE
             BEGIN_SIBLING_EVENT
                 CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(5), LW(6), LW(7))
                 SET_VALUE(LW(8), 0)
@@ -652,7 +652,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), LW(6))
         ADD(LW(10), 1)
         GOTO(10)
-        ELSE
+    ELSE
         // Last bonk: the final hit.
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
@@ -770,7 +770,7 @@ EVT_BEGIN(partyChristineAttack_Monosiri)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), LW(6))
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
     END_IF
@@ -800,7 +800,7 @@ EVT_BEGIN(partyChristineAttack_Monosiri)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_Y_1"))
         CALL(btlevtcmd_ftomsec, 28, LW(0))
         WAIT_MS(LW(0))
-        ELSE
+    ELSE
         CALL(evt_audience_acrobat_notry)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
     END_IF
@@ -881,16 +881,16 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
     LABEL(10)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
@@ -916,7 +916,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         ADD(LW(2), 5)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, MOVE_SOUND_NONE)
-        ELSE
+    ELSE
         CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         ADD(LW(2), 5)
@@ -994,7 +994,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
                                 CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(1))
                                 IF_INT_GREATER_OR_EQUAL(LW(1), 0)
                                     ADD(LW(0), -24)
-                                    ELSE
+                                ELSE
                                     ADD(LW(0), 24)
                                 END_IF
                                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FLIP_ANGLE, LW(0))
@@ -1012,7 +1012,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
 
             // BUG: deletes the event with id 15, not the sibling event whose id was stored in LW(15)
             DELETE_EVENT(15)
-            ELSE
+        ELSE
             BEGIN_SIBLING_EVENT
                 CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
                 CALL(evt_eff64, STRING(""), STRING("kemuri2_n64"), 2, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1060,7 +1060,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
             CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
-            ELSE
+        ELSE
             SET_VALUE(LW(6), LW(10))
             SUBTRACT(LW(6), 1)
             CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(6), LW(6))
@@ -1086,7 +1086,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         ADD(LW(10), 1)
         CALL(btlevtcmd_StartAC, 0)
         GOTO(10)
-        ELSE
+    ELSE
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(10), LW(6))
@@ -1320,7 +1320,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
         WAIT_MS(166)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_Y_1"))
         WAIT_MS(167)
-        ELSE
+    ELSE
         CALL(evt_audience_acrobat_notry)
         WAIT_FRAMES(20)
     END_IF
@@ -1328,7 +1328,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     // On success the "Mario can move again" message shows.
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_AnnounceMessage, 0, 0, 0, STRING("msg_st_chg_mario_quick"), 60)
-        ELSE
+    ELSE
         WAIT_MS(500)
     END_IF
 
@@ -1489,7 +1489,7 @@ EVT_END()
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Goombella's element reactions: none special, every element hits her normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Goombella's status vulnerabilities: base rate (100) for every status. */
 #if VERSION > VERSION_DEMO_US

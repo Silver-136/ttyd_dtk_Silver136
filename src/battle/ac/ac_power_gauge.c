@@ -50,7 +50,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
     }
 
     switch (ac->acState) {
-        case 0:
+        case AC_STATE_INIT:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
@@ -60,7 +60,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
             pw->frame = 0;
             pw->frame2 = 0;
             ac->outputParams[0] = 0;
-            ac->acState = 99;
+            ac->acState = AC_STATE_WAIT_START;
             ac->result = AC_RESULT_RUNNING;
             pw->maxFrames = ac->params[1] + ac->params[2];
             pw->gauge = 0.0f;
@@ -95,10 +95,11 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
                     break;
             }
             break;
-        case 99:
+        case AC_STATE_WAIT_START:
             break;
-        case 100:
+        case AC_STATE_START:
             if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
+                // irand(100) is never negative: a confused auto-play always fails
                 if (irand(100) >= 0) {
                     ac->setupParam = 30;
                     pw->autoSuccess = 0;
@@ -107,26 +108,26 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
                     ac->setupParam = 30;
                 }
                 ac->outputParams[0] = 1;
-                ac->acState = 1002;
+                ac->acState = AC_STATE_RUN + 2;
                 break;
             }
             if (pw->mode) {
-                ac->acState = 1001;
+                ac->acState = AC_STATE_RUN + 1;
             } else {
-                ac->acState = 1000;
+                ac->acState = AC_STATE_RUN;
             }
             if (pw->mode) {
                 BattleAcGaugeSeInit();
             }
-        case 1000:
-        case 1001:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
             pw->frame++;
             switch (pw->phase) {
                 case 0:
                     if (!pw->mode) {
                         if (pw->button == BattlePadGetNow() || isAuto) {
                             pw->phase = 1;
-                            ac->acState = 1001;
+                            ac->acState = AC_STATE_RUN + 1;
                             pw->frame = 0;
                             ac->outputParams[0] = 1;
                             BattleAcGaugeSeInit();
@@ -154,12 +155,12 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
             } else if (pw->phase == 1) {
                 pw->frame2++;
             }
-            if (ac->acState == 1000) {
+            if (ac->acState == AC_STATE_RUN) {
                 if (pw->frame > 120) {
                     pw->frame = 0;
                     ac->result = 0;
                     pw->gauge = 0.0f;
-                    ac->acState = 1003;
+                    ac->acState = AC_STATE_RUN + 3;
                     ac->outputParams[0] = 2;
                     break;
                 }
@@ -167,7 +168,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
                 pw->frame = 0;
                 ac->result = 0;
                 pw->gauge = 101.0f;
-                ac->acState = 1003;
+                ac->acState = AC_STATE_RUN + 3;
                 break;
             }
             if (pw->frame <= ac->params[1]) {
@@ -196,10 +197,10 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
                     ac->result = AC_RESULT_SUCCESS;
                     ac->resultCount++;
                 }
-                ac->acState = 1003;
+                ac->acState = AC_STATE_RUN + 3;
             }
             break;
-        case 1002:
+        case AC_STATE_RUN + 2:
             ac->setupParam--;
             if (ac->setupParam < 0) {
                 if (pw->autoSuccess) {
@@ -210,24 +211,24 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
                 }
                 ac->doneFlags |= AC_DONE_FLAG_FINISHED;
                 pw->endTimer = 60;
-                ac->acState = 1005;
+                ac->acState = AC_STATE_RUN + 5;
                 return 0;
             }
             break;
-        case 1003:
-            ac->acState = 1004;
-        case 1004:
+        case AC_STATE_RUN + 3:
+            ac->acState = AC_STATE_RUN + 4;
+        case AC_STATE_RUN + 4:
             ac->doneFlags |= AC_DONE_FLAG_FINISHED;
             BattleAcGaugeSeDelete();
             pw->endTimer = 60;
-            ac->acState = 1005;
-        case 1005:
+            ac->acState = AC_STATE_RUN + 5;
+        case AC_STATE_RUN + 5:
             pw->endTimer--;
             if (pw->endTimer <= 0) {
-                ac->acState = 1006;
+                ac->acState = AC_STATE_RUN + 6;
             }
             break;
-        case 1006:
+        case AC_STATE_RUN + 6:
             ac->maincb = NULL;
             ac->dispcb = NULL;
             ac->resultcb = NULL;
@@ -252,19 +253,19 @@ void battleAcDisp_PowerGauge(CameraId cameraId, void* param) {
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
     switch (ac->acState) {
-        case 99:
+        case AC_STATE_WAIT_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
-        case 100:
-        case 1000:
-        case 1001:
-        case 1003:
+        case AC_STATE_START:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
+        case AC_STATE_RUN + 3:
             actionCommandDisp(disp->iconX, disp->iconY);
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
             break;
-        case 1004:
-        case 1005:
+        case AC_STATE_RUN + 4:
+        case AC_STATE_RUN + 5:
             if (disp->slideTimer >= 40) {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
@@ -281,7 +282,7 @@ void battleAcDisp_PowerGauge(CameraId cameraId, void* param) {
 /** Called by btlevtcmd_StopAC: unless the command already finished, stops the gauge sound and starts the end wait. */
 void battleAcDelete_PowerGauge(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED)) {
-        work->actionCommands.acState = 1004;
+        work->actionCommands.acState = AC_STATE_RUN + 4;
     }
 }
 
@@ -368,11 +369,11 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
 
     switch (ac->acState) {
-        case 99:
-        case 100:
-        case 1003:
-        case 1004:
-        case 1005:
+        case AC_STATE_WAIT_START:
+        case AC_STATE_START:
+        case AC_STATE_RUN + 3:
+        case AC_STATE_RUN + 4:
+        case AC_STATE_RUN + 5:
             if ((u16)c) {
                 Vec pos = {0.0f, 0.0f, 0.0f};
                 f32 px = -225.0f + x;
@@ -393,8 +394,8 @@ static void actionCommandDisp(f32 x, f32 y) {
                 iconDispGx(&pos, ICON_FLAG_2D, b, 1.0f);
             }
             break;
-        case 1000:
-        case 1001:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
             if (pw->mode) {
                 if (pw->gauge >= (f32)ac->params[4] && pw->gauge <= 100.0f) {
                     if ((u16)c) {

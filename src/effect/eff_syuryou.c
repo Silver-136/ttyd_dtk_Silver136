@@ -104,7 +104,7 @@ void effSyuryouMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSyuryouDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSyuryouDisp, effect);
 }
 
 /** Draws the animation pose camera-facing, with the fade alpha applied as an event colour. */

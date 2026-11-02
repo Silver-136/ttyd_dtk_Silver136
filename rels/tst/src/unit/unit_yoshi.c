@@ -66,6 +66,7 @@ s32 _gundan_part_update(YoshiGundanPart* p, s32 i);
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_sweat_n64.h"
 #include "data_tables.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of Yoshi (btlevtcmd_SetUnitWork / GetUnitWork, unit->work).
 // Slot 3 is set to -1 by Ground Pound and never read, so it keeps its number.
@@ -131,7 +132,7 @@ u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Yoshi has no elemental defence. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Yoshi is fully vulnerable to every status effect (100 for each). */
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
@@ -332,7 +333,7 @@ EVT_END()
 /** Hit reaction: straightens his rotation (left over from his moves), then runs the default damage script. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -380,9 +381,9 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_hip_drop", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_SHATTERS_FREEZE | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -432,9 +433,9 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_nomikomi", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -483,9 +484,9 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_nomikomi", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -535,7 +536,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     "msg_ac_nomikomi", // acHelpMsg
     SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -582,7 +583,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     "msg_ac_nomikomi", // acHelpMsg
     SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -620,7 +621,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, // acHelpMsg
     SPECIAL_PIERCE_DEFENSE | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT, // targetWeightFlags
+    TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -664,7 +665,7 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_wonder_egg", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
@@ -718,9 +719,9 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     3, // acLevel
     2, // reserved_6F
     "msg_ac_taigun_yoshi", // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_UNGUARDABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE | SPECIAL_DIMINISH_BY_HIT | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -873,12 +874,12 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 256, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
     END_SWITCH
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, 0)
@@ -924,15 +925,15 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     END_IF
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 4, 0, 0, 0, -1)
-    IF_INT_NOT_EQUAL(LW(5), 1)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
         CALL(btlevtcmd_StopAC)
-        IF_INT_EQUAL(LW(5), 3)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), 38)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), 39)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), 40)
         END_IF
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1158,7 +1159,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
 
     // If the target is out of reach (a flying enemy), Yoshi first moves to where he can reach it.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 256, LW(5))
-    IF_INT_EQUAL(LW(5), 5)
+    IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
 #if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
         MULTIPLY(LW(6), 40)
@@ -1205,14 +1206,14 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     // His tongue shoots out.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_2"))
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW1"), 0)
-    IF_INT_NOT_EQUAL(LW(5), 1)
-        IF_INT_EQUAL(LW(5), 3)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), 38)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), 39)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), 40)
         END_IF
         WAIT_FRAMES(50)
@@ -1986,14 +1987,14 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
         GOTO(90)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), 38)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), 39)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), 40)
         END_IF
         GOTO(75)
@@ -2612,10 +2613,10 @@ USER_FUNC(_gundan_yoshi_run_effect) {
                 return EVT_RETURN_DONE;
         }
 #if VERSION <= VERSION_DEMO_US
-        dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)_btlYoshiDisp, w);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)_btlYoshiDisp, w);
 #else
         for (i = 0; i < 256; i++) {
-            dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(2, 1), (DispCallback)_btlYoshiDisp, &w->parts[i]);
+            dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(DISP_MODE_XLU, DISP_MODE_ALPHA_TEST), (DispCallback)_btlYoshiDisp, &w->parts[i]);
         }
 #endif
     } while (0);

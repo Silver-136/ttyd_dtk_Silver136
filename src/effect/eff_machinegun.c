@@ -57,7 +57,7 @@ void effMachinegunMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMachinegunDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMachinegunDisp, effect);
 }
 
 /** Draws the shot as a rotated sprite (texture 0x89) with a grey tint. */

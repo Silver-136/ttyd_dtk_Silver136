@@ -123,9 +123,9 @@ static const char* luigi_book_5[] = {
 const char** luigi_book_list[] = {luigi_book_1, luigi_book_2, luigi_book_3, luigi_book_4, luigi_book_5};
 
 #if VERSION <= VERSION_DEMO_US
-u16 menu_skip_list[] = {1, 9, 10, 11, 6, 7, 8, 5, 3, 2, 4, 0x32, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78};
+u16 menu_skip_list[] = {ITEM_STRANGE_SACK, ITEM_HAMMER, ITEM_SUPER_HAMMER, ITEM_ULTRA_HAMMER, ITEM_BOOTS, ITEM_SUPER_BOOTS, ITEM_ULTRA_BOOTS, ITEM_BOAT_CURSE, ITEM_TUBE_CURSE, ITEM_PAPER_CURSE, ITEM_PLANE_CURSE, ITEM_MAGICAL_MAP, ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
 #else
-u16 menu_skip_list[] = {9, 10, 11, 6, 7, 8, 5, 3, 2, 4, 0x32, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78};
+u16 menu_skip_list[] = {ITEM_HAMMER, ITEM_SUPER_HAMMER, ITEM_ULTRA_HAMMER, ITEM_BOOTS, ITEM_SUPER_BOOTS, ITEM_ULTRA_BOOTS, ITEM_BOAT_CURSE, ITEM_TUBE_CURSE, ITEM_PAPER_CURSE, ITEM_PLANE_CURSE, ITEM_MAGICAL_MAP, ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
 #endif
 
 
@@ -312,7 +312,7 @@ s32 winItemMain(WindowWork* w) {
         if (w->buttonTrg & PAD_BUTTON_A) {
             if (w->item.mode == 0) {
                 id = pouchHaveItem(w->item.cursor[mode]);
-                if (itemDataTable[id].usable_locations & 4) {
+                if (itemDataTable[id].usable_locations & ITEM_USABLE_MENU) {
                     w->item.useItem = id;
                     w->item.useIdx = w->item.cursor[mode];
                     w->item.state = 300;
@@ -421,7 +421,7 @@ s32 winItemMain(WindowWork* w) {
 #if VERSION <= VERSION_DEMO_US
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 #else
                 w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
                 w->helpX = w->helpTgtX;
@@ -473,7 +473,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.mailLines += 7;
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
-            psndSFXOn(SFX_NAME_WORD(0x20013));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
 #else
             w->item.mailLine = 0;
             if (mail->flags & MAIL_FLAG_PICTURE) {
@@ -611,7 +611,7 @@ s32 winItemMain(WindowWork* w) {
         } else if (w->buttonTrg & PAD_BUTTON_A) {
             mp = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
-            psndSFXOn(SFX_NAME_WORD(0x20012));
+            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             if (mp->currMotionId != MARIO_MOTION_SHIP && mp->currMotionId != MARIO_MOTION_PLANE &&
                 ((w->item.useTarget < 2 && !marioBgmodeChk()) || (w->item.useTarget < 1 && marioBgmodeChk()))) {
 #else
@@ -677,7 +677,7 @@ s32 winItemMain(WindowWork* w) {
             }
             if (old != w->item.useTarget) {
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn(SFX_NAME_WORD(0x20005));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #endif
@@ -690,7 +690,7 @@ s32 winItemMain(WindowWork* w) {
             }
             if (old != w->item.useTarget) {
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn(SFX_NAME_WORD(0x20005));
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #endif
@@ -836,7 +836,7 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
             id = p->item.skip[0];
         }
         scroll = w->item.scroll[w->item.mode];
-        grayed = (w->item.mode != 0 || (itemDataTable[id].usable_locations & 4)) == 0;
+        grayed = (w->item.mode != 0 || (itemDataTable[id].usable_locations & ITEM_USABLE_MENU)) == 0;
         y = scroll + (20.0f + ((yBase = (100.0f + yo) - row * 38) - 10.0f));
         if (y > 240.0f) {
             continue;

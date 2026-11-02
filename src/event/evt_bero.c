@@ -32,6 +32,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_hit.h"
 #include "system.h"
+#include "driver/npcdrv.h"
 
 //.sbss, NOTE: all are reversed because of -inline deferred
 s32 BeroEXEC;
@@ -979,7 +980,7 @@ EVT_BEGIN(bero_play_enter_anime)
                     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
                     CALL_CHILD(LW(9))
                     BREAK_LOOP
-                    ELSE
+                ELSE
                     CALL_CHILD(LW(9))
                 END_IF
             END_LOOP
@@ -1001,7 +1002,7 @@ EVT_BEGIN(bero_play_out_anime)
                 WAIT_MS(LW(9))
                 CALL(evt_bero_mario_go)
             END_INLINE_EVENT
-            ELSE
+        ELSE
             BEGIN_INLINE_EVENT
                 WAIT_MS(500)
                 CALL(evt_bero_mario_go)
@@ -1038,7 +1039,7 @@ EVT_BEGIN(bero_play_out_anime)
                     SET_FLOAT_VALUE(LW(0), FLOAT(180.0f))
                     CALL_CHILD(LW(9))
                     BREAK_LOOP
-                    ELSE
+                ELSE
                     CALL_CHILD(LW(9))
                 END_IF
             END_LOOP
@@ -1239,7 +1240,7 @@ USER_FUNC(evt_bero_cam3d_change) {
     cam->storedAt = BeroAT;
     cam->startTimeA = gp->renderTime;
     cam->durationA = (u32)OSMillisecondsToTicks(time);
-    cam->stateA = 3;
+    cam->stateA = CAM_MOVE_TO_STORED;
     cam->curveA = curve;
     return EVT_RETURN_DONE;
 }
@@ -1289,14 +1290,14 @@ USER_FUNC(evt_bero_1stcheck) {
  * and aborts (restarting NPCs) if it returns LW(0) = 1.
  */
 EVT_BEGIN(bero_case_init_check)
-    CALL(evt_bero_exec_onoff, 1, 65536)
+    CALL(evt_bero_exec_onoff, 1, BERO_EXEC_ENTRY_DONE)
     CALL(evt_bero_exec_get, LW(0))
-    AND_RAW(LW(0), 1)
+    AND_RAW(LW(0), BERO_EXEC_BUSY)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), 1)
         RETURN
     END_IF
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
@@ -1315,14 +1316,14 @@ EVT_BEGIN(bero_case_init_check)
         CALL(bero_get_position_pipe_pure, 0, LW(0))
     END_SWITCH
     CALL(evt_bero_set_now_number, LW(1))
-    CALL(evt_bero_exec_onoff, 0, 1)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_BUSY)
     SET_VALUE(LW(15), 0)
     CALL_CHILD(LW(11))
     IF_INT_EQUAL(LW(0), 1)
-        CALL(evt_npc_change_fbat_mode, 1)
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
         CALL(evt_npc_start_for_event)
-        CALL(evt_bero_exec_onoff, 0, 65536)
-        CALL(evt_bero_exec_onoff, 1, 1)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
+        CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
         SET_VALUE(LW(0), 1)
         RETURN
     END_IF
@@ -1341,9 +1342,9 @@ EVT_BEGIN(bero_case_exec_none)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_onoff, 0, 65536)
-    CALL(evt_bero_exec_onoff, 1, 1)
-    CALL(evt_bero_exec_onoff, 0, 8)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
+    CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_EXIT_DONE)
     WAIT_FRAMES(2)
     CALL(evt_bero_1stcheck, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1374,11 +1375,11 @@ EVT_BEGIN(bero_case_exec_road)
         PEEK_FLOAT(LW(10), PTR(&BeroEX))
         PEEK_FLOAT(LW(12), PTR(&BeroEZ))
         CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(150.0f))
-        CALL(evt_bero_exec_onoff, 0, 65536)
-        CALL(evt_bero_exec_onoff, 1, 1)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
+        CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
     END_INLINE_EVENT
     WAIT_MS(150)
-    CALL(evt_bero_exec_onoff, 0, 8)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_EXIT_DONE)
     WAIT_FRAMES(2)
     CALL(evt_bero_1stcheck, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1422,12 +1423,12 @@ EVT_BEGIN(bero_case_exec_door)
         PEEK_FLOAT(LW(10), PTR(&BeroEX))
         PEEK_FLOAT(LW(12), PTR(&BeroEZ))
         CALL(evt_mario_mov_pos2, LW(10), LW(12), FLOAT(150.0f))
-        CALL(evt_bero_exec_onoff, 0, 65536)
-        CALL(evt_bero_exec_onoff, 1, 1)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
+        CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
     END_INLINE_EVENT
     CALL(evt_bero_mario_go_wait)
     WAIT_MS(150)
-    CALL(evt_bero_exec_onoff, 0, 8)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_EXIT_DONE)
     WAIT_FRAMES(2)
     CALL(evt_bero_1stcheck, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1460,7 +1461,7 @@ USER_FUNC(evt_camera_change_event_from_road) {
             cam->storedAt = at;
             cam->startTimeA = gp->renderTime;
             cam->durationA = (u32)OSMillisecondsToTicks(500);
-            cam->stateA = 3;
+            cam->stateA = CAM_MOVE_TO_STORED;
             cam->curveA = EASING_SINE_IN_OUT;
         }
     }
@@ -1484,7 +1485,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
             AND_RAW(LW(0), BERO_TYPE_BG_MODE)
             IF_INT_EQUAL(LW(0), 0)
                 SET_VALUE(LF(0), 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(0), 1)
             END_IF
             CALL(evt_bero_get_number, LW(14))
@@ -1494,7 +1495,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
             AND_RAW(LW(0), BERO_TYPE_BG_MODE)
             IF_INT_EQUAL(LW(0), 0)
                 SET_VALUE(LF(1), 0)
-                ELSE
+            ELSE
                 SET_VALUE(LF(1), 1)
             END_IF
             SET_VALUE(LF(2), 0)
@@ -1528,16 +1529,16 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_DOKAN1"), LW(0), LW(1), LW(2), 0)
     SWITCH(LW(5))
         CASE_EQUAL(BERO_DIR_W)
-        CALL(evt_mario_paper_pose_dokan, 5)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_YOKO_OUT)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(BERO_DIR_E)
-        CALL(evt_mario_paper_pose_dokan, 5)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_YOKO_OUT)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(8)
-        CALL(evt_mario_paper_pose_dokan, 2)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_TATE_DOWNOUT)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(9)
-        CALL(evt_mario_paper_pose_dokan, 3)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_TATE_UPOUT)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
     END_SWITCH
 
@@ -1550,7 +1551,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LF(0), 0)
-            ELSE
+        ELSE
             SET_VALUE(LF(0), 1)
         END_IF
         WAIT_MS(500)
@@ -1561,15 +1562,15 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LF(1), 0)
-            ELSE
+        ELSE
             SET_VALUE(LF(1), 1)
         END_IF
         CALL(evt_bero_disppos_load)
         CALL(evt_mario_paper_pose_off)
         CALL(evt_bero_disppos_save)
         CALL(evt_bero_exec_get, LW(0))
-        IF_BITS_CLEAR(LW(0), 4)
-            CALL(evt_bero_exec_onoff, 0, 2)
+        IF_BITS_CLEAR(LW(0), BERO_EXEC_KEEP_MOVING)
+            CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
         END_IF
         CALL(evt_bero_get_info_length, LW(1), LW(10))
         CALL(bero_get_position_pipe_pure, 1, LW(10))
@@ -1580,7 +1581,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         WAIT_MS(500)
         IF_INT_NOT_EQUAL(LF(1), 0)
             CALL(evt_mario_bgmode_on)
-            ELSE
+        ELSE
             CALL(evt_mario_bgmode_off)
         END_IF
         PEEK_FLOAT(LW(0), PTR(&BeroEX))
@@ -1589,8 +1590,8 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_DOKAN1"), LW(0), LW(1), LW(2), 0)
         CALL_CHILD(PTR(evt_bero_info_run_pipe_sub00))
         CALL(evt_bero_exec_get, LW(0))
-        IF_BITS_CLEAR(LW(0), 4)
-            CALL(evt_bero_exec_onoff, 1, 2)
+        IF_BITS_CLEAR(LW(0), BERO_EXEC_KEEP_MOVING)
+            CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
         END_IF
         CALL(evt_bero_disppos_load)
         CALL(evt_mario_cont_onoff, 1)
@@ -1602,23 +1603,23 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 
         // With a destination map (the pipe exit never spawns this case) he just takes the entrance's layer.
-        ELSE
+    ELSE
         CALL(evt_bero_disppos_load)
         CALL(evt_mario_paper_pose_off)
         SET_VALUE(LW(0), LW(4))
         AND_RAW(LW(0), BERO_TYPE_BG_MODE)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_mario_bgmode_on)
-            ELSE
+        ELSE
             CALL(evt_mario_bgmode_off)
         END_IF
     END_IF
 
     // Field enemies resume and the exits are live again.
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
-    CALL(evt_bero_exec_onoff, 0, 65536)
-    CALL(evt_bero_exec_onoff, 1, 1)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
+    CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
     RETURN
 EVT_END()
 
@@ -1654,16 +1655,16 @@ EVT_BEGIN(bero_case_exec_pipe)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_DOKAN1"), LW(0), LW(1), LW(2), 0)
     SWITCH(LW(5))
         CASE_EQUAL(BERO_DIR_W)
-        CALL(evt_mario_paper_pose_dokan, 5)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_YOKO_OUT)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(BERO_DIR_E)
-        CALL(evt_mario_paper_pose_dokan, 5)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_YOKO_OUT)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(8)
-        CALL(evt_mario_paper_pose_dokan, 2)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_TATE_DOWNOUT)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(9)
-        CALL(evt_mario_paper_pose_dokan, 3)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_TATE_UPOUT)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
     END_SWITCH
     IF_BITS_CLEAR(LW(4), BERO_TYPE_FLAG_NO_FADE)
@@ -1682,7 +1683,7 @@ EVT_BEGIN(bero_case_exec_pipe)
             CALL(evt_fade_set_mapchange_type, 0, FADE_PIPE_DOWN_A1, 0, -1, -1)
         END_SWITCH
     END_IF
-    CALL(evt_bero_exec_onoff, 0, 8)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_EXIT_DONE)
     WAIT_FRAMES(2)
     CALL(evt_bero_1stcheck, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1705,9 +1706,9 @@ EVT_BEGIN(bero_case_exec_gate)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_onoff, 0, 65536)
-    CALL(evt_bero_exec_onoff, 1, 1)
-    CALL(evt_bero_exec_onoff, 0, 8)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
+    CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_EXIT_DONE)
     WAIT_FRAMES(2)
     CALL(evt_bero_1stcheck, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1805,7 +1806,7 @@ EVT_BEGIN(bero_case_switch_off)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_bero_case_id_load, LW(1), LW(15))
         CALL(evt_del_case_evt, 0, LW(15))
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("ベロの出て行くデータの二重削除防止をしています"))
 #else
     IF_INT_EQUAL(LW(0), 0)
@@ -1813,7 +1814,7 @@ EVT_BEGIN(bero_case_switch_off)
         CALL(evt_bero_case_id_load, LW(1), LW(15))
         CALL(evt_del_case_evt, 0, LW(15))
         CALL(evt_hitobj_attr_onoff, 0, 0, LW(3), HIT_ATTR_BERO)
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("\203x\203\215\202\314\215\355\217\234\227\\\226\361\202\340\202\265\202\255\202\315\203x\203\215\202\314\217o\202\304\215s\202\255\203f\201[\203^\202\314\223\361\217d\215\355\217\234\226h\216~\202\305\202\267"))
 #endif
     END_IF
@@ -1876,17 +1877,17 @@ EVT_BEGIN(evt_bero_info_run_pipe_sub00)
     SWITCH(LW(5))
         CASE_EQUAL(BERO_DIR_W)
         CALL(evt_mario_set_dispdir, 180)
-        CALL(evt_mario_paper_pose_dokan, 4)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_YOKO_IN)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(BERO_DIR_E)
         CALL(evt_mario_set_dispdir, 0)
-        CALL(evt_mario_paper_pose_dokan, 4)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_YOKO_IN)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(BERO_DIR_DOWN)
-        CALL(evt_mario_paper_pose_dokan, 1)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_TATE_UPIN)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(BERO_DIR_UP)
-        CALL(evt_mario_paper_pose_dokan, 0)
+        CALL(evt_mario_paper_pose_dokan, DOKAN_TATE_DOWNIN)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
     END_SWITCH
     CALL(evt_mario_dokan_end)
@@ -1946,21 +1947,21 @@ EVT_BEGIN(evt_bero_info_run)
 #if VERSION > VERSION_DEMO_US
         DEBUG_PUT_MSG(STRING("\203Z\201[\203u\203u\203\215\203b\203N\202\251\202\347\202\314\203\215\201[\203h\216\236\202\314\217\210\227\235"))
 #endif
-        CALL(evt_bero_exec_onoff, 0, 1)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_BUSY)
         WAIT_FRAMES(1)
         CALL(evt_bero_exec_get, LW(0))
-        IF_BITS_CLEAR(LW(0), 4)
-            CALL(evt_bero_exec_onoff, 0, 2)
+        IF_BITS_CLEAR(LW(0), BERO_EXEC_KEEP_MOVING)
+            CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
         END_IF
         WAIT_FRAMES(1)
         CALL(evt_bero_exec_get, LW(0))
-        IF_BITS_CLEAR(LW(0), 4)
-            CALL(evt_bero_exec_onoff, 1, 2)
+        IF_BITS_CLEAR(LW(0), BERO_EXEC_KEEP_MOVING)
+            CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
         END_IF
-        CALL(evt_npc_change_fbat_mode, 1)
+        CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
         CALL(evt_npc_start_for_event)
-        CALL(evt_bero_exec_onoff, 1, 1)
-        CALL(evt_bero_exec_onoff, 0, 65536)
+        CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
         CALL_CHILD(PTR(bero_case_entry))
         RETURN
     END_IF
@@ -1968,10 +1969,10 @@ EVT_BEGIN(evt_bero_info_run)
     // Normal arrival: lock the controls. A background entrance hides the partners;
     // otherwise they follow Mario in, out of the pipe for a pipe entrance.
     CALL(evt_bero_exec_get, LW(0))
-    IF_INT_EQUAL(LW(0), 1)
+    IF_INT_EQUAL(LW(0), BERO_EXEC_BUSY)
         RETURN
     END_IF
-    CALL(evt_bero_exec_onoff, 0, 1)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_BUSY)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_BG_MODE)
@@ -1981,7 +1982,7 @@ EVT_BEGIN(evt_bero_info_run)
         CALL(evt_mario_kill_party, 0)
         CALL(evt_mario_kill_party, 1)
         CALL(evt_mario_cam_y_off)
-        ELSE
+    ELSE
         DEBUG_PUT_MSG(STRING("\225\201\222\312\202\311\223\374\202\351\202\306\202\253\202\314\203}\203\212\203I\202\314\217\211\212\372\217\210\227\235"))
         CALL(evt_mario_bgmode_off)
         SET_VALUE(LW(0), LW(4))
@@ -1989,7 +1990,7 @@ EVT_BEGIN(evt_bero_info_run)
         IF_INT_EQUAL(LW(0), BERO_TYPE_PIPE)
             CALL(evt_mario_set_prev_party_dokan, 0)
             CALL(evt_mario_set_prev_party_dokan, 1)
-            ELSE
+        ELSE
             CALL(evt_mario_set_prev_party, 0)
             CALL(evt_mario_set_prev_party, 1)
         END_IF
@@ -2001,13 +2002,13 @@ EVT_BEGIN(evt_bero_info_run)
     IF_INT_EQUAL(LW(0), BERO_TYPE_PIPE)
         SWITCH(LW(5))
             CASE_EQUAL(BERO_DIR_W)
-            CALL(evt_mario_dokan_prepare, 4)
+            CALL(evt_mario_dokan_prepare, DOKAN_YOKO_IN)
             CASE_EQUAL(BERO_DIR_E)
-            CALL(evt_mario_dokan_prepare, 4)
+            CALL(evt_mario_dokan_prepare, DOKAN_YOKO_IN)
             CASE_EQUAL(BERO_DIR_DOWN)
-            CALL(evt_mario_dokan_prepare, 1)
+            CALL(evt_mario_dokan_prepare, DOKAN_TATE_UPIN)
             CASE_EQUAL(BERO_DIR_UP)
-            CALL(evt_mario_dokan_prepare, 0)
+            CALL(evt_mario_dokan_prepare, DOKAN_TATE_DOWNIN)
         END_SWITCH
     END_IF
 
@@ -2093,7 +2094,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_bero_mario_enter)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL_CHILD(LW(7))
     IF_INT_EQUAL(LW(0), 1)
@@ -2101,8 +2102,8 @@ EVT_BEGIN(evt_bero_mario_enter)
         GOTO(100)
     END_IF
     CALL(evt_bero_exec_get, LW(0))
-    IF_BITS_CLEAR(LW(0), 4)
-        CALL(evt_bero_exec_onoff, 0, 2)
+    IF_BITS_CLEAR(LW(0), BERO_EXEC_KEEP_MOVING)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
     END_IF
     CALL(evt_bero_get_into_info)
     SET_VALUE(LW(0), LW(4))
@@ -2122,15 +2123,15 @@ EVT_BEGIN(evt_bero_mario_enter)
         CALL(evt_mario_key_onoff, 1)
     END_SWITCH
     CALL(evt_bero_exec_get, LW(0))
-    IF_BITS_CLEAR(LW(0), 4)
-        CALL(evt_bero_exec_onoff, 1, 2)
+    IF_BITS_CLEAR(LW(0), BERO_EXEC_KEEP_MOVING)
+        CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
     END_IF
     LABEL(100)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     CALL_CHILD(PTR(bero_case_entry))
-    CALL(evt_bero_exec_onoff, 1, 1)
-    CALL(evt_bero_exec_onoff, 0, 65536)
+    CALL(evt_bero_exec_onoff, 1, BERO_EXEC_BUSY)
+    CALL(evt_bero_exec_onoff, 0, BERO_EXEC_ENTRY_DONE)
     RETURN
 EVT_END()
 

@@ -190,9 +190,9 @@ USER_FUNC(main_genki) {
         main_object(i);
     }
     main_star();
-    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, NULL);
+    dispEntry(CAMERA_2D, 901.0f, DISP_MODE_ALPHA_TEST, disp_2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, disp_3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, disp_3D_alpha, NULL);
     return 0;
 }
 

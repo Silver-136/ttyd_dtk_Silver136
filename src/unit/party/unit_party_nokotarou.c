@@ -397,7 +397,7 @@ BattleWeapon partyWeapon_NokotarouFirstAttack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -440,7 +440,7 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
     "msg_ac_hammer", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -491,7 +491,7 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     "msg_ac_koura_shubibin", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -537,7 +537,7 @@ BattleWeapon partyWeapon_NokotarouKouraGuard = {
     "msg_ac_koura_no_mamori", // acHelpMsg
     SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -583,7 +583,7 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     "msg_ac_tsuranuki_koura", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -897,14 +897,14 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(13), MOVE_SOUND_NONE, 0)
 
     // Miss: the enemy's dodge plays if it has one, he slides past it, pops out of his shell and runs home.
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         CALL(btlevtcmd_StopAC)
@@ -936,7 +936,7 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
+    IF_INT_NOT_EQUAL(LW(0), CHECK_COUNTER_NONE)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPIN_SPEED, 0)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         CALL_CHILD(_koura_rotate_stop)
@@ -1185,14 +1185,14 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(5), LW(5))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 0)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(50)
@@ -1206,7 +1206,7 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
     CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
+    IF_INT_NOT_EQUAL(LW(0), CHECK_COUNTER_NONE)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPIN_SPEED, 0)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         CALL_CHILD(_koura_rotate_stop)
@@ -1803,14 +1803,14 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 0)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(50)
@@ -1824,7 +1824,7 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
     CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
+    IF_INT_NOT_EQUAL(LW(0), CHECK_COUNTER_NONE)
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_EFFECT_END, 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPIN_SPEED, 0)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -2031,7 +2031,7 @@ EVT_END()
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
 /** Koops's element reactions: none special, every element hits him normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Koops's defence while flipped on his back (dmg_turn_event): 0. */
 static BattleUnitDefense defence_turn = {0};

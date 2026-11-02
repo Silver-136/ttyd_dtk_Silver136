@@ -140,7 +140,7 @@ void effExpBomMain(EffectEntry* effect) {
     if (!disp) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, effExpBomDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effExpBomDisp, effect);
     }
 }
 

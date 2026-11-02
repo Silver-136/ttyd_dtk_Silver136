@@ -159,7 +159,7 @@ void effPokopiThunderMain(EffectEntry* effect) {
     } else if (frame >= 11) {
         work->alpha = (s32)inline_fn(work->alpha, 0.5f);
     }
-    dispEntry(work->cameraId, dispCalcZ(&position), 2, (DispCallback)effPokopiThunderDisp, effect);
+    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPokopiThunderDisp, effect);
 }
 
 /** Returns a->end.y - b->start.y, the vertical span of the bolt. */
@@ -271,7 +271,7 @@ void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
         work->z[i] = zero + (0.09090909f * ((f32)i * (work->end.z - work->start.z)) + work->start.z);
         work->w[i] = 0.1f * (f32)data[i + 12];
     }
-    vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, 3)->address;
+    vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 48, SMART_GROUP_TEMP)->address;
     v = vtx;
     for (i = 0; i < 12; i++) {
         f32 ox, a, oy, r, ang2;

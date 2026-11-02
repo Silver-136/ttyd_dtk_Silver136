@@ -304,15 +304,15 @@ void effFunemizuMain(EffectEntry* effect) {
     }
     if (type == 0 || type == 2) {
 #if VERSION <= VERSION_DEMO_US
-        dispEntry(work->cam, dispCalcZ(&position), 8, (DispCallback)effFunemizuDisp, effect);
+        dispEntry(work->cam, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effFunemizuDisp, effect);
 #else
-        dispEntry(cam, dispCalcZ(&position), 2, (DispCallback)effFunemizuDisp, effect);
+        dispEntry(cam, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFunemizuDisp, effect);
 #endif
     } else {
 #if VERSION <= VERSION_DEMO_US
-        dispEntry(work->cam, dispCalcZ(&position), 8, (DispCallback)effFunemizuShibukiDisp, effect);
+        dispEntry(work->cam, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effFunemizuShibukiDisp, effect);
 #else
-        dispEntry(cam, dispCalcZ(&position), 2, (DispCallback)effFunemizuShibukiDisp, effect);
+        dispEntry(cam, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFunemizuShibukiDisp, effect);
 #endif
     }
 }

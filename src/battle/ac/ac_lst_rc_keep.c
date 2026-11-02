@@ -54,23 +54,23 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
     do {
         loop = 0;
         switch (ac->acState) {
-            case 0:
+            case AC_STATE_INIT:
                 ac->result = AC_RESULT_RUNNING;
                 lw->count = 0;
                 memset(disp, 0, sizeof(BattleACDispParams));
                 disp->iconX = -300.0f;
                 disp->iconY = 0.0f;
                 disp->slideTimer = 20;
-                ac->acState = 99;
+                ac->acState = AC_STATE_WAIT_START;
                 break;
-            case 99:
+            case AC_STATE_WAIT_START:
                 break;
-            case 100:
+            case AC_STATE_START:
                 lw->timer = 120;
-                ac->acState = 1000;
+                ac->acState = AC_STATE_RUN;
                 lw->held0 = 0;
                 lw->held1 = 0;
-            case 1000:
+            case AC_STATE_RUN:
                 if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
                     if (ac->setupFlags & AC_SETUP_FLAG_RETRIES) {
                         ac->setupParam--;
@@ -78,6 +78,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                             break;
                         }
                     }
+                    // irand(100) is never negative: a confused auto-play always fails
                     if (irand(100) >= 0) {
                         ac->result = 0;
                     } else {
@@ -107,7 +108,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     }
                 }
                 if ((lw->held0 != 0 && lw->held1 != 0) || ac->countdown > 0 || autoCmd) {
-                    ac->acState = 1001;
+                    ac->acState = AC_STATE_RUN + 1;
                     lw->timer = ac->params[0];
                     lw->held1 = lw->held0 = lw->count = 0;
                     break;
@@ -116,15 +117,15 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                 if (lw->timer <= 0) {
                     ac->result = 0;
                     loop = 1;
-                    ac->acState = 1003;
+                    ac->acState = AC_STATE_RUN + 3;
                 }
                 break;
-            case 1001:
+            case AC_STATE_RUN + 1:
                 if (ac->countdown > 0) {
                     ac->countdown--;
                     ac->result = AC_RESULT_SUCCESS;
                     loop = 1;
-                    ac->acState = 1003;
+                    ac->acState = AC_STATE_RUN + 3;
                 }
                 lw->timer--;
                 if (lw->held0 > 0) {
@@ -141,7 +142,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     if (lw->held0 > 5 || lw->held1 > 5) {
                         ac->result &= ~AC_RESULT_RUNNING;
                         loop = 1;
-                        ac->acState = 1003;
+                        ac->acState = AC_STATE_RUN + 3;
                         break;
                     }
                 }
@@ -151,7 +152,7 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     if (lw->count >= 5) {
                         ac->result &= ~AC_RESULT_RUNNING;
                         loop = 1;
-                        ac->acState = 1003;
+                        ac->acState = AC_STATE_RUN + 3;
                         break;
                     }
                     lw->timer = ac->params[lw->count];
@@ -174,21 +175,21 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                     ac->result |= AC_RESULT_SUCCESS;
                     ac->result &= ~AC_RESULT_RUNNING;
                     loop = 1;
-                    ac->acState = 1003;
+                    ac->acState = AC_STATE_RUN + 3;
                     break;
                 }
                 if (ok) {
                     ac->result |= AC_RESULT_SUCCESS;
                     ac->result &= ~AC_RESULT_RUNNING;
                     loop = 1;
-                    ac->acState = 1003;
+                    ac->acState = AC_STATE_RUN + 3;
                     break;
                 }
                 ac->result &= ~AC_RESULT_RUNNING;
                 loop = 1;
-                ac->acState = 1003;
+                ac->acState = AC_STATE_RUN + 3;
                 break;
-            case 1003:
+            case AC_STATE_RUN + 3:
                 // FAKE: byte-offset index (off >> 2) and the n >= 0 guard; the plain loop over
                 // ac_lstrckeep_iconname[i] changes the object
                 n = lw->count - 1;
@@ -197,19 +198,19 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
                         iconDelete(ac_lstrckeep_iconname[off >> 2]);
                     }
                 }
-                ac->acState = 1004;
-            case 1004:
-            case 1005:
+                ac->acState = AC_STATE_RUN + 4;
+            case AC_STATE_RUN + 4:
+            case AC_STATE_RUN + 5:
                 lw->endTimer = 60;
-                ac->acState = 1006;
+                ac->acState = AC_STATE_RUN + 6;
                 break;
-            case 1006:
+            case AC_STATE_RUN + 6:
                 lw->endTimer--;
                 if (lw->endTimer <= 0) {
-                    ac->acState = 1007;
+                    ac->acState = AC_STATE_RUN + 7;
                 }
                 break;
-            case 1007:
+            case AC_STATE_RUN + 7:
                 ac->maincb = NULL;
                 ac->dispcb = NULL;
                 ac->resultcb = NULL;
@@ -235,9 +236,9 @@ void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
     BattleACDispParams* disp = &ac->disp;
     LstRcWork* lw = (LstRcWork*)ac->work;
     switch (ac->acState) {
-        case 99:
-        case 100:
-        case 1000:
+        case AC_STATE_WAIT_START:
+        case AC_STATE_START:
+        case AC_STATE_RUN:
             disp->iconStep = -1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
@@ -245,7 +246,7 @@ void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
                 (disp->slideTimer)--;
             }
             break;
-        case 1001:
+        case AC_STATE_RUN + 1:
             disp->iconStep = lw->count - 1;
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             actionCommandDisp(disp->iconX, disp->iconY, disp->iconStep);
@@ -253,13 +254,13 @@ void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
                 (disp->slideTimer)--;
             }
             break;
-        case 1002:
-        case 1003:
-        case 1004:
+        case AC_STATE_RUN + 2:
+        case AC_STATE_RUN + 3:
+        case AC_STATE_RUN + 4:
             actionCommandDisp(30.0f, 0.0f, disp->iconStep);
             break;
-        case 1005:
-        case 1006:
+        case AC_STATE_RUN + 5:
+        case AC_STATE_RUN + 6:
             if (disp->slideTimer >= 40) {
                 disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -300.0f, disp->slideTimer - 40, 20);
             } else {
@@ -275,7 +276,7 @@ void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: starts the 60-frame wait after which the command clears its callbacks. */
 void battleAcDelete_LstRcKeep(BattleWork* work) {
-    work->actionCommands.acState = 1005;
+    work->actionCommands.acState = AC_STATE_RUN + 5;
 }
 
 // actionCommandDisp size-optimised, as in the original (the object differs without it)

@@ -303,7 +303,7 @@ void effStardustMain(EffectEntry* effect) {
     if (type != 0 && type != 10 && dead >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(camera, dispCalcZ(&position), 2, (DispCallback)effStardustDisp, effect);
+        dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStardustDisp, effect);
     }
 }
 

@@ -185,7 +185,7 @@ void effKumokumoChipMain(EffectEntry* effect) {
     work->position.x += work->velocity.x;
     work->position.y += work->velocity.y;
     work->position.z += work->velocity.z;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKumokumoChipDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKumokumoChipDisp, effect);
 }
 
 /** Draws the chip as one scaled 32x32 textured quad (effect texture 0x6B) with the current fade alpha. */

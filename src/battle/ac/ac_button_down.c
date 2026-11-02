@@ -47,7 +47,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
     do {
         allDone = 0;
         switch (ac->acState) {
-            case 0: {
+            case AC_STATE_INIT: {
                     ac->result = AC_RESULT_RUNNING;
                     memset(disp, 0, sizeof(BattleACDispParams));
                     disp->iconX = -300.0f;
@@ -122,19 +122,19 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
 
                     }
 
-                    ac->acState = 99;
+                    ac->acState = AC_STATE_WAIT_START;
                     break;
                 }
 
-            case 99:
+            case AC_STATE_WAIT_START:
                 break;
 
-            case 100:
-                ac->acState = 1000;
+            case AC_STATE_START:
+                ac->acState = AC_STATE_RUN;
                 p->sndCount = 0;
                 p->timer = work->actionCommands.params[0];
 
-            case 1000:
+            case AC_STATE_RUN:
                 if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
                     if (ac->setupFlags & AC_SETUP_FLAG_RETRIES) {
                         ac->setupParam--;
@@ -142,6 +142,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                             break;
                         }
                     }
+                    // irand(100) is never negative: a confused auto-play always fails
                     if (irand(100) >= 0) {
                         ac->result = 0;
                     } else {
@@ -154,7 +155,7 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     (work->actionCommands.countdown)--;
                     ac->result = AC_RESULT_SUCCESS;
                     allDone = 1;
-                    ac->acState = 1001;
+                    ac->acState = AC_STATE_RUN + 1;
                     break;
                 }
                 ac->outputParams[0] = 0;
@@ -174,12 +175,12 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                             }
                         } else if (BattlePadGetTrigger()) {
                             ac->result = 0;
-                            ac->acState = 1001;
+                            ac->acState = AC_STATE_RUN + 1;
                             if ((work->actionCommands.acFlags & AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS) && ac->outputParams[0] > 0) {
                                 allDone = 1;
                                 ac->result |= AC_RESULT_SUCCESS;
                                 ac->result &= ~AC_RESULT_RUNNING;
-                                ac->acState = 1001;
+                                ac->acState = AC_STATE_RUN + 1;
                                 break;
                             }
                             return 1;
@@ -200,41 +201,41 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
                     ac->result |= AC_RESULT_SUCCESS;
                     allDone = 1;
                     ac->result &= ~AC_RESULT_RUNNING;
-                    ac->acState = 1001;
+                    ac->acState = AC_STATE_RUN + 1;
                     break;
                 }
                 p->timer--;
                 if (p->timer < 0) {
                     ac->result = 0;
                     allDone = 1;
-                    ac->acState = 1001;
+                    ac->acState = AC_STATE_RUN + 1;
                     if ((work->actionCommands.acFlags & AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS) && ac->outputParams[0] > 0) {
                         ac->result |= AC_RESULT_SUCCESS;
                         ac->result &= ~AC_RESULT_RUNNING;
-                        ac->acState = 1001;
+                        ac->acState = AC_STATE_RUN + 1;
                     }
                 }
                 break;
 
-            case 1001:
-                ac->acState = 1002;
+            case AC_STATE_RUN + 1:
+                ac->acState = AC_STATE_RUN + 2;
 
-            case 1002:
+            case AC_STATE_RUN + 2:
                 return 0;
 
-            case 1003:
+            case AC_STATE_RUN + 3:
                 p->endTimer = 60;
-                ac->acState = 1004;
+                ac->acState = AC_STATE_RUN + 4;
                 break;
 
-            case 1004:
+            case AC_STATE_RUN + 4:
                 p->endTimer--;
                 if (p->endTimer <= 0) {
-                    ac->acState = 1005;
+                    ac->acState = AC_STATE_RUN + 5;
                 }
                 break;
 
-            case 1005:
+            case AC_STATE_RUN + 5:
                 ac->maincb = NULL;
                 ac->dispcb = NULL;
                 ac->resultcb = NULL;
@@ -262,8 +263,8 @@ void battleAcDisp_ButtonDown(CameraId cameraId, void* param) {
     f32 x, y;
     disp = &ac->disp;
     switch (ac->acState) {
-        case 99:
-        case 0:
+        case AC_STATE_WAIT_START:
+        case AC_STATE_INIT:
             if (disp->slideTimer > 0) {
                 disp->slideTimer--;
             }
@@ -279,7 +280,7 @@ void battleAcDisp_ButtonDown(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: starts the 60-frame wait after which the command clears its callbacks. */
 void battleAcDelete_ButtonDown(BattleWork* work) {
-    work->actionCommands.acState = 1003;
+    work->actionCommands.acState = AC_STATE_RUN + 3;
 }
 
 /**

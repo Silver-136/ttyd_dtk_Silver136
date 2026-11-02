@@ -256,7 +256,7 @@ void nannpc_ext_disp() {
     s32 idx;
     NanNPCSort* sp;
     NanNPC* np;
-    if (w->flags & 1) {
+    if (w->flags & NANNPC_WORK_DEPTH_SORT) {
         extLoadVertex();
         extLoadTexture();
         nannpc_loadTev();
@@ -372,12 +372,12 @@ void nannpc_ext_main() {
  * the sprites go in render mode 1, or 2 with work flag 0x1.
  */
 void nannpc_ext_dispent() {
-    if (!(nanNPCWork->flags & 1)) {
-        dispEntry(CAMERA_3D, 0.0f, 1, nannpc_ext_disp, 0);
-        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_shadow_disp, 0);
+    if (!(nanNPCWork->flags & NANNPC_WORK_DEPTH_SORT)) {
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, nannpc_ext_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, nannpc_ext_shadow_disp, 0);
     } else {
-        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_disp, 0);
-        dispEntry(CAMERA_3D, 0.0f, 2, nannpc_ext_shadow_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, nannpc_ext_disp, 0);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, nannpc_ext_shadow_disp, 0);
     }
 }
 

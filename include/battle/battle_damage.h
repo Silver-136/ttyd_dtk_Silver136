@@ -134,6 +134,33 @@ typedef enum StatusDamageResult {
     STATUS_RESULT_SLEEP = (1 << 5),        // 0x20, the damage is applied without the hit reaction
 } StatusDamageResult;
 
+// What BattlePreCheckDamage, BattleCheckCounter and BattleCheckDamage return (scripts: btlevtcmd_(Command)PreCheckDamage,
+// PreCheckCounter, CheckDamage); one number range, scripts test the same variable for several.
+typedef enum BattleCheckResult {
+    CHECK_DAMAGE_COUNTERED = -1,        // the attacker was countered, or nothing was decided
+    CHECK_COUNTER_NONE = 0,
+    PRECHECK_HIT = 1,
+    PRECHECK_MISS = 2,                  // accuracy roll failed, or the part is a clone the weapon cannot touch
+    PRECHECK_LUCKY = 3,                 // Pretty Lucky, Lucky Day, Close Call
+    PRECHECK_INTANGIBLE = 4,            // invisible, veiled, or a part with the per-version attribute bit
+    PRECHECK_PREEMPTIVE_SPIKY = 5,      // kCounterPreemptiveFrontSpiky stops the attack before contact
+    PRECHECK_DODGY = 6,                 // STATUS_DODGY
+    CHECK_COUNTER_PREEMPTIVE_SPIKY = 7,
+    CHECK_COUNTER_TOP_SPIKY = 8,
+    CHECK_COUNTER_FRONT_SPIKY = 9,
+    CHECK_COUNTER_FIERY = 10,
+    CHECK_COUNTER_ICY = 11,
+    CHECK_COUNTER_EXPLOSIVE = 12,
+    CHECK_COUNTER_VOLATILE_EXPLOSIVE = 13,
+    CHECK_COUNTER_ELECTRIFIED = 14,
+    CHECK_COUNTER_POISON = 15,
+    CHECK_COUNTER_PAYBACK = 16,
+    CHECK_COUNTER_HOLD_FAST = 17,
+    CHECK_DAMAGE_HIT = 18,
+    CHECK_DAMAGE_NO_EFFECT = 19,
+    CHECK_DAMAGE_SUPERGUARDED = 21,     // Superguarded without a counter
+} BattleCheckResult;
+
 void BattleAttackDeclareAll(struct BattleWork* wp);
 void BattleDamageDirect(s32 unitId, struct BattleUnit* target, struct BattleWorkUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 s32 BattlePreCheckDamage(struct BattleUnit* attacker, struct BattleUnit* target, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32 flags);

@@ -42,7 +42,6 @@
 #include "mario/mario_pouch.h"
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
-BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 #if VERSION >= VERSION_US
 #include "memory.h"
 #endif
@@ -220,7 +219,7 @@ EVT_END()
  */
 static EVT_BEGIN(evt_haikei_in)
     BEGIN_INLINE_EVENT
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         WAIT_FRAMES(10)
         CALL(evt_mario_cam_keep_off)
         CALL(evt_mario_cam_y_on)
@@ -1120,7 +1119,7 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_2_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("kon"), MAP_ANIM_PLAY_LOOP, 0)
         CALL_CHILD(PTR(evt_ramp))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_1_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -1146,7 +1145,7 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_door_msg), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
     END_IF

@@ -116,7 +116,7 @@ EVT_BEGIN(subsetevt_dead)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
         CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
         CALL(btlevtcmd_DivePosition, LW(10), LW(2), LW(3), LW(4), 0, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
-        ELSE
+    ELSE
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_WALK)
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
         CALL(btlevtcmd_SetMoveSpeed, LW(10), FLOAT(4.0f))
@@ -135,7 +135,7 @@ EVT_BEGIN(subsetevt_dead)
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-            ELSE
+        ELSE
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
         END_IF
         CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
@@ -146,7 +146,7 @@ EVT_BEGIN(subsetevt_dead)
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-                ELSE
+            ELSE
                 // The partner keels over, the Life Shroom icon shows above it and the Shroom is used up.
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_KO)
                 BEGIN_SIBLING_EVENT
@@ -189,7 +189,7 @@ EVT_BEGIN(subsetevt_dead)
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-                ELSE
+            ELSE
             END_IF
             CALL(btlevtcmd_KillUnit, LW(10), 1)
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(11))
@@ -226,7 +226,7 @@ EVT_BEGIN(subsetevt_dead)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
-                ELSE
+            ELSE
                 // The standard enemy revival: the enemy spins and tips over, and the Life Shroom icon shows.
                 CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
                 SET_VALUE(LW(0), 48)
@@ -288,7 +288,7 @@ EVT_BEGIN(subsetevt_dead)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
-                ELSE
+            ELSE
                 CALL_CHILD(subsetevt_dead_core)
             END_IF
         END_IF
@@ -348,7 +348,7 @@ EVT_BEGIN(subsetevt_dead_core)
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_KillUnit, LW(10), 0)
-        ELSE
+    ELSE
         CALL(btlevtcmd_KillUnit, LW(10), 2)
     END_IF
     RETURN
@@ -385,7 +385,7 @@ EVT_BEGIN(subsetevt_dead_core_nospin_norotate)
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_KillUnit, LW(10), 1)
-        ELSE
+    ELSE
         CALL(btlevtcmd_KillUnit, LW(10), 2)
     END_IF
     RETURN
@@ -619,11 +619,11 @@ EVT_BEGIN(subsetevt_damage)
             CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_PRESS_GONBABA, LW(1))
             IF_INT_NOT_EQUAL(LW(1), 0)
                 WAIT_MS(3000)
-                ELSE
+            ELSE
                 CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_PRESS_BATTENDER, LW(1))
                 IF_INT_NOT_EQUAL(LW(1), 0)
                     WAIT_MS(2500)
-                    ELSE
+                ELSE
                     WAIT_MS(1500)
                 END_IF
             END_IF
@@ -696,7 +696,7 @@ EVT_BEGIN(subsetevt_damage)
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
             WAIT_MS(2000)
             CALL(btlevtcmd_AnimeFlagOnOff, LW(10), LW(11), PART_ANIM_INKED, 0)
-            ELSE
+        ELSE
             CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_BG_FALL_DOWN, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
@@ -705,7 +705,7 @@ EVT_BEGIN(subsetevt_damage)
                     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(15))
                     WAIT_FRAMES(30)
                 END_IF
-                ELSE
+            ELSE
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
                 WAIT_MS(1000)
                 IF_INT_NOT_EQUAL(LW(15), -1)
@@ -715,7 +715,7 @@ EVT_BEGIN(subsetevt_damage)
             END_IF
         END_IF
         RETURN
-        ELSE
+    ELSE
 #if VERSION > VERSION_DEMO_US
         // In the retail releases a no-damage last hit fades the HP gauge out.
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
@@ -1070,7 +1070,7 @@ EVT_BEGIN(subsetevt_shot_damage)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(12), PTR(&marioWeapon_KaitenHammerInvolved))
         CALL_CHILD(PTR(subsetevt_shot_damage_kaiten))
-        ELSE
+    ELSE
         SET_VALUE(LW(12), PTR(&marioWeapon_UltraHammerInvolved))
         CALL_CHILD(PTR(subsetevt_shot_damage_ultra))
     END_IF
@@ -1123,14 +1123,14 @@ EVT_BEGIN(subsetevt_shot_damage_kaiten)
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_PreCheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(4)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
@@ -1260,14 +1260,14 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(4)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, LW(10), LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(0))
         CASE_DEFAULT
     END_SWITCH
@@ -1412,14 +1412,14 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_PARTNER, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(4)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_PARTNER, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
         GOTO(50)
         CASE_DEFAULT
@@ -1509,7 +1509,7 @@ EVT_BEGIN(subsetevt_binta_damage_left)
     CALL(btlevtcmd_GetFaceDirection, LW(10), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), -18)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), 18)
     END_IF
     LOOP(20)
@@ -1529,7 +1529,7 @@ EVT_BEGIN(subsetevt_binta_damage_right)
     CALL(btlevtcmd_GetFaceDirection, LW(10), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 0)
         SET_VALUE(LW(0), 18)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), -18)
     END_IF
     LOOP(20)
@@ -1555,7 +1555,7 @@ EVT_BEGIN(subsetevt_binta_damage_left_last)
         CALL(btlevtcmd_GetFaceDirection, LW(10), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 0)
             SET_VALUE(LW(8), -2160)
-            ELSE
+        ELSE
             SET_VALUE(LW(8), 2160)
         END_IF
         CALL(_binta_effect, LW(10), LW(8))
@@ -1582,7 +1582,7 @@ EVT_BEGIN(subsetevt_binta_damage_right_last)
         CALL(btlevtcmd_GetFaceDirection, LW(10), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 0)
             SET_VALUE(LW(8), 2160)
-            ELSE
+        ELSE
             SET_VALUE(LW(8), -2160)
         END_IF
         CALL(_binta_effect, LW(10), LW(8))

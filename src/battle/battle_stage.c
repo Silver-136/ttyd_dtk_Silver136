@@ -256,8 +256,8 @@ void BattleStageEnd(void) {
  */
 void BattleStageDisp(void) {
     BattleGetUnitPtr(_battleWorkPointer, _battleWorkPointer->activeUnitId);
-    dispEntry(CAMERA_3D, 5000.0f, 2, BattleStageDispDark, NULL);
-    dispEntry(CAMERA_3D, 6000.0f, 2, BattleStageDispLight, NULL);
+    dispEntry(CAMERA_3D, 5000.0f, DISP_MODE_XLU, BattleStageDispDark, NULL);
+    dispEntry(CAMERA_3D, 6000.0f, DISP_MODE_XLU, BattleStageDispLight, NULL);
 }
 
 #pragma dont_inline on
@@ -757,7 +757,7 @@ void batSpotMain(void) {
 
     while (count-- > 0) {}
     if (wp->skipRender > 0) {
-        dispEntry(CAMERA_3D_IMAGE, -1000.0f, 0, batSpotDisp, NULL);
+        dispEntry(CAMERA_3D_IMAGE, -1000.0f, DISP_MODE_OPAQUE, batSpotDisp, NULL);
     }
 }
 #pragma dont_inline reset
@@ -916,7 +916,7 @@ static void screen_capture(CameraId camId, void* param) {
 
 /** Script helper with no arguments: queues screen_capture for this frame. */
 USER_FUNC(screen_evt_func) {
-    dispEntry(CAMERA_2D, 1000.0f, 0, screen_capture, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, screen_capture, NULL);
     return 0;
 }
 

@@ -486,7 +486,7 @@ void smartAutoFree(s32 allocType) {
         for (entry = wp->allocHead; entry; entry = next) {
             next = entry->next;
             // FAKE: no-op (s32) cast; the plain compare changes the object
-            if ((s32)entry->type == 4) {
+            if ((s32)entry->type == SMART_GROUP_TEMP_KEEP) {
                 smartFree(entry);
             }
         }
@@ -503,8 +503,8 @@ void smartAutoFree(s32 allocType) {
 void smartFree(smartEntry* entry) {
     u32 total;
 
-    if (entry->type == 4) {
-        entry->type = 3;
+    if (entry->type == SMART_GROUP_TEMP_KEEP) {
+        entry->type = SMART_GROUP_TEMP;
         return;
     }
     if (!entry->prev) {
@@ -560,7 +560,7 @@ smartEntry* smartAlloc(u32 size, u8 type) {
 
     if (!g_bFirstSmartAlloc) {
         g_bFirstSmartAlloc = TRUE;
-        smartAutoFree(3);
+        smartAutoFree(SMART_GROUP_TEMP);
     }
 
     if (wp->waitsync) {
@@ -684,7 +684,7 @@ void smartGarbage(void) {
         addr = entry->address;
         if (addr != ptr) {
             if (entry->file) {
-                if (entry->file->state == 3 && entry->file->entry && OSGetCurrentThread() != &dvdmgr_thread) {
+                if (entry->file->state == FILE_STATE_PRELOADED && entry->file->entry && OSGetCurrentThread() != &dvdmgr_thread) {
                     if (prev) {
                         prev->spaceAfter = addr - ptr;
                     } else {

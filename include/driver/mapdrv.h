@@ -120,9 +120,17 @@ typedef enum MapDrawModeFlags {
     DRAW_MODE_DEPTH_OFFSET = (1 << 4),  // 0x10, with GROUP: -> MAP_OBJ_FLAG_DEPTH_OFFSET
 } MapDrawModeFlags;
 
+// MapJointDrawMode.cullMode: index into mapdrv's table of GX cull modes.
+typedef enum MapCullMode {
+    MAP_CULL_FRONT = 0,
+    MAP_CULL_BACK = 1,
+    MAP_CULL_ALL = 2,
+    MAP_CULL_NONE = 3,
+} MapCullMode;
+
 typedef struct MapJointDrawMode {
     u8 blendType;            // 0x0, 0..3, selects MapObject.blendMode
-    u8 cullMode;             // 0x1
+    u8 cullMode;             // 0x1, MapCullMode
     u8 modeFlags;            // 0x2, MapDrawModeFlags
     u8 pad_03;               // 0x3, never accessed
     u32 lightMask;           // 0x4, bit i = map light i applies (with DRAW_MODE_MAP_LIGHTS)

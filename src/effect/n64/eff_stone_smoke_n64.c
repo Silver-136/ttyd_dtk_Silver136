@@ -97,7 +97,7 @@ void effStoneSmokeMain(EffectEntry* effect) {
     } else {
         work->scale = 0.01f * scale_data2[(frame - 7) % 7];
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effStoneSmokeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStoneSmokeDisp, effect);
 }
 
 /**

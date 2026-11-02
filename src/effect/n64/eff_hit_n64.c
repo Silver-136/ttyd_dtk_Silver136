@@ -185,7 +185,7 @@ void effHitMain(EffectEntry* effect) {
         work->position.y = 0.0f;
         work->position.z = 0.0f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHitDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHitDisp, effect);
 }
 
 /**

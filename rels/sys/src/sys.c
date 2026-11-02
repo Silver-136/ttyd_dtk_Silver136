@@ -377,7 +377,7 @@ void sys_01_msg_tex_capture_func(CameraId cameraId, void* param) {
     h = bottom - top;
     wp->msgTexW = w;
     wp->msgTexH = h;
-    wp->msgTex = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+    wp->msgTex = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     GXSetTexCopySrc(left, top, w, h);
     GXSetTexCopyDst(w, h, GX_TF_RGB5A3, GX_FALSE);
     GXCopyTex(wp->msgTex->address, GX_FALSE);
@@ -1345,7 +1345,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(display) {
     SysWork* wp;
-SysChar* chr;
+    SysChar* chr;
     s32 type = evtGetValue(event, event->args[0]);
     s32 i;
 #else
@@ -1474,9 +1474,9 @@ USER_FUNC(display) {
     }
     if (wp->state != 0) {
 #if VERSION >= VERSION_US
-        dispEntry(CAMERA_3D, 0.0f, 2, sys_01_msg_tex_capture_func, wp);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, sys_01_msg_tex_capture_func, wp);
 #endif
-        dispEntry(CAMERA_3D_EFFECTA, 0.0f, 2, display_func, wp);
+        dispEntry(CAMERA_3D_EFFECTA, 0.0f, DISP_MODE_XLU, display_func, wp);
     }
     return EVT_RETURN_BLOCK;
 }

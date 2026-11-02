@@ -246,7 +246,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(meet_clouda)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     CALL(evt_party_move_pos2, 1, -110, 0, FLOAT(120.0f))
@@ -307,7 +307,7 @@ EVT_BEGIN(meet_clouda2)
         ADD(LW(0), 50)
         IF_INT_LESS(LW(2), 0)
             ADD(LW(2), 50)
-            ELSE
+        ELSE
             SUBTRACT(LW(2), 50)
         END_IF
         CALL(evt_party_move_pos2, 0, 130, LW(2), FLOAT(120.0f))
@@ -320,7 +320,7 @@ EVT_BEGIN(meet_clouda2)
     ADD(LW(0), 50)
     IF_INT_LESS(LW(2), 0)
         ADD(LW(2), 50)
-        ELSE
+    ELSE
         SUBTRACT(LW(2), 50)
     END_IF
 #if VERSION <= VERSION_DEMO_US
@@ -1605,7 +1605,7 @@ USER_FUNC(evt_flower) {
                 break;
         }
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, flower_disp, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, flower_disp, wp);
     return EVT_RETURN_DONE;
 }
 
@@ -1640,7 +1640,7 @@ USER_FUNC(evt_flower_end_main) {
                 break;
         }
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, flower_disp, wp);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, flower_disp, wp);
     return EVT_RETURN_DONE;
 }
 

@@ -143,7 +143,7 @@ void effStarPointMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 1, (DispCallback)effStarPointDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effStarPointDisp, effect);
 }
 
 void effStarPointDisp(CameraId cameraId, EffectEntry* effect) {

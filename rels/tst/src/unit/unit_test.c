@@ -6,6 +6,7 @@
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_sub.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots of the test enemy.
 enum {
@@ -33,7 +34,7 @@ static EvtWord wait_event[7];
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element modifiers of the test unit `test`: none, no element is special to it. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Base defence of the test unit `test` while it is flipped on its back: no damage reduction.
@@ -176,7 +177,7 @@ static BattleWeapon weapon_test_attack = {
     NULL, // acHelpMsg
     0, // special
     0, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -204,7 +205,7 @@ EVT_END()
 
 /** Damage reaction of the test enemy: the default damage script. */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     RETURN
@@ -215,7 +216,7 @@ EVT_END()
  * sets unit work 0 to 2 (turns left on its back), takes pose NKT_D_1 and bounces twice in place.
  */
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
     CALL(btlevtcmd_AnimeSetPoseTable, LW(10), LW(11), PTR(pose_table_turn))
@@ -234,7 +235,7 @@ EVT_END()
  * Otherwise it just stays down for another turn.
  */
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetUnitWork, LW(10), UW_TEST_FLIPPED_TURNS, LW(0))
     SUBTRACT(LW(0), 1)
@@ -281,17 +282,17 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_test_attack))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_test_attack), 256, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -1)
-    IF_INT_NOT_EQUAL(LW(5), 1)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_MoveDirectionAdd, UNIT_ID_SELF, LW(0), 30)

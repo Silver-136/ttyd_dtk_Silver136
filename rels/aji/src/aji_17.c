@@ -294,7 +294,7 @@ void noiseDisp(CameraId cameraId, void* param) {
     Mtx mtx;
     s32 start;
     cam = camGetPtr(cameraId);
-    buf = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0), 3)->address;
+    buf = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_I8, GX_FALSE, 0), SMART_GROUP_TEMP)->address;
     for (y = 0; y < 64; y++) {
         for (x = 0; x < 64; x++) {
             by = y / 4;
@@ -403,7 +403,7 @@ EVT_BEGIN(evt_last)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_party_stop, 0)
     WAIT_MS(800)
 
@@ -1700,21 +1700,21 @@ static EVT_BEGIN(peach_evt_stg2)
 
     // The dummy Peach and two hologram Peaches are created for the dance.
     CALL(evt_npc_entry, STRING("\203_\203~\201["), STRING("c_peach"))
-    CALL(evt_npc_flag_onoff, 1, STRING("\203_\203~\201["), NPC_FLAG_HIDDEN)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203_\203~\201["), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203_\203~\201["), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203_\203~\201["), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_width, STRING("\203_\203~\201["), FLOAT(20.0f))
     CALL(evt_npc_set_height, STRING("\203_\203~\201["), FLOAT(47.0f))
     CALL(evt_npc_entry, STRING("\203z\203\215\203O\203\211\203\200"), STRING("c_peach"))
     CALL(evt_npc_set_tribe, STRING("\203z\203\215\203O\203\211\203\200"), STRING("\203s\201[\203`\225P"))
-    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\200"), NPC_FLAG_HIDDEN)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\200"), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\200"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\200"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_color, STRING("\203z\203\215\203O\203\211\203\200"), 255, 255, 255, 255)
     CALL(evt_npc_set_width, STRING("\203z\203\215\203O\203\211\203\200"), FLOAT(20.0f))
     CALL(evt_npc_set_height, STRING("\203z\203\215\203O\203\211\203\200"), FLOAT(47.0f))
     CALL(evt_npc_entry, STRING("\203z\203\215\203O\203\211\203\2002"), STRING("c_peach_r"))
     CALL(evt_npc_set_tribe, STRING("\203z\203\215\203O\203\211\203\2002"), STRING("\203s\201[\203`\225P"))
-    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\2002"), NPC_FLAG_HIDDEN)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\2002"), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\2002"), NPC_FLAG_NO_DRAW)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\215\203O\203\211\203\2002"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_color, STRING("\203z\203\215\203O\203\211\203\2002"), 255, 255, 255, 255)
     CALL(evt_npc_set_width, STRING("\203z\203\215\203O\203\211\203\2002"), FLOAT(20.0f))
     CALL(evt_npc_set_height, STRING("\203z\203\215\203O\203\211\203\2002"), FLOAT(47.0f))
@@ -1741,7 +1741,7 @@ static EVT_BEGIN(peach_evt_stg2)
         CALL(disp_horogram_evt)
     END_INLINE_EVENT
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_map_replayanim, 0, STRING("moza"))
 
     // Peach asks TEC if her mail reached Mario, and TEC confirms it did.
@@ -1963,7 +1963,7 @@ static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_map_playanim, STRING("moza"), 1, 0)
     CALL(evt_map_pauseanim, 0, STRING("moza"))
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_map_replayanim, 0, STRING("moza"))
     CALL(evt_msg_print, 0, STRING("peach_aji_115"), 0, 0)
     CALL(evt_map_pauseanim, 0, STRING("moza"))
@@ -2558,7 +2558,7 @@ static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_mario_set_pos, -200, 0, 0)
     CALL(evt_cam3d_evt_set, 230, 45, 372, 22, 85, -25, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(2000)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -2671,7 +2671,7 @@ static EVT_BEGIN(peach_evt_stg5_1)
     CALL(evt_mario_set_pos, -220, 0, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
@@ -2837,7 +2837,7 @@ static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_map_playanim, STRING("moza"), 1, 0)
     CALL(evt_map_pauseanim, 0, STRING("moza"))
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("peach_aji_282"), 0, STRING("mario"))
     BEGIN_INLINE_EVENT
@@ -3040,7 +3040,7 @@ static EVT_BEGIN(peach_evt_stg6)
         CALL(evt_npc_set_ry, STRING("\216\350\211\272\202P"), 270)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("\203V\203\205\203\212\203\207\201["), NPC_FLAG_INTANGIBLE)
+        CALL(evt_npc_flag_onoff, 1, STRING("\203V\203\205\203\212\203\207\201["), NPC_FLAG_NO_HIT)
         CALL(evt_npc_move_position, STRING("\203V\203\205\203\212\203\207\201["), -30, -70, 0, FLOAT(60.0f), 0)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
@@ -3085,7 +3085,7 @@ static EVT_BEGIN(peach_evt_stg6)
     WAIT_MS(1400)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("\216\350\211\272\202P"), NPC_FLAG_NO_WALL_HIT)
+        CALL(evt_npc_flag_onoff, 1, STRING("\216\350\211\272\202P"), NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_status_onoff, 0, STRING("\216\350\211\272\202P"), NPC_STATUS_FACE_MOVE_DIR)
         WAIT_FRAMES(1)
         CALL(evt_npc_move_position, STRING("\216\350\211\272\202P"), 105, -100, 100, 0, 0)
@@ -3093,10 +3093,10 @@ static EVT_BEGIN(peach_evt_stg6)
         CALL(evt_npc_move_position, STRING("\216\350\211\272\202P"), 105, -95, 100, 0, 0)
         WAIT_MS(100)
         CALL(evt_npc_status_onoff, 1, STRING("\216\350\211\272\202P"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_flag_onoff, 0, STRING("\216\350\211\272\202P"), NPC_FLAG_NO_WALL_HIT)
+        CALL(evt_npc_flag_onoff, 0, STRING("\216\350\211\272\202P"), NPC_FLAG_NO_WALL_COLLISION)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        CALL(evt_npc_flag_onoff, 1, STRING("\216\350\211\272\202Q"), NPC_FLAG_NO_WALL_HIT)
+        CALL(evt_npc_flag_onoff, 1, STRING("\216\350\211\272\202Q"), NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_npc_status_onoff, 0, STRING("\216\350\211\272\202Q"), NPC_STATUS_FACE_MOVE_DIR)
         WAIT_FRAMES(1)
         CALL(evt_npc_move_position, STRING("\216\350\211\272\202Q"), -105, -100, 100, 0, 0)
@@ -3104,7 +3104,7 @@ static EVT_BEGIN(peach_evt_stg6)
         CALL(evt_npc_move_position, STRING("\216\350\211\272\202Q"), -105, -95, 100, 0, 0)
         WAIT_MS(100)
         CALL(evt_npc_status_onoff, 1, STRING("\216\350\211\272\202Q"), NPC_STATUS_FACE_MOVE_DIR)
-        CALL(evt_npc_flag_onoff, 0, STRING("\216\350\211\272\202Q"), NPC_FLAG_NO_WALL_HIT)
+        CALL(evt_npc_flag_onoff, 0, STRING("\216\350\211\272\202Q"), NPC_FLAG_NO_WALL_COLLISION)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING("S_sui2"), LW(0), LW(1), LW(2))
     CALL(evt_mapobj_get_position, STRING("S_sui3"), LW(3), LW(4), LW(5))
@@ -3374,7 +3374,7 @@ EVT_BEGIN(aji_17_init_evt)
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_kill_party, 0)
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
     END_IF
@@ -3384,19 +3384,11 @@ EVT_BEGIN(aji_17_init_evt)
     IF_INT_GREATER(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kurai"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kikai"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION >= VERSION_US
         CALL(evt_map_playanim, STRING("kika_1"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("kika_2"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("kika_3"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("moni_1"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_map_playanim, STRING("moza"), MAP_ANIM_PLAY_LOOP, 0)
-#else
-        CALL(evt_map_playanim, STRING("kika_1"), 1, 0)
-        CALL(evt_map_playanim, STRING("kika_2"), 1, 0)
-        CALL(evt_map_playanim, STRING("kika_3"), 1, 0)
-        CALL(evt_map_playanim, STRING("moni_1"), 2, 0)
-        CALL(evt_map_playanim, STRING("moza"), 1, 0)
-#endif
         CALL(evt_map_pauseanim, 0, STRING("moza"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("keyboard"), 0, PTR(tec_talk), 0)
     END_IF
@@ -3410,7 +3402,7 @@ EVT_END()
 
 s32 noise(EventEntry* event, BOOL isFirstCall) {
     EvtWord alpha = evtGetValue(event, event->args[0]);
-    dispEntry(CAMERA_2D, 1100.0f, 0, noiseDisp, (void*)alpha);
+    dispEntry(CAMERA_2D, 1100.0f, DISP_MODE_OPAQUE, noiseDisp, (void*)alpha);
     return EVT_RETURN_DONE;
 }
 
@@ -3508,7 +3500,7 @@ void disp_horogram(CameraId cameraId, void* param) {
 
 /** Script function that queues disp_horogram for the 3D camera every frame; never finishes. */
 s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_3D, 0.0f, 2, disp_horogram, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, disp_horogram, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -3589,7 +3581,7 @@ void peach_capture(CameraId cameraId, void* param) {
 
 /** Script function that queues the capture of the hologram (peach_capture) every frame; blocks forever. */
 s32 horogram_cap_evt(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_3D, 1000.0f, 0, peach_capture, NULL);
+    dispEntry(CAMERA_3D, 1000.0f, DISP_MODE_OPAQUE, peach_capture, NULL);
     return EVT_RETURN_BLOCK;
 }
 

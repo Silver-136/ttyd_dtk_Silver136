@@ -81,7 +81,7 @@ USER_FUNC(evt_telop_entry) {
             wp->time = event->lifetime;
             event->userdata[0]++;
         }
-        dispEntry(CAMERA_2D, 300.0f, 0, telop, NULL);
+        dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
         break;
     case 2:
         ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
@@ -89,7 +89,7 @@ USER_FUNC(evt_telop_entry) {
             wp->time = event->lifetime;
             event->userdata[0]++;
         }
-        dispEntry(CAMERA_2D, 300.0f, 0, telop, NULL);
+        dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
         break;
     case 3:
         ms = OSTicksToMilliseconds((u32)event->lifetime - (u32)wp->time);
@@ -98,7 +98,7 @@ USER_FUNC(evt_telop_entry) {
         } else {
             event->userdata[0]++;
         }
-        dispEntry(CAMERA_2D, 300.0f, 0, telop, NULL);
+        dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, telop, NULL);
         break;
     case 4:
         return EVT_RETURN_DONE;

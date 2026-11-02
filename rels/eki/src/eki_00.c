@@ -1364,12 +1364,12 @@ static void ext_moamoa_main(void) {
 #pragma opt_lifetimes reset
 static void ext_moamoa_dispent(void) {
     if (wp->flags & MOAMOA_WORK_FLAG_ACTIVE) {
-        dispEntry(CAMERA_3D, (0.0f), 1, ext_disp, NULL);
-        dispEntry(CAMERA_3D, (0.0f), 2, ext_shadow_disp, NULL);
+        dispEntry(CAMERA_3D, (0.0f), DISP_MODE_ALPHA_TEST, ext_disp, NULL);
+        dispEntry(CAMERA_3D, (0.0f), DISP_MODE_XLU, ext_shadow_disp, NULL);
     }
     if (wp->flags & MOAMOA_WORK_FLAG_DRAW_OFFSCREEN) {
-        dispEntry(CAMERA_OFFSCREEN2, -5000.0f, 1, ext_disp, NULL);
-        dispEntry(CAMERA_OFFSCREEN2, -5000.0f, 2, ext_shadow_disp, NULL);
+        dispEntry(CAMERA_OFFSCREEN2, -5000.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
+        dispEntry(CAMERA_OFFSCREEN2, -5000.0f, DISP_MODE_XLU, ext_shadow_disp, NULL);
     }
 }
 
@@ -1872,7 +1872,7 @@ EVT_BEGIN(evt_elv_down)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_kaidan"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("kaidann_A"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("anm_ori"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kaidann"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ori"), MAP_OBJ_FLAG_HIDDEN)
@@ -2100,7 +2100,7 @@ EVT_BEGIN(evt_elv)
     IF_INT_EQUAL(GF(0), 0)
         CALL_CHILD(PTR(evt_elv_down))
         SET_VALUE(GF(0), 1)
-        ELSE
+    ELSE
         CALL_CHILD(PTR(evt_elv_up))
         SET_VALUE(GF(0), 0)
     END_IF

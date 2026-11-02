@@ -426,7 +426,7 @@ void battleCameraMain(void) {
         if (wp->cameraWork.modeFrame == 10) {
             wp->cameraWork.modeFrame = 0;
             btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE);
-            btl_camera_set_moveto(0, 0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, 120, 4);
+            btl_camera_set_moveto(BTL_CAM_PRI_NORMAL, 0.0f, 110.0f, 750.0f, 0.0f, 60.0f, 0.0f, 120, 4);
         }
         strcpy(name, "\202\251\202\337\202\347\201\100\202\323\202\302\202\244\202\311\202\315\202\242\202\301\202\275");
         break;
@@ -773,9 +773,9 @@ void btl_camera_set_mode(s32 pri, s32 mode) {
         wp->cameraWork.moveSpeedLv = 1;
         wp->cameraWork.zoomSpeedLv = 1;
         wp->cameraWork.modeFrame = 0;
-        btl_camera_nomove_x_onoff(0, 0);
-        btl_camera_nomove_y_onoff(0, 0);
-        btl_camera_nomove_z_onoff(0, 0);
+        btl_camera_nomove_x_onoff(BTL_CAM_PRI_NORMAL, 0);
+        btl_camera_nomove_y_onoff(BTL_CAM_PRI_NORMAL, 0);
+        btl_camera_nomove_z_onoff(BTL_CAM_PRI_NORMAL, 0);
         wp->cameraWork.flags &= ~BTL_CAM_FLAG_POS_OFFSET;
     }
 }

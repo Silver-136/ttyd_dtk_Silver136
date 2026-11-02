@@ -8,6 +8,71 @@ struct BattleWeapon;
 struct BattleWork;
 struct BattleUnit;
 
+// BattleCommand.state: BattleCommandInput's menu steps. *_ERROR_OPEN starts the error message event, *_ERROR waits for it.
+enum {
+    CMD_STATE_INIT = 0,
+    CMD_STATE_ACT_REOPEN = 1,
+    CMD_STATE_ACT_MENU = 2,
+    CMD_STATE_ACT_ERROR_OPEN = 3,
+    CMD_STATE_ACT_ERROR = 4,
+    CMD_STATE_WEAPON_SETUP = 5,
+    CMD_STATE_WEAPON_REOPEN = 6,
+    CMD_STATE_WEAPON_MENU = 7,
+    CMD_STATE_WEAPON_ERROR_OPEN = 8,
+    CMD_STATE_WEAPON_ERROR = 9,
+    CMD_STATE_TARGET_SETUP = 10,
+    CMD_STATE_TARGET_SELECT = 11,
+    CMD_STATE_MULTI_CANCEL_SETUP = 12,
+    CMD_STATE_MULTI_CANCEL = 13,
+    CMD_STATE_MULTI_ITEM_SETUP = 14,
+    CMD_STATE_MULTI_ITEM_REOPEN = 15,
+    CMD_STATE_MULTI_ITEM_MENU = 16,
+    CMD_STATE_MULTI_ITEM_ERROR_OPEN = 17,
+    CMD_STATE_MULTI_ITEM_ERROR = 18,
+    CMD_STATE_OPERATION_SETUP = 19,
+    CMD_STATE_OPERATION_REOPEN = 20,
+    CMD_STATE_OPERATION_MENU = 21,
+    CMD_STATE_OPERATION_ERROR_OPEN = 22,
+    CMD_STATE_OPERATION_ERROR = 23,
+    CMD_STATE_PARTY_SETUP = 24,
+    CMD_STATE_PARTY_REOPEN = 25,
+    CMD_STATE_PARTY_MENU = 26,
+    CMD_STATE_PROTECT_SETUP = 27,
+    CMD_STATE_PROTECT_SELECT = 28,
+    CMD_STATE_DECIDED = 29,
+};
+
+// BattleCommandAct.type, BattleCommand.actType and the type of _btlcmd_GetCursorPtr's cursor. MULTI_ITEM, PARTY and
+// MENU only select a cursor; 7 and 8 have cursors and menu cases but no act of that type is ever made.
+enum {
+    CMD_ACT_JUMP = 0,
+    CMD_ACT_HAMMER = 1,
+    CMD_ACT_ITEM = 2,
+    CMD_ACT_MULTI_ITEM = 3,
+    CMD_ACT_SPECIAL = 4,
+    CMD_ACT_OPERATION = 5,
+    CMD_ACT_PARTY_MOVE = 6,
+    CMD_ACT_CHANGE_POSITION = 9,
+    CMD_ACT_PARTY = 10,
+    CMD_ACT_AUDIENCE_ATTACK = 11,
+    CMD_ACT_AUDIENCE_PRESENT = 12,
+    CMD_ACT_LECTURE_END = 13,
+    CMD_ACT_MENU = 14,
+};
+
+// BattleCommandOperation.type, BattleCommand.operationType: _btlcmd_SetAttackEvent's events.
+enum {
+    CMD_OP_CHANGE_PARTY = 0,
+    CMD_OP_CHARGE = 1,
+    CMD_OP_SUPER_CHARGE = 2,
+    CMD_OP_ESCAPE = 3,
+    CMD_OP_PROTECT_PARTNER = 4,
+    CMD_OP_APPEAL = 5,
+    CMD_OP_DEFEND = 6,
+    CMD_OP_WAIT = 7,
+    CMD_OP_WAKEUP_EVENT = 8,
+};
+
 typedef struct BattleCommandCursor {
     s32 absPos; // 0x0, absolute cursor index
     s32 relPos; // 0x4, first visible row

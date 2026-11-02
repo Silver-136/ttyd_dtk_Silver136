@@ -164,7 +164,7 @@ USER_FUNC(evt_mario_dokan_prepare) {
     s32 type;
     mp->flags |= MARIO_FLAG_FLOORS_DISABLED;
     type = evtGetValue(event, args[0]);
-    if (type == 4) {
+    if (type == DOKAN_YOKO_IN) {
         mp->scale = (Vec){0.0f, 0.0f, 0.0f};
         mp->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         party = partyGetPtr(marioGetPartyId());
@@ -183,7 +183,7 @@ USER_FUNC(evt_mario_dokan_prepare) {
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
             party->flags |= PARTY_FLAG_FORCE_FALL;
         }
-    } else if (type == 5) {
+    } else if (type == DOKAN_YOKO_OUT) {
         mp->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         partyShadowOff(partyGetPtr(marioGetPartyId()));
         partyShadowOff(partyGetPtr(marioGetExtraPartyId()));
@@ -222,12 +222,12 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
 #endif
         } else {
             switch (type) {
-                case 4:
-                case 5:
+                case DOKAN_YOKO_IN:
+                case DOKAN_YOKO_OUT:
                     event->userdata[1] = 20;
                     ret = 2;
                     break;
-                case 1:
+                case DOKAN_TATE_UPIN:
                     if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                         marioUpdateCamPos();
                         camFollowYOn();
@@ -239,18 +239,18 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
                     }
                     event->userdata[1] = 0;
                     break;
-                case 0:
+                case DOKAN_TATE_DOWNIN:
                     event->userdata[1] = 2;
                     break;
-                case 2:
+                case DOKAN_TATE_DOWNOUT:
                     event->userdata[1] = 10;
                     break;
-                case 3:
+                case DOKAN_TATE_UPOUT:
                     event->userdata[1] = 10;
                     break;
             }
         }
-        if (type == 2 || type == 3) {
+        if (type == DOKAN_TATE_DOWNOUT || type == DOKAN_TATE_UPOUT) {
             marioSlitForceCancel();
             marioRollForceCancel();
             partyShadowOff(partyGetPtr(marioGetPartyId()));
@@ -269,7 +269,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                 camFollowYOff();
             }
-        } else if (type == 5) {
+        } else if (type == DOKAN_YOKO_OUT) {
             partyGoodbye(marioGetPartyId());
             partyGoodbye(marioGetExtraPartyId());
         }
@@ -879,7 +879,7 @@ USER_FUNC(evt_mario_normalize) {
                     event->userdata[0] = 3;
                 }
             } else if (mp->currMotionId == MARIO_MOTION_VIVIAN) {
-                if (vivianGetStatus() != 0 && vivianGetStatus() == 2) {
+                if (vivianGetStatus() != VIVIAN_STATUS_INACTIVE && vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
                     vivianUnhold(partyGetPtr(marioGetPartyId()));
                     event->userdata[0] = 5;
                 }
@@ -892,7 +892,7 @@ USER_FUNC(evt_mario_normalize) {
         case 1:
             ret = 0;
             if (mp->currMotionId == MARIO_MOTION_ROLL) {
-                if (mp->rollFlags == 0) {
+                if (mp->rollFlags == ROLL_STATE_NONE) {
                     event->userdata[0] = 2;
                 }
             } else if (mp->currMotionId == MARIO_MOTION_SLIT) {
@@ -930,7 +930,7 @@ USER_FUNC(evt_mario_normalize) {
         case 5:
             if (mp->currMotionId != MARIO_MOTION_VIVIAN) {
                 event->userdata[0] = 6;
-            } else if (vivianGetStatus() == 0) {
+            } else if (vivianGetStatus() == VIVIAN_STATUS_INACTIVE) {
                 event->userdata[0] = 6;
             }
             break;
@@ -2129,7 +2129,7 @@ USER_FUNC(evt_mario_set_prev_party_dokan) {
         if (id >= 0) {
             mp->currPartySlotId[slot] = id;
             party = partyGetPtr(id);
-            partyChgRunMode(party, 0);
+            partyChgRunMode(party, PARTY_RUN_MOVE_RESET);
             party->flags |= PARTY_FLAG_DISABLE_FLOORS;
             party->flags |= PARTY_FLAG_FORCE_FALL;
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
@@ -2170,7 +2170,7 @@ USER_FUNC(evt_mario_hello_party) {
     if (!party) {
         return EVT_RETURN_DONE;
     }
-    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != 1) {
+    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != PARTY_RUN_WAIT) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -2205,7 +2205,7 @@ USER_FUNC(evt_mario_hello_exparty_pos) {
     if (!party) {
         return EVT_RETURN_DONE;
     }
-    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != 1) {
+    if (!(party->flags & PARTY_FLAG_IS_ACTIVE) || party->runMode != PARTY_RUN_WAIT) {
         return EVT_RETURN_BLOCK;
     }
     return EVT_RETURN_DONE;
@@ -2478,7 +2478,7 @@ USER_FUNC(evt_mario_paper_plane) {
 #endif
             return EVT_RETURN_DONE;
         }
-    } else if (marioGetPlaneStatus() == 2) {
+    } else if (marioGetPlaneStatus() == PLANE_STATUS_GLIDING) {
 #if VERSION <= VERSION_DEMO_US
         mp->trigFlags &= ~MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
 #endif

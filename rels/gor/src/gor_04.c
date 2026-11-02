@@ -42,7 +42,7 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 #include "map/sharin.h"
-#include "map/sharin.h"
+#include "driver/camdrv.h"
 #include <dolphin/pad.h>
 
 static USER_FUNC(ramp_r);
@@ -933,7 +933,7 @@ static EVT_BEGIN(evt_train)
 #endif
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_00_START)
         CALL(evt_bero_mapchange, STRING("sys_01"), STRING("stg_6"))
-        ELSE
+    ELSE
         CALL(evt_bero_mapchange, STRING("rsh_02_a"), STRING("nidome_start"))
     END_IF
     RETURN
@@ -1277,7 +1277,7 @@ EVT_BEGIN(hikosenkakari_talk)
             ADD(LW(2), 10)
             SET_VALUE(LW(10), STRING("airship"))
             CALL(evt_item_entry, LW(10), ITEM_BLIMP_TICKET, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-            CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH)
+            CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1369,7 +1369,7 @@ EVT_BEGIN(ekiin_talk)
             ADD(LW(2), 10)
             SET_VALUE(LW(10), STRING("train"))
             CALL(evt_item_entry, LW(10), ITEM_TRAIN_TICKET, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-            CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH)
+            CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
             WAIT_MS(1000)
             CALL(evt_item_delete, LW(10))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -1638,7 +1638,7 @@ static NpcSetupInfo npcEnt[] = {
 EVT_BEGIN(evt_hikousen)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_AIRSHIP1"))
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bou_10"), MAP_OBJ_FLAG_HIDDEN)
@@ -2241,7 +2241,7 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
         CALL(evt_snd_bgm_scope, 0, 1)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-        ELSE
+    ELSE
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("hikousen_return"))
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
@@ -2274,7 +2274,7 @@ EVT_BEGIN(gor_04_init_evt)
     // Arriving back by blimp starts the blimp-landing scene; otherwise the second gondola is hidden.
     IF_STR_EQUAL(LW(0), STRING("hikousen_return"))
         SPAWN_EVENT(PTR(evt_hikousen_return))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hako_1"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -2301,7 +2301,7 @@ EVT_BEGIN(gor_04_init_evt)
         SPAWN_EVENT(PTR(evt_train2))
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
-        ELSE
+    ELSE
 
         // Otherwise, the train sits at the platform in the correct state for the trip direction.
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
@@ -2309,7 +2309,7 @@ EVT_BEGIN(gor_04_init_evt)
             SET_VALUE(LW(0), STRING("n_bero"))
             CALL_CHILD(PTR(bero_case_switch_on))
             CALL(evt_npc_set_position, STRING("駅員"), -400, 80, 100)
-            ELSE
+        ELSE
             CALL_CHILD(PTR(hom_10_evt_resha_right))
             SET_VALUE(LW(0), STRING("n_bero"))
             CALL_CHILD(PTR(bero_case_switch_off))
@@ -2343,10 +2343,10 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
     END_IF
-END_IF
+    END_IF
 
 // The mail event runs in the background.
-SPAWN_EVENT(evt_sub_mail_event)
+    SPAWN_EVENT(evt_sub_mail_event)
 #else
 #if VERSION >= VERSION_US
         END_IF

@@ -203,7 +203,7 @@ void effFireDustMain(EffectEntry* effect) {
             p->vel.y += 0.04f * (p->targetVel.y - p->vel.y);
             p->vel.z += 0.04f * (p->targetVel.z - p->vel.z);
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireDustDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireDustDisp, effect);
     }
 }
 

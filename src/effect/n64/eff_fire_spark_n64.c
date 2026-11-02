@@ -180,7 +180,7 @@ void effFireSparkMain(EffectEntry* effect) {
         work->vel.y += 0.04f * (work->velTgt.y - work->vel.y);
         work->vel.z += 0.04f * (work->velTgt.z - work->vel.z);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireSparkDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireSparkDisp, effect);
 }
 
 /**

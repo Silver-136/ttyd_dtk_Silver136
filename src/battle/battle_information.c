@@ -73,7 +73,7 @@ typedef struct ItemHogTable {
 
 // Descriptive name (not in the symbol maps).
 const ItemHogTable item_hog_table = {
-    {0x98, 0x98, 0x98, 0xA2, 0x94, 0x9A, 0x99, 0x84, 0x87, 0x8B}
+    {ITEM_DRIED_SHROOM, ITEM_DRIED_SHROOM, ITEM_DRIED_SHROOM, ITEM_FRIGHT_MASK, ITEM_MUSHROOM, ITEM_HONEY_SYRUP, ITEM_TASTY_TONIC, ITEM_FIRE_FLOWER, ITEM_VOLT_SHROOM, ITEM_POW_BLOCK}
 };
 
 /**

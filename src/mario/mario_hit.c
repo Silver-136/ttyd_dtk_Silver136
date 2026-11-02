@@ -192,7 +192,7 @@ BOOL chkfilterVecRoll(HitCheckQuery* query, HitEntry* entry) {
  */
 BOOL chkfilterVecVivian(HitCheckQuery* query, HitEntry* entry) {
     MapObjectEntry* mobj;
-    if ((entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_TOGE | HIT_ATTR_ROLL_THROUGH)) && !(entry->attributes & HIT_ATTR_BERO)) {
+    if ((entry->attributes & (HIT_ATTR_NPC_ONLY | HIT_ATTR_SPIKES | HIT_ATTR_ROLL_THROUGH)) && !(entry->attributes & HIT_ATTR_BERO)) {
         return FALSE;
     }
     if (!(entry->attributes & HIT_ATTR_MOBJ)) {
@@ -365,7 +365,7 @@ HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist
         } else {
             hit = marioHitCheckVecInl(pos, dir, outPos, outNrm, &d);
         }
-    } else if (marioGetJabaraState() == 1) {
+    } else if (marioGetJabaraState() == JABARA_STATE_RISING) {
         hit = marioHitCheckAttr2Inl(pos, dir, outPos, outNrm, &d);
     } else {
         hit = marioHitCheckVecInl(pos, dir, outPos, outNrm, &d);
@@ -509,7 +509,7 @@ void marioChkGnd(void) {
     f32 d;
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
-    if (vivianGetStatus() == 2 || vivianGetStatus() == 1 || vivianGetStatus() == 3) {
+    if (vivianGetStatus() == VIVIAN_STATUS_HIDDEN || vivianGetStatus() == VIVIAN_STATUS_SINKING || vivianGetStatus() == VIVIAN_STATUS_RISING) {
         mario->hitobjStandOn = marioSearchGround(&y, &b, &c, 37.0f, 0.0f);
         mario->hitobjUnder = marioSearchUnder();
         return;
@@ -581,8 +581,8 @@ void marioChkGnd(void) {
         marioChgMot(MARIO_MOTION_DAMAGE);
         return;
     }
-    if (mario->hitobjStandOn && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_TOGE)) {
-        if (vivianGetStatus() != 2 && vivianGetStatus() != 1 && vivianGetStatus() != 3) {
+    if (mario->hitobjStandOn && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_SPIKES)) {
+        if (vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_RISING) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
@@ -1247,26 +1247,26 @@ HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
 void marioChkToge(void) {
     MarioWork* mario = marioGetPtr();
     s32 attr;
-    if (vivianGetStatus() == 2 || vivianGetStatus() == 1 || vivianGetStatus() == 3) {
+    if (vivianGetStatus() == VIVIAN_STATUS_HIDDEN || vivianGetStatus() == VIVIAN_STATUS_SINKING || vivianGetStatus() == VIVIAN_STATUS_RISING) {
         return;
     }
     if (mario->hitobjFront != NULL) {
         attr = hitGetAttr(mario->hitobjFront);
-        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE) && mario->frontWallDist < 0.5f * mario->wPlayerCollisionBox.x) {
+        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_SPIKES) && mario->frontWallDist < 0.5f * mario->wPlayerCollisionBox.x) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
     if (mario->hitobjWall != NULL) {
         attr = hitGetAttr(mario->hitobjWall);
-        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
+        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_SPIKES)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
     }
     if (mario->hitobjHead != NULL) {
         attr = hitGetAttr(mario->hitobjHead);
-        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_TOGE)) {
+        if (mario->currMotionId != MARIO_MOTION_DAMAGE_TOGE && (attr & HIT_ATTR_SPIKES)) {
             set_damage_root_ypos(mario->position.y);
             marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
         }
@@ -2170,7 +2170,7 @@ void marioSearchFrontWall_staying(f32 dz) {
         } else {
             mario->hitobjFront = NULL;
         }
-    } else if (!strcmp(gp->currentMapName, "dou_10") && vivianGetStatus() != 2 && vivianGetStatus() != 1 && vivianGetStatus() != 3) {
+    } else if (!strcmp(gp->currentMapName, "dou_10") && vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_RISING) {
         ang = toMovedir(mario->displayDirection);
         pos = mario->position;
         movePos(&pos.x, &pos.z, 0.5f * mario->wPlayerCollisionBox.x, ang);
@@ -2425,7 +2425,7 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
         return kpaSearchWallFront(pos, h, dx, dz);
     }
 #endif
-    if (vivianGetStatus() == 2) {
+    if (vivianGetStatus() == VIVIAN_STATUS_HIDDEN) {
         return NULL;
     }
     sincosf(&s, &c, dz);
@@ -2571,7 +2571,7 @@ HitEntry* dou10_yoko_yari(f32* out) {
         return hit;
     }
     pos = mario->position;
-    if (!strcmp(gp->currentMapName, "dou_10") && vivianGetStatus() != 2 && vivianGetStatus() != 1 && vivianGetStatus() != 3 && !hit) {
+    if (!strcmp(gp->currentMapName, "dou_10") && vivianGetStatus() != VIVIAN_STATUS_HIDDEN && vivianGetStatus() != VIVIAN_STATUS_SINKING && vivianGetStatus() != VIVIAN_STATUS_RISING && !hit) {
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             step = 2.0f;
         } else {
@@ -2584,27 +2584,27 @@ HitEntry* dou10_yoko_yari(f32* out) {
             Vec dir = {0.0f, -1.0f, 0.0f};
             hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
         }
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
             *out = 0.8f;
         }
         pos = mario->position;
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
             *out = 0.8f;
         }
         pos = mario->position;
         movePos(&pos.x, &pos.z, step, 270.0f);
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
             *out = 0.8f;
         }
         pos = mario->position;
         movePos(&pos.x, &pos.z, step, 90.0f);
         hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-        if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+        if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
             mario->hitobjFront = hit;
             *out = 0.8f;
         }
@@ -2631,27 +2631,27 @@ HitEntry* dou10_yoko_yari2(f32* out) {
         Vec dir = {0.0f, -1.0f, 0.0f};
         hit = marioHitCheckVecInl(&pos2, &dir, &outPos, &outNrm, &d);
     }
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = mario->position;
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = mario->position;
     movePos(&pos.x, &pos.z, 8.0f, 270.0f);
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
         *out = 0.8f;
     }
     pos = mario->position;
     movePos(&pos.x, &pos.z, 8.0f, 90.0f);
     hit = searchFrontWall(&pos, &h, 20.0f, 0.0f, 20.0f);
-    if (hit && (hitGetAttr(hit) & HIT_ATTR_TOGE)) {
+    if (hit && (hitGetAttr(hit) & HIT_ATTR_SPIKES)) {
         mario->hitobjFront = hit;
         *out = 0.8f;
     }
@@ -2867,7 +2867,7 @@ BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {
 
     n = 8;
     hitAny = FALSE;
-    if (kpaGetStageViewType() == 0) {
+    if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
         n = 2;
     }
     step = 360.0f / n;

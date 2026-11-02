@@ -260,9 +260,9 @@ s32 winRootMain(WindowWork* w) {
             w->tabSel = 0;
         }
 #if VERSION > VERSION_DEMO_US
-        w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), 1);
+        w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_MAP);
         w->texBufValid = 0;
-        dispEntry(CAMERA_2D, 1000.0f, 0, (DispCallback)winRootBgCaptureDisp, w);
+        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, (DispCallback)winRootBgCaptureDisp, w);
 #endif
         break;
     case 10:
@@ -449,7 +449,7 @@ s32 winRootMain(WindowWork* w) {
     w->sortPosX += (w->sortTgtX - w->sortPosX) / WR_FSTEP(4.0f);
     w->sortPosY += (w->sortTgtY - w->sortPosY) / WR_FSTEP(4.0f);
 #if VERSION > VERSION_DEMO_US
-    dispEntry(CAMERA_2D, 1000.0f, 0, (DispCallback)winRootBgDrawDisp, w);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, (DispCallback)winRootBgDrawDisp, w);
 #endif
     return 0;
 }
@@ -1471,7 +1471,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                         continue;
                     }
                 } else {
-                    if (swGet(w->log.recipeIds[n] + 0x41)) {
+                    if (swGet(w->log.recipeIds[n] + GSWF_RECIPE_FOUND_BASE)) {
                         continue;
                     }
                 }
@@ -1497,7 +1497,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                     }
                     icon = itemDataTable[w->log.badgeIds[n] + BADGE_MIN].icon_id;
                 } else {
-                    if (!swGet(w->log.recipeIds[n] + 0x41)) {
+                    if (!swGet(w->log.recipeIds[n] + GSWF_RECIPE_FOUND_BASE)) {
                         continue;
                     }
                     icon = itemDataTable[w->log.recipeIds[n] + ITEM_SHROOM_FRY].icon_id;
@@ -2562,7 +2562,7 @@ void winSortMain(WindowWork* wp) {
         }
     } else if (rep & DEMO_STICK_DOWN) {
 #if VERSION == VERSION_EU
-        psndSFXOn(SFX_NAME_WORD(0x20005));
+        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         wp->sortRev = 0;
 #else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));

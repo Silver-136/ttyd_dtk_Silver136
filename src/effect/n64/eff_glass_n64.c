@@ -129,7 +129,7 @@ void effGlassMain(EffectEntry* effect) {
     work->position.y += work->vy;
     work->position.z += work->vz;
     work->rotZ += work->rotY;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effGlassDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effGlassDisp, effect);
 }
 
 /**

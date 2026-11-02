@@ -227,7 +227,7 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
             return EVT_RETURN_DONE;
         }
     }
-    dispEntry(CAMERA_2D, 900.0f, 1, (void*)_get_item_announce_disp, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, (void*)_get_item_announce_disp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -258,9 +258,9 @@ s32 _damage(EventEntry* event, BOOL isFirstCall) {
  */
 void* btlataudGetMoveEventPtr(s32 id) {
     switch (BattleAudience_GetPresentItemType()) {
-        case 1:
+        case PRESENT_ITEM_DAMAGE:
             return btlataudevtPresentItem_Damage;
-        case 0:
+        case PRESENT_ITEM_GET:
         default:
             return btlataudevtPresentItem_Get;
     }

@@ -133,9 +133,9 @@ static EVT_BEGIN(first_time_w_bero)
             WAIT_MS(1000)
             BEGIN_INLINE_EVENT
                 WAIT_MS(500)
-                CALL(evt_bero_exec_onoff, 0, 2)
+                CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
                 WAIT_MS(500)
-                CALL(evt_bero_exec_onoff, 1, 2)
+                CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
             END_INLINE_EVENT
             BEGIN_INLINE_EVENT
                 CALL(evt_party_move_pos2, 0, -360, 0, FLOAT(150.0f))

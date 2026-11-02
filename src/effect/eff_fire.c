@@ -304,15 +304,15 @@ void effFireMain(EffectEntry* effect) {
         case 3:
         case 4:
         case 8:
-            dispEntry(CAMERA_3D, dispCalcZ(&work->position), 2, (DispCallback)effFireDisp2, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, (DispCallback)effFireDisp2, effect);
             break;
         case 5:
         case 6:
         case 7:
-            dispEntry(CAMERA_3D, dispCalcZ(&work->position), 2, (DispCallback)effFireDisp3, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, (DispCallback)effFireDisp3, effect);
             break;
         default:
-            dispEntry(CAMERA_3D, dispCalcZ(&work->position), 8, (DispCallback)effFireDisp, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_CUSTOM_MID, (DispCallback)effFireDisp, effect);
             break;
     }
 }
@@ -868,7 +868,7 @@ void effFireSmokeMain(EffectEntry* effect) {
     work->color[0] *= 0.99f;
     work->color[1] *= 0.99f;
     work->color[2] *= 0.99f;
-    dispEntry(CAMERA_3D, dispCalcZ(&work->position), 2, (DispCallback)effFireSmokeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, (DispCallback)effFireSmokeDisp, effect);
 }
 
 /** Draws the smoke puff as a billboard scaled by scale_dt for its age. */

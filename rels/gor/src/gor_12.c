@@ -17,6 +17,7 @@
 #include "pmario_sound.h"
 #include "mario/mario.h"
 #include "party.h"
+#include "driver/camdrv.h"
 
 
 static EvtWord epilogue_evt[49];
@@ -33,7 +34,7 @@ EvtWord gor_12_init_evt[35];
  */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_MUJ1"))
-    CALL(evt_cam_ctrl_onoff, 4, 0)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)

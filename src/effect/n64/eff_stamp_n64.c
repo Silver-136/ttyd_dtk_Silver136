@@ -129,7 +129,7 @@ void effStampMain(EffectEntry* effect) {
         work->position.x = work->radius * (f32)cos(6.2831855f * (90.0f + work->angle) / 360.0f);
         work->position.y = work->radius * (f32)sin(6.2831855f * (90.0f + work->angle) / 360.0f);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effStampDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStampDisp, effect);
 }
 
 /**

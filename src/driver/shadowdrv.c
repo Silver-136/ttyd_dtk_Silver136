@@ -252,15 +252,15 @@ void shadowInit(void) {
     cswp->base.configIdx = 1;
     cswp->base.color = (GXColor){0, 0, 0, 0x6E};
     cswp->projection = 1;
-    cswp->defaultMode = 2;
+    cswp->defaultMode = SHADOW_MODE_CYLINDER;
     cswp->defaultSizeY = 20.0f;
     cswp->defaultEnabled = 1;
     cswp->numEntries = 0;
-    cswp->entries = __memAlloc(HEAP_DEFAULT, sizeof(ShadowEntry) * 64);
-    memset(cswp->entries, 0, sizeof(ShadowEntry) * 64);
+    cswp->entries = __memAlloc(HEAP_DEFAULT, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
+    memset(cswp->entries, 0, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
     wp = cswp;
     bufferSize = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
-    wp->base.texBuffer = smartAlloc(bufferSize, 0);
+    wp->base.texBuffer = smartAlloc(bufferSize, SMART_GROUP_PERMANENT);
     depthShadowInit();
 
     {
@@ -295,16 +295,16 @@ void shadowInit(void) {
  * depth shadow end), then empties the shadow list and draw counts for the new frame.
  */
 void shadowMain(void) {
-    dispEntry(CAMERA_3D, 0.0f, 9, shadowDisp, NULL);
-    dispEntry(CAMERA_OFFSCREEN2, 0.0f, 9, shadowDisp, NULL);
-    dispEntry(CAMERA_3D_EFFECTA, 0.0f, 9, shadowDisp, NULL);
-    dispEntry(CAMERA_3D_EFFECTB, 0.0f, 9, shadowDisp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU_BEFORE, shadowDisp, NULL);
+    dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_XLU_BEFORE, shadowDisp, NULL);
+    dispEntry(CAMERA_3D_EFFECTA, 0.0f, DISP_MODE_XLU_BEFORE, shadowDisp, NULL);
+    dispEntry(CAMERA_3D_EFFECTB, 0.0f, DISP_MODE_XLU_BEFORE, shadowDisp, NULL);
     if (cswp->projection) {
-        dispEntry(CAMERA_SHADOW, 0.0f, 5, shadowDisp, NULL);
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_XLU_BEFORE_OPAQUE, shadowDisp, NULL);
     }
-    dispEntry(CAMERA_SHADOW, 0.0f, 0, shadowDisp, NULL);
-    dispEntry(CAMERA_SHADOW, 0.0f, 2, shadowDisp, NULL);
-    dispEntry(CAMERA_SHADOW, 0.0f, 7, shadowDisp, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, shadowDisp, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_XLU, shadowDisp, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_CUSTOM_LAST, shadowDisp, NULL);
     cswp->numEntries = 0;
     cswp->base.flags &= ~SHADOW_WORK_READY;
     cswp->base.drawCount = 0;
@@ -408,7 +408,7 @@ void shadowDisp(CameraId cameraId, void* param) {
         shadowCharShadowDisp_Texture(cameraId, param);
     } else if (cameraId == CAMERA_SHADOW) {
         switch (disp->renderMode) {
-            case 5: {
+            case DISP_MODE_XLU_BEFORE_OPAQUE: {
                 ShadowConfig* cfg;
                 shadowCharShadowDisp_Collision(cameraId, param);
                 if ((cfg = &shadowConfig[cswp->base.configIdx])->follow == 1) {
@@ -429,14 +429,14 @@ void shadowDisp(CameraId cameraId, void* param) {
                 projShadowEnd(cameraId, &cswp->base);
                 break;
             }
-            case 0:
+            case DISP_MODE_OPAQUE:
                 shadowBegin(pswp, FALSE);
                 break;
-            case 2:
+            case DISP_MODE_XLU:
                 projShadowEnd(cameraId, pswp);
                 shadowBegin(dswp, TRUE);
                 break;
-            case 7:
+            case DISP_MODE_CUSTOM_LAST:
                 depthShadowEnd(cameraId, dswp);
                 break;
         }
@@ -485,7 +485,7 @@ void shadowCharShadowDisp_Collision(CameraId cameraId, void* param) {
         if (entry->flags & SHADOW_ENTRY_PLACED) {
             continue;
         }
-        if (entry->mode != 3 && (entry->flags & SHADOW_ENTRY_GROUND)) {
+        if (entry->mode != SHADOW_MODE_PROJECTION && (entry->flags & SHADOW_ENTRY_GROUND)) {
             query.targetPos = entry->pos;
             query.targetPos.y += 1.0f;
             query.targetDir = (Vec){0.0f, -1.0f, 0.0f};
@@ -554,7 +554,7 @@ void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
         if (!entry->size) {
             continue;
         }
-        if (entry->mode != 3) {
+        if (entry->mode != SHADOW_MODE_PROJECTION) {
             continue;
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
@@ -650,7 +650,7 @@ void shadowCharShadowDisp_Polygon(CameraId cameraId, void* param) {
         if (!entry->size) {
             continue;
         }
-        if (entry->mode != 0) {
+        if (entry->mode != SHADOW_MODE_POLYGON) {
             continue;
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
@@ -729,7 +729,7 @@ void shadowCharShadowDisp_Texture(CameraId cameraId, void* param) {
         if (!entry->size) {
             continue;
         }
-        if (entry->mode != 1) {
+        if (entry->mode != SHADOW_MODE_TEXTURE) {
             continue;
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
@@ -810,13 +810,13 @@ void cylinder(ShadowEntry* entry) {
 /** Draws a shadow's volume shape: a cube for type 1, otherwise the cylinder. */
 static inline void shadowDrawVolume(ShadowEntry* entry) {
     switch (entry->type) {
-        case 1:
+        case SHADOW_TYPE_CUBE:
             GXSetArray(GX_VA_CLR0, color_tbl_cube, 4);
             GXCallDisplayList(cube_dl_top, 0x40);
             GXCallDisplayList(cube_dl_bottom, 0x20);
             GXCallDisplayList(cube_dl_side, 0x20);
             break;
-        case 0:
+        case SHADOW_TYPE_CYLINDER:
         default:
             cylinder(entry);
             break;
@@ -856,7 +856,7 @@ void cylinderShadowDraw(CameraId cameraId, void* param) {
         if (!entry->size) {
             continue;
         }
-        if (entry->mode != 2) {
+        if (entry->mode != SHADOW_MODE_CYLINDER) {
             continue;
         }
         if (!(entry->flags & SHADOW_ENTRY_PLACED)) {
@@ -918,7 +918,7 @@ s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
     entry->size = size;
     entry->sizeY = cswp->defaultSizeY;
     entry->mode = cswp->defaultMode;
-    entry->type = 0;
+    entry->type = SHADOW_TYPE_CYLINDER;
     entry->offscreenId = -1;
     entry->camId = CAMERA_3D;
     entry->volume = 1.0f;
@@ -949,7 +949,7 @@ s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size) {
     entry->size = size;
     entry->sizeY = cswp->defaultSizeY;
     entry->mode = mode;
-    entry->type = 0;
+    entry->type = SHADOW_TYPE_CYLINDER;
     entry->offscreenId = -1;
     entry->camId = CAMERA_3D;
     entry->volume = 1.0f;
@@ -1199,7 +1199,7 @@ void projShadowEnd(CameraId cameraId, void* param) {
     cfg = &shadowConfig[wp->configIdx];
     size = ShadowSizeTbl[cfg->sizeIdx];
     if (wp->flags & SHADOW_WORK_ALLOC) {
-        wp->texBuffer = smartAlloc((wp->flags & SHADOW_WORK_HALF_SIZE_UNUSED) ? GXGetTexBufferSize(size / 2, size / 2, GX_TF_IA4, GX_FALSE, 0)
+        wp->texBuffer = smartAlloc((wp->flags & SHADOW_WORK_HALF_SIZE_UNUSED) ? GXGetTexBufferSize(size / 2, size / 2, GX_TF_IA4, GX_FALSE, SMART_GROUP_PERMANENT)
                                               : GXGetTexBufferSize(size, size, GX_TF_IA4, GX_FALSE, 0), 3);
     }
     GXSetTexCopySrc(0, 0, size, size);
@@ -1250,7 +1250,7 @@ void depthShadowEnd(CameraId cameraId, void* param) {
     }
     if (wp->flags & SHADOW_WORK_ALLOC) {
         size = ShadowSizeTbl[cfg->sizeIdx];
-        wp->texBuffer = smartAlloc(GXGetTexBufferSize(size, size, texFmt, GX_FALSE, 0), 3);
+        wp->texBuffer = smartAlloc(GXGetTexBufferSize(size, size, texFmt, GX_FALSE, 0), SMART_GROUP_TEMP);
     }
     GXSetTexCopySrc(0, 0, size, size);
     GXSetTexCopyDst(size, size, copyFmt, GX_FALSE);

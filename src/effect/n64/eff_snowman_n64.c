@@ -256,7 +256,7 @@ void effSnowmanMain(EffectEntry* effect) {
         effSnowDustN64Entry(1, 10, 30, work->position.x + work->offset.x, 10.0f + (work->position.y + work->offset.y),
                             60.0f + (work->position.z + work->offset.z), 60.0f, 100.0f, 2.0f);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSnowmanDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSnowmanDisp, effect);
 }
 
 /** Empty: the snowman body is never drawn, so only the vapor and snow-dust puffs that effSnowmanMain spawns show. */

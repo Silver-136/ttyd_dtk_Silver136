@@ -177,7 +177,7 @@ EffectEntry* effTorchEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 void effTorchMain(EffectEntry* effect) {
     EffTorchWork* work = effect->userdata;
 
-    dispEntry(CAMERA_3D, dispCalcZ(&work->position), 2, (DispCallback)effTorchDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, (DispCallback)effTorchDisp, effect);
 }
 
 /**

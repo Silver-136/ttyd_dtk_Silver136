@@ -297,7 +297,7 @@ void effFlameMain(EffectEntry* effect) {
         work->smoothed.x += 0.1f * (work->position.x - work->smoothed.x);
         work->smoothed.y += 0.1f * (work->position.y - work->smoothed.y);
         work->smoothed.z += 0.1f * (work->position.z - work->smoothed.z);
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFlameDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFlameDisp, effect);
     }
 }
 

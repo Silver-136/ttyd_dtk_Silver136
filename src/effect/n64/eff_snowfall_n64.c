@@ -227,16 +227,16 @@ void effSnowfallMain(EffectEntry* effect) {
         cam_clip_chk(p, 550, h, life);
     }
 #if VERSION <= VERSION_DEMO_US
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSnowfallDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSnowfallDisp, effect);
 #else
 #if VERSION >= VERSION_US
     if (gp->inBattle == 0) {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 10, (DispCallback)effSnowfallDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU_AFTER, (DispCallback)effSnowfallDisp, effect);
     } else {
-        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), 10, (DispCallback)effSnowfallDisp, effect);
+        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU_AFTER, (DispCallback)effSnowfallDisp, effect);
     }
 #else
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 10, (DispCallback)effSnowfallDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU_AFTER, (DispCallback)effSnowfallDisp, effect);
 #endif
 #endif
 }

@@ -3,6 +3,17 @@
 #pragma once
 
 /* Audience animation bytecode (interpreted by BattleAudienceAnimMain); every command is a run of s32 words. */
+enum {
+    AUD_OP_END = -1,
+    AUD_OP_FRAME = -2,
+    AUD_OP_RESTART = -3,
+    AUD_OP_LABEL = -4,
+    AUD_OP_GOTO = -5,
+    AUD_OP_REPEAT = -6,
+    AUD_OP_END_REPEAT = -7,
+    AUD_OP_WAIT = -8,
+};
+
 #define AUD_END -1                 /* stop */
 #define AUD_FRAME(anim, wait) -2, anim, wait /* show animation frame, then wait */
 #define AUD_RESTART -3             /* jump back to the start of the script */

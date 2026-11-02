@@ -268,7 +268,7 @@ EVT_END()
 /** Hit reaction: straightens her rotation (left over from her spinning moves), then runs the default damage script. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -311,7 +311,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
 #else
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
 #endif
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -358,7 +358,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
 #else
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
 #endif
-    0x80002004, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -401,7 +401,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     "msg_ac_binta", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -444,7 +444,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     "msg_ac_binta", // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -495,7 +495,7 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     "msg_ac_madowaseru", // acHelpMsg
     SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, // sleepChance..stopTime
     100, // dizzyChance
     3, // dizzyTime
@@ -540,7 +540,7 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     "msg_ac_heart_catch", // acHelpMsg
     SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_PAYBACK, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -582,7 +582,7 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
     "msg_ac_chuchurina_kiss", // acHelpMsg
     SPECIAL_CANNOT_MISS | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_LOW_HP_RATIO | TARGET_WEIGHT_PREFER_LOW_HP | TARGET_WEIGHT_PREFER_IN_PERIL | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_LOW_HP_RATIO | TARGET_WEIGHT_LOW_HP | TARGET_WEIGHT_IN_PERIL | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -622,7 +622,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     // Against an enemy with pre-emptive front spikes (pre-check result 5) she first walks up in front of it,
     // and the damage check there pricks her on the spikes.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 5)
+    IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
         MULTIPLY_FLOAT(LW(6), 40)
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -792,28 +792,28 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
     SWITCH(LW(5))
-        CASE_OR_EQUAL(2)
-        CASE_OR_EQUAL(3)
-        CASE_OR_EQUAL(6)
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_MISS)
+        CASE_OR_EQUAL(PRECHECK_LUCKY)
+        CASE_OR_EQUAL(PRECHECK_DODGY)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         CASE_END
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
 
     // She cannot hit it: the enemy's dodge or counter plays, she spins round, looks dejected and goes home.
-    IF_INT_NOT_EQUAL(LW(5), 1)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
         DELETE_EVENT(LW(14))
         SET_VALUE(LW(14), 0)
         CALL(btlevtcmd_StopAC)
-        IF_INT_EQUAL(LW(5), 3)
+        IF_INT_EQUAL(LW(5), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(5), 6)
+        IF_INT_EQUAL(LW(5), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(5), 2)
+        IF_INT_EQUAL(LW(5), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         LOOP(20)
@@ -874,17 +874,17 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(0))
 #endif
     SWITCH(LW(0))
-        CASE_OR_EQUAL(7)
-        CASE_OR_EQUAL(8)
-        CASE_OR_EQUAL(9)
-        CASE_OR_EQUAL(10)
-        CASE_OR_EQUAL(11)
-        CASE_OR_EQUAL(12)
-        CASE_OR_EQUAL(13)
-        CASE_OR_EQUAL(14)
-        CASE_OR_EQUAL(15)
-        CASE_OR_EQUAL(16)
-        CASE_OR_EQUAL(17)
+        CASE_OR_EQUAL(CHECK_COUNTER_PREEMPTIVE_SPIKY)
+        CASE_OR_EQUAL(CHECK_COUNTER_TOP_SPIKY)
+        CASE_OR_EQUAL(CHECK_COUNTER_FRONT_SPIKY)
+        CASE_OR_EQUAL(CHECK_COUNTER_FIERY)
+        CASE_OR_EQUAL(CHECK_COUNTER_ICY)
+        CASE_OR_EQUAL(CHECK_COUNTER_EXPLOSIVE)
+        CASE_OR_EQUAL(CHECK_COUNTER_VOLATILE_EXPLOSIVE)
+        CASE_OR_EQUAL(CHECK_COUNTER_ELECTRIFIED)
+        CASE_OR_EQUAL(CHECK_COUNTER_POISON)
+        CASE_OR_EQUAL(CHECK_COUNTER_PAYBACK)
+        CASE_OR_EQUAL(CHECK_COUNTER_HOLD_FAST)
 #if VERSION > VERSION_DEMO_US
         IF_INT_EQUAL(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeft))
             SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackLeftLast))
@@ -1524,14 +1524,14 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     SET_VALUE(LW(15), 0)
     LABEL(10)
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(6))
-    IF_INT_NOT_EQUAL(LW(6), 1)
-        IF_INT_EQUAL(LW(6), 3)
+    IF_INT_NOT_EQUAL(LW(6), PRECHECK_HIT)
+        IF_INT_EQUAL(LW(6), PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         END_IF
-        IF_INT_EQUAL(LW(6), 6)
+        IF_INT_EQUAL(LW(6), PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         END_IF
-        IF_INT_EQUAL(LW(6), 2)
+        IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
         GOTO(50)
@@ -1673,7 +1673,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     // later with a stylish window on the way) and the damage check runs there without the action command.
     SET_VALUE(LW(14), 0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&partyWeapon_ChuchurinaItemSteal), DAMAGE_RESULT_FINAL_HIT, LW(5))
-    IF_INT_EQUAL(LW(5), 5)
+    IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
         CALL(btlevtcmd_GetWidth, LW(3), LW(15))
@@ -1767,19 +1767,19 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     WAIT_FRAMES(6)
 
     // She cannot reach it: the enemy's dodge plays and the move ends.
-    IF_INT_NOT_EQUAL(LW(5), 1)
+    IF_INT_NOT_EQUAL(LW(5), PRECHECK_HIT)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
         SWITCH(LW(5))
-            CASE_OR_EQUAL(4)
+            CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
             CASE_END
-            CASE_EQUAL(3)
+            CASE_EQUAL(PRECHECK_LUCKY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
-            CASE_EQUAL(6)
+            CASE_EQUAL(PRECHECK_DODGY)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
-            CASE_EQUAL(2)
+            CASE_EQUAL(PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
-            CASE_EQUAL(1)
+            CASE_EQUAL(PRECHECK_HIT)
             CASE_DEFAULT
         END_SWITCH
         WAIT_FRAMES(30)
@@ -2265,7 +2265,7 @@ EVT_END()
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Ms. Mowz's element reactions: none special, every element hits her normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Ms. Mowz's status vulnerabilities: base rate (100) for every status. */
 #if VERSION > VERSION_DEMO_US
@@ -2579,7 +2579,7 @@ USER_FUNC(_chuchu_item_steal) {
 void mono_capture(CameraId camId, void* param) {
     BattleUnit* unit = param;
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
-    unit->screenTexBuf = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I8, GX_FALSE, 0), 1);
+    unit->screenTexBuf = smartAlloc(GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I8, GX_FALSE, 0), SMART_GROUP_MAP);
     GXSetTexCopySrc(0, 0, 0x260, 0x1E0);
     GXSetTexCopyDst(0x260, 0x1E0, GX_TF_I8, GX_FALSE);
     GXCopyTex(unit->screenTexBuf->address, GX_FALSE);
@@ -2657,7 +2657,7 @@ USER_FUNC(mono_main) {
 
     id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    dispEntry(CAMERA_2D, 910.0f, 0, (DispCallback)mono_disp, unit);
+    dispEntry(CAMERA_2D, 910.0f, DISP_MODE_OPAQUE, (DispCallback)mono_disp, unit);
     return EVT_RETURN_BLOCK;
 }
 
@@ -2669,7 +2669,7 @@ USER_FUNC(mono_capture_event) {
     id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     BtlUnit_GetPartsPtr(unit, 1);
-    dispEntry(CAMERA_2D, 910.0f, 0, (DispCallback)mono_capture, unit);
+    dispEntry(CAMERA_2D, 910.0f, DISP_MODE_OPAQUE, (DispCallback)mono_capture, unit);
     return EVT_RETURN_DONE;
 }
 

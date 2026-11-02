@@ -142,7 +142,7 @@ void effSweatMain(EffectEntry* effect) {
     if (done >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSweatDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSweatDisp, effect);
     }
 }
 

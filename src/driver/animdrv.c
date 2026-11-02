@@ -422,7 +422,7 @@ void animInit(void) {
 
 /** Once per frame: queues the offscreen pass that renders the paper (effect overlay) poses. */
 void animMain(void) {
-    dispEntry(CAMERA_OFFSCREEN, 0.0f, 1, animPaperPoseDisp, NULL);
+    dispEntry(CAMERA_OFFSCREEN, 0.0f, DISP_MODE_ALPHA_TEST, animPaperPoseDisp, NULL);
 }
 
 /** The animation file data of pose pose. */
@@ -2392,11 +2392,11 @@ static BOOL animSetMaterial_ChangeTexture(AnimationPoseData* data, AnimPoseShape
 }
 
 #if VERSION > VERSION_DEMO_US
-static s32 tbl[4] = { 2, 1, 3, 0 }; // shape cullMode -> GXCullMode: GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE
+static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE }; // shape cullMode -> GXCullMode: GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE
 #else
 /** Sets GX culling for a shape's cull mode; the demo map has one static local table both draw functions read. */
 static inline void animSetCullMode(s32 cullMode) {
-    static s32 tbl[4] = { 2, 1, 3, 0 };
+    static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE };
     GXSetCullMode(tbl[cullMode]);
 }
 #endif
@@ -3472,7 +3472,7 @@ void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     pose->paperTexScaleY = (f32)(pose->paperRectBottom - pose->paperRectTop) / (f32)h;
     GXSetTexCopySrc(left, top, w, h);
     GXSetTexCopyDst(w, h, GX_TF_RGB5A3, GX_FALSE);
-    pose->paperCapture0 = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), 3);
+    pose->paperCapture0 = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXCopyTex(pose->paperCapture0->address, GX_TRUE);
     GXPixModeSync();
     GXInitTexObj(&pose->paperTexObj[0], pose->paperCapture0->address, w, h, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -3583,7 +3583,7 @@ void animPoseDisp_MakeExtTexture(const char* group, const char* anim, f32 frame,
     GXSetTexCopySrc(left, top, w, h);
     GXSetTexCopyDst(w, h, GX_TF_RGB5A3, GX_FALSE);
     anim_ext_tex_size += GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0);
-    *image = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+    *image = smartAlloc(GXGetTexBufferSize(w, h, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     GXCopyTex((*image)->address, GX_TRUE);
     GXPixModeSync();
     GXInitTexObj(obj, (*image)->address, w, h, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);

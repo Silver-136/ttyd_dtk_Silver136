@@ -24,6 +24,7 @@
 #include "evt/evt_ext.h"
 #include "evt/evt_npc.h"
 #include "libc_decls.h"
+#include "battle/battle_damage.h"
 
 // Unit work slots (btlevtcmd_SetUnitWork / GetUnitWork)
 enum {
@@ -239,9 +240,9 @@ BattleWeapon weapon_chorobon_gundan_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-    SPECIAL_BADGE_BUFFABLE | SPECIAL_STATUS_BUFFABLE | SPECIAL_CHARGE_BUFFABLE, // special
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGE_BUFFABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -377,20 +378,20 @@ static EVT_BEGIN(attack_event)
     // The swarm flies in toward the target; the damage check decides between a miss and a hit.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), 38)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), 39)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), 40)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -424,7 +425,7 @@ static EVT_BEGIN(attack_event)
         ELSE
             CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_gundan_attack), 0, LW(5))
         END_IF
-        IF_INT_EQUAL(LW(5), 21)
+        IF_INT_EQUAL(LW(5), CHECK_DAMAGE_SUPERGUARDED)
             CALL(chorogun_counterd, LW(6))
         ELSE
             CALL(chorogun_bound_target, LW(6))
@@ -768,7 +769,7 @@ void chorogun_ext_main(void) {
                 break;
         }
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, chorogun_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, chorogun_ext_disp, NULL);
 }
 
 /** Draw callback for the swarm: sets up the extdrv render mode, vertices, texture and TEV, then draws all poses. */

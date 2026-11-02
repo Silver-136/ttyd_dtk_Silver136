@@ -311,13 +311,13 @@ EVT_BEGIN(witchtrio_momeru)
     // Mario's controls are locked until he has finished entering the map.
     CALL(evt_mario_key_onoff, 0)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_mario_normalize)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
 
     // Mario, his partner and Punio walk in and spot the Sirens.
@@ -378,7 +378,7 @@ EVT_BEGIN(witchtrio_momeru)
     ADD(LW(1), 11)
     ADD(LW(2), 5)
     CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("necklace"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("necklace"), ITEM_FLAG_NO_TOUCH_GET)
     WAIT_MS(300)
     CALL(evt_npc_set_autotalkpose, STRING("ビビアン"), STRING("PTR_S_5"), STRING("PTR_T_6"))
     WAIT_FRAMES(1)
@@ -528,7 +528,7 @@ EVT_BEGIN(witchtrio_momeru)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     RETURN
 EVT_END()
@@ -576,7 +576,7 @@ EVT_BEGIN(witchtrio_picture)
     CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_NO_HIT | NPC_FLAG_VIVIAN_TYPE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
 
     // Vivian protests that Beldam had the sketch all along; Beldam tells her to study it instead.
@@ -600,7 +600,7 @@ EVT_BEGIN(witchtrio_picture)
     // Beldam holds up the sketch of Mario and the three gather round;
     // Beldam admires the mustached man and thinks she has seen him before.
     CALL(evt_item_entry, STRING("picture"), ITEM_MARIO_POSTER, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("picture"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("picture"), ITEM_FLAG_NO_TOUCH_GET)
     SPAWN_EVENT_GET_ID(PTR(majorin_have_picture), LW(10))
     CALL(evt_npc_set_anim, STRING("マジョリン"), STRING("MJR_I_1"))
     WAIT_MS(500)
@@ -696,7 +696,7 @@ EVT_BEGIN(mario_vs_witchtrio)
     END_LOOP
 
     // Everyone stops; Mario and his party face west as the Sirens notice them.
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -842,7 +842,7 @@ EVT_END()
 
 EVT_BEGIN(get_necklace)
     CALL(item_check_necklace_exist)
-    CALL(evt_npc_change_fbat_mode, 7)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
@@ -874,7 +874,7 @@ EVT_BEGIN(get_necklace)
     END_IF
     CALL(evt_msg_print, 0, STRING("stg2_win_e08_03"), 0, STRING("extparty"))
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     RETURN
 EVT_END()
@@ -933,7 +933,7 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_WITCH1"))
     CALL(evt_cam3d_evt_set, -375, 144, 533, -375, 40, -58, 0, EASING_SINE_IN_OUT)
     CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, 0, -1000, 0, ITEM_TYPE_STILL, GSWF_WIN_00_NECKLACE, PTR(get_necklace))
-    CALL(evt_item_flag_on, STRING("necklace"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("necklace"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_npc_get_position, STRING("マリリン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GURUGURU_MARK1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("effmaririn"), STRING("マリリン"), 2, 0, 0, 0, 0, 0, 0, -1)
@@ -976,7 +976,7 @@ EVT_BEGIN(witchtrio_lose)
         CALL(evt_npc_jump_position_nohit, STRING("ダミー"), LW(13), 0, LW(2), 250, FLOAT(7.5f))
         DELETE_EVENT(LW(15))
         CALL(evt_npc_set_position, STRING("ダミー"), 0, -1000, 0)
-        CALL(evt_item_flag_off, STRING("necklace"), ITEM_FLAG_NO_TOUCH)
+        CALL(evt_item_flag_off, STRING("necklace"), ITEM_FLAG_NO_TOUCH_GET)
         CALL(evt_item_set_position, STRING("necklace"), LW(13), 0, LW(2))
     END_INLINE_EVENT
 
@@ -1035,7 +1035,7 @@ EVT_BEGIN(witchtrio_lose)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
-    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
     RETURN
 EVT_END()

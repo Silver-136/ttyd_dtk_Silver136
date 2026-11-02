@@ -654,6 +654,19 @@ typedef struct BtlPartPoseSound {
     u8 flag;                 // 0x14
 } BtlPartPoseSound;
 
+// BattleUnitPart.look: the paper look applied through animPoseSetEffect "p_b_st". Only
+// NONE, NORMAL, DODGY and XLU are ever set; the others are named by the effect animation battle_disp.c plays for them.
+enum {
+    PART_LOOK_NONE = 0,
+    PART_LOOK_NORMAL = 1,
+    PART_LOOK_PM_C_UNUSED = 2,   // PM_C_1A
+    PART_LOOK_PM_F_UNUSED = 3,   // PM_F_1A
+    PART_LOOK_DODGY = 4,         // PM_Y_1B, two-frame pattern, STATUS_DODGY
+    PART_LOOK_PM_C2_UNUSED = 5,  // PM_C_1A + PM_C_1B
+    PART_LOOK_PM_F2_UNUSED = 6,  // PM_F_2
+    PART_LOOK_XLU = 7,           // PM_Y_1A, invisible or part color not fully opaque
+};
+
 typedef struct BattleWorkUnitPartBlurEntry {
     s32 flags;       // 0x0
     Mtx orientation; // 0x4
@@ -735,7 +748,7 @@ typedef struct BattleWorkUnitPart {
     f32 animSpeed2;                                        // 0x20C, init 1.0
     void (*dispCallback)(struct BattleWorkUnitPart*, s32); // 0x210, called before (0) and after (1) drawing
     u8 poseState;                                          // 0x214
-    u8 poseType;                                           // 0x215
+    u8 look;                                               // 0x215
     u16 poseTimer;                                         // 0x216
     GXColor drawColor;                                     // 0x218, material colour set per frame from dispColor
     BattleWorkUnitPartBlur blurWork;                       // 0x21C
@@ -828,6 +841,21 @@ typedef struct StChgInfo {
 typedef struct BtlStatusCopy {
     u8 data[0x1E]; // BattleUnit status turns/strengths from sleepTurns, copied as one block
 } BtlStatusCopy;
+
+// BattleUnit.moveState: how the current action counts against the unit's moves (battle_seq.c, battle_seq_command.c).
+// Anything but NORMAL does not spend a move. Dip states step at act end (badgeWeapon_3KaiItem, badgeWeapon_2KaiItem).
+typedef enum BattleMoveState {
+    MOVE_STATE_NORMAL = 0,
+    MOVE_STATE_POSITION_CHANGE = 1,     // btldefaultevt_ChangePosition
+    MOVE_STATE_QUICK_CHANGE = 3,        // partner change with BATTLE_BADGE_QUICK_CHANGE
+    MOVE_STATE_AUDIENCE_ATTACK = 4,     // Appeal-type free act (btlataudGetAttackEventPtr)
+    MOVE_STATE_TRIPLE_DIP_1 = 5,
+    MOVE_STATE_TRIPLE_DIP_2 = 6,
+    MOVE_STATE_TRIPLE_DIP_3 = 7,
+    MOVE_STATE_DOUBLE_DIP_1 = 8,
+    MOVE_STATE_DOUBLE_DIP_2 = 9,
+    MOVE_STATE_DONE = 10,               // no moves left this turn
+} BattleMoveState;
 
 typedef struct BattleUnit {
     s32 unitId;                                  // 0x0

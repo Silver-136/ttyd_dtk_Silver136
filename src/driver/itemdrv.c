@@ -5,6 +5,7 @@
 #include "driver/itemdrv.h"
 #include "eff/eff_itemget.h"
 #include "driver/swdrv.h"
+#include "icon_ids.h"
 #include <dolphin/pad.h>
 #include "driver/icondrv.h"
 #include "driver/windowdrv.h"
@@ -95,7 +96,7 @@ WinMgrDesc itemdrv_window_desc[4] = {
 
 /**
  * Puts a removed badge item on sale at the badge shop through pouchArriveBadge:
- * demos do so when ITEM_FLAG_BADGE_RETURN (0x100) is clear, in or out of battle;
+ * demos do so when ITEM_FLAG_LOST_BADGE_TO_SHOP (0x100) is clear, in or out of battle;
  * retail does so only outside battle and when the same bit is set.
  */
 inline void itemCheckBadge(ItemEntry* entry) {
@@ -228,7 +229,7 @@ void itemCoinDrop(Vec* position) {
  */
 #if VERSION <= VERSION_DEMO_US
 static BOOL itemGetCheck(ItemEntry* entry) {
-s32 fbatMode = fbatGetPointer()->mode;
+    s32 fbatMode = fbatGetPointer()->mode;
 #else
 BOOL itemGetCheck(ItemEntry* entry) {
 #endif
@@ -286,7 +287,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (fbatMode != 0 && fbatMode != 1)
+    if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD)
         return FALSE;
 #else
     if (fbatPreventMarioEventChk()) return FALSE;
@@ -312,7 +313,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
 /** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 #if VERSION <= VERSION_DEMO_US
 static BOOL itemGetNokoCheck(ItemEntry* entry) {
-s32 fbatMode = fbatGetPointer()->mode;
+    s32 fbatMode = fbatGetPointer()->mode;
 #else
 BOOL itemGetNokoCheck(ItemEntry* entry) {
 #endif
@@ -363,7 +364,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (fbatMode != 0 && fbatMode != 1)
+    if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD)
         return FALSE;
     return TRUE;
 #else
@@ -924,8 +925,8 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
         dz = z - entry->position.z;
         xzdist = sqrtf(dx * dx + dz * dz);
         dist = sqrtf(dx * dx + dy * dy + dz * dz);
-        if (xzdist < range && marioItemGetOk() && marioGetJabaraState() != 1 &&
-            marioGetJabaraState() != 4 && marioGetJabaraState() != 5) {
+        if (xzdist < range && marioItemGetOk() && marioGetJabaraState() != JABARA_STATE_RISING &&
+            marioGetJabaraState() != JABARA_STATE_BUMP_CEILING && marioGetJabaraState() != JABARA_STATE_SWING) {
             if (__fabs((y + mario->wPlayerCollisionBox.y * 0.5f) - entry->position.y) < mario->wPlayerCollisionBox.y * 0.5f + 10.0f) {
                 hit = NULL;
                 if (y < entry->position.y) {
@@ -965,7 +966,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 #if VERSION <= VERSION_DEMO_US
         if (!(entry->flags & ITEM_FLAG_ACTIVE))
             continue;
-        if (entry->flags & ITEM_FLAG_NO_TOUCH)
+        if (entry->flags & ITEM_FLAG_NO_TOUCH_GET)
         continue;
         if (entry->flags2 & ITEM_FLAG2_CARRIED)
             continue;
@@ -1318,13 +1319,9 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             if (entry->itemId == ITEM_WEDDING_RING) {
 #if VERSION <= VERSION_DEMO_US
-                iconChange(entry->name, 0x114);
+                iconChange(entry->name, ICON_114);
 #else
-#if VERSION >= VERSION_US
-                iconChange(entry->name, 0x11B);
-#else
-                iconChange(entry->name, 0x114);
-#endif
+                iconChange(entry->name, ICON_114);
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags |= ICON_FLAG_ITEM_NO_MAP_BLEND;
@@ -1388,15 +1385,11 @@ void itemseq_GetItem(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
             iconFlagOff(entry->name, 0x40);
             if (entry->itemId == ITEM_WEDDING_RING) {
-                iconChange(entry->name, 0x115);
+                iconChange(entry->name, ICON_115);
 #else
             iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
             if (entry->itemId == ITEM_WEDDING_RING) {
-#if VERSION >= VERSION_US
-                iconChange(entry->name, 0x11C);
-#else
-                iconChange(entry->name, 0x115);
-#endif
+                iconChange(entry->name, ICON_115);
             }
             if (!entry->effect) {
                 iconNameToPtr(entry->name)->uflags &= ~ICON_FLAG_ITEM_NO_MAP_BLEND;
@@ -1418,9 +1411,9 @@ void itemseq_GetItem(ItemEntry* entry) {
             {
                 s32 id = entry->itemId;
                 if (id >= BADGE_MIN && id < BADGE_MAX) {
-                    wp->select = winMgrSelectEntry(2, id, 1);
+                    wp->select = winMgrSelectEntry(SELECT_TYPE_BADGE, id, 1);
                 } else {
-                    wp->select = winMgrSelectEntry(1, id, 1);
+                    wp->select = winMgrSelectEntry(SELECT_TYPE_ITEM, id, 1);
                 }
             }
             break;
@@ -1693,7 +1686,7 @@ void itemseq_Bound(ItemEntry* entry) {
             t1 = OSTicksToMicroseconds(entry->airTime) / 1000000.0f;
             t2 = OSTicksToMicroseconds(entry->airTime + delta) / 1000000.0f;
             dx = dt * (entry->speed * (f32)sin(6.2831855f * entry->direction / 360.0f));
-            { f32 c = (f32)cos(6.2831855f * entry->direction / 360.0f); dz = dt * (entry->speed * -c); } // FAKE: cos result in a local
+            { f32 c = cos(6.2831855f * entry->direction / 360.0f); dz = dt * (entry->speed * -c); } // FAKE: cos result in a local
             if (entry->flags2 & ITEM_FLAG2_NO_Z_MOVE) {
                 dz = 0.0f;
             }
@@ -1805,7 +1798,7 @@ void itemseq_Bound(ItemEntry* entry) {
                 }
             }
             if (hit) {
-                if (hitGetAttr(hit) & (HIT_ATTR_DEEP_WATER | HIT_ATTR_DAMAGE_LIQUID)) {
+                if (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_DAMAGE_LIQUID)) {
                     entry->flags2 |= ITEM_FLAG2_SUNK;
                     {
                         Vec sndPos = (Vec){0.0f, 0.0f, 0.0f};

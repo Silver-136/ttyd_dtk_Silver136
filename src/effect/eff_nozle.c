@@ -410,7 +410,7 @@ static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0
  */
 #if VERSION <= VERSION_DEMO_US
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}
-, {80, 100}, {79, 99}, {77, 97}, {75, 94}, {73, 91}, {70, 87}, {66, 83}, {62, 78}, {58, 73}, {54, 67}, {49, 61}, {44, 55}, {39, 49}, {34, 42}, {29, 36}, {24, 29}, {19, 23}, {14, 17}, {9, 11}, {5, 6}, {0, 0}, {0, 0}
+    , {80, 100}, {79, 99}, {77, 97}, {75, 94}, {73, 91}, {70, 87}, {66, 83}, {62, 78}, {58, 73}, {54, 67}, {49, 61}, {44, 55}, {39, 49}, {34, 42}, {29, 36}, {24, 29}, {19, 23}, {14, 17}, {9, 11}, {5, 6}, {0, 0}, {0, 0}
 };
 #else
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}};
@@ -545,10 +545,10 @@ void effNozleMain(EffectEntry* effect) {
         effDelete(effect);
 #if VERSION > VERSION_DEMO_US
     } else if (type == 3) {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 8, (DispCallback)effNozleDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effNozleDisp, effect);
 #endif
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effNozleDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effNozleDisp, effect);
     }
 }
 

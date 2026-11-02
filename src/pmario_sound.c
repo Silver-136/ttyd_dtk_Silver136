@@ -45,6 +45,12 @@ typedef enum PsndDipState {
     PSND_DIP_STATE_UP = 0x10,
 } PsndDipState;
 
+// PaperSoundWork.sfxFadeState: psndSFXAllOff-style fades of all sound effects
+typedef enum PsndSfxFadeState {
+    PSND_SFX_FADE_IDLE = 0,
+    PSND_SFX_FADE_OUT = 2,
+} PsndSfxFadeState;
+
 typedef struct SoundBGMEntry {
     const char* name;
     u32 flags;
@@ -9346,7 +9352,7 @@ void psndStopAllFadeOut(void) {
             sfx->flags |= PSFX_FLAG_FADE_OUT;
         }
     }
-    wp->sfxFadeState = 2;
+    wp->sfxFadeState = PSND_SFX_FADE_OUT;
     PSND_SET_FADE(wp);
 }
 
@@ -9419,8 +9425,8 @@ void psndMapChange(void) {
             sfx->flags |= PSFX_FLAG_FADE_OUT;
         }
     }
-    if (wp->sfxFadeState != 2) {
-        wp->sfxFadeState = 2;
+    if (wp->sfxFadeState != PSND_SFX_FADE_OUT) {
+        wp->sfxFadeState = PSND_SFX_FADE_OUT;
         wp->sfxFadeMax = 60;
         wp->sfxFadeTime = 60;
     }
@@ -9438,8 +9444,8 @@ void psndSFXAllOff(void) {
             sfx->flags |= PSFX_FLAG_FADE_OUT;
         }
     }
-    if (wp->sfxFadeState != 2) {
-        wp->sfxFadeState = 2;
+    if (wp->sfxFadeState != PSND_SFX_FADE_OUT) {
+        wp->sfxFadeState = PSND_SFX_FADE_OUT;
 #if VERSION <= VERSION_DEMO_US
         wp->sfxFadeMax = 60;
         wp->sfxFadeTime = 60;
@@ -10171,7 +10177,7 @@ u32 psndBGMChkSilent(s32 id) {
     if (bgm->listId == 0xFFFFFFFF) {
         return FALSE;
     }
-    return bgm->fade.dipState == 8;
+    return bgm->fade.dipState == PSND_DIP_STATE_DOWN;
 }
 
 /** Exempts BGM channel id from the master BGM volume: scope > 0 for good, < 0 not at all, 0 for 30 more frames. */
@@ -10281,10 +10287,10 @@ void psndSFXMain(void) {
             }
         }
     }
-    if (p->sfxFadeState == 2) {
+    if (p->sfxFadeState == PSND_SFX_FADE_OUT) {
         p->sfxFadeTime--;
         if (p->sfxFadeTime <= 0) {
-            p->sfxFadeState = 0;
+            p->sfxFadeState = PSND_SFX_FADE_IDLE;
         }
         fade = (p->sfxFadeTime * 127) / p->sfxFadeMax;
     }
@@ -10826,12 +10832,12 @@ static inline u8 psndEnvVolume(PaperSoundEnv* e, PaperSoundWork* p) {
     if (f == NULL) {
         return e->volume * p->envVolume / 100;
     }
-    if (f->dipState == 0) {
+    if (f->dipState == PSND_DIP_STATE_IDLE) {
         v = 0x7f;
     } else {
         v = f->dipTime * 0x7f / f->dipTimeMax;
     }
-    if (f->state == 0) {
+    if (f->state == PSND_FADE_STATE_IDLE) {
         return p->envVolume * (e->volume * v / 127) / 100;
     }
     w = f->timeMax * (e->volume * v / 127) / f->time;
@@ -10875,12 +10881,12 @@ static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
     if (f == NULL) {
         *vol = e->volume * p->envVolume / 100;
     } else {
-        if (f->dipState == 0) {
+        if (f->dipState == PSND_DIP_STATE_IDLE) {
             dip = 0x7F;
         } else {
             dip = f->dipTime * 0x7F / f->dipTimeMax;
         }
-        if (f->state == 0) {
+        if (f->state == PSND_FADE_STATE_IDLE) {
             *vol = p->envVolume * (e->volume * dip / 127) / 100;
         } else {
             s16 faded = f->timeMax * (e->volume * dip / 127) / f->time;
@@ -11162,9 +11168,9 @@ void psndENVMain(void) {
                 }
                 if (psnd.fade[i].state == 4 && psnd.fade[i].timeMax > 0)
                     (psnd.fade[i].timeMax)--;
-                if (psnd.fade[i].dipState == 8 && psnd.fade[i].dipTime > psnd.fade[i].dipTimeMax * psnd.fade[i].dipPercent / 100)
+                if (psnd.fade[i].dipState == PSND_DIP_STATE_DOWN && psnd.fade[i].dipTime > psnd.fade[i].dipTimeMax * psnd.fade[i].dipPercent / 100)
                     (psnd.fade[i].dipTime)--;
-                if (psnd.fade[i].dipState == 0x10) {
+                if (psnd.fade[i].dipState == PSND_DIP_STATE_UP) {
                     if (psnd.fade[i].dipTime < psnd.fade[i].dipTimeMax)
                         (psnd.fade[i].dipTime)++;
                     else
@@ -11238,16 +11244,16 @@ void psndENVMain(void) {
             if (psnd.fade[i].state == 4 && psnd.fade[i].timeMax > 0) {
                 psnd.fade[i].timeMax--;
             }
-            if (psnd.fade[i].dipState == 8 &&
+            if (psnd.fade[i].dipState == PSND_DIP_STATE_DOWN &&
                 psnd.fade[i].dipTime > psnd.fade[i].dipTimeMax * psnd.fade[i].dipPercent / 100) {
                 psnd.fade[i].dipTime--;
             }
-            if (psnd.fade[i].dipState == 0x10) {
+            if (psnd.fade[i].dipState == PSND_DIP_STATE_UP) {
                 if (psnd.fade[i].dipTime < psnd.fade[i].dipTimeMax) {
                     psnd.fade[i].dipTime++;
                 } else {
 #endif
-                    psnd.fade[i].dipState = 0;
+                    psnd.fade[i].dipState = PSND_DIP_STATE_IDLE;
                 }
             }
 #if VERSION <= VERSION_DEMO_US

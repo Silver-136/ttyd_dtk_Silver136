@@ -5,6 +5,7 @@
 #include "battle/battle.h"
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
+#include "system.h"
 
 /** Sine of an angle in degrees, used throughout battle code for motion and bobbing. */
 f32 sinfd(f32 deg) {
@@ -63,32 +64,32 @@ f32 intpl_sub(s32 mode, f32 start, f32 end, s32 cur, s32 steps) {
     f32 c;
 
     switch (mode) {
-        case 0:
+        case EASING_LINEAR:
             return start + (cur * (end - start)) / steps;
-        case 1:
+        case EASING_QUADRATIC_IN:
             return start + ((end - start) * (cur * cur)) / (steps * steps);
-        case 2:
+        case EASING_CUBIC_IN:
             return start + ((end - start) * (cur * (cur * cur))) / (steps * (steps * steps));
-        case 3:
+        case EASING_QUARTIC_IN:
             return start + ((end - start) * (cur * (cur * (cur * cur)))) / (steps * (steps * (steps * steps)));
-        case 7:
+        case EASING_WAVE_SHRINKING:
             c = cos(4.0f * (3.141592f * ((f32)cur / (f32)steps)));
             diff = end - start;
             return end - ((f32)(steps - cur) * ((f32)(steps - cur) * (diff * c))) / ((f32)steps * (f32)steps);
-        case 8:
+        case EASING_WAVE_SHRINKING_FASTER:
             c = cos(4.0f * (3.141592f * ((f32)(cur * cur) / (f32)steps)) / 15.0f);
             diff = end - start;
             return end - ((f32)(steps - cur) * ((f32)(steps - cur) * (diff * c))) / ((f32)steps * (f32)steps);
-        case 4:
+        case EASING_QUADRATIC_OUT:
             diff = end - start;
             return (start + diff) - (diff * ((steps - cur) * (steps - cur))) / (steps * steps);
-        case 5:
+        case EASING_CUBIC_OUT:
             diff = end - start;
             return (start + diff) - (diff * ((steps - cur) * ((steps - cur) * (steps - cur)))) / (steps * (steps * steps));
-        case 6:
+        case EASING_QUARTIC_OUT:
             diff = end - start;
             return (start + diff) - (diff * ((steps - cur) * ((steps - cur) * ((steps - cur) * (steps - cur))))) / (steps * (steps * (steps * steps)));
-        case 10:
+        case EASING_BOUNCE_SHRINKING:
             c = cos(4.0f * (3.141592f * ((f32)(cur * cur) / (f32)steps)) / 40.0f);
             rest = steps - cur;
             c = ((f32)rest * ((f32)rest * c)) / ((f32)steps * (f32)steps);
@@ -96,15 +97,15 @@ f32 intpl_sub(s32 mode, f32 start, f32 end, s32 cur, s32 steps) {
                 c = -c;
             }
             return end - c * (end - start);
-        case 11:
+        case EASING_SINE_IN_OUT:
             c = cos(3.141592f * (f32)cur / (f32)steps);
             diff = end - start;
             return start + diff * (1.0f - c) / 2.0f;
-        case 12:
+        case EASING_SINE_OUT:
             c = sin(1.570796f * (f32)cur / (f32)steps);
             diff = end - start;
             return start + diff * c;
-        case 13:
+        case EASING_SINE_IN:
             c = cos(1.570796f * (f32)cur / (f32)steps);
             diff = end - start;
             return start + diff * (1.0f - c);

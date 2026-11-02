@@ -113,6 +113,15 @@ typedef enum AcGaugeTimingFlags {
     AC_GAUGE_TIMING_FLAG_CYCLE_PAUSE = (1 << 1),  // gauge blanked for 15 frames after each cycle
 } AcGaugeTimingFlags;
 
+// BattleActions.acState: shared steps of every ac_*.c main callback. From AC_STATE_RUN on each command has its own
+// steps (AC_STATE_RUN + n), the last one clears the callbacks.
+enum {
+    AC_STATE_INIT = 0,
+    AC_STATE_WAIT_START = 99,  // set up by the main callback; BattleActionCommandStart moves it on
+    AC_STATE_START = 100,      // BattleActionCommandStart
+    AC_STATE_RUN = 1000,
+};
+
 typedef struct BattleActions {
     struct BattleUnit* acUnit;      // 0x0
     s32 setupFlags;                  // 0x4, BattleActionCommandSetup a4; bit0: auto-play while confused
@@ -149,6 +158,15 @@ void BattleActionCommandDeclareACResult(BattleWork* work, BattleWeapon* weapon, 
 
 void BattleActionCommandStart(BattleWork* work);
 void BattleActionCommandStop(BattleWork* work);
+// BattleActionCommandCheckDefence: ActionCommands.defenseResult (3 is never set; battle_damage.c tests > 3 for "guarded")
+enum {
+    GUARD_RESULT_NONE = 0,
+    GUARD_RESULT_MASHED = 1,   // two or more presses in the last 15 frames
+    GUARD_RESULT_NO_PRESS = 2,
+    GUARD_RESULT_GUARD = 4,
+    GUARD_RESULT_SUPERGUARD = 5,
+};
+
 s32 BattleActionCommandGetDefenceResult(void);
 void BattleActionCommandResetDefenceResult(void);
 s32 BattleActionCommandGetDifficulty(BattleWork* work);

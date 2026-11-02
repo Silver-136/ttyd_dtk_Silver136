@@ -124,7 +124,7 @@ static void effBombMain(EffectEntry* effect) {
             work->scaleY = scale_dt2[frame * 3 + 2] / 100.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBombDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBombDisp, effect);
 }
 
 /** Draws the eight rays as stretched sprites, rotated by their angle around the blast centre. */

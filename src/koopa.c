@@ -43,9 +43,9 @@ extern f32 marioJumpData[];
  */
 f32 kpaWidthDat[4] = {20.0f, 60.0f, 84.0f, 186.0f};
 f32 baseScaleTbl[4] = {0.3f, 1.0f, 1.4f, 3.1f};
-s32 kpaPauseSeTable[28] = {0x10C, 0x10D, 0x10E, 0x10F, 0x111, 0x112, 0x113, 0x114, 0x116, 0x117,
-                           0x118, 0x119, 0x11B, 0x11E, 0x11F, 0x120, 0x122, 0x123, 0x124, 0x125,
-                           0x127, 0x128, 0x129, 0x12A, 0x12C, 0x12D, 0x12E, 0x12F};
+s32 kpaPauseSeTable[28] = {PSND_SFX_VOICE_KOOPA_ANGRY1_1, PSND_SFX_VOICE_KOOPA_ANGRY1_2, PSND_SFX_VOICE_KOOPA_ANGRY2_1, PSND_SFX_VOICE_KOOPA_ANGRY2_2, PSND_SFX_VOICE_KOOPA_HAPPY1_1, PSND_SFX_VOICE_KOOPA_HAPPY1_2, PSND_SFX_VOICE_KOOPA_HAPPY2_1, PSND_SFX_VOICE_KOOPA_HAPPY2_2, PSND_SFX_VOICE_KOOPA_LAUGH1_1, PSND_SFX_VOICE_KOOPA_LAUGH1_2,
+                           PSND_SFX_VOICE_KOOPA_LAUGH2_1, PSND_SFX_VOICE_KOOPA_LAUGH2_2, PSND_SFX_VOICE_KOOPA_QUESTION1, PSND_SFX_VOICE_KOOPA_SATIATED1_2, PSND_SFX_VOICE_KOOPA_SATIATED2_1, PSND_SFX_VOICE_KOOPA_SATIATED2_2, PSND_SFX_VOICE_KOOPA_SURPRISED1_1, PSND_SFX_VOICE_KOOPA_SURPRISED1_2, PSND_SFX_VOICE_KOOPA_SURPRISED2_1, PSND_SFX_VOICE_KOOPA_SURPRISED2_2,
+                           PSND_SFX_VOICE_KOOPA_THINK1_1, PSND_SFX_VOICE_KOOPA_THINK1_2, PSND_SFX_VOICE_KOOPA_THINK2_1, PSND_SFX_VOICE_KOOPA_THINK2_2, PSND_SFX_VOICE_KOOPA_VEXATIOUS1_1, PSND_SFX_VOICE_KOOPA_VEXATIOUS1_2, PSND_SFX_VOICE_KOOPA_VEXATIOUS2_1, PSND_SFX_VOICE_KOOPA_VEXATIOUS2_2};
 static EffectEntry* fireefp;
 // FAKE: never used; pads .sbss to the 8 bytes of the original section; removing it changes the object
 static u8* fireefp_pad;
@@ -729,17 +729,17 @@ s32 kpaFireAttackCheck(void) {
  */
 void kpaAttackStart(void) {
     MarioWork* mp = marioGetPtr();
-    if (mp->kpaWork->attackState == 0) {
+    if (mp->kpaWork->attackState == KPA_ATTACK_NONE) {
         marioChgMot(MARIO_MOTION_STAY);
-        mp->kpaWork->attackState = 1;
+        mp->kpaWork->attackState = KPA_ATTACK_START;
     }
 }
 
 /** Starts the fire breath attack without changing motion (state 30), used while moving or jumping. */
 void kpaAttackStart2(void) {
     KpaWork* w = marioGetPtr()->kpaWork;
-    if (w->attackState == 0) {
-        w->attackState = 30;
+    if (w->attackState == KPA_ATTACK_NONE) {
+        w->attackState = KPA_ATTACK_SCRIPTED_START;
     }
 }
 
@@ -751,41 +751,41 @@ void kpaAttackStart2(void) {
 void kpaFireAttack(void) {
     MarioWork* mario = marioGetPtr();
     switch (mario->kpaWork->attackState) {
-    case 1:
+    case KPA_ATTACK_START:
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->airTimer = 0;
         mario->kpaWork->fireRate = mario->kpaWork->level == 0 ? 12 : 8;
         mario->kpaWork->fireCount = 0;
         mario->kpaWork->attackTimer = 0;
-        mario->kpaWork->attackState = 20;
+        mario->kpaWork->attackState = KPA_ATTACK_WINDUP_POSE;
         if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             mario->baseSpeed = 0.0f;
             mario->kpaSpeed = 0.0f;
         }
-    case 20:
+    case KPA_ATTACK_WINDUP_POSE:
         kpaChgPose("KPA_A_1A", "KPA2_A_1A");
         mario->kpaWork->attackTimer = 6;
-        mario->kpaWork->attackState = 21;
+        mario->kpaWork->attackState = KPA_ATTACK_WINDUP;
         break;
-    case 21:
+    case KPA_ATTACK_WINDUP:
         if (--mario->kpaWork->attackTimer > 0) {
             break;
         }
         kpaChgPose("KPA_A_1B", "KPA2_A_1B");
         mario->kpaWork->attackTimer = 8;
-        mario->kpaWork->attackState = 22;
+        mario->kpaWork->attackState = KPA_ATTACK_FIRE_START;
         kpaFireSEOn();
         break;
-    case 22:
+    case KPA_ATTACK_FIRE_START:
         kpaFireEntry(mario->position);
         if (--mario->kpaWork->attackTimer > 0) {
             break;
         }
         mario->kpaWork->attackTimer = sysMsec2Frame(400);
         kpaChgPose("KPA_A_1C", "KPA2_A_1C");
-        mario->kpaWork->attackState = 23;
+        mario->kpaWork->attackState = KPA_ATTACK_FIRE_HOLD;
         break;
-    case 23:
+    case KPA_ATTACK_FIRE_HOLD:
         kpaFireEntry(mario->position);
         if (--mario->kpaWork->attackTimer > 0) {
             break;
@@ -797,52 +797,52 @@ void kpaFireAttack(void) {
             break;
         }
         kpaChgPose("KPA_A_1D", "KPA2_A_1D");
-        mario->kpaWork->attackState = 24;
+        mario->kpaWork->attackState = KPA_ATTACK_FINISH;
         mario->kpaWork->attackTimer = 6;
         kpaFireSEOff();
         break;
-    case 24:
+    case KPA_ATTACK_FINISH:
         if (--mario->kpaWork->attackTimer > 0) {
             break;
         }
-        mario->kpaWork->attackState = 0;
+        mario->kpaWork->attackState = KPA_ATTACK_NONE;
         kpaChgPose("KPA_S_1", "KPA2_S_1");
         break;
     }
     switch (mario->kpaWork->attackState) {
-    case 30:
+    case KPA_ATTACK_SCRIPTED_START:
         mario->kpaWork->fireRate = mario->kpaWork->level == 0 ? 12 : 8;
         mario->kpaWork->fireCount = 0;
         mario->kpaWork->attackTimer = 0;
-        mario->kpaWork->attackState = 40;
+        mario->kpaWork->attackState = KPA_ATTACK_SCRIPTED_WINDUP_POSE;
         if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             mario->baseSpeed = 0.0f;
             mario->kpaSpeed = 0.0f;
         }
-    case 40:
+    case KPA_ATTACK_SCRIPTED_WINDUP_POSE:
         kpaChgPose("KPA_A_1A", "KPA2_A_1A");
         mario->kpaWork->attackTimer = 6;
-        mario->kpaWork->attackState = 41;
+        mario->kpaWork->attackState = KPA_ATTACK_SCRIPTED_WINDUP;
         break;
-    case 41:
+    case KPA_ATTACK_SCRIPTED_WINDUP:
         if (--mario->kpaWork->attackTimer > 0) {
             break;
         }
         kpaChgPose("KPA_A_1B", "KPA2_A_1B");
         mario->kpaWork->attackTimer = 8;
-        mario->kpaWork->attackState = 42;
+        mario->kpaWork->attackState = KPA_ATTACK_SCRIPTED_FIRE_START;
         kpaFireSEOn();
         break;
-    case 42:
+    case KPA_ATTACK_SCRIPTED_FIRE_START:
         kpaFireEntry(mario->position);
         if (--mario->kpaWork->attackTimer > 0) {
             break;
         }
         mario->kpaWork->attackTimer = sysMsec2Frame(400);
         kpaChgPose("KPA_A_1C", "KPA2_A_1C");
-        mario->kpaWork->attackState = 43;
+        mario->kpaWork->attackState = KPA_ATTACK_SCRIPTED_FIRE_HOLD;
         break;
-    case 43:
+    case KPA_ATTACK_SCRIPTED_FIRE_HOLD:
         kpaFireEntry(mario->position);
         if (--mario->kpaWork->attackTimer > 0) {
             break;
@@ -854,15 +854,15 @@ void kpaFireAttack(void) {
             break;
         }
         kpaChgPose("KPA_A_1D", "KPA2_A_1D");
-        mario->kpaWork->attackState = 44;
+        mario->kpaWork->attackState = KPA_ATTACK_SCRIPTED_FINISH;
         mario->kpaWork->attackTimer = 6;
         kpaFireSEOff();
         break;
-    case 44:
+    case KPA_ATTACK_SCRIPTED_FINISH:
         if (--mario->kpaWork->attackTimer > 0) {
             break;
         }
-        mario->kpaWork->attackState = 0;
+        mario->kpaWork->attackState = KPA_ATTACK_NONE;
         switch ((u16)mario->currMotionId) {
         case MARIO_MOTION_STAY:
             kpaChgPose("KPA_S_1", "KPA2_S_1");
@@ -884,13 +884,13 @@ void kpaFireAttack(void) {
 /** Ends any fire attack at once and stops its sound. */
 void kpaCancelAttackMode(void) {
     KpaWork* w = marioGetPtr()->kpaWork;
-    w->attackState = 0;
+    w->attackState = KPA_ATTACK_NONE;
     kpaFireSEOff();
 }
 
 /** TRUE while any fire attack state is active. */
 s32 kpaGetAttackMode(void) {
-    return marioGetPtr()->kpaWork->attackState != 0;
+    return marioGetPtr()->kpaWork->attackState != KPA_ATTACK_NONE;
 }
 
 /** Removes the fire breath effect and stops its sound. Called by the kpa map scripts. */

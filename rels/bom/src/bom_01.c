@@ -537,7 +537,7 @@ s32 sight(EventEntry* event, BOOL isFirstCall) {
         return EVT_RETURN_DONE;
     }
     if (sight_wp->dir != 5) {
-        dispEntry(CAMERA_2D, 800.0f, 0, disp_sight, NULL);
+        dispEntry(CAMERA_2D, 800.0f, DISP_MODE_OPAQUE, disp_sight, NULL);
     }
     return EVT_RETURN_BLOCK;
 }
@@ -910,7 +910,7 @@ static void ext_init(void) {
     f32 angle;
     f32 dist;
 
-    lp = smartAlloc(sizeof(BomWork), 1);
+    lp = smartAlloc(sizeof(BomWork), SMART_GROUP_MAP);
     wp = lp->address;
     memset(wp, 0, sizeof(BomWork));
     wp->count = extGetPoseNum();
@@ -1096,7 +1096,7 @@ static void ext_dispent(void) {
     BomWork* wp = lp->address;
 
     if (!(wp->flags & 1)) {
-        dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp, NULL);
     }
 }
 
@@ -1404,7 +1404,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_msg_print, 0, STRING("stg7_bom_63"), 0, STRING("me"))
     WAIT_MS(300)
-    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos, 0, 10, 0, 500)
     END_INLINE_EVENT
@@ -1510,9 +1510,9 @@ static EVT_BEGIN(evt_taihou)
     // The mayor orders positions, and the crew answer (stg7_bom_66 and 67).
     CALL(evt_msg_print, 0, STRING("stg7_bom_66"), 0, STRING("me"))
     SET_VALUE(GF(0), 0)
-    CALL(evt_npc_flag_onoff, 0, STRING("\203z\203\217\203C\203g"), NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 0, STRING("\203y\203\223\203g\203\212\203b\203g"), NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 0, STRING("\203X\203\211\203\212\201["), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 0, STRING("\203z\203\217\203C\203g"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 0, STRING("\203y\203\223\203g\203\212\203b\203g"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 0, STRING("\203X\203\211\203\212\201["), NPC_FLAG_TALK_POSE)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_print, 0, STRING("stg7_bom_67"), 0, STRING("\203z\203\217\203C\203g"))
     END_INLINE_EVENT
@@ -1575,9 +1575,9 @@ static EVT_BEGIN(evt_taihou)
         WAIT_FRAMES(1)
         GOTO(2)
     END_IF
-    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\217\203C\203g"), NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203y\203\223\203g\203\212\203b\203g"), NPC_FLAG_TALK_ANIM)
-    CALL(evt_npc_flag_onoff, 1, STRING("\203X\203\211\203\212\201["), NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203z\203\217\203C\203g"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203y\203\223\203g\203\212\203b\203g"), NPC_FLAG_TALK_POSE)
+    CALL(evt_npc_flag_onoff, 1, STRING("\203X\203\211\203\212\201["), NPC_FLAG_TALK_POSE)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), -50, -200, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_move_position, STRING("\203z\203\217\203C\203g"), -35, -260, 0, FLOAT(80.0f), 1)
@@ -2369,7 +2369,7 @@ static EVT_BEGIN(musume_a_entry)
     CALL(evt_npc_entry, STRING("\202R\220l\226\272\202`"), STRING("c_dance_r"))
     CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202`"), STRING("\227x\202\350\216q"))
     CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202`"), 370, 5, -120)
-    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202`"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202`"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
     CALL(evt_npc_change_interrupt, STRING("\202R\220l\226\272\202`"), 6, PTR(musume_talk))
     RETURN
 EVT_END()
@@ -2382,7 +2382,7 @@ static EVT_BEGIN(musume_b_entry)
     CALL(evt_npc_entry, STRING("\202R\220l\226\272\202a"), STRING("c_dance_p"))
     CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202a"), STRING("\227x\202\350\216q\203s\203\223\203N"))
     CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202a"), 400, 5, -150)
-    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202a"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202a"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
     CALL(evt_npc_change_interrupt, STRING("\202R\220l\226\272\202a"), 6, PTR(musume_talk))
     RETURN
 EVT_END()
@@ -2395,7 +2395,7 @@ static EVT_BEGIN(musume_c_entry)
     CALL(evt_npc_entry, STRING("\202R\220l\226\272\202b"), STRING("c_dance_k"))
     CALL(evt_npc_set_tribe, STRING("\202R\220l\226\272\202b"), STRING("\227x\202\350\216q\211\251\227\316"))
     CALL(evt_npc_set_position, STRING("\202R\220l\226\272\202b"), 430, 5, -100)
-    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202b"), NPC_FLAG_MOVE_ANIM | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("\202R\220l\226\272\202b"), NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_TALK_POSE)
     CALL(evt_npc_change_interrupt, STRING("\202R\220l\226\272\202b"), 6, PTR(musume_talk))
     RETURN
 EVT_END()
@@ -2511,7 +2511,7 @@ s32 taihou_r(EventEntry* event, BOOL isFirstCall) {
 static void depthDisp(CameraId camera, void* param) {
     f32 amp = evtGetValue(NULL, GW(5)) / 100.0f;
     CameraEntry* cam = camGetPtr(camera);
-    smartEntry* buf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGB565, GX_FALSE, 0), 3);
+    smartEntry* buf = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP);
     GXTexObj obj;
     Mtx mtx;
     f32 a;
@@ -2579,7 +2579,7 @@ static void depthDisp(CameraId camera, void* param) {
 
 /** Script helper: queues depthDisp on the 2D camera and keeps blocking, so the blur runs every frame. */
 static s32 depth(EventEntry* event, BOOL isFirstCall) {
-    dispEntry(CAMERA_2D, 1000.0f, 0, depthDisp, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, depthDisp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -2628,7 +2628,7 @@ void ext_init_minnnanokoe(void) {
     s32 x;
     s32 z;
 
-    lp = smartAlloc(sizeof(BomWork), 1);
+    lp = smartAlloc(sizeof(BomWork), SMART_GROUP_MAP);
     wp = lp->address;
     memset(wp, 0, sizeof(BomWork));
     wp->count = extGetPoseNum();
@@ -2703,7 +2703,7 @@ void ext_disp_minnnanokoe(CameraId camera, void* param) {
 
 /** Queues ext_disp_minnnanokoe for the 3D camera each frame. */
 void ext_dispent_minnnanokoe(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, ext_disp_minnnanokoe, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, ext_disp_minnnanokoe, NULL);
 }
 
 /**

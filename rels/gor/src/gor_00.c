@@ -780,7 +780,7 @@ static EVT_BEGIN(marco_talk)
         CASE_EQUAL(STG4_33_MEET_BOBBERY)
         IF_INT_EQUAL(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 0)
             CALL(evt_msg_print, 0, STRING("mac_4_045"), 0, STRING("me"))
-            ELSE
+        ELSE
             CALL(evt_msg_print, 0, STRING("mac_4_045_01"), 0, STRING("me"))
         END_IF
 
@@ -3842,7 +3842,7 @@ static USER_FUNC(make_itemsel_table) {
     itemsel_table_ram = _mapAlloc((MAX_HELD_ITEMS + 1) * sizeof(s32));
     p = itemsel_table_ram;
     count = 0;
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < MAX_HELD_ITEMS; i++) {
         s32 item = pouch->heldItems[i];
 
         if (item >= ITEM_SHROOM_FRY && item < ITEM_AUDIENCE_CAN) {
@@ -4914,8 +4914,8 @@ EVT_END()
 static EVT_BEGIN(mony_peton_event)
     CALL(evt_msg_print, 0, STRING("mac_5_038"), 0, STRING("モニー"))
     CALL(evt_msg_print, 0, STRING("mac_5_039"), 0, STRING("ピートン"))
-    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_INTANGIBLE)
-    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_WALL_COLLISION | NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_ry, STRING("モニー"), 270)
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
@@ -5340,7 +5340,7 @@ EVT_BEGIN(gor_00_koopa_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_15_08_BOWSER_ROGUEPORT_DOCK)
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
-    CALL(evt_fade_entry, 6, 300, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT_3D, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(GF(1), 1)
     WAIT_MS(2000)
@@ -5930,16 +5930,16 @@ static HitDamageReturn dmgRetPoint[] = {
 
 /**
  * Opens the chest mobj_box00 and gives Mario the HP Drain badge (ITEM_HP_DRAIN_BADGE;
- * JP and later releases add ITEM_FLAG_BADGE_RETURN).
+ * JP and later releases add ITEM_FLAG_LOST_BADGE_TO_SHOP).
  */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_HP_DRAIN_BADGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
-    CALL(evt_item_flag_on, STRING("item00"), 258)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
 #endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))

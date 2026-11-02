@@ -107,7 +107,7 @@ void effPuniBalloonMain(EffectEntry* effect) {
         work->velocity.z *= 0.98f;
         work->scale *= 0.9f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effPuniBalloonDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effPuniBalloonDisp, effect);
 }
 
 /** Draw callback: dispatches to balloon_0 (the balloon) or balloon_1 (the burst) by type. */

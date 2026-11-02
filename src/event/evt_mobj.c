@@ -891,7 +891,7 @@ static s32 mobj_rideswitch_orange(MapObjectEntry* mobj) {
         case 0:
             if (mobj->flags & MOBJ_FLAG_HIT) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
-                psndSFXOn_3D((const char*)0x1d7, &mobj->position);
+                psndSFXOn_3D((const char*)PSND_SFX_MOBJ_RIDE_SWITCH_ON5, &mobj->position);
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
                 mobj->state = 1;
             }
@@ -959,7 +959,7 @@ static s32 mobj_rideswitch_green(MapObjectEntry* mobj) {
         case 0:
             if (mobj->flags & MOBJ_FLAG_HIT) {
                 mobjRunEvent(mobj, (s32*)mobj->event);
-                psndSFXOn_3D((const char*)0x1d5, &mobj->position);
+                psndSFXOn_3D((const char*)PSND_SFX_MOBJ_RIDE_SWITCH_ON3, &mobj->position);
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
                 mobj->state = 1;
             }
@@ -984,7 +984,7 @@ static s32 mobj_rideswitch_green(MapObjectEntry* mobj) {
                 if (!(mobj->flags & MOBJ_FLAG_HIT)) {
                     mobj->state = 3;
                     animPoseSetAnim(mobj->poseId, "A_2", 1);
-                    psndSFXOn_3D((const char*)0x1d6, &mobj->position);
+                    psndSFXOn_3D((const char*)PSND_SFX_MOBJ_RIDE_SWITCH_ON4, &mobj->position);
                 } else {
                     mobj->flags &= ~MOBJ_FLAG_HIT;
                 }
@@ -2838,7 +2838,7 @@ static s32 mobj_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
         case 0:
             if (mobj->flags & MOBJ_FLAG_HIT) {
-                psndSFXOn_3D((const char*)0x1b7, &mobj->position);
+                psndSFXOn_3D((const char*)PSND_SFX_MOBJ_BLOCK_UNBREAK1, &mobj->position);
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
                 mobj->flags &= ~MOBJ_FLAG_HIT;
                 mobj->state++;
@@ -3484,9 +3484,9 @@ s32 mobj_breaking_floor(MapObjectEntry* mobj) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
 #if VERSION <= VERSION_DEMO_US
-            psndSFXOn_3D(SFX_NAME_WORD(0x1E8), &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BREAK_FLOOR1), &mobj->position);
 #else
-            psndSFXOn_3D(SFX_NAME_WORD(0x1E8 | PSND_SFX_KEEP), &mobj->position);
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BREAK_FLOOR1 | PSND_SFX_KEEP), &mobj->position);
 #endif
             animPoseSetAnim(mobj->poseId, "A_1", 1);
             if ((u32)mobj->event != 0U) {
@@ -3629,7 +3629,7 @@ void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     sysWaitDrawSync();
     hh = ((u32)width >> 1) & 0x7fff;
     ww = ((u32)height >> 1) & 0x7fff;
-    mobj->paperTexData = smartAlloc(GXGetTexBufferSize(hh, ww, GX_TF_RGBA8, 0, 0), 3);
+    mobj->paperTexData = smartAlloc(GXGetTexBufferSize(hh, ww, GX_TF_RGBA8, 0, 0), SMART_GROUP_TEMP);
     GXSetTexCopySrc(0, 0, width, height);
     GXSetTexCopyDst(hh, ww, GX_TF_RGBA8, GX_TRUE);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
@@ -3734,12 +3734,12 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         }
         animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-        dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
         break;
     case 1:
         animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-        dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
         if (!(animPoseGetLoopTimes(mobj->poseId) < 1.0f)) {
             animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
             mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
@@ -3753,7 +3753,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         f32* joint;
         animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-        dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+        dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
         // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
         joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
         item = marioGetPtr();
@@ -3879,14 +3879,14 @@ static s32 mobj_trap_floor(MapObjectEntry* mobj) {
             if (mobj->flags & MOBJ_FLAG_HIT) {
                 evtSetValue(NULL, mobj->flagVar, 1);
                 animPoseSetAnim(mobj->poseId, "A_1", 1);
-                psndSFXOn_3D((const char*)0x1f1, &mobj->position);
+                psndSFXOn_3D((const char*)PSND_SFX_MOBJ_FLOOR_TRAP1, &mobj->position);
                 mobj->state++;
             }
             break;
         case 1:
             animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
             mobj->flags |= MOBJ_FLAG_PAPER_TEX;
-            dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
+            dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
             if (!(animPoseGetLoopTimes(mobj->poseId) < 1.0f)) {
                 animGetPtr()->poses[mobj->poseId].flags &= ~ANIM_POSE_FLAG_CHANGE_TEXTURE;
                 mobj->flags &= ~MOBJ_FLAG_PAPER_TEX;
@@ -3997,7 +3997,7 @@ static s32 mobj_breaking_rock(MapObjectEntry* mobj) {
             img->animName = "A_1";
             img->animTime = animTimeGetTime(type);
             imgSetShadow(img, 2);
-            psndSFXOn_3D((const char*)0x1cc, &mobj->position);
+            psndSFXOn_3D((const char*)PSND_SFX_MOBJ_WALL_BREAK1, &mobj->position);
             mobj->state++;
             break;
         case 2:
@@ -5240,7 +5240,7 @@ USER_FUNC(kpa_disp_pole_score_main) {
     } else {
         psw->y = 230.0f;
     }
-    dispEntry(CAMERA_3D, 0.0f, 2, kpa_disp_pole_score, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, kpa_disp_pole_score, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -5444,7 +5444,7 @@ EVT_BEGIN(kpa_move_to_toride)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("kpa_06"))
         CALL(evt_mapobj_get_position, STRING("toride"), LW(0), LW(1), LW(2))
-        ELSE
+    ELSE
         CALL(evt_mapobj_get_position, STRING("toride_"), LW(0), LW(1), LW(2))
     END_IF
     CALL(kpa_get_level, LW(6))

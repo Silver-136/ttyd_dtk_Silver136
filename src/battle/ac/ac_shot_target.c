@@ -73,7 +73,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
         sfxName = "SFX_AC_CURSOR_MOVE1";
         repeat = FALSE;
         switch (ac->acState) {
-            case 0:
+            case AC_STATE_INIT:
                 _ac_disp_init(work);
                 ac->result = AC_RESULT_RUNNING;
                 unit = BattleGetUnitPtr(work, work->actionCommands.params[SHOT_TARGET_PARAM_UNIT_ID]);
@@ -89,21 +89,21 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                 _ac_rumble_param_set(difficulty, &cw->periodX, &cw->cntX, &cw->ampX);
                 _ac_rumble_param_set(difficulty, &cw->periodY, &cw->cntY, &cw->ampY);
                 cw->sfxId = -1;
-                ac->acState = 99;
+                ac->acState = AC_STATE_WAIT_START;
                 break;
-            case 99:
+            case AC_STATE_WAIT_START:
                 break;
-            case 100:
+            case AC_STATE_START:
                 cw->frame = work->actionCommands.params[SHOT_TARGET_PARAM_START_FRAMES];
-                ac->acState = 1000;
+                ac->acState = AC_STATE_RUN;
                 cw->sfxId = psndSFXOn(sfxName);
-            case 1000:
+            case AC_STATE_RUN:
                 if (work->actionCommands.countdown > 0) {
                     work->actionCommands.countdown--;
                     ac->result = AC_RESULT_SUCCESS;
                     repeat = TRUE;
                     ac->resultCount++;
-                    ac->acState = 1001;
+                    ac->acState = AC_STATE_RUN + 1;
                     break;
                 }
                 cw->cntX--;
@@ -154,7 +154,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                         ac->result = AC_RESULT_SUCCESS;
                         ac->resultCount++;
                     }
-                    ac->acState = 1001;
+                    ac->acState = AC_STATE_RUN + 1;
                     break;
                 }
                 if (cw->frame < 0) {
@@ -164,29 +164,29 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                     } else {
                         ac->result = 0;
                     }
-                    ac->acState = 1001;
+                    ac->acState = AC_STATE_RUN + 1;
                 }
                 break;
-            case 1001:
-                ac->acState = 1002;
+            case AC_STATE_RUN + 1:
+                ac->acState = AC_STATE_RUN + 2;
                 break;
-            case 1002:
+            case AC_STATE_RUN + 2:
                 break;
-            case 1003:
+            case AC_STATE_RUN + 3:
                 cw->endTimer = 60;
-                ac->acState = 1004;
+                ac->acState = AC_STATE_RUN + 4;
                 // FAKE: sfxId compared as u32 with 0xFFFFFFFF; the plain cw->sfxId != -1 changes the object
                 if ((u32)cw->sfxId != 0xFFFFFFFF) {
                     psndSFXOff(cw->sfxId);
                 }
                 break;
-            case 1004:
+            case AC_STATE_RUN + 4:
                 cw->endTimer--;
                 if (cw->endTimer <= 0) {
-                    ac->acState = 1005;
+                    ac->acState = AC_STATE_RUN + 5;
                 }
                 break;
-            case 1005:
+            case AC_STATE_RUN + 5:
                 ac->maincb = NULL;
                 ac->dispcb = NULL;
                 ac->resultcb = NULL;
@@ -246,19 +246,19 @@ void battleAcDisp_ShotTarget(CameraId cameraId, void* param) {
     BattleACDispParams* d = &ac->disp;
 
     switch (ac->acState) {
-        case 99:
-        case 100:
-        case 1000:
-        case 1001:
-        case 1002:
+        case AC_STATE_WAIT_START:
+        case AC_STATE_START:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
+        case AC_STATE_RUN + 2:
             d->iconX = intplGetValue(EASING_QUADRATIC_OUT, -200.0f, 30.0f, 20 - d->slideTimer, 20);
             actionCommandDisp(d->iconX, d->iconY);
             if (d->slideTimer > 0) {
                 d->slideTimer--;
             }
             break;
-        case 1003:
-        case 1004:
+        case AC_STATE_RUN + 3:
+        case AC_STATE_RUN + 4:
             if (d->slideTimer >= 40) {
                 d->iconX = intplGetValue(EASING_QUADRATIC_OUT, 30.0f, -200.0f, d->slideTimer - 40, 20);
             } else {
@@ -274,7 +274,7 @@ void battleAcDisp_ShotTarget(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: stops the cursor sound and starts the 60-frame end wait. */
 void battleAcDelete_ShotTarget(BattleWork* work) {
-    work->actionCommands.acState = 1003;
+    work->actionCommands.acState = AC_STATE_RUN + 3;
 }
 
 /** Resets the display state: off screen to the left with a 20-frame slide, white colour, empty fill. */
@@ -304,10 +304,10 @@ static void actionCommandDisp(f32 x, f32 y) {
     Vec screen2;
 
     switch (ac->acState) {
-        case 100:
-        case 1000:
-        case 1001:
-        case 1002:
+        case AC_STATE_START:
+        case AC_STATE_RUN:
+        case AC_STATE_RUN + 1:
+        case AC_STATE_RUN + 2:
             cw->angle += 2.0f;
             btlGetScreenPoint(&cw->pos, &screen);
             btlDispTex4(BTL_TEX(0x42), screen, (Vec){1.0f, 1.0f, 1.0f}, (Vec){0.0f, 0.0f, 0.0f}, (GXColor){255, 255, 255, 255});

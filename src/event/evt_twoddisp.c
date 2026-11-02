@@ -76,7 +76,7 @@ USER_FUNC(twoddisp_main) {
     u32 i;
     for (i = 0; (s32)i < 100; i++) {
     }
-    dispEntry(CAMERA_2D, 1000.0f, 0, twoddisp_disp, NULL);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, twoddisp_disp, NULL);
     return EVT_RETURN_DONE;
 }
 

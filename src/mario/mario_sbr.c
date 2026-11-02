@@ -527,7 +527,7 @@ void marioGetStick(f32* dir, f32* mag) {
         return;
     }
     x = mario->wStickDir1;
-    y = ((mario->flags & MARIO_FLAG_BG_MODE) || kpaGetStageViewType() == 0) ? 0 : -mario->wStickDir2;
+    y = ((mario->flags & MARIO_FLAG_BG_MODE) || kpaGetStageViewType() == KPA_VIEW_SIDE) ? 0 : -mario->wStickDir2;
     if (yoshiGetStatus() == YOSHI_STATUS_FLUTTER) {
         y = 0;
     }
@@ -558,7 +558,7 @@ s32 marioGetMovementSpeed(void) {
     if (x == 0 && mario->wStickDir2 == 0) {
         return 0;
     }
-    if (x * x + mario->wStickDir2 * mario->wStickDir2 > 3025) {
+    if (x * x + mario->wStickDir2 * mario->wStickDir2 > STICK_DASH_MIN_SQ) {
         return 2;
     }
     return 1;

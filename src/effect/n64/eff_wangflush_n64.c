@@ -121,7 +121,7 @@ void effWangFlushMain(EffectEntry* effect) {
     sv = (f32)sin((6.2831855f * (timer * 50)) / 360.0f);
     work->flashScale = 0.5f * sv + 0.9f;
     work->flashAlpha = (s32)(144.0f + 64.0f * (f32)sin((6.2831855f * (timer * 40)) / 360.0f));
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effWangFlushDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effWangFlushDisp, effect);
 }
 
 /**

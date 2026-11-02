@@ -189,6 +189,65 @@ typedef struct BattleAudienceStar {
     u8 pad_5D[0x60 - 0x5D];
 } BattleAudienceStar;
 
+// BattleAudience.presentItemType: a landed audience throw is a gift or junk that does damage.
+enum {
+    PRESENT_ITEM_GET = 0,
+    PRESENT_ITEM_DAMAGE = 1,
+};
+
+#define AUDIENCE_MEMBER_MAX 200
+
+// BattleAudience_SetAnim ids: index into BattleAudienceMember.animTable (battle_audience_kind_data). Kinds fill only
+// the rows they use.
+typedef enum AudienceAnim {
+    AUD_ANIM_WAIT_FRONT = 0,
+    AUD_ANIM_WAIT_BACK = 1,
+    AUD_ANIM_JUMP_FRONT = 2,
+    AUD_ANIM_JUMP_BACK = 3,
+    AUD_ANIM_RAISE_BACK = 4,
+    AUD_ANIM_ITEM_ON_BACK = 5,
+    AUD_ANIM_ITEM_THROW_BACK = 6,
+    AUD_ANIM_RUN_FRONT = 7,
+    AUD_ANIM_TUMBLE_FRONT = 8,
+    AUD_ANIM_DAMAGE_FRONT = 9,
+    AUD_ANIM_SLEEP_FRONT = 10,
+    AUD_ANIM_SLEEP_BACK = 11,
+    AUD_ANIM_CONFUSE_FRONT = 12,
+    AUD_ANIM_CONFUSE_BACK = 13,
+    AUD_ANIM_SING_FRONT = 14,   // Crazy Dayzees
+    AUD_ANIM_SHELL_BACK = 15,   // Koopas
+    AUD_ANIM_IGNITE_FRONT = 16, // Bulky Bob-ombs
+    AUD_ANIM_IGNITE_BACK = 17,
+    AUD_ANIM_EAT_FRONT = 18,    // Piranha Plants
+} AudienceAnim;
+
+// BattleAudience.sounds slots, one per BattleAudienceSound* function; _L and _R by the member's side (x <= 0 is _L).
+// 3 and 12 are unused.
+typedef enum AudienceSoundSlot {
+    AUD_SOUND_BOOING = 0,
+    AUD_SOUND_CLAP = 1,
+    AUD_SOUND_NOISE = 2,
+    AUD_SOUND_CHEER_A = 4,
+    AUD_SOUND_CHEER_B = 5,
+    AUD_SOUND_WHISTLE_L = 6,
+    AUD_SOUND_WHISTLE_R = 7,
+    AUD_SOUND_CALL = 8,
+    AUD_SOUND_HAND_BEAT = 9,
+    AUD_SOUND_ITEM_THROW_L = 10,
+    AUD_SOUND_ITEM_THROW_R = 11,
+    AUD_SOUND_RUN = 13,
+    AUD_SOUND_SLEEP_L = 14,
+    AUD_SOUND_SLEEP_R = 15,
+    AUD_SOUND_ZZZ = 16,
+    AUD_SOUND_SING = 17,
+    AUD_SOUND_SHELL_L = 18,
+    AUD_SOUND_SHELL_R = 19,
+    AUD_SOUND_BOMB_IGNITE = 20,
+    AUD_SOUND_BOMB_FIRE_L = 21,
+    AUD_SOUND_BOMB_FIRE_R = 22,
+    AUD_SOUND_PAKKUN_EAT = 23,
+} AudienceSoundSlot;
+
 typedef struct BattleAudienceSound {
     s32 flags;                     // 0x0, AUD_SOUND_FLAG_PLAYING
     s32 sfxId;                     // 0x4

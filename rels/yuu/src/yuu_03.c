@@ -178,7 +178,7 @@ USER_FUNC(yuu_03_icon_monte_entry) {
         }
     }
     if (!exists) {
-        dispEntry(CAMERA_3D, 0.0f, 1, yuu_03_icon_monte_disp, yuu_03_monte_p);
+        dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, yuu_03_icon_monte_disp, yuu_03_monte_p);
     }
     return EVT_RETURN_BLOCK;
 }
@@ -590,7 +590,7 @@ USER_FUNC(evt_ryushi) {
         p->alpha = 0.7 * (255.0f * ((100.0f - d) / 100.0f) * alphaScale);
         p->scale = scale;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, ryushi_disp, NULL);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, ryushi_disp, NULL);
     return EVT_RETURN_DONE;
 }
 
@@ -830,7 +830,7 @@ EVT_BEGIN(minigame04_end)
     IF_INT_GREATER_OR_EQUAL(LW(0), 701)
         CALL(eff_call_minigame, 2, 0, 0, 500)
         WAIT_MS(4000)
-        ELSE
+    ELSE
         CALL(eff_call_minigame, 1, 0, 0, 500)
         WAIT_MS(4000)
     END_IF
@@ -856,7 +856,7 @@ EVT_BEGIN(minigame04_end)
     CALL(yuugijou_get_montemedal, LW(0))
     IF_INT_LESS(LW(0), LW(1))
         SET_VALUE(LW(0), 1)
-        ELSE
+    ELSE
         CALL(evt_msg_select, 0, STRING("sysyuu_03_00"))
     END_IF
 

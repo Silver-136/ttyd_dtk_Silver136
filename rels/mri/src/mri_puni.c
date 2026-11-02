@@ -2511,7 +2511,7 @@ void puniModeParent(PuniData* p) {
     flag = 0;
     PSVECSubtract(&p->parent->pos, &p->pos, &v);
     p->parentDist = PSVECMag(&v);
-    if (!(bero_get_BeroEXEC() & 1)) {
+    if (!(bero_get_BeroEXEC() & BERO_EXEC_BUSY)) {
         if (32.0 < __fabs(p->pos.y - p->parent->pos.y)) {
             flag = 1;
         } else if (p->parentDist > 80.0f) {
@@ -5804,7 +5804,7 @@ void puni_puni_dispent(void) {
     Vec v;
     Vec tmp;
 
-    dispEntry(CAMERA_3D, 0.0f, 1, puni_puni_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, puni_puni_disp, NULL);
     pose = puniGetPosePtr();
     for (i = 0; i < 210; i++) {
         {
@@ -5815,10 +5815,10 @@ void puni_puni_dispent(void) {
         tmp.y = (*pose->mtx)[1][3];
         tmp.z = (*pose->mtx)[2][3];
         v = tmp;
-        dispEntry(CAMERA_3D, dispCalcZ(&v), 2, puni_puni_shadow_disp, pose);
+        dispEntry(CAMERA_3D, dispCalcZ(&v), DISP_MODE_XLU, puni_puni_shadow_disp, pose);
         pose++;
     }
-    dispEntry(CAMERA_3D, 0.0f, 1, evt_icon_disp_func, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, evt_icon_disp_func, NULL);
 }
 
 /**
@@ -7337,9 +7337,9 @@ USER_FUNC(evt_puni_pera_onoff) {
     EvtWord* args = event->args;
     PuniData* p = &Punidat[evtGetValue(event, args[0])];
     if (evtGetValue(event, args[1])) {
-        p->npc->flags &= ~NPC_FLAG_ACTIVE;
+        p->npc->flags &= ~NPC_FLAG_READY;
     } else {
-        p->npc->flags |= NPC_FLAG_ACTIVE;
+        p->npc->flags |= NPC_FLAG_READY;
     }
     return EVT_RETURN_DONE;
 }
@@ -7643,7 +7643,7 @@ USER_FUNC(puni_disp_info_sub) {
     }
     packed = (count << 16) | total;
     if (Punigp->showPuniCounter && total >= 10) {
-        dispEntry(CAMERA_2D, 1000.0f, 0, puniCountDisp, (void*)packed);
+        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, puniCountDisp, (void*)packed);
     }
     return EVT_RETURN_DONE;
 }
@@ -7736,11 +7736,11 @@ EVT_BEGIN(mri_puni_position_init)
         END_IF
     END_INLINE_EVENT
     DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217\211\212\372\202\314\216\300\215s\222\206\221\322\202\277"))
-    CALL(evt_bero_exec_wait, 1)
+    CALL(evt_bero_exec_wait, BERO_EXEC_BUSY)
     LOOP(0)
         CALL(evt_puni_set_systemmode, 1)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\215\300\225W\203Z\203b\203g\221\322\202\277"))
-        CALL(evt_bero_exec_wait, 2)
+        CALL(evt_bero_exec_wait, BERO_EXEC_MARIO_MOVING)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217\254\223\256\225\250\212\326\214W\217\211\212\372\211\273"))
         DEBUG_PUT_REG(GSW (GSW_MRI_PUNI_CUR_MAP))
         DEBUG_PUT_REG(GSW (GSW_MRI_PUNI_PREV_MAP))
@@ -7756,19 +7756,19 @@ EVT_BEGIN(mri_puni_position_init)
         CALL(evt_toge_setup, LW (6), LW (7), LW (8), LW (9))
         CALL(evt_puni_set_systemmode, 2)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217I\227\271\221\322\202\277"))
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         CALL(evt_puni_set_systemmode, 3)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\216\237\202\314\216\300\215s\222\206\221\322\202\277"))
-        CALL(evt_bero_exec_wait, 1)
+        CALL(evt_bero_exec_wait, BERO_EXEC_BUSY)
         SET_VALUE(GSW (GSW_MRI_PUNI_PREV_MAP), GSW (GSW_MRI_PUNI_CUR_MAP))
         CALL(evt_bero_get_now_number, LW (10))
         CALL(evt_bero_get_info_kinddir, 4264967306, 4264967296, 4264967297, 4264967298)
         CALL(evt_bero_get_info_nextarea, 4264967306, 4264967299, 4264967300)
         IF_INT_EQUAL(LW (0), 1)
             DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\224\340\221\322\202\277"))
-            CALL(evt_bero_exec_wait, 268435456)
+            CALL(evt_bero_exec_wait, BERO_EXEC_MRI_DOOR_GO)
             DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\224\340\221\322\202\277\217I\202\355\202\350"))
-            CALL(evt_bero_exec_onoff, 1, 268435456)
+            CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MRI_DOOR_GO)
         END_IF
         IF_INT_EQUAL(LW (0), 2)
             IF_INT_NOT_EQUAL(LW (3), 0)
@@ -7777,7 +7777,7 @@ EVT_BEGIN(mri_puni_position_init)
         END_IF
         BEGIN_INLINE_EVENT
             DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\203G\203\212\203A\203`\203F\203\223\203W\222\274\221O\221\322\202\277"))
-            CALL(evt_bero_exec_wait, 8)
+            CALL(evt_bero_exec_wait, BERO_EXEC_EXIT_DONE)
             DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\203v\203j\221\260\203g\203Q\221\260SE\213\255\220\247\203I\203t"))
             CALL(evt_puni_force_se_off)
         END_INLINE_EVENT

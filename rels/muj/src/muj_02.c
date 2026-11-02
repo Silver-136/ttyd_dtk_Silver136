@@ -675,7 +675,7 @@ EVT_BEGIN(muj_02_init_evt)
 #if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         SET_VALUE(LW(0), PTR(tree_tbl_treeb_evt))
-        ELSE
+    ELSE
 #endif
     SET_VALUE(LW(0), PTR(tree_tbl))
 #if VERSION >= VERSION_US
@@ -751,6 +751,6 @@ void printCount(CameraId camera, void* param) {
  * killed).
  */
 USER_FUNC(countDisp) {
-    dispEntry(CAMERA_2D, 399.0f, 0, printCount, NULL);
+    dispEntry(CAMERA_2D, 399.0f, DISP_MODE_OPAQUE, printCount, NULL);
     return EVT_RETURN_BLOCK;
 }

@@ -82,7 +82,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
         work->baseScaleY = 0.03f * (f32)(rand() % 11) + 1.7f;
         work->angle = (f32)(rand() % 61);
         work->timer = 30;
-        angF = (f32)ang; // FAKE: early float conversion temp; (f32)ang / implicit int at use both differ
+        angF = ang; // FAKE: early float conversion temp; (f32)ang / implicit int at use both differ
         work->velY = 0.5f;
         work->accelY = -0.02f;
         work->accelY2 = 0.00005f;
@@ -141,7 +141,7 @@ void effKemuri5Main(EffectEntry* effect) {
     if (anyActive == 0) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri5Disp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri5Disp, effect);
     }
 }
 

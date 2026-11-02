@@ -202,7 +202,7 @@ EVT_BEGIN(ItemEvent_Automatic_Target)
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(8))
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(8))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(8), LW(10), LW(11))
@@ -274,7 +274,7 @@ EVT_BEGIN(ItemEvent_Recovery)
     CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(8))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(8), LW(10), LW(11))
@@ -285,7 +285,7 @@ EVT_BEGIN(ItemEvent_Recovery)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -317,7 +317,7 @@ EVT_BEGIN(ItemEvent_Support_Sub_UseDeclere)
     WAIT_MS(600)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -347,13 +347,13 @@ EVT_BEGIN(ItemEvent_GetTarget)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -374,19 +374,19 @@ EVT_BEGIN(ItemEvent_Support_Sub_Effect)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -425,13 +425,13 @@ EVT_BEGIN(ItemEvent_Support_RefreshEffect)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_GetHitPos, LW(10), LW(11), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_REST_CONDITION1"), LW(0), LW(1), LW(2), 0)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -439,7 +439,7 @@ EVT_BEGIN(ItemEvent_Support_RefreshEffect)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -458,7 +458,7 @@ EVT_END()
 BattleWeapon ItemWeaponData_CookingItem = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    0, NULL, // itemId..description
+    ITEM_NULL, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, 0, 0.0f, 0, 0, 0, 0, // baseFpCost..reserved_1B
     NULL, // hpDamageFn
@@ -827,7 +827,7 @@ EVT_BEGIN(ItemEvent_Pow_Block)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -922,13 +922,13 @@ EVT_BEGIN(ItemEvent_Pow_Block)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), PTR(&ItemWeaponData_Pow_Block), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), PTR(&ItemWeaponData_Pow_Block), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
@@ -1002,7 +1002,7 @@ EVT_BEGIN(ItemEvent_Fire_Flower_Core)
                 WAIT_FRAMES(5)
             END_LOOP
         END_SIBLING_EVENT
-        ELSE
+    ELSE
         CALL(evt_eff64, STRING(""), STRING("fireflower_n64"), 1, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(45)
@@ -1022,13 +1022,13 @@ EVT_BEGIN(ItemEvent_Fire_Flower_Core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), PTR(&ItemWeaponData_Fire_Flower), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), PTR(&ItemWeaponData_Fire_Flower), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
@@ -1110,13 +1110,13 @@ EVT_BEGIN(ItemEvent_Kaminari_Core)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -1138,13 +1138,13 @@ EVT_BEGIN(ItemEvent_Kaminari_Core)
     WAIT_MS(83)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     WAIT_MS(167)
@@ -1153,7 +1153,7 @@ EVT_BEGIN(ItemEvent_Kaminari_Core)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -1173,7 +1173,7 @@ EVT_BEGIN(ItemEvent_Kaminari)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -1410,13 +1410,13 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi_Core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
@@ -1497,7 +1497,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -1525,13 +1525,13 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -1547,7 +1547,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     ADD(LW(2), 20)
     IF_INT_GREATER_OR_EQUAL(LW(5), 0)
         CALL(evt_eff, 0, STRING("ibuki"), 0, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_eff, 0, STRING("ibuki"), 1, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
     END_IF
     WAIT_MS(500)
@@ -1562,19 +1562,19 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -1643,7 +1643,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -1690,13 +1690,13 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -1710,19 +1710,19 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -1782,7 +1782,7 @@ EVT_BEGIN(ItemEvent_Teresano_Fuku)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -1806,13 +1806,13 @@ EVT_BEGIN(ItemEvent_Teresano_Fuku)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -1824,19 +1824,19 @@ EVT_BEGIN(ItemEvent_Teresano_Fuku)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -2066,7 +2066,7 @@ EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(evt_eff, 0, STRING("sheep"), 0, LW(0), LW(1), 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(2), 15)
         CALL(evt_eff, 0, STRING("sheep"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -2156,13 +2156,13 @@ EVT_BEGIN(ItemEvent_Stop_Watch_Core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
@@ -2183,7 +2183,7 @@ EVT_BEGIN(ItemEvent_Stop_Watch)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -2408,7 +2408,7 @@ EVT_BEGIN(ItemEvent_Suitooru)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -2432,13 +2432,13 @@ EVT_BEGIN(ItemEvent_Suitooru)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -2450,13 +2450,13 @@ EVT_BEGIN(ItemEvent_Suitooru)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
@@ -2471,7 +2471,7 @@ EVT_BEGIN(ItemEvent_Suitooru)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -2529,7 +2529,7 @@ EVT_BEGIN(ItemEvent_Teki_Kyouka)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -2937,13 +2937,13 @@ EVT_BEGIN(ItemEvent_Irekaeeru)
         IF_INT_EQUAL(LW(8), 0)
             CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
             SWITCH(LW(5))
-                CASE_EQUAL(3)
+                CASE_EQUAL(PRECHECK_LUCKY)
                 CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-                CASE_EQUAL(6)
+                CASE_EQUAL(PRECHECK_DODGY)
                 CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-                CASE_EQUAL(2)
+                CASE_EQUAL(PRECHECK_MISS)
                 CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-                CASE_EQUAL(1)
+                CASE_EQUAL(PRECHECK_HIT)
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
             END_SWITCH
         END_IF
@@ -3342,7 +3342,7 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
     CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(8))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(8), LW(10), LW(11))
@@ -3353,7 +3353,7 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -3375,10 +3375,10 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
         CALL(evt_sub_random, 100, LW(0))
         IF_INT_LESS(LW(0), 40)
             SET_VALUE(LW(8), PTR(&ItemWeaponData_FirstLovePuddingBiribiri))
-            ELSE
+        ELSE
             IF_INT_LESS(LW(0), 80)
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_FirstLovePuddingTrans))
-                ELSE
+            ELSE
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_FirstLovePuddingSleep))
             END_IF
         END_IF
@@ -3386,10 +3386,10 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
         CALL(evt_sub_random, 100, LW(0))
         IF_INT_LESS(LW(0), 40)
             SET_VALUE(LW(8), PTR(&ItemWeaponData_PeachTaltBiribiri))
-            ELSE
+        ELSE
             IF_INT_LESS(LW(0), 80)
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_PeachTaltDodge))
-                ELSE
+            ELSE
                 SET_VALUE(LW(8), PTR(&ItemWeaponData_PeachTaltSleep))
             END_IF
         END_IF
@@ -3402,13 +3402,13 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
     SET_VALUE(LW(12), LW(8))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL_CHILD(PTR(_return_home_event))
@@ -4209,7 +4209,7 @@ BattleWeapon ItemWeaponData_FutarideForever = {
 BattleWeapon ItemWeaponData_FireCandy = {
     NULL, 0, // name..icon
     {0}, // pad_06
-    228, // itemId
+    ITEM_FIRE_POP, // itemId
     NULL, // description
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
@@ -4256,7 +4256,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetFriendBelong, UNIT_ID_SELF, LW(0))
-    IF_INT_EQUAL(LW(0), 0)
+    IF_INT_EQUAL(LW(0), ALLIANCE_PLAYER)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_WALK)
@@ -4288,13 +4288,13 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
         END_IF
         CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
             CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
@@ -4315,12 +4315,12 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHitPos, LW(10), LW(11), LW(5), LW(6), LW(7))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetFriendBelong, LW(10), LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
             SET_VALUE(LW(5), -120)
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
             SET_VALUE(LW(5), 100)
         END_IF
@@ -4359,19 +4359,19 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_SWITCH
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
-        ELSE
+    ELSE
         SET_VALUE(LW(10), -1)
     END_IF
     GOTO(10)
@@ -4545,7 +4545,7 @@ EVT_BEGIN(ItemEvent_Poison_Kinoko)
     CALL(evt_sub_random, 100, LW(0))
     IF_INT_LESS(LW(0), 80)
         CALL_CHILD(PTR(ItemEvent_Support_Sub_Effect))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(ItemEvent_GetTarget))
         CALL(evt_btl_camera_set_homing_unit, 0, LW(10), -1)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -4885,7 +4885,7 @@ USER_FUNC(_throw_item_icon) {
         event->userdata[2] = 1;
         wk->pos = wk->target;
     }
-    dispEntry(CAMERA_3D, 900.0f, 1, _disp_item_icon, event);
+    dispEntry(CAMERA_3D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_item_icon, event);
     return EVT_RETURN_BLOCK;
 }
 
@@ -4923,7 +4923,7 @@ USER_FUNC(_nancy_mirage) {
         return EVT_RETURN_DONE;
     }
     animPoseMain(event->userdata[1]);
-    dispEntry(CAMERA_3D, z, 2, _nancy_disp, event);
+    dispEntry(CAMERA_3D, z, DISP_MODE_XLU, _nancy_disp, event);
     return EVT_RETURN_BLOCK;
 }
 

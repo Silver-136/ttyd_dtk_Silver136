@@ -177,10 +177,10 @@ USER_FUNC(main_deka) {
     main_star();
     main_enemy();
     yuka_main();
-    dispEntry(CAMERA_2D, 901.0f, 1, disp_2D, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 1, disp_3D, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 2, disp_3D_alpha, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 0, yuka_disp, NULL);
+    dispEntry(CAMERA_2D, 901.0f, DISP_MODE_ALPHA_TEST, disp_2D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, disp_3D, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, disp_3D_alpha, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, yuka_disp, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -212,8 +212,8 @@ static void yuka_init(void) {
     if (w->texH > 0x1E0) {
         w->texH = 0x1E0;
     }
-    w->tex = smartAlloc(GXGetTexBufferSize(w->texW, w->texH, GX_TF_RGB565, GX_FALSE, 0), 2);
-    w->mesh = smartAlloc(sizeof(YukaMesh), 2);
+    w->tex = smartAlloc(GXGetTexBufferSize(w->texW, w->texH, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_BATTLE);
+    w->mesh = smartAlloc(sizeof(YukaMesh), SMART_GROUP_BATTLE);
     m = w->mesh->address;
     for (r = 0; r < 2; r++) {
         for (i = 0; i < 129; i++) {
@@ -236,7 +236,7 @@ static void yuka_init(void) {
             m->v[r][i] = r;
         }
     }
-    dispEntry(CAMERA_SHADOW, 0.0f, 0, yuka_capture, NULL);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, yuka_capture, NULL);
 }
 
 /**
@@ -694,7 +694,7 @@ static void main_star(void) {
             f32 shake[6] = {1.0f, 1.3f, 2.0f, 2.6f, 3.3f, 3.8f};
             f32 amp[6] = {1.0f, 1.3f, 2.0f, 2.6f, 3.3f, 3.8f};
             w->starCount++;
-            btl_camera_shake_h(0, w->starCount * shake[w->result], 0.0f, 20, 0);
+            btl_camera_shake_h(BTL_CAM_PRI_NORMAL, w->starCount * shake[w->result], 0.0f, 20, 0);
             psndSFXOn("SFX_BTL_SAC_DOKKAN5");
             for (j = 0; j < 2; j++) {
                 for (k = 0; k < 6; k++) {

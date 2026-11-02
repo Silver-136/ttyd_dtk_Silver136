@@ -90,7 +90,7 @@ void effExplosionMain(EffectEntry* effect) {
     if (work->type == 0) {
         work->scale += 0.1f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effExplosionDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effExplosionDisp, effect);
 }
 
 /** Draws a camera-facing explosion sprite using texture 14, picking the frame from progress. */

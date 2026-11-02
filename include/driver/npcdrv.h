@@ -359,6 +359,13 @@ typedef enum FbatCheckFlags {
     FBAT_CHECK_REACTION = (1 << 13),    // 0x2000, only NPCs with reactionFlags bit 0; no first-strike announce
 } FbatCheckFlags;
 
+// FirstStrikeInfo.type
+enum {
+    FIRST_STRIKE_NONE = 0,
+    FIRST_STRIKE_ENEMY = 1,  // "fb_sensei_sareta", 60-frame hold
+    FIRST_STRIKE_MARIO = 2,  // "fb_sensei_shita", slides in and out
+};
+
 typedef struct FirstStrikeInfo {
     BOOL enabled;        // 0x0
     u32 hitKind;            // 0x4, FbatHitKind, 0 when done
@@ -394,6 +401,25 @@ typedef enum BattleFirstAttack {
     FIRST_ATTACK_ENEMY = 9,         // and above: the enemy strikes first
 } BattleFirstAttack;
 
+// FieldBattleData.mode (fbatChangeMode, evt_npc_change_fbat_mode): what the field NPC driver does each frame. 6 is
+// read like BATTLE (evt_npc.c) and handled in npcMain as no work, but nothing sets it.
+enum {
+    FBAT_MODE_OFF = 0,
+    FBAT_MODE_FIELD = 1,          // normal field play; hits and talk are checked
+    FBAT_MODE_TALK = 2,           // A pressed at talkTarget; fbatTalkMode
+    FBAT_MODE_REACTION_TALK = 3,  // fbatTalkMode, entered from an NPC's reaction
+    FBAT_MODE_BATTLE = 5,         // hit an enemy; fbatBattleMode
+    FBAT_MODE_EVENT = 7,          // events and menus own the field: no checks
+    FBAT_MODE_EVENT_MOBJ_ACTIVE = 8, // like EVENT, but mobjdrv keeps its objects running
+};
+
+// FieldBattleInfo.ruleKeepResult, set by BtlActRec_JudgeRuleKeep. The Glitz Pit reads bit 0x4 (evt_tou_set_rule_result).
+typedef enum RuleKeepResult {
+    RULE_KEEP_BROKEN = 1,       // outside both bounds
+    RULE_KEEP_WITHIN_LOOSE = 2, // missed ruleParam but within ruleParam2
+    RULE_KEEP_KEPT = 6,         // met ruleParam
+} RuleKeepResult;
+
 typedef struct FieldBattleInfo {
     u32 mode; //0x0, unused
     BattleUnitType party; //0x4
@@ -402,7 +428,7 @@ typedef struct FieldBattleInfo {
     u32 result; //0x10, BattleResult
     u32 coins; //0x14, BattleStoreCoin
     u8 ruleType; //0x18, NpcBattleInfo.battleRule[0], index into the _rule_msg tables
-    u8 ruleKeepResult; //0x19
+    u8 ruleKeepResult; //0x19, RuleKeepResult
     u8 ruleParam; //0x1A, battleRule[1], printed in the rule message
     u8 ruleParam2; //0x1B, battleRule[2], secondary threshold used by battle_actrecord condition checks
 } FieldBattleInfo;
@@ -494,16 +520,3 @@ void npcSetStayPose(char* name);
 void npcSetTalkPose(char* name);
 NpcEntry* fbatHitCheckAll(void);
 s32 npcKoopaModeMobjBoundDeadCheck(struct HitEntry* hit);
-
-// Names from LLCOOLT's tree.
-enum {
-    NPC_FLAG_MOVE_ANIM = 1024,
-    NPC_FLAG_NO_WALL_HIT = 1073741824,
-    NPC_FLAG_HIDDEN = 128,
-    NPC_FLAG_JUMPING = 131072,
-    NPC_FLAG_LAND_ON_FLOOR = 16,
-    NPC_FLAG_ACTIVE = 2,
-    NPC_FLAG_INTANGIBLE = 32,
-    NPC_FLAG_TALK_ANIM = 512,
-    NPC_FLAG_SKIP_HIT_ATTR4 = 8192,
-};

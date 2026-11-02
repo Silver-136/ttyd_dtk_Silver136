@@ -205,7 +205,7 @@ void effBreakMain(EffectEntry* effect) {
     if (done >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_2D, dispCalcZ(&position), 2, (DispCallback)effBreakDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBreakDisp, effect);
     }
 }
 

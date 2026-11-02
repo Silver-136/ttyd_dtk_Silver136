@@ -206,7 +206,7 @@ void effLevelupMain(EffectEntry* effect) {
     if (done >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_2D, dispCalcZ(&position2), 2, (DispCallback)effLevelupDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&position2), DISP_MODE_XLU, (DispCallback)effLevelupDisp, effect);
     }
 }
 

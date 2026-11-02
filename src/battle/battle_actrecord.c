@@ -80,7 +80,7 @@ void BtlActRec_JudgeRuleKeep(void) {
     BattleGetPartyPtr(wp);
     switch (rec->ruleType) {
     case kNoFailureCondition:
-        rec->ruleKeepResult = 6;
+        rec->ruleKeepResult = RULE_KEEP_KEPT;
         break;
     case kConditionJumpLess:
         rec->ruleKeepResult = _check_no_use(ar->marioJumpMoves);
@@ -140,14 +140,14 @@ void BtlActRec_JudgeRuleKeep(void) {
         if (mario != NULL) {
             rec->ruleKeepResult = _check_use(mario->currentHp);
         } else {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
         break;
     case kConditionMarioWinLessHp:
         if (mario != NULL) {
             rec->ruleKeepResult = _check_no_use(mario->currentHp);
         } else {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
         break;
     case kConditionPowerBounceCombo:
@@ -263,20 +263,20 @@ void BtlActRec_JudgeRuleKeep(void) {
         break;
     case kConditionWinInMoreTurns:
         if (ar->turnCount > rec->ruleParam) {
-            rec->ruleKeepResult = 6;
+            rec->ruleKeepResult = RULE_KEEP_KEPT;
         } else if (ar->turnCount > rec->ruleParam2) {
-            rec->ruleKeepResult = 2;
+            rec->ruleKeepResult = RULE_KEEP_WITHIN_LOOSE;
         } else {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
         break;
     case kConditionWinInFewerTurns:
         if (ar->turnCount <= rec->ruleParam) {
-            rec->ruleKeepResult = 6;
+            rec->ruleKeepResult = RULE_KEEP_KEPT;
         } else if (ar->turnCount <= rec->ruleParam2) {
-            rec->ruleKeepResult = 2;
+            rec->ruleKeepResult = RULE_KEEP_WITHIN_LOOSE;
         } else {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
         break;
     case kConditionWaitTurnsBeforeMarioActions:
@@ -305,16 +305,16 @@ void BtlActRec_JudgeRuleKeep(void) {
         break;
     case kConditionMarioOnlyJumpOrDefend:
         if (ar->marioHammerMoves + ar->marioSpecialAttacks + ar->marioSpecialSupports + ar->marioAttackItems + ar->marioSupportItems + ar->marioPartyChanges + ar->marioCharges + ar->marioSuperCharges + ar->marioAppeals + ar->marioEscapes == 0) {
-            rec->ruleKeepResult = 6;
+            rec->ruleKeepResult = RULE_KEEP_KEPT;
         } else {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
         break;
     case kConditionMarioOnlyHammerOrDefend:
         if (ar->marioJumpMoves + ar->marioSpecialAttacks + ar->marioSpecialSupports + ar->marioAttackItems + ar->marioSupportItems + ar->marioPartyChanges + ar->marioCharges + ar->marioSuperCharges + ar->marioAppeals + ar->marioEscapes == 0) {
-            rec->ruleKeepResult = 6;
+            rec->ruleKeepResult = RULE_KEEP_KEPT;
         } else {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
         break;
     }
@@ -356,16 +356,16 @@ s32 _check_turn_count_0_turn(s32 n) {
     BattleActRecord* ar = &wp->actRecord;
     if (ar->turnCount <= rec->ruleParam2 || rec->ruleParam2 == 0xff) {
         if (n == 0) {
-            rec->ruleKeepResult = 2;
+            rec->ruleKeepResult = RULE_KEEP_WITHIN_LOOSE;
         } else {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
     }
     if (ar->turnCount <= rec->ruleParam || rec->ruleParam == 0xff) {
         if (n == 0) {
-            rec->ruleKeepResult = 6;
-        } else if (!(rec->ruleKeepResult & 2)) {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_KEPT;
+        } else if (!(rec->ruleKeepResult & RULE_KEEP_WITHIN_LOOSE)) {
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
     }
     return rec->ruleKeepResult;
@@ -378,16 +378,16 @@ s32 _check_turn_count_0_end(s32 n) {
     BattleActRecord* ar = &wp->actRecord;
     if (ar->turnCount <= rec->ruleParam2 || rec->ruleParam2 == 0xff) {
         if (n == 0) {
-            rec->ruleKeepResult = 2;
+            rec->ruleKeepResult = RULE_KEEP_WITHIN_LOOSE;
         } else {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
     }
     if (ar->turnCount <= rec->ruleParam || rec->ruleParam == 0xff) {
         if (n == 0) {
-            rec->ruleKeepResult = 6;
-        } else if (!(rec->ruleKeepResult & 2)) {
-            rec->ruleKeepResult = 1;
+            rec->ruleKeepResult = RULE_KEEP_KEPT;
+        } else if (!(rec->ruleKeepResult & RULE_KEEP_WITHIN_LOOSE)) {
+            rec->ruleKeepResult = RULE_KEEP_BROKEN;
         }
     }
     return rec->ruleKeepResult;

@@ -1102,7 +1102,7 @@ EVT_BEGIN(usu00_stage4_coming_event)
     CALL(evt_cam3d_evt_set, -255, 166, 704, -255, 71, 162, 5000, EASING_LINEAR)
     WAIT_MS(5500)
     SET_VALUE(GF(0), 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(600)
     CALL(evt_party_stop, 0)
     BEGIN_INLINE_EVENT
@@ -1455,7 +1455,7 @@ EVT_BEGIN(usu00_vivian_cry_event)
     CALL(evt_npc_set_autotalkpose, STRING("ビビアン"), STRING("PTR_S_3"), STRING("PTR_T_3"))
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -2367,7 +2367,7 @@ static BeroEntry bero_entry_data[] = {
 static EVT_BEGIN(oshimodo_event)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg4_jin_151"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -2409,7 +2409,7 @@ EVT_BEGIN(koopa_dokan_evt)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
     CALL(evt_msg_print, 0, STRING("kpa_stg5_009_2"), 0, STRING("mario"))
     BEGIN_INLINE_EVENT
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         SET_VALUE(LW(0), STRING("dokan_1"))
         CALL_CHILD(PTR(bero_case_switch_off))
         LOOP(0)
@@ -2883,8 +2883,8 @@ EVT_END()
 
 
 void kpaSen_ext_dispent(void) {
-    dispEntry(CAMERA_3D, 0.0f, 1, kpaSen_ext_disp, NULL);
-    dispEntry(CAMERA_3D, 0.0f, 2, kpaSen_ext_shadow_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, kpaSen_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, kpaSen_ext_shadow_disp, NULL);
 }
 
 /** Script helper: resets the first 100 crowd sprites (the troopers) to state 0 so they gather again. */
@@ -3015,7 +3015,7 @@ EVT_BEGIN(usu_00_koopa_first_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_npc_get_reglid, STRING("村人Ｃ"), LW(0))
     DELETE_EVENT(LW(0))
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_fade_end_wait)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
@@ -3473,7 +3473,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(white_on)
     CALL(evt_cam_letter_box_onoff, 0, 1)
     CALL(evt_cam_letter_box_disable, 1)
-    CALL(evt_fade_entry, 6, 300, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT_3D, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
     CALL(white_off)
@@ -4097,7 +4097,7 @@ EVT_BEGIN(usu_00_init_evt)
             END_IF
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
         END_SWITCH
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
     END_IF
@@ -4160,7 +4160,7 @@ EVT_BEGIN(usu_00_init_evt)
         CALL_CHILD(PTR(evt_door_entry))
         SET_VALUE(LW(0), PTR(&door_3))
         CALL_CHILD(PTR(evt_door_entry))
-        ELSE
+    ELSE
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie1door"), 0, PTR(door_ie1_koopa_evt), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie2door"), 0, PTR(door_ie2_koopa_evt), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ie3door"), 0, PTR(door_ie3_koopa_evt), 0)
@@ -4245,7 +4245,7 @@ EVT_BEGIN(usu_00_init_evt)
             CALL(evt_mario_set_pos, 0, 0, 50)
             CALL(evt_mario_set_dir, 90, 0, 0)
             CALL(evt_npc_set_position, STRING("ババ"), -100, 25, 100)
-            ELSE
+        ELSE
             CALL(evt_mario_set_pos, 30, 0, 180)
             CALL(evt_mario_set_dir, 90, 0, 0)
             CALL(evt_npc_set_position, STRING("ババ"), -100, 25, 100)

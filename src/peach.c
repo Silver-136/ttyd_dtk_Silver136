@@ -384,7 +384,7 @@ void peach_walk(void) {
     if (mario->forceMoveTimer == 0) {
         mario->baseSpeed = marioGetWalkSpd();
     }
-    if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 > 3025) {
+    if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 > STICK_DASH_MIN_SQ) {
         marioChgMot(MARIO_MOTION_DASH);
     } else {
         mario->directionView = mario->controlStickAngle;
@@ -416,7 +416,7 @@ void peach_dash(void) {
     }
     if (mario->flags & MARIO_FLAG_FORCED_MOVEMENT) {
         peachStepSe(20, 10);
-    } else if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 <= 3025) {
+    } else if (mario->wStickDir1 * mario->wStickDir1 + mario->wStickDir2 * mario->wStickDir2 <= STICK_DASH_MIN_SQ) {
         marioChgMot(MARIO_MOTION_WALK);
     } else {
         mario->directionView = mario->controlStickAngle;

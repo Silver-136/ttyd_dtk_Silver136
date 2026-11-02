@@ -5,6 +5,8 @@
 
 #include <dolphin/gx.h>
 
+#define PALETTE_VERSION 0x0020AF30 // versionNumber of a .tpl file
+
 typedef struct CLUTHeader {
     // total size: 0xC
     u16 numEntries;   // offset 0x0, size 0x2

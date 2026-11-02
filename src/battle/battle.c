@@ -84,8 +84,8 @@ void BattleInit(FieldBattleInfo* info) {
     BattleAfterReactionQueueInit();
     BattleStatusChangeMsgWorkInit();
     btlDispInit();
-    BattleSetSeq(wp, SEQ_UNKNOWN, 0);
-    BattleSetSeq(wp, SEQ_INIT, 0x1000000);
+    BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_INIT);
+    BattleSetSeq(wp, SEQ_INIT, SEQ_INIT_START);
     wp->seqEndWork = NULL;
     wp->commandMenu.flags = 0;
     wp->commandMenu.cursor[0].absPos = 0;
@@ -139,14 +139,14 @@ BOOL BattleMain(void) {
     BattleBreakSlot_Main();
     btlDispMain();
 
-    if (BattleGetSeq(wp, SEQ_UNKNOWN) == 4) {
+    if (BattleGetSeq(wp, SEQ_UNKNOWN) == BATTLE_STAGE_DONE) {
         return FALSE;
     }
 
-    if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT) && BattleGetSeq(wp, SEQ_UNKNOWN) == 2) {
+    if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT) && BattleGetSeq(wp, SEQ_UNKNOWN) == BATTLE_STAGE_TURN) {
         wp->flags |= (BATTLE_FLAG_INTERRUPT_STOP | BATTLE_FLAG_DEMO_TIMEOUT);
-        BattleSetSeq(wp, SEQ_UNKNOWN, 3);
-        BattleSetSeq(wp, SEQ_END, 0x7000000);
+        BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_END);
+        BattleSetSeq(wp, SEQ_END, SEQ_END_START);
         return TRUE;
     }
 
@@ -223,9 +223,9 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
     setup = wp->fbatInfo->setup;
     groupSetup = setup->groupSetup;
     pouch = pouchGetPtr();
-    wp->alliances[0].allianceId = 2;
-    wp->alliances[1].allianceId = 1;
-    wp->alliances[2].allianceId = 0;
+    wp->alliances[0].clearFlags = ALLIANCE_CLEAR_LEADER_OUT;
+    wp->alliances[1].clearFlags = ALLIANCE_CLEAR_ALL_OUT;
+    wp->alliances[2].clearFlags = ALLIANCE_CLEAR_NONE;
     wp->alliances[0].attackDirection = 1;
     wp->alliances[1].attackDirection = -1;
     wp->alliances[2].attackDirection = 1;
@@ -1032,12 +1032,12 @@ u8 BattleMajinaiCheck(void) {
         return 0;
     }
     if (pouch->turnsUntilMerleeActivation < 0) {
-        pouch->merleeNextCurseType = 0;
+        pouch->merleeNextCurseType = MAJINAI_NONE;
         pouch->turnsUntilMerleeActivation = irand(5) + 6;
         pouch->turnsUntilMerleeActivation--;
         return 0;
     }
-    if (pouch->merleeNextCurseType != 0) {
+    if (pouch->merleeNextCurseType != MAJINAI_NONE) {
         return pouch->merleeNextCurseType;
     }
     pouch->turnsUntilMerleeActivation--;
@@ -1048,22 +1048,22 @@ u8 BattleMajinaiCheck(void) {
     if (wp->fbatInfo->setup->battleFlags & NPC_BATTLE_MERLEE_SAFE_CURSE_UNUSED) {
         r = irand(100);
         if (r < 45) {
-            pouch->merleeNextCurseType = 1;
+            pouch->merleeNextCurseType = MAJINAI_POWER_UP;
         } else if (r < 90) {
-            pouch->merleeNextCurseType = 2;
+            pouch->merleeNextCurseType = MAJINAI_DEFENCE_UP;
         } else {
-            pouch->merleeNextCurseType = 3;
+            pouch->merleeNextCurseType = MAJINAI_EXP_UP;
         }
     } else {
         r = irand(100);
         if (r < 30) {
-            pouch->merleeNextCurseType = 1;
+            pouch->merleeNextCurseType = MAJINAI_POWER_UP;
         } else if (r < 60) {
-            pouch->merleeNextCurseType = 2;
+            pouch->merleeNextCurseType = MAJINAI_DEFENCE_UP;
         } else if (r < 80) {
-            pouch->merleeNextCurseType = 3;
+            pouch->merleeNextCurseType = MAJINAI_EXP_UP;
         } else {
-            pouch->merleeNextCurseType = 4;
+            pouch->merleeNextCurseType = MAJINAI_COIN_UP;
         }
     }
     return pouch->merleeNextCurseType;
@@ -1075,10 +1075,10 @@ void BattleMajinaiDone(void) {
     pouch->merleeCurseUsesRemaining--;
     if (pouch->merleeCurseUsesRemaining != 0) {
         pouch->turnsUntilMerleeActivation = -1;
-        pouch->merleeNextCurseType = 0;
+        pouch->merleeNextCurseType = MAJINAI_NONE;
     } else {
         pouch->turnsUntilMerleeActivation = -1;
-        pouch->merleeNextCurseType = 0;
+        pouch->merleeNextCurseType = MAJINAI_NONE;
     }
 }
 

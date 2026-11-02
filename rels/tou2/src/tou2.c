@@ -384,7 +384,7 @@ static USER_FUNC(evt_tou_print_ranking) {
     }
     dwp->target = dwp->page * 220;
     dwp->scroll += (dwp->target - dwp->scroll) / 8.0f;
-    dispEntry(CAMERA_2D, 300.0f, 0, disp_proc, NULL);
+    dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, disp_proc, NULL);
     return EVT_RETURN_BLOCK;
 }
 

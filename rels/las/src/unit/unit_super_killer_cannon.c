@@ -87,9 +87,9 @@ BattleUnitKind unit_super_killer_cannon = {
     0.0f,
     0.0f,
     0.0f,
-0.0f,
     0.0f,
-26.0f,
+    0.0f,
+    26.0f,
     0.0f,
     0.0f,
     26.0f,
@@ -136,7 +136,7 @@ BattleUnitKind unit_super_killer_cannon = {
 static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
 
 /** Defence attributes of the B. Bill Blaster: none, every element hits it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 5, 100, 40, 100, 100, 90};

@@ -6,6 +6,12 @@
 #include "driver/icondrv.h"
 #include "evt/evt_cmd.h"
 
+// BattleIcon.flags
+enum {
+    BATTLE_ICON_FLAG_ACTIVE = 1,
+    BATTLE_ICON_FLAG_HIDDEN = 2,
+};
+
 typedef struct BattleWorkIcon {
     u16 flags; //0x0
     u16 iconId; //0x2

@@ -109,7 +109,7 @@ static EVT_BEGIN(yari_trap_sub)
     END_IF
     SET_VALUE(GW(15), 1)
     LOOP(0)
-        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("bb"), HIT_ATTR_TOGE)
+        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("bb"), HIT_ATTR_SPIKES)
         CALL(evt_mapobj_get_position, STRING("s02_yari"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 50, 150)
@@ -135,7 +135,7 @@ static EVT_BEGIN(yari_trap_sub)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("bb"), HIT_ATTR_TOGE)
+        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("bb"), HIT_ATTR_SPIKES)
 #if VERSION == VERSION_EU
         CALL(evt_sub_get_framerate, LW(0))
         IF_INT_EQUAL(LW(0), 50)

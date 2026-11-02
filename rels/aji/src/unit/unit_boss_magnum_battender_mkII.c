@@ -237,7 +237,7 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
 /** Elemental reactions of Magnus von Grapple 2.0: none, every element hurts it normally. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist = {0, 40, 40, 0, 40, 0, 100, 20, 0, 0, 100, 0, 100, 40, 40, 0, 0, 100, 30, 0, 0, 0};
@@ -372,7 +372,7 @@ BattleWeapon weapon_batten_drill_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -413,7 +413,7 @@ BattleWeapon weapon_batten_boomerang_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -454,7 +454,7 @@ BattleWeapon weapon_batten_aud_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
     COUNTER_RESIST_ALL, // counterResistFlags
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
@@ -720,7 +720,7 @@ USER_FUNC(aud_suikomi) {
             BattleFree(list);
         }
         list = BattleAlloc(sizeof(s32) * 20);
-        for (i = 0; i < 200; i++) {
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             if ((u8)BattleAudience_GetExist(i) == TRUE) {
                 ids[n] = i;
                 n++;
@@ -738,7 +738,7 @@ USER_FUNC(aud_suikomi) {
         for (i = 0; i < 20; i++) {
             mem = BattleAudienceGetPtr(ids[i]);
             mem->flags |= AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
-            BattleAudience_SetAnim(ids[i], 9, FALSE);
+            BattleAudience_SetAnim(ids[i], AUD_ANIM_DAMAGE_FRONT, FALSE);
             mem->interpFramesTotal = i * 3 + 60;
             mem->counter = 0;
             mem->rotation.y = 0.0f;
@@ -750,7 +750,7 @@ USER_FUNC(aud_suikomi) {
     }
     BtlUnit_GetPos(BattleGetUnitPtr(_battleWorkPointer, id), &x2, &y2, &z2);
     y2 += 5.0f;
-    for (i = 0; i < 200; i++) {
+    for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
         for (j = 0; j < 20; j++) {
             if (i == list[j]) {
                 mem = BattleAudienceGetPtr(i);
@@ -843,7 +843,7 @@ USER_FUNC(aud_fire_hit) {
         BtlUnit_GetHitPos(unit, part, &hx, &hy, &hz);
         for (i = start; i < start + 2; i++) {
             mem = BattleAudienceGetPtr(list[i]);
-            BattleAudience_SetAnim(list[i], 9, FALSE);
+            BattleAudience_SetAnim(list[i], AUD_ANIM_DAMAGE_FRONT, FALSE);
             mem->position = (Vec){x, y, z};
             mem->interpFramesTotal = 0;
             mem->counter = 0;
@@ -896,7 +896,7 @@ USER_FUNC(aud_fire_no_hit) {
         BtlUnit_GetHitPos(unit, part, &hx, &hy, &hz);
         for (i = start; i < start + 2; i++) {
             mem = BattleAudienceGetPtr(list[i]);
-            BattleAudience_SetAnim(list[i], 9, FALSE);
+            BattleAudience_SetAnim(list[i], AUD_ANIM_DAMAGE_FRONT, FALSE);
             mem->position = (Vec){x, y, z};
             mem->interpFramesTotal = 0;
             mem->counter = 0;
@@ -1053,7 +1053,7 @@ EVT_END()
  * zooms the camera on it and speaks stg7_aji_41_06.
  */
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_CheckDamagePattern, UNIT_ID_SELF, ATTACKPATTERN_PRESS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1146,7 +1146,7 @@ static EVT_BEGIN(dead_event)
         END_IF
 #endif
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
@@ -1349,7 +1349,7 @@ static EVT_BEGIN(attack_event)
     LABEL(99)
 
     // The facing is reset and it goes back to waiting.
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1451,20 +1451,20 @@ EVT_BEGIN(drill_attack_event)
     // Each target in turn gets the hit check and then the damage; the action-command result is read once.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_drill_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -1580,20 +1580,20 @@ EVT_BEGIN(boomerang_attack_event)
     // result is read once.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_boomerang_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -1890,20 +1890,20 @@ EVT_BEGIN(aud_attack_event_sub)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_MACHINEGUN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_aud_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
@@ -2111,7 +2111,7 @@ static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 /**
  * Elemental reactions of the X-Punch fist of Magnus von Grapple 2.0: none, every element hurts it normally.
  */
-static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr_r = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 #if VERSION <= VERSION_DEMO_US
 static StatusVulnerability regist_r = {0, 70, 70, 70, 70, 70, 100, 70, 0, 0, 100, 0, 100, 70, 70, 0, 90, 100, 70, 0, 0, 0};
@@ -2199,7 +2199,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #if VERSION <= VERSION_DEMO_US
     COUNTER_RESIST_ALL & ~(COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_PREEMPTIVE_SPIKY),
-    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
 #else
     COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags
@@ -2309,7 +2309,7 @@ static EVT_BEGIN(arm_event_end)
 EVT_END()
 
 static EVT_BEGIN(damage_event_r)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
@@ -2353,20 +2353,20 @@ static EVT_BEGIN(attack_event_r)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A1_4"))
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_rocket_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_OR_EQUAL(4)
+        CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
         CASE_END
         CASE_DEFAULT

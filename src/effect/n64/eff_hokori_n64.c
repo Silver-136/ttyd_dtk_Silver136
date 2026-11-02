@@ -133,7 +133,7 @@ void effHokoriMain(EffectEntry* effect) {
             work->scaleX += work->growth2;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHokoriDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHokoriDisp, effect);
 }
 
 /**

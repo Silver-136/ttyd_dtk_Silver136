@@ -291,7 +291,7 @@ void BattleStageObjectInit(void) {
     obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
     obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
     mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
-    obj->flags |= 1;
+    obj->flags |= STAGE_OBJECT_FLAG_HIDDEN;
     id++;
 
     j = 0;
@@ -316,7 +316,7 @@ void BattleStageObjectInit(void) {
         obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
         obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
         mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
-        obj->flags |= 1;
+        obj->flags |= STAGE_OBJECT_FLAG_HIDDEN;
         id++;
         j++;
     }
@@ -395,8 +395,8 @@ void BattleStageObjectMain(void) {
             obj->prevRotation = obj->rotation;
             changed = TRUE;
         }
-        if (obj->flags & 2) {
-            obj->flags &= ~2;
+        if (obj->flags & STAGE_OBJECT_FLAG_UPDATE) {
+            obj->flags &= ~STAGE_OBJECT_FLAG_UPDATE;
             changed = TRUE;
         }
         switch (obj->data->layer) {
@@ -447,7 +447,7 @@ void BattleStageObjectMain(void) {
                 }
                 break;
         }
-        if (obj->flags & 1) {
+        if (obj->flags & STAGE_OBJECT_FLAG_HIDDEN) {
             if (!(mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN)) {
                 mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
             }
@@ -582,7 +582,7 @@ BattleWeaponData _nozzle_at_base_monster = {{
     {0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-    TARGET_CLASS_NO_MARIO | TARGET_CLASS_NO_PARTNER | TARGET_CLASS_UNUSED_4 | TARGET_CLASS_UNUSED_8 | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_MULTIPLE, // targetClassFlags
+    TARGET_CLASS_NO_MARIO_OR_SHELL | TARGET_CLASS_NO_PARTNER | TARGET_CLASS_UNUSED_4 | TARGET_CLASS_UNUSED_8 | TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
@@ -2490,14 +2490,14 @@ EVT_BEGIN(_object_turn_event_core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(4)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
@@ -2620,14 +2620,14 @@ EVT_BEGIN(_nozzle_work_event_core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(4)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
@@ -2647,14 +2647,14 @@ EVT_BEGIN(_nozzle_work_event_core)
     END_IF
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
-        CASE_EQUAL(4)
-        CASE_EQUAL(2)
+        CASE_EQUAL(PRECHECK_INTANGIBLE)
+        CASE_EQUAL(PRECHECK_MISS)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_MISS)
-        CASE_EQUAL(3)
+        CASE_EQUAL(PRECHECK_LUCKY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_LUCKY)
-        CASE_EQUAL(6)
+        CASE_EQUAL(PRECHECK_DODGY)
         CALL(btlevtcmd_StartAvoid, LW(10), DAMAGE_CODE_DODGY)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PRECHECK_HIT)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(10), LW(11), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CASE_DEFAULT
     END_SWITCH
@@ -2896,10 +2896,10 @@ USER_FUNC(_mobj_destroy) {
     int i;
 
     layer = evtGetValue(event, event->args[0]);
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && obj->data->layer == layer) {
-            obj->flags |= 1;
+            obj->flags |= STAGE_OBJECT_FLAG_HIDDEN;
             unit = BattleGetUnitPtr(wp, obj->battleUnitIdx);
             if (unit) {
                 for (part = unit->parts; part; part = part->nextPart) {
@@ -3017,7 +3017,7 @@ USER_FUNC(_set_mobj_shake_init) {
     u8 position;
 
     layer = evtGetValue(event, event->args[0]);
-    for (i = 0; i < 32; i++) {
+    for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
         if (obj->id > 0 && obj->data->layer == layer) {
             obj->reserved_72 = 0;
@@ -3056,7 +3056,7 @@ USER_FUNC(_set_mobj_shake) {
     switch (layer) {
         case 0:
         case 1:
-            for (i = 0; i < 32; i++) {
+            for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                 obj = &wp->stageObjects[i];
                 if (obj->id > 0 && obj->data->layer == layer) {
                     _mobj_shake_main(obj);
@@ -3175,31 +3175,31 @@ USER_FUNC(_nozzle_turn) {
     if (event->userWork[3] < 30) {
         event->userWork[3]++;
         switch (sw->nozzleDir[index]) {
-            case 1:
+            case NOZZLE_DIR_PLUS_45:
                 from = 45.0f;
                 break;
-            case 2:
+            case NOZZLE_DIR_CENTER:
                 from = 0.0f;
                 break;
-            case 3:
+            case NOZZLE_DIR_MINUS_45:
                 from = -45.0f;
                 break;
-            case 0:
+            case NOZZLE_DIR_RAISED:
             default:
                 from = 0.0f;
                 break;
         }
         switch (sw->nozzleNextDir[index]) {
-            case 1:
+            case NOZZLE_DIR_PLUS_45:
                 to = 45.0f;
                 break;
-            case 2:
+            case NOZZLE_DIR_CENTER:
                 to = 0.0f;
                 break;
-            case 3:
+            case NOZZLE_DIR_MINUS_45:
                 to = -45.0f;
                 break;
-            case 0:
+            case NOZZLE_DIR_RAISED:
             default:
                 to = 0.0f;
                 break;
@@ -3248,7 +3248,7 @@ USER_FUNC(_announce_wall_message) {
         return EVT_RETURN_DONE;
     }
     event->userdata[0]--;
-    dispEntry(CAMERA_2D, 900.0f, 1, _disp_escape_wall_message, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _disp_escape_wall_message, NULL);
     return EVT_RETURN_BLOCK;
 }
 
@@ -3312,7 +3312,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
     int i;
 
     if (isFirstCall) {
-        for (i = 0; i < 64; i++) {
+        for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             unit = BattleGetUnitPtr(wp, i);
 #if VERSION <= VERSION_DEMO_US
             if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && unit->ceilFallEventCode) {
@@ -3328,7 +3328,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
             }
         }
     }
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN)) {
             if (unit->ceilFallEventId && !evtCheckID(unit->ceilFallEventId)) {
@@ -3461,11 +3461,11 @@ USER_FUNC(_nozzle_work_wait) {
 /** Spray angle in degrees for a nozzle's direction: -45 for 1, -135 for 3, -90 for 2 or upright. */
 f32 _get_nozzle_dir(s32 index) {
     switch (_battleWorkPointer->stageObjectWork.nozzleDir[index]) {
-        case 1:
+        case NOZZLE_DIR_PLUS_45:
             return -45.0f;
-        case 3:
+        case NOZZLE_DIR_MINUS_45:
             return -135.0f;
-        case 2:
+        case NOZZLE_DIR_CENTER:
         default:
             return -90.0f;
     }
@@ -3707,29 +3707,29 @@ s32 _get_nozzle_attack_index(u8 index) {
     switch (index) {
         case 0:
             switch (sw->nozzleDir[index]) {
-                case 1:
+                case NOZZLE_DIR_PLUS_45:
                     return -1;
-                case 2:
+                case NOZZLE_DIR_CENTER:
                     return 0;
-                case 3:
+                case NOZZLE_DIR_MINUS_45:
                     return 1;
             }
         case 2:
             switch (sw->nozzleDir[index]) {
-                case 1:
+                case NOZZLE_DIR_PLUS_45:
                     return 0;
-                case 2:
+                case NOZZLE_DIR_CENTER:
                     return 1;
-                case 3:
+                case NOZZLE_DIR_MINUS_45:
                     return -1;
             }
         case 1:
             switch (sw->nozzleDir[index]) {
-                case 1:
+                case NOZZLE_DIR_PLUS_45:
                     return 0;
-                case 2:
+                case NOZZLE_DIR_CENTER:
                     return -1;
-                case 3:
+                case NOZZLE_DIR_MINUS_45:
                     return 1;
             }
     }
@@ -4042,7 +4042,7 @@ USER_FUNC(_object_fall_attack) {
                     flags |= DAMAGE_RESULT_NO_EVADE;
                 }
                 e->preCheck = BattlePreCheckDamage(BattleGetSystemPtr(wp), BattleGetUnitPtr(wp, e->unitId), BattleGetUnitPartsPtr(e->unitId, e->partId), weapon, flags);
-                if (e->preCheck == 1 && !e->noAc) {
+                if (e->preCheck == PRECHECK_HIT && !e->noAc) {
                     delay = irand(0);
                     for (k2 = 0; k2 < i; k2++) {
                         o2 = &w->entries[k2];
@@ -4090,7 +4090,7 @@ USER_FUNC(_object_fall_attack) {
                     hit.y = BattleStageGetPtr()->audienceSizeY;
                     hit.z = (0.1f * (e3->unitId % 20)) + (((e3->unitId / 20) * 30) + 115);
                     btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_AUDIENCE);
-                    btl_camera_set_moveSpeedLv(0, 2);
+                    btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
                     width = 0.0f;
                     break;
 
@@ -4108,10 +4108,10 @@ USER_FUNC(_object_fall_attack) {
                 dir = 270.0f;
             }
             switch (e3->preCheck) {
-                case 2:
-                case 3:
-                case 4:
-                case 6:
+                case PRECHECK_MISS:
+                case PRECHECK_LUCKY:
+                case PRECHECK_INTANGIBLE:
+                case PRECHECK_DODGY:
                     hit.y = pos.y;
                     break;
             }
@@ -4209,10 +4209,10 @@ USER_FUNC(_object_fall_attack) {
                     }
                     psndSFXOff(e3->sfxId);
                     switch (e3->preCheck) {
-                        case 2:
-                        case 3:
-                        case 4:
-                        case 6:
+                        case PRECHECK_MISS:
+                        case PRECHECK_LUCKY:
+                        case PRECHECK_INTANGIBLE:
+                        case PRECHECK_DODGY:
                             switch (e3->type) {
                                 case STAGE_FALL_WATER:
                                     break;
@@ -4222,7 +4222,7 @@ USER_FUNC(_object_fall_attack) {
                                     break;
                             }
                             break;
-                        case 1:
+                        case PRECHECK_HIT:
                             switch (e3->type) {
                                 case STAGE_FALL_BASIN:
                                 case STAGE_FALL_BUCKET:
@@ -4257,11 +4257,11 @@ USER_FUNC(_object_fall_attack) {
                             tg = &targets2.targets[targets2.targetIndices[targets2.currentTarget]];
                             unit2 = BattleGetUnitPtr(wp, tg->unitIdx);
                             switch (BattlePreCheckDamage(BattleGetSystemPtr(wp), unit2, BattleGetUnitPartsPtr(tg->unitIdx, tg->partIdx), weapon3, DAMAGE_RESULT_FINAL_HIT)) {
-                                case 2:
-                                case 4:
+                                case PRECHECK_MISS:
+                                case PRECHECK_INTANGIBLE:
                                     break;
 
-                                case 3: {
+                                case PRECHECK_LUCKY: {
                                     EffectEntry* eff;
                                     BtlUnit_GetPos(unit2, &p.x, &p.y, &p.z);
                                     if (p.y < 85.0f) {
@@ -4277,12 +4277,12 @@ USER_FUNC(_object_fall_attack) {
                                     break;
                                 }
 
-                                case 6:
+                                case PRECHECK_DODGY:
                                     unit2->damagePattern = 0;
                                     BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_DODGY);
                                     break;
 
-                                case 1:
+                                case PRECHECK_HIT:
                                     if (BtlUnit_GetACPossibility(unit2) && acCount <= 0) {
                                         BattleActionCommandCheckDefence(unit2, weapon3);
                                         acCount++;

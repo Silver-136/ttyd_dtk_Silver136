@@ -109,7 +109,7 @@ USER_FUNC(bress) {
     if (mario != NULL && event->userdata[0] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA)) {
 #else
     if (mario != NULL && event->userdata[0] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA) &&
-        vivianGetStatus() != 2) {
+        vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
 #endif
         effMistEntry(4, 30, mario->position.x, 24.0f + mario->position.y, mario->position.z, 270.0f - mario->displayDirection);
         event->userdata[0] = irand(60) + 60;
@@ -118,7 +118,7 @@ USER_FUNC(bress) {
     if (party != NULL && event->userdata[1] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA)) {
 #else
     if (party != NULL && event->userdata[1] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA) &&
-        vivianGetStatus() != 2) {
+        vivianGetStatus() != VIVIAN_STATUS_HIDDEN) {
 #endif
         effMistEntry(4, 30, party->position.x, party->position.y + offset[party->currentMemberId], party->position.z,
                      270.0f - party->displayDirection);

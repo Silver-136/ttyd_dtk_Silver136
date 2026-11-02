@@ -88,7 +88,7 @@ BattleUnitKind unit_nancy = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Damage-type modifiers of the `nancy` placeholder unit: none, no special weakness or immunity. */
-static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
  * Status vulnerability of the `nancy` placeholder unit (100% is the normal chance): immune to Sleep, Stop,

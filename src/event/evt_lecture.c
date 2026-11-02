@@ -7,6 +7,7 @@
 #include "mario/mario_party.h"
 #include "mario/mariost.h"
 #include "party.h"
+#include "system.h"
 
 static Vec stPt;
 static Vec stAt;
@@ -99,7 +100,7 @@ USER_FUNC(lect_cam_load) {
     camera->startTimeA = gp->renderTime;
     camera->durationA = OSMillisecondsToTicks(msec);
     camera->stateA = 3;
-    camera->curveA = 11;
+    camera->curveA = EASING_SINE_IN_OUT;
 
     mario->position = stMpos;
     mario->displayDirection = stMdir1;

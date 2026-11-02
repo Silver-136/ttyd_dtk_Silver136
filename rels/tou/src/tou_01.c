@@ -463,19 +463,19 @@ EVT_BEGIN(evt_wall2)
     IF_INT_EQUAL(LW(1), 0)
         SPAWN_EVENT(PTR(evt_sakaba_4))
         WAIT_MS(150)
-    SPAWN_EVENT(PTR(evt_sakaba_1))
+        SPAWN_EVENT(PTR(evt_sakaba_1))
         WAIT_MS(150)
-    SPAWN_EVENT(PTR(evt_sakaba_2))
+        SPAWN_EVENT(PTR(evt_sakaba_2))
         WAIT_MS(150)
-    SPAWN_EVENT(PTR(evt_sakaba_3))
-        ELSE
+        SPAWN_EVENT(PTR(evt_sakaba_3))
+    ELSE
         SPAWN_EVENT(PTR(evt_sakaba_3))
         WAIT_MS(150)
         SPAWN_EVENT(PTR(evt_sakaba_2))
         WAIT_MS(150)
         SPAWN_EVENT(PTR(evt_sakaba_1))
         WAIT_MS(150)
-    SPAWN_EVENT(PTR(evt_sakaba_4))
+        SPAWN_EVENT(PTR(evt_sakaba_4))
     END_IF
 #else
     SPAWN_EVENT(PTR(evt_sakaba_1))
@@ -718,7 +718,7 @@ EVT_BEGIN(evt_hotdog)
     ELSE
         CALL(evt_msg_print, 0, STRING("stg3_tou_13"), 0, STRING("ホットドッグ"))
     END_IF
-    CALL(evt_win_coin_on, 0, LW(10))
+    CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(10))
     CALL(evt_msg_select, 0, STRING("stg3_tou_13_yn"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_pouch_get_coin, LW(0))
@@ -824,13 +824,13 @@ USER_FUNC(make_shadow) {
     if (isFirstCall) {
         wp = _mapAlloc(sizeof(ShadowWork));
         event->userdata[0] = (EvtWord)wp;
-        wp->tex = smartAlloc(GXGetTexBufferSize(128, 128, GX_TF_RGB5A3, GX_FALSE, 0), 1);
+        wp->tex = smartAlloc(GXGetTexBufferSize(128, 128, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     }
     wp = (ShadowWork*)event->userdata[0];
     GXInitTexObj(&wp->obj, wp->tex->address, 128, 128, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     mapSetProjTexObj(&wp->obj, wp->tex);
-    dispEntry(CAMERA_SHADOW, 0.0f, 3, make_shadow_disp, wp);
+    dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE_NO_Z, make_shadow_disp, wp);
     return EVT_RETURN_BLOCK;
 }
 
@@ -2996,7 +2996,7 @@ EVT_BEGIN(evt_peach_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 130, 134, 0, 75, -312, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -25, -305, FLOAT(80.0f))
         CALL(evt_mario_set_dir, 90, 300, 0)
@@ -3178,7 +3178,7 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_position, STRING("シンエモンＡ"), 50, 0, 375)
     CALL(evt_npc_set_ry, STRING("シンエモンＡ"), 270)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_POSE)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_scale, STRING("シンエモンＡ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
@@ -3188,7 +3188,7 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_position, STRING("シンエモンＢ"), -50, 0, 400)
     CALL(evt_npc_set_ry, STRING("シンエモンＢ"), 90)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_POSE)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_scale, STRING("シンエモンＢ"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.0f))
@@ -3649,7 +3649,7 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_mobj_tornadoswitch_blue, 0, STRING("dummy_sw"), 735, 10, 455, PTR(evt_dummy_sw), GSWF_TOU_01_TORNADO_SWITCH_PRESSED)
         SET_VALUE(GF(10), 0)
         SPAWN_EVENT(PTR(evt_kanban2))
-        ELSE
+    ELSE
         CALL(evt_map_playanim, STRING("anm_kan"), MAP_ANIM_PLAY_AT_END, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("neon_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -3662,7 +3662,7 @@ EVT_BEGIN(tou_01_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
-            ELSE
+        ELSE
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
         END_IF
     END_IF
@@ -3875,13 +3875,13 @@ EVT_BEGIN(tou_01_init_evt)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
-        ELSE
+    ELSE
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("a_door_mon"))
             IF_INT_EQUAL(LF(0), 0)
                 SPAWN_EVENT(PTR(evt_gondora))
             END_IF
-            ELSE
+        ELSE
             CALL(evt_cam_road_reset)
         END_IF
     END_IF
@@ -3937,7 +3937,7 @@ EVT_BEGIN(tou_01_init_evt)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
                 CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
             END_SWITCH
-            ELSE
+        ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_URN1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU1"))
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)

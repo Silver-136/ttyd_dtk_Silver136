@@ -436,7 +436,7 @@ void effKumokumoMain(EffectEntry* effect) {
         }
         work->frame++;
     }
-    dispEntry(camera, dispCalcZ(&position), 2, (DispCallback)effKumokumoDisp, effect);
+    dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKumokumoDisp, effect);
 }
 
 /**

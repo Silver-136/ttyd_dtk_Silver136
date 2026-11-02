@@ -252,7 +252,7 @@ void marioStInit(void) {
     gp->rumbleEnabled = 1;
     gp->soundMode = 0;
 
-    gp->retraceLocalTime = 0;
+    gp->playTime = 0;
     gp->retraceDeltaTime = 0;
     gp->retraceTime = OSGetTime();
 
@@ -264,14 +264,14 @@ void marioStInit(void) {
     gp->systemLv1Time = 0;
     gp->systemLv0Time = 0;
 
-    gp->mapFadeOutType = FADE_IN_BLACK;
-    gp->mapFadeOutDuration = 300;
-    gp->mapFadeInType = FADE_OUT_BLACK;
+    gp->mapFadeInType = FADE_IN_BLACK;
     gp->mapFadeInDuration = 300;
-    gp->areaFadeOutType = FADE_IN_BLACK;
-    gp->areaFadeOutDuration = 300;
-    gp->areaFadeInType = FADE_OUT_BLACK;
+    gp->mapFadeOutType = FADE_OUT_BLACK;
+    gp->mapFadeOutDuration = 300;
+    gp->areaFadeInType = FADE_IN_BLACK;
     gp->areaFadeInDuration = 300;
+    gp->areaFadeOutType = FADE_OUT_BLACK;
+    gp->areaFadeOutDuration = 300;
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
     gp->language = LANGUAGE_JP;
@@ -461,7 +461,7 @@ void marioStMain(void) {
                     none_key = OSGetTime();
 #endif
 } else {
-                    gp->resetType = 1;
+                    gp->resetType = RESET_TYPE_SOFT;
                 }
 #else
             if (gp->dirs[i]) {
@@ -571,9 +571,9 @@ void viPostCallback(u32 retraceCount) {
 
     time = OSGetTime();
     gp->retraceDeltaTime = time - gp->retraceTime;
-    gp->retraceLocalTime += gp->retraceDeltaTime;
-    if (gp->retraceLocalTime > (OS_TIMER_CLOCK * (OSTime)359999999)) {
-        gp->retraceLocalTime = (OS_TIMER_CLOCK * (OSTime)359999999);
+    gp->playTime += gp->retraceDeltaTime;
+    if (gp->playTime > (OS_TIMER_CLOCK * (OSTime)359999999)) {
+        gp->playTime = (OS_TIMER_CLOCK * (OSTime)359999999);
     }
 #if VERSION >= VERSION_US
     if (!gp->dvdError && !winCheck()) {
@@ -620,13 +620,13 @@ void viPostCallback(u32 retraceCount) {
             }
         } else {
             if (!OSGetResetButtonState()) {
-                gp->resetType = 1;
+                gp->resetType = RESET_TYPE_SOFT;
             }
         }
         if (gp->keyDataValid) {
             if (OSIsRestart() && !gp->restartChecked) {
                 if ((keyGetButton(0) & reset) == reset) {
-                    gp->resetType = 0;
+                    gp->resetType = RESET_TYPE_NONE;
                     goto exitcheck;
                 } else {
                     gp->restartChecked = TRUE;
@@ -638,14 +638,14 @@ void viPostCallback(u32 retraceCount) {
                     gp->softResetTimeout = OSGetTime();
                 }
                 if (OSTicksToMilliseconds(OSGetTime() - gp->softResetTimeout) > 500) {
-                    gp->resetType = 1;
+                    gp->resetType = RESET_TYPE_SOFT;
                 }
             } else {
                 gp->softResetWait = FALSE;
             }
 #if VERSION > VERSION_DEMO_US
             if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {
-                gp->resetType = 0;
+                gp->resetType = RESET_TYPE_NONE;
             }
 #endif
         }
@@ -894,7 +894,7 @@ void gcResetCheck(void) {
             cardMain();
             VIWaitForRetrace();
         }
-        if (gp->resetType != 2) {
+        if (gp->resetType != RESET_TYPE_MENU) {
             if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
 #if VERSION <= VERSION_DEMO_US
                 code = OS_RESET_RESTART;
