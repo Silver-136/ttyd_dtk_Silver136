@@ -42,7 +42,6 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 #include "map/sharin.h"
-#include "map/sharin.h"
 #include "driver/camdrv.h"
 #include <dolphin/pad.h>
 

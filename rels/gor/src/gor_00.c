@@ -3830,7 +3830,7 @@ static USER_FUNC(make_itemsel_table) {
     itemsel_table_ram = _mapAlloc((MAX_HELD_ITEMS + 1) * sizeof(s32));
     p = itemsel_table_ram;
     count = 0;
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < MAX_HELD_ITEMS; i++) {
         s32 item = pouch->heldItems[i];
 
         if (item >= ITEM_SHROOM_FRY && item < ITEM_AUDIENCE_CAN) {
@@ -5923,7 +5923,7 @@ static EVT_BEGIN(mobj_box00)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
-    CALL(evt_item_flag_on, STRING("item00"), 258)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
 #endif
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))

@@ -7105,17 +7105,20 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             data->extra[0] = data->extra[1] = data->extra[2] = 0;
             if (data->flags & 1) {
                 data->flags &= ~1;
-                {s32 n; CaseSetup* s = &setup;
-                for (n = 0; n < 2; n++) {
-                    s->conditionId = 0x8009;
-                    s->hitObjName = drumname[n].anim;
-                    s->swFlag = 0;
-                    s->activeFunc = NULL;
-                    s->evtCode = slotevttbl[n];
-                    s->priority = 0;
-                    memcpy(s->lwData, event->lwData, sizeof(s->lwData));
-                    data->caseId[n] = caseEntry(s);
-                }
+                {
+                    s32 n;
+                    CaseSetup* s = &setup;
+
+                    for (n = 0; n < 2; n++) {
+                        s->conditionId = 0x8009;
+                        s->hitObjName = drumname[n].anim;
+                        s->swFlag = 0;
+                        s->activeFunc = NULL;
+                        s->evtCode = slotevttbl[n];
+                        s->priority = 0;
+                        memcpy(s->lwData, event->lwData, sizeof(s->lwData));
+                        data->caseId[n] = caseEntry(s);
+                    }
                 }
             }
             if (data->flags & 8) {
