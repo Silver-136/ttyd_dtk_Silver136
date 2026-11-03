@@ -118,10 +118,6 @@ void BattleAudienceSoundGetInfo2(s32 index, Vec* pos);
 void BattleAudienceSoundMain(void);
 void BattleAudienceNoiseMain(void);
 
-
-
-#pragma force_active on
-
 /** Weapon for an empty can thrown by a spectator (ITEM_AUDIENCE_CAN): 1 damage plus 1 per extra hit. */
 BattleWeapon weapon_data_akikan = {
     NULL, 0, // name..icon
@@ -253,7 +249,7 @@ BattleWeapon weapon_data_hammer = {
     NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
-#pragma force_active reset
+
 /**
  * Seating layout per Mario's rank (Rising Star, B-List Star, A-List Star, Superstar): how many seats are open in
  * each of the ten rows (centred in the 20 columns), so the stands fill out as the rank goes up.

@@ -822,6 +822,3 @@ USER_FUNC(evt_nannpcwork_flag_onoff) {
 
 #pragma explicit_zero_data on
 #pragma explicit_zero_data reset
-
-#pragma force_active reset
-
