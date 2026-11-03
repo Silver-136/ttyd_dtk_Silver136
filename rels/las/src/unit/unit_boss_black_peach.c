@@ -3006,9 +3006,8 @@ EVT_BEGIN(queen_dead_hp_msg_evt)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-
 /** Event script: the queen's line when she is about to die (stg8_las_168). */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(queen_dead_hp_msg_evt)
     CALL(btlevtcmd_StatusWindowOnOff, 0)
     CALL(evt_btl_camera_set_mode, 0, 0)

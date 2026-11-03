@@ -213,12 +213,12 @@ void gcResetCheck(void);
  */
 void marioStInit(void) {
     static u8 stack[0x1000];
-#if VERSION <= VERSION_DEMO_US
+
     // the releases also start cold after a shutdown reset
+#if VERSION <= VERSION_DEMO_US
     if (!OSIsRestart()
 ) {
 #else
-    // the releases also start cold after a shutdown reset
     if (!OSIsRestart() || (OSGetResetCode() & OS_RESET_SHUTDOWN)) {
 #endif
         DEMOInit(&GXNtsc480IntDfMarioSt);
@@ -274,6 +274,8 @@ void marioStInit(void) {
     gp->areaFadeInDuration = 300;
     gp->areaFadeOutType = FADE_OUT_BLACK;
     gp->areaFadeOutDuration = 300;
+
+    // game language: 1 English, 2 German, 3 French, 4 Spanish, 5 Italian
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
     gp->language = LANGUAGE_JP;
@@ -326,7 +328,6 @@ void marioStInit(void) {
     if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS && !(gp->flags & GW_FLAG_E3)) {
         gp->language = LANGUAGE_JP;
     } else {
-        // game language: 1 English, 2 German, 3 French, 4 Spanish, 5 Italian
         gp->language = LANGUAGE_US;
     }
     gp->framerate = 60;

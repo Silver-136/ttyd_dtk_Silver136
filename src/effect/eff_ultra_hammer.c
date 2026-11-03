@@ -185,10 +185,6 @@ s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 0,
 };
 
-/** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
-
-// Texture scroll offsets: -3.5 / 24 * i for i = 0..24
-
 s8 wakka_normal_tbl[] ATTRIBUTE_ALIGN(32) = {
     0, 61, 16,
 #else
@@ -457,6 +453,7 @@ u8 wakka_dl_0_19[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
+/** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
 #if VERSION <= VERSION_DEMO_US
 void* wakka_dl_0_tbl[] = {
     wakka_dl_0_0, // 0
@@ -515,7 +512,10 @@ static f32 scale_tbl[] = {
     3.2f, 3.4f, 3.6f, 3.8f, 4.0f,
     4.2f, 4.4f, 4.6f, 4.8f, 5.0f,
 };
+#endif
 
+// Texture scroll offsets: -3.5 / 24 * i for i = 0..24
+#if VERSION <= VERSION_DEMO_US
 f32 scroll_tbl[] = {
     0.0f, -0.14583334f, -0.29166669f, -0.43750003f, -0.58333337f,
     -0.72916669f, -0.87500006f, -1.0208334f, -1.1666667f, -1.3125f,

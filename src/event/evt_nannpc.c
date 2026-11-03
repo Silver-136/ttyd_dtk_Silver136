@@ -22,11 +22,6 @@ NanNPCWork* nanNPCWork;
 char makestring[16];
 
 
-/**
- * Finds the crowd NPC with the given name.
- * Names are strings; a value without the top address bit is treated as a number
- * and looked up by its six-digit hex form, so scripts can name crowd NPCs by index. NULL if none matches.
- */
 #if VERSION <= VERSION_DEMO_US
 /**
  * The demo turns the name into a string in a helper (same code, other register order).

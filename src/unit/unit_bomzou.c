@@ -73,24 +73,30 @@ static StatusVulnerability regist = {
     0, // invisible
     0, // ohko
 };
+#endif
 
 /** Poses while the fuse has 3 or more turns left (all frames use B_2). */
+#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_NORMAL, "B_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_2"},
     {POSE_TYPE_DAMAGE, "B_2"},
     {POSE_TYPE_ACTION, "B_2"},
 };
+#endif
 
 /** Poses while the fuse has 2 turns left (all frames use B_3). */
+#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_2[] = {
     {POSE_TYPE_NORMAL, "B_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_3"},
     {POSE_TYPE_DAMAGE, "B_3"},
     {POSE_TYPE_ACTION, "B_3"},
 };
+#endif
 
 /** Poses while the fuse has 1 turn left (all frames use B_4). */
+#if VERSION > VERSION_DEMO_US
 static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_NORMAL, "B_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_4"},
@@ -274,7 +280,6 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
-/** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -314,7 +319,6 @@ static EVT_BEGIN(phase_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
-/** The bomb never acts on its own turn; it just returns to its idle loop. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -344,10 +348,6 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
-/**
- * Death data event (tag 49): queues explosion_event (tag 53) as an after-reaction,
- * so a bomb that is knocked out still blows up.
- */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN
@@ -424,11 +424,13 @@ static EVT_BEGIN(explosion_event)
 EVT_END()
 #else
 EVT_END_PAD()
+#endif
 
 /**
  * Data table events: knocked out (49) queues the blast, tag 53 is the blast itself,
  * and the battle end (63) cuts off the fuse sound.
  */
+#if VERSION > VERSION_DEMO_US
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_EXPLOSION_EVENT_BOMZOU, explosion_event},

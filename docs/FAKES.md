@@ -559,10 +559,9 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | rels/win/src/window/win_00.c | win_item_move_3d_position | elapsed is copied into isFirstCall; using elapsed directly changes the object. | see comment |
 | PAL | rels/tst/src/unit/unit_powan.c | powan_rider_follow | worldPositions read as `*(Vec**)` instead of `(Vec*)...->address` (register choice) | natural form with the typed smartEntry address |
 | Demos | rels/mri/src/mri_puni.c | puni_puni_main | `(const char*)(u32)` round trip on one sound name, so its address is hoisted into a saved register before the loop | plain literal: one register less, stack frame 16 bytes smaller |
-| Demos | src/cam_shift.c | (file) | `#define renderTime renderFieldTime` inside a demo guard: the demo times the shift with the field clock | a helper or guards at the seven uses, which retail would read |
 | Demos | src/battle/battle_unit.c | BtlUnit_GetStatus, BtlUnit_SetStatus, BtlUnit_CheckRecoveryStatus, BtlUnit_CheckStatus | BATTLE_UNIT_STATUS_ENUM: the file sees the enum prototypes while its callers see s8 (same bytes retail reads through s8) | one prototype for all units: the callers then lose their sign extension |
 | Both | src/event/evt_badgeshop.c | evt_badgeShop_throw_get_kind_cnt | `long i` instead of int: register choice in the demos, no change in retail | int |
 | Demos | src/event/evt_mario.c | evt_mario_mov_pos (demo guard) | marioSetForceMove called through a (s32, f32, f32) cast; the demo prototype is (f32, s32, f32) as its other callers need | plain call |
 | Demos | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | stripped in the demos: only the strings stay compiled there, so its numbers stay out of the pool | full body |
 | Demos | src/manager/cardmgr_demo.inc | (demo copy of cardmgr.c) | no-op self-assignment the target compiles to a register copy; | see comment |
-| Demos | src/driver/npcdrv.c | fbatHitCheck (demo copy), FH_NPC_FILTER | `(*(T*)&...)` field reads as in the retail copy's row | plain field reads |
+| Demos | src/driver/npcdrv.c | fbatHitCheck (demo copy) | `(*(T*)&...)` field reads as in the retail copy's row | plain field reads |

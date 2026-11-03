@@ -513,8 +513,11 @@ EVT_BEGIN(nokkosu_init)
 EVT_END()
 
 EVT_BEGIN(nokkosu_talk)
+
     // Nokkos is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+
+    // Nokkos greets Mario.
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
 #else
@@ -525,8 +528,6 @@ EVT_BEGIN(nokkosu_talk)
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
 #else
-
-    // Nokkos greets Mario.
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
 #endif
 

@@ -94,15 +94,7 @@ void coingetDisp(WinMgrEntry* entry);
 s32 evt_sub_mail_event_end[1];
 #endif
 
-/**
- * Sway of a hammered tree, one row per frame for 25 frames: the trunk's tilt in degrees and the leaves' two
- * offsets, swinging out and settling back to rest. tree_evt reads it.
- */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Stopwatch script that just waits a frame forever: scripts spawn it with SPAWN_EVENT_GET_ID
- * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
- */
 EVT_BEGIN(evt_sub_stopwatch)
     LOOP(0)
         WAIT_FRAMES(1)
@@ -111,6 +103,10 @@ EVT_BEGIN(evt_sub_stopwatch)
 EVT_END()
 #endif
 
+/**
+ * Sway of a hammered tree, one row per frame for 25 frames: the trunk's tilt in degrees and the leaves' two
+ * offsets, swinging out and settling back to rest. tree_evt reads it.
+ */
 s32 tree_data[] = {
     -230000000, -230000000, -230000000, -230000547, -229998519, -229998338, -230001199, -229996749,
     -229996348, -230001643, -229995557, -229995012, -230001570, -229995811, -229995310, -230000702,
@@ -137,17 +133,7 @@ EVT_BEGIN(evt_sub_stopwatch)
 EVT_END()
 #endif
 
-/**
- * Sideways sway of a checked bush, one offset per frame for 12 frames, out and back to rest;
- * kusa_evt reads it.
- */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Shakes a tree hit with the hammer: plays the tree and leaves sounds,
- * drops falling-leaf effects (LW(0) picks the leaf variant), spawns the optional drop script in LW(5),
- * then sways map objects LW(2) (trunk, rotated)
- * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
- */
 EVT_BEGIN(tree_evt)
     SET_VALUE(LF(0), 0)
     IF_INT_NOT_EQUAL(LW(3), 0)
@@ -202,11 +188,6 @@ EVT_BEGIN(tree_evt)
     END_LOOP
     RETURN
 EVT_END()
-/**
- * Map setup helper: walks the tree table at LW(0) (rows of six words: leaf variant 0-6, hit object, trunk,
- * leaves, leaves, drop script; a first word of 7 ends it)
- * and registers a hammer case on each hit object that runs tree_evt.
- */
 EVT_BEGIN(evt_sub_tree_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -221,21 +202,16 @@ EVT_BEGIN(evt_sub_tree_access_entry)
 EVT_END()
 #endif
 
+/**
+ * Sideways sway of a checked bush, one offset per frame for 12 frames, out and back to rest;
+ * kusa_evt reads it.
+ */
 static s32 kusa_data[] = {
     -230000000, -230001918, -230003070, -230002273, -230000794, -230000000, -230000794, -230002273,
     -230003070, -230002501, -230001249, -230000000,
 };
 
-/**
- * The pale yellow "You got N coins!" window that evt_sub_get_coin opens for coin rewards;
- * coingetDisp draws it.
- */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Shakes a bush Mario checks: plays the grass sound at Mario, spawns the optional drop script in LW(3),
- * and sways map object LW(2) sideways through kusa_data for 12 frames.
- * Run per bush by evt_sub_kusa_access_entry.
- */
 EVT_BEGIN(kusa_evt)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(10), LW(11), LW(12), 0)
@@ -252,11 +228,6 @@ EVT_BEGIN(kusa_evt)
     END_LOOP
     RETURN
 EVT_END()
-/**
- * Map setup helper: walks the bush table at LW(0) (rows of four words: kind, hit object, map object,
- * drop script; a first word of 4 ends it) and registers an A-button case in front of each one that runs
- * kusa_evt.
- */
 EVT_BEGIN(evt_sub_kusa_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -271,6 +242,10 @@ EVT_BEGIN(evt_sub_kusa_access_entry)
 EVT_END()
 #endif
 
+/**
+ * The pale yellow "You got N coins!" window that evt_sub_get_coin opens for coin rewards;
+ * coingetDisp draws it.
+ */
 WinMgrDesc coinget_window_desc[] = {
     {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, coingetDisp},
 };
@@ -1999,7 +1974,6 @@ USER_FUNC(evt_sub_animgroup_async) {
     return EVT_RETURN_DONE;
 }
 
-/** Starts the on-screen countdown timer: args[0] is the time limit, args[1] the restart time. */
 #if VERSION == VERSION_EU
 /** Returns the display frame rate (50 or 60) in args[0]. PAL only. */
 USER_FUNC(evt_sub_get_framerate) {

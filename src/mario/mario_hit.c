@@ -67,7 +67,6 @@ static inline f32 marioHitNrmAngle(Vec* nrm) {
     return angleABf(0.0f, 0.0f, sqrtf(nx * nx + nz * nz), -ny);
 }
 
-/** marioHitNrmAngle without the local copies: sets groundRot from the normal and returns the slope in degrees. */
 #if VERSION <= VERSION_DEMO_US
 
 /** Demo-only form of marioHitNrmAngle taking the normal as three floats (the demo's tube ground and landing checks). */
@@ -2667,10 +2666,6 @@ HitEntry* dou10_yoko_yari2(f32* out) {
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
 
-/**
- * Spear check on dou_10 for tube mode (mario.c): unfiltered rays 40 along +z from 10 ahead of and behind Mario;
- * a hit becomes hitobjFront, and mario.c hurts him if it has the spike attribute 0x800.
- */
 HitEntry* dou10_yoko_yari3(void) {
     HitCheckQuery query;
     f32 s, c;

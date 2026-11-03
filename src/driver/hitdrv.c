@@ -1418,9 +1418,8 @@ void hitObjGetNormal(const char* name, Vec* normal) {
     }
 }
 
-#if VERSION > VERSION_DEMO_US
-
 /** Returns hit's joint name, or NULL for NULL (the demo has no range check). */
+#if VERSION > VERSION_DEMO_US
 const char* hitGetName(HitEntry* hit) {
     MapEntry* map;
     s32 count;
@@ -1448,8 +1447,6 @@ const char* hitGetName(HitEntry* hit) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
-
-/** Returns hit's joint name, or NULL for NULL (the demo has no range check). */
 const char* hitGetName(HitEntry* hit) {
     if (hit != NULL) {
         return hit->joint->name;

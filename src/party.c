@@ -982,11 +982,11 @@ void partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
     party->motionStep = sub;
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Returns the partner to the run mode she had before the current one,
  * ending her ability first (evt_party and party_move).
  */
+#if VERSION <= VERSION_DEMO_US
 void partyPrevRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
         return;
@@ -999,10 +999,6 @@ void partyPrevRunMode(PartyEntry* party) {
 #endif
 #pragma dont_inline reset
 
-/**
- * Returns the partner to the run mode she had before the current one,
- * ending her ability first (evt_party and party_move).
- */
 #if VERSION > VERSION_DEMO_US
 void partyPrevRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
@@ -1948,17 +1944,15 @@ void allPartyRideJabara(void) {
         partyChgRunMode(party, PARTY_RUN_RIDE);
     }
 }
+#endif
 
 /**
  * Where the partner rides with Mario: behind him on Yoshi (the follower behind the main partner),
  * above him in plane mode, in front of the boat in boat mode (not in the demos), otherwise 20 above him.
  */
+#if VERSION <= VERSION_DEMO_US
 static void getRidePos(PartyEntry* party, Vec* pos) {
 #else
-/**
- * Where the partner rides with Mario: behind him on Yoshi (the follower behind the main partner),
- * above him in plane mode, in front of the boat in boat mode (not in the demos), otherwise 20 above him.
- */
 void getRidePos(PartyEntry* party, Vec* pos) {
 #endif
     MarioWork* mario = party->playerPtr;

@@ -14,8 +14,6 @@ static CardWork* wp;
 #define CARD_FLAG_OP_FAILED 0x200       // the last operation stopped on an error result
 #define CARD_FLAG_BAD_HEADER 0x400      // a read found the file header failing its check
 #define CARD_FLAG_WRITE_STAGED 0x800    // write_main writes writeBuf (copy, erase) instead of the slot's data
-#define CARD_FLAG_INSERT_CHANGED 0x4000 // retail: a card was inserted or removed while watching slot A
-#define CARD_FLAG_INSERT_WATCH 0x8000   // slot A is watched for a card being inserted or removed
 
 // Set once a card has been opened; memcard_open then reads its serial number.
 // The demo keeps it in bit 0x4000 (retail moved it to make room for the insert watch).

@@ -250,18 +250,19 @@ EVT_END()
 s32 fbatNpcTalkCheck(void);
 
 
-#if VERSION > VERSION_DEMO_US
-
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
  * retail clears the floor-collision overrides kuribo_use may have set; empty in the demos.
  */
+#if VERSION > VERSION_DEMO_US
 void kuribo_use_post(PartyEntry* party) {
     party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
     party->flags &= ~PARTY_FLAG_FORCE_FALL;
 }
+#endif
 
 /** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
+#if VERSION > VERSION_DEMO_US
 void kuribo_use(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
     HitEntry* wall;
@@ -350,16 +351,17 @@ void kuribo_use(PartyEntry* party) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
-
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
  * retail clears the floor-collision overrides kuribo_use may have set; empty in the demos.
  */
+#if VERSION <= VERSION_DEMO_US
 void kuribo_use_post(PartyEntry* party) {
 }
+#endif
 
 /** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
+#if VERSION <= VERSION_DEMO_US
 void kuribo_use(PartyEntry* party) {
     EventEntry* evt;
 

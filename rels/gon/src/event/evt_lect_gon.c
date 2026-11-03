@@ -789,8 +789,9 @@ EVT_BEGIN(slit_majin_lecture)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_15"), 0, STRING("ペラ魔人"))
 
-// The genie asks whether Mario understands the curse.
 #endif
+
+// The genie asks whether Mario understands the curse.
         CALL(evt_msg_select, 0, STRING("stg1_gon_12_15_yn"))
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_msg_continue)
@@ -814,8 +815,9 @@ EVT_BEGIN(slit_majin_lecture)
 #else
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_17"))
 
-// The genie says farewell and disappears.
 #endif
+
+// The genie says farewell and disappears.
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_2"))
     WAIT_MS(200)
     CALL(evt_npc_set_camid, STRING("ペラ魔人"), 4)

@@ -928,8 +928,10 @@ EVT_BEGIN(plane_majin_lecture)
 EVT_END()
 #else
 EVT_END_PAD()
+#endif
 
 /** Script helper. Stores TRUE in args[0] while the R trigger is held on controller 0, otherwise FALSE. */
+#if VERSION > VERSION_DEMO_US
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;
 
@@ -942,11 +944,6 @@ static USER_FUNC(lect_push_r_check) {
 }
 #endif
 
-/**
- * Script helper (normal change).
- * Cancels Mario's roll and paper mode so he is back to normal,
- * and blocks until the roll is finished and the slit (paper) pose is over.
- */
 #if VERSION <= VERSION_DEMO_US
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;

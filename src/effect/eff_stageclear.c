@@ -49,7 +49,10 @@ static s32* texid_tbl[] = {tex_jp, tex_shadow_jp, tex_us, tex_shadow_us};
 s32 shake_dt[] = {2, 6, 2, 0, -1};
 s32 shake_dt2[] = {12, 36, 12, 0, -1};
 #endif
+#endif
+
 /** Shakes the camera when a banner letter lands: 50 frames lightly, or 100 frames harder for the last letter (LW 1). */
+#if VERSION < VERSION_US
 static EVT_BEGIN(evt_shake)
     IF_INT_EQUAL(LW(1), 0)
         CALL(evt_cam_shake, CAMERA_3D_EFFECTA, FLOAT(0.009765625f), FLOAT(0.009765625f), 50)
@@ -83,7 +86,10 @@ typedef struct TexSet {
 static TexSet texid_tbl[6] = { { tex_jp, tex_shadow_jp, 8 }, { tex_us, tex_shadow_us, 14 }, { tex_lang3, tex_shadow_lang3, 12 }, { tex_lang4, tex_shadow_lang4, 16 }, { tex_lang5, tex_shadow_lang5, 12 }, { tex_lang6, tex_shadow_lang6, 8 } };
 /** Rainbow (niji) texture laid over the banner letters, Japanese then English. */
 u32 niji_tbl[] = {144, 154, 150, 156, 158, 144};
+#endif
+
 /** Shakes the camera when a banner letter lands: 50 frames lightly, or 100 frames harder for the last letter (LW 1). */
+#if VERSION >= VERSION_US
 static EVT_BEGIN(evt_shake)
     IF_INT_EQUAL(LW(1), 0)
         CALL(evt_cam_shake, CAMERA_3D_EFFECTA, FLOAT(0.009765625f), FLOAT(0.009765625f), 50)

@@ -2953,11 +2953,11 @@ USER_FUNC(kamec_fire_magic) {
 }
 
 
-#if VERSION > VERSION_DEMO_US
 /**
  * Ends the calling Magikoopa's magic effect: the demo deletes the effect passed in args[0];
  * the full game finds it by the Magikoopa's name and lets it run out.
  */
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(kamec_fire_magic_delete) {
     EffectEntry* eff = effNameToPtr(evtNpcNameToPtr(event, "me")->description);
     if (eff) {
@@ -2969,11 +2969,12 @@ USER_FUNC(kamec_fire_magic_delete) {
 
 
 /** Lost event of Yux: hovers through its standing poses for 2 s and resumes. */
-#if VERSION <= VERSION_DEMO_US
+
 /**
  * Ends the calling Magikoopa's magic effect: the demo deletes the effect passed in args[0];
  * the full game finds it by the Magikoopa's name and lets it run out.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(kamec_fire_magic_delete) {
     effSoftDelete((EffectEntry*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;

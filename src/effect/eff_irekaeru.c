@@ -88,11 +88,11 @@ void effIrekaeruMain(EffectEntry* effect) {
 #endif
                 return;
             }
-#if VERSION >= VERSION_US
+
             // FAKE: no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object
+#if VERSION >= VERSION_US
             work->poseId = animPoseEntry(eff_irekae_str_tbl[gp->language], (u32)inBattle);
 #else
-            // FAKE: no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object
             work->poseId = animPoseEntry("EFF_Irekae", (u32)inBattle);
 #endif
             animPoseSetAnim(work->poseId, "Z_1", TRUE);

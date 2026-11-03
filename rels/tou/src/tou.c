@@ -430,11 +430,6 @@ static USER_FUNC(evt_rankingReInit) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00002e24, JP tou .text+0x2D60. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Script helper (no arguments): resets the Glitz Pit to its starting state.
- * Removes item 0x41 from the pouch, clears every fighter's lost flag
- * and the first-match/champion/title-match/last-opponent flags, then rebuilds the ranking.
- */
 USER_FUNC(evt_rankingReset) {
     s32 i;
 
@@ -2874,7 +2869,6 @@ USER_FUNC(chk) {
 // Descriptive name (not in the symbol maps); placeholder unk_tou_0000063c, JP tou .text+0x578. See docs/NAME_PROVENANCE.md.
 // Accumulate 241 eligible checks; ineligible controls or motions pause rather than reset the count.
 #if VERSION > VERSION_DEMO_US
-/** Script helper: waits until Mario has been idle, walking or dashing (and not locked out) for 240 frames in total. */
 USER_FUNC(tou_mario_free_wait) {
     MarioWork* mario = marioGetPtr();
 
@@ -2901,7 +2895,6 @@ USER_FUNC(tou_mario_talk_end_wait) {
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 USER_FUNC(tou_mario_keyoff_check) {
     EvtWord* args = event->args;
 

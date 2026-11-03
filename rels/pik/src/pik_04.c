@@ -712,7 +712,6 @@ EVT_BEGIN(evt_down)
     SUBTRACT_FLOAT(LW(3), FLOAT(1325.0f))
     SUBTRACT_FLOAT(LW(6), FLOAT(1325.0f))
 
-    // The elevator box sinks.
     CALL(evt_hit_bind_mapobj, STRING("a_hako"), STRING("hako"))
     CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(10))
 #else
@@ -722,10 +721,11 @@ EVT_BEGIN(evt_down)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
 
-    // The elevator box sinks.
     CALL(evt_hit_bind_mapobj, STRING("a_hako"), STRING("hako"))
     CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(9))
 #endif
+
+    // The elevator box sinks.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 13250, 0, 10000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)

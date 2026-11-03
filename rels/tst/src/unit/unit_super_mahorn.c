@@ -663,16 +663,14 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(PTR(attack_magic_event))
             GOTO(99)
         ELSE
-#if VERSION > VERSION_DEMO_US
-            LABEL(10)
 
             // Otherwise it rolls for an attack by weight: punch, magic, all-target magic or a support spell.
+#if VERSION > VERSION_DEMO_US
+            LABEL(10)
             SET_VALUE(LW(0), 0)
             ADD(LW(0), 30)
             ADD(LW(0), 60)
 #else
-
-            // Otherwise it rolls for an attack by weight: punch, magic, all-target magic or a support spell.
             LABEL(10)
             SET_VALUE(LW(0), 0)
             ADD(LW(0), 60)

@@ -133,6 +133,9 @@ static const char bti04[7];
  * starts the battle via battle_init, then once the battle ends returns to the field (or game over on a kiosk
  * timeout; states 10/11 end a debug battle).
  */
+
+// A non-NULL map name tells seq_gameOver to skip its iris fade (the battle has already
+// faded out); seq_game does not read it.
 #if VERSION > VERSION_DEMO_US
 void seq_battleMain(SequenceWork* work) {
     FieldBattleData* fbat;
@@ -324,8 +327,6 @@ void seq_battleMain(SequenceWork* work) {
         }
         case 4:
         if (++work->counter > 30) {
-                // A non-NULL map name tells seq_gameOver to skip its iris fade (the battle has already
-                // faded out); seq_game does not read it.
                 if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT)) {
                     seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
                 } else {
@@ -348,7 +349,7 @@ void seq_battleMain(SequenceWork* work) {
     }
 }
 
-/** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
+/** Demo versions: performs the battle setup. */
 static void battle_init(void) {
 #endif
 

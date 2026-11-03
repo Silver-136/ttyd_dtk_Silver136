@@ -297,6 +297,7 @@ TubuDt tubuDt[] = {
     {-33, -62, 0, 0, 382, "gor"},
     {-33, -74, 1, 0, 382, "las"},
 };
+#endif
 
 /**
  * Sets up the Journal when the pause menu opens:
@@ -306,6 +307,7 @@ TubuDt tubuDt[] = {
  * finds Mario's spot on the world map for the current area, and builds the sorted badge,
  * recipe and Tattle lists with their found counts.
  */
+#if VERSION <= VERSION_DEMO_US
 void winLogInit(WindowWork* w) {
     s32 j;
     s32 i;
@@ -313,7 +315,7 @@ void winLogInit(WindowWork* w) {
     EffectEntry* e;
     const char* area;
     TattleEntry* t;
-#else
+#endif
 
 /**
  * Sets up the Journal when the pause menu opens:
@@ -323,6 +325,7 @@ void winLogInit(WindowWork* w) {
  * finds Mario's spot on the world map for the current area, and builds the sorted badge,
  * recipe and Tattle lists with their found counts.
  */
+#if VERSION > VERSION_DEMO_US
 void winLogInit(WindowWork* w) {
     u32 k;
     const char* area;

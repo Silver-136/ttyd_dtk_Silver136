@@ -2657,51 +2657,7 @@ static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
 #endif
 
 #if VERSION <= VERSION_DEMO_US
-// FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
-#define FH_NPC_FILTER(f1000, bit)                                       \
-    if (npc == NULL)                                                    \
-        continue;                                                       \
-    if (!(npc->flags & NPC_FLAG_READY))                                 \
-        continue;                                                       \
-    if (f1000) {                                                        \
-        if (!(npc->flags & NPC_FLAG_ENEMY))                             \
-            continue;                                                   \
-    } else {                                                            \
-        if (npc->flags & NPC_FLAG_ENEMY)                                \
-            continue;                                                   \
-    }                                                                   \
-    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & (bit)))   \
-        continue;                                                       \
-    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)                         \
-        continue;                                                       \
-    if (npc->flags & NPC_FLAG_NO_HIT)                                   \
-        continue;                                                       \
-    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD)      \
-        continue;                                                       \
-    if (npc->flags & NPC_FLAG_2D)                                       \
-        continue;
-#define FH_NPC_FILTER2(f1000, bit)                                      \
-    if (npc == NULL)                                                    \
-        continue;                                                       \
-    if (!(npc->flags & NPC_FLAG_READY))                                 \
-        continue;                                                       \
-    if (f1000) {                                                        \
-        if (!(npc->flags & NPC_FLAG_ENEMY))                             \
-            continue;                                                   \
-    } else {                                                            \
-        if (npc->flags & NPC_FLAG_ENEMY)                                \
-            continue;                                                   \
-    }                                                                   \
-    if (soft && !(npc->reactionFlags & (bit)))                          \
-        continue;                                                       \
-    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)                         \
-        continue;                                                       \
-    if (npc->flags & NPC_FLAG_NO_HIT)                                   \
-        continue;                                                       \
-    if (npc->flags & NPC_FLAG_2D)                                       \
-        continue;                                                       \
-    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD)      \
-        continue;
+
 
 /** Position of the hammer head during the spin hammer in the demos. */
 static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) {
@@ -2865,7 +2821,28 @@ void* fbatHitCheck(u32 flags, void* result) {
                 npcHammerPos(f, reach, swingAngle, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER2(flags & FBAT_CHECK_ENEMY, 2)
+                    // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
+                    if (npc == NULL)
+                        continue;
+                    if (!(npc->flags & NPC_FLAG_READY))
+                        continue;
+                    if (flags & FBAT_CHECK_ENEMY) {
+                        if (!(npc->flags & NPC_FLAG_ENEMY))
+                            continue;
+                    } else {
+                        if (npc->flags & NPC_FLAG_ENEMY)
+                            continue;
+                    }
+                    if (soft && !(npc->reactionFlags & 2))
+                        continue;
+                    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)
+                        continue;
+                    if (npc->flags & NPC_FLAG_NO_HIT)
+                        continue;
+                    if (npc->flags & NPC_FLAG_2D)
+                        continue;
+                    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD)
+                        continue;
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 10.0f))
                         continue;
                     if (dist >= res.dist)
@@ -2945,7 +2922,28 @@ void* fbatHitCheck(u32 flags, void* result) {
                 npcKaitenHammerPos(swingAngle, reach, &x, &y, &z);
                 npc = wp->entries;
                 for (i = 0; i < total; i++, npc++) {
-                    FH_NPC_FILTER(flags & FBAT_CHECK_ENEMY, 2)
+                    // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
+                    if (npc == NULL)
+                        continue;
+                    if (!(npc->flags & NPC_FLAG_READY))
+                        continue;
+                    if (flags & FBAT_CHECK_ENEMY) {
+                        if (!(npc->flags & NPC_FLAG_ENEMY))
+                            continue;
+                    } else {
+                        if (npc->flags & NPC_FLAG_ENEMY)
+                            continue;
+                    }
+                    if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & 2))
+                        continue;
+                    if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK)
+                        continue;
+                    if (npc->flags & NPC_FLAG_NO_HIT)
+                        continue;
+                    if ((*(u32*)&((NpcEntry*)npc)->statusFlags) & NPC_STATUS_DEAD)
+                        continue;
+                    if (npc->flags & NPC_FLAG_2D)
+                        continue;
                     if (!_npcHitCheckSphere(npc, &dist, x, y, z, 10.0f))
                         continue;
                     if (dist >= res.dist)

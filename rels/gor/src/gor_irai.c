@@ -907,10 +907,10 @@ static inline f32 iraiAddI(f32 a, s32 b) {
 }
 
 /**
- * Draw callback of the request window (US and PAL):
+ * Draw callback of the request window (JP and demos):
  * draws the blue title frames and header texts,
  * the list of requests (client and contents columns) clipped to the window,
- * with texts centred or squeezed to fit; solved requests are grey and the active one is red.
+ * with texts drawn at fixed positions; solved requests are grey and the active one is red.
  */
 void irai_window_disp(CameraId camera, void* param) {
     f32 negX;

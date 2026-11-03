@@ -935,7 +935,6 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
         GOTO(99)
     END_IF
 
-    // In JP and later, if the enemy would counter, his spin stops at once.
     CALL(evt_btl_camera_set_mode, 0, 0)
 
     // The hit, with the rating effect after a good command.
@@ -946,6 +945,8 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
         GOTO(99)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+
+    // In JP and later, if the enemy would counter, his spin stops at once.
     CALL(btlevtcmd_CommandPreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), 256, LW(0))
     IF_INT_NOT_EQUAL(LW(0), CHECK_COUNTER_NONE)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SHELL_SPIN_SPEED, 0)
@@ -1542,13 +1543,13 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
             CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
         END_IF
         CALL(btlevtcmd_SetHp, LW(10), LW(0))
+
+        // If Mario still has a move this turn, the shell opens to let him act.
 #if VERSION <= VERSION_DEMO_US
         CALL(btlevtcmd_RunDataEventChild, LW(10), 61)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, POSE_TYPE_NEUTRAL)
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, PART_ATTR_HIDDEN)
         CALL(btlevtcmd_OnAttribute, LW(3), kShellShielded | kUnitNeverTargetable)
-
-        // If Mario still has a move this turn, the shell opens to let him act.
         CALL(_check_mario_move_count, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_btl_camera_set_mode, 0, 0)
@@ -1558,8 +1559,6 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, kHidden)
         CALL(btlevtcmd_OnAttribute, LW(3), kShellShielded | kUnitNeverTargetable)
         CALL(btlevtcmd_StartWaitEvent, LW(3))
-
-        // If Mario still has a move this turn, the shell opens to let him act.
         CALL(_check_mario_move_count, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

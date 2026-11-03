@@ -779,7 +779,6 @@ static inline f32 partyUpdSpd(PartyEntry* party) {
 // FAKE: copy of partyUpdSpd with its locals declared in another order; using partyUpdSpd in partyChkUpdSpd changes the object
 #if VERSION > VERSION_DEMO_US
 
-/** partyUpdSpd again with its locals declared in another order (as found; the order can change register allocation). */
 static inline f32 partyUpdSpd2(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 f;
@@ -824,7 +823,6 @@ static inline f32 partyChkUpdSpd(PartyEntry* party) {
 // Descriptive name (not in the symbol maps); placeholder unk_800c93d0, JP 0x800C93D0. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 
-/** Sets targetSpeed (0 = stop); when nonzero requests an easing step unless forced to move, jumping, falling or climbing a step. Returns spd. */
 f32 partySetTargetSpd(PartyEntry* party, f32 spd) {
     if (spd) {
         party->targetSpeed = spd;
@@ -843,10 +841,6 @@ f32 partySetTargetSpd(PartyEntry* party, f32 spd) {
 // Descriptive name (not in the symbol maps); placeholder unk_800c9398, JP 0x800C9398. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 
-/**
- * Sets both targetSpeed and moveSpeed at once to spd scaled by Mario's playerGravity (0.75 in shallow water),
- * with no easing. Returns spd.
- */
 f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
     f32 t = spd * party->playerPtr->playerGravity;
     party->targetSpeed = t * partySpdRate(party);
@@ -862,10 +856,6 @@ f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
 // Descriptive name (not in the symbol maps); placeholder unk_800c92c4, JP 0x800C92C4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 
-/**
- * One speed-easing step for this frame (partyUpdSpd) unless the partner is forced to move or is jumping,
- * falling or climbing a step; returns moveSpeed. Koops and Ms. Mowz call it from their walks.
- */
 f32 partyUpdMoveSpd(PartyEntry* party) {
     if (party->forceMoveFrames != 0 || party->motionId == PARTY_MOTION_JUMP || party->motionId == PARTY_MOTION_FALL || party->motionId == PARTY_MOTION_UPSTAIRS) {
         return party->moveSpeed;
@@ -878,7 +868,6 @@ f32 partyUpdMoveSpd(PartyEntry* party) {
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
 
-/** Plays the partner landing sound (0x928) at the partner, when a jump or fall ends (party_motion.c). */
 void partyPlaySfxPartyLanding1(PartyEntry* party) {
     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_LANDING1), &party->position);
 }
@@ -959,11 +948,6 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
 // Descriptive name (not in the symbol maps); placeholder unk_800c9044, JP 0x800C9044. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 
-/**
- * Puts the partner in its standing pose (1), or the sleep pose (6) while Mario is deeply asleep
- * or PARTY_FLAG_SLEEP_ON is set. Ms. Mowz keeps her pose while chuchu_searchObject finds something to sniff out.
- * Does nothing in run mode 0.
- */
 void partyChgStayPose(PartyEntry* party) {
     if (party->runMode != PARTY_RUN_MOVE_RESET) {
         if (marioChkDeepSleep() == TRUE || (party->flags & PARTY_FLAG_SLEEP_ON)) {
@@ -1016,11 +1000,6 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
 // Descriptive name (not in the symbol maps); placeholder unk_800c8e74, JP 0x800C8E74. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 
-/**
- * Turns the partner's sprite to face Mario on screen:
- * displayDirectionTarget 180 when Mario is on its left in the camera's view, else 0.
- * Used by evt_mario.c and party_motion.c.
- */
 void partySetDispDirToMario(PartyEntry* party) {
     f32 dir = angleABf(party->position.x, party->position.z,
                        party->playerPtr->position.x, party->playerPtr->position.z);
@@ -1040,10 +1019,6 @@ void partySetDispDirToMario(PartyEntry* party) {
 // Descriptive name (not in the symbol maps); placeholder unk_800c8dd0, JP 0x800C8DD0. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 
-/**
- * TRUE when hit belongs to a map object a partner must not stand on (the objNames list: chests, jump stands,
- * Save and Heart Blocks, switches). party_motion.c then hops the partner off it (partyGetAppearPos5).
- */
 BOOL partyChkNoStandMobj(HitEntry* hit) {
     MapObjectEntry* mobj;
     BOOL ret;

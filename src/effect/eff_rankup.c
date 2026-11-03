@@ -84,11 +84,11 @@ void effRankupMain(EffectEntry* effect) {
 #endif
                 return;
             }
-#if VERSION >= VERSION_US
+
             // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
+#if VERSION >= VERSION_US
             work->poseId = animPoseEntry(eff_rankup_str_tbl[gp->language], (u32)inBattle);
 #else
-            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
             work->poseId = animPoseEntry("EFF_TekiKyouka", (u32)inBattle);
 #endif
             animPoseSetAnim(work->poseId, "Z_1", TRUE);

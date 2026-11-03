@@ -305,6 +305,7 @@ static u32 nozle_3_dl_1_15[] __attribute__((aligned(32))) = {0x98000400, 0x55000
 static u32 nozle_3_dl_1_16[] __attribute__((aligned(32))) = {0x98000300, 0x3B000000, 0x11001500, 0x15003600, 0x00001200, 0x10001000, 0x35000000, 0x12000F00, 0x0F000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static void* nozle_3_dl_1_tbl[] __attribute__((aligned(32))) = {nozle_3_dl_1_0, nozle_3_dl_1_1, nozle_3_dl_1_2, nozle_3_dl_1_3, nozle_3_dl_1_4, nozle_3_dl_1_5, nozle_3_dl_1_6, nozle_3_dl_1_7, nozle_3_dl_1_8, nozle_3_dl_1_9, nozle_3_dl_1_10, nozle_3_dl_1_11, nozle_3_dl_1_12, nozle_3_dl_1_13, nozle_3_dl_1_14, nozle_3_dl_1_15, nozle_3_dl_1_16};
 
+/** Display-list sizes for list set 1 of nozzle model 3 (type 2), drawn first. */
 #if VERSION <= VERSION_DEMO_US
 static u8 nozle_3_dl_1_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
 #endif
@@ -411,7 +412,6 @@ static GXColor nozle_4_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 127}, {255, 255, 255, 76}, {255, 255, 255, 0},
 };
 #else
-/** Display-list sizes for list set 1 of nozzle model 3 (type 2), drawn first. */
 static s8 nozle_4_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64, 0};
 #endif
 

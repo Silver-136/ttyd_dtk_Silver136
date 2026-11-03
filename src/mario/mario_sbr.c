@@ -100,10 +100,6 @@ void marioBottomless(void) {
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
 
-/**
- * Saves where Mario respawns after falling out of the map:
- * an entrance (evt_bero.c) or the boat's landing spot, 37 units above the given point.
- */
 void marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
     MarioWork* mario = marioGetPtr();
     Vec position;
@@ -117,7 +113,6 @@ void marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
 
-/** Saves the bottomless-pit respawn point as given; set from seq_mapchange.c to 10 above Mario on map entry. */
 void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
     MarioWork* mario = marioGetPtr();
     Vec position;
@@ -134,10 +129,6 @@ void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
 
-/**
- * Makes falling out of the map reload the current map at its entrance instead of respawning;
- * set when Mario enters a map as the boat.
- */
 void marioReloadMapOnBottomlessOn(void) {
     MarioWork* mario = marioGetPtr();
     mario->bottomlessReload = 1;
@@ -148,7 +139,6 @@ void marioReloadMapOnBottomlessOn(void) {
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
 
-/** Goes back to respawning at the saved point after a fall; cleared when the boat lands. */
 void marioReloadMapOnBottomlessOff(void) {
     MarioWork* mario = marioGetPtr();
     mario->bottomlessReload = 0;

@@ -3347,8 +3347,8 @@ void puniModeDead(PuniData* p) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
+#if VERSION <= VERSION_DEMO_US
 void puniModeDead(PuniData* p) {
     puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
 }
@@ -3838,14 +3838,14 @@ void puniModeUpdraft(PuniData *p) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-static inline void puniModeWonderSfx(PuniData* p, const char* sfx) {
-#else
 /**
  * Wonder mode: pops the soap bubble (sound and burst effect),
  * then after 20 frames the Puni gets a hop animation and goes to the funbari mode.
  * The demo build has this as a helper taking the sound name.
  */
+#if VERSION <= VERSION_DEMO_US
+static inline void puniModeWonderSfx(PuniData* p, const char* sfx) {
+#else
 void puniModeWonder(PuniData* p) {
 #endif
     Vec pos;
@@ -3886,12 +3886,12 @@ void puniModeWonder(PuniData* p) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
 /**
  * Wonder mode: pops the soap bubble (sound and burst effect),
  * then after 20 frames the Puni gets a hop animation and goes to the funbari mode.
  * The demo build has this as a helper taking the sound name.
  */
+#if VERSION <= VERSION_DEMO_US
 static void puniModeWonder(PuniData* p) {
     puniModeWonderSfx(p, "SFX_STG2_SOAPBALL_BREAK1");
 }

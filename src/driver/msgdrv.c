@@ -968,6 +968,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
     }
 
     while (TRUE) {
+
+            // Shift-JIS 0x8145 is the middle dot, 0x8140 the full-width space, 0x8151 the full-width low line
 #if VERSION <= VERSION_DEMO_US
         {
             s32 gz = 0;
@@ -1019,7 +1021,6 @@ void msgAnalize(smartEntry* smart, char* msg) {
             entry->scale = scale;
 #endif
             entry->value = flags;
-            // Shift-JIS 0x8145 is the middle dot, 0x8140 the full-width space, 0x8151 the full-width low line
             if (*(u16*)msg == 0x8145) {
                 entry->value |= MSG_CHAR_VOICE;
             } else if (*(u16*)msg != 0x8140 && *(u16*)msg != 0x8151) {
@@ -1538,13 +1539,12 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
 #if VERSION <= VERSION_DEMO_US
             } else if ((((s8*)tag)[0] == 'R') || ((((s8*)tag)[0] == '/') && (((u32)((s8*)tag)[0]) == 0x2F72))) {
-                // BUG: the closing test compares one character with '/r' (0x2F72, a two-character constant), so it
-                // is always false and only <R...> tags are handled here
 #else
             } else if (((s8*)tag)[0] == 'R' || (((s8*)tag)[0] == '/' && (u32)((s8*)tag)[0] == 0x2F72)) {
+#endif
+
                 // BUG: the second test compares one byte with 0x2F72 ("/r" as a halfword), so it is never true:
                 // only R tags get here and i is always 1
-#endif
                 i = 1;
                 if (((s8*)tag)[0] != 'R') {
                     i = 2;
@@ -1653,8 +1653,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
             if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
 #else
             if (gp->language == LANGUAGE_JP && (s8)check >= '0' && (s8)check <= '9') {
-                // full-width digit: '0' + 0x821F is Shift-JIS 0x824F, the full-width zero
 #endif
+
+                // full-width digit: '0' + 0x821F is Shift-JIS 0x824F, the full-width zero
                 glyphD = kanjiSearch((u16)(check + 0x821F));
             } else {
                 glyphD = hankakuSearch(check);

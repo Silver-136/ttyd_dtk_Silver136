@@ -752,13 +752,6 @@ USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Counts itemId in bargainBadges[bargainNum..2*bargainNum-1];
- * the callers (winmgr.c, evt_win.c) subtract the count from the bargain stock when they build the badge lists.
- * Those slots lie past the five-entry array (bargainNum, reserved_110, restockFlags and padding),
- * which never hold a badge id, so it always returns 0.
- * Guess: it was meant to count copies already set aside.
- */
 #if VERSION <= VERSION_DEMO_US
 /** demo only: TRUE once word 6 of the block in LW(0) reaches the bargain count (no caller in the demo dol) */
 USER_FUNC(evt_badgeShop_getBargainKind) {

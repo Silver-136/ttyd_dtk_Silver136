@@ -625,10 +625,6 @@ EVT_BEGIN(mario_appeal_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
-/**
- * Mario's victory pose M_V_2 held for one second (data tag 64),
- * run for Mario and the partner when the battle is won and experience is handed out.
- */
 EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)

@@ -1087,11 +1087,13 @@ void mapUnLoad(void) {
 BOOL mapPreLoad(const char* map) {
     return TRUE;
 }
+#endif
 
 /**
  * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
  * The demo first unpacks the map's compressed archive.
  */
+#if VERSION > VERSION_DEMO_US
 void mapLoad(const char* map) {
     MapWork* wp;
     // FAKE: wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object
@@ -1127,11 +1129,13 @@ BOOL mapPreLoad(const char* map) {
     }
     return TRUE;
 }
+#endif
 
 /**
  * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
  * The demo first unpacks the map's compressed archive.
  */
+#if VERSION <= VERSION_DEMO_US
 void mapLoad(const char* map) {
     char path[256];
     MapWork* wp;
@@ -1160,11 +1164,13 @@ void mapLoad(const char* map) {
     _mapLoad(wp, 0, map);
     wp->entries[0].count = 1;
 }
+#endif
 
 /**
  * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
  */
+#if VERSION <= VERSION_DEMO_US
 void bmapUnLoad(void) {
     MapWork* wp2;
     MapEntry* entry3;
@@ -1231,9 +1237,10 @@ void bmapUnLoad(void) {
     arcDelete(1);
     arcDelete(2);
     memset(wp, 0, sizeof(MapWork));
+
+    // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
 #if VERSION <= VERSION_DEMO_US
     j = 0;
-    // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
     {
         s32 gz = 0;
         if (gz != 0) {
@@ -1267,7 +1274,6 @@ void bmapUnLoad(void) {
     wp = mapWork;
     activeGroup = 0;
     for (i = 0, entry = wp->entries; i < wp->entries[0].count; entry++, i++) {
-        // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
         if (entry->datAram) {
             entry->dat = _mapAllocTail(entry->datSize);
             entry->tpl = _mapAllocTail(entry->tplSize);

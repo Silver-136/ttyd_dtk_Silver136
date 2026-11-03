@@ -102,10 +102,6 @@ void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);
 
-/**
- * Panels of the file select menu: the four save files, then the copy, delete and back buttons and the sound
- * and rumble buttons; each with its position, offsets and the panel the cursor moves to up, down, left, right.
- */
 #if VERSION <= VERSION_DEMO_US
 s32 stone_id[7] = {ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR, ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR};
 /** Demo: a 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
@@ -117,6 +113,10 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 #endif
 
+/**
+ * Panels of the file select menu: the four save files, then the copy, delete and back buttons and the sound
+ * and rumble buttons; each with its position, offsets and the panel the cursor moves to up, down, left, right.
+ */
 WinDt win_dt[9] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {7, 2, 1, 1}},
     {140.0f, 75.0f, -120.0f, 60.0f, 12, 0, {8, 3, 0, 0}},

@@ -280,7 +280,6 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
-/** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1168,21 +1167,17 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         RETURN
 EVT_END()
 
-/**
- * Ms. Mowz's Tease: she teases the enemies, and the action command result sets the dizzy chance of a copy of the
- * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
- */
 #if VERSION <= VERSION_DEMO_US
-/**
- * Kiss Thief's spawned helper: runs mono_main, which draws the captured greyscale screen every frame;
- * the move deletes this event when the effect ends.
- */
 static EVT_BEGIN(main_evt)
     CALL(mono_main)
     RETURN
 EVT_END()
 #endif
 
+/**
+ * Ms. Mowz's Tease: she teases the enemies, and the action command result sets the dizzy chance of a copy of the
+ * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
+ */
 EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1233,7 +1228,6 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_AcSetGaugeParam, 100, 100, 100, 100)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
 
-    // Camera pulls back over her and the gauge command runs.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, 0, 3)
 #else
@@ -1243,10 +1237,11 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_AcSetGaugeParam, 34, 68, 100, 100)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
 
-    // Camera pulls back over her and the gauge command runs.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
 #endif
+
+    // Camera pulls back over her and the gauge command runs.
     CALL(evt_btl_camera_set_moveto, 1, LW(0), 73, 400, LW(0), 43, 0, 40, 5)
     WAIT_FRAMES(22)
     CALL(btlevtcmd_StartAC, 1)

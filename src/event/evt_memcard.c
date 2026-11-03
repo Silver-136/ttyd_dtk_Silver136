@@ -33,10 +33,6 @@ USER_FUNC(memcard_code) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_802564b4, JP 0x802564B4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Clears cardmgr's read buffer so the next check rereads the card;
- * the retail evt_memcard_check calls it before a retry.
- */
 USER_FUNC(memcard_buf_reset) {
     cardBufReset();
     return EVT_RETURN_DONE;
@@ -46,7 +42,6 @@ USER_FUNC(memcard_buf_reset) {
 /** Starts watching the card slot for the card being pulled or swapped while a format or create prompt is open. */
 // Descriptive name (not in the symbol maps); placeholder unk_80256490, JP 0x80256490. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Starts watching the card slot for the card being pulled or swapped while a format or create prompt is open. */
 USER_FUNC(memcard_watch_start) {
     cardInsertWatchStart();
     return EVT_RETURN_DONE;
@@ -59,10 +54,6 @@ USER_FUNC(memcard_watch_start) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_80256428, JP 0x80256428. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Sets args[0] to 1 if the card in the slot changed since memcard_watch_start, else 0;
- * the scripts then print msg_out_mcard_warnning and abandon the format or create.
- */
 USER_FUNC(memcard_watch_chk) {
     EvtWord* args = event->args;
 
@@ -78,7 +69,6 @@ USER_FUNC(memcard_watch_chk) {
 /** Stops the card-slot watch started by memcard_watch_start. */
 // Descriptive name (not in the symbol maps); placeholder unk_80256404, JP 0x80256404. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/** Stops the card-slot watch started by memcard_watch_start. */
 USER_FUNC(memcard_watch_end) {
     cardInsertWatchEnd();
     return EVT_RETURN_DONE;

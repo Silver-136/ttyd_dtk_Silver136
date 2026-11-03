@@ -2348,8 +2348,6 @@ EVT_BEGIN(gor_04_init_evt)
     END_IF
     END_IF
 
-// The mail event runs in the background.
-    SPAWN_EVENT(evt_sub_mail_event)
 #else
 #if VERSION >= VERSION_US
         END_IF
@@ -2362,6 +2360,12 @@ EVT_BEGIN(gor_04_init_evt)
         END_IF
 #endif
     END_IF
+#endif
+
+// The mail event runs in the background.
+#if VERSION <= VERSION_DEMO_US
+    SPAWN_EVENT(evt_sub_mail_event)
+#else
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
 #endif

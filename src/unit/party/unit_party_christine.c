@@ -1175,7 +1175,6 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // Set the action command timing from the difficulty.
 #else
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -1185,6 +1184,8 @@ EVT_BEGIN(partyChristineAttack_Kiss)
         CALL(btlevtcmd_ChangeFaceDirection, LW(3), LW(15))
     END_IF
 #endif
+
+    // Set the action command timing from the difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AcGetDifficulty, LW(0))

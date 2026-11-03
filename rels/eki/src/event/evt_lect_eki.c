@@ -710,8 +710,9 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
 #else
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_10"), 0, STRING("キノピコ"))
 
-// If he says "One more time" the loop repeats; otherwise it ends.
 #endif
+
+// If he says "One more time" the loop repeats; otherwise it ends.
         CALL(evt_msg_select, 0, STRING("lecture_u_boots_11"))
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
         IF_INT_EQUAL(LW(0), 0)

@@ -6920,6 +6920,7 @@ USER_FUNC(cook_chk) {
     evtSetValue(event, args[2], 0);
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Zess T.'s two-ingredient recipe lookup: given items args[0] and args[1] (in either order),
@@ -6927,6 +6928,7 @@ USER_FUNC(cook_chk) {
  * Anything with the Mystery item gives a random result.
  * The demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
  */
+#if VERSION > VERSION_DEMO_US
 USER_FUNC(cook_chk2) {
     // FAKE: `(volatile u32)args[n]` index casts on the evtSetValue calls below (plain args[n] changes
     // the object in both versions)
@@ -7016,6 +7018,7 @@ static USER_FUNC(cook_chk) {
     evtSetValue(event, (volatile u32)args[2], itemNameToID(result2));
     return EVT_RETURN_DONE;
 }
+#endif
 
 /**
  * Zess T.'s two-ingredient recipe lookup: given items args[0] and args[1] (in either order),
@@ -7023,6 +7026,7 @@ static USER_FUNC(cook_chk) {
  * Anything with the Mystery item gives a random result.
  * The demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
  */
+#if VERSION <= VERSION_DEMO_US
 static USER_FUNC(cook_chk2) {
     EvtWord* args = event->args;
     s32 item1 = evtGetValue(event, args[0]);

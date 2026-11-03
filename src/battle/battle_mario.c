@@ -4168,18 +4168,24 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_MiniminiFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
 EVT_END()
+#endif
+
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NemuraseFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
 EVT_END()
+#endif
+
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
@@ -4725,7 +4731,10 @@ EVT_BEGIN(marioAttackEvent_GatsunHammer)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
     RETURN
 EVT_END()
+#endif
+
 /** Ice Smash badge attack: a normal hammer swing (LW(14) = 0); the freeze comes from badgeWeapon_IceNaguri. */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
@@ -6760,14 +6769,17 @@ EVT_BEGIN(_NormalCharge_core)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
 /** Charge badge move for Mario. */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NormalCharge)
     SET_VALUE(LW(12), PTR(&badgeWeapon_Charge))
     CALL_CHILD(PTR(_NormalCharge_core))
     RETURN
 EVT_END()
+#endif
+
 /** Charge P badge move for the partner. */
+#if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NormalChargeP)
     SET_VALUE(LW(12), PTR(&badgeWeapon_ChargeP))
     CALL_CHILD(PTR(_NormalCharge_core))
@@ -6820,20 +6832,26 @@ EVT_BEGIN(marioAttackEvent_DokanJump)
     CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
     RETURN
 EVT_END()
+#endif
 
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_MiniminiFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
 EVT_END()
+#endif
 
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NemuraseFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
 EVT_END()
+#endif
 
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
@@ -6850,8 +6868,10 @@ EVT_BEGIN(marioAttackEvent_GatsunHammer)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
     RETURN
 EVT_END()
+#endif
 
 /** Ice Smash badge attack: a normal hammer swing (LW(14) = 0); the freeze comes from badgeWeapon_IceNaguri. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
@@ -6863,15 +6883,19 @@ EVT_BEGIN(marioAttackEvent_TsuranukiHammer)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
     RETURN
 EVT_END()
+#endif
 
 /** Charge badge move for Mario. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NormalCharge)
     SET_VALUE(LW(12), PTR(&badgeWeapon_Charge))
     CALL_CHILD(PTR(_NormalCharge_core))
     RETURN
 EVT_END()
+#endif
 
 /** Charge P badge move for the partner. */
+#if VERSION > VERSION_DEMO_US
 EVT_BEGIN(marioAttackEvent_NormalChargeP)
     SET_VALUE(LW(12), PTR(&badgeWeapon_ChargeP))
     CALL_CHILD(PTR(_NormalCharge_core))

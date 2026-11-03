@@ -1199,11 +1199,6 @@ static void insert(s32* arr, s32 n, s32 from, s32 to) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_00004b50, JP tou2 .text+0x4A8C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * Script helper that resets the arena ranking when the player starts the tournament again:
- * saves and frees the old table, takes the Champ's Belt from the inventory,
- * clears the per-fighter and story flags of the Glitz Pit run, and builds a fresh ranking.
- */
 USER_FUNC(tou2_rankingReset) {
     s32 i;
 
@@ -1317,10 +1312,10 @@ static void rankingInit(void) {
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
         }
 
+        // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.
 #if VERSION <= VERSION_DEMO_US
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #else
-        // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {
 #endif
 

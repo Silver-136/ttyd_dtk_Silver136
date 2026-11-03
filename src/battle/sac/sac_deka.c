@@ -140,15 +140,15 @@ static EVT_BEGIN(nice_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
-static USER_FUNC(main_deka) {
-#else
 /**
  * Runs Earth Tremor every frame: the timing game, its gauge and markers, the Crystal Star,
  * the enemies on the rippling floor and the floor mesh, then queues the displays.
  * args[0] is the partner's unit id (-1 = none).
  * The retail releases end it once yuka_end has freed the floor buffers; the demo has no such exit.
  */
+#if VERSION <= VERSION_DEMO_US
+static USER_FUNC(main_deka) {
+#else
 USER_FUNC(main_deka) {
 #endif
 

@@ -123,10 +123,11 @@ void e3Disp(CameraId cameraId, void* param);
 void e3DispOffscreen(CameraId cameraId, void* param);
 #endif
 #if VERSION <= VERSION_DEMO_US
-/** Sets every character to the given column of anim_tbl. */
 #if VERSION != VERSION_DEMO_JP
 static f32 e3BlinkTime(void);
 #endif
+
+/** Sets every character to the given column of anim_tbl. */
 USER_FUNC(e3PoseSetAnim) {
     s32 col = evtGetValue(event, event->args[0]);
     s32 i;
@@ -870,61 +871,57 @@ void e3Disp(CameraId cameraId, void* param) {
         // Two passes of four mirrored window corners (shadow and content)
         winTexInit(*wp->handle->data);
         for (pass = 1, inset = 5; pass >= 0; pass--, inset -= 5) {
+
+            // Top-Left
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-            // Top-Left
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #else
-            // Top-Left
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-            // Top-Left
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #endif
                       (Vec){ (110.0f + wp->curX) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f },
                       (Vec){ 1.0f, 1.0f, 1.0f },
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+
+            // Top-Right
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-            // Top-Right
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #else
-            // Top-Right
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-                      // Top-Right
                       winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #endif
                       (Vec){ (wp->curX - 110.0f) + (f32)inset, (90.0f + wp->curY) - (f32)inset, 0.0f },
                       (Vec){ -1.0f, 1.0f, 1.0f },
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+
+            // Bottom-Left
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-            // Bottom-Left
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #else
-            // Bottom-Left
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-                      // Bottom-Left
                       winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #endif
                       (Vec){ (110.0f + wp->curX) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f },
                       (Vec){ 1.0f, -1.0f, 1.0f },
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+
+            // Bottom-Right
 #if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-            // Bottom-Right
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #else
-            // Bottom-Right
             winTexSet(((gp->retraceCount >> 4) & 1) ? E3_TEX_CURSOR0 : E3_TEX_CURSOR1,
 #endif
 #else
-                      // Bottom-Right
                       winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #endif
                       (Vec){ (wp->curX - 110.0f) + (f32)inset, (wp->curY - 90.0f) - (f32)inset, 0.0f },

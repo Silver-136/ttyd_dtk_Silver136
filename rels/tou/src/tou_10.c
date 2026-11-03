@@ -1526,6 +1526,8 @@ EVT_END()
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
  */
 static EVT_BEGIN(evt_gardman)
+
+    // Lock input, wait for landing and, in US/PAL, also wait for talking to end.
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(LW(0), 0)
     LOOP(0)
@@ -1554,8 +1556,6 @@ static EVT_BEGIN(evt_gardman)
     WAIT_FRAMES(1)
 #else
     CALL(tou_10_mario_free_wait)
-
-    // Lock input, wait for landing and, in US/PAL, also wait for talking to end.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
 #if VERSION >= VERSION_US

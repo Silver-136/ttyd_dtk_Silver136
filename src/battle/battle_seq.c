@@ -73,6 +73,7 @@ EVT_BEGIN(nanika_luck_event)
     CALL(btlevtcmd_WaitEventEnd, PTR(0xfe363c8f))
     RETURN
 EVT_END()
+
 /**
  * Started by btlseqFirstAct on a normal battle start (no first strike):
  * pops the stage background layers in with _set_haikei_entry_scale.
@@ -179,10 +180,6 @@ const char* _rule_msg_table_after[] = {
 };
 
 #if VERSION <= VERSION_DEMO_US
-/**
- * Started by btlseqFirstAct on a normal battle start (no first strike):
- * pops the stage background layers in with _set_haikei_entry_scale.
- */
 EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN

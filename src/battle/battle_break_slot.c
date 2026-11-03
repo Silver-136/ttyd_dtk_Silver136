@@ -488,10 +488,12 @@ void BattleBreakSlot_Main(void) {
                 btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 10, 0);
             }
 #if VERSION == VERSION_EU
-            count *= i; // now the frame of the last hit
+            count *= i;
 #else
-            count = 120; // the frame of the last hit
+            count = 120;
 #endif
+
+            // count is now the frame of the last hit
             if (slot->phaseTimer == count) {
                 BattleAudienceSoundCheer(240, 240);
             }

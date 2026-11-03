@@ -136,13 +136,6 @@ WinMgrDesc list_desc[] = {
     {2, 0, 8, -250, -130, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, point_disp},
 };
 
-/**
- * Runs when Mario presses A on a shelf item (started by evt_shop_main_func with LW(0) = the ShopWork):
- * the shopkeeper names the item and price, and on yes takes the coins, gives the item,
- * adds a shop point (doubled during the timed sales at the Great Tree (mri_07),
- * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
- * then runs the shop's own buy_evt with LW(0) = the item id.
- */
 #if VERSION <= VERSION_DEMO_US
 /** the demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
 EVT_BEGIN(evt_shoplist)
@@ -153,6 +146,13 @@ EVT_BEGIN(evt_shoplist)
 EVT_END()
 #endif
 
+/**
+ * Runs when Mario presses A on a shelf item (started by evt_shop_main_func with LW(0) = the ShopWork):
+ * the shopkeeper names the item and price, and on yes takes the coins, gives the item,
+ * adds a shop point (doubled during the timed sales at the Great Tree (mri_07),
+ * Twilight Town (usu_01) and the Excess Express (rsh_03)), hands out any point prizes reached,
+ * then runs the shop's own buy_evt with LW(0) = the item id.
+ */
 static EVT_BEGIN(buy_evt)
     // Mario stops and the item's highlight goes away;
     // a first-time shopper hears the shopping explanation instead.

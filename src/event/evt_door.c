@@ -1864,10 +1864,6 @@ USER_FUNC(npc_hide_onoff) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Copies the DoorParam in args[0] onto the map heap and returns the copy in args[1],
- * so a map can change it with evt_door_set_param (Rogueport, gor_01/gor_02).
- */
 #if VERSION <= VERSION_DEMO_US
 /** the demo defines these with the door helpers at the end of the file */
 static USER_FUNC(snd_door_in) {

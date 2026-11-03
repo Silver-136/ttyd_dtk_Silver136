@@ -452,11 +452,6 @@ BOOL pouchRemoveItem(ItemType type) {
     return 0;
 }
 
-/**
- * Removes the item id from list slot index (the item used or thrown away, from the item menu,
- * battle and evt_pouch) and closes the gap; FALSE if the slot holds another item.
- * Badges drop their worn state too.
- */
 #if VERSION <= VERSION_DEMO_US
 
 /**

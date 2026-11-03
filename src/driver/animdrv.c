@@ -2036,7 +2036,6 @@ static void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
     Mtx sc1, sc2, sc3;
     Mtx rc1, rc2, rc3;
-    // FAKE: texCount/texIdRemap/pTexEntries copied into locals (kept as separate webs by the dead guard before loop 2); the incoming
     PSMTXTrans(trans, node->translation.x, node->translation.y, node->translation.z);
     PSMTXScale(scale, node->mScale.x, node->mScale.y, node->mScale.z);
     if (0.0f != node->scaleCenter.x || 0.0f != node->scaleCenter.y || 0.0f != node->scaleCenter.z) {
@@ -2081,7 +2080,6 @@ static void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
  */
 static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
     Mtx trans, scale, iscale, rot, tmp;
-    // param nodes then neighbour the other params and m but not the counter, which with the counter as a one-element array
     PSMTXTrans(trans, node->translation.x, node->translation.y, node->translation.z);
     if (sx && sy && sz) {
         PSMTXScale(iscale, 1.0f / sx, 1.0f / sy, 1.0f / sz);

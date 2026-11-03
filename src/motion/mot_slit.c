@@ -360,7 +360,6 @@ void motSlitContinue(void) {
     marioGetPtr()->slitState = SLIT_STATE_MOVE;
 }
 
-/** TRUE once the slit motion has reached its ending states (0x64 and later). */
 #if VERSION <= VERSION_DEMO_US
 /**
  * Demo only: returns to the slit motion at the state saved

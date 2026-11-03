@@ -3880,12 +3880,6 @@ static void partyGorFix(PartyEntry* party) {
 // them earlier in the file. The object's function order follows the definitions, so each order keeps its own copies.
 #if VERSION <= VERSION_DEMO_US
 
-/**
- * Moves a jumping partner forward by moveSpeed along targetDir, stopped by walls;
- * records the wall in hitobjFront/hitobjPush.
- * With the front wall check disabled it moves a scratch vector that is never stored,
- * so the partner does not move sideways at all.
- */
 static inline void partyJumpFrontMove(PartyEntry* party) {
     Vec v;
     HitEntry* hit;
@@ -4460,10 +4454,6 @@ void party_set_behind_dir(PartyEntry* party, f32 dir) {
     party->trigFlags |= PARTY_TRIG_BEHIND_DIR_SET;
 }
 
-/**
- * Movement direction (degrees) of whoever this partner follows:
- * Mario, or for a second partner the first one when it is out.
- */
 static inline f32 partyGetFollowDir(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     PartyEntry* other;
@@ -5166,13 +5156,13 @@ void party_motion_stay(PartyEntry* party) {
             case 0:
             default:
 #else
+static void partyPoseA2(PartyEntry* party) {
+#endif
 
 /**
  * Ms. Mowz's sniffing pose (PCH_A2_1) for 30 frames,
  * when chuchu_searchObject finds an item or hidden treasure within 150 units of Mario.
  */
-static void partyPoseA2(PartyEntry* party) {
-#endif
     partyChgPose(party, "PCH_A2_1");
     party->useMotionId = 1;
     party->moveFrames = 30;
@@ -5333,10 +5323,6 @@ void allPartySlitOn(void) {
     }
 }
 
-/**
- * Mario left Paper Mode: both partners still in it start their turn-back animation (slitStep 40).
- * Called from mot_slit.c.
- */
 void allPartySlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && (party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 0x28) {
@@ -5363,10 +5349,6 @@ static inline void partyForceSlitOff(PartyEntry* party) {
     partyChgPoseId(party, PARTY_POSE_STAND);
 }
 
-/**
- * Ends Paper Mode at once on both partners; used when Mario's own Paper Mode is cut short (mot_slit.c)
- * and by the all_party_slit_off script helper.
- */
 void allPartyForceSlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -5518,12 +5500,6 @@ static BOOL party_slit(PartyEntry* party) {
     return ret;
 }
 
-/**
- * A roll state like Mario's tube mode ("p_roll" paper animation, PM_R_1A/1B) for slitOn 2,
- * spinning with speed and ending at slitStep 100; returns FALSE while ending.
- * Nothing in the tree sets slitOn to 2, so as built it returns TRUE at once.
- * Guess: an unused partner tube mode.
- */
 static BOOL party_roll(PartyEntry* party) {
     BOOL ret = TRUE;
     f32 d;

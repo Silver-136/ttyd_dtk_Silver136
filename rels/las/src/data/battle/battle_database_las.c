@@ -3567,7 +3567,6 @@ USER_FUNC(hi_fire_main) {
 }
 #endif
 
-/** Script helper: blocks until the battle sequence has ended. */
 #if VERSION <= VERSION_DEMO_US
 /**
  * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
@@ -3597,6 +3596,7 @@ EVT_BEGIN(stg_08_6_init_sub_event)
 EVT_END()
 #endif
 
+/** Script helper: blocks until the battle sequence has ended. */
 USER_FUNC(check_battle_end) {
     return battleSeqEndCheck() ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

@@ -295,10 +295,10 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(1000)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+#endif
 
 // Crump brags that his machine is raw horsepower; the robot walks in, jumps and lands with a shake of the
 // camera.
-#endif
     CALL(evt_msg_print, 0, STRING("stg7_aji_41"), 0, STRING("ロボット"))
 #if VERSION > VERSION_DEMO_US
     CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)

@@ -9398,8 +9398,8 @@ s32 psndGetFlag(void) {
     return psnd.flags;
 }
 
+/** Fades out every playing effect except environment sounds and those marked to survive a map change. */
 #if VERSION > VERSION_DEMO_US
-/** demo: the reverb reset is in psndBGMOn_f_d, and the SFX fade-out of psndSFXAllOff is written out here */
 void psndMapChange(void) {
     if (strcmp(psnd.mapName, gp->currentMapName)) {
         psnd.reverb = 0;
@@ -9410,7 +9410,6 @@ void psndMapChange(void) {
 }
 #endif
 
-/** Fades out every playing effect except environment sounds and those marked to survive a map change. */
 #if VERSION <= VERSION_DEMO_US
 /** demo: the reverb reset is in psndBGMOn_f_d, and the SFX fade-out of psndSFXAllOff is written out here */
 void psndMapChange(void) {
@@ -9715,7 +9714,7 @@ static inline void psndBGMSearchP(const char* name, s32* pi) {
     return i;
 }
 
-/** JP, US and PAL form of psndBGMOn_f_d above; fadeout is the fade-out time for the BGM being replaced. */
+/** Demo form: no fadeout parameter; replacement fades use 750 ms (100 ms when restarting a stream). */
 BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
     PaperSoundBGM* bgm;
     PaperSoundFade* fade2;
@@ -9728,7 +9727,6 @@ BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
     u8 vol;
     u8 pan;
     PaperSoundBGM* b0;
-    // FAKE: fo/ft/fl are copies of the parameters; flags is reused to hold the volume and fadetime to hold the
     if (strcmp(psnd.mapName, gp->currentMapName)) {
         psnd.reverb = 0;
     }
@@ -10876,6 +10874,11 @@ static inline void psndEnvDone(PaperSoundEnv* e) {
 /** Number of environment names; also the terminating id in psenvlist. */
 #if VERSION <= VERSION_DEMO_US
 #define PSENV_COUNT 0x75
+#else
+#define PSENV_COUNT 0x76
+#endif
+
+#if VERSION <= VERSION_DEMO_US
 
 /** Volume of environment sound e under its channel's fade; the demos write it through a pointer. */
 static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
@@ -10961,6 +10964,7 @@ static inline void psndENVApply(PaperSoundEnv* e) {
         }
     }
 }
+#endif
 
 /**
  * Per-frame environment sound update: ramps the environment volume (80% in the camera idle mix),
@@ -10968,16 +10972,9 @@ static inline void psndENVApply(PaperSoundEnv* e) {
  * 1 loops at a fixed position, 2 repeats at a fixed position at intervals, 3 plays once at the listener.
  * Also runs the environment fades and low-pass filter.
  */
+#if VERSION <= VERSION_DEMO_US
 static void psndENVMain(void) {
 #else
-#define PSENV_COUNT 0x76
-
-/**
- * Per-frame environment sound update: ramps the environment volume (80% in the camera idle mix),
- * then runs each entry by type: 0 plays at a random spot around the listener at random intervals,
- * 1 loops at a fixed position, 2 repeats at a fixed position at intervals, 3 plays once at the listener.
- * Also runs the environment fades and low-pass filter.
- */
 void psndENVMain(void) {
 #endif
     s32 i;
@@ -11058,7 +11055,7 @@ void psndENVMain(void) {
                         break;
                 }
 
-                // the demo does not restart a one-shot ambient sound: it stays in its last state
+                // The demo does not restart a finished type-1 ambient sound: it stays in its last state.
                 e->sfx = -1;
                 e->state++;
 #else

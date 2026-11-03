@@ -203,18 +203,7 @@ void vivianUnhold(PartyEntry* party) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
-
-/**
- * Moves Vivian's tail point (trailPos) a tenth of the way toward her each frame,
- * keeping it within VIVIAN_FOLLOW_DIST (30 units in the US and PAL releases, 22 before);
- * party.c draws her shadow tail to it.
- */
-void vivianShadow(PartyEntry* party) {
-    f32 dx, dy, dz;
-
-    {
-#else
+#if VERSION > VERSION_DEMO_US
 
 /** hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
 void partyVivianTailStop(PartyEntry* party) {
@@ -252,6 +241,8 @@ BOOL vivianDisplayTailCheck(PartyEntry* party) {
     return TRUE;
 }
 
+#endif
+
 /**
  * Moves Vivian's tail point (trailPos) a tenth of the way toward her each frame,
  * keeping it within VIVIAN_FOLLOW_DIST (30 units in the US and PAL releases, 22 before);
@@ -260,6 +251,9 @@ BOOL vivianDisplayTailCheck(PartyEntry* party) {
 void vivianShadow(PartyEntry* party) {
     f32 dx, dy, dz;
 
+#if VERSION <= VERSION_DEMO_US
+    {
+#else
     if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN) {
 #endif
 
@@ -305,16 +299,6 @@ static inline void vivianFollow(PartyEntry* party) {
     movePos(&party->moveTarget.x, &party->moveTarget.z, ofs, toMovedir(270.0f + mario->displayDirection));
 }
 
-/**
- * Demo Veil: Vivian moves behind Mario and both sink into the floor shadow (ripple effect, sounds),
- * then stay hidden riding the ground under Mario until B
- * or X (or vivian_cancel_req) brings them back up with a small hop.
- */
-void vivian_use(PartyEntry* party) {
-    f32 gx, gy, gz;
-    void* hit;
-    void* rip;
-    MarioWork* p;
 #else
     HitEntry* hit;
     u8 id;
@@ -374,6 +358,7 @@ void vivian_use(PartyEntry* party) {
 
 #pragma defer_codegen off
 #pragma explicit_zero_data on
+#endif
 
 /**
  * Veil: Vivian moves behind Mario and both sink into the floor shadow (ripple effect, sounds),
@@ -381,6 +366,12 @@ void vivian_use(PartyEntry* party) {
  * or X (or vivian_cancel_req) brings them back up with a small hop.
  */
 void vivian_use(PartyEntry* party) {
+#if VERSION <= VERSION_DEMO_US
+    f32 gx, gy, gz;
+    void* hit;
+    void* rip;
+    MarioWork* p;
+#else
     Vec s;
     EffectEntry* rip;
     f32 d;

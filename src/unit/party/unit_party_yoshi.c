@@ -368,18 +368,17 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/**
- * Ground Pound (0 FP): repeated pounds on one enemy from above (not ceiling enemies), 1 damage each,
- * lowered by each earlier hit; flips shelled enemies and grounds winged ones. Usable while confused.
- */
 #if VERSION <= VERSION_DEMO_US
-/** Idle (retail position; the demo defines it near the top of the file): plays the stay pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 #endif
 
+/**
+ * Ground Pound (0 FP): repeated pounds on one enemy from above (not ceiling enemies), 1 damage each,
+ * lowered by each earlier hit; flips shelled enemies and grounds winged ones. Usable while confused.
+ */
 BattleWeapon partyWeapon_YoshiNormalAttack = {
     "btl_wn_pys_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -2122,8 +2121,8 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
 /** Idle (retail position; the demo defines it near the top of the file): plays the stay pose from the pose table. */
+#if VERSION > VERSION_DEMO_US
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
