@@ -39,9 +39,9 @@ OSResetCallback OSSetResetCallback(OSResetCallback callback) {
 
     if (callback) {
         __PIRegs[0] = 2;
-        __OSUnmaskInterrupts(0x200);
+        __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_RSW);
     } else {
-        __OSMaskInterrupts(0x200);
+        __OSMaskInterrupts(OS_INTERRUPTMASK_PI_RSW);
     }
     OSRestoreInterrupts(enabled);
     return prevCallback;

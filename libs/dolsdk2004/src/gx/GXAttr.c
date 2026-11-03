@@ -110,7 +110,7 @@ void GXSetVtxDesc(GXAttr attr, GXAttrType type) {
     __GXData->dirtyState |= 8;
 }
 
-void GXSetVtxDescv(const GXVtxDescList *attrPtr) {
+void GXSetVtxDescv(const GXVtxDescList* attrPtr) {
     CHECK_GXBEGIN(306, "GXSetVtxDescv");
     CHECK_ATTRPTR(307, attrPtr);
 
@@ -425,7 +425,7 @@ void GXGetVtxAttrFmt(GXVtxFmt fmt, GXAttr attr, GXCompCnt* cnt, GXCompType* type
     case GX_VA_NRM:
     case GX_VA_NBT:
         *cnt = GET_REG_FIELD(*va, 1, 9);
-        if (*cnt == GX_TEX_ST && (u8)(*va >> 0x1F) != 0) {
+        if (*cnt == GX_NRM_NBT && (u8)(*va >> 0x1F) != 0) {
             *cnt = GX_NRM_NBT3;
         }
         *type = GET_REG_FIELD(*va, 3, 10);

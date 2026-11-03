@@ -192,8 +192,7 @@ void GXSetTevIndWarp(GXTevStageID tev_stage, GXIndTexStageID ind_stage, u8 signe
 
 void GXSetTevIndTile(GXTevStageID tev_stage, GXIndTexStageID ind_stage, u16 tilesize_s,
     u16 tilesize_t, u16 tilespacing_s, u16 tilespacing_t, GXIndTexFormat format,
-    GXIndTexMtxID matrix_sel, GXIndTexBiasSel bias_sel, GXIndTexAlphaSel alpha_sel)
-{
+    GXIndTexMtxID matrix_sel, GXIndTexBiasSel bias_sel, GXIndTexAlphaSel alpha_sel) {
     GXIndTexWrap wrap_s;
     GXIndTexWrap wrap_t;
     f32 mtx[2][3];

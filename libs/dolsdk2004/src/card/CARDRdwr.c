@@ -13,9 +13,9 @@ static void BlockReadCallback(s32 chan, s32 result) {
     card = &__CARDBlock[chan];
 
     if ((result >= 0)) {
-        card->xferred += 0x200;
-        card->addr += 0x200;
-        ((u8*)card->buffer) += 0x200;
+        card->xferred += CARD_SEG_SIZE;
+        card->addr += CARD_SEG_SIZE;
+        ((u8*)card->buffer) += CARD_SEG_SIZE;
 
         if (--card->repeat > 0) {
             result = __CARDReadSegment(chan, BlockReadCallback);
@@ -47,7 +47,7 @@ s32 __CARDRead(s32 chan, u32 addr, s32 length, void* dst, CARDCallback callback)
         return CARD_RESULT_NOCARD;
     }
     card->xferCallback = callback;
-    card->repeat = (length / 512u);
+    card->repeat = (length / CARD_SEG_SIZE);
     card->addr = addr;
     card->buffer = dst;
     return __CARDReadSegment(chan, BlockReadCallback);

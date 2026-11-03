@@ -259,16 +259,16 @@ static void Decode(u8* s, u8* d) {
     int k;
     int p;
     int q;
-    int r7;  // huh? DWARF info says these 2 variables might be register names and not actual names.
-    int r25;
+    int linkOffset;
+    int dataOffset;
     int cnt;
     int os;
     unsigned int flag;
     unsigned int code;
 
     os  = *(int*)(s + 0x4);
-    r7  = *(int*)(s + 0x8);
-    r25 = *(int*)(s + 0xC);
+    linkOffset  = *(int*)(s + 0x8);
+    dataOffset = *(int*)(s + 0xC);
 
     q    = 0;
     flag = 0;
@@ -284,19 +284,19 @@ static void Decode(u8* s, u8* d) {
 
         // Non-linked chunk
         if (code & 0x80000000) {
-            d[q++] = s[r25++];
+            d[q++] = s[dataOffset++];
         }
         // Linked chunk
         else {
             // Read offset from link table
-            j = s[r7] << 8 | s[r7 + 1];
-            r7 += sizeof(u16);
+            j = s[linkOffset] << 8 | s[linkOffset + 1];
+            linkOffset += sizeof(u16);
 
             // Apply offset
             k = q - (j & 0x0FFF);
             cnt    = j >> 12;
             if (cnt == 0) {
-                cnt = s[r25++] + 0x12;
+                cnt = s[dataOffset++] + 0x12;
             } else {
                 cnt += 2;
             }
@@ -436,22 +436,22 @@ u32 OSLoadFont(OSFontHeader* fontData, void* tmp) {
 
     encode = OSGetFontEncode();
     switch (encode) {
-    case 0:
+    case OS_FONT_ENCODE_ANSI:
         FontDataAnsi = fontData;
-        size = ReadFont(tmp, 0, FontDataAnsi);
+        size = ReadFont(tmp, OS_FONT_ENCODE_ANSI, FontDataAnsi);
         break;
-    case 1:
+    case OS_FONT_ENCODE_SJIS:
         FontDataSjis = fontData;
-        size = ReadFont(tmp, 1, FontDataSjis);
+        size = ReadFont(tmp, OS_FONT_ENCODE_SJIS, FontDataSjis);
         break;
     case 3:
     case 4:
     case 5:
         FontDataAnsi = fontData;
-        size = ReadFont(tmp, 0, FontDataAnsi);
+        size = ReadFont(tmp, OS_FONT_ENCODE_ANSI, FontDataAnsi);
         if (size != 0) {
             FontDataSjis = (OSFontHeader*)((u8*)FontDataAnsi + size);
-            size += ReadFont(tmp, 1, FontDataSjis);
+            size += ReadFont(tmp, OS_FONT_ENCODE_SJIS, FontDataSjis);
         }
         break;
     case 2:
@@ -535,14 +535,14 @@ static char* ParseStringW(u16 encode, const char* string, OSFontHeader** pfont, 
     }
 
     if (utf32 != 0) {
-        encode = 0;
+        encode = OS_FONT_ENCODE_ANSI;
         font = FontDataAnsi;
         code = OSUTF32toANSI(utf32);
 
         if (code == 0 || (FixedPitch != 0 && utf32 <= 0x7F)) {
             code = OSUTF32toSJIS(utf32);
             if (code != 0) {
-                encode = 1;
+                encode = OS_FONT_ENCODE_SJIS;
                 font = FontDataSjis;
             }
         }
@@ -646,10 +646,10 @@ int OSInitFont(OSFontHeader* fontData) {
 
     encode = OSGetFontEncode();
     switch (encode) {
-    case 0:
+    case OS_FONT_ENCODE_ANSI:
         tmp = (void*)((u8*)fontData + 0x1D120);
         FontDataAnsi = fontData;
-        size = ReadFont(tmp, 0, FontDataAnsi);
+        size = ReadFont(tmp, OS_FONT_ENCODE_ANSI, FontDataAnsi);
         if (size == 0) {
             return 0;
         }
@@ -658,10 +658,10 @@ int OSInitFont(OSFontHeader* fontData) {
         FontDataAnsi->sheetImage = OSRoundUp32B(FontDataAnsi->sheetImage);
         ExpandFontSheet(FontDataAnsi, img, (u8*)FontDataAnsi + FontDataAnsi->sheetImage);
         break;
-    case 1:
+    case OS_FONT_ENCODE_SJIS:
         tmp = (void*)((u8*)fontData + 0xD3F00);
         FontDataSjis = fontData;
-        size = ReadFont(tmp, 1, FontDataSjis);
+        size = ReadFont(tmp, OS_FONT_ENCODE_SJIS, FontDataSjis);
         if (size == 0) {
             return 0;
         }
@@ -675,7 +675,7 @@ int OSInitFont(OSFontHeader* fontData) {
     case 5:
         tmp = (void*)((u8*)fontData + 0xF4020);
         FontDataAnsi = fontData;
-        size = ReadFont(tmp, 0, FontDataAnsi);
+        size = ReadFont(tmp, OS_FONT_ENCODE_ANSI, FontDataAnsi);
         if (size == 0) {
             return 0;
         }
@@ -685,7 +685,7 @@ int OSInitFont(OSFontHeader* fontData) {
         ExpandFontSheet(FontDataAnsi, img, (u8*)FontDataAnsi + FontDataAnsi->sheetImage);
 
         FontDataSjis = (OSFontHeader*)((u8*)FontDataAnsi + 0x20120);
-        size = ReadFont(tmp, 1, FontDataSjis);
+        size = ReadFont(tmp, OS_FONT_ENCODE_SJIS, FontDataSjis);
         if (size == 0) {
             return 0;
         }

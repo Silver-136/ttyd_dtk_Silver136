@@ -26,7 +26,7 @@ const char * __EXIVersion = "<< Dolphin SDK - EXI\tdebug build: Apr  5 2004 03:5
 const char * __EXIVersion = "<< Dolphin SDK - EXI\trelease build: Apr  5 2004 04:14:14 (0x2301) >>";
 #endif
 
-static EXIControl Ecb[3];
+static EXIControl Ecb[MAX_CHAN];
 static u32 IDSerialPort1;
 
 // external functions
@@ -114,7 +114,7 @@ int EXIImm(s32 chan, void* buf, s32 len, u32 type, EXICallback callback) {
     }
 
     exi->state |= STATE_IMM;
-    if (type != 0) {
+    if (type != EXI_READ) {
         data = 0;
         for(i = 0; i < len; i++) {
             data |= ((u8*)buf)[i] << ((3 - i) * 8);
@@ -123,7 +123,7 @@ int EXIImm(s32 chan, void* buf, s32 len, u32 type, EXICallback callback) {
     }
 
     exi->immBuf = buf;
-    exi->immLen = (type != 1) ? len : 0; 
+    exi->immLen = (type != EXI_WRITE) ? len : 0; 
     __EXIRegs[(chan * 5) + 3] = (type << 2) | 1 | ((len - 1) << 4);
     OSRestoreInterrupts(enabled);
     return 1;
@@ -133,7 +133,7 @@ int EXIImmEx(s32 chan, void* buf, s32 len, u32 mode) {
     s32 xLen;
 
     while (len) {
-        xLen = (len < 4) ? len : 4;
+        xLen = (len < MAX_IMM) ? len : MAX_IMM;
         if (EXIImm(chan, buf, xLen, mode, 0) == 0) {
             return 0;
         }
@@ -602,14 +602,14 @@ void EXIInit() {
     __EXIRegs[5] = 0;
     __EXIRegs[10] = 0;
     __EXIRegs[0] = 0x2000;
-    __OSSetInterruptHandler(9,  EXIIntrruptHandler);
-    __OSSetInterruptHandler(10, TCIntrruptHandler);
-    __OSSetInterruptHandler(11, EXTIntrruptHandler);
-    __OSSetInterruptHandler(12, EXIIntrruptHandler);
-    __OSSetInterruptHandler(13, TCIntrruptHandler);
-    __OSSetInterruptHandler(14, EXTIntrruptHandler);
-    __OSSetInterruptHandler(15, EXIIntrruptHandler);
-    __OSSetInterruptHandler(16, TCIntrruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_EXI_0_EXI,  EXIIntrruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_EXI_0_TC, TCIntrruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_EXI_0_EXT, EXTIntrruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_EXI_1_EXI, EXIIntrruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_EXI_1_TC, TCIntrruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_EXI_1_EXT, EXTIntrruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_EXI_2_EXI, EXIIntrruptHandler);
+    __OSSetInterruptHandler(__OS_INTERRUPT_EXI_2_TC, TCIntrruptHandler);
 
     EXIGetID(0, 2, &IDSerialPort1);
 

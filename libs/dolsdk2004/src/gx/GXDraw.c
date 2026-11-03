@@ -91,9 +91,9 @@ static void Subdivide(u8 depth, f32 v0[3], f32 v1[3], f32 v2[3]) {
 }
 
 static void SubDivTriangle(u8 depth, u8 i, f32 (*data)[3], u8 (*ndx)[3]) {
-    f32 *x0 = data[ndx[i][0]];
-    f32 *x1 = data[ndx[i][1]];
-    f32 *x2 = data[ndx[i][2]];
+    f32* x0 = data[ndx[i][0]];
+    f32* x1 = data[ndx[i][1]];
+    f32* x2 = data[ndx[i][2]];
 
     Subdivide(depth, x0, x1, x2);
 }
@@ -210,7 +210,7 @@ void GXDrawSphere(u8 numMajor, u8 numMinor) {
 
     if (ttype != GX_NONE) {
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_TEX0, GX_TEX_ST, GX_RGBA6, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     }
 
     for (i = 0; i < numMajor; i++) {
@@ -300,11 +300,11 @@ void GXDrawCube(void) {
     GetVertState();
     if (ntype != GX_NONE) {
         GXSetVtxDesc(GX_VA_NBT, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_NBT, GX_TEX_ST, GX_RGBA6, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_NBT, GX_NRM_NBT, GX_F32, 0);
     }
     if (ttype != GX_NONE) {
         GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_TEX0, GX_TEX_ST, GX_RGB8, 0);
+        GXSetVtxAttrFmt(GX_VTXFMT3, GX_VA_TEX0, GX_TEX_ST, GX_S8, 0);
     }
 
     GXBegin(GX_QUADS, GX_VTXFMT3, 24);
@@ -359,9 +359,9 @@ static f32 verts[20][3] = {
 
 void GXDrawDodeca(void) {
     u32 i;
-    f32 *p0;
-    f32 *p1;
-    f32 *p2;
+    f32* p0;
+    f32* p1;
+    f32* p2;
     f32 u[3];
     f32 v[3];
     f32 n[3];
@@ -478,8 +478,9 @@ static u32 CmpNormal32(f32 n1[3], f32 n2[3]) {
     u32 i;
 
     for (i = 0; i < 3; i++) {
-        if (n1[i] != n2[i])
+        if (n1[i] != n2[i]) {
             return FALSE;
+        }
     }
     return TRUE;
 }
@@ -492,8 +493,9 @@ static void AddNormal(f32 n[3]) {
     u32 i;
 
     for (i = 0; i < nrm_cnt; i++) {
-        if (CmpNormal32(n, &nrm_tab[i * 3]))
+        if (CmpNormal32(n, &nrm_tab[i * 3])) {
             return;
+        }
     }
     indx = nrm_cnt * 3;
     nrm_tab[indx + 0] = n[0];

@@ -31,12 +31,8 @@ static u32 peReq;
 static u32 rfReq;
 static u32 fiReq;
 
-// prototypes
-static void DEMOWriteStats(u8 update);
-static void DEMOWriteStats(u8 update);
-
 void DEMOSetStats(DemoStatData* stat, u32 nstats, DEMO_STAT_DISP disp) {
-    if (stat == 0 || nstats == 0) {
+    if (stat == NULL || nstats == 0) {
         DemoStatEnable = FALSE;
     } else {
         DemoStatEnable = TRUE;
@@ -313,7 +309,7 @@ void DEMOPrintStats(void) {
                 ht = rmode->xfbHeight / 2;
                 break;
         }
-        DEMOInitCaption(0, wd, ht);
+        DEMOInitCaption(DM_FT_OPQ, wd, ht);
         for (i = 0; i < DemoStatMaxIndx; i++) {
             switch (DemoStat[i].stat_type) {
                 case DEMO_STAT_PIX:

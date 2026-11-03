@@ -50,7 +50,7 @@
 #define R_PPC_PLT32 27    //  word32  L + A
 #define R_PPC_PLTREL32 28 //  word32  L + A - P
 #define R_PPC_PLT16_LO 29 //  half16  #lo(L + A)
-#define R_PPL_PLT16_HI 30 //  half16  #hi(L + A)
+#define R_PPC_PLT16_HI 30 //  half16  #hi(L + A)
 #define R_PPC_PLT16_HA 31 //  half16  #ha(L + A)
 
 #define R_PPC_SDAREL16 32   //  half16* S + A - _SDA_BASE_
@@ -291,7 +291,7 @@ static BOOL Link(OSModuleInfo* newModule, void* bss, BOOL fixed) {
         newModule->nameOffset += (u32)__OSStringTable;
     }
 
-    Relocate(0, moduleHeader);
+    Relocate(NULL, moduleHeader);
 
     for (moduleInfo = __OSModuleInfoList.head; moduleInfo; moduleInfo = moduleInfo->link.next) {
         Relocate(moduleHeader, (OSModuleHeader*)moduleInfo);
@@ -358,8 +358,6 @@ Found:
     siFlush = 0;
     for (rel = (OSRel*)imp->offset; rel->type != R_DOLPHIN_END; rel++) {
         (u8*)p += rel->offset;
-        si = &OSGetSectionInfo(newModule)[rel->section];
-        offset = OS_SECTIONINFO_OFFSET(si->offset);
         x = 0;
         switch (rel->type) {
         case R_PPC_NONE:
@@ -487,8 +485,8 @@ BOOL OSUnlink(OSModuleInfo* oldModule) {
 }
 
 void __OSModuleInit(void) {
-    __OSModuleInfoList.head = __OSModuleInfoList.tail = 0;
-    __OSStringTable = 0;
+    __OSModuleInfoList.head = __OSModuleInfoList.tail = NULL;
+    __OSStringTable = NULL;
 }
 
 OSModuleInfo* OSSearchModule(void* ptr, u32* section, u32* offset) {
@@ -502,17 +500,17 @@ OSModuleInfo* OSSearchModule(void* ptr, u32* section, u32* offset) {
     }
 
     moduleInfo = __OSModuleInfoList.head;
-    while (moduleInfo != 0) {
+    while (moduleInfo != NULL) {
         sectionInfo = (OSSectionInfo*)moduleInfo->sectionInfoOffset;
         for (i = 0; i < moduleInfo->numSections; i++) {
             if (sectionInfo->size != 0) {
-                baseSection = sectionInfo->offset & 0xFFFFFFFE;
+                baseSection = OS_SECTIONINFO_OFFSET(sectionInfo->offset);
                 if (baseSection <= (u32)ptr && (u32)ptr < baseSection + sectionInfo->size) {
-                    if (section != 0) {
+                    if (section != NULL) {
                         *section = i;
                     }
 
-                    if (offset != 0) {
+                    if (offset != NULL) {
                         *offset = (u32)ptr - baseSection;
                     }
 

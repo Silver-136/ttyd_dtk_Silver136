@@ -8,9 +8,6 @@ static struct {
     /* 0x04 */ DVDCommandBlock* prev;
 } WaitingQueue[4];
 
-// prototypes
-static DVDCommandBlock* PopWaitingQueuePrio(s32 prio);
-
 void __DVDClearWaitingQueue(void) {
     u32 i;
     DVDCommandBlock* q;
@@ -47,8 +44,8 @@ static DVDCommandBlock* PopWaitingQueuePrio(s32 prio) {
     q->next = tmp->next;
     tmp->next->prev = q;
     OSRestoreInterrupts(enabled);
-    tmp->next = 0;
-    tmp->prev = 0;
+    tmp->next = NULL;
+    tmp->prev = NULL;
     return tmp;
 }
 
@@ -161,7 +158,7 @@ void DVDDumpWaitingQueue(void) {
             OSReport("\n");
             for (q = start->next; q != start; q = q->next) {
                 OSReport("0x%08x: Command: %s ", q, CommandNames[q->command]);
-                if (q->command == 1) {
+                if (q->command == DVD_COMMAND_READ) {
                     OSReport("Disk offset: %d, Length: %d, Addr: 0x%08x\n", q->offset, q->length, q->addr);
                 } else {
                     OSReport("\n");

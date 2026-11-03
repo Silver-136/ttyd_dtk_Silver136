@@ -62,7 +62,7 @@ static MEM_DATA* GetLayerAddr(u16 id, POOL_DATA* pool) {
 }
 
 void InsertData(u16 id, void* data, u8 dataType, u32 remove) {
-  MEM_DATA* m; // r30
+  MEM_DATA* m;
 
   switch (dataType) {
   case 0:
@@ -123,7 +123,7 @@ void InsertData(u16 id, void* data, u8 dataType, u32 remove) {
 }
 
 static void ScanIDList(u16* ref, void* data, u8 dataType, u32 remove) {
-  u16 id; // r30
+  u16 id;
 
   while (*ref != 0xFFFF) {
     if ((*ref & 0x8000)) {
@@ -209,11 +209,11 @@ void sndSetSampleDataUploadCallback(void* (*callback)(u32, u32), u32 chunckSize)
 }
 
 bool sndPushGroup(void* prj_data, u16 gid, void* samples, void* sdir, void* pool) {
-  GROUP_DATA* g; // r31
+  GROUP_DATA* g;
   MUSY_ASSERT_MSG(prj_data != NULL, "Project data pointer is NULL");
   MUSY_ASSERT_MSG(sdir != NULL, "Sample directory pointer is NULL");
 
-  if (sndActive && gsCurrent->sp < 128) {
+  if (sndActive && gsCurrent->sp < (s32)(sizeof(gsCurrent->stack) / sizeof(gsCurrent->stack[0]))) {
     g = prj_data;
 
     while (g->nextOff != 0xFFFFFFFF) {
@@ -242,7 +242,6 @@ bool sndPushGroup(void* prj_data, u16 gid, void* samples, void* sdir, void* pool
   return FALSE;
 }
 
-/*
 
 
 
@@ -253,7 +252,8 @@ bool sndPushGroup(void* prj_data, u16 gid, void* samples, void* sdir, void* pool
 
 
 
-*/
+
+
 bool sndPopGroup() {
   GROUP_DATA* g;
   SDIR_DATA* sdir;
@@ -288,7 +288,6 @@ bool sndPopGroup() {
   return 1;
 }
 
-/*
 
 
 
@@ -301,7 +300,8 @@ bool sndPopGroup() {
 
 
 
-*/
+
+
 
 u32 seqPlaySong(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 irq_call, u8 studio) {
   int i;

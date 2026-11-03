@@ -28,25 +28,25 @@ void OSSetArenaLo(void* newLo) {
 }
 
 void* OSAllocFromArenaLo(u32 size, u32 align) {
-  void* ptr;
-  u8* arenaLo;
+    void* ptr;
+    u8* arenaLo;
 
-  ptr = OSGetArenaLo();
-  arenaLo = ptr = (void*)ROUND(ptr, align);
-  arenaLo += size;
-  arenaLo = (u8*)ROUND(arenaLo, align);
-  OSSetArenaLo(arenaLo);
-  return ptr;
+    ptr = OSGetArenaLo();
+    arenaLo = ptr = (void*)ROUND(ptr, align);
+    arenaLo += size;
+    arenaLo = (u8*)ROUND(arenaLo, align);
+    OSSetArenaLo(arenaLo);
+    return ptr;
 }
 
 void* OSAllocFromArenaHi(u32 size, u32 align) {
-  void* ptr;
-  u8* arenaHi;
+    void* ptr;
+    u8* arenaHi;
 
-  arenaHi = OSGetArenaHi();
-  arenaHi = (u8*)TRUNC(arenaHi, align);
-  arenaHi -= size;
-  arenaHi = ptr = (void*)TRUNC(arenaHi, align);
-  OSSetArenaHi(arenaHi);
-  return ptr;
+    arenaHi = OSGetArenaHi();
+    arenaHi = (u8*)TRUNC(arenaHi, align);
+    arenaHi -= size;
+    arenaHi = ptr = (void*)TRUNC(arenaHi, align);
+    OSSetArenaHi(arenaHi);
+    return ptr;
 }

@@ -3,10 +3,10 @@
 
 #include "__os.h"
 
-// End of each month in standard year
+// Days before each month in a standard year
 static int YearDays[MONTH_MAX] = {0,   31,  59,  90,  120, 151,
                                   181, 212, 243, 273, 304, 334};
-// End of each month in leap year
+// Days before each month in a leap year
 static int LeapYearDays[MONTH_MAX] = {0,   31,  60,  91,  121, 152,
                                       182, 213, 244, 274, 305, 335};
 
@@ -26,7 +26,7 @@ jump:
     blr
 }
 
-asm OSTick OSGetTick(void){
+asm OSTick OSGetTick(void) {
     nofralloc
 
     mftb r3
@@ -45,7 +45,7 @@ asm static void __SetTime(OSTime time) {
 
 void __OSSetTime(OSTime time) {
     BOOL enabled;
-    OSTime * timeAdjustAddr;
+    OSTime* timeAdjustAddr;
 
     timeAdjustAddr = __OSSystemTime;
     enabled = OSDisableInterrupts();
@@ -111,7 +111,7 @@ static void GetDates(int days, OSCalendarTime* td) {
     int year;
     int n;
     int month;
-    int * md;
+    int* md;
 
     ASSERTLINE(311, 0 <= days);
 
@@ -167,7 +167,7 @@ void OSTicksToCalendarTime(OSTime ticks, OSCalendarTime* td) {
     GetDates(days, td);
     td->hour = secs / 60 / 60;
     td->min = secs / 60 % 60;
-    td->sec = secs % 60;
+    td->sec = secs % SECS_IN_MIN;
 }
 
 OSTime OSCalendarTimeToTicks(OSCalendarTime* td) {

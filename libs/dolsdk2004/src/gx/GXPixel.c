@@ -82,8 +82,8 @@ void GXSetFog(GXFogType type, f32 startz, f32 endz, f32 nearz, f32 farz, GXColor
         SET_REG_FIELD(201, fog2, 8, 24, 0xF0);
     }
 
-    a_hex = *(u32 *)&a;
-    c_hex = *(u32 *)&c;
+    a_hex = *(u32*)&a;
+    c_hex = *(u32*)&c;
 
     SET_REG_FIELD(209, fog0, 11, 0, (a_hex >> 12) & 0x7FF);
     SET_REG_FIELD(210, fog0, 8, 11, (a_hex >> 23) & 0xFF);
@@ -121,7 +121,7 @@ void GXSetFogColor(GXColor color) {
     __GXData->bpSentNot = 0;
 }
 
-void GXInitFogAdjTable(GXFogAdjTable *table, u16 width, const f32 projmtx[4][4]) {
+void GXInitFogAdjTable(GXFogAdjTable* table, u16 width, const f32 projmtx[4][4]) {
     f32 xi;
     f32 iw;
     f32 rangeVal;
@@ -151,7 +151,7 @@ void GXInitFogAdjTable(GXFogAdjTable *table, u16 width, const f32 projmtx[4][4])
     }
 }
 
-void GXSetFogRangeAdj(GXBool enable, u16 center, const GXFogAdjTable *table) {
+void GXSetFogRangeAdj(GXBool enable, u16 center, const GXFogAdjTable* table) {
     u32 i;
     u32 range_adj;
     u32 range_c;
@@ -265,10 +265,11 @@ void GXSetPixelFmt(GXPixelFmt pix_fmt, GXZFmt16 z_fmt) {
 
     if (oldPeCtrl != __GXData->peCtrl) {
         GX_WRITE_RAS_REG(__GXData->peCtrl);
-        if (pix_fmt == GX_PF_RGB565_Z16)
+        if (pix_fmt == GX_PF_RGB565_Z16) {
             aa = 1;
-        else
+        } else {
             aa = 0;
+        }
         SET_REG_FIELD(527, __GXData->genMode, 1, 9, aa);
         __GXData->dirtyState |= 4;
     }

@@ -4,7 +4,7 @@
 #include "__card.h"
 
 u16 __CARDVendorID = 0xFFFF;
-u8 __CARDPermMask = 0x1C;
+u8 __CARDPermMask = CARD_ATTR_PUBLIC | CARD_ATTR_NO_COPY | CARD_ATTR_NO_MOVE;
 
 u16 CARDSetVendorID(u16 vendorID) {
     u16 prevID = __CARDVendorID;
@@ -93,11 +93,11 @@ s32 CARDSetAttributesAsync(s32 chan, s32 fileNo, u8 attr, CARDCallback callback)
         return result;
     }
 
-    if ((CARDCheckAttr(dirent.permission, 0x20) && !CARDCheckAttr(attr, 0x20)) || (CARDCheckAttr(dirent.permission, 0x40) && !CARDCheckAttr(attr, 0x40))) {
+    if ((CARDCheckAttr(dirent.permission, CARD_ATTR_GLOBAL) && !CARDCheckAttr(attr, CARD_ATTR_GLOBAL)) || (CARDCheckAttr(dirent.permission, CARD_ATTR_COMPANY) && !CARDCheckAttr(attr, CARD_ATTR_COMPANY))) {
         return CARD_RESULT_NOPERM;
     }
 
-    if ((CARDCheckAttr(attr, 0x20) && CARDCheckAttr(attr, 0x40)) || (CARDCheckAttr(attr, 0x20) && CARDCheckAttr(dirent.permission, 0x40)) || (CARDCheckAttr(attr, 0x40) && CARDCheckAttr(dirent.permission, 0x20))) {
+    if ((CARDCheckAttr(attr, CARD_ATTR_GLOBAL) && CARDCheckAttr(attr, CARD_ATTR_COMPANY)) || (CARDCheckAttr(attr, CARD_ATTR_GLOBAL) && CARDCheckAttr(dirent.permission, CARD_ATTR_COMPANY)) || (CARDCheckAttr(attr, CARD_ATTR_COMPANY) && CARDCheckAttr(dirent.permission, CARD_ATTR_GLOBAL))) {
         return CARD_RESULT_NOPERM;
     }
 
@@ -130,9 +130,9 @@ static int __CARDEnablePerm(u8 perm, BOOL enable) {
 }
 
 int __CARDEnableGlobal(BOOL enable) {
-    return __CARDEnablePerm(0x20, enable);
+    return __CARDEnablePerm(CARD_ATTR_GLOBAL, enable);
 }
 
 int __CARDEnableCompany(BOOL enable) {
-    return __CARDEnablePerm(0x40, enable);
+    return __CARDEnablePerm(CARD_ATTR_COMPANY, enable);
 }

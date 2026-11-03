@@ -276,7 +276,7 @@ typedef union
 #define L2CR_L2PE                   0x40000000  // L2 data parity generation and checking enable
 
 #define L2CR_L2SIZ_256K             0x10000000  // L2 size 256K
-#define L2CR_L2SIZ_512K             0x20000000  // L2 size 512
+#define L2CR_L2SIZ_512K             0x20000000  // L2 size 512K
 #define L2CR_L2SIZ_1M               0x30000000  // L2 size 1M
 
 #define L2CR_L2CLK_1_0              0x02000000  // L2 clock ratio 1

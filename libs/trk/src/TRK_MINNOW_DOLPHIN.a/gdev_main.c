@@ -57,41 +57,41 @@ int gdev_cc_close(void) {
 
 int gdev_cc_read(u8* dest, int size) {
     u8 buff[GDEV_BUF_SIZE];
-    u32 p1;
-    int r3;
-    int p2;
+    u32 readResult;
+    int copySize;
+    int requiredSize;
     int poll;
 
-    p1 = 0;
+    readResult = 0;
 
     if (!gIsInitialized)
         return -10001;
 
-    r3 = size;
+    copySize = size;
     MWTRACE(1, "Expected packet size : 0x%08x (%ld)\n", size, size);
 
-    p2 = size;
+    requiredSize = size;
 
-    while (CBGetBytesAvailableForRead(&gRecvCB) < p2) {
-        p1 = 0;
+    while (CBGetBytesAvailableForRead(&gRecvCB) < requiredSize) {
+        readResult = 0;
         poll = DBQueryData();
         if (poll != 0) {
-            p1 = DBRead(buff, p2);
-            if (p1 == 0)
+            readResult = DBRead(buff, requiredSize);
+            if (readResult == 0)
                 CircleBufferWriteBytes(&gRecvCB, buff, poll);
         }
     }
 
-    if (p1 == 0)
-        CircleBufferReadBytes(&gRecvCB, dest, r3);
+    if (readResult == 0)
+        CircleBufferReadBytes(&gRecvCB, dest, copySize);
     else
-        MWTRACE(8, "cc_read : error reading bytes from EXI2 %ld\n", p1);
+        MWTRACE(8, "cc_read : error reading bytes from EXI2 %ld\n", readResult);
 
-    return p1;
+    return readResult;
 }
 
 int gdev_cc_write(const u8* bytes, int length) {
-    int exi2Len;
+    int writeResult;
     int n_copy;
     u32 hexCopy;
 
@@ -107,13 +107,13 @@ int gdev_cc_write(const u8* bytes, int length) {
 
     while (n_copy > 0) {
         MWTRACE(1, "cc_write sending %ld bytes\n", n_copy);
-        exi2Len = DBWrite((const void*)hexCopy, n_copy);
+        writeResult = DBWrite((const void*)hexCopy, n_copy);
 
-        if (exi2Len == 0)
+        if (writeResult == 0)
             break;
 
-        hexCopy += exi2Len;
-        n_copy -= exi2Len;
+        hexCopy += writeResult;
+        n_copy -= writeResult;
     }
 
     return 0;

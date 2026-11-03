@@ -150,10 +150,10 @@ void __OSInterruptInit(void) {
     __OSMaskInterrupts(OS_INTERRUPTMASK_MEM | OS_INTERRUPTMASK_DSP | OS_INTERRUPTMASK_AI |
                         OS_INTERRUPTMASK_EXI | OS_INTERRUPTMASK_PI);
 
-    __OSSetExceptionHandler(4, ExternalInterruptHandler);
+    __OSSetExceptionHandler(__OS_EXCEPTION_EXTERNAL_INTERRUPT, ExternalInterruptHandler);
     #if DEBUG
         __PIRegs[0] = 1;
-        __OSUnmaskInterrupts(0x100);
+        __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_ERROR);
     #endif
 }
 
@@ -295,7 +295,7 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
 }
 
 OSInterruptMask OSGetInterruptMask(void) { 
-    return *(OSInterruptMask *)OSPhysicalToCached(0x00C8);
+    return *(OSInterruptMask*)OSPhysicalToCached(0x00C8);
 }
 
 OSInterruptMask OSSetInterruptMask(OSInterruptMask local) {

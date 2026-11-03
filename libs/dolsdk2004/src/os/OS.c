@@ -174,7 +174,7 @@ static void DisableWriteGatherPipe(void) {
     u32 hid2;
 
     hid2 = PPCMfhid2();
-    hid2 &= ~0x40000000;
+    hid2 &= ~HID2_WPE;
     PPCMthid2(hid2);
 }
 
@@ -417,7 +417,6 @@ static void OSExceptionInit(void) {
     // Copy the right vector into the table
     for (exception = 0; exception < __OS_EXCEPTION_MAX; exception++) {
         if (BI2DebugFlag && (*BI2DebugFlag >= 2) && __DBIsExceptionMarked(exception)) {
-            // this DBPrintf is suspicious.
             DBPrintf(">>> OSINIT: exception %d commandeered by TRK\n", exception);
             continue;
         }
@@ -576,7 +575,7 @@ recoverable:
     // r4 - pointer to context
     // r5 - garbage
     // srr0 - exception handler
-    // srr1 - address translation enalbed, not yet recoverable
+    // srr1 - address translation enabled, not yet recoverable
 
     rfi
     // NOT REACHED HERE
@@ -603,7 +602,7 @@ asm void OSDefaultExceptionHandler(register __OSException exception, register OS
 
 #ifdef __GEKKO__
 void __OSPSInit(void) {
-	PPCMthid2(PPCMfhid2() | 0x80000000 | 0x20000000);
+	PPCMthid2(PPCMfhid2() | HID2_LSQE | HID2_PSE);
 	ICFlashInvalidate();
 	__sync();
 

@@ -31,7 +31,7 @@ static void InitDefaultHeap(void) {
     arenaHi = (void*)OSRoundDown32B(arenaHi);
 
     OSSetCurrentHeap(OSCreateHeap(arenaLo, arenaHi));
-    OSSetArenaLo(arenaLo = arenaHi);
+    OSSetArenaLo(arenaHi);
 }
 
 void __sys_free(void* ptr) {

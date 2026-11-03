@@ -75,7 +75,7 @@ void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {
         return;
     }
 
-    control &= 3;
+    control &= OS_PROTECT_CONTROL_RDWR;
 
     end = (u32)addr + nBytes;
     start = TRUNC(addr, 1u << 10);
@@ -91,11 +91,11 @@ void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {
     __MEMRegs[1 + 2 * chan] = (u16)(end >> 10);
 
     reg = __MEMRegs[8];
-    reg &= ~(3 << 2 * chan);
+    reg &= ~(OS_PROTECT_CONTROL_RDWR << 2 * chan);
     reg |= control << 2 * chan;
     __MEMRegs[8] = reg;
 
-    if (control != 3) {
+    if (control != OS_PROTECT_CONTROL_RDWR) {
         __OSUnmaskInterrupts(OS_INTERRUPTMASK(__OS_INTERRUPT_MEM_0 + chan));
     }
 
@@ -216,7 +216,7 @@ void __OSInitMemoryProtection(void) {
 #ifdef DEBUG
     if (OSGetConsoleSimulatedMemSize() < OSGetPhysicalMemSize() && OSGetConsoleSimulatedMemSize() == 0x1800000)
 #else
-    temp = OSGetConsoleSimulatedMemSize();  // not sure how else to get the order right on retail
+    temp = OSGetConsoleSimulatedMemSize();  // Read simulated size before checking physical size.
     if (temp < OSGetPhysicalMemSize() && temp == 0x1800000)
 #endif
     {

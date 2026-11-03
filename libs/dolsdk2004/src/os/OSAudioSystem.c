@@ -34,7 +34,7 @@ void __OSInitAudioSystem(void) {
     __DSPRegs[5] |= 1;
 
     while (__DSPRegs[5] & 1);
-        __DSPRegs[0] = 0;
+    __DSPRegs[0] = 0;
 
     while (((__DSPRegs[2] << 16) | __DSPRegs[3]) & 0x80000000);
 
@@ -73,7 +73,7 @@ void __OSInitAudioSystem(void) {
         reg16 = __DSPRegs[2];
     }
 
-    if(((u32)((reg16 << 16) | __DSPRegs[3]) + 0x7FAC0000U) != 0x4348) {
+    if (((u32)((reg16 << 16) | __DSPRegs[3]) + 0x7FAC0000U) != 0x4348) {
         ASSERTMSGLINE(193, 0, "__OSInitAudioSystem(): DSP returns invalid message");
     }
 

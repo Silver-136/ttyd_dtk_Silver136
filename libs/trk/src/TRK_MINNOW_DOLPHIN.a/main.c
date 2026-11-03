@@ -57,10 +57,10 @@ int ddh_cc_close(void) {
 
 int ddh_cc_read(u8* dest, int size) {
     u8 buff[DDH_BUF_SIZE];
-    u32 p1;
+    u32 readResult;
     int poll;
 
-    p1 = 0;
+    readResult = 0;
 
     if (!gIsInitialized)
         return -10001;
@@ -68,21 +68,21 @@ int ddh_cc_read(u8* dest, int size) {
     MWTRACE(1, "Expected packet size : 0x%08x (%ld)\n", size, size);
 
     while (CBGetBytesAvailableForRead(&gRecvCB) < size) {
-        p1 = 0;
+        readResult = 0;
         poll = EXI2_Poll();
         if (poll != 0) {
-            p1 = EXI2_ReadN(buff, poll);
-            if (p1 == 0)
+            readResult = EXI2_ReadN(buff, poll);
+            if (readResult == 0)
                 CircleBufferWriteBytes(&gRecvCB, buff, poll);
         }
     }
 
-    if (p1 == 0)
+    if (readResult == 0)
         CircleBufferReadBytes(&gRecvCB, dest, size);
     else
-        MWTRACE(8, "cc_read : error reading bytes from EXI2 %ld\n", p1);
+        MWTRACE(8, "cc_read : error reading bytes from EXI2 %ld\n", readResult);
 
-    return p1;
+    return readResult;
 }
 
 int ddh_cc_write(const u8* bytes, int length) {

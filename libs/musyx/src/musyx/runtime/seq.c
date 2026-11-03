@@ -7,8 +7,8 @@
 #include <stdint.h>
 
 static NOTE seqNote[256];
-SEQ_INSTANCE seqInstance[8];
-u16 seqMIDIPriority[8][16];
+SEQ_INSTANCE seqInstance[SND_MAX_SEQINSTANCES];
+u16 seqMIDIPriority[SND_MAX_SEQINSTANCES][16];
 
 static u32 seq_next_id = 0;
 static bool8 curFadeOutState = 0;
@@ -20,8 +20,8 @@ SEQ_INSTANCE* seqPausedRoot = NULL;
 SEQ_INSTANCE* seqActiveRoot = NULL;
 
 static void ClearNotes() {
-  NOTE* ln = NULL; // r30
-  s32 i;           // r29
+  NOTE* ln = NULL;
+  s32 i;
 
   noteFree = &seqNote[0];
   for (i = 0; i < 256; i++) {
@@ -36,8 +36,8 @@ static void ClearNotes() {
 }
 
 static void ResetNotes(SEQ_INSTANCE* seq) {
-  NOTE* n; // r31
-  u32 i;   // r30
+  NOTE* n;
+  u32 i;
   for (i = 0; i < 2; i++) {
     n = seq->noteUsed[i];
     if (n != NULL) {
@@ -71,8 +71,8 @@ static void ResetNotes(SEQ_INSTANCE* seq) {
 }
 
 static void KillNotes(SEQ_INSTANCE* seq) {
-  NOTE* n; // r31
-  u32 i;   // r30
+  NOTE* n;
+  u32 i;
 
   for (i = 0; i < 2; i++) {
     for (n = seq->noteUsed[i]; n != NULL; n = n->next) {
@@ -86,9 +86,9 @@ static void KillNotes(SEQ_INSTANCE* seq) {
 }
 
 static NOTE* AllocateNote(u32 endTime, u8 section) {
-  NOTE* n;       // r31
-  NOTE* nl;      // r30
-  NOTE* last_nl; // r29
+  NOTE* n;
+  NOTE* nl;
+  NOTE* last_nl;
   if ((n = noteFree) != NULL) {
     if ((noteFree = n->next) != NULL) {
       noteFree->prev = NULL;
@@ -148,8 +148,8 @@ static void FreeNote(struct NOTE* n) {
 }
 
 static u32 HandleNotes() {
-  NOTE* note; // r31
-  u32 i;      // r30
+  NOTE* note;
+  u32 i;
 
   for (i = 0; i < 2; i++) {
     note = cseq->noteUsed[i];
@@ -178,9 +178,9 @@ static u32 HandleNotes() {
 }
 
 static void KeyOffNotes() {
-  NOTE* note;     // r31
-  NOTE* nextNote; // r29
-  u32 i;          // r30
+  NOTE* note;
+  NOTE* nextNote;
+  u32 i;
 
   for (i = 0; i < 2; i++) {
     note = cseq->noteUsed[i];
@@ -221,8 +221,8 @@ static void seqFreeKeyOffNote(NOTE* n) {
 }
 
 static void HandleKeyOffNotes() {
-  NOTE* n;  // r31
-  NOTE* nn; // r30
+  NOTE* n;
+  NOTE* nn;
   if (!cseq->keyOffCheck) {
     n = cseq->noteKeyOff;
     while (n != NULL) {
@@ -241,8 +241,8 @@ static void HandleKeyOffNotes() {
 static void InitPublicIds() { seq_next_id = 0; }
 
 static u32 GetPublicId(u32 seqId) {
-  u32 pub_id;       // r30
-  SEQ_INSTANCE* si; // r31
+  u32 pub_id;
+  SEQ_INSTANCE* si;
 
   do {
     pub_id = seq_next_id;
@@ -268,7 +268,7 @@ static u32 GetPublicId(u32 seqId) {
 }
 
 u32 seqGetPrivateId(u32 seqId) {
-  SEQ_INSTANCE* si; // r31
+  SEQ_INSTANCE* si;
   for (si = seqActiveRoot; si != NULL; si = si->next) {
     if (si->publicId == (seqId & ~SND_SEQ_CROSSFADE_ID)) {
       return si->index | seqId & SND_SEQ_CROSSFADE_ID;
@@ -313,7 +313,7 @@ static void DoPrgChange(SEQ_INSTANCE* seq, u8 prg, u8 midi) {
 }
 
 static void BuildTransTab(u8* tab, PAGE* page) {
-  u8 i; // r31
+  u8 i;
 
   for (i = 0; i < 128; i++) {
     tab[i] = 0xff;
@@ -329,13 +329,13 @@ static void InitTrackEvents();
 
 u32 seqStartPlay(PAGE* norm, PAGE* drum, MIDISETUP* midiSetup, u32* song, SND_PLAYPARA* para,
                  u8 studio, u16 sgid) {
-  ARR* arr;              // r27
-  u32* tracktab;         // r24
-  s32 i;                 // r31
-  SEQ_INSTANCE* nseq;    // r30
-  SEQ_INSTANCE* oldCSeq; // r23
-  u32 seqId;             // r28
-  u32 bpm;               // r25
+  ARR* arr;
+  u32* tracktab;
+  s32 i;
+  SEQ_INSTANCE* nseq;
+  SEQ_INSTANCE* oldCSeq;
+  u32 seqId;
+  u32 bpm;
 
   if ((nseq = seqFreeRoot) == NULL) {
     return SND_ID_ERROR;
@@ -507,7 +507,7 @@ static void SetTickDelta(SEQ_SECTION* section, u32 deltaTime) {
 }
 
 static void HandleMasterTrack(u8 secIndex) {
-  SEQ_SECTION* section; // r31
+  SEQ_SECTION* section;
 
   section = &cseq->section[secIndex];
   if (section->mTrack.base != NULL) {
@@ -558,7 +558,7 @@ static void StartPause(SEQ_INSTANCE* si) {
 }
 
 void seqPause(u32 seqId) {
-  SEQ_INSTANCE* si; // r31
+  SEQ_INSTANCE* si;
   seqId = seqGetPrivateId(seqId);
 
   if (seqId == SND_SEQ_ERROR_ID) {
@@ -581,7 +581,7 @@ void seqPause(u32 seqId) {
 }
 
 void seqStop(u32 seqId) {
-  SEQ_INSTANCE* si; // r31
+  SEQ_INSTANCE* si;
 
   if ((seqId = seqGetPrivateId(seqId)) == SND_SEQ_ERROR_ID) {
     return;
@@ -628,7 +628,7 @@ void seqStop(u32 seqId) {
 }
 
 void seqKillAllInstances() {
-  SEQ_INSTANCE* si; // r31
+  SEQ_INSTANCE* si;
   for (si = seqActiveRoot; si != NULL; si = si->next) {
     seqStop(si->publicId);
   }
@@ -639,7 +639,7 @@ void seqKillAllInstances() {
 }
 
 void seqKillInstancesByGroupID(u16 sgid) {
-  SEQ_INSTANCE* si; // r31
+  SEQ_INSTANCE* si;
 
   for (si = seqActiveRoot; si != NULL; si = si->next) {
     if (si->groupID == sgid) {
@@ -654,7 +654,7 @@ void seqKillInstancesByGroupID(u16 sgid) {
 }
 
 void seqSpeed(u32 seqId, u16 speed) {
-  u32 i; // r30
+  u32 i;
 
   seqId = seqGetPrivateId(seqId);
   MUSY_ASSERT_MSG(seqId != SND_SEQ_ERROR_ID, "Sequencer ID is not valid.");
@@ -671,7 +671,7 @@ void seqSpeed(u32 seqId, u16 speed) {
 }
 
 void seqContinue(u32 seqId) {
-  struct SEQ_INSTANCE* si; // r31
+  struct SEQ_INSTANCE* si;
 
   seqId = seqGetPrivateId(seqId);
   MUSY_ASSERT_MSG(seqId != SND_SEQ_ERROR_ID, "Sequencer ID is not valid.");
@@ -721,8 +721,8 @@ void seqMute(u32 seqId, u32 mask1, u32 mask2) {
 }
 
 void seqVolume(u8 volume, u16 time, u32 seqId, u8 mode) {
-  u32 i;      // r29
-  u32 pub_id; // r27
+  u32 i;
+  u32 pub_id;
 
   pub_id = seqId;
   seqId = seqGetPrivateId(seqId);
@@ -763,9 +763,9 @@ void seqVolume(u8 volume, u16 time, u32 seqId, u8 mode) {
 }
 
 void seqCrossFade(SND_CROSSFADE* ci, u32* new_seqId, bool8 irq_call) {
-  SND_PLAYPARA pp; // r1+0x14
-  u32 seqId;       // r29
-  u16 time;        // r27
+  SND_PLAYPARA pp;
+  u32 seqId;
+  u16 time;
 
   seqId = seqGetPrivateId(ci->seqId1);
   MUSY_ASSERT_MSG(seqId != SND_SEQ_ERROR_ID, "Sequencer ID is not valid.");
@@ -861,9 +861,9 @@ void seqCrossFade(SND_CROSSFADE* ci, u32* new_seqId, bool8 irq_call) {
 }
 
 static u8* GetStreamValue(u8* stream, u16* deltaTime, s16* deltaData) {
-  u8 b1; // r31
-  u8 b2; // r29
-  s16 v; // r30
+  u8 b1;
+  u8 b2;
+  s16 v;
 
   b1 = stream[0];
   b2 = stream[1];
@@ -913,7 +913,7 @@ static u8* GetStreamValue(u8* stream, u16* deltaTime, s16* deltaData) {
 }
 
 static void InitStream(SEQ_STREAM* stream, u32 streamDataOffset) {
-  u16 delta; // r1+0x10
+  u16 delta;
   if (streamDataOffset != 0) {
     if ((stream->nextAddr = GetStreamValue(ARR_GET(cseq->arrbase, streamDataOffset), &delta,
                                            &stream->nextDelta)) != NULL) {
@@ -927,7 +927,7 @@ static void InitStream(SEQ_STREAM* stream, u32 streamDataOffset) {
 }
 
 static u16 HandleStream(SEQ_STREAM* stream) {
-  u16 delta; // r1+0xC
+  u16 delta;
   stream->value += stream->nextDelta;
   if (stream->nextAddr != NULL) {
     if ((stream->nextAddr = GetStreamValue(stream->nextAddr, &delta, &stream->nextDelta)) != NULL) {
@@ -942,12 +942,12 @@ static u16 HandleStream(SEQ_STREAM* stream) {
 }
 
 static SEQ_EVENT* GenerateNextTrackEvent(u8 trackId) {
-  TRACK* track;    // r29
-  CPAT* pattern;   // r31
-  SEQ_EVENT* ev;   // r30
-  u32 patternTime; // r28
-  u32 pitchTime;   // r27
-  u32 modTime;     // r26
+  TRACK* track;
+  CPAT* pattern;
+  SEQ_EVENT* ev;
+  u32 patternTime;
+  u32 pitchTime;
+  u32 modTime;
 
   track = &cseq->track[trackId];
   pattern = &cseq->pattern[trackId];
@@ -1042,8 +1042,8 @@ static SEQ_EVENT* GenerateNextTrackEvent(u8 trackId) {
 }
 
 static void InsertGlobalEvent(SEQ_SECTION* section, SEQ_EVENT* event) {
-  SEQ_EVENT* el;      // r31
-  SEQ_EVENT* last_el; // r30
+  SEQ_EVENT* el;
+  SEQ_EVENT* last_el;
 
   last_el = NULL;
   el = section->globalEventRoot;
@@ -1075,7 +1075,7 @@ static u32 GetNextEventTime(SEQ_SECTION* section) {
 }
 
 static SEQ_EVENT* GetGlobalEvent(SEQ_SECTION* section) {
-  SEQ_EVENT* ev; // r31
+  SEQ_EVENT* ev;
   ev = section->globalEventRoot;
   if (ev != NULL && ((section->globalEventRoot = ev->next) != NULL)) {
     section->globalEventRoot->prev = NULL;
@@ -1084,17 +1084,17 @@ static SEQ_EVENT* GetGlobalEvent(SEQ_SECTION* section) {
 }
 
 static SEQ_EVENT* HandleEvent(SEQ_EVENT* event, u8 secIndex, bool* loopFlag) {
-  CPAT* pa;          // r26
-  NOTE_DATA* pe;     // r24
-  s32 velocity;      // r28
-  s32 key;           // r30
-  u8 midi;           // r27
-  u16 macId;         // r21
-  NOTE* note;        // r22
-  TENTRY* tEntry;    // r25
-  CPAT* pattern;     // r29
-  u32* pTab;         // r20
-  SEQ_PATTERN* pptr; // r23
+  CPAT* pa;
+  NOTE_DATA* pe;
+  s32 velocity;
+  s32 key;
+  u8 midi;
+  u16 macId;
+  NOTE* note;
+  TENTRY* tEntry;
+  CPAT* pattern;
+  u32* pTab;
+  SEQ_PATTERN* pptr;
 
   switch (event->type) {
   case 4:
@@ -1209,8 +1209,8 @@ static SEQ_EVENT* HandleEvent(SEQ_EVENT* event, u8 secIndex, bool* loopFlag) {
 }
 
 static void InitTrackEvents() {
-  u32 i;         // r31
-  SEQ_EVENT* ev; // r30
+  u32 i;
+  SEQ_EVENT* ev;
 
   if (cseq->trackSectionTab == NULL) {
     for (i = 0; i < 0x40; i += 1) {
@@ -1228,8 +1228,8 @@ static void InitTrackEvents() {
 }
 
 static void InitTrackEventsSection(u8 secIndex) {
-  u32 i;         // r31
-  SEQ_EVENT* ev; // r30
+  u32 i;
+  SEQ_EVENT* ev;
 
   if (cseq->trackSectionTab == NULL) {
     for (i = 0; i < 64; i += 1) {
@@ -1247,9 +1247,9 @@ static void InitTrackEventsSection(u8 secIndex) {
 }
 
 static bool HandleTrackEvents(u8 secIndex, u32 deltaTime) {
-  SEQ_EVENT* ev;        // r29
-  bool loopFlag;        // r1+0x10
-  SEQ_SECTION* section; // r31
+  SEQ_EVENT* ev;
+  bool loopFlag;
+  SEQ_SECTION* section;
 
   section = &cseq->section[secIndex];
   loopFlag = FALSE;
@@ -1279,13 +1279,13 @@ static bool HandleTrackEvents(u8 secIndex, u32 deltaTime) {
 }
 
 void seqHandle(u32 deltaTime) {
-    u32 x;                // r29
-    u32 i;                // r31
-    u32 j;                // r28
-    u32 eventsActive;     // r26
-    u32 notesActive;      // r24
-    SEQ_INSTANCE* si;     // r30
-    SEQ_INSTANCE* nextSi; // r27
+    u32 x;
+    u32 i;
+    u32 j;
+    u32 eventsActive;
+    u32 notesActive;
+    SEQ_INSTANCE* si;
+    SEQ_INSTANCE* nextSi;
 
     if (deltaTime == 0) {
         return;
@@ -1356,12 +1356,12 @@ void seqHandle(u32 deltaTime) {
 }
 
 void seqInit() {
-  u32 i; // r31
-  u32 j; // r29
+  u32 i;
+  u32 j;
 
   seqActiveRoot = NULL;
   seqPausedRoot = NULL;
-  for (i = 0; i < 8; i++) {
+  for (i = 0; i < SND_MAX_SEQINSTANCES; i++) {
     if (i == 0) {
       seqFreeRoot = &seqInstance[i];
       seqInstance[i].prev = NULL;

@@ -141,7 +141,7 @@ static void SubBlock_merge_next(SubBlock* ths, SubBlock** start) {
     }
 
 static inline int Block_empty(Block* ths) {
-    SubBlock* sb = (SubBlock*)((char*)ths + 16);
+    SubBlock* sb = (SubBlock*)((char*)ths + sizeof(Block));
     return SubBlock_is_free(sb) && SubBlock_size(sb) == Block_size(ths) - 24;
 }
 

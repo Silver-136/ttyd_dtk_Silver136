@@ -124,12 +124,12 @@ void __OSUnhandledException(__OSException exception, OSContext* context, u32 dsi
         OSReport("Non-recoverable Exception %d", exception);
     } else {
         if (exception == __OS_EXCEPTION_PROGRAM && (context->srr1 & (0x80000000 >> 11)) &&
-            __OSErrorTable[__OS_EXCEPTION_FLOATING_POINT_EXCEPTION] != 0)
+            __OSErrorTable[__OS_EXCEPTION_FLOATING_POINT_EXCEPTION] != NULL)
         {
             exception = __OS_EXCEPTION_FLOATING_POINT_EXCEPTION;
 
             msr = PPCMfmsr();
-            PPCMtmsr(msr | 0x2000);
+            PPCMtmsr(msr | MSR_FP);
 
             if (__OSFPUContext) {
                 OSSaveFPUContext((OSContext*)__OSFPUContext);
@@ -146,7 +146,7 @@ void __OSUnhandledException(__OSException exception, OSContext* context, u32 dsi
             if (__OSFPUContext == context) {
                 OSDisableScheduler();
                 __OSErrorTable[exception](exception, context, dsisr, dar);
-                context->srr1 &= ~0x2000;
+                context->srr1 &= ~MSR_FP;
                 __OSFPUContext = NULL;
 
                 context->fpscr &=
@@ -156,7 +156,7 @@ void __OSUnhandledException(__OSException exception, OSContext* context, u32 dsi
                 OSEnableScheduler();
                 __OSReschedule();
             } else {
-                context->srr1 &= ~0x2000;
+                context->srr1 &= ~MSR_FP;
                 __OSFPUContext = NULL;
             }
 
@@ -183,7 +183,7 @@ void __OSUnhandledException(__OSException exception, OSContext* context, u32 dsi
     OSReport("\nDSISR = 0x%08x                   DAR  = 0x%08x\n", dsisr, dar);
     OSReport("TB = 0x%016llx\n", now);
 
-    switch(exception) {
+    switch (exception) {
     case __OS_EXCEPTION_DSI:
         OSReport("\nInstruction at 0x%x (read from SRR0) attempted to access "
                     "invalid address 0x%x (read from DAR)\n",

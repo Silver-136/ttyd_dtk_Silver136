@@ -47,9 +47,9 @@ static float pan_tab_dpl2[4] = {
 
 static void CalcBus(float* vol_tab, float* vl, float* vr, float* vs, float vol,
                     struct SAL_PANINFO* pi) {
-  u32 i;   // r29
-  float f; // r62
-  float v; // r63
+  u32 i;
+  float f;
+  float v;
 
   i = vol * 127.f;
   v = (vol * 127) - (float)i;
@@ -63,10 +63,10 @@ static void CalcBus(float* vol_tab, float* vl, float* vr, float* vs, float vol,
 
 static void CalcBusDPL2(float* vol_tab, float* fvl, float* fvr, float* rvl, float* rvr, float vol,
                         SAL_PANINFO* pi) {
-  u32 i;    // r29
-  float f;  // r62
-  float v;  // r63
-  float vs; // r61
+  u32 i;
+  float f;
+  float v;
+  float vs;
 
   i = vol * 127;
   f = vol * 127 - (float)i;
@@ -83,10 +83,10 @@ static void CalcBusDPL2(float* vol_tab, float* fvl, float* fvr, float* rvl, floa
 
 void salCalcVolume(u8 voltab_index, SAL_VOLINFO* vi, float vol, u32 pan, u32 span, float auxa,
                    float auxb, u32 itd, u32 dpl2) {
-  float* vol_tab; // r30
-  float p;        // r63
-  float sp;       // r62
-  SAL_PANINFO pi; // r1+0x2C
+  float* vol_tab;
+  float p;
+  float sp;
+  SAL_PANINFO pi;
 
   if (voltab_index == 0) {
     vol_tab = musyx_vol_tab;

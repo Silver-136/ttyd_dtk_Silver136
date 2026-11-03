@@ -28,7 +28,6 @@ static GXFifoObj FifoObj;
 static GXData gxData;
 GXData* const __GXData = &gxData;
 
-// these are supposed to be in-function static, but it messed up sbss order
 u32 resetFuncRegistered;
 u32 calledOnce;
 OSTime time;
@@ -89,18 +88,18 @@ static void EnableWriteGatherPipe(void) {
     u32 hid2 = PPCMfhid2();
 
     PPCMtwpar(OSUncachedToPhysical((void*)GXFIFO_ADDR));
-    hid2 |= 0x40000000;
+    hid2 |= HID2_WPE;
     PPCMthid2(hid2);
 }
 
 static void DisableWriteGatherPipe(void) {
     u32 hid2 = PPCMfhid2();
 
-    hid2 &= ~0x40000000;
+    hid2 &= ~HID2_WPE;
     PPCMthid2(hid2);
 }
 
-static GXTexRegion*__GXDefaultTexRegionCallback(const GXTexObj* t_obj, GXTexMapID id) {
+static GXTexRegion* __GXDefaultTexRegionCallback(const GXTexObj* t_obj, GXTexMapID id) {
     GXTexFmt fmt;
     u8 mm;
 
@@ -524,8 +523,9 @@ void __GXInitGX(void) {
     GXSetTevSwapModeTable(GX_TEV_SWAP2, GX_CH_GREEN, GX_CH_GREEN, GX_CH_GREEN, GX_CH_ALPHA);
     GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
 
-    for (i = GX_TEVSTAGE0; i < GX_MAX_TEVSTAGE; i++)
+    for (i = GX_TEVSTAGE0; i < GX_MAX_TEVSTAGE; i++) {
         GXSetTevDirect((GXTevStageID)i);
+    }
 
     GXSetNumIndStages(0);
     GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_1, GX_ITS_1);

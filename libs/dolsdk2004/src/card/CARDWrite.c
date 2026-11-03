@@ -34,7 +34,7 @@ static void WriteCallback(s32 chan, s32 result) {
             fat = __CARDGetFatBlock(card);
             fileInfo->offset += card->sectorSize;
             fileInfo->iBlock = fat[fileInfo->iBlock];
-            if ((fileInfo->iBlock < 5) || (fileInfo->iBlock >= card->cBlock)) {
+            if ((fileInfo->iBlock < CARD_NUM_SYSTEM_BLOCK) || (fileInfo->iBlock >= card->cBlock)) {
                 result = CARD_RESULT_BROKEN;
                 goto after;
             }

@@ -51,7 +51,7 @@ int __OSCheckMutexes(OSThread* thread);
 
 void OSInitMutex(OSMutex* mutex) {
     OSInitThreadQueue(&mutex->queue);
-    mutex->thread = 0;
+    mutex->thread = NULL;
     mutex->count = 0;
 }
 
@@ -64,7 +64,7 @@ void OSLockMutex(OSMutex* mutex) {
     
     while (1) {
         OSThread* ownerThread = mutex->thread;
-        if (ownerThread == 0) {
+        if (ownerThread == NULL) {
             mutex->thread = currentThread;
             mutex->count++;
             ENQUEUE_MUTEX(mutex, &currentThread->queueMutex, link);
@@ -209,7 +209,7 @@ int __OSCheckMutex(OSMutex* mutex) {
         if (thread->link.prev != NULL && (thread != thread->link.prev->link.next)) {
             return 0;
         } 
-        if (thread->state != 4) {
+        if (thread->state != OS_THREAD_STATE_WAITING) {
             return 0;
         } 
         if (thread->priority < priority) {

@@ -140,9 +140,9 @@ static inline void __dorounddecup(decimal* d, int digits) {
 
 static inline void __rounddec(decimal* d, int digits) {
     if (digits > 0 && digits < d->sig.length) {
-        int unkBool = __must_round(d, digits);
+        int roundingResult = __must_round(d, digits);
         d->sig.length = digits;
-        if (unkBool >= 0)
+        if (roundingResult >= 0)
             __dorounddecup(d, digits);
     }
 }

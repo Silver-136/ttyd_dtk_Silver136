@@ -339,7 +339,7 @@ static s32 Retry(s32 chan) {
         return CARD_RESULT_READY;
     }
 
-    if (!EXIDma(chan, card->buffer, (s32)((card->cmd[0] == 0x52) ? 512 : card->pageSize), card->mode,
+    if (!EXIDma(chan, card->buffer, (s32)((card->cmd[0] == 0x52) ? CARD_SEG_SIZE : card->pageSize), card->mode,
                 __CARDTxHandler))
     {
         EXIDeselect(chan);
@@ -453,7 +453,7 @@ s32 __CARDReadSegment(s32 chan, CARDCallback callback) {
     card->cmd[3] = AD3(card->addr);
     card->cmd[4] = BA(card->addr);
     card->cmdlen = 5;
-    card->mode = 0;
+    card->mode = EXI_READ;
     card->retry = 0;
 
     result = __CARDStart(chan, callback, 0);
@@ -463,7 +463,7 @@ s32 __CARDReadSegment(s32 chan, CARDCallback callback) {
         if (!EXIImmEx(chan, card->cmd, card->cmdlen, EXI_WRITE) ||
             !EXIImmEx(chan, (u8* )card->workArea + sizeof(CARDID), card->latency,
             EXI_WRITE) || // XXX use DMA if possible
-            !EXIDma(chan, card->buffer, 512, card->mode, __CARDTxHandler))
+            !EXIDma(chan, card->buffer, CARD_SEG_SIZE, card->mode, __CARDTxHandler))
         {
             card->txCallback = NULL;
             EXIDeselect(chan);
@@ -498,7 +498,7 @@ s32 __CARDWritePage(s32 chan, CARDCallback callback) {
     card->cmd[3] = AD3(card->addr);
     card->cmd[4] = BA(card->addr);
     card->cmdlen = 5;
-    card->mode = 1;
+    card->mode = EXI_WRITE;
     card->retry = 3;
 
     result = __CARDStart(chan, 0, callback);

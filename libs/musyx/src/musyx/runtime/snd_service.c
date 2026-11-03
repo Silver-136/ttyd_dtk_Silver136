@@ -20,8 +20,8 @@ static const float _sinConsts[] = {
     -0.000198409,  // -(1/5040.09)
     0.0000027526f, // 1/363292.89
     0.63661975f,   // 1/1.57079638
-    1.57079638f,   //
-    0.f,           //
+    1.57079638f,
+    0.f,
     0.0000000239f, // 1/41841004.18f
 };
 #endif
@@ -117,11 +117,11 @@ s16 sndSin(u16 angle) {
 }
 
 void* sndBSearch(void* key, void* base, s32 num, s32 len, SND_COMPARE cmp) {
-  long l;    // r31
-  long r;    // r30
-  long m;    // r29
-  long c;    // r28
-  void* ptr; // r27
+  long l;
+  long r;
+  long m;
+  long c;
+  void* ptr;
 
   if (num != 0) {
     l = 1;

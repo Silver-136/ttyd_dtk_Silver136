@@ -17,11 +17,10 @@ int __aborting = 0;
 static void (*__atexit_funcs[max_funcs])(void);
 int __atexit_curr_func = 0;
 
-void (*__stdio_exit)(void) = 0;
-void (*__console_exit)(void) = 0;
+void (*__stdio_exit)(void) = NULL;
+void (*__console_exit)(void) = NULL;
 
 void exit(int status) {
-    int i;
     void (**dtor)(void);
 
     if (!__aborting) {

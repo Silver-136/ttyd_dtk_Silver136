@@ -20,9 +20,9 @@ void __DSPHandler(__OSInterrupt intr, OSContext* context) {
     u16 tmp;
     u32 mail;
 
-    tmp = __DSPRegs[5];
+    tmp = __DSPRegs[DSP_CONTROL_STATUS];
     tmp = (tmp & ~0x28) | 0x80;
-    __DSPRegs[5] = tmp;
+    __DSPRegs[DSP_CONTROL_STATUS] = tmp;
 
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(&exceptionContext);
@@ -32,7 +32,7 @@ void __DSPHandler(__OSInterrupt intr, OSContext* context) {
         ;
 
     mail = DSPReadMailFromDSP();
-    if ((__DSP_curr_task->flags & (1<<(31-0x1E))) && (mail + 0x232F0000) == 2)
+    if ((__DSP_curr_task->flags & 2) && mail == 0xDCD10002)
         mail = 0xDCD10003;
 
     switch (mail) {

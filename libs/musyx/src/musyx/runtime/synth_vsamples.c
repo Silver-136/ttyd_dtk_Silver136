@@ -28,8 +28,8 @@ void vsInit() {
 }
 
 static u16 vsNewInstanceID() {
-  u8 i;       // r31
-  u16 instID; // r29
+  u8 i;
+  u16 instID;
   do {
     instID = vs.nextInstID++;
     for (i = 0; i < vs.numBuffers; ++i) {
@@ -65,9 +65,9 @@ static void vsFreeBuffer(u8 bufferIndex) {
 u32 vsSampleStartNotify(unsigned long vid) {
   u8 voice;
   u8 v1 = vid;
-  u8 sb;       // r29
-  u8 i;        // r28
-  size_t addr; // r27
+  u8 sb;
+  u8 i;
+  size_t addr;
 
   voice = v1 & 0xFF;
   for (i = 0; i < vs.numBuffers; ++i) {
@@ -105,7 +105,7 @@ u32 vsSampleStartNotify(unsigned long vid) {
 
 void vsSampleEndNotify(u32 pubID) {
   u8 sb;
-  u8 voice;
+
 
   if (pubID != 0xFFFFFFFF) {
     u8 id = (u8)pubID;
@@ -199,11 +199,11 @@ void vsUpdateBuffer(struct VS_BUFFER* sb, unsigned long cpos) {
 }
 
 void vsSampleUpdates() {
-  u32 i;           // r29
-  u32 cpos;        // r27
-  u32 realCPos;    // r28
-  VS_BUFFER* sb;   // r31
-  u32 nextSamples; // r26
+  u32 i;
+  u32 cpos;
+  u32 realCPos;
+  VS_BUFFER* sb;
+  u32 nextSamples;
 
   if (vs.callback == NULL) {
     return;

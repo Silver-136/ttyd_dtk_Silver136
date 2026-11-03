@@ -1,4 +1,3 @@
-/*
 
 
 
@@ -14,7 +13,8 @@
 
 
 
-*/
+
+
 #define _MATH_H_
 #include "dolphin/os/OSCache.h"
 #include "musyx/assert.h"
@@ -34,7 +34,7 @@ static u32 dbgActiveVoicesMax = 0;
 extern u8 salFrame;
 extern u8 salAuxFrame;
 
-DSPstudioinfo dspStudio[8];
+DSPstudioinfo dspStudio[SAL_MAX_STUDIONUM];
 
 static u32 dspARAMZeroBuffer = 0;
 
@@ -69,9 +69,9 @@ DSPvoice* dspVoice = NULL;
 SND_MESSAGE_CALLBACK salMessageCallback = NULL;
 
 bool salInitDspCtrl(u8 numVoices, u8 numStudios, u32 defaultStudioDPL2) {
-  u32 i;         // r31
-  u32 j;         // r27
-  size_t itdPtr; // r28
+  u32 i;
+  u32 j;
+  size_t itdPtr;
 
   salNumVoices = numVoices;
   salMaxStudioNum = numStudios;
@@ -512,8 +512,8 @@ const u16 dspMixerCyclesMain[16] = {
 
 static u32 salCheckVolErrorAndResetDelta(u16* dsp_vol, u16* dsp_delta, u16* last_vol, u16 targetVol,
                                          u16* resetFlags, u16 resetMask) {
-  s16 d; // r31
-  s16 x; // r30
+  s16 d;
+  s16 x;
 
   if (targetVol != *last_vol) {
     d = (s16)targetVol - (s16)*last_vol;
@@ -553,8 +553,8 @@ static void sal_setup_dspvol(u16* dsp_delta, u16* last_vol, u16 vol) {
 }
 
 static void sal_update_hostplayinfo(DSPvoice* dsp_vptr) {
-  u32 old_lo; // r30
-  u32 pitch;  // r31
+  u32 old_lo;
+  u32 pitch;
 
   if (dsp_vptr->smp_info.loopLength != 0) {
     return;
@@ -595,7 +595,7 @@ static void DoDepopFade(long* dspStart, s16* dspDelta, long* hostSum) {
 }
 
 static void HandleDepopVoice(DSPstudioinfo* stp, DSPvoice* dsp_vptr) {
-  _PB* pb; // r31
+  _PB* pb;
   dsp_vptr->postBreak = 0;
   dsp_vptr->pb->state = 0;
   pb = dsp_vptr->pb;
@@ -629,9 +629,9 @@ static void HandleDepopVoice(DSPstudioinfo* stp, DSPvoice* dsp_vptr) {
 }
 
 static void SortVoices(DSPvoice** voices, long l, long r) {
-  long i;        // r28
-  long last;     // r29
-  DSPvoice* tmp; // r27
+  long i;
+  long last;
+  DSPvoice* tmp;
 
   if (l >= r) {
     return;
@@ -663,44 +663,44 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
   static const u16 pbOffsets[10] = {10, 12, 24, 14, 16, 26, 18, 20, 22};
   static DSPvoice* voices[64];
 
-  u8 s;                        // r27
-  u8 mix_start;                // r1+0x17
-  u8 st;                       // r21
-  u8 st1;                      // r1+0x16
-  u8 getAuxFrame;              // r1+0x15
-  u16 rampResetOffsetFlags[5]; // r1+0xE4
-  DSPvoice* dsp_vptr;          // r30
-  DSPvoice* next_dsp_vptr;     // r1+0xE0
-  u32 tmp_addr;                // r1+0xDC
-  u32 addr;                    // r1+0xD8
-  u32 base;                    // r17
-  u32 in;                      // r1+0xD4
-  u32 voiceNum;                // r1+0xD0
-  u32 cyclesUsed;              // r24
-  u16* pptr;                   // r28
-  u16* pend;                   // r1+0xCC
-  u16 adsr_start;              // r1+0x34
-  u16 adsr_delta;              // r1+0x32
-  u16 old_adsr_delta;          // r1+0x30
-  s32 current_delta;           // r1+0xC8
-  s32 v;                       // r25
-  _PB* pb;                     // r31
-  _PB* last_pb;                // r20
-  u32 VoiceDone;               // r1+0xC4
-  u32 needsDelta;              // r19
-  u32 newVoice;                // r1+0xC0
-  _SPB* spb;                   // r26
-  DSPstudioinfo* stp;          // r29
+  u8 s;
+  u8 mix_start;
+  u8 st;
+  u8 st1;
+  u8 getAuxFrame;
+  u16 rampResetOffsetFlags[5];
+  DSPvoice* dsp_vptr;
+  DSPvoice* next_dsp_vptr;
+  u32 tmp_addr;
+  u32 addr;
+  u32 base;
+  u32 in;
+  u32 voiceNum;
+  u32 cyclesUsed;
+  u16* pptr;
+  u16* pend;
+  u16 adsr_start;
+  u16 adsr_delta;
+  u16 old_adsr_delta;
+  s32 current_delta;
+  s32 v;
+  _PB* pb;
+  _PB* last_pb;
+  u32 VoiceDone;
+  u32 needsDelta;
+  u32 newVoice;
+  _SPB* spb;
+  DSPstudioinfo* stp;
 #ifdef _DEBUG
-  u32 dbgActiveVoices; // r1+0xBC
+  u32 dbgActiveVoices;
 #endif
-  u32 procVoiceFlag; // r1+0xB8
-  u32 offset;        // r1+0xB4
-  u32 endAddr;       // r1+0xB0
-  u32 loopAddr;      // r1+0xAC
-  u32 zeroAddr;      // r1+0x98
-  DSPvoice* sp78;
-  DSPvoice* sp74;
+  u32 procVoiceFlag;
+  u32 offset;
+  u32 endAddr;
+  u32 loopAddr;
+  u32 zeroAddr;
+
+
 
 #ifdef _DEBUG
   dbgActiveVoices = 0;
@@ -743,7 +743,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
       }
       stp->alienVoiceRoot = NULL;
       if ((dspCmdPtr + 3) > (dspCmdMaxPtr - 4)) {
-        u16 size; // r1+0x2E
+        u16 size;
         dspCmdPtr[0] = 13; // MORE
         dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
         dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -767,7 +767,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
       cyclesUsed += 0x2C62;
       for (in = 0; in < stp->numInputs; in++) {
         if ((dspCmdPtr + 6) > (dspCmdMaxPtr - 4)) {
-          u16 size; // r1+0x2C
+          u16 size;
           dspCmdPtr[0] = 0xD; // MORE
           dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
           dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -794,8 +794,8 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
         cyclesUsed += 0x294D;
       }
       last_pb = NULL;
-      for (v = 0, dsp_vptr = stp->voiceRoot, sp78 = dsp_vptr; dsp_vptr;
-           v++, dsp_vptr = dsp_vptr->next, sp74 = dsp_vptr) {
+      for (v = 0, dsp_vptr = stp->voiceRoot; dsp_vptr;
+           v++, dsp_vptr = dsp_vptr->next) {
         voices[v] = dsp_vptr;
       }
       voiceNum = (int)v;
@@ -804,7 +804,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
       for (v = voiceNum; v > 0; v--) {
         dsp_vptr = voices[v - 1];
         if (dsp_vptr->state != 0) {
-          u8 i; // r1+0x14
+          u8 i;
           pb = dsp_vptr->pb;
           for (s = 1; s < 5; s++) {
             rampResetOffsetFlags[s] = 0;
@@ -850,8 +850,8 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
             case 0:
             case 4:
             case 5: {
-              SNDADPCMinfo* adpcmInfo; // r18
-              u8 i;                    // r1+0x13
+              SNDADPCMinfo* adpcmInfo;
+              u8 i;
               pb->addr.format = 0;
               pb->adpcm.gain = 0;
               adpcmInfo = dsp_vptr->smp_info.extraData;
@@ -875,8 +875,8 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               }
             } break;
             case 1: {
-              DSPADPCMplusInfo* adpcmInfo; // r23
-              u8 i;                        // r1+0x12
+              DSPADPCMplusInfo* adpcmInfo;
+              u8 i;
               pb->addr.format = 0;
               pb->adpcm.gain = 0;
               offset = (dsp_vptr->smp_info.offset + 0xD) / 14;
@@ -897,7 +897,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               dsp_vptr->playInfo.posLo = 0;
             } break;
             case 3: {
-              u8 i; // r1+0x11
+              u8 i;
               pb->addr.format = 0x19;
               pb->adpcm.gain = 0x100;
               for (i = 0; i < 8; i++) {
@@ -910,7 +910,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
             } break;
             case 2:
             case 6: {
-              u8 i; // r1+0x10
+              u8 i;
               pb->addr.format = 0xA;
               pb->adpcm.gain = 0x800;
               for (i = 0; i < 8; i++) {
@@ -937,8 +937,8 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               case 0:
               case 1:
               case 4: {
-                u32 bn; // r1+0xA8
-                u32 bo; // r1+0xA4
+                u32 bn;
+                u32 bo;
                 bn = dsp_vptr->smp_info.loop / 14;
                 bo = dsp_vptr->smp_info.loop - (bn * 0xE);
                 loopAddr = base + bn * 16 + 2 + bo;
@@ -948,8 +948,8 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
                 endAddr = base + bn * 16 + 2 + bo;
               } break;
               case 5: {
-                u32 bn; // r1+0xA0
-                u32 bo; // r1+0x9C
+                u32 bn;
+                u32 bo;
                 loopAddr = ((u32)dsp_vptr->vSampleInfo.loopBufferAddr * 2) + 2;
                 endAddr = dsp_vptr->smp_info.loop + dsp_vptr->smp_info.loopLength - 1;
                 bn = endAddr / 14;
@@ -981,8 +981,8 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               case 1:
               case 4:
               case 5: {
-                u32 bn; // r1+0x94
-                u32 bo; // r1+0x90
+                u32 bn;
+                u32 bo;
                 bn = (dsp_vptr->smp_info.length - 1) / 14;
                 bo = (dsp_vptr->smp_info.length - 1) - (bn * 0xE);
                 tmp_addr = base + bn * 16 + 2 + bo;
@@ -1070,8 +1070,8 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
             pb->adpcmLoop.loop_pred_scale = dsp_vptr->streamLoopPS;
             if ((dsp_vptr->smp_info.compType == 5) && (dsp_vptr->vSampleInfo.inLoopBuffer == 0) &&
                 (pb->streamLoopCnt != 0)) {
-              u32 bn; // r1+0x8C
-              u32 bo; // r1+0x88
+              u32 bn;
+              u32 bo;
               bn = (dsp_vptr->vSampleInfo.loopBufferLength - 1) / 14;
               bo = (dsp_vptr->vSampleInfo.loopBufferLength - 1) - (bn * 14);
               tmp_addr = ((u32)dsp_vptr->vSampleInfo.loopBufferAddr * 2) + bn * 16 + 2 + bo;
@@ -1452,7 +1452,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
           } else {
             if (!last_pb) {
               if ((dspCmdPtr + 3) > (dspCmdMaxPtr - 4)) {
-                u16 size; // r1+0x2A
+                u16 size;
                 dspCmdPtr[0] = 13; // MORE
                 dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
                 dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -1519,7 +1519,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
       getAuxFrame = (salAuxFrame + 1) % 3;
       if (stp->auxAHandler) {
         if ((dspCmdPtr + 5) > (dspCmdMaxPtr - 4)) {
-          u16 size; // r1+0x26
+          u16 size;
           dspCmdPtr[0] = 13; // MORE
           dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
           dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -1546,7 +1546,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
       if (stp->type == SND_STUDIO_TYPE_STD) {
         if (stp->auxBHandler) {
           if ((dspCmdPtr + 5) > (dspCmdMaxPtr - 4)) {
-            u16 size; // r1+0x24
+            u16 size;
             dspCmdPtr[0] = 13; // MORE
             dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
             dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -1572,7 +1572,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
         }
       } else {
         if ((dspCmdPtr + 5) > (dspCmdMaxPtr - 4)) {
-          u16 size; // r1+0x22
+          u16 size;
           dspCmdPtr[0] = 13; // MORE
           dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
           dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -1597,7 +1597,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
         dspCmdPtr += 5;
       }
       if ((dspCmdPtr + 3) > (dspCmdMaxPtr - 4)) {
-        u16 size; // r1+0x20
+        u16 size;
         dspCmdPtr[0] = 13; // MORE
         dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
         dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -1632,7 +1632,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
     }
   }
   if ((dspCmdPtr + 3) > (dspCmdMaxPtr - 4)) {
-    u16 size; // r1+0x1E
+    u16 size;
     dspCmdPtr[0] = 13; // MORE
     dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
     dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -1656,7 +1656,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
   for (st = 0; st < salMaxStudioNum; st++) {
     if ((dspStudio[st].state == 1) && (dspStudio[st].isMaster != 0)) {
       if ((dspCmdPtr + 3) > (dspCmdMaxPtr - 4)) {
-        u16 size; // r1+0x1C
+        u16 size;
         dspCmdPtr[0] = 13; // MORE
         dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
         dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -1706,7 +1706,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
     dspCmdPtr += 5;
   }
   if ((dspCmdPtr + 5) > (dspCmdMaxPtr - 4)) {
-    u16 size; // r1+0x1A
+    u16 size;
     dspCmdPtr[0] = 13; // MORE
     dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
     dspCmdPtr[2] = (u32)dspCmdMaxPtr;
@@ -1724,7 +1724,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
     dspCmdMaxPtr = dspCmdPtr + 0xC0;
   }
   {
-    u16 size; // r1+0x18
+    u16 size;
     dspCmdPtr[0] = 14; // OUTPUT
     dspCmdPtr[1] = (u32)dspSurround >> 16;
     dspCmdPtr[2] = (u32)dspSurround;
@@ -1790,13 +1790,13 @@ void salDeactivateVoice(DSPvoice* dsp_vptr) {
 }
 
 void salHandleAuxProcessing() {
-  DSPstudioinfo* r28;
-  u8 st;             // r29
-  s32* work;         // r30
-  DSPstudioinfo* sp; // r31
-  SND_AUX_INFO info; // r1+0x8
 
-  for (sp = dspStudio, st = 0; st < salMaxStudioNum; ++st, r28 = sp++, r28 = r28) {
+  u8 st;
+  s32* work;
+  DSPstudioinfo* sp;
+  SND_AUX_INFO info;
+
+  for (sp = dspStudio, st = 0; st < salMaxStudioNum; ++st, sp++) {
 
     if (sp->state != 1) {
       continue;
@@ -1805,22 +1805,22 @@ void salHandleAuxProcessing() {
     if (sp->auxAHandler != NULL) {
       work = sp->auxA[(salAuxFrame + 2) % 3];
       info.data.bufferUpdate.left = work;
-      info.data.bufferUpdate.right = work + 0xa0;
-      info.data.bufferUpdate.surround = work + 0x140;
-      sp->auxAHandler(0, &info, sp->auxAUser);
+      info.data.bufferUpdate.right = work + SND_AUX_BLOCKSIZE;
+      info.data.bufferUpdate.surround = work + (2 * SND_AUX_BLOCKSIZE);
+      sp->auxAHandler(SND_AUX_REASON_BUFFERUPDATE, &info, sp->auxAUser);
 #if MUSY_TARGET == MUSY_TARGET_DOLPHIN
-      DCFlushRangeNoSync(work, 0x780);
+      DCFlushRangeNoSync(work, 3 * SND_AUX_BLOCKSIZE * sizeof(*work));
 #endif
     }
 
-    if (sp->type == 0 && sp->auxBHandler != 0) {
+    if (sp->type == SND_STUDIO_TYPE_STD && sp->auxBHandler != NULL) {
       work = sp->auxB[(salAuxFrame + 2) % 3];
       info.data.bufferUpdate.left = work;
-      info.data.bufferUpdate.right = work + 0xa0;
-      info.data.bufferUpdate.surround = work + 0x140;
-      sp->auxBHandler(0, &info, sp->auxBUser);
+      info.data.bufferUpdate.right = work + SND_AUX_BLOCKSIZE;
+      info.data.bufferUpdate.surround = work + (2 * SND_AUX_BLOCKSIZE);
+      sp->auxBHandler(SND_AUX_REASON_BUFFERUPDATE, &info, sp->auxBUser);
 #if MUSY_TARGET == MUSY_TARGET_DOLPHIN
-      DCFlushRangeNoSync(work, 0x780);
+      DCFlushRangeNoSync(work, 3 * SND_AUX_BLOCKSIZE * sizeof(*work));
 #endif
     }
   }

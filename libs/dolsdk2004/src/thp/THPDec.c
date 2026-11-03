@@ -130,7 +130,7 @@ s32 THPVideoDecode(void* file, void* tileY, void* tileU, void* tileV,
 
 				all_done = TRUE;
 			} else if (status == 216) {
-				// empty but required for match
+				// Marker 216 requires no additional processing.
 			} else {
 				goto _err_unsupported_marker;
 			}
@@ -245,7 +245,6 @@ u8 __THPReadFrameHeader(void)
 	return 0;
 }
 
-/* there is an EXTREMELY tiny schedule swap but otherwise matching */
 u8 __THPReadScaneHeader(void)
 {
 	u8 i, utmp8;
@@ -488,7 +487,6 @@ void __THPPrepBitStream(void)
 						                           .valPtr[k + 1])];
 						__THPInfo->huffmanTabs[i].increment[j] = (u8)(k + 1);
 						k                                      = 99;
-					} else {
 					}
 				}
 			}
@@ -1307,7 +1305,7 @@ _FCEB_Done:
 	return (h->Vij[(s32)(tmp + h->valPtr[code])]);
 
 	asm
-	{ // 6684
+	{
       _notEnoughBits:
         cmpwi   cnt, 33;
         lwz     tmp, info->c;
@@ -1467,8 +1465,7 @@ void __THPDecompressiMCURow640x480(void)
 
 	{
 		for (cl_num = 0; cl_num < __THPInfo->MCUsPerRow; cl_num++) {
-			THPFileInfo* um = __THPInfo;
-			__THPHuffDecodeDCTCompY(um, __THPMCUBuffer[0]);
+			__THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[0]);
 			__THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[1]);
 			__THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[2]);
 			__THPHuffDecodeDCTCompY(__THPInfo, __THPMCUBuffer[3]);

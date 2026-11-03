@@ -37,7 +37,7 @@ u8 synthAuxAMIDI[8];
 u8 synthAuxAMIDISet[8];
 u8 synthAuxBMIDI[8];
 u8 synthAuxBMIDISet[8];
-u8 synthTrackVolume[64]; // size: 0x40
+
 
 static void synthAddJob(SYNTH_VOICE* svoice, SYNTH_JOBTYPE jobType, u32 deltaTime);
 
@@ -53,7 +53,7 @@ u32 synthGetTicksPerSecond(SYNTH_VOICE* svoice) {
 }
 
 static u32 apply_portamento(SYNTH_VOICE* svoice, u32 ccents, u32 deltaTime) {
-  u32 old_portCurPitch; // r31
+  u32 old_portCurPitch;
 
   if ((svoice->cFlags & 0x400) != 0 && (int)((svoice->portDuration - svoice->portTime) >> 8) > 0) {
 
@@ -91,12 +91,12 @@ void synthInitPortamento(SYNTH_VOICE* svoice) {
 }
 
 static u32 do_voice_portamento(u8 key, u8 midi, u8 midiSet, u32 isMaster, u32* rejected) {
-  u32 i;                      // r30
-  u32 vid;                    // r29
-  u32 id;                     // r27
-  SYNTH_VOICE* sv;            // r31
-  SYNTH_VOICE* last_sv;       // r28
-  bool legatoVoiceIsStarting; // r26
+  u32 i;
+  u32 vid;
+  u32 id;
+  SYNTH_VOICE* sv;
+  SYNTH_VOICE* last_sv;
+  bool legatoVoiceIsStarting;
 
   legatoVoiceIsStarting = FALSE;
   vid = SND_ID_ERROR;
@@ -150,7 +150,7 @@ static u32 do_voice_portamento(u8 key, u8 midi, u8 midiSet, u32 isMaster, u32* r
 }
 
 static u32 check_portamento(u8 key, u8 midi, u8 midiSet, u32 newVID, u32* vid) {
-  u32 rejected; // r1+0x14
+  u32 rejected;
 
   if (inpGetMidiCtrl(SND_MIDICTRL_PORTAMENTO, midi, midiSet) > 8064) {
     *vid = do_voice_portamento(key & 0x7f, midi, midiSet, newVID, &rejected);
@@ -177,15 +177,15 @@ static u32 StartLayer(u16 layerID, s16 prio, u8 maxVoices,
 #endif
                       u8 key, u8 vol, u8 panning, u8 midi, u8 midiSet, u8 section, u16 step,
                       u16 trackid, u32 vidFlag, u8 vGroup, u8 studio, u32 itd) {
-  u16 n;      // r1+0x38
-  u32 vid;    // r26
-  u32 new_id; // r1+0x34
-  u32 id;     // r27
-  LAYER* l;   // r31
-  s32 p;      // r30
-  s32 k;      // r29
-  u8 v;       // r25
-  u8 mKey;    // r24
+  u16 n;
+  u32 vid;
+  u32 new_id;
+  u32 id;
+  LAYER* l;
+  s32 p;
+  s32 k;
+  u8 v;
+  u8 mKey;
 
   vid = SND_ID_ERROR;
   if ((l = dataGetLayer(layerID, &n)) == NULL) {
@@ -283,11 +283,11 @@ static u32 StartKeymap(u16 keymapID, s16 prio, u8 maxVoices,
 #endif
                        u8 key, u8 vol, u8 panning, u8 midi, u8 midiSet, u8 section, u16 step,
                        u16 trackid, u32 vidFlag, u8 vGroup, u8 studio, u32 itd) {
-  u8 o;           // r30
-  KEYMAP* keymap; // r31
-  s32 p;          // r26
-  s32 k;          // r29
-  u32 vid;        // r1+0x34
+  u8 o;
+  KEYMAP* keymap;
+  s32 p;
+  s32 k;
+  u32 vid;
 
   if ((keymap = dataGetKeymap(keymapID)) != NULL) {
     o = key & 0x7f;
@@ -333,7 +333,7 @@ static u32 StartKeymap(u16 keymapID, s16 prio, u8 maxVoices,
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(1, 5, 4)
 static void unblockAllAllocatedVoices(u32 vid) {
-  u32 id; // r31
+  u32 id;
 
   id = vidGetInternalId(vid);
   MUSY_ASSERT_MSG(id != SND_ID_ERROR, "*** Alloc unblock: ID is illegal");
@@ -355,7 +355,7 @@ u32 synthStartSound(u16 id, u8 prio, u8 max,
 
   switch (id & 0xC000) {
   case 0: {
-    u32 vid; // r1+0x34
+    u32 vid;
     if (!check_portamento(key, midi, midiSet, 1, &vid)) {
       return SND_ID_ERROR;
     }
@@ -415,8 +415,8 @@ u32 synthStartSound(u16 id, u8 prio, u8 max,
 }
 
 static u32 convert_cents(SYNTH_VOICE* svoice, u32 ccents) {
-  u32 curDetune; // r30
-  u32 cpitch;    // r31
+  u32 curDetune;
+  u32 cpitch;
 
   cpitch = sndGetPitch(ccents / 65536, svoice->sInfo) * 65536;
   if ((curDetune = ccents & 0xffff) != 0) {
@@ -439,20 +439,20 @@ static void UpdateTimeMIDICtrl(SYNTH_VOICE* sv) {
 }
 
 static void LowPrecisionHandler(u32 i) {
-  u32 j;            // r30
-  s32 pbend;        // r29
-  u32 ccents;       // r28
-  u32 cpitch;       // r26
-  u16 Modulation;   // r24
-  u16 portamento;   // r25
-  u32 lowDeltaTime; // r27
-  SYNTH_VOICE* sv;  // r31
-  u32 cntDelta;     // r20
-  u32 addFactor;    // r19
-  u16 adsr_start;   // r1+0xE
-  u16 adsr_delta;   // r1+0xC
-  s32 vrange;       // r23
-  s32 voff;         // r22
+  u32 j;
+  s32 pbend;
+  u32 ccents;
+  u32 cpitch;
+  u16 Modulation;
+  u16 portamento;
+  u32 lowDeltaTime;
+  SYNTH_VOICE* sv;
+  u32 cntDelta;
+  u32 addFactor;
+  u16 adsr_start;
+  u16 adsr_delta;
+  s32 vrange;
+  s32 voff;
 
   sv = &synthVoice[i];
   if (!hwIsActive(i) && sv->addr == NULL) {
@@ -615,26 +615,26 @@ end:
 }
 
 static void ZeroOffsetHandler(u32 i) {
-  SYNTH_VOICE* sv;  // r31
-  u32 lowDeltaTime; // r26
-  u16 Modulation;   // r25
-  f32 vol;          // f30
-  f32 auxa;         // f25
-  f32 auxb;         // f24
-  f32 f;            // f27
-  f32 voiceVol;     // f28
-  bool volUpdate;   // r30
-  f32 lfo;          // f23
-  f32 scale;        // f31
-  f32 mscale;       // f22
-  s32 pan;          // r28
-  f32 preVol;       // f26
-  f32 postVol;      // f29
+  SYNTH_VOICE* sv;
+  u32 lowDeltaTime;
+  u16 Modulation;
+  f32 vol;
+  f32 auxa;
+  f32 auxb;
+  f32 f;
+  f32 voiceVol;
+  bool volUpdate;
+  f32 lfo;
+  f32 scale;
+  f32 mscale;
+  s32 pan;
+  f32 preVol;
+  f32 postVol;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
-  unsigned short para; // r22
-  unsigned short a0;   // r1+0xA
-  unsigned short b0;   // r1+0x8
-  unsigned long frq;   // r21
+  unsigned short para;
+  unsigned short a0;
+  unsigned short b0;
+  unsigned long frq;
 #endif
 
   sv = &synthVoice[i];
@@ -762,7 +762,7 @@ end:
 }
 
 static void EventHandler(u32 i) {
-  SYNTH_VOICE* sv; // r31
+  SYNTH_VOICE* sv;
 
   sv = &synthVoice[i];
   if (!hwIsActive(i) && sv->addr == NULL) {
@@ -790,7 +790,7 @@ end:
 }
 
 static void synthInitJobQueue() {
-  u8 i; // r31
+  u8 i;
 
   for (i = 0; i < 32; ++i) {
     synthJobTable[i].lowPrecision = NULL;
@@ -802,10 +802,10 @@ static void synthInitJobQueue() {
 }
 
 static void synthAddJob(SYNTH_VOICE* svoice, SYNTH_JOBTYPE jobType, u32 deltaTime) {
-  SYNTH_QUEUE* newJq;   // r31
-  SYNTH_QUEUE** root;   // r30
-  u8 jobTabIndex;       // r29
-  SYNTH_JOBTAB* jobTab; // r28
+  SYNTH_QUEUE* newJq;
+  SYNTH_QUEUE** root;
+  u8 jobTabIndex;
+  SYNTH_JOBTAB* jobTab;
 
   jobTabIndex = ((deltaTime / 256) + synthJobTableIndex) & 0x1f;
   jobTab = &synthJobTable[jobTabIndex];
@@ -879,8 +879,8 @@ void synthForceLowPrecisionUpdate(SYNTH_VOICE* svoice) {
 void synthKeyStateUpdate(SYNTH_VOICE* svoice) { synthAddJob(svoice, SYNTH_JOBTYPE_EVENT, 0); }
 
 static void HandleJobQueue(SYNTH_QUEUE** queueRoot, void (*handler)(u32)) {
-  SYNTH_QUEUE* jq;     // r31
-  SYNTH_QUEUE* nextJq; // r30
+  SYNTH_QUEUE* jq;
+  SYNTH_QUEUE* nextJq;
 
   jq = *queueRoot;
   while (jq != NULL) {
@@ -896,7 +896,7 @@ static void HandleJobQueue(SYNTH_QUEUE** queueRoot, void (*handler)(u32)) {
 }
 
 static void HandleVoices() {
-  SYNTH_JOBTAB* jTab = &synthJobTable[synthJobTableIndex]; // r31
+  SYNTH_JOBTAB* jTab = &synthJobTable[synthJobTableIndex];
   HandleJobQueue(&jTab->lowPrecision, LowPrecisionHandler);
   HandleJobQueue(&jTab->event, EventHandler);
   HandleJobQueue(&jTab->zeroOffset, ZeroOffsetHandler);
@@ -918,10 +918,10 @@ static void HandleFaderTermination(SYNTHMasterFader* smf) {
 }
 
 void synthHandle(u32 deltaTime) {
-  u32 i;                 // r29
-  u32 s;                 // r30
-  SYNTHMasterFader* smf; // r31
-  u32 testFlag;          // r27
+  u32 i;
+  u32 s;
+  SYNTHMasterFader* smf;
+  u32 testFlag;
 
   if (synthInfo.numSamples == 0) {
     return;
@@ -960,7 +960,7 @@ void synthHandle(u32 deltaTime) {
 
     for (s = 0; s < 8; ++s) {
       if (synthAuxAMIDI[s] != 0xff) {
-        SND_AUX_INFO info; // r1+0x18
+        SND_AUX_INFO info;
         for (i = 0; i < SND_AUX_NUMPARAMETERS; ++i) {
           info.data.parameterUpdate.para[i] =
               inpGetAuxA(s, i, synthAuxAMIDI[s], synthAuxAMIDISet[s]);
@@ -969,7 +969,7 @@ void synthHandle(u32 deltaTime) {
       }
 
       if (synthAuxBMIDI[s] != 0xff) {
-        SND_AUX_INFO info; // r1+0xC
+        SND_AUX_INFO info;
         for (i = 0; i < SND_AUX_NUMPARAMETERS; ++i) {
           info.data.parameterUpdate.para[i] =
               inpGetAuxB(s, i, synthAuxBMIDI[s], synthAuxBMIDISet[s]);
@@ -1031,9 +1031,9 @@ u32 synthFXStart(u16 fid,
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
 int synthCheckFXRealloc(unsigned short fid) {
-  struct FX_TAB* fx;            // r31
-  unsigned long allocId;        // r30
-  unsigned long currentAllocId; // r1+0x8
+  struct FX_TAB* fx;
+  unsigned long allocId;
+  unsigned long currentAllocId;
 
   fx = dataGetFX(fid);
   if (fx == NULL) {
@@ -1050,8 +1050,8 @@ int synthCheckFXRealloc(unsigned short fid) {
 #endif
 
 bool synthFXSetCtrl(u32 vid, u8 ctrl, u8 value) {
-  u32 i;   // r31
-  u32 ret; // r29
+  u32 i;
+  u32 ret;
 
   ret = FALSE;
   vid = vidGetInternalId(vid);
@@ -1076,8 +1076,8 @@ bool synthFXSetCtrl(u32 vid, u8 ctrl, u8 value) {
 }
 
 bool synthFXSetCtrl14(u32 vid, u8 ctrl, u16 value) {
-  u32 i;   // r31
-  u32 ret; // r29
+  u32 i;
+  u32 ret;
 
   ret = FALSE;
   vid = vidGetInternalId(vid);
@@ -1110,8 +1110,8 @@ void synthFXCloneMidiSetup(SYNTH_VOICE* dest, SYNTH_VOICE* src) {
 }
 
 static bool synthFXVolume(u32 vid, u8 vol) {
-  u32 i;   // r31
-  u32 ret; // r29
+  u32 i;
+  u32 ret;
 
   ret = FALSE;
   vid = vidGetInternalId(vid);
@@ -1136,8 +1136,8 @@ static bool synthFXVolume(u32 vid, u8 vol) {
 }
 
 bool synthSendKeyOff(u32 voiceid) {
-  u32 i;    // r30
-  bool ret; // r29
+  u32 i;
+  bool ret;
 
   ret = FALSE;
 
@@ -1160,7 +1160,7 @@ bool synthSendKeyOff(u32 voiceid) {
 }
 
 u16 synthGetVolume(u32 vid) {
-  u32 i; // r30
+  u32 i;
 
   vid = vidGetInternalId(vid);
   if (vid != SND_ID_ERROR) {
@@ -1190,10 +1190,10 @@ static void SetupFader(SYNTHMasterFader* smf, u8 volume, u32 time, u8 seqMode, u
 }
 
 void synthVolume(u8 volume, u16 time, u8 vGroup, u8 seqMode, u32 seqId) {
-  u32 ltime;             // r1+0x14
-  u32 i;                 // r30
-  u8 type;               // r29
-  SYNTHMasterFader* smf; // r31
+  u32 ltime;
+  u32 i;
+  u8 type;
+  SYNTHMasterFader* smf;
 
   if ((ltime = time) != 0) {
     sndConvertMs(&ltime);
@@ -1259,10 +1259,10 @@ bool synthIsFadeOutActive(u8 vGroup) {
 }
 
 void synthPauseVolume(u8 volume, u16 time, u8 vGroup) {
-  u32 i;                 // r30
-  u32 ltime;             // r1+0x10
-  u8 type;               // r28
-  SYNTHMasterFader* smf; // r31
+  u32 i;
+  u32 ltime;
+  u8 type;
+  SYNTHMasterFader* smf;
 
   if (time == 0) {
     ++time;
@@ -1357,7 +1357,7 @@ void synthSetMusicVolumeType(u8 vGroup, u8 type) {
 }
 
 static u32 synthHWMessageHandler(u32 mesg, u32 voiceID) {
-  u32 ret; // r30
+  u32 ret;
 
   ret = FALSE;
 
@@ -1394,7 +1394,7 @@ static u32 synthHWMessageHandler(u32 mesg, u32 voiceID) {
 }
 
 void synthInit(u32 mixFrq, u32 numVoices) {
-  u32 i; // r31
+  u32 i;
 
   synthRealTime = 0;
   synthInfo.mixFrq = mixFrq;

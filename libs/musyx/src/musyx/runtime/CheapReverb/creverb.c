@@ -1,4 +1,3 @@
-/* ---------------------------------------
 
 
 
@@ -7,8 +6,9 @@
 
 
 
-   ---------------------------------------
-*/
+
+
+
 #include "musyx/musyx.h"
 #include "musyx/sal.h"
 #include <float.h>
@@ -25,7 +25,7 @@ static void DLsetdelay(_SND_REVSTD_DELAYLINE* dl, s32 lag) {
 static void DLcreate(_SND_REVSTD_DELAYLINE* dl, s32 len) {
   dl->length = (s32)len * sizeof(f32);
   dl->inputs = (f32*)salMalloc(len * sizeof(f32));
-  memset(dl->inputs, 0, len * sizeof(len));
+  memset(dl->inputs, 0, len * sizeof(*dl->inputs));
   dl->lastOutput = 0.f;
   DLsetdelay(dl, len >> 1);
   dl->inPoint = 0;
@@ -37,8 +37,8 @@ static void DLdelete(_SND_REVSTD_DELAYLINE* dl) { salFree(dl->inputs); }
 bool ReverbSTDCreate(_SND_REVSTD_WORK* rv, float coloration, float time, float mix, float damping,
                      float predelay) {
   static u32 lens[4] = {1789, 1999, 433, 149};
-  u8 i; // r31
-  u8 k; // r29
+  u8 i;
+  u8 k;
 
   if ((coloration < 0.f || coloration > 1.f) || (time < .01f || time > 10.f) ||
       (mix < 0.f || mix > 1.f) || (damping < 0.f || damping > 1.f) ||
@@ -89,7 +89,7 @@ bool ReverbSTDCreate(_SND_REVSTD_WORK* rv, float coloration, float time, float m
 
 bool ReverbSTDModify(_SND_REVSTD_WORK* rv, float coloration, float time, float mix, float damping,
                      float predelay) {
-  unsigned char i; // r31
+  unsigned char i;
 
   if ((coloration < 0.f || coloration > 1.f) || (time < .01f || time > 10.f) ||
       (mix < 0.f || mix > 1.f) || (damping < 0.f || damping > 1.f) ||
@@ -425,7 +425,7 @@ void ReverbSTDCallback(s32* left, s32* right, s32* surround, _SND_REVSTD_WORK* r
 }
 
 void ReverbSTDFree(_SND_REVSTD_WORK* rv) {
-  u8 i; // r31
+  u8 i;
   for (i = 0; i < 6; ++i) {
     DLdelete(&rv->AP[i]);
   }

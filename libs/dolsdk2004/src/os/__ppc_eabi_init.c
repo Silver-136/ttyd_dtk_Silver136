@@ -48,22 +48,22 @@ void __init_user(void) {
 }
 
 static void __init_cpp(void) {
-	void (* * constructor)();
+    void (**constructor)();
 
-	/*
-	 *	call static initializers
-	 */
-	for (constructor = _ctors; *constructor; constructor++) {
-		(*constructor)();
-	}
+    /*
+     * call static initializers
+     */
+    for (constructor = _ctors; *constructor; constructor++) {
+        (*constructor)();
+    }
 }
 
 static void __fini_cpp(void) {
-    void (* * destructor)();
+    void (**destructor)();
 
-	/*
-	 *	call destructors
-	 */
+    /*
+     * call destructors
+     */
     for (destructor = _dtors; *destructor; destructor++) {
         (*destructor)();
     }

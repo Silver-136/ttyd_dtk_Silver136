@@ -59,7 +59,7 @@ s32 __CARDFormatRegionAsync(s32 chan, u16 encode, CARDCallback callback) {
 
     id = (CARDID*)card->workArea;
     memset(id, 0xff, CARD_SYSTEM_BLOCK_SIZE);
-    dvdstatus = __VIRegs[55];
+    dvdstatus = __VIRegs[VI_DTV_STAT];
 
     id->encode = encode;
     sram = __OSLockSram();

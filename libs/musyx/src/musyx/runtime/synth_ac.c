@@ -52,8 +52,8 @@ static float tonedown_tab[128] = {
 s32 sndPitchUpOne(u16 note) { return note * 1.0594631f; }
 
 u32 sndGetPitch(u8 key, u32 sInfo) {
-  u8 okey;   // r31
-  float frq; // r63
+  u8 okey;
+  float frq;
   if (sInfo == 0xffffffff) {
     sInfo = 0x40005622;
   }

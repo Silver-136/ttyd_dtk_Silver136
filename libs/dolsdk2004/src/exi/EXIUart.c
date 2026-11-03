@@ -67,7 +67,7 @@ void __OSEnableBarnacle(s32 chan, u32 dev) {
     case EXI_USB_ADAPTER:
     case EXI_NPDP_GDEV:
     case EXI_MODEM:
-    case 0x03010000:
+    case EXI_MARLIN:
     case 0x04020100:
     case EXI_ETHER:
     case 0x04020300:
@@ -115,7 +115,7 @@ int ReadUARTN(void) {
 static int QueueLength(void) {
     u32 cmd;
 
-    if (EXISelect(Chan, Dev, 3) == 0) {
+    if (EXISelect(Chan, Dev, EXI_FREQ_8M) == 0) {
         return -1;
     }
 

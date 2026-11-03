@@ -22,8 +22,8 @@ static FX_GROUP dataFXGroups[128];
 static u16 dataFXGroupNum;
 
 bool dataInsertKeymap(u16 cid, void* keymapdata) {
-  long i; // r31
-  long j; // r29
+  long i;
+  long j;
   hwDisableIrq();
 
   for (i = 0; i < dataKeymapNum && dataKeymapTab[i].id < cid; ++i)
@@ -64,8 +64,8 @@ bool dataInsertKeymap(u16 cid, void* keymapdata) {
 }
 
 bool dataRemoveKeymap(u16 sid) {
-  long i; // r31
-  long j; // r30
+  long i;
+  long j;
 
   hwDisableIrq();
   for (i = 0; i < dataKeymapNum && dataKeymapTab[i].id != sid; ++i)
@@ -86,8 +86,8 @@ bool dataRemoveKeymap(u16 sid) {
 }
 
 bool dataInsertLayer(u16 cid, void* layerdata, u16 size) {
-  long i; // r31
-  long j; // r29
+  long i;
+  long j;
 
   hwDisableIrq();
 
@@ -134,8 +134,8 @@ bool dataInsertLayer(u16 cid, void* layerdata, u16 size) {
 }
 
 bool dataRemoveLayer(u16 sid) {
-  long i; // r31
-  long j; // r30
+  long i;
+  long j;
 
   hwDisableIrq();
   for (i = 0; i < dataLayerNum && dataLayerTab[i].id != sid; ++i)
@@ -156,8 +156,8 @@ bool dataRemoveLayer(u16 sid) {
 }
 
 bool dataInsertCurve(u16 cid, void* curvedata) {
-  long i; // r31
-  long j; // r29
+  long i;
+  long j;
 
   hwDisableIrq();
 
@@ -201,8 +201,8 @@ bool dataInsertCurve(u16 cid, void* curvedata) {
 }
 
 bool dataRemoveCurve(u16 sid) {
-  long i; // r31
-  long j; // r30
+  long i;
+  long j;
 
   hwDisableIrq();
   for (i = 0; i < dataCurveNum && dataCurveTab[i].id != sid; ++i)
@@ -223,12 +223,12 @@ bool dataRemoveCurve(u16 sid) {
 }
 
 bool dataInsertSDir(SDIR_DATA* sdir, void* smp_data) {
-  s32 i;        // r31
-  SDIR_DATA* s; // r25
-  u16 n;        // r27
-  u16 j;        // r29
+  s32 i;
+  SDIR_DATA* s;
+  u16 n;
+  u16 j;
 #if MUSY_VERSION <= MUSY_VERSION_CHECK(2, 0, 1)
-  u16 k; // r26
+  u16 k;
 #endif
   for (i = 0; i < dataSmpSDirNum && dataSmpSDirs[i].data != sdir; ++i)
     ;
@@ -282,10 +282,10 @@ bool dataInsertSDir(SDIR_DATA* sdir, void* smp_data) {
 }
 
 bool dataRemoveSDir(struct SDIR_DATA* sdir) {
-  long i;          // r28
-  long j;          // r30
-  long index;      // r27
-  SDIR_DATA* data; // r31
+  long i;
+  long j;
+  long index;
+  SDIR_DATA* data;
 
   index = 0;
   for (; index < dataSmpSDirNum && dataSmpSDirs[index].data != sdir; ++index) {
@@ -351,10 +351,10 @@ bool dataAddSampleReference(u16 sid
                             ARAMInfo* aramInfo
 #endif
 ) {
-  u32 i;                 // r29
-  SAMPLE_HEADER* header; // r1+0xC
-  SDIR_DATA* data;       // r30
-  SDIR_DATA* sdir;       // r31
+  u32 i;
+  SAMPLE_HEADER* header;
+  SDIR_DATA* data;
+  SDIR_DATA* sdir;
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
   SDIR_TAB* sdirTab;
 #endif
@@ -418,8 +418,8 @@ bool dataRemoveSampleReference(u16 sid
                                ARAMInfo* aramInfo
 #endif
 ) {
-  u32 i;           // r30
-  SDIR_DATA* sdir; // r31
+  u32 i;
+  SDIR_DATA* sdir;
 
   for (i = 0; i < dataSmpSDirNum; ++i) {
     for (sdir = dataSmpSDirs[i].data; sdir->id != 0xFFFF; ++sdir) {
@@ -444,7 +444,7 @@ bool dataRemoveSampleReference(u16 sid
 }
 
 bool dataInsertFX(u16 gid, struct FX_TAB* fx, u16 fxNum) {
-  long i; // r31
+  long i;
 
   for (i = 0; i < dataFXGroupNum && gid != dataFXGroups[i].gid; ++i) {
   }
@@ -477,8 +477,8 @@ bool dataInsertFX(u16 gid, struct FX_TAB* fx, u16 fxNum) {
 }
 
 bool dataRemoveFX(u16 gid) {
-  long i; // r31
-  long j; // r30
+  long i;
+  long j;
 
   for (i = 0; i < dataFXGroupNum && gid != dataFXGroups[i].gid; ++i) {
   }
@@ -504,10 +504,10 @@ bool dataRemoveFX(u16 gid) {
 }
 
 bool dataInsertMacro(u16 mid, void* macroaddr) {
-  long main; // r28
-  long pos;  // r29
-  long base; // r27
-  long i;    // r31
+  long main;
+  long pos;
+  long base;
+  long i;
 
   hwDisableIrq();
 
@@ -564,9 +564,9 @@ bool dataInsertMacro(u16 mid, void* macroaddr) {
 }
 
 bool dataRemoveMacro(u16 mid) {
-  s32 main; // r29
-  s32 base; // r28
-  s32 i;    // r31
+  s32 main;
+  s32 base;
+  s32 i;
 
   hwDisableIrq();
   main = MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2) ? (mid >> 6) : ((mid >> 6) & 0x3fff);
@@ -626,7 +626,7 @@ s32 dataGetSample(u16 sid, SAMPLE_INFO* newsmp) {
   static SDIR_DATA key;
   static SDIR_DATA* result;
   static SAMPLE_HEADER* sheader;
-  long i; // r30
+  long i;
 
   key.id = sid;
 
@@ -707,8 +707,8 @@ struct FX_TAB* dataGetFX(u16 fid) {
     FX_TAB k;
     u16 pad;
   } key; // original symbol is 0xC bytes (4-aligned tail pad)
-  FX_TAB* ret; // r29
-  long i;      // r31
+  FX_TAB* ret;
+  long i;
 
   key.k.id = fid;
   for (i = 0; i < dataFXGroupNum; ++i) {
@@ -722,7 +722,7 @@ struct FX_TAB* dataGetFX(u16 fid) {
 }
 
 void dataInit(u32 smpBase, u32 smpLength) {
-  long i; // r31
+  long i;
 
   dataSmpSDirNum = 0;
   dataCurveNum = 0;

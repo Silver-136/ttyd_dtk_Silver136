@@ -42,24 +42,19 @@ static u32 CheckingBits;
 static u32 PendingBits;
 static u32 BarrelBits;
 
-static u32 Type[4];
-static PADStatus Origin[4];
+static u32 Type[PAD_MAX_CONTROLLERS];
+static PADStatus Origin[PAD_MAX_CONTROLLERS];
 
 u32 __PADSpec;
 
 // prototypes
 static void PADTypeAndStatusCallback(s32 chan, u32 type);
-static u16 GetWirelessID(s32 chan);
-static void SetWirelessID(s32 chan, u16 id);
 static void DoReset();
 static void PADEnable(s32 chan);
-static void ProbeWireless(s32 chan);
 static void PADProbeCallback(s32 chan, u32 error, OSContext *context);
 static void PADDisable(s32 chan);
 static void UpdateOrigin(s32 chan);
 static void PADOriginCallback(s32 chan, u32 error, OSContext *context);
-static void PADFixCallback(s32 unused, u32 error, struct OSContext *context);
-static void PADResetCallback(s32 unused, u32 error, struct OSContext *context);
 static void PADReceiveCheckCallback(s32 chan, u32 error);
 static void SPEC0_MakeStatus(s32 chan, PADStatus *status, u32 data[2]);
 static void SPEC1_MakeStatus(s32 chan, PADStatus *status, u32 data[2]);
@@ -314,7 +309,7 @@ int PADReset(u32 mask) {
     EnabledBits &= ~mask;
     BarrelBits &= ~mask;
 
-    if (Spec == 4) {
+    if (Spec == PAD_SPEC_4) {
         RecalibrateBits |= mask;
     }
 
@@ -399,7 +394,7 @@ u32 PADRead(PADStatus* status) {
     enabled = OSDisableInterrupts();
     motor = 0;
 
-    for (chan = 0; chan < 4; chan++, status++) {
+    for (chan = 0; chan < PAD_MAX_CONTROLLERS; chan++, status++) {
         chanBit = PAD_CHAN0_BIT >> chan;
         chanShift = 8 * (SI_MAX_CHAN - 1 - chan);
 
@@ -472,11 +467,6 @@ u32 PADRead(PADStatus* status) {
     return motor;
 }
 
-typedef struct XY {
-    u8 line;
-    u8 count;
-} XY;
-
 void PADSetSamplingRate(u32 msec) {
     SISetSamplingRate(msec);
 }
@@ -499,7 +489,7 @@ void PADControlAllMotors(const u32* commandArray) {
 
     for (chan = 0; chan < SI_MAX_CHAN; chan++, commandArray++) {
         chanBit = PAD_CHAN0_BIT >> chan;
-        if ((EnabledBits & chanBit) && !(SIGetType(chan) & 0x20000000)) {
+        if ((EnabledBits & chanBit) && !(SIGetType(chan) & SI_GC_NOMOTOR)) {
             command = *commandArray;
             ASSERTMSGLINE(0x4B5, !(command & 0xFFFFFFFC), "PADControlAllMotors(): invalid command");
             if (Spec < PAD_SPEC_2 && command == PAD_MOTOR_STOP_HARD)
@@ -829,7 +819,7 @@ BOOL __PADDisableRumble(BOOL disable) {
 }
 
 BOOL PADIsBarrel(s32 chan) {
-    if (chan < 0 || chan >= 4) {
+    if (chan < 0 || chan >= PAD_MAX_CONTROLLERS) {
         return FALSE;
     }
 

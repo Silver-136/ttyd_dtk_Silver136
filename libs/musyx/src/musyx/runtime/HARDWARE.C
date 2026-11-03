@@ -32,9 +32,9 @@ u8 salTimeOffset;
 void hwSetTimeOffset(u8 offset);
 
 static void snd_handle_irq() {
-  u8 r; // r31
-  u8 i; // r30
-  u8 v; // r29
+  u8 r;
+  u8 i;
+  u8 v;
   if (sndActive == 0) {
     return;
   }
@@ -132,8 +132,8 @@ void hwSetPriority(u32 v, u32 prio) { dspVoice[v].prio = prio; }
 
 void hwInitSamplePlayback(u32 v, u16 smpID, void* newsmp, u32 set_defadsr, u32 prio,
                           u32 callbackUserValue, u32 setSRC, u8 itdMode) {
-  unsigned char i;  // r30
-  unsigned long bf; // r29
+  unsigned char i;
+  unsigned long bf;
   bf = 0;
   for (i = 0; i <= salTimeOffset; ++i) {
     bf |= dspVoice[v].changed[i] & 0x20;
@@ -177,8 +177,8 @@ void hwBreak(s32 vid) {
 }
 
 void hwSetADSR(u32 v, void* _adsr, u8 mode) {
-  u32 sl;                              // r29
-  ADSR_INFO* adsr = (ADSR_INFO*)_adsr; // r30
+  u32 sl;
+  ADSR_INFO* adsr = (ADSR_INFO*)_adsr;
 
   switch (mode) {
   case 0: {
@@ -331,11 +331,11 @@ void hwSetITDMode(u32 v, u8 mode) {
 #define hwGetITDMode(dsp_vptr) (dsp_vptr->flags & 0x80000000)
 
 void hwSetVolume(u32 v, u8 table, float vol, u32 pan, u32 span, float auxa, float auxb) {
-  SAL_VOLINFO vi;                    // r1+0x24
-  u16 il;                            // r30
-  u16 ir;                            // r29
-  u16 is;                            // r28
-  DSPvoice* dsp_vptr = &dspVoice[v]; // r31
+  SAL_VOLINFO vi;
+  u16 il;
+  u16 ir;
+  u16 is;
+  DSPvoice* dsp_vptr = &dspVoice[v];
   if (vol >= 1.f) {
     vol = 1.f;
   }
@@ -426,8 +426,8 @@ bool hwRemoveInput(u8 studio, SND_STUDIO_INPUT* in_desc) {
 void hwChangeStudio(u32 v, u8 studio) { salReconnectVoice(&dspVoice[v], studio); }
 
 u32 hwGetPos(u32 v) {
-  unsigned long pos; // r31
-  unsigned long off; // r30
+  unsigned long pos;
+  unsigned long off;
   if (dspVoice[v].state != 2) {
     return 0;
   }
@@ -459,8 +459,8 @@ u32 hwGetPos(u32 v) {
 
 void hwFlushStream(void* base, u32 offset, u32 bytes, u8 hwStreamHandle, void (*callback)(size_t),
                    u32 user) {
-  size_t aram; // r28
-  size_t mram; // r29
+  size_t aram;
+  size_t mram;
   size_t len;
   aram = aramGetStreamBufferAddress(hwStreamHandle, &len);
   bytes += (offset & 31);

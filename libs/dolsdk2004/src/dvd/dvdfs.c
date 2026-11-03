@@ -19,10 +19,6 @@ OSThreadQueue __DVDThreadQueue;
 u32 __DVDLongFileNameFlag;
 
 // prototypes
-static BOOL isSame(const char* path, const char* string);
-static u32 myStrncpy(char* dest, char* src, u32 maxlen);
-static u32 entryToPath(u32 entry, char* path, u32 maxlen);
-static BOOL DVDConvertEntrynumToPath(s32 entrynum, char* path, u32 maxlen);
 static void cbForReadAsync(s32 result, DVDCommandBlock* block);
 static void cbForReadSync(s32 result, DVDCommandBlock* block);
 static void cbForSeekAsync(s32 result, DVDCommandBlock* block);
@@ -172,7 +168,7 @@ BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo) {
     
     fileInfo->startAddr = filePosition(entrynum);
     fileInfo->length = fileLength(entrynum);
-    fileInfo->callback = (DVDCallback)NULL;
+    fileInfo->callback = NULL;
     fileInfo->cb.state = DVD_STATE_END;
     
     return TRUE;
@@ -200,7 +196,7 @@ BOOL DVDOpen(const char* fileName, DVDFileInfo* fileInfo) {
     
     fileInfo->startAddr = filePosition(entry);
     fileInfo->length = fileLength(entry);
-    fileInfo->callback = (DVDCallback)NULL;
+    fileInfo->callback = NULL;
     fileInfo->cb.state = DVD_STATE_END;
     
     return TRUE;
@@ -346,20 +342,20 @@ s32 DVDReadPrio(DVDFileInfo* fileInfo, void* addr, s32 length, s32 offset, s32 p
     block = &fileInfo->cb;
     result = DVDReadAbsAsyncPrio(block, addr, length, fileInfo->startAddr + offset, cbForReadSync, prio);
     if (result == 0) {
-        return -1;
+        return DVD_RESULT_FATAL_ERROR;
     }
     enabled = OSDisableInterrupts();
 
     while (1) {
         state = ((volatile DVDCommandBlock*)block)->state;
-        if (state == 0) {
+        if (state == DVD_STATE_END) {
             retVal = (s32)block->transferredSize;
             break;
-        } else if (state == -1) {
-            retVal = -1;
+        } else if (state == DVD_STATE_FATAL_ERROR) {
+            retVal = DVD_RESULT_FATAL_ERROR;
             break;
-        } else if (state == 10) {
-            retVal = -3;
+        } else if (state == DVD_STATE_CANCELED) {
+            retVal = DVD_RESULT_CANCELED;
             break;
         }
         OSSleepThread(&__DVDThreadQueue);
@@ -408,20 +404,20 @@ s32 DVDSeekPrio(DVDFileInfo* fileInfo, s32 offset, s32 prio) {
     block = &fileInfo->cb;
     result = DVDSeekAbsAsyncPrio(block, (u32)(char*)fileInfo->startAddr + offset, cbForSeekSync, prio);
     if (!result) {
-        return -1;
+        return DVD_RESULT_FATAL_ERROR;
     }
     enabled = OSDisableInterrupts();
 
     while (1) {
         state = ((volatile DVDCommandBlock*)block)->state;
-        if (state == 0) {
+        if (state == DVD_STATE_END) {
             retVal = 0;
             break;
-        } else if (state == -1) {
-            retVal = -1;
+        } else if (state == DVD_STATE_FATAL_ERROR) {
+            retVal = DVD_RESULT_FATAL_ERROR;
             break;
-        } else if (state == 10) {
-            retVal = -3;
+        } else if (state == DVD_STATE_CANCELED) {
+            retVal = DVD_RESULT_CANCELED;
             break;
         }
         OSSleepThread(&__DVDThreadQueue);
@@ -582,7 +578,7 @@ s32 DVDPrepareStream(DVDFileInfo* fileInfo, u32 length, u32 offset) {
             break;
         }
         if (state == DVD_STATE_CANCELED) {
-            retVal = -3;
+            retVal = DVD_RESULT_CANCELED;
             break;
         }
         

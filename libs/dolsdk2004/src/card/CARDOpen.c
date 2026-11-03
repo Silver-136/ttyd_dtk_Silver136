@@ -42,11 +42,11 @@ s32 __CARDIsWritable(CARDControl* card, CARDDir* ent) {
     result = __CARDAccess(card, ent);
     if (result == CARD_RESULT_NOPERM) {
         perm = ent->permission & __CARDPermMask;
-        if (perm & 0x20 && (memcmp(ent->gameName, __CARDDiskNone.gameName, sizeof(ent->gameName)) == 0 &&
+        if (perm & CARD_ATTR_GLOBAL && (memcmp(ent->gameName, __CARDDiskNone.gameName, sizeof(ent->gameName)) == 0 &&
                             memcmp(ent->company, __CARDDiskNone.company, sizeof(ent->company)) == 0))
         {
             return CARD_RESULT_READY;
-        } else if (perm & 0x40 && (memcmp(ent->gameName, __CARDDiskNone.gameName, sizeof(ent->gameName)) == 0 &&
+        } else if (perm & CARD_ATTR_COMPANY && (memcmp(ent->gameName, __CARDDiskNone.gameName, sizeof(ent->gameName)) == 0 &&
                                   memcmp(ent->company, diskID->company, sizeof(ent->company)) == 0))
         {
             return CARD_RESULT_READY;
@@ -58,7 +58,7 @@ s32 __CARDIsWritable(CARDControl* card, CARDDir* ent) {
 
 s32 __CARDIsReadable(CARDControl* card, CARDDir* ent) {
     s32 result = __CARDIsWritable(card, ent);
-    if (result == CARD_RESULT_NOPERM && (ent->permission & 0x4)) {
+    if (result == CARD_RESULT_NOPERM && (ent->permission & CARD_ATTR_PUBLIC)) {
         return CARD_RESULT_READY;
     }
 

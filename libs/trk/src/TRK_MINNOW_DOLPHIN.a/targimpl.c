@@ -527,11 +527,11 @@ DSError TRKTargetAccessMemory(void* data, u32 start, size_t* length, int accessO
 
 DSError TRKTargetReadInstruction(void* data, u32 start) {
     DSError error;
-    size_t registersLength = 4;
+    size_t instructionLength = 4;
 
-    error = TRKTargetAccessMemory(data, start, &registersLength, 0, 1);
+    error = TRKTargetAccessMemory(data, start, &instructionLength, 0, 1);
 
-    if (error == 0 && registersLength != 4)
+    if (error == 0 && instructionLength != 4)
         error = 0x700;
 
     return error;

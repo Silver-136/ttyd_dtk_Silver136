@@ -70,7 +70,7 @@
 extern u8 _stack_end[];
 extern u8 _stack_addr[];
 
-static OSThreadQueue RunQueue[32];
+static OSThreadQueue RunQueue[OS_PRIORITY_MAX + 1];
 static OSThread IdleThread;
 static OSThread DefaultThread;
 static OSContext IdleContext;
@@ -78,8 +78,7 @@ static volatile u32 RunQueueBits;
 static volatile int RunQueueHint;
 static s32 Reschedule;
 
-#define ALIGN4(val) (((val) + 0x3) & ~0x3)
-#define ALIGN8(val) (((val) + 0x7) & ~0x7)
+
 
 // prototypes
 static void OSInitMutexQueue(OSMutexQueue* queue);
@@ -124,17 +123,17 @@ void __OSThreadInit() {
     OSPriority prio;
 
     thread->state = OS_THREAD_STATE_RUNNING;
-    thread->attr = 1;
+    thread->attr = OS_THREAD_ATTR_DETACH;
     thread->priority = thread->base = 0x10;
     thread->suspend = 0;
-    thread->val = (void*)-1; // wut
+    thread->val = (void*)-1;
     thread->mutex = 0;
 
     OSInitThreadQueue(&thread->queueJoin);
 #ifdef DEBUG
     OSInitMutexQueue(&thread->queueMutex);
 #else
-    thread->queueMutex.head = thread->queueMutex.tail = 0; // it got inlined? cant reproduce the inline...
+    thread->queueMutex.head = thread->queueMutex.tail = 0;
 #endif
 
     ASSERTLINE(LINE(348, 357, 357), PPCMfmsr() & MSR_FP);
@@ -150,7 +149,7 @@ void __OSThreadInit() {
     RunQueueBits = 0;
     RunQueueHint = 0;
 
-    for (prio = 0; prio <= 31; prio++) {
+    for (prio = OS_PRIORITY_MIN; prio <= OS_PRIORITY_MAX; prio++) {
         OSInitThreadQueue(&RunQueue[prio]);
     }
     OSInitThreadQueue(&__OSActiveThreadQueue);
@@ -277,7 +276,7 @@ s32 __OSGetEffectivePriority(OSThread* thread) {
 static OSThread* SetEffectivePriority(OSThread* thread, s32 priority) {
     ASSERTLINE(LINE(614, 632, 632), !IsSuspended(thread->suspend));
 
-    switch(thread->state) {
+    switch (thread->state) {
     case OS_THREAD_STATE_READY:
         UnsetRun(thread);
         thread->priority = priority;
@@ -306,7 +305,7 @@ static void UpdatePriority(OSThread* thread) {
     s32 priority;
 
     while (1) {
-        if(thread->suspend > 0) {
+        if (thread->suspend > 0) {
             break;
         }
         priority = __OSGetEffectivePriority(thread);
@@ -351,16 +350,17 @@ static OSThread* SelectThread(int yield) {
     }
 
     if (currentThread) {
-        if (currentThread->state == 2) {
+        if (currentThread->state == OS_THREAD_STATE_RUNNING) {
             if (yield == 0) {
                 priority = __cntlzw(RunQueueBits);
-                if (currentThread->priority <= priority)
+                if (currentThread->priority <= priority) {
                     return NULL;
+                }
             }
             currentThread->state = OS_THREAD_STATE_READY;
             SetRun(currentThread);
         }
-        if (!(currentThread->context.state & 2) && (OSSaveContext(&currentThread->context) != 0)) {
+        if (!(currentThread->context.state & OS_CONTEXT_STATE_EXC) && (OSSaveContext(&currentThread->context) != 0)) {
             return NULL;
         }
     }
@@ -417,13 +417,13 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param, void* st
 
     ASSERTMSGLINE(LINE(864, 895, 895), ((priority >= OS_PRIORITY_MIN) && (priority <= OS_PRIORITY_MAX)), "OSCreateThread(): priority out of range (0 <= priority <= 31).");
 
-    // why check this for an assert just to check it again right after?
+    // Reject out-of-range priorities even when assertions are disabled.
     if ((priority < OS_PRIORITY_MIN) || (priority > OS_PRIORITY_MAX)) {
         return 0;
     }
 
     thread->state = OS_THREAD_STATE_READY;
-    thread->attr = attr & 1U;
+    thread->attr = attr & OS_THREAD_ATTR_DETACH;
     thread->base = priority;
     thread->priority = priority;
     thread->suspend = 1;
@@ -433,7 +433,7 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param, void* st
 #ifdef DEBUG
     OSInitMutexQueue(&thread->queueMutex);
 #else
-    OSInitThreadQueue((void*)&thread->queueMutex); // why
+    OSInitThreadQueue((void*)&thread->queueMutex);
 #endif
     sp = (u32)stack;
     sp &= ~7;
@@ -447,15 +447,15 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param, void* st
     thread->stackEnd = (void*)((unsigned int)stack - stackSize);
     *thread->stackEnd = OS_THREAD_STACK_MAGIC;
     thread->error = 0;
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < OS_THREAD_SPECIFIC_MAX; i++) {
         thread->specific[i] = NULL;
     }
     enabled = OSDisableInterrupts();
 
-    if (__OSErrorTable[16] != NULL) {
-        thread->context.srr1 |= 0x900;
-        thread->context.state |= 1;
-        thread->context.fpscr = (__OSFpscrEnableBits & 0xf8) | 4;
+    if (__OSErrorTable[__OS_EXCEPTION_FLOATING_POINT_EXCEPTION] != NULL) {
+        thread->context.srr1 |= MSR_FE0 | MSR_FE1;
+        thread->context.state |= OS_CONTEXT_STATE_FPSAVED;
+        thread->context.fpscr = (__OSFpscrEnableBits & 0xf8) | FPSCR_NI;
         for (i = 0; i < 32; ++i) {
             *(u64*)&thread->context.fpr[i] = (u64)0xffffffffffffffffLL;
             *(u64*)&thread->context.psf[i] = (u64)0xffffffffffffffffLL;
@@ -482,11 +482,11 @@ void OSExitThread(void* val) {
         "OSExitThread(): current thread is not active.");
 
     OSClearContext(&currentThread->context);
-    if (currentThread->attr & 1) {
+    if (currentThread->attr & OS_THREAD_ATTR_DETACH) {
         DEQUEUE_THREAD(currentThread, &__OSActiveThreadQueue, linkActive);
         currentThread->state = 0;
     } else {
-        currentThread->state = 8;
+        currentThread->state = OS_THREAD_STATE_MORIBUND;
         currentThread->val = val;
     }
     __OSUnlockAllMutex(currentThread);
@@ -508,7 +508,7 @@ void OSCancelThread(OSThread* thread) {
     ASSERTMSG1LINE(LINE(985, 1016, 1016), __OSIsThreadActive(thread) != 0, 
         "OSExitThread(): thread %p is not active.", thread);
 
-    switch(thread->state) {
+    switch (thread->state) {
     case OS_THREAD_STATE_READY:
         if (thread->suspend <= 0) {
             UnsetRun(thread);
@@ -530,11 +530,11 @@ void OSCancelThread(OSThread* thread) {
         return;
     }
     OSClearContext(&thread->context);
-    if (thread->attr & 1) {
+    if (thread->attr & OS_THREAD_ATTR_DETACH) {
         DEQUEUE_THREAD(thread, &__OSActiveThreadQueue, linkActive);
         thread->state = 0;
     } else {
-        thread->state = 8;
+        thread->state = OS_THREAD_STATE_MORIBUND;
     }
     __OSUnlockAllMutex(thread);
     OSWakeupThread(&thread->queueJoin);
@@ -547,7 +547,7 @@ int OSJoinThread(OSThread* thread, void* val) {
 
     ASSERTMSG1LINE(LINE(1061, 1092, 1092), __OSIsThreadActive(thread) != 0, "OSJoinThread(): thread %p is not active.", thread);
 
-    if (!(thread->attr & 1) && (thread->state != OS_THREAD_STATE_MORIBUND) && (thread->queueJoin.head == NULL)) {
+    if (!(thread->attr & OS_THREAD_ATTR_DETACH) && (thread->state != OS_THREAD_STATE_MORIBUND) && (thread->queueJoin.head == NULL)) {
         OSSleepThread(&thread->queueJoin);
         if (__OSIsThreadActive(thread) == 0) {
             OSRestoreInterrupts(enabled);
@@ -572,7 +572,7 @@ void OSDetachThread(OSThread* thread) {
 
     ASSERTMSG1LINE(LINE(1111, 1142, 1142), __OSIsThreadActive(thread) != 0, "OSDetachThread(): thread %p is not active.", thread);
     
-    thread->attr |= 1;
+    thread->attr |= OS_THREAD_ATTR_DETACH;
     if (thread->state == OS_THREAD_STATE_MORIBUND) {
         DEQUEUE_THREAD(thread, &__OSActiveThreadQueue, linkActive);
         thread->state = 0;
@@ -592,7 +592,7 @@ s32 OSResumeThread(OSThread* thread) {
     if (thread->suspend < 0) {
         thread->suspend = 0;
     } else if (thread->suspend == 0) {
-        switch(thread->state) {
+        switch (thread->state) {
         case OS_THREAD_STATE_READY:
             thread->priority = __OSGetEffectivePriority(thread);
             SetRun(thread);
@@ -621,17 +621,17 @@ s32 OSSuspendThread(OSThread* thread) {
 
     suspendCount = thread->suspend++;
     if (suspendCount == 0) {
-        switch(thread->state) {
+        switch (thread->state) {
         case OS_THREAD_STATE_RUNNING:
             RunQueueHint = 1;
-            thread->state = 1;
+            thread->state = OS_THREAD_STATE_READY;
             break;
         case OS_THREAD_STATE_READY:
             UnsetRun(thread);
             break;
         case OS_THREAD_STATE_WAITING:
             DEQUEUE_THREAD(thread, thread->queue, link);
-            thread->priority = 0x20;
+            thread->priority = OS_PRIORITY_MAX + 1;
             ENQUEUE_THREAD(thread, thread->queue, link);
             if (thread->mutex) {
                 ASSERTLINE(LINE(1214, 1245, 1245), thread->mutex->thread); 
@@ -711,7 +711,7 @@ s32 OSGetThreadPriority(OSThread* thread) {
 OSThread* OSSetIdleFunction(OSIdleFunction idleFunction, void* param, void* stack, u32 stackSize) {
     if (idleFunction) {
         if (IdleThread.state == 0) {
-            OSCreateThread(&IdleThread, (void*)idleFunction, param, stack, stackSize, OS_PRIORITY_MAX, 1);
+            OSCreateThread(&IdleThread, (void*)idleFunction, param, stack, stackSize, OS_PRIORITY_IDLE, OS_THREAD_ATTR_DETACH);
             OSResumeThread(&IdleThread);
             return &IdleThread;
         }
@@ -762,7 +762,7 @@ static BOOL IsMember(OSThreadQueue* queue, OSThread* thread) {
     return FALSE;
 }
 
-// custom macro for OSCheckActiveThreads?
+// Report and panic on active-thread invariant failures.
 #define ASSERTREPORT(line, cond) \
     if (!(cond)) { \
         OSReport("OSCheckActiveThreads: Failed " #cond " in %d\n", line); \
@@ -800,7 +800,7 @@ s32 OSCheckActiveThreads(void) {
         ASSERTREPORT(LINE(1504, 1535, 1535), 0 <= thread->suspend);
         ASSERTREPORT(LINE(1505, 1536, 1536), CheckThreadQueue(&thread->queueJoin));
 
-        switch(thread->state) {
+        switch (thread->state) {
         case OS_THREAD_STATE_READY:
             if (thread->suspend <= 0) {
                 ASSERTREPORT(LINE(1511, 1542, 1542), thread->queue == &RunQueue[thread->priority]);

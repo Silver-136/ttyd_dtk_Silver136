@@ -115,7 +115,7 @@ void GXInitFifoBase(GXFifoObj* fifo, void* base, u32 size) {
 }
 
 void GXInitFifoPtrs(GXFifoObj* fifo, void* readPtr, void* writePtr) {
-    __GXFifoObj* realFifo = (__GXFifoObj *)fifo;
+    __GXFifoObj* realFifo = (__GXFifoObj*)fifo;
     BOOL enabled;
 
     ASSERTMSGLINE(LINE(592, 592, 596), realFifo != CPUFifo,         "GXInitFifoPtrs: fifo is attached to CPU");
@@ -150,7 +150,6 @@ void GXInitFifoLimits(GXFifoObj* fifo, u32 hiWatermark, u32 loWatermark) {
 
 #define GX_SET_PI_REG(offset, val) (*(volatile u32*)((volatile u32*)(__piReg) + (offset)) = val)
 
-// NONMATCHING DEBUG
 void GXSetCPUFifo(GXFifoObj* fifo) {
     __GXFifoObj* realFifo = (__GXFifoObj*)fifo;
     BOOL enabled = OSDisableInterrupts();
@@ -307,8 +306,9 @@ void __GXSaveCPUFifoAux(__GXFifoObj* realFifo) {
 #endif
     } else {
         realFifo->count = (u8*)realFifo->wrPtr - (u8*)realFifo->rdPtr;
-        if (realFifo->count < 0)
+        if (realFifo->count < 0) {
             realFifo->count += realFifo->size;
+        }
     }
     OSRestoreInterrupts(enabled);
 }
@@ -318,7 +318,6 @@ void GXSaveGPFifo(GXFifoObj* fifo) {
 #if SDK_REVISION < 2
     u32 cpStatus;
     u8 readIdle;
-    u32 temp;
 #else
     BOOL enabled = OSDisableInterrupts();
 #endif
@@ -456,8 +455,8 @@ void GXDisableBreakPt(void) {
 }
 
 void __GXFifoInit(void) {
-    __OSSetInterruptHandler(0x11, GXCPInterruptHandler);
-    __OSUnmaskInterrupts(0x4000);
+    __OSSetInterruptHandler(__OS_INTERRUPT_PI_CP, GXCPInterruptHandler);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_CP);
     __GXCurrentThread = OSGetCurrentThread();
     GXOverflowSuspendInProgress = FALSE;
     CPUFifo = NULL;
@@ -506,8 +505,9 @@ void __GXCleanGPFifo(void) {
     void* base;
 
     gpFifo = GXGetGPFifo();
-    if (gpFifo == (GXFifoObj*)NULL)
+    if (gpFifo == NULL) {
         return;
+    }
 
     cpuFifo = GXGetCPUFifo();
     base = GXGetFifoBase(gpFifo);
@@ -561,7 +561,6 @@ u32 GXResetOverflowCount(void) {
     return oldcount;
 }
 
-// NONMATCHING
 volatile void* GXRedirectWriteGatherPipe(void* ptr) {
     u32 reg = 0;
     BOOL enabled = OSDisableInterrupts();
@@ -590,10 +589,9 @@ volatile void* GXRedirectWriteGatherPipe(void* ptr) {
 
     PPCSync();
     OSRestoreInterrupts(enabled);
-    return (volatile void *)GXFIFO_ADDR;
+    return (volatile void*)GXFIFO_ADDR;
 }
 
-// NONMATCHING
 void GXRestoreWriteGatherPipe(void) {
     u32 reg = 0;
     u32 i;
@@ -612,7 +610,7 @@ void GXRestoreWriteGatherPipe(void) {
 
     PPCSync();
     while (PPCMfwpar() & 1) {}
-    PPCMtwpar((u32)OSUncachedToPhysical((void *)GXFIFO_ADDR));
+    PPCMtwpar((u32)OSUncachedToPhysical((void*)GXFIFO_ADDR));
     GX_SET_PI_REG(3, (u32)CPUFifo->base & 0x3FFFFFFF);
     GX_SET_PI_REG(4, (u32)CPUFifo->top & 0x3FFFFFFF);
     SET_REG_FIELD(1578, reg, 21, 5, ((u32)CPUFifo->wrPtr & 0x3FFFFFFF) >> 5);

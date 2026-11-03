@@ -13,10 +13,6 @@ static void* LastSheet;
 static s16 FontSize;
 static s16 FontSpace;
 
-// prototypes
-static void DrawFontChar(int x, int y, int z, int xChar, int yChar);
-static void LoadSheet(void* image, GXTexMapID texMapID);
-
 void DEMOSetFontType(s32 attr) {
     switch(attr) {
     case DM_FT_RVS:
@@ -164,7 +160,7 @@ OSFontHeader* DEMOInitROMFont(void) {
         OSPanic(__FILE__, 446, "Ins. memory to load ROM font.");
     }
 
-    if (OSInitFont(FontData) == 0) {
+    if (OSInitFont(FontData) == FALSE) {
         OSPanic(__FILE__, 450, "ROM font is available in boot ROM ver 0.8 or later.");
     }
 
@@ -179,11 +175,11 @@ void DEMOSetROMFontSize(s16 size, s16 space) {
 }
 
 void DEMOGetROMFontSize(s16* size, s16* space) {
-    if (size != 0) {
+    if (size != NULL) {
         *size = FontSize / 16;
     }
 
-    if (space != 0) {
+    if (space != NULL) {
         *space = FontSpace / 16;
     }
 }

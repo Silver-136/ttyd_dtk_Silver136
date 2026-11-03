@@ -83,8 +83,9 @@ void GXInitLightSpot(GXLightObj* lt_obj, f32 cutoff, GXSpotFn spot_func) {
     obj = (__GXLightObjInt_struct*)lt_obj;
     CHECK_GXBEGIN(200, "GXInitLightSpot");
 
-    if (cutoff <= 0.0f || cutoff > 90.0f)
+    if (cutoff <= 0.0f || cutoff > 90.0f) {
         spot_func = GX_SP_OFF;
+    }
 
     r = (3.1415927f * cutoff) / 180.0f;
     cr = cosf(r);
@@ -143,10 +144,12 @@ void GXInitLightDistAttn(GXLightObj* lt_obj, f32 ref_dist, f32 ref_br, GXDistAtt
     obj = (__GXLightObjInt_struct*)lt_obj;
     CHECK_GXBEGIN(275, "GXInitLightDistAttn");
 
-    if (ref_dist < 0.0f)
+    if (ref_dist < 0.0f) {
         dist_func = GX_DA_OFF;
-    if (ref_br <= 0.0f || ref_br >= 1.0f)
+    }
+    if (ref_br <= 0.0f || ref_br >= 1.0f) {
         dist_func = GX_DA_OFF;
+    }
 
     switch (dist_func) {
     case GX_DA_GENTLE:
@@ -539,12 +542,13 @@ void GXSetChanCtrl(GXChannelID chan, GXBool enable, GXColorSrc amb_src, GXColorS
     ASSERTMSGLINE(895, chan >= GX_COLOR0 && chan <= GX_COLOR1A1, "GXSetChanCtrl: Invalid Channel Id");
 
 #if DEBUG
-    if (chan == GX_COLOR0A0)
+    if (chan == GX_COLOR0A0) {
         idx = 0;
-    else if (chan == GX_COLOR1A1)
+    } else if (chan == GX_COLOR1A1) {
         idx = 1;
-    else
+    } else {
         idx = chan;
+    }
 #else
     idx = chan & 0x3;
 #endif

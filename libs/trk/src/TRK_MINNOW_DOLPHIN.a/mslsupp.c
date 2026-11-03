@@ -11,16 +11,16 @@ enum { DS_IONoError, DS_IOError, DS_IOEOF };
 int __access_file(unsigned int handle, unsigned char* buffer, size_t* count, void* ref_con,
                                 unsigned int cmd) {
     size_t countTemp;
-    unsigned char r0;
+    unsigned char ioResult;
 
     if (GetTRKConnected() == 0)
         return DS_IOError;
 
     countTemp = *count;
-    r0 = TRKAccessFile(cmd, handle, &countTemp, buffer);
+    ioResult = TRKAccessFile(cmd, handle, &countTemp, buffer);
     *count = countTemp;
 
-    switch (r0) {
+    switch (ioResult) {
     case DS_IONoError:
         return DS_IONoError;
     case DS_IOEOF:
@@ -43,14 +43,14 @@ int __TRK_write_console(unsigned long handle, unsigned char* buffer, size_t* cou
 }
 
 int __close_console(unsigned long handle) {
-    unsigned int r0;
+    unsigned int ioResult;
 
     if (GetTRKConnected() == 0)
         return DS_IOError;
 
-    r0 = TRKCloseFile(0xD3, handle);
+    ioResult = TRKCloseFile(0xD3, handle);
 
-    switch ((unsigned char)r0) {
+    switch ((unsigned char)ioResult) {
     case DS_IONoError:
         return DS_IONoError;
     case DS_IOEOF:

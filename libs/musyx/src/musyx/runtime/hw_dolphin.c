@@ -95,7 +95,7 @@ u32 salInitAi(SND_SOME_CALLBACK callback, u32 unk, u32* outFreq) {
     salLogicActive = FALSE;
     userCallback = callback;
     AIRegisterDMACallback(salCallback);
-    AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * 0x280), 0x280);
+    AIInitDMA(OSCachedToPhysical(salAIBufferBase) + (salAIBufferIndex * DMA_BUFFER_LEN), DMA_BUFFER_LEN);
     synthInfo.numSamples = 0x20;
     *outFreq = 32000;
     MUSY_DEBUG("MusyX AI interface initialized.\n");
@@ -115,7 +115,7 @@ u32 salExitAi() {
 }
 
 void* salAiGetDest() {
-  u8 index; // r31
+  u8 index;
   index = (salAIBufferIndex + 2) % 4;
   return (void*)((u8*)salAIBufferBase + index * DMA_BUFFER_LEN);
 }
@@ -126,7 +126,7 @@ u32 salInitDsp() {
   dsp_task.iram_length = dspSlaveLength;
   dsp_task.iram_addr = 0;
   dsp_task.dram_mmem_addr = (u16*)dram_image;
-  dsp_task.dram_length = 0x2000;
+  dsp_task.dram_length = sizeof(dram_image);
   dsp_task.dram_addr = 0;
   dsp_task.dsp_init_vector = 0x10;
   dsp_task.dsp_resume_vector = 0x30;

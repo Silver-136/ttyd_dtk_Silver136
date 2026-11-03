@@ -3,8 +3,7 @@
 
 #include "__os.h"
 
-// These macros are copied from OSThread.c. Or ARE they the same
-// macros? They dont seem to be in the SDK headers.
+// Reset-function queue insertion and removal.
 #define ENQUEUE_INFO(info, queue)                            \
     do {                                                     \
         OSResetFunctionInfo* __prev = (queue)->tail; \
@@ -61,7 +60,7 @@ static OSResetFunctionQueue ResetFunctionQueue;
 static u32 bootThisDol;
 
 // prototypes
-static int CallResetFunctions(int final);
+
 static void Reset(u32 resetCode);
 
 void OSRegisterResetFunction(OSResetFunctionInfo* info) {
@@ -147,8 +146,8 @@ static void KillThreads(void) {
     for (thread = __OSActiveThreadQueue.head; thread; thread = next) {
         next = thread->linkActive.next;
         switch (thread->state) {
-        case 1:
-        case 4:
+        case OS_THREAD_STATE_READY:
+        case OS_THREAD_STATE_WAITING:
             OSCancelThread(thread);
             continue;
         default:
@@ -195,7 +194,7 @@ void OSResetSystem(BOOL reset, u32 resetCode, BOOL forceMenu) {
 
     OSDisableScheduler();
 
-    if (reset == TRUE && forceMenu) {
+    if (reset == OS_RESET_HOTRESET && forceMenu) {
         sram = __OSLockSram();
         sram->flags |= 0x40;
         __OSUnlockSram(1);
@@ -231,10 +230,11 @@ void OSResetSystem(BOOL reset, u32 resetCode, BOOL forceMenu) {
 
 u32 OSGetResetCode() {
     u32 resetCode;
-    if (__OSRebootParams.valid)
+    if (__OSRebootParams.valid) {
         resetCode = 0x80000000 | __OSRebootParams.restartCode;
-    else
+    } else {
         resetCode = (__PIRegs[9] & 0xFFFFFFF8) / 8;
+    }
 
     return resetCode;
 }

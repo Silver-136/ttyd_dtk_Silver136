@@ -43,14 +43,6 @@ static int NumHeaps;
 static void* ArenaStart;
 static void* ArenaEnd;
 
-// prototypes
-static Cell* DLAddFront(Cell* list, Cell* cell);
-static Cell* DLLookup(Cell* list, Cell* cell);
-static Cell* DLExtract(Cell* list, Cell* cell);
-static Cell* DLInsert(Cell* list, Cell* cell);
-static int DLOverlap(Cell* list, void* start, void* end);
-static s32 DLSize(Cell* list);
-
 static Cell* DLAddFront(Cell* list, Cell* cell) {
     cell->next = list;
     cell->prev = 0;
@@ -161,7 +153,7 @@ void* OSAllocFromHeap(int heap, u32 size) {
     ASSERTMSGLINE(340, HeapArray[heap].size >= 0, "OSAllocFromHeap(): invalid heap handle.");
 
     hd = &HeapArray[heap];
-    size += 0x20;
+    size += HEADERSIZE;
     size = (size + 0x1F) & 0xFFFFFFE0;
 
     for(cell = hd->free; cell != NULL; cell = cell->next) {
@@ -180,7 +172,7 @@ void* OSAllocFromHeap(int heap, u32 size) {
     ASSERTMSGLINE(365, cell->hd == NULL, "OSAllocFromHeap(): heap is broken.");
 
     leftoverSize = cell->size - size;
-    if (leftoverSize < 0x40U) {
+    if (leftoverSize < MINOBJSIZE) {
         hd->free = DLExtract(hd->free, cell);
     } else {
         cell->size = size;
@@ -210,7 +202,7 @@ void* OSAllocFromHeap(int heap, u32 size) {
     hd->paddingBytes += (cell->size - (requested + 0x20));
     hd->payloadBytes += requested;
 #endif
-    return (u8*)cell + 0x20;
+    return (u8*)cell + HEADERSIZE;
 }
 
 void* OSAllocFixed(void* rstart, void* rend) {
@@ -329,7 +321,7 @@ void OSFreeToHeap(int heap, void* ptr) {
     ASSERTMSGLINE(579, ((u32)ArenaStart+0x20) <= (u32)ptr && (u32)ptr < (u32)ArenaEnd, "OSFreeToHeap(): invalid pointer.");
     ASSERTMSGLINE(580, OFFSET(ptr, ALIGNMENT) == 0, "OSFreeToHeap(): invalid pointer.");
     ASSERTMSGLINE(581, HeapArray[heap].size >= 0, "OSFreeToHeap(): invalid heap handle.");
-    cell = (void*)((u32)ptr-0x20);
+    cell = (void*)((u32)ptr-HEADERSIZE);
     hd = &HeapArray[heap];
     ASSERTMSGLINE(586, cell->hd == hd, "OSFreeToHeap(): invalid pointer.");
     ASSERTMSGLINE(587, DLLookup(hd->allocated, cell), "OSFreeToHeap(): invalid pointer.");

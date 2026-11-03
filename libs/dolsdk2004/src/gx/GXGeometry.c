@@ -44,7 +44,7 @@ void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts) {
     __GXinBegin = 1;
 #endif
 
-    if (*(u32*)&__GXData->vNumNot == 0) {  // checks both vNum and bpSentNot
+    if (*(u32*)&__GXData->vNumNot == 0) {  // checks vNumNot and bpSentNot together
         __GXSendFlushPrim();
     }
     GX_WRITE_U8(vtxfmt | type);
@@ -133,7 +133,6 @@ void GXGetCullMode(GXCullMode* mode) {
     default:            *mode = hwMode;        break;
     }
 #else
-    // fake match?
     GXCullMode hwMode = __GXData->genMode;
     *mode = ((hwMode >> 0xD) & 0x2) | (((((int)hwMode >> 0xE) & 0x2) >> 0x1));
 #endif

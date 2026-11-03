@@ -3,7 +3,6 @@ typedef unsigned long size_t;
 #define K1 0x80808080
 #define K2 0xfefefeff
 
-// strstr: US evt_msg uses it; JP links nothing that does, so its linker strips it (JP demo map: UNUSED)
 char* strstr(const char* str, const char* pat) {
     const unsigned char* s1 = (const unsigned char*)str - 1;
     const unsigned char* p1 = (const unsigned char*)pat;
@@ -128,7 +127,6 @@ bytecopy:
             return 0;
         }
     } while (1);
-    return 0;
 }
 
 char* strcat(char* dst, const char* src) {
@@ -215,8 +213,6 @@ bytecopy:
         if ((*(++destb) = *(++fromb)) == 0)
             return (dst);
     } while (1);
-
-    return (dst);
 }
 
 size_t strlen(const char* str) {

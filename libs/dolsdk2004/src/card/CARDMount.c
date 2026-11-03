@@ -38,7 +38,6 @@ static BOOL IsCard(u32 id) {
         break;
     default:
         return FALSE;
-        break;
     }
 
     sectorSize = SectorSizeTable[(id & 0x00003800) >> 11];

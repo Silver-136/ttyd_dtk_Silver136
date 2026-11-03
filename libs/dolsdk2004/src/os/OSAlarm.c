@@ -10,7 +10,7 @@ typedef struct {
 } OSAlarmQueue;
 
 // prototypes
-static void SetTimer(OSAlarm * alarm);
+static void SetTimer(OSAlarm* alarm);
 static void InsertAlarm(OSAlarm* alarm, OSTime fire, OSAlarmHandler handler);
 static void DecrementerExceptionCallback(register __OSException exception, register OSContext* context);
 static void DecrementerExceptionHandler(__OSException exception, OSContext* context);
@@ -29,7 +29,7 @@ BOOL OSCheckAlarmQueue(void) {
     ASSERTREPORT(147, AlarmQueue.head == NULL || AlarmQueue.head->prev == NULL);
     ASSERTREPORT(148, AlarmQueue.tail == NULL || AlarmQueue.tail->next == NULL);
 
-    for(alarm = AlarmQueue.head; alarm; alarm = alarm->next) {
+    for (alarm = AlarmQueue.head; alarm; alarm = alarm->next) {
         ASSERTREPORT(151, alarm->next == NULL || alarm->next->prev == alarm);
         ASSERTREPORT(152, alarm->next != NULL || AlarmQueue.tail == alarm);
     }
@@ -49,15 +49,15 @@ static void SetTimer(OSAlarm* alarm) {
 }
 
 void OSInitAlarm(void) {
-    if (__OSGetExceptionHandler(8) != DecrementerExceptionHandler) {
+    if (__OSGetExceptionHandler(__OS_EXCEPTION_DECREMENTER) != DecrementerExceptionHandler) {
         AlarmQueue.head = AlarmQueue.tail = NULL;
-        __OSSetExceptionHandler(8, DecrementerExceptionHandler);
+        __OSSetExceptionHandler(__OS_EXCEPTION_DECREMENTER, DecrementerExceptionHandler);
         OSRegisterResetFunction(&ResetFunctionInfo);
     }
 }
 
 void OSCreateAlarm(OSAlarm* alarm) {
-    alarm->handler = 0;
+    alarm->handler = NULL;
     alarm->tag = 0;
 }
 
@@ -154,7 +154,7 @@ void OSCancelAlarm(OSAlarm* alarm) {
 
     enabled = OSDisableInterrupts();
 
-    if (alarm->handler == 0) {
+    if (alarm->handler == NULL) {
         OSRestoreInterrupts(enabled);
         return;
     }
@@ -188,7 +188,7 @@ static void DecrementerExceptionCallback(register __OSException exception,
 
     time = __OSGetSystemTime();
     alarm = AlarmQueue.head;
-    if (alarm == 0) {
+    if (alarm == NULL) {
         OSLoadContext(context);
     }
 

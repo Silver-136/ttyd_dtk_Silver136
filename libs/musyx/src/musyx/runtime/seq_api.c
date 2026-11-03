@@ -1,4 +1,3 @@
-/*
 
 
 
@@ -14,12 +13,12 @@
 
 
 
-*/
+
+
 
 #include "musyx/assert.h"
 #include "musyx/hardware.h"
 #include "musyx/seq.h"
-/*
 
 
 
@@ -28,7 +27,8 @@
 
 
 
-*/
+
+
 
 extern SEQ_INSTANCE* seqActiveRoot;
 
@@ -46,15 +46,15 @@ void sndSeqCrossFade(struct SND_CROSSFADE* ci, u32* new_seqId) {
   hwEnableIrq();
 }
 
-/*
 
 
 
 
-*/
+
+
 bool sndSeqCrossFadeDone(SND_SEQID* new_seqId) {
-  if (*new_seqId != -1) {
-    return (*new_seqId & 0x80000000) == 0;
+  if (*new_seqId != SND_SEQ_ERROR_ID) {
+    return (*new_seqId & SND_SEQ_CROSSFADE_ID) == 0;
   }
 
   return TRUE;
@@ -64,26 +64,26 @@ u16 sndSeqGetLoopCnt(SND_SEQID seqId) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
 
   seqId = seqGetPrivateId(seqId);
-  if (seqId != -1 && (seqId & 0x80000000) == 0) {
+  if (seqId != SND_SEQ_ERROR_ID && (seqId & SND_SEQ_CROSSFADE_ID) == 0) {
     return seqInstance[seqId].section[0].loopCnt;
   }
 
   return 0;
 }
 
-/*
 
 
 
 
 
 
-*/
+
+
 u16 sndSeqGetLoopCntEx(u32 seqId, u8 track) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
 
   seqId = seqGetPrivateId(seqId);
-  if (seqId != -1 && (seqId & 0x80000000) == 0) {
+  if (seqId != SND_SEQ_ERROR_ID && (seqId & SND_SEQ_CROSSFADE_ID) == 0) {
     if (seqInstance[seqId].trackSectionTab == NULL) {
       return seqInstance[seqId].section[0].loopCnt;
     } else {
@@ -94,24 +94,24 @@ u16 sndSeqGetLoopCntEx(u32 seqId, u8 track) {
   return 0;
 }
 
-/*
 
 
 
 
 
 
-*/
+
+
 bool sndSeqGetValid(SND_SEQID seqId) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
 
   return seqGetPrivateId(seqId) != -1;
 }
 
-/*
 
 
-*/
+
+
 void sndSeqPause(SND_SEQID seqId) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
@@ -119,11 +119,11 @@ void sndSeqPause(SND_SEQID seqId) {
   hwEnableIrq();
 }
 
-/*
 
 
 
-*/
+
+
 void sndSeqStop(SND_SEQID seqid) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
@@ -131,17 +131,17 @@ void sndSeqStop(SND_SEQID seqid) {
   hwEnableIrq();
 }
 
-/*
 
 
 
-*/
+
+
 bool sndSeqLoop(SND_SEQID seqId, bool on) {
-  unsigned long i; // r30
+  unsigned long i;
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
 
-  if ((seqId = seqGetPrivateId(seqId)) != -1) {
-    if ((seqId & 0x80000000) == 0) {
+  if ((seqId = seqGetPrivateId(seqId)) != SND_SEQ_ERROR_ID) {
+    if ((seqId & SND_SEQ_CROSSFADE_ID) == 0) {
       for (i = 0; i < 16; ++i) {
         seqInstance[seqId].section[i].loopDisable = !on;
       }
@@ -157,20 +157,20 @@ bool sndSeqLoop(SND_SEQID seqId, bool on) {
   return FALSE;
 }
 
-/*
 
 
 
 
 
 
-*/
+
+
 bool sndSeqLoopEx(SND_SEQID seqId, u8 track, bool on) {
-  u32 i; // r29
+  u32 i;
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
 
-  if ((seqId = seqGetPrivateId(seqId)) != -1) {
-    if ((seqId & 0x80000000) == 0) {
+  if ((seqId = seqGetPrivateId(seqId)) != SND_SEQ_ERROR_ID) {
+    if ((seqId & SND_SEQ_CROSSFADE_ID) == 0) {
       if (seqInstance[seqId].trackSectionTab == NULL) {
         for (i = 0; i < 16; ++i) {
           seqInstance[seqId].section[i].loopDisable = !on;
@@ -191,7 +191,6 @@ bool sndSeqLoopEx(SND_SEQID seqId, u8 track, bool on) {
   return FALSE;
 }
 
-/*
 
 
 
@@ -199,7 +198,8 @@ bool sndSeqLoopEx(SND_SEQID seqId, u8 track, bool on) {
 
 
 
-*/
+
+
 void sndSeqSpeed(u32 seqId, u16 speed) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
@@ -207,11 +207,11 @@ void sndSeqSpeed(u32 seqId, u16 speed) {
   hwEnableIrq();
 }
 
-/*
 
 
 
-*/
+
+
 void sndSeqContinue(SND_SEQID seqId) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
@@ -219,11 +219,11 @@ void sndSeqContinue(SND_SEQID seqId) {
   hwEnableIrq();
 }
 
-/*
 
 
 
-*/
+
+
 void sndSeqMute(SND_SEQID seqId, u32 mask1, u32 mask2) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
@@ -231,10 +231,10 @@ void sndSeqMute(SND_SEQID seqId, u32 mask1, u32 mask2) {
   hwEnableIrq();
 }
 
-/*
 
 
-*/
+
+
 void sndSeqVolume(u8 volume, u16 time, u32 seqId, u8 mode) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
@@ -242,11 +242,11 @@ void sndSeqVolume(u8 volume, u16 time, u32 seqId, u8 mode) {
   hwEnableIrq();
 }
 
-/*
 
 
 
-*/
+
+
 u8 sndSeqGetVolGroup(SND_SEQID seqId) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   if ((seqId = seqGetPrivateId(seqId)) != -1) {
@@ -257,10 +257,10 @@ u8 sndSeqGetVolGroup(SND_SEQID seqId) {
   return 0;
 }
 
-/*
 
 
-*/
+
+
 bool sndSeqAssignVolGroup2Track(SND_SEQID seqId, u8 track, u8 vGroup) {
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
 
@@ -274,15 +274,15 @@ bool sndSeqAssignVolGroup2Track(SND_SEQID seqId, u8 track, u8 vGroup) {
   return FALSE;
 }
 
-/*
 
 
 
 
 
-*/
+
+
 u8 sndSeqGetMidiCtrl(SND_SEQID seqId, u8 channel, u8 ctrl) {
-  u8 value; // r31
+  u8 value;
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
 
   value = 0;
@@ -296,12 +296,12 @@ u8 sndSeqGetMidiCtrl(SND_SEQID seqId, u8 channel, u8 ctrl) {
   return value;
 }
 
-/*
 
 
-*/
+
+
 u16 sndSeqGetMidiCtrl14(SND_SEQID seqId, u8 channel, u8 ctrl) {
-  u16 value; // r31
+  u16 value;
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
 
   value = 0;
@@ -315,11 +315,11 @@ u16 sndSeqGetMidiCtrl14(SND_SEQID seqId, u8 channel, u8 ctrl) {
   return value;
 }
 
-/*
 
-*/
+
+
 bool sndSeqSetMidiCtrl(SND_SEQID seqId, u8 channel, u8 ctrl, u8 value) {
-  unsigned long ret = FALSE; // r30
+  unsigned long ret = FALSE;
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
   if ((seqId = seqGetPrivateId(seqId)) != -1) {
@@ -333,14 +333,14 @@ bool sndSeqSetMidiCtrl(SND_SEQID seqId, u8 channel, u8 ctrl, u8 value) {
   return ret;
 }
 
-/*
 
 
 
 
-*/
+
+
 bool sndSeqSetMidiCtrl14(SND_SEQID seqId, u8 channel, u8 ctrl, u16 value) {
-  bool ret = FALSE; // r30
+  bool ret = FALSE;
   MUSY_ASSERT_MSG(sndActive, "Sound system is not initialized.");
   hwDisableIrq();
   if ((seqId = seqGetPrivateId(seqId)) != -1) {
@@ -358,10 +358,10 @@ u16 seqGetMIDIPriority(u8 set, u8 channel) { return seqMIDIPriority[set][channel
 
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 2)
 u32 seqGetInstanceForVoice(u32 vid) {
-  u32 i;             // r28
-  u32 j;             // r29
-  SEQ_INSTANCE* seq; // r30
-  NOTE* n;           // r31
+  u32 i;
+  u32 j;
+  SEQ_INSTANCE* seq;
+  NOTE* n;
 
   for (i = 0; i < 8; ++i) {
     for (seq = seqActiveRoot; seq != NULL; seq = seq->next) {

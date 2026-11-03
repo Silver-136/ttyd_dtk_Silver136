@@ -2,7 +2,7 @@
 #include <dolphin.h>
 #include <dolphin/pad.h>
 
-// FAKE: wrapper pads the object to the original 12-byte symbol size
+// FAKE: the JP retail and PAL wrapper adds two bytes after the 10-byte clamp region.
 #if defined(VERSION_G8ME01) || defined(VERSION_G8ME01_DEMO) || defined(VERSION_G8MJ01_DEMO)
 // US and demo object: the bare 10-byte region
 static const struct { PADClampRegion r; } ClampRegion = { {
@@ -132,10 +132,10 @@ static void ClampTrigger(u8* trigger, u8 min, u8 max) {
     }
 }
 
-void PADClamp(PADStatus * status) {
+void PADClamp(PADStatus* status) {
     int i;
 
-    for (i = 0; i < 4; i++, status++) {
+    for (i = 0; i < PAD_MAX_CONTROLLERS; i++, status++) {
         if (status->err == PAD_ERR_NONE) {
             ClampStick(&status->stickX, &status->stickY, ClampRegion.r.maxStick, ClampRegion.r.xyStick, ClampRegion.r.minStick);
             ClampStick(&status->substickX, &status->substickY, ClampRegion.r.maxSubstick, ClampRegion.r.xySubstick, ClampRegion.r.minSubstick);
@@ -147,7 +147,7 @@ void PADClamp(PADStatus * status) {
 
 void PADClampCircle(PADStatus* status) {
     int i;
-    for (i = 0; i < 4; ++i, status++) {
+    for (i = 0; i < PAD_MAX_CONTROLLERS; ++i, status++) {
         if (status->err == PAD_ERR_NONE) {
             ClampCircle(&status->stickX, &status->stickY, ClampRegion.r.radStick, ClampRegion.r.minStick);
             ClampCircle(&status->substickX, &status->substickY, ClampRegion.r.radSubstick, ClampRegion.r.minSubstick);

@@ -56,7 +56,7 @@ static VID_LIST* get_vidlist(u32 vid) {
 }
 
 static u32 get_newvid() {
-  u32 vid; // r31
+  u32 vid;
   do {
     vid = vidCurrentId++;
   } while (vid == 0xFFFFFFFF);
@@ -126,10 +126,10 @@ u32 vidMakeRoot(SYNTH_VOICE* svoice) {
 }
 
 u32 vidMakeNew(SYNTH_VOICE* svoice, u32 isMaster) {
-  u32 vid;       // r29
-  VID_LIST* nvl; // r30
-  VID_LIST* lvl; // r28
-  VID_LIST* vl;  // r31
+  u32 vid;
+  VID_LIST* nvl;
+  VID_LIST* lvl;
+  VID_LIST* vl;
 
   vid = get_newvid();
 _restart:
@@ -223,8 +223,8 @@ static void voiceInitPrioSort() {
 }
 
 void voiceRemovePriority(SYNTH_VOICE* svoice) {
-  SYNTH_VOICELIST* vps; // r31
-  SYNTH_ROOTLIST* rps;  // r30
+  SYNTH_VOICELIST* vps;
+  SYNTH_ROOTLIST* rps;
 
   vps = &voicePrioSortVoices[svoice->id & 0xFF];
   if (vps->user != 1) {
@@ -258,10 +258,10 @@ void voiceRemovePriority(SYNTH_VOICE* svoice) {
 }
 
 void voiceSetPriority(SYNTH_VOICE* svoice, u8 prio) {
-  u16 li;               // r25
-  SYNTH_VOICELIST* vps; // r27
-  u16 i;                // r29
-  u32 v;                // r26
+  u16 li;
+  SYNTH_VOICELIST* vps;
+  u16 i;
+  u32 v;
   v = (u8)svoice->id;
   vps = &voicePrioSortVoices[v];
   if (vps->user == 1) {
@@ -479,8 +479,8 @@ int voiceAllocatePeek(u8 priority, u8 maxVoices, u32 allocId, u8 fxFlag, u32* cu
 }
 
 void voiceFree(SYNTH_VOICE* svoice) {
-  u32 i;                // r29
-  SYNTH_VOICELIST* sfv; // r30
+  u32 i;
+  SYNTH_VOICELIST* sfv;
   MUSY_ASSERT(svoice->id != 0xFFFFFFFF);
   macMakeInactive(svoice, MAC_STATE_STOPPED);
   voiceRemovePriority(svoice);
@@ -511,7 +511,7 @@ void voiceFree(SYNTH_VOICE* svoice) {
 }
 
 static void voiceInitFreeList() {
-  u32 i; // r31
+  u32 i;
 
   for (i = 0; i < synthInfo.voiceNum; ++i) {
     voiceList[i].prev = i - 1;
@@ -573,7 +573,7 @@ void voiceUnblock(u32 voice) {
 }
 
 void voiceKill(u32 vi) {
-  SYNTH_VOICE* sv = &synthVoice[vi]; // r31
+  SYNTH_VOICE* sv = &synthVoice[vi];
   if (sv->addr != NULL) {
     vidRemoveVoiceReferences(sv);
     sv->cFlags &= ~3;
@@ -589,9 +589,9 @@ void voiceKill(u32 vi) {
 }
 
 s32 voiceKillSound(u32 voiceid) {
-  s32 ret = -1;     // r29
-  u32 next_voiceid; // r28
-  u32 i;            // r30
+  s32 ret = -1;
+  u32 next_voiceid;
+  u32 i;
   if (sndActive != FALSE) {
     for (voiceid = vidGetInternalId(voiceid); voiceid != -1; voiceid = next_voiceid) {
       i = voiceid & 0xff;
@@ -621,8 +621,8 @@ void synthKillAllVoices(unsigned char musiconly) {
 }
 
 void synthKillVoicesByMacroReferences(u16* ref) {
-  u32 i;  // r31
-  u16 id; // r29
+  u32 i;
+  u16 id;
 
   for (i = 0; i < synthInfo.voiceNum; ++i) {
     if (synthVoice[i].addr == NULL && synthVoice[i].block == 0) {
@@ -687,7 +687,7 @@ void synthKillVoicesBySampleReferences(u16* ref) {
 }
 
 u32 voiceIsLastStarted(SYNTH_VOICE* svoice) {
-  u32 i; // r31
+  u32 i;
 
   if (svoice->id != 0xFFFFFFFF && svoice->midi != 0xFF) {
     i = svoice->id & 0xFF;
@@ -704,7 +704,7 @@ u32 voiceIsLastStarted(SYNTH_VOICE* svoice) {
 }
 
 void voiceSetLastStarted(SYNTH_VOICE* svoice) {
-  u32 i; // r31
+  u32 i;
 
   if (svoice->id != 0xFFFFFFFF && svoice->midi != 0xFF) {
     i = svoice->id & 0xFF;

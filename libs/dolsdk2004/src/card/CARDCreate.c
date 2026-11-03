@@ -20,7 +20,7 @@ static void CreateCallbackFat(s32 chan, s32 result) {
         ent = &dir[card->freeNo];
         memcpy(ent->gameName, card->diskID->gameName, sizeof(ent->gameName));
         memcpy(ent->company,  card->diskID->company, sizeof(ent->company));
-        ent->permission = 4;
+        ent->permission = CARD_ATTR_PUBLIC;
         ent->copyTimes = 0;
 
         ASSERTLINE(111, CARDIsValidBlockNo(card, card->startBlock));

@@ -53,18 +53,18 @@ static void aramQueueInit() {
 }
 
 static void aramQueueCallback(unsigned long ptr) {
-  u32 i;                        // r31
-  ARQRequest* arq;              // r29
-  ARAMTransferQueue* aramQueue; // r30
+  u32 i;
+  ARQRequest* arq;
+  ARAMTransferQueue* aramQueue;
 
   arq = (ARQRequest*)ptr;
-  if (arq->priority == 1) {
+  if (arq->priority == ARQ_PRIORITY_HIGH) {
     aramQueue = &aramQueueHi;
   } else {
     aramQueue = &aramQueueLo;
   }
 
-  for (i = 0; i < 16; ++i) {
+  for (i = 0; i < sizeof(aramQueue->queue) / sizeof(aramQueue->queue[0]); ++i) {
     if (arq == &aramQueue->queue[i].arq && aramQueue->queue[i].callback) {
       aramQueue->queue[i].callback(aramQueue->queue[i].user);
     }
@@ -75,8 +75,8 @@ static void aramQueueCallback(unsigned long ptr) {
 
 void aramUploadData(void* mram, unsigned long aram, unsigned long len, unsigned long highPrio,
                     void (*callback)(unsigned long), unsigned long user) {
-  ARAMTransferQueue* aramQueue; // r31
-  int old;                      // r30
+  ARAMTransferQueue* aramQueue;
+  int old;
 
   aramQueue = highPrio != 0 ? &aramQueueHi : &aramQueueLo;
 
@@ -115,9 +115,9 @@ void aramSyncTransferQueue() {
 }
 
 void aramInit(unsigned long length) {
-  signed short* tmpMem;   // r30
-  unsigned long i;        // r29
-  unsigned long aramBase; // r28
+  signed short* tmpMem;
+  unsigned long i;
+  unsigned long aramBase;
 #line 173
   MUSY_ASSERT_MSG(length > sizeof(s16) * 640, "ARAM size is too small");
 
@@ -165,7 +165,7 @@ unsigned long aramGetUserBytes(unsigned long len) { return len - sizeof(s16) * 6
 
 void aramSetUploadCallback(void* (*callback)(unsigned long, unsigned long),
                            unsigned long chunckSize) {
-  unsigned long acs; // r30
+  unsigned long acs;
 
   if (callback != NULL) {
     chunckSize = (chunckSize + 31) & ~31;
@@ -214,9 +214,9 @@ void* aramStoreData(void* src, unsigned long len, ARAMInfo* info) {
 }
 #else
 void* aramStoreData(void* src, unsigned long len) {
-  unsigned long addr;    // r26
-  void* buffer;          // r27
-  unsigned long blkSize; // r30
+  unsigned long addr;
+  void* buffer;
+  unsigned long blkSize;
   len = (len + 31) & ~31;
 #line 266
   MUSY_ASSERT_MSG(aramWrite + len <= aramStream, "Data will not fit in remaining ARAM space");
@@ -261,11 +261,11 @@ void aramRemoveData(void* aram, unsigned long len) {
 }
 
 static void InitStreamBuffers() {
-  unsigned long i; // r31
+  unsigned long i;
   aramUsedStreamBuffers = NULL;
   aramFreeStreamBuffers = NULL;
   aramIdleStreamBuffers = aramStreamBuffers;
-  for (i = 1; i < 64; ++i) {
+  for (i = 1; i < sizeof(aramStreamBuffers) / sizeof(aramStreamBuffers[0]); ++i) {
     aramStreamBuffers[i - 1].next = &aramStreamBuffers[i];
   }
   aramStreamBuffers[i - 1].next = NULL;
@@ -273,10 +273,10 @@ static void InitStreamBuffers() {
 }
 
 unsigned char aramAllocateStreamBuffer(unsigned long len) {
-  STREAM_BUFFER* sb;     // r30
-  STREAM_BUFFER* oSb;    // r31
-  STREAM_BUFFER* lastSb; // r28
-  u32 minLen;            // r27
+  STREAM_BUFFER* sb;
+  STREAM_BUFFER* oSb;
+  STREAM_BUFFER* lastSb;
+  u32 minLen;
 
   len = (len + 31) & ~31;
   lastSb = oSb = NULL;
@@ -342,11 +342,11 @@ unsigned long aramGetStreamBufferAddress(unsigned char id, unsigned long* len) {
 }
 
 void aramFreeStreamBuffer(unsigned char id) {
-  struct STREAM_BUFFER* fSb;    // r30
-  struct STREAM_BUFFER* sb;     // r31
-  struct STREAM_BUFFER* lastSb; // r29
-  struct STREAM_BUFFER* nextSb; // r27
-  unsigned long minAddr;        // r28
+  struct STREAM_BUFFER* fSb;
+  struct STREAM_BUFFER* sb;
+  struct STREAM_BUFFER* lastSb;
+  struct STREAM_BUFFER* nextSb;
+  unsigned long minAddr;
 
   MUSY_ASSERT_MSG(id != 0xFF, "Stream buffer ID is invalid");
   fSb = &aramStreamBuffers[id];
@@ -410,14 +410,14 @@ void aramFreeStreamBuffer(unsigned char id) {
 //   void (*callback)(unsigned long); // offset 0x20, size 0x4
 //   unsigned long user;              // offset 0x24, size 0x4
 // } ARAMTransferJob;
-//
+
 // typedef struct ARAMTransferQueue {
 //   // total size: 0x284
 //   ARAMTransferJob queue[16]; // offset 0x0, size 0x280
 //   vu8 write;                 // offset 0x280, size 0x1
 //   vu8 valid;                 // offset 0x281, size 0x1
 // } ARAMTransferQueue;
-//
+
 // typedef struct STREAM_BUFFER {
 //   // total size: 0x10
 //   struct STREAM_BUFFER* next; // offset 0x0, size 0x4
@@ -425,13 +425,13 @@ void aramFreeStreamBuffer(unsigned char id) {
 //   unsigned long length;       // offset 0x8, size 0x4
 //   unsigned long allocLength;  // offset 0xC, size 0x4
 // } STREAM_BUFFER;
-//
+
 // static unsigned long aramTop;                                     // size: 0x4
 // static unsigned long aramWrite;                                   // size: 0x4
 // static unsigned long aramStream;                                  // size: 0x4
 // static void* (*aramUploadCallback)(unsigned long, unsigned long); // size: 0x4
 // static unsigned long aramUploadChunkSize;                         // size: 0x4
-//
+
 // static ARAMTransferQueue aramQueueLo;
 // static ARAMTransferQueue aramQueueHi;
 
@@ -473,11 +473,11 @@ size_t aramGetStreamBufferAddress(u8 id, size_t* len) {
 }
 
 void aramFreeStreamBuffer(unsigned char id) {
-  STREAM_BUFFER* fSb;    // r30
-  STREAM_BUFFER* sb;     // r31
-  STREAM_BUFFER* lastSb; // r29
-  STREAM_BUFFER* nextSb; // r27
-  unsigned long minAddr; // r28
+  STREAM_BUFFER* fSb;
+  STREAM_BUFFER* sb;
+  STREAM_BUFFER* lastSb;
+  STREAM_BUFFER* nextSb;
+  unsigned long minAddr;
 
   MUSY_ASSERT_MSG(id != 0xFF, "Stream buffer ID is invalid");
 }

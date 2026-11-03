@@ -1,4 +1,3 @@
-/* ---------------------------------------
 
 
 
@@ -7,25 +6,26 @@
 
 
 
-   ---------------------------------------
-*/
+
+
+
 #include "musyx/musyx.h"
 
 #include "musyx/assert.h"
 #include "musyx/sal.h"
 
 void sndAuxCallbackDelay(u8 reason, SND_AUX_INFO* info, void* user) {
-  s32 l;           // r30
-  s32 r;           // r29
-  s32 s;           // r28
-  s32* lBuf;       // r27
-  s32* rBuf;       // r26
-  s32* sBuf;       // r25
-  u32 i;  // r24
-  SND_AUX_DELAY* c; // r31
-  s32* left;       // r23
-  s32* right;      // r22
-  s32* sur;        // r21
+  s32 l;
+  s32 r;
+  s32 s;
+  s32* lBuf;
+  s32* rBuf;
+  s32* sBuf;
+  u32 i;
+  SND_AUX_DELAY* c;
+  s32* left;
+  s32* right;
+  s32* sur;
 
   switch (reason) {
   case SND_AUX_REASON_BUFFERUPDATE:
@@ -33,10 +33,10 @@ void sndAuxCallbackDelay(u8 reason, SND_AUX_INFO* info, void* user) {
     left = info->data.bufferUpdate.left;
     right = info->data.bufferUpdate.right;
     sur = info->data.bufferUpdate.surround;
-    lBuf = c->left + (c->currentPos[0] * 160);
-    rBuf = c->right + (c->currentPos[1] * 160);
-    sBuf = c->sur + (c->currentPos[2] * 160);
-    for (i = 0; i < 160; ++i) {
+    lBuf = c->left + (c->currentPos[0] * SND_AUX_BLOCKSIZE);
+    rBuf = c->right + (c->currentPos[1] * SND_AUX_BLOCKSIZE);
+    sBuf = c->sur + (c->currentPos[2] * SND_AUX_BLOCKSIZE);
+    for (i = 0; i < SND_AUX_BLOCKSIZE; ++i) {
 
       l = *lBuf;
       r = *rBuf;
@@ -71,15 +71,15 @@ bool sndAuxCallbackUpdateSettingsDelay(SND_AUX_DELAY* delay) {
   sndAuxCallbackShutdownDelay(delay);
 
   for (i = 0; i < 3; ++i) {
-    delay->currentSize[i] = ((delay->delay[i] - 5) * 32 + 159) / 160;
+    delay->currentSize[i] = ((delay->delay[i] - 5) * 32 + (SND_AUX_BLOCKSIZE - 1)) / SND_AUX_BLOCKSIZE;
     delay->currentPos[i] = 0;
     delay->currentFeedback[i] = (delay->feedback[i] << 7) / 100;
     delay->currentOutput[i] = (delay->output[i] << 7) / 100;
   }
 
-  delay->left = (s32*)salMalloc(delay->currentSize[0] * 160 * 4);
-  delay->right = (s32*)salMalloc(delay->currentSize[1] * 160 * 4);
-  delay->sur = (s32*)salMalloc(delay->currentSize[2] * 160 * 4);
+  delay->left = (s32*)salMalloc(delay->currentSize[0] * SND_AUX_BLOCKSIZE * sizeof(s32));
+  delay->right = (s32*)salMalloc(delay->currentSize[1] * SND_AUX_BLOCKSIZE * sizeof(s32));
+  delay->sur = (s32*)salMalloc(delay->currentSize[2] * SND_AUX_BLOCKSIZE * sizeof(s32));
 
   /* clang-format off */
   MUSY_ASSERT(delay->left!=NULL);
@@ -90,14 +90,14 @@ bool sndAuxCallbackUpdateSettingsDelay(SND_AUX_DELAY* delay) {
   right = delay->right;
   sur = delay->sur;
 
-  for (i = 0; i < delay->currentSize[0] * 160; ++i) {
+  for (i = 0; i < delay->currentSize[0] * SND_AUX_BLOCKSIZE; ++i) {
     *left++ = 0;
   }
 
-  for (i = 0; i < delay->currentSize[1] * 160; ++i) {
+  for (i = 0; i < delay->currentSize[1] * SND_AUX_BLOCKSIZE; ++i) {
     *right++ = 0;
   }
-  for (i = 0; i < delay->currentSize[2] * 160; ++i) {
+  for (i = 0; i < delay->currentSize[2] * SND_AUX_BLOCKSIZE; ++i) {
     *sur++ = 0;
   }
   return TRUE;

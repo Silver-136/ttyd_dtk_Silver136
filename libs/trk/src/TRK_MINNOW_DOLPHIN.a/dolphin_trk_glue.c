@@ -207,9 +207,9 @@ void InitializeProgramEndTrap(void) {
     u8* endOfProgramInstructionBytes = (u8*)EndofProgramInstruction;
     u8* ppcHaltPtr = (u8*)PPCHalt;
 
-    TRK_memcpy(ppcHaltPtr + 4, endOfProgramInstructionBytes, 4);
-    ICInvalidateRange(ppcHaltPtr + 4, 4);
-    DCFlushRange(ppcHaltPtr + 4, 4);
+    TRK_memcpy(ppcHaltPtr + 4, endOfProgramInstructionBytes, sizeof(EndofProgramInstruction));
+    ICInvalidateRange(ppcHaltPtr + 4, sizeof(EndofProgramInstruction));
+    DCFlushRange(ppcHaltPtr + 4, sizeof(EndofProgramInstruction));
 }
 
 void TRKUARTInterruptHandler(void) {}

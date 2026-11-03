@@ -62,7 +62,7 @@ typedef struct SDIR_DATA {
 } SDIR_DATA;
 
 /*! A direct copy of the above structure to allow us to load in legacy data
- * this must be done via sndConvert32BitSDIRto64BitSDIR via client code,
+ * this must be done via sndConvert32BitSDIRTo64BitSDIR via client code,
  * this is explicit on the part of the programmer.
  * MusyX data built with the new tools will not require this step.
  */
@@ -193,7 +193,7 @@ typedef struct FX_GROUP {
   u16 refCount; // offset 0x4, size 0x2
   u16 reserved; // offset 0x6, size 0x2
 #endif
-  FX_TAB* fxTab; // offset 0x4, size 0x4
+  FX_TAB* fxTab; // Position depends on version.
 } FX_GROUP;
 
 void dataInit(u32, u32); /* extern */

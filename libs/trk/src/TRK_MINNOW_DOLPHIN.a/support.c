@@ -69,7 +69,7 @@ DSError HandlePositionFileSupportRequest(u32 file_handle, u32* position, u8 when
     CommandReply reply;
 
     memset(&reply, 0, sizeof(CommandReply));
-    reply.commandID = 0xD4;
+    reply.commandID = DSMSG_PositionFile;
     reply.length = sizeof(CommandReply);
     reply.r8.w = file_handle;
     reply.rC.w = *position;
@@ -108,7 +108,7 @@ DSError HandleCloseFileSupportRequest(int file_handle, u32* ioResult) {
     CommandReply reply;
 
     memset(&reply, 0, sizeof(CommandReply));
-    reply.commandID = 0xD3;
+    reply.commandID = DSMSG_CloseFile;
     reply.length = sizeof(CommandReply);
     reply.r8.w = file_handle;
 

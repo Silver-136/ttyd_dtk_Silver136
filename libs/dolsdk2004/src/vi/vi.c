@@ -190,27 +190,27 @@ static void __VIRetraceHandler(__OSInterrupt unused, OSContext* context) {
 #endif
 
     inter = 0;
-    reg = __VIRegs[0x18];
+    reg = __VIRegs[VI_DISP_INT_0];
     if (reg & 0x8000) {
-        __VIRegs[0x18] = reg & ~0x8000;
+        __VIRegs[VI_DISP_INT_0] = reg & ~0x8000;
         inter |= 1;
     }
-    reg = __VIRegs[0x1A];
+    reg = __VIRegs[VI_DISP_INT_1];
     if (reg & 0x8000) {
-        __VIRegs[0x1A] = reg & ~0x8000;
+        __VIRegs[VI_DISP_INT_1] = reg & ~0x8000;
         inter |= 2;
     }
-    reg = __VIRegs[0x1C];
+    reg = __VIRegs[VI_DISP_INT_2];
     if (reg & 0x8000) {
-        __VIRegs[0x1C] = reg & ~0x8000;
+        __VIRegs[VI_DISP_INT_2] = reg & ~0x8000;
         inter |= 4;
     }
-    reg = __VIRegs[0x1E];
+    reg = __VIRegs[VI_DISP_INT_3];
     if (reg & 0x8000) {
-        __VIRegs[0x1E] = reg & ~0x8000;
+        __VIRegs[VI_DISP_INT_3] = reg & ~0x8000;
         inter |= 8;
     }
-    reg = __VIRegs[0x1E];
+    reg = __VIRegs[VI_DISP_INT_3];
 
     if ((inter & 4) || (inter & 8)) {
         OSClearContext(&exceptionContext);
@@ -520,8 +520,8 @@ void VIInit(void) {
     __VIRegs[26] = value;
     PreCB = NULL;
     PostCB = NULL;
-    __OSSetInterruptHandler(0x18, __VIRetraceHandler);
-    __OSUnmaskInterrupts(0x80);
+    __OSSetInterruptHandler(__OS_INTERRUPT_PI_VI, __VIRetraceHandler);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_VI);
 }
 
 void VIWaitForRetrace(void) {
@@ -558,7 +558,6 @@ static void setInterruptRegs(VITiming* tm) {
     regs[24] = vct | 0x1000;
     MARK_CHANGED(24);
 
-    vct;  // fixes regalloc
 }
 
 static void setPicConfig(u16 fbSizeX, VIXFBMode xfbMode, u16 panPosX, u16 panSizeX, u8* wordPerLine, u8* std, u8* wpl, u8* xof) {
@@ -956,11 +955,11 @@ void VISetNextFrameBuffer(void* fb) {
 }
 
 void* VIGetNextFrameBuffer(void) {
-    return *(void**)(&NextBufAddr);
+    return (void*)NextBufAddr;
 }
 
 void* VIGetCurrentFrameBuffer(void) {
-    return *(void**)(&CurrBufAddr);
+    return (void*)CurrBufAddr;
 }
 
 void VISetNextRightFrameBuffer(void* fb) {
@@ -1091,12 +1090,12 @@ u32 VIGetScanMode(void) {
     u32 scanMode;
     BOOL enabled = OSDisableInterrupts();
 
-    if ((u32)(__VIRegs[54] & 1) == 1) {
-        scanMode = 2;
-    } else if (!((__VIRegs[1] & (1 << 2)) >> 2)) {
-        scanMode = 0;
+    if ((u32)(__VIRegs[VI_CLOCK_SEL] & 1) == 1) {
+        scanMode = VI_PROGRESSIVE;
+    } else if (!((__VIRegs[VI_DISP_CONFIG] & (1 << 2)) >> 2)) {
+        scanMode = VI_INTERLACE;
     } else {
-        scanMode = 1;
+        scanMode = VI_NON_INTERLACE;
     }
     
     OSRestoreInterrupts(enabled);
@@ -1107,7 +1106,7 @@ u32 VIGetDTVStatus(void) {
     u32 dtvStatus;
     BOOL enabled = OSDisableInterrupts();
 
-    dtvStatus = __VIRegs[55] & 3;
+    dtvStatus = __VIRegs[VI_DTV_STAT] & 3;
     OSRestoreInterrupts(enabled);
     return dtvStatus & 1;
 }
@@ -1139,7 +1138,6 @@ void __VIGetAdjustingValues(s16* x, s16* y) {
     OSRestoreInterrupts(enabled);
 }
 
-// DEBUG NONMATCHING - wrong reg use, equivalent
 void __VIEnableRawPositionInterrupt(s16 x, s16 y, void (*callback)(s16, s16)) {
     BOOL enabled;
     u32 halfLine;

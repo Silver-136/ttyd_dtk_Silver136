@@ -170,7 +170,7 @@ void OSFatal(GXColor fg, GXColor bg, const char* msg) {
     AISetStreamVolLeft(0);
     AISetStreamVolRight(0);
     VIInit();
-    __OSUnmaskInterrupts(0x80);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_VI);
     VISetBlack(TRUE);
     VIFlush();
     VISetPreRetraceCallback(NULL);
@@ -197,7 +197,7 @@ void OSFatal(GXColor fg, GXColor bg, const char* msg) {
 
     do {} while ((__EXIRegs[3] & 1) == 1);
 
-    __OSSetExceptionHandler(8, &OSDefaultExceptionHandler);
+    __OSSetExceptionHandler(__OS_EXCEPTION_DECREMENTER, &OSDefaultExceptionHandler);
     GXAbortFrame();
     OSSetArenaLo((void*)0x81400000);
     OSSetArenaHi(bootInfo->FSTLocation);

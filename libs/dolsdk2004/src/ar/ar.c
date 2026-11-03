@@ -55,13 +55,13 @@ void ARStartDMA(u32 type, u32 mainmem_addr, u32 aram_addr, u32 length) {
     ASSERTMSGLINE(376, !(__DSPRegs[5] & 0x200), "ARAM DMA already in progress\n");
     ASSERTMSGLINE(377, !(mainmem_addr & 0x1F), "AR: Main memory address is not a multiple of 32 bytes!\n");
     ASSERTMSGLINE(378, !(length & 0x1F), "AR: DMA transfer length is not a multiple of 32 bytes!\n");
-    __DSPRegs[16] = (__DSPRegs[16] & 0xFFFFFC00 | (mainmem_addr >> 0x10)); 
-    __DSPRegs[17] = (__DSPRegs[17] & 0xFFFF001F | ((u16)mainmem_addr));
-    __DSPRegs[18] = (__DSPRegs[18] & 0xFFFFFC00 | (aram_addr >> 0x10));
-    __DSPRegs[19] = (__DSPRegs[19] & 0xFFFF001F | ((u16)aram_addr));
-    __DSPRegs[20] = __DSPRegs[20] & ~0x8000 | ((type << 0xF) & ~0x7FFF);
-    __DSPRegs[20] = (__DSPRegs[20] & 0xFFFFFC00) | (length >> 0x10);
-    __DSPRegs[21] = (__DSPRegs[21] & 0xFFFF001F) | (length & 0x0000FFFF);
+    __DSPRegs[DSP_ARAM_DMA_MM_HI] = (__DSPRegs[DSP_ARAM_DMA_MM_HI] & 0xFFFFFC00 | (mainmem_addr >> 0x10)); 
+    __DSPRegs[DSP_ARAM_DMA_MM_LO] = (__DSPRegs[DSP_ARAM_DMA_MM_LO] & 0xFFFF001F | ((u16)mainmem_addr));
+    __DSPRegs[DSP_ARAM_DMA_ARAM_HI] = (__DSPRegs[DSP_ARAM_DMA_ARAM_HI] & 0xFFFFFC00 | (aram_addr >> 0x10));
+    __DSPRegs[DSP_ARAM_DMA_ARAM_LO] = (__DSPRegs[DSP_ARAM_DMA_ARAM_LO] & 0xFFFF001F | ((u16)aram_addr));
+    __DSPRegs[DSP_ARAM_DMA_SIZE_HI] = __DSPRegs[DSP_ARAM_DMA_SIZE_HI] & ~0x8000 | ((type << 0xF) & ~0x7FFF);
+    __DSPRegs[DSP_ARAM_DMA_SIZE_HI] = (__DSPRegs[DSP_ARAM_DMA_SIZE_HI] & 0xFFFFFC00) | (length >> 0x10);
+    __DSPRegs[DSP_ARAM_DMA_SIZE_LO] = (__DSPRegs[DSP_ARAM_DMA_SIZE_LO] & 0xFFFF001F) | (length & 0x0000FFFF);
     OSRestoreInterrupts(old);
 }
 
@@ -113,8 +113,8 @@ u32 ARInit(u32* stack_index_addr, u32 num_entries) {
 
     old = OSDisableInterrupts();
     __AR_Callback = NULL;
-    __OSSetInterruptHandler(6, __ARHandler);
-    __OSUnmaskInterrupts(0x02000000);
+    __OSSetInterruptHandler(__OS_INTERRUPT_DSP_ARAM, __ARHandler);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_DSP_ARAM);
     __AR_StackPointer = 0x4000;
     __AR_FreeBlocks = num_entries;
     __AR_BlockLength = stack_index_addr;

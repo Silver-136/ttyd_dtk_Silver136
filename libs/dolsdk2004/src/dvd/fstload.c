@@ -10,15 +10,12 @@ static u32 status;
 static DVDBB2* bb2;
 static DVDDiskID* idTmp;
 
-// prototypes
-static void cb(s32 result, DVDCommandBlock* block);
-
 static void cb(s32 result, DVDCommandBlock* block) {
     if (result > 0) {
         switch(status) {
         case 0:
             status = 1;
-            DVDReadAbsAsyncForBS(block, bb2, 0x20, 0x420, cb);
+            DVDReadAbsAsyncForBS(block, bb2, sizeof(DVDBB2), 0x420, cb);
             return;
         case 1:
             status = 2;
@@ -28,7 +25,7 @@ static void cb(s32 result, DVDCommandBlock* block) {
         }
     }
 
-    if (result == -1) {
+    if (result == DVD_RESULT_FATAL_ERROR) {
         return;
     } else if (result == -4) {
         status = 0;
@@ -55,26 +52,16 @@ void __fstLoad(void) {
 
     while (1) {
         state = DVDGetDriveStatus();
-        if (state == 0) {
+        if (state == DVD_STATE_END) {
             break;
         }
 
-        // weird switch that seemingly wont do anything but break out of its own switch. What was this for? Early DVD development pre-hardware?
-        switch(state) {
-        case DVD_STATE_FATAL_ERROR: break;
-        case DVD_STATE_BUSY: break;
-        case DVD_STATE_WAITING: break;
-        case DVD_STATE_COVER_CLOSED: break;
-        case DVD_STATE_NO_DISK: break;
-        case DVD_STATE_COVER_OPEN: break;
-        case DVD_STATE_MOTOR_STOPPED: break;
-        }
     }
 
     bootInfo->FSTLocation = (void*)bb2->FSTAddress;
     bootInfo->FSTMaxLength = bb2->FSTMaxLength;
     id = &bootInfo->DVDDiskID;
-    memcpy(id, idTmp, 0x20);
+    memcpy(id, idTmp, sizeof(DVDDiskID));
     OSReport("\n");
     OSReport("  Game Name ... %c%c%c%c\n", id->gameName[0], id->gameName[1], id->gameName[2], id->gameName[3]);
     OSReport("  Company ..... %c%c\n", id->company[0], id->company[1]);

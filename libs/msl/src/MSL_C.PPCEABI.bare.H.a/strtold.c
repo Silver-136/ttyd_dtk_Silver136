@@ -297,7 +297,14 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
         case hex_state:
             switch (hex_scan_state) {
             case hex_start:
-                r.b[0] = 0; r.b[1] = 0; r.b[2] = 0; r.b[3] = 0; r.b[4] = 0; r.b[5] = 0; r.b[6] = 0; r.b[7] = 0;
+                r.b[0] = 0;
+                r.b[1] = 0;
+                r.b[2] = 0;
+                r.b[3] = 0;
+                r.b[4] = 0;
+                r.b[5] = 0;
+                r.b[6] = 0;
+                r.b[7] = 0;
                 hex_digits = 2;
                 hex_scan_state = leading_hex_zeroes;
                 c = fetch();
@@ -325,7 +332,11 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
                     int u;
                     hex_dig_count++;
                     u = toupper(c);
-                    if (u >= 'A') u = u - 'A' + 10; else u -= '0';
+                    if (u >= 'A') {
+                        u = u - 'A' + 10;
+                    } else {
+                        u -= '0';
+                    }
                     dig = u;
                     if (hex_digits % 2) {
                         t |= dig;
@@ -348,7 +359,11 @@ long double __strtold(int max_width, int (*ReadProc)(void*, int, int), void* Rea
                     unsigned char dig;
                     int u;
                     u = toupper(c);
-                    if (u >= 'A') u = u - 'A' + 10; else u -= '0';
+                    if (u >= 'A') {
+                        u = u - 'A' + 10;
+                    } else {
+                        u -= '0';
+                    }
                     dig = u;
                     if (hex_digits % 2) {
                         t |= dig;

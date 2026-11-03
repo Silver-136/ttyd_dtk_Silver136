@@ -26,7 +26,7 @@ void macSetExternalKeyoff(SYNTH_VOICE* svoice);
 static void DoSetPitch(SYNTH_VOICE* svoice);
 
 static int SendSingleKeyOff(u32 voiceid) {
-  u32 i; // r31
+  u32 i;
 
   if (voiceid != 0xFFFFFFFF) {
 
@@ -69,8 +69,8 @@ static void CheckHWEventTrap(SYNTH_VOICE* svoice) {
 }
 
 static u32 mcmdWait(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 w;  // r1+0x10
-  u32 ms; // r29
+  u32 w;
+  u32 ms;
 
   if ((ms = (u16)(cstep->para[1] >> 0x10))) {
     if (((u8)(cstep->para[0] >> 8) & 1)) {
@@ -131,7 +131,7 @@ static u32 mcmdWait(SYNTH_VOICE* svoice, MSTEP* cstep) {
       if (svoice->wait != -1) {
         TimeQueueAdd(svoice);
       }
-      macMakeInactive(svoice, 1);
+      macMakeInactive(svoice, MAC_STATE_YIELDED);
       return 1;
     }
   }
@@ -163,7 +163,7 @@ static u32 mcmdReturn(SYNTH_VOICE* svoice) {
 }
 
 static void mcmdIfKey(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  MSTEP* addr; // r31
+  MSTEP* addr;
   if (svoice->curNote < ((u8)(cstep->para[0] >> 8))) {
     return;
   }
@@ -187,8 +187,8 @@ static void mcmdIfVelocity(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdIfModulation(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  MSTEP* addr; // r30
-  u8 mod;      // r28
+  MSTEP* addr;
+  u8 mod;
 
   if (svoice->midi == 0xff) {
     return;
@@ -205,7 +205,7 @@ static void mcmdIfModulation(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdIfRandom(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  MSTEP* addr; // r31
+  MSTEP* addr;
   if ((u8)sndRand() < (u8)(cstep->para[0] >> 8)) {
     return;
   }
@@ -217,7 +217,7 @@ static void mcmdIfRandom(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static u32 mcmdGoto(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  MSTEP* addr; // r31
+  MSTEP* addr;
   if ((addr = (MSTEP*)dataGetMacro(cstep->para[0] >> 0x10)) != NULL) {
     svoice->addr = addr;
     svoice->curAddr = addr + (u16)cstep->para[1];
@@ -228,7 +228,7 @@ static u32 mcmdGoto(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static u32 mcmdGosub(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  MSTEP* addr; // r30
+  MSTEP* addr;
   if ((addr = (MSTEP*)dataGetMacro((u16)(cstep->para[0] >> 0x10))) != NULL) {
     svoice->callStackIndex = (svoice->callStackIndex + 1) & 3;
     svoice->callStack[svoice->callStackIndex].addr = svoice->addr;
@@ -246,8 +246,8 @@ static u32 mcmdGosub(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdTrapEvent(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  MSTEP* addr; // r29
-  u8 t;        // r30
+  MSTEP* addr;
+  u8 t;
   if ((addr = (MSTEP*)dataGetMacro(cstep->para[0] >> 0x10)) != NULL) {
     t = (u8)(cstep->para[0] >> 8);
     svoice->trapEventAddr[t] = addr;
@@ -260,7 +260,7 @@ static void mcmdTrapEvent(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdUntrapEvent(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u8 i; // r31
+  u8 i;
   svoice->trapEventAddr[(u8)(cstep->para[0] >> 8)] = 0;
 
   for (i = 0; i < 3; ++i) {
@@ -305,8 +305,8 @@ skip:
 }
 
 static void mcmdPlayMacro(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  s32 key;       // r29
-  u32 new_child; // r30
+  s32 key;
+  u32 new_child;
 
   key = ((u32)svoice->orgNote + (s8)(u8)(cstep->para[0] >> 8));
   key = (key < 0) ? 0 : key > 0x7f ? 0x7f : key;
@@ -339,8 +339,8 @@ static void mcmdPlayMacro(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdSendKeyOff(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 voiceid; // r30
-  u32 i;       // r31
+  u32 voiceid;
+  u32 i;
 
   voiceid = (svoice->orgNote + (u8)(cstep->para[0] >> 8)) << 8;
   voiceid |= ((u16)(cstep->para[0] >> 16)) << 16;
@@ -352,8 +352,8 @@ static void mcmdSendKeyOff(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdAddAgeCounter(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  s16 step; // r29
-  s32 age;  // r30
+  s16 step;
+  s32 age;
 
   step = (u16)(cstep->para[0] >> 16);
   age = (svoice->age >> 15) + step;
@@ -383,7 +383,7 @@ static void mcmdSetAgeCounterSpeed(SYNTH_VOICE* svoice, MSTEP* cstep) {
   }
 }
 static void mcmdSetAgeCounterByVolume(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 age; // r30
+  u32 age;
 
   age = (((u8)(svoice->volume >> 16) * (u16)cstep->para[1]) >> 7) + (u16)(cstep->para[0] >> 16);
   svoice->age = age > 60000 ? 0x75300000 : age * 0x8000;
@@ -391,8 +391,8 @@ static void mcmdSetAgeCounterByVolume(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdAddPriority(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  s16 add;  // r30
-  s16 prio; // r31
+  s16 add;
+  s16 prio;
   add = (u16)(cstep->para[0] >> 16);
   prio = svoice->prio + add;
   prio = (prio < 0) ? 0 : (prio > 0xFF) ? 0xFF : prio;
@@ -454,7 +454,7 @@ static u32 mcmdLastKey(SYNTH_VOICE* svoice, MSTEP* cstep) {
 
 static void mcmdStartSample(SYNTH_VOICE* svoice, MSTEP* cstep) {
   static SAMPLE_INFO newsmp;
-  u16 smp; // r28
+  u16 smp;
   smp = cstep->para[0] >> 8;
 
   if (dataGetSample(smp, &newsmp) != 0) {
@@ -466,7 +466,7 @@ static void mcmdStartSample(SYNTH_VOICE* svoice, MSTEP* cstep) {
     break;
   case 1:
     newsmp.offset = ((u8)(0x7f - (svoice->volume >> 0x10)) * (u32)cstep->para[1]) / 0x7f;
-    ;
+
     break;
   case 2:
     newsmp.offset = ((u8)((svoice->volume >> 0x10)) * (u32)cstep->para[1]) / 0x7f;
@@ -513,9 +513,9 @@ static void mcmdSetMod2Vibrato(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdVibrato(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 time; // r1+0x10
-  s8 kr;    // r29
-  s8 cr;    // r30
+  u32 time;
+  s8 kr;
+  s8 cr;
 
   if ((u8)(cstep->para[0] >> 0x18) & 3) {
     svoice->cFlags |= 0x4000;
@@ -568,9 +568,9 @@ static void mcmdVibrato(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdSetupLFO(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 time;  // r1+0x14
-  u32 phase; // r1+0x10
-  u8 n;      // r31
+  u32 time;
+  u32 phase;
+  u8 n;
 
   n = (u8)(cstep->para[0] >> 8);
   time = (u16)(cstep->para[0] >> 0x10);
@@ -584,14 +584,14 @@ static void mcmdSetupLFO(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void DoSetPitch(SYNTH_VOICE* svoice) {
-  u32 f;    // r29
-  u32 of;   // r26
-  u32 i;    // r31
-  u32 frq;  // r28
-  u32 ofrq; // r27
-  u32 no;   // r30
-  s32 key;  // r25
-  u8 oKey;  // r24
+  u32 f;
+  u32 of;
+  u32 i;
+  u32 frq;
+  u32 ofrq;
+  u32 no;
+  s32 key;
+  u8 oKey;
   static u16 kf[13] = {
       4096, 4339, 4597, 4871, 5160, 5467, 5792, 6137, 6502, 6888, 7298, 7732, 8192,
   };
@@ -660,11 +660,11 @@ static void mcmdSetPitch(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdSetADSR(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  ADSR_INFO adsr;      // r1+0x8
-  ADSR_INFO* adsr_ptr; // r31
-  s32 ascale;          // r28
-  s32 dscale;          // r27
-  f32 sScale;          // f31
+  ADSR_INFO adsr;
+  ADSR_INFO* adsr_ptr;
+  s32 ascale;
+  s32 dscale;
+  f32 sScale;
 
   if ((adsr_ptr = dataGetCurve(cstep->para[0] >> 8)) != NULL) {
     if (!(u8)(cstep->para[0] >> 24)) {
@@ -723,9 +723,9 @@ static s32 midi2TimeTab[128] = {
 };
 
 static void mcmdSetADSRFromCtrl(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  // Local variables
-  f32 sScale;     // f31
-  ADSR_INFO adsr; // r1+0x8
+
+  f32 sScale;
+  ADSR_INFO adsr;
 
   sScale = dspDLSVolTab[inpGetMidiCtrl(cstep->para[0] >> 24, svoice->midi, svoice->midiSet) >> 7];
   adsr.data.dls.atime =
@@ -742,11 +742,11 @@ static void mcmdSetADSRFromCtrl(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdSetPitchADSR(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  ADSR_INFO adsr;      // r1+0x10
-  ADSR_INFO* adsr_ptr; // r31
-  u32 sl;              // r28
-  s32 ascale;          // r27
-  s32 dscale;          // r26
+  ADSR_INFO adsr;
+  ADSR_INFO* adsr_ptr;
+  u32 sl;
+  s32 ascale;
+  s32 dscale;
 
   if ((adsr_ptr = dataGetCurve((cstep->para[0] >> 8))) == NULL) {
     return;
@@ -796,7 +796,7 @@ static void mcmdSetPitchADSR(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static u32 mcmdPitchSweep(SYNTH_VOICE* svoice, MSTEP* cstep, int num) {
-  s32 delta; // r31
+  s32 delta;
   svoice->sweepOff[num] = 0;
   svoice->sweepNum[num] = (u8)(cstep->para[0] >> 8);
   svoice->sweepCnt[num] = (s32)svoice->sweepNum[num] << 0x10;
@@ -812,8 +812,8 @@ static u32 mcmdPitchSweep(SYNTH_VOICE* svoice, MSTEP* cstep, int num) {
 }
 
 static void DoPanningSetup(SYNTH_VOICE* svoice, MSTEP* cstep, u8 pi) {
-  s32 width;  // r29
-  u32 mstime; // r27
+  s32 width;
+  u32 mstime;
   svoice->panTime[pi] = width = (u16)(cstep->para[0] >> 16);
   sndConvertMs(&svoice->panTime[pi]);
   mstime = (s8)(cstep->para[1]);
@@ -835,8 +835,8 @@ static void mcmdSetSurroundPanning(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdSetPianoPanning(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  s32 delta; // r31
-  s32 scale; // r30
+  s32 delta;
+  s32 scale;
   delta = (svoice->curNote << 16) - ((u8)(cstep->para[0] >> 16) << 16);
   scale = (s8)((u8)(cstep->para[0] >> 8));
   delta = ((delta * scale) >> 7);
@@ -847,10 +847,10 @@ static void mcmdSetPianoPanning(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static u32 TranslateVolume(u32 volume, u16 curve) {
-  u8* ptr;   // r30
-  u32 vlow;  // r28
-  u32 vhigh; // r31
-  s32 d;     // r27
+  u8* ptr;
+  u32 vlow;
+  u32 vhigh;
+  s32 d;
 
   if (curve != 0xFFFF) {
     if ((ptr = (u8*)dataGetCurve(curve))) {
@@ -874,8 +874,8 @@ static u32 TranslateVolume(u32 volume, u16 curve) {
 }
 
 static void mcmdScaleVolume(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u16 curve; // r29
-  u16 scale; // r28
+  u16 curve;
+  u16 scale;
   scale = (u16)(u8)(cstep->para[0] >> 8);
 
   if ((u8)(cstep->para[1] >> 8) == 0) {
@@ -896,7 +896,7 @@ static void mcmdScaleVolume(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdScaleVolumeDLS(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u16 scale; // r31
+  u16 scale;
 
   scale = (cstep->para[0] >> 8);
   if ((u8)(cstep->para[0] >> 0x18) == 0) {
@@ -912,10 +912,10 @@ static void mcmdScaleVolumeDLS(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void DoEnvelopeCalculation(SYNTH_VOICE* svoice, MSTEP* cstep, s32 start_vol) {
-  u32 tvol;   // r31
-  u32 time;   // r1+0x14
-  s32 mstime; // r28
-  u16 curve;  // r27
+  u32 tvol;
+  u32 time;
+  s32 mstime;
+  u16 curve;
 
   time = (u16)(cstep->para[1] >> 16);
 
@@ -954,13 +954,13 @@ static void mcmdFadeIn(SYNTH_VOICE* svoice, MSTEP* cstep) {
   DoEnvelopeCalculation(svoice, cstep, 0);
 }
 
-static void mcmdRandomKey(SYNTH_VOICE* svoice /* r28 */, MSTEP* cstep /* r31 */) {
-  u8 k1;     // r30
-  u8 k2;     // r29
-  u8 t;      // r20
-  s32 i1;    // r27
-  s32 i2;    // r26
-  u8 detune; // r25
+static void mcmdRandomKey(SYNTH_VOICE* svoice, MSTEP* cstep) {
+  u8 k1;
+  u8 k2;
+  u8 t;
+  s32 i1;
+  s32 i2;
+  u8 detune;
 
   if (!(u8)(cstep->para[1] >> 8)) {
     k1 = (cstep->para[0] >> 8);
@@ -996,8 +996,8 @@ static void mcmdScaleReverb(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 static void SelectSource(SYNTH_VOICE* svoice, CTRL_DEST* dest, MSTEP* cstep, u64 tstflag,
                          u32 dirtyFlag) {
-  u8 comb;   // r28
-  s32 scale; // r30
+  u8 comb;
+  s32 scale;
 
   if (!(svoice->cFlags & tstflag)) {
     comb = 0;
@@ -1085,7 +1085,7 @@ static void mcmdFilterParameterSelect(SYNTH_VOICE* svoice, MSTEP* cstep) {
 #endif
 
 static void mcmdAuxAFXSelect(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 i;                                                                     // r31
+  u32 i;
   static u64 mask[4] = {0x100000000, 0x200000000, 0x400000000, 0x800000000}; // size: 0x20
   static u32 dirty[4] = {0x80000001, 0x80000002, 0x80000004, 0x80000008};    // size: 0x10
   i = (u8)(cstep->para[1] >> 0x18);
@@ -1093,7 +1093,7 @@ static void mcmdAuxAFXSelect(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdAuxBFXSelect(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 i;                                                                         // r31
+  u32 i;
   static u64 mask[4] = {0x1000000000, 0x2000000000, 0x4000000000, 0x8000000000}; // size: 0x20
   static u32 dirty[4] = {0x80000010, 0x80000020, 0x80000040, 0x80000080};        // size: 0x10
   i = (u8)(cstep->para[1] >> 0x18);
@@ -1101,7 +1101,7 @@ static void mcmdAuxBFXSelect(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdPortamento(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 time; // r1+0x10
+  u32 time;
   svoice->portType = cstep->para[0] >> 16;
   time = (u16)(cstep->para[1] >> 16);
   if (((u8)(cstep->para[1] >> 8) & 1)) {
@@ -1166,9 +1166,9 @@ void varSet32(SYNTH_VOICE* svoice, u32 ctrl, u8 index, s32 v) {
 void varSet(SYNTH_VOICE* svoice, u32 ctrl, u8 index, s16 v) { varSet32(svoice, ctrl, index, v); }
 
 static void mcmdVarCalculation(SYNTH_VOICE* svoice, MSTEP* cstep, u8 op) {
-  s16 s1; // r28
-  s16 s2; // r31
-  s32 t;  // r30
+  s16 s1;
+  s16 s2;
+  s32 t;
 
   s1 = varGet(svoice, (u8)(cstep->para[0] >> 24), cstep->para[1]);
   if (op == 4) {
@@ -1203,9 +1203,9 @@ static void mcmdSetVarImmediate(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdIfVarCompare(SYNTH_VOICE* svoice, MSTEP* cstep, u8 cmp) {
-  s32 a;     // r28
-  s32 b;     // r27
-  u8 result; // r30
+  s32 a;
+  s32 b;
+  u8 result;
 
   a = varGet32(svoice, (u8)(cstep->para[0] >> 8), (u8)(cstep->para[0] >> 0x10));
   b = varGet32(svoice, (u8)(cstep->para[0] >> 0x18), (u8)cstep->para[1]);
@@ -1227,7 +1227,7 @@ static void mcmdIfVarCompare(SYNTH_VOICE* svoice, MSTEP* cstep, u8 cmp) {
   }
 }
 bool macPostMessage(u32 vid, s32 mesg) {
-  SYNTH_VOICE* sv; // r31
+  SYNTH_VOICE* sv;
   if ((vid = vidGetInternalId(vid)) != -1 && (sv = &synthVoice[vid & 0xFF])->mesgNum < 4) {
     ++sv->mesgNum;
     sv->mesgQueue[sv->mesgWrite] = mesg;
@@ -1239,9 +1239,9 @@ bool macPostMessage(u32 vid, s32 mesg) {
   return 0;
 }
 static void mcmdSendMessage(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u8 i;      // r31
-  s32 mesg;  // r30
-  u16 macro; // r28
+  u8 i;
+  s32 mesg;
+  u16 macro;
 
   mesg = varGet32(svoice, 0, (u8)(cstep->para[1] >> 8));
 
@@ -1262,7 +1262,7 @@ static void mcmdSendMessage(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void mcmdGetMessage(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  s32 mesg; // r30
+  s32 mesg;
   mesg = 0;
   if (svoice->mesgNum != '\0') {
     mesg = svoice->mesgQueue[svoice->mesgRead];
@@ -1289,9 +1289,9 @@ static void mcmdSRCModeSelect(SYNTH_VOICE* svoice, MSTEP* cstep) {
   svoice->cFlags |= 0x80000000000;
 }
 static void mcmdSetKeyGroup(SYNTH_VOICE* svoice, MSTEP* cstep) {
-  u32 i;    // r31
-  u8 kg;    // r30
-  u32 kill; // r29
+  u32 i;
+  u8 kg;
+  u32 kill;
 
   svoice->keyGroup = 0;
   kg = (u8)(cstep->para[0] >> 8);
@@ -1318,10 +1318,10 @@ static void mcmdSetupTremolo(SYNTH_VOICE* svoice, MSTEP* cstep) {
 }
 
 static void macHandleActive(SYNTH_VOICE* svoice) {
-  u8 i;                              // r29
-  u8 lastNote;                       // r27
-  u32 ex;                            // r30
-  CHANNEL_DEFAULTS* channelDefaults; // r28
+  u8 i;
+  u8 lastNote;
+  u32 ex;
+  CHANNEL_DEFAULTS* channelDefaults;
   static MSTEP cstep;
 
   if (svoice->cFlags & 3) {
@@ -1668,9 +1668,9 @@ static void macHandleActive(SYNTH_VOICE* svoice) {
 }
 
 void macHandle(u32 deltaTime) {
-  SYNTH_VOICE* sv;     // r31
-  SYNTH_VOICE* nextSv; // r30
-  u64 w;               // r28
+  SYNTH_VOICE* sv;
+  SYNTH_VOICE* nextSv;
+  u64 w;
 
   for (sv = macTimeQueueRoot; sv != NULL && sv->wait <= macRealTime;) {
     nextSv = sv->nextTimeQueueMacro;
@@ -1733,8 +1733,8 @@ void macSetPedalState(SYNTH_VOICE* svoice, u32 state) {
 }
 
 static void TimeQueueAdd(SYNTH_VOICE* svoice) {
-  SYNTH_VOICE* sv;     // r31
-  SYNTH_VOICE* lastSv; // r30
+  SYNTH_VOICE* sv;
+  SYNTH_VOICE* lastSv;
 
   lastSv = NULL;
   for (sv = macTimeQueueRoot; sv != NULL && sv->wait < svoice->wait;) {
@@ -1835,11 +1835,11 @@ u32 macStart(u16 macid, u8 priority, u8 maxVoices,
 #endif
              u8 key, u8 vol, u8 panning, u8 midi, u8 midiSet, u8 section, u16 step, u16 trackid,
              u8 new_vid, u8 vGroup, u8 studio, u32 itd) {
-  u32 voice;           // r30
-  u32 vid;             // r25
-  MSTEP* addr;         // r28
-  SYNTH_VOICE* svoice; // r31
-  u16 seqPrio;         // r24
+  u32 voice;
+  u32 vid;
+  MSTEP* addr;
+  SYNTH_VOICE* svoice;
+  u16 seqPrio;
 
   if ((addr = dataGetMacro(macid))) {
     if (!(key & 0x80) && (seqPrio = seqGetMIDIPriority(midiSet, midi)) != 0xFFFF) {
@@ -1914,7 +1914,7 @@ u32 macStart(u16 macid, u8 priority, u8 maxVoices,
 }
 
 void macInit() {
-  u32 i; // r31
+  u32 i;
 
   macActiveMacroRoot = 0;
   macTimeQueueRoot = 0;

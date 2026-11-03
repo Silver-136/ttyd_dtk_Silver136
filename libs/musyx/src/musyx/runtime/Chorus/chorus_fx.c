@@ -515,7 +515,7 @@ lbl_803B6FF4:
   stw posLoV, src->posLo;
   stw posHiV, src->posHi;
 
-  /* Pop and restore LR to original values */
+  /* Restore the saved GPRs and stack pointer. */
   lmw r26, 0x28(sp);
   addi r1, r1, 0x40;
   blr;
@@ -543,7 +543,7 @@ void sndAuxCallbackChorus(u8 reason, SND_AUX_INFO* info, void* user) {
   switch (reason) {
   case SND_AUX_REASON_BUFFERUPDATE:
     c = (SND_AUX_CHORUS*)user;
-    nextCurrentLast = (c->work.currentLast + 1) % 3;
+    nextCurrentLast = (c->work.currentLast + 1) % _SND_CHORUS_NUM_BLOCKS;
     leftD = c->work.lastLeft[nextCurrentLast];
     rightD = c->work.lastRight[nextCurrentLast];
     surD = c->work.lastSur[nextCurrentLast];
@@ -551,7 +551,7 @@ void sndAuxCallbackChorus(u8 reason, SND_AUX_INFO* info, void* user) {
     rightS = info->data.bufferUpdate.right;
     surS = info->data.bufferUpdate.surround;
 
-    for (i = 0; i < 160; ++i) {
+    for (i = 0; i < SND_AUX_BLOCKSIZE; ++i) {
       *leftD = *leftS++;
       leftD++;
       *rightD = *rightS++;
@@ -598,7 +598,7 @@ void sndAuxCallbackChorus(u8 reason, SND_AUX_INFO* info, void* user) {
       }
     }
 
-    c->work.currentPosHi = c->work.src.posHi % 480;
+    c->work.currentPosHi = c->work.src.posHi % (_SND_CHORUS_NUM_BLOCKS * SND_AUX_BLOCKSIZE);
     c->work.currentPosLo = c->work.src.posLo;
     c->work.currentLast = nextCurrentLast;
     break;
@@ -630,13 +630,13 @@ bool sndAuxCallbackPrepareChorus(SND_AUX_CHORUS* chorus) {
   chorus->work.lastLeft[0] = (s32*)salMalloc(0x1680);
 
   if (chorus->work.lastLeft[0] != NULL) {
-    chorus->work.lastRight[0] = chorus->work.lastLeft[0] + 0x1e0;
-    chorus->work.lastSur[0] = chorus->work.lastRight[0] + 0x1e0;
+    chorus->work.lastRight[0] = chorus->work.lastLeft[0] + (_SND_CHORUS_NUM_BLOCKS * SND_AUX_BLOCKSIZE);
+    chorus->work.lastSur[0] = chorus->work.lastRight[0] + (_SND_CHORUS_NUM_BLOCKS * SND_AUX_BLOCKSIZE);
 
-    for (i = 1; i < 3; ++i) {
-      chorus->work.lastLeft[i] = chorus->work.lastLeft[0] + i * 0xa0;
-      chorus->work.lastRight[i] = chorus->work.lastRight[0] + i * 0xa0;
-      chorus->work.lastSur[i] = chorus->work.lastSur[0] + i * 0xa0;
+    for (i = 1; i < _SND_CHORUS_NUM_BLOCKS; ++i) {
+      chorus->work.lastLeft[i] = chorus->work.lastLeft[0] + i * SND_AUX_BLOCKSIZE;
+      chorus->work.lastRight[i] = chorus->work.lastRight[0] + i * SND_AUX_BLOCKSIZE;
+      chorus->work.lastSur[i] = chorus->work.lastSur[0] + i * SND_AUX_BLOCKSIZE;
     }
 
     lastLeft = chorus->work.lastLeft[0];
@@ -652,7 +652,7 @@ bool sndAuxCallbackPrepareChorus(SND_AUX_CHORUS* chorus) {
     chorus->work.oldLeft[0] = chorus->work.oldLeft[1] = chorus->work.oldLeft[2] = chorus->work.oldLeft[3] = 0;
     chorus->work.oldRight[0] = chorus->work.oldRight[1] = chorus->work.oldRight[2] = chorus->work.oldRight[3] = 0;
     chorus->work.oldSur[0] = chorus->work.oldSur[1] = chorus->work.oldSur[2] = chorus->work.oldSur[3] = 0;
-    chorus->work.src.trigger = 480;
+    chorus->work.src.trigger = _SND_CHORUS_NUM_BLOCKS * SND_AUX_BLOCKSIZE;
     chorus->work.src.target = 0;
     return sndAuxCallbackUpdateSettingsChorus(chorus);
   }

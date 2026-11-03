@@ -261,7 +261,7 @@ void __OSBootDolSimple(u32 doloffset, u32 restartCode, void* regionStart, void* 
 
     __DVDPrepareResetAsync(Callback);
     __OSMaskInterrupts(0xFFFFFFE0);
-    __OSUnmaskInterrupts(0x400);
+    __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_DI);
     OSEnableInterrupts();
 
 #if SDK_REVISION < 1
@@ -315,8 +315,8 @@ void __OSBootDol(u32 doloffset, u32 restartCode, const char** argv) {
     sprintf(doloffInString, "%d", doloffset);
     argvlen = 0;
 
-    if (argv != 0) {
-        while (argv[argvlen] != 0) {
+    if (argv != NULL) {
+        while (argv[argvlen] != NULL) {
             argvlen++;
         }
     }

@@ -19,7 +19,7 @@ static void DLsetdelay(_SND_REVHI_DELAYLINE* delayline, s32 len) {
 static void DLcreate(_SND_REVHI_DELAYLINE* delayline, s32 length) {
   delayline->length = (s32)length * sizeof(f32);
   delayline->inputs = (f32*)salMalloc(length * sizeof(f32));
-  memset(delayline->inputs, 0, length * sizeof(length));
+  memset(delayline->inputs, 0, length * sizeof(*delayline->inputs));
   delayline->lastOutput = 0.f;
   DLsetdelay(delayline, length >> 1);
   delayline->inPoint = 0;
@@ -30,8 +30,8 @@ static void DLdelete(_SND_REVHI_DELAYLINE* delayline) { salFree(delayline->input
 bool ReverbHICreate(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32 damping,
                     f32 preDelay, f32 crosstalk) {
   static int lens[] = {1789, 1999, 2333, 433, 149, 47, 73, 67};
-  unsigned char i; // r31
-  unsigned char k; // r29
+  unsigned char i;
+  unsigned char k;
   if (coloration < 0.f || coloration > 1.f || time < 0.01f || time > 10.f || mix < 0.f ||
       mix > 1.f || crosstalk < 0.f || crosstalk > 1.f || damping < 0.f || damping > 1.f ||
       preDelay < 0.f || preDelay > 0.1f) {
@@ -85,7 +85,7 @@ bool ReverbHICreate(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32
 
 bool ReverbHIModify(struct _SND_REVHI_WORK* rv, float coloration, float time, float mix,
                     float damping, float preDelay, float crosstalk) {
-  u8 i; // r30
+  u8 i;
 
   if (coloration < 0.f || coloration > 1.f || time < 0.01f || time > 10.f || mix < 0.f ||
       mix > 1.f || crosstalk < 0.f || crosstalk > 1.f || damping < 0.f || damping > 1.f ||

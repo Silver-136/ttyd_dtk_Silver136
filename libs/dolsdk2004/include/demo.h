@@ -18,4 +18,4 @@ extern u32 DEMOFontBitmap[768];
 }
 #endif
 
-#endif // _DOLPHIN_DEMO_H_
+#endif // _DEMO_H_

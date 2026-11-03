@@ -59,11 +59,11 @@ static BOOL ProcessNextCommand(void) {
 
     ASSERTLINE(310, n < 3);
 
-	if (CommandList[n].command == 1) {
+	if (CommandList[n].command == DVD_COMMAND_READ) {
 		++NextCommandNumber;
 		Read(CommandList[n].address, CommandList[n].length, CommandList[n].offset, CommandList[n].callback);
 		return TRUE;
-	} else if (CommandList[n].command == 2) {
+	} else if (CommandList[n].command == DVD_COMMAND_SEEK) {
 		++NextCommandNumber;
 		DVDLowSeek(CommandList[n].offset, CommandList[n].callback);
 		return TRUE;
@@ -258,10 +258,10 @@ static void SeekTwiceBeforeRead(void* addr, u32 length, u32 offset, DVDLowCallba
         newOffset = (offset & ~0x7FFF) + WorkAroundSeekLocation;
 	}
 
-	CommandList[0].command = 2;
+	CommandList[0].command = DVD_COMMAND_SEEK;
 	CommandList[0].offset = newOffset;
 	CommandList[0].callback = callback;
-	CommandList[1].command = 1;
+	CommandList[1].command = DVD_COMMAND_READ;
 	CommandList[1].address = addr;
 	CommandList[1].length = length;
 	CommandList[1].offset = offset;
@@ -272,7 +272,7 @@ static void SeekTwiceBeforeRead(void* addr, u32 length, u32 offset, DVDLowCallba
 }
 
 static void WaitBeforeRead(void* addr, u32 length, u32 offset, DVDLowCallback callback, OSTime wait) {
-	CommandList[0].command = 1;
+	CommandList[0].command = DVD_COMMAND_READ;
 	CommandList[0].address = addr;
 	CommandList[0].length = length;
 	CommandList[0].offset = offset;

@@ -50,14 +50,14 @@ int TRKTestForPacket(void) {
     MWTRACE(4, "TestForPacket : FreeBuffer is  %ld\n", id);
     TRKSetBufferPosition(b, 0);
 
-    if (TRKReadUARTN(&hdr, 0x40) == 0) {
-        TRKAppendBuffer_ui8(b, (unsigned char*)&hdr, 0x40);
+    if (TRKReadUARTN(&hdr, sizeof(hdr)) == 0) {
+        TRKAppendBuffer_ui8(b, (unsigned char*)&hdr, sizeof(hdr));
         id = bufIdx;
 
-        if ((bytes = hdr.size - 0x40) > 0) {
+        if ((bytes = hdr.size - sizeof(hdr)) > 0) {
             MWTRACE(1, "Reading payload %ld bytes\n", bytes);
 
-            if (TRKReadUARTN(payload, hdr.size - 0x40) == 0) {
+            if (TRKReadUARTN(payload, hdr.size - sizeof(hdr)) == 0) {
                 TRKAppendBuffer_ui8(b, payload, hdr.size);
             } else {
                 MWTRACE(8, "TestForPacket : Invalid size of packet hdr.size\n");

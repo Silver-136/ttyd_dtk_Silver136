@@ -163,7 +163,7 @@ typedef struct VS_BUFFER {
   u32 last;                    // offset 0x4, size 0x4
   u32 finalGoodSamples;        // offset 0x8, size 0x4
   u32 finalLast;               // offset 0xC, size 0x4
-  SND_VIRTUALSAMPLE_INFO info; // offset 0x10, size 0x14
+  SND_VIRTUALSAMPLE_INFO info; // offset 0x10
 } VS_BUFFER;
 
 typedef struct _VS {
@@ -171,10 +171,10 @@ typedef struct _VS {
   u8 numBuffers;              // offset 0x0, size 0x1
   u32 bufferLength;           // offset 0x4, size 0x4
   VS_BUFFER streamBuffer[64]; // offset 0x8, size 0xB00
-  u8 voices[64];              // offset 0x908, size 0x40
-  u16 nextInstID;             // offset 0x948, size 0x2
+  u8 voices[64];              // size 0x40
+  u16 nextInstID;             // size 0x2
   u32 (*callback)(u8,
-                  const SND_VIRTUALSAMPLE_INFO*); // offset 0x94C, size 0x4
+                  const SND_VIRTUALSAMPLE_INFO*); // size 0x4
 } VS;
 
 extern VS vs;

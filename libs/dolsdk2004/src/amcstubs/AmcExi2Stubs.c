@@ -1,9 +1,6 @@
 #include <dolphin.h>
 #include <dolphin/amc/AmcExi2Comm.h>
 
-// prototypes
-int AMC_IsStub(void);
-
 void EXI2_Init(volatile unsigned char **inputPendingPtrRef, EXICallback monitorCallback) {}
 
 void EXI2_EnableInterrupts(void) {}
