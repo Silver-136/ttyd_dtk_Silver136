@@ -989,7 +989,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, 0, STRING("op_09"), 0, STRING("peach"))
     WAIT_MS(1000)
 
-    // The camera pulls in; the merchant says the box will open for Peach, and she agrees to try.
+    // The camera pulls in; the merchant offers Peach the contents if the box opens for her, and she agrees to try.
     CALL(evt_cam3d_evt_set, -450, 250, 1030, -135, 100, 482, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_flag_onoff, 1, STRING("peach"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 1, STRING("nazo"), NPC_FLAG_INSTANT_TURN)

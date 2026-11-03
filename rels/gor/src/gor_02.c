@@ -1983,7 +1983,7 @@ EVT_BEGIN(oyabun_talk)
         CASE_EQUAL(STG2_41_FRANKLYS_HOUSE_STG_2)
         IF_INT_EQUAL(GSWF_GOR_ISHNAIL_PASSWORD_TOLD, 1)
             // At the step where Mario needs to find the Parlor's secret:
-            // the boss grumbles that this is the Robbo Thieves' fortress.
+            // the boss repeats the shop and password instructions for reaching Don Pianta.
             CALL(evt_msg_print, 0, STRING("mac_2_040"), 0, STRING("me"))
             RETURN
         END_IF
@@ -2651,7 +2651,7 @@ static EVT_BEGIN(sanders_talk)
         CALL(evt_item_set_position, STRING("tegami"), 0, -1000, 0)
         WAIT_MS(300)
 
-        // He walks to his door and opens it for fresh air while the others wait; then closes it again.
+        // After asking for a moment alone, he walks to his door and opens it while the others wait; then closes it again.
         CALL(evt_npc_set_ry, STRING("me"), 270)
         CALL(evt_npc_move_position, STRING("me"), 0, -140, 0, FLOAT(60.0f), 0)
         SPAWN_EVENT(PTR(evt_gor_door_open_sanders))
@@ -2754,7 +2754,7 @@ EVT_BEGIN(kuribo4_talk)
             IF_INT_GREATER(LW(0), 0)
                 CALL(iri_13_make_item_tbl)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
-                    // He asks for trunks and Mario nods and shrugs between his lines.
+                    // He misunderstands the job and Mario nods and shrugs between his lines.
                     CALL(evt_msg_print, 0, STRING("irai_13_001"), 0, 0)
                     CALL(evt_mario_set_pose, STRING("M_N_5B"))
                     WAIT_MS(500)
@@ -4234,7 +4234,7 @@ static DoorParam door_data_04 = {
 };
 
 /**
- * Message shown when the Trouble Center's door is tried while the shop is not ready ("preparing", gor_02_035):
+ * Message shown when the Trouble Center's door is tried while the shop is not ready (an out-of-office notice, gor_02_035):
  * locks the controls for the line, then frees them.
  */
 EVT_BEGIN(evt_door_04_junbi)
@@ -5707,8 +5707,8 @@ EVT_END()
 
 /**
  * Frankly's tutorial lecture after the fence is gone:
- * asks whether Mario wants the lesson (mac_0_084_02), lets Goombella chip in,
- * and sets STG0_10_01_FRANKLYS_TUTORIAL. If he declines twice he cuts the lecture short.
+ * asks whether Mario knows Action Commands (mac_0_084_02), lets Goombella chip in,
+ * and sets STG0_10_01_FRANKLYS_TUTORIAL. If he says he knows them and declines practice, he skips the lesson.
  */
 EVT_BEGIN(kurihakase_lecture)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -5837,7 +5837,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
 
-    // A message announces that the partner is back by the door; the Professor is placed at the front door.
+    // A message asks Mario to wait; the Professor is placed at the front door.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_0_121_01"), 0, 0)
     WAIT_WHILE(GF(0))

@@ -1012,7 +1012,7 @@ static EVT_BEGIN(evt_unlock)
     RETURN
 EVT_END()
 
-/** Waits until Mario is within 125 units of the central Boo and then plays its whispering message (stg4_jin_53). */
+/** Waits until Mario is within 125 units of the central Boo and then plays its sniffing message (stg4_jin_53). */
 EVT_BEGIN(tyuou_teresa_kusukusu)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
@@ -1058,12 +1058,12 @@ EVT_BEGIN(tyuou_teresa_init)
 EVT_END()
 
 /**
- * Talk script of the central Boo: asks whether to carry on (stg4_jin_54),
+ * Talk script of the central Boo: asks whether Mario will be mean to it (stg4_jin_54),
  * then the Boo is startled and swells to four times its size (stg4_jin_56..57),
  * vanishes and starts the 1000-Boos swarm (senteresa_evt); after its appearance barrier the story becomes "1000 Boos".
  */
 EVT_BEGIN(tyuou_teresa_talk)
-    // The central Boo asks Mario whether he means to be mean to it; a no sends him away.
+    // The central Boo asks Mario whether he means to be mean to it; a yes sends him away.
     CALL(evt_msg_print, 0, STRING("stg4_jin_54"), 0, STRING("中央テレサ"))
     CALL(evt_msg_select, 0, STRING("stg4_jin_54_yn"))
     IF_INT_EQUAL(LW(0), 0)

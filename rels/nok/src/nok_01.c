@@ -681,7 +681,7 @@ EVT_BEGIN(nokorin_talk)
             IF_INT_EQUAL(LW(0), 2)
                 SET_VALUE(GSWF_NOK_KOOPIE_KOO_BLESSING_DONE, 1)
 
-                // Koops is in the party: she apologizes to him and hops away.
+                // Koops is in the party: she apologizes to him, asks Mario to look after him and hops away.
                 CALL(evt_msg_print, 0, STRING("stg1_nok_67"), 0, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_nok_68"), 0, 0)
                 CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -704,7 +704,7 @@ EVT_BEGIN(nokorin_talk)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
 
-        // Before chapter 2: she cheers Koops on and asks Mario to look after him.
+        // Before chapter 2: she cheers Koops on.
         CALL(evt_msg_print, 0, STRING("stg1_nok_71"), 0, 0)
     ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_72"), 0, 0)

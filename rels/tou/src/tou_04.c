@@ -2457,7 +2457,7 @@ EVT_BEGIN(evt_bred_nigeru)
     RETURN
 EVT_END()
 
-/** Prints Mario's one-line remark stg3_tou_462_01 with controls locked. */
+/** Prints the locked-door notice stg3_tou_462_01 with controls locked. */
 EVT_BEGIN(boss_msg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg3_tou_462_01"), 0, 0)

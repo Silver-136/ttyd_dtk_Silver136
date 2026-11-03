@@ -615,7 +615,8 @@ EVT_END()
 
 /**
  * Rescue of Bobbery from the tree (STG5_15_RUNAWAY_SAILORS):
- * Bobbery thanks Mario (stg5_muj_33_01), the party walks to his side and the story advances.
+ * Bobbery cries out in pain (stg5_muj_33_01); later dialogue thanks Mario (stg5_muj_34_01).
+ * The party walks to his side and the story advances.
  */
 EVT_BEGIN(sanders_kyushutsu_sub)
     CALL(evt_mario_key_onoff, 0)

@@ -238,7 +238,7 @@ EVT_BEGIN(evt_powan)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 
-    // Detective Pennington hops in and greets Mario.
+    // The Sanctum Manager's travel notice is read before Detective Pennington hops in.
     CALL(evt_msg_print, 0, STRING("stg6_pik_06"), 0, 0)
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -273,7 +273,7 @@ EVT_BEGIN(evt_powan)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_set_dir_to_target, STRING("ポワン探偵"), STRING("mario"))
 
-    // Pennington speaks about the sanctum.
+    // Pennington greets Mario and speaks about the sanctum.
     CALL(evt_msg_print, 0, STRING("stg6_pik_08"), 0, STRING("ポワン探偵"))
     CALL(evt_mario_set_dir, 270, 200, 0)
     CALL(evt_party_set_dir, 0, 270, 200)

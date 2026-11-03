@@ -425,7 +425,7 @@ EVT_BEGIN(gonbaba_event)
         END_LOOP
     END_INLINE_EVENT
 
-    // The partner is worried about Hooktail, and Mario nods.
+    // The partner celebrates beating Hooktail and mentions finding the Crystal Star; Mario nods.
     CALL(evt_msg_print_party, STRING("stg1_gon_33_01"))
     CALL(evt_party_set_dir, 0, 270, -1)
     WAIT_MS(800)

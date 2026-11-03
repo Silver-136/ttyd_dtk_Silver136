@@ -171,7 +171,6 @@ EVT_BEGIN(majinaisi_table_talk)
         CALL(evt_party_set_dir, 0, 270, 300)
     END_INLINE_EVENT
 
-    // The cube opens and Mario jumps out in a burst of star dust; Merlee promises he will win in style.
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 1, 105, 0, 60)
         CALL(evt_party_set_dir, 1, 270, 300)
@@ -338,6 +337,8 @@ EVT_BEGIN(majinaisi_table_talk)
             GOTO(4)
         END_IF
     END_INLINE_EVENT
+
+    // The cube opens and Mario jumps out in a burst of star dust; Merlee promises he will win in style.
     BEGIN_INLINE_EVENT
         WAIT_MS(100)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

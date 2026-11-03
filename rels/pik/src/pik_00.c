@@ -1114,7 +1114,7 @@ EVT_END()
 
 /**
  * Talk script for the station attendant.
- * Before the return to Rogueport (STG6_54_WELCOME_BACK) he gives a plain greeting;
+ * Before the return to Rogueport (STG6_54_WELCOME_BACK) he says there is time before departure;
  * later he tells Mario the train is not ready until the return trip has started,
  * and otherwise offers a ride back on the Excess Express.
  * If Mario has the Train Ticket he shows it, the attendant steps aside and evt_train boards the train;

@@ -141,7 +141,7 @@ EVT_BEGIN(kpa_07_evt)
     WAIT_FRAMES(1)
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("K_1"), STRING("T_7"))
 
-    // Out-of-breath Kammy reaches Bowser and tells him she has found something.
+    // Out-of-breath Kammy reaches Bowser and praises him.
     CALL(evt_msg_print, 0, STRING("kpa_stg6_009"), 0, STRING("ババ"))
     CALL(evt_npc_set_anim, STRING("ババ"), STRING("S_1"))
     CALL(evt_mario_set_dir, 270, 300, 0)

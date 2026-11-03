@@ -4094,7 +4094,8 @@ EVT_END()
 
 /**
  * Mony and Peton boarding the ship (STG5_64_01_WEDDING_RING_DELIVERY):
- * when Mario brings them to the ship they say their thanks (stg5_muj_145, 146)
+ * when Mario brings them to the ship Peeton says they are ready for Rogueport,
+ * and Mony urges her father to hold on (stg5_muj_145, 146)
  * and the story becomes STG5_64_02_F_F_SAIL_OFF.
  */
 EVT_BEGIN(mony_peton_boarding)

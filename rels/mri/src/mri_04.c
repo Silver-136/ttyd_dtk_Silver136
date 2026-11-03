@@ -299,7 +299,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_move_position, STRING("チュチュリーナ"), 65, 0, 0, FLOAT(120.0f), 0)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_S_1"))
 
-    // She says the Crystal Star is near the bottom of the tree and that the cell key is in the room.
+    // She greets Mario again.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e13_03"), 0, STRING("チュチュリーナ"))
     CALL(evt_cam3d_evt_set, FLOAT(137.39941f), FLOAT(25.299805f), FLOAT(635.6992f), FLOAT(36.69922f), FLOAT(131.19922f), FLOAT(-83.69922f), 400, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -318,6 +318,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_msg_print_party, STRING("stg2_mri_e13_04"))
     CALL(evt_cam3d_evt_set, 67, 125, 180, -6, 150, 11, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+
+    // She says the Crystal Star is near the bottom of the tree.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e13_05"), 0, STRING("チュチュリーナ"))
     CALL(evt_cam3d_evt_set, FLOAT(123.19922f), FLOAT(105.69922f), FLOAT(310.0996f), FLOAT(-6.0f), FLOAT(150.0f), FLOAT(11.0f), 300, EASING_SINE_IN_OUT)
     WAIT_MS(200)

@@ -407,7 +407,7 @@ EVT_BEGIN(nokonoko_F_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
 
-        // Without a request, he chats about the weather; the lines change as the story advances.
+        // Without a request, he chats about flowers and the weather; the lines change as the story advances.
         CALL(evt_msg_print, 0, STRING("stg1_nok_17"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
         CALL(evt_msg_print, 0, STRING("stg1_nok_17_01"), 0, 0)

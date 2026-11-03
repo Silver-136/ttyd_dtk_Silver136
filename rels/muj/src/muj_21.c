@@ -113,7 +113,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ピーチ姫"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_7"), STRING("P_T_13"))
 
-    // Peach tells Mario how lovely the people of Rogueport are, and how little she liked it at first.
+    // Peach tells Mario how lovely the people of Rogueport are, despite her unhappy memories of being kidnapped there.
     CALL(evt_msg_print, 0, STRING("ep_27"), 0, STRING("ピーチ姫"))
     CALL(evt_npc_set_ry, STRING("ピーチ姫"), 270)
     WAIT_FRAMES(1)

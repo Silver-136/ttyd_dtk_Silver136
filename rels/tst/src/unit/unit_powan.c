@@ -421,7 +421,7 @@ EVT_END()
  * Respawns Powan after a battle (LW(5) is the respawn counter, stored in its unit work 0):
  * spawns entry_powan high above the stage at x = 80,
  * lets it fall to the floor and then prints a Japanese complaint from it that depends on the counter (the lines
- * get shorter and more worn out each time).
+ * get more worn out each time).
  */
 static EVT_BEGIN(respawn_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_powan), 0)

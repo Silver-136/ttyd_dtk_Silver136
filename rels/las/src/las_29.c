@@ -1908,7 +1908,7 @@ EVT_BEGIN(last_evt_3_1)
     SPAWN_EVENT(PTR(b_peach_fuwafuwa))
     WAIT_MS(500)
 
-    // She asks Mario again whether he will serve her; Mario answers and the Queen decides he must perish.
+    // She asks Mario again whether he will serve her; his partner answers and the Queen decides he must perish.
     CALL(evt_msg_print, 0, STRING("stg8_las_146"), PTR(b_peach_msgcb), STRING("ブラックピーチ"))
     CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)

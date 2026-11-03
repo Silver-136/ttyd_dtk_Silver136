@@ -3581,7 +3581,7 @@ EVT_BEGIN(shukko_event)
     CALL(evt_npc_move_position, STRING("マルコ"), LW(0), LW(2), 1000, 0, 0)
     WAIT_MS(300)
 
-    // Flavio gives the order to cast off and the crew cheers.
+    // Flavio gives the order to cast off and a sailor calls for them to wait.
     CALL(evt_msg_print, 0, STRING("mac_4_093"), 0, STRING("マルコ"))
     CALL(evt_cam3d_evt_set, 95, 207, 763, 95, 89, 98, 400, EASING_SINE_IN_OUT)
     WAIT_MS(400)
@@ -6708,7 +6708,7 @@ EVT_BEGIN(return_gorotsuki_town)
     // Goombella notices the ship; the camera moves to the dock and Mario appears.
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリスチーヌ"), 0, 0, 0, 0, 0, 0, 0, 48)
 
-    // The camera moves to the dock; Mario appears and talks about arriving in Rogueport.
+    // The camera moves to the dock and Mario appears.
     CALL(evt_cam3d_evt_set, 2, 225, 1015, 2, 50, 243, 3000, EASING_SINE_IN_OUT)
     WAIT_MS(3000)
     WAIT_WHILE(GF(10))

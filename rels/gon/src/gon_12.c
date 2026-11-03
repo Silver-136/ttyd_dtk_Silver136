@@ -166,8 +166,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_cam3d_evt_set, -78, 152, 528, -78, 57, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
 
-    // Ms. Mowz turns around and her theme starts; she greets Mario and introduces herself as a globe-trotting
-    // thief.
+    // Ms. Mowz turns around and her theme starts; she greets Mario.
     CALL(evt_npc_reverse_ry, STRING("チュチュリーナ"))
     WAIT_MS(500)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_CYUCYURINA1"))
@@ -175,7 +174,8 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_cam3d_evt_set, 141, 91, 263, 141, 45, -2, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
 
-    // Mario's partner asks her about the castle and the Crystal Star; Ms. Mowz is intrigued.
+    // Mario's partner asks who she is; Ms. Mowz introduces herself as a globe-trotting thief.
+    // The partner explains their search for the Crystal Star, which intrigues her.
     CALL(evt_msg_print_party, STRING("stg1_gon_18_02"))
     CALL(evt_cam3d_evt_set, -110, 75, 225, -110, 35, 0, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)

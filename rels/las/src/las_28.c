@@ -858,7 +858,7 @@ EVT_END()
 
 /**
  * Event script: Bowser crashes through the ceiling of the Queen's Chamber in a rain of rubble,
- * landing on top of Sir Grodus, and quarrels with him while Kammy Koopa (ババ) flies in.
+ * landing on top of Sir Grodus, and quarrels with Mario while Kammy Koopa (ババ) flies in.
  * Mario fights Bowser and Kammy in battle 13; the barrier around Peach drops afterwards,
  * Bowser and Kammy are left dazed with spinning stars, Grodus (now cracked) staggers away,
  * and the story moves to STG8_15_GRODUS. Bowser and Kammy get talk events (koopa_talk/baba_talk).

@@ -367,7 +367,7 @@ EVT_BEGIN(elder_rescue)
     END_INLINE_EVENT
     CALL(evt_snd_bgmoff, PSND_PAUSE)
 
-    // The Elder scolds Punio for coming back, and he protests that he only went to find help.
+    // The Elder scolds Punio for leaving his sister behind, and he protests that he only went to find help.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG2_PUNI1"))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e14_01"), 0, STRING("プニ族長老"))
     WAIT_WHILE(GF(0))
@@ -567,7 +567,7 @@ EVT_BEGIN(sister_regl)
     RETURN
 EVT_END()
 
-/** Talk script of Punio's sister in the cell: asks Mario to help. */
+/** Talk script of Punio's sister in the cell: calls out to her big brother. */
 static EVT_BEGIN(sister_talk)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e14_14"), 0, STRING("me"))
     RETURN

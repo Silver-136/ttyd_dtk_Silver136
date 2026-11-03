@@ -248,7 +248,7 @@ EVT_END()
 /**
  * Scene at STG4_16_LEAVING_TWILIGHT_TOWN:
  * Mario's mail alert (exclamation bubble and controller rumble), the partner comments (tik_07_mail4_00);
- * after he presses A the mail jingle plays, Peach's mail is read (tik_07_mail4_01, 02),
+ * after he presses A the mail jingle plays, Peach's mail is read (tik_07_mail4_01) and the partner reacts (tik_07_mail4_02),
  * story progress becomes STG4_17_A_MAIL_FROM_PEACH and the mail is opened (mail slot 3).
  */
 static EVT_BEGIN(peach_mail)

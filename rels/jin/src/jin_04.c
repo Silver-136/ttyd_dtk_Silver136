@@ -346,7 +346,7 @@ EVT_BEGIN(irekawatta_mario)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
 
-    // The fake Mario (Doopliss in Mario's shape) talks to the partner.
+    // The partner talks to the fake Mario (Doopliss in Mario's shape).
     LABEL(101)
     CALL(evt_npc_set_stay_anim, STRING("にせマリオ"))
     CALL(evt_npc_set_ry, STRING("にせマリオ"), 270)
@@ -589,7 +589,7 @@ EVT_END()
 
 /**
  * Cutscene after the second Doopliss battle: Doopliss is beaten, the Ruby Star hops to Mario,
- * Mario's real shape returns (the shadow tint goes off), Doopliss runs away, the partners cheer,
+ * Mario's real shape returns (the shadow tint goes off), Doopliss runs away, the partners react,
  * Vivian takes the Ruby Star and brings it back and the partners rejoin.
  * The story advances to "The Ruby Star" and the Star Stone cutscene (evt_sub_starstone) plays.
  */
@@ -749,7 +749,7 @@ EVT_BEGIN(hontonosugata_mario)
     CALL(evt_cam3d_evt_set, 110, 730, 240, 110, 690, -6, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
 
-    // The partners cheer one by one.
+    // The partners react one by one.
     CALL(evt_msg_print, 0, STRING("stg4_jin_29"), 0, STRING("クリスチーヌ"))
     CALL(evt_cam3d_evt_set, 76, 732, 261, 76, 692, -6, 400, EASING_SINE_IN_OUT)
     WAIT_MS(400)

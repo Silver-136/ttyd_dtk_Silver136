@@ -1632,7 +1632,7 @@ EVT_END()
 
 /**
  * Script run for a freed NPC (name in LW(0): the waitress or the conductor):
- * the NPC thanks Mario (stg6_rsh_249_00 / 249_01) while
+ * the NPC cries out (stg6_rsh_249_00 / 249_01) while
  * hopping away from the swarm in three shrinking jumps (400, 200 and 100 ms) in a random direction,
  * and ends in a relieved pose.
  */
@@ -1711,7 +1711,7 @@ EVT_END()
 
 /**
  * Cutscene after both captives are freed: the swarm flees, the camera pulls back,
- * the conductor and waitress thank Mario (stg6_rsh_240_00, 241, 240_01),
+ * the conductor and waitress speak about their rescue and the remaining captives (stg6_rsh_240_00, 241, 240_01),
  * the story advances to STG6_47_ESCAPING_THE_SMORGS and the west door opens.
  */
 static EVT_BEGIN(evt_moamoa_escape)
@@ -1825,7 +1825,8 @@ EVT_END()
 
 /**
  * Talk script of the conductor in the baggage car:
- * before the escape he says he is stuck (stg6_rsh_249_01_01), afterwards he thanks Mario (stg6_rsh_242).
+ * before the escape he asks Mario to help the waitress (stg6_rsh_249_01_01); afterwards he describes the creatures
+ * entering through the window and the remaining captive passengers (stg6_rsh_242).
  */
 static EVT_BEGIN(talk_syashou)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
@@ -1855,7 +1856,8 @@ EVT_END()
 
 /**
  * Talk script of the waitress in the baggage car:
- * before the escape she says she is stuck (stg6_rsh_249_01_02), afterwards she thanks Mario (stg6_rsh_243).
+ * before the escape she asks Mario to help the conductor (stg6_rsh_249_01_02); afterwards she expresses fear
+ * and concern for the other passengers (stg6_rsh_243).
  */
 static EVT_BEGIN(talk_waitless)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)

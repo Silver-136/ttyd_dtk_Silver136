@@ -1613,7 +1613,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
-    // Don Pianta, sunk in gloom, answers only with silence.
+    // Don Pianta, sunk in gloom, addresses Francesca after a long silence.
     CALL(evt_msg_print, 0, STRING("mac_5_046"), 0, STRING("マフィアボス"))
     CALL(evt_npc_set_anim, STRING("マフィアボス"), STRING("A_1"))
     WAIT_MS(500)
@@ -1954,7 +1954,7 @@ EVT_END()
 
 /**
  * Dialogue of the two henchmen (マフィア１ and マフィア２) when Mario talks to them
- * while Don Pianta is away (mac_5_009, mac_5_010).
+ * while Don Pianta is asleep (mac_5_009, mac_5_010).
  */
 EVT_BEGIN(maffiaboss_nekomu00)
     CALL(evt_msg_print, 0, STRING("mac_5_009"), 0, STRING("マフィア１"))
@@ -2914,7 +2914,7 @@ EVT_BEGIN(bteresa_table_talk)
 #endif
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
 
-    // Trouble Center request 11 (bringing back Teresa's medals) is active: she hands over the reward.
+    // Trouble Center request 11 (the parlor's Grand Opening request) is active: she hands over the reward.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_PLAY_WITH_ME)
         CALL(evt_msg_print, 0, STRING("irai_11_001"), 0, STRING("me"))
         CALL(yuugijou_get_takeoutflag, LW(0))

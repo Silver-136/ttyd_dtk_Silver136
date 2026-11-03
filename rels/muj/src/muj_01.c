@@ -216,7 +216,7 @@ static EVT_BEGIN(garawaru_talk)
         CASE_EQUAL(STG5_18_01_BOBBERY_JOINS)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
-            // With Bobbery in the party, he greets the captain and spots Bobbery.
+            // With Bobbery in the party but not active, he greets the captain and asks whether Bobbery will be found.
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_05"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_71_04"), 0, STRING("me"))
@@ -337,13 +337,13 @@ EVT_END()
 
 /**
  * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
- * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
+ * if the missing-sailor conversation has not yet run, otherwise he talks according to the story stage.
  */
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_17_WINE_OBTAINED)
         IF_INT_EQUAL(GSWF_MUJ_01_BOBBERY_MISSING_SCENE_SEEN, 0)
-            // While Bobbery is being found, the timid sailor must first be persuaded.
+            // While Bobbery is being found, the crew first discusses the missing sailor.
             CALL_CHILD(PTR(settoku_event_main))
         END_IF
     END_SWITCH
@@ -353,7 +353,7 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_msg_print, 0, STRING("stg5_muj_22_0"), 0, STRING("me"))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_13_BOBBERY_THE_BRIDGE)
         IF_INT_EQUAL(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 0)
-            // Flavio brushes off talk of the admiral and tells Mario to hurry.
+            // Flavio marvels that the admiral is alive and orders Mario to rescue him.
             CALL(evt_msg_print, 0, STRING("stg5_muj_31"), 0, STRING("me"))
             SET_VALUE(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 1)
         ELSE
@@ -1513,7 +1513,7 @@ static KinopioData kino_dt = {
 };
 
 /**
- * The sailors' homesickness (kyoshu): Mario and his partner overhear the crew (stg5_muj_15 to 22);
+ * The crew's island-exploration decision (kyoshu): Mario and his partner overhear the crew (stg5_muj_15 to 22);
  * Flavio asks whether Mario will help, then the story advances to STG5_12_FLAVIO_PA_PATCH
  * and control returns.
  */
@@ -1613,7 +1613,7 @@ EVT_END()
 
 /**
  * The crew splits (nakamaware): Mario walks into the camp at STG5_11_DESERTED_ISLAND,
- * the sailors argue about heading home (stg5_muj_05 to 14), and three Embers (ghost flames) appear and attack;
+ * the sailors argue over their cowardice (stg5_muj_05 to 14), and three Embers (ghost flames) appear and attack;
  * the fight is battle info 6. Afterwards kyoshu_event plays.
  * The GSWF_MUJ01_SKIP_TO_SHOW_OF_HANDS flag jumps straight to kyoshu_event.
  */
@@ -1830,7 +1830,7 @@ EVT_BEGIN(settoku_event)
 EVT_END()
 
 /**
- * Flavio persuades the timid sailor (settoku): everyone turns to face Flavio, he speaks (stg5_muj_29),
+ * Flavio learns that Bobbery is missing (settoku): everyone turns to face Flavio, he speaks (stg5_muj_29),
  * the timid sailor answers (stg5_muj_30) and GSWF_MUJ01_TIMID_SAILOR_PERSUADED is set.
  */
 EVT_BEGIN(settoku_event_main)

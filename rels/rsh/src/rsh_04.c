@@ -443,7 +443,7 @@ EVT_END()
 /**
  * Cutscene of the lost documents (shorui funshitu) in cabin 3 at STG6_21_DAY_2:
  * Pennington questions the salaryman while the camera frames them,
- * the salaryman paces and mumbles (stg6_rsh_169_xx),
+ * Pennington paces and reasons aloud (stg6_rsh_169_xx),
  * the screen blurs as the mystery deepens and the story advances to STG6_22_DOCUMENT.
  */
 // Each timed speech signals GF(0); the main movement waits for it before starting the next speech.
@@ -494,7 +494,7 @@ EVT_BEGIN(evt_shorui_funshitu)
         WAIT_MS(2000)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
 
-        // The salaryman paces and mumbles.
+        // Pennington paces and reasons aloud.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_169_00"), 0, 0)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
         SET_VALUE(GF(0), 1)
@@ -572,7 +572,7 @@ static s32 item_tbl[] = {
 /**
  * Cutscene when Mario brings the important-looking paper (Vital Paper) to the cabin:
  * the camera frames the NPCs, Mario chooses the paper from the item menu,
- * the salaryman recognises it and says thanks (stg6_rsh_172 to 177),
+ * the salaryman recognises it and Pennington asks where it was found (stg6_rsh_172 to 177),
  * and the story advances to STG6_24_A_VITAL_CLUE.
  */
 // Cancelling leaves the clue unresolved; accepting displays a temporary paper without consuming the pouch item.
@@ -678,7 +678,7 @@ static s32 item_tbl2[] = {
 
 /**
  * Talk script of the conductor (syashou) in rsh_04.
- * By story stage: his first greeting (sets STG6_01_THE_CONDUCTOR), ticket and autograph hints,
+ * By story stage: his first greeting (sets STG6_01_THE_CONDUCTOR), threat and baggage-car remarks, autograph hints,
  * the night talk where Mario can agree to help (STG6_13_TALK_TO_THE_CONDUCTOR),
  * the Blanket exchange (takes the Blanket, gives a Mushroom, STG6_19_GIVE_BLANKET), and day 2,
  * day 3 and return-trip lines.
@@ -704,7 +704,7 @@ static EVT_BEGIN(talk_syashou)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 0)
-            // Ticket and autograph hints.
+            // Remarks about the threat and the baggage-car restriction.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_07"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 1)
         ELSE
@@ -739,7 +739,7 @@ static EVT_BEGIN(talk_syashou)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_113"))
         END_IF
         CASE_LESS(STG6_15_GHOST_REQUEST)
-        // Hints for the ghost and the baggage car.
+        // A reminder to find the missing blanket.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_115"), 0, 0)
         CASE_LESS(STG6_16_THE_BAGGAGE_CAR)
         CALL_CHILD(PTR(evt_allow_kamotsu))

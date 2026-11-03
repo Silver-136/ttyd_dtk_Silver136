@@ -1496,7 +1496,7 @@ EVT_END()
 
 /**
  * Trigger on the stained carpet spot (a_yuka_simi) on day 1:
- * Mario comments (stg6_rsh_51), the partner too the first time (stg6_rsh_52),
+ * a clue message appears (stg6_rsh_51), and the partner comments the first time (stg6_rsh_52),
  * and the story advances to STG6_03_STAINED_CARPET.
  */
 static EVT_BEGIN(evt_yuka_simi)

@@ -1246,7 +1246,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_cam3d_evt_set, -26, 275, 213, -26, 192, -216, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 
-    // Mario and Flurrie talk with Punio about the tree.
+    // Flurrie tells Mario about her stage career and the Punies.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_01"), 0, STRING("party"))
     CALL(evt_mario_set_dir, 270, 200, 0)
     WAIT_MS(500)

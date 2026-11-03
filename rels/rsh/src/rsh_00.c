@@ -853,7 +853,7 @@ EVT_END()
  * Talk script of the driver (unten).
  * Picks his line by story stage: the greeting that alternates,
  * the autograph request (at STG6_10 to 11 he signs and gives Mario the Autograph with the item-get
- * fanfare, STG6_11_OBTAIN_AUTOGRAPH), hints for each later stage,
+ * fanfare, STG6_11_OBTAIN_AUTOGRAPH), comments for each later stage,
  * the Smorg scene (evt_moamoa) before STG6_46_ENGINEER, and after the story a line for where the train is.
  */
 static EVT_BEGIN(talk_unten)
@@ -861,7 +861,7 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
 
-            // His greeting alternates and early lines mention Pennington's assistant.
+            // His greeting alternates with his response to the threat.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_00"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 1)
         ELSE
@@ -869,7 +869,7 @@ static EVT_BEGIN(talk_unten)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
         END_IF
 
-        // He asks for the conductor and signs an autograph for Mario.
+        // His earlier line celebrates sunset train rides; at the autograph stage he signs for Mario.
         CASE_LESS(STG6_10_THE_CONDUCTOR_ZIP_TOAD)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         CASE_LESS(STG6_11_OBTAIN_AUTOGRAPH)
@@ -904,7 +904,7 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
 
-        // Hints for each later stage of the train mystery.
+        // Comments for each later stage of the train journey.
         CASE_LESS(STG6_19_GIVE_BLANKET)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_02"), 0, 0)
         CASE_LESS(STG6_21_DAY_2)

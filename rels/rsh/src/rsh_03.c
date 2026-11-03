@@ -925,7 +925,7 @@ EVT_BEGIN(evt_lanch_missing)
     SET_VALUE(LW(0), STRING("コック"))
     SPAWN_EVENT(PTR(dir_target))
 
-    // The cook gives his account.
+    // The cook asks what kind of dish a mystery is.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_26"), 0, STRING("コック"))
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
@@ -1000,7 +1000,7 @@ EVT_BEGIN(evt_lanch_missing)
     WAIT_MS(1500)
     CALL(evt_npc_set_autotalkpose, STRING("ウェイトレス"), STRING("B_2"), STRING("T_2"))
 
-    // The waitress gives hers.
+    // The waitress rejects Pennington's accusation.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_31"), 0, STRING("ウェイトレス"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 102, 174, 0, 50, -122, 0, EASING_SINE_IN_OUT)
@@ -1622,7 +1622,7 @@ EVT_END()
 
 /**
  * Trigger on the stained carpet spot (a_yuka_simi) on day 1:
- * Mario comments (stg6_rsh_51), the partner too the first time (stg6_rsh_52),
+ * a clue message appears (stg6_rsh_51), and the partner comments the first time (stg6_rsh_52),
  * and the story advances to STG6_03_STAINED_CARPET.
  */
 static EVT_BEGIN(evt_yuka_simi)

@@ -1371,7 +1371,7 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_cam3d_evt_set, LW(0), 92, 128, LW(0), 40, -168, 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         IF_INT_EQUAL(GSWF_GOR_FLAVIO_FIRST_TALK_DONE, 0)
-            // Flavio introduces himself as a trader and asks Mario what he longs for in life; the answer only
+            // Flavio introduces himself as a trader and asks Mario what Flavio's life lacks; the answer only
             // changes his reply.
             CALL(evt_msg_print, 0, STRING("mac_4_007"), 0, STRING("me"))
         ELSE
