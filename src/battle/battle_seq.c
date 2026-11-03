@@ -2564,7 +2564,7 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
             if (((BattleWork*)w)->movePriorityQueue[i] == -1) {
                 break;
             }
-            count = count + 1;
+            count++;
         }
     }
     for (i = 0; i < count - 1; i++) {

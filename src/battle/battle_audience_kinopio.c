@@ -321,7 +321,7 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
         }
     } else if (!(m->flags & AUDIENCE_MEMBER_FLAG_TARGETED)) {
         switch (m->itemId) {
-        case -1: {
+        case -1:
             rnd = irand(360000);
             if (rnd < 10) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT_HURIMUKI);
@@ -355,7 +355,7 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
                     }
                 }
             }
-            break; }
+            break;
         }
     }
 }

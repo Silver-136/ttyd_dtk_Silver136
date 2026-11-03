@@ -643,6 +643,7 @@ USER_FUNC(evt_unitwin_select_func) {
                     break;
                 }
             }
+            // BUG: itemFlags[i] is read before the bounds test; no match with goodsMax == 6 reads itemFlags[6], past the six-element array.
             if (!(wp->itemFlags[i] & UNITWIN_ITEM_UNAVAILABLE) && i < wp->goodsMax) {
                 if (wp->selected != i) {
                     if (wp->selected == -1) {

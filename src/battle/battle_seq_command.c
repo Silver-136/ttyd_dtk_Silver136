@@ -2991,23 +2991,23 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     case 8:
         _btlcmd_MakeSelectWeaponTable(wp, cmd->actType);
         {
-        u8 cnt;
-        u8 i;
-        _btlcmd_GetCursorPtr(cmd, cmd->actType, &cursor);
-        cnt = 0;
-        for (i = 0; i < cursor->count; i++) {
-            weapon = cmd->weapon[i].weapon;
-            if (cmd->weapon[i].enabled && (weapon->special & SPECIAL_CONFUSED_ACTION) &&
-                !(weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) && (weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
-                list[cnt++] = i;
+            u8 cnt;
+            u8 i;
+            _btlcmd_GetCursorPtr(cmd, cmd->actType, &cursor);
+            cnt = 0;
+            for (i = 0; i < cursor->count; i++) {
+                weapon = cmd->weapon[i].weapon;
+                if (cmd->weapon[i].enabled && (weapon->special & SPECIAL_CONFUSED_ACTION) &&
+                    !(weapon->targetClassFlags & TARGET_CLASS_MULTIPLE) && (weapon->targetClassFlags & TARGET_CLASS_SINGLE)) {
+                    list[cnt++] = i;
+                }
             }
-        }
-        list[cnt] = -1;
-        if (cnt) {
-            cursor->absPos = list[irand(cnt)];
-        } else {
-            return NULL;
-        }
+            list[cnt] = -1;
+            if (cnt) {
+                cursor->absPos = list[irand(cnt)];
+            } else {
+                return NULL;
+            }
         }
         if (!cmd->weapon[cursor->absPos].enabled) {
             return subsetevt_confuse_flustered;

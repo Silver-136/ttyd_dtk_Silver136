@@ -11291,9 +11291,6 @@ BOOL psndENVOn(u32 flags, const char* name) {
     return psndENVOn_f_d(flags, name, 1000, 0);
 }
 
-typedef struct PairU32_ {
-    u32 a, b;
-} PairU32_;
 /** Returns the index of environment name in the name table (or the numeric id it encodes); 0 when not found. */
 static inline s32 psndENVSearch(const char** names, const char* name) {
     s32 id;

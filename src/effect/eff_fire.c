@@ -886,6 +886,8 @@ void effFireSmokeDisp(CameraId cameraId, EffectEntry* effect) {
 
     camera = camGetPtr(cameraId);
     idx = work->age * 2;
+
+    // This bound covers only the first 30 (x, y) pairs of scale_dt.
     if (idx < 60) {
         sx = scale_dt[idx] / 128.0f;
         sy = scale_dt[idx + 1] / 128.0f;

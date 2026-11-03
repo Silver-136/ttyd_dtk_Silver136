@@ -238,45 +238,81 @@ BOOL itemGetCheck(ItemEntry* entry) {
     MarioWork* mario = marioGetPtr();
 
 #if VERSION <= VERSION_DEMO_US
-    if (!entry)
+    if (!entry) {
         return FALSE;
-    if (entry->flags2 & ITEM_FLAG2_SUNK)
+    }
+    if (entry->flags2 & ITEM_FLAG2_SUNK) {
         return FALSE;
-    if (marioStGetSystemLevel() != 0)
-    return FALSE;
-    if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))
+    }
+    if (marioStGetSystemLevel() != 0) {
         return FALSE;
-    if (gp->mapEventId)
-    return FALSE;
-    if (seqGetSeq() != SEQ_GAME)
+    }
+    if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
         return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_SHIP)
+    }
+    if (gp->mapEventId) {
         return FALSE;
-    if (vivianGetStatus())
-    return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE)
+    }
+    if (seqGetSeq() != SEQ_GAME) {
         return FALSE;
-    if (nokonoko_holdItem())
+    }
+    if (mario->currMotionId == MARIO_MOTION_SHIP) {
         return FALSE;
+    }
+    if (vivianGetStatus()) {
+        return FALSE;
+    }
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
+        return FALSE;
+    }
+    if (nokonoko_holdItem()) {
+        return FALSE;
+    }
 #else
-    if (!entry) return FALSE;
-    if (entry->flags2 & ITEM_FLAG2_SUNK) return FALSE;
+    if (!entry) {
+        return FALSE;
+    }
+    if (entry->flags2 & ITEM_FLAG2_SUNK) {
+        return FALSE;
+    }
     if (mario->characterId == CHARACTER_BOWSER) {
         if (!(mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)) {
-            if (marioStGetSystemLevel() != 0) return FALSE;
-            if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
+            if (marioStGetSystemLevel() != 0) {
+                return FALSE;
+            }
+            if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
+                return FALSE;
+            }
         }
     } else {
-        if (marioStGetSystemLevel() != 0) return FALSE;
-        if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
+        if (marioStGetSystemLevel() != 0) {
+            return FALSE;
+        }
+        if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
+            return FALSE;
+        }
     }
-    if (gp->mapEventId) return FALSE;
-    if (seqGetSeq() != SEQ_GAME) return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_SHIP) return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_PLANE) return FALSE;
-    if (vivianGetStatus()) return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
-    if (nokonoko_holdItem()) return FALSE;
+    if (gp->mapEventId) {
+        return FALSE;
+    }
+    if (seqGetSeq() != SEQ_GAME) {
+        return FALSE;
+    }
+    if (mario->currMotionId == MARIO_MOTION_SHIP) {
+        return FALSE;
+    }
+    if (mario->currMotionId == MARIO_MOTION_PLANE) {
+        return FALSE;
+    }
+    if (vivianGetStatus()) {
+        return FALSE;
+    }
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
+        return FALSE;
+    }
+    if (nokonoko_holdItem()) {
+        return FALSE;
+    }
 #endif
     {
         ItemWork* wp = itemGetWork();
@@ -289,10 +325,13 @@ BOOL itemGetCheck(ItemEntry* entry) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD)
+    if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD) {
         return FALSE;
+    }
 #else
-    if (fbatPreventMarioEventChk()) return FALSE;
+    if (fbatPreventMarioEventChk()) {
+        return FALSE;
+    }
 #endif
     switch (entry->mode) {
         case ITEM_MODE_SCATTER:
@@ -323,38 +362,70 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
     MarioWork* mario = marioGetPtr();
 
 #if VERSION <= VERSION_DEMO_US
-    if (!entry)
+    if (!entry) {
         return FALSE;
-    if (entry->flags2 & ITEM_FLAG2_SUNK)
+    }
+    if (entry->flags2 & ITEM_FLAG2_SUNK) {
         return FALSE;
-    if (marioStGetSystemLevel() != 0)
+    }
+    if (marioStGetSystemLevel() != 0) {
         return FALSE;
-    if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))
+    }
+    if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
         return FALSE;
-    if (gp->mapEventId)
-    return FALSE;
-    if (seqGetSeq() != SEQ_GAME)
+    }
+    if (gp->mapEventId) {
         return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_SHIP)
+    }
+    if (seqGetSeq() != SEQ_GAME) {
         return FALSE;
-    if (vivianGetStatus())
+    }
+    if (mario->currMotionId == MARIO_MOTION_SHIP) {
         return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE)
+    }
+    if (vivianGetStatus()) {
         return FALSE;
-    if ((u16)(mario->currMotionId - 5) <= 3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK)
+    }
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
         return FALSE;
+    }
+    if ((u16)(mario->currMotionId - 5) <= 3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
+        return FALSE;
+    }
 #else
-    if (!entry) return FALSE;
-    if (entry->flags2 & ITEM_FLAG2_SUNK) return FALSE;
-    if (marioStGetSystemLevel() != 0) return FALSE;
-    if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
-    if (entry->flags2 & ITEM_FLAG2_NO_PARTNER) return FALSE;
-    if (gp->mapEventId) return FALSE;
-    if (seqGetSeq() != SEQ_GAME) return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_SHIP) return FALSE;
-    if (vivianGetStatus()) return FALSE;
-    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) return FALSE;
-    if ((u16)(mario->currMotionId - 5) <= 3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) return FALSE;
+    if (!entry) {
+        return FALSE;
+    }
+    if (entry->flags2 & ITEM_FLAG2_SUNK) {
+        return FALSE;
+    }
+    if (marioStGetSystemLevel() != 0) {
+        return FALSE;
+    }
+    if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) {
+        return FALSE;
+    }
+    if (entry->flags2 & ITEM_FLAG2_NO_PARTNER) {
+        return FALSE;
+    }
+    if (gp->mapEventId) {
+        return FALSE;
+    }
+    if (seqGetSeq() != SEQ_GAME) {
+        return FALSE;
+    }
+    if (mario->currMotionId == MARIO_MOTION_SHIP) {
+        return FALSE;
+    }
+    if (vivianGetStatus()) {
+        return FALSE;
+    }
+    if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
+        return FALSE;
+    }
+    if ((u16)(mario->currMotionId - 5) <= 3 || mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
+        return FALSE;
+    }
 #endif
     {
         ItemWork* wp = itemGetWork();
@@ -367,8 +438,9 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD)
+    if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD) {
         return FALSE;
+    }
     return TRUE;
 #else
     return !fbatPreventMarioEventChk();
@@ -415,7 +487,9 @@ void itemMain(void) {
     }
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (!(entry->flags & ITEM_FLAG_ACTIVE)) continue;
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
+            continue;
+        }
         mode = entry->mode;
         active = TRUE;
         switch (mode) {
@@ -914,15 +988,21 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
     mario = marioGetPtr();
     found = NULL;
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
-        if (!(entry->flags & ITEM_FLAG_ACTIVE)) continue;
+        if (!(entry->flags & ITEM_FLAG_ACTIVE)) {
+            continue;
+        }
         // FAKE: the empty do-while adds a block before the continue; without it the flag tests are scheduled differently
         if (entry->flags & ITEM_FLAG_NO_TOUCH_GET) {
             do {
             } while (0);
             continue;
         }
-        if (entry->flags2 & ITEM_FLAG2_CARRIED) continue;
-        if (entry->mode == ITEM_MODE_GET) continue;
+        if (entry->flags2 & ITEM_FLAG2_CARRIED) {
+            continue;
+        }
+        if (entry->mode == ITEM_MODE_GET) {
+            continue;
+        }
         dx = x - entry->position.x;
         dy = y - entry->position.y;
         dz = z - entry->position.z;

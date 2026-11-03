@@ -598,7 +598,6 @@ s32 evt_case_equal(EventEntry* entry) { // 36
     s32 inputValue;
     s32 targetValue;
 
-
     depth = entry->switchDepth;
     targetValue = evtGetValue(entry, args[0]);
     state = entry->switchStates[depth];
@@ -626,7 +625,6 @@ s32 evt_case_not_equal(EventEntry* entry) { // 37
     s32 inputValue;
     s32 targetValue;
 
-
     depth = entry->switchDepth;
     targetValue = evtGetValue(entry, args[0]);
     state = entry->switchStates[depth];
@@ -652,7 +650,6 @@ s32 evt_case_small(EventEntry* entry) { // 38
     s32 state;
     s32 inputValue;
     s32 targetValue;
-
 
     depth = entry->switchDepth;
     targetValue = evtGetValue(entry, args[0]);
@@ -680,7 +677,6 @@ s32 evt_case_small_equal(EventEntry* entry) { // 40
     s32 inputValue;
     s32 targetValue;
 
-
     depth = entry->switchDepth;
     targetValue = evtGetValue(entry, args[0]);
     state = entry->switchStates[depth];
@@ -706,7 +702,6 @@ s32 evt_case_large(EventEntry* entry) { // 39
     s32 state;
     s32 inputValue;
     s32 targetValue;
-
 
     depth = entry->switchDepth;
     targetValue = evtGetValue(entry, args[0]);
@@ -861,7 +856,6 @@ s32 evt_case_and(EventEntry* entry) { // 44
     s32 depth = entry->switchDepth;
     s32 targetValue;
     s32 inputValue;
-
 
     targetValue = evtGetValue(entry, args[0]);
     inputValue = entry->switchValues[depth];

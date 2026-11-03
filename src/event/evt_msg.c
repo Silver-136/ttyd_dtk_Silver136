@@ -528,152 +528,233 @@ void evtMsgFmtStr(char* buf, const char* name) {
     s32 form;
 
     switch (gp->language) {
-    case LANGUAGE_US:
-    case 6:
-        switch ((signed char)*name) {
-        case 'A':
-        case 'E':
-        case 'I':
-        case 'O':
-        case 'U':
-        case 'a':
-        case 'e':
-        case 'i':
-        case 'o':
-        case 'u':
-            article = "an ";
+        case LANGUAGE_US:
+        case 6:
+            switch ((signed char)*name) {
+            case 'A':
+            case 'E':
+            case 'I':
+            case 'O':
+            case 'U':
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+                article = "an ";
+                break;
+            default:
+                article = "a ";
+                break;
+            }
+            if ((marker = strstr(buf, "<AN>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, article);
+                strcat(tmp, marker + 4);
+                strcpy(buf, tmp);
+                if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+                    len = strlen(buf) - strlen(marker);
+                    strncpy(tmp, buf, len);
+                    tmp[len] = 0;
+                    strcat(tmp, name);
+                    strcat(tmp, marker + 6);
+                }
+            } else if ((marker = strstr(buf, "<AN_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, article);
+                strcat(tmp, name);
+                strcat(tmp, marker + 9);
+            } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, name);
+                strcat(tmp, marker + 6);
+            }
             break;
-        default:
-            article = "a ";
+        case LANGUAGE_GE:
+            form = 0;
+            if (strstr(name, "<M>") != NULL) {
+                form = 0;
+            } else if (strstr(name, "<F>") != NULL) {
+                form = 1;
+            } else if (strstr(name, "<N>") != NULL) {
+                form = 2;
+            } else if (strstr(name, "<MPLdie>") != NULL) {
+                form = 3;
+            } else if (strstr(name, "<FPLdie>") != NULL) {
+                form = 4;
+            } else if (strstr(name, "<NPLdie>") != NULL) {
+                form = 5;
+#if VERSION == VERSION_EU
+            } else if (strstr(name, "<PL") != NULL) {
+                form = 6;
+#endif
+            }
+            if ((marker = strstr(buf, "<Einen>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_de_article_acc_cap_tbl[form]);
+                strcat(tmp, marker + 7);
+                strcpy(buf, tmp);
+                if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+                    len = strlen(buf) - strlen(marker);
+                    strncpy(tmp, buf, len);
+                    tmp[len] = 0;
+                    strcat(tmp, name);
+                    strcat(tmp, marker + 6);
+                }
+            } else if ((marker = strstr(buf, "<Ein_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_de_article_nom_cap_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 10);
+            } else if ((marker = strstr(buf, "<ein_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_de_article_nom_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 10);
+            } else if ((marker = strstr(buf, "<Einen_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_de_article_acc_cap_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 12);
+            } else if ((marker = strstr(buf, "<einen_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_de_article_acc_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 12);
+#if VERSION == VERSION_EU
+            } else if ((marker = strstr(buf, "<einem_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_de_article_dat_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 12);
+#endif
+            } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, name);
+                strcat(tmp, marker + 6);
+            }
             break;
-        }
-        if ((marker = strstr(buf, "<AN>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, article);
-            strcat(tmp, marker + 4);
-            strcpy(buf, tmp);
-            if ((marker = strstr(buf, "<ITEM>")) != NULL) {
-                len = strlen(buf) - strlen(marker);
-                strncpy(tmp, buf, len);
-                tmp[len] = 0;
-                strcat(tmp, name);
-                strcat(tmp, marker + 6);
-            }
-        } else if ((marker = strstr(buf, "<AN_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, article);
-            strcat(tmp, name);
-            strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, name);
-            strcat(tmp, marker + 6);
-        }
-        break;
-    case LANGUAGE_GE:
-        form = 0;
-        if (strstr(name, "<M>") != NULL) {
+        case LANGUAGE_FR:
             form = 0;
-        } else if (strstr(name, "<F>") != NULL) {
-            form = 1;
-        } else if (strstr(name, "<N>") != NULL) {
-            form = 2;
-        } else if (strstr(name, "<MPLdie>") != NULL) {
-            form = 3;
-        } else if (strstr(name, "<FPLdie>") != NULL) {
-            form = 4;
-        } else if (strstr(name, "<NPLdie>") != NULL) {
-            form = 5;
+            if (strstr(name, "<M>") != NULL) {
+                form = 0;
+            } else if (strstr(name, "<F>") != NULL) {
+                form = 1;
+            } else if (strstr(name, "<PLles>") != NULL) {
+                form = 2;
 #if VERSION == VERSION_EU
-        } else if (strstr(name, "<PL") != NULL) {
-            form = 6;
+            } else if (strstr(name, "<PLdes>") != NULL) {
+                form = 3;
 #endif
-        }
-        if ((marker = strstr(buf, "<Einen>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_de_article_acc_cap_tbl[form]);
-            strcat(tmp, marker + 7);
-            strcpy(buf, tmp);
-            if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+            }
+            if ((marker = strstr(buf, "<un>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_fr_article_tbl[form]);
+                strcat(tmp, marker + 4);
+                strcpy(buf, tmp);
+                if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+                    len = strlen(buf) - strlen(marker);
+                    strncpy(tmp, buf, len);
+                    tmp[len] = 0;
+                    strcat(tmp, name);
+                    strcat(tmp, marker + 6);
+                }
+            } else if ((marker = strstr(buf, "<Un_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_fr_article_cap_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 9);
+            } else if ((marker = strstr(buf, "<un_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_fr_article_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 9);
+            } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
                 tmp[len] = 0;
                 strcat(tmp, name);
                 strcat(tmp, marker + 6);
             }
-        } else if ((marker = strstr(buf, "<Ein_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_de_article_nom_cap_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 10);
-        } else if ((marker = strstr(buf, "<ein_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_de_article_nom_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 10);
-        } else if ((marker = strstr(buf, "<Einen_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_de_article_acc_cap_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 12);
-        } else if ((marker = strstr(buf, "<einen_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_de_article_acc_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 12);
-#if VERSION == VERSION_EU
-        } else if ((marker = strstr(buf, "<einem_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_de_article_dat_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 12);
-#endif
-        } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, name);
-            strcat(tmp, marker + 6);
-        }
-        break;
-    case LANGUAGE_FR:
-        form = 0;
-        if (strstr(name, "<M>") != NULL) {
+            break;
+        case LANGUAGE_SP:
             form = 0;
-        } else if (strstr(name, "<F>") != NULL) {
-            form = 1;
-        } else if (strstr(name, "<PLles>") != NULL) {
-            form = 2;
-#if VERSION == VERSION_EU
-        } else if (strstr(name, "<PLdes>") != NULL) {
-            form = 3;
-#endif
-        }
-        if ((marker = strstr(buf, "<un>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_fr_article_tbl[form]);
-            strcat(tmp, marker + 4);
-            strcpy(buf, tmp);
+            if (strstr(name, "<M>") != NULL) {
+                form = 0;
+            } else if (strstr(name, "<F>") != NULL) {
+                form = 1;
+            } else if (strstr(name, "<MNA>") != NULL) {
+                form = 2;
+            } else if (strstr(name, "<FNA>") != NULL) {
+                form = 3;
+            } else if (strstr(name, "<PLunos>") != NULL) {
+                form = 4;
+            } else if (strstr(name, "<PLunas>") != NULL) {
+                form = 5;
+            }
+            if ((marker = strstr(buf, "<un>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_es_article_tbl[form]);
+                strcat(tmp, marker + 4);
+                strcpy(buf, tmp);
+                if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+                    len = strlen(buf) - strlen(marker);
+                    strncpy(tmp, buf, len);
+                    tmp[len] = 0;
+                    strcat(tmp, name);
+                    strcat(tmp, marker + 6);
+                }
+            } else if ((marker = strstr(buf, "<Un_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_es_article_cap_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 9);
+            } else if ((marker = strstr(buf, "<un_ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, msg_es_article_tbl[form]);
+                strcat(tmp, name);
+                strcat(tmp, marker + 9);
+            } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
+                len = strlen(buf) - strlen(marker);
+                strncpy(tmp, buf, len);
+                tmp[len] = 0;
+                strcat(tmp, name);
+                strcat(tmp, marker + 6);
+            }
+            break;
+        case LANGUAGE_IT:
             if ((marker = strstr(buf, "<ITEM>")) != NULL) {
                 len = strlen(buf) - strlen(marker);
                 strncpy(tmp, buf, len);
@@ -681,91 +762,10 @@ void evtMsgFmtStr(char* buf, const char* name) {
                 strcat(tmp, name);
                 strcat(tmp, marker + 6);
             }
-        } else if ((marker = strstr(buf, "<Un_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_fr_article_cap_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, "<un_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_fr_article_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, name);
-            strcat(tmp, marker + 6);
-        }
-        break;
-    case LANGUAGE_SP:
-        form = 0;
-        if (strstr(name, "<M>") != NULL) {
-            form = 0;
-        } else if (strstr(name, "<F>") != NULL) {
-            form = 1;
-        } else if (strstr(name, "<MNA>") != NULL) {
-            form = 2;
-        } else if (strstr(name, "<FNA>") != NULL) {
-            form = 3;
-        } else if (strstr(name, "<PLunos>") != NULL) {
-            form = 4;
-        } else if (strstr(name, "<PLunas>") != NULL) {
-            form = 5;
-        }
-        if ((marker = strstr(buf, "<un>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_es_article_tbl[form]);
-            strcat(tmp, marker + 4);
-            strcpy(buf, tmp);
-            if ((marker = strstr(buf, "<ITEM>")) != NULL) {
-                len = strlen(buf) - strlen(marker);
-                strncpy(tmp, buf, len);
-                tmp[len] = 0;
-                strcat(tmp, name);
-                strcat(tmp, marker + 6);
-            }
-        } else if ((marker = strstr(buf, "<Un_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_es_article_cap_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, "<un_ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, msg_es_article_tbl[form]);
-            strcat(tmp, name);
-            strcat(tmp, marker + 9);
-        } else if ((marker = strstr(buf, "<ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, name);
-            strcat(tmp, marker + 6);
-        }
-        break;
-    case LANGUAGE_IT:
-        if ((marker = strstr(buf, "<ITEM>")) != NULL) {
-            len = strlen(buf) - strlen(marker);
-            strncpy(tmp, buf, len);
-            tmp[len] = 0;
-            strcat(tmp, name);
-            strcat(tmp, marker + 6);
-        }
-        break;
-    case LANGUAGE_JP:
-        strcpy(tmp, buf);
-        break;
+            break;
+        case LANGUAGE_JP:
+            strcpy(tmp, buf);
+            break;
     }
 
     // BUG: when the text has none of the markers its language looks for (or the language has no case), tmp is
@@ -787,12 +787,12 @@ USER_FUNC(evt_msg_fmt_str) {
     const char* name;
 
     switch (mode) {
-    case 0:
-        name = msgSearch(src);
-        break;
-    case 1:
-        name = src;
-        break;
+        case 0:
+            name = msgSearch(src);
+            break;
+        case 1:
+            name = src;
+            break;
     }
     strcpy(msg_article_buf, name);
     evtMsgFmtStr(msg_article_buf, item);
@@ -824,143 +824,143 @@ void evtMsgFmtInt(char* buf, s32 count) {
     strcat(msg_num_buf, found + 5);
 
     switch (gp->language) {
-    case LANGUAGE_US:
-    case LANGUAGE_SP:
-    case 6:
-        if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count != 1) {
-                strcat(msg_plural_buf, "s");
+        case LANGUAGE_US:
+        case LANGUAGE_SP:
+        case 6:
+            if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count != 1) {
+                    strcat(msg_plural_buf, "s");
+                }
+                strcat(msg_plural_buf, marker + 3);
+            } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                strcat(msg_plural_buf, marker + 3);
             }
-            strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            strcat(msg_plural_buf, marker + 3);
-        }
-        break;
-    case LANGUAGE_FR:
-        if ((marker = strstr(msg_num_buf, "<X>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count > 1) {
-                strcat(msg_plural_buf, "x");
+            break;
+        case LANGUAGE_FR:
+            if ((marker = strstr(msg_num_buf, "<X>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count > 1) {
+                    strcat(msg_plural_buf, "x");
+                }
+                strcat(msg_plural_buf, marker + 3);
+            } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count > 1) {
+                    strcat(msg_plural_buf, "s");
+                }
+                strcat(msg_plural_buf, marker + 3);
+            } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                strcat(msg_plural_buf, marker + 3);
             }
-            strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count > 1) {
-                strcat(msg_plural_buf, "s");
+            break;
+        case LANGUAGE_GE:
+            if ((marker = strstr(msg_num_buf, "<COIN>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count == 1) {
+                    strcat(msg_plural_buf, "M\xFCnze");
+                } else {
+                    strcat(msg_plural_buf, "M\xFCnzen");
+                }
+                strcat(msg_plural_buf, marker + 6);
+            } else if ((marker = strstr(msg_num_buf, "<POINT>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count == 1) {
+                    strcat(msg_plural_buf, "Punkt");
+                } else {
+                    strcat(msg_plural_buf, "Punkte");
+                }
+                strcat(msg_plural_buf, marker + 7);
+            } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count != 1) {
+                    strcat(msg_plural_buf, "s");
+                }
+                strcat(msg_plural_buf, marker + 3);
+            } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                strcat(msg_plural_buf, marker + 3);
             }
-            strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            strcat(msg_plural_buf, marker + 3);
-        }
-        break;
-    case LANGUAGE_GE:
-        if ((marker = strstr(msg_num_buf, "<COIN>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count == 1) {
-                strcat(msg_plural_buf, "M\xFCnze");
-            } else {
-                strcat(msg_plural_buf, "M\xFCnzen");
+            break;
+        case LANGUAGE_IT:
+            if ((marker = strstr(msg_num_buf, "<COIN>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count == 1) {
+                    strcat(msg_plural_buf, "moneta");
+                } else {
+                    strcat(msg_plural_buf, "monete");
+                }
+                strcat(msg_plural_buf, marker + 6);
+            } else if ((marker = strstr(msg_num_buf, "<point>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count == 1) {
+                    strcat(msg_plural_buf, "punto");
+                } else {
+                    strcat(msg_plural_buf, "punti");
+                }
+                strcat(msg_plural_buf, marker + 7);
+            } else if ((marker = strstr(msg_num_buf, "<POINT>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count == 1) {
+                    strcat(msg_plural_buf, "Punto");
+                } else {
+                    strcat(msg_plural_buf, "Punti");
+                }
+                strcat(msg_plural_buf, marker + 7);
+            } else if ((marker = strstr(msg_num_buf, "<OGGETTO>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count == 1) {
+                    strcat(msg_plural_buf, "oggetto");
+                } else {
+                    strcat(msg_plural_buf, "oggtti");
+                }
+                strcat(msg_plural_buf, marker + 7);
+            } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                if (count != 1) {
+                    strcat(msg_plural_buf, "s");
+                }
+                strcat(msg_plural_buf, marker + 3);
+            } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
+                len = strlen(msg_num_buf) - strlen(marker);
+                strncpy(msg_plural_buf, msg_num_buf, len);
+                msg_plural_buf[len] = 0;
+                strcat(msg_plural_buf, marker + 3);
             }
-            strcat(msg_plural_buf, marker + 6);
-        } else if ((marker = strstr(msg_num_buf, "<POINT>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count == 1) {
-                strcat(msg_plural_buf, "Punkt");
-            } else {
-                strcat(msg_plural_buf, "Punkte");
-            }
-            strcat(msg_plural_buf, marker + 7);
-        } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count != 1) {
-                strcat(msg_plural_buf, "s");
-            }
-            strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            strcat(msg_plural_buf, marker + 3);
-        }
-        break;
-    case LANGUAGE_IT:
-        if ((marker = strstr(msg_num_buf, "<COIN>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count == 1) {
-                strcat(msg_plural_buf, "moneta");
-            } else {
-                strcat(msg_plural_buf, "monete");
-            }
-            strcat(msg_plural_buf, marker + 6);
-        } else if ((marker = strstr(msg_num_buf, "<point>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count == 1) {
-                strcat(msg_plural_buf, "punto");
-            } else {
-                strcat(msg_plural_buf, "punti");
-            }
-            strcat(msg_plural_buf, marker + 7);
-        } else if ((marker = strstr(msg_num_buf, "<POINT>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count == 1) {
-                strcat(msg_plural_buf, "Punto");
-            } else {
-                strcat(msg_plural_buf, "Punti");
-            }
-            strcat(msg_plural_buf, marker + 7);
-        } else if ((marker = strstr(msg_num_buf, "<OGGETTO>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count == 1) {
-                strcat(msg_plural_buf, "oggetto");
-            } else {
-                strcat(msg_plural_buf, "oggtti");
-            }
-            strcat(msg_plural_buf, marker + 7);
-        } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            if (count != 1) {
-                strcat(msg_plural_buf, "s");
-            }
-            strcat(msg_plural_buf, marker + 3);
-        } else if ((marker = strstr(msg_num_buf, "<N>")) != NULL) {
-            len = strlen(msg_num_buf) - strlen(marker);
-            strncpy(msg_plural_buf, msg_num_buf, len);
-            msg_plural_buf[len] = 0;
-            strcat(msg_plural_buf, marker + 3);
-        }
-        break;
-    case LANGUAGE_JP:
-        strcpy(msg_plural_buf, buf);
-        break;
+            break;
+        case LANGUAGE_JP:
+            strcpy(msg_plural_buf, buf);
+            break;
     }
 
     // BUG: when none of its language's markers is found (or the language has no case), msg_plural_buf still holds an
@@ -981,12 +981,12 @@ USER_FUNC(evt_msg_fmt_int) {
     const char* name;
 
     switch (mode) {
-    case 0:
-        name = msgSearch(src);
-        break;
-    case 1:
-        name = src;
-        break;
+        case 0:
+            name = msgSearch(src);
+            break;
+        case 1:
+            name = src;
+            break;
     }
     strcpy(msg_count_buf, name);
     evtMsgFmtInt(msg_count_buf, count);

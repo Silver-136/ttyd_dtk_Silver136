@@ -403,6 +403,8 @@ MapAttrEntry _map_attr_data[] = {
     { "pik_04", 17, 7 },
     { "bom_03", 11, 5 },
     { "bom_04", 11, 5 },
+
+    // BUG: findMapAttr finds the earlier area-10 entries for these eki_00..eki_06 names.
     { "eki_00", 12, 7 },
     { "eki_01", 12, 7 },
     { "eki_02", 12, 7 },

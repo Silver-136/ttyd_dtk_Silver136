@@ -162,7 +162,7 @@ USER_FUNC(evt_win_item_maketable) {
         evtSetValue(event, args[1], 0);
         return EVT_RETURN_DONE;
     }
-    table = _mapAlloc((count + 1) * 4);
+    table = _mapAlloc((count + 1) * sizeof(*table));
     item = list;
     i = 0;
     n = 0;
@@ -231,6 +231,8 @@ static void oneMessageDisp(WinMgrEntry* entry) {
     OneMsgWin* w = entry->param;
     const char* msg;
     if (winMgrAction(w->id) == 0) {
+
+        // BUG: only type 0 assigns msg before it is used below.
         switch (w->type) {
         case 0:
             msg = msgSearch("msg_you_gotta_mail");

@@ -10,8 +10,8 @@
 typedef struct BattleStageObjectData {
     char* name; //0x0
     u16 spawnSpecialUnitType; //0x4
-    u16 layer; //0x8
-    Vec position; //0xC
+    u16 layer; //0x6
+    Vec position; //0x8
     u8 numFramesToStartFalling; //0x14
     u8 numFramesToFall; //0x15
     u8 pad_16[2]; //0x16

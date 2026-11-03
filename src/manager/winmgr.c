@@ -1119,29 +1119,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
             case SELECT_TYPE_PARTY_RANK_UP:
             case SELECT_TYPE_PARTY_SWAP_RANK_UP:
                 evt->lwData[1] = party_id_table[id];
-                switch (id) {
-                    case 0:
-                        name = msgSearch(name_party0);
-                        break;
-                    case 1:
-                        name = msgSearch(name_party1);
-                        break;
-                    case 2:
-                        name = msgSearch(name_party4);
-                        break;
-                    case 3:
-                        name = pouchGetYoshiName();
-                        break;
-                    case 4:
-                        name = msgSearch(name_party5);
-                        break;
-                    case 5:
-                        name = msgSearch(name_party2);
-                        break;
-                    case 6:
-                        name = msgSearch(name_party6);
-                        break;
-                }
+                name = select_party_name(id);
                 evt->lwData[3] = (EvtWord)name;
                 break;
             case SELECT_TYPE_PARTY_SWAP_RANK_DOWN:
@@ -1149,29 +1127,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
 #if VERSION <= VERSION_DEMO_US
                 name = select_party_name(id);
 #else
-                switch (id) {
-                    case 0:
-                        name = msgSearch(name_party0);
-                        break;
-                    case 1:
-                        name = msgSearch(name_party1);
-                        break;
-                    case 2:
-                        name = msgSearch(name_party4);
-                        break;
-                    case 3:
-                        name = pouchGetYoshiName();
-                        break;
-                    case 4:
-                        name = msgSearch(name_party5);
-                        break;
-                    case 5:
-                        name = msgSearch(name_party2);
-                        break;
-                    case 6:
-                        name = msgSearch(name_party6);
-                        break;
-                }
+                name = select_party_name(id);
 #endif
                 evt->lwData[4] = (EvtWord)name;
                 break;

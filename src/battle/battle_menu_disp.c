@@ -383,6 +383,8 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
     sc = 0.66f * (1.3f - 0.005f * v.z);
     PSMTXScale(scl, sc, sc, 1.0f);
     PSMTXRotRad(rot, 'y', rad);
+
+    // Original code replaces the local rotation matrix with identity.
     PSMTXIdentity(rot);
     PSMTXConcat(m, rot, out);
     PSMTXConcat(out, scl, out);

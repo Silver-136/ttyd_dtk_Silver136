@@ -18,7 +18,7 @@ typedef struct EnvironmentGlare {
     GXTevKColorSel kcolorSel0; //0xC
     GXTevKColorSel kcolorSel1; //0x10
     f32 coordScale; //0x14
-    s32 count; //0x18, number of coords that follors
+    s32 count; //0x18, number of coords that follow
     EnvironmentGlareTexCoord coords[]; //0x1C
 } EnvironmentGlare;
 

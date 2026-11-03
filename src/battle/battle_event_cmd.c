@@ -838,6 +838,7 @@ USER_FUNC(btlevtcmd_GetHpGaugeOffset) {
     unit = BattleGetUnitPtr(wp, BattleTransID(event, btlId));
     x = unit->hpGaugeOffset[0];
     y = unit->hpGaugeOffset[1];
+    // These tests compare the s16 offset values, not the output indices; neither can equal EVT_NULLPTR.
     if (x != EVT_NULLPTR) {
         evtSetValue(event, indexX, x);
     }
@@ -1986,7 +1987,7 @@ USER_FUNC(btlevtcmd_GetDamageCode) {
     id = BattleTransID(event, btlId);
     index = args[1];
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    evtSetValue(event, index, (s32)(u8)unit->damageCode);
+    evtSetValue(event, index, (u8)unit->damageCode);
     return EVT_RETURN_DONE;
 }
 
@@ -4626,6 +4627,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
         if (unit->moveFrames == 0) {
             y = unit->moveTargetPos.y;
             BtlUnit_SetPos(unit, x, y, z);
+            // Both operands read the same field, not successive jump heights.
             unit->moveSpeedY = -(unit->jumpBaseY - unit->jumpBaseY);
             unit->fallAccel = 1.8f;
             return EVT_RETURN_YIELD;
@@ -4635,6 +4637,7 @@ USER_FUNC(btlevtcmd_MarioJumpPosition) {
         if (!BtlUnit_GetACPossibility(unit)) {
             return EVT_RETURN_DONE;
         }
+        // Both operands again read the same jumpBaseY field.
         unit->moveSpeedY = -(unit->jumpBaseY - unit->jumpBaseY);
         unit->fallAccel = 1.8f;
         unit->moveFrames = 1;
@@ -4692,6 +4695,7 @@ USER_FUNC(btlevtcmd_GetTakeoffPosition) {
     oz = args[5];
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
+    // Y and Z share a scratch local; only X is used from this call.
     BtlUnit_GetPos(unit, &x, &y, &y);
     id2 = BattleTransID(event, id2);
     target = BattleGetUnitPtr(wp, id2);
@@ -4710,6 +4714,7 @@ USER_FUNC(btlevtcmd_GetTakeoffPosition) {
         cid = BattleTransID(event, cid);
         u2 = BattleGetUnitPtr(wp, cid);
         p2 = BtlUnit_GetPartsPtr(u2, cpno);
+        // Y and Z share a scratch local; only X is used from this call.
         BtlUnit_GetHitPos(u2, p2, &tx, &y, &y);
         if (__fabs(x - hx) > __fabs(x - tx)) {
             hx = tx;

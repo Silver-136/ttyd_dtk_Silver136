@@ -173,7 +173,7 @@ void effKumokumoChipMain(EffectEntry* effect) {
             work->a1 = lifetime * 16;
         }
     } else {
-        if (work->frame < 4) {
+        if (fr < 4) {
             work->a1 = fr * 64 + 63;
         } else {
             work->a1 = 255;

@@ -959,7 +959,7 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
     u8 c;
     f32 lim;
     f32 x, y;
-    f32* camf;
+    CameraEntry* camera;
 
     if (screen_wp->captured == 0) {
         return;
@@ -1043,8 +1043,8 @@ void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
     }
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
-    camf = (f32*)camGetPtr(CAMERA_3D);
-    PSMTXScale(m, 1.0f, 16.0f + 6.0f * ((100.0f - camf[5]) / 1000.0f), 1.0f);
+    camera = camGetPtr(CAMERA_3D);
+    PSMTXScale(m, 1.0f, 16.0f + 6.0f * ((100.0f - camera->cameraPos.z) / 1000.0f), 1.0f);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
     GXLoadTexMtxImm(m, GX_TEXMTX1, GX_MTX2x4);
     p->tevStage = 2;

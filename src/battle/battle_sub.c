@@ -183,4 +183,3 @@ void btlsubResetMoveColorLvAll(BattleWork* work) {
         }
     }
 }
-

@@ -428,8 +428,6 @@ USER_FUNC(evt_eff64) {
     f32 float13;
     f32 float14;
     EffectEntry* effect;
-    s32 u1a;
-    s32 u1b;
 
     args = event->args;
     intArg = args;
@@ -439,8 +437,8 @@ USER_FUNC(evt_eff64) {
     evtGetValue(event, *(floatArg++));
     evtGetValue(event, *(rawArg++));
     effSet = (const char*)evtGetValue(event, *(intArg++));
-    u1a = evtGetValue(event, *(floatArg++));
-    u1b = evtGetValue(event, *(rawArg++));
+    evtGetValue(event, *(floatArg++));
+    evtGetValue(event, *(rawArg++));
     int2 = evtGetValue(event, *(intArg++));
     int3 = evtGetValue(event, *(intArg++));
     int4 = evtGetValue(event, *(intArg++));

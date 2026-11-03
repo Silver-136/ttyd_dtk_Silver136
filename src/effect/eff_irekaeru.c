@@ -2,10 +2,6 @@
 
 #include "version.h"
 
-#if VERSION >= VERSION_US
-#include "mario/mariost.h"
-#endif
-
 #include "eff/eff_irekaeru.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

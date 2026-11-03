@@ -451,7 +451,7 @@ void effRecoveryMain(EffectEntry* effect) {
                 break;
             }
         }
-        if (type <= 1u || type == 7 || type == 8 || type == 4 || type == 5) {
+        if (type == 0 || type == 1 || type == 7 || type == 8 || type == 4 || type == 5) {
             if (done >= amount) {
                 work = effect->userdata;
                 if (type != 7 && type != 8) {
@@ -514,7 +514,7 @@ void effRecoveryMain(EffectEntry* effect) {
         calc.z = work->position.z;
         dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_ALPHA_TEST, (DispCallback)effRecoveryDisp, effect);
     }
-    if (type <= 1u || type == 7 || type == 8) {
+    if (type == 0 || type == 1 || type == 7 || type == 8) {
         Vec calc = { 0.0f, 0.0f, 0.0f };
         calc.x = work->position.x;
         calc.y = work->position.y;
@@ -642,7 +642,7 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(transMtx, scaleMtx, transMtx);
     PSMTXTrans(scaleMtx, 0.0f, 2.0f, 0.0f);
     PSMTXConcat(transMtx, scaleMtx, transMtx);
-    if (type <= 1u || type == 7 || type == 8 || type == 4 || type == 5) {
+    if (type == 0 || type == 1 || type == 7 || type == 8 || type == 4 || type == 5) {
         PSMTXConcat(transMtx, p->anim->joints[0].mtx, transMtx);
     }
     PSMTXConcat(cam->view, transMtx, transMtx);

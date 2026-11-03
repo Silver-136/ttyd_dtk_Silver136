@@ -73,6 +73,8 @@ EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle
         PSMTXRotAxisRad(mtx, &axis, 0.017453292f * -rot);
         w->position.x = mtx[0][1] * len;
         w->position.y = mtx[1][1] * len;
+
+        // Z position uses column 2, unlike X/Y and the velocity below.
         w->position.z = mtx[2][2] * len;
         w->velocity.x = mtx[0][1];
         w->velocity.y = mtx[1][1];

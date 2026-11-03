@@ -394,5 +394,3 @@ void effMugiKemuri2Disp(CameraId camId, void* param) {
         }
     }
 }
-
-

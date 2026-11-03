@@ -88,6 +88,8 @@ void effLaserMain(EffectEntry* effect) {
             if (work->timer >= 60) {
                 animPoseSetAnim(work->poseId, "A_1", TRUE);
                 animPoseSetLocalTimeRate(work->poseId, 0.5f);
+
+                // Advance from state 1 to state 3, skipping the white-fade state.
                 work->state += 2;
             }
             break;

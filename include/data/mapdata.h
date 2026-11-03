@@ -28,5 +28,8 @@ typedef struct WorldData {
 
 MapData* mapDataPtr(const char* mapName);
 AreaData* areaDataPtr(const char* areaName);
+WorldData* worldDataPtr(void);
+int maxMapInArea(const char* areaName);
+int maxAreaInWorld(void);
 void relSetEvtAddr(const char* mapName, EvtWord* eventAddr);
 void relSetBtlAddr(const char* areaName, void* btlSetupTbl, void* btlSetupNoTbl);

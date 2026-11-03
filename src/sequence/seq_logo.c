@@ -978,7 +978,7 @@ void progDisp(CameraId camId, void* param) {
                     gp->flags |= GW_FLAG_PROGRESSIVE;
                 } else {
                     OSSetProgressiveMode(0);
-                    wp->progressive = 0;
+                    wp->progressive = FALSE;
                     gp->flags &= ~GW_FLAG_PROGRESSIVE;
                 }
 #if VERSION > VERSION_DEMO_US
@@ -989,7 +989,7 @@ void progDisp(CameraId camId, void* param) {
             case 4:
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
                     VISetBlack(FALSE);
-                    wp->progressive = 0;
+                    wp->progressive = FALSE;
                 }
 #else
 #if VERSION == VERSION_EU
@@ -1025,7 +1025,7 @@ void progDisp(CameraId camId, void* param) {
 
             case 4:
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
-                    wp->progressive = 0;
+                    wp->progressive = FALSE;
 #endif
                     wp->progState++;
                 }
@@ -1067,7 +1067,7 @@ void progDisp(CameraId camId, void* param) {
                 } else {
                     OSSetEuRgb60Mode(0);
                     gp->framerate = 50;
-                    wp->progressive = 0;
+                    wp->progressive = FALSE;
                     gp->flags &= ~GW_FLAG_PROGRESSIVE;
                 }
                 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
@@ -1076,7 +1076,7 @@ void progDisp(CameraId camId, void* param) {
             case 4:
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
                     VISetBlack(FALSE);
-                    wp->progressive = 0;
+                    wp->progressive = FALSE;
                 }
 #endif
 #endif

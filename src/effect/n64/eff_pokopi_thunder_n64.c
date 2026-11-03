@@ -110,6 +110,8 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     if (len != nv) {
         work->length = sqrtf(len);
     } else {
+
+        // The work and callback have already been attached to the effect on this path.
         return NULL;
     }
     work->length = 0.005f * work->length;

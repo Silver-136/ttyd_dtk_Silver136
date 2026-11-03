@@ -55,7 +55,7 @@ USER_FUNC(pre_kurio_use) {
 #endif
 
     void* hit;
-    char* msg;
+    const char* msg;
     MarioWork* mario;
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 

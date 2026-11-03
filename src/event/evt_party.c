@@ -300,7 +300,7 @@ USER_FUNC(evt_party_set_dir) {
         p->targetDir = toMovedirSimple(p->displayDirectionTarget);
         count = event->userdata[2] + 1;
         event->userdata[2] = count;
-        return count > frames;
+        return count > frames ? EVT_RETURN_YIELD : EVT_RETURN_BLOCK;
     } else {
         if (frames < 0) {
             p->displayDirectionTarget = revise360(270.0f - angle);

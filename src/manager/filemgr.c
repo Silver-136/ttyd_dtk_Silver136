@@ -497,6 +497,8 @@ void fileGarbageMoveMem(void* data, FileEntry* file) {
     } else {
         fileGarbageDataAdrClear(file);
     }
+
+    // Smart-backed files store &smart->address in data; address is the first smartEntry field.
     memmove(data, ((smartEntry*)file->data)->address, ((smartEntry*)file->data)->size);
     *file->data = data;
     if (file->state == FILE_STATE_PRELOADED) {

@@ -2185,7 +2185,6 @@ void BattleAudienceApSrcCtrlProcess(void) {
     s32 k;
     f32 dy;
     f32 dx;
-    Vec tmp2;
 
     if (!(base->flags & AUDIENCE_FLAG_SP_GAINED)) {
         return;

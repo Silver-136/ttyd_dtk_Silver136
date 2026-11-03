@@ -15,25 +15,25 @@
 
 
 typedef struct EffKemuri6N64Work {
-    BOOL active;     // 0x0
-    u16 type;        // 0x4
-    s16 timer;       // 0x6
-    u8 alpha;        // 0x8
-    u8 pad_9[3];     // 0x9
-    Vec position;    // 0xC
-    f32 rotation;    // 0x18
-    f32 scaleX;      // 0x1C
-    f32 scaleY;      // 0x20
-    f32 scaleZ;      // 0x24
-    f32 baseX;       // 0x28
-    f32 baseY;       // 0x2C
-    f32 angle;       // 0x30
-    u8 pad_34[4];    // 0x34
-    f32 velocity;    // 0x38
-    f32 accel;       // 0x3C
-    f32 accelAdd;    // 0x40
+    BOOL active;       // 0x0
+    u16 type;          // 0x4
+    s16 timer;         // 0x6
+    u8 alpha;          // 0x8
+    u8 pad_9[3];       // 0x9
+    Vec position;      // 0xC
+    f32 rotation;      // 0x18
+    f32 scaleX;        // 0x1C
+    f32 scaleY;        // 0x20
+    f32 scaleZ;        // 0x24
+    f32 baseX;         // 0x28
+    f32 baseY;         // 0x2C
+    f32 angle;         // 0x30
+    u8 pad_34[4];      // 0x34
+    f32 velocity;      // 0x38
+    f32 accel;         // 0x3C
+    f32 accelAdd;      // 0x40
     f32 accelAddStep;  // 0x44
-    u8 pad_48[8];    // 0x48
+    u8 pad_48[8];      // 0x48
 } EffKemuri6N64Work;
 
 /** Camera-facing walking puff quad. */

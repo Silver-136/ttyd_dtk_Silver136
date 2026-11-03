@@ -1,6 +1,7 @@
 // Paper Mario 64 effect: `count` colored sparkle stars scatter from a point with the given velocity (stardust).
 
 #include "version.h"
+#include "eff/n64/eff_stardust2_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

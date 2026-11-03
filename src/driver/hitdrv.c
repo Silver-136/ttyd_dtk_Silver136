@@ -268,7 +268,6 @@ void hitDelete(const char* name) {
  * and recomputes the world matrices and triangles of the maps that changed.
  */
 void hitMain(void) {
-    void** joints;
     MapEntry* entry;
     MapWork* wp = mapGetWork();
     s32 j;
@@ -295,11 +294,10 @@ void hitMain(void) {
             if (list == NULL) {
                 continue;
             }
-            joints = (void**)list;
-            for (k = 0; k < list->count; joints++, k++) {
-                hit = hitNameToPtr(*(const char**)joints[1]);
+            for (k = 0; k < list->count; k++) {
+                hit = hitNameToPtr(*(const char**)list->joints[k]);
                 if (hit != NULL) {
-                    mapCalcAnimMatrix(hit->animMtx, hit->localMtx, anim, joints[1]);
+                    mapCalcAnimMatrix(hit->animMtx, hit->localMtx, anim, list->joints[k]);
                     recalc = TRUE;
                     hit->flags |= HIT_FLAG_ANIM_MTX;
                     hit->flags |= HIT_FLAG_MTX_DIRTY;

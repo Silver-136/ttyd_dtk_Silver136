@@ -84,22 +84,22 @@ USER_FUNC(twoddisp_main) {
  * Sets up the 2D overlay system: allocates 100 empty entries from map memory and starts twoddisp_main_event,
  * copying the caller's local variables to it. No script in the game calls these overlay commands.
  */
-s32 evt_twoddisp_init(EventEntry* evt, BOOL isFirstCall) {
+USER_FUNC(evt_twoddisp_init) {
     EventEntry* e;
     TwodEntry* p;
     u32 i;
 
-    e = evtEntryType(twoddisp_main_event, evt->priority, 0, evt->type);
-    e->unitId = evt->unitId;
-    e->ownerNPC = evt->ownerNPC;
+    e = evtEntryType(twoddisp_main_event, event->priority, 0, event->type);
+    e->unitId = event->unitId;
+    e->ownerNPC = event->ownerNPC;
     for (i = 0; i < 16; i++) {
-        e->lwData[i] = evt->lwData[i];
+        e->lwData[i] = event->lwData[i];
     }
     for (i = 0; i < 3; i++) {
-        e->lfData[i] = evt->lfData[i];
+        e->lfData[i] = event->lfData[i];
     }
-    e->uwBase = evt->uwBase;
-    e->ufBase = evt->ufBase;
+    e->uwBase = event->uwBase;
+    e->ufBase = event->ufBase;
     twodID = e->eventId;
     twodPtr = (TwodEntry*)_mapAlloc(100 * sizeof(TwodEntry));
     for (i = 0; (s32)i < 100; i++) {
@@ -121,16 +121,16 @@ s32 evt_twoddisp_init(EventEntry* evt, BOOL isFirstCall) {
  * Adds a visible overlay named args[0] showing args[1] (an icon id,
  * or a text pointer with the top bit set) in the first free slot.
  */
-s32 evt_twoddisp_entry(EventEntry* evt, BOOL isFirstCall) {
+USER_FUNC(evt_twoddisp_entry) {
     s32 id;
     s32 i;
     EvtWord* args;
     char* name;
     TwodEntry* p;
 
-    args = evt->args;
-    name = (char*)evtGetValue(evt, args[0]);
-    id = evtGetValue(evt, args[1]);
+    args = event->args;
+    name = (char*)evtGetValue(event, args[0]);
+    id = evtGetValue(event, args[1]);
 
     for (i = 0; i < 100; i++) {
         p = &twodPtr[i];
@@ -167,48 +167,48 @@ static inline TwodEntry* twod_find(const char* name) {
 }
 
 /** Sets the offset of overlay args[0] to (args[1], args[2]), added to its base position. */
-s32 evt_twoddisp_set_position(EventEntry* evt, BOOL isFirstCall) {
-    EvtWord* args = evt->args;
-    char* name = (char*)evtGetValue(evt, args[0]);
+USER_FUNC(evt_twoddisp_set_position) {
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
     TwodEntry* p;
 
     // twod_find returns NULL for a name that is not registered; the result is not checked.
     p = twod_find(name);
-    p->x = evtGetFloat(evt, args[1]);
-    p->y = evtGetFloat(evt, args[2]);
+    p->x = evtGetFloat(event, args[1]);
+    p->y = evtGetFloat(event, args[2]);
     return EVT_RETURN_DONE;
 }
 
 /** Sets the base screen position of overlay args[0] to (args[1], args[2]). */
-s32 evt_twoddisp_set_base_position(EventEntry* evt, BOOL isFirstCall) {
-    EvtWord* args = evt->args;
-    char* name = (char*)evtGetValue(evt, args[0]);
+USER_FUNC(evt_twoddisp_set_base_position) {
+    EvtWord* args = event->args;
+    char* name = (char*)evtGetValue(event, args[0]);
     TwodEntry* p;
 
     // twod_find returns NULL for a name that is not registered; the result is not checked.
     p = twod_find(name);
-    p->baseX = evtGetFloat(evt, args[1]);
-    p->baseY = evtGetFloat(evt, args[2]);
+    p->baseX = evtGetFloat(event, args[1]);
+    p->baseY = evtGetFloat(event, args[2]);
     return EVT_RETURN_DONE;
 }
 
 /** Sets (args[0] nonzero) or clears flag bits args[2] on overlay args[1]; bit 1 makes it visible. */
-s32 evt_twoddisp_flag_onoff(EventEntry* evt, BOOL isFirstCall) {
+USER_FUNC(evt_twoddisp_flag_onoff) {
     s32 onoff;
     TwodEntry* p;
     EvtWord* args;
     char* name;
 
-    args = evt->args;
-    onoff = evtGetValue(evt, args[0]);
-    name = (char*)evtGetValue(evt, args[1]);
+    args = event->args;
+    onoff = evtGetValue(event, args[0]);
+    name = (char*)evtGetValue(event, args[1]);
 
     // twod_find returns NULL for a name that is not registered; the result is not checked.
     p = twod_find(name);
     if (onoff) {
-        p->flags |= evtGetValue(evt, args[2]);
+        p->flags |= evtGetValue(event, args[2]);
     } else {
-        p->flags &= ~evtGetValue(evt, args[2]);
+        p->flags &= ~evtGetValue(event, args[2]);
     }
     return EVT_RETURN_DONE;
 }

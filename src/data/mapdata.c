@@ -539,11 +539,6 @@ WorldData world_data = { "MarioSt", "マリオの世界", { &area_kwb, &area_bti
                                                       &area_las, &area_kpa, &area_jon, &area_yuu, &area_qiz, &area_sys,
                                                       &area_dmo, &area_dig, &area_end } };
 
-// forward declarations
-WorldData* worldDataPtr(void);
-int maxMapInArea(const char* areaName);
-int maxAreaInWorld(void);
-
 /** Finds a map's MapData by name (e.g. "gor_01") by scanning every map of every area in world_data; NULL if none. */
 MapData* mapDataPtr(const char* mapName) {
     WorldData* wp = worldDataPtr();

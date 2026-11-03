@@ -55,7 +55,7 @@ void padRumbleOn(u32 chan);
 void padRumbleHardOff(u32 chan);
 u8 padGetRumbleStatus(u32 chan);
 void sincosf(f32* ret_sin, f32* ret_cos, f32 degree);
-void movePos(float* ret_sin, float* ret_cos, f32 dist, f32 degree);
+void movePos(f32* ret_sin, f32* ret_cos, f32 dist, f32 degree);
 s32 irand(s32 scalar);
 u16 sysGetToken(void);
 void sysWaitDrawSync(void);

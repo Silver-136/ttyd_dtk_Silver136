@@ -1146,7 +1146,3 @@ EVT_BEGIN(marioAttackEvent_ZubaStar)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
-
-
-
-

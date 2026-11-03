@@ -1353,7 +1353,9 @@ void animPoseMain(s32 poseId) {
             }
             s = 0.0625f;
             for (; kf < kfEnd; kf++) {
-                { AnimVtxDelta* d; AnimVtxDelta* e;
+                {
+                    AnimVtxDelta* d;
+                    AnimVtxDelta* e;
                     v = (u8*)pose->bufferVtxPos;
                     d = &anim->vtxPosDeltas[kf->vtxPosStart];
                     e = d + kf->vtxPosCount;
@@ -1367,7 +1369,9 @@ void animPoseMain(s32 poseId) {
                         ((Vec*)v)->z += s * z;
                     }
                 }
-                { AnimVtxDelta* d; AnimVtxDelta* e;
+                {
+                    AnimVtxDelta* d;
+                    AnimVtxDelta* e;
                     v = (u8*)pose->bufferVtxNrm;
                     d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
                     e = d + kf->vtxNrmCount;
@@ -1381,7 +1385,10 @@ void animPoseMain(s32 poseId) {
                         ((Vec*)v)->z += s * z;
                     }
                 }
-                { AnimVisDelta* d; AnimVisDelta* e; s8* v;
+                {
+                    AnimVisDelta* d;
+                    AnimVisDelta* e;
+                    s8* v;
                     v = pose->bufferGroupVisibility;
                     d = &anim->visDeltas[kf->visStart];
                     e = d + kf->visCount;
@@ -1390,7 +1397,9 @@ void animPoseMain(s32 poseId) {
                         v[0] += d->add;
                     }
                 }
-                { AnimNodeDelta* d; AnimNodeDelta* e;
+                {
+                    AnimNodeDelta* d;
+                    AnimNodeDelta* e;
                     v = (u8*)pose->bufferNode;
                     d = &anim->nodeDeltas[kf->nodeStart];
                     e = d + kf->nodeCount;
@@ -1400,7 +1409,9 @@ void animPoseMain(s32 poseId) {
                         *(f32*)v += s * x;
                     }
                 }
-                { AnimTexDelta* d; AnimTexDelta* e;
+                {
+                    AnimTexDelta* d;
+                    AnimTexDelta* e;
                     v = (u8*)pose->bufferTexAnimEntries;
                     d = &anim->texDeltas[kf->texStart];
                     e = d + kf->texCount;
@@ -1480,7 +1491,9 @@ void animPoseMain(s32 poseId) {
                         ((AnimTexMtx*)tex)->transT += td->transT;
 #else
             for (; kf < kfEnd; kf++) {
-                { AnimVtxDelta* d; AnimVtxDelta* e;
+                {
+                    AnimVtxDelta* d;
+                    AnimVtxDelta* e;
                     v = (u8*)pose->bufferVtxPos;
                     d = &anim->vtxPosDeltas[kf->vtxPosStart];
                     e = d + kf->vtxPosCount;
@@ -1494,7 +1507,9 @@ void animPoseMain(s32 poseId) {
                         ((Vec*)v)->z += s * z;
                     }
                 }
-                { AnimVtxDelta* d; AnimVtxDelta* e;
+                {
+                    AnimVtxDelta* d;
+                    AnimVtxDelta* e;
                     v = (u8*)pose->bufferVtxNrm;
                     d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
                     e = d + kf->vtxNrmCount;
@@ -1508,7 +1523,10 @@ void animPoseMain(s32 poseId) {
                         ((Vec*)v)->z += s * z;
                     }
                 }
-                { AnimVisDelta* d; AnimVisDelta* e; s8* v;
+                {
+                    AnimVisDelta* d;
+                    AnimVisDelta* e;
+                    s8* v;
                     v = pose->bufferGroupVisibility;
                     d = &anim->visDeltas[kf->visStart];
                     e = d + kf->visCount;
@@ -1517,7 +1535,9 @@ void animPoseMain(s32 poseId) {
                         v[0] += d->add;
                     }
                 }
-                { AnimNodeDelta* d; AnimNodeDelta* e;
+                {
+                    AnimNodeDelta* d;
+                    AnimNodeDelta* e;
                     v = (u8*)pose->bufferNode;
                     d = &anim->nodeDeltas[kf->nodeStart];
                     e = d + kf->nodeCount;
@@ -1527,7 +1547,9 @@ void animPoseMain(s32 poseId) {
                         *(f32*)v += s * x;
                     }
                 }
-                { AnimTexDelta* d; AnimTexDelta* e;
+                {
+                    AnimTexDelta* d;
+                    AnimTexDelta* e;
                     v = (u8*)pose->bufferTexAnimEntries;
                     d = &anim->texDeltas[kf->texStart];
                     e = d + kf->texCount;
@@ -1568,7 +1590,9 @@ void animPoseMain(s32 poseId) {
 #endif
         kf = &anim->keyframes[nextFrame];
 #if VERSION > VERSION_DEMO_US
-        { AnimVtxDelta* d; AnimVtxDelta* e;
+        {
+            AnimVtxDelta* d;
+            AnimVtxDelta* e;
             s = 0.0625f * t;
             v = grpA;
             d = &anim->vtxPosDeltas[kf->vtxPosStart];
@@ -1587,7 +1611,10 @@ void animPoseMain(s32 poseId) {
                 ((Vec*)v)->z += z * s;
             }
         }
-        { AnimVtxDelta* d; AnimVtxDelta* e; u8* v;
+        {
+            AnimVtxDelta* d;
+            AnimVtxDelta* e;
+            u8* v;
             v = grpB;
             d = &anim->vtxNrmDeltas[kf->vtxNrmStart];
             e = d + kf->vtxNrmCount;
@@ -1605,7 +1632,10 @@ void animPoseMain(s32 poseId) {
                 ((Vec*)v)->z += z * s;
             }
         }
-        { AnimNodeDelta* d; AnimNodeDelta* e; u8* v;
+        {
+            AnimNodeDelta* d;
+            AnimNodeDelta* e;
+            u8* v;
             d = &anim->nodeDeltas[kf->nodeStart];
             e = d + kf->nodeCount;
             dt = anim->keyframes[nextFrame].time - anim->keyframes[frame].time;

@@ -548,7 +548,7 @@ void mot_fall(void) {
 #if VERSION >= VERSION_US
     mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
     if (marioPriCheckJabara() && mario->jumpStartSpeed == 0.0f && mario->jumpPeakAirTime != 0 && mario->jumpPeakAirTime < mario->airTimer) {
-        if (mario->airTimer < 0x12) {
+        if (mario->airTimer < 18) {
             if (mario->controlStickSensitivity) {
                 mario->trigFlags |= MARIO_TRIG_FLAG_JABARA_MOVE_CHK;
             }
@@ -560,7 +560,7 @@ void mot_fall(void) {
         }
     }
 #endif
-    if (mario->screenY >= 0x1AE) {
+    if (mario->screenY >= 430) {
         f32 r = marioGetCamFollowRate();
         r += 0.1f;
         if (r >= 0.8f) {

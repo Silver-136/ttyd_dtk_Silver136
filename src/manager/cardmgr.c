@@ -43,14 +43,14 @@ const char cardFileName[] = "mariost_save_file";
 const char card_title_jp[0x18] = "ペーパーマリオＲＰＧ";
 const char card_date_jp[0x20] = "%2d月%2d日のセーブデータです";
 const char cardGameTitle[0xC] = "Paper Mario";
-const char cardDateFormat[0x12] = "%2d/%2d save data";
+const char cardDateFormat[] = "%2d/%2d save data";
 const char card_date_de[0x18] = "Spielstand vom: %2d/%2d";
 const char card_date_fr[0x16] = "Sauvegarde du %2d/%2d";
 const char card_date_es[0x1B] = "Datos guardados el %2d/%2d";
 const char card_date_it[0x15] = "Salvataggio: %2d/%2d";
 #else
 const char cardGameTitle[] = "Paper Mario";
-const char cardDateFormat[0x12] = "%2d/%2d save data";
+const char cardDateFormat[] = "%2d/%2d save data";
 #endif
 #else
 const char cardGameTitle[] = "ペーパーマリオＲＰＧ";
@@ -743,7 +743,7 @@ void read_main(void) {
                 break;
             case 10:
                 if (wp->validSave1 != 0 && wp->validSave2 != 0) {
-                    if (!(wp->lastSaveTime1 <= wp->lastSaveTime2)) {
+                    if (wp->lastSaveTime1 > wp->lastSaveTime2) {
                         saveType = 0;
                     } else {
                         saveType = 1;
@@ -846,7 +846,7 @@ void read_all_main(void) {
                 break;
             case 10:
                 if (wp->validSave1 != 0 && wp->validSave2 != 0) {
-                    if (!(wp->lastSaveTime1 <= wp->lastSaveTime2)) {
+                    if (wp->lastSaveTime1 > wp->lastSaveTime2) {
                         saveType = 0;
                     } else {
                         saveType = 1;

@@ -70,7 +70,7 @@ EVT_BEGIN(lv3quake_evt)
     RETURN
 EVT_END()
 
-inline BOOL chkRevDir(f32 angle) {
+static inline BOOL chkRevDir(f32 angle) {
     BOOL ret = FALSE;
     if (angle >= 90.0f && angle <= 270.0f) {
         ret = TRUE;
@@ -99,11 +99,6 @@ static inline f32 hamDir(MarioWork* mario) {
     return r;
 }
 
-
-typedef struct {
-    u8 pad[0x15];
-    char name[0x10];
-} HamMobj;
 
 static const char isS1_str[14];
 static const char isB1_str[17];

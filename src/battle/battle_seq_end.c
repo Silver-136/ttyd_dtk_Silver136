@@ -679,6 +679,7 @@ void btlseqEnd(BattleWork* wp) {
         if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
             ok = 0;
         } else if (party2) {
+            // The repeated Mario check below does not test the partner's DANGER/PERIL flags.
             if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
                 BtlUnit_CheckStatus(party2, STATUS_INSTANT_KILL)) {
                 ok = 0;
@@ -742,6 +743,7 @@ void btlseqEnd(BattleWork* wp) {
         if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
             ok = 0;
         } else if (party) {
+            // The repeated Mario check below does not test the partner's DANGER/PERIL flags.
             if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
                 BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
                 ok = 0;

@@ -154,6 +154,7 @@ static void effExpBomDisp(CameraId camId, void* param) {
 void effExpBomDisp(CameraId camId, void* param) {
 #endif
 
+    EffectEntry* effect = param;
     f32* scl;
     f32* ry;
     effExpBomData* data;
@@ -167,13 +168,13 @@ void effExpBomDisp(CameraId camId, void* param) {
     GXTexObj texObj;
 
     camera = camGetPtr(camId);
-    data = ((EffectEntry*)param)->userdata;
+    data = effect->userdata;
     PSMTXTrans(mtx, data->position.x, data->position.y, data->position.z);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(camId)->viewYaw);
     PSMTXConcat(mtx, rot, base);
     PSMTXConcat(camera->view, base, base);
 #if VERSION <= VERSION_DEMO_US
-    for (i = 0; i < ((EffectEntry*)param)->count; i++, data++) {
+    for (i = 0; i < effect->count; i++, data++) {
         if (data->lifeLeft < 0 || data->startDelay >= 0)
                 continue;
         n = data->lifeLeft;
@@ -183,7 +184,7 @@ void effExpBomDisp(CameraId camId, void* param) {
         PSMTXScale(scale, bom_scale[i], bom_scale[i], bom_scale[i]);
         PSMTXRotRad(rot, 'z', 0.017453292f * bom_ry[i]);
 #else
-    for (i = 0, scl = bom_scale, ry = bom_ry; i < ((EffectEntry*)param)->count; scl++, ry++, i++, data++) {
+    for (i = 0, scl = bom_scale, ry = bom_ry; i < effect->count; scl++, ry++, i++, data++) {
         if (data->lifeLeft < 0 || data->startDelay >= 0) {
             continue;
         }

@@ -898,14 +898,9 @@ s32 kpaGetAttackMode(void) {
 // Descriptive name (not in the symbol maps); placeholder unk_801f8cd0, JP 0x801F8CD0. See docs/NAME_PROVENANCE.md.
 void kpaFireDelete(void) {
     if (fireefp) {
-        MarioWork* mario;
         effSoftDelete(fireefp);
         fireefp = NULL;
-        mario = marioGetPtr();
-        if (mario->kpaWork->fireSfxId != 0xFFFFFFFFU) {
-            psndSFXOff(mario->kpaWork->fireSfxId);
-            mario->kpaWork->fireSfxId = -1;
-        }
+        kpaFireSEOff();
     }
 }
 

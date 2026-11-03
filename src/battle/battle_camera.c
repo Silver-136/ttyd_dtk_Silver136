@@ -372,6 +372,8 @@ void battleCameraMain(void) {
             btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
             break;
         }
+
+        // Original code overwrites the requested audience ID without changing homingOffset2.
         wp->cameraWork.audienceId = 10;
         d = wp->cameraWork.homingOffset2.x - wp->cameraWork.homingOffset.x;
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);

@@ -145,8 +145,8 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     randA = (s32)(a * 1000.0f);
     randB = (s32)(radius * 1000.0f);
     p = work + 1;
-    lifeA = 0x20;
-    lifeB = 0x14;
+    lifeA = 32;
+    lifeB = 20;
     for (; i < count + 1; lifeA += 2, lifeB += 2, i++, p++) {
         fa = (f32)(rand() % randA) / 1000.0f;
         fb = (f32)(rand() % randB) / 1000.0f;

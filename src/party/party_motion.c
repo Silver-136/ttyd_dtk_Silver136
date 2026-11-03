@@ -1464,7 +1464,7 @@ void party_motion_homing_fly(PartyEntry* party) {
 #if VERSION >= VERSION_US
     f32 hh;
     f32 hd;
-    void* head;
+    HitEntry* head;
 #endif
 
     id = partyGetFootmarkId(party);

@@ -282,6 +282,7 @@ void BattleStageObjectInit(void) {
             break;
         }
     }
+    // With no free slot, obj still points to the last slot; there is no full-table check here.
     obj->data = data;
     obj->id = id;
     obj->battleUnitIdx = -1;
@@ -3714,6 +3715,7 @@ USER_FUNC(_nozzle_work_attack_set) {
 s32 _get_nozzle_attack_index(u8 index) {
     BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
 
+    // Unmatched directions fall through the remaining nozzle cases to the final -1.
     switch (index) {
         case 0:
             switch (sw->nozzleDir[index]) {

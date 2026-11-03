@@ -30,11 +30,12 @@
 #include <dolphin/pad.h>
 #include "sfx_name_word.h"
 #include "mot/mot_jump.h"
-#include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "mot/mot_ship.h"
 #include "party.h"
 #include "mario/mario_hit.h"
+
+extern double sin(double x);
 
 typedef struct MotShipWork {
     u32 flags;                    // 0x00: bit0 = facing (SHIP_DIR), bit1 = marioShipGetDir; set to 0/1/2 by shipDecideDir

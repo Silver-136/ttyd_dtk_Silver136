@@ -49,7 +49,7 @@ void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
 }
 
 /** Returns a * -b (used for the x position of each puff in the ring). */
-inline float inline_fn(f32 a, f32 b) { return a * (-b); }
+static inline f32 inline_fn(f32 a, f32 b) { return a * (-b); }
 
 #pragma opt_propagation off
 /**

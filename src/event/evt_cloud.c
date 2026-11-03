@@ -278,7 +278,7 @@ static USER_FUNC(evt_cloud_main) {
 USER_FUNC(evt_cloud_init) {
     s32 i;
 
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < (s32)(sizeof(cloud) / sizeof(cloud[0])); i++) {
         cloud[i].flags = 0;
         sprintf(cloud[i].imgName, "i_name_%1d", i);
         sprintf(cloud[i].offscreenName, "o_name_%1d", i);
@@ -306,12 +306,12 @@ USER_FUNC(evt_cloud_ent) {
     hitName = (char*)evtGetValue(event, args[2]);
     endEvt = (void*)evtGetValue(event, args[3]);
 
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < (s32)(sizeof(cloud) / sizeof(cloud[0])); i++) {
         if (!(cloud[i].flags & CLOUD_FLAG_IN_USE)) {
             break;
         }
     }
-    if (i >= 16) {
+    if (i >= (s32)(sizeof(cloud) / sizeof(cloud[0]))) {
         return EVT_RETURN_DONE;
     }
     wp = &cloud[i];

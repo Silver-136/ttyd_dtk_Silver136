@@ -1096,32 +1096,7 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 }
 
 
-/** Draws win.tpl texture id stretched over a width x height quad at (x, y), for the book and journal grid frames. */
-static inline void winBookTex(WindowWork* w, s32 id, f32 x, f32 y, f32 width, f32 height) {
-    GXTexObj obj;
-    Mtx m;
-    f64 aw;
-    f64 ah;
 
-    TEXGetGXTexObjFromPalette((TEXPalette*)*w->res->data, &obj, id);
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    ah = __fabs(height);
-    aw = __fabs(width);
-    PSMTXScale(m, (f32)aw / GXGetTexObjWidth(&obj), (f32)ah / GXGetTexObjHeight(&obj), 1.0f);
-    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(x, y, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(x, y - height, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(x + width, y - height, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(x + width, y, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-}
 
 /**
  * Draws an open two-page book at (x, y).
@@ -1159,24 +1134,24 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
         off = 32.0f;
     }
 
-    winBookTex(w, 0x33, 8.0f + x, y - 8.0f, 432.0f, 256.0f - off);
-    winBookTex(w, 0x28, x, y, 16.0f, 8.0f);
-    winBookTex(w, 0x2C, (16.0f + x), y, 184.0f, 8.0f);
-    winBookTex(w, 0x26, (184.0f + (16.0f + x)), y, 48.0f, 16.0f);
-    winBookTex(w, 0x2D, (48.0f + (184.0f + (16.0f + x))), y, 184.0f, 8.0f);
-    winBookTex(w, 0x2A, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y, 16.0f, 8.0f);
-    winBookTex(w, 0x30, x, y - 8.0f, 8.0f, 256.0f - off);
-    winBookTex(w, 0x32, 8.0f + (184.0f + (16.0f + x)), y - 16.0f, 16.0f, 248.0f - off);
-    winBookTex(w, 0x31, 8.0f + (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f, 8.0f, 256.0f - off);
-    winBookTex(w, 0x29, x, y - 8.0f - 256.0f + off, 16.0f, 16.0f);
-    winBookTex(w, 0x2E, (16.0f + x), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
-    winBookTex(w, 0x27, (184.0f + (16.0f + x)), y - 8.0f - 256.0f + off, 48.0f, 24.0f);
-    winBookTex(w, 0x2F, (48.0f + (184.0f + (16.0f + x))), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
-    winBookTex(w, 0x2B, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f - 256.0f + off, 16.0f, 16.0f);
+    winRootTexQuad(w, 0x33, 8.0f + x, y - 8.0f, 432.0f, 256.0f - off);
+    winRootTexQuad(w, 0x28, x, y, 16.0f, 8.0f);
+    winRootTexQuad(w, 0x2C, (16.0f + x), y, 184.0f, 8.0f);
+    winRootTexQuad(w, 0x26, (184.0f + (16.0f + x)), y, 48.0f, 16.0f);
+    winRootTexQuad(w, 0x2D, (48.0f + (184.0f + (16.0f + x))), y, 184.0f, 8.0f);
+    winRootTexQuad(w, 0x2A, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y, 16.0f, 8.0f);
+    winRootTexQuad(w, 0x30, x, y - 8.0f, 8.0f, 256.0f - off);
+    winRootTexQuad(w, 0x32, 8.0f + (184.0f + (16.0f + x)), y - 16.0f, 16.0f, 248.0f - off);
+    winRootTexQuad(w, 0x31, 8.0f + (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f, 8.0f, 256.0f - off);
+    winRootTexQuad(w, 0x29, x, y - 8.0f - 256.0f + off, 16.0f, 16.0f);
+    winRootTexQuad(w, 0x2E, (16.0f + x), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
+    winRootTexQuad(w, 0x27, (184.0f + (16.0f + x)), y - 8.0f - 256.0f + off, 48.0f, 24.0f);
+    winRootTexQuad(w, 0x2F, (48.0f + (184.0f + (16.0f + x))), y - 8.0f - 256.0f + off, 184.0f, 16.0f);
+    winRootTexQuad(w, 0x2B, (184.0f + (48.0f + (184.0f + (16.0f + x)))), y - 8.0f - 256.0f + off, 16.0f, 16.0f);
 
     if (a == 1) {
         for (i = 0; i < 8; i++) {
-            winBookTex(w, 0x34, (16.0f + x) + (i % 2) * 216, y - 32.0f - (i / 2) * 48, 192.0f, 32.0f);
+            winRootTexQuad(w, 0x34, (16.0f + x) + (i % 2) * 216, y - 32.0f - (i / 2) * 48, 192.0f, 32.0f);
         }
     }
 
@@ -1403,17 +1378,17 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
 
         // ofs is a * 13 (0 or 13 in the two normal modes), so ofs != 1 always holds and page 3 always takes this branch.
         if ((ofs != 0 && p == 2) || (ofs != 1 && p == 3)) {
-            winBookTex(w, (a * 13 + 0x7B), x, y + scroll - p * 232, 56.0f, 56.0f);
-            winBookTex(w, (a * 13 + 0x7D), x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
-            winBookTex(w, (a * 13 + 0x7E), 8.0f + x, y - 56.0f + scroll - p * 232, 48.0f, 8.0f);
-            winBookTex(w, (a * 13 + 0x85), 56.0f + x, y + scroll - p * 232, 8.0f, 8.0f);
-            winBookTex(w, (a * 13 + 0x84), 56.0f + x, y - 8.0f + scroll - p * 232, 8.0f, 48.0f);
-            winBookTex(w, (a * 13 + 0x81), 56.0f + x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
+            winRootTexQuad(w, (a * 13 + 0x7B), x, y + scroll - p * 232, 56.0f, 56.0f);
+            winRootTexQuad(w, (a * 13 + 0x7D), x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
+            winRootTexQuad(w, (a * 13 + 0x7E), 8.0f + x, y - 56.0f + scroll - p * 232, 48.0f, 8.0f);
+            winRootTexQuad(w, (a * 13 + 0x85), 56.0f + x, y + scroll - p * 232, 8.0f, 8.0f);
+            winRootTexQuad(w, (a * 13 + 0x84), 56.0f + x, y - 8.0f + scroll - p * 232, 8.0f, 48.0f);
+            winRootTexQuad(w, (a * 13 + 0x81), 56.0f + x, y - 56.0f + scroll - p * 232, 8.0f, 8.0f);
             break;
         }
         for (i = 0; i < 7; i++) {
             for (j = 0; j < 4; j++) {
-                winBookTex(w, (a * 13 + 0x7B) + ((i + j * 7) & 1), x + i * 56, scroll + (y - j * 56) - py, 56.0f, 56.0f);
+                winRootTexQuad(w, (a * 13 + 0x7B) + ((i + j * 7) & 1), x + i * 56, scroll + (y - j * 56) - py, 56.0f, 56.0f);
             }
         }
         c0 = (a * 13 + 0x7D);
@@ -1426,13 +1401,13 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
             } else {
                 id = (a * 13 + 0x86);
             }
-            winBookTex(w, id, x + i * 56, y - 224.0f + scroll - py, 8.0f, 8.0f);
+            winRootTexQuad(w, id, x + i * 56, y - 224.0f + scroll - py, 8.0f, 8.0f);
             if ((i & 1) == 0) {
                 id = c1;
             } else {
                 id = (a * 13 + 0x80);
             }
-            winBookTex(w, id, 8.0f + (x + i * 56), y - 224.0f + scroll - py, 48.0f, 8.0f);
+            winRootTexQuad(w, id, 8.0f + (x + i * 56), y - 224.0f + scroll - py, 48.0f, 8.0f);
         }
         c0 = (a * 13 + 0x85);
         c1 = (a * 13 + 0x84);
@@ -1444,15 +1419,15 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
             } else {
                 id = (a * 13 + 0x87);
             }
-            winBookTex(w, id, 392.0f + x, scroll + (y - i * 56) - py, 8.0f, 8.0f);
+            winRootTexQuad(w, id, 392.0f + x, scroll + (y - i * 56) - py, 8.0f, 8.0f);
             if ((i & 1) == 0) {
                 id = c1;
             } else {
                 id = (a * 13 + 0x82);
             }
-            winBookTex(w, id, 392.0f + x, scroll + (y - i * 56 - 8.0f) - py, 8.0f, 48.0f);
+            winRootTexQuad(w, id, 392.0f + x, scroll + (y - i * 56 - 8.0f) - py, 8.0f, 48.0f);
         }
-        winBookTex(w, (a * 13 + 0x81), 392.0f + x, y - 224.0f + scroll - py, 8.0f, 8.0f);
+        winRootTexQuad(w, (a * 13 + 0x81), 392.0f + x, y - 224.0f + scroll - py, 8.0f, 8.0f);
     }
 
     npages = (num + 27) / 28;

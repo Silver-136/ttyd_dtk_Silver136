@@ -377,76 +377,76 @@ static void actionCommandDisp(f32 x, f32 y) {
     f32 target;
     camGetPtr(CAMERA_2D);
     {
-    s32 numIcons;
-    u16 pressedA, idleA, pressedB, idleB;
-    s32 off0, off1;
-    idleB = 0;
-    pressedB = 0;
-    numIcons = 1;
-    ac->disp.blinkTimer++;
-    off1 = 0;
-    off0 = 0;
-    pressedA = BattleACGetButtonIcon(p->mask, 1);
-    idleA = BattleACGetButtonIcon(p->mask, 0);
-    switch (ac->params[0]) {
-        case 15:
-            off0 = -10;
-            off1 = 10;
-        case 11:
-        case 12:
-            pressedA = BattleACGetButtonIcon(p->maskA, 1);
-            idleA = BattleACGetButtonIcon(p->maskA, 0);
-            pressedB = BattleACGetButtonIcon(p->maskB, 1);
-            idleB = BattleACGetButtonIcon(p->maskB, 0);
-            numIcons = 2;
-            break;
-        case 13:
-            pressedA = ICON_STICK_UP;
-            idleA = ICON_STICK_DOWN;
-            break;
-        case 14:
-            pressedA = ICON_STICK_LEFT;
-            idleA = ICON_STICK_RIGHT;
-            break;
-    }
-    phase = ac->disp.blinkTimer / 7;
-    if (numIcons == 1) {
-        if ((phase & 1) == 1) {
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = -200.0f + x;
-            pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
-        } else {
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = -200.0f + x;
-            pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
+        s32 numIcons;
+        u16 pressedA, idleA, pressedB, idleB;
+        s32 off0, off1;
+        idleB = 0;
+        pressedB = 0;
+        numIcons = 1;
+        ac->disp.blinkTimer++;
+        off1 = 0;
+        off0 = 0;
+        pressedA = BattleACGetButtonIcon(p->mask, 1);
+        idleA = BattleACGetButtonIcon(p->mask, 0);
+        switch (ac->params[0]) {
+            case 15:
+                off0 = -10;
+                off1 = 10;
+            case 11:
+            case 12:
+                pressedA = BattleACGetButtonIcon(p->maskA, 1);
+                idleA = BattleACGetButtonIcon(p->maskA, 0);
+                pressedB = BattleACGetButtonIcon(p->maskB, 1);
+                idleB = BattleACGetButtonIcon(p->maskB, 0);
+                numIcons = 2;
+                break;
+            case 13:
+                pressedA = ICON_STICK_UP;
+                idleA = ICON_STICK_DOWN;
+                break;
+            case 14:
+                pressedA = ICON_STICK_LEFT;
+                idleA = ICON_STICK_RIGHT;
+                break;
         }
-    } else {
-        if ((phase & 1) == 1) {
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = -225.0f + x + off0;
-            pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
-            {
-                Vec pos2 = {0.0f, 0.0f, 0.0f};
-                pos2.x = -175.0f + x + off1;
-                pos2.y = 70.0f + y;
-                iconDispGx(&pos2, ICON_FLAG_2D, pressedB, 1.0f);
+        phase = ac->disp.blinkTimer / 7;
+        if (numIcons == 1) {
+            if ((phase & 1) == 1) {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = -200.0f + x;
+                pos.y = 70.0f + y;
+                iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
+            } else {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = -200.0f + x;
+                pos.y = 70.0f + y;
+                iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
             }
         } else {
-            Vec pos = {0.0f, 0.0f, 0.0f};
-            pos.x = -225.0f + x + off0;
-            pos.y = 70.0f + y;
-            iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
-            {
-                Vec pos2 = {0.0f, 0.0f, 0.0f};
-                pos2.x = -175.0f + x + off1;
-                pos2.y = 70.0f + y;
-                iconDispGx(&pos2, ICON_FLAG_2D, idleB, 1.0f);
+            if ((phase & 1) == 1) {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = -225.0f + x + off0;
+                pos.y = 70.0f + y;
+                iconDispGx(&pos, ICON_FLAG_2D, idleA, 1.0f);
+                {
+                    Vec pos2 = {0.0f, 0.0f, 0.0f};
+                    pos2.x = -175.0f + x + off1;
+                    pos2.y = 70.0f + y;
+                    iconDispGx(&pos2, ICON_FLAG_2D, pressedB, 1.0f);
+                }
+            } else {
+                Vec pos = {0.0f, 0.0f, 0.0f};
+                pos.x = -225.0f + x + off0;
+                pos.y = 70.0f + y;
+                iconDispGx(&pos, ICON_FLAG_2D, pressedA, 1.0f);
+                {
+                    Vec pos2 = {0.0f, 0.0f, 0.0f};
+                    pos2.x = -175.0f + x + off1;
+                    pos2.y = 70.0f + y;
+                    iconDispGx(&pos2, ICON_FLAG_2D, idleB, 1.0f);
+                }
             }
         }
-    }
     }
     target = p->gauge / 100.0f;
     if (disp->gaugeRatio <= target) {

@@ -332,6 +332,7 @@ static inline s32 cmpSign(s32 a, s32 b) {
 void monteCountDisp(void) {
     static s32 monte_snd_flag;
     s32 y = -0xB4;
+    s32 delta;
     u32 flags = yuwp->flags;
     Mtx mtx;
     GXColor c1, c2, c3, c4;
@@ -367,27 +368,27 @@ void monteCountDisp(void) {
     iconNumberDispGx(mtx, yuwp->dispTokens, 0, c4);
     yuwp->dispTick++;
     if ((yuwp->dispTick & 3) == 0) {
-        y = yuwp->tokens - yuwp->dispTokens;
+        delta = yuwp->tokens - yuwp->dispTokens;
         yuwp->dispTick = 0;
-        if (monte_snd_flag == 0 && y != 0) {
+        if (monte_snd_flag == 0 && delta != 0) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
             monte_snd_flag = 8;
         }
 #if VERSION <= VERSION_DEMO_US
         monte_snd_flag = 0;
 #endif
-        if (y != 0) {
-            y = y / 10;
-            if (y == 0) {
+        if (delta != 0) {
+            delta = delta / 10;
+            if (delta == 0) {
                 s32 sg;
                 if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
                     sg = 1;
                 } else {
                     sg = -1;
                 }
-                y = sg;
+                delta = sg;
             }
-            yuwp->dispTokens += y;
+            yuwp->dispTokens += delta;
         }
     }
 #if VERSION <= VERSION_DEMO_US

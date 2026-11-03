@@ -167,7 +167,7 @@ void effKemuri10Main(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
-    s32 camera;
+    CameraId camera;
     s32 timer;
 
     work = effect->userdata;
@@ -210,7 +210,7 @@ void effKemuri10Main(EffectEntry* effect) {
 #if VERSION <= VERSION_DEMO_US
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri10Disp, effect);
 #else
-    dispEntry((CameraId)camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri10Disp, effect);
+    dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri10Disp, effect);
 #endif
 }
 
