@@ -1153,7 +1153,8 @@ static EVT_BEGIN(peach_mail)
 EVT_END()
 
 /**
- * Exits (beros) of this room: s_bero to gor_03, dokan_1 (script only), A_dokan_h00 (script only) and n_bero
+ * Exits (beros) of this room: s_bero to gor_03, the pipe pair dokan_1 and A_dokan_h00 (each leads to the other, entered
+ * with the stick held; A_dokan_h00 in BG mode) and n_bero
  * to rsh_01_a.
  */
 static BeroEntry bero_entry_data[] = {
@@ -1474,7 +1475,7 @@ EVT_END()
 
 /**
  * Init event of Luigi (ルイージ): between STG6_54_WELCOME_BACK
- * and STG7_19_THE_DOOR_TO_LORD_CRUMP places him at (65, 0, 120) facing left or right.
+ * and STG7_19_THE_DOOR_TO_LORD_CRUMP places him at (65, 0, 120) facing left.
  */
 static EVT_BEGIN(luigi_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1509,7 +1510,7 @@ static NpcSetupInfo luigiEnt[] = {
 };
 
 /**
- * Registers Luigi (model c_luigi) and his companion Su Creamy (ス・クリーミ, model c_lp_moa) from luigiEnt
+ * Registers Luigi (model c_luigi) and his companion Screamy (ス・クリーミ, model c_lp_moa) from luigiEnt
  * and screamEnt in the story range STG6_54_WELCOME_BACK to STG7_19_THE_DOOR_TO_LORD_CRUMP;
  * called while the map sets up its NPCs.
  */
@@ -1539,7 +1540,7 @@ EVT_BEGIN(scream_talk)
     RETURN
 EVT_END()
 
-/** NPC setup of Su Creamy, Luigi's companion at the station. */
+/** NPC setup of Screamy, Luigi's companion at the station. */
 NpcSetupInfo screamEnt[] = {
     {
         "ス・クリーミ", // name
@@ -1633,7 +1634,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * Boarding the blimp to Glitzville when Mario stands on the A_noriba gondola:
+ * Boarding the blimp to Glitzville when Mario presses A on the A_noriba gondola:
  * the blimp music starts, the mooring poles are lowered one after another, the gondola rises over 2 seconds,
  * then the screen changes to tou_20 (first trip, before STG3_00_WELCOME_TO_GLITZVILLE) or tou_00
  * after a 10 second ride.
@@ -2270,7 +2271,7 @@ EVT_BEGIN(gor_04_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_17, 0)
     SPAWN_EVENT(PTR(evt_wing))
 
-    // Stepping on the blimp platform starts the blimp ride.
+    // Pressing A on the blimp platform starts the blimp ride.
     CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
     CALL(evt_bero_get_entername, LW(0))
 

@@ -799,7 +799,7 @@ static void monte_disp(CameraId camera, void* param) {
 }
 
 /**
- * Enter event of the n_bero door: if system flag 64 is set it clears it, then returns 0 in LW(0).
+ * Enter event of the n_bero, e_bero, dokan_1 and s_bero exits: if system flag 64 is set it clears it, then returns 0 in LW(0).
  * Leftover of a debug mode switch.
  */
 EVT_BEGIN(debug_event)
@@ -1075,7 +1075,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
     CALL(evt_set_dir_to_target, STRING("マフィアボス"), STRING("mario"))
     WAIT_MS(200)
 
-    // Don Pianta grudgingly admits Mario brought his daughter back and that she is happy with Frankie.
+    // Don Pianta grudgingly admits Mario brought his daughter back.
     CALL(evt_msg_print, 0, STRING("mac_2_117"), 0, STRING("マフィアボス"))
 
     // Mario is near the desk: Don Pianta walks over to him and hands over the Blimp Ticket.
@@ -1126,7 +1126,7 @@ EVT_END()
 
 /**
  * Init event of Don Pianta (マフィアボス): places him by the story progress (at his desk,
- * on the platform with his back turned during STG5_58_FAIR_WINDS to STG5_64_03_F_F_ARRIVE,
+ * lying on the platform (turned 90 degrees about X) during STG5_58_FAIR_WINDS to STG5_64_03_F_F_ARRIVE,
  * or out of sight afterwards) and, after the reunion scene at STG2_45_DAUGHTER_LOCATED, runs the ticket check.
  */
 EVT_BEGIN(maffiaboss_init)
@@ -1601,7 +1601,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア１"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
-    // Don Pianta, sunk in gloom, addresses Francesca after a long silence.
+    // Don Pianta stays silent (the line is only dots).
     CALL(evt_msg_print, 0, STRING("mac_5_046"), 0, STRING("マフィアボス"))
     CALL(evt_npc_set_anim, STRING("マフィアボス"), STRING("A_1"))
     WAIT_MS(500)
@@ -2163,7 +2163,7 @@ static EVT_BEGIN(mony_talk)
 EVT_END()
 
 /**
- * Init event of Peeton (ピートン): while Trouble Center request 19 is active she stands at (275, 0, 413);
+ * Init event of Peeton (ピートン): while Trouble Center request 19 is active he stands at (275, 0, 413);
  * otherwise she is placed by story progress at one of four spots in the hall (e.g. (-280, 155, -185) in the
  * early chapters, (-198, 155, -80) after the train leaves).
  */
@@ -2325,7 +2325,7 @@ EVT_END()
 
 /**
  * Init event of Luigi (ルイージ): during STG3_32_BOSS_BATTLE up to STG4_15_04_SHADOW_SIRENS_DOOPLISS
- * places him at (440, 0, -20) facing left or right; outside that range he keeps his default position.
+ * places him at (440, 0, -20) facing left; outside that range he keeps his default position.
  */
 static EVT_BEGIN(luigi_init)
     SWITCH(GSW_STORY_PROGRESS)
