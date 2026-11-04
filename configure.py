@@ -26,17 +26,17 @@ from tools.project import (
     is_windows,
 )
 
-# Game versions
-DEFAULT_VERSION = 0
+# Game versions, in build order: the index is BUILD_VERSION and equals the VERSION value in include/version.h.
 VERSIONS = [
-    "G8MJ01",  # 0
-    "G8ME01",  # 1
-    "G8MP01",  # 2
-    "G8ME01_DEMO",  # 3
-    "G8MJ01_DEMO",  # 4
-    "G8ME01_DEMO2",  # 5: September 2004 US demo (Interactive Multi-Game Demo Disc Version 19)
-    "G8MP01_DEMO",  # 6: September 2004 European demo (Multi-Game Demo Disk November 2004)
+    "G8ME01_DEMO",  # 0: June 2004 US demo (VERSION_DEMO_US)
+    "G8MJ01_DEMO",  # 1: Japanese store demo (VERSION_DEMO_JP)
+    "G8MJ01",  # 2: Japanese release (VERSION_JP)
+    "G8ME01",  # 3: US release (VERSION_US)
+    "G8ME01_DEMO2",  # 4: September 2004 US demo, Interactive Multi-Game Demo Disc Version 19 (VERSION_DEMO_US2)
+    "G8MP01_DEMO",  # 5: September 2004 European demo, Multi-Game Demo Disk November 2004 (VERSION_DEMO_EU)
+    "G8MP01",  # 6: European release (VERSION_EU)
 ]
+DEFAULT_VERSION = VERSIONS.index("G8MJ01")
 # Versions added after JP and US.
 LATER_VERSIONS = ("G8MP01", "G8ME01_DEMO", "G8MJ01_DEMO", "G8ME01_DEMO2", "G8MP01_DEMO")
 
@@ -229,7 +229,6 @@ cflags_base = [
     "-i libs/dolsdk2004/include/libc",
     "-i libs/musyx/include",
     f"-i build/{config.version}/include",
-    f"-DBUILD_VERSION={version_num}",
     f"-DVERSION_{config.version}",
     "-DSDK_REVISION=1",
 ]

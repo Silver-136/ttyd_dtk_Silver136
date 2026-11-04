@@ -25,15 +25,6 @@ SmartWork smartWork;
 #endif
 
 //.sdata
-#if VERSION >= VERSION_US
-// US and later: no fixed battle heap (battle maps use a map sub-heap); the smart heap is index 4
-#define HEAP_COUNT 5
-#define SMART_HEAP 4
-#else
-#define HEAP_COUNT 6
-#define SMART_HEAP 5
-#endif
-
 // {fixed, size}: a fixed heap (1) has its size in KiB, the others (0) get size percent of the arena left over
 s32 size_table[HEAP_COUNT][2] = {
 #if VERSION <= VERSION_DEMO_JP
@@ -87,11 +78,9 @@ u32 count;
 
 #if VERSION <= VERSION_DEMO_JP
 // early demos: the smart heap is a fixed 7 MiB block taken from the default heap
-#define SMART_ALLOC_HEAP HEAP_DEFAULT
 #define SMART_HEAP_SIZE 0x700000
 #else
-#define SMART_ALLOC_HEAP SMART_HEAP
-#define SMART_HEAP_SIZE ((u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32)
+#define SMART_HEAP_SIZE ((u8*)heapEnd[HEAP_SMART] - (u8*)heapStart[HEAP_SMART] - 32)
 #endif
 
 //local prototypes

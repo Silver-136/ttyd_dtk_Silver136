@@ -6,14 +6,31 @@
 #include <dolphin/gx.h>
 #include "manager/filemgr.h"
 
+// Heap indexes for __memAlloc/__memFree (sizes in memory.c size_table). JP and the early demos have a fixed battle
+// heap at index 4; US and later have none (battle memory comes from a map sub-heap, see BattleAlloc), so the last
+// heap moves from 5 to 4.
 typedef enum HEAP_TYPE {
     HEAP_DEFAULT = 0,
-    HEAP_MALLOC = 1, //for memInit/Clear to do its allocation
+    HEAP_MALLOC = 1, // memInit/memClear turn it into the map heap (_mapAlloc)
     HEAP_EXT = 2,
     HEAP_EFFECT = 3,
+#if VERSION >= VERSION_US
+    HEAP_SMART = 4, // the smart heap for loaded files (smartAlloc)
+    HEAP_COUNT = 5
+#else
     HEAP_BATTLE = 4,
-    HEAP_UNK5 = 5
+    HEAP_SMART = 5, // the smart heap for loaded files (smartAlloc); the early demos leave it unused and take the
+                    // smart heap from HEAP_DEFAULT instead
+    HEAP_COUNT = 6
+#endif
 } HEAP_TYPE;
+
+// The heap smartAlloc's block comes from.
+#if VERSION <= VERSION_DEMO_JP
+#define SMART_ALLOC_HEAP HEAP_DEFAULT
+#else
+#define SMART_ALLOC_HEAP HEAP_SMART
+#endif
 
 typedef struct smartEntry {
     void* address; //0x0
