@@ -71,23 +71,23 @@ Placements that stay are needed or kept on purpose: SDK startup sections, paddin
 
 Same rule: every commit keeps all five builds byte-identical (US 30 files, JP 32, PAL 33, US demo 7, JP demo 33, objdiff
 100 % code and data per unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory.py`, start = commit
-85ac972b, last counted 2026-11-01. Version differences live in ordered `VERSION` tests (`include/version.h`): 9,104 tests in
-871 game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL 1, Demos 7). US retail is
+85ac972b, last counted <!--n:counted_date-->2026-11-03<!--/n--> (`cleanup_tools/progress_counts.py --write` updates every marked number). Version differences live in ordered `VERSION` tests (`include/version.h`): <!--n:version_tests-->9,123<!--/n--> tests in
+<!--n:version_tests_files-->871<!--/n--> game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL <!--n:fakes_rows_pal-->1<!--/n-->, Demos <!--n:fakes_rows_demos-->6<!--/n-->). US retail is
 the readability priority. Comments that retell a script or describe a scene stay.
 
 | What | Start | Now |
 | --- | --- | --- |
-| Hand-made copies of the MSL math-header constants (`fd_*` objects) | 16,730 lines in 607 files | 28 lines in 1 file (end_00); the rest come from the math headers, precompiled as the original was |
-| `#pragma force_active` | 776 | 16 |
-| `__declspec(section ...)` placements | 434 | 18 |
-| Padding objects (`gap_*`) | 142 | 8 |
+| Hand-made copies of the MSL math-header constants (`fd_*` objects) | 16,730 lines in 607 files | <!--n:game_fake_data_fd-->28<!--/n--> lines in <!--n:game_fake_data_fd_files-->1<!--/n--> file (end_00); the rest come from the math headers, precompiled as the original was |
+| `#pragma force_active` | 776 | <!--n:game_force_active-->13<!--/n--> |
+| `__declspec(section ...)` placements | 434 | <!--n:game_section_placement-->18<!--/n--> |
+| Padding objects (`gap_*`) | 142 | <!--n:game_gap_padding-->8<!--/n--> |
 | Whole-file optimizer/inline pragmas | 50 size + 16 inline settings | 0: per-unit flags in `configure.py` |
 | Per-function optimizer and inline pragma pairs replaced by one per-unit flag (`-inline noauto`, `-opt noprop`, ...) | | 60 units (one SDK unit, OSLink) |
-| Other optimizer and inline pragmas | 697 | 263 |
-| `FAKE:` comment sites (each listed in FAKES.md) | 320 | 779 in game code + 22 in libs (FAKES.md rows 214 -> 556). Many fakes are gone, but the certification review below marked every existing trick that had no FAKE note (spare copies, no-op casts, always-true tests, one-use inline functions and macros that only steer code generation), so the count went up: these are tricks that were already there, now documented |
+| Other optimizer and inline pragmas | 697 | <!--n:game_pragma_other-->261<!--/n--> |
+| `FAKE:` comment sites (each listed in FAKES.md) | 320 | <!--n:game_fake_comment_sites-->773<!--/n--> in game code + <!--n:libs_fake_comment_sites-->22<!--/n--> in libs (FAKES.md rows 214 -> <!--n:fakes_rows-->555<!--/n-->). Many fakes are gone, but the certification review below marked every existing trick that had no FAKE note (spare copies, no-op casts, always-true tests, one-use inline functions and macros that only steer code generation), so the count went up: these are tricks that were already there, now documented |
 | Doc comments | | about 12,000 functions and event scripts, 6,000 data tables and 1,240 files have a description, from LLCOOLT's readability pass (with the author's permission); the rest are open |
 | Certification review of `src/` | | every file read once (2026-10-27); about 3,500 edits kept where both builds stayed byte-identical: names and named constants, wrong or matching-process comments rewritten, dead code removed, `// BUG:` notes on retail oddities. The event scripts under `rels/` are not reviewed yet |
-| Inline asm in game code | 19 | 8 |
+| Inline asm in game code | 19 | <!--n:game_inline_asm-->8<!--/n--> |
 | Private copies of prototypes in `.c` files | ~20,000 | ~1,000 left (event functions, owner-header and SDK prototypes now come from headers) |
 | Raw numbers given names | | unit kinds and sides, items (also about 590 item ids in event scripts), sounds (182 ids), saved variables, targeting flags, characters, menu states, party/battle/item/event flags, weapon elements, counter resistances, special and target-property flags, unit and part attributes (also in about 1,200 event-script calls and the unit/part data tables), statuses, partner ids; the special unit ids of battle scripts (about 34,000 arguments); the flag words of map objects, NPCs (and their status word), effects, cameras, animation poses, battles, fades, the memory card and window managers, map drawing objects and animations, items, Mario's display and Peach, partners, ext poses, sound streams, the audience, the status window, images, message windows, the pause menu and file select, the puni module and the map hit objects (about 13,000 code, script and table masks); item and unit-kind case labels; defense attributes, damage codes and damage-check flags, battle camera modes, interpolation curves, case-event conditions, sequence ids and BGM/ENV play words; the certification `magic` notes where a name already exists (party run modes and motions, battle phases, item ids in tables, `UNIT_ID_SELF` in about 495 more script sites) |
 | Calls through function-pointer casts (wrong or private prototypes) | ~385 | 37 (one typed declaration per function; open families listed in `docs/CLEANUP_BACKLOG.md`) |
