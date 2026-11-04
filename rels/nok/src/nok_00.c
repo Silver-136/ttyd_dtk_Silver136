@@ -348,7 +348,7 @@ EVT_BEGIN(nokonoko_F_talk)
                     CALL(evt_item_get_item, STRING("df"))
                     CALL(evt_item_get_item_end_wait, STRING("df"))
                     CALL(evt_msg_print, 0, STRING("irai_15_007"), 0, 0)
-                    CALL(evt_sub_save_playtime, GSW_NOK_FOOD_I_WANT_DONE_TIME_UNUSED)
+                    CALL(evt_sub_save_playtime, GSW_NOK_FOOD_I_WANT_DONE_TIME)
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_THE_FOOD_I_WANT), 1)
 

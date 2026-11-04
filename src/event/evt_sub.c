@@ -8,6 +8,7 @@
 #include "eff/eff_itemget.h"
 #include "icon_ids.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_save_flags.h"
 #include "countdown.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -2338,12 +2339,12 @@ USER_FUNC(irai_mail_check) {
         u8 b[8];
         OSTime t;
     } u;
-    IRAI_CHECK(0x1505, 0x17, 0x58d, 0x25)
-    IRAI_CHECK(0x150a, 0x18, 0x595, 0x26)
-    IRAI_CHECK(0x150b, 0x19, 0x59d, 0x27)
-    IRAI_CHECK(0x150d, 0x1a, 0x5a5, 0x28)
-    IRAI_CHECK(0x1512, 0x1b, 0x5ad, 0x29)
-    IRAI_CHECK(0x1518, 0x1c, 0x5b5, 0x2a)
+    IRAI_CHECK(0x1505, 0x17, GSW_ID(GSW_GON_TRY_TO_FIND_ME_DONE_TIME), 0x25)
+    IRAI_CHECK(0x150a, 0x18, GSW_ID(GSW_TIK_HELP_MY_DADDY_DONE_TIME), 0x26)
+    IRAI_CHECK(0x150b, 0x19, GSW_ID(GSW_TOU_HELP_WANTED_DONE_TIME), 0x27)
+    IRAI_CHECK(0x150d, 0x1a, GSW_ID(GSW_NOK_FOOD_I_WANT_DONE_TIME), 0x28)
+    IRAI_CHECK(0x1512, 0x1b, GSW_ID(GSW_USU_TROUBLE_20_DONE_TIME), 0x29)
+    IRAI_CHECK(0x1518, 0x1c, GSW_ID(GSW_BOM_I_CANT_SPEAK_DONE_TIME), 0x2a)
     evtSetValue(event, args[1], ret);
     return EVT_RETURN_DONE;
 }

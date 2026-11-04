@@ -30,9 +30,9 @@ void kpaMutekiOn(void);
 
 struct HitEntry;
 
-/* Bowser (kpa) work, pointed to by MarioWork.kpaWork (0x28C JP, 0x298 US).
+/* Bowser (kpa) work, pointed to by MarioWork.kpaWork (0x28C in JP, 0x298 from US on).
  * kpaPreInit allocates it once (0x154) and marioReset keeps the pointer.
- * Same layout on JP and US. */
+ * Same layout in every version. */
 typedef enum KpaWorkFlags {
     KPA_WORK_FLAG_NO_HIP_ATTACK = (1 << 4),  // 0x10, kpaHipAttackOk returns FALSE
     KPA_WORK_FLAG_WATER_FALL_SFX = (1 << 8), // 0x100, play SFX_KUPPA_WATER_FALL1 on the next drop into water (set while falling or leaving the water)

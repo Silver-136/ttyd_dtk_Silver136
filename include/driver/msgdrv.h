@@ -13,9 +13,9 @@ typedef enum MsgCharFlags {
     MSG_CHAR_SHAKE = (1 << 1),          // 0x2, <shake>
     MSG_CHAR_WAVE = (1 << 2),           // 0x4, <wave>
     MSG_CHAR_TALK = (1 << 3),           // 0x8, plays the voice and moves the speaker's mouth
-    MSG_CHAR_VOICE = (1 << 4),          // 0x10, plays the voice only (US: the '・' character)
+    MSG_CHAR_VOICE = (1 << 4),          // 0x10, plays the voice only (set for the '・' character)
     MSG_CHAR_SEL_ROW_MASK = 0xFF00,     // <select> windows: the row of the character (MSG_CHAR_SEL_ROW)
-    MSG_CHAR_SCALE_X = (1 << 16),       // 0x10000, <scaleX> (US): stretched on x only
+    MSG_CHAR_SCALE_X = (1 << 16),       // 0x10000, <scaleX> (US and later): stretched on x only
 } MsgCharFlags;
 #define MSG_CHAR_SEL_ROW(n) (0x100 << (n))
 
@@ -49,7 +49,8 @@ typedef struct MsgChar {
     f32 rot; //0x14, animation entries: rotation; dynamic-scale entries: current scale
 } MsgChar;
 
-// MsgWinData.flags (msgdrv, evt_msg). 0x1 (set at creation, never read) is not named.
+// MsgWinData.flags (msgdrv, evt_msg). 0x1 (set at creation, never read) has only LLCOOLT's name MSG_WIN_FLAG_OPEN
+// at the end of this file.
 typedef enum MsgWinFlags {
     MSG_WIN_FLAG_START = (1 << 1),       // 0x2
     MSG_WIN_FLAG_FAST = (1 << 2),        // 0x4
@@ -79,7 +80,7 @@ typedef struct MsgWinData {
     OSTime lastUpdateTime; //0x30, reset every msgMain; the delta advances the scroll
     s32 charCount; //0x38, MsgChar entries in use
 #if VERSION >= VERSION_US
-    MsgChar entries[0xA00]; //0x3C (US: twice as many, so every field below moves by 0x7800)
+    MsgChar entries[0xA00]; //0x3C (US and later: twice as many, so every field below moves by 0x7800)
 #else
     MsgChar entries[0x500]; //0x3C
 #endif

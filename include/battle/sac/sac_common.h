@@ -7,10 +7,10 @@
 #include "dolphin/mtx.h"
 #include "driver/effdrv.h"
 
-// The star stone that rises above Mario at the start of a special move (main_star in sac_bakugame, sac_muki and
-// sac_suki; sac_deka keeps its own variant)
+// The star stone that rises above Mario at the start of a special move (main_star in sac_bakugame, sac_muki,
+// sac_scissor, sac_suki and sac_zubastar; sac_deka keeps its own variant)
 typedef struct SacStarStone {
-    s32 state;        // 0x0, main_star step (1 appear, 2 rise and spin, 3 fly up, then idle)
+    s32 state;        // 0x0, main_star step (1 appear, 2 rise and spin, 3 fly up; the later steps differ per move)
     s32 timer;        // 0x4, frames in the current step
     Vec pos;          // 0x8
     Vec from;         // 0x14

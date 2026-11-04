@@ -33,7 +33,7 @@ typedef struct BreakSlotWork {
     s32 breakTurn;            // 0x010
     f32 spMultiplier;         // 0x014, star power gain multiplier from the slot result (2.0/3.0; BattleAudience_ApRecoveryBuild)
     BreakSlotReel reels[3];   // 0x018
-    s32 startSfxId;           // 0x12C, SFX_BTL_SLOT_START1 handle, stopped on the first reel
+    s32 startSfxId;           // 0x12C, SFX_BTL_SLOT_START1 handle, stopped once all three reels have stopped
     struct EventEntry* evt;           // 0x130
 } BreakSlotWork;
 

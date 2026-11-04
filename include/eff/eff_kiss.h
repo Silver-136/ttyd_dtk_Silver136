@@ -1,4 +1,5 @@
-// eff_kiss.c: Ms. Mowz's kiss (チュチュリーナキス); effKissEntry.
+// eff_kiss.c: kiss effect (チュチュリーナキス, Ms. Mowz's kiss), also used by other partners' battle moves and by
+// field scenes; effKissEntry.
 
 #pragma once
 

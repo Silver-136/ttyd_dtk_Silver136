@@ -22,7 +22,7 @@ typedef enum DoorParamKind {
 } DoorParamKind;
 
 // DoorParam.flags
-#define DOOR_FLAG_HIDE_NPCS 0x1        // npc_hide_onoff hides the listed NPCs while inside
+#define DOOR_FLAG_HIDE_NPCS 0x1        // npc_hide_onoff shows the listed NPCs while inside, hides them on leaving
 #define DOOR_FLAG_NO_OPEN_SE 0x2       // house_open_se stays silent
 
 // LW(15) of evt_door_open / evt_door_close: option bits the caller sets

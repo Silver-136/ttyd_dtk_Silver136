@@ -1,4 +1,4 @@
-// Majolyne / Marilyn / Vivian (the Shadow Sirens): types and scripts shared between the win battle
+// Majolyne / Marilyn / Vivian (the Shadow Sirens): the sort entry type shared by the win battle
 // (chapter 2) and the las rematch (chapter 8), each built from its own copy of the units.
 
 #pragma once

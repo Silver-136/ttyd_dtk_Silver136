@@ -19,7 +19,8 @@
 #include "battle/battle_seq_end.h"
 #include "mario/mario_pouch.h"
 
-// Battle texture id in each version's battle texture file: the US ids of the textures that use it are 0x16 higher
+// Battle texture id in each version's battle texture file: in US and later the ids of the textures that use it are
+// 0x16 higher
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
 typedef enum EquipFlags {
@@ -216,7 +217,7 @@ typedef struct StChgMsg {
 typedef struct StChgWork {
     StChgMsg msg[28];     // 0x0
     char text[0x100];     // 0x150
-    s32 maskHi;           // 0x250 (BattleAnnounce 0x368): 64-bit message mask, read as s64 (the US BattleAnnounce is only 4-aligned); all set when the luck event starts
+    s32 maskHi;           // 0x250 (BattleAnnounce 0x368): 64-bit message mask, read as s64 (with the 0x100 text of US and later and the early demos it is only 4-aligned); all set when the luck event starts
     s32 maskLo;           // 0x254
 } StChgWork;
 
@@ -228,7 +229,7 @@ typedef struct BattleAnnounce {
     char text[0x100];
 #else
 #if VERSION >= VERSION_US
-    char text[0x100];                 // 0x14 (US 4 shorter)
+    char text[0x100];                 // 0x14 (US and later: 4 shorter than JP)
 #else
     char text[0x104];                 // 0x14
 #endif
@@ -249,7 +250,7 @@ typedef struct BattleWorkPartyInfo {
     u8 pad_22[0x24 - 0x22];   // 0x22, never accessed
     s32 statusFlags;          // 0x24, saved BattleUnit.statusFlags
 #if VERSION >= VERSION_US
-    u16 usCommandDisabled[2]; // US only: saved BattleUnit usCommandDisabled
+    u16 usCommandDisabled[2]; // US and later: saved BattleUnit usCommandDisabled
 #endif
 } BattleWorkPartyInfo;
 
@@ -342,7 +343,7 @@ struct BattleWork {
     s32 stylishEndFrame;               // 0x2728
     s32 stylishUnitId;                 // 0x272C
     s32 stylishResult;                 // 0x2730
-    s32 stylishEarlyFrames;            // 0xA2734
+    s32 stylishEarlyFrames;            // 0x2734
     FieldBattleInfo* fbatInfo;          // 0x2738
     s32 statusWindowOff;                // 0x273C
     s32 lectureMode;                    // 0x2740
@@ -375,14 +376,14 @@ struct BattleWork {
     s32 acHelpDispType;                 // 0x18FF4
     u8 pad_18FF8[0x19038 - 0x18FF8];    // 0x18FF8, never accessed
 #if VERSION >= VERSION_US
-    s32 commandDisabled[3]; // US
+    s32 commandDisabled[3]; // US and later
 #else
     s32 commandDisabled[5];             // 0x19038, set to 3 by Bowser's command-blocking attacks
 #endif
     s32 luckEventId;                    // 0x1904C
     s32 reserveItems[4];                // 0x19050
     s32 curtainSfxId;                    // 0x19060
-    u8 lastAcSuccess;                   // 0x19064 (US 0x19074), 1 after a successful action command (btlevtcmd_ResultACDefence)
+    u8 lastAcSuccess;                   // 0x19064 (US 0x19074), 1 after a successful action command (btlevtcmd_AudienceDeclareACResult)
     u8 pad_19065[0x19068 - 0x19065];    // 0x19065, never accessed
     BattleDebugCtrl debug;              // 0x19068 (US 0x19078), debug overrides read by the audience and break slot
     u32 lectureFlags;                   // 0x19080 (US 0x19090), bit 0 set by the Frankly lecture (aud_attack_init/end); continues msgWindow lectureWindowId
@@ -410,7 +411,8 @@ BattleUnit* BattleGetUnitPtr(BattleWork* wp, s32 index);
 void BattleFree(void* ptr);
 void* BattleAlloc(u32 size);
 
-// BTL_ALLOC/BTL_FREE: US routes these battle-heap sites through BattleAlloc/BattleFree; JP calls the heap directly.
+// BTL_ALLOC/BTL_FREE: US and later route these battle-heap sites through BattleAlloc/BattleFree; JP and the early
+// demos call the heap directly.
 #if VERSION >= VERSION_US
 #define BTL_ALLOC(size) BattleAlloc(size)
 #define BTL_FREE(ptr) BattleFree(ptr)

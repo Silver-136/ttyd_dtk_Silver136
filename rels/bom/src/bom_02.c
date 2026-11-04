@@ -928,7 +928,7 @@ static EVT_BEGIN(talk_murabito_h)
                 END_LOOP
                 CALL(evt_msg_print, 0, STRING("irai_26_05"), 0, 0)
                 CALL(evt_sub_get_coin, 20)
-                CALL(evt_sub_save_playtime, GSW_BOM_I_CANT_SPEAK_TIME_UNUSED)
+                CALL(evt_sub_save_playtime, GSW_BOM_I_CANT_SPEAK_DONE_TIME)
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_I_CANT_SPEAK), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)

@@ -198,7 +198,7 @@ typedef enum PsndFlags {
 #define PSND_BGM_SONG_MASK 0x0FFFFFFF // ... the low bits are the song id
 #define PSND_RESTART 0x10          // restart even if the same song or group is already playing
 #define PSND_CONTINUE 0x20         // resume the faded-out (PSND_PAUSE) song: SoundSSContinueCh/SoundSongContinueCh
-#define PSND_QUICK 0x40            // BGM: dip and undo move 5 steps per frame; ENV (US): dip applied at once
+#define PSND_QUICK 0x40            // BGM: dip and undo move 5 steps per frame; ENV (US and later): dip applied at once
 #define PSND_UNSILENT 0x80         // with PSND_CONTINUE: undo PSND_SILENT
 #define PSND_FADEIN 0x100          // fade in over the fade time
 #define PSND_FADEOUT 0x200         // Off: fade out, then free the slot (On calls ignore it; many evt_snd_bgmon scripts pass it anyway)

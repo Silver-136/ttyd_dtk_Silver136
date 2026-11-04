@@ -36,9 +36,9 @@ typedef struct SeqEndObj {
 typedef struct BattleSeqEndWork {
     s32 state;                     // 0x0
     s32 timer;                     // 0x4
-    s16 exp;                       // 0x8, star points won (doubled by the badge)
+    s16 exp;                       // 0x8, star points won (doubled by Merlee's MAJINAI_EXP_UP charm)
     s16 expDisp;                   // 0xA, counts down while exp is added to the pouch
-    s32 levelUp;                   // 0xC, set when the pouch exp reaches 100
+    s32 levelUp;                   // 0xC, set when the pouch star points reach 100
     s32 selected;                  // 0x10
     s32 unk14;                     // 0x14
     s32 objCount;                  // 0x18

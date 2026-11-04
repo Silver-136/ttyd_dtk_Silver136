@@ -30,10 +30,6 @@ extern BattleWeapon ItemWeaponData_HealthySalad;
 extern BattleWeapon ItemWeaponData_Honey_Syrup;
 extern BattleWeapon ItemWeaponData_IceCandy;
 
-#if VERSION <= VERSION_DEMO_JP
-extern BattleWeapon ItemWeaponData_FireCandy;
-#endif
-
 extern BattleWeapon ItemWeaponData_Irekaeeru;
 extern BattleWeapon ItemWeaponData_Jiwajiwa_Kinoko;
 extern BattleWeapon ItemWeaponData_Jiwajiwa_Syrup;

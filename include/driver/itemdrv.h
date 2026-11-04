@@ -8,7 +8,7 @@
 #include <dolphin/os.h>
 
 // ItemEntry.flags, named from itemdrv (itemMain, itemHitCheck, itemseq_*, the get sequence). 0x80 (tested, never
-// set) is not named.
+// set) has only LLCOOLT's name ITEM_FLAG_ELASTIC at the end of this file.
 typedef enum ItemEntry_Flags {
     ITEM_FLAG_ACTIVE = (1 << 0),
     ITEM_FLAG_NO_TOUCH_GET = (1 << 1),        // 0x2, itemHitCheck ignores it (no pickup by touch)
@@ -27,7 +27,8 @@ typedef enum ItemEntry_Flags {
     ITEM_FLAG_NO_GET_BGM = (1 << 15),         // 0x8000, no get fanfare
 } ItemEntry_Flags;
 
-// ItemEntry.flags2. 0x2 (tested in evt_item_get_item, never set) is not named.
+// ItemEntry.flags2. 0x2 (tested in evt_item_get_item, never set) has only LLCOOLT's name ITEM_STATUS_END_WAIT at
+// the end of this file.
 typedef enum ItemEntry_Flags2 {
     ITEM_FLAG2_IN_POUCH = (1 << 0),             // 0x1, the item went into the pouch
     ITEM_FLAG2_NO_PICKUP_RISING = (1 << 2),     // 0x4, not collectible while rising
@@ -58,7 +59,7 @@ typedef enum ItemEntryType {
     ITEM_TYPE_SPREAD_TIMED = 6,             // + ITEM_FLAG2_SPREAD, 5000 ms
     ITEM_TYPE_SCATTER_NO_PICKUP_TIMED_LAND = 7, // 5000 ms counted from landing
     ITEM_TYPE_DROP = 8,                     // enemy and coin drops: 8000 ms from landing
-#if VERSION <= VERSION_DEMO_JP // the demo has no type 9
+#if VERSION <= VERSION_DEMO_JP // the early demos have no lost-badge type
     ITEM_TYPE_DROP_REPLACEABLE = 9,        // + ITEM_FLAG_REPLACEABLE
     ITEM_TYPE_DROP_LONG = 10,               // recovered items: 20000 ms from landing
     ITEM_TYPE_DROP_LONG_REPLACEABLE = 11,

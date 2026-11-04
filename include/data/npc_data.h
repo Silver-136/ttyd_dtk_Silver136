@@ -7,7 +7,7 @@
 #include "evt/evt_word.h"
 
 typedef struct NpcAiInfo {
-    const char* description; //0x0, used for s/etup.xml tag lookup
+    const char* description; //0x0, matched against the <aitype> tag of the map's setup file (setupDataBase)
     s32 flags; //0x4
     EvtWord* initEvent; //0x8
     EvtWord* moveEvent; //0xC

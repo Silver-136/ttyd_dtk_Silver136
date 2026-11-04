@@ -26,8 +26,8 @@ typedef enum GlobalWorkFlags {
     GW_FLAG_PROGRESSIVE = (1 << 3),          // 0x8, progressive scan (kept on the memory card; hot reset)
     GW_FLAG_CURTAIN_OPEN = (1 << 4),         // 0x10, the next map opens with the stage curtain (sys start)
     GW_FLAG_NO_SAVE_BLOCK = (1 << 5),        // 0x20, save blocks are not created (E3 demo)
-    GW_FLAG_E3 = (1 << 12),                  // 0x1000, E3 demo build behaviour (seq_e3)
-    GW_FLAG_E3_TIMEOUT = (1 << 13),          // 0x2000, the E3 demo went idle: back to the logo
+    GW_FLAG_E3 = (1 << 12),                  // 0x1000, E3/kiosk behaviour: set by seq_e3 and, at start-up, by every demo (marioStInit)
+    GW_FLAG_E3_TIMEOUT = (1 << 13),          // 0x2000, kiosk mode went idle: back to the logo
     GW_FLAG_NO_LETTER_BOX_UNUSED = (1 << 15), // 0x8000, the letter box is not drawn; nothing sets it
 } GlobalWorkFlags;
 

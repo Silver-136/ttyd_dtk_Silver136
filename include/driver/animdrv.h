@@ -28,7 +28,7 @@ typedef struct AnimPoseShape {
     AnimPoseShapeVertex vtxPos;    // 0x40
     AnimPoseShapeVertex vtxNrm;    // 0x48
     AnimPoseShapeVertex vtxClr0;   // 0x50
-    AnimPoseShapeVertex vtxTex[8]; // 0x48
+    AnimPoseShapeVertex vtxTex[8]; // 0x58
     s32 shapeDrawStart;            // 0x98
     s32 shapeDrawCount;            // 0x9C
     s32 dispMode;                  // 0xA0
@@ -276,7 +276,7 @@ typedef struct AnimationPose {
     AnimTexMtx* texAnimEntries;       // 0x6C
     f32 peraRotY;                       // 0x70, base Y rotation for the paper turn (flags & 8)
     f32 rotationY;                      // 0x74
-    f32 scaleZFlip;                     // 0x78, -1.0f mirrors Z (NpcEntry wScaleZ_flip)
+    f32 scaleZFlip;                     // 0x78, -1.0f mirrors Z (saved in NpcFieldEntry.scaleZFlip)
     f32 peraTargetRotY;                 // 0x7C, rotationY turns toward this; animPoseGetPeraEnd checks it
     s32 curKeyValue;                    // 0x80, AnimValueKey.value of valueKeyIdx; not read in C
     f32 loopTime;                       // 0x84
@@ -344,8 +344,8 @@ typedef struct AnimationWork {
     GXTexObj* curTexObj;            // 0x38
     Mtx paperMtx[3];                  // 0x3C
     Mtx* paperMtxPtr[3];              // 0xCC
-    s32 paperTexMode0;                   // 0xD8, animSetPaperTexObj a7 (both fields get it); == 0 tested with texChange1 in the paper draw path
-    s32 paperTexMode1;                   // 0xDC, animSetPaperTexObj a7; == 0 tested with check2 in the paper draw path
+    s32 paperTexMode0;                   // 0xD8, animSetPaperTexObj texMode (both fields get it); == 0 tested with texChange1 in the paper draw path
+    s32 paperTexMode1;                   // 0xDC, animSetPaperTexObj texMode; == 0 tested with check2 in the paper draw path
     s32 currDispMode;                 // 0xE0
     u8 pad_E4[0xE8 - 0xE4];       // 0xE4, never accessed
     s32 mbUseFloatScratch;            // 0xE8

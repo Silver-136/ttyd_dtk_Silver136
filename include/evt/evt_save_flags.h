@@ -126,16 +126,16 @@
 // set by mail_evt_pik_00 (RDM Issue 6); shopper_talk_evt (rsh_03 greets with stg6_shop_04_1) and add_shop_point
 // (swGet(0xFC)) double points within 15 minutes of GSW 23
 #define GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE GSWF(252)
-// set by win_04 init on every entry; win_log's map-dot check reads it for dot type 1, but no tubuDt dot uses type 1
+// set by win_04 init on every entry (JP and later); win_log's map-dot check reads it for dot type 1, but no tubuDt dot uses type 1
 #define GSWF_WIN_04_ENTERED GSWF(253)
-// set by tik_01 init on every entry; the journal map (win_log tubuCheck type 2) reads it
+// set by tik_01 init on every entry (JP and later); the journal map (win_log tubuCheck type 2) reads it
 #define GSWF_TIK_01_VISITED GSWF(254)
-// set by gon_00 init on every entry; the journal map (win_log tubuCheck type 3) reads it
+// set by gon_00 init on every entry (JP and later); the journal map (win_log tubuCheck type 3) reads it
 #define GSWF_GON_00_VISITED GSWF(255)
-// set by gra_00 init on every entry; win_log shows the type-4 map dots (Twilight Town to gra path) once it is set
+// set by gra_00 init on every entry (JP and later); win_log shows the type-4 map dots (Twilight Town to gra path) once it is set
 #define GSWF_GRA_00_ENTERED GSWF(256)
 // set by kuzi_bomb_talk_husei (gor_03) after the lottery-clock-error explanation, cleared when Mario buys a new
-// 500-coin number; when set the short lines are used
+// 500-coin number; when set the short lines are used (JP and later)
 #define GSWF_GOR_LOTTERY_RESET_EXPLAINED GSWF(257)
 // set by luigi_gor_first_talk (gor.c) after Luigi's first greeting (gor_luigi_00/01)
 #define GSWF_GOR_LUIGI_FIRST_TALK_DONE GSWF(1175)
@@ -297,13 +297,13 @@
 #define GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN GSWF(1238)
 // set by kuzi_get_keihin (gor_03) on the first Number 2 win: Lucky Day the first time, Zess Special after
 #define GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN GSWF(1239)
-// set by evt_yuuranking main_evt when a Plane Game score (yuu_00, type 0) takes first place; bteresa_talk counts it
+// set by evt_yuuranking_alloc when a Plane Game score (yuu_00, type 0) takes first place; bteresa_talk counts it
 #define GSWF_GOR_PLANE_GAME_TOP_SCORE GSWF(1240)
-// set by evt_yuuranking main_evt when a Boat Game score (yuu_01, type 3) takes first place; bteresa_talk counts it
+// set by evt_yuuranking_alloc when a Boat Game score (yuu_01, type 3) takes first place; bteresa_talk counts it
 #define GSWF_GOR_BOAT_GAME_TOP_SCORE GSWF(1241)
-// set by evt_yuuranking main_evt when a Tube Game score (yuu_02, type 2) takes first place; bteresa_talk counts it
+// set by evt_yuuranking_alloc when a Tube Game score (yuu_02, type 2) takes first place; bteresa_talk counts it
 #define GSWF_GOR_TUBE_GAME_TOP_SCORE GSWF(1242)
-// set by evt_yuuranking main_evt when a Paper Game time (yuu_03, type 1) takes first place; bteresa_talk counts it
+// set by evt_yuuranking_alloc when a Paper Game time (yuu_03, type 1) takes first place; bteresa_talk counts it
 #define GSWF_GOR_PAPER_GAME_TOP_SCORE GSWF(1243)
 // set by evt_to_gor and evt_skip (tou_00) when the blimp flies back to gor_04; no code reads it
 #define GSWF_TOU_BLIMP_TO_ROGUEPORT_UNUSED GSWF(1244)
@@ -475,7 +475,7 @@
 #define GSWF_GON_12_HONEY_SYRUP_CHEST GSWF(1509) /* the gon_12 chest mobj_box02 holding a Honey Syrup */
 #define GSWF_GON_13_UP_ARROW_CHEST GSWF(1510)    /* the gon_13 chest mobj_box04 holding an Up Arrow */
 // set by chuchurina_sogu (gon_12) when Koops is the partner at the end of the Ms. Mowz encounter; the credits
-// (end_00) show picture 53 instead of 9 when set
+// (end_00) show picture 53 instead of 9 when set (JP and later)
 #define GSWF_GON_12_MOWZ_MET_WITH_KOOPS GSWF(1511)
 #define GSWF_NOK_00_VISITED_UNUSED GSWF(1624)    /* set by nok_00 init on entry; only its own guard reads it */
 // set by nokorin_talk (nok_01) at Koopie Koo's introduction (before STG1_06_01); the same talk tests it
@@ -535,7 +535,7 @@
 #define GSWF_HEI_10_MULTIBOUNCE_BADGE_BLOCK GSWF(1796)
 // the hei_13 badge block (evt_mobj_badgeblk kind 1) holding Close Call
 #define GSWF_HEI_13_CLOSE_CALL_BADGE_BLOCK GSWF(1797)
-// the Happy Heart lying in hei_13 (above the bricks; not placed in the E3 build)
+// the Happy Heart lying in hei_13 (above the bricks; not placed while the GW_FLAG_E3 system flag is set)
 #define GSWF_HEI_13_HAPPY_HEART GSWF(1798)
 #define GSWF_HEI_13_TEN_COIN_BRICK GSWF(1799)    /* the hei_13 ten-coin brick (evt_mobj_brick MOBJ_BRICK_TEN_COIN) */
 #define GSWF_HEI_01_COIN_BUSH GSWF(1800)         /* the coin in hei_01's bush item_kusa_7 */
@@ -609,7 +609,7 @@
 // the Black Key lying in gra_00; set by its pickup event evt_majin_key, gra_00 init places it while clear
 #define GSWF_GRA_00_BLACK_KEY GSWF(2091)
 // set by senteresa_evt (jin_00) after the Atomic Boo battle; jin_00 init spawns that event and the Boo NPCs while
-// clear; gor_02 C code tests it for a 0x4C result
+// clear; gor_02 C code tests it for a 0x4C result (JP and later)
 #define GSWF_JIN_00_ATOMIC_BOO_DEFEATED GSWF(2226)
 // set by senteresa_evt (jin_00) when the Boos carry Mario out to gra_06; gra_06 init then runs teresa_oidasare_evt,
 // which clears it
@@ -1099,7 +1099,7 @@
 // events)
 #define GSWF_DOU_11_SWITCH_2_PRESSED GSWF(2984)
 #define GSWF_DOU_07_P_DOWN_D_UP GSWF(2985)       /* the P-Down, D-Up lying in dou_07 (evt_item_entry "item_00") */
-// the dou_05 chest "mobj_box00" (MOBJ_ITEMBOX_NORMAL): Defend Plus P in the US build, Damage Dodge P in JP
+// the dou_05 chest "mobj_box00" (MOBJ_ITEMBOX_NORMAL): Defend Plus P in US and later, Damage Dodge P before US
 #define GSWF_DOU_05_BADGE_CHEST GSWF(2986)
 // the Black Key dropped by the dou_07 Ember (erumosu_dead) and re-entered by dou_07 init
 #define GSWF_DOU_07_BLACK_KEY GSWF(2987)
@@ -1159,7 +1159,7 @@
 #define GSWF_MUJ_05_FLAVIO_FAVOR_ASKED GSWF(3142)
 // the Wedding Ring lying in muj_05 (evt_item_entry "item00", from STG5_63)
 #define GSWF_MUJ_05_WEDDING_RING GSWF(3143)
-// JP only: the muj_03 brick "bblk00" (evt_mobj_brick MOBJ_BRICK_PLAIN); the US build uses LSWF(3) instead
+// before US only: the muj_03 brick "bblk00" (evt_mobj_brick MOBJ_BRICK_PLAIN); US and later use LSWF(3) instead
 #define GSWF_MUJ_03_BRICK GSWF(3145)
 // the muj_02 badge block (evt_mobj_badgeblk kind 1, "mobj_badge_gat") holding Head Rattle
 #define GSWF_MUJ_02_HEAD_RATTLE_BADGE_BLOCK GSWF(3146)
@@ -1173,8 +1173,8 @@
 // set by koburon_talk (muj_00) after Whacka's first greeting, and by koburon_dead; later talks pick the line by
 // GSW(721)
 #define GSWF_MUJ_WHACKA_FIRST_TALK_DONE GSWF(3151)
-// the Keel Mango of the muj_02 tree "item_treeb_01" (evt_treeb_01); muj_02 init clears it on every entry, the US init
-// sets it before STG5_43
+// the Keel Mango of the muj_02 tree "item_treeb_01" (evt_treeb_01); muj_02 init clears it on every entry, and in US and
+// later sets it before STG5_43
 #define GSWF_MUJ_02_KEEL_MANGO_TREE GSWF(3152)
 // the muj_03 hidden block (evt_mobj_brick MOBJ_BRICK_HIDDEN_ITEM, "mobj_hidden2") holding a Jammin' Jelly
 #define GSWF_MUJ_03_JAMMIN_JELLY_HIDDEN_BLOCK GSWF(3153)
@@ -1702,7 +1702,8 @@
 #define GSW_MAIN_POWER_BOUNCE_RECORD_LO GSW(32)
 // deepest Pit of 100 Trials level reached, raised by jon_init_evt (jon); tik_06's sign (evt_kanban2) prints it
 #define GSW_JON_DEEPEST_LEVEL GSW(33)
-// shown by tik_06's sign (evt_kanban2) as Star Pieces found out of 100; nothing in the code writes it
+// shown by tik_06's sign (evt_kanban2) as Star Pieces found out of 100; itemseq_GetItem (itemdrv) adds 1
+// per item get of type 8
 #define GSW_TIK_STAR_PIECES_FOUND_COUNT GSW(34)
 // high byte of the Power Bounce record (see GSW(32)), raised by marioAttackEvent_RenzokuJump (battle_mario); tik_06's
 // sign prints it
@@ -1714,7 +1715,7 @@
 // GSWF(1191) once 90000 ms have passed
 #define GSW_GOR_CONTACT_LENS_ORDER_TIME GSW(108)
 // 100-coin investments given to Lumpy in mokorim_talk (gor_00), 0..3 (3 = he takes no more); from STG6_56 he repays 1
-// = 300, 2 = 600 (JP 500), 3 = 999 coins
+// = 300, 2 = 600 (500 before US), 3 = 999 coins
 #define GSW_GOR_LUMPY_INVESTMENT_COUNT GSW(116)
 // bteresa_talk (gor_03): 0..5, raised by one per talk while not above the count of minigame top-score flags
 // GSWF(1240..1243); picks bunny_teresa_11 .. _11_4
@@ -1790,21 +1791,21 @@
 // Bowser's power level carried between kpa rooms: saved by jumpstand_evt (kpa_03/kpa_05, evt_koopa_get_level),
 // restored by kpa_04/kpa_06 init (evt_koopa_set_level)
 #define GSW_KPA_BOWSER_LEVEL GSW(1223)
-// 8 bytes 1421..1428: play time saved by evt_sub_save_playtime when Try to Find Me (Koopook, gon_08) is completed; no
-// code reads it
-#define GSW_GON_TRY_TO_FIND_ME_DONE_TIME_UNUSED GSW(1421)
+// 8 bytes 1421..1428: play time saved by evt_sub_save_playtime when Try to Find Me (Koopook, gon_08) is completed;
+// irai_mail_check (evt_sub.c) reads it and sends mail 0x25 two hours later
+#define GSW_GON_TRY_TO_FIND_ME_DONE_TIME GSW(1421)
 // 8 bytes 1429..1436: play time saved by evt_sub_save_playtime when Help My Daddy (Pine T. Jr., tik_06) is completed;
-// no code reads it
-#define GSW_TIK_HELP_MY_DADDY_DONE_TIME_UNUSED GSW(1429)
+// irai_mail_check (evt_sub.c) reads it and sends mail 0x26 two hours later
+#define GSW_TIK_HELP_MY_DADDY_DONE_TIME GSW(1429)
 // 8 bytes (GSW 1437-1444): play time saved by talk_kinoshikowa (tou_05) when trouble Help Wanted is finished;
 // irai_mail_check (evt_sub.c) sends mail 0x27 two hours later
 #define GSW_TOU_HELP_WANTED_DONE_TIME GSW(1437)
 // 8 bytes 1445..1452: play time saved by evt_sub_save_playtime when The Food I Want (Bub-ulber, nok_00) is completed;
-// no code reads it
-#define GSW_NOK_FOOD_I_WANT_DONE_TIME_UNUSED GSW(1445)
+// irai_mail_check (evt_sub.c) reads it and sends mail 0x28 two hours later
+#define GSW_NOK_FOOD_I_WANT_DONE_TIME GSW(1445)
 // 8 bytes (1453..1460): evt_sub_save_playtime in aunt_talk (usu_01) when trouble 20 is solved; irai_mail_check sends
 // mail 0x29 two hours later
 #define GSW_USU_TROUBLE_20_DONE_TIME GSW(1453)
 // first of 8 bytes (1461-1468) where evt_sub_save_playtime stores the play time when the I Can't Speak trouble ends
-// (bom_02 talk_murabito_h); no code reads it
-#define GSW_BOM_I_CANT_SPEAK_TIME_UNUSED GSW(1461)
+// (bom_02 talk_murabito_h); irai_mail_check (evt_sub.c) reads it and sends mail 0x2A two hours later
+#define GSW_BOM_I_CANT_SPEAK_DONE_TIME GSW(1461)

@@ -79,7 +79,7 @@ typedef struct SoundEffect {
     SND_FVECTOR dir;        // 0x7C
 } SoundEffect;
 
-// SoundDVD.flags (their setters are stripped from the retail build except MUTE in SoundDVDMain)
+// SoundDVD.flags (their setters are stripped from every build except MUTE in SoundDVDMain)
 typedef enum SoundDVDFlags {
     SOUND_DVD_FLAG_PLAY = (1 << 0),     // 0x1
     SOUND_DVD_FLAG_MUTE = (1 << 1),     // 0x2

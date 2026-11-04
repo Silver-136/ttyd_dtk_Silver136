@@ -1,4 +1,4 @@
-// Declares the table of party unit setups used when a battle starts.
+// Header of battle_party.c (the table of party unit setups); battle.c declares the table itself.
 
 #pragma once
 

@@ -22,7 +22,7 @@ typedef struct smartEntry {
     u16 inUse; //0xC, 1 from smartAlloc, 0 when freed; written only
     u8 type; //0xE, allocation type passed to smartAlloc
     u8 pad_F; //0xF
-    u32 spaceAfter; //0x10, free bytes after this block (heap size - 32 at init; prev->spaceAfter += size on free)
+    u32 spaceAfter; //0x10, free bytes after this block (set from bytesLeft on allocation; prev->spaceAfter += size on free)
     struct smartEntry* next; //0x14
     struct smartEntry* prev; //0x18
 } smartEntry;
@@ -43,7 +43,7 @@ void memClear(HEAP_TYPE heap);
 void* __memAlloc(HEAP_TYPE heap, u32 size);
 void __memFree(HEAP_TYPE heap, void* ptr);
 
-#if VERSION >= VERSION_US // US: the map heap functions take the heap base; these macros pass mapalloc_base_ptr
+#if VERSION >= VERSION_US // US and later: the map heap functions take the heap base; these macros pass mapalloc_base_ptr
 extern void* mapalloc_base_ptr;
 void* _mapAlloc(void* base, u32 size);
 void* _mapAllocTail(void* base, u32 size);

@@ -38,7 +38,7 @@ typedef struct HitDamageReturn {
 
 // HitEntry.attributes: collision attributes from the map's hit joints (names from the joints that carry them and
 // from the code that tests them: marioChkToge, the walk-sound and hazard checks). DAMAGE_RETURN, MOBJ and BERO are
-// set at run time. 0x2, 0x8, 0x40, 0x400, 0x400000 and bits 24-29 are not named.
+// set at run time. 0x2, 0x8, 0x40, 0x400000 and bits 24-29 are not named.
 typedef enum HitAttributes {
     HIT_ATTR_SHELL_THROUGH = (1 << 0),     // 0x1, Koops' shell passes through
     HIT_ATTR_NPC_ONLY = (1 << 2),          // 0x4, only NPCs collide (hitCheckAttr(4) probes skip it)

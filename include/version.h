@@ -58,7 +58,7 @@
 #define VERSION_PICK(jp, us) (jp)
 #endif
 
-// FPS_EASE(n): easing divisor. US scales it by the frame rate (gp->framerate / 60); JP uses n as is.
+// FPS_EASE(n): easing divisor. US and later scale it by the frame rate (gp->framerate / 60); JP and the early demos use n as is.
 // Needs mario/mariost.h for gp.
 #if VERSION >= VERSION_US
 #define FPS_EASE(n) ((n) * gp->framerate / 60.0f)
@@ -66,7 +66,7 @@
 #define FPS_EASE(n) (n)
 #endif
 
-// FPS_EASE_D(us, jp): for JP sites written with a double literal (8.0) that US writes as a float (8.0f).
+// FPS_EASE_D(us, jp): for JP sites written with a double literal (8.0) that US and later write as a float (8.0f).
 // Note the order: US first, unlike VERSION_PICK.
 #if VERSION >= VERSION_US
 #define FPS_EASE_D(us, jp) FPS_EASE(us)
@@ -74,7 +74,7 @@
 #define FPS_EASE_D(us, jp) (jp)
 #endif
 
-// FPS_FRAMES(n): integer frame count. US scales it to the frame rate (n * gp->framerate / 60).
+// FPS_FRAMES(n): integer frame count. US and later scale it to the frame rate (n * gp->framerate / 60).
 #if VERSION >= VERSION_US
 #define FPS_FRAMES(n) ((n) * gp->framerate / 60)
 #else

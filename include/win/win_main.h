@@ -10,7 +10,7 @@
 #include "memory.h"
 
 #if VERSION <= VERSION_DEMO_JP
-// Directory of the window files on the disc in the demo (format prefix "%s/" is the DVD root).
+// Directory of the window files on the disc in the early demos (format prefix "%s/" is the DVD root).
 #define WIN_DIR "%s/window/"
 #endif
 
@@ -130,13 +130,13 @@ typedef struct WinLogPage {
     f32 ty;         // 0xC
     s32 num;        // 0x10
 #if VERSION >= VERSION_US
-    s32 page;       // US only: page shown in the "%d/%d" counter
+    s32 page;       // US and later: page shown in the "%d/%d" counter
 #endif
     s32 cursor;     // 0x14
     s32 idx;        // 0x18, first row shown
     f32 scroll;     // 0x1C
     f32 scrollTgt;  // 0x20
-    f32 iconX;      // 0x24, x of the selected-entry icon box (texture 0x95/0x96 + item icon; US page counter); eases toward iconTx
+    f32 iconX;      // 0x24, x of the selected-entry icon box (texture 0x95/0x96 + item icon; page counter from US on); eases toward iconTx
     f32 iconTx;     // 0x28, target of iconX (not in the field list: partner of f24, renamed to match)
     f32 iconY;      // 0x2C, y of the selected-entry icon box; eases toward iconTy
     f32 iconTy;     // 0x30, target of iconY (not in the field list: partner of f2C, renamed to match)

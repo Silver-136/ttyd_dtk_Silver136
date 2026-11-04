@@ -12,22 +12,22 @@ typedef struct PiantaParlorWork {
     s32 tokens; //0x08
     u32 dispTick; //0x0C, counter-animation tick
     u32 dispTokens; //0x10, token count currently shown (counts toward tokens)
-    // four minigames x five ranks (+1 spare slot); defaults set in yuugijou_init
+    // minigame rows x five ranks (+1 spare slot); defaults set in yuugijou_init
 #if VERSION >= VERSION_US
-    // US keeps eight record rows (0x258 bytes in all): recordScore 0xD4, recordParam 0x194, pad_134 at 0x254
+    // US and later keep eight record rows (0x258 bytes in all): recordScore 0xD4, recordParam 0x194, pad_134 at 0x254
     s32 recordOn[8][6]; //0x14
     s32 recordScore[8][6]; //0xD4
     s32 recordParam[8][6]; //0x194
 #else
-    s32 recordOn[4][6]; //0x14, all set to 1 at init
+    s32 recordOn[4][6]; //0x14, ranks 0-4 set to 1 at init
     s32 recordScore[4][6]; //0x74, default record values (game 1 ascending: times)
-    s32 recordParam[4][6]; //0xD4, per-rank value derived from recordScore (game 0: constants)
+    s32 recordParam[4][6]; //0xD4, per-rank value derived from recordScore (game 0, and all games in the early demos: constants)
 #endif
     u32 pad_134; //0x134, never accessed
 } PiantaParlorWork;
 
 // Record arrays are [minigame][rank]; ranks 0-4 hold the defaults set in yuugijou_init, rank 5 is unused there.
-// Element offsets (for patching / save editing):
+// Element offsets of the four-row layout (before US; US and later use the eight-row offsets above):
 //   0x014  recordOn[0][0]
 //   0x018  recordOn[0][1]
 //   0x01C  recordOn[0][2]

@@ -26,7 +26,7 @@ typedef struct seq_e3_work {
     u32 pad_5C;        // 0x5C, never accessed
     u32 pad_60;        // 0x60, never accessed
 #endif
-    f32 poseRotY;   // 0x64, set to 270.0f in seq_e3Init, never read
+    f32 poseRotY;   // 0x64, set to 270.0f in seq_e3Init; only the June US demo reads it (e3PoseSetRotY turns the characters drawn with it)
 } seq_e3_work;
 
 void seq_e3Init(SequenceWork* work);

@@ -383,7 +383,7 @@ typedef enum BattleResult {
     BATTLE_RESULT_WIN = 1,        // the enemy side was defeated
     BATTLE_RESULT_WIN_FIELD = 2,  // won without a battle (Bump Attack, battle skip)
     BATTLE_RESULT_LOSE = 3,
-    BATTLE_RESULT_ESCAPE = 4,     // ran away (also the demo timeout)
+    BATTLE_RESULT_ESCAPE = 4,     // ran away (also the kiosk-mode idle timeout, GW_FLAG_E3_TIMEOUT)
     BATTLE_RESULT_STOPPED = 5,    // ended by btlevtcmd_InterruptStop, or no battle and no win in the field
 } BattleResult;
 

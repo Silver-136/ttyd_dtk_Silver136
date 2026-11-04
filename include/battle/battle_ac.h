@@ -20,7 +20,7 @@ typedef enum BattleACResultFlags {
 typedef void (*BattleACDeleteCallback)(BattleWork* work);
 
 typedef struct BattleACDispParams {
-    s32 blinkTimer;                 // 0x0, frame counter for the icon blink (ac_repeatedly_lv)
+    s32 blinkTimer;                 // 0x0, frame counter for the icon blink (ac_repeatedly, ac_repeatedly_lv, ac_timing_a, ac_timing_wide)
     s32 frame2;                     // 0x4, frame counter (ac_repeatedly)
     u8 pad_08[0xC - 0x8];           // 0x8, no named access
     GXColor color;                  // 0xC, icon colour
@@ -142,7 +142,7 @@ typedef struct BattleActions {
     s32 params[8];                   // 0x38, btlevtcmd_AcSetParam/AcSetParamAll/AcGetParam
     s32 outputParams[8];             // 0x58
     s32 gaugeParams[4];              // 0x78, btlevtcmd_AcSetGaugeParam
-    s16 countdown;                   // 0x88, per-frame countdown in repeatedly/signal_timing/stick_rotate
+    s16 countdown;                   // 0x88, automatic successes left: while above 0 a command or guard check passes and uses one (battle_ac.c, most ac_*.c)
     u8 pad_8A[0x8C - 0x8A];          // 0x8A, never accessed
     BattleWorkPad pad;               // 0x8C
     u32 seId;                        // 0x288, power gauge SFX id (battle_ac.c)
@@ -161,7 +161,7 @@ void BattleActionCommandStop(BattleWork* work);
 // BattleActionCommandCheckDefence: ActionCommands.defenseResult (3 is never set; battle_damage.c tests > 3 for "guarded")
 enum {
     GUARD_RESULT_NONE = 0,
-    GUARD_RESULT_MASHED = 1,   // two or more presses in the last 15 frames
+    GUARD_RESULT_MASHED = 1,   // two or more presses in the last 15 frames, or one outside the guard window
     GUARD_RESULT_NO_PRESS = 2,
     GUARD_RESULT_GUARD = 4,
     GUARD_RESULT_SUPERGUARD = 5,

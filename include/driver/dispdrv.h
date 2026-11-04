@@ -28,7 +28,7 @@ typedef enum DispMode {
     DISP_MODE_CUSTOM_LAST = 7,        // 1100000
     DISP_MODE_CUSTOM_MID = 8,         // 1000000
     DISP_MODE_XLU_BEFORE = 9,         // 500000
-    DISP_MODE_XLU_AFTER = 10,         // 700000, not in the US demo
+    DISP_MODE_XLU_AFTER = 10,         // 700000, JP and later (not in the early demos)
 } DispMode;
 
 void dispInit(void);

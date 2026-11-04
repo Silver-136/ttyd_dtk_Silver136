@@ -6,8 +6,8 @@
 #include <dolphin/types.h>
 #include <dolphin/mtx.h>
 
-/* mot_plane's work: MarioWork.motPlane (the 0x288 union). Allocated 0x48 by mot_plane's
- * trigger block, freed by mot_plane_post / on landing. Same on JP and US. */
+/* mot_plane's work: MarioWork.motPlane (the per-motion union, 0x288 in JP, 0x294 from US on). Allocated 0x48 by mot_plane's
+ * trigger block, freed by mot_plane_post / on landing. Same layout in every version. */
 // MotPlaneWork.flags
 #define MOT_PLANE_FLAG_RIGHT (1 << 0)       // facing right (HIT_ATTR_PLANE_PANEL_R of the take-off panel)
 #define MOT_PLANE_FLAG_DIVE_UNUSED (1 << 4) // set while diving; tested only to clear itself on pull-up (no other effect found; legacy _UNUSED name)

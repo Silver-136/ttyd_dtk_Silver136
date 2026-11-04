@@ -24,7 +24,7 @@ typedef struct NameEntryWork {
     f32 caretTargetY; //0x38
     char name[16]; //0x3C
     u8 pad_4C[0x50 - 0x4C]; //0x4C
-    const char** charTable; //0x50, hiragana_tbl or katakana_tbl; US also uses latin_tbl
+    const char** charTable; //0x50, hiragana_tbl or katakana_tbl; US and later also use latin_tbl
     f32 maskAlpha; //0x54, 0..1 fade of the confirm mask
     u8 pad_58[0x5C - 0x58]; //0x58
     s32 confirmSel; //0x5C, yes/no toggle on the confirm prompt

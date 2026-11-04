@@ -1,4 +1,4 @@
-// eff_ibuki.c: ice breath (こおりのいぶき) of Beldam (Shadow Siren); effIbukiEntry.
+// eff_ibuki.c: ice breath (こおりのいぶき) of Beldam (Shadow Siren) and the Ice Storm item (ItemEvent_Koorino_Ibuki); effIbukiEntry.
 
 #pragma once
 

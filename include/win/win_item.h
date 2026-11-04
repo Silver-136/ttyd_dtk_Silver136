@@ -1,4 +1,4 @@
-// win_item.c: the pause menu item window (items, important items, mail, Koopa book): winItemInit/Main/Disp.
+// win_item.c: the pause menu item window (items, important items, mail, Super Luigi books): winItemInit/Main/Disp.
 
 #pragma once
 

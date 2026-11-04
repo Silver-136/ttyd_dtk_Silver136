@@ -12,7 +12,7 @@ typedef enum YoshiStatus {
     YOSHI_STATUS_FLUTTER = 2,
     YOSHI_STATUS_STAND_JUMP = 3,
     YOSHI_STATUS_FALL = 4,
-    YOSHI_STATUS_OTHER = 5, // includes get-off motions 100..101 and the default active state
+    YOSHI_STATUS_OTHER = 5, // includes get-off motions 100..101 and the default active state (JP and later; the early demos return 3 for both)
 } YoshiStatus;
 
 s32 yoshiGetStatus(void);

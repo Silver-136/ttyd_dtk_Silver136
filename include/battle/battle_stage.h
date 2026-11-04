@@ -30,7 +30,7 @@ typedef struct BattleStageData {
     char* specificStageDataDir; //0x4
     u32 numObjects; //0x8
     BattleStageObjectData* objects; //0xC
-    BattleWeapon bgAWeapon; //0x10, background A1/A2 falling
+    BattleWeapon bgAWeapon; //0x10, background A1 falling (A2 has no weapon: _get_bgset_attack_data)
     BattleWeapon bgBWeapon; //0xD0, background B falling
     void* initEvt; //0x190
     void* destroyBgA1Evt; //0x194

@@ -40,9 +40,9 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kGuardTargetPart = (1 << 3),             // 0x8, the part an attack is redirected to when this unit bodyguards
     kUnknown_0x10 = (1 << 4),                // 0x10
     kUnknown_0x40 = (1 << 6),                // 0x40
-    // 0x80, US: the unit's UNIT_WORK_PART_DEFENSE slot is added to this part's defence (BattlePreCheckDamage);
-    // Hooktail's two body parts, whose damage event lowers the slot when Attack FX R hits. JP tests bit 0x20 there
-    // instead, which these parts do not have.
+    // 0x80, US and later: the unit's UNIT_WORK_PART_DEFENSE slot is added to this part's defence (BattleCalculateDamage);
+    // Hooktail's two body parts, whose damage event lowers the slot when Attack FX R hits. JP and the early demos test
+    // bit 0x20 there instead, which their Hooktail parts carry.
     kPartUnitWorkDefense = (1 << 7),
     kWeakToIcePower = (1 << 8),              // 0x100
     kIsWinged = (1 << 11),                   // 0x800, grounded by SPECIAL_GROUND_WINGED
@@ -377,7 +377,8 @@ typedef enum BattleUnitType {
 } BattleUnitType;
 
 // BattleDataEntry.tag: slots of a unit's data table, named after the (original) events the units put there;
-// avoid events use tag = damage code + 6 (codes 0x1F..0x27), counter-damage overrides tag = code - 19
+// avoid events use tag = damage code + 6 (codes 0x1F..0x28, except Lucky 0x26 -> 45 and Dodgy 0x27 -> 44),
+// counter-damage overrides tag = code - 19
 // (codes 0x2B..0x37). Tags 68/69 hold weapons, not events.
 typedef enum BattleDataTag {
     UNIT_DATA_TECH_MENU_FUNC = 1, // __makeTechMenuFunc
@@ -555,7 +556,7 @@ typedef enum BattlePoseType {
     POSE_TYPE_ITEM = 52, // receives or uses an item
     POSE_TYPE_DANGER = 56,
     POSE_TYPE_PERIL = 57,
-#if VERSION <= VERSION_DEMO_JP // the demo has no kissed poses
+#if VERSION <= VERSION_DEMO_JP // the early demos have no kissed poses
     POSE_TYPE_ESCAPE_STUMBLE = 58, // failed escape
     POSE_TYPE_ESCAPE_RECOVER = 59,
     POSE_TYPE_HAPPY_HEART = 60,
@@ -565,7 +566,7 @@ typedef enum BattlePoseType {
     POSE_TYPE_APPEAL = 64,
     POSE_TYPE_COMMAND = 65, // command selection
     POSE_TYPE_SHELL_SHIELD_OPEN = 66,
-    POSE_TYPE_ACTION = 67, // fallback of 40..69
+    POSE_TYPE_ACTION = 67, // fallback of 40..67
     POSE_TYPE_MAX = 68,    // types are below this; a larger table entry ends the search
 #else
     POSE_TYPE_KISSED_CHRISTINE = 58, // Goombella's kiss
@@ -848,7 +849,7 @@ typedef enum BattleMoveState {
     MOVE_STATE_NORMAL = 0,
     MOVE_STATE_POSITION_CHANGE = 1,     // btldefaultevt_ChangePosition
     MOVE_STATE_QUICK_CHANGE = 3,        // partner change with BATTLE_BADGE_QUICK_CHANGE
-    MOVE_STATE_AUDIENCE_ATTACK = 4,     // Appeal-type free act (btlataudGetAttackEventPtr)
+    MOVE_STATE_AUDIENCE_ATTACK = 4,     // audience attack (X button, btlataudGetAttackEventPtr)
     MOVE_STATE_TRIPLE_DIP_1 = 5,
     MOVE_STATE_TRIPLE_DIP_2 = 6,
     MOVE_STATE_TRIPLE_DIP_3 = 7,
@@ -947,7 +948,7 @@ typedef struct BattleUnit {
     u8 pad_136[2];                               // 0x136, never accessed
     s32 statusFlags;                            // 0x138
 #if VERSION >= VERSION_US
-    u16 usCommandDisabled[2]; // US only (+4 from here): per-unit turns left for the two command blocks JP keeps in BattleWork commandDisabled[3..4]
+    u16 usCommandDisabled[2]; // US and later (+4 from here): per-unit turns left for the two command blocks JP keeps in BattleWork commandDisabled[3..4]
 #endif
     s32 protectId;                               // 0x13C
     BattleVulnerableStatus* vulnStatus;          // 0x140
@@ -975,7 +976,7 @@ typedef struct BattleUnit {
     EvtWord work[16];                            // 0x214, unit work words (btlevtcmd_SetUnitWork / GetUnitWork): numbers, effect and work pointers; floats stored in the word (SetUnitWorkFloat / GetUnitWorkFloat)
     BattleUnitPart* currentTarget;           // 0x254
     s32 reserved_258;                            // 0x258 (US 0x25C), only cleared at turn start (battle_seq)
-    s16 hpDamageCount;                           // 0x25C, number of damaging moves
+    s16 hpDamageCount;                           // 0x25C, hits taken this turn (BattleCheckDamage; SPECIAL_DIMINISH_BY_HIT subtracts it)
     u8 pad_25E[0x260 - 0x25E];                   // 0x25E, never accessed
     s32 totalHpDamageTaken;                      // 0x260
     s32 totalFpDamageTaken;                      // 0x264 (US 0x268), sum of fpDamageTaken this turn
@@ -983,11 +984,11 @@ typedef struct BattleUnit {
     s8 hpDamageTaken;                            // 0x26C
     s8 fpDamageTaken;                            // 0x26D
     s8 fpLost;                                   // 0x26E (US 0x272), FP actually lost by the last hit (fpDamageTaken clamped to current FP)
-    s8 superguardCountTaken;                     // 0x26F (US 0x273), attacker's superguardedCount when this unit superguarded it
+    s8 superguardCountTaken;                     // 0x26F (US 0x273), attacker's superguardedCount after its hit on this unit
     u32 damagePattern;                           // 0x270, damage pattern of the last hit (selects the hurt pose), 0 when cleared
     s32 damageCode;                              // 0x274
     BattleUnitToken_Flags tokenFlags;           // 0x278
-    s32 superguardedCount;                       // 0x27C (US 0x280), times this unit was superguarded this turn; weapon special 0x20 subtracts it from damage
+    s32 superguardedCount;                       // 0x27C (US 0x280), hits this unit resolved as attacker this turn (BattleCheckDamage counts every one, superguarded or not); weapon special 0x20 subtracts it from damage
     s32 totalDamageDealt;                        // 0x280, damage this unit dealt as attacker
     s32 initEventId;                             // 0x284
     void* waitEventCode;                         // 0x288
@@ -1008,7 +1009,7 @@ typedef struct BattleUnit {
     void* actEndEvent;                           // 0x2C4 (US 0x2C8), run when the unit's action ends (battle_seq)
     s32 actEndEventId;                                   // 0x2C8 (US 0x2CC)
 #if VERSION >= VERSION_DEMO_EU
-    s32 slideReturnEventId; // PAL only (+4 from here): enemy_slide_return_evt of sac_enemy_slide_return, waited on by BattleWaitAllActiveEvtEnd_NoBgSetEndWait
+    s32 slideReturnEventId; // PAL and the PAL demo (+4 from here): enemy_slide_return_evt of sac_enemy_slide_return, waited on by BattleWaitAllActiveEvtEnd_NoBgSetEndWait
 #endif
     void* hitEventCode;                          // 0x2CC (US 0x2D0), run on the attacker by BattleRunHitEventDirect
     s32 talkPartId;                                  // 0x2D0 (US 0x2D4)

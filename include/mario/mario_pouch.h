@@ -426,7 +426,7 @@ typedef struct PouchData {
     s8 hammerLevel;                    // 0x99
     s16 starPieceCount;               // 0x9A
     s16 shineSpriteCount;             // 0x9C
-    u16 powerBounceRecord;            // 0x9E, Pit of 100 Trials
+    u16 powerBounceRecord;            // 0x9E, best Power Bounce combo (_record_renzoku_count)
     s16 keyItems[MAX_KEY_ITEMS];       // 0xA0
     s16 heldItems[MAX_HELD_ITEMS];     // 0x192
     s16 storedItems[MAX_STORED_ITEMS]; // 0x1BA

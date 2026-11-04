@@ -774,8 +774,8 @@ EVT_BEGIN(enemy_2d_common_dead_event)
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
 
-        // Bowser's star (4), a map object bumped from below (8) and lava (16, darkened) also score and flip it
-        // off screen; the goal pole (32) flips it without a score.
+        // Bowser's star (4), a map object bumped from below (8) and lava (16, darkened) also flip it off screen with a
+        // score call (npcCalcScore gives 0 for lava); the goal pole (32) flips it without a score.
         CASE_FLAG(KPA_ENCOUNT_STAR)
         CALL(evt_npc_calc_score, STRING("me"))
         SPAWN_EVENT(PTR(_2d_dead_rotate_event))

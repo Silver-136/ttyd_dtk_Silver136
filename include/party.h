@@ -162,7 +162,7 @@ typedef struct PartyWorkCloud {  // party_cloud.c
         f32 hoverSpeed;          // 0x180, 4.25
         s32 hoverSpeedBits;      // 0x180, zeroed as s32
     };
-    s32 lockAnims;               // 0x184, US cloudLockAnimationsOn/Off (unused on JP)
+    s32 lockAnims;               // 0x184, cloudLockAnimationsOn/Off (US and later; unused in JP and the early demos)
 } PartyWorkCloud;
 
 typedef struct PartyWorkVivian { // party_vivian.c
@@ -270,9 +270,9 @@ typedef struct PartyEntry {
     u32 reserved_44;                    // 0x44, only set to 0x10
 #if VERSION <= VERSION_DEMO_JP
     union {
-        s32 wallStuckCount; // 0x48, demo: frames the follow walk hit a wall with its target 100+ away in height
-        // The demo's code never reads these three; they share bytes with wallStuckCount so that retail
-        // code still compiles.
+        s32 wallStuckCount; // 0x48, early demos: frames the follow walk hit a wall with its target 100+ away in height
+        // The early demos' code never reads these three; they share bytes with wallStuckCount so that the code
+        // shared with JP and later still compiles.
         struct {
 #else
     u8 pad_48[0x4C - 0x48];             // 0x48, never accessed

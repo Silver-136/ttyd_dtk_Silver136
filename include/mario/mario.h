@@ -123,7 +123,7 @@ typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_JABARA_MOVE_CHK = (1 << 21),
     MARIO_TRIG_FLAG_START_JABARA_SPIN = (1 << 22),
 #if VERSION <= VERSION_DEMO_JP
-    MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 24), // the demo also sets it on landing (marioChkGnd)
+    MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 24), // the early demos also set it on landing (marioChkGnd)
     MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT = (1 << 28),
     MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 29),
     MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 30),
@@ -165,7 +165,7 @@ typedef struct MarioMotSlit {      // mot_slit.c (paper slit / side-step)
     f32 pushDir;                   // 0x08, 0 or 180: slide direction relative to targetYaw while pushing a 0x2000 wall
     f32 lastY;                     // 0x0C, position.y last frame
 #if VERSION <= VERSION_DEMO_JP
-    s16 reserved_10; // 0x10, demo: mot_slit's second timer, accessed as MarioWork.slitTimer2
+    s16 reserved_10; // 0x10, early demos: mot_slit's second timer, accessed as MarioWork.slitTimer2
     s16 resumeState;
 #else
     u8 pad10[4];                   // 0x10
@@ -177,11 +177,11 @@ typedef struct MarioMotSlit {      // mot_slit.c (paper slit / side-step)
 } MarioMotSlit;
 
 #if VERSION < VERSION_US
-typedef struct MarioMotStay {      // mot_stay.c, JP only (US keeps these in MarioWork.stay)
+typedef struct MarioMotStay {      // mot_stay.c, before US (US and later keep these in MarioWork.stay)
     u8 pad00[0x10];                // 0x00
     s32 jabaraWait;                // 0x10, frames before the spring-jump check, capped at 10
     s32 deepSleepTimer;            // 0x14, marioChkDeepSleep: >= 10 s
-    s32 holdTimer;                 // 0x18, frames the stick has been held
+    s32 holdTimer;                 // 0x18, frames A has been held
 } MarioMotStay;
 #endif
 
@@ -228,13 +228,13 @@ typedef enum MarioMotHammer2Flags {
 typedef struct MarioMotRoll {      // mot_roll.c
     u8 pad00[4];                   // 0x00
     s32 flags;                     // 0x04, ROLL_FLAG_*
-    s32 sfxId;                     // 0x08, only JP uses it (US moved it to MotRollWork.sfxId)
+    s32 sfxId;                     // 0x08, only JP uses it (US and later use MotRollWork.sfxId)
 } MarioMotRoll;
 
 typedef struct MarioMotHip {       // mot_hip.c
     f32 angle;                     // 0x00
 #if VERSION < VERSION_US
-    s32 sfxId[2];                  // 0x04, JP only (US uses soundId[3], soundId[4])
+    s32 sfxId[2];                  // 0x04, before US (US and later use soundId[3], soundId[4])
 #endif
 } MarioMotHip;
 
@@ -321,13 +321,13 @@ typedef union MarioMotWork {       // 0x2A0 JP, 0x2B8 US, 0x1C bytes
 } MarioMotWork;
 
 #if VERSION >= VERSION_US
-typedef struct MarioStayWork {     // US only, MarioWork 0x2AC: mot_stay's counters left the scratch block
+typedef struct MarioStayWork {     // US and later, MarioWork 0x2AC: mot_stay's counters left the scratch block
     s32 jabaraWait;                // 0x2AC
-    s32 holdTimer;                 // 0x2B0, only cleared on US
+    s32 holdTimer;                 // 0x2B0, US and later only clear it
     s32 deepSleepTimer;            // 0x2B4, marioChkDeepSleep
 } MarioStayWork;
 #elif VERSION <= VERSION_DEMO_JP
-typedef struct MarioStayWork {     // demo: inside the motion work at 0x10, another order than US
+typedef struct MarioStayWork {     // early demos: inside the motion work at 0x10, another order than US
     s32 jabaraWait;
     s32 deepSleepTimer;            // marioChkDeepSleep
     s32 holdTimer;
@@ -421,11 +421,11 @@ typedef struct MarioWork {
 #if VERSION <= VERSION_DEMO_JP
     union {
             s32 currSubMotionId; // 0x44
-            s32 slitState;       // 0x44, demo: mot_slit's state machine runs on the sub-motion id
+            s32 slitState;       // 0x44, early demos: mot_slit's state machine runs on the sub-motion id
         };
         union {
             s32 multiTimer; // 0x48, per-motion frame counter
-            s32 slitTimer;  // 0x48, demo: mot_slit's timer is the per-motion counter
+            s32 slitTimer;  // 0x48, early demos: mot_slit's timer is the per-motion counter
         };
 #else
     s32 currSubMotionId;           // 0x44
@@ -488,7 +488,7 @@ typedef struct MarioWork {
     f32 baseDashSpeed;            // 0x188, same on US
     f32 moveDist;                  // 0x18C, distance to move this frame (marioMove)
 #if VERSION >= VERSION_US
-    f32 jumpStartSpeed;            // 0x190 US only (+4 from here): baseSpeed at jump start
+    f32 jumpStartSpeed;            // 0x190 US and later (+4 from here): baseSpeed at jump start
 #endif
     f32 controlStickSensitivity;   // 0x190
     f32 controlStickAngle;         // 0x194
@@ -506,19 +506,19 @@ typedef struct MarioWork {
     f32 wallPushDir;               // 0x1CC, direction of that push
     s32 wallPushHold;              // 0x1D0, frames the push is held (14)
 #if VERSION <= VERSION_DEMO_JP
-    struct NpcEntry* touchNpc;
-    struct HitEntry* hitobjFrontA;      // 0x1DC, wall in front found on an A press
-    struct HitEntry* hitobjFront;       // 0x1E0
-    struct HitEntry* hitobjStandOn;     // 0x1E4, 0x1E8 US
-    struct HitEntry* hitobjJumpFrom;    // 0x1E8, 0x1EC US
-    struct HitEntry* hitobjPush;        // 0x1EC JP, 0x1F0 US
-    struct HitEntry* hitobjWall;        // 0x1F0, wall touched this frame (before push threshold)
-    struct HitEntry* hitobjHead;        // 0x1F4
-    struct HitEntry* hitobjUnder;       // 0x1F8
-    struct HitEntry* hitobjHammer;      // 0x1FC, hit by the hammer (mobjdrv/casedrv/marioChkHitHammer)
-    struct HitEntry* hitobjHammerNew;   // 0x200, found by this swing frame (copied to hitobjHammer)
-    struct HitEntry* damageHit;         // 0x204
-    struct HitEntry* prevHitobjStandOn; // 0x208, hitobjStandOn of the previous frame (marioMain end)
+    struct NpcEntry* touchNpc;          // 0x1D4
+    struct HitEntry* hitobjFrontA;      // 0x1D8, wall in front found on an A press
+    struct HitEntry* hitobjFront;       // 0x1DC
+    struct HitEntry* hitobjStandOn;     // 0x1E0
+    struct HitEntry* hitobjJumpFrom;    // 0x1E4
+    struct HitEntry* hitobjPush;        // 0x1E8
+    struct HitEntry* hitobjWall;        // 0x1EC, wall touched this frame (before push threshold)
+    struct HitEntry* hitobjHead;        // 0x1F0
+    struct HitEntry* hitobjUnder;       // 0x1F4
+    struct HitEntry* hitobjHammer;      // 0x1F8, hit by the hammer (mobjdrv/casedrv/marioChkHitHammer)
+    struct HitEntry* hitobjHammerNew;   // 0x1FC, found by this swing frame (copied to hitobjHammer)
+    struct HitEntry* damageHit;         // 0x200
+    struct HitEntry* prevHitobjStandOn; // 0x204, hitobjStandOn of the previous frame (marioMain end)
 #else
     void* touchNpc;                // 0x1D4, NpcEntry* (marioGetTouchNpcPtr)
     struct NpcEntry* targetNpc;    // 0x1D8, NPC in range for interaction (npcdrv)
@@ -589,23 +589,23 @@ typedef struct MarioWork {
     s32 dirEvtFrame;               // 0x29C
 #if VERSION <= VERSION_DEMO_JP
     union {
-        MarioMotWork mot; // 0x2A0 JP
+        MarioMotWork mot; // 0x29C (0x2A0 JP)
         struct {
             u8 pad_hipAngle[4]; // mot.hip.angle
-            s32 hipSfxId[2];    // 0x2A4 JP: mot_hip's spin and fall sounds, inside the motion work
+            s32 hipSfxId[2];    // 0x2A0 (0x2A4 JP): mot_hip's drop sound and voice, inside the motion work
         };
         struct {
             u8 pad_stay[0x10];  // motion work up to mot_stay's counters
-            MarioStayWork stay; // 0x2B0 JP: mot_stay's counters, inside the motion work
+            MarioStayWork stay; // 0x2AC (0x2B0 JP): mot_stay's counters, inside the motion work
         };
         struct {
             u8 pad_slit[0x10]; // mot.slit up to its second timer
-            s16 slitTimer2;    // demo: mot_slit's second timer, inside the motion work
+            s16 slitTimer2;    // early demos: mot_slit's second timer, inside the motion work
         };
     };
 #else
 #if VERSION >= VERSION_US
-    MarioStayWork stay;            // 0x2AC US only (+0x18 from here)
+    MarioStayWork stay;            // 0x2AC US and later (+0x18 from here)
 #endif
     MarioMotWork mot;              // 0x2A0 JP, 0x2B8 US
 #endif

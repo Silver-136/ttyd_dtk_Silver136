@@ -179,15 +179,16 @@ typedef struct BattleCommand {
     BattleCommandParty party[8];         // 0x390
     BattleCommandMultiItem multiItem[3]; // 0x450
     BattleCursor cursor[14];             // 0x498
-    s32 actType;                         // 0x540, type of the chosen act (act[cursor].type); 9 on cancel
-    s32 prevActType;                     // 0x544, actType saved before it is forced to 12
+    s32 actType;                         // 0x540, type of the chosen act (act[cursor].type); 9 (CMD_ACT_CHANGE_POSITION) when Y swaps places
+    s32 prevActType;                     // 0x544, actType saved before it is forced to 11 or 12 (audience attack / audience item)
     s32 operationType;                   // 0x548, BattleCommandOperation.type of the chosen tactic
     s32 partyKind;                       // 0x54C, party kind chosen in the change-partner menu
     u8 dipMode;                          // 0x550, Double/Triple Dip count (2/3), 1 while picking
     u8 cancelled;                        // 0x551, command cancelled: the unit just waits
     u8 pad_552[0x554 - 0x552];           // 0x552, never accessed
     s32 recCommand;                      // 0x554, state recorded by _commandRestoreRec (0 = none)
-    u8 attackAudience;                   // 0x558, 1: BattleCommandAttackAudienceCheck fired, 2: reset pending
+    u8 attackAudience;                   // 0x558, 1: an audience action (X attack or a thrown item) interrupted the menu, 2: the same during the
+                                         // Dip cancel check (cleared at CMD_STATE_INIT)
     u8 pad_559[0x55C - 0x559];           // 0x559, never accessed
     BattleSubMenu* subMenu;                       // 0x55C, battle_menu_disp.c
     s32 idleTimer;                       // 0x560, frames without input; idle camera at 900

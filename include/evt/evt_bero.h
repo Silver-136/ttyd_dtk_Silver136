@@ -26,8 +26,8 @@ enum {
 
 typedef struct BeroEntry {
     const char* hitName; //0x0
-    u16 type; //0x4, BERO_TYPE_KIND_MASK: the exit kind (1 walk-off edge w_/e_/s_bero, 2 pipe dokan, 0xF00 holes
-              //     and some s_bero; 0 and 3 rare) | BERO_TYPE_BG_MODE | 0x2000 (on some pipes)
+    u16 type; //0x4, BERO_TYPE_KIND_MASK: the exit kind (0 and 1 the edge exits w_/e_/n_/s_bero, 2 pipe
+              //     dokan, 0xF00 holes and some s_bero; 3 rare) | BERO_TYPE_BG_MODE | 0x2000 (on some pipes)
     u16 sfxId; //0x6
     s32 directionId; //0x8, 45-degree steps from north, 8 up, 9 down
     s32 centerPosition; //0xC, x of centerPosition[3]

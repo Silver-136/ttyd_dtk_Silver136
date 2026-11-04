@@ -3,11 +3,11 @@
 #pragma once
 
 /*
-icon.bin structure:
-s16 numEntries
-s16 entryOffset[numEntries]
-s16 IconBinEntry[6][numEntries] (?, width override? height override? numImages, tplId, iconDelay?)
-2 extra bytes for some reason
+icon.bin structure (as icondrv.c reads it, iconGetBinData / IconBinData):
+u16 numEntries
+u16 entryOffset[numEntries], byte offsets from the file start
+per icon at its offset: u16 type (bit 0: animated), u16 width, u16 height, u16 numIcons,
+then numIcons frames of {u16 tplId, u16 delay}
 */
 
 #include "version.h"
@@ -21,8 +21,8 @@ typedef struct IconBinaryEntry {
     u16 width;      // 0x2, overrides tpl size
     u16 height;     // 0x4, overrides tpl size
     u16 numIcons;   // 0x6, for simple anims like button press
-    u16 tplId;      // 0x8, for tpl lookup
-    u16 frameDelay; // 0xA, if animated, number of frames until next
+    u16 tplId;      // 0x8, first frame's tpl index (one {tplId, delay} pair per frame follows numIcons)
+    u16 frameDelay; // 0xA, first frame's delay: frames until the next one
 } IconBinaryEntry;
 
 typedef struct IconBinary {
@@ -31,7 +31,7 @@ typedef struct IconBinary {
     IconBinaryEntry data[numBinEntries]; // 0x432
 } IconBinary;
 
-// flags, 1 = in use, 0x10 = 2D, 0x1000 = animated(?), 0x2000 = ?(something to do with bin)
+// flags (JP and later): 1 = in use, 0x10 = 2D, 0x1000 = animated, 0x2000 = icon data not loaded yet (IconFlags)
 
 
 // IconEntry.flags (iconFlagOn/iconFlagOff)

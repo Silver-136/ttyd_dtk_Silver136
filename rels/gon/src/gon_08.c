@@ -614,7 +614,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
 
     // The time is recorded and the request is marked solved.
-    CALL(evt_sub_save_playtime, GSW_GON_TRY_TO_FIND_ME_DONE_TIME_UNUSED)
+    CALL(evt_sub_save_playtime, GSW_GON_TRY_TO_FIND_ME_DONE_TIME)
     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_TRY_TO_FIND_ME), 1)
     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)

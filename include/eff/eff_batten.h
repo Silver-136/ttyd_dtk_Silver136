@@ -1,4 +1,4 @@
-// eff_batten.c: Magnus von Grapple 2.0 effects (バッテンダーエックス): types 1-2 the target mark (EFF_batten_x), type 3 the rocket jets; effBattenEntry and EffBattenWork.
+// eff_batten.c: Magnus von Grapple 2.0 effects (バッテンダーエックス): types 1-2 the target mark (EFF_batten_x), type 3 the rocket jets (also used by the chapter 2 Magnus von Grapple, mri); effBattenEntry and EffBattenWork.
 
 #pragma once
 

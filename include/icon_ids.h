@@ -152,7 +152,7 @@
 #define ICON_AC_BAR_LEFT VERSION_PICK(0x08F, 0x097)
 #define ICON_AC_BAR_RIGHT VERSION_PICK(0x090, 0x098)
 #define ICON_AC_OFF VERSION_PICK(0x091, 0x099)
-#define ICON_AC_LAMP_1 VERSION_PICK(0x092, 0x09A) // also the equipped-badge marker in the US badge list (winmgr)
+#define ICON_AC_LAMP_1 VERSION_PICK(0x092, 0x09A) // also the equipped-badge marker in the badge sell list from US on (winmgr)
 #define ICON_093 VERSION_PICK(0x093, 0x09B)
 #define ICON_AC_LAMP_3 VERSION_PICK(0x094, 0x09C)
 #define ICON_AC_ON VERSION_PICK(0x095, 0x09D)

@@ -78,7 +78,7 @@ typedef enum FadeType {
     FADE_STORY_BOWSER_A2,
     FADE_CURTAIN_SIDES_A1_TOP,
     FADE_CURTAIN_SIDES_A2_TOP,
-    // the retail names of the same fades
+    // other names of the same fades (used by fadedrv, seq_battle, seq_e3 and seq_game in every version)
     FADE_IN_WHITE2 = FADE_IN_WHITE_2D,
     FADE_CURTAIN_UP_DOWN_A1 = FADE_CURTAIN_VERTICAL_A1,
     TITLE_SCREEN_CURTAIN_LEAVE_GRADUAL2 = FADE_CURTAIN_LEAVE,
@@ -107,7 +107,7 @@ typedef struct FadeEntry {
     f32 progress; //0x24, 0..1 (1 - elapsed/duration when fading in)
     f32 rotation; //0x28, degrees (z rotation of the fade texture)
     Mtx texMtx; //0x2C, built in the fade draw (entries[0] only), loaded as GX_TEXMTX0
-    f32 elapsed; //0x5C, ms, +16.67 per frame
+    f32 elapsed; //0x5C, ms, +16.67 per frame (US and later: + 1000 / gp->framerate)
     const char* animFile; //0x60, e.g. "OFF_d_dokan_down"
     const char* animName; //0x64, e.g. "A_1"
     s32 imageType; //0x68
@@ -142,7 +142,7 @@ typedef struct FadeWork {
     u32 pad_04; //0x4, never accessed
     FadeEntry entries[5]; //0x8
     s32 lastEntryId; //0x350, entry index used by the last fadeEntry
-    f32 softness; //0x354, 0 after fadeTecSoftOn, 1 after fadeTecSoftOff
+    f32 softness; //0x354, set to 0 by fadeTecSoftOn (then rises to 1), to 1 by fadeTecSoftOff (then falls to 0)
     TEXPalette* texture; //0x358
     BOOL loaded; //0x35C
 } FadeWork;

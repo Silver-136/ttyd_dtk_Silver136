@@ -66,15 +66,15 @@ typedef enum BattleWeaponCounterResist_Flags {
     COUNTER_RESIST_POISON = 0x40,
     COUNTER_RESIST_EXPLOSIVE = 0x80,
     COUNTER_RESIST_VOLATILE_EXPLOSIVE = 0x100,
-    COUNTER_RESIST_PAYBACK = 0x200,
-    COUNTER_RESIST_HOLD_FAST = 0x400, // the Payback status and the Return Postage badge
+    COUNTER_RESIST_PAYBACK = 0x200, // the Payback status and the Return Postage badge
+    COUNTER_RESIST_HOLD_FAST = 0x400, // the Hold Fast status
     COUNTER_RESIST_ALL = 0x7FF,
 } BattleWeaponCounterResist_Flags;
 
 // BattleWeapon.special (bits checked in battle_damage.c; 0x200 and 0x8000 are set in some tables, their use is
 // not clear)
 typedef enum BattleWeaponSpecialFlags {
-    SPECIAL_BADGE_POWER = 0x1, // badges add to or subtract from the power (BattlePreCheckDamage)
+    SPECIAL_BADGE_POWER = 0x1, // badges add to or subtract from the power (BattleCalculateDamage)
     SPECIAL_STATUS_POWER = 0x2, // Huge/Tiny, Attack Up/Down and Merlee's boost change the power
     SPECIAL_CHARGEABLE = 0x4, // uses up a Charge
     SPECIAL_CANNOT_MISS = 0x8,

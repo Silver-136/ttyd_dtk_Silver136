@@ -1,4 +1,4 @@
-// eff_mist2.c: black mist (黒い霧) in las and around the Shadow Queen; effMist2Entry and EffMist2Work.
+// eff_mist2.c: black mist (黒い霧) in las and around the Shadow Queen (also the smoke in tik_05); effMist2Entry and EffMist2Work.
 
 #pragma once
 

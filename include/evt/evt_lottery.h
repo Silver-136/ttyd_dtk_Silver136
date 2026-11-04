@@ -11,7 +11,7 @@ typedef enum LotteryFlags {
     LOTTERY_FLAG_INIT = (1 << 0),         // 0x1, today's number was drawn once
     LOTTERY_FLAG_TICKET = (1 << 1),       // 0x2, a ticket was bought
     LOTTERY_FLAG_CLOCK_ERROR = (1 << 2),  // 0x4, the clock went back past a saved time
-    LOTTERY_FLAG_REBOUGHT = (1 << 3),     // 0x8, bought again after an error; cleared on the next day
+    LOTTERY_FLAG_REBOUGHT = (1 << 3),     // 0x8, bought under a clock error (JP and later also over a held ticket); cleared on the next day
     LOTTERY_FLAG_NEW_DAY = (1 << 4),      // 0x10, a new day since the last check
     LOTTERY_FLAG_MATCH4 = (1 << 12),      // 0x1000, today's number matches all four digits
     LOTTERY_FLAG_MATCH3 = (1 << 13),      // 0x2000, the last three digits

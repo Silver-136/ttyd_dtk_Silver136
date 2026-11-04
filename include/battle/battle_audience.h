@@ -69,7 +69,7 @@ typedef enum BattleAudienceMemberFlags {
     AUDIENCE_MEMBER_FLAG_USED = (1 << 0),         // 0x1
     AUDIENCE_MEMBER_FLAG_NOT_EXIST = (1 << 1),    // 0x2, GetExist is FALSE (about to be eaten or sucked in)
     AUDIENCE_MEMBER_FLAG_DISP = (1 << 2),         // 0x4, drawn
-    AUDIENCE_MEMBER_FLAG_FRONT_CENTER = (1 << 3), // 0x8, rows 0-2, columns 4-15: may hold items, join phase events
+    AUDIENCE_MEMBER_FLAG_FRONT_CENTER = (1 << 3), // 0x8, rows 0-2, columns 4-15 (2-17 in the early demos): may hold items, join phase events
     AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL = (1 << 4),  // 0x10, BattleAudience_GetSysCtrl
     AUDIENCE_MEMBER_FLAG_TARGETED = (1 << 5),     // 0x20, BattleAudience_SetTarget
     AUDIENCE_MEMBER_FLAG_ATTACKED = (1 << 6),     // 0x40, BattleAudience_Attack
@@ -141,7 +141,8 @@ typedef struct BattleAudienceMember {
     f32 interpGravity;         // 0x124
     s32 interpType;            // 0x128
     union {
-        s32 statusTimer;       // 0x12C, set to 5 and counted down while status == AUDIENCE_STATUS_IGNITE
+        s32 statusTimer;       // 0x12C, set to 5 and counted down while status == AUDIENCE_STATUS_IGNITE or SHELL;
+                               // some handlers keep an event id or a member index here
         f32 bobAngle;          // 0x12C, kinopio bob phase (radians)
     };
     f32 bobOffset;             // 0x130, type 2: 5 * sin(phase) added to the drawn y
@@ -276,7 +277,7 @@ typedef struct BattleAudienceWindow {
 } BattleAudienceWindow;
 
 // BattleAudience.flags: 0x10..0x1000 are set by one BattleAudience_Case_* each and read by BattleAudience_PerAct.
-// 0x1, 0x2 (set, never read), 0x4 and 0x4000 (Hooktail only) are not named.
+// 0x1 and 0x4 are not named.
 // The early demos have one more flag (STYLISH_MISSED, 0x400), so the later bits are one higher.
 typedef enum BattleAudienceFlags {
 #if VERSION <= VERSION_DEMO_JP
@@ -331,7 +332,7 @@ typedef struct BattleAudience {
 #endif
     f32 audienceDeltaMultiplier;      // 0x13778
     f32 targetAudienceCount;          // 0x1377C
-    f32 addedAudienceCount;           // 013780
+    f32 addedAudienceCount;           // 0x13780
     s32 currentAudienceIntCount;      // 0x13784
     s32 currentAudienceIntCountRight; // 0x13788
     s32 currentAudienceIntCountLeft;  // 0x1378C
@@ -380,7 +381,7 @@ typedef struct BattleAudience {
 #else
     s32 joyLevel;                      // 0x1390C, audience joy level
 #endif
-    BOOL excited;                      // 0x13910, if toads are cheering
+    BOOL excited;                      // 0x13910, set by the level-up show: waiting members hop more often
 } BattleAudience;
 
 BattleAudience* BattleAudienceBaseGetPtr(void);

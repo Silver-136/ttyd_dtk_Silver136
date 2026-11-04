@@ -34,7 +34,7 @@ typedef struct BattleVulnerableStatus {
     u8 instaKillRate; //0x15
 } BattleVulnerableStatus;
 
-// Low byte of a hit result (the upper bits are flags; 0x16, 0x1C and 0x1D are status-only outcomes not named yet)
+// Low byte of a hit result (the upper bits are flags; 0x16, 0x1C and 0x1D are status-only outcomes)
 typedef enum BattleDamageCode {
     DAMAGE_CODE_STATUS_ONLY = 0x16, // status effect without normal impact
     DAMAGE_CODE_NORMAL = 0x17, // hit by a normal-element weapon
@@ -57,7 +57,7 @@ typedef enum BattleDamageCode {
     DAMAGE_CODE_MISS = 0x28,
     DAMAGE_CODE_PROTECTED = 0x29, // target whose attack a bodyguard took
     DAMAGE_CODE_SUPERGUARDED = 0x2A,
-    DAMAGE_CODE_COUNTER_TOP_SPIKY = 0x2B, // BattleCheckCounter kinds; the message id is 0x100 + the code
+    DAMAGE_CODE_COUNTER_TOP_SPIKY = 0x2B, // BattleCheckCounter kinds; CounterWork.msg = DAMAGE_RESULT_FINAL_HIT | the code (the attacker's damage result)
     DAMAGE_CODE_COUNTER_PREEMPTIVE_SPIKY = 0x2C,
     DAMAGE_CODE_COUNTER_FRONT_SPIKY = 0x2D,
     DAMAGE_CODE_COUNTER_FIERY = 0x2E,
@@ -85,7 +85,7 @@ typedef enum BattleDamageResultFlags {
                                          // (btldefaultevt_guard_return)
     DAMAGE_RESULT_ABSORBED = 0x2000, // DEFENSE_ATTR_ABSORB: the hit heals; no damage display, Pity Flower or FP damage
     DAMAGE_RESULT_BACKFIRE = 0x4000, // the default damage event runs _backfire
-    DAMAGE_RESULT_FREEZE_CRUSH = 0x8000, // SPECIAL_FREEZE_CRUSH broke the target's freeze
+    DAMAGE_RESULT_FREEZE_CRUSH = 0x8000, // SPECIAL_FREEZE_CRUSH broke the target's freeze (never set: its irand(100) < 0 test fails)
     DAMAGE_RESULT_AC_SUCCESS = 0x20000, // the attack's action command succeeded
     DAMAGE_RESULT_GUARD = 0x40000,
     DAMAGE_RESULT_SUPERGUARD = 0x80000,

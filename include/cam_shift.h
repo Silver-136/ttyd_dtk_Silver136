@@ -1,4 +1,4 @@
-// cam_shift.c: the field camera shift (camShiftInit/camShiftMain), panned with the C stick.
+// cam_shift.c: the field camera shift (camShiftInit/camShiftMain), eased from Mario's horizontal stick input.
 
 #pragma once
 

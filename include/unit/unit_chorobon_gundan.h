@@ -1,5 +1,5 @@
-// Chorobon gundan (Fuzzy Horde) and the gold Chorobon that summons it: shared by the hei units and
-// their tst copies.
+// Chorobon gundan (Fuzzy Horde) and the gold Chorobon that summons it: shared by the two hei units (the
+// tst copies have their own chorogun_tst.h).
 #pragma once
 
 #include "evt/evt_cmd.h"

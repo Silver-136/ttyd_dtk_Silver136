@@ -1,4 +1,4 @@
-// error_handler.c: installs the OS error handler (setupErrorHandler, setupErrorHandler) that reports crashes.
+// error_handler.c: installs the OS error handler (setupErrorHandler, systemErrorHandler) that reports crashes.
 
 #pragma once
 

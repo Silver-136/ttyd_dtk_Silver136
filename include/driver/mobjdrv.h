@@ -73,7 +73,7 @@ typedef struct MapObjectEntry {
         f32 typeDataF[4];
     };
     s32 timer;                               // 0x1B0, per-type countdown (timer switch, blinking, respawn delays)
-    s32 typeWork;                            // 0x1B4, per-type: timer switch reload length; evt_mobj.c:4149 mobj loop SFX id
+    s32 typeWork;                            // 0x1B4, per-type: timer switch reload length; fire bar loop SFX id (evt_mobj.c)
     char linkedName[0x1C8 - 0x1B8];          // 0x1B8, name of a paired mobj (mobjNameToPtr)
     struct EffectEntry* effect;              // 0x1C8, coin fukidashi effect (evt_mobj.c)
     s32 eventId;                             // 0x1CC
