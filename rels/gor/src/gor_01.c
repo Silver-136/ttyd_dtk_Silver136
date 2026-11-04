@@ -2199,6 +2199,7 @@ EVT_BEGIN(chusan1_talk)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_05_001"), 0, STRING("me"))
+            // BUG: the flag is set to 0, not 1, so the ELSE line (irai_05_002) never prints.
             SET_VALUE(GSWF_TROUBLE_WORK(0), 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("irai_05_002"), 0, STRING("me"))
