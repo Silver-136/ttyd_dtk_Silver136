@@ -32,7 +32,6 @@ static s32 nokoSe;
 #include "eff/eff_kemu_test.h"
 #include "eff/n64/eff_small_star_n64.h"
 #include "mario/mariost.h"
-double sqrt(double);
 HitEntry* ccwall(PartyEntry* party, s32 mode);
 void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out);
 void lookupSafetyPos3(Vec pos, f32 height, Vec* out);

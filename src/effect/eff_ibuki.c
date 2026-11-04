@@ -12,7 +12,7 @@
 #include "eff/n64/eff_vapor_n64.h"
 
 void effIbukiMain(EffectEntry* effect);
-void effIbukiDisp(CameraId cameraId, EffectEntry* effect);
+void effIbukiDisp(CameraId cameraId, void* param);
 
 typedef struct EffIbukiWork {
     s32 type;      // 0x0
@@ -209,11 +209,12 @@ void effIbukiMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effIbukiDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effIbukiDisp, effect);
 }
 
 /** Draws the puffs from display lists, fading by per-puff alpha. */
-void effIbukiDisp(CameraId cameraId, EffectEntry* effect) {
+void effIbukiDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 i;
     u8* sz;
     u8** dl;

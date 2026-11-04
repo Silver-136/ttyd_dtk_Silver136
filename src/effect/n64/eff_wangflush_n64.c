@@ -50,7 +50,7 @@ static u8 color_rotation_data[] = {
 #endif
 
 void effWangFlushMain(EffectEntry* effect);
-void effWangFlushDisp(CameraId cameraId, EffectEntry* effect);
+void effWangFlushDisp(CameraId cameraId, void* param);
 
 /** Spawns a flash at (x, y, z) lasting `timer` frames. Spawned by event scripts through evt_eff. */
 EffectEntry* effWangFlushN64Entry(s32 type, f32 x, f32 y, f32 z, s32 timer) {
@@ -122,14 +122,15 @@ void effWangFlushMain(EffectEntry* effect) {
     sv = (f32)sin((6.2831855f * (timer * 50)) / 360.0f);
     work->flashScale = 0.5f * sv + 0.9f;
     work->flashAlpha = (s32)(144.0f + 64.0f * (f32)sin((6.2831855f * (timer * 40)) / 360.0f));
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effWangFlushDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effWangFlushDisp, effect);
 }
 
 /**
  * Draws texture 0x1C camera-facing: for type 0 first a pulsing flash whose colour cycles through
  * color_rotation_data, then the white sprite turned by its spin, at its size and alpha.
  */
-void effWangFlushDisp(CameraId cameraId, EffectEntry* effect) {
+void effWangFlushDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffWangFlushN64Work* work;
     s32 idx;

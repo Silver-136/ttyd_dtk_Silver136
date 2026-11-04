@@ -16,8 +16,8 @@
 #include "driver/mapdrv.h"
 
 void effSandarsMain(EffectEntry* effect);
-void effSandarsDisp(CameraId cameraId, EffectEntry* effect);
-void effSandarsDisp2(CameraId cameraId, EffectEntry* effect);
+void effSandarsDisp(CameraId cameraId, void* param);
+void effSandarsDisp2(CameraId cameraId, void* param);
 
 /** Size percentages per frame as each type 5 sprite grows in: up to 120%, then it collapses. */
 static u8 scale_data[] = { 0, 0, 0, 13, 28, 44, 60, 75, 89, 101, 111, 117, 120, 75, 0};
@@ -154,7 +154,7 @@ void effSandarsMain(EffectEntry* effect) {
                 work->rot += work->rotSpeed;
             }
         }
-        dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, (DispCallback)effSandarsDisp2, effect);
+        dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, effSandarsDisp2, effect);
         return;
     default:
         break;
@@ -188,11 +188,12 @@ void effSandarsMain(EffectEntry* effect) {
         }
         break;
     }
-    dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, (DispCallback)effSandarsDisp, effect);
+    dispEntry(camId, dispCalcZ(&pos2), DISP_MODE_XLU, effSandarsDisp, effect);
 }
 
 /** Draws the EFF_bakuhatu explosion pose, camera-facing, with fading alpha. */
-void effSandarsDisp(CameraId cameraId, EffectEntry* effect) {
+void effSandarsDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffSandarsWork* work;
     Mtx mtx;
     Mtx rot;
@@ -220,7 +221,8 @@ void effSandarsDisp(CameraId cameraId, EffectEntry* effect) {
 }
 
 /** Draws the type 5 steam sprites as camera-facing textured quads, each spinning around its own centre. */
-void effSandarsDisp2(CameraId cameraId, EffectEntry* effect) {
+void effSandarsDisp2(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffSandarsWork* work;
     CameraEntry* camera;
     f32 neg;

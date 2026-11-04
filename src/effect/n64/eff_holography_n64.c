@@ -1353,7 +1353,7 @@ effN64Vtx ach_01_v[55][22] = {
 };
 
 void effHolographyMain(EffectEntry* effect);
-void effHolographyDisp(CameraId cameraId, EffectEntry* effect);
+void effHolographyDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns the holography effect at (x, y, z), scaled by 0.1 * scale,
@@ -1422,7 +1422,7 @@ void effHolographyMain(EffectEntry* effect) {
     if (timer < 16) {
         work->alpha = timer * 16;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHolographyDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effHolographyDisp, effect);
 }
 
 /**
@@ -1430,7 +1430,8 @@ void effHolographyMain(EffectEntry* effect) {
  * The vertex set is ach_01_v[54 - frame], so the ribbon unfurls over 55 frames;
  * each segment is fainter than the previous one.
  */
-void effHolographyDisp(CameraId cameraId, EffectEntry* effect) {
+void effHolographyDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffHolographyN64Work* work;
     s32 frame;

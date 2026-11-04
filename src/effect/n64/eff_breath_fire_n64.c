@@ -10,7 +10,7 @@
 #include <dolphin/mtx.h>
 
 void effBreathFireMain(EffectEntry* effect);
-void effBreathFireDisp(CameraId cameraId, EffectEntry* effect);
+void effBreathFireDisp(CameraId cameraId, void* param);
 
 /** Mesh of a fire-breath flame: two stacked quads whose texture strip frame advances as the flame ages. */
 static effN64Vtx stg_fire_breath_v[] = {
@@ -147,12 +147,13 @@ void effBreathFireMain(EffectEntry* effect) {
             work->alpha = remaining * 224 / lifetime;
             work->scale += work->scaleRate * (work->targetScale - work->scale);
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBreathFireDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effBreathFireDisp, effect);
     }
 }
 
 /** Draws the flame as two stacked textured quads whose texture strip frame advances with age. */
-void effBreathFireDisp(CameraId cameraId, EffectEntry* effect) {
+void effBreathFireDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffBreathFireN64Work* work;
     GXTexObj texObj;

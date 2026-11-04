@@ -11,7 +11,7 @@
 #include "eff/eff_magic1_n64.h"
 
 void effCrystalMain(EffectEntry* effect);
-void effCrystalDisp(CameraId cameraId, EffectEntry* effect);
+void effCrystalDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a crystal glint at (x, y, z).
@@ -207,7 +207,7 @@ void effCrystalMain(EffectEntry* effect) {
         work->scale += work->scaleVel;
         break;
     }
-    dispEntry(work->camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effCrystalDisp, effect);
+    dispEntry(work->camera, dispCalcZ(&position), DISP_MODE_XLU, effCrystalDisp, effect);
 }
 
 /** Outer 108x108 glint quad of the crystal shine, spun slowly with texture 0x6D (types below 3). */
@@ -227,7 +227,8 @@ effN64Vtx size100x100_tex32x32_vtx[] = {
 };
 
 /** Draws a camera-facing glint of 108x108 or 100x100 units; types below 3 use textures 0x6D and 0x6E. */
-void effCrystalDisp(CameraId cameraId, EffectEntry* effect) {
+void effCrystalDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffCrystalN64Work* work;
     GXTexObj texObj;

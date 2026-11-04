@@ -14,7 +14,7 @@ double sin(float);
 double cos(float);
 
 void effSweatMain(EffectEntry* effect);
-void effSweatDisp(CameraId cameraId, EffectEntry* effect);
+void effSweatDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns sweat drops at (x, y, z) for `life` frames, fanned around `angle`.
@@ -144,7 +144,7 @@ void effSweatMain(EffectEntry* effect) {
     if (done >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSweatDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effSweatDisp, effect);
     }
 }
 
@@ -152,7 +152,8 @@ void effSweatMain(EffectEntry* effect) {
  * Draws each started drop as a camera-facing 6.4 x 9.6 white quad of the TTYD sweat-drop texture 93,
  * tilted by its angle and mirrored when the angle is positive.
  */
-void effSweatDisp(CameraId cameraId, EffectEntry* effect) {
+void effSweatDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffSweatN64Work* work;
     Mtx trans;

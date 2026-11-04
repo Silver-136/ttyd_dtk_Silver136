@@ -50,7 +50,7 @@ static u8 color_rotation_data[] = {
 #endif
 
 void effHagetakaFlushMain(EffectEntry* effect);
-void effHagetakaFlushDisp(CameraId cameraId, EffectEntry* effect);
+void effHagetakaFlushDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a short green twinkle at (x, y, z) that lasts 10 frames.
@@ -111,11 +111,12 @@ void effHagetakaFlushMain(EffectEntry* effect) {
     } else {
         work->scale = 0.3f + 0.2f * frame;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHagetakaFlushDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effHagetakaFlushDisp, effect);
 }
 
 /** Draws a camera-facing 16x16 sprite from texture 0x1C, scaled by baseScale * scale. */
-void effHagetakaFlushDisp(CameraId cameraId, EffectEntry* effect) {
+void effHagetakaFlushDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffHagetakaFlushN64Work* work;
     s32 alpha;

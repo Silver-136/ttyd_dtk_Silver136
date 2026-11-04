@@ -28,7 +28,7 @@ typedef struct EffSmallStarN64Work {
 static f32 kaiten;
 
 void effSmallStarMain(EffectEntry* effect);
-void effSmallStarDisp(CameraId cameraId, EffectEntry* effect);
+void effSmallStarDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns `count` small stars at (x, y, z); type picks the spread pattern and (dx, dy, dz) the base velocity.
@@ -246,7 +246,7 @@ void effSmallStarMain(EffectEntry* effect) {
         w->position.z += w->velocity.z;
         w->rotation += w->rotVel;
     }
-    dispEntry(((EffSmallStarN64Work*)effect->userdata)->camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSmallStarDisp, effect);
+    dispEntry(((EffSmallStarN64Work*)effect->userdata)->camera, dispCalcZ(&position), DISP_MODE_XLU, effSmallStarDisp, effect);
 }
 
 #pragma opt_propagation reset
@@ -272,7 +272,8 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
  * with no depth test so it shows on top; the colour cycles through color_rotation_data,
  * each star one step further along.
  */
-void effSmallStarDisp(CameraId cameraId, EffectEntry* effect) {
+void effSmallStarDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     s32 a, b, c;
     EffSmallStarN64Work* w;

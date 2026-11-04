@@ -39,7 +39,7 @@
 #define UNIT_WORK_SPIN_EVENT_ID 4 // NormalAttack: id of the sibling event that spins her back after a slap (0 = none); deleted before the next slap
 #define UNIT_WORK_MAX_SLAPS 5     // NormalAttack: number of slaps (2, 3, 4 by party tech level); the attack ends when the slap count reaches it
 
-void btlUnitPartsDisp(CameraId camId, BattleUnitPart* parts);
+void btlUnitPartsDisp(CameraId camId, void* parts);
 
 PoseTableEntry pose_table_chuchurina_stay[24];
 static BattleDataEntry data_table[8];
@@ -2595,7 +2595,8 @@ void mono_capture(CameraId camId, void* param) {
  * Display callback that draws the captured greyscale frame full-screen with alpha mono_alpha and
  * then redraws the partner's main part over it, so Ms. Mowz stays in colour during Kiss Thief.
  */
-void mono_disp(CameraId camId, BattleUnit* unit) {
+void mono_disp(CameraId camId, void* payload) {
+    BattleUnit* unit = payload;
     CameraEntry* cam = camGetPtr(camId);
     smartEntry* texBuf = unit->screenTexBuf;
     void* buf = NULL;
@@ -2661,7 +2662,7 @@ USER_FUNC(mono_main) {
 
     id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    dispEntry(CAMERA_2D, 910.0f, DISP_MODE_OPAQUE, (DispCallback)mono_disp, unit);
+    dispEntry(CAMERA_2D, 910.0f, DISP_MODE_OPAQUE, mono_disp, unit);
     return EVT_RETURN_BLOCK;
 }
 

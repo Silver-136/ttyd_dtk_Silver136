@@ -274,7 +274,7 @@ MayaKeyList damageStar_effAnimRSTDt = {2, damageStar_effAnimRST};
 MayaAnimData damageStar_effAnimDt = { { 0 }, 65.0f, &damageStar_effAnimRSTDt };
 
 void effDamageStarMain(EffectEntry* effect);
-void effDamageStarDisp(CameraId cameraId, EffectEntry* effect);
+void effDamageStarDisp(CameraId cameraId, void* payload);
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
@@ -400,7 +400,7 @@ void effDamageStarMain(EffectEntry* effect) {
         }
     }
     ((DamageStarWork*)effect->userdata)->tick = gp->retraceCount;
-    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, (DispCallback)effDamageStarDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, effDamageStarDisp, effect);
 }
 
 // One textured square of half-size h, u = horizontal texture repeat.
@@ -417,7 +417,8 @@ static inline void damageStarQuad(f32 h, f32 u) {
 }
 
 /** Draws the star sprites and the damage number as digit quads in front of them. */
-void effDamageStarDisp(CameraId cameraId, EffectEntry* effect) {
+void effDamageStarDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* cam;
     GXColor color;
     DamageStarWork* work;

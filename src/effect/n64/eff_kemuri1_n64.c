@@ -208,7 +208,7 @@ EffectEntry* effKemuri1N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angleOfs) {
     return effect;
 }
 
-void effKemuri1Disp(CameraId cameraId, EffectEntry* effect);
+void effKemuri1Disp(CameraId cameraId, void* param);
 
 /**
  * Steps an animation index through 16 frames across the effect's duration (15 to 129 frames),
@@ -276,14 +276,15 @@ void effKemuri1Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, (DispCallback)effKemuri1Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_XLU, effKemuri1Disp, effect);
 }
 
 /**
  * Draws each smoke sprite as a camera-facing quad with texture 0x28, picking the animation frame from the timer;
  * types 5-7 are half size.
  */
-void effKemuri1Disp(CameraId cameraId, EffectEntry* effect) {
+void effKemuri1Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     Mtx mtx, scale, rot, view;
     GXTexObj tex;
     EffKemuri1Work* work;

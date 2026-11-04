@@ -41,7 +41,7 @@ typedef struct EffKemuri8N64Work {
 } EffKemuri8N64Work;
 
 void effKemuri8Main(EffectEntry* effect);
-void effKemuri8Disp(CameraId cameraId, EffectEntry* effect);
+void effKemuri8Disp(CameraId cameraId, void* param);
 
 /** Sets the camera the smoke is drawn with (the entry defaults to camera 4). */
 void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
@@ -174,14 +174,15 @@ void effKemuri8Main(EffectEntry* effect) {
         work->position.x += work->speed * work->sinAngle;
         work->position.y += work->speed * work->cosAngle;
     }
-    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri8Disp, effect);
+    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, effKemuri8Disp, effect);
 }
 
 /**
  * Draws each puff twice as a billboarded quad (texture 0x28): a dark offset shadow, then the puff.
  * Hot puffs shift from white through yellow to red as their counter grows.
  */
-void effKemuri8Disp(CameraId cameraId, EffectEntry* effect) {
+void effKemuri8Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffKemuri8N64Work* work;
     s32 type;

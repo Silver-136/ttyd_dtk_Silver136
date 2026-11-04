@@ -44,9 +44,9 @@ typedef struct EffNanigaWork {
 } EffNanigaWork;
 
 void effNanigaMain(EffectEntry* effect);
-void effNanigaDisp(CameraId cameraId, EffectEntry* effect);
-void effNanigaDisp2(CameraId cameraId, EffectEntry* effect);
-void effNanigaDisp3(CameraId cameraId, EffectEntry* effect);
+void effNanigaDisp(CameraId cameraId, void* param);
+void effNanigaDisp2(CameraId cameraId, void* param);
+void effNanigaDisp3(CameraId cameraId, void* param);
 
 /**
  * Plays SFX_ITEM_WHAT3, 4 and 5 at the effect's position (LW 0-2), 833 ms apart;
@@ -278,17 +278,17 @@ void effNanigaMain(EffectEntry* effect) {
     case 4:
     case 5:
     case 10:
-        dispEntry(CAMERA_2D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, (DispCallback)effNanigaDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, effNanigaDisp, effect);
         break;
     default:
         if (state == 11 && animPoseGetLoopTimes(work->pose) < 0.8f) {
             break;
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, (DispCallback)effNanigaDisp3, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_ALPHA_TEST, effNanigaDisp3, effect);
         break;
     }
     if (work->pose != -1) {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effNanigaDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effNanigaDisp2, effect);
     }
 }
 
@@ -297,7 +297,8 @@ void effNanigaMain(EffectEntry* effect) {
  * clipped by a scissor to a 40x40 window (scaled 1.5x) around the effect's screen position.
  * Used while the reel spins and settles (states 2-5 and 10).
  */
-void effNanigaDisp(CameraId cameraId, EffectEntry* effect) {
+void effNanigaDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffNanigaWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     Mtx mT, mR, mS, mC;
@@ -376,7 +377,8 @@ void effNanigaDisp(CameraId cameraId, EffectEntry* effect) {
  * Draws the EFF_naniga animation pose (groups 1-3) 20 units below the effect, facing the camera,
  * tinted white at the work's alpha. Registered every frame while the pose is loaded.
  */
-void effNanigaDisp2(CameraId cameraId, EffectEntry* effect) {
+void effNanigaDisp2(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffNanigaWork* work = effect->userdata;
     Mtx mT, mR, mS, mC;
 
@@ -394,7 +396,8 @@ void effNanigaDisp2(CameraId cameraId, EffectEntry* effect) {
     animPoseDrawMtx(work->pose, mC, 3, 0.0f, 10.0f);
 }
 
-void effNanigaDisp3(CameraId cameraId, EffectEntry* effect) {
+void effNanigaDisp3(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffNanigaWork* work = effect->userdata;
     ItemData* item;
     Mtx mT, mR, mS, mC;

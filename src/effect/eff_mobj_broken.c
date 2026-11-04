@@ -30,8 +30,8 @@ typedef struct EffMObjBrokenWork {
 } EffMObjBrokenWork;
 
 static void effMObjBrokenMain(EffectEntry* effect);
-static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect);
-static void effMObjBrokenDisp2(CameraId cameraId, EffectEntry* effect);
+static void effMObjBrokenDisp(CameraId cameraId, void* param);
+static void effMObjBrokenDisp2(CameraId cameraId, void* param);
 
 /** Spawns the debris of a broken map object at (x, y, z); evt_mobj.c calls it with a type per object kind (0-7). */
 EffectEntry* effMObjBrokenEntry(s32 type, f32 x, f32 y, f32 z) {
@@ -208,9 +208,9 @@ static void effMObjBrokenMain(EffectEntry* effect) {
         return;
     }
     if (type != 7) {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_CUSTOM_MID, (DispCallback)effMObjBrokenDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_CUSTOM_MID, effMObjBrokenDisp, effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_CUSTOM_MID, (DispCallback)effMObjBrokenDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos2), DISP_MODE_CUSTOM_MID, effMObjBrokenDisp2, effect);
     }
 }
 
@@ -218,7 +218,8 @@ static void effMObjBrokenMain(EffectEntry* effect) {
 #pragma opt_lifetimes reset
 
 /** Draws the fragments as textured quads (effect textures 56-59) with alpha blending. */
-static void effMObjBrokenDisp(CameraId cameraId, EffectEntry* effect) {
+static void effMObjBrokenDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffMObjBrokenWork* work = effect->userdata;
     CameraEntry* camera;
     Mtx mT, mR, mS, mN;
@@ -315,7 +316,8 @@ static void rendermodeFunc(s32 wXluStage) {
 }
 
 /** Draws the EFF_sango model pieces for the type that shows them, tinted with an event colour for fading. */
-static void effMObjBrokenDisp2(CameraId cameraId, EffectEntry* effect) {
+static void effMObjBrokenDisp2(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 off;
     EffMObjBrokenWork* work;
     EffMObjBrokenWork* top;

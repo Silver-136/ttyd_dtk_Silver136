@@ -40,7 +40,7 @@ static effN64Vtx size12x12_tex64x64_vtx[] = {
 };
 
 void effFallLeafMain(EffectEntry* effect);
-void effFallLeafDisp(CameraId cameraId, EffectEntry* effect);
+void effFallLeafDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns four leaves that drift down around (x, y, z) for lifetime frames;
@@ -156,11 +156,12 @@ void effFallLeafMain(EffectEntry* effect) {
         work->position.x += work->vx;
         work->position.y += work->vy;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFallLeafDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFallLeafDisp, effect);
 }
 
 /** Draws each leaf as a camera-facing sprite with texture 0x14; the type picks the leaf tint. */
-void effFallLeafDisp(CameraId cameraId, EffectEntry* effect) {
+void effFallLeafDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffFallLeafN64Work* work;
     s32 type;

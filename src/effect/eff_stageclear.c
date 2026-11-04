@@ -35,7 +35,7 @@ typedef struct StageClearWork {
 
 
 void effStageClearMain(EffectEntry* effect);
-void effStageClearDisp(CameraId cameraId, EffectEntry* effect);
+void effStageClearDisp(CameraId cameraId, void* payload);
 
 #if VERSION < VERSION_US
 #if VERSION <= VERSION_DEMO_US
@@ -285,9 +285,9 @@ void effStageClearMain(EffectEntry* effect) {
         }
     }
     if (type < 10) {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effStageClearDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effStageClearDisp, effect);
     } else {
-        dispEntry(CAMERA_3D_EFFECTA, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, (DispCallback)effStageClearDisp, effect);
+        dispEntry(CAMERA_3D_EFFECTA, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, effStageClearDisp, effect);
     }
 }
 
@@ -296,7 +296,8 @@ void effStageClearMain(EffectEntry* effect) {
  * a dark offset shadow pass first, then the letters,
  * with a scrolling rainbow texture blended over the type 0 text.
  */
-void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
+void effStageClearDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     StageClearWork* work = effect->userdata;
     CameraEntry* cam;
     f32 scale;

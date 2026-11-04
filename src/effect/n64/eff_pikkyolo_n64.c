@@ -52,7 +52,7 @@ static effN64Vtx size16x16_tex16x16_vtx[] = {
 };
 
 void effPikkyoloMain(EffectEntry* effect);
-void effPikkyoloDisp(CameraId cameraId, EffectEntry* effect);
+void effPikkyoloDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns six randomly colored fragments at (x, y, z) thrown out with random velocities, scaled by scale;
@@ -150,11 +150,12 @@ void effPikkyoloMain(EffectEntry* effect) {
         }
         work->rot += ((i & 1) * 2 - 1) * 14;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPikkyoloDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effPikkyoloDisp, effect);
 }
 
 /** Draws each fragment as a camera-facing, spinning quad using one of four animation cells of texture 0x41. */
-void effPikkyoloDisp(CameraId cameraId, EffectEntry* effect) {
+void effPikkyoloDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffPikkyoloN64Work* work;
     s32 i;

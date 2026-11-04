@@ -66,14 +66,6 @@ s32 mobj_lock(MapObjectEntry* mobj);
 #endif
 #endif
 
-#if MOBJ_EXTRA_OBJS
-static s32 mobj_breaking_rock(MapObjectEntry* mobj);
-static s32 mobj_trap_floor(MapObjectEntry* mobj);
-static s32 mobj_arrow(MapObjectEntry* mobj);
-static s32 mobj_rideswitch_green(MapObjectEntry* mobj);
-static s32 mobj_rideswitch_orange(MapObjectEntry* mobj);
-#endif
-
 /**
  * Resolves a map object name for the script commands below;
  * "me" means the object whose event is running (event->thisMapObj).

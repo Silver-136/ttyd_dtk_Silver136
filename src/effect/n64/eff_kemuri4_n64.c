@@ -84,7 +84,7 @@ effN64Vtx flowers_v[41] = {
 };
 
 void effKemuri4Main(EffectEntry* effect);
-void effKemuri4Disp(CameraId cameraId, EffectEntry* effect);
+void effKemuri4Disp(CameraId cameraId, void* param);
 
 /**
  * Spawns one puff at (x, y, z) that drifts sideways from the angle (mirrored if flip is nonzero).
@@ -189,12 +189,13 @@ void effKemuri4Main(EffectEntry* effect) {
     if (anyActive == 0) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effKemuri4Disp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, effKemuri4Disp, effect);
     }
 }
 
 /** Draws a textured quad (texture 0x4C or 0x4D, picked randomly at spawn), then an untextured vertex-colored shape. */
-void effKemuri4Disp(CameraId cameraId, EffectEntry* effect) {
+void effKemuri4Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera = camGetPtr(cameraId);
     effN64Vtx* vtx1;
     effN64Vtx* vtx2;

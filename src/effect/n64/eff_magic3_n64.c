@@ -25,7 +25,7 @@ typedef struct EffMagic3N64Work {
 } EffMagic3N64Work;
 
 void effMagic3Main(EffectEntry* effect);
-void effMagic3Disp(CameraId cameraId, EffectEntry* effect);
+void effMagic3Disp(CameraId cameraId, void* payload);
 
 #pragma opt_propagation off
 /**
@@ -156,11 +156,12 @@ void effMagic3Main(EffectEntry* effect) {
         work->position.y += work->velocity.y;
         work->position.z += work->velocity.z;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagic3Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effMagic3Disp, effect);
 }
 
 /** Draws each spark as a camera-facing, rotated streak quad (32x16, effect texture 0x1E). */
-void effMagic3Disp(CameraId cameraId, EffectEntry* effect) {
+void effMagic3Disp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffMagic3N64Work* work;
     GXTexObj texObj;

@@ -34,7 +34,7 @@ typedef struct EffStarPowerN64Work {
 } EffStarPowerN64Work;
 
 void effStarPowerMain(EffectEntry* effect);
-void effStarPowerDisp(CameraId cameraId, EffectEntry* effect);
+void effStarPowerDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a star power glow at (x, y, z); `id` selects the colors and a lifetime of 0 or less lasts
@@ -161,7 +161,7 @@ void effStarPowerMain(EffectEntry* effect) {
         work->prevRotZ = work->rotZ;
         work->prevScale = work->scale;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStarPowerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effStarPowerDisp, effect);
 }
 
 /**
@@ -217,7 +217,8 @@ effN64Vtx testsrc_akari_v[] = {
  * while the glow alpha is nonzero, the textured glow shell (texture 0x49) at the previous frame's pose at half
  * alpha and at the current pose, then the solid star body at the current pose with the main alpha.
  */
-void effStarPowerDisp(CameraId cameraId, EffectEntry* effect) {
+void effStarPowerDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     s32 half;
     EffStarPowerN64Work* work;

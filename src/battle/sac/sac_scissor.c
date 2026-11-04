@@ -34,7 +34,6 @@
 #include "battle/battle_disp.h"
 #include "battle/battle_sub.h"
 
-double sqrt(double);
 double __fabs(double);
 /** Absolute value through the __fabs intrinsic; scissor_intersection uses it to pick each segment's major axis. */
 // FAKE: my_fabsf() wraps __fabs for scissor_intersection; direct __fabs calls change the object

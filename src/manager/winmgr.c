@@ -37,7 +37,7 @@ typedef struct WinMgrSelectTbl {
 
 #if VERSION >= VERSION_US
 u16 pouchEquipBadge(s32 index);
-int select_comp_bteresa(void* a, void* b);
+s32 select_comp_bteresa(const void* a, const void* b);
 #endif
 
 void select_main(WinMgrEntry* entry);
@@ -70,8 +70,8 @@ void select_disp3_mario(WinMgrEntry* entry);
 #endif
 
 void winMgrSeq(WinMgrEntry* entry);
-int select_comp_type(void* a, void* b);
-int select_comp_starpiece(void* a, void* b);
+s32 select_comp_type(const void* a, const void* b);
+s32 select_comp_starpiece(const void* a, const void* b);
 
 //.sbss
 static WinMgrWork work;
@@ -920,7 +920,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 }
             }
 #if VERSION > VERSION_DEMO_US
-            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_type);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_type);
 #endif
             break;
         case SELECT_TYPE_BADGE_STAR_PIECE:
@@ -947,7 +947,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                     sel->numItems++;
                 }
             }
-            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_starpiece);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_starpiece);
             break;
         case SELECT_TYPE_BADGE_CHARLIETON:
             sel->items = __memAlloc(HEAP_DEFAULT, 4 * sizeof(WinMgrSelectItem));
@@ -982,7 +982,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             }
 
 #if VERSION >= VERSION_US
-            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), (QSortCompare)select_comp_bteresa);
+            qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_bteresa);
 #endif
 
             break;
@@ -1032,21 +1032,23 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
 // Descriptive name (not in the symbol maps); placeholder unk_80237a2c, JP 0x80237A2C. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
 // PAL: equal prices fall back to the type order
-int select_comp_starpiece(void* a, void* b) {
+s32 select_comp_starpiece(const void* a, const void* b) {
+    const WinMgrSelectItem* itemA = a;
+    const WinMgrSelectItem* itemB = b;
 #if VERSION == VERSION_EU
-    if (itemDataTable[((WinMgrSelectItem*)a)->id].star_piece_price > itemDataTable[((WinMgrSelectItem*)b)->id].star_piece_price) {
+    if (itemDataTable[itemA->id].star_piece_price > itemDataTable[itemB->id].star_piece_price) {
         return 1;
     }
-    if (itemDataTable[((WinMgrSelectItem*)a)->id].star_piece_price < itemDataTable[((WinMgrSelectItem*)b)->id].star_piece_price) {
+    if (itemDataTable[itemA->id].star_piece_price < itemDataTable[itemB->id].star_piece_price) {
         return -1;
     }
-    if (itemDataTable[((WinMgrSelectItem*)a)->id].type_sort_order > itemDataTable[((WinMgrSelectItem*)b)->id].type_sort_order) {
+    if (itemDataTable[itemA->id].type_sort_order > itemDataTable[itemB->id].type_sort_order) {
         return 1;
     }
-    return -(itemDataTable[((WinMgrSelectItem*)a)->id].type_sort_order < itemDataTable[((WinMgrSelectItem*)b)->id].type_sort_order);
+    return -(itemDataTable[itemA->id].type_sort_order < itemDataTable[itemB->id].type_sort_order);
 #else
-    u16 x = itemDataTable[((WinMgrSelectItem*)a)->id].star_piece_price;
-    u16 y = itemDataTable[((WinMgrSelectItem*)b)->id].star_piece_price;
+    u16 x = itemDataTable[itemA->id].star_piece_price;
+    u16 y = itemDataTable[itemB->id].star_piece_price;
     if (x > y) {
         return 1;
     }
@@ -1057,9 +1059,11 @@ int select_comp_starpiece(void* a, void* b) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_802379e4, JP 0x802379E4. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-int select_comp_type(void* a, void* b) {
-    s16 x = itemDataTable[((WinMgrSelectItem*)a)->id].type_sort_order;
-    s16 y = itemDataTable[((WinMgrSelectItem*)b)->id].type_sort_order;
+s32 select_comp_type(const void* a, const void* b) {
+    const WinMgrSelectItem* itemA = a;
+    const WinMgrSelectItem* itemB = b;
+    s16 x = itemDataTable[itemA->id].type_sort_order;
+    s16 y = itemDataTable[itemB->id].type_sort_order;
     if (x > y) {
         return 1;
     }
@@ -1069,9 +1073,11 @@ int select_comp_type(void* a, void* b) {
 
 #if VERSION >= VERSION_US
 /** US: badge list sorted by (buy price * 2 + 2) / 3 */
-int select_comp_bteresa(void* a, void* b) {
-    s32 x = (itemDataTable[((WinMgrSelectItem*)a)->id].buy_price * 2 + 2) / 3;
-    s32 y = (itemDataTable[((WinMgrSelectItem*)b)->id].buy_price * 2 + 2) / 3;
+s32 select_comp_bteresa(const void* a, const void* b) {
+    const WinMgrSelectItem* itemA = a;
+    const WinMgrSelectItem* itemB = b;
+    s32 x = (itemDataTable[itemA->id].buy_price * 2 + 2) / 3;
+    s32 y = (itemDataTable[itemB->id].buy_price * 2 + 2) / 3;
     if (x > y) {
         return 1;
     }

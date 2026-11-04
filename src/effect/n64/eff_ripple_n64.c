@@ -32,7 +32,8 @@ void effRippleN64SetRxRz(EffectEntry* effect, f32 rx, f32 rz) {
  * shape texture 0x5B from the TTYD set for types 1-3/10/20/30, else N64 texture 0x21,
  * masked by N64 texture 0x22 scrolling with `offset`. Types 1, 3, 10 and 30 are black, the rest white.
  */
-void effRippleDisp(CameraId cameraId, EffectEntry* effect) {
+void effRippleDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     s32 type;
     EffRippleN64Work* work;
@@ -148,7 +149,7 @@ void effRippleMain(EffectEntry* effect) {
         work->offset -= 32;
     }
     work->scale += 0.1f;
-    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRippleDisp, effect);
+    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, effRippleDisp, effect);
 }
 
 /**

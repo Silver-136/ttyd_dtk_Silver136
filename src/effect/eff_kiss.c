@@ -30,8 +30,8 @@ typedef struct KissWork {
 } KissWork;
 
 void effKissMain(EffectEntry* effect);
-void effKissDisp(CameraId cameraId, EffectEntry* effect);
-void effKissDisp2(CameraId cameraId, EffectEntry* effect);
+void effKissDisp(CameraId cameraId, void* payload);
+void effKissDisp2(CameraId cameraId, void* payload);
 
 /**
  * Per-frame keys of the type 1 kiss hearts over 24 frames: distance from the centre (they burst outward and
@@ -243,9 +243,9 @@ void effKissMain(EffectEntry* effect) {
         break;
     }
     if (type == 4 || type == 5) {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effKissDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effKissDisp2, effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effKissDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effKissDisp, effect);
     }
 }
 
@@ -269,7 +269,8 @@ static inline void effKissGXSetup(void) {
 }
 
 /** Draws the lip mark and the hearts in two passes. */
-void effKissDisp(CameraId cameraId, EffectEntry* effect) {
+void effKissDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     KissWork* work = effect->userdata;
     CameraEntry* cam;
     KissWork* q;
@@ -453,7 +454,8 @@ void effKissDisp(CameraId cameraId, EffectEntry* effect) {
 }
 
 /** Draws the small pink hearts (texture 20) around the kiss. */
-void effKissDisp2(CameraId cameraId, EffectEntry* effect) {
+void effKissDisp2(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     KissWork* work = effect->userdata;
     CameraEntry* cam;
     Mtx mT, mS, mR, mBase;

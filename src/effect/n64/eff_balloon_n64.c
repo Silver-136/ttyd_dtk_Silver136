@@ -63,7 +63,7 @@ static effN64Vtx balloon_vtx[] = {
 };
 
 void effBalloonMain(EffectEntry* effect);
-void effBalloonDisp(CameraId cameraId, EffectEntry* effect);
+void effBalloonDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns the balloon at (x, y, z) that grows to `targetScale`,
@@ -148,7 +148,7 @@ void effBalloonMain(EffectEntry* effect) {
     } else {
         work->offsetY = 1.2f * scale;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBalloonDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effBalloonDisp, effect);
 }
 
 /**
@@ -156,7 +156,8 @@ void effBalloonMain(EffectEntry* effect) {
  * then draws the outline as a fan of triangles around one vertex;
  * the texture is chosen from the lifetime counter (Guess).
  */
-void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
+void effBalloonDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera = camGetPtr(cameraId);
     EffBalloonN64Work* work = effect->userdata;
     s32 lifetime;

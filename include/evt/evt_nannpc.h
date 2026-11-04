@@ -105,9 +105,9 @@ typedef struct NanNPCWork {
     s16* tbl;          // 0x8
     s32 num;           // 0xC
     u32 flags;         // 0x10
-    void (*func14)();  // 0x14
-    void (*func18)();  // 0x18
-    void (*func1c)();  // 0x1C
+    void (*subfunc0)(); // 0x14
+    void (*subfunc1)(); // 0x18
+    void (*subfunc2)(); // 0x1C
 } NanNPCWork;
 
 // NanNPCWork.flags

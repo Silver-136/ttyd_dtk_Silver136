@@ -53,7 +53,7 @@ effN64Vtx ice_s_vtx[] = {
 };
 
 static void effIceMain(EffectEntry* effect);
-static void effIceDisp(CameraId cameraId, EffectEntry* effect);
+static void effIceDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns eight ice shards at (x, y, z) that fly up and spin for 30 frames.
@@ -140,14 +140,15 @@ static void effIceMain(EffectEntry* effect) {
         p->x += p->velX;
         p->y += p->velY;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_XLU, (DispCallback)effIceDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_XLU, effIceDisp, effect);
 }
 
 /**
  * Draws the eight shards, alternating between a plain shard (texture 8, odd indices)
  * and a spinning one (texture 7, even indices).
  */
-static void effIceDisp(CameraId cameraId, EffectEntry* effect) {
+static void effIceDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     EffIceN64Work* work;
     CameraEntry* cam;
     Mtx trans;

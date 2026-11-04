@@ -94,8 +94,8 @@ static inline void effFireQuad(s32 iw, s32 ih) {
     GXColor4u8(0x00, 0x00, 0x00, 0xFF);
     GXTexCoord2f32(0.0f, 1.0f);
 }
-void effFireDisp(CameraId cameraId, EffectEntry* effect);
-void effFireDisp2(CameraId cameraId, EffectEntry* effect);
+void effFireDisp(CameraId cameraId, void* payload);
+void effFireDisp2(CameraId cameraId, void* payload);
 void effFireDisp3(CameraId cameraId, EffectEntry* effect);
 
 /** Slower looping 200-frame swell of the flame's size (up to 1.2) for flame type 4; read by effFireMain. */
@@ -108,7 +108,7 @@ FireScaleKey scale2[] = {
 };
 #endif
 
-void effFireSmokeDisp(CameraId cameraId, EffectEntry* effect);
+void effFireSmokeDisp(CameraId cameraId, void* payload);
 void effFireSmokeMain(EffectEntry* effect);
 
 static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale);
@@ -306,7 +306,7 @@ void effFireMain(EffectEntry* effect) {
         case 3:
         case 4:
         case 8:
-            dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, (DispCallback)effFireDisp2, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, effFireDisp2, effect);
             break;
         case 5:
         case 6:
@@ -314,13 +314,14 @@ void effFireMain(EffectEntry* effect) {
             dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, (DispCallback)effFireDisp3, effect);
             break;
         default:
-            dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_CUSTOM_MID, (DispCallback)effFireDisp, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_CUSTOM_MID, effFireDisp, effect);
             break;
     }
 }
 
 /** Draws the main flame billboard with an animated texture, using alpha blending. */
-void effFireDisp(CameraId cameraId, EffectEntry* effect) {
+void effFireDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     s32 w;
     s32 h;
     EffFireWork* work;
@@ -434,7 +435,8 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect) {
 }
 
 /** Draws the second flame layer (texture 0x48) using two texture coordinate sets. */
-void effFireDisp2(CameraId cameraId, EffectEntry* effect) {
+void effFireDisp2(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffFireWork* work;
     s32 type;
@@ -871,11 +873,12 @@ void effFireSmokeMain(EffectEntry* effect) {
     work->color[0] *= 0.99f;
     work->color[1] *= 0.99f;
     work->color[2] *= 0.99f;
-    dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, (DispCallback)effFireSmokeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, effFireSmokeDisp, effect);
 }
 
 /** Draws the smoke puff as a billboard scaled by scale_dt for its age. */
-void effFireSmokeDisp(CameraId cameraId, EffectEntry* effect) {
+void effFireSmokeDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     EffFireSmokeWork* work = effect->userdata;
     CameraEntry* camera;
     GXTexObj texObj;

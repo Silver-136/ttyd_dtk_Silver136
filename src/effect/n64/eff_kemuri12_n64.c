@@ -34,7 +34,7 @@ effN64Vtx size32x32_tex32x32_yougan_vtx[] = {
 };
 
 void effKemuri12Main(EffectEntry* effect);
-void effKemuri12Disp(CameraId cameraId, EffectEntry* effect);
+void effKemuri12Disp(CameraId cameraId, void* param);
 
 /**
  * Spawns an expanding smoke puff at (x, y, z) for duration frames.
@@ -100,7 +100,7 @@ void effKemuri12Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri12Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKemuri12Disp, effect);
 }
 
 /**
@@ -108,7 +108,8 @@ void effKemuri12Main(EffectEntry* effect) {
  * the current animation frame and the next, by the fraction of progress (TEV register 1 alpha);
  * types above 2 use the lava-coloured (yougan) mesh with extra quads.
  */
-void effKemuri12Disp(CameraId cameraId, EffectEntry* effect) {
+void effKemuri12Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 type;
     CameraEntry* camera;
     s32 last;

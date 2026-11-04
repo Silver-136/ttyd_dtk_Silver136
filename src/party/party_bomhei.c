@@ -96,9 +96,9 @@ static inline void bomheiCleanSfx(PartyEntry* p) {
 /** Stops the sounds of a bomb use; the demos keep a third id at 0x17C. */
 static inline void bomheiCleanUseSfx(PartyEntry* p) {
 #if VERSION <= VERSION_DEMO_US
-    if ((u32)p->work.bomhei.reserved_17C != 0xFFFFFFFFU) {
-        psndSFXOff(p->work.bomhei.reserved_17C);
-        p->work.bomhei.reserved_17C = -1;
+    if ((u32)p->work.bomhei.throwSfxId != 0xFFFFFFFFU) {
+        psndSFXOff(p->work.bomhei.throwSfxId);
+        p->work.bomhei.throwSfxId = -1;
     }
 #endif
     bomheiCleanSfx(p);
@@ -141,7 +141,7 @@ void bomhei_init_800BFBB0(PartyEntry* party) {
     party->height = 28.0f;
     party->width = 28.0f;
     party->work.bomhei.state = 100;
-    party->work.bomhei.reserved_17C = -1;
+    party->work.bomhei.throwSfxId = -1;
     party->work.bomhei.sfxId = -1;
     party->work.bomhei.sfxId2 = -1;
 }
@@ -545,7 +545,7 @@ void bomhei_use_main(PartyEntry* party) {
     switch (party->useMotionId) {
     case 20:
 #if VERSION <= VERSION_DEMO_US
-        party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_THROW1, &party->playerPtr->position);
+        party->work.bomhei.throwSfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_THROW1, &party->playerPtr->position);
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_THROW1), &party->playerPtr->position);
 #endif

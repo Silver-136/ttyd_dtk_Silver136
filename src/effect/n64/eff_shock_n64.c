@@ -117,7 +117,7 @@ effN64Vtx testsrc_shock_v[] = {
 };
 
 void effShockMain(EffectEntry* effect);
-void effShockDisp(CameraId cameraId, EffectEntry* effect);
+void effShockDisp(CameraId cameraId, void* param);
 
 EffectEntry* effShockN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffectEntry* effect;
@@ -214,7 +214,7 @@ void effShockMain(EffectEntry* effect) {
             w->c10 = 0;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effShockDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effShockDisp, effect);
 }
 
 /**
@@ -222,7 +222,8 @@ void effShockMain(EffectEntry* effect) {
  * an outer ring textured with 0x85 (yellow and fading for type 1) and an untextured inner pass,
  * both in the work's two colours. Type 0 and types above 3 draw nothing.
  */
-void effShockDisp(CameraId cameraId, EffectEntry* effect) {
+void effShockDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffShockN64Work* w;
     s32 type;

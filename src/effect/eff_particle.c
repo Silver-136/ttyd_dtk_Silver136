@@ -98,7 +98,7 @@ static inline f32 pt_frand(void) {
     return (f32)(u32)seed * 2.3283064e-10f;
 }
 
-void effParticleDisp(CameraId cameraId, EffectEntry* effect);
+void effParticleDisp(CameraId cameraId, void* payload);
 void effParticleMain(EffectEntry* effect);
 
 /** Gaussian-distributed random number (polar Box-Muller), caching the second value for the next call. */
@@ -302,11 +302,12 @@ void effParticleMain(EffectEntry* effect) {
         }
         idx = prev->next;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effParticleDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effParticleDisp, effect);
 }
 
 /** Draws every live particle as a camera-facing textured quad (effect texture 0x61). */
-void effParticleDisp(CameraId cameraId, EffectEntry* effect) {
+void effParticleDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     ParticleWork* work = effect->userdata;
     CameraEntry* cam = camGetPtr(cameraId);
     s32 alpha = work->alpha;

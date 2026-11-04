@@ -4,7 +4,7 @@
 #include "battle/battle_audience.h"
 #include "system.h"
 #include "manager/evtmgr_cmd.h"
-double sqrt(double);
+#include "libc_decls.h"
 
 /** s32* mask */
 //s32* mask

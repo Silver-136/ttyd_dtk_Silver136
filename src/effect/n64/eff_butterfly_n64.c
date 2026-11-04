@@ -33,7 +33,7 @@ typedef struct EffButterflyN64Work {
 static s8 y_data[30] = {-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -17, -15, -13, -11, -9, -7, -5, -3, -1, 0, 0};
 
 void effButterflyMain(EffectEntry* effect);
-void effButterflyDisp(CameraId cameraId, EffectEntry* effect);
+void effButterflyDisp(CameraId cameraId, void* param);
 
 /** Butterfly wing poses: one six-vertex set per bob step, with the wing tips rising set by set so the wings flap. */
 effN64Vtx but_02_v[] = {
@@ -324,7 +324,7 @@ void effButterflyMain(EffectEntry* effect) {
     work->position.x += work->velocity.x;
     work->position.y += work->velocity.y;
     work->position.z += work->velocity.z;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effButterflyDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, effButterflyDisp, effect);
 }
 
 /**
@@ -332,7 +332,8 @@ void effButterflyMain(EffectEntry* effect) {
  * bobIdx also selects the six-vertex set in but_02_v;
  * the wing tips rise from set to set (y 31, 42, 58, 79 ...), so the wings flap.
  */
-void effButterflyDisp(CameraId cameraId, EffectEntry* effect) {
+void effButterflyDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffButterflyN64Work* work;
     GXTexObj texObj;

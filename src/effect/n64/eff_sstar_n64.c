@@ -74,7 +74,7 @@ effN64Vtx shooting_dust_vtx[10] = {
 };
 
 void effSstarMain(EffectEntry* effect);
-void effSstarDisp(CameraId cameraId, EffectEntry* effect);
+void effSstarDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a star at (x, y, z) flying toward (tx, ty, tz) at `speed` per frame.
@@ -224,7 +224,7 @@ void effSstarMain(EffectEntry* effect) {
     if (w->life < 0) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effSstarDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effSstarDisp, effect);
     }
 }
 
@@ -233,7 +233,8 @@ void effSstarMain(EffectEntry* effect) {
  * until its second bounce, a five-segment dust trail built from the last eight frames' matrices with texture 0xA
  * (0xB for subtype 3).
  */
-void effSstarDisp(CameraId cameraId, EffectEntry* effect) {
+void effSstarDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffSstarN64Work* w;
     s32 i;

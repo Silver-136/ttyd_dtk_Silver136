@@ -20,7 +20,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
-double hypot(double x, double y);
+#include "libc_decls.h"
 
 static USER_FUNC(get_attacker);
 static u16 krb_comp_dir(f32 x, f32 z);

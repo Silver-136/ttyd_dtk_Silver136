@@ -61,7 +61,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 };
 
 void effAkariPoseMain(EffectEntry* effect);
-void effAkariPoseDisp(CameraId cameraId, EffectEntry* effect);
+void effAkariPoseDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns `count` flares around (x, y, z), `scale` times the base size,
@@ -189,11 +189,12 @@ void effAkariPoseMain(EffectEntry* effect) {
         work->vy += b * (work->targetVy - work->vy);
     }
 
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effAkariPoseDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effAkariPoseDisp, effect);
 }
 
 /** Draws each started flare as a rotated, camera-facing 16x16 textured quad. */
-void effAkariPoseDisp(CameraId cameraId, EffectEntry* effect) {
+void effAkariPoseDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* cam;
     EffAkariPoseN64Work* work;
     s32 alpha;

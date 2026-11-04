@@ -2371,8 +2371,8 @@ static inline void partyChgRunMo(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_US
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
+#include "mot/mot_plane.h"
 extern f32 partyNrmToAngle(Vec* n);
-extern s32 marioPlaneGetFlyingDir(void);
 /** TRUE when hit is a floor the partner may stand on (not flagged with hit attributes 0x200 or 0x800). */
 static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     return hit == NULL ? FALSE : (hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES)) == 0;

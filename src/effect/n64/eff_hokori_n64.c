@@ -35,7 +35,7 @@ static effN64Vtx size8x8_tex32x32_vtx[] = {
 };
 
 void effHokoriMain(EffectEntry* effect);
-void effHokoriDisp(CameraId cameraId, EffectEntry* effect);
+void effHokoriDisp(CameraId cameraId, void* payload);
 
 EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     s32 count;
@@ -133,14 +133,15 @@ void effHokoriMain(EffectEntry* effect) {
             work->scaleX += work->growth2;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHokoriDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effHokoriDisp, effect);
 }
 
 /**
  * Draws each puff as a camera-facing sprite (texture 21 for type 0, 22 otherwise):
  * tall and square ones alternate for types 0-1, small ones for other types.
  */
-void effHokoriDisp(CameraId cameraId, EffectEntry* effect) {
+void effHokoriDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffHokoriN64Work* work;
     GXTexObj tex;

@@ -25,7 +25,7 @@ typedef struct EffUpdownWork {
 } EffUpdownWork;
 
 void effUpdownMain(EffectEntry* effect);
-void effUpdownDisp(CameraId cameraId, EffectEntry* effect);
+void effUpdownDisp(CameraId cameraId, void* param);
 
 /** Digit icons 0-9 used to draw the number. */
 static u16 icon_id[10] = { ICON_NUMBER_SMALL_0, ICON_NUMBER_SMALL_1, ICON_NUMBER_SMALL_2, ICON_NUMBER_SMALL_3, ICON_NUMBER_SMALL_4, ICON_NUMBER_SMALL_5, ICON_NUMBER_SMALL_6, ICON_NUMBER_SMALL_7, ICON_NUMBER_SMALL_8, ICON_NUMBER_SMALL_9 };
@@ -117,7 +117,7 @@ void effUpdownMain(EffectEntry* effect) {
         if (work->alpha != 0xFF) {
             mode = DISP_MODE_XLU;
         }
-        dispEntry(CAMERA_3D, dispCalcZ(p), mode, (DispCallback)effUpdownDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(p), mode, effUpdownDisp, effect);
     }
 }
 
@@ -170,7 +170,8 @@ static void polygon(s32 type, s32 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 
 }
 
 /** Draws a coloured square background, the last digit of |number| (an icon texture) and the up or down arrow icon. */
-void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
+void effUpdownDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffUpdownWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     s32 number = work->number;

@@ -14,7 +14,7 @@
 #include "libc_decls.h"
 
 void effMist2Main(EffectEntry* effect);
-void effMist2Disp(CameraId cameraId, EffectEntry* effect);
+void effMist2Disp(CameraId cameraId, void* param);
 
 /** Spawns the second mist effect at (x, y, z) for `life` frames; called through evt_eff ("mist2", the black mist). */
 EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b) {
@@ -145,11 +145,12 @@ void effMist2Main(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMist2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effMist2Disp, effect);
 }
 
 /** Draws each puff as a rotated textured quad (effect texture 0x5E). */
-void effMist2Disp(CameraId cameraId, EffectEntry* effect) {
+void effMist2Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffMist2Work* work = effect->userdata;
     Mtx trans;
     Mtx rot;

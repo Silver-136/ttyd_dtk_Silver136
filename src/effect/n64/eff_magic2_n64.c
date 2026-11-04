@@ -40,7 +40,7 @@ static u8 color_rotation_data[24] = {0xFF, 0xC5, 0x9C, 0xFF, 0x9C, 0xFF, 0xFF, 0
                                      0xFF, 0xC5, 0x7B, 0xFF, 0xB4, 0xFF, 0xDE, 0x73, 0xFF, 0xFF, 0x94, 0x9C};
 
 void effMagic2Main(EffectEntry* effect);
-void effMagic2Disp(CameraId cameraId, EffectEntry* effect);
+void effMagic2Disp(CameraId cameraId, void* param);
 void magic2_2_line_dl(void);
 void magic2_4_dl(void);
 
@@ -216,14 +216,15 @@ void effMagic2Main(EffectEntry* effect) {
             w->tex1ScrollY += 0x100;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagic2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effMagic2Disp, effect);
 }
 
 /**
  * Draws the burst with an N64-style perspective projection (narrow for type 0, wide for type 1) once per record,
  * scrolling two textures and cycling a color table.
  */
-void effMagic2Disp(CameraId cameraId, EffectEntry* effect) {
+void effMagic2Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 fov;
     s32 half;
     EffMagic2N64Work* w;

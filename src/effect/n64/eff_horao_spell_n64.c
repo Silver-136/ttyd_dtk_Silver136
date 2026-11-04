@@ -73,7 +73,7 @@ effN64Vtx horao_spell_vtx[] = {
 };
 
 void effHoraoSpellMain(EffectEntry* effect);
-void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect);
+void effHoraoSpellDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns the horao spell effect at (x, y, z) for lifetime frames (0 = until soft-deleted).
@@ -144,14 +144,15 @@ void effHoraoSpellMain(EffectEntry* effect) {
     if (frame < 16) {
         work->alpha = frame * 16 + 15;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effHoraoSpellDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effHoraoSpellDisp, effect);
 }
 
 /**
  * Draws two 16-segment ribbons 36 degrees apart that sway with a sine and scroll texture 0x73.
  * The vertices are rebuilt every frame in smartAlloc memory.
  */
-void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect) {
+void effHoraoSpellDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     GXTexObj texObj;
     Mtx mtx;
     Mtx scale;

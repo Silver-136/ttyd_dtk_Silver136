@@ -33,7 +33,8 @@ typedef struct EffChargeWork {
 } EffChargeWork;
 
 /** Draws the sparkles as additive billboards from texture 30, tinted between the two colours chosen by type. */
-void effChargeDisp(CameraId cameraId, EffectEntry* effect) {
+void effChargeDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffChargeWork* work = effect->userdata;
     s32 i;
     s32 s0 = work->r0, s1 = work->g0, s2 = work->b0;
@@ -173,7 +174,7 @@ void effChargeMain(EffectEntry* effect) {
         work->yaw += (f32)(odd ? 5 : 2);
         work->pitch += (f32)(odd ? 2 : 5);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effChargeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effChargeDisp, effect);
 }
 
 /**

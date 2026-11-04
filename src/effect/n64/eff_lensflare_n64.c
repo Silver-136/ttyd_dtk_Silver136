@@ -54,7 +54,7 @@ static effN64Vtx size10x10_tex32x32_vtx[] = {
 };
 
 void effLensflareMain(EffectEntry* effect);
-void effLensflareDisp(CameraId cameraId, EffectEntry* effect);
+void effLensflareDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a lens flare at (x, y, z): one main record plus five orbiting streak elements with random angle
@@ -139,14 +139,15 @@ void effLensflareMain(EffectEntry* effect) {
             e->angle = (f32)(rand() % 360);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effLensflareDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effLensflareDisp, effect);
 }
 
 /**
  * Draws a spinning 48x48 glow billboard (texture 0x6F),
  * then for each streak element four small shapes (texture 0x86).
  */
-void effLensflareDisp(CameraId cameraId, EffectEntry* effect) {
+void effLensflareDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     s32 ang1;
     s32 odd;
     s32 ang2;

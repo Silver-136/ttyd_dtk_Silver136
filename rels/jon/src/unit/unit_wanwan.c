@@ -17,6 +17,7 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
+#include "libc_decls.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_SOUND_VOLUME 1 // volume of the wait sounds (SFX_ENM_WAN_*): 127 at init and each attack, sound_gensui_event lowers it to 70 % per loop, at least 32
@@ -26,7 +27,6 @@
 #define PARTS_WORK_OFFSET_X 0 // parts 1-8: x offset from part 9 recorded by chain_main for UNIT_WORK_CHAIN_STATE 1
 #define PARTS_WORK_OFFSET_Y 1 // parts 1-8: y offset from part 9 recorded by chain_main for UNIT_WORK_CHAIN_STATE 1
 
-double sqrt(double x);
 
 static USER_FUNC(chain_init);
 static USER_FUNC(chain_main);

@@ -28,7 +28,7 @@ typedef struct EffFireRingN64Work {
 } EffFireRingN64Work;
 
 void effFireRingMain(EffectEntry* effect);
-void effFireRingDisp(CameraId cameraId, EffectEntry* effect);
+void effFireRingDisp(CameraId cameraId, void* param);
 
 /** The fire ring mesh: 90 vertices of a flat ring, with coordinates for the two scrolling flame textures. */
 static effN64Vtx stg__s_v[] = {
@@ -195,7 +195,7 @@ void effFireRingMain(EffectEntry* effect) {
         if (work->uv[3] < 0.0f) {
             work->uv[3] += 128.0f;
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireRingDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFireRingDisp, effect);
     }
 }
 
@@ -203,7 +203,8 @@ void effFireRingMain(EffectEntry* effect) {
  * Draws the ring mesh with the two flame textures (0x2d and 0x2e),
  * using the scrolled coordinates and the work colour.
  */
-void effFireRingDisp(CameraId cameraId, EffectEntry* effect) {
+void effFireRingDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffFireRingN64Work* work;
     GXTexObj texObj;

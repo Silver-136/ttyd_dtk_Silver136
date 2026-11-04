@@ -12,7 +12,7 @@
 #include <dolphin/mtx.h>
 
 void effMahojinMain(EffectEntry* effect);
-void effMahojinDisp(CameraId cameraId, EffectEntry* effect);
+void effMahojinDisp(CameraId cameraId, void* payload);
 
 s32 mahojin_rate;
 
@@ -278,14 +278,15 @@ void effMahojinMain(EffectEntry* effect) {
                 break;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMahojinDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effMahojinDisp, effect);
 }
 
 /**
  * Draws the magic circle's front and back animation poses at the effect position,
  * applying the purple tint callback.
  */
-void effMahojinDisp(CameraId cameraId, EffectEntry* effect) {
+void effMahojinDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     Mtx mtx;
     f32 z[16];
     s32 idx[16];

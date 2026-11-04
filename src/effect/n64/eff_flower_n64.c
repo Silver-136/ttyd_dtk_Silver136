@@ -31,7 +31,7 @@ typedef struct EffFlowerN64Work {
 } EffFlowerN64Work;
 
 void effFlowerMain(EffectEntry* effect);
-void effFlowerDisp(CameraId cameraId, EffectEntry* effect);
+void effFlowerDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a flower that rises from just above (x, y, z) for lifetime frames.
@@ -146,11 +146,12 @@ void effFlowerMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFlowerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFlowerDisp, effect);
 }
 
 /** Draws the flower with texture 0x4C in two passes (the flowers_v meshes), tilted by rotX/rotY. */
-void effFlowerDisp(CameraId cameraId, EffectEntry* effect) {
+void effFlowerDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffFlowerN64Work* work;
     GXTexObj texObj;

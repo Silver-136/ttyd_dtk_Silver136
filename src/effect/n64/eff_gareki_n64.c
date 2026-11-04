@@ -28,7 +28,7 @@ typedef struct EffGarekiN64Work {
 
 void gareki_dl(s32 type);
 void effGarekiMain(EffectEntry* effect);
-void effGarekiDisp(CameraId cameraId, EffectEntry* effect);
+void effGarekiDisp(CameraId cameraId, void* param);
 
 #if VERSION <= VERSION_DEMO_US
 static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
@@ -196,14 +196,15 @@ void effGarekiMain(EffectEntry* effect) {
             work->rotZ += 20.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effGarekiDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effGarekiDisp, effect);
 }
 
 /**
  * Draws the whole chunk with texture 23 while it falls,
  * then each of the eight pieces at its own offset and rotation.
  */
-void effGarekiDisp(CameraId cameraId, EffectEntry* effect) {
+void effGarekiDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffGarekiN64Work* work;
     s32 i;

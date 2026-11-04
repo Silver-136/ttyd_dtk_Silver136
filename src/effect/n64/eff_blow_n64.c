@@ -41,7 +41,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 };
 
 void effBlowMain(EffectEntry* effect);
-void effBlowDisp(CameraId cameraId, EffectEntry* effect);
+void effBlowDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns `count` streaks at (x, y, z) travelling along the direction (dx, dy, dz);
@@ -241,11 +241,12 @@ void effBlowMain(EffectEntry* effect) {
         work->life = 10;
         work->age = 0;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBlowDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effBlowDisp, effect);
 }
 
 /** Draws each streak as a rotated, stretched camera-facing quad tinted light cyan. */
-void effBlowDisp(CameraId cameraId, EffectEntry* effect) {
+void effBlowDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffBlowN64Work* work;
     s32 i;

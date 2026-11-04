@@ -80,7 +80,7 @@ struct {
 } vtx_data[3] = {{vtx, 95}, {vtx2, 66}, {vtx3, 56}};
 
 void effFireworksMain(EffectEntry* effect);
-void effFireworksDisp(CameraId cameraId, EffectEntry* effect);
+void effFireworksDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a firework at (x, y, z) travelling with velocity (vx, vy, vz) that bursts into the pattern selected by
@@ -214,7 +214,7 @@ void effFireworksMain(EffectEntry* effect) {
             work->frame = 1;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireworksDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFireworksDisp, effect);
 }
 
 /**
@@ -222,7 +222,8 @@ void effFireworksMain(EffectEntry* effect) {
  * after the burst draws one sprite (texture 8) per vertex of vtx_data[type],
  * randomly skipping some every frame so the burst twinkles.
  */
-void effFireworksDisp(CameraId cameraId, EffectEntry* effect) {
+void effFireworksDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     static s32 salpha;
     static s32 sflag;
     CameraEntry* camera;

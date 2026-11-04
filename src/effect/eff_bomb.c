@@ -46,7 +46,7 @@ static u8 scale_dt2[] = {
     13, 144, 144, 13, 146, 146, 14, 148, 148, 14, 150, 150, 15, 148, 148, 15, 150, 150,
 };
 
-static void effBombDisp(CameraId cameraId, EffectEntry* effect);
+static void effBombDisp(CameraId cameraId, void* payload);
 static void effBombMain(EffectEntry* effect);
 
 /**
@@ -124,11 +124,12 @@ static void effBombMain(EffectEntry* effect) {
             work->scaleY = scale_dt2[frame * 3 + 2] / 100.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBombDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effBombDisp, effect);
 }
 
 /** Draws the eight rays as stretched sprites, rotated by their angle around the blast centre. */
-static void effBombDisp(CameraId cameraId, EffectEntry* effect) {
+static void effBombDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     EffBombWork* work;
     CameraEntry* camera;
     GXTexObj texObj;

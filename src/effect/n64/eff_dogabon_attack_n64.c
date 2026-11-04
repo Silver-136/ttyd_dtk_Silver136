@@ -46,7 +46,7 @@ typedef struct EffDogabonAttackN64Work {
 } EffDogabonAttackN64Work;
 
 void effDogabonAttackMain(EffectEntry* effect);
-void effDogabonAttackDisp(CameraId cameraId, EffectEntry* effect);
+void effDogabonAttackDisp(CameraId cameraId, void* param);
 
 /** Piece size (in percent) while it settles into place: a small squash, then a bounce back to full size. */
 static u8 scale_data[7] = {94, 92, 100, 105, 107, 105, 100};
@@ -309,11 +309,12 @@ void effDogabonAttackMain(EffectEntry* effect) {
             break;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effDogabonAttackDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, effDogabonAttackDisp, effect);
 }
 
 /** Draws the 25 pieces with texture 140, scaled by each piece's scaleX/scaleY. */
-void effDogabonAttackDisp(CameraId cameraId, EffectEntry* effect) {
+void effDogabonAttackDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffDogabonAttackN64Work* work;
     s32 i;

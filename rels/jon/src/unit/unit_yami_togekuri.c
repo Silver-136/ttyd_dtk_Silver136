@@ -19,6 +19,7 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
+#include "libc_decls.h"
 
 static USER_FUNC(get_attacker);
 static USER_FUNC(krb_get_dir);
@@ -516,7 +517,6 @@ static USER_FUNC(krb_get_dir) {
     return EVT_RETURN_DONE;
 }
 
-double hypot(double x, double y);
 
 /**
  * Angle in degrees (0-359) of the vector (x, z) from the sine table,

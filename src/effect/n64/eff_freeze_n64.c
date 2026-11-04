@@ -46,7 +46,7 @@ static effN64Vtx size32x64_tex32x64_vtx[] = {
 };
 
 void effFreezeMain(EffectEntry* effect);
-void effFreezeDisp(CameraId cameraId, EffectEntry* effect);
+void effFreezeDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns an ice block around (x, y, z) for lifetime frames (0 = until soft-deleted),
@@ -152,11 +152,12 @@ void effFreezeMain(EffectEntry* effect) {
     ((EffSnowDustN64Work*)work->dust->userdata)->position.x = work->position.x;
     ((EffSnowDustN64Work*)work->dust->userdata)->position.y = 10.0f + work->position.y;
     ((EffSnowDustN64Work*)work->dust->userdata)->position.z = work->position.z;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFreezeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFreezeDisp, effect);
 }
 
 /** Draws the ice block as a camera-facing 32x64 sprite from texture 138, using texIdx to choose the glint frame. */
-void effFreezeDisp(CameraId cameraId, EffectEntry* effect) {
+void effFreezeDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffFreezeN64Work* work;
     s32 alpha;

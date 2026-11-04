@@ -33,7 +33,7 @@ static s8 anim_data_1[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, -1};
 static s8* anim_data_table[] = {anim_data_0, anim_data_1};
 
 static void effKemuri2Main(EffectEntry* effect);
-static void effKemuri2Disp(CameraId cameraId, EffectEntry* effect);
+static void effKemuri2Disp(CameraId cameraId, void* param);
 
 /**
  * Spawns a single smoke puff at (x, y, z) that drifts along (dirX, dirZ) and rises.
@@ -89,7 +89,7 @@ static void effKemuri2Main(EffectEntry* effect) {
         work->velY += work->accelY;
         work->position.y += work->velY;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri2Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKemuri2Disp, effect);
 }
 
 /** Binds the texture for the puff type (0xC, 0xD or 0xE) and draws one centred quad (16x16 for type 0, else 24x24). */
@@ -165,7 +165,8 @@ static void main_dl(s32 type) {
  * Draws each puff as a camera-facing sprite via main_dl,
  * picking the cell (wf * cell units) from the type's sprite sheet (176, 224 or 256 texels wide).
  */
-static void effKemuri2Disp(CameraId cameraId, EffectEntry* effect) {
+static void effKemuri2Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri2N64Work* work = effect->userdata;
     s32 cell;

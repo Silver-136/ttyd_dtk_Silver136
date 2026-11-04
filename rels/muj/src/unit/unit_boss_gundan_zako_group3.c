@@ -73,7 +73,6 @@ typedef struct ZakoGunWork {
 } ZakoGunWork;
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
-double sqrt(double x);
 
 USER_FUNC(zakogun_dead3);
 USER_FUNC(zakogun_attack3_3);

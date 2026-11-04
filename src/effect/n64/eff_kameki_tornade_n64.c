@@ -23,7 +23,7 @@ static inline void Vec2Vtx(Vec* v, s16* o) {
 }
 
 void effKamekiTornadeMain(EffectEntry* effect);
-void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect);
+void effKamekiTornadeDisp(CameraId cameraId, void* payload);
 
 EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
@@ -138,14 +138,15 @@ void effKamekiTornadeMain(EffectEntry* effect) {
     for (i = 0; i < 8; i++) {
         work->ang[i] += work->angVel[i];
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKamekiTornadeDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKamekiTornadeDisp, effect);
 }
 
 /**
  * Builds a 16-segment ring of vertices and draws seven stacked, twisted layers, each tilted and scaled,
  * using texture 0x6C on both texture maps.
  */
-void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect) {
+void effKamekiTornadeDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     f32 scale;
     s32 i;
     EffKamekiTornadeN64Work* work;

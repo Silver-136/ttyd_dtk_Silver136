@@ -146,7 +146,7 @@ typedef struct PartyWorkBomhei { // party_bomhei.c
     s16 timer;                   // 0x178
     u8 state;                    // 0x17A, 10/20/30/40/100...
     u8 syncFrame;                // 0x17B, index into m_w_7_sync
-    s32 reserved_17C;                  // 0x17C, init -1
+    s32 throwSfxId;                    // 0x17C, init -1
     s32 sfxId;                   // 0x180, fuse sfx (0x93C)
     s32 sfxId2;                  // 0x184, sfx 0x93D
 } PartyWorkBomhei;

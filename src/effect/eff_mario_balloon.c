@@ -13,7 +13,7 @@
 #include <dolphin/mtx.h>
 
 void effMarioBalloonMain(EffectEntry* effect);
-void effMarioBalloonDisp(CameraId cameraId, EffectEntry* effect);
+void effMarioBalloonDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a balloon over Mario (npc NULL) or over the given NPC;
@@ -66,11 +66,12 @@ void effMarioBalloonMain(EffectEntry* effect) {
     pos.x = work->position.x;
     pos.y = work->position.y;
     pos.z = work->position.z;
-    dispEntry(work->camera, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, (DispCallback)effMarioBalloonDisp, effect);
+    dispEntry(work->camera, dispCalcZ(&pos), DISP_MODE_CUSTOM_MID, effMarioBalloonDisp, effect);
 }
 
 /** Draws the balloon icon as textured quads (effect textures 14-17) with alpha blending. */
-void effMarioBalloonDisp(CameraId cameraId, EffectEntry* effect) {
+void effMarioBalloonDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     MarioBalloonWork* work = effect->userdata;
     Mtx mT, mR, mS, mTA, mN;
     GXTexObj texObj;

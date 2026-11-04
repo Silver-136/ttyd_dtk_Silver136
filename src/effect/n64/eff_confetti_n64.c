@@ -26,7 +26,7 @@ typedef struct EffConfettiN64Work {
 } EffConfettiN64Work;
 
 void effConfettiMain(EffectEntry* effect);
-void effConfettiDisp(CameraId cameraId, EffectEntry* effect);
+void effConfettiDisp(CameraId cameraId, void* param);
 
 /** Twelve pastel RGB colours for the confetti pieces, one per piece in turn. */
 u8 color_table[] = {
@@ -268,11 +268,11 @@ void effConfettiMain(EffectEntry* effect) {
         w->position.z += w->velocity.z;
     }
     if (type < 10) {
-        dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effConfettiDisp, effect);
+        dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, effConfettiDisp, effect);
     } else if (type < 20) {
-        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effConfettiDisp, effect);
+        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU, effConfettiDisp, effect);
     } else {
-        dispEntry(CAMERA_2D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effConfettiDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&position), DISP_MODE_XLU, effConfettiDisp, effect);
     }
 }
 
@@ -280,7 +280,8 @@ void effConfettiMain(EffectEntry* effect) {
  * Draws each active piece as a camera-facing sprite from texture 0x4B,
  * stepping through the six-entry anm_seq flutter cycle. Type 3 draws four small quads per piece.
  */
-void effConfettiDisp(CameraId cameraId, EffectEntry* effect) {
+void effConfettiDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 anm;
     s32 type;
     EffConfettiN64Work* w;

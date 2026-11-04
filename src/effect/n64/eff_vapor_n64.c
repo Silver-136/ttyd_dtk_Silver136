@@ -67,7 +67,7 @@ static const GXColor kColor1;
 static const GXColor kColor2;
 
 void effVaporMain(EffectEntry* effect);
-void effVaporDisp(CameraId cameraId, EffectEntry* effect);
+void effVaporDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a steam puff at (x, y, z) of the given scale; a lifetime of 0 or less lasts until soft-deleted.
@@ -153,7 +153,7 @@ void effVaporMain(EffectEntry* effect) {
         work->vel = -1.5f;
     }
     work->anim += 1.0f;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effVaporDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effVaporDisp, effect);
 }
 
 /**
@@ -162,7 +162,8 @@ void effVaporMain(EffectEntry* effect) {
  * cross-fading between frames of the smoke strip (texture 0x69 for types 0/2, 0x6A otherwise)
  * and shaded between the work's two colours.
  */
-void effVaporDisp(CameraId cameraId, EffectEntry* effect) {
+void effVaporDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffVaporN64Work* work;
     s32 frame;
     CameraEntry* camera;

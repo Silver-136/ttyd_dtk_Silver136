@@ -30,7 +30,7 @@ typedef struct EffFireSparkN64Work {
 } EffFireSparkN64Work;
 
 void effFireSparkMain(EffectEntry* effect);
-void effFireSparkDisp(CameraId cameraId, EffectEntry* effect);
+void effFireSparkDisp(CameraId cameraId, void* param);
 
 /** Spark size over its 30-step cycle: grows in, holds at full size, then shrinks away. */
 static f32 scale_data[30] = {
@@ -180,14 +180,15 @@ void effFireSparkMain(EffectEntry* effect) {
         work->vel.y += 0.04f * (work->velTgt.y - work->vel.y);
         work->vel.z += 0.04f * (work->velTgt.z - work->vel.z);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireSparkDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFireSparkDisp, effect);
 }
 
 /**
  * Draws each live spark as a camera-facing sprite blending texture 0x8b with 0x65,
  * one texture row per spark (i % 4) and scrolled by its own offset.
  */
-void effFireSparkDisp(CameraId cameraId, EffectEntry* effect) {
+void effFireSparkDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 i;
     EffFireSparkN64Work* work;
     CameraEntry* camera;

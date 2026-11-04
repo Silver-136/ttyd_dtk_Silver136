@@ -13,7 +13,7 @@
 #include "libc_decls.h"
 
 void effPuniBalloonMain(EffectEntry* effect);
-void effPuniBalloonDisp(CameraId cameraId, EffectEntry* effect);
+void effPuniBalloonDisp(CameraId cameraId, void* param);
 static void balloon_1(CameraId cameraId, EffectEntry* effect);
 static void balloon_0(CameraId cameraId, EffectEntry* effect);
 
@@ -107,11 +107,12 @@ void effPuniBalloonMain(EffectEntry* effect) {
         work->velocity.z *= 0.98f;
         work->scale *= 0.9f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effPuniBalloonDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&pos), DISP_MODE_XLU, effPuniBalloonDisp, effect);
 }
 
 /** Draw callback: dispatches to balloon_0 (the balloon) or balloon_1 (the burst) by type. */
-void effPuniBalloonDisp(CameraId cameraId, EffectEntry* effect) {
+void effPuniBalloonDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     PuniBalloonWork* work = effect->userdata;
     if (work->type == 0) {
         balloon_0(cameraId, effect);

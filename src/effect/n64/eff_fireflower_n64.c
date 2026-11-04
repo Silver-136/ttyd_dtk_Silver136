@@ -70,7 +70,7 @@ static s8 scale_data[] = "27<AFKPUZ_dgigd";
 #endif
 
 void effFireFlowerMain(EffectEntry* effect);
-void effFireFlowerDisp(CameraId cameraId, EffectEntry* effect);
+void effFireFlowerDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns the Fire Flower effect at (x, y, z): a flower that unfolds and shoots 30 sparks to the side,
@@ -245,14 +245,15 @@ void effFireFlowerMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFireFlowerDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFireFlowerDisp, effect);
 }
 
 /**
  * Draws the flower with texture 0x36 and the spark sprites with 0x37;
  * work->stage picks the vertex set for the flower's bloom stage.
  */
-void effFireFlowerDisp(CameraId cameraId, EffectEntry* effect) {
+void effFireFlowerDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffFireFlowerN64Work* work;
     s32 i;

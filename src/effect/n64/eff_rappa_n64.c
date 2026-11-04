@@ -41,7 +41,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 };
 
 void effRappaMain(EffectEntry* effect);
-void effRappaDisp(CameraId cameraId, EffectEntry* effect);
+void effRappaDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns `num` sparks at (x, y, z) fired along pitch/yaw (degrees), living 30 frames;
@@ -132,7 +132,7 @@ void effRappaMain(EffectEntry* effect) {
             work->scaleOfs += work->speed / 10.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRappaDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effRappaDisp, effect);
 }
 
 /** Builds a GXColor from four byte components. */
@@ -150,7 +150,8 @@ static inline GXColor mkcol(u8 r, u8 g, u8 b, u8 a) {
  * each spark is one step further along the table and the whole set advances 3 steps per frame,
  * so the colours cycle.
  */
-void effRappaDisp(CameraId cameraId, EffectEntry* effect) {
+void effRappaDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     s32 j0, j1, j2;
     EffRappaN64Work* work;

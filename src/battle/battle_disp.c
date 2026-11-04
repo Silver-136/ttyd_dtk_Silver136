@@ -322,10 +322,10 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
     return STATUS_INVALID;
 }
 
-void btlUnitPartsBlurDisp(CameraId camId, BattleUnitPart* part);
-void btlUnitItemDisp2(CameraId camId, BattleUnit* unit);
+void btlUnitPartsBlurDisp(CameraId camId, void* payload);
+void btlUnitItemDisp2(CameraId camId, void* payload);
 void btlUnitStolenItemDisp(CameraId camId, void* param);
-void btlUnitPartsDisp(CameraId camId, BattleUnitPart* part);
+void btlUnitPartsDisp(CameraId camId, void* part);
 
 /**
  * Battle per-frame display update for every unit:
@@ -551,16 +551,16 @@ next:
                 if (!(part->attributes & kMainPart) || !(unit->attributeFlags & kVeiled)) {
                     if (part->dispColor.a < 0xFF || animPoseTestXLU(part->poseId)) {
                         if (!(part->animFlags & PART_ANIM_NO_DISP)) {
-                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_XLU, (DispCallback)btlUnitPartsDisp, part);
+                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_XLU, btlUnitPartsDisp, part);
                         }
                     } else {
                         if (!(part->animFlags & PART_ANIM_NO_DISP)) {
-                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_ALPHA_TEST, (DispCallback)btlUnitPartsDisp, part);
+                            dispEntry(CAMERA_3D, dispCalcZ(&zpos), DISP_MODE_ALPHA_TEST, btlUnitPartsDisp, part);
                         }
                     }
                 }
                 if (part->attributes & kMotionBlur) {
-                    dispEntry(CAMERA_3D, wz, DISP_MODE_XLU, (DispCallback)btlUnitPartsBlurDisp, part);
+                    dispEntry(CAMERA_3D, wz, DISP_MODE_XLU, btlUnitPartsBlurDisp, part);
                 }
             }
             if (!(unit->attributeFlags & kUnitNoShadow) && !(part->attributes & kNoShadow)) {
@@ -614,7 +614,7 @@ next:
                 dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitItemDisp, unit);
             }
         } else if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) {
-            dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitItemDisp2, unit);
+            dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, btlUnitItemDisp2, unit);
         }
     }
     BattleStockExpDisp();
@@ -634,7 +634,7 @@ next:
  * then draws the pose tinted by its colour (black when blackened, green-tinted for poison,
  * dimmed by moveColorLv) with the Charge shine. Also records the matrix for the blur trail.
  */
-void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
+void btlUnitPartsDisp(CameraId camId, void* param) {
     Mtx uMtx;
     Mtx drawMtx;
     Mtx pS2;
@@ -933,7 +933,8 @@ void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
 }
 #pragma pop
 
-void btlUnitItemDisp2(CameraId camId, BattleUnit* unit) {
+void btlUnitItemDisp2(CameraId camId, void* payload) {
+    BattleUnit* unit = payload;
     BattleWork* wp = _battleWorkPointer;
     s32 kind = unit->currentKind;
 
@@ -997,7 +998,8 @@ void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, GXColor
  * Draws the part's afterimage trail: each history entry is redrawn with the base colour faded between the two
  * blur colours along the trail.
  */
-void btlUnitPartsBlurDisp(CameraId camId, BattleUnitPart* part) {
+void btlUnitPartsBlurDisp(CameraId camId, void* payload) {
+    BattleUnitPart* part = payload;
     BattleWorkUnitPartBlur* blur;
     BattleWorkUnitPartBlurEntry* entry;
     GXColor color;

@@ -2162,12 +2162,14 @@ void _mapDispMapGrp(CameraId cam, MapObject* obj) {
 }
 
 /** dispdrv callback that draws a single map object (queued by mapDisp). */
-void mapDispMapObj(CameraId cam, MapObject* obj) {
+void mapDispMapObj(CameraId cam, void* payload) {
+    MapObject* obj = payload;
     _mapDispMapObj(cam, obj);
 }
 
 /** dispdrv callback that draws a group map object and its members (queued by mapDisp). */
-void mapDispMapGrp(CameraId cam, MapObject* obj) {
+void mapDispMapGrp(CameraId cam, void* payload) {
+    MapObject* obj = payload;
     _mapDispMapGrp(cam, obj);
 }
 
@@ -2175,7 +2177,8 @@ void mapDispMapGrp(CameraId cam, MapObject* obj) {
  * dispdrv callback for an object drawn into its offscreen buffer:
  * draws it and adds the screen rectangle it covered to that offscreen entry.
  */
-void mapDispMapObj_off(CameraId cam, MapObject* obj) {
+void mapDispMapObj_off(CameraId cam, void* payload) {
+    MapObject* obj = payload;
     u16 left, top, right, bottom;
 
     sysWaitDrawSync();
@@ -2187,7 +2190,8 @@ void mapDispMapObj_off(CameraId cam, MapObject* obj) {
 }
 
 /** As mapDispMapObj_off for a whole group. */
-void mapDispMapGrp_off(CameraId cam, MapObject* obj) {
+void mapDispMapGrp_off(CameraId cam, void* payload) {
+    MapObject* obj = payload;
     u16 left, top, right, bottom;
 
     sysWaitDrawSync();
@@ -2267,7 +2271,8 @@ void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj) {
  * dispdrv callback for objects with flag 0x20000000:
  * draws the object untextured and stores the screen rectangle the GPU reports in obj->screenRect.
  */
-void mapDispMapObj_bbox(CameraId cam, MapObject* obj) {
+void mapDispMapObj_bbox(CameraId cam, void* payload) {
+    MapObject* obj = payload;
     sysWaitDrawSync();
     GXClearBoundingBox();
     _mapDispMapObj_NoMaterial(cam, obj);
@@ -2276,7 +2281,8 @@ void mapDispMapObj_bbox(CameraId cam, MapObject* obj) {
 }
 
 /** As mapDispMapObj_bbox for a whole group. */
-void mapDispMapGrp_bbox(CameraId cam, MapObject* obj) {
+void mapDispMapGrp_bbox(CameraId cam, void* payload) {
+    MapObject* obj = payload;
     sysWaitDrawSync();
     GXClearBoundingBox();
     _mapDispMapGrp_NoMaterial(cam, obj);
@@ -2426,13 +2432,13 @@ void mapDisp(void) {
                 }
             }
             if (obj->flags & MAP_OBJ_FLAG_SCREEN_RECT) {
-                dispEntry(CAMERA_OFFSCREEN2, 5000.0f, DISP_MODE_OPAQUE_NO_Z, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox), obj);
+                dispEntry(CAMERA_OFFSCREEN2, 5000.0f, DISP_MODE_OPAQUE_NO_Z, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_bbox : mapDispMapGrp_bbox), obj);
             }
             if (obj->flags & MAP_OBJ_FLAG_OFFSCREEN) {
-                dispEntry(CAMERA_OFFSCREEN2, z, mode, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off), obj);
+                dispEntry(CAMERA_OFFSCREEN2, z, mode, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj_off : mapDispMapGrp_off), obj);
             }
             if (!(obj->flags & MAP_OBJ_FLAG_HIDDEN)) {
-                dispEntry(obj->cameraId, z, mode, (DispCallback)(!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp), obj);
+                dispEntry(obj->cameraId, z, mode, (!(obj->flags & MAP_OBJ_FLAG_GROUP) ? mapDispMapObj : mapDispMapGrp), obj);
             }
         }
     }

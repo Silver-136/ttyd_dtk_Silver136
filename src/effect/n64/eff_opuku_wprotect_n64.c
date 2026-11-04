@@ -43,7 +43,7 @@ typedef struct EffOpukuWprotectN64Work {
 } EffOpukuWprotectN64Work;
 
 void effOpukuWprotectMain(EffectEntry* effect);
-void effOpukuWprotectDisp(CameraId cameraId, EffectEntry* effect);
+void effOpukuWprotectDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a water shield box around (x, y, z) scaled by scale,
@@ -177,7 +177,7 @@ void effOpukuWprotectMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuWprotectDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effOpukuWprotectDisp, effect);
 }
 
 /**
@@ -239,7 +239,8 @@ static effN64Vtx size8x8_tex32x32_vtx[4] = {
  * Draws the shield as a 40-point box whose upper vertices jitter each frame (texture 0x90),
  * plus the rising bubble sprites (texture 0x91).
  */
-void effOpukuWprotectDisp(CameraId cameraId, EffectEntry* effect) {
+void effOpukuWprotectDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffOpukuWprotectN64Work* work;
     s32 i;

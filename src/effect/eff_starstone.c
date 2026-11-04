@@ -19,7 +19,7 @@
 #include "driver/shadowdrv.h"
 #include "eff/n64/eff_stardust_n64.h"
 
-void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect);
+void effStarStoneDisp_2(CameraId cameraId, void* param);
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect);
 void effStarStoneMain(EffectEntry* effect);
 
@@ -597,7 +597,7 @@ void effStarStoneMain(EffectEntry* effect) {
             dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effStarStoneDisp_1, effect);
             break;
         default:
-            dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effStarStoneDisp_2, effect);
+            dispEntry(cam, dispCalcZ(&pos), DISP_MODE_XLU, effStarStoneDisp_2, effect);
             break;
         }
     }
@@ -825,7 +825,8 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
 #endif
 
 /** Draws the stones that split in two (types 1-5): an untextured shell for each half, then each half textured. */
-void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {
+void effStarStoneDisp_2(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     Mtx m;
     Mtx s;
     Mtx r;

@@ -25,7 +25,7 @@ typedef struct EffStardust2N64Work {
 } EffStardust2N64Work;
 
 void effStardust2Main(EffectEntry* effect);
-void effStardust2Disp(CameraId cameraId, EffectEntry* effect);
+void effStardust2Disp(CameraId cameraId, void* param);
 
 /** RGB colours the sparkles cycle through (pinks, purples and blues), three bytes per step. */
 static u8 color_rotation_data[] = {
@@ -317,7 +317,7 @@ void effStardust2Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStardust2Disp, effect);
+    dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, effStardust2Disp, effect);
 }
 
 /**
@@ -325,7 +325,8 @@ void effStardust2Main(EffectEntry* effect) {
  * coloured from color_rotation_data and tinted per type:
  * orange for 0-2/10, pale peach for 3/30, yellow for 5, pink otherwise.
  */
-void effStardust2Disp(CameraId cameraId, EffectEntry* effect) {
+void effStardust2Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* cam;
     EffStardust2N64Work* w;
     s32 type;

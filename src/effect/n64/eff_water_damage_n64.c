@@ -66,7 +66,7 @@ u32 water_damage_tex[32] __attribute__((aligned(32))) = {
 
 void effWaterDamageMain(EffectEntry* effect);
 void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect);
-void effWaterDamageDisp2(CameraId cameraId, EffectEntry* effect);
+void effWaterDamageDisp2(CameraId cameraId, void* param);
 
 /**
  * Spawns water droplets and mist at (x, y, z); type picks the splash shape.
@@ -251,7 +251,7 @@ void effWaterDamageMain(EffectEntry* effect) {
     if (variant == 0) {
         dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, (DispCallback)effWaterDamageDisp, effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, (DispCallback)effWaterDamageDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_CUSTOM_MID, effWaterDamageDisp2, effect);
     }
 }
 
@@ -384,7 +384,8 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
  * Plain variant of effWaterDamageDisp: the same camera-facing 8x8 droplet quads of texture 0x89 in pale cyan,
  * with no refraction layer.
  */
-void effWaterDamageDisp2(CameraId cameraId, EffectEntry* effect) {
+void effWaterDamageDisp2(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffWaterDamageN64Work* work;
     CameraEntry* cam;
     Mtx trans;

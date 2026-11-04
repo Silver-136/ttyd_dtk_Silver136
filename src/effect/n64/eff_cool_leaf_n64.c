@@ -54,7 +54,7 @@ static effN64Vtx size12x12_tex64x64_red_vtx[] = {
 };
 
 void effCoolLeafMain(EffectEntry* effect);
-void effCoolLeafDisp(CameraId cameraId, EffectEntry* effect);
+void effCoolLeafDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns four leaves that swirl for 100 frames, each starting at a random offset near (75-125, 70-90).
@@ -270,14 +270,15 @@ void effCoolLeafMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effCoolLeafDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effCoolLeafDisp, effect);
 }
 
 /**
  * Draws each leaf as a two-sided sprite with texture 0x14, rotated about Z and Y;
  * type 0 uses the brown leaf vertices and type 1 the red ones.
  */
-void effCoolLeafDisp(CameraId cameraId, EffectEntry* effect) {
+void effCoolLeafDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffCoolLeafN64Work* work;
     s32 type;

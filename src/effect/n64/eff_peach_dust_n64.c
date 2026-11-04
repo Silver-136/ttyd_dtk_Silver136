@@ -96,7 +96,7 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
 };
 
 void effPeachDustMain(EffectEntry* effect);
-void effPeachDustDisp(CameraId cameraId, EffectEntry* effect);
+void effPeachDustDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns up to 100 dust particles at (x, y, z) arranged by one of three 16x16 masks selected by type (every
@@ -230,12 +230,13 @@ void effPeachDustMain(EffectEntry* effect) {
     if (dead >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPeachDustDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effPeachDustDisp, effect);
     }
 }
 
 /** Draws each live particle as a camera-facing quad (texture 0x20, one of eight 22x22 cells) with a rotating color. */
-void effPeachDustDisp(CameraId cameraId, EffectEntry* effect) {
+void effPeachDustDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffPeachDustParticle* p;
     s32 i;
     s32 tex;

@@ -80,7 +80,7 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
 };
 
 void effStardustMain(EffectEntry* effect);
-void effStardustDisp(CameraId cameraId, EffectEntry* effect);
+void effStardustDisp(CameraId cameraId, void* param);
 
 EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     s32 lifeA;
@@ -303,7 +303,7 @@ void effStardustMain(EffectEntry* effect) {
     if (type != 0 && type != 10 && dead >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStardustDisp, effect);
+        dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, effStardustDisp, effect);
     }
 }
 
@@ -312,7 +312,8 @@ void effStardustMain(EffectEntry* effect) {
  * coloured from color_rotation_data scaled by the work's tint (see effStardustN64SetColor),
  * each sparkle one step further on.
  */
-void effStardustDisp(CameraId cameraId, EffectEntry* effect) {
+void effStardustDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffStardustN64Work* work;
     s32 i;
     CameraEntry* camera;

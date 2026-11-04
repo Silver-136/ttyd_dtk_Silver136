@@ -37,7 +37,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 static const GXColor kWhite = {255, 255, 255, 0};
 
 void effAkariSflushMain(EffectEntry* effect);
-void effAkariSflushDisp(CameraId cameraId, EffectEntry* effect);
+void effAkariSflushDisp(CameraId cameraId, void* payload);
 
 EffectEntry* effAkariSflushN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
@@ -105,14 +105,15 @@ void effAkariSflushMain(EffectEntry* effect) {
     if (lifetime < 8) {
         work->alpha = lifetime * 32 + 31;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effAkariSflushDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effAkariSflushDisp, effect);
 }
 
 /**
  * Draws a ring of five pointed, four-corner flares that pulse in size with a cosine;
  * extra rings are added with `count` (always 0 here).
  */
-void effAkariSflushDisp(CameraId cameraId, EffectEntry* effect) {
+void effAkariSflushDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffAkariSflushN64Work* work;
     s32 i;

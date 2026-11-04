@@ -19,6 +19,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
+#include "libc_decls.h"
 
 static USER_FUNC(get_attacker);
 static USER_FUNC(krb_get_dir);
@@ -579,8 +580,6 @@ static USER_FUNC(krb_get_dir) {
     evtSetValue(event, args[4], angleABf(dx, dz, 0.0f, 0.0f));
     return EVT_RETURN_DONE;
 }
-
-double hypot(double x, double y);
 
 /**
  * Finds the direction in degrees (0 to 359) of the vector (x, z) with a binary search over SinTable (seven

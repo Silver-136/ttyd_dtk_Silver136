@@ -44,7 +44,7 @@ static effN64Vtx kmr_a_1_v[] = {
 
 void effKemuri5Main(EffectEntry* effect);
 
-void effKemuri5Disp(CameraId cameraId, EffectEntry* effect);
+void effKemuri5Disp(CameraId cameraId, void* param);
 
 #pragma opt_propagation off
 /**
@@ -141,14 +141,15 @@ void effKemuri5Main(EffectEntry* effect) {
     if (anyActive == 0) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri5Disp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKemuri5Disp, effect);
     }
 }
 
 #pragma opt_propagation reset
 
 /** Draws each puff as a camera-facing (Y-billboarded) textured quad using effect texture 0x4E. */
-void effKemuri5Disp(CameraId cameraId, EffectEntry* effect) {
+void effKemuri5Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri5N64Work* work = effect->userdata;
     s32 i;

@@ -34,7 +34,7 @@ typedef struct EffThunderN64Work {
 
 
 void effThunderMain(EffectEntry* effect);
-void effThunderDisp(CameraId cameraId, EffectEntry* effect);
+void effThunderDisp(CameraId cameraId, void* payload);
 
 /**
  * The lightning bolt mesh (inazuma, "lightning"): several jagged bolt shapes,
@@ -744,7 +744,7 @@ void effThunderMain(EffectEntry* effect) {
         }
     }
 
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effThunderDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effThunderDisp, effect);
 }
 
 /**
@@ -752,7 +752,8 @@ void effThunderMain(EffectEntry* effect) {
  * two scrolled layers: magenta-pink (FF,2F,C6) for types 0-2, yellow with the fading alpha for types 3+.
  * Type 1 stays hidden for its first 18 frames.
  */
-void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
+void effThunderDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffThunderN64Work* work;
     s32 type;

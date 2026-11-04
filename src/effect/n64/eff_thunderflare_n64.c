@@ -41,7 +41,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 };
 
 void effThunderflareMain(EffectEntry* effect);
-void effThunderflareDisp(CameraId cameraId, EffectEntry* effect);
+void effThunderflareDisp(CameraId cameraId, void* payload);
 
 /** Spawns a glowing flare at (x, y, z). Used by the Kamec units (tik, tou2, las) and event scripts. */
 EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
@@ -161,14 +161,15 @@ void effThunderflareMain(EffectEntry* effect) {
         work->rotA += odd ? 5 : 2;
         work->rotB += odd ? 2 : 5;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effThunderflareDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effThunderflareDisp, effect);
 }
 
 /**
  * Draws each remaining spark as a camera-facing 16x16 quad of texture 0x55,
  * its colour mixed between the work's colour pair by the texture, with the spark's own alpha.
  */
-void effThunderflareDisp(CameraId cameraId, EffectEntry* effect) {
+void effThunderflareDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffThunderflareN64Elem* work;
     s32 cr, cg, cb;

@@ -41,7 +41,7 @@ DispEntry** pSortWork;
 DispEntry* pDispWork;
 
 //local prototypes
-static s32 _sort(const void** sortA, const void** sortB);
+static s32 _sort(const void* sortA, const void* sortB);
 
 /** Allocates the display list of 1024 draw requests and its sort table at boot. */
 void dispInit(void) {
@@ -92,12 +92,12 @@ void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback,
 }
 
 /** qsort comparator for draw requests: ascending by their combined order. */
-static s32 _sort(const void** sortA, const void** sortB) {
+static s32 _sort(const void* sortA, const void* sortB) {
     f32 orderB;
     f32 orderA;
 
-    orderA = (*(DispEntry**)sortA)->order;
-    orderB = (*(DispEntry**)sortB)->order;
+    orderA = (*(DispEntry* const*)sortA)->order;
+    orderB = (*(DispEntry* const*)sortB)->order;
     if (orderA > orderB) {
         return 1;
     }
@@ -109,7 +109,7 @@ static s32 _sort(const void** sortA, const void** sortB) {
 
 /** Sorts this frame's draw requests by order before the cameras are drawn. */
 void dispSort(void) {
-    qqsort(pSortWork, entry_n, sizeof(DispEntry*), (QSortCompare)_sort);
+    qqsort(pSortWork, entry_n, sizeof(DispEntry*), _sort);
 }
 
 /**

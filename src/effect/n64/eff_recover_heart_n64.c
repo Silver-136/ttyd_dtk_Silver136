@@ -103,7 +103,7 @@ effN64Vtx size16x24_tex32x32_r_flower_vtx[] = {
 };
 
 void effRecoverHeartMain(EffectEntry* effect);
-void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect);
+void effRecoverHeartDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a rising heart sprite at (x, y, z) lasting 46 frames; a negative count selects the alternate texture.
@@ -225,7 +225,7 @@ void effRecoverHeartMain(EffectEntry* effect) {
         }
         work->frame++;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRecoverHeartDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effRecoverHeartDisp, effect);
 }
 
 /**
@@ -234,7 +234,8 @@ void effRecoverHeartMain(EffectEntry* effect) {
  * Except for type 2, the first piece is a large 32x32 icon with the amount drawn on it from digit strip 0x53:
  * one digit under 10, otherwise two (with `flag` set the left glyph is strip slot 10 instead of the tens digit).
  */
-void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
+void effRecoverHeartDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     s32 j;
     CameraEntry* camera;
     EffRecoverHeartN64Work* work;

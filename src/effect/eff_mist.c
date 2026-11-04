@@ -27,7 +27,7 @@ typedef struct EffMistWork {
 } EffMistWork;
 
 void effMistMain(EffectEntry* effect);
-void effMistDisp(CameraId cameraId, EffectEntry* effect);
+void effMistDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns the rising mist at (x, y, z) for `life` frames; type 0-6 selects the colour and motion.
@@ -199,11 +199,12 @@ void effMistMain(EffectEntry* effect) {
                 work->position.z += work->velocity.z;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMistDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effMistDisp, effect);
 }
 
 /** Draws each puff as a camera-facing textured quad (effect texture 0x44) tinted by its r, g, b. */
-void effMistDisp(CameraId cameraId, EffectEntry* effect) {
+void effMistDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffMistWork* work = effect->userdata;
     Mtx trans;
     Mtx rot;

@@ -57,7 +57,7 @@ u32 gap_07_80417E8C_sdata[5] = {0,0,0,0,0};
 #endif
 
 void effGonbabaBreathMain(EffectEntry* effect);
-void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect);
+void effGonbabaBreathDisp(CameraId cameraId, void* param);
 
 #pragma opt_propagation off
 /** Initialises one breath particle for the given type: delay by index, start offset, velocity and lifetime. */
@@ -353,11 +353,12 @@ void effGonbabaBreathMain(EffectEntry* effect) {
                 break;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effGonbabaBreathDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effGonbabaBreathDisp, effect);
 }
 
 /** Draws the particles as camera-facing quads, coloured by type; companion layers sit slightly off the camera plane. */
-void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect) {
+void effGonbabaBreathDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffGonbabaBreathWork* work = effect->userdata;
     Mtx trans;
     Mtx rot;

@@ -42,7 +42,7 @@ typedef struct EffSnowfallWork {
 } EffSnowfallWork;
 
 void effSnowfallMain(EffectEntry* effect);
-void effSnowfallDisp(CameraId cameraId, EffectEntry* effect);
+void effSnowfallDisp(CameraId cameraId, void* param);
 
 /**
  * A loose cluster of eight small flake quads drawn for every snowfall particle,
@@ -231,16 +231,16 @@ void effSnowfallMain(EffectEntry* effect) {
         cam_clip_chk(p, 550, h, life);
     }
 #if VERSION <= VERSION_DEMO_US
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSnowfallDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effSnowfallDisp, effect);
 #else
 #if VERSION >= VERSION_US
     if (gp->inBattle == 0) {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU_AFTER, (DispCallback)effSnowfallDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU_AFTER, effSnowfallDisp, effect);
     } else {
-        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU_AFTER, (DispCallback)effSnowfallDisp, effect);
+        dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), DISP_MODE_XLU_AFTER, effSnowfallDisp, effect);
     }
 #else
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU_AFTER, (DispCallback)effSnowfallDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU_AFTER, effSnowfallDisp, effect);
 #endif
 #endif
 }
@@ -250,7 +250,8 @@ void effSnowfallMain(EffectEntry* effect) {
  * after copying texture 100's 16x16 image into 99's mip chain each frame.
  * White, or the map's blend colour when the first map entry has blending on.
  */
-void effSnowfallDisp(CameraId cameraId, EffectEntry* effect) {
+void effSnowfallDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* cam;
     EffSnowfallParticle* p;
     Mtx trans;

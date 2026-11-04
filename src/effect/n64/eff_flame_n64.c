@@ -41,7 +41,7 @@ typedef struct EffFlameN64Work {
 } EffFlameN64Work;
 
 void effFlameMain(EffectEntry* effect);
-void effFlameDisp(CameraId cameraId, EffectEntry* effect);
+void effFlameDisp(CameraId cameraId, void* param);
 
 /**
  * Copies one s16 vertex from src to dst and transforms its position by matrix m,
@@ -297,11 +297,12 @@ void effFlameMain(EffectEntry* effect) {
         work->smoothed.x += 0.1f * (work->position.x - work->smoothed.x);
         work->smoothed.y += 0.1f * (work->position.y - work->smoothed.y);
         work->smoothed.z += 0.1f * (work->position.z - work->smoothed.z);
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effFlameDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effFlameDisp, effect);
     }
 }
 
-void effFlameDisp(CameraId cameraId, EffectEntry* effect) {
+void effFlameDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 alpha;
     s32 type;
     // FAKE: one-element pointer array; a plain EffFlameN64Work* work changes the object

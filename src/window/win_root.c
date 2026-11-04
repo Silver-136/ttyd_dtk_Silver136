@@ -89,8 +89,8 @@ u8 enemy_monoshiri_sort_table[] = {
 
 void winMarioMain2();
 void winBadgeExit();
-void winRootBgDrawDisp(s32 unused, WindowWork* bg);
-void winRootBgCaptureDisp(s32 unused, WindowWork* bg);
+void winRootBgDrawDisp(CameraId unused, void* param);
+void winRootBgCaptureDisp(CameraId unused, void* param);
 
 #define WIN_ROOT_ADD_TAB(n)             \
     {                                   \
@@ -262,7 +262,7 @@ s32 winRootMain(WindowWork* w) {
 #if VERSION > VERSION_DEMO_US
         w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_MAP);
         w->texBufValid = 0;
-        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, (DispCallback)winRootBgCaptureDisp, w);
+        dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, winRootBgCaptureDisp, w);
 #endif
         break;
     case 10:
@@ -449,7 +449,7 @@ s32 winRootMain(WindowWork* w) {
     w->sortPosX += (w->sortTgtX - w->sortPosX) / WR_FSTEP(4.0f);
     w->sortPosY += (w->sortTgtY - w->sortPosY) / WR_FSTEP(4.0f);
 #if VERSION > VERSION_DEMO_US
-    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, (DispCallback)winRootBgDrawDisp, w);
+    dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, winRootBgDrawDisp, w);
 #endif
     return 0;
 }
@@ -2936,7 +2936,8 @@ void winMailDisp(WindowWork* wp) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_8014d5dc, JP 0x8014D5DC. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
+void winRootBgCaptureDisp(CameraId unused, void* param) {
+    WindowWork* bg = param;
     GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
     GXSetTexCopyDst(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE);
     GXCopyTex(bg->texBuf->address, GX_FALSE);
@@ -2959,7 +2960,8 @@ void winRootBgCaptureDisp(s32 unused, WindowWork* bg) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8014d338, JP 0x8014D338. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-void winRootBgDrawDisp(s32 unused, WindowWork* bg) {
+void winRootBgDrawDisp(CameraId unused, void* param) {
+    WindowWork* bg = param;
     GXTexObj obj;
     f32 w;
     f32 h;

@@ -19,7 +19,7 @@ static effN64Vtx size16x16_tex64x32_vtx[] = {
 };
 
 void effStampMain(EffectEntry* effect);
-void effStampDisp(CameraId cameraId, EffectEntry* effect);
+void effStampDisp(CameraId cameraId, void* param);
 
 /** Spawns the stamp burst at (x, y, z); type 0-2 picks the tint. Used by the battle damage code (battle_damage.c). */
 EffectEntry* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
@@ -129,14 +129,15 @@ void effStampMain(EffectEntry* effect) {
         work->position.x = work->radius * (f32)cos(6.2831855f * (90.0f + work->angle) / 360.0f);
         work->position.y = work->radius * (f32)sin(6.2831855f * (90.0f + work->angle) / 360.0f);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effStampDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effStampDisp, effect);
 }
 
 /**
  * Draws each piece as a 16x16 quad of texture 0x2B facing the camera and turned to its angle,
  * shaded between the work's two colours by the vertex alpha.
  */
-void effStampDisp(CameraId cameraId, EffectEntry* effect) {
+void effStampDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffStampN64Work* work;
     s32 i;

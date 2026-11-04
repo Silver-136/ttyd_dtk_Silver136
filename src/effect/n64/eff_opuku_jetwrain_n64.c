@@ -48,7 +48,7 @@ static effN64Vtx opuku_jetwrain_vtx[16] = {
     {-144, -104, -320, 0x280, 0x280, 0, 0, 0, 255},
 };
 
-void effOpukuJetwrainDisp(CameraId cameraId, EffectEntry* effect);
+void effOpukuJetwrainDisp(CameraId cameraId, void* param);
 void effOpukuJetwrainMain(EffectEntry* effect);
 
 /** Returns the sine of an angle given in degrees. */
@@ -170,14 +170,15 @@ void effOpukuJetwrainMain(EffectEntry* effect) {
             work->h[i][j] += 0.02f * work->v[i][j];
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuJetwrainDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effOpukuJetwrainDisp, effect);
 }
 
 /**
  * Copies the frame to a texture and redraws it as 16x16 tiles whose corners are displaced by the wave heights,
  * waiting for draw sync after every tile.
  */
-void effOpukuJetwrainDisp(CameraId cameraId, EffectEntry* effect) {
+void effOpukuJetwrainDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 px;
     EffOpukuJetwrainWork* work;
     s32 alpha;

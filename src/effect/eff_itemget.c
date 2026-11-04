@@ -15,8 +15,8 @@
 #include "libc_decls.h"
 
 void effItemGetMain(EffectEntry* effect);
-void effItemGetDisp(CameraId cameraId, EffectEntry* effect);
-void effItemUseDisp(CameraId cameraId, EffectEntry* effect);
+void effItemGetDisp(CameraId cameraId, void* payload);
+void effItemUseDisp(CameraId cameraId, void* payload);
 
 /**
  * Pop-in size of the sparkle burst over its first 12 frames, in percent: it swells from nothing to 121%
@@ -187,14 +187,15 @@ void effItemGetMain(EffectEntry* effect) {
             effDelete(effect);
             return;
         }
-        dispEntry(camera, dispCalcZ(&tmp), DISP_MODE_XLU, (DispCallback)effItemUseDisp, effect);
+        dispEntry(camera, dispCalcZ(&tmp), DISP_MODE_XLU, effItemUseDisp, effect);
     } else {
-        dispEntry(camera, dispCalcZ(&tmp), DISP_MODE_XLU, (DispCallback)effItemGetDisp, effect);
+        dispEntry(camera, dispCalcZ(&tmp), DISP_MODE_XLU, effItemGetDisp, effect);
     }
 }
 
 /** Draws the sparkle sprites for the item get types in two passes (shadow, then main). */
-void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
+void effItemGetDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     ItemGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     Mtx m19c;
@@ -345,7 +346,8 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
 }
 
 /** Draws the sparkles for type 10 (item use) as camera-facing quads. */
-void effItemUseDisp(CameraId cameraId, EffectEntry* effect) {
+void effItemUseDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     ItemGetWork* work = effect->userdata;
     CameraEntry* camera;
     Mtx mtx;

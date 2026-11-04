@@ -19,6 +19,7 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
+#include "libc_decls.h"
 
 static USER_FUNC(get_attacker);
 static USER_FUNC(krb_get_dir);
@@ -503,7 +504,6 @@ static USER_FUNC(krb_get_dir) {
     return EVT_RETURN_DONE;
 }
 
-double hypot(double x, double y);
 
 /**
  * Returns the angle in degrees (0..359) of the point (x, z) by a binary search of the sine table;

@@ -171,7 +171,7 @@ u8 batten_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
 u8 rz_tbl[] = {0x00, 0x09, 0x12, 0x1C, 0x25, 0x2F, 0x39, 0x43, 0x4D, 0x57, 0x61, 0x6B, 0x74, 0x7D, 0x86, 0x8F, 0x97, 0x9F, 0xA6, 0xAD, 0xB4, 0xB8, 0xB9, 0xB9, 0xB6, 0xB4, 0xB1, 0xAE, 0xAE, 0xAF, 0xB4};
 
 void effKumokumoMain(EffectEntry* effect);
-void effKumokumoDisp(CameraId cameraId, EffectEntry* effect);
+void effKumokumoDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a cloud effect at (x, y, z) scaled by scale, lasting time frames (time <= 0 means until deleted).
@@ -452,7 +452,7 @@ void effKumokumoMain(EffectEntry* effect) {
         }
         work->frame++;
     }
-    dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKumokumoDisp, effect);
+    dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, effKumokumoDisp, effect);
 }
 
 /**
@@ -486,7 +486,8 @@ static inline void kkDraw(void* vtx, void* tex0, void* tex1, void* norm, void* c
  * Draws the main cloud model billboarded with two scrolling textures (type 2 uses the X-shaped model,
  * type 3 five rotated copies), then each active puff as a textured quad sized to its texture.
  */
-void effKumokumoDisp(CameraId cameraId, EffectEntry* effect) {
+void effKumokumoDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffKumokumoN64Particle* work;
     s32 alpha;
     s32 type;

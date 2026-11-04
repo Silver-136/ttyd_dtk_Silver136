@@ -28,7 +28,7 @@ static effN64Vtx size48x48_tex32x32_vtx[5] = {
     {0, 0, 0, 0, 0, 255, 255, 255, 200},
 };
 
-void effGlassDisp(CameraId cameraId, EffectEntry* effect);
+void effGlassDisp(CameraId cameraId, void* param);
 void effGlassMain(EffectEntry* effect);
 
 /**
@@ -129,14 +129,15 @@ void effGlassMain(EffectEntry* effect) {
     work->position.y += work->vy;
     work->position.z += work->vz;
     work->rotZ += work->rotY;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effGlassDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effGlassDisp, effect);
 }
 
 /**
  * Draws the shard as a 16x16 sprite using texture 0x59, blending two glint rows;
  * at the end of the glint cycle the odd type adds a larger flash.
  */
-void effGlassDisp(CameraId cameraId, EffectEntry* effect) {
+void effGlassDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     s32 type;
     EffGlassN64Work* work;
     s32 alpha;

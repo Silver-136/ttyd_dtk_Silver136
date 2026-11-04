@@ -17,6 +17,7 @@
 #include "driver/animdrv.h"
 #include "pmario_sound.h"
 #include <string.h>
+#include "libc_decls.h"
 #include "battle/battle_attack_audience.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_cmd.h"
@@ -1505,8 +1506,6 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
         (*count)++;
     }
 }
-
-double sqrt(double);
 
 /**
  * Returns in args[7] how many frames moving from point args[0..2] to args[3..5] takes at speed args[6],

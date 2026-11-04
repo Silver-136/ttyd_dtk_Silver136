@@ -939,7 +939,7 @@ MayaKeyList ice_effAnimRSTDt = {18, ice_effAnimRST};
 MayaAnimData ice_effAnimDt = { { 0 }, 119.0f, &ice_effAnimRSTDt };
 
 static void effIceMain(EffectEntry* effect);
-static void effIceDisp(CameraId cameraId, EffectEntry* effect);
+static void effIceDisp(CameraId cameraId, void* param);
 
 /** Spawns an ice block at (x, y, z); durations 1..999 count down, other values hold until soft-deleted. Used for the frozen status. */
 EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
@@ -1040,11 +1040,12 @@ static void effIceMain(EffectEntry* effect) {
             }
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_XLU, (DispCallback)effIceDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&calcPos), DISP_MODE_XLU, effIceDisp, effect);
 }
 
 /** Draws the ice block model with its animated joint transforms. */
-static void effIceDisp(CameraId cameraId, EffectEntry* effect) {
+static void effIceDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffIceWork* work = effect->userdata;
     GXTexObj texObj;
     Mtx trans;

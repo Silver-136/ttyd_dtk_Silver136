@@ -24,7 +24,7 @@ typedef struct CamRoadHit {
     f32 y;                 // 0x08
     Vec pos;               // 0x0c
     Vec dir;               // 0x18
-    s32 f_24;              // 0x24
+    s32 segment;           // 0x24
     u32 flags;             // 0x28
 } CamRoadHit;
 double acos(double);
@@ -513,7 +513,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     hit->dir.y = 0.0f;
                     hit->dir.z = nrm[idxA].z;
                     hit->y = y0;
-                    hit->f_24 = idxA;
+                    hit->segment = idxA;
                     hit->flags = fl | 1;
                     continue;
                 }
@@ -554,7 +554,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     hit->dir.y = 0.0f;
                     hit->dir.z = nrm[idxB].z;
                     hit->y = y0;
-                    hit->f_24 = idxB;
+                    hit->segment = idxB;
                     hit->flags = fl | 1;
                     continue;
                 }
@@ -641,7 +641,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             hit->t = yy;
             ret = 1;
             hit->y = y0;
-            hit->f_24 = i;
+            hit->segment = i;
             hit->flags = fl;
         } else {
             lz0 = pt[i].z;
@@ -703,7 +703,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     hit->dir.y = 0.0f;
                     hit->dir.z = nrm[idxA].z;
                     hit->y = y0;
-                    hit->f_24 = idxA;
+                    hit->segment = idxA;
                     hit->flags = fl | 1;
                     continue;
                 }
@@ -730,7 +730,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
                     hit->dir.y = 0.0f;
                     hit->dir.z = nrm[idxB].z;
                     hit->y = y0;
-                    hit->f_24 = idxB;
+                    hit->segment = idxB;
                     hit->flags = fl | 1;
                     continue;
                 }
@@ -758,7 +758,7 @@ s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             hit->dir.y = 0.0f;
             hit->dir.z = s * (nrm[i + 1].z - nrm[i].z) + nrm[i].z;
             hit->y = y0;
-            hit->f_24 = i;
+            hit->segment = i;
             hit->flags = fl;
         }
     }
@@ -961,7 +961,7 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
         }
         nx = -hit.dir.z;
         len2 = nx * nx + hit.dir.x * hit.dir.x;
-        f4c = hit.f_24;
+        f4c = hit.segment;
         nz = hit.dir.x;
         z = hit.pos.z;
         flags = hit.flags;

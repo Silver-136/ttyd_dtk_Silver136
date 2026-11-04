@@ -55,7 +55,6 @@ s32 senkaronMesPushingFlag;
 s32 marioPushedFlag;
 s32 marioHammerFrame;
 static f32 randf(f32 min, f32 max);
-double sqrt(double x);
 static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 

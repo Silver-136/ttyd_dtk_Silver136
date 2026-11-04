@@ -85,7 +85,6 @@ s32 dance_reverse(EventEntry* event, BOOL isFirstCall);
 s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall);
 s32 evt_fuki_btn(EventEntry* event, BOOL isFirstCall);
 s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall);
-s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_shuryolight_init(EventEntry* event, BOOL isFirstCall);
 s32 evt_shuryolight_run_evt(EventEntry* event, BOOL isFirstCall);
 s32 evt_snd_envoff_f(EventEntry* event, BOOL isFirstCall);

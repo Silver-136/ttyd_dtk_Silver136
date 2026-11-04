@@ -190,10 +190,10 @@ MayaAnimData recovery_effAnimDt = { { 0 }, 79.0f, &recovery_effAnimRSTDt };
 void effRecoveryMain(EffectEntry* effect);
 void effRecoveryMain2(EffectEntry* effect);
 
-void effRecoveryDisp(CameraId cameraId, EffectEntry* effect);
-void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect);
-void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect);
-void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect);
+void effRecoveryDisp(CameraId cameraId, void* param);
+void effRecoveryDisp2(CameraId cameraId, void* param);
+void effRecoveryDisp3(CameraId cameraId, void* param);
+void effRecoveryDisp4(CameraId cameraId, void* param);
 
 /**
  * Spawns the HP/FP recovery icons at (x, y, z);
@@ -512,21 +512,21 @@ void effRecoveryMain(EffectEntry* effect) {
         calc.x = work->position.x;
         calc.y = work->position.y;
         calc.z = work->position.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_ALPHA_TEST, (DispCallback)effRecoveryDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_ALPHA_TEST, effRecoveryDisp, effect);
     }
     if (type == 0 || type == 1 || type == 7 || type == 8) {
         Vec calc = { 0.0f, 0.0f, 0.0f };
         calc.x = work->position.x;
         calc.y = work->position.y;
         calc.z = work->position.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, (DispCallback)effRecoveryDisp2, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, effRecoveryDisp2, effect);
     }
     if (type == 4 || type == 5) {
         Vec calc = { 0.0f, 0.0f, 0.0f };
         calc.x = work->position.x;
         calc.y = work->position.y;
         calc.z = work->position.z;
-        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, (DispCallback)effRecoveryDisp3, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, effRecoveryDisp3, effect);
     }
 }
 
@@ -581,11 +581,12 @@ void effRecoveryMain2(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, (DispCallback)effRecoveryDisp4, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&calc), DISP_MODE_XLU, effRecoveryDisp4, effect);
 }
 
 /** Draws the rising icons as textured quads. */
-void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
+void effRecoveryDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
     RecoveryWork* p;
     CameraEntry* cam;
@@ -697,7 +698,8 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
  * Draws the recovered amount above the icons for the HP/FP forms (types 0-3, 7, 8) with effNumberGX,
  * centred and facing the camera: number style 0 for HP (types 0, 2, 7), 1 for FP (types 1, 3, 8).
  */
-void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect) {
+void effRecoveryDisp2(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
     s32 type;
     s32 amount;
@@ -748,7 +750,8 @@ void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect) {
  * a dark shadow offset by 2 units, then the label in pink for HP (type 4) or green for FP (type 5).
  * Texture 111/110 in US and PAL (173/172 when gp->language is 4), 0x8B/0x8A in JP and the demos.
  */
-void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
+void effRecoveryDisp3(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
     CameraEntry* cam;
     s32 type;
@@ -845,7 +848,8 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
  * the others are sparkles (texture 20) pointed along their flight angle,
  * their colour cycling through color_rotation_data.
  */
-void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect) {
+void effRecoveryDisp4(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     RecoveryWork* work = effect->userdata;
     CameraEntry* cam;
     s32 i;

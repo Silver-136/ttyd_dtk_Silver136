@@ -27,7 +27,7 @@ typedef struct EffSheepWork {
     s32 sfxId;      // 0x30
 } EffSheepWork;
 
-void effSheepDisp(CameraId cameraId, EffectEntry* effect);
+void effSheepDisp(CameraId cameraId, void* param);
 void effSheepMain(EffectEntry* effect);
 
 /**
@@ -204,12 +204,13 @@ void effSheepMain(EffectEntry* effect) {
     if (done >= effect->count - 1) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effSheepDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, effSheepDisp, effect);
     }
 }
 
 /** Draws every active sheep pose at its offset and scale relative to the effect position. */
-void effSheepDisp(CameraId cameraId, EffectEntry* effect) {
+void effSheepDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffSheepWork* work = effect->userdata;
     Mtx trans;
     Mtx scale;

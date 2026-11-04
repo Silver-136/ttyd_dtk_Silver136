@@ -66,7 +66,7 @@ static SnowmanJumpStep adata[] = {
 #endif
 
 void effSnowmanMain(EffectEntry* effect);
-void effSnowmanDisp(CameraId cameraId, EffectEntry* effect);
+void effSnowmanDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a snowman at (x, y, z); a lifetime of 0 or less lasts until soft-deleted.
@@ -257,9 +257,9 @@ void effSnowmanMain(EffectEntry* effect) {
         effSnowDustN64Entry(1, 10, 30, work->position.x + work->offset.x, 10.0f + (work->position.y + work->offset.y),
                             60.0f + (work->position.z + work->offset.z), 60.0f, 100.0f, 2.0f);
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSnowmanDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effSnowmanDisp, effect);
 }
 
 /** Empty: the snowman body is never drawn, so only the vapor and snow-dust puffs that effSnowmanMain spawns show. */
-void effSnowmanDisp(CameraId cameraId, EffectEntry* effect) {
+void effSnowmanDisp(CameraId cameraId, void* param) {
 }

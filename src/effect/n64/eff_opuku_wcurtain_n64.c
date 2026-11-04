@@ -26,7 +26,7 @@ typedef struct EffOpukuWcurtainN64Work {
 } EffOpukuWcurtainN64Work;
 
 void effOpukuWcurtainMain(EffectEntry* effect);
-void effOpukuWcurtainDisp(CameraId cameraId, EffectEntry* effect);
+void effOpukuWcurtainDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a water curtain at (x, y, z) scaled by scale, lasting lifetime frames (<= 0 means until deleted):
@@ -107,14 +107,15 @@ void effOpukuWcurtainMain(EffectEntry* effect) {
             work->speed[i] += 0.1f * (5.0f - work->speed[i]);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuWcurtainDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effOpukuWcurtainDisp, effect);
 }
 
 /**
  * Builds twelve vertical strips (texture 0x8F, alpha dropping 20 per strip),
  * scales and positions them in world space, and draws them as a row of quads.
  */
-void effOpukuWcurtainDisp(CameraId cameraId, EffectEntry* effect) {
+void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffOpukuWcurtainN64Work* work;
     Mtx mtx;

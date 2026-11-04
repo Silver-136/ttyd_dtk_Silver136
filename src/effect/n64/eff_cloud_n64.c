@@ -15,7 +15,7 @@
 #include <math.h>
 
 void effCloudMain(EffectEntry* effect);
-void effCloudDisp(CameraId cameraId, EffectEntry* effect);
+void effCloudDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a ribbon-like cloud trail whose head starts at (x, y, z) and keeps a 30-point history of its path.
@@ -199,7 +199,7 @@ void effCloudMain(EffectEntry* effect) {
         }
         work->len[idx] = prev + d;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effCloudDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effCloudDisp, effect);
 }
 
 /**
@@ -207,7 +207,8 @@ void effCloudMain(EffectEntry* effect) {
  * and draws it with texture 0x83 scrolling along the path length;
  * older points shift in colour toward the second tint.
  */
-void effCloudDisp(CameraId cameraId, EffectEntry* effect) {
+void effCloudDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     EffCloudN64Work* work;
     f32 scale;
     s32 frame;

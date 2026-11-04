@@ -105,9 +105,9 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 
 void effFallMain(EffectEntry* effect);
-void effFallDisp(CameraId cameraId, EffectEntry* effect);
-void effFallDispInseki(CameraId cameraId, EffectEntry* effect);
-void effFallDispWater(CameraId cameraId, EffectEntry* effect);
+void effFallDisp(CameraId cameraId, void* payload);
+void effFallDispInseki(CameraId cameraId, void* payload);
+void effFallDispWater(CameraId cameraId, void* payload);
 
 EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f32 dir, s32 num, s32 duration) {
     const char* sfxName;
@@ -788,18 +788,18 @@ void effFallMain(EffectEntry* effect) {
     }
     switch (type) {
         case 3:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDispWater, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, effFallDispWater, effect);
             break;
         case 4:
         case 5:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_OPAQUE, (DispCallback)effFallDisp, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_OPAQUE, effFallDisp, effect);
             break;
         case 7:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDispInseki, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, effFallDispInseki, effect);
             break;
         case 6:
         default:
-            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, (DispCallback)effFallDisp, effect);
+            dispEntry(CAMERA_3D, dispCalcZ(&sndPos), DISP_MODE_XLU, effFallDisp, effect);
             break;
     }
 }
@@ -807,7 +807,8 @@ void effFallMain(EffectEntry* effect) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 /** Draws the sprite-based falling objects (bugs, fork, bucket, tub, Koopa, light) as camera-facing quads. */
-void effFallDisp(CameraId cameraId, EffectEntry* effect) {
+void effFallDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     Mtx trans;
     Mtx scl;
     Mtx rot;
@@ -999,7 +1000,8 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
 }
 
 /** Draws the meteor (EFF_inseki) animation poses at the object's position. */
-void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
+void effFallDispInseki(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     Mtx trans;
     Mtx scl;
     Mtx rot;
@@ -1055,7 +1057,8 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
 /** Opaque white, the tint register colour the falling water is drawn with in effFallDispWater. */
 static const GXColor white255 = { 255, 255, 255, 255 };
 /** Draws the falling water (type 3) as translucent quads. */
-void effFallDispWater(CameraId cameraId, EffectEntry* effect) {
+void effFallDispWater(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     Mtx trans;
     Mtx scl;
     Mtx rot;

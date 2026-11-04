@@ -32,7 +32,7 @@ static effN64Vtx size32x64_tex32x64_vtx[] = {
 };
 
 void effBalloonHeihoMain(EffectEntry* effect);
-void effBalloonHeihoDisp(CameraId cameraId, EffectEntry* effect);
+void effBalloonHeihoDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a rising balloon Shy Guy (heiho) at (x, y, z) for `lifetime` frames.
@@ -82,11 +82,12 @@ void effBalloonHeihoMain(EffectEntry* effect) {
         work->speed = 2.0f;
     }
     work->position.y += work->speed;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBalloonHeihoDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effBalloonHeihoDisp, effect);
 }
 
 /** Draws a camera-facing 32x64 sprite, split into four strips, with the colour's texture and map fog applied. */
-void effBalloonHeihoDisp(CameraId cameraId, EffectEntry* effect) {
+void effBalloonHeihoDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffBalloonHeihoN64Work* work;
     s32 type;

@@ -61,7 +61,7 @@ static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130
 #endif
 
 void effTimestampMain(EffectEntry* effect);
-void effTimestampDisp(CameraId cameraId, EffectEntry* effect);
+void effTimestampDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns ten digit sprites around (x, y, z) that fade in with staggered delays;
@@ -170,7 +170,7 @@ void effTimestampMain(EffectEntry* effect) {
             }
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effTimestampDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effTimestampDisp, effect);
 }
 
 /**
@@ -178,7 +178,8 @@ void effTimestampMain(EffectEntry* effect) {
  * and draws the ten pieces on it at their pos_data offsets with textures 0x5A/0x5B,
  * each in its own colour and size, turned to face the camera.
  */
-void effTimestampDisp(CameraId cameraId, EffectEntry* effect) {
+void effTimestampDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffTimestampN64Work* work;
     GXTexObj texObj;

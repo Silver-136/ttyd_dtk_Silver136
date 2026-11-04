@@ -37,7 +37,7 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
 };
 
 void effKumokumoChipMain(EffectEntry* effect);
-void effKumokumoChipDisp(CameraId cameraId, EffectEntry* effect);
+void effKumokumoChipDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns one cloud chip at (x, y, z) that flies in a straight line to (tx, ty, tz) at speed units per frame (so
@@ -185,11 +185,12 @@ void effKumokumoChipMain(EffectEntry* effect) {
     work->position.x += work->velocity.x;
     work->position.y += work->velocity.y;
     work->position.z += work->velocity.z;
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKumokumoChipDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKumokumoChipDisp, effect);
 }
 
 /** Draws the chip as one scaled 32x32 textured quad (effect texture 0x6B) with the current fade alpha. */
-void effKumokumoChipDisp(CameraId cameraId, EffectEntry* effect) {
+void effKumokumoChipDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffKumokumoChipN64Work* work;
     s32 alpha;

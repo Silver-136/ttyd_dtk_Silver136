@@ -51,7 +51,7 @@ u8 yuragi_data2[11][24] = {
 static u8 (*yuragi_data_table[2])[24] = {yuragi_data, yuragi_data2};
 
 void effPokopiThunderMain(EffectEntry* effect);
-void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect);
+void effPokopiThunderDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a lightning bolt from (x, y, z) to (x2, y2, z2) scaled by scale,
@@ -162,7 +162,7 @@ void effPokopiThunderMain(EffectEntry* effect) {
     } else if (frame >= 11) {
         work->alpha = (s32)inline_fn(work->alpha, 0.5f);
     }
-    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPokopiThunderDisp, effect);
+    dispEntry(work->cameraId, dispCalcZ(&position), DISP_MODE_XLU, effPokopiThunderDisp, effect);
 }
 
 /** Returns a->end.y - b->start.y, the vertical span of the bolt. */
@@ -172,7 +172,8 @@ inline float pt_dy(EffPokopiThunderN64Work* a, EffPokopiThunderN64Work* b) { ret
  * Rebuilds a 12-point jagged ribbon along the bolt each frame, wobbling the points from the frame table,
  * and draws it as quads with texture 0x54.
  */
-void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
+void effPokopiThunderDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     s32 alpha;
     f32 scale;

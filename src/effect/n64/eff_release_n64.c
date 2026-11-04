@@ -39,7 +39,7 @@ typedef struct AnimeEntry {
 } AnimeEntry;
 
 void effReleaseMain(EffectEntry* effect);
-void effReleaseDisp(CameraId cameraId, EffectEntry* effect);
+void effReleaseDisp(CameraId cameraId, void* payload);
 
 /**
  * Growth of the orb's glow rings over the 30 steps after the release flash:
@@ -417,7 +417,7 @@ void effReleaseMain(EffectEntry* effect) {
             work->size[i] = 0.0f;
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effReleaseDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effReleaseDisp, effect);
 }
 
 /**
@@ -427,7 +427,8 @@ void effReleaseMain(EffectEntry* effect) {
  * and 3 the flash (0x47).
  * Variants 2 and 3 also flash the whole screen light grey for a few frames at the release and at state 5.
  */
-void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
+void effReleaseDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffReleaseN64Work* work;
     GXTexObj texObj;

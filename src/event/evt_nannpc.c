@@ -216,7 +216,9 @@ void nanNPCOption(void) {
 #pragma pop
 
 /** qsort comparator ordering crowd NPCs from far to near (larger Z first) so they draw back to front. */
-s32 nannpc_zcompare(NanNPCSort* a, NanNPCSort* b) {
+s32 nannpc_zcompare(const void* paramA, const void* paramB) {
+    const NanNPCSort* a = paramA;
+    const NanNPCSort* b = paramB;
     if (a->z < b->z) {
         return 1;
     }
@@ -264,7 +266,7 @@ void nannpc_ext_disp() {
             sp->idx = i;
             sp->z = np->pos.z;
         }
-        qqsort(w->sort, w->num, sizeof(NanNPCSort), (QSortCompare)nannpc_zcompare);
+        qqsort(w->sort, w->num, sizeof(NanNPCSort), nannpc_zcompare);
         for (i = extGetPoseNum() - 1; i >= 0; i--) {
             idx = w->sort[i].idx;
             GXSetTevColor(GX_TEVREG0, w->npc[idx].color);
@@ -354,14 +356,14 @@ void nannpc_ext_main_sub_fast() {
 /** Default extdrv main callback: runs the three crowd sub functions (set by evt_nannpc_set_subfunc) in order. */
 void nannpc_ext_main() {
     NanNPCWork* w = nanNPCWork;
-    if (w->func14) {
-        w->func14();
+    if (w->subfunc0) {
+        w->subfunc0();
     }
-    if (w->func18) {
-        w->func18();
+    if (w->subfunc1) {
+        w->subfunc1();
     }
-    if (w->func1c) {
-        w->func1c();
+    if (w->subfunc2) {
+        w->subfunc2();
     }
 }
 
@@ -407,9 +409,9 @@ USER_FUNC(evt_nannpc_init) {
     memset(w->sort, 0, w->num * sizeof(NanNPCSort));
     w->tbl = _mapAlloc(0x14);
     memset(w->tbl, 0, 0x14);
-    w->func14 = NULL;
-    nanNPCWork->func18 = nannpc_ext_main_sub;
-    w->func1c = NULL;
+    w->subfunc0 = NULL;
+    nanNPCWork->subfunc1 = nannpc_ext_main_sub;
+    w->subfunc2 = NULL;
     if (!initf) {
         initf = nannpc_ext_init;
     }
@@ -459,13 +461,13 @@ USER_FUNC(evt_nannpc_set_subfunc) {
     NanNPCWork* w = nanNPCWork;
     switch (kind) {
         case 0:
-            w->func14 = (void (*)())evtGetValue(event, args[1]);
+            w->subfunc0 = (void (*)())evtGetValue(event, args[1]);
             break;
         case 1:
-            w->func18 = (void (*)())evtGetValue(event, args[1]);
+            w->subfunc1 = (void (*)())evtGetValue(event, args[1]);
             break;
         case 2:
-            w->func1c = (void (*)())evtGetValue(event, args[1]);
+            w->subfunc2 = (void (*)())evtGetValue(event, args[1]);
             break;
     }
     return EVT_RETURN_DONE;

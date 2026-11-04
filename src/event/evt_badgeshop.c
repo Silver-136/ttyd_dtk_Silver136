@@ -204,7 +204,9 @@ void badgeShop_init(void) {
 }
 
 /** qqsort comparator for badgeShop_bottakuruGeneration: orders (item, key) pairs by the key in word 1, ascending. */
-s32 bottakuruComp(const s32* sortA, const s32* sortB) {
+s32 bottakuruComp(const void* paramA, const void* paramB) {
+    const s32* sortA = paramA;
+    const s32* sortB = paramB;
     s32 a, b;
 
     a = sortA[1];
@@ -248,7 +250,7 @@ void badgeShop_bottakuruGeneration(void) {
         }
     }
 
-    qqsort(table, 0x11, sizeof(table[0]), (QSortCompare)bottakuruComp);
+    qqsort(table, 0x11, sizeof(table[0]), bottakuruComp);
 
     for (i = 0; i < 4; i++) {
         for (m = 0; m < sizeof(badge_bottakuru_table) / sizeof(badge_bottakuru_table[0]); m++) {

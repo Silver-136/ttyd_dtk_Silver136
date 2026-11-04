@@ -41,7 +41,7 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
 };
 
 void effMagicHoraoMain(EffectEntry* effect);
-void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect);
+void effMagicHoraoDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a "Horao" battle magic sprite at (x, y, z):
@@ -144,11 +144,12 @@ void effMagicHoraoMain(EffectEntry* effect) {
             work->scale -= 0.05f;
             break;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagicHoraoDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effMagicHoraoDisp, effect);
 }
 
 /** Draws a wobbling 16-strip ribbon (textures 0x56/0x57) while easing in; in the hold state draws two flat textures. */
-void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect) {
+void effMagicHoraoDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     effN64Vtx* vtx;
     effN64Vtx* v;
     s32 i;

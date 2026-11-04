@@ -41,13 +41,13 @@ typedef struct ZSObj {
     /* 0x3C */ f32 rot;
     /* 0x40 */ f32 rotSpeed;
     /* 0x44 */ f32 vy;
-    /* 0x48 */ s32 f48;
-    /* 0x4C */ s32 f4c;
+    /* 0x48 */ s32 fallFrame;
+    /* 0x4C */ s32 fallDuration;
 } ZSObj;
 
 typedef struct ZSCursor {
     /* 0x00 */ s32 timer;
-    /* 0x04 */ s32 f4;
+    /* 0x04 */ s32 phaseTimer;
     /* 0x08 */ Vec pos;
     /* 0x14 */ Vec trail[4];
 } ZSCursor;
@@ -250,8 +250,8 @@ void zubastar_create_takaku(s32 n, Vec* pts) {
     t->a = 0;
     t->n = n;
     t->pos = (Vec){0.0f, 0.0f, 0.0f};
-    t->f48 = 0;
-    t->f4c = 1;
+    t->fallFrame = 0;
+    t->fallDuration = 1;
     for (i = 0; i < n; i++) {
         t->v[i] = pts[i];
     }
@@ -337,12 +337,12 @@ void zubastar_bunkatu(Vec* p0, Vec* p1) {
             }
             a->a = 0;
             a->pos = (Vec){0.0f, 0.0f, 0.0f};
-            a->f48 = irand(0x80);
-            a->f4c = irand(5) + 1;
+            a->fallFrame = irand(0x80);
+            a->fallDuration = irand(5) + 1;
             b->a = 0;
             b->pos = (Vec){0.0f, 0.0f, 0.0f};
-            b->f48 = irand(0x80);
-            b->f4c = irand(5) + 1;
+            b->fallFrame = irand(0x80);
+            b->fallDuration = irand(5) + 1;
             BattleFree(w->ptrs[i]->v);
             BattleFree(w->ptrs[i]);
             w->ptrs[i] = a;
@@ -649,13 +649,13 @@ USER_FUNC(zubastar_main) {
         break;
     case 5:
         w->cursor.timer = 6;
-        w->cursor.f4 = 0;
+        w->cursor.phaseTimer = 0;
     case 6:
-        w->cursor.f4++;
+        w->cursor.phaseTimer++;
         w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.f4, 15);
+        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.phaseTimer, 15);
         w->cursor.pos.z = 0.0f;
-        if (w->cursor.f4 >= 15) {
+        if (w->cursor.phaseTimer >= 15) {
             w->cursor.timer = 10;
         }
         break;
@@ -664,13 +664,13 @@ USER_FUNC(zubastar_main) {
         break;
     case 15:
         w->cursor.timer = 16;
-        w->cursor.f4 = 0;
+        w->cursor.phaseTimer = 0;
     case 16:
-        w->cursor.f4++;
+        w->cursor.phaseTimer++;
         w->cursor.pos.x = 0.0f;
-        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.f4, 15);
+        w->cursor.pos.y = intplGetValue(EASING_QUADRATIC_OUT, 300.0f, 300.0f, w->cursor.phaseTimer, 15);
         w->cursor.pos.z = 0.0f;
-        if (w->cursor.f4 >= 15) {
+        if (w->cursor.phaseTimer >= 15) {
             w->cursor.timer = 20;
         }
         break;
@@ -701,7 +701,7 @@ USER_FUNC(zubastar_main) {
         }
         if (w->ltimer >= 15) {
             w->cursor.timer = 27;
-            w->cursor.f4 = 0;
+            w->cursor.phaseTimer = 0;
 #if VERSION <= VERSION_DEMO_US
             // The demo flashes the screen from here.
             fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -712,8 +712,8 @@ USER_FUNC(zubastar_main) {
         }
         break;
     case 27:
-        w->cursor.f4++;
-        if (w->cursor.f4 >= 5) {
+        w->cursor.phaseTimer++;
+        if (w->cursor.phaseTimer >= 5) {
             w->cursor.timer = 28;
         }
         break;
@@ -871,7 +871,7 @@ USER_FUNC(zubastar_bomb) {
             s32 steps = irand(30) + 30;
             f32 sx, sy, sz;
             s32 j;
-            t->f4c = steps;
+            t->fallDuration = steps;
             sx = 0.0f;
             sy = 0.0f;
             sz = 0.0f;
@@ -889,19 +889,19 @@ USER_FUNC(zubastar_bomb) {
             t->rot = 0.0f;
             t->rotSpeed = 70.0f * rand() / 32767.0f - 35.0f;
             t->vy = (2.0f * (t->end.y - t->start.y) - steps * (-1.25f * steps)) / (2.0f * steps);
-            t->f48 = 0;
+            t->fallFrame = 0;
             t->a = 5;
             psndSFXOn(sfx);
             break;
         }
         case 5:
-            t->pos.x = intplGetValue(EASING_LINEAR, t->start.x, t->end.x, t->f48, t->f4c);
-            t->pos.z = intplGetValue(EASING_LINEAR, t->start.z, t->end.z, t->f48, t->f4c);
+            t->pos.x = intplGetValue(EASING_LINEAR, t->start.x, t->end.x, t->fallFrame, t->fallDuration);
+            t->pos.z = intplGetValue(EASING_LINEAR, t->start.z, t->end.z, t->fallFrame, t->fallDuration);
             t->pos.y += t->vy;
             t->rot += t->rotSpeed;
             t->vy += -1.25f;
-            t->f48++;
-            if (t->f48 > t->f4c) {
+            t->fallFrame++;
+            if (t->fallFrame > t->fallDuration) {
                 t->a = 10;
             }
             break;

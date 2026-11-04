@@ -709,7 +709,9 @@ s32 comp_aiueo(const void* a, const void* b) {
 }
 
 /** qqsort comparator: items by type_sort_order from the item table, ascending (pouchSortItem modes 1 and 3). */
-s32 comp_kind(s16* a, s16* b) {
+s32 comp_kind(const void* paramA, const void* paramB) {
+    const s16* a = paramA;
+    const s16* b = paramB;
     s16 x = itemDataTable[*a].type_sort_order;
     s16 y = itemDataTable[*b].type_sort_order;
     if (x > y) {
@@ -741,7 +743,9 @@ s32 comp_aiueo_r(const void* a, const void* b) {
 }
 
 /** qqsort comparator: items by type_sort_order, descending (pouchSortItem modes 8 and 10). */
-s32 comp_kind_r(s16* a, s16* b) {
+s32 comp_kind_r(const void* paramA, const void* paramB) {
+    const s16* a = paramA;
+    const s16* b = paramB;
     s16 x = itemDataTable[*a].type_sort_order;
     s16 y = itemDataTable[*b].type_sort_order;
     if (x < y) {
@@ -799,11 +803,11 @@ void pouchSortItem(s32 mode) {
         if (mode == 0) {
             qqsort(items, n, sizeof(s16), comp_aiueo);
         } else if (mode == 1) {
-            qqsort(items, n, sizeof(s16), (QSortCompare)comp_kind);
+            qqsort(items, n, sizeof(s16), comp_kind);
         } else if (mode == 7) {
             qqsort(items, n, sizeof(s16), comp_aiueo_r);
         } else if (mode == 8) {
-            qqsort(items, n, sizeof(s16), (QSortCompare)comp_kind_r);
+            qqsort(items, n, sizeof(s16), comp_kind_r);
         }
         memcpy(pp[0]->heldItems, items, sizeof(items));
     }
@@ -820,11 +824,11 @@ void pouchSortItem(s32 mode) {
         if (mode == 2) {
             qqsort(keys, n, sizeof(s16), comp_aiueo);
         } else if (mode == 3) {
-            qqsort(keys, n, sizeof(s16), (QSortCompare)comp_kind);
+            qqsort(keys, n, sizeof(s16), comp_kind);
         } else if (mode == 9) {
             qqsort(keys, n, sizeof(s16), comp_aiueo_r);
         } else if (mode == 10) {
-            qqsort(keys, n, sizeof(s16), (QSortCompare)comp_kind_r);
+            qqsort(keys, n, sizeof(s16), comp_kind_r);
         }
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }

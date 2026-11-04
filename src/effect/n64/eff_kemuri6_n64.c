@@ -45,7 +45,7 @@ static effN64Vtx kmr_a_1_v[] = {
 };
 
 void effKemuri6Main(EffectEntry* effect);
-void effKemuri6Disp(CameraId cameraId, EffectEntry* effect);
+void effKemuri6Disp(CameraId cameraId, void* param);
 
 /**
  * Spawns one randomly sized and rotated cloud-smoke puff ("walking" in the effect table) at (x, y, z);
@@ -135,12 +135,13 @@ void effKemuri6Main(EffectEntry* effect) {
     if (!disp) {
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri6Disp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKemuri6Disp, effect);
     }
 }
 
 /** Draws the puff as a Y-billboarded textured quad (effect texture 0x4E) rolled by its rotation. */
-void effKemuri6Disp(CameraId cameraId, EffectEntry* effect) {
+void effKemuri6Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffKemuri6N64Work* work;
     int i;

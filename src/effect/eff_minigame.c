@@ -31,7 +31,7 @@ typedef struct MiniGameWork {
 } MiniGameWork;
 
 void effMiniGameMain(EffectEntry* effect);
-void effMiniGameDisp(CameraId cameraId, EffectEntry* effect);
+void effMiniGameDisp(CameraId cameraId, void* param);
 
 #if VERSION >= VERSION_US
 typedef struct MiniGameTbl {
@@ -446,12 +446,13 @@ void effMiniGameMain(EffectEntry* effect) {
         effect->flags &= ~EFFECT_FLAG_SOFT_DELETE;
         effDelete(effect);
     } else {
-        dispEntry(CAMERA_2D, dispCalcZ(&pos), DISP_MODE_XLU, (DispCallback)effMiniGameDisp, effect);
+        dispEntry(CAMERA_2D, dispCalcZ(&pos), DISP_MODE_XLU, effMiniGameDisp, effect);
     }
 }
 
 /** Draws the banner text pieces as 2D textured quads, choosing the texture set for the current language. */
-void effMiniGameDisp(CameraId cameraId, EffectEntry* effect) {
+void effMiniGameDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     MiniGameWork* work = effect->userdata;
     CameraEntry* cam;
     MiniGameWork* p;

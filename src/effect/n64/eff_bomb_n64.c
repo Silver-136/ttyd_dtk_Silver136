@@ -46,7 +46,7 @@ static effN64Vtx size8x8_tex32x32_vtx[] = {
 };
 
 static void effBombMain(EffectEntry* effect);
-static void effBombDisp(CameraId cameraId, EffectEntry* effect);
+static void effBombDisp(CameraId cameraId, void* payload);
 
 /** Changes which camera the bomb effect is drawn with (the default is CAMERA_3D). */
 void effBombN64SetCamId(EffectEntry* effect, s32 camId) {
@@ -159,11 +159,12 @@ static void effBombMain(EffectEntry* effect) {
         }
     }
     work->rot += work->rotAdd;
-    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effBombDisp, effect);
+    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, effBombDisp, effect);
 }
 
 /** Draws the flash quad for types 1-2, then the burst sprite which cycles through three textures frame by frame. */
-static void effBombDisp(CameraId cameraId, EffectEntry* effect) {
+static void effBombDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffBombN64Work* work;
     Mtx mtx;

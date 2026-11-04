@@ -48,7 +48,7 @@ typedef struct EffOpukuWgunN64Work {
 } EffOpukuWgunN64Work;
 
 void effOpukuWgunMain(EffectEntry* effect);
-void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect);
+void effOpukuWgunDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a water-gun shot from (x1, y1, z1) to (x2, y2, z2) living `lifetime` frames at `scale`.
@@ -178,7 +178,7 @@ void effOpukuWgunMain(EffectEntry* effect) {
             work->alphas[i] = (u8)(255.0f - 255.0f * t);
         }
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuWgunDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effOpukuWgunDisp, effect);
 }
 
 /**
@@ -191,7 +191,8 @@ static u8 a_data[12] = {255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 128, 3
  * Builds a camera-view ribbon through the twelve points (width grows with each point age, texture 0x8D or 0x8E)
  * and draws it as quads.
  */
-void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect) {
+void effOpukuWgunDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffOpukuWgunN64Work* work;
     Mtx scale;

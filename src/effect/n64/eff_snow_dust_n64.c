@@ -14,7 +14,7 @@
 
 
 void effSnowDustMain(EffectEntry* effect);
-void effSnowDustDisp(CameraId cameraId, EffectEntry* effect);
+void effSnowDustDisp(CameraId cameraId, void* param);
 
 /** Size of a pulsing puff (types 2 and 3) or a type 5 sparkle over its 30-step cycle: three quick swells. */
 static u8 scale_data[] = {
@@ -326,7 +326,7 @@ void effSnowDustMain(EffectEntry* effect) {
                 break;
         }
     }
-    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effSnowDustDisp, effect);
+    dispEntry(camId, dispCalcZ(&position), DISP_MODE_XLU, effSnowDustDisp, effect);
 }
 
 /**
@@ -335,7 +335,8 @@ void effSnowDustMain(EffectEntry* effect) {
  * types 2/3 a 12x12 frame from the 0x67 strip (type 2 picks the frame per particle),
  * and types 4/5 a 16x16 sparkle from 0x68 plus a 32x32 glow quad.
  */
-void effSnowDustDisp(CameraId cameraId, EffectEntry* effect) {
+void effSnowDustDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* cam;
     EffSnowDustN64Work* work;
     s32 i;

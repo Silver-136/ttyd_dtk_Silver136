@@ -146,7 +146,7 @@ static s32 jetw_ry_tbl[] = {0, 40, 55, 190, 20, 130, 270, 300};
 #endif
 
 void effOpukuJetwMain(EffectEntry* effect);
-void effOpukuJetwDisp(CameraId cameraId, EffectEntry* effect);
+void effOpukuJetwDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns a spray of blobs at (x, y, z) scaled by scale, lasting lifetime frames (<= 0 until deleted).
@@ -216,14 +216,15 @@ void effOpukuJetwMain(EffectEntry* effect) {
     if (work->frame < 8) {
         work->alpha = (work->frame << 5) + 31;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOpukuJetwDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effOpukuJetwDisp, effect);
 }
 
 /**
  * Draws a central blob, then three streams of 16x16 sprites (texture 0x34) whose positions, sizes,
  * rotations and alphas come from step tables and advance with the frame.
  */
-void effOpukuJetwDisp(CameraId cameraId, EffectEntry* effect) {
+void effOpukuJetwDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     Mtx mtx;
     Mtx scale;
     Mtx rot;

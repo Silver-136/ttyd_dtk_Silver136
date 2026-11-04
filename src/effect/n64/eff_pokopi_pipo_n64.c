@@ -48,7 +48,7 @@ static u8 w_scale_data[7] = {110, 150, 130, 110, 100, 95, 100};
 static u8 h_scale_data[7] = {80, 60, 80, 100, 120, 110, 100};
 
 void effPokopiPipoMain(EffectEntry* effect);
-void effPokopiPipoDisp(CameraId cameraId, EffectEntry* effect);
+void effPokopiPipoDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns a lobbed blob that flies from (x, y, z) to (x2, y2, z2) in duration frames on a gravity arc,
@@ -153,11 +153,12 @@ void effPokopiPipoMain(EffectEntry* effect) {
         work->position.y = 14.285715f;
         work->angleVel = -20.0f;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPokopiPipoDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effPokopiPipoDisp, effect);
 }
 
 /** Draws the blob as a camera-facing, spinning quad (texture 0x95 for type 0, otherwise 0x96). */
-void effPokopiPipoDisp(CameraId cameraId, EffectEntry* effect) {
+void effPokopiPipoDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffPokopiPipoN64Work* work;
     s32 alpha;

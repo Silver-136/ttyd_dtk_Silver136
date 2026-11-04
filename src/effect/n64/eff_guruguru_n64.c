@@ -20,7 +20,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 };
 
 void effGuruguruMain(EffectEntry* effect);
-void effGuruguruDisp(CameraId cameraId, EffectEntry* effect);
+void effGuruguruDisp(CameraId cameraId, void* param);
 
 /**
  * Spawns num yellow sprites circling (x, y, z); the radius opens up to the given radius.
@@ -96,12 +96,13 @@ void effGuruguruMain(EffectEntry* effect) {
                 work->angle -= 360;
             }
         }
-        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effGuruguruDisp, effect);
+        dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effGuruguruDisp, effect);
     }
 }
 
 /** Draws each sprite as a camera-facing yellow quad (texture 0x1D) at its position on the circle. */
-void effGuruguruDisp(CameraId cameraId, EffectEntry* effect) {
+void effGuruguruDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera = camGetPtr(cameraId);
     EffGuruguruN64Work* work = effect->userdata;
     Mtx mtx;

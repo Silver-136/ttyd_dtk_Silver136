@@ -35,7 +35,7 @@ typedef struct EffKemuri3N64Work {
 } EffKemuri3N64Work;
 
 void effKemuri3Main(EffectEntry* effect);
-void effKemuri3Disp(CameraId cameraId, EffectEntry* effect);
+void effKemuri3Disp(CameraId cameraId, void* param);
 
 #pragma opt_propagation off
 /**
@@ -142,11 +142,12 @@ void effKemuri3Main(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri3Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKemuri3Disp, effect);
 }
 
 /** Draws each live puff as a 16x16 quad (effect texture 0xF) tinted brown-yellow with the puff alpha. */
-void effKemuri3Disp(CameraId cameraId, EffectEntry* effect) {
+void effKemuri3Disp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffKemuri3N64Work* work;
     s32 i;

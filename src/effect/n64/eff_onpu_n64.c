@@ -39,7 +39,7 @@ static effN64Vtx size16x32_tex16x32_vtx[] = {
 };
 
 void effOnpuMain(EffectEntry* effect);
-void effOnpuDisp(CameraId cameraId, EffectEntry* effect);
+void effOnpuDisp(CameraId cameraId, void* payload);
 
 /**
  * Spawns one music note at (x, y, z) living 64 frames.
@@ -117,14 +117,15 @@ void effOnpuMain(EffectEntry* effect) {
     work->position.y += work->vy;
     work->vx += 0.04f * (work->targetVx - work->vx);
     work->vy += 0.04f * (work->targetVy - work->vy);
-    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effOnpuDisp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effOnpuDisp, effect);
 }
 
 /**
  * Draws the note as a camera-facing 16x32 quad using two scrolling note textures (0x28, 0x29) with the color
  * cycling.
  */
-void effOnpuDisp(CameraId cameraId, EffectEntry* effect) {
+void effOnpuDisp(CameraId cameraId, void* payload) {
+    EffectEntry* effect = payload;
     CameraEntry* camera;
     EffOnpuN64Work* work;
     s32 offset;

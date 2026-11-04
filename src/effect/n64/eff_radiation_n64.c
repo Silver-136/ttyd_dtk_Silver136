@@ -12,7 +12,7 @@
 #include <dolphin/mtx.h>
 
 void effRadiationMain(EffectEntry* effect);
-void effRadiationDisp(CameraId cameraId, EffectEntry* effect);
+void effRadiationDisp(CameraId cameraId, void* param);
 
 /** 150x20 quad, starting at the centre and reaching outward, drawn for each ray of types 0-1. */
 effN64Vtx size150x20_tex32x32[] = {
@@ -299,9 +299,9 @@ void effRadiationMain(EffectEntry* effect) {
     }
     w2 = effect->userdata;
     if (w2->flag == 0) {
-        dispEntry(w2->camera, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effRadiationDisp, effect);
+        dispEntry(w2->camera, dispCalcZ(&position), DISP_MODE_XLU, effRadiationDisp, effect);
     } else {
-        dispEntry(w2->camera, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effRadiationDisp, effect);
+        dispEntry(w2->camera, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, effRadiationDisp, effect);
     }
 }
 
@@ -311,7 +311,8 @@ void effRadiationMain(EffectEntry* effect) {
  * with every fourth ray a different length (type 3 turned 45 degrees about Z).
  * Both faces drawn; with `flag` set it uses plain alpha blending without depth test or writes.
  */
-void effRadiationDisp(CameraId cameraId, EffectEntry* effect) {
+void effRadiationDisp(CameraId cameraId, void* param) {
+    EffectEntry* effect = param;
     CameraEntry* camera;
     EffRadiationN64Work* p;
     GXTexObj texObj;
