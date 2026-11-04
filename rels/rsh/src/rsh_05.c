@@ -147,7 +147,6 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 static void ext_disp(CameraId camera, void* param);
 static void ext_shadow_disp(CameraId camera, void* param);
 
-s32 evt_mario_flag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall);

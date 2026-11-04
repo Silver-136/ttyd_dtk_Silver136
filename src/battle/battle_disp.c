@@ -609,7 +609,7 @@ next:
         }
         if (unit->heldItem) {
             if ((unit->flags & BATTLE_UNIT_FLAG_STOLEN_ITEM) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
-                dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitStolenItemDisp, unit);
+                dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, btlUnitStolenItemDisp, unit);
             } else if ((!(unit->flags & BATTLE_UNIT_FLAG_ACTING) || (unit->flags & BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING)) && !(unit->flags & BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)) {
                 dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)btlUnitItemDisp, unit);
             }
@@ -906,7 +906,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
 
 // FAKE: per-function opt_dead_assignments off keeps the unused height store; without it the object changes
 #pragma push
-// dead assignments optimisation off for btlUnitItemDisp, btlUnitItemDisp2, btlUnitStolenItemDisp and 15 more: the original register allocation and scheduling need it
+// Dead-assignment optimisation off for btlUnitItemDisp only (until the pop): the original register allocation needs it.
 #pragma opt_dead_assignments off
 void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;

@@ -432,7 +432,7 @@ void vivian_use(PartyEntry* party) {
     case 2:
         m->dispFlags |= MARIO_DISP_FLAG_SHADOW_OFF;
         partyChgPose(party, "PTR_A2_3");
-        partyPaperOn((PartyEntry*)party, "p_bibi");
+        partyPaperOn(party, "p_bibi");
         partyChgPaper(party, "PM_B_1");
         party->useMotionId = 3;
         party->moveFrames = 4;

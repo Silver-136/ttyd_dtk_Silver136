@@ -95,7 +95,6 @@ s32 BattleAudience_GetPPAudienceNum_R(void);
 s32 BattleAudience_GetPPAudienceNum_L(void);
 s32 BattleAudience_GetPPAudienceNum_RL_Sub(s32 offset);
 BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id);
-double sqrt(double);
 
 #if VERSION <= VERSION_DEMO_US
 static void BattleAudienceNumToTargetSub(void);

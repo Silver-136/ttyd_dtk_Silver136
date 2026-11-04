@@ -461,7 +461,7 @@ HitEntry* kpaChkHitobjRide(void) {
 }
 
 /**
- * No return statement: the original falls off the end (callers ignore the result).
+ * No return statement: this reconstruction falls off the end; the original C return type is unproven.
  * Declared void, the kpaWork pointer lands in r3 instead of r4, so the long return type stays.
  */
 long kpaClearHitobjRide(void) {

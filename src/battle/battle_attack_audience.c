@@ -229,7 +229,7 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
             return EVT_RETURN_DONE;
         }
     }
-    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, (void*)_get_item_announce_disp, NULL);
+    dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, _get_item_announce_disp, NULL);
     return EVT_RETURN_BLOCK;
 }
 

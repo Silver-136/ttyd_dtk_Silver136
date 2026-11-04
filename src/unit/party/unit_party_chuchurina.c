@@ -2673,7 +2673,7 @@ USER_FUNC(mono_capture_event) {
     id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     BtlUnit_GetPartsPtr(unit, 1);
-    dispEntry(CAMERA_2D, 910.0f, DISP_MODE_OPAQUE, (DispCallback)mono_capture, unit);
+    dispEntry(CAMERA_2D, 910.0f, DISP_MODE_OPAQUE, mono_capture, unit);
     return EVT_RETURN_DONE;
 }
 

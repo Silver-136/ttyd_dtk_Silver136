@@ -17,6 +17,9 @@
 #include "driver/camdrv.h"
 #include "driver/effdrv.h"
 #include "battle/battle_damage.h"
+#include "eff/eff_sleep.h"
+#include "eff/eff_fire.h"
+#include "eff/eff_ice.h"
 
 // FAKE: no-op cast of the msg array to StChgMsg*; &_battleWorkPointer->announce.stChg.msg[i] changes the object
 #define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i))
@@ -169,7 +172,6 @@ void BattleStatusEffectDelete(BattleUnit* unit) {
 }
 
 EffectEntry* effSparkEntry(s32, s32, f32, f32, f32, f32);
-EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation);
 
 /**
  * While the unit is asleep, keeps a sleep effect (the floating Zs) at the top-right of its body part:
@@ -254,9 +256,6 @@ void BSE_BiribiriDelete(BattleUnit* unit) {
         unit->sparkEff = NULL;
     }
 }
-
-EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
-EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
 
 /**
  * While the unit is Burned, keeps a flame effect on it at the unit kind's burnFlameOffset (mirrored by facing
@@ -380,8 +379,6 @@ void BSE_TurnFirstProcessEffectEntry(BattleUnit* unit, s16 active) {
     unit->burnDamageFlameState = 1;
     unit->mbBurnDamageFlameActive = active;
 }
-
-f32 sinfd(f32 degrees);
 
 /**
  * Steps the start-of-turn Burn animation each frame:

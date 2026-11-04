@@ -25,7 +25,6 @@
 #include "libc_decls.h"
 #include "battle/battle_break_slot.h"
 
-double sqrt(double);
 double __fabs(double);
 
 

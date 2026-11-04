@@ -29,7 +29,6 @@
 #include "evt/evt_item.h"
 #include "driver/itemdrv.h"
 
-double sqrt(double);
 double __fabs(double);
 
 
