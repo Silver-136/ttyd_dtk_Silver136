@@ -962,7 +962,7 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
 #endif
 /**
  * Like partyChgRunMode but enters mode already at motion step sub,
- * without the mode's start-up (the change trigger is cleared). Unused in C.
+ * without the mode's start-up (the change trigger is cleared).
  */
 // Descriptive name (not in the symbol maps).
 void partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {

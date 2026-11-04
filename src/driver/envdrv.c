@@ -22,7 +22,7 @@
 
 //.data
 
-/** Glare filter type 0: the screen copy added back 16 times, up to 7 pixels off in a cross: a star glow. */
+/** Glare pattern for filter type 1: the screen copy added back 16 times, up to 7 pixels off in a cross: a star glow. */
 EnvironmentGlare envGlare0 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1, 5.25f, 16,
     {
@@ -33,7 +33,7 @@ EnvironmentGlare envGlare0 = {
     }
 };
 
-/** Glare filter type 1: the screen copy added back 8 times in a small ring around each pixel, a soft glow. */
+/** Glare pattern for filter type 2: the screen copy added back 8 times in a small ring around each pixel, a soft glow. */
 EnvironmentGlare envGlare1 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_2, 3.5f, 8,
     {
@@ -42,7 +42,7 @@ EnvironmentGlare envGlare1 = {
     }
 };
 
-/** Glare filter type 2: the screen copy added back 52 times over a filled diamond: a strong bloom. */
+/** Glare pattern for filter type 3: the screen copy added back 52 times over a filled diamond: a strong bloom. */
 EnvironmentGlare envGlare2 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_4, 3.5f, 52,
     {
@@ -62,7 +62,7 @@ EnvironmentGlare envGlare2 = {
     }
 };
 
-/** Glare filter type 3: the screen copy added back 16 times on a diamond ring 3 to 4 pixels out, a halo. */
+/** Glare pattern for filter type 4: the screen copy added back 16 times on a diamond ring 3 to 4 pixels out, a halo. */
 EnvironmentGlare envGlare3 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_2, 3.5f, 16,
     {
@@ -224,7 +224,8 @@ void envDisp(CameraId camId, void *param) {
 }
 
 /**
- * Last 3D-camera draw callback: draws the glare (bloom) filter the current type picks (envGlare0..3) over its
+ * 3D-camera draw callback (DISP_MODE_CUSTOM_MID, so it runs before envCapture, envDisp and envCapture2 in the
+ * DISP_MODE_CUSTOM_LAST band): draws the glare (bloom) filter the current type picks (envGlare0..3) over its
  * screen rectangle, restoring the viewport and projection afterwards.
  */
 void envDisp2(CameraId camId, void *param) {
@@ -259,7 +260,7 @@ void envDisp2(CameraId camId, void *param) {
     GXSetProjectionv(pm);
 }
 
-/** Once per frame: queues the environment capture and draw callbacks on the 3D camera around the scene. */
+/** Once per frame: queues the environment capture and draw callbacks on the 3D camera after the scene. */
 void envMain(void) {
     dispEntry(CAMERA_3D, 20.0f, DISP_MODE_CUSTOM_LAST, envCapture, NULL);
     dispEntry(CAMERA_3D, 10.0f, DISP_MODE_CUSTOM_LAST, envDisp, NULL);
@@ -592,7 +593,7 @@ void envDisp_Blur(void) {
 
 /**
  * Starts the motion blur (from the evt_env helpers):
- * type 1 fades from fully opaque, msec gives the fade time in milliseconds (0 for a constant blur).
+ * a nonzero type fades from fully opaque, msec gives the fade time in milliseconds (0 for a constant blur).
  * Allocates the half-size capture texture in map memory.
  */
 void envBlurOn(s32 type, s32 msec) {
@@ -620,7 +621,10 @@ void envBlurOff(void) {
     _mapFree(wp->envBlur);
 }
 
-/** almost 1:1, needs some regalloc work and type changes */
+/**
+ * Copies the glare filter's screen rectangle to a half-size texture and adds it back over the rectangle once per
+ * offset in glare (up to 8 offsets per pass).
+ */
 void envGlare(EnvironmentGlare* glare) {
     static f32 frame_cnt = 0.0f;
     EnvironmentWork* envWork = envGetWork();
@@ -764,7 +768,7 @@ void envGlare(EnvironmentGlare* glare) {
 /**
  * Sets the glare filter: type 1..4 picks the glare pattern
  * and x0/y0..x1/y1 the screen rectangle it covers (rounded out to even pixels and clamped to the frame);
- * type 0 turns it off. No caller in this tree.
+ * type 0 turns it off. Called from the eki_03 and hom_00 room code.
  */
 void envGlareFilter(s32 type, s32 y0, s32 x0, s32 y1, s32 x1) {
     EnvironmentWork* wp = envGetWork();
@@ -806,7 +810,7 @@ void envGlareFilter(s32 type, s32 y0, s32 x0, s32 y1, s32 x1) {
     wp->flags |= ENV_FLAG_GLARE_FILTER;
 }
 
-/** Sets the depth scale of the glare filter and makes it depth-dependent. No caller in this tree. */
+/** Sets the depth scale of the glare filter and makes it depth-dependent. Called from the eki_03 room code. */
 void envGlareFilterZ(f32 zscale) {
     EnvironmentWork* wp = envGetWork();
     EnvironmentGlareFilter* f = &wp->filter;
@@ -1062,7 +1066,7 @@ static inline void envLoadTex(u32 id, s32 map) {
  * textures from env.tpl, 1..10) to a map object's material, advancing the stage,
  * texture coordinate and map counters in info.
  * Map RELs call it from their own TEV callbacks installed with evt_map_set_tevcallback
- * (the trains in gor_04 and pik_00 with type 7, pik_01 with 4 and 7, hom_10 with 7).
+ * (the trains in gor_04, pik_00, hom_10 and rsh_06 with type 7, pik_01 with 4 and 7, win_04's mirror ball with 10).
  */
 void envAddTev(s32 type, MapTevCallbackInfo* info) {
     s32 stage;

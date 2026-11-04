@@ -25,7 +25,7 @@ HitEntry* hitActiveListTop; // head of the active hit list (descriptive name, se
 
 /** Boot setup for the collision driver; empty, all state lives with the loaded maps. */
 void hitInit(void) {
-    ; // stubbed in retail
+    ; // empty in every version
 }
 
 /** Frees the collision objects and their triangle lists of every loaded map, e.g. before a map change. */
@@ -190,8 +190,8 @@ typedef struct HitAnimJointList {
 } HitAnimJointList;
 
 /**
- * Builds the list of hit objects the checks walk (hitActiveListTop).
- * The demo has no active list: hit objects without parts are flagged 0x8000 and skipped by the checks.
+ * Builds the list of hit objects the checks walk (hitActiveListTop; JP and later).
+ * The early demos have no active list: hit objects without parts are flagged 0x8000 and skipped by the checks.
  */
 static void hitPreCheck(void) {
     MapEntry* entry;
@@ -237,7 +237,7 @@ static void hitPreCheck(void) {
 
 /**
  * Removes the collision object named name: it is flagged deleted (0x80) and the checks skip it from then on;
- * the JP and later releases also rebuild the active list.
+ * JP and later also rebuild the active list.
  */
 void hitDelete(const char* name) {
     MapWork* wp = mapGetWork();
@@ -263,7 +263,7 @@ void hitDelete(const char* name) {
 }
 
 /**
- * Once per frame: refreshes collision-check eligibility (the retail active list, or the early demos' geometry flags),
+ * Once per frame: refreshes collision-check eligibility (the JP and later active list, or the early demos' geometry flags),
  * applies the current frame of every playing map animation to the collision objects it moves,
  * and recomputes the world matrices and triangles of the maps that changed.
  */
@@ -823,7 +823,7 @@ inline BOOL tempfunc3(HitCheckQuery* query, HitVector* vector) {
  * Finds the closest collision object hit by the query ray, applying callback when supplied,
  * and updates the query's distance, hit position and normal. Returns NULL on no hit.
  * The early demos scan every map entry (no active list) without a separate straight-up case;
- * retail walks the active list and has separate straight-down, straight-up and horizontal cases.
+ * JP and later walk the active list and have separate straight-down, straight-up and horizontal cases.
  */
 HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1416,7 +1416,10 @@ void hitObjGetNormal(const char* name, Vec* normal) {
     }
 }
 
-/** Returns hit's joint name, or NULL for NULL (the demo has no range check). */
+/**
+ * Returns hit's joint name, or NULL for NULL; JP and later also return NULL for a pointer outside every
+ * loaded map's hit table (the early demos have no range check).
+ */
 #if VERSION >= VERSION_JP
 const char* hitGetName(HitEntry* hit) {
     MapEntry* map;

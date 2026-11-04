@@ -83,7 +83,7 @@ void lightReInit(void) {
 static const Vec camDir = {0.0f, 0.0f, 1.0f};
 
 /**
- * Per-frame update: places the PAPER light far away along the camera direction (turned into view space)
+ * Per-frame update: places the PAPER light far away along the camera direction (turned into world space)
  * so paper characters are lit from the camera, and parks the Boo light 1000 units overhead.
  */
 void lightMain(void) {

@@ -39,7 +39,8 @@ void offscreenReset(BOOL inBattle) {
 }
 
 /**
- * Registers a named offscreen region (reusing the slot if the name exists) with an empty bounding box
+ * Registers a named offscreen region in the first free slot (an existing entry with the name is not reused)
+ * with an empty bounding box
  * and returns its id. Map objects, NPCs, shadows and effects such as the cloud and scissor screens use it.
  */
 s32 offscreenEntry(const char* name) {

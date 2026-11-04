@@ -47,7 +47,7 @@ typedef struct CubeJoint {
     MapFileJointPart part;
 } CubeJoint;
 
-/** Draw mode of the built-in collision cube (culling flag set), shared by the cube, head and front hit joints. */
+/** Draw mode of the built-in collision cube (hit attribute HIT_ATTR_MOBJ set), shared by the cube, head and front hit joints. */
 #if VERSION >= VERSION_JP
 CubeDrawMode cubeMSJ = {{0, 1, 0, 0, 0, (s32)0x80000000}, 0};
 #endif
@@ -459,8 +459,8 @@ void mobjReset(BOOL inBattle) {
 
 /**
  * Creates the collision for a map object from its pose's bounding box, replacing any it had:
- * type 0 a solid cube (MOBJ_<name>), 1 a cube shaped for head hits,
- * 2 a front cube plus a second part (MOBJ~<name>) for objects with two hit parts.
+ * type 0 a solid cube (MOBJ_<name>), 1 only the cube's bottom face, for head hits,
+ * 2 the front face plus a second part with the other five faces (MOBJ~<name>) for objects with two hit parts.
  */
 void mobjHitEntry(MapObjectEntry* entry, s32 type) {
     AnimationPoseData* pose;
@@ -745,7 +745,7 @@ void mobjMain(void) {
 #if VERSION <= VERSION_DEMO_JP
         if (!(gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > FBAT_MODE_FIELD && fbat != FBAT_MODE_EVENT_MOBJ_ACTIVE)))) {
 #else
-        // retail (US on) reads inBattle again; `gp->inBattle != 0 ||` is always false here
+        // every version reads inBattle again; `gp->inBattle != 0 ||` is always false here
 #if VERSION >= VERSION_US
         if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > FBAT_MODE_FIELD && fbat != FBAT_MODE_EVENT_MOBJ_ACTIVE)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
 #else
@@ -1022,7 +1022,10 @@ MapObjectEntry* mobjNameToPtrNoAssert(const char* name) {
     return entry;
 }
 
-/** the demo searches the mobj list for the entry whose first hit object is hitObj */
+/**
+ * the early demos search the mobj list for the entry whose first hit object is hitObj; JP and later return the
+ * hit object's own mobj pointer when it has HIT_ATTR_MOBJ, else NULL
+ */
 MapObjectEntry* mobjHitObjPtrToPtr(HitEntry* hitObj) {
 #if VERSION <= VERSION_DEMO_JP
     int i;
@@ -1142,7 +1145,7 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
 
 /**
  * Returns whether a map object shows the "!" hint balloon over Mario when he is near (MOBJ_FLAG_SHOW_HINT).
- * Later versions accept NULL.
+ * JP and later accept NULL.
  */
 BOOL mobjGetHint(MapObjectEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1174,9 +1177,9 @@ BOOL mobjCheckExec(void) {
 
 /**
  * For a MOBJ_KururinFloor object returns 2 while its item is still there to find,
- * 1 once its item is out or its flag is set, and 0 for any other object. The demo keeps it as a real function.
+ * 1 once its item is out or its flag is set, and 0 for any other object. The early demos keep it as a real function.
  */
-static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inlined in retail but not in demo
+static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // always inlined in JP and later, a real function in the early demos
     if (!strcmp(entry->animName, kururinName)) {
         ItemEntry* item = itemNameToPtr(entry->name);
         if (item != NULL && (item->flags & ITEM_FLAG_ACTIVE) && evtGetValue(0, entry->flagVar) == 0) {
@@ -1222,7 +1225,7 @@ void mobjStrippedFallPool(MapObjectEntry* entry) {
     }
 }
 
-/** demo only: the nearest active mobj within minMagnitude of (x, y, z) */
+/** early demos only: the nearest active mobj within minMagnitude of (x, y, z) */
 MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude) {
     int entryCount;
     Vec pos;
@@ -1327,9 +1330,9 @@ MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char**
 
 /**
  * For a MOBJ_KururinFloor object returns 2 while its item is still there to find,
- * 1 once its item is out or its flag is set, and 0 for any other object. The demo keeps it as a real function.
+ * 1 once its item is out or its flag is set, and 0 for any other object. The early demos keep it as a real function.
  */
-// A real function in the demo, defined after its callers.
+// A real function in the early demos, defined after its callers.
 int mobjCheckKururingFloorItem(MapObjectEntry* entry) {
     if (!strcmp(entry->animName, kururinName)) {
         ItemEntry* item = itemNameToPtr(entry->name);

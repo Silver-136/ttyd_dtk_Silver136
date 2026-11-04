@@ -64,7 +64,7 @@ typedef struct IconBinData {
     }
 
 #if VERSION >= VERSION_US
-    // US: language-specific variants of icons 0x49 and 0x67 (indexed by gp->language)
+    // US and later: language-specific variants of icons 0x49 and 0x67 (indexed by gp->language)
     u16 icon_049_lang_tbl[6] = {0x49, 0x4A, 0x4B, 0x4C, 0x49, 0x4D};
     u16 icon_067_lang_tbl[6] = {0x67, 0x68, 0x69, 0x6A, 0x67, 0x6B};
 #endif
@@ -187,9 +187,9 @@ void iconInit(void) {
     }
 }
 
-/** Empty in every release build. */
+/** Empty in every version. */
 void iconTexSetup(void) {
-    ; // stubbed in retail
+    ; // stubbed
 }
 
 /** Clears every icon of the current (field or battle) set. */
@@ -221,8 +221,8 @@ void iconMain(void) {
 #if VERSION >= VERSION_US
                 data = iconGetBinData(entry->iconId);
 #endif
-                // BUG: JP reads data here without loading it for this entry (uninitialized, or left over from an
-                // earlier entry's animation step); US loads it first.
+                // BUG: JP and the early demos read data here without loading it for this entry (uninitialized, or
+                // left over from an earlier entry's animation step); US and later load it first.
                 entry->width = data->width;
                 entry->height = data->height;
                 entry->numIcons = data->numIcons;
@@ -272,7 +272,7 @@ void iconMain(void) {
 /**
  * Creates a named 3D icon showing iconId at the origin, scale 1, opaque white.
  * On maps whose first map entry has flag 2 the map blend colour is not applied to it;
- * later versions make an exception for Rogueport Sewers' X-Naut Fortress (aji) during the last-mail story step.
+ * JP and later make an exception for the X-Naut Fortress (aji) during the last-mail story step.
  */
 void iconEntry(const char* name, u16 iconId) {
     IconWork* wp = iconGetWork();
@@ -473,7 +473,7 @@ void iconDispGx(Vec* position, s16 flags, u16 iconId, f32 scale) {
 
 /**
  * Immediately draws icon iconId with a caller-built matrix (in the current camera's space), opaque white;
- * the battle menus and audience use it.
+ * the battle menus, audience, windows, shops and some effects use it.
  */
 void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     IconEntry entry;
@@ -530,7 +530,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
 
 /**
  * Immediately draws icon iconId with a caller-built matrix, tinted by color;
- * used for the digit icons of iconNumberDispGx.
+ * used among others for the digit icons of iconNumberDispGx.
  */
 void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     IconEntry entry;
@@ -572,7 +572,7 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     iconGX(m, ep);
 }
 
-/** JP and demo signature: the id is an s16. */
+/** Fills texObj with icon iconId's current animation frame (a 1x1 dummy texture until icon.tpl and icon.bin have loaded). */
 void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
     static char dummy[] ATTRIBUTE_ALIGN(32) = "";
     IconBinData* data;
@@ -595,7 +595,7 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
     GXInitTexObjLOD(texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
 }
 
-/** JP and demo signature: the id is an s16. */
+/** Returns icon iconId's width and height from icon.bin, or the texture's size when icon.bin gives none. */
 void iconGetWidthHight(u16* width, u16* height, s32 iconId) {
     IconBinData* data;
     TEXDescriptor* descriptor;

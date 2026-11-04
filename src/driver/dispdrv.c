@@ -14,7 +14,7 @@
 #define DISP_MAX_ENTRIES 1024
 
 #if VERSION >= VERSION_US
-// US reads its 1.0f from a fadedrv global (the name float_1_8041f770 is a label, the original name is unknown)
+// US and later read their 1.0f from a fadedrv global (the name float_1_8041f770 is a label, the original name is unknown)
 #define DISP_ONE float_1_8041f770
 #else
 #define DISP_ONE 1.0f
@@ -62,7 +62,7 @@ void dispReInit(void) {
  * renderMode picks the blend, alpha test and depth setup (0 opaque, 1 alpha-tested, 2/5 translucent,
  * 3/4 no depth) and a base depth from offset_tbl;
  * order shifts it within that band (translucent modes draw far to near, the rest near to far).
- * NaN orders are dropped. The JP and later releases add translucent modes 9 and 10.
+ * NaN orders are dropped. In JP and later, modes 9 and 10 are translucent too (mode 10 is new there).
  */
 void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback, void* param) {
     DispEntry* entry = &pDispWork[entry_n];
@@ -206,7 +206,7 @@ DispEntry* dispGetCurWork(void) {
     return currentWorkPtr;
 }
 
-// Padding object: 28 zero bytes the retail .sdata holds after offset_tbl; no source form for them is known
+// Padding object: 28 zero bytes the JP and later .sdata holds after offset_tbl; no source form for them is known
 // (layout debt, docs/CLEANUP_BACKLOG.md)
 #if VERSION >= VERSION_JP
 #pragma force_active on

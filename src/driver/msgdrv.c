@@ -27,7 +27,7 @@
 #include "driver/mapdrv.h"
 /** Red "No messages" text shown in place of a message key that is not found, Japanese version (ErrMessage). */
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
-/** The same red "No messages" text for each other language, tagged with its name; ErrMessage picks one. */
+/** The same red "No messages" text for each other language (US and later tag it with the language name); ErrMessage picks one. */
 #if VERSION >= VERSION_US
 const char R_no_messages_US[] = "<col ff0000ff>No messages.[English]<col>\012<key>";
 const char R_no_messages_DE[] = "<col ff0000ff>No messages.[German]<col>\012<key>";
@@ -156,7 +156,7 @@ void msgInit(void) {
     msgLoad("global", 1);
 }
 
-/** Loads the selected message file into the map or default heap and builds its lookup table. */
+/** Loads the selected message file into the map or default heap (the early demos: a smart heap block) and builds its lookup table. */
 #if VERSION <= VERSION_DEMO_JP
 /** The text of a loaded message file (the demo keeps it in a smart heap block). */
 static inline const char* msgEntryText(MessageEntry* entry) {
@@ -217,7 +217,7 @@ void msgLoad(const char* filename, s32 index) {
     entry->count = msgcount / 2; // tag, message
 #else
 #if VERSION >= VERSION_US
-    // US: the global message buffer is allocated once, sized for the largest message file of all languages
+    // US and later: the global message buffer is allocated once, sized for the largest message file of all languages
     if (!entry->address && index == 1) {
         max = 0;
         for (i = 0; i <= 6; i++) {
@@ -517,7 +517,7 @@ s32 msgMain(smartEntry* smart) {
 }
 
 #if VERSION >= VERSION_US
-// US: <scaleX> letters (MSG_CHAR_SCALE_X) are stretched on x only
+// US and later: <scaleX> letters (MSG_CHAR_SCALE_X) are stretched on x only
 // A macro, not an inline function: as a function the US constant order changes.
 #define MSG_DRAW_SCALE(c)                                \
     if ((c)->value & MSG_CHAR_SCALE_X) {                 \
@@ -853,13 +853,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
     f32 scale;
 #else
 #if VERSION >= VERSION_US
-    Vec scale; // US: x and y scale apart (<scaleX>)
-    u32 maxW; // US: widest line so far, becomes the window width
+    Vec scale; // US and later: x and y scale apart (<scaleX>)
+    u32 maxW; // US and later: widest line so far, becomes the window width
 #else
     f32 scale;
 #endif
 #if VERSION >= VERSION_DEMO_EU
-    s32 centerStart; // PAL: first character of the open <center> span
+    s32 centerStart; // PAL and the PAL demo: first character of the open <center> span
 #endif
 #endif
     f32 fv;
@@ -1086,7 +1086,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #else
 #if VERSION >= VERSION_US
             if (data->flags & MSG_WIN_FLAG_SMALL) {
-                // US: tighter line spacing
+                // US and later: tighter line spacing
                 y -= 0.7f * (32.0f * maxScale);
                 savedScroll -= 0.7f * (32.0f * maxScale);
             } else {
@@ -1784,7 +1784,7 @@ const char* msgSearch(const char* tag) {
 
 /**
  * Returns TRUE if byte c starts a two-byte Shift-JIS character.
- * Later versions return FALSE for every language but Japanese.
+ * US and later return FALSE for every language but Japanese.
  */
 BOOL _ismbblead(u32 c) {
 #if VERSION >= VERSION_US
@@ -2048,8 +2048,8 @@ static inline void msgWinNextPage(WindowEntry* window) {
 #pragma opt_common_subs off
 /**
  * Per-frame window update for speech windows: times the speaker's talk animation,
- * then runs the window states (fade in, printing, key wait with A to continue and Z/B to page back and forward,
- * fade out and close), playing the page sounds, and queues msgWindow_Disp.
+ * then runs the window states (fade in, printing, key wait with A or B to continue and Z to page back;
+ * while paging back A goes forward one page and B jumps to the last; fade out and close), playing the page sounds, and queues msgWindow_Disp.
  */
 void msgWindow_Main(WindowEntry* window) {
     smartEntry* smart = window->userdata;
@@ -2163,7 +2163,7 @@ void msgWindow_Main(WindowEntry* window) {
             }
         }
 #if VERSION >= VERSION_US
-        else // US: one key per frame
+        else // US and later: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
             data->page = data->pageCount - 1;
@@ -2216,7 +2216,7 @@ void msgWindow_Main(WindowEntry* window) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
         }
 #if VERSION >= VERSION_US
-        else // US: one key per frame
+        else // US and later: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
             window->state = MSG_WIN_STATE_REVIEW_DOWN;
@@ -2225,7 +2225,7 @@ void msgWindow_Main(WindowEntry* window) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
         }
 #if VERSION >= VERSION_US
-        else // US: one key per frame
+        else // US and later: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
             window->state = MSG_WIN_STATE_REVIEW_UP;
@@ -2243,7 +2243,8 @@ void msgWindow_Main(WindowEntry* window) {
 #pragma opt_common_subs reset
 /**
  * Per-frame update for clear (type 11) windows, text with no frame:
- * prints, waits for A (or X) to page on and B to jump to the last page, then fades out; queues msgWindow_Disp.
+ * fades in while printing, stops at key waits and <o> stops without reading any button (msgWindow_Continue resumes
+ * it), and fades out at the end of the text; queues msgWindow_Disp.
  */
 void msgWindow_Clear_Main(WindowEntry* window) {
     MsgWinData* data = WIN_DATA(window);

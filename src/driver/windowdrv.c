@@ -37,7 +37,7 @@ static inline void fogOff(void) {
 
 /**
  * Allocates the 7 window slots and marks them free; called once at boot.
- * Later versions also forget the frame texture so windowTexSetup reloads it.
+ * JP and later also forget the frame texture so windowTexSetup reloads it.
  */
 void windowInit(void) {
     WindowEntry* w;
@@ -66,7 +66,7 @@ void windowInit(void) {
 #if VERSION <= VERSION_DEMO_JP
 void windowLoadTpl(const char* name);
 
-/** the demo loads msgWindow.tpl synchronously */
+/** the early demos load msgWindow.tpl synchronously */
 void windowTexSetup(void) {
 #else
 
@@ -467,8 +467,8 @@ void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
 }
 
 /**
- * Draws the frame of a system window (type 3) at (x, y) with the given size and alpha,
- * with its slowly scrolling background pattern.
+ * Draws the frame of a system window at (x, y) with the given size and alpha,
+ * with its slowly scrolling background pattern (type is not used; the Glitz Pit rooms pass 0).
  */
 void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height) {
     CameraEntry* camera;

@@ -318,7 +318,7 @@ void npcDisp_xlu(CameraId cameraId, void* param) {
 /**
  * Draw callback for an opaque NPC, registered once per render mode:
  * mode 0 updates and draws the opaque pass, modes 1 and 2 the other two passes.
- * The US and later releases apply the dimmed colour before the switch; JP and the early demos only in mode 0.
+ * US and later apply the dimmed colour before the switch; JP and the early demos only in mode 0.
  */
 void npcDisp(CameraId camId, void* param) {
     NpcEntry* entry = param;
@@ -330,7 +330,7 @@ void npcDisp(CameraId camId, void* param) {
     mtx_setup(entry, mtx, -1);
 
 #if VERSION >= VERSION_US
-    // US: the dimmed colour is applied for every render mode
+    // US and later: the dimmed colour is applied for every render mode
     color = entry->color;
     if (entry->statusFlags & NPC_STATUS_DARKEN) {
         color.r /= 2;
@@ -1309,7 +1309,8 @@ NpcEntry* npcNameToPtr_NoAssert(const char* name) {
 
 /**
  * Sets the stay and talk animations npcSetStayPose and npcSetTalkPose use for "mario";
- * mario.c switches them for Mario's forms and Bowser, and a script helper in evt_npc.c can set them too.
+ * mario.c and peach.c switch them for Mario's forms, Peach and Bowser, and a script helper in evt_npc.c can set
+ * them too.
  */
 void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose) {
     strcpy(MarioStayPose, stayPose);
@@ -1522,7 +1523,7 @@ void npcMoveG(NpcEntry* npc) {
             f64 ad = __fabs(dy);
             f32 hh = 0.8f * npc->height;
             dist = hh + (f32)ad;
-            // US: also probe the floor at both side edges of the NPC
+            // US and later: also probe the floor at both side edges of the NPC
             if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x, npc->position.y + hh, npc->position.z, 0.0f,
 #if VERSION >= VERSION_US
@@ -1701,7 +1702,7 @@ FieldBattleData* fbatGetPointer(void) {
 }
 
 /**
- * Sets the field battle mode (0 off, 1 normal, 2 talking, 3 hit a friendly NPC, 5 battle, 7 pause menu, ...);
+ * Sets the field battle mode (0 off, 1 normal, 2 talking, 3 hit a friendly NPC, 5 battle, 7 events and menus, ...);
  * called from scripts and the pause menu.
  */
 void fbatChangeMode(s16 mode) {
@@ -2562,7 +2563,7 @@ void npcGroupDead(NpcEntry* entry, u16 reason) {
 
 /**
  * Returns the NPC Mario could talk to this frame, or NULL;
- * casedrv uses it so jumping on, standing on or pushing an object does not fire
+ * casedrv uses it so its A-button cases (jumping from, standing on, facing or pushing an object) do not fire
  * while an NPC is in talking range.
  */
 NpcEntry* fbatNpcTalkCheck(void) {
@@ -2673,9 +2674,9 @@ static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) 
 
 /**
  * Finds the NPC Mario or the partner hits this frame.
- * flags pick the checks: 0x20 touch/jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,
- * 0x200 Bobbery's bomb; 0x10 also checks enemy contact (and no checks while invincible),
- * 0x1 tests only the current hammer frame instead of the whole swing,
+ * flags pick the checks: 0x20 jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,
+ * 0x200 Bobbery's bomb; 0x10 also checks body contact (and no checks while invincible),
+ * 0x1 tests only the current hammer frame instead of the whole swing (the shell and bomb checks need it),
  * 0x1000 tests enemies instead of friendly NPCs, 0x2000 only NPCs whose reactionFlags allow that hit,
  * without setting the banner.
  * Returns the selected NPC hit and writes the FbatHitResult (kind first) to the second argument if given;
@@ -3871,8 +3872,8 @@ s32 npcCalcScore(NpcEntry* npc) {
 }
 
 /**
- * Whether Flurrie's breath reaches the NPC at its top,
- * middle or bottom (JP and later: never for NPCs that cannot be attacked or touched).
+ * Whether Flurrie's breath reaches the NPC at its position, half its height below it or a full height below it
+ * (JP and later: never for NPCs that cannot be attacked or touched).
  */
 BOOL npcCheckBlow(NpcEntry* npc) {
     Vec pos;

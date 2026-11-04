@@ -48,8 +48,8 @@ inline Vec makeVecByValue(f32 x, f32 y, f32 z);
 
 /**
  * Creates the 13 cameras at boot, in draw order:
- * two offscreen render targets, shadow, background, the main 3D camera, two 3D effect cameras,
- * the 3D image camera, 2D (menus and text), the two fade cameras and two debug cameras.
+ * two offscreen render targets, shadow, background, the main 3D camera, the first 3D effect camera,
+ * the 3D image camera, the second 3D effect camera, 2D (menus and text), the two fade cameras and two debug cameras.
  * All use a 25 degree field of view on a 608x480 screen.
  */
 void camInit(void) {
@@ -153,7 +153,7 @@ CameraEntry* camEntryPersp(CameraCallback callback, f32 fovY, f32 aspect, f32 ne
 /**
  * Allocates and initialises an orthographic camera (top/bottom/left/right box, near/far,
  * viewport depth nearZ..farZ) with the default eye, full-screen scissor and viewport and the given name.
- * camInit uses it for the 2D cameras ("off", "off2", "shadow", "bg").
+ * camInit uses it for the 2D cameras ("off", "off2", "shadow", "bg", "dbg").
  */
 inline CameraEntry* camEntryOrtho(CameraCallback callback, f32 fovY, f32 aspect, f32 top, f32 bottom, f32 left,
                                   f32 right, f32 near, f32 far, f32 nearZ, f32 farZ, const char* name) {
@@ -672,7 +672,7 @@ void cam3dImgMain(CameraEntry* camera) {
 /**
  * Update callback of the two 3D effect cameras:
  * copies the main 3D camera's position, target and up vector so effects draw from the same viewpoint.
- * The JP and later releases also rebuild the projection each frame.
+ * JP and later also rebuild the projection each frame.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void camEffMain(CameraEntry* camera) {
@@ -803,7 +803,7 @@ void camLetterBoxDraw(CameraId cameraId, void* param) {
  * Once per frame: shows the letterbox while the game is in a cutscene (Mario has no control and no partner is
  * being used, outside door transitions) and hides it otherwise.
  * The bars slide in 3 pixels per frame to 49 (top) and 44 (bottom) and fade out when done;
- * also sets the idle sound mix while they are up.
+ * also sets the letterbox sound mix (quieter music, louder sound effects) while they are up.
  */
 void camLetterBox(void) {
     CameraEntry* camera = camPtrTbl[CAMERA_2D];

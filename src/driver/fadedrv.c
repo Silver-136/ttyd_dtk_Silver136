@@ -22,7 +22,7 @@
 #include "driver/mapdrv.h"
 
 #if VERSION >= VERSION_US
-// US-only named constant (dispdrv reads it by name), followed by a zero word
+// US and later: named constant (dispdrv reads it by name), followed by a zero word
 #pragma force_active on
 const f32 float_1_8041f770 = 1.0f;
 const f32 float_0_8041f774 = 0.0f;
@@ -103,10 +103,12 @@ void fadeTexSetup(void) {
 
 /**
  * Starts screen transition type over duration milliseconds in color.
- * The white fades become the colour fades in light grey; iris and spot fades last at least one second.
- * Slot 0 takes iris, spot and colour fades, slot 1 the curtain and stage animations,
- * slot 2 the pipe transitions, and the later slots the page flips
- * and the story-book frames (Mario, Peach, Bowser), each with the animation file it plays.
+ * The white fades become the colour fades in light grey; iris and spot fades last at least one second
+ * (except JP and later's FADE_IN_SPOT2/FADE_OUT_SPOT2, which become spot fades without that minimum).
+ * Slot 0 takes iris, spot and colour fades, slot 1 the curtain and stage animations (and the four-page flip),
+ * slot 2 the pipe transitions, slot 3 the page flips
+ * and the story-book frames (Mario, Peach, Bowser), slot 4 the two curtain-sides _TOP fades,
+ * each with the animation file it plays.
  */
 void fadeEntry(s32 type, s32 duration, GXColor color) {
     FadeEntry* entry;
@@ -116,7 +118,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
         return;
     }
 
-    // types 16-21 are types 9, 10, 11, 12, 14 and 15 in near-white (0xF0F0F0)
+    // types 16-21 are types 9, 10, 11, 12, 14 and 15 in near-white (0xF0F0F0) (JP and later numbers)
     if (type == FADE_IN_WHITE) {
         type = FADE_IN_BLACK;
         color = (GXColor){0xF0, 0xF0, 0xF0, 0xFF};
@@ -493,7 +495,7 @@ void fadeSoftFocusOff(void) {
     wp->flags &= ~FADE_WORK_SOFT_FOCUS;
 }
 
-/** Covers the 3D scene with white (no fade in this driver); no caller in this tree. */
+/** Covers the 3D scene with white (no fade in this driver); called from usu_00's room code. */
 void fadeWhiteOutOn(void) {
     wp->flags |= FADE_WORK_WHITE_OUT;
 }
@@ -1238,7 +1240,7 @@ void fadeMain(void) {
 
 
 /**
- * Draws slot 0's fade on the fade camera: the iris
+ * Draws slot 0's fade (with the 2D camera's projection, on the fade, 2D or 3D camera fadeMain queues it on): the iris
  * or spot texture scaled around the spot position (growing with the fifth power of progress) or a flat colour,
  * and nothing more once a fade-in has finished.
  */
@@ -1466,7 +1468,7 @@ static void zFill(void) {
 // FAKE: a * b + 0.0f through an inline helper (disp_maku); the plain product changes the object
 static inline f32 fadeMadd(f32 a, f32 b, f32 c) { return a * b + c; }
 /**
- * Draws slot 1's curtain or stage animation (maku is Japanese for curtain) on its camera,
+ * Draws slot 1's or slot 4's curtain or stage animation (maku is Japanese for curtain) on its camera,
  * scaled to the screen and offset by fadeSetAnimOfsPos or placed at the virtual world position,
  * with the depth set up by z or zFill.
  */
@@ -1724,12 +1726,15 @@ void fadeReset(s32 id) {
     entry->scale = 1.0f;
 }
 
-/** Returns fade.tpl; the name entry screen draws its frame textures from it. */
+/** Returns fade.tpl; the name entry screen's mask (nameMaskGX) draws its image 1 (the spot texture). */
 TEXPalette* fadeGetTpl(void) {
     return wp->texture;
 }
 
-/** Makes the next curtain or stage animation in slot 1 play fast; used by the title screen. */
+/**
+ * Shortens the narrowing of the curtain-enter fade now in slot 1 (scale 1.5 to 1 over 90 frames, not 3 to 1 over
+ * 180); called after fadeEntry, which clears the flag. Used by the title screen.
+ */
 void fadeSetNarrowFast(void) {
     wp->entries[1].flags |= FADE_FLAG_NARROW_FAST;
 }

@@ -133,7 +133,6 @@ void bgAutoScrollOn(void) {
 
 /**
  * Stops the camera's position from shifting the backdrop; only the camera yaw still turns it.
- * No caller in this tree.
  */
 void bgTransOffsetOff(void) {
     bgGetWork()->flags |= BG_NO_TRANSLATION;

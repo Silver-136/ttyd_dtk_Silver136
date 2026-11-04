@@ -93,7 +93,7 @@ static void zFill(void) {
 /**
  * Draw callback for one image: binds its up to three captured textures (screen copies) as the pose's paper
  * textures, advances the animation, and draws the pose as a flat screen-space quad sized to the capture,
- * scaled by distance when it has a virtual point. Later versions flag the entry when no capture is ready.
+ * scaled by distance when it has a virtual point. JP and later flag the entry when no capture is ready.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void imgDisp(CameraId camId, void* param) {
@@ -334,7 +334,7 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
 /**
  * Refreshes capture slot id of an image: takes the texture of its offscreen region (copying it into the image's
  * own buffer once when it keeps the capture) or copies its rectangle straight from the frame buffer.
- * The demo copies from the offscreen texture's address directly.
+ * The early demos read the offscreen texture's address into a local first; the copy is the same.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void imgCapture_Prim(ImageEntry* entry, s32 id) {
@@ -462,7 +462,7 @@ void imgAutoRelease(s32 type) {
 /**
  * Creates a named image of type 0 (field), 1 (battle) or 2 (both) with no pose yet,
  * default image camera and three empty capture slots, and returns its index.
- * Used by the pipe (fImg_dokan) and page-flip (fImg_peron) fades, the cloud effect and evt_img.
+ * Used by the pipe (fImg_dokan) and page-flip (fImg_peron) fades, the cloud effect, evt_img, evt_mobj and a few room scripts.
  */
 s32 imgEntry(const char* name, s32 type) {
     int i, count;

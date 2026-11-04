@@ -52,7 +52,7 @@ void caseReInit(void) {
 /**
  * Registers a case from a CaseSetup: the event script to start, its priority,
  * the hit object name and condition (or a save flag or a check function) that fires it.
- * Returns the case id the scripts use to delete it. Called by the evt_case helpers.
+ * Returns the case id the scripts use to delete it. Called by the evt_case helpers (and gor_03 directly).
  */
 s32 caseEntry(CaseSetup* setup) {
     CaseEntry* entry;
@@ -91,7 +91,7 @@ void caseDelete(s32 caseId) {
  * hammers or bumps his head on (plus button and stick presses, Bobbery's blast and flags)
  * and starts each fired case's event script with the case's saved LW values, unless one is still running.
  * Skipped in battle, with a window open, or while Mario can't take case events;
- * the demo checks the field battle mode directly instead of fbatPreventMarioEventChk.
+ * the early demos check the field battle mode directly instead of fbatPreventMarioEventChk.
  */
 void caseMain(void) {
     MarioWork* mario;

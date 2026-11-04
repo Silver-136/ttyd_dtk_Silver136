@@ -94,7 +94,7 @@ const char* getMapDataDvdRoot(void) {
 #if VERSION >= VERSION_JP
 /**
  * Stops mapDisp from drawing the map until the next map load or mapDispOn;
- * used by evt_map and win_root (the pause menu). Not in the demo.
+ * used by evt_map, win_root (the pause menu) and tik_05. Not in the early demos.
  */
 void mapDispOff(void) {
     disableMapDraw = TRUE;
@@ -539,7 +539,7 @@ static inline MapAnim* mapSearchAnmObj_inl(const char* animName) {
     return NULL;
 }
 
-/** The playing map animation called animName in the active group's entries, or NULL; no callers outside this file. */
+/** The playing map animation called animName in the active group's entries, or NULL; called from aji_06 and aji_11. */
 MapEntryAnimData* mapSearchAnmObj(const char* animName) {
     MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry;
@@ -578,7 +578,7 @@ void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs) {
  * Starts the map animation name from map.dat.
  * mode 0 plays once, 1 loops, 2 jumps to the end;
  * level 1-4 times it on the system level clock gp->systemLv0Time..Lv3Time,
- * 0 on the field or battle render clock. Called from evt_map and battle stage objects.
+ * 0 on the field or battle render clock. Called from evt_map, battle stage objects, gor_03 and hei_07.
  */
 void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
     MapAnim* anim = NULL;
@@ -1091,7 +1091,7 @@ BOOL mapPreLoad(const char* map) {
 
 /**
  * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
- * The demo first unpacks the map's compressed archive.
+ * The early demos first unpack the map's compressed archive.
  */
 #if VERSION >= VERSION_JP
 void mapLoad(const char* map) {
@@ -1115,7 +1115,7 @@ void mapLoad(const char* map) {
 #pragma opt_common_subs off
 #if VERSION <= VERSION_DEMO_JP
 /**
- * The demo reads each map's LZ77-compressed archive "<root>/b/<map>" itself:
+ * The early demos read each map's LZ77-compressed archive "<root>/b/<map>" itself:
  * mapPreLoad starts the read, mapLoad unpacks it into the arc slot before loading the map.
  */
 BOOL mapPreLoad(const char* map) {
@@ -1133,7 +1133,7 @@ BOOL mapPreLoad(const char* map) {
 
 /**
  * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
- * The demo first unpacks the map's compressed archive.
+ * The early demos first unpack the map's compressed archive.
  */
 #if VERSION <= VERSION_DEMO_JP
 void mapLoad(const char* map) {
@@ -1297,8 +1297,8 @@ void bmapUnLoad(void) {
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * Demo only: starts the async read of the battle map archives arc_d/<map>.arc;
- * TRUE once both requested files are available.
+ * Early demos only: starts the async read of the battle map archives arc_d/<map>.arc;
+ * TRUE only when map and map2 are both given and available (a NULL map2 always gives FALSE).
  */
 BOOL bmapPreLoad(const char* map, const char* map2) {
     FileEntry* file = NULL;
@@ -1319,7 +1319,7 @@ BOOL bmapPreLoad(const char* map, const char* map2) {
 /**
  * Called by seq_battle at battle start: parks the field map's files in ARAM,
  * then loads the battle stage map into MapWork slot 1 as entry 0 and, if given,
- * the stage-specific map map2 as entry 1. The demo reads and unpacks both archives itself.
+ * the stage-specific map map2 as entry 1. The early demos read and unpack both archives themselves.
  */
 void bmapLoad(const char* map, const char* map2) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1670,7 +1670,7 @@ static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, MapMaterial* 
 
 /**
  * Applies an alpha animation at the animation's current time to the material,
- * stored as 255 minus the animated value in blendColor.r.
+ * stored as 255 minus 255 times the animated value in blendColor.r.
  */
 static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMaterial* obj) {
     int n;
@@ -2103,7 +2103,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
         GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
     }
     mapSetObjFog(obj);
-    // a translucent-pass object is not drawn when it is hidden, unlit-only or fully transparent
+    // a group member is not drawn when it is disabled, hidden (and not offscreen) or fully transparent
     if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
         if (obj->flags & MAP_OBJ_FLAG_DISABLED) {
             goto end;
@@ -3875,7 +3875,7 @@ void mapObjFlagOff(const char* name, u32 flags) {
 
 /**
  * Sets flags on obj and its whole subtree, and its later siblings when doNext;
- * retail versions skip the display-list flag on objects without a display list.
+ * JP and later skip the display-list flag on objects without a display list.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
@@ -4230,13 +4230,13 @@ void mapGrpSetColor(const char* name, GXColor color) {
     setColor(mapGetMapObj(name), color, FALSE);
 }
 
-/** Stores the texture for the projected texture stage of objects with flag 0x400; no callers in the tree. */
+/** Stores the texture for the projected texture stage of objects with flag 0x400; called by hei_00 and tou_01. */
 void mapSetProjTexObj(GXTexObj* obj, void* imgRef) {
     projTexObj = *obj;
     projTexImgRef = imgRef;
 }
 
-/** Stores the projection matrix for the projected texture stage of objects with flag 0x400; no callers in the tree. */
+/** Stores the projection matrix for the projected texture stage of objects with flag 0x400; called by hei_00 and tou_01. */
 void mapSetProjMtx(Mtx mtx) {
     MTXCopy(mtx, projMtx);
 }
@@ -4244,7 +4244,7 @@ void mapSetProjMtx(Mtx mtx) {
 /**
  * Prepares a cubic spline through the n points pts for spline_getvalue:
  * t gets each point's parameter (cumulative distance normalised to 0..1) and out the second-derivative table.
- * Used by evt_sub.
+ * Used by evt_sub, himo and the aji unit_barriern units.
  */
 void spline_maketable(s32 n, Vec* pts, f32* t, Vec* out) {
     f32* h;

@@ -267,7 +267,7 @@ static void _callback_tpl(s32 error, DVDFileInfo* info) {
 }
 
 /**
- * Boot setup: allocates the effect entry pool (512 entries in the US and later releases, 256 before),
+ * Boot setup: allocates the effect entry pool (512 entries in US and later, 256 before),
  * clears it and the texture state, and initialises the N64-style effects.
  */
 void effInit(void) {
@@ -294,7 +294,7 @@ void effInit(void) {
 /**
  * Loads effect.tpl, the shared effect textures:
  * from the startup archive if it is there, otherwise asynchronously from the disc (the jp or us folder by
- * language in the US and later releases). Called from the logo sequence at boot.
+ * language in US and later). Called from the logo sequence at boot.
  */
 void effTexSetup(void) {
     DVDEntry* entry;
@@ -492,7 +492,7 @@ EffectSet* effGetSet(const char* name) {
 
 /**
  * per-key interpolation and the GQR5 setup were inlines in the original:
- * inline locals take the low registers, last declared lowest (qv0 f9 .. qm1 f12 above dt phaseCount / s f7 / s3 f6 / s2
+ * inline locals take the low registers, last declared lowest (qv0 f9 .. qm1 f12 above dt f8 / s f7 / s3 f6 / s2
  * f5; gqr r9 under the key-offset temp r10)
  */
 // Hermite interpolation of the 22 channels of two keys into buf (MayaHermitKey: value at +2, in/out tangents at

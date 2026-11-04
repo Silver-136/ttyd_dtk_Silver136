@@ -349,7 +349,7 @@ OSTime animTimeGetTime(BOOL globalTime) {
     return OSTicksToMilliseconds(gp->renderTime);
 }
 
-/** Allocates the 1.5 MB per-frame vertex heap on first use and rewinds it. */
+/** Allocates the 1.5 MB pose vertex heap on first use and rewinds it. */
 void initTestHeap(void) {
     if (!wp->testHeap) { // allocate 1.5MiB test heap
         wp->testHeap = __memAlloc(HEAP_DEFAULT, TESTHEAP_SIZE);
@@ -374,7 +374,7 @@ void* testAlloc(u32 size) {
 
 /**
  * Boot setup: allocates the pools (64 animation files, 64 texture files, 256 poses,
- * a 1024-vector scratch buffer), the per-frame vertex heap and the tangent table used to bend paper,
+ * a 1024-vector scratch buffer), the pose vertex heap and the tangent table used to bend paper,
  * and loads a/vivian.bin (the hair and tail chain data of Vivian and her sisters)
  * and a/ag2tg.bin (the animation-group to texture-group map).
  */
@@ -1061,15 +1061,15 @@ GXColor animPoseGetMaterialEvtColor(s32 poseId) {
 }
 
 // FAKE: t3 = t * t2 through an inline so t3 is an inline return temp (numbered above the LICM temp of t2),
-// giving the target FPR order (t3 f7, t2 phaseCount). Behaviour-identical.
+// giving the target FPR order (t3 f7, t2 f8). Behaviour-identical.
 static inline f32 apmMul(f32 a, f32 b) {
     return a * b;
 }
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * The demo copies the frame buffers through small inline helpers.
- * Kept: writing the copies out as `if (n != 0) memcpy_as4(...)` changes the demo animPoseMain's registers,
+ * The early demos copy the frame buffers through small inline helpers.
+ * Kept: writing the copies out as `if (n != 0) memcpy_as4(...)` changes the demos' animPoseMain registers,
  * and calling the helpers from the later versions' animPoseMain changes theirs.
  */
 static inline void apmCopy4(void* src, void* dst, s32 count, s32 size) {
@@ -1093,7 +1093,10 @@ static inline void apmCopyTo(void* dst, void* src, s32 count, s32 size) {
 }
 #endif
 
-/** the demo converts the s8 deltas with plain casts (no fast-cast setup) and walks the keyframes and deltas by index */
+/**
+ * the early demos convert the s8 deltas with plain casts (no fast-cast setup) and walk the keyframes and deltas by
+ * index; JP and later use fast-cast loads and pointer walks
+ */
 void animPoseMain(s32 poseId) {
     s32 frame;
     s32 nA;
@@ -1736,7 +1739,7 @@ void animPoseMain(s32 poseId) {
     }
 }
 
-/** the demo always builds every matrix and concatenates them all */
+/** the early demos always build every matrix and concatenate them all; JP and later build only the parts in use */
 #if VERSION >= VERSION_JP
 void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
@@ -1864,7 +1867,7 @@ void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
 
 /**
  * Pushes the modelling matrix of a joint node (translation, two rotations and a scale,
- * cancelling the parent's scale): demo version, which always builds and concatenates every matrix.
+ * cancelling the parent's scale): JP and later version, which builds and concatenates only the parts in use.
  */
 void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
     Mtx trans, scale, iscale, rot, tmp;
@@ -2014,10 +2017,9 @@ void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 sz) {
 }
 
 /**
- * the demo sets up each texture object, then builds the full texture matrix
- * unless the animation is the identity.
- * The local declaration order is load-bearing: it decides the register colouring (wrapFlags r30, params
- * r23-r29).
+ * JP and later: sets up each texture object, then builds each texture matrix from only the parts in use
+ * (rotation, translation, scale).
+ * The local declaration order is load-bearing: it decides the register colouring (see the FAKE note below).
  */
 void animSetMaterial_Texture(s32 texCount_, s32 *texIdRemap_, AnimPoseTexEntry *pTexEntries_, AnimTexMtx *animEntries, s32 texBindsCapacity, AnimTexBind *texBinds, AnimationTextureFile *texFile) {
     s32 texCount;
@@ -2151,7 +2153,7 @@ static void pushGXModelMtx_JointNode__(AnimPoseNode* node, f32 sx, f32 sy, f32 s
 }
 
 /**
- * the demo sets up each texture object, then builds the full texture matrix
+ * the early demos set up each texture object, then build the full texture matrix
  * unless the animation is the identity.
  * The local declaration order is load-bearing: it decides the register colouring (wrapFlags r30, params
  * r23-r29).
@@ -2445,7 +2447,7 @@ static inline void animSetCullMode(s32 cullMode) {
 
 /**
  * Sets up the material of shape shapeId for draw stage xluStage:
- * the matrices, lighting, cull mode, alpha test and blending, the tint colours and textures,
+ * the matrices (JP and later), lighting, cull mode, alpha test and blending, the tint colours and textures,
  * including substituted paper textures.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -3373,7 +3375,7 @@ void animPaperPoseDisp(CameraId camId, void* param) {
 /**
  * Renders one pose with a paper overlay offscreen (unturned) into a texture sized to its screen bounding box,
  * so the overlay can be drawn with the character's image;
- * with rectangle caching on, the rectangle is only remeasured when it changes.
+ * with rectangle caching on, the rectangle is only remeasured after an animation change.
  */
 void animPaperPoseDispSub(s32 unused, AnimationPose* arg) {
     AnimationPose* pose;

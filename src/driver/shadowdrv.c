@@ -33,7 +33,8 @@ void shadowDisp(CameraId cameraId, void* param);
 
 /**
  * The two light cameras that render shadow textures: 0, a fixed perspective light for the projected and depth
- * shadows, and 1, an orthographic light that follows the character for character shadows (cswp).
+ * shadows, and 1, an orthographic light that shadowDisp keeps 1000 units above the 3D camera's look-at point,
+ * for character shadows (cswp).
  */
 static ShadowConfig shadowConfig[2] = {
     {0, {-100.0f, 256.0f, 335.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, -20.0f, 20.0f, 356.0f, 741.0f, 0, 3, 0, -4.47f},
@@ -526,7 +527,7 @@ void shadowCharShadowDisp_Collision(CameraId cameraId, void* param) {
 
 /**
  * Renders the projected (mode 3) character shadows into the character shadow texture from the shadow light's
- * view, at their alpha.
+ * view, in a grey taken from the character shadow colour's alpha (white in battle).
  */
 void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
     ShadowConfig* cfg;
@@ -978,7 +979,7 @@ void shadowSetType(s32 id, u8 type) {
 }
 
 #if VERSION >= VERSION_JP
-/** Sets the alpha of shadow id (despite the name); the demo has no per-shadow alpha. */
+/** Sets the alpha of shadow id (despite the name); the early demos have no per-shadow alpha. */
 void shadowSetMode(s32 id, u8 alpha) {
     ShadowEntry* entry = &cswp->entries[id];
     entry->alpha = alpha;
@@ -1270,7 +1271,8 @@ void depthShadowEnd(CameraId cameraId, void* param) {
     wp->flags |= SHADOW_WORK_READY;
 }
 
-// Unreferenced strings: labels for the 8-bit and 16-bit depth shadow images
+// Strings no code reads: labels for the 8-bit and 16-bit depth shadow images (the early demos list them in the
+// unused DispModeMsg table)
 const char str_802C1AFC[] = "result scene (8bit depth)";
 const char str_802C1B18[] = "actual depth from the light (8bit depth)";
 const char str_802C1B44[] = "projected shadow depth map (8bit depth)";
