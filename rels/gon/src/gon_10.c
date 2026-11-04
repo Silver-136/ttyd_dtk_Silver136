@@ -1,8 +1,11 @@
 // gon_10 (ゴンババ, Hooktail Castle): room between gon_05 and Hooktail's lair (gon_11).
 // Has a save block and a recovery block.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
+#include "evt/evt_cam.h"
+#include "evt/evt_seq.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_map.h"
 #include "evt/evt_mobj.h"
@@ -14,7 +17,11 @@
 
 
 static EvtWord door02_close[22];
+#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+static EvtWord door02_open[10];
+#else
 static EvtWord door02_open[22];
+#endif
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[3];
@@ -37,12 +44,19 @@ EVT_END()
  * Door animation callback, opening for the w_bero exit to gon_11:
  * rotates map objects "door03" and "door04" about Y by 0.389 and -0.389 times the value in LW(0),
  * so the two leaves swing opposite ways.
+ * In the September demos this door, the way into Hooktail's lair, ends the demo instead: it turns the letterbox
+ * off and goes to the game-over sequence.
  */
 static EVT_BEGIN(door02_open)
+#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+    CALL(evt_cam_letter_box_disable, 0)
+    CALL(evt_seq_set_seq, SEQ_GAME_OVER, 0, 0)
+#else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door03"), 0, LW(0), 0)
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
     CALL(evt_mapobj_rotate, 1, STRING("door04"), 0, LW(0), 0)
+#endif
     RETURN
 EVT_END()
 

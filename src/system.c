@@ -562,10 +562,11 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
  * Reads the controllers once per frame (DEMOPadRead) into the global input state:
  * held, newly pressed, released and auto-repeat (24 frames first, then every 6) for buttons
  * and stick directions, the analogue sticks and triggers,
- * and applies rumble changes to the motors when rumble is enabled.
+ * and, in the releases, applies rumble changes to the motors when rumble is enabled.
  */
 void makeKey(void) {
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+    // the demos keep button/dirs in 32-bit locals
     s32 delay;
     u32 button;
     u32 dirs;
@@ -615,7 +616,6 @@ void makeKey(void) {
         gp->triggerLeft[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerLeft;
         gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
     }
-#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
     for (i = 0; i < 4; i++) {
         if ((gp->button[i] & (PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START)) == (PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START)) {
@@ -638,6 +638,8 @@ void makeKey(void) {
     }
 #endif
 
+#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
+    // only the releases drive the rumble motors
     if (gp->rumbleEnabled) {
         for (i = 0; i < 4; i++) {
             if (gp->rumbleHardStop[i]) {

@@ -55,22 +55,22 @@ extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;
 
-// The demo has no padding after these three (the retail sizes are aligned up).
+// The demos have no padding after these three (the release sizes are aligned up).
 typedef struct {
     BattleUnitDefense v;
-#if VERSION >= VERSION_JP
+#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
     u8 pad[3];
 #endif
 } DefencePad;
 typedef struct {
     BattleUnitDefenseAttr v;
-#if VERSION >= VERSION_JP
+#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
     u8 pad[3];
 #endif
 } DefenceAttrPad;
 typedef struct {
     StatusVulnerability v;
-#if VERSION >= VERSION_JP
+#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
     u8 pad[2];
 #endif
 } RegistPad;
@@ -171,21 +171,21 @@ BattleUnitKind unit_chorobon_gundan = {
 };
 
 /** Defence of the Fuzzy Horde's body per damage type: 0 against every damage type. */
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
 static DefencePad defence = {{{0, 0, 0, 0, 0}}};
 #else
 static DefencePad defence = {{{0, 0, 0, 0, 0}}, {0}};
 #endif
 
 /** Defence attributes of the Fuzzy Horde's body: none, so every damage type is dealt normally. */
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
 static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}};
 #else
 static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}, {0}};
 #endif
 
 /** Status vulnerability of the Fuzzy Horde: immune to the statuses listed in this table. */
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
 static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 #else
 static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0}};

@@ -890,7 +890,8 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
         if (work->flags & SEQEND_DISP_LVUP_CONFIRM_UNUSED) {
             dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _LvupParamConfirmDisp, wp);
         }
-#if VERSION >= VERSION_JP
+#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
+        // only the releases draw the level-up help
         if (work->flags & SEQEND_DISP_LVUP_HELP) {
             dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _LvupParamHelpMsgDisp, wp);
         }
@@ -987,8 +988,8 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
             break;
     }
 
-// FAKE: the linker strips this function from the demos; their pool keeps its strings but not its numbers
-#if VERSION >= VERSION_JP
+// FAKE: the linker strips this function from every demo; their pool keeps its strings but not its numbers
+#if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
     width = FontGetMessageWidthLine(msg, &lines);
     lines++;
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, (zero - width / 2) - 20.0f, -145.0f + (lines - 1) * 29, width + 40, lines * 29 + 1, 10.0f);

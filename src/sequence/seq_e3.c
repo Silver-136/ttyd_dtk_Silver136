@@ -224,23 +224,15 @@ void seq_e3Init(SequenceWork* seq) {
     wp->nextScreen = 0;
     wp->scenario = 0;
     wp->poseRotY = 270.0f;
-#if VERSION <= VERSION_DEMO_JP
-#if VERSION == VERSION_DEMO_JP
-    OSCreateAlarm(&wp->alarm);
-    OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
-    wp->initTime = OSGetTime();
-#else
+#if VERSION == VERSION_DEMO_US
+    // the June US demo starts the timeout when a scenario is picked
     OSCancelAlarm(&wp->alarm);
     wp->initTime = 0;
-#endif
 #else
+    // kiosk timeout: 10 minutes, 5 in the US release
     OSCreateAlarm(&wp->alarm);
-#if VERSION >= VERSION_US
-#if VERSION >= VERSION_DEMO_EU
-    OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
-#else
+#if VERSION == VERSION_US
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 300, alarm_handler);
-#endif
 #else
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
 #endif
@@ -540,54 +532,31 @@ void seq_e3Main(SequenceWork* seq) {
                 pouchGetPtr()->partyData[i].currentHP = 20;
                 pouchGetPtr()->partyData[i].HPLevel = 1;
             }
-#if VERSION <= VERSION_DEMO_JP
-            for (i = 0; i < 2; i++) {
-                pouchGetItem(ITEM_THUNDER_RAGE);
-                pouchGetItem(ITEM_SHOOTING_STAR);
-                pouchGetItem(ITEM_FIRE_FLOWER);
-                pouchGetItem(ITEM_POW_BLOCK);
-            }
-            pouchGetPtr()->availableBP = 20;
-            pouchGetPtr()->maximumBP = 20;
-            pouchGetItem(ITEM_POWER_BOUNCE);
-            pouchGetItem(ITEM_POWER_SMASH);
-            pouchEquipBadgeID(ITEM_POWER_BOUNCE);
-            pouchEquipBadgeID(ITEM_POWER_SMASH);
-#else
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION >= VERSION_DEMO_US2
+            // the September demos and PAL: the first scenario starts without items or badges
             if (wp->scenario != 0) {
+#endif
                 for (i = 0; i < 2; i++) {
                     pouchGetItem(ITEM_THUNDER_RAGE);
                     pouchGetItem(ITEM_SHOOTING_STAR);
                     pouchGetItem(ITEM_FIRE_FLOWER);
                     pouchGetItem(ITEM_POW_BLOCK);
                 }
-
-            }
-#else
-            for (i = 0; i < 2; i++) {
-                pouchGetItem(ITEM_THUNDER_RAGE);
-                pouchGetItem(ITEM_SHOOTING_STAR);
-                pouchGetItem(ITEM_FIRE_FLOWER);
-                pouchGetItem(ITEM_POW_BLOCK);
+#if VERSION >= VERSION_DEMO_US2
             }
 #endif
 
             pouchGetPtr()->availableBP = 20;
             pouchGetPtr()->maximumBP = 20;
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION >= VERSION_DEMO_US2
             if (wp->scenario != 0) {
+#endif
                 pouchGetItem(ITEM_POWER_BOUNCE);
                 pouchGetItem(ITEM_POWER_SMASH);
                 pouchEquipBadgeID(ITEM_POWER_BOUNCE);
                 pouchEquipBadgeID(ITEM_POWER_SMASH);
+#if VERSION >= VERSION_DEMO_US2
             }
-#else
-            pouchGetItem(ITEM_POWER_BOUNCE);
-            pouchGetItem(ITEM_POWER_SMASH);
-            pouchEquipBadgeID(ITEM_POWER_BOUNCE);
-            pouchEquipBadgeID(ITEM_POWER_SMASH);
-#endif
 #endif
             pouchReviseMarioParam();
             pouchRevisePartyParam();

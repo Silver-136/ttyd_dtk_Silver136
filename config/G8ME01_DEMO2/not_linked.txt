@@ -1,0 +1,1 @@
+# September 2004 US demo units not linked from C yet (see configure.py). Remove a line once the unit links and the hashes hold.

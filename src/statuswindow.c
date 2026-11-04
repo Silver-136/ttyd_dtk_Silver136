@@ -60,12 +60,12 @@ u16 gauge_back[8] = { ICON_SP_ORB_1, ICON_SP_ORB_2, ICON_SP_ORB_3, ICON_SP_ORB_4
 u16 gauge_wakka[16] = { ICON_SP_ORB_PART_0, ICON_SP_ORB_PART_1, ICON_SP_ORB_PART_2, ICON_SP_ORB_PART_3, ICON_SP_ORB_PART_4, ICON_SP_ORB_PART_5, ICON_SP_ORB_PART_6, ICON_SP_ORB_PART_7,
                         ICON_SP_ORB_PART_8, ICON_SP_ORB_PART_9, ICON_SP_ORB_PART_10, ICON_SP_ORB_PART_11, ICON_SP_ORB_PART_12, ICON_SP_ORB_PART_13, ICON_SP_ORB_PART_14, ICON_SP_ORB_PART_15 };
 
-#if VERSION >= VERSION_US
-                        // US: pause-menu icons per language
-                        s16 party_icon_tbl[6] = { ICON_MENU_PARTY, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
-                        s16 gear_icon_tbl[6] = { ICON_MENU_GEAR, 0x230, 0x231, 0x232, 0x233, 0x234 };
-                        s16 badge_icon_tbl[6] = { ICON_MENU_BADGES, 0x235, 0x236, 0x235, 0x237, 0x238 };
-                        s16 journal_icon_tbl[6] = { ICON_MENU_JOURNAL, 0x239, 0x239, 0x239, 0x23A, 0x23B };
+#if VERSION == VERSION_US || VERSION == VERSION_EU
+// US and PAL: pause-menu icons per language (the September demos draw no menu hints, so they lack these)
+s16 party_icon_tbl[6] = { ICON_MENU_PARTY, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
+s16 gear_icon_tbl[6] = { ICON_MENU_GEAR, 0x230, 0x231, 0x232, 0x233, 0x234 };
+s16 badge_icon_tbl[6] = { ICON_MENU_BADGES, 0x235, 0x236, 0x235, 0x237, 0x238 };
+s16 journal_icon_tbl[6] = { ICON_MENU_JOURNAL, 0x239, 0x239, 0x239, 0x23A, 0x23B };
 #endif
 
 
@@ -423,7 +423,8 @@ void statusWinDisp(CameraId camId, void* param) {
         }
         numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
     }
-#if VERSION <= VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+    // no demo draws the menu hints
 }
 #else
     if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {

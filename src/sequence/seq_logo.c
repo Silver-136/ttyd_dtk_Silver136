@@ -55,14 +55,58 @@ static s32 logoAsyncFirst(void);
 #endif
 
 #if VERSION >= VERSION_JP
+/**
+ * Releases: on a cold start, NTSC asks for progressive scan when the cable allows it (always when it is saved,
+ * or with B held); PAL always asks 50 Hz or 60 Hz, preselecting the saved EURGB60 choice. The September demos
+ * ask nothing: they pick 60 Hz or progressive scan themselves, then wait 2 s for the TV.
+ */
 void seq_logoInit(SequenceWork* work) {
+#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+    s32 i;
+#endif
     memset(wp, 0, sizeof(LogoWork));
 #if VERSION >= VERSION_US
     wp->page = -1;
 #endif
     wp->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
+#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+    wp->progressive = FALSE;
+#endif
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+        // A PAL TV is switched to 60 Hz (EURGB60), an NTSC TV on a component cable to progressive scan unless B
+        // is held. On a PAL TV sRMObjHReso_prog is the EURGB60 mode (the September US demo's marioStInit copied
+        // the PAL modes into the NTSC ones).
+        if (VIGetTvFormat() != VI_NTSC || (VIGetDTVStatus() && !(keyGetButton(0) & PAD_BUTTON_B))) {
+            if (VIGetTvFormat() != VI_NTSC) {
+                OSSetEuRgb60Mode(1);
+            } else {
+                OSSetProgressiveMode(1);
+            }
+            VISetBlack(TRUE);
+            VIConfigure(&sRMObjHReso_prog);
+            VIFlush();
+            VIWaitForRetrace();
+            VIWaitForRetrace();
+            gp->flags |= GW_FLAG_PROGRESSIVE;
+            // give the TV 2 s to settle on the new mode
+            for (i = 0; i < 120; i++) {
+                VIWaitForRetrace();
+            }
+        } else {
+            if (VIGetTvFormat() != VI_NTSC) {
+                OSSetEuRgb60Mode(0);
+            } else {
+                OSSetProgressiveMode(0);
+            }
+            VISetBlack(TRUE);
+            VIConfigure(&sRMObjHReso);
+            VIFlush();
+            VIWaitForRetrace();
+        }
+        wp->progressive = FALSE;
+        gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+#elif VERSION >= VERSION_DEMO_EU
         // PAL: always ask for 50Hz / 60Hz; preselect 60Hz when EURGB60 is saved
         wp->progressive = TRUE;
         wp->toggle = OSGetEuRgb60Mode() != 1;
@@ -85,17 +129,18 @@ void seq_logoInit(SequenceWork* work) {
         }
 #endif
     }
-#if VERSION >= VERSION_US
-    if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
-        VIConfigure(&sRMObjHReso);
+#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+    else {
 #else
+#if VERSION < VERSION_US
     logoAsyncFirst();
+#endif
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         VIConfigure(&sRMObjHReso);
-#endif
         VIFlush();
         VIWaitForRetrace();
     } else {
+#endif
         switch (OSGetResetCode() & 1) {
             case OS_RESET_RESTART:
                 VIConfigure(&sRMObjHReso);
@@ -221,7 +266,11 @@ void seq_logoMain(SequenceWork* work) {
             if (!wp->progressive) {
                 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
                 time = gp->renderTime;
+#if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+                work->state = 8; // the September demos skip the story screen
+#else
                 work->state++;
+#endif
             }
             break;
 
@@ -504,16 +553,36 @@ void logoDisp(CameraId camId, void* param) {
         GXGetViewportv(viewport);
         GXGetScissor(&sciLeft, &sciTop, &sciWidth, &sciHeight);
 #if VERSION >= VERSION_DEMO_EU
+        // PAL: 50 Hz while the 50/60 Hz question is up, then the chosen mode
         if ((!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) && ((SequenceWork*)param)->state < 3) {
             rmode = &sRMObjHReso;
         } else if (OSGetEuRgb60Mode() != 1) {
-#else
-        if (OSGetProgressiveMode() != 1) {
-#endif
             rmode = &sRMObjHReso;
         } else {
             rmode = &sRMObjHReso_prog;
         }
+#elif VERSION == VERSION_DEMO_US2
+        // on a PAL TV the NTSC modes hold the PAL ones (marioStInit), _prog the EURGB60 one
+        if (VIGetTvFormat() != VI_NTSC) {
+            if (OSGetEuRgb60Mode() != 1) {
+                rmode = &sRMObjHReso;
+            } else {
+                rmode = &sRMObjHReso_prog;
+            }
+        } else {
+            if (OSGetProgressiveMode() != 1) {
+                rmode = &sRMObjHReso;
+            } else {
+                rmode = &sRMObjHReso_prog;
+            }
+        }
+#else
+        if (OSGetProgressiveMode() != 1) {
+            rmode = &sRMObjHReso;
+        } else {
+            rmode = &sRMObjHReso_prog;
+        }
+#endif
         GXSetPixelFmt(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
         GXSetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
         GXSetDispCopyDst(rmode->fbWidth, rmode->efbHeight);
@@ -782,6 +851,22 @@ void dummy_draw(CameraId camId, void* param) {
     f32 scale;
     u16 height;
 
+#if VERSION == VERSION_DEMO_US2
+    // as in logoDisp: on a PAL TV the NTSC modes hold the PAL and EURGB60 ones
+    if (VIGetTvFormat() != VI_NTSC) {
+        if (OSGetEuRgb60Mode() != 1) {
+            rmode = &GXNtsc480IntDfMarioSt;
+        } else {
+            rmode = &GXNtsc480ProgMarioSt;
+        }
+    } else {
+        if (OSGetProgressiveMode() != 1) {
+            rmode = &GXNtsc480IntDfMarioSt;
+        } else {
+            rmode = &GXNtsc480ProgMarioSt;
+        }
+    }
+#else
 #if VERSION >= VERSION_DEMO_EU
     if (OSGetEuRgb60Mode() != 1) {
 #else
@@ -791,6 +876,7 @@ void dummy_draw(CameraId camId, void* param) {
     } else {
         rmode = &GXNtsc480ProgMarioSt;
     }
+#endif
     scale = GXGetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
     height = (u16)GXSetDispCopyYScale(scale);
     GXSetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);

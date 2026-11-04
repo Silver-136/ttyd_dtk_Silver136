@@ -2145,8 +2145,8 @@ USER_FUNC(evt_npc_get_drop_item) {
     if (npc->battleInfo.battleFlags & NPC_BATTLE_NO_ITEM_DROP) {
         evtSetValue(event, index, 0);
     } else {
-#if VERSION <= VERSION_DEMO_JP
-        evtSetValue(event, index, 0);
+#if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
+        evtSetValue(event, index, 0); // every demo: no item drops
 #else
         evtSetValue(event, index, npc->battleInfo.itemDropped);
 #endif

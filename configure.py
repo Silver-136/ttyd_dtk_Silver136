@@ -34,9 +34,11 @@ VERSIONS = [
     "G8MP01",  # 2
     "G8ME01_DEMO",  # 3
     "G8MJ01_DEMO",  # 4
+    "G8ME01_DEMO2",  # 5: September 2004 US demo (Interactive Multi-Game Demo Disc Version 19)
+    "G8MP01_DEMO",  # 6: September 2004 European demo (Multi-Game Demo Disk November 2004)
 ]
 # Versions added after JP and US.
-LATER_VERSIONS = ("G8MP01", "G8ME01_DEMO", "G8MJ01_DEMO")
+LATER_VERSIONS = ("G8MP01", "G8ME01_DEMO", "G8MJ01_DEMO", "G8ME01_DEMO2", "G8MP01_DEMO")
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -231,9 +233,12 @@ cflags_base = [
     f"-DVERSION_{config.version}",
     "-DSDK_REVISION=1",
 ]
-# libs/ test the VERSION_<id> macros: the European release is built from the US code, so it defines both.
-if config.version == "G8MP01":
+# libs/ test the VERSION_<id> macros: the European release and the September demos are built from the US code,
+# so they define VERSION_G8ME01 too (the European demo also VERSION_G8MP01).
+if config.version in ("G8MP01", "G8ME01_DEMO2"):
     cflags_base.append("-DVERSION_G8ME01")
+if config.version == "G8MP01_DEMO":
+    cflags_base.extend(["-DVERSION_G8ME01", "-DVERSION_G8MP01"])
 
 # Debug flags
 if args.debug:
