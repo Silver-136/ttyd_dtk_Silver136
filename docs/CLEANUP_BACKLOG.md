@@ -16,7 +16,7 @@ to the original games through every step; US retail is the priority for readabil
 | `#pragma force_active` | <!--n:game_force_active-->13<!--/n--> lines in <!--n:game_force_active_files-->5<!--/n--> files (libs <!--n:libs_force_active-->10<!--/n-->) | 776 | the library pairs keep the `gap_*` objects |
 | `gap_*` padding objects | <!--n:game_gap_padding-->8<!--/n--> (libs <!--n:libs_gap_padding-->7<!--/n-->) | 142 | eff_kemutest's gaps are real storage; the library gaps are scaffolding (section 7) |
 | `fd_*` math-static data | <!--n:game_fake_data_fd-->28<!--/n--> lines, end_00 only | 16,730 lines in 607 files | end_00 is built without the REL precompiled header |
-| inline asm | <!--n:game_inline_asm-->8<!--/n--> (libs <!--n:libs_inline_asm-->286<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
+| inline asm | <!--n:game_inline_asm-->8<!--/n--> (libs <!--n:libs_inline_asm-->280<!--/n-->) | 19 | library sites sorted in section 7: mostly genuine assembly, three TRK candidates for C |
 | raw pointer arithmetic | <!--n:game_raw_pointer_math-->27<!--/n--> (libs <!--n:libs_raw_pointer_math-->15<!--/n-->) | 28 | all documented fakes |
 
 FAKES.md rows by kind (approximate): spare temporaries or copies that steer register choice ~65, byte-offset
