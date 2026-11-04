@@ -118,7 +118,7 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 /**
  * Script helper that moves Mario in a straight line during the lecture.
  * args[0] is the duration in ms; on the first call it saves Mario's position into LW(0) to LW(2),
- * then each frame moves him toward the target held in LW(3) to LW(5) until the time is up.
+ * then each frame moves him from the position held in LW(3) to LW(5) back toward that saved position until the time is up.
  */
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
@@ -458,8 +458,8 @@ static USER_FUNC(effitemget_busaiku) {
 
 /**
  * Script helper.
- * Turns the hit areas (nasi = none) of the named map object (or "me") on;
- * each of its two hit entries with a name is switched on with hitGrpFlagOn.
+ * Turns the hit areas (nasi = none) of the named map object (or "me") off;
+ * each of its two hit entries with a name gets HIT_FLAG_OFF set with hitGrpFlagOn.
  */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);

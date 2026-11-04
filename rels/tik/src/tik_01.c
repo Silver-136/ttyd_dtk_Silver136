@@ -63,7 +63,7 @@ EVT_BEGIN(lecture_badge_after_00_evt)
 EVT_END()
 
 /**
- * Runs when Mario enters the second pipe.
+ * Entry script of dokan_2: runs when Mario arrives in this room through the pipe from Rogueport (gor_02).
  * During the badge tutorial (STG0_17_BADGE_TUTORIAL up to the Blooper battle),
  * if he has no badge equipped yet, it plays lecture_badge_after_00_evt. Returns 0 in LW(0).
  */
@@ -283,7 +283,7 @@ EVT_END()
  * They taunt Mario and his partner (mac_0_086 to mac_0_092),
  * jump at him and start a battle (battle info 4) against Goomba 1.
  * After the fight they run away off the left edge, the partner comments (mac_0_094),
- * story progress is set to STG0_11_3_GOOMBA_GOONS, the save-block hit area opens and the music returns.
+ * story progress is set to STG0_11_3_GOOMBA_GOONS, the a_rec collision group is switched off and the music returns.
  */
 EVT_BEGIN(gorotuki_sanninngumi)
     // The three Goombas wait on the ledge until Mario walks past X = -100.
@@ -457,7 +457,7 @@ EVT_BEGIN(gorotuki_sanninngumi)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
 
-    // The Goomba gang is marked done, the save block opens and the sewer music returns.
+    // The Goomba gang is marked done, the a_rec collision group is switched off and the sewer music returns.
     SET_VALUE(GSW_STORY_PROGRESS, STG0_11_3_GOOMBA_GOONS)
     CALL(evt_hitobj_onoff, STRING("a_rec"), 1, 0)
     CALL(evt_mario_key_onoff, 1)

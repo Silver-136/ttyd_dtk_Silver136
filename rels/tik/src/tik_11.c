@@ -528,8 +528,8 @@ EVT_END()
  * (evt_win_party_lankdown_chk, powerdown_07).
  * Otherwise Mario picks the partner to boost and the partner to drop (evt_win_other_select 7 and 8) and confirms
  * the trade for 39 coins (powerdown_08, powerdown_09);
- * on yes it takes the coins, brings out the boosted partner,
- * chants (powerdown_11, powerdown_12), raises that partner's rank by one,
+ * on yes it takes the coins, brings out the partner losing a rank,
+ * chants (powerdown_11, powerdown_12), swaps in the boosted partner, raises that partner's rank by one,
  * lowers the other's by one and says it is
  * finished (powerdown_13).
  */

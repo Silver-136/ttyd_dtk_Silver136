@@ -395,10 +395,12 @@ s32 mugen_kairou_list[] = {
 /**
  * Event script: sets up the endless corridor (mugen kairou),
  * a room that repeats until Mario takes the right door seven times.
- * Before the Palace lock is opened it just lights the four torches 4..7;
- * afterwards it lights the torch given by mugen_kairou_list for the current streak
+ * At any story progress other than STG8_01_02_LOCK (before the Palace lock is opened, and again once the
+ * corridor is solved) it just lights the four torches 4..7;
+ * at STG8_01_02_LOCK it lights the torch given by mugen_kairou_list for the current streak
  * and rewires the east doors e_bero_1 and e_bero_2
- * so that the right one leads on (the list entry, 7 or 3, decides which).
+ * so that the right one counts the round (the list entry, 7 or 3, decides which; in the last round e_bero_1
+ * keeps its exit to las_09).
  */
 EVT_BEGIN(mugen_kairou_init)
     CALL_CHILD(PTR(taimatu_evt))

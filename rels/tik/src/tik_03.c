@@ -440,7 +440,7 @@ EVT_END()
 
 /**
  * Sound effects for the secret passage (para) appearing:
- * a SFX_STG1_LOAD_APPEAR1 step sound at each of eight positions from X = 55 to 425 and at -454, in sequence,
+ * a SFX_STG1_LOAD_APPEAR1 step sound at each of seven positions from X = 55 to 425 and at -454, in sequence,
  * timed to the opening animation.
  */
 EVT_BEGIN(anm_para_snd)
@@ -486,7 +486,7 @@ EVT_END()
  * Scene where the guide Puni shows Mario the secret passage (STG1_33).
  * He walks to a switch at X = 220 and steps on it (mac_1_029_01, mac_1_030);
  * the camera shakes, success jingle plays, the wall (kabe_1) is replaced and the passage (para) opens.
- * Sets GSWF_TIK03_SECRET_DOOR_OPEN and story progress STG1_34_PUNIS_SECRET_PASSAGE.
+ * Sets GSWF_TIK_03_SECRET_PASSAGE_OPEN and story progress STG1_34_PUNIS_SECRET_PASSAGE.
  */
 EVT_BEGIN(puni_switch)
     CALL(evt_mario_key_onoff, 0)
@@ -562,7 +562,7 @@ EVT_END()
 /**
  * The floor switch for the secret passage.
  * Toggles it: pressed while closed, it plays the opening animation (anm_para),
- * hides the wall and sets GSWF_TIK03_SECRET_DOOR_OPEN;
+ * hides the wall and sets GSWF_TIK_03_SECRET_PASSAGE_OPEN;
  * pressed while open, it plays the closing animation (anm_rapa), clears the flag and restores the hit areas.
  */
 EVT_BEGIN(tik03_switch_evt)
@@ -591,7 +591,7 @@ EVT_END()
  * Map init script of tik_03.
  * Starts the sewer music and ambience, sets up the exits and the guide Puni,
  * runs puni_soguu_3 and puni_nakama at their story steps,
- * restores the passage state from GSWF_TIK03_SECRET_DOOR_OPEN,
+ * restores the passage state from GSWF_TIK_03_SECRET_PASSAGE_OPEN,
  * and places the Damage Dodge badge and the Star Piece panel.
  * Before Boggly Woods (STG2_00_BOGGLY_WOODS) the pipe exit (dokan) is switched off
  * and its destination replaced.

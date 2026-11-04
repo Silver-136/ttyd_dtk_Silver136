@@ -102,7 +102,7 @@ USER_FUNC(evt_tik_villager_urouro_check_func) {
 /**
  * Wandering loop for the sewer residents (urouro = loitering about).
  * The NPC flips to face the opposite way every few seconds, then picks a random heading of 120 to 240 degrees,
- * walks 50 units that way (clamped to 70 units from where it started) at speed 30,
+ * walks 50 units that way (reset to where it started if that lands more than 70 units from there) at speed 30,
  * and rests a second before repeating.
  */
 EVT_BEGIN(tik_villager_urouro)

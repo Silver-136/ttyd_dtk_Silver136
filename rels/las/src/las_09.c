@@ -155,8 +155,8 @@ EVT_END()
 
 /**
  * Exits of las_09: west door w_bero to las_08 (e_bero_1); east door e_bero to las_19 (w_bero); north door
- * n_bero to las_10 (s_bero); dokan_1 (scripted pipe); dokan_2 (scripted pipe); dokan_5 (scripted pipe);
- * dokan_4 (scripted pipe).
+ * n_bero to las_10 (s_bero); pipes inside this room: dokan_1 to dokan_5, dokan_2 to dokan_4, dokan_5 to
+ * dokan_1, dokan_4 to dokan_2.
  */
 static BeroEntry bero_entry_data[] = {
     {
@@ -281,8 +281,8 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Where Mario is put back after falling through the 57 listed floor panels (mod_00 and up) that fall away
- * when the Shadow Sirens battle ends; y = -1000 uses each hit object's own position.
+ * Where Mario is put back after falling into one of the 57 listed hazard hit objects (mod_00 and up);
+ * y = -1000 uses each hit object's own position.
  */
 static HitDamageReturn dmgRetPoint[] = {
     {"mod_00", {0.0f, -1000.0f, 0.0f}},
@@ -481,7 +481,7 @@ EVT_END()
 
 /**
  * Event script: Bobbery explodes the first Chain Chomp statue (map object wan3, hit object A_wan1).
- * Disables automatic letterboxing, locks Mario's controls, runs bomb_wanwan and sets GSWF_LAS09_CHOMP_STATUE_1_BOMBED.
+ * Disables automatic letterboxing, locks Mario's controls, runs bomb_wanwan and sets GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP.
  */
 EVT_BEGIN(bomb_wanwan1_evt)
     CALL(evt_cam_letter_box_disable, 1)
@@ -498,7 +498,7 @@ EVT_END()
 
 /**
  * Event script: Bobbery explodes the second Chain Chomp statue (wan1, hit object A_wan2).
- * Same as bomb_wanwan1_evt but sets GSWF_LAS09_CHOMP_STATUE_2_BOMBED.
+ * Same as bomb_wanwan1_evt but sets GSWF_LAS_09_CHAIN_CHOMP_2_BLOWN_UP.
  */
 EVT_BEGIN(bomb_wanwan2_evt)
     CALL(evt_cam_letter_box_disable, 1)
@@ -632,7 +632,7 @@ EVT_END()
 /**
  * Event script: runs when the second blue switch is pressed.
  * Same as switch_1_evt for the platforms S_daizadai2_1..3 and the harbour exit Ship_Change1,
- * which is made walkable.
+ * whose ship-panel attribute (HIT_ATTR_SHIP_PANEL2) is turned on; no hit object is turned off.
  */
 EVT_BEGIN(switch_2_evt)
 

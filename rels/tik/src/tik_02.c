@@ -1,4 +1,4 @@
-// tik_02 (埋没した都市, Rogueport Sewers): the Blooper (gesso) boss room with the moving floating island (ukishima_move); the
+// tik_02 (埋没した都市, Rogueport Sewers): the Blooper (gesso) boss room with the two moving floating islands (ukishima_move); the
 // way to Petal Meadows (hei_00).
 
 #include "version.h"
@@ -600,8 +600,8 @@ EVT_END()
  * Cutscene and battle with the Blooper (geso, the prologue boss),
  * started from the map init at STG0_17_BADGE_TUTORIAL.
  * During the scene, Mario is held back at X = -410;
- * the Blooper's tentacle (ゲッソーのゲソ) and then the Blooper rise out of the water (mac_0_125, mac_0_126),
- * the battle starts (battle info 3), and afterwards he leaves in a crash.
+ * the Blooper's tentacle (ゲッソーのゲソ) and then the Blooper rise out of the water (mac_0_125),
+ * the battle starts (battle info 3), and afterwards he wails (mac_0_126) and leaves in a crash.
  * The road of islands then appears (ukishima_apper),
  * story progress is set to STG0_19_BLOOPER_BATTLE and the sewer music returns.
  */

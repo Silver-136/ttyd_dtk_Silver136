@@ -162,7 +162,7 @@ static BeroEntry bero_entry_data[] = {
 /**
  * Init of Sir Grodus's NPC (シュリョー) in las_28: sets status bit 2, so he turns to face the way he moves.
  * Between STG8_14_LOCK and STG8_14_01_QUEENS_CHAMBER he is placed at (410, 25, 0), facing left,
- * and jumping is allowed.
+ * with floor collision and gravity on.
  */
 static EVT_BEGIN(syuryo_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -479,7 +479,7 @@ EVT_END()
 
 /**
  * Event script: the Sir Grodus scene in the Queen's Chamber (las_28).
- * Grodus (シュリョー) gloats over the imprisoned Peach and the third-force music plays; he fights Mario in battle 15.
+ * Grodus (シュリョー) gloats and the third-force music plays; he fights Mario in battle 15.
  * Afterwards Peach, held in her barrier, speaks to Mario,
  * Grodus shocks Mario and the partner with lightning (syuryo_thunder), and Mario answers a yes/no question.
  * The scene ends by starting koopa_evt.

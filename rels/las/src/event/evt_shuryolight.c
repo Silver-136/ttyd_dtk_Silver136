@@ -97,7 +97,8 @@ EVT_BEGIN(shuryolight_pow_normal)
 EVT_END()
 
 /**
- * Event script: the power lamp in its "blinking" state (used while Grodus is angry or the barrier is active):
+ * Event script: the power lamp in its "blinking" state (started together with shuryolight_head_off in las_28
+ * and las_29):
  * lit for 0.7 to 4.7 seconds, then dim for 200 ms, repeated forever.
  */
 EVT_BEGIN(shuryolight_pow_tenmetu)

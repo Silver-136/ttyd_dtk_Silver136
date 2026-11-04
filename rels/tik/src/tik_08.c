@@ -38,7 +38,7 @@ EVT_END()
 
 /**
  * Pushes Mario back from the blocked Twilight Town pipe:
- * spawns oshimodo_event_sub, sets GSWF_TIK08_TWILIGHT_PIPE_REACHED and returns 0 in LW(0).
+ * spawns oshimodo_event_sub, sets GSWF_TIK_08_PIPE_REJECTED and returns 0 in LW(0).
  */
 // Run the pipe rejection dialogue asynchronously and record that this pipe was tried.
 static EVT_BEGIN(oshimodo_event)

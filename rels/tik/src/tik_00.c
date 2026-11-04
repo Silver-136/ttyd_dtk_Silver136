@@ -859,7 +859,7 @@ USER_FUNC(uranai_cap_evt) {
 
 /**
  * TEV callback for the center card (card_omote_5).
- * Once the capture is ready, it sets up two texture stages
+ * Once the capture is ready, it sets up two TEV stages
  * so the card face shows the captured Merluvlee texture modulated by vertex colour.
  */
 void card_tev(MapTevCallbackInfo* info) {
@@ -969,12 +969,12 @@ EVT_BEGIN(uranai_init)
 EVT_END()
 
 /**
- * Animates the card reading: the nine cards fly up and spin in, are shuffled between four positions,
- * and are flipped by a turn while the sound effects SFX_EVT_FORTUNE_CARD_MOVE1 to 5 play.
- * Merluvlee is hidden during the flip and shown again at the end.
+ * Animates the card reading: the nine cards fly up and spin in, each slides in from one of four directions
+ * (by its group), and the middle card spins about ten turns while the sound effects SFX_EVT_FORTUNE_CARD_MOVE1 to 5 play.
+ * Merluvlee is hidden while the cards rise and shown again when the middle card's face is hidden near the end of its spin.
  */
 EVT_BEGIN(uranai_main)
-    // The cards fly up from below the table, spinning in, while Merluvlee is hidden behind them.
+    // The cards fly up from below the table, spinning in, and Merluvlee stops being drawn.
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
         CALL(evt_snd_sfxon, STRING("SFX_EVT_FORTUNE_CARD_MOVE1"), 0)
@@ -1093,7 +1093,7 @@ EVT_BEGIN(uranai_main)
         END_IF
     END_LOOP
 
-    // The cards fly off the table one by one; the middle one stays behind.
+    // The cards drop away all at once; the middle one (card_5) rises a little instead.
     SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(9), FLOAT(0.0f))
     SET_INT_READ_ADDR(PTR(&name_tbl))
@@ -1396,7 +1396,7 @@ EVT_END()
 /**
  * Init script for Dazzle (starmaniac, the Star Piece collector).
  * Before the badge tutorial step he is placed at (400, -20, 175) instead of his default spot.
- * Not used in the US demo, which uses the shared NPC init.
+ * Not used in the US and JP demos, which use the shared NPC init.
  */
 EVT_BEGIN(starmaniac_init)
     CALL_CHILD(PTR(npc_init_evt))
@@ -1651,7 +1651,7 @@ EVT_BEGIN(kuribo5_talk)
 EVT_END()
 
 /**
- * Init script for resident chusan4; places him at (-175, -19, 235) and sets NPC status bit 2
+ * Init script for resident chusan4; places him at (-175, -19, 235) and sets NPC_STATUS_FACE_MOVE_DIR (0x2)
  * (he turns to face his travel direction).
  */
 EVT_BEGIN(chusan4_init)
@@ -2063,8 +2063,8 @@ static const char* door_data_01_npc[] = {
 };
 
 /**
- * Wall callback for Merluvlee's house: when LW(6) is 0 (entering),
- * starts the three wall panels falling flat one after another (evt_wall_01_00 to 02).
+ * Wall callback for Merluvlee's house: on its first call (LW(6) = 0), on entry and on exit,
+ * starts the three wall panels one after another (evt_wall_01_00 to 02).
  */
 static EVT_BEGIN(evt_wall_01)
     IF_INT_EQUAL(LW(6), 0)
@@ -2260,7 +2260,7 @@ EVT_BEGIN(evt_wall_02_03)
     RETURN
 EVT_END()
 
-/** Wall callback for the shop house: starts the four wall panels falling flat when the door opens. */
+/** Wall callback for the shop house: on its first call (LW(6) = 0), on entry and on exit, starts the four wall panels. */
 static EVT_BEGIN(evt_wall_02)
     IF_INT_EQUAL(LW(6), 0)
         SPAWN_EVENT(PTR(evt_wall_02_00))
@@ -2436,7 +2436,7 @@ EVT_BEGIN(evt_wall_03_03)
     RETURN
 EVT_END()
 
-/** Wall callback for the third house: starts the four wall panels falling flat when the door opens. */
+/** Wall callback for the third house: on its first call (LW(6) = 0), on entry and on exit, starts the four wall panels. */
 static EVT_BEGIN(evt_wall_03)
     IF_INT_EQUAL(LW(6), 0)
         SPAWN_EVENT(PTR(evt_wall_03_00))
@@ -2472,7 +2472,7 @@ EVT_BEGIN(evt_close_03)
     RETURN
 EVT_END()
 
-/** Map object (kururin1) that belongs to the third house. */
+/** Mobj (kururin1) that belongs to the third house. */
 static const char* door_data_03_mobj[] = {
     "kururin1",
     NULL,
@@ -2534,7 +2534,7 @@ EVT_END()
  * which glow objects (sui__1, sui__2, wa_pu) show from the story progress and from GW(10),
  * which the activation script sets before starting its animation.
  * After the hideout explodes (chapter 7) the other variant shows.
- * The releases add a third state from the return to Rogueport onwards.
+ * JP and later add a third state from the return to Rogueport onwards, which shows ie_4_1 again.
  */
 EVT_BEGIN(evt_open_04_open)
 #if VERSION <= VERSION_DEMO_JP
@@ -2670,9 +2670,9 @@ static DoorParam door_data_04 = {
 };
 
 /**
- * Door trigger for the teleporter house after the X-Naut hideout has exploded.
- * While GSWF_TIK_00_STG7_DOOR_OPENED is clear, Mario reads the sign message tik_000 and the event returns;
- * the normal door opening runs only after that flag is set.
+ * Door trigger on the outside of the teleporter house (registered at every story step).
+ * While GSWF_TIK_00_STG7_DOOR_OPENED is clear, the message tik_000 (no speaker) is shown and the event returns;
+ * the normal door opening runs only after that flag is set (evt_door_stg7_close sets it, from the inside trigger).
  */
 EVT_BEGIN(evt_door_stg7_open)
     IF_INT_EQUAL(GSWF_TIK_00_STG7_DOOR_OPENED, 0)

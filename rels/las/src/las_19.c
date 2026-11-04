@@ -223,7 +223,7 @@ const char* mapgrp_name_1[] = {
     "S_kai_25",
 };
 
-/** The last five staircase pieces, raised after those in mapgrp_name_1. */
+/** The last five staircase pieces (S_kai_20..24); no script reads this table. */
 const char* mapgrp_name_2[] = {
     "S_kai_20",
     "S_kai_21",
@@ -290,8 +290,8 @@ EVT_BEGIN(change_map_evt)
     END_LOOP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
 
-    // The camera drops to the foot of the tower and follows the pieces as they are pushed up in waves, with a
-    // rumble and shaking.
+    // The camera drops to the foot of the tower while the pieces settle down 30 units per wave (each wave leaves
+    // one more piece in place), with a rumble and shaking.
     CALL(evt_cam3d_evt_set, -5, -547, 531, -5, -623, -13, 9200, EASING_LINEAR)
     WAIT_MS(300)
     SET_VALUE(GF(0), 0)
@@ -328,7 +328,7 @@ EVT_BEGIN(change_map_evt)
     WAIT_MS(7600)
     SET_VALUE(GF(0), 1)
 
-    // Back to the Riddle Tower hub (las_10) with the tower risen.
+    // Back to the Riddle Tower hub (las_10, entry ret_chgmap_evt).
     CALL(evt_bero_mapchange, STRING("las_10"), STRING("ret_chgmap_evt"))
     RETURN
 EVT_END()
@@ -361,7 +361,7 @@ EVT_END()
  * Map init script for las_19, the stairs of the Palace of Shadow:
  * music (first or third Palace theme depending on the story),
  * the cloud-covered lid (S_futa) that Flurrie must blow off until STG8_08_THE_NEW_PATH,
- * the rising- staircase cutscene when entered from las_10, the Wizzerd NPCs,
+ * the staircase cutscene when entered from las_10 (chgmap_evt), the Wizzerd NPCs,
  * two float switches and a Thunder Rage block.
  */
 EVT_BEGIN(las_19_init_evt)

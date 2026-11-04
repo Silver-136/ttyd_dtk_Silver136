@@ -98,7 +98,7 @@ EVT_END()
  * Event script: checks the red switch riddle after each press.
  * When switch 1 has been hit twice and switch 2 three times (switch 2 only counts before switch 1 is touched),
  * it sparkles both switches away, plays a success jingle and makes the key chest (Palace Key 0x28) appear,
- * then sets GSWF_LAS13_RED_SWITCHES_SOLVED.
+ * then sets GSWF_LAS_13_SWITCH_PUZZLE_SOLVED.
  */
 EVT_BEGIN(switch_check)
     SET_VALUE(LW(0), 0)

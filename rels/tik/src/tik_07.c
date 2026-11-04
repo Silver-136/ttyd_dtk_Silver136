@@ -247,8 +247,8 @@ EVT_END()
 
 /**
  * Scene at STG4_16_LEAVING_TWILIGHT_TOWN:
- * Mario's mail alert (exclamation bubble and controller rumble), the partner comments (tik_07_mail4_00);
- * after he presses A the mail jingle plays, Peach's mail is read (tik_07_mail4_01) and the partner reacts (tik_07_mail4_02),
+ * Mario's mail alert (jingle, exclamation bubble and controller rumble), the partner comments (tik_07_mail4_00);
+ * after he presses A the jingle stops and the mail sounds play, Peach's mail is read (tik_07_mail4_01) and the partner reacts (tik_07_mail4_02),
  * story progress becomes STG4_17_A_MAIL_FROM_PEACH and the mail is opened (mail slot 3).
  */
 static EVT_BEGIN(peach_mail)
@@ -305,7 +305,7 @@ static EVT_BEGIN(peach_mail)
 EVT_END()
 
 /**
- * Break callback of the big Lv 2 block (mobj_blk01, GSWF_TIK07_BIG_BLOCK_BROKEN): shows the s_hikari map-object
+ * Break callback of the big Lv 2 block (mobj_blk01, GSWF_TIK_07_LV2_BIG_BLOCK_BROKEN): shows the s_hikari map-object
  * group, which the map init hides while the block is unbroken.
  */
 static EVT_BEGIN(evt_block)

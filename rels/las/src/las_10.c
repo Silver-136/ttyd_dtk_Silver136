@@ -484,8 +484,8 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Wall groups of the first tier of the Riddle Tower that are switched on or off together as Mario moves
- * between sections.
+ * Wall groups of the first tier of the Riddle Tower, one per camera octant; temae_kesu hides the entry for
+ * the camera's octant and its two neighbours.
  */
 const char* kabe_list_1[] = {
     "S11_kabe4",
@@ -534,7 +534,7 @@ EVT_END()
 
 /**
  * Event script: the first entry to the Riddle Tower hall.
- * Waits for the elevator, then Mario and the partner walk to the centre,
+ * Waits until Mario stands on A_3_2 or A_3_3, then Mario and the partner walk to the centre,
  * the partner speaks twice (stg8_las_31, stg8_las_32) while the camera looks up at the tower,
  * and GSWF_LAS10_RIDDLE_TOWER_ENTERED is set.
  */
@@ -1185,8 +1185,8 @@ const char* daiza_name[] = {
  * and registers the key use events for stands that are still empty (turned stands are shown already turned).
  */
 EVT_BEGIN(kagi_8_on)
-    // Before the keys were placed the eight key stands rise out of the floor one after another, shaking the
-    // screen.
+    // Right after the Star Key is placed (story still before STG8_05_STAR_KEY_SLOT) the eight key stands rise
+    // out of the floor one after another, shaking the screen.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         WAIT_MS(500)
         SET_VALUE(GF(0), 0)

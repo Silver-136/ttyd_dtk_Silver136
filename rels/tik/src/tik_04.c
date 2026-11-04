@@ -1,5 +1,5 @@
 // tik_04 (埋没した都市, Rogueport Sewers): the plane panel (plane_tobashi_check), the paper stairs (kaidan_pera), the switch
-// and the black key, and a meeting with the guide Puni.
+// and the black key, and two glimpses of the guide Puni.
 
 #include "version.h"
 #include "battle/battle_unit.h"

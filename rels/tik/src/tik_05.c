@@ -484,7 +484,7 @@ EVT_END()
 
 /**
  * Prologue scene where Mario and his partners first see the Thousand-Year Door (look_large_door starts it).
- * The camera pans along X over six seconds, the partners comment (mac_0_095_kur, mac_0_096_kur),
+ * The camera pans along X over six seconds, Professor Frankly (extparty) comments (mac_0_095_kur, mac_0_096_kur),
  * and story progress becomes STG0_13_FIRST_FLIGHT.
  */
 EVT_BEGIN(large_door_stg0)
@@ -523,7 +523,7 @@ EVT_BEGIN(large_door_stg0)
 EVT_END()
 
 /**
- * Case trigger for looking at the big door.
+ * Enter event of the east door (e_bero), for looking at the big door.
  * At STG0_12_02_PAPER_MAGE_1 it starts large_door_stg0 and returns 1 in LW(0);
  * at STG7_50_A_WAITING_PROF_FRANKLY it advances to STG7_51_THOUSAND_YEAR_DOOR and returns 0;
  * otherwise returns 0.
@@ -672,7 +672,7 @@ EVT_BEGIN(evt_fogreset)
 EVT_END()
 
 /**
- * Sound-effect timing script spawned when each magic circle appears (mahojin_event1 to 7).
+ * Sound-effect timing script spawned when each magic circle appears (mahojin_event to mahojin_event7).
  * In every version it only
  * waits 3.5 s and then 1.6 s and returns, playing nothing. Guess: its sound calls were cut, leaving the waits.
  */
@@ -1998,7 +1998,7 @@ EVT_BEGIN(evt_mapwrite)
     CALL(map_bgmode_end, STRING("map_itemget"), STRING("map_map"))
     CALL(evt_eff_softdelete, STRING("map_itemget"))
 
-    // The magic circle ends, the fog clears and the map drops back into Mario's hands.
+    // The magic circle ends, the fog closes in again (evt_fogreset) and the map drops back into Mario's hands.
     SET_VALUE(GF(11), 1)
     CALL(evt_eff_softdelete, STRING("mahojin"))
     SPAWN_EVENT(PTR(mahojin_se_event_end))
@@ -2148,7 +2148,7 @@ EVT_BEGIN(mahojin_event)
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_MAP_KAKAGERU2"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(2000)
 
-    // Seen from above, Mario, Goombella and Frankly look around in confusion while fog fills the room.
+    // Seen from above, Mario, Goombella and Frankly look around in confusion while the fog is pushed back (evt_fogset).
     CALL(evt_cam3d_evt_set, 0, 634, 421, 0, 58, -270, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pose, STRING("M_I_N"))
     CALL(evt_party_set_pos, 1, -30, 19, -190)
@@ -2423,7 +2423,7 @@ EVT_END()
 
 /**
  * Pedestal scene after the sixth Crystal Star (STG6_57_A_MAIL_FROM_PEACH).
- * The same sequence (mac_6_001) with a longer wait;
+ * The same sequence (mac_6_001);
  * sets STG6_70_THOUSAND_YEAR_DOOR and sends Mario back to Rogueport (gor_02).
  */
 EVT_BEGIN(mahojin_event6)

@@ -232,7 +232,7 @@ static BeroEntry w_bero_mapchg[] = {
 
 /**
  * Event script: plays the stop sound of a floating block (LW(15)) when it reaches its end height;
- * playback tests the descending flag LF(1), not the block-colour flag computed in LF(0).
+ * playback tests the descending flag LF(1), not the big-block flag computed in LF(0).
  */
 EVT_BEGIN(floatblk_stop_se)
     CALL(evt_mobj_get_position, LW(15), LW(0), LW(1), LW(2))
@@ -255,7 +255,7 @@ EVT_END()
 
 /**
  * Event script: shakes the camera for a moment (strength easing from 0.01 down to 0.003)
- * when a floating block lands.
+ * when a floating block starts moving and when it lands after descending.
  */
 EVT_BEGIN(floatblk_shake)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
@@ -297,7 +297,7 @@ EVT_BEGIN(floatblk_evt)
     WAIT_MS(500)
     CALL(evt_mobj_get_position, LW(15), LW(0), LW(1), LW(2))
 
-    // The block's colour decides whether the large or the small float sound plays.
+    // The block's kind (one of the big02 blocks or not) decides whether the large or the small float sound plays.
     CALL(evt_mobj_get_kindname, LW(15), LW(3))
     SET_VALUE(LF(0), 0)
     IF_STR_EQUAL(LW(3), STRING("MOBJ_green_big02_FlowBlock"))
@@ -488,7 +488,7 @@ EVT_END()
  * Map init script for las_21: music (first or third Palace theme by story), the doors to las_19,
  * las_23 and las_20, and before STG8_06_MOVING_PLANETS hides the lower floor.
  * Afterwards the las_19 blocks use the las_19 switch states and both las_21 blocks start lowered,
- * with their float switches and a blue jump stand.
+ * with their float switches. A blue jump stand is placed in every story state.
  */
 EVT_BEGIN(las_21_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)

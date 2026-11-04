@@ -1082,7 +1082,7 @@ EVT_BEGIN(last_evt_1)
     WAIT_FRAMES(1)
     WAIT_MS(500)
 
-    // Grodus explains the Shadow Queen will possess Peach; Peach apologizes to Mario for the map she sent.
+    // The partner speaks; Peach apologizes to Mario for the map she sent; Grodus calls the Shadow Queen to arise.
     CALL(evt_msg_print_party, STRING("stg8_las_112"))
     CALL(evt_cam3d_evt_set, 20, 100, 300, 115, 60, 20, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -1334,7 +1334,7 @@ EVT_END()
 
 /**
  * Event script: the second cutscene in the throne hall:
- * the Shadow Queen speaks with Grodus, then strikes Peach down with a blast, the hall flashes,
+ * the Shadow Queen speaks with Grodus, then turns on Peach, her vessel (Peach collapses), the hall flashes,
  * and the map changes to usu_00 (sekai_yami2).
  */
 EVT_BEGIN(last_evt_2)
@@ -1390,7 +1390,7 @@ EVT_BEGIN(last_evt_2)
     WAIT_FRAMES(1)
     WAIT_MS(500)
 
-    // She strikes Peach down with a blast; the hall flashes white.
+    // She turns on Peach, her vessel, and Peach collapses; the hall flashes white.
     CALL(evt_msg_print, 0, STRING("stg8_las_119"), 0, STRING("影の女王"))
     CALL(evt_cam3d_evt_set, -140, 100, 284, 178, 75, -34, 4000, EASING_SINE_IN_OUT)
     CALL(evt_npc_get_position, STRING("影の女王"), LW(0), LW(1), LW(2))
@@ -1428,7 +1428,7 @@ EVT_BEGIN(last_evt_2)
     RETURN
 EVT_END()
 
-#if VERSION < VERSION_US  // JP-only script (US dropped it)
+#if VERSION < VERSION_US  // JP and JP demo only (US and PAL dropped it)
 EVT_BEGIN(nise_mario_init)
     CALL(evt_npc_entry, STRING("にせマリオ"), STRING("c_mario"))
     CALL(evt_npc_set_tribe, STRING("にせマリオ"), STRING("にせマリオ"))
@@ -1681,7 +1681,8 @@ EVT_BEGIN(last_evt_3)
     WAIT_MS(1000)
     CALL(evt_npc_set_position, STRING("マジョリン"), -50, 0, 150)
 
-    // Beldam, Marilyn and Doopliss greet their returned queen and report that they found her a vessel.
+    // Beldam greets their returned queen, Marilyn and Doopliss appear beside her, and Beldam reports that
+    // she found her a vessel.
     CALL(evt_msg_print, 0, STRING("stg8_las_128"), 0, STRING("マジョリン"))
     CALL(evt_npc_set_position, STRING("マジョリン"), 0, -1000, 0)
     CALL(rou_hikari_front_onoff, 1, 1)
@@ -2119,7 +2120,7 @@ EVT_BEGIN(majo_kyorokyoro)
 EVT_END()
 
 /**
- * Event script: the scene where everyone's voices call to Mario and heal him.
+ * Event script: the scene where everyone's voices call to Mario and Peach gives him her last power, which heals him.
  * The partner speaks while the three Sirens look around, and Peach answers,
  * Mario's party is fully healed with evt_pouch_all_party_recovery, the Shadow Queen (possessing Peach) is
  * angered, and the second fight with her (battle 17) follows;
@@ -2632,7 +2633,7 @@ EVT_END()
  */
 EVT_BEGIN(last_evt_4)
 
-    // The Shadow Queen is gone: the music stops and the Sirens and Mario's partners speak.
+    // The Shadow Queen is beaten: the music stops; she, the Sirens and Mario's partner speak.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2658,7 +2659,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kuro"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
 
-    // Professor Frankly (クリハカセ) arrives and the hall flashes white as the Queen's power fades.
+    // Professor Frankly (クリハカセ) is set up out of sight for later, and the room starts to quake.
     CALL(evt_npc_entry, STRING("クリハカセ"), STRING("c_kuri_h"))
     CALL(evt_npc_set_tribe, STRING("クリハカセ"), STRING("クリハカセ"))
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -2668,8 +2669,8 @@ EVT_BEGIN(last_evt_4)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(9))
 
-        // White flashes fill the hall; the Shadow Queen and her dark form vanish from the room and Peach is
-        // placed in front of Mario.
+        // The camera shakes until GF(0) is set or 30 seconds pass; meanwhile white flashes fill the hall, the
+        // Shadow Queen and her dark form vanish and Peach is placed where the dark form floated.
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(15))
         LOOP(0)
             IF_INT_NOT_EQUAL(GF(0), 0)
@@ -2879,7 +2880,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_INSTANT_TURN)
 
-    // Beldam, Marilyn and Doopliss speak their last words; the partners answer.
+    // Beldam, Marilyn and Doopliss speak and leave; the partner answers.
     CALL(evt_msg_print, 0, STRING("stg8_las_173"), 0, STRING("マジョリン"))
     CALL(evt_npc_majo_disp_off, STRING("マジョリン"))
     WAIT_MS(300)
@@ -3027,7 +3028,7 @@ EVT_BEGIN(last_evt_4)
     ADD(LW(0), 5)
     ADD(LW(1), 20)
 
-    // A chest grows into view, drops to the floor and bounces to a stop.
+    // A chest grows into view, hops sideways and drops to the floor.
     CALL(evt_mobj_itembox, STRING("box"), LW(0), LW(1), LW(2), MOBJ_ITEMBOX_GOLDEN, 0, 0, 0)
     CALL(evt_mobj_set_scale, STRING("box"), FLOAT(0.2998047f), FLOAT(0.2998047f), FLOAT(0.2998047f))
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
@@ -3172,7 +3173,7 @@ EVT_BEGIN(last_evt_4)
 EVT_END()
 
 /**
- * Init of Sir Grodus's glow in las_29: at STORY_STG8_15_GRODUS,
+ * Init of Sir Grodus's glow in las_29: at STG8_15_GRODUS,
  * sets up the glow effect around Sir Grodus and runs it with the blinking power table.
  */
 static EVT_BEGIN(shuryolight_init)

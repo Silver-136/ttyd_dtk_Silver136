@@ -1,4 +1,4 @@
-// las_05 (ラストダンジョン, Palace of Shadow): Dark Bones (黒カロン) and the swarm of Dull Bones (senkaron) that pushes
+// las_05 (ラストダンジョン, Palace of Shadow): Dark Bones (黒カロン) and the swarm of Dry Bones (senkaron) that pushes
 // Mario around.
 
 #include "version.h"
@@ -783,7 +783,7 @@ s32 move_check_list[] = {
  * Per-frame update callback of the bone swarm (senkaron_ext_main):
  * lets each of the 1000 bones fall from the ceiling, move toward Mario,
  * and get knocked away by Mario's hammer or partner attacks;
- * also pushes Mario sideways when the bones collide with him (marioPushed) and plays the clatter sounds.
+ * also pushes Mario toward the room's centre when the bones collide with him (marioPushed) and plays the clatter sounds.
  */
 static void senkaron_ext_main(void) {
     MarioWork* mario;
@@ -1142,7 +1142,7 @@ static void senkaron_ext_main(void) {
     }
 }
 
-/** Queues the shadow draw callback of the bone swarm every frame. */
+/** Queues the draw callback and the shadow draw callback of the bone swarm every frame. */
 static void senkaron_ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, senkaron_ext_disp, NULL);
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, senkaron_ext_shadow_disp, NULL);
@@ -1269,8 +1269,8 @@ static EVT_BEGIN(senkaron_event)
         SET_FLOAT_VALUE(LW(4), FLOAT(0.0009765625f))
         SET_VALUE(LW(5), 270)
 
-        // The swarm pushes Mario back along the floor until Dark Bones turns to chase him; then control is
-        // returned.
+        // The swarm pushes Mario back along the floor until he reaches X 370; then Dark Bones starts his
+        // patrol and control is returned.
         CALL(evt_mario_set_pose, STRING("M_I_O"))
         LOOP(0)
             WAIT_FRAMES(1)
@@ -1298,8 +1298,8 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_mario_key_onoff, 1)
         SET_VALUE(LW(0), STRING("w_bero"))
 
-        // Mario is pushed around by the swarm with his partner in tow; if he is held too long the partner
-        // calls out (stg8_las_05, stg8_las_06) and the game is over.
+        // Mario is pushed around by the swarm with his partner in tow; if he stands idle near the room's
+        // centre, he sinks, the partner calls out (stg8_las_05, stg8_las_06) and the game is over.
         CALL_CHILD(PTR(bero_case_switch_off))
         SET_VALUE(GF(0), 0)
         BEGIN_INLINE_EVENT
@@ -1665,7 +1665,7 @@ EVT_BEGIN(kurokaron_talk)
     RETURN
 EVT_END()
 
-/** The single NPC of the room, Dark Bones (黒カロン); it does not turn to face Mario. */
+/** The NPCs of the room: Dark Bones (黒カロン), which does not turn to face Mario, and a Dry Bones (カロン) without events. */
 static NpcSetupInfo npcEnt[] = {
     {
         "黒カロン", // name

@@ -280,15 +280,15 @@ const char* hosi_name[] = {
 };
 
 /**
- * Event script: after each star switch press, checks whether the seven stars match the solution (switches 1, 3,
- * 4 and 6 on, the rest off, as kept in LSWF(1..7)).
+ * Event script: after each star switch press, checks whether the seven stars match the solution (stars 2, 4, 5
+ * and 7 lit, that is the 1st, 3rd, 4th and 6th switch on, the rest off, as kept in LSWF(1..7)).
  * When solved it flashes the stars in a running light, shakes the camera,
  * removes the switches and sets the story to STG8_11_STAR_PUZZLE.
  */
 EVT_BEGIN(hosi_sw_check)
     SET_VALUE(LW(0), 0)
 
-    // Compare the seven star switches against the solution (1, 3, 4 and 6 on, the others off).
+    // Compare the seven star switches against the solution (stars 2, 4, 5 and 7 lit, the others off).
     IF_INT_EQUAL(LSWF_LAS_20_STAR_02_LIT, 1)
         ADD(LW(0), 1)
     END_IF
@@ -365,7 +365,7 @@ EVT_BEGIN(hosi_sw_check)
             ADD(LW(0), 1)
         END_LOOP
 
-        // The stars flash in a running light, the room quakes, and the switches vanish.
+        // After the running light all stars stay lit: a sound plays, the room quakes, and the switches vanish.
         CALL(evt_snd_sfxon, STRING("SFX_STG8_STAR_LIGHTUP2"), 0)
         WAIT_MS(100)
         CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE3"), LW(10))
@@ -520,7 +520,7 @@ EVT_END()
 /**
  * Map init script for las_20, the star switch room of the Palace:
  * music and ambience, the door, the gear animation, the moving platform with its red switch, the star puzzle,
- * and two hidden blocks with a Repel Cape and a Life Shroom.
+ * and two ? blocks with a Repel Cape and a Life Shroom.
  */
 EVT_BEGIN(las_20_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
