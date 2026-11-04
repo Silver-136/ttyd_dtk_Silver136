@@ -248,7 +248,7 @@ static inline BOOL pouchAdd(s16 *t1, s16 *t2, s32 size, ItemType type) {
 
 /**
  * Gives Mario an item (pickups, scripts, battle audience gifts).
- * Coins (max 999), Pianta tokens (max 99999; demos cap at 0x7FFFFFFF),
+ * Coins (max 999), Pianta tokens (max 99999; the early demos cap at 0x7FFFFFFF),
  * hearts (1 HP to Mario and the current partner) and flowers (1 FP to Mario),
  * Star Pieces and Shine Sprites only bump counters.
  * Boots and hammers set the jump/hammer level, badges set their found flag (GSWF id - 0x70),
@@ -455,8 +455,8 @@ BOOL pouchRemoveItem(ItemType type) {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * The demo's pouchRemoveItemIndex shifts the second table wrongly:
- * it clears the slot it has just filled instead of the one it moved from (the demo's own bug;
+ * The early demos' pouchRemoveItemIndex shifts the second table wrongly:
+ * it clears the slot it has just filled instead of the one it moved from (the early demos' own bug;
  * the later versions call pouchShift).
  */
 static inline void pouchShiftDemo(s16* table1, s16* table2, int i, s32 maximum) {
@@ -556,7 +556,7 @@ void pouchHiraToKata(const char* src, char* dst) {
         dst[i * 2] = 0;
     } else {
 #if VERSION >= VERSION_DEMO_EU
-        // PAL: sort key of a Latin name: drops <...> message tags, upper-cases, folds accented vowels to
+        // PAL and the PAL demo: sort key of a Latin name: drops <...> message tags, upper-cases, folds accented vowels to
         // A E I O U, spells the OE ligature out and drops C-cedilla
         char buf[0x400];
         char* key = dst;
@@ -631,9 +631,10 @@ void pouchHiraToKata(const char* src, char* dst) {
 
 /**
  * Sort key of an item name for the alphabetical sorts.
- * JP and US inline their own copy of the kana conversion here; PAL calls pouchHiraToKata.
+ * JP, US and the US September demo inline their own copy of the kana conversion here; PAL and the PAL demo
+ * call pouchHiraToKata.
  */
-// PAL calls pouchHiraToKata; JP and US inline their own copy of the conversion
+// PAL and the PAL demo call pouchHiraToKata; JP, US and the US September demo inline their own copy of the conversion
 static inline void pouchAiueoConv(const char* src, char* dst) {
 #if VERSION >= VERSION_DEMO_EU
     pouchHiraToKata(src, dst);
@@ -687,7 +688,7 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** The demo compares the item names as they are, without the kana conversion. */
+/** The early demos compare the item names as they are, without the kana conversion. */
 static s32 comp_aiueo(const void* a, const void* b) {
 #else
 s32 comp_aiueo(const void* a, const void* b) {
@@ -757,7 +758,7 @@ s32 comp_kind_r(const void* paramA, const void* paramB) {
 /**
  * Sorts a pouch list for the item and badge menus (win_root.c).
  * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
- * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost (retail breaks ties by kind). Badges keep their worn state.
+ * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost (JP and later break ties by kind). Badges keep their worn state.
  * JP and the early demos compare internal ids for badge names.
  */
 void pouchSortItem(s32 mode) {
@@ -833,7 +834,7 @@ void pouchSortItem(s32 mode) {
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
 
-    // PAL sorts badge names by the pouchHiraToKata key
+    // PAL and the PAL demo sort badge names by the pouchHiraToKata key
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
 #if VERSION <= VERSION_DEMO_JP
         i = 0;
@@ -1257,7 +1258,8 @@ s32 pouchGetPartyAttackLv(PartyId partyId) {
 }
 
 /**
- * Adds a stored item: demos fill the first empty slot; retail shifts entries down and inserts at the front.
+ * Adds a stored item: the early demos fill the first empty slot; JP and later shift entries down and insert at
+ * the front.
  * Returns FALSE if storage is full. Removal differs by version in pouchRemoveKeepItem below.
  */
 BOOL pouchAddKeepItem(s32 id) {
@@ -1286,7 +1288,7 @@ BOOL pouchAddKeepItem(s32 id) {
     return FALSE;
 }
 
-/** Removes a stored item: demos clear the first matching id; retail requires id at index and closes the gap. FALSE if not found. */
+/** Removes a stored item: the early demos clear the first matching id; JP and later require id at index and close the gap. FALSE if not found. */
 #if VERSION <= VERSION_DEMO_JP
 BOOL pouchRemoveKeepItem(s32 id) {
     s32 i;
@@ -1446,7 +1448,7 @@ BOOL pouchEquipBadgeID(s32 badgeId) {
 
 /**
  * Unequips the first worn copy of a badge; FALSE if none is worn.
- * The Game Over sequence takes off Slow Go with it. Not in the US demo.
+ * The Game Over sequence takes off Slow Go with it. Not in the early demos.
  */
 BOOL pouchUnEquipBadgeID(s32 badgeId) {
     int i;
@@ -1467,8 +1469,9 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
  * Puts a badge on sale at the badge shop (Lovely Howz)
  * when a dropped badge item carrying ITEM_FLAG_LOST_BADGE_TO_SHOP goes away uncollected (itemdrv.c itemCheckBadge),
  * so it is not lost for good.
- * In retail those are the badges field enemies drop when beaten (enemy_common_dead_event).
- * Adds it to the special table outside battle; the demo adds it to the bargain table, in or out of battle.
+ * In JP and later those are the badges field enemies drop when beaten (enemy_common_dead_event).
+ * JP and later add it to the special table, outside battle only; the early demos add it to the bargain table,
+ * in or out of battle, for badges without that flag.
  */
 s32 pouchArriveBadge(s32 id) {
 #if VERSION <= VERSION_DEMO_JP

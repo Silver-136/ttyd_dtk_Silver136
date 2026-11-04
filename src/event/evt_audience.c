@@ -373,8 +373,8 @@ USER_FUNC(evt_audience_delete) {
 }
 
 /**
- * Does nothing in every version, though Mario's battle scripts still call it after his attacks.
- * Guess: a leftover hook for crowd-driven Star Power refills.
+ * Does nothing in every version, though Mario's, the partners' and the items' battle scripts still call it
+ * after their moves.
  */
 USER_FUNC(evt_audience_ap_recovery) {
     return EVT_RETURN_DONE;
@@ -456,7 +456,7 @@ USER_FUNC(evt_audience_num_updown_in_event) {
 
 /**
  * Run when Mario skips the Stylish command.
- * Up to the US demo it clears AUDIENCE_FLAG_STYLISH_MISSED; the later releases do nothing here.
+ * In the early demos it clears AUDIENCE_FLAG_STYLISH_MISSED; JP and later do nothing here.
  */
 USER_FUNC(evt_audience_acrobat_notry) {
     BattleAudience_Case_AcrobatNoTry();

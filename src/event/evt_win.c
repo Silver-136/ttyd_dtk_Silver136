@@ -133,7 +133,7 @@ typedef struct UnitWinWork {
     f32 cursorY;           // 0x40
     f32 scroll;            // 0x44
     u8 pad48[4];           // 0x48
-    s32 skipEntry;         // retail offset 0x4C; starts at 0, demos set it from the excluded-list entry argument
+    s32 skipEntry;         // offset 0x4C in JP and later; starts at 0, the early demos set it from the excluded-list entry argument
     s32 mode;              // 0x50, UnitWinMode
     u16 flags2;            // 0x54, UNITWIN_FREE_*
 #if VERSION <= VERSION_DEMO_JP
@@ -193,7 +193,7 @@ static const char* mario_status_labelname_table[3] = {"_hp", "_fp", "_bp"};
 static const char* mario_status_name_table[3] = {"\202g\202o", "\202e\202o", "\202a\202o"};
 static s32 mario_status_henka_table[3] = {5, 5, 3};
 
-/** Unit-window update event, started by evt_unitwin_alloc unless retail selects window-manager mode; runs evt_unitwin_main_func. */
+/** Unit-window update event, started by evt_unitwin_alloc unless window-manager mode is selected (JP and later); runs evt_unitwin_main_func. */
 static EVT_BEGIN(main_evt)
     CALL(evt_unitwin_main_func)
     RETURN
@@ -371,7 +371,7 @@ static const char* party_name_table_rtn(s32 i) {
 /**
  * Sets up the unit window work (_wp), the pointing-finger cursor icon,
  * and the HP/FP/BP pointers to Mario's base stats for the stat windows.
- * Retail args[0] selects window-manager mode when nonzero; otherwise, as in the early demos, it starts main_evt.
+ * In JP and later args[0] selects window-manager mode when nonzero; otherwise, as in the early demos, it starts main_evt.
  * Must run before the other unitwin commands.
  */
 USER_FUNC(evt_unitwin_alloc) {
@@ -410,7 +410,7 @@ USER_FUNC(evt_unitwin_alloc) {
 /**
  * Tears the unit window down.
  * Blocks until a unit-window event acknowledges the free request, then removes the counter item icons,
- * the early demos' case events or retail window-manager windows, the cursor icon and the work.
+ * the early demos' case events or the window-manager windows of JP and later, the cursor icon and the work.
  */
 USER_FUNC(evt_unitwin_free) {
 #if VERSION >= VERSION_JP
@@ -460,7 +460,7 @@ USER_FUNC(evt_unitwin_free) {
  * Puts goods on a shop counter.
  * args[0] is a null-terminated table of (map object, hit object, script) rows, args[1] the item id for each row;
  * shows each item's icon over its map object. The early demos register a hit-object case that runs select_evt;
- * retail starts select_evt to poll the counter and creates three window-manager windows.
+ * JP and later start select_evt to poll the counter and create three window-manager windows.
  */
 USER_FUNC(evt_unitwin_selltable_setup) {
     s32 i;
@@ -508,7 +508,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
 }
 
 /**
- * Demo counter selection callback: uses the hit case's slot index, starts its purchase script on A,
+ * Early-demo counter selection callback: uses the hit case's slot index, starts its purchase script on A,
  * and waits for that script before restoring Mario's keys.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -691,7 +691,7 @@ USER_FUNC(evt_unitwin_select_func) {
             } else {
                 iconFlagOff(name, ICON_FLAG_HIDDEN);
 #else
-// Descriptive name (not in the symbol maps); placeholder unk_80174e98, JP 0x80174E98. See docs/NAME_PROVENANCE.md.
+// Original name from the JP demo map (early demos only).
 /** list window: arg = window kind; returns lwData[0] = 1 and the picked entry in lwData[1..] */
 USER_FUNC(unitwin_window_select_func) {
     EvtWord* args = event->args;

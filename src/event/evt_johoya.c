@@ -117,7 +117,7 @@ USER_FUNC(johoya_keti_newjoho_check) {
  * Picks the args[0]-th unbought rumour: writes its message label to args[1], the title text to args[2],
  * its length to args[3] and the cost to args[4], and remembers it for setreadflag.
  * Empty label and zeros when there is none.
- * Retail reads the title from the "jketi_title_%04d" message;
+ * JP and later read the title from the "jketi_title_%04d" message;
  * the early demos use the text inside the rumour's own tag.
  */
 USER_FUNC(johoya_keti_newjoho_makelabel) {
@@ -350,7 +350,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
     return count;
 }
 
-/** Clears the three rumour read-flag tables. Runs on a new game (stg0_00_init in event.c). */
+/** Clears the three rumour read-flag tables. Runs at boot (mariost.c) and on a new game (stg0_00_init in event.c). */
 void johoya_init(void) {
     InformantUnknown* readFlags = &_jdt.readFlags;
 
@@ -421,7 +421,7 @@ s32 search_evt_no(const char* label) {
     return -1;
 }
 
-/** Returns the story label string in evtNoLabel for an index (no bounds check). No caller in the C code. */
+/** Returns the story label string in evtNoLabel for an index (no bounds check). Called from gor_01.c and tik_00.c. */
 const char* search_evt_moji(s32 id) {
     return evtNoLabel[id];
 }

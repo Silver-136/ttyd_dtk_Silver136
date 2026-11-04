@@ -41,9 +41,9 @@ EVT_BEGIN(minigame_end)
 EVT_END()
 
 /**
- * Retail: the pause window during a minigame.
- * Freezes Mario in place, runs the minigame's own window script (evtYuuSetWindowEvt),
- * asks whether to quit and runs minigame_end on the first choice, then flags it closed.
+ * The pause window during a minigame.
+ * JP and later first freeze Mario in place and run the minigame's own window script (evtYuuSetWindowEvt);
+ * then it asks whether to quit and runs minigame_end on the first choice, then flags it closed.
  */
 EVT_BEGIN(window_open)
 #if VERSION >= VERSION_JP
@@ -79,8 +79,8 @@ static inline s32 MAX0(s32 x) {
 /**
  * Resets the Pianta Parlor work: token counts and flags cleared,
  * and the default record tables (five ranks per minigame, score plus a derived per-rank value) filled in.
- * Called on a new game (mariost.c) and from event.c.
- * The demo has its own records; US/PAL keep eight record rows, JP four.
+ * Called at boot (mariost.c) and on a new game (stg0_00_init in event.c).
+ * The early demos have their own records; US and later keep eight record rows, JP four.
  */
 void yuugijou_init(void) {
     s32 t;
@@ -325,7 +325,7 @@ static inline s32 cmpSign(s32 a, s32 b) {
  * Draws the Pianta token counter (window, token icons and number) while flags 1 and 2 are set,
  * higher on screen with flag 4.
  * Every 4th frame the shown count steps a tenth of the way (at least 1) toward the real count,
- * with a tick sound; retail versions space the sound out to every 8 steps.
+ * with a tick sound; JP and later space the sound out to every 8 steps.
  * Called from the draw callbacks of gor_03 (the Pianta Changer)
  * and of the Pianta Parlor games (yuu_00 to yuu_03).
  */
@@ -404,7 +404,7 @@ void monteCountDisp(void) {
 #endif
 
 /**
- * Adds args[1] Pianta tokens (negative to spend). Retail caps the total at 99999; the demo does not.
+ * Adds args[1] Pianta tokens (negative to spend). JP and later cap the total at 99999; the early demos do not.
  * A nonzero args[0] snaps the counter display to the new total instead of letting it count up.
  */
 USER_FUNC(yuugijou_add_montemedal) {
@@ -449,7 +449,7 @@ USER_FUNC(yuugijou_get_montemedal_keep) {
  * Adds args[1] to keptTokens while the tokens are taken out (flag 2); args[0] is read but ignored.
  * keptTokens is overwritten by the next yuugijou_montemedal_keep, so nothing comes of it.
  * Its one caller, gor_03's Pianta Changer (exchange_set), passes only the tokens bought,
- * so args[1] reads the next script word. Guess: meant to add the purchase to the deposit too.
+ * so args[1] reads the next script word.
  */
 USER_FUNC(yuugijou_add_montemedal_moto) {
     EvtWord* args = event->args;
@@ -545,10 +545,9 @@ USER_FUNC(yuuminigame_get_window_evt) {
 }
 #endif
 
-/** Retail: sets the script window_open runs as a child before the quit prompt; each minigame sets its own. */
 // Descriptive name (not in the symbol maps); placeholder unk_8022439c, JP 0x8022439C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
-/** Retail: sets the script window_open runs as a child before the quit prompt; each minigame sets its own. */
+/** JP and later: sets the script window_open runs as a child before the quit prompt; each minigame sets its own. */
 void evtYuuSetWindowEvt(EvtWord* evt) {
     yuu_window_evt = evt;
 }

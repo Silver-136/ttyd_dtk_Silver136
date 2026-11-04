@@ -18,7 +18,7 @@
 #include "dolphin/mtx.h"
 
 #if VERSION != VERSION_JP
-// US has no local duplicate: this is the global kuribo_init
+// Only JP has a local duplicate; elsewhere this is the global kuribo_init
 #define kuribo_init_800C23B4 kuribo_init
 #endif
 
@@ -45,7 +45,7 @@ BOOL christineGetStatus(void) {
  * LW(0) is moved to that NPC's description (its tattle message);
  * otherwise it looks at the map object Mario pushes, faces or stands on and picks the hint for that block,
  * switch, chest or sign, falling back to the "msg_kuri_map" comment on the map itself.
- * Mutes sound effects for the duration; retail also lifts her off the floor collision,
+ * Mutes sound effects for the duration; JP and later also lift her off the floor collision,
  * and returns early when she is in paper form (the early demos instead require her on the ground).
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -199,7 +199,7 @@ USER_FUNC(pre_kurio_use) {
 
 /**
  * Last step of the field Tattle script: advances kuribo_use to its wind-down state,
- * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
+ * lets Mario move again and unmutes sound effects (JP and later also restore her floor collision).
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(post_kurio_use) {
@@ -252,7 +252,7 @@ s32 fbatNpcTalkCheck(void);
 
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
- * retail clears the floor-collision overrides kuribo_use may have set; empty in the early demos.
+ * JP and later clear the floor-collision overrides kuribo_use may have set; empty in the early demos.
  */
 #if VERSION >= VERSION_JP
 void kuribo_use_post(PartyEntry* party) {
@@ -261,7 +261,10 @@ void kuribo_use_post(PartyEntry* party) {
 }
 #endif
 
-/** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
+/**
+ * The early demos start the message right where Goombella stands; JP and later first walk her next to Mario
+ * when she is more than 125 units away or a wall lies between them.
+ */
 #if VERSION >= VERSION_JP
 void kuribo_use(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
@@ -353,14 +356,17 @@ void kuribo_use(PartyEntry* party) {
 
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
- * retail clears the floor-collision overrides kuribo_use may have set; empty in the early demos.
+ * JP and later clear the floor-collision overrides kuribo_use may have set; empty in the early demos.
  */
 #if VERSION <= VERSION_DEMO_JP
 void kuribo_use_post(PartyEntry* party) {
 }
 #endif
 
-/** The demo starts the message right where Goombella stands; retail first walks her next to Mario. */
+/**
+ * The early demos start the message right where Goombella stands; JP and later first walk her next to Mario
+ * when she is more than 125 units away or a wall lies between them.
+ */
 #if VERSION <= VERSION_DEMO_JP
 void kuribo_use(PartyEntry* party) {
     EventEntry* evt;

@@ -1,4 +1,4 @@
-// The chapter title card ("telop") shown when a chapter starts.
+// The area name banner ("telop") shown the first time a map script calls it for an area.
 
 #include "version.h"
 #include "driver/camdrv.h"

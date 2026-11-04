@@ -32,7 +32,7 @@
 #endif
 
 #if VERSION != VERSION_JP
-// US has no local duplicate: this is the global bomhei_init
+// Only JP has a local duplicate; elsewhere this is the global bomhei_init
 #define bomhei_init_800BFBB0 bomhei_init
 #endif
 
@@ -185,7 +185,7 @@ void bomhei_exit(PartyEntry* party) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** Party table exit handler (demo): drops Mario's carry flag, stops the bomb sounds and frees the use work. */
+/** Party table exit handler (early demos): drops Mario's carry flag, stops the bomb sounds and frees the use work. */
 void bomhei_exit(PartyEntry* party) {
     party->playerPtr->flags &= ~(MARIO_FLAG_ACTIVE << 13);
     bomheiCleanUseSfx(party);
@@ -196,8 +196,8 @@ void bomhei_exit(PartyEntry* party) {
 /**
  * Cancels a bomb in progress: back to run mode 2 unless in run mode 9,
  * clears the use flags and frees the use work.
- * Called before plane, ship and bellows rides and on run-mode changes (party_move.c).
- * The early demos leave Mario's carry flag and sounds alone; retail clears the carry flag and stops the two bomb sounds.
+ * Called before plane, ship and bellows rides (party.c) and when a forced walk starts (partyForceWalk, party_move.c).
+ * The early demos leave Mario's carry flag and sounds alone; JP and later clear the carry flag and stop the two bomb sounds.
  */
 void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
@@ -239,7 +239,7 @@ void bomhei_use_cancel2(void) {
 
 /**
  * Party table post-use handler: drops Mario's carry flag, stops the sounds and frees the use work.
- * Demos restore a standing pose when carried; retail chooses walk, dash, jump or standing from Mario's state
+ * The early demos restore a standing pose when carried; JP and later choose walk, dash, jump or standing from Mario's state
  * and repositions Bobbery near Mario during use motions 70-99.
  */
 #if VERSION >= VERSION_JP
@@ -378,10 +378,10 @@ typedef struct BomheiWork {
 
 /**
  * Ends the fuse early on attribute 0xC00 (use motion 60, explode), or floor attribute 0x200
- * without 0xC00 (use motion 40, the splash). Retail checks front, then head, then floor until one applies;
+ * without 0xC00 (use motion 40, the splash). JP and later check front, then head, then floor until one applies;
  * the early demos inspect only the first hit object present.
- * 0x200 is the hazard water that sinks Mario (mario_hit.c, MARIO_MOTION_DAMAGE) and 0x800 the spikes
- * (MARIO_MOTION_DAMAGE_TOGE). Guess: 0x400, the other bit of 0xC00, is a further hazard.
+ * 0x200 is the hazard water that sinks Mario (mario_hit.c, MARIO_MOTION_DAMAGE), 0x400 HIT_ATTR_DAMAGE_LIQUID
+ * and 0x800 the spikes (MARIO_MOTION_DAMAGE_TOGE).
  */
 static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
     HitEntry* hit;
@@ -978,8 +978,8 @@ void mario_controll(PartyEntry* party) {
 
 /**
  * Tests floor without attribute 0xE00 just below the point dist units from pos along angle.
- * Both versions probe 4 units down from 2 above that point. Demos keep the moved point's original height;
- * retail moves pos to the floor hit, rounded to 0.001 units.
+ * All versions probe 4 units down from 2 above that point. The early demos keep the moved point's original height;
+ * JP and later move pos to the floor hit, rounded to 0.001 units.
  */
 static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1045,7 +1045,7 @@ static inline BOOL bomheiChkReturnGround(Vec* pos, f32 dist, f32 angle) {
 }
 
 /**
- * Where a partner reappears next to Mario after leaving the screen (Bobbery after his blast in the demo,
+ * Where a partner reappears next to Mario after leaving the screen (Bobbery after his blast in the early demos,
  * Koops and the party_motion fall-ins): 6 units along Mario's yaw,
  * else behind or in front of him at his collision radius,
  * whichever has no wall and floor that passes bomheiChkReturnGround; else behind him at that radius.

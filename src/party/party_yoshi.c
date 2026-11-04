@@ -151,8 +151,8 @@ void sweatMain(PartyEntry* party) {
 
 /**
  * Ride state from Yoshi's use motion: 0 not riding (or the partner is not Yoshi), 1 riding on the ground,
- * 2 flutter jump, 3 jump-stand bounce, 4 falling after it,
- * 5 anything else (mounting, getting off, step-up, water). The demo has only 0, 1, 2 and 3 for everything else.
+ * 2 flutter jump, 3 jump-stand bounce, 4 falling (after a flutter or a jump-stand bounce),
+ * 5 anything else (mounting, getting off, step-up, water). The early demos have only 0, 1, 2 and 3 for everything else.
  */
 s32 yoshiGetStatus(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -277,8 +277,8 @@ static inline void fall(PartyEntry* party) {
 /**
  * Ends the ride at once (no dismount animation):
  * resets the offsets and Mario's pose, frees Yoshi's work area and returns him to follow mode.
- * Called on damage, map re-init and yoshi_exit.
- * In the retail versions a spike hit (MARIO_MOTION_DAMAGE_TOGE) instead puts Yoshi
+ * Called on damage, after a field battle (marioFBattlePost) and from yoshi_exit.
+ * In JP and later a spike hit (MARIO_MOTION_DAMAGE_TOGE) instead puts Yoshi
  * and the extra partner in run mode 0xd.
  */
 void marioYoshiForceCancel(void) {
@@ -333,7 +333,7 @@ void yoshi_bye(PartyEntry* party) {
     }
 }
 
-/** Yoshi's exit handler (retail party_data only): cancels the ride and puts Mario back to standing. */
+/** Yoshi's exit handler (party_data, partner Yoshi's entry only): cancels the ride and puts Mario back to standing. */
 void yoshi_exit(PartyEntry* party) {
     party->playerPtr->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
     marioYoshiForceCancel();
@@ -403,7 +403,7 @@ void yoshiAnimeCtrl(PartyEntry* party) {
     }
 }
 
-/** Yoshi's init handler (party_data): sets his member kind and size (26 tall; 28 wide in the demo, 20 later). */
+/** Yoshi's init handler (party_data): sets his member kind and size (26 tall; 28 wide in the early demos, 20 in JP and later). */
 void yoshi_init(PartyEntry* party) {
     party->memberKind = PARTY_MEMBER_YOSHI;
     party->moveKind = 0;
@@ -440,8 +440,8 @@ static inline f32 getOfs(PartyEntry* party) {
 
 /**
  * Runs Yoshi's ride: mounting, ground movement, flutter and jump-stand motion, dismounting and water handling.
- * Demos omit the head search and add the fly bob speed directly to the height;
- * retail accumulates a bob offset around a ground/base height. The early demos also scale ordinary ride movement
+ * The early demos omit the head search and add the fly bob speed directly to the height;
+ * JP and later accumulate a bob offset around a ground/base height. The early demos also scale ordinary ride movement
  * to 3/4 while party bit 0x80 (shallow water) is set.
  */
 void yoshi_use(PartyEntry* party) {
@@ -896,7 +896,7 @@ void yoshi_use(PartyEntry* party) {
                         party->moveSpeed = 0.0f;
                         party->useMotionId = 52;
 #if VERSION <= VERSION_DEMO_JP
-                        break; // the demo only breaks out here in the evt mode
+                        break; // the early demos only break out here in the evt mode
                     }
 #else
                     }
@@ -1156,7 +1156,7 @@ void yoshi_use(PartyEntry* party) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** The demo version works the fly angle in the caller's variable (passed by pointer). */
+/** The early demos' version works the fly angle in the caller's variable (passed by pointer). */
 void yoshiFlyMove(PartyEntry* party, f32* angle) {
 #else
 void yoshiFlyMove(PartyEntry* party) {
@@ -1209,7 +1209,7 @@ void yoshiFlyMove(PartyEntry* party) {
  * Ride velocity from the stick X axis: accelerates velX,
  * stops on a reversal against the flutter direction and clamps to 16.
  * With the stick released it brakes (harder against a wall);
- * from the US release on it brakes only during the flutter and stops at once otherwise.
+ * in US and later it brakes only during the flutter and stops at once otherwise.
  */
 void inertia(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -1286,7 +1286,7 @@ void inertia(PartyEntry* party) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** The demo searches 11 up into locals and has the older landing and step code. */
+/** The early demos search 11 up into locals and has the older landing and step code. */
 static void searchGround(PartyEntry* party) {
 #else
 void searchGround(PartyEntry* party) {
@@ -1429,7 +1429,7 @@ void searchGround(PartyEntry* party) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** The demo searches into locals, always records the hit object, and stops the flutter sound on landing. */
+/** The early demos search into locals, always record the hit object, and stops the flutter sound on landing. */
 static void searchGround2(PartyEntry* party) {
 #else
 void searchGround2(PartyEntry* party) {

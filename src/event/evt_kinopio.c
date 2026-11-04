@@ -195,7 +195,7 @@ USER_FUNC(get_from_bed_evt) {
 /**
  * Lays Mario flat in bed: switches him to the "p_slit" paper pose and holds his facing at args[0] degrees,
  * never finishing (the talk script deletes it).
- * Retail also slides him 0.2 units a frame for 30 frames (backwards in pik_04).
+ * JP and later also slide him 0.2 units a frame for 30 frames (backwards in pik_04).
  */
 static USER_FUNC(paper_on) {
     EvtWord* args = event->args;
@@ -283,14 +283,9 @@ USER_FUNC(cameraman_on) {
 }
 #endif
 
-/**
- * .data The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
- * puts Mario to bed with a spotlight fade and sleep music, restores HP/FP and partners,
- * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
- */
 //.data
 /**
- * .data The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
+ * The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
  * puts Mario to bed with a spotlight fade and sleep music, restores HP/FP and partners,
  * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
  */
@@ -313,7 +308,6 @@ EVT_BEGIN(kinopio_house_talk_evt)
         RETURN
     END_IF
 
-    // If Mario and the party are already fully rested, the innkeeper asks whether he wants a bed anyway.
     // If Mario and the party are already fully rested, the innkeeper asks whether he wants a bed anyway.
     CALL(power_chk, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -554,7 +548,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     RETURN
 EVT_END()
 
-/** Retail 50th-stay celebration with the Lakitu cameraman's photo and the 200-coin gift; see the demo version above. */
+/** 50th-stay celebration with the 200-coin gift; JP and later add the Lakitu cameraman's photo. */
 EVT_BEGIN(evt_50)
     CALL(get_npcname, LW(10))
 #if VERSION >= VERSION_JP

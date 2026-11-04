@@ -40,8 +40,8 @@ RubWork rubwork;
 
 /**
  * Handles falling to y <= -2000: background mode enters the bottomless motion.
- * Demos otherwise use fixed positions for eki_04, gon_10 and muj_00, or (0, 74, 0) elsewhere;
- * only the generic fallback also moves the partners. Retail reloads the map when requested,
+ * The early demos otherwise use fixed positions for eki_04, gon_10 and muj_00, or (0, 74, 0) elsewhere;
+ * only the generic fallback also moves the partners. JP and later reload the map when requested,
  * otherwise restores Mario and his partners to bottomlessResetPosition and force-resets his motion.
  */
 void marioBottomless(void) {
@@ -271,7 +271,7 @@ f32 revise360(f32 angle) {
 /**
  * Converts a screen-relative angle in degrees into a world move direction (270 - angle + camera yaw, wrapped).
  * In paper mode the input angle is forced to 0 or 180 from the side Mario faces before that conversion.
- * The US and PAL releases round to 0.001 degree; JP and the early demos to 0.01.
+ * US and later round to 0.001 degree; JP and the early demos to 0.01.
  */
 f32 toMovedir(f32 angle) {
     MarioWork* mario = marioGetPtr();

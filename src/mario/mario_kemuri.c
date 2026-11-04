@@ -295,7 +295,7 @@ void kemuri(void) {
 /**
  * Dust trail behind the partner, run each frame from party.c:
  * every eight qualifying updates while it walks at speed 2 or more, or while Yoshi carries Mario.
- * The JP and demo versions also puff over water and at any system level.
+ * JP and the early demos also puff over water, in pipe mode and at any system level.
  */
 void party_kemuri(PartyEntry* party) {
 

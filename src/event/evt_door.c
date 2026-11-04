@@ -107,7 +107,7 @@ EvtWord evt_door_open_quick[220];
 EvtWord evt_door_entry[77];
 
 /**
- * Plays the door-open sound for a DoorParam (LW(0)) at its map object's position;
+ * Plays the door-open sound for a DoorParam (LW(0)) at its hitIn hit object's position;
  * the sound comes from DoorParam.se (1 plain, 2-4 wood, 5-6 iron, 7 grille, 8 sliding, 9 turning, 10 electric,
  * 11 stone, 12-13 castle, 14 metal); 0 stays silent.
  */
@@ -150,7 +150,7 @@ EVT_BEGIN(door_open_se)
 EVT_END()
 
 /**
- * Plays the door-shut sound matching DoorParam.se at the door's map object;
+ * Plays the door-shut sound matching DoorParam.se at the door's hitIn hit object;
  * same table as door_open_se, except se 4 reuses the second wood sound.
  */
 EVT_BEGIN(door_close_se)
@@ -192,8 +192,8 @@ EVT_BEGIN(door_close_se)
 EVT_END()
 
 /**
- * Plays SFX_DOOR_FALL1 at the door's map object for any nonzero DoorParam.se;
- * spawned by evt_door_open when the door has a wall event (evtWall).
+ * Plays SFX_DOOR_FALL1 at the door's hitIn hit object for any nonzero DoorParam.se;
+ * spawned by evt_door_open and evt_door_open_bom_01 when the door has an out event (evtOut).
  */
 EVT_BEGIN(door_down_se)
     CALL(evt_door_param, LW(0), DOOR_PARAM_SE, LW(1))
@@ -208,8 +208,8 @@ EVT_BEGIN(door_down_se)
 EVT_END()
 
 /**
- * Plays SFX_HOUSE_OPEN1 at the door's map object when the house front swings open,
- * unless DoorParam.flags bit 2 asks for no sound.
+ * Plays SFX_HOUSE_OPEN1 at the door's hitIn hit object when the house front swings open,
+ * unless DoorParam.flags has DOOR_FLAG_NO_OPEN_SE (0x2).
  */
 EVT_BEGIN(house_open_se)
     CALL(evt_door_param, LW(0), DOOR_PARAM_FLAGS, LW(1))
@@ -285,7 +285,7 @@ USER_FUNC(door_entry) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-/** the demo defines house_close_se right after house_open_se */
+/** the early demos define house_close_se right after house_open_se */
 EVT_BEGIN(house_close_se)
     CALL_CHILD(house_open_se)
     RETURN
@@ -1546,7 +1546,8 @@ USER_FUNC(get_noclip_map) {
 /**
  * Works out where Mario stands outside (out) and inside (in) a door from the hit objects' positions and normals;
  * the outside spot is offset sideways by half the door map object's width according to the hinge side (type).
- * With mario set, Mario's own position replaces the hit positions. Only X and Z are written.
+ * With mario set, Mario's own position replaces the hit positions. Only X and Z are written, except that a missing
+ * hit object makes that spot Mario's whole position.
  */
 void door_position_sub(s32 type, const char* map, const char* hitIn, const char* hitOut, Vec* in, Vec* out, BOOL mario) {
     Mtx inv;
@@ -1865,7 +1866,7 @@ USER_FUNC(npc_hide_onoff) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-/** the demo defines these with the door helpers at the end of the file */
+/** the early demos define these with the door helpers at the end of the file */
 static USER_FUNC(snd_door_in) {
     psndSetFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;

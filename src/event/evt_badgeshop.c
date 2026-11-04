@@ -108,7 +108,7 @@ s32 badge_bteresa_table_card_special[] = { //Pianta Parlor Special Card
     ITEM_MAPLE_SYRUP, ITEM_POWER_JUMP, ITEM_HP_PLUS, ITEM_FP_PLUS, ITEM_NULL
 };
 
-// US moves Multibounce from the Gold Card list to the Silver Card list.
+// US and later move Multibounce from the Gold Card list to the Silver Card list.
 s32 badge_bteresa_table_card_silver[] = { // Pianta Parlor Silver Card
     ITEM_GOLD_BAR_X3, ITEM_POWER_SMASH, ITEM_HP_PLUS_P,
 #if VERSION >= VERSION_US
@@ -649,7 +649,7 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
 #pragma opt_common_subs reset
 
 #if VERSION <= VERSION_DEMO_JP
-/** the demo counts the thrown badges through an inline copy of badgeShop_ThrowCheck (with its bug: always 0) */
+/** the early demos count the thrown badges through an inline copy of badgeShop_ThrowCheck (with its bug: always 0) */
 static inline s32 badgeShop_ThrowCount(s32 itemId) {
     int i;
     s32 count;
@@ -665,7 +665,7 @@ static inline s32 badgeShop_ThrowCount(s32 itemId) {
 
 /**
  * Counts how many different badges are left in the Lovely Howz bargain_table and writes it to args[0].
- * The demo also subtracts badgeShop_ThrowCount from each badge's stock first, which is always 0.
+ * The early demos also subtract badgeShop_ThrowCount from each badge's stock first, which is always 0.
  */
 USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     EvtWord* args = event->args;
@@ -755,7 +755,7 @@ USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-/** demo only: TRUE once word 6 of the block in LW(0) reaches the bargain count (no caller in the demo dol) */
+/** early demos only: TRUE once word 6 of the block in LW(0) reaches the bargain count (no caller in the demo dol) */
 USER_FUNC(evt_badgeShop_getBargainKind) {
     evtSetValue(event, event->args[0], !(((s32*)event->lwData[0])[6] < bdsw->bargainNum));
     return EVT_RETURN_DONE;
@@ -764,9 +764,8 @@ USER_FUNC(evt_badgeShop_getBargainKind) {
 /**
  * Counts itemId in bargainBadges[bargainNum..2*bargainNum-1];
  * the callers (winmgr.c, evt_win.c) subtract the count from the bargain stock when they build the badge lists.
- * Those slots lie past the five-entry array (bargainNum, reserved_110, restockFlags and padding),
- * which never hold a badge id, so it always returns 0.
- * Guess: it was meant to count copies already set aside.
+ * Those slots are unfilled (zero) entries of the five-entry array or lie past it (bargainNum, reserved_110,
+ * restockFlags and padding), which never hold a badge id, so it always returns 0.
  */
 s32 badgeShop_ThrowCheck(s32 itemId) {
     int i;

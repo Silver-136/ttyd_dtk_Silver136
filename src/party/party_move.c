@@ -123,7 +123,7 @@ s32 partyGetFootmarkId(PartyEntry* party) {
 
 /**
  * Copies the supplied other member's position in the early demos unless it is absent or far, otherwise Mario's.
- * Retail selects the other slot and rejects it when absent, in Koops status 3, or at least 150 units from Mario.
+ * JP and later select the other slot and reject it when absent, in Koops status 3, or at least 150 units from Mario.
  */
 #if VERSION <= VERSION_DEMO_JP
 static inline void partyTargetPos(PartyEntry* other, BOOL far, Vec* pos) {
@@ -429,7 +429,7 @@ f32 partyGetTargetMovespd(s32 id) {
  * Without PARTY_FLAG_IS_PARTNER, or while following close (doors),
  * it is Mario's walk speed (baseSpeed, else baseDashSpeed);
  * otherwise the active partner's moveSpeed unless Koops's nokonokoGetStatus is 3
- * (retail also falls back to Mario when that partner is at least 150 units away).
+ * (JP and later also fall back to Mario when that partner is at least 150 units away).
  */
 f32 partyGetTargetMovespd2(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -471,7 +471,7 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
 
 /**
  * Advances trail id's read position by one, wrapping at 80.
- * Retail stops at the write position; the early demos can advance past it.
+ * JP and later stop at the write position; the early demos can advance past it.
  */
 void partyNextReadId(s32 id) {
 #if VERSION >= VERSION_JP
@@ -542,7 +542,7 @@ void partyClearFootmark(void) {
 
 /**
  * Restarts footmarks: the early demos reset both trails to Mario (the partner lookup is unused).
- * Retail resets only trail 1 to the active partner, or Mario if it is absent, in Koops status 3, or at least 150 units away.
+ * JP and later reset only trail 1 to the active partner, or Mario if it is absent, in Koops status 3, or at least 150 units away.
  */
 void partyClearFootmark2(void) {
 #if VERSION <= VERSION_DEMO_JP
@@ -604,7 +604,7 @@ static inline BOOL partyChkMarioJumpFlag(void) {
 /**
  * Appends pos to trail id, unless successive marks are both jump marks, pos is unchanged,
  * or readId is exactly writeId + 1 (this full check does not account for wrapping).
- * Argument mask 1 marks a jump; the slit argument is 2 in the early demos and 4 in retail, stored as bit 4.
+ * Argument mask 1 marks a jump; the slit argument is 2 in the early demos and 4 in JP and later, stored as FOOTMARK_FLAG_SLIT (4).
  */
 static inline void partyPutFootmark(s32 id, Vec pos, u32 flags) {
     MarioWork* mario = marioGetPtr();
@@ -653,7 +653,7 @@ static inline BOOL partyChkOtherFlag(PartyEntry* other) {
 /**
  * Lays this frame's footmark for Koops's walk (party_nokonoko.c).
  * The slot 0 entry tracks Mario; the other tracks the active partner,
- * or Mario while Koops's nokonokoGetStatus is 3 (retail also falls back at a distance of 150 or more);
+ * or Mario while Koops's nokonokoGetStatus is 3 (JP and later also fall back at a distance of 150 or more);
  * switching between the two restarts the trail (footmarkMode).
  */
 void partyRecordFootmark(PartyEntry* party) {
@@ -875,7 +875,7 @@ void partyPlaySfxPartyLanding1(PartyEntry* party) {
 
 /**
  * Footstep sounds, counted on footstepTimer; arg 0 walking, 1 running (normally steps twice as often; the egg and Punio keep their timing).
- * Flavio, the Yoshi egg and Punio have their own sounds and timing, flying partners (moveKind 1) a single sound;
+ * Flavio, the Yoshi egg and Punio have their own sounds (the egg and Punio also their own timing), flying partners (moveKind 1) a single sound;
  * the rest alternate two steps.
  */
 #if VERSION >= VERSION_JP
@@ -1321,7 +1321,7 @@ s32 partyMarioHosei(PartyEntry* party);
  * and the push away from Mario (partyMarioHosei), times 0.75 in shallow water.
  * While being pushed it restarts the footmark trail,
  * and after 30 frames of pushing it sends the partner behind Mario.
- * JP, US and PAL suppress the behind-Mario transition during door walks.
+ * JP and later suppress the behind-Mario transition during door walks.
  */
 void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
     MarioWork* mario = party->playerPtr;
@@ -1481,7 +1481,7 @@ void partyChkWall(PartyEntry* party) {
 #if VERSION >= VERSION_JP
 
 /**
- * Run mode 1 in JP, US and PAL: the partner stands and waits (stand pose, Flurrie's hover, falling),
+ * Run mode 1 in JP and later: the partner stands and waits (stand pose, Flurrie's hover, falling),
  * with the usual end-of-frame checks and Vivian's shadow.
  */
 void party_move_mode_wait(PartyEntry* party) {
@@ -1517,7 +1517,7 @@ void party_move_mode_wait(PartyEntry* party) {
 /**
  * Readies a walking partner: grounded, footmark trail restarted at whatever it follows, homing distance 50,
  * then stand pose, move mode 1 and motion 0 unless Mario has partner walking disabled.
- * The PAL release also ends any jump.
+ * PAL and the PAL demo also end any jump.
  */
 void partyWalkInit(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1554,7 +1554,7 @@ void partyWalkInit(PartyEntry* party) {
 
 /**
  * move_func of the walking partners (partyDataTbl):
- * reinitialises on a run-mode change, eases the speed (JP, US and PAL), then runs partyWalkMain.
+ * reinitialises on a run-mode change, eases the speed (JP and later), then runs partyWalkMain.
  */
 void partyMoveWalk(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
@@ -1619,8 +1619,8 @@ void partyWalkMain(PartyEntry* party) {
 }
 
 /**
- * Move mode 0: the partner stays where it is (stand motion, falls; JP,
- * US and PAL also run Flurrie's hover and end other motions).
+ * Move mode 0: the partner stays where it is (stand motion, falls; JP
+ * and later also run Flurrie's hover and end other motions).
  */
 void party_move_mode_stay(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_MOVE_MODE) {
@@ -1988,7 +1988,7 @@ extern f32 partyNrmToAngle(Vec* n);
 
 /**
  * TRUE when hit is floor a partner may appear on:
- * not water or a hazard (attr 0x200 / 0x800) and not a map object from objNames.
+ * not deep water or spikes (attr 0x200 / 0x800) and not a map object from objNames.
  */
 static inline BOOL partyAppearChkFloor(HitEntry* hit) {
     if (!hit) {
@@ -2499,7 +2499,7 @@ const Vec vec3_802ce0ac = {0.0f, 0.0f, 0.0f};
 const Vec vec3_802ce0b8 = {0.0f, 0.0f, 0.0f};
 #endif
 
-/** Stand-in for a function the original linker dead-stripped; it created 90.0f and 20.0f in the .sdata2 pool here. */
+/** Stand-in for a function the original linker dead-stripped; it created 90.0f and 20.0f (0.0f in the early demos) in the .sdata2 pool here. */
 // Stand-in for a function the original linker dead-stripped; it created 90.0f and 20.0f in the .sdata2 pool here.
 static void partyMoveStrippedPool(f32* f) {
 #if VERSION <= VERSION_DEMO_JP

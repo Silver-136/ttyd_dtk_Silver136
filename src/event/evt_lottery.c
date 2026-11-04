@@ -1,4 +1,4 @@
-// Script commands for the Pianta Parlor lottery ticket.
+// Script commands for the lottery ticket in west Rogueport (gor_03).
 
 #include "version.h"
 #include "evt/evt_lottery.h"
@@ -18,8 +18,8 @@ lottery_info* lotteryGetPtr(void) {
 }
 
 /**
- * the demo checks the draw day before the per-shop times,
- * never rerolls a prize number and keeps the buy times when the clock went back
+ * the early demos check the draw day before the per-shop times,
+ * never reroll a prize number and keep the buy times when the clock went back
  */
 USER_FUNC(evt_lottery) {
     lottery_info* lot;
@@ -228,7 +228,7 @@ USER_FUNC(evt_lottery) {
     return EVT_RETURN_DONE;
 }
 
-/** the demo only marks a purchase made with a broken clock */
+/** the early demos only mark a purchase made with a broken clock */
 USER_FUNC(evt_lottery_buy) {
     EvtWord* args = event->args;
     OSTime now = OSGetTime();

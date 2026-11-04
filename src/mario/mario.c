@@ -405,7 +405,7 @@ void marioItemGetChk(void) {
 
 /**
  * TRUE when Mario may collect field items, i.e. the marioItemGetDisable lock is off;
- * itemdrv checks it before a pick- up.
+ * itemdrv checks it before a pick-up.
  */
 BOOL marioItemGetOk(void) {
     return (mp->flags & MARIO_FLAG_ITEM_GET_DISABLED) == 0;
@@ -476,7 +476,7 @@ static inline BOOL marioChkYoshiKey(void) {
  * or a partner action holding the keys.
  * In the Pianta Parlor game rooms (yuu_) only the control and key locks count.
  * Called by win_main and a dou_04 script call; with Vivian in use,
- * the US and PAL releases also block it while her party entry has flag 0x80000000.
+ * US and later also block it while her party entry has flag 0x80000000.
  */
 BOOL marioCheckMenuDisable(void) {
     MarioWork* wp = mp;
@@ -629,7 +629,7 @@ void marioFBattlePrepare(void) {
  * Undoes marioFBattlePrepare once the battle start is over or cancelled:
  * restores movement, puts Mario back after the accordion motion, gets him off Yoshi,
  * gives the partner control back and ends a hammer swing.
- * The US and PAL releases also move the partner back to its spot beside Mario.
+ * US and later also move the partner back to its spot beside Mario.
  */
 void marioFBattlePost(void) {
     MarioWork* wp = mp;
@@ -968,7 +968,7 @@ void marioInit(void) {
 /**
  * Resets MarioWork on a map change (seq_mapchange) but keeps the character, pose sets, current motion, facing,
  * partners, camera and 8-bit mode; the rest is cleared and the partners, balloon,
- * blur trail and camera shift are reset. The US demo carries flag 0x200000 over as the party-walk lock.
+ * blur trail and camera shift are reset. The early demos carry flag 0x200000 over as the party-walk lock.
  */
 void marioReInit(void) {
     CameraId camId;
@@ -1171,7 +1171,7 @@ static inline BOOL marioChkRollMot2(void) {
  * outfit and Slow Go checks, the Moon's low gravity (moo maps), invincibility and coin-drop timers, input,
  * partner use and motion, then the movement, ground and wall checks for his state, bottomless pits,
  * display set-up, balloon, partner and camera. Bowser and Peach hand off to kpaMain/peachMain.
- * The US demo always rechecks the outfit and has no Slow Go walk forcing here.
+ * The early demos always recheck the outfit and have no Slow Go walk forcing here.
  */
 void marioMain(void) {
     MarioWork* wp = mp;
@@ -1500,8 +1500,8 @@ static inline void marioMove_screenPos(void) {
 /**
  * Moves Mario for the frame (marioMoveMain) and updates his screen position.
  * In background mode it also handles the camera height and picks the walk or run pose from his movement;
- * from the Japanese release on, aji_13 (X-Naut Fortress) raises the camera
- * when he climbs high on screen instead.
+ * from the Japanese release on, aji_13 (X-Naut Fortress) instead turns the camera's height follow back on
+ * once he is low on screen (screen y 400 or more).
  */
 void marioMove(void) {
     MarioWork* wp = mp;
@@ -2526,7 +2526,7 @@ void marioDisp(CameraId camId, void* param) {
     animPoseSetLocalTimeRate(wp->paperAnimGroupId[marioAnimeId()], (wp->flags & MARIO_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f);
 }
 
-/** Returns the back-facing version of a Mario or Peach pose name, or NULL if it has none; PAL adds M_I_3. */
+/** Returns the back-facing version of a Mario or Peach pose name, or NULL if it has none; the PAL demo and PAL add M_I_3. */
 const char* toRearPose(const char* name) {
     const char* rear = NULL;
     if (mp->characterId == CHARACTER_PEACH && !(mp->peachFlags & PEACH_FLAG_GUNDAN)) {

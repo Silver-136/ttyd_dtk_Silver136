@@ -65,8 +65,9 @@ WinMgrDesc coin_desc = {
 };
 
 /**
- * Retail: args[0] flag, args[1] select window type;
+ * JP and later: args[0] flag, args[1] select window type;
  * args[2] gets the chosen entry (-1 if cancelled) and, when the flag is set, args[3] the cursor slot.
+ * The early demos take the type in args[0] and write the entry to args[1].
  * Mario's controls are locked while the window is open.
  */
 USER_FUNC(evt_win_item_select) {
@@ -374,7 +375,7 @@ static void coin_disp(WinMgrEntry* entry) {
 }
 
 /**
- * Opens the counter window of type args[0] (0 coins, 1 Shine Sprites, 2 Star Pieces) at the top left,
+ * Opens the counter window of type args[0] (0 coins, 1 Shine Sprites, 2 Star Pieces) on the left, below the middle of the screen (x -250, y -75),
  * as shops do while buying; args[1] gets the window handle for evt_win_coin_off/wait.
  */
 USER_FUNC(evt_win_coin_on) {

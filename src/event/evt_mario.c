@@ -193,7 +193,7 @@ USER_FUNC(evt_mario_dokan_prepare) {
 
 /**
  * Plays Mario's paper pipe animation, then switches to the pipe motion;
- * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
+ * arg 0 = DokanType (evt_bero passes the OUT types when Mario leaves through a pipe, the IN types when he comes out of one).
  * Blocks while the spin runs; the partners leave as he goes in.
  */
 USER_FUNC(evt_mario_paper_pose_dokan) {
@@ -739,7 +739,7 @@ const f32 evt_mario_half_turn = 180.0f;
 
 /**
  * Snaps Mario's display direction to 0 or 180 degrees and updates movement direction.
- * US and PAL derive movement from the snapped direction; JP and the early demos use toMovedir(90) for either facing.
+ * US and later derive movement from the snapped direction; JP and the early demos use toMovedir(90) for either facing.
  */
 USER_FUNC(evt_mario_adjust_dir) {
     marioAdjustMoveDir();
@@ -771,7 +771,7 @@ USER_FUNC(evt_mario_set_normal_pose) {
 
 /**
  * Plays the Mario animation named in arg 0, unless he is a plane, boat, tube or sideways paper.
- * Names not in a_mario_group come from the second animation set. The EU release swaps M_I_2 for M_I_3.
+ * Names not in a_mario_group come from the second animation set. The PAL demo and PAL swap M_I_2 for M_I_3.
  */
 USER_FUNC(evt_mario_set_pose) {
     s32 i;
@@ -1128,7 +1128,7 @@ static inline f32 doorAngle(f32 cam) {
 /**
  * Moves Mario through a door to x = args[0], z = args[1] at the requested speed args[2] (reduced in background mode),
  * while the partners follow closely, then positions them behind him.
- * The early demos choose their direction from the camera yaw; retail adds map-specific partner directions.
+ * The early demos choose their direction from the camera yaw; JP and later add map-specific partner directions (pik_00, muj_01).
  */
 USER_FUNC(evt_mario_party_door_move) {
     EvtWord* args = event->args;
@@ -1303,7 +1303,7 @@ USER_FUNC(evt_mario_party_door_move) {
 /**
  * Moves Mario through an entrance to x = args[0], z = args[1] at the requested speed args[2] (reduced in background mode),
  * keeping the partners close, then positions them behind him.
- * The early demos use the same angle rule for both move kinds; retail varies the angles by moveKind.
+ * The early demos use the same angle rule for both move kinds; JP and later vary the angles by moveKind.
  */
 USER_FUNC(evt_mario_party_bero_move) {
     EvtWord* args = event->args;
@@ -1581,7 +1581,7 @@ USER_FUNC(evt_mario_jump_pos) {
             mp->jumpJerkY = 0.0f;
             mp->jumpSnapY = 0.0f;
             mp->baseSpeed = 0.0f;
-            mp->baseSpeed = 0.0f; // the retail code stores baseSpeed twice
+            mp->baseSpeed = 0.0f; // the original code stores baseSpeed twice
             camFollowYOn();
             if (!(mp->flags & MARIO_FLAG_TUBE_MODE)) {
                 marioChgMot(MARIO_MOTION_STAY);
@@ -1788,7 +1788,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         mp->jumpJerkY = 0.0f;
         mp->jumpSnapY = 0.0f;
         mp->baseSpeed = 0.0f;
-        mp->baseSpeed = 0.0f; // the retail code stores baseSpeed twice
+        mp->baseSpeed = 0.0f; // the original code stores baseSpeed twice
         marioChgMot(MARIO_MOTION_STAY);
         mp->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
@@ -2371,7 +2371,7 @@ USER_FUNC(evt_mario_kill_party) {
 
 /**
  * Removes the partner in slot arg 0 at once; for the second slot it uses partyKill2 instead.
- * Used by the game over sequence, Rogueport and the Shadow Mario scripts.
+ * Used by the game over sequence and map scripts (Rogueport, the Shadow Mario scripts, mri, muj, tou, win).
  */
 USER_FUNC(evt_mario_clear_party) {
     MarioWork* mp = marioGetPtr();

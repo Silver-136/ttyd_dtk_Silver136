@@ -82,7 +82,7 @@ s32 marioUseParty(void) {
         return 0;
     }
 
-    // 1 = PARTY_MEMBER_GOOMBELLA, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
+    // 4 = PARTY_MEMBER_YOSHI: the char-sized enum constant changes the s8 compare
     if (party->currentMemberId == PARTY_MEMBER_GOOMBELLA && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;
     }
@@ -210,7 +210,7 @@ void marioPartyKill(void) {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Demo partner button check: X arms MARIO_TRIG_FLAG_JABARA_CHK with a 5-frame partyUseDelay
+ * Early-demo partner button check: X arms MARIO_TRIG_FLAG_JABARA_CHK with a 5-frame partyUseDelay
  * while Mario stands, walks or dashes with a usable partner.
  * Subsequent calls count down the delay and return partyDoWork's result when it expires.
  * Losing control clears the trigger; jumping, falling and airTimer also block or cancel it.

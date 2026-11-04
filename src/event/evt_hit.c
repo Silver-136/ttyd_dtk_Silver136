@@ -158,7 +158,7 @@ USER_FUNC(evt_hitobj_attr_onoff) {
 
 /**
  * Starts script evt once for hit object name and every object below it, passing each name in LW(0);
- * flag also walks the siblings (it is FALSE only for the starting object).
+ * withSiblings also walks the siblings (it is FALSE only for the starting object).
  */
 static void name_callback_sub(const char* name, void* evt, BOOL withSiblings) {
     HitEntry* hit = hitNameToPtr(name);

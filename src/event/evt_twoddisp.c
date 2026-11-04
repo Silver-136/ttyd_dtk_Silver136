@@ -82,7 +82,7 @@ USER_FUNC(twoddisp_main) {
 
 /**
  * Sets up the 2D overlay system: allocates 100 empty entries from map memory and starts twoddisp_main_event,
- * copying the caller's local variables to it. No script in the game calls these overlay commands.
+ * copying the caller's local variables to it. kpa.c is the only user of these overlay commands.
  */
 USER_FUNC(evt_twoddisp_init) {
     EventEntry* e;
@@ -192,7 +192,7 @@ USER_FUNC(evt_twoddisp_set_base_position) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets (args[0] nonzero) or clears flag bits args[2] on overlay args[1]; bit 1 makes it visible. */
+/** Sets (args[0] nonzero) or clears flag bits args[2] on overlay args[1]; flag 0x1 makes it visible. */
 USER_FUNC(evt_twoddisp_flag_onoff) {
     s32 onoff;
     TwodEntry* p;

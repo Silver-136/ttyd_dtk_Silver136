@@ -84,7 +84,7 @@ USER_FUNC(urouro_init_func) {
  * Per-frame wander step for NPC args[0]: walk in a random direction for 3-6 s,
  * turn back toward the centre when outside the radius,
  * after hitting a wall or when Mario walks into it from behind, then stand 4.5-9 s.
- * Retail versions also play the NPC's footstep sounds. Never returns DONE.
+ * JP and later also play the NPC's footstep sounds. Never returns DONE.
  */
 USER_FUNC(urouro_main_func) {
     const char* name = (const char*)evtGetValue(event, *event->args);

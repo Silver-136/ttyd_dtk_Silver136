@@ -134,7 +134,7 @@ static const Vec vecB = {0.0f, 0.0f, 0.0f};
 /**
  * Script helper: reads set_msg's result (LW0 message, LW1 2 near / 1 far / 0 nothing) and,
  * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
- * then a 1.5 s speech-bubble effect over her. In the retail versions a far find skips the sniff.
+ * then a 1.5 s speech-bubble effect over her. In JP and later a far find skips the sniff.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(search_result) {
@@ -228,7 +228,7 @@ USER_FUNC(set_msg) {
 #else
 
 /**
- * The demo stops at the first item or block in range and has no buried treasure table.
+ * The early demos stop at the first item or block in range and have no hidden treasure table.
  * Script helper: looks for an item and then a block from mobj_list within 150 units of Mario, then anywhere;
  * sets LW0 to map_exist_near / map_exist_far / map_no_exist and LW1 to 2 / 1 / 0, and turns Ms. Mowz to face it.
  */
@@ -379,8 +379,9 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
 #endif
 
 /**
- * Whether there is something to sniff within 150 units of Mario (an item, an unopened item box,
- * a Kururin floor item or a block from mobj_list);
+ * Whether there is something to sniff within 150 units of Mario: an item or a map object from mobj_list,
+ * plus in the early demos the nearest object if it is a closed item box or a Kururin floor with an item,
+ * and in JP and later an unfound chuchu_treasure_tbl spot;
  * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
  */
 BOOL chuchu_searchObject(void) {
@@ -440,7 +441,7 @@ void chuchu_exit(PartyEntry* party) {
 
 /**
  * Party table move handler: on a run-mode change clears the in-use flag and starts walking;
- * then follows Mario (the retail versions also update her walk speed first).
+ * then follows Mario (JP and later also update her walk speed first).
  */
 void chuchu_move(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {

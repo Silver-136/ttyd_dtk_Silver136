@@ -54,8 +54,8 @@
 s32 mobj_lock(MapObjectEntry* mobj);
 
 
-// The objects JP and US strip (the A/B ride switches, red tornado switch, arrow, trap floor and
-// breaking rock) stay in PAL.
+// The objects JP, US and the US September demo strip (the A/B ride switches, red tornado switch, arrow,
+// trap floor and breaking rock) stay in the early demos, the PAL demo and PAL.
 #if VERSION >= VERSION_DEMO_EU
 #define MOBJ_EXTRA_OBJS 1
 #else
@@ -105,7 +105,7 @@ static inline BOOL isAnimA13(const s8* a) {
     return FALSE;
 }
 
-// FAKE: itemEntry declared with the position first: the retail calls load x/y/z before the other arguments
+// FAKE: itemEntry declared with the position first: the original calls load x/y/z before the other arguments
 // (same registers by the EABI); calls in the definition's order and an inline wrapper both load them last
 extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u16 type, s32 collectFlag,
                             EvtWord* evtCode);
@@ -131,7 +131,6 @@ EVT_END()
 
 // ---- entry, delete and property functions ----
 
-/** Creates a bare map object. args: name, animation group. Waits (blocks) until the animation group has loaded. */
 #if VERSION <= VERSION_DEMO_JP
 extern EvtWord kpa_powerup_evt[];
 extern EvtWord evt_fire[];
@@ -293,7 +292,10 @@ USER_FUNC(evt_mobj_set_z_position) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets MOBJ_FLAG_EXEC_CANCEL on the map object args[0] ("me" allowed), which stops its per-frame main function. */
+/**
+ * Sets MOBJ_FLAG_EXEC_CANCEL on the map object args[0] ("me" allowed): a cancel request that the switch-block,
+ * lock and treasure-chest main functions read and clear.
+ */
 USER_FUNC(evt_mobj_exec_cancel) {
     MapObjectEntry* mobj = MOBJ_PTR(event, (const char*)evtGetValue(event, event->args[0]));
     mobj->flags |= MOBJ_FLAG_EXEC_CANCEL;
@@ -686,7 +688,7 @@ USER_FUNC(evt_mobj_floatswitch_red) {
 }
 
 #if MOBJ_EXTRA_OBJS
-/** Places a reusable red tornado switch pressed by a spin jump; only built in PAL and the early demos. args[0] ignored. */
+/** Places a reusable red tornado switch pressed by a spin jump; only built in the early demos, the PAL demo and PAL. args[0] ignored. */
 USER_FUNC(evt_mobj_tornadoswitch_red) {
     EvtWord* args = event->args;
     s32 flagVar;
@@ -731,7 +733,7 @@ USER_FUNC(evt_mobj_tornadoswitch_red) {
  * Main function of the paired timer switches: pressing one starts a countdown of typeWork frames;
  * if the other switch of the pair is pressed before it runs out, the event runs.
  * The blue pair then sparkles, sets both flags and deletes itself; the red pair resets for another try.
- * The demo does not stop on timeout first.
+ * The early demos do not stop on timeout first.
  */
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_timerswitch(MapObjectEntry* mobj) {
@@ -878,7 +880,7 @@ USER_FUNC(evt_mobj_timerswitch) {
 
 #if MOBJ_EXTRA_OBJS
 /**
- * Main function of the orange ride switch (PAL and demos):
+ * Main function of the orange ride switch (early demos, PAL demo and PAL):
  * standing on it runs the event and squashes it flat, where it stays.
  */
 static s32 mobj_rideswitch_orange(MapObjectEntry* mobj) {
@@ -943,7 +945,7 @@ USER_FUNC(evt_mobj_rideswitch_orange) {
 }
 
 /**
- * Main function of the green ride switch (PAL and demos): stepping on it runs the event and flattens it;
+ * Main function of the green ride switch (early demos, PAL demo and PAL): stepping on it runs the event and flattens it;
  * once Mario walks away it rises back up and can be pressed again.
  */
 static s32 mobj_rideswitch_green(MapObjectEntry* mobj) {
@@ -1260,7 +1262,8 @@ USER_FUNC(evt_mobj_jumpstand_red) {
 
 /**
  * Main function of the blue jump stands: landing on one launches Mario upwards with the stored power
- * (marioChgJumpStandMotion), runs the event and plays the spring sounds; controls stay locked until it ends.
+ * (marioChgJumpStandMotion), runs the event and plays the spring sounds; field battles stay off
+ * (SYSTEM_LEVEL_NO_FIELD_BATTLE) until the event ends.
  */
 s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
@@ -1528,7 +1531,7 @@ USER_FUNC(evt_mobj_lv_blk) {
 
 /**
  * Main function of the floating (flow) blocks toggled by a switch block:
- * on their own they show "S_1" (solid, no shadow) when something rests on them and "A_1" otherwise;
+ * on their own they show "S_1" (solid, no shadow) when they rest on a floor just below them and "A_1" otherwise;
  * when linked they follow the switch's A_1-A_3 animation.
  */
 s32 mobj_float_blk(MapObjectEntry* mobj) {
@@ -1963,7 +1966,7 @@ s32 mobj_lock(MapObjectEntry* mobj) {
                 }
                 r = pouchCheckItem(it);
                 if (r) {
-                    // BUG (JP only, fixed in US above): pouchCheckItem returns how many of the key the player holds,
+                    // BUG (early demos and JP, fixed in US and later above): pouchCheckItem returns how many of the key the player holds,
                     // not its id, so this stores the count and the count is passed to pouchRemoveItem below as an item
                     // id. Holding one key gives item 1 (ITEM_STRANGE_SACK), so a lock that takes a list of keys tries
                     // to remove that item.
@@ -2234,7 +2237,7 @@ s32 mobj_itembox(MapObjectEntry* mobj) {
 /**
  * Places a treasure chest.
  * args: name, x, y, z, kind (0 normal, 1 big, 2 grey, 3 black, 4 golden), check event, open event,
- * flag variable (already set: placed open). Chests above the floor do not fall or cast a shadow.
+ * flag variable (already set: placed open). Chests with a floor within 5 below them do not fall or cast a shadow.
  */
 USER_FUNC(evt_mobj_itembox) {
     s32 flagVar;
@@ -2301,7 +2304,7 @@ USER_FUNC(evt_mobj_itembox) {
 
 /**
  * Main function of the signboards: reading one runs its event and waits for it to finish.
- * JP and later lock Mario's controls while it runs; the demo's sign scripts do that themselves.
+ * JP and later lock Mario's controls while it runs; the early demos' sign scripts do that themselves.
  */
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_signboard(MapObjectEntry* mobj) {
@@ -2373,7 +2376,7 @@ static s32 mobj_arrow(MapObjectEntry* mobj) {
     return 0;
 }
 
-/** Places a decorative arrow sign (MOBJ_Arrow); only built in PAL and the early demos. args: name, x, y, z, flag variable. */
+/** Places a decorative arrow sign (MOBJ_Arrow); only built in the early demos, the PAL demo and PAL. args: name, x, y, z, flag variable. */
 USER_FUNC(evt_mobj_arrow) {
     EvtWord* args = event->args;
     s32 inBattle;
@@ -2436,7 +2439,7 @@ static inline void recoveryHeal(void) {
  * hitting one from below restores Mario's HP and FP and every active partner's HP.
  * The coin-taking version first checks the price (typeData[1]), shows "sys_no_coin" when Mario is short,
  * charges the coins and keeps a price bubble above it.
- * The first hit outside the kiosk build shows the "kaifuku_first_hit" tutorial instead
+ * The first hit outside E3 mode (GW_FLAG_E3) shows the "kaifuku_first_hit" tutorial instead
  * and sets GSWF_HEART_BLOCK_TUTORIAL_SEEN.
  */
 s32 mobj_recovery_blk(MapObjectEntry* mobj) {
@@ -2730,7 +2733,7 @@ USER_FUNC(evt_mobj_save_blk) {
 
 #if VERSION >= VERSION_US
 /** Plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit; not in JP. */
-// US-only plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit.
+// US and later: plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit.
 s32 mobj_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
@@ -2822,12 +2825,6 @@ USER_FUNC(evt_mobj_blk) {
 }
 #endif
 
-/**
- * Main function of the ?
- * blocks and badge (pink) blocks: the first hit pops out the stored item (or a coin,
- * which is collected at once and sets the flag), or runs the event instead if one is set.
- * The block then turns into an empty block that just bounces when hit again.
- */
 #if VERSION <= VERSION_DEMO_JP
 /** Plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit; not in JP. */
 static s32 mobj_blk(MapObjectEntry* mobj) {
@@ -3053,7 +3050,7 @@ USER_FUNC(evt_mobj_badgeblk) {
  * Main function of the Shine Sprite blocks: when hit it pops a Shine Sprite, gives it to Mario,
  * sets the flag variable and deletes itself.
  * In Pirate's Grotto (dou_02, dou_05/dou_10 when hit by a partner) it also stops Mario
- * while the Shine is collected; the demo has no such maps.
+ * while the Shine is collected; the early demos have no such maps.
  */
 #if VERSION <= VERSION_DEMO_JP
 static s32 mobj_powerupblk(MapObjectEntry* mobj) {
@@ -3259,7 +3256,7 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
 
 /**
  * Main function of the coin blocks that pay out several coins (MOBJ_10CountBlock):
- * the first hit gives a coin, sets the flag variable (or runs the event instead)
+ * the first hit sets the flag variable and gives a coin (or runs the event instead)
  * and starts a 200-frame window in which every further hit gives another coin; then it becomes an empty block.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -3578,8 +3575,6 @@ USER_FUNC(evt_mobj_breaking_floor) {
 }
 
 // ---- kpa ----
-
-// ---- kpa ----
 typedef struct KpaPoleScoreWork {
     char str[8];
     f32 x;
@@ -3867,7 +3862,7 @@ USER_FUNC(evt_mobj_kururing_floor) {
 
 #if MOBJ_EXTRA_OBJS
 /**
- * Main function of the trap door panels (PAL and demos):
+ * Main function of the trap door panels (early demos, PAL demo and PAL):
  * standing or spin-jumping on one sets the flag variable and flips it open with the paper texture,
  * then deletes it.
  */
@@ -3899,7 +3894,7 @@ static s32 mobj_trap_floor(MapObjectEntry* mobj) {
 }
 
 /**
- * Places a trap door panel (MOBJ_trap; PAL and demos).
+ * Places a trap door panel (MOBJ_trap; early demos, PAL demo and PAL).
  * args: name, x, y, z, map group under it, unused, flag variable (already set: not placed).
  */
 USER_FUNC(evt_mobj_trap_floor) {
@@ -3941,7 +3936,7 @@ USER_FUNC(evt_mobj_trap_floor) {
     return EVT_RETURN_DONE;
 }
 
-/** PAL: a bomb rock that peels away as a paper sheet when hit */
+/** Early demos, PAL demo and PAL: a bomb rock that peels away as a paper sheet when hit */
 static s32 mobj_breaking_rock(MapObjectEntry* mobj) {
     char oname[16] = "o_";
     char iname[16] = "i_";
@@ -4025,7 +4020,7 @@ static s32 mobj_breaking_rock(MapObjectEntry* mobj) {
 }
 
 /**
- * Places a rock that a Bobbery bomb blows away (MOBJ_BombRock; PAL and demos).
+ * Places a rock that a Bobbery bomb blows away (MOBJ_BombRock; early demos, PAL demo and PAL).
  * args: name, x, y, z, event, flag variable (already set: not placed).
  */
 USER_FUNC(evt_mobj_breaking_rock) {
@@ -5116,12 +5111,8 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Writes the name of the goal pole whose event is running (event->thisMapObj) to args[0],
- * or 0 outside a map object event.
- */
 #if VERSION <= VERSION_DEMO_JP
-/** demo-only: turn Mario to face the given angle */
+/** Early demos only: turn Mario to face the given angle */
 static USER_FUNC(kpa_set_dir) {
     f32 dir = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
@@ -5173,9 +5164,8 @@ USER_FUNC(kpa_get_width) {
     return EVT_RETURN_DONE;
 }
 
-/** Formats the score args[0] (0-9999) without leading zeros into the floating pole-score text. */
 #if VERSION <= VERSION_DEMO_JP
-/** demo-only: read Mario's position into three float variables */
+/** Early demos only: read Mario's position into three float variables */
 static USER_FUNC(kpa_get_mario_pos) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
@@ -5260,11 +5250,6 @@ USER_FUNC(kpa_clear_jump_data) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Goal pole sequence for small Bowser (levels 0-1):
- * shows the score, slides him and the flag down to the ground, then moves the camera on and hands control back.
- * Run by mobj_koopa_pole_evt with the score in LW(0).
- */
 #if VERSION <= VERSION_DEMO_JP
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 EVT_BEGIN(kpa_powerup_evt)
@@ -5276,6 +5261,11 @@ EVT_BEGIN(evt_fire)
     RETURN
 EVT_END()
 #endif
+/**
+ * Goal pole sequence for small Bowser (levels 0-1):
+ * shows the score, slides him and the flag down to the ground, then moves the camera on and hands control back.
+ * Run by mobj_koopa_pole_evt with the score in LW(0).
+ */
 EVT_BEGIN(kpa_pole)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)

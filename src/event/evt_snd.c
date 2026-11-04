@@ -1,6 +1,6 @@
-// NOTE: in G8MJ01 the event/evt_snd.c split (0x80077EC4..0x80077F88) actually holds
-// the tail of seq_gameover.c (seq_gameOverExit/Init); the real evt_snd functions
-// live at 0x8014C488 inside the party/party_motion.c split.
+// NOTE: in JP and later the event/evt_snd.c split (JP 0x80077EC4..0x80077F88; the early demos have none) holds
+// evt_snd_bgm_unpause and the tail of seq_gameover.c (seq_gameOverExit/Init); the other evt_snd
+// functions live inside the party/party_motion.c split (JP from 0x8014C488).
 #include "evt/evt_snd.h"
 #include "driver/camdrv.h"
 #include "driver/seqdrv.h"

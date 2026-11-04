@@ -252,7 +252,8 @@ void marioBalloonMain(void) {
 /**
  * TRUE when the hit is something the A button acts on:
  * a map object with hint 1 or a balloon-flagged case event with any of the A conditions (front, jump from, push,
- * stand on). Pass-through hits never count. Used by Bowser's collision code (koopa_hit.c).
+ * stand on). Pass-through hits never count. Used by searchFrontWall (mario_hit.c) and Bowser's collision code
+ * (koopa_hit.c).
  */
 BOOL chkBalloon(HitEntry* hit) {
     BOOL ret = FALSE;

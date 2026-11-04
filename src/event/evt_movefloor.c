@@ -54,7 +54,7 @@ typedef struct MovingFloor {
 
 /**
  * Sine of each whole degree from 0 to 449 (the extra quarter turn lets it double as a cosine table).
- * Only the WOBBLE macro reads it, for the 3-unit bob of kind 1 moving floors.
+ * Only movingFloorWobble reads it, for the 3-unit bob of kind 1 moving floors.
  */
 static f32 sintbl[450] = {
     0.0f, 0.017452f, 0.034899f, 0.052336f, 0.069756f, 0.087156f, 0.104528f, 0.121869f,
@@ -434,7 +434,10 @@ USER_FUNC(moving_floor_get_pause) {
     return EVT_RETURN_DONE;
 }
 
-/** Returns the floor's kind in args[1]: 0 carries Mario and partners along, 1 bobs in place without carrying. */
+/**
+ * Returns the floor's kind in args[1]: 0 carries Mario and partners along and plays the moving sound,
+ * 1 bobs up and down as it travels and does neither.
+ */
 USER_FUNC(moving_floor_get_kind) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -492,7 +495,7 @@ USER_FUNC(moving_floor_getf_now_bpoint) {
 
 /**
  * Returns the stop time at each end of the floor's travel in frames (from the ms value in LW(5)),
- * or 0 during mode 3's mid-point stops. PAL converts with the 50 Hz frame rate instead of a fixed 60.
+ * or 0 during mode 3's mid-point stops. The PAL demo and PAL convert with gp->framerate instead of a fixed 60.
  */
 USER_FUNC(moving_floor_get_stmsec) {
     EvtWord* args = event->args;
@@ -572,7 +575,7 @@ USER_FUNC(moving_floor_stop_se) {
     return EVT_RETURN_DONE;
 }
 
-/** Halts the floor's sounds for good; set when Mario leaves the map so no sound outlives it. */
+/** Halts the floor's sounds for good; set when Mario takes an exit to another area so no sound outlives it. */
 USER_FUNC(moving_floor_halt_se) {
     MovingFloor* w = MOVING_FLOOR_ARG();
     w->seHalt = 1;

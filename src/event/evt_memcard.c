@@ -11,7 +11,7 @@
 
 
 /**
- * Functions are emitted in reverse source order (deferred inlining) Waits
+ * Functions are emitted in reverse source order (deferred inlining). Waits
  * until the current memory card operation finishes, then stores cardmgr's result code in args[0]:
  * 0 on success, negative for errors (-3 no card, -2 a different card, -6/-13 needs formatting, -4 no save file,
  * -8/-9 no space, -10 save data it cannot use), as the save/load scripts below switch on it.
@@ -29,7 +29,7 @@ USER_FUNC(memcard_code) {
 
 /**
  * Clears cardmgr's read buffer so the next check rereads the card;
- * the retail evt_memcard_check calls it before a retry.
+ * evt_memcard_check in JP and later calls it before a retry.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_802564b4, JP 0x802564B4. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
@@ -223,9 +223,9 @@ EVT_BEGIN(evt_memcard_nosave)
 EVT_END()
 
 /**
- * Demo version of the boot-time card check: reads the card, offers to format it or create the save file, and sets
- * GF(0) once the game may start. Unlike retail it does not watch for the card being pulled mid-prompt, and a
- * failed format or create offers to play without saving instead of retrying.
+ * Boot-time card check: reads the card, offers to format it or create the save file, and sets
+ * GF(0) once the game may start. JP and later also watch for the card being pulled mid-prompt and retry a
+ * failed format or create; in the early demos a failure offers to play without saving instead.
  */
 EVT_BEGIN(evt_memcard_check)
     SET_VALUE(GF(0), 0)
@@ -263,7 +263,7 @@ EVT_BEGIN(evt_memcard_check)
             CALL_CHILD(PTR(evt_memcard_nosave))
 
             // Corrupted card: offer to format it (asking twice), then to create a save file;
-            // any refusal or failure offers to play without saving.
+            // any refusal (and, in the early demos, any failure) offers to play without saving.
 #if VERSION <= VERSION_DEMO_JP
             CASE_OR_EQUAL(-13)
             CASE_OR_EQUAL(-6)
@@ -430,7 +430,7 @@ EVT_END()
 
 /**
  * File select: asks to delete save slot LW(0) (0-based) and erases it.
- * If the erase fails, the curtains close and open,
+ * In JP and later, if the erase fails, the curtains close and open,
  * the load screen reloads the card and GF(0) is set so the file list is refreshed.
  */
 EVT_BEGIN(evt_memcard_delete)
@@ -474,7 +474,8 @@ EVT_END()
 /**
  * File select: copies save slot LW(0) onto slot LW(1) (0-based),
  * asking first when the target slot already holds a save.
- * On failure the curtains close and open and the file list is reloaded (GF(0) set), as in evt_memcard_delete.
+ * In JP and later, on failure the curtains close and open and the file list is reloaded (GF(0) set), as in
+ * evt_memcard_delete.
  */
 EVT_BEGIN(evt_memcard_copy)
 #if VERSION >= VERSION_JP
@@ -532,11 +533,11 @@ EVT_BEGIN(evt_memcard_copy)
 EVT_END()
 
 /**
- * Retail save script, run from Save Blocks, intermissions and the first save after name entry.
+ * Save script, run from Save Blocks, intermissions and the first save after name entry.
  * LW(0) is the save kind stored in GSW_SAVE_RESUME_POINT:
  * 0 is a Save Block, 23 the new-file save (saves without asking),
- * 21 the ending save (which uses the ending yes/no prompt).
- * Handles format/create prompts, retries a failed write,
+ * 21 the ending save (which uses the ending yes/no prompt in JP and later).
+ * Handles format/create prompts, retries a failed write (JP and later),
  * and on failure warns that the game was not saved and offers to try again.
  */
 EVT_BEGIN(evt_memcard_save)
@@ -773,7 +774,7 @@ EVT_BEGIN(evt_memcard_save)
     END_IF
 #endif
 
-    // After a failure outside Save Blocks and the new-file save,
+    // After a failure outside Save Blocks (and, in the early demos, the new-file save),
     // warn that progress was not saved and offer to save again.
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_msg_continue)
@@ -812,7 +813,7 @@ EVT_END()
 
 #if VERSION >= VERSION_US
 /**
- * US/PAL: runs evt_memcard_save, then for any save other than a Save Block (LW(0) nonzero) waits one more
+ * US and later: runs evt_memcard_save, then for any save other than a Save Block (LW(0) nonzero) waits one more
  * second. Save Blocks, intermissions and the new-file save on the load screen call it.
  */
 EVT_BEGIN(evt_memcard_save_wrapper)

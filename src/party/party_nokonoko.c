@@ -42,8 +42,9 @@ u32 lookupSafetyPos(Vec pos, f32 height, Vec* out);
  * Where Koops is in his Shell Toss, from his use-motion state:
  * 0 not in use (or not Koops), 1 pulling into his shell beside Mario, 2 shell flying out,
  * 3 shell held spinning in place (the X button, or an event hold), 4 shell coming back,
- * 5 coming back after a held shot, 6 dropping back in from above after falling out of bounds, 7 anything else.
- * Read by evt_party, npcdrv and party_motion.
+ * 5 coming back after a held shot, 6 flying off the top of the screen and dropping back in from above
+ * (when the returning held shot hits a map object), 7 anything else.
+ * Read by evt_party, npcdrv, party_motion, party_move and some room scripts (eki_00, las_05, rsh_05, rsh_06).
  */
 s32 nokonokoGetStatus(PartyEntry* party) {
     u32 m;
@@ -151,7 +152,7 @@ void nokonoko_move(PartyEntry* party) {
 }
 
 /**
- * Aborts Koops's Shell Toss when Mario gets hurt (called from the damage motion):
+ * Aborts Koops's Shell Toss when Mario gets hurt (called from the damage motion in JP and later):
  * stops the shell-spin sound, restores his flags and standing height and puts him back into follow mode
  * unless he is in run mode 8 or 13.
  */
@@ -259,10 +260,11 @@ static inline void noko_star(PartyEntry* party, s32 n) {
 /**
  * Shell Toss, run every frame while Koops is in use.
  * He tucks into his shell beside Mario, shoots forward 120 units (picking up the first item it touches),
- * stops spinning in place while X is held (or while an event holds it),
+ * stops and spins in place while X is held (or while an event holds it),
  * then slides back to a safe spot next to Mario; hitting a wall ends the throw early.
- * Outside event use, an off-screen shell is placed near Mario and the toss ends when Mario's keys are off.
- * nokonokoGetStatus reports the state; the US release reworked the wall push-out.
+ * Outside event use, when Mario's keys are off and the shell is off-screen, it is placed 160 units from Mario
+ * and the toss ends. nokonokoGetStatus reports the state; US and later push the shell out of walls with
+ * partyChkWallAround.
  */
 void nokonoko_use(PartyEntry* party) {
     Vec out;
@@ -1402,7 +1404,7 @@ void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
 }
 
 /**
- * Returns the point Mario's collision width away from pos in the given direction (degrees)
+ * Returns the point Mario's collision width away from pos in the given direction (degrees), raised by height,
  * if there is floor under it, else pos; nokonoko_use picks the direction from the lookupSafetyPos probe mask.
  */
 void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {

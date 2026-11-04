@@ -508,7 +508,7 @@ USER_FUNC(evt_map_entry_airport_harbor) {
 
 /**
  * Hides the map object named in args[0] for good and puts a real flame at its position:
- * args[1] 0 a torch effect, 1 a fire effect (tinted by the map blend in the retail releases).
+ * args[1] 0 a torch effect, 1 a fire effect (tinted by the map blend in JP and later).
  * Used by bom_02 and jin_07.
  */
 USER_FUNC(evt_map_replace_mapobj) {

@@ -588,7 +588,7 @@ void marioStMain(void) {
             }
 #else
             // After two minutes without input in the field or in battle, raise the kiosk timeout flag
-            // (only read in kiosk mode, by seq_game and seq_battle).
+            // (only read in kiosk mode, by seq_game, seq_battle and battle.c).
             if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE)) {
                 gp->flags |= GW_FLAG_E3_TIMEOUT;
             }
@@ -656,7 +656,7 @@ u32 marioStGetSystemLevel(void) {
  * Runs after every vertical retrace: advances the play-time clocks (each stops while its system level is
  * paused), records the retrace count, watches the console's Reset button
  * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
- * JP and later also reset when the drive reports a fatal status.
+ * JP and later cancel a pending reset (RESET_TYPE_NONE) while the drive reports a fatal status.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void viPostCallback(u32 retraceCount) {
@@ -754,9 +754,9 @@ exitcheck:
 
 /**
  * Background thread started by marioStInit that polls the disc drive:
- * on cover open, no or wrong disc, retry or (retail only) fatal error it sets gp->dvdError,
+ * on cover open, no or wrong disc, retry or (JP and later) fatal error it sets gp->dvdError,
  * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
- * US and PAL wait until the status has been steady for 10 frames before drawing.
+ * US and later wait until the status has been steady for 10 frames before drawing.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void* gcDvdCheckThread(void* param) {
@@ -947,7 +947,7 @@ void gcRumbleCheck(void) {
 }
 
 /**
- * The early demos inline the reset check into its callers (the US demo also logs the reset);
+ * The early demos inline the reset check into its callers (the June US demo also logs the reset);
  * their restart codes are only RESTART and HOTRESET.
  */
 #if VERSION <= VERSION_DEMO_JP

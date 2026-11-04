@@ -105,7 +105,7 @@ USER_FUNC(evt_run_case_evt_bero) {
 
 /**
  * C entry point for registering a case event at priority 0 (_caseEntry);
- * evt_map.c uses it for the airport ride cases. Returns the case id.
+ * evt_map.c uses it for the airport ride cases, evt_shop.c and evt_win.c for theirs. Returns the case id.
  */
 s32 evtRunCaseEntry(s32 conditionId, BOOL flag, const char* hitObjName, u32 swFlag, void* evtCode,
                     EvtWord* lwData) {

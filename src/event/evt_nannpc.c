@@ -24,8 +24,8 @@ char makestring[16];
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * The demo turns the name into a string in a helper (same code, other register order).
- * Demo only: in the other versions the helper's "%06x" literal would move ahead in the string pool even unused.
+ * The early demos turn the name into a string in a helper (same code, other register order).
+ * Early demos only: in the other versions the helper's "%06x" literal would move ahead in the string pool even unused.
  */
 static inline char* nanNPCEntryName(char* name) {
     if (!((EvtWord)name & 0x80000000)) {
@@ -35,7 +35,7 @@ static inline char* nanNPCEntryName(char* name) {
     return name;
 }
 
-/** the demo search through that helper */
+/** the early demos' search through that helper */
 static inline NanNPC* nanNPCSearch2(char* name) {
     s32 i;
     NanNPC* p;
@@ -74,8 +74,8 @@ static inline NanNPC* nanNPCSearch(char* name) {
 }
 
 /**
- * Moves crowd NPC r by its move vector, sliding off map collision:
- * a hit reflects the motion off the wall and pushes the NPC clear, and the move vector decays by 0.6 per frame.
+ * Moves crowd NPC npc by its move vector, sliding off map collision:
+ * a hit reflects the motion off the wall and pushes the NPC clear; without a hit the move vector is scaled by 0.6.
  * NPCs with flag 0x8 move without collision.
  */
 static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
@@ -151,7 +151,7 @@ static inline void nanNPCHitMove(NanNPC* npc, f32 mag) {
 #pragma push
 #pragma opt_dead_assignments off
 /**
- * Crowd behaviour pass, installed by map rels (Rogueport plaza gor_00, dou_11) as sub function 2:
+ * Crowd behaviour pass, installed by map rels (muj_00, dou_11) as sub function 2:
  * NPCs with flag 0x4 push each other apart when closer than their size,
  * are pulled back towards their target position, and then move with collision (speed capped).
  */
@@ -215,7 +215,10 @@ void nanNPCOption(void) {
 }
 #pragma pop
 
-/** qsort comparator ordering crowd NPCs from far to near (larger Z first) so they draw back to front. */
+/**
+ * qsort comparator ordering crowd NPCs by Z, larger first; nannpc_ext_disp draws the sorted list from its end,
+ * so the smaller Z draw first.
+ */
 s32 nannpc_zcompare(const void* paramA, const void* paramB) {
     const NanNPCSort* a = paramA;
     const NanNPCSort* b = paramB;

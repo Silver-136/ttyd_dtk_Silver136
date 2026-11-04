@@ -103,7 +103,7 @@ EVT_BEGIN(evt_bero_info_run_gate)
 EVT_END()
 #endif
 
-// s32 x, s32 y, s32 z (new in retail)
+// s32 x, s32 y, s32 z (JP and later)
 // Descriptive name (not in the symbol maps).
 #if VERSION <= VERSION_DEMO_JP
 BeroEntry bero_null[] = {
@@ -127,7 +127,7 @@ BeroEntry bero_null[] = {
 
 /**
  * Sets where Mario respawns after falling into a bottomless pit; args are x, y, z as whole numbers.
- * Retail only (the early demos lack it).
+ * JP and later (the early demos lack it).
  */
 USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
     EvtWord* args = event->args;
@@ -140,8 +140,8 @@ USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets Mario's bottomless-pit respawn point to where he stands now. No arguments; retail only. */
-// no args (new in retail)
+/** Sets Mario's bottomless-pit respawn point to where he stands now. No arguments; JP and later. */
+// no args (JP and later)
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
     MarioWork* wp = marioGetPtr();
@@ -150,7 +150,7 @@ USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
 }
 
 /**
- * Returns the BeroEXEC state bits; bit 1 is set while an entrance
+ * Returns the BeroEXEC state bits; BERO_EXEC_BUSY (0x1) is set while an entrance
  * or exit is playing (camdrv and seq_mapchange check it before showing the letterbox).
  */
 s32 bero_get_BeroEXEC(void) {
@@ -450,7 +450,7 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
     s32 kind = bero->directionId;
     switch (kind) {
     case BERO_DIR_AUTO:
-        // retail compares kind here (it is 20000 in this case)
+        // the original code compares kind here (it is 20000 in this case)
         if (kind == BERO_DIR_NONE) {
             kind = BERO_DIR_NONE;
         } else {
@@ -1582,7 +1582,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL(bero_set_disp_position_pipe)
 
         // He pops out of the destination pipe in its layer (background or normal) with the pipe sound,
-        // gets control back, and the pipe he left re-arms once he steps off.
+        // gets control back, and the pipe he came out of re-arms once he steps off.
         WAIT_MS(500)
         IF_INT_NOT_EQUAL(LF(1), 0)
             CALL(evt_mario_bgmode_on)
@@ -1782,7 +1782,10 @@ EVT_BEGIN(bero_case_entry_sub)
     RETURN
 EVT_END()
 
-/** Retail: same, with the "registered" debug message only on a real registration. */
+/**
+ * Registers the exit trigger of entrance LW(0) (index or name) unless it already is (bero_case_entry_sub).
+ * JP and later print the "registered" debug message only on a real registration.
+ */
 EVT_BEGIN(bero_case_switch_on)
     CALL(evt_bero_switch_on, LW(0))
     CALL(evt_bero_get_info_num, LW(1))
@@ -1802,7 +1805,10 @@ EVT_BEGIN(bero_case_switch_on)
     RETURN
 EVT_END()
 
-/** Retail: same, and also clears hit attribute 0x800000 on the entrance's hit object. */
+/**
+ * Unregisters entrance LW(0) (index or name) and deletes its exit trigger unless it already is;
+ * JP and later also clear hit attribute 0x800000 (HIT_ATTR_BERO) on the entrance's hit object.
+ */
 EVT_BEGIN(bero_case_switch_off)
     CALL(evt_bero_switch_off, LW(0))
     CALL(evt_bero_get_info_num, LW(1))
@@ -1826,10 +1832,6 @@ EVT_BEGIN(bero_case_switch_off)
     RETURN
 EVT_END()
 
-/**
- * Arrival by road: Mario walks from the map edge to the end point
- * while partners follow closely (homing distance 20, back to 50 after).
- */
 #if VERSION <= VERSION_DEMO_JP
 /** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_none)
@@ -1923,11 +1925,6 @@ EVT_BEGIN(evt_bero_info_run_pipe)
     RETURN
 EVT_END()
 
-/**
- * Map-entry script run after evt_bero_get_info: on a save load just registers exits;
- * otherwise sets up Mario (background mode, partners, pipe pose), places him,
- * sets the pipe fade and spawns the walk-in.
- */
 #if VERSION <= VERSION_DEMO_JP
 /** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_gate)
@@ -1941,7 +1938,7 @@ EVT_END()
  * sets the pipe fade and spawns the walk-in.
  */
 EVT_BEGIN(evt_bero_info_run)
-    // Find the entrance Mario arrived by and whether he is in paper form.
+    // Find the entrance Mario arrived by, load the paper pipe animations and read the system flags.
     CALL(evt_bero_get_into_info)
     CALL(evt_bero_set_now_number, LW(1))
     CALL(evt_bero_read_mario_pera)

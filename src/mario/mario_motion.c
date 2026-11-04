@@ -147,7 +147,7 @@ MarioJumpData marioJumpData = {
 
 /**
  * Puts Mario back into stay/walk/dash from the field battle code (fbatBattleMode state 4).
- * The plane is cancelled, the tube makes the partners ride on (not in the demo),
+ * The plane is cancelled, the tube makes the partners ride on (not in the early demos),
  * and Yoshi (and, US and later, the damage motions) are left alone.
  * With no speed it switches to stay but then still to walk, as there is no return.
  */
@@ -240,7 +240,8 @@ void marioChgRollMotion(void) {
 /**
  * Launches Mario off a spring (jump stand) with v as the jump height:
  * from evt_mobj and on landing on MOBJ_BlueJumpStand (100).
- * In tube mode only the height is stored (retail also puffs smoke and jumps); on Yoshi, yoshi_jumpStand jumps.
+ * In tube mode the early demos only store the height (JP and later also puff smoke and jump); on Yoshi,
+ * yoshi_jumpStand jumps.
  */
 void marioChgJumpStandMotion(f32 v) {
     MarioWork* mario = marioGetPtr();
@@ -333,7 +334,7 @@ BOOL marioChkTalkable(void) {
  * Per-frame air check (from marioMain, Peach's and Bowser's main) that starts the Spin Jump (MARIO_MOTION_HIP)
  * on A: Mario needs a jump input and marioChkHipAttack;
  * Bowser instead needs kpaHipAttackOk and 6 frames to his peak.
- * Never in 8-bit or paper mode; the PAL release also skips it in plane mode.
+ * Never in 8-bit or paper mode; PAL and the PAL demo also skip it in plane mode.
  */
 void marioBoots(void) {
     MarioWork* mario = marioGetPtr();
@@ -410,7 +411,7 @@ void marioChgMot(MarioMotion id) {
 }
 
 /**
- * marioChgMot with a choice: callPost FALSE skips the old motion's post function (retail still runs it when
+ * marioChgMot with a choice: callPost FALSE skips the old motion's post function (JP and later still run it when
  * leaving the jabara motion). Used by motion code that has already cleaned up itself.
  */
 void marioChgMotSub(MarioMotion id, s32 callPost) {
@@ -862,7 +863,7 @@ void marioLandOn(void) {
             return;
         }
 #if VERSION <= VERSION_DEMO_JP
-        marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after landing
+        marioChgMot(MARIO_MOTION_WALK); // the early demos do not stay in the slit after landing
 #else
         if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
 #if VERSION >= VERSION_US
@@ -927,7 +928,7 @@ static f32 marioDemoHalf(f32 x) {
 
 /**
  * Talk motion: turns Mario left or right to face the NPC he touched and takes that NPC's talk pose;
- * the M_I_2 pose (M_I_3 in the PAL release) returns to M_S_1 after 60 frames.
+ * the M_I_2 pose (M_I_3 in PAL and the PAL demo) returns to M_S_1 after 60 frames.
  * Peach uses peach_talk, Bowser his own pose.
  */
 void mot_talk(void) {
@@ -1014,7 +1015,7 @@ void mot_getItem(void) {
 /**
  * Starts a jump on A from stand, walk or the slit unless A belongs to something else:
  * an object hint or A-button case in front or underfoot, an NPC in talk range, or Yoshi.
- * PAL also refuses on a damage floor. TRUE if Mario jumped.
+ * PAL and the PAL demo also refuse on a damage floor. TRUE if Mario jumped.
  */
 BOOL marioChkJump(void) {
     MarioWork* mario = marioGetPtr();
@@ -1066,7 +1067,7 @@ BOOL marioChkJump(void) {
 
 /**
  * On Y, turns Mario into the boat or the plane when he stands on a matching panel and has the Boat
- * or Plane Curse (retail: a pending partner use blocks it unless
+ * or Plane Curse (JP and later: a pending partner use blocks it unless
  * MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON is set).
  * Returns TRUE only when Y was pressed and no panel took it; callers (mot_stay, mot_walk) ignore it.
  */
@@ -1173,7 +1174,7 @@ s32 marioRollChgChk(void) {
 
 /**
  * Bounces Mario off an enemy he jumped on in the field (npcdrv first-strike hits) with the NPC jump motion;
- * not for Bowser in body status 2 or (retail) in the tube.
+ * not for Bowser in body status 2 or (JP and later) in the tube.
  */
 void marioChgMotJump2(void) {
     MarioWork* mario = marioGetPtr();
@@ -1190,7 +1191,7 @@ void marioChgMotJump2(void) {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * In the demo the Flurrie motion lives here: party_cloud.c has no mot_cloud yet,
+ * In the early demos the Flurrie motion lives here: party_cloud.c has no mot_cloud yet,
  * and the motion's post function resets the camera target.
  */
 static void mot_cloud(void) {
@@ -1205,7 +1206,7 @@ static void mot_cloud(void) {
     }
 }
 
-/** Leaving the demo's Flurrie motion: puts the camera target back on Mario (cloudResetAt). */
+/** Leaving the early demos' Flurrie motion: puts the camera target back on Mario (cloudResetAt). */
 static void mot_cloud_post(void) {
     cloudResetAt();
 }
@@ -1226,7 +1227,7 @@ static inline BOOL marioChkBackAngle(f32 a) {
  * No code in the tree enters MARIO_MOTION_KAZE; marioChkSts 0x20 only tests for it.
  * Guess: a whirlwind, from the name ("kaze", wind).
  * Resembles Paper Mario 64's spin (action_update_spin: Z, the sprite turning, ending at 0 or 180 degrees), but this one
- * stays in place: no movement, sound, effect or attack. Same code in all five versions.
+ * stays in place: no movement, sound, effect or attack. Same code in all versions.
  */
 void mot_kaze(void) {
     MarioWork* mario = marioGetPtr();
@@ -1271,7 +1272,7 @@ void mot_kaze(void) {
  * Unused: lays Mario flat (rot.x 90, pose M_S_1, slit display flag cleared) until B stands him back up.
  * No code in the tree enters MARIO_MOTION_SHADOW. Guess: lying flat as a shadow, from the name.
  * The look is like Paper Mario 64's KnockDownPlayer map scripts, but those draw a separate rotating sprite during a
- * cutscene; this only tilts Mario and waits for B. Same code in all five versions.
+ * cutscene; this only tilts Mario and waits for B. Same code in all versions.
  */
 void mot_shadow(void) {
     MarioWork* mario = marioGetPtr();

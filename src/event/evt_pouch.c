@@ -59,14 +59,10 @@ USER_FUNC(evt_pouch_remove_item) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Retail only: removes item args[0] from slot args[1] of the held list (the slot the shop's sell menu picked)
- * and re-clamps stats; args[2] gets 0 on success or -1 if that slot holds something else.
- */
 // Descriptive name (not in the symbol maps).
 #if VERSION >= VERSION_JP
 /**
- * Retail only: removes item args[0] from slot args[1] of the held list (the slot the shop's sell menu picked)
+ * JP and later only: removes item args[0] from slot args[1] of the held list (the slot the shop's sell menu picked)
  * and re-clamps stats; args[2] gets 0 on success or -1 if that slot holds something else.
  */
 USER_FUNC(evt_pouch_remove_item_index) {
@@ -99,8 +95,8 @@ USER_FUNC(evt_pouch_add_keepitem) {
 }
 
 /**
- * Takes item args[0] out of storage; args[1] (US demo and older: the result) gets 0 on success or -1.
- * Later versions take the storage slot in args[1], close the gap in the list, and return the result in args[2].
+ * Takes item args[0] out of storage; args[1] (early demos: the result) gets 0 on success or -1.
+ * JP and later take the storage slot in args[1], close the gap in the list, and return the result in args[2].
  */
 USER_FUNC(evt_pouch_remove_keepitem) {
     EvtWord* args = event->args;

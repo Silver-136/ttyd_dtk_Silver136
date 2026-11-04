@@ -170,7 +170,7 @@ extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
 /**
  * Spawns an effect by effect-set name args[1] ("kemuri", "recovery", ...) and names it args[0]
- * unless that is ""; args[2..13] are passed to the set's entry function as ints or floats as each one needs.
+ * unless that is ""; args[2..14] are passed to the set's entry function as ints or floats as each one needs.
  */
 USER_FUNC(evt_eff) {
     EvtWord* args = event->args;
@@ -957,7 +957,7 @@ USER_FUNC(evt_eff_fukidashi) {
             party = partyGetPtr(marioGetPartyId());
             if (party) {
 #if VERSION >= VERSION_US
-                // US: the Flurrie bubble sits at a fixed height
+                // US and later: the Flurrie bubble sits at a fixed height
                 {
                     f32 yy = 2.0f * party->height / 3.0f;
                     f32 ww;

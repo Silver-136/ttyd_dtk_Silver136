@@ -21,7 +21,7 @@
 #include "sfx_name_word.h"
 
 #if VERSION != VERSION_JP
-// US has no local duplicate: this is the global vivian_init
+// Only JP has a local duplicate; elsewhere this is the global vivian_init
 #define vivian_init_801809C0 vivian_init
 #endif
 
@@ -59,7 +59,7 @@ void marioForceVivianAnime(void) {
 
 /**
  * Mario motion MARIO_MOTION_VIVIAN (entered while Veil hides him in the floor):
- * on entry it stops any jump or fall, zeroes his speed and timers and, in retail,
+ * on entry it stops any jump or fall, zeroes his speed and timers and, in JP and later,
  * clears his wall and push collision; nothing runs on later frames.
  */
 void mot_vivian(void) {
@@ -76,14 +76,14 @@ void mot_vivian(void) {
     }
 }
 
-/** Demo copy: hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
+/** Early-demo copy: hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
 static inline void partyVivianTailStop(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
-        party->work.vivian.tailFlags |= 1; // the demo keeps the tail flags in the Vivian work
+        party->work.vivian.tailFlags |= 1; // the early demos keep the tail flags in the Vivian work
     }
 }
 
-/** Demo copy: shows Vivian's shadow tail again. */
+/** Early-demo copy: shows Vivian's shadow tail again. */
 static inline void partyVivianTailStart(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MEMBER_VIVIAN) {
         party->work.vivian.tailFlags &= ~1;
@@ -191,7 +191,7 @@ s32 vivianGetStatus(void) {
 }
 
 /**
- * Ends a hidden Veil from code or a script (evt_party, evt_mario):
+ * Ends a hidden Veil from code or a script (party.c, evt_party, evt_mario):
  * if Vivian is in the hidden state it starts the rise-out sequence.
  */
 void vivianUnhold(PartyEntry* party) {
@@ -245,7 +245,7 @@ BOOL vivianDisplayTailCheck(PartyEntry* party) {
 
 /**
  * Moves Vivian's tail point (trailPos) a tenth of the way toward her each frame,
- * keeping it within VIVIAN_FOLLOW_DIST (30 units in the US and PAL releases, 22 before);
+ * keeping it within VIVIAN_FOLLOW_DIST (30 units in US and later, 22 in the early demos and JP);
  * party.c draws her shadow tail to it.
  */
 void vivianShadow(PartyEntry* party) {
@@ -281,9 +281,9 @@ void vivian_move(PartyEntry* party) {
     vivianShadow(party);
 }
 
-/** demo: Vivian always hides 13 behind Mario, with no ground search outside the hidden state */
+/** early demos: Vivian always hides 13 behind Mario, with no ground search outside the hidden state */
 
-// The demo's vivianFollow/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
+// The early demos' vivianFollow/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
 static inline void vivianFollow(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
     MarioWork* mario = party->playerPtr;

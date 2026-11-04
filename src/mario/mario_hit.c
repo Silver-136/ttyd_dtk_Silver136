@@ -499,7 +499,7 @@ static inline BOOL marioChkGndOk(void) {
 /**
  * Mario's per-frame ground check while on the ground (mario.c, koopa.c, peach.c, the Spring Jump):
  * finds the floor he stands on, starts a fall when it is gone,
- * hurts him on 0x200 (damage) and 0x800 (spike) floors, steps him up 5-11 unit steps in front,
+ * hurts him on 0x200 (water hazard) and 0x800 (spike) floors, steps him up 5-11 unit steps in front,
  * and handles the boat, Bowser and tube-mode variants. Skipped while he is in Vivian's shadow.
  */
 void marioChkGnd(void) {
@@ -714,9 +714,10 @@ void marioChkGnd2(void) {
 
 
 /**
- * Five-point ground search: demos probe at 0.375 of the collision width and return the first accepted floor.
- * Retail uses 0.425 in paper mode (0.375 otherwise) and keeps the highest accepted floor.
- * Demos allow slopes below 75 degrees in paper mode (50 otherwise); retail also allows 75 in slit display or hip-drop motion.
+ * Five-point ground search: the early demos probe at 0.375 of the collision width and return the first accepted floor.
+ * JP and later use 0.425 in paper mode (0.375 otherwise) and keep the highest accepted floor.
+ * The early demos allow slopes below 75 degrees in paper mode (50 otherwise); JP and later allow 75 in slit display
+ * or the hip-drop motion instead (50 otherwise).
  */
 HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     f32 dist;
@@ -974,10 +975,10 @@ static inline HitEntry* landonHitCheck(LandonRay* ray, Vec* outPos, Vec* outNrm,
 }
 
 /**
- * Tube ground search: demos test three points and return the first accepted floor;
+ * Tube ground search: the early demos test three points and return the first accepted floor;
  * on flat ground the centre stays put and the two side probes move 3 units ahead.
- * Retail tests four points on nearly flat ground or three on slopes, skips slopes of 75–105 degrees,
- * and keeps the highest accepted floor.
+ * JP and later test four points on nearly flat ground or three on slopes, skip slopes of 75–105 degrees,
+ * and keep the highest accepted floor.
  */
 HitEntry* marioSearchGroundRoll(f32* y, f32* b, f32* c, f32 spd, f32 h) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1418,7 +1419,7 @@ HitEntry* marioLandonChk_old(f32* outY, f32 spd) {
     return NULL;
 }
 
-/** Five-point landing probe with a vertical ofs: demos use the older LandonRay form; retail uses marioHitCheckVecInl. */
+/** Five-point landing probe with a vertical ofs: the early demos use the older LandonRay form; JP and later use marioHitCheckVecInl. */
 HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
 #if VERSION <= VERSION_DEMO_JP
     LandonRay ray;
@@ -1823,7 +1824,7 @@ static inline void marioSearchHeadOfs(MarioWork* mario, f32 deg, f32* px, f32* p
  * ignoring walls outside tube mode (slopes of 50-130 degrees normally, 75-105 in paper/slit mode).
  * If his head reaches it, pos->y is set to the ceiling, *h to 0 and the hit is returned;
  * otherwise *h gets the gap (-1 if none).
- * The US and PAL releases also ignore non-tube ceilings while falling faster than 10 per frame.
+ * US and later also ignore non-tube ceilings while falling faster than 10 per frame.
  */
 HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
     Vec p;
@@ -2837,7 +2838,7 @@ static inline void wallCopy(Vec* out, Vec* in) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** The demo has no mode argument: the push is always limited to 1/8 of the width. */
+/** The early demos have no mode argument: the push is always limited to 1/8 of the width. */
 BOOL marioChkWallAround(Vec* pos, f32 unused, f32 dir, f32 w, f32 h) {
 #else
 BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h) {

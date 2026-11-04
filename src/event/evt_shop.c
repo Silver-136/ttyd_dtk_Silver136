@@ -138,7 +138,7 @@ WinMgrDesc list_desc[] = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-/** the early demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
+/** the early demos define the prize list script here, in .data (JP and later: .sdata); the US demo never runs it */
 EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
     CALL(disp_list)
@@ -247,8 +247,6 @@ static EVT_BEGIN(buy_evt)
         END_IF
     END_IF
 
-    // Hand out every shop point prize now reached; at 300 points the shopkeeper announces the maximum and the
-    // count resets.
     // Hand out every shop point prize now reached; at 300 points the shopkeeper announces the maximum and the
     // count resets.
     LOOP(0)
@@ -615,7 +613,7 @@ EVT_END()
 /**
  * Counter menu option for storing items: checks Mario has an item and the shop has free storage,
  * then lets him pick items one by one and moves each from his pouch to the stored-item list (pouch keep items).
- * Retail picks by index so duplicate items are handled; the JP and US demo releases remove by item id.
+ * JP and later pick by index so duplicate items are handled; the early demos remove by item id.
  */
 EVT_BEGIN(keep_evt)
     CALL(keep_pouchcheck_func)
@@ -765,10 +763,10 @@ EVT_BEGIN(point_evt)
     END_SWITCH
     RETURN
     OPCODE_END_SCRIPT,
-    0 // US: the object is 0x8C bytes (trailing zero word)
+    0 // US and later: the object is 0x8C bytes (trailing zero word)
 };
 
-// US: point window icon per language (first object of evt_shop .sdata)
+// US and later: point window icon per language (first object of evt_shop .sdata)
 u16 point_disp_icons[] = {0x226, 0x227, 0x228, 0x227, 0x229, 0x22A};
 #else
     CALL(get_shop_point, LW(0))
@@ -779,7 +777,7 @@ EVT_END()
 #endif
 
 #if VERSION >= VERSION_JP
-/** the early demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
+/** JP and later define the prize list script here, in .sdata (the early demos: earlier in the file, in .data) */
 EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
     CALL(disp_list)
@@ -887,7 +885,7 @@ void point_disp(WinMgrEntry* entry) {
     }
 }
 
-/** Draws the title of the shop point prize list window (msg_shop_point_list4), centred; retail squeezes it to fit. */
+/** Draws the title of the shop point prize list window (msg_shop_point_list4), centred; US and later squeeze it to fit. */
 void title_disp(WinMgrEntry* entry) {
     const char* msg;
 
@@ -930,7 +928,7 @@ void title_disp(WinMgrEntry* entry) {
 /**
  * Draws the shop point prize list: a column of point thresholds and the prize item names,
  * prizes already claimed in red.
- * This is the retail version, which scales long headings and names to fit for the translated releases.
+ * US and later scale long headings and names to fit.
  */
 void list_disp(WinMgrEntry* entry) {
     PouchData* pouch;
@@ -1198,7 +1196,7 @@ USER_FUNC(point_disp_onoff) {
 
 /**
  * Blocks until the shop points window has counted up to Mario's points;
- * retail plays a tick sound each frame meanwhile.
+ * JP and later play a tick sound each frame meanwhile.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(point_wait) {
@@ -1471,7 +1469,7 @@ USER_FUNC(unkeep_pouchcheck_func) {
 /**
  * Shop driver, every frame: when Mario stands on a shelf's hit object,
  * opens the name and description windows for that item; A starts buy_evt.
- * Waits while a partner ability, the Ghost Diary or (retail) a field item pickup is active,
+ * Waits while a partner ability, the Ghost Diary or (JP and later) a field item pickup is active,
  * and on rsh_03 on day 3 until the shopkeeper is woken.
  * Hides the icons of one-off items once bought and of shelves whose map object is hidden.
  */

@@ -85,7 +85,7 @@ static inline void cloudCalcPos(PartyEntry* party) {
 /**
  * Mario's motion while Flurrie gusts (MARIO_MOTION_CLOUD):
  * on its first frame clears his jump, step and fall flags and timers so he stands still.
- * The demo keeps this handler in mario_motion.c.
+ * The early demos keep this handler in mario_motion.c.
  */
 void mot_cloud(void) {
     MarioWork* mario = marioGetPtr();
@@ -281,7 +281,7 @@ f32 cloudGetBreathDist(void) {
 /**
  * Lets Flurrie follow and bob again after a cutscene froze her,
  * and puts her back in her standing pose (PWD_S_1).
- * Called by the US/PAL evt_party_cloud_lock_animations_on_off script helper.
+ * Called by the evt_party_cloud_lock_animations_on_off script helper (US and later).
  */
 // Descriptive name (not in the symbol maps).
 void cloudLockAnimationsOff(PartyEntry* party) {
@@ -291,7 +291,7 @@ void cloudLockAnimationsOff(PartyEntry* party) {
 
 /**
  * Freezes Flurrie for a cutscene: cloud_move stops following and bobbing, and she takes pose PWD_Z_1.
- * Called by the US/PAL evt_party_cloud_lock_animations_on_off script helper.
+ * Called by the evt_party_cloud_lock_animations_on_off script helper (US and later).
  */
 // Descriptive name (not in the symbol maps).
 void cloudLockAnimationsOn(PartyEntry* party) {
@@ -361,7 +361,7 @@ void cloud_move(PartyEntry* party) {
 
 /**
  * Flurrie's init handler (party_data.c): marks her a flying partner,
- * sets her collision size (38 tall, 36 wide in the demo, 24 in later versions) and clears her gust state.
+ * sets her collision size (38 tall, 36 wide in the early demos, 24 in JP and later) and clears her gust state.
  */
 void cloud_init(PartyEntry* party) {
     party->memberKind = PARTY_MEMBER_FLURRIE;

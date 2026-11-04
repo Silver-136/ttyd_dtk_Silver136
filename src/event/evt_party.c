@@ -136,7 +136,7 @@ USER_FUNC(evt_party_set_camid) {
 /**
  * If the partner is off screen, walks it toward Mario a unit at a time,
  * snapping it to the floor below (or Mario's height), until it is on screen; clears its footmarks first.
- * The EU release also stops once Mario himself is off screen.
+ * The PAL demo and PAL also stop once Mario himself is off screen.
  */
 USER_FUNC(evt_party_force_reset_outofscreen) {
     MarioWork* mario;
@@ -499,7 +499,7 @@ USER_FUNC(evt_party_wait_landon) {
 /**
  * Makes the partner jump to (args[1], args[2], args[3]) in args[4] milliseconds, blocking until it lands.
  * args[5] = 0 also turns it toward the target; args[6] is the arc height for a level jump (-1000 or below = 20).
- * Rising jumps add headroom (half the partner's height in the JP and US demo releases, 37 units later).
+ * Rising jumps add headroom (half the partner's height in the early demos, 37 units in JP and later).
  * args[0]: slot.
  */
 USER_FUNC(evt_party_jump_pos) {
@@ -1101,8 +1101,7 @@ USER_FUNC(evt_party_cloud_breathout) {
 
 #if VERSION >= VERSION_US
 
-/** US and PAL only. */
-// US and PAL only.
+/** US and later only. */
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_party_cloud_lock_animations_on_off) {
     PartyEntry* p;

@@ -18,7 +18,7 @@
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 
-// US message buffer is twice as large
+// US and later: the message buffer is twice as large
 #if VERSION >= VERSION_US
 #define MSG_BUF_SIZE 0xA00
 #else
@@ -27,7 +27,7 @@
 
 /** Message-script setup hook called at startup; empty in every release. */
 void evt_msg_init(void) {
-    // empty in the retail game
+    // empty in every version
 }
 
 void msgWindow_Add(const char* msg, s32 id);
@@ -197,7 +197,7 @@ static const char* battlePartyMsgPad[6] = {0};
 #endif
 #else
 #include "mario/mariost.h"
-// US-only localized article/plural helpers (evt_msg_fmt_int / evtMsgFmtInt, evt_msg_fmt_str / evtMsgFmtStr, below).
+// US and later: localized article/plural helpers (evt_msg_fmt_int / evtMsgFmtInt, evt_msg_fmt_str / evtMsgFmtStr, below).
 // clang-format off
 #if VERSION >= VERSION_DEMO_EU
 const char* msg_de_article_nom_cap_tbl[7] = {"Ein ", "Eine ", "Ein ", "Die ", "Die ", "Die ", ""};
@@ -290,7 +290,7 @@ USER_FUNC(evt_msg_print_battle_party) {
 
 /**
  * Like evt_msg_print, but first fills the message's printf placeholders with up to four extra script arguments
- * (counts, slot numbers, coin amounts) into a local buffer (twice as large in the US and PAL releases).
+ * (counts, slot numbers, coin amounts) into a local buffer (twice as large in US and later).
  */
 USER_FUNC(evt_msg_print_insert) {
     char buf[MSG_BUF_SIZE];
@@ -510,16 +510,14 @@ USER_FUNC(evt_msg_npc) {
 
 #if VERSION >= VERSION_US
 /**
- * US-only localized article/plural helpers.
- * The US build emits functions in reverse source order,
+ * US and later: localized article/plural helpers.
+ * These builds emit functions in reverse source order,
  * so these sit at the end of the file to come first in .text.
- * US/PAL: replaces the article and item markers in buf (<AN>, <AN_ITEM>, <ITEM>, and the German,
+ * Replaces the article and item markers in buf (<AN>, <AN_ITEM>, <ITEM>, and the German,
  * French and Spanish <Ein_ITEM>/<un_ITEM> forms) with the right article for the item name and the name itself,
  * using the gender and plural tags in the name (<M>, <F>, <PLles>, ...).
  * Picks the rules by gp->language; Italian (5) only substitutes <ITEM>.
  */
-// US-only localized article/plural helpers. The US build emits functions in reverse source
-// order, so these sit at the end of the file to come first in .text.
 void evtMsgFmtStr(char* buf, const char* name) {
     char tmp[0xA00];
     u32 len;
@@ -774,7 +772,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
 }
 
 /**
- * US/PAL: builds a message with an item name and its article:
+ * US and later: builds a message with an item name and its article:
  * args[2] is the message (id when args[0] is 0, literal text when 1), args[3] the item name;
  * returns the formatted text in args[1] (a shared static buffer).
  */
@@ -801,7 +799,7 @@ USER_FUNC(evt_msg_fmt_str) {
 }
 
 /**
- * US/PAL: replaces <NUM> in buf with count and then fixes the plural markers for the language:
+ * US and later: replaces <NUM> in buf with count and then fixes the plural markers for the language:
  * <S> (and <X> in French) adds the plural ending, <N> is dropped,
  * and German and Italian spell out coin and point words (<COIN>, <POINT>, ...).
  */
@@ -969,7 +967,7 @@ void evtMsgFmtInt(char* buf, s32 count) {
 }
 
 /**
- * US/PAL: builds a message with a number: args[2] is the message (id when args[0] is 0, literal text when 1),
+ * US and later: builds a message with a number: args[2] is the message (id when args[0] is 0, literal text when 1),
  * args[3] the count; returns the text with the number and matching plural in args[1] (a shared static buffer).
  */
 USER_FUNC(evt_msg_fmt_int) {
@@ -994,7 +992,7 @@ USER_FUNC(evt_msg_fmt_int) {
     return EVT_RETURN_DONE;
 }
 
-// US: the scratch buffers are defined after the functions (their .bss follows the partyLabel statics, reversed).
+// US and later: the scratch buffers are defined after the functions (their .bss follows the partyLabel statics, reversed).
 char msg_article_buf[0xA00];
 char msg_num_buf[0xA00];
 char msg_plural_buf[0xA00];

@@ -137,7 +137,7 @@ s32 tree_data[] = {
 
 /**
  * Stopwatch script that just waits a frame forever: scripts spawn it with SPAWN_EVENT_GET_ID
- * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
+ * and read how long it has run with evt_sub_get_stopwatch (e.g. Peach's timed tasks in aji_06, aji_16 and aji_17).
  */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(evt_sub_stopwatch)
@@ -401,7 +401,7 @@ EVT_END()
  * Adds the star to the pouch, spins it up around Mario with the fanfare, prints the chapter's lines,
  * runs the stage-clear curtain and save prompt, then changes map:
  * Peach's interlude at aji_10 after chapters 1-3, usu_00, muj_12 and so on after the others.
- * US and PAL time the spin in milliseconds and scale its steps by the frame rate.
+ * US and later time the spin in milliseconds and scale its steps by the frame rate.
  */
 EVT_BEGIN(evt_sub_starstone)
     // Mario stops and the star goes into his pouch; the Doopliss scene (-1) adds nothing.
@@ -458,7 +458,7 @@ EVT_BEGIN(evt_sub_starstone)
         SET_VALUE(LF(8), 1)
     END_IF
 
-    // The fanfare lasts at least 9.7 seconds; the screen flashes white with a chime.
+    // The scene lasts at least 9.7 seconds from here; the screen flashes white with a chime.
     CALL(set_stop, 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(9700)
@@ -683,7 +683,6 @@ EVT_BEGIN(evt_sub_starstone)
         CALL(evt_msg_print, 0, STRING("stg4_jin_10_03"), 0, 0)
     END_IF
 
-    // Offer to save; the save kind tells which chapter was just finished.
     // Offer to save; the save kind tells which chapter was just finished.
     WAIT_MS(1000)
     IF_INT_EQUAL(LF(1), 1)
@@ -913,7 +912,7 @@ EVT_END()
 
 /**
  * Rogueport (gor_02): at STG3_51 sends Koopie Koo's mail (18)
- * when Mario enters the strip near x -280..-230; also delivers due Trouble Center follow-up mail.
+ * when Mario crosses the line from (-280, -50) to (-230, 220); also delivers due Trouble Center follow-up mail.
  * Loops for as long as the map runs.
  */
 EVT_BEGIN(mail_evt_gor_02)
@@ -1015,9 +1014,9 @@ EVT_BEGIN(mail_evt_gor_04)
 EVT_END()
 
 /**
- * Excess Express (rsh_02_a in US and PAL, rsh_03_a in JP and the early demos):
+ * Excess Express (rsh_02_a in US and later, rsh_03_a in JP and the early demos):
  * from day 3 (STG6_45) sends Pa-Patch's mail (21)
- * when Mario crosses the line at x = -100 (JP and demos: 400).
+ * when Mario crosses the line at x = -100 (JP and the early demos: 400).
  */
 EVT_BEGIN(mail_evt_rsh_03_a)
     IF_INT_EQUAL(GSWF_MAIL_PA_PATCH_SENT, 1)
@@ -1076,8 +1075,8 @@ EVT_BEGIN(mail_evt_hom_00)
 EVT_END()
 
 /**
- * Rogueport (gor_02): at STG6_71 sends Zip Toad's mail (23) when Mario enters the map's area.
- * PAL also waits until Mario is out of motion 25.
+ * Rogueport (gor_02): at STG6_71 sends Zip Toad's mail (23) when Mario crosses the line from
+ * (-1000, -4226) to (1000, 7374). The PAL demo and PAL also wait until Mario is out of motion 25.
  */
 EVT_BEGIN(mail_evt_gor_02_2)
     IF_INT_EQUAL(GSWF_MAIL_ZIP_TOAD_SENT, 1)
@@ -1580,7 +1579,7 @@ USER_FUNC(evt_sub_intpl_get_float) {
 
 /**
  * Starts a time-based interpolation: easing mode, start, end and duration in milliseconds,
- * timed from the script's own clock. Retail uses this so animations run at the same speed at 50 Hz.
+ * timed from the script's own clock, so animations run at the same speed at 50 Hz.
  */
 USER_FUNC(evt_sub_intpl_msec_init) {
     EvtWord* args = event->args;
@@ -1968,7 +1967,7 @@ USER_FUNC(evt_sub_load_progresstime) {
     return EVT_RETURN_DONE;
 }
 
-/** Returns the text language setting (gp->language) in args[0]; message code uses 0 as the default language. */
+/** Returns the text language setting (gp->language) in args[0]; 0 is Japanese (LANGUAGE_JP). */
 USER_FUNC(evt_sub_get_language) {
     evtSetValue(event, event->args[0], gp->language);
     return EVT_RETURN_DONE;
@@ -1990,7 +1989,7 @@ USER_FUNC(evt_sub_animgroup_async) {
 }
 
 #if VERSION >= VERSION_DEMO_EU
-/** Returns the display frame rate (50 or 60) in args[0]. PAL only. */
+/** Returns the display frame rate (50 or 60) in args[0]. Only in the PAL demo and PAL. */
 USER_FUNC(evt_sub_get_framerate) {
     evtSetValue(event, event->args[0], gp->framerate);
     return EVT_RETURN_DONE;
@@ -2041,7 +2040,7 @@ USER_FUNC(evt_sub_countdown_set_restart_time) {
 /**
  * Draws the "You got N coins!" message inside the coin window of evt_sub_get_coin;
  * work[0] is the coin count, work[1] turns the text on.
- * US and PAL widen the window to fit the message and formats it per language.
+ * US and later widen the window to fit the message and format it per language.
  */
 void coingetDisp(WinMgrEntry* entry) {
     s32* work = entry->param;
@@ -2225,7 +2224,7 @@ USER_FUNC(stageclear_wait) {
     return effStageClearEndChk(effNameToPtr("sub_clear")) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
-/** Sets the module-level stop flag to args[0]; evt_sub_starstone raises it 9.7 seconds into the fanfare. */
+/** Sets the module-level stop flag to args[0]; evt_sub_starstone raises it 9.7 seconds after the white flash starts. */
 USER_FUNC(set_stop) {
     stop = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
