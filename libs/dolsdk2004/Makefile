@@ -59,9 +59,6 @@ TARGET_LIBS := G2D              \
                amcnotstub       \
                amcstubs         \
                ar               \
-               ax               \
-               axart            \
-               axfx             \
                base             \
                card             \
                db               \
@@ -75,19 +72,15 @@ TARGET_LIBS := G2D              \
                gx               \
                hio              \
                mcc              \
-               mix              \
                mtx              \
                odemustubs       \
                odenotstub       \
                os               \
                pad              \
                perf             \
-               seq              \
                si               \
                sp               \
                support          \
-               syn              \
-               texPalette       \
                vi
 
 VERIFY_LIBS := $(filter-out amcstubs dsp odemustubs,$(TARGET_LIBS))

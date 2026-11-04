@@ -175,10 +175,12 @@ never copied in). What the raw counts above mean for the libraries:
   row stays.
 - **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's three
   pairs (getTiming, latch0/latch1) stay: a whole-unit flag changes other helpers.
-- **Sources no build uses:** 107 of the 313 library sources are compiled in neither version (AX, AXART, AXFX,
-  GD, SYN, GXSave/GXVerif*, perf, demo, MCC, extra OS/CARD/SI/VI files, a MusyX test main, ...). They
-  came with the SDK reconstruction the tree imported; their "needed to match" lines were never checked
-  against our game. Keep or delete is open (user).
+- **Sources no build uses:** Codex round 22 G recounted 101 library sources that none of the five builds compiles.
+  The 39 it marked for removal are gone (2026-11-03, user OK): the AX sound stack (AX, AXART, AXFX, SYN, MIX, SEQ;
+  the game plays sound through MusyX, and the JP demo link map has none of these archives), the SDK copies of
+  DEMOInit/DEMOPad and texPalette (the map lists them as unreferenced duplicates of the game's own files), MusyX
+  txwin and an empty dsp_perf.c. The other 62 (GD, GXSave/GXVerif*, perf, MCC, extra OS/CARD/SI/VI files, ...)
+  stay: the SDK Makefile still builds them as separate archives. Reasons per file: round22_G.tsv (cleanup notes).
 
 ## 8. After the three new versions (PAL, US demo, JP demo; 2026-11-01)
 
