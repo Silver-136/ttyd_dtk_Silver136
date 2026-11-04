@@ -120,9 +120,9 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 }
 
 /**
- * Script helper: moves Mario in a straight line over args[0] milliseconds from
- * where he stands to the point in LW(3), LW(4), LW(5), saving his starting point in LW(0) to LW(2).
- * Blocks until the time is up.
+ * Script helper: slides Mario in a straight line over args[0] milliseconds. The first call saves his position
+ * in LW(0) to LW(2); each call then places him on the line from LW(3), LW(4), LW(5) (at the start) to that
+ * saved position (at the end). Blocks until the time is up.
  */
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
@@ -820,8 +820,8 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
 EVT_END()
 
 /**
- * Script helper: turns on hit-group flag 1 for the hit objects of the map object named by args[0] ("me" means
- * the object running the script), which the hit checks skip, so the object loses its collision (nasi = none).
+ * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
+ * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
  * Unused in this file.
  */
 static USER_FUNC(lect_mobj_hit_nasi) {

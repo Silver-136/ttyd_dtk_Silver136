@@ -116,8 +116,9 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 }
 
 /**
- * Slides Mario in a straight line from the point in LW(3), LW(4), LW(5) to where he stands at the first call
- * over args[0] ms (that end point is saved to LW(0) to LW(2) on the first call). Blocks until done.
+ * Script helper: slides Mario in a straight line over args[0] milliseconds. The first call saves his position
+ * in LW(0) to LW(2); each call then places him on the line from LW(3), LW(4), LW(5) (at the start) to that
+ * saved position (at the end). Blocks until the time is up.
  */
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
@@ -463,8 +464,8 @@ static USER_FUNC(effitemget_busaiku) {
 }
 
 /**
- * Script helper: for each of the (up to two) hit objects of map object args[0] ("me" for the running one) that
- * has a name, turns the hit group's collision off (HIT_FLAG_OFF); used for the block dropped in the lesson.
+ * Script helper: switches off the collision of the map object named args[0] ("me" for the running one): each
+ * of its (up to two) named hit objects gets HIT_FLAG_OFF through hitGrpFlagOn (nasi = none).
  */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
