@@ -32,7 +32,7 @@ enum {
 
 // outputParams[2]
 enum {
-    STICK_KEEP_RESULT_EARLY = 1,   // let go early
+    STICK_KEEP_RESULT_EARLY = 1,   // let go before the last light, or after its release window
     STICK_KEEP_RESULT_LATE = 2,    // held too long
     STICK_KEEP_RESULT_SUCCESS = 3,
 };
@@ -49,7 +49,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused);
  * Per-frame driver of action command 3, used by Mario's hammer attacks and Frankly's battle lesson.
  * Tilt the stick left within 120 frames and hold it while params[0] lights come on, one every params[1] frames,
  * then let go within a difficulty window (80 down to 5 frames) after the last, big one lights.
- * outputParams[2]: 1 let go early, 2 held too long, 3 success.
+ * outputParams[2]: 1 let go early or after the window, 2 held through the last step, 3 success.
  * acFlags bit 1 ignores early releases and passes a held-too-long. A non-zero params[2] freezes.
  */
 s32 battleAcMain_StickKeepLeft(BattleWork* work) {
@@ -309,7 +309,7 @@ void battleAcDelete_StickKeepLeft(BattleWork* work) {
 /**
  * Draws the stick icon (flashing until it is tilted, released once the last light is on), the bar,
  * the numbered lights up to the current step and the final star;
- * acFlags bit 0 packs them closer for long counts.
+ * acFlags bit 0 packs them closer (and lengthens the bar for four or more lights).
  */
 static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     s32 count;

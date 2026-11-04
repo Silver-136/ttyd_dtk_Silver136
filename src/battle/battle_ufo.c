@@ -1,5 +1,6 @@
-// PAL only: the UFO test enemy (UNIT_UNUSED_UFO, "bll_un_ufo" in tst.rel). It flies in, hovers over a
-// target, drops an item part (part 2) that bounces on the floor and blinks out, then flies away.
+// Built for the early demos, PAL and the PAL demo (not JP, US or the September US demo): the UFO test enemy
+// (UNIT_UNUSED_UFO, "bll_un_ufo" in tst.rel). It flies in, hovers over a target, drops an item part (part 2)
+// that bounces on the floor and hides when it reaches the target, then flies away.
 // The unit's 0x44-byte work (BtlUnit_Entry allocates it for this kind) sits in countersetWeapon.
 #include "battle/battle.h"
 #include "battle/battle_sub.h"

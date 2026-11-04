@@ -44,7 +44,7 @@ void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 #include "mario/mariost.h"
 #include "sdk/texPalette.h"
 #include "icon_ids.h"
-// US: menu animation lengths scale with the display rate (gp->framerate is 60 or 50)
+// US and later: menu animation lengths scale with the display rate (gp->framerate is 60 or 50)
 #if VERSION >= VERSION_US
 #define FRAMES(n) (gp->framerate * (n) / 60)
 #define FRAMES_STEP(jp, n, x) ((x) * ((n) / gp->framerate))
@@ -213,7 +213,7 @@ void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* a, Vec* b, f
  * Hukidasi = speech bubble.
  * Draws the selected command as a bubble with its icon and name,
  * with a drop shadow that shifts as the bubble turns about y by s degrees; disabled commands are greyed.
- * The US release squeezes names wider than 90 units.
+ * US and later squeeze names wider than 90 units.
  */
 void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s) {
     GXColor tev;
@@ -283,7 +283,7 @@ void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32
     PSMTXTrans(trn, 0.0f, 52.5f, 0.0f);
 #if VERSION >= VERSION_US
     {
-        // US: long command names are squeezed to 90 units wide
+        // US and later: long command names are squeezed to 90 units wide
         f32 w = FontGetMessageWidth(name);
         PSMTXScale(scl, w > 90.0f ? 0.9f * (90.0f / w) : 0.9f, 0.9f, 0.9f);
     }
@@ -400,7 +400,7 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
     }
 }
 
-/** Retail signature: y is the name-width setting described above. */
+/** JP and later signature: y is the name-width setting (see DrawSubIconSub). */
 #if VERSION <= VERSION_DEMO_JP
 static void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party) {
 #else
@@ -431,7 +431,7 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
     }
 }
 
-/** Retail signature: y selects the name squeezing described above. */
+/** JP and later signature: y selects the name squeezing in the body below. */
 #if VERSION <= VERSION_DEMO_JP
 static void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party) {
 #else
@@ -815,7 +815,7 @@ void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle) {
 }
 
 #if VERSION >= VERSION_US
-// US: per-language "DANGER"/"PERIL" textures, the marks drawn larger outside Japanese, and the
+// US and later: per-language "DANGER"/"PERIL" textures, the marks drawn larger outside Japanese, and the
 // Mario and partner marks split into two functions drawn in an order that keeps the front one on top.
 u16 danger_icon_tbl[6] = {6, 7, 8, 7, 9, 10};
 u16 peril_icon_tbl[6] = {11, 12, 13, 14, 15, 16};
@@ -834,8 +834,7 @@ void DrawMenuMarioPinchMark(void) {
     Vec p;
 #else
 /**
- * Draws the DANGER/PERIL marks for Mario and his partner,
- * drawing first whichever stands behind (from Mario's x position) so the front one stays on top.
+ * Draws the DANGER/PERIL marks for Mario, then for his partner.
  */
 void DrawMenuPinchMark(void) {
     Mtx m;
@@ -1958,7 +1957,7 @@ void DrawOperationWin(void) {
         if (idx < cursor->count) {
             enabled[i] = items[idx].enabled;
             // BUG: tests row i of the list instead of row idx, so once the list scrolls the coin fallback follows the
-            // wrong entry (retail code).
+            // wrong entry (every version).
             if (items[i].icon) {
                 icons[i] = items[idx].icon;
             } else {

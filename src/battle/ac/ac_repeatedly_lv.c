@@ -11,7 +11,7 @@
 #include "system.h"
 #include <string.h>
 
-// float first here: the retail call loads the ratio before the other arguments (battle_ac.c defines x, y, width, ratio, ...)
+// BattleAcDrawGauge takes the ratio before the width (battle_ac.c defines x, y, ratio, width, ...)
 
 typedef struct RepeatedlyLvWork {
     u32 mask;    // 0x0
@@ -25,7 +25,7 @@ typedef struct RepeatedlyLvWork {
     s16 pressCount; // 0x1C, counted presses; odd/even picks maskB/maskA for the alternating commands (params[0] 11-15)
     s16 s1e;     // 0x1E, initial timeLeft (params[1]); never read
     s16 timeLeft; // 0x20, frames left (params[1]), counted down; cleared when the maxMask button is let go; the command ends at 0
-    s16 unheldFrames; // 0x22, frames the maxMask button is not held before the start; the command fails at 150
+    s16 unheldFrames; // 0x22, frames the maxMask button is not held before the start; at 150 the command ends with level 0 (result: success)
     u8 gaugeWidth; // 0x24, params[2]; the width argument of BattleAcDrawGauge (third int, see the float-first prototype)
     s8 state;    // 0x25
     u8 levelStep; // 0x26, params[5] (0 -> 100); gauge points per level when computing level
@@ -119,7 +119,7 @@ void battleAcDelete_RepeatedlyLv(BattleWork* work);
 
 /**
  * Per-frame driver of action command 6, used by Koops's Shell Slam, Yoshi's Ground Pound and Stampede,
- * Bobbery's Bob- ombast and Ms. Mowz's Love Slap, Tease and Smooch.
+ * Bobbery's Bob-ombast and Ms. Mowz's Love Slap, Tease and Smooch.
  * Presses fill a draining gauge (see the acFlags enum);
  * at the time limit it succeeds if the gauge is at params[6] or more.
  * outputParams[1] is the gauge, [2] the level reached (one more when full).
@@ -363,7 +363,7 @@ void battleAcDelete_RepeatedlyLv(BattleWork* work) {
 }
 
 /**
- * Draws the flashing input icons (two for the alternating inputs),
+ * Draws the flashing input icons (two for inputs 11, 12 and 15),
  * the gauge eased toward its value with level marks from gaugeParams (pulsing red once full),
  * and per acFlags the params[6] target marker and the level number.
  */

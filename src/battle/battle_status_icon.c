@@ -166,7 +166,7 @@ void BattleStatusIconInit(BattleUnit* unit) {
  * while the command menu is up (dispFlags bit 0), fills the unit's icon list from _disp_table,
  * one entry per active status, placed at the unit's statusIconOffset and stacked 25.6 units apart,
  * and registers BattleStatusIconDisp.
- * From the US release on it picks the table by game language;
+ * US and later pick the table by game language;
  * the tables differ only in the HP and FP Regen icons.
  */
 void BattleStatusIconMain(BattleUnit* unit) {
@@ -227,7 +227,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
 
 /** Status-icon cleanup when a unit is deleted; empty in every version. */
 void BattleStatusIconDelete(BattleUnit* unit) {
-    ; //stubbed in retail
+    ; //stubbed in every version
 }
 
 /**

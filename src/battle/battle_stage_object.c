@@ -465,7 +465,6 @@ void BattleStageObjectMain(void) {
 
 /**
  * Empty in every version; called at the end of BattleStageObjectMain each frame.
- * Guess: a stripped debug hook.
  */
 void BattleObjectConfig(void) {
     // does nothing
@@ -2571,9 +2570,9 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * The same nozzle script for the other builds, placed after _set_mobj_rotate_x
- * so the string pool keeps its order; see the JP copy above.
- * These builds show the wall banner with btlevtcmd_AnnounceMessage for 180 frames instead.
+ * Nozzle work at the first turn (BattleStage_NozzleWorkCheck(0)): _nozzle_work_event_core with LW(10) = 0.
+ * The early demos place this script and _nozzle_work_event_1 here; JP has its copies after the default
+ * destroy scripts below, US and later after _set_mobj_rotate_x.
  */
 EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
@@ -2840,7 +2839,8 @@ USER_FUNC(_set_mobj_rotate_x) {
     return busy ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
-/* US: these three scripts sit after _set_mobj_rotate_x so the message string pools after its Vec literal */
+/* US and later: these three scripts sit after _set_mobj_rotate_x so the message string pools after its Vec literal;
+   these builds show the wall banner with btlevtcmd_AnnounceMessage for 180 frames */
 #if VERSION >= VERSION_US
 EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -3016,7 +3016,7 @@ USER_FUNC(_bgset_audience_bgset_access) {
     return EVT_RETURN_DONE;
 }
 
-/** Gives each piece of layer args[0] a random wobble period of 60-69 frames, starting at either end of the swing. */
+/** Gives each piece of layer args[0] a random wobble period of 60-69 frames, starting at the start or the middle of the period. */
 USER_FUNC(_set_mobj_shake_init) {
     BattleWork* wp = _battleWorkPointer;
     s32 layer;
@@ -3261,8 +3261,8 @@ USER_FUNC(_announce_wall_message) {
 }
 
 /**
- * 2D draw callback for the JP/demo wall banner:
- * a white window frame with btl_msg_escape_wall_close2 centred near the top of the screen.
+ * 2D draw callback for the JP and early-demo wall banner:
+ * a white window frame with btl_msg_escape_wall_close2 centred in the lower half of the screen.
  */
 void _disp_escape_wall_message(CameraId camera, void* param) {
     const char* msg = msgSearch("btl_msg_escape_wall_close2");
@@ -3311,7 +3311,7 @@ USER_FUNC(_fall_frame_wait) {
 
 /**
  * Runs each living unit's ceiling-fall script (btlevtcmd_SetEventCeilFall) and waits for all of them to end.
- * The US and later builds skip units with the instant-kill status.
+ * JP and later skip units with the instant-kill status.
  */
 USER_FUNC(_fall_frame_wait_unit_ready) {
     BattleWork* wp = _battleWorkPointer;
@@ -3913,8 +3913,8 @@ typedef struct FallObjectWork {
 } FallObjectWork;
 
 /**
- * Drops one ceiling object: picks its type from the rank's rates (repeating earlier picks once three are
- * recorded), aims it at a target the type's weapon can reach or, 10% of the time once Mario has a Star Power,
+ * Drops one ceiling object: picks its type from the rank's rates (the branch that repeats earlier picks once
+ * three are recorded never runs: the work is new each call and holds one entry), aims it at a target the type's weapon can reach or, 10% of the time once Mario has a Star Power,
  * at a random audience member, then waits for the effect to land and deals the damage (guard check, dodges,
  * Superguard and lucky reactions). Returns 1 in args[0] if it fell on the audience.
  */

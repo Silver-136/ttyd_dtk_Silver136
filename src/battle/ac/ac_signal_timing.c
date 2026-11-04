@@ -85,7 +85,7 @@ s32 _get_ok_frame_range(s32 difficulty) {
  * each to be answered with its button (A, or random d-pad-style stick directions or A/B/X/Y per params[4])
  * within the ok window.
  * Counts hits in outputParams[0] ([1] is the last answer, 1 or -1) and succeeds with params[3] or more.
- * The releases also stop taking presses once every signal is answered.
+ * JP and later also stop taking presses once every signal is answered.
  */
 s32 battleAcMain_SignalTiming(BattleWork *work) {
     const char *sfxPi;

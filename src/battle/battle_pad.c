@@ -26,7 +26,7 @@ void BattlePadManager(void) {
 
 /**
  * Zeroes one controller's battle input record: the current and previous pad state,
- * the 30-frame button histories and the hold-repeat timer.
+ * the 30-frame pressed, held and button histories (not the released one) and the hold-repeat timer.
  */
 void BtlPad_WorkInit(BattleWorkPad* pad) {
     int i;

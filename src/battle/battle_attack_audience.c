@@ -66,7 +66,7 @@ s32 _get_attack_aud_no(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Script helper: hits audience member args[0].
- * args[1] == 1 skips the hit spark and the "pliable" damage sound (Koops' shell variant);
+ * args[1] == 1 skips the hit spark and the "pliable" damage sound (one of Flurrie's two calls);
  * otherwise a hit effect and the sound play at the member.
  * The member is then knocked out of the crowd by BattleAudience_Attack.
  */
@@ -162,7 +162,7 @@ s32 _get_present_target_id(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Draws the "Got <item>!" window (btl_msg_get_item) centred near the top of the screen for the thrown item.
- * Non-JP releases fill the item name in with evtMsgFmtStr for languages other than English.
+ * US and later fill the item name in with evtMsgFmtStr unless the language is Japanese.
  */
 void _get_item_announce_disp(CameraId cameraId, void* param) {
     u16 lines;

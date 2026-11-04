@@ -1132,7 +1132,7 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
  * Burn and freeze cancel each other, as do Fast and Slow, without applying the new one,
  * and a zero strength for a size, attack or defense change clears an effect of that sign.
  * Cancellation and zero-strength clear paths return FALSE; unhandled types return TRUE without changing a status.
- * Retail versions also return FALSE when Charge drops below 0
+ * JP and later also return FALSE when Charge drops below 0
  * or Allergic or Payback is set to 0 turns, which the early demos treat as set.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -1732,7 +1732,7 @@ BOOL BtlUnit_CanActStatus(BattleUnit* unit) {
 /**
  * Loads Mario's HP and FP, or a partner's HP, from the save data (pouch) into the battle unit;
  * partners also get back the size, status flags
- * and status turns saved in the battle's party info (and, in US and PAL, the disabled commands) and are KO'd
+ * and status turns saved in the battle's party info (and, in US and later, the disabled commands) and are KO'd
  * if their HP is 0.
  */
 void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
@@ -1803,7 +1803,7 @@ void BtlUnit_ReviseHpFp(BattleUnit* unit) {
 
 /**
  * Writes Mario's HP and FP, or a partner's HP, back to the save data (pouch) and keeps a partner's size,
- * status flags and status turns (and, in US and PAL, disabled commands) in the battle's party info for
+ * status flags and status turns (and, in US and later, disabled commands) in the battle's party info for
  * when it is switched back in.
  */
 void BtlUnit_SetParamToPouch(BattleUnit* unit) {
@@ -1988,7 +1988,7 @@ void BtlUnit_SetMaxFp(BattleUnit* unit, s32 value) {
  * doubling per extra copy for Power Jump, Multibounce, Power Bounce, Tornado Jump, Power Smash, Quake Hammer,
  * Hammer Throw, Fire Drive, Charge, the Mega moves and Super Charge;
  * times the count for the stomps, Head Rattle and Ice Smash. Each Flower Saver takes 1 off (not below 1).
- * Retail caps it at 999.
+ * JP and later cap it at 999.
  */
 s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
     s32 cost = (u8)weapon->baseFpCost;

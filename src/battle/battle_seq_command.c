@@ -1979,7 +1979,7 @@ check:
 /**
  * Draws the Double/Triple Dip cancel prompt: btl_msg_multi_item_cancel_check with Yes/No and the hand cursor.
  * Before the US release Yes/No are hardcoded Japanese;
- * the PAL release sizes the window by the text's measured width instead of its length.
+ * the PAL demo and PAL size the window by the text's measured width instead of its length.
  */
 void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* param) {
     BattleWork* wp = param;
@@ -2539,7 +2539,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     switch (type) {
     case CMD_ACT_OPERATION:
         switch (cmd->operationType) {
-        case CMD_ACT_PARTY_MOVE:
+        case CMD_OP_DEFEND:
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
                 unit->attackEventCode = btldefaultevt_Defend;
@@ -2547,7 +2547,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
                 unit->attackEventCode = btldefaultevt_DefendParty;
             }
             break;
-        case CMD_ACT_OPERATION:
+        case CMD_OP_APPEAL:
             unit->attackEventCode = btldefaultevt_Appeal;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
@@ -2565,7 +2565,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
                 BtlActRec_AddCount(&wp->actRecord.partnerAppeals);
             }
             break;
-        case CMD_ACT_MULTI_ITEM:
+        case CMD_OP_ESCAPE:
             unit->attackEventCode = btldefaultevt_Escape;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             if (unit->currentKind == UNIT_MARIO) {
@@ -2574,7 +2574,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
                 BtlActRec_AddCount(&wp->actRecord.partnerEscapes);
             }
             break;
-        case CMD_ACT_HAMMER:
+        case CMD_OP_CHARGE:
 #if VERSION <= VERSION_DEMO_JP
             unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
 #endif
@@ -2591,7 +2591,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
                 BtlActRec_AddCount(&wp->actRecord.partnerCharges);
             }
             break;
-        case CMD_ACT_ITEM:
+        case CMD_OP_SUPER_CHARGE:
 #if VERSION <= VERSION_DEMO_JP
             unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
 #endif
@@ -2608,7 +2608,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
                 BtlActRec_AddCount(&wp->actRecord.partnerSuperCharges);
             }
             break;
-        case CMD_ACT_JUMP:
+        case CMD_OP_CHANGE_PARTY:
             unit->attackEventCode = btldefaultevt_ChangeParty;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             cmd->cursor[1].absPos = 0;
@@ -2621,7 +2621,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
                 BtlActRec_AddCount(&wp->actRecord.partnerPartyChanges);
             }
             break;
-        case CMD_ACT_SPECIAL:
+        case CMD_OP_PROTECT_PARTNER:
             unit->attackEventCode = btldefaultevt_ProtectPartner;
             unit->attackEventFlags = ACT_EVENT_KEEP_STATUS_WINDOW;
             break;
@@ -2896,7 +2896,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
 /**
  * Draws one HP bar at screen position pos: the frame texture, then the fill by barRatio,
  * with a black trail for recent damage while it drains (mode 1).
- * The US and PAL releases use other texture ids than JP and the early demos.
+ * US and later use other texture ids than JP and the early demos.
  */
 void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
@@ -2934,8 +2934,8 @@ void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
  * then a random single-target move usable while confused aimed at a random target, or Defend,
  * Run Away or Change Partner from Tactics.
  * Enemies and some invalid picks get subsetevt_confuse_flustered; no eligible move returns NULL for a retry,
- * as does no eligible Change Partner choice in retail.
- * The US and PAL releases first drop a Double or Triple Dip in progress.
+ * as does no eligible Change Partner choice in JP and later.
+ * US and later first drop a Double or Triple Dip in progress.
  */
 void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     BattleCommand* cmd = &wp->commandMenu;
@@ -3052,38 +3052,38 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         }
         cmd->operationType = cmd->operation[cursor->absPos].type;
         switch (cmd->operationType) {
-        case CMD_ACT_PARTY_MOVE:
+        case CMD_OP_DEFEND:
             if (unit->currentKind == UNIT_MARIO) {
                 return btldefaultevt_Defend;
             }
             return btldefaultevt_DefendParty;
-        case CMD_ACT_OPERATION:
+        case CMD_OP_APPEAL:
             return btldefaultevt_Appeal;
         case CMD_OP_WAIT:
             return btldefaultevt_Wait;
-        case CMD_ACT_MULTI_ITEM:
+        case CMD_OP_ESCAPE:
             return btldefaultevt_Escape;
-        case CMD_ACT_HAMMER:
+        case CMD_OP_CHARGE:
 #if VERSION <= VERSION_DEMO_JP
             return badgeWeapon_Charge.attackEvtScript;
-        case CMD_ACT_ITEM:
+        case CMD_OP_SUPER_CHARGE:
             return badgeWeapon_SuperCharge.attackEvtScript;
-            case CMD_OP_WAKEUP_EVENT:
+        case CMD_OP_WAKEUP_EVENT:
             return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
-        case CMD_ACT_JUMP: {
+        case CMD_OP_CHANGE_PARTY: {
 #else
             if (unit->currentKind == UNIT_MARIO) {
                 return badgeWeapon_Charge.attackEvtScript;
             }
             return badgeWeapon_ChargeP.attackEvtScript;
-        case CMD_ACT_ITEM:
+        case CMD_OP_SUPER_CHARGE:
             if (unit->currentKind == UNIT_MARIO) {
                 return badgeWeapon_SuperCharge.attackEvtScript;
             }
             return badgeWeapon_SuperChargeP.attackEvtScript;
         case CMD_OP_WAKEUP_EVENT:
             return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
-        case CMD_ACT_JUMP:
+        case CMD_OP_CHANGE_PARTY:
             {
 #endif
                 u8 cnt;
@@ -3112,7 +3112,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             cmd->partyKind = cmd->party[cursor->absPos].kind;
             cmd->cursor[1].absPos = 0;
             return btldefaultevt_ChangeParty;
-        case CMD_ACT_SPECIAL:
+        case CMD_OP_PROTECT_PARTNER:
             return subsetevt_confuse_flustered;
         default:
             return subsetevt_confuse_flustered;
@@ -3128,7 +3128,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
  * Records the current menu state in cmd->recCommand;
  * while an audience action is pending, clears it
  * and the pending action once the menu is back at the recorded state.
- * The command loop calls it after each state while attackAudience is set (from an X audience attack) and
+ * The command loop calls it after each state while attackAudience is set (from an X audience attack or an audience item) and
  * then re-runs the states at once,
  * with BattleMenuKeyOKInACT letting input through, until it is back at the recorded state.
  * Guess: this rebuilds the menu where the player was after the audience interruption.

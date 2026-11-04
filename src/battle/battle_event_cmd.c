@@ -1543,7 +1543,7 @@ USER_FUNC(btlevtcmd_GetMaxHp) {
     return EVT_RETURN_DONE;
 }
 
-/** Script: returns in args[1] the maximum FP of the unit args[0] (badge bonuses included, via BtlUnit_GetMaxFp). */
+/** Script: returns in args[1] the maximum FP of the unit args[0] (Mario's for a partner, via BtlUnit_GetMaxFp). */
 USER_FUNC(btlevtcmd_GetMaxFp) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -1682,7 +1682,7 @@ USER_FUNC(btlevtcmd_SetMaxMoveCount) {
     return EVT_RETURN_DONE;
 }
 
-/** Script: returns in args[1] the part number of the part the unit args[0] is currently targeting. */
+/** Script: returns in args[1] the part number of the unit args[0]'s own part that the last hit struck. */
 USER_FUNC(btlevtcmd_GetDamagePartsId) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -1699,7 +1699,7 @@ USER_FUNC(btlevtcmd_GetDamagePartsId) {
     return EVT_RETURN_DONE;
 }
 
-/** Script: returns in args[1] the HP damage the unit args[0] took from the current attack. */
+/** Script: returns in args[1] the HP damage the unit args[0] took from the last hit. */
 USER_FUNC(btlevtcmd_GetHpDamage) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -1716,7 +1716,7 @@ USER_FUNC(btlevtcmd_GetHpDamage) {
     return EVT_RETURN_DONE;
 }
 
-/** Script: returns in args[1] the FP damage the unit args[0] took from the current attack. */
+/** Script: returns in args[1] the FP damage the unit args[0] took from the last hit. */
 USER_FUNC(btlevtcmd_GetFpDamage) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -1733,7 +1733,7 @@ USER_FUNC(btlevtcmd_GetFpDamage) {
     return EVT_RETURN_DONE;
 }
 
-/** Script: returns in args[1] how many damaging hits the unit args[0] took from the current attack. */
+/** Script: returns in args[1] how many hits (guarded ones included) the unit args[0] took from the current attack. */
 USER_FUNC(btlevtcmd_GetHpDamageCount) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -2194,7 +2194,7 @@ USER_FUNC(btlevtcmd_GetUnitKind) {
     return EVT_RETURN_DONE;
 }
 
-/** Script: returns in args[1] the unit paired with args[0] (Mario for the partner, the partner for Mario), or -1. */
+/** Script: returns in args[1] the unit paired with args[0] (the partner for Mario, Mario for any other unit), or -1. */
 USER_FUNC(btlevtcmd_GetPartnerId) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -3030,7 +3030,8 @@ static inline Vec becMvVecE(f32 x, f32 y, f32 z) {
 }
 
 /**
- * Script: jumps the unit args[0] in an arc to (args[1..3]) over args[4] frames (0 = from the jump speed),
+ * Script: jumps the unit args[0] in an arc to (args[1..3]) over args[4] frames (0 = the unit's preset frame
+ * count, or from the jump speed when that is 0 too),
  * using its gravity, with the jump sounds of sound set args[5]. Blocks until it lands.
  */
 USER_FUNC(btlevtcmd_JumpPosition) {
@@ -3291,8 +3292,8 @@ USER_FUNC(btlevtcmd_GetMoveFrame) {
 
 /**
  * Script: flies the unit args[0] to (args[1..3]) over args[4] frames along a curve bowed by args[5] units (0 =
- * straight), the bow vertical for type args[7] 0 and sideways otherwise;
- * args[6] is the interpolation mode (+100 also pins it to the target at the end), args[8] the sound set.
+ * straight), the bow vertical for type args[7] 0 and across the path in the x-y plane otherwise;
+ * args[6] is the interpolation mode (+100 also ends the move where it reaches the floor), args[8] the sound set.
  * Floating units use it instead of walking. Blocks until it arrives.
  */
 USER_FUNC(btlevtcmd_DivePosition) {
@@ -3914,7 +3915,7 @@ USER_FUNC(btlevtcmd_AttackDeclareAll) {
 /**
  * Script: before the hit, checks whether the weapon args[3] of the unit args[0] will connect with part args[2]
  * of the unit args[1] (flags args[4]) and returns the result in args[5] (hit, miss, dodge, lucky and so on).
- * Ends the script when the check fails or the attacker's event was killed.
+ * Ends the script when the check fails or this script's own event was deleted meanwhile.
  */
 USER_FUNC(btlevtcmd_PreCheckDamage) {
     EvtWord* args = event->args;
@@ -4066,7 +4067,7 @@ USER_FUNC(btlevtcmd_CommandPreCheckCounter) {
 /**
  * Script: deals the hit: applies the weapon args[3] of the unit args[0] to part args[2] of the unit args[1] with
  * damage flags args[4] (damage, status, counters, the target's hit event) and returns the result in args[5].
- * Ends the script when it fails or the attacker's event was killed.
+ * Ends the script when it fails or this script's own event was deleted meanwhile.
  */
 USER_FUNC(btlevtcmd_CheckDamage) {
     EvtWord* args = event->args;
@@ -4430,7 +4431,7 @@ USER_FUNC(btlevtcmd_PhaseEventStartDeclare) {
 
 /**
  * Script: picks the action a confused unit args[0] takes (BattleSetConfuseAct)
- * and returns its script in args[1]; after 20 failed tries (10 in the early demos) it falls back to
+ * and returns its script in args[1]; after 21 failed tries (11 in the early demos) it falls back to
  * subsetevt_confuse_flustered.
  */
 USER_FUNC(btlevtcmd_GetConfuseActEvent) {
@@ -4504,8 +4505,9 @@ USER_FUNC(btlevtcmd_MarioJumpParam) {
 /**
  * Script: Mario's jump onto a target: arcs the unit args[0] to (args[1..3]) over args[4] frames (0 = from the
  * move speed) with the jump sounds of sound set args[6].
- * The arc height grows with the distance; type args[5] picks the curve (1 and 2 the normal jump,
- * 2 about 12% higher; 3 and 4 a taller curve, 4 a further 25% higher). Blocks until he lands.
+ * The arc height grows with the distance; type args[5] picks the curve (0 and 2 the normal jump,
+ * 2 about 12% higher; 3 and 4 a taller curve, 4 a further 25% higher). Type 1 makes no arc: it ends at once
+ * when BtlUnit_GetACPossibility fails, else after a frame without movement. Blocks until he lands.
  */
 USER_FUNC(btlevtcmd_MarioJumpPosition) {
     BattleUnit* unit;
@@ -5271,7 +5273,7 @@ USER_FUNC(btlevtcmd_ResultACDefence) {
     return EVT_RETURN_DONE;
 }
 
-/** Script: returns the action command result flags in args[0] (bit 2 = success). */
+/** Script: returns the action command result flags in args[0] (AC_RESULT_SUCCESS, 0x2 = success). */
 USER_FUNC(btlevtcmd_GetResultAC) {
     evtSetValue(event, event->args[0], _battleWorkPointer->actionCommands.result);
     return EVT_RETURN_DONE;
@@ -5385,7 +5387,7 @@ USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
 extern void psndSFX_pit(s32 id, s32 pitch);
 
 #if VERSION >= VERSION_US
-// US: per-language width table [language][0] * [language][type + 1]
+// US and later: per-language width table [language][0] * [language][type + 1]
 static f32 ac_success_width_tbl[7][8] = {
     {30.0f, 3.0f, 3.0f, 3.0f, 3.0f, 4.0f, 5.0f, 6.0f},
     {30.0f, 4.0f, 4.0f, 4.0f, 4.0f, 5.0f, 9.0f, 9.0f},
@@ -5400,7 +5402,7 @@ static f32 ac_success_width_tbl[7][8] = {
 /**
  * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
  * Excellent) above the position args[1..3], kept on screen, with its sound.
- * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
+ * US and later versions size the sign by a per-language width table (ac_success_width_tbl).
  */
 USER_FUNC(btlevtcmd_ACSuccessEffect) {
     EvtWord* args = event->args;
@@ -6135,7 +6137,7 @@ USER_FUNC(btlevtcmd_AnimeFlagOnOff) {
 
 /**
  * Script: returns 1 in args[1] when the unit args[0] can show guard motions:
- * not asleep, stopped, frozen, tiny, KO'd, invisible and the like, and not already defending.
+ * not asleep, stopped, frozen, tiny, KO'd or invisible, and not flipped over (UNIT_STATUS_FLAG_FLIPPED).
  */
 USER_FUNC(btlevtcmd_CheckGuardMotionEnable) {
     EvtWord* args = event->args;
@@ -6453,7 +6455,8 @@ USER_FUNC(btlevtcmd_GetItemRecoverParam) {
 /**
  * Script: rolls the stage hazards an attack with the weapon args[0] can set off, from its stageEffectRates:
  * knocking down the background (A1, A2, then B), turning or firing the stage nozzles,
- * dropping the iron frame and the objects above it. The battle debug flags can force each one.
+ * dropping the iron frame and, once there is no iron frame, the hanging objects. The battle debug flags can
+ * force each one.
  */
 USER_FUNC(btlevtcmd_WeaponAftereffect) {
     BattleWork* wp = _battleWorkPointer;
@@ -7099,9 +7102,8 @@ USER_FUNC(btlevtcmd_InviteApInfoReport) {
 }
 
 /**
- * Script: slides the battle stage's background objects off screen (args[0] = 0: sideways 450 units for the back
- * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.
- * Used by Star Power special moves that need a clear stage.
+ * Script: sets the unit args[0]'s hit event (hitEventCode) to the script args[1].
+ * Built in the early demos, the September PAL demo and PAL only.
  */
 #if VERSION >= VERSION_DEMO_EU
 USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
@@ -7316,7 +7318,7 @@ USER_FUNC(btlevtcmd_ftomsec) {
 
 /**
  * Script: converts args[0] frames at 60 fps into frames at the running frame rate and returns them in args[1];
- * the PAL 50 Hz mode needs fewer frames. In the US release a 60 Hz setting returns the value unchanged.
+ * the PAL 50 Hz mode needs fewer frames. In US and later versions a 60 Hz setting returns the value unchanged.
  */
 USER_FUNC(btlevtcmd_ftof) {
     EvtWord* args = event->args;

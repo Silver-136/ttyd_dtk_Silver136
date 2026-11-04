@@ -29,9 +29,9 @@ void BattleAcHelpSetDispType(s32 type) {
     }
 }
 
-/** Empty in the retail games; called once from battle setup. */
+/** Empty in every version; called once from battle setup. */
 void BattleAcHelpInit(void) {
-// stubbed in retail
+// stubbed in every version
 }
 
 void _ac_help_disp(CameraId cameraId, void* param);

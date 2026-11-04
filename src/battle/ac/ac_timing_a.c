@@ -82,7 +82,7 @@ void battleAcDelete_TimingA(BattleWork* work) {
 }
 
 /**
- * Display callback: slides the A icon in from the left over 20 frames (the releases snap it in place),
+ * Display callback: slides the A icon in from the left over 20 frames (JP and later snap it in place),
  * and once the command is stopped keeps it up for 40 frames before sliding it back out.
  */
 void battleAcDisp_TimingA(CameraId cameraId, void* param) {
@@ -98,7 +98,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
 #endif
         case AC_STATE_WAIT_START:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
-            // no break: case 100 sets iconX to 30.0f, so the icon does not slide in
+            // no break: in JP and later case 100 sets iconX to 30.0f, so the icon does not slide in
         case AC_STATE_START:
 #if VERSION >= VERSION_JP
             disp->iconX = 30.0f;

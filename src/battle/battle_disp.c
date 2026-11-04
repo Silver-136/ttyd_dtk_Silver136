@@ -59,7 +59,7 @@ void _btlStockExpDisp(CameraId camId, void* param);
 
 /**
  * Returns the animation name for a pose type from a unit part's pose table:
- * the first entry that matches poseId or is the BTL_POSE_NORMAL fallback. NULL for no table.
+ * the first entry that matches type or is the POSE_TYPE_NORMAL fallback. NULL for no table.
  */
 const char* searchPoseTbl(PoseTableEntry* table, s32 type) {
     int i;
@@ -166,8 +166,8 @@ void btlDispGXQuads2D(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a) {
 }
 
 /**
- * GX state for the battle texture planes: textured, vertex colour from the vertices,
- * alpha from the material register.
+ * GX state for the battle texture planes: textured, colour and alpha from the vertices
+ * (lighting off; only the ambient source is the register).
  */
 void btlDispTexPlaneInit(void) {
     GXSetCullMode(GX_CULL_NONE);
@@ -302,7 +302,7 @@ void btlDispInit(void) {
 /**
  * Picks the status pose for a unit: the KO pose when it is inactive,
  * else the first status it has from _status_pose_table (the early demos check sleep before stop and freeze,
- * retail checks it after), else BTL_POSE_NORMAL.
+ * JP and later check it after), else STATUS_INVALID (the value of POSE_TYPE_NORMAL).
  */
 StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
     s32* table = _status_pose_table;
@@ -334,7 +334,7 @@ void btlUnitPartsDisp(CameraId camId, void* part);
  * chooses each part's pose (status, peril, danger, defend), sets the animation speed for Fast and Slow,
  * picks normal, translucent (invisible) or dodgy draw types, queues the part,
  * blur and shadow draws and held-item icons, then the Star Point counter, stage, command menu,
- * audience and break slot. Retail drops the shell to the floor height.
+ * audience and break slot. JP and later drop the shell to the floor height.
  */
 void btlDispMain(void) {
     BattleUnit* unit;
@@ -1052,7 +1052,7 @@ void btlDispEntAnime(BattleUnit* unit) {
 
 /**
  * Plays a named animation on a part, taking manual control of its pose (status poses no longer override it).
- * flag marks it as a hurt pose, which keeps the status draw types.
+ * damagePose marks it as a hurt pose, which keeps the status draw types.
  */
 void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose) {
     strcpy(part->poseName, name);
@@ -1295,7 +1295,7 @@ void _pose_two_pattern(BattleUnitPart* part) {
 
 // FAKE: unused constant local kept by a per-function opt_dead_assignments off; without them the object changes
 #pragma push
-// dead assignments optimisation off for btlDispAnimeSpeed, btlGetScreenPoint, btlDispTex4 and 3 more: the original register allocation and scheduling need it
+// dead assignments optimisation off for btlDispAnimeSpeed only (until the pop): the original register allocation and scheduling need it
 #pragma opt_dead_assignments off
 /** Sets a part's status animation speed (2 for Fast, 0.5 for Slow) and applies it times its scripted speed. */
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed) {
@@ -1351,8 +1351,8 @@ void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color) {
 }
 
 /**
- * Draws one quadrant of btlDispTex4: offset by pos2, mirrored by scale2, then scaled,
- * rotated (Z, X, Y) and placed at pos.
+ * Draws one quadrant of btlDispTex4: scaled, mirrored by scale2, offset by pos2,
+ * then rotated (Z, X, Y) and placed at pos.
  */
 void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color) {
     Mtx mtx, trans, scl, rotX, rotY, rotZ, trans2, scl2;

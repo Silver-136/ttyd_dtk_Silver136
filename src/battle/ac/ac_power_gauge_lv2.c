@@ -42,7 +42,7 @@ static void actionCommandDisp(f32 x, f32 y);
  * 0.75-second windows near 1, 3 and 5 seconds, where holding drains it;
  * it also leaks params[2]/100 a frame and locks once full.
  * outputParams[0] is the level (gauge x params[3] / 100,
- * one more when full in the releases unless acFlags bit 0); success needs params[4] or more.
+ * one more when full in JP and later unless acFlags bit 0); success needs params[4] or more.
  */
 s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;

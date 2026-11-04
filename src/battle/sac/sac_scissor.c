@@ -98,7 +98,7 @@ void scissor_damage_sub(BattleUnit* unit, s32* out);
 
 /**
  * Art Attack's per-loop hit: scissor_damage hits each enemy inside a closed loop with it, for the power
- * weaponGetPower_Scissor worked out (0 to 3); it always hits, pierces defense and cannot be guarded.
+ * scissor_damage worked out (0 to 3, returned by weaponGetPower_Scissor); it always hits, pierces defense and cannot be guarded.
  */
 BattleWeapon weapon_scissor = {
     "btl_wn_sac_scissor", // name
@@ -764,7 +764,8 @@ void star_disp2D(CameraId camera, void* param) {
 
 /**
  * Draws star idx (0 the cursor, 1-4 the trail) as the Art Attack icon at the given alpha;
- * once time is up (phase 6) fades them all out over 30 frames.
+ * once time is up (phase 6) fades them all out over 30 calls: the shared timer steps on every star drawn
+ * (5 per frame), so the fade takes about 6 frames.
  */
 void star_disp2D_sub(s32 idx, s32 alpha) {
     ScissorWork* w = GetScissorPtr();
@@ -958,7 +959,7 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
 
 
 /**
- * Applies one closed loop: scores every enemy the loop covers (skipping KO'd, evasive,
+ * Applies one closed loop: scores every enemy the loop covers (skipping KO'd, clone,
  * untargetable and immune ones and some defense attributes) and hits each with Art Attack.
  * args[0] gets the rating level for the popup when every enemy was hit, else -1; the crowd cheers louder.
  */

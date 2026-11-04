@@ -453,7 +453,7 @@ USER_FUNC(end_suki) {
 /**
  * Draws the 2D panel: the frame, the remaining-time bar
  * and the button row (the last round's buttons sliding out above the current ones),
- * clipped to the panel's strip of screen. The JP and later releases draw the buttons through _disp_2D.
+ * clipped to the panel's strip of screen. JP and later draw the buttons through _disp_2D.
  */
 static void disp_2D(CameraId cam, void* param) {
     Mtx m;
@@ -709,7 +709,7 @@ void _disp_2D(s32 side, s32 idx) {
 }
 #endif
 
-/** 3D draw callback; draws nothing (the demo only fetches the work). */
+/** 3D draw callback; draws nothing (the early demos only fetch the work). */
 static void disp_3D(CameraId cam, void* param) {
 #if VERSION <= VERSION_DEMO_JP
     get_ptr();
@@ -899,7 +899,7 @@ void set_tev(MapTevCallbackInfo* info) {
  * Showstopper, the Garnet Star's special move (star stone effect type 5):
  * Mario raises the star, the player presses the shown buttons over up to five rounds,
  * then each earned star flies out with a paper flourish and a crystal shine,
- * the stage flashes and every enemy not evasive is checked against the instant-KO chance the stars bought.
+ * the stage flashes and every enemy that is not a clone is checked against the instant-KO chance the stars bought.
  */
 EVT_BEGIN(marioAttackEvent_Suki)
     // A knocked-out partner is left out; with no enemy to target the move ends at once.
@@ -1044,7 +1044,7 @@ EVT_BEGIN(marioAttackEvent_Suki)
     END_LOOP
     CALL_CHILD(flash_cancel_evt)
 
-    // Every enemy that is not evasive is checked against the instant-KO chance.
+    // Every enemy that is not a clone is checked against the instant-KO chance.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon), LW(3), LW(4))

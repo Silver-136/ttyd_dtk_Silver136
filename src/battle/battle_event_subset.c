@@ -173,7 +173,7 @@ EVT_BEGIN(subsetevt_dead)
                 WAIT_FRAMES(90)
 #if VERSION >= VERSION_JP
 
-                // In the retail releases the partner's event 67 also runs (Koops uses it to stand upright).
+                // In JP and later the partner's event 67 also runs (Koops uses it to stand upright).
                 CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
                 IF_INT_NOT_EQUAL(LW(0), 0)
                     CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_REVIVE_EVENT)
@@ -402,8 +402,8 @@ EVT_BEGIN(subsetevt_dead_core_nospin_norotate)
 EVT_END()
 
 /**
- * Reaction when a unit avoids an attack by stepping back (damage code 41):
- * it backs away, waits in the guard pose until the attack ends and walks home.
+ * Reaction of a unit whose hit a bodyguard took (damage code 41):
+ * it backs away, waits in the bodyguard pose until the attack ends and runs home.
  */
 EVT_BEGIN(btldefaultevt_avoid_guard)
     CALL(btlevtcmd_AnimeCmpPoseType, LW(10), LW(11), POSE_TYPE_RUN, 40, LW(2))
@@ -433,7 +433,8 @@ EVT_END()
  * after it in LW(15): flipped or grounded units, hammer knockback (Spin Hammer, Ultra Hammer), slaps,
  * Gale Force and Yoshi's swallow patterns run the unit's data-table event or the matching subset;
  * a squashing hit flattens the unit for 1.5 to 3 seconds; other hits hold the hurt pose.
- * A hit that does no damage shakes the unit with a miss sound (retail also fades the HP gauge on the last hit).
+ * A hit that does no damage shakes the unit with a miss sound (JP and later also fade the HP gauge on the last
+ * hit).
  */
 EVT_BEGIN(subsetevt_damage)
     // A flipped shell or a winged unit knocked to the ground runs the unit's own event 13 or 14 and stops here.
@@ -593,7 +594,7 @@ EVT_BEGIN(subsetevt_damage)
     END_IF
 
     // The hit did damage. A squashing last hit flattens the unit
-    // (pattern 10: Flurrie's Body Slam and similar; 11: stomps; 12: stamps).
+    // (pattern 10: Flurrie's Body Slam and similar; 11: PRESS_GONBABA; 12: PRESS_BATTENDER).
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
@@ -728,7 +729,7 @@ EVT_BEGIN(subsetevt_damage)
     ELSE
 #if VERSION >= VERSION_JP
 
-        // In the retail releases a no-damage last hit fades the HP gauge out.
+        // In JP and later a no-damage last hit fades the HP gauge out.
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(_set_hp_gauge_fade_flag, LW(10))
@@ -805,7 +806,8 @@ EVT_END()
 /**
  * Hurt reaction for an attacker damaged by the target's counter (LW(0) = damage code: spikes, fire, ice,
  * electric, explosions, poison, Payback and so on):
- * the attacker hops back with the matching pose, Mario cries out on the spike and fire counters.
+ * the attacker hops back with the matching pose, Mario cries out on the spike counters (and, in JP and later, on
+ * the fire counter).
  */
 EVT_BEGIN(subsetevt_counter_damage)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
@@ -866,11 +868,7 @@ EVT_BEGIN(subsetevt_counter_damage)
     RETURN
 EVT_END()
 
-/**
- * Swaps Mario and the partner (the front-and-back switch):
- * both arc to each other's home positions and the Koops shell shield follows Mario.
- * Retail only moves the shell when it still has HP.
- */
+/** Plays the miss sound for an attack that did nothing (the early demos' copy). */
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(subsetevt_nodamage_motion)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS2"), 0)
@@ -881,7 +879,7 @@ EVT_END()
 /**
  * Swaps Mario and the partner (the front-and-back switch):
  * both arc to each other's home positions and the Koops shell shield follows Mario.
- * Retail only moves the shell when it still has HP.
+ * In JP and later the shell reopens at its new place only when it still has HP.
  */
 EVT_BEGIN(btldefaultevt_ChangePosition)
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(10))
@@ -940,7 +938,7 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
 EVT_END()
 
 /**
- * Happy Heart badge regeneration: the unit strikes its happy pose (retail: only when it is not frozen,
+ * Happy Heart badge regeneration: the unit strikes its happy pose (JP and later: only when LW(3) is not frozen,
  * asleep or stopped) and waits a moment.
  */
 EVT_BEGIN(subsetevt_happy_heart)
@@ -1000,7 +998,7 @@ EVT_BEGIN(subsetevt_happy_flower)
     RETURN
 EVT_END()
 
-/** Fright: the unit hops, runs off the edge of the stage and is removed from the battle (no coins or Star Points). */
+/** Pause after the HP or FP Regen status heals a unit at turn start (the early demos' copy, 120 frames). */
 #if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(subsetevt_regeneration)
     WAIT_FRAMES(120)
@@ -1092,7 +1090,8 @@ EVT_END()
 
 /**
  * Spin Hammer knockback: the unit spins and flies along the line of enemies behind it, hitting each one,
- * then off the stage edge; it comes back home unless the hit KO'd it.
+ * then off the stage edge; a unit the hit brought to 0 HP drops back in from the other side and returns home,
+ * any other is set down on the floor where it landed.
  */
 EVT_BEGIN(subsetevt_shot_damage_kaiten)
     BEGIN_SIBLING_EVENT_GET_ID(LW(13))
@@ -1481,8 +1480,8 @@ EVT_END()
 
 /**
  * Reaction for damage pattern 18, which no weapon in the tree uses (btldefaultevt_Damage checks for it):
- * the unit takes pose type 39 and spins once around (18 degrees a frame for 20 frames, the way it faces),
- * then waits 10 frames.
+ * the unit takes pose type 39 and is knocked back 40 then 18 units with two hops,
+ * then sets its kKnockedAwayReturned token.
  * Guess: meant for an Ultra Hammer acrobatic hit, from the name.
  */
 EVT_BEGIN(subset_ultra_hammer_acrobat_damage_event)
@@ -1671,7 +1670,7 @@ EVT_BEGIN(subsetevt_nodamage_motion)
 EVT_END()
 #endif
 
-/** Pause after the HP Regen status heals a unit at turn start. */
+/** Pause after the HP or FP Regen status heals a unit at turn start. */
 #if VERSION >= VERSION_JP
 EVT_BEGIN(subsetevt_regeneration)
     WAIT_FRAMES(60)

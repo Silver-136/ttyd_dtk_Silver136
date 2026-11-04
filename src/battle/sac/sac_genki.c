@@ -878,7 +878,10 @@ void main_star0(s32 idx) {
     }
 }
 
-/** Sweet Feast's single big star: the same rise, fly-up and sway as main_star0, larger and alone. */
+/**
+ * Sweet Feast's single big star: the same fly-up and sway as main_star0, larger and alone;
+ * it rises straight up 50 instead of circling Mario.
+ */
 void main_star1(void) {
     GenkiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -1014,7 +1017,7 @@ static void disp_2D(CameraId cam, void* param) {
 /**
  * Draws the game: the running HP / partner HP / FP totals over Mario's
  * and the partner's heads (blinking when they change),
- * each falling item's icon (big items at double size and flashing,
+ * each falling item's icon (big items at size 2 instead of 1.25 and flashing,
  * the partner icon picked per partner and Yoshi colour), and the spinning aim reticle in front of Mario.
  */
 static void disp_3D(CameraId cam, void* param) {
@@ -1429,8 +1432,7 @@ void weapon_entry(void) {
 
 /**
  * Starts the first idle object.
- * main_genki calls it directly, not from a script, so it is called through a cast;
- * it returns nothing (r3 still holds the work pointer), which main_genki ignores.
+ * main_base calls it at each drop interval while time is left.
  */
 void object_entry(void) {
     GenkiWork* w = get_ptr();
@@ -1445,7 +1447,7 @@ void object_entry(void) {
     }
 }
 
-/** Counts the objects in state 2 (called directly by main_genki through a cast). */
+/** Counts the objects in state 2 (called by main_mario to see whether any item is still falling). */
 s32 object_get_num(void) {
     GenkiWork* w = get_ptr();
     s32 i;
@@ -1507,7 +1509,7 @@ static USER_FUNC(star_stone_appear) {
 }
 
 /**
- * Clears the turns left on the command blocks set by Bowser's command-blocking attacks (US and PAL keep two of
+ * Clears the turns left on the command blocks set by Bowser's command-blocking attacks (US and later keep two of
  * them on the partner unit); part of status_recover_evt's cure.
  */
 USER_FUNC(recover_cmd_disable) {

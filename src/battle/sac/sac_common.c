@@ -140,7 +140,7 @@ USER_FUNC(sac_wao) {
 
 /**
  * Runs until sac_handbeat_end: the crowd claps along in time,
- * starting every 60 frames and speeding up to every 20 while the clap volume rises to 100%.
+ * starting every 60 frames and speeding up to every 20 while the cheer volume rises to 100%.
  * Stops audience sounds 4 and 5 first; fades out over 180 frames.
  */
 USER_FUNC(sac_handbeat) {
@@ -261,7 +261,7 @@ USER_FUNC(sac_enemy_slide_go) {
 
 /**
  * Starts enemy_slide_return_evt on every enemy-side unit to slide them home.
- * The PAL release also records each script's id in the unit (slideReturnEventId)
+ * The PAL demo and PAL also record each script's id in the unit (slideReturnEventId)
  * so battle_seq can wait for the slide to finish.
  */
 USER_FUNC(sac_enemy_slide_return) {

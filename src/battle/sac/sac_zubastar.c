@@ -260,7 +260,7 @@ void zubastar_create_takaku(s32 n, Vec* pts) {
 
 /**
  * Cuts every screen piece the line from p0 to p1 crosses into two, replacing it with both halves,
- * each given a random delay and drift for the shatter.
+ * each given a random fallFrame and fallDuration (zubastar_bomb resets both when the shatter starts).
  */
 void zubastar_bunkatu(Vec* p0, Vec* p1) {
     ZubaStarWork* w = GetZubaStarPtr();
@@ -406,7 +406,7 @@ void psndSFX_pit(s32 id, s32 pitch);
 /**
  * Runs the Supernova minigame until it ends: each round the player mashes A to fill the gauge to 100 within 300
  * frames; a full gauge counts a cut (up to five),
- * cheers the audience by its size and slashes a line across the screen, which splits the screen pieces.
+ * cheers the audience by its size and slashes three lines across the screen, which split the screen pieces.
  * A failed round or the fifth cut ends the game.
  */
 USER_FUNC(zubastar_main) {
@@ -703,7 +703,7 @@ USER_FUNC(zubastar_main) {
             w->cursor.timer = 27;
             w->cursor.phaseTimer = 0;
 #if VERSION <= VERSION_DEMO_JP
-            // The demo flashes the screen from here.
+            // The early demos flash the screen from here.
             fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 30, 0);
 #else
@@ -1017,7 +1017,7 @@ static inline void dispA(Mtx m, s32 i) {
 }
 
 /**
- * Draws the minigame's 2D layer: the A button and the gauge, the slash lines fading in and out,
+ * Draws the minigame's 2D layer: the A button and the gauge, the slash lines pulsing in brightness,
  * and the cursor with its trail while it slashes.
  */
 void zubastar_disp2D(CameraId cam, void* param) {
@@ -1077,7 +1077,7 @@ void zubastar_disp2D(CameraId cam, void* param) {
 /**
  * Supernova, the Crystal Star's special move (star stone effect type 6):
  * Mario raises the star, the player fills the gauge with A over up to five rounds to slash the screen,
- * then a white flash and quaking camera hit every enemy not evasive for 0 to 15 damage by the number of slashes,
+ * then a white flash and quaking camera hit every enemy that is not a clone for 0 to 15 damage by the number of full gauges,
  * and the screen shatters into the cut pieces.
  */
 EVT_BEGIN(marioAttackEvent_ZubaStar)

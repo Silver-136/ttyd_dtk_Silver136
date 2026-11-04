@@ -24,8 +24,8 @@ void BtlActRec_AddPoint(u8* point, u8 amount) {
 }
 
 /**
- * Re-judges the battle's turn-based condition (the Glitz Pit "don't act/attack for N turns" kind) at the end of
- * each turn from battle_seq, by counting the relevant actions so far;
+ * Re-judges the battle's turn-based condition (the Glitz Pit "don't act/attack for N turns" kind) at the start of
+ * each turn from battle_seq (btlseqTurnFirstProcess), by counting the relevant actions so far;
  * other condition types are judged at battle end.
  */
 void BtlActRec_JudgeTurnRuleKeep(void) {

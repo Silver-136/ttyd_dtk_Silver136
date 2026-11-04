@@ -627,9 +627,9 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
 }
 
 /**
- * Picks the attacker and victim of a First Strike from fbatInfo->partyId:
+ * Picks the attacker and victim of a First Strike from fbatInfo->firstAttack:
  * 1-6 Mario strikes first, 7-8 his partner, 9 (and anything else) the first enemy strikes Mario.
- * Called by battle_seq when the battle opens.
+ * Called by battle_seq when the battle opens and by btlevtcmd_GetFirstAttackTarget.
  */
 void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit** target) {
     BattleUnit* found;

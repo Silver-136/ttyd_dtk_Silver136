@@ -146,7 +146,7 @@ void BSE_KagegakureDelete(BattleUnit* unit);
  * empty in every version (the effect pointers start NULL).
  */
 void BattleStatusEffectInit(BattleUnit* unit) {
-    ; //stubbed in retail
+    ; //empty in every version
 }
 
 /**
@@ -331,8 +331,8 @@ void BSE_Freeze(BattleUnit* unit) {
 }
 
 /**
- * Removes the unit's ice-block effect with effSoftDelete, so instead of vanishing it plays out the rest of its
- * animation and then sags, fades and drips smoke puffs (effIceMain).
+ * Removes the unit's ice-block effect with effSoftDelete, so instead of vanishing it plays its animation on from
+ * frame 90 to the end and then deletes itself (effIceMain).
  */
 void BSE_FreezeDelete(BattleUnit* unit) {
     if (unit->iceEff != NULL) {
@@ -444,8 +444,8 @@ BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
 
 /**
  * Empties the unit's six-entry status-change queue (statusChangeInfo).
- * Called when the unit enters battle and from BtlUnit_ClearStatus; in JP and later,
- * status-message processing also clears it while a message is active.
+ * Called when the unit enters battle; in JP and later also from BtlUnit_ClearStatus, and
+ * status-message processing clears it while a message is active.
  */
 void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
     s32 i;
@@ -700,7 +700,7 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
 typedef void (*WakuColByRefFunc)(u16, GXColor*, f32, f32, f32, f32, f32);
 
 /**
- * Draws the current status-change text centred near the top of the screen (y -120) in a white-bordered window
+ * Draws the current status-change text centred in the lower half of the screen (y -120) in a white-bordered window
  * sized to the text, 29 units per line.
  */
 void _st_chg_msg_disp(void) {

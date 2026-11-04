@@ -558,7 +558,7 @@ skip:
             defense += 3;
         }
 
-        // JP tests bit 0x20 here; Hooktail's parts carry kPartUnitWorkDefense (0x80) in both versions
+        // JP and the early demos test bit 0x20 here, US and later kPartUnitWorkDefense (0x80); Hooktail's parts carry the bit each version tests
         if (part->attributes & VERSION_PICK(0x20, kPartUnitWorkDefense)) {
             if ((defense += target->work[UNIT_WORK_PART_DEFENSE]) < 0) {
                 defense = 0;

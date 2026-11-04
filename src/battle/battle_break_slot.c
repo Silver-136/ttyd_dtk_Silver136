@@ -40,7 +40,7 @@ typedef struct {
 void BattleBreakSlotDispReel(CameraId camId, void* param);
 void item_appear_force(BreakSlotReel* reel, s32 item);
 
-/** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
+/** Card textures (small and big reels) by card number; the early demos' battle texture ids. */
 #if VERSION <= VERSION_DEMO_JP
 u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
 u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
@@ -205,7 +205,7 @@ EVT_BEGIN(doku_kinoko_effect)
     RETURN
 EVT_END()
 
-// US battle textures are 0x16 higher; BTL_TEX uses JP-base IDs.
+// US and later battle textures are 0x16 higher; BTL_TEX uses JP-base IDs.
 #if VERSION >= VERSION_JP
 u16 tex_id_list_small[5] = {BTL_TEX(0x2B), BTL_TEX(0x2D), BTL_TEX(0x2F), BTL_TEX(0x2E), BTL_TEX(0x2C)};
 u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BTL_TEX(0x33), BTL_TEX(0x31)};
@@ -301,7 +301,7 @@ void BattleBreakSlot_Init(void) {
  * plays out: the matching recovery script runs,
  * the crowd grows (to full for Shine Sprites, empties for Poison Mushrooms) and the result is announced;
  * the boosted turns are set in breakTurn. A mismatch plays the failure sound.
- * PAL plays a language-dependent number of break hits (one more in Italian).
+ * PAL and the PAL demo play a language-dependent number of break hits (one more in Spanish).
  */
 void BattleBreakSlot_Main(void) {
     static f32 updown;
@@ -324,7 +324,7 @@ void BattleBreakSlot_Main(void) {
     BattleGetPartyPtr(wp);
 
 #if VERSION >= VERSION_DEMO_EU
-    // PAL: phase 6 plays a language-dependent number of break hits (count) every i frames
+    // PAL and the PAL demo: phase 6 plays a language-dependent number of break hits (count) every i frames
     switch (gp->language) {
         case LANGUAGE_SP: // one more break hit
             count = 7;
@@ -583,7 +583,7 @@ void BattleBreakSlot_Main(void) {
                 }
             }
 
-            // BUG: k is set only by the loop on the frame where phaseTimer is 210; here (220) it is read uninitialized
+            // BUG: k is set only by the loop on the frame where phaseTimer is count + 90; here (count + 100) it is read uninitialized
             if (slot->phaseTimer == count + 100 && k == 200) {
                 btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
                 btl_camera_noshake(BTL_CAM_PRI_NORMAL);
@@ -942,7 +942,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
 
 /** Frees the reels' card lists at battle end; empty in JP and the early demos, which leak them with the battle heap. */
 void BattleBreakSlot_End(void) {
-    // JP frees nothing here: the reel card arrays stay allocated
+    // JP and the early demos free nothing here: the reel card arrays stay allocated
 #if VERSION >= VERSION_US
     BattleFree(BattleBreakSlotReelGetPtr(0)->cards);
     BattleFree(BattleBreakSlotReelGetPtr(1)->cards);
@@ -1086,7 +1086,7 @@ void BattleBreakSlot_DecBreakTurn(void) {
     }
 }
 
-/** Hides the Bingo cards and clears the fill count when the battle ends. */
+/** Hides the Bingo cards and clears the fill count before the level-up screen at battle end. */
 void BattleBreakSlot_HideReel(void) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
     BreakSlotReel* reel = BattleBreakSlotReelGetPtr(0);
@@ -1098,7 +1098,7 @@ void BattleBreakSlot_HideReel(void) {
     slot->reelNo = 0;
 }
 
-/** Makes the reel land on card item next by moving its index to just before that card (debug forcing). */
+/** Makes the reel land on card item next by moving its index to just before that card (forced cards: debug, lecture, slot flags). */
 void item_appear_force(BreakSlotReel* reel, s32 item) {
     s32 i;
 

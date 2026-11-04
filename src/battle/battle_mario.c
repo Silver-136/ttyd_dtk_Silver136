@@ -937,7 +937,8 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
 };
 
 /**
- * The tornado of Tornado Jump: the 2-damage hit on each airborne enemy after a successful second command.
+ * The tornado of Tornado Jump: the hit on each airborne enemy after a successful second command,
+ * 2 damage per equipped Tornado Jump badge (weaponGetPowerTatsumaki).
  * Has no attack script of its own; marioAttackEvent_TatsumakiJump uses it for those targets.
  */
 BattleWeapon badgeWeapon_TatsumakiJumpInvolved = {
@@ -2296,8 +2297,8 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
         CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 1, 1, 0)
     END_IF
 
-    // First strike: Mario starts at his place, waits a second and runs to the takeoff spot. Otherwise he runs
-    // there at once, with a star sparkle for Shrink, Sleepy and Soft Stomp.
+    // First strike: Mario starts 250 units behind his home spot, waits a second and runs to the takeoff spot.
+    // Otherwise he runs there at once, with a star sparkle for Shrink, Sleepy and Soft Stomp.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -2514,7 +2515,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
 #if VERSION >= VERSION_US
 
-    // Outside JP a Stylish press is possible on the backflip.
+    // In US and later a Stylish press is possible on the backflip.
     SET_VALUE(LW(6), 32)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(3)
@@ -2576,8 +2577,8 @@ EVT_END()
  * Also his first strike with the Super Boots.
  */
 static EVT_BEGIN(marioAttackEvent_KururinJump)
-    // First strike: Mario starts at his place, waits half a second and runs to the takeoff spot, with the
-    // Action Command set up on the way.
+    // First strike: Mario starts 250 units behind his home spot, waits half a second and runs to the takeoff
+    // spot, with the Action Command set up on the way.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.39941406f))
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3196,8 +3197,8 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         GOTO(95)
     END_IF
 
-    // The timed press on landing (a little later outside JP). A missed press deals one hit, the screen shakes
-    // by the damage dealt (at most 9 outside JP) and Mario hops back off.
+    // The timed press on landing (a little later in US and later). A missed press deals one hit, the screen
+    // shakes by the damage dealt (at most 9 in US and later) and Mario hops back off.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
     WAIT_FRAMES(2)
     CALL(btlevtcmd_AnimeChangePaperGroup, UNIT_ID_SELF, 1, 0, 0)
@@ -3287,7 +3288,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     WAIT_FRAMES(2)
 
     // The second timed press: a good press deals the second hit with the success effect; a missed one still
-    // deals it, the screen shakes (capped at 9 only in the US version) and Mario hops back off.
+    // deals it, the screen shakes (capped at 9 only in US and the September US demo) and Mario hops back off.
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 1)
     CALL(btlevtcmd_ac_timing_get_success_frame, LW(0))
     DIVIDE(LW(0), 2)
@@ -3498,7 +3499,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     END_IF
 
     // The timed press on landing. A missed press still deals the hit, the screen shakes by the damage dealt
-    // (at most 9 outside JP) and Mario hops back off.
+    // (at most 9 in US and later) and Mario hops back off.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1D"))
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 1)
     CALL(btlevtcmd_ac_timing_get_success_frame, LW(0))
@@ -3947,7 +3948,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
         END_IF
 
         // The tornado strikes every other enemy the tornado weapon (badgeWeapon_TatsumakiJumpInvolved) can
-        // reach, skipping the stomped enemy (in the demo, reaching it ends the round early); a dodge plays
+        // reach, skipping the stomped enemy (in the early demos, reaching it ends the round early); a dodge plays
         // the enemy's dodge.
         BEGIN_SIBLING_EVENT
             SET_VALUE(LW(6), LW(3))
@@ -4549,7 +4550,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
         END_SIBLING_EVENT
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), 3, MOVE_SOUND_KEEP)
         CASE_DEFAULT
-        // The third and later jumps: the same Stylish chance; in JP a badly timed Stylish makes Mario flail
+        // The third and later jumps: the same Stylish chance; in JP and earlier a badly timed Stylish makes Mario flail
         // and counts as a failed Stylish.
         SET_VALUE(LW(8), 36)
         CALL(btlevtcmd_MarioJumpParam, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8))
@@ -4753,7 +4754,7 @@ EVT_END()
  * LW(12) is the weapon and LW(14) picks the badge variant of the swing.
  */
 EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
-    // On a First Strike Mario starts at his home spot facing the target; on a normal turn the attack is declared,
+    // On a First Strike Mario starts 250 units behind his home spot; on a normal turn the attack is declared,
     // FP are paid and Merlee's charm is checked.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -5068,7 +5069,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     LABEL(92)
 #endif
 
-    // Stylish: Mario backflips in place; for the plain Hammer and Ice Smash a second good press ends it in a pose
+    // Stylish: Mario backflips in place; for the plain Hammer, Head Rattle and Ice Smash a second good press ends it in a pose
     // with confetti.
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -5213,7 +5214,7 @@ EVT_END()
  * then token 128 once it has flown back in from the other side and landed at its home.
  */
 static EVT_BEGIN(marioAttackEvent_KaitenHammer)
-    // On a First Strike Mario starts at his home spot facing the target; on a normal turn the attack is declared,
+    // On a First Strike Mario starts 250 units behind his home spot; on a normal turn the attack is declared,
     // FP are paid and Merlee's charm is checked.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -6926,7 +6927,7 @@ static const Vec majinai_effect_pos = {0.0f, 10.0f, 0.0f};
 /**
  * Run at the start of Mario's attacks: if Merlee's next charm is the attack boost (merleeNextCurseType 1),
  * uses it up with the Merlee sparkle, a hop and the "power up" banner.
- * JP and earlier show the banner for 60 frames instead of the US style 180-frame banner that A or B closes.
+ * JP and earlier show the banner for 60 frames instead of the 180-frame banner of US and later that A or B closes.
  */
 EVT_BEGIN(marioAttackEvent_MajinaiPowerUpCheck)
     CALL(_majinai_powerup_check, LW(0))
@@ -7259,8 +7260,8 @@ USER_FUNC(_hammer_star_effect) {
 }
 
 /**
- * Spins unit args[0] one full turn and a bit over args[2] frames,
- * switching part args[1] to animation args[3] once it is three-quarters round;
+ * Spins unit args[0] round to angle 0 plus one more full turn over args[2] frames,
+ * switching part args[1] to animation args[3] once 270 degrees or less of the turn are left;
  * the acrobatic spin of the spinning hammer.
  */
 USER_FUNC(_kaiten_hammer_acrobat_rotate) {

@@ -40,7 +40,7 @@ static ScreenWork* screen_wp;
 //.sdata
 static BattleSpotWork* wp = &work;
 
-// US: battle stage memory goes through BattleAlloc/BattleFree
+// US and later: battle stage memory goes through BattleAlloc/BattleFree
 #if VERSION >= VERSION_US
 #define STG_ALLOC(size) BattleAlloc(size)
 #define STG_FREE(ptr) BattleFree(ptr)
@@ -231,7 +231,7 @@ void BattleStageMain(void) {
 
 /**
  * Battle teardown (from BattleEnd): frees the spline data still held by any light.
- * The US and later releases also free the spotlight cone array (batSpotEnd);
+ * US and later also free the spotlight cone array (batSpotEnd);
  * the early demos and the Japanese release leave it allocated.
  */
 void BattleStageEnd(void) {
@@ -321,7 +321,7 @@ void BattleStageDispDark(CameraId camId, void* param) {
 // (a propagated constant load is an unnamed temp numbered above every named local); `s` is taken directly
 // rather than through STG because with propagation off the inline's return temp would take its place.
 #pragma push
-// propagation optimisation off for BattleStageDispLight, BattleStageOnLightInCommand, BattleStageOffLightInCommand and 7 more: the original register allocation and scheduling need it
+// propagation optimisation off for BattleStageDispLight (the pop below ends it): the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Display callback from BattleStageDisp: draws each active light as an additive beam,
@@ -402,7 +402,6 @@ void BattleStageDispLight(CameraId camId, void* param) {
 
 /**
  * Empty in every version. battle_seq_command.c calls it when Mario or the partner starts choosing a command.
- * Guess: it once lit the acting unit while the menu is open.
  */
 void BattleStageOnLightInCommand(void) {
 }
@@ -411,7 +410,7 @@ void BattleStageOnLightInCommand(void) {
 void BattleStageOffLightInCommand(s32 a, s32 b) {
 }
 
-/** Empty in every version; called from battle_seq_command.c while choosing a target. Guess: it once lit the allies. */
+/** Empty in every version; called from battle_seq_command.c while choosing a target. */
 void BattleStageOnLightFriendInCommand(void) {
 }
 
@@ -419,7 +418,7 @@ void BattleStageOnLightFriendInCommand(void) {
 void BattleStageOffLightFriendInCommand(void) {
 }
 
-/** Empty in every version; called from battle_seq_command.c while choosing a target. Guess: it once lit the enemies. */
+/** Empty in every version; called from battle_seq_command.c while choosing a target. */
 void BattleStageOnLightEnemyInCommand(void) {
 }
 
@@ -763,7 +762,7 @@ void batSpotMain(void) {
 #pragma dont_inline reset
 
 #if VERSION >= VERSION_US
-// US: frees the spot entries at battle end
+// US and later: frees the spot entries at battle end
 #pragma dont_inline on
 /** Frees the spotlight cone array at battle end (BattleStageEnd). */
 void batSpotEnd(void) {

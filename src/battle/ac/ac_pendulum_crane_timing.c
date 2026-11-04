@@ -43,7 +43,7 @@ typedef struct PendulumWork {
 #if VERSION >= VERSION_JP
     s32 zone;     // 0x48
 #endif
-    s32 endTimer; // 0x4C
+    s32 endTimer; // 0x4C (0x48 in the early demos)
 } PendulumWork;
 
 
@@ -58,10 +58,11 @@ s32 _get_angle_rate(f32 angle);
 
 /**
  * Per-frame driver of action command 12, used by Koops's Shell Shield.
- * Swings unit params[1] (part params[2]) up to 45 degrees each way, a full swing every params[4] x 2 frames;
- * pressing A stops it, and outputParams[1] gives the shield's HP for that angle (2 at the ends, 8 in the middle,
- * see _hp_tbl). Fails after params[5] frames. With acFlags bit 0 the stick can damp the swing.
- * The releases tick a sound on entering either end of the gauge.
+ * Swings unit params[1] (part params[2]) up to 45 degrees each way, a full swing every params[4] x 2 / 3 frames
+ * (the phase advances 3 a frame); pressing A stops it, and outputParams[1] gives the shield's HP for that angle
+ * (2 at the ends, 8 in the middle, see _hp_tbl). Fails after params[5] frames. With acFlags bit 0 the analog
+ * L and R triggers can slow the swing.
+ * JP and later tick a sound on entering either end of the gauge.
  */
 s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
     PendulumWork* cw;
@@ -178,7 +179,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             cw->rate = rate;
             rate = _get_angle_rate(cw->angle);
 #if VERSION <= VERSION_DEMO_JP
-            // The demo ticks only at the exact ends of the gauge.
+            // The early demos tick only at the exact ends of the gauge.
             if (rate == 0 || rate == 100) {
 #else
             zone = -1;
@@ -275,7 +276,10 @@ void battleAcDisp_PendulumCraneTiming(CameraId cameraId, void* param) {
     }
 }
 
-/** Called by btlevtcmd_StopAC: unless the command already finished, stops its sound and starts the end wait. */
+/**
+ * Called by btlevtcmd_StopAC: unless the command already finished, starts the end wait
+ * (which would stop sfxId, but this command never starts a sound: it stays -1).
+ */
 void battleAcDelete_PendulumCraneTiming(BattleWork* work) {
     if (work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED) {
         return;
@@ -284,7 +288,7 @@ void battleAcDelete_PendulumCraneTiming(BattleWork* work) {
 }
 
 /**
- * Draws the A icon, the gauge as seven bands shaded by HP (brightest in the middle)
+ * Draws the gauge frame icon, the gauge as seven bands by HP (blue at the ends shading to red in the middle)
  * and the marker at the current swing position.
  */
 static void actionCommandDisp(f32 x, f32 y) {

@@ -318,10 +318,10 @@ USER_FUNC(bakuGameBombEntry) {
  * The Clock Out bomb game.
  * The bomb drops on Mario's side; the A/B/X buttons are shown over Mario's side,
  * the enemies and the audience (reshuffled now and then), and pressing one throws the bomb there.
- * Enemies or the crowd throw it back after a while. Mashing A/B/X fills the gauge.
+ * Enemies or the crowd throw it on (to one of the other two) after a while. Mashing A/B/X fills the gauge.
  * When the fuse (540-659 frames) runs out the bomb explodes on whoever holds it.
  * Returns args[0] holder (0 Mario's side, 1 enemies, 2 audience), args[1] gauge,
- * args[2] stop level (-1, or 2/3/4 for gauge under 33/66/above). The US+ releases halve the throw-back rate.
+ * args[2] stop level (-1, or 2/3/4 for gauge under 33/66/above). US and later halve the throw-back rate.
  */
 USER_FUNC(bakuGameMain) {
     s32 unused[8] = {0, 1, 2, 3, 4, 5, 6, 7};
@@ -1130,8 +1130,8 @@ main_end:
 }
 
 /**
- * After the game, the stand-in Shy Guy (heiho) who caught the bomb for big
- * or ceiling enemies drops back to the floor and walks off to the right. Does nothing when no stand-in was used.
+ * After the game, the stand-in Shy Guy (heiho) who caught the bomb for a big enemy (width 100+)
+ * or an all-ceiling enemy party drops back to the floor and walks off to the right. Does nothing when no stand-in was used.
  */
 USER_FUNC(bakuGameHeihoReturn) {
     BakuWork* w = GetBakuGamePtr();
@@ -1408,7 +1408,7 @@ void bakuGameDisp2D(CameraId cam, void* param) {
 
 /**
  * Draws the bomb model at its position, growing with the fuse (scale 2 to 6), and,
- * when big or ceiling enemies need it, the Shy Guy stand-in as a textured quad from the audience texture
+ * when a big enemy (width 100+) or an all-ceiling enemy party needs it, the Shy Guy stand-in as a textured quad from the audience texture
  * palette.
  */
 void bakuGameDisp3D(CameraId cam, void* param) {
@@ -1475,7 +1475,7 @@ void bakuGameDispStar(CameraId cam, void* param) {
 /**
  * Clock Out's attack script (battle_mario's weapon):
  * pays the Star Power, plays the shared Crystal Star opening, runs the bomb game,
- * builds the Stop weapon from the result and stops whichever team held the bomb when it blew.
+ * builds the Stop weapon from the result and stops whichever team held the bomb when it blew (the crowd falls asleep).
  */
 EVT_BEGIN(marioAttackEvent_BakuGame)
     CALL(btlevtcmd_WaitGuardMove)
@@ -1580,7 +1580,7 @@ EVT_BEGIN(hitCheck_MarioTeam)
     RETURN
 EVT_END()
 
-/** The bomb blew up on the enemy side: the weapon (LW(9)) hits every targeted enemy part that is not evasive. */
+/** The bomb blew up on the enemy side: the weapon (LW(9)) hits every targeted enemy part that is not a clone (kClone). */
 EVT_BEGIN(hitCheck_EnemyTeam)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     LABEL(10)

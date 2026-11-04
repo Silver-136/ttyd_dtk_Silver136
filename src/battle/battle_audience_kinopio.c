@@ -1,4 +1,5 @@
-// Battle audience control for the Toad (kinopio) members: jumping, entering, singing and status behaviors.
+// Battle audience control for every audience member (the "Kinopio" routine is shared by all kinds): jumping, entering,
+// singing and status behaviors.
 
 #include "version.h"
 #include "battle/battle_audience.h"
@@ -61,7 +62,7 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 index);
 /**
  * Per-frame update of one audience member, whatever its kind (the "Kinopio" Toad routine is shared by all):
  * runs the handler for its status (0 idle, 1-3 idle fidgets, 4-6 cheering, 7-8 item throw, 9 booing, 10 hit,
- * 11 enter, 12 leave, 13 asleep, 14-20 the kind-specific phase events; 21-22 empty, demos only),
+ * 11 enter, 12 leave, 13 asleep, 14-20 the kind-specific phase events; 21-22 empty, early demos only),
  * then integrates velocity and hop height and works out the draw position.
  * Boos bob up and down; Piranha Plants never hop.
  */
@@ -532,7 +533,7 @@ void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
  * Status 7, holding an item to throw: waits during command input until the item's timer runs out,
  * then throws (status 8).
  * If Mario or a partner hits the member first, the item is dropped, the member is knocked back (status 10) and,
- * unless the item was junk, the crowd's target size shrinks a little.
+ * unless item slot 0 holds junk (ITEM_AUDIENCE_CAN up to the badges), the crowd's target size shrinks a little.
  */
 void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
@@ -1219,7 +1220,7 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
 }
 
 /**
- * Puts one member to sleep (status 13 after 3 frames) for the Dayzee's song,
+ * Puts one member to sleep (status 13; statusDelay 3 wakes it after three enemy phases) for the Dayzee's song,
  * redirecting a wide member's tail seat to its owner and sparing Koopas hiding in their shells.
  */
 void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
@@ -1540,11 +1541,11 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-/** Status 21, demos only: empty (Guess: a no-gravity state, from the name); retail drops the case. */
+/** Status 21, early demos only: empty (Guess: a no-gravity state, from the name); JP and later drop the case. */
 static void BattleAudienceCtrlProcessKinopioNoGravity(s32 index, s32 front) {
 }
 
-/** Status 22, demos only: empty; whatever the "audience ball" event was, it was cut. */
+/** Status 22, early demos only: empty; whatever the "audience ball" event was, it was cut. */
 static void BattleAudienceCtrlProcessKinopioAudBall(s32 index, s32 front) {
 }
 #endif

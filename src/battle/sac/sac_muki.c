@@ -61,7 +61,7 @@ typedef struct MukiWork {
     s32 timer;             // 0x8
     s32 timeLeft;          // 0xc
     s32 unitId;            // 0x10
-    f32 atkBoost;          // 0x14, attack gain 0..9 (+0.25 JP / +0.2 US per type-0 object hit); wait_game_end returns it, set_weapon puts it in atkChangeStrength
+    f32 atkBoost;          // 0x14, attack gain 0..9 (+0.25 JP and the early demos / +0.2 US and later per type-0 object hit); wait_game_end returns it, set_weapon puts it in atkChangeStrength
     f32 atkDisp;           // 0x18, shown attack value; eases toward atkBoost each frame, drives the red gauge fill and number
     f32 defBoost;          // 0x1c, defense gain 0..9 (type-1 object hits); wait_game_end returns it, set_weapon puts it in defChangeStrength
     f32 defDisp;           // 0x20, shown defense value; eases toward defBoost, drives the blue gauge fill and number
@@ -182,7 +182,7 @@ USER_FUNC(main_muki) {
 }
 
 /**
- * Game state machine: grows the 3x3 grid in, slides the gauges in, runs the 900-frame timer,
+ * Game state machine: grows the 3x3 grid in, slides the gauges in, runs the 899-frame timer,
  * then shrinks the grid and pops the rating (from the attack + defense levels earned) when time is up.
  * Also eases the shown gauge values toward the earned ones.
  */
@@ -350,7 +350,7 @@ static inline void sacMukiAudienceCall(s32 num) {
 /**
  * The cursor on the 3x3 grid: moves square to square with the Control Stick (slower while Mario is dizzy)
  * and on A hits what is in its square: a red arrow adds to the attack gauge,
- * a blue arrow to the defense gauge (0.25 in JP and the early demos, 0.2 in US and PAL, up to level 9),
+ * a blue arrow to the defense gauge (0.25 in JP and the early demos, 0.2 in US and later, up to level 9),
  * a poison mushroom makes Mario dizzy and the crowd boo.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -1036,7 +1036,7 @@ static USER_FUNC(star_stone_appear) {
 /**
  * Attack event of Power Lift: pays the Star Power, plays the star intro, runs the 3x3 grid game,
  * then raises Mario's and the partner's attack and defense for 3 turns by the levels earned.
- * PAL stops the US double run of the enemy return and cleanup when only defense was raised.
+ * PAL and the PAL demo stop the earlier versions' double run of the enemy return and cleanup when only defense was raised.
  */
 EVT_BEGIN(marioAttackEvent_Muki)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(14))

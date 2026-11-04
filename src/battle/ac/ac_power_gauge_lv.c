@@ -186,7 +186,7 @@ void battleAcDelete_PowerGaugeLv(BattleWork* work) {
 }
 
 /**
- * Draws the A icon frame, the level gauge and the L and R icons,
+ * Draws the gauge frame icon, the level gauge and the L and R icons,
  * shown pressed while the gauge is in the success zone.
  */
 static void actionCommandDisp(f32 x, f32 y) {

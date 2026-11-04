@@ -840,7 +840,7 @@ void btlseqEnd(BattleWork* wp) {
 
 /**
  * Starts every unit's battle-end event (unit data entry 0x3F) bound to that unit;
- * run on a win once all events have finished, and when the battle is fled or aborted.
+ * run on a win once all events have finished, on a loss, and when the battle is fled or aborted.
  */
 void _ExecAllUnitBattleEndEvent(void) {
     BattleUnit* unit;
@@ -952,7 +952,7 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
 
 /**
  * Draws the selected HP, FP or BP level-up help message, or its cap-error message at HP/FP 200 or BP 99.
- * Retail queues it while SEQEND_DISP_LVUP_HELP is set; the early demos do not queue it.
+ * The releases (JP, US, PAL) queue it while SEQEND_DISP_LVUP_HELP is set; the demos do not queue it.
  */
 void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;
@@ -1112,8 +1112,9 @@ USER_FUNC(_set_initial_upgrade_cursor_position);
 
 /**
  * Level-up show, started by btlseqEnd when the Star Points reach 100.
- * The stage darkens and the curtains close (on a wide stage Mario and the partner walk off first and the
- * wide-stage flag is cleared), the nozzle objects lower,
+ * The stage darkens and the curtains close (when the party stands in the audience area,
+ * BATTLE_FLAG_PARTY_IN_AUDIENCE, Mario and the partner walk off first; the flag is then cleared),
+ * the nozzle objects lower,
  * confetti and the level-up effect play and Star Power refills,
  * a spotlight cone follows Mario while the enemies are hidden, Mario and the partner walk back on,
  * the HP/FP/BP blocks appear and the curtains open.
@@ -1133,7 +1134,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(evt_fade_end_wait)
     END_SIBLING_EVENT
 
-    // On a wide stage, Mario and the partner walk off to the left while the curtains close.
+    // When the party stands in the audience area (BATTLE_FLAG_PARTY_IN_AUDIENCE), Mario and the partner walk off to the left while the curtains close.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_PARTY_IN_AUDIENCE)
     IF_INT_NOT_EQUAL(LW(0), 0)
         BEGIN_SIBLING_EVENT
@@ -1178,7 +1179,7 @@ EVT_BEGIN(_curtain_close_event)
         END_LOOP
     END_SIBLING_EVENT
 
-    // The wide-stage flag is cleared and the camera returns to its normal view.
+    // The party-in-audience flag is cleared and the camera returns to its normal view.
     CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_PARTY_IN_AUDIENCE)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1255,13 +1256,13 @@ EVT_BEGIN(_curtain_close_event)
     CALL(evt_audience_sound_cheer, 180, 40)
     WAIT_MS(1000)
 
-    // The HP, FP and BP blocks appear dimmed and the spotlight fades.
+    // The HP, FP and BP blocks appear and the spotlight fades.
     CALL(_lvup_select_object_init)
     BEGIN_SIBLING_EVENT
         CALL(_lvup_spot_off, 30)
     END_SIBLING_EVENT
 
-    // The stage lights come back and the curtains open.
+    // The stage lights come back, the three blocks are dimmed and the curtains open.
 #if VERSION >= VERSION_US
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_batstage_set_stg_dark, 0, 30, 0)
@@ -1544,7 +1545,7 @@ USER_FUNC(_lvup_ap_recover_full) {
 /**
  * Script helper for the level-up show: starts each other unit's level-up event (data entry 0x42),
  * or hides it and its shadow when it has none, skipping the system unit,
- * Mario and the partner (retail runs Bobbery's event but never hides him).
+ * Mario and the partner (JP and later run Bobbery's event but never hide him).
  * A stage iron frame (if_body, if_wire) is hidden and marked gone.
  */
 USER_FUNC(_disable_enemy_unit_disp) {

@@ -132,14 +132,14 @@ const BattleWeapon weapon_lucky_start = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Black: the colour of the curtain fade when the battle starts after the Glitz Pit rule banner. */
+/** Black: the colour of the curtain fade that opens every battle (btlseqFirstAct). */
 static const GXColor c = {0, 0, 0, 0xFF};
 /** White: the window colour of the Glitz Pit rule banner drawn by _rule_disp. */
 static const GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 /**
  * Glitz Pit bonus-condition messages for minor-league fights, indexed by the battle's rule type ("a" = unused);
- * _rule_disp shows the one for the fight before turn 1, e.g. "Don't use your jump!".
+ * _rule_disp shows the one for the fight at the start of turn 1, e.g. "Don't use your jump!".
  */
 const char* _rule_msg_table_2bu[] = {
     "a", "stg3_tou_cp_001", "a", "stg3_tou_cp_002", "a", "stg3_tou_cp_004", "stg3_tou_cp_008", "a",
@@ -215,10 +215,10 @@ void BattleSequenceManager(void) {
 }
 
 /**
- * Refreshes every unit's Danger/Peril state (a2 is passed on to BtlUnit_CheckPinchStatus;
+ * Refreshes every unit's Danger/Peril state (noAudience is passed on to BtlUnit_CheckPinchStatus;
  * TRUE on the setup frame), then, while the action menu is open, beeps every 60 frames:
  * SFX_BTL_DANGER1 if Mario or the partner is in Peril, else SFX_BTL_PINCH1 for Danger.
- * Only the first unit with the flag is looked at. With neither, clears Mario's work[8] and the timer.
+ * Only the first unit with the flag is looked at. With neither, clears Mario's work[MARIO_WORK_PINCH_VOICE] and the timer.
  */
 void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     BattleUnit* unit;
@@ -351,7 +351,7 @@ void btlseqInit(BattleWork* wp) {
 
 /**
  * Weapon whose attack script opens the battle for a field first strike,
- * by the type in FieldBattleInfo.partyId (set by BattleInformationSetFirstAttack):
+ * by the type in FieldBattleInfo.firstAttack (set by BattleInformationSetFirstAttack):
  * 1 and 3 Jump, 2 Spin Jump, 4 Hammer, 5 Super Hammer spin, 6 Ultra Hammer, 7 Koops, 8 Bobbery.
  * 0 (no first strike) gives NULL.
  */
@@ -733,7 +733,7 @@ USER_FUNC(_set_effect_luck) {
  * the per-status recovery checks with SFX_REST_CONDITION1, the command-disable countdowns,
  * then the phase loop (btlseqPhase) and the audience's turn-end check before starting the next turn.
  * A step with nothing to do skips its wait step.
- * In the US and PAL releases two of the countdowns are per unit (usCommandDisabled).
+ * In US and later two of the countdowns are per unit (usCommandDisabled).
  */
 #if VERSION <= VERSION_DEMO_JP
 static void btlseqTurn(BattleWork* wp) {
@@ -2683,7 +2683,7 @@ BOOL BattleWaitAllActiveEvtEnd(BattleWork* wp) {
 
 /**
  * TRUE once no unit has a running phase, attack,
- * damage or entry event (the PAL release also waits for the slide-return event)
+ * damage or entry event (the PAL demo and PAL also wait for the slide-return event)
  * and BattleAfterReactionMain is idle; clears the ids of finished events.
  * Unlike BattleWaitAllActiveEvtEnd it ignores the stage-object events,
  * so battle_stage_object.c can use it while those run.
@@ -2754,8 +2754,8 @@ BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
 }
 
 /**
- * TRUE when the battle is over: at least two of the three alliances meet their clear condition (bit 1: no active
- * member left standing; bit 2: no required member left;
+ * TRUE when the battle is over: at least two of the three alliances meet their clear condition (ALLIANCE_CLEAR_ALL_OUT, 1: no active
+ * member left standing; ALLIANCE_CLEAR_LEADER_OUT, 2: no leader left;
  * an unused alliance counts as met), or the party ran away or the battle was interrupted.
  * Records clearConditionMet per alliance.
  */

@@ -190,7 +190,7 @@ extern BattleUnitSetup entryunit_party[7];
 
 /**
  * Spawns the battle's units: the system unit, Mario and his current partner with their stats from the pouch
- * and the equipped badges, then each enemy of the selected group with its held item (an item it stole in the
+ * and the equipped badges, then each enemy of the selected group with (in the releases) its held item (an item it stole in the
  * field takes priority) and its drop table.
  */
 BOOL Btl_UnitSetup(BattleWork* wp) {
@@ -394,7 +394,7 @@ void BattleIncSeq(BattleWork* wp, BattleSequence seq) {
 }
 
 /**
- * Allocates battle memory: from the battle area of the map heap in US and PAL,
+ * Allocates battle memory: from the battle area of the map heap in US and later,
  * from HEAP_BATTLE in JP and the early demos.
  */
 void* BattleAlloc(u32 size) {
@@ -866,7 +866,7 @@ void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
 
 /**
  * Resets the saved per-partner state (size, status flags and turns,
- * and in US/PAL the disabled-command bits) kept while partners are swapped out.
+ * and in US and later the disabled-command bits) kept while partners are swapped out.
  */
 void BattlePartyInfoWorkInit(BattleWork* wp) {
     BattleWorkPartyInfo* partyInfo;
@@ -937,7 +937,7 @@ void BattleAfterReactionQueueInit(void) {
 }
 
 /**
- * Queues an after-reaction for unit a: a script from its unit data entry b to run once the current action
+ * Queues an after-reaction for unit unitId: a script from its unit data entry tag to run once the current action
  * finishes. A unit already queued is not added again.
  */
 void BattleAfterReactionEntry(s32 unitId, s32 tag) {
@@ -959,7 +959,7 @@ void BattleAfterReactionEntry(s32 unitId, s32 tag) {
     }
 }
 
-/** Removes every queued after-reaction of unit a with tag b, closing the gaps. */
+/** Removes every queued after-reaction of unit unitId with tag tag, closing the gaps. */
 void BattleAfterReactionRelease(s32 unitId, s32 tag) {
     s32 i;
     s32 j;

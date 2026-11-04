@@ -126,7 +126,7 @@ USER_FUNC(btlevtcmd_BtlIconEntry) {
 }
 
 /**
- * s32 itemId (index for itemDataTable) , f32 x, f32 y, f32 z, s32 evtIndex Script:
+ * s32 itemId (index for itemDataTable), x, y, z (read as integers), s32 evtIndex Script:
  * like btlevtcmd_BtlIconEntry but takes an item id and shows that item's icon from itemDataTable.
  */
 // args: item id (its itemDataTable icon is shown), x, y, z (read as integers), variable that receives the battle

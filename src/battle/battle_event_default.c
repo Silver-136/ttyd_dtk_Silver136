@@ -198,7 +198,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
         GOTO(10)
         CASE_EQUAL(DAMAGE_CODE_DODGY)
-        // Miss (code 39): the unit's own miss event, else a miss sound and the paper-dodge animation.
+        // Dodgy (code 39): the unit's own dodgy event 44, else a miss sound and the paper-dodge animation.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_AVOID_DODGY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_AVOID_DODGY_EVENT)
@@ -240,7 +240,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
         GOTO(10)
         CASE_EQUAL(DAMAGE_CODE_MISS)
-        // Dodge (code 40): the unit's data-table dodge event 46.
+        // Miss (code 40): the unit's data-table miss event 46.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_AVOID_MISS_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_AVOID_MISS_EVENT)
@@ -462,7 +462,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
     END_IF
 
-    // A backfiring move, or a unit that used Defend, finishes with its own event.
+    // A backfiring move finishes with _backfire; a bodyguard that took the hit goes back with guard_return.
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_BACKFIRE, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(_backfire, LW(10))
@@ -588,7 +588,7 @@ EVT_BEGIN(btldefaultevt_ChangeParty)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_JP
-/** The short scripts sit where the demo's .data places them (retail keeps them in .sdata). */
+/** The short scripts sit where the early demos' .data places them (JP and later keep them in .sdata). */
 EVT_BEGIN(btldefaultevt_ProtectPartner)
     CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_SetGuard, UNIT_ID_SELF, LW(3))
@@ -684,7 +684,10 @@ EVT_BEGIN(btldefaultevt_LectureEnd)
 EVT_END()
 #endif
 
-/** Action for a unit that does nothing this turn: restarts its wait event. */
+/**
+ * Appeal command: the camera moves in on the unit (higher and farther when it is Huge, JP and later), then its
+ * own appeal event if it has one, else the appeal pose and sound and the audience's appeal reaction.
+ */
 EVT_BEGIN(btldefaultevt_Appeal)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_NEUTRAL)
@@ -780,7 +783,7 @@ EVT_END()
 /**
  * The Run Away command: Mario and the partner turn and run in place
  * while the escape action command plays (the gauge uses the enemy group's run rate).
- * On a miss both stumble and walk home; on a success they run off screen,
+ * On a miss both stumble and run home; on a success they run off screen,
  * the audience reacts and the battle ends (after _event_MajinaiEnd when Merlee's spells ran out).
  */
 EVT_BEGIN(btldefaultevt_Escape)
@@ -898,7 +901,7 @@ EVT_BEGIN(btldefaultevt_Escape)
         WAIT_FRAMES(40)
         CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
 
-        // Both get up and walk back to their home positions; the turn goes on.
+        // Both get up and run back to their home positions; the turn goes on.
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(10))
             IF_INT_NOT_EQUAL(LW(10), -1)

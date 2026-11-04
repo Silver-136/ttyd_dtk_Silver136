@@ -66,7 +66,7 @@ static inline void shotRecord(BattleActions* ac, ShotWork* sw) {
  * Per-frame driver of action command 7, used by Bobbery's Bomb Squad.
  * A reticle sweeps a 60-unit arc around unit params[0] between angles params[4]
  * and params[5] at params[6]/10 degrees a frame;
- * pressing A, holding to charge and letting go throws (acFlags bit 0 throws at once at half power).
+ * pressing A, holding to charge and letting go throws (acFlags bit 0 throws at once with the mean of params[2] and [3]).
  * Each throw sets outputParams[1] (power, params[2]..[3]), [2] (angle), [3] (count) and [0],
  * which the script clears for the next of params[1] throws.
  * Without a press for 360 frames it throws by itself, and the command fails if the last throw was such.

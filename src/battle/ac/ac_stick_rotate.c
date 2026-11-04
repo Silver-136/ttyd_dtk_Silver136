@@ -117,7 +117,8 @@ static inline void stickRotateFail(BattleWork* work) {
  * Start rotating the stick (holding button params[2], if set) within 120 frames;
  * every 8 steps is one rotation, counted in outputParams[0] up to params[0].
  * After params[1] frames, or on letting go of the button, it succeeds with params[3] rotations or more.
- * acFlags bit 0 demands a steady one-way turn, each step within params[4]..params[5] frames;
+ * acFlags bit 0 demands a steady one-way turn, each step within params[4]..params[5] frames
+ * (up to params[6] faster steps are allowed);
  * bit 1 a fixed direction.
  */
 s32 battleAcMain_StickRotate(BattleWork* work) {

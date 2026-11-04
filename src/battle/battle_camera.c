@@ -55,8 +55,8 @@ void battleCameraInit(void) {
  * Per-frame battle camera: works out the target eye
  * and look-at point for cameraWork.mode (0 default view of the stage, 1 default zoomed, 2 raised for the cursor,
  * 3 scripted move-to, 4/5 from backstage, 6 on the audience, 7-13 following one or two units,
- * parts or an audience member, 14-16 the battle opening (normal, First Strike, enemy First Strike), 17 victory,
- * 18 defeat, 19 running away), applies zoom, axis locks, offsets and the W/H shakes,
+ * parts or an audience member, 14-16 the battle opening (normal, First Strike, enemy First Strike), 17/18 victory
+ * (18 aims 20 lower), 19 defeat, 20 running away), applies zoom, axis locks, offsets and the W/H shakes,
  * and eases the 3D camera there at the move/zoom speed level. Each mode's debug name is kept in a local buffer.
  */
 void battleCameraMain(void) {
@@ -561,10 +561,11 @@ void battleCameraMain(void) {
 /**
  * Moves the battle camera one step toward the eye (x, y, z) and target (atX, atY, atZ),
  * called each frame from battleCameraMain.
- * Mode 1 adds the manual offset (cameraWork.position) and the wide-stage shift;
- * clamp 1 keeps x within +-(100 + (600 - z) / 2).
+ * Mode 1 adds the manual offset (cameraWork.position) and, while BATTLE_FLAG_PARTY_IN_AUDIENCE is set, a shift by
+ * Mario's home z; clamp 1 keeps x within +-(100 + (600 - z) / 2).
  * The step is the remaining distance divided by 1.5, 15, 5, 1,
- * 200 or 100 for speed level 0-5 (moveSpeedLv for x/y, zoomSpeedLv for z); the steps are returned in dX..dAtZ.
+ * 200 or 100 for speed level 0-5 (moveSpeedLv for x/y, zoomSpeedLv for z; a moveSpeedLv of 5 or more is reset to
+ * 1); the steps are returned in dX..dAtZ.
  */
 void battleCameraMoveTo(s32 applyOffsets, s32 clampX, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ,
                         f32* dX, f32* dY, f32* dZ, f32* dAtX, f32* dAtY, f32* dAtZ) {
@@ -765,7 +766,7 @@ USER_FUNC(evt_btl_camera_set_prilimit) {
 
 /**
  * Switches the battle camera to mode (see battleCameraMain) if pri passes the floor, resetting zoom,
- * speed levels, axis locks and the manual offset.
+ * speed levels and axis locks and clearing BTL_CAM_FLAG_POS_OFFSET (the manual offset itself stays).
  */
 void btl_camera_set_mode(s32 pri, s32 mode) {
     BattleWork* wp = _battleWorkPointer;
@@ -1165,7 +1166,10 @@ USER_FUNC(evt_btl_camera_nomove_z_onoff) {
     return EVT_RETURN_DONE;
 }
 
-/** Adds a fixed offset (x, y, z) to the camera position until btl_camera_off_posoffset_manual or a mode change. */
+/**
+ * Adds a fixed offset (x, y, z) to the camera position until btl_camera_off_posoffset_manual (a mode change clears
+ * only BTL_CAM_FLAG_POS_OFFSET, which nothing reads).
+ */
 void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {

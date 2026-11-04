@@ -347,7 +347,10 @@ void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
     }
 }
 
-/** Called by btlevtcmd_StopAC: unless the command already finished, starts the end wait and stops its sound. */
+/**
+ * Called by btlevtcmd_StopAC: unless the command already finished, starts the end wait
+ * (which would stop sfxId, but this command never starts a sound: it stays -1).
+ */
 void battleAcDelete_GaugeTiming(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & 1)) {
         work->actionCommands.acState = AC_STATE_RUN + 4;

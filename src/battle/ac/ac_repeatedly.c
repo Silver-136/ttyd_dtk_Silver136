@@ -122,7 +122,8 @@ static void _init_param(BattleWork* work) {
 
 /**
  * Per-frame driver of action command 5, used when running away from battle and by Goombella's Rally Wink.
- * Each press adds params[5] x a difficulty factor (higher in the early demos) to the gauge, which drains every frame;
+ * Each press adds params[5] x a difficulty factor (_power_table: 55 down to 25; 80 down to 8 in the early demos)
+ * to the gauge, which drains every frame;
  * the gauge locks once full.
  * After the time limit it succeeds when the gauge has reached the target mark or filled.
  */

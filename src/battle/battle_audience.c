@@ -262,7 +262,7 @@ s32 haiti_data[][10] = {
 };
 
 #if VERSION >= VERSION_US
-// US: the first three rows narrowed to 12/14/14 seats; BattleAudience_NoUsedFCHaitiRandCenter seats new
+// US and later: the first three rows narrowed to 12/14/14 seats; BattleAudience_NoUsedFCHaitiRandCenter seats new
 // members there while fewer than 20 are present
 s32 haiti_data_front_narrow[][10] = {
     { 12, 14, 14, 0, 0, 0, 0, 0, 0, 0 },
@@ -426,7 +426,7 @@ void BattleAudience_ActInit(void) {
  * -5 for hitting an enemy for no damage; for a good action command,
  * the streak (up to 2) times the move's action-command multiplier,
  * -5 for a failed one unless it defeated an enemy; the streak for a good guard;
- * for Stylish moves twice the Stylish multiplier times the Stylish count (the demo uses its Stylish streak),
+ * for Stylish moves twice the Stylish multiplier times the Stylish count (the early demos use their Stylish streak),
  * -5 for a failed one. Big gains queue phase reactions (gifts from Toads, Shy Guys and Luigi, a Puni crowd);
  * the thresholds for losses are never reached, since a failure counts only -5.
  * A Stylish move also brings in 10 Punies, and a pending Puni escape is announced.
@@ -654,13 +654,14 @@ void BattleAudience_PerPhase(u32 value) {
  * Plays the crowd's phase reactions at the start of the enemy phase;
  * battle_seq.c calls it every frame until it returns FALSE.
  * First Bulky Bob-ombs whose fuse has burnt down explode (announced once the blasts end),
- * then a pending Puni escape is announced. Of the reactions queued since the last phase
+ * then a pending Puni escape is announced and the queued reactions are dropped.
+ * Without a blast, of the reactions queued since the last phase
  * (BattleAudienceAddPhaseEvtList) those with a member able to take part are kept,
  * and one is picked at random: 0 a Toad throws an item, 1 the Koopas hide in their shells,
  * 2 the Dull Bones throw bones, 3 a crowd of Punies arrives (announced), 4 a Boo turns a unit invisible,
  * 5 the X-Nauts throw rocks, 6 an X-Naut throws an item, 7 a Hammer Bro throws a hammer,
  * 8 a Shy Guy throws an item, 9 a Shy Guy runs onto the stage,
- * 10 a Crazee Dayzee sings its neighbours to sleep (announced), 11 a Bulky Bob-omb lights its fuse,
+ * 10 a Crazee Dayzee sings the rest of the crowd to sleep (announced), 11 a Bulky Bob-omb lights its fuse,
  * 12 a Piranha Plant bites a neighbour, 13 Luigi throws an item.
  * 9, 11 and 12 are left out while audience hazards are off.
  * Last, sleeping members count down to waking, Koopas in their shells come out when their timer ends
@@ -1289,7 +1290,7 @@ void BattleAudience_Disp(void) {
 /**
  * Battle end (from battle.c): frees the audience textures and, once Mario has Star Power,
  * saves the target audience size (clamped to 0 and the rank's maximum) to the pouch for the next battle.
- * The US and PAL releases also free the copy of the Star Power bonuses.
+ * US and later also free the copy of the Star Power bonuses.
  */
 void BattleAudience_End(void) {
     BattleAudience* audience;
@@ -1319,7 +1320,7 @@ void BattleAudience_End(void) {
         pouchSetAudienceNum(audience->targetAudienceCount);
     }
 #if VERSION >= VERSION_US
-    // US frees the star-power bonus info allocated in BattleAudience_ApRecoveryBuild
+    // US and later free the star-power bonus info allocated in BattleAudience_ApRecoveryBuild
     if (audience->impendingBonuses) {
         BattleFree(audience->impendingBonuses);
         audience->impendingBonuses = NULL;
@@ -1800,7 +1801,7 @@ void BattleAudienceSetThrowItemMax(void) {
 
 /**
  * Picks a random targetable unit on either side with HP left,
- * skipping the unused kinds from UNIT_UNUSED_TREE up to UNIT_UNUSED_TESTNPC; NULL if there is none.
+ * skipping the unused kinds UNIT_UNUSED_TREE and UNIT_UNUSED_SWITCH; NULL if there is none.
  * The Boo's phase event uses it to choose whom to turn invisible.
  */
 BattleUnit* BattleAudienceDetectTargetAll(void) {
@@ -1864,7 +1865,8 @@ BattleUnit* BattleAudienceDetectTargetPlayer(void) {
  * Per-frame update of thrown audience items: picks the item from the thrower's kind table,
  * flies it in an arc to Mario or his partner, then either hands it over as a gift (if the pouch has room) or,
  * for junk (can, rock, bone, hammer), loads the matching weapon so it does damage,
- * and starts the receiving unit's script. Items whose thrower leaves or is knocked out are removed.
+ * and records the item and the receiving unit (BattleAudience_SetPresent*).
+ * Items whose thrower falls asleep, explodes, leaves or is gone are removed.
  */
 void BattleAudienceItemCtrlProcess(void) {
     Vec hv;
@@ -2516,7 +2518,8 @@ void BattleAudienceAnimProcess(void) {
     } while (0)
 /**
  * Draws the audience: each present member as a camera-facing textured quad in its seat,
- * front and back rows in separate passes (render modes 1 and 2), with flipping, hop offsets and fade colours.
+ * opaque members (colorA 0xFF) and translucent ones in separate passes (alpha-test and translucent render modes),
+ * with flipping, hop offsets and fade colours.
  */
 void BattleAudienceDispAudience(CameraId camId, void* param) {
     f32 sx, cx, sy, cy, sz, cz;
@@ -3247,7 +3250,7 @@ u8 BattleAudience_GetWaiting(s32 index) {
 /**
  * TRUE when member index may be sent walking out (status 12):
  * audience hazards are on, it is under audience control, not marked never to leave, and not asleep,
- * in its shell, fuse lit, in a Boo or Shy Guy event, in a demo-only status or already leaving.
+ * in its shell, fuse lit, in a Boo or Shy Guy event, in an early-demo-only status or already leaving.
  * Used when the crowd shrinks, the Punies flee and falling objects or blasts scatter the crowd.
  */
 BOOL BattleAudience_GetEscapeChangeOK(s32 index) {
@@ -3382,10 +3385,9 @@ s32 BattleAudience_NoUsedHaitiRand(void) {
 s32 BattleAudience_NoUsedFCHaitiRandFull(void) {
 #else
 /**
- * Picks the seat for a new member (crowd setup, arrivals, Punies):
- * while fewer than 20 are present it tries the narrow front block first
- * (BattleAudience_NoUsedFCHaitiRandCenter) so a small crowd sits together,
- * otherwise the full layout (BattleAudience_NoUsedFCHaitiRandFull); -1 when no seat is free.
+ * Picks the seat for a new member (crowd setup, arrivals, Punies): a random free seat in the rank's seating
+ * layout (haiti_data), weighting front rows and centre columns heavily; -1 when the stands are full.
+ * JP and the early demos have no narrow front block (BattleAudience_NoUsedFCHaitiRandCenter is US and later).
  */
 s32 BattleAudience_NoUsedFCHaitiRand(void) {
 #endif
@@ -3684,7 +3686,7 @@ void BattleAudienceNumToTarget(void) {
 
 /**
  * Counts the members present in the stands that are not on their way out;
- * the demo stores it in presentCount instead of returning it.
+ * the early demos store it in presentCount instead of returning it.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void BattleAudienceNumToTargetSub(void) {
@@ -3811,7 +3813,8 @@ void BattleAudienceAddTargetNumSub(f32 value) {
  * and walk in to seats from BattleAudience_NoUsedFCHaitiRand; leavers are random members allowed to leave.
  * Each gets its place in line as counter, the start delay of its walk.
  * Returns how many came (positive) or left (negative);
- * does nothing before Mario has Star Power or on a wide stage.
+ * does nothing before Mario has Star Power or while Mario's party stands in the audience area
+ * (BATTLE_FLAG_PARTY_IN_AUDIENCE, Hooktail).
  * Used by BattleAudienceNumToTarget, the bingo slots and Frankly's lecture.
  */
 s32 BattleAudienceAddAudienceNum(s32 num) {
@@ -3911,7 +3914,7 @@ void BattleAudiencePuniAllEscape(void) {
 /**
  * Brings up to num Punies to free seats, each adding one to the temporary extra
  * (the target size in the early demos); only once Mario has Star Power,
- * when the battle's crowd includes Punies and not on a wide stage.
+ * when the battle's crowd includes Punies and not while Mario's party stands in the audience area.
  * A Stylish move brings 10 (BattleAudience_PerAct), the Puni phase reaction 200.
  */
 void BattleAudienceAddPuni(s32 num) {
@@ -4871,7 +4874,7 @@ void BattleAudience_Case_KillEnemy(s32 level) {
 /**
  * Crowd reaction to a successful action command (battle_ac.c):
  * if any member is idle, a 180-frame cheer fading over 120 and everyone raises their arms;
- * records the success for BattleAudience_PerAct. The demo also counts it as one Stylish command
+ * records the success for BattleAudience_PerAct. The early demos also count it as one Stylish command
  * and clears the missed-Stylish flag.
  */
 void BattleAudience_Case_ActionCommandGood(BattleWeapon* weapon) {
@@ -4936,7 +4939,7 @@ void BattleAudience_Case_GuardBad(void) {
  * Crowd reaction to a Stylish command (battle event commands):
  * if anyone is idle, a cheer and clapping (180 frames, fading over 120) and everyone hops;
  * counts the Stylish command (up to 5 per action) for BattleAudience_PerAct.
- * The demo only flags the success and clears the missed-Stylish flag.
+ * The early demos only flag the success and clear the missed-Stylish flag.
  */
 void BattleAudience_Case_AcrobatGood(void) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
@@ -4968,7 +4971,7 @@ void BattleAudience_Case_AcrobatGood(void) {
 /**
  * Crowd reaction to a failed Stylish command (battle event commands):
  * if anyone is idle, booing and the arms-up reaction;
- * flags it for BattleAudience_PerAct (the demo also notes the miss).
+ * flags it for BattleAudience_PerAct (the early demos also note the miss).
  */
 void BattleAudience_Case_AcrobatBad(void) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
@@ -4992,7 +4995,7 @@ void BattleAudience_Case_AcrobatBad(void) {
 
 /**
  * Called by a script command when a Stylish chance passed untried;
- * only the demo acts on it, clearing the missed-Stylish flag.
+ * only the early demos act on it, clearing the missed-Stylish flag.
  */
 void BattleAudience_Case_AcrobatNoTry(void) {
 #if VERSION <= VERSION_DEMO_JP
@@ -5040,7 +5043,7 @@ void BattleAudience_Case_FinalAttack(void) {
  * End-of-turn audience update (battle_seq.c), skipped while frozen.
  * Once the battle has run for twice the enemies' total level divided by Mario's level in turns (at least 5),
  * the crowd shrinks by 5% of the level's audience factor each turn,
- * and on that turn an X-Naut throws an item (the demo queues that every late turn).
+ * and on that turn an X-Naut throws an item (the early demos queue that every late turn).
  * The chance of the bigger phase reactions grows by 3% per turn;
  * when it comes up, the Boo, Shy Guy run, Crazee Dayzee, Bulky Bob-omb,
  * Piranha Plant and Luigi reactions are queued, the Koopas too late in battle, and the chance resets.
@@ -5099,7 +5102,7 @@ void BattleAudience_Case_TurnEnd(void) {
  * with anyone taking part, Star Power gain of a quarter of the crowd plus 25, plus 25 per Super Appeal badge,
  * a 180-frame cheer and clapping fading over 60 and the arms-up reaction;
  * the target size grows by 5% of the level's audience factor either way.
- * The demo also counts the Appeal as a Stylish command.
+ * The early demos also count the Appeal as a Stylish command.
  */
 void BattleAudience_Case_Appeal(BattleUnit* unit) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();

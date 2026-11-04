@@ -21,7 +21,8 @@ typedef struct AirGaugeWork {
     s32 endWait;    // 0x14, frames before the result
 } AirGaugeWork;
 
-// Hold keys for _GetGaugeDecValue, one table per params[7] level (the seven tables are identical): frame = frames
+// Hold keys for _GetGaugeDecValue, one table per params[7] level (the seven tables are identical, except _table_3
+// in the early demos, which has the later keys): frame = frames
 // A has been held, value = amount taken off the base drain (interpolated between keys), flag = A icon drawn
 // pressed; frame -1 ends the table.
 
@@ -42,8 +43,8 @@ GaugeKey _table_2[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0
 #endif
 
 /**
- * Gauge curve keys {frame, value, flag; -1 ends it} of the final curve:
- * copy 3 of the 7 static tables the inlined header code emits, never read here.
+ * Gauge curve keys {frame, value, flag; -1 ends it} for params[7] level 3 (read by _GetGaugeDecValue);
+ * the same in every version.
  */
 GaugeKey _table_3[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 
@@ -228,7 +229,8 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
 /**
  * Per-frame gauge change: a drain rate chosen by difficulty params[7],
  * minus a lift that rises over the first 20 frames A is held after a press and fades out by frame 80,
- * so tapping A keeps the gauge rising. Also sets the flag that shows the A icon as pressed.
+ * so the gauge rises while A is held after a press and drains once A is released or held too long.
+ * Also sets the flag that shows the A icon as pressed (the key's flag; 1 while A is not held or past the last key).
  * The early demos use a steeper, shorter lift curve and lower drain rates.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -349,7 +351,7 @@ void battleAcDelete_AirGauge(BattleWork* work) {
 
 /**
  * Draws the level gauge (its fill eased toward the real value by 0.01 a frame) and the A button icon,
- * pressed while the press lift is active.
+ * drawn pressed while _GetGaugeDecValue's flag is set.
  */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;

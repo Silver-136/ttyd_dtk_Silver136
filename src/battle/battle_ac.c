@@ -135,7 +135,8 @@ void BattleActionCommandStop(BattleWork* work) {
  * Judges Mario's or a partner's guard against weapon from the recent pad history and returns defenseResult:
  * 5 = Superguard (B within the window, allowed by the weapon and while above 0 HP),
  * 4 = Guard (A within the window), 2 = no press,
- * 1 = failed because buttons were mashed (two or more presses in the last 15 frames).
+ * 1 = failed because buttons were mashed (two or more presses in the last 15 frames, or one press outside the
+ * window).
  * The windows shrink or widen with Simplifier and Unsimplifier (A: 10..5 frames, B: 5..1);
  * Auto Command badges always Superguard.
  * While actionCommands.countdown is above 0, each check uses one count and passes automatically.
@@ -237,7 +238,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     return wp->actionCommands.defenseResult;
 }
 
-/** Returns the buttons in mask that were newly pressed chan frames ago in the action-command pad history. */
+/** Returns the buttons in mask that were newly pressed frame frames ago in the action-command pad history. */
 s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask) {
     return _battleWorkPointer->actionCommands.pad.buttonsPressedHistory[frame] & mask;
 }
@@ -436,7 +437,7 @@ static inline void gaugeQuad(CameraEntry* cam, f32 x0, f32 y0, f32 x1, f32 y1, u
  * filled to ratio (0-1; below 0 draws only the frame).
  * From level 2 the background is split into coloured bands at thresholds a, b and c (percent).
  * flags 1 tints the fill with the command's display colour, flags 2 draws it red.
- * Used by the air gauge and timing gauge commands.
+ * Used by the air gauge, timing gauge, power gauge and repeated-press commands and two special moves.
  */
 void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32 b, s32 c, s32 flags) {
     BattleWork* wp = _battleWorkPointer;

@@ -144,7 +144,7 @@ EVT_END()
  * Runs Earth Tremor every frame: the timing game, its gauge and markers, the Crystal Star,
  * the enemies on the rippling floor and the floor mesh, then queues the displays.
  * args[0] is the partner's unit id (-1 = none).
- * The retail releases end it once yuka_end has freed the floor buffers; the demo has no such exit.
+ * JP and later end it once yuka_end has freed the floor buffers; the early demos have no such exit.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(main_deka) {
@@ -323,7 +323,7 @@ static void yuka_main(void) {
 
 /**
  * Frees the floor texture and mesh and clears the stg_b_yuka flags again.
- * The retail releases also null the buffer addresses, which is what lets main_deka finish.
+ * JP and later also null the buffer addresses, which is what lets main_deka finish.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(yuka_end) {
@@ -493,7 +493,7 @@ static void main_base(void) {
     }
 }
 
-/** Gauge display states: 30 frames to appear, then shown; after a miss it blinks for 80 frames and holds 30. */
+/** Gauge display states: 30 frames to appear, then shown; after a miss it blinks for 80 frames, then slides off over 30 (as after the fifth round). */
 void main_gauge(void) {
     DekaWork* w = get_ptr();
 
@@ -576,7 +576,7 @@ void main_timing(s32 idx) {
  * then settles at (-100, 30, 50) for Mario and the partner to ride (state 4).
  * Grows by 1 per cleared round (states 6-7) or shrinks back to 2 on a wrong press (8-9).
  * For the attack (10-11) it bounces six times; each landing shakes the camera and sends two floor waves outward,
- * stronger with the bounce count and the result; then it rises 40 and stops (13).
+ * stronger with the bounce count and the result; then it rises 40 and fades out (13).
  */
 static void main_star(void) {
     DekaWork* w = get_ptr();
@@ -880,7 +880,7 @@ USER_FUNC(end_deka) {
 
 /**
  * Draws the timing gauge: its frame, the red fill up to the cursor,
- * the star markers (lit once the cursor reaches them), the previous round's markers drifting up and fading,
+ * the star markers (lit once the cursor reaches them), the previous round's markers drifting 40 up out of the clip area,
  * and the hit or miss mark under each marker.
  */
 static void disp_2D(CameraId cam, void* param) {
@@ -1172,14 +1172,14 @@ EVT_BEGIN(marioAttackEvent_Deka)
     END_SIBLING_EVENT
     WAIT_FRAMES(30)
 
-    // The camera resets and the background and rippling floor are cleaned up.
+    // The camera resets and the background is restored (the early demos also clean up the rippling floor here).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION <= VERSION_DEMO_JP
     CALL(yuka_end)
 #endif
     CALL(btlevtcmd_SacBgsetMove, 1)
 
-    // Vivian stops tracking her position.
+    // Vivian stops tracking her position (JP and later clean up the floor and the star after it).
 #if VERSION <= VERSION_DEMO_JP
     CALL(end_deka)
 #endif
@@ -1258,7 +1258,7 @@ EVT_END()
 
 /**
  * Draws the rippling floor as 128 textured quads along the strip, using the captured floor texture.
- * The retail releases skip it once the buffers are freed.
+ * JP and later skip it once the buffers are freed.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void yuka_disp(CameraId cam, void* param) {

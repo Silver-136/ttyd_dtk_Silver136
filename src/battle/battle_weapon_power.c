@@ -150,7 +150,7 @@ u32 weaponGetPowerHPHalf(BattleUnit* unit1, BattleWeapon* weapon, BattleUnit* un
     return hp / 2;
 }
 
-/** Halves the target's HP, rounding the damage down: the Poison Shroom item thrown at an enemy. */
+/** Halves the target's HP, rounding the damage down: the Poison Shroom item (used on the user's own side). */
 u32 weaponGetPowerHPHalf2(BattleUnit* unit1, BattleWeapon* weapon, BattleUnit* unit2, BattleUnitPart* part) {
     return unit2->currentHp / 2;
 }
