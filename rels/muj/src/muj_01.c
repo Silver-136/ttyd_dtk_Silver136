@@ -1,5 +1,5 @@
 // muj_01 (無人島, Keelhaul Key): the castaways' camp: the shop and the inn, the sailors and the
-// dancers, and the crew's homesickness, split and persuasion (kyoshu_event, nakamaware_event, settoku_event).
+// dancers, and the crew's show of hands, split and persuasion (kyoshu_event, nakamaware_event, settoku_event).
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -337,7 +337,7 @@ EVT_END()
 
 /**
  * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
- * if the missing-sailor conversation has not yet run, otherwise he talks according to the story stage.
+ * if the missing-sailor conversation has not yet run, then he talks according to the story stage.
  */
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
@@ -544,7 +544,7 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_party_run, 1)
 #endif
 
-        // Flavio stammers an excuse and paces nervously.
+        // Flavio stammers an excuse and looks around nervously.
         CALL(evt_msg_print, 0, STRING("stg5_muj_84"), 0, STRING("me"))
         LOOP(3)
             SET_VALUE(LW(0), 0)
@@ -789,8 +789,8 @@ EVT_BEGIN(suifu_d_regl)
 EVT_END()
 
 /**
- * Talk event of sailor D: lines stg5_muj_159 to 163 for the stretches of the story from Fair Winds to the end of
- * the Hideout arc.
+ * Talk event of sailor D: lines stg5_muj_159 to 163 for the stretches of the story from Fair Winds to
+ * STG8_END_AFTER_THE_BATTLE, stg5_muj_163_1 otherwise.
  */
 static EVT_BEGIN(suifu_d_talk)
     SWITCH(GSW_STORY_PROGRESS)
@@ -810,7 +810,7 @@ static EVT_BEGIN(suifu_d_talk)
     RETURN
 EVT_END()
 
-/** Init event of the shabby sailor A: after STG5_59_ROGUEPORT_DOCK he is set up to wander. */
+/** Init event of the shabby sailor A: from STG5_59_ROGUEPORT_DOCK on he is placed at (95, 0, 82). */
 EVT_BEGIN(borosuifu_a_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
@@ -820,8 +820,8 @@ EVT_BEGIN(borosuifu_a_init)
 EVT_END()
 
 /**
- * Talk event of the shabby sailor A: a different line (stg5_muj_154 to 157) for each stretch of the story from
- * Fair Winds to the end of the Hideout arc.
+ * Talk event of the shabby sailor A: a different line (stg5_muj_154 to 158) for each stretch of the story from
+ * Fair Winds to STG8_END_AFTER_THE_BATTLE, stg5_muj_158_1 otherwise.
  */
 EVT_BEGIN(borosuifu_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
@@ -843,7 +843,7 @@ EVT_END()
 
 /**
  * Init event of the shabby sailor B: turns on NPC_STATUS_FACE_MOVE_DIR and,
- * after STG5_59_ROGUEPORT_DOCK, sets him up to wander.
+ * from STG5_59_ROGUEPORT_DOCK on, places him at (-350, 0, 0) facing right.
  */
 EVT_BEGIN(borosuifu_b_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -856,8 +856,8 @@ EVT_BEGIN(borosuifu_b_init)
 EVT_END()
 
 /**
- * Regular event of the shabby sailor B: wanders around his spawn point once the story is past
- * STG5_59_ROGUEPORT_DOCK.
+ * Regular event of the shabby sailor B: from STG5_59_ROGUEPORT_DOCK on he walks back and forth between
+ * x = 350 and x = -350 (speed 40), pausing 1 s at each end.
  */
 EVT_BEGIN(borosuifu_b_regl)
     SWITCH(GSW_STORY_PROGRESS)
@@ -873,7 +873,7 @@ EVT_BEGIN(borosuifu_b_regl)
 EVT_END()
 
 /**
- * Talk event of the shabby sailor B: a different line (stg5_muj_164 to 167) for each stretch of the story,
+ * Talk event of the shabby sailor B: a different line (stg5_muj_164 to 168, then 168_1) for each stretch of the story,
  * as for sailor A.
  */
 EVT_BEGIN(borosuifu_b_talk)
@@ -934,7 +934,7 @@ EVT_END()
 
 /**
  * Adds the first dancer (3人娘Ａ, model c_dance_r, the red one) with walk and talk animations and musume_talk;
- * called from the ending map init.
+ * called from muj_01_init_evt from STG8_00_START on.
  */
 static EVT_BEGIN(musume_a_entry)
     CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r"))
@@ -1316,7 +1316,8 @@ static const char* mise_npc[] = {
 
 /**
  * Open event of the shop building: shows the interior,
- * fades the outside blend away and lowers the music and ambience to a muffled 50 percent with a low-pass filter.
+ * fades the outside blend away, lowers the music and ambience to 50 percent and puts a low-pass filter on the
+ * ambience.
  */
 EVT_BEGIN(mise_data_open)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -1513,9 +1514,9 @@ static KinopioData kino_dt = {
 };
 
 /**
- * The crew's island-exploration decision (kyoshu): Mario and his partner overhear the crew (stg5_muj_15 to 22);
- * Flavio asks whether Mario will help, then the story advances to STG5_12_FLAVIO_PA_PATCH
- * and control returns.
+ * The crew's island-exploration decision (kyoshu, show of hands): the rough sailor praises Mario and Flavio asks
+ * him to explore the island (stg5_muj_15, 16); if Mario says no, Flavio calls a show of hands (stg5_muj_18 to 22);
+ * then the story advances to STG5_12_FLAVIO_PA_PATCH and control returns.
  */
 EVT_BEGIN(kyoshu_event)
     CALL(evt_party_stop, 0)
@@ -1584,7 +1585,7 @@ EVT_BEGIN(maruco_buruburu)
     RETURN
 EVT_END()
 
-/** Makes the shabby sailor Garawaru shiver (muj_npc_buruburu for 10 seconds). */
+/** Makes the rough sailor (ガラの悪い水夫) shiver (muj_npc_buruburu for 10 seconds). */
 EVT_BEGIN(garawaru_buruburu)
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
     LOOP(0)
@@ -1618,7 +1619,7 @@ EVT_END()
  * The GSWF_MUJ01_SKIP_TO_SHOW_OF_HANDS flag jumps straight to kyoshu_event.
  */
 EVT_BEGIN(nakamaware_event)
-    // If the quarrel was already seen, go straight to the show of hands.
+    // With the skip flag set (only the STG5_12 story-point start in event.c sets it), go straight to the show of hands.
     IF_INT_EQUAL(GSWF_MUJ_01_CREW_SPLIT_SKIP, 1)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_cam3d_evt_set, -85, 134, 714, -85, 38, 172, 500, EASING_SINE_IN_OUT)
@@ -1862,7 +1863,7 @@ EVT_END()
 
 /**
  * Stops the regular events of only two sailors, shabby sailor B (ボロ水夫B) and sailor D (水夫D), so they stay put;
- * the map init runs it before sekai_yami_evt or minnnanokoe_evt (STORY_STG8_15_GRODUS).
+ * the map init runs it before sekai_yami_evt or minnnanokoe_evt (STG8_15_GRODUS).
  */
 static EVT_BEGIN(delete_npc_regl_evt)
     CALL(evt_npc_change_interrupt, STRING("ボロ水夫B"), 1, 0)
@@ -1874,7 +1875,7 @@ static EVT_BEGIN(delete_npc_regl_evt)
     RETURN
 EVT_END()
 
-/** Shakes the 3D camera sideways by a small amount every 500 ms, forever; used in the dark ending scene. */
+/** Shakes the 3D camera vertically by a small amount, 500 ms per call, forever; used in the dark ending scene. */
 static EVT_BEGIN(sekai_yami_shake)
     LOOP(0)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
@@ -1949,7 +1950,7 @@ USER_FUNC(muj_get_door_check) {
 /**
  * Script helper: sets the "dark world" view matrix,
  * a camera looking down from height 100 at the offset z in args[0];
- * used by the dark ending scene (after STORY_STG8_15_GRODUS) where the camp goes dark.
+ * used by the dark ending scenes (at STG8_15_GRODUS) where the camp goes dark.
  */
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);
@@ -2045,7 +2046,7 @@ static USER_FUNC(starstone_set_ry) {
 /**
  * The world-goes-dark cutaway at STG8_15_GRODUS (entered from "sekai_yami2"):
  * control is taken, the camp is drawn dark with the camera shaking and a quake sound,
- * four sailors run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
+ * three sailors and the shop clerk run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
  * and the game returns to pik_01 at "sekai_yami2".
  */
 static EVT_BEGIN(sekai_yami_evt)
@@ -2374,8 +2375,8 @@ EVT_BEGIN(yakan_anime)
 EVT_END()
 
 /**
- * Map init for muj_01 (the camp): picks music (ending-scene variants after STORY_STG8_15_GRODUS),
- * registers the exits, Flavio's shop and the inn, the save block and Star Pieces,
+ * Map init for muj_01 (the camp): picks music (ending-scene variants at STG8_15_GRODUS),
+ * registers the exits, the shop and the inn, the save block and Star Pieces,
  * then spawns the scene for the story stage (nakamaware_event, settoku_event or the ending epilogue).
  */
 EVT_BEGIN(muj_01_init_evt)

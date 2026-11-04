@@ -149,7 +149,7 @@ EVT_BEGIN(dai3_escape)
     RETURN
 EVT_END()
 
-/** Positions the two X-Naut grunts and, if he has not left yet, Lord Crump for the fight in the Puni room. */
+/** Positions the two X-Naut grunts and, if he has not left yet, Lord Crump for the fight in this room. */
 EVT_BEGIN(dai3_battle_init)
     CALL(evt_npc_set_position, STRING("第三勢力部下Ａ"), -119, 0, 29)
     CALL(evt_npc_set_ry, STRING("第三勢力部下Ａ"), 90)

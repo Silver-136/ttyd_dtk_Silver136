@@ -153,7 +153,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
-/** Closes the south door (S_doa); used as the door-close script of the south loading zone. */
+/** Closes the door (S_doa); used as the door-close script of the west door w_bero. */
 static EVT_BEGIN(bero_s_doa_close)
     SET_VALUE(LW(9), 0)
     SET_VALUE(LW(10), STRING("S_doa"))
@@ -161,7 +161,7 @@ static EVT_BEGIN(bero_s_doa_close)
     RETURN
 EVT_END()
 
-/** Opens the south door (S_doa); used as the door-open script of the south loading zone. */
+/** Opens the door (S_doa); used as the door-open script of the west door w_bero. */
 static EVT_BEGIN(bero_s_doa_open)
     SET_VALUE(LW(9), 0)
     SET_VALUE(LW(10), STRING("S_doa"))
@@ -170,8 +170,8 @@ static EVT_BEGIN(bero_s_doa_open)
 EVT_END()
 
 /**
- * Exits of mri_05: west door w_bero to mri_01 (e_bero); dokan1 (scripted pipe); dokan2 (scripted pipe); pipe
- * dokan3 to mri_02 (dokan2); pipe dokan4 to mri_19 (dokan1).
+ * Exits of mri_05: west door w_bero to mri_01 (e_bero); pipe dokan1 to dokan2 in this room; pipe dokan2 to
+ * dokan1 in this room; pipe dokan3 to mri_02 (dokan2); pipe dokan4 to mri_19 (dokan1).
  */
 static BeroEntry bero_entry_data[] = {
     {

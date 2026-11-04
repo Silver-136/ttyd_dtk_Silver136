@@ -101,8 +101,8 @@ BeroEntry bero_bluejail[] = {
 };
 
 /**
- * Exits of mri_09: west road w_bero to mri_08 (e_bero); north road n_bero to mri_10 (s_bero); dokan2
- * (scripted pipe); dokan3 (scripted pipe).
+ * Exits of mri_09: west road w_bero to mri_08 (e_bero); north road n_bero to mri_10 (s_bero); pipe dokan2
+ * to dokan3 in this room; pipe dokan3 to dokan2 in this room.
  */
 static BeroEntry bero_entry_data[] = {
     {
@@ -309,7 +309,7 @@ static EVT_BEGIN(breakyuka_init)
 EVT_END()
 
 /**
- * Main script when the floor gives way under the Puni weight:
+ * Main script when the breaking floor gives way:
  * turns on the collision of the lower floor piece and makes every Puni that is standing over the hole fall.
  */
 static EVT_BEGIN(breakyuka_main)

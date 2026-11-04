@@ -87,8 +87,9 @@ USER_FUNC(puni_get_id) {
 }
 
 /**
- * Exits of mri_16: dokan1 (scripted pipe); pipe dokan2 to mri_18 (dokan2); dokan3 (scripted pipe); dokan4
- * (scripted pipe); dokan6 (scripted pipe); pipe dokan7 to mri_13 (dokan).
+ * Exits of mri_16: pipe dokan1 to dokan4 in this room; pipe dokan2 to mri_18 (dokan2); pipe dokan3 to dokan6
+ * in this room; pipe dokan4 to dokan1 in this room; pipe dokan6 to dokan3 in this room; pipe dokan7 to mri_13
+ * (dokan).
  */
 static BeroEntry bero_entry_data[] = {
     {
@@ -406,7 +407,8 @@ static HitDamageReturn hitDmgRetPoints[] = {
 /**
  * Script when the treasure chest is opened: the Shrink Stomp badge appears above the chest
  * and Mario collects it with the normal item fanfare.
- * In retail, an uncollected badge is marked for the badge shop on leaving the map.
+ * From the JP build on (not in the June US demo or the JP demo), an uncollected badge is marked for the badge
+ * shop on leaving the map.
  */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
@@ -425,7 +427,7 @@ EVT_END()
 
 /**
  * Map init script of mri_16, the water room: sets up the Puni, the blue water switch, the bar switch and bar,
- * the water level or drained water depending on GSWF_MRI16_WATER_SWITCH_PRESSED, the Dizzy Dial,
+ * the water level or drained water depending on GSWF_MRI_16_WATER_SWITCH_PRESSED, the Dizzy Dial,
  * the Shrink Stomp chest (the badge) and a Shine Sprite block.
  */
 EVT_BEGIN(mri_16_init_evt)

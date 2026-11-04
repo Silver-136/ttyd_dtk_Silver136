@@ -105,7 +105,8 @@ EvtWord all_party_lecture[492];
 
 /**
  * Linear blend of two values by progress elapsed / total:
- * returns start at the beginning and end at the end (parameter order is end, start).
+ * returns the argument named end at elapsed 0 and the one named start at elapsed = total
+ * (the names are the reverse of what the formula does).
  */
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;
@@ -114,9 +115,10 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 }
 
 /**
- * Script helper: slides Mario to a lecture position over args[0] frames.
- * The first call stores his start in LW(0) to LW(2) and the timer;
- * each call blends his position toward the destination in LW(3) to LW(5).
+ * Script helper: slides Mario over args[0] milliseconds.
+ * The first call stores his position in LW(0) to LW(2) and the timer;
+ * each call sets his position to the blend that runs from LW(3) to LW(5) (at the start) to LW(0) to LW(2)
+ * (at the end).
  */
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
@@ -238,7 +240,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
 
 /**
  * Script helper that animates the two button prompts of the lecture each frame:
- * sequence 0 picks the first icon, 2 fades the prompt in, 3 fades it out (7 alpha per frame) and 4 hides it.
+ * sequence 0 sets the X button icon, 2 fades the prompt in, 3 fades it out (7 alpha per frame) and 4 hides it.
  * Returns done when both prompts are hidden, otherwise queues the draw and blocks. Starts them at (200, -25).
  */
 static USER_FUNC(lecture_button_rtn) {
@@ -667,8 +669,8 @@ EVT_BEGIN(all_party_lecture)
 EVT_END()
 
 /**
- * Script helper: switches on the hit boxes of the map object named args[0] (or the calling object for "me")
- * so it can be hit again.
+ * Script helper: switches off the hit boxes of the map object named args[0] (or the calling object for "me")
+ * by setting HIT_FLAG_OFF on them, so it cannot be hit.
  */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
@@ -756,8 +758,8 @@ static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 }
 
 /**
- * Script helper: slides a partner to a lecture position over args[1] frames (partner slot args[0]: 0 is the
- * active partner), storing the start in LW(3) to LW(5) on the first call.
+ * Script helper: slides a partner to the lecture position LW(0) to LW(2) over args[1] milliseconds (partner
+ * slot args[0]: 0 is the active partner), storing the start in LW(3) to LW(5) on the first call.
  */
 static USER_FUNC(lect_party_ido_sum) {
     EvtWord* args = event->args;

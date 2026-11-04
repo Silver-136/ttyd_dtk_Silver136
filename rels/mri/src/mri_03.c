@@ -277,7 +277,7 @@ EVT_BEGIN(after_2hours)
 EVT_END()
 
 /**
- * Eight control points (x, y, z) of the path the freed Puni Elder walks along when he leaves with Punio
+ * Eight control points (x, y, z) of the path the freed Puni Elder walks along when she leaves the cell
  * (elder_rescue).
  */
 static f32 spline_dt[] = {
@@ -297,12 +297,12 @@ f32 spline_dt1[] = {
 
 /**
  * Cutscene when Mario opens the red cell: the Puni elder, swollen and grumbling, is freed;
- * Punio and the sister Puni run up; the screen fades while the party rests
- * and the elder walks off along a spline with Punio.
+ * Punio runs up; the screen fades while the party rests,
+ * then the elder walks off along a spline and Punio follows along another.
  * Punio rejoins the Puni group and the story is set to STG2_14_PUNI_ELDER_FREED.
  */
 EVT_BEGIN(elder_rescue)
-    // Mario opens the red cell; Punio and his sister run up to the swollen Elder inside.
+    // Mario opens the red cell; Punio runs up to the swollen Elder inside.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_cam3d_evt_set, 105, 82, 92, 105, 30, -203, 1000, EASING_SINE_IN_OUT)
@@ -514,7 +514,7 @@ EVT_END()
 
 /**
  * Init script of the Puni elder in the cell room:
- * until he is freed (STG2_14_PUNI_ELDER_FREED) he is held in the cell (the red one).
+ * until she is freed (STG2_14_PUNI_ELDER_FREED) she is held in the cell (the red one).
  */
 static EVT_BEGIN(elder_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -525,7 +525,7 @@ static EVT_BEGIN(elder_init)
 EVT_END()
 
 /**
- * Talk script of the Puni elder in the cell: while the red cell is still locked he asks Mario to free him;
+ * Talk script of the Puni elder in the cell: while the red cell is still locked she complains about being locked up;
  * nothing is said afterwards.
  */
 static EVT_BEGIN(elder_talk)
@@ -944,7 +944,8 @@ EVT_END()
 
 /**
  * Sets the prison's wall blend flags for the blue-cell scene:
- * the same mesh and character flag setup as jail_alpha, with lock-object flags set only while each cell is locked.
+ * the same mesh and character flag setup as jail_alpha except プニ族３ and the kururin1 floor, with lock-object
+ * flags set only while each cell is locked.
  */
 EVT_BEGIN(bluejail_alpha)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -1227,7 +1228,10 @@ USER_FUNC(puni_parent) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper that sets the Puni slot args[0] to step 10 of puniModeEventparent so it walks away from the cell. */
+/**
+ * Script helper that sets the Puni slot args[0] to step 10 of puniModeEventparent so it moves away from
+ * (-160, 40), where Punio and Petuni meet.
+ */
 USER_FUNC(puni_away) {
     s32 offset = evtGetValue(event, event->args[0]) * sizeof(PuniData);
     PuniData* puni = (PuniData*)((u8*)puniGetPunidat() + offset);
@@ -1253,11 +1257,11 @@ EVT_END()
 /**
  * Scene when the blue cell is opened (story STG2_19_INSIDE_THE_BLUE_CELL to STG2_20_PUNIO_PETUNI):
  * the Punies step away from the cell, Punio and his sister Petuni talk with the party,
- * a Dried Shroom is found and shown shrinking, and Petuni joins the Puni group (GSWF_MRI_PETUNI_IN_PUNI_GROUP).
+ * Petuni gives Punio a Dried Shroom that shrinks as he eats it, and Petuni joins the Puni group (GSWF_MRI_PETUNI_IN_PUNI_GROUP).
  * Sets the story to STG2_20_PUNIO_PETUNI.
  */
 EVT_BEGIN(guide_sister)
-    // The Punies step back from the opened blue cell and Mario and his partner relax.
+    // The Punies step back from the opened blue cell and Mario and his partner spin around.
 #if VERSION < VERSION_US
     CALL(evt_mario_key_onoff, 0)
 #endif

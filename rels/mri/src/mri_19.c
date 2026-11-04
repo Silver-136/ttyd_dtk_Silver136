@@ -24,8 +24,8 @@ static EvtWord cloud_wind_event[39];
 EvtWord mri_19_init_evt[146];
 
 /**
- * Exits of mri_19: pipe dokan1 to mri_05 (dokan4); pipe dokan2 to mri_06 (dokan1); dokan3 (scripted pipe);
- * dokan4 (scripted pipe).
+ * Exits of mri_19: pipe dokan1 to mri_05 (dokan4); pipe dokan2 to mri_06 (dokan1); pipe dokan3 to dokan4
+ * in this room; pipe dokan4 to dokan3 in this room.
  */
 static BeroEntry bero_entry_data[] = {
     {

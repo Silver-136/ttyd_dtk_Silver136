@@ -23,8 +23,8 @@ static KusaAccess ueki_access_data[7];
 EvtWord mri_18_init_evt[105];
 
 /**
- * Exits of mri_18: pipe dokan1 to mri_12 (dokan3); pipe dokan2 to mri_16 (dokan2); dokan3 (scripted pipe);
- * dokan4 (scripted pipe).
+ * Exits of mri_18: pipe dokan1 to mri_12 (dokan3); pipe dokan2 to mri_16 (dokan2); pipe dokan3 to dokan4
+ * in this room; pipe dokan4 to dokan3 in this room.
  */
 static BeroEntry bero_entry_data[] = {
     {

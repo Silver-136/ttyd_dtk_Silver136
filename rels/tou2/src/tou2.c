@@ -556,7 +556,8 @@ static void printRanking(void) {
 
 /**
  * Script helper: arg0 is the result bitmask of the last match's special rule.
- * Bit 2 (value 4) means the rule was met and sets GSWF_TOU_LAST_RULE_MET; any other result clears it.
+ * Bit 2 (value 4) means the rule was met and sets GSWF_TOU_LAST_RULE_MET; bit 1 or bit 0 clears it, and a result
+ * with none of these bits leaves it unchanged.
  */
 USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
@@ -849,8 +850,8 @@ static USER_FUNC(evt_tou_get_fighter_rank) {
 }
 
 /**
- * Script helper: arg0 = fighter id; arg1 receives the message text of the fighter's team title (for example "The
- * Koopinator").
+ * Script helper: arg0 = fighter id; arg1 receives the message text of the fighter's title (the stg3_tou_sensyu2_NN
+ * epithet, not the team name such as "The Koopinator").
  */
 USER_FUNC(evt_tou_get_fighter_name2) {
     EvtWord* args = event->args;
@@ -1251,8 +1252,8 @@ static void rankingExit(void) {
 /**
  * Allocates the ranking table, restores each fighter's below-player flag
  * and points from the saved game state (or the starting points on the first run),
- * hides fighters who have not joined yet or have left according to story progress (Sir Swoop, Bandy Andy, The
- * Destructors), and sorts it.
+ * hides fighters who have not joined yet or have left according to story progress (Sir Swoop, the KP Koopas,
+ * Bandy Andy, The Destructors), and sorts it.
  */
 static void rankingInit(void) {
     s32 temp;

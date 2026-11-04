@@ -1,4 +1,4 @@
-// mri_puni (巨木の中, The Great Tree): the Puni crowd system: every puni and Jabbi follows Mario or its group leader,
+// mri_puni (巨木の中, The Great Tree): the Puni crowd system: every puni follows Mario or its group leader,
 // walks the maze maps (puniMapdata), falls, fights and is saved/restored through the LSW bytes; driven by the
 // evt_puni_* calls.
 
@@ -42,7 +42,7 @@ extern int abs(int);
 void envSetYami(MapTevCallbackInfo* info);
 
 /**
- * Animation frame sequences of the Puni, one per action, each a list of frame numbers ending with 65535:
+ * Animation frame sequences of the Puni, one per action, each a list of frame numbers ending with 65535 or 65534:
  * this one is the idle loop
  * (the walk, run, damage, down, roll, stray, jump and wander sequences below follow the same layout).
  */
@@ -79,8 +79,7 @@ u16* puni_patern_table[] = { puni_nom_patern_data, puni_wlk_patern_data, puni_ru
                              puni_jpd_patern_data, puni_wan_patern_data };
 
 /**
- * Animation frame sequences of the Jabbi (toge): the idle loop, which has 24 frames and then repeats from
- * the one marked 65.
+ * Animation frame sequences of the Jabbi (toge): the idle loop, which has 24 frames.
  */
 u16 toge_nom_patern_data[25] = {
     84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 65535,
@@ -120,7 +119,7 @@ static inline s32 puni_bero_id_filter(s32 id) {
 
 /**
  * Returns the table of Puni data (Punidat, PUNI_DATA_MAX slots: Mario's stand-in, the Punies 1 to 102,
- * the blockers 103 to 109 and the Jabbi 110 to 209). Used by the map scripts in mri.c and mri_01 to mri_20.
+ * the blockers 103 to 109 and the Jabbi 110 to 209). Used by the C code of mri.c, mri_01, mri_03, mri_13 and mri_16.
  */
 PuniData* puniGetPunidat(void) {
     return Punidat;
@@ -138,8 +137,8 @@ PuniTexInfo* puniGetTex(void) {
 
 /**
  * Draw callback for the status icons over the Puni on the two battle floors (9 and 12):
- * shows the dizzy stars circling a dizzy Jabbi and counts down the healed marker (about 30 frames) on a Puni
- * whose HP was just restored.
+ * shows the dizzy stars circling a dizzy Jabbi and clears the healed flag of a Puni whose HP was just restored
+ * after about 30 frames (nothing is drawn for that flag).
  */
 void evt_icon_disp_func(CameraId camId, void* param) {
     PuniData* p;
@@ -647,8 +646,8 @@ void _ymode_mri_16_01(PuniData* p) {
 /**
  * Sets a Puni's height from the map's floor mode (Punigp->ymode):
  * flat floors, the mri_02 weight floor, the stairs of mri_09, the broken floors of mri_09,
- * mri_12 and mri_17 (the broken floor drops the Puni 6 units), and the ramps of mri_16.
- * Never lets a Puni jump more than 11 units in one frame.
+ * mri_12 and mri_17 (until it breaks, the breakable floor raises the Puni 6 units), and the ramps of mri_16.
+ * In height modes 2 to 6 it never lets a Puni jump more than 11 units in one frame.
  */
 void puniSetYPosition(PuniData* p) {
     if (p->flags & PUNI_FLAG_PUNI) {
@@ -709,14 +708,14 @@ void puniSetYPosition(PuniData* p) {
 }
 
 /**
- * Cell map of the mri_06 maze (13 by 5 cells of 50 units) that the Puni movement code checks to keep the
- * Punies inside the maze.
+ * Cell map of the mri_06 maze (13 by 5 cells; used while a Puni's y is between -1 and 50) that the Puni movement
+ * code checks to keep the Punies inside the maze.
  */
 u8 puniMapdata_MRI_06[] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00,
 };
 
-/** Cell map of mri_09 (7 by 6 cells of 150 units) while its wall panels are in place. */
+/** Cell map of mri_09 (7 by 6 cells; used while a Puni's y is between -1 and 150) while its wall panels are in place. */
 u8 puniMapdata_MRI_09[] = {
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0x20, 0x00, 0x20, 0x00, 0x20, 0x00, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
@@ -1301,7 +1300,7 @@ void qrndseed(s32 seed) {
 
 /**
  * Advances the Puni fight's own random generator and returns a number from 0 to n-1.
- * The Puni battles use this instead of rand() so they are repeatable from a seed.
+ * The Puni battles use this instead of rand().
  */
 s32 qrnd(s32 n) {
     s32 v;
@@ -1421,8 +1420,8 @@ void PuniChildHagure(PuniData *p) {
 
 /**
  * Finds a place in a follow chain for p: the chain member with the lowest depth that has a free child slot (at
- * most two children, the first only below depth 2) and makes p its child.
- * Returns FALSE when no chain exists (p then follows Mario directly).
+ * most two children, the second only below depth 2) and makes p its child.
+ * Returns FALSE when no chain member has a free slot (p's parent is then left unchanged).
  */
 BOOL searchParent(PuniData* p) {
     s32 level = 10000;
@@ -1461,9 +1460,9 @@ static const Vec puni_fall_dir = {0.0f, -1.0f, 0.0f};
 
 /**
  * Checks that a Puni has not been pushed out of the map:
- * returns 1 if its height is outside both stuck bands (all is well),
+ * returns 1 if its height is outside both height bands (it has left the floor heights),
  * 2 if it is inside a band but there is no floor within 3 units below it,
- * and 0 if it is in a band with a floor beneath.
+ * and 0 if it is in a band with a floor beneath (all is well); callers put it back for 1 and 2.
  */
 s32 puniPositionCheck(PuniData* p) {
     f32* r = &Punigp->stuckTop0;
@@ -1499,7 +1498,7 @@ s32 puniPositionCheck(PuniData* p) {
 
 /**
  * Puts a Puni that fell out of the map back at the recovery position (Punigp->recoverPos) with a one-unit random
- * jitter, clearing its previous position.
+ * jitter, setting its previous position to the new one.
  */
 void puniPositionRecover(PuniData* p) {
     p->pos = Punigp->recoverPos;
@@ -1621,7 +1620,7 @@ static const Vec puni_fall_dir;
 #if VERSION >= VERSION_JP
 /**
  * Move step with wall collision that reflects the velocity off the wall (JP and later):
- * the Puni slides along the wall, loses speed as the velocity is mirrored,
+ * the Puni slides along the wall, the velocity is mirrored,
  * and the move is undone if the slid position would cross another wall.
  */
 void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
@@ -1867,7 +1866,10 @@ void puniMoveNormal(PuniData* p) {
 }
 #endif
 
-/** Moves a Puni by its velocity with no collision at all. */
+/**
+ * The June demos' two move steps (up to the JP demo): both move through puniMoveAtari with the velocity reflected off walls;
+ * the limited one first caps the speed at maxSpeed.
+ */
 #if VERSION <= VERSION_DEMO_JP
 static void puniMoveLimitedNormal(PuniData* p) {
     Vec start;
@@ -2937,7 +2939,7 @@ static const Vec puni_away_zero0 = {0.0f, 0.0f, 0.0f};
 #pragma dont_inline on
 /**
  * Moves a fleeing Puni along its velocity with wall collision.
- * Returns 1 and sets the wall push direction when it hits a wall with attribute bit 4,
+ * Returns 1 and sets the wall push direction when it hits a wall with attribute 0x4 (HIT_ATTR_NPC_ONLY),
  * 2 for any other wall (step 10), 0 when nothing was hit.
  */
 int puniModeAway_sub(PuniData* p) {
@@ -3324,7 +3326,7 @@ void puniModeRecover(PuniData* p) {
 
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
 #if VERSION <= VERSION_DEMO_JP
-/** The demo's puni main loop calls this directly with the sound name; every version reaches it through puniModeDead. */
+/** The June demos' puni main loop calls this directly with the sound name; their puniModeDead below calls it too. */
 static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
     switch (p->modeStep) {
         case 0:
@@ -3356,7 +3358,7 @@ void puniModeDead(PuniData* p) {
 
 /**
  * Moves a Puni blown by the wind and handles what it hits:
- * returns 1 for a wall that pushes it out (attribute bit 4; remembers the push direction and goes to step 3),
+ * returns 1 for a wall that pushes it out (attribute 0x4, HIT_ATTR_NPC_ONLY; remembers the push direction and goes to step 3),
  * 2 for any other wall hit (step 10; also for any hit while all Punies fight) and 0 if nothing was hit.
  */
 int puniModeWind_sub(PuniData* p) {
@@ -3554,10 +3556,10 @@ void puniModeWind(PuniData* p) {
 
 /**
  * Fall mode: the Puni falls under gravity (0.45 per frame) until it hits something.
- * Depending on what it lands on (attribute 0x100, 0x200,
- * a pit marker target or ordinary floor) it chooses the next mode:
- * the trap/pedestal modes, the water mode or lost mode;
- * a Puni that falls out of the world is put back at the recovery position.
+ * Depending on what it lands on it chooses the next mode: attribute 0x100 the updraft wait (preupdraft),
+ * 0x200 the water mode, the floor of one of the first two targets the pedestal mode (dodai),
+ * ordinary floor the position check; a wall with attribute 0x4 does not stop the fall.
+ * A Puni that falls below y=-1000 is put back at the recovery position and becomes lost (hagure).
  */
 #if VERSION <= VERSION_DEMO_JP
 static void puniModeFall(PuniData* p) {
@@ -3693,7 +3695,7 @@ void puniModeFall(PuniData* p) {
 
 /**
  * Waits (30 to 230 frames) with a balloon effect over the Puni before starting to ride an updraft;
- * the NPC then gets the record-defeat flag.
+ * its draw pose (p->npc is a pose view) then gets flag 4, which hides its shadow.
  */
 void puniModePreupdraft(PuniData* p) {
     Vec pos;
@@ -3840,7 +3842,7 @@ void puniModeUpdraft(PuniData *p) {
 
 /**
  * Wonder mode: pops the soap bubble (sound and burst effect),
- * then after 20 frames the Puni gets a hop animation and goes to the funbari mode.
+ * starts animation 9 at once and after 20 frames goes to the funbari mode with the walk animation.
  * The demo build has this as a helper taking the sound name.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -3888,7 +3890,7 @@ void puniModeWonder(PuniData* p) {
 
 /**
  * Wonder mode: pops the soap bubble (sound and burst effect),
- * then after 20 frames the Puni gets a hop animation and goes to the funbari mode.
+ * starts animation 9 at once and after 20 frames goes to the funbari mode with the walk animation.
  * The demo build has this as a helper taking the sound name.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -3937,8 +3939,8 @@ static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist
 }
 
 /**
- * Funbari mode ("holding on"): the Puni that came down from the bubble makes a few hops toward the gather target
- * (or away from it) for 68 frames, then falls back to the floor.
+ * Funbari mode ("holding on"): the Puni that came down from the bubble moves toward the gather target with one hop
+ * for 68 frames, then falls back to the floor (at once when no gather target is on).
  */
 void puniModeFunbari(PuniData* p) {
     switch (p->modeStep) {
@@ -4340,7 +4342,7 @@ void puniModeTrap(PuniData* p) {
 
 /**
  * Starts the scale-up when a Puni walks in through a left or right loading zone:
- * resets the delay counter, scale 0 and sets the NPC's record-defeat flag.
+ * resets the delay counter, scale 0 and sets flag 4 on its draw pose (p->npc is a pose view; hides its shadow).
  */
 void puniModeEnterSubInit(PuniData* p) {
     if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
@@ -4588,8 +4590,8 @@ void puniModeCustom(PuniData* p) {
 
 /**
  * Draw callback for the Punies: loads the Puni draw state and draws every Puni pose;
- * while the dark view (system word
- * 3) is on, it sets up the dark lighting for each pose first.
+ * while the dark view (area flag
+ * 3, LSWF_MRI_00_DARKNESS_ON) is on, it sets up the dark lighting for each pose first.
  */
 void puni_puni_disp(CameraId camId, void* param) {
     MapTevCallbackInfo info;
@@ -4967,8 +4969,9 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
 /**
  * Moves one Puni according to its mode (JP and later):
  * the following, fighting and walking modes use the normal move with speed limit and slowdown,
- * the gather mode the speed-limited move, damage the plain move, the scripted mode its own moveFunc;
- * flee, wind and updraft modes have already moved themselves. Every mode then sets the Puni's height.
+ * the gather mode the speed-limited move, damage the reflecting move without speed limit or slowdown,
+ * the scripted mode its own moveFunc; flee and wind modes have already moved themselves.
+ * All these modes then set the Puni's height; the other modes (updraft, fall and so on) are left alone.
  */
 void puniMoveMain(PuniData* p) {
     switch (p->mode) {
@@ -5905,8 +5908,8 @@ USER_FUNC(evt_puni_set_yuka) {
 
 /**
  * Sets where a Puni that fell out of the map is put back (args[0] to args[2] = x, y, z) and the two height bands
- * where a Puni can be stuck inside the floor (args[3], args[4] top and bottom of band 0, args[5],
- * args[6] of band 1; -1000 for none).
+ * around the floor heights a Puni must stay within (args[3], args[4] top and bottom of band 0, args[5],
+ * args[6] of band 1; -1000 for none); see puniPositionCheck.
  */
 USER_FUNC(evt_puni_set_hamari) {
     EvtWord* args = event->args;
@@ -6174,7 +6177,7 @@ static inline void puni_swget_idx(s32 idx, s32* val, Vec* pos) {
 
 /**
  * Debug listing: formats a line per Puni (following Mario, lost in some map with its position, not yet joined,
- * caught in a trap, or waiting at the cell in mri_03) into a buffer; the text is never shown in the retail game.
+ * caught in a trap, or waiting at the cell in mri_03) into a buffer; the text is never shown.
  */
 s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
     char buf[256];
@@ -6247,7 +6250,7 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
  * Sets up the Puni crowd when a map starts (called through mri_puni_init).
  * args[0] = 2 means the map was entered through a loading zone, whose direction in args[2] sets the entry flags;
  * Punies that Mario had with him (those the story has recruited: Punio, his sister, the little Jabbi,
- * the rival and the first GSW_MRI_PUNI_FOLLOWERS+4 others) are placed either beside Mario after a save load,
+ * the rival and the others numbered 5 to GSW_MRI_PUNI_FOLLOWERS+4) are placed either beside Mario after a save load,
  * walking in from the loading zone, or at their saved lost position; trapped ones are skipped.
  * The blockers 103 to 109 are placed at the down pipes.
  */
@@ -6522,7 +6525,7 @@ static inline s32 puniFloor(f32 v) {
 
 /**
  * Finds a stray Puni's resting spot: for Puni in the falling, bubble or water modes it is parked below the map,
- * otherwise it snaps to the nearest whole grid point around its position that has a clear line to it.
+ * otherwise it snaps to the first of the four whole grid points around its position that has a clear line to it.
  */
 void puniHagurePos(PuniData* p) {
     Vec cur;
@@ -7029,7 +7032,7 @@ USER_FUNC(evt_puni_get_mode) {
 }
 
 /**
- * Script helper: forces Puni args[0] into mode args[1] and detaches it from the fight and follow chain,
+ * Script helper: forces Puni args[0] into mode args[1] and detaches it from the follow chain,
  * removing its effects.
  */
 USER_FUNC(evt_puni_set_mode) {
@@ -7305,7 +7308,8 @@ USER_FUNC(evt_puni_zenmetsu_check) {
 
 /**
  * Checks whether every Puni of one side is lower than height args[1] (args[0] picks Puni or Jabbi).
- * args[2] = 1 if no one is higher, otherwise 0. Used by the lift to know when the crowd has come down.
+ * args[2] = 1 if no one is higher, otherwise 0 (the June demos: 1 only if everyone is exactly at that height).
+ * mri_08 and mri_11 use it to wait until the Punies are down at height 0.
  */
 USER_FUNC(evt_puni_landon_check) {
     EvtWord* args = event->args;
@@ -7385,7 +7389,7 @@ USER_FUNC(evt_puni_winddisable_onoff) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: stops the Puni crowd's two looping sounds (the footsteps and the Jabbi march). */
+/** Script helper: stops the Jabbi march loop (sfx468) and the sound handle sfx458, which nothing in this file sets. */
 USER_FUNC(evt_puni_force_se_off) {
     if (Punigp->sfx458) {
         psndSFXOff(Punigp->sfx458);
@@ -7497,8 +7501,8 @@ const char* npcGetTribeName(const char** name) {
 
 static const Vec puni_fall_dir;
 /**
- * Per-frame callback of the spider check: turns each live spider-tribe NPC of the map (Piders, the Jabbi's enemy
- * stand-ins) into a Puni target (slots 2 to 9) at its position,
+ * Per-frame callback of the spider check: turns each live spider-tribe NPC of the map (Piders)
+ * into a Puni target (slots 2 to 9) at its position,
  * snapped to the nearest floor height within 50 units, flagged to repel the crowd.
  * Targets of NPCs that are not near any floor are left off.
  */
@@ -7560,7 +7564,7 @@ USER_FUNC(puni_disp_info_kassencheck) {
 
 /**
  * Draw callback for the Puni counter at the lower left of the screen: skipped while a shop menu is open;
- * draws the pair of numbers (count in the map and total with Mario,
+ * draws the pair of numbers (the count with Mario, blinking while some are missing, and the story total,
  * packed in the parameter) with the icon for the counter background, faded by the counter opacity.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -7601,8 +7605,9 @@ void puniCountDisp(CameraId unused, void* param) {
 
 /**
  * Per-frame counter update: counts the living Punies that are with Mario (not defeated, not saved aside,
- * not in the pipe modes) and the total the story has gathered (Punio, his sister, the rival,
- * plus the recruited followers). On the Jabbi fight floors the numbers stay hidden until the fight has been won.
+ * not the little Jabbi, not lost: modes 15 and 16) and the total the story has gathered (Punio, his sister,
+ * the rival, plus the recruited followers). On the Jabbi fight floors, until the fight has been won, the
+ * missing number (args[1]) is 0 and the count does not blink.
  * Keeps the totals in the save so the counter shows the right values while the map loads,
  * and draws the counter when there are at least 10 Punies.
  */
@@ -7661,7 +7666,7 @@ USER_FUNC(puni_disp_info_sub) {
 }
 
 /**
- * Event started by maps with spiders: waits until the Puni system is running (mode 2) and
+ * Event started by maps with spiders: waits for the game sequence (SEQ_GAME) and
  * then keeps the spider NPCs registered as Puni targets, every frame.
  */
 EVT_BEGIN(puni_piders_check)
@@ -7723,8 +7728,8 @@ EVT_END()
 
 /**
  * Drives the Puni system through a map visit with the loading-zone (bero) steps.
- * Hides the counter on entry (unless coming in through a zone from another area), waits for the entry step,
- * sets the system mode 1 (position setup), then sets up the Punies
+ * Shows the counter on entry at once unless coming in through a zone from another area (then it fades in),
+ * sets the system mode 1 (position setup), waits for the entry step, then sets up the Punies
  * and Jabbi (evt_puni_setup, evt_toge_setup) in mode 2 (running).
  * When the map ends it goes to mode 3, notes the previous map, waits for doors, fades the counter,
  * silences the crowd's looping sounds and sends the Punies out (evt_puni_exit). Loops for every map change.
@@ -7807,8 +7812,8 @@ EVT_END()
 
 /**
  * Registers the six stand-in NPCs for the Puni system (a Puni, a Jabbi, the guide, his sister,
- * the little Jabbi and the rival), parks them out of sight at y -1000 and makes them untouchable
- * and without shadows.
+ * the little Jabbi and the rival), parks them out of sight at y -1000 and makes them untouchable,
+ * without wall collision and with shadows not projected to the floor.
  */
 EVT_BEGIN(mri_puni_init_dvd)
     CALL(evt_npc_entry, STRING("\203v\203jsp"), STRING("c_puni"))
@@ -7841,8 +7846,8 @@ EVT_END()
 /**
  * Map init call that starts the Puni system if it is needed at the current story point.
  * The stand-ins are always registered; before STORY_STG2_10_SECRET_ENTRANCE_REVEALED and
- * after the epilogue there are no Punies.
- * During the Grodus chapter they exist only in mri_00
+ * from the epilogue on there are no Punies.
+ * At STORY_STG8_15_GRODUS they exist only in mri_00
  * when entered at the ending scenes (sekai_yami1 or minnnanokoe);
  * between the praise and the queen's chamber they exist only in mri_00 and only
  * while the player has not left the tree.

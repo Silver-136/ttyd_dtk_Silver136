@@ -93,7 +93,7 @@ static inline f32 orbit_update(f32 x) { return x * 3.141592f / 180.0f; }
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 
-/** Declarations of the battle-camera helpers defined below. */
+/** Declarations of the script helpers defined below. */
 USER_FUNC(cam_test_func);
 USER_FUNC(cam_test_init_func);
 USER_FUNC(dai3_butai_main_func);
@@ -604,7 +604,7 @@ NanNPC* random_choice_target(s32 type) {
 
 /**
  * Per-frame behaviour of the sailors that jump during the fight (tobikakaru):
- * wait a random time, hop in a parabola onto a random target sailor, wait, then hop back to their home spot;
+ * wait a random time, hop in a parabola onto a random member of the other crowd (random_choice_target), wait, then hop back to their home spot;
  * states 20 to 22 are the hop and the waits.
  */
 void tobikakari_seq00(NanNPC* npc) {
@@ -899,7 +899,7 @@ static ExtTexInfo ext_entry_data[] = {
     {0},
 };
 
-/** Frame sequence of the walking and standing sailors of the beach crowd, ended by -1. */
+/** Frame sequence of the standing sailors (S_1) of the beach crowd, ended by -1. */
 static s16 suifu_animtbl[] = {
     0, 0, 0, 1, 1, 1, 2, 2,
     2, 3, 3, 3, 4, 4, 4, 5,
@@ -913,7 +913,7 @@ static s16 suifu_animtbl[] = {
 #endif
 };
 
-/** Frame sequence of the running sailors of the crowd (the panic and the jumping fight), ended by -1. */
+/** Frame sequence of the running sailors of the crowd (the jumping fight), ended by -1. */
 s16 suifu_animtbl_run[] = {
     14, 14, 15, 15, 16, 16, 17, 17,
     18, 18, 19, 19, 20, 20, 21, 21,
@@ -1154,7 +1154,7 @@ static EVT_BEGIN(suifu_c_init)
 EVT_END()
 
 /**
- * Talk event of sailor C: stg5_muj_94_01 while the X-Naut ship is coming (STG5_36_HOLE_IN_THE_WALL),
+ * Talk event of sailor C: stg5_muj_94_01 before the X-Naut ship arrives (STG5_36_HOLE_IN_THE_WALL),
  * stg5_muj_117_04 in the later beach stage.
  */
 static EVT_BEGIN(suifu_c_talk)
@@ -1234,7 +1234,7 @@ EVT_END()
 /**
  * Talk event of Cortez as the ferryman (STG5_58_FAIR_WINDS on):
  * asks whether to sail to Rogueport (hune_00).
- * On yes he answers (hune_02), GSWF_GOR00_SHIP_ARRIVAL_PENDING is set and muj_gor_ship_start sails the ship;
+ * On yes he answers (hune_02), GSWF_MUJ_SAILING_TO_ROGUEPORT is set and muj_gor_ship_start sails the ship;
  * on no he says hune_01.
  */
 static EVT_BEGIN(korutesu_talk)
@@ -1466,7 +1466,7 @@ EVT_BEGIN(koburon_evt)
 EVT_END()
 
 /**
- * Talk event of the flashy man (Kiza) who appears on the beach in the ending (STG8_00_START on):
+ * Talk event of the flashy man (Kiza) who appears on the beach from STG8_00_START on:
  * says stg5_muj_146_02_01.
  */
 static EVT_BEGIN(kiza_talk)
@@ -1489,7 +1489,7 @@ static EVT_BEGIN(kiza_entry)
 EVT_END()
 
 /**
- * NPCs of the beach: the rough sailor, Flavio, the bespectacled sailor, Lord Crump's officer disguise, the
+ * NPCs of the beach: the rough sailor, Flavio, the bespectacled sailor (Four-Eyes), Lord Crump (第三勢力幹部), the
  * nervous sailor, sailors A, bomb, C, D and E, Cortez, Mony, Peeton and the Whacka.
  */
 static NpcSetupInfo npcEnt[] = {
@@ -1891,8 +1891,9 @@ EVT_BEGIN(suifu_random_sub)
 EVT_END()
 
 /**
- * Fires a cannonball splash at the ship's position: a smoke puff and a splash effect at the waterline;
- * used while the ships trade shots in the pirates versus X-Nauts scene.
+ * Fires the X-Naut ship's cannon: a smoke puff near the ship (GW(13) to GW(15) plus an offset) and,
+ * a second later, a splash effect at the target (LW(0), -20, LW(2));
+ * used while the X-Naut ship fires on the beach (dai3_shurai_sub, dai3_shurai_after).
  */
 EVT_BEGIN(tama_shoot)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_CANNON_FIRING1"), 0)
@@ -1920,7 +1921,7 @@ EVT_END()
 
 /**
  * Makes the NPC named in LW(0) look around: waits random times
- * and flips its facing (evt_npc_reverse_ry) repeatedly, as nervous sailors do.
+ * and flips its facing (evt_npc_reverse_ry) twice, then faces it left (ry 270), as nervous sailors do.
  */
 EVT_BEGIN(npc_kyorokyoro)
     CALL(evt_sub_random, 1000, LW(10))
@@ -1941,7 +1942,7 @@ EVT_END()
 /**
  * The X-Naut ship's arrival (STG5_36_HOLE_IN_THE_WALL):
  * when Mario steps onto the pier the X-Naut ship rushes in,
- * Flavio and the sailors panic (stg5_muj_95, 96 and on),
+ * Flavio and the sailors greet Mario (stg5_muj_95, 96) and panic once the cannons fire,
  * Mario and his partner are positioned for the scene; the story advances to STG5_40_TRUE_IDENTITY and control returns.
  */
 EVT_BEGIN(dai3_shurai_sub)
@@ -2130,7 +2131,7 @@ EVT_BEGIN(dai3_shurai_sub)
     CALL(evt_npc_set_position, STRING("第三勢力幹部"), 0, -100, 0)
     CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 90)
 
-    // The bespectacled sailor, Four-Eyes, appears on the X-Naut ship and jumps over to the pier.
+    // The bespectacled sailor, Four-Eyes, appears and jumps up onto the X-Naut ship.
     CALL(evt_msg_print, 0, STRING("stg5_muj_105"), 0, STRING("めがね水夫"))
     WAIT_MS(1000)
     CALL(evt_npc_jump_position_nohit, STRING("めがね水夫"), -802, 162, 0, 500, 120)
@@ -2457,8 +2458,8 @@ EVT_BEGIN(iwapera_offscreen_end)
 EVT_END()
 
 /**
- * Rams the X-Naut ship into the shore: plays the impact sound,
- * shakes the camera and swings the ship's heading (GW(1)) by 15 degrees over one second.
+ * The X-Naut ship's impact at the end of its approach: plays the impact sound, shakes the camera,
+ * swings the ship's heading (GW(1)) by 15 degrees and moves its centre x (GW(2)) by -80 over one second.
  */
 EVT_BEGIN(dai3_kurukuru)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_IMPACT1"), 0)
@@ -2950,8 +2951,8 @@ static EVT_BEGIN(_kemuri_sub)
 EVT_END()
 
 /**
- * Spawns the smoke puffs kicked up where the jumping sailors land (two _kemuri_sub events with random
- * delays).
+ * Spawns smoke puffs at random spots during the jumping fight (two _kemuri_sub events, then a random
+ * 200 to 400 ms delay).
  */
 EVT_BEGIN(tobikakari_kemuri)
     LOOP(0)
@@ -2988,7 +2989,7 @@ EVT_END()
 
 /**
  * The big scene of Keelhaul Key: the pirate and X-Naut ships come together,
- * Cortez and Lord Crump (the X-Naut "third force", dai3) trade insults (stg5_muj_118 to 123),
+ * Cortez and Lord Crump (the X-Naut "third force", dai3) trade insults (stg5_muj_118 to 122),
  * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
  * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
  */
@@ -3024,7 +3025,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_cam3d_evt_set, -847, 334, 977, -847, 78, -475, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
 
-    // Lord Crump gloats that he has ammunition to spare as the X-Naut ship starts to fire.
+    // Lord Crump gloats that he has ammunition to spare; then the cannon loop in GW(8) is deleted.
     CALL(evt_msg_print, 0, STRING("stg5_muj_118"), 0, STRING("第三勢力幹部"))
     DELETE_EVENT(GW(8))
     CALL(evt_cam3d_evt_set, 0, 470, -91, 0, 400, -383, 500, EASING_SINE_IN_OUT)
@@ -3607,7 +3608,7 @@ static EVT_BEGIN(option_ship_mario)
     RETURN
 EVT_END()
 
-/** Loop that moves the pirate ship, its hit box and the water as the ship departs, from the position GW(0). */
+/** Loop that moves the pirate ship and its hit box as the ship departs, from the position GW(0), GW(1). */
 EVT_BEGIN(option_ship_main)
     LOOP(0)
         SET_VALUE(LW(0), GW(0))
@@ -4005,8 +4006,9 @@ EVT_BEGIN(muj_gor_ship_start)
 EVT_END()
 
 /**
- * Boarding the pirate ship at the pier: freezes the party,
- * slides the ship by 600 units while the camera follows, and gives control back;
+ * Arrival of the pirate ship from Rogueport (map init, when GSWF_GOR_SAILING_TO_KEELHAUL is set): freezes the
+ * party, places Mario, the partners and Cortez aboard, slides the ship 600 units in to the pier
+ * under a fixed camera, and gives control back;
  * when the story is STG5_62_AN_ILL_DON_PIANTA it advances the story to STG5_63_KEELHAUL_ANYTIME
  * and restores the Keelhaul music.
  */
@@ -4212,8 +4214,8 @@ EVT_BEGIN(muj_00_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("船ダミー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_DRAW | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-    // Place the spinning floor with its Star Piece and the paper-mode bush and turntable,
-    // and start the water and ship animations.
+    // Place the spinning floor with its Star Piece, load the paper animations OFF_d_yabu (rock wall)
+    // and OFF_d_kaiten (ship turn-around), and start the water and ship animations.
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 1375, 35, -430, STRING("S_ground"), 125, GSWF_STARPIECE_71)
     CALL(evt_paper_entry, STRING("OFF_d_yabu"))
     CALL(evt_paper_entry, STRING("OFF_d_kaiten"))

@@ -289,7 +289,7 @@ static f32 spline_dt[] = {
 };
 
 /**
- * Cutscene when Mario first reaches the sealed Great Boggly Tree:
+ * Cutscene when Mario talks to Punio at the sealed Great Boggly Tree (STG2_03_THE_GREAT_TREE):
  * Punio, the Puni who guides him, tells the party the entrance is locked,
  * runs off along a spline path and ends in front of the tree.
  * Sets the story to STG2_03_01_SEALED_ENTRANCE.
@@ -351,8 +351,9 @@ EVT_BEGIN(seal_bigtree)
 EVT_END()
 
 /**
- * Second cutscene at the sealed tree entrance: Punio talks to Mario, hops away and vanishes,
- * Mario's partner steps up, and the west exit gets the lost-item exit.
+ * Second cutscene at the sealed tree entrance: Punio tells Mario about a hidden secret entrance and Flurrie,
+ * hops twice, then the NPC is removed and Punio joins as Mario's follower (party slot 1, PARTY_MEMBER_PUNIO)
+ * at his spot; the west exit gets the lost-item exit.
  * Sets the story to STG2_03_02_SEALED_ENTRANCE_2.
  */
 EVT_BEGIN(seal_bigtree2)
@@ -543,7 +544,7 @@ static EVT_BEGIN(elder_talk)
 EVT_END()
 
 /**
- * Init script of Fabio, the merchant: once his request (trouble 28) has been solved,
+ * Init script of Fabio, the merchant: once trouble 28 (TROUBLE_ROUST_THESE_CADS) has been solved,
  * and outside the final story point, he stands on the left side of the yard.
  */
 static EVT_BEGIN(fabio_init)
@@ -754,7 +755,7 @@ EVT_END()
 
 /**
  * Exit script of the northeast door (to mri_01):
- * the first time through, Punio is hidden and the party member takes his place,
+ * the first time through, the Punio NPC is hidden and follower Punio (party slot 1) takes his place,
  * then he is marked as following Mario (GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO). Returns 0 to the door code in LW(0).
  */
 EVT_BEGIN(out_ne_bero)
@@ -1154,7 +1155,7 @@ USER_FUNC(evt_mri_cloud_ent) {
     return EVT_RETURN_DONE;
 }
 
-/** Event that runs the cloud system (evt_cloud_main) for the clouds hiding the tree top. */
+/** Event that runs one registered cloud's state machine (evt_cloud_main) every frame. */
 static EVT_BEGIN(evt_cloud_main_evt)
     CALL(evt_cloud_main)
     RETURN
@@ -1177,7 +1178,7 @@ f32 guide_move_data[] = {
 EVT_BEGIN(open_bigtree)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
 
-    // A success jingle plays over the music as the clouds clear and the controls are taken.
+    // The music pauses and a success jingle plays as the clouds clear and the controls are taken.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 1)
@@ -1214,7 +1215,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
 
-    // Punio appears on the ledge and jumps down to Mario and Flurrie.
+    // Follower Punio jumps up to the ledge, becomes an NPC again and hops in through the secret entrance.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_00"), 0, STRING("extparty"))
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
@@ -1260,7 +1261,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
-    // Punio runs to the hidden door and unlocks it; the lamp lights and the secret door (S_doa) slides open.
+    // Punio calls from inside the tree and unlocks the door; the lamp lights and the secret door (S_doa) slides open.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_02"), 0, STRING("ガイド"))
     CALL(evt_cam3d_evt_set, 140, 90, 193, 140, 45, -154, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -1468,7 +1469,7 @@ EVT_END()
 
 /**
  * Per-NPC chatter during the chapter 8 dark scene:
- * once the camera counter GW(0) reaches the NPC's x position it shows a surprised speech bubble above it
+ * once the dark-view sweep position GW(0) reaches the NPC's x position it shows a surprised speech bubble above it
  * and keeps turning around now and then.
  */
 static EVT_BEGIN(sekai_yami_npc)
@@ -1496,7 +1497,7 @@ EVT_END()
 
 /**
  * Per-Puni chatter during the chapter 8 dark scene:
- * once the camera counter GW(0) reaches the Puni's x position it shows a surprised speech bubble
+ * once the dark-view sweep position GW(0) reaches the Puni's x position it shows a surprised speech bubble
  * and keeps turning around now and then.
  */
 EVT_BEGIN(sekai_yami_puni)
@@ -1830,7 +1831,7 @@ static USER_FUNC(sysflag) {
 /**
  * Map init script of mri_00, the front yard of the Great Boggly Tree:
  * registers the NPCs (Punio, the rival Puni, the little Jabbi, Punio's sister, the Puni elder,
- * Fabio and the dancers), the doors, the clouds, the FP Plus badge and the language-specific sign,
+ * Fabio and the dancers), the doors, the clouds, the FP Plus badge and (US and later) the language-specific sign,
  * and starts the chapter 2 scenes and the chapter 8 Puni crowd scenes depending on the story progress.
  */
 EVT_BEGIN(mri_00_init_evt)
@@ -1924,7 +1925,7 @@ EVT_BEGIN(mri_00_init_evt)
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
 
-            // Chapter 2 music and ambience for the Great Tree.
+            // The Great Tree music and ambience (on the first arrival the music starts 2 seconds later).
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
         ELSE
@@ -1943,7 +1944,7 @@ EVT_BEGIN(mri_00_init_evt)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
             IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 1)
 
-                // While Punio follows Mario, the three dancer Punies dance in the yard.
+                // While Punio follows Mario, the three dancers (the travelling sisters) stand in the yard.
                 CALL_CHILD(PTR(odoriko_1_init))
                 CALL_CHILD(PTR(odoriko_2_init))
                 CALL_CHILD(PTR(odoriko_3_init))

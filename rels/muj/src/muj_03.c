@@ -34,9 +34,9 @@ static KusaAccess kusa_tbl[9];
 EvtWord muj_03_init_evt[112];
 
 /**
- * Trigger event (case event) of the jungle path:
- * the first time Mario passes after STG5_13_BOBBERY_THE_BRIDGE it starts nigeru_suifu01
- * and sets GSWF_MUJ03_RUNAWAY_SAILOR_SEEN.
+ * Enter event of e_bero (Mario arriving from muj_04):
+ * the first time he enters there from STG5_13_BOBBERY_THE_BRIDGE on it starts nigeru_suifu01,
+ * sets GSWF_MUJ_03_FLEEING_SAILORS_SEEN and returns 1 in LW(0) (0 otherwise).
  */
 EVT_BEGIN(muj_03_event_01)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
@@ -216,7 +216,8 @@ static KusaAccess kusa_tbl[] = {
 
 /**
  * Map init for muj_03 (the jungle path): starts the jungle music and ambience, registers the exits,
- * the coin and Thunder Rage ? blocks, a hidden brick, a Shine Sprite block and the NPCs.
+ * the coin and Thunder Rage ? blocks, two hidden blocks (ten coins, Jammin' Jelly), a plain brick,
+ * a Shine Sprite block, a Star Piece, the trees and the bushes.
  */
 EVT_BEGIN(muj_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))

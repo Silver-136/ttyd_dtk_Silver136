@@ -87,7 +87,7 @@ EVT_END()
 
 /**
  * Init of villager Puni 6: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (390, 0, -35) and sets its facing.
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (390, 0, -35) and sets its facing.
  */
 EVT_BEGIN(puni_6_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -113,7 +113,7 @@ EVT_END()
 
 /**
  * Init of villager Puni 7: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-350, -310, 100).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-350, -310, 100).
  */
 EVT_BEGIN(puni_7_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -139,7 +139,7 @@ EVT_END()
 
 /**
  * Init of villager Puni 8: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-380, 0, 10).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-380, 0, 10).
  */
 EVT_BEGIN(puni_8_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -164,7 +164,7 @@ EVT_END()
 
 /**
  * Init of villager Puni 9: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (330, -310, 45) and sets its facing.
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (330, -310, 45) and sets its facing.
  */
 EVT_BEGIN(puni_9_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -190,7 +190,7 @@ EVT_END()
 
 /**
  * Init of villager Puni 10: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-120, -310, 50).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-120, -310, 50).
  */
 EVT_BEGIN(puni_10_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -226,7 +226,7 @@ EVT_END()
 
 /**
  * Init of villager Puni 11: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-190, -310, 125).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-190, -310, 125).
  */
 EVT_BEGIN(puni_11_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -349,7 +349,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
-/** Closes the south door (S_doa); used as the door-close script of that loading zone. */
+/** Closes the door model S_doa of the east door e_bero; used as the door-close script of that loading zone. */
 static EVT_BEGIN(bero_s_doa_close)
     SET_VALUE(LW(9), 1)
     SET_VALUE(LW(10), STRING("S_doa"))
@@ -357,7 +357,7 @@ static EVT_BEGIN(bero_s_doa_close)
     RETURN
 EVT_END()
 
-/** Opens the south door (S_doa); used as the door-open script of that loading zone. */
+/** Opens the door model S_doa of the east door e_bero; used as the door-open script of that loading zone. */
 static EVT_BEGIN(bero_s_doa_open)
     SET_VALUE(LW(9), 1)
     SET_VALUE(LW(10), STRING("S_doa"))
@@ -686,7 +686,7 @@ EVT_END()
  * Map init script of mri_06, a Puni room with the Jabbi/Piders and a save block:
  * sets up the Puni, NPCs, save block, planters, the Damage Dodge P badge block and the hidden brick,
  * plays the bomb-alarm music while the time bomb is active,
- * and drops the fake wall (S_nisekabe) with Flurrie's wind until it is blown away.
+ * and registers the fake wall (S_nisekabe) for Flurrie's wind until it is blown away (then it stays hidden).
  */
 EVT_BEGIN(mri_06_init_evt)
     CALL(evt_puni_mem_init)

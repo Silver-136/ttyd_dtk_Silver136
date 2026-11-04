@@ -1,5 +1,5 @@
-// mri_14 (巨木の中, The Great Tree): the deepest room: the Crystal Star appears and Lord Crump takes it
-// (dai3_kanbu), then leaves a time bomb (time_bomb); moving floor and planters.
+// mri_14 (巨木の中, The Great Tree): the deepest room: Lord Crump appears (dai3_kanbu), then the Crystal Star
+// appears, Crump takes it and leaves a time bomb (time_bomb); moving floor and planters.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -124,7 +124,8 @@ static USER_FUNC(evtflash) {
 
 /**
  * Entry script of the west loading zone: at STG2_22_LORD_CRUMP_APPEARS,
- * if the time bomb scene is still pending, Mario and his partner are placed inside the room,
+ * if the re-entry after Lord Crump's appearance is pending (GSWF_MRI_14_CRUMP_REENTRY_PENDING, set by dai3_kanbu,
+ * cleared here), Mario and his partner are placed at the west edge,
  * exit execution is briefly disabled and re-enabled, and they walk in; returns 1 in LW(0) to skip the normal entry.
  * Otherwise returns 0.
  */
@@ -292,7 +293,7 @@ EVT_BEGIN(dai3_kanbu)
     RETURN
 EVT_END()
 
-/** Flashes the screen once with the light sound while GF(0) is set. */
+/** Flashes the screen once with the light sound after GF(0) is clear; GF(0) is held set during the flash. */
 EVT_BEGIN(flash_and_wait)
     WAIT_WHILE(GF(0))
     SET_VALUE(GF(0), 1)
@@ -324,7 +325,7 @@ USER_FUNC(evt_npc_set_anim_localtime) {
     return EVT_RETURN_DONE;
 }
 
-/** Flashes the screen twice in a row with the light sound while GF(0) is set. */
+/** Flashes the screen twice in a row with the light sound after GF(0) is clear; GF(0) is held set meanwhile. */
 EVT_BEGIN(flash2_and_wait)
     WAIT_WHILE(GF(0))
     SET_VALUE(GF(0), 1)
@@ -876,7 +877,7 @@ EVT_END()
 /**
  * Hit/talk script of the orb pedestal: if empty, Mario picks an item to put on it (cancel ends the script),
  * the orb appears with the light beam; if full, Mario takes the orb back.
- * In the demo, at STG2_22_LORD_CRUMP_APPEARS he is released at once
+ * In the June US demo and the JP demo, at STG2_22_LORD_CRUMP_APPEARS he is released at once
  * and held by punipuni_mario_halt for the cutscene.
  */
 static EVT_BEGIN(punipuni_ball00)

@@ -323,7 +323,7 @@ static USER_FUNC(tornade_alpha_func) {
 }
 
 /**
- * Debug stub for muj_mario_pos_osreport: reads Mario's state and the A-button trigger
+ * Debug stub for muj_mario_pos_osreport: reads Mario's state and pad 0's button triggers
  * but prints nothing in this build; always blocks.
  */
 USER_FUNC(muj_mario_pos_osreport_func) {
@@ -413,7 +413,8 @@ EVT_END()
 
 /**
  * Cortez's exit: the same tornado effect fades in around him while he flickers hidden
- * and visible at growing intervals, then the tornado is deleted and he stays hidden.
+ * and visible at growing intervals, and the tornado is deleted after three seconds. The script returns at once
+ * (the effects run on in inline events) and the last flicker leaves him drawn; the caller moves him away.
  * Called at the end of his scenes in muj_12.
  */
 EVT_BEGIN(korutesu_vanish)

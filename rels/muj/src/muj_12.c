@@ -80,7 +80,7 @@ static const GXColor evtflash_col2 = {0xFF, 0xFF, 0xFF, 0xFF};
 
 /**
  * Darkens the room: fades map blend colour 0 from white to black over LW(10) ms;
- * korutesu_event uses it (600 ms) before the closing message.
+ * korutesu_event_after uses it (600 ms) before the closing message.
  */
 static EVT_BEGIN(back_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, LW(10))
@@ -260,7 +260,10 @@ EVT_BEGIN(korutesu_flush)
     RETURN
 EVT_END()
 
-/** A shorter burst of screen flashes with random pauses (one second at most), used in the fight with Cortez. */
+/**
+ * Three screen flashes with random pauses (0.8 s plus up to 0.5 s, then 1.6 s plus up to 1 s),
+ * used after the battle with Cortez.
+ */
 EVT_BEGIN(korutesu_flush2)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_KOR_APPEAR_LIGHT1"), 0)
     CALL(evtflash)
@@ -754,7 +757,7 @@ EVT_BEGIN(kosho_event)
 #endif
     WAIT_MS(500)
 
-    // Cortez has his Black Skull back and Flavio asks for thanks.
+    // With the gem back, Cortez's ship the Black Skull can sail again, and Flavio asks for thanks.
     CALL(evt_msg_print, 0, STRING("stg5_dou_37"), 0, STRING("コルテス"))
     CALL(evt_cam3d_evt_set, -120, 107, 337, -120, 40, -6, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)

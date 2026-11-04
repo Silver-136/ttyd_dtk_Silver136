@@ -137,8 +137,9 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Positions Mario, his partner, Mony and Peton for a conversation with the couple:
- * walks Mario and the partner to a spot beside whichever side of the path they are on (decided by LW(10))
- * and locks Mario's pose after he moves into place.
+ * LW(10) 0 (Mony was talked to): Mario and the partner walk to Mony's right and Peton walks up beside her;
+ * LW(10) 1 (Peton): they walk to Peton's left and Mony walks up beside him.
+ * Locks Mario's pose after he moves into place.
  */
 EVT_BEGIN(mony_peton_setup)
     IF_INT_EQUAL(LW(10), 0)
@@ -403,7 +404,7 @@ EVT_BEGIN(find_wedding_ring)
 EVT_END()
 
 /**
- * Init event of Mony in the jungle: sets status bit 2 (she turns to face the way she moves)
+ * Init event of Mony in the jungle: sets NPC_STATUS_FACE_MOVE_DIR (she turns to face the way she moves)
  * and between STG5_63_KEELHAUL_ANYTIME and STG5_64_LOST_WEDDING_RING she is placed at (500, 0, -40).
  */
 static EVT_BEGIN(mony_init)
@@ -648,7 +649,8 @@ static KusaAccess kusa_tbl[] = {
 /**
  * Map init for muj_02 (the jungle): starts the jungle music and ambience, registers the exits, NPCs,
  * a Head Rattle badge block and a Courage Shell ? block, the Keel Mango tree and grass patches,
- * and removes the Chorobon enemy NPCs once the story is past STG5_59_ROGUEPORT_DOCK.
+ * and removes the Chorobon enemy NPCs 1, 2 and 7 from STG5_59_ROGUEPORT_DOCK on (US and PAL remove
+ * チョロボン２ at every story value).
  */
 EVT_BEGIN(muj_02_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))

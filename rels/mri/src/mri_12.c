@@ -35,8 +35,8 @@ static EvtWord breakyuka_main[9];
 EvtWord mri_12_init_evt[140];
 
 /**
- * Exits of mri_12: east road e_bero to mri_11 (w_bero); east road e_bero_2 to mri_17 (w_bero); dokan1
- * (scripted pipe); dokan2 (scripted pipe); pipe dokan3 to mri_18 (dokan1).
+ * Exits of mri_12: east road e_bero to mri_11 (w_bero); east road e_bero_2 to mri_17 (w_bero); pipe dokan1
+ * to dokan2 in this room; pipe dokan2 to dokan1 in this room; pipe dokan3 to mri_18 (dokan1).
  */
 static BeroEntry bero_entry_data[] = {
     {
@@ -191,7 +191,7 @@ static KusaAccess ueki_access_data[] = {
 };
 
 /**
- * Init script of the breaking floor: until the floor has fallen (GSWF_MRI12_FLOOR_BROKEN is 0) the lower floor
+ * Init script of the breaking floor: until the floor has fallen (GSWF_MRI_12_BREAKING_FLOOR_BROKEN is 0) the lower floor
  * piece (A_f2_rak_01) has its collision off.
  */
 static EVT_BEGIN(breakyuka_init)
@@ -202,7 +202,7 @@ static EVT_BEGIN(breakyuka_init)
 EVT_END()
 
 /**
- * Main script when the floor gives way under the Puni weight:
+ * Main script when the breaking floor gives way:
  * turns on the collision of the lower floor piece and makes every Puni that is standing over the hole fall.
  */
 static EVT_BEGIN(breakyuka_main)

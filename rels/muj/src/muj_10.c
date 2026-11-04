@@ -1,5 +1,5 @@
 // muj_10 (無人島, Keelhaul Key): the end of Pirate's Grotto (from dou_11): the hidden dock and
-// ship where the crew is driven out and Cortez appears (korutesu_appear_event).
+// ship where Mario is thrown off the ship (oidasare_event) and Cortez appears to the crew (korutesu_appear_event).
 
 #include "version.h"
 #include "eff/n64/eff_kameki_tornade_n64.h"
@@ -221,8 +221,8 @@ static EVT_BEGIN(door_custom)
 EVT_END()
 
 /**
- * Enter event of both exits: at STG5_41_RETURN_TO_THE_GROTTO it runs door_custom and walks Mario
- * and both partners in from the corridor door (-46, 45, -287) one after another,
+ * Enter event of both exits: at STG5_41_RETURN_TO_THE_GROTTO it runs door_custom and walks Mario,
+ * his partner and the follower (party slot 1) in from the corridor door (-46, 45, -287) one after another,
  * returning LW(0) = 1 so the normal walk-in is skipped (evt_bero_mario_enter); otherwise it returns LW(0) = 0.
  */
 static EVT_BEGIN(bero_in_event)
@@ -536,10 +536,12 @@ s32 senin_event_erumospos[] = {
 
 /**
  * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
- * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
+ * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka; also places the 60 Embers
+ * (invisible, alpha 0) and the named sailors, Mony and Peton. Versions before US play the Cortez scene here too
+ * (US and PAL: korutesu_appear_event).
  */
 EVT_BEGIN(senin_event)
-    // The crew is driven out: Mario loses control and the dock crowd is placed.
+    // The crew gathers: Mario loses control and the dock crowd is placed.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_nannpc_init, PTR(test_ext_entry_data), 0, 0, 0, 155)
     CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
@@ -765,8 +767,9 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 /**
  * Map init for muj_10 (the hidden dock): picks music for the story stage, registers the exits and NPCs,
- * hides or places sailors, Mony and Cortez for the current stage and spawns the scene (nazo_event,
- * oidasare_event, senin_event or korutesu_appear_event).
+ * spawns the scene for the current stage (nazo_event, oidasare_event, senin_event or korutesu_appear_event),
+ * hides the ship and the bridge from STG5_42_PIRATES_VS_X_NAUTS on and, outside the demos, places the
+ * heart and save blocks before STG5_41_RETURN_TO_THE_GROTTO.
  */
 EVT_BEGIN(muj_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)

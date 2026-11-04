@@ -45,8 +45,8 @@ BeroEntry bero_black_shadow[] = {
 };
 
 /**
- * Exits of mri_20: pipe dokan1 to mri_03 (dokan); pipe dokan2 to mri_02 (dokan3); dokan3 (scripted pipe);
- * dokan4 (scripted pipe).
+ * Exits of mri_20: pipe dokan1 to mri_03 (dokan); pipe dokan2 to mri_02 (dokan3); pipe dokan3 to dokan4
+ * in this room; pipe dokan4 to dokan3 in this room.
  */
 static BeroEntry bero_entry_data[] = {
     {

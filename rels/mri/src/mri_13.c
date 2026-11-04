@@ -293,7 +293,10 @@ USER_FUNC(evt_puni_force_pose) {
     return EVT_RETURN_DONE;
 }
 
-/** Camera shake while the elevator platform moves (a long shake in the demo builds, five 1-second shakes later). */
+/**
+ * Camera shake while the elevator platform moves (in the June US demo and the JP demo 1.5-second shakes repeated
+ * until the script is deleted, in later builds five 1-second shakes).
+ */
 EVT_BEGIN(yuka_shake)
 #if VERSION <= VERSION_DEMO_JP
     LOOP(0)

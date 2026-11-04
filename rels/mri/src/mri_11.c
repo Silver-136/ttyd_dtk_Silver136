@@ -56,7 +56,7 @@ EvtWord mri_11_init_evt[192];
 
 /**
  * Init of Jabbi villager 7: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-220, 0, 110).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-220, 0, 110).
  */
 EVT_BEGIN(toge_7_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -88,7 +88,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 8: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-75, 0, -100).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-75, 0, -100).
  */
 EVT_BEGIN(toge_8_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -120,7 +120,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 9: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (70, 0, 80).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (70, 0, 80).
  */
 EVT_BEGIN(toge_9_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -152,7 +152,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 10: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (180, 0, 60).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (180, 0, 60).
  */
 EVT_BEGIN(toge_10_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -195,7 +195,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 11: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-70, 0, -35).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-70, 0, -35).
  */
 EVT_BEGIN(toge_11_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -387,10 +387,10 @@ EVT_END()
 
 /**
  * Victory scene of the second Puni-versus-Jabbi fight; the mirror image of the one in mri_08.
- * Waits for all active Punies to be at y=0 in the early demos, or no higher than y=0 in retail;
+ * Waits for all active Punies to be at y=0 in the June US demo and the JP demo, or no higher than y=0 in the other versions;
  * the camera moves to the crowd, Punio speaks (stg2_mri_e17_01_04),
  * the crowd charges the hive on the left, the beacon breaks,
- * the music returns and the fight is marked won (GSWF_MRI11_JABBI_FIGHT2_WON). Mario gets control back.
+ * the music returns and the fight is marked won (GSWF_MRI_11_JABBI_SQUAD_DEFEATED). Mario gets control back.
  */
 static EVT_BEGIN(puni_win)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -559,7 +559,7 @@ EVT_END()
 
 /**
  * Waits for Mario to reach x=-100 or farther left, then lets the Punies attack (evt_puni_attack_on),
- * shows the Jabbi message (stg2_mri_e17_01_03) and starts the win-or-lose check.
+ * shows a message without a speech-bubble tail (stg2_mri_e17_01_03) and starts the win-or-lose check.
  */
 static EVT_BEGIN(puni_vs_toge_battlewait)
     LOOP(0)
@@ -617,7 +617,7 @@ EVT_END()
 /**
  * Start of the second fight with the Jabbi: as puni_vs_toge_init,
  * but Punio speaks to the Puni (stg2_mri_e17_01_01 and 01_02) while the camera zooms;
- * sets GSWF_MRI11_JABBI_FIGHT2_STARTED.
+ * sets GSWF_MRI_11_JABBI_SQUAD_INTRO_SEEN.
  */
 static EVT_BEGIN(puni_vs_toge)
     CALL(evt_puni_wait_systemmode, 2)
@@ -670,8 +670,8 @@ static KusaAccess ueki_access_data[] = {
 /**
  * Map init script of mri_11, the second Jabbi fortress:
  * like mri_08 it starts the Punies-versus-Jabbi fight (or its resume scene)
- * until it has been won (GSWF_MRI11_JABBI_FIGHT2_WON),
- * keeps the fortress and walls in place until then and hides them afterwards,
+ * until it has been won (GSWF_MRI_11_JABBI_SQUAD_DEFEATED),
+ * keeps the fortress in place until then and hides it afterwards (the A_gra_l collision stays off until the win),
  * and plays the waterfall and water animations.
  */
 EVT_BEGIN(mri_11_init_evt)

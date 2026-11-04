@@ -190,7 +190,7 @@ static USER_FUNC(evtflash) {
  * Checks whether the Punies are ready for the Puni elder's check.
  * Returns in args[0]: 0 when missing Punies are counted, 1 when neither missing nor trapped Punies are counted,
  * 2 when traps are counted but no missing Punies are counted.
- * Punio waiting at the cell in mri_03 is not counted (retail versions).
+ * Punio waiting at the cell in mri_03 is not counted (JP and later versions, the September demos included).
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(elder_talk_sub_punicheck) {
@@ -360,7 +360,8 @@ s32 puni_return_data[] = {
 /**
  * Brings missing Punies back: for each eligible Puni slot (1 to 102) that is lost or left in another area,
  * clears its area data and re-enters it at the next free spot from puni_return_data in the village.
- * Puni that are already beside Mario stay. Retail also skips trapped Punies and Punio waiting at the jail.
+ * Puni that are already beside Mario stay. JP and later versions (the September demos included) also skip trapped
+ * Punies and Punio waiting at the jail.
  */
 EVT_BEGIN(puni_return)
     SET_VALUE(LW(10), 1)
@@ -418,9 +419,10 @@ EVT_BEGIN(puni_return)
 EVT_END()
 
 /**
- * Dialog of the Puni elder's "gather the Punies" offer: the elder asks whether to call them;
+ * Dialog of the Puni elder's "gather the Punies" offer: the elder offers three choices;
  * if some Punies are lost the elder calls them back with puni_return (a loud call with a camera zoom),
- * then reports that everyone has gathered. The camera is restored and the Punies unfreeze at the end.
+ * then reports that everyone has gathered. The "I love you" choice freezes the Punies and unfreezes them
+ * (and restores the camera) at its end.
  */
 EVT_BEGIN(elder_talk_sub)
 
@@ -556,8 +558,8 @@ static s32 iri_17_item_tbl[] = {
  * Talk script of the Puni elder.
  * Handles two of Rogueport's trouble-center requests first:
  * trouble 10 (bring a Life Shroom, pays 60 coins)
- * and trouble 17 (take the Routing Slip: the elder asks which item to hand over,
- * then gives out the slip as an item).
+ * and trouble 17 (Mario hands over the Routing Slip from an item window,
+ * then the elder gives the slip back as an item).
  * Otherwise, at story points 15_11 to 26, she gives the Crystal Star hint while the Elder tip flag is clear,
  * or opens elder_talk_sub's menu once it is set,
  * and has a different line after the praise and after the game's end.
@@ -644,7 +646,8 @@ EVT_END()
 
 /**
  * Talk script of the first villager Puni.
- * Its General White hint branch is at STG7_02_MAYOR_BOB in retail, but runs through the finale in demos;
+ * Its General White hint branch is at STG7_02_MAYOR_BOB in JP and later versions (the September demos included),
+ * but runs through the finale in the June US demo and the JP demo;
  * otherwise it has a line that changes after the story.
  */
 EVT_BEGIN(puni_1_talk)
@@ -703,14 +706,14 @@ EVT_BEGIN(puni_init)
     RETURN
 EVT_END()
 
-/** Init script of the old woman Puni in Bowser's chapter 3 scene: does the shared NPC init and enables facing the movement direction. */
+/** Init script of Kammy Koopa (ババ) in Bowser's chapter 3 scene: does the shared NPC init and enables facing the movement direction. */
 static EVT_BEGIN(baba_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
-/** Talk script of the old woman Puni: her line in Bowser's scene (kpa_stg3_006). */
+/** Talk script of Kammy Koopa: her line in Bowser's scene (kpa_stg3_006). */
 static EVT_BEGIN(baba_talk)
     CALL(evt_msg_print, 0, STRING("kpa_stg3_006"), 0, STRING("me"))
     RETURN
@@ -1858,7 +1861,7 @@ EVT_BEGIN(rival_nakama)
         WAIT_FRAMES(1)
     END_LOOP
 
-    // Puniper, the rival, sneers that Punio will not impress him; the freed Puni Elder arrives and scolds him.
+    // Puniper, the rival, sneers that Punio will not impress him; the freed Puni Elder scolds him.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -2113,8 +2116,8 @@ EVT_BEGIN(rival_nakama)
 EVT_END()
 
 /**
- * The Puni elder explains the Punies' powers to Mario right after the Puni Orb scene,
- * with a camera shake as a Puni lands on Mario. Sets GSWF_MRI01_ELDER_POWERS_EXPLAINED.
+ * The Puni elder calls Mario back right after the Puni Orb scene (Mario takes a fall pose with a camera shake)
+ * and tells him she can call lost Punies back for him. Sets GSWF_MRI_01_ELDER_TIP_SEEN.
  */
 EVT_BEGIN(elder_kaisetsu)
     LOOP(0)
@@ -2291,7 +2294,7 @@ void mri_stg3_012_cb(s32 type, void* param) {
     }
 }
 
-/** Places the Punies 5 to 13 at fixed idle spots in the village (inert, with the collision flag set). */
+/** Places the Punies 5 to 13 at fixed idle spots in the village (with the collision and not-in-party flags cleared). */
 EVT_BEGIN(puni_taiki)
     CALL(evt_puni_init_puni, 5, 14, -55, 0, 20, 0)
     CALL(evt_puni_flag_onoff, 5, 0, PUNI_FLAG_COLLIDE | PUNI_FLAG_NOT_IN_PARTY)
@@ -2454,7 +2457,7 @@ EVT_END()
 
 /**
  * The boss intro in the village (story STG2_23_01_X_NAUT_BATTLE): Crump confronts the Puni elder, the Punies are hidden,
- * the time bomb is set and Crump gloats, then the Magnus von Grapple lands.
+ * Crump gloats and stops the time bomb's countdown, then the Magnus von Grapple lands.
  * Mario then fights it (battle info 20). Sets the story to STG2_24_BOSS_BATTLE, then runs boss_battle_win.
  */
 EVT_BEGIN(boss_battle)
@@ -2600,7 +2603,7 @@ EVT_BEGIN(boss_battle)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04_02"), 0, STRING("第三勢力幹部"))
     WAIT_MS(250)
 
-    // Mario's partner steps in front of her and Crump laughs; the Punies hide.
+    // Mario's partner steps in front of her and Crump laughs, then shuts off the bomb timer.
     CALL(evt_msg_print_party, STRING("stg2_mri_e24_05"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("第三勢力幹部"), 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_npc_set_ry, STRING("第三勢力幹部"), 90)
@@ -2653,7 +2656,7 @@ EVT_BEGIN(boss_battle)
     CALL(evt_cam3d_evt_set, -180, 152, 548, -180, 57, 7, 0, EASING_SINE_IN_OUT)
     WAIT_MS(333)
 
-    // Crump sets the time bomb and calls his giant machine.
+    // Crump calls his giant machine.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_07"), 0, STRING("第三勢力幹部"))
     CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_APPEAR1"), LW(0), LW(1), LW(2), 0)
@@ -2975,7 +2978,7 @@ EVT_BEGIN(boss_battle_win)
         END_IF
     END_LOOP
 
-    // The Punies in the party run up to the wreckage (the Jabbi among them, if he joined).
+    // The named Punies of the party are placed beside Mario (the Jabbi among them, if he joined).
     IF_INT_EQUAL(GSWF_MRI_JABBLE_JOINED, 1)
         CALL(evt_puni_set_mode, 3, PUNI_MODE_INERT)
         CALL(evt_puni_set_position, 3, -120, 0, 10)
@@ -3608,7 +3611,7 @@ EVT_BEGIN(mri_01_koopa_second_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg3_008"), 0, STRING("プニ族長老"))
     CALL(evt_fade_out, 700)
 
-    // The Elder accuses him of being one of the evildoers; Kammy insists she knows where the Crystal Star is.
+    // The Elder accuses him of being one of the evildoers; Kammy insists the Elder knows where the Crystal Star is.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG2_PUNI1"))
     CALL(evt_npc_set_scale, STRING("プニ族長老"), FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(evt_mario_set_pos, 0, 0, 25)
@@ -3841,7 +3844,7 @@ EVT_BEGIN(mri_01_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_15_11_PUNIES)
         IF_INT_EQUAL(GSWF_MRI_01_ELDER_TIP_SEEN, 0)
-            // Once the Puni group exists, the Elder explains the Punies' powers if she has not yet.
+            // Once the Puni group exists, the Elder gives her call-back tip if she has not yet.
             SPAWN_EVENT(PTR(elder_kaisetsu))
         END_IF
     END_IF

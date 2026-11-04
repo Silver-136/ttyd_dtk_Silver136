@@ -253,8 +253,8 @@ EVT_BEGIN(mario_hashi_anime)
 EVT_END()
 
 /**
- * First Ember (Elmos A) swoops in over the bridge toward Mario, gliding to x = -25 then -35 at height 125,
- * with its footstep sounds muted.
+ * First Ember (Elmos A) swoops in over the bridge at Bobbery, gliding to x = -25 then -35 at height 125
+ * over and over, with its footstep sounds muted.
  */
 EVT_BEGIN(erumos00_attack)
     CALL(evt_npc_sound_data_set, STRING("エルモスA"), 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
@@ -333,9 +333,9 @@ EVT_BEGIN(mario_katsugi)
 EVT_END()
 
 /**
- * Bobbery's scene on the rope bridge (STG5_13_BOBBERY_THE_BRIDGE):
- * Mario meets Admiral Bobbery and the two scared sailors, Bobbery tells his story (stg5_muj_23 to 28),
- * the Embers attack and are driven off, Mario is carried off by the sailors and the party moves to muj_03.
+ * Bobbery's scene on the rope bridge (runs at STG5_12_FLAVIO_PA_PATCH, sets STG5_13_BOBBERY_THE_BRIDGE):
+ * Mario meets Admiral Bobbery and the two scared sailors, Bobbery orders the sailors away (stg5_muj_23 to 28),
+ * the Embers keep attacking him, Mario is carried off by the sailors and the party moves to muj_03.
  */
 EVT_BEGIN(sanders_funto)
     CALL(evt_npc_set_position, STRING("サンダース"), 0, 112, 0)
@@ -359,7 +359,7 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_npc_set_position, STRING("エルモスA"), -60, 125, 0)
     CALL(evt_npc_set_position, STRING("エルモスB"), 60, 125, 0)
 
-    // Mario arrives at the bridge: control is taken and the exit is waited out.
+    // Mario arrives at the bridge: control is taken and the entrance is waited out.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_mario_normalize)
@@ -490,8 +490,8 @@ EVT_BEGIN(yashi_yure_init)
 EVT_END()
 
 /**
- * The coconut palm (S_yasi_ki): hitting it shakes the tree and drops coconuts (ITEM_COCONUT) one after another,
- * state GW(10) counting how many have fallen; each coconut can be picked up where it lands.
+ * The coconut palm (S_yasi_ki): the first and second hammer hits each shake the tree and drop one coconut
+ * (ITEM_COCONUT), state GW(10) counting the hits; each coconut can be picked up where it lands.
  */
 // Only the first two shakes schedule coconut pickups; later shakes still increment the counter.
 EVT_BEGIN(yashi_yure)

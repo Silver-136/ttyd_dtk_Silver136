@@ -244,7 +244,7 @@ EVT_END()
 
 /**
  * Door close used when Mario leaves through the door:
- * he starts walking after a short delay (shorter in the JP releases) while the door closes.
+ * he starts walking after a short delay (shorter in the June US demo, the JP demo and JP) while the door closes.
  */
 EVT_BEGIN(evt_mri_door_close)
     BEGIN_INLINE_EVENT
@@ -310,7 +310,7 @@ EVT_BEGIN(evt_mri_door_naname_close_pure)
 EVT_END()
 
 /**
- * Close for diagonal doors: Mario starts walking after a short delay (shorter in the JP releases)
+ * Close for diagonal doors: Mario starts walking after a short delay (shorter in the June US demo, the JP demo and JP)
  * while the door closes.
  */
 EVT_BEGIN(evt_mri_door_naname_close)
@@ -379,8 +379,8 @@ EVT_END()
 
 /**
  * Registers the planter plants of a map.
- * It reads a table (address in LW(0)) of (map object name, unused, follow-up script) entries
- * and makes each plant run _ueki_anime when Mario hits it with the hammer or touches it from the front.
+ * It reads a table (address in LW(0)) of (hit object name, map object to shake, follow-up script) entries
+ * and makes each plant run _ueki_anime when Mario hits it with the hammer or presses A in front of it.
  */
 EVT_BEGIN(mri_ueki_entry)
     SET_INT_READ_ADDR(LW(0))
@@ -492,7 +492,7 @@ USER_FUNC(evt_mri_get16bitdata) {
  * Runs for the light on the Puni switch (map object name in LW(0), counter read from the pointer in LW(1),
  * threshold in LW(2)): every frame it plays the ride sound when the counter crosses the threshold
  * and colors the light with hakari_color (rainbow while the counter is within the threshold, white otherwise).
- * Spawned from mri_02 with GW(0), the number of Punies still missing on the switch.
+ * Spawned from mri_02, mri_13 and mri_14 with GW(0); in mri_02 that is the number of Punies still missing on the switch.
  */
 EVT_BEGIN(mri_hikari_color)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -582,7 +582,7 @@ USER_FUNC(mri_npc_buruburu) {
  * mri_06 (about 4:10) and mri_01 (1:40) and waits for it to run out.
  * On timeout Mario is frozen, the tree shakes with dust and a quake,
  * the screen fades to white and the game over sequence plays.
- * Skipped once the Punies have praised Mario (story progress past STG2_26).
+ * Skipped once the Punies have praised Mario (story progress at or past STG2_26).
  */
 EVT_BEGIN(mri_countdown)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)

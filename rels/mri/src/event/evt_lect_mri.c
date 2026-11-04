@@ -116,8 +116,8 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 }
 
 /**
- * Slides Mario in a straight line from where he stands to the point in LW(3), LW(4),
- * LW(5) over args[0] ms (the start point is saved to LW(0) to LW(2) on the first call). Blocks until done.
+ * Slides Mario in a straight line from the point in LW(3), LW(4), LW(5) to where he stands at the first call
+ * over args[0] ms (that end point is saved to LW(0) to LW(2) on the first call). Blocks until done.
  */
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
@@ -201,7 +201,7 @@ static USER_FUNC(x_flag_wait) {
 /**
  * Draw callback that draws the two lecture button icons on the 2D layer:
  * each visible button is drawn at its position with its icon and fade,
- * nine of the arrow icons being nudged down by 15 so they line up with the others.
+ * the nine control stick icons being nudged down by 15 so they line up with the others.
  */
 static void lecture_button_disp(CameraId camera, void* param) {
     s32 i;
@@ -316,7 +316,7 @@ static USER_FUNC(lecture_button_set_alpha) {
     return EVT_RETURN_DONE;
 }
 
-/** Sets or clears the flag bits args[1] on button args[0] (args[2] nonzero sets them); bit 2 is the hidden flag. */
+/** Sets or clears the flag bits args[1] on button args[0] (args[2] nonzero sets them); bit 0x1 is the hidden flag. */
 static USER_FUNC(lecture_button_flag_on_off) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -464,7 +464,7 @@ static USER_FUNC(effitemget_busaiku) {
 
 /**
  * Script helper: for each of the (up to two) hit objects of map object args[0] ("me" for the running one) that
- * has a name, turns the hit group on; used for the block dropped in the lesson.
+ * has a name, turns the hit group's collision off (HIT_FLAG_OFF); used for the block dropped in the lesson.
  */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
@@ -572,7 +572,7 @@ static USER_FUNC(bgm_start_wait) {
 
 /**
  * Sets up the Super Boots lesson: puts Mario at the lesson spot,
- * puts Toadette next to him facing him (no wall hit, no talk animation),
+ * puts Toadette next to him facing him (no hit, no wall collision, talk pose and automatic move animation on),
  * moves the camera in and slides Mario into place over 1 second, then he faces right.
  */
 EVT_BEGIN(boots_lv2_juyoitem_lecture_init)
@@ -594,10 +594,11 @@ EVT_END()
 
 /**
  * The Super Boots lesson by Toadette.
- * She walks to Mario and explains the boots (lecture_s_boots_04 to 07, with a Jabbi message in between);
+ * She walks to Mario and explains the boots (lecture_s_boots_04 to 07, with a message without a speech-bubble
+ * tail, 06, in between);
  * the button icon blinks to show the button, and Mario must do the move (motion 17) while the status window
  * and the sticks are locked, with Toadette repeating her hint now and then.
- * After that she asks (lecture_s_boots_09) whether to explain again and loops if so.
+ * After that she asks (lecture_s_boots_09) whether to try again and loops if so.
  * Then she steps aside, drops a black breaking floor block to show what the boots can break,
  * and says the closing lines (12, 13) before leaving.
  */

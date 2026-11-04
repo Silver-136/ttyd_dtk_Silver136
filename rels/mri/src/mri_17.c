@@ -87,7 +87,7 @@ EvtWord mri_17_init_evt[208];
 
 /**
  * Enter script of the east pipe: the first time Mario comes in,
- * it starts the strange statue scene (strange_statue) and records it with GSWF_MRI17_STRANGE_STATUE_SEEN.
+ * it starts the strange statue scene (strange_statue) and records it with GSWF_MRI_17_PILLAR_SCENE_SEEN.
  * Returns 0 in LW(0).
  */
 EVT_BEGIN(bero_02_into_event)
@@ -721,7 +721,7 @@ static EVT_BEGIN(punipuni_ball00)
 EVT_END()
 
 /**
- * Init script of the breaking floor: until the floor has fallen (GSWF_MRI17_FLOOR_BROKEN is 0) the lower floor
+ * Init script of the breaking floor: until the floor has fallen (GSWF_MRI_17_BREAKING_FLOOR_BROKEN is 0) the lower floor
  * piece (A_f2_rak_01) has its collision off.
  */
 static EVT_BEGIN(breakyuka_init)

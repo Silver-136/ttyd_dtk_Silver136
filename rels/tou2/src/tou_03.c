@@ -1339,7 +1339,7 @@ EVT_END()
 
 /**
  * Spawns the NPCs for the ring map, depending on story progress.
- * Before the intro it places Rawk Hawk and the Spiked Goomba-type opponent;
+ * Before the intro it places Rawk Hawk and his Dark Koopatrol opponent (tribe トゲノコエース);
  * in the regular story it creates two random sparring fighters for watch mode (unless a match is reserved);
  * and when GSWF_TOU_MATCH_RESERVED is set it creates the opponent team as NPCs "enemy 1..5" hidden under the
  * floor, with their tribes from evt_tou_get_fighter_tribe,
@@ -3336,8 +3336,8 @@ EVT_BEGIN(evt_champ_win)
 EVT_END()
 
 /**
- * Scene after losing to Rawk Hawk: the announcer names the winner,
- * with different text when the title match was reserved, then Rawk Hawk speaks.
+ * Scene after losing to Rawk Hawk: the announcer names the winner, then Rawk Hawk speaks a line
+ * that depends on whether the title match was booked and on Mario's rank.
  */
 EVT_BEGIN(evt_champ_lose)
     CALL_CHILD(PTR(evt_damage_pose))
@@ -3398,7 +3398,7 @@ EVT_END()
  * the camera surveys the ring, the opponent team walks in,
  * and the announcer introduces the fighters with texts from the fighter tables (different lines before and after
  * the return to Rogueport; Rawk Hawk is introduced with his belt).
- * The party may comment, then both sides speak their pre-match lines.
+ * The party (or Grubba, with no partner out) may comment, then the opponent speaks its pre-match line.
  */
 EVT_BEGIN(evt_default_opening)
     // The announcer waits in the ring; Mario and the partner wait at the west steps, the opponents at the east.
@@ -3658,7 +3658,8 @@ EVT_BEGIN(evt_default_opening)
 EVT_END()
 
 /**
- * Victory scene for every ordinary match: the belt is hidden when the champion lost, confetti falls,
+ * Victory scene for every ordinary match: the belt effect is switched off (every time, whoever the opponent was),
+ * the opponents take their confused pose, confetti falls,
  * Mario strikes his victory pose, the announcer declares Mario winner
  * and a party message follows (only with a partner before the story point).
  */
@@ -4760,7 +4761,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, 0, 155, 288, 0, 105, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
 
-    // Grubba powers up: the machine whirs faster, the screen shakes and he swells.
+    // Grubba powers up: the machine whirs faster, he trembles (evt_shake) and he swells.
 #if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg3_tou_466"), 0, STRING("ガンス"))
 

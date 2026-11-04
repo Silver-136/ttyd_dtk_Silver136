@@ -1,5 +1,5 @@
 // muj_21 (無人島, Keelhaul Key): an ending scene on the ship at dawn with Peach and Mario
-// (BGM_ENDING5, ep_27 to ep_30), sailing back to Rogueport (gor_12).
+// (BGM_ENDING5, ep_27 to ep_30) after leaving Rogueport (from gor_00), then on to the sea scene gor_12.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -186,7 +186,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(LW(1))
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_5"), STRING("P_T_5"))
 
-    // Peach spots Rogueport ahead and the ship heads there.
+    // Peach points out Rogueport shining and the map fades to the sea scene gor_12.
     CALL(evt_msg_print, 0, STRING("ep_30"), 0, STRING("ピーチ姫"))
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 1000, FADE_IN_BLACK, 1000)
     CALL(evt_bero_mapchange, STRING("gor_12"), STRING(""))

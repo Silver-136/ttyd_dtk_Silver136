@@ -186,7 +186,7 @@ EVT_BEGIN(hiru_yoru_event)
     RETURN
 EVT_END()
 
-/** Night turns to day: the same slowdown applied to the "yoru_hiru" map animation. */
+/** Night turns to day: the same slowdown (second step 100 ms instead of 200 ms) applied to the "yoru_hiru" map animation. */
 EVT_BEGIN(yoru_hiru_event)
     CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
@@ -406,7 +406,7 @@ USER_FUNC(marcoship_stop_wait_func) {
 }
 
 /**
- * Script helper that eases the playback speed of the ship's flag
+ * Script helper that eases the playback speed of the ship
  * and sea animations ("fune", "fune_01" and "nami", "nami_02") toward their target rates by at most 0.005 per
  * frame; runs forever (always blocks).
  */
@@ -1983,7 +1983,7 @@ USER_FUNC(fune_curve_pos) {
 
 /**
  * Rocks the ship S_fune_m of the opening scene:
- * rolls it from +5 to -5 degrees and back every 2 seconds forever (on later versions along the curved horizon
+ * rolls it from +5 to -5 degrees and back, 2 seconds each way, forever (on later versions along the curved horizon
  * from fune_curve_pos), moving its foam layer and a ship sound with it.
  */
 EVT_BEGIN(anm_yure)
@@ -2105,7 +2105,7 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
 }
 
 /**
- * Display callback for the title logo: draws the logo texture for the current language
+ * Display callback for the title logo: draws the logo texture (per language in US and PAL, texture 5 otherwise)
  * and, in the demos, the Press Start text using the wp alpha.
  */
 static void draw(CameraId camera, void* param) {
@@ -2115,7 +2115,7 @@ static void draw(CameraId camera, void* param) {
     f32 projection[7];
     CameraEntry* cam;
 #if VERSION >= VERSION_US
-    // US: logo texture per language (indexed by gp->language)
+    // US and PAL: logo texture per language (indexed by gp->language)
 #if VERSION >= VERSION_DEMO_EU
     s32 logoTex[6] = {0x13, 0x13, 0x14, 0x15, 0x16, 0x17};
 #else
@@ -2160,7 +2160,7 @@ static void draw(CameraId camera, void* param) {
 
 /**
  * The title scene of the opening (entered as "prologue" from aaa_00 after the Mario's house prologue):
- * plays BGM_OPENING1 (the init starts it on the US demo and earlier), starts the title logo,
+ * plays BGM_OPENING1 (in the two June demos the init starts it instead), starts the title logo,
  * sails the steamship S_fune_m in over 10 seconds and waits for Press Start (GF(1)),
  * switching to BGM_EVT_SAILING1 if nothing is pressed within 5 seconds.
  * After the press it plays SFX_PRESS_START1, sails the ship on out and fades to white into sys_01 ("prologue").

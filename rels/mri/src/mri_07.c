@@ -94,8 +94,8 @@ static ShopperData35 shopper_data = {
 
 /**
  * Talk script of the little Jabbi in the Puni shop room:
- * Punio, the clerk and the party talk about the little Jabbi joining the Puni group and the player answers yes
- * or no. If Mario agrees the Jabbi joins the Puni group (GSWF_MRI_JABBI_IN_PUNI_GROUP);
+ * Punio, the clerk and the party talk about the little Jabbi and the player chooses whether to go after him
+ * or leave him be. If Mario leaves him be the Jabbi joins the Puni group (GSWF_MRI_JABBLE_JOINED);
  * if not, the Jabbi hops away.
  */
 EVT_BEGIN(chibitoge_nakama)

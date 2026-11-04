@@ -697,7 +697,7 @@ EVT_BEGIN(sanders_kyushutsu_sub)
     RETURN
 EVT_END()
 
-/** Makes an Ember circle around the point (-115, -15) at 5 degrees per frame for three seconds (muj_npc_guruguru). */
+/** Makes an Ember circle around the point (-115, -15) at 5 degrees per frame, in three-second muj_npc_guruguru calls repeated until the event is deleted. */
 EVT_BEGIN(erumosu_guruguru)
     LOOP(0)
         CALL(muj_npc_guruguru, LW(0), -115, -15, 1, FLOAT(-5.0f), 3000)
@@ -780,7 +780,7 @@ EVT_BEGIN(marco_and_jewel)
     RETURN
 EVT_END()
 
-/** Flashes the blue eye of the skull rock (S_hige_iwa03_me) twice with a sparkle effect. */
+/** Flashes the blue eye of the skull rock (S_hige_iwa03_me) with a sparkle effect at two points beside it. */
 EVT_BEGIN(blueeye_flush)
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa03_me"), LW(0), LW(1), LW(2))
     ADD(LW(0), -12)
@@ -797,7 +797,7 @@ EVT_BEGIN(blueeye_flush)
     RETURN
 EVT_END()
 
-/** Flashes the red eye of the skull rock (S_hige_iwa02_me) twice with a sparkle effect. */
+/** Flashes the red eye of the skull rock (S_hige_iwa02_me) with a sparkle effect at two points beside it. */
 EVT_BEGIN(redeye_flush)
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa02_me"), LW(0), LW(1), LW(2))
     ADD(LW(0), -12)
@@ -844,7 +844,7 @@ static s32 itemsel_table[] = {
 /**
  * Touching the skull rock: if Mario has no Skull Gem he reads the inscription (stg5_muj_93_01);
  * with the gem he can pick it from the item window and place it in the rock,
- * which flashes both eyes and sets GSWF_MUJ05_SKULL_GEM_PLACED.
+ * which flashes both eyes and sets GSWF_MUJ_05_SKULL_GEM_PLACED.
  */
 EVT_BEGIN(dokuroiwa_touch)
     CALL(evt_pouch_check_item, ITEM_SKULL_GEM, LW(0))
@@ -1027,7 +1027,7 @@ EVT_END()
 
 /**
  * Correct skull rock answer: Mario is frozen, the rock flashes five times,
- * the camera shakes and the rock opens (GSWF_MUJ05_SKULL_ROCK_OPENED).
+ * the camera shakes and the rock opens (GSWF_MUJ_05_SKULL_ROCK_OPENED).
  */
 EVT_BEGIN(answer_event)
     CALL(evt_mario_key_onoff, 0)
@@ -1070,7 +1070,7 @@ EVT_END()
 
 /**
  * Hammering the big rock with the blue eye (A_iwa01):
- * plays the rock hit sound and, while the Skull Gem is in place,
+ * while the Skull Gem is in place, plays the rock hit sound,
  * flashes the blue eye and records a blue strike (1), then checks the sequence:
  * a wrong one starts penalty_event, a complete one starts answer_event.
  */
@@ -1104,7 +1104,7 @@ EVT_BEGIN(iwa01_hammer)
     RETURN
 EVT_END()
 
-/** Jumping onto the big blue-eye rock with A: plays the rock jump sound while the Skull Gem is placed. */
+/** A pressed on the first air frame after jumping off the big blue-eye rock (CASE_JUMP_FROM_A): plays the rock jump sound while the Skull Gem is placed. */
 EVT_BEGIN(iwa01_ride_a)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
@@ -1161,7 +1161,8 @@ EVT_BEGIN(iwa02_hammer)
 EVT_END()
 
 /**
- * Jumping onto the red-eye rock with A after a hip bump:
+ * A pressed on the first air frame after jumping off the red-eye rock (CASE_JUMP_FROM_A), when
+ * evt_mario_chk_hipbump reports a hip bump:
  * plays the small rock jump sound while the Skull Gem is placed.
  */
 EVT_BEGIN(iwa02_ride_a)
@@ -1325,8 +1326,9 @@ EVT_BEGIN(dokuroiwa_bomb)
 EVT_END()
 
 /**
- * Initialises the skull rock: hides the jewel, closes the lid hit box, clears the puzzle buffer and,
- * once STG5_19_GEMS_AND_JINGLES is reached, hides the rock and opens the exit hit box.
+ * Initialises the skull rock: hides the jewel, turns off the hit object A_dkr_iwa_futa02, clears the puzzle
+ * buffer and, once STG5_19_GEMS_AND_JINGLES is reached, hides the rock and turns off its hit (A_dokuro_iwa),
+ * leaving the exit e_bero on; before that stage it turns e_bero off.
  */
 EVT_BEGIN(dokuroiwa_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)

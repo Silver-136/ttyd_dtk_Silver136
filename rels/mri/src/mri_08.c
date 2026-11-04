@@ -59,7 +59,7 @@ EvtWord mri_08_init_evt[190];
 
 /**
  * Init of Jabbi villager 1: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-220, 0, 110).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-220, 0, 110).
  */
 EVT_BEGIN(toge_1_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -91,7 +91,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 2: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-75, 0, -100).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-75, 0, -100).
  */
 EVT_BEGIN(toge_2_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -123,7 +123,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 3: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (70, 0, 80).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (70, 0, 80).
  */
 EVT_BEGIN(toge_3_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -155,7 +155,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 4: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (180, 0, 60).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (180, 0, 60).
  */
 EVT_BEGIN(toge_4_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -187,7 +187,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 5: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-70, 0, -35).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (-70, 0, -35).
  */
 EVT_BEGIN(toge_5_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -230,7 +230,7 @@ EVT_END()
 
 /**
  * Init of Jabbi villager 6: once the chapter 2 finale has been played
- * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (300, 0, -60).
+ * and Mario has left the tree (GSWF_MRI_LEFT_AFTER_BOSS_BATTLE), moves it to (300, 0, -60).
  */
 EVT_BEGIN(toge_6_init)
     SWITCH(GSW_STORY_PROGRESS)
@@ -389,7 +389,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Script helper that lines up three Jabbi chains (slots 110 to 112, 113 to 115, 116 to 119) at (450, 0, 0) with
- * togeMakeRetsu, for the Jabbi fortress scene.
+ * togeMakeRetsu (no script calls it).
  */
 USER_FUNC(toge_enter_func00) {
     Vec pos = {450.0f, 0.0f, 0.0f};
@@ -440,7 +440,7 @@ EVT_END()
  * Punio (the guide) speaks (stg2_mri_e17_01), the crowd charges the hive (evt_mri_puni_win_attack)
  * and smashes the beacon with five rumbles, the Punies head back (evt_mri_puni_win_end),
  * the beacon breaks (puni_win_offscreen), the field music is scheduled to return,
- * GSWF_MRI08_JABBI_FIGHT_WON is set and Mario gets control back.
+ * GSWF_MRI_08_JABBI_SQUAD_DEFEATED is set and Mario gets control back.
  */
 static EVT_BEGIN(puni_win)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -591,7 +591,7 @@ EVT_END()
 
 /**
  * Waits for Mario to walk to x=175, then lets the Punies attack (evt_puni_attack_on),
- * shows the Jabbi message (stg2_mri_e17_00_02) and starts the win-or-lose check.
+ * shows a message without a speech-bubble tail (stg2_mri_e17_00_02) and starts the win-or-lose check.
  */
 static EVT_BEGIN(puni_vs_toge_battlewait)
     LOOP(0)
@@ -649,7 +649,7 @@ EVT_END()
 /**
  * Start of the first fight with the Jabbi: as puni_vs_toge_init,
  * but Punio speaks to the Puni (stg2_mri_e17_00 and 00_01) while the camera zooms;
- * sets GSWF_MRI08_JABBI_FIGHT_STARTED.
+ * sets GSWF_MRI_08_JABBI_SQUAD_INTRO_SEEN.
  */
 static EVT_BEGIN(puni_vs_toge)
     CALL(evt_puni_wait_systemmode, 2)
