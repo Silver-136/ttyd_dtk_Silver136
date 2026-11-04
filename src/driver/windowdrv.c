@@ -57,13 +57,13 @@ void windowInit(void) {
     w[5].userdata = NULL;
     w[6].flags = 0;
     w[6].userdata = NULL;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     winTpl = NULL;
     tpl_loaded = FALSE;
 #endif
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void windowLoadTpl(const char* name);
 
 /** the demo loads msgWindow.tpl synchronously */
@@ -78,7 +78,7 @@ void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
 
     s32 i;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     windowLoadTpl("font/msgWindow.tpl");
 #else
     UnpackTexPalette(winTpl);
@@ -89,7 +89,7 @@ void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     for (i = 0; i < winTpl->numDescriptors; i++) {
         TEXGetGXTexObjFromPalette(winTpl, &wakuTexObj[i], i);
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     tpl_loaded = TRUE;
 }
 
@@ -1110,14 +1110,14 @@ end:
     ;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BOOL tpl_loaded; // Set by the asynchronous setup callback after msgWindow.tpl is unpacked and wakuTexObj is built.
 #endif
 TEXPalette* winTpl;
 
 /** Whether the window frame textures can be drawn; the demos load them synchronously and need no check. */
 static inline BOOL windowTplReady(void) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     return TRUE;
 #else
     return tpl_loaded;

@@ -115,13 +115,13 @@ void mobjKoopaOn(void);
 s32 mobjCheckItemboxOpen(MapObjectEntry* entry);
 BOOL mobjGetHint(MapObjectEntry* entry);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 MapObjectEntry* mobjNearDistCheck(f32 x, f32 y, f32 z, f32 minMagnitude);
 #endif
 
 MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 int mobjCheckKururingFloorItem(MapObjectEntry* entry);
 #endif
 

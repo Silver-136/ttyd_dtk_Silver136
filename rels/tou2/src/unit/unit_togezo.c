@@ -115,7 +115,7 @@ static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 /** Damage-type reactions of the Spiny: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {90, 90, 80, 100, 90, 100, 100, 80, 100, 90, 100, 90, 100, 90, 90, 100, 80, 100, 90, 100, 100, 100};
 #else
 static StatusVulnerability regist = {
@@ -256,7 +256,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGZ_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "TGZ_S_1"},
     {POSE_TYPE_DAMAGE, "TGZ_D_3"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_WALK, "TGZ_W_1"},
     {POSE_TYPE_RUN, "TGZ_R_1"},
 #endif
@@ -343,7 +343,7 @@ static BattleWeapon weapon_togezo_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_ALL,
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
 #else

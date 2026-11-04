@@ -121,7 +121,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Defence attributes of the Red Bones: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {50, 50, 100, 0, 50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0};
 #else
 static StatusVulnerability regist = {

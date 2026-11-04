@@ -114,7 +114,7 @@ void countDownMain(void) {
             }
             break;
         case COUNTDOWN_STATE_RUN:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if ((wp->flags & COUNTDOWN_FLAG_TIME_UP) != 0) {
                 psndSFXOff(wp->sfxId);
                 wp->sfxId = -1;

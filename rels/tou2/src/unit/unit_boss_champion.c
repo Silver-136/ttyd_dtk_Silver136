@@ -70,7 +70,7 @@ EvtWord flying_chop_attack_event[326];
 EvtWord foot_stamp_attack_event[467];
 EvtWord healing_event[209];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord roof_shake_attack_event[];
 #else
 EvtWord roof_shake_attack_event[386];
@@ -104,7 +104,7 @@ BattleUnitKind unit_boss_champion = {
     0,
     1,
     1,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     49,
 #else
     34,
@@ -181,7 +181,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  * Status vulnerability of the Rawk Hawk (percent chance to take each status):
  * immune to growing huge, fright, gale force and instant kill; resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {60, 60, 70, 70, 60, 70, 100, 40, 0, 60, 100, 60, 100, 60, 60, 0, 0, 100, 70, 100, 100, 0};
 #else
 static StatusVulnerability regist = {
@@ -531,7 +531,7 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
@@ -1597,7 +1597,7 @@ USER_FUNC(check_ceil) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_000027b8, JP tou2 .text+0x26F4. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Script helper (JP and later) for roof_shake_attack_event:
@@ -1624,7 +1624,7 @@ USER_FUNC(eff_fall_entry) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_00002770, JP tou2 .text+0x26AC. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Script helper (JP and later): blocks until the falling object in args[0] has landed far enough for its hit to
@@ -1651,7 +1651,7 @@ USER_FUNC(eff_fall_hit_wait) {
  * and on the partner; the demos make that final check on Mario and the partner after a fixed 32 frames.
  */
 EVT_BEGIN(roof_shake_attack_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(LW(15), 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_FALL_EVENT, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, PARTS_WORK_FALL_EVENT + 1, 0)
@@ -1666,7 +1666,7 @@ EVT_BEGIN(roof_shake_attack_event)
     SET_VALUE(LW(13), 0)
 #endif
     LOOP(10)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         SET_VALUE(LW(0), 0)
         ADD(LW(0), LW(13))
         CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, LW(0), 0)
@@ -1693,7 +1693,7 @@ EVT_BEGIN(roof_shake_attack_event)
         WAIT_FRAMES(16)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_BLED_SHAKE_CAILING1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         ADD(LW(2), 10)
         SET_VALUE(LW(6), 30)

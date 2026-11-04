@@ -52,7 +52,7 @@ static EvtWord evt_poster_9[7];
 EvtWord evt_poster_10[12];
 EvtWord evt_poster_11[27];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_poster_12[];
 #else
 EvtWord evt_poster_12[22];
@@ -308,7 +308,7 @@ EVT_BEGIN(evt_poster_12)
     CALL(evt_hitobj_onoff, STRING("a_kami_8"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_kami_9"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     CALL_CHILD(evt_chk)
 #else
@@ -356,7 +356,7 @@ EVT_BEGIN(eki_03_init_evt)
 
     // The HP Plus item, the Shine Sprite block and the brick blocks (one holds a Thunder Rage).
     CALL(evt_item_entry, STRING("item"), ITEM_HP_PLUS, -550, 220, -50, ITEM_TYPE_STILL, GSWF_EKI_03_HP_PLUS, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 475, 100, 25, 0, GSWF_SHINE_36, 0)
     CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, 0, 0, 0, LSWF(1))
 #else
@@ -382,7 +382,7 @@ EVT_BEGIN(eki_03_init_evt)
     // hidden along with their hit areas.
     CALL(evt_cloud_init)
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_1_BLOWN_AWAY, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_cloud_ent, 0, STRING("kami_1"), STRING("a_kami_1"), PTR(evt_poster_1))
     ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -394,7 +394,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_1"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_2_BLOWN_AWAY, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_cloud_ent, 0, STRING("kami_2"), STRING("a_kami_2"), PTR(evt_poster_2))
     ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -406,7 +406,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_3_BLOWN_AWAY, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_cloud_ent, 0, STRING("kami_3"), STRING("a_kami_3"), PTR(evt_poster_3))
     ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_3"), MAP_OBJ_FLAG_HIDDEN)
@@ -482,7 +482,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_8"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_9"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
 #endif
     END_IF
@@ -593,7 +593,7 @@ static USER_FUNC(test_glare) {
         envGlareFilter(0, 0, 0, 0, 0);
     } else {
         envGlareFilter(1, rect[1] - 50, rect[0] - 50, rect[3] + 50, rect[2] + 50);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         envGlareFilterZ(0.998f);
 #else
         envGlareFilterZ(1.148f);

@@ -33,7 +33,7 @@ static void _partyEntry(s32 flag) {
     mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_BG_MODE) {
         return;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     }
     count = 0;
     if (partyGetPtr(mario->currPartySlotId[0]) != NULL) {
@@ -75,7 +75,7 @@ static void _partyEntry(s32 flag) {
                 off = 120.0f;
             }
             party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
 #else
             party->displayDirectionTarget = revise360(mario->displayDirection + off);
@@ -97,7 +97,7 @@ static void _partyEntry(s32 flag) {
                 off = -120.0f;
             }
             party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
 #else
             party->displayDirectionTarget = revise360(mario->displayDirection + off);

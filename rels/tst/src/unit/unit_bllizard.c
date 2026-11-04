@@ -70,13 +70,13 @@ BattleUnitKind unit_bllizard = {
     1, // perilHP
     25, // level
     0, // bonusExp
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     2,
 #else
     4, // bonusCoin
 #endif
     70, // bonusCoinRate
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     2,
 #else
     0, // baseCoin
@@ -85,7 +85,7 @@ BattleUnitKind unit_bllizard = {
     9999, // pbSoftCap
     35, // width
     30, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     4,
     30,
     0.0f,
@@ -103,7 +103,7 @@ BattleUnitKind unit_bllizard = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     18.0f,
     0.0f,
@@ -154,7 +154,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Elemental reactions of the Ice Puff: takes 1 extra damage from fire attacks; is healed by ice attacks. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_ABSORB, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {50, 70, 70, 100, 60, 0, 100, 0, 100, 60, 100, 60, 100, 70, 60, 70, 80, 100, 60, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

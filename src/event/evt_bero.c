@@ -42,7 +42,7 @@ f32 BeroOX, BeroOY, BeroOZ; //offset position
 f32 BeroSX, BeroSY, BeroSZ; //start position
 f32 BeroEX, BeroEY, BeroEZ; //end position
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern Vec BeroPT, BeroAT;
 #else
 Vec BeroPT, BeroAT;
@@ -55,7 +55,7 @@ BOOL BeroMarioGO;
  * direction and start point worked out automatically. The entrance lookup falls back to it
  * when gp->beroEnterName is empty.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BeroEntry bero_null[] = {
     {
         NULL, // hitName
@@ -88,7 +88,7 @@ EVT_BEGIN(default_outevt)
 EVT_END()
 
 /** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(evt_bero_info_run_none)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -96,7 +96,7 @@ EVT_END()
 #endif
 
 /** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(evt_bero_info_run_gate)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -105,7 +105,7 @@ EVT_END()
 
 // s32 x, s32 y, s32 z (new in retail)
 // Descriptive name (not in the symbol maps).
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BeroEntry bero_null[] = {
     {
         NULL, // hitName
@@ -620,7 +620,7 @@ USER_FUNC(evt_bero_get_info_num) {
 
 USER_FUNC(bero_get_position_normal) {
     EvtWord* args = event->args;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     MarioWork* wp = marioGetPtr();
 #endif
     s32 dir = evtGetValue(event, args[0]);
@@ -690,7 +690,7 @@ USER_FUNC(bero_get_position_normal) {
     BeroEX = end.x;
     BeroEY = end.y;
     BeroEZ = end.z;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     marioSetBottomlessRespawnPosOnBeroEntry(end.x, end.y, end.z);
     if (wp->currMotionId == MARIO_MOTION_SHIP) {
         marioReloadMapOnBottomlessOn();
@@ -754,7 +754,7 @@ void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* star
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(bero_get_position_pipe_pure) {
 #else
 USER_FUNC(bero_get_position_pipe_pure) {
@@ -772,7 +772,7 @@ USER_FUNC(bero_get_position_pipe_pure) {
     BeroEX = end.x;
     BeroEY = (f32)(kind == BERO_DIR_UP ? end.y - 37.5f : end.y);
     BeroEZ = end.z;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     marioSetBottomlessRespawnPosOnBeroEntry(BeroEX, BeroEY, BeroEZ);
 #endif
     return EVT_RETURN_DONE;
@@ -1336,7 +1336,7 @@ EVT_BEGIN(bero_case_init_check)
 EVT_END()
 
 EVT_BEGIN(bero_case_exec_none)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -1360,7 +1360,7 @@ EVT_BEGIN(bero_case_exec_none)
 EVT_END()
 
 EVT_BEGIN(bero_case_exec_road)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -1395,7 +1395,7 @@ EVT_BEGIN(bero_case_exec_road)
 EVT_END()
 
 EVT_BEGIN(bero_case_exec_door)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -1415,7 +1415,7 @@ EVT_BEGIN(bero_case_exec_door)
         CALL(evt_mario_set_force_dir, LW(0))
         CALL(evt_mario_wait_landon)
         CALL(evt_bero_mario_go_wait)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("tou_04"))
             CALL(bero_get_position_normal, 0, FLOAT(40.0f))
@@ -1638,7 +1638,7 @@ EVT_BEGIN(bero_case_exec_pipe)
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -1700,7 +1700,7 @@ EVT_END()
 
 /** Exit trigger for gates: after bero_case_init_check, changes map straight away. */
 EVT_BEGIN(bero_case_exec_gate)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -1786,11 +1786,11 @@ EVT_END()
 EVT_BEGIN(bero_case_switch_on)
     CALL(evt_bero_switch_on, LW(0))
     CALL(evt_bero_get_info_num, LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     DEBUG_PUT_MSG(STRING("ベロ登録"))
 #endif
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(bero_case_entry_sub)
 #else
         DEBUG_PUT_MSG(STRING("\203x\203\215\223o\230^"))
@@ -1806,7 +1806,7 @@ EVT_END()
 EVT_BEGIN(bero_case_switch_off)
     CALL(evt_bero_switch_off, LW(0))
     CALL(evt_bero_get_info_num, LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     DEBUG_PUT_MSG(STRING("ベロ削除"))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_bero_case_id_load, LW(1), LW(15))
@@ -1830,7 +1830,7 @@ EVT_END()
  * Arrival by road: Mario walks from the map edge to the end point
  * while partners follow closely (homing distance 20, back to 50 after).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_none)
     CALL(evt_mario_key_onoff, 1)
@@ -1928,7 +1928,7 @@ EVT_END()
  * otherwise sets up Mario (background mode, partners, pipe pose), places him,
  * sets the pipe fade and spawns the walk-in.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_gate)
     CALL(evt_mario_key_onoff, 1)
@@ -1949,7 +1949,7 @@ EVT_BEGIN(evt_bero_info_run)
 
     // Loading a save: no walk-in; only arm the exits and start the NPCs.
     IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         DEBUG_PUT_MSG(STRING("\203Z\201[\203u\203u\203\215\203b\203N\202\251\202\347\202\314\203\215\201[\203h\216\236\202\314\217\210\227\235"))
 #endif
         CALL(evt_bero_exec_onoff, 0, BERO_EXEC_BUSY)
@@ -2144,7 +2144,7 @@ EVT_END()
 BeroEntry* BeroINFOARR[16];
 s32 BeroSW[16];
 s32 BeroID[16];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 Vec BeroPT, BeroAT;
 #endif
 

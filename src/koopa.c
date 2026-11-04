@@ -321,7 +321,7 @@ void kpaMain(void) {
  * horizontal movement limited by his dash speed and walls, jumping and falling, floors and ceilings,
  * then the shared player effects, balloon and camera.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void kpa2DMain(void) {
 #else
 void kpa2DMain(void) {
@@ -338,7 +338,7 @@ void kpa2DMain(void) {
     if (mp->kpaNoHitTimer) {
         mp->kpaNoHitTimer--;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     mp->hitobjHead = NULL;
     mp->hitobjFront = NULL;
     mp->hitobjFrontA = NULL;
@@ -391,7 +391,7 @@ void kpa2DMain(void) {
         }
         marioCheckWall(spd, ang);
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     mp->position.y += mp->floorMove.y;
 #endif
     PSVECSubtract(&mp->position, &saved, &diff);
@@ -916,7 +916,7 @@ void kpaStrippedPool(f32* f, s32 i) {
  * Retail skips the test at level 0 and for puffs smaller than 7 units; the demo tests them all.
  * Deletes the effect when the attack ends.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void kpaFireMain(void) {
 #else
 void kpaFireMain(void) {
@@ -959,7 +959,7 @@ void kpaFireMain(void) {
                 ((EffGonbabaBreathWork*)((EffGonbabaBreathWork*)fireefp->userdata)->child->userdata)->position.z = z;
             }
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {
             f32 sc;
             f32 base;
@@ -970,7 +970,7 @@ void kpaFireMain(void) {
             fe = fireefp;
             camGetPtr(CAMERA_3D);
             w = (EffGonbabaBreathWork*)fe->userdata;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             base = w->scale;
 #else
             headScale = w->scale;
@@ -988,7 +988,7 @@ void kpaFireMain(void) {
             for (i = 1; i < fe->count; i++, w++) {
                 if (((i - 1) & 3) == 0 && w->delay == 0 && w->life > 0x10) {
                     void* hit;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     sc = 7.0f * w->scale;
                     PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
                     PSMTXScale(mb0, sc, sc, sc);

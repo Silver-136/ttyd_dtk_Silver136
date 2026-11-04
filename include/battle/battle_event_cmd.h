@@ -280,12 +280,12 @@ USER_FUNC(btlevtcmd_SamplingEnemy);
 USER_FUNC(btlevtcmd_SetDiveSound);
 USER_FUNC(btlevtcmd_SetEventCeilFall);
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 USER_FUNC(btlevtcmd_SetCounterAcCallBack);
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 USER_FUNC(btlevtcmd_SetCounterAcCallBack);
 #endif
 

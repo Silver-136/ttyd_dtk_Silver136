@@ -60,7 +60,7 @@ static EvtWord punipuni_mario_halt[33];
 #if VERSION >= VERSION_US
 EvtWord time_bomb[931];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord time_bomb[938];
 #else
 EvtWord time_bomb[937];
@@ -73,7 +73,7 @@ static EvtWord yuka_check[116];
 static KusaAccess ueki_access_data[7];
 static EvtWord punipuni_ball00_init[35];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord punipuni_ball00[70];
 #else
 static EvtWord punipuni_ball00[57];
@@ -489,7 +489,7 @@ EVT_END()
 EVT_BEGIN(time_bomb)
     // Controls off, the music fades out and the room begins to shake.
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     SET_VALUE(GF(10), 0)
@@ -557,7 +557,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_cam3d_evt_set, 200, 305, -33, 0, 140, -338, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, 0, 0, -89)
     CALL(evt_mario_set_dir, 90, 0, 0)
@@ -588,7 +588,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_item_move_3d_position, STRING("item00"), 0, 400, -340, 750, EASING_LINEAR)
     CALL(evt_item_set_position, STRING("item00"), 0, -1000, 0)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), 30)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
@@ -720,7 +720,7 @@ EVT_BEGIN(time_bomb)
     CALL_CHILD(PTR(npc_dokan))
     WAIT_MS(2000)
     CALL(evt_cam3d_evt_set, 0, 105, 269, 0, 45, -76, 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_set_dir, 0, 270, -1)
 #endif
     WAIT_MS(200)
@@ -736,7 +736,7 @@ EVT_BEGIN(time_bomb)
         END_IF
     END_LOOP
     SET_VALUE(GSW_STORY_PROGRESS, STG2_23_TIME_BOMB_ACTIVATED)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -892,7 +892,7 @@ static EVT_BEGIN(punipuni_ball00)
         SET_VALUE(GF(15), 1)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(15), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
         CALL(evt_mario_key_onoff, 1)
         SET_VALUE(GF(10), 1)

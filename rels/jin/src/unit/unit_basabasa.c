@@ -216,7 +216,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 85, 100, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 80, 110, 100, 80, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

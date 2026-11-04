@@ -78,7 +78,7 @@ static EvtWord evt_unlock00[6];
 EvtWord evt_unlock00_01[4];
 s32 key_table00[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_check00[];
 #else
 EvtWord evt_check00[23];
@@ -101,7 +101,7 @@ static EvtWord evt_unlock01[8];
 
 s32 key_table01[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_check01[];
 #else
 EvtWord evt_check01[90];
@@ -122,7 +122,7 @@ EvtWord guide_sister[775];
 
 EvtWord elder_shaberi[13];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord toraware_elder[];
 #else
 EvtWord toraware_elder[423];
@@ -832,7 +832,7 @@ s32 key_table00[] = {
 EVT_BEGIN(evt_check00)
     CALL(evt_pouch_check_item, ITEM_RED_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_table00), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_table00), LW(0), 0)
@@ -914,7 +914,7 @@ s32 key_table01[] = {
 EVT_BEGIN(evt_check01)
     CALL(evt_win_item_maketable, PTR(key_table01), LW(10))
     IF_INT_NOT_EQUAL(LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, LW(10), LW(0))
 #else
         CALL(evt_win_item_select, 0, LW(10), LW(0), 0)
@@ -1490,7 +1490,7 @@ EVT_END()
 EVT_BEGIN(toraware_elder)
     // Mario enters the prison; Punio and the Punies find the Elder locked in her cell.
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_puni_wait_systemmode, 2)
 #endif
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
@@ -1501,7 +1501,7 @@ EVT_BEGIN(toraware_elder)
     BEGIN_INLINE_EVENT
         CALL(evt_party_set_dir, 0, 270, 200)
     END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL_CHILD(PTR(mri_guide_hagure_check))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_puni_set_lsw_index, LSW_MRI_PUNI_RECORDS, 0, 0, 0, 0, 0)

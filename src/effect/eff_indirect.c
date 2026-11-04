@@ -97,7 +97,7 @@ void effIndirectMain(EffectEntry* effect) {
 }
 
 /** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
@@ -114,14 +114,14 @@ void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx scale;
     Mtx final;
     GXTexObj texObj;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     void* indTex;
     f32 indMtx[2][3];
 #endif
     camera = camGetPtr(CAMERA_2D);
     type = work->type;
     alpha = work->alpha;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     indTex = work->work->address;
 #endif
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
@@ -151,7 +151,7 @@ void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     GXPixModeSync();
     GXInitTexObj(&texObj, buffer, 304, 240, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXInitTexObj(&texObj, indTex, 64, 64, GX_TF_IA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXLoadTexObj(&texObj, GX_TEXMAP2);
 #endif
@@ -173,7 +173,7 @@ void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(mtx, camera->view, mtx);
     PSMTXConcat(mtx, final, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX3x4);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     indMtx[0][0] = 0.5f;
     indMtx[0][1] = 0.0f;
     indMtx[0][2] = 0.0f;
@@ -221,7 +221,7 @@ void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     GXPosition3f32(-size / 2, -size / 2, 0.0f);
     GXTexCoord2f32(0.0f, v);
     GXEnd();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXSetNumIndStages(0);
     GXSetTevDirect(GX_TEVSTAGE1);
 #endif

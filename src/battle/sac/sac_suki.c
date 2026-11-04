@@ -111,7 +111,7 @@ static BattleWeapon weapon = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
 #else
     100, // ohkoChance
@@ -479,7 +479,7 @@ static void disp_2D(CameraId cam, void* param) {
     }
     GXSetScissor(0, 0x91, gp->fbWidth, 0x50);
     for (i = 0; i < 7; i++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         u16 icon;
         if (w->btn2[i].state != 0) {
             if (i < w->prev) {
@@ -622,7 +622,7 @@ static void disp_2D(CameraId cam, void* param) {
  * with the pressed icon for buttons already entered.
  */
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void _disp_2D(s32 side, s32 idx) {
     SukiWork* w = get_ptr();
     SukiBtn* b;
@@ -711,7 +711,7 @@ void _disp_2D(s32 side, s32 idx) {
 
 /** 3D draw callback; draws nothing (the demo only fetches the work). */
 static void disp_3D(CameraId cam, void* param) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     get_ptr();
 #endif
 }

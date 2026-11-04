@@ -205,7 +205,7 @@ static USER_FUNC(paper_on) {
         marioPaperOn("p_slit");
         marioChgPose("M_S_1");
         marioChgPaper("PM_S_3A");
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         event->userdata[0] = 0;
     }
     if (event->userdata[0] < 30) {
@@ -275,7 +275,7 @@ USER_FUNC(snd_on) {
 }
 
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(cameraman_on) {
     NpcEntry* npc = npcNameToPtr("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223");
     animPoseSetMaterialFlagOn(npc->poseId, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
@@ -380,7 +380,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
             CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
         END_INLINE_EVENT
         CALL(get_bedside, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
 #else
         CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(90.0f))
@@ -403,7 +403,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
 
     // Mario jumps into bed with a yelp and lies down flat with sleeping sounds.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_flag_onoff, 1, 768)
 #else
@@ -415,7 +415,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
     CALL(evt_mario_adjust_dir)
     WAIT_MS(200)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_SHADOW_OFF)
 #endif
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
@@ -424,7 +424,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
         WAIT_MS(200)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
@@ -458,7 +458,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     WAIT_MS(3000)
     DELETE_EVENT(LW(10))
     CALL(paper_off)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_SHADOW_OFF)
 #endif
     IF_INT_NOT_EQUAL(LW(11), 0)
@@ -472,7 +472,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
         ADD_FLOAT(LW(2), LW(4))
         CALL(evt_mario_set_party_pos, 1, LW(12), LW(0), LW(1), LW(2))
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_flag_onoff, 0, 768)
 #else
     CALL(evt_mario_flag_onoff, 0, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL | MARIO_FLAG_WALLS_DISABLED)
@@ -484,14 +484,14 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_set_dir_npc, LW(0))
     CALL(evt_party_set_dir_npc, 0, LW(0))
     CALL(evt_party_set_dir_npc, 1, LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_adjust_dir)
 #endif
     CALL(evt_npc_flag_onoff, 1, LW(0), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_INSTANT_TURN)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(snd_on)
@@ -502,7 +502,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     END_IF
     IF_INT_EQUAL(GSW_INN_STAY_COUNT, INN_COMMEMORATIVE_STAY)
         CALL_CHILD(evt_50)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         RETURN
     END_IF
     CALL(evt_snd_bgmoff, PSND_FADE_OUT | PSND_SLOT(1))
@@ -533,7 +533,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(get_npctalk, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
     CALL(evt_fade_end_wait)
 #else
@@ -557,7 +557,7 @@ EVT_END()
 /** Retail 50th-stay celebration with the Lakitu cameraman's photo and the 200-coin gift; see the demo version above. */
 EVT_BEGIN(evt_50)
     CALL(get_npcname, LW(10))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_get_position, LW(10), LW(13), LW(14), LW(15))
     CALL(evt_npc_entry, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("c_jugem_c"))
     CALL(evt_npc_set_tribe, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"), STRING("\203J\203\201\203\211\203}\203\223"))
@@ -590,7 +590,7 @@ EVT_BEGIN(evt_50)
 #endif
     CALL(msg_no, 9, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(10))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmoff, PSND_FADE_OUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
 #endif
@@ -604,7 +604,7 @@ EVT_BEGIN(evt_50)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 100)
     CALL(evt_eff, 0, STRING("confetti"), 3, LW(0), LW(1), LW(2), 600, 0, 0, 0, 0, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1"), LW(0), LW(1), LW(2), 0)
@@ -616,7 +616,7 @@ EVT_BEGIN(evt_50)
     CALL(msg_no, 10, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(10))
     CALL(get_bedside, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
     CALL(get_npctalk, LW(0), LW(1), LW(2))
     CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
@@ -646,7 +646,7 @@ EVT_BEGIN(evt_50)
     CALL(evt_fade_end_wait)
     CALL(msg_no, 12, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(10))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_set_dir_npc, LW(10))
     CALL(evt_party_set_dir_npc, 0, LW(10))
     WAIT_MS(300)
@@ -654,7 +654,7 @@ EVT_BEGIN(evt_50)
     CALL(evt_sub_get_coin, 200)
     CALL(msg_no, 13, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, LW(10))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_fade_entry, FADE_OUT_BLACK, 1000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_npc_check_delete, STRING("\217h\211\256\202\314\203J\203\201\203\211\203}\203\223"))

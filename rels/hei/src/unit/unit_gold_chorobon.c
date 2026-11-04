@@ -41,7 +41,7 @@ EvtWord gold_chorobon_rabbit_move[123];
 BattleUnitSetup entry_chorogun;
 EvtWord call_chorogun_event[67];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord escape_chorogun_event[];
 #else
 EvtWord escape_chorogun_event[50];
@@ -49,7 +49,7 @@ EvtWord escape_chorogun_event[50];
 
 static EvtWord init_event[43];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord damage_event[108];
 #else
 static EvtWord damage_event[131];
@@ -346,7 +346,7 @@ EVT_END()
 EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(2000)
     CALL(get_gold_chorobon_id, LW(4))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), -1)
         RETURN
@@ -363,7 +363,7 @@ EVT_BEGIN(escape_chorogun_event)
     WAIT_MS(1000)
     CALL(btlevtcmd_GetUnitWork, LW(4), UNIT_WORK_CHOROGUN, LW(3))
     CALL(btlevtcmd_KillUnit, LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_SetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, 1)
 #endif
     RETURN
@@ -400,7 +400,7 @@ EVT_END()
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(0))
     CALL(btlevtcmd_GetUnitId, LW(0), LW(1))
     IF_INT_NOT_EQUAL(LW(1), -1)
@@ -413,11 +413,11 @@ static EVT_BEGIN(damage_event)
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_CALLED, LW(0))
                     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 1)
 #endif
                         CALL(btlevtcmd_WaitAttackEnd)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(10))
                         CALL_CHILD(PTR(chorogun_dead_reward))
                         SET_VALUE(LW(10), -2)
@@ -425,14 +425,14 @@ static EVT_BEGIN(damage_event)
                         CALL(chorogun_escape_all)
                         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
                         CALL(btlevtcmd_KillUnit, LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 1)
 #endif
                     END_IF
                 END_IF
             END_IF
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(btldefaultevt_Damage)
 #else
     END_IF

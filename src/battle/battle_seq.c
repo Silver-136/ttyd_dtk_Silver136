@@ -78,7 +78,7 @@ EVT_END()
  * Started by btlseqFirstAct on a normal battle start (no first strike):
  * pops the stage background layers in with _set_haikei_entry_scale.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN
@@ -179,7 +179,7 @@ const char* _rule_msg_table_after[] = {
     "stg3_tou_cp_053", "stg3_tou_cp_052", "a", "a",
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(_default_haikei_set_entry_event)
     CALL(_set_haikei_entry_scale)
     RETURN
@@ -735,7 +735,7 @@ USER_FUNC(_set_effect_luck) {
  * A step with nothing to do skips its wait step.
  * In the US and PAL releases two of the countdowns are per unit (usCommandDisabled).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void btlseqTurn(BattleWork* wp) {
 #else
 void btlseqTurn(BattleWork* wp) {
@@ -856,7 +856,7 @@ void btlseqTurn(BattleWork* wp) {
             if (!BattleWaitAllActiveEvtEnd(wp)) {
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             BattleIncSeq(wp, SEQ_TURN);
 #else
             if (BattleCheckConcluded(wp)) {
@@ -1445,7 +1445,7 @@ void btlseqTurn(BattleWork* wp) {
                     ret = BtlUnit_CheckRecoveryStatus(unit, STATUS_SLOW);
                     sfx |= ret;
                     if (ret) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         BtlUnit_ResetMoveStatus(unit);
 #endif
                         evt = evtEntry(subsetevt_status_recovery, 10, 0);
@@ -1608,7 +1608,7 @@ void btlseqTurn(BattleWork* wp) {
                     if (!BattleWaitAllActiveEvtEnd(wp)) {
                         break;
                     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     BattleIncSeq(wp, SEQ_TURN);
 #else
                     if (BattleCheckConcluded(wp)) {
@@ -1715,7 +1715,7 @@ void btlseqTurn(BattleWork* wp) {
                             unit->currentHp = unit->maxHp;
                         }
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &heartX, &heartY, &heartZ);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         heartY += BtlUnit_GetHeight(unit);
 #else
                         heartY += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
@@ -1761,7 +1761,7 @@ void btlseqTurn(BattleWork* wp) {
                     if (n > 0) {
                         BtlUnit_RecoverFp(unit, n);
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &flowerX, &flowerY, &flowerZ);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         flowerY += BtlUnit_GetHeight(unit);
 #else
                         flowerY += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
@@ -1923,7 +1923,7 @@ void btlseqPhase(BattleWork* wp) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void btlseqMove(BattleWork* wp) {
 #else
 void btlseqMove(BattleWork* wp) {
@@ -2026,7 +2026,7 @@ void btlseqMove(BattleWork* wp) {
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         unit->tokenFlags &= TOKEN_FLAG_PERSISTENT;
 #else
                         unit->tokenFlags &= 0x80002000;
@@ -2046,7 +2046,7 @@ void btlseqMove(BattleWork* wp) {
                     id = wp->movePriorityQueue[i];
                     if (id != -1) {
                         unit = BattleGetUnitPtr(wp, id);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         if (unit) {
 #else
                         if (unit && unit->movesRemaining > 0) {
@@ -2159,7 +2159,7 @@ void btlseqMove(BattleWork* wp) {
  * TRUE when no unit in this phase's move queue can still act (done for the turn or KO'd).
  * Outside the demos a unit also needs movesRemaining above 0.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BOOL BattlePhaseEndCheck(void) {
 #else
 BOOL BattlePhaseEndCheck(void) {
@@ -2171,7 +2171,7 @@ BOOL BattlePhaseEndCheck(void) {
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         if (wp->movePriorityQueue[i] != -1) {
             unit = BattleGetUnitPtr(wp, wp->movePriorityQueue[i]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (unit && unit->moveState != MOVE_STATE_DONE && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
 #else
             if (unit && unit->moveState != MOVE_STATE_DONE && unit->movesRemaining > 0 &&
@@ -2195,7 +2195,7 @@ BOOL BattlePhaseEndCheck(void) {
  * afterwards updates moves left, Charge, Double/Triple Dip progress,
  * the audience reaction and the unit's act-end event, and returns to btlseqMove.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void btlseqAct(BattleWork* wp) {
 #else
 void btlseqAct(BattleWork* wp) {
@@ -2383,7 +2383,7 @@ void btlseqAct(BattleWork* wp) {
                         }
                         if (unit->movesRemaining <= 0) {
                             unit->moveState = MOVE_STATE_DONE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                             if (!(unit->tokenFlags & kHasRallyWinkStatus)) {
                                 unit->activeTurns = 0;
                             } else {
@@ -2498,7 +2498,7 @@ void btlseqTurnFirstProcess(BattleWork* wp) {
  * units done for the turn; outside the demos Slowed units are still queued),
  * resets their protect target and pose sounds, then sorts the queue and builds the phase event order.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void btlseqPhaseFirstProcess(BattleWork* wp) {
 #else
 void btlseqPhaseFirstProcess(BattleWork* wp) {
@@ -2518,7 +2518,7 @@ void btlseqPhaseFirstProcess(BattleWork* wp) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             unit->moveColorLv = 0xFF;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (unit->moveState == MOVE_STATE_DONE) {
 #else
             if (unit->moveState == MOVE_STATE_DONE && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
@@ -2732,7 +2732,7 @@ BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
                 unit->entryEventId = 0;
                 break;
             }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             while (unit->slideReturnEventId) {
                 if (evtCheckID(unit->slideReturnEventId)) {
                     done = FALSE;

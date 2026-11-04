@@ -160,7 +160,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of Bandit: none, every element hits normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Status vulnerability of Bandit (the demos), as percentage multipliers for the attack's base status chance:
  * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
@@ -199,7 +199,7 @@ static PoseTableEntry pose_table[] = {
     {42, "R_1"},
     {41, "R_1"},
     {40, "W_1"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {56, "I_1"},
     {57, "I_1"},
 #else
@@ -219,7 +219,7 @@ static PoseTableEntry pose_table_item_have[] = {
     {2, "Y_1"},
     {9, "Y_1"},
     {5, "K_1"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {4, "I_1"},
     {3, "I_1"},
 #else
@@ -384,7 +384,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), 256, LW(5))
     IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         MULTIPLY(LW(6), 40)
 #else
         MULTIPLY_FLOAT(LW(6), 40)
@@ -545,7 +545,7 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), 256, LW(5))
     IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         MULTIPLY(LW(6), 40)
 #else
         MULTIPLY_FLOAT(LW(6), 40)
@@ -766,7 +766,7 @@ static USER_FUNC(_steal_item) {
         }
         if (num > 0) {
             evtSetValue(event, itemVar, ITEM_COIN);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             evtSetValue(event, iconVar, 394);
 #else
             evtSetValue(event, iconVar, 402);

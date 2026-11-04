@@ -36,7 +36,7 @@ static BattleWeapon weapon_dokugassun_attack;
 static BattleWeapon weapon_dokugassun_poisongas_attack;
 static EvtWord attack_event[69];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord poisongas_event[274];
 #else
 static EvtWord poisongas_event[303];
@@ -53,7 +53,7 @@ static EvtWord unison_phase_event[140];
 static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[12];
 #else
 static EvtWord wait_event[13];
@@ -67,7 +67,7 @@ BattleUnitKind unit_dokugassun = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     45,
     0,
     1,
@@ -77,7 +77,7 @@ BattleUnitKind unit_dokugassun = {
     2, // bonusCoin
 #endif
     70, // bonusCoinRate
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     4,
 #else
     2, // baseCoin
@@ -124,7 +124,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Poison Puff: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {50, 70, 70, 0, 60, 100, 100, 60, 100, 60, 100, 60, 100, 60, 60, 60, 80, 100, 60, 100, 100, 20};
 #else
 static StatusVulnerability regist = {
@@ -226,7 +226,7 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM | TARGET_WEIGHT_FRONT, // targetWeightFlags
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     50,
 #else
     70, // poisonChance
@@ -256,7 +256,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(poisongas_event))
         GOTO(99)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LW(0), 70)
     ADD(LW(0), 30)
 #else
@@ -265,7 +265,7 @@ static EVT_BEGIN(attack_event)
 #endif
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LW(0), 70)
 #else
     SET_VALUE(LW(0), 65)
@@ -309,7 +309,7 @@ static EVT_BEGIN(poisongas_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE3"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -755,7 +755,7 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
 EVT_END_PAD()

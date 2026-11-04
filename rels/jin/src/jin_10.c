@@ -29,7 +29,7 @@ static EvtWord door_close[12];
 static EvtWord door_open[12];
 static BeroEntry bero_entry_data[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord push_evt[126];
 #else
 static EvtWord push_evt[132];
@@ -148,7 +148,7 @@ static EVT_BEGIN(push_evt)
     ADD_FLOAT(GW(10), LW(10))
     IF_FLOAT_GREATER_OR_EQUAL(GW(10), FLOAT(265.0f))
         SET_FLOAT_VALUE(GW(10), FLOAT(265.0f))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
 #endif
         IF_INT_EQUAL(GF(0), 1)
@@ -158,7 +158,7 @@ static EVT_BEGIN(push_evt)
     END_IF
     IF_FLOAT_LESS_OR_EQUAL(GW(10), FLOAT(0.0f))
         SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
 #endif
         IF_INT_EQUAL(GF(0), 1)

@@ -59,7 +59,7 @@ BattleUnitKind unit_boss_moamoa_tentacle_c = {
     10, // pbSoftCap
     110, // width
     70, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     -50,
     70,
 #else
@@ -72,7 +72,7 @@ BattleUnitKind unit_boss_moamoa_tentacle_c = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     0,
     0,

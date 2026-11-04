@@ -112,7 +112,7 @@ static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord christine_party_lecture_init[];
 extern EvtWord christine_party_lecture[];
 extern EvtWord chuchulina_party_lecture_init[];
@@ -127,7 +127,7 @@ EvtWord chuchulina_party_lecture[236];
 static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[482];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord hammer_lv3_juyoitem_lecture_init[];
 #else
 EvtWord hammer_lv3_juyoitem_lecture_init[107];
@@ -136,7 +136,7 @@ EvtWord hammer_lv3_juyoitem_lecture_init[107];
 EvtWord hammer_lv3_juyoitem_lecture_sub01[29];
 EvtWord hammer_lv3_juyoitem_lecture_sub02[65];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord hammer_lv3_juyoitem_lecture[];
 #else
 EvtWord hammer_lv3_juyoitem_lecture[718];
@@ -509,7 +509,7 @@ static USER_FUNC(effitemget_busaiku) {
  * Mario faces left, the camera moves in front of him and his partner glides next to him.
  */
 EVT_BEGIN(christine_party_lecture_init)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapdisp_onoff, 0)
 #endif
     CALL(evt_mario_set_dir, 270, 0, 0)
@@ -555,7 +555,7 @@ EVT_BEGIN(christine_party_lecture)
     CALL(evt_party_set_pose, 0, STRING("PKR_O_1"))
     WAIT_MS(1000)
     CALL(evt_party_set_pose, 0, STRING("PKR_S_1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapdisp_onoff, 1)
 #endif
     RETURN
@@ -566,7 +566,7 @@ EVT_END()
  * Mario is placed at the start of the stage, the camera moves in and the partner glides next to him.
  */
 EVT_BEGIN(chuchulina_party_lecture_init)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapdisp_onoff, 0)
 #endif
     CALL(evt_mario_set_pos, 0, 0, -600)
@@ -645,7 +645,7 @@ EVT_BEGIN(chuchulina_party_lecture)
     CALL(evt_party_set_pose, 0, STRING("PCH_O_2"))
     WAIT_MS(1000)
     CALL(evt_party_set_pose, 0, STRING("PCH_S_1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapdisp_onoff, 1)
 #endif
     RETURN
@@ -830,7 +830,7 @@ EVT_END()
  * and the camera is set to face them.
  */
 EVT_BEGIN(hammer_lv3_juyoitem_lecture_init)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapdisp_onoff, 0)
 #endif
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -1140,7 +1140,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("R_2"))
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
     CALL(evt_npc_set_position, STRING("キノピコ"), 0, -1000, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapdisp_onoff, 1)
 #endif
     RETURN

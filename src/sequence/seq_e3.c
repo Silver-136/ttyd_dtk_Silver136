@@ -32,7 +32,7 @@
 #include "mario/mario_party.h"
 
 typedef enum winTexMode {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     // PAL's texture file has one texture fewer before the tile
     MODE_5 = 4,
     MODE_6 = 5,
@@ -47,7 +47,7 @@ typedef enum winTexMode {
     MODE_11 = 11,
 } winTexMode;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
 #include "manager/evtmgr.h"
@@ -85,7 +85,7 @@ seq_e3_entry e3_tbl[3] = {
 
 };
 #if VERSION < VERSION_US
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 char* anim_tbl[4 * 4] = {
     "b_mario", "M_W_1", "M_S_1", "M_N_8",
     "c_pkr", "PKR_W_1", "PKR_S_1", "PKR_A_2A",
@@ -122,7 +122,7 @@ static void e3DispShadow(f32 x, f32 y, f32 z);
 void e3Disp(CameraId cameraId, void* param);
 void e3DispOffscreen(CameraId cameraId, void* param);
 #endif
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION != VERSION_DEMO_JP
 static f32 e3BlinkTime(void);
 #endif
@@ -201,7 +201,7 @@ void alarm_handler(OSAlarm* alarm, OSContext* context) {
  * sets the kiosk and save-blocks-off flags and plays the file menu BGM.
  */
 void seq_e3Init(SequenceWork* seq) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     wp->handle = fileAllocf(FILE_TYPE_TPL, "%s/monthry.tpl", getMarioStDvdRoot());
 #else
@@ -224,7 +224,7 @@ void seq_e3Init(SequenceWork* seq) {
     wp->nextScreen = 0;
     wp->scenario = 0;
     wp->poseRotY = 270.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     OSCreateAlarm(&wp->alarm);
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
@@ -236,7 +236,7 @@ void seq_e3Init(SequenceWork* seq) {
 #else
     OSCreateAlarm(&wp->alarm);
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
 #else
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 300, alarm_handler);
@@ -260,7 +260,7 @@ void seq_e3Init(SequenceWork* seq) {
 
 /** Leaves the kiosk menu: frees its textures (and the US demo's characters and their script) and fades out sound. */
 void seq_e3Exit(SequenceWork* seq) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION != VERSION_DEMO_JP
     s32 i;
 
@@ -330,7 +330,7 @@ void seq_e3Main(SequenceWork* seq) {
 
         case 4: {
             prev = wp->scenario;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             stickX = keyGetStickX(0);
             stickY = keyGetStickY(0);
             switch (wp->scenario) {
@@ -418,7 +418,7 @@ void seq_e3Main(SequenceWork* seq) {
                 wp->nextScreen = 0;
                 seq->state++;
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
 #else
@@ -540,7 +540,7 @@ void seq_e3Main(SequenceWork* seq) {
                 pouchGetPtr()->partyData[i].currentHP = 20;
                 pouchGetPtr()->partyData[i].HPLevel = 1;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             for (i = 0; i < 2; i++) {
                 pouchGetItem(ITEM_THUNDER_RAGE);
                 pouchGetItem(ITEM_SHOOTING_STAR);
@@ -554,7 +554,7 @@ void seq_e3Main(SequenceWork* seq) {
             pouchEquipBadgeID(ITEM_POWER_BOUNCE);
             pouchEquipBadgeID(ITEM_POWER_SMASH);
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             if (wp->scenario != 0) {
                 for (i = 0; i < 2; i++) {
                     pouchGetItem(ITEM_THUNDER_RAGE);
@@ -575,7 +575,7 @@ void seq_e3Main(SequenceWork* seq) {
 
             pouchGetPtr()->availableBP = 20;
             pouchGetPtr()->maximumBP = 20;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             if (wp->scenario != 0) {
                 pouchGetItem(ITEM_POWER_BOUNCE);
                 pouchGetItem(ITEM_POWER_SMASH);
@@ -592,7 +592,7 @@ void seq_e3Main(SequenceWork* seq) {
             pouchReviseMarioParam();
             pouchRevisePartyParam();
             statusWinForceUpdate();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
         } break;
     }
@@ -643,7 +643,7 @@ typedef enum E3Texture {
  * and the blinking corner cursor easing toward the selection.
  * On the offscreen page-flip camera it draws the other page.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void e3Disp(CameraId cameraId, void* param) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
     Mtx poseMtx;
@@ -657,13 +657,13 @@ void e3Disp(CameraId cameraId, void* param) {
     f32 projBackup[GX_PROJECTION_SZ];
     f32 viewportBackup[GX_VIEWPORT_SZ];
     CameraEntry camBackup;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     char* keys[3];
 #endif
     s32 active;
     s32 alpha;
     s32 i;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 px, py;
     s32 row, col;
     s32 inset, pass, step;
@@ -692,7 +692,7 @@ void e3Disp(CameraId cameraId, void* param) {
                   camera->viewport[4], camera->viewport[5]);
 
     if (active == 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
         alpha = (s32)((f32)sin((f64)((f32)gp->retraceCount / 30.0f)) * 459.0f);
         if (alpha < 0) {
@@ -784,7 +784,7 @@ void e3Disp(CameraId cameraId, void* param) {
 #else
         // 'Press Start' overlay with alpha pulsing
         alpha = (s32)((f32)sin((f64)((f32)gp->retraceCount / 30.0f)) * 459.0f);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         {
             // PAL: per-language title texture
             s32 tbl[6] = {11, 11, 12, 13, 14, 15};
@@ -798,7 +798,7 @@ void e3Disp(CameraId cameraId, void* param) {
 
         winTexInit(*wp->handle->data);
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             winTexSet(tbl[gp->language], (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #else
         winTexSet(12, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
@@ -807,7 +807,7 @@ void e3Disp(CameraId cameraId, void* param) {
         winTexSet(MODE_11, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
         pressStartGX(alpha, 0.0f, -110.0f);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         }
 #endif
     } else {
@@ -842,7 +842,7 @@ void e3Disp(CameraId cameraId, void* param) {
             }
 
             {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 char* keys[3] = {"menu_monosiri_hei", "menu_monosiri_gon", "menu_monosiri_win"};
 #else
                 char* keys[] = {
@@ -873,7 +873,7 @@ void e3Disp(CameraId cameraId, void* param) {
         for (pass = 1, inset = 5; pass >= 0; pass--, inset -= 5) {
 
             // Top-Left
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #else
@@ -887,7 +887,7 @@ void e3Disp(CameraId cameraId, void* param) {
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 
             // Top-Right
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #else
@@ -901,7 +901,7 @@ void e3Disp(CameraId cameraId, void* param) {
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 
             // Bottom-Left
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #else
@@ -915,7 +915,7 @@ void e3Disp(CameraId cameraId, void* param) {
                       (pass != 0) ? (GXColor){ 0x00, 0x00, 0x00, 0x40 } : (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 
             // Bottom-Right
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
             winTexSet(((gp->retraceCount >> 4) & 1) ? MODE_6 : MODE_7,
 #else
@@ -963,7 +963,7 @@ void e3DispOffscreen(CameraId cameraId, void* param) {
 #if VERSION >= VERSION_US // US: local here, seq_title has the global copy
 static
 #endif
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
 void pressStartGX(s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
@@ -1015,14 +1015,14 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXTexObj startText, gradient;
     Mtx mtx, scale;
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     s32 tbl[6] = {16, 16, 17, 18, 19, 20};
     TEXGetGXTexObjFromPalette(*wp->handle->data, &startText, tbl[gp->language]);
 #else
     TEXGetGXTexObjFromPalette(*wp->handle->data, &startText, 3);
 #endif
     GXLoadTexObj(&startText, GX_TEXMAP0);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     TEXGetGXTexObjFromPalette(*wp->handle->data, &gradient, 3);
 #else
     TEXGetGXTexObjFromPalette(*wp->handle->data, &gradient, 4);
@@ -1052,7 +1052,7 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     GXSetZMode(GX_DISABLE, GX_LEQUAL, GX_DISABLE);
 #else
@@ -1087,7 +1087,7 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     MTXTrans(mtx, x, y, 0.0f);
     MTXScale(scale, (f32)GXGetTexObjWidth(&startText), (f32)GXGetTexObjHeight(&startText), 1.0f);
@@ -1116,7 +1116,7 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXTexCoord2f32(1.0f, 1.0f);
     GXPosition3f32(0.5f, 0.5f, 0.0f);
     GXTexCoord2f32(1.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     GXPosition3f32(-0.5f, 0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);

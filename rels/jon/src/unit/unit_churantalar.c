@@ -67,7 +67,7 @@ static EvtWord yarn_event[44];
 static EvtWord entry_event[48];
 static EvtWord damage_event[10];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event[183];
 static EvtWord blow_dead_event[98];
 #else
@@ -83,7 +83,7 @@ static EvtWord unison_phase_event[120];
 static EvtWord attack_event[72];
 static EvtWord damage_check_event_sub[157];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord piders_attack_common_event1[187];
 static EvtWord piders_attack_common_event1_2[128];
 #else
@@ -167,7 +167,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Arantula: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {70, 80, 30, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 80, 30, 100, 70, 100, 100, 30};
 #else
 static StatusVulnerability regist = {
@@ -641,7 +641,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_SetPos, LW(10), 0, -1000, 0)
 #endif
     CALL(btlevtcmd_KillUnit, LW(10), 1)
@@ -677,7 +677,7 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_SetPos, LW(10), 0, -1000, 0)
 #endif
     CALL(btlevtcmd_KillUnit, LW(10), 1)
@@ -954,7 +954,7 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
@@ -1018,7 +1018,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
     ELSE

@@ -113,7 +113,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  * Status vulnerability of the Putrid Piranha (percent chance to take each status): immune to poison;
  * resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {90, 90, 70, 0, 85, 100, 100, 90, 100, 80, 100, 80, 100, 80, 80, 30, 40, 100, 80, 100, 100, 95};
 #else
 static StatusVulnerability regist = {
@@ -213,7 +213,7 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special

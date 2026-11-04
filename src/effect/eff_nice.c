@@ -348,7 +348,7 @@ void effNiceDisp(CameraId cameraId, void* param) {
     PSMTXScale(scale, 8.0f, 8.0f, 8.0f);
     PSMTXConcat(mtx, scale, mtx);
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     if (gp->language != 0) {
 #else
     if ((gp->language == LANGUAGE_US && wp->type == 3) || (gp->language == LANGUAGE_US && wp->type == 4) || (gp->language == LANGUAGE_IT && wp->type == 6)) {

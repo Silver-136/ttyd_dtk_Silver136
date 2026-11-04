@@ -61,7 +61,7 @@ static BeroEntry bero_data_c[3];
 EvtWord init_cook[29];
 s32 item_tbl_cook[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord talk_cook_nabe_return[];
 #else
 EvtWord talk_cook_nabe_return[47];
@@ -107,7 +107,7 @@ static ShopperData35 shopper_data;
 EvtWord shop_door_open[27];
 EvtWord shop_door_close[31];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_shop_open[];
 #else
 EvtWord evt_shop_open[267];
@@ -127,7 +127,7 @@ EvtWord evt_shop_close[317];
 EvtWord evt_shop_door_init[36];
 static EvtWord evt_yuka_simi[45];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static const char* access_tbl[11];
 static EvtWord evt_access[14];
 static EvtWord evt_access_entry[23];
@@ -396,7 +396,7 @@ s32 item_tbl_cook[] = {
 
 EVT_BEGIN(talk_cook_nabe_return)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_70_00"), 0, STRING("コック"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(item_tbl_cook), LW(1))
 #else
     CALL(evt_win_item_select, 0, PTR(item_tbl_cook), LW(1), 0)
@@ -462,7 +462,7 @@ EVT_BEGIN(talk_cook)
         END_IF
         RETURN
         LABEL(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
@@ -540,7 +540,7 @@ EVT_BEGIN(talk_cook)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_212"), 0, 0)
         CASE_LESS(STG6_44_END_OF_DAY_2)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_219"), 0, 0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_party_stop, 0)
         WAIT_MS(300)
         CALL(evt_msg_print_party, STRING("stg6_rsh_219_2"))
@@ -584,7 +584,7 @@ EVT_BEGIN(talk_waitless_pias_return)
     CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
     DELETE_EVENT(LW(10))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_195"), 0, STRING("ウェイトレス"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(item_tbl_waitless), LW(1))
     IF_INT_NOT_EQUAL(LW(1), -1)
 #else
@@ -1357,7 +1357,7 @@ EVT_BEGIN(shop_door_close)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002634, JP rsh .text+0x2570. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(npc_alpha_except_tenin) {
     s32 alpha = evtGetValue(event, event->args[0]);
     NpcWork* wp = npcGetWorkPtr();
@@ -1419,7 +1419,7 @@ EVT_BEGIN(evt_shop_open)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kagu_s"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tobira"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_tobira_omise"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 500)
         LOOP(0)
@@ -1469,7 +1469,7 @@ EVT_BEGIN(evt_shop_close)
 
 
     END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 500)
         LOOP(0)
@@ -1644,27 +1644,27 @@ EVT_END()
 static const char* access_tbl[] = {
     "table_1",
     "stg6_rsh_268",
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "stg6_rsh_268",
 #endif
     "table_2",
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "stg6_rsh_268",
 #endif
     "stg6_rsh_268",
     "oubun",
     "stg6_rsh_269",
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "stg6_rsh_269",
 #endif
     "shokki",
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "stg6_rsh_270",
 #endif
     "stg6_rsh_270",
     "memo",
     "stg6_rsh_271",
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "stg6_rsh_271",
 #endif
     NULL,
@@ -1676,11 +1676,11 @@ static const char* access_tbl[] = {
  */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
 #endif
         CALL(evt_msg_print, 0, LW(1), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ELSE
         CALL(evt_msg_print, 0, LW(2), 0, 0)
     END_IF
@@ -1693,7 +1693,7 @@ EVT_END()
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         READ_INT2(LW(0), LW(1))
 #else
         READ_INT3(LW(0), LW(1), LW(2))
@@ -2006,7 +2006,7 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
     ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -2027,7 +2027,7 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
         END_IF
     END_IF
     CALL_CHILD(PTR(evt_rsh_03_rnd_npc_entry))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL_CHILD(PTR(evt_access_entry))
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)

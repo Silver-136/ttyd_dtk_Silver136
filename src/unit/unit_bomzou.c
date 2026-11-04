@@ -30,7 +30,7 @@ static EvtWord phase_event[67];
 static EvtWord wait_event[57];
 EvtWord end_battle_evt[19];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord explosion_event[172];
 #else
 static EvtWord explosion_event[173];
@@ -48,7 +48,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** The bomb has no status vulnerabilities (all zero). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -76,7 +76,7 @@ static StatusVulnerability regist = {
 #endif
 
 /** Poses while the fuse has 3 or more turns left (all frames use B_2). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_NORMAL, "B_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_2"},
@@ -86,7 +86,7 @@ static PoseTableEntry pose_table_3[] = {
 #endif
 
 /** Poses while the fuse has 2 turns left (all frames use B_3). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static PoseTableEntry pose_table_2[] = {
     {POSE_TYPE_NORMAL, "B_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_3"},
@@ -96,7 +96,7 @@ static PoseTableEntry pose_table_2[] = {
 #endif
 
 /** Poses while the fuse has 1 turn left (all frames use B_4). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_NORMAL, "B_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_4"},
@@ -193,7 +193,7 @@ BattleWeapon weapon_bomzou_explosion = {
     {0, 10, 10, 100, 30, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -279,7 +279,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -318,7 +318,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -347,7 +347,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN
@@ -420,7 +420,7 @@ static EVT_BEGIN(explosion_event)
     LABEL(99)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
 EVT_END_PAD()
@@ -430,7 +430,7 @@ EVT_END_PAD()
  * Data table events: knocked out (49) queues the blast, tag 53 is the blast itself,
  * and the battle end (63) cuts off the fuse sound.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_EXPLOSION_EVENT_BOMZOU, explosion_event},
@@ -440,7 +440,7 @@ static BattleDataEntry data_table[] = {
 #endif
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -450,7 +450,7 @@ EVT_END()
 #endif
 
 /** The bomb never acts on its own turn; it just returns to its idle loop. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -461,7 +461,7 @@ EVT_END()
  * Death data event (tag 49): queues explosion_event (tag 53) as an after-reaction,
  * so a bomb that is knocked out still blows up.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN

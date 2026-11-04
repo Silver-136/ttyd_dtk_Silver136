@@ -34,7 +34,7 @@ static EvtWord patapata_dmg_first_attack_pos[19];
 static EvtWord attack_event_patapata[541];
 static PoseTableEntry pose_table[18];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table_turn[15];
 #else
 static PoseTableEntry pose_table_turn[17];
@@ -146,7 +146,7 @@ static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 /** Defence attributes of the Paratroopa's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_patapata_attr = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_patapata = {100, 100, 120, 100, 95, 100, 100, 95, 100, 95, 100, 95, 100, 95, 95, 100, 120, 100, 95, 100, 100, 100};
 #else
 static StatusVulnerability regist_patapata = {
@@ -530,7 +530,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "NKT_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
     {POSE_TYPE_DAMAGE, "NKT_D_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_RUN, "NKT_R_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
 #endif
@@ -556,7 +556,7 @@ static BattleUnitDefenseAttr defence_attr = {0};
 /** Defence of the Paratroopa's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 100, 90, 100, 95, 100, 100, 95, 100, 95, 100, 95, 100, 95, 95, 100, 90, 100, 95, 100, 100, 100};
 #else
 static StatusVulnerability regist = {

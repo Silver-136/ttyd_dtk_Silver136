@@ -33,7 +33,7 @@
 
 s32 vivian_cancel_req;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #pragma explicit_zero_data on
 
 /**
@@ -72,7 +72,7 @@ void mot_vivian(void) {
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
         mario->baseSpeed = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     }
 }
 
@@ -111,7 +111,7 @@ void mot_vivian_post(void) {
         marioPaperOff();
         {
             Vec zero = {0.0f, 0.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             mario->dispOfs = zero;
 #else
             mario->dispOfs2 = zero;
@@ -133,7 +133,7 @@ void mot_vivian_post(void) {
             partyChgPoseId(party, PARTY_POSE_STAND);
             partyVivianTailStart(party);
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         camFollowYOn();
 #endif
     } else if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
@@ -151,7 +151,7 @@ void vivian_init_801809C0(PartyEntry* party) {
     party->height = 35.0f;
     party->width = 24.0f;
     party->work.vivian.shadowSize = 10.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     party->work.vivian.tailFlags = 0;
 #else
     party->tailFlags = 0;
@@ -203,7 +203,7 @@ void vivianUnhold(PartyEntry* party) {
     }
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /** hides Vivian's shadow tail (bit 0 of her tail flags), when she sinks into the floor with Mario. */
 void partyVivianTailStop(PartyEntry* party) {
@@ -251,7 +251,7 @@ BOOL vivianDisplayTailCheck(PartyEntry* party) {
 void vivianShadow(PartyEntry* party) {
     f32 dx, dy, dz;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {
 #else
     if (party && party->currentMemberId == PARTY_MEMBER_VIVIAN) {
@@ -285,7 +285,7 @@ void vivian_move(PartyEntry* party) {
 
 // The demo's vivianFollow/vivian_use are older (fixed hide offset, ground search in vivian_use): one copy each
 static inline void vivianFollow(PartyEntry* party) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MarioWork* mario = party->playerPtr;
     f32 ofs;
 
@@ -366,7 +366,7 @@ static inline void vivianFollow(PartyEntry* party) {
  * or X (or vivian_cancel_req) brings them back up with a small hop.
  */
 void vivian_use(PartyEntry* party) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 gx, gy, gz;
     void* hit;
     void* rip;
@@ -382,7 +382,7 @@ void vivian_use(PartyEntry* party) {
         party->useMotionId = 0;
         party->work.vivian.shadowSize = 10.0f;
         party->trailPos = party->position;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         party->work.vivian.followOfs = 0.0f;
         vivian_cancel_req = 0;
         camFollowYOff();
@@ -397,7 +397,7 @@ void vivian_use(PartyEntry* party) {
     switch (party->useMotionId) {
     case 0:
         marioChgMot(MARIO_MOTION_VIVIAN);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         party->work.vivian.followOfs = -13.0f;
 #endif
         vivianFollow(party);
@@ -418,13 +418,13 @@ void vivian_use(PartyEntry* party) {
         if (--party->moveFrames > 0) {
             break;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         party->flags2 |= PARTY_DISP_FLAG_SHADOW_NODECAY;
 #endif
         party->displayDirectionTarget = m->displayDirectionTarget;
         party->moveDir = toMovedirSimple(party->displayDirectionTarget);
         party->trailPos = party->position;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         party->flags2 |= PARTY_DISP_FLAG_SHADOW_NODECAY;
         partyChgPose(party, "PTR_A2_2");
         party->useMotionId = 2;
@@ -452,7 +452,7 @@ void vivian_use(PartyEntry* party) {
         party->moveFrames = 30;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1), &party->position);
     case 4:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (30 - party->moveFrames <= 24) {
             party->dispOfs.y += 0.4f;
             m->dispOfs.y += 0.4f;
@@ -465,7 +465,7 @@ void vivian_use(PartyEntry* party) {
             if (party->dispOfs.y >= 8.0f) {
                 party->dispOfs.y = 8.0f;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (m->dispOfs.y >= 8.0f) {
                 m->dispOfs.y = 8.0f;
 #else
@@ -491,7 +491,7 @@ void vivian_use(PartyEntry* party) {
         partyVivianTailStop(party);
         party->useMotionId = 5;
     case 5:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         vivianFollow(party);
 #endif
         party->work.vivian.shadowSize -= 1.0f;
@@ -502,7 +502,7 @@ void vivian_use(PartyEntry* party) {
         }
         break;
     case 10:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         hit = marioSearchGround(&gx, &gy, &gz, 100.0f, -100.0f);
         if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_SPIKES))) {
             if (m->floorMove.y || m->floorMove.x) {
@@ -533,7 +533,7 @@ void vivian_use(PartyEntry* party) {
     m->position.x += m->floorMove.x;
     m->position.z += m->floorMove.z;
     m->position.y += m->floorMove.y;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     party->position.x += m->floorMove.x;
     party->position.z += m->floorMove.z;
     party->position.y += m->floorMove.y;
@@ -558,7 +558,7 @@ void vivian_use(PartyEntry* party) {
     } else if (party->work.vivian.rippleEffect->flags == 0) {
         party->work.vivian.rippleEffect = NULL;
     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         effRippleSetPosition(party->work.vivian.rippleEffect, p->position.x, 1.5f + p->position.y, p->position.z);
     }
     if (party->useMotionId >= 4) {
@@ -570,14 +570,14 @@ void vivian_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 20:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         party->work.vivian.followOfs = 0.0f;
 #endif
         m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW1_1), &party->position);
         party->useMotionId = 21;
     case 21:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         vivianFollow(party);
 #endif
         party->work.vivian.shadowSize += 1.0f;
@@ -594,7 +594,7 @@ void vivian_use(PartyEntry* party) {
         party->useMotionId = 23;
         break;
     case 23:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         vivianFollow(party);
 #endif
         animPoseSetLocalTime(party->paperAnimGroup, 24.0f);
@@ -603,7 +603,7 @@ void vivian_use(PartyEntry* party) {
         party->moveFrames = 24;
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_VIVIAN_SHADOW2), &party->position);
     case 24:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         vivianFollow(party);
 #endif
         animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
@@ -622,7 +622,7 @@ void vivian_use(PartyEntry* party) {
         }
         break;
     case 25:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         animPoseSetLocalTime(party->paperAnimGroup, party->moveFrames);
         animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
         m->dispOfs.y -= 0.4f;
@@ -648,7 +648,7 @@ void vivian_use(PartyEntry* party) {
         party->useMotionId = 26;
         party->moveFrames = 24;
     case 26:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         animPoseSetLocalTime(party->paperAnimGroup, 0.0f);
         animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], party->work.vivian.marioAnimTime);
         m->dispOfs.y -= 0.4f;
@@ -682,7 +682,7 @@ void vivian_use(PartyEntry* party) {
             m->hitobjStandOn = NULL;
             {
                 Vec zero = {0.0f, 0.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 m->dispOfs = zero;
 #else
                 m->dispOfs2 = zero;

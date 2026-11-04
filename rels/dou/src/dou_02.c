@@ -25,7 +25,7 @@
 
 static BeroEntry bero_entry_data[4];
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 static EvtWord yari_trap_sub[129];
 #else
 static EvtWord yari_trap_sub[119];
@@ -138,14 +138,14 @@ static EVT_BEGIN(yari_trap_sub)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("bb"), HIT_ATTR_SPIKES)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_sub_get_framerate, LW(0))
         IF_INT_EQUAL(LW(0), 50)
             WAIT_MS(2800)
         ELSE
 #endif
         WAIT_MS(2500)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         END_IF
 #endif
         IF_INT_EQUAL(GW(15), 2)

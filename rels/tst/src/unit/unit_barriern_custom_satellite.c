@@ -58,7 +58,7 @@ BattleUnitKind unit_barriern_custom_satellite = {
     0.0f,
     0.0f,
     0.0f,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
     -16,
 #else
@@ -130,7 +130,7 @@ static BattleUnitKindPart parts[] = {
     {6, "btl_un_barriern_custom_satellite", "c_baria_c", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, PART_ATTR_NOT_TARGETABLE | PART_ATTR_HIDDEN | PART_ATTR_NO_SHADOW | PART_ATTR_WORLD_POSITION, 0, pose_table},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Status vulnerability of Mini-X-Yux (the demos), as the percent chance a status takes hold:

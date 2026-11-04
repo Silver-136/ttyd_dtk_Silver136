@@ -28,7 +28,7 @@ static PouchData* mpp;
  * Max HP of each partner by partner id (row) and HP level
  * (column: levels 0 to 2, then 200 for the cap).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
 s16 _party_max_hp_table[8][4] = {
 #else
@@ -45,7 +45,7 @@ s16 _party_max_hp_table[8][4] = {
     {10, 20, 30, 200},
     {15, 25, 35, 200},
     {15, 20, 30, 200},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     {15, 20, 25, 200}
 #else
@@ -116,7 +116,7 @@ void pouchInit(void) {
             party->techLevel = 0;
         }
     }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     strcpy(mpp->yoshiName, "Yoshi");
 #elif VERSION >= VERSION_US
     strcpy(mpp->yoshiName, msgSearch("name_party3"));
@@ -265,7 +265,7 @@ BOOL pouchGetItem(ItemType type) {
         return 1;
     }
     if (type == ITEM_PIANTA_TOKEN) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (yuwp->tokens < 0x7FFFFFFF)
         {
 #else
@@ -452,7 +452,7 @@ BOOL pouchRemoveItem(ItemType type) {
     return 0;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * The demo's pouchRemoveItemIndex shifts the second table wrongly:
@@ -515,7 +515,7 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     }
     for (i = index; i < maximum; p++, i++) {
         if (type == *p) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             pouchShiftDemo(table1, table2, i, maximum);
 #else
             pouchShift(table1, table2, i, maximum);
@@ -526,12 +526,12 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     return FALSE;
 }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 char* strupr(char* str);
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_800d06b4, JP 0x800D06B4. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void pouchHiraToKata(const char* src, char* dst) {
     u16 c;
     s32 len = strlen(src) / 2;
@@ -555,7 +555,7 @@ void pouchHiraToKata(const char* src, char* dst) {
         }
         dst[i * 2] = 0;
     } else {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         // PAL: sort key of a Latin name: drops <...> message tags, upper-cases, folds accented vowels to
         // A E I O U, spells the OE ligature out and drops C-cedilla
         char buf[0x400];
@@ -635,7 +635,7 @@ void pouchHiraToKata(const char* src, char* dst) {
  */
 // PAL calls pouchHiraToKata; JP and US inline their own copy of the conversion
 static inline void pouchAiueoConv(const char* src, char* dst) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     pouchHiraToKata(src, dst);
 #else
 #if VERSION >= VERSION_US
@@ -685,7 +685,7 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 #endif
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /** The demo compares the item names as they are, without the kana conversion. */
 static s32 comp_aiueo(const void* a, const void* b) {
@@ -696,7 +696,7 @@ s32 comp_aiueo(const void* a, const void* b) {
 #endif
     s16 ia = *(s16*)a;
     s16 ib = *(s16*)b;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
     if (r > 0)
         return 1;
@@ -721,7 +721,7 @@ s32 comp_kind(const void* paramA, const void* paramB) {
 }
 
 /** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 comp_aiueo_r(const void* a, const void* b) {
 #else
 s32 comp_aiueo_r(const void* a, const void* b) {
@@ -730,7 +730,7 @@ s32 comp_aiueo_r(const void* a, const void* b) {
 #endif
     s16 ia = *(s16*)a;
     s16 ib = *(s16*)b;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 r = strcmp(msgSearch(itemDataTable[ia].name), msgSearch(itemDataTable[ib].name));
     if (r < 0)
         return 1;
@@ -770,7 +770,7 @@ void pouchSortItem(s32 mode) {
     BOOL swap;
     s16 t2, t1;
     PouchData* pp[1];
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     char keyA[0x80];
     s16 bj;
     s32 l;
@@ -835,7 +835,7 @@ void pouchSortItem(s32 mode) {
 
     // PAL sorts badge names by the pouchHiraToKata key
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         i = 0;
         for (n = 0; n < MAX_BADGES; n++) {
             if (pp[0]->badges[n] != 0) {
@@ -846,7 +846,7 @@ void pouchSortItem(s32 mode) {
         }
         for (n = i; n < MAX_BADGES; n++) {
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         count = 0;
         for (n = 0; n < MAX_BADGES; n++) {
             if (pp[0]->badges[n] != 0) {
@@ -881,7 +881,7 @@ void pouchSortItem(s32 mode) {
             badges[n] = 0;
             equipped[n] = 0;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         for (n = 0; n < i - 1; n++) {
             for (j = n + 1; j < i; j++) {
                 ItemData* a = &itemDataTable[badges[n]];
@@ -925,7 +925,7 @@ void pouchSortItem(s32 mode) {
     }
 }
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         for (j = 0; j < count - 1; j++) {
             for (l = j + 1; l < count; l++) {
                 BOOL swap;
@@ -974,7 +974,7 @@ void pouchSortItem(s32 mode) {
                         swap = TRUE;
                     }
                 } else if (mode == 5) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     if (itemDataTable[bn].type_sort_order > itemDataTable[bj].type_sort_order) {
 #else
                     if (a->type_sort_order > b->type_sort_order) {
@@ -982,7 +982,7 @@ void pouchSortItem(s32 mode) {
                         swap = TRUE;
                     }
                 } else if (mode == 12) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     if (itemDataTable[bn].type_sort_order < itemDataTable[bj].type_sort_order) {
 #else
                     if (a->type_sort_order < b->type_sort_order) {
@@ -992,7 +992,7 @@ void pouchSortItem(s32 mode) {
                 } else if (mode == 6) {
                     if (ca > cb) {
                         swap = TRUE;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     } else if (ca == cb && itemDataTable[bn].type_sort_order > itemDataTable[bj].type_sort_order) {
 #else
                     } else if (ca == cb && a->type_sort_order > b->type_sort_order) {
@@ -1002,7 +1002,7 @@ void pouchSortItem(s32 mode) {
                 } else if (mode == 13) {
                     if (ca < cb) {
                         swap = TRUE;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     } else if (ca == cb && itemDataTable[bn].type_sort_order < itemDataTable[bj].type_sort_order) {
 #else
                     } else if (ca == cb && a->type_sort_order < b->type_sort_order) {
@@ -1011,7 +1011,7 @@ void pouchSortItem(s32 mode) {
                     }
                 }
                 if (swap) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     t1 = badges[j];
                     t2 = equipped[j];
                     badges[j] = badges[l];
@@ -1263,7 +1263,7 @@ s32 pouchGetPartyAttackLv(PartyId partyId) {
 BOOL pouchAddKeepItem(s32 id) {
     s32 i, j;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < MAX_STORED_ITEMS; i++) {
         if (mpp->storedItems[i] == 0) {
             break;
@@ -1287,7 +1287,7 @@ BOOL pouchAddKeepItem(s32 id) {
 }
 
 /** Removes a stored item: demos clear the first matching id; retail requires id at index and closes the gap. FALSE if not found. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BOOL pouchRemoveKeepItem(s32 id) {
     s32 i;
 
@@ -1442,7 +1442,7 @@ BOOL pouchEquipBadgeID(s32 badgeId) {
 }
 
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Unequips the first worn copy of a badge; FALSE if none is worn.
@@ -1471,7 +1471,7 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
  * Adds it to the special table outside battle; the demo adds it to the bargain table, in or out of battle.
  */
 s32 pouchArriveBadge(s32 id) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     return badgeShop_add(bdsw->bargain_table, (s16)id, 1);
 #else
     return badgeShop_add(bdsw->special_table, (s16)id, 1);

@@ -62,7 +62,7 @@ void mot_talk(void);
 void mot_getItem(void);
 void mot_kaze(void);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void mot_bottomless(void);
 static void mot_cloud_post(void);
 #else
@@ -114,7 +114,7 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_plane, NULL, mot_plane_post},
     {mot_ship, NULL, mot_ship_post},
     {mot_yoshi, NULL, mot_yoshi_post},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {mot_cloud, NULL, mot_cloud_post},
 #else
     {mot_cloud, NULL, cloudResetAt},
@@ -157,7 +157,7 @@ void marioChgMoveMotion(void) {
         mario_plane_cancel();
         return;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
         allPartyForceRideOn();
         return;
@@ -244,12 +244,12 @@ void marioChgRollMotion(void) {
  */
 void marioChgJumpStandMotion(f32 v) {
     MarioWork* mario = marioGetPtr();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     camFollowYOn();
 #endif
     if (marioChkSts(MARIO_STS_ROLL)) {
         mario->mot.jump.standHeight = v;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     } else if (mario->currMotionId == MARIO_MOTION_YOSHI) {
 #else
         effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
@@ -358,7 +358,7 @@ void marioBoots(void) {
         return;
     }
     if (!(flags & MARIO_FLAG_HAS_INPUT_JUMP)) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         return;
     }
     if (mario->currMotionId == MARIO_MOTION_PLANE) {
@@ -432,7 +432,7 @@ void marioChgMotSub(MarioMotion id, s32 callPost) {
         if (marioMotTbl[mario->prevMotionId].post) {
             marioMotTbl[mario->prevMotionId].post();
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     } else if (mario->prevMotionId == MARIO_MOTION_JABARA) {
         if (marioMotTbl[mario->prevMotionId].post) {
             marioMotTbl[mario->prevMotionId].post();
@@ -725,7 +725,7 @@ void marioFall(void) {
             mario->position.y += spd;
         } else {
             mario->position.y = y;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (marioPriCheckJabara() && a != -1 && rub >= 0) {
 #else
 #if VERSION >= VERSION_US
@@ -835,7 +835,7 @@ void marioLandOn(void) {
             return;
         }
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             marioChgMotSub(MARIO_MOTION_STAY, FALSE);
 #else
             marioSlitReenter();
@@ -861,7 +861,7 @@ void marioLandOn(void) {
             quake_kpaLandOn();
             return;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         marioChgMot(MARIO_MOTION_WALK); // the demo does not stay in the slit after landing
 #else
         if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
@@ -903,7 +903,7 @@ void marioLandOn(void) {
         return;
     }
     if (flags & MARIO_FLAG_PAPER_MODE) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         marioChgMotSub(MARIO_MOTION_STAY, FALSE);
 #else
         marioSlitReenter();
@@ -916,7 +916,7 @@ void marioLandOn(void) {
 }
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static f32 marioDemoHalf(f32 x) {
     if (x < 0.0) {
         return x;
@@ -975,7 +975,7 @@ void mot_talk(void) {
         if (fbat != NULL) {
             marioChgPose(((NpcEntry*)fbat)->checkPose);
         }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if (!strcmp(mario->animName, "M_I_3")) {
 #else
         if (!strcmp(mario->animName, "M_I_2")) {
@@ -1053,7 +1053,7 @@ BOOL marioChkJump(void) {
         }
     }
     if (fbatNpcTalkCheck()) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         return FALSE;
     }
     if (mario->hitobjStandOn && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
@@ -1073,7 +1073,7 @@ BOOL marioChkJump(void) {
 BOOL marioChkTransform(void) {
     MarioWork* mario = marioGetPtr();
     if (!(mario->buttonTrg & PAD_BUTTON_Y)) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         return FALSE;
     }
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON) && mario->partyUseDelay) {
@@ -1130,7 +1130,7 @@ BOOL marioChkItemMotion(void) {
 
 /** Always 0: a left-over stick-rub check; marioMain's air movement would skip the stick while it returned nonzero. */
 s32 L_marioChkRub(void) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MarioWork* mario = marioGetPtr();
 #endif
     return 0;
@@ -1177,7 +1177,7 @@ s32 marioRollChgChk(void) {
  */
 void marioChgMotJump2(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED) {
 #else
     if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED && mario->currMotionId != MARIO_MOTION_ROLL) {
@@ -1187,7 +1187,7 @@ void marioChgMotJump2(void) {
 }
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * In the demo the Flurrie motion lives here: party_cloud.c has no mot_cloud yet,

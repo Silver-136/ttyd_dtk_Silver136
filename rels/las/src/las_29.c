@@ -1044,7 +1044,7 @@ EVT_BEGIN(last_evt_1)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #else
@@ -1286,7 +1286,7 @@ EVT_BEGIN(last_evt_1)
     END_INLINE_EVENT
     CALL(evt_mapobj_get_position, STRING("S_hakahuta"), LW(0), LW(1), LW(2))
     ADD(LW(2), 50)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff64, STRING(""), STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, 0, STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1543,7 +1543,7 @@ EVT_BEGIN(last_evt_3)
         ADD(LW(3), 30)
         SET_VALUE(LW(4), LW(1))
         ADD(LW(4), 50)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
@@ -1553,7 +1553,7 @@ EVT_BEGIN(last_evt_3)
         ADD(LW(3), 10)
         SET_VALUE(LW(4), LW(1))
         ADD(LW(4), 25)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
@@ -1563,7 +1563,7 @@ EVT_BEGIN(last_evt_3)
         SUBTRACT(LW(3), 20)
         SET_VALUE(LW(4), LW(1))
         ADD(LW(4), 10)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
@@ -1609,7 +1609,7 @@ EVT_BEGIN(last_evt_3)
             CALL(evt_sub_random, 20, LW(3))
             SUBTRACT(LW(3), 10)
             ADD(LW(3), LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_eff64, STRING(""), STRING("kemuri12_n64"), 0, LW(3), LW(1), LW(2), FLOAT(1.0f), 30, 0, 0, 0, 0, 0, 0)
 #else
             CALL(evt_eff64, 0, STRING("kemuri12_n64"), 0, LW(3), LW(1), LW(2), FLOAT(1.0f), 30, 0, 0, 0, 0, 0, 0)
@@ -1639,7 +1639,7 @@ EVT_BEGIN(last_evt_3)
         ADD(LW(3), 30)
         SET_VALUE(LW(4), LW(1))
         ADD(LW(4), 15)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
@@ -1649,7 +1649,7 @@ EVT_BEGIN(last_evt_3)
         ADD(LW(3), 5)
         SET_VALUE(LW(4), LW(1))
         ADD(LW(4), 30)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
@@ -1659,7 +1659,7 @@ EVT_BEGIN(last_evt_3)
         SUBTRACT(LW(3), 25)
         SET_VALUE(LW(4), LW(1))
         ADD(LW(4), 10)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("hit"), 2, LW(3), LW(4), LW(2), 1, 5, 0, 0, 0, 0, 0, 0)
@@ -1824,7 +1824,7 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_mov_pos2, 0, 0, FLOAT(120.0f))
     CALL(evt_npc_release_filednpc, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #endif
 
@@ -2257,7 +2257,7 @@ EVT_BEGIN(last_evt_3_2)
     // The Shadow Queen is shaken by the voices and the light that surrounds Mario.
     CALL(evt_msg_print, 0, STRING("stg8_las_148_76"), PTR(b_peach_msgcb), STRING("ブラックピーチ"))
     CALL(evt_npc_get_position, STRING("ブラックピーチ"), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff64, STRING(""), STRING("stardust_n64"), 1, LW(0), LW(1), LW(2), 30, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, 0, STRING("stardust_n64"), 1, LW(0), LW(1), LW(2), 30, 0, 0, 0, 0, 0, 0, 0)
@@ -2294,7 +2294,7 @@ EVT_BEGIN(last_evt_3_2)
                 ADD(LW(3), LW(0))
                 CALL(evt_sub_random, 100, LW(4))
                 ADD(LW(4), LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_eff64, STRING(""), STRING("stardust_n64"), 2, LW(3), LW(4), LW(2), 42, 0, 0, 0, 0, 0, 0, 0)
 #else
                 CALL(evt_eff64, 0, STRING("stardust_n64"), 2, LW(3), LW(4), LW(2), 42, 0, 0, 0, 0, 0, 0, 0)
@@ -2311,7 +2311,7 @@ EVT_BEGIN(last_evt_3_2)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ブラックピーチ"), LW(0), LW(1), LW(2))
         ADD(LW(1), 20)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff64, STRING(""), STRING("crystal_n64"), 4, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
         WAIT_MS(200)
         CALL(evt_eff64, STRING(""), STRING("crystal_n64"), 4, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
@@ -2330,7 +2330,7 @@ EVT_BEGIN(last_evt_3_2)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ブラックピーチ"), LW(0), LW(1), LW(2))
         ADD(LW(1), 20)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff64, STRING(""), STRING("crystal_n64"), 4, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
         WAIT_MS(200)
         CALL(evt_eff64, STRING(""), STRING("crystal_n64"), 4, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
@@ -2349,7 +2349,7 @@ EVT_BEGIN(last_evt_3_2)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ブラックピーチ"), LW(0), LW(1), LW(2))
         ADD(LW(1), 20)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff64, STRING(""), STRING("crystal_n64"), 4, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
         WAIT_MS(200)
         CALL(evt_eff64, STRING(""), STRING("crystal_n64"), 4, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
@@ -2364,7 +2364,7 @@ EVT_BEGIN(last_evt_3_2)
         SUBTRACT(LW(0), 15)
         ADD(LW(1), 20)
         ADD(LW(2), 10)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff64, STRING(""), STRING("snow_dust_n64"), 4, LW(0), LW(1), LW(2), 15, 15, FLOAT(1.0f), 6, 60, 0, 0, 0)
 #else
         CALL(evt_eff64, 0, STRING("snow_dust_n64"), 4, LW(0), LW(1), LW(2), 15, 15, FLOAT(1.0f), 6, 60, 0, 0, 0)
@@ -2380,7 +2380,7 @@ EVT_BEGIN(last_evt_3_2)
     CALL(evt_npc_get_position, STRING("ブラックピーチ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_QUEEN_SHINE3"), LW(0), LW(1), LW(2), 0)
     ADD(LW(1), 20)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff64, STRING(""), STRING("release_n64"), 3, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, 0, STRING("release_n64"), 3, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
@@ -2424,7 +2424,7 @@ EVT_BEGIN(last_evt_3_2)
     CALL(evt_msg_print, 0, STRING("stg8_las_149"), 0, STRING("ピーチ姫"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #else
@@ -2484,7 +2484,7 @@ EVT_BEGIN(last_evt_3_2)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("ブラックピーチ"), 0, 0, 0, 0, 0, 0, 0, 60)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("ブラックピーチ"), 0, 0, 0, 0, 0, 0, 0, 60)
@@ -2495,7 +2495,7 @@ EVT_BEGIN(last_evt_3_2)
     CALL(evt_npc_get_position, STRING("ピーチ姫"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_PEACH_SHINE1"), LW(0), LW(1), LW(2), 0)
     ADD(LW(1), 30)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff64, STRING(""), STRING("lensflare_n64"), 0, LW(0), LW(1), LW(2), 0, 96, 0, 0, 0, 0, 0, 0)
     WAIT_MS(400)
     CALL(evt_eff64, STRING(""), STRING("crystal_n64"), 4, LW(0), LW(1), LW(2), 1, 48, 0, 0, 0, 0, 0, 0)
@@ -2527,7 +2527,7 @@ EVT_BEGIN(last_evt_3_2)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_MARIO_SHINE1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff64, STRING(""), STRING("broken_barrier_n64"), 2, LW(0), LW(1), LW(2), 1, 60, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff64, STRING(""), STRING("broken_barrier_n64"), 2, LW(3), LW(4), LW(5), 1, 60, 0, 0, 0, 0, 0, 0)
     WAIT_MS(900)
@@ -2913,7 +2913,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_ENDING1"))
     WAIT_MS(300)
     CALL(rou_hikari_front_onoff, 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
@@ -3103,7 +3103,7 @@ EVT_BEGIN(last_evt_4)
     ADD(LW(3), 15)
     SET_VALUE(LW(4), LW(1))
     ADD(LW(4), 10)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff, STRING(""), STRING("kemuri_test"), 0, LW(3), LW(4), LW(2), 1, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, LW(3), LW(4), LW(2), 1, 0, 0, 0, 0, 0, 0, 0)
@@ -3112,7 +3112,7 @@ EVT_BEGIN(last_evt_4)
     ADD(LW(3), 5)
     SET_VALUE(LW(4), LW(1))
     ADD(LW(4), 5)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff, STRING(""), STRING("kemuri_test"), 0, LW(3), LW(4), LW(2), 1, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, LW(3), LW(4), LW(2), 1, 0, 0, 0, 0, 0, 0, 0)
@@ -3121,7 +3121,7 @@ EVT_BEGIN(last_evt_4)
     SUBTRACT(LW(3), 20)
     SET_VALUE(LW(4), LW(1))
     ADD(LW(4), 7)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff, STRING(""), STRING("kemuri_test"), 0, LW(3), LW(4), LW(2), 1, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, LW(3), LW(4), LW(2), 1, 0, 0, 0, 0, 0, 0, 0)
@@ -3163,7 +3163,7 @@ EVT_BEGIN(last_evt_4)
     // The story is set to the end of the main game and the scene moves to Rogueport (gor_11).
     SET_VALUE(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 1, FADE_IN_BLACK, 300)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_bero_mapchange, STRING("gor_11"), STRING(""))
 #else
     CALL(evt_bero_mapchange, STRING("gor_11"), 0)
@@ -3213,7 +3213,7 @@ EVT_BEGIN(las_29_init_evt)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_snd_set_rev_mode, 2)
 #endif
             CALL(rousoku_init, 1)
@@ -3223,7 +3223,7 @@ EVT_BEGIN(las_29_init_evt)
         IF_STR_EQUAL(LW(15), STRING("starstone"))
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_snd_set_rev_mode, 2)
 #endif
             CALL(rousoku_init, 1)
@@ -3233,7 +3233,7 @@ EVT_BEGIN(las_29_init_evt)
         IF_STR_EQUAL(LW(15), STRING("sekai_yami2"))
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(rousoku_init, 1)
             CALL_CHILD(nise_mario_init)
 #else
@@ -3248,7 +3248,7 @@ EVT_BEGIN(las_29_init_evt)
         IF_STR_EQUAL(LW(15), STRING("sekai_yami1"))
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_snd_set_rev_mode, 2)
 #endif
             CALL(rousoku_init, 1)
@@ -3256,7 +3256,7 @@ EVT_BEGIN(las_29_init_evt)
         END_IF
         IF_STR_EQUAL(LW(15), STRING("w_bero"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_snd_set_rev_mode, 2)
 #endif
             CALL(rousoku_init, 0)
@@ -3265,7 +3265,7 @@ EVT_BEGIN(las_29_init_evt)
         CASE_EQUAL(STG8_16_THE_RETURN_OF_THE_QUEEN)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_set_rev_mode, 2)
 #endif
         CALL(evt_party_stop, 0)
@@ -3274,7 +3274,7 @@ EVT_BEGIN(las_29_init_evt)
         CASE_DEFAULT
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_set_rev_mode, 2)
 #endif
         CALL_CHILD(PTR(evt_bero_info_run))

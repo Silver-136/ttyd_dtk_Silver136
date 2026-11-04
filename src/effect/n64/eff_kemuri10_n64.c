@@ -146,7 +146,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     work->rot[1][3] = zr;
     work->rot[2][3] = zr;
     work->scale = 0.1f * scale;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     work->camera = CAMERA_3D;
 #endif
     return effect;
@@ -157,7 +157,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
  * The alpha rises and the velocity decays for the first 11 frames, then both drop off quickly;
  * the scale grows by 5% per frame and the texture offset scrolls.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effKemuri10Main(EffectEntry* effect) {
 #else
 void effKemuri10Main(EffectEntry* effect) {
@@ -177,7 +177,7 @@ void effKemuri10Main(EffectEntry* effect) {
     position = tmp;
     // FAKE: the timer goes through a temporary for the decrement; `work->timer--;` changes the object
     timer = work->timer;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     camera = work->camera;
 #endif
     work->timer = timer - 1;
@@ -207,7 +207,7 @@ void effKemuri10Main(EffectEntry* effect) {
         work->scale *= 1.05f;
         work++;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effKemuri10Disp, effect);
 #else
     dispEntry(camera, dispCalcZ(&position), DISP_MODE_XLU, effKemuri10Disp, effect);

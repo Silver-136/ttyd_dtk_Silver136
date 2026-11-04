@@ -33,7 +33,7 @@ typedef struct EffTimestampN64Work {
     s32 delay[10];      // 0x14C
 } EffTimestampN64Work;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static u8 colr[17] = {255, 255, 255, 198, 138, 130, 130, 130, 130, 130, 175, 215, 250, 255, 255, 255, 255};
 static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255, 255, 225, 198, 159, 130};
 static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};
@@ -54,7 +54,7 @@ static u8 scale_data[4] = {120, 80, 40, 60};
  * Red, green and blue of each piece: the pieces run through the rainbow from red through green
  * and blue back to red (only the first ten entries are used).
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static u8 colr[17] = {255, 255, 255, 198, 138, 130, 130, 130, 130, 130, 175, 215, 250, 255, 255, 255, 255};
 static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255, 255, 225, 198, 159, 130};
 static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};

@@ -25,7 +25,7 @@ static BeroEntry bero_data_b[2];
 static BeroEntry bero_data_c[2];
 static EvtWord init_unten[6];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_unten[8];
 #else
 static EvtWord talk_unten[19];
@@ -36,7 +36,7 @@ static const char* access_tbl[5];
 static EvtWord evt_access[14];
 static EvtWord evt_access_entry[23];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_07_init_evt[];
 #else
 EvtWord rsh_07_init_evt[113];
@@ -119,11 +119,11 @@ static EVT_BEGIN(init_unten)
 EVT_END()
 
 static EVT_BEGIN(talk_unten)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #endif
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
     END_IF
@@ -200,7 +200,7 @@ EVT_BEGIN(rsh_07_init_evt)
     ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)

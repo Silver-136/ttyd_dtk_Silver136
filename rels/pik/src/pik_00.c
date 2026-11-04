@@ -95,7 +95,7 @@ static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord hom_10_init_evt[104];
 #else
 static EvtWord hom_10_init_evt[140];
@@ -106,7 +106,7 @@ static BeroEntry bero_data[3];
 static const char* name_tbl[6];
 EvtWord evt_pik_yajirushi[71];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_train[252];
 #else
 static EvtWord evt_train[295];
@@ -114,7 +114,7 @@ static EvtWord evt_train[295];
 
 EvtWord init_ekiin[8];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord talk_ekiin[];
 #else
 EvtWord talk_ekiin[146];
@@ -126,7 +126,7 @@ static EvtWord talk_papa[141];
 static EvtWord init_mama[8];
 s32 iri_29_item_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_mama[316];
 #else
 static EvtWord talk_mama[318];
@@ -137,7 +137,7 @@ static EvtWord talk_konari[58];
 static EvtWord init_madam[8];
 static s32 item_tbl_madam[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_madam_ring_return[52];
 #else
 static EvtWord talk_madam_ring_return[54];
@@ -145,7 +145,7 @@ static EvtWord talk_madam_ring_return[54];
 
 s32 iri_23_item_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_madam[183];
 #else
 static EvtWord talk_madam[185];
@@ -172,7 +172,7 @@ EvtWord evt_rot_door_sub[63];
 EvtWord evt_rot_door[9];
 EvtWord evt_pik_00_arrival[86];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_seacret[];
 #else
 EvtWord evt_seacret[131];
@@ -180,7 +180,7 @@ EvtWord evt_seacret[131];
 
 static EvtWord mobj_box00[34];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord pik_00_init_evt[];
 #else
 EvtWord pik_00_init_evt[410];
@@ -893,7 +893,7 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -1010,11 +1010,11 @@ EVT_BEGIN(evt_pik_yajirushi)
 EVT_END()
 
 static EVT_BEGIN(evt_train)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(11), 1)
 #endif
     CALL(evt_hitobj_onoff, STRING("n_bero"), 1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1028,14 +1028,14 @@ static EVT_BEGIN(evt_train)
         GOTO(0)
     END_IF
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_stop, 0)
     WAIT_MS(200)
 #endif
     CALL(evt_mario_mov_pos2, -215, -360, FLOAT(80.0f))
     CALL(evt_mario_mov_pos2, -230, -425, FLOAT(80.0f))
     CALL(evt_mario_set_dir, 90, 300, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_stop, 0)
     WAIT_MS(200)
     CALL(evt_party_move_pos2, 0, -215, -360, FLOAT(80.0f))
@@ -1047,7 +1047,7 @@ static EVT_BEGIN(evt_train)
     WAIT_MS(200)
     CALL(evt_party_move_pos2, 1, -215, -420, FLOAT(80.0f))
     CALL(evt_party_set_dir, 1, 270, 300)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_stop, 1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_set_pos, 0, -200, LW(1), -425)
@@ -1096,7 +1096,7 @@ static EVT_BEGIN(evt_train)
     END_IF
     SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #endif
     SET_VALUE(GSWF_HOM_TRAIN_BOARDED_UNUSED, 1)
@@ -1157,7 +1157,7 @@ EVT_BEGIN(talk_ekiin)
                 CALL(evt_npc_move_position, STRING("me"), -260, -335, 0, FLOAT(120.0f), 1)
                 CALL(evt_npc_set_ry, STRING("me"), 90)
                 SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL_CHILD(evt_train)
 #else
                 SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 0)
@@ -1434,7 +1434,7 @@ static EVT_BEGIN(talk_mama)
             IF_INT_GREATER(LW(0), 0)
                 // Trouble Center request 29: Goldbob's wife asks what Mario needs, and he shows the Present.
                 CALL(evt_msg_print, 0, STRING("irai_29_14"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, PTR(iri_29_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl), LW(0), 0)
@@ -1598,7 +1598,7 @@ static s32 item_tbl_madam[] = {
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_pik_04_06"), 0, STRING("マダム"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
 #else
     CALL(evt_win_item_select, 0, PTR(item_tbl_madam), LW(1), 0)
@@ -1626,7 +1626,7 @@ static EVT_BEGIN(talk_madam)
         CALL(evt_pouch_check_item, ITEM_WRESTLING_MAG, LW(0))
         IF_INT_GREATER(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_23_01"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(iri_23_item_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(iri_23_item_tbl), LW(0), 0)
@@ -1980,7 +1980,7 @@ EVT_BEGIN(evt_rot_door)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(erase_house)
     IF_INT_EQUAL(GF(11), 1)
         RETURN
@@ -2053,7 +2053,7 @@ EVT_BEGIN(evt_seacret)
     CALL(evt_img_free_capture, STRING("img"), 0)
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, 0, 0, 0, 0)
     CALL(evt_img_alloc_capture, STRING("img"), 2, STRING("ofs"), 1, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_img_set_position, STRING("img"), -4, -298)
     CALL(evt_img_set_virtual_point, STRING("img"), 0, 0, 5)
 #else
@@ -2063,7 +2063,7 @@ EVT_BEGIN(evt_seacret)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
     CALL(evt_img_onoff, STRING("img"), 1)
     CALL(img_flag)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_1_sakai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_set_offscreen, 1, STRING("e"), STRING("ofs"))
@@ -2100,7 +2100,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_badge_gat"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_HP_DRAIN_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item00"), 258)
@@ -2119,7 +2119,7 @@ EVT_END()
  * and temporarily sets GF(11) so the villa roof stays hidden when entering through n_bero.
  */
 EVT_BEGIN(pik_00_init_evt)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(11), 0)
 #endif
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
@@ -2229,7 +2229,7 @@ EVT_BEGIN(pik_00_init_evt)
     END_INLINE_EVENT
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bero_"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_1_N"), MAP_OBJ_FLAG_CLIP)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_run_case_evt, CASE_UNDER, 1, STRING("a_home_yuka"), 0, PTR(erase_house), 0)
     CALL(evt_run_case_evt, CASE_NOT_UNDER, 1, STRING("a_home_yuka"), 0, PTR(appear_house), 0)
 #else
@@ -2263,7 +2263,7 @@ USER_FUNC(img_flag) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Retail house-floor watcher: hides ie_1 while Mario is over a_home_yuka or GF(11) is set,
  * restores it after he leaves, and keeps running.
@@ -2295,7 +2295,7 @@ USER_FUNC(under) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * The demo's version: while Yoshi is ridden it updates the hit object under Mario,
  * which the house floor's case events (erase_house, appear_house) react to.

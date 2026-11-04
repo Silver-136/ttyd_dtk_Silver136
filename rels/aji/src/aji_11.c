@@ -42,7 +42,7 @@ EvtWord evt_gajigaji_main[96];
 EvtWord evt_gajigaji[50];
 static s32 item_list[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord peach_evt_disksys[];
 #else
 EvtWord peach_evt_disksys[164];
@@ -52,7 +52,7 @@ EvtWord peach_evt_tana1[50];
 EvtWord peach_evt_tana2[31];
 static EvtWord peach_evt_stg5[105];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_11_init_evt[];
 #else
 EvtWord aji_11_init_evt[111];
@@ -64,7 +64,7 @@ EvtWord aji_11_init_evt[111];
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -81,7 +81,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -267,7 +267,7 @@ EVT_BEGIN(peach_evt_disksys)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(item_list), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
@@ -393,7 +393,7 @@ EVT_BEGIN(aji_11_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     END_SWITCH
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI6"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

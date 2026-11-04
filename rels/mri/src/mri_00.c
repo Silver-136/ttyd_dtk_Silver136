@@ -127,7 +127,7 @@ static EvtWord evt_cloud_main_evt[4];
 f32 guide_move_data[15];
 EvtWord open_bigtree[446];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord mario_see_you[];
 #else
 EvtWord mario_see_you[210];
@@ -137,7 +137,7 @@ EvtWord puni_set[59];
 static EvtWord sekai_yami_npc[59];
 EvtWord sekai_yami_puni[70];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord sekai_yami_evt[286];
 static EvtWord minnnanokoe_evt[614];
 #else
@@ -150,7 +150,7 @@ static EvtWord evt_switch_init[17];
 #if VERSION >= VERSION_US
 EvtWord mri_00_init_evt[377];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord mri_00_init_evt[291];
 #else
 EvtWord mri_00_init_evt[296];
@@ -438,7 +438,7 @@ static EVT_BEGIN(guide_talk)
         SPAWN_EVENT(PTR(seal_bigtree2))
         CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
         CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CASE_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
 #else
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -952,7 +952,7 @@ static USER_FUNC(evt_cloud_main) {
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (party->currentMemberId != 5) {
         return EVT_RETURN_BLOCK;
     }
@@ -1349,7 +1349,7 @@ EVT_BEGIN(mario_see_you)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)
@@ -1588,7 +1588,7 @@ static EVT_BEGIN(sekai_yami_evt)
     SPAWN_EVENT(PTR(sekai_yami_puni))
     SET_VALUE(LW(0), 64)
     SPAWN_EVENT(PTR(sekai_yami_puni))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 1000)
@@ -1655,7 +1655,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_ry, STRING("プニ族長老"), 270)
     CALL(evt_npc_set_position, STRING("ライバル"), -100, 0, 225)
     CALL(evt_npc_set_ry, STRING("ライバル"), 270)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_yuka_hika_02"), MAP_OBJ_FLAG_HIDDEN)
 #endif
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
@@ -1856,7 +1856,7 @@ EVT_BEGIN(mri_00_init_evt)
         IF_INT_EQUAL(LW(15), PARTY_MEMBER_NONE)
             CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
             CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
     END_IF
@@ -1885,7 +1885,7 @@ EVT_BEGIN(mri_00_init_evt)
                 SPAWN_EVENT(PTR(mario_see_you_init))
             END_INLINE_EVENT
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_SWITCH
 #endif
     CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)

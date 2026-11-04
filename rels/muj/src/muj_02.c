@@ -52,7 +52,7 @@ EvtWord lost_wedding_ring_sub[4];
 EvtWord lost_wedding_ring[395];
 static s32 itemsel_table00[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord wedding_ring_consign[];
 #else
 EvtWord wedding_ring_consign[30];
@@ -326,7 +326,7 @@ EVT_BEGIN(wedding_ring_consign)
     SET_VALUE(LW(0), 0)
     CALL(evt_pouch_check_item, ITEM_WEDDING_RING, LW(10))
     IF_INT_NOT_EQUAL(LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(itemsel_table00), LW(10))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table00), LW(10), 0)
@@ -371,7 +371,7 @@ EVT_BEGIN(find_wedding_ring)
         ADD(LW(2), 110)
         CALL(evt_npc_set_ry, STRING("モニー"), 270)
         CALL(evt_npc_move_position, STRING("モニー"), LW(0), LW(2), 0, FLOAT(120.0f), 0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         ADD(LW(0), -350)
 #else
         ADD(LW(0), -200)
@@ -386,7 +386,7 @@ EVT_BEGIN(find_wedding_ring)
         ADD(LW(2), 110)
         CALL(evt_npc_set_ry, STRING("ピートン"), 270)
         CALL(evt_npc_move_position, STRING("ピートン"), LW(0), LW(2), 0, FLOAT(120.0f), 0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         ADD(LW(0), -350)
 #else
         ADD(LW(0), -200)

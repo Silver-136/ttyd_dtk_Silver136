@@ -20,7 +20,7 @@
 #include "sfx_name_word.h"
 #include "statuswindow.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "win/win_main.h"
 #endif
 
@@ -133,7 +133,7 @@ EVT_BEGIN(fall_gameover)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_FRAMES(120)
 #else
 #if VERSION >= VERSION_US
@@ -210,7 +210,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
     CALL(evt_mario_clear_party, 1)
     WAIT_FRAMES(1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgm_unpause)
 #endif
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
@@ -280,7 +280,7 @@ EVT_BEGIN(evt_gameover)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void seq_gameOverInit(SequenceWork* work) {
     winReInit();
     psndStopAllFadeOut();
@@ -379,12 +379,12 @@ void seq_gameOverMain(SequenceWork* work) {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(FADE_IN_BLACK, 1000, color);
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
 #endif
             marioReset();
             marioEntry();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
             if ((u32)psbgm[0].streamId != 0xFFFFFFFFU) {
                 sound.streams[psbgm[0].streamId].flags |= SOUND_STREAM_FLAG_PAUSE;
@@ -403,7 +403,7 @@ void seq_gameOverMain(SequenceWork* work) {
                 GXColor color = {0, 0, 0, 255};
                 fadeEntry(FADE_CURTAIN_CENTER_A2, 0, color);
             }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             psndBGMOff_f_d(PSND_FADEOUT, 4000, FALSE);
 #endif
             work->state++;
@@ -412,7 +412,7 @@ void seq_gameOverMain(SequenceWork* work) {
             if (!fadeIsFinish()) {
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             gp->resetType = RESET_TYPE_SOFT;
 #else
             _relUnLoad();

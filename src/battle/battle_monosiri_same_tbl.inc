@@ -22,7 +22,7 @@ BattleUnitType same_tbl_gesso_arm_r[] = {
     UNIT_NULL
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "../src/battle/battle_monosiri_rampell.inc"
 #endif
 
@@ -282,13 +282,13 @@ BattleUnitType same_tbl_moamoa[] = {
     UNIT_SMORG_MIASMA_TENTACLE_C,
     UNIT_SMORG_MIASMA_TENTACLE_B,
     UNIT_SMORG_MIASMA_TENTACLE_A,
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     UNIT_SMORG_MIASMA_CLAW,
 #endif
     UNIT_NULL
 };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BattleUnitType same_tbl_iron_sinemon[] = {
     UNIT_IRON_CLEFT_RED,
     UNIT_IRON_CLEFT_GREEN,

@@ -30,7 +30,7 @@ void gareki_dl(s32 type);
 void effGarekiMain(EffectEntry* effect);
 void effGarekiDisp(CameraId cameraId, void* param);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
 #endif
 
@@ -102,7 +102,7 @@ static effN64Vtx stg__s_v[] = {
 };
 
 /** Sideways speed of each of the eight rubble pieces when the chunk breaks. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
 #endif
 

@@ -674,7 +674,7 @@ void cam3dImgMain(CameraEntry* camera) {
  * copies the main 3D camera's position, target and up vector so effects draw from the same viewpoint.
  * The JP and later releases also rebuild the projection each frame.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void camEffMain(CameraEntry* camera) {
 #else
 void camEffMain(CameraEntry* camera) {
@@ -687,7 +687,7 @@ void camEffMain(CameraEntry* camera) {
     camera->cameraAt = camera3D->cameraAt;
     camera->viewDistance = VECDistance(&camera->cameraPos, &camera->cameraAt);
     camera->viewYaw = angleABf(camera->cameraPos.x, camera->cameraPos.z, camera->cameraAt.x, camera->cameraAt.z);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     MTXPerspective(camera->projection, camera->fovY, camera->aspect, camera->near, camera->far);
 #endif
 }

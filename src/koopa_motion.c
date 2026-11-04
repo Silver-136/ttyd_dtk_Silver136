@@ -242,7 +242,7 @@ void kpa_walk(void) {
         m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         m->currSubMotionId = 0;
         m->multiTimer = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (kpaGetStageViewType() == KPA_VIEW_SIDE) {
             if (m->controlStickSensitivity) {
                 kpaChgPose("KPA_W_1", "KPA2_W_1");
@@ -457,7 +457,7 @@ void kpa_fall(void) {
         mario->flags |= MARIO_FLAG_IS_FALLING;
         mario->currSubMotionId = 0;
         if (mario->currMotionId != MARIO_MOTION_FALL_2) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if ((s32)(u8)mario->characterId == CHARACTER_BOWSER) {
                 kpaChgPose("KPA_J_1B", "KPA2_J_1B");
 #else
@@ -535,7 +535,7 @@ void kpa_hip(void) {
         mario->baseSpeed = 0.0f;
         marioChgPose("KPA2_J_1C");
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (mario->fallStartPos.y >= mario->position.y && ((u32)mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF) && mario->position.y > 75.0f) {
 #else
     if (mario->fallStartPos.y >= mario->position.y && (mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
@@ -769,7 +769,7 @@ void kpa_powdown(void) {
  * Underwater horizontal movement: accelerates kpaSpeed from the stick up to 40
  * and turns it into a walking speed (retail caps it at 2, the demo at 1 and also moves him here).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void kpaSwimMove(void) {
 #else
 void kpaSwimMove(void) {
@@ -797,7 +797,7 @@ void kpaSwimMove(void) {
         }
     }
     mario->kpaSpeed = spd;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     moveSpeed = 0.03f * __fabsf(spd);
     if (moveSpeed >= 1.0f) {
         moveSpeed = 1.0f;
@@ -818,7 +818,7 @@ void kpaSwimMove(void) {
         }
     }
     mario->moveDist = moveSpeed;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     movePos(&mario->position.x, &mario->position.z, mario->baseSpeed, mario->directionView);
 #endif
 }
@@ -1026,7 +1026,7 @@ void kpa_swim(void) {
         mario->currSubMotionId = 0x29;
         mario->multiTimer = 0x18;
     case 0x29:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (mario->buttonTrg & PAD_BUTTON_A) {
             mario->currSubMotionId = 20;
         } else {

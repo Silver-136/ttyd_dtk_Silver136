@@ -133,7 +133,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
     for (i = 0; i < wp->count; i++) {
         if (johoya_get(table, wp->info[i].storyId) == 0) {
             if (target == n) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 sprintf((char*)wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
 #else
                 sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
@@ -141,7 +141,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
                 msg = msgSearch(tmp);
 #endif
                 evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 evtSetValue(event, args[2], (EvtWord)wp->info[i].initEndPos);
                 evtSetValue(event, args[3], wp->info[i].tagEndPos);
 #else

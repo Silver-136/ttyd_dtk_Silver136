@@ -70,7 +70,7 @@ EvtWord evt_nokorin[869];
 static NpcSetupInfo npcEnt[3];
 static HitDamageReturn hitDmgRetPoints[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord peach_mail[250];
 #else
 static EvtWord peach_mail[287];
@@ -78,7 +78,7 @@ static EvtWord peach_mail[287];
 
 EvtWord christine_hei_01[46];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
 EvtWord hei_01_init_evt[148];
 #else
@@ -876,7 +876,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(10))
@@ -963,11 +963,11 @@ EVT_END()
 
 EVT_BEGIN(christine_hei_01)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_party_stop, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_npc_stop_for_event)
@@ -1029,7 +1029,7 @@ EVT_BEGIN(hei_01_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
         IF_INT_EQUAL(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 0)

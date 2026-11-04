@@ -26,7 +26,7 @@ static BattleUnitKindPart parts_clauda[1];
 static EvtWord init_event_clauda[50];
 EvtWord damage_event_clauda[22];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_clauda[156];
 #else
 static EvtWord dead_event_clauda[177];
@@ -130,7 +130,7 @@ static BattleUnitDefense defence_clauda = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Flurrie double's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_clauda = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_clauda = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
 #else
 static StatusVulnerability regist_clauda = {
@@ -247,7 +247,7 @@ static EVT_BEGIN(dead_event_clauda)
         WAIT_FRAMES(37)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_win"), 0, -2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
         WAIT_MS(500)
@@ -258,7 +258,7 @@ static EVT_BEGIN(dead_event_clauda)
         WAIT_MS(200)
         CASE_EQUAL(1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
         LOOP(0)
@@ -269,7 +269,7 @@ static EVT_BEGIN(dead_event_clauda)
         END_LOOP
         CASE_EQUAL(2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     END_SWITCH

@@ -36,7 +36,7 @@ static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[2];
 EvtWord evt_robot_waku[34];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_boss[778];
 #else
 static EvtWord evt_boss[797];
@@ -45,7 +45,7 @@ static EvtWord evt_boss[797];
 EvtWord evt_boss2[147];
 static NpcSetupInfo npcEnt[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_14_init_evt[];
 #else
 EvtWord aji_14_init_evt[71];
@@ -57,7 +57,7 @@ EvtWord aji_14_init_evt[71];
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -74,7 +74,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -229,13 +229,13 @@ static EVT_BEGIN(evt_boss)
     // He says he has been waiting for Mario and lured him here with the Crystal Star (stg7_aji_37 to 39).
     CALL(evt_msg_print, 0, STRING("stg7_aji_37"), 0, STRING("幹部"))
     WAIT_MS(300)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_pos, 0, -460, 0, 15)
 #endif
     CALL(evt_cam3d_evt_set, -435, 40, 287, -435, 40, -13, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_stop, 0)
 #endif
     WAIT_MS(300)
@@ -293,14 +293,14 @@ static EVT_BEGIN(evt_boss)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 165, 183, 285, 281, 193, -98, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 1, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
 
 // Crump brags that his machine is raw horsepower; the robot walks in, jumps and lands with a shake of the
 // camera.
     CALL(evt_msg_print, 0, STRING("stg7_aji_41"), 0, STRING("ロボット"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("ロボット"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     CALL(evt_cam3d_evt_set, 250, 124, 545, 250, 140, -105, 300, EASING_SINE_IN_OUT)
@@ -342,7 +342,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, -50, 475, 1104, -50, 35, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(300)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_envoff, PSND_FADEOUT)
 #endif
 
@@ -501,13 +501,13 @@ static NpcSetupInfo npcEnt[] = {
  * and before STG7_20_LORD_CRUMP_DEFEATED the second robot is placed and evt_boss starts the fight.
  */
 EVT_BEGIN(aji_14_init_evt)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("tuzuki"))
 #endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)

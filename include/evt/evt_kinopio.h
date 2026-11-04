@@ -11,7 +11,7 @@ extern EvtWord kinopio_house_talk_evt[];
 
 extern EvtWord evt_50[];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(cameraman_on);
 #endif
 

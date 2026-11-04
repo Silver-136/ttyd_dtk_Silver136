@@ -58,13 +58,13 @@ BattleUnitKind unit_yami_patakuri = {
     1, // perilHP
     12, // level
     0, // bonusExp
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     1,
 #else
     2, // bonusCoin
 #endif
     70, // bonusCoinRate
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     1,
 #else
     0, // baseCoin
@@ -73,7 +73,7 @@ BattleUnitKind unit_yami_patakuri = {
     9999, // pbSoftCap
     23, // width
     25, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     5,
     25,
     0.0f,
@@ -91,7 +91,7 @@ BattleUnitKind unit_yami_patakuri = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     12.0f,
     0.0f,
@@ -148,7 +148,7 @@ static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_patakuri = {80, 100, 100, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 100, 130, 100, 80, 100, 100, 80};
 #else
 static StatusVulnerability regist_patakuri = {
@@ -518,7 +518,7 @@ static BattleUnitDefense defence = {0};
  */
 static BattleUnitDefenseAttr defence_attr = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 100, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 100, 100, 100, 80, 100, 100, 80};
 #else
 static StatusVulnerability regist = {

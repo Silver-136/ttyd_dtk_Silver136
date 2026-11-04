@@ -45,7 +45,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     data++;
 
     for (i = 1; i < 4; i++, data++) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         memset(data, 0, sizeof(effMahorn2Data));
 #endif
         data->type = 1;
@@ -58,7 +58,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     }
 
     for (i = 4; i < 5; i++, data++) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         memset(data, 0, sizeof(effMahorn2Data));
 #endif
         data->type = 2;
@@ -71,7 +71,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     }
 
     for (i = 5; i < 6; i++, data++) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         memset(data, 0, sizeof(effMahorn2Data));
 #endif
         data->type = 3;
@@ -84,7 +84,7 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     }
 
     for (i = 6; i < effect->count; i++, data++) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         memset(data, 0, sizeof(effMahorn2Data));
 #endif
         data->type = 4;
@@ -179,7 +179,7 @@ void effMahorn2Main(EffectEntry *effect) {
 }
 
 /** Draws the travelling elements as textured quads (effect textures 0x8F and 0x90). */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effMahorn2Disp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
@@ -280,7 +280,7 @@ void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
             GXPosition3f32(-w / 2.0f, -h / 2.0f, 0.0f);
             GXTexCoord2f32(0.0f, v);
         } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             for (i = 0; i < 3; i++) {
 #else
             s32 j;
@@ -290,7 +290,7 @@ void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
                 {
                     f32 xs[3][2] = { { 0.0f, 2.0f }, { 2.0f, 12.0f }, { 12.0f, 14.0f } };
                     f32 us[3][2] = { { 0.0f, 0.5f }, { 0.5f, 0.5f }, { 0.5f, 1.0f } };
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     GXPosition3f32(xs[i][0], h / 2.0f, 0.0f);
                     GXTexCoord2f32(2.0f * us[i][0], 0.0f);
                     GXPosition3f32(xs[i][1], h / 2.0f, 0.0f);

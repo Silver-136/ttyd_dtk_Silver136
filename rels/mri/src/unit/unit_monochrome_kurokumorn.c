@@ -97,7 +97,7 @@ static BattleUnitDefense defence = {0};
 /** Defence attributes of the Dark Puff: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 100, 110, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 90, 90, 90, 110, 100, 90, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

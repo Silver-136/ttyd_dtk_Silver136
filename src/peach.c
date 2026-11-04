@@ -439,7 +439,7 @@ void peach_talk(void) {
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
         mario->baseSpeed = 0.0f;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if (mario->peachFlags & PEACH_FLAG_GUNDAN) {
             mario->multiTimer = 60;
             mario->currSubMotionId = 10;
@@ -448,7 +448,7 @@ void peach_talk(void) {
         marioAdjustMoveDir();
         peachChgPose("P_T_1");
     }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     // PAL: while transformed, the talk pose drops back to the stand pose after 60 frames
     switch (mario->currSubMotionId) {
         case 10:

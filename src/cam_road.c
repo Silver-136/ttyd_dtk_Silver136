@@ -45,7 +45,7 @@ static CamRoadWork* wp = &work;
  * and notes whether the file is version 1.01 (state 0x65, which supports switching curves on and off by name)
  * or older (0x64). Returns 0 if the file is missing. Called by the camera driver on map load.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s32 camRoadSetup(const char* name) {
     char path[128];
     u32 size;
@@ -113,7 +113,7 @@ static void camRoadStrippedReport(const char* p, s32 a, s32 b) {
  * and notes whether the file is version 1.01 (state 0x65, which supports switching curves on and off by name)
  * or older (0x64). Returns 0 if the file is missing. Called by the camera driver on map load.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 camRoadSetup(const char* name) {
     char path[128];
     u32 size;

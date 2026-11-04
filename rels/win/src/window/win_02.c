@@ -23,7 +23,7 @@
 
 static BeroEntry bero_entry_data[5];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_hikou_nobiru_init[];
 extern EvtWord evt_hikou_nobiru[];
 #else
@@ -110,13 +110,13 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(evt_hikou_nobiru_init)
     CALL(evt_hit_bind_mapobj, STRING("a_dai"), STRING("hikou"))
     CALL(evt_hit_bind_mapobj, STRING("a_hi"), STRING("hikou"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan_ha"))
 #else
     CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan2"))
 #endif
     CALL(evt_hit_bind_mapobj, STRING("A_hi_kabe"), STRING("S_nob_tree"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hit_bind_mapobj, STRING("A_dokan_nobi"), STRING("S_dokan2"))
 #endif
     SET_VALUE(LW(0), 175)
@@ -134,7 +134,7 @@ EVT_BEGIN(evt_hikou_nobiru_init)
     CALL(evt_hit_bind_update, STRING("a_dai"))
     CALL(evt_hit_bind_update, STRING("a_hi"))
     CALL(evt_hit_bind_update, STRING("A_dokan1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hit_bind_update, STRING("A_dokan_nobi"))
 #endif
     CALL(evt_hit_bind_update, STRING("A_hi_kabe"))
@@ -158,13 +158,13 @@ EVT_BEGIN(evt_hikou_nobiru)
     CALL(evt_cam3d_evt_set, -307, 393, 533, -307, 297, -7, 3000, EASING_LINEAR)
     CALL(evt_hit_bind_mapobj, STRING("a_dai"), STRING("hikou"))
     CALL(evt_hit_bind_mapobj, STRING("a_hi"), STRING("hikou"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan_ha"))
 #else
     CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan2"))
 #endif
     CALL(evt_hit_bind_mapobj, STRING("A_hi_kabe"), STRING("S_nob_tree"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hit_bind_mapobj, STRING("A_dokan_nobi"), STRING("S_dokan2"))
 #endif
     CALL(evt_hit_get_position, STRING("A_dokan1"), LW(0), LW(1), LW(2))
@@ -179,7 +179,7 @@ EVT_BEGIN(evt_hikou_nobiru)
             DIVIDE_FLOAT(LW(2), 90)
             CALL(evt_mapobj_scale, 1, STRING("S_dokan2"), 1, LW(2), 1)
             CALL(evt_hit_bind_update, STRING("A_dokan1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_hit_bind_update, STRING("A_dokan_nobi"))
 #endif
             CALL(evt_hit_bind_update, STRING("A_hi_kabe"))

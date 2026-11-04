@@ -106,7 +106,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of Fuzzy: none, every element hits normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Status vulnerability of Fuzzy (the demos), as percentage multipliers for the attack's base status chance:
  * 100 for Sleep, Stop, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy,
@@ -191,7 +191,7 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0, 0, 0,
 #else
     0, 0, 2, // baseFpCost..superguardsAllowed

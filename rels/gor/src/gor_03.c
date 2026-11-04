@@ -170,7 +170,7 @@ EvtWord maffiaboss_ticket_put[31];
 EvtWord maffiaboss_ticket_check[241];
 EvtWord maffiaboss_init[73];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord maffiaboss_maffiaboss[];
 #else
 EvtWord maffiaboss_maffiaboss[495];
@@ -180,7 +180,7 @@ EvtWord maffiaboss_airship_ticket[768];
 EvtWord maffiaboss_teshita_irai[253];
 EvtWord maffiaboss_train_ticket_init[50];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord maffiaboss_train_ticket[];
 #else
 EvtWord maffiaboss_train_ticket[824];
@@ -204,7 +204,7 @@ EvtWord maffia1_talk[128];
 
 EvtWord maffia2_init[23];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord maffia2_talk[];
 #else
 EvtWord maffia2_talk[128];
@@ -217,7 +217,7 @@ static EvtWord mony_talk[53];
 static EvtWord peton_init[69];
 s32 iri_19_item_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord peton_talk_common[];
 #else
 EvtWord peton_talk_common[235];
@@ -225,7 +225,7 @@ EvtWord peton_talk_common[235];
 
 static EvtWord peton_talk[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord peton_desk_talk[];
 #else
 EvtWord peton_desk_talk[47];
@@ -248,7 +248,7 @@ EvtWord gor_03_dokan_up_evt[60];
 EvtWord gor_03_dokan_down_evt[63];
 ExchangeRyokin exchange_ryokin_medal_tbl[9][3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord bteresa_talk_sub_minigame[];
 #else
 EvtWord bteresa_talk_sub_minigame[245];
@@ -262,7 +262,7 @@ EvtWord bteresa_talk_sub_keihin[VERSION_PICK(220, 242)];
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord bteresa_table_talk[];
 #else
 EvtWord bteresa_table_talk[437];
@@ -290,7 +290,7 @@ EvtWord* slotevttbl[2];
 s32 slotgara[2][3][8];
 s32 upsidegara[2][3][8];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord ranking_set[];
 #else
 EvtWord ranking_set[65];
@@ -311,7 +311,7 @@ EvtWord kinopiko_a_talk[68];
 static EvtWord kinopiko_b_init[13];
 EvtWord kinopiko_b_regl[19];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord kinopiko_b_talk[148];
 #else
 static EvtWord kinopiko_b_talk[159];
@@ -362,7 +362,7 @@ EvtWord evt_wall_02_1[28];
 const char* door_data_02_1_npc[6];
 EvtWord desk_talk_check[173];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_door_02_1_open[];
 extern EvtWord evt_door_02_1_close[];
 #else
@@ -375,7 +375,7 @@ static EvtWord evt_door_03_00[12];
 static EvtWord evt_wall_03[28];
 static const char* door_data_03_npc[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord door_data_03_open[];
 extern EvtWord door_data_03_close[];
 #else
@@ -386,7 +386,7 @@ EvtWord door_data_03_close[19];
 static DoorParam door_data_03;
 static EvtWord evt_door_03_caseopen[6];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_door_03_open[165];
 static EvtWord evt_door_03_close[14];
 #else
@@ -400,7 +400,7 @@ static EvtWord evt_door_04_00[12];
 static EvtWord evt_wall_04[28];
 static const char* door_data_04_npc[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_door_04_open[12];
 extern EvtWord evt_door_04_close_snd[];
 #else
@@ -411,7 +411,7 @@ EvtWord evt_door_04_close_snd[19];
 static DoorParam door_data_04;
 EvtWord evt_door_04_caseclose[6];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_door_04_close[65];
 #else
 static EvtWord evt_door_04_close[70];
@@ -429,7 +429,7 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord majorin_nusumigiki[];
 extern EvtWord yuureturn_rtn[];
 #else
@@ -439,7 +439,7 @@ EvtWord yuureturn_rtn[101];
 
 static EvtWord peach_mail[248];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kuzi_bomb_talk_normal[];
 extern EvtWord kuzi_bomb_talk_husei[];
 extern EvtWord kuzi_bomb_bomb[];
@@ -453,7 +453,7 @@ EvtWord kuzi_keiziban_normal[];
 EvtWord kuzi_keiziban_husei[14];
 EvtWord kuzi_bomb_talk[16];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kuzi_keiziban_entry[];
 #else
 EvtWord kuzi_keiziban_entry[27];
@@ -463,7 +463,7 @@ EvtWord tenin_fuwafuwa[7];
 EvtWord casino_fuwafuwa[7];
 EvtWord debug_event_mode[144];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord monte_evt_door_close[];
 #else
 EvtWord monte_evt_door_close[16];
@@ -1301,7 +1301,7 @@ EVT_BEGIN(maffiaboss_maffiaboss)
     CALL(evt_npc_flag_onoff, 0, STRING("マフィア２"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
     // Story progress: the search for Don Pianta's daughter begins.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSW_STORY_PROGRESS, STG2_44_FINDING_DON_PIANTA)
     SET_VALUE(LSWF(3), 0)
 #else
@@ -1632,7 +1632,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -584, 265, -145, -189, 200, -145, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
 #else
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_CSN1"))
@@ -1740,12 +1740,12 @@ EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_item_entry, STRING("ticket"), ITEM_TRAIN_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("ticket"), ITEM_FLAG_NO_GET_BGM)
     BEGIN_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_bgmoff, PSND_PAUSE)
 #endif
         CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_KEYITEM1"))
         WAIT_MS(2000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
 #else
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -1824,7 +1824,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(5), 1)
 #endif
     RETURN
@@ -1982,7 +1982,7 @@ EVT_BEGIN(maffia1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_02"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
         CALL(evt_msg_print, 0, STRING("mac_2_070"), 0, STRING("me"))
 #else
@@ -2046,14 +2046,14 @@ EVT_BEGIN(maffia2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_03"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
 #else
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
 #endif
             CALL(evt_msg_print, 0, STRING("mac_2_071"), 0, STRING("me"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             ELSE
             CALL(evt_msg_print, 0, STRING("mac_2_116_buka2"), 0, STRING("me"))
         END_IF
@@ -2208,7 +2208,7 @@ EVT_BEGIN(peton_talk_common)
                 CALL(evt_msg_print, 0, STRING("irai_19_01"), 0, STRING("ピートン"))
             ELSE
                 CALL(evt_msg_print, 0, STRING("irai_19_02"), 0, STRING("ピートン"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_19_item_tbl), LW(0), 0)
@@ -2278,7 +2278,7 @@ EVT_END()
  * otherwise runs peton_talk_common, which also handles the request in the demos.
  */
 EVT_BEGIN(peton_desk_talk)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
         RETURN
     END_IF
@@ -2504,7 +2504,7 @@ EVT_BEGIN(exchange_keep_sub)
             SET_VALUE(LW(0), 48)
             CALL_CHILD(PTR(bteresa_n_fadein))
             CALL(yuugijou_get_montemedal, LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_91"), 0, 0, LW(1))
 #else
 #if VERSION >= VERSION_US
@@ -2622,7 +2622,7 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_34"))
         CALL(evt_msg_select, 0, STRING("bunny_teresa_yesno2"))
         IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_47"))
 #else
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_48"))
@@ -2653,7 +2653,7 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
     CALL(yuugijou_get_montemedal, LW(0))
     IF_INT_LESS(LW(0), LW(1))
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_35"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_12"))
 #endif
         RETURN
@@ -2720,7 +2720,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     // If Teresa has no prizes left, she apologizes.
     CALL(evt_badgeShop_bteresa_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("bunny_teresa_64"), 0, STRING("me"))
 #else
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_64"))
@@ -2730,7 +2730,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
 
     // On the first visit she explains that piantas can be traded in for prizes.
     IF_INT_EQUAL(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("bunny_teresa_60"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 1)
 #else
@@ -2760,7 +2760,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
 
     // Teresa quotes the price (and the BP a badge needs) and asks Mario to confirm.
     IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(2), LW(3), LW(4))
     ELSE
         CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_66"), 0, STRING("me"), LW(2), LW(3))
@@ -2825,7 +2825,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     WAIT_MS(200)
 
     // Teresa offers another trade unless Mario is out of piantas or prizes.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_continue)
     CALL(evt_badgeShop_bteresa_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -2839,7 +2839,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     END_IF
     CALL(yuugijou_get_montemedal, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("bunny_teresa_69"), 0, STRING("me"))
         GOTO(0)
     END_IF
@@ -2858,13 +2858,13 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     CALL(evt_msg_continue)
     GOTO(1)
     LABEL(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_print, 0, STRING("bunny_teresa_12"), 0, STRING("me"))
 #endif
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Unused (nothing references it in any version): Bunny Teresa's first info answer, printing bunny_teresa_04
  * and appending bunny_teresa_12 (both placeholder texts in the US messages).
@@ -2897,7 +2897,7 @@ EVT_BEGIN(bteresa_table_talk)
     // Mario stops and Bunny Teresa turns to face him.
     CALL(setmertn, STRING("バニーテレサ"))
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_stop, 0)
 #endif
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
@@ -3034,7 +3034,7 @@ EVT_BEGIN(bteresa_table_talk)
 
     // Menu: Mario chooses a minigame, the prize exchange, or leaves.
     CALL(evt_exchange_msg_alloc)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     LOOP(0)
 #endif
     CALL(minigameselect_msg_set, STRING("bunny_teresa_03"), LW(0))
@@ -3082,7 +3082,7 @@ EVT_BEGIN(bteresa_table_talk)
 
     // Run the prize exchange or the chosen minigame.
     IF_INT_EQUAL(LW(0), 4)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL_CHILD(bteresa_talk_sub_keihin)
 #else
@@ -3091,12 +3091,12 @@ EVT_BEGIN(bteresa_table_talk)
     ELSE
         CALL_CHILD(PTR(bteresa_talk_sub_minigame))
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     END_LOOP
 #endif
     LABEL(0)
     CALL(evt_exchange_msg_free)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -3238,7 +3238,7 @@ EVT_BEGIN(slot_set)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_stop, 0)
 #else
 #if VERSION >= VERSION_US
@@ -3297,7 +3297,7 @@ EVT_BEGIN(slot_set)
     LABEL(0)
     CALL(evt_cam3d_evt_off, 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_run, 0)
 #else
 #if VERSION >= VERSION_US
@@ -3406,7 +3406,7 @@ static const I3 disp_slot_icons = {{ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_B
  */
 EVT_BEGIN(ranking_set)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_stop, 0)
 #endif
     CALL(evt_cam3d_evt_set, FLOAT(-541.8994f), FLOAT(115.5f), FLOAT(-115.0f), FLOAT(-197.0f), FLOAT(56.799805f), FLOAT(-115.0f), 600, EASING_SINE_IN_OUT)
@@ -3426,7 +3426,7 @@ EVT_BEGIN(ranking_set)
     LABEL(0)
     CALL(evt_cam3d_evt_off, 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -3444,7 +3444,7 @@ EVT_BEGIN(exchange_set)
     CALL(evt_mario_key_onoff, 0)
 
     // Piantas Mario left in the machine earlier are returned first.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_stop, 0)
 #endif
     CALL(yuugijou_get_takeoutflag, LW(0))
@@ -3489,7 +3489,7 @@ EVT_BEGIN(exchange_set)
 
     // Price menu: Mario picks how many medals to buy with coins.
     CALL(evt_exchange_msg_alloc)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 0)
@@ -3533,7 +3533,7 @@ EVT_BEGIN(exchange_set)
     // Mario leaves the counter and the camera returns.
     CALL(evt_cam3d_evt_off, 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -3630,13 +3630,13 @@ static EVT_BEGIN(kinopiko_b_talk)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_072_01"), 0, STRING("me"))
         ELSE
 #endif
             CALL(evt_msg_print, 0, STRING("gor_03_072"), 0, STRING("me"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         END_IF
 #endif
         CASE_LESS(STG3_32_BOSS_BATTLE)
@@ -4202,7 +4202,7 @@ EVT_BEGIN(evt_door_01_0_close)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Open callback of building 1's back door (door_data_01_1, "S_i01_doa_o", which the clerk unlocks in
  * uraguchi_event): in JP and later turns on the collision "A_ie_03A", "A_gaitou" and "A_kabe_01", shows the
@@ -4251,7 +4251,7 @@ EVT_END()
  * the outside models and NPCs again, clearing the doors no-blend flags, restoring the sound and showing "pblk2"
  * again.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(evt_door_01_1_close)
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_gaitou"), 1, 0)
@@ -4287,7 +4287,7 @@ EVT_BEGIN(evt_door_01_1_close)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Demo open callback of building 1's back door, which the clerk unlocks in uraguchi_event:
  * dips the music and ambience, low-passes the ambience, and hides the Shine Sprite block "pblk2".
@@ -4638,7 +4638,7 @@ EVT_END()
  * and, in JP and later, clears GF(5).
  */
 EVT_BEGIN(evt_door_02_1_open)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(5), 0)
 #endif
     BEGIN_INLINE_EVENT
@@ -4684,7 +4684,7 @@ EVT_END()
  * At STG5_64_03_F_F_ARRIVE it starts the Rogueport track explicitly instead of resuming the music.
  */
 EVT_BEGIN(evt_door_02_1_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
 #else
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
@@ -4694,7 +4694,7 @@ EVT_BEGIN(evt_door_02_1_close)
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
             CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
             CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             ELSE
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
             CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -4763,7 +4763,7 @@ static const char* door_data_03_npc[] = {
  * dips the music and ambience with a low-pass.
  */
 EVT_BEGIN(door_data_03_open)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
 #endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4774,7 +4774,7 @@ EVT_END()
 
 /** Closes the door of house 3: restores the entry collision (JP and later) and brings the music and ambience back. */
 EVT_BEGIN(door_data_03_close)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 1)
 #endif
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -4857,7 +4857,7 @@ static EVT_BEGIN(evt_door_03_open)
     CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
 #endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4871,7 +4871,7 @@ EVT_END()
  * and ambience that evt_door_03_open dipped.
  */
 static EVT_BEGIN(evt_door_03_close)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 1)
 #endif
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -4947,7 +4947,7 @@ static const char* door_data_04_npc[] = {
  * dips the music and ambience to 50 and applies a low-pass filter.
  */
 static EVT_BEGIN(evt_door_04_open)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 0)
 #endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4961,7 +4961,7 @@ EVT_END()
  * and ambience back.
  */
 EVT_BEGIN(evt_door_04_close_snd)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 1)
 #endif
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -5013,7 +5013,7 @@ static EVT_BEGIN(evt_door_04_close)
     CALL(evt_door_param, LW(0), DOOR_PARAM_HITS, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(2), 0, PTR(evt_door_04_caseclose), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 1)
 #endif
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -5115,7 +5115,7 @@ EVT_END()
  * his spot and has him stand facing forward (S_1).
  */
 EVT_BEGIN(uraguchi_tenin)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_move_position, STRING("店員"), -508, 24, 0, FLOAT(60.0f), 0)
 #else
     CALL(evt_npc_move_position, STRING("店員"), -490, 24, 0, FLOAT(60.0f), 0)
@@ -5414,7 +5414,7 @@ EVT_BEGIN(majorin_nusumigiki)
     // Beldam says she will deal with them later and vanishes.
     CALL(evt_msg_print, 0, STRING("mac_5_904"), 0, STRING("マジョリン"))
     CALL(evt_npc_majo_disp_off, STRING("マジョリン"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_set_position, STRING("マジョリン"), 0, -1000, 0)
 #endif
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
@@ -5438,7 +5438,7 @@ EVT_END()
  * or bunny_teresa_17_1 after the epilogue starts).
  */
 EVT_BEGIN(yuureturn_rtn)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"), 0)
     CALL(evt_snd_env_lpf, 0, 800)
@@ -5562,7 +5562,7 @@ EVT_END()
  * already held a different number costs 100 coins (kuji_bomb_015 to 019). Too few coins gets kuji_bomb_022_1.
  */
 EVT_BEGIN(kuzi_bomb_talk_normal)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 0)
@@ -5681,7 +5681,7 @@ EVT_BEGIN(kuzi_bomb_talk_normal)
 EVT_END()
 
 EVT_BEGIN(kuzi_bomb_talk_husei)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 0)
@@ -5692,7 +5692,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     ELSE
         SET_VALUE(LW(0), 1)
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_GOR_LOTTERY_RESET_EXPLAINED, 1)
         SET_VALUE(LW(0), 1)
     ELSE
@@ -5762,7 +5762,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
                             CALL(evt_msg_print_add, 0, STRING("kuji_bomb_051"))
                             CALL(evt_pouch_remove_item, ITEM_LOTTERY_PICK, LW(0))
                             CALL(evt_lottery_buy, LW(0))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                             SET_VALUE(GSWF_GOR_LOTTERY_RESET_EXPLAINED, 0)
 #endif
                             CALL(evt_item_entry, STRING("kuzi"), ITEM_LOTTERY_PICK, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -5794,7 +5794,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_mario_set_pose, STRING("M_N_7"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), GW(5))
 #endif
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
@@ -5808,7 +5808,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
             END_IF
             CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 300)
         END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxoff, GW(5))
 #endif
     END_INLINE_EVENT
@@ -5816,7 +5816,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     CALL(evt_msg_print, 0, STRING("kuji_bomb_055"), PTR(kuji_bomb_055_callback), STRING("グルメボム兵"))
     SET_VALUE(GF(1), 1)
     WAIT_MS(300)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_sfxon, STRING("SFX_STG7_TEC_SHUTDOWN1"), 0)
 #endif
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 239, 200)
@@ -5848,7 +5848,7 @@ EVT_BEGIN(kuzi_bomb_talk_husei)
     CALL(evt_npc_flag_onoff, 1, STRING("グルメボム兵"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_3"), STRING("T_3"))
     CALL(evt_npc_set_anim, STRING("グルメボム兵"), STRING("S_3"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_MS(20000)
 #else
     WAIT_MS(3000)
@@ -5951,7 +5951,7 @@ EVT_BEGIN(kuzi_bomb_bomb)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_npc_set_position, STRING("グルメボム兵"), LW(2), FLOAT(0.0f), LW(4))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_sfxon_3d, STRING("SFX_PARTY_PBM_DOWN1"), LW(2), 0, LW(4), 0)
 #endif
     RETURN
@@ -5978,7 +5978,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
         SET_VALUE(LW(0), 1)
     END_IF
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_set_dir_to_target, STRING("グルメボム兵"), STRING("mario"))
         CALL(evt_mario_set_dir, 270, 300, 0)
 #endif
@@ -5997,7 +5997,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
             SET_VALUE(LW(0), 0)
         END_IF
         IF_INT_NOT_EQUAL(LW(0), 4)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_mario_set_dir, 270, 300, 0)
 #endif
             CALL(evt_cam3d_evt_set, -150, 120, 890, -150, 50, 470, 800, EASING_SINE_IN_OUT)
@@ -6033,7 +6033,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
             END_SWITCH
             CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_2"), STRING("T_2"))
             CALL(evt_msg_print, 0, LW(1), 0, STRING("グルメボム兵"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
                 SWITCH(LW(0))
@@ -6051,7 +6051,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
             CALL(evt_mario_set_pose, LW(2))
             WAIT_MS(800)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(kuzi_get_keihin, LW(0), LW(1))
             SET_VALUE(LW(2), LW(0))
             ADD(LW(2), 1)
@@ -6059,7 +6059,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
 #else
             CALL(evt_set_dir_to_target, STRING("グルメボム兵"), STRING("mario"))
             CALL(kuzi_get_keihin, LW(0), LW(1))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             CALL(evt_sub_get_language, LW(10))
             IF_INT_EQUAL(LW(10), 4)
                 SET_VALUE(LW(2), LW(0))
@@ -6070,7 +6070,7 @@ EVT_BEGIN(kuzi_keiziban_normal)
             SET_VALUE(LW(2), LW(0))
             ADD(LW(2), 1)
             CALL(evt_msg_print_insert, 0, STRING("kuji_bomb_028"), 0, STRING("グルメボム兵"), LW(2))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             END_IF
 #endif
 #endif
@@ -6129,7 +6129,7 @@ EVT_BEGIN(kuzi_bomb_talk)
 EVT_END()
 
 EVT_BEGIN(kuzi_keiziban_entry)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_unitwin_alloc, 0)
     CALL(unitwin_lottery_disp_onoff, 1)
 #endif
@@ -6139,7 +6139,7 @@ EVT_BEGIN(kuzi_keiziban_entry)
     ELSE
         CALL_CHILD(PTR(kuzi_keiziban_normal))
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(unitwin_lottery_disp_onoff, 0)
     CALL(evt_unitwin_free)
 #endif
@@ -6208,7 +6208,7 @@ EVT_END()
 EVT_BEGIN(monte_evt_door_close)
     CALL(enzan_lw_save)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_stop, 0)
     CALL_CHILD(exchange_keep_sub)
     CALL(evt_party_run, 0)
@@ -6245,7 +6245,7 @@ EVT_BEGIN(monte_evt_door_entry)
 EVT_END()
 
 EVT_BEGIN(gor_03_init_evt)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"))
 #else
@@ -6530,7 +6530,7 @@ static USER_FUNC(fall_rtn) {
                 }
                 if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == TRUE) {
                     psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &m->sub.pos);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     if (yuwp->tokens < 0x7FFFFFFF) {
 #else
                     if (yuwp->tokens < 99999) {
@@ -6558,7 +6558,7 @@ static USER_FUNC(fall_rtn) {
                 pos.y = 0.0f;
                 if (get_monte_check(&pos, &marioGetPtr()->position) == TRUE) {
                     psndSFXOn_3D(SFX_NAME_WORD("SFX_EVT_GAME_MONTE_COUNT1"), &m->sub.pos);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     if (yuwp->tokens < 0x7FFFFFFF) {
 #else
                     if (yuwp->tokens < 99999) {
@@ -7064,7 +7064,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 psndSFXOn("SFX_EVT_GAME_SLOT_SUCCESS1");
                 switch (gara2[0]) {
                     case 0:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         data->monteCount = 5;
 #else
                         data->monteCount = 3;
@@ -7357,7 +7357,7 @@ void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
  * Mushroom in the demos) and then Zess Dynamite or Zess Special, rank 2 gives an Ultra Shroom,
  * rank 3 a Life Shroom, otherwise a Mushroom. The item goes to args[1].
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(kuzi_get_keihin) {
 #else
 USER_FUNC(kuzi_get_keihin) {
@@ -7368,7 +7368,7 @@ USER_FUNC(kuzi_get_keihin) {
     switch (evtGetValue(event, args[0])) {
         case 0:
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 item = ITEM_MUSHROOM;
 #else
                 item = ITEM_POWER_PLUS;
@@ -7380,7 +7380,7 @@ USER_FUNC(kuzi_get_keihin) {
             break;
         case 1:
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 item = ITEM_MUSHROOM;
 #else
                 item = ITEM_LUCKY_DAY;

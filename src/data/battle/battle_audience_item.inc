@@ -65,7 +65,7 @@ BattleAudienceItemKind audience_item_heiho[] = {
     {ITEM_RUIN_POWDER, 10},
     {ITEM_POWER_PUNCH, 10},
     {ITEM_STOPWATCH, 10},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {ITEM_TRADE_OFF, 10},
 #endif
     {ITEM_MINI_MR_MINI, 10},

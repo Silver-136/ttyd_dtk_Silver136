@@ -531,7 +531,7 @@ EVT_BEGIN(a_sekizou_1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
 #else
         CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
@@ -659,7 +659,7 @@ EVT_BEGIN(a_sekizou_1)
                 CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
 #else
                 CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))

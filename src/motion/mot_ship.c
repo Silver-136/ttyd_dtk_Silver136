@@ -3,7 +3,7 @@
 
 #include "version.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
 #include "dolphin/types.h"
@@ -60,7 +60,7 @@ typedef struct MotShipWork {
  * Plays SFX_MARIO_SHIP1_1 four times, 12 frames apart,
  * at the position in LW(0..2) while Mario spins and folds into the paper boat.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 #endif
 
@@ -95,7 +95,7 @@ EVT_BEGIN(sound_evt2)
 EVT_END()
 
 /** Tuning values of Mario's paper boat: water drag and slowing, drift rates, the whirlpool push limit (2.0). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 #endif
 
@@ -284,7 +284,7 @@ void mot_ship_post(void) {
     if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 #else
@@ -298,7 +298,7 @@ void mot_ship_post(void) {
             marioGetPtr()->motShip->sfxId = -1;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {
         Vec zero = {0.0f, 0.0f, 0.0f};
         mario->dispOfs = zero;
@@ -426,7 +426,7 @@ void mot_ship(void) {
         m->jumpPeakAirTime = 0;
         m->baseSpeed = 0.0f;
         marioGetPtr()->motShip->turnSpeed = 0.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
 #endif
         shipDecideDir(m, &p1, &p2);
@@ -852,7 +852,7 @@ void mot_ship(void) {
                 r27 = 1;
             }
         } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (m->displayDirection <= -540.0f) {
                 m->displayDirection = -540.0f;
 #else
@@ -883,7 +883,7 @@ void mot_ship(void) {
         marioChgMot(MARIO_MOTION_FALL);
         marioSetFallPara();
         allPartyRideOff();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         marioSetBottomlessRespawnPosOnBeroEntry(m->position.x, m->position.y, m->position.z);
         marioReloadMapOnBottomlessOff();
 #endif
@@ -1009,19 +1009,19 @@ BOOL marioChkShipMoveMode(void) {
  * drifts and slows with water friction (shipData constants), adds any whirlpool push,
  * keeps the engine sound playing and moves Mario; stores the distance moved in mario->moveDist.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void shipMove(void) {
 #else
 void shipMove(void) {
 #endif
     MarioWork* m = marioGetPtr();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     f32 len;
     // FAKE: 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object
     unsigned long long rateIdx;
 #endif
     f32 spd;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 swirlMax;
     f32 max;
     f32 len;
@@ -1031,7 +1031,7 @@ void shipMove(void) {
     f32 tz;
     f32 vx;
     f32 vz;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 fr;
 #else
     f32 max;
@@ -1039,7 +1039,7 @@ void shipMove(void) {
 #endif
     f32 dx;
     f32 dz;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     unsigned long long rateIdx;
 #else
     f32 fr;
@@ -1054,7 +1054,7 @@ void shipMove(void) {
         movePos(&dx, &dz, marioGetPtr()->motShip->swirlX, marioGetPtr()->motShip->swirlY);
         marioGetPtr()->motShip->dispX += dx;
         marioGetPtr()->motShip->dispY += dz;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         swirlMax = shipData[4];
         if (marioGetPtr()->motShip->dispX > swirlMax) {
             swirlMax = shipData[4];
@@ -1069,7 +1069,7 @@ void shipMove(void) {
         if (marioGetPtr()->motShip->dispX < (-shipData[4])) {
             marioGetPtr()->motShip->dispX = -shipData[4];
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         swirlMax = shipData[4];
         if (marioGetPtr()->motShip->dispY > swirlMax) {
             swirlMax = shipData[4];
@@ -1104,7 +1104,7 @@ void shipMove(void) {
             }
         } else {
             vx += ((tx - 1.0f) - vx) * shipData[rateIdx];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             nmax = -max;
             if (vx <= nmax) {
                 vx = nmax;
@@ -1169,7 +1169,7 @@ void shipMove(void) {
             psndSFXOff(marioGetPtr()->motShip->sfxId);
             marioGetPtr()->motShip->sfxId = -1;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     }
     if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
         psndSFX_pos(marioGetPtr()->motShip->sfxId, &m->position);

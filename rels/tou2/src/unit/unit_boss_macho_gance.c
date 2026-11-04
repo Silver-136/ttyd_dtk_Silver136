@@ -49,7 +49,7 @@ static StatusVulnerability regist;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_furafura[18];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleDataEntry data_table[2];
 #else
 static BattleDataEntry data_table[15];
@@ -74,7 +74,7 @@ EvtWord base_size_change[99];
 static EvtWord phase_event[482];
 static EvtWord dead_event[64];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord macho_gance_damage_event[238];
 #endif
 
@@ -100,7 +100,7 @@ BattleUnitKind unit_boss_macho_gance = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     70,
 #else
     71, // level
@@ -155,7 +155,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  * Status vulnerability of the Macho Grubba (percent chance to take each status):
  * immune to growing huge, fright, gale force and instant kill; resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {50, 40, 50, 60, 50, 60, 100, 40, 0, 60, 100, 60, 100, 60, 60, 0, 0, 100, 60, 100, 100, 0};
 #else
 static StatusVulnerability regist = {
@@ -232,7 +232,7 @@ static PoseTableEntry pose_table_furafura[] = {
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, macho_gance_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, macho_gance_damage_event},
@@ -837,7 +837,7 @@ static EVT_BEGIN(phase_event)
             LOOP(LW(5))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(0.0f), FLOAT(180.0f), LW(6))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(1.0f), FLOAT(1.1494141f), LW(7))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
 #else
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), 1)
@@ -855,7 +855,7 @@ static EVT_BEGIN(phase_event)
             LOOP(LW(5))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(0.0f), FLOAT(-180.0f), LW(6))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(1.1494141f), FLOAT(1.2998047f), LW(7))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
 #else
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), 1)
@@ -960,7 +960,7 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Data events 24 to 36 (JP and later), which the standard damage reaction runs for the counter-damage codes 43

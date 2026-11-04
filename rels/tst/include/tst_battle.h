@@ -14,7 +14,7 @@ struct BattleWeapon;
 //   lower (countersetWeapon 0x314, not PAL 0x318). The JP demo's tst has the JP layout, 4 bytes lower again (0x310).
 // - BattleWork: tst's places stageObjectWork 0x2A0 further in, at 0x1837C (PAL and US 0x180DC).
 typedef struct TstBattleUnit {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     u8 pad_000[0x304];
 #else
     u8 pad_000[0x308]; // 0x0, as BattleUnit without slideReturnEventId
@@ -38,7 +38,7 @@ typedef struct TstBattleWork {
 #define TST_BATTLE_UNIT(unit) ((TstBattleUnit*)(unit))
 #define TST_BATTLE_WORK(work) ((TstBattleWork*)(work))
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 // The JP demo's tst places BattleWork's actionCommands 0x2A0 lower than the game, at 0x19F0 (main 0x1C90).
 typedef struct TstDemoBattleWork {
     u8 pad_00000[0x19F0];         // 0x0

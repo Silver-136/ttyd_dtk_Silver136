@@ -42,7 +42,7 @@ static void alpha_tev(MapTevCallbackInfo* info);
 static BeroEntry bero_entry_data[5];
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
@@ -50,7 +50,7 @@ static EvtWord evt_chk[23];
 
 static EvtWord evt_unlock[7];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord bigdoor_event_init[];
 extern EvtWord bigdoor_event[];
 #else
@@ -195,7 +195,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_GROTTO_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -220,14 +220,14 @@ EVT_END()
  */
 EVT_BEGIN(bigdoor_event_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         DEBUG_PUT_MSG(STRING("dou_05：扉が開く前の処理"))
 #endif
         SET_VALUE(LW(0), STRING("w_bero_3"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_mapobj_trans, 0, STRING("tetu"), 1, 0, 0)
         ELSE
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         DEBUG_PUT_MSG(STRING("dou_05：扉が開く後の処理"))
 #endif
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero_3"), HIT_ATTR_NPC_ONLY)
@@ -243,7 +243,7 @@ EVT_END()
  */
 EVT_BEGIN(bigdoor_event)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         CALL(evt_mario_wait_landon)
         CALL(evt_mario_set_mov_spd, FLOAT(0.0f))
@@ -309,7 +309,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
  */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else

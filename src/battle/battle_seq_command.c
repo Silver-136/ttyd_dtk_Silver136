@@ -95,7 +95,7 @@ s32 _hammer_badge_table[9] = {ITEM_POWER_SMASH, ITEM_PIERCING_BLOW, ITEM_HAMMER_
  * Started by BattleCommandInput when the player picks a greyed-out command:
  * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
@@ -454,7 +454,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
                 if (wp->flags & (BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x43);
 #else
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_JUMP_WEAPON);
@@ -505,7 +505,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                 }
                 if (wp->flags & (BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_FREE) && wp->lectureUnitId != -1) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), 0x44);
 #else
                     cmd->weapon[num].weapon = BtlUnit_GetData(BattleGetUnitPtr(wp, wp->lectureUnitId), UNIT_DATA_LECTURE_HAMMER_WEAPON);
@@ -631,7 +631,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].weapon = &defaultWeapon_Dummy_NoItem;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 cmd->weapon[num].icon = ICON_UNAVAILABLE;
 #endif
                 if (cmd->weapon[num].weapon->name) {
@@ -703,7 +703,7 @@ BattleCheckPartyEntry _checkPartyTable[8] = {
  * Started by BattleCommandInput when the player picks a greyed-out command:
  * gets the reason message from _get_msg and announces it for 60 frames; the menu reopens when it ends.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(_btl_cmd_error_msg_event)
     CALL(_get_msg, LW(0))
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -30, LW(0), 60)
@@ -832,7 +832,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
             cmd->operation[0].enabled = 0;
             cmd->operation[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         cmd->operation[0].cost = 0;
 #endif
         num = 1;
@@ -842,7 +842,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].enabled = 1;
         cmd->operation[num].name = msgSearch("btl_cmd_op_appeal");
         cmd->operation[num].icon = ICON_BTL_CMD_APPEAL;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         cmd->operation[num].disableReason = 0;
 #else
         cmd->operation[num].disableReason = CMD_DISABLE_NONE;
@@ -902,7 +902,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[num].name = msgSearch("btl_cmd_op_defend");
     cmd->operation[num].icon = ICON_BTL_CMD_DEFEND;
     cmd->operation[num].disableReason = CMD_DISABLE_NONE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     cmd->operation[num].cost = 0;
 #endif
     cmd->operation[num].help = "btl_hlp_cmd_operation_defend";
@@ -915,7 +915,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[idx].enabled = BtlUnit_CanActStatus(unit);
     cmd->operation[idx].name = msgSearch("btl_cmd_op_escape");
     cmd->operation[idx].icon = ICON_ARROW;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     cmd->operation[idx].cost = 0;
 #endif
     if (cmd->operation[idx].enabled) {
@@ -1502,7 +1502,7 @@ void BattleCommandDisplay(BattleWork* wp) {
 
     if (cmd != NULL) {
         SelectedItemCoordinateColorUpDate();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         dispEntry(CAMERA_2D, 501.0f, DISP_MODE_OPAQUE, BattleDrawEnemyHP, wp);
 #else
         dispEntry(CAMERA_2D, 902.0f, DISP_MODE_OPAQUE, BattleDrawEnemyHP, wp);
@@ -1991,7 +1991,7 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
 
     pouchGetPtr();
     sprintf(buf, msgSearch("btl_msg_multi_item_cancel_check"));
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     len = (f32)FontGetMessageWidth(buf);
     // FAKE: called through a cast that puts the float arguments first; the plain call changes the object
     ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 0.5f * (f32)len), 30.0f, 65.0f + (f32)len, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -2575,34 +2575,34 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             }
             break;
         case CMD_ACT_HAMMER:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
 #endif
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
 #endif
                 BtlActRec_AddCount(&wp->actRecord.marioCharges);
             } else {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 unit->attackEventCode = badgeWeapon_ChargeP.attackEvtScript;
 #endif
                 BtlActRec_AddCount(&wp->actRecord.partnerCharges);
             }
             break;
         case CMD_ACT_ITEM:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
 #endif
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
 #endif
                 BtlActRec_AddCount(&wp->actRecord.marioSuperCharges);
             } else {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 unit->attackEventCode = badgeWeapon_SuperChargeP.attackEvtScript;
 #endif
                 BtlActRec_AddCount(&wp->actRecord.partnerSuperCharges);
@@ -2655,7 +2655,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             BtlActRec_AddCount(&wp->actRecord.marioHammerMoves);
             break;
         case CMD_ACT_SPECIAL:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (weapon->hpDamageFn) {
 #else
             if (_check_weapon_type_attack(weapon)) {
@@ -2666,7 +2666,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             }
             break;
         case CMD_ACT_ITEM:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             // FAKE: compares the pointers as signed integers (cmpw); the plain pointer compare changes the object
             if ((EvtWord)weapon == (EvtWord)&ItemWeaponData_Naniga_Okorukana) {
                 break;
@@ -2794,7 +2794,7 @@ s32 _check_present_item(void) {
     case ITEM_HEART:
         BtlUnit_RecoverHp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         pos.y += BtlUnit_GetHeight(unit);
 #else
         pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
@@ -2805,7 +2805,7 @@ s32 _check_present_item(void) {
     case ITEM_FLOWER:
         BtlUnit_RecoverFp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         pos.y += BtlUnit_GetHeight(unit);
 #else
         pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
@@ -3064,7 +3064,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         case CMD_ACT_MULTI_ITEM:
             return btldefaultevt_Escape;
         case CMD_ACT_HAMMER:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             return badgeWeapon_Charge.attackEvtScript;
         case CMD_ACT_ITEM:
             return badgeWeapon_SuperCharge.attackEvtScript;
@@ -3099,7 +3099,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
                 if (cnt) {
                     cursor->absPos = list[irand(cnt)];
                 } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     return subsetevt_confuse_flustered;
 #else
                     return NULL;

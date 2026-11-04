@@ -55,7 +55,7 @@ effN64Vtx size8x8_tex16x16_2_vtx[] = {
     {-3, 5, 0, 0, 512, 0, 0, 0, 255},
 };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 u32 water_damage_tex[32] __attribute__((aligned(32))) = {
     0x78A31427, 0x572B0B52, 0x5167133A, 0x7FDF7F2F, 0x653E32A7, 0xF5FFFF8B, 0x32670486, 0x8BFFD55E,
     0x60830B26, 0xF8E8FA55, 0x602011C5, 0x2E020278, 0x59A40486, 0xF7155555, 0x90200486, 0xBC555555,
@@ -260,7 +260,7 @@ void effWaterDamageMain(EffectEntry* effect) {
  * with a refraction layer: the demos copy the screen each frame and sample it shifted by the droplet's position,
  * the retail builds use the small built-in water_damage_tex instead.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
@@ -268,20 +268,20 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 
     EffWaterDamageN64Work* work;
     CameraEntry* cam;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 ix;
 #endif
     Mtx trans;
     Mtx scale;
     Mtx rot;
     Mtx mtx;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 i;
     s32 iy;
     s32 alpha;
 #endif
     GXTexObj texObj;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     void* buffer;
     s32 i;
     s32 alpha;
@@ -330,7 +330,7 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP0);
     GXSetCullMode(GX_CULL_NONE);
     work++;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_TEMP_KEEP)->address;
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
@@ -343,14 +343,14 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
     GXInitTexObjLOD(&texObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&texObj, GX_TEXMAP1);
     for (i = 1; i < effect->count; i++, work++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         dx = (s32)work->position.x + ix;
         dy = (s32)work->position.y + iy;
         dx = dx < 0 ? -(dx & 0x7F) : (dx & 0x7F);
         dy = dy > 0 ? -(dy & 0x3F) : (dy & 0x3F);
 #endif
         PSMTXScale(scale, 0.0625f, 0.0625f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         PSMTXTrans(trans, (f32)(dx + 160) / 320.0f, (f32)(dy + 120) / 240.0f, 0.0f);
         PSMTXConcat(scale, trans, scale);
 #endif

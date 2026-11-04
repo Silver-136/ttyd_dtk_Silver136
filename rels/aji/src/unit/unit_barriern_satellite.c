@@ -47,7 +47,7 @@ BattleUnitKind unit_barriern_satellite = {
     9999, // pbSoftCap
     16, // width
     16, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
     8,
 #else
@@ -60,7 +60,7 @@ BattleUnitKind unit_barriern_satellite = {
 #endif
     0.0f, // centerOffset.x in demos; vivianOffsetX in retail
     0.0f, // centerOffset.y in demos; vivianOffsetZ in retail
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     0,
     -16,
@@ -129,7 +129,7 @@ static BattleUnitKindPart parts[] = {
     {6, "btl_un_barriern_satellite", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 100, 100, 0, 90, 100, 0, 0, 100, 90, 100, 90, 100, 90, 90, 0, 100, 100, 90, 100, 100, 100};
 #else
 static StatusVulnerability regist = {

@@ -3,7 +3,7 @@
  */
 #include "version.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
 #include "evt/evt_badgeshop.h"
@@ -18,7 +18,7 @@
 #include <string.h>
 
 //.data
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 badge_starmaniac_table[] = { //Dazzle
     ITEM_ATTACK_FX_Y, ITEM_CHILL_OUT, ITEM_PRETTY_LUCKY, ITEM_HAPPY_HEART,
     ITEM_HAPPY_FLOWER, ITEM_HAPPY_HEART_P, ITEM_ITEM_HOG, ITEM_HEART_FINDER,
@@ -31,7 +31,7 @@ s32 badge_starmaniac_table[] = { //Dazzle
  * Charlieton's Rogueport stock: the badges
  * and items he can offer; the bargain slots store indexes into it.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 badge_bottakuru_table[] = { //Charlieton Rogueport
     ITEM_SHOOTING_STAR, ITEM_EARTH_QUAKE, ITEM_BOOS_SHEET, ITEM_REPEL_CAPE,
     ITEM_STOPWATCH, ITEM_ULTRA_SHROOM, ITEM_JAMMIN_JELLY, ITEM_DRIED_SHROOM,
@@ -77,7 +77,7 @@ s32 badge_special_table_stage_6_clear[] = { //Poshley Heights
     ITEM_SIMPLIFIER, ITEM_UNSIMPLIFIER, ITEM_ATTACK_FX_P, ITEM_NULL
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s32 badge_starmaniac_table[] = { //Dazzle
     ITEM_ATTACK_FX_Y, ITEM_CHILL_OUT, ITEM_PRETTY_LUCKY, ITEM_HAPPY_HEART,
     ITEM_HAPPY_FLOWER, ITEM_HAPPY_HEART_P, ITEM_ITEM_HOG, ITEM_HEART_FINDER,
@@ -132,7 +132,7 @@ s32 badge_bteresa_table_card_platinum[] = { //Pianta Parlor Platinum Card
 };
 
 //.bss
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s32 badge_bteresa_table_nedan[] = {
     400, 200, 100, 50,
     800, 600, 400, 200,
@@ -648,7 +648,7 @@ USER_FUNC(evt_badgeShop_bottakuru_dec) {
 
 #pragma opt_common_subs reset
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** the demo counts the thrown badges through an inline copy of badgeShop_ThrowCheck (with its bug: always 0) */
 static inline s32 badgeShop_ThrowCount(s32 itemId) {
     int i;
@@ -674,7 +674,7 @@ USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     long i; // FAKE: `long` (same size): the int form allocates registers differently in the demos
 
     for (count = 0, i = 0; i < BADGE_COUNT; i++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if ((badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN))) - badgeShop_ThrowCount(i + BADGE_MIN) > 0) {
 #else
         badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN));
@@ -719,7 +719,7 @@ USER_FUNC(evt_badgeShop_bottakuru_get_kind_cnt) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(U_evt_badgeShop_get_special_zaiko) {
     EvtWord* args = event->args;
     s16 badge;
@@ -754,7 +754,7 @@ USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** demo only: TRUE once word 6 of the block in LW(0) reaches the bargain count (no caller in the demo dol) */
 USER_FUNC(evt_badgeShop_getBargainKind) {
     evtSetValue(event, event->args[0], !(((s32*)event->lwData[0])[6] < bdsw->bargainNum));
@@ -782,7 +782,7 @@ s32 badgeShop_ThrowCheck(s32 itemId) {
     return count;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 badgeShop_SpecialCheck(void) {
     s32 count;
     int i;

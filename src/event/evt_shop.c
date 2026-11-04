@@ -82,7 +82,7 @@ static EvtWord buy_evt[VERSION_PICK(326, 366)];
 EvtWord shopper_talk_evt[];
 EvtWord first_shopping_evt[86];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord sell_evt[193];
 EvtWord keep_evt[145];
 extern EvtWord unkeep_evt[];
@@ -136,7 +136,7 @@ WinMgrDesc list_desc[] = {
     {2, 0, 8, -250, -130, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, point_disp},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** the demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
 EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
@@ -451,14 +451,14 @@ EVT_BEGIN(shopper_talk_evt)
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 CALL(evt_msg_print_add_insert, 0, LW(14), LW(2))
 #else
                 CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
 #endif
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 CALL(evt_msg_print_add, 1, LW(14))
 #else
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
@@ -541,7 +541,7 @@ static EVT_BEGIN(sell_evt)
     CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(8))
     LABEL(0)
     CALL(item_data_db_arrange)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, SELECT_TYPE_ITEM_SELL, LW(1))
 #else
     CALL(evt_win_item_select, 1, SELECT_TYPE_ITEM_SELL, LW(1), LW(4))
@@ -581,7 +581,7 @@ static EVT_BEGIN(sell_evt)
         CALL(evt_msg_print_add, 0, LW(14))
         GOTO(0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_pouch_remove_item, LW(1), LW(0))
 #else
     CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
@@ -629,7 +629,7 @@ EVT_BEGIN(keep_evt)
         RETURN
     END_IF
     CALL(get_msg, LW(10), 14, LW(14))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_print_add_insert, 0, LW(14), LW(1))
     LABEL(0)
     CALL(evt_win_item_select, SELECT_TYPE_ITEM_STORE, LW(1))
@@ -654,7 +654,7 @@ EVT_BEGIN(keep_evt)
         CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_pouch_remove_item, LW(1), LW(0))
 #else
     CALL(evt_pouch_remove_item_index, LW(1), LW(4), LW(0))
@@ -706,7 +706,7 @@ EVT_BEGIN(unkeep_evt)
     CALL(get_msg, LW(10), 19, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
     LABEL(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, SELECT_TYPE_ITEM_RETRIEVE, LW(1))
 #else
     CALL(evt_win_item_select, 1, SELECT_TYPE_ITEM_RETRIEVE, LW(1), LW(4))
@@ -716,7 +716,7 @@ EVT_BEGIN(unkeep_evt)
         CALL(evt_msg_print, 0, LW(14), 0, STRING("me"))
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_pouch_remove_keepitem, LW(1), LW(0))
 #else
     CALL(evt_pouch_remove_keepitem, LW(1), LW(4), LW(0))
@@ -777,7 +777,7 @@ u16 point_disp_icons[] = {0x226, 0x227, 0x228, 0x227, 0x229, 0x22A};
 EVT_END()
 #endif
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** the demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
 EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
@@ -1084,7 +1084,7 @@ USER_FUNC(disp_list) {
         winMgrOpen(event->userdata[0]);
         winMgrOpen(event->userdata[1]);
         winMgrOpen(event->userdata[2]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
 #else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_OPEN1));
@@ -1094,7 +1094,7 @@ USER_FUNC(disp_list) {
         winMgrCloseAutoDelete(event->userdata[0]);
         winMgrCloseAutoDelete(event->userdata[1]);
         winMgrCloseAutoDelete(event->userdata[2]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
 #else
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_CLOSE1));
@@ -1171,7 +1171,7 @@ USER_FUNC(evt_shop_setup) {
         wp->win[i] = winMgrEntry(&window_desc[i]);
     }
     wp->sel = -1;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
 #endif
@@ -1199,14 +1199,14 @@ USER_FUNC(point_disp_onoff) {
  * Blocks until the shop points window has counted up to Mario's points;
  * retail plays a tick sound each frame meanwhile.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(point_wait) {
 #else
 USER_FUNC(point_wait) {
 #endif
     ShopWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     return wp->points != pouch->shopPoints ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 #else
@@ -1474,7 +1474,7 @@ USER_FUNC(unkeep_pouchcheck_func) {
  * and on rsh_03 on day 3 until the shopkeeper is woken.
  * Hides the icons of one-off items once bought and of shelves whose map object is hidden.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_shop_main_func) {
 #else
 USER_FUNC(evt_shop_main_func) {
@@ -1513,7 +1513,7 @@ USER_FUNC(evt_shop_main_func) {
         }
         return EVT_RETURN_BLOCK;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (winGhostDiaryChk()) {
 #else
     if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {

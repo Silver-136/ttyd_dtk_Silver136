@@ -161,7 +161,7 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
  * It also ends 300 units below Mario (in battle, below y = -300; the demos only check Mario).
  * CAMERA_3D, layer 2.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effSstarMain(EffectEntry* effect) {
 #else
 void effSstarMain(EffectEntry* effect) {
@@ -207,7 +207,7 @@ void effSstarMain(EffectEntry* effect) {
             w->rotZ = angleABf(0.0f, 0.0f, -w->velocity.y, w->screenVelX);
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (gp->inBattle == 0) {
         if (mario->position.y - w->position.y > 300.0f) {
             w->life = -1;

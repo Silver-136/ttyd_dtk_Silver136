@@ -29,7 +29,7 @@ static EvtWord s2_open[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord cam_shake[62];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_kaidan_oku[];
 #else
 EvtWord evt_kaidan_oku[144];
@@ -156,7 +156,7 @@ EVT_END()
 EVT_BEGIN(evt_kaidan_oku)
     IF_INT_LESS_OR_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
         CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mario_normalize)
 #endif
         CALL(evt_party_stop, 0)

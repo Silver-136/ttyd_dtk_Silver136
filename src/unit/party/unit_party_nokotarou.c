@@ -50,7 +50,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 PoseTableEntry pose_table_nokotarou_stay[26];
 PoseTableEntry pose_table_nokotarou_turn[12];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleDataEntry data_table[11];
 #else
 static BattleDataEntry data_table[12];
@@ -75,7 +75,7 @@ static EvtWord _koura_rotate_start[199];
 static EvtWord _koura_rotate_stop[13];
 EvtWord partyNokotarouAttack_FirstAttack[236];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord partyNokotarouAttack_NormalAttack[769];
 EvtWord partyNokotarouAttack_SyubibinKoura[667];
 #else
@@ -85,7 +85,7 @@ EvtWord partyNokotarouAttack_SyubibinKoura[VERSION_PICK(691, 702)];
 
 EvtWord partyNokotarouAttack_KouraGuard[];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord partyNokotarouAttack_TsuranukiKoura[901];
 #else
 EvtWord partyNokotarouAttack_TsuranukiKoura[VERSION_PICK(931, 942)];
@@ -95,7 +95,7 @@ EvtWord nokotarou_appeal_event[34];
 static EvtWord party_win_reaction[16];
 static EvtWord attack_audience_event[263];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord nokotarou_revive_event[16];
 #endif
 
@@ -108,7 +108,7 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 BattleUnitSetup entry_koura;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -196,7 +196,7 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
     {UNIT_DATA_ATTACK_READY_EVENT, subset_attack_ready_jump_event},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {UNIT_DATA_REVIVE_EVENT, nokotarou_revive_event},
 #endif
     {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
@@ -297,7 +297,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -371,7 +371,7 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Idle: plays the stay pose from the current pose table (normal or flipped). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -930,7 +930,7 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
         GOTO(99)
     END_IF
@@ -1134,7 +1134,7 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
         SET_VALUE(LW(0), 100)
         SET_VALUE(LW(1), 30)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_AcSetParamAll, 2, LW(0), 1, 90, LW(1), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetFlag, 3)
 #else
@@ -1209,7 +1209,7 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
         END_IF
         GOTO(50)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
     CALL(btlevtcmd_GetResultAC, LW(0))
@@ -1332,7 +1332,7 @@ EVT_END()
  * then drops a new shell unit (unit_koura) over Mario whose HP the action command sets.
  * Mario is hidden and untargetable inside it; if he still has a move, the shell opens again.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BattleUnitSetup entry_koura = {
     &unit_koura, // unitKindParams
     ALLIANCE_PLAYER, // alliance
@@ -1416,7 +1416,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 12, 1, 0)
 
     // The shell floats down towards Mario while the command runs.
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     WAIT_FRAMES(2)
 #endif
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -1498,7 +1498,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
                 SET_VALUE(LW(0), -1)
             END_SWITCH
             IF_INT_GREATER_OR_EQUAL(LW(0), 0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 CALL(btlevtcmd_GetResultPrizeLv, -1, LW(0), LW(7))
 #else
                 CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(0), LW(7))
@@ -1545,7 +1545,7 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         CALL(btlevtcmd_SetHp, LW(10), LW(0))
 
         // If Mario still has a move this turn, the shell opens to let him act.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_RunDataEventChild, LW(10), 61)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, POSE_TYPE_NEUTRAL)
         CALL(btlevtcmd_OnPartsAttribute, LW(3), 1, PART_ATTR_HIDDEN)
@@ -1826,7 +1826,7 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
         END_IF
         GOTO(50)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 0)
     CALL(btlevtcmd_GetResultAC, LW(0))
@@ -1995,7 +1995,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_NOKO_ATTACK2"), 0)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 15)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
 #else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 0)
@@ -2048,7 +2048,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static BattleUnitDefense defence_turn = {0};
 
 /** Koops's status vulnerabilities: base rate (100) for every status. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -2076,7 +2076,7 @@ static StatusVulnerability regist = {
 #endif
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -2091,7 +2091,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /** Idle: plays the stay pose from the current pose table (normal or flipped). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -2102,7 +2102,7 @@ EVT_END()
  * Setup for the giant shell (unit_koura) that Shell Shield spawns over Mario: on Mario's side, acting before the
  * player, placed off screen until the move positions it.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BattleUnitSetup entry_koura = {
     &unit_koura, // unitKindParams
     ALLIANCE_PLAYER, // alliance

@@ -159,7 +159,7 @@ NpcTribeInfo npcTribe[] = {
     {"ウスグラ店おじさん", "c_f_oji", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_STG4_MOVE1L", "SFX_FLD_NPC_STG4_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"ウスグラ店おばさん", "c_f_oba", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_STG4_MOVE1L", "SFX_FLD_NPC_STG4_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"にせマリオ", "c_mario", "EM_S_1", "EM_Z_1", "EM_S_1", "EM_T_1", "EM_W_1", "EM_R_1", "EM_D_1", "EM_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_STG4_LANPEL_M_MOVE1L", "SFX_STG4_LANPEL_M_MOVE1R", 10000, "SFX_STG4_LANPEL_M_JUMP1", "STG4_LANPEL_M_LANDING1"},
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     {"にせマリオ２", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_3", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
 #else
     {"にせマリオ２", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_2", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
@@ -178,7 +178,7 @@ NpcTribeInfo npcTribe[] = {
     {"オドオド水夫", "c_odo_k", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"水夫", "c_suifu_k", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {"ボロ水夫", "c_boro_k", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"エルモス", "c_elmos", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
 #else
     {"エルモス", "c_elmos", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 55.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
@@ -188,7 +188,7 @@ NpcTribeInfo npcTribe[] = {
     {"サンダースねむる", "c_bomt_n", "N_1", "N_1", "N_1", "T_1", "W_3", "R_3", "D_1", "D_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_PARTY_MOVE1L", "SFX_FLD_NPC_PARTY_MOVE1R", 12000, "SFX_FLD_NPC_PARTY_JUMP1", "SFX_FLD_NPC_PARTY_LANDING1"},
     {"コルテス", "c_korutesu3", "KRT_S_1", "KRT_Z_1", "KRT_S_1", "KRT_T_2", "KRT_W_1", "KRT_R_1", "KRT_D_1", "KRT_D_1", 60.0f, 60.0f, 0.0f, 0.0f, -15.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {"クリチェロ", "c_kuribo_n", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"コブロン", "c_koburon", "S_1", "Z_1", "S_1", "S_1", "S_1", "S_1", "D_1", "S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
 #else
     {"コブロン", "c_koburon", "S_1", "Z_1", "S_1", "T_1", "S_1", "S_1", "D_1", "S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
@@ -232,7 +232,7 @@ NpcTribeInfo npcTribe[] = {
     {"ピーチ姫（ラスト用）", "c_peach_f", "P_S_9F", "P_Z_9F", "P_S_9F", "P_T_9F", "P_W_9F", "P_R_9F", "P_S_9F", "P_S_9F", 20.0f, 47.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_PEACH_MOVE1L", "SFX_PEACH_MOVE1R", 12000, NULL, "SFX_PEACH_LANDING1"},
     {"ブラックピーチ", "c_b_peach_b", "KRT_S_1", "KRT_Z_1", "KRT_S_1", "KRT_T_1", "KRT_W_1", "KRT_W_1", "KRT_S_1", "KRT_S_1", 20.0f, 47.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {"影の女王", "c_q_kage", "KRT_S_1", "KRT_Z_1", "KRT_S_1", "KRT_T_1", "KRT_S_1", "KRT_S_1", "KRT_S_1", "KRT_S_1", 20.0f, 47.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"トゲノコ", "c_togenoko", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_NOKO_MOVE3L", "SFX_FLD_ENM_NOKO_MOVE3R", 12000, "SFX_FLD_ENM_NOKO_JUMP1", NULL},
     {"NPCハンマーブロス", "c_burosu_h", "BRO_S_1", "BRO_Z_1", "BRO_S_1", "BRO_T_1", "BRO_W_1", "BRO_R_1", "BRO_D_1", "BRO_K_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_NPC_NOKO_MOVE1L", "SFX_FLD_NPC_NOKO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
 #else
@@ -265,7 +265,7 @@ NpcTribeInfo npcTribe[] = {
     {"ヤミパタクリ", "c_kuribo_y", "PTK_S_1", "PTK_Z_2", "PTK_S_1", "PTK_T_1", "PTK_W_1", "PTK_R_1", "PTK_D_1", "PTK_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_PATAKURI_MOVE1", "SFX_FLD_ENM_PATAKURI_MOVE1", 12000, NULL, NULL},
     {"ホネノコ敵", "c_karon_g_h", "KRN_S_1", "KRN_Z_1", "KRN_S_1", "KRN_T_1", "KRN_W_1", "KRN_R_1", "KRN_D_1", "KRN_K_1", 24.0f, 36.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_HONENOKO_MOVE1L", "SFX_FLD_ENM_HONENOKO_MOVE1R", 12000, NULL, NULL},
     {"ボム兵", "c_bomhey", "BOM_S_1", "BOM_Z_1", "BOM_S_1", "BOM_T_1", "BOM_W_1", "BOM_R_1", "BOM_D_1", "BOM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_BOMB_MOVE1", "SFX_FLD_ENM_BOMB_MOVE1", 12000, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"メット", "c_met", "MET_S_1", "MET_Z_1", "MET_S_1", "MET_T_1", "MET_W_1", "MET_R_1", "MET_D_1", "MET_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
     {"トゲメット", "c_met", "TMT_S_1", "TMT_Z_1", "TMT_S_1", "TMT_T_1", "TMT_W_1", "TMT_R_1", "TMT_D_1", "TMT_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_MET_MOVE1L", "SFX_FLD_ENM_MET_MOVE1R", 12000, "SFX_FLD_ENM_MET_ATTACK1", NULL},
     {"パタトゲメット", "c_met", "PTM_S_1", "PTM_Z_1", "PTM_S_1", "PTM_T_1", "PTM_W_1", "PTM_R_1", "PTM_D_1", "PTM_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PATAMET_MOVE1", "SFX_FLD_ENM_PATAMET_MOVE1", 12000, NULL, NULL},
@@ -292,7 +292,7 @@ NpcTribeInfo npcTribe[] = {
     {"シンノスケ", "c_sinnosuke", "SIS_S_1", "SIS_Z_1", "SIS_S_1", "SIS_T_1", "SIS_W_1", "SIS_R_1", "SIS_D_1", "SIS_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_EMON_MOVE1L", "SFX_FLD_ENM_EMON_MOVE1R", 12000, NULL, NULL},
     {"バサバサ", "c_basabasa", "BSA_S_1", "BSA_S_1", "BSA_S_1", "BSA_T_1", "BSA_S_1", "BSA_S_1", "BSA_D_1", "BSA_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BASA_MOVE1", "SFX_FLD_ENM_BASA_MOVE1", 12000, NULL, NULL},
     {"バサバサチュルル", "c_cyuru", "CYU_S_1", "CYU_S_1", "CYU_S_1", "CYU_T_1", "CYU_S_1", "CYU_S_1", "CYU_D_1", "CYU_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BASA_MOVE1", "SFX_FLD_ENM_BASA_MOVE1", 12000, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"バサバサグリーン", "c_basabasa_g", "CYU_S_1", "CYU_S_1", "CYU_S_1", "CYU_T_1", "CYU_S_1", "CYU_S_1", "CYU_D_1", "CYU_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BASA_MOVE1", "SFX_FLD_ENM_BASA_MOVE1", 12000, NULL, NULL},
 #else
     {"バサバサグリーン", "c_basabasa_g", "BSA_S_1", "BSA_S_1", "BSA_S_1", "BSA_T_1", "BSA_S_1", "BSA_S_1", "BSA_D_1", "BSA_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BASA_MOVE1", "SFX_FLD_ENM_BASA_MOVE1", 12000, NULL, NULL},
@@ -309,7 +309,7 @@ NpcTribeInfo npcTribe[] = {
     {"ゴールドチョロボン", "c_chorobon_k", "CBN_S_1", "CBN_Z_1", "CBN_S_1", "CBN_T_1", "CBN_W_1", "CBN_R_1", "CBN_D_1", "CBN_K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, "SFX_FLD_ENM_CHORO1_MOVE1", NULL},
     {"パンジーさん", "c_pansy", "PAN_S_1", "PAN_Z_1", "PAN_S_1", "PAN_T_1", "PAN_W_1", "PAN_R_1", "PAN_D_1", "PAN_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PANZI_MOVE1L", "SFX_FLD_ENM_PANZI_MOVE1R", 12000, NULL, NULL},
     {"きらめくパンジーさん", "c_kpansy", "PAN_S_1_K", "PAN_Z_1_K", "PAN_S_1_K", "PAN_T_1_K", "PAN_W_1_K", "PAN_R_1_K", "PAN_D_1_K", "PAN_K_1_K", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_PANZI_MOVE1L", "SFX_FLD_ENM_PANZI_MOVE1R", 12000, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"キラー大砲", "c_killtai", "KTA_S_1", "KTA_Z_1", "KTA_S_1", "KTA_T_1", "KTA_S_1", "KTA_S_1", "KTA_D_1", "KTA_K_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {"キラー", "c_kilr", "KIL_S_1", "KIL_Z_1", "KIL_S_1", "KIL_T_1", "KIL_W_1", "KIL_R_1", "KIL_D_1", "KIL_K_1", 20.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {"スーパーキラー大砲", "c_killtai_g", "KTA_S_1", "KTA_Z_1", "KTA_S_1", "KTA_T_1", "KTA_S_1", "KTA_S_1", "KTA_D_1", "KTA_K_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
@@ -363,7 +363,7 @@ NpcTribeInfo npcTribe[] = {
     {"チャンピオン", "c_bred_h", "Z_1", "Z_1", "Z_1", "Z_1", "Z_1", "Z_1", "Z_1", "Z_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {"マッチョガンス", "c_m_gansu", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {"ワンワン", "c_wanwan", "WAN_S_1A", "WAN_Z_1", "WAN_S_1A", "WAN_A_1", "WAN_S_1A", "WAN_S_1A", "WAN_D_1", "WAN_K_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"バブル", "c_bubble", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
     {"ファントム", "c_phantom", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 20.0f, 20.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_BUBBLE_MOVE1", NULL, 0, NULL, NULL},
     {"ヘビーボム", "c_heavy", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 40.0f, 60.0f, 0.0f, 0.0f, -10.0f, 20.0f, "SFX_FLD_ENM_BOMB_MOVE1", "SFX_FLD_ENM_BOMB_MOVE1", 12000, NULL, NULL},
@@ -390,7 +390,7 @@ NpcTribeInfo npcTribe[] = {
     {"カメック白空", "c_kamek_w", "KMW_S_2", "KMW_Z_2", "KMW_S_2", "KMW_T_2", "KMW_W_2", "KMW_R_2", "KMW_D_2", "KMW_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {"カメック緑空", "c_kamek_g", "KMG_S_2", "KMG_Z_2", "KMG_S_2", "KMG_T_2", "KMG_W_2", "KMG_R_2", "KMG_D_2", "KMG_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {"カメック青空", "c_kamek", "KMK_S_2", "KMK_Z_2", "KMK_S_2", "KMK_T_2", "KMK_W_2", "KMK_R_2", "KMK_D_2", "KMK_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     {"ダイジェストマリオ", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_3", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
 #else
     {"ダイジェストマリオ", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_2", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},

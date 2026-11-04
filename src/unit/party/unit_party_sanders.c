@@ -40,7 +40,7 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 PoseTableEntry pose_table_sanders_stay[25];
 PoseTableEntry pose_table_counter_sanders[20];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleDataEntry data_table[8];
 #else
 static BattleDataEntry data_table[9];
@@ -59,7 +59,7 @@ BattleWeapon partyWeapon_SandersCounterSet;
 BattleWeapon partyWeapon_SandersSuperBombAttack;
 EvtWord partySandersAttack_FirstAttack[321];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord partySandersAttack_NormalAttack[946];
 #else
 EvtWord partySandersAttack_NormalAttack[970];
@@ -87,7 +87,7 @@ static EvtWord attack_event[2];
 BattleUnitSetup entry_bomzou;
 static EvtWord party_win_reaction[9];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -186,7 +186,7 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {UNIT_DATA_WIN_REACTION_EVENT, party_win_reaction},
     {UNIT_DATA_ATTACK_READY_EVENT, subset_attack_ready_jump_event},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {UNIT_DATA_BATTLE_END_HIDE_EVENT, sanders_battle_end_event},
 #endif
     {UNIT_DATA_AVOID_COUNTER_EVENT, btldefaultevt_avoid_counter_event},
@@ -568,7 +568,7 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
 #else
@@ -758,7 +758,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
 #else
@@ -1102,19 +1102,19 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
         SWITCH(LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CASE_LESS_OR_EQUAL(2)
 #else
             CASE_LESS_OR_EQUAL(3)
 #endif
             SET_VALUE(LW(0), -1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CASE_LESS_OR_EQUAL(4)
 #else
             CASE_LESS_OR_EQUAL(5)
 #endif
             SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CASE_LESS_OR_EQUAL(6)
 #else
             CASE_LESS_OR_EQUAL(7)
@@ -1304,7 +1304,7 @@ EVT_BEGIN(partySandersAttack_CounterSet)
     ELSE
         CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
         SUBTRACT(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(0), LW(6))
 #else
         CALL(btlevtcmd_GetResultPrizeLv, -1, LW(0), LW(6))
@@ -1348,7 +1348,7 @@ EVT_BEGIN(partySandersAttack_CounterSet)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BattleUnitSetup entry_bomzou = {
     &unit_bomzou, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
@@ -1544,7 +1544,7 @@ EVT_BEGIN(sanders_appeal_event)
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
 #else
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
@@ -1566,7 +1566,7 @@ EVT_BEGIN(sanders_appeal_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Victory reaction (data tag 64): Bobbery's Y_1 pose for 48 frames. */
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Y_1"))
@@ -1610,13 +1610,13 @@ static EVT_BEGIN(attack_audience_event)
     WAIT_MS(1000)
     CALL(evt_snd_sfxoff, LW(14))
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK4"), 0)
 #else
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK3"), 0)
 #endif
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff, STRING(""), STRING("sandars"), 3, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
@@ -1673,7 +1673,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Bobbery's status chances: 100 for every status (badges lower them in battle). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -1709,7 +1709,7 @@ EVT_END()
  * Setup for each time bomb that Bomb Squad spawns (unit_bomzou): on Bobbery's side,
  * acting before the player's turn, placed off stage until the throw moves it.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BattleUnitSetup entry_bomzou = {
     &unit_bomzou, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
@@ -1723,7 +1723,7 @@ BattleUnitSetup entry_bomzou = {
 #endif
 
 /** Victory reaction (data tag 64): Bobbery's Y_1 pose for 48 frames. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Y_1"))
     WAIT_FRAMES(48)

@@ -36,7 +36,7 @@ extern void partyWalkInit(PartyEntry* party, s32 mode);
 
 /** Map objects Ms. Mowz can sniff out: blocks, and from JP on the treasure chests and the Kururin floor. */
 char* mobj_list[] = {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "MOBJ_TreasureBox",
     "MOBJ_BigTreasureBox",
     "MOBJ_GrayTreasureBox",
@@ -81,7 +81,7 @@ EVT_END()
  * Items hidden in the scenery that Ms. Mowz's sniffing can point at (in bushes, trees and the like): map,
  * the flag set once the item is taken, and the spot's position.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 ChuchuTreasure chuchu_treasure_tbl[] = {
     {"hei_00", 0xF840715E, -468, 139, -127},
     {"hei_00", 0xF8406272, -408, 139, -127},
@@ -127,7 +127,7 @@ ChuchuTreasure chuchu_treasure_tbl[] = {
 #endif
 
 /** Zero vector that starts the position of a hidden scenery item during Ms. Mowz's treasure search. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static const Vec vecB = {0.0f, 0.0f, 0.0f};
 #endif
 
@@ -136,7 +136,7 @@ static const Vec vecB = {0.0f, 0.0f, 0.0f};
  * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
  * then a 1.5 s speech-bubble effect over her. In the retail versions a far find skips the sniff.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(search_result) {
 #else
 USER_FUNC(search_result) {
@@ -148,7 +148,7 @@ USER_FUNC(search_result) {
         if ((u32)event->lwData[0] == 0 || event->lwData[1] == 0) {
             return EVT_RETURN_DONE;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         psndSFXOn_3D((const char*)PSND_SFX_PARTY_CHURINA_SMELL_JUMP1, &party->position);
 #else
         if (event->lwData[1] == 1) {
@@ -172,7 +172,7 @@ USER_FUNC(search_result) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos) {
     u32 i;
     int found;
@@ -253,7 +253,7 @@ static USER_FUNC(set_msg) {
         } else {
             range = 10000.0f;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         item = itemNearDistCheck(player->position.x, player->position.y, player->position.z, range);
         if (item) {
             event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
@@ -346,7 +346,7 @@ USER_FUNC(post_msg) {
 }
 
 /** Whether any unfound chuchu_treasure_tbl entry on the current map is within range of Mario. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
     u32 i;
     int found;
@@ -384,7 +384,7 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
  * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
  */
 BOOL chuchu_searchObject(void) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     char** name;
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
     MapObjectEntry* mobj;
@@ -448,7 +448,7 @@ void chuchu_move(PartyEntry* party) {
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         partyWalkInit(party, 1);
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     partyUpdMoveSpd(party);
 #endif
     partyWalkMain(party);

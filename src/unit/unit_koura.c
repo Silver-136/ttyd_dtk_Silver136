@@ -22,7 +22,7 @@ PoseTableEntry pose_table_crack_lv2[5];
 static BattleUnitKindPart parts[2];
 static EvtWord init_event[46];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord phase_event[22];
 #else
 static EvtWord phase_event[38];
@@ -96,7 +96,7 @@ BattleUnitKind unit_koura = {
  * 9 reacts to damage by picking the crack stage, 61 refreshes the crack poses,
  * 62 removes the shell at once and 49 plays the break animation.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_KOURA_OPEN_EVENT, koura_open},
     {UNIT_DATA_KOURA_CLOSE_EVENT, koura_close},
@@ -169,7 +169,7 @@ PoseTableEntry pose_table_crack_lv2[] = {
     {POSE_TYPE_ACTION, "PKO_S_3"},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_KOURA_OPEN_EVENT, koura_open},
     {UNIT_DATA_KOURA_CLOSE_EVENT, koura_close},
@@ -209,7 +209,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -225,7 +225,7 @@ EVT_END()
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(koura_open)
 #else
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
@@ -236,7 +236,7 @@ static EVT_BEGIN(phase_event)
     END_IF
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(koura_close)
 #else
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
@@ -304,7 +304,7 @@ EVT_BEGIN(koura_close)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -340,7 +340,7 @@ EVT_BEGIN(damage_core)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_CRACK, 0)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_FRAMES(30)
 #else
     WAIT_MS(500)
@@ -462,7 +462,7 @@ EVT_BEGIN(destroy_event)
 EVT_END()
 
 /** Hit reaction: the default damage script with no special pose (LW10 = -2); the crack poses come from damage_core. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -472,7 +472,7 @@ EVT_END()
 #endif
 
 /** Idle: just plays the stay pose from the current (crack-stage) pose table. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

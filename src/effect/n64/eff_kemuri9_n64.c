@@ -26,7 +26,7 @@ typedef struct EffKemuri9N64Work {
     s32 timer;       // 0x24
     s32 counter;     // 0x28
     s32 life;        // 0x2C
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 anim;
 #else
     s32 texU;        // 0x30
@@ -36,7 +36,7 @@ typedef struct EffKemuri9N64Work {
 #endif
 } EffKemuri9N64Work;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, -1024, 0, 0, 0, 0, 255},
@@ -79,7 +79,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     work->timer = life;
     work->counter = 0;
     work->life = life;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     work->anim = 0.0f;
 #else
     work->texU = 0;
@@ -90,7 +90,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     work->position.z = z;
     work->radius = 10.0f;
     work->radiusEnd = radiusEnd;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     work->texU = 0;
     work->texV = 0;
     work->frameMax = life;
@@ -112,7 +112,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
 }
 
 /** Eases the ring radius toward radiusEnd, lifts each puff, advances the texture animation; deletes at end of life. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effKemuri9Main(EffectEntry* effect) {
 #else
 void effKemuri9Main(EffectEntry* effect) {
@@ -128,7 +128,7 @@ void effKemuri9Main(EffectEntry* effect) {
     tmp.y = work->position.y;
     tmp.z = work->position.z;
     position = tmp;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     work->anim = 8.0f * (f32)work->counter / (f32)work->life;
 #else
     {
@@ -163,7 +163,7 @@ void effKemuri9Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effKemuri9Disp, effect);
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * The demo draws the smoke as N64 quads, blending two frames of one texture strip;
  * the later versions use a 16-cell GX texture and draw the quads directly.
@@ -195,12 +195,12 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     f32 half = 0.5f;
     f32 h;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     u = work->texU;
     v = work->texV;
 #endif
     type = work->type;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     frame = (s32)work->anim;
     blend = (s32)(256.0f * (work->anim - (f32)frame));
     last = frame == 7;
@@ -215,7 +215,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     effGetTexObj(0x28, &texObj);
 #endif
     GXLoadTexObj(&texObj, GX_TEXMAP0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if ((s32)type < 2) {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xE6, 0xDE, 0xDE, 0x82});
     } else {
@@ -232,7 +232,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     PSMTXTrans(mtx, 0.0625f * (f32)u, 0.0f, 0.0f);
     PSMTXScale(scale, 0.0625f, 1.0f, 1.0f);
     PSMTXConcat(mtx, scale, mtx);
@@ -246,7 +246,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
 #else
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
@@ -255,7 +255,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_APREV, GX_CA_TEXA, GX_CA_A1, GX_CA_ZERO);
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
@@ -266,7 +266,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
 #endif
     GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_CPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
 #else
@@ -274,7 +274,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
 #endif
     GXSetCullMode(GX_CULL_NONE);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
     PSMTXConcat(mtx, rot, view);
@@ -308,7 +308,7 @@ void effKemuri9Disp(CameraId cameraId, EffectEntry* effect) {
         PSMTXConcat(view, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         effSetVtxDescN64((s32)type == 1 ? size16x16_tex32x32_vtx : size32x32_tex32x32_vtx);
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);

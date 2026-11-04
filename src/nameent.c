@@ -141,7 +141,7 @@ const char* latin_tbl[] = {
 #endif
 
 // The demos still load the name entry textures from the old window folder.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define NAME_TPL_JP "%s/window/jp/name.tpl"
 #else
 #define NAME_TPL_JP "%s/w/jp/name.tpl"
@@ -337,7 +337,7 @@ void nameEntMain(void) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** The demo has no cursor travel check, no all-blank name check and no default partner name. */
 static s32 nameMain(void) {
     s32 off;
@@ -378,7 +378,7 @@ s32 nameMain(void) {
                                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_DELETE1 | PSND_SFX_BYPASS_MUTE));
                                 }
                                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             case 7:
                                 wp->confirmSel = 1;
                                 wp->state = 100;
@@ -403,7 +403,7 @@ s32 nameMain(void) {
                                         if (wp->type == 1 && k >= n) {
                                             strcpy(wp->name, msgSearch("name_party3"));
                                             wp->nameLen = strlen(wp->name) / 2;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                                             if (wp->nameLen >= 8) {
                                                 wp->nameLen = 7;
                                             }
@@ -428,7 +428,7 @@ s32 nameMain(void) {
                                         if (wp->type == 1 && m >= n) {
                                             strcpy(wp->name, msgSearch("name_party3"));
                                             wp->nameLen = strlen(wp->name);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                                             if (wp->nameLen >= 8) {
                                                 wp->nameLen = 7;
                                             }
@@ -462,7 +462,7 @@ s32 nameMain(void) {
                                 break;
                         }
                     } else if (wp->nameLen < 8) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         ((u16*)wp->name)[wp->nameLen] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
                         wp->nameLen++;
                         if (wp->nameLen >= 8) {
@@ -483,7 +483,7 @@ s32 nameMain(void) {
                             wp->cursorX = 10;
                             wp->cursorY = 7;
                         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         psndSFXOn((const char*)PSND_SFX_FILE_MOJI_SET1);
                     } else if (wp->nameLen == 8) {
                         ((u16*)wp->name)[wp->nameLen - 1] = *(const u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
@@ -585,7 +585,7 @@ s32 nameMain(void) {
                             if (wp->type == 1 && j >= len) {
                                 strcpy(wp->name, msgSearch("name_party3"));
                                 wp->nameLen = strlen(wp->name) / 2;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                                 if (wp->nameLen >= 8) {
                                     wp->nameLen = 7;
                                 }
@@ -610,7 +610,7 @@ s32 nameMain(void) {
                             if (wp->type == 1 && m >= len) {
                                 strcpy(wp->name, msgSearch("name_party3"));
                                 wp->nameLen = strlen(wp->name);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                                 if (wp->nameLen >= 8) {
                                     wp->nameLen = 7;
                                 }
@@ -768,7 +768,7 @@ s32 nameMain(void) {
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 if (wp->confirmSel == 0) {
                     wp->state++;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
                 } else {
                     wp->state = 0;
@@ -782,7 +782,7 @@ s32 nameMain(void) {
                 }
             } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
                 wp->state = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 psndSFXOn((const char*)PSND_SFX_CURSOR_CANCEL1);
             } else if (keyGetDirRep(0) & (DEMO_STICK_UP | DEMO_STICK_DOWN)) {
                 wp->confirmSel = 1 - wp->confirmSel;
@@ -819,7 +819,7 @@ s32 nameMain(void) {
  * the side buttons, the caret, the prompt window for this type and, while confirming,
  * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void nameEntDisp(CameraId cameraId, void* param) {
 #else
 void nameEntDisp(CameraId cameraId, void* param) {
@@ -863,7 +863,7 @@ void nameEntDisp(CameraId cameraId, void* param) {
     for (j = 0; j < 9; j++) {
         for (n = 0; n < NAMEENT_COLS; n++) {
             if (wp->charTable[j * NAMEENT_COLS + n]) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);
 #else
                 FontDrawString((f32)(n * 24 - 190 + (n / 5) * 30 + (24 - FontGetMessageWidth(wp->charTable[j * NAMEENT_COLS + n])) / 2), (f32)(112 - j * 28), wp->charTable[j * NAMEENT_COLS + n]);

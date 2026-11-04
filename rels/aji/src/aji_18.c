@@ -38,7 +38,7 @@ static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_machine[];
 #else
 EvtWord evt_machine[266];
@@ -85,7 +85,7 @@ static USER_FUNC(make_list) {
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -102,7 +102,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -119,7 +119,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -136,7 +136,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -210,7 +210,7 @@ EVT_BEGIN(evt_machine)
         RETURN
     END_IF
     CALL(make_list)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(key_list), LW(10))
 #else
     CALL(evt_win_item_select, 0, PTR(key_list), LW(10), 0)
@@ -350,7 +350,7 @@ EVT_BEGIN(aji_18_init_evt)
     // The fortress music and ambience start and the exits are set up.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

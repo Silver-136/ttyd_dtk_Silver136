@@ -49,7 +49,7 @@ static EvtWord peach_evt_stg3[158];
 static EvtWord peach_evt_stg6[138];
 static EvtWord peach_evt_door_stop[18];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_16_init_evt[];
 #else
 EvtWord aji_16_init_evt[167];
@@ -526,7 +526,7 @@ EVT_BEGIN(aji_16_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     CALL(evt_hitobj_onoff, STRING("A_door1_1"), 1, 0)

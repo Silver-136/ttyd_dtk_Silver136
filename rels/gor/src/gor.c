@@ -30,7 +30,7 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static s32 gor_inemuri_snd_id;
 static char* gor_msg_cat_buf;
 #endif
@@ -41,7 +41,7 @@ void _prolog(void);
 
 EvtWord gor_villager_urouro[19];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord inemuri_snd[];
 extern EvtWord mario_and_party_sleep[];
 extern EvtWord luigi_gor_first_talk[];
@@ -94,7 +94,7 @@ void _unresolved(void) {
 
 /** Script helper (Japanese release and later): frees the string built by evt_gor_msg_cat_alloc, if there is one. */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000050c, JP gor .text+0x440. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Script helper (Japanese release and later): frees the string built by evt_gor_msg_cat_alloc, if there is one. */
 USER_FUNC(evt_gor_msg_cat_free) {
     if (gor_msg_cat_buf == NULL) {
@@ -113,7 +113,7 @@ USER_FUNC(evt_gor_msg_cat_free) {
  * Used to put fixed text around a looked-up message in Rogueport scripts.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000041c, JP gor .text+0x350. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper (Japanese release and later): builds one string out of args[0],
  * the message named args[1] and args[2], in a map-allocated buffer,
@@ -204,7 +204,7 @@ USER_FUNC(evt_goki_sub_intpl_get_value) {
  * so it can be stopped later (-1 for none).
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_00000104, JP gor .text+0x38. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper (Japanese release and later): remembers the sound effect id args[0] of Mario's snoring
  * so it can be stopped later (-1 for none).
@@ -220,7 +220,7 @@ USER_FUNC(evt_gor_inemuri_snd_set) {
  * if any.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_000000cc, JP gor .text+0x0. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper (Japanese release and later): stops the snoring sound effect saved by evt_gor_inemuri_snd_set,
  * if any.
@@ -249,12 +249,12 @@ EVT_END()
  * The Japanese release and later also remember the sound's id so it can be cut off when he wakes.
  */
 EVT_BEGIN(inemuri_snd)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_gor_inemuri_snd_set, -1)
 #endif
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
 #else
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), LW(3))
@@ -341,7 +341,7 @@ EVT_BEGIN(mario_and_party_sleep)
     // Luigi has finished: the snoring stops.
     IF_INT_NOT_EQUAL(LW(15), -1)
         DELETE_EVENT(LW(15))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_gor_inemuri_snd_off)
 #endif
     END_IF
@@ -406,19 +406,19 @@ EVT_BEGIN(luigi_gor_first_talk)
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(500)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print, 0, STRING("gor_luigi_01"), 0, STRING("me"))
 #else
             SET_VALUE(LW(2), STRING("gor_luigi_01"))
 #endif
             ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print, 0, STRING("gor_luigi_01_1"), 0, STRING("me"))
 #else
             SET_VALUE(LW(2), STRING("gor_luigi_01_1"))
 #endif
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_msg_print, 0, LW(2), 0, STRING("me"))
 #endif
         CALL(evt_mario_set_pose, STRING("M_N_5B"))
@@ -427,7 +427,7 @@ EVT_BEGIN(luigi_gor_first_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG2_24_BOSS_BATTLE)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("gor_luigi_02"), 0, STRING("me"))
         CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG3_31_GRUBBAS_PLANS)
         CALL(evt_msg_print, 0, STRING("gor_luigi_03"), 0, STRING("me"))

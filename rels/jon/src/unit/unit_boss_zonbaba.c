@@ -31,7 +31,7 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table[7];
 static PoseTableEntry pose_table_weak[7];
 #else
@@ -96,7 +96,7 @@ BattleUnitKind unit_boss_zonbaba = {
     115.0f,
     0.0f,
     -10.0f,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     0.0f,
         0.0f,
@@ -186,7 +186,7 @@ static StatusVulnerability regist = {
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_DIZZY, "GNB_X_1"},
     {POSE_TYPE_STOP, "GNB_Z_1"},
 #endif
@@ -201,7 +201,7 @@ static PoseTableEntry pose_table[] = {
 static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_DIZZY, "GNB_X_1"},
     {POSE_TYPE_STOP, "GNB_N_1"},
 #endif
@@ -1195,7 +1195,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HP_STAGE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 6, 30, 15, 10, 10, 10, 10)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 6, 25, 20, 10, 10, 10, 10)
@@ -1230,7 +1230,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(1), 20)
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 7, 25, 20, 10, 10, 10, 10, LW(1))
@@ -1268,7 +1268,7 @@ static EVT_BEGIN(attack_event)
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(1), 50)
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 7, 25, 20, 10, 10, 10, 10, LW(1))

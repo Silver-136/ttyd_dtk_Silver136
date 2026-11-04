@@ -50,7 +50,7 @@ EvtWord evt_gon_04flowblock_updown1_init[37];
 #if VERSION >= VERSION_US
 EvtWord evt_gon_04flowblock_updown1[465];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord evt_gon_04flowblock_updown1[489];
 #else
 EvtWord evt_gon_04flowblock_updown1[491];
@@ -62,7 +62,7 @@ EvtWord evt_gon_04flowblock_updown2_init[37];
 #if VERSION >= VERSION_US
 EvtWord evt_gon_04flowblock_updown2[465];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord evt_gon_04flowblock_updown2[489];
 #else
 EvtWord evt_gon_04flowblock_updown2[491];
@@ -80,7 +80,7 @@ EvtWord evt_hashi_pera1[16];
 EvtWord evt_hashi[50];
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
@@ -297,7 +297,7 @@ EVT_END()
  * resetting) is dead code, as is the inner IF_INT_EQUAL(1, 0) arm.
  */
 EVT_BEGIN(evt_gon_04flowblock_updown1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif
 
@@ -559,7 +559,7 @@ EVT_END()
  * and camera shake, and flips the state flag LSWF(7).
  */
 EVT_BEGIN(evt_gon_04flowblock_updown2)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif
 
@@ -1085,7 +1085,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0D, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)

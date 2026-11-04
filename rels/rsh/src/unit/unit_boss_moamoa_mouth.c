@@ -55,7 +55,7 @@ BattleUnitKind unit_boss_moamoa_mouth = {
     10, // pbSoftCap
     200, // width
     120, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     40,
     100,
 #else
@@ -68,7 +68,7 @@ BattleUnitKind unit_boss_moamoa_mouth = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     0,
     0,

@@ -19,7 +19,7 @@ void hitReCalcMatrix2(HitEntry* hit, Mtx mtx, BOOL recursion);
 
 s32 unk_8041840C;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 HitEntry* hitActiveListTop; // head of the active hit list (descriptive name, see docs/NAME_PROVENANCE.md)
 #endif
 
@@ -199,7 +199,7 @@ static void hitPreCheck(void) {
     s32 j;
     MapWork* wp = mapGetWork();
     HitEntry* hit;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     HitEntry* prev;
 
     prev = hitActiveListTop = NULL;
@@ -209,7 +209,7 @@ static void hitPreCheck(void) {
     for (; i < wp->entries->count; entry++, i++) {
         hit = entry->hitEntries;
         for (j = 0; j < entry->hitNumJoints; j++, hit++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             hit->flags |= HIT_FLAG_NO_GEOMETRY;
             if (hit->joint->partCount != 0) {
                 hit->flags &= ~HIT_FLAG_NO_GEOMETRY;
@@ -253,7 +253,7 @@ void hitDelete(const char* name) {
             }
             if (strcmp(name, hit->joint->name) == 0) {
                 hit->flags |= HIT_FLAG_DELETED;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 hitPreCheck();
 #endif
                 return;
@@ -676,7 +676,7 @@ inline BOOL tempfunc(HitCheckQuery* query, HitVector* vector) {
     query->hitPos.x = query->targetPos.x;
     query->hitPos.y = query->targetPos.y - query->targetDistance;
     query->hitPos.z = query->targetPos.z;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     query->hitNormal = vector->normal;
 #endif
     if (dotProduct >= 0.0f) {
@@ -826,7 +826,7 @@ inline BOOL tempfunc3(HitCheckQuery* query, HitVector* vector) {
  * retail walks the active list and has separate straight-down, straight-up and horizontal cases.
  */
 HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     HitVector* vector2;
     HitVector* vector3;
     MapEntry* map = mapGetWork()->entries;
@@ -871,14 +871,14 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     }
     minDist = -1.0f;
     // FAKE: 0.5f through the spare local temp; `reach = query->targetDistance * 0.5f` changes the object
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     hitIdx = -1;
 #endif
     temp = 0.5f;
     reach = query->targetDistance * temp;
     PSVECScale(&query->targetDir, &endPos, reach);
     PSVECAdd(&query->targetPos, &endPos, &endPos);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (query->targetDir.x == 0.0f && query->targetDir.y == -1.0f && query->targetDir.z == 0.0f) {
         for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
             for (j = 0, hit = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit++) {
@@ -1094,7 +1094,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
     query->targetDistance = distance;
     query->hitPos = position;
     query->hitNormal = normal;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     return &map[mapIdx].hitEntries[hitIdx];
 #else
     return closest;
@@ -1302,7 +1302,7 @@ HitEntry* hitCheckSphereFilter(HitFilterCallback callback, f32 x, f32 y, f32 z,
     if (objectId < 0) {
         return NULL;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (minDist < (0.5f * radius)) {
         return &map[entryId].hitEntries[objectId];
     }
@@ -1417,7 +1417,7 @@ void hitObjGetNormal(const char* name, Vec* normal) {
 }
 
 /** Returns hit's joint name, or NULL for NULL (the demo has no range check). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 const char* hitGetName(HitEntry* hit) {
     MapEntry* map;
     s32 count;
@@ -1444,7 +1444,7 @@ const char* hitGetName(HitEntry* hit) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 const char* hitGetName(HitEntry* hit) {
     if (hit != NULL) {
         return hit->joint->name;

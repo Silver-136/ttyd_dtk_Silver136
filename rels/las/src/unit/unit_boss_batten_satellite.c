@@ -103,7 +103,7 @@ BattleUnitKind unit_boss_batten_satellite = {
     9, // pbSoftCap
     16, // width
     16, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
     8,
 #else
@@ -116,7 +116,7 @@ BattleUnitKind unit_boss_batten_satellite = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     0,
     0,
@@ -178,7 +178,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {0, 75, 75, 0, 10, 100, 100, 75, 100, 75, 100, 75, 100, 75, 75, 0, 75, 100, 75, 100, 100, 90};
 #else
 static StatusVulnerability regist = {

@@ -110,7 +110,7 @@ static USER_FUNC(_steal_item) {
     }
     {
         s32 item = 0;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         s32 count;
 #else
         s32 count = 0;
@@ -118,7 +118,7 @@ static USER_FUNC(_steal_item) {
         s32 held = 0;
         s32 r;
         s32 i;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         s32 heldMax = GetHeldItemCount; // PAL: read as in the other Pider thieves, but this one only takes badges
 
         count = 0;
@@ -147,7 +147,7 @@ static USER_FUNC(_steal_item) {
         } else {
             s32 k;
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             for (k = 0; k < heldMax; k++) {
 #else
             for (k = 0; k < 20; k++) {
@@ -273,7 +273,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Badge Bandit: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {70, 70, 60, 100, 70, 100, 100, 50, 100, 70, 100, 70, 100, 70, 80, 75, 60, 100, 70, 100, 100, 60};
 #else
 static StatusVulnerability regist = {
@@ -320,7 +320,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_RUN, "R_1"},
     {POSE_TYPE_RUN_HOME, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {POSE_TYPE_DANGER, "I_1"},
     {POSE_TYPE_PERIL, "I_1"},
 #else
@@ -337,7 +337,7 @@ static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_STOP, "Y_1"},
     {POSE_TYPE_FREEZE, "Y_1"},
     {POSE_TYPE_CONFUSE, "K_1"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {POSE_TYPE_POISON, "I_1"},
     {POSE_TYPE_DIZZY, "I_1"},
 #else

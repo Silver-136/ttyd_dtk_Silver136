@@ -36,7 +36,7 @@ extern EvtWord evt_sub_tree_access_entry[];
 
 extern WinMgrDesc coinget_window_desc[1];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kusa_evt[41];
 #else
 extern EvtWord kusa_evt[43];
@@ -48,7 +48,7 @@ extern EvtWord mail_evt_gor_01[61];
 extern EvtWord mail_evt_gor_01_2[93];
 extern EvtWord mail_evt_gor_02[87];
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 extern EvtWord mail_evt_gor_02_2[68];
 #else
 extern EvtWord mail_evt_gor_02_2[61];
@@ -67,7 +67,7 @@ extern EvtWord mail_evt_usu_01[61];
 extern EvtWord mail_evt_win_01[61];
 extern s32 tree_data[75];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tree_evt[249];
 #else
 extern EvtWord tree_evt[251];
@@ -103,7 +103,7 @@ USER_FUNC(stone_bg_open);
 USER_FUNC(stone_ry);
 USER_FUNC(evt_key_get_button);
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 USER_FUNC(evt_sub_get_framerate);
 #endif
 

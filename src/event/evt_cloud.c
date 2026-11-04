@@ -78,7 +78,7 @@ static USER_FUNC(evt_cloud_main) {
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
         return EVT_RETURN_BLOCK;
     }
@@ -148,7 +148,7 @@ static USER_FUNC(evt_cloud_main) {
                 if (y < 0) {
                     y = 0;
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (w > gp->fbWidth) {
                     w = gp->fbWidth;
 #else
@@ -156,7 +156,7 @@ static USER_FUNC(evt_cloud_main) {
                     w = gp->fbWidth - x;
 #endif
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (h > gp->efbHeight) {
                     h = gp->efbHeight;
 #else

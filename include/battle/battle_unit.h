@@ -555,7 +555,7 @@ typedef enum BattlePoseType {
     POSE_TYPE_ITEM = 52, // receives or uses an item
     POSE_TYPE_DANGER = 56,
     POSE_TYPE_PERIL = 57,
-#if VERSION <= VERSION_DEMO_US // the demo has no kissed poses
+#if VERSION <= VERSION_DEMO_JP // the demo has no kissed poses
     POSE_TYPE_ESCAPE_STUMBLE = 58, // failed escape
     POSE_TYPE_ESCAPE_RECOVER = 59,
     POSE_TYPE_HAPPY_HEART = 60,
@@ -1007,7 +1007,7 @@ typedef struct BattleUnit {
     s32 ceilFallEventId;                                // 0x2C0 (US 0x2C4)
     void* actEndEvent;                           // 0x2C4 (US 0x2C8), run when the unit's action ends (battle_seq)
     s32 actEndEventId;                                   // 0x2C8 (US 0x2CC)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     s32 slideReturnEventId; // PAL only (+4 from here): enemy_slide_return_evt of sac_enemy_slide_return, waited on by BattleWaitAllActiveEvtEnd_NoBgSetEndWait
 #endif
     void* hitEventCode;                          // 0x2CC (US 0x2D0), run on the attacker by BattleRunHitEventDirect
@@ -1166,14 +1166,14 @@ void BtlUnit_SetPartsMoveSpeed(BattleUnitPart* part, f32 moveSpeedXZ);
 void BtlUnit_SetJumpSpeed(BattleUnit* unit, f32 moveSpeedY);
 s8 BtlUnit_GetBelong(BattleUnit* unit);
 
-#if VERSION <= VERSION_DEMO_US && defined(BATTLE_UNIT_STATUS_ENUM)
+#if VERSION <= VERSION_DEMO_JP && defined(BATTLE_UNIT_STATUS_ENUM)
 void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* strength);
 #else
 void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength);
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US && defined(BATTLE_UNIT_STATUS_ENUM)
+#if VERSION <= VERSION_DEMO_JP && defined(BATTLE_UNIT_STATUS_ENUM)
 BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength);
 #else
 BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength);
@@ -1181,14 +1181,14 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength);
 
 void BtlUnit_ClearStatus(BattleUnit* unit);
 
-#if VERSION <= VERSION_DEMO_US && defined(BATTLE_UNIT_STATUS_ENUM)
+#if VERSION <= VERSION_DEMO_JP && defined(BATTLE_UNIT_STATUS_ENUM)
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, StatusEffectType type);
 #else
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type);
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US && defined(BATTLE_UNIT_STATUS_ENUM)
+#if VERSION <= VERSION_DEMO_JP && defined(BATTLE_UNIT_STATUS_ENUM)
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, StatusEffectType type);
 #else
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type);
@@ -1283,13 +1283,13 @@ enum {
     PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET = 4194304,
     BTL_POSE_STAY = 43,
     PART_ATTR_UNTATTLEABLE = 524288,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BTL_POSE_TALK = 63,
 #else
     BTL_POSE_TALK = 65,
 #endif
     PART_ATTR_NOT_TARGETABLE = 65536,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BTL_POSE_STAY_DEFAULT = 67,
 #else
     BTL_POSE_STAY_DEFAULT = 69,

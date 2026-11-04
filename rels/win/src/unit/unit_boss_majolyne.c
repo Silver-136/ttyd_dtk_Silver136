@@ -127,7 +127,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element attributes of Beldam: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {70, 80, 70, 100, 70, 100, 100, 50, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
 #else
 static StatusVulnerability regist = {

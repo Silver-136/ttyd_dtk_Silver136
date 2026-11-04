@@ -41,7 +41,7 @@ static EvtWord init_0[37];
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord main_0[489];
 #else
 static EvtWord main_0[491];
@@ -53,7 +53,7 @@ EvtWord init_1[37];
 #if VERSION >= VERSION_US
 EvtWord main_1[465];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord main_1[489];
 #else
 EvtWord main_1[491];
@@ -62,7 +62,7 @@ EvtWord main_1[491];
 
 s32 key_tbl00[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_chk00[];
 #else
 EvtWord evt_chk00[23];
@@ -71,7 +71,7 @@ EvtWord evt_chk00[23];
 static EvtWord evt_unlock00[10];
 s32 key_tbl01[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_chk01[];
 #else
 EvtWord evt_chk01[23];
@@ -321,7 +321,7 @@ EVT_END()
  * it reverses and the switch is cancelled. Ends with a landing sound and the final shake when descending.
  */
 static EVT_BEGIN(main_0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif
 
@@ -584,7 +584,7 @@ EVT_END()
  * A descending head-contact match reverses the block and cancels the switch press.
  */
 EVT_BEGIN(main_1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif
 
@@ -831,7 +831,7 @@ s32 key_tbl00[] = {
 EVT_BEGIN(evt_chk00)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0C, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl00), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl00), LW(0), 0)
@@ -863,7 +863,7 @@ s32 key_tbl01[] = {
 EVT_BEGIN(evt_chk01)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0E, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl01), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl01), LW(0), 0)

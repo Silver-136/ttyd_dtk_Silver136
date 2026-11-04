@@ -120,7 +120,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (flags & TARGET_CLASS_NO_MARIO_OR_SHELL) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (unit->currentKind == UNIT_MARIO) {
 #else
                 if (unit->currentKind == UNIT_MARIO || unit->currentKind == UNIT_SHELL_SHIELD) {
@@ -267,7 +267,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             }
             if (d->propFlags & TARGET_PROP_HAMMERLIKE) {
                 if (part->attributes & kHammerlikeCannotTarget) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     ok = FALSE;
                     break;
 #else

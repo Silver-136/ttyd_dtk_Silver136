@@ -61,7 +61,7 @@ static EvtWord evt_sensyu[70];
 EvtWord evt_1st_sub[107];
 static EvtWord evt_1st_leagu[747];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_toile_door[];
 #else
 EvtWord evt_toile_door[236];
@@ -816,7 +816,7 @@ EVT_BEGIN(evt_toile_door)
         RETURN
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("stg3_tou_t_00"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
@@ -961,7 +961,7 @@ EVT_BEGIN(evt_champion_win)
     ADD(LW(1), 4)
     ADD(LW(2), 15)
     CALL(evt_eff, STRING("belt"), STRING("starstone"), 9, LW(0), LW(1), LW(2), FLOAT(0.75f), 0, 0, 0, 0, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(tou_08_belt_camid)
 #endif
     CALL(evt_item_entry, STRING("belt"), ITEM_CHAMPS_BELT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -1001,7 +1001,7 @@ EVT_BEGIN(evt_champion_win)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e08, JP tou .text+0x6D44. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(tou_08_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");
 
@@ -1301,7 +1301,7 @@ EVT_BEGIN(tou_08_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -120, 12, -135, ITEM_TYPE_STILL, GSWF_TOU_08_ICE_STORM, 0)
 #else
     CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -240, 0, -90, ITEM_TYPE_STILL, GSWF_TOU_08_ICE_STORM, 0)
@@ -1351,7 +1351,7 @@ EVT_BEGIN(tou_08_init_evt)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -1360,7 +1360,7 @@ EVT_BEGIN(tou_08_init_evt)
             CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
             IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -1373,7 +1373,7 @@ EVT_BEGIN(tou_08_init_evt)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             ELSE
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))

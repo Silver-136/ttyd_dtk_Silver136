@@ -106,7 +106,7 @@ static s16 nozle_1_texcoord1_tbl[] __attribute__((aligned(32))) = {
     0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static GXColor nozle_1_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 204}, {255, 255, 255, 51}, {255, 255, 255, 76}, {255, 255, 255, 102},
     {255, 255, 255, 0}, {255, 255, 255, 127}, {0, 0, 0, 0}, {0, 0, 0, 0},
@@ -119,7 +119,7 @@ static u32 nozle_1_dl_0_2[] __attribute__((aligned(32))) = {0x98000A09, 0x000020
 static u32 nozle_1_dl_0_3[] __attribute__((aligned(32))) = {0x98000A07, 0x00001F1F, 0x0500001E, 0x1E1F0000, 0x14141E00, 0x00121211, 0x00001515, 0x10000013, 0x13180000, 0x07071700, 0x00050504, 0x00000404, 0x02000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_0_4[] __attribute__((aligned(32))) = {0x98000A05, 0x00001E1E, 0x0300001C, 0x1C1E0000, 0x12121D00, 0x000F0F10, 0x00001313, 0x0F00000E, 0x0E170000, 0x05051600, 0x00010102, 0x00000000, 0x00000103, 0x03000000, 0x00000000, 0x00000000};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static u32 nozle_1_dl_0_5[] __attribute__((aligned(32))) = {0x98000401, 0x00011D1D, 0x1C000110, 0x10030000, 0x1C1C1D00, 0x000F0F00, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_0_6[] __attribute__((aligned(32))) = {0x9800041C, 0x00011010, 0x0E000111, 0x111D0000, 0x0F0F0F00, 0x000E0E00, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_0_7[] __attribute__((aligned(32))) = {0x9800040E, 0x00011111, 0x15000102, 0x020F0000, 0x0E0E1600, 0x00010100, 0x00000000, 0x00000000};
@@ -135,7 +135,7 @@ static u32 nozle_1_dl_1_2[] __attribute__((aligned(32))) = {0x98000A2C, 0x00002F
 static u32 nozle_1_dl_1_3[] __attribute__((aligned(32))) = {0x98000A2A, 0x00002222, 0x28000021, 0x21420000, 0x1A1A4100, 0x00181834, 0x00001B1B, 0x33000019, 0x193B0000, 0x0D0D3A00, 0x000B0B27, 0x00000A0A, 0x25000008, 0x08000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_4[] __attribute__((aligned(32))) = {0x98000A28, 0x00002121, 0x26000020, 0x20410000, 0x18184000, 0x00161633, 0x00001919, 0x32000017, 0x173A0000, 0x0B0B3900, 0x00090925, 0x00000808, 0x23000106, 0x06000000, 0x00000000, 0x00000000};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static u32 nozle_1_dl_1_5[] __attribute__((aligned(32))) = {0x98000424, 0x00011F1F, 0x3F000114, 0x14260000, 0x20204000, 0x00161600, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_6[] __attribute__((aligned(32))) = {0x9800043F, 0x00011414, 0x31000115, 0x15400000, 0x16163200, 0x00171700, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_7[] __attribute__((aligned(32))) = {0x98000431, 0x00011515, 0x38000107, 0x07320000, 0x17173900, 0x00090900, 0x00000000, 0x00000000};
@@ -282,7 +282,7 @@ static u32 nozle_3_dl_0_15[] __attribute__((aligned(32))) = {0x98000400, 0x20000
 static u32 nozle_3_dl_0_16[] __attribute__((aligned(32))) = {0x98000300, 0x06000000, 0x00000100, 0x01000100, 0x00000100, 0x02000200, 0x00000000, 0x01000300, 0x03000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static void* nozle_3_dl_0_tbl[] __attribute__((aligned(32))) = {nozle_3_dl_0_0, nozle_3_dl_0_1, nozle_3_dl_0_2, nozle_3_dl_0_3, nozle_3_dl_0_4, nozle_3_dl_0_5, nozle_3_dl_0_6, nozle_3_dl_0_7, nozle_3_dl_0_8, nozle_3_dl_0_9, nozle_3_dl_0_10, nozle_3_dl_0_11, nozle_3_dl_0_12, nozle_3_dl_0_13, nozle_3_dl_0_14, nozle_3_dl_0_15, nozle_3_dl_0_16};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static u8 nozle_3_dl_0_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
 #endif
 
@@ -306,7 +306,7 @@ static u32 nozle_3_dl_1_16[] __attribute__((aligned(32))) = {0x98000300, 0x3B000
 static void* nozle_3_dl_1_tbl[] __attribute__((aligned(32))) = {nozle_3_dl_1_0, nozle_3_dl_1_1, nozle_3_dl_1_2, nozle_3_dl_1_3, nozle_3_dl_1_4, nozle_3_dl_1_5, nozle_3_dl_1_6, nozle_3_dl_1_7, nozle_3_dl_1_8, nozle_3_dl_1_9, nozle_3_dl_1_10, nozle_3_dl_1_11, nozle_3_dl_1_12, nozle_3_dl_1_13, nozle_3_dl_1_14, nozle_3_dl_1_15, nozle_3_dl_1_16};
 
 /** Display-list sizes for list set 1 of nozzle model 3 (type 2), drawn first. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static u8 nozle_3_dl_1_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
 #endif
 
@@ -349,7 +349,7 @@ static s16 nozle_4_texcoord1_tbl[] __attribute__((aligned(32))) = {
     0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static GXColor nozle_4_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 127}, {255, 255, 255, 76}, {255, 255, 255, 0},
 };
@@ -364,7 +364,7 @@ static u32 nozle_4_dl_0_5[] __attribute__((aligned(32))) = {0x98000617, 0x000017
 static u32 nozle_4_dl_0_6[] __attribute__((aligned(32))) = {0x98000618, 0x00001818, 0x19000119, 0x190F0000, 0x0C0C1000, 0x010E0E06, 0x00000D0D, 0x0700010F, 0x0F000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_4_dl_0_7[] __attribute__((aligned(32))) = {0x98000619, 0x00011919, 0x1A00021A, 0x1A100001, 0x0E0E1100, 0x02101007, 0x00010F0F, 0x08000211, 0x11000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
 #else
 static s8 nozle_1_normal_tbl[] __attribute__((aligned(32))) = {
@@ -399,7 +399,7 @@ static s8 nozle_3_normal_tbl[] __attribute__((aligned(32))) = {
 };
 
 /** Display-list sizes for list set 0 of nozzle model 3 (type 2), drawn after set 1. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static u8 nozle_3_dl_0_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
 /** Display-list sizes for list set 1 of nozzle model 3 (type 2), drawn first. */
 static u8 nozle_3_dl_1_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
@@ -422,7 +422,7 @@ static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0
  * Width and height percentages per frame as a type 0 or 2 nozzle grows in; read backwards from its
  * remaining life as it shrinks away at the end.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}
     , {80, 100}, {79, 99}, {77, 97}, {75, 94}, {73, 91}, {70, 87}, {66, 83}, {62, 78}, {58, 73}, {54, 67}, {49, 61}, {44, 55}, {39, 49}, {34, 42}, {29, 36}, {24, 29}, {19, 23}, {14, 17}, {9, 11}, {5, 6}, {0, 0}, {0, 0}
 };
@@ -493,7 +493,7 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
 }
 
 /** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effNozleMain(EffectEntry* effect) {
 #else
 void effNozleMain(EffectEntry* effect) {
@@ -558,7 +558,7 @@ void effNozleMain(EffectEntry* effect) {
     work->timer++;
     if (work->life < 0) {
         effDelete(effect);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     } else if (type == 3) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_CUSTOM_MID, (DispCallback)effNozleDisp, effect);
 #endif
@@ -588,7 +588,7 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
 }
 
 /** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
@@ -616,7 +616,7 @@ void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     cam = camGetPtr(cameraId);
     alpha = work->alpha;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);

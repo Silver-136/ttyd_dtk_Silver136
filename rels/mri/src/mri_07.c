@@ -27,7 +27,7 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord chibitoge_nakama[];
 #else
 EvtWord chibitoge_nakama[287];
@@ -67,7 +67,7 @@ static ShopItem goods_list[] = {
 
 /** What the clerk buys from Mario and at what price (the trade-in list of the shop). */
 static ShopDb trade_list[] = {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {ITEM_HP_DRAIN_BADGE, 5, 0},
 #else
     {ITEM_HP_DRAIN_ITEM, 5, 0},
@@ -112,7 +112,7 @@ EVT_BEGIN(chibitoge_nakama)
     CALL(evt_msg_print, 0, STRING("stg2_mri_f01_01"), 0, STRING("プニ店員"))
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_stop, 0)
 #endif
     CALL(evt_msg_print_party, STRING("stg2_mri_f01_02"))
@@ -158,7 +158,7 @@ EVT_BEGIN(chibitoge_nakama)
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_mode, 1, PUNI_MODE_JOIN)
     CALL(evt_npc_flag_onoff, 0, STRING("ガイドsp"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_run, 0)
 #endif
     RETURN

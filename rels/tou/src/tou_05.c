@@ -44,13 +44,13 @@ static EvtWord evt_dakuto[90];
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord n_bero_match_reset[14];
 #endif
 
 static BeroEntry bero_data[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_takurami[];
 extern EvtWord evt_hiki_close[];
 extern EvtWord evt_hiki_open[];
@@ -69,7 +69,7 @@ static EvtWord evt_kinoshikowa[222];
 static EvtWord evt_sensyu[430];
 EvtWord evt_sensyu2[208];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_1st_leagu[456];
 #else
 static EvtWord evt_1st_leagu[467];
@@ -79,7 +79,7 @@ EvtWord evt_nozoki_msg[33];
 EvtWord evt_nozoki[769];
 EvtWord evt_sensyu_reentry[293];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tou_05_init_evt[];
 #else
 EvtWord tou_05_init_evt[445];
@@ -145,7 +145,7 @@ EVT_END()
  * Exit script: cancels a registered but unplayed match (clears GSWF_TOU_MATCH_RESERVED)
  * when Mario leaves through the door.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(n_bero_match_reset)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
         DEBUG_PUT_MSG(STRING("登録していた試合をリセット"))
@@ -168,7 +168,7 @@ static BeroEntry bero_data[] = {
         -1, // length
         NULL, // enterEvent
         -1, // caseType
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         NULL,
 #else
         n_bero_match_reset, // exitEvent
@@ -207,7 +207,7 @@ static BeroEntry bero_data[] = {
  * the story advances to STG3_31_GRUBBAS_PLANS and the office door's entrance is switched on.
  */
 EVT_BEGIN(evt_takurami)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_key_onoff, 0)
 #endif
 
@@ -333,7 +333,7 @@ EVT_END()
 
 /** Closes the desk drawer (kami_2 papers hidden) with the drawer-shut sound and re-registers evt_hiki_open. */
 EVT_BEGIN(evt_hiki_close)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -342,7 +342,7 @@ EVT_BEGIN(evt_hiki_close)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DRAWER_SHUT1"), LW(10), LW(11), LW(12), 0)
     SET_VALUE(LW(8), LW(0))
     SET_VALUE(LW(9), LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 100, 0, 30)
     LOOP(31)
         CALL(evt_sub_intpl_get_value)
@@ -355,7 +355,7 @@ EVT_BEGIN(evt_hiki_close)
         CALL(evt_mapobj_trans, 1, LW(8), 0, 0, LW(0))
         CALL(evt_hit_bind_update, LW(9))
         WAIT_FRAMES(1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -364,7 +364,7 @@ EVT_BEGIN(evt_hiki_close)
     SET_VALUE(LW(0), LW(8))
     SET_VALUE(LW(1), LW(9))
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(evt_hiki_open), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
 #endif
@@ -374,7 +374,7 @@ EVT_END()
 
 // LW(0)/LW(1) carry the drawer object and its bound hit name across open/close trigger swaps.
 EVT_BEGIN(evt_hiki_open)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -383,7 +383,7 @@ EVT_BEGIN(evt_hiki_open)
     // The partner comes over to the desk when it is the special drawer and Grubba's secret is still unknown.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_mario_key_onoff, 0)
 #endif
             BEGIN_INLINE_EVENT
@@ -411,7 +411,7 @@ EVT_BEGIN(evt_hiki_open)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DRAWER_OPEN1"), LW(10), LW(11), LW(12), 0)
     SET_VALUE(LW(8), LW(0))
     SET_VALUE(LW(9), LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 100, 30)
     LOOP(31)
         CALL(evt_sub_intpl_get_value)
@@ -424,7 +424,7 @@ EVT_BEGIN(evt_hiki_open)
         CALL(evt_mapobj_trans, 1, LW(8), 0, 0, LW(0))
         CALL(evt_hit_bind_update, LW(9))
         WAIT_FRAMES(1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
@@ -439,14 +439,14 @@ EVT_BEGIN(evt_hiki_open)
     // The special drawer plays the discovery scene of Grubba's secret paper.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL_CHILD(evt_takurami)
 #else
             CALL_CHILD(PTR(evt_takurami))
             CALL(evt_mario_key_onoff, 1)
 #endif
             CALL(evt_party_run, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_cam_letter_box_disable, 0)
 #endif
             CALL(evt_exit_case_evt)
@@ -463,11 +463,11 @@ EVT_BEGIN(evt_hiki_open)
             SET_VALUE(GSWF_STARPIECE_58, 1)
         END_IF
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_key_onoff, 1)
 #endif
     CALL(evt_party_run, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_cam_letter_box_disable, 0)
 #endif
     CALL(evt_exit_case_evt)
@@ -1046,11 +1046,11 @@ static EVT_BEGIN(evt_1st_leagu)
     // Grubba, startled, leaps out from behind the desk (the drawer is shoved shut).
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_npc_get_position, STRING("ガンス"), LW(0), LW(1), LW(2))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_sound_data_set, STRING("ガンス"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     CALL(evt_npc_jump_position_nohit, STRING("ガンス"), LW(0), LW(1), LW(2), 300, 20)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_sound_data_reset, STRING("ガンス"))
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -1462,7 +1462,7 @@ EVT_BEGIN(tou_05_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_map_playanim, STRING("anm_camera"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("paifu"), MAP_OBJ_FLAG_CLIP)
 #endif
     CALL(evt_bero_get_entername, LW(0))
@@ -1578,7 +1578,7 @@ EVT_BEGIN(tou_05_init_evt)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -1586,7 +1586,7 @@ EVT_BEGIN(tou_05_init_evt)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))

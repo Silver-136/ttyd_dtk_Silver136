@@ -77,7 +77,7 @@ typedef struct SplineWork {
 
 #pragma force_active on
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static const char coin_fmt[] = "%f%f%f";
 #endif
 
@@ -94,7 +94,7 @@ void coingetDisp(WinMgrEntry* entry);
 s32 evt_sub_mail_event_end[1];
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(evt_sub_stopwatch)
     LOOP(0)
         WAIT_FRAMES(1)
@@ -139,7 +139,7 @@ s32 tree_data[] = {
  * Stopwatch script that just waits a frame forever: scripts spawn it with SPAWN_EVENT_GET_ID
  * and read how long it has run with evt_sub_get_stopwatch (Peach's timed tasks in aji_06, aji_16 and aji_17).
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(evt_sub_stopwatch)
     LOOP(0)
         WAIT_FRAMES(1)
@@ -148,7 +148,7 @@ EVT_BEGIN(evt_sub_stopwatch)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(tree_evt)
     SET_VALUE(LF(0), 0)
     IF_INT_NOT_EQUAL(LW(3), 0)
@@ -226,7 +226,7 @@ static s32 kusa_data[] = {
     FLOAT(-2.998046875f), FLOAT(-2.4423828125f), FLOAT(-1.2197265625f), FLOAT(0.0f),
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(kusa_evt)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(10), LW(11), LW(12), 0)
@@ -271,7 +271,7 @@ WinMgrDesc coinget_window_desc[] = {
  * then sways map objects LW(2) (trunk, rotated)
  * and LW(3)/LW(4) (leaves, shifted) through tree_data for 25 frames. Run per tree by evt_sub_tree_access_entry.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(tree_evt)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)
@@ -334,7 +334,7 @@ EVT_END()
  * leaves, leaves, drop script; a first word of 7 ends it)
  * and registers a hammer case on each hit object that runs tree_evt.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(evt_sub_tree_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -354,7 +354,7 @@ EVT_END()
  * and sways map object LW(2) sideways through kusa_data for 12 frames.
  * Run per bush by evt_sub_kusa_access_entry.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(kusa_evt)
     SET_TYPE(0)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -379,7 +379,7 @@ EVT_END()
  * drop script; a first word of 4 ends it) and registers an A-button case in front of each one that runs
  * kusa_evt.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(evt_sub_kusa_access_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -606,7 +606,7 @@ EVT_BEGIN(evt_sub_starstone)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STAGE_CLEAR1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_envoff, PSND_FADEOUT)
 #endif
     CALL(evt_eff_softdelete, STRING("sub_hikari"))
@@ -775,7 +775,7 @@ EVT_BEGIN(evt_sub_starstone)
         CALL(evt_bero_mapchange, STRING("pik_01"), 0)
     END_IF
     IF_INT_EQUAL(LF(8), 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
         CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
         CALL(evt_snd_sfx_all_stop)
@@ -1092,12 +1092,12 @@ EVT_BEGIN(mail_evt_gor_02_2)
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -1000, -4226, 1000, 7374, LW(5))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_71_FRANKLYS_HOUSE_STG_6)
             IF_INT_EQUAL(LW(5), 1)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 CALL(evt_mario_get_motion, LW(5))
                 IF_INT_NOT_EQUAL(LW(5), 25)
 #endif
                 BREAK_LOOP
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 END_IF
 #endif
             END_IF
@@ -1237,7 +1237,7 @@ EVT_BEGIN(mail_evt_usu_01)
         SET_VALUE(LW(11), LW(1))
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 300, -2000, 300, 2000, LW(5))
 #else
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 110, -2000, 110, 2000, LW(5))
@@ -1989,7 +1989,7 @@ USER_FUNC(evt_sub_animgroup_async) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 /** Returns the display frame rate (50 or 60) in args[0]. PAL only. */
 USER_FUNC(evt_sub_get_framerate) {
     evtSetValue(event, event->args[0], gp->framerate);
@@ -2083,7 +2083,7 @@ USER_FUNC(evt_sub_get_coin) {
     MarioWork* mario = marioGetPtr();
     Vec a = mario->position;
     Vec b = a;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     Vec scr;
 #endif
     f32 rad = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
@@ -2113,7 +2113,7 @@ USER_FUNC(evt_sub_get_coin) {
     work = event->wInterpWork;
     switch (state) {
     case 0:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         iconEntry2D("iraiCoin", ICON_ITEM_COIN);
         getScreenPoint(&b, &scr);
         iconSetPos("iraiCoin", scr.x, scr.y, scr.z);

@@ -84,7 +84,7 @@ static BattleUnitKind unit_hyper_sinemon = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else
 static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
@@ -96,7 +96,7 @@ static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
  */
 static BattleUnitDefense defence_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 static StatusVulnerability regist = {50, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 80, 80, 50, 30, 100, 80, 100, 100, 95};

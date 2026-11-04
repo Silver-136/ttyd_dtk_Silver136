@@ -33,7 +33,7 @@ USER_FUNC(_disable_restore_command_cursor);
 #if VERSION >= VERSION_US
 EvtWord subsetevt_dead[612];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord subsetevt_dead[595];
 #else
 EvtWord subsetevt_dead[608];
@@ -44,7 +44,7 @@ EvtWord subsetevt_dead_core[193];
 EvtWord subsetevt_dead_core_nospin_norotate[125];
 EvtWord btldefaultevt_avoid_guard[92];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord subsetevt_damage[];
 extern EvtWord subsetevt_counter_damage[];
 extern EvtWord btldefaultevt_ChangePosition[];
@@ -64,7 +64,7 @@ EvtWord subsetevt_blow_dead[76];
 EvtWord subsetevt_shot_damage[31];
 EvtWord subsetevt_shot_damage_kaiten[288];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord subsetevt_shot_damage_ultra[];
 #else
 EvtWord subsetevt_shot_damage_ultra[429];
@@ -73,7 +73,7 @@ EvtWord subsetevt_shot_damage_ultra[429];
 EvtWord subsetevt_swallow_failed_damage[55];
 EvtWord subsetevt_swallow_spew_damage[55];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord subsetevt_swallow_shot_damage[];
 #else
 EvtWord subsetevt_swallow_shot_damage[342];
@@ -87,7 +87,7 @@ EvtWord subsetevt_binta_damage_left_last[69];
 EvtWord subsetevt_binta_damage_right_last[69];
 EvtWord subsetevt_status_recovery[48];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord subsetevt_check_target_movable[57];
 #endif
 
@@ -171,7 +171,7 @@ EVT_BEGIN(subsetevt_dead)
                     CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 90)
                 END_SIBLING_EVENT
                 WAIT_FRAMES(90)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
                 // In the retail releases the partner's event 67 also runs (Koops uses it to stand upright).
                 CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
@@ -726,7 +726,7 @@ EVT_BEGIN(subsetevt_damage)
         END_IF
         RETURN
     ELSE
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
         // In the retail releases a no-damage last hit fades the HP gauge out.
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
@@ -826,7 +826,7 @@ EVT_BEGIN(subsetevt_counter_damage)
         CASE_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
         CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
 #else
         CASE_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
@@ -871,7 +871,7 @@ EVT_END()
  * both arc to each other's home positions and the Koops shell shield follows Mario.
  * Retail only moves the shell when it still has HP.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(subsetevt_nodamage_motion)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS2"), 0)
     RETURN
@@ -922,14 +922,14 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
             WAIT_FRAMES(1)
             GOTO(10)
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_GetHp, LW(10), LW(0))
         IF_INT_GREATER(LW(0), 0)
 #endif
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_KOURA_OPEN_EVENT)
             CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         END_IF
 #endif
     END_IF
@@ -947,7 +947,7 @@ EVT_BEGIN(subsetevt_happy_heart)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_HEART, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 60)
 #else
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
@@ -959,7 +959,7 @@ EVT_BEGIN(subsetevt_happy_heart)
                     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_HEART)
 #endif
                 END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             WAIT_FRAMES(120)
 #else
             END_IF
@@ -976,7 +976,7 @@ EVT_BEGIN(subsetevt_happy_flower)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_FLOWER, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 61)
 #else
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
@@ -988,7 +988,7 @@ EVT_BEGIN(subsetevt_happy_flower)
                     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_FLOWER)
 #endif
                 END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             WAIT_FRAMES(120)
 #else
             END_IF
@@ -1001,7 +1001,7 @@ EVT_BEGIN(subsetevt_happy_flower)
 EVT_END()
 
 /** Fright: the unit hops, runs off the edge of the stage and is removed from the battle (no coins or Star Points). */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(subsetevt_regeneration)
     WAIT_FRAMES(120)
     RETURN
@@ -1260,14 +1260,14 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(_check_through_pos, LW(10), LW(2), LW(0), LW(1), LW(2))
     IF_INT_EQUAL(LW(2), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IS_EVENT_RUNNING(LW(5), LW(6))
         IF_INT_EQUAL(LW(6), 1)
 #endif
             SET_VALUE(LW(1), LW(0))
             WAIT_FRAMES(1)
             GOTO(32)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         END_IF
 #endif
     END_IF
@@ -1402,7 +1402,7 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
 
     // The next enemy in line is the target; with none, the unit lands with two hops.
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     DEBUG_PUT_REG(LW(3))
 #endif
     IF_INT_EQUAL(LW(3), -1)
@@ -1634,7 +1634,7 @@ EVT_BEGIN(subsetevt_status_recovery)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(subsetevt_check_target_movable)
     CALL(btlevtcmd_CheckStatus, LW(3), STATUS_INSTANT_KILL, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1664,7 +1664,7 @@ EVT_END()
 #endif
 
 /** Plays the miss sound for an attack that did nothing. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(subsetevt_nodamage_motion)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS2"), 0)
     RETURN
@@ -1672,7 +1672,7 @@ EVT_END()
 #endif
 
 /** Pause after the HP Regen status heals a unit at turn start. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(subsetevt_regeneration)
     WAIT_FRAMES(60)
     RETURN
@@ -1741,7 +1741,7 @@ USER_FUNC(_add_star_point_disp_offset) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_8010ee30, JP 0x8010EE30. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(_set_hp_gauge_fade_flag) {
     BattleWork* wp = _battleWorkPointer;
     s32 id;

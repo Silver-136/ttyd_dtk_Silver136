@@ -22,7 +22,7 @@ NanNPCWork* nanNPCWork;
 char makestring[16];
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * The demo turns the name into a string in a helper (same code, other register order).
  * Demo only: in the other versions the helper's "%06x" literal would move ahead in the string pool even unused.
@@ -493,7 +493,7 @@ USER_FUNC(evt_nannpc_entry) {
     w = nanNPCWork;
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
         p = (NanNPC*)((u8*)w->npc + off);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         str = nanNPCEntryName((char*)name);
 #else
         str = (char*)name;
@@ -661,7 +661,7 @@ USER_FUNC(evt_nannpc_move_position2) {
     Vec diff;
     Vec step;
     args = event->args;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
     now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
 #else
@@ -698,7 +698,7 @@ USER_FUNC(evt_nannpc_move_position2) {
  */
 USER_FUNC(evt_nannpc_jump_position) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     NanNPC* npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
 #else
     char* name = (char*)evtGetValue(event, args[0]);

@@ -986,7 +986,7 @@ void JUTFontSetup(u16 font) {
 #endif
 
     if (!pfh) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         sprintf(path, "%s/font/%s.bfn", getMarioStDvdRoot(), fontname[font]);
 #else
         sprintf(path, "%s/f/%s.bfn", getMarioStDvdRoot(), fontname[font]);

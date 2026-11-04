@@ -45,7 +45,7 @@ TitleWork* wp2 = &work2;
 #endif
 
 /** Resting height of the title logo; the demos show it higher. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define TITLE_TOP_Y 130.0f
 #else
 #define TITLE_TOP_Y 120.0f
@@ -63,7 +63,7 @@ const char* DbgBtlSel_GetMsgDataPtr(void) {
     return NULL;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Later versions: titleInit does the setup, then the same flags are cleared. */
 void seq_titleInit(SequenceWork* work) {
     titleInit(work);
@@ -74,7 +74,7 @@ void seq_titleInit(SequenceWork* work) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void seq_titleInit(SequenceWork* work) {
     memset(wp2, 0, sizeof(TitleWork));
     wp2->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());
@@ -122,7 +122,7 @@ void seq_titleMain(SequenceWork* work) {
 }
 
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 getDebugMode(void) {
     return wp2->debug;
 }
@@ -183,7 +183,7 @@ void titleInit(SequenceWork* work) {
  * or about 19 s of idling (to the dmo_00 opening demo).
  * Queues the logo draws each frame; later versions also track the debug-mode button code.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
@@ -200,7 +200,7 @@ void titleMain(SequenceWork* work) {
                 if (seqGetPrevSeq() == SEQ_LOAD) {
                     fadeEntry(FADE_CURTAIN_SIDES_A2_TOP, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(FADE_CURTAIN_CENTER_Z2_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     wp2->topPosY = TITLE_TOP_Y;
                     wp2->bottomPosY = -170.0f;
 #endif
@@ -213,7 +213,7 @@ void titleMain(SequenceWork* work) {
                     fadeEntry(FADE_OUT_WHITE_3D, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
                     fadeEntry(FADE_CURTAIN_ENTER_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
                     fadeSetNarrowFast();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     wp2->timer = 38;
 #else
                     wp2->timer = 23;
@@ -236,7 +236,7 @@ void titleMain(SequenceWork* work) {
                 } else {
                     wp2->topPosY = TITLE_TOP_Y;
                     wp2->bottomPosY = -170.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
                     wp2->counter = 0;
 #endif
@@ -259,7 +259,7 @@ void titleMain(SequenceWork* work) {
                 }
             }
             wp2->bottomPosX = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             wp2->bottomPosY = intplGetValue(EASING_SINE_IN_OUT, -300.0f, -170.0f, wp2->counter, VERSION_PICK(60, gp->framerate));
             wp2->counter++;
             if (wp2->counter > VERSION_PICK(60, gp->framerate)) {
@@ -269,7 +269,7 @@ void titleMain(SequenceWork* work) {
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
                 titleLoadDemo();
-#if VERSION == VERSION_US
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
                 wp2->counter = 0;
 #endif
                 wp2->frame = 0;
@@ -278,7 +278,7 @@ void titleMain(SequenceWork* work) {
             }
             break;
         case 3:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             wp2->fadeAlpha += 0.1f;
             if (wp2->fadeAlpha > 1.0f) {
                 wp2->fadeAlpha = 1.0f;
@@ -335,7 +335,7 @@ void titleMain(SequenceWork* work) {
             break;
         case 20:
             fadeEntry(FADE_CURTAIN_LEAVE_3D, 0, (GXColor){0x00, 0x00, 0x00, 0xFF});
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             fadeEntry(FADE_OUT_WHITE, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
 #else
             fadeEntry(FADE_OUT_BLACK, 1000, (GXColor){0x00, 0x00, 0x00, 0xFF});
@@ -357,7 +357,7 @@ void titleMain(SequenceWork* work) {
             }
             if (fadeIsFinish()) {
                 fadeReset(1);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 gp->areaFadeOutType = FADE_OUT_WHITE;
 #else
                 if (pouchGetHP() <= 0) {
@@ -373,7 +373,7 @@ void titleMain(SequenceWork* work) {
     if (wp2->state != 12 && work->state < 14) {
         dispEntry(CAMERA_3D, 0.0f, DISP_MODE_OPAQUE, disp1, NULL);
         dispEntry(CAMERA_3D_EFFECTB, 0.0f, DISP_MODE_OPAQUE, disp2, NULL);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         // a button sequence on the title screen turns on debug mode (getDebugMode)
         switch (wp2->debug) {
             case 0:
@@ -453,7 +453,7 @@ void disp1(CameraId cameraId, void* param) {
  * and PAL) and the pulsing "press start" prompt.
  * Later versions show the build date and time while Z is held in debug mode.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void disp2(CameraId cameraId, void* param) {
 #else
 void disp2(CameraId cameraId, void* param) {
@@ -465,7 +465,7 @@ void disp2(CameraId cameraId, void* param) {
     s32 alpha;
     f32 s;
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     s32 tbl[6] = {19, 19, 20, 21, 22, 23};
 #else
     s32 tbl[6] = {21, 21, 22, 23, 24, 25};
@@ -480,14 +480,14 @@ void disp2(CameraId cameraId, void* param) {
     GXSetViewport(cam->viewport[0], cam->viewport[1], cam->viewport[2],
                   cam->viewport[3], cam->viewport[4], cam->viewport[5]);
     winTexInit(*wp2->texture->data);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     winTexSet(5, (Vec){wp2->topPosX, wp2->topPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     winTexSet(6, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     s = (f32)sin((f32)gp->retraceCount / 30.0f);
 #else
 #if VERSION >= VERSION_US
     winTexSetNearest(tbl[gp->language], (Vec){wp2->topPosX, wp2->topPosY - 20.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     winTexSet(gp->language + 7, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #else
     winTexSet(gp->language + 9, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -506,7 +506,7 @@ void disp2(CameraId cameraId, void* param) {
     if (alpha > 255) {
         alpha = 255;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     pressStartGX(alpha, 0.0f, -110.0f);
 #else
 #if VERSION >= VERSION_US
@@ -534,7 +534,7 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     Mtx mtx, scaleMtx;
 
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, gp->language + 13);
 #else
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, gp->language + 15);
@@ -564,7 +564,7 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0);
     MTXScale(scaleMtx, 1.0f, 1.0f, 1.0f);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MTXTrans(mtx, (f32)gp->retraceCount / -200.0f, 0.0f, 0.0f);
 #else
     MTXTrans(mtx, (f32)wp2->frame / -200.0f, 0.0f, 0.0f);
@@ -608,7 +608,7 @@ static void titleLoadDemo(void) {
     animGroupBaseAsync("c_peach", 0, 0);
     animGroupBaseAsync("c_nazo", 0, 0);
     animGroupBaseAsync("MOBJ_GoldenTreasureBox", 0, 0);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     animGroupBaseAsync("MOBJ_BigTreasureBox", 0, 0);
 #endif
     animGroupBaseAsync("c_roten", 0, 0);

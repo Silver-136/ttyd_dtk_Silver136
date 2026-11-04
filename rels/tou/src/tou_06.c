@@ -62,7 +62,7 @@ EvtWord evt_kontena2[23];
 static EvtWord evt_block_broken[5];
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
@@ -70,7 +70,7 @@ static EvtWord evt_chk[23];
 
 static EvtWord evt_lock[14];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_chuchu[];
 #else
 EvtWord evt_chuchu[626];
@@ -254,7 +254,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x13, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -299,7 +299,7 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_npc_set_position, STRING("チュチュリーナ"), -100, 50, -60)
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 270)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_MS(1000)
 #else
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
@@ -313,7 +313,7 @@ EVT_BEGIN(evt_chuchu)
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
 #else
         CALL(evt_party_set_dir, 0, 270, 300)
@@ -708,11 +708,11 @@ EVT_BEGIN(tou_06_init_evt)
         BEGIN_INLINE_EVENT
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             CALL(evt_party_cont_onoff, 0, 1)
 #endif
             CALL(evt_mario_wait_landon)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             LOOP(30)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -728,7 +728,7 @@ EVT_BEGIN(tou_06_init_evt)
 #endif
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_mario_cam_on)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             CALL(evt_cam_letter_box_disable, 0)
 #else
         END_INLINE_EVENT
@@ -741,7 +741,7 @@ EVT_BEGIN(tou_06_init_evt)
 
     // Animate the flies over the garbage; retail sets up Trouble Center job 13 here, demos do so below.
     CALL(evt_map_playanim, STRING("anm_hae"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL_CHILD(PTR(iri_13_init))
@@ -764,7 +764,7 @@ EVT_BEGIN(tou_06_init_evt)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -772,7 +772,7 @@ EVT_BEGIN(tou_06_init_evt)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -784,7 +784,7 @@ EVT_BEGIN(tou_06_init_evt)
             END_SWITCH
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gor_hae"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, 13)
         CALL_CHILD(iri_13_init)

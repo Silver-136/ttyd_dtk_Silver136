@@ -122,7 +122,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  * Status vulnerability of the Goomba (percent multipliers on each status's base chance):
  * extra prone to stop, fright and instant kill; the demos also increase its gale force vulnerability.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else
 static StatusVulnerability regist = {

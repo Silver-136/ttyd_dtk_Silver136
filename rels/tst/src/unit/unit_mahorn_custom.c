@@ -96,7 +96,7 @@ static EvtWord yokeyoke_magic_event[49];
 static EvtWord recover_magic_event[70];
 static EvtWord bunsin_event[152];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord spawn_event[72];
 #else
 static EvtWord spawn_event[76];
@@ -112,7 +112,7 @@ BattleUnitKind unit_mahorn_custom = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     50,
     0,
     1,
@@ -122,7 +122,7 @@ BattleUnitKind unit_mahorn_custom = {
     3, // bonusCoin
 #endif
     70, // bonusCoinRate
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     5,
 #else
     2, // baseCoin
@@ -172,7 +172,7 @@ BattleUnitKind unit_mahorn_custom_bunsin = {
     1,
     1,
     1,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
 #else
     2,
@@ -240,7 +240,7 @@ static BattleUnitDefense defence = {{5, 5, 5, 5, 5}};
 /** Element response of the Elite Wizzerd: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {0, 30, 30, 100, 20, 100, 100, 20, 100, 20, 100, 20, 100, 20, 20, 10, 55, 100, 20, 100, 100, 20};
 
 static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 0};
@@ -328,7 +328,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
@@ -364,7 +364,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {5, 0, 0, 0, 0, 0, 0, 0},
     NULL, // fpDamageFn
         {0}, // fpDamageWork
@@ -689,7 +689,7 @@ static EVT_BEGIN(attack_event)
             // (all-enemy magic, size-up, defence-up, invisibility, dodgy, heal).
             LABEL(10)
             SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             ADD(LW(0), 50)
             ADD(LW(0), 50)
 #else
@@ -704,7 +704,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(0), 10)
             SUBTRACT(LW(0), 1)
             CALL(evt_sub_random, LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             SET_VALUE(LW(0), 50)
 #else
             SET_VALUE(LW(0), 30)
@@ -714,7 +714,7 @@ static EVT_BEGIN(attack_event)
                 CALL_CHILD(PTR(attack_punch_event))
                 GOTO(99)
             END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             ADD(LW(0), 50)
 #else
             ADD(LW(0), 60)
@@ -1938,7 +1938,7 @@ static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(mahorn_copy_status, LW(13), LW(3))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
 #endif
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)

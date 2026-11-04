@@ -75,7 +75,7 @@ EvtWord kanbu_init[9];
 static EvtWord syuryo_init[24];
 static NpcSetupInfo npcEnt[9];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_10_init_evt[];
 #else
 EvtWord aji_10_init_evt[279];
@@ -87,7 +87,7 @@ EvtWord aji_10_init_evt[279];
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -104,7 +104,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -121,7 +121,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -138,7 +138,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -1467,7 +1467,7 @@ EVT_BEGIN(aji_10_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI5"))
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)

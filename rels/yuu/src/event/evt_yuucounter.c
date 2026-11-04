@@ -42,7 +42,7 @@ static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor bgColor = {0xFF, 0xFF, 0xFF, 0x99};
 void iconDispGxCol(Mtx pos, s16 flags, u16 iconId, GXColor color);
 // IconFlags.ICON_FLAG_2D (icondrv.h clashes with the prototype above)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define COUNTER_ICON_2D 0x4
 #else
 #define COUNTER_ICON_2D 0x10
@@ -53,7 +53,7 @@ USER_FUNC(yuucounter_disp_flag_onoff);
 
 static EvtWord main_evt[4];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord yuucounter_window_disp_evt[6];
 EvtWord yuucounter_window_null_evt[2];
 #endif
@@ -156,7 +156,7 @@ USER_FUNC(evt_yuucounter_alloc) {
     }
     wp->event = evtEntry(main_evt, 0, 0);
     wp->event->lwData[0] = (EvtWord)wp;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (wp->type == 1) {
         evtYuuSetWindowEvt(yuucounter_window_disp_evt);
     } else {
@@ -188,7 +188,7 @@ USER_FUNC(evt_yuucounter_main_func) {
  * type 2 asks yuunpc_juni for Mario's current rank;
  * then draws the translucent backdrop, the digits and the unit icon with icon sprites.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void evt_yuucounter_disp_func(CameraId camera, void* param) {
 #else
 void evt_yuucounter_disp_func(CameraId camera, void* param) {
@@ -234,7 +234,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
         case 1:
             if (!(wp->dispFlags & 2)) {
                 if (wp->data >= 0) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     if (wp->dispFlags & 4) {
                         wp->dispFlags &= ~4;
                         wp->lastTime = gp->renderTime;
@@ -362,7 +362,7 @@ void evt_yuucounter_disp_func(CameraId camera, void* param) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00009d5c, JP yuu .text+0x9C90. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** args[0] = on/off, args[1] = flag mask. Sets or clears those display flag bits of the counter (JP and later). */
 USER_FUNC(yuucounter_disp_flag_onoff) {
     EvtWord* args = event->args;
@@ -385,7 +385,7 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script run for timer counters: sets display flag 4 so the timer restarts its baseline
  * when the window opens (JP and later).

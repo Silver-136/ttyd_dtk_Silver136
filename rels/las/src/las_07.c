@@ -25,7 +25,7 @@ static EvtWord e2_door_open[22];
 static EvtWord door_matigai_evt[16];
 static BeroEntry bero_entry_data[5];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_07_init_evt[];
 #else
 EvtWord las_07_init_evt[57];
@@ -240,7 +240,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(las_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

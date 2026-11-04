@@ -36,7 +36,7 @@ void partyChgMotSlitFloor(PartyEntry* party);
 
 static s32 unk_804189f4;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static f32 touch_wall_ct;
 static s32 upstairs_count;
 static f32 upstairs_dy;
@@ -66,7 +66,7 @@ USER_FUNC(evt_snd_bgmon_f) {
     s32 flags = args[0];
     const char* bgm_name = (const char*)args[1];
     s32 fadetime = evtGetValue(event, args[2]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     psndBGMOn_f_d(flags, (char*)bgm_name, fadetime, 0);
 #else
     psndBGMOn_f(flags, bgm_name, fadetime, 0);
@@ -74,7 +74,7 @@ USER_FUNC(evt_snd_bgmon_f) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 // Descriptive name (not in the symbol maps); placeholder unk_8014cc24, JP 0x8014CC24. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_snd_bgmon_f_d) {
     EvtWord* args = event->args;
@@ -283,7 +283,7 @@ USER_FUNC(evt_snd_sfx_all_stop) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_8014c47c, JP 0x8014C47C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void partyResetTouchWallCt(void) {
     touch_wall_ct = 60.0f;
 }
@@ -294,7 +294,7 @@ void partyResetTouchWallCt(void) {
  * evt_mario door and pipe moves turn it on while Mario walks through.
  */
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void partyFollowCloseOn(PartyEntry* party) {
     party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
@@ -303,7 +303,7 @@ void partyFollowCloseOn(PartyEntry* party) {
 
 /** Back to normal follow distance after a door or pipe move (evt_mario). */
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void partyFollowCloseOff(PartyEntry* party) {
     party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
@@ -338,7 +338,7 @@ s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir);
 
 void party_force_reset_outofscreen(PartyEntry* party);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void partyWalkSe(PartyEntry* party, s32 arg) {
     s32 a;
     s32 b;
@@ -602,7 +602,7 @@ void party_motion_stay(PartyEntry* party) {
  * otherwise the same floor, talk and Ms. Mowz handling as party_motion_stay.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8014bbc8, JP 0x8014BBC8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void party_motion_wait(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -662,7 +662,7 @@ void party_motion_wait(PartyEntry* party) {
  * falls (motion 3) or splashes when there is none, and jumps off objects that cannot be stood on.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8014ba3c, JP 0x8014BA3C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void partyWalkChkGnd(PartyEntry* party) {
     Vec pos;
@@ -719,7 +719,7 @@ void partyWalkChkGnd(PartyEntry* party) {
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void partyChgWalkPose(PartyEntry* party, f32 spd) {
     if (spd >= 1.25f) {
         partyChgPoseId(party, PARTY_POSE_RUN);
@@ -758,7 +758,7 @@ static inline BOOL partyChkMarioFollowY(MarioWork* mario) {
     if (mario->airTimer != 0 && mario->baseSpeed == 0.0f) {
         return FALSE;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_HIP || mario->currMotionId == MARIO_MOTION_HIP_2) {
 #else
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_HIP ||
@@ -820,7 +820,7 @@ static inline void partyFlyHeadCheck(PartyEntry* party) {
  * US/PAL also push it down from las_10's ceilings.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8014b824, JP 0x8014B824. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void partyFlyAdjustY(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -948,7 +948,7 @@ void partyFlyAdjustY(PartyEntry* party) {
 void partyGetReadId2(s32 id, Vec* pos);
 void L_getTargetPos(s32 id, Vec* pos);
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Retail: the walking partner's follow motion (motion 1 of move mode 1):
@@ -1391,7 +1391,7 @@ found:
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Demos: the walking partner's follow motion (motion 1 of move mode 1):
@@ -1424,7 +1424,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     f32 lim;
     f32 lim2;
     f32 spd;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 dir;
     f32 sp;
     f32 d3;
@@ -1472,14 +1472,14 @@ void party_motion_homing_fly(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         party->flags &= ~PARTY_FLAG_IS_BEHIND_MARIO;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         party->noFloorFrames = 0;
 #endif
     }
     if (party->forceMoveFrames != 0) {
         lim = 28.0f;
     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         lim = 40.0f;
     }
     lim2 = party->homingDist;
@@ -1492,7 +1492,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     if (!strcmp(gp->currentMapName, "aji_02") || !strcmp(gp->currentMapName, "aji_05") ||
         !strcmp(gp->currentMapName, "aji_12")) {
         if (!marioKeyOffChk()) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             lim = 24.0f;
             lim2 = lim;
 #else
@@ -1501,7 +1501,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (party->trigFlags & PARTY_TRIG_FOLLOW_CLOSE) {
         lim2 = 24.0f;
 #else
@@ -1524,7 +1524,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         partyMoveBehindMario(party, 0);
         return;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!partyChkMarioFollowYDemo(party->playerPtr)) {
 #else
     if (!partyChkMarioFollowY(party->playerPtr)) {
@@ -1532,7 +1532,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         partyChgMot(party, PARTY_MOTION_STAY);
         return;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     spd = ((party->flags & PARTY_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f) * partyGetTargetMovespd2(party);
     party->moveSpeed = spd;
     if ((party->flags & PARTY_FLAG_IS_PARTNER) && partyGetPtr(marioGetPartyId())) {
@@ -1618,7 +1618,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                     if (a < 0.5f) {
                         a = 0.0f;
                     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     party->moveSpeed = mario->baseSpeed + a;
                 }
 #else
@@ -1642,7 +1642,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                 break;
             }
             if (marioGetSlitFloorPos(&v)) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 party->moveSpeed = 1.5f;
                 partyNextReadId(id);
                 if (marioGetSlitFloorPos(&v)) {
@@ -1675,7 +1675,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                     if (a < 0.5f) {
                         a = 0.0f;
                     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     party->moveSpeed = mario->baseSpeed + a;
                 } else {
                     party->moveSpeed = d3 - lim2;
@@ -1736,7 +1736,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             break;
         }
         partyNextReadId(id);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         partyGetReadId2(id, &t);
         if (!(party->flags & PARTY_FLAG_DISABLE_FLOORS)) {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
@@ -1845,7 +1845,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     }
     if (!hit) {
         if (!(party->trigFlags & PARTY_TRIG_DOOR_MOVE)) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             getFrontFloor(party, &t, party->targetDir);
         } else {
             party->homeDir = revise360(270.0f + mario->targetYaw);
@@ -1890,7 +1890,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             party->hitobjPush = hit;
             if (hitGetAttr(hit) & HIT_ATTR_SLIT) {
                 if (party->slitOn != 1) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     party->trigFlags |= PARTY_TRIG_SLIT_INIT;
                     party->slitOn = 1;
 #else
@@ -1905,7 +1905,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                     movePos(&v.x, &v.z, party->moveSpeed, party->targetDir);
                 }
             } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 d3 = partyGetTargetDistY(id, party->position.y);
                 if (d3 >= 100.0f) {
                     partyChgMot(party, PARTY_MOTION_STAY);
@@ -1965,7 +1965,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     }
     party->position.x = v.x;
     party->position.z = v.z;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     hh = party->height;
     hp = party->position;
     hit = partySearchHead(party, &hp, &hh, party->displayDirection);
@@ -2009,7 +2009,7 @@ void party_motion_homing_fly(PartyEntry* party) {
             partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             return;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     }
     party->hitobjStandOn = hit;
     if (!hit) {
@@ -2024,7 +2024,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         } else {
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (hitGetAttr(hit) & HIT_ATTR_DAMAGE_RETURN) {
             party->damageHit = hit;
         }
@@ -2036,7 +2036,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     party_force_reset_outofscreen(party);
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Retail: makes the next behind-Mario walk stand at dir plus the camera yaw (degrees) from Mario
@@ -2052,7 +2052,7 @@ void party_set_behind_dir(PartyEntry* party, f32 dir) {
  * Movement direction (degrees) of whoever this partner follows:
  * Mario, or for a second partner the first one when it is out.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static inline f32 partyGetFollowDir(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     PartyEntry* other;
@@ -2581,7 +2581,7 @@ void party_motion_beside_mario(PartyEntry* party) {
  * With the front wall check disabled it moves a scratch vector that is never stored,
  * so the partner does not move sideways at all.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static inline void partyJumpFrontMove(PartyEntry* party) {
     // With front-wall checks disabled, only the local Vec is moved; the party position is not updated.
     Vec v;
@@ -2650,7 +2650,7 @@ static inline void partyJumpCalc(PartyEntry* party, MarioWork* mario, f32 d) {
     party->gravity = -g * mario->playerGravity;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Retail: the follow jump (motion 2): aims at the next footmark or moveTarget,
@@ -3036,7 +3036,7 @@ static inline BOOL partyChkHitAttr200(HitEntry* hit) {
     return FALSE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Retail: motion 7, the partner knocked away: it flies up off the top of the screen,
@@ -3137,7 +3137,7 @@ void allPartySlitOn(void) {
  * Mario left Paper Mode: both partners still in it start their turn-back animation (slitStep 40).
  * Called from mot_slit.c.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void allPartySlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && (party->flags & PARTY_FLAG_PAPER_MODE) && party->slitStep < 40) {
@@ -3154,7 +3154,7 @@ void allPartySlitOff(void) {
  * Ends Paper Mode at once on both partners; used when Mario's own Paper Mode is cut short (mot_slit.c)
  * and by the all_party_slit_off script helper.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void allPartyForceSlitOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -3193,7 +3193,7 @@ void allPartySlitOffReq(void) {
 }
 #endif
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Retail: ends Paper Mode on this partner at once, facing left or right from its direction, and resets its pose.
@@ -3241,7 +3241,7 @@ void partySlitReset(PartyEntry* party) {
 }
 #endif
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Retail: per-frame Paper Mode state for a partner while slitOn is 1:
@@ -3396,7 +3396,7 @@ BOOL party_slit(PartyEntry* party) {
  * Nothing in the tree sets slitOn to 2, so as built it returns TRUE at once.
  * Guess: an unused partner tube mode.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BOOL party_roll(PartyEntry* party) {
     BOOL ret = TRUE;
     f32 x;
@@ -3504,7 +3504,7 @@ BOOL party_roll(PartyEntry* party) {
  * Close-follow distance: 18 for walking partners; 30 for Flurrie and Vivian, 8 during a door move.
  * Any other flying partner gets an unset value.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static f32 partyStayDist(PartyEntry* party) {
     // Nonzero moveKind is supported here only for Flurrie and Vivian.
     f32 d;
@@ -3528,7 +3528,7 @@ static f32 partyStayDist(PartyEntry* party) {
 #endif
 
 /** Height a flying partner hovers above its target: 5, or 1 in 8-bit mode. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static f32 partyHomingOff(PartyEntry* party) {
     f32 off = 5.0f;
     if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {
@@ -3544,7 +3544,7 @@ static f32 partyHomingOff(PartyEntry* party) {
  * Probes from at most 40 above the partner in demos, or touch_wall_ct in retail,
  * staying under any ceiling found in front.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
 #else
 s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
@@ -3562,7 +3562,7 @@ s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
 
     r = 2.0f * party->width / 3.0f;
     q.targetDir = (Vec){0.0f, 1.0f, 0.0f};
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     wallct = 40.0f;
 #else
     wallct = touch_wall_ct;
@@ -3584,7 +3584,7 @@ s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
     y = -2000.0f;
 found:
     if (y > -2000.0f) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         f32 u;
         f32 t;
         t = party->position.y + wallct;
@@ -3601,7 +3601,7 @@ found:
     } else {
         q2.targetPos.y = party->position.y + wallct;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     r = party->width;
 #else
     r = 0.75f * party->width;
@@ -3632,7 +3632,7 @@ static inline void partyDownDirX(HitCheckQuery* q) {
     q->targetDir = (Vec){0.0f, -1.0f, 0.0f};
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static f32 partyGetDirGndY(Vec u, f32 md) {
     f32 k = 40.0f;
     HitCheckQuery q2;
@@ -3680,7 +3680,7 @@ static f32 partyGetGndY(f32 x, f32 y, f32 z) {
  * hit attributes of the floor 20 units ahead in direction dir (probed from 20 up, 40 down), 0 if none.
  * Homing walk uses it to skip footmarks over 0x800 floors.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static inline u32 partyGetFrontAttr(PartyEntry* party, f32 dir) {
 #else
 static u32 partyGetFrontAttr(PartyEntry* party, f32 dir) {
@@ -3727,7 +3727,7 @@ static inline void partyDownDirY(HitCheckQuery* q) {
  * more than 650 px down) back toward Mario step by step onto the floor until it is on screen, and clears the footmarks.
  * A partner right under Mario but far down the screen is put at its appear position instead.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void party_force_reset_outofscreen(PartyEntry* party) {
 #else
 void party_force_reset_outofscreen(PartyEntry* party) {
@@ -3762,7 +3762,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
         party->position = pos;
         return;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     margin = 40;
     if (-40.0f <= sx && sx <= 640.0f && sy <= 650.0f) {
 #else
@@ -3771,7 +3771,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
 #endif
         return;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     // BUG: both branches call partyClearFootmark; the other motions call partyClearFootmark2 when PARTY_FLAG_IS_PARTNER is set
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
         partyClearFootmark();
@@ -3819,7 +3819,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
             start.y += up;
             hit = partyHitCheck(party, &start, &dir, &hitPos, &nrm, &dist);
             if (hit) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 if (!partyChkHitAttr200(hit)) {
                     y = hitPos.y;
                 }
@@ -3837,7 +3837,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
                 if (pos.y + 74.0f > y) {
                     start.y += 74.0f;
                     hit = partyHitCheck(party, &start, &dir, &hitPos, &nrm, &dist);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     if (hit) {
 #else
                     if (hit && !partyChkHitAttr200(hit)) {
@@ -3864,7 +3864,7 @@ void party_force_reset_outofscreen(PartyEntry* party) {
  * Rogueport (gor_01): when Mario stands on one floor of a house and the partner on the floor above it,
  * moves the partner to (122, 130, -313). Guess: works around a partner stuck on the upper floor.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static void partyGorFix(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     if (!strcmp(gp->currentMapName, "gor_01") && mario->hitobjStandOn && party->hitobjStandOn &&
@@ -3878,7 +3878,7 @@ static void partyGorFix(PartyEntry* party) {
 
 // The demos define the jump, follow, stay, damage, slit and roll motions here, after the helpers above; retail defines
 // them earlier in the file. The object's function order follows the definitions, so each order keeps its own copies.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 static inline void partyJumpFrontMove(PartyEntry* party) {
     Vec v;
@@ -5167,7 +5167,7 @@ static void partyPoseA2(PartyEntry* party) {
     party->useMotionId = 1;
     party->moveFrames = 30;
 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     }
 }
 

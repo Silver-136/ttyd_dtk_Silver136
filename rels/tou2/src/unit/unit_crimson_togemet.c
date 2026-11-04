@@ -159,7 +159,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TMT_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "TMT_A_1"},
     {POSE_TYPE_DAMAGE, "TMT_S_3"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_WALK, "TMT_W_1"},
     {POSE_TYPE_RUN, "TMT_R_1"},
 #endif
@@ -295,7 +295,7 @@ static BattleUnitDefense defence_turn = {0};
  */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

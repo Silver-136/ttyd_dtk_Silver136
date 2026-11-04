@@ -100,7 +100,7 @@ WinMgrDesc itemdrv_window_desc[4] = {
  * retail does so only outside battle and when the same bit is set.
  */
 inline void itemCheckBadge(ItemEntry* entry) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (BADGE_MIN <= entry->itemId && entry->itemId < BADGE_MAX && !(entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP)) {
         pouchArriveBadge(entry->itemId);
     }
@@ -151,7 +151,7 @@ static inline void itemGetEnd(ItemEntry* entry) {
     marioStSystemLevel(0);
     psndClearFlag(PSND_FLAG_MUTE_SFX);
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (entry->flags2 & ITEM_FLAG2_CTRL_OFF) {
         entry->flags2 &= ~ITEM_FLAG2_CTRL_OFF;
         marioCtrlOn();
@@ -229,7 +229,7 @@ void itemCoinDrop(Vec* position) {
  * set), no map event or other sequence runs, Mario is not on the boat (or, in retail, the plane panel), hiding with Vivian,
  * taking damage or holding Koops's item, no other get is in progress, and field battle state allows it.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BOOL itemGetCheck(ItemEntry* entry) {
     s32 fbatMode = fbatGetPointer()->mode;
 #else
@@ -237,7 +237,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
 #endif
     MarioWork* mario = marioGetPtr();
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!entry) {
         return FALSE;
     }
@@ -324,7 +324,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
             }
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD) {
         return FALSE;
     }
@@ -352,7 +352,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
 }
 
 /** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BOOL itemGetNokoCheck(ItemEntry* entry) {
     s32 fbatMode = fbatGetPointer()->mode;
 #else
@@ -361,7 +361,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
 
     MarioWork* mario = marioGetPtr();
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!entry) {
         return FALSE;
     }
@@ -437,7 +437,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
             }
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (fbatMode != FBAT_MODE_OFF && fbatMode != FBAT_MODE_FIELD) {
         return FALSE;
     }
@@ -554,7 +554,7 @@ void itemMain(void) {
                             hitDist = 20.0 + d;
                         }
                         hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         hit = hit ? hit : NULL;
 #else
                         if (hit) {
@@ -568,7 +568,7 @@ void itemMain(void) {
                 }
                 if (!hit) {
                     itemModeChange(entry, ITEM_MODE_FALL);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 } else {
                     entry->position.y = newY;
 #endif
@@ -590,7 +590,7 @@ void itemMain(void) {
                 }
                 break;
             case ITEM_MODE_DELETE:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 itemCheckBadge(entry);
 #endif
                 itemDelete(entry->name);
@@ -674,7 +674,7 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
  * When the table is full, US/PAL may replace a dropped coin or flower; JP and the demos only try
  * the first slot for a replaceable coin, flower or heart. Returns the entry or NULL.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
 #else
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
@@ -735,7 +735,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     }
 
     if (i >= wp->count) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         entry = wp->entries;
         if (entry->flags & ITEM_FLAG_ACTIVE && entry->itemId == ITEM_COIN && entry->flags & ITEM_FLAG_REPLACEABLE) {
             itemDelete(entry->name);
@@ -808,7 +808,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     entry->position.z = z;
     entry->itemId = itemId;
     entry->type = type;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     entry->evtCode = pickupEvt;
 #else
     entry->evtCode = evtCode;
@@ -833,7 +833,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
         entry->effect = effStarStoneEntry(entry->itemId - ITEM_DIAMOND_STAR, x, 16.0f + y, z, 1.0f);
         break;
     default:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
         {
             char* nm = entry->name;
@@ -887,7 +887,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
             itemModeChange(entry, ITEM_MODE_SCATTER_NO_PICKUP);
             entry->flags |= ITEM_FLAG_REPLACEABLE;
             break;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         case ITEM_TYPE_DROP_LOST_BADGE:
             entry->flags |= ITEM_FLAG_LOST_BADGE_TO_SHOP;
 #endif
@@ -940,7 +940,7 @@ void itemDelete(const char* name) {
 
     for (entry = wp->entries, i = 0; i < wp->count; i++, entry++) {
         if (!strcmp(entry->name, name)) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             itemCheckBadge(entry);
 #endif
             switch (entry->itemId) {
@@ -1046,7 +1046,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     i = 0;
     pos = makeVecByValue2(x, y, z);
     for (; i < wp->count; i++, entry++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (!(entry->flags & ITEM_FLAG_ACTIVE))
             continue;
         if (entry->flags & ITEM_FLAG_NO_TOUCH_GET)
@@ -1186,7 +1186,7 @@ void winHelpDisp(WinMgrEntry* win) {
 }
 
 /** Draws the full-pouch warning: retail chooses item or badge wording; the demos always use the item-full message. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry;
 #else
@@ -1196,11 +1196,11 @@ void winFullDisp(WinMgrEntry* win) {
     u16 width;
 #endif
     const char* msg;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     u16 width;
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     entry = win->param;
     msg = msgSearch("msg_window_item_full");
     width = (u16)FontGetMessageWidth(msg);
@@ -1224,7 +1224,7 @@ void winFullDisp(WinMgrEntry* win) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
@@ -1244,7 +1244,7 @@ void itemseq_GetItem(ItemEntry* entry) {
     switch (entry->subState) {
         case 0:
             entry->flags2 &= ~ITEM_FLAG2_RELEASED;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (entry->flags & ITEM_FLAG_LOST_BADGE_TO_SHOP) {
                 entry->flags2 |= ITEM_FLAG2_SAVED_LOST_BADGE;
             } else {
@@ -1268,7 +1268,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             marioKeyOff();
             marioStSystemLevel(2);
             psndSetFlag(PSND_FLAG_MUTE_SFX);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             mario->floorMove.x = 0.0f;
             mario->floorMove.z = 0.0f;
             mario->baseSpeed = 0.0f;
@@ -1280,7 +1280,7 @@ void itemseq_GetItem(ItemEntry* entry) {
         case 1:
             if (!(entry->flags & ITEM_FLAG_FORCE_GET) || entry->flags & ITEM_FLAG_NOKO_GET) {
                 if (!marioChkItemGetMotion()) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     if (mario->currMotionId == MARIO_MOTION_JUMP_SW || (u16)(mario->currMotionId - 6) <= 2 ||
                         mario->currMotionId == MARIO_MOTION_GET_ITEM || mario->currMotionId == MARIO_MOTION_TALK) {
                         entry->subState = 8;
@@ -1322,7 +1322,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 bgm = 2;
             }
             wp->effect = effItemGetEntry(type, mario->position.x, 62.0f + mario->position.y, mario->position.z);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (type == 0 || type == 3) {
                 if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
                     ((ItemGetWork*)wp->effect->userdata)->camera = 5;
@@ -1401,7 +1401,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 winMgrSetParam(entry->winId[2], entry);
             }
             if (entry->itemId == ITEM_WEDDING_RING) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 iconChange(entry->name, ICON_114);
 #else
                 iconChange(entry->name, ICON_114);
@@ -1412,7 +1412,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             break;
         case 2:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (!(entry->flags2 & ITEM_FLAG2_UPGRADE_GET)) {
                 marioCtrlOff();
                 entry->flags2 |= ITEM_FLAG2_CTRL_OFF;
@@ -1446,7 +1446,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 }
             }
             if (entry->flags2 & ITEM_FLAG2_UPGRADE_GET) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 entry->subState = 5;
 #else
                 entry->subState = 6;
@@ -1455,7 +1455,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             if (entry->itemId >= ITEM_MIN && entry->itemId < ITEM_MAX && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) { // GSWF_ITEM_TUTORIAL_SEEN
                 swSet(0xEB); // GSWF_ITEM_TUTORIAL_SEEN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 entry->subState = 3;
 #else
                 entry->subState = 4;
@@ -1465,7 +1465,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             }
             effSoftDelete(wp->effect);
             marioSetCamId(CAMERA_3D);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             iconFlagOff(entry->name, 0x40);
             if (entry->itemId == ITEM_WEDDING_RING) {
                 iconChange(entry->name, ICON_115);
@@ -1483,7 +1483,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 itemDelete(entry->name);
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             entry->subState = 4;
 #else
             entry->subState = 5;
@@ -1500,7 +1500,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 }
             }
             break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case 3:
 #else
         case 4:
@@ -1514,7 +1514,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             itemGetEnd(entry);
             itemDelete(entry->name);
             break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case 4:
 #else
         case 5:
@@ -1524,7 +1524,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 break;
             }
             winMgrSelectDelete(wp->select);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (select >= 0) {
 #else
             if (select < 0) {
@@ -1538,7 +1538,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 entry->flags2 &= ~ITEM_FLAG2_IN_POUCH;
                 entry->itemId = select;
                 entry->evtCode = NULL;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 entry->flags &= ~(ITEM_FLAG_COLLECT_GSWF | ITEM_FLAG_COLLECT_LSWF);
                 iconChange(entry->name, itemDataTable[entry->itemId].icon_id);
             }
@@ -1565,7 +1565,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             if (mario->flags & MARIO_FLAG_BG_MODE) {
                 entry->flags2 |= ITEM_FLAG2_NO_Z_MOVE;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             entry->subState = 7;
             break;
         case 5:
@@ -1578,7 +1578,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             wp->lectureEvt->lwData[8] = (EvtWord)entry;
             wp->lectureEvt->lwData[9] = (EvtWord)wp->effect;
             psndClearFlag(PSND_FLAG_MUTE_SFX);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             entry->subState = 6;
             break;
         case 6:
@@ -1593,7 +1593,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             itemGetEnd(entry);
             itemDelete(entry->name);
             break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case 7:
 #else
         case 9:
@@ -1617,7 +1617,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             entry->flags &= ~ITEM_FLAG_NO_TOUCH_GET;
             itemGetEnd(entry);
             break;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         case 8:
             if (mario->flags & MARIO_FLAG_BG_MODE) {
                 entry->flags2 |= ITEM_FLAG2_NO_Z_MOVE;
@@ -1662,7 +1662,7 @@ static s32 _move_dir_1090;
  * walls and ceilings, landing on map objects, water and lava, and despawning where needed;
  * becomes resting when it stops.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void itemseq_Bound(ItemEntry* entry) {
 #else
 void itemseq_Bound(ItemEntry* entry) {
@@ -1851,7 +1851,7 @@ void itemseq_Bound(ItemEntry* entry) {
                 }
                 entry->flags2 |= ITEM_FLAG2_RELEASED;
                 entry->flags2 &= ~ITEM_FLAG2_CARRIED;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 entry->flags |= ITEM_FLAG_LOST_BADGE_TO_SHOP;
 #endif
                 break;

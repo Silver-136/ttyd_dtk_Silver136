@@ -44,7 +44,7 @@ static f32 spline_dt[9];
 static EvtWord party_damage_pose[52];
 EvtWord party_damage_pose2[52];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_first[517];
 #else
 static EvtWord evt_first[525];
@@ -255,7 +255,7 @@ static EVT_BEGIN(evt_first)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(party_reset)
         CALL(evt_party_jump_pos, 0, LW(0), 0, LW(2), 500, 0, -1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         DEBUG_PUT_MSG(STRING("ビビアンしっぽ有効"))
         CALL(evt_party_vivian_tail, 0, 1)
 #endif
@@ -313,7 +313,7 @@ static EVT_BEGIN(evt_first)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
 

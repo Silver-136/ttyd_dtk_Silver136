@@ -70,7 +70,7 @@ typedef enum SeqEndDispFlags {
 } SeqEndDispFlags;
 
 // Mario's level cap: the demos stop at 98.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define LEVEL_MAX 98
 #else
 #define LEVEL_MAX 99
@@ -140,7 +140,7 @@ s32 bp_tex_tbl[6] = {59, 59, 60, 61, 62, 63};
 #endif
 
 /** Prints Mario's current rank-up message. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(_rank_up_event)
     CALL(_get_rank_up_msg, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, 0)
@@ -780,7 +780,7 @@ void btlseqEnd(BattleWork* wp) {
         NpcEntry* p;
         BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT);
         BattleAudienceSoundSetVolAll(0, 30);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         fb = fbatGetPointer();
         p = fb->target;
         if (p) p->interruptFlags |= NPC_INTERRUPT_NO_FIND;
@@ -890,7 +890,7 @@ void btlseqEnd_DispMain(CameraId camId, void* param) {
         if (work->flags & SEQEND_DISP_LVUP_CONFIRM_UNUSED) {
             dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _LvupParamConfirmDisp, wp);
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (work->flags & SEQEND_DISP_LVUP_HELP) {
             dispEntry(camId, 900.0f, DISP_MODE_ALPHA_TEST, _LvupParamHelpMsgDisp, wp);
         }
@@ -988,7 +988,7 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     }
 
 // FAKE: the linker strips this function from the demos; their pool keeps its strings but not its numbers
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     width = FontGetMessageWidthLine(msg, &lines);
     lines++;
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, (zero - width / 2) - 20.0f, -145.0f + (lines - 1) * 29, width + 40, lines * 29 + 1, 10.0f);
@@ -1274,7 +1274,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(_lvup_obj_set_color, 0, 100, 128, 128, 255)
         CALL(_lvup_obj_set_color, 1, 100, 128, 128, 255)
         CALL(_lvup_obj_set_color, 2, 100, 128, 128, 255)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_fade_entry, FADE_CURTAIN_SIDES_A2_3D, 1000, 0, 0, 0)
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, LW(0))
@@ -1467,7 +1467,7 @@ EVT_BEGIN(_koura_delete_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(_rank_up_event)
     CALL(_get_rank_up_msg, LW(0))
     CALL(evt_msg_print, 0, LW(0), 0, 0)
@@ -1562,7 +1562,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
         kind = unit->currentKind;
         if (kind == UNIT_SYSTEM) continue;
         if (kind == UNIT_MARIO) continue;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER) continue;
 #else
         if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER && kind != UNIT_BOBBERY) continue;
@@ -1571,7 +1571,7 @@ USER_FUNC(_disable_enemy_unit_disp) {
         if (data) {
             evt = evtEntry(data, 10, 0);
             evt->unitId = unit->unitId;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         } else {
 #else
         } else if (unit->currentKind != UNIT_BOBBERY) {

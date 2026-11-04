@@ -148,7 +148,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
     random = group->randomItemWeight;
     none = group->noItemWeight;
     type = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     n = pouchEquipCheckBadge(ITEM_ITEM_HOG);
     if (n >= 1) {
         held *= n * 2 + 2;

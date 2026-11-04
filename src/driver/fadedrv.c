@@ -66,7 +66,7 @@ void fadeInit(void) {
         entry->animOffsetX = 0.0f;
         entry->animOffsetY = 0.0f;
         entry->scale = 1.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         entry->delayFrames = 0;
 #endif
     }
@@ -144,7 +144,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     if ((type == FADE_IN_IRIS || type == FADE_OUT_IRIS) && duration < 1000) {
         duration = 1000;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
 #else
     // FAKE: types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the
@@ -160,7 +160,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
 
     // no default: a type without a case here would go on with entry and id uninitialised
     switch (type) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case FADE_IN_IRIS:
         case FADE_OUT_IRIS:
         case FADE_IN_SPOT:
@@ -180,7 +180,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
             id = 0;
             entry = &wp->entries[0];
             fadeReset(2);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             entry->delayFrames = 0;
             switch (type) {
                 case 1: case 3: case 5: case 9: case 11: case 14:
@@ -217,7 +217,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
             id = 1;
             entry = &wp->entries[1];
             break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case FADE_PIPE_UP_A1:
         case FADE_PIPE_UP_A2:
         case FADE_PIPE_DOWN_A1:
@@ -233,7 +233,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
             entry = &wp->entries[2];
             fadeReset(0);
             break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case FADE_PAGE_FLIP_Z1:
         case FADE_PAGE_FLIP_A1:
         case FADE_PAGE_FLIP_Z1_OFFSCREEN:
@@ -253,7 +253,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
             id = 3;
             entry = &wp->entries[3];
             switch (type) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 case FADE_PAGE_FLIP_A1:
                 case FADE_PAGE_FLIP_A1_OFFSCREEN:
                 case FADE_STORY_MARIO_A3:
@@ -266,7 +266,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
                     break;
             }
             break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case FADE_CURTAIN_SIDES_A1_TOP:
         case FADE_CURTAIN_SIDES_A2_TOP:
 #else
@@ -574,7 +574,7 @@ void fadeMain(void) {
             continue;
         }
         switch (entry->type) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_IN_IRIS:
             case FADE_IN_SPOT:
             case FADE_IN_SPOT_3D:
@@ -586,7 +586,7 @@ void fadeMain(void) {
 #endif
                 switch (entry->state) {
                     case 0:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         if (entry->duration != 0) {
                             if (entry->delayFrames != 0) {
                                 entry->delayFrames--;
@@ -620,7 +620,7 @@ void fadeMain(void) {
                         break;
                 }
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_OUT_IRIS:
             case FADE_OUT_SPOT:
             case FADE_OUT_SPOT_3D:
@@ -633,7 +633,7 @@ void fadeMain(void) {
 #endif
                 switch (entry->state) {
                     case 0:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         if (entry->duration != 0) {
                             entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
                             entry->progress = entry->elapsed / entry->duration;
@@ -661,7 +661,7 @@ void fadeMain(void) {
                         break;
                 }
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_PIPE_UP_A1:
             case FADE_PIPE_UP_A2:
             case FADE_PIPE_DOWN_A1:
@@ -698,7 +698,7 @@ void fadeMain(void) {
                         fadeCapture("fImg_dokan", NULL, 0);
                         switch (entry->type) {
                             case FADE_PIPE_LEFT_A1:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                                 entry->sfxId = psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_MAP_DOKAN1"));
                                 break;
                             case FADE_PIPE_RIGHT_A1:
@@ -753,7 +753,7 @@ void fadeMain(void) {
                         if (entry->image->loopTimes >= 1.0f) {
                             entry->flags |= FADE_FLAG_DONE;
                             switch (entry->type) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                                 case FADE_PIPE_UP_A2:
                                 case FADE_PIPE_DOWN_A2:
                                 case FADE_PIPE_LEFT_A2:
@@ -772,7 +772,7 @@ void fadeMain(void) {
                         break;
                 }
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_PAGE_FLIP_Z1:
             case FADE_PAGE_FLIP_Z1_OFFSCREEN:
             case FADE_STORY_MARIO_A1:
@@ -808,7 +808,7 @@ void fadeMain(void) {
                                 offscreenEntry("fOff_peron");
                                 fadeCapture("fImg_peron", "fOff_peron", 0);
                                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             case FADE_STORY_MARIO_A1:
                             case FADE_STORY_PEACH_A1:
                             case FADE_STORY_BOWSER_A1:
@@ -818,13 +818,13 @@ void fadeMain(void) {
                                 fadeCapture("fImg_peron", NULL, 2);
                                 entry->image->camId = CAMERA_FADE2;
                                 entry->image->dispCamId = CAMERA_FADE2;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                                 psndSFXOn(SFX_NAME_WORD("SFX_OFF_CHANGE_STORY1"));
 #else
                                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_STORY1 | PSND_SFX_KEEP));
 #endif
                                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             case FADE_STORY_MARIO_A2:
                             case FADE_STORY_PEACH_A2:
                             case FADE_STORY_BOWSER_A2:
@@ -844,7 +844,7 @@ void fadeMain(void) {
                     case 1:
                         if (entry->image->loopTimes >= 1.0f) {
                             switch (entry->type) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                                 case FADE_STORY_MARIO_A1:
                                 case FADE_STORY_PEACH_A1:
                                 case FADE_STORY_BOWSER_A1:
@@ -872,7 +872,7 @@ void fadeMain(void) {
                         break;
                 }
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_PAGE_FLIP_A1:
             case FADE_PAGE_FLIP_A1_OFFSCREEN:
             case FADE_STORY_MARIO_A3:
@@ -889,7 +889,7 @@ void fadeMain(void) {
                         entry->image->animName = entry->animName;
                         imgClearVirtualPoint(entry->image);
                         switch (entry->type) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             case FADE_STORY_MARIO_A3:
                             case FADE_STORY_PEACH_A3:
                             case FADE_STORY_BOWSER_A3:
@@ -899,7 +899,7 @@ void fadeMain(void) {
                                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_OFF_CHANGE_STORY2 | PSND_SFX_KEEP));
 #endif
                                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             case FADE_PAGE_FLIP_A1:
                             case FADE_PAGE_FLIP_A1_OFFSCREEN:
                             psndSFXOn(SFX_NAME_WORD("SFX_OFF3_MAP_CHANGE1"));
@@ -986,7 +986,7 @@ void fadeMain(void) {
                         break;
                 }
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_CURTAIN_SIDES_A1_3D:
             case FADE_CURTAIN_SIDES_A2_3D:
             case FADE_CURTAIN_SIDES_Z1_3D:
@@ -1015,7 +1015,7 @@ void fadeMain(void) {
                             break;
                         }
                         switch (entry->type) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             case FADE_CURTAIN_SIDES_A1_3D:
                             case FADE_CURTAIN_SIDES_A1:
                             case FADE_CURTAIN_SIDES_A1_TOP:
@@ -1103,7 +1103,7 @@ void fadeMain(void) {
                         break;
                 }
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_CURTAIN_LEAVE_3D:
             case FADE_CURTAIN_LEAVE:
 #else
@@ -1129,7 +1129,7 @@ void fadeMain(void) {
                 break;
         }
         switch (entry->type) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_CURTAIN_UP_DOWN_A1:
             case FADE_CURTAIN_VERTICAL_A2:
             case FADE_CURTAIN_CENTER_A1:
@@ -1188,7 +1188,7 @@ void fadeMain(void) {
                     dispEntry(CAMERA_OFFSCREEN2, 0.0f, DISP_MODE_OPAQUE, entry->callback, entry->offparam);
                 }
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_IN_BLACK_2D:
             case FADE_OUT_BLACK_2D:
             case FADE_COVER_BLACK_2D:
@@ -1197,7 +1197,7 @@ void fadeMain(void) {
 #endif
                 dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, disp_texture, wp);
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_IN_SPOT_3D:
             case FADE_OUT_SPOT_3D:
             case FADE_IN_BLACK_3D:
@@ -1207,7 +1207,7 @@ void fadeMain(void) {
 #endif
                 dispEntry(CAMERA_3D, 0.0f, DISP_MODE_CUSTOM_LAST, disp_texture, wp);
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case FADE_PIPE_UP_A1:
             case FADE_PIPE_UP_A2:
             case FADE_PIPE_DOWN_A1:
@@ -1243,7 +1243,7 @@ void fadeMain(void) {
  * and nothing more once a fade-in has finished.
  */
 void disp_texture(CameraId camId, void* param) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     static u8 i4tex[1] ATTRIBUTE_ALIGN(32) = {0xFF};
 #else
     static u8 i4tex[1] = {0xFF};

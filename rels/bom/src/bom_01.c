@@ -233,7 +233,7 @@ static EvtWord door_close[10];
 DoorParam door;
 static BeroEntry bero_entry_data[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord first_evt[146];
 extern EvtWord evt_bom_01_karakara[];
 #else
@@ -247,7 +247,7 @@ EvtWord gamen_shake[8];
 EvtWord gamen_shake2[26];
 EvtWord mario_tobideru[54];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord mario_shot[];
 #else
 EvtWord mario_shot[160];
@@ -265,7 +265,7 @@ EvtWord open_hatch[83];
 static f32 spline_dt[9];
 const char* oh_data[8];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_taihou[2440];
 #else
 static EvtWord evt_taihou[2446];
@@ -300,7 +300,7 @@ static EvtWord musume_c_entry[26];
 static NpcSetupInfo npcEnt[7];
 EvtWord bom1000_minnnanokoe[21];
 
-#if VERSION == VERSION_US
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
 static EvtWord minnnanokoe_evt[466];
 #else
 static EvtWord minnnanokoe_evt[450];
@@ -801,7 +801,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam_letter_box_onoff, 1, 1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_cam3d_evt_set, 340, 100, -53, 340, 80, -302, 0, EASING_SINE_IN_OUT)
@@ -815,7 +815,7 @@ static EVT_BEGIN(first_evt)
     WAIT_MS(4000)
     CALL(evt_cam3d_evt_set, 200, 150, 1001, -40, 130, 348, 6000, EASING_SINE_IN_OUT)
     WAIT_MS(6000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_mario_mov_pos2, -351, 0, FLOAT(120.0f))
@@ -837,7 +837,7 @@ static EVT_BEGIN(first_evt)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG7_01_FAHR_OUTPOST_1ST_VISIT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(bero_case_switch_on)
 #else
@@ -856,7 +856,7 @@ EVT_BEGIN(evt_bom_01_karakara)
     SET_VALUE(LW(8), 0)
     LOOP(0)
         CALL(evt_mapobj_get_position, LW(9), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_AMB_WINDVANE1"), LW(0), LW(1), LW(2), LW(10))
 #endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 1, 10, 1000)
@@ -884,7 +884,7 @@ EVT_BEGIN(evt_bom_01_karakara)
         END_LOOP
         BEGIN_INLINE_EVENT
             WAIT_MS(900)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_sfxoff, LW(10))
 #endif
         END_INLINE_EVENT
@@ -1218,7 +1218,7 @@ EVT_BEGIN(mario_shot)
     CALL(evt_eff64, STRING("ripple"), STRING("ripple_n64"), 2, 570, 950, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("particle"), STRING("particle"), 0, 520, 900, 0, 1, 1, 0, 100, 0, 0, 0, 0)
     CALL(taihou_r)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         CALL(evt_eff, 0, STRING("hit"), 1, 570, 950, 0, FLOAT(3.0f), 4, 0, 0, 0, 0, 0, 0)
         WAIT_MS(200)
@@ -1468,7 +1468,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_mario_set_pose, STRING("M_N_7"))
     WAIT_FRAMES(1)
     CALL(evt_mario_cont_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     DEBUG_PUT_MSG(STRING("\203r\203r\203A\203\223\202\265\202\301\202\333\226\263\214\370"))
     CALL(evt_party_vivian_tail, 0, 0)
 #endif
@@ -2979,7 +2979,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             WAIT_MS(100)
         END_LOOP
     END_SIBLING_EVENT
-#if VERSION == VERSION_US
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
     SET_VALUE(GW(6), 0)
 #endif
     BEGIN_SIBLING_EVENT
@@ -3009,7 +3009,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             END_SWITCH
             BEGIN_INLINE_EVENT
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_US
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
                 CALL(evt_msg_pri, GW(6))
                 ADD(GW(6), 1)
                 IF_INT_EQUAL(GW(6), 10)

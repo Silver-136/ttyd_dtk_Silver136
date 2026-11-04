@@ -34,7 +34,7 @@ EvtWord evt_slit2[15];
 static BeroEntry bero_entry_data[5];
 EvtWord heya_tenura_onoff[68];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_08_init_evt[];
 #else
 EvtWord aji_08_init_evt[148];
@@ -205,7 +205,7 @@ EVT_END()
 EVT_BEGIN(aji_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

@@ -114,7 +114,7 @@ static EvtWord init_powan[64];
 static EvtWord talk_powan[204];
 static NpcSetupInfo npc_data[7];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_tana_5[];
 #else
 EvtWord evt_tana_5[50];
@@ -125,7 +125,7 @@ typedef struct ShelfAccess {
     const char* hit;
     const char* msg;
     EvtWord* evt;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     const char* msg2;
 #endif
 } ShelfAccess;
@@ -135,7 +135,7 @@ typedef struct ShelfAccessTbl3 {
 } ShelfAccessTbl3;
 static ShelfAccessTbl3 access_tbl;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_access[21];
 static EvtWord evt_access_entry[24];
 #else
@@ -155,7 +155,7 @@ EvtWord rsh_04_init_evt[201];
 
 EvtWord rsh_04_a_init_evt[96];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_04_b_init_evt[];
 #else
 EvtWord rsh_04_b_init_evt[44];
@@ -163,7 +163,7 @@ EvtWord rsh_04_b_init_evt[44];
 
 static const char* window_tbl[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_04_c_init_evt[];
 #else
 EvtWord rsh_04_c_init_evt[67];
@@ -173,7 +173,7 @@ static BeroEntry bero_data_a_return[3];
 static BeroEntry bero_data_b_return[3];
 static BeroEntry bero_data_c_return[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_04_init_evt_nidome[];
 #else
 EvtWord rsh_04_init_evt_nidome[149];
@@ -465,7 +465,7 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
     CALL(evt_set_dir_to_target, STRING("サラリーマン"), STRING("mario"))
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_status_onoff, 1, STRING("ポワン探偵"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_167"), 0, 0)
 #else
@@ -596,7 +596,7 @@ EVT_BEGIN(evt_daijisouna_kami)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_172"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(item_tbl), LW(1))
 #else
     CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)
@@ -750,7 +750,7 @@ static EVT_BEGIN(talk_syashou)
         CASE_LESS(STG6_19_GIVE_BLANKET)
         // The Blanket exchange: he takes the Blanket and gives a Mushroom.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_142"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
         IF_INT_NOT_EQUAL(LW(1), -1)
 #else
@@ -812,7 +812,7 @@ static EVT_BEGIN(talk_syashou)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_13"), 0, 0)
             ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
 #else
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
@@ -1141,7 +1141,7 @@ static EVT_BEGIN(talk_konari)
             END_IF
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_96"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(item_tbl3), LW(1))
 #else
             CALL(evt_win_item_select, 0, PTR(item_tbl3), LW(1), 0)
@@ -1379,14 +1379,14 @@ static NpcSetupInfo npc_data[] = {
 };
 
 EVT_BEGIN(evt_tana_5)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_STARPIECE_85, 1)
 #else
     IF_INT_EQUAL(GSWF_STARPIECE_85, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
 #endif
             CALL(evt_msg_print, 0, LW(1), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             ELSE
             CALL(evt_msg_print, 0, LW(3), 0, 0)
         END_IF
@@ -1405,7 +1405,7 @@ EVT_END()
 /** Luggage shelves of the car: each shelf hit area with the message it shows and the script a shelf runs. */
 static ShelfAccessTbl3 access_tbl = {
     {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {"tana_3", "stg6_rsh_272", NULL},
         {"tana_4", "stg6_rsh_273", NULL},
         {"tana_5", "stg6_rsh_274", evt_tana_5},
@@ -1422,11 +1422,11 @@ static ShelfAccessTbl3 access_tbl = {
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(LW(2), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
 #endif
             CALL(evt_msg_print, 0, LW(1), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             ELSE
             CALL(evt_msg_print, 0, LW(3), 0, 0)
         END_IF
@@ -1442,7 +1442,7 @@ EVT_END()
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         READ_INT3(LW(0), LW(1), LW(2))
 #else
         READ_INT4(LW(0), LW(1), LW(2), LW(3))
@@ -1709,7 +1709,7 @@ EVT_BEGIN(rsh_04_b_init_evt)
         CALL_CHILD(PTR(bero_case_entry))
         CALL(evt_mario_set_pos, 220, 0, -20)
         CALL(evt_party_set_pos, 0, 200, 0, -20)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         DEBUG_PUT_MSG(STRING("パーティドア移動フラグクリア"))
         CALL(evt_party_trigflg_onoff, 0, PARTY_TRIG_FOLLOW_CLOSE | PARTY_TRIG_HALF_PUSH | PARTY_TRIG_BEHIND_DIR_SET | PARTY_TRIG_DOOR_MOVE, 0)
 #endif
@@ -1742,7 +1742,7 @@ EVT_BEGIN(rsh_04_c_init_evt)
         CALL_CHILD(PTR(bero_case_entry))
         CALL(evt_mario_set_pos, -200, 0, -30)
         CALL(evt_party_set_pos, 0, -230, 0, -30)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         DEBUG_PUT_MSG(STRING("パーティドア移動フラグクリア"))
         CALL(evt_party_trigflg_onoff, 0, PARTY_TRIG_FOLLOW_CLOSE | PARTY_TRIG_HALF_PUSH | PARTY_TRIG_BEHIND_DIR_SET | PARTY_TRIG_DOOR_MOVE, 0)
 #endif
@@ -1923,7 +1923,7 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
     ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)

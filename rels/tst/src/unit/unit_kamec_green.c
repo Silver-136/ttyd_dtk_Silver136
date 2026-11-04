@@ -96,7 +96,7 @@ static EvtWord recover_magic_event[142];
 static EvtWord all_recover_magic_event[180];
 static EvtWord bunsin_magic_event[160];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord spawn_event[62];
 #else
 static EvtWord spawn_event[66];
@@ -248,7 +248,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type reactions of the Green Magikoopa: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {40, 70, 60, 100, 60, 100, 100, 60, 100, 50, 100, 50, 100, 50, 50, 40, 70, 100, 60, 100, 100, 95};
 #else
 static StatusVulnerability regist = {
@@ -399,7 +399,7 @@ static BattleWeapon weapon_kamec_attack_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
@@ -2100,7 +2100,7 @@ static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(kamec_copy_status, LW(13), LW(3))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
 #endif
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)

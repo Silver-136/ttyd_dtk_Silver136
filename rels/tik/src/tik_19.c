@@ -32,7 +32,7 @@ static void majin_callback(s32 type);
 static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_majin[485];
 static EvtWord evt_majin2[239];
 #else
@@ -163,7 +163,7 @@ static EVT_BEGIN(evt_majin)
             ADD(LW(1), 30)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("mac_majin_10"), PTR(majin_callback), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -214,7 +214,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_majin2)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_mobj_wait_animation_end, STRING("box"))

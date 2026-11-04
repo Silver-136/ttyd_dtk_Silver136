@@ -23,7 +23,7 @@ void effStarStoneDisp_2(CameraId cameraId, void* param);
 void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect);
 void effStarStoneMain(EffectEntry* effect);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s16 diamond_1_vertex_tbl[] __attribute__((aligned(32))) = { 18386, 5751, 0, 7281, 9135, 0, 0, 19109, 0, -7281, 9135, 0, -18386, 5751, 0, -11781, -4714, 0, -11363, -15863, 0, 0, -13273, 0, 11363, -15863, 0, 11781, -4714, 0, 6676, 1460, -6799, 0, 6311, -6799, -6676, 1460, -6799, -4126, -6387, -6799, 4126, -6387, -6799, 6676, 1460, 6799, 0, 6311, 6799, -6676, 1460, 6799, -4126, -6387, 6799, 4126, -6387, 6799, 18629, 5827, 0, 7377, 9256, 0, 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 4180, -6472, 6889};
 s8 diamond_1_normal_tbl[] __attribute__((aligned(32))) = { 0, 28, 57, 25, 35, 47, 27, 9, 57, 0, 30, 56, -27, 9, 57, -25, 35, 47, -28, 10, 56, -17, -23, 57, -41, -12, 47, -19, -25, 55, 17, -23, 57, 0, -42, 47, 19, -25, 55, 41, -12, 47, 28, 10, 56, 27, 37, -44, 0, 28, -57, 26, 8, -57, 0, 30, -56, 34, 25, -47, -27, 37, -44, -26, 8, -57, -28, 10, -56, -12, 41, -47, -43, -14, -45, -16, -22, -57, -19, -25, -55, -42, -1, -47, 0, -44, -45, 16, -22, -57, 19, -25, -55, -9, -41, -47, 43, -14, -45, 28, 10, -56, 36, -22, -47, 42, -1, -47, 9, -41, -47, -36, -22, -47, -34, 25, -47, 12, 41, -47};
 s16 diamond_1_texcoord0_tbl[] __attribute__((aligned(32))) = { 4505, 2867, 3276, 4505, 3276, -1228, 4915, -409, 4915, 2457, 1228, 0, 1638, 1228, 8192, 1638, 3276, 4096, 7372, 2867, 7782, 0, 5324, 2457, 3276, 2048, 3276, 2867, 1638, 5734, 1228, 3276, 13107, 4096, 15974, 9011, 11059, 3686, 16384, 3276, 10649, 8192, 10649, 6445, 10649, 0, 8601, 1229, 8601, 8192, 8601, 0, 10240, 3276, 9420, 3276, 11468, 4096, 15155, 5734, 14336, 7782, 16384, 4096, 11878, 4096, 12288, 3276, 9420, 10649, 10649, 2457};
@@ -65,7 +65,7 @@ u8 diamond_1_dl_0_31[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x01, 
 u8 diamond_1_dl_0_32[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x10, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x0F, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 diamond_1_dl_0_33[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x10, 0x00, 0x01, 0x01, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8* diamond_1_dl_0_tbl[] = { diamond_1_dl_0_0, diamond_1_dl_0_1, diamond_1_dl_0_2, diamond_1_dl_0_3, diamond_1_dl_0_4, diamond_1_dl_0_5, diamond_1_dl_0_6, diamond_1_dl_0_7, diamond_1_dl_0_8, diamond_1_dl_0_9, diamond_1_dl_0_10, diamond_1_dl_0_11, diamond_1_dl_0_12, diamond_1_dl_0_13, diamond_1_dl_0_14, diamond_1_dl_0_15, diamond_1_dl_0_16, diamond_1_dl_0_17, diamond_1_dl_0_18, diamond_1_dl_0_19, diamond_1_dl_0_20, diamond_1_dl_0_21, diamond_1_dl_0_22, diamond_1_dl_0_23, diamond_1_dl_0_24, diamond_1_dl_0_25, diamond_1_dl_0_26, diamond_1_dl_0_27, diamond_1_dl_0_28, diamond_1_dl_0_29, diamond_1_dl_0_30, diamond_1_dl_0_31, diamond_1_dl_0_32, diamond_1_dl_0_33 };
 #endif
 
@@ -106,14 +106,14 @@ u8 diamond_1_dl_1_31[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x15, 
 u8 diamond_1_dl_1_32[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x24, 0x00, 0x05, 0x10, 0x15, 0x01, 0x06, 0x10, 0x23, 0x02, 0x07, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 diamond_1_dl_1_33[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x24, 0x00, 0x05, 0x11, 0x16, 0x03, 0x08, 0x11, 0x15, 0x01, 0x06, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8* diamond_1_dl_1_tbl[] = { diamond_1_dl_1_0, diamond_1_dl_1_1, diamond_1_dl_1_2, diamond_1_dl_1_3, diamond_1_dl_1_4, diamond_1_dl_1_5, diamond_1_dl_1_6, diamond_1_dl_1_7, diamond_1_dl_1_8, diamond_1_dl_1_9, diamond_1_dl_1_10, diamond_1_dl_1_11, diamond_1_dl_1_12, diamond_1_dl_1_13, diamond_1_dl_1_14, diamond_1_dl_1_15, diamond_1_dl_1_16, diamond_1_dl_1_17, diamond_1_dl_1_18, diamond_1_dl_1_19, diamond_1_dl_1_20, diamond_1_dl_1_21, diamond_1_dl_1_22, diamond_1_dl_1_23, diamond_1_dl_1_24, diamond_1_dl_1_25, diamond_1_dl_1_26, diamond_1_dl_1_27, diamond_1_dl_1_28, diamond_1_dl_1_29, diamond_1_dl_1_30, diamond_1_dl_1_31, diamond_1_dl_1_32, diamond_1_dl_1_33 };
 #endif
 
 /** Display-list sizes for the round stone's second list set (Diamond Star, type 0). */
 u8 diamond_1_dl_1_size_tbl[] = { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s16 diamond_2_2_vertex_tbl[] __attribute__((aligned(32))) = { 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 0, -6472, 6889, 0, -6472, -6889, 18629, 5827, 0, 7377, 9256, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 4180, -6472, 6889, 0, 19362, 0, 0, 6394, 6889, 0, -6472, 6889, 0, -13449, 0, 0, 6394, -6889, 0, -6472, -6889, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 s8 diamond_2_2_normal_tbl[] __attribute__((aligned(32))) = { -27, 9, 57, -25, 35, 47, -22, 22, 55, -28, 10, 56, -17, -23, 57, -41, -12, 47, -19, -25, 55, 4, -43, 46, -34, 25, 47, -27, 37, -44, -26, 8, -57, -14, 20, -58, -28, 10, -56, -12, 41, -47, -43, -14, -45, -16, -22, -57, -19, -25, -55, -42, -1, -47, 9, -41, -47, -36, -22, -47, -34, 25, -47, 0, -24, 59, 0, -44, -45, 0, -24, -59, 64, 0, 0, 22, 22, 55, 25, 35, 47, 27, 9, 57, 34, 25, 47, 17, -23, 57, -4, -43, 46, 19, -25, 55, 41, -12, 47, 28, 10, 56, 27, 37, -44, 14, 20, -58, 26, 8, -57, 34, 25, -47, 16, -22, -57, 19, -25, -55, -9, -41, -47, 43, -14, -45, 28, 10, -56, 36, -22, -47, 42, -1, -47, 12, 41, -47, -64, 0, 0};
 s16 diamond_2_2_texcoord0_tbl[] __attribute__((aligned(32))) = { 6553, -2457, 9830, -819, 9830, 4915, 2457, 0, 6553, 4096, 6553, 5734, 3276, 11468, 15564, 0, 3276, 2457, 16550, 8838, 4305, 4774, 18862, 1581, 8181, 14022, -4062, 9959, -2478, 14802, 9011, 5734, 6553, 9011, 16384, 3276, 6553, 8192, 14745, 5734, 10649, 4915, 2457, 6553, 5444, 4661, 14936, 9098, 17729, 1931, -2035, 9571, 7456, 14008, -1345, 14452 };
@@ -139,7 +139,7 @@ u8 diamond_2_2_dl_0_16[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x0A
 u8 diamond_2_2_dl_0_17[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x0C, 0x15, 0x02, 0x08, 0x05, 0x07, 0x02, 0x08, 0x0B, 0x04, 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 diamond_2_2_dl_0_18[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x05, 0x16, 0x02, 0x08, 0x0D, 0x17, 0x02, 0x08, 0x08, 0x0F, 0x02, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8* diamond_2_2_dl_0_tbl[] = { diamond_2_2_dl_0_0, diamond_2_2_dl_0_1, diamond_2_2_dl_0_2, diamond_2_2_dl_0_3, diamond_2_2_dl_0_4, diamond_2_2_dl_0_5, diamond_2_2_dl_0_6, diamond_2_2_dl_0_7, diamond_2_2_dl_0_8, diamond_2_2_dl_0_9, diamond_2_2_dl_0_10, diamond_2_2_dl_0_11, diamond_2_2_dl_0_12, diamond_2_2_dl_0_13, diamond_2_2_dl_0_14, diamond_2_2_dl_0_15, diamond_2_2_dl_0_16, diamond_2_2_dl_0_17, diamond_2_2_dl_0_18 };
 #endif
 
@@ -165,14 +165,14 @@ u8 diamond_2_2_dl_1_16[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x17
 u8 diamond_2_2_dl_1_17[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x11, 0x2C, 0x03, 0x14, 0x13, 0x27, 0x03, 0x14, 0x10, 0x27, 0x03, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 diamond_2_2_dl_1_18[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x0F, 0x2D, 0x00, 0x15, 0x12, 0x2A, 0x00, 0x15, 0x0E, 0x2A, 0x00, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8* diamond_2_2_dl_1_tbl[] = { diamond_2_2_dl_1_0, diamond_2_2_dl_1_1, diamond_2_2_dl_1_2, diamond_2_2_dl_1_3, diamond_2_2_dl_1_4, diamond_2_2_dl_1_5, diamond_2_2_dl_1_6, diamond_2_2_dl_1_7, diamond_2_2_dl_1_8, diamond_2_2_dl_1_9, diamond_2_2_dl_1_10, diamond_2_2_dl_1_11, diamond_2_2_dl_1_12, diamond_2_2_dl_1_13, diamond_2_2_dl_1_14, diamond_2_2_dl_1_15, diamond_2_2_dl_1_16, diamond_2_2_dl_1_17, diamond_2_2_dl_1_18 };
 #endif
 
 /** Display-list sizes for the second half of the stone that splits in two (types 1-5). */
 u8 diamond_2_2_dl_1_size_tbl[] = { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s16 diamond_7_vertex_tbl[] __attribute__((aligned(32))) = { 18386, 5751, 0, 7281, 9135, 0, 0, 19109, 0, -7281, 9135, 0, -18386, 5751, 0, -11781, -4714, 0, -11363, -15863, 0, 0, -13273, 0, 11363, -15863, 0, 11781, -4714, 0, 6676, 1460, -6799, 0, 6311, -6799, -6676, 1460, -6799, -4126, -6387, -6799, 4126, -6387, -6799, 6676, 1460, 6799, 0, 6311, 6799, -6676, 1460, 6799, -4126, -6387, 6799, 4126, -6387, 6799, 18629, 5827, 0, 7377, 9256, 0, 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 4180, -6472, 6889, 0, 0, 0, 0, 0, 0, 0, 0 };
 s8 diamond_7_normal_tbl[] __attribute__((aligned(32))) = { 0, 28, 57, 25, 35, 47, 27, 9, 57, 0, 30, 56, -27, 9, 57, -25, 35, 47, -28, 10, 56, -17, -23, 57, -41, -12, 47, -19, -25, 55, 17, -23, 57, 0, -42, 47, 19, -25, 55, 41, -12, 47, 28, 10, 56, 27, 37, -44, 0, 28, -57, 26, 8, -57, 0, 30, -56, 34, 25, -47, -27, 37, -44, -26, 8, -57, -28, 10, -56, -12, 41, -47, -43, -14, -45, -16, -22, -57, -19, -25, -55, -42, -1, -47, 0, -44, -45, 16, -22, -57, 19, -25, -55, -9, -41, -47, 43, -14, -45, 28, 10, -56, 36, -22, -47, 42, -1, -47, 9, -41, -47, -36, -22, -47, -34, 25, -47, 12, 41, -47};
 s16 diamond_7_texcoord0_tbl[] __attribute__((aligned(32))) = { 4505, 2867, 3276, 4505, 3276, -1228, 4915, -409, 4915, 2457, 1228, 0, 1638, 1228, 8192, 1638, 3276, 4096, 7372, 2867, 7782, 0, 5324, 2457, 3276, 2048, 3276, 2867, 1638, 5734, 1228, 3276, 11401, 434, 15244, 4406, 11750, 9216, 14437, -1546, 16584, 528, 14591, 3420, 9379, 3635, 13010, -1400, 13985, 6751, 15234, 8192, 9341, 3612, 14929, 0, 15063, -2382, 17507, 1688, 15088, 6230, 12239, 4419, 7030, 4341, 10818, -818, 11287, 10220, 8631, 1980, 13880, 1609, 11810, 0, 14032, 8192, 10543, 5953, 11468, 4096, 8192, 3358, 16384, 0, 11763, 8192, 11269, 8192, 10640, 3129, 12288, 0, 13935, 3129, 13306, 8192, 15660, -3731, 15104, 1836, 12392, -2166, 11617, -43, 15126, 2852, 11321, 10251, 9999, 223, 15407, 1873, 10640, 9959, 8192, 8192, 12288, 6383, 11712, 7139, 10559, 4142, 12418, 67, 14437, -1546, 13304, 6896, 15661, -3731, 16384, 8192};
@@ -214,7 +214,7 @@ u8 diamond_7_dl_0_31[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x01, 
 u8 diamond_7_dl_0_32[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x10, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x0F, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 diamond_7_dl_0_33[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x10, 0x00, 0x01, 0x01, 0x02, 0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8* diamond_7_dl_0_tbl[] = { diamond_7_dl_0_0, diamond_7_dl_0_1, diamond_7_dl_0_2, diamond_7_dl_0_3, diamond_7_dl_0_4, diamond_7_dl_0_5, diamond_7_dl_0_6, diamond_7_dl_0_7, diamond_7_dl_0_8, diamond_7_dl_0_9, diamond_7_dl_0_10, diamond_7_dl_0_11, diamond_7_dl_0_12, diamond_7_dl_0_13, diamond_7_dl_0_14, diamond_7_dl_0_15, diamond_7_dl_0_16, diamond_7_dl_0_17, diamond_7_dl_0_18, diamond_7_dl_0_19, diamond_7_dl_0_20, diamond_7_dl_0_21, diamond_7_dl_0_22, diamond_7_dl_0_23, diamond_7_dl_0_24, diamond_7_dl_0_25, diamond_7_dl_0_26, diamond_7_dl_0_27, diamond_7_dl_0_28, diamond_7_dl_0_29, diamond_7_dl_0_30, diamond_7_dl_0_31, diamond_7_dl_0_32, diamond_7_dl_0_33 };
 #endif
 
@@ -254,7 +254,7 @@ u8 diamond_7_dl_1_30[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x1B, 
 u8 diamond_7_dl_1_31[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x19, 0x25, 0x06, 0x38, 0x20, 0x16, 0x11, 0x37, 0x18, 0x16, 0x0B, 0x39, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 u8 diamond_7_dl_1_32[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x03, 0x17, 0x26, 0x0A, 0x3B, 0x1F, 0x12, 0x0F, 0x42, 0x16, 0x12, 0x08, 0x2E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8* diamond_7_dl_1_tbl[] = { diamond_7_dl_1_0, diamond_7_dl_1_1, diamond_7_dl_1_2, diamond_7_dl_1_3, diamond_7_dl_1_4, diamond_7_dl_1_5, diamond_7_dl_1_6, diamond_7_dl_1_7, diamond_7_dl_1_8, diamond_7_dl_1_9, diamond_7_dl_1_10, diamond_7_dl_1_11, diamond_7_dl_1_12, diamond_7_dl_1_13, diamond_7_dl_1_14, diamond_7_dl_1_15, diamond_7_dl_1_16, diamond_7_dl_1_17, diamond_7_dl_1_18, diamond_7_dl_1_19, diamond_7_dl_1_20, diamond_7_dl_1_21, diamond_7_dl_1_22, diamond_7_dl_1_23, diamond_7_dl_1_24, diamond_7_dl_1_25, diamond_7_dl_1_26, diamond_7_dl_1_27, diamond_7_dl_1_28, diamond_7_dl_1_29, diamond_7_dl_1_30, diamond_7_dl_1_31, diamond_7_dl_1_32 };
 #endif
 
@@ -266,7 +266,7 @@ u8 diamond_4_color0_tbl[] __attribute__((aligned(32))) = { 0xD7, 0x18, 0x35, 0xF
 u8 diamond_5_color0_tbl[] __attribute__((aligned(32))) = { 0x4D, 0x71, 0xB4, 0xFF, 0x3B, 0x63, 0x9A, 0xFF, 0x6E, 0x8F, 0xC4, 0xFF, 0x43, 0x45, 0x88, 0xFF, 0x4D, 0x71, 0xB4, 0xFF, 0x3B, 0x63, 0x9A, 0xFF};
 u8 diamond_6_color0_tbl[] __attribute__((aligned(32))) = { 0xF0, 0x76, 0x19, 0xFF, 0x7E, 0x2D, 0x15, 0xFF, 0xB5, 0x41, 0x1E, 0xFF, 0x98, 0x36, 0x19, 0xFF, 0xD1, 0x67, 0x16, 0xFF, 0xF0, 0x8A, 0x08, 0xFF };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s16 diamond_1_vertex_tbl[] __attribute__((aligned(32))) = { 18386, 5751, 0, 7281, 9135, 0, 0, 19109, 0, -7281, 9135, 0, -18386, 5751, 0, -11781, -4714, 0, -11363, -15863, 0, 0, -13273, 0, 11363, -15863, 0, 11781, -4714, 0, 6676, 1460, -6799, 0, 6311, -6799, -6676, 1460, -6799, -4126, -6387, -6799, 4126, -6387, -6799, 6676, 1460, 6799, 0, 6311, 6799, -6676, 1460, 6799, -4126, -6387, 6799, 4126, -6387, 6799, 18629, 5827, 0, 7377, 9256, 0, 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 4180, -6472, 6889};
 s8 diamond_1_normal_tbl[] __attribute__((aligned(32))) = { 0, 28, 57, 25, 35, 47, 27, 9, 57, 0, 30, 56, -27, 9, 57, -25, 35, 47, -28, 10, 56, -17, -23, 57, -41, -12, 47, -19, -25, 55, 17, -23, 57, 0, -42, 47, 19, -25, 55, 41, -12, 47, 28, 10, 56, 27, 37, -44, 0, 28, -57, 26, 8, -57, 0, 30, -56, 34, 25, -47, -27, 37, -44, -26, 8, -57, -28, 10, -56, -12, 41, -47, -43, -14, -45, -16, -22, -57, -19, -25, -55, -42, -1, -47, 0, -44, -45, 16, -22, -57, 19, -25, -55, -9, -41, -47, 43, -14, -45, 28, 10, -56, 36, -22, -47, 42, -1, -47, 9, -41, -47, -36, -22, -47, -34, 25, -47, 12, 41, -47};
 s16 diamond_1_texcoord0_tbl[] __attribute__((aligned(32))) = { 4505, 2867, 3276, 4505, 3276, -1228, 4915, -409, 4915, 2457, 1228, 0, 1638, 1228, 8192, 1638, 3276, 4096, 7372, 2867, 7782, 0, 5324, 2457, 3276, 2048, 3276, 2867, 1638, 5734, 1228, 3276, 13107, 4096, 15974, 9011, 11059, 3686, 16384, 3276, 10649, 8192, 10649, 6445, 10649, 0, 8601, 1229, 8601, 8192, 8601, 0, 10240, 3276, 9420, 3276, 11468, 4096, 15155, 5734, 14336, 7782, 16384, 4096, 11878, 4096, 12288, 3276, 9420, 10649, 10649, 2457};
@@ -274,7 +274,7 @@ u8 diamond_1_color0_tbl[] __attribute__((aligned(32))) = { 0xD7, 0xE0, 0xC2, 0xF
 #endif
 
 /** Display lists of the round stone's first list set (Diamond Star, type 0), drawn with the sizes below. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 u8* diamond_1_dl_0_tbl[] = { diamond_1_dl_0_0, diamond_1_dl_0_1, diamond_1_dl_0_2, diamond_1_dl_0_3, diamond_1_dl_0_4, diamond_1_dl_0_5, diamond_1_dl_0_6, diamond_1_dl_0_7, diamond_1_dl_0_8, diamond_1_dl_0_9, diamond_1_dl_0_10, diamond_1_dl_0_11, diamond_1_dl_0_12, diamond_1_dl_0_13, diamond_1_dl_0_14, diamond_1_dl_0_15, diamond_1_dl_0_16, diamond_1_dl_0_17, diamond_1_dl_0_18, diamond_1_dl_0_19, diamond_1_dl_0_20, diamond_1_dl_0_21, diamond_1_dl_0_22, diamond_1_dl_0_23, diamond_1_dl_0_24, diamond_1_dl_0_25, diamond_1_dl_0_26, diamond_1_dl_0_27, diamond_1_dl_0_28, diamond_1_dl_0_29, diamond_1_dl_0_30, diamond_1_dl_0_31, diamond_1_dl_0_32, diamond_1_dl_0_33 };
 u8* diamond_1_dl_1_tbl[] = { diamond_1_dl_1_0, diamond_1_dl_1_1, diamond_1_dl_1_2, diamond_1_dl_1_3, diamond_1_dl_1_4, diamond_1_dl_1_5, diamond_1_dl_1_6, diamond_1_dl_1_7, diamond_1_dl_1_8, diamond_1_dl_1_9, diamond_1_dl_1_10, diamond_1_dl_1_11, diamond_1_dl_1_12, diamond_1_dl_1_13, diamond_1_dl_1_14, diamond_1_dl_1_15, diamond_1_dl_1_16, diamond_1_dl_1_17, diamond_1_dl_1_18, diamond_1_dl_1_19, diamond_1_dl_1_20, diamond_1_dl_1_21, diamond_1_dl_1_22, diamond_1_dl_1_23, diamond_1_dl_1_24, diamond_1_dl_1_25, diamond_1_dl_1_26, diamond_1_dl_1_27, diamond_1_dl_1_28, diamond_1_dl_1_29, diamond_1_dl_1_30, diamond_1_dl_1_31, diamond_1_dl_1_32, diamond_1_dl_1_33 };
 s16 diamond_2_2_vertex_tbl[] __attribute__((aligned(32))) = { 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 0, -6472, 6889, 0, -6472, -6889, 18629, 5827, 0, 7377, 9256, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 4180, -6472, 6889, 0, 19362, 0, 0, 6394, 6889, 0, -6472, 6889, 0, -13449, 0, 0, 6394, -6889, 0, -6472, -6889, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -298,7 +298,7 @@ static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3
  */
 f32 edge_color[] = { 0.331f, 0.314999998f, 0.231999993f, 0.158999994f, 0.261000007f, 0.162f, 0.287f, 0.240999997f, 0.0930000022f, 0.324999988f, 0.131999999f, 0.141000003f, 0.144999996f, 0.202999994f, 0.305999994f, 0.312000006f, 0.181999996f, 0.115000002f, 0.256000012f, 0.312999994f, 0.344000012f };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static u8* color_tbl[] = { diamond_1_color0_tbl, diamond_2_color0_tbl, diamond_3_color0_tbl, diamond_4_color0_tbl, diamond_5_color0_tbl, diamond_6_color0_tbl, diamond_7_color0_tbl };
 #endif
 
@@ -443,7 +443,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
  * States 1-5 are the drop: it falls under gravity, bounces on the ground (jump sound, puffs),
  * then the halves separate and tilt.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effStarStoneMain(EffectEntry* effect) {
 #else
 void effStarStoneMain(EffectEntry* effect) {
@@ -583,7 +583,7 @@ void effStarStoneMain(EffectEntry* effect) {
             ((EffSnowDustN64Work*)w->dust->userdata)->position.z = 0.0f;
         }
         if (w->state < 3 && cam == CAMERA_3D) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale);
 #else
             shadowSetMode(shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale), w->a);
@@ -634,7 +634,7 @@ void effStarStoneMain(EffectEntry* effect) {
  * some share the function's loop variables, others have their own block,
  * and the demo orders the loop variables differently; each form gives the original register allocation.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     u32 i;
     u8* size;
@@ -649,7 +649,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     EffStarStoneWork* w = effect->userdata;
     CameraEntry* cam = camGetPtr(cameraId);
     s32 type = w->type;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     u8** dp;
     u8* sp;
     u32 i;
@@ -670,7 +670,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     starStoneBlendState();
     GXSetCullMode(GX_CULL_BACK);
     if (type == 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
         for (i = 0, size = diamond_1_dl_0_size_tbl, list = diamond_1_dl_0_tbl; i < sizeof(diamond_1_dl_0_tbl) / sizeof(diamond_1_dl_0_tbl[0]); i++, size++, list++) {
             GXCallDisplayList(*list, *size << 5);
@@ -754,7 +754,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     }
     starStoneBlendState();
     if (type == 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_ARRAY, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
         {
             u8* sz;
@@ -770,7 +770,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
         LOOPK(diamond_1_dl_0_tbl, diamond_1_dl_0_size_tbl, 34)
 #endif
     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
         {
             u8* sz;
@@ -790,7 +790,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&tex, GX_TEXMAP0);
     starStoneBlendState();
     if (type == 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
         {
             u8* sz;

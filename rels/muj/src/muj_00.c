@@ -23,7 +23,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "eff/eff_kemu_test.h"
 #endif
 
@@ -111,7 +111,7 @@ static void alpha_tev(MapTevCallbackInfo* info);
 
 static ExtTexInfo ext_entry_data[59];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s16 suifu_animtbl[41];
 s16 suifu_animtbl_run[21];
 static s16 elmos_animtbl[21];
@@ -153,7 +153,7 @@ static EvtWord mony_talk[30];
 static EvtWord peton_init[2];
 static EvtWord peton_talk[30];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord koburon_init[];
 extern EvtWord koburon_regp[];
 #else
@@ -163,7 +163,7 @@ EvtWord koburon_regp[140];
 
 EvtWord koburon_talk[87];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord koburon_dead[];
 #else
 EvtWord koburon_dead[139];
@@ -175,7 +175,7 @@ static EvtWord kiza_entry[30];
 static NpcSetupInfo npcEnt[15];
 static BeroEntry bero_entry_data[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord mujinto_hyochaku[];
 #else
 EvtWord mujinto_hyochaku[297];
@@ -184,7 +184,7 @@ EvtWord mujinto_hyochaku[297];
 s32 suifu_random_setup[380];
 EvtWord suifu_random_sub[123];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tama_shoot[];
 #else
 EvtWord tama_shoot[69];
@@ -248,7 +248,7 @@ static EvtWord muj_gor_ship[53];
 static EvtWord ship_pera[115];
 EvtWord muj_gor_ship_start[245];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord into_muj_ship[];
 #else
 EvtWord into_muj_ship[173];
@@ -369,7 +369,7 @@ void suifu_kyorokyoro_init(NanNPC* npc) {
 }
 
 /** Demo-only cannon-smoke entry helper: creates the effect at args[0..2] and writes its pointer to args[3]. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(tama_shoot_kemuri_entry) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -906,7 +906,7 @@ static s16 suifu_animtbl[] = {
     5, 5, 6, 6, 6, 7, 7, 7,
     8, 8, 8, 9, 9, 9, 10, 10,
     10, 11, 11, 11, 12, 12, 12, 13,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     -1,
 #else
     -1, 0,
@@ -917,7 +917,7 @@ static s16 suifu_animtbl[] = {
 s16 suifu_animtbl_run[] = {
     14, 14, 15, 15, 16, 16, 17, 17,
     18, 18, 19, 19, 20, 20, 21, 21,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     22, 22, 23, 23, -1,
 #else
     22, 22, 23, 23, -1, 0,
@@ -928,7 +928,7 @@ s16 suifu_animtbl_run[] = {
 static s16 elmos_animtbl[] = {
     24, 24, 25, 25, 26, 26, 27, 27,
     28, 28, 29, 29, 30, 30, 31, 31,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     32, 32, 33, 33, -1,
 #else
     32, 32, 33, 33, -1, 0,
@@ -942,7 +942,7 @@ static s16 dai3_animtbl[] = {
     39, 39, 40, 40, 40, 41, 41, 41,
     42, 42, 42, 43, 43, 43, 44, 44,
     44, 45, 45, 45, 46, 46, 46, 47,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     -1,
 #else
     -1, 0,
@@ -953,7 +953,7 @@ static s16 dai3_animtbl[] = {
 s16 dai3_animtbl_run[] = {
     48, 48, 49, 49, 50, 50, 51, 51,
     52, 52, 53, 53, 54, 54, 55, 55,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     56, 56, 57, 57, -1,
 #else
     56, 56, 57, 57, -1, 0,
@@ -1304,7 +1304,7 @@ EVT_BEGIN(koburon_init)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_2"))
     CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
     CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LSWF(1), 0)
 #else
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
@@ -1319,7 +1319,7 @@ EVT_END()
  * When he walks away the reaction flags are cleared, and retail also clears the talk interrupt.
  */
 EVT_BEGIN(koburon_regp)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_keyon_wait)
 #endif
     LABEL(0)
@@ -1327,7 +1327,7 @@ EVT_BEGIN(koburon_regp)
     CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dist, LW(0), LW(2), LW(3), LW(5), LW(1))
     IF_INT_GREATER(LW(1), 100)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         IF_INT_EQUAL(LSWF(1), 1)
 #else
         IF_INT_EQUAL(LSWF_MUJ_00_WHACKA_OUT, 1)
@@ -1342,7 +1342,7 @@ EVT_BEGIN(koburon_regp)
             CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
             SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 0)
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
         CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
 #endif
@@ -1351,7 +1351,7 @@ EVT_BEGIN(koburon_regp)
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
             CALL(evt_npc_set_position, STRING("me"), LW(3), 35, LW(5))
             CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_OUT1"), LW(3), -29999996, LW(5), 0)
             SET_VALUE(LSWF(1), 1)
 #else
@@ -1361,7 +1361,7 @@ EVT_BEGIN(koburon_regp)
             WAIT_MS(500)
             CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
             CALL(evt_npc_reaction_flag_onoff, 1, STRING("me"), 15)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(koburon_talk))
 #endif
         END_IF
@@ -1400,13 +1400,13 @@ EVT_BEGIN(koburon_talk)
 EVT_END()
 
 EVT_BEGIN(koburon_dead)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_DAMAGED_PLIABLE1"), LW(0), LW(1), LW(2), 0)
 #endif
     CALL(evt_npc_set_damage_anim, STRING("me"))
     WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
 #endif
     ADD(LW(1), 30)
@@ -1789,7 +1789,7 @@ EVT_BEGIN(mujinto_hyochaku)
     WAIT_MS(500)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_11_DESERTED_ISLAND)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)
@@ -1902,7 +1902,7 @@ EVT_BEGIN(tama_shoot)
         SET_VALUE(LW(1), GW(14))
         ADD(LW(1), 130)
         SET_VALUE(LW(2), GW(15))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(tama_shoot_kemuri_entry, LW(0), LW(1), LW(2), LW(10))
         CALL(tama_shoot_kemuri, LW(10), FLOAT(90.0f), FLOAT(90.0f))
 #else
@@ -3083,7 +3083,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
         CALL_CHILD(PTR(iwapera_offscreen_end))
         WAIT_MS(4000)
         SPAWN_EVENT_GET_ID(PTR(cam_dai3_vs_kaizoku), LW(10))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_sub_get_framerate, LW(0))
         IF_INT_EQUAL(LW(0), 60)
 #endif
@@ -3093,7 +3093,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
         WAIT_MS(1400)
         CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
         WAIT_MS(200)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         ELSE
             WAIT_MS(11400)
             DELETE_EVENT(LW(10))
@@ -3140,7 +3140,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_cam3d_evt_set, -436, 595, 725, -226, 120, -460, 0, EASING_SINE_IN_OUT)
     CALL(evt_npc_flag_onoff, 0, STRING("コルテス"), NPC_FLAG_NO_DRAW)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BEGIN_INLINE_EVENT
 #else
     CALL(evt_party_run, 0)
@@ -3154,7 +3154,7 @@ EVT_BEGIN(kaizoku_vs_dai3)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_jump_pos, -430, 60, -212, 1000, 0, 80)
     CALL(evt_snd_sfxoff, LW(9))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     LOOP(0)
         IS_EVENT_RUNNING(LW(3), LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -3339,7 +3339,7 @@ EVT_END()
  */
 EVT_BEGIN(dai3_beat_back)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -4057,7 +4057,7 @@ EVT_BEGIN(into_muj_ship)
     DELETE_EVENT(LW(8))
     DELETE_EVENT(LW(9))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)

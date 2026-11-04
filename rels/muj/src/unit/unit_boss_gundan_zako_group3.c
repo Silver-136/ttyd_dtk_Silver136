@@ -92,7 +92,7 @@ static EvtWord init_event[21];
 static EvtWord damage_event[129];
 static EvtWord dead_event[136];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord attack_event[260];
 #else
 static EvtWord attack_event[287];
@@ -413,7 +413,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_CheckActStatus, LW(5), LW(12))
     IF_INT_NOT_EQUAL(LW(12), 0)
         CALL(zakogun_get_kanbu_id_evtcmd, LW(5))
@@ -426,7 +426,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_MovePosition, LW(5), LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE, 0)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         END_SIBLING_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
 #endif
     BEGIN_SIBLING_EVENT
@@ -434,7 +434,7 @@ static EVT_BEGIN(attack_event)
         CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ADHERE1"), 0)
     END_SIBLING_EVENT
     CALL(zakogun_attack3_1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_NOT_EQUAL(LW(12), 0)
 #endif
         DELETE_EVENT(LW(15))
@@ -444,12 +444,12 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_JumpPosition, LW(5), 0, 100, 0, 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
         CALL(evt_snd_sfxoff, LW(13))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
 #endif
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(zakogun_set_target_id, LW(3))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_NOT_EQUAL(LW(12), 0)
 #endif
         BEGIN_SIBLING_EVENT_GET_ID(LW(14))
@@ -460,7 +460,7 @@ static EVT_BEGIN(attack_event)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
 #endif
     BEGIN_SIBLING_EVENT
@@ -468,12 +468,12 @@ static EVT_BEGIN(attack_event)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ROUND1"), LW(13))
     CALL(zakogun_attack3_2, LW(13))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_NOT_EQUAL(LW(12), 0)
 #endif
         DELETE_EVENT(LW(14))
         DELETE_EVENT(LW(15))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
     IF_INT_NOT_EQUAL(LW(12), 0)
 #endif
@@ -492,7 +492,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_AnimeChangePose, LW(5), 1, STRING("S_1"))
             CALL(btlevtcmd_ResetFaceDirection, LW(5))
         END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ADHERE2"), 0)

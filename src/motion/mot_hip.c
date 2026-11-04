@@ -236,7 +236,7 @@ void mot_hip(void) {
             break;
         }
         fall = marioGetFallSpd();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         hit = marioChkLandon(&y, fall);
 #else
         hit = marioSearchGround(&y, &tmp1, &tmp2, fall, fall);
@@ -259,14 +259,14 @@ void mot_hip(void) {
             mario->rotOfs.y = 0.0f;
             mario->airTimer = 0;
             mario->jumpPeakAirTime = 0;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             mario->dispOfs2.y = 0.0f;
 #endif
             marioChgPose("M_A_1B");
             attr = hitGetAttr(hit);
             if (attr & HIT_ATTR_WATER_HAZARD) {
                 set_damage_root_ypos(mario->position.y);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 d = -0.4f;
                 mario->jumpVelocityY = d;
                 mario->jumpAccelerationY = d;
@@ -286,7 +286,7 @@ void mot_hip(void) {
                 marioChgMot(MARIO_MOTION_DAMAGE_TOGE);
                 return;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             psndSFXOn_3D((char*)PSND_SFX_MARIO_HIO_DROP2, &mario->position);
             evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
 #else
@@ -332,7 +332,7 @@ void mot_hip(void) {
     }
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #pragma dont_inline on
 #endif
 
@@ -361,7 +361,7 @@ s32 chkground(void) {
         mario->jumpPeakAirTime = 0;
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if (!marioBgmodeChk()) {
             camFollowYOn();
         }
@@ -371,7 +371,7 @@ s32 chkground(void) {
         attr = hitGetAttr(hit);
         if (attr & HIT_ATTR_WATER_HAZARD) {
             set_damage_root_ypos(mario->position.y);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             v = -0.4f;
             mario->jumpVelocityY = v;
             mario->jumpAccelerationY = v;

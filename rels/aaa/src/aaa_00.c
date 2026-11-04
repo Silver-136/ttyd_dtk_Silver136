@@ -60,7 +60,7 @@ static EvtWord door_1_open[12];
 static EvtWord door_1_close[14];
 static DoorParam door_1;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_prologue[644];
 #else
 static EvtWord evt_prologue[713];
@@ -240,7 +240,7 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_cam3d_evt_set, 145, 122, 717, 145, 108, -180, 5000, EASING_SINE_IN_OUT)
     WAIT_MS(4000)
     CALL(evt_npc_set_position, STRING("パレッタ"), 500, 500, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(1), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
@@ -284,7 +284,7 @@ static EVT_BEGIN(evt_prologue)
 
     // Parakarry calls out "Mail call!" and flies off.
     CALL(evt_msg_print, 0, STRING("pro_00"), 0, STRING("パレッタ"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(1), 1)
 #endif
     CALL(evt_npc_glide_position, STRING("パレッタ"), 0, 300, -100, 0, FLOAT(80.0f), FLOAT(-30.0f), 11, 0)

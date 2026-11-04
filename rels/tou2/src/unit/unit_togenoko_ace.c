@@ -119,7 +119,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Damage-type reactions of the Dark Koopatrol: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {60, 60, 50, 100, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 50, 100, 50, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

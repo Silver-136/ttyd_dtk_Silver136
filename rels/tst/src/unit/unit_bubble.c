@@ -87,12 +87,12 @@ BattleUnitKind unit_bubble = {
     1, // perilHP
     21, // level
     0, // bonusExp
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     2, // bonusCoin
     70, // bonusCoinRate
 #endif
     1, // bonusCoin in demos; baseCoin in retail
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     70,
     2,
 #endif
@@ -141,7 +141,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_ABSORB, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_WEAK, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {50, 90, 75, 25, 75, 100, 0, 50, 100, 75, 100, 75, 100, 75, 75, 50, 90, 100, 75, 100, 100, 95};
 #else
 static StatusVulnerability regist = {
@@ -235,7 +235,7 @@ static BattleWeapon weapon_bubble_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
@@ -278,7 +278,7 @@ static BattleWeapon weapon_bubble_fire_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
@@ -609,7 +609,7 @@ static USER_FUNC(eff_fire) {
     f32 z;
 
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         eff = effFireEntry(5, 90, 0.0f, -1000.0f, 0.0f, 1.0f);
 #else
         eff = effFireEntry(5, 106, 0.0f, -1000.0f, 0.0f, 1.0f);

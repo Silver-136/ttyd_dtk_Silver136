@@ -22,7 +22,7 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "driver/itemdrv.h"
 #include "evt/evt_item.h"
 #endif
@@ -48,7 +48,7 @@ EvtWord peach_evt_bero_out2[25];
 BeroEntry bero_data_peach2[2];
 EvtWord evt_kou1[115];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_kou2[];
 #else
 EvtWord evt_kou2[155];
@@ -261,7 +261,7 @@ EVT_BEGIN(evt_kou2)
     IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 0)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("tenjo"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_mario_key_onoff, 0)
 #endif
             CALL(evt_mario_normalize)
@@ -270,7 +270,7 @@ EVT_BEGIN(evt_kou2)
             SET_VALUE(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_mario_key_onoff, 1)
 #endif
         END_IF
@@ -864,7 +864,7 @@ EVT_BEGIN(aji_09_init_evt)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)
             CALL(evt_mario_wait_landon)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             LOOP(30)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -881,7 +881,7 @@ EVT_BEGIN(aji_09_init_evt)
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
         CALL(evt_item_entry, STRING("item_00"), ITEM_REPEL_CAPE, -180, 12, -135, ITEM_TYPE_STILL, GSWF(4213), 0)
@@ -900,7 +900,7 @@ EVT_BEGIN(aji_09_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     RETURN

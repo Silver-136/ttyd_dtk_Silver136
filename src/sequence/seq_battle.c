@@ -34,7 +34,7 @@
 #include "driver/mapdrv.h"
 #include "seq/seq_battle.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "data/mapdata.h"
 
 static void battle_init(void);
@@ -65,12 +65,12 @@ static inline BOOL loadTpl(const char* path) {
 void seq_battleInit(SequenceWork* work) {
     FieldBattleData* fbat;
     NpcEntry* npc;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MapData* map;
 #endif
 
     debug_battle_flag = gp->debugBattle;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     // the demo starts reading the battle map now
     fbatGetPointer();
     switch (pouchGetPtr()->rank) {
@@ -136,7 +136,7 @@ static const char bti04[7];
 
 // A non-NULL map name tells seq_gameOver to skip its iris fade (the battle has already
 // faded out); seq_game does not read it.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void seq_battleMain(SequenceWork* work) {
     FieldBattleData* fbat;
     BattleStageData* stage;
@@ -356,7 +356,7 @@ static void battle_init(void) {
     FieldBattleData* fbat;
     NpcEntry* npc;
     PouchData* pouch;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MapData* map;
     MapData* map2;
     BattleStageData* stage;
@@ -366,7 +366,7 @@ static void battle_init(void) {
 
     fbat = fbatGetPointer();
     npc = fbat->target;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     stage = npc->battleInfo.stageData;
     pouch = pouchGetPtr();
     if (debug_battle_flag == 0) {
@@ -418,7 +418,7 @@ static void battle_init(void) {
     npcReleaseFiledNpc();
     gp->inBattle = 1;
     evtmgrReInit();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (map && map->eventAddr) {
         evtEntry(map->eventAddr, 0, 0);
     }
@@ -479,7 +479,7 @@ static void battle_init(void) {
     info->ruleParam = npc->battleInfo.battleRule[1];
     info->ruleParam2 = npc->battleInfo.battleRule[2];
     BattleInit(info);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     return FALSE;
 #endif
 }
@@ -491,7 +491,7 @@ static void battle_init(void) {
  * and resumes the field BGM and ambience unless heading to game over (or, in later versions,
  * resumes the time-bomb music in the Great Tree).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void battle_exit(void) {
 #else
 void battle_exit(void) {
@@ -531,7 +531,7 @@ void battle_exit(void) {
         partyCtrlOn();
         marioGetPtr()->flags |= MARIO_FLAG_ACTIVE;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     psndClearFlag(PSND_FLAG_BATTLE_START);
 #else
     L_psndBGM_stop();
@@ -544,7 +544,7 @@ void battle_exit(void) {
     }
     PSMTXScale(mtx, 3.0f, 3.0f, 3.0f);
     PSMTXMultVec(mtx, &light->position, &light->position);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if ((evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_23_TIME_BOMB_ACTIVATED || evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_24_BOSS_BATTLE) && evtGetValue(NULL, GSW_STORY_PROGRESS) != STG8_END_AFTER_THE_BATTLE && seqGetNextSeq() != SEQ_GAME_OVER) {
 #else
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE) {
@@ -560,7 +560,7 @@ void battle_exit(void) {
  * gon_11, whose message file a debug battle loads when its menu has none, and the battle stage maps for
  * Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises).
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static const char gon11[] = "gon_11";
 #endif
 /**
@@ -571,6 +571,6 @@ static const char bti01[] = "bti_01";
 static const char bti02[] = "bti_02";
 static const char bti03[] = "bti_03";
 static const char bti04[] = "bti_04";
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static const char gon11[] = "gon_11";
 #endif

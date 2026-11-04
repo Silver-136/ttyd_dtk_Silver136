@@ -50,7 +50,7 @@ static NpcSetupInfo npcEnt[2];
 static TreeAccess tree_tbl[2];
 EvtWord evt_majin_key[5];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord gra_00_init_evt[];
 #else
 EvtWord gra_00_init_evt[74];
@@ -656,7 +656,7 @@ EVT_END()
  * and the ambush for the story range around the lost Superbomb.
  */
 EVT_BEGIN(gra_00_init_evt)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GSWF_GRA_00_ENTERED, 1)
 #endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))

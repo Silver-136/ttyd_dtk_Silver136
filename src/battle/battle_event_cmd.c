@@ -3735,7 +3735,7 @@ USER_FUNC(btlevtcmd_DispItemIcon) {
     if (isFirstCall) {
         event->userdata[0] = time;
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         itemFlagOn(event->userdatap[1], ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
         return EVT_RETURN_BLOCK;
@@ -3787,7 +3787,7 @@ USER_FUNC(btlevtcmd_CommandFlyItem) {
         }
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, pos.x, pos.y, pos.z);
         effItemGetEntry(10, pos.x, 12.0f + pos.y, pos.z - 5.0f);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         itemFlagOn(event->userdatap[1], ITEM_FLAG_LOST_BADGE_TO_SHOP);
 #endif
         if (kind == UNIT_MARIO) {
@@ -4449,7 +4449,7 @@ USER_FUNC(btlevtcmd_GetConfuseActEvent) {
     while (!evt) {
         evt = BattleSetConfuseAct(_battleWorkPointer, unit);
         i++;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (i > 10) {
 #else
         if (i > 20) {
@@ -5411,7 +5411,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     f32 h;
     const char* name;
     s32 eff;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     EffectEntry* entry;
 
     type = evtGetValue(event, args[0]);
@@ -7103,7 +7103,7 @@ USER_FUNC(btlevtcmd_InviteApInfoReport) {
  * layers, up 260 for the top layer) or back into place (nonzero) over 45 frames; blocks until done.
  * Used by Star Power special moves that need a clear stage.
  */
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -7118,7 +7118,7 @@ USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 USER_FUNC(btlevtcmd_SetCounterAcCallBack) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

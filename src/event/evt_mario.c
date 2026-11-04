@@ -32,7 +32,7 @@
 #include "mot/mot_plane.h"
 #include "eff/eff_kemuri.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void marioSetForceMove(f32 dir, s32 frames, f32 spd);
 #else
 void marioSetForceMove(s32 frames, f32 dir, f32 spd);
@@ -315,7 +315,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 party->position = mp->position;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 party->scale.x = mp->scale.x;
                 party->scale.y = mp->scale.y;
                 party->scale.z = mp->scale.z;
@@ -332,7 +332,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
                 party->position = mp->position;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 party->scale.x = mp->scale.x;
                 party->scale.y = mp->scale.y;
                 party->scale.z = mp->scale.z;
@@ -387,7 +387,7 @@ const char* a_mario_group[] = {
     "M_H_8", "M_H_9", "M_H_9A", "M_H_9B", "M_O_1", "M_O_2", "M_B_1", "M_B_2", "M_D_1", "M_D_2",
     "M_U_3", "M_D_6", "M_P_1", "M_P_2", "M_I_1", "M_I_2", "M_I_S", "M_X_1", "M_I_U", "M_A_1A",
     "M_A_1B", "M_U_2", "M_W_7", "M_C_1", "M_C_2", "M_Y_1", "M_Y_2", "M_Y_3", "M_A_2A", "M_A_2B",
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     "M_A_2C", "M_B_3", "M_B_4", "M_J_5A", "M_J_5B", "M_S_4", "M_W_6", "M_V_2", "M_I_Y", "M_I_3", NULL,
 #else
     "M_A_2C", "M_B_3", "M_B_4", "M_J_5A", "M_J_5B", "M_S_4", "M_W_6", "M_V_2", "M_I_Y", NULL,
@@ -606,7 +606,7 @@ USER_FUNC(evt_mario_get_dir) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern const f32 evt_mario_full_turn;
 extern const f32 evt_mario_half_turn;
 #endif
@@ -627,7 +627,7 @@ USER_FUNC(evt_mario_set_dir) {
         event->userdata[2] = 0;
         event->userdataf[1] = mp->displayDirection;
         if (dir > 270.0f) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             dir -= evt_mario_full_turn;
 #else
             dir -= 360.0f;
@@ -642,7 +642,7 @@ USER_FUNC(evt_mario_set_dir) {
     if (frames > 0) {
         target = revise360(270.0f - dir);
         if (target > 270.0f) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             target -= evt_mario_full_turn;
 #else
             target -= 360.0f;
@@ -706,7 +706,7 @@ USER_FUNC(evt_mario_set_dir_npc) {
     }
     camAngle = camGetPtr(CAMERA_3D)->viewYaw;
     angle = revise360(angleABf(mp->position.x, mp->position.z, npc->position.x, npc->position.z) - camAngle);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     mp->displayDirectionTarget = angle < evt_mario_half_turn ? evt_mario_half_turn : 0.0f;
 #else
     mp->displayDirectionTarget = angle < 180.0f ? 180.0f : 0.0f;
@@ -717,7 +717,7 @@ USER_FUNC(evt_mario_set_dir_npc) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_800e23e0, JP 0x800E23E0. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(evt_mario_set_dir_pos) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -732,7 +732,7 @@ USER_FUNC(evt_mario_set_dir_pos) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 const f32 evt_mario_full_turn = 360.0f;
 const f32 evt_mario_half_turn = 180.0f;
 #endif
@@ -784,7 +784,7 @@ USER_FUNC(evt_mario_set_pose) {
         return EVT_RETURN_DONE;
     }
     name = (const char*)evtGetValue(event, args[0]);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     if (strcmp(name, "M_I_2") == 0) {
         name = "M_I_3";
     }
@@ -800,7 +800,7 @@ USER_FUNC(evt_mario_set_pose) {
 USER_FUNC(evt_mario_normalize) {
     s32 ret = 0;
     MarioWork* mp = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BOOL off;
 
     if (isFirstCall) {
@@ -834,13 +834,13 @@ USER_FUNC(evt_mario_normalize) {
             marioCtrlOn();
             partyCtrlOn();
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         event->userdata[0] = 0;
 #endif
         if (mp->currMotionId != MARIO_MOTION_YOSHI && mp->currMotionId != MARIO_MOTION_ROLL && mp->currMotionId != MARIO_MOTION_VIVIAN &&
             !(mp->dispFlags & MARIO_DISP_FLAG_SLIT)) {
             marioChgMot(MARIO_MOTION_STAY);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (event->userdata[1]) {
                 marioCtrlOff();
                 partyCtrlOff();
@@ -947,7 +947,7 @@ USER_FUNC(evt_mario_normalize) {
             break;
     }
     if (ret == 2) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         mp->trigFlags &= ~MARIO_TRIG_FLAG_NORMALIZING;
 #endif
         if (event->userdata[1]) {
@@ -1003,7 +1003,7 @@ USER_FUNC(evt_mario_set_talk_motion) {
  */
 USER_FUNC(evt_mario_cancel_roll_motion) {
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         marioRollCancel();
 #else
         marioRollTryCancel();
@@ -1052,7 +1052,7 @@ USER_FUNC(evt_mario_mov_pos) {
         } else {
             spd = distABf(mp->position.x, mp->position.z, x, z) / event->userdata[0];
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         ((void (*)(s32, f32, f32))marioSetForceMove)(event->userdata[0], mp->directionView, spd); // FAKE: argument order of the retail private prototype, needed for register use
 #else
         marioSetForceMove(event->userdata[0], mp->directionView, spd);
@@ -1082,7 +1082,7 @@ USER_FUNC(evt_mario_mov_pos2) {
             spd *= 0.4f;
         }
         spd /= (f32)gp->framerate;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         marioSetForceMove(mp->directionView, 1.0f / spd + dist / spd, spd);
 #else
         marioSetForceMove(1.0f / spd + dist / spd, mp->directionView, spd);
@@ -1097,7 +1097,7 @@ USER_FUNC(evt_mario_mov_pos2) {
 }
 
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(evt_mario_party_door_halve_hitbox) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -1152,7 +1152,7 @@ USER_FUNC(evt_mario_party_door_move) {
             if (mp->position.y > party->position.y) {
                 party->position = mp->position;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
 #else
             party->trigFlags |= PARTY_TRIG_HALF_PUSH;
@@ -1170,7 +1170,7 @@ USER_FUNC(evt_mario_party_door_move) {
             if (mp->position.y > party->position.y) {
                 party->position = mp->position;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
 #else
             party->trigFlags |= PARTY_TRIG_HALF_PUSH;
@@ -1194,7 +1194,7 @@ USER_FUNC(evt_mario_party_door_move) {
             {
                 s32 n = (f32)gp->framerate * (dist / spd);
                 spd = spd / (f32)gp->framerate;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 marioSetForceMove(mp->directionView, n, spd);
 #else
                 marioSetForceMove(n, mp->directionView, spd);
@@ -1214,7 +1214,7 @@ USER_FUNC(evt_mario_party_door_move) {
             }
             event->userdata[1] = sysMsec2Frame(400);
             event->userdata[0] = 6;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 partyMoveBehindMario3(party, 0, revise360(270.0f - camGetPtr(CAMERA_3D)->viewYaw));
@@ -1233,7 +1233,7 @@ USER_FUNC(evt_mario_party_door_move) {
             }
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 partyMoveBehindMario3(party, 0, revise360(270.0f - camGetPtr(CAMERA_3D)->viewYaw));
 #else
                 partyMoveBehindMario3(party, 0,
@@ -1249,7 +1249,7 @@ USER_FUNC(evt_mario_party_door_move) {
             if (--event->userdata[1] > 0) {
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             party = partyGetPtr(marioGetPartyId());
             if (party) {
                 party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
@@ -1271,7 +1271,7 @@ USER_FUNC(evt_mario_party_door_move) {
             }
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
 #else
                 partyMoveBehindMario3(party, 0,
@@ -1326,7 +1326,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             if (mp->position.y > party->position.y) {
                 party->position = mp->position;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
 #else
             partyFollowCloseOn(party);
@@ -1343,7 +1343,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             if (mp->position.y > party->position.y) {
                 party->position = mp->position;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
 #else
             partyFollowCloseOn(party);
@@ -1366,7 +1366,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             {
                 s32 n = (f32)gp->framerate * (dist / spd);
                 spd = spd / (f32)gp->framerate;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 marioSetForceMove(mp->directionView, n, spd);
 #else
                 marioSetForceMove(n, mp->directionView, spd);
@@ -1384,13 +1384,13 @@ USER_FUNC(evt_mario_party_bero_move) {
             if (--event->userdata[1] > 0) {
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             event->userdata[1] = sysMsec2Frame(400);
             event->userdata[0] = 6;
 #endif
             party = partyGetPtr(marioGetPartyId());
             if (party) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 partyMoveBehindMario3(party, 0, revise360(mp->targetYaw + ((mp->displayDirectionTarget >= 90.0f && mp->displayDirectionTarget <= 270.0f) ? 200.0f : 160.0f)));
 #else
                 partyMoveBehindMario3(party, 0,
@@ -1404,7 +1404,7 @@ USER_FUNC(evt_mario_party_bero_move) {
             }
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 partyMoveBehindMario3(party, 0, revise360(mp->targetYaw + ((mp->displayDirectionTarget >= 90.0f && mp->displayDirectionTarget <= 270.0f) ? 200.0f : 160.0f)));
             }
 #else
@@ -1421,7 +1421,7 @@ USER_FUNC(evt_mario_party_bero_move) {
 #endif
             break;
         case 6:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             party = partyGetPtr(marioGetPartyId());
             if (party && (party->flags & PARTY_FLAG_IS_BEHIND_MARIO)) {
                 event->userdata[1] = 0;
@@ -1436,14 +1436,14 @@ USER_FUNC(evt_mario_party_bero_move) {
             }
             party = partyGetPtr(marioGetPartyId());
             if (party) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
 #else
                 partyFollowCloseOff(party);
 #endif
                 party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~PARTY_TRIG_DOOR_MOVE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 if (party->moveKind == 1) {
                     partySetDispDirToMario(party);
                     party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -1452,14 +1452,14 @@ USER_FUNC(evt_mario_party_bero_move) {
             }
             party = partyGetPtr(marioGetExtraPartyId());
             if (party) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
 #else
                 partyFollowCloseOff(party);
 #endif
                 party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~PARTY_TRIG_DOOR_MOVE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 if (party->moveKind == 1) {
                     partySetDispDirToMario(party);
                     party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -1616,7 +1616,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
     if (isFirstCall) {
         event->userdata[0] = 0;
         event->userdata[3] = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (mp->fallStartPos.y < mp->position.y) {
 #else
         if (mode == 3) {
@@ -1644,7 +1644,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
     switch (event->userdata[0]) {
         case 0:
             mp->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (marioChkSts(MARIO_STS_ROLL)) {
                 effKemuriEntry(0, mp->position.x, mp->position.y, mp->position.z, 0.0f);
             }
@@ -1674,7 +1674,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
             if (event->userdata[3] & 2) {
                 event->userdata[0] = 10;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             marioChgMot(MARIO_MOTION_JUMP_3);
 #endif
             event->userdata[2] = 0.5f * (f32)event->userdata[1] + 0.5f;
@@ -1721,7 +1721,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
     switch (event->userdata[0]) {
         case 10:
             if (mp->position.y < y2) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (!mode) {
 #else
                 if (!(mode & 1)) {
@@ -2431,7 +2431,7 @@ USER_FUNC(evt_mario_dump_item) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 HITOBJ(head, hitobjHead)
 
 HITOBJ(ride, hitobjStandOn)
@@ -2473,13 +2473,13 @@ USER_FUNC(evt_mario_paper_plane) {
     }
     if (!mode) {
         if (mp->currMotionId == MARIO_MOTION_STAY && mp->hitobjStandOn) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             mp->trigFlags &= ~MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
 #endif
             return EVT_RETURN_DONE;
         }
     } else if (marioGetPlaneStatus() == PLANE_STATUS_GLIDING) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         mp->trigFlags &= ~MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
 #endif
         return EVT_RETURN_DONE;

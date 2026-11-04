@@ -124,7 +124,7 @@ EvtWord elmos_a_kaku[13];
 EvtWord elmos_a_shuku[13];
 static ExtTexInfo ext_entry_data[21];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s16 elmos_animtbl[21];
 #else
 static s16 elmos_animtbl[22];
@@ -145,7 +145,7 @@ EvtWord anm_entotsu[33];
 EvtWord anm_neji[33];
 EvtWord anm_yure[];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_prologue[172];
 #else
 static EvtWord evt_prologue[182];
@@ -155,7 +155,7 @@ static EvtWord epilogue_npc_entry[25];
 EvtWord fune_move[136];
 static EvtWord epilogue_evt[97];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord muj_20_init_evt[];
 #else
 EvtWord muj_20_init_evt[362];
@@ -979,7 +979,7 @@ static ExtTexInfo ext_entry_data[] = {
 static s16 elmos_animtbl[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
     8, 9, 10, 11, 12, 13, 14, 15,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     16, 17, 18, 19, -1,
 #else
     16, 17, 18, 19, -1, 0,
@@ -1221,7 +1221,7 @@ EVT_BEGIN(onryo_event)
     CALL(evt_set_fune_anim_rate, FLOAT(0.69921875f))
     CALL(evt_set_nami_anim_rate, FLOAT(0.69921875f))
     WAIT_MS(1000)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_flag_onoff, 1, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_TALK_POSE)
 #endif
@@ -1361,7 +1361,7 @@ EVT_BEGIN(onryo_event)
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("stg5_sea_11"), 0, STRING("ガラの悪い水夫"))
     WAIT_WHILE(GF(0))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_flag_onoff, 0, STRING("ガラの悪い水夫"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_TALK_POSE)
 #endif
@@ -1955,7 +1955,7 @@ static USER_FUNC(fune_eff) {
  * writing the result to LW(7) to LW(9) and the added heading to LW(0).
  */
 // Descriptive name (not in the symbol maps); placeholder unk_muj_00004328, JP muj .text+0x4264. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(fune_curve_pos) {
     f32 x = evtGetFloat(event, GW(0));
     f32 y = evtGetFloat(event, GW(1));
@@ -1997,14 +1997,14 @@ EVT_BEGIN(anm_yure)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
 #else
             CALL(fune_curve_pos)
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), LW(7), LW(8), LW(9))
 #endif
             CALL(evt_mapobj_rotate, 1, STRING("S_fune_m"), 0, 180, LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_sfx_pos, GW(4), GW(0), GW(1), GW(2))
             CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), GW(0), GW(1), GW(2))
 #else
@@ -2020,14 +2020,14 @@ EVT_BEGIN(anm_yure)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
 #else
             CALL(fune_curve_pos)
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), LW(7), LW(8), LW(9))
 #endif
             CALL(evt_mapobj_rotate, 1, STRING("S_fune_m"), 0, 180, LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_sfx_pos, GW(4), GW(0), GW(1), GW(2))
             CALL(evt_mapobj_trans, 1, STRING("S_umi_l_siro_b"), GW(0), GW(1), GW(2))
 #else
@@ -2048,7 +2048,7 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
     GXTexObj startText, gradient;
     Mtx v17, v16;
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     TEXGetGXTexObjFromPalette(*wp->tpl->data, &startText, 13); // PAL: texture 13 of the TPL
 #else
     TEXGetGXTexObjFromPalette(*wp->tpl->data, &startText, VERSION_PICK(8, 15));
@@ -2116,7 +2116,7 @@ static void draw(CameraId camera, void* param) {
     CameraEntry* cam;
 #if VERSION >= VERSION_US
     // US: logo texture per language (indexed by gp->language)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     s32 logoTex[6] = {0x13, 0x13, 0x14, 0x15, 0x16, 0x17};
 #else
     s32 logoTex[6] = {0x15, 0x15, 0x16, 0x17, 0x18, 0x19};
@@ -2131,7 +2131,7 @@ static void draw(CameraId camera, void* param) {
     cam = camGetPtr(CAMERA_2D);
     *camGetCurPtr() = *cam;
     winTexInit(*(TEXPalette**)wp->tpl->data);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     winTexSet(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
     // the demo blinks PRESS START under the logo once the ship has arrived (GF(0))
     if (evtGetValue(NULL, GF(0))) {
@@ -2166,7 +2166,7 @@ static void draw(CameraId camera, void* param) {
  * After the press it plays SFX_PRESS_START1, sails the ship on out and fades to white into sys_01 ("prologue").
  */
 static EVT_BEGIN(evt_prologue)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_MS(4000)
 #else
     WAIT_MS(500)
@@ -2395,7 +2395,7 @@ EVT_BEGIN(muj_20_init_evt)
     END_IF
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("prologue"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_OPENING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
 #endif
@@ -2405,7 +2405,7 @@ EVT_BEGIN(muj_20_init_evt)
         CALL(evt_mario_set_pos, 0, -1000, 0)
         CALL(evt_party_set_pos, 0, 0, -1000, 0)
         CALL(evt_map_playanim, STRING("yoru_hiru"), MAP_ANIM_PLAY_AT_END, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mapobj_trans, 1, STRING("S_hai03_sun"), 0, -260, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_umi_l_siro_b"), MAP_OBJ_FLAG_HIDDEN)
 #endif
@@ -2437,7 +2437,7 @@ EVT_BEGIN(muj_20_init_evt)
 EVT_END()
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(logo) {
 #else
 USER_FUNC(logo) {
@@ -2451,7 +2451,7 @@ USER_FUNC(logo) {
         event->userdatap[0] = wp;
     }
     wp = event->userdatap[0];
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/mariost.tpl", getMarioStDvdRoot()) == 0) {
         return EVT_RETURN_BLOCK;
     }
@@ -2478,7 +2478,7 @@ USER_FUNC(logo) {
             }
             break;
         case 2:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_START))) {
 #else
             if (evtGetValue(event, GF(0)) && (keyGetButtonTrg(0) & (PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_START))) {

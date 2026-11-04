@@ -2,7 +2,7 @@
 
 #include "version.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
 #include "evt/evt_cmd.h"
@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include <stdlib.h>
 #include "icon_ids.h"
 #else
@@ -48,7 +48,7 @@
 #include "statuswindow.h"
 #include "win/win_main.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "driver/casedrv.h"
 #include "evt/evt_case.h"
 #include "data_tables.h"
@@ -58,7 +58,7 @@
 
 #include <dolphin/pad.h>
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "demo/DEMOPad.h"
 #endif
 
@@ -113,7 +113,7 @@ typedef struct UnitWinWork {
     u16 pad2;              // 0x2
     UnitWinSell* entries;  // 0x4
     s32* goods;            // 0x8
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     u16 itemFlags[6];      // 0xC
 #endif
     s32 goodsMax;          // 0x18
@@ -124,7 +124,7 @@ typedef struct UnitWinWork {
     s32 coin;              // 0x2C
     s32 coinDisp;          // 0x30
     f32 cursor;            // 0x34
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 scrollTop;         // 0x2C
 #else
     u8 pad38[4];           // 0x38
@@ -136,7 +136,7 @@ typedef struct UnitWinWork {
     s32 skipEntry;         // retail offset 0x4C; starts at 0, demos set it from the excluded-list entry argument
     s32 mode;              // 0x50, UnitWinMode
     u16 flags2;            // 0x54, UNITWIN_FREE_*
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     u8 pad4A[2];           // 0x4A
     s32 caseId[16];        // 0x4C, one case event per counter hit object
 #else
@@ -144,7 +144,7 @@ typedef struct UnitWinWork {
 #endif
     s32 count;             // 0x58
     s32 coinTick;          // 0x5C
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 winId[3];          // 0x60
     u8 pad6C[0xE0 - 0x6C]; // 0x6C
     s32 selected;          // 0xE0
@@ -158,7 +158,7 @@ static UnitWinWork* _wp;
 
 USER_FUNC(evt_unitwin_main_func);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_unitwin_select_func);
 #else
 USER_FUNC(evt_unitwin_select_func);
@@ -172,7 +172,7 @@ void unitwin_point_disp(WinMgrEntry* entry);
 void unitwin_name_disp(WinMgrEntry* entry);
 
 /** The three windows of the unit window: the name plate, the help text box and the points counter. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 WinMgrDesc unitwin_desc[3] = {
     {0, 0, 8, -150, 120, 300, 50, {0x2B, 0xA4, 0xFF, 0xFF}, NULL, unitwin_name_disp},
     {0, 0, 8, -240, -130, 500, 80, {0xF0, 0xF0, 0xF0, 0xFF}, unitwin_help_main, unitwin_help_disp},
@@ -205,7 +205,7 @@ EVT_BEGIN(select_evt)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_8017599c, JP 0x8017599C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void unitwin_name_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     const char* msg = msgSearch(itemDataTable[wp->goods[wp->goodsIdx]].name);
@@ -237,7 +237,7 @@ void unitwin_name_disp(WinMgrEntry* entry) {
 #endif
 
 // never called: the linker strips it, its "%s_%04d" string stays in this object's .rodata (name descriptive)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static void unitwin_fmt(char* buf, const char* name, s32 n) {
     sprintf(buf, "%s_%04d", name, n);
 }
@@ -245,7 +245,7 @@ static void unitwin_fmt(char* buf, const char* name, s32 n) {
 
 /** Help window update: runs the shared help-window logic. */
 // Descriptive name (not in the symbol maps); placeholder unk_8017597c, JP 0x8017597C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void unitwin_help_main(WinMgrEntry* entry) {
     winMgrHelpMain(entry);
 }
@@ -253,7 +253,7 @@ void unitwin_help_main(WinMgrEntry* entry) {
 
 /** Help window draw: shows the description of the item at the selected counter slot. */
 // Descriptive name (not in the symbol maps); placeholder unk_801758fc, JP 0x801758FC. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void unitwin_help_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     s32 idx = wp->goodsIdx * sizeof(s32); // FAKE: byte offset of the goods slot computed before winMgrAction (slwi ahead of the call, lwzx after), as in the target; goods[wp->goodsIdx] and an index local both scale after the call
@@ -271,7 +271,7 @@ void unitwin_help_disp(WinMgrEntry* entry) {
  * The label icon differs between Japanese (language 0) and other text.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_80175710, JP 0x80175710. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void unitwin_point_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
@@ -375,14 +375,14 @@ static const char* party_name_table_rtn(s32 i) {
  * Must run before the other unitwin commands.
  */
 USER_FUNC(evt_unitwin_alloc) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 useWinMgr = evtGetValue(event, event->args[0]);
 #endif
     UnitWinWork* wp = _mapAlloc(sizeof(UnitWinWork));
     memset(wp, 0, sizeof(UnitWinWork));
     wp->mode = UNITWIN_MODE_IDLE;
     _wp = wp;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (useWinMgr) {
         wp->flags |= UNITWIN_FLAG_WINMGR;
     } else {
@@ -392,7 +392,7 @@ USER_FUNC(evt_unitwin_alloc) {
     iconEntry2D("yubicursor_2", ICON_YUBI_CURSOR);
     iconFlagOn("yubicursor_2", ICON_FLAG_HIDDEN);
     iconFlagOn("yubicursor_2", ICON_FLAG_FLIP_X);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (!(wp->flags & UNITWIN_FLAG_WINMGR)) {
         wp->evt = evtEntry(main_evt, 0, 0);
         wp->evt->lwData[0] = (EvtWord)wp;
@@ -413,7 +413,7 @@ USER_FUNC(evt_unitwin_alloc) {
  * the demos' case events or retail window-manager windows, the cursor icon and the work.
  */
 USER_FUNC(evt_unitwin_free) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     UnitWinWork* wp = _wp;
     s32 i;
     char name[32];
@@ -436,7 +436,7 @@ USER_FUNC(evt_unitwin_free) {
         mapObjFlagOff(wp->entries[i].mapObj, MAP_OBJ_FLAG_DISABLED);
         sprintf(name, "uwn%d", i);
         iconDelete(name);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         entry = caseIdToPtr(wp->caseId[i]);
         if (evtCheckID(entry->evtId)) {
             evtDeleteID(entry->evtId);
@@ -468,7 +468,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
     UnitWinSell* tbl = (UnitWinSell*)evtGetValue(event, args[0]);
     s32* goods = (s32*)evtGetValue(event, args[1]);
     UnitWinWork* wp = _wp;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     EvtWord caseWork[16];
 #endif
     char name[32];
@@ -485,18 +485,18 @@ USER_FUNC(evt_unitwin_selltable_setup) {
             iconEntry(name, itemDataTable[wp->goods[i]].icon_id);
             iconSetPos(name, pos.x, pos.y + 6.0f, pos.z);
             iconFlagOn(name, ICON_FLAG_NO_MAP_BLEND);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         } else {
             wp->itemFlags[i] |= UNITWIN_ITEM_UNAVAILABLE;
 #endif
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         caseWork[0] = (EvtWord)wp;
         caseWork[1] = i;
         wp->caseId[i] = evtRunCaseEntry(0, 0, wp->entries[i].hitName, 0, select_evt, caseWork);
 #endif
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     wp->evt = evtEntryType(select_evt, 0, EVENT_START_IMMEDIATE, 0);
     wp->evt->lwData[0] = (EvtWord)wp;
     for (i = 0; i < 3; i++) {
@@ -511,7 +511,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
  * Demo counter selection callback: uses the hit case's slot index, starts its purchase script on A,
  * and waits for that script before restoring Mario's keys.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_unitwin_select_func) {
     UnitWinWork* wp = (UnitWinWork*)event->lwData[0];
     if (wp->mode == UNITWIN_MODE_IDLE) {
@@ -572,7 +572,7 @@ USER_FUNC(unitwincoin_wait) {
  * it is drawn only while the lottery reports a ticket.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8017524c, JP 0x8017524C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(unitwin_lottery_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp = _wp;
@@ -590,7 +590,7 @@ USER_FUNC(unitwin_lottery_disp_onoff) {
  * args[0] is the unit window work, args[1] nonzero marks the slot sold so its item disappears.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_801751f8, JP 0x801751F8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(unitwin_set_bought) {
     EvtWord* args = event->args;
     UnitWinWork* wp = (UnitWinWork*)evtGetValue(event, args[0]);
@@ -1092,7 +1092,7 @@ USER_FUNC(unitwin_window_select_func) {
             }
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (ng) {
         break;
     }
@@ -1262,7 +1262,7 @@ static inline const char* unitwin_party_name(s32 i) {
  * the partner lists (5-7) and the HP/FP/BP lists (8-10),
  * with the finger cursor and the help text of the highlighted row.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
 #else
 void evt_unitwin_disp_func(CameraId cameraId, void* param) {
@@ -1356,17 +1356,17 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
             wp->coinTick++;
             wp->coinTick %= 1200;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (abs(coin - wp->coin) == 1 || gp->retraceCount % 6 == 0) {
 #else
             if (!unitwin_coin_se_wait) {
 #endif
                 psndSFXOn("SFX_COUNT_COIN1");
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 unitwin_coin_se_wait = 7;
 #endif
             }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         }
         if (unitwin_coin_se_wait > 0) {
             unitwin_coin_se_wait--;
@@ -1396,7 +1396,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             }
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if ((wp->flags & UNITWIN_FLAG_LOTTERY) && (lotteryGetPtr()->flags & LOTTERY_FLAG_TICKET)) {
         Mtx mtx;
         char buf[32];

@@ -34,7 +34,7 @@ static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static BattleWeapon weapon_iron_sinemon_attack;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table[17];
 #else
 static PoseTableEntry pose_table[18];
@@ -47,7 +47,7 @@ static EvtWord init_event_sub[47];
 static EvtWord dmg_avoid_counter_thorn_head_event[76];
 static EvtWord damage_event[102];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord phase_event[164];
 #else
 static EvtWord phase_event[188];
@@ -220,7 +220,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ATTACK, "SIN_A_1a"},
     {POSE_TYPE_WALK, "SIN_W_1"},
     {POSE_TYPE_RUN, "SIN_R_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_TALK, "SIN_T_1"},
 #endif
     {POSE_TYPE_DANGER, "SIN_I_1"},
@@ -348,23 +348,23 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     DEBUG_PUT_MSG(STRING("ぺぺぺまん２"))
 #endif
     IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     DEBUG_PUT_MSG(STRING("ぺぺぺまん３"))
 #endif
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         DEBUG_PUT_MSG(STRING("ぺぺぺまん４"))
 #endif
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             DEBUG_PUT_MSG(STRING("ぺぺぺまん５"))
 #endif
             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_PARTNER)
@@ -385,7 +385,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL(yoshi_exist, LW(0))
             IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_268"), 0, UNIT_ID_SELF)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OTHER_ID, LW(0))
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_269"), 0, LW(0))

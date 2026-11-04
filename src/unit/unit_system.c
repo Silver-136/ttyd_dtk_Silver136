@@ -27,7 +27,7 @@ static BattleUnitKindPart parts[] = {
  * It has no HP gauge, locked HP and is ignored when checking for a cleared battle;
  * it exists to run battle-wide scripts.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 #endif
 
@@ -104,7 +104,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /** Status chances for the system unit: all 0, so no status can ever land on it. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop

@@ -16,7 +16,7 @@ typedef struct seq_e3_work {
     f32 dstY;          // 0x1C
     OSAlarm alarm;     // 0x20
     OSTime initTime;   // 0x48
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 poseIds[4];    // 0x50, the four characters on the title screen
     struct EventEntry* animEvt; // 0x60, event that animates them
 #else

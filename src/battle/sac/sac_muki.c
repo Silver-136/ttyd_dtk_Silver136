@@ -101,7 +101,7 @@ EvtWord marioAttackEvent_Muki[];
  * Power Lift's weapon template (3 SP, targets Mario and the partner): set_weapon copies it and adds a sure
  * 3-turn Attack or Defense boost of the points earned in the minigame.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(nice_event_pow)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -100, 175, 0)
     RETURN
@@ -146,7 +146,7 @@ static BattleWeapon weapon = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(nice_event_pow)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -100, 175, 0)
     RETURN
@@ -353,7 +353,7 @@ static inline void sacMukiAudienceCall(s32 num) {
  * a blue arrow to the defense gauge (0.25 in JP and the demos, 0.2 in US and PAL, up to level 9),
  * a poison mushroom makes Mario dizzy and the crowd boo.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void main_cursor(void) {
 #else
 void main_cursor(void) {
@@ -391,7 +391,7 @@ void main_cursor(void) {
             ob = w->o3d[w->idx].link;
             if (ob) {
                 ob->kind = 5;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
 #else
                 effHitEntry(0, 5, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
@@ -1097,7 +1097,7 @@ EVT_BEGIN(marioAttackEvent_Muki)
         CALL(evt_btl_camera_set_zoomSpeedLv, 0, 2)
         WAIT_MS(1000)
         CALL(sac_wao)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         BEGIN_INLINE_EVENT_GET_ID(LW(12))
 #else
         BEGIN_INLINE_EVENT
@@ -1107,7 +1107,7 @@ EVT_BEGIN(marioAttackEvent_Muki)
             CALL(sac_enemy_slide_return)
             CALL(end_muki)
         END_INLINE_EVENT
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         SET_VALUE(LW(13), 0)
         IF_INT_NOT_EQUAL(LW(1), 0)
             SET_VALUE(LW(13), 1)
@@ -1124,7 +1124,7 @@ EVT_BEGIN(marioAttackEvent_Muki)
             END_IF
         END_INLINE_EVENT
         IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             SET_VALUE(LW(13), 1)
 #endif
             CALL(set_weapon, 0, LW(0), LW(9))
@@ -1135,7 +1135,7 @@ EVT_BEGIN(marioAttackEvent_Muki)
             RETURN
         END_IF
     END_IF
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     IF_INT_EQUAL(LW(13), 0)
         DELETE_EVENT(LW(12))
 #endif
@@ -1144,7 +1144,7 @@ EVT_BEGIN(marioAttackEvent_Muki)
     CALL(end_muki)
     WAIT_MS(1000)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     ELSE
     END_IF
 #endif

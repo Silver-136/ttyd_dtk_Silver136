@@ -34,12 +34,12 @@
 #include "assets/_mariost_icon_tlut.inc"
 #include "assets/_mariost_banner_tex.inc"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "../src/manager/cardmgr_demo.inc"
 #else
 const char cardFileName[] = "mariost_save_file";
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 const char card_title_jp[0x18] = "ペーパーマリオＲＰＧ";
 const char card_date_jp[0x20] = "%2d月%2d日のセーブデータです";
 const char cardGameTitle[0xC] = "Paper Mario";
@@ -360,7 +360,7 @@ void cardCopy2Main(s32 slot) {
     s32 savedLastSlot;
 #endif
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     s32 framerate;
 #endif
     save = &wp->data->saves[slot];
@@ -369,7 +369,7 @@ void cardCopy2Main(s32 slot) {
     progressive = (u32)(gp->flags & GW_FLAG_PROGRESSIVE);
 #if VERSION >= VERSION_US
     language = gp->language;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     framerate = gp->framerate;
 #endif
 #endif
@@ -405,7 +405,7 @@ void cardCopy2Main(s32 slot) {
     }
 #if VERSION >= VERSION_US
     gp->language = language;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     // PAL: loading a save keeps the current 50/60 Hz frame rate
     gp->framerate = framerate;
 #endif
@@ -1169,7 +1169,7 @@ static BOOL dataCheck(void) {
     }
 }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 /** Byte sum of the save file header (PAL: an inline; JP and US spell the loop out in make_header). */
 static inline u32 header_sum(u8* data, s32 size) {
     s32 i;
@@ -1186,7 +1186,7 @@ static inline u32 header_sum(u8* data, s32 size) {
 /** PAL: not inlined; the comment and its date order follow gp->language */
 static void make_header(void) {
     CardMetadata* metadata;
-#if VERSION != VERSION_EU
+#if VERSION < VERSION_DEMO_EU
     s32 i;
     u8* temp;
     u32 checksum;
@@ -1195,7 +1195,7 @@ static void make_header(void) {
 
     metadata = &cardGetFilePtr()->metadata;
     memset(metadata, 0, sizeof(metadata->data));
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     OSTicksToCalendarTime(OSGetTime(), &td);
     switch (gp->language) {
         case 0:
@@ -1235,7 +1235,7 @@ static void make_header(void) {
     metadata->data.rumbleEnabled = (gp->rumbleEnabled != 0);
     metadata->data.soundMode = (u16)gp->soundMode;
     metadata->data.lastSlot = (u16)gp->lastSlot;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     metadata->checksum1 = 0;
     metadata->checksum2 = ~0u;
     metadata->checksum1 = header_sum((u8*)&metadata->data, sizeof(metadata->data));

@@ -18,7 +18,7 @@
 
 static BeroEntry bero_entry_data[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord korutesu_event[71];
 #else
 static EvtWord korutesu_event[74];
@@ -69,12 +69,12 @@ static BeroEntry bero_entry_data[] = {
  */
 static EVT_BEGIN(korutesu_event)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_mario_normalize)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_seq_wait, SEQ_GAME)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

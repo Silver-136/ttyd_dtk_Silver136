@@ -138,7 +138,7 @@ static const LangTbl lang_tbl = {{
  * they run psndMapChange right after the unload and do not set the respawn point.
  */
 void seq_mapChangeMain(SequenceWork* work) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BOOL newarea = strcmp(_next_area, gp->currentAreaName) ? TRUE : FALSE;
     const char* area_name;
     EvtWord* evtCode;
@@ -166,7 +166,7 @@ void seq_mapChangeMain(SequenceWork* work) {
         gp->mapFadeOutDuration = 300;
         gp->areaFadeOutType = FADE_OUT_BLACK;
         gp->areaFadeOutDuration = 300;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         psndSFXAllOff();
 #endif
         if (!newarea) {
@@ -174,7 +174,7 @@ void seq_mapChangeMain(SequenceWork* work) {
         } else {
             gp->didAreaChange = TRUE;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         area_name = getAreaName();
         fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
         mapPreLoad(_next_map);
@@ -187,7 +187,7 @@ void seq_mapChangeMain(SequenceWork* work) {
         work->state++;
         break;
     case 1:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (fadeIsFinish()) {
             if (gp->relocationBase) {
                 ((void (*)(void))((OSModuleHeader*)gp->relocationBase)->epilog)();
@@ -225,7 +225,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             seqSetSeq(SEQ_TITLE, NULL, NULL);
         } else {
             area_name = getAreaName();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             fres = (FileEntry*)fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
 #else
             fres = fileAsyncf(FILE_TYPE_RAW, 0, mc_rel_fmt, getMarioStDvdRoot(), area_name);
@@ -283,7 +283,7 @@ void seq_mapChangeMain(SequenceWork* work) {
                 psndClearFlag(PSND_FLAG_BGM_WAIT_1);
             }
             setupDataBase(_next_area, _next_map);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             psndMapChange();
 #endif
             evtCode = mapDataPtr(_next_map)->eventAddr;
@@ -323,7 +323,7 @@ void seq_mapChangeMain(SequenceWork* work) {
         MarioWork* mario;
         PartyEntry* party;
         PartyEntry* extraParty;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (strncmp(_next_map, "dmo", 3) && strncmp(_next_map, "dig", 3) && strncmp(_next_map, "sys", 3)) {
             {
                 LangTbl lang = lang_tbl;
@@ -372,7 +372,7 @@ void seq_mapChangeMain(SequenceWork* work) {
                     extraParty->position.x += -30.0f * (f32)cos(camGetPtr(CAMERA_3D)->viewYaw);
                     extraParty->position.z += 30.0f * (f32)sin(camGetPtr(CAMERA_3D)->viewYaw);
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (!strcmp(gp->currentMapName, "dou_05") && party) {
                     party->position = mario->position;
                     party->position.x -= 30.0f;
@@ -495,7 +495,7 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
         msgLoad(mapFile, 0);
     }
     setupDataLoad(map->mapName);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     sprintf(mapFile, "./bg/%s.tpl", newMapName);
 #else
     sprintf(mapFile, "./b/%s.tpl", newMapName);
@@ -577,7 +577,7 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static const char mc_tou2[] = "tou2";
 #endif
 static const char mc_tou_03[] = "tou_03";
@@ -588,7 +588,7 @@ static const char mc_rel_fmt[] = "%s/rel/%s.rel";
  * the area REL path, and the test (tst) and Pit of 100 Trials (jon) areas, whose REL gets its own buffer.
  */
 static const char mc_tou[] = "tou";
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static const char mc_tou2[] = "tou2";
 #endif
 static const char mc_tst[] = "tst";

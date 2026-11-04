@@ -64,7 +64,7 @@ USER_FUNC(evt_pouch_remove_item) {
  * and re-clamps stats; args[2] gets 0 on success or -1 if that slot holds something else.
  */
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Retail only: removes item args[0] from slot args[1] of the held list (the slot the shop's sell menu picked)
  * and re-clamps stats; args[2] gets 0 on success or -1 if that slot holds something else.
@@ -104,7 +104,7 @@ USER_FUNC(evt_pouch_add_keepitem) {
  */
 USER_FUNC(evt_pouch_remove_keepitem) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (pouchRemoveKeepItem(evtGetValue(event, args[0]))) {
         evtSetValue(event, args[1], 0);
 #else
@@ -114,7 +114,7 @@ USER_FUNC(evt_pouch_remove_keepitem) {
         evtSetValue(event, args[2], 0);
 #endif
     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         evtSetValue(event, args[1], -1);
 #else
         evtSetValue(event, args[2], -1);
@@ -130,7 +130,7 @@ USER_FUNC(evt_pouch_check_item) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 GETTER(evt_pouch_get_hp, pouchGetHP)
 SETTER(evt_pouch_set_hp, pouchSetHP)
 #endif

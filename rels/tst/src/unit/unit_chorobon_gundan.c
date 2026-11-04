@@ -69,7 +69,7 @@ static BattleUnitKindPart parts[1];
 BattleWeapon weapon_chorobon_gundan_attack;
 static EvtWord init_event[26];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord damage_event[80];
 #else
 static EvtWord damage_event[59];
@@ -156,7 +156,7 @@ BattleUnitKind unit_chorobon_gundan = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     kUnitLeader | kUnitNoSpin | kUnitNoHpGauge,
 #else
     kUnitLeader | kUnitNoSpin,
@@ -323,7 +323,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_CHOROBON_GUNDAN_FEW_LEFT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_btl_camera_set_mode, 0, 0)

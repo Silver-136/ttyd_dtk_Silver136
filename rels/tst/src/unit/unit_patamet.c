@@ -40,7 +40,7 @@ static EvtWord wait_event_pata[6];
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_ceil[18];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table_turn[15];
 #else
 static PoseTableEntry pose_table_turn[17];
@@ -58,7 +58,7 @@ static StatusVulnerability regist;
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[12];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord init_event2[142];
 #else
 static EvtWord init_event2[148];
@@ -71,7 +71,7 @@ static EvtWord attack_event[546];
 static EvtWord wait_event[6];
 static EvtWord damage_event_ceil[49];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord counter_damage_event_ceil[70];
 static EvtWord ceil_fall_ready_event[152];
 static EvtWord attack_event_ceil[461];
@@ -93,13 +93,13 @@ BattleUnitKind unit_patamet = {
     1, // perilHP
     20, // level
     0, // bonusExp
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     2,
 #else
     3, // bonusCoin
 #endif
     70, // bonusCoinRate
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     1,
 #else
     0, // baseCoin
@@ -108,7 +108,7 @@ BattleUnitKind unit_patamet = {
     9999, // pbSoftCap
     28, // width
     30, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     5,
     30,
     0.0f,
@@ -126,7 +126,7 @@ BattleUnitKind unit_patamet = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     14.0f,
     0.0f,
@@ -195,7 +195,7 @@ static BattleWeapon weapon_patamet_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
 #else
     COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
@@ -221,7 +221,7 @@ static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 /** Elemental reactions of the Parabuzzy: is immune to fire and explosion attacks. */
 static BattleUnitDefenseAttr defence_attr_pata = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_pata = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 95, 100, 75, 100, 100, 95};
 #else
 static StatusVulnerability regist_pata = {
@@ -569,7 +569,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MET_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "MET_A_1"},
     {POSE_TYPE_DAMAGE, "MET_D_3"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_ATTACK, "MET_A_1"},
     {POSE_TYPE_WALK, "MET_W_1"},
 #endif
@@ -633,7 +633,7 @@ static BattleWeapon weapon_met_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_ALL,
 #else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
@@ -674,7 +674,7 @@ static BattleWeapon weapon_met_ceil_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_ALL,
 #else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
@@ -709,7 +709,7 @@ static BattleUnitDefense defence_turn = {0};
  */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {60, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
 #else
 static StatusVulnerability regist = {
@@ -801,7 +801,7 @@ static EVT_BEGIN(init_event2)
         CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, PTR(ceil_fall_ready_event))
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -50, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, -50, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, -15, 0)
 #endif
     END_IF
@@ -1099,7 +1099,7 @@ static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1132,7 +1132,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
     CALL_CHILD(init_event2)
@@ -1267,13 +1267,13 @@ static EVT_BEGIN(attack_event_ceil)
         ADD_FLOAT(LW(13), FLOAT(10.0f))
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
 #endif
 
     // It leaves the ceiling state: its pose table, data table and hit offsets switch back to the floor
     // versions.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
 #endif
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
@@ -1284,7 +1284,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, 0)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)

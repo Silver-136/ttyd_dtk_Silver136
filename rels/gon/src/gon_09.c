@@ -33,7 +33,7 @@ static EvtWord init_0[37];
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord main_0[489];
 #else
 static EvtWord main_0[491];
@@ -154,7 +154,7 @@ EVT_END()
  * it reverses and the switch is cancelled.
  */
 static EVT_BEGIN(main_0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif
 

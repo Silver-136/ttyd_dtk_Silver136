@@ -34,7 +34,7 @@ static inline void recoveryQuad(f32 l, f32 r, f32 t, f32 b, f32 u) {
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
@@ -160,7 +160,7 @@ MayaHermitKey recovery_effHermit_0[] = {
 };
 
 /** Twelve pastel colours the recovery sparkles cycle through, one step per frame. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
@@ -246,7 +246,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     work->timer = 0;
     work->tick = gp->retraceCount;
     work->alpha = 255;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     work->baseY = -30.0f;
 #endif
     {
@@ -337,7 +337,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
 }
 
 /** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effRecoveryMain(EffectEntry* effect) {
 #else
 void effRecoveryMain(EffectEntry* effect) {
@@ -352,7 +352,7 @@ void effRecoveryMain(EffectEntry* effect) {
     s32 type = work->type;
     u32 n = 0;
     f32 x, y, z;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     f32 baseY = work->baseY;
 #endif
     f32 a, d;
@@ -435,7 +435,7 @@ void effRecoveryMain(EffectEntry* effect) {
                 if (p->timer < 16) {
                     p->timer++;
                     p->position.x = intplGetValue(EASING_QUADRATIC_IN, p->position.x, 0.0f, p->timer, 16);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, -30.0f, p->timer, 16);
 #else
                     p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, baseY, p->timer, 16);
@@ -456,7 +456,7 @@ void effRecoveryMain(EffectEntry* effect) {
                 work = effect->userdata;
                 if (type != 7 && type != 8) {
                     Vec sfxPos;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     s32 count = amount * 10;
                     if (count > 100) {
                         count = 100;
@@ -673,7 +673,7 @@ void effRecoveryDisp(CameraId cameraId, void* param) {
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
     for (i = 1; i < effect->count; i++, p++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {
             u32 k = (i + gp->retraceCount) % 12;
             color = (GXColor){ color_rotation_data[k * 3], color_rotation_data[k * 3 + 1], color_rotation_data[k * 3 + 2], p->alpha };
@@ -897,7 +897,7 @@ void effRecoveryDisp4(CameraId cameraId, void* param) {
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, alpha * work->alpha / 255 });
             } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 {
                     u32 k = (i + gp->retraceCount) % 12;
                     color = (GXColor){ color_rotation_data[k * 3], color_rotation_data[k * 3 + 1], color_rotation_data[k * 3 + 2], alpha * work->alpha / 255 };

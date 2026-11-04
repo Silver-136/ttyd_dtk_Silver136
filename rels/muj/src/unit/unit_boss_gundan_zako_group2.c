@@ -695,7 +695,7 @@ void zakogun_ext_main2(void) {
                 BtlUnit_GetPos(BattleGetUnitPtr(wp, work->targetId), &x, &y, &z);
                 zako->vel.x = rand() / 32767.0f - 0.5f;
                 zako->vel.y = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 zako->vel.z = 0.2f;
 #else
                 zako->vel.z = 1.5f;

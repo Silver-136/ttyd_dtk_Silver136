@@ -41,7 +41,7 @@ static EvtWord wait_event_pata[6];
 static PoseTableEntry pose_table[17];
 static PoseTableEntry pose_table_ceil[17];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table_turn[14];
 #else
 static PoseTableEntry pose_table_turn[16];
@@ -188,7 +188,7 @@ static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 /** Elemental reactions of the Spiky Parabuzzy: is immune to fire and explosion attacks. */
 static BattleUnitDefenseAttr defence_attr_pata = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_pata = {75, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 95, 100, 75, 100, 100, 95};
 #else
 static StatusVulnerability regist_pata = {
@@ -558,7 +558,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TMT_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "TMT_A_1"},
     {POSE_TYPE_DAMAGE, "TMT_S_3"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_WALK, "TMT_W_1"},
     {POSE_TYPE_RUN, "TMT_R_1"},
 #endif
@@ -689,7 +689,7 @@ static BattleUnitDefense defence_turn = {0};
  */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

@@ -21,7 +21,7 @@
 #endif
 
 //.sdata
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 f32 offset_tbl[] = {
 #else
 static f32 offset_tbl[] = {
@@ -29,7 +29,7 @@ static f32 offset_tbl[] = {
 
     400000.0f, 400000.0f, 600000.0f, 100000.0f, 100000.0f,
     300000.0f, 900000.0f, 1100000.0f, 1000000.0f, 500000.0f,
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     700000.0f // render mode 10
 #endif
 };
@@ -76,7 +76,7 @@ void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback,
     switch (renderMode) {
         case DISP_MODE_XLU:
         case DISP_MODE_XLU_BEFORE_OPAQUE:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         case DISP_MODE_XLU_BEFORE:
         case DISP_MODE_XLU_AFTER:
 #endif
@@ -163,7 +163,7 @@ void dispDraw(CameraId camId) {
                     break;
                 case DISP_MODE_XLU:
                 case DISP_MODE_XLU_BEFORE_OPAQUE:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 case DISP_MODE_XLU_BEFORE:
                 case DISP_MODE_XLU_AFTER:
 #endif
@@ -208,7 +208,7 @@ DispEntry* dispGetCurWork(void) {
 
 // Padding object: 28 zero bytes the retail .sdata holds after offset_tbl; no source form for them is known
 // (layout debt, docs/CLEANUP_BACKLOG.md)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #pragma force_active on
 u32 gap_07_8040F344_sdata[7] = {0, 0, 0, 0, 0, 0, 0};
 #pragma force_active reset

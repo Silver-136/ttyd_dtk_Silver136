@@ -27,7 +27,7 @@ void hei_test_water_tev(MapTevCallbackInfo* info);
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_chorobon[136];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord hei_12_init_evt[];
 #else
 EvtWord hei_12_init_evt[97];
@@ -130,13 +130,13 @@ EVT_BEGIN(hei_12_init_evt)
         CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     ELSE
         CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_npc_check, STRING("チョロボン"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_npc_set_battle_info, STRING("チョロボン"), 23)
 #endif
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
 #else
     END_IF

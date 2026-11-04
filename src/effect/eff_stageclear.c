@@ -38,13 +38,13 @@ void effStageClearMain(EffectEntry* effect);
 void effStageClearDisp(CameraId cameraId, void* payload);
 
 #if VERSION < VERSION_US
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
 s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
 #endif
 static s32 tex_us[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA0, 0x9E, 0xA3, 0xA0, 0xA4, 0xA5};
 s32 tex_shadow_us[] = {0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAA, 0xA8, 0xAD, 0xAA, 0xAE, 0xAF};
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32* texid_tbl[] = {tex_jp, tex_shadow_jp, tex_us, tex_shadow_us};
 s32 shake_dt[] = {2, 6, 2, 0, -1};
 s32 shake_dt2[] = {12, 36, 12, 0, -1};
@@ -99,12 +99,12 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 #else
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
 s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
 #endif
 /** Banner letters, shadows and letter count for each language. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static s32* texid_tbl[] = {tex_jp, tex_shadow_jp, tex_us, tex_shadow_us};
 #endif
 /** Rainbow (niji) texture laid over the banner letters, Japanese then English. */
@@ -112,12 +112,12 @@ static u32 niji_tbl[] = {0xAC, 0xB0};
 #endif
 
 /** Shake pattern handed to an ordinary letter's camera-shake event in LW 0; evt_shake does not read it. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 shake_dt[] = {2, 6, 2, 0, -1};
 #endif
 
 /** Stronger shake pattern handed to the last letter's shake event; also unread. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 shake_dt2[] = {12, 36, 12, 0, -1};
 #endif
 

@@ -233,7 +233,7 @@ static inline f32 partyNrmSet(PartyEntry* party, Vec n) {
     return partyNrmTo(&n);
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static inline HitEntry* partyHitCheckGnd(PartyEntry* party, Vec* pos, Vec* dir, f32 dist, f32* outY, Vec* outNrm) {
     HitCheckQuery query;
     Vec d = *dir;
@@ -295,7 +295,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     party->groundSlope = 0.0f;
     range = __fabsf(range);
     range += 0.1f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     d = 0.75f * partyGetHeight(party);
 #else
     if (marioGetPtr()->currMotionId == MARIO_MOTION_YOSHI) {
@@ -313,7 +313,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
     }
     rad = 3.1415927f * rad / 180.0f;
     nsz = (f32)sin(rad);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     sx = 0.5f * ((party->width - 0.05f) * nsz);
     nsz = (f32)cos(rad);
     sz = 0.5f * ((party->width - 0.05f) * -nsz);
@@ -331,7 +331,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
         Vec d0 = {0.0f, -1.0f, 0.0f};
         dir = d0;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     px = party->position.x;
     pz = party->position.z;
 #else
@@ -360,7 +360,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
         pos.x = px + ox;
         pos.y = probeY;
         pos.z = pz + oz;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         hit = partyHitCheckGnd(party, &pos, &dir, len, &gy, &outNrm);
 #else
         dist = len;
@@ -377,7 +377,7 @@ HitEntry* partySearchGround(PartyEntry* party, f32 range, f32 depth) {
             if (gy < baseY && __fabsf(gy - baseY) >= 2.0f) {
                 if (__fabsf(gy - baseY) > __fabsf(depth)) {
                     party->dropDepth = __fabsf(baseY - gy);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 } else {
                     party->groundY = gy;
                     party->dropDepth = 0.0f;
@@ -518,7 +518,7 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
         party->groundRot = zero;
     }
     party->groundSlope = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     h = 0.5f * partyGetHeight(party);
 #else
     h = partyGetHeight(party);
@@ -577,7 +577,7 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
  * so a partner pushing into a wall slides along it.
  */
 static inline void partyWallSlide(Vec* out, Vec n, f32 d, f32 sn, f32 cs) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     // FAKE: unused zero Vec local; without it the object changes
     Vec unused = {0.0f, 0.0f, 0.0f};
 #endif
@@ -593,7 +593,7 @@ static inline void partyWallSlide(Vec* out, Vec n, f32 d, f32 sn, f32 cs) {
  * or 1 when airborne or yoshiGetStatus() is 2; an extra 1-unit ray in one corner of gor_02):
  * slides *pos along the nearest wall, or moves it by dist; it stays put when both diagonals are blocked.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     Vec qpos;
     Vec qdir;
@@ -737,7 +737,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /** Demo only: partner-filtered ray that returns the hit object, the rounded hit distance in *dist and the normal. */
 static inline HitEntry* partyHitCheckDistNrm(PartyEntry* party, Vec* pos, Vec* dir, Vec* outNrm, f32* dist) {
@@ -888,7 +888,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         dir.z = cs;
         hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
         if (hit) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             party->frontWallDist = d;
 #endif
             partyWallSlide(pos, nrm, dist, sn, cs);
@@ -908,7 +908,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         hit = partyHitCheckInl(party, &p, &dir, &outPos, &nrm, &d);
         if (hit) {
             if (partyNrmTo(&nrm) >= 45.0f) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 party->frontWallDist = d;
 #endif
                 partyWallSlide(pos, nrm, dist, sn, cs);
@@ -916,7 +916,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
             }
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     party->frontWallDist = -1.0f;
 #endif
     pos->x += dist * sn;

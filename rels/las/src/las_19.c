@@ -36,7 +36,7 @@ static EvtWord switch1_evt[13];
 static EvtWord switch2_evt[13];
 static EvtWord cloud_evt[5];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_19_init_evt[];
 #else
 EvtWord las_19_init_evt[205];
@@ -376,7 +376,7 @@ EVT_BEGIN(las_19_init_evt)
         END_IF
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

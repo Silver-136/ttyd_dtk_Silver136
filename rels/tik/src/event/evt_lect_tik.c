@@ -15,7 +15,7 @@
 #include "mot/mot_roll.h"
 #include "driver/npcdrv.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "evt/evt_window.h"
 #endif
 
@@ -99,7 +99,7 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord plane_majin_lecture_init[73];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord plane_majin_lecture[];
 #else
 EvtWord plane_majin_lecture[715];
@@ -706,12 +706,12 @@ EVT_BEGIN(plane_majin_lecture)
                 WAIT_FRAMES(1)
             END_LOOP
             LOOP(0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(x_flag_get, 1, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), 3)
 #endif
                     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), 0, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(x_flag_get, 1, LW(0))
 #else
                 END_IF
@@ -748,7 +748,7 @@ EVT_BEGIN(plane_majin_lecture)
                 END_IF
             END_LOOP
         END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_cam_letter_box_disable, 1)
         CALL(mainwindow_opendisable)
         CALL(evt_mario_trigflag_onoff, 1, -2147483648)
@@ -796,7 +796,7 @@ EVT_BEGIN(plane_majin_lecture)
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(x_flag_set, 1, 3)
             WAIT_FRAMES(1)
             CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
@@ -829,7 +829,7 @@ EVT_BEGIN(plane_majin_lecture)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(lecture_button_flag_on_off, 0, 2, 0)
         WAIT_MS(300)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(dai_moveti_get, LW(0), LW(1), LW(2))
         ADD_FLOAT(LW(0), FLOAT(700.0f))
         SUBTRACT_FLOAT(LW(1), FLOAT(260.0f))
@@ -840,7 +840,7 @@ EVT_BEGIN(plane_majin_lecture)
         CALL(evt_msg_print, 0, STRING("mac_majin_16"), 0, STRING("ペラ魔人"))
 #endif
         CALL(evt_msg_select, 0, STRING("mac_majin_17"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         IF_INT_EQUAL(LW(0), 0)
             CALL(x_flag_set, 1, 2)
             CALL(x_flag_set, 0, 2)
@@ -851,7 +851,7 @@ EVT_BEGIN(plane_majin_lecture)
 #endif
         LOOP(0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             IF_INT_LESS_OR_EQUAL(LW(1), -900)
 #else
             IF_INT_GREATER_OR_EQUAL(LW(1), -550)
@@ -860,7 +860,7 @@ EVT_BEGIN(plane_majin_lecture)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_mario_cont_onoff, 0)
         CALL(evt_mario_set_pos, -300, -600, 0)
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), EASING_LINEAR, 11)
@@ -900,14 +900,14 @@ EVT_BEGIN(plane_majin_lecture)
 
     // The demon hints at how to change back; Mario drops out of plane mode and the demon leaves.
     CALL(evt_msg_print_add, 0, STRING("mac_majin_18_1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(x_flag_set, 1, 2)
     WAIT_FRAMES(2)
     CALL(evt_cam3d_evt_set, FLOAT(-300.0f), FLOAT(-460.0f), FLOAT(457.0f), FLOAT(-300.0f), FLOAT(-558.0f), FLOAT(-101.799805f), 1200, EASING_LINEAR)
 #endif
     CALL(x_flag_set, 0, 2)
     CALL(evt_mario_paper_plane, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(1), -850)
@@ -924,14 +924,14 @@ EVT_BEGIN(plane_majin_lecture)
     CALL(evt_npc_set_camid, STRING("ペラ魔人"), CAMERA_3D)
     CALL(evt_npc_set_position, STRING("ペラ魔人"), 0, -1000, 0)
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
 EVT_END_PAD()
 #endif
 
 /** Script helper. Stores TRUE in args[0] while the R trigger is held on controller 0, otherwise FALSE. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;
 
@@ -944,7 +944,7 @@ static USER_FUNC(lect_push_r_check) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;
 
@@ -966,7 +966,7 @@ static USER_FUNC(evt_nomal_cange) {
     MarioWork* mario = marioGetPtr();
 
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         marioRollCancel();
 #else
         marioRollTryCancel();

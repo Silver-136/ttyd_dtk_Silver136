@@ -93,7 +93,7 @@ static USER_FUNC(bgm_start_wait);
 
 EvtWord slit_majin_lecture_init[26];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord slit_majin_lecture[];
 #else
 EvtWord slit_majin_lecture[390];
@@ -601,7 +601,7 @@ static USER_FUNC(evt_nomal_cange) {
     MarioWork* mario = marioGetPtr();
 
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         marioRollCancel();
 #else
         marioRollTryCancel();
@@ -675,7 +675,7 @@ EVT_BEGIN(slit_majin_lecture)
 
     // The genie announces the paper curse and tells Mario to hold the R button.
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_13"), 0, STRING("ペラ魔人"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_14"), 0, STRING("ペラ魔人"))
 #else
@@ -742,7 +742,7 @@ EVT_BEGIN(slit_majin_lecture)
                     END_IF
                 END_IF
             END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_msg_continue)
 #endif
 
@@ -776,14 +776,14 @@ EVT_BEGIN(slit_majin_lecture)
             IF_INT_EQUAL(LW(11), 1)
                 BREAK_LOOP
             ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_continue)
 #endif
                 CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12_15_1"), 0, STRING("ペラ魔人"))
             END_IF
         END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_15"))
 #else
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -793,13 +793,13 @@ EVT_BEGIN(slit_majin_lecture)
 
 // The genie asks whether Mario understands the curse.
         CALL(evt_msg_select, 0, STRING("stg1_gon_12_15_yn"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
 #endif
 
         // No: the genie scolds him and the lesson repeats.
         IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg1_gon_12_16"), 0, STRING("ペラ魔人"))
 #else
@@ -809,7 +809,7 @@ EVT_BEGIN(slit_majin_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_17"), 0, STRING("ペラ魔人"))
 #else

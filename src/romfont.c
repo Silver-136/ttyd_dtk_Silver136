@@ -12,7 +12,7 @@
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "mario/mariost.h"
 #include <dolphin/os.h>
 #else
@@ -52,14 +52,14 @@ const char* msg_jp[21] = {
 };
 
 const char* msg_us[21] = {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     "Would you like to display\nin progressive scan mode?",
 #else
     "Would you like to display\nin Progressive Mode?",
 #endif
     "Yes              N o",
     "[    ]",
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     "Progressive scan mode\nhas been turned on.",
     "Progressive scan mode\nhas been turned off.",
 #else
@@ -72,7 +72,7 @@ const char* msg_us[21] = {
     "Screen display has been set to\n60Hz mode.",
     "Screen display has been set to\n50Hz mode.",
     "The Disc Cover is open.\nIf you want to continue the game,\nplease close the Disc Cover.",
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     "Please insert\nthe \"Paper Mario\" Game Disc.",
 #else
     "Please insert\nthe \"Paper Mario: The\nThousand-Year Door\"\nGame Disc.",
@@ -95,7 +95,7 @@ const char* msg_ge[21] = {
     "",
     "",
     "",
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     "Dieses Spiel unterst\374tzt den 60Hz-Modus.\nBitte Modus ausw\344hlen.\n\nSollte das TV-Ger\344t im 60Hz-Modus kein\neinwandfreies Bild darstellen,\nbitte den 50Hz-Modus ausw\344hlen.",
 #else
     "Dieses Spiel unterst\374tzt den 60Hz-Modus.\nBitte Modus auswahlen.\n\nSollte das TV-Gerat im 60Hz-Modus kein\neinwandfreies Bild darstellen,\nbitte den 50Hz-Modus auswahlen.",
@@ -105,7 +105,7 @@ const char* msg_ge[21] = {
     "Die Bildschirmdarstellung erfolgt im\n60Hz-Modus.",
     "Die Bildschirmdarstellung erfolgt im\n50Hz-Modus.",
     "Der Disc-Deckel ist ge\366ffnet.\nBitte den Disc-Deckel schlie\337en,\num mit dem Spiel fortzufahren.",
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     "Bitte legen Sie die \"Paper Mario\"-Disc ein.",
 #else
     "Bitte legen Sie die \"Paper Mario\" Disc ein.",
@@ -128,7 +128,7 @@ const char* msg_fr[21] = {
     "",
     "",
     "",
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     "Ce jeu est compatible\navec le mode 60 Hz.\nVeuillez choisir un mode.\n\nSi votre t\351l\351viseur n'affiche pas\ncorrectement le mode 60 Hz,\nchoisissez le mode 50 Hz.",
 #else
     "Ce jeu est compatible\navec le mode 60 Hz.\nVeuillez choisir un mode.\n\nSi votre televiseur n'affiche pas\ncorrectement le mode 60 Hz,\nchoisissez le mode 50 Hz.",
@@ -139,7 +139,7 @@ const char* msg_fr[21] = {
     "L'affichage est en mode 50 Hz.",
     "Le couvercle est ouvert.\nPour continuer \340 jouer,\nveuillez fermer le couvercle.",
     "Veuillez ins\351rer le disque \"Paper Mario\".",
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     "La lecture du disque a \351chou\351.\nVeuillez vous r\351f\351rer\nau manuel d'instructions\nNintendo GameCube pour\nde plus amples informations.",
 #else
     "La lecture du disque a echoue.\nVeuillez vous r\351f\351rer\nau manuel d'instructions\nNintendo GameCube pour\nde plus amples informations.",
@@ -210,7 +210,7 @@ const char* msg_it[21] = {
  */
 static const char** msg_tbl[6] = { msg_jp, msg_us, msg_ge, msg_fr, msg_sp, msg_it };
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 const char* msg_jp[9] = {
 #else
 const char* msg_jp[10] = {
@@ -223,7 +223,7 @@ const char* msg_jp[10] = {
     "ディスクカバーが開いています。\n\nゲームを続ける場合は、\nディスクカバーを閉めてください。",
     "ペーパーマリオＲＰＧの\nディスクをセットしてください。",
     "ディスクを読めませんでした。\n\nくわしくは、本体の取扱説明書を\nお読みください。",
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "エラーが発生しました。\n\n本体のパワーボタンを押して電源をOFFにし、\n本体の取扱説明書の指示に従ってください。",
 #endif
     NULL
@@ -262,7 +262,7 @@ void romFontMake(void);
  * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
  */
 const char* romFontGetMessage(s32 msg) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (wp->language != 0 && gp->language == 0) {
         return msg_tbl[1][msg];
     }

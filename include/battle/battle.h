@@ -224,7 +224,7 @@ typedef struct BattleAnnounce {
     s16 x;                           // 0x0
     s16 y;                           // 0x2
     s32 params[4];                   // 0x4
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     char text[0x100];
 #else
 #if VERSION >= VERSION_US
@@ -394,7 +394,7 @@ void battleMain(void);
 
 void battle_exit(void);
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BOOL battle_init(void);
 #endif
 

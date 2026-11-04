@@ -20,7 +20,7 @@
 #include "driver/camdrv.h"
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord epilogue_evt[58];
 extern EvtWord gor_11_init_evt[];
 #else
@@ -48,7 +48,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(3000)
     CALL(evt_fade_in, 1000)
     WAIT_MS(5000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 3000)
 #endif
     CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 1500, -1, -1)
@@ -65,7 +65,7 @@ EVT_END()
 EVT_BEGIN(gor_11_init_evt)
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN

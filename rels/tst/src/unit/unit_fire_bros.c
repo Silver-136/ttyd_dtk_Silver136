@@ -164,7 +164,7 @@ BattleUnitKind unit_fire_bros = {
     data_table,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Defence of the Fire Bro: 1 against normal, ice, explosion and electric hits;

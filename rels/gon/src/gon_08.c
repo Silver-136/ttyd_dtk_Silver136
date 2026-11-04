@@ -41,7 +41,7 @@ static EvtWord init_0[37];
 #if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord main_0[489];
 #else
 static EvtWord main_0[491];
@@ -50,7 +50,7 @@ static EvtWord main_0[491];
 
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
@@ -62,7 +62,7 @@ EvtWord nokkosu_init[16];
 #if VERSION >= VERSION_US
 EvtWord nokkosu_talk[226];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord nokkosu_talk[115];
 #else
 EvtWord nokkosu_talk[157];
@@ -222,7 +222,7 @@ EVT_END()
  * it reverses and the switch is cancelled.
  */
 static EVT_BEGIN(main_0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_TYPE(239)
 #endif
 
@@ -472,7 +472,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0F, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -518,7 +518,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 
     // Nokkos greets Mario.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
 #else
 #if VERSION >= VERSION_US

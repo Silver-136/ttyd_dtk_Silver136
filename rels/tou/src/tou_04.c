@@ -65,7 +65,7 @@ static EvtWord n2_door_open[22];
 static EvtWord n2_door_close[22];
 static BeroEntry bero_data[12];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord move_g[];
 #else
 EvtWord move_g[233];
@@ -77,7 +77,7 @@ EvtWord move_g_1_dokimasu[51];
 EvtWord talk_g_1[90];
 EvtWord move_g_1[52];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord init_g_2[];
 #else
 EvtWord init_g_2[26];
@@ -89,7 +89,7 @@ EvtWord init_g_3[30];
 EvtWord talk_g_3[39];
 EvtWord move_g_3[37];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord move_g_4_dokimasen[];
 #else
 EvtWord move_g_4_dokimasen[36];
@@ -97,7 +97,7 @@ EvtWord move_g_4_dokimasen[36];
 
 EvtWord init_g_4[];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord talk_g_4[];
 #else
 EvtWord talk_g_4[271];
@@ -125,7 +125,7 @@ EvtWord init_g_11[29];
 EvtWord talk_g_11[25];
 static EvtWord init_champ[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord init_brots[54];
 #else
 static EvtWord init_brots[58];
@@ -146,7 +146,7 @@ static EvtWord evt_toile[107];
 static EvtWord evt_toile2[107];
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
@@ -593,7 +593,7 @@ EVT_BEGIN(move_g)
         SET_VALUE(LF(0), 1)
     END_SWITCH
     CALL(evt_npc_get_position, STRING("me"), LW(10), LW(11), LW(12))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_EQUAL(LW(0), 1)
         SET_VALUE(LW(10), -520)
         SET_VALUE(LW(11), 0)
@@ -780,7 +780,7 @@ EVT_END()
 
 /** NPC init for guard 2: in JP and later, placed at (-520, 0, 70) during Grubba's Plans when entered through n_bero_2; otherwise at (-520, 0, 0), including both demos. */
 EVT_BEGIN(init_g_2)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("n_bero_2"))
@@ -926,7 +926,7 @@ EVT_BEGIN(move_g_4_dokimasen)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_move_position, STRING("me"), -350, -530, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_set_position, STRING("me"), -350, 0, -530)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(LW(0), 5)
     CALL_CHILD(PTR(bero_case_switch_off))
 #endif
@@ -953,7 +953,7 @@ EVT_BEGIN(init_g_4)
         END_SWITCH
         IF_INT_EQUAL(LF(0), 1)
             SET_VALUE(LF(1), GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 0)
                 CALL(evt_bero_get_entername, LW(0))
                 IF_STR_EQUAL(LW(0), STRING("s_bero_5"))
@@ -979,7 +979,7 @@ EVT_BEGIN(init_g_4)
             CALL(evt_npc_set_position, STRING("me"), -350, 0, -530)
         ELSE
             CALL(evt_npc_set_position, STRING("me"), -300, 0, -530)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             CALL(evt_npc_set_ry, STRING("me"), 270)
 #endif
             IF_INT_EQUAL(LF(2), 1)
@@ -1005,7 +1005,7 @@ EVT_BEGIN(talk_g_4)
         CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
         IF_INT_EQUAL(LW(3), -350)
             CALL(evt_msg_print, 0, STRING("stg3_tou_42"), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
             CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1019,7 +1019,7 @@ EVT_BEGIN(talk_g_4)
                 CALL(evt_npc_set_ry, STRING("me"), 90)
             END_IF
             CALL(memoryRY)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
             SET_VALUE(LW(0), 5)
             CALL_CHILD(PTR(bero_case_switch_on))
@@ -1062,7 +1062,7 @@ EVT_BEGIN(talk_g_4)
             // He steps aside and opens the way to the office.
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
             CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1076,7 +1076,7 @@ EVT_BEGIN(talk_g_4)
                 CALL(evt_npc_set_ry, STRING("me"), 90)
             END_IF
             CALL(memoryRY)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
             SET_VALUE(LW(0), 5)
@@ -1361,7 +1361,7 @@ EVT_END()
  * (-525, 0, 225), (-175, 0, -475), (525, 0, -175) or (525, 0, 425).
  */
 static EVT_BEGIN(init_brots)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -1384,7 +1384,7 @@ static EVT_BEGIN(init_brots)
                 END_SWITCH
             END_SWITCH
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
 #endif
     RETURN
@@ -1413,7 +1413,7 @@ static USER_FUNC(make_list) {
     s32 i;
 
     if (tmp == NULL) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         tmp = _mapAlloc(0x400);
     }
     sprintf(tmp, "<select %d %d %d %d>", 0, 7, 300, 140);
@@ -2319,7 +2319,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x12, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -2534,7 +2534,7 @@ EVT_BEGIN(tou_04_init_evt)
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
@@ -2542,7 +2542,7 @@ EVT_BEGIN(tou_04_init_evt)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
@@ -2633,7 +2633,7 @@ EVT_BEGIN(tou_04_init_evt)
         ADD(LW(2), 1)
     END_LOOP
     SWITCH(GSW_STORY_PROGRESS)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CASE_LESS(STG3_03_GRUBBA)
 #endif
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -2705,7 +2705,7 @@ EVT_BEGIN(tou_04_init_evt)
                 CALL_CHILD(PTR(bero_case_switch_on))
             END_IF
             IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 SET_VALUE(LW(0), 5)
                 CALL_CHILD(bero_case_switch_on)
 #else

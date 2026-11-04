@@ -70,7 +70,7 @@ s32 iri_29_item_tbl1[2];
 s32 iri_29_item_tbl2[2];
 s32 iri_29_item_tbl3[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord konarikin_talk[];
 #else
 EvtWord konarikin_talk[426];
@@ -97,7 +97,7 @@ EvtWord resaresa_entry[35];
 EvtWord sebaschan_talk[8];
 EvtWord sebaschan_entry[35];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord koopa_door_evt[];
 extern EvtWord pik_01_koopa_evt[];
 #else
@@ -112,7 +112,7 @@ static EvtWord minnnanokoe_evt[391];
 static EvtWord evt_switch_init[17];
 EvtWord iri_27_npc_entry[26];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord pik_01_init_evt[];
 #else
 EvtWord pik_01_init_evt[486];
@@ -605,7 +605,7 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_SHROOM_CAKE, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_05"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         CALL(evt_win_item_select, PTR(iri_29_item_tbl1), LW(0))
 #else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl1), LW(0), 0)
@@ -624,7 +624,7 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_KEEL_MANGO, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_06"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         CALL(evt_win_item_select, PTR(iri_29_item_tbl2), LW(0))
 #else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl2), LW(0), 0)
@@ -643,7 +643,7 @@ EVT_BEGIN(konarikin_talk)
                     CALL(evt_pouch_check_item, ITEM_FRIGHT_MASK, LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_07"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         CALL(evt_win_item_select, PTR(iri_29_item_tbl3), LW(0))
 #else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl3), LW(0), 0)
@@ -1127,7 +1127,7 @@ EVT_BEGIN(koopa_door_evt)
         END_IF
     END_LOOP
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), 226)
         SET_VALUE(LW(5), -216)
@@ -1160,7 +1160,7 @@ EVT_BEGIN(pik_01_koopa_evt)
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     CALL(evt_cam3d_evt_set, -273, 145, 196, -273, 69, -237, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_INSTANT_TURN)
@@ -1405,7 +1405,7 @@ static EVT_BEGIN(sekai_yami_evt)
             WAIT_MS(200)
         END_LOOP
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_MS(3000)
 #else
     WAIT_MS(1000)
@@ -1582,7 +1582,7 @@ EVT_BEGIN(pik_01_init_evt)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 400, 95, 125, 0, GSWF_SHINE_38, 0)
     IF_INT_EQUAL(LF(0), 1)
         SET_VALUE(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(bero_case_switch_off)
 #else
         CALL_CHILD(PTR(bero_case_switch_off))

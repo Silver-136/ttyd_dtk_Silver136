@@ -106,7 +106,7 @@ EvtWord evt_bcv_sw[99];
 EvtWord evt_key_get[5];
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_door_msg[85];
 extern EvtWord aji_13_init_evt[];
 #else
@@ -143,7 +143,7 @@ static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -160,7 +160,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -177,7 +177,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -194,7 +194,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -552,13 +552,13 @@ static USER_FUNC(mario_chk) {
         PartyEntry* party = partyGetPtr(0);
         if (mario != NULL && mario->hitobjStandOn != NULL && hitIsGroup(mario->hitobjStandOn, hitNameToPtr("A_bel"))) {
             mario->floorMove.x = 0.6f;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             mario->floorMove.x *= 60.0f / gp->framerate; // PAL: the push per frame is scaled to the frame rate
 #endif
         }
         if (party != NULL && party->hitobjUnder != NULL && hitIsGroup(party->hitobjStandOn, hitNameToPtr("A_bel"))) {
             party->floorMoveX = 0.6f;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             party->floorMoveX *= 60.0f / gp->framerate;
 #endif
         }
@@ -673,7 +673,7 @@ EVT_BEGIN(move_up_down)
     END_IF
     MULTIPLY(LW(7), 100)
     MULTIPLY(LW(8), 100)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(LW(4), LW(8))
     IF_STR_EQUAL(LW(5), STRING("A_ugoku_2"))
         SET_VALUE(LW(3), 1)
@@ -706,7 +706,7 @@ EVT_BEGIN(move_up_down)
         IF_INT_NOT_EQUAL(LW(5), 0)
             CALL(evt_hit_bind_update, LW(5))
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_NOT_EQUAL(LW(3), 0)
             IF_INT_NOT_EQUAL(GF(1), 0)
 #if VERSION < VERSION_US
@@ -720,7 +720,7 @@ EVT_BEGIN(move_up_down)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(0)
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         WAIT_MS(300)
 #else
         LABEL(5)
@@ -765,7 +765,7 @@ EVT_BEGIN(move_up_down)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(1)
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         SET_VALUE(LW(8), LW(4))
 #endif
         WAIT_MS(300)
@@ -848,7 +848,7 @@ ShikakeMoveTbl6 up_down_tbl = {
         {"A_ugoku_2", "S_ugoku_2", 0, -150, 2800},
         {"A_ugoku_h_4", "S_ugoku_h_4", 0, 100, 3000},
         {"A_ugoku_h_5", "S_ugoku_h_5", 0, -200, 4000},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {"A_ugoku_h_6", "S_ugoku_h_6", 0, -150, 3000},
 #else
         {"A_ugoku_h_6", "S_ugoku_h_6", 40, -150, 3000},
@@ -1077,7 +1077,7 @@ static EVT_BEGIN(evt_door_msg)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -1102,7 +1102,7 @@ EVT_END()
 EVT_BEGIN(aji_13_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI7"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -1157,7 +1157,7 @@ EVT_BEGIN(aji_13_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 200, 60, 100, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
     CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_item_set_scale, STRING("item00"), FLOAT(0.5996094f))
 #endif
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
@@ -1172,7 +1172,7 @@ EVT_BEGIN(aji_13_init_evt)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_000035a0, JP aji .text+0x34DC. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(hit_group_chk) {
     EvtWord* args = event->args;
     const char* name1 = (const char*)evtGetValue(event, args[0]);
@@ -1194,14 +1194,14 @@ USER_FUNC(hit_group_chk) {
  * when Mario is in background mode, the camera's Y-follow is off
  * and (in JP and later releases) Mario's airTimer is zero, it turns Y-follow back on. Blocks forever.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(bg_cam_chk) {
 #else
 USER_FUNC(bg_cam_chk) {
 #endif
 
     CameraEntry* camera = camGetPtr(CAMERA_3D);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW)) {
 #else
     if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW) && marioGetPtr()->airTimer == 0) {

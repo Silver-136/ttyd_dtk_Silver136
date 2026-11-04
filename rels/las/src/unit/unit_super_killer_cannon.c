@@ -70,7 +70,7 @@ BattleUnitKind unit_super_killer_cannon = {
     9999, // pbSoftCap
     52, // width
     38, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     5,
     38,
     0.0f,
@@ -138,7 +138,7 @@ static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
 /** Defence attributes of the B. Bill Blaster: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 5, 100, 40, 100, 100, 90};
 #else
 static StatusVulnerability regist = {

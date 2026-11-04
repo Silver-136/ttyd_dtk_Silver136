@@ -69,7 +69,7 @@ typedef struct CloudWork {
 } CloudWork;
 static CloudWork* cloud;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s8 cloud_once_flag;
 #else
 static u8 cloud_once_flag;
@@ -94,7 +94,7 @@ static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
 #include "version.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord gonbaba_event[];
 #else
 EvtWord gonbaba_event[1410];
@@ -108,7 +108,7 @@ EvtWord iri_16_cloud_evt[36];
 EvtWord iri_16_touch_evt[2];
 static EvtWord iri_16_init[57];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord gon_11_init_evt[];
 #else
 EvtWord gon_11_init_evt[101];
@@ -665,13 +665,13 @@ EVT_BEGIN(gonbaba_event)
     // Hooktail is defeated, father and son are reunited: the story advances and the Diamond Star is awarded.
     SET_VALUE(GSW_STORY_PROGRESS, STG1_16_HOOKTAIL)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
 #endif
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
 #endif
     SET_VALUE(LW(0), 1)
@@ -829,7 +829,7 @@ static void _mapclsofs_all(CloudWork* wp) {
  * runs the end event (iri_16_cloud_evt) and the entry is released. Brief contact gaps keep advancing the counter;
  * the cloud resets when the loss-of-contact grace period expires or Mario leaves the gust motion.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_cloud_main) {
     CloudWork* wp = (CloudWork*)event->lwData[0];
     s32 inBattle = gp->inBattle != 0;
@@ -843,7 +843,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     HitEntry *hit1;
     HitEntry *hit2;
     HitEntry *hit3;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     MarioWork *mario;
     CloudWork *wp;
     PartyEntry *ptmp;
@@ -851,7 +851,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     HitEntry *hit;
     OffscreenEntry *off;
     ImageEntry *img;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BOOL inBattle;
     wp = (CloudWork*)event->lwData[0];
     inBattle = gp->inBattle != 0;
@@ -861,7 +861,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     if (isFirstCall) {
         return 0;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (party == NULL) {
         return EVT_RETURN_BLOCK;
     }
@@ -879,7 +879,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     hit3 = cloudGetHitBreathout(3);
     switch (wp->state) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (cloud_once_flag == 1) {
 #else
             if (((s32) (cloud_once_flag & 0xFFFFFFFFFFFFFFFFu)) == 1) // FAKE: no-op 64-bit mask; needed for 100% (plain cloud_once_flag == 1 gives 97.9-98.1)
@@ -906,7 +906,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
             animPaperPoseEntry(wp->animName, inBattle);
             offscreenEntry(wp->offscreenName);
             off = offscreenNameToPtr(wp->offscreenName);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             off->texFmt = off->copyFmt = 6;
 #else
             off->texFmt = (off->copyFmt = 4);
@@ -1169,7 +1169,7 @@ EVT_BEGIN(gon_11_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("ゴンババ"), NPC_FLAG_NO_CULL)
     CALL(evt_light_charalight_all_onoff, 1)
     CALL(evt_light_npc_lighting_onoff, 1, STRING("ゴンババ"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(iri_16_init)
 #else
     CALL_CHILD(PTR(iri_16_init))

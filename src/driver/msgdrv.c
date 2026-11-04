@@ -84,7 +84,7 @@ MsgIcon msgIcon[] = {
 };
 
 /** Sound effects of the message windows by window type: the sound when it opens, then the one when it closes. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 msgWindowOpen_SE_Data[] = {
     PSND_SFX_WINDOW_NORMAL_OPEN1, PSND_SFX_WINDOW_NORMAL_CLOSE1, PSND_SFX_WINDOW_WHISPER_OPEN1, PSND_SFX_WINDOW_WHISPER_CLOSE1, PSND_SFX_WINDOW_SIGNBOARD_OPEN1, PSND_SFX_WINDOW_SIGNBOARD_CLOSE1, PSND_SFX_WINDOW_SYSTEM_OPEN1, PSND_SFX_WINDOW_SYSTEM_CLOSE1,
     0x20, 0x21, 0x1C, 0x1D, 0x18, 0x19, 0x22, 0x23,
@@ -95,7 +95,7 @@ s32 msgWindowOpen_SE_Data[] = {
 //.sbss
 MessageWork msgWork;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static smartEntry dummySmartList;
 #endif
 
@@ -105,7 +105,7 @@ void* msgSortDvdData;
 //.sdata
 MessageWork* msgw = &msgWork;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static char NoMessage[] = "";
 const char* ErrMessage[VERSION_PICK(2, 7)] = {
     R_no_messages_JP, R_no_messages_US,
@@ -129,7 +129,7 @@ const char* language_dir[2] = {"msg", "emsg"};
 #endif
 
 //local prototypes
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s32 msgWindowOpen_SE_Data[] = {
     0x16, 0x17, 0x1A, 0x1B, 0x20, 0x21, 0x1C, 0x1D,
     0x20, 0x21, 0x1C, 0x1D, 0x18, 0x19, 0x22, 0x23,
@@ -157,7 +157,7 @@ void msgInit(void) {
 }
 
 /** Loads the selected message file into the map or default heap and builds its lookup table. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** The text of a loaded message file (the demo keeps it in a smart heap block). */
 static inline const char* msgEntryText(MessageEntry* entry) {
     return entry->address->address;
@@ -184,7 +184,7 @@ void msgLoad(const char* filename, s32 index) {
     char dvdpath[128];
 
     entry = &msgw->entries[index];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     sprintf(filepath, "./%s/%s.txt", language_dir[gp->language], filename);
     if (entry->address) {
         if (entry->address != &dummySmartList) {
@@ -301,7 +301,7 @@ void msgLoad(const char* filename, s32 index) {
         entry->lookup = NULL;
     } else {
         ofs = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (entry->lookup) {
             smartFree(entry->lookup);
         }
@@ -320,7 +320,7 @@ void msgLoad(const char* filename, s32 index) {
             ofs += strlen(str) + 1;
             str += strlen(str) + 1;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         msgSortDvdData = (void*)msgEntryText(entry);
 #else
         msgSortDvdData = entry->address;
@@ -802,7 +802,7 @@ u16 hankakuSearch(char c);
  * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
  * word wrap and scrolling. Called when a window opens and for each added message.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void msgAnalize(smartEntry* smart, const char* msg) {
 #else
 void msgAnalize(smartEntry* smart, char* msg) {
@@ -849,7 +849,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     char paper[0x20];
     char paper2[0x20];
     s32 step;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 scale;
 #else
 #if VERSION >= VERSION_US
@@ -858,7 +858,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #else
     f32 scale;
 #endif
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     s32 centerStart; // PAL: first character of the open <center> span
 #endif
 #endif
@@ -888,7 +888,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     u16 iw;
     u16 ih;
     f32 maxScale;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     const char* next;
 #if VERSION == VERSION_DEMO_JP
     BOOL isHM;
@@ -909,7 +909,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     entry = &data->entries[data->charCount];
     flags = 0;
     maxScale = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     scale = 1.0f;
 #else
 #if VERSION >= VERSION_US
@@ -918,7 +918,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         scale = one;
     }
     maxW = 70;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     centerStart = 0;
 #endif
 #else
@@ -941,7 +941,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         switch (window->type) {
         case WINDOW_TYPE_SYSTEM: {
             static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             entry->value = *((const u32*)(&c));
 #else
             entry->value = *(u32*)&c;
@@ -950,7 +950,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         }
         case WINDOW_TYPE_TEC: {
             static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             entry->value = *((const u32*)(&c));
 #else
             entry->value = *(u32*)&c;
@@ -970,7 +970,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     while (TRUE) {
 
             // Shift-JIS 0x8145 is the middle dot, 0x8140 the full-width space, 0x8151 the full-width low line
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {
             s32 gz = 0;
             if (gz != 0) {
@@ -1051,7 +1051,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         case 0:
             entry->glyph = MSG_GLYPH_END;
             entry->time = time;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
             if (data->selWidth == 0) {
                 if (maxW < x) {
@@ -1070,7 +1070,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         case '\n':
             entry->glyph = MSG_GLYPH_NEWLINE;
             entry->time = time;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             x = 0;
 #else
 #if VERSION < VERSION_US
@@ -1080,7 +1080,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             if (0.0f == maxScale) {
                 maxScale = 1.0f;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             y -= 32.0f * maxScale;
             savedScroll -= 32.0f * maxScale;
 #else
@@ -1107,7 +1107,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 flags &= ~MSG_CHAR_SEL_ROW_MASK;
                 flags |= MSG_CHAR_SEL_ROW(data->numSel);
                 data->numSel++;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             }
             continue;
             case '<':
@@ -1129,7 +1129,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             next = msgGetCommand(msg + 1, tag, args);
 #endif
             msg = next;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
                (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
             {
@@ -1139,7 +1139,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
             }
 #endif
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if ((strcmp(tag, "k") == 0) || (strcmp(tag, "key") == 0)) {
 #else
             if (strcmp(tag, "k") == 0 || strcmp(tag, "key") == 0) {
@@ -1153,7 +1153,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 savedPage++;
             } else if (strcmp(tag, "keyxon") == 0) {
                 data->flags |= MSG_WIN_FLAG_KEY_X;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             } else if ((strcmp(tag, "p") == 0) || (strcmp(tag, "scrl_auto") == 0)) {
 #else
             } else if (strcmp(tag, "p") == 0 || strcmp(tag, "scrl_auto") == 0) {
@@ -1169,7 +1169,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     savedScroll = 0;
                     data->charCount++;
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             } else if ((strcmp(tag, "o") == 0) || (strcmp(tag, "once_stop") == 0)) {
 #else
             } else if (strcmp(tag, "o") == 0 || strcmp(tag, "once_stop") == 0) {
@@ -1184,7 +1184,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 x = posX;
                 if (posY != 999) {
                     y = topY - posY;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 }
                 savedScroll = -posY;
             } else if (strcmp(tag, "scale") == 0) {
@@ -1279,7 +1279,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "system") == 0) {
                 static const GXColor c = {0xDC, 0xC8, 0xDC, 0xFF};
                 window->type = WINDOW_TYPE_SYSTEM;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     entry->value = *((const u32*)(&c));
 #else
                 entry->value = *(u32*)&c;
@@ -1291,7 +1291,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "tec") == 0) {
                 static const GXColor c = {0x00, 0xD9, 0x14, 0xFF};
                 window->type = WINDOW_TYPE_TEC;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     entry->value = *((const u32*)(&c));
 #else
                 entry->value = *(u32*)&c;
@@ -1346,14 +1346,14 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 data->charCount++;
             } else if (strcmp(tag, "nowinse") == 0) {
                 window->flags |= WINDOW_FLAG_NOWINSE;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             } else if (strcmp(tag, "icon") == 0) {
 #if VERSION == VERSION_DEMO_JP
                 isHM = FALSE;
 #endif
                 if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             } else if (strcmp(tag, "center") == 0) {
                 centerStart = data->charCount;
             } else if (strcmp(tag, "/center") == 0) {
@@ -1373,7 +1373,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
                 } else {
                     sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
                     if (strcmp(name, "HM") == 0) {
                         isHM = TRUE;
@@ -1389,7 +1389,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                         iconId = 0;
                     }
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
                 if (!isHM)
 #endif
@@ -1416,7 +1416,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->scale = iconScale;
                     entry->time = time;
                     entry++;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
                     time += step;
                     data->charCount++;
@@ -1495,7 +1495,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 sscanf(args, "%s%s%d%d%f%d", anim1, anim2, &animX, &animY, &animScale, &animFlip);
                 entry->value = animPoseEntry(anim1, 2);
                 animPoseSetAnim(entry->value, anim2, 1);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 animPoseSetMaterialFlagOn(entry->value, ANIM_MATERIAL_FLAG_NO_BLEND | ANIM_MATERIAL_FLAG_NO_BLEND2);
 #else
                 animPoseSetMaterialFlagOn(entry->value, (MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2));
@@ -1509,7 +1509,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry->x = animX;
                 entry->y = topY - animY;
                 entry->scale = animScale;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 entry->rot = (animFlip == 0) ? (0.0f) : (180.0f);
 #else
                 entry->rot = (animFlip == 0) ? 0.0f : 180.0f;
@@ -1531,13 +1531,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 entry++;
                 data->charCount++;
             } else if (strcmp(tag, "r") == 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 data2 = data;
 #endif
                 if (data->window->type != WINDOW_TYPE_SMALL) {
                     rubyX = x;
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             } else if ((((s8*)tag)[0] == 'R') || ((((s8*)tag)[0] == '/') && (((u32)((s8*)tag)[0]) == 0x2F72))) {
 #else
             } else if (((s8*)tag)[0] == 'R' || (((s8*)tag)[0] == '/' && (u32)((s8*)tag)[0] == 0x2F72)) {
@@ -1559,7 +1559,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 // does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target (FAKES.md)
                 for (k = 0; k < half; k++) {
                     glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     total += (s32)(0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4))));
                     j += 2;
                 }
@@ -1603,7 +1603,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                         }
                     }
                     glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     wwR = 0.55f * (scale * ((f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
 #else
 #if VERSION >= VERSION_US
@@ -1617,7 +1617,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->glyph = glyph;
                     entry->x = rubyX;
                     entry->y = ys[0];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     entry->scale = 0.55f * scale;
 #else
 #if VERSION >= VERSION_US
@@ -1640,7 +1640,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
                 continue;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if ((*((const s8*)next)) == '\n') {
 #else
             if (*(s8*)next == '\n') {
@@ -1649,7 +1649,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             }
             continue;
         default:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if ((((gp->language) == 0) && (((s8)check) >= '0')) && (((s8)check) <= '9')) {
 #else
             if (gp->language == LANGUAGE_JP && (s8)check >= '0' && (s8)check <= '9') {
@@ -1660,7 +1660,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else {
                 glyphD = hankakuSearch(check);
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             wwD = scale * ((f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2));
             entry->glyph = glyphD;
             entry->x = x;
@@ -1692,7 +1692,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             if (flags & MSG_CHAR_DYNAMIC) {
                 entry->rot = fv;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (maxScale < scale) {
                 maxScale = scale;
             }
@@ -1736,7 +1736,7 @@ int msg_compare(const void* a, const void* b) {
     return 0;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** the text of a loaded message file (the demo keeps it in a smart heap block) */
 static inline const char* msgEntryText(MessageEntry* entry) {
     return (const char*)entry->address;
@@ -2310,7 +2310,7 @@ void msgWindow_Clear_Main(WindowEntry* window) {
  * Draw callback for a message window: draws the frame for its type (speech balloon with tail toward the speaker,
  * sign plate, system box, ...) and the text with msgDisp.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void msgWindow_Disp(CameraId camId, void* param) {
 #else
 void msgWindow_Disp(CameraId camId, void* param) {
@@ -2389,7 +2389,7 @@ void msgWindow_Disp(CameraId camId, void* param) {
     case WINDOW_TYPE_PLATE:
     case WINDOW_TYPE_KANBAN:
     case WINDOW_TYPE_HOUSOU:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->width, window->height);
         GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 2.0f, camera->scissor[2], 0x68);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);

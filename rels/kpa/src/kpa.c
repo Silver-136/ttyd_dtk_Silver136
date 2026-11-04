@@ -47,7 +47,7 @@ KpaWork* kwp;
 void FontDrawString(f32 x, f32 y, const char* message);
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
 // IconFlags.ICON_FLAG_2D (icondrv.h clashes with the prototype above)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define KPA_ICON_2D 0x4
 #else
 #define KPA_ICON_2D 0x10
@@ -67,7 +67,7 @@ EvtWord kpa_read_mobj[291];
 EvtWord kpa_coin_evt[7];
 EvtWord kpa_read_item[34];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kpa_dead[];
 #else
 EvtWord kpa_dead[168];
@@ -301,7 +301,7 @@ EVT_BEGIN(kpa_dead)
     SET_VALUE(LSWF_KPA_STAGE_ENDED, 1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(kpa_fire_off)
 #endif
     CALL(evt_mario_key_onoff, 0)
@@ -392,7 +392,7 @@ USER_FUNC(kpa_nohitenemy_ct_clear) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_kpa_00000a08, JP kpa .text+0x944. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper: calls kpaFireDelete(), which removes Bowser's fire-breath effect and stops its looping sound.
  * Run when Bowser dies so the flame does not linger (JP and later).

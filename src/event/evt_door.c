@@ -73,7 +73,7 @@ EvtWord out_houseanim[72];
 EvtWord in_dooranim[134];
 EvtWord out_dooranim[121];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord house_in[];
 extern EvtWord house_out[];
 #else
@@ -87,7 +87,7 @@ EvtWord door_dark2[34];
 EvtWord door_light[30];
 EvtWord door_light2[30];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_door_open[];
 #else
 EvtWord evt_door_open[508];
@@ -222,7 +222,7 @@ EVT_BEGIN(house_open_se)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(snd_door_in) {
     psndSetFlag(PSND_FLAG_DOOR_IN);
     return EVT_RETURN_DONE;
@@ -284,7 +284,7 @@ USER_FUNC(door_entry) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** the demo defines house_close_se right after house_open_se */
 EVT_BEGIN(house_close_se)
     CALL_CHILD(house_open_se)
@@ -352,7 +352,7 @@ EVT_BEGIN(door_up_se)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(house_close_se)
     CALL_CHILD(PTR(house_open_se))
     RETURN
@@ -524,7 +524,7 @@ EVT_BEGIN(house_in)
     CALL(evt_hitobj_onoff, LW(1), 1, 1)
     CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 1, LW(0), MAP_OBJ_FLAG_NO_MAP_BLEND2)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_party_door_halve_hitbox)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -553,7 +553,7 @@ EVT_BEGIN(house_in)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(snd_door_in)
 #endif
     POKE_INT(0, PTR(&DoorFLAG))
@@ -584,7 +584,7 @@ EVT_BEGIN(house_out)
     END_INLINE_EVENT
     SPAWN_EVENT_GET_ID(PTR(out_dooranim), LW(15))
     WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_party_door_halve_hitbox)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -621,7 +621,7 @@ EVT_BEGIN(house_out)
     CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(npc_light, LW(10))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(snd_door_out)
 #endif
     RETURN
@@ -761,7 +761,7 @@ EVT_BEGIN(evt_door_open)
             END_INLINE_EVENT
         END_IF
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_party_door_halve_hitbox)
 #endif
     CALL(evt_door_param, LW(0), DOOR_PARAM_OUT_POS, LW(1), LW(2), LW(3))
@@ -901,7 +901,7 @@ EVT_BEGIN(evt_door_open_bom_01)
     SPAWN_EVENT(PTR(door_open_se))
 
     // The door swings open with its sound.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #if VERSION < VERSION_US
     CALL(evt_mario_party_door_halve_hitbox)
 #endif
@@ -1864,7 +1864,7 @@ USER_FUNC(npc_hide_onoff) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** the demo defines these with the door helpers at the end of the file */
 static USER_FUNC(snd_door_in) {
     psndSetFlag(PSND_FLAG_DOOR_IN);

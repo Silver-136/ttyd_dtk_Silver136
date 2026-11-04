@@ -120,7 +120,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability of the Koopatrol (percent chance to take each status): resists most statuses. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {70, 70, 60, 100, 60, 100, 100, 60, 100, 70, 100, 70, 100, 70, 70, 60, 60, 100, 60, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

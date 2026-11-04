@@ -235,7 +235,7 @@ EVT_BEGIN(eki_05_init_evt)
 #if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
 #endif
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     BEGIN_INLINE_EVENT
         CALL(evt_seq_wait, 2)
         CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)

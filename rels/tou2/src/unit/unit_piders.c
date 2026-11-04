@@ -61,7 +61,7 @@ static EvtWord yarn_event[44];
 static EvtWord entry_event[48];
 static EvtWord damage_event[10];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event[183];
 static EvtWord blow_dead_event[98];
 #else
@@ -77,7 +77,7 @@ static EvtWord unison_phase_event[120];
 static EvtWord attack_event[72];
 static EvtWord damage_check_event_sub[157];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord piders_attack_common_event1[187];
 static EvtWord piders_attack_common_event1_2[128];
 #else
@@ -93,7 +93,7 @@ static EvtWord renzoku_attack_event_sub[55];
 static EvtWord renzoku_attack_event_sub_no_last[10];
 static EvtWord renzoku_attack_event_sub_last[79];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[6];
 #else
 static EvtWord wait_event[7];
@@ -161,11 +161,11 @@ BattleUnitKind unit_piders = {
     0, // turnOrderVariance
     0, // swallowChance
     2, // swallowAttributes
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     100, // hammerKnockbackChance
 #endif
     0, // itemStealParam
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
     0.0f,
     0.0f,
@@ -194,7 +194,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type reactions of the Pider: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {90, 100, 50, 100, 90, 100, 100, 90, 100, 90, 100, 90, 100, 90, 90, 100, 70, 100, 90, 100, 100, 95};
 #else
 static StatusVulnerability regist = {
@@ -663,7 +663,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_SetPos, LW(10), 0, -1000, 0)
 #endif
     CALL(btlevtcmd_KillUnit, LW(10), 1)
@@ -699,7 +699,7 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoncombatant)
     CALL(btlevtcmd_SetMaxMoveCount, LW(10), 0)
     CALL(btlevtcmd_OnAttribute, LW(10), kUnitNoHpGauge)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_SetPos, LW(10), 0, -1000, 0)
 #endif
     CALL(btlevtcmd_KillUnit, LW(10), 1)
@@ -989,7 +989,7 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("PAI_A_2a"))
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
@@ -1052,7 +1052,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
     ELSE
@@ -1291,7 +1291,7 @@ EVT_END()
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
 EVT_END_PAD()

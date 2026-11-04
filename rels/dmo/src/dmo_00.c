@@ -81,7 +81,7 @@ USER_FUNC(demo_init);
 
 EvtWord buttonCheck[32];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord demo_evt[];
 #else
 EvtWord demo_evt[1489];
@@ -108,7 +108,7 @@ EvtWord dmo_00_init_evt[262];
  * and sets the fade-in for the map (black after the logo sequence,
  * white after the title screen in the demo versions; black otherwise).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(demo_init) {
 #else
 USER_FUNC(demo_init) {
@@ -128,7 +128,7 @@ USER_FUNC(demo_init) {
     }
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/demo.tpl", getMarioStDvdRoot()) != 0U) {
         wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/demo.tpl", getMarioStDvdRoot());
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (seqGetPrevSeq() == SEQ_LOGO) {
             gp->areaFadeInType = FADE_IN_BLACK;
             gp->areaFadeInDuration = 500;
@@ -613,7 +613,7 @@ USER_FUNC(eff_cam1) {
  * and builds the text window tags (clear, window position/size, once_stop) into buf so the narration is centred.
  * The vertical offset differs slightly in the demo versions.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(make_msg) {
 #else
 USER_FUNC(make_msg) {
@@ -623,7 +623,7 @@ USER_FUNC(make_msg) {
     u16 width;
 
     width = FontGetMessageWidthLine(msgSearch((const char*)evtGetValue(event, args[0])), &lines);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     sprintf(buf, "<clear><wpos %d %d %d %d><once_stop>", -width / 2 - 62, lines * 28 / 2 - 90, 400, 200);
 #else
     sprintf(buf, "<clear><wpos %d %d %d %d><once_stop>", -width / 2 - 62, lines * 28 / 2 - 84, 400, 200);
@@ -661,7 +661,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(GF(10), 0)
     SPAWN_EVENT_GET_ID(PTR(buttonCheck), GW(10))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO1"))
 #else
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_DEMO1"))
@@ -730,13 +730,13 @@ EVT_BEGIN(demo_evt)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, PTR(buf), 0, 0)
     CALL(evt_msg_print_add, 0, STRING("op_book_08"))
     CALL(demo_winonoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_img_entry, STRING("img1"))
     CALL(evt_img_entry, STRING("img2"))
     CALL(evt_img_entry, STRING("img3"))
 #endif
     CALL(evt_img_entry, STRING("img4"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_img_entry, STRING("img3"))
     CALL(evt_img_entry, STRING("img2"))
     CALL(evt_img_entry, STRING("img1"))
@@ -872,7 +872,7 @@ EVT_BEGIN(demo_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ロテン１"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING("チューさん１"), NPC_FLAG_NO_DRAW)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 6000)
 #else
     CALL(evt_mobj_flag_onoff, 0, STRING("hako"), MOBJ_FLAG_NO_DISP)
@@ -898,7 +898,7 @@ EVT_BEGIN(demo_evt)
 
     // New music; Peach strolls in and complains that Toadsworth is always watching over her.
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO2"))
 #else
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_DEMO2"))
@@ -1200,7 +1200,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_set_position, STRING("hako"), -125, 0, 450)
     CALL(evt_npc_flag_onoff, 1, STRING("hako"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_pera_onoff, STRING("hako"), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mobj_itembox, STRING("hako"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, 0, 0)
     CALL(evt_mobj_flag_onoff, 1, STRING("hako"), MOBJ_FLAG_NO_DISP)
 #endif

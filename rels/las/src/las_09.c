@@ -47,7 +47,7 @@ static EvtWord n_door_open[22];
 static BeroEntry bero_entry_data[8];
 static HitDamageReturn dmgRetPoint[58];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord first_evt[208];
 #else
 static EvtWord first_evt[210];
@@ -67,7 +67,7 @@ EvtWord majyorin_evt_npc_entry[26];
 EvtWord majyorin_evt_main[652];
 EvtWord majyorin_evt[55];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_09_init_evt[];
 #else
 EvtWord las_09_init_evt[257];
@@ -419,7 +419,7 @@ static EVT_BEGIN(first_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
     CALL_CHILD(PTR(bero_case_entry))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -1021,7 +1021,7 @@ EVT_END()
 EVT_BEGIN(las_09_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

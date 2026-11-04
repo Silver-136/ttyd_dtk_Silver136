@@ -19,7 +19,7 @@
 #include <math.h>
 
 /** Slope of a floor normal: its angle from vertical in degrees. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "mario/mario_balloon.h"
 #include "mario/mario_hit.h"
 static inline void kpaWallSlide(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz) {
@@ -645,7 +645,7 @@ HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r) {
 // map shows the head of koopa_hit.o as kpaSearchWallFront (kept there, 0x320 bytes) and the stripped
 // _reflect2/_reflect; the demo kpaSearchWallFront's literals are 45, 0.75, 0.25, 0.5, so the US original
 // (whose only literal left is 0.5) was a different version and cannot be taken from the demo.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** demo only: Koopa's front-wall search (two rays at 3/4 and 1/4 of the body height), called from searchFrontWall */
 HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
     Vec p;

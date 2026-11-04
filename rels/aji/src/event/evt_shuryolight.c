@@ -191,7 +191,7 @@ static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
 
     // Only the first light bound to this group is advanced and drawn.
     if (i != 5) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         animPoseMain(lights[i].npc->poseId);
 #endif
         animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);

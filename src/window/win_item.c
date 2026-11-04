@@ -122,7 +122,7 @@ static const char* luigi_book_5[] = {
  */
 const char** luigi_book_list[] = {luigi_book_1, luigi_book_2, luigi_book_3, luigi_book_4, luigi_book_5};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u16 menu_skip_list[] = {ITEM_STRANGE_SACK, ITEM_HAMMER, ITEM_SUPER_HAMMER, ITEM_ULTRA_HAMMER, ITEM_BOOTS, ITEM_SUPER_BOOTS, ITEM_ULTRA_BOOTS, ITEM_BOAT_CURSE, ITEM_TUBE_CURSE, ITEM_PAPER_CURSE, ITEM_PLANE_CURSE, ITEM_MAGICAL_MAP, ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
 #else
 u16 menu_skip_list[] = {ITEM_HAMMER, ITEM_SUPER_HAMMER, ITEM_ULTRA_HAMMER, ITEM_BOOTS, ITEM_SUPER_BOOTS, ITEM_ULTRA_BOOTS, ITEM_BOAT_CURSE, ITEM_TUBE_CURSE, ITEM_PAPER_CURSE, ITEM_PLANE_CURSE, ITEM_MAGICAL_MAP, ITEM_DIAMOND_STAR, ITEM_EMERALD_STAR, ITEM_GOLD_STAR, ITEM_RUBY_STAR, ITEM_SAPPHIRE_STAR, ITEM_GARNET_STAR, ITEM_CRYSTAL_STAR};
@@ -207,7 +207,7 @@ void winItemInit(WindowWork* w) {
     winMgrSetPriority(w->useWin[1], -100);
 #if VERSION >= VERSION_US
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), gp->language == LANGUAGE_JP ? "jp" : "us");
-#elif VERSION <= VERSION_DEMO_US
+#elif VERSION <= VERSION_DEMO_JP
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
 #else
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
@@ -331,7 +331,7 @@ s32 winItemMain(WindowWork* w) {
                     w->item.state = 100;
                     w->item.bookTgtX = -170.0f;
                     w->item.bookTgtY = 160.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     w->flags |= WINDOW_FLAG_BOOK_OPEN;
 #endif
                     book = luigi_book_list[c - ITEM_SUPER_LUIGI1];
@@ -419,7 +419,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.state = 10;
                 w->item.bookTgtX = 320.0f;
                 w->item.bookTgtY = -240.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             }
         } else if (w->buttonTrg & PAD_BUTTON_B) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
@@ -437,7 +437,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.state = 10;
                 w->item.bookTgtX = 320.0f;
                 w->item.bookTgtY = -240.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
                 w->helpX = w->helpTgtX;
                 w->helpY = w->helpTgtY;
@@ -446,7 +446,7 @@ s32 winItemMain(WindowWork* w) {
         } else if (w->buttonTrg & PAD_BUTTON_START) {
             w->item.bookTgtX = 320.0f;
             w->item.bookTgtY = -240.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             w->flags &= ~WINDOW_FLAG_BOOK_OPEN;
             w->helpX = w->helpTgtX;
             w->helpY = w->helpTgtY;
@@ -467,7 +467,7 @@ s32 winItemMain(WindowWork* w) {
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
             FontGetMessageWidthLine(msgSearch(mail->body), &w->item.mailLines);
             w->item.mailLines++;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             w->item.mailLines += 7;
             w->item.mailLine = 0;
             if (mail->flags & MAIL_FLAG_PICTURE) {
@@ -545,7 +545,7 @@ s32 winItemMain(WindowWork* w) {
     case 201:
         mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
         if (mail->flags & MAIL_FLAG_PICTURE) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
             if (w->mailRes) {
                 w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/window/jp/mail.tpl", getMarioStDvdRoot());
@@ -576,7 +576,7 @@ s32 winItemMain(WindowWork* w) {
                     w->item.mailLine--;
                 }
             } else if (keyGetDirRep(0) & DEMO_SUBSTICK_DOWN) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (w->item.mailLine + 8 < w->item.mailLines) {
 #else
                 if (w->item.mailLine + 6 < w->item.mailLines) {
@@ -611,7 +611,7 @@ s32 winItemMain(WindowWork* w) {
             winMgrClose(w->useWin[1]);
         } else if (w->buttonTrg & PAD_BUTTON_A) {
             mp = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
             if (mp->currMotionId != MARIO_MOTION_SHIP && mp->currMotionId != MARIO_MOTION_PLANE &&
                 ((w->item.useTarget < 2 && !marioBgmodeChk()) || (w->item.useTarget < 1 && marioBgmodeChk()))) {
@@ -644,7 +644,7 @@ s32 winItemMain(WindowWork* w) {
                 }
             }
             for (i = 0; i < 7; i++) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 if (party != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&
                     !(pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_AWAY)) {
 #else
@@ -655,14 +655,14 @@ s32 winItemMain(WindowWork* w) {
             }
             if (w->item.useTarget < 1) {
                 pouchSetHP(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 pouchSetFP(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
                 pouchSetAP(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
 #endif
             } else {
                 party = list[w->item.useTarget - 1]->partyId;
                 pouchSetPartyHP(party, pouchGetPartyHP(party) + itemDataTable[w->item.useItem].hp_restored);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 pouchSetFP(pouchGetFP() + itemDataTable[w->item.useItem].fp_restored);
                 pouchSetAP(pouchGetAP() + itemDataTable[w->item.useItem].sp_restored);
 #endif
@@ -677,7 +677,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.useTarget = w->party.count;
             }
             if (old != w->item.useTarget) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
@@ -690,7 +690,7 @@ s32 winItemMain(WindowWork* w) {
                 w->item.useTarget = 0;
             }
             if (old != w->item.useTarget) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
 #else
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
@@ -913,7 +913,7 @@ static const char* hpfp_name_table[7][2] = {
  * winMgr draw callback for the item target window: Mario with his HP and FP, then each partner with HP;
  * the chosen target blinks while the item takes effect and the others gray out. Also draws the hand cursor.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void itemUseDisp(WinMgrEntry* entry) {
 #else
 void itemUseDisp(WinMgrEntry* entry) {
@@ -923,7 +923,7 @@ void itemUseDisp(WinMgrEntry* entry) {
     GXColor white2;
     GXColor white3;
     GXColor white = {255, 255, 255, 255};
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WindowPartyDt* list[9];
 #else
     WindowPartyDt* list[11];
@@ -949,7 +949,7 @@ void itemUseDisp(WinMgrEntry* entry) {
             }
         }
         for (i = 0; i < 7; i++) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             if (party != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&
                 !(pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_AWAY)) {
 #else
@@ -994,7 +994,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 winFontInit();
                 winFontSet((Vec){entry->x + 50, entry->y - 8 - off, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, msgSearch("name_mario"));
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 winFontSetR((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetHP());
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
                 winFontSet((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxHP());
@@ -1004,7 +1004,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
                 winFontSet((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%d", pouchGetMaxFP());
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 winFontSetRWidth((Vec){entry->x + 245, entry->y - 8 - off, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, 30.0f, "%d", pouchGetHP());
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
                 winFontSetWidth((Vec){entry->x + 310, entry->y - 10 - off, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, 30.0f, "%d", pouchGetMaxHP());
@@ -1021,7 +1021,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 }
                 winFontInit();
                 winFontSet((Vec){entry->x + 220, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_FP_NAME);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 winFontSetRWidth((Vec){entry->x + 245, entry->y - 8 - off3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, 30.0f, "%d", pouchGetFP());
                 winFontSetR((Vec){entry->x + 267, entry->y - 8 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
                 winFontSetWidth((Vec){entry->x + 310, entry->y - 10 - off3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, 30.0f, "%d", pouchGetMaxFP());
@@ -1047,7 +1047,7 @@ void itemUseDisp(WinMgrEntry* entry) {
                 }
                 winIconSet(list[i - 1]->iconId, (Vec){entry->x + 30, yoff + (entry->y - 20 - i * 28), 0.0f}, (Vec){0.65f, 0.65f, 0.65f}, white3);
                 winFontInit();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, name);
                 winFontSet((Vec){entry->x + 220, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
                 winFontSetR((Vec){entry->x + 245, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
@@ -1056,7 +1056,7 @@ void itemUseDisp(WinMgrEntry* entry) {
 #else
                 winFontSet((Vec){entry->x + 50, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){FontGetMessageWidth(name) < 160.0f ? 1.0f : 160.0f / FontGetMessageWidth(name), 1.0f, 1.0f}, black, name);
                 winFontSet((Vec){entry->x + 220, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, WI_HP_NAME);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 winFontSetRWidth((Vec){entry->x + 245, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, 30.0f, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].currentHP);
                 winFontSetR((Vec){entry->x + 267, yoff + (entry->y - 8 - i * 28), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, WI_SLASH);
                 winFontSetWidth((Vec){entry->x + 310, (yoff + (entry->y - 8 - i * 28)) - 2.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, 30.0f, "%d", pouchGetPtr()->partyData[list[i - 1]->partyId].maximumHP);

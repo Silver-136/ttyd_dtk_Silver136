@@ -206,7 +206,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element modifiers of the Boo: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /** Status vulnerability of the Boo in the demo builds: immune to poison; resists most other statuses. */
 static StatusVulnerability regist = {50, 50, 90, 0, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 95, 100, 10, 100, 100, 10};

@@ -39,7 +39,7 @@ static EvtWord evt_tou_balloon[85];
 static EvtWord evt_light[66];
 static EvtWord evt_wing[125];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_to_tou[];
 #else
 EvtWord evt_to_tou[293];
@@ -179,7 +179,7 @@ EVT_END()
 EVT_BEGIN(evt_to_tou)
     CALL(evt_cam3d_evt_set, -2000, 241, 534, -2000, 145, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_URN1"), 18000)
 #else
     CALL(evt_snd_bgmon_f_d, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_URN1"), 18000, 18000)
@@ -475,7 +475,7 @@ EVT_BEGIN(tou_00_koopa_evt)
             GOTO(2)
         END_IF
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfx_pit, GW(9), -1365)
 #else
     CALL(evt_snd_sfx_pit, GW(2), -1365)

@@ -147,7 +147,7 @@ s32 marioGetPlaneStatus(void) {
  * Ends a glide early: switches to the landing phase (sub-motion 50) from the current height.
  * Called from evt_mario's plane command and when the field motion is changed while flying.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void mario_plane_cancel(void) {
     MarioWork* mario = marioGetPtr();
     if ((u16)mario->currMotionId == MARIO_MOTION_PLANE && (s32)mario->currSubMotionId >= 12 && (s32)mario->currSubMotionId < 20) {
@@ -359,7 +359,7 @@ void mot_plane(void) {
     }
     flyMain();
     if (marioKeyOffChk() && !(mp->trigFlags & MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         MarioWork* m = marioGetPtr();
         if ((u16)m->currMotionId == MARIO_MOTION_PLANE && (s32)m->currSubMotionId >= 12 && (s32)m->currSubMotionId < 20) {
             m->currSubMotionId = 50;
@@ -516,7 +516,7 @@ void mot_plane(void) {
         break;
     case 70: {
         Vec p;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         set_damage_root_ypos(mp->position.y);
 #endif
         p = mp->position;
@@ -879,7 +879,7 @@ static f32 planeDead270(void) {
  * plus from JP on a ray between the two), and with no floor a short upward ray for a ceiling
  * (mario->hitobjHead). Returns TRUE on any hit, with the hit height in *outY.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BOOL chkCollision(f32* outY) {
 #else
 BOOL chkCollision(f32* outY) {
@@ -959,7 +959,7 @@ BOOL chkCollision(f32* outY) {
         y = mario->motPlane->tipPos.y;
         z = mario->motPlane->tipPos.z;
         mario->hitobjStandOn = NULL;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         dist = 2.0f;
         hit = marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, -1.0f, 0.0f);
 #else
@@ -970,7 +970,7 @@ BOOL chkCollision(f32* outY) {
             mario->hitobjStandOn = hit;
             ret = TRUE;
             *outY = oy;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         }
     }
     if (!ret) {

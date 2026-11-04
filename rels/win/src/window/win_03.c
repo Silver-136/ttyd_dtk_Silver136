@@ -41,7 +41,7 @@ EvtWord cloud_out[12];
 EvtWord cloud_in[12];
 static BeroEntry bero_entry_data[5];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord lookat_house[];
 #else
 EvtWord lookat_house[45];
@@ -53,7 +53,7 @@ EvtWord tree_evt_01[20];
 static TreeAccess tree_access_data[5];
 EvtWord dummy_event[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord win_03_init_evt[];
 #else
 EvtWord win_03_init_evt[108];
@@ -189,7 +189,7 @@ EVT_BEGIN(lookat_house)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_02"), 0, STRING("extparty"))
@@ -400,7 +400,7 @@ EVT_BEGIN(win_03_init_evt)
         SPAWN_EVENT(cloud_lostitem)
     END_IF
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
 EVT_END_PAD4()

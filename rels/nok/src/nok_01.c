@@ -75,7 +75,7 @@ EvtWord boss_noko_open_gate[181];
 
 static s32 iri_17_item_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord boss_noko_talk[];
 #else
 EvtWord boss_noko_talk[352];
@@ -83,7 +83,7 @@ EvtWord boss_noko_talk[352];
 
 EvtWord nokorin_init[30];
 
-#if VERSION == VERSION_US
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
 EvtWord nokorin_talk[281];
 #else
 EvtWord nokorin_talk[267];
@@ -111,7 +111,7 @@ static const char* ie_map[2];
 static HouseParam ie_data;
 static HitDamageReturn hitDmgRetPoints[13];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord nokotarou_tabidachi[];
 #else
 EvtWord nokotarou_tabidachi[328];
@@ -576,7 +576,7 @@ EVT_BEGIN(boss_noko_talk)
 
                     // Request 17: the mayor takes the Routing Slip from Mario.
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
 #else
                     CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
@@ -616,7 +616,7 @@ EVT_BEGIN(boss_noko_talk)
         CALL(evt_msg_print, 0, STRING("stg1_nok_56_01"), 0, 0)
         CASE_LESS(STG1_31_FRANKLYS_HOUSE_STG_1)
         CALL(evt_msg_print, 0, STRING("stg1_nok_57"), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CASE_EQUAL(STG7_02_MAYOR_BOB)
         SET_VALUE(GSWF_NOK_GENERAL_WHITE_HINT_HEARD, 1)
         CALL(evt_msg_print, 0, STRING("stg1_nok_57_1_00"), 0, 0)
@@ -733,7 +733,7 @@ EVT_BEGIN(nokorin_talk)
         CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
     END_IF
     CASE_DEFAULT
-#if VERSION == VERSION_US // PAL has the JP line
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2) // PAL has the JP line
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
@@ -1206,7 +1206,7 @@ EVT_BEGIN(nokotarou_tabidachi)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
     RESUME_TYPES_OTHER(4)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -1668,7 +1668,7 @@ static EVT_BEGIN(evt_kusa_4)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
@@ -1687,7 +1687,7 @@ static EVT_BEGIN(evt_kusa_5)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
@@ -1706,7 +1706,7 @@ static EVT_BEGIN(evt_kusa_6)
     END_IF
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)

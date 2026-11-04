@@ -104,7 +104,7 @@ static BattleUnitDefense defence = {0};
 /** Element attributes of the Piranha Plant: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 80, 60, 100, 75, 100, 100, 80, 100, 70, 100, 70, 100, 70, 70, 20, 30, 100, 70, 100, 100, 30};
 #else
 static StatusVulnerability regist = {

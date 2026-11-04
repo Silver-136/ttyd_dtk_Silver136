@@ -18,7 +18,7 @@ struct MapAllocEntry {
 };
 
 //.bss
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern SmartWork smartWork;
 #else
 SmartWork smartWork;
@@ -36,7 +36,7 @@ SmartWork smartWork;
 
 // {fixed, size}: a fixed heap (1) has its size in KiB, the others (0) get size percent of the arena left over
 s32 size_table[HEAP_COUNT][2] = {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {1, 0x3784},
 #else
     {1, 0x1C84}, // 0x721000, 7300 KiB (7.13 MiB)
@@ -68,13 +68,13 @@ void* mapalloc_base_ptr;
 #define MAPBASE_PARAM void* base_,
 #define MAPBASE ((MapAllocEntry*)base_)
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 SmartWork smartWork;
 #endif
 void* mapalloc_base_ptr;
 u32 mapalloc_size;
 BOOL g_bFirstSmartAlloc;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static u16 count;
 #define COUNT count
 #else
@@ -85,7 +85,7 @@ u32 count;
 #define MAPBASE mapalloc_base_ptr
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 // demo: the smart heap is a fixed 7 MiB block taken from the default heap
 #define SMART_ALLOC_HEAP HEAP_DEFAULT
 #define SMART_HEAP_SIZE 0x700000
@@ -441,7 +441,7 @@ void smartInit(void) {
     g_bFirstSmartAlloc = FALSE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * JP and later: empties the smart heap again without reallocating it.
  * Used by the crash screen to get memory for the ROM font.

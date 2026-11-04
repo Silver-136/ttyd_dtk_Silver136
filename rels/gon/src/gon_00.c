@@ -15,7 +15,7 @@
 static BeroEntry bero_entry_data[4];
 static BeroEntry e3_bero[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord gon_00_init_evt[];
 #else
 EvtWord gon_00_init_evt[77];
@@ -101,7 +101,7 @@ static BeroEntry e3_bero[] = {
  * With the E3 system flag set, the west exit is rerouted back to the same room instead of leading to Petal Meadows.
  */
 EVT_BEGIN(gon_00_init_evt)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GSWF_GON_00_VISITED, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

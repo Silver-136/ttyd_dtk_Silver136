@@ -46,7 +46,7 @@ FireScaleKey scale1[] = {
  * Eight vertex colours of the layered flame for the spark-throwing types: orange fire (type 5), blue (6)
  * and green (7). Read by effFireDisp3.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 FireScaleKey scale2[] = {
     {0, 1.0f},
     {100, 1.2f},
@@ -99,7 +99,7 @@ void effFireDisp2(CameraId cameraId, void* payload);
 void effFireDisp3(CameraId cameraId, EffectEntry* effect);
 
 /** Slower looping 200-frame swell of the flame's size (up to 1.2) for flame type 4; read by effFireMain. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 FireScaleKey scale2[] = {
     { 0, 1.0f },
     { 100, 1.2f },
@@ -189,7 +189,7 @@ EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
     work->pulseScale = 0.0f;
     work->reserved_80 = 0;
     work->reserved_84 = 0;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     work->useMapBlend = 0;
 #endif
     return effect;
@@ -599,7 +599,7 @@ void effFireDisp2(CameraId cameraId, void* payload) {
 }
 
 /** Draws the spark particles (types 5-7) around the flame. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
 #else
 void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
@@ -642,7 +642,7 @@ void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(scaleMtx, work->scale * work->scaleX, work->scale * work->scaleY, work->scale);
     PSMTXConcat(trans, rot, mb0);
     PSMTXConcat(mb0, scaleMtx, mb0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXSetNumTevStages(2);
 #else
     GXSetNumTevStages(3);
@@ -657,7 +657,7 @@ void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_DIVIDE_2, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_APREV, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

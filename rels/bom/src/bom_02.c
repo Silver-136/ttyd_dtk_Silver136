@@ -47,7 +47,7 @@
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 static USER_FUNC(nice_effect_shrink);
 #endif
 
@@ -79,7 +79,7 @@ static EvtWord evt_taihou[190];
 EvtWord urotuku_white[190];
 static EvtWord init_soncho[13];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_soncho[416];
 #else
 static EvtWord talk_soncho[421];
@@ -100,7 +100,7 @@ static EvtWord talk_murabito_g[81];
 static EvtWord init_murabito_h[2];
 s32 iri_26_item_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_murabito_h[149];
 #else
 static EvtWord talk_murabito_h[151];
@@ -114,14 +114,14 @@ static EvtWord init_white[83];
 EvtWord mario_jump[];
 
 #if VERSION < VERSION_US
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord mario_jump_tail[6];
 #endif
 #endif
 
 s32 iri_25_item_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_white[115];
 #else
 static EvtWord talk_white[117];
@@ -137,7 +137,7 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord sekai_yami_evt[465];
 #else
 static EvtWord sekai_yami_evt[459];
@@ -146,7 +146,7 @@ static EvtWord sekai_yami_evt[459];
 static EvtWord minnnanokoe_evt[183];
 static KinopioData kino_dt;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord bom_02_init_evt[];
 #else
 EvtWord bom_02_init_evt[312];
@@ -574,7 +574,7 @@ static EVT_BEGIN(talk_soncho)
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21"), 0, STRING("me"))
             ELSE
                 CALL(evt_msg_print, 0, STRING("stg7_bom_21_01"), 0, STRING("me"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
                 RETURN
@@ -913,7 +913,7 @@ static EVT_BEGIN(talk_murabito_h)
             CALL(evt_msg_print_add, 0, STRING("irai_26_03"))
             CALL(evt_msg_select, 0, STRING("irai_26_03_s"))
             CALL(evt_msg_print_add, 0, STRING("irai_26_04"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(iri_26_item_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(iri_26_item_tbl), LW(0), 0)
@@ -1058,7 +1058,7 @@ EvtWord mario_jump[] = {
         SUBTRACT(LW(0), 20)
         SUBTRACT(LW(2), 20)
 #endif
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_eff, STRING("eff_nice"), STRING("nice"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
         CALL(nice_effect_shrink, STRING("eff_nice"))
 #else
@@ -1082,7 +1082,7 @@ EvtWord mario_jump[] = {
         SUBTRACT(LW(0), 20)
         SUBTRACT(LW(2), 20)
 #endif
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_eff, STRING("eff_good"), STRING("nice"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
         CALL(nice_effect_shrink, STRING("eff_good"))
 #else
@@ -1097,7 +1097,7 @@ EvtWord mario_jump[] = {
     END_INLINE_EVENT
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, 335, 30, -130, 500, 2, -1000)
-#if VERSION >= VERSION_US || VERSION <= VERSION_DEMO_US
+#if VERSION >= VERSION_US || VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_cam_keep_off)
     RETURN
@@ -1107,7 +1107,7 @@ EVT_END()
 };
 #endif
 
-#if VERSION < VERSION_US && VERSION > VERSION_DEMO_US  // US and the demos: this tail is part of mario_jump (US script above)
+#if VERSION < VERSION_US && VERSION >= VERSION_JP  // US and the demos: this tail is part of mario_jump (US script above)
 EvtWord mario_jump_tail[] = {
     STRING("ホワイト"), 32, /* rest of mario_jump's evt_npc_flag_onoff call */
     CALL(evt_mario_cam_keep_off)
@@ -1140,7 +1140,7 @@ static EVT_BEGIN(talk_white)
                 IF_INT_EQUAL(LF(0), 1)
                     CALL(evt_msg_print, 0, STRING("irai_25_19"), 0, STRING("ホワイト"))
                 END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, PTR(iri_25_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_25_item_tbl), LW(0), 0)
@@ -1670,7 +1670,7 @@ static ShopperData35 shopper_data = {
 };
 
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 /** PAL only: shrinks a named "nice" effect to 5/7 of its size. */
 static USER_FUNC(nice_effect_shrink) {
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
@@ -1822,7 +1822,7 @@ static EVT_BEGIN(sekai_yami_evt)
         CALL(evt_npc_wait_pera, STRING("ボムヘイG"))
         CALL(evt_npc_reverse_ry, STRING("ボムヘイG"))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 3000)
 #endif
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0068359375f))
@@ -1907,7 +1907,7 @@ static KinopioData kino_dt = {
     198, // breakfastItem
     {-425.0f, 50.0f, -200.0f}, // breakfastPos
     15, // ryoukin
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {-291.0f, 46.0f, -225.0f},
 #else
     {-285.0f, 46.0f, -223.0f}, // bed
@@ -2035,7 +2035,7 @@ EVT_BEGIN(bom_02_init_evt)
             CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF_BOM_02_SNOW_BUNNY, 0)
         END_IF
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie1_naka"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie2_naka"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie3_naka"), MAP_OBJ_FLAG_CLIP)

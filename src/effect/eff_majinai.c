@@ -47,7 +47,7 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
  * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map and make Mario glow,
  * wait, restore) and deletes the effect when the animation has looped.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effMajinaiMain(EffectEntry* effect) {
 #else
 void effMajinaiMain(EffectEntry* effect) {
@@ -95,7 +95,7 @@ void effMajinaiMain(EffectEntry* effect) {
             map->entries[0].flags |= 8;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 for (i = 0; i < 3; i++) {
                     if (mario->paperAnimGroupId[i] != -1) {
                         animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
@@ -110,7 +110,7 @@ void effMajinaiMain(EffectEntry* effect) {
                 animPoseSetMaterialFlagOn(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit))->poseId, MAP_OBJ_FLAG_NO_MAP_BLEND);
             }
             if (animPoseGetLoopTimes(work->poseId) >= 0.93f) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 effStardustEntry(0, 16, 60, work->position.x, 55.0f + work->position.y, work->position.z, 45.0f, 45.0f);
 #else
                 effStardustEntry(0, 16, 60, work->position.x, 55.0f * work->scale + work->position.y,
@@ -135,7 +135,7 @@ void effMajinaiMain(EffectEntry* effect) {
             map->entries[0].flags |= 8;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 for (i = 0; i < 3; i++) {
                     if (mario->paperAnimGroupId[i] != -1) {
                         animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);

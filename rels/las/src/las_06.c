@@ -16,7 +16,7 @@
 #include "evt/evt_bero.h"
 #include "manager/evtmgr_cmd.h"
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static char name[8];
 #endif
 
@@ -29,7 +29,7 @@ static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 static EvtWord rousoku_init[46];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_06_init_evt[];
 #else
 EvtWord las_06_init_evt[56];
@@ -139,7 +139,7 @@ static EVT_BEGIN(rousoku_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(7.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
@@ -156,7 +156,7 @@ EVT_END()
 EVT_BEGIN(las_06_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -178,7 +178,7 @@ EVT_END()
 /** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     char name[8];
     s32 number;
 

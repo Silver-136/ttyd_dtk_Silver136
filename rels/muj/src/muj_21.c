@@ -37,7 +37,7 @@ static NpcSetupInfo npcEnt[2];
 EvtWord fune_yure[42];
 static EvtWord epilogue_evt[344];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord muj_21_init_evt[];
 #else
 EvtWord muj_21_init_evt[58];
@@ -216,7 +216,7 @@ EVT_BEGIN(muj_21_init_evt)
     SPAWN_EVENT(PTR(fune_yure))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_f_wa"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mario_kill_party, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPAWN_EVENT(epilogue_evt)
 #else
     SPAWN_EVENT(PTR(epilogue_evt))

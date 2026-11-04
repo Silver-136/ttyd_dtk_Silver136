@@ -171,7 +171,7 @@ EVT_BEGIN(tik_15_init_evt)
     END_IF
     CALL(evt_mobj_lv_blk, STRING("block00"), -370, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_1_BROKEN, STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("block01"), -420, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_2_BROKEN, STRING("MOBJ_Lv1BigBlock"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -30, ITEM_MUSHROOM, 0, GSWF_TIK_15_MUSHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -30, ITEM_FIRE_FLOWER, 0, GSWF_TIK_15_FIRE_FLOWER_BLOCK, 0)
 #else

@@ -41,7 +41,7 @@ static EvtWord hikaru_off[4];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[48];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_05_init_evt[];
 #else
 EvtWord aji_05_init_evt[77];
@@ -53,7 +53,7 @@ EvtWord aji_05_init_evt[77];
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -70,7 +70,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -188,7 +188,7 @@ static EvtWord hikaru_yuka_init[] = {
 EVT_BEGIN(aji_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -214,7 +214,7 @@ static USER_FUNC(ride_chk) {
     static s32 onoff[24];
     char hitName[64];
     char name[64];
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
     HitEntry* hit;
@@ -224,7 +224,7 @@ static USER_FUNC(ride_chk) {
     if (isFirstCall) {
         memset(onoff, 0, sizeof(onoff));
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         hit = mario->hitobjStandOn;
         if (hit == NULL) {
@@ -236,7 +236,7 @@ static USER_FUNC(ride_chk) {
 #endif
     // Contact resets the counter to 30; the same call decrements it before testing visibility.
     for (i = 0; i < 24; i++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         MarioWork* mario = marioGetPtr();
 
         if (mario->hitobjUnder != NULL) {
@@ -244,7 +244,7 @@ static USER_FUNC(ride_chk) {
         if (hit != NULL) {
 #endif
             sprintf(hitName, "A_hikaru_%02d", i + 1);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
 #else
             if (strcmp(hit->joint->name, hitName) == 0) {

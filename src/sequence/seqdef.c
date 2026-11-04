@@ -13,7 +13,7 @@
 #include "seq/seq_battle.h"
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "seq/seq_demo.h"
 SequenceCallback seq_data[9][3] = {
 #else
@@ -27,7 +27,7 @@ SequenceCallback seq_data[8][3] = {
     {seq_battleInit, seq_battleMain, seq_battleExit},
     {seq_gameOverInit, seq_gameOverMain, seq_gameOverExit},
     {seq_loadInit, seq_loadMain, seq_loadExit},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {seq_demoInit, seq_demoMain, seq_demoExit},
 #endif
     {seq_e3Init, seq_e3Main, seq_e3Exit},

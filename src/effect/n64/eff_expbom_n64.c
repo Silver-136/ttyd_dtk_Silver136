@@ -84,7 +84,7 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
         data->position.z = z;
         data->offsetX = 0.0f;
         data->offsetY = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         sv = bom_dir[i];
         spd = 2.0f * bom_spd[i];
         rad = ((6.2831855f * (90.0f + sv)) / 360.0f);
@@ -148,7 +148,7 @@ void effExpBomMain(EffectEntry* effect) {
  * Draws each live fragment as a camera-facing sprite stepping through the explosion textures 0-6 (blending each
  * with its successor); the sprite scale and Z rotation come from bom_scale and bom_ry.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effExpBomDisp(CameraId camId, void* param) {
 #else
 void effExpBomDisp(CameraId camId, void* param) {
@@ -173,7 +173,7 @@ void effExpBomDisp(CameraId camId, void* param) {
     PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(camId)->viewYaw);
     PSMTXConcat(mtx, rot, base);
     PSMTXConcat(camera->view, base, base);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < effect->count; i++, data++) {
         if (data->lifeLeft < 0 || data->startDelay >= 0)
                 continue;

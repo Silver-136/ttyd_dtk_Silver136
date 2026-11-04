@@ -107,7 +107,7 @@ static BattleUnitDefenseAttr defence_patakuri_attr = {{DEFENSE_ATTR_NONE, DEFENS
  * Status vulnerability of the Paragoomba (Paragoomba form) (percent chance to take each status):
  * extra prone to stop, dizzy, fright, gale force and instant kill.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_patakuri = {100, 120, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 150, 100, 100, 100, 100, 150};
 #else
 static StatusVulnerability regist_patakuri = {
@@ -453,7 +453,7 @@ static BattleUnitDefenseAttr defence_attr = {0};
  * Status vulnerability of the Paragoomba (percent chance to take each status):
  * extra prone to stop, fright and instant kill; also gale force in the demos.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else
 static StatusVulnerability regist = {

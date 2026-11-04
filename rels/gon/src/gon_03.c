@@ -78,7 +78,7 @@ static BeroEntry bero_entry_data[3];
 const char* nokotaro_pose[2];
 EvtWord tegami_event[305];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord senkaron_event[583];
 #else
 static EvtWord senkaron_event[579];
@@ -491,7 +491,7 @@ static EVT_BEGIN(senkaron_event)
         // reaching it shoves him back to gon_01.
         LOOP(0)
             WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             IF_INT_GREATER_OR_EQUAL(LW(0), 350)
 #else
@@ -807,7 +807,7 @@ void nokotaro_callback(s32 type) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_gon_00000374, JP gon .text+0x290. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper (retail versions): writes 1 into LW(0)
  * when Mario is touching the Dry Bones leader (the NPC marioGetTouchNpcPtr finds) while he has control,

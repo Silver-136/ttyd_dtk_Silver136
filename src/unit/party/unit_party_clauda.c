@@ -249,7 +249,7 @@ BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -426,7 +426,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -658,19 +658,19 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
     SUBTRACT(LW(1), 3)
     SWITCH(LW(1))
         CASE_LESS_OR_EQUAL(-3)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(0), 420)
 #else
         SET_VALUE(LW(0), 300)
 #endif
         CASE_EQUAL(-2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(0), 360)
 #else
         SET_VALUE(LW(0), 300)
 #endif
         CASE_EQUAL(-1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(0), 320)
 #else
         SET_VALUE(LW(0), 300)
@@ -678,19 +678,19 @@ EVT_BEGIN(partyClaudaAttack_BreathAttack)
         CASE_EQUAL(0)
         SET_VALUE(LW(0), 300)
         CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(0), 270)
 #else
         SET_VALUE(LW(0), 300)
 #endif
         CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(0), 240)
 #else
         SET_VALUE(LW(0), 300)
 #endif
         CASE_DEFAULT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(0), 180)
 #else
         SET_VALUE(LW(0), 300)
@@ -866,7 +866,7 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
             SET_VALUE(LW(0), 70)
             SET_VALUE(LW(1), 2)
             CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             SET_VALUE(LW(0), 65)
             SET_VALUE(LW(1), 3)
             CASE_EQUAL(2)
@@ -896,7 +896,7 @@ EVT_BEGIN(partyClaudaAttack_PredationAttack)
         SUBTRACT(LW(0), 3)
         SWITCH(LW(0))
             CASE_LESS_OR_EQUAL(-3)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             SET_VALUE(LW(0), 80)
             SET_VALUE(LW(1), 0)
             CASE_EQUAL(-2)
@@ -1223,7 +1223,7 @@ EVT_BEGIN(clauda_appeal_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Victory reaction (data tag 64): plays Flurrie's PWD_Y_1 pose to the end. */
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_Y_1"))
@@ -1395,7 +1395,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Flurrie's status vulnerabilities: base rate (100) for every status. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -1428,7 +1428,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /** Idle: plays the stay pose from the current pose table. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1436,7 +1436,7 @@ EVT_END()
 #endif
 
 /** Victory reaction (data tag 64): plays Flurrie's PWD_Y_1 pose to the end. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_Y_1"))
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)

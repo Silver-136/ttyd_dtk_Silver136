@@ -279,7 +279,7 @@ typedef struct BattleAudienceWindow {
 // 0x1, 0x2 (set, never read), 0x4 and 0x4000 (Hooktail only) are not named.
 // The demos have one more flag (STYLISH_MISSED, 0x400), so the later bits are one higher.
 typedef enum BattleAudienceFlags {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     AUDIENCE_FLAG_SP_GAINED = (1 << 1),
 #endif
     AUDIENCE_FLAG_PHASE_REACTION = (1 << 3),       // 0x8
@@ -289,7 +289,7 @@ typedef enum BattleAudienceFlags {
     AUDIENCE_FLAG_GUARD_BAD = (1 << 7),            // 0x80
     AUDIENCE_FLAG_ACROBAT_GOOD = (1 << 8),         // 0x100
     AUDIENCE_FLAG_ACROBAT_BAD = (1 << 9),          // 0x200
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     AUDIENCE_FLAG_STYLISH_MISSED = (1 << 10),      // the last stylish try missed
     AUDIENCE_FLAG_ENEMY_DAMAGE = (1 << 11),
     AUDIENCE_FLAG_ENEMY_NO_DAMAGE = (1 << 12),
@@ -325,7 +325,7 @@ typedef struct BattleAudience {
     BattleAudienceMember members[200]; // 0x1BC
     BattleAudienceItem items[100];     // 0xF25C
     BattleAudienceStar starpower[100]; // 0x10E7C
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BattleAudienceSound sounds[24];    // 0x133FC
     BattleAudienceWindow window;       // 0x1375C
 #endif
@@ -335,13 +335,13 @@ typedef struct BattleAudience {
     s32 currentAudienceIntCount;      // 0x13784
     s32 currentAudienceIntCountRight; // 0x13788
     s32 currentAudienceIntCountLeft;  // 0x1378C
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 presentCount;                     // 0x13414, members that exist and are not in status 12 (BattleAudienceNumToTargetSub)
 #endif
     s32 maxAudience;                  // 0x13790
     s32 typeWeights[12];               // 0x13794, per-type audience weights (BattleAudienceSettingAudience)
     s32 starPowerGain;                 // 0x137C4, star power gained this action
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 numStylishCommandsThisAttack;     // 0x13450
     s32 stylishTotal;                     // 0x13454, stylish commands summed over the battle, capped at 100
 #else
@@ -349,7 +349,7 @@ typedef struct BattleAudience {
 #endif
     s32 crowdPleasedStreak;            // 0x137CC, consecutive good actions, capped at 2
     s32 crowdDispleasedStreak;         // 0x137D0, consecutive bad actions, capped at 5
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 acStreak;                         // 0x13460, capped at 2, indexes the weapon's per-streak table
     StarPowerInfo* impendingBonuses;      // 0x13464
     u8 reserved_13468[0x1346C - 0x13468]; // 0x13468, never accessed
@@ -359,7 +359,7 @@ typedef struct BattleAudience {
 #endif
     s32 checkPhaseReactionState;      // 0x137DC
     s32 phaseSub;                      // 0x137E0, phase sub-state
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 joyLevel;                         // 0x13474
 #endif
     s32 presentItemNo;                 // 0x137E4
@@ -374,7 +374,7 @@ typedef struct BattleAudience {
     s32 phaseList[14];                 // 0x138CC
     s32 phaseListCount;                // 0x13904
     s32 turnEndPhaseEventChance;      // 0x13908
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BattleAudienceSound sounds[24];       // 0x135A0
     BattleAudienceWindow window;          // 0x13900
 #else

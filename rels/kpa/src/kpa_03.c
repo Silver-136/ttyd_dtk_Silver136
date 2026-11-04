@@ -19,7 +19,7 @@ EvtWord kpa_act_stg2_item[85];
 static EvtWord kpa_fall[41];
 EvtWord kairyu_evt[38];
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 static EvtWord jumpstand_evt[62];
 #else
 static EvtWord jumpstand_evt[60];
@@ -130,7 +130,7 @@ EVT_END()
  */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(kpa_cancel_attack_mode)
 #endif
     BEGIN_INLINE_EVENT
@@ -151,7 +151,7 @@ static EVT_BEGIN(jumpstand_evt)
     CALL(evt_mobj_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(1))
     ADD(LW(3), 700)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 2000, 1)
 #else
     CALL(evt_mario_jump_jumpstand, LW(0), LW(1), LW(2), LW(0), LW(3), LW(2), LW(0), LW(3), LW(2), 4000, 3)

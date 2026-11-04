@@ -165,20 +165,20 @@ BattleUnitKind unit_fire_bros = {
  * Defence of the Fire Bro: 1 against every element in retail; demos use fire defence 99
  * and a fire-immunity attribute, with defence 1 against the other elements.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleUnitDefense defence = {{1, 99, 1, 1, 1}};
 #else
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 #endif
 
 /** Damage-type reactions of the Fire Bro: immune to fire in demos; no special element reaction in retail. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 #else
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 80, 70, 100, 80, 100, 100, 70, 100, 80, 100, 80, 100, 80, 80, 40, 60, 100, 80, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

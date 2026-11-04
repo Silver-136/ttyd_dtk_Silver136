@@ -37,7 +37,7 @@ static EvtWord dmg_avoid_counter_thorn_head_event[71];
 static EvtWord damage_event[10];
 static EvtWord counter_damage_event[30];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord return_event[244];
 #else
 static EvtWord return_event[256];
@@ -53,7 +53,7 @@ static EvtWord wait_event[6];
 BattleUnitKind unit_pakkun_flower = {
     UNIT_PIRANHA_PLANT,
     "btl_un_pakkun_flower",
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     13,
 #else
     15,
@@ -61,7 +61,7 @@ BattleUnitKind unit_pakkun_flower = {
     0,
     1,
     1,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     35,
         0,
         1,
@@ -134,7 +134,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type modifiers of the Piranha Plant: none, no special weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Status vulnerability of the Piranha Plant (100% is the normal chance): resists Sleep 80%, Stop 80%, Dizzy
@@ -168,7 +168,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {8, 0, 0, 0, 0, 0, 0, 0},
 #else
     {9, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -684,7 +684,7 @@ static USER_FUNC(shadow_scale_memory) {
  */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
 #else
     if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {

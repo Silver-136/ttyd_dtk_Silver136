@@ -97,7 +97,7 @@ static EvtWord evt_gardman[198];
 
 EvtWord evt_match_make_sub[138];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_match_make[];
 #else
 EvtWord evt_match_make[116];
@@ -111,7 +111,7 @@ static EvtWord evt_block[5];
 EvtWord tou_10_init_evt[254];
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e5c, JP tou .text+0x6D98. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 USER_FUNC(tou_10_mario_keyoff_check) {
     EvtWord* args = event->args;
@@ -135,7 +135,7 @@ s32 tou_10_mario_talk_end_wait(void) {
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006ec8, JP tou .text+0x6E04. See docs/NAME_PROVENANCE.md.
 
 // Accumulate 241 eligible checks; blocked controls or other motions pause rather than reset the count.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper: waits for 241 eligible checks with Mario idle, walking or dashing and neither input nor control
  * locked out. Ineligible checks pause the count.
@@ -1528,7 +1528,7 @@ EVT_END()
 static EVT_BEGIN(evt_gardman)
 
     // Lock input, wait for landing and, in US/PAL, also wait for talking to end.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LW(0), 0)
     LOOP(0)
         ADD(LW(0), 1)
@@ -1682,7 +1682,7 @@ EVT_END()
  * otherwise the first-match booking helper brings Mario to the console.
  */
 EVT_BEGIN(evt_match_make)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(tou_10_mario_keyoff_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
@@ -1888,7 +1888,7 @@ EVT_BEGIN(tou_10_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -1896,7 +1896,7 @@ EVT_BEGIN(tou_10_init_evt)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))

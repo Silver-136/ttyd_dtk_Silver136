@@ -56,7 +56,7 @@ static NpcSetupInfo npcEnt[4];
 static EvtWord evt_sensyu[169];
 static EvtWord evt_champion[578];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_champion_re[];
 #else
 EvtWord evt_champion_re[308];
@@ -78,7 +78,7 @@ EvtWord evt_tou_bed[432];
 static EvtWord bed_entry[10];
 static EvtWord mobj_box00[34];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tou_07_init_evt[];
 #else
 EvtWord tou_07_init_evt[286];
@@ -100,7 +100,7 @@ USER_FUNC(tou_07_mario_keyoff_check) {
 
 /** Script helper: re-enables sound effects (clears the SFX mute flag). */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006bd8, JP tou .text+0x6B14. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(tou_07_snd_on) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
@@ -109,7 +109,7 @@ USER_FUNC(tou_07_snd_on) {
 
 /** Script helper: mutes sound effects (sets the SFX mute flag), used while Mario sleeps in the bed. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006c00, JP tou .text+0x6B3C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(tou_07_snd_off) {
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
@@ -319,7 +319,7 @@ static EVT_BEGIN(evt_champion)
         CALL(evt_party_move_pos2, 0, 3, -110, FLOAT(60.0f))
         CALL(evt_party_stop, 0)
         WAIT_MS(100)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_party_move_pos2, 0, 60, -100, FLOAT(60.0f))
 #else
         CALL(evt_party_move_pos2, 0, 70, -110, FLOAT(60.0f))
@@ -492,14 +492,14 @@ EVT_BEGIN(evt_champion_re)
 
     // She congratulates Mario on winning the title back.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_140"), 0, STRING("キノシコワ"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
 #endif
     CALL(evt_npc_move_position, STRING("キノシコワ"), 40, -95, 0, FLOAT(80.0f), 1)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 30, -95, 0, FLOAT(80.0f), 1)
     CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_entry, STRING("ベルト"), STRING("c_bred_h"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 56)
@@ -511,12 +511,12 @@ EVT_BEGIN(evt_champion_re)
     CALL(tou_07_belt_camid)
 #endif
     CALL(evt_item_entry, STRING("belt"), ITEM_CHAMPS_BELT, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(tou_07_icon_off)
 #endif
     CALL(evt_item_get_item, STRING("belt"))
     CALL(evt_item_get_item_end_wait, STRING("belt"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_delete, STRING("ベルト"))
     CALL(evt_eff_delete, STRING("belt"))
 #endif
@@ -696,7 +696,7 @@ EVT_BEGIN(evt_tou_bed)
             WAIT_MS(200)
             CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_MARIO_SLEEP2"), LW(0), LW(1), LW(2), 0)
         END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(tou_07_snd_off)
 #endif
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -755,7 +755,7 @@ EVT_BEGIN(evt_tou_bed)
         WAIT_FRAMES(1)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(tou_07_snd_on)
 #endif
         CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
@@ -892,7 +892,7 @@ EVT_BEGIN(tou_07_init_evt)
         SWITCH(GSW_STORY_PROGRESS)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_20_MAJORS_10TH_PLACE)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
@@ -904,7 +904,7 @@ EVT_BEGIN(tou_07_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         END_SWITCH
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("e_bero"))
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
@@ -933,7 +933,7 @@ static USER_FUNC(paper_on) {
 
 /** Script helper: hides the belt item's icon. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006cfc, JP tou .text+0x6C38. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(tou_07_icon_off) {
     iconFlagOn(itemNameToPtr("belt")->name, ICON_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
@@ -945,7 +945,7 @@ USER_FUNC(tou_07_icon_off) {
  * and the belt NPC (ベルト) to camera 7 (CAMERA_3D_EFFECTB).
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006d34, JP tou .text+0x6C70. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(tou_07_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");
     // ベルト

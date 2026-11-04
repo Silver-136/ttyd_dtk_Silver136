@@ -71,7 +71,7 @@ static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord hom_10_init_evt[104];
 static EvtWord evt_train[252];
 extern EvtWord evt_train2[];
@@ -832,7 +832,7 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -859,7 +859,7 @@ static EVT_BEGIN(hom_10_init_evt)
 EVT_END()
 
 static EVT_BEGIN(evt_train)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
 #else
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -927,7 +927,7 @@ static EVT_BEGIN(evt_train)
     WAIT_FRAMES(1)
     SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #else
     SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
@@ -1028,7 +1028,7 @@ EVT_BEGIN(evt_train2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
 
@@ -1052,14 +1052,14 @@ EVT_BEGIN(evt_train2)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
     SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
 #endif
 
     // Until Mario reads it, Peach's mail scene plays.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
     SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_57_A_MAIL_FROM_PEACH)
@@ -2288,7 +2288,7 @@ EVT_BEGIN(gor_04_init_evt)
     IF_STR_EQUAL(LW(0), STRING("n_bero"))
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
         SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
 #endif
         SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
@@ -2342,7 +2342,7 @@ EVT_BEGIN(gor_04_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
     END_IF
@@ -2363,7 +2363,7 @@ EVT_BEGIN(gor_04_init_evt)
 #endif
 
 // The mail event runs in the background.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPAWN_EVENT(evt_sub_mail_event)
 #else
     SPAWN_EVENT(PTR(evt_sub_mail_event))

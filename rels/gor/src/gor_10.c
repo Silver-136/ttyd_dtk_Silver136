@@ -168,7 +168,7 @@ static USER_FUNC(depth) {
     return EVT_RETURN_BLOCK;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tegami_init_evt[];
 #else
 EvtWord tegami_init_evt[78];
@@ -176,7 +176,7 @@ EvtWord tegami_init_evt[78];
 
 EvtWord evt_mezame[226];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord mezame_init_evt[];
 extern EvtWord gor_10_init_evt[];
 #else
@@ -200,7 +200,7 @@ EVT_BEGIN(tegami_init_evt)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), 1, 0)
 #endif
@@ -411,7 +411,7 @@ EVT_BEGIN(mezame_init_evt)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), 1, 0)
 #endif
@@ -439,7 +439,7 @@ EVT_END()
  * In JP and later it starts the sea animations and does nothing else if map events are being skipped.
  */
 EVT_BEGIN(gor_10_init_evt)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_sub_get_system_flag, LW(0))

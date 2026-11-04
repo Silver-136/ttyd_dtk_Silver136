@@ -10,7 +10,7 @@
 extern EvtWord all_juyoitem_lecture_rel[];
 extern EvtWord all_party_lecture[];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 extern EvtWord evt_gardman_spawn[];
 #endif
 
@@ -42,7 +42,7 @@ extern EvtWord tou_20_init_evt[];
 extern EvtWord evt_match_after_stop_npcs[];
 USER_FUNC(chk);
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(evt_rankingReset);
 #endif
 

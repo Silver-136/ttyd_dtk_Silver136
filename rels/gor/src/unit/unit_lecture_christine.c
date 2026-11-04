@@ -457,7 +457,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
 
         // Guard lesson: he asks Mario to press the A button as she lands, and waits for it.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, UNIT_ID_LECTURE)
 #else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, -6)
@@ -469,16 +469,16 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
             WAIT_FRAMES(1)
             GOTO(11)
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         WAIT_MS(50)
 #endif
         BEGIN_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             WAIT_MS(100)
 #endif
             CALL(evt_msg_continue)
         END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         WAIT_MS(100)
 #endif
         CASE_EQUAL(7)
@@ -486,7 +486,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
 
         // Superguard lesson: he asks for the B button instead, and waits for it.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_014"), 0, UNIT_ID_LECTURE)
 #else
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_014"), 0, -6)
@@ -498,16 +498,16 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
             WAIT_FRAMES(1)
             GOTO(12)
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         WAIT_MS(50)
 #endif
         BEGIN_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             WAIT_MS(100)
 #endif
             CALL(evt_msg_continue)
         END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         WAIT_MS(100)
 #endif
     END_SWITCH

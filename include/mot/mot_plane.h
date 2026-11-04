@@ -42,7 +42,7 @@ s32 marioPlaneGetFlyingDir(void);
 void mot_plane(void);
 void mot_plane_post(void);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void mario_plane_cancel(void);
 #else
 BOOL mario_plane_cancel(void);

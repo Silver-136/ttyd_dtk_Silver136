@@ -37,7 +37,7 @@ static EvtWord dmg_avoid_counter_thorn_head_event[71];
 static EvtWord damage_event[10];
 static EvtWord counter_damage_event[30];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord return_event[244];
 #else
 static EvtWord return_event[256];
@@ -121,7 +121,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type modifiers of the Pale Piranha: none, no special weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Status vulnerability of the Pale Piranha (100% is the normal chance): resists Dizzy 80%, Confusion 95%,
@@ -670,7 +670,7 @@ static USER_FUNC(shadow_scale_memory) {
  */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (_battleWorkPointer->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {
 #else
     if (TST_BATTLE_WORK(_battleWorkPointer)->stageObjectWork.flags & STAGE_OBJ_FLAG_IRON_FRAME_GONE) {

@@ -24,7 +24,7 @@ PiantaParlorWork yuugijouwork;
 //.sbss
 PiantaParlorWork* yuwp;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord* yuu_window_evt;
 #endif
 
@@ -33,7 +33,7 @@ EVT_BEGIN(minigame_end)
     SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
     CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
     CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_set_enable_key, 0)
 #endif
     CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
@@ -46,7 +46,7 @@ EVT_END()
  * asks whether to quit and runs minigame_end on the first choice, then flags it closed.
  */
 EVT_BEGIN(window_open)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_cont_onoff, 0)
     BEGIN_SIBLING_EVENT
         CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
@@ -65,7 +65,7 @@ EVT_BEGIN(window_open)
         CALL(yuuminigame_end)
     END_IF
     CALL(yuuminigame_window_end)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_cont_onoff, 1)
 #endif
     RETURN
@@ -93,7 +93,7 @@ void yuugijou_init(void) {
     yuwp->recordOn[0][3] = 1;
     yuwp->recordOn[0][4] = 1;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     yuwp->recordScore[0][0] = 0x18EE8;
     yuwp->recordScore[0][1] = 0x1708E;
     yuwp->recordScore[0][2] = 0x13F42;
@@ -124,7 +124,7 @@ void yuugijou_init(void) {
     yuwp->recordOn[1][3] = 1;
     yuwp->recordOn[1][4] = 1;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     yuwp->recordScore[1][0] = 0x1D2;
     yuwp->recordScore[1][1] = 0x1EA;
     yuwp->recordScore[1][2] = 0x200;
@@ -159,7 +159,7 @@ void yuugijou_init(void) {
     yuwp->recordOn[2][3] = 1;
     yuwp->recordOn[2][4] = 1;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     yuwp->recordScore[2][0] = 0x62E8;
     yuwp->recordScore[2][1] = 0x5410;
     yuwp->recordScore[2][2] = 0x4B96;
@@ -196,7 +196,7 @@ void yuugijou_init(void) {
     yuwp->recordOn[3][3] = 1;
     yuwp->recordOn[3][4] = 1;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     yuwp->recordScore[3][0] = 0x4EFC;
     yuwp->recordScore[3][1] = 0x4416;
     yuwp->recordScore[3][2] = 0x302A;
@@ -336,20 +336,20 @@ void monteCountDisp(void) {
     u32 flags = yuwp->flags;
     Mtx mtx;
     GXColor c1, c2, c3, c4;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (flags & PARLOR_FLAG_COUNTER_HIGH)
 #else
     if (flags & PARLOR_FLAG_COUNTER_HIGH) {
 #endif
         y = -0x78;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (!(flags & PARLOR_FLAG_COUNTER_SHOWN) || !(flags & PARLOR_FLAG_TOKENS_OUT))
 #else
     }
     if (!(flags & PARLOR_FLAG_COUNTER_SHOWN) || !(flags & PARLOR_FLAG_TOKENS_OUT)) {
 #endif
         return;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {
             {
 #else
@@ -374,7 +374,7 @@ void monteCountDisp(void) {
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
             monte_snd_flag = 8;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         monte_snd_flag = 0;
 #endif
         if (delta != 0) {
@@ -391,7 +391,7 @@ void monteCountDisp(void) {
             yuwp->dispTokens += delta;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     monte_snd_flag = 0;
 #else
     if (monte_snd_flag != 0) {
@@ -399,7 +399,7 @@ void monteCountDisp(void) {
 #endif
     }
 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 }
 #endif
 
@@ -410,7 +410,7 @@ void monteCountDisp(void) {
 USER_FUNC(yuugijou_add_montemedal) {
     EvtWord* args = event->args;
     s32 immediate = evtGetValue(event, args[0]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     yuwp->tokens += evtGetValue(event, args[1]);
     if (immediate != 0)
         yuwp->dispTokens = yuwp->tokens;
@@ -538,7 +538,7 @@ USER_FUNC(yuuminigame_end) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_802243a4, JP 0x802243A4. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(yuuminigame_get_window_evt) {
     evtSetValue(event, event->args[0], (EvtWord)yuu_window_evt);
     return EVT_RETURN_DONE;
@@ -547,7 +547,7 @@ USER_FUNC(yuuminigame_get_window_evt) {
 
 /** Retail: sets the script window_open runs as a child before the quit prompt; each minigame sets its own. */
 // Descriptive name (not in the symbol maps); placeholder unk_8022439c, JP 0x8022439C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Retail: sets the script window_open runs as a child before the quit prompt; each minigame sets its own. */
 void evtYuuSetWindowEvt(EvtWord* evt) {
     yuu_window_evt = evt;

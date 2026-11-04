@@ -41,7 +41,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param);
 void item_appear_force(BreakSlotReel* reel, s32 item);
 
 /** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
 u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
 #endif
@@ -206,7 +206,7 @@ EVT_BEGIN(doku_kinoko_effect)
 EVT_END()
 
 // US battle textures are 0x16 higher; BTL_TEX uses JP-base IDs.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 u16 tex_id_list_small[5] = {BTL_TEX(0x2B), BTL_TEX(0x2D), BTL_TEX(0x2F), BTL_TEX(0x2E), BTL_TEX(0x2C)};
 u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BTL_TEX(0x33), BTL_TEX(0x31)};
 #endif
@@ -312,7 +312,7 @@ void BattleBreakSlot_Main(void) {
     BreakSlotReel* reel;
     BreakSlotReel* rr;
     s32 count;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     s32 item;
     BOOL isBreakFrame;
 #endif
@@ -323,7 +323,7 @@ void BattleBreakSlot_Main(void) {
     BattleGetMarioPtr(wp);
     BattleGetPartyPtr(wp);
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     // PAL: phase 6 plays a language-dependent number of break hits (count) every i frames
     switch (gp->language) {
         case LANGUAGE_SP: // one more break hit
@@ -471,7 +471,7 @@ void BattleBreakSlot_Main(void) {
                     BattleAudienceSoundBooing();
                 }
             }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             isBreakFrame = FALSE;
             for (item = 1; item <= count; item++) {
                 if (slot->phaseTimer == item * i) {
@@ -487,7 +487,7 @@ void BattleBreakSlot_Main(void) {
                 psndSFXOn("SFX_BTL_SYS_BREAK1");
                 btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 10, 0);
             }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             count *= i;
 #else
             count = 120;
@@ -591,7 +591,7 @@ void BattleBreakSlot_Main(void) {
             if (slot->phaseTimer == count + 150) {
                 BattleAudienceAddTargetNum(0.0f, updown);
                 slot->phase = 8;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 slot->flags &= ~2; // the demo's force-star flag
 #else
                 slot->flags &= ~4;
@@ -784,7 +784,7 @@ void BattleBreakSlot_Main(void) {
                         BattleBreakSlotReelGetPtr(1)->item == 4 && rr->item == 4) {
                         break;
                     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     if ((slot->flags & 2) && BattleBreakSlotReelGetPtr(0)->item == 4 &&
                         BattleBreakSlotReelGetPtr(1)->item == 4 && rr->item == 4) {
                         break;
@@ -793,7 +793,7 @@ void BattleBreakSlot_Main(void) {
                     if ((slot->flags & BREAK_SLOT_FLAG_LECTURE) && rr->item != 3) {
                         break;
                     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     if ((slot->flags & 2) && rr->item != 2) {
                         break;
                     }
@@ -988,7 +988,7 @@ void BattleBreakSlot_PointInc(void) {
             if (slot->flags & BREAK_SLOT_FLAG_LECTURE) {
                 item_appear_force(reel, 3);
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (slot->flags & 2) {
                 item_appear_force(reel, 2);
             }
@@ -1010,7 +1010,7 @@ void BattleBreakSlot_PointInc(void) {
             if (slot->flags & BREAK_SLOT_FLAG_LECTURE) {
                 item_appear_force(reel, 3);
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (slot->flags & 2) {
                 item_appear_force(reel, 2);
             }

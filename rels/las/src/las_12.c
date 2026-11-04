@@ -28,7 +28,7 @@ static EvtWord box_evt[30];
 static EvtWord switch_evt[46];
 static EvtWord hint_plate[14];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kabenuke_check_evt[];
 extern EvtWord las_12_init_evt[];
 #else
@@ -127,7 +127,7 @@ EVT_BEGIN(kabenuke_check_evt)
     IF_INT_LESS(LW(0), 0)
         GOTO(0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -137,7 +137,7 @@ EVT_BEGIN(kabenuke_check_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     SET_VALUE(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
 #endif
@@ -152,7 +152,7 @@ EVT_END()
 EVT_BEGIN(las_12_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

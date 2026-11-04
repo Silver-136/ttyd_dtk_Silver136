@@ -18,7 +18,7 @@ s32 THPSimpleDrawCurrentFrame(GXRenderModeObj* rmode, u32 x, u32 y, u32 polygonW
 u32 THPSimpleGetTotalFrame(void);
 BOOL THPSimpleSetVolume(s32 vol, s32 time);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "driver/seqdrv.h"
 void seq_demoInit(SequenceWork* work);
 void seq_demoMain(SequenceWork* work);

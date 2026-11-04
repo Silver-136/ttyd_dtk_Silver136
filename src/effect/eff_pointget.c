@@ -45,7 +45,7 @@ static PointGetTex tex_lang3[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x7E
 static PointGetTex tex_shadow_lang3[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x80, 0x81 } };
 static PointGetTex tex_lang4[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x7E, 0x7F } };
 static PointGetTex tex_shadow_lang4[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x80, 0x81 } };
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 static PointGetTex tex_lang5[6] = {{1, 0x7C, 0x7D}, {0, 0x7E, 0x7F}, {-1, -1, -1}, {1, 0x80, 0x81}, {-1, -1, -1}, {1, 0x84, 0x85}};
 static PointGetTex tex_shadow_lang5[6] = {{1, 0x7C, 0x7D}, {0, 0x7E, 0x7F}, {-1, -1, -1}, {1, 0x82, 0x83}, {-1, -1, -1}, {1, 0x84, 0x85}};
 #else
@@ -62,7 +62,7 @@ static PointGetTexSet texid_tbl[6] = {
     { { tex_us, tex_shadow_us }, 5 },
     { { tex_lang3, tex_shadow_lang3 }, 3 },
     { { tex_lang4, tex_shadow_lang4 }, 3 },
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     { { tex_lang5, tex_shadow_lang5 }, 6 },
 #else
     { { tex_lang5, tex_shadow_lang5 }, 7 },
@@ -106,7 +106,7 @@ EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 dur
 }
 
 /** Per frame: advances the display's state machine and deletes the effect when finished. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effPointGetMain(EffectEntry* effect) {
 #else
 void effPointGetMain(EffectEntry* effect) {
@@ -123,7 +123,7 @@ void effPointGetMain(EffectEntry* effect) {
     work->timer++;
     switch (work->state) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             work->position.x = intplGetValue(EASING_SINE_IN_OUT, -1000.0f, 50.0f * work->scale, work->timer, 45);
 #else
             work->position.x = intplGetValue(EASING_SINE_IN_OUT, -1000.0f, 0.0f, work->timer, 45);
@@ -146,7 +146,7 @@ void effPointGetMain(EffectEntry* effect) {
             }
             break;
         case 2:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             work->position.x = intplGetValue(EASING_SINE_IN_OUT, 50.0f * work->scale, 1000.0f, work->timer, 60);
 #else
             work->position.x = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 1000.0f, work->timer, 60);
@@ -160,7 +160,7 @@ void effPointGetMain(EffectEntry* effect) {
     dispEntry(CAMERA_2D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effPointGetDisp, effect);
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** The demo draws the point count as three fixed digit cells (leading zeros skipped) after the header. */
 static void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
 #else
@@ -173,7 +173,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     EffPointGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     f32 scale = work->scale;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 wide;
     f32 width;
     f32 ox;
@@ -201,7 +201,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx;
     Mtx scaleMtx;
     Mtx baseMtx;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 digits[3];
     s32 n;
     s32 i;
@@ -269,7 +269,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     wide = 352.0f;
     width = 48.0f;
     for (pass = 1; pass >= 0; pass--) {

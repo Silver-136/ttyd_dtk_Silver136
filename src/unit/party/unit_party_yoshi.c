@@ -35,7 +35,7 @@
 
 typedef struct YoshiGundanPart YoshiGundanPart;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 #endif
 
@@ -60,7 +60,7 @@ typedef struct YoshiGundanWork {
     f32 meanX; // sum of the parts' x, then the mean (/ 256)
 } YoshiGundanWork;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 #endif
 
@@ -116,7 +116,7 @@ EvtWord partyYoshiAttack_Nomikomi[1000];
 EvtWord partyYoshiAttack_EggAttack[1266];
 EvtWord _egg_attack_event[195];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord partyYoshiAttack_CallGuard[];
 #else
 EvtWord partyYoshiAttack_CallGuard[553];
@@ -134,7 +134,7 @@ u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
  * the hurt poses, walking and running, low HP, the failed Run Away tumble, talking, item use,
  * the command menu wait, the Appeal, zero gravity, the Defend stance and plain standing.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 #endif
 
@@ -171,7 +171,7 @@ PoseTableEntry pose_table_yoshi_stay[] = {
  * Strike (nothing), the victory pose, an empty step run after a move's cost is paid (7) and the spin when he
  * superguards an attack (47).
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, yoshi_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -191,7 +191,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Yoshi's status chances: 100 for every status (badges lower them in battle). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -246,7 +246,7 @@ PoseTableEntry pose_table_egg_p[] = {
  * Yoshi's battle parts: part 1 is his targetable body (model c_babyyoshi);
  * parts 2-7 are hidden, untargetable eggs (c_tamago) that Mini-Egg lays and throws.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BattleDataEntry data_table[] = {
     {5, yoshi_appeal_event},
     {6, attack_audience_event},
@@ -368,7 +368,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -610,7 +610,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     {1, 4, 2, 5, 3, 6, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE,
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST,
 #else
@@ -1855,7 +1855,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
         SET_VALUE(LW(1), 14)
         SET_VALUE(LW(2), 30)
     END_SWITCH
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 17, 18, EVT_NULLPTR)
 #else
     CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 20, 61, EVT_NULLPTR)
@@ -1876,18 +1876,18 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_11"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(6))
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(0))
     MULTIPLY_FLOAT(LW(6), LW(0))
 #endif
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     ADD(LW(1), LW(6))
 #endif
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
     MULTIPLY(LW(5), 30)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff, STRING(""), STRING("kiss"), 3, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff, 0, STRING("kiss"), 3, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
@@ -2122,7 +2122,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /** Idle (retail position; the demo defines it near the top of the file): plays the stay pose from the pose table. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -2534,7 +2534,7 @@ static inline s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
  * draws them, and frees the work and stops the sound when all are across.
  * The US and PAL releases cap the herd's depth at 65 instead of 80.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_gundan_yoshi_run_effect) {
 #else
 USER_FUNC(_gundan_yoshi_run_effect) {
@@ -2590,7 +2590,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
             f32 sc;
             p = &w->parts[irand(256)];
             sc = 1.0f + 0.05f * (f32)irand(20);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
 #else
             effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(15), 65.0f, sc);
@@ -2611,7 +2611,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         unit->countersetWeapon = NULL;
         return EVT_RETURN_DONE;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_XLU, (DispCallback)_btlYoshiDisp, w);
 #else
     for (i = 0; i < 256; i++) {
@@ -2624,7 +2624,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
 }
 
 /** Draws one Stampede Yoshi (later releases). */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     YoshiGundanPart* p;
     s32 i;
@@ -2632,7 +2632,7 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
 void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
 #endif
     f32 s;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < 256; i++) {
         p = &w->parts[i];
         s = (p->vx < 0.0f) ? 0.4f : -0.4f;

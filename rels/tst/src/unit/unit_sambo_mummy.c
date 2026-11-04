@@ -68,12 +68,12 @@ BattleUnitKind unit_sambo_mummy = {
     1, // perilHP
     23, // level
     0, // bonusExp
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     2, // bonusCoin
     70, // bonusCoinRate
 #endif
     1, // baseCoin
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     70,
     2,
 #endif
@@ -119,7 +119,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Elemental reactions of the Poison Pokey: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {70, 60, 70, 100, 70, 100, 100, 30, 100, 70, 100, 70, 100, 70, 70, 80, 70, 100, 70, 100, 100, 95};
 #else
 static StatusVulnerability regist = {
@@ -165,7 +165,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_4 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {4, 0, 0, 0, 0, 0, 0, 0},
 #else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -212,7 +212,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_3 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {4, 0, 0, 0, 0, 0, 0, 0},
 #else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -259,7 +259,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_2 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {4, 0, 0, 0, 0, 0, 0, 0},
 #else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -346,7 +346,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_4 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {3, 0, 0, 0, 0, 0, 0, 0},
 #else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -387,7 +387,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_3 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {3, 0, 0, 0, 0, 0, 0, 0},
 #else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -428,7 +428,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_2 = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {3, 0, 0, 0, 0, 0, 0, 0},
 #else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -621,7 +621,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHeight, LW(10), LW(3))
     CALL(btlevtcmd_GetStatusMg, LW(10), LW(4))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY(LW(3), LW(4))
 #else
     MULTIPLY_FLOAT(LW(3), LW(4))

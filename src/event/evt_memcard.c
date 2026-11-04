@@ -32,7 +32,7 @@ USER_FUNC(memcard_code) {
  * the retail evt_memcard_check calls it before a retry.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_802564b4, JP 0x802564B4. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(memcard_buf_reset) {
     cardBufReset();
     return EVT_RETURN_DONE;
@@ -41,7 +41,7 @@ USER_FUNC(memcard_buf_reset) {
 
 /** Starts watching the card slot for the card being pulled or swapped while a format or create prompt is open. */
 // Descriptive name (not in the symbol maps); placeholder unk_80256490, JP 0x80256490. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(memcard_watch_start) {
     cardInsertWatchStart();
     return EVT_RETURN_DONE;
@@ -53,7 +53,7 @@ USER_FUNC(memcard_watch_start) {
  * the scripts then print msg_out_mcard_warnning and abandon the format or create.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_80256428, JP 0x80256428. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(memcard_watch_chk) {
     EvtWord* args = event->args;
 
@@ -68,7 +68,7 @@ USER_FUNC(memcard_watch_chk) {
 
 /** Stops the card-slot watch started by memcard_watch_start. */
 // Descriptive name (not in the symbol maps); placeholder unk_80256404, JP 0x80256404. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(memcard_watch_end) {
     cardInsertWatchEnd();
     return EVT_RETURN_DONE;
@@ -190,7 +190,7 @@ USER_FUNC(memcard_write) {
 
 EvtWord evt_memcard_nosave[19];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_memcard_check[];
 #else
 EvtWord evt_memcard_check[322];
@@ -198,7 +198,7 @@ EvtWord evt_memcard_check[322];
 
 EvtWord evt_memcard_start[32];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_memcard_delete[];
 extern EvtWord evt_memcard_copy[];
 extern EvtWord evt_memcard_save[];
@@ -231,7 +231,7 @@ EVT_BEGIN(evt_memcard_check)
     SET_VALUE(GF(0), 0)
 
     // Load the save data from the Memory Card in Slot A and act on the result.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(LF(10), 0)
     LOOP(0)
         IF_INT_EQUAL(LW(10), 0)
@@ -264,7 +264,7 @@ EVT_BEGIN(evt_memcard_check)
 
             // Corrupted card: offer to format it (asking twice), then to create a save file;
             // any refusal or failure offers to play without saving.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CASE_OR_EQUAL(-13)
             CASE_OR_EQUAL(-6)
 #else
@@ -279,7 +279,7 @@ EVT_BEGIN(evt_memcard_check)
                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_alldelete"))
                 CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
                 IF_INT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     CALL(memcard_watch_chk, LW(0))
                     IF_INT_EQUAL(LW(0), 1)
                         CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
@@ -292,7 +292,7 @@ EVT_BEGIN(evt_memcard_check)
                     CALL(memcard_code, LW(0))
                     IF_INT_NOT_EQUAL(LW(0), 0)
                         CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_miss"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         CALL_CHILD(evt_memcard_nosave)
 #else
                         SET_VALUE(LF(10), 1)
@@ -302,7 +302,7 @@ EVT_BEGIN(evt_memcard_check)
                         CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
                         CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
                         IF_INT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                             CALL(memcard_watch_chk, LW(0))
                             IF_INT_EQUAL(LW(0), 1)
                                 CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
@@ -315,7 +315,7 @@ EVT_BEGIN(evt_memcard_check)
                             CALL(memcard_code, LW(0))
                             IF_INT_NOT_EQUAL(LW(0), 0)
                                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                                 CALL_CHILD(evt_memcard_nosave)
 #else
                                 SET_VALUE(LF(10), 1)
@@ -337,7 +337,7 @@ EVT_BEGIN(evt_memcard_check)
             END_IF
             CASE_END
             // No save file on the card: offer to create one.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CASE_EQUAL(-4)
 #else
             CASE_EQUAL(CARD_RESULT_NOFILE)
@@ -346,7 +346,7 @@ EVT_BEGIN(evt_memcard_check)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data"))
             CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
             IF_INT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(memcard_watch_chk, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
                     CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
@@ -359,7 +359,7 @@ EVT_BEGIN(evt_memcard_check)
                 CALL(memcard_code, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), 0)
                     CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL_CHILD(evt_memcard_nosave)
 #else
                     SET_VALUE(LF(10), 1)
@@ -384,7 +384,7 @@ EVT_BEGIN(evt_memcard_check)
                 CALL_CHILD(PTR(evt_memcard_nosave))
             END_IF
             CASE_END
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CASE_EQUAL(CARD_RESULT_NOPERM)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_savedata_2"))
             CALL_CHILD(PTR(evt_memcard_nosave))
@@ -395,7 +395,7 @@ EVT_BEGIN(evt_memcard_check)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
             CALL_CHILD(PTR(evt_memcard_nosave))
         END_SWITCH
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(memcard_watch_end, LW(0))
         IF_INT_EQUAL(LF(10), 1)
             SET_VALUE(LF(10), 0)
@@ -403,7 +403,7 @@ EVT_BEGIN(evt_memcard_check)
         ELSE
 #endif
             BREAK_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         END_IF
 #endif
     END_LOOP
@@ -434,7 +434,7 @@ EVT_END()
  * the load screen reloads the card and GF(0) is set so the file list is refreshed.
  */
 EVT_BEGIN(evt_memcard_delete)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(0), 0)
 #endif
     SET_VALUE(LW(10), LW(0))
@@ -449,17 +449,17 @@ EVT_BEGIN(evt_memcard_delete)
             CALL(evt_msg_print_add, 0, STRING("msg_savefile_delete_copy_miss"))
         ELSE
             CALL(evt_msg_print_add_insert, 0, STRING("msg_savefile_delete_finish"), LW(10))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             RETURN
 #endif
         END_IF
         ELSE
         CALL(evt_msg_continue)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         RETURN
 #endif
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_fade_entry, FADE_CURTAIN_SIDES_A1_3D, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_fade_entry, FADE_CURTAIN_SIDES_Z1_3D, 0, 0, 0, 0)
@@ -477,7 +477,7 @@ EVT_END()
  * On failure the curtains close and open and the file list is reloaded (GF(0) set), as in evt_memcard_delete.
  */
 EVT_BEGIN(evt_memcard_copy)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(0), 0)
 #endif
     SET_VALUE(LW(10), LW(0))
@@ -496,13 +496,13 @@ EVT_BEGIN(evt_memcard_copy)
                 CALL(evt_msg_print_add, 0, STRING("msg_savefile_delete_copy_miss"))
             ELSE
                 CALL(evt_msg_print_add_insert, 0, STRING("msg_savefile_copy_finish"), LW(10), LW(11))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 RETURN
 #endif
             END_IF
             ELSE
             CALL(evt_msg_continue)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             RETURN
 #endif
         END_IF
@@ -514,12 +514,12 @@ EVT_BEGIN(evt_memcard_copy)
             CALL(evt_msg_print_add, 0, STRING("msg_savefile_delete_copy_miss"))
         ELSE
             CALL(evt_msg_print_add_insert, 0, STRING("msg_savefile_copy_finish"), LW(10), LW(11))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             RETURN
 #endif
         END_IF
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_fade_entry, FADE_CURTAIN_SIDES_A1_3D, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(evt_fade_entry, FADE_CURTAIN_SIDES_Z1_3D, 0, 0, 0, 0)
@@ -553,13 +553,13 @@ EVT_BEGIN(evt_memcard_save)
     ELSE
         CALL(evt_msg_print, 0, STRING("msg_mcard_save_select"), 0, 0)
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_EQUAL(LW(10), 21)
         CALL(evt_msg_select, 0, STRING("msg_mcard_yesno_ending"))
     ELSE
 #endif
         CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
 #endif
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -575,7 +575,7 @@ EVT_BEGIN(evt_memcard_save)
     ELSE
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_warnning"))
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     GOTO(3)
     LABEL(2)
     CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
@@ -584,7 +584,7 @@ EVT_BEGIN(evt_memcard_save)
 #endif
     CALL(memcard_header_write)
     CALL(memcard_write)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     LABEL(4)
     SET_VALUE(LF(11), 0)
 #endif
@@ -605,7 +605,7 @@ EVT_BEGIN(evt_memcard_save)
         CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_card"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CASE_OR_EQUAL(-13)
         CASE_OR_EQUAL(-6)
 #else
@@ -620,7 +620,7 @@ EVT_BEGIN(evt_memcard_save)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_alldelete"))
             CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
             IF_INT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(memcard_watch_chk, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
                     CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
@@ -632,7 +632,7 @@ EVT_BEGIN(evt_memcard_save)
                 CALL(memcard_code, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), 0)
                     CALL(evt_msg_print_add, 0, STRING("msg_mcard_format_miss"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
 #else
                     SET_VALUE(LF(11), 1)
@@ -643,7 +643,7 @@ EVT_BEGIN(evt_memcard_save)
                     CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
                     IF_INT_EQUAL(LW(0), 0)
                         CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         CALL(memcard_watch_chk, LW(0))
                         IF_INT_EQUAL(LW(0), 1)
                             CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
@@ -654,7 +654,7 @@ EVT_BEGIN(evt_memcard_save)
                         CALL(memcard_code, LW(0))
                         IF_INT_NOT_EQUAL(LW(0), 0)
                             CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
 #else
                             SET_VALUE(LF(11), 1)
@@ -668,7 +668,7 @@ EVT_BEGIN(evt_memcard_save)
                                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
                                 RETURN
                             ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
 #else
                                 SET_VALUE(LF(11), 1)
@@ -686,7 +686,7 @@ EVT_BEGIN(evt_memcard_save)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
         END_IF
         CASE_END
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CASE_EQUAL(-4)
 #else
         CASE_EQUAL(CARD_RESULT_NOFILE)
@@ -696,7 +696,7 @@ EVT_BEGIN(evt_memcard_save)
         CALL(evt_msg_select, 0, STRING("msg_mcard_yesno"))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_warning"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(memcard_watch_chk, LW(0))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_msg_print_add, 0, STRING("msg_out_mcard_warnning"))
@@ -707,7 +707,7 @@ EVT_BEGIN(evt_memcard_save)
             CALL(memcard_code, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_make_data_miss"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
 #else
                 SET_VALUE(LF(11), 1)
@@ -721,7 +721,7 @@ EVT_BEGIN(evt_memcard_save)
                     CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
                     RETURN
                 ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
 #else
                     SET_VALUE(LF(11), 1)
@@ -738,7 +738,7 @@ EVT_BEGIN(evt_memcard_save)
         CASE_OR_EQUAL(CARD_RESULT_INSSPACE)
         CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_nospace"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_EQUAL(LW(10), 23)
 #endif
             CALL(evt_msg_print_add, 0, STRING("msg_gc_mcard_open"))
@@ -756,7 +756,7 @@ EVT_BEGIN(evt_memcard_save)
             ELSE
                 CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
             END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             ELSE
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
         END_IF
@@ -766,7 +766,7 @@ EVT_BEGIN(evt_memcard_save)
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_miss"))
     END_SWITCH
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(memcard_watch_end)
     IF_INT_EQUAL(LF(11), 1)
         GOTO(4)
@@ -779,7 +779,7 @@ EVT_BEGIN(evt_memcard_save)
         CALL(evt_msg_continue)
         RETURN
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("msg_savefile_nosave_warnning"), 0, 0)
     IF_INT_EQUAL(LW(10), 21)
@@ -790,7 +790,7 @@ EVT_BEGIN(evt_memcard_save)
     IF_INT_EQUAL(LW(0), 0)
 #endif
         IF_INT_EQUAL(LW(10), 23)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_continue)
             RETURN
 #else
@@ -799,7 +799,7 @@ EVT_BEGIN(evt_memcard_save)
             GOTO(1)
 #endif
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_print_add, 0, STRING("msg_savefile_nosave_warnning"))
     CALL(evt_msg_select, 0, STRING("msg_mcard_yesno3"))
     IF_INT_EQUAL(LW(0), 0)

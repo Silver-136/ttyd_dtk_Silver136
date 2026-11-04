@@ -59,7 +59,7 @@ void sort_7_3_func(WindowWork* wp);
 void sort_8_1_func(WindowWork* wp);
 void sort_8_2_func(WindowWork* wp);
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 u8 enemy_monoshiri_sort_table[] = {
     0x00, 0x01, 0x02, 0x03, 0x2F, 0x30, 0x94, 0x2A, 0x62, 0x95, 0x96, 0x12, 0x24, 0x24, 0x0A, 0x0B,
     0x32, 0x14, 0x4D, 0x54, 0x33, 0x32, 0x15, 0x63, 0x43, 0x38, 0x4F, 0x3E, 0x6B, 0x6E, 0x6F, 0x79,
@@ -189,7 +189,7 @@ s32 winRootMain(WindowWork* w) {
             WIN_ROOT_ADD_TAB(3);
         }
         WIN_ROOT_ADD_TAB(4);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {
             s32 j;
             for (j = 0; j < w->tabNum; j++) {
@@ -259,7 +259,7 @@ s32 winRootMain(WindowWork* w) {
             w->active = 12;
             w->tabSel = 0;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         w->texBuf = smartAlloc(GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0), SMART_GROUP_MAP);
         w->texBufValid = 0;
         dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, winRootBgCaptureDisp, w);
@@ -387,14 +387,14 @@ s32 winRootMain(WindowWork* w) {
             w->menu[i].state = 10;
         }
         w->msgState = 10;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         mapDispOn();
         camDispOn(CAMERA_3D);
 #endif
         w->active++;
         break;
     default:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (w->texBuf) {
             smartFree(w->texBuf);
             w->texBuf = NULL;
@@ -448,7 +448,7 @@ s32 winRootMain(WindowWork* w) {
     w->helpX += __fabs(2.0f * (f32)sin(gp->retraceCount / 8.0f));
     w->sortPosX += (w->sortTgtX - w->sortPosX) / WR_FSTEP(4.0f);
     w->sortPosY += (w->sortTgtY - w->sortPosY) / WR_FSTEP(4.0f);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     dispEntry(CAMERA_2D, 1000.0f, DISP_MODE_OPAQUE, winRootBgDrawDisp, w);
 #endif
     return 0;
@@ -458,7 +458,7 @@ s32 winRootMain(WindowWork* w) {
 // Removing it changes the object.
 void winRootStrippedPool(f32* f) {
     f[0] = 185.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f[1] = 180.0f;
 #else
     f[1] = 1000.0f;
@@ -515,7 +515,7 @@ void winRootDisp(s32 camId, WindowWork* wp) {
         winMailDisp(wp);
         winMsgDisp(wp, wp->msgOfsX, wp->msgOfsY);
         winSortGX(wp);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {
 #else
         if (!(wp->flags & WINDOW_FLAG_BOOK_OPEN)) {
@@ -1166,7 +1166,7 @@ void winBookGX(WindowWork* w, s32 a, f32 x, f32 y) {
                         luigi_book_list[w->item.bookIdx][w->item.bookPage * 2]);
         winFontSetLabel((Vec){220.0f + lx, y - 14.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, (GXColor){0x00, 0x00, 0x00, 0xFF},
                         luigi_book_list[w->item.bookIdx][w->item.bookPage * 2 + 1]);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         pose = ((MessageWork*)msgGetWork())->poseId;
                         anim = animPoseGetAnimDataPtr(pose);
                         if (w->item.bookPage < w->item.bookPages - 1) {
@@ -1621,7 +1621,7 @@ WinSortData sort_6[] = {
     {"msg_menu_sort_kind", sort_6_2_func},
     {NULL, NULL},
 };
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8 enemy_monoshiri_sort_table[] = {
     0x00, 0x01, 0x02, 0x03, 0x2F, 0x30, 0x94, 0x2A, 0x62, 0x95, 0x96, 0x12, 0x24, 0x97, 0x0A, 0x0B,
     0x32, 0x14, 0x4D, 0x54, 0x33, 0x98, 0x15, 0x63, 0x43, 0x38, 0x4F, 0x3E, 0x6B, 0x6E, 0x6F, 0x79,
@@ -1742,7 +1742,7 @@ void sort_3_3_func(WindowWork* wp) {
 
     pouchGetHaveBadgeCnt();
     pouchHaveBadge(sel);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     pouchSortItem(!wp->sortRev ? 4 : 11);
 #else
     pouchSortItem(!wp->sortRev ? 6 : 13);
@@ -1754,7 +1754,7 @@ void sort_3_3_func(WindowWork* wp) {
     wp->badge.page[0] = wp->badge.sel[0] / 8;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /** The demo sorts the equipped list through the pouch, like the owned list. */
 static void sort_4_1_func(WindowWork* wp) {
@@ -1833,7 +1833,7 @@ void sort_4_1_func(WindowWork* wp) {
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /** Equipped badges by type, through the pouch (modes 5/12). */
 static void sort_4_2_func(WindowWork* wp) {
@@ -1855,7 +1855,7 @@ void sort_4_2_func(WindowWork* wp) {
     wp->badge.page[1] = wp->badge.sel[1] / 8;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /** Equipped badges by name, then by BP cost, through the pouch. */
 static void sort_4_3_func(WindowWork* wp) {
@@ -1927,7 +1927,7 @@ void sort_4_3_func(WindowWork* wp) {
 
 /** Journal badge log by name, retail: names normalized through pouchHiraToKata first. */
 s32 compare_func5_1(const void* a, const void* b) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
     const s16* eb = b;
     s16 ia = *ea + BADGE_MIN;
@@ -1954,7 +1954,7 @@ s32 compare_func5_1(const void* a, const void* b) {
 
 /** Reverse of compare_func5_1. */
 s32 compare_func5_1_r(const void* a, const void* b) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
     const s16* eb = b;
     s16 ia = *ea + BADGE_MIN;
@@ -2041,7 +2041,7 @@ void sort_5_3_func(WindowWork* wp) {
         s16 b;
         s32 i;
         s32 j;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1);
         for (i = 0; i < wp->log.badge.num - 1; i++) {
             for (j = i + 1; j < wp->log.badge.num; j++) {
@@ -2078,7 +2078,7 @@ void sort_5_3_func(WindowWork* wp) {
         s16 a;
         s16 b;
         s32 i;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         s32 j;
         qqsort(wp->log.badgeIds, wp->log.badge.num, sizeof(s16), compare_func5_1_r);
         for (i = 0; i < wp->log.badge.num - 1; i++) {
@@ -2119,7 +2119,7 @@ void sort_5_3_func(WindowWork* wp) {
 
 /** Journal recipe log by name, retail: names normalized through pouchHiraToKata first. */
 s32 compare_func6_1(const void* a, const void* b) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
     const s16* eb = b;
     s16 ia = *ea + ITEM_SHROOM_FRY;
@@ -2146,7 +2146,7 @@ s32 compare_func6_1(const void* a, const void* b) {
 
 /** Reverse of compare_func6_1. */
 s32 compare_func6_1_r(const void* a, const void* b) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
     const s16* eb = b;
     s16 ia = *ea + ITEM_SHROOM_FRY;
@@ -2260,7 +2260,7 @@ void sort_7_1_func(WindowWork* wp) {
 static inline u32 getMonosiriPlace(const char* place) {
     static char* tbl[] = {
         "nara", "gor", "tik", "shiga", "hei", "nok", "stn", "gon", "win", "hou", "mri", "tou", "usu",
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         "gra", "jin", "muj", "dou", "rsh", "hom", "eki", "pik", "sin", "bom", "moo", "aji", "las",
 #else
         "gra", "jin", "muj", "dou", "hom", "eki", "rsh", "pik", "sin", "bom", "moo", "aji", "las",
@@ -2281,7 +2281,7 @@ static inline u32 getMonosiriPlace(const char* place) {
     return i;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
     {"msg_menu_sort_place", sort_7_2_func},
@@ -2341,7 +2341,7 @@ void sort_7_2_func(WindowWork* wp) {
 }
 
 /** Tattle Log by name, retail: normalized, with Doopliss's entries under his current name. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 compare_func3(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -2368,7 +2368,7 @@ s32 compare_func3(const void* a, const void* b) {
 }
 #endif
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /** Reverse of compare_func3 (retail). */
 s32 compare_func3_r(const void* a, const void* b) {
@@ -2397,7 +2397,7 @@ s32 compare_func3_r(const void* a, const void* b) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /** Demo Tattle Log name comparison: compares the entries' enemyTag messages directly. */
 static s32 compare_func3(const void* a, const void* b) {
@@ -2530,7 +2530,7 @@ void winSortMain(WindowWork* wp) {
         wp->sortTgtX = -600.0f;
     } else if (rep & DEMO_STICK_UP) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         wp->sortRev = 0;
 #endif
         wp->sortSel--;
@@ -2538,7 +2538,7 @@ void winSortMain(WindowWork* wp) {
             wp->sortSel = wp->sortNum - 1;
         }
     } else if (rep & DEMO_STICK_DOWN) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
         wp->sortRev = 0;
 #else
@@ -2805,7 +2805,7 @@ void winZClear(void) {
  * While a letter is read (item.state 202): its header, the body scrolled by mailLine,
  * its picture (flags 0x1000) and scroll arrows.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void winMailDisp(WindowWork* wp) {
 #else
 void winMailDisp(WindowWork* wp) {
@@ -2874,7 +2874,7 @@ void winMailDisp(WindowWork* wp) {
             winTexSet(0x65 + (kind2 + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
             winTexSet(0x65 + (kind2 + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
             winFontInit();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             winFontSetLabel((Vec){120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
             GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158, 0xAE);
 #else
@@ -2888,7 +2888,7 @@ void winMailDisp(WindowWork* wp) {
             winTexInit((TEXPalette*)*wp->res->data);
             winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f }, (Vec){ 1.0f, 7.5f, 1.0f }, col);
             winFontInit();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             winFontSetLabel((Vec){80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, (GXColor){0x00, 0x00, 0x00, 0xFF}, mail->body);
             if (mail->flags & MAIL_FLAG_PICTURE) {
                 winTexInit((TEXPalette*)*wp->mailRes->data);
@@ -2914,7 +2914,7 @@ void winMailDisp(WindowWork* wp) {
                     if ((gp->retraceCount & 0x1F) < 0x14) {
                         winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 } else if (wp->item.mailLine + 8 == wp->item.mailLines) {
 #else
                 } else if (wp->item.mailLine + 6 == wp->item.mailLines) {
@@ -2935,13 +2935,13 @@ void winMailDisp(WindowWork* wp) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_8014d5dc, JP 0x8014D5DC. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void winRootBgCaptureDisp(CameraId unused, void* param) {
     WindowWork* bg = param;
     GXSetTexCopySrc(0, 0, gp->fbWidth, gp->efbHeight);
     GXSetTexCopyDst(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE);
     GXCopyTex(bg->texBuf->address, GX_FALSE);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     GXPixModeSync();
     DCFlushRange(bg->texBuf->address, GXGetTexBufferSize(gp->fbWidth, gp->efbHeight, GX_TF_RGB565, GX_FALSE, 0));
     GXInvalidateTexAll();
@@ -2959,7 +2959,7 @@ void winRootBgCaptureDisp(CameraId unused, void* param) {
  * queued each frame by winRootMain, so the field can stay switched off while the menu is open.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_8014d338, JP 0x8014D338. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void winRootBgDrawDisp(CameraId unused, void* param) {
     WindowWork* bg = param;
     GXTexObj obj;
@@ -2975,14 +2975,14 @@ void winRootBgDrawDisp(CameraId unused, void* param) {
         GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
         GXSetNumTexGens(1);
         GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_OR);
 #else
         GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
 #endif
         GXSetZCompLoc(GX_TRUE);
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
 #else
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);

@@ -71,7 +71,7 @@ void monosiri_disp(CameraId camera, void* param);
  * from Rogueport and Petal Meadows to the Moon, the X-Naut Fortress and the Palace of Shadow.
  * The map page draws them, and the cursor names the nearest big one.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 TubuDt tubuDt[] = {
     {14, -34, 1, 0, 3, "gor"},
     {-4, -31, 0, 2, 12, "gor"},
@@ -199,7 +199,7 @@ static inline void winLogAddMenu(WindowWork* w, s32 id) {
     }
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define TUBU_TYPE(t) 0
 #define TUBU_SEQ_361 360
 TubuDt tubuDt[] = {
@@ -307,7 +307,7 @@ TubuDt tubuDt[] = {
  * finds Mario's spot on the world map for the current area, and builds the sorted badge,
  * recipe and Tattle lists with their found counts.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void winLogInit(WindowWork* w) {
     s32 j;
     s32 i;
@@ -325,7 +325,7 @@ void winLogInit(WindowWork* w) {
  * finds Mario's spot on the world map for the current area, and builds the sorted badge,
  * recipe and Tattle lists with their found counts.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void winLogInit(WindowWork* w) {
     u32 k;
     const char* area;
@@ -364,7 +364,7 @@ void winLogInit(WindowWork* w) {
         }
         ((EffStarStoneWork*)e->userdata)->cam = CAMERA_2D;
         ((EffStarStoneWork*)e->userdata)->flags &= ~STAR_STONE_FLAG_SHINE_SFX;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ((EffStarStoneWork*)e->userdata)->flags |= STAR_STONE_FLAG_EXTERNAL_DRAW;
 #endif
     }
@@ -405,7 +405,7 @@ void winLogInit(WindowWork* w) {
             }
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!strncmp(gp->currentMapName, "hom", 3))
         area = "eki";
     if (!strncmp(gp->currentMapName, "jon", 3))
@@ -683,7 +683,7 @@ s32 winLogMain(WindowWork* w) {
         winMsgEntry(w, 0, w->log.menu[w->log.cursor].msg, 0);
         break;
     case 10:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/%s", getMarioStDvdRoot(), winGetMapTplName()) == 0U)
                 break;
         if (!w->mapRes) {
@@ -762,7 +762,7 @@ s32 winLogMain(WindowWork* w) {
         y = -120.0f + w->log.scrollY + w->log.mapY;
         bx = 74.0f + w->log.scrollX;
         by = 120.0f + w->log.scrollY;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         for (k = 0; k < 0x5D; k++) {
             t = &tubuDt[k];
             if (swByteGet(0) < t->id)
@@ -1204,7 +1204,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             PSMTXRotRad(m2, 'y', 0.017453292f * (51.42857f * i - w->log.stoneAngle));
             PSMTXMultVec(m2, &v, &v);
             PSMTXMultVec(m1, &v, &v);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
 #endif
             // FAKE: wk is reloaded before each position store; one load changes the object
@@ -1214,7 +1214,7 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
             wk->position.y = 20.0f + (v.y + (y + w->log.stoneWinY));
             wk = w->log.eff[i]->userdata;
             wk->position.z = v.z;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             winKageGX(w, v.x + (x + w->log.stoneWinX), (v.y + (y + w->log.stoneWinY)) - 30.0f, v.z, 1.0f, (GXColor){0x00, 0x00, 0x00, 0x80});
 #else
         }
@@ -1314,7 +1314,7 @@ static inline double fabs(double x) { return __fabs(x); }
  * the route dots revealed so far (the hovered place blinks), the current chapter's goal icon,
  * Mario's marker at his location, the frame, and bobbing arrows on the sides that can still scroll.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void mapGX(WindowWork* w, f32 x, f32 y) {
 #else
 void mapGX(WindowWork* w, f32 x, f32 y) {
@@ -1352,7 +1352,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         winTexInit(*w->res->data);
         for (i = 0; i < sizeof(tubuDt) / sizeof(TubuDt); i++) {
             t = &tubuDt[i];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (swByteGet(0) < t->id)
                 break;
             {
@@ -1376,7 +1376,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
             id = ICON_SAC_BAKUGAME;
             k = 1;
         } else if (sw >= STG2_41_FRANKLYS_HOUSE_STG_2 && sw < STG3_32_BOSS_BATTLE) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             id = ICON_SAC_SUKI;
             k = 2;
         } else if (sw >= STG3_51_FRANKLYS_HOUSE_STG_3 && sw < STG4_15_03_THE_RUBY_STAR) {
@@ -1453,7 +1453,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
  * 16 entries in two columns with their log numbers (unknown enemies as "???",
  * in retail, Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void monoshiriGX(WindowWork* w, f32 x, f32 y) {
 #else
 void monoshiriGX(WindowWork* w, f32 x, f32 y) {
@@ -1495,7 +1495,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
     winFontSet((Vec){(x - 108.0f) + (100 - tw) / 2, y - 184.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, k1, buf);
     winFontInit();
     for (i = 0; i < 16; i++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         s32 id;
         id = w->log.enemy[w->log.enemyPage * 16 + i].id;
         te = battleGetUnitMonosiriPtr(id);
@@ -1547,7 +1547,7 @@ void monoshiriGX(WindowWork* w, f32 x, f32 y) {
         winIconInit();
         winIconSet(ICON_TRIGGER_R, (Vec){440.0f + x, y - 240.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {
         const char* msg;
         msg = msgSearch("msg_menu_sort_narabikae");
@@ -1578,7 +1578,7 @@ MonosiriWork* monosiriInit(s32 id, f32 x, f32 y) {
     m->y = y;
     m->curX = 500.0f;
     m->curY = -300.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     m->alpha = 0;
     m->pose1 = -1;
     m->pose2 = -1;
@@ -1593,7 +1593,7 @@ MonosiriWork* monosiriInit(s32 id, f32 x, f32 y) {
  */
 void monosiriMain(MonosiriWork* m) {
     s32 group = gp->inBattle ? 1 : 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     const char* lang[2] = {"jp", "us"};
     GXTexObj tex;
     TattleEntry* t;
@@ -1695,29 +1695,29 @@ void monosiriExit(MonosiriWork* m) {
     if (m) {
         if (m->file1) {
             fileFree(m->file1);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             m->file1 = NULL;
 #endif
         }
         if (m->file2) {
             fileFree(m->file2);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             m->file2 = NULL;
 #endif
         }
         if (m->pose1 != -1) {
             animPoseRelease(m->pose1);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             m->pose1 = -1;
 #endif
         }
         if (m->pose2 != -1) {
             animPoseRelease(m->pose2);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             m->pose2 = -1;
 #endif
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (m->smart) {
             smartFree(m->smart);
             m->smart = NULL;
@@ -1882,7 +1882,7 @@ void capture(CameraId camera, void* param) {
  * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the demos),
  * and where it is found.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void monosiri_disp(CameraId camera, void* param) {
 #else
 void monosiri_disp(CameraId camera, void* param) {
@@ -1904,7 +1904,7 @@ void monosiri_disp(CameraId camera, void* param) {
     TattleEntry* te;
     u16 tw;
     u16 th;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 d;
     GXColor c0;
     GXColor c;
@@ -1986,7 +1986,7 @@ void monosiri_disp(CameraId camera, void* param) {
         }
         id = m->id;
         te = battleGetUnitMonosiriPtr(id);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         sprintf(buf, "%d\201D%s", enemy_monoshiri_sort_table[id], msgSearch(te->enemyTag));
 #else
         if (id == UNIT_DOOPLISS_CHAPTER4_FIGHT1 || id == UNIT_DOOPLISS_CHAPTER8) {
@@ -2011,7 +2011,7 @@ void monosiri_disp(CameraId camera, void* param) {
         w = 0.75f * FontGetMessageWidth(buf);
         winFontInit();
         winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 180.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         sprintf(buf, "%s\201@%s", msgSearch("menu_monosiri_derutokoro"), msgSearch(te->locationTag));
         w = 0.75f * FontGetMessageWidth(buf);
         winFontSet((Vec){(16.0f + x) + (248.0f - w) / 2.0f, y - 210.0f, 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, buf);

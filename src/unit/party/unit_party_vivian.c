@@ -74,7 +74,7 @@ BattleWeapon partyWeapon_VivianShadowGuard;
 BattleWeapon partyWeapon_VivianMagicalPowder;
 BattleWeapon partyWeapon_VivianCharmKissAttack;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord partyVivianAttack_NormalAttack[610];
 extern EvtWord partyVivianAttack_ShadowGuard[];
 #else
@@ -90,7 +90,7 @@ EvtWord vivian_appeal_event[80];
 static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[189];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
 #endif
 
@@ -219,7 +219,7 @@ static VivDef defence = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
 static VivDefAttr defence_attr = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
 
 /** Vivian's status chances: 100 for every status (badges lower them in battle). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
 #endif
 
@@ -228,7 +228,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -424,7 +424,7 @@ EVT_BEGIN(vivian_hide_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -608,7 +608,7 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, // poisonStrength
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     90,
 #else
     100, // confuseChance
@@ -672,7 +672,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
 
     // She glides under the stage to a spot beside the enemy and rises out of the floor there.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
     CALL(btlevtcmd_TransStageFloorPosition, LW(6), LW(7), LW(8))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 30)
@@ -697,7 +697,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     // She turns to face the enemy and glides in close if she is not there yet.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_TransStageFloorPosition, LW(6), LW(7), LW(8))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 30)
     SUBTRACT(LW(1), 20)
@@ -883,7 +883,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         GOTO(90)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
 #else
     CALL(btlevtcmd_GetResultPrizeLv, -1, 0, LW(6))
@@ -894,7 +894,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     CALL(btlevtcmd_StopAC)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
 #endif
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_A2_2"))
@@ -935,7 +935,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
 #endif
     LABEL(99)
@@ -1535,7 +1535,7 @@ USER_FUNC(_get_move_frame) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_8017d03c, JP 0x8017D03C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Takes target unit args[0] and a position in args[1]-args[3]
  * and adjusts it in place to where Vivian should surface for Shade Fist:

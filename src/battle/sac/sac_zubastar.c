@@ -538,7 +538,7 @@ USER_FUNC(zubastar_main) {
                 n++;
             }
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         top[n] = 364.0f;
         bot[n] = 304.0f;
 #else
@@ -702,7 +702,7 @@ USER_FUNC(zubastar_main) {
         if (w->ltimer >= 15) {
             w->cursor.timer = 27;
             w->cursor.phaseTimer = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             // The demo flashes the screen from here.
             fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             btl_camera_shake_h(BTL_CAM_PRI_NORMAL, 5.0f, 0.0f, 30, 0);
@@ -719,7 +719,7 @@ USER_FUNC(zubastar_main) {
         break;
     case 28:
         w->cursor.timer = 30;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #endif
     case 30:

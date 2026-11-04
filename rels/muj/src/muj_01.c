@@ -111,7 +111,7 @@ static NpcSetupInfo npcEnt[17];
 static EvtWord bero_in_event[5];
 static BeroEntry bero_entry_data[3];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord muj_00_door_open[];
 #else
 EvtWord muj_00_door_open[247];
@@ -394,7 +394,7 @@ static EVT_BEGIN(marco_talk)
             CALL(delete_itemsel_table)
             RETURN
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, LW(10), LW(0))
 #else
         CALL(evt_win_item_select, 0, LW(10), LW(0), 0)
@@ -478,7 +478,7 @@ static EVT_BEGIN(marco_talk)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_cam3d_evt_set, -60, 95, 491, -60, 35, 146, 500, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_party_stop, 0)
 #else
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
@@ -493,7 +493,7 @@ static EVT_BEGIN(marco_talk)
             SET_VALUE(LF(10), 1)
             CALL(evt_mario_hello_exparty_pos, 15, -25, 0, 210)
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(GF(0), 1)
         BEGIN_INLINE_EVENT
             CALL(evt_party_move_pos2, 0, 0, 170, FLOAT(120.0f))
@@ -540,7 +540,7 @@ static EVT_BEGIN(marco_talk)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_83"), 0, STRING("extparty"))
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_party_run, 1)
 #endif
 
@@ -1280,7 +1280,7 @@ EVT_BEGIN(muj_00_door_open)
     WAIT_MS(500)
     CALL(evt_door_param, LW(0), DOOR_PARAM_IN_POS_FROM_MARIO, LW(1), LW(2), LW(3))
     CALL(evt_mario_party_door_move, LW(1), LW(3), FLOAT(135.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_move_behind_mario, 0)
     CALL(evt_party_move_behind_mario, 1)
 #endif
@@ -1498,7 +1498,7 @@ static KinopioData kino_dt = {
     0, // breakfastItem
     {0}, // breakfastPos
     10, // ryoukin
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {399.0f, 16.0f, -185.0f},
 #else
     {403.0f, 17.0f, -182.0f}, // bed
@@ -2114,7 +2114,7 @@ static EVT_BEGIN(sekai_yami_evt)
     // Someone screams as the darkness spreads.
     CALL(evt_msg_print, 0, STRING("stg8_dark_06"), 0, 0)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         WAIT_MS(1000)
         LOOP(2)
 #else
@@ -2132,7 +2132,7 @@ static EVT_BEGIN(sekai_yami_evt)
             CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
             WAIT_MS(100)
             CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             WAIT_MS(100)
             END_LOOP
     END_INLINE_EVENT

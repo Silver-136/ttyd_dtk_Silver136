@@ -43,7 +43,7 @@ static EvtWord talk_toron[63];
 static EvtWord init_madam[52];
 static s32 item_tbl_madam[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_madam_ring_return[65];
 #else
 static EvtWord talk_madam_ring_return[67];
@@ -55,7 +55,7 @@ NpcSetupInfo npc_data_2[3];
 static EvtWord evt_daiji_kami[41];
 EvtWord evt_pikary_arrival[141];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static const char* access_tbl[5];
 static EvtWord evt_access[14];
 static EvtWord evt_access_entry[23];
@@ -72,7 +72,7 @@ EvtWord rsh_01_b_init_evt[14];
 static const char* window_tbl[3];
 EvtWord rsh_01_c_init_evt[24];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord talk_syasyou[];
 #else
 EvtWord talk_syasyou[19];
@@ -83,7 +83,7 @@ static BeroEntry bero_data_b_return[4];
 static BeroEntry bero_data_c_return[4];
 BeroEntry gor_bero[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_01_init_evt_nidome[];
 #else
 EvtWord rsh_01_init_evt_nidome[206];
@@ -408,7 +408,7 @@ static s32 item_tbl_madam[] = {
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_200"), 0, STRING("マダム"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
 #else
     CALL(evt_win_item_select, 0, PTR(item_tbl_madam), LW(1), 0)
@@ -657,12 +657,12 @@ EVT_END()
 static const char* access_tbl[] = {
     "tana_5",
     "stg6_rsh_262",
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "stg6_rsh_267",
 #endif
     "tana_4",
     "stg6_rsh_263",
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     "stg6_rsh_267",
 #endif
     NULL,
@@ -675,11 +675,11 @@ static const char* access_tbl[] = {
  */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
 #endif
         CALL(evt_msg_print, 0, LW(1), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ELSE
         CALL(evt_msg_print, 0, LW(2), 0, 0)
     END_IF
@@ -695,7 +695,7 @@ EVT_END()
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         READ_INT2(LW(0), LW(1))
 #else
         READ_INT3(LW(0), LW(1), LW(2))
@@ -739,7 +739,7 @@ EVT_BEGIN(rsh_01_init_evt)
         SET_VALUE(LW(0), 2)
         CALL_CHILD(PTR(bero_case_switch_off))
         SET_VALUE(LW(1), STRING("stg6_rsh_261"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         SET_VALUE(LW(2), STRING("stg6_rsh_261"))
 #endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
@@ -869,11 +869,11 @@ EVT_END()
  * says stg6_rsh_c_14, or in the releases stg6_rsh_c_09_1 once the train has reached Rogueport.
  */
 EVT_BEGIN(talk_syasyou)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #endif
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ELSE
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_09_1"), 0, 0)
     END_IF
@@ -1125,7 +1125,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
                     SET_VALUE(LW(0), STRING("s_bero"))
                     CALL_CHILD(PTR(bero_case_switch_off))
                     SET_VALUE(LW(1), STRING("stg6_rsh_261"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     SET_VALUE(LW(2), STRING("stg6_rsh_261"))
 #endif
                     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("s_bero"), 0, PTR(evt_access), 0)
@@ -1140,7 +1140,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
     ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)

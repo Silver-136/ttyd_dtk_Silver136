@@ -962,7 +962,7 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
  * untargetable and immune ones and some defense attributes) and hits each with Art Attack.
  * args[0] gets the rating level for the popup when every enemy was hit, else -1; the crowd cheers louder.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 scissor_damage(EventEntry* evt, BOOL first) {
 #else
 s32 scissor_damage(EventEntry* evt, BOOL first) {
@@ -990,7 +990,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
             BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
             s32 res;
             if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) != 1 && !(part->attributes & kClone) && !(part->attributes & kImmuneToDamageAndStatus) &&
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 !(part->attributes & kNotTargetable) && *(s8*)part->defenseAttr != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP) {
 #else
                 !(part->attributes & kNotTargetable) && part->defenseAttr->defenseAttrs[ELEMENT_NORMAL] != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP &&
@@ -1146,7 +1146,7 @@ void scissor_capture(CameraId camera, void* param) {
 }
 
 /** Draws the player's line in shifting rainbow colours. The demos also outline each enemy's cut box in red. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void scissor_disp_control(CameraId camera, void* param) {
 #else
 void scissor_disp_control(CameraId camera, void* param) {
@@ -1154,7 +1154,7 @@ void scissor_disp_control(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
     f32* pts = (f32*)w->points;
     s32 i;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BattleWork* wp;
     BattleUnit* unit;
     Vec pos;
@@ -1198,7 +1198,7 @@ void scissor_disp_control(CameraId camera, void* param) {
         GXPosition3f32(pts[i * 2], pts[i * 2 + 1], 0.0f);
         GXPosition3f32(pts[i * 2 + 2], pts[i * 2 + 3], 0.0f);
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     wp = _battleWorkPointer;
     GXSetChanMatColor(4, (GXColor){0xFF, 0x00, 0x00, 0xFF});
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
@@ -1413,7 +1413,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(30)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_btl_camera_set_moveto, 0, 75, 120, 600, 75, 70, 0, 30, 0)
 #else
         CALL(evt_btl_camera_set_moveto, 0, 75, 105, 600, 75, 55, 0, 30, 0)

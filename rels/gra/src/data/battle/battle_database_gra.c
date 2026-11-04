@@ -109,7 +109,7 @@ BattleStageObjectData gra_btlobject_data[] = {
     {"kusa_3", 2, 1, {-77.0f, 0.0f, 77.0f}, 20, 40, {0}},
     {"kusa_4", 2, 1, {-155.0f, 0.0f, 71.0f}, 30, 30, {0}},
     {"kusamura_mae", 2, 1, {0.0f, 0.0f, 72.0f}, 0, 60, {0}},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"kusamura_usiro", 2, 1, {0.0f, 0.0f, -70.0f}, 10, 50, {0}},
 #else
     {"kusamura_usiro", 2, 1, {0.0f, 0.0f, -65.0f}, 10, 50, {0}},

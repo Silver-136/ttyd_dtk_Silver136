@@ -74,7 +74,7 @@ static const Vec kemu_pos = { 0.0f, 0.0f, 0.0f };
 static const Vec kemu_tmp = { 0.0f, 0.0f, 0.0f };
 
 /** Sets the X and Z rotation used by type 11, which is drawn tilted rather than camera-facing. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static f32 bom_dir[10] = {10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f};
 static f32 bom_spd[10] = {2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f};
 #endif
@@ -387,7 +387,7 @@ static void effKemuTestMain(EffectEntry* effect) {
  * Spawned by the hammer motion (mot_hammer.c), partner code and event scripts.
  */
 EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     static f32 bom_dir[10] = { 10.0f, 40.0f, 80.0f, 170.0f, 140.0f, 100.0f, 25.0f, 155.0f, 60.0f, 120.0f };
     static f32 bom_spd[10] = { 2.2f, 2.7f, 3.0f, 2.2f, 2.7f, 3.0f, 1.9f, 1.9f, 1.5f, 1.5f };
 #endif

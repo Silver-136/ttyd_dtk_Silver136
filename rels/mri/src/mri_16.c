@@ -37,7 +37,7 @@ static BeroEntry bero_entry_data[7];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord water_shikake[];
 #else
 EvtWord water_shikake[312];
@@ -232,7 +232,7 @@ EVT_BEGIN(water_shikake)
     // The blue switch has been pressed: controls off and the music dips; Punies already on the lower level are
     // put at fixed spots there.
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #else
     BEGIN_INLINE_EVENT
@@ -412,7 +412,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_SHRINK_STOMP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)

@@ -21,7 +21,7 @@ extern BattleWeapon ItemWeaponData_FreshJuice;
 extern BattleWeapon ItemWeaponData_Funyafunya_Kun;
 extern BattleWeapon ItemWeaponData_FutarideForever;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern BattleWeapon ItemWeaponData_FireCandy;
 #endif
 
@@ -30,7 +30,7 @@ extern BattleWeapon ItemWeaponData_HealthySalad;
 extern BattleWeapon ItemWeaponData_Honey_Syrup;
 extern BattleWeapon ItemWeaponData_IceCandy;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern BattleWeapon ItemWeaponData_FireCandy;
 #endif
 

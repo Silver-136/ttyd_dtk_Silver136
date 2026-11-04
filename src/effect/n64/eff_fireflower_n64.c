@@ -33,7 +33,7 @@ typedef struct EffFireFlowerN64Work {
     s32 flip;     // 0x50
 } EffFireFlowerN64Work;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s8 scale_data[] = "27<AFKPUZ_dgigd";
 #endif
 
@@ -65,7 +65,7 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
 };
 
 /** Fire Flower size (in percent) as it grows in over 15 frames, overshooting slightly before settling. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static s8 scale_data[] = "27<AFKPUZ_dgigd";
 #endif
 

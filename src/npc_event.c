@@ -266,7 +266,7 @@ EvtWord enemy_common_blow_event[13];
 EvtWord enemy_2d_common_dead_event[415];
 EvtWord _2d_dead_rotate_event[];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord testenemynpc_move_event[];
 #else
 EvtWord testenemynpc_move_event[13];
@@ -279,7 +279,7 @@ EvtWord kuriboo_find_event[54];
 EvtWord kuriboo_lost_event[31];
 EvtWord kuriboo_return_event[37];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord patakuri_move_event[];
 #else
 EvtWord patakuri_move_event[148];
@@ -288,7 +288,7 @@ EvtWord patakuri_move_event[148];
 EvtWord patakuri_find_event[90];
 EvtWord patakuri_lost_event[31];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord patakuri_return_event[];
 #else
 EvtWord patakuri_return_event[170];
@@ -322,7 +322,7 @@ EvtWord met_find_event[269];
 EvtWord met_lost_event[43];
 EvtWord met_return_event[51];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord patamet_move_event[];
 #else
 EvtWord patamet_move_event[151];
@@ -404,7 +404,7 @@ EvtWord piders_blow_event[13];
 EvtWord pakkun_attack_event[74];
 EvtWord pakkun_init_event[34];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord pakkun_move_event[];
 extern EvtWord pakkun_find_event[];
 extern EvtWord pakkun_return_event[];
@@ -418,7 +418,7 @@ EvtWord dokugassun_init_event[14];
 EvtWord dokugassun_move_event[153];
 EvtWord dokugassun_find_event[69];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord dokugassun_lost_event[];
 #else
 EvtWord dokugassun_lost_event[27];
@@ -437,7 +437,7 @@ EvtWord basabasa_find_event[69];
 EvtWord basabasa_lost_event[31];
 EvtWord basabasa_return_event[44];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord basabasa2_move_event[];
 #else
 EvtWord basabasa2_move_event[148];
@@ -447,7 +447,7 @@ EvtWord basabasa2_find_event[60];
 EvtWord basabasa2_lost_event[31];
 EvtWord basabasa2_return_event[140];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord teresa_move_event[];
 #else
 EvtWord teresa_move_event[165];
@@ -456,7 +456,7 @@ EvtWord teresa_move_event[165];
 EvtWord teresa_find_event[60];
 EvtWord teresa_lost_event[31];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord teresa_return_event[];
 extern EvtWord bubble_move_event[];
 #else
@@ -474,7 +474,7 @@ EvtWord hbom_return_event[37];
 EvtWord zakowiz_init_event[38];
 EvtWord zakowiz_move_event[70];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord zakowiz_find_event[];
 #else
 EvtWord zakowiz_find_event[159];
@@ -489,7 +489,7 @@ EvtWord hannya_lost_event[23];
 EvtWord hannya_return_event[29];
 EvtWord mahoon_init_event[120];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord mahoon_move_event[];
 #else
 EvtWord mahoon_move_event[259];
@@ -501,7 +501,7 @@ EvtWord mahoon_lost_event[142];
 EvtWord mahoon_return_event[251];
 EvtWord kamec_init_event[54];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kamec_move_event[];
 #else
 EvtWord kamec_move_event[177];
@@ -561,7 +561,7 @@ EvtWord kuriboo2D_move_event[72];
 EvtWord kuriboo2D_find_event[70];
 EvtWord zako2D_init_event[27];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord zako2D_move_event[];
 #else
 EvtWord zako2D_move_event[244];
@@ -575,7 +575,7 @@ EvtWord fall2D_regl_event[34];
 EvtWord zakoM2D_init_event[37];
 EvtWord zakoM2D_move_event[95];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord zakoM2D_find_event[179];
 EvtWord zakoM2D_find_start_event[88];
 #else
@@ -619,7 +619,7 @@ EVT_BEGIN(enemy_common_dead_event)
     END_IF
     CALL(evt_npc_get_drop_item, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
 #else
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
@@ -628,7 +628,7 @@ EVT_BEGIN(enemy_common_dead_event)
     CALL(evt_npc_getback_item_entry, STRING("me"))
     CALL(evt_npc_get_drop_fixitem, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
 #else
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
@@ -657,7 +657,7 @@ EVT_END()
  * Blow event of most field enemies, run when Flurrie's Gale Force catches them without blowing them away:
  * confused pose, spins until the blow ends, waits 2 s and resumes.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Dead event for event-controlled enemies: plays enemy_event_dead_event_sub on itself (no drops) and resumes.
  * Demo position of the retail definition below.
@@ -824,7 +824,7 @@ EVT_BEGIN(_2d_dead_rotate_event)
         CALL(evt_npc_add_rotate, STRING("me"), 0, 0, LW(0))
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     RETURN
 EVT_END()
 
@@ -847,7 +847,7 @@ EVT_BEGIN(testnpc_move_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Turns on the standard field enemy flags (battle info, script-driven, jumping, move animation, land on floor,
  * enemy) and status 2. Demo position of the retail definition below.
@@ -886,7 +886,7 @@ EVT_END()
  * sets the enemy flags (and, outside the demos, its standing pose) and then does nothing.
  */
 EVT_BEGIN(testenemynpc_move_event)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(enemy_common_flag_init_event)
 #else
     CALL_CHILD(PTR(enemy_common_flag_init_event))
@@ -899,7 +899,7 @@ EVT_BEGIN(testenemynpc_move_event)
 EVT_END()
 
 /** Move event of the generic wandering event NPC: wanders within 100 units of where it stands with evt_urouro. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Init event of the generic wandering event NPC: move and talk animations on.
  * Demo position of the retail definition below.
@@ -937,7 +937,7 @@ EVT_END()
  * Move event of Goombas, Spiky Goombas, X-Nauts and Bandits:
  * every half second walks 100 units in a new direction turned 120 to 240 degrees from the last.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Init event of Goombas, Spiky Goombas, X-Nauts and Bandits: standard enemy flags.
  * Demo position of the retail definition below.
@@ -1007,7 +1007,7 @@ EVT_END()
  * Move event of Paragoombas: flies in a direction turned 120 to 240 degrees from the last,
  * in four bobbing 25-unit glides 50 above the floor, then rests 0.5 s.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Init event of Paragoombas: script-driven flying enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(patakuri_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
@@ -1021,7 +1021,7 @@ EVT_END()
  * in four bobbing 25-unit glides 50 above the floor, then rests 0.5 s.
  */
 EVT_BEGIN(patakuri_move_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     CALL(evt_sub_random, 360, LW(3))
@@ -1090,7 +1090,7 @@ EVT_BEGIN(patakuri_return_event)
     WAIT_MS(500)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_stay_anim, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_reverse_ry, STRING("me"))
     WAIT_MS(500)
     CALL(evt_npc_reverse_ry, STRING("me"))
@@ -1387,7 +1387,7 @@ EVT_END()
  * Move event of Koopa Paratroopas: flies five pairs of bobbing 30-unit glides 50 above the floor,
  * veering up to 20 degrees, then rests 0.5 s.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Init event of Koopa Paratroopas: flying enemy flags with wall bounce.
  * Demo position of the retail definition below.
@@ -1727,7 +1727,7 @@ EVT_BEGIN(met_return_event)
 EVT_END()
 
 /** Move event of Parabuzzies: same bobbing flight as the Paragoomba's. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Init event of Parabuzzies: flying enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(patamet_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
@@ -1738,7 +1738,7 @@ EVT_END()
 
 /** Move event of Parabuzzies: same bobbing flight as the Paragoomba's. */
 EVT_BEGIN(patamet_move_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     CALL(evt_sub_random, 360, LW(3))
@@ -1837,7 +1837,7 @@ EVT_END()
  * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
  * turns to face Mario and pauses up to half a second.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Init event of Fuzzies: jumping enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(chorobon_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_GRAVITY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_ENEMY)
@@ -1921,7 +1921,7 @@ EVT_BEGIN(chorobon_return_event)
 EVT_END()
 
 /** Move event of Crazee Dayzees: wanders like a Goomba. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Init event of Crazee Dayzees: standard enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(pansy_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
@@ -1985,7 +1985,7 @@ EVT_BEGIN(pansy_return_event)
 EVT_END()
 
 /** Move event of Amazy Dayzees: wanders like a Goomba. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Init event of Amazy Dayzees: standard enemy flags. Demo position of the retail definition below. */
 EVT_BEGIN(twinkling_pansy_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
@@ -2088,7 +2088,7 @@ EVT_END()
  * turns to Mario and throws its spinning bone in an arc at where he stands (the bone attacks in mode 12),
  * then puts the bone away and resumes.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Dead event of bone-throwing Dry Bones: hides the bone, then the usual defeat and drops.
  * Demo position of the retail definition below.
@@ -2314,7 +2314,7 @@ EVT_BEGIN(killer_dead_event)
     END_IF
     CALL(evt_npc_get_drop_item, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
 #else
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
@@ -2323,7 +2323,7 @@ EVT_BEGIN(killer_dead_event)
     CALL(evt_npc_getback_item_entry, STRING("me"))
     CALL(evt_npc_get_drop_fixitem, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
 #else
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
@@ -2389,7 +2389,7 @@ EVT_BEGIN(killer_cannon_move_event)
 EVT_END()
 
 /** Move event of Pokeys: stands in place. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(sambo_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION)
@@ -2664,7 +2664,7 @@ EVT_BEGIN(sinemon_return_event)
 EVT_END()
 
 /** Move event of Bristles: wanders like a Goomba. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(togedaruma_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     RETURN
@@ -2823,7 +2823,7 @@ EVT_BEGIN(barriern_find_event)
     CALL(evt_npc_set_ry, STRING("me"), LW(0))
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_FIND)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #endif
     LABEL(0)
@@ -2927,7 +2927,7 @@ USER_FUNC(piders_draw_yawn) {
  * and returns the effect in args[6].
  * Outside the demos the effect is named after the Magikoopa so it can be found later.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(kamec_fire_magic) {
 #else
 USER_FUNC(kamec_fire_magic) {
@@ -2940,11 +2940,11 @@ USER_FUNC(kamec_fire_magic) {
     s32 tx = evtGetValue(event, args[3]);
     s32 ty = evtGetValue(event, args[4]);
     s32 tz = evtGetValue(event, args[5]);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
 #endif
     EffectEntry* eff = effMagic1N64Entry(0, 60, (f32)x, (f32)y, (f32)z, (f32)tx, (f32)ty, (f32)tz);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     effSetName(eff, npc->description);
 #endif
     evtSetValue(event, args[6], (EvtWord)eff);
@@ -2956,7 +2956,7 @@ USER_FUNC(kamec_fire_magic) {
  * Ends the calling Magikoopa's magic effect: the demo deletes the effect passed in args[0];
  * the full game finds it by the Magikoopa's name and lets it run out.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(kamec_fire_magic_delete) {
     EffectEntry* eff = effNameToPtr(evtNpcNameToPtr(event, "me")->description);
     if (eff) {
@@ -2973,7 +2973,7 @@ USER_FUNC(kamec_fire_magic_delete) {
  * Ends the calling Magikoopa's magic effect: the demo deletes the effect passed in args[0];
  * the full game finds it by the Magikoopa's name and lets it run out.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(kamec_fire_magic_delete) {
     effSoftDelete((EffectEntry*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
@@ -2983,7 +2983,7 @@ static USER_FUNC(kamec_fire_magic_delete) {
 EVT_BEGIN(barriern_lost_event)
 #else
 EVT_BEGIN(barriern_lost_event)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #endif
 #endif
@@ -2996,7 +2996,7 @@ EVT_BEGIN(barriern_lost_event)
 EVT_END()
 
 EVT_BEGIN(barriern_return_event)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #endif
     CALL(evt_set_dir_to_home, STRING("me"))
@@ -3014,7 +3014,7 @@ EVT_BEGIN(barriern_return_event)
 EVT_END()
 
 EVT_BEGIN(barriern_blow_event)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #endif
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 0)
@@ -3026,7 +3026,7 @@ EVT_BEGIN(barriern_blow_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(piders_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
@@ -3175,7 +3175,7 @@ EVT_BEGIN(pakkun_init_event)
 EVT_END()
 
 EVT_BEGIN(pakkun_move_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_FIND)
 #endif
     CALL(evt_npc_set_anim, STRING("me"), STRING("PKF_S_1"))
@@ -3186,7 +3186,7 @@ EVT_BEGIN(pakkun_move_event)
 EVT_END()
 
 EVT_BEGIN(pakkun_find_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_FIND)
 #endif
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -3216,7 +3216,7 @@ EVT_BEGIN(pakkun_find_event)
 EVT_END()
 
 EVT_BEGIN(pakkun_return_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_FIND)
 #endif
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -3234,7 +3234,7 @@ EVT_BEGIN(pakkun_return_event)
     CALL(evt_npc_set_anim, STRING("me"), STRING("PKF_E_1"))
     WAIT_FRAMES(10)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_FRAMES(20)
 #else
     WAIT_FRAMES(25)
@@ -3299,7 +3299,7 @@ EVT_BEGIN(dokugassun_lost_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff_fukidashi, 1, 0, STRING("me"), 1, 0, 0, 0, 0, 0, 0, 30)
 #endif
     CALL(evt_npc_reverse_ry, STRING("me"))
@@ -3406,7 +3406,7 @@ EVT_BEGIN(basabasa_return_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(basabasa_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
@@ -3418,7 +3418,7 @@ EVT_BEGIN(basabasa2_init_event)
 EVT_END()
 #endif
 EVT_BEGIN(basabasa2_move_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     CALL(evt_sub_random, 360, LW(3))
@@ -3497,7 +3497,7 @@ EVT_BEGIN(basabasa2_return_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(basabasa2_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
@@ -3509,7 +3509,7 @@ EVT_BEGIN(teresa_init_event)
 EVT_END()
 #endif
 EVT_BEGIN(teresa_move_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_FIND)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
@@ -3572,7 +3572,7 @@ EVT_BEGIN(teresa_return_event)
     CALL(evt_set_dir_to_home, STRING("me"))
     CALL(evt_npc_get_dir, STRING("me"), LW(3))
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_FIND)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
     SET_VALUE(LW(0), 255)
@@ -3594,7 +3594,7 @@ EVT_BEGIN(teresa_return_event)
         CALL(evt_npc_set_color, STRING("me"), 255, 255, 255, LW(0))
         WAIT_MS(30)
     END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
 #endif
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_FIND)
@@ -3602,7 +3602,7 @@ EVT_BEGIN(teresa_return_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(teresa_dead_event)
     CALL_CHILD(enemy_common_dead_event)
     RETURN
@@ -3614,7 +3614,7 @@ EVT_BEGIN(bubble_init_event)
 EVT_END()
 #endif
 EVT_BEGIN(bubble_move_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     CALL(evt_sub_random, 360, LW(3))
@@ -3699,7 +3699,7 @@ EVT_BEGIN(bubble_return_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(hbom_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     RETURN
@@ -3789,7 +3789,7 @@ EVT_BEGIN(zakowiz_move_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(zakowiz_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
@@ -3819,7 +3819,7 @@ EVT_BEGIN(zakowiz_find_event)
     CALL(evt_npc_flag_onoff, 0, STRING("slave_0"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 12)
     CALL(evt_npc_jump_position, STRING("slave_0"), LW(0), LW(1), LW(2), 1000, 0, FLOAT(75.0f), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_get_position, STRING("slave_0"), LW(0), LW(1), LW(2))
 #endif
     CALL(evt_eff, STRING(""), STRING("kemuri_test"), 16, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
@@ -3863,7 +3863,7 @@ EVT_BEGIN(zakowiz_blow_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(hannya_init_event)
     CALL_CHILD(enemy_common_flag_init_event)
     CALL(evt_npc_status_onoff, 0, STRING("me"), 2)
@@ -3948,7 +3948,7 @@ EVT_BEGIN(mahoon_init_event)
 EVT_END()
 
 EVT_BEGIN(mahoon_move_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     BEGIN_SIBLING_EVENT
@@ -4142,7 +4142,7 @@ EVT_BEGIN(mahoon_return_event)
 EVT_END()
 
 EVT_BEGIN(kamec_init_event)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
@@ -4161,7 +4161,7 @@ EVT_BEGIN(kamec_init_event)
 EVT_END()
 
 EVT_BEGIN(kamec_move_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
 #endif
     CALL(evt_sub_random, 360, LW(3))
@@ -4270,7 +4270,7 @@ EVT_BEGIN(kamec_return_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(kamec_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
@@ -4343,7 +4343,7 @@ EVT_BEGIN(kamec2_find_event)
     ADD(LW(1), 20)
     CALL(evt_npc_flag_onoff, 0, STRING("slave_0"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 12)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_glide_position, STRING("slave_0"), LW(0), LW(1), LW(2), 1000, 0, FLOAT(0.0f), 0, 6)
 #else
     CALL(evt_npc_glide_position, STRING("slave_0"), LW(0), LW(1), LW(2), 1000, 0, FLOAT(0.0f), 0, 3)
@@ -4380,7 +4380,7 @@ EVT_BEGIN(kamec2_return_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(kamec2_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
@@ -4424,7 +4424,7 @@ EVT_BEGIN(hbross_move_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(hbross_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL_CHILD(enemy_common_dead_event)
@@ -4682,7 +4682,7 @@ EVT_BEGIN(hbross_blow_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(enemy_event_dead_event)
     SET_VALUE(LW(10), STRING("me"))
     CALL_CHILD(enemy_event_dead_event_sub)
@@ -4961,7 +4961,7 @@ EVT_BEGIN(wanwan_find_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(zakoEntryDokan) {
 #else
 USER_FUNC(zakoEntryDokan) {
@@ -4985,7 +4985,7 @@ USER_FUNC(zakoEntryDokan) {
     }
     {
         const char* hn = hitGetName(marioGetPtr()->hitobjStandOn);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (hn && !strcmp(hn, pipeHitName))
             return EVT_RETURN_DONE;
 #else
@@ -5114,7 +5114,7 @@ USER_FUNC(zakoEntryFall) {
 
 
 // Descriptive name (not in the symbol maps); placeholder unk_800ece0c, JP 0x800ECE0C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Makes a fire effect at args[0-2] for the calling NPC and keeps it burning for args[3] frames,
  * shrinking and fading it over the last 30; blocks until it is gone.
@@ -5282,7 +5282,7 @@ EVT_BEGIN(zako2D_move_event)
         CALL(evt_npc_set_ry, STRING("me"), LW(0))
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_FLOOR_COLLISION)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         LOOP(30)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 4096)
             WAIT_FRAMES(1)
@@ -5473,7 +5473,7 @@ EVT_BEGIN(zakoM2D_move_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Throws the X-Naut PhD's bottle in an arc toward Mario (LW(10) is his distance;
  * from 200 on it throws a fixed long arc), where it shatters into glass and fire with sounds and smoke.
@@ -5546,7 +5546,7 @@ EVT_BEGIN(zakoM2D_find_start_event)
         WAIT_FRAMES(24)
         CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     END_SIBLING_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_anim, STRING("slave_0"), STRING("B_1"))
         CALL(evt_npc_set_ry, STRING("slave_0"), LW(0))
@@ -5584,7 +5584,7 @@ EVT_BEGIN(zakoM2D_find_start_event)
 EVT_END()
 
 /** Init event of Bloopers in Bowser's side-scrolling stages: enemy flags, side-scrolling mode, no jumping. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(zakoM2D_dead_event)
     CALL(evt_npc_status_onoff, 0, STRING("slave_0"), 4)
     CALL_CHILD(enemy_2d_common_dead_event)
@@ -5641,7 +5641,7 @@ EVT_BEGIN(gesso2D_move_event)
         IF_INT_LESS(LW(1), LW(11))
             BREAK_LOOP
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         IF_INT_LESS(LW(1), 60)
 #else
         IF_INT_LESS(LW(1), 90)

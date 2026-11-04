@@ -34,7 +34,7 @@ EvtWord ne_close[22];
 EvtWord ne_open[22];
 EvtWord gra_06_ido[12];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord gra_06_ido_in_sub[];
 #else
 EvtWord gra_06_ido_in_sub[77];
@@ -44,7 +44,7 @@ EvtWord gra_06_ido_in[7];
 static BeroEntry bero_entry_data[4];
 EvtWord gra_06_saku_open[];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord first_gra06jin[];
 #else
 EvtWord first_gra06jin[138];
@@ -105,7 +105,7 @@ EVT_BEGIN(gra_06_ido_in_sub)
     CALL(evt_party_set_dir, 1, 270, -1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_jump_pos, 165, 0, 374, 800, 0, -1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     END_INLINE_EVENT
@@ -231,7 +231,7 @@ EVT_BEGIN(gra_06_saku_open)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_mario_key_onoff, 0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             CALL(evt_party_stop, 0)
             WAIT_MS(200)
             CALL(evt_msg_print_party, STRING("stg4_gra_20"))
@@ -301,7 +301,7 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_mario_set_pos, -320, 0, 365)
     CALL(evt_party_set_pos, 0, -350, 0, 365)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     BEGIN_INLINE_EVENT
@@ -322,7 +322,7 @@ EVT_BEGIN(first_gra06jin)
     WAIT_FRAMES(1)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_party_stop, 0)
@@ -333,7 +333,7 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_08_STEEPLE_DEMO_EXT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -407,7 +407,7 @@ EVT_BEGIN(teresa_oidasare_evt)
     END_LOOP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_LAND_DAMAGE2"), LW(0), LW(1), LW(2), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_set_pose, STRING("M_D_2"))

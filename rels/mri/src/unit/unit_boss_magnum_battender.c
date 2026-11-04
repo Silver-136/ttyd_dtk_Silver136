@@ -81,7 +81,7 @@ static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event[216];
 #else
 static EvtWord dead_event[234];
@@ -129,7 +129,7 @@ BattleUnitKind unit_boss_magnum_battender = {
     6, // pbSoftCap
     120, // width
     160, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     30,
     100,
     0.0f,
@@ -147,7 +147,7 @@ BattleUnitKind unit_boss_magnum_battender = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     60.0f,
     0.0f,
@@ -198,7 +198,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Defence attributes of Magnus: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {0, 50, 50, 0, 50, 0, 100, 30, 0, 0, 100, 0, 100, 50, 50, 0, 0, 100, 40, 0, 0, 0};
 #else
 static StatusVulnerability regist = {
@@ -232,7 +232,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_STOP, "MGN_2D_1"},
     {POSE_TYPE_FREEZE, "MGN_2D_1"},
     {POSE_TYPE_CONFUSE, "MGN_X_1"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {POSE_TYPE_POISON, "MGN_S_1"},
     {POSE_TYPE_DIZZY, "MGN_S_1"},
 #else
@@ -258,7 +258,7 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_STOP, "MGN_2D_2"},
     {POSE_TYPE_FREEZE, "MGN_2D_2"},
     {POSE_TYPE_CONFUSE, "MGN_X_2"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {POSE_TYPE_POISON, "MGN_S_2"},
     {POSE_TYPE_DIZZY, "MGN_S_2"},
 #else
@@ -613,7 +613,7 @@ static EVT_BEGIN(dead_event)
     WAIT_MS(500)
     CALL(arm_check, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
 #endif
@@ -625,12 +625,12 @@ static EVT_BEGIN(dead_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
 #endif
     CALL(arm_check, 1, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_CheckDamageCode, LW(0), DAMAGE_RESULT_ZERO_HP, LW(1))
         IF_INT_EQUAL(LW(1), 0)
 #endif
@@ -642,7 +642,7 @@ static EVT_BEGIN(dead_event)
                 CALL(btlevtcmd_OnPartsAttribute, LW(10), 1, kNoShadow)
             END_INLINE_EVENT
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LW(10), UNIT_ID_SELF)
 #else
     END_IF
@@ -1203,7 +1203,7 @@ static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Magnus' rocket fist: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr_r = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_r = {0, 80, 80, 80, 80, 80, 100, 80, 0, 0, 100, 0, 100, 80, 80, 0, 110, 100, 80, 0, 0, 0};
 #else
 static StatusVulnerability regist_r = {
@@ -1285,7 +1285,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_TOP_SPIKY | COUNTER_RESIST_FRONT_SPIKY | COUNTER_RESIST_FIERY | COUNTER_RESIST_ICY | COUNTER_RESIST_POISON | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
 #else

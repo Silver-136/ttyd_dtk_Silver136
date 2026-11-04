@@ -37,7 +37,7 @@ EvtWord evt_open_kagi[73];
 static EvtWord evt_unlock[11];
 EvtWord oumu_init[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord oumu_talk[];
 extern EvtWord oumu_juyo_talk[];
 extern EvtWord oumu_check[];
@@ -50,7 +50,7 @@ EvtWord oumu_check[176];
 static NpcSetupInfo npcEnt[2];
 static s32 lock_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord lock_item_check[21];
 #else
 static EvtWord lock_item_check[23];
@@ -217,7 +217,7 @@ EVT_END()
  * before the Ruby Star is recovered, then different lines for after the Ruby Star and after the final battle.
  */
 EVT_BEGIN(oumu_talk)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
 #endif
     SWITCH(GSW_STORY_PROGRESS)
@@ -247,7 +247,7 @@ EVT_END()
  */
 EVT_BEGIN(oumu_juyo_talk)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
 #endif
     IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
@@ -315,7 +315,7 @@ EVT_BEGIN(oumu_check)
                     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
                         CALL(evt_mario_key_onoff, 0)
                         CALL(evt_party_cont_onoff, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         CALL(mainwindow_opendisable)
 #endif
                         WAIT_MS(1000)
@@ -328,12 +328,12 @@ EVT_BEGIN(oumu_check)
                             END_IF
                             WAIT_FRAMES(1)
                         END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
 #endif
                         CALL(evt_msg_print, 0, STRING("stg4_jin_45"), 0, STRING("オウム"))
                         CALL(evt_mario_key_onoff, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         CALL(mainwindow_openenable)
 #endif
                     END_IF
@@ -374,7 +374,7 @@ static s32 lock_tbl[] = {
 static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x17, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(lock_tbl), LW(0), 0)
@@ -394,7 +394,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_POWER_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
@@ -456,7 +456,7 @@ EVT_BEGIN(jin_08_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF_STARPIECE_70)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_itembox, STRING("mobj_box01"), 80, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
     CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -80, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)
     SPAWN_EVENT(oumu_check)

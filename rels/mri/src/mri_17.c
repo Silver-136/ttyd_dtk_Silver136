@@ -51,14 +51,14 @@ static KusaAccess ueki_access_data[4];
 s16 trap_position[204];
 EvtWord trap_main[122];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord trap_restore[59];
 #endif
 
 EvtWord wana_kemuri[130];
 EvtWord wana_offscreen[219];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord trap_event[];
 #else
 EvtWord trap_event[716];
@@ -69,7 +69,7 @@ static EvtWord punipuni_ball00_init[34];
 static EvtWord punipuni_ball00[45];
 static EvtWord breakyuka_init[11];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord breakyuka_main[135];
 #else
 static EvtWord breakyuka_main[131];
@@ -77,7 +77,7 @@ static EvtWord breakyuka_main[131];
 
 EvtWord strange_statue[56];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord switch_event[];
 extern EvtWord mri_17_init_evt[];
 #else
@@ -307,7 +307,7 @@ EVT_BEGIN(trap_main)
 EVT_END()
 
 // Consume one x/z pair for every Puni index, including those not trapped.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(trap_restore)
     CALL(evt_puni_wait_systemmode, 2)
     SET_VALUE(LW(10), 1)
@@ -422,7 +422,7 @@ EVT_BEGIN(trap_event)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 80, 151, 555, 80, 56, 13, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(wana_offscreen)
 #else
     CALL_CHILD(PTR(wana_offscreen))
@@ -439,11 +439,11 @@ EVT_BEGIN(trap_event)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(mri_guide_goryu)
 #endif
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
 #else
     CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
@@ -572,7 +572,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_puni_set_mode, 1, PUNI_MODE_TRAP)
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
@@ -594,7 +594,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
     CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_09"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -759,7 +759,7 @@ static EVT_BEGIN(breakyuka_main)
         CALL(evt_puni_get_trap_index, LW(10), LW(12))
         IF_INT_EQUAL(LW(12), 1)
             CALL(evt_puni_set_mode, LW(10), PUNI_MODE_HAGURE)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_puni_flag_onoff, LW(10), 1, 0xA00000)
             CALL(evt_puni_set_trap_index, LW(10), 0)
 #else
@@ -810,11 +810,11 @@ EVT_BEGIN(switch_event)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0146484375f), FLOAT(0.0f), 1000)
     CALL(evt_snd_sfxoff, LW(10))
     WAIT_MS(500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_stop, 0)
 #endif
     CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_10"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_run, 0)
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
@@ -878,7 +878,7 @@ EVT_BEGIN(mri_17_init_evt)
         CALL(evt_paper_entry, STRING("OFF_d_saku"))
         SPAWN_EVENT(PTR(trap_check))
         CASE_BETWEEN(STG2_21_BUBBLES_2, STG2_21_03_SUPER_BOOTS)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SPAWN_EVENT(trap_main)
         CASE_GREATER_OR_EQUAL(STG2_21_03_SUPER_BOOTS)
 #else

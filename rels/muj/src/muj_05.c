@@ -49,7 +49,7 @@ USER_FUNC(evt_dokuroiwa_command_set);
 EvtWord sanders_rotate[28];
 EvtWord sanders_nakama_sub[13];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord sanders_nakama[];
 #else
 EvtWord sanders_nakama[173];
@@ -59,7 +59,7 @@ static EvtWord sanders_init[51];
 static s32 itemsel_table01[2];
 EvtWord sanders_talk_sub[70];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord sanders_talk[170];
 #else
 static EvtWord sanders_talk[178];
@@ -87,7 +87,7 @@ EvtWord dokuroiwa_flush[51];
 s32 command_seikai[7];
 static s32 itemsel_table[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord dokuroiwa_touch[];
 #else
 EvtWord dokuroiwa_touch[127];
@@ -242,13 +242,13 @@ EVT_BEGIN(sanders_nakama)
     SET_VALUE(LW(3), 200)
     SPAWN_EVENT(PTR(sanders_rotate))
     WAIT_MS(500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_stop, 0)
 #endif
     CALL(evt_msg_print_party, STRING("stg5_muj_56"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_62"), 0, STRING("me"))
     CALL(evt_msg_print_party, STRING("stg5_muj_63"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_69"), 0, STRING("me"))
@@ -321,7 +321,7 @@ static EVT_BEGIN(sanders_talk)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_34_03"), 0, STRING("me"))
         ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)
@@ -361,11 +361,11 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
             WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_party_stop, 0)
 #endif
             CALL(evt_msg_print_party, STRING("stg5_muj_49"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_party_run, 0)
 #endif
         END_IF
@@ -853,18 +853,18 @@ EVT_BEGIN(dokuroiwa_touch)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg5_muj_93_01"), 0, 0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_18_02_FLAVIOS_FAVOR_2)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_party_stop, 0)
 #endif
             CALL(evt_msg_print_party, STRING("stg5_muj_93_01_01"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_party_run, 0)
 #endif
             SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
         END_IF
         CALL(evt_mario_key_onoff, 1)
         ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table), LW(0), 0)
@@ -1366,11 +1366,11 @@ EVT_END()
 EVT_BEGIN(muj_05_first)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_mario_normalize)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_33"), 0, STRING("サンダース"))

@@ -342,7 +342,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
             winTexSet_x2(i + 0x1A, 0xB4, (Vec){x - 190.0f, VERSION_PICK(20.0f, 25.0f) + (a - off), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0x80, 0x80, 0x80, 0xFF});
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - ((pouch->maximumBP + 9) / 10)) * 13);
     winFontInit();
     winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "\202a\202o");
@@ -387,7 +387,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
  * equipped highlight, icon, name, BP cost and cost pips, plus the page arrows and the Z sort hint.
  * The JP and later releases gray out badges Mario cannot afford.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void badge_disp(WindowWork* w, f32 xo, f32 yo) {
 #else
 void badge_disp(WindowWork* w, f32 xo, f32 yo) {
@@ -397,7 +397,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     ItemData* item;
     s8* cost;
     s32 j;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXColor colA;
 #else
     GXColor colA = {255, 255, 255, 255};
@@ -414,7 +414,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     s32 gray;
     f32 scroll;
     f32 width;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 tw;
     colA = (GXColor){255, 255, 255, 255};
     colB = (GXColor){0, 0, 0, 255};
@@ -427,7 +427,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         cnt = w->badge.count;
     }
     GXSetScissor(0, 0x77, 0x260, 0xB8);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < cnt; i++) {
 #else
     p0 = w;
@@ -437,7 +437,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         if (w->badge.tab == 0) {
             badge = pouchHaveBadge(i);
         } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             badge = w->badge.list[i].id;
 #else
             badge = p0->badge.list[0].id;
@@ -447,7 +447,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         if (w->badge.tab == 0) {
             equipped = pouchEquipCheckBadgeIndex(i);
         } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             equipped = w->badge.list[i].equipped;
         }
         if ((scroll + ((yo + 110.0f) - (f32)(i * 23))) > 240.0f) {
@@ -466,7 +466,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         }
         if (equipped) {
             winTexInit(*w->res->data);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             winTexSet(0x1E, (Vec){82.0f + xo, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){44.0f, 1.0f, 1.0f}, colA);
         }
         winIconInit();
@@ -508,7 +508,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
             // FAKE: the texture id goes through a spare temporary t in a comma expression; equipped ? 0x1C : 0x1D changes the object
             {
                 s32 t;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 winTexSet((t = 0x1D, equipped ? t = 0x1C : 0, t), (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)(i * 23))), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colA);
 #else
                 winTexSet((t = 0x1D, equipped ? t = 0x1C : 0, t),
@@ -521,7 +521,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
     GXSetScissor(0, 0, 0x260, 0x1E0);
     {
         f32 ax;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         colU = (GXColor){255, 255, 255, 255};
         colD = (GXColor){0, 0, 0, 255};
 #endif

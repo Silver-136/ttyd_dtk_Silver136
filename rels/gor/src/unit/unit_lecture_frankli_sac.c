@@ -52,7 +52,7 @@ static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 EvtWord _test_event[20];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord stop_wait_event[];
 #else
 EvtWord stop_wait_event[20];
@@ -61,7 +61,7 @@ EvtWord stop_wait_event[20];
 static EvtWord init_event[61];
 static EvtWord phase_event[105];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord actend_event[];
 #else
 EvtWord actend_event[538];
@@ -387,14 +387,14 @@ void spot_square_disp(CameraId cameraId, void* param) {
  */
 EVT_BEGIN(stop_wait_event)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
 #else
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_MARIO, 1)
 #endif
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_PARTNER)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), BTL_POSE_STAY)
 #else
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_PARTNER, LW(0))
@@ -475,7 +475,7 @@ EVT_END()
  * the hammer-throwing audience member (013 to 014_3); at step 3 he ends the lecture (014_4, 015).
  */
 EVT_BEGIN(actend_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL_CHILD(PTR(stop_wait_event))
 #endif
 
@@ -588,7 +588,7 @@ EVT_BEGIN(actend_event)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
                     CALL(evt_btl_camera_set_moveto, 0, -30, 29, 499, -30, -3, 5, 30, 11)
                     WAIT_FRAMES(120)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_014_2"), 0, UNIT_ID_LECTURE)
 #else
                     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)

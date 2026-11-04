@@ -23,7 +23,7 @@
 #include "statuswindow.h"
 #include "icon_ids.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "mario/mariost.h"
 #endif
 
@@ -40,7 +40,7 @@ typedef struct OneMsgWin {
     s32 id;    // 0x8
 } OneMsgWin;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 coinwin_se_wait;
 #endif
 
@@ -71,7 +71,7 @@ WinMgrDesc coin_desc = {
  */
 USER_FUNC(evt_win_item_select) {
     EvtWord* args = event->args;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 type = evtGetValue(event, args[0]);
 #else
     s32 getCursor = evtGetValue(event, args[0]);
@@ -89,12 +89,12 @@ USER_FUNC(evt_win_item_select) {
     if (result == 0) {
         return EVT_RETURN_BLOCK;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     cursor = winMgrSelectGetCursor(sel);
 #endif
     winMgrSelectDelete(sel);
     marioKeyOn();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     evtSetValue(event, args[1], result);
 #else
     evtSetValue(event, args[2], result);
@@ -356,7 +356,7 @@ static void coin_disp(WinMgrEntry* entry) {
         }
         w->timer++;
         w->timer = w->timer % 1200;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (__abs(target - w->coins) == 1 || gp->retraceCount % 6 == 0) {
             psndSFXOn("SFX_COUNT_COIN1");
 #else
@@ -366,7 +366,7 @@ static void coin_disp(WinMgrEntry* entry) {
 #endif
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (coinwin_se_wait > 0) {
         coinwin_se_wait--;
     }

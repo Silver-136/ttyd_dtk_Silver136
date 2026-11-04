@@ -147,11 +147,11 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
     Vec out2;
     Vec pos;
     Vec pos2;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 h;
     f32 sx, sy, sz;
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     Vec marioPos;
 #endif
     f32 sx, sy, sz;
@@ -173,7 +173,7 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
         pos2 = p->position;
         marioGetScreenPos(pos2, &sx, &sy, &sz);
         if (marioChkInScreen((s32)sx, (s32)sy)) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             break;
         }
         marioPos = ((MarioWork*)mario)->position;
@@ -553,7 +553,7 @@ USER_FUNC(evt_party_jump_pos) {
         if (__fabsf(dy) < 1.0f) {
             dy = hgt;
         } else if (dy >= 0.0f) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             dy += 0.5f * p->height;
 #else
             dy += 37.0f;
@@ -586,7 +586,7 @@ USER_FUNC(evt_party_jump_pos) {
         mode = 0;
         ff = p->velY;
         {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             f32 groundY, dropDepth;
             HitEntry* hit = _partySearchGround(
                 p, &groundY, &dropDepth, __fabsf(ff), __fabsf(ff));
@@ -597,7 +597,7 @@ USER_FUNC(evt_party_jump_pos) {
 #endif
                 p->hitobjStandOn = hit;
                 mode = 1;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 p->position.y = groundY;
 #else
                 p->position.y = p->groundY;
@@ -1135,7 +1135,7 @@ void evtPartyStrippedPool(f32* f) {
     f[1] = 0.5f;
     f[2] = 20.0f;
     f[3] = 0.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     f[4] = 37.0f;
 #endif
     f[5] = -1000.0f;

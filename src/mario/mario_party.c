@@ -29,7 +29,7 @@ static inline void marioPartyKillSlot1(void) {
     }
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;
@@ -98,7 +98,7 @@ s32 marioUseParty(void) {
 #endif
 
 // Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Runs from partyMain while a partner is out: after the partner button,
@@ -207,7 +207,7 @@ void marioPartyKill(void) {
     marioPartyKillSlot1();
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Demo partner button check: X arms MARIO_TRIG_FLAG_JABARA_CHK with a 5-frame partyUseDelay

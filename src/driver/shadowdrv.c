@@ -2,7 +2,7 @@
 
 #include "version.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define DTRIGF_PLAIN_DATA
 #include <dtrigf.h>
 #include "driver/shadowdrv.h"
@@ -91,7 +91,7 @@ static u8 cube_dl_top[64] ATTRIBUTE_ALIGN(32) = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x80,
     0x00,
@@ -217,7 +217,7 @@ DepthShadowWork* dswp = &depth_shadow_work;
 /** Side lengths of the square shadow textures (400, 256, 128, 64 pixels) that a shadow config picks from. */
 u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x38, 0x01, 0x39, 0x01, 0x3A, 0x01, 0x3B, 0x01, 0x00,
 };
@@ -330,7 +330,7 @@ static inline void shadowSetupPolygon(void) {
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
 #else
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA, GX_CA_ZERO);
@@ -846,7 +846,7 @@ static inline void shadowSetMatZero(void) {
  * Draws the cylinder (mode 2, the default) character shadows:
  * each volume darkens the ground it passes through, and its screen area goes to the shadow's offscreen region.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void cylinderShadowDraw(CameraId cameraId, void* param) {
 #else
 void cylinderShadowDraw(CameraId cameraId, void* param) {
@@ -878,7 +878,7 @@ void cylinderShadowDraw(CameraId cameraId, void* param) {
         }
         PSMTXConcat(view, entry->mtx, m);
         GXLoadPosMtxImm(m, GX_PNMTX0);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         shadowSetTev(entry->alpha);
 #endif
         GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
@@ -931,7 +931,7 @@ s32 shadowEntry(f32 x, f32 y, f32 z, f32 size) {
     entry->volume = 1.0f;
     entry->decay = 0.2f;
     entry->decay2 = 0.4f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     entry->alpha = 0xFF;
 #endif
     cswp->numEntries++;
@@ -962,7 +962,7 @@ s32 shadowEntryMode(s32 mode, f32 x, f32 y, f32 z, f32 size) {
     entry->volume = 1.0f;
     entry->decay = 0.2f;
     entry->decay2 = 0.4f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     entry->alpha = 0xFF;
 #endif
     cswp->numEntries++;
@@ -977,7 +977,7 @@ void shadowSetType(s32 id, u8 type) {
     entry->type = type;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Sets the alpha of shadow id (despite the name); the demo has no per-shadow alpha. */
 void shadowSetMode(s32 id, u8 alpha) {
     ShadowEntry* entry = &cswp->entries[id];
@@ -1137,18 +1137,18 @@ ShadowConfig* shadowGetProjShadowConfig(void) {
  * depth ramp) from the shadow light's view and projection.
  */
 static inline void shadowCalcTexMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     u32 is16;
 #endif
     ShadowConfig* cfg = &shadowConfig[wp->configIdx];
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     u32 is16 = cfg->format > 2;
 #endif
     Mtx m;
     Mtx dm;
     f32 n, f, d, scale;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     is16 = cfg->format > 2;
 #endif
     if (texMtx) {
@@ -1277,7 +1277,7 @@ const char str_802C1B44[] = "projected shadow depth map (8bit depth)";
 const char str_802C1B6C[] = "result scene (16bit depth)";
 const char str_802C1B88[] = "actual depth from the light (16bit depth)";
 const char str_802C1BB4[] = "projected shadow depth map (16bit depth)";
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static const char* DispModeMsg[6] = {
     str_802C1AFC,
     str_802C1B18,

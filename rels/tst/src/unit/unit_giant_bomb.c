@@ -88,7 +88,7 @@ BattleUnitKind unit_giant_bomb = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     48,
 #else
     34, // level
@@ -97,7 +97,7 @@ BattleUnitKind unit_giant_bomb = {
     70, // bonusCoinRate
 #endif
     0, // baseCoin
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     1,
     70,
     5,
@@ -250,7 +250,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, // burnChance..sizeChangeStrength
     100, // atkChangeChance
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     2,
 #else
     3, // atkChangeTime
@@ -292,7 +292,7 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     12,
 #else
     9, // chargeStrength
@@ -310,7 +310,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Element response of the Bob-ulk: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {45, 30, 50, 100, 50, 100, 100, 50, 100, 50, 100, 50, 100, 50, 50, 60, 0, 100, 50, 100, 100, 20};
 #else
 static StatusVulnerability regist = {
@@ -815,7 +815,7 @@ static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(5))
     DIVIDE(LW(5), 2)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY(LW(5), LW(6))
 #else
     MULTIPLY_FLOAT(LW(5), LW(6))

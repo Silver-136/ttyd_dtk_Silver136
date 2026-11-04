@@ -95,7 +95,7 @@ static void zFill(void) {
  * textures, advances the animation, and draws the pose as a flat screen-space quad sized to the capture,
  * scaled by distance when it has a virtual point. Later versions flag the entry when no capture is ready.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void imgDisp(CameraId camId, void* param) {
 #else
 void imgDisp(CameraId camId, void* param) {
@@ -148,12 +148,12 @@ void imgDisp(CameraId camId, void* param) {
         }
     }
     if (first == -1) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         entry->flags |= IMAGE_FLAG_NO_CAPTURE;
 #endif
         return;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
 #endif
     animSetPaperTexMtx(mp[0], mp[1], mp[2]);
@@ -184,7 +184,7 @@ void imgDisp(CameraId camId, void* param) {
         scale = t / d;
         zoff = d - t;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {
         if (entry->flags & IMAGE_FLAG_OFFSCREEN_RECT) {
             fl = entry->shadows[first].rect.left;
@@ -224,7 +224,7 @@ void imgDisp(CameraId camId, void* param) {
     animPoseDrawMtx(entry->poseId, m3, 2, 0.0f, scale);
     animPoseDrawMtx(entry->poseId, m3, 3, 0.0f, scale);
     animSetPaperTexMtx(NULL, NULL, NULL);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     sysWaitDrawSync();
 }
 #else
@@ -336,14 +336,14 @@ static inline void imgCaptureCopy(ImageShadow* sh, ImageEntry* entry) {
  * own buffer once when it keeps the capture) or copies its rectangle straight from the frame buffer.
  * The demo copies from the offscreen texture's address directly.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #else
 void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #endif
 
     ImageShadow* sh = &entry->shadows[id];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     void* src;
 #endif
     s32 offId;
@@ -360,7 +360,7 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
             if (sh->flags & IMG_SHADOW_COPY_PENDING) {
                 offscreenGetTexObj(offId, &obj, &buf);
                 if (obj) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     src = buf->address;
 #endif
                     w = GXGetTexObjWidth(obj);
@@ -372,7 +372,7 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
                     } else if (sh->allocMode == 2) {
                         sh->data = smartAlloc(size, SMART_GROUP_PERMANENT);
                     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     memcpy(sh->data->address, src, size);
 #else
                     memcpy(sh->data->address, buf->address, size);
@@ -544,7 +544,7 @@ void imgMain(void) {
                     if (entry->shadows[shadow].flags & IMG_SHADOW_ACTIVE) break;
                 }
                 if (shadow != 3) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     dispEntry(entry->camId, 0.0f, DISP_MODE_ALPHA_TEST, imgDisp, entry);
 #else
                     dispEntry(entry->camId, entry->order, DISP_MODE_ALPHA_TEST, imgDisp, entry);
@@ -636,7 +636,7 @@ void imgSetShadow(ImageEntry* entry, s32 shadowId) {
  * Draw callback on the shadow camera: draws the image's pose with its captured textures into the shadow pass
  * so it casts a projected or depth shadow, and counts the shadow draw for shadowdrv.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void imgShadowDisp(CameraId camId, void* param) {
 #else
 void imgShadowDisp(CameraId camId, void* param) {
@@ -646,7 +646,7 @@ void imgShadowDisp(CameraId camId, void* param) {
     GXTexObj* objs[3];
     void* datas[3];
     Mtx mtxs[3];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     Mtx* mp[3];
 #else
     MtxPtr mp[3];
@@ -684,7 +684,7 @@ void imgShadowDisp(CameraId camId, void* param) {
             datas[i] = sh->data;
         }
         if (objs[i] != NULL) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             mp[i] = &mtxs[i];
             if (first == -1)
                 first = i;
@@ -697,12 +697,12 @@ void imgShadowDisp(CameraId camId, void* param) {
         }
     }
     if (first == -1) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         entry->flags |= IMAGE_FLAG_NO_CAPTURE;
 #endif
         return;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     animSetPaperTexMtx((void*)mp[0], (void*)mp[1], (void*)mp[2]);
 #else
     entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;

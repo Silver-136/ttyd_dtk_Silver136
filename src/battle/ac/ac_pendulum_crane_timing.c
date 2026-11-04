@@ -40,7 +40,7 @@ typedef struct PendulumWork {
     s32 flag;     // 0x3C
     s32 rate;     // 0x40
     s32 sfxId;    // 0x44
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 zone;     // 0x48
 #endif
     s32 endTimer; // 0x4C
@@ -99,7 +99,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             cw->cur = work->actionCommands.params[PENDULUM_PARAM_PERIOD];
             cw->vel = 0;
             cw->force = 3.0f;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             cw->zone = -1;
 #endif
             cw->button = PAD_BUTTON_A;
@@ -177,7 +177,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             work->actionCommands.outputParams[1] = _get_angle_hp(rate);
             cw->rate = rate;
             rate = _get_angle_rate(cw->angle);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             // The demo ticks only at the exact ends of the gauge.
             if (rate == 0 || rate == 100) {
 #else
@@ -190,7 +190,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             if (zone != -1 && zone != cw->zone) {
 #endif
                 psndSFXOn("SFX_AC_GAUGE_MOVE1");
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 cw->zone = zone;
 #endif
             }

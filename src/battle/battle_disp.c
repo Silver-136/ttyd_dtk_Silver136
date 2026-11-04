@@ -34,12 +34,12 @@
 // Statuses that select the unit's pose, in priority order (_GetStatusPoseType)
 s32 _status_pose_table[] = {
     STATUS_INSTANT_KILL,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     STATUS_SLEEP,
 #endif
     STATUS_STOP,
     STATUS_FREEZE,
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     STATUS_SLEEP,
 #endif
     STATUS_POISON,
@@ -374,7 +374,7 @@ void btlDispMain(void) {
                 if (target->damageEventId && evtCheckID(target->damageEventId)) goto next;
                 BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
                 BtlUnit_GetPos(target, &tpos.x, &tpos.y, &tpos.z);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 tpos.z += 5.0f;
 #else
                 tpos.z += 7.0f;
@@ -397,7 +397,7 @@ void btlDispMain(void) {
                         break;
                     case 3:
                         if (__fabs(pos.x - tpos.x) < 1.0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             BtlUnit_SetPos(unit, tpos.x, tpos.y, tpos.z);
 #else
                             BtlUnit_SetPos(unit, tpos.x, h, tpos.z);
@@ -405,14 +405,14 @@ void btlDispMain(void) {
                             unit->work[SHELL_SHIELD_WORK_FOLLOW] = 1;
                         } else if (tpos.x > pos.x) {
                             pos.x += 1.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             BtlUnit_SetPos(unit, pos.x, tpos.y, tpos.z);
 #else
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
 #endif
                         } else {
                             pos.x -= 1.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                             BtlUnit_SetPos(unit, pos.x, tpos.y, tpos.z);
 #else
                             BtlUnit_SetPos(unit, pos.x, h, tpos.z);
@@ -420,7 +420,7 @@ void btlDispMain(void) {
                         }
                         break;
                     default:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         BtlUnit_SetPos(unit, tpos.x, tpos.y, tpos.z);
 #else
                         BtlUnit_SetPos(unit, tpos.x, h, tpos.z);

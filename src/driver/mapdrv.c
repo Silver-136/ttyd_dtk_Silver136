@@ -39,7 +39,7 @@ void* projTexImgRef;
 Mtx projMtx;
 BOOL __mapdrv_make_dl;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BOOL disableMapDraw;
 #endif
 
@@ -62,7 +62,7 @@ static inline f32 sinf(f32 x) { return sin(x); }
 
 /** Frames per second of the map animation clock. PAL keeps it at 60 even when the display runs at 50 Hz. */
 static inline s32 mapAnimFps(void) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     return 60;
 #else
     return gp->framerate;
@@ -91,7 +91,7 @@ const char* getMapDataDvdRoot(void) {
 }
 
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Stops mapDisp from drawing the map until the next map load or mapDispOn;
  * used by evt_map and win_root (the pause menu). Not in the demo.
@@ -102,7 +102,7 @@ void mapDispOff(void) {
 #endif
 
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Lets mapDisp draw the map again after mapDispOff. */
 void mapDispOn(void) {
     disableMapDraw = FALSE;
@@ -252,7 +252,7 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
  * group and shadow flags, centre, and the bounding-box cull flag
  * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
 #else
 MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
@@ -364,10 +364,10 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
             obj->flags |= MAP_OBJ_FLAG_CHAR_SHADOW;
         }
     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         OSPanic("mapdrv.c", 0x2c1, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         OSPanic("mapdrv.c", 0x2e8, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
 #else
         OSPanic("mapdrv.c", 0x2e5, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
@@ -434,7 +434,7 @@ static void mapResetPaperCraftAmbColor(void);
  * Only for ver1.02 map files, and skips light-masked parts and Mario's shadow receivers
  * while a character shadow projection is on.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void makeDisplayList(BOOL group) {
 #else
 void makeDisplayList(BOOL group) {
@@ -459,7 +459,7 @@ void makeDisplayList(BOOL group) {
     total = 0;
     for (pass = 0; pass < 2; pass++) {
         obj = e->objects;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         for (k = 0; k < 8; k++) {
             obj->displayList[k] = NULL;
             obj->displayListSize[k] = 0;
@@ -823,7 +823,7 @@ found:
 }
 
 // The demos still use the long map file names.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define MAP_PATH_DAT "./map/%s/map.dat"
 #define MAP_PATH_TPL "./map/%s/texture.tpl"
 #define MAP_PATH_CAMROAD "./map/%s/camera_road.bin"
@@ -838,7 +838,7 @@ found:
  * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
  * textures, bounding box corners, animation table and display lists.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     u32 datSize, k;
@@ -959,7 +959,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             camLoadRoad(CAMERA_3D, str1);
         }
         camSetTypePersp(CAMERA_3D);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, wp->entries[group].textureTable);
 #else
         mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, (&wo->entries[group])->textureTable);
@@ -1013,7 +1013,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             o->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     disableMapDraw = FALSE;
 #endif
 }
@@ -1028,7 +1028,7 @@ void mapUnLoad(void) {
     MapEntry* entry;
     int i;
     MapWork* wp;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     sysWaitDrawSync();
 #endif
     entry = mapWork->entries;
@@ -1051,7 +1051,7 @@ void mapUnLoad(void) {
             entry->dispListSize = 0;
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     disableMapDraw = FALSE;
 #endif
     hitReInit();
@@ -1083,7 +1083,7 @@ void mapUnLoad(void) {
     memset(wp, 0, sizeof(MapWork));
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BOOL mapPreLoad(const char* map) {
     return TRUE;
 }
@@ -1093,7 +1093,7 @@ BOOL mapPreLoad(const char* map) {
  * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
  * The demo first unpacks the map's compressed archive.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void mapLoad(const char* map) {
     MapWork* wp;
     // FAKE: wp2 is a second copy of mapWork used only by the memset; memset(wp, ...) without it changes the object
@@ -1113,7 +1113,7 @@ void mapLoad(const char* map) {
 // split temp; split temps are created in order of the variables' first reference (i before wp before entry), which gives
 // the target's i r31 / wp r30 / entry r29. Code is otherwise identical.
 #pragma opt_common_subs off
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * The demo reads each map's LZ77-compressed archive "<root>/b/<map>" itself:
  * mapPreLoad starts the read, mapLoad unpacks it into the arc slot before loading the map.
@@ -1135,7 +1135,7 @@ BOOL mapPreLoad(const char* map) {
  * Loads the field map map into MapWork slot 0 as its only entry; called by seq_mapchange.
  * The demo first unpacks the map's compressed archive.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void mapLoad(const char* map) {
     char path[256];
     MapWork* wp;
@@ -1170,7 +1170,7 @@ void mapLoad(const char* map) {
  * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void bmapUnLoad(void) {
     MapWork* wp2;
     MapEntry* entry3;
@@ -1208,7 +1208,7 @@ void bmapUnLoad(void) {
             entry->dispListSize = 0;
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     disableMapDraw = FALSE;
 #endif
     hitReInit();
@@ -1239,7 +1239,7 @@ void bmapUnLoad(void) {
     memset(wp, 0, sizeof(MapWork));
 
     // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     j = 0;
     {
         s32 gz = 0;
@@ -1295,7 +1295,7 @@ void bmapUnLoad(void) {
 #endif
 #pragma opt_common_subs reset
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Demo only: starts the async read of the battle map archives arc_d/<map>.arc;
  * TRUE once both requested files are available.
@@ -1322,14 +1322,14 @@ BOOL bmapPreLoad(const char* map, const char* map2) {
  * the stage-specific map map2 as entry 1. The demo reads and unpacks both archives itself.
  */
 void bmapLoad(const char* map, const char* map2) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     char path[256];
 #endif
     MapWork* wp;
     MapEntry* entry;
     MapEntry* e;
     int i;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     FileEntry* file;
     u32 size;
     void* arc;
@@ -1375,7 +1375,7 @@ void bmapLoad(const char* map, const char* map2) {
     wp = (0, &mapWork[1]);
     activeGroup = 1;
     memset(wp, 0, sizeof(MapWork));
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (map != NULL) {
         sprintf(path, "%s/b/%s", getMarioStDvdRoot(), map);
         file = fileAlloc(path, 0);
@@ -1770,7 +1770,7 @@ static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightDa
 }
 
 static inline MapMaterial* mapMainFindTbl_(const char* name) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     int j;
     int i;
 
@@ -1849,7 +1849,7 @@ void mapMain(void) {
     Mtx scale;
     f32 v[9];
     f32 cv[5];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < wp->entries[0].count; i++) {
         entry = &wp->entries[i];
 #else
@@ -1883,7 +1883,7 @@ void mapMain(void) {
             }
             if (!(anim->flags & MAP_ANIM_FLAG_PAUSE)) {
                 ms = OSTicksToMilliseconds(t);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 cur = 60.0f * (f32)(u64)(ms - anim->startTime) / 1000.0f;
 #else
                 cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
@@ -2330,7 +2330,7 @@ void mapDisp(void) {
     s32 mode;
     MapFileJoint* joint;
     BOOL clipped;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (disableMapDraw) {
         return;
     }
@@ -3849,7 +3849,7 @@ void mapObjFlagOn(const char* name, u32 flags) {
         error_count %= 32;
         return;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
         obj->flags |= flags;
     }
@@ -3877,7 +3877,7 @@ void mapObjFlagOff(const char* name, u32 flags) {
  * Sets flags on obj and its whole subtree, and its later siblings when doNext;
  * retail versions skip the display-list flag on objects without a display list.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     obj->flags |= flags;
 #else
@@ -4445,7 +4445,7 @@ static void mapStrippedPool(const char** str, f32* val) {
     val[1] = 0.0f;
     val[2] = 0.5f;
     val[3] = 2.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     str[1] = "%s/map/%s/map.dat";
 #else
     str[1] = "%s/m/%s/d";

@@ -45,7 +45,7 @@ typedef struct IraiWork {
     s32 yubiY;
     s32 field_0x94;
     f32 scroll;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     char client[30][101];
     char contents[30][101];
 #else

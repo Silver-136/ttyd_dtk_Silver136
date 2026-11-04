@@ -34,7 +34,7 @@ static EvtWord patapata_dmg_first_attack_pos[19];
 static EvtWord attack_event_patapata[541];
 static PoseTableEntry pose_table[18];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table_turn[15];
 #else
 static PoseTableEntry pose_table_turn[17];
@@ -156,7 +156,7 @@ static BattleUnitDefense defence_patapata = {{2, 2, 2, 2, 2}};
  */
 static BattleUnitDefenseAttr defence_patapata_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_patapata = {80, 80, 100, 100, 75, 100, 100, 75, 100, 75, 100, 75, 100, 75, 70, 80, 100, 100, 75, 100, 100, 70};
 #else
 static StatusVulnerability regist_patapata = {
@@ -529,7 +529,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "NKT_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
     {POSE_TYPE_DAMAGE, "NKT_D_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_RUN, "NKT_R_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
 #endif
@@ -568,7 +568,7 @@ static BattleUnitDefenseAttr defence_attr = {0};
  */
 static BattleUnitDefense defence_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 80, 70, 100, 75, 100, 100, 75, 100, 75, 100, 75, 100, 75, 80, 80, 70, 100, 75, 100, 100, 70};
 #else
 static StatusVulnerability regist = {

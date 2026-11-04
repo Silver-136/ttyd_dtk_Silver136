@@ -34,7 +34,7 @@ static EvtWord wakeup_event[67];
 static EvtWord init_event_nokotarou[62];
 static EvtWord damage_event_nokotarou[24];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_nokotarou[156];
 #else
 static EvtWord dead_event_nokotarou[177];
@@ -185,7 +185,7 @@ static BattleUnitDefenseAttr defence_attr_nokotarou = {{DEFENSE_ATTR_NONE, DEFEN
 /** Defence of the Koops double's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn_nokotarou = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_nokotarou = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
 #else
 static StatusVulnerability regist_nokotarou = {
@@ -356,7 +356,7 @@ static EVT_BEGIN(dead_event_nokotarou)
         WAIT_FRAMES(37)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_nok"), 0, -2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
         WAIT_MS(500)
@@ -367,7 +367,7 @@ static EVT_BEGIN(dead_event_nokotarou)
         WAIT_MS(200)
         CASE_EQUAL(1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
         LOOP(0)
@@ -378,7 +378,7 @@ static EVT_BEGIN(dead_event_nokotarou)
         END_LOOP
         CASE_EQUAL(2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     END_SWITCH
@@ -598,7 +598,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 40)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
 #else

@@ -128,7 +128,7 @@ void nokonoko_move(PartyEntry* party) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyWalkInit(party, 1);
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     partyUpdMoveSpd(party);
 #endif
     partyRecordFootmark(party);
@@ -322,7 +322,7 @@ void nokonoko_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
     case 0:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
@@ -353,7 +353,7 @@ void nokonoko_use(PartyEntry* party) {
         mario->baseSpeed = 0.0f;
         break;
     case 1:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
@@ -373,7 +373,7 @@ void nokonoko_use(PartyEntry* party) {
         party->useMotionId = 2;
         partyChgPose(party, "PNK_A_1");
     case 2:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE || mario->currMotionId == MARIO_MOTION_DAMAGE) {
             party->useMotionId = 70;
             break;
@@ -475,7 +475,7 @@ void nokonoko_use(PartyEntry* party) {
             noko_se_off();
             break;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         NOKO_PICK_UP_NEAR_ITEM(party, party->useMotionId = 50; psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position); noko_star(party, 1); noko_se_off(); break;)
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (mario->currMotionId == MARIO_MOTION_SHIP || mario->currMotionId == MARIO_MOTION_JABARA || mario->currMotionId == MARIO_MOTION_PLANE || mario->currMotionId == MARIO_MOTION_ROLL ||
@@ -544,7 +544,7 @@ void nokonoko_use(PartyEntry* party) {
     case 52:
         if (ccwall(party, 1) != NULL) {
             partyGetMoveDirSpd(party, &dir, &spd);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             marioChkWallAround(&party->position, spd, dir, party->width, party->height);
             party->useMotionId = 70;
             psndSFXOn_3D((const char*)PSND_SFX_PARTY_PNK_KOURA_WALL1, &party->position);
@@ -958,7 +958,7 @@ void nokotaro_hold_cancel(PartyEntry* party) {
  * Returns the wall hit, or NULL.
  * Mode 0 is the outbound throw; mode 1 the return, where hitobjAction is only set after a held shot.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static HitEntry* ccwall(PartyEntry* party, s32 mode) {
 #else
 HitEntry* ccwall(PartyEntry* party, s32 mode) {
@@ -1063,7 +1063,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
         sincosf(&s2, &c2, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s2 * party->width);
         party->position.z = hz + 0.5f * (c2 * party->width);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         party->position.z -= w * (f32)cos(3.1415927f * (party->targetDir - 90.0f) / 180.0f);
         party->position.x -= w * (f32)sin(3.1415927f * (party->targetDir - 90.0f) / 180.0f);
 #endif
@@ -1094,7 +1094,7 @@ HitEntry* ccwall(PartyEntry* party, s32 mode) {
         sincosf(&s3, &c3, 180.0f + party->targetDir);
         party->position.x = hx + 0.5f * (s3 * party->width);
         party->position.z = hz + 0.5f * (c3 * party->width);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         party->position.z -= w * (f32)cos(3.1415927f * (90.0f + party->targetDir) / 180.0f);
         party->position.x -= w * (f32)sin(3.1415927f * (90.0f + party->targetDir) / 180.0f);
 #endif

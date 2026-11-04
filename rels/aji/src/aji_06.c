@@ -87,7 +87,7 @@ s32 kusuri_tyogo_list[8];
 s32 kusuri_list[5];
 s32 kusuri_id[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord peach_evt_kusuri_select[];
 #else
 EvtWord peach_evt_kusuri_select[73];
@@ -366,7 +366,7 @@ EVT_BEGIN(peach_evt_kusuri_select)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(kusuri_list), LW(1))
 #else
         CALL(evt_win_item_select, 0, PTR(kusuri_list), LW(1), 0)
@@ -1923,7 +1923,7 @@ EVT_BEGIN(aji_06_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI2"))
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -1947,7 +1947,7 @@ EVT_BEGIN(aji_06_init_evt)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)
             CALL(evt_mario_wait_landon)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             LOOP(30)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))

@@ -35,7 +35,7 @@ void setupDataLoad(const char* mapName) {
     u32 filesize;
 
     ptr = NULL;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     sprintf(path, "%s/setup/%s/setup.xml", getMarioStDvdRoot(), mapName);
     if (strcmp(mapName, "muj_20") || evtGetValue(NULL, GSW_STORY_PROGRESS) != STG0_02_MARIOS_HOUSE) {
 #else

@@ -32,7 +32,7 @@ EvtWord evt_dokan1[11];
 static BeroEntry bero_entry_data[6];
 EvtWord guide_bigtree[336];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord peach_mail[242];
 #else
 static EvtWord peach_mail[257];
@@ -319,20 +319,20 @@ static EVT_BEGIN(peach_mail)
     DELETE_EVENT(LW(10))
     WAIT_FRAMES(1)
     CALL(evt_sub_rumble_onoff, 1, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(2))
     ADD(LW(3), 267)
     SET_VALUE(LW(4), LW(2))
 #endif
     IF_INT_EQUAL(LF(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_cam3d_evt_set, -184, 86, 262, -184, 38, -5, 1000, EASING_SINE_IN_OUT)
 #else
         CALL(evt_cam3d_evt_set, -184, 86, LW(3), -184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
 #endif
     ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_cam3d_evt_set, 184, 86, 262, 184, 38, -5, 1000, EASING_SINE_IN_OUT)
 #else
         CALL(evt_cam3d_evt_set, 184, 86, LW(3), 184, 38, LW(4), 1000, EASING_SINE_IN_OUT)

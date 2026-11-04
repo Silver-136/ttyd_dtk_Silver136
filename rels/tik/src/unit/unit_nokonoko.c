@@ -21,7 +21,7 @@
 BattleUnitKind unit_nokonoko;
 static PoseTableEntry pose_table[18];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table_turn[15];
 #else
 static PoseTableEntry pose_table_turn[17];
@@ -127,7 +127,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "NKT_Q_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "NKT_D_1"},
     {POSE_TYPE_DAMAGE, "NKT_D_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_RUN, "NKT_R_1"},
     {POSE_TYPE_WALK, "NKT_W_1"},
 #endif
@@ -156,7 +156,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static BattleUnitDefense defence_turn = {0};
 
 /** Status vulnerability of the Koopa Troopa (percentage multipliers on status-infliction chances): resists some statuses. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 100, 90, 100, 95, 100, 100, 95, 100, 95, 100, 95, 100, 95, 95, 100, 90, 100, 95, 100, 100, 100};
 #else
 static StatusVulnerability regist = {

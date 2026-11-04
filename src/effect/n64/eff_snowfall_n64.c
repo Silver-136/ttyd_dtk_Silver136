@@ -181,7 +181,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
  * the life only counts down from below 100, fading alpha over the last 10 frames.
  * US and PAL draw on layer 10 (the battle camera in battle), JP on layer 10, the demos on layer 2.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effSnowfallMain(EffectEntry* effect) {
 #else
 void effSnowfallMain(EffectEntry* effect) {
@@ -230,7 +230,7 @@ void effSnowfallMain(EffectEntry* effect) {
         p->position.z += p->velocity.z;
         cam_clip_chk(p, 550, h, life);
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, effSnowfallDisp, effect);
 #else
 #if VERSION >= VERSION_US

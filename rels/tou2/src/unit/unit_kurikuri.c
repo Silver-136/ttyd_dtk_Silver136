@@ -41,7 +41,7 @@ static EvtWord wait_event[6];
  */
 BattleUnitKind unit_kurikuri = {
     UNIT_GOOMBA_GLITZVILLE, // unitType
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     "btl_un_kurikuri",
 #else
     "btl_un_kuriboo", // name
@@ -59,7 +59,7 @@ BattleUnitKind unit_kurikuri = {
     9999, // pbSoftCap
     23, // width
     25, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     5,
     25,
     0.0f,
@@ -77,7 +77,7 @@ BattleUnitKind unit_kurikuri = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     12.0f,
     0.0f,
@@ -162,7 +162,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Damage-type reactions of the Goomba Bros.: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else
 static StatusVulnerability regist = {

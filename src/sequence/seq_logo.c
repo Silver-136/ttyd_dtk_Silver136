@@ -5,7 +5,7 @@
 #include "libc_decls.h"
 #include "driver/arcdrv.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "driver/animdrv.h"
 #endif
 
@@ -37,7 +37,7 @@ static LogoWork work;
 //.sdata
 static LogoWork* wp = &work;
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 // PAL: per-language logo screen textures {logo, story text}
 static s32 logoTexTbl[6][2] = {{24, 25}, {24, 25}, {26, 27}, {28, 29}, {30, 31}, {32, 33}};
 #endif
@@ -54,7 +54,7 @@ void progDisp(CameraId camId, void* param);
 static s32 logoAsyncFirst(void);
 #endif
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
 #if VERSION >= VERSION_US
@@ -62,7 +62,7 @@ void seq_logoInit(SequenceWork* work) {
 #endif
     wp->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         // PAL: always ask for 50Hz / 60Hz; preselect 60Hz when EURGB60 is saved
         wp->progressive = TRUE;
         wp->toggle = OSGetEuRgb60Mode() != 1;
@@ -118,7 +118,7 @@ void seq_logoInit(SequenceWork* work) {
 
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * The demos always start interlaced; the US demo also starts the logo files loading
@@ -162,7 +162,7 @@ void seq_logoExit(SequenceWork* work) {
     effTexSetup();
     marioPoseInit();
     fileFree(wp->texture);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     gp->flags |= GW_FLAG_VIDEO_MODE_SET;
 #endif
 }
@@ -174,7 +174,7 @@ void seq_logoExit(SequenceWork* work) {
  */
 void seq_logoMain(SequenceWork* work) {
     static OSTime time;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     u32 size;
     u8* decode;
     FileEntry* first;
@@ -198,7 +198,7 @@ void seq_logoMain(SequenceWork* work) {
             break;
 
         case 1:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (fadeIsFinish() && !wp->progressive) {
                 work->state++;
                 time = gp->renderTime;
@@ -261,7 +261,7 @@ void seq_logoMain(SequenceWork* work) {
 
         case 9:
             if (fadeIsFinish()) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 work->state++;
                 time = gp->renderTime;
 #else
@@ -391,7 +391,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case 10:
             VISetBlack(FALSE);
             VIWaitForRetrace();
@@ -503,7 +503,7 @@ void logoDisp(CameraId camId, void* param) {
         GXGetProjectionv(projection);
         GXGetViewportv(viewport);
         GXGetScissor(&sciLeft, &sciTop, &sciWidth, &sciHeight);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if ((!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) && ((SequenceWork*)param)->state < 3) {
             rmode = &sRMObjHReso;
         } else if (OSGetEuRgb60Mode() != 1) {
@@ -530,7 +530,7 @@ void logoDisp(CameraId camId, void* param) {
 
             case 0:
             case 1:
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, logoTexTbl[gp->language][0]);
 #else
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 7);
@@ -586,7 +586,7 @@ void logoDisp(CameraId camId, void* param) {
                         alpha = 255;
                     }
                     GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, alpha});
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, logoTexTbl[gp->language][1]);
 #else
                     TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 8);
@@ -782,7 +782,7 @@ void dummy_draw(CameraId camId, void* param) {
     f32 scale;
     u16 height;
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     if (OSGetEuRgb60Mode() != 1) {
 #else
     if (OSGetProgressiveMode() != 1) {
@@ -807,7 +807,7 @@ void dummy_draw(CameraId camId, void* param) {
  * param is unused.
  */
 #if VERSION < VERSION_US
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void progDisp(CameraId camId, void* param) {
 #else
 void progDisp(CameraId camId, void* param) {
@@ -891,13 +891,13 @@ void progDisp(CameraId camId, void* param) {
                     -160.0f,
                     0.7f,
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     time = gp->renderTime;
 #endif
                     wp->progState++;
                 }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 msg = romFontGetMessage(5);
 #else
                 msg = romFontGetMessage(0);
@@ -905,7 +905,7 @@ void progDisp(CameraId camId, void* param) {
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
                     -width / 2.0f,
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     30.0f,
 #else
                     -80.0f,
@@ -914,7 +914,7 @@ void progDisp(CameraId camId, void* param) {
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     msg = romFontGetMessage(6);
 #else
                     msg = romFontGetMessage(1);
@@ -927,14 +927,14 @@ void progDisp(CameraId camId, void* param) {
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     msg = romFontGetMessage(7);
 #else
                     msg = romFontGetMessage(2);
 #endif
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     (f32)(108 * ((2 * wp->toggle) - 1)) - width / 2.0f,
 #else
                     (f32)(106 * ((2 * wp->toggle) - 1)) - width / 2.0f,
@@ -981,7 +981,7 @@ void progDisp(CameraId camId, void* param) {
                     wp->progressive = FALSE;
                     gp->flags &= ~GW_FLAG_PROGRESSIVE;
                 }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 gp->flags |= GW_FLAG_VIDEO_MODE_SET;
 #endif
                 break;
@@ -992,7 +992,7 @@ void progDisp(CameraId camId, void* param) {
                     wp->progressive = FALSE;
                 }
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
 #else
                 if (!wp->toggle) {
@@ -1029,13 +1029,13 @@ void progDisp(CameraId camId, void* param) {
 #endif
                     wp->progState++;
                 }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 type = 8;
 #else
                 type = 3;
 #endif
                 if (wp->toggle) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     type = 9;
 #else
                     type = 4;
@@ -1049,7 +1049,7 @@ void progDisp(CameraId camId, void* param) {
                     1.0f,
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 break;
 
             case 3:

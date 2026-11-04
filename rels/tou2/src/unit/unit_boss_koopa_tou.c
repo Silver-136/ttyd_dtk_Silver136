@@ -125,7 +125,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  * Status vulnerability of the Bowser (percent chance to take each status):
  * immune to fright, gale force and instant kill; resists most other statuses.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 60, 70, 50, 60, 50, 100, 40, 100, 75, 100, 75, 100, 60, 60, 0, 0, 100, 60, 100, 100, 0};
 #else
 static StatusVulnerability regist = {

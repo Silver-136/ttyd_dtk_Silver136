@@ -94,7 +94,7 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord sanders_party_lecture_init[48];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord sanders_party_lecture[];
 #else
 EvtWord sanders_party_lecture[71];
@@ -496,7 +496,7 @@ EVT_BEGIN(sanders_party_lecture)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_party_stop, 0)
     WAIT_FRAMES(16)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 40)
     CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(80.0f))

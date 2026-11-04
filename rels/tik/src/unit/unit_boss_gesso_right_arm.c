@@ -31,7 +31,7 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[4];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BattleDataEntry gesso_right_arm_data_table[13];
 #endif
 
@@ -40,7 +40,7 @@ static BattleUnitKindPart parts[1];
 static EvtWord init_event[25];
 static EvtWord damage_event[31];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord gesso_right_arm_damage_event[93];
 #endif
 
@@ -102,7 +102,7 @@ BattleUnitKind unit_boss_gesso_right_arm = {
     1, // numParts
     parts, // parts
     init_event, // initEventCode
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     data_table,
 #else
     gesso_right_arm_data_table, // dataTable
@@ -154,7 +154,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /** Data table of the Blooper's R. Tentacle: its damage reaction for the hit tags 24 to 36. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BattleDataEntry gesso_right_arm_data_table[] = {
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, gesso_right_arm_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, gesso_right_arm_damage_event},
@@ -216,7 +216,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Damage reaction of the Blooper's right tentacle (JP and later); the same as the left tentacle's damage event. */
 EVT_BEGIN(gesso_right_arm_damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

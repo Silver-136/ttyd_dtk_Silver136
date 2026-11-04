@@ -1933,7 +1933,7 @@ BattleUnitSetup btlparty_test_barriern[] = {
         1, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {90.0f, 60.0f, 0.0f},
 #else
         {50.0f, 40.0f, -10.0f}, // position
@@ -1947,7 +1947,7 @@ BattleUnitSetup btlparty_test_barriern[] = {
         1, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {170.0f, 60.0f, 0.0f},
 #else
         {130.0f, 40.0f, 10.0f}, // position

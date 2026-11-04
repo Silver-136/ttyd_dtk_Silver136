@@ -643,7 +643,7 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
                 if (rank_wp->entries[i].flags & RANK_PLAYER) {
                     break;
@@ -699,7 +699,7 @@ static USER_FUNC(evt_tou_get_rule_info) {
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
                 if (rank_wp->entries[i].flags & RANK_PLAYER) {
                     break;
@@ -907,7 +907,7 @@ static USER_FUNC(evt_tou_get_next_match) {
     if (rank > 0) {
         if (reverse) {
             evtSetValue(event, args[0], list[rank - 1]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         } else if (rank != num - 1) {
 #else
         } else if (rank + 1 < num) {
@@ -1198,7 +1198,7 @@ static void insert(s32* arr, s32 n, s32 from, s32 to) {
  * clears the per-fighter and story flags of the Glitz Pit run, and builds a fresh ranking.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_00004b50, JP tou2 .text+0x4A8C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(tou2_rankingReset) {
     s32 i;
 
@@ -1313,7 +1313,7 @@ static void rankingInit(void) {
         }
 
         // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #else
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {

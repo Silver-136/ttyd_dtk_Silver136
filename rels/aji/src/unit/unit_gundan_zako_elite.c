@@ -92,7 +92,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Elemental reactions of the Elite X-Naut: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {60, 70, 60, 100, 70, 100, 100, 60, 100, 65, 100, 65, 100, 60, 60, 80, 70, 100, 60, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

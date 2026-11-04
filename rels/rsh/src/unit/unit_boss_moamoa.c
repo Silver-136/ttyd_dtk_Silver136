@@ -72,7 +72,7 @@ typedef struct MoamoaWork {
 } MoamoaWork;
 static MoamoaWork* wp;
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 // PAL: a seeded generator for the swarm's start positions (moamoa_srand / moamoa_randf)
 static u32 moamoa_rand_prev;
 static u32 moamoa_rand_cur;
@@ -161,7 +161,7 @@ USER_FUNC(evt_moamoa_mainUnitIdClear) {
 /** Returns a random float between min and max using rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     return r * (max - min) + min;
 }
 
@@ -216,7 +216,7 @@ BattleUnitKind unit_boss_moamoa = {
     6, // pbSoftCap
     160, // width
     80, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
     24,
     0.0f,
@@ -248,7 +248,7 @@ BattleUnitKind unit_boss_moamoa = {
     15.0f, // vivianOffsetX
 #endif
     10.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     80.0f,
     20.0f,
     0.0f,
@@ -1203,7 +1203,7 @@ USER_FUNC(moamoa_on) {
     AnimationPose* ap;
     Vec* p;
     s32 start;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     u32 seeds[4] = {0x3056, 0xF36, 0xF2A93, 0x17F57};
 #endif
     Vec v;
@@ -1216,13 +1216,13 @@ USER_FUNC(moamoa_on) {
     wp->elems = BTL_ALLOC(wp->count * sizeof(Moamoa));
     memset(wp->elems, 0, wp->count * sizeof(Moamoa));
     elem = wp->elems;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     moamoa_srand(seeds[rand() & 3]);
 #endif
     for (i = 0; i < wp->count; i++, elem++) {
         elem->flags = 0;
         v = (Vec){0.0f, 0.0f, 0.0f};
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         v.x = moamoa_randf(-10.0f, 10.0f);
         v.y = moamoa_randf(-10.0f, 10.0f);
         v.z = moamoa_randf(-10.0f, 10.0f);

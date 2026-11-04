@@ -1019,7 +1019,7 @@ USER_FUNC(tiz_stone) {
  * On the first call it copies the frame to a texture, then draws it as a 38 by 30 grid of 16 pixel tiles;
  * each tile whose delay is over is drawn flying off with its own rotation and velocity.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void tiz_broken_draw(CameraId cameraId, void* param) {
 #else
 void tiz_broken_draw(CameraId cameraId, void* param) {
@@ -1041,7 +1041,7 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
 
     if (broken_wp->copied == 0) {
         GXSetTexCopySrc(0, 0, 608, 480);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         GXSetTexCopyDst(608, 480, GX_TF_RGBA8, GX_FALSE);
 #else
         GXSetTexCopyDst(304, 240, GX_TF_RGB5A3, GX_TRUE);
@@ -1051,7 +1051,7 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
         broken_wp->copied = 1;
     }
     GXSetNumChans(0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     GXInitTexObj(&tex, broken_wp->tex->address, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 #else
     GXInitTexObj(&tex, broken_wp->tex->address, 304, 240, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
@@ -1073,7 +1073,7 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetCurrentMtx(GX_PNMTX0);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     PSMTXIdentity(ident);
 #endif
     // Each row has thirty-eight drawn pieces followed by one skipped entry.
@@ -1134,7 +1134,7 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
  * (param_tbl); every frame it moves the tiles and queues tiz_broken_draw on camera 8, and it returns once every
  * tile has left the screen (|x| over 340 or |y| over 260), freeing its buffers.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(tiz_broken) {
 #else
 USER_FUNC(tiz_broken) {
@@ -1160,7 +1160,7 @@ USER_FUNC(tiz_broken) {
 
     if (isFirstCall) {
         memset(broken_wp, 0, sizeof(BrokenWork));
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         broken_wp->tex = smartAlloc(GXGetTexBufferSize(608, 480, GX_TF_RGBA8, GX_FALSE, 0), SMART_GROUP_MAP);
 #else
         broken_wp->tex = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
@@ -1366,7 +1366,7 @@ static USER_FUNC(evtflash) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_0000247c, JP tik .text+0x23B8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Script helper (JP and later).
@@ -1431,7 +1431,7 @@ USER_FUNC(map_bgmode_end) {
  * [4] receives 1 while still turning and 0 when done.
  * The speed ramps up over the first 20 percent of the time and down over the last 20 percent.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(cam_mahojin_kaiten_main) {
 #else
 USER_FUNC(cam_mahojin_kaiten_main) {
@@ -1443,7 +1443,7 @@ USER_FUNC(cam_mahojin_kaiten_main) {
     f32 end = evtGetFloat(event, args[1]);
     s32 cont;
     f32 cur;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 speed;
     f32 total;
 #else
@@ -1460,7 +1460,7 @@ USER_FUNC(cam_mahojin_kaiten_main) {
     if (event->lwData[15] == 0) {
         event->lwData[14] = 0;
         event->lwData[15] = 1;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         event->savedTime = gp->renderTime;
 #endif
     }
@@ -1477,7 +1477,7 @@ USER_FUNC(cam_mahojin_kaiten_main) {
         if (i == event->lwData[14]) {
             cur = total;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         }
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
@@ -1767,7 +1767,7 @@ EVT_BEGIN(evt_mapwrite)
     WAIT_MS(200)
     CALL(evt_fade_entry, FADE_OUT_WHITE_3D, 3200, 0, 0, 0)
     CALL(evt_fade_end_wait)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(map_disp_onoff, 0)
     WAIT_FRAMES(1)
 #endif
@@ -1864,7 +1864,7 @@ EVT_BEGIN(evt_mapwrite)
         SET_VALUE(LW(8), STRING("TIZ_stg_6"))
         SET_VALUE(LW(9), STRING("SFX_EVT_MAP_STG6_APPEAR1"))
         CASE_EQUAL(6)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(5), -70)
     SET_VALUE(LW(6), 145)
     SET_VALUE(LW(7), -140)
@@ -1878,7 +1878,7 @@ EVT_BEGIN(evt_mapwrite)
     END_SWITCH
     ADD(LW(6), -10)
     ADD(LW(7), -20)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_MAP_NEXT_APPEAR1"), LW(5), LW(6), LW(7), 0)
     CALL(evt_eff64, STRING("tiz_dust2"), STRING("stardust2_n64"), 5, LW(5), LW(6), LW(7), 50, 50, 30, 600, 0, 0, 0, 0)
     CALL(tiz_stone, LW(0))
@@ -1891,7 +1891,7 @@ EVT_BEGIN(evt_mapwrite)
     CALL(tiz_stone, 0)
     WAIT_MS(500)
     CALL(evt_npc_entry, STRING("tiz_obj"), LW(8))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_pera_onoff, STRING("tiz_obj"), 0)
     CALL(evt_npc_set_ry, STRING("tiz_obj"), 0)
 #endif
@@ -1900,7 +1900,7 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_npc_set_position, STRING("tiz_obj"), LW(5), LW(6), LW(7))
     CALL(evt_npc_set_scale, STRING("tiz_obj"), FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.5f))
     CALL(evt_npc_set_camid, STRING("tiz_obj"), 7)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_npc_set_anim, STRING("tiz_obj"), STRING("A_1"))
 #else
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 1000)
@@ -1919,7 +1919,7 @@ EVT_BEGIN(evt_mapwrite)
     ADD(LW(6), 10)
     ADD(LW(7), 20)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff64, STRING("tiz_dust"), STRING("stardust_n64"), 0, LW(5), LW(6), LW(7), FLOAT(15.0f), 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_MAP_NEXT_APPEAR1"), LW(5), LW(6), LW(7), 0)
@@ -1955,7 +1955,7 @@ EVT_BEGIN(evt_mapwrite)
         CALL(evt_snd_sfxon, STRING("SFX_EVT_MAP_KAKAGERU1_2"), 0)
         CASE_END
     END_SWITCH
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(map_disp_onoff, 1)
     WAIT_FRAMES(1)
 #endif
@@ -1974,7 +1974,7 @@ EVT_BEGIN(evt_mapwrite)
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
     ADD(LW(2), -10)
     CALL(evt_eff, STRING("map_itemget"), STRING("itemget"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_sfxon, STRING("SFX_EVT_MAP_KAKAGERU1_3"), 0)
 #endif
     CALL(map_bgmode, STRING("map_itemget"), STRING("map_map"))
@@ -2581,7 +2581,7 @@ EVT_BEGIN(mahojin_event7)
     // The music stops and the magic circle forms; seen from above, a crystal wave rises around Mario.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_sfxon, STRING("SFX_EVT_MAP_KAKAGERU3_1"), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff, STRING("mahojin"), STRING("mahojin"), 7, 0, 28, -250, 0, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff, STRING("mahojin"), STRING("mahojin"), 8, 0, 28, -250, 0, 0, 0, 0, 0, 0, 0, 0)

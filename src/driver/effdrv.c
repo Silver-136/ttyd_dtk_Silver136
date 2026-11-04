@@ -14,7 +14,7 @@
 #include "libc_decls.h"
 
 // The demos still load the effect textures from the old eff folder.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define EFF_TPL_PATH "%s/eff/%s/effect_%s.tpl"
 #define EFF_TPL_JP "%s/eff/jp/effect.tpl"
 #else
@@ -23,7 +23,7 @@
 #endif
 
 //.data
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static const char* str_kemuri[] = {"着地", "敵消滅", "重いもの移動用", NULL};
 static const char* str_confetti[] = {"type 0", "type 1", "type 2", "type 3", "type 4", "type 5", "type 6", NULL};
 static const char* str_fukidashi[] = {"びっくり！", "はてな？", "ぐるぐる", "数字", "てんてん", "もじゃもじゃ", "チュチュリーナ", NULL};
@@ -74,7 +74,7 @@ static const char* str_ultra_hammer[] = {"左回り", "右回り", NULL};
 #endif
 
 EffectSet eff_set_table[] = {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0, "kemuri", "けむり", str_kemuri},
     {1, "confetti", "紙ふぶき", str_confetti},
     {2, "fukidashi", "ふきだし", str_fukidashi},

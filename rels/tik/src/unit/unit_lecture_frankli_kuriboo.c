@@ -27,7 +27,7 @@ static BattleUnitKindPart parts[1];
 static EvtWord init_event[53];
 static EvtWord entry_event[29];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord phase_event[148];
 #else
 static EvtWord phase_event[160];
@@ -210,7 +210,7 @@ static EVT_BEGIN(phase_event)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
             CALL(evt_btl_camera_set_moveto, 0, 71, 49, 213, 71, 35, 0, 30, 11)
             WAIT_FRAMES(30)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_02"), 0, UNIT_ID_SELF)
 #else
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -218,7 +218,7 @@ static EVT_BEGIN(phase_event)
 #endif
             CALL(evt_btl_camera_set_moveto, 0, 111, 85, 213, 111, 71, 0, 30, 11)
             WAIT_FRAMES(30)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_03"), 0, UNIT_ID_SELF)
 #else
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)

@@ -31,7 +31,7 @@ typedef enum SoundEffectFlags {
     SFX_FLAG_STREAM = (1 << 31)  // 0x80000000, a streamed .stm sound (SoundSS*, streamName)
 } SoundEffectFlags;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define SFX_EFFECT(fxId) (SFX_FLAG_EFX | (fxId))
 #define SFX_SONG(group, song) (SFX_FLAG_SONG | ((group) << 16) | ((song) << 8) | (song))
 #endif
@@ -148,7 +148,7 @@ typedef struct PaperSoundWork {
     s8 sfxVolume;                   // 0x59, SFX master volume, ramps toward 100 (120 when flag 0x20)
     s8 envVolume;                   // 0x5A, ENV master volume, ramps toward 100 (80 when flag 0x20)
     u8 sfxActiveCount[0x5C - 0x5B]; // 0x5B, active PaperSoundEffect slots counted by psndSFXMain
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s8 sfxCooldown;                 // 0x5C, frames before certain repeating SFX may restart (set to 6)
     u8 pad_5D[0x60 - 0x5D];         // 0x5D
 #endif
@@ -233,7 +233,7 @@ BOOL psndENV_LPF(s32 id, u16 freq);
 u32 psndBGMChkSilent(s32 id);
 BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 r6);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused);
 #else
 BOOL psndBGMOn_f(u32 r3, const char* bgm_name, u32 fadetime, s32 r6);
@@ -241,7 +241,7 @@ BOOL psndBGMOn_f(u32 r3, const char* bgm_name, u32 fadetime, s32 r6);
 
 BOOL psndENVOn(u32 flags, const char* name);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BOOL psndBGMOn_f_d(u32 flags, char* bgm_name, u32 fadetime, s32 unused);
 #else
 BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s32 r7);

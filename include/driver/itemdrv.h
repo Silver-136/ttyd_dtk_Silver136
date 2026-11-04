@@ -58,7 +58,7 @@ typedef enum ItemEntryType {
     ITEM_TYPE_SPREAD_TIMED = 6,             // + ITEM_FLAG2_SPREAD, 5000 ms
     ITEM_TYPE_SCATTER_NO_PICKUP_TIMED_LAND = 7, // 5000 ms counted from landing
     ITEM_TYPE_DROP = 8,                     // enemy and coin drops: 8000 ms from landing
-#if VERSION <= VERSION_DEMO_US // the demo has no type 9
+#if VERSION <= VERSION_DEMO_JP // the demo has no type 9
     ITEM_TYPE_DROP_REPLACEABLE = 9,        // + ITEM_FLAG_REPLACEABLE
     ITEM_TYPE_DROP_LONG = 10,               // recovered items: 20000 ms from landing
     ITEM_TYPE_DROP_LONG_REPLACEABLE = 11,

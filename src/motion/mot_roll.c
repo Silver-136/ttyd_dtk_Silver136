@@ -343,7 +343,7 @@ s32 marioRollTryCancel(void) {
  * returns 1 if it started. Called from evt_mario.
  */
 s32 marioRollCancel(void) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 ret = 0;
 #endif
     MarioWork* mario = marioGetPtr();
@@ -353,7 +353,7 @@ s32 marioRollCancel(void) {
     if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
         return 0;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING)) {
         ret = 1;
         mario->currSubMotionId = 0x14;
@@ -376,7 +376,7 @@ s32 marioRollCancel(void) {
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MarioWork* m;
 #else
     MarioWork* m = marioGetPtr();
@@ -434,7 +434,7 @@ void mot_roll_post(void) {
 void marioRollForceCancel(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         MarioWork* m;
 #else
         MarioWork* m = marioGetPtr();
@@ -624,7 +624,7 @@ void mot_roll(void) {
         s32 z1;
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
         marioAdjustMoveDir();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         mario->hammerDir = 0;
 #else
         v31 = mario->displayDirection;
@@ -686,7 +686,7 @@ void mot_roll(void) {
             mario->dispOfs.y = 1.0f;
         }
         if (--mario->multiTimer <= 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             v31 = mario->displayDirection;
             if (v31 < 90.0f || v31 > 270.0f) {
                 mario->hammerDir = 1;
@@ -718,7 +718,7 @@ void mot_roll(void) {
         mario->displayDirection = 0.0f;
         {
             MarioWork* m = marioGetPtr();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
             if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
                 psndSFXOff(marioGetPtr()->motRoll->sfxId);
@@ -738,7 +738,7 @@ void mot_roll(void) {
         }
         marioChgPaper("PM_R_1C");
         marioPaperLightOff();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_ROLL2, &mario->position);
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_ROLL2), &mario->position);
@@ -784,7 +784,7 @@ void mot_roll(void) {
             }
             marioSetSpec();
             mario->rollFlags = ROLL_STATE_NONE;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
             mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
             mario->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -819,7 +819,7 @@ void mot_roll(void) {
         roll_upstairs();
         return;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B)) {
         if (!(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING)) {
 #else
@@ -834,7 +834,7 @@ void mot_roll(void) {
     }
     v26 = mario->tubeScaleY;
     if (marioGetPtr()->motRoll->squashTrigger) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         s32 z = 0;
         s32 one;
         marioGetPtr()->motRoll->squashTrigger = z;
@@ -858,7 +858,7 @@ void mot_roll(void) {
             }
         }
         if (mario->airTimer == 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             s32 t = 2;
 #endif
             marioGetPtr()->motRoll->squashState = 2;
@@ -868,7 +868,7 @@ void mot_roll(void) {
         if (v26 > 0.4f) {
             v26 = 0.4f * (0.35f - v26) + v26;
             if (v26 <= 0.4f) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 s32 t = 3;
 #endif
                 v26 = 0.4f;
@@ -880,7 +880,7 @@ void mot_roll(void) {
         if (v26 < 1.0f) {
             v26 = 0.5f * (1.05f - v26) + v26;
             if (v26 >= 1.0f) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 s32 t = 0;
 #endif
                 marioGetPtr()->motRoll->squashState = 0;
@@ -890,7 +890,7 @@ void mot_roll(void) {
         break;
     }
     mario->tubeScaleY = v26;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (mario->airTimer == 0) {
         camFollowYOn();
     }
@@ -910,7 +910,7 @@ void mot_roll(void) {
         marioGetPtr()->motRoll->spdZ = v27;
     }
     if (mario->hitobjStandOn) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (mario->airTimer == 0 && (mario->buttonTrg & PAD_BUTTON_A)) {
             {
 #else
@@ -925,7 +925,7 @@ void mot_roll(void) {
                 m->jumpSnapY = -0.02f;
                 m->flags |= MARIO_FLAG_IS_JUMPING;
                 m->airTimer = 1;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_JUMP1, &marioGetPtr()->position);
 #else
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_JUMP1), &marioGetPtr()->position);
@@ -938,7 +938,7 @@ void mot_roll(void) {
             }
         }
         marioUpdateCamCollision(mario->position);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     } else {
         mario->airTimer++;
         mario->airTimer--;
@@ -948,7 +948,7 @@ void mot_roll(void) {
     }
     if (mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
         if (mario->hitobjHead) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             mario->jumpVelocityY = -0.03f;
             mario->jumpAccelerationY = -0.02f;
             mario->jumpJerkY = -0.02f;
@@ -999,7 +999,7 @@ void mot_roll(void) {
     }
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) && !(mario->mot.roll.flags & ROLL_FLAG_NO_SLOPE_UNUSED)) {
         v31 = angleABf(0.0f, 0.0f, v29, -v28);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (((MarioWork*)mario)->groundRot.z > 0.0f) {
 #else
         if (((MarioWork*)mario)->groundRot.z > 0.05f) {
@@ -1013,7 +1013,7 @@ void mot_roll(void) {
             if (nx <= -100.0f) {
                 nx = -100.0f;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         } else if (mario->groundRot.z < 0.0f) {
 #else
         } else if (mario->groundRot.z < -0.05f) {
@@ -1028,7 +1028,7 @@ void mot_roll(void) {
                 nx = 100.0f;
             }
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (((MarioWork*)mario)->groundRot.x > 0.0f) {
 #else
         if (((MarioWork*)mario)->groundRot.x > 0.05f) {
@@ -1042,7 +1042,7 @@ void mot_roll(void) {
             if (nz <= -100.0f) {
                 nz = -100.0f;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         } else if (mario->groundRot.x < 0.0f) {
 #else
         } else if (mario->groundRot.x < -0.05f) {
@@ -1064,7 +1064,7 @@ void mot_roll(void) {
             nz = distABf(0.0f, 0.0f, nx, -nz);
             nx = -nz * (f32)sin(3.1415927f * mario->directionView / 180.0f);
             nz = nz * (f32)cos(3.1415927f * ((MarioWork*)mario)->directionView / 180.0f);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         }
     }
     if (mario->targetNpc) {
@@ -1230,7 +1230,7 @@ void mot_roll(void) {
     }
     if (mario->baseSpeed) {
         MarioWork* m = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if ((u32)m->mot.roll.sfxId == (u32)-1) {
             m->mot.roll.sfxId = (s32)psndSFXOn_3D((char*)PSND_SFX_MARIO_ROLL_MOVE1, &m->position);
 #else
@@ -1246,7 +1246,7 @@ void mot_roll(void) {
         }
     } else {
         MarioWork* m = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if ((u32)m->mot.roll.sfxId != (u32)-1U) {
             psndSFXOff(m->mot.roll.sfxId);
             m->mot.roll.sfxId = -1;
@@ -1293,7 +1293,7 @@ void mot_roll(void) {
     if (mario->wStickDir1 || mario->wStickDir2) {
         mario->mot.roll.flags |= ROLL_FLAG_STICK_UNUSED;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!(mario->mot.roll.flags & ROLL_FLAG_FIX) && (mario->buttonTrg & PAD_BUTTON_B) && !(mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING) && mario->hitobjStandOn) {
         mario->currSubMotionId = 0x14;
         camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
@@ -1371,11 +1371,11 @@ static inline void marioRollCan(void) {
     {
         f32 s;
         f32 c;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         f32 ox, oy, oz;
 #endif
         f32 dist;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         f32 nx, ny, nz;
 #else
         Vec pos;
@@ -1385,7 +1385,7 @@ static inline void marioRollCan(void) {
         Vec d2;
 #endif
         dist = 100.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z, 0.0f, -1.0f, 0.0f)) {
             f32 sq = sqrtf(nx * nx + nz * nz);
             f32 ang = angleABf(0.0f, 0.0f, sq, -ny);
@@ -1411,7 +1411,7 @@ static inline void marioRollCan(void) {
             } else {
                 sincosf(&s, &c, 90.0f);
                 dist = 100.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, mario->position.x, mario->position.y, mario->position.z, s, 0.0f, c);
 #else
                 pos = mario->position;
@@ -1435,7 +1435,7 @@ void marioRollStrippedPool(void) {
     MarioWork* mario = marioGetPtr();
     mario->dispOfs.x = 100.0f;
     mario->dispOfs.y = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     mario->jumpVelocityY = -1.0f;
 #endif
     mario->dispOfs.z = 0.5f;

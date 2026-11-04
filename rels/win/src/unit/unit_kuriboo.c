@@ -116,7 +116,7 @@ static BattleUnitDefense defence = {0};
 /** Element attributes of the Goomba: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else
 static StatusVulnerability regist = {

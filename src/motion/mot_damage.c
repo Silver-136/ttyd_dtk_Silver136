@@ -128,7 +128,7 @@ void mot_damage(void) {
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (mario->jumpVelocityY == 0.0f) {
             mario->jumpVelocityY = -6.0f;
             mario->jumpAccelerationY = 0.0f;
@@ -152,7 +152,7 @@ void mot_damage(void) {
         mario->airTimer = 0;
         mario->baseSpeed = 0.0f;
         mario->multiTimer = 20;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (mario->prevMotionId != MARIO_MOTION_YOSHI) {
 #else
         if (mario->prevMotionId != MARIO_MOTION_YOSHI && mario->prevMotionId != MARIO_MOTION_PLANE) {
@@ -259,7 +259,7 @@ void mot_damage(void) {
             mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
             mario->currSubMotionId = 12;
             mario->dispFlags |= MARIO_DISP_FLAG_HIDE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (mario->multiTimer == 0) {
                 mario->multiTimer = 10;
                 mario->mot.damage.camStepY = (dest.y - mario->mot.damage.rootY) / (f32)mario->multiTimer;
@@ -281,7 +281,7 @@ void mot_damage(void) {
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
         marioSetFallPara();
         mario->dispFlags &= ~MARIO_DISP_FLAG_HIDE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         mario->multiTimer = 1;
 #endif
         break;
@@ -289,7 +289,7 @@ void mot_damage(void) {
         if (--mario->multiTimer > 0) {
             break;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         mario->currSubMotionId = 20;
         break;
     case 14:
@@ -410,14 +410,14 @@ void mot_damageToge(void) {
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         marioClearSlitFloor();
 #endif
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         marioAdjustMoveDir();
         marioSlitForceCancel();
         marioYoshiForceCancel();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         nokonoko_use_cancel();
 #endif
         marioNoUpdateCamPos();

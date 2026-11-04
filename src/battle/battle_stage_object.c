@@ -1359,7 +1359,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 -99, 0, 0, 0, 0, 0, 0, 0,
 #else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
@@ -1678,7 +1678,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 -99, 0, 0, 0, 0, 0, 0, 0,
 #else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
@@ -1997,7 +1997,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 -99, 0, 0, 0, 0, 0, 0, 0,
 #else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
@@ -2316,7 +2316,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 100, 0, 100, 0, 0, 0, // poisonTime..dodgyTime
                 100, 0, 100, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
                 0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 -99, 0, 0, 0, 0, 0, 0, 0,
 #else
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
@@ -2430,7 +2430,7 @@ BattleStageObjectData _object_nozzle_data[] = {
     {"nozzle_r", 3, 4, {120.0f, 0.0f, 90.0f}, 0, 0},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BattleStageObjectData _object_wall_data = {"escape_wall", 4, 5, {-175.0f, 0.0f, 0.0f}, 0, 0};
 BattleStageObjectData _object_spot_light_data[] = {
     {"spotlight", 6, 7, {0.0f, 240.0f, 0.0f}, 0, 0},
@@ -2523,7 +2523,7 @@ EVT_BEGIN(_object_turn_event_core)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
@@ -2569,7 +2569,7 @@ EVT_BEGIN(_fall_frame_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * The same nozzle script for the other builds, placed after _set_mobj_rotate_x
  * so the string pool keeps its order; see the JP copy above.
@@ -2684,7 +2684,7 @@ EVT_BEGIN(_object_fall_event)
 EVT_END()
 
 /** The escape wall at the left edge of the stage, which closes in battles that cannot be fled. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 BattleStageObjectData _object_wall_data = {"escape_wall", 4, 5, {-175.0f, 0.0f, 0.0f}, 0, 0};
 
 /** The overhead spotlight; the entry with no name ends the list. */
@@ -2728,7 +2728,7 @@ EVT_END()
 #endif
 
 #if VERSION < VERSION_US
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(_announce_wall_message)
@@ -2746,7 +2746,7 @@ EVT_END()
  * Nozzle attack during battle (BattleStage_NozzleWorkCheck(1)):
  * _nozzle_work_event_core with LW(10) = 1, which also lets a type-0 nozzle set fill the stage with fog.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
     CALL_CHILD(PTR(_nozzle_work_event_core))
@@ -3322,7 +3322,7 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
     if (isFirstCall) {
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             unit = BattleGetUnitPtr(wp, i);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && unit->ceilFallEventCode) {
 #else
             if (unit && !(unit->flags & BATTLE_UNIT_FLAG_BROKEN) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->ceilFallEventCode) {
@@ -4148,7 +4148,7 @@ USER_FUNC(_object_fall_attack) {
                     break;
 
                 case STAGE_FALL_FORK:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     e3->effect = effFallEntry(2, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 90);
 #else
                     e3->effect = effFallEntry(2, pos.x, pos.y, 5.0f + pos.z, width, hit.y - pos.y, dir, 1, 90);
@@ -4165,13 +4165,13 @@ USER_FUNC(_object_fall_attack) {
 
                 case STAGE_FALL_BOWSER_STATUE:
                     if (BtlUnit_GetBelong(unit) == 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         e3->effect = effFallEntry(6, -300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
 #else
                         e3->effect = effFallEntry(6, -300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
 #endif
                     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         e3->effect = effFallEntry(6, 300.0f, pos.y, pos.z, 0.0f, 0.0f, dir, 1, 180);
 #else
                         e3->effect = effFallEntry(6, 300.0f, pos.y, 15.0f + pos.z, 0.0f, 0.0f, dir, 1, 180);
@@ -4180,7 +4180,7 @@ USER_FUNC(_object_fall_attack) {
                     break;
 
                 case STAGE_FALL_METEOR:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     e3->effect = effFallEntry(7, pos.x, pos.y, pos.z, width, hit.y - pos.y, dir, 1, 180);
 #else
                     e3->effect = effFallEntry(7, pos.x, pos.y, 5.0f + pos.z, width, hit.y - pos.y, dir, 1, 180);
@@ -4241,7 +4241,7 @@ USER_FUNC(_object_fall_attack) {
                                     psndSFXOn_3D(SFX_NAME_WORD("SFX_BTL_STAGE_DAMAGE_TUB1"), &sfxPos); // FAKE: integer cast makes the literal a hoisted @ temp (same pointer)
                                     break;
                                 case STAGE_FALL_WATER:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                                     psndSFXOn_3D(sfxRest, &sfxPos);
 #endif
                                     break;

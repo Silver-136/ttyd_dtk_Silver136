@@ -36,7 +36,7 @@ s32* audience_anim_pakkun[19];
 s32* audience_anim_luigi[19];
 BattleAudienceItemKind audience_item_kinopio[12];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BattleAudienceItemKind audience_item_heiho[18];
 #else
 BattleAudienceItemKind audience_item_heiho[17];
@@ -229,7 +229,7 @@ BattleAudienceItemKind audience_item_heavy_bomb[1];
 BattleAudienceItemKind audience_item_kuriboo[3];
 BattleAudienceItemKind audience_item_pakkun[1];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #include "../src/data/battle/battle_audience_run_front.inc"
 #include "../src/data/battle/battle_audience_anim.inc"
 #define AUD_ITEM_GROUP 1
@@ -273,7 +273,7 @@ s32 audience_kinopio_itemthrow_back[] = {
     AUD_FRAME(7, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 1
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -344,7 +344,7 @@ s32 audience_daisan_itemthrow_back[] = {
     AUD_FRAME(23, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 2
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -415,7 +415,7 @@ s32 audience_teresa_itemthrow_back[] = {
     AUD_FRAME(39, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 3
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -486,7 +486,7 @@ s32 audience_hammer_bros_itemthrow_back[] = {
     AUD_FRAME(57, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 4
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -557,7 +557,7 @@ s32 audience_honenoko_itemthrow_back[] = {
     AUD_FRAME(73, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 5
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -628,7 +628,7 @@ s32 audience_heiho_itemthrow_back[] = {
     AUD_FRAME(89, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 6
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -699,7 +699,7 @@ s32 audience_pansy_itemthrow_back[] = {
     AUD_FRAME(107, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 7
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -775,7 +775,7 @@ s32 audience_puni_itemthrow_back[] = {
     AUD_FRAME(125, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 8
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -846,7 +846,7 @@ s32 audience_nokonoko_itemthrow_back[] = {
     AUD_FRAME(141, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 9
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -922,7 +922,7 @@ s32 audience_heavy_bomb_itemthrow_back[] = {
     AUD_FRAME(158, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 10
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -1003,7 +1003,7 @@ s32 audience_kuriboo_itemthrow_back[] = {
     AUD_FRAME(178, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 11
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -1074,7 +1074,7 @@ s32 audience_pakkun_itemthrow_back[] = {
     AUD_FRAME(194, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 12
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -1150,7 +1150,7 @@ s32 audience_luigi_itemthrow_back[] = {
     AUD_FRAME(7, 32), AUD_END,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define AUD_RUN_FRONT 13
 #include "../src/data/battle/battle_audience_run_front.inc"
 #undef AUD_RUN_FRONT
@@ -1186,7 +1186,7 @@ s32 audience_luigi_confuse_back[] = {
     AUD_LABEL(0), AUD_FRAME(15, 8), AUD_GOTO(0), AUD_END,
 };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #define AUD_ITEM_GROUP 2
 #include "../src/data/battle/battle_audience_item.inc"
 #undef AUD_ITEM_GROUP

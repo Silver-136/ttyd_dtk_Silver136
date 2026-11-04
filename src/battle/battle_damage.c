@@ -151,7 +151,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         s32 n = 0;
         s32 i = target->badgesEquipped.PityFlower;
         for (; i > 0; i--) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             irand(100);
 #else
             if (irand(100) < 30) {
@@ -172,18 +172,18 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         if (result & DAMAGE_RESULT_ATTACK_FX_R) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_R1", &pos);
         } else if (result & DAMAGE_RESULT_ATTACK_FX_Y) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_Y1", &pos);
         } else if (result & DAMAGE_RESULT_ATTACK_FX_B) {
 #endif
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_B1", &pos);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         } else if (result & DAMAGE_RESULT_ATTACK_FX_B) {
 #else
         } else if (result & DAMAGE_RESULT_ATTACK_FX_G) {
 #endif
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_G1", &pos);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         } else if (result & DAMAGE_RESULT_ATTACK_FX_G) {
             psndSFXOn_3D("SFX_MARIO_HAMMER_PIKKYO_Y1", &pos);
 #endif
@@ -452,7 +452,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
         if (attacker->currentHp <= attacker->kindParams->perilHP && attacker->badgesEquipped.MegaRush) {
             damage += attacker->badgesEquipped.MegaRush * 5;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         else
 #endif
         if (attacker->currentHp <= attacker->kindParams->dangerHP && attacker->badgesEquipped.PowerRush) {
@@ -536,7 +536,7 @@ skip:
         if (target->badgesEquipped.DamageDodge && (flags & DAMAGE_RESULT_GUARD)) {
             defense += target->badgesEquipped.DamageDodge;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (element == ELEMENT_FIRE && target->badgesEquipped.IcePower) {
             defense += target->badgesEquipped.IcePower;
         }
@@ -584,7 +584,7 @@ skip:
     if (flags & DAMAGE_RESULT_GUARD) {
         damage--;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (element == ELEMENT_FIRE && target->badgesEquipped.IcePower) {
         damage -= target->badgesEquipped.IcePower;
     }
@@ -594,7 +594,7 @@ skip:
         damage *= target->badgesEquipped.DoublePain + 1;
     }
     if (target->badgesEquipped.LastStand && target->currentHp <= target->kindParams->dangerHP) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         n = target->badgesEquipped.LastStand;
 #else
         n = target->badgesEquipped.LastStand + 1;
@@ -732,7 +732,7 @@ s32 _getSickStatusRate(BattleWeapon* weapon, s32 type) {
         case STATUS_INVISIBLE: return weapon->invisibleChance;
         case STATUS_HP_REGEN: return weapon->hpRegenTime > 0 ? 100 : 0;
         case STATUS_FP_REGEN: return weapon->fpRegenTime > 0 ? 100 : 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case STATUS_CHARGE: return weapon->chargeStrength > 0 ? 100 : 0;
         case STATUS_PAYBACK: return weapon->paybackTime > 0 ? 100 : 0;
 #else
@@ -938,7 +938,7 @@ void _getSickStatusParam(BattleUnit* unit, BattleWeapon* weapon, u32 type, s8* o
                 strength += (n - 1) * 2;
             }
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (strength >= 10) {
             strength = 9;
         }
@@ -1056,7 +1056,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
     if (part->attributes & kImmuneToStatus) {
         return 0;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (BtlUnit_CheckStatus(unit, STATUS_ALLERGIC) && !ok) {
         return 0;
     }
@@ -1078,7 +1078,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
             case STATUS_FRIGHT:
             case STATUS_GALE_FORCE:
             case STATUS_INSTANT_KILL:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 return 0;
 #else
                 if (!ok) {
@@ -1166,7 +1166,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
         } else {
             y += BtlUnit_GetHeight(unit) / 2;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         switch (unit->currentKind) {
             case UNIT_HOOKTAIL:
             case UNIT_GLOOMTAIL:
@@ -1189,7 +1189,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
             case STATUS_CONFUSE:
                 effStampN64Entry(1, x, y, 10.0f + z);
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case STATUS_DEFENSE_UP:
             case STATUS_DEFENSE_DOWN:
                 eff = effStampN64Entry(2, x, y, 10.0f + z);
@@ -1501,7 +1501,7 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
                     }
                     break;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             BattleSetStatusDamage(&result, target, part, weapon->special, i, (s8)rate, levelDiff, time, strength);
 #else
             if (BattleSetStatusDamage(&result, target, part, weapon->special, i, (s8)rate, levelDiff, time, strength) && i == STATUS_INVISIBLE) {

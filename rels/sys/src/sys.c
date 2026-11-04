@@ -1349,7 +1349,7 @@ EVT_BEGIN(evt_start)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(display) {
     SysWork* wp;
     SysChar* chr;
@@ -1426,7 +1426,7 @@ USER_FUNC(display) {
     g_wp = wp;
     switch (wp->state) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]) != 0U) {
                 wp->file = fileAllocf(FILE_TYPE_TPL, "%s/eff/%s/effect_sys.tpl", getMarioStDvdRoot(), lang_prefix[gp->language]);
 #else

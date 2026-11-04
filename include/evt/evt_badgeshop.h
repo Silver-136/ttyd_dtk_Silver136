@@ -51,7 +51,7 @@ extern s32 badge_bottakuru100_table[];
 extern s32 badge_bottakuru_table[];
 extern BadgeShopWork* bdsw;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 USER_FUNC(evt_badgeShop_getBargainKind);
 #endif
 

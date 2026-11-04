@@ -36,7 +36,7 @@ EvtWord enemy3_dead_evt[11];
 EvtWord enemy4_dead_evt[102];
 static EvtWord hint_plate[24];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_17_init_evt[];
 #else
 EvtWord las_17_init_evt[123];
@@ -158,7 +158,7 @@ EVT_BEGIN(enemy4_dead_evt)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
         WAIT_MS(500)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_SWITCH_BIKKURI_APPEAR1"), -225, 60, 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_eff, STRING(""), STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
@@ -198,7 +198,7 @@ EVT_END()
 EVT_BEGIN(las_17_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

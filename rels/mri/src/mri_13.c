@@ -48,7 +48,7 @@ EvtWord yuka_shake[11];
 EvtWord yuka_shake2[68];
 static EvtWord yuka_check[133];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord yuka_event[];
 #else
 EvtWord yuka_event[421];
@@ -295,7 +295,7 @@ USER_FUNC(evt_puni_force_pose) {
 
 /** Camera shake while the elevator platform moves (a long shake in the demo builds, five 1-second shakes later). */
 EVT_BEGIN(yuka_shake)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     LOOP(0)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1500)
 #else
@@ -311,7 +311,7 @@ EVT_END()
  * a series of shakes that die down over about 10 seconds, ending in a final stronger one.
  */
 EVT_BEGIN(yuka_shake2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0087890625f), FLOAT(0.0f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0078125f), FLOAT(0.0f), 1000)
@@ -535,7 +535,7 @@ EVT_BEGIN(yuka_event)
     CALL(evt_target_set_position, 0, -55, -309, 50)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_06_WATER_SWITCH)
     CALL(evt_puni_set_hamari, -180, -310, 60, 2, -2, -306, -312)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_puni_winddisable_onoff, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)

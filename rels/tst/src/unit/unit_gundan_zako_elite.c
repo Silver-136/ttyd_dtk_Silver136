@@ -48,7 +48,7 @@ BattleUnitKind unit_gundan_zako_elite = {
     0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     3,
 #else
     2, // baseCoin
@@ -57,7 +57,7 @@ BattleUnitKind unit_gundan_zako_elite = {
     9999, // pbSoftCap
     30, // width
     36, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
     36,
     0.0f,
@@ -75,7 +75,7 @@ BattleUnitKind unit_gundan_zako_elite = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     15.0f,
     0.0f,
@@ -126,7 +126,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Elemental reactions of the Elite X-Naut: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {60, 70, 60, 100, 70, 100, 100, 60, 100, 65, 100, 65, 100, 60, 60, 80, 70, 100, 60, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

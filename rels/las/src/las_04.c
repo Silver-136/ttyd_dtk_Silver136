@@ -91,7 +91,7 @@ FirebarSetup firebardesc[7];
 EvtWord firebar_evt[102];
 static HitDamageReturn dmgRetPoint[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_04_init_evt[];
 #else
 EvtWord las_04_init_evt[55];
@@ -612,7 +612,7 @@ void _firebar_trans(FirebarWork* wp) {
  * Mario's invulnerability motions or invincibility timer set the "no damage" bit;
  * the fire-bar sound plays while Mario is within 120 units in X.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(firebar_entry) {
 #else
 USER_FUNC(firebar_entry) {
@@ -681,7 +681,7 @@ USER_FUNC(firebar_entry) {
         if (psndSFXChk(wp->sfxId) == 0) {
             psndSFXOff(wp->sfxId);
             wp->sfxId = -1;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         }
         balls = wp->balls;
         for (j = 0; j < 3; j++) {
@@ -844,7 +844,7 @@ static HitDamageReturn dmgRetPoint[] = {
 EVT_BEGIN(las_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS2"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

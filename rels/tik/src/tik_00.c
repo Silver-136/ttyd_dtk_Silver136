@@ -32,7 +32,7 @@
 #include "driver/itemdrv.h"
 #include "evt/evt_uranaisi.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "evt/evt_win.h"
 #endif
 
@@ -105,7 +105,7 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord uranaisi_next_evt[];
 extern EvtWord uranaisi_starpiece_evt[];
 extern EvtWord uranaisi_supercoin_evt[];
@@ -122,7 +122,7 @@ typedef struct CardName {
 static CardName name_tbl[9];
 EvtWord evt_uranai_cap[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord uranai_init[];
 #else
 EvtWord uranai_init[147];
@@ -131,7 +131,7 @@ EvtWord uranai_init[147];
 EvtWord uranai_main[595];
 EvtWord uranai_exit[98];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord uranaisi_table_talk[];
 #else
 EvtWord uranaisi_table_talk[226];
@@ -140,7 +140,7 @@ EvtWord uranaisi_table_talk[226];
 EvtWord uranaisi_direct_talk[8];
 EvtWord uranaisi_init[10];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord starmaniac_init[14];
 #endif
 
@@ -175,7 +175,7 @@ EvtWord evt_wall_01_02[66];
 static const char* door_data_01_npc[2];
 static EvtWord evt_wall_01[12];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_open_01[];
 #else
 EvtWord evt_open_01[39];
@@ -208,7 +208,7 @@ static EvtWord evt_door_04_00[12];
 static EvtWord evt_door_04_01[12];
 static EvtWord evt_wall_04[15];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_open_04_open[];
 static EvtWord evt_door_04_close[85];
 #else
@@ -222,7 +222,7 @@ EvtWord evt_door_stg7_close[7];
 static EvtWord evt_door_04_entry[64];
 EvtWord tensou_return[243];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tensou_init_event[];
 #else
 EvtWord tensou_init_event[182];
@@ -231,7 +231,7 @@ EvtWord tensou_init_event[182];
 EvtWord tensou_event[209];
 EvtWord tensou_anim_event[30];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tensou_sw_event[];
 #else
 EvtWord tensou_sw_event[94];
@@ -244,7 +244,7 @@ static EvtWord epilogue_npc_entry[25];
 static EvtWord epilogue_evt[127];
 static EvtWord mobj_box01[34];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tik_00_init_evt[];
 #else
 EvtWord tik_00_init_evt[214];
@@ -375,7 +375,7 @@ static const UranaiTag uranaisi_pos_tag = { "pos" };
  * In JP and later, from the return to Rogueport (chapter 9) on, she only says uranaisi_17 and pays the fee back.
  */
 EVT_BEGIN(uranaisi_next_evt)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG9_02_RETURN_TO_ROGUEPORT)
 #endif
         CALL(uranaisi_data_alloc, 0, STRING("un_next"))
@@ -385,7 +385,7 @@ EVT_BEGIN(uranaisi_next_evt)
             CALL(evt_msg_print, 0, LW(1), 0, STRING("me"))
         ELSE
             IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_unitwin_alloc)
                             CALL(unitwincoin_disp_onoff, 1)
 #else
@@ -396,20 +396,20 @@ EVT_BEGIN(uranaisi_next_evt)
                 CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("げんざいの　イベントばんごうは\n『%s』\nです\n<key>"), LW(1))
                 CALL(uranaisi_ryokin, 0, LW(2))
                 CALL(evt_pouch_add_coin, LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(unitwincoin_wait)
 #else
                 CALL(evt_win_coin_wait, LW(12))
 #endif
                 WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(unitwincoin_disp_onoff, 0)
                             CALL(evt_unitwin_free)
 #else
                 CALL(evt_win_coin_off, LW(12))
 #endif
                 ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_unitwin_alloc)
                             CALL(unitwincoin_disp_onoff, 1)
 #else
@@ -427,13 +427,13 @@ EVT_BEGIN(uranaisi_next_evt)
                 CALL(evt_msg_print_add_insert, MSG_PRINT_DIRECT_TEXT, STRING("いじょう　%dこが\nじゅうふくしている　メッセージです\n<key>"), LW(3))
                 CALL(uranaisi_ryokin, 0, LW(2))
                 CALL(evt_pouch_add_coin, LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(unitwincoin_wait)
 #else
                 CALL(evt_win_coin_wait, LW(12))
 #endif
                 WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(unitwincoin_disp_onoff, 0)
                             CALL(evt_unitwin_free)
 #else
@@ -442,7 +442,7 @@ EVT_BEGIN(uranaisi_next_evt)
             END_IF
         END_IF
         CALL(uranaisi_data_free)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ELSE
         CALL(evt_msg_print, 0, STRING("uranaisi_17"), 0, STRING("me"))
         CALL(evt_win_coin_on, COIN_WINDOW_COINS, LW(12))
@@ -466,7 +466,7 @@ EVT_BEGIN(uranaisi_starpiece_evt)
     CALL(uranaisi_data_alloc, 1, STRING("un_starpiece"))
     CALL(uranaisi_starpiece_check, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_unitwin_alloc)
         CALL(unitwincoin_disp_onoff, 1)
 #else
@@ -475,13 +475,13 @@ EVT_BEGIN(uranaisi_starpiece_evt)
         CALL(evt_msg_print, 0, STRING("uranaisi_14"), 0, STRING("me"))
         CALL(uranaisi_ryokin, 1, LW(2))
         CALL(evt_pouch_add_coin, LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(unitwincoin_wait)
 #else
         CALL(evt_win_coin_wait, LW(12))
 #endif
         WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(unitwincoin_disp_onoff, 0)
         CALL(evt_unitwin_free)
 #else
@@ -506,7 +506,7 @@ EVT_BEGIN(uranaisi_supercoin_evt)
     CALL(uranaisi_data_alloc, 2, STRING("un_supercoin"))
     CALL(uranaisi_supercoin_check, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_unitwin_alloc)
         CALL(unitwincoin_disp_onoff, 1)
 #else
@@ -515,13 +515,13 @@ EVT_BEGIN(uranaisi_supercoin_evt)
         CALL(evt_msg_print, 0, STRING("uranaisi_16"), 0, STRING("me"))
         CALL(uranaisi_ryokin, 2, LW(2))
         CALL(evt_pouch_add_coin, LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(unitwincoin_wait)
 #else
         CALL(evt_win_coin_wait, LW(12))
 #endif
         WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(unitwincoin_disp_onoff, 0)
         CALL(evt_unitwin_free)
 #else
@@ -931,7 +931,7 @@ EVT_BEGIN(uranai_init)
     CALL(uranai_init_func)
     SET_VALUE(GW(15), LW(0))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("supotto"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(supotto_blendmode)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("uranai_mae"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -1248,7 +1248,7 @@ EVT_BEGIN(uranaisi_table_talk)
     CALL(evt_party_stop, 0)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     CALL(evt_npc_set_ry, STRING("me"), 180)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
             IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_FIRST_TALK_DONE, 0)
 #else
@@ -1282,7 +1282,7 @@ EVT_BEGIN(uranaisi_table_talk)
         // A menu lists the three readings with their prices (My Next Path, Star Pieces, Shine Sprites);
         // cancelling ends the talk.
         SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_unitwin_alloc)
     CALL(unitwincoin_disp_onoff, 1)
 #else
@@ -1293,7 +1293,7 @@ EVT_BEGIN(uranaisi_table_talk)
         CALL(evt_msg_select, 1, LW(1))
         CALL(evt_uranaisi_msg_free)
         IF_INT_EQUAL(LW(0), 4)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(unitwincoin_disp_onoff, 0)
                     CALL(evt_unitwin_free)
 #else
@@ -1308,7 +1308,7 @@ EVT_BEGIN(uranaisi_table_talk)
         CALL(evt_pouch_get_coin, LW(1))
         IF_INT_LESS(LW(1), LW(2))
             CALL(evt_msg_print_add, 0, STRING("uranaisi_07"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(unitwincoin_disp_onoff, 0)
                     CALL(evt_unitwin_free)
 #else
@@ -1328,13 +1328,13 @@ EVT_BEGIN(uranaisi_table_talk)
         END_SWITCH
         MULTIPLY(LW(2), -1)
         CALL(evt_pouch_add_coin, LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(unitwincoin_wait)
 #else
         CALL(evt_win_coin_wait, LW(12))
 #endif
         WAIT_MS(200)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(unitwincoin_disp_onoff, 0)
             CALL(evt_unitwin_free)
         CALL_CHILD(uranai_init)
@@ -1364,7 +1364,7 @@ EVT_BEGIN(uranaisi_table_talk)
         END_SWITCH
 
         // The table is cleared; JP and later return to the reading menu, while the demos restore Mario's controls.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(uranai_exit)
 #else
         CALL_CHILD(PTR(uranai_exit))
@@ -1391,7 +1391,7 @@ EVT_BEGIN(uranaisi_init)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Init script for Dazzle (starmaniac, the Star Piece collector).
@@ -1420,7 +1420,7 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
         RETURN
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(tik_snd_off)
 #endif
     IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
@@ -1434,7 +1434,7 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_msg_select, 0, STRING("starmaniac_03"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_05"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(tik_snd_on)
 #endif
         RETURN
@@ -1444,7 +1444,7 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_pouch_get_starpiece, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_06"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(tik_snd_on)
 #endif
         RETURN
@@ -1458,7 +1458,7 @@ EVT_BEGIN(starmaniac_talk)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("starmaniac_08"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         RETURN
     END_IF
     CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -1497,7 +1497,7 @@ EVT_BEGIN(starmaniac_talk)
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print_add, 0, STRING("starmaniac_15"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(tik_snd_on)
 #endif
         RETURN
@@ -1513,7 +1513,7 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(tik_snd_on)
 #endif
         RETURN
@@ -1521,7 +1521,7 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_pouch_get_starpiece, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(tik_snd_on)
 #endif
         RETURN
@@ -1532,14 +1532,14 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_14"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(tik_snd_on)
 #endif
         RETURN
     END_IF
     CALL(evt_msg_continue)
     GOTO(0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(tik_snd_on)
 #endif
     RETURN
@@ -1847,7 +1847,7 @@ static NpcSetupInfo npcEnt[] = {
         "星マニア", // name
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         npc_init_evt,
 #else
         starmaniac_init, // initEvent
@@ -2082,7 +2082,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_open_01)
     CALL(evt_mapobj_trans, 1, STRING("card"), 0, -1000, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapobj_trans, 1, STRING("ie_1_naka"), 0, FLOAT(0.19921875f), 0)
 #endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -2537,7 +2537,7 @@ EVT_END()
  * The releases add a third state from the return to Rogueport onwards.
  */
 EVT_BEGIN(evt_open_04_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
 #else
     SWITCH(GSW_STORY_PROGRESS)
@@ -2545,7 +2545,7 @@ EVT_BEGIN(evt_open_04_open)
 #endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_EQUAL(GW(10), 0)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
@@ -2568,7 +2568,7 @@ EVT_BEGIN(evt_open_04_open)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CASE_DEFAULT
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -2578,7 +2578,7 @@ EVT_BEGIN(evt_open_04_open)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
 #endif
             ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
             IF_INT_EQUAL(GW(10), 0)
@@ -2595,7 +2595,7 @@ EVT_BEGIN(evt_open_04_open)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     END_IF
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -2634,7 +2634,7 @@ static EVT_BEGIN(evt_door_04_close)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
         CALL(evt_door_end_wait)
         CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(kurihakase_event)
 #else
         CALL_CHILD(PTR(kurihakase_event))
@@ -2796,7 +2796,7 @@ EVT_END()
 
 EVT_BEGIN(tensou_init_event)
     SET_VALUE(GW(10), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
 #else
     SWITCH(GSW_STORY_PROGRESS)
@@ -2805,7 +2805,7 @@ EVT_BEGIN(tensou_init_event)
         CALL(evt_map_playanim, STRING("anm_PC"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("anm_Terop"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         END_IF
 #else
         CASE_LESS(STG9_02_RETURN_TO_ROGUEPORT)
@@ -2874,7 +2874,7 @@ USER_FUNC(card_camid) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_000005e8, JP tik .text+0x524. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Script helper (JP and later).
@@ -2890,7 +2890,7 @@ USER_FUNC(supotto_blendmode) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_000005c0, JP tik .text+0x4FC. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /** Script helper (JP and later). Mutes sound effects (PSND_FLAG_MUTE_SFX). */
 USER_FUNC(tik_snd_off) {
@@ -2900,7 +2900,7 @@ USER_FUNC(tik_snd_off) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_tik_00000598, JP tik .text+0x4D4. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /** Script helper (JP and later). Unmutes sound effects (clears PSND_FLAG_MUTE_SFX). */
 USER_FUNC(tik_snd_on) {
@@ -3031,7 +3031,7 @@ EVT_END()
  * in between it shows the message stg7_tik_01_01 and does nothing.
  */
 EVT_BEGIN(tensou_sw_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_sfxon, STRING("SFX_STG7_SWITCH_WARP1"), 0)
 #endif
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
@@ -3245,7 +3245,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_SOFT_STOMP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
@@ -3317,7 +3317,7 @@ EVT_BEGIN(tik_00_init_evt)
         CALL_CHILD(PTR(epilogue_npc_entry))
         SPAWN_EVENT(PTR(epilogue_evt))
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPAWN_EVENT(evt_sub_mail_event)
 #else
     SPAWN_EVENT(PTR(evt_sub_mail_event))
@@ -3325,7 +3325,7 @@ EVT_BEGIN(tik_00_init_evt)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_2"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_3"), MAP_OBJ_FLAG_CLIP)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4"), MAP_OBJ_FLAG_CLIP)
 #endif
     RETURN

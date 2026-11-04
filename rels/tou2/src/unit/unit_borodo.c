@@ -112,12 +112,12 @@ static USER_FUNC(_steal_item) {
         s32 item = 0;
         s32 r;
         s32 i;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         s32 heldMax = GetHeldItemCount; // PAL scans only the held-item slots the bag has
 #endif
 
         count = 0;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         for (i = 0; i < heldMax; i++) {
 #else
         for (i = 0; i < MAX_HELD_ITEMS; i++) {
@@ -145,7 +145,7 @@ static USER_FUNC(_steal_item) {
         } else {
             s32 k;
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             for (k = 0; k < heldMax; k++) {
 #else
             for (k = 0; k < MAX_HELD_ITEMS; k++) {
@@ -275,7 +275,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Status vulnerability multipliers of the Bandit: resists most statuses. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {90, 90, 80, 100, 90, 100, 100, 70, 100, 90, 100, 90, 100, 90, 90, 95, 80, 100, 90, 100, 100, 95};
 #else
 static StatusVulnerability regist = {
@@ -321,7 +321,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_RUN, "R_1"},
     {POSE_TYPE_RUN_HOME, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {POSE_TYPE_DANGER, "I_1"},
     {POSE_TYPE_PERIL, "I_1"},
 #else
@@ -337,7 +337,7 @@ static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_STOP, "Y_1"},
     {POSE_TYPE_FREEZE, "Y_1"},
     {POSE_TYPE_CONFUSE, "K_1"},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {POSE_TYPE_POISON, "I_1"},
     {POSE_TYPE_DIZZY, "I_1"},
 #else

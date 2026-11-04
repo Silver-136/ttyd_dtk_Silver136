@@ -38,18 +38,18 @@ BattleUnitKind unit_hennya = {
     0, // maxFp
     1, // dangerHP
     1, // perilHP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     36,
     0,
 #else
     33, // level
 #endif
     1, // bonusCoin in demos; bonusExp in retail
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     3, // bonusCoin
 #endif
     70, // bonusCoinRate
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     3,
 #else
     1, // baseCoin
@@ -96,7 +96,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Element response of the Spunia: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {70, 90, 70, 150, 70, 150, 150, 70, 150, 70, 150, 70, 150, 70, 70, 90, 90, 150, 70, 0, 0, 30};
 #else
 static StatusVulnerability regist = {

@@ -9,7 +9,7 @@
 #include "manager/filemgr.h"
 #include "memory.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 // Directory of the window files on the disc in the demo (format prefix "%s/" is the DVD root).
 #define WIN_DIR "%s/window/"
 #endif
@@ -52,7 +52,7 @@ typedef struct WinBadgeEnt {
 
 typedef struct WinMarioState {
     s32 poseId; // 0x188
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 hammerHold; // 0x18C, frames the hammer pose holds (30 once the swing reaches loop time 0.89); the pose time only follows retraceCount while 0
 #endif
     s32 mode;   // 0x190, 0 = Mario page, 1 = special move list (A on the star power row); switched on in winMarioMain, opens the list in the draw
@@ -244,7 +244,7 @@ typedef struct WindowWork {
     FileEntry* res;             // 0x28, win.tpl
     FileEntry* mailRes;         // 0x2C, mail tpl
     FileEntry* mapRes;          // 0x30, log map tpl
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     smartEntry* texBuf;         // 0x34, background capture texture
     s32 texBufValid;            // 0x38
 #endif
@@ -342,7 +342,7 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg);
 void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...);
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...);
 #endif
 

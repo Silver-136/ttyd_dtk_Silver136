@@ -60,7 +60,7 @@ static void* yuunpc_wp;
 s32 ryuwp;
 RyushiWork* xwp;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 Monte* yuu_03_monte_p;
 #endif
 
@@ -84,7 +84,7 @@ static USER_FUNC(evt_nomal_cange);
 USER_FUNC(evt_slit_cancel);
 USER_FUNC(yuu_03_icon_monte_restart);
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord yuu_03_icon_monte_entry_evt[4];
 #endif
 
@@ -95,7 +95,7 @@ EvtWord minigame04_main[33];
 EvtWord minigame04_start_cam[40];
 EvtWord minigame04_start_cam_cancel[20];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord minigame04_start[];
 extern EvtWord minigame04_end[];
 #else
@@ -108,7 +108,7 @@ EvtWord yuu_03_init_evt[VERSION_PICK(26, 140)];
 /** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000371c, JP yuu .text+0x3650. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(yuu_03_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;
@@ -116,7 +116,7 @@ USER_FUNC(yuu_03_cam_shift_reset) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000365c, JP yuu .text+0x3590. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void yuu_03_icon_monte_disp(CameraId camera, void* param) {
     Monte* monte = param;
     s32 i;
@@ -142,7 +142,7 @@ void yuu_03_icon_monte_disp(CameraId camera, void* param) {
  */
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_000034bc, JP yuu .text+0x33F0. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(yuu_03_icon_monte_entry) {
     BOOL exists = FALSE;
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
@@ -195,7 +195,7 @@ USER_FUNC(yuu_03_icon_monte_entry) {
  */
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_0000341c, JP yuu .text+0x3350. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(yuu_03_icon_monte_restart) {
     SlitWork* data;
 
@@ -260,7 +260,7 @@ static USER_FUNC(evt_nomal_cange) {
     MarioWork* mario = marioGetPtr();
 
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         marioRollCancel();
 #else
         marioRollTryCancel();
@@ -477,7 +477,7 @@ USER_FUNC(evt_ryushi_clr) {
  * Per-frame update of the wind particles: moves them at a speed set by the current Paper Mode wind state,
  * wraps them around the view, fades them in and out with the state timer, and queues ryushi_disp.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_ryushi) {
 #else
 USER_FUNC(evt_ryushi) {
@@ -510,7 +510,7 @@ USER_FUNC(evt_ryushi) {
         case 2:
         case 3:
         case 4:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             speed = 3.3333333f;
 #else
             speed = 2.9166667f;
@@ -520,7 +520,7 @@ USER_FUNC(evt_ryushi) {
         case 6:
         case 7:
         case 8:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             speed = 3.3333333f;
 #else
             speed = 2.9166667f;
@@ -601,7 +601,7 @@ USER_FUNC(evt_ryushi) {
 }
 
 /** Event wrapper that runs yuu_03_icon_monte_entry as a blocking view event. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(yuu_03_icon_monte_entry_evt)
     CALL(yuu_03_icon_monte_entry)
     RETURN
@@ -667,14 +667,14 @@ EVT_BEGIN(minigame04_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1520.0f), FLOAT(335.0f), FLOAT(850.0f), FLOAT(-1520.0f), FLOAT(65.0f), FLOAT(-25.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_cam3d_evt_set, FLOAT(1285.0f), FLOAT(334.0f), FLOAT(850.0f), FLOAT(1285.0f), FLOAT(65.0f), FLOAT(-25.0f), 5000, EASING_LINEAR)
 #else
     CALL(evt_cam3d_evt_set, FLOAT(1285.0f), FLOAT(334.0f), FLOAT(850.0f), FLOAT(1285.0f), FLOAT(65.0f), FLOAT(-25.0f), 10000, EASING_LINEAR)
 #endif
     WAIT_MS(1000)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame4"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_MS(2000)
 #else
     WAIT_MS(7000)
@@ -732,7 +732,7 @@ EVT_BEGIN(minigame04_start)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MINIGAME1"))
     CALL(eff_call_minigame, 0, 0, 0, 500)
     WAIT_MS(3000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_key_onoff, 1)
 #else
     CALL(evt_mario_set_enable_key, 352)
@@ -741,31 +741,31 @@ EVT_BEGIN(minigame04_start)
 #endif
     CALL(yuunpc_go)
     CALL(evt_yuucounter_alloc, 0, 70, 2, 701)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_key_onoff, 1)
 #endif
     RETURN
 EVT_END()
 
 EVT_BEGIN(minigame04_end)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_cam_letter_box_onoff, 1, 0)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_cam3d_evt_set_now)
     CALL(evt_mario_set_enable_key, 0)
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #endif
     SET_VALUE(GW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_cam_y_off)
 #endif
     SET_VALUE(GF(0), 1)
     SET_VALUE(LW(3), 1)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 LOOP(0)
                     IF_INT_NOT_EQUAL(LW(3), 0)
@@ -790,7 +790,7 @@ EVT_BEGIN(minigame04_end)
 
         // Retail walks Mario to x 1650 after landing if his final rank is below 701 and y is above -100;
         // otherwise it waits for him to stand and normalizes him. Demos attempt the goal walk without those rank/height tests.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         BEGIN_INLINE_EVENT
 #else
         IF_INT_LESS(LW(0), 701)
@@ -805,21 +805,21 @@ EVT_BEGIN(minigame04_end)
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             IF_INT_GREATER(LW(1), -100)
 #endif
                 IF_INT_NOT_EQUAL(GF(0), 0)
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     IF_INT_LESS(LW(0), 1650)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         CALL(evt_nomal_cange)
 #else
                         CALL(evt_mario_normalize)
 #endif
                         CALL(evt_mario_mov_pos2, 1650, LW(2), 120)
                     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 END_IF
                 ELSE
                 CALL(evt_mario_wait_rideon)
@@ -885,14 +885,14 @@ EVT_BEGIN(minigame04_end)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_sfxoff, GW(10))
     CALL(evt_fade_out, 1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
 #endif
     SET_VALUE(GF(0), 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL_CHILD(PTR(yuu_03_kaijo_init2))
     CALL(evt_cam_road_reset)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_slit_cancel)
     CALL(evt_mario_normalize)
 #else
@@ -944,7 +944,7 @@ EVT_END()
 
 void yuuminigame_init_4slit(EventEntry* event, BOOL isFirstCall) {
     SlitWork* data = ((MiniGameWork*)event->lwData[0])->data;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     data->viewEvent = evtEntryType(yuu_03_icon_monte_entry_evt, 0, 0, 0);
     data->viewEvent->lwData[0] = event->lwData[0];
 #endif
@@ -987,21 +987,21 @@ void yuuminigame_main_4slit(EventEntry* event, BOOL isFirstCall) {
             wp->subEvent->lwData[0] = data->coins;
             switch (data->coins) {
                 case 0:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     data->result = 0x2;
 #else
                     data->result = 0x105;
 #endif
                     break;
                 case 1:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     data->result = 0x10A;
 #else
                     data->result = 0x103;
 #endif
                     break;
                 case 2:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     data->result = 0x105;
 #else
                     data->result = 0x101;
@@ -1186,14 +1186,14 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                         speed = 0.0f;
                     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         speed = 1.6666666f;
 #else
                         speed = 0.0f;
 #endif
                     }
                 } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     speed = 3.3333333f;
 #else
                     speed = 2.9166667f;
@@ -1207,14 +1207,14 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
                         speed = -0.0f;
                     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         speed = -1.6666666f;
 #else
                         speed = -0.0f;
 #endif
                     }
                 } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     speed = -3.3333333f;
 #else
                     speed = -2.9166667f;

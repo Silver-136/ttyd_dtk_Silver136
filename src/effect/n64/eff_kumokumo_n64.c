@@ -56,7 +56,7 @@ s16 cloud_texcoord1_tbl[] __attribute__((aligned(32))) = {
     8192, 0, 12288, 0, 16384, 0,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 0}, {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 127},
     {255, 255, 255, 204},
@@ -69,7 +69,7 @@ u32 cloud_dl_0_1[] __attribute__((aligned(32))) = {0x98000E1F, 0x00001F1F, 0x200
 u32 cloud_dl_0_2[] __attribute__((aligned(32))) = {0x98000E20, 0x00002020, 0x21000021, 0x211B0004, 0x1B1B1C00, 0x031C1C16, 0x00041616, 0x17000317, 0x17110004, 0x11111200, 0x0312120C, 0x00040C0C, 0x0D00030D, 0x0D070002, 0x04040800, 0x01060602, 0x00000505, 0x03000007, 0x07000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 cloud_dl_0_3[] __attribute__((aligned(32))) = {0x98000E21, 0x00002121, 0x22000022, 0x221C0003, 0x1C1C1D00, 0x011D1D17, 0x00031717, 0x18000118, 0x18120003, 0x12121300, 0x0113130D, 0x00030D0D, 0x0E00010E, 0x0E080001, 0x06060900, 0x00080803, 0x00000707, 0x04000009, 0x09000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
 #endif
 
@@ -116,7 +116,7 @@ s16 batten_texcoord1_tbl[] __attribute__((aligned(32))) = {
     8192, 4096, 12288, 4096, 16384, 4096,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 0}, {255, 255, 255, 153},
     {255, 255, 255, 127}, {255, 255, 255, 204},
@@ -132,7 +132,7 @@ s8 cloud_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64,
 };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 0}, {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 127},
     {255, 255, 255, 204},
@@ -140,12 +140,12 @@ GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
 #endif
 
 /** The round cloud model's four display lists. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
 #endif
 
 /** Size in 32-byte units of each of the round cloud model's four display lists. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
 s8 batten_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -159,7 +159,7 @@ GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
 #endif
 
 /** Size in 32-byte units of each of the round cloud model's four display lists. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
 s8 batten_normal_tbl[] __attribute__((aligned(32))) = {0, 0, 64};
 #endif

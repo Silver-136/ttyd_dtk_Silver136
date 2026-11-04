@@ -986,7 +986,7 @@ void _CheckMoveCount(BattleUnit* unit) {
  * for statuses with no strength (sleep, stop, dizzy, ...) both get the turn count.
  * A size, attack or defense change of the other sign reads as 0.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void BtlUnit_GetStatus(BattleUnit* unit, StatusEffectType type, s8* turns, s8* strength) {
 #else
 void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
@@ -995,7 +995,7 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
     s8 status_turns = 0;
     s8 status_strength = 0;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     switch ((s8)type) {
 #else
     switch (type) {
@@ -1135,7 +1135,7 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
  * Retail versions also return FALSE when Charge drops below 0
  * or Allergic or Payback is set to 0 turns, which the demos treat as set.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength) {
     switch ((s8)type) {
 #else
@@ -1182,7 +1182,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
         case STATUS_HUGE:
         case STATUS_TINY:
             if (!strength) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if ((s8)type == STATUS_HUGE) {
 #else
                 if (type == STATUS_HUGE) {
@@ -1235,7 +1235,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
                 unit->defChangeTurns = turns;
                 unit->defChangeStrength = strength;
             } else if (strength == 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if ((s8)type == STATUS_DEFENSE_DOWN) {
 #else
                 if (type == STATUS_DEFENSE_DOWN) {
@@ -1263,7 +1263,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             unit->chargeStrength += strength;
             if (unit->chargeStrength < 0) {
                 unit->chargeStrength = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             } else if (unit->chargeStrength > 99) {
 #else
                 return FALSE;
@@ -1274,7 +1274,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             }
             break;
         case STATUS_ALLERGIC:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (turns > 0) {
                 unit->allergicTurns = turns;
             } else {
@@ -1292,7 +1292,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             unit->invisibleTurns = turns;
             break;
         case STATUS_PAYBACK:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (turns > 0) {
                 unit->paybackTurns = turns;
             } else {
@@ -1354,7 +1354,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
 void BtlUnit_ClearStatus(BattleUnit* unit) {
     memset(&unit->sleepTurns, 0, sizeof(BtlStatusCopy));
     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BattleStatusChangeInfoWorkInit(unit);
 #endif
 }
@@ -1364,7 +1364,7 @@ void BtlUnit_ClearStatus(BattleUnit* unit) {
  * attack and defense changes, poison and regen), clearing its strength when the turns run out.
  * Returns TRUE when the status just wore off; FALSE when it continues, was not active, or the unit is KO'd.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, StatusEffectType type) {
 #else
 BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
@@ -1384,7 +1384,7 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
     if (!turns) {
         return FALSE;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     switch ((s8)type) {
 #else
     switch (type) {
@@ -1491,7 +1491,7 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
 }
 
 /** Returns TRUE while the status effect has turns left; Electric also counts as active when the unit wears Zap Tap. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, StatusEffectType type) {
 #else
 BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type) {
@@ -1505,7 +1505,7 @@ BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type) {
     if (turns) {
         return TRUE;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if ((s8)type == STATUS_ELECTRIC && unit->badgesEquipped.ZapTap) {
 #else
     if (type == STATUS_ELECTRIC && unit->badgesEquipped.ZapTap) {
@@ -2029,7 +2029,7 @@ s32 BtlUnit_GetWeaponCost(BattleUnit* unit, BattleWeapon* weapon) {
             cost = 1;
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (cost >= 1000) {
         cost = 999;
     }

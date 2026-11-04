@@ -38,7 +38,7 @@ EvtWord floatblk_stop_se[47];
 EvtWord floatblk_shake[27];
 EvtWord floatblk_evt[336];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord floatblk21_1_evt[];
 extern EvtWord floatblk21_2_evt[];
 extern EvtWord las_21_init_evt[];
@@ -419,7 +419,7 @@ EVT_END()
  * toggles it between Y -130 and Y -580 using floatblk_evt and remembers the position in LSWF(8).
  */
 EVT_BEGIN(floatblk21_1_evt)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(LSWF(8), 0)
 #else
     SET_TYPE(239)
@@ -454,7 +454,7 @@ EVT_END()
  * toggles it between Y -130 and Y -580 and remembers the position in LSWF(9).
  */
 EVT_BEGIN(floatblk21_2_evt)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(LSWF(9), 0)
 #else
     SET_TYPE(239)
@@ -497,7 +497,7 @@ EVT_BEGIN(las_21_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

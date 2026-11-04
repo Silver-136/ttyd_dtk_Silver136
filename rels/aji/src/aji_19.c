@@ -37,7 +37,7 @@ static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
 EvtWord evt_hajimete[33];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_19_init_evt[];
 #else
 EvtWord aji_19_init_evt[56];
@@ -49,7 +49,7 @@ EvtWord aji_19_init_evt[56];
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -66,7 +66,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -83,7 +83,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -100,7 +100,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -179,7 +179,7 @@ EVT_END()
 EVT_BEGIN(aji_19_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -201,7 +201,7 @@ EVT_END()
 
 /** Conveyor push per frame: PAL scales the 60 Hz speed to the frame rate. */
 static inline f32 beltSpeed(void) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     return 60.0f / gp->framerate;
 #else
     return 1.0f;

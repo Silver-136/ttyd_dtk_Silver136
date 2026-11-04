@@ -67,7 +67,7 @@ static EvtWord damage_event[22];
 static EvtWord dead_event[261];
 static EvtWord unison_phase_event[87];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord phase_event[61];
 #else
 static EvtWord phase_event[68];
@@ -75,7 +75,7 @@ static EvtWord phase_event[68];
 
 static EvtWord attack_event[29];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord ogg_attack_event[481];
 #else
 static EvtWord ogg_attack_event[491];
@@ -115,7 +115,7 @@ static EvtWord fmario_zoom_christine[19];
 static EvtWord gparty_zoom_christine[19];
 static EvtWord init_event_christine[72];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_christine[73];
 #else
 static EvtWord dead_event_christine[80];
@@ -136,7 +136,7 @@ static EvtWord wakeup_event[67];
 static EvtWord init_event_nokotarou[92];
 static EvtWord damage_event_nokotarou[6];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_nokotarou[73];
 #else
 static EvtWord dead_event_nokotarou[80];
@@ -159,7 +159,7 @@ static BattleDataEntry data_table_clauda[2];
 static BattleUnitKindPart parts_clauda[1];
 static EvtWord init_event_clauda[80];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_clauda[73];
 #else
 static EvtWord dead_event_clauda[80];
@@ -175,7 +175,7 @@ static BattleDataEntry data_table_yoshi[2];
 static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[54];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_yoshi[73];
 #else
 static EvtWord dead_event_yoshi[80];
@@ -193,7 +193,7 @@ static EvtWord vivian_down[19];
 static EvtWord vivian_up[27];
 EvtWord init_event_vivian[64];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord dead_event_vivian[];
 #else
 EvtWord dead_event_vivian[80];
@@ -209,7 +209,7 @@ BattleUnitKindPart parts_sanders[1];
 BattleWeapon enemyWeapon_SandersNormalAttack;
 EvtWord init_event_sanders[51];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord dead_event_sanders[];
 #else
 EvtWord dead_event_sanders[80];
@@ -229,7 +229,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast;
 BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast;
 EvtWord init_event_chuchurina[51];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord dead_event_chuchurina[];
 #else
 EvtWord dead_event_chuchurina[80];
@@ -303,7 +303,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 static StatusVulnerability regist = {
@@ -852,7 +852,7 @@ static EVT_BEGIN(phase_event)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HAS_ATTACKED, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(mario_shadow_guard_check, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
 #endif
@@ -867,7 +867,7 @@ static EVT_BEGIN(phase_event)
                             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)
                             CALL_CHILD(PTR(mutate_event))
                             CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         END_IF
 #endif
                     END_IF
@@ -1019,11 +1019,11 @@ static EVT_BEGIN(ogg_attack_event)
 
     // Deal the damage, reduced by the action command defence.
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(1.0f))
 #endif
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_AnimeSetMotionSpeed, UNIT_ID_SELF, 1, FLOAT(2.0f))
 #endif
     BEGIN_SIBLING_EVENT
@@ -1083,7 +1083,7 @@ static BattleUnitDefense defence_fmario = {0};
  */
 static BattleUnitDefenseAttr defence_attr_fmario = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_fmario = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 static StatusVulnerability regist_fmario = {
@@ -1221,7 +1221,7 @@ static BattleWeapon weapon_masao_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
 #else
@@ -1300,7 +1300,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
 #else
@@ -1979,7 +1979,7 @@ static BattleUnitDefense defence_christine = {0};
  */
 static BattleUnitDefenseAttr defence_attr_christine = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_christine = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 static StatusVulnerability regist_christine = {
@@ -2096,7 +2096,7 @@ static EVT_BEGIN(dead_event_christine)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     WAIT_MS(500)
@@ -2149,7 +2149,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
 #else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
@@ -2431,7 +2431,7 @@ static BattleUnitDefenseAttr defence_attr_nokotarou = {0};
  */
 static BattleUnitDefense defence_turn_nokotarou = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_nokotarou = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 static StatusVulnerability regist_nokotarou = {
@@ -2589,7 +2589,7 @@ static EVT_BEGIN(dead_event_nokotarou)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     WAIT_MS(500)
@@ -2706,7 +2706,7 @@ static EVT_BEGIN(attack_event_nokotarou)
         CALL_CHILD(PTR(wakeup_event))
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
 #else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
@@ -2792,7 +2792,7 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
         IF_INT_EQUAL(LW(6), PRECHECK_MISS)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_FaceDirectionAdd, -29999997, LW(0), 40)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
 #else
@@ -3023,7 +3023,7 @@ static BattleUnitDefense defence_clauda = {0};
  */
 static BattleUnitDefenseAttr defence_attr_clauda = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_clauda = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 static StatusVulnerability regist_clauda = {
@@ -3125,7 +3125,7 @@ static EVT_BEGIN(dead_event_clauda)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     WAIT_MS(500)
@@ -3324,7 +3324,7 @@ static BattleUnitDefense defence_yoshi = {0};
  */
 static BattleUnitDefenseAttr defence_attr_yoshi = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_yoshi = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 static StatusVulnerability regist_yoshi = {
@@ -3423,7 +3423,7 @@ static EVT_BEGIN(dead_event_yoshi)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     WAIT_MS(500)
@@ -3665,7 +3665,7 @@ BattleUnitDefense defence_vivian = {0};
  */
 BattleUnitDefenseAttr defence_attr_vivian = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 StatusVulnerability regist_vivian = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 StatusVulnerability regist_vivian = {
@@ -3836,7 +3836,7 @@ EVT_BEGIN(dead_event_vivian)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PTR_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     WAIT_MS(500)
@@ -3942,7 +3942,7 @@ BattleUnitDefense defence_sanders = {0};
  */
 BattleUnitDefenseAttr defence_attr_sanders = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 StatusVulnerability regist_sanders = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 StatusVulnerability regist_sanders = {
@@ -4028,7 +4028,7 @@ BattleWeapon enemyWeapon_SandersNormalAttack = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
 #else
@@ -4083,7 +4083,7 @@ EVT_BEGIN(dead_event_sanders)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     WAIT_MS(500)
@@ -4212,7 +4212,7 @@ BattleUnitDefense defence_chuchurina = {0};
  */
 BattleUnitDefenseAttr defence_attr_chuchurina = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 StatusVulnerability regist_chuchurina = {40, 50, 40, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 StatusVulnerability regist_chuchurina = {
@@ -4298,7 +4298,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
 #else
@@ -4344,7 +4344,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     2, // reserved_6F
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_GROUND_WINGED | SPECIAL_CONFUSED_ACTION, // special
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY,
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
 #else
@@ -4474,7 +4474,7 @@ EVT_BEGIN(dead_event_chuchurina)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_NM_DOWN3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     WAIT_MS(500)
@@ -4787,7 +4787,7 @@ static USER_FUNC(eff_scanning) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000855c, JP las .text+0x8490. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Script helper: returns 1 in args[0] if Mario currently has a shadow guard (the Vivian partner's protective

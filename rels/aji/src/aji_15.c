@@ -33,7 +33,7 @@ EvtWord peach_evt_yuge[43];
 EvtWord peach_evt_syawa_main[798];
 EvtWord peach_evt_syawa_init[63];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_15_init_evt[];
 #else
 EvtWord aji_15_init_evt[58];
@@ -415,7 +415,7 @@ EVT_BEGIN(aji_15_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(peach_evt_syawa_init)
 #else
     CALL(evt_snd_set_rev_mode, 1)

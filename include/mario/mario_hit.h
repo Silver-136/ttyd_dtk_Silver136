@@ -26,7 +26,7 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w);
 
 void marioChkGnd(void);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BOOL marioChkWallAround(Vec* pos, f32 unused, f32 dir, f32 w, f32 h);
 #else
 BOOL marioChkWallAround(Vec* pos, s32 mode, f32 unused, f32 dir, f32 w, f32 h);

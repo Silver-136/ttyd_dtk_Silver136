@@ -111,7 +111,7 @@ static EvtWord marioAttackEvent_KururinJump[1210];
 EvtWord marioAttackEvent_JyabaraJump[];
 EvtWord marioAttackEvent_GatsuDokaJump[VERSION_PICK(624, 638)];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord marioAttackEvent_TatsumakiJump[1661];
 #else
 EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
@@ -120,7 +120,7 @@ EvtWord marioAttackEvent_TatsumakiJump[VERSION_PICK(1668, 1679)];
 EvtWord marioAttackEvent_RenzokuJump[840];
 EvtWord marioAttackEvent_TugiTugiJump[VERSION_PICK(793, 775)];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord marioAttackEvent_NormalHammer_Core[1312];
 #else
 EvtWord marioAttackEvent_NormalHammer_Core[VERSION_PICK(1326, 1333)];
@@ -445,7 +445,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {1, 2, 2, 4, 4, 8, 0, 0},
 #else
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -576,7 +576,7 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST,
 #else
@@ -666,7 +666,7 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
     NULL, // fpDamageFn
     {0}, // fpDamageWork
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST,
 #else
@@ -998,7 +998,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, // burnTime..freezeTime
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     95,
 #else
     100, // sizeChangeChance
@@ -1043,7 +1043,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_ATTACK_FX | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_PREEMPTIVE_SPIKY | COUNTER_RESIST_FRONT_SPIKY, // counterResistFlags
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     95,
 #else
     100, // sleepChance
@@ -1094,7 +1094,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
     0, // atkChangeStrength
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     95,
 #else
     100, // defChangeChance
@@ -1357,7 +1357,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     ITEM_HEAD_RATTLE, // itemId
     NULL, // description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     3,
 #else
     2, // baseFpCost
@@ -1383,7 +1383,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, // poisonStrength
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     90,
 #else
     100, // confuseChance
@@ -1409,7 +1409,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     ITEM_FIRE_DRIVE, // itemId
     NULL, // description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     6,
     0, 0, // baseSpCost..superguardsAllowed
         1.0f,
@@ -1428,7 +1428,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0xFFFFFFFF, 0, 0, 2, 1, 4, 252, 2},
     NULL, // fpDamageFn
         {0}, // fpDamageWork
@@ -1450,7 +1450,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     95,
 #else
     100, // burnChance
@@ -1479,7 +1479,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     ITEM_FIRE_DRIVE, // itemId
     NULL, // description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     6,
     0, 0, // baseSpCost..superguardsAllowed
         1.0f,
@@ -1498,7 +1498,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     1, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {1, 2, 2, 4, 3, 6, 0, 0},
     NULL, // fpDamageFn
         {0}, // fpDamageWork
@@ -1520,7 +1520,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     TARGET_WEIGHT_FRONT | TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, // poisonStrength..dodgyTime
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     95,
 #else
     100, // burnChance
@@ -1569,7 +1569,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, // burnTime
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     90,
 #else
     100, // freezeChance
@@ -1595,7 +1595,7 @@ BattleWeapon badgeWeapon_Charge = {
     ITEM_CHARGE, // itemId
     "btl_hlp_cmd_operation_charge", // description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
 #else
     1, // baseFpCost
@@ -1639,7 +1639,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     ITEM_CHARGE_P, // itemId
     "btl_hlp_cmd_operation_charge", // description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
 #else
     1, // baseFpCost
@@ -1798,7 +1798,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     ITEM_TRIPLE_DIP, // itemId
     NULL, // description
     100, // baseAccuracy
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     10,
 #else
     8, // baseFpCost
@@ -1934,7 +1934,7 @@ BattleWeapon marioWeapon_BakuGame = {
     SPECIAL_CANNOT_MISS | SPECIAL_FREEZE_CRUSH | SPECIAL_UNGUARDABLE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     0, 0, 0, // targetWeightFlags..sleepTime
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0, // stopChance
     0,
 #else
@@ -2224,7 +2224,7 @@ BattleWeapon marioWeapon_Suki = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonTime..dodgyTime
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
 #else
     100, // ohkoChance
@@ -3307,7 +3307,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
         CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#if VERSION == VERSION_US
+#if (VERSION == VERSION_US || VERSION == VERSION_DEMO_US2)
         IF_INT_GREATER_OR_EQUAL(LW(0), 10)
             SET_VALUE(LW(0), 9)
         END_IF
@@ -3592,7 +3592,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
     CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
@@ -3887,7 +3887,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
                 IF_INT_LESS(LW(1), 90)
                     IF_INT_GREATER_OR_EQUAL(LW(0), 90)
                         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_N_7"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_MARIO_FALL_CRUSH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
                     END_IF
@@ -3960,7 +3960,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
                 GOTO(59)
             END_IF
             IF_INT_EQUAL(LW(3), LW(6))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 GOTO(59)
 #else
                 GOTO(58)
@@ -3980,7 +3980,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
                 IF_BITS_SET(LW(0), AC_RESULT_SUCCESS)
                     CALL(btlevtcmd_CheckDamage, UNIT_ID_SYSTEM, LW(3), LW(4), PTR(&badgeWeapon_TatsumakiJumpInvolved), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
                     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(btlevtcmd_GetResultPrizeLv, LW(3), 1, LW(6))
                     CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
 #else
@@ -4169,7 +4169,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
 EVT_END()
 
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_MiniminiFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
@@ -4177,7 +4177,7 @@ EVT_END()
 #endif
 
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_NemuraseFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
@@ -4185,7 +4185,7 @@ EVT_END()
 #endif
 
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
@@ -4720,7 +4720,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(marioAttackEvent_NormalHammer)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
@@ -4734,7 +4734,7 @@ EVT_END()
 #endif
 
 /** Ice Smash badge attack: a normal hammer swing (LW(14) = 0); the freeze comes from badgeWeapon_IceNaguri. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
@@ -5008,7 +5008,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     // apply and the first Stylish window opens.
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_btl_camera_shake_h, 0, LW(0), 0, 10, 13)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 60, 0)
@@ -5726,7 +5726,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     SWITCH(LW(0))
         CASE_EQUAL(2)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING2"), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(2), STRING("M_H_13"))
         CASE_EQUAL(1)
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING1"), 0)
@@ -6770,7 +6770,7 @@ EVT_BEGIN(_NormalCharge_core)
 EVT_END()
 
 /** Charge badge move for Mario. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_NormalCharge)
     SET_VALUE(LW(12), PTR(&badgeWeapon_Charge))
     CALL_CHILD(PTR(_NormalCharge_core))
@@ -6779,7 +6779,7 @@ EVT_END()
 #endif
 
 /** Charge P badge move for the partner. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(marioAttackEvent_NormalChargeP)
     SET_VALUE(LW(12), PTR(&badgeWeapon_ChargeP))
     CALL_CHILD(PTR(_NormalCharge_core))
@@ -6820,7 +6820,7 @@ EVT_BEGIN(_SuperCharge_core)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_GatsunJump)
     SET_VALUE(LW(12), PTR(&badgeWeapon_GatsunJump))
     CALL_CHILD(PTR(marioAttackEvent_GatsuDokaJump))
@@ -6835,7 +6835,7 @@ EVT_END()
 #endif
 
 /** Shrink Stomp badge attack: a normal jump; the shrink status comes from the badge's weapon data. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_MiniminiFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
@@ -6843,7 +6843,7 @@ EVT_END()
 #endif
 
 /** Sleepy Stomp badge attack: a normal jump; the sleep status comes from the badge's weapon data. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_NemuraseFumi)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
@@ -6851,7 +6851,7 @@ EVT_END()
 #endif
 
 /** Soft Stomp badge attack: a normal jump; the defense-down effect comes from the badge's weapon data. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_FunyafunyaJump)
     CALL_CHILD(PTR(marioAttackEvent_NormalJump))
     RETURN
@@ -6871,7 +6871,7 @@ EVT_END()
 #endif
 
 /** Ice Smash badge attack: a normal hammer swing (LW(14) = 0); the freeze comes from badgeWeapon_IceNaguri. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_IceNaguri)
     SET_VALUE(LW(14), 0)
     CALL_CHILD(PTR(marioAttackEvent_NormalHammer_Core))
@@ -6886,7 +6886,7 @@ EVT_END()
 #endif
 
 /** Charge badge move for Mario. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_NormalCharge)
     SET_VALUE(LW(12), PTR(&badgeWeapon_Charge))
     CALL_CHILD(PTR(_NormalCharge_core))
@@ -6895,7 +6895,7 @@ EVT_END()
 #endif
 
 /** Charge P badge move for the partner. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(marioAttackEvent_NormalChargeP)
     SET_VALUE(LW(12), PTR(&badgeWeapon_ChargeP))
     CALL_CHILD(PTR(_NormalCharge_core))
@@ -6917,7 +6917,7 @@ EVT_BEGIN(marioAttackEvent_SuperChargeP)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static const Vec majinai_effect_pos = {0.0f, 0.0f, 0.0f};
 #else
 static const Vec majinai_effect_pos = {0.0f, 10.0f, 0.0f};

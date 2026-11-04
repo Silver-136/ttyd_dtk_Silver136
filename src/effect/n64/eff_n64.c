@@ -17,7 +17,7 @@
 #include "libc_decls.h"
 
 //.data
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static const char* kemuri_patname[] = {"\203}\203\212\203I:KAMECSMALL", "\203K\203\214\203L:KAMECBIG", "-----", "\203}\203\212\203I\202\307\202\301\202\265\202\361:KAMECBIG", "Block\202\307\202\301\202\265\202\361::KAMECBIG", "\203T\203\223\203{", "\203}\203~\201[", NULL};
 static const char* kemuri_dash_patname[] = {"Mairo:KAMECSMALL", "KAMECBIG", "PINKYBOM", NULL};
 static const char* stardust_patname[] = {"\202\317\202\237\201[\202\301\202\306\202\305\202\351", "\202\267\202\255\202\310\202\337", "\202\250\202\250\202\337", "\202\347\202\301\202\251\202\267\202\255\202\310\202\337", "\202\347\202\301\202\251\202\250\202\250\202\337"};
@@ -80,7 +80,7 @@ static const char* str_fall_leaf[] = {"\227\216\202\277\227t64-1", "\227\216\202
 #endif
 
 eff_set eff_set_n64[] = {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0, "expbom_n64", "\223G\202\252\202\265\202\361\202\266\202\341\202\244\202\306\202\253", NULL},
     {1, "kemuri1_n64", "\223y\211\214\222\205\222n", kemuri_patname},
     {2, "kemuri2_n64", "\223y\211\214\203_\203b\203V\203\205", kemuri_dash_patname},
@@ -366,7 +366,7 @@ void effTexSetupN64(void) {
     wp->effTextureLoaded = FALSE;
     wp->effTexture = (TEXPalette*)arcOpen("effect_n64.tpl", 0, 0);
     if (wp->effTexture == NULL) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         sprintf(path, "%s/eff/jp/effect_n64.tpl", getMarioStDvdRoot());
 #else
 #if VERSION >= VERSION_US

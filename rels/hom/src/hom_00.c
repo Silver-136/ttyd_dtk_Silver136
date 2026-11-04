@@ -69,7 +69,7 @@ static NpcSetupInfo npc_data[9];
 EvtWord evt_bridge_down[144];
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_chk[21];
 #else
 static EvtWord evt_chk[23];
@@ -465,7 +465,7 @@ static s32 key_tbl[] = {
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STATION_KEY_0x18, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -840,7 +840,7 @@ EVT_END()
 EVT_BEGIN(hom_00_init_evt)
     // NPCs, music, ambience, the save block and the recovery block.
     SET_VALUE(GF(15), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_setup, PTR(npc_data))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
@@ -870,7 +870,7 @@ EVT_BEGIN(hom_00_init_evt)
 
     // Late in the story the crossing barrier is shown in its open position.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_map_playanim, STRING("shadanki"), MAP_ANIM_PLAY_AT_END, 0)
 #else
         CALL(evt_bero_get_entername, LW(0))
@@ -942,7 +942,7 @@ EVT_BEGIN(hom_00_init_evt)
         CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     SPAWN_EVENT(PTR(evt_sub_mail_event))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
 #endif
     RETURN

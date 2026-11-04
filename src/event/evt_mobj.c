@@ -56,10 +56,10 @@ s32 mobj_lock(MapObjectEntry* mobj);
 
 // The objects JP and US strip (the A/B ride switches, red tornado switch, arrow, trap floor and
 // breaking rock) stay in PAL.
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 #define MOBJ_EXTRA_OBJS 1
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define MOBJ_EXTRA_OBJS 1
 #else
 #define MOBJ_EXTRA_OBJS 0
@@ -112,7 +112,7 @@ extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u
 
 
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                             EVT_BEGIN(kpa_powerup_evt)
                                 CALL(kpa_powerup, LW(0), LW(1), LW(2))
                                 RETURN
@@ -120,7 +120,7 @@ extern ItemEntry* itemEntry(f32 x, f32 y, f32 z, const char* name, s32 itemId, u
 #endif
 
 /** Event that runs fire_func with LW(0)-LW(3) to spawn a fire effect for Bowser's stage objects. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(evt_fire)
     CALL(fire_func, LW(0), LW(1), LW(2), LW(3))
     RETURN
@@ -132,7 +132,7 @@ EVT_END()
 // ---- entry, delete and property functions ----
 
 /** Creates a bare map object. args: name, animation group. Waits (blocks) until the animation group has loaded. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kpa_powerup_evt[];
 extern EvtWord evt_fire[];
 #endif
@@ -733,7 +733,7 @@ USER_FUNC(evt_mobj_tornadoswitch_red) {
  * The blue pair then sparkles, sets both flags and deletes itself; the red pair resets for another try.
  * The demo does not stop on timeout first.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_timerswitch(MapObjectEntry* mobj) {
 #else
 s32 mobj_timerswitch(MapObjectEntry* mobj) {
@@ -786,12 +786,12 @@ s32 mobj_timerswitch(MapObjectEntry* mobj) {
             animPoseSetAnim(mobj->poseId, "S_1", 1);
             animPoseSetAnim(other->poseId, "S_1", 1);
             mobj->state = 0;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             break;
 #endif
         }
         if (other->state == 2) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (marioKeyOffChk() || marioCtrlOffChk()) {
                 mobj->state = 0;
                 break;
@@ -1365,7 +1365,7 @@ USER_FUNC(evt_mobj_jumpstand_blue) {
  * It then runs the event, sets the flag variable
  * and plays the "P_box_y" paper-peel animation through an offscreen capture before deleting itself.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
 #else
 s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
@@ -1383,7 +1383,7 @@ s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
     strcat(iname, mobj->name);
     switch (mobj->state) {
     case 0:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         animGroupBaseAsync("P_box_y", type, NULL);
 #endif
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -1454,7 +1454,7 @@ s32 mobj_lv_blk_evt(MapObjectEntry* mobj) {
     case 11:
         img = imgNameToPtr(iname, type);
         if (img->loopTimes >= 1.0f) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             mobj->state = 12;
         }
         if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
@@ -2303,7 +2303,7 @@ USER_FUNC(evt_mobj_itembox) {
  * Main function of the signboards: reading one runs its event and waits for it to finish.
  * JP and later lock Mario's controls while it runs; the demo's sign scripts do that themselves.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_signboard(MapObjectEntry* mobj) {
 #else
 s32 mobj_signboard(MapObjectEntry* mobj) {
@@ -2311,7 +2311,7 @@ s32 mobj_signboard(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             marioKeyOff();
 #endif
             mobjRunEvent(mobj, (s32*)mobj->event);
@@ -2320,7 +2320,7 @@ s32 mobj_signboard(MapObjectEntry* mobj) {
         break;
     case 1:
         if (evtCheckID(mobj->eventId) != 1) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             marioKeyOn();
 #endif
             mobj->eventId = 0;
@@ -2828,7 +2828,7 @@ USER_FUNC(evt_mobj_blk) {
  * which is collected at once and sets the flag), or runs the event instead if one is set.
  * The block then turns into an empty block that just bounces when hit again.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit; not in JP. */
 static s32 mobj_blk(MapObjectEntry* mobj) {
     switch (mobj->state) {
@@ -3055,7 +3055,7 @@ USER_FUNC(evt_mobj_badgeblk) {
  * In Pirate's Grotto (dou_02, dou_05/dou_10 when hit by a partner) it also stops Mario
  * while the Shine is collected; the demo has no such maps.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_powerupblk(MapObjectEntry* mobj) {
 #else
 s32 mobj_powerupblk(MapObjectEntry* mobj) {
@@ -3070,7 +3070,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
             break;
         }
         marioKeyOff();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         gp->systemLevelFlags |= SYSTEM_LEVEL_STOP_LV0 | SYSTEM_LEVEL_STOP_LV1;
 #else
         if (!strcmp(gp->currentMapName, "dou_02")) {
@@ -3102,7 +3102,7 @@ s32 mobj_powerupblk(MapObjectEntry* mobj) {
         itemForceGet(itemEntry(mobj->position.x, 40.0f + mobj->position.y, mobj->position.z, "pwrblk2", ITEM_SHINE_SPRITE, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL));
         evtSetValue(NULL, mobj->flagVar, 1);
         marioKeyOn();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (!strcmp(gp->currentMapName, "dou_02")) {
             marioCtrlOn();
         } else if ((!strcmp(gp->currentMapName, "dou_05") || !strcmp(gp->currentMapName, "dou_10")) && mobj->hitFlag == MOBJ_FLAG_HIT_PARTY) {
@@ -3167,7 +3167,7 @@ USER_FUNC(evt_mobj_powerupblk) {
  * sets the flag variable and breaks apart with the "P_box_y" paper-peel animation drawn through an offscreen
  * capture, then deletes itself.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_brickblk(MapObjectEntry* mobj) {
 #else
 s32 mobj_brickblk(MapObjectEntry* mobj) {
@@ -3184,7 +3184,7 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
     strcat(iname, mobj->name);
     switch (mobj->state) {
     case 0:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         animGroupBaseAsync("P_box_y", type, NULL);
 #endif
         if (mobj->flags & MOBJ_FLAG_HIT) {
@@ -3229,7 +3229,7 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
     case 11:
         img = imgNameToPtr(iname, type);
         if (img->loopTimes >= 1.0f) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             mobj->state = 12;
         }
         if (img->flags & IMAGE_FLAG_NO_CAPTURE) {
@@ -3262,7 +3262,7 @@ s32 mobj_brickblk(MapObjectEntry* mobj) {
  * the first hit gives a coin, sets the flag variable (or runs the event instead)
  * and starts a 200-frame window in which every further hit gives another coin; then it becomes an empty block.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_10countblk(MapObjectEntry* mobj) {
 #else
 s32 mobj_10countblk(MapObjectEntry* mobj) {
@@ -3272,7 +3272,7 @@ s32 mobj_10countblk(MapObjectEntry* mobj) {
         if (mobj->flags & MOBJ_FLAG_HIT) {
             if (mobj->flags & MOBJ_FLAG_HIDDEN) {
                 mobj->flags &= ~MOBJ_FLAG_HIDDEN;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 strcpy(mobj->animName, "MOBJ_Block");
 #endif
             }
@@ -3466,7 +3466,7 @@ USER_FUNC(evt_mobj_brick) {
  * Main function of the breakable floor panels: a spin jump onto one (Super Boots) runs the event,
  * sets the flag variable, turns off the panel's collision and fades it out over 64 frames before deleting it.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_breaking_floor(MapObjectEntry* mobj) {
 #else
 s32 mobj_breaking_floor(MapObjectEntry* mobj) {
@@ -3480,7 +3480,7 @@ s32 mobj_breaking_floor(MapObjectEntry* mobj) {
     switch (mobj->state) {
     case 0:
         if (mobj->flags & MOBJ_FLAG_HIT) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BREAK_FLOOR1), &mobj->position);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_BREAK_FLOOR1 | PSND_SFX_KEEP), &mobj->position);
@@ -4922,7 +4922,7 @@ USER_FUNC(evt_mobj_koopa_sango) {
  * Fire breath (anything at level 3) breaks the base:
  * event, flag, 400/500 points, and the fireballs fly off towards the camera and are deleted.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
 #else
 s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
@@ -4932,11 +4932,11 @@ s32 mobj_koopa_fireber_dodai_evt(MapObjectEntry* mobj) {
     char buf[0x20];
     char buf2[0x20];
     BOOL ok = FALSE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     NpcEntry* npc;
 #endif
     s32 i;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     NpcEntry* npc;
 #endif
     MarioWork* mario = marioGetPtr();
@@ -5120,7 +5120,7 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
  * Writes the name of the goal pole whose event is running (event->thisMapObj) to args[0],
  * or 0 outside a map object event.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** demo-only: turn Mario to face the given angle */
 static USER_FUNC(kpa_set_dir) {
     f32 dir = evtGetFloat(event, event->args[0]);
@@ -5174,7 +5174,7 @@ USER_FUNC(kpa_get_width) {
 }
 
 /** Formats the score args[0] (0-9999) without leading zeros into the floating pole-score text. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** demo-only: read Mario's position into three float variables */
 static USER_FUNC(kpa_get_mario_pos) {
     EvtWord* args = event->args;
@@ -5265,7 +5265,7 @@ USER_FUNC(kpa_clear_jump_data) {
  * shows the score, slides him and the flag down to the ground, then moves the camera on and hands control back.
  * Run by mobj_koopa_pole_evt with the score in LW(0).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Event that runs kpa_powerup with LW(0)-LW(2); started when Bowser grabs a power-up in his side-scrolling stages. */
 EVT_BEGIN(kpa_powerup_evt)
     CALL(kpa_powerup, LW(0), LW(1), LW(2))
@@ -5294,7 +5294,7 @@ EVT_BEGIN(kpa_pole)
     SUBTRACT_FLOAT(LW(4), LW(5))
     CALL(evt_mario_set_pos, LW(4), LW(2), LW(3))
     CALL(kpa_score_to_str, LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(kpa_get_mario_pos, LW(0), LW(1), LW(2))
     SUBTRACT_FLOAT(LW(1), FLOAT(25.0f))
     SET_FLOAT_VALUE(LW(14), FLOAT(155.0f))
@@ -5315,7 +5315,7 @@ EVT_BEGIN(kpa_pole)
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(1), LW(2), LW(3))
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_POST_SLIDE1"), LW(1), LW(2), LW(3), LW(10))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT_GET_ID(LW(6))
         LOOP(0)
             CALL(evt_mobj_get_y_position, LW(15), LW(4))
@@ -5372,7 +5372,7 @@ EVT_BEGIN(kpa_pole)
     CALL(evt_cam3d_evt_set, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9), 300, EASING_LINEAR)
     WAIT_MS(200)
     CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(kpa_set_dir, 270)
 #else
     CALL(evt_mario_set_dir, 270, 0, 0)

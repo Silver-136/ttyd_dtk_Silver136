@@ -53,7 +53,7 @@ void marioBottomless(void) {
     }
     if (marioBgmodeChk() == TRUE) {
         marioChgMot(MARIO_MOTION_BOTTOMLESS);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         return;
     }
     if (strcmp(gp->currentMapName, "eki_04") == 0) {
@@ -67,7 +67,7 @@ void marioBottomless(void) {
         seqSetSeq(SEQ_MAP_CHANGE, gp->currentMapName, gp->beroEnterName);
 #endif
     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         mario->position = (Vec){0.0f, 74.0f, 0.0f};
 #else
         mario->position = mario->bottomlessResetPosition;
@@ -83,7 +83,7 @@ void marioBottomless(void) {
         if (marioBgmodeChk() == TRUE) {
             mario->position.z = -450.0f;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     }
     marioChgMot(MARIO_MOTION_FORCE_RESET);
 }
@@ -98,7 +98,7 @@ void marioBottomless(void) {
  * an entrance (evt_bero.c) or the boat's landing spot, 37 units above the given point.
  */
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
     MarioWork* mario = marioGetPtr();
@@ -111,7 +111,7 @@ void marioSetBottomlessRespawnPosOnBeroEntry(f32 x, f32 y, f32 z) {
 
 /** Saves the bottomless-pit respawn point as given; set from seq_mapchange.c to 10 above Mario on map entry. */
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
     MarioWork* mario = marioGetPtr();
@@ -127,7 +127,7 @@ void marioSetBottomlessRespawnPos(f32 x, f32 y, f32 z) {
  * set when Mario enters a map as the boat.
  */
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void marioReloadMapOnBottomlessOn(void) {
     MarioWork* mario = marioGetPtr();
@@ -137,7 +137,7 @@ void marioReloadMapOnBottomlessOn(void) {
 
 /** Goes back to respawning at the saved point after a fall; cleared when the boat lands. */
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 void marioReloadMapOnBottomlessOff(void) {
     MarioWork* mario = marioGetPtr();
@@ -458,7 +458,7 @@ void marioUpdateKeyData(void) {
     mario->buttonTrg = gp->buttonNew[0] & mask;
     mario->buttonRepeat = gp->buttonRepeat[0] & mask;
     mario->buttonUp = gp->buttonUp[0] & mask;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!(mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF))) {
 #else
     if (!(mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_CTRL_OFF_2 | MARIO_FLAG_KEY_OFF))) {
@@ -481,7 +481,7 @@ void marioUpdateKeyData(void) {
         }
     }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if ((mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) || !marioChkKey()) {
 #else
     if ((mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_CTRL_OFF_2 | MARIO_FLAG_KEY_OFF)) || !marioChkKey()) {
@@ -544,7 +544,7 @@ void marioGetStick(f32* dir, f32* mag) {
     *mag = m;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * How far the main stick is pushed: 0 neutral, 1 a little, 2 past radius 55;

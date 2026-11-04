@@ -96,7 +96,7 @@ static EvtWord yokeyoke_magic_event[49];
 static EvtWord recover_magic_event[70];
 static EvtWord bunsin_event[152];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord spawn_event[72];
 #else
 static EvtWord spawn_event[76];
@@ -117,7 +117,7 @@ BattleUnitKind unit_super_mahorn = {
     1, // perilHP
     33, // level
     0, // bonusExp
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     3,
 #else
     2, // bonusCoin
@@ -220,7 +220,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {10, 50, 50, 100, 40, 100, 100, 40, 100, 40, 100, 40, 100, 40, 40, 30, 75, 100, 40, 100, 100, 90};
 
 static StatusVulnerability regist_bunsin = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 90};
@@ -308,7 +308,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
@@ -344,7 +344,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {3, 0, 0, 0, 0, 0, 0, 0},
     NULL, // fpDamageFn
         {0}, // fpDamageWork
@@ -665,7 +665,7 @@ static EVT_BEGIN(attack_event)
         ELSE
 
             // Otherwise it rolls for an attack by weight: punch, magic, all-target magic or a support spell.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             LABEL(10)
             SET_VALUE(LW(0), 0)
             ADD(LW(0), 30)
@@ -684,7 +684,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(0), 8)
             SUBTRACT(LW(0), 1)
             CALL(evt_sub_random, LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             SET_VALUE(LW(0), 60)
 #else
             SET_VALUE(LW(0), 30)
@@ -694,7 +694,7 @@ static EVT_BEGIN(attack_event)
                 CALL_CHILD(PTR(attack_punch_event))
                 GOTO(99)
             END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             ADD(LW(0), 40)
 #else
             ADD(LW(0), 60)
@@ -1916,7 +1916,7 @@ static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
     CALL(mahorn_copy_status, LW(13), LW(3))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
 #endif
     CALL(btlevtcmd_SetUnitWork, LW(3), UNIT_WORK_BUNSIN, 1)

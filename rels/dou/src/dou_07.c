@@ -49,7 +49,7 @@ static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
 EvtWord apper_elmos[43];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord peramajin_before[];
 extern EvtWord peramajin_after[];
 #else
@@ -185,7 +185,7 @@ EVT_BEGIN(peramajin_before)
         // Mario has the key: the chest asks him to pick it from the item menu.
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_09"), PTR(majin_callback), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(key_tbl), LW(10))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(10), 0)
@@ -216,7 +216,7 @@ EVT_BEGIN(peramajin_before)
         END_INLINE_EVENT
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_11"), PTR(majin_callback), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mario_set_pose, STRING("M_I_N"))
 #endif
         CALL(evt_cam3d_evt_set, -33, 92, 412, -33, 36, 92, 500, EASING_SINE_IN_OUT)
@@ -293,7 +293,7 @@ EVT_END()
 EVT_BEGIN(peramajin_after)
     // The chest has opened: Mario receives the Boat Curse and the music changes.
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_party_stop, 0)
@@ -339,7 +339,7 @@ EVT_BEGIN(peramajin_after)
     CALL(lect_cam_save)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(ship_majin_lecture_init)
     CALL_CHILD(ship_majin_lecture)
 #else
@@ -379,7 +379,7 @@ EVT_BEGIN(peramajin_after)
     END_INLINE_EVENT
     CALL(evt_img_release, STRING("img"))
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))

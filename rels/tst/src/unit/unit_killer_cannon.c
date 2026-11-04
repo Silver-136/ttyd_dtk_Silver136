@@ -84,7 +84,7 @@ BattleUnitKind unit_killer_cannon = {
     0.0f,
     0.0f,
     0.0f,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     0.0f,
 #else
@@ -129,7 +129,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Damage-type modifiers of the Bill Blaster: none, no special weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Status vulnerability of the Bill Blaster (100% is the normal chance): immune to Sleep, Stop, Dizzy, Poison,

@@ -100,7 +100,7 @@ BattleUnitKind unit_red_honenoko = {
     0,
     2,
     100,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     100,
 #else
     20,
@@ -126,7 +126,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Element modifiers of the Red Bones: none, no element is special to it. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Status vulnerability of the Red Bones in the demo builds: immune to poison and instant KO;

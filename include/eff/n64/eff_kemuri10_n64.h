@@ -22,7 +22,7 @@ typedef struct EffKemuri10N64Work {
     u8 r, g, b;     // 0x64
     u8 r2, g2, b2;  // 0x67
     u8 pad_6a[2];   // 0x6A
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 camera;     // 0x6C
 #endif
 } EffKemuri10N64Work;

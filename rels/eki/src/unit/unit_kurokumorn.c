@@ -95,7 +95,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Elemental reactions of the Ruff Puff: is healed by electric attacks. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_ABSORB}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 80, 90, 100, 70, 0, 100, 70, 100, 70, 100, 70, 100, 70, 70, 70, 90, 100, 70, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

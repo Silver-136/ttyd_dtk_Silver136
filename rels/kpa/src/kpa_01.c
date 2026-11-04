@@ -51,7 +51,7 @@ void kpa_stg1_034_cb(s32 type, smartEntry* smart);
 EvtWord kpa_01_door_open[219];
 EvtWord kpa_01_door_close[237];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kpa_01_touzyo_evt[];
 extern EvtWord kpa_01_syuppatu_evt[];
 #else
@@ -306,7 +306,7 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     WAIT_MS(100)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_001"), 0, STRING("トゲノコＡ"))
     SET_VALUE(GSW_STORY_PROGRESS, STG1_19_01_BOWSER_BOWSER_CASTLE)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -809,7 +809,7 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
             GOTO(10)
         END_IF
     END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         CALL(evt_npc_kamek_kemuri2, STRING("ババ"), 1500, 1)
     END_INLINE_EVENT
@@ -1203,7 +1203,7 @@ EVT_BEGIN(kpa_01_init_evt)
         END_IF
     END_SWITCH
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
 EVT_END_PAD()
@@ -1218,7 +1218,7 @@ static USER_FUNC(make_name) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
     static char name[8];
@@ -1316,7 +1316,7 @@ USER_FUNC(get_togenoko_pos) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 
 /** PAL only: called at the start of kpa_03's jumpstand_evt. */
 USER_FUNC(kpa_cancel_attack_mode) {

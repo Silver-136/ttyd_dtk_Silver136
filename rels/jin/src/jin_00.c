@@ -110,7 +110,7 @@ EvtWord e2_open[12];
 EvtWord e2_close[12];
 EvtWord jin_00_dai[16];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord jin_00_dai_in_sub[];
 #else
 EvtWord jin_00_dai_in_sub[83];
@@ -132,7 +132,7 @@ EvtWord nopush_evt[5];
 static EvtWord evt_key[5];
 static s32 lock_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord lock_item_check[21];
 #else
 static EvtWord lock_item_check[23];
@@ -149,7 +149,7 @@ EvtWord atomic_teresa_init[2];
 static NpcSetupInfo npcEnt[12];
 static ExtTexInfo senteresa_ext_entry_data[47];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord senteresa_evt[];
 #else
 EvtWord senteresa_evt[1248];
@@ -461,7 +461,7 @@ EVT_BEGIN(jin_00_dai_in_sub)
     CALL(evt_party_set_dir, 1, 270, -1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_jump_pos, 365, 40, 0, 700, 0, -1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     END_INLINE_EVENT
@@ -989,7 +989,7 @@ static s32 lock_tbl[] = {
 static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x16, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(lock_tbl), LW(0), 0)
@@ -1404,7 +1404,7 @@ static void senteresa_ext_main(void) {
     f32 spd;
     Vec v;
     Vec d;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL && strcmp(mp->paperAnimName, "P_H_1C") == 0) {
 #else
     if (marioGetAngleKaitenHammer() > 0.0f) {
@@ -1560,7 +1560,7 @@ static void senteresa_ext_main(void) {
                 computePos(&pTeresa[i], &v);
                 v.y = (*pose->mtx)[1][3];
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
 #else
                 (*pose->mtx)[1][3] = v.y;
@@ -2347,7 +2347,7 @@ EVT_BEGIN(senteresa_evt)
     // After the fight the Lucky Start pops out, the remaining Boos are blown away and the Atomic Boo is
     // marked as defeated.
     CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_JIN_00_LUCKY_START, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_LOST_BADGE_TO_SHOP)
     SET_VALUE(GSWF_JIN_00_LUCKY_START, 1)
 #endif

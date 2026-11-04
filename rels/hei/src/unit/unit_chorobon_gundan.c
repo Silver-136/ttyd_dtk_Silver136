@@ -58,19 +58,19 @@ BattleUnitKind unit_chorobon_gundan;
 // The demo has no padding after these three (the retail sizes are aligned up).
 typedef struct {
     BattleUnitDefense v;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     u8 pad[3];
 #endif
 } DefencePad;
 typedef struct {
     BattleUnitDefenseAttr v;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     u8 pad[3];
 #endif
 } DefenceAttrPad;
 typedef struct {
     StatusVulnerability v;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     u8 pad[2];
 #endif
 } RegistPad;
@@ -82,13 +82,13 @@ static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 BattleWeapon weapon_chorobon_gundan_attack;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord chorogun_dead_reward[73];
 #endif
 
 static EvtWord init_event[26];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord damage_event[80];
 #else
 static EvtWord damage_event[59];
@@ -158,7 +158,7 @@ BattleUnitKind unit_chorobon_gundan = {
     "SFX_BTL_DAMAGE_FIRE1", // fireDamageSfxName
     "SFX_BTL_DAMAGE_ICE1", // iceDamageSfxName
     "SFX_BTL_DAMAGE_BIRIBIRI1", // electricDamageSfxName
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     kUnitLeader | kUnitNoSpin | kUnitNoHpGauge, // attributeFlags
 #else
     kUnitLeader | kUnitNoSpin, // attributeFlags
@@ -171,21 +171,21 @@ BattleUnitKind unit_chorobon_gundan = {
 };
 
 /** Defence of the Fuzzy Horde's body per damage type: 0 against every damage type. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static DefencePad defence = {{{0, 0, 0, 0, 0}}};
 #else
 static DefencePad defence = {{{0, 0, 0, 0, 0}}, {0}};
 #endif
 
 /** Defence attributes of the Fuzzy Horde's body: none, so every damage type is dealt normally. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}};
 #else
 static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}, {0}};
 #endif
 
 /** Status vulnerability of the Fuzzy Horde: immune to the statuses listed in this table. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 #else
 static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0}};
@@ -261,7 +261,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(chorogun_dead_reward)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -320,7 +320,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(99)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, 0, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_btl_camera_set_mode, 0, 0)

@@ -156,7 +156,7 @@ static EvtWord init_event[149];
 static EvtWord entry_event[94];
 static EvtWord damage_event[47];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord damage_sub_event[];
 #else
 EvtWord damage_sub_event[148];
@@ -165,7 +165,7 @@ EvtWord damage_sub_event[148];
 static EvtWord phase_event[28];
 EvtWord monster_before_phase_event[195];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event[126];
 #else
 static EvtWord dead_event[165];
@@ -203,7 +203,7 @@ EvtWord batten_leader_shikaeshi_attack_event[176];
 EvtWord batten_leader_yokeyoke_attack_event[176];
 EvtWord batten_leader_stop_attack_event[328];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event[15];
 #else
 static EvtWord wait_event[16];
@@ -519,7 +519,7 @@ BattleUnitKind unit_boss_batten_leader = {
     6, // pbSoftCap
     68, // width
     66, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     7,
     68,
     0.0f,
@@ -537,7 +537,7 @@ BattleUnitKind unit_boss_batten_leader = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     34.0f,
     0.0f,
@@ -600,7 +600,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  */
 BattleUnitDefenseAttr defence_attr_muteki = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {30, 30, 30, 100, 30, 100, 100, 30, 100, 50, 100, 50, 100, 30, 30, 0, 0, 100, 30, 100, 100, 1};
 #else
 static StatusVulnerability regist = {
@@ -686,7 +686,7 @@ static PoseTableEntry pose_table_furafura[] = {
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, damage_sub_event},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {50, dead_event},
 #else
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -1666,7 +1666,7 @@ EVT_END()
  * otherwise they add ten times the total damage to it, capped at 100.
  */
 EVT_BEGIN(damage_sub_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(_hp_gauge_flag_on, LW(10))
@@ -1818,11 +1818,11 @@ static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 9)
     LOOP(4)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(0), LW(1))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_GetUnitId, LW(1), LW(1))
 #endif
         IF_INT_NOT_EQUAL(LW(1), -1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(btlevtcmd_KillUnit, LW(1), 1)
 #else
             CALL(btlevtcmd_CheckDamageCode, LW(1), DAMAGE_RESULT_ZERO_HP, LW(2))
@@ -1840,7 +1840,7 @@ static EVT_BEGIN(dead_event)
         END_IF
         ADD(LW(0), 1)
     END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     WAIT_MS(1000)
 #endif
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -1873,7 +1873,7 @@ static EVT_BEGIN(dead_event)
     DELETE_EVENT(LW(0))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     DELETE_EVENT(LW(0))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
 #endif
@@ -2809,7 +2809,7 @@ static EVT_BEGIN(wait_event)
         CALL(check_satellite)
     END_LOOP
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 static USER_FUNC(btlevtcmd_AnimeGetPose) {
 #else
@@ -3013,7 +3013,7 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000d538, JP las .text+0xD46C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 /**
  * Script helper: sets the HP gauge flag 1 on the unit args[0] (JP and later),

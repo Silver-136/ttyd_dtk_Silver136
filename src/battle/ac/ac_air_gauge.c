@@ -31,7 +31,7 @@ typedef struct GaugeKey {
     s32 flag;
 } GaugeKey;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 GaugeKey _table_0[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_1[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_2[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
@@ -47,7 +47,7 @@ GaugeKey _table_2[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0
  */
 GaugeKey _table_3[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 GaugeKey _table_4[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_5[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_6[5] = {{0, 0.0f, 1}, {10, 1.2f, 1}, {30, 0.7f, 1}, {50, 0.0f, 0}, {-1, -1.0f, 0}};
@@ -231,7 +231,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
  * so tapping A keeps the gauge rising. Also sets the flag that shows the A icon as pressed.
  * The demos use a steeper, shorter lift curve and lower drain rates.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static f32 _GetGaugeDecValue(void) {
 #else
 f32 _GetGaugeDecValue(void) {
@@ -244,7 +244,7 @@ f32 _GetGaugeDecValue(void) {
     f32 base;
 
     switch ((u32)ac->params[7]) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case 0:
             base = 0.0f;
             t = _table_0;
@@ -278,7 +278,7 @@ f32 _GetGaugeDecValue(void) {
         case 5: base = 0.47f; t = _table_5; break;
 #endif
         case 6:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         default:
             t = _table_6;
             base = 0.45f;

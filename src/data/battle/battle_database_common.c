@@ -340,7 +340,7 @@ ItemDropData battle_item_met[] = {
     {ITEM_POWER_PUNCH, 5, 5},
     {ITEM_MINI_MR_MINI, 5, 5},
     {ITEM_POWER_JUMP, 0, 2},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {ITEM_POWER_JUMP, 0, 2},
 #else
     {ITEM_POWER_SMASH, 0, 2},
@@ -358,7 +358,7 @@ ItemDropData battle_item_togemet[] = {
     {ITEM_POWER_PUNCH, 5, 5},
     {ITEM_REPEL_CAPE, 5, 5},
     {ITEM_POWER_JUMP, 0, 2},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {ITEM_POWER_JUMP, 0, 2},
 #else
     {ITEM_POWER_SMASH, 0, 2},
@@ -588,7 +588,7 @@ ItemDropData battle_item_pakkun_flower[] = {
     {0},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 ItemDropData battle_item_poison_pakkun[] = {
     {ITEM_NULL, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 5},
@@ -767,7 +767,7 @@ ItemDropData battle_item_sambo_mummy[] = {
     {0},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 ItemDropData battle_item_killer_cannon[] = {
     {ITEM_NULL, 200, 300},
     {ITEM_MUSHROOM, 0, 5},
@@ -991,7 +991,7 @@ ItemDropData battle_item_dark_keeper[] = {
     {0},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 ItemDropData battle_item_yamitogedaruma[] = {
     {ITEM_NULL, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 10},
@@ -1351,7 +1351,7 @@ ItemDropData battle_item_red_honenoko[] = {
 };
 
 /** Putrid Piranha: held items and drops by weight, after a first row of no item. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 ItemDropData battle_item_poison_pakkun[] = {
     {ITEM_NULL, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 5},
@@ -1438,7 +1438,7 @@ ItemDropData battle_item_super_killer[] = {
 };
 
 /** Bill Blaster: held items and drops by weight, after a first row of no item. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 ItemDropData battle_item_killer_cannon[] = {
     {ITEM_NULL, 200, 300},
     {ITEM_MUSHROOM, 0, 5},
@@ -1449,7 +1449,7 @@ ItemDropData battle_item_killer_cannon[] = {
 #endif
 
 /** B. Bill Blaster: held items and drops by weight, after a first row of no item. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 ItemDropData battle_item_super_killer_cannon[] = {
     {ITEM_NULL, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 5},
@@ -1485,7 +1485,7 @@ ItemDropData battle_item_togedaruma[] = {
 };
 
 /** Dark Bristle: held items and drops by weight, after a first row of no item. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 ItemDropData battle_item_yamitogedaruma[] = {
     {ITEM_NULL, 200, 300},
     {ITEM_SUPER_SHROOM, 0, 10},
@@ -1565,7 +1565,7 @@ ItemDropData battle_item_default_param_list[] = {
     {0},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 ItemDropData battle_item_kinoko[] = {
     {0},
 };
@@ -1598,7 +1598,7 @@ ItemDropData battle_item_sinabita_kinoko[] = {
 };
 #endif
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 // Empty drop tables of tst.rel's test battles (PAL)
 ItemDropData battle_item_kinoko[] = {
     {0},

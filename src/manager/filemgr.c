@@ -18,7 +18,7 @@
 enum { FILE_ENTRY_CAPACITY = 0x400 };
 
 //.bss
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 FileManagerWork fileWork;
 #endif
 
@@ -141,7 +141,7 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
         case FILE_TYPE_TPL:
             tpl = data;
             if (tpl->versionNumber != PALETTE_VERSION) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 OSPanic("filemgr.c", 150, "invalid version number for texture palette");
 #else
                 OSPanic("filemgr.c", VERSION_PICK(147, 153), "invalid version number for texture palette");
@@ -347,7 +347,7 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
         case FILE_TYPE_TPL:
             tpl = data;
             if (tpl->versionNumber != PALETTE_VERSION) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 OSPanic("filemgr.c", 109, "invalid version number for texture palette");
 #else
                 OSPanic("filemgr.c", VERSION_PICK(106, 112), "invalid version number for texture palette");

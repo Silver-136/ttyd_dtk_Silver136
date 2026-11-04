@@ -41,7 +41,7 @@ BattleUnitKind unit_sinemon = {
     1, // perilHP
     26, // level
     0, // bonusExp
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     4,
 #else
     3, // bonusCoin
@@ -93,7 +93,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IM
 /** Defence of the Moon Cleft while flipped: no numerical defence; its fire-immunity attribute remains active. */
 static BattleUnitDefense defence_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Status vulnerability of the Moon Cleft in the demo builds: immune to burn; resists most other statuses.
  */

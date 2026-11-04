@@ -41,7 +41,7 @@ static EvtWord chibitoge_init[21];
 static EvtWord chibitoge_talk[111];
 static NpcSetupInfo npcEnt[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord chuchurina_sogu[812];
 #else
 static EvtWord chuchurina_sogu[814];
@@ -182,7 +182,7 @@ static EVT_BEGIN(chuchurina_sogu)
     // Mario enters through the loading zone; Ms. Mowz and an X-Naut underling are already in the room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
 #endif
@@ -218,7 +218,7 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_party_move_pos2, 0, 145, LW(2), FLOAT(120.0f))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
 #endif
         CALL(evt_puni_wait_systemmode, 2)
@@ -233,7 +233,7 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_puni_set_anim, 1, 0)
         CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_seq_wait, 2)
 #endif
     CALL(evt_npc_set_anim, STRING("第三勢力部下"), STRING("D_2"))
@@ -329,7 +329,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_npc_set_anim, STRING("チュチュリーナ"), STRING("PCH_W_1"))
     CALL(evt_npc_get_position, STRING("チュチュリーナ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHURINA_ESCAPE1"), LW(0), LW(1), LW(2), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 68, -120, 300, 20)
 #else
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 135, -200, 300, 10)
@@ -386,7 +386,7 @@ static EVT_BEGIN(chuchurina_sogu)
 
     // The story advances and Mario regains control.
     SET_VALUE(GSW_STORY_PROGRESS, STG2_13_MS_MOWZ)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)

@@ -39,7 +39,7 @@ static EvtWord evt_box[89];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[40];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_12_init_evt[];
 #else
 EvtWord aji_12_init_evt[71];
@@ -51,7 +51,7 @@ EvtWord aji_12_init_evt[71];
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -68,7 +68,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -222,7 +222,7 @@ EVT_END()
 EVT_BEGIN(aji_12_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -299,7 +299,7 @@ static USER_FUNC(mario_chk) {
     for (i = 0; i < 50; i++) {
         hitGrpAttrOn((const char*)hit_list[i], HIT_ATTR_SPIKES);
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (mario->hitobjUnder == NULL) {
 #else
     party = partyGetPtr(0);
@@ -317,7 +317,7 @@ static USER_FUNC(mario_chk) {
         mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
         hitGrpAttrOff("A_hikaru_01", HIT_ATTR_SPIKES);
         event->userdata[2] = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     } else if (strncmp(hitGetName(mario->hitobjUnder), "A_hikaru_", strlen("A_hikaru_")) != 0) {
 #else
     } else if (strncmp(hitGetName(hit), "A_hikaru_", strlen("A_hikaru_")) != 0) {
@@ -326,7 +326,7 @@ static USER_FUNC(mario_chk) {
         mapGrpFlagOn("nashi_01", MAP_OBJ_FLAG_HIDDEN);
         hitGrpAttrOff("A_hikaru_01", HIT_ATTR_SPIKES);
         event->userdata[2] = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     } else if (strcmp(hitGetName(mario->hitobjUnder), "A_hikaru_01") == 0 && event->userdata[2] == 0) {
 #else
     } else if (strcmp(hitGetName(hit), "A_hikaru_01") == 0 && event->userdata[2] == 0) {

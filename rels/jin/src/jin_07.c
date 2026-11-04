@@ -79,7 +79,7 @@ static NpcSetupInfo npcEnt[2];
 static ExtTexInfo senteresa_ext_entry_data[5];
 EvtWord evt_teresa_box_open[576];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord jin_07_init_evt[];
 #else
 EvtWord jin_07_init_evt[151];
@@ -707,7 +707,7 @@ EVT_BEGIN(jin_07_init_evt)
             CALL(evt_cam_road_reset)
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_wait_landon)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
             CALL(evt_mario_key_onoff, 1)

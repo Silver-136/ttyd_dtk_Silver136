@@ -150,7 +150,7 @@ EVT_BEGIN(hei_13_init_evt)
     END_IF
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_TYPE_GROUND, GSWF_HEI_13_HAPPY_HEART, 0)
 #else
         CALL(evt_item_entry, STRING("i"), ITEM_HAPPY_HEART, 325, 200, -100, ITEM_TYPE_STILL, GSWF_HEI_13_HAPPY_HEART, 0)

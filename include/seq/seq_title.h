@@ -17,7 +17,7 @@ typedef struct TitleWork {
     s32 counter; //0x20
     s32 timer; //0x24
     s32 idle; //0x28
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 frame; //0x2C
     s32 debug; //0x30
 #endif

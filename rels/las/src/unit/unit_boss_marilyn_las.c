@@ -123,7 +123,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {50, 50, 50, 100, 50, 100, 100, 30, 100, 40, 100, 40, 100, 40, 40, 0, 0, 100, 40, 100, 100, 5};
 #else
 static StatusVulnerability regist = {
@@ -484,7 +484,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_LESS(LW(0), 2)
         SET_VALUE(LW(2), 25)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_DrawLots, LW(0), 3, 50, 25, LW(2))
 #else
     CALL(btlevtcmd_DrawLots, LW(0), 3, 40, 35, LW(2))

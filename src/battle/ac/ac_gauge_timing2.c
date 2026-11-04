@@ -116,7 +116,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
             if (BattlePadCheckTrigger(gw->button)) {
                 pressed = 1;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (gw->frame > gw->totalFrames)
             {
                 if (((s32)work->actionCommands.outputParams[0]) > 0) {
@@ -189,14 +189,14 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                             if ((!doAuto) && gw->flag[i4]) {
                                 gw->state[i4] = -1;
                                 psndSFXOn(sfxNg);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                                 found = 1;
 #endif
                             } else {
                                 gw->state[i4] = 1;
                                 work->actionCommands.outputParams[0]++;
                                 psndSFXOn(sfxOk);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                                 found = 1;
 #endif
                             }
@@ -205,7 +205,7 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
                             if (i4 == (work->actionCommands.params[2] - 1)) {
                                 gw->state[i4] = -1;
                                 psndSFXOn(sfxNg);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                                 found = 1;
 #endif
                             }

@@ -94,7 +94,7 @@ EvtWord aunt_pig_init[29];
 EvtWord iri_20_out_house[407];
 EvtWord iri_20_aunt_to_house[149];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aunt_talk[];
 #else
 EvtWord aunt_talk[687];
@@ -128,7 +128,7 @@ static EvtWord urouro_move[24];
 EvtWord urouro_move_semai[24];
 static NpcSetupInfo npcEnt[24];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord village_chief_change_pig_event[];
 #else
 EvtWord village_chief_change_pig_event[166];
@@ -185,7 +185,7 @@ EvtWord evt_monban_buta2[17];
 EvtWord evt_monban_look[119];
 static s32 lock_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord lock_item_check[39];
 #else
 static EvtWord lock_item_check[41];
@@ -202,7 +202,7 @@ static BoobooName booboo_name[8];
 EvtWord evt_roll_get[2];
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_majin[325];
 static EvtWord evt_majin2[239];
 #else
@@ -872,13 +872,13 @@ EVT_BEGIN(aunt_talk)
             // The town music fades out and music-box music takes over.
             CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
             WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             BEGIN_INLINE_EVENT
                 WAIT_MS(2000)
 #endif
                 CALL(evt_snd_bgmoff, PSND_PAUSE)
                 CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_ORGEL1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             END_INLINE_EVENT
 
 #endif
@@ -890,7 +890,7 @@ EVT_BEGIN(aunt_talk)
             WAIT_MS(500)
             CALL(evt_msg_print, 0, STRING("irai_20_003"), 0, STRING("me"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL_CHILD(iri_20_aunt_to_house)
 #else
             CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 3000)
@@ -898,7 +898,7 @@ EVT_BEGIN(aunt_talk)
 #endif
             CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
             CALL(evt_snd_bgmon_f, PSND_CONTINUE | PSND_FADEIN, 0, 2000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
             CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
             CALL(evt_snd_env_lpf, 0, 0)
@@ -1030,7 +1030,7 @@ EVT_BEGIN(aunt_talk)
             IF_INT_EQUAL(LW(0), 0)
                 CALL(get_item_list, LW(0))
                 LOOP(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(evt_win_item_select, LW(0), LW(1))
 #else
                     CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
@@ -1650,7 +1650,7 @@ static NpcSetupInfo npcEnt[] = {
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
         gatekeeper_pig_init, // initEvent
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         urouro_move,
 #else
         NULL, // regularEvent
@@ -1754,7 +1754,7 @@ EVT_BEGIN(village_chief_change_pig_event)
     GOTO(0)
     LABEL(10)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_STG4_TEMPLE_BELL1"), 0)
@@ -1935,7 +1935,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 SET_VALUE(LW(15), 0)
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_party_cont_onoff, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(mainwindow_opendisable)
 #endif
                 CALL_CHILD(PTR(cam_up))
@@ -1945,7 +1945,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 CALL_CHILD(PTR(cam_down))
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_party_cont_onoff, 0, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(mainwindow_openenable)
 #endif
             END_IF
@@ -1971,7 +1971,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(mainwindow_opendisable)
 #endif
             CALL_CHILD(PTR(cam_up))
@@ -2039,7 +2039,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
             // Controls come back; GW(0) keeps the crows quiet until usu01_check_vivian resets it.
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_mario_key_onoff, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(mainwindow_openenable)
 #endif
             SET_VALUE(GW(0), 1)
@@ -2144,7 +2144,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(mainwindow_opendisable)
 #endif
             CALL_CHILD(PTR(cam_up))
@@ -2179,7 +2179,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
             // Controls come back; GW(1) keeps the crows quiet until usu01_check_vivian resets it.
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_mario_key_onoff, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(mainwindow_openenable)
 #endif
             SET_VALUE(GW(1), 1)
@@ -2283,7 +2283,7 @@ EVT_BEGIN(usu01_crowJ_talk_event)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_party_cont_onoff, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(mainwindow_opendisable)
 #endif
             CALL_CHILD(PTR(cam_up))
@@ -2311,7 +2311,7 @@ EVT_BEGIN(usu01_crowJ_talk_event)
             CALL_CHILD(PTR(cam_down))
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_party_cont_onoff, 0, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(mainwindow_openenable)
 #endif
             SET_VALUE(GW(2), 1)
@@ -3226,7 +3226,7 @@ static s32 lock_tbl[] = {
 static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_SHOP_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(lock_tbl), LW(0), 0)
@@ -3266,7 +3266,7 @@ static ShopObj obj_list[] = {
 
 static ShopItem goods_list[] = {
     {ITEM_THUNDER_RAGE, 20},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {ITEM_BOOS_SHEET, 10},
 #else
     {ITEM_SPITE_POUCH, 10},
@@ -3279,7 +3279,7 @@ static ShopItem goods_list[] = {
 
 static ShopDb trade_list[] = {
     {ITEM_THUNDER_RAGE, 10, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {ITEM_BOOS_SHEET, 5, 0},
 #else
     {ITEM_SPITE_POUCH, 5, 0},
@@ -3430,7 +3430,7 @@ static EVT_BEGIN(evt_majin)
             ADD(LW(1), 30)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_09"), PTR(majin_callback), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -3448,7 +3448,7 @@ static EVT_BEGIN(evt_majin)
                 ADD(LW(1), 30)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_11"), PTR(majin_callback), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(evt_mario_set_pose, STRING("M_I_N"))
 #endif
             END_IF
@@ -3463,7 +3463,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_majin2)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_party_stop, 0)
@@ -3667,7 +3667,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_DEFEND_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)

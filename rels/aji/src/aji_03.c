@@ -66,7 +66,7 @@ EvtWord evt_sw1[72];
 EvtWord evt_sw2[72];
 s32 haguruma_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_haguruma[130];
 #else
 static EvtWord evt_haguruma[132];
@@ -76,7 +76,7 @@ EvtWord badge_evt[5];
 EvtWord badge_evt2[5];
 EvtWord badge_evt3[5];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_03_init_evt[];
 #else
 EvtWord aji_03_init_evt[525];
@@ -88,7 +88,7 @@ EvtWord aji_03_init_evt[525];
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -105,7 +105,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use -0.2217.
  */
 static EVT_BEGIN(e_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
@@ -976,7 +976,7 @@ static EVT_BEGIN(evt_haguruma)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(haguruma_tbl), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(haguruma_tbl), LW(0), 0)
@@ -1033,7 +1033,7 @@ EVT_BEGIN(aji_03_init_evt)
     // The room's music and ambience start, and S_hikari is hidden.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -1183,7 +1183,7 @@ USER_FUNC(evt_sousa_icon) {
     return EVT_RETURN_YIELD;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void icon_disp(CameraId camera, void* param) {
 #else
 void icon_disp(CameraId camera, void* param) {

@@ -46,7 +46,7 @@ EvtWord ranperu_toujou[338];
 EvtWord starstone_jump_se[15];
 EvtWord irekawatta_mario_init[67];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord irekawatta_mario[];
 #else
 EvtWord irekawatta_mario[495];
@@ -56,7 +56,7 @@ EvtWord yoshi_color[65];
 EvtWord ranperu_lastbattle[378];
 EvtWord hontonosugata_mario_init[125];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord hontonosugata_mario[];
 #else
 EvtWord hontonosugata_mario[948];
@@ -66,7 +66,7 @@ EvtWord ranperu_init[20];
 EvtWord nisemario_init[22];
 static NpcSetupInfo npcEnt[7];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord jin_04_jumpstand[];
 extern EvtWord jin_04_init_evt[];
 #else
@@ -318,11 +318,11 @@ EVT_BEGIN(irekawatta_mario)
     // The Ruby Star scene plays while the music fades out.
     SET_VALUE(LW(0), -1)
     SET_VALUE(LW(1), STRING("rubystar"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(evt_sub_starstone)
 #endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL_CHILD(PTR(evt_sub_starstone))
 #endif
     WAIT_MS(500)
@@ -407,7 +407,7 @@ EVT_BEGIN(irekawatta_mario)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
 #endif
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
@@ -849,7 +849,7 @@ EVT_BEGIN(hontonosugata_mario)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_15_03_THE_RUBY_STAR)
     SET_VALUE(LW(0), 4)
     SET_VALUE(LW(1), STRING("rubystar"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(evt_sub_starstone)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -969,7 +969,7 @@ EVT_BEGIN(jin_04_jumpstand)
         END_SWITCH
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_party_dokan, 0, LW(0))
         IF_INT_EQUAL(LW(0), 1)
 #endif
@@ -982,7 +982,7 @@ EVT_BEGIN(jin_04_jumpstand)
                 CALL(evt_party_jump_pos, 0, -100, 670, 50, 1000, 0, -1000)
                 CALL(evt_party_run, 0)
             END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         END_IF
 #endif
         CALL(evt_mario_jump_pos, -75, 670, 50, 1000, 0, -1000)
@@ -998,7 +998,7 @@ EVT_BEGIN(jin_04_jumpstand)
         ELSE
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_party_dokan, 0, LW(0))
         IF_INT_EQUAL(LW(0), 1)
 #endif
@@ -1011,7 +1011,7 @@ EVT_BEGIN(jin_04_jumpstand)
                 CALL(evt_party_jump_pos, 0, -60, 450, 130, 500, 0, -1000)
                 CALL(evt_party_run, 0)
             END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         END_IF
 #endif
         CALL(evt_hitobj_onoff, STRING("MOBJ_mobj_jump"), 0, 0)
@@ -1032,7 +1032,7 @@ EVT_BEGIN(jin_04_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
         CALL(evt_snd_set_rev_mode, 2)
 #else
@@ -1041,11 +1041,11 @@ EVT_BEGIN(jin_04_init_evt)
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_SWITCH
 #endif
     CALL(evt_snd_set_rev_mode, 2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     END_SWITCH
 #endif
     CALL(evt_kagemario_init)

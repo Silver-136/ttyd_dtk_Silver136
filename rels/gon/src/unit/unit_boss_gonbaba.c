@@ -49,7 +49,7 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table[7];
 static PoseTableEntry pose_table_weak[7];
 #else
@@ -64,7 +64,7 @@ EvtWord negotiation_event[1786];
 EvtWord gon_extra_eaten_event[389];
 static EvtWord damage_event[10];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord gonbaba_damage_sub_event[];
 #else
 EvtWord gonbaba_damage_sub_event[574];
@@ -258,7 +258,7 @@ BattleUnitKind unit_boss_gonbaba = {
     115.0f,
     0.0f,
     -10.0f,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     0.0f,
         0.0f,
@@ -312,7 +312,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Elemental reactions of Hooktail: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {10, 0, 50, 0, 50, 10, 100, 0, 0, 0, 50, 0, 100, 0, 100, 0, 0, 100, 0, 0, 0, 0};
 #else
 static StatusVulnerability regist = {
@@ -345,7 +345,7 @@ static StatusVulnerability regist = {
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_STOP, "GNB_Z_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
 #endif
@@ -364,7 +364,7 @@ static PoseTableEntry pose_table[] = {
 static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_STOP, "GNB_N_1"},
     {POSE_TYPE_DIZZY, "GNB_X_1"},
 #endif
@@ -839,7 +839,7 @@ EVT_BEGIN(negotiation_event)
         CALL(evt_btl_camera_noshake, 1)
         CALL(evt_btl_camera_shake_h, 1, 7, 0, 30, 12)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_batstage_set_aud_dark, 0, 180, 0)
     CALL(evt_batstage_set_aud_dark_base, 0, 180, 0)
 #else
@@ -1409,7 +1409,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
             RETURN
         END_IF
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_WaitAttackEnd)
 #endif
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
@@ -1449,7 +1449,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
 
     // Third time: she gags again and wonders why crickets always make her faint (stg1_gon_31_04).
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MESSAGE_STEP, 3)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_WaitAttackEnd)
 #endif
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("GNB_T_4"))
@@ -1605,7 +1605,7 @@ static EVT_BEGIN(init_event)
     CALL(evt_audience_flag_on, 35, 512)
     CALL(evt_audience_flag_on, 53, 512)
     CALL(evt_audience_flag_on, 54, 512)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_audience_base_flag_on, 32768)
 #else
     CALL(evt_audience_base_flag_on, 16384)

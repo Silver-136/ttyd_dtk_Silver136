@@ -37,7 +37,7 @@
 BeroEntry bero_bluejail[1];
 static BeroEntry bero_entry_data[5];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord wall_roll_sub[];
 #else
 EvtWord wall_roll_sub[96];
@@ -47,7 +47,7 @@ EvtWord wall_roll_sub[96];
 #if VERSION >= VERSION_US
 EvtWord wall_roll[272];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord wall_roll[262];
 #else
 EvtWord wall_roll[264];
@@ -55,7 +55,7 @@ EvtWord wall_roll[264];
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord breakyuka_init[11];
 #else
 static EvtWord breakyuka_init[17];
@@ -73,7 +73,7 @@ EvtWord get_blue_jail_key[143];
 #if VERSION >= VERSION_US
 EvtWord mri_09_init_evt[230];
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord mri_09_init_evt[216];
 #else
 EvtWord mri_09_init_evt[228];
@@ -179,7 +179,7 @@ static BeroEntry bero_entry_data[] = {
  * then hides the panel and releases the capture.
  */
 EVT_BEGIN(wall_roll_sub)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_paper_entry, LW(0))
 #endif
     CALL(evt_img_entry, LW(2))
@@ -265,7 +265,7 @@ EVT_BEGIN(wall_roll)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)
     SET_VALUE(GSWF_MRI_09_WALL_PUZZLE_SOLVED, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     WAIT_FRAMES(1)
 #endif
     CALL(evt_puni_all_fall_check)
@@ -294,13 +294,13 @@ EVT_BEGIN(wall_roll)
 EVT_END()
 
 static EVT_BEGIN(breakyuka_init)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 1)
 #else
     IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 0)
 #endif
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ELSE
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 1)
 #endif
@@ -561,7 +561,7 @@ EVT_BEGIN(mri_09_init_evt)
         CALL(evt_mobj_switch_red, 1, STRING("slot01"), -30, 0, 135, PTR(slot01_event), 0)
         CALL(evt_mobj_switch_red, 1, STRING("slot02"), 30, 0, 135, PTR(slot02_event), 0)
         CALL(evt_mobj_switch_red, 1, STRING("slot03"), 80, 0, 135, PTR(slot03_event), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_paper_entry, STRING("OFF_d_roll_down"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_up"))
         CALL(evt_paper_entry, STRING("OFF_d_roll_left"))

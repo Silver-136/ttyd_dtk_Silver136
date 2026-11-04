@@ -20,7 +20,7 @@
 #include "driver/itemdrv.h"
 #include "tik.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "evt/evt_snd.h"
 #endif
 
@@ -34,7 +34,7 @@ static EvtWord iri_12_init[85];
 static EvtWord evt_kanban[16];
 static EvtWord evt_kanban2[45];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tik_06_init_evt[];
 #else
 EvtWord tik_06_init_evt[47];
@@ -303,7 +303,7 @@ EVT_END()
  * two signboards (one shows deepest floor, Power Bounce record and Star Piece count) and a Star Piece.
  */
 EVT_BEGIN(tik_06_init_evt)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
 #else
     CALL(evt_snd_bgmoff, PSND_FADEOUT)

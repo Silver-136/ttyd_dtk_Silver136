@@ -111,7 +111,7 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord yoshi_party_lecture_init[43];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord yoshi_party_lecture[];
 #else
 EvtWord yoshi_party_lecture[271];
@@ -512,7 +512,7 @@ EVT_BEGIN(yoshi_party_lecture)
         LOOP(0)
             IF_INT_LESS_OR_EQUAL(LW(3), 0)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_sfxon_3d, STRING("SFX_PARTY_YOSH_MOVE1"), LW(0), LW(1), LW(2), 0)
 #endif
                 SET_VALUE(LW(3), 10)
@@ -539,7 +539,7 @@ EVT_BEGIN(yoshi_party_lecture)
         LOOP(0)
             IF_INT_LESS_OR_EQUAL(LW(3), 0)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_sfxon_3d, STRING("SFX_PARTY_YOSH_MOVE1"), LW(0), LW(1), LW(2), 0)
 #endif
                 SET_VALUE(LW(3), 10)

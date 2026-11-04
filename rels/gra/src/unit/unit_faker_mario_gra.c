@@ -107,7 +107,7 @@ static BattleUnitDefense defence_fmario = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr_fmario = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_fmario = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 0};
 #else
 static StatusVulnerability regist_fmario = {

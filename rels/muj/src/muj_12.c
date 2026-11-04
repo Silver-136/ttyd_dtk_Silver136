@@ -55,7 +55,7 @@ EvtWord korutesu_large[56];
 EvtWord korutesu_blur[43];
 static EvtWord starstone_fuwafuwa[53];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord korutesu_event[616];
 #else
 static EvtWord korutesu_event[627];
@@ -63,7 +63,7 @@ static EvtWord korutesu_event[627];
 
 EvtWord korutesu_event_after[140];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord kosho_event[];
 #else
 EvtWord kosho_event[517];
@@ -590,7 +590,7 @@ static EVT_BEGIN(korutesu_event)
 
     // The story advances and the Crystal Star is awarded.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(evt_sub_starstone)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -598,7 +598,7 @@ static EVT_BEGIN(korutesu_event)
     CALL_CHILD(PTR(evt_sub_starstone))
 #endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ9"))
 #endif
     RETURN
@@ -747,7 +747,7 @@ EVT_BEGIN(kosho_event)
     SET_VALUE(GF(2), 1)
     DELETE_EVENT(LW(10))
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_set_position, STRING("jewel"), 0, -1000, 0)
 #else
     CALL(evt_item_delete, STRING("jewel"))

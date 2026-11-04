@@ -30,7 +30,7 @@ static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table[7];
 #else
 static PoseTableEntry pose_table[9];
@@ -92,7 +92,7 @@ BattleUnitKind unit_boss_bunbaba = {
     115.0f,
     0.0f,
     -10.0f,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     0.0f,
         0.0f,
@@ -152,7 +152,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
  */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {40, 40, 40, 100, 40, 100, 100, 0, 0, 0, 100, 0, 100, 40, 40, 0, 0, 100, 40, 0, 0, 1};
 #else
 static StatusVulnerability regist = {
@@ -185,7 +185,7 @@ static StatusVulnerability regist = {
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_DIZZY, "GNB_X_1"},
     {POSE_TYPE_STOP, "GNB_D2_1"},
 #endif
@@ -1081,7 +1081,7 @@ EVT_BEGIN(mega_attack_event)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1750)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_BREATH_FIRE1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
 #else
         CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MEGABREATH1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
@@ -1187,7 +1187,7 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(9), PTR(&weapon_bunbaba_eq_attack))
         CALL_CHILD(PTR(eq_attack_event))
         CASE_EQUAL(3)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 10)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 15)

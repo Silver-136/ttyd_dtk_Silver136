@@ -34,7 +34,7 @@ static EvtWord door_close[12];
 static EvtWord door_open[12];
 static BeroEntry bero_entry_data[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord chuchurina_sogu[598];
 #else
 static EvtWord chuchurina_sogu[610];
@@ -145,7 +145,7 @@ static EVT_BEGIN(chuchurina_sogu)
         CALL(evt_party_move_pos2, 0, 160, 15, FLOAT(150.0f))
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 130, 0, FLOAT(150.0f))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
 
@@ -277,7 +277,7 @@ static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_cam3d_evt_off, 500, EASING_QUADRATIC_OUT)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         SET_VALUE(GSWF_GON_12_MOWZ_MET_WITH_KOOPS, 1)
@@ -368,7 +368,7 @@ EVT_BEGIN(gon_12_init_evt)
         SET_VALUE(GSWF_GON_12_CASTLE_KEY_CHEST, 1)
     END_IF
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -117, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get00), GSWF_GON_12_CASTLE_KEY_CHEST)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -56, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get01), GSWF_GON_12_MUSHROOM_CHEST)
 #else
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -56, 0, -25, MOBJ_ITEMBOX_NORMAL, 0, PTR(item_get01), GSWF_GON_12_MUSHROOM_CHEST)

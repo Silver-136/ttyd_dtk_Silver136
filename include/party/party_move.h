@@ -8,7 +8,7 @@
 struct HitEntry;
 
 // Footmark.flag bits, set by partyRecordFootmark from the leader it follows
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define PARTY_FOOTMARK_DEMO_ARG_SLIT 2 // demo: partyPutFootmark's argument bit for FOOTMARK_FLAG_SLIT
 #endif
 

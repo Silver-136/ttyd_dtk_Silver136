@@ -187,7 +187,7 @@ static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
         }
     }
     if (i != 5) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         animPoseMain(lights[i].npc->poseId);
 #endif
         animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);

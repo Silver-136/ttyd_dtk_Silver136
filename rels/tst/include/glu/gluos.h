@@ -12,10 +12,10 @@ BOOL __assert(const char* filename, s32 line, const char* assertion);
 
 #undef assert
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define assert(expr) ((void)0)
 #else
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define assert(expr) ((void)0)
 #else
 #define assert(expr) ((void)((expr) || __assert(__FILE__, __LINE__, #expr)))

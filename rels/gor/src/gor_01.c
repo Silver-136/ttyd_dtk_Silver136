@@ -72,7 +72,7 @@
 typedef struct ShopSel {
     u8 field_0x0[8];
     s32* items;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     u8 field_0xC[0x18 - 0xC];
 #else
     u8 field_0xC[0x24 - 0xC];
@@ -128,7 +128,7 @@ EvtWord zaiko_buy_evt[VERSION_PICK(174, 185)];
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord buy_evt[41];
 extern EvtWord badgeshopper_talk_evt[];
 #else
@@ -191,7 +191,7 @@ EvtWord chusan2_talk[76];
 static EvtWord bomhei_init[2];
 EvtWord bomhei_talk[76];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord bottakuru_init[];
 #else
 EvtWord bottakuru_init[25];
@@ -253,7 +253,7 @@ EvtWord evt_badge_dummy[VERSION_PICK(128, 139)];
 
 UnitWinSell uwnobj_list[6];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_open_02_01_f2[];
 #else
 EvtWord evt_open_02_01_f2[22];
@@ -308,7 +308,7 @@ EvtWord christine_nakama_init[58];
 EvtWord christine_nakama[760];
 EvtWord maffia_turn[84];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord maffia_assault[];
 #else
 EvtWord maffia_assault[797];
@@ -330,7 +330,7 @@ static EvtWord sekai_yami_evt[185];
 static EvtWord minnnanokoe_evt[397];
 EvtWord iri_09_init[10];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord iri_09_tentyo_talk[];
 #else
 EvtWord iri_09_tentyo_talk[172];
@@ -349,7 +349,7 @@ EvtWord marco_jewel[22];
 static EvtWord epilogue_npc_entry[48];
 static EvtWord epilogue_evt_sub[160];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord epilogue_evt[312];
 #else
 static EvtWord epilogue_evt[313];
@@ -368,7 +368,7 @@ EvtWord gor_01_init_evt[VERSION_PICK(546, 548)];
 #endif
 
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 SimpleRecipe R_simple_recipe_table[26];
 CookRecipe R_cookbook_recipe_table[VERSION_PICK(289, 292)];
 #endif
@@ -380,7 +380,7 @@ s32 iri_18_item_tbl[2];
 EvtWord cooking_evt[];
 
 // Descriptive name (not in the symbol maps); placeholder unk_gor_00004db4, JP gor .text+0x4CE8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Returns in args[0] how many special badges the badge shop currently has in stock (badgeShop_SpecialCheck).
  * JP and later releases.
@@ -398,7 +398,7 @@ USER_FUNC(badgeshop_special_cnt) {
  * remembers her current z in LW float 10 and 11 as the line she stands on,
  * and (JP and later) makes her resume her regular event when Mario leaves her talk range.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(nancy_block_init_func) {
 #else
 USER_FUNC(nancy_block_init_func) {
@@ -410,7 +410,7 @@ USER_FUNC(nancy_block_init_func) {
     z = npc->position.z;
     event->lwDataF[10] = z;
     event->lwDataF[11] = z;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     npc->flags |= NPC_FLAG_RESUME_AFTER_TALK;
 #endif
     return EVT_RETURN_DONE;
@@ -526,7 +526,7 @@ static USER_FUNC(mario_keyoff_wait) {
 static EVT_BEGIN(sell_evt)
     CALL(evt_pouch_get_havebadgecnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("badgeshop_06"), 0, STRING("バッジ店員"))
         RETURN
     END_IF
@@ -543,7 +543,7 @@ static EVT_BEGIN(sell_evt)
     CALL(evt_win_other_select, SELECT_TYPE_BADGE_SELL)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_coin_off, LW(12))
         RETURN
     END_IF
@@ -630,7 +630,7 @@ EVT_END()
 EVT_BEGIN(zaiko_buy_evt)
     CALL(evt_badgeShop_throw_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("badgeshop_37"), 0, STRING("バッジ店員"))
         RETURN
     END_IF
@@ -652,7 +652,7 @@ EVT_BEGIN(zaiko_buy_evt)
     CALL(evt_win_other_select, SELECT_TYPE_BADGE_BUY)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_coin_off, LW(12))
         RETURN
     END_IF
@@ -689,7 +689,7 @@ EVT_BEGIN(zaiko_buy_evt)
     END_IF
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), LW(3))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("badgeshop_01"), 0, STRING("バッジ店員"))
         CALL(evt_win_coin_off, LW(12))
 #else
@@ -700,7 +700,7 @@ EVT_BEGIN(zaiko_buy_evt)
     END_IF
     CALL(evt_pouch_add_item, LW(1), LW(0))
     IF_INT_EQUAL(LW(0), -1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("badgeshop_02"), 0, STRING("バッジ店員"))
         CALL(evt_win_coin_off, LW(12))
 #else
@@ -712,7 +712,7 @@ EVT_BEGIN(zaiko_buy_evt)
     CALL(evt_badgeShop_throw_dec, LW(1))
     MULTIPLY(LW(3), -1)
     CALL(evt_pouch_add_coin, LW(3))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_coin_wait, LW(12))
     WAIT_MS(500)
     CALL(evt_win_coin_off, LW(12))
@@ -756,7 +756,7 @@ EVT_END()
  * Choice 1 runs zaiko_buy_evt (the stock list) and choice 2 leaves with badgeshop_22.
  */
 static EVT_BEGIN(buy_evt)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_print, 0, STRING("badgeshop_36"), 0, STRING("バッジ店員"))
 #else
     CALL(evt_msg_print_add, 0, STRING("badgeshop_36"))
@@ -764,7 +764,7 @@ static EVT_BEGIN(buy_evt)
     CALL(evt_msg_select, 0, STRING("badgeshop_35"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL(evt_msg_print, 0, STRING("badgeshop_05"), 0, STRING("バッジ店員"))
 #else
@@ -781,14 +781,14 @@ static EVT_BEGIN(buy_evt)
         END_IF
 #endif
         CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL_CHILD(zaiko_buy_evt)
 #else
         CALL_CHILD(PTR(zaiko_buy_evt))
 #endif
         CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
 #else
@@ -798,7 +798,7 @@ static EVT_BEGIN(buy_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(first_shopping_evt)
     CALL(evt_msg_print, 0, STRING("badgeshop_30"), 0, STRING("バッジ店員"))
     RETURN
@@ -807,7 +807,7 @@ EVT_END()
 EVT_BEGIN(badgeshopper_talk_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(unitwin_get_work_ptr, LW(10))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF(2), 0)
         CALL_CHILD(first_shopping_evt)
         SET_VALUE(GSWF(2), 1)
@@ -819,21 +819,21 @@ EVT_BEGIN(badgeshopper_talk_evt)
     CALL(evt_msg_select, 0, STRING("badgeshop_23"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL_CHILD(buy_evt)
 #else
         CALL_CHILD(PTR(buy_evt))
 #endif
         CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL_CHILD(sell_evt)
 #else
         CALL_CHILD(PTR(sell_evt))
 #endif
         CASE_EQUAL(2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL(evt_msg_print, 0, STRING("badgeshop_22"), 0, STRING("バッジ店員"))
 #else
@@ -931,7 +931,7 @@ EVT_BEGIN(nancy_init_check)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
         SET_VALUE(LW(3), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         IF_INT_GREATER(LW(10), -575)
 #else
         IF_INT_GREATER(LW(10), -580)
@@ -1055,7 +1055,7 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_mario_wait_landon)
 
     // After the demos, if Flurrie is current, wait until partner use ends before Mario resumes his normal pose.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
         LOOP(0)
@@ -1266,7 +1266,7 @@ EVT_BEGIN(nancy_talk)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("gor_01_008"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(item_tbl_nancy), LW(1))
 #else
             CALL(evt_win_item_select, 0, PTR(item_tbl_nancy), LW(1), 0)
@@ -1659,7 +1659,7 @@ EVT_BEGIN(master_talk)
         WAIT_MS(1000)
         CALL(evt_npc_reverse_ry, STRING("me"))
         WAIT_MS(1000)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_party_stop, 0)
         CALL(evt_msg_print_party, STRING("mac_4_069"))
         CALL(evt_party_run, 0)
@@ -1717,7 +1717,7 @@ EVT_BEGIN(master_talk)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         WAIT_MS(800)
         CALL(evt_msg_print, 0, STRING("mac_4_076"), 0, STRING("me"))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_party_stop, 0)
         CALL(evt_msg_print_party, STRING("mac_4_077"))
         CALL(evt_party_run, 0)
@@ -2287,7 +2287,7 @@ EVT_BEGIN(bomhei_talk)
 EVT_END()
 
 EVT_BEGIN(bottakuru_init)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
@@ -2296,7 +2296,7 @@ EVT_BEGIN(bottakuru_init)
         RETURN
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_set_ry, STRING("me"), 90)
 #endif
     SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
@@ -2310,7 +2310,7 @@ EVT_END()
  */
 EVT_BEGIN(bottakuru_talk)
     // Charlieton is sold out, or has nothing Mario can still buy: he only thanks him.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("bottakuru_03"), 0, STRING("me"))
@@ -2368,7 +2368,7 @@ EVT_BEGIN(bottakuru_talk)
 
     // Charlieton quotes the price of the chosen item; for a badge (id 240 and up) he also gives its BP cost.
     IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(2), LW(3), LW(4))
     ELSE
         CALL(evt_msg_print_insert, 0, STRING("bottakuru_06"), 0, STRING("me"), LW(2), LW(3))
@@ -2441,7 +2441,7 @@ EVT_BEGIN(bottakuru_talk)
 
     // Charlieton thanks Mario; if he is now sold out or Mario has no coins left the visit ends, otherwise he
     // offers more.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("bottakuru_09"))
@@ -3370,14 +3370,14 @@ const char* badgemise_npc[] = {
  * The demo version is a simpler variant without the language switch.
  */
 EVT_BEGIN(evt_badge_dummy)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     SET_VALUE(LW(10), LW(0))
     CALL(disp_off, LW(10))
     CALL(evt_set_dir_to_target, STRING("バッジ店員"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("バッジ店員"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF(2), 0)
         CALL_CHILD(first_shopping_evt)
         SET_VALUE(GSWF(2), 1)
@@ -3420,7 +3420,7 @@ EVT_BEGIN(evt_badge_dummy)
     END_IF
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), LW(13))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL(evt_msg_print, 0, STRING("badgeshop_01"), 0, STRING("バッジ店員"))
         CALL(unitwincoin_disp_onoff, 0)
@@ -3432,7 +3432,7 @@ EVT_BEGIN(evt_badge_dummy)
     END_IF
     CALL(evt_pouch_add_item, LW(12), LW(0))
     IF_INT_EQUAL(LW(0), -1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_continue)
         CALL(evt_msg_print, 0, STRING("badgeshop_02"), 0, STRING("バッジ店員"))
         CALL(unitwincoin_disp_onoff, 0)
@@ -3443,7 +3443,7 @@ EVT_BEGIN(evt_badge_dummy)
         RETURN
     END_IF
     CALL(set_new_goods_list, LW(10), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LW(0), LW(10))
     CALL(evt_badgeShop_getBargainKind, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -3491,7 +3491,7 @@ EVT_BEGIN(evt_open_02_01_f2)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 1)
@@ -4661,7 +4661,7 @@ EVT_BEGIN(maffia_turn)
 EVT_END()
 
 EVT_BEGIN(maffia_assault)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(11), 1)
 #endif
     CALL(evt_npc_set_position, STRING("マフィア１"), 75, 0, -400)
@@ -4858,7 +4858,7 @@ EVT_BEGIN(maffia_assault)
     CALL(evt_npc_set_ry, LW(10), 90)
     CALL(evt_npc_move_position, LW(10), LW(3), LW(2), 0, FLOAT(120.0f), 0)
     CALL(evt_npc_set_position, LW(10), 0, -1000, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GF(11), 0)
 #endif
     RETURN
@@ -5597,7 +5597,7 @@ EVT_BEGIN(iri_09_tentyo_talk)
             LOOP(0)
                 CALL(evt_msg_continue)
                 CALL(iri_09_item_tbl_make, LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, LW(1), LW(2))
 #else
                 CALL(evt_win_item_select, 0, LW(1), LW(2), 0)
@@ -5709,7 +5709,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
 
                 // She asks for the item; Mario picks it from the item menu.
                 CALL(evt_msg_print, 0, STRING("irai_16_02"), 0, STRING("チュチュリーナ"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, PTR(iri_16_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_16_item_tbl), LW(0), 0)
@@ -5957,7 +5957,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_set_position, STRING("バッジ店長"), -114, 154, -173)
     CALL(evt_npc_flag_onoff, 1, STRING("バッジ店長"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f2_naka"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 1)
@@ -6193,7 +6193,7 @@ EVT_BEGIN(gor_01_init_evt)
     // Until Flavio's talk the Skull Gem lies on the ground.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), 2)
 #else
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), ITEM_FLAG_NO_TOUCH_GET)
@@ -6262,7 +6262,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         IF_INT_EQUAL(GSWF_GOR_01_ULTRA_HAMMER_CHEST_FELL, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 146, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
 #else
             CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
@@ -6316,7 +6316,7 @@ EVT_END()
  * Zess T.'s one-ingredient recipes: for each ingredient, the dish made from it by itself before and after the
  * cookbook is solved.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 SimpleRecipe R_simple_recipe_table[] = {
     {"ファイアフラワー", "あつあつスープ", "あつあつスープ"}, // ITEM_FIRE_FLOWER -> ITEM_SPICY_SOUP
     {"びりびりキノコ", "キノコいため", "キノコいため"}, // ITEM_VOLT_SHROOM -> ITEM_SHROOM_FRY
@@ -6350,7 +6350,7 @@ SimpleRecipe R_simple_recipe_table[] = {
 /**
  * Zess T.'s two-ingredient recipes: pairs of ingredients and the dish they make in the retail releases.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 CookRecipe R_cookbook_recipe_table[] = {
 #if VERSION < VERSION_US
     {"かみなりドッカン", "かみなりゴロゴロ", "しれんのナベ"}, // ITEM_THUNDER_RAGE + ITEM_THUNDER_BOLT -> ITEM_TRIAL_STEW
@@ -6890,7 +6890,7 @@ s32 itemNameToID(const char* name) {
     return i;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Looks up one ingredient in R_simple_recipe_table and returns its before- and after-Cookbook results
  * in args[1] and args[2], or 0 when no recipe matches. Mystery gives the same random dish in both outputs.
@@ -6928,7 +6928,7 @@ USER_FUNC(cook_chk) {
  * Anything with the Mystery item gives a random result.
  * The demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(cook_chk2) {
     // FAKE: `(volatile u32)args[n]` index casts on the evtSetValue calls below (plain args[n] changes
     // the object in both versions)
@@ -6964,7 +6964,7 @@ static inline BOOL fileAsyncMissing(FileEntry* file) {
     return (s32)file == -1;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * The demo reads the recipes from cooking.xml on the disc:
  * <cooking_x1> blocks for one ingredient, <cooking_x2> blocks for two.
@@ -7026,7 +7026,7 @@ static USER_FUNC(cook_chk) {
  * Anything with the Mystery item gives a random result.
  * The demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(cook_chk2) {
     EvtWord* args = event->args;
     s32 item1 = evtGetValue(event, args[0]);
@@ -7088,7 +7088,7 @@ BOOL chkCookItem(s32 item) {
  * picked), ends it with -1 and returns the count in args[1].
  * args[0] is the pouch slot to leave out (the item id in the demos).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(make_item_tbl) {
 #else
 USER_FUNC(make_item_tbl) {
@@ -7101,7 +7101,7 @@ USER_FUNC(make_item_tbl) {
     s32 item;
 
     for (i = 0; i < cnt; i++) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (skip != i) {
             item = pouchHaveItem(i);
             if (item != 0) {
@@ -7291,7 +7291,7 @@ EVT_BEGIN(cooking_evt)
 
     // Controls are locked while Mario and his partners walk up to Zess T.'s stove.
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(LW(11), -1)
     SET_VALUE(LW(12), -1)
 #endif
@@ -7341,7 +7341,7 @@ EVT_BEGIN(cooking_evt)
             CALL(evt_pouch_check_item, ITEM_COOKBOOK, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
                 CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, PTR(iri_18_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_18_item_tbl), LW(0), 0)
@@ -7481,7 +7481,7 @@ EVT_BEGIN(cooking_evt)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(0)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(make_item_tbl, LW(14), LW(0))
 #else
     CALL(make_item_tbl, LW(11), LW(0))
@@ -7494,7 +7494,7 @@ EVT_BEGIN(cooking_evt)
     // She asks for an ingredient; Mario picks it from his pouch (backing out asks again).
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_007"))
     LABEL(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(item_tbl), LW(0))
 #else
     CALL(evt_win_item_select, 1, PTR(item_tbl), LW(0), LW(1))
@@ -7513,7 +7513,7 @@ EVT_BEGIN(cooking_evt)
     SET_VALUE(LW(14), LW(0))
 
     // With the Cookbook recipes unlocked, Mario may add a second ingredient.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LF(0), 0)
 
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
@@ -7531,7 +7531,7 @@ EVT_BEGIN(cooking_evt)
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_continue)
                 LABEL(2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, PTR(item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 1, PTR(item_tbl), LW(0), LW(1))
@@ -7544,7 +7544,7 @@ EVT_BEGIN(cooking_evt)
                         SET_VALUE(LF(0), 1)
                         GOTO(3)
                         CASE_EQUAL(1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         CALL(evt_msg_continue)
 #endif
                         GOTO(2)
@@ -7557,7 +7557,7 @@ EVT_BEGIN(cooking_evt)
                     GOTO(2)
                 END_IF
                 SET_VALUE(LW(15), LW(0))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 SET_VALUE(LW(12), LW(1))
 #endif
                 ELSE
@@ -7572,7 +7572,7 @@ EVT_BEGIN(cooking_evt)
         CALL(get_item_name, LW(14), LW(0))
 
         IF_INT_EQUAL(LF(0), 0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             CALL(evt_msg_fmt_str, 0, LW(2), STRING("gor_01_cook_012"), LW(0))
             CALL(evt_msg_print, 1, LW(2), 0, STRING("ナンシー"))
         ELSE
@@ -7587,7 +7587,7 @@ EVT_BEGIN(cooking_evt)
         ELSE
         CALL(get_item_name, LW(14), LW(0))
         CALL(get_item_name, LW(15), LW(1))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_msg_fmt_str, 0, LW(2), STRING("gor_01_cook_013"), LW(0))
         CALL(evt_msg_fmt_str, 1, LW(2), LW(2), LW(1))
         CALL(evt_msg_print, 1, LW(2), 0, STRING("ナンシー"))
@@ -7605,7 +7605,7 @@ EVT_BEGIN(cooking_evt)
     // The ingredients leave the pouch and the dish is worked out from the recipe.
     IF_INT_EQUAL(LW(15), 0)
         CALL(cook_chk, LW(14), LW(0), LW(1))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_pouch_remove_item, LW(14), LW(3))
 #else
         CALL(evt_pouch_remove_item_index, LW(14), LW(11), LW(3))
@@ -7617,7 +7617,7 @@ EVT_BEGIN(cooking_evt)
         END_IF
         ELSE
         CALL(cook_chk2, LW(14), LW(15), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_pouch_remove_item, LW(14), LW(3))
         CALL(evt_pouch_remove_item, LW(15), LW(3))
 #else

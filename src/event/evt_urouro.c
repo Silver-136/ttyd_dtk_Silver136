@@ -94,7 +94,7 @@ USER_FUNC(urouro_main_func) {
     f32 dist;
     f32 step;
     f32 lim;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 temp;
 #else
     s32 sfxFlag;
@@ -150,7 +150,7 @@ USER_FUNC(urouro_main_func) {
                 step = lim;
             }
             npc->moveOffset.x = step * (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
             npc->moveOffset.z = step * -temp;
 #else

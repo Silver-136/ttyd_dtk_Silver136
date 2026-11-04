@@ -35,7 +35,7 @@ const char* toge_data[18];
 EvtWord toge_evt_sub[121];
 EvtWord toge_evt[86];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_03_init_evt[];
 #else
 EvtWord las_03_init_evt[32];
@@ -254,7 +254,7 @@ EVT_END()
 EVT_BEGIN(las_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

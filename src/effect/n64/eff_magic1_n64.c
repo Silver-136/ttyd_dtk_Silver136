@@ -72,7 +72,7 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
  * Moves the bolt along its velocity (the burst slows and fades); a bolt reaching the end spawns the burst there.
  * From JP on, it only draws while the system level is nonzero.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effMagic1Main(EffectEntry* effect) {
 #else
 void effMagic1Main(EffectEntry* effect) {
@@ -87,7 +87,7 @@ void effMagic1Main(EffectEntry* effect) {
     tmp.y = work->offset.y;
     tmp.z = work->offset.z;
     position = tmp;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (marioStGetSystemLevel() != 0) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_XLU, (DispCallback)effMagic1Disp, effect);
         return;

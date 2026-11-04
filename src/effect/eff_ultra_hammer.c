@@ -42,7 +42,7 @@ s16 wakka_texcoord0_tbl[];
 
 #ifdef __MWERKS__
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s16 wakka_vertex_tbl[] ATTRIBUTE_ALIGN(32) = {
     24347, 0, -8825, // 0
     20710, 0, -15961, // 1
@@ -176,7 +176,7 @@ s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
     23552, 8192, // 39
     28672, 0, // 40
     28672, 8192, // 41
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0, 0,
     0, 0,
     0, 0,
@@ -454,7 +454,7 @@ u8 wakka_dl_0_19[] ATTRIBUTE_ALIGN(32) = {
 };
 
 /** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void* wakka_dl_0_tbl[] = {
     wakka_dl_0_0, // 0
     wakka_dl_0_1, // 1
@@ -504,7 +504,7 @@ u8 wakka_dl_0_size_tbl[] = {
 
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static f32 scale_tbl[] = {
     1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
     1.2f, 1.4f, 1.6f, 1.8f, 2.0f,
@@ -515,7 +515,7 @@ static f32 scale_tbl[] = {
 #endif
 
 // Texture scroll offsets: -3.5 / 24 * i for i = 0..24
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 f32 scroll_tbl[] = {
     0.0f, -0.14583334f, -0.29166669f, -0.43750003f, -0.58333337f,
     -0.72916669f, -0.87500006f, -1.0208334f, -1.1666667f, -1.3125f,
@@ -573,7 +573,7 @@ EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 
  * Counts down and fades alpha in the last 16 frames;
  * each of the three rings waits for its start delay, then runs its 25-step scroll/scale table and repeats.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void effUltraHammerMain(EffectEntry* effect) {
 #else
 void effUltraHammerMain(EffectEntry* effect) {
@@ -602,7 +602,7 @@ void effUltraHammerMain(EffectEntry* effect) {
         } else {
             if (data->scroll < 25) {
                 data->offsetX = scroll_tbl[data->scroll];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 data->scale = scale_tbl[data->scroll];
 #else
                 data->scale = 3.5f;

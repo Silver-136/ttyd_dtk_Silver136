@@ -71,7 +71,7 @@ typedef enum HitEntryFlags {
     HIT_FLAG_MAPOBJ_BIND = (1 << 5), // 0x20
     HIT_FLAG_MTX_DIRTY = (1 << 6),  // 0x40
     HIT_FLAG_DELETED = (1 << 7),    // 0x80
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     HIT_FLAG_NO_GEOMETRY = (1 << 15), // 0x8000, an object without triangles (partCount 0); the checks skip it
 #endif
 } HitEntryFlags;
@@ -99,7 +99,7 @@ struct HitEntry {
     struct HitEntry* parent;        // 0xD4
     struct HitEntry* child;         // 0xD8
     struct HitEntry* sibling;       // 0xDC
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     struct HitEntry* siblingActive; // 0xE0
 #endif
 };

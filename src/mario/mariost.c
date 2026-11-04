@@ -83,7 +83,7 @@ BOOL DvdCheckTreadOn;
 
 //.data
 GXRenderModeObj sRMObjHReso = {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     VI_TVMODE_PAL_INT, //viTVmode
     0x260, //fbWidth
     0x1C0, //efbHeight
@@ -114,7 +114,7 @@ GXRenderModeObj sRMObjHReso = {
 
 /** Video mode of the boot logo screens for NTSC progressive scan or PAL EURGB60, set by seq_logo after a hot reset. */
 GXRenderModeObj sRMObjHReso_prog = {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     VI_TVMODE_EURGB60_INT, //viTVmode
 #else
     VI_TVMODE_NTSC_PROG, //viTVmode
@@ -126,7 +126,7 @@ GXRenderModeObj sRMObjHReso_prog = {
     0x10, //viYOrigin
     0x29A, //viWidth
     0x1C0, //viHeight
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     VI_XFBMODE_DF, //xFBmode
 #else
     VI_XFBMODE_SF, //xFBmode
@@ -141,7 +141,7 @@ GXRenderModeObj sRMObjHReso_prog = {
 };
 
 GXRenderModeObj GXNtsc480IntDfMarioSt = {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     VI_TVMODE_PAL_INT, //viTVmode
     0x260, //fbWidth
     0x1E0, //efbHeight
@@ -172,7 +172,7 @@ GXRenderModeObj GXNtsc480IntDfMarioSt = {
 
 /** The game's main video mode for NTSC progressive scan or PAL EURGB60, used by marioStInit after a hot reset. */
 GXRenderModeObj GXNtsc480ProgMarioSt = {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     VI_TVMODE_EURGB60_INT, //viTVmode
 #else
     VI_TVMODE_NTSC_PROG, //viTVmode
@@ -184,7 +184,7 @@ GXRenderModeObj GXNtsc480ProgMarioSt = {
     0x0, //viYOrigin
     0x294, //viWidth
     0x1E0, //viHeight
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     VI_XFBMODE_DF, //xFBmode
 #else
     VI_XFBMODE_SF, //xFBmode
@@ -215,7 +215,7 @@ void marioStInit(void) {
     static u8 stack[0x1000];
 
     // the releases also start cold after a shutdown reset
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!OSIsRestart()
 ) {
 #else
@@ -233,7 +233,7 @@ void marioStInit(void) {
         }
     }
     DEMOEnableGPHangWorkaround(5);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     DEMOPadInit();
     DVDSetAutoFatalMessaging(TRUE);
 #else
@@ -245,7 +245,7 @@ void marioStInit(void) {
     memset(gp, 0, sizeof(GlobalWork));
     gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
     gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (OSIsRestart()) {
         gp->flags |= GW_FLAG_VIDEO_MODE_SET;
     }
@@ -276,7 +276,7 @@ void marioStInit(void) {
     gp->areaFadeOutDuration = 300;
 
     // game language: 1 English, 2 German, 3 French, 4 Spanish, 5 Italian
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION == VERSION_DEMO_JP
     gp->language = LANGUAGE_JP;
 #else
@@ -284,7 +284,7 @@ void marioStInit(void) {
 #endif
     gp->framerate = 60;
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     if (VIGetTvFormat() == VI_NTSC) {
         gp->framerate = 60;
     } else if (VIGetTvFormat() == VI_EURGB60) {
@@ -392,7 +392,7 @@ void marioStInit(void) {
     } else {
         SoundSetOutputMode(1);
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     none_key = OSGetTime();
 #endif
 }
@@ -438,7 +438,7 @@ void marioStMain(void) {
     gcResetCheck();
     if (gp->flags & GW_FLAG_E3) {
         for (i = 0; i < 4; i++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (gp->dirs[i])
                 break;
             if (gp->button[i])
@@ -564,7 +564,7 @@ u32 marioStGetSystemLevel(void) {
  * and the B+X+Start soft reset (held 0.5 s), then services rumble and the sound driver.
  * JP and later also reset when the drive reports a fatal status.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void viPostCallback(u32 retraceCount) {
 #else
 void viPostCallback(u32 retraceCount) {
@@ -646,7 +646,7 @@ void viPostCallback(u32 retraceCount) {
             } else {
                 gp->softResetWait = FALSE;
             }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (DVDGetDriveStatus() == DVD_STATE_FATAL_ERROR) {
                 gp->resetType = RESET_TYPE_NONE;
             }
@@ -664,7 +664,7 @@ exitcheck:
  * mutes sound and draws the ROM-font error message on its own, until the drive recovers.
  * US and PAL wait until the status has been steady for 10 frames before drawing.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void* gcDvdCheckThread(void* param) {
 #else
 void* gcDvdCheckThread(void* param) {
@@ -716,7 +716,7 @@ void* gcDvdCheckThread(void* param) {
                 gp->dvdError = TRUE;
                 break;
             case DVD_STATE_FATAL_ERROR:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
                 msgId = 13;
 #else
@@ -749,7 +749,7 @@ void* gcDvdCheckThread(void* param) {
             SoundCloseCover();
         }
         if (gp->dvdError) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (cardIsExec()) {
                 gp->dvdError = FALSE;
             }
@@ -763,7 +763,7 @@ void* gcDvdCheckThread(void* param) {
             DEMOBeforeRender();
             if (msgId) {
                 message = romFontGetMessage(msgId);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 width = 0.8f * romFontGetWidth(message);
 #else
                 // FAKE: s32 -> f32 -> s32 round trip; the plain assignment changes the object
@@ -772,7 +772,7 @@ void* gcDvdCheckThread(void* param) {
                 MTXPerspective(mtx, 25.0f, 1.2666667f, 1.0f, 10000.0f);
                 GXSetProjection(mtx, GX_PERSPECTIVE);
                 xpos = -width / 2.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 romFontPrintGX(xpos, 0.0f, 0.8f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
 #else
                 romFontPrintGX(xpos, 60.0f, 1.0f, &(GXColor){0xFF, 0xFF, 0xFF, 0xFF}, message);
@@ -856,7 +856,7 @@ void gcRumbleCheck(void) {
  * The demos inline the reset check into its callers (the US demo also logs the reset);
  * their restart codes are only RESTART and HOTRESET.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static inline void gcResetCheck(void) {
     u32 code;
 
@@ -899,7 +899,7 @@ void gcResetCheck(void) {
         }
         if (gp->resetType != RESET_TYPE_MENU) {
             if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 code = OS_RESET_RESTART;
 #else
                 code = OS_RESET_SHUTDOWN;

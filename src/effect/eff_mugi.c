@@ -48,7 +48,7 @@ inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
 }
 
 /** Spawns the wheat/flower smoke puffs behind Mario at (x, y, z) heading `angle`; called from mario_kemuri.c. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * The demo has one more entry function here.
  * Nothing calls it, so the linker drops it, but its type string stays at the end of the unit's .rodata.

@@ -25,7 +25,7 @@ BattleUnitKind unit_met;
 static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_ceil[18];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table_turn[15];
 #else
 static PoseTableEntry pose_table_turn[17];
@@ -172,7 +172,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MET_Q_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "MET_A_1"},
     {POSE_TYPE_DAMAGE, "MET_D_3"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_ATTACK, "MET_A_1"},
     {POSE_TYPE_WALK, "MET_W_1"},
 #endif
@@ -305,7 +305,7 @@ static BattleUnitDefense defence_turn = {0};
  */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {75, 90, 75, 100, 75, 100, 0, 75, 100, 75, 100, 75, 100, 75, 75, 60, 65, 100, 75, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

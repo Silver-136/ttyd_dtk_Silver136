@@ -70,7 +70,7 @@ EvtWord ukishima_watari[186];
 EvtWord ukishima_check[40];
 static EvtWord ukishima_apper[286];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord ukishima_init1[];
 extern EvtWord ukishima_part1[];
 extern EvtWord ukishima_init2[];
@@ -92,7 +92,7 @@ EvtWord torinoko_suifu[172];
 EvtWord suifu_orei[339];
 EvtWord escapeway_event[98];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord bombwall_escape_move[58];
 static EvtWord bombwall_bomb[187];
 #else
@@ -140,7 +140,7 @@ EvtWord pukapuka_watari_init02[70];
 HitDamageReturn hitDmgRetPoints_1st[17];
 static HitDamageReturn hitDmgRetPoints[17];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord dou_11_init_evt[];
 #else
 EvtWord dou_11_init_evt[307];
@@ -297,7 +297,7 @@ static EVT_BEGIN(suifu_e_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_35_ESCAPE_ROUTE)
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_npc_set_position, STRING("水夫E"), 736, 50, 113)
 #else
         CALL(evt_npc_set_position, STRING("me"), 736, 50, 113)
@@ -1138,7 +1138,7 @@ EVT_END()
  * until one island switch has been pressed (in the demos, mobj01).
  */
 EVT_BEGIN(ukishima_init1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_DOU_11_SWITCH_1_PRESSED, 0)
 #else
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
@@ -1163,7 +1163,7 @@ EVT_BEGIN(ukishima_part1)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 280, 174, 527, 280, 79, -14, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
 #endif
     SET_VALUE(LW(2), STRING("S_taru_n01"))
@@ -1188,7 +1188,7 @@ EVT_END()
  * until both island switches have been pressed (or in the demos, the second switch).
  */
 EVT_BEGIN(ukishima_init2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_DOU_11_SWITCH_2_PRESSED, 0)
 #else
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
@@ -1212,7 +1212,7 @@ EVT_BEGIN(ukishima_part2)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 525, 174, 527, 525, 79, -14, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
 #endif
     SET_VALUE(LW(2), STRING("S_taru_n03"))
@@ -1232,7 +1232,7 @@ EVT_BEGIN(ukishima_part2)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Event of the first blue island switch (mobj01):
  * sets its flag and runs ukishima_part1 or ukishima_part2 depending on how many switches are now down.
@@ -1643,11 +1643,11 @@ EVT_END()
  */
 EVT_BEGIN(escapeway_event)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_mario_normalize)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     WAIT_MS(500)
@@ -1674,7 +1674,7 @@ EVT_BEGIN(escapeway_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * After the wall is blown open: Sailor C is made intangible and Mario
  * and the partner are walked to their places at (730, -120) and (712, -126) to watch. JP and later only.
@@ -1708,14 +1708,14 @@ EVT_END()
  */
 static EVT_BEGIN(bombwall_bomb)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #endif
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_mapobj_get_position, STRING("S_ana_before"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_WALL_BREAK1"), LW(0), LW(1), LW(2), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         CALL(evt_mario_wait_landon)
@@ -2872,7 +2872,7 @@ EVT_BEGIN(dou_11_init_evt)
             SPAWN_EVENT(PTR(watarikiri_suifu_init))
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_switch_blue, 2, STRING("mobj01"), -220, 120, -450, PTR(ukishima_part1), GSWF_DOU_11_SWITCH_1_PRESSED)
     CALL(evt_mobj_switch_blue, 2, STRING("mobj02"), 80, 120, -450, PTR(ukishima_part2), GSWF_DOU_11_SWITCH_2_PRESSED)
     SPAWN_EVENT(ukishima_init1)
@@ -2928,7 +2928,7 @@ EVT_BEGIN(dou_11_init_evt)
     SET_VALUE(LW(0), STRING("S_bin04"))
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main17), LW(10))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
         SPAWN_EVENT(pukapuka_watari_init01)
 #else
@@ -2938,7 +2938,7 @@ EVT_BEGIN(dou_11_init_evt)
         SPAWN_EVENT(PTR(pukapuka_watari_init01))
 #endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     IF_INT_EQUAL(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
         SPAWN_EVENT(pukapuka_watari_init02)
 #else

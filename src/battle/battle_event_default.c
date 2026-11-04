@@ -47,7 +47,7 @@ EvtWord btldefaultevt_BiribiriMove[29];
 EvtWord btldefaultevt_guard_move[85];
 EvtWord btldefaultevt_guard_return[98];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord btldefaultevt_Appeal[114];
 #else
 EvtWord btldefaultevt_Appeal[145];
@@ -58,7 +58,7 @@ EvtWord btldefaultevt_Escape[657];
 EvtWord btldefaultevt_Confuse[19];
 EvtWord btldefaultevt_CantMoveZeroGravity[44];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord btldefaultevt_SuitoruBadgeEffect[100];
 #else
 EvtWord btldefaultevt_SuitoruBadgeEffect[122];
@@ -587,7 +587,7 @@ EVT_BEGIN(btldefaultevt_ChangeParty)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** The short scripts sit where the demo's .data places them (retail keeps them in .sdata). */
 EVT_BEGIN(btldefaultevt_ProtectPartner)
     CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(3))
@@ -671,7 +671,7 @@ EVT_BEGIN(btldefaultevt_guard_return)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Action for a unit that does nothing this turn: restarts its wait event. */
 EVT_BEGIN(btldefaultevt_Wait)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -688,7 +688,7 @@ EVT_END()
 EVT_BEGIN(btldefaultevt_Appeal)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_NEUTRAL)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
 #endif
@@ -698,7 +698,7 @@ EVT_BEGIN(btldefaultevt_Appeal)
         ADD(LW(3), 35)
         SET_VALUE(LW(4), LW(2))
         ADD(LW(2), 250)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     ELSE
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), LW(1))
@@ -762,7 +762,7 @@ EVT_BEGIN(_Defence_core)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Mario's Defend command. */
 EVT_BEGIN(btldefaultevt_Defend)
     SET_VALUE(LW(12), PTR(&badgeWeapon_DefenceCommand))
@@ -1000,13 +1000,13 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
             CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(7))
             MULTIPLY_FLOAT(LW(7), LW(6))
 #endif
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             ADD(LW(1), 50)
             CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
 #else
@@ -1021,14 +1021,14 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     CALL(_get_flower_suitoru_point, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
             CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(7))
             MULTIPLY_FLOAT(LW(7), LW(6))
 #endif
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             ADD(LW(1), 50)
             CALL(evt_eff, STRING(""), STRING("recovery"), 1, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
 #else
@@ -1058,7 +1058,7 @@ EVT_BEGIN(btldefaultevt_avoid_counter_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(btldefaultevt_ProtectPartner)
     CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_SetGuard, UNIT_ID_SELF, LW(3))
@@ -1070,7 +1070,7 @@ EVT_BEGIN(btldefaultevt_Dummy)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(btldefaultevt_Wait)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN

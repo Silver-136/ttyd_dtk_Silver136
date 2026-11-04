@@ -12,7 +12,7 @@
 #include "evt/evt_map.h"
 #include "pmario_sound.h"
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "evt/evt_mobj.h"
 #endif
 
@@ -24,7 +24,7 @@ static EvtWord e_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord warning_event[38];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord muj_11_init_evt[];
 #else
 EvtWord muj_11_init_evt[35];
@@ -150,7 +150,7 @@ EVT_BEGIN(muj_11_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_31_FOUR_EYES)
         SPAWN_EVENT(PTR(warning_event))
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, 0, 60, -20, 0, 0)
     CALL(evt_mobj_save_blk, STRING("s_blk"), 50, 60, -20, 0, 0)
 #endif

@@ -107,7 +107,7 @@ void caseMain(void) {
     HitEntry* push;
     HitEntry* hammer;
     HitEntry* head;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 fbatMode;
 #endif
     mario = marioGetPtr();
@@ -120,7 +120,7 @@ void caseMain(void) {
     hammer = mario->hitobjHammer;
     head = mario->hitobjHead;
     btn = mario->buttonTrg;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if ((u32)marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         ((fbatMode = fbatGetPointer()->mode) == 0 || fbatMode == FBAT_MODE_FIELD) && marioCaseEventValidChk()) {
 #else

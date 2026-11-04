@@ -60,7 +60,7 @@ static EvtWord damage_event[315];
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event[393];
 #else
 static EvtWord dead_event[402];
@@ -139,7 +139,7 @@ static BattleUnitDefense defence_guard = {{2, 2, 2, 2, 2}};
 /** Defence attributes of Lord Crump: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 70, 60, 100, 60, 100, 100, 60, 100, 60, 100, 60, 100, 50, 60, 0, 0, 100, 60, 100, 0, 0};
 #else
 static StatusVulnerability regist = {
@@ -564,7 +564,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, 300, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(evt_btl_camera_set_moveto, 0, 220, 87, 419, 220, 60, 0, 60, 11)
     WAIT_FRAMES(60)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_batstage_set_aud_dark, 0, 1, 0)
 #endif
 
@@ -583,7 +583,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_SetHp, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_OnOffStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, 0, 0, 0)
     WAIT_FRAMES(95)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_batstage_return_aud_dark_base, 1, 0)
 #endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

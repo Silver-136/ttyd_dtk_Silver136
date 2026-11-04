@@ -1574,7 +1574,7 @@ static const Vec puni_fall_dir;
    the start loads code-generate before the pointer args, so they read r4 directly (scheduling). */
 typedef void* (*PuniHitCheckStartFirst)(f32, f32, f32, void*, f32*, f32*, f32*, f32*, f32*, f32*, f32*, f32, f32, f32);
 // Descriptive name (not in the symbol maps); placeholder unk_mri_000095f0, JP mri .text+0x952C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Move step of the limited-speed Puni (JP and later):
  * like puniMoveAtari but without reflecting the velocity, and on floor 18 a hit simply stops the step.
@@ -1618,7 +1618,7 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
 
 static const Vec puni_fall_dir;
 // Descriptive name (not in the symbol maps); placeholder unk_mri_0000980c, JP mri .text+0x9748. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Move step with wall collision that reflects the velocity off the wall (JP and later):
  * the Puni slides along the wall, loses speed as the velocity is mirrored,
@@ -1699,7 +1699,7 @@ void puniMoveDecel(PuniData* p) {
     start = p->pos;
     start.y += 1.0f;
     PSVECNormalize(&p->vel, &dir);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (puniMoveAtari(p, start, dir, 1, dist)) {
         PSVECScale(&p->vel, &p->vel, 0.6f);
 #else
@@ -1739,14 +1739,14 @@ void puniMoveDecel(PuniData* p) {
     if (p->hitMove != NULL || p->hitCheck != NULL) {
         p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
     } else {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         PSVECScale(&p->vel, &p->vel, 0.6f);
 #endif
         p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
     }
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void puniMoveLimitedNormal(PuniData* p) {
     Vec start;
     Vec dir;
@@ -1806,7 +1806,7 @@ void puniMoveLimitedNormal(PuniData* p) {
 }
 #endif
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void puniMoveNormal(PuniData* p) {
     Vec start;
     Vec dir;
@@ -1868,7 +1868,7 @@ void puniMoveNormal(PuniData* p) {
 #endif
 
 /** Moves a Puni by its velocity with no collision at all. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void puniMoveLimitedNormal(PuniData* p) {
     Vec start;
     Vec dir;
@@ -2789,7 +2789,7 @@ void puniModeSearch(PuniData* p) {
  * Gather mode: the Puni walks to a gather target (targets with PUNI_TARGET_FLAG_MASS, e.g. a Puni Orb pedestal),
  * nudging away when too close and jittering sideways on floors 13 and 18 when it stands still.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void puniModeMass(PuniData* p) {
 #else
 void puniModeMass(PuniData* p) {
@@ -2812,7 +2812,7 @@ void puniModeMass(PuniData* p) {
         return;
     }
     a = gp->retraceCount & 0xF;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     b = p->index & 0xF;
 #else
     b = *(s16*)( &p->index ) & 0xF;
@@ -3323,7 +3323,7 @@ void puniModeRecover(PuniData* p) {
 }
 
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** The demo's puni main loop calls this directly with the sound name; every version reaches it through puniModeDead. */
 static inline void puniModeDeadSfx(PuniData* p, const char* sfx) {
     switch (p->modeStep) {
@@ -3348,7 +3348,7 @@ void puniModeDead(PuniData* p) {
 }
 
 /** Defeated mode: plays the Puni fight death sound once and lies down in the down animation. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 void puniModeDead(PuniData* p) {
     puniModeDeadSfx(p, "SFX_STG2_FIGHT_TOGE3");
 }
@@ -3559,14 +3559,14 @@ void puniModeWind(PuniData* p) {
  * the trap/pedestal modes, the water mode or lost mode;
  * a Puni that falls out of the world is put back at the recovery position.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void puniModeFall(PuniData* p) {
 #else
 void puniModeFall(PuniData* p) {
     Vec start;
 #endif
     Vec dir;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     Vec start;
 #endif
     f32 mag;
@@ -3588,7 +3588,7 @@ void puniModeFall(PuniData* p) {
     case 1:
         p->vel.x = 0.0f;
         p->vel.y -= 0.45f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         PSVECNormalize(&p->vel, &dir);
 #else
         {
@@ -3653,7 +3653,7 @@ void puniModeFall(PuniData* p) {
             } else {
                 p->modeVar0 = 0xF;
             }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (Punigp->floor == 0x12 && p->pos.y < -300.0f) {
                 s32 zero = 0;
                 puniswTrapSetindex(*(s16*)(&p->index), &zero);
@@ -3843,7 +3843,7 @@ void puniModeUpdraft(PuniData *p) {
  * then after 20 frames the Puni gets a hop animation and goes to the funbari mode.
  * The demo build has this as a helper taking the sound name.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static inline void puniModeWonderSfx(PuniData* p, const char* sfx) {
 #else
 void puniModeWonder(PuniData* p) {
@@ -3852,7 +3852,7 @@ void puniModeWonder(PuniData* p) {
 
     switch (p->modeStep) {
         case 0:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             psndSFXOn_3D(sfx, &p->pos);
 #else
             psndSFXOn_3D("SFX_STG2_SOAPBALL_BREAK1", &p->pos);
@@ -3891,7 +3891,7 @@ void puniModeWonder(PuniData* p) {
  * then after 20 frames the Puni gets a hop animation and goes to the funbari mode.
  * The demo build has this as a helper taking the sound name.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void puniModeWonder(PuniData* p) {
     puniModeWonderSfx(p, "SFX_STG2_SOAPBALL_BREAK1");
 }
@@ -4768,7 +4768,7 @@ static inline void puniModeCheckPos(PuniData* p) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00012d58, JP mri .text+0x12C94. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void puniModeMain(PuniData* p) {
     switch (p->mode) {
         case PUNI_MODE_IDLE:
@@ -4963,7 +4963,7 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder fn_19_13A90, JP mri .text+0x13A90. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Moves one Puni according to its mode (JP and later):
  * the following, fighting and walking modes use the normal move with speed limit and slowdown,
@@ -5135,7 +5135,7 @@ static void puniOption(void) {
     f32 dist, r2, r;
     for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
         p->flags &= ~PUNI_FLAG_NEAR;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     }
     for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
 #endif
@@ -5196,7 +5196,7 @@ static void puniOption(void) {
         if (!(p->flags & PUNI_FLAG_NEAR)) {
             p->flags &= ~PUNI_FLAG_PUSHING;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (PSVECMag(&p->vel) >= 8.0f) {
             PSVECNormalize(&p->vel, &p->vel);
             PSVECScale(&p->vel, &p->vel, 8.0f);
@@ -5209,7 +5209,7 @@ static void puniOption(void) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00014ad4, JP mri .text+0x14A10. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Same push-apart pass as puniOption for slots 0 to 109 (JP and later),
  * used outside the two battle floors where there are no Jabbi slots:
@@ -5443,7 +5443,7 @@ void puniSound(void) {
 f32 cloudGetBreathPower(Vec pos, f32 r);
 extern double fabs(double);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void puni_puni_main(void) {
 #else
 void puni_puni_main(void) {
@@ -5460,7 +5460,7 @@ void puni_puni_main(void) {
     t->pos = mario->position;
     puniMapFindbuff(t->pos);
     puniModeALLCheck();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0, p = Punidat + 1; i < 210; i++, p++) {
         p->modeHistIdx++;
         p->modeHistIdx &= 0x7F;
@@ -5478,7 +5478,7 @@ void puni_puni_main(void) {
             p->attacked = 0;
             puniParaRecover(p);
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     }
     if (Punigp->flags & PUNI_WORK_FLAG_BATTLE_FLOOR) {
 #endif
@@ -5537,7 +5537,7 @@ void puni_puni_main(void) {
                         }
                     }
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 switch (p->mode) {
                     case PUNI_MODE_IDLE:
                         p->flags &= ~PUNI_FLAG_STRAY;
@@ -5709,7 +5709,7 @@ void puni_puni_main(void) {
                                 }
                             }
                         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         puniOption();
                         {
 #else
@@ -5730,7 +5730,7 @@ void puni_puni_main(void) {
             if (q->flags & PUNI_FLAG_ACTIVE) {
                 if (!(q->flags & PUNI_FLAG_MOVE_STOP)) {
                     q->prevPos = q->pos;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     switch (q->mode) {
                         case PUNI_MODE_IDLE:
                         case PUNI_MODE_JOIN:
@@ -6251,7 +6251,7 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
  * walking in from the loading zone, or at their saved lost position; trapped ones are skipped.
  * The blockers 103 to 109 are placed at the down pipes.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_puni_setup) {
 #else
 USER_FUNC(evt_puni_setup) {
@@ -6285,7 +6285,7 @@ USER_FUNC(evt_puni_setup) {
                 break;
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (Punigp->floor == 9 || Punigp->floor == 12) {
         Punigp->flags |= PUNI_WORK_FLAG_BATTLE_FLOOR;
     }
@@ -7327,7 +7327,7 @@ USER_FUNC(evt_puni_landon_check) {
     count = 0;
     for (i = start; i < end; i++) {
         p = &Punidat[i];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if ((p->flags & PUNI_FLAG_ACTIVE) && p->pos.y != y) {
 #else
         if ((p->flags & PUNI_FLAG_ACTIVE) && p->pos.y > y) {
@@ -7563,7 +7563,7 @@ USER_FUNC(puni_disp_info_kassencheck) {
  * draws the pair of numbers (count in the map and total with Mario,
  * packed in the parameter) with the icon for the counter background, faded by the counter opacity.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void puniCountDisp(CameraId unused, void* param) {
 #else
 void puniCountDisp(CameraId unused, void* param) {

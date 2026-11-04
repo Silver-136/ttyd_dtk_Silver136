@@ -27,7 +27,7 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 BattleWeapon weapon_cortez_claw_float_attack;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table[4];
 #else
 static PoseTableEntry pose_table[6];
@@ -99,7 +99,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Cortez Hook: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {0, 80, 95, 100, 90, 100, 100, 50, 0, 0, 100, 0, 100, 50, 50, 0, 90, 100, 50, 0, 0, 0};
 #else
 static StatusVulnerability regist = {
@@ -172,7 +172,7 @@ BattleWeapon weapon_cortez_claw_float_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_STOP, "KRT_Z_1"},
     {POSE_TYPE_FREEZE, "KRT_Z_1"},
 #endif
@@ -190,7 +190,7 @@ static PoseTableEntry pose_table[] = {
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, cortez_weapon_dead_event},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {70, cortez_weapon_break_event},
 #else
     {UNIT_DATA_WEAPON_BREAK_EVENT, cortez_weapon_break_event},

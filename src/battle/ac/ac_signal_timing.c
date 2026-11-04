@@ -18,7 +18,7 @@
 
 typedef struct SignalTimingWork {
     s32 hits;       // 0x0
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 misses;     // 0x4
 #endif
     s32 index;      // 0x8
@@ -124,7 +124,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 disp->iconY = 0.0f;
                 disp->slideTimer = 20;
                 w->hits = 0;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 w->misses = 0;
 #endif
                 w->frame = 0;
@@ -244,7 +244,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     got = 1;
                     good = 1;
                 }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 if ((w->hits + w->misses) >= work->actionCommands.params[SIGNAL_PARAM_COUNT]) {
                     got = 0;
                 }
@@ -270,7 +270,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                             ac->acState = AC_STATE_RUN + 2;
                         }
                     } else if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         w->misses++;
 #endif
                         if (w->frame >= w->rangeStart) {
@@ -288,7 +288,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     w->pressed = 1;
                     work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = -1;
                     if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         w->misses++;
 #endif
                         w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;

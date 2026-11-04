@@ -110,7 +110,7 @@ static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the H. Paragoomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_patakuri = {80, 100, 100, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 100, 130, 100, 80, 100, 100, 95};
 #else
 static StatusVulnerability regist_patakuri = {
@@ -536,7 +536,7 @@ static BattleUnitDefense defence = {0};
 /** Defence attributes of the H. Paragoomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {80, 100, 80, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 100, 100, 100, 80, 100, 100, 95};
 #else
 static StatusVulnerability regist = {

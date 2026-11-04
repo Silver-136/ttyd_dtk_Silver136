@@ -42,7 +42,7 @@ static f32 angleABTBL[] = { 1.0f,       1.273187f,  1.27303f,   1.272768f,  1.27
 const char* build_date_ptr = R_build_date;
 const char* build_time_ptr = R_build_time;
 
-#if VERSION != VERSION_EU
+#if VERSION < VERSION_DEMO_EU
 const char* systemStrippedPool0(void) {
     return "assertion \"%s\" failed.\n \"%s\"\n";
 }
@@ -53,7 +53,7 @@ const char* getMarioStDvdRoot(void) {
     return ".";
 }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 /** PAL keeps the assertion helpers that JP and US strip. */
 BOOL __assert(const char* filename, int line, const char* assertion) {
     OSPanic(filename, line, assertion);
@@ -565,7 +565,7 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
  * and applies rumble changes to the motors when rumble is enabled.
  */
 void makeKey(void) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 delay;
     u32 button;
     u32 dirs;
@@ -615,7 +615,7 @@ void makeKey(void) {
         gp->triggerLeft[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerLeft;
         gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
     for (i = 0; i < 4; i++) {
         if ((gp->button[i] & (PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START)) == (PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START)) {
@@ -867,7 +867,7 @@ f32 sysMsec2FrameFloat(f32 msec) {
 #endif
 }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 /** PAL only: printf-style debug line with file and line through OSReport. */
 void sysDebugReport(const char* filename, int line, const char* format, ...) {
     char buf[2048];
@@ -1112,7 +1112,7 @@ f32 systemStrippedPool2(s32 x) {
 void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     f[0] = 1.0f;
     str[0] = "LINEAR";
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     str[1] = "ACCEL";
     str[2] = "DOUBLE_ACCEL";
     str[3] = "TRIPLE_ACCEL";

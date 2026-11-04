@@ -58,11 +58,11 @@ typedef struct EndMoa {
 } EndMoa;
 typedef struct EndWork {
     FileEntry* tpl;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 mode;
 #endif
     s32 alpha;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 npcLoadNum;     // credit NPCs whose animation groups have been requested so far
     s32 npcLoadRequest;
 #else
@@ -97,7 +97,7 @@ typedef struct CreditActor {
 } CreditActor;
 EndWork end_work;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 (*end_moa_chain_group)[2];
 s32* end_moa_chain_count;
 ExtTexInfo* end_moa_ext_data;
@@ -106,7 +106,7 @@ EndMoa* end_moa_tbl;
 
 extern EndWork* end_wp;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern CreditMsg end_staff_roll_msg_tbl[];
 extern CreditNpc R_credits_npc_info[151];
 #else
@@ -139,7 +139,7 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord end_credit_npc_parade[];
 extern EvtWord end_image_main_evt[];
 EvtWord end_return_title_evt[];
@@ -284,7 +284,7 @@ USER_FUNC(evt_end_credit_npc_get_wait_type) {
     }
     if (R_credits_npc_info[id].evt != NULL) {
         evtSetValue(event, args[1], 0);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     } else if (strcmp(R_credits_npc_info[id].agb, "c_gazigazi") == 0) {
         evtSetValue(event, args[1], 2);
 #endif
@@ -299,7 +299,7 @@ EndWork* end_wp = &end_work;
 
 // Staff-roll entries; the PAL table includes the European staff.
 CreditMsg end_staff_roll_msg_tbl[] = {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0, 0, 0, 0, NULL, 0, "a00", NULL,
     0, 0, 0, 1, 0, "a01", 0, "b00",
     NULL, 0, 0, 0, 2, 0, "a02", 0,
@@ -368,7 +368,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     {0, 0, 6, {NULL, "a05", NULL}, {"b06", NULL, NULL}},
     {0, 0, 7, {NULL, "a06", NULL}, {"b07", NULL, NULL}},
     {0, 0, 8, {NULL, "a07", NULL}, {"b08", NULL, NULL}},
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     {0, 0, 9, {NULL, "a08", NULL}, {"b09", "b10", "b11"}},
     {0, 0, 10, {NULL, "a09", NULL}, {"b12", NULL, NULL}},
     {0, 0, 11, {NULL, NULL, NULL}, {"b13", NULL, NULL}},
@@ -466,7 +466,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
 };
 
 CreditNpc R_credits_npc_info[] = {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     "c_luigi", "W_1", 0, "c_pkr", "PKR_W_1", 0, "c_kuri_h", "W_1",
     0, "c_kino_ji", "W_1", 0, "c_cook", "W_1", 0, "c_deale",
     "W_1", 0, "c_levela", "W_1", 0, "c_uranai", "W_1", 0,
@@ -704,7 +704,7 @@ USER_FUNC(evt_end_credit_npc_main) {
     inBattle = gp->inBattle != 0;
     if (R_credits_npc_info[id].evt != NULL) {
         evtEntry(R_credits_npc_info[id].evt, 0, 0);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
             animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
         }
@@ -722,7 +722,7 @@ USER_FUNC(evt_end_credit_npc_main) {
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
             case 1:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             case 4:
 #endif
                 actor->angle = 160.0f;
@@ -732,14 +732,14 @@ USER_FUNC(evt_end_credit_npc_main) {
                 actor->angle = 250.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case 3:
 #endif
             default:
                 actor->angle = 70.0f;
                 actor->limit = 90.0f + actor->angle + 30.0f;
                 break;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             }
             if (id + 5 < ARRAY_SIZE(R_credits_npc_info)) {
                 animGroupBaseAsync(R_credits_npc_info[id + 5].agb, inBattle, NULL);
@@ -755,7 +755,7 @@ USER_FUNC(evt_end_credit_npc_main) {
             r = 100.0f;
             break;
         case 1:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         case 4:
 #endif
             x = -304.0f;
@@ -767,7 +767,7 @@ USER_FUNC(evt_end_credit_npc_main) {
             y = -240.0f;
             r = 100.0f;
             break;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         case 3:
 #endif
         default:
@@ -805,7 +805,7 @@ USER_FUNC(evt_end_credit_npc_main) {
             if (actor->angle > actor->limit) {
                 animPoseRelease(actor->poseId);
                 _mapFree(actor);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 end_wp->npcLoadRequest++;
 #endif
                 return 2;
@@ -819,7 +819,7 @@ USER_FUNC(evt_end_credit_npc_main) {
     PSMTXConcat(m2, m1, actor->mtx);
     PSMTXScale(m3, 1.0f, 1.0f, 0.01f);
     PSMTXConcat(actor->mtx, m3, actor->mtx);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (animPoseGetVivianType(actor->poseId)) {
         v = (Vec){0.0f, 0.0f, 0.0f};
         v.x = actor->mtx[0][3];
@@ -850,7 +850,7 @@ EVT_BEGIN(end_credit_npc_parade)
             CALL(evt_end_credit_npc_main, LW(0))
         END_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             WAIT_MS(2000)
 #else
             WAIT_MS(1920)
@@ -860,7 +860,7 @@ EVT_BEGIN(end_credit_npc_parade)
 #endif
         END_IF
         ADD(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         IF_INT_GREATER_OR_EQUAL(LW(0), ARRAY_SIZE(R_credits_npc_info))
 #else
         IF_INT_GREATER_OR_EQUAL(LW(0), 152)
@@ -885,7 +885,7 @@ s32 end_overlay_tex_tbl[6] = {52, 52, 54, 55, 55, 56};
  * shows one, cross-fades to the next and back, with long holds (about 18 s) and 4 s fades,
  * by driving evt_end_image_set_mode and the TEV blend value.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(end_image_blend_loop)
     LOOP(0)
         CALL(evt_end_image_set_mode, 1)
@@ -942,7 +942,7 @@ EVT_BEGIN(end_image_blend_loop)
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Requests the animation groups of the credit NPCs after the ones already loaded,
  * one for each NPC that has left the screen, so the parade's next characters are ready in time;
@@ -989,7 +989,7 @@ void end_image_disp(CameraId cameraId, void* param) {
     if (end_wp->tpl == NULL) {
         return;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (end_wp->alpha == 0) {
         return;
     }
@@ -1006,14 +1006,14 @@ void end_image_disp(CameraId cameraId, void* param) {
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
 #endif
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, end_wp->alpha});
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     TEXGetGXTexObjFromPalette(*end_wp->tpl->data, &obj, id);
     GXLoadTexObj(&obj, GX_TEXMAP0);
     GXSetNumTevStages(1);
@@ -1126,7 +1126,7 @@ void end_image_disp(CameraId cameraId, void* param) {
         GXTexCoord2f32(0.0f, 1.0f);
         GXEnd();
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (end_wp->alpha2 > 0) {
         f32 w2;
         f32 h2;
@@ -1208,7 +1208,7 @@ EVT_BEGIN(end_image_main_evt)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_EQUAL(GW(11), 49)
             // The very last picture: a second overlay picture fades in over it.
             WAIT_MS(500)
@@ -1287,14 +1287,14 @@ EVT_BEGIN(end_return_title_evt)
     SET_VALUE(GF(10), 1)
     CALL(evt_end_font_restore)
     SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 21)
     CALL_CHILD(evt_memcard_save)
     CALL(end_bgm_wait_stop)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_pouch_mario_recovery) // PAL: the party is healed before the save
     CALL(evt_pouch_all_party_recovery)
 #endif
@@ -1330,7 +1330,7 @@ EVT_BEGIN(end_00_init_evt)
     CALL(evt_bg_set_color, 0, 0, 0, 255)
     SET_VALUE(GF(10), 0)
     CALL(evt_end_staff_roll_init)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BEGIN_INLINE_EVENT
             CALL(evt_end_credit_npc_preload)
         END_INLINE_EVENT
@@ -1340,7 +1340,7 @@ EVT_BEGIN(end_00_init_evt)
 #endif
     BEGIN_INLINE_EVENT
         CALL(evt_end_staff_roll_msg_main)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPAWN_EVENT(end_return_title_evt)
 #endif
     END_INLINE_EVENT
@@ -1362,7 +1362,7 @@ EVT_BEGIN(end_credit_gesso_evt)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_set_position, STRING("gesso"), 0, LW(0), 0)
 #else
         CALL(evt_npc_set_position, STRING("gesso"), 130, LW(0), 0)
@@ -1379,14 +1379,14 @@ EVT_END()
 /** Parade script for Hooktail (ゴンババ): the silhouette enters from the right in the demos, from the left in the releases. */
 EVT_BEGIN(end_credit_gonbaba_evt)
     CALL(evt_npc_entry, STRING("gonbaba"), STRING("c_gonbaba"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_set_anim, STRING("gonbaba"), STRING("GNB_S_1"))
 #else
     CALL(evt_npc_set_anim, STRING("gonbaba"), STRING("GNB_S_3"))
 #endif
     CALL(evt_npc_flag_onoff, 1, STRING("gonbaba"), NPC_FLAG_NO_CULL)
     CALL(evt_end_npc_silhouette_on, STRING("gonbaba"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 10000, 2000, 2000)
 #else
     CALL(evt_npc_set_scale, STRING("gonbaba"), FLOAT(0.5f), FLOAT(0.5f), FLOAT(0.5f))
@@ -1396,7 +1396,7 @@ EVT_BEGIN(end_credit_gonbaba_evt)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -100, 0)
 #else
         CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -20, 200)
@@ -1407,7 +1407,7 @@ EVT_BEGIN(end_credit_gonbaba_evt)
         END_IF
     END_LOOP
     WAIT_MS(3000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 2000, 10000, 2000)
 #else
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -1300, -10000, 2000)
@@ -1415,7 +1415,7 @@ EVT_BEGIN(end_credit_gonbaba_evt)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -100, 0)
 #else
         CALL(evt_npc_set_position, STRING("gonbaba"), LW(0), -20, 200)
@@ -1429,7 +1429,7 @@ EVT_BEGIN(end_credit_gonbaba_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(end_credit_batten_evt)
     CALL(evt_npc_entry, STRING("batten"), STRING("c_mb_robo_1b"))
     CALL(evt_npc_set_anim, STRING("batten"), STRING("MGN_W_1"))
@@ -1453,7 +1453,7 @@ EVT_BEGIN(end_credit_batten2_evt)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_set_position, STRING("batten"), 0, LW(0), 0)
 #else
         CALL(evt_npc_set_position, STRING("batten2"), 100, LW(0), 0)
@@ -1463,7 +1463,7 @@ EVT_BEGIN(end_credit_batten2_evt)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_delete, STRING("batten"))
 #else
     CALL(evt_npc_delete, STRING("batten2"))
@@ -1471,7 +1471,7 @@ EVT_BEGIN(end_credit_batten2_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Demo parade script for Cortez (korutesu): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_korutesu_evt)
     CALL(evt_npc_entry, STRING("kortesu"), STRING("c_korutesu1"))
@@ -1494,7 +1494,7 @@ EVT_BEGIN(end_credit_atomic_evt)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_set_position, STRING("kortesu"), 0, LW(0), 0)
 #else
         CALL(evt_npc_set_position, STRING("atomic"), LW(0), 20, 0)
@@ -1504,7 +1504,7 @@ EVT_BEGIN(end_credit_atomic_evt)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_delete, STRING("kortesu"))
 #else
     CALL(evt_npc_delete, STRING("atomic"))
@@ -1512,7 +1512,7 @@ EVT_BEGIN(end_credit_atomic_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Demo parade script for the second robot model (c_mb_robo_2b):
  * rises up through the middle of the screen as a silhouette.
@@ -1537,7 +1537,7 @@ EVT_BEGIN(end_credit_korutesu_evt)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_set_position, STRING("batten2"), 0, LW(0), 0)
 #else
         CALL(evt_npc_set_position, STRING("korutesu"), LW(0), -150, 0)
@@ -1547,7 +1547,7 @@ EVT_BEGIN(end_credit_korutesu_evt)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_delete, STRING("batten2"))
 #else
     WAIT_MS(3000)
@@ -1566,7 +1566,7 @@ EVT_BEGIN(end_credit_korutesu_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Demo parade script for the Shadow Queen model (c_q_kage): rises up through the middle of the screen. */
 EVT_BEGIN(end_credit_queen_evt)
     CALL(evt_npc_entry, STRING("queen"), STRING("c_q_kage"))
@@ -1591,7 +1591,7 @@ EVT_BEGIN(end_credit_para_evt)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(10.0f))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_set_position, STRING("queen"), 0, LW(0), 0)
 #else
         CALL(evt_npc_set_position, STRING("para"), 50, LW(0), 0)
@@ -1601,7 +1601,7 @@ EVT_BEGIN(end_credit_para_evt)
             BREAK_LOOP
         END_IF
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_delete, STRING("queen"))
     RETURN
 EVT_END()
@@ -1697,7 +1697,7 @@ USER_FUNC(evt_end_image_set_alpha) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001268, JP end .text+0x11A4. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper: sets args[0] as alpha2, the opacity of the overlay picture end_image_disp draws over the
  * picture while it is above 0 (image 52 in JP, end_overlay_tex_tbl by language later).
@@ -1711,7 +1711,7 @@ USER_FUNC(evt_end_image_set_overlay_alpha) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000122c, JP end .text+0x1168. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper: selects what end_image_disp draws (args[0]): 0 the current picture, 1 images 49 and 50 blended,
  * 2 images 50 and 51 blended; end_image_blend_loop switches between 1 and 2.
@@ -1723,7 +1723,7 @@ USER_FUNC(evt_end_image_set_mode) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_000011f0, JP end .text+0x112C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper: sets args[0] (0 to 255) as the TEV blend alpha of the ending pictures:
  * in modes 1 and 2 it is the
@@ -1775,7 +1775,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
     switch (end_wp->pos) {
         case 0:
             x = -274;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             y = -20;
 #else
             y = -24;
@@ -1787,7 +1787,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             break;
         case 2:
             x = 274;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             y = -20;
 #else
             y = -24;
@@ -1799,7 +1799,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             break;
         case 4:
             x = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             y = -80;
 #else
             y = -60;
@@ -1817,11 +1817,11 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                         wx = x - 0.8f * FontGetMessageWidth(msg) / 2.0f;
                     } else if (x > 0) {
                         wx = x - 0.8f * FontGetMessageWidth(msg);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     }
                     sprintf(buf1, "<clear><wait %d><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", 0, wx - 62, wy, msg);
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                     }
                     if (strcmp(end_staff_roll_msg_tbl[idx].msg1[i], "c00") == 0) {
                         wx += 10;
@@ -1835,7 +1835,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             for (i = 0; i < 3; i++) {
                 if (end_staff_roll_msg_tbl[idx].msg2[i] != NULL) {
                     msg2 = msgSearch(end_staff_roll_msg_tbl[idx].msg2[i]);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     wx2 = x + 8;
                     wy2 = y - i * 24 - 50;
                     if (x == 0) {
@@ -1891,7 +1891,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                         break;
                     }
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (i < 3) {
                     for (i = 0; i < 3; i++) {
                         if (end_wp->win1[i] != -1) {
@@ -1940,7 +1940,7 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             }
             break;
         case 4:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 evtSetValue(event, GW(10), 2);
                 state++;
@@ -1972,7 +1972,7 @@ USER_FUNC(evt_end_staff_roll_init) {
     s32 i;
 
     if (isFirstCall) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         end_wp->npcLoadNum = 0;
         end_wp->npcLoadRequest = 0;
         end_wp->tpl = NULL;
@@ -2002,7 +2002,7 @@ USER_FUNC(evt_end_staff_roll_init) {
     if (end_wp->tpl == NULL) {
         end_wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/ending.tpl", getMarioStDvdRoot());
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     end_wp->npcLoadNum = 10;
     for (i = 0; i < end_wp->npcLoadNum; i++) {
 #else
@@ -2012,7 +2012,7 @@ USER_FUNC(evt_end_staff_roll_init) {
             return 0;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < end_wp->npcLoadNum; i++) {
 #else
     // retail runs this empty loop; the demos' version still counts npcLoadNum here.
@@ -2031,7 +2031,7 @@ USER_FUNC(evt_end_staff_roll_init) {
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
     psndClearFlag(PSND_FLAG_NO_SFX);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
@@ -2052,7 +2052,7 @@ void end_staff_roll_exit(void) {
  * restores Japanese text where the credits switched it, or turns the sound effects back on.
  */
 USER_FUNC(evt_end_font_restore) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
@@ -2089,7 +2089,7 @@ USER_FUNC(evt_end_npc_silhouette_on) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_000008bc, JP end .text+0x7F8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Random float in [min, max] from rand(). */
 f32 end_randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
@@ -2099,7 +2099,7 @@ f32 end_randf(f32 min, f32 max) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_000006f8, JP end .text+0x634. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Ext-pose init for the Smorg silhouette in the credits:
  * gives each of the 300 small Moamoa a random offset of up to 10 units
@@ -2126,7 +2126,7 @@ void end_ext_moamoa_init(void) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000440, JP end .text+0x37C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Per-frame update of the Smorg silhouette: places each small Moamoa on its chain between two joints of the big
  * Smorg model (c_g_moamoa), hides it when a joint is off screen, scales it with the model,
@@ -2188,7 +2188,7 @@ void end_ext_moamoa_main(void) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000039c, JP end .text+0x2D8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Draw callback for the Smorg silhouette: draws all the small Moamoa in plain black using the silhouette render
  * mode.
@@ -2206,7 +2206,7 @@ void end_ext_disp(CameraId cameraId, void* param) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000035c, JP end .text+0x298. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Queues end_ext_disp into the 3D camera every frame. */
 void end_ext_moamoa_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, end_ext_disp, NULL);
@@ -2214,7 +2214,7 @@ void end_ext_moamoa_dispent(void) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000012c, JP end .text+0x68. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper: allocates the Smorg silhouette's tables (300 Moamoa, 40 animation frames,
  * the chains between joints of the big Smorg model),
@@ -2257,7 +2257,7 @@ USER_FUNC(evt_end_moamoa_init) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_end_000000c4, JP end .text+0x0. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Script helper: turns off the joint tracking, frees the Smorg silhouette's tables and resets the ext-pose driver. */
 USER_FUNC(evt_end_moamoa_exit) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
@@ -2276,7 +2276,7 @@ USER_FUNC(evt_end_moamoa_exit) {
  * Parade script for the giant Smorg: builds the big Smorg out of 300 small Moamoa as a silhouette,
  * raises it up the screen over 2 seconds, holds it for 3 seconds, lowers it away, and cleans it up.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(end_credit_moamoa_evt)
     CALL(evt_npc_entry, STRING("モアモアダミー"), STRING("c_n_moa_a"))
     CALL(evt_npc_set_position, STRING("モアモアダミー"), 0, -1000, 0)

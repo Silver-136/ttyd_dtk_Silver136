@@ -224,7 +224,7 @@ void mot_hammer(void) {
             }
             psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         mario->mot.hammer.hitKind = kind;
 #endif
     }
@@ -268,7 +268,7 @@ void mot_hammer(void) {
         }
         mario->currSubMotionId = 1;
         mario->hitobjHammer = mario->hitobjHammerNew;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         px = mario->position.x;
         py = mario->position.y;
         pz = mario->position.z;
@@ -341,7 +341,7 @@ void mot_hammer(void) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             for (i = 0; i < 5; i++) {
 #else
             // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
@@ -737,7 +737,7 @@ void mot_ham2_post(void) {
         m->camShiftRate.z = 0.01f;
     }
     marioPaperOff();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     marioPaperLightOn();
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 #else
@@ -758,7 +758,7 @@ void mot_ham2_post(void) {
  * *out gets the hit kind (0 nothing, 4/5/6 a wall or object at high, middle or low height,
  * 7 something just above Mario's head height) that picks the swing pose and sound.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static HitEntry* hitEstimate(s32* out) {
 #else
 HitEntry* hitEstimate(s32* out) {
@@ -775,7 +775,7 @@ HitEntry* hitEstimate(s32* out) {
     f32 h;
     s32 i;
     f32 k5 = 5.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 ang;
 #endif
     mario = marioGetPtr();
@@ -791,7 +791,7 @@ HitEntry* hitEstimate(s32* out) {
     }
     sincosf(&s, &c, a);
     h = mario->wPlayerCollisionBox.y;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     ang = 3.14159265f;
     cy = (f32)cos(ang);
 #else
@@ -813,7 +813,7 @@ HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     ang = 1.2217306f;
     cy = (f32)cos(ang);
 #else
@@ -836,7 +836,7 @@ HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     ang = 0.78539816f;
     cy = (f32)cos(ang);
 #else
@@ -859,7 +859,7 @@ HitEntry* hitEstimate(s32* out) {
             return hit;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     ang = 0.0f;
     cy = (f32)cos(ang);
 #else
@@ -903,7 +903,7 @@ HitEntry* hitEstimate(s32* out) {
 }
 
 /** Names of the small and big blocks that only a level 1, 2 or 3 hammer (Hammer, Super, Ultra) can break. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 const char* not_fullswing_mobj[] = {
     "MOBJ_RedJumpStand",
     "MOBJ_RedJumpStand2",

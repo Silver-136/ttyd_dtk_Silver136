@@ -25,7 +25,7 @@ USER_FUNC(evt_lottery) {
     lottery_info* lot;
     s32 day;
     s32 v;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     OSCalendarTime a1, a2, d1, d2, b1, b2, e;
 #else
     OSCalendarTime a1, a2, b1, b2, c1, c2, d1, d2, e;
@@ -57,7 +57,7 @@ USER_FUNC(evt_lottery) {
         }
     }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (lot->flags & LOTTERY_FLAG_TICKET) {
         if (lot->times[idx] < now) {
             OSTicksToCalendarTime(lot->times[idx], &b1);
@@ -132,7 +132,7 @@ USER_FUNC(evt_lottery) {
                     lot->todayNum = lot->number;
                     lot->flags |= LOTTERY_FLAG_MATCH4;
                 } else if (day == lot->days[1]) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     do {
                         lot->todayNum = lot->number % 1000 + rand() % 10 * 1000;
                     } while (lot->todayNum == lot->number);
@@ -179,7 +179,7 @@ USER_FUNC(evt_lottery) {
     } else {
         lot->flags |= LOTTERY_FLAG_CLOCK_ERROR;
         lot->todayNum = -1;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (idx == 1) {
             lot->lastTime = now;
         }
@@ -236,7 +236,7 @@ USER_FUNC(evt_lottery_buy) {
 
     do {
         lot->number = rand() % 10000;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     } while (lot->todayNum == lot->number);
 #else
     } while (lot->number == lot->todayNum || lot->number % 1000 == lot->todayNum % 1000 ||
@@ -248,20 +248,20 @@ USER_FUNC(evt_lottery_buy) {
     lot->days[2] = 35 - rand() % 10;
     lot->days[3] = 10 - rand() % 6;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     lot->flags |= LOTTERY_FLAG_TICKET;
 #endif
 
     if (lot->flags & LOTTERY_FLAG_CLOCK_ERROR) {
         lot->flags |= LOTTERY_FLAG_REBOUGHT;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         lot->lastTime = now;
         lot->times[0] = now;
         lot->times[1] = now;
 #endif
     }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (lot->flags & LOTTERY_FLAG_TICKET) {
         lot->flags |= LOTTERY_FLAG_REBOUGHT;
         lot->lastTime = now;

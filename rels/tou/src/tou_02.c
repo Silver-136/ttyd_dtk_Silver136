@@ -120,7 +120,7 @@ EvtWord talk_repo[112];
 EvtWord init_cam1[8];
 EvtWord talk_cam1[112];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord init_cam2[];
 #else
 EvtWord init_cam2[19];
@@ -154,7 +154,7 @@ EvtWord init_borodo[32];
 EvtWord talk_borodo[13];
 static NpcSetupInfo npcEnt[17];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_tougi2[];
 #else
 EvtWord evt_tougi2[285];
@@ -162,7 +162,7 @@ EvtWord evt_tougi2[285];
 
 ExtTexInfo ext_fan_data[28];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord mario_momikucha_msg[];
 #else
 EvtWord mario_momikucha_msg[111];
@@ -745,7 +745,7 @@ EVT_END()
 
 /** Second camera operator: demos always use (80, 200, -125); retail uses it before the arena intro, then (30, 200, -60). */
 EVT_BEGIN(init_cam2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_set_position, STRING("me"), 80, 200, -125)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
@@ -898,7 +898,7 @@ EVT_BEGIN(talk_kino5)
             CASE_GREATER(0)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 4)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 CALL(evt_sub_get_language, LW(0))
                 SWITCH(LW(0))
                     CASE_EQUAL(2)
@@ -958,7 +958,7 @@ EVT_BEGIN(talk_kino5)
                     ELSE
                         CALL(evt_msg_print, 0, STRING("stg3_npc_re_031"), 0, 0)
                     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 WAIT_MS(300)
                 CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
                 WAIT_MS(600)
@@ -1078,7 +1078,7 @@ EVT_END()
  * or STG3_20_05_MAJORS_4TH_PL in retail; otherwise placed at y = -1000.
  */
 EVT_BEGIN(init_chu)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_20_08_MS_MOWZ)
             CALL(evt_npc_set_position, STRING("me"), 245, 0, 125)
@@ -1664,7 +1664,7 @@ EVT_BEGIN(evt_tougi2)
     WAIT_MS(500)
     SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)
@@ -1711,7 +1711,7 @@ ExtTexInfo ext_fan_data[] = {
  * Initializes FanWork and one Fan per extdrv pose with a random facing and one of the three walk animations.
  * X and Z are sampled independently with randf(-100, 100). Starts SFX_STG3_AUDIENCE_FAN1 and stores its initial volume.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void ext_fan_init(void) {
 #else
 void ext_fan_init(void) {
@@ -1755,12 +1755,12 @@ void ext_fan_init(void) {
             pos.x = randf(-100.0f, 100.0f);
             pos.z = randf(-100.0f, 100.0f);
             fan->pos = pos;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             fan->vel = (Vec){0.0f, 0.0f, 0.0f};
 #endif
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     extGetPosePtr()->flags &= ~1;
 #endif
     fan_wp->sfxId = psndSFXOn_3D("SFX_STG3_AUDIENCE_FAN1", &(Vec){0.0f, 0.0f, 0.0f});
@@ -1788,20 +1788,20 @@ static Vec fan_zero;
  * Retail: hidden actor anchors join the repulsion, walking fans reflect velocity on a hit query and are also
  * position-clamped, and the count excludes flagged anchors.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void ext_fan_main(void) {
 #else
 void ext_fan_main(void) {
 #endif
     MarioWork* mario = marioGetPtr();
     Fan* fan;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     ExtdrvPose* pose;
     s32 li;
     Fan* lfan;
 #endif
     s32 i;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     ExtdrvPose* pose;
 #endif
     Vec dir;
@@ -1812,7 +1812,7 @@ void ext_fan_main(void) {
     } else {
         fan_wp->hammerTimer = 0;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (evtGetValue(NULL, GF(10))) {
         ExtdrvPose* pose = extGetPosePtr();
         Fan* fan = fan_wp->fans;
@@ -1852,13 +1852,13 @@ void ext_fan_main(void) {
     }
 #endif
     {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         Fan* fan = fan_wp->fans;
 #else
         Fan* fan;
 #endif
         s32 i;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         // the first fan stands in for Mario
         fan->pos = mario->position;
         if (evtGetValue(NULL, GF(10))) {
@@ -1871,14 +1871,14 @@ void ext_fan_main(void) {
         for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
             if (fan->state == 0) {
                 PSVECSubtract(&target, &fan->pos, &dir);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (PSVECMag(&dir) > 50.0f) {
 #else
                 if (PSVECMag(&dir)) {
 #endif
                     PSVECNormalize(&dir, &dir);
                     dir.y = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     PSVECScale(&dir, &dir, 0.4f);
 #else
                     PSVECScale(&dir, &dir, 0.1f);
@@ -1889,7 +1889,7 @@ void ext_fan_main(void) {
         }
     }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {
         for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
             if (fan->state == 0) {
@@ -1978,14 +1978,14 @@ void ext_fan_main(void) {
                         angle = angleABf(mario->position.x, mario->position.z, fan->pos.x, fan->pos.z);
                         dir2 = cloudGetBreathDir();
                         fan->state = 20;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         dir2 = (angle + dir2) / 2.0f;
 #else
                         angle = (angle + dir2) / 2.0f;
 #endif
                         fan->target = fan_zero;
                         spd = randf(0.1f, 0.2f);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                         angle = 6.2831855f * dir2 / 360.0f;
 #else
                         angle = 6.2831855f * angle / 360.0f;
@@ -2006,7 +2006,7 @@ void ext_fan_main(void) {
     // Count walking fans; retail also excludes flagged actor anchors.
     fan_wp->count = fan_wp->num;
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {
         f32 angle;
         f32 dist;
@@ -2161,7 +2161,7 @@ EVT_BEGIN(mario_momikucha_msg)
         ADD(LW(0), 2)
         MULTIPLY(LW(0), 1000)
         WAIT_MS(LW(0))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_mario_get_pos, 0, LW(5), LW(7), LW(8))
         CALL(evt_sub_random, 100, LW(0))
         CALL(evt_sub_random, 100, LW(1))
@@ -2171,7 +2171,7 @@ EVT_BEGIN(mario_momikucha_msg)
 #endif
         SUBTRACT(LW(0), 50)
         SUBTRACT(LW(1), 50)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         ADD(LW(5), LW(0))
         ADD(LW(8), LW(1))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(5), LW(7), LW(8))
@@ -2234,7 +2234,7 @@ EVT_BEGIN(evt_momikucha)
     CALL(evt_npc_set_position, STRING("fan"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("fan2"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("fan3"), 0, -1000, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_ext_entry, 250, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
 #else
     CALL(evt_ext_entry, 200, PTR(ext_fan_data), PTR(ext_fan_init), PTR(ext_fan_main), PTR(ext_fan_dispent))
@@ -2306,7 +2306,7 @@ static EVT_BEGIN(evt_key)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void ext_fan_dispent(void) {
 #else
 void ext_fan_dispent(void) {
@@ -2323,7 +2323,7 @@ void ext_fan_dispent(void) {
  * 2 when Flurrie's gust reaches within 30 of it; 0 otherwise. In JP and later, the fan standing in for Mario or
  * the champion (flags bit 1) is never hit.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 check_hammer(Fan* fan) {
 #else
 s32 check_hammer(Fan* fan) {
@@ -2338,7 +2338,7 @@ s32 check_hammer(Fan* fan) {
     Vec pos;
 
     if (mario->position.y > 0.0f) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         return 0;
     }
     if (fan->flags & 1) {

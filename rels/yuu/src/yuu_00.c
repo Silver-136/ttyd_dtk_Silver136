@@ -98,7 +98,7 @@ EvtWord yuu_00_init_evt[11];
 #endif
 
 static MonteTable montetable[] = {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {-1200.0f, -800.0f, 450.0f, 400.0f, 2},
     {-800.0f, -300.0f, 400.0f, 300.0f, 2},
     {-300.0f, 200.0f, 300.0f, 150.0f, 1},
@@ -351,19 +351,19 @@ EVT_BEGIN(minigame01_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1230.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(-1230.0f), FLOAT(160.0f), FLOAT(-10.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 4000, EASING_LINEAR)
 #else
     CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 6000, EASING_LINEAR)
 #endif
     WAIT_MS(1000)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     WAIT_MS(3000)
     CALL(evt_yuutitle_free)
 #endif
     WAIT_MS(2000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_yuutitle_free)
     WAIT_MS(1000)
 #endif
@@ -952,7 +952,7 @@ EVT_BEGIN(minigame01_start)
 
     // Mario becomes a paper airplane, the controls come back and the coin counter appears.
     CALL(evt_change_plane)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_key_onoff, 1)
     WAIT_MS(1000)
     CALL(evt_yuucounter_alloc, 0, 70, 0, 0)
@@ -967,7 +967,7 @@ EVT_BEGIN(minigame01_start)
 EVT_END()
 
 EVT_BEGIN(minigame01_end)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
     CALL(yuuminigame_get_dataadr, 1, LW(15))
     CALL(evt_moving_floor_delete, LW(15))
@@ -1077,7 +1077,7 @@ EVT_BEGIN(minigame01_end)
     CALL(re_fall_rtn)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL_CHILD(PTR(yuu_00_kaijo_init2))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(yuu_00_cam_shift_reset)
 #endif
     WAIT_MS(500)
@@ -1179,7 +1179,7 @@ EVT_BEGIN(yuu_00_init_evt)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00004250, JP yuu .text+0x4184. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(yuu_00_cam_shift_reset) {
     camShiftReset();
     return EVT_RETURN_DONE;

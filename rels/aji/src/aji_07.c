@@ -37,7 +37,7 @@ static BeroEntry bero_entry_data[2];
 EvtWord tensou_ride[245];
 EvtWord tensou_switch[62];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_tensou2[];
 #else
 EvtWord evt_tensou2[216];
@@ -269,7 +269,7 @@ EVT_BEGIN(evt_tensou2)
             END_IF
         END_LOOP
     END_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_WARP1_2"), LW(2), LW(3), LW(4), 0)
 #endif
@@ -341,7 +341,7 @@ EVT_END()
 EVT_BEGIN(aji_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -370,7 +370,7 @@ EVT_BEGIN(aji_07_init_evt)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)
             CALL(evt_mario_wait_landon)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             LOOP(30)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))

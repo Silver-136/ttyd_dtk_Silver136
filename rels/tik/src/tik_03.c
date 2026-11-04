@@ -29,7 +29,7 @@
 EvtWord bero_05_custom_in[30];
 EvtWord bero_05_custom_out[12];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static BeroEntry bero_entry_data[6];
 #else
 static BeroEntry bero_entry_data[3];
@@ -91,7 +91,7 @@ static BeroEntry bero_entry_data[] = {
         0, 0, // enterAnimeArg..exitAnimeArg
     },
     {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         "s_bero_2", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId

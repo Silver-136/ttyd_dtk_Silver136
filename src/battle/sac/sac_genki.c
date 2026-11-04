@@ -461,7 +461,7 @@ void main_target(void) {
  * hearts add 1 to Mario's HP total (big ones 3), partner icons to the partner's HP, flowers to FP,
  * and a poison mushroom makes Mario dizzy. The audience cheers or boos.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void main_weapon(s32 idx) {
 #else
 void main_weapon(s32 idx) {
@@ -557,7 +557,7 @@ void main_weapon(s32 idx) {
         wp->state = 3;
         o->state = 3;
         effStardustN64Entry(5, o->pos.x, o->pos.y, o->pos.z, 10.0f);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         effHitEntry(0, 10, o->pos.x, o->pos.y, o->pos.z, 1.0f);
 #else
         effHitEntry(0, 5, o->pos.x, o->pos.y, o->pos.z, 1.0f);

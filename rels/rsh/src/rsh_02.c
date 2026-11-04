@@ -59,7 +59,7 @@ static EvtWord evt_shake[39];
 EvtWord evt_shake2[6];
 static s32 item_tbl2[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord talk_yuurei[];
 #else
 EvtWord talk_yuurei[451];
@@ -77,7 +77,7 @@ EvtWord evt_2day_end[68];
 EvtWord evt_normal_yado[119];
 EvtWord evt_bed[22];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_toron_catch[];
 #else
 EvtWord evt_toron_catch[281];
@@ -85,7 +85,7 @@ EvtWord evt_toron_catch[281];
 
 static s32 item_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_toron_catch2[];
 #else
 EvtWord evt_toron_catch2[359];
@@ -103,7 +103,7 @@ EvtWord evt_toron_appear[414];
 #endif
 
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 static EvtWord evt_daiji_kami[96];
 #else
 static EvtWord evt_daiji_kami[88];
@@ -113,7 +113,7 @@ static EvtWord evt_yuka_simi[45];
 static EvtWord evt_access[14];
 static EvtWord evt_access2[44];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_access_entry[21];
 #else
 static EvtWord evt_access_entry[62];
@@ -131,7 +131,7 @@ EvtWord rsh_02_b_init_evt[168];
 static const char* window_tbl[4];
 EvtWord rsh_02_c_init_evt[142];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_02_init_evt_nidome[];
 #else
 EvtWord rsh_02_init_evt_nidome[208];
@@ -139,7 +139,7 @@ EvtWord rsh_02_init_evt_nidome[208];
 
 EvtWord rsh_02_a_init_evt_nidome[337];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_02_b_init_evt_nidome[];
 #else
 EvtWord rsh_02_b_init_evt_nidome[213];
@@ -150,7 +150,7 @@ EvtWord evt_nidome_bed[126];
 
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002384, JP rsh .text+0x22C0. See docs/NAME_PROVENANCE.md.
 // Wait until neither roll-cancel protection nor continued slit movement prevents normalization.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(mario_normalize_wait) {
     if (!marioRollCancelDisable() && !marioSlitContinueChk()) {
         return EVT_RETURN_DONE;
@@ -623,7 +623,7 @@ EVT_BEGIN(talk_yuurei)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_122"), 0, 0)
         CASE_LESS(STG6_18_BLANKET_EXCHANGE)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_135"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
 #else
         CALL(evt_win_item_select, 0, PTR(item_tbl2), LW(1), 0)
@@ -1115,14 +1115,14 @@ EVT_BEGIN(evt_toron_catch)
     LOOP(0)
         CALL(toron_check)
         IF_INT_EQUAL(LW(10), 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             CALL(evt_mario_key_onoff, 0)
             BEGIN_INLINE_EVENT
                 CALL(mario_normalize_wait)
 #endif
                 CALL(evt_mario_normalize)
                 CALL(evt_party_yoshi_ride, 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_mario_key_onoff, 0)
 #else
             END_INLINE_EVENT
@@ -1166,7 +1166,7 @@ EVT_BEGIN(evt_toron_catch)
     // The story advances and the map changes to rsh_02_b.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
     CALL(evt_bero_mapchange, STRING("rsh_02_b"), STRING("w_bero"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_key_onoff, 1)
 #endif
     RETURN
@@ -1240,7 +1240,7 @@ EVT_BEGIN(evt_toron_catch2)
     WAIT_MS(500)
     CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
     LOOP(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(item_tbl), LW(1))
 #else
         CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)
@@ -1310,7 +1310,7 @@ EVT_BEGIN(evt_toron_appear)
     END_IF
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(0), -110)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         GOTO(100)
     END_IF
     IF_INT_LESS(LW(0), -330)
@@ -1475,7 +1475,7 @@ static EVT_BEGIN(evt_daiji_kami)
     ELSE
         CALL(evt_mario_set_dir, 270, 300, 0)
     END_IF
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_party_stop, 0)
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg6_rsh_180"))
@@ -1543,13 +1543,13 @@ EVT_END()
  * depending on the version and the story stage.
  */
 static EVT_BEGIN(evt_access_entry)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
 #endif
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_4"), 0, PTR(evt_access), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_5"), 0, PTR(evt_access2), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         ELSE
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("tana_3"), 0, PTR(evt_access), 0)
@@ -1594,7 +1594,7 @@ EVT_BEGIN(rsh_02_init_evt)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("bed"), 0, PTR(evt_bed), GW(11))
         END_IF
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(evt_access_entry)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF_SHINE_34, 0)
@@ -1990,7 +1990,7 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
         SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 0)
         CALL_CHILD(PTR(evt_rsh_rnd_npc_init))
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
     CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF_SHINE_34, 0)
 #else
@@ -2012,7 +2012,7 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
         ELSE
             IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
 #else
                 CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -2191,7 +2191,7 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
             BEGIN_INLINE_EVENT
                 CALL(evt_mario_key_onoff, 0)
                 CALL(evt_party_stop, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH3"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
 #endif

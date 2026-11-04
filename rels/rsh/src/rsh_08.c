@@ -15,7 +15,7 @@ BeroEntry bero_data_a_nidome[2];
 BeroEntry bero_data_b_nidome[2];
 BeroEntry bero_data_c_nidome[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_08_a_init_evt[];
 #else
 EvtWord rsh_08_a_init_evt[72];
@@ -95,7 +95,7 @@ EVT_BEGIN(rsh_08_a_init_evt)
     ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)

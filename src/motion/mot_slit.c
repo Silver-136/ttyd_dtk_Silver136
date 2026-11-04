@@ -45,7 +45,7 @@ typedef enum SlitState {
     SLIT_STATE_LECTURE_END_3 = 0x7A,
 } SlitState;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define SLIT_FLAG_RESUME 0x10 // mot.slit.flags: resumeState holds the state motSlitContinue2 returns to
 #endif
 
@@ -57,7 +57,7 @@ int __abs(int);
 
 
 // Descriptive name (not in the symbol maps); placeholder unk_800a4e40, JP 0x800A4E40. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Puts Mario straight back into Paper Mode's sideways standing state (slit state 10) after landing from a jump
  * or fall while still paper; called from the landing code in mario_motion.c. JP and later.
@@ -71,7 +71,7 @@ void marioSlitReenter(void) {
 #endif
 
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Returns Mario to the slit motion after landing while moving in Paper Mode, keeping its current state.
  * JP and later.
@@ -108,7 +108,7 @@ BOOL marioSlitAbilityChk(void) {
  */
 s32 marioSlitButton(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (mario->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) {
         return 0;
     }
@@ -119,7 +119,7 @@ s32 marioSlitButton(void) {
     if (marioBgmodeChk() == 1) {
         return 0;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
 #else
     if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
@@ -144,7 +144,7 @@ s32 marioSlitButton(void) {
  */
 BOOL marioSlitKeyDisable(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 st;
 #else
     s16 st;
@@ -162,7 +162,7 @@ BOOL marioSlitKeyDisable(void) {
     return TRUE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * TRUE when Mario must stay in Paper Mode: R is held, walls are too close around him,
  * or he stands in a narrow crack (marioCreviceWallChk). The item menu refuses items then. JP and later.
@@ -318,7 +318,7 @@ BOOL marioGetSlitFloorPos(Vec* out) {
  */
 BOOL marioChkSlitThrouh(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 st;
 #else
     s16 st;
@@ -336,7 +336,7 @@ BOOL marioChkSlitThrouh(void) {
 /** TRUE on the last frame of a pass through a gap (slit state 0x52 or 0x5E). */
 BOOL marioChkSlitThrouhEnd(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 st;
 #else
     s16 st;
@@ -360,7 +360,7 @@ void motSlitContinue(void) {
     marioGetPtr()->slitState = SLIT_STATE_MOVE;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Demo only: returns to the slit motion at the state saved
  * before a step-up (or ends it, state 0x64, if none was saved).
@@ -399,7 +399,7 @@ void motSlitCancel(void) {
 void motSlitCancel2(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         allPartyForceSlitOff();
 #endif
         mario->slitState = SLIT_STATE_SCRIPT_END_1;
@@ -422,7 +422,7 @@ void motSlitCancel3(void) {
  * evt_mario and mario_sbr wait on it.
  */
 BOOL marioGetMotSlitCancel3(void) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 st;
 #else
     s16 st;
@@ -465,7 +465,7 @@ void marioSlitForceCancel(void) {
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->wPlayerCollisionBox.x = 20.0f;
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #else
@@ -492,7 +492,7 @@ void marioSlitForceCancel(void) {
  */
 void mot_slit_post(void) {
     MarioWork* mario = marioGetPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     u16 id;
 #elif VERSION >= VERSION_US
     u16 id;
@@ -520,7 +520,7 @@ void mot_slit_post(void) {
                 mario->displayDirection = 180.0f;
                 mario->displayDirectionTarget = mario->displayDirection;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             mario->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
             mario->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
             mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
@@ -531,7 +531,7 @@ void mot_slit_post(void) {
             marioPaperOff();
             mapResetPaperAmbColor();
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
                 marioAdjustMoveDir();
             }
@@ -540,7 +540,7 @@ void mot_slit_post(void) {
 #endif
             allPartyForceSlitOff();
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     } else {
         id = mario->currMotionId;
         if (id == MARIO_MOTION_WALK || (u16)(id - MARIO_MOTION_DASH) <= MARIO_MOTION_JUMP_2 - MARIO_MOTION_DASH || mario->currMotionId == MARIO_MOTION_JUMP_3) {
@@ -645,7 +645,7 @@ void marioReInit_slit(void) {
 static inline BOOL slitContinueChk(void) {
     MarioWork* mario = marioGetPtr();
     Vec pos;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (marioSlitButton() == 2) {
 #else
     if (marioSlitButton()) {
@@ -794,7 +794,7 @@ void mot_slit(void) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT1), &m->position);
         break;
     case SLIT_STATE_CHANGING:
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if (m->flags & MARIO_FLAG_FORCED_MOVEMENT) {
             break;
         }
@@ -827,7 +827,7 @@ void mot_slit(void) {
             }
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT) && m->baseSpeed >= m->baseDashSpeed) {
 #else
         if (m->baseSpeed >= m->baseDashSpeed) {
@@ -866,7 +866,7 @@ void mot_slit(void) {
         }
         if (marioChkKey()) {
             if (slitContinueChk() != TRUE) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 m->directionView = m->controlStickAngle;
 #endif
                 m->slitState = SLIT_STATE_END_1;
@@ -903,7 +903,7 @@ void mot_slit(void) {
             marioChgPaper("PM_S_1E");
         } else {
             marioChgPaper("PM_S_1D");
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (revise360(m->directionView - m->targetYaw) <= 180.0f) {
                 m->mot.slit.side = 1;
                 m->displayDirection = 260.0f;
@@ -920,7 +920,7 @@ void mot_slit(void) {
     }
     switch (m->slitState) {
     case SLIT_STATE_MOVE:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (m->mot.slit.timer > 0) {
             m->mot.slit.timer = 0;
             marioChgPaper("PM_S_1D");
@@ -951,7 +951,7 @@ void mot_slit(void) {
             } else {
                 s32 sum;
                 m->mot.slit.count = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 sum = __abs((s8)m->wStickDir1) + __abs((s8)m->wStickDir2);
 #else
                 sum = __abs(m->wStickDir1) + __abs(m->wStickDir2);
@@ -970,7 +970,7 @@ void mot_slit(void) {
             marioChgPaper("PM_S_1E");
             m->mot.slit.count = 6;
             m->mot.slit.side = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
 #else
             slitSetDisplayDir(m);
@@ -989,7 +989,7 @@ void mot_slit(void) {
                     m->slitState = SLIT_STATE_MOVE_PM_S_2;
                     m->mot.slit.side = 2;
                     m->baseSpeed = slitWalkSpeed();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     m->displayDirection = 260.0f;
                     SLITSTOP2(m)
 #endif
@@ -1001,7 +1001,7 @@ void mot_slit(void) {
                     m->slitState = SLIT_STATE_MOVE_PM_S_2;
                     m->mot.slit.side = 1;
                     m->baseSpeed = slitWalkSpeed();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     m->displayDirection = 280.0f;
                     SLITSTOP2(m)
 #endif
@@ -1011,14 +1011,14 @@ void mot_slit(void) {
         break;
     case SLIT_STATE_MOVE_PM_S_2:
         if (--m->mot.slit.timer > 0) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             SLITSTOP2(m)
 #endif
             break;
         }
         marioChgPaper("PM_S_1D");
         m->slitState = SLIT_STATE_MOVE;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
 #else
         m->displayDirection = (m->mot.slit.side == 1) ? 260.0f : 280.0f;
@@ -1027,7 +1027,7 @@ void mot_slit(void) {
     }
     if (m->flags & MARIO_FLAG_PAPER_MODE) {
         if (m->hitobjPush != NULL) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (hitGetAttr(m->hitobjPush) & HIT_ATTR_SLIT) {
                 HitCheckQuery q;
                 f32 sn, cs;
@@ -1108,7 +1108,7 @@ void mot_slit(void) {
             if (!(st >= SLIT_STATE_CRACK_1 && st <= SLIT_STATE_CRACK_5) && m->hitobjStandOn != NULL && (hitGetAttr(m->hitobjStandOn) & HIT_ATTR_SLIT)) {
                 m->mot.slit.counter += 3;
                 marioChgPaper("PM_S_1H");
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (m->mot.slit.counter >= 0xf) {
 #else
                 if (m->mot.slit.counter >= 0xf && m->currMotionId == MARIO_MOTION_SLIT) {
@@ -1167,7 +1167,7 @@ void mot_slit(void) {
             p->slitPos = p->position;
         }
     case SLIT_STATE_CRACK_2:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->slitTimer = 20;
 #else
         m->slitTimer = 15;
@@ -1178,7 +1178,7 @@ void mot_slit(void) {
         m->flags &= ~MARIO_FLAG_IS_JUMPING;
         m->flags |= (MARIO_FLAG_IS_FALLING | MARIO_FLAG_HAS_INPUT_JUMP);
     case SLIT_STATE_CRACK_3:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->displayDirection = (revise360(m->directionView - m->targetYaw) <= 180.0f) ? 260.0f : 280.0f;
 #else
         slitSetDisplayDir(m);
@@ -1188,7 +1188,7 @@ void mot_slit(void) {
         }
         m->slitState = SLIT_STATE_CRACK_4;
         m->flags &= ~MARIO_FLAG_FLOORS_DISABLED;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
 #endif
     case SLIT_STATE_CRACK_4:
@@ -1200,7 +1200,7 @@ void mot_slit(void) {
     case SLIT_STATE_CRACK_5:
         camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
         m->slitState = SLIT_STATE_MOVE;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
 #endif
         break;
@@ -1208,7 +1208,7 @@ void mot_slit(void) {
     switch (m->slitState) {
     case SLIT_STATE_END_1:
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->mot.slit.resumeState = m->slitState;
         m->mot.slit.flags |= SLIT_FLAG_RESUME;
 #endif
@@ -1239,14 +1239,14 @@ void mot_slit(void) {
                 m->directionView = toMovedirSimple(m->displayDirection);
             }
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_SLIT2, &m->position);
     case SLIT_STATE_END_2:
         m->mot.slit.resumeState = m->slitState;
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT2), &m->position);
     case SLIT_STATE_END_2:
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if (m->flags & MARIO_FLAG_FORCED_MOVEMENT) {
             break;
         }
@@ -1267,13 +1267,13 @@ void mot_slit(void) {
         m->slitState = SLIT_STATE_END_3;
         break;
     case SLIT_STATE_END_3:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->mot.slit.resumeState = m->slitState;
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             if (!m->controlStickSensitivity) {
                 m->baseSpeed = 0.0f;
@@ -1294,7 +1294,7 @@ void mot_slit(void) {
         }
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #else
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
@@ -1302,11 +1302,11 @@ void mot_slit(void) {
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         marioAdjustMoveDir();
         allPartySlitOff();
 #else
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             marioAdjustMoveDir();
         }
@@ -1325,7 +1325,7 @@ void mot_slit(void) {
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
         m->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
         m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->mot.slit.resumeState = m->slitState;
         m->mot.slit.flags |= SLIT_FLAG_RESUME;
 #endif
@@ -1348,7 +1348,7 @@ void mot_slit(void) {
             m->displayDirectionTarget = m->displayDirection;
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_SLIT2, &m->position);
     case SLIT_STATE_SCRIPT_END_2:
         m->mot.slit.resumeState = m->slitState;
@@ -1362,7 +1362,7 @@ void mot_slit(void) {
         m->slitState = SLIT_STATE_SCRIPT_END_3;
         break;
     case SLIT_STATE_SCRIPT_END_3:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->mot.slit.resumeState = m->slitState;
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
@@ -1381,7 +1381,7 @@ void mot_slit(void) {
         marioChgMot(MARIO_MOTION_STAY);
         break;
     case SLIT_STATE_LECTURE_END_1:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->mot.slit.resumeState = m->slitState;
         m->mot.slit.flags |= SLIT_FLAG_RESUME;
 #endif
@@ -1404,7 +1404,7 @@ void mot_slit(void) {
             m->displayDirectionTarget = m->displayDirection;
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         psndSFXOn_3D((char*)PSND_SFX_MARIO_CHANGE_SLIT2, &m->position);
     case SLIT_STATE_LECTURE_END_2:
         m->mot.slit.resumeState = m->slitState;
@@ -1418,13 +1418,13 @@ void mot_slit(void) {
         m->slitState = SLIT_STATE_LECTURE_END_3;
         break;
     case SLIT_STATE_LECTURE_END_3:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->mot.slit.resumeState = m->slitState;
 #endif
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
         m->flags &= ~MARIO_FLAG_WALLS_DISABLED;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
 #else
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);

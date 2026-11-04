@@ -69,7 +69,7 @@ void _prolog(void) {
  * No puffs while Mario is in certain states (marioChkSts 4, 8, 0x10), and from the JP release on,
  * none while vivianGetStatus() returns 2 (Vivian's shadow state). Simulates visible breath in the cold.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(bress) {
 #else
 USER_FUNC(bress) {
@@ -106,7 +106,7 @@ USER_FUNC(bress) {
             timers[i]--;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (mario != NULL && event->userdata[0] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA)) {
 #else
     if (mario != NULL && event->userdata[0] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA) &&
@@ -115,7 +115,7 @@ USER_FUNC(bress) {
         effMistEntry(4, 30, mario->position.x, 24.0f + mario->position.y, mario->position.z, 270.0f - mario->displayDirection);
         event->userdata[0] = irand(60) + 60;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (party != NULL && event->userdata[1] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA)) {
 #else
     if (party != NULL && event->userdata[1] == 0 && !marioChkSts(MARIO_STS_PAPER) && !marioChkSts(MARIO_STS_ROLL) && !marioChkSts(MARIO_STS_JABARA) &&

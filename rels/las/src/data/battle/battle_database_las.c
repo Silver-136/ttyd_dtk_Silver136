@@ -18,7 +18,7 @@
 #include "battle/battle_stage.h"
 #include "driver/npcdrv.h"
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EffectEntry* hi_fire_eff[6];
 s8 hi_fire_end_flag[4];
 #endif
@@ -218,7 +218,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[61];
 NpcTerritoryInfo btl_las_setup_no_tbl[61];
 EvtWord bgset_las_gear_event[38];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord stg_08_1_init_sub_event[];
 #else
 EvtWord stg_08_1_init_sub_event[97];
@@ -235,7 +235,7 @@ EvtWord stg_08_6_init_sub_event[46];
 EvtWord stg_08_6_init_event[4];
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_0000775c, JP las .text+0x7690. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper: raises hi_fire_end_flag so hi_fire_main stops
  * and deletes the six torch flame effects at the end of a battle (JP and later).
@@ -2934,7 +2934,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_las_btlno_las_bunbaba_off, // select
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY,
 #else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_NO_PARTY_ENTRY | NPC_BATTLE_STORY), // battleFlags
@@ -3490,7 +3490,7 @@ EVT_BEGIN(stg_08_1_init_sub_event)
     CALL(evt_eff, STRING("_hi2"), STRING("fire"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_get_position, STRING("hi3"), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("_hi3"), STRING("fire"), 3, LW(0), LW(1), LW(2), FLOAT(1.0f), 1000, 0, 0, 0, 0, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("hi3"), MAP_OBJ_FLAG_HIDDEN)
@@ -3508,7 +3508,7 @@ EVT_BEGIN(stg_08_1_init_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
  * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.
@@ -3530,7 +3530,7 @@ EVT_END()
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_las_00007774, JP las .text+0x76A8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Script helper (runs every frame until hi_fire_end_flag is set):
  * creates six dark flame effects and keeps each one over the torch object hi1..hi6 whenever that torch is above
@@ -3567,7 +3567,7 @@ USER_FUNC(hi_fire_main) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Battle stage event for stage stg_08_6: lights six dark-flame torches (hi1..hi6);
  * in JP and later the flames follow the torch objects through hi_fire_main, and all are removed at battle end.

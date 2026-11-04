@@ -3,7 +3,7 @@
 #include "version.h"
 
 #if VERSION >= VERSION_US
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 const char R_build_date[] = "Sep 26 2004";
 /** Build time of the EU version (15:37:03). */
 const char R_build_time[] = "15:37:03";

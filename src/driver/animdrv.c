@@ -223,7 +223,7 @@ u8 _vivihimoData[3][0x400] ATTRIBUTE_ALIGN(32) = {
     0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00, 0x3F, 0x80, 0x00, 0x00,
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s32 vivihimoTailGroupNo[4] ATTRIBUTE_ALIGN(32) = {0, 2, -1, -1};
 void* vivihimoData[4] = {
     NULL,
@@ -288,14 +288,14 @@ MoaChain g_moamoa_chain_tbl[47] = {
 extern Mtx g_modeling_mtx_stack[32];
 extern AnimationWork work;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 f32 tanfTbl[0xB2];
 #else
 extern f32 tanfTbl[0xB2];
 #endif
 
 //.sdata
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 vivihimoTailGroupNo[4] ATTRIBUTE_ALIGN(32) = { 0, 2, -1, -1 };
 #endif
 
@@ -304,7 +304,7 @@ s32 vivihimoTailGroupNo[4] ATTRIBUTE_ALIGN(32) = { 0, 2, -1, -1 };
  * entry 0 none, 1-3 the three blocks of _vivihimoData (two floats per animation),
  * filled from a/vivian.bin when the driver starts.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void* vivihimoData[4] = {
     NULL,
     _vivihimoData[0],
@@ -314,7 +314,7 @@ void* vivihimoData[4] = {
 #endif
 
 /** Points at the animation driver's work (files, textures, pose pool, scratch buffers). */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 AnimationWork work;
 Mtx g_modeling_mtx_stack[32];
 #endif
@@ -1066,7 +1066,7 @@ static inline f32 apmMul(f32 a, f32 b) {
     return a * b;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * The demo copies the frame buffers through small inline helpers.
  * Kept: writing the copies out as `if (n != 0) memcpy_as4(...)` changes the demo animPoseMain's registers,
@@ -1100,7 +1100,7 @@ void animPoseMain(s32 poseId) {
     s32 nB;
     s32 nD;
     s32 nextFrame;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     s32 k;
     AnimKeyframe* kf;
     AnimKeyframe* kfEnd;
@@ -1156,7 +1156,7 @@ void animPoseMain(s32 poseId) {
     pose = &poses[poseId];
     file = animPoseGetBaseData(pose);
     anim = file->anims[pose->animId].data;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     OSInitFastCast();
 #endif
     if (wp->mbUseFloatScratch != 0) {
@@ -1261,7 +1261,7 @@ void animPoseMain(s32 poseId) {
     nE = file->bufferTexAnimNum;
     if (pose->lastFrameZero != frame) {
         if (pose->lastFrameZero == -1 || pose->lastFrameZero > frame) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             apmCopy4((u8*)file->bufferVtxPos, (u8*)pose->bufferVtxPos, nA, sizeof(Vec));
             apmCopy4((u8*)file->nrmVtxBuffer, (u8*)pose->bufferVtxNrm, nB, sizeof(Vec));
             apmCopy(file->groupVisibility, pose->bufferGroupVisibility, nC);
@@ -1428,7 +1428,7 @@ void animPoseMain(s32 poseId) {
             kf = &anim->keyframes[pose->lastFrameZero + 1];
             kfEnd = &anim->keyframes[frame + 1];
             s = 0.0625f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             for (k = pose->lastFrameZero + 1; k <= frame; k++) {
                 kf = &anim->keyframes[k];
                 {
@@ -1569,7 +1569,7 @@ void animPoseMain(s32 poseId) {
         }
     }
     if (frame == nextFrame) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         apmCopyTo(grpA, (u8*)pose->bufferVtxPos, nA, sizeof(Vec));
         apmCopyTo(grpB, (u8*)pose->bufferVtxNrm, nB, sizeof(Vec));
         apmCopyTo((u8*)pose->nodes, (u8*)pose->bufferNode, nD, 4);
@@ -1585,11 +1585,11 @@ void animPoseMain(s32 poseId) {
         }
 #endif
     } else if (frame <= nextFrame) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         AnimKeyframe* kf;
 #endif
         kf = &anim->keyframes[nextFrame];
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         {
             AnimVtxDelta* d;
             AnimVtxDelta* e;
@@ -1683,14 +1683,14 @@ void animPoseMain(s32 poseId) {
             v += d->step * 4;
             if (b < 0x59 && b > -0x59) {
                 f32 hb;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 x = __OSs8tof32(&d->value);
 #endif
                 t2 = t * t;
                 t3 = apmMul(t, t2);
                 hb = -2.0f * t3 + 3.0f * t2;
                 *(f32*)v = *(f32*)v + ((t + (t3 - 2.0f * t2)) * (dt * tanfTbl[d->tangentStart + 0x59]) +
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                                 hb * (0.0625f * (f32)d->value) +
 #else
                                 hb * (0.0625f * x) +
@@ -1715,7 +1715,7 @@ void animPoseMain(s32 poseId) {
             f += 360.0f;
         }
         f -= pose->rotationY;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         while (f < -360.0f)
             f += 360.0f;
         while (f >= 360.0f)
@@ -1737,7 +1737,7 @@ void animPoseMain(s32 poseId) {
 }
 
 /** the demo always builds every matrix and concatenates them all */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void pushGXModelMtx_TransformNode__(AnimPoseNode* node) {
     Mtx trans, scale, rot, tmp;
     Mtx sc1, sc2, sc3;
@@ -2214,7 +2214,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
             hdr = desc->textureHeader;
             GXInitTexObjLOD(&obj, hdr->minFilter, hdr->magFilter, hdr->minLOD, hdr->maxLOD, hdr->LODBias, GX_FALSE, hdr->edgeLODEnable, GX_ANISO_1);
             GXLoadTlut(&tlut, 0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             GXLoadTexObj(&obj, (GXTexMapID)i);
 #else
             GXLoadTexObj(&obj, (GXTexMapID) i[0]);
@@ -2229,7 +2229,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
                     wrapS = GX_MIRROR;
                 } else {
                     // FAKE: wrapS assigned in two steps; wrapS = wrapFlags & 1 changes the object
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     // plain `wrapFlags & 1` the branch becomes a li/bne select, and the two-step form of the CI path keeps wrapFlags at r22
                     wrapS = (wrapFlags & 1) != 0;
 #else
@@ -2245,7 +2245,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
             }
             GXInitTexObj(&obj, hdr->data, hdr->width, hdr->height, (GXTexFmt) hdr->format, wrapS, wrapT, hdr->minLOD != hdr->maxLOD);
             hdr = desc->textureHeader;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             GXInitTexObjLOD(&obj, hdr->minFilter, hdr->magFilter, hdr->minLOD, hdr->maxLOD, hdr->LODBias, (GXBool)0, hdr->edgeLODEnable, GX_ANISO_1);
             GXLoadTexObj(&obj, (GXTexMapID)i);
 #else
@@ -2254,7 +2254,7 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
 #endif
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {
 
         // r22); j is a one-element array (an IRO temp, so j colours r20 and texMtx r21), and the dead gz guard keeps k = 0 from
@@ -2433,7 +2433,7 @@ static BOOL animSetMaterial_ChangeTexture(AnimationPoseData* data, AnimPoseShape
     return FALSE;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static s32 tbl[4] = { GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE }; // shape cullMode -> GXCullMode: GX_CULL_BACK, GX_CULL_FRONT, GX_CULL_ALL, GX_CULL_NONE
 #else
 /** Sets GX culling for a shape's cull mode; the demo map has one static local table both draw functions read. */
@@ -2448,7 +2448,7 @@ static inline void animSetCullMode(s32 cullMode) {
  * the matrices, lighting, cull mode, alpha test and blending, the tint colours and textures,
  * including substituted paper textures.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void materialProc(s32 shapeId, s32 xluStage) {
 #else
 void materialProc(s32 shapeId, s32 xluStage) {
@@ -2468,7 +2468,7 @@ void materialProc(s32 shapeId, s32 xluStage) {
     Mtx camMtx;
     Mtx invCamMtx;
     Vec lightPos;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (shapeId != (-1)) {
 #else
     if (shapeId != -1) {
@@ -2484,7 +2484,7 @@ void materialProc(s32 shapeId, s32 xluStage) {
         drawCount = shape->shapeDrawCount;
         draw = &wp->curPoseData->draws[shape->shapeDrawStart];
         if ((dispMode == 0 && wp->currDispMode == 2) || dispMode == wp->currDispMode || wp->curPose->materialColor.a != 0xFF || wp->curPose->materialColor2.a != 0xFF) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             animSetCullMode(shape->cullMode);
 #else
             GXSetCullMode(tbl[shape->cullMode]);
@@ -2562,7 +2562,7 @@ static inline AnimationPoseData* rpCurData(void) {
  * Draws shape shapeId of the current pose: points GX at the pose's evaluated vertex positions and normals
  * and the file's colours and texture coordinates, then sends its polygons.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void renderProc(s32 shapeId, s32 unused) {
 #else
 void renderProc(s32 shapeId, s32 unused) {
@@ -2594,17 +2594,17 @@ void renderProc(s32 shapeId, s32 unused) {
         GXTexObj* texObj;
         CameraEntry* camera;
         s32 index;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         Mtx* model = g_modeling_mtx;
 #endif
         camera = camGetCurPtr();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         MTXConcat(camera->view, *model, camMtx);
 #else
         MTXConcat(camera->view, *g_modeling_mtx, camMtx);
 #endif
         GXLoadPosMtxImm(camMtx, GX_PNMTX0);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         MTXInverse(camMtx, invCamMtx);
         MTXTranspose(invCamMtx, camMtx);
         GXLoadNrmMtxImm(camMtx, GX_PNMTX0);
@@ -2631,7 +2631,7 @@ void renderProc(s32 shapeId, s32 unused) {
             f32* buffer;
             s32 firstDrawId;
             f32* texVtxIndices[8];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             animSetCullMode(shape->cullMode);
 #else
             GXSetCullMode(tbl[shape->cullMode]);
@@ -2830,7 +2830,7 @@ void renderProc(s32 shapeId, s32 unused) {
  * pushes its node matrix, sets up its material and draws its shape.
  * Vivian, Marilyn and Beldam's hair and tail chains are bent towards their movement on the way.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
 #else
 void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 blend) {
@@ -2896,7 +2896,7 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
             switch (type) {
                 case 1:
                     offA = -2.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     offB = 2.0f;
 #else
                     offB = 0.5f;
@@ -2904,7 +2904,7 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
                     break;
                 case 2:
                     offA = -3.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     offB = 1.0f;
 #else
                     offB = 0.5f;
@@ -2912,7 +2912,7 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
                     break;
                 case 3:
                     offA = -1.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     offB = 1.0f;
 #else
                     offB = 0.5f;

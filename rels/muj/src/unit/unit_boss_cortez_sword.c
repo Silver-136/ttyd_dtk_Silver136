@@ -24,7 +24,7 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 BattleWeapon weapon_cortez_sword_float_attack;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseTableEntry pose_table[4];
 #else
 static PoseTableEntry pose_table[6];
@@ -40,7 +40,7 @@ static EvtWord avoid_thorn_event[33];
 EvtWord cortez_weapon_get_home_height[144];
 EvtWord cortez_weapon_set_formation_attribute[27];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord cortez_weapon_unison_phase_event[];
 #else
 EvtWord cortez_weapon_unison_phase_event[79];
@@ -114,7 +114,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of Cortez Sword: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {0, 80, 95, 100, 90, 100, 100, 50, 0, 0, 100, 0, 100, 50, 50, 0, 90, 100, 50, 0, 0, 0};
 #else
 static StatusVulnerability regist = {
@@ -183,7 +183,7 @@ BattleWeapon weapon_cortez_sword_float_attack = {
 };
 
 static PoseTableEntry pose_table[] = {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_STOP, "KRT_Z_1"},
     {POSE_TYPE_FREEZE, "KRT_Z_1"},
 #endif
@@ -221,7 +221,7 @@ static PoseTableEntry pose_table_break[] = {
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, cortez_weapon_dead_event},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {70, cortez_weapon_break_event},
 #else
     {UNIT_DATA_WEAPON_BREAK_EVENT, cortez_weapon_break_event},
@@ -373,7 +373,7 @@ EVT_BEGIN(cortez_weapon_unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_OWNER, LW(0))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_EQUAL(LW(0), -1)
             RETURN
         END_IF
@@ -383,7 +383,7 @@ EVT_BEGIN(cortez_weapon_unison_phase_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(9))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL_CHILD(cortez_weapon_get_home_height)
 #else
                 IF_INT_EQUAL(LW(9), -1)

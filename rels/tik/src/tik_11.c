@@ -51,7 +51,7 @@ static USER_FUNC(wariai_enzan_0f);
 static USER_FUNC(wariai_enzan_0);
 static USER_FUNC(wariai_enzan_1);
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord powerdownya_face_left[16];
 #endif
 
@@ -278,7 +278,7 @@ static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /**
  * Loop that keeps Mario and his partner facing the shopkeeper (the point X = -9) every frame,
  * until the script is stopped. JP and later.
@@ -306,7 +306,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("powerdown_04"), 0, STRING("me"))
 #else
         CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
@@ -358,7 +358,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     WAIT_MS(500)
     CALL(evt_win_coin_off, LW(12))
     CALL(enzan_lw_save)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SPAWN_EVENT_GET_ID(PTR(powerdownya_face_left), GW(1))
 #endif
     CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
@@ -507,7 +507,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     WAIT_MS(1500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     DELETE_EVENT(GW(1))
 #endif
     CALL(enzan_lw_load)
@@ -538,7 +538,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
         CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         RETURN
     END_IF
     CALL(evt_win_party_lankdown_chk, LW(0))
@@ -616,7 +616,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_IF
     END_LOOP
     WAIT_MS(500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_POWERDOWN1"))
     CALL(bgm_start_wait)
@@ -624,7 +624,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -9, 49, 0, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SPAWN_EVENT_GET_ID(PTR(powerdownya_face_left), GW(1))
 #endif
     CALL(evt_msg_print, 0, STRING("powerdown_12"), 0, STRING("me"))
@@ -701,7 +701,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
             CALL(evt_party_set_pose, 0, STRING("PCH_I_1"))
         END_SWITCH
         WAIT_MS(500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         DELETE_EVENT(GW(1))
 #endif
         CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_NO_MAKE_DISP_DIR, 1)
@@ -725,7 +725,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, LW(1))
         WAIT_MS(500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_party_stop, 0)
         SPAWN_EVENT_GET_ID(PTR(powerdownya_face_left), GW(1))
 #endif
@@ -844,7 +844,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     WAIT_MS(1500)
     CALL(evt_party_set_breed_pose, 0, 1)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(enzan_lw_load)
 #else
     DELETE_EVENT(GW(1))

@@ -41,7 +41,7 @@ EvtWord taimatu_evt[18];
 s32 mugen_kairou_list[7];
 EvtWord mugen_kairou_init[96];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord las_08_init_evt[];
 #else
 EvtWord las_08_init_evt[22];
@@ -441,7 +441,7 @@ EVT_END()
 EVT_BEGIN(las_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

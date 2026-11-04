@@ -16,7 +16,7 @@ USER_FUNC(unitwin_setmariolevel);
 USER_FUNC(unitwin_setpartylank);
 USER_FUNC(unitwincoin_disp_onoff);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 USER_FUNC(unitwin_window_select_func);
 #endif
 

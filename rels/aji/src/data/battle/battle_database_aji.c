@@ -514,7 +514,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {50.0f, 0.0f, -10.0f},
 #else
         {30.0f, 0.0f, -10.0f}, // position
@@ -528,7 +528,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {90.0f, 40.0f, 0.0f},
 #else
         {70.0f, 40.0f, 0.0f}, // position
@@ -542,7 +542,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {130.0f, 40.0f, 10.0f},
 #else
         {150.0f, 40.0f, 20.0f}, // position
@@ -624,7 +624,7 @@ BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {70.0f, 40.0f, 0.0f},
 #else
         {50.0f, 40.0f, -10.0f}, // position
@@ -638,7 +638,7 @@ BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {110.0f, 40.0f, 10.0f},
 #else
         {130.0f, 40.0f, 10.0f}, // position
@@ -699,7 +699,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {50.0f, 0.0f, -10.0f},
 #else
         {30.0f, 0.0f, -10.0f}, // position
@@ -713,7 +713,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {90.0f, 40.0f, 0.0f},
 #else
         {70.0f, 40.0f, 0.0f}, // position
@@ -727,7 +727,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {130.0f, 40.0f, 10.0f},
 #else
         {150.0f, 40.0f, 20.0f}, // position
@@ -896,7 +896,7 @@ BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {70.0f, 40.0f, 0.0f},
 #else
         {50.0f, 40.0f, -10.0f}, // position
@@ -910,7 +910,7 @@ BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {110.0f, 40.0f, 10.0f},
 #else
         {130.0f, 40.0f, 10.0f}, // position

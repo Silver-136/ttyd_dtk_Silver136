@@ -79,7 +79,7 @@ BeroEntry bero_witchtrio[1];
 static BeroEntry bero_entry_data[3];
 EvtWord meet_clouda[76];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord meet_clouda2[];
 #else
 EvtWord meet_clouda2[139];
@@ -87,7 +87,7 @@ EvtWord meet_clouda2[139];
 
 EvtWord clouda_inai[17];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord clouda_irai[];
 #else
 EvtWord clouda_irai[444];
@@ -101,7 +101,7 @@ EvtWord dummy1_jump[26];
 EvtWord dummy2_jump[32];
 static s32 item_list[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord clouda_nakama[];
 #else
 EvtWord clouda_nakama[1556];
@@ -116,7 +116,7 @@ EvtWord flower_event[28];
 EvtWord flower_disp_pos[21];
 static EvtWord cloud_toujou[95];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord win_04_init_evt[];
 #else
 EvtWord win_04_init_evt[94];
@@ -284,7 +284,7 @@ EVT_BEGIN(meet_clouda2)
         IF_INT_GREATER_OR_EQUAL(LW(0), 150)
             IF_INT_GREATER_OR_EQUAL(LW(1), 50)
                 IF_INT_LESS(LW(1), 51)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
                     IF_INT_GREATER_OR_EQUAL(LW(1), 50)
                         IF_INT_LESS(LW(1), 51)
@@ -293,7 +293,7 @@ EVT_BEGIN(meet_clouda2)
                                 IF_INT_LESS(LW(1), 51)
 #endif
                     BREAK_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 END_IF
             END_IF
         END_IF
@@ -306,7 +306,7 @@ EVT_BEGIN(meet_clouda2)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_party_force_reset_outofscreen, 0)
         CALL(evt_party_stop, 0)
@@ -330,7 +330,7 @@ EVT_BEGIN(meet_clouda2)
     ELSE
         SUBTRACT(LW(2), 50)
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(120.0f))
 #else
     CALL(evt_party_move_pos2, 1, 160, LW(2), FLOAT(120.0f))
@@ -344,7 +344,7 @@ EVT_BEGIN(meet_clouda2)
     END_LOOP
 #endif
     CALL(evt_msg_print, 0, STRING("stg2_win_e05_00_02"), 0, STRING("extparty"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_party_run, 1)
@@ -368,12 +368,12 @@ EVT_END()
 
 EVT_BEGIN(clouda_irai)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_party_force_reset_outofscreen, 0)
 #endif
         CALL(evt_party_stop, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 0, 255, LW(2), FLOAT(120.0f))
         CALL(evt_party_set_dir, 0, 90, 200)
@@ -382,7 +382,7 @@ EVT_BEGIN(clouda_irai)
         CALL(evt_party_force_reset_outofscreen, 1)
 #endif
         CALL(evt_party_stop, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 1, 225, LW(2), FLOAT(120.0f))
         CALL(evt_party_set_dir, 1, 90, 200)
@@ -658,7 +658,7 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_win_item_select, PTR(item_list), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
@@ -1521,7 +1521,7 @@ static EVT_BEGIN(cloud_toujou)
 EVT_END()
 
 EVT_BEGIN(win_04_init_evt)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     SET_VALUE(GSWF_WIN_04_ENTERED, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

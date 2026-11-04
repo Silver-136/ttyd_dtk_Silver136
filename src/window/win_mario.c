@@ -119,7 +119,7 @@ void winMarioInit(WindowWork* w) {
     if (marioGetPtr()->flags & MARIO_FLAG_IS_SHADOW_MARIO) {
         animPoseSetMaterialFlagOn(w->mario.poseId, MAP_OBJ_TEV_CALLBACK(10));
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     w->mario.hammerHold = 0;
 #endif
     w->mario.mode = 0;
@@ -152,7 +152,7 @@ void winMarioInit2(WindowWork* w) {
             winMsgEntry(w, 0, linkDt[w->marioSel].msg, 0);
             break;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     w->mario.hammerHold = 0;
 #endif
     w->mario.mode = 0;
@@ -217,7 +217,7 @@ s32 winMarioMain(WindowWork* w) {
                 }
             } else if (w->buttonTrg & PAD_BUTTON_B) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1 | PSND_SFX_BYPASS_MUTE));
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 animPoseSetAnim(w->mario.poseId, (w->flags & WINDOW_FLAG_8BIT) ? "S_1" : "M_S_1", 0);
 #else
                 if (w->flags & WINDOW_FLAG_8BIT) {
@@ -250,7 +250,7 @@ s32 winMarioMain(WindowWork* w) {
                         anims[0] = hammer_pose[pouchGetHammerLv()];
                     }
                     animPoseSetAnim(w->mario.poseId, anims[0], 0);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     if (w->mario.hammerHold == 0) {
                         if (animPoseGetLoopTimes(w->mario.poseId) >= 0.89f) {
                             w->mario.hammerHold = 30;
@@ -264,7 +264,7 @@ s32 winMarioMain(WindowWork* w) {
 #endif
                     break;
                 default:
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     w->mario.hammerHold = 0;
 #endif
                     if (w->flags & WINDOW_FLAG_8BIT) {
@@ -320,7 +320,7 @@ void winMarioMain2(void) {
 
 /** US and PAL use ASCII digits; JP and the demos use full-width digits. */
 const char* winZenkakuStr(s32 n) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     const char* tbl[10] = {"０", "１", "２", "３", "４",
                            "５", "６", "７", "８", "９"};
         static char tmp2[0x100];
@@ -369,12 +369,12 @@ char* winZenkakuStrPad(s32 n, s32 digits) {
     return winZenkakuStrPad_buf;
 }
 #else
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 char winZenkakuStrPad_tmp[0x100];
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_8016af5c, JP 0x8016AF5C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 char* winZenkakuStrPad(s32 n, s32 digits) {
     const char* tbl[10] = {"０", "１", "２", "３", "４",
                            "５", "６", "７", "８", "９"};
@@ -518,7 +518,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     GXColor white;
     GXColor black;
     PouchData* pouch;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     f32 left;
     f32 x;
     f32 y;
@@ -739,7 +739,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             }
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
     // FAKE: two dead int guards (gz is 0; folded after register allocation, no code): the first redefines q1/q2 so
     // they are not propagated, the second consumes them into y
@@ -761,7 +761,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     left = 10.0f + x;
     winKirinukiGX(w, 0, left, 10.0f + (20.0f + y), 260.0f, 150.0f);
     winIconInit();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     rowB = 10.0f + (20.0f + x);
     winIconSet(ICON_STAR_POINT, (Vec){rowB, 10.0f + y, 0.0f}, (Vec){0.62f, 0.62f, 0.62f}, white);
     winIconSet(ICON_ITEM_COIN, (Vec){rowB, 10.0f + (y - 28.0f), 0.0f}, (Vec){0.62f, 0.62f, 0.62f}, white);
@@ -905,7 +905,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     if (w->mario.mode) {
 
         // FAKE: the star power cost (s8 baseSpCost, never negative) is read unsigned (lbz with no extsb), as by the old u8 view of the move table
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
         winFontInit();
         winFontSetEdge((Vec){(90.0f + x) - 270.0f, 155.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, msgSearch("msg_menu_mario_sac_waza"));

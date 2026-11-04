@@ -125,7 +125,7 @@ BattleUnitKind unit_barriern_z = {
     1,
     27,
     0,
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     2,
     70,
     2,
@@ -212,7 +212,7 @@ static BattleUnitKindPart parts[] = {
     {11, "btl_un_barriern_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 10, 10, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /**
  * Status vulnerability of Z-Yux (the demos), as the percent chance a status takes hold:

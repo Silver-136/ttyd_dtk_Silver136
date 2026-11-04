@@ -154,7 +154,7 @@ static const WinLangTbl winLangTbl;
 void winMain(void) {
     MarioWork* mario;
     s32 i;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     WindowPartyDt* list[7];
 #endif
 
@@ -219,7 +219,7 @@ void winMain(void) {
                         if (keyGetButton(0) & PAD_TRIGGER_Z) {
                             break;
                         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         if (strcmp(gp->currentAreaName, "yuu") == 0) {
                             break;
                         }
@@ -239,7 +239,7 @@ void winMain(void) {
                     if (keyGetButton(0) & PAD_TRIGGER_L) {
                         break;
                     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
                     if ((gp->flags & GW_FLAG_E3) && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG0_07_GOOMBELLA_JOINS) {
                         break;
@@ -259,7 +259,7 @@ void winMain(void) {
                     npcStopForEvent();
                 }
                 fbatChangeMode(FBAT_MODE_EVENT);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 marioCtrlOff2();
 #else
                 if (mario->characterId == CHARACTER_BOWSER) {
@@ -285,7 +285,7 @@ void winMain(void) {
                 for (i = 0; i < 4; i++) {
                     padRumbleHardOff(i);
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "jp/mail.tpl", getMarioStDvdRoot());
                 {
                     const char* name = winGetMapTplName();
@@ -317,7 +317,7 @@ void winMain(void) {
                 WinLangTbl lang = winLangTbl;
                 BOOL ok;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (fileAsyncf(FILE_TYPE_TPL, NULL, WIN_DIR "%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]) == 0U) {
                     ok = FALSE;
                 } else {
@@ -361,7 +361,7 @@ void winMain(void) {
 
             case WIN_MENU_CLOSE:
                 camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 marioCtrlOn2();
 #else
                 if (mario->characterId == CHARACTER_BOWSER) {
@@ -414,7 +414,7 @@ void winMain(void) {
                 break;
 
             case WIN_MENU_ITEM_USE: {
-#if VERSION != VERSION_EU
+#if VERSION < VERSION_DEMO_EU
 #if VERSION >= VERSION_US
                 WindowPartyDt* list[11]; /* FAKE */ // US frame is 96 bytes; only 7 entries used
 #else
@@ -427,7 +427,7 @@ void winMain(void) {
                 s32 n;
 
                 partyId = !marioBgmodeChk() ? marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 n = 0;
                 for (i = 0; i < 7; i++) {
                     if (partyId == winPartyDt[i].partyId) {
@@ -441,7 +441,7 @@ void winMain(void) {
 #endif
                     }
                 }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 for (i = 0; i < 7; i++) {
                     if (partyId != winPartyDt[i].partyId && (pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_JOINED) &&
                         !(pouchGetPtr()->partyData[winPartyDt[i].partyId].flags & POUCH_PARTY_FLAG_AWAY)) {
@@ -532,7 +532,7 @@ static const WinLangTbl winLangTbl = {{
 
 
 EVT_BEGIN(kime_pose)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
@@ -560,7 +560,7 @@ EVT_BEGIN(kime_pose)
 EVT_END()
 
 EVT_BEGIN(kime_pose2)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
@@ -587,7 +587,7 @@ EVT_BEGIN(kime_pose2)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(win_main_child_evt)
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -603,7 +603,7 @@ EVT_END()
  * Yoshi's pose depends on his color (party_color).
  */
 EVT_BEGIN(kime_pose_famicom)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_nokotaro_get_status, 0, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
@@ -655,12 +655,12 @@ EVT_END()
 EVT_BEGIN(evt_item_use)
     SET_TYPE(0)
     CALL(evt_mario_normalize)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(all_party_slit_off)
 #endif
     WAIT_FRAMES(1)
     CALL(evt_mario_adjust_dir)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL_CHILD(PTR(win_main_child_evt))
 #endif
@@ -714,7 +714,7 @@ EVT_BEGIN(evt_item_use)
         CALL(itemUseFunc)
         WAIT_MS(1500)
         CALL(itemUseFunc2)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_party_set_breed_pose, 0, 1)
 #else
         CALL_CHILD(PTR(win_main_child_evt))
@@ -758,7 +758,7 @@ EVT_BEGIN(evt_diary_read)
     END_IF
     CALL(evt_msg_continue)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
     CALL(evt_mario_adjust_dir)
@@ -799,7 +799,7 @@ EVT_BEGIN(evt_diary_read)
     ADD(LW(1), 20)
     ADD(LW(2), 20)
     CALL(evt_npc_set_position, STRING("\202\344\202\244\202\352\202\242"), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_APPEAR1"), LW(0), LW(1), LW(2), 0)
 #else
     CALL(evt_snd_sfxon_3d, PSND_SFX_STG6_GHOST_APPEAR1 | PSND_SFX_BYPASS_MUTE, LW(0), LW(1), LW(2), 0)
@@ -812,7 +812,7 @@ EVT_BEGIN(evt_diary_read)
     BEGIN_INLINE_EVENT
         CALL(evt_env_blur_on, 0, 0)
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_SHAKE1"), LW(0), LW(1), LW(2), LW(3))
 #else
@@ -841,7 +841,7 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(lecture_step_wait, 2)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_02"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(lecture_step_wait, 5)
 #else
 #if VERSION >= VERSION_US
@@ -872,7 +872,7 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
     CALL(lecture_step_wait, 10)
     CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_MS(500)
     RETURN
 #if VERSION == VERSION_DEMO_JP
@@ -965,7 +965,7 @@ USER_FUNC(itemUseFunc) {
                 cnt = 300;
                 break;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
 #else
             eff = effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
@@ -1039,7 +1039,7 @@ USER_FUNC(party_color) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_80177cf8, JP 0x80177CF8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(all_party_slit_off) {
     allPartyForceSlitOff();
     return EVT_RETURN_DONE;
@@ -1079,7 +1079,7 @@ BOOL winGhostDiaryChk(void) {
 }
 
 const char* winMainStrippedTpl(void) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     return WIN_DIR "%s/win.tpl";
 #else
     return "%s/w/%s/win.tpl";
@@ -1116,7 +1116,7 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     FontDrawMessageMtx(trans, buf);
 }
 
@@ -1162,7 +1162,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     Mtx trans;
     Mtx scl;
     va_list args;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     va_start(args, fmt);
 #if VERSION == VERSION_DEMO_JP
     vsprintf(buf, fmt, args);
@@ -1202,7 +1202,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     FontDrawStringMtx(trans, buf);
 }
 
@@ -1222,7 +1222,7 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #endif
 }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 
 /** PAL: right-aligned like winFontSetR, squeezed horizontally to fit width */
 void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* fmt, ...) {
@@ -1416,7 +1416,7 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     GXPosition3f32(-0.5f, HALF_F, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);
 }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 
 // Descriptive name (not in the symbol maps); placeholder unk_80177008, JP 0x80177008. See docs/NAME_PROVENANCE.md.
 void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
@@ -1587,7 +1587,7 @@ void winIconGrayInit(void) {
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_CPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP2);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #if VERSION != VERSION_DEMO_JP
     if (!GX_TEVSTAGE2 && !GX_TEVSTAGE2 && !GX_TEVSTAGE2) {
     }
@@ -1662,7 +1662,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
  * In JP and later it clears WINDOW_FLAG_LECTURE_KEY_MASK on the first call and sets it once the step is reached;
  * the demos do not change that flag here.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(lecture_step_wait) {
     s32 n = evtGetValue(event, event->args[0]);
 #else
@@ -1678,7 +1678,7 @@ USER_FUNC(lecture_step_wait) {
     if (wp->lectureStep < n) {
         return EVT_RETURN_BLOCK;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     return EVT_RETURN_DONE;
 }
 
@@ -1770,7 +1770,7 @@ void winLectureKeyMask(void) {
  */
 void winLectureOn(void) {
     wp->flags |= WINDOW_FLAG_LECTURE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     wp->flags |= WINDOW_FLAG_LECTURE_KEY_MASK;
 #endif
     wp->lectureStep = 0;

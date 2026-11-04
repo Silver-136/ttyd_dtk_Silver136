@@ -53,7 +53,7 @@ s32 BattleAcrobatMain(BattleWork* work) {
         return EVT_RETURN_YIELD;
     }
     if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         dispEntry(CAMERA_3D, 900.0f, DISP_MODE_ALPHA_TEST, _accrobat_timing_icon_disp, unit);
 #else
         Vec pos = { 0 };

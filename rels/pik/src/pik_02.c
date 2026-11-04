@@ -74,7 +74,7 @@ EvtWord patakuri_init[7];
 static EvtWord baba_init[7];
 static NpcSetupInfo npc_data[7];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_garnet[];
 #else
 EvtWord evt_garnet[562];
@@ -727,7 +727,7 @@ EVT_BEGIN(evt_garnet)
     END_INLINE_EVENT
     WAIT_MS(1000)
     CALL(evt_npc_majo_disp_off, STRING("マリリン"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_set_position, STRING("マジョリン"), 0, -1000, 0)
     CALL(evt_npc_set_position, STRING("マリリン"), 0, -1000, 0)
 #endif
@@ -804,7 +804,7 @@ EVT_BEGIN(evt_garnet)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 
     // The story advances.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SET_VALUE(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
@@ -887,7 +887,7 @@ EVT_END()
  */
 EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 2)
 #endif
     CALL(evt_mario_key_onoff, 0)
@@ -898,7 +898,7 @@ EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_npc_set_ry, STRING("ババ"), 270)
     CALL(evt_cam3d_evt_set, 0, 360, -338, 0, 250, -1130, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_bgm_scope, 0, 1)
 #endif
@@ -1260,7 +1260,7 @@ EVT_BEGIN(pik_02_init_evt)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_PIK2"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_set_rev_mode, 2)
     ELSE
         CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_EVT_KUPPA1"))

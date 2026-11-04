@@ -70,7 +70,7 @@ EvtWord nokonoko_D_talk[52];
 s32 iri_15_item_tbl1[2];
 s32 iri_15_item_tbl2[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord nokonoko_F_talk[];
 #else
 EvtWord nokonoko_F_talk[318];
@@ -97,7 +97,7 @@ static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
 static KinopioData kino_dt;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord first_time_camera[];
 #else
 EvtWord first_time_camera[195];
@@ -310,7 +310,7 @@ EVT_BEGIN(nokonoko_F_talk)
             CALL(evt_pouch_get_haveitemcnt, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, SELECT_TYPE_ITEM, LW(0))
 #else
                 CALL(evt_win_item_select, 0, SELECT_TYPE_ITEM, LW(0), 0)
@@ -376,7 +376,7 @@ EVT_BEGIN(nokonoko_F_talk)
             CALL(evt_pouch_get_haveitemcnt, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, SELECT_TYPE_ITEM, LW(0))
 #else
                 CALL(evt_win_item_select, 0, SELECT_TYPE_ITEM, LW(0), 0)
@@ -849,7 +849,7 @@ EVT_BEGIN(first_time_camera)
     CALL(evt_cam3d_evt_off, 500, EASING_QUADRATIC_OUT)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG1_NOK1"), 2000)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_party_run, 0)

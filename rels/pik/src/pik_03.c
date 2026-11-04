@@ -29,7 +29,7 @@ EvtWord bero_in[45];
 EvtWord bero_out[53];
 static BeroEntry bero_data[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_daiza[21];
 #else
 static EvtWord evt_daiza[28];
@@ -118,7 +118,7 @@ static EVT_BEGIN(evt_daiza)
     CALL(evt_npc_stop_for_event)
     SET_VALUE(LW(0), 6)
     SET_VALUE(LW(1), STRING("star"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(evt_sub_starstone)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)

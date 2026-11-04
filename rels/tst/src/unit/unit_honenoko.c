@@ -118,7 +118,7 @@ static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 /** Damage-type modifiers of the Dull Bones: none, no special weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Status vulnerability of the Dull Bones (multipliers on status chances): immune to Sleep and Poison; uses
  * Stop 60%, Dizzy 50%, Confusion 50%, Freeze 90%, Tiny 90%, Attack Down 90%, Defense Down 90%, Allergic 90%,

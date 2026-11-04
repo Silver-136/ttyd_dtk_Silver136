@@ -49,7 +49,7 @@ typedef struct SlitWork {
     f32 rot1;
     f32 rot2;
     s32 monteCount;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     EventEntry* viewEvent;
 #endif
 } SlitWork;

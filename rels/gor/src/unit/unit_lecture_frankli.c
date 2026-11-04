@@ -33,7 +33,7 @@ static EvtWord phase_event[681];
 static EvtWord attack_event[5];
 static EvtWord wait_event[6];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord lecAttackEvent_Jump[];
 extern EvtWord lecAttackEvent_Hammer[];
 #else
@@ -220,7 +220,7 @@ BattleWeapon _lec_weapon_hammer = {
  *  and the end-of-lecture script (the tags are one higher in the retail versions).
  */
 static BattleDataEntry data_table[] = {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {67, &_lec_weapon_jump},
     {68, &_lec_weapon_hammer},
     {69, lecture_end_event},
@@ -587,7 +587,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
             CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
             CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_002"), 0, UNIT_ID_LECTURE)
 #else
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_002"), 0, -6)
@@ -599,7 +599,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
                 WAIT_FRAMES(1)
                 GOTO(11)
             END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             WAIT_MS(150)
 #endif
             CALL(evt_msg_continue)
@@ -845,7 +845,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
             LOOP(LW(5))
                 CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     IS_EVENT_RUNNING(LW(15), LW(0))
                     IF_INT_EQUAL(LW(0), 0)
                     ELSE
@@ -863,13 +863,13 @@ EVT_BEGIN(lecAttackEvent_Hammer)
                             WAIT_FRAMES(1)
                             GOTO(6)
                         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                         WAIT_MS(200)
 #endif
                         CALL(evt_msg_continue)
                         CALL(btlevtcmd_AcSetParam, 2, 0)
                         RESUME_EVENT(LW(15))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                     END_IF
 #endif
                 END_IF
@@ -896,7 +896,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
             GOTO(10)
         END_IF
         CALL(btlevtcmd_ResultAC)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         WAIT_MS(200)
 #endif
         CALL(evt_msg_continue)

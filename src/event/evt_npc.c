@@ -86,7 +86,7 @@ USER_FUNC(evt_npc_slave_entry) {
 
 /** const char* lookupName */
 // const char* lookupName
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void npc_report_pos(NpcEntry* npc) {
     OSReport("%f%f%f", npc->position.x, npc->position.y, npc->position.z);
 }
@@ -550,7 +550,7 @@ USER_FUNC(evt_npc_move_position) {
             npcTuningRy(npc, npc->moveDir);
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {
 #else
     // Advance the move offset along the heading (not while NPC_STATUS_STOPPED)
@@ -2026,7 +2026,7 @@ USER_FUNC(evt_npc_wait_battle_end) {
     if (party) {
         partyCtrlOn();
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     psndClearFlag(PSND_FLAG_BATTLE_START);
 #else
     L_psndBGM_stop();
@@ -2145,7 +2145,7 @@ USER_FUNC(evt_npc_get_drop_item) {
     if (npc->battleInfo.battleFlags & NPC_BATTLE_NO_ITEM_DROP) {
         evtSetValue(event, index, 0);
     } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         evtSetValue(event, index, 0);
 #else
         evtSetValue(event, index, npc->battleInfo.itemDropped);
@@ -2449,7 +2449,7 @@ USER_FUNC(evt_npc_majo_disp_on) {
             break;
 
         case 1:
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             animPoseSetLocalTime(npc->poseId, 0.0f);
 #else
             animPoseSetEffect(npc->poseId, "p_bibi", TRUE);
@@ -2577,7 +2577,7 @@ USER_FUNC(evt_npc_calc_score) {
  * or 16 frames depending on the animation state (3 or 2), sized by the NPC's scale.
  * On kpa_01 the smoke is drawn on camera 7 (not in the JP demo).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
 #else
 void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
@@ -2609,7 +2609,7 @@ void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
         }
         effect = effKemuri10N64Entry(0, x, (18.0f * npc->scale.x) + npc->position.y, npc->position.z, dirX, 0.0f, 0.0f,
                                      npc->scale.x);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                                      if (!strcmp(gp->currentMapName, "kpa_01")) {
                                          ((EffKemuri10N64Work*)effect->userdata)->camera = CAMERA_3D_EFFECTB;
                                      }

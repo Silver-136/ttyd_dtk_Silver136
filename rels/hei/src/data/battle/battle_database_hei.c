@@ -101,7 +101,7 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_06_03_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_07_01_off[2];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_08_01_off[2];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_08_02_off[2];
 #endif
 
@@ -112,7 +112,7 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_11_01_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_11_03_off[3];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_12_01_off[2];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_12_02_off[2];
 #endif
 
@@ -120,7 +120,7 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_13_02_off[5];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_03_off[4];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_04_off[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 NpcSetupBattleInfo btlsetup_hei_tbl[26];
 NpcTerritoryInfo btl_hei_setup_no_tbl[26];
 #else
@@ -142,7 +142,7 @@ BattleStageObjectData hei_btlobject_data[] = {
     {"kusa_3", 2, 1, {-165.0f, 0.0f, 49.0f}, 20, 40, {0}},
     {"hana_1", 2, 1, {100.0f, 0.0f, 76.0f}, 30, 30, {0}},
     {"hana_2", 2, 1, {-44.0f, 0.0f, 74.0f}, 0, 60, {0}},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"saku_1", 2, 1, {-11.0f, 0.0f, -24.0f}, 10, 50, {0}},
 #else
     {"saku_1", 2, 1, {-24.0f, 0.0f, -39.0f}, 10, 50, {0}},
@@ -2020,7 +2020,7 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_08_01_off[] = {
 };
 
 /** BTLNO_HEI_08_02 always fights Fuzzy x4 on stage stg_01_2. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_08_02_off[] = {
     {10, &btlgrp_hei_hei_08_01_off_1, &hei_btlstage_data[10]},
     {0},
@@ -2068,7 +2068,7 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_12_01_off[] = {
 };
 
 /** BTLNO_HEI_12_02 always fights Fuzzy x4 on stage stg_01_2. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_12_02_off[] = {
     {10, &btlgrp_hei_hei_12_01_off_1, &hei_btlstage_data[10]},
     {0},
@@ -2268,7 +2268,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         btlgrpsel_hei_btlno_hei_08_01_off, // select
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -2343,7 +2343,7 @@ NpcSetupBattleInfo btlsetup_hei_tbl[] = {
         btlgrpsel_hei_btlno_hei_12_01_off, // select
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_STORY), // battleFlags
         0, // randomMode
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         {{5, 5}, {0}, {0}, {0}, {0}, {5, 5}, {0}, {0}, {5, 5}, {0}, {5, 5}, {0}, {1, 1}, {0}, {0}, {0}}, // randomRanges
         "BGM_ZAKO_BATTLE1", // bgmName
     },
@@ -2408,7 +2408,7 @@ NpcTerritoryInfo btl_hei_setup_no_tbl[] = {
     {"BTLNO_HEI_06_03", 13},
     {"BTLNO_HEI_07_01", 14},
     {"BTLNO_HEI_08_01", 15},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {"BTLNO_HEI_09_01", 16},
     {"BTLNO_HEI_09_03", 17},
     {"BTLNO_HEI_10_01", 18},

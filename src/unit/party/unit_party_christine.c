@@ -64,7 +64,7 @@ EvtWord partyChristineAttack_RenzokuAttack[1071];
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord partyChristineAttack_Kiss[442];
 #else
 EvtWord partyChristineAttack_Kiss[546];
@@ -79,7 +79,7 @@ static StatusVulnerability regist;
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -134,7 +134,7 @@ PoseTableEntry pose_table_christine_stay[] = {
     {POSE_TYPE_ACTION, "PKR_S_1"},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 PoseTableEntry pose_table_dictionary_page[] = {
     {POSE_TYPE_NORMAL, "ZYO_Z_1"},
     {31, "ZYO_Z_1"},
@@ -257,7 +257,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -1171,7 +1171,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
@@ -1192,7 +1192,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     SUBTRACT(LW(0), 3)
     SWITCH(LW(0))
         CASE_LESS_OR_EQUAL(-3)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(0), 30)
         SET_VALUE(LW(1), 10)
         CASE_EQUAL(-2)
@@ -1214,7 +1214,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
         SET_VALUE(LW(0), 23)
         SET_VALUE(LW(1), 30)
         CASE_EQUAL(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(0), 20)
         SET_VALUE(LW(1), 30)
         CASE_EQUAL(2)
@@ -1243,7 +1243,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_StartAC, 1)
 
     // Success: a sparkle over her head.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_GetResultAC, LW(0))
     IF_BITS_SET(LW(0), 2)
@@ -1287,7 +1287,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
 
     // On success Mario blushes, hearts rise from him and he gains another move; on failure nothing happens.
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         IF_BITS_SET(LW(6), 2)
 #else
         IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
@@ -1347,7 +1347,7 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL_CHILD(subsetevt_check_target_movable)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_ResetFaceDirection, LW(3))
@@ -1500,7 +1500,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Goombella's status vulnerabilities: base rate (100) for every status. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -1532,7 +1532,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 /** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -1696,7 +1696,7 @@ USER_FUNC(_dictionary) {
  * otherwise it is flagged for an extra move.
  * The US and later releases also raise its max moves and mark Rally Wink when it is slowed.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_set_hustle) {
 #else
 USER_FUNC(_set_hustle) {
@@ -1712,11 +1712,11 @@ USER_FUNC(_set_hustle) {
         if (unit->movesRemaining <= 0) {
             unit->movesRemaining++;
             unit->moveState = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             unit->activeTurns = 0;
 #endif
             unit->moveColorLv = 0xFF;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (unit->maxMovesThisTurn <= 0) {
                 unit->maxMovesThisTurn = 1;
                 if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {

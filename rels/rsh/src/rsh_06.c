@@ -244,7 +244,7 @@ static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord hom_10_init_evt[104];
 extern EvtWord evt_resha_init[];
 #else
@@ -260,7 +260,7 @@ EvtWord moamoa_debug[230];
 EvtWord rsh_06_init_evt[84];
 EvtWord rsh_06_a_init_evt[32];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord rsh_06_init_evt_nidome[];
 #else
 EvtWord rsh_06_init_evt_nidome[41];
@@ -873,7 +873,7 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     if ((*pose->mtx)[1][3] > mario->position.y + mario->wPlayerCollisionBox.y) {
         return 0;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], mario->position.x, mario->position.z) < (20.0f + mario->wPlayerCollisionBox.x) / 2 && mario->position.y > 10.0f + (*pose->mtx)[1][3] && (mario->flags & MARIO_FLAG_IS_FALLING) && !(mario->flags & MARIO_FLAG_IS_JUMPING) && wp->bounceCount < 2) {
         marioChgMot(MARIO_MOTION_JUMP_SW);
 #else
@@ -1033,7 +1033,7 @@ static void ext_moamoa_main(void) {
         if ((( !(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)) ) && ( mario->position.y > 200.0f )) && ( wp->dist < 30.0f) ) {
             cnt += 1.0f;
         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!hit)) && (!(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
 #else
         if (((((( wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) )) && ( !marioKeyOffChk() )) && ( !marioCtrlOffChk() )) && ( !hit )) && ( !(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)) )) {
@@ -1070,7 +1070,7 @@ static void ext_moamoa_main(void) {
             }
         }
         if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(m->flags & (MOAMOA_FLAG_TO_TARGET | MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) ) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH) {
 #else
             if ((( (mario->currMotionId == MARIO_MOTION_STAY ) || (( (u16)(mario->currMotionId - MARIO_MOTION_WALK) ) <= 1 )) || (( (u16)(mario->currMotionId - MARIO_MOTION_SLIT) ) <= 1 )) ||
@@ -1478,7 +1478,7 @@ static void ext_moamoa_main(void) {
     mario->floorMove.x = 0.0f;
     mario->floorMove.y = 0.0f;
     mario->floorMove.z = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (!(wp->flags & 0x18)) {
         mario->position.x -= cnt / 20.0f;
 #else
@@ -2213,7 +2213,7 @@ static EVT_BEGIN(hom_10_init_evt)
         CALL_CHILD(PTR(hom_10_evt_resha_start3))
         SET_VALUE(LW(0), 500)
         SET_VALUE(LW(1), -500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("renketu_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -2240,7 +2240,7 @@ static EVT_BEGIN(hom_10_init_evt)
 EVT_END()
 
 EVT_BEGIN(evt_resha_init)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(hom_10_evt_resha_right)
 #else
     CALL_CHILD(PTR(hom_10_evt_resha_right))
@@ -2650,7 +2650,7 @@ EVT_BEGIN(rsh_06_init_evt_nidome)
     ELSE
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)

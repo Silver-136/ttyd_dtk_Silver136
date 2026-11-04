@@ -43,7 +43,7 @@ static EvtWord init_event[41];
 static EvtWord chain_event[23];
 static EvtWord damage_event[33];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord counter_damage_event[115];
 #else
 static EvtWord counter_damage_event[68];
@@ -55,7 +55,7 @@ static EvtWord wait_event[476];
 static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_sound_event2[11];
 #else
 static EvtWord wait_sound_event2[12];
@@ -81,7 +81,7 @@ BattleUnitKind unit_wanwan = {
     9999, // pbSoftCap
     34, // width
     36, // height
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     6,
     44,
     0.0f,
@@ -99,7 +99,7 @@ BattleUnitKind unit_wanwan = {
 #endif
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0.0f,
     17.0f,
     0.0f,
@@ -127,11 +127,11 @@ BattleUnitKind unit_wanwan = {
     36.0f, // cutHeight
     0, // turnOrder
     0, // turnOrderVariance
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     -1,
 #endif
     0, // swallowChance
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     2, // swallowAttributes
 #endif
     100, // hammerKnockbackChance
@@ -158,7 +158,7 @@ static BattleUnitDefense defence = {{5, 99, 99, 5, 5}};
 /** Defence attributes of the Chain-Chomp: immune to fire hits; immune to ice hits. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {0, 65, 65, 100, 65, 100, 100, 65, 100, 65, 100, 65, 100, 65, 65, 45, 30, 100, 65, 100, 100, 90};
 #else
 static StatusVulnerability regist = {
@@ -343,7 +343,7 @@ static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_GetPartsPos, LW(10), 1, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_PartsFaceDirectionSub, LW(10), 1, LW(2), 25)
     ADD(LW(3), 25)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(btlevtcmd_DivePartsPosition, LW(10), 1, LW(2), LW(3), LW(4), 5, 0, EASING_LINEAR, 0, -1)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_SetPartsFallAccel, LW(10), 1, FLOAT(1.0f))
@@ -736,7 +736,7 @@ static EVT_BEGIN(wait_sound_event2)
     WAIT_FRAMES(LW(10))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
 EVT_END_PAD()
@@ -811,7 +811,7 @@ static USER_FUNC(chain_main) {
     dx = x1 - x2;
     dy = y1 - y2;
     dz = z1 - z2;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 7;
 #else
     len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 8;
@@ -820,7 +820,7 @@ static USER_FUNC(chain_main) {
         len = 10.0f;
     }
     sag = 300.0f / (len * len);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     // keep the chomp below the top of the stage
     part = BtlUnit_GetPartsPtr(unit, 1);
     BtlUnit_GetPartsPos(part, &x, &y, &z);
@@ -833,7 +833,7 @@ static USER_FUNC(chain_main) {
     x += -(unit->faceDirection * 16);
     y += 16.0f;
     BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 2), x, y, z);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 2; i <= 6; i++) {
 #else
     for (i = 2; i <= 7; i++) {

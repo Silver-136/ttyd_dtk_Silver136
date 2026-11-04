@@ -57,15 +57,15 @@ BattleUnitKind unit_hyper_jyugem = {
     1, // dangerHP
     1, // perilHP
     26, // level
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
 #endif
     1, // bonusExp
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     2, // bonusCoin
 #endif
     70, // bonusCoinRate
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     2,
 #else
     1, // baseCoin
@@ -112,7 +112,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Dark Lakitu: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {60, 70, 80, 100, 60, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 70, 80, 100, 60, 100, 100, 50};
 #else
 static StatusVulnerability regist = {
@@ -531,13 +531,13 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 116)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 90)
 #endif
     ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 82)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 70)
@@ -589,13 +589,13 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 3, 33, 33, 50)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 30)
 #endif
     ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_DrawLots, LW(0), 3, 33, 33, 16)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 10)

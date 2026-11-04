@@ -101,7 +101,7 @@ void mot_stay(void) {
         mario->airTimer = 0;
         mario->multiTimer = 0;
         mario->currSubMotionId = 0;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         mario->lastGroundPos = mario->position;
         mario->stay.jabaraWait = 0;
         mario->stay.holdTimer = 0;
@@ -125,7 +125,7 @@ void mot_stay(void) {
         mario->idleKeyTimer = 0;
         marioSoundInit();
         marioResetCamFollowRate();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
             motSlitContinue();
         } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
@@ -180,7 +180,7 @@ void mot_stay(void) {
             mario->baseSpeed = 0.0f;
         }
         mario->flags &= ~MARIO_FLAG_IS_PUSHING;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     }
     if (mario->flags & MARIO_FLAG_IS_8_BIT) {
         marioChkJump();
@@ -386,7 +386,7 @@ void marioChgMotAuto(void) {
 /** Cleanup when the stay motion ends: stops the idle sound and the charge-up voice. */
 void mot_stay_post(void) {
     MarioWork* mario;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     MarioMotion id = marioGetPtr()->currMotionId;
     if (id != MARIO_MOTION_HAMMER_2 && id != MARIO_MOTION_JABARA) {
         mario = marioGetPtr();

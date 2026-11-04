@@ -41,7 +41,7 @@ static EvtWord init_event_sub[47];
 static EvtWord dmg_avoid_counter_thorn_head_event[76];
 static EvtWord damage_event[102];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord phase_event[196];
 #else
 static EvtWord phase_event[188];
@@ -341,23 +341,23 @@ static EVT_BEGIN(phase_event)
     IF_INT_EQUAL(LW(0), 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     DEBUG_PUT_MSG(STRING("ぺぺぺまん２"))
 #endif
     IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
         RETURN
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     DEBUG_PUT_MSG(STRING("ぺぺぺまん３"))
 #endif
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         DEBUG_PUT_MSG(STRING("ぺぺぺまん４"))
 #endif
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_EQUAL(LW(0), 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             DEBUG_PUT_MSG(STRING("ぺぺぺまん５"))
 #endif
             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_PARTNER)

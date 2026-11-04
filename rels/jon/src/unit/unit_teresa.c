@@ -42,7 +42,7 @@ static EvtWord normal_attack_event[354];
 static EvtWord trans_myself_event[196];
 static EvtWord trans_event[289];
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 static EvtWord move_event[101];
 #else
 static EvtWord move_event[84];
@@ -196,7 +196,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
  */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {50, 50, 90, 0, 50, 100, 100, 50, 100, 60, 100, 60, 100, 60, 60, 50, 95, 100, 10, 100, 100, 10};
 #else
 static StatusVulnerability regist = {
@@ -799,7 +799,7 @@ static EVT_BEGIN(move_event)
     WAIT_FRAMES(30)
     SET_VALUE(LW(12), 80)
     LABEL(0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     SET_VALUE(LW(15), 0)
 #endif
     CALL(teresa_check_teresa, LW(3), LW(5))
@@ -808,7 +808,7 @@ static EVT_BEGIN(move_event)
         IF_INT_EQUAL(LW(6), 0)
             SPAWN_EVENT(PTR(move_event_sub))
             ADD(LW(12), 20)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             ADD(LW(15), 1)
 #endif
         END_IF
@@ -816,7 +816,7 @@ static EVT_BEGIN(move_event)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_NOT_EQUAL(LW(3), -1)
         GOTO(0)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     END_IF
     IF_INT_GREATER_OR_EQUAL(LW(15), 2)
         IF_INT_LESS(LW(12), 145)

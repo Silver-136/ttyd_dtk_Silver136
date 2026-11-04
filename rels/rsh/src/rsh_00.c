@@ -85,7 +85,7 @@ EvtWord evt_handle[107];
 EvtWord regu_unten[210];
 static EvtWord init_unten[17];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_unten[235];
 #else
 static EvtWord talk_unten[236];
@@ -875,7 +875,7 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_11_OBTAIN_AUTOGRAPH)
 
         // He signs the autograph and gives it to Mario.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_108"), 0, 0)
 #else
@@ -893,7 +893,7 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_item_get_item, STRING("sign"))
         CALL(evt_item_get_item_end_wait, STRING("sign"))
         CALL(evt_npc_set_anim, STRING("me"), STRING("T_1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("stg6_rsh_110"), 0, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_11_OBTAIN_AUTOGRAPH)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
@@ -940,11 +940,11 @@ static EVT_BEGIN(talk_unten)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_07"), 0, 0)
         ELSE
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #endif
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08"), 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
             END_IF
@@ -1160,7 +1160,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         END_IF
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
@@ -1170,7 +1170,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -1191,7 +1191,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
             END_IF
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     END_IF
 #endif
     RETURN

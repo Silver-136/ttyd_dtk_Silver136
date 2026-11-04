@@ -6,7 +6,7 @@
 
 const char* getMarioStDvdRoot(void);
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
 void sysDebugReport(const char* filename, int line, const char* format, ...);
 #endif
 

@@ -242,7 +242,7 @@ EvtWord evt_tougi[777];
 EvtWord init_kinosikowa[13];
 static NpcSetupInfo npcEnt[5];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_damage_pose[];
 #else
 EvtWord evt_damage_pose[63];
@@ -250,7 +250,7 @@ EvtWord evt_damage_pose[63];
 
 static EvtWord evt_kime_pose[56];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord npc_entry[];
 #else
 EvtWord npc_entry[623];
@@ -266,7 +266,7 @@ EvtWord evt_random_battle[VERSION_PICK(335, 338)];
 EvtWord evt_random_battle2[VERSION_PICK(317, 326)];
 EvtWord evt_teki_nyuujyou[107];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_teki_nyuujyou_default[];
 #else
 EvtWord evt_teki_nyuujyou_default[183];
@@ -276,7 +276,7 @@ EvtWord burst_chain_entry[289];
 EvtWord burst_wangwang[69];
 EvtWord evt_match[VERSION_PICK(362, 381)];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_kurikuri_opening[];
 #else
 EvtWord evt_kurikuri_opening[442];
@@ -285,7 +285,7 @@ EvtWord evt_kurikuri_opening[442];
 EvtWord evt_kurikuri_win[231];
 EvtWord evt_kurikuri_lose[];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_shinemon_opening[];
 extern EvtWord evt_shinemon_win[];
 #else
@@ -295,7 +295,7 @@ EvtWord evt_shinemon_win[199];
 
 EvtWord evt_shinemon_lose[];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_champ_opening[];
 extern EvtWord evt_champ_opening_re[];
 #else
@@ -327,7 +327,7 @@ static EvtWord evt_boss[VERSION_PICK(1916, 1919)];
 #endif
 
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_watch_match[];
 #else
 EvtWord evt_watch_match[515];
@@ -1284,7 +1284,7 @@ static NpcSetupInfo npcEnt[] = {
  * played after Mario loses a match. Also sets the pose lock on versions from JP on.
  */
 EVT_BEGIN(evt_damage_pose)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
     CALL(evt_mario_set_pose, STRING("M_D_2"))
@@ -1508,7 +1508,7 @@ EVT_BEGIN(npc_entry)
             CALL(evt_npc_flag_onoff, 1, LW(2), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
             CALL(evt_npc_set_ry, LW(2), 270)
             BEGIN_INLINE_EVENT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(evt_npc_get_height, LW(2), LW(0))
                 IF_INT_GREATER(LW(0), 50)
                     CALL(evt_npc_set_height, LW(2), 50)
@@ -1650,7 +1650,7 @@ EVT_BEGIN(evt_random_battle)
     // The gong rings and the battle starts.
     CALL(evt_snd_sfxon, STRING("SFX_STG3_GONG1"), 0)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_set_battle_info, STRING("乱"), 10)
     CALL(evt_npc_battle_start, STRING("乱"))
     CALL(evt_npc_wait_battle_end)
@@ -1714,7 +1714,7 @@ EVT_BEGIN(evt_random_battle)
     // The Iron Clefts moan about losing and Grubba cheers Gonzales, or they gloat and Grubba calls the upset.
     CALL(evt_npc_get_battle_result, LW(0))
     IF_INT_EQUAL(LW(0), BATTLE_RESULT_WIN)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print, 0, STRING("stg3_tou_406"), 0, STRING("乱"))
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_403_02"), 0, STRING("ガンス"))
@@ -1985,11 +1985,11 @@ EVT_BEGIN(evt_teki_nyuujyou_default)
         CALL(evt_npc_jump_position_nohit, LW(0), 250, 20, LW(4), 500, 30)
         CALL(evt_npc_jump_position_nohit, LW(0), 215, 40, LW(4), 500, 30)
         CALL(evt_npc_jump_position_nohit, LW(0), 185, 60, LW(4), 500, 30)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_npc_sound_data_set, LW(0), 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
 #endif
         CALL(evt_npc_move_position, LW(0), LW(3), LW(4), 0, FLOAT(60.0f), 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_npc_sound_data_reset, LW(0))
 #endif
         CALL(tribe_chk, LW(0), STRING(/*"バーストワンワン"*/"\203o\201[\203X\203g\203\217\203\223\203\217\203\223"), LW(5))
@@ -2114,7 +2114,7 @@ EVT_END()
  * by the player's rank).
  */
 EVT_BEGIN(evt_match)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_FF_ENV_TOU1"))
 #else
 #if VERSION >= VERSION_US
@@ -2159,7 +2159,7 @@ EVT_BEGIN(evt_match)
     // until the Goomba Bros.' surprise attack has been seen, the opponents strike first.
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_set_attack_mode, STRING("敵１"), 16)
         CALL(_firstattack_setting)
     END_IF
@@ -2254,7 +2254,7 @@ EVT_BEGIN(evt_match)
                 CALL(evt_tou_get_ranking, LW(10))
             ELSE
                 IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     CALL(evt_tou_get_ranking, LW(10))
 #else
                     IF_INT_GREATER(LW(10), 1)
@@ -2341,7 +2341,7 @@ EVT_BEGIN(evt_kurikuri_opening)
     CALL(evt_npc_set_position, STRING(/*"敵５"*/"\223G\202T"), 130, 60, -25)
     CALL(evt_cam3d_evt_set, 1075, 547, 998, 0, 287, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, PTR("BGM_FF_ENV_TOU1"))
 #endif
     CALL(evt_cam3d_evt_set, -1024, 547, 1050, 0, 287, -8, 6000, EASING_LINEAR)
@@ -2368,7 +2368,7 @@ EVT_BEGIN(evt_kurikuri_opening)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxon_3d, PTR("SFX_DOOR_SHUT_IRON2"), -565, 0, 0, 0)
 #endif
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, -180, 0, 20)
@@ -2521,7 +2521,7 @@ EVT_BEGIN(evt_kurikuri_lose)
     CALL(evt_npc_set_position, LW(2), 33, 60, -83)
     CALL(evt_set_dir_to_target, LW(2), STRING("\223G\202P"))
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
     ELSE
@@ -2546,7 +2546,7 @@ EVT_BEGIN(evt_shinemon_opening)
     CALL(evt_npc_set_position, STRING("\203K\203\223\203X"), 0, 60, -130)
     CALL(evt_cam3d_evt_set, 1075, 547, 998, 0, 287, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU1"))
 #endif
     CALL(evt_cam3d_evt_set, -1024, 547, 1050, 0, 287, -8, 5000, EASING_LINEAR)
@@ -2564,7 +2564,7 @@ EVT_BEGIN(evt_shinemon_opening)
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_IRON2"), -565, 0, 0, 0)
 #endif
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, -180, 0, 20)
@@ -2622,7 +2622,7 @@ EVT_BEGIN(evt_shinemon_opening)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 30, -180)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 60, -180)
@@ -2631,7 +2631,7 @@ EVT_BEGIN(evt_shinemon_opening)
     END_INLINE_EVENT
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 200)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 90, 200)
@@ -2675,7 +2675,7 @@ EVT_BEGIN(evt_shinemon_opening)
     SPAWN_EVENT(PTR(evt_teki_nyuujyou))
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_IRON2"), 565, 0, 0, 0)
 #endif
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, -180, 0, 20)
@@ -2729,7 +2729,7 @@ EVT_END()
 EVT_BEGIN(evt_shinemon_win)
     SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
     CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_set_position, STRING("敵１"), 55, 60, 0)
     CALL(evt_npc_set_position, STRING("敵２"), 95, 60, 0)
     CALL(evt_npc_set_anim, STRING("敵１"), STRING("SIN_K_1"))
@@ -2793,7 +2793,7 @@ EVT_BEGIN(evt_shinemon_lose)
     CALL(evt_eff, STRING(""), STRING("confetti"), 3, LW(0), LW(1), LW(2), 300, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon, STRING("SFX_STG3_WIN_AUDIENCE1"), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(2), STRING("ガンス"))
     ELSE
         SET_VALUE(LW(2), STRING("キノシコワ"))
@@ -2811,7 +2811,7 @@ EVT_BEGIN(evt_shinemon_lose)
         SET_VALUE(LW(2), STRING("\203L\203m\203V\203R\203\217"))
     END_IF
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
     ELSE
@@ -2850,7 +2850,7 @@ EVT_BEGIN(evt_champ_opening)
         CALL(tou_champion_belt, STRING("\223G\202P"))
     END_INLINE_EVENT
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
     CALL(evt_snd_bgm_scope, 0, 1)
 #endif
@@ -2867,7 +2867,7 @@ EVT_BEGIN(evt_champ_opening)
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_IRON2"), -565, 0, 0, 0)
 #endif
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, -180, 0, 20)
@@ -2962,7 +2962,7 @@ EVT_BEGIN(evt_champ_opening)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 300)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 100)
@@ -3006,7 +3006,7 @@ EVT_BEGIN(evt_champ_opening_re)
     CALL(evt_npc_set_position, STRING("\203L\203m\203V\203R\203\217"), 0, 60, -130)
     CALL(evt_cam3d_evt_set, 0, 481, 1310, 0, 295, -145, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
     CALL(evt_snd_bgm_scope, 0, 1)
 #endif
@@ -3024,7 +3024,7 @@ EVT_BEGIN(evt_champ_opening_re)
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_IRON2"), 565, 0, 0, 0)
 #endif
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, -180, 0, 20)
@@ -3037,7 +3037,7 @@ EVT_BEGIN(evt_champ_opening_re)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("\223G\202P"), 450, 0, 0, FLOAT(60.0f), 1)
         WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_npc_move_position, STRING("敵１"), 280, 0, 0, FLOAT(60.0f), 1)
                 CALL(evt_npc_jump_position_nohit, STRING("敵１"), 250, 20, 0, 500, 30)
                 CALL(evt_npc_jump_position_nohit, STRING("敵１"), 215, 40, 0, 500, 30)
@@ -3106,7 +3106,7 @@ EVT_BEGIN(evt_champ_opening_re)
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_IRON2"), -565, 0, 0, 0)
 #endif
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, -180, 0, 20)
@@ -3169,7 +3169,7 @@ EVT_BEGIN(evt_champ_opening_re)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_party_move_pos2, 0, -280, 25, FLOAT(120.0f))
 #else
         CALL(evt_party_move_pos2, 0, -280, 25, FLOAT(60.0f))
@@ -3181,7 +3181,7 @@ EVT_BEGIN(evt_champ_opening_re)
         WAIT_FRAMES(1)
         CALL(evt_party_jump_pos, 0, -185, 60, 25, 400, 1, -1000)
         WAIT_FRAMES(1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_party_move_pos2, 0, -130, -25, FLOAT(120.0f))
 #else
         CALL(evt_party_move_pos2, 0, -130, -25, FLOAT(60.0f))
@@ -3198,7 +3198,7 @@ EVT_BEGIN(evt_champ_opening_re)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 30, -180)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 60, -180)
@@ -3207,7 +3207,7 @@ EVT_BEGIN(evt_champ_opening_re)
     END_INLINE_EVENT
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 300)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 90, 300)
@@ -3348,11 +3348,11 @@ EVT_BEGIN(evt_champ_lose)
     CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         SET_VALUE(LW(2), STRING("\203K\203\223\203X"))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_118_61"), 0, PTR("ガンス"), LW(0))
 #endif
         ELSE
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         SET_VALUE(LW(2), PTR("キノシコワ"))
         CALL(evt_msg_print_insert, 0, PTR("stg3_tou_re_118_61"), 0, PTR("キノシコワ"), LW(0))
 #else
@@ -3360,7 +3360,7 @@ EVT_BEGIN(evt_champ_lose)
     END_IF
     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_118_61"), 0, LW(2), LW(0))
 #endif
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     END_IF
 #endif
     WAIT_MS(300)
@@ -3450,7 +3450,7 @@ EVT_BEGIN(evt_default_opening)
 
     // In retail the music starts here; Mario and the partner hop up into the ring while the opponents walk in.
     CALL(evt_seq_wait, SEQ_GAME)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_TOU1"))
 #endif
     CALL(evt_cam3d_evt_set, 0, 331, 1310, 0, 145, -145, 3000, EASING_SINE_IN_OUT)
@@ -3467,7 +3467,7 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_mario_jump_pos, -185, 60, 0, 400, 1, -1000)
         CALL(evt_mario_mov_pos2, -55, 0, FLOAT(120.0f))
     END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     BEGIN_INLINE_EVENT
 #else
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
@@ -3509,7 +3509,7 @@ EVT_BEGIN(evt_default_opening)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(3000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     LOOP(0)
         IS_EVENT_RUNNING(LW(10), LW(11))
         IF_INT_EQUAL(LW(11), 0)
@@ -3560,7 +3560,7 @@ EVT_BEGIN(evt_default_opening)
         CALL(evt_msg_print, 0, LW(4), 0, LW(3))
         CALL(evt_msg_print_add_insert, 0, LW(5), LW(2), LW(0))
     END_IF
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 5)
         CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, 0)
@@ -3726,7 +3726,7 @@ EVT_BEGIN(evt_default_win)
 #endif
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 5)
         CALL(evt_cam3d_evt_set, -65, 143, 263, -65, 95, -8, 0, 0)
@@ -3883,7 +3883,7 @@ static EVT_BEGIN(evt_champion)
     WAIT_FRAMES(1)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_IRON2"), 565, 0, 0, 0)
 #endif
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, -180, 0, 20)
@@ -4558,7 +4558,7 @@ s32 gans_white_off(EventEntry* event, BOOL isFirstCall) {
 static EVT_BEGIN(evt_boss)
     // Hide the stage props, lock the east door, place Grubba in the ring and set the Crystal Star spinning.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group34"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_hitobj_onoff, STRING("polySurface731_q00050"), 0, 0)
     SET_VALUE(LW(0), STRING("e_bero"))
     CALL_CHILD(bero_case_switch_off)
@@ -4599,7 +4599,7 @@ static EVT_BEGIN(evt_boss)
 
     // Wait until Mario steps onto the ring.
     LOOP(0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -201, 201, -201, -201, LW(3))
         IF_INT_EQUAL(LW(3), 1)
@@ -4644,7 +4644,7 @@ static EVT_BEGIN(evt_boss)
 
     // Mario and the partner are startled and Mario jumps up into the ring.
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("p"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
@@ -4714,7 +4714,7 @@ static EVT_BEGIN(evt_boss)
         CALL(getY)
         WAIT_FRAMES(1)
     END_LOOP
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_hitobj_onoff, STRING("a_souti"), 1, 1)
     WAIT_MS(1000)
@@ -4748,7 +4748,7 @@ static EVT_BEGIN(evt_boss)
     WAIT_MS(300)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_I_Y"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_set_pos, 0, -180, 60, 0)
     CALL(evt_party_stop, 0)
     WAIT_FRAMES(1)
@@ -4869,7 +4869,7 @@ static EVT_BEGIN(evt_boss)
     // In a white flash Grubba becomes Macho Grubba and shouts his new name; Mario and the partner react.
     CALL(gans_white_on)
     CALL(evt_paper_entry, STRING("OFF_d_bom"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_get_position, STRING("ガンス"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("マッチョガンス"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_ry, STRING("マッチョガンス"), 270)
@@ -4953,7 +4953,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_snd_sfx_vol, LW(15), 38)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_get_position, STRING("マッチョガンス"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガンス"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("マッチョガンス"), 0, -1000, 0)
@@ -5324,7 +5324,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_cam3d_evt_set, 0, 200, 584, 0, 100, -8, 2000, EASING_SINE_IN_OUT)
@@ -5332,7 +5332,7 @@ static EVT_BEGIN(evt_boss)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
     SET_VALUE(LW(0), 3)
     SET_VALUE(LW(1), STRING("stone"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(evt_sub_starstone)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -5357,14 +5357,14 @@ EVT_BEGIN(evt_watch_match)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING("\203K\203\223\203X"), 0, 60, -130)
     ELSE
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
             CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 60, -130)
 #else
         CALL(evt_npc_set_position, STRING("\203L\203m\203V\203R\203\217"), 0, 60, -130)
 #endif
     END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("選手1"), NPC_FLAG_NO_HIT)
 #else
@@ -5754,7 +5754,7 @@ EVT_BEGIN(evt_kyaku_check)
         IF_INT_NOT_EQUAL(LW(3), 0)
             SET_VALUE(LW(1), 0)
         END_IF
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
         CALL(evt_mario_get_motion, LW(3))
         SWITCH(LW(3))
             CASE_EQUAL(0)

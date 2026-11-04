@@ -45,7 +45,7 @@ BattleUnitKind unit_dark_keeper = {
     1, // dangerHP
     1, // perilHP
     28, // level
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     0,
 #else
     1, // bonusExp
@@ -95,7 +95,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element response of the Dark Craw: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {60, 70, 60, 100, 60, 100, 100, 60, 100, 60, 100, 60, 100, 60, 60, 0, 60, 100, 60, 100, 100, 95};
 #else
 static StatusVulnerability regist = {
@@ -173,7 +173,7 @@ static BattleWeapon weapon_monban_attack = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {5, 0, 0, 0, 0, 0, 0, 0},
 #else
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -214,7 +214,7 @@ static BattleWeapon weapon_monban_throw_attack = {
     1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {5, 0, 0, 0, 0, 0, 0, 0},
 #else
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork

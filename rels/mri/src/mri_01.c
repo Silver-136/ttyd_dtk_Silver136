@@ -69,7 +69,7 @@ static EvtWord rival_talk[8];
 static EvtWord elder_init[39];
 s32 puni_return_data[204];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord puni_return[];
 #else
 EvtWord puni_return[99];
@@ -79,7 +79,7 @@ EvtWord elder_talk_sub[376];
 s32 irai_item_tbl[2];
 static s32 iri_17_item_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord elder_talk[173];
 #else
 static EvtWord elder_talk[177];
@@ -87,7 +87,7 @@ static EvtWord elder_talk[177];
 
 EvtWord puni_1_init[24];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord puni_1_talk[];
 #else
 EvtWord puni_1_talk[43];
@@ -109,7 +109,7 @@ static EvtWord bero_01_doa_open[10];
 EvtWord out_mri_event[5];
 static BeroEntry bero_entry_data[4];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord bigtree_firstbattle[];
 #else
 EvtWord bigtree_firstbattle[734];
@@ -130,7 +130,7 @@ EvtWord boss_robot_electro[43];
 EvtWord boss_robot_kemuri[49];
 EvtWord boss_battle_win_init[49];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord boss_battle_win[];
 #else
 EvtWord boss_battle_win[1493];
@@ -192,7 +192,7 @@ static USER_FUNC(evtflash) {
  * 2 when traps are counted but no missing Punies are counted.
  * Punio waiting at the cell in mri_03 is not counted (retail versions).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(elder_talk_sub_punicheck) {
 #else
 USER_FUNC(elder_talk_sub_punicheck) {
@@ -204,7 +204,7 @@ USER_FUNC(elder_talk_sub_punicheck) {
     s32 traps = 0;
     s32 others = 0;
     s32 result;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     Vec pos;
 #else
     s32 c[5];
@@ -213,7 +213,7 @@ USER_FUNC(elder_talk_sub_punicheck) {
     s32 puni;
     for (i = 1; i < 103; i++) {
         puniGetPunidat();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, (s32*)&pos);
         if (puni != 0 && puni != punigp[0x328 / 4]) {
             others++;
@@ -237,14 +237,14 @@ USER_FUNC(elder_talk_sub_punicheck) {
 #endif
     }
     result = 1;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (traps != 0) {
         result = 2;
     }
 #endif
     if (others != 0) {
         result = 0;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     } else if (traps != 0) {
         result = 2;
 #endif
@@ -370,7 +370,7 @@ EVT_BEGIN(puni_return)
         ADD(LW(11), -1)
         CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, LW(11), LW(0), LW(1), LW(2), LW(3))
         CALL(evt_puni_get_flag, LW(10), LW(4))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         IF_INT_NOT_EQUAL(LW(0), 0)
         IF_BITS_SET(LW(4), PUNI_FLAG_ACTIVE)
         DEBUG_PUT_MSG(STRING("長老の能力"))
@@ -390,7 +390,7 @@ EVT_BEGIN(puni_return)
 #endif
             END_IF
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_NOT_EQUAL(LW(5), 0)
             DEBUG_PUT_MSG(STRING("トラップにかかっています"))
             GOTO(100)
@@ -567,7 +567,7 @@ static EVT_BEGIN(elder_talk)
         CALL(evt_pouch_check_item, ITEM_LIFE_SHROOM, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("irai_10_01"), 0, STRING("me"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(irai_item_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(irai_item_tbl), LW(0), 0)
@@ -590,7 +590,7 @@ static EVT_BEGIN(elder_talk)
         ELSE
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
@@ -648,7 +648,7 @@ EVT_END()
  * otherwise it has a line that changes after the story.
  */
 EVT_BEGIN(puni_1_talk)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
             IF_INT_EQUAL(GSWF_TOU_GENERAL_WHITE_HINT_HEARD, 0)
@@ -662,7 +662,7 @@ EVT_BEGIN(puni_1_talk)
             CALL(evt_msg_print, 0, STRING("stg2_mri_re_000_1"), 0, STRING("me"))
             SET_VALUE(GSWF_MRI_GENERAL_WHITE_HINT_HEARD, 1)
         END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
         CALL(evt_msg_print, 0, STRING("stg2_mri_re_000"), 0, STRING("me"))
 #endif
@@ -1042,7 +1042,7 @@ EVT_BEGIN(bigtree_firstbattle)
     // Punio leads Mario into the empty village; he wonders where everyone is and calls out.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     BEGIN_INLINE_EVENT
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
         CALL(evt_mario_set_dir, 90, 200, 0)
@@ -1201,7 +1201,7 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_npc_battle_start, LW(10))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_key_onoff, 1)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_party_run, 0)
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
@@ -2392,7 +2392,7 @@ EVT_END()
  * then is parked out of sight and restored to normal size.
  */
 EVT_BEGIN(dai3kanbu_suikomare)
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     BEGIN_INLINE_EVENT_GET_ID(LW(1))
 #else
     BEGIN_INLINE_EVENT
@@ -2418,7 +2418,7 @@ EVT_BEGIN(dai3kanbu_suikomare)
     END_INLINE_EVENT
     CALL(evt_npc_glide_position, STRING("第三勢力幹部"), 150, 60, 30, 300, 0, 0, 0, 0)
     DELETE_EVENT(LW(0))
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     DELETE_EVENT(LW(1))
     WAIT_FRAMES(1)
 #endif
@@ -3186,13 +3186,13 @@ EVT_BEGIN(boss_battle_win)
         CALL(evt_npc_set_position, LW(14), 0, -1000, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         WAIT_MS(1100)
 #else
         WAIT_MS(600)
 #endif
         CALL(evt_npc_get_position, LW(11), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         ADD(LW(0), -40)
 #else
         ADD(LW(0), -80)
@@ -3204,13 +3204,13 @@ EVT_BEGIN(boss_battle_win)
         CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_03"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         WAIT_MS(1100)
 #else
         WAIT_MS(600)
 #endif
         CALL(evt_npc_get_position, LW(12), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         ADD(LW(0), -40)
 #else
         ADD(LW(0), -80)
@@ -3220,13 +3220,13 @@ EVT_BEGIN(boss_battle_win)
         CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_04"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         WAIT_MS(1700)
 #else
         WAIT_MS(1200)
 #endif
         CALL(evt_npc_get_position, LW(13), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         ADD(LW(0), -40)
 #else
         ADD(LW(0), -80)
@@ -3236,13 +3236,13 @@ EVT_BEGIN(boss_battle_win)
         CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_05"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         WAIT_MS(2000)
 #else
         WAIT_MS(1500)
 #endif
         CALL(evt_npc_get_position, LW(14), LW(0), LW(1), LW(2))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         ADD(LW(0), -40)
 #else
         ADD(LW(0), -80)
@@ -3313,7 +3313,7 @@ EVT_BEGIN(boss_battle_win)
     CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
     SET_VALUE(LW(0), 2)
     SET_VALUE(LW(1), LW(10))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(evt_sub_starstone)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)

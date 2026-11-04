@@ -161,7 +161,7 @@ void statusWinMain(void) {
                         wp->idle = gp->framerate * 10;
                         if (!wp->forcedClose && !wp->forceTimer && !statusWinCheck()) {
                             statusWinOpen();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                             wp->flags |= STATUS_WINDOW_FLAG_MENU_ICONS;
 #endif
                         }
@@ -284,7 +284,7 @@ void gaugeDisp(s32 sp, f32 x, f32 y) {
         pos.x = x + (f32)(full * 32);
         pos.y = y;
         pos.z = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         iconDispGxScaleFirst(1.0f, &pos, 0x4, gauge_wakka[part]);
 #else
         iconDispGxScaleFirst(1.0f, &pos, 0x10, gauge_wakka[part]);
@@ -298,7 +298,7 @@ void gaugeDisp(s32 sp, f32 x, f32 y) {
         pos2.x = x + (f32)(i * 32);
         pos2.y = 12.0f + y;
         pos2.z = 0.0f;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         iconDispGxScaleFirst(1.0f, &pos2, 0x4, i < full ? gauge_back[i] : ICON_SP_ORB_EMPTY);
 #else
         iconDispGxScaleFirst(1.0f, &pos2, 0x10, i < full ? gauge_back[i] : ICON_SP_ORB_EMPTY);
@@ -316,7 +316,7 @@ static inline void numDisp(f32 x, f32 y, s32 value, BOOL small) {
  * Draws the HUD: the HP, FP, Star Power and coin/Star Point banners with their icons and numbers,
  * Mario's and the partner's HP, and the gauge, blinking any value flagged by the stat blink functions.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void statusWinDisp(CameraId camId, void* param) {
 #else
 void statusWinDisp(CameraId camId, void* param) {
@@ -423,7 +423,7 @@ void statusWinDisp(CameraId camId, void* param) {
         }
         numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 }
 #else
     if (wp->flags & STATUS_WINDOW_FLAG_MENU_ICONS && !gp->inBattle) {
@@ -478,7 +478,7 @@ void statusWinDisp(CameraId camId, void* param) {
  * Reads the values the HUD shows: from the pouch in the field (the partner from the party),
  * from Mario's and the partner's battle units in battle.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void statusGetValue(StatusValue* values) {
 #else
 void statusGetValue(StatusValue* values) {
@@ -496,7 +496,7 @@ void statusGetValue(StatusValue* values) {
         values->maxAp = pouchGetMaxAP();
         values->starPoints = pouchGetStarPoint();
         values->coins = pouchGetCoin();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (!marioBgmodeChk()) {
             values->party = marioGetParty();
             values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
@@ -619,7 +619,7 @@ static inline s32 calcStep(s32 target, s32 cur) {
  * Counts the displayed HUD numbers toward the real values every other frame while the window is open,
  * with the coin counting sound every 8th frame (6th in the demos).
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void valueUpdate(void) {
 #else
 void valueUpdate(void) {
@@ -638,7 +638,7 @@ void valueUpdate(void) {
         return;
     }
     d = calcStep(v.coins, wp->cur.coins);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (d && !(count % 6)) {
 #else
     if (d && !(count % 8)) {
@@ -778,7 +778,7 @@ void statusAPBlink(s32 frames) {
 }
 
 // Descriptive name (not in the symbol maps).
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void statusClearBlink(void) {
     wp->blink = 0;
 }

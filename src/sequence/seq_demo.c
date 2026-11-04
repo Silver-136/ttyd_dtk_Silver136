@@ -134,7 +134,7 @@ static u16 VolumeTable[] = {
 // clang-format on
 
 //.bss
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "manager/filemgr.h"
 typedef struct SeqDemoWork {
     BOOL fullScreen; // 0x0, draw the movie once at full size instead of twice at half size
@@ -1063,7 +1063,7 @@ void THPGXYuv2RgbDraw(u8* y_data, u8* u_data, u8* v_data, s16 x, s16 y, s16 text
     GXEnd();
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/fadedrv.h"

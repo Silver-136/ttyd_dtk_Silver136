@@ -121,7 +121,7 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_hotdog[];
 #else
 EvtWord evt_hotdog[86];
@@ -163,7 +163,7 @@ EvtWord talk_jugem_1[112];
 EvtWord init_jugem_2[12];
 EvtWord talk_jugem_2[112];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord init_bijyo[];
 #else
 EvtWord init_bijyo[40];
@@ -175,7 +175,7 @@ static EvtWord talk_kiza[60];
 static EvtWord init_sarary[12];
 EvtWord select_number[44];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord talk_sarary[478];
 #else
 static EvtWord talk_sarary[479];
@@ -183,7 +183,7 @@ static EvtWord talk_sarary[479];
 
 static NpcSetupInfo npcEnt[20];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_uron[];
 #else
 EvtWord evt_uron[195];
@@ -198,7 +198,7 @@ static EvtWord evt_tamago_scale[89];
 static EvtWord evt_tamago_scale2[83];
 s32 yoshi_data[30];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_tamago_move[];
 extern EvtWord evt_tamago[];
 extern EvtWord talk_tamago[];
@@ -211,7 +211,7 @@ EvtWord talk_tamago[321];
 EvtWord evt_gondora_updown[143];
 EvtWord evt_gondora_mon[62];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_gondora[];
 extern EvtWord evt_gondora2[];
 #else
@@ -222,7 +222,7 @@ EvtWord evt_gondora2[200];
 EvtWord evt_search_light[82];
 EvtWord evt_dummy_sw[178];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_peach_after[];
 #else
 EvtWord evt_peach_after[92];
@@ -232,7 +232,7 @@ static EvtWord sekai_yami_npc_init[84];
 static EvtWord sekai_yami_npc[65];
 static EvtWord sekai_yami_evt[215];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord minnnanokoe_npc_entry[163];
 #else
 static EvtWord minnnanokoe_npc_entry[175];
@@ -240,7 +240,7 @@ static EvtWord minnnanokoe_npc_entry[175];
 
 static EvtWord minnnanokoe_evt[446];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord evt_telbox[];
 #else
 EvtWord evt_telbox[124];
@@ -249,7 +249,7 @@ EvtWord evt_telbox[124];
 EvtWord evt_mail[175];
 static EvtWord evt_key[7];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord mobj_box00[34];
 #else
 static EvtWord mobj_box00[36];
@@ -732,7 +732,7 @@ static ShopperData35 shopper_data = {
 // Charge only after the item was successfully added to the pouch.
 EVT_BEGIN(evt_hotdog)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("mario"))
@@ -1651,7 +1651,7 @@ EVT_END()
 EVT_BEGIN(init_bijyo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_20_00_MAJORS_8TH_PLACE, STG3_20_03_THE_YELLOW_BLOCK)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CASE_BETWEEN(STG3_20_05_MAJORS_4TH_PL, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
         IF_INT_EQUAL(GSWF_TOU_04_STORAGE_ROOM_TALK_SEEN, 1)
             CALL(evt_npc_set_position, STRING("me"), 610, 10, -120)
@@ -1660,11 +1660,11 @@ EVT_BEGIN(init_bijyo)
         CALL(evt_npc_set_position, STRING("me"), 610, 10, -120)
 #endif
         CASE_DEFAULT
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
 #endif
             CALL(evt_npc_set_position, STRING("me"), 610, 10, -120)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         END_IF
 #endif
     END_SWITCH
@@ -1912,7 +1912,7 @@ static EVT_BEGIN(talk_sarary)
             RETURN
         END_IF
         CALL(evt_msg_print_add, 0, STRING("irai_24_032"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_unitwin_alloc)
 #else
         CALL(evt_unitwin_alloc, 0)
@@ -2204,7 +2204,7 @@ static NpcSetupInfo npcEnt[] = {
  */
 EVT_BEGIN(evt_uron)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_party_stop, 0)
@@ -2259,7 +2259,7 @@ EVT_BEGIN(evt_uron)
     CALL(evt_msg_print_party, STRING("stg3_tou_04"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -2302,7 +2302,7 @@ static USER_FUNC(mario_chk) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** The demo's champion reset: the releases use evt_rankingReset of tou.c, which also rebuilds the ranking. */
 static USER_FUNC(rankingReset) {
     s32 i;
@@ -2552,7 +2552,7 @@ EVT_BEGIN(evt_tamago_move)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_npc_change_interrupt, STRING("ホットドッグ"), 1, PTR(dummy))
@@ -2612,7 +2612,7 @@ EVT_END()
 EVT_BEGIN(evt_tamago)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_mario_wait_move_end)
@@ -2626,7 +2626,7 @@ EVT_BEGIN(evt_tamago)
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_cam3d_evt_set, -345, 169, 544, -345, 38, -204, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPAWN_EVENT(evt_tamago_move)
     SPAWN_EVENT(evt_oyaji_move)
 #else
@@ -2654,7 +2654,7 @@ EVT_END()
  */
 EVT_BEGIN(talk_tamago)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_party_stop, 0)
@@ -2814,7 +2814,7 @@ EVT_END()
 
 EVT_BEGIN(evt_gondora)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_party_stop, 0)
@@ -2864,7 +2864,7 @@ EVT_END()
 
 EVT_BEGIN(evt_gondora2)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -2895,7 +2895,7 @@ EVT_BEGIN(evt_gondora2)
         WAIT_MS(300)
         CALL(evt_party_move_pos2, 0, 20, 490, FLOAT(80.0f))
         CALL(evt_party_move_pos2, 0, 20, 410, FLOAT(80.0f))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_mario_set_dir, 270, 200, 0)
 #endif
         CALL(evt_party_stop, 0)
@@ -2908,7 +2908,7 @@ EVT_BEGIN(evt_gondora2)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 20, 410, FLOAT(80.0f))
     CALL(evt_mario_mov_pos2, -20, 410, FLOAT(80.0f))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_set_dir, 90, 200, 0)
 #endif
     SET_VALUE(LW(0), 120)
@@ -2917,7 +2917,7 @@ EVT_BEGIN(evt_gondora2)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(rankingReset)
 #else
             CALL(evt_rankingReset)
@@ -3037,7 +3037,7 @@ EVT_BEGIN(evt_peach_after)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_npc_set_position, STRING("美女"), 0, -1000, 0)
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -3202,7 +3202,7 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_tribe, STRING("シンエモンＡ"), STRING("アイアンシンエモン"))
     CALL(evt_npc_set_position, STRING("シンエモンＡ"), 50, 0, 375)
     CALL(evt_npc_set_ry, STRING("シンエモンＡ"), 270)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_POSE)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＡ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
@@ -3212,7 +3212,7 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_set_tribe, STRING("シンエモンＢ"), STRING("アイアンシンエモン2"))
     CALL(evt_npc_set_position, STRING("シンエモンＢ"), -50, 0, 400)
     CALL(evt_npc_set_ry, STRING("シンエモンＢ"), 90)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_INSTANT_TURN | NPC_FLAG_TALK_POSE)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("シンエモンＢ"), NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN)
@@ -3365,7 +3365,7 @@ EVT_BEGIN(evt_telbox)
     CALL(evt_mapobj_get_position, STRING("tel_box"), LW(10), LW(11), LW(12))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(10), LW(11), LW(12))
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     SWITCH(LW(0))
@@ -3574,12 +3574,12 @@ EVT_END()
  */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_PLUS_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
@@ -3700,7 +3700,7 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)
     CALL(evt_hit_bind_update, STRING("a_gondora"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("gondora"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 615, 160, -10, 0, 0)
 #else
 #if VERSION >= VERSION_US
@@ -3806,7 +3806,7 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_gai_1"), MAP_OBJ_FLAG_DISABLED)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_gai_2"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
-#if VERSION != VERSION_EU // PAL sets the language sign
+#if VERSION < VERSION_DEMO_EU // PAL sets the language sign
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_hot"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_hot"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_hot"), MAP_OBJ_FLAG_DISABLED)

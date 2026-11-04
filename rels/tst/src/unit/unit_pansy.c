@@ -28,7 +28,7 @@ static BattleDataEntry data_table[2];
 static EvtWord init_event[21];
 static EvtWord damage_event[10];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord song_event[298];
 #else
 static EvtWord song_event[300];
@@ -95,7 +95,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Crazee Dayzee's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {95, 30, 30, 100, 30, 100, 100, 30, 100, 30, 100, 30, 100, 30, 30, 100, 80, 100, 30, 100, 100, 30};
 #else
 static StatusVulnerability regist = {
@@ -156,7 +156,7 @@ BattleWeapon weapon_pansy_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_IGNORE_VULNERABILITY,
     COUNTER_RESIST_ALL, // counterResistFlags
         TARGET_WEIGHT_RANDOM,
@@ -319,14 +319,14 @@ static EVT_BEGIN(song_event)
             WAIT_FRAMES(12)
         END_LOOP
     END_SIBLING_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     WAIT_FRAMES(60)
     WAIT_FRAMES(60)
 #else
     WAIT_FRAMES(120)
 #endif
     SET_VALUE(LW(6), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
 #endif
 

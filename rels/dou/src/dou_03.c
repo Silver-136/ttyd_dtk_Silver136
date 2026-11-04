@@ -39,7 +39,7 @@ EvtWord nagare_taru[38];
 EvtWord nagare_taru_se[45];
 EvtWord nagare_bin[33];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord watergate_handle[];
 #else
 EvtWord watergate_handle[251];
@@ -298,7 +298,7 @@ EVT_BEGIN(watergate_handle)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table), LW(0), 0)
@@ -350,11 +350,11 @@ EVT_BEGIN(watergate_handle)
         CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)
         CALL(evt_msg_print, 0, STRING("stg5_dou_02"), 0, 0)
         WAIT_MS(500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_party_stop, 0)
 #endif
         CALL(evt_msg_print_party, STRING("stg5_dou_03"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_party_run, 0)
 #endif
         SET_VALUE(LW(0), STRING("s_bero"))

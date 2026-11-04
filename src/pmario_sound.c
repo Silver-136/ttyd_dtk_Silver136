@@ -66,7 +66,7 @@ SoundBGMEntry psbgmlist[] = {
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_TITLE1", SFX_FLAG_STREAM, "sound/stream/sys_tit1_32k", 0x5D, 0x40, 0x01, 0x01},
     { "BGM_DEMO1", SFX_FLAG_STREAM, "sound/stream/sys_demo1_32k", 0x5F, 0x40, 0x00, 0x01},
     { "BGM_DEMO2", SFX_FLAG_STREAM, "sound/stream/sys_demo2_32k", 0x52, 0x40, 0x00, 0x01},
@@ -146,7 +146,7 @@ SoundBGMEntry psbgmlist[] = {
     {"BGM_STG0_100DN1", SFX_FLAG_STREAM, "sound/stream/stg_tik1_32k", 0x32, 0x40, 0x00, 0x00},
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
     {"BGM_STG1_HEI1", SFX_FLAG_STREAM, "sound/stream/stg_dor1_32k", 0x46, 0x40, 0x00, 0x00},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_STG1_NOK1", SFX_FLAG_STREAM, "sound/stream/stg_nok1_32k", 0x55, 0x40, 0x00, 0x00},
 #else
     {"BGM_STG1_NOK1", SFX_FLAG_STREAM, "sound/stream/stg_nok1_32k", 0x57, 0x40, 0x00, 0x00},
@@ -156,7 +156,7 @@ SoundBGMEntry psbgmlist[] = {
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
     {"BGM_STG2_WIN1", SFX_FLAG_STREAM, "sound/stream/stg_fsg1_32k", 0x46, 0x40, 0x00, 0x00},
     {"BGM_STG2_MRI1", SFX_FLAG_STREAM, "sound/stream/stg_okk1_32k", 0x4B, 0x40, 0x00, 0x00},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_STG2_MRI2", SFX_FLAG_STREAM, "sound/stream/evt_pun1_32k", 0x4B, 0x40, 0x00, 0x00},
 #else
     {"BGM_STG2_MRI2", SFX_FLAG_STREAM, "sound/stream/evt_pun1_32k", 0x48, 0x40, 0x00, 0x00},
@@ -166,7 +166,7 @@ SoundBGMEntry psbgmlist[] = {
     {"BGM_STG3_TOU1", SFX_FLAG_STREAM, "sound/stream/stg_tog1_32k", 0x4D, 0x40, 0x00, 0x00},
     {"BGM_STG3_TOU2", SFX_FLAG_STREAM, "sound/stream/stg_tgm1_32k", 0x50, 0x40, 0x00, 0x00},
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_STG4_USU1", SFX_FLAG_STREAM, "sound/stream/stg_ugt1_32k", 0x42, 0x40, 0x00, 0x00},
 #else
     {"BGM_STG4_USU1", SFX_FLAG_STREAM, "sound/stream/stg_ugt1_32k", 0x3E, 0x40, 0x00, 0x00},
@@ -192,7 +192,7 @@ SoundBGMEntry psbgmlist[] = {
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
     {"BGM_STG8_LST1", SFX_FLAG_STREAM, "sound/stream/stg_ldn1_32k", 0x55, 0x50, 0x00, 0x00},
     {"BGM_STG8_LST2", SFX_FLAG_STREAM, "sound/stream/stg_ldn2_32k", 0x5A, 0x50, 0x00, 0x00},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_STG8_LST3", SFX_FLAG_STREAM, "sound/stream/stg_ldn3_32k", 0x5A, 0x50, 0x00, 0x00},
 #else
     {"BGM_STG8_LST3", SFX_FLAG_STREAM, "sound/stream/stg_ldn3_32k", 0x5D, 0x50, 0x00, 0x00},
@@ -263,7 +263,7 @@ SoundBGMEntry psbgmlist[] = {
     {"BGM_EVT_FRANKURI1", SFX_FLAG_STREAM, "sound/stream/evt_fkh1_32k", 0x50, 0x40, 0x00, 0x01},
     {"BGM_EVT_3RD_ENEMY", SFX_FLAG_STREAM, "sound/stream/evt_3rd1_32k", 0x4D, 0x40, 0x00, 0x01},
     {"BGM_EVT_REST1", SFX_FLAG_STREAM, "sound/stream/evt_rst1_32k", 0x5A, 0x40, 0x00, 0x01},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_EVT_POWAN1", SFX_FLAG_STREAM, "sound/stream/evt_pwn1_32k", 0x4B, 0x40, 0x00, 0x01},
 #else
     {"BGM_EVT_POWAN1", SFX_FLAG_STREAM, "sound/stream/evt_pwn1_32k", 0x46, 0x40, 0x00, 0x01},
@@ -284,7 +284,7 @@ SoundBGMEntry psbgmlist[] = {
     {"BGM_EVT_STG5_GHOST1", SFX_FLAG_STREAM, "sound/stream/evt_elmos_app1_32k", 0x50, 0x40, 0x00, 0x01},
     {"BGM_EVT_STG5_KORTESS1", SFX_FLAG_STREAM, "sound/stream/evt_kts1_32k", 0x54, 0x40, 0x00, 0x01},
     {"BGM_EVT_STG5_VS_3RD_ENEMY", SFX_FLAG_STREAM, "sound/stream/evt_v3d1_32k", 0x5A, 0x40, 0x00, 0x01},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_EVT_STG7_HUGE_GUN1", SFX_FLAG_STREAM, "sound/stream/evt_huge_gun1_32k", 0x5F, 0x40, 0x00, 0x01},
 #else
     {"BGM_EVT_STG7_HUGE_GUN1", SFX_FLAG_STREAM, "sound/stream/evt_huge_gun1_32k", 0x62, 0x40, 0x00, 0x01},
@@ -295,7 +295,7 @@ SoundBGMEntry psbgmlist[] = {
     {"BGM_EVT_STG8_3RDHEAD1", SFX_FLAG_STREAM, "sound/stream/evt_3dh1_32k", 0x50, 0x40, 0x00, 0x01},
     {"BGM_EVT_STG8_WITCH", SFX_FLAG_STREAM, "sound/stream/evt_wit2_32k", 0x58, 0x40, 0x00, 0x01},
     {"BGM_EVT_COOKING1", SFX_FLAG_STREAM, "sound/stream/evt_cok1_32k", 0x53, 0x40, 0x00, 0x01},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_EVT_STAGE_CLEAR1", SFX_FLAG_STREAM, "sound/stream/evt_stc1_32k", 0x5F, 0x40, 0x00, 0x01},
 #else
     {"BGM_EVT_STAGE_CLEAR1", SFX_FLAG_STREAM, "sound/stream/evt_stc1_32k", 0x62, 0x40, 0x00, 0x01},
@@ -327,7 +327,7 @@ SoundBGMEntry psbgmlist[] = {
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
     {"BGM_FF_STG_START1", SFX_FLAG_STREAM, "sound/stream/ff_stt1_32k", 0x4B, 0x40, 0x00, 0x01},
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_FF_ENV_SURPRISED1", SFX_FLAG_STREAM, "sound/stream/ff_spr1_32k", 0x5A, 0x40, 0x00, 0x01},
     { "BGM_FF_ENV_SURPRISED2", SFX_FLAG_STREAM, "sound/stream/ff_spr2_32k", 0x5A, 0x40, 0x00, 0x01},
     { "BGM_FF_ENV_SURPRISED3", SFX_FLAG_STREAM, "sound/stream/ff_spr3_32k", 0x5A, 0x40, 0x00, 0x01},
@@ -345,7 +345,7 @@ SoundBGMEntry psbgmlist[] = {
     {"", 0x00000000, "", 0x00, 0x00, 0x00, 0x00},
     {"BGM_FF_ENV_CRISIS1", SFX_FLAG_STREAM, "sound/stream/ff_crs1_32k", 0x50, 0x40, 0x00, 0x01},
     {"BGM_FF_ENV_TOU1", SFX_FLAG_STREAM, "sound/stream/ff_tou1_32k", 0x57, 0x40, 0x00, 0x01},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "BGM_FF_ENV_TOU2", SFX_FLAG_STREAM, "sound/stream/ff_tou2_32k", 0x57, 0x40, 0x00, 0x01},
 #else
     {"BGM_FF_ENV_TOU2", SFX_FLAG_STREAM, "sound/stream/ff_tou2_32k", 0x52, 0x40, 0x00, 0x01},
@@ -380,7 +380,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_CURSOR_MOVE1", SFX_EFFECT(0x47A), "", 105, 64, 0, 0, 0, 0, 0},
     { "SFX_CURSOR_MOVE2", SFX_EFFECT(0x47A), "", 85, 64, 0, 0, 0, 0, 0xAAA},
 #else
@@ -388,7 +388,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_CURSOR_MOVE2", SFX_FLAG_EFX | 0x47C, "", 85, 64, 0, 0, 0, 0, 0xAAA},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PRESS_START1", SFX_EFFECT(0x266), "", 90, 64, 0, 40, 0, 0, 0},
     { "SFX_FILE_CURSOR_MOVE1", SFX_EFFECT(0x47E), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_FILE_MOJI_SET1", SFX_EFFECT(0x481), "", 105, 64, 0, 0, 0, 0, 0},
@@ -406,7 +406,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_CURSOR_OK1", SFX_EFFECT(0x47C), "SE1_SELECT1", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_CURSOR_CANCEL1", SFX_EFFECT(0x479), "SE1_SELECT2", 75, 64, 0, 0, 0, 0, 0},
     { "SFX_CURSOR_NOT_CHOICE1", SFX_EFFECT(0x25F), "", 80, 64, 0, 0, 0, 0, 0},
@@ -534,13 +534,13 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_MESSAGE5_4", SFX_FLAG_EFX, "SE1_VOICE_ENEMY_HEAVY2", 0, 64, 0, 0, 1, 0, 0},
     {"SFX_MESSAGE5_5", SFX_FLAG_EFX, "SE1_VOICE_ENEMY_HEAVY5", 0, 64, 0, 0, 1, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_COUNT_COIN1", SFX_EFFECT(0x478), "", 60, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_COUNT_COIN1", SFX_FLAG_EFX | 0x47A, "", 60, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BIKKURI_MARK1", SFX_EFFECT(0x25E), "", 65, 64, 0, 0, 0, 0, 0},
     { "SFX_QUESTION_MARK1", SFX_EFFECT(0x3C), "", 65, 64, 0, 0, 0, 0, 0},
     { "SFX_GURUGURU_MARK1", SFX_EFFECT(0x12E), "", 100, 64, 0, 0, 0, 0, 0},
@@ -611,7 +611,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_VOICE_PEACH_CALL_MARIO2", SFX_FLAG_EFX, "SE1_VOICE_P_CALL_MARIO2", 127, 64, 0, 0, 0, 0, 0},
     {"SFX_VOICE_PEACH_CALL_MARIO3", SFX_FLAG_EFX, "SE1_VOICE_P_CALL_MARIO3", 127, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_VOICE_MARIO_FLD_JUMP1", SFX_EFFECT(0x288), "SE2_VOICE_M_FLD_JUMP1", 105, 64, 0, 1, 0, 0, 0},
     { "SFX_VOICE_MARIO_FLD_JUMP2", SFX_EFFECT(0x289), "SE2_VOICE_M_FLD_JUMP2", 105, 64, 0, 1, 0, 0, 0},
     { "SFX_VOICE_MARIO_FLD_JUMP3", SFX_EFFECT(0x29F), "", 105, 64, 0, 1, 0, 0, 0},
@@ -935,7 +935,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MARIO_MOVE1L", SFX_EFFECT(0x397), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_MARIO_MOVE1R", SFX_EFFECT(0x398), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_MARIO_MOVE2L", SFX_EFFECT(0x39B), "", 60, 64, 0, 1, 0, 0, 0},
@@ -1031,7 +1031,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_MARIO_FALL2", SFX_FLAG_EFX, "SE4_FLD_M_FALL2", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_MARIO_FALL3", SFX_FLAG_EFX, "SE4_FLD_M_FALL3", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MARIO_FURAFURA1", SFX_EFFECT(0), "SE4_FLD_M_FURAFURA1", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_MARIO_DOWN1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_MARIO_DOKAN1", SFX_EFFECT(0x39F), "", 80, 64, 0, 1, 0, 0, 0},
@@ -1041,7 +1041,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_MARIO_DOKAN1", SFX_FLAG_EFX | 0x3A1, "", 80, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MARIO_CHANGE_SLIT1", SFX_EFFECT(0x389), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_MARIO_CHANGE_SLIT2", SFX_EFFECT(0x38C), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_MARIO_CHANGE_ROLL1", SFX_EFFECT(0x38D), "", 100, 64, 0, 1, 0, 0, 0},
@@ -1101,7 +1101,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_MARIO_SHIP3", SFX_FLAG_EFX | 0x229, "", 100, 64, 0, 1, 0, 55, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MARIO_FALL_WATER1", SFX_EFFECT(0x214), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_MARIO_LEAP_WATER1", SFX_EFFECT(0x379), "", 110, 64, 0, 1, 0, 0, 0},
     { "SFX_MARIO_GAJIGAJI1", SFX_EFFECT(0x37A), "", 100, 64, 0, 1, 0, 0, 0},
@@ -1135,7 +1135,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MOBJ_BLOCK_SAVE1", SFX_EFFECT(0x263), "SE4_OBJ_BLOCK_SAVE1", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_MOBJ_BLOCK_S_FLOAT_MOVE1", SFX_EFFECT(0x3CD), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_MOBJ_BLOCK_S_FLOAT_DOWN1", SFX_EFFECT(0x3CE), "", 100, 64, 0, 1, 0, 0, 0},
@@ -1277,7 +1277,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_MOBJ_POW_BLOCK1", SFX_FLAG_EFX | 0x3B, "", 100, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MOBJ_BLACKBOX_SWING1", SFX_EFFECT(0x24C), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_MOBJ_BLACKBOX_OPEN1", SFX_EFFECT(0x3D8), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_MOBJ_PERAMAJIN_OUT1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
@@ -1294,7 +1294,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ITEM_MARIO_USE1", SFX_EFFECT(0x423), "btl_e_item_use1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ITEM_PARTY_USE1", SFX_EFFECT(0x423), "btl_e_item_use1_22k", 100, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
@@ -1391,7 +1391,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_GRASS_SHAKE1", SFX_EFFECT(0x3B4), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_GRASS_SHAKE2", SFX_EFFECT(0), "SE1_GRASS_SHAKE1", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_HIT_TREE1", SFX_EFFECT(0x3B6), "", 100, 64, 0, 1, 0, 0, 0},
@@ -1488,7 +1488,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_GLASS_DOOR1_OPEN1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_GLASS_DOOR1_CLOSE1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_DOOR_DOWN1", SFX_EFFECT(0x3A0), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_HOUSE_DOWN1", SFX_EFFECT(0x235), "", 110, 64, 0, 1, 0, 0, 0},
     { "SFX_HOUSE_OPEN1", SFX_EFFECT(0x236), "", 100, 64, 0, 1, 0, 0, 0},
@@ -1582,7 +1582,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_EVT_MAP_NEXT_APPEAR2_2", SFX_FLAG_EFX, "SE2_EVT_MAP_NEXT_APPEAR2_2", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_EVT_MAP_NEXT_APPEAR2_3", SFX_FLAG_EFX, "SE2_EVT_MAP_NEXT_APPEAR2_3", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_MAP_KAKAGERU2", SFX_SONG(0x4, 0x35), "", 117, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_MAP_KAKAGERU2_2", SFX_SONG(0x4, 0x36), "", 117, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_MAP_KAKAGERU2_3", SFX_SONG(0x4, 0x41), "", 117, 64, 0, 1, 0, 0, 0},
@@ -1592,7 +1592,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_EVT_MAP_KAKAGERU2_3", SFX_FLAG_SONG | 0x44141, "", 110, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_MAP_KAKAGERU3_1", SFX_SONG(0x4, 0x42), "", 100, 64, 0, 1, 0, 15, 0},
     { "SFX_EVT_MAP_KAKAGERU3_2", SFX_SONG(0x4, 0x43), "", 117, 64, 0, 1, 0, 15, 0},
     { "SFX_EVT_MAP_KAKAGERU3_3", SFX_SONG(0x4, 0x44), "", 100, 64, 0, 1, 0, 10, 0},
@@ -1602,7 +1602,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_EVT_MAP_KAKAGERU3_3", SFX_FLAG_SONG | 0x44444, "", 85, 64, 0, 1, 0, 10, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_STAGE_CLEAR1", SFX_EFFECT(0x14C), "", 50, 64, 0, 0, 0, 6, 0x555},
 #else
     {"SFX_EVT_STAGE_CLEAR1", SFX_FLAG_EFX | 0x150, "", 50, 64, 0, 0, 0, 6, 0x555},
@@ -1611,7 +1611,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_PERAMAJIN_LIGHT1", SFX_SONG(0x4, 0x37), "", 80, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_PERAMAJIN_BLINKING1", SFX_EFFECT(0x242), "", 50, 64, 0, 1, 0, 0, 0xAAA},
 #else
@@ -1619,13 +1619,13 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_EVT_PERAMAJIN_BLINKING1", SFX_FLAG_EFX | 0x249, "", 50, 64, 0, 1, 0, 0, 0xAAA},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_LECTUREN_BLINKING1", SFX_EFFECT(0x242), "", 50, 64, 0, 1, 0, 0, 0xAAA},
 #else
     {"SFX_EVT_LECTUREN_BLINKING1", SFX_FLAG_EFX | 0x249, "", 50, 64, 0, 1, 0, 0, 0xAAA},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_LECTURE_BLOCK_FALL1", SFX_EFFECT(0xAB), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_LECTURE_BLOCK_DOWN1", SFX_EFFECT(0x3BA), "", 100, 64, 0, 1, 0, 0, 0xF800},
 #else
@@ -1637,7 +1637,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_FLD_NPC_PARTY_MOVE1L", SFX_EFFECT(0x3BD), "", 45, 64, 0, 1, 0, 0, 0},
     { "SFX_FLD_NPC_PARTY_MOVE1R", SFX_EFFECT(0x3BE), "", 45, 64, 0, 1, 0, 0, 0},
     { "SFX_FLD_NPC_PARTY_JUMP1", SFX_EFFECT(0x3B8), "", 40, 64, 0, 1, 0, 0, 0},
@@ -1836,7 +1836,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_FLD_NPC_MAJO_HANG1", SFX_EFFECT(0x3BC), "", 30, 64, 0, 1, 0, 0, 0x2AB},
     { "SFX_FLD_NPC_MARI_HANG1", SFX_EFFECT(0x3BC), "", 30, 64, 0, 1, 0, 0, 0xFD55},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
@@ -1867,7 +1867,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_STG_START_CURTAIN_UP1", SFX_EFFECT(0x552), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_STG_START_CURTAIN_DOWN1", SFX_EFFECT(0x551), "", 90, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_BTL_START_CURTAIN_UP1", SFX_EFFECT(0x543), "", 60, 64, 0, 1, 0, 0, 0},
@@ -1885,7 +1885,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_KUPPA_WALL_BREAK1", SFX_EFFECT(0x548), "SE6_OFF_KUPPA_WALL_BREAK1", 100, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_OFF_KUPPA_WALL_BREAK1", SFX_FLAG_EFX | 0x54A, "SE6_OFF_KUPPA_WALL_BREAK1", 100, 64, 0, 1, 0, 0, 0},
@@ -1899,7 +1899,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_MAP_BECOME_OLD1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_SHIP_REVERSE1", SFX_EFFECT(0x54D), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_FENCE_OPEN1", SFX_EFFECT(0x547), "", 75, 64, 0, 1, 0, 0, 0},
@@ -1913,7 +1913,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_STEP_APPEAR1", SFX_EFFECT(0x54E), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_STEP_APPEAR2", SFX_EFFECT(0x54F), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_STEP_APPEAR3", SFX_EFFECT(0x550), "", 100, 64, 0, 1, 0, 0, 0},
@@ -1923,7 +1923,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_OFF_STEP_APPEAR3", SFX_FLAG_EFX | 0x552, "", 100, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF0_STEP_APPEAR1_2", SFX_SONG(0x4, 0x16), "", 115, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_OFF0_STEP_APPEAR1_2", SFX_FLAG_SONG | 0x41616, "", 115, 64, 0, 20, 0, 0, 0},
@@ -1932,7 +1932,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF1_ROCK_BREAK1", SFX_EFFECT(0x534), "", 90, 64, 0, 1, 0, 0, 0},
     { "SFX_STG1_PERA1", SFX_EFFECT(0x46B), "btl_e_bomb_move1_22k", 60, 64, 0, 1, 0, 0, 0x2AB},
     { "SFX_OFF1_PUZZLE1", SFX_EFFECT(0x531), "", 90, 64, 0, 1, 0, 0, 0},
@@ -1952,7 +1952,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG1_PERA2", SFX_FLAG_SONG | 0x43F3F, "", 90, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF1_PERA_BREAK1", SFX_SONG(0x4, 0x66), "", 90, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF1_PERA_FALL1", SFX_EFFECT(0x536), "", 85, 64, 0, 1, 0, 0, 0xFAAB},
 #else
@@ -1962,7 +1962,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF2_ENTER_APPEAR1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF2_DOOR_GRID_SHUT1", SFX_EFFECT(0x537), "", 100, 64, 0, 1, 0, 10, 0},
     { "SFX_OFF2_DOKAN_APPEAR1", SFX_EFFECT(0x535), "", 90, 64, 0, 1, 0, 0, 0},
@@ -1988,7 +1988,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF3_VIEW_ROOM1", SFX_SONG(0x9, 0x79), "", 110, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF3_VIEW_ROOM2", SFX_SONG(0x9, 0x7A), "", 110, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF3_PERA_KAIDAN_APPEAR1", SFX_EFFECT(0x469), "", 110, 64, 0, 1, 0, 0, 0},
@@ -2008,7 +2008,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF4_LANPEL_APPEAR1", SFX_EFFECT(0x46A), "", 110, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF4_NAME_ENTRY1", SFX_SONG(0x9, 0x75), "", 127, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF4_NAME_ENTRY2", SFX_SONG(0x9, 0x76), "", 127, 64, 0, 1, 0, 0, 0},
@@ -2020,7 +2020,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF5_OBJ_ROCK_BREAK1", SFX_EFFECT(0x553), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF5_SHIP_APPEAR1", SFX_EFFECT(0x53B), "", 120, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF5_SHIP_REVERSE1", SFX_EFFECT(0x54D), "", 100, 64, 0, 1, 0, 0, 0},
@@ -2032,7 +2032,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF6_ROOM_IN1", SFX_EFFECT(0x53C), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF6_ROOM_OUT1", SFX_EFFECT(0x53D), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF6_SHOP_IN1", SFX_EFFECT(0x53E), "", 100, 64, 0, 1, 0, 0, 0},
@@ -2046,7 +2046,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF7_KAIDAN_APPEAR1", SFX_SONG(0x9, 0x7D), "", 120, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF7_PASSWORD_ENTRY1", SFX_SONG(0x9, 0x75), "", 127, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF7_PASSWORD_ENTRY2", SFX_SONG(0x9, 0x76), "", 127, 64, 0, 1, 0, 0, 0},
@@ -2066,7 +2066,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_CLAUD_WIND2", SFX_EFFECT(0x544), "", 90, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_CLAUD_WIND3", SFX_EFFECT(0x545), "", 90, 64, 0, 1, 0, 0, 0},
 #else
@@ -2076,7 +2076,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_BLOCK_BREAK1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_WALL_BREAK1", SFX_EFFECT(0x553), "", 115, 64, 0, 20, 0, 0, 0},
 #else
@@ -2090,7 +2090,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_PERAMAJIN_APPEAR1", SFX_EFFECT(0x54B), "", 80, 64, 0, 1, 0, 6, 0},
     { "SFX_OFF_PERAMAJIN_COME1", SFX_SONG(0xB, 0x83), "", 100, 64, 0, 1, 0, 10, 0},
     { "SFX_OFF_PERAMAJIN_GOOUT1", SFX_SONG(0xB, 0x84), "", 100, 64, 0, 1, 0, 10, 0},
@@ -2110,7 +2110,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_CHANGE_MAP1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_CHANGE_MAP2", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_CHANGE_MAP3", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
@@ -2146,7 +2146,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_OFF_CHANGE_MAP_DOKAN8", SFX_FLAG_SONG | 0x97E7E, "", 85, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_CHANGE_STORY1", SFX_SONG(0x9, 0x81), "", 85, 64, 0, 1, 0, 7, 0},
     { "SFX_OFF_CHANGE_STORY2", SFX_SONG(0x9, 0x82), "", 85, 64, 0, 1, 0, 2, 0},
 #else
@@ -2157,7 +2157,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_OFF_MARIO_SLEEP1", SFX_EFFECT(0x549), "", 90, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_MARIO_SLEEP2", SFX_EFFECT(0x54A), "", 90, 64, 0, 1, 0, 0, 0},
     { "SFX_OFF_MARIO_AWAKE1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
@@ -2177,7 +2177,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_EVT_LUIGI_MOVE1L", SFX_FLAG_EFX, "SE4_FLD_M_WALK_NORMAL1", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_EVT_LUIGI_MOVE1R", SFX_FLAG_EFX, "SE4_FLD_M_WALK_NORMAL2", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_OPN_BOOK_OPEN1", SFX_EFFECT(0x209), "", 100, 64, 0, 60, 0, 0, 0},
     { "SFX_EVT_OPN_PAGE_OPEN1", SFX_EFFECT(0x20A), "", 100, 64, 0, 60, 0, 15, 0},
 #else
@@ -2186,7 +2186,7 @@ SoundEffectEntry pssfxlist[] = {
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_OPN_PARETTA_MOVE1", SFX_EFFECT(0x4FC), "btl_e_pata_move1_22k", 95, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_POST_SHAKE1", SFX_EFFECT(0x20B), "", 115, 64, 0, 1, 0, 0, 0},
 #else
@@ -2194,7 +2194,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_EVT_POST_SHAKE1", SFX_FLAG_EFX | 0x20F, "", 115, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_OPN_SHIP_MOVE1", SFX_EFFECT(0x15C), "", 95, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_OPN_SHIP_CREAK1", SFX_EFFECT(0x76), "", 50, 64, 0, 30, 0, 0, 0},
 #else
@@ -2205,7 +2205,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG0_SHIP_MOVE1", SFX_EFFECT(0x15C), "", 95, 64, 0, 30, 0, 0, 0},
     { "SFX_STG0_SHIP_JUMP1", SFX_EFFECT(0x554), "", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_STG0_SHIP_JUMP2", SFX_EFFECT(0x503), "", 0, 64, 0, 1, 0, 0, 0},
@@ -2282,7 +2282,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG0_KURIHAKASE_MOVE1L", SFX_FLAG_EFX, "SE5_BTL_E_MOVE_WALK1L", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_STG0_KURIHAKASE_MOVE1R", SFX_FLAG_EFX, "SE5_BTL_E_MOVE_WALK1R", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG0_PUNI_MOVE1", SFX_EFFECT(0x176), "", 50, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_STG0_PUNI_MOVE1", SFX_FLAG_EFX | 0x17A, "", 50, 64, 0, 1, 0, 0, 0},
@@ -2301,7 +2301,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG0_MAP_PUTOUT1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_STG0_MAP_DOWN1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG0_SHUT_BOOK1", SFX_EFFECT(0x15D), "", 85, 64, 0, 1, 0, 0, 0},
     { "SFX_STG0_OPEN_BOOK1", SFX_EFFECT(0x158), "", 75, 64, 0, 1, 0, 0, 0},
     { "SFX_STG0_PUT_BOOK1", SFX_EFFECT(0x15D), "", 85, 64, 0, 1, 0, 0, 0xFAAB},
@@ -2313,7 +2313,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG0_LENS_BREAK1", SFX_FLAG_EFX | 0x15F, "", 120, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG0_GESO_LEG_MOVE1", SFX_EFFECT(0x15A), "", 50, 64, 0, 20, 0, 0, 0},
     { "SFX_STG0_GESO_LEG_MOVE2", SFX_EFFECT(0x214), "", 90, 64, 0, 20, 0, 0, 0x800},
     { "SFX_STG0_GESO_JUMP1", SFX_EFFECT(0xD2), "", 120, 64, 0, 20, 0, 0, 0},
@@ -2336,7 +2336,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG0_GESO_WAIT1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_STG0_GESO_FALL1", SFX_FLAG_EFX, "SE2_AUD_THROW_OBJ1", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG1_KINOBROS_MOVE1L", SFX_EFFECT(0x207), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG1_KINOBROS_MOVE1R", SFX_EFFECT(0x208), "", 60, 64, 0, 1, 0, 0, 0},
 #else
@@ -2344,7 +2344,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG1_KINOBROS_MOVE1R", SFX_FLAG_EFX | 0x20C, "", 60, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG1_LOAD_APPEAR1", SFX_EFFECT(0x3E3), "", 120, 64, 0, 20, 0, 0, 0},
 #else
     {"SFX_STG1_LOAD_APPEAR1", SFX_FLAG_EFX | 0x3E5, "", 120, 64, 0, 20, 0, 0, 0},
@@ -2354,13 +2354,13 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_STG2_AIR_SHIP_DRIVE1", SFX_FLAG_EFX | 0x53, "", 110, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_KURAGARI_PEN1", SFX_SONG(0x4, 0x1D), "", 105, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_STG3_KURAGARI_PEN1", SFX_FLAG_SONG | 0x41D1D, "", 110, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG4_MARIO_ROLL_DOWN1", SFX_EFFECT(0x550), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG4_MARIO_ROLL_DOWN2", SFX_EFFECT(0x166), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG4_SHIP_MOVE1", SFX_EFFECT(0x76), "", 100, 64, 0, 30, 0, 0, 0},
@@ -2376,7 +2376,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_STG4_SHIP_MOVE2", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG5_TRAIN_BELL1", SFX_EFFECT(0x1C4), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG5_TRAIN_MOVE1", SFX_SONG(0x1, 0x00), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG5_TRAIN_MOVE2", SFX_SONG(0x1, 0x01), "", 100, 64, 0, 1, 0, 0, 0},
@@ -2386,7 +2386,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG5_TRAIN_MOVE2", SFX_FLAG_SONG | 0x10101, "", 100, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG6_TBOX_FALL1", SFX_EFFECT(0x378), "", 70, 64, 0, 1, 0, 0, 0x1000},
     { "SFX_STG6_TBOX_FALL2", SFX_EFFECT(0x15F), "", 100, 64, 0, 1, 0, 0, 0},
 #else
@@ -2400,7 +2400,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_STG7_DOOR_LAST_OPEN1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG0_MONBAN_ESCAPE1", SFX_EFFECT(0x362), "", 100, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_STG0_MONBAN_ESCAPE1", SFX_FLAG_EFX | 0x364, "", 100, 64, 0, 1, 0, 0, 0},
@@ -2412,7 +2412,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG1_GNB_ROAR1", SFX_EFFECT(0x4B), "", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_STG1_GNB_ROAR2", SFX_EFFECT(0x4B), "", 127, 64, 0, 30, 0, 0, 0},
     { "SFX_STG1_GNB_FLY1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
@@ -2478,7 +2478,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_TOGE_FLOAR_UP1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG1_CHORO_FALL1", SFX_EFFECT(0x40A), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG1_CHORO_G_WAIT1", SFX_EFFECT(0x409), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG1_CHORO_G_WAIT2", SFX_EFFECT(0x40A), "", 60, 64, 0, 1, 0, 0, 0},
@@ -2519,7 +2519,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX__STG1_ROCK_BREAK1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG1_HONE_ACCESS1", SFX_EFFECT(0x52A), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG1_HONE_DOWN1", SFX_EFFECT(0), "SE2_AUD_THROW_OBJ2", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_STG1_HONE_DOWN1_2", SFX_EFFECT(0xC3), "", 110, 64, 0, 1, 0, 20, 0},
@@ -2584,7 +2584,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX__STG1_PERA1", SFX_FLAG_EFX, "SE2_EVT_1_PERA_BRIDGE1", 0, 64, 0, 1, 0, 0, 0},
     {"SFX__STG1_PERA2", SFX_FLAG_EFX, "SE2_EVT_1_PERA_BRIDGE2", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX__STG1_PERA_STEP1", SFX_EFFECT(0), "SE2_EVT_1_PERA_STEP1", 0, 64, 0, 40, 0, 0, 0},
     { "SFX_STG1_QUAK_PERA1", SFX_EFFECT(0x166), "", 120, 64, 0, 20, 0, 0, 0},
 #else
@@ -2592,7 +2592,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG1_QUAK_PERA1", SFX_FLAG_EFX | 0x16A, "", 120, 64, 0, 20, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG1_TOGE_UP1", SFX_EFFECT(0x170), "", 100, 64, 0, 20, 0, 0, 0},
 #else
     {"SFX_STG1_TOGE_UP1", SFX_FLAG_EFX | 0x174, "", 100, 64, 0, 20, 0, 0, 0},
@@ -2606,7 +2606,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_STG2_ROAD_APPEAR1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG2_VIVI_NECKLACE1", SFX_EFFECT(0x4A7), "btl_e_3rd_hoist1_22k", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG2_MAJO_NECKLACE_STEAL1", SFX_EFFECT(0xAB), "", 70, 64, 0, 1, 0, 0, 0x800},
     { "SFX_STG2_MAJO_NECKLACE_STEAL2", SFX_EFFECT(0x4A2), "btl_e_3rd_cloth1_22k", 70, 64, 0, 1, 0, 15, 0xD55},
@@ -2668,7 +2668,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_STG2_PUNISWITCH_RIDE1", SFX_FLAG_EFX | 0x72, "", 60, 64, 0, 50, 0, 0, 0x800},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG2_PUNI_MOVE2_1", SFX_EFFECT(0x177), "", 45, 64, 0, 1, 0, 0, 0},
     { "SFX_STG2_PUNI_MOVE2_2", SFX_EFFECT(0x178), "", 45, 64, 0, 1, 0, 0, 0},
     { "SFX_STG2_PUNI_MOVE2_3", SFX_EFFECT(0x179), "", 45, 64, 0, 1, 0, 0, 0},
@@ -2794,7 +2794,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG2_SLOT_TURN1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"SFX__STG2_SLOT_GOOUT1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG2_QUAKE1", SFX_EFFECT(0x164), "", 100, 64, 0, 40, 0, 0, 0},
     { "SFX_STG2_QUAKE2", SFX_EFFECT(0x164), "", 100, 64, 0, 40, 0, 0, 0},
     { "SFX_STG2_WATER_FLOW1", SFX_EFFECT(0x4), "", 100, 64, 0, 60, 0, 0, 0},
@@ -2843,7 +2843,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX__STG2_BOSS_APPEAR1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_STG2_BOSS_EXPLOSION1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG2_BOSS_APPEAR1", SFX_EFFECT(0x57), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG2_BOSS_APPEAR2", SFX_EFFECT(0x163), "", 127, 64, 0, 1, 0, 0, 0xFAAB},
     { "SFX_STG2_BOSS_LIGHT1", SFX_SONG(0x4, 0x37), "", 100, 64, 0, 1, 0, 0, 0},
@@ -2863,7 +2863,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG2_BOSS_MOVE1R", SFX_FLAG_EFX | 0x106, "", 90, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG2_3RD_EXPLSION1", SFX_EFFECT(0x2F3), "", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_STG2_3RD_EXPLSION2", SFX_SONG(0x4, 0x4A), "", 90, 64, 0, 30, 0, 0, 0},
     { "SFX_STG2_3RD_EXPLSION3", SFX_EFFECT(0x1C5), "", 127, 64, 0, 40, 0, 0, 0},
@@ -2882,7 +2882,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_AIR_SHIP_DRIVE1", SFX_EFFECT(0x53), "", 60, 64, 0, 1, 0, 0, 0x555},
     { "SFX_STG3_AIR_SHIP_DRIVE1_2", SFX_EFFECT(0x197), "", 65, 64, 0, 1, 0, 0, 0x555},
     { "SFX_STG3_AIR_SHIP_DRIVE2", SFX_SONG(0x4, 0x2A), "", 70, 64, 0, 1, 0, 0, 0},
@@ -2955,7 +2955,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG3_WIN_AUDIENCE1", SFX_FLAG_EFX | 0x4F, "", 120, 64, 0, 1, 0, 0, 0},
     {"SFX_STG3_WIN_AUDIENCE2", SFX_FLAG_EFX | 0x4F, "", 120, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_FIGHTING1", SFX_EFFECT(0x397), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_FIGHTING2", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_FIGHTING3", SFX_EFFECT(0x314), "", 100, 64, 0, 1, 0, 0, 0},
@@ -3003,7 +3003,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX__STG3_NAME_ENTRY1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_DUCT_KOUSHI_HIT1", SFX_EFFECT(0x18C), "SE2_EVT_3_AIRDUCT_HIT1", 110, 64, 0, 40, 0, 0, 0},
     { "SFX_STG3_DUCT_KOUSHI_FALL1", SFX_EFFECT(0x13F), "", 100, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
@@ -3061,7 +3061,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX__STG3_PERA_KAIDAN_APPEAR1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_GUARDMAN_MOVE1L", SFX_EFFECT(0x397), "", 70, 64, 0, 1, 0, 0, 0xFAAB},
     { "SFX_STG3_GUARDMAN_MOVE1R", SFX_EFFECT(0x398), "", 70, 64, 0, 1, 0, 0, 0xFAAB},
 #else
@@ -3069,7 +3069,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG3_GUARDMAN_MOVE1R", SFX_FLAG_EFX | 0x39A, "", 70, 64, 0, 1, 0, 0, 0xFAAB},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_GANSU_MOVE1L", SFX_EFFECT(0xBC), "", 70, 64, 0, 1, 0, 0, 0x555},
     { "SFX_STG3_GANSU_MOVE1R", SFX_EFFECT(0xBD), "", 70, 64, 0, 1, 0, 0, 0x555},
 #else
@@ -3080,7 +3080,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG3_BLED_MOVE1L_", SFX_FLAG_EFX, "SE2_BOS_GANSU_MOVE1L", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_STG3_BLED_MOVE1R_", SFX_FLAG_EFX, "SE2_BOS_GANSU_MOVE1R", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_KINOSIKOWA_MOVE1L", SFX_EFFECT(0x193), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_KINOSIKOWA_MOVE1R", SFX_EFFECT(0x194), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_KINOSIKOWA_LANDING1", SFX_EFFECT(0x192), "", 70, 64, 0, 1, 0, 0, 0},
@@ -3092,7 +3092,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG3_KINOSIKOWA_JUMP1", SFX_FLAG_EFX | 0x4FF, "btl_e_pata_move2_22k", 50, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_HOTDOG_MOVE1L", SFX_EFFECT(0x207), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_HOTDOG_MOVE1R", SFX_EFFECT(0x208), "", 60, 64, 0, 1, 0, 0, 0},
 #else
@@ -3108,7 +3108,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_STG3_POGU_MOVE1", SFX_FLAG_EFX, "SE6_BTL_E_BASA_MOVE1", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_ISIN_MOVE1L", SFX_EFFECT(0x415), "btl_e_emon_walkl1_22k", 100, 64, 0, 0, 0, 0, 0xF800},
     { "SFX_STG3_ISIN_MOVE1R", SFX_EFFECT(0x416), "btl_e_emon_walkr2_22k", 100, 64, 0, 0, 0, 0, 0xF800},
     { "SFX_STG3_ISIN_JUMP1", SFX_EFFECT(0x191), "SE3_EVT_K_JUMP1", 100, 64, 0, 0, 0, 0, 0xFD55},
@@ -3125,7 +3125,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG3_KOOPA_MOVE1R", SFX_FLAG_EFX | 0x4A, "", 75, 64, 0, 1, 0, 0, 0},
     {"SFX_STG3_KOOPA_JUMP1", SFX_FLAG_EFX | 0x24, "evt_k_jump1_16k", 110, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_CHURINA_MOVE1L", SFX_EFFECT(0), "SE4_FLD_P_WALK_NORMAL1", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_CHURINA_MOVE1R", SFX_EFFECT(0), "SE4_FLD_P_WALK_NORMAL2", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_CHURINA_LANDING1", SFX_EFFECT(0), "SE4_FLD_P_LANDING1", 0, 64, 0, 1, 0, 0, 0},
@@ -3144,7 +3144,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG4_NPC_MOVE1L", SFX_EFFECT(0x207), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG4_NPC_MOVE1R", SFX_EFFECT(0x208), "", 60, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
@@ -3289,7 +3289,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG5_SHIP_ARRIVAL1_3", SFX_FLAG_SONG | 0x43232, "", 100, 64, 0, 30, 0, 0, 0},
     {"SFX_STG5_SHIP_ARRIVAL1_4", SFX_FLAG_SONG | 0x43333, "", 100, 64, 0, 30, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG5_MARCO_MOVE1L", SFX_EFFECT(0x207), "", 70, 64, 0, 1, 0, 0, 0xFAAB},
     { "SFX_STG5_MARCO_MOVE1R", SFX_EFFECT(0x208), "", 70, 64, 0, 1, 0, 0, 0xFAAB},
     { "SFX_STG5_MARCO_LANDING1", SFX_EFFECT(0x206), "", 60, 64, 0, 0, 0, 0, 0xFAAB},
@@ -3427,7 +3427,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG5_TOGE_IN2", SFX_FLAG_EFX, "", 0, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG5_MINIGAME_SHIP_SINK1", SFX_SONG(0x4, 0x47), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG5_MINIGAME_SHIP_FLOAT1", SFX_EFFECT(0x554), "", 80, 64, 0, 1, 0, 30, 0x555},
     { "SFX_STG5_MINIGAME_WAVE1", SFX_EFFECT(0xF), "", 100, 64, 0, 1, 0, 0, 0},
@@ -3525,7 +3525,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_STG5_KANBU_TURN1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG5_SHIP_KOL_MOVE1", SFX_EFFECT(0x76), "", 95, 64, 0, 30, 0, 0, 0},
     { "SFX_STG5_SHIP_KOL_MAST1", SFX_EFFECT(0x52D), "", 95, 64, 0, 30, 0, 0, 0},
     { "SFX_STG5_WAVE1", SFX_EFFECT(0xF), "", 95, 64, 0, 30, 0, 0, 0},
@@ -3535,7 +3535,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG5_WAVE1", SFX_FLAG_EFX | 0xF, "", 95, 64, 0, 30, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG5_KOBURON_OUT1", SFX_EFFECT(0x4F6), "btl_e_pakkun_move1_22k", 80, 64, 0, 1, 0, 0, 0x555},
     { "SFX_STG5_KOBURON_IN1", SFX_EFFECT(0x4F7), "btl_e_pakkun_move2_22k", 80, 64, 0, 1, 0, 0, 0x555},
 #else
@@ -3546,7 +3546,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG6_ROSE_MOVE1L", SFX_EFFECT(0x193), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG6_ROSE_MOVE1R", SFX_EFFECT(0x194), "", 100, 64, 0, 1, 0, 0, 0},
 #else
@@ -3554,7 +3554,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG6_ROSE_MOVE1R", SFX_FLAG_EFX | 0x198, "", 100, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG6_TRAIN_BELL1", SFX_EFFECT(0x1C4), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG6_TRAIN_MOVE1", SFX_SONG(0x1, 0x00), "", 120, 64, 0, 1, 0, 30, 0},
     { "SFX_STG6_TRAIN_MOVE1_2", SFX_SONG(0x1, 0x02), "", 120, 64, 0, 1, 0, 0, 0},
@@ -3582,7 +3582,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG6_TRAIN_CHIME1", SFX_FLAG_SONG | 0x40C0C, "", 70, 64, 0, 1, 0, 0, 0},
     {"SFX_STG6_TRAIN_HANDLE_MOVE1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG6_DRIVER_SIGN1", SFX_SONG(0x4, 0x1D), "", 120, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     { "SFX_STG6_GHOST_SHAKE1", SFX_EFFECT(0xDB), "", 100, 64, 0, 1, 0, 0, 0xF800},
@@ -3723,7 +3723,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG7_WHITE_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged_hard1_22k", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG7_WHITE_NICE1", SFX_EFFECT(0x487), "", 110, 64, 0, 1, 0, 8, 0},
     { "SFX_STG7_WHITE_GOOD1", SFX_EFFECT(0x482), "", 110, 64, 0, 1, 0, 8, 0},
@@ -3932,7 +3932,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG8_TOGE_APPEAR1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_STG8_TOGE_IN1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG8_KARON_APPEAR1", SFX_EFFECT(0x52A), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG8_KARON_DOWN1", SFX_EFFECT(0xC3), "", 110, 64, 0, 1, 0, 0, 0},
     { "SFX_STG8_KARON_LANDING1", SFX_EFFECT(0x4F3), "", 70, 64, 0, 1, 0, 0, 0},
@@ -4025,7 +4025,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG8_TBOX_APPEAR3", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_STG8_SWITCH_APPEAR1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG8_FLOOR_ROUND_START1", SFX_EFFECT(0x25C), "", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_STG8_STAR_LIGHTUP1", SFX_EFFECT(0x1F0), "", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_STG8_STAR_LIGHTUP2", SFX_EFFECT(0x1F1), "", 100, 64, 0, 1, 0, 0, 0},
@@ -4132,7 +4132,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG8_PEACH_SHINE1", SFX_FLAG_SONG | 0x45252, "", 100, 64, 0, 1, 0, 0, 0},
     {"SFX_STG8_MARIO_SHINE1", SFX_FLAG_SONG | 0x45353, "", 100, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG8_QUEEN_DIE1", SFX_SONG(0x4, 0x27), "", 120, 64, 0, 1, 0, 0, 0},
     { "SFX_STG8_QUEEN_DIE2", SFX_EFFECT(0x249), "", 110, 64, 0, 60, 0, 0, 0x800},
     { "SFX_STG8_QUEEN_DIE3", SFX_SONG(0x4, 0x28), "", 120, 64, 0, 1, 0, 0, 0},
@@ -4142,7 +4142,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG8_QUEEN_DIE3", SFX_FLAG_SONG | 0x42828, "", 120, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG8_CANDLE_DARK_OFF1", SFX_EFFECT(0x1E0), "", 85, 64, 0, 30, 0, 0, 0},
     { "SFX_STG8_CANDLE_ON1", SFX_EFFECT(0x1E3), "", 85, 64, 0, 30, 0, 0, 0},
 #else
@@ -4150,7 +4150,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_STG8_CANDLE_ON1", SFX_FLAG_EFX | 0x1E7, "", 85, 64, 0, 30, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG8_KURI_TBOX_LANDING1", SFX_EFFECT(0x388), "", 85, 64, 0, 1, 0, 0, 0xF556},
 #else
     {"SFX_STG8_KURI_TBOX_LANDING1", SFX_FLAG_EFX | 0x38A, "", 85, 64, 0, 1, 0, 0, 0xF556},
@@ -4159,7 +4159,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PEACH_MOVE1L", SFX_EFFECT(0x2E9), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_MOVE1R", SFX_EFFECT(0x2EA), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_LANDING1", SFX_EFFECT(0x2EB), "", 70, 64, 0, 1, 0, 0, 0},
@@ -4208,7 +4208,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_PEACH_TEC_ACTIVE1", SFX_FLAG_EFX | 0x1A, "evt_p_tec_active1_16k", 100, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PEACH_KEYBOARD1", SFX_EFFECT(0x20F), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_MAIL_SOUSIN1", SFX_EFFECT(0x1B), "evt_p_mail_send1_16k", 85, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_MAIL_SOUSIN2", SFX_EFFECT(0x1C), "evt_p_mail_send2_16k", 100, 64, 0, 1, 0, 0, 0},
@@ -4223,7 +4223,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_PEACH_DANCE_OK1", SFX_FLAG_EFX | 0x1F, "evt_p_dance_ok1_16k", 80, 64, 0, 1, 0, 0, 0},
     {"SFX_PEACH_DANCE_NG1", SFX_FLAG_EFX | 0x20, "evt_p_dance_ng1_16k", 80, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PEACH_3RD_P_MOVE1L", SFX_EFFECT(0x4AE), "btl_e_3rd_walkl1_22k", 85, 64, 0, 1, 0, 0, 0x2AB},
     { "SFX_PEACH_3RD_P_MOVE1R", SFX_EFFECT(0x4AF), "btl_e_3rd_walkr1_22k", 85, 64, 0, 1, 0, 0, 0x2AB},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
@@ -4265,7 +4265,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_PEACH_CHANGE_CLOTH1", SFX_FLAG_EFX | 0x21, "evt_p_change_cloth1_16k", 70, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PEACH_MACHINE_OPEN1", SFX_EFFECT(0x1D1), "", 75, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_MACHINE_SWITCH1", SFX_EFFECT(0x16F), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_MACHINE_SIREN1", SFX_EFFECT(0x210), "", 50, 64, 0, 1, 0, 0, 0},
@@ -4287,7 +4287,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_PEACH_TOUMEI2", SFX_FLAG_EFX | 0x1A0, "", 127, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PEACH_DRINK_MEDICINE1", SFX_EFFECT(0x4A4), "btl_e_3rd_drink1_22k", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_MINIMINI1", SFX_EFFECT(0x2FD), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_DEKADEKA1", SFX_EFFECT(0x2F6), "", 100, 64, 0, 1, 0, 0, 0},
@@ -4297,7 +4297,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_PEACH_DEKADEKA1", SFX_FLAG_EFX | 0x2F8, "", 100, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PEACH_BAREFOOT_MOVE1L", SFX_EFFECT(0x20D), "", 50, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_BAREFOOT_MOVE1R", SFX_EFFECT(0x20E), "", 50, 64, 0, 1, 0, 0, 0},
     { "SFX_PEACH_BAREFOOT_LANDING1", SFX_EFFECT(0x20E), "", 50, 64, 0, 1, 0, 0, 0xFAAB},
@@ -4311,7 +4311,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_PEACH_MONITOR_ON1", SFX_FLAG_EFX | 0x23, "evt_p_monitor_on1_16k", 80, 64, 0, 1, 0, 0, 0},
     {"SFX_PEACH_MONITOR_OFF1", SFX_FLAG_EFX | 0x23, "evt_p_monitor_off1_16k", 80, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PEACH_TEC_BUTTON1", SFX_EFFECT(0x16F), "", 100, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_PEACH_TEC_BUTTON1", SFX_FLAG_EFX | 0x173, "", 100, 64, 0, 1, 0, 0, 0},
@@ -4323,13 +4323,13 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_KUPPA_MOVE1", SFX_FLAG_EFX | 0x49, "", 75, 64, 0, 1, 0, 0, 0},
     {"SFX_KUPPA_MOVE2", SFX_FLAG_EFX | 0x4A, "", 75, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_KUPPA_ENEMY_DIE1", SFX_EFFECT(0x38B), "", 100, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_KUPPA_ENEMY_DIE1", SFX_FLAG_EFX | 0x38D, "", 100, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_KUPPA_LANDING1", SFX_EFFECT(0x4C), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_JUMP1", SFX_EFFECT(0x24), "evt_k_jump1_16k", 120, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_HIP_DROP1", SFX_EFFECT(0x25), "evt_k_hipdrop1_16k", 100, 64, 0, 1, 0, 0, 0},
@@ -4343,7 +4343,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_KUPPA_FIRE_BREATH1", SFX_FLAG_EFX | 0x202, "SE2_BTL_STG_FIRE1", 110, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_KUPPA_BIG1", SFX_EFFECT(0x245), "SE3_EVT_K_BIG1", 110, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_SMALL1", SFX_EFFECT(0x39F), "SE3_EVT_K_SMALL1", 110, 64, 0, 1, 0, 0, 0},
 #else
@@ -4359,7 +4359,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_KUPPA_POST_SLIDE1", SFX_FLAG_EFX | 0x2D, "evt_k_post_slide1_16k", 80, 64, 0, 1, 0, 0, 0},
     {"SFX_KUPPA_STRUGGLE1", SFX_FLAG_EFX | 0x2E, "evt_k_struggle1_16k", 100, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_KUPPA_GOALIN1", SFX_EFFECT(0x14C), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_FIREWORKS1", SFX_EFFECT(0x139), "", 100, 64, 0, 30, 0, 0, 0},
 #else
@@ -4367,7 +4367,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_KUPPA_FIREWORKS1", SFX_FLAG_EFX | 0x13D, "", 100, 64, 0, 10, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_KUPPA_3RD_WATER_FALL1", SFX_EFFECT(0x214), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_GESSO_MOVE1", SFX_EFFECT(0x2F), "evt_k_gesso_move1_16k", 90, 64, 0, 1, 0, 0, 0},
 #else
@@ -4375,7 +4375,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_KUPPA_GESSO_MOVE1", SFX_FLAG_EFX | 0x2F, "evt_k_gesso_move1_16k", 90, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_KUPPA_DOKAN_BREAK1", SFX_EFFECT(0x376), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_POST_THROW1", SFX_EFFECT(0x204), "", 120, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_MEAT_APPEAR1", SFX_EFFECT(0x3DD), "", 100, 64, 0, 1, 0, 0, 0},
@@ -4387,7 +4387,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_KUPPA_COUNTER1", SFX_FLAG_EFX | 0x30, "evt_k_counter1_16k", 100, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_KUPPA_ANGRY1", SFX_EFFECT(0x166), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_ANGRY2", SFX_EFFECT(0x49), "", 90, 64, 0, 1, 0, 0, 0xF800},
 #else
@@ -4398,7 +4398,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_KUPPA_WALL_BREAK1", SFX_FLAG_EFX, "", 0, 64, 0, 1, 0, 0, 0},
     {"SFX_KUPPA_AIRSHIP_MOVE1", SFX_FLAG_EFX | 0x31, "evt_k_airship_move1_16k", 100, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_KUPPA_KAMEBABA_MOVE1L", SFX_EFFECT(0x202), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_KAMEBABA_MOVE1R", SFX_EFFECT(0x203), "", 70, 64, 0, 1, 0, 0, 0},
     { "SFX_KUPPA_KAMEBABA_FLY1", SFX_EFFECT(0x32), "evt_k_kamebaba_fly1_16k", 100, 64, 0, 1, 0, 0, 0},
@@ -4539,7 +4539,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_EPILOGUE_KOR_SHIP_MOVE1", SFX_EFFECT(0x1AF), "", 70, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     { "SFX_EVT_EPILOGUE_3RD_BATTEN1", SFX_EFFECT(0x20C), "", 65, 64, 0, 1, 0, 5, 0},
@@ -4561,7 +4561,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG0_AMB_WATERDROP1", SFX_EFFECT(0x7A), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG0_AMB_WATERDROP2", SFX_EFFECT(0x7A), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_AMB_WATERDROP1", SFX_EFFECT(0), "SE2_AMB_WATERDROP1", 0, 64, 0, 1, 0, 0, 0},
@@ -4582,7 +4582,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG3_AMB_OBJ_SCREEN1", SFX_EFFECT(0x70), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_AMB_OBJ_SCREEN2", SFX_EFFECT(0x71), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG3_AMB_KANBAN1", SFX_EFFECT(0x9), "", 100, 64, 0, 1, 0, 0, 0},
@@ -4602,7 +4602,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG4_AMB_WATERDROP1", SFX_EFFECT(0x7A), "", 60, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_STG4_AMB_WATERDROP1", SFX_FLAG_EFX | 0x7C, "", 60, 64, 0, 1, 0, 0, 0},
@@ -4610,7 +4610,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG5_AMB_POT1", SFX_EFFECT(0), "", 0, 64, 0, 1, 0, 0, 0},
     { "SFX_STG5_AMB_POT2", SFX_EFFECT(0), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG5_AMB_WATERDROP2", SFX_EFFECT(0x7A), "", 60, 64, 0, 1, 0, 0, 0},
@@ -4622,7 +4622,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG6_AMB_WEATHERCOCK1", SFX_EFFECT(0x7F), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_STG5_AMB_WATERDROP1", SFX_EFFECT(0x7A), "", 60, 64, 0, 1, 0, 0, 0xFAAB},
 #else
@@ -4632,7 +4632,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_STG7_AMB_WINDVANE1", SFX_EFFECT(0x7F), "", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_STG7_AMB_CEILING_MOVE1", SFX_EFFECT(0x9), "", 50, 64, 0, 1, 0, 0, 0},
     { "SFX_STG7_AMB_GEAR1", SFX_EFFECT(0x64), "", 70, 64, 0, 15, 0, 0, 0},
@@ -4650,7 +4650,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_GAME_TELESA_MOVE1", SFX_EFFECT(0x459), "btl_e_telesa_toumei1_22k.aif", 60, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_GAME_TELESA_MOVE2", SFX_EFFECT(0x458), "btl_e_telesa_toumei1_22k.aif", 60, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
@@ -4683,7 +4683,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_EVT_GAME_RESULT_COUNT1", SFX_FLAG_EFX | 0x30, "", 100, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_GAME_BOAT_WATER1", SFX_EFFECT(0x62), "", 40, 64, 0, 1, 0, 0, 0xFD55},
     { "SFX_EVT_GAME_BOAT_BARREL1", SFX_EFFECT(0x39C), "", 100, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_GAME_BOAT_UZUSIO1", SFX_SONG(0x4, 0x65), "", 100, 64, 0, 1, 0, 0, 0},
@@ -4695,7 +4695,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_EVT_GAME_BOAT_UZUSIO2", SFX_FLAG_SONG | 0x44747, "", 70, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_GAME_SLIT_NPC_MOVE1L", SFX_EFFECT(0x207), "", 50, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_GAME_SLIT_NPC_MOVE1R", SFX_EFFECT(0x208), "", 50, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_GAME_SLIT_NPC_JUMP1", SFX_EFFECT(0x4FD), "btl_e_pata_move2_22k", 50, 64, 0, 1, 0, 0, 0},
@@ -4708,7 +4708,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_LOTTERY_BOMB_BURST1", SFX_EFFECT(0x123), "btl_e_heavyb_att3_22k", 120, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_LOTTERY_BOMB_BURST2", SFX_EFFECT(0x379), "", 110, 64, 0, 1, 0, 0, 0xF800},
 #else
@@ -4719,7 +4719,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_FORTUNE_CARD_MOVE1", SFX_SONG(0x4, 0x0E), "", 80, 64, 0, 1, 0, 25, 0},
     { "SFX_EVT_FORTUNE_CARD_MOVE2", SFX_EFFECT(0x1F4), "", 120, 64, 0, 1, 0, 20, 0},
     { "SFX_EVT_FORTUNE_CARD_MOVE3", SFX_SONG(0x4, 0x0F), "", 80, 64, 0, 1, 0, 20, 0},
@@ -4782,13 +4782,13 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_REQUEST_CHURINA_KISS1", SFX_EFFECT(0x338), "", 100, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_EVT_REQUEST_CHURINA_KISS1", SFX_FLAG_EFX | 0x33A, "", 100, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_REQUEST_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_EVT_REQUEST_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 1, 0, 0, 0},
@@ -4797,7 +4797,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_COOK_COOKING1", SFX_EFFECT(0x7C), "", 85, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_COOK_COOKING2", SFX_SONG(0x7, 0x72), "", 80, 64, 0, 1, 0, 0, 0},
     { "SFX_EVT_COOK_COOKING3", SFX_EFFECT(0x1F3), "", 125, 64, 0, 1, 0, 0, 0},
@@ -4808,7 +4808,7 @@ SoundEffectEntry pssfxlist[] = {
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_EVT_COOK_FIRE1", SFX_EFFECT(0x312), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_EVT_COOK_LIGHT1", SFX_EFFECT(0xCB), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_EVT_COOK_EXPLOSION1", SFX_EFFECT(0x123), "SE4_BTL_P_THUNDERS_ATT3", 100, 64, 0, 0, 0, 0, 0},
@@ -4821,7 +4821,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PARTY_IN1", SFX_EFFECT(0x151), "SE2_PARTY_IN2", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_PARTY_OUT1", SFX_EFFECT(0x35E), "SE2_PARTY_OUT2", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_PARTY_CHANGE1", SFX_EFFECT(0), "SE2_PARTY_CHANGE1", 0, 64, 0, 0, 0, 0, 0},
@@ -4908,7 +4908,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_FLD_MARIO_DAMAGED1", SFX_EFFECT(0x314), "", 100, 64, 1, 0, 0, 0, 0},
     { "SFX_BTL_FLD_ENEMY_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged1_normal1_22k", 100, 64, 1, 0, 0, 0, 0},
 #else
@@ -4917,7 +4917,7 @@ SoundEffectEntry pssfxlist[] = {
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_POS_CHANGE1", SFX_EFFECT(0x255), "SE4_BTL_S_CHANGE_POSITION1", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BTL_POS_CHANGE1", SFX_FLAG_EFX | 0x25C, "SE4_BTL_S_CHANGE_POSITION1", 100, 64, 0, 0, 0, 0, 0},
@@ -4925,7 +4925,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_BTL_UP_SCREEN1", SFX_FLAG_EFX, "", 0, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MARIO_BATTLE_MOVE1L", SFX_EFFECT(0x397), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_MARIO_BATTLE_MOVE1R", SFX_EFFECT(0x398), "", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -4934,7 +4934,7 @@ SoundEffectEntry pssfxlist[] = {
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MARIO_BATTLE_JUMP1", SFX_EFFECT(0x217), "", 0, 64, 0, 0, 0, 0, 0},
     { "SFX_MARIO_JUMP_LANDING1", SFX_EFFECT(0x385), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_MARIO_HAMMER_HOLD1", SFX_EFFECT(0x128), "", 100, 64, 0, 0, 0, 0, 0},
@@ -4948,7 +4948,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_MARIO_HAMMER_HOLD3", SFX_FLAG_EFX | 0x12D, "", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MARIO_HAMMER_SWING1", SFX_EFFECT(0x380), "", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_MARIO_HAMMER_SWING2", SFX_EFFECT(0x381), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_MARIO_HAMMER_SWING3", SFX_EFFECT(0x382), "", 100, 64, 0, 0, 0, 0, 0},
@@ -4960,7 +4960,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_BTL_MARIO_EAT1", SFX_FLAG_EFX, "SE2_FLD_M_EAT1", 0, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_ATTACK_MISS1", SFX_EFFECT(0x30E), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_ATTACK_MISS2", SFX_EFFECT(0x30F), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_ATTACK_MISS3", SFX_EFFECT(0x310), "", 90, 64, 0, 0, 0, 0, 0},
@@ -5034,7 +5034,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BTL_JUMP_DOKAN1", SFX_FLAG_EFX, "", 0, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_JUMP_CONTINUE1", SFX_EFFECT(0x31A), "", 0, 64, 0, 0, 0, 10, 0},
     { "SFX_BTL_JUMP_CONTINUE2", SFX_EFFECT(0x31B), "", 100, 64, 0, 0, 0, 10, 0},
     { "SFX_BTL_JUMP_CONTINUE3", SFX_EFFECT(0x31C), "", 100, 64, 0, 0, 0, 10, 0},
@@ -5156,7 +5156,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_CURSOR_MOVE1", SFX_EFFECT(0x475), "SE1_SELECT5", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_CURSOR_MOVE2", SFX_EFFECT(0x476), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_CURSOR_OK1", SFX_EFFECT(0x477), "", 95, 64, 0, 0, 0, 0, 0},
@@ -5323,7 +5323,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX__BTL_SYS_AP_UP1", SFX_FLAG_EFX, "SE2_BTL_SYS_AP_UP1", 0, 64, 0, 0, 0, 0, 0},
     {"SFX__BTL_SYS_AP_DOWN1", SFX_FLAG_EFX, "SE2_BTL_SYS_AP_DOWN1", 0, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_SYSTEM_NICE_25PERCENT1", SFX_EFFECT(0x488), "", 110, 64, 0, 0, 0, 8, 0},
     { "SFX_SYSTEM_NICE_50PERCENT1", SFX_EFFECT(0x489), "", 110, 64, 0, 0, 0, 8, 0},
     { "SFX_SYSTEM_NICE1", SFX_EFFECT(0x487), "", 110, 64, 0, 0, 0, 8, 0},
@@ -5349,7 +5349,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_SYSTEM_ACROBAT1", SFX_FLAG_EFX | 0x46E, "", 80, 64, 0, 0, 0, 8, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_MARIO_GUARD1", SFX_EFFECT(0x315), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_STAR_POINT_GET1", SFX_EFFECT(0x365), "", 60, 64, 0, 0, 0, 0, 0},
     { "SFX_NOT_CHOICE1", SFX_EFFECT(0x25F), "", 100, 64, 0, 0, 0, 0, 0},
@@ -5359,7 +5359,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_NOT_CHOICE1", SFX_FLAG_EFX | 0x266, "", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AC_PI1", SFX_EFFECT(0x35C), "", 60, 64, 0, 0, 0, 0, 0},
     { "SFX_AC_PONE1", SFX_EFFECT(0x35B), "", 70, 64, 0, 0, 0, 0, 0},
     { "SFX_AC_POWER_GAUGE1", SFX_EFFECT(0x150), "SE4_BTL_S_AC_METER1", 70, 64, 0, 0, 0, 0, 0},
@@ -5372,7 +5372,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AC_COMMAND_OK1", SFX_FLAG_EFX | 0x1F, "", 80, 64, 0, 0, 0, 0, 0},
     {"SFX_AC_COMMAND_NG1", SFX_FLAG_EFX | 0x20, "", 80, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AC_CURSOR_MOVE1", SFX_EFFECT(0x152), "", 80, 64, 0, 0, 0, 0, 0x555},
     { "SFX_AC_GAUGE_MOVE1", SFX_EFFECT(0x153), "", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_AC_BUTTON_PUSH1", SFX_EFFECT(0x35C), "", 60, 64, 0, 0, 0, 0, 0x800},
@@ -5387,7 +5387,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_SPECIAL_AC_PONE1", SFX_FLAG_EFX, "SE4_BTL_S_AC_S_END1", 0, 64, 0, 0, 0, 0, 0},
     {"SFX_AC_SPECIAL1", SFX_FLAG_EFX, "SE4_BTL_S_AC_S_METER1", 0, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_SLOT_START1", SFX_SONG(0x9, 0x77), "", 75, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_SLOT_SUCCESS1", SFX_SONG(0x9, 0x78), "", 75, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
@@ -5420,7 +5420,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_SAC_START1", SFX_SONG(0x4, 0x1C), "", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_SAC_START2", SFX_EFFECT(0x135), "", 70, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_SAC_START3", SFX_EFFECT(0x136), "", 110, 64, 0, 0, 0, 0, 0},
@@ -5432,7 +5432,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_BTL_SAC_SUCCESS1", SFX_FLAG_EFX, "", 0, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_SAC_HEART_SHOOT1", SFX_EFFECT(0x133), "", 70, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_SAC_HEART_SHOOT2", SFX_EFFECT(0x4FD), "", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_SAC_HEART_SHOOT3", SFX_EFFECT(0x306), "", 100, 64, 0, 0, 0, 0, 0},
@@ -5529,7 +5529,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_PARTY_BATTLE_SUBMOVE1L", SFX_EFFECT(0x3BD), "", 50, 64, 0, 0, 0, 0, 0},
     { "SFX_PARTY_BATTLE_SUBMOVE1R", SFX_EFFECT(0x3BE), "", 50, 64, 0, 0, 0, 0, 0},
     { "SFX_PARTY_BATTLE_SUBHANG1", SFX_EFFECT(0x3BC), "", 50, 64, 0, 0, 0, 0, 0},
@@ -5731,7 +5731,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENEMY_DIE1", SFX_EFFECT(0x412), "SE1_ENEMY_GO_OUT2", 55, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     { "SFX_FLD_ENM_HONENOKO_MOVE1L", SFX_EFFECT(0x4F2), "", 55, 64, 0, 1, 0, 0, 0},
@@ -5946,7 +5946,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_ENEMY_DIE1_1", SFX_EFFECT(0x411), "btl_e_die1_1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_ENEMY_DIE1_2", SFX_EFFECT(0x412), "btl_e_die1_2_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_DAMAGE_FIRE1", SFX_EFFECT(0x40C), "btl_e_damaged_fire1_22k", 95, 64, 0, 0, 0, 0, 0},
@@ -5965,7 +5965,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_ITEM_USE1", SFX_EFFECT(0x423), "btl_e_item_use1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_INSIDE1", SFX_EFFECT(0x45A), "btl_e_turned1_22k", 90, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_INSIDE2", SFX_EFFECT(0x45B), "btl_e_turned2_22k", 85, 64, 0, 0, 0, 0, 0},
@@ -5990,7 +5990,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_HONENOKO_SEND_GROUP1", SFX_EFFECT(0x503), "btl_e_throw_poi1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HONENOKO_SEND_GROUP2", SFX_EFFECT(0x504), "btl_e_throw_pote1_22k", 110, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
@@ -6026,7 +6026,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KILLER_MOVE1", SFX_EFFECT(0x431), "btl_e_killer_move1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KILLER_ATTACK1", SFX_EFFECT(0x42E), "btl_e_killer_att1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KILLER_CHARGE1", SFX_EFFECT(0x430), "btl_e_killer_charge1_22k", 95, 64, 0, 0, 0, 0, 0},
@@ -6036,7 +6036,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_KILLER_CHARGE1", SFX_FLAG_EFX | 0x432, "btl_e_killer_charge1_22k", 95, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KILLER_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_KILLER_DAMAGED1", SFX_FLAG_EFX | 0x40F, "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6044,7 +6044,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KILLER_CANNON1", SFX_EFFECT(0x41B), "btl_e_firling1_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KILLER_CANNON2", SFX_EFFECT(0x41B), "btl_e_firling1_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KILLER_CANNON3", SFX_EFFECT(0x41B), "btl_e_firling1_22k", 110, 64, 0, 0, 0, 0, 0},
@@ -6058,7 +6058,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_KILLER_CANNON_CHARGE1", SFX_FLAG_EFX | 0x431, "btl_e_charge1_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KILLER_CANON_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_KILLER_CANON_DAMAGED1", SFX_FLAG_EFX | 0x40F, "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6068,7 +6068,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KUMO_MOVE1", SFX_EFFECT(0x4EA), "btl_e_move_float1_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KUMO_MOVE2", SFX_EFFECT(0x4EB), "btl_e_move_float2_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KUMO_MOVE3", SFX_EFFECT(0x4EC), "btl_e_move_float3_22k", 110, 64, 0, 0, 0, 0, 0},
@@ -6088,7 +6088,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KUMO_CHARGE1", SFX_EFFECT(0x4D7), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KUMO_CHARGE_ATTACK1", SFX_EFFECT(0x2F3), "エフェクト雷の音", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6099,7 +6099,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_DOKU_KUMO_CHARGE1", SFX_EFFECT(0x4D7), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_DOKU_KUMO_CHARGE_ATTACK1", SFX_EFFECT(0x2FE), "se4_btl_c_poison1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6109,7 +6109,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BLIZ_KUMO_CHARGE1", SFX_EFFECT(0x4D7), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BLIZ_KUMO_CHARGE_ATTACK1", SFX_EFFECT(0x332), "se4_btl_p_clau_breath2_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6121,13 +6121,13 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KURI_JUMP1", SFX_EFFECT(0x424), "btl_e_jump_normal1_22k", 70, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_KURI_JUMP1", SFX_FLAG_EFX | 0x426, "btl_e_jump_normal1_22k", 70, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KURI_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KURI_LANDING1", SFX_EFFECT(0x433), "btl_e_landing_normal1_22k", 85, 64, 0, 0, 0, 0, 0},
 #else
@@ -6137,7 +6137,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KURI_MOVE1", SFX_EFFECT(0x43E), "btl_e_move_walk1l_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KURI_MOVE2", SFX_EFFECT(0x43F), "btl_e_move_walk1r_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KURI_LANDING_MISS1", SFX_EFFECT(0x432), "btl_e_landing_miss1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6149,7 +6149,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_TOGEKURI_MOVE1", SFX_EFFECT(0x43E), "btl_e_move_walk1l_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_TOGEKURI_MOVE2", SFX_EFFECT(0x43F), "btl_e_move_walk1r_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_TOGEKURI_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6161,7 +6161,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PATAKURI_MOVE1", SFX_EFFECT(0x448), "btl_e_pkuri_move1_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PATAKURI_MOVE2", SFX_EFFECT(0x449), "btl_e_pkuri_move2_22k", 90, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PATAKURI_MOVE3", SFX_EFFECT(0x44A), "btl_e_pkuri_move3_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6171,7 +6171,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_PATAKURI_MOVE3", SFX_FLAG_EFX | 0x44C, "btl_e_pkuri_move3_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PATAKURI_WAIT1", SFX_EFFECT(0x448), "btl_e_pkuri_move1_22k", 60, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PATAKURI_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6181,7 +6181,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_SAMBO_MOVE1", SFX_EFFECT(0x44D), "btl_e_sambo_move1_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_SAMBO_ATTACK1", SFX_EFFECT(0x456), "btl_e_charge1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_SAMBO_ATTACK3", SFX_EFFECT(0x456), "btl_e_charge1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6205,7 +6205,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_SAMBO_SEND_GROUP3", SFX_FLAG_EFX | 0x44D, "btl_e_pullout1_22k", 95, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_SAMBO_MOVE2", SFX_EFFECT(0x44E), "btl_e_jump_short1_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_SAMBO_MOVE3", SFX_EFFECT(0x44F), "btl_e_jump_normal1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_SAMBO_ATTACK6", SFX_EFFECT(0x44C), "btl_e_att_hard1_22k", 95, 64, 0, 0, 0, 0, 0},
@@ -6215,7 +6215,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_SAMBO_ATTACK6", SFX_FLAG_EFX | 0x44E, "btl_e_att_hard1_22k", 95, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_SAMBO_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_SAMBO_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6224,7 +6224,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_EMON_MOVE1", SFX_EFFECT(0x415), "btl_e_emon_walkl1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_EMON_MOVE2", SFX_EFFECT(0x416), "btl_e_emon_walkr2_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_EMON_MOVE3", SFX_EFFECT(0x413), "btl_e_charge1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6240,7 +6240,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_EMON_JUMP1", SFX_FLAG_EFX | 0x195, "", 100, 64, 0, 0, 0, 0, 0x800},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_EMON_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged1_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_EMON_DAMAGED1", SFX_FLAG_EFX | 0x40F, "btl_e_damaged1_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6249,7 +6249,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_3RD1_MOVE1", SFX_EFFECT(0x4AE), "btl_e_3rd_walkl1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_3RD1_MOVE2", SFX_EFFECT(0x4AF), "btl_e_3rd_walkr1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_3RD1_MOVE3", SFX_EFFECT(0x4AC), "btl_e_3rd_swing1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6277,7 +6277,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_3RD1_MISS1", SFX_FLAG_EFX | 0x4AC, "btl_e_3rd_miss1_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_3RD1_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_3rd_damaged1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_3RD1_LANDING1", SFX_EFFECT(0x433), "btl_e_3rd_landing1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6287,7 +6287,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_3RD2_ATTACK1", SFX_EFFECT(0x4A6), "btl_e_3rd_fumble1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_3RD2_ATTACK2", SFX_EFFECT(0x4A7), "btl_e_3rd_hoist1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_3RD2_ATTACK3", SFX_EFFECT(0x4A8), "btl_e_3rd_hoist2_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6311,7 +6311,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_3RD2_CRASH1", SFX_FLAG_EFX | 0x4A5, "btl_e_3rd_crash1_22k", 80, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_3RD2_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_3rd_damaged1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_3RD2_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_3rd_damaged1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6319,7 +6319,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_CHORO1_MOVE1", SFX_EFFECT(0x405), "btl_e_choro_move1_22k", 75, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_CHORO1_ATTACK1_1", SFX_EFFECT(0x3FF), "btl_e_choro_att1_1_22k", 60, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_CHORO1_ATTACK1_2", SFX_EFFECT(0x400), "btl_e_choro_att1_2_22k", 65, 64, 0, 0, 0, 0, 0},
@@ -6333,7 +6333,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_CHORO1_ATTACK3", SFX_FLAG_EFX | 0x408, "btl_e_choro_move2_22k", 80, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_CHORO1_WAIT1", SFX_EFFECT(0x409), "btl_e_choro_wait1_22k", 55, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_CHORO1_WAIT2", SFX_EFFECT(0x40A), "btl_e_choro_wait2_22k", 55, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_CHORO1_LANDING1", SFX_EFFECT(0x404), "btl_e_choro_landing1_22k", 55, 64, 0, 0, 0, 0, 0},
@@ -6347,7 +6347,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_CHORO2_MOVE1", SFX_EFFECT(0x405), "btl_e_choro_move1_22k", 75, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_CHORO2_ATTACK1_1", SFX_EFFECT(0x3FF), "btl_e_choro_att1_1_22k", 60, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_CHORO2_ATTACK1_2", SFX_EFFECT(0x400), "btl_e_choro_att1_2_22k", 65, 64, 0, 0, 0, 0, 0},
@@ -6369,7 +6369,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_CHORO2_MAGIC1", SFX_FLAG_EFX | 0x250, "", 110, 64, 0, 0, 0, 0, 0x2AB},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_CHORO2_WAIT1", SFX_EFFECT(0x409), "btl_e_choro_wait1_22k", 55, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_CHORO2_WAIT2", SFX_EFFECT(0x40A), "btl_e_choro_wait2_22k", 55, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_CHORO2_LANDING1", SFX_EFFECT(0x404), "btl_e_choro_landing1_22k", 55, 64, 0, 0, 0, 0, 0},
@@ -6383,7 +6383,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_TELESA_MOVE1", SFX_EFFECT(0x459), "btl_e_telesa_move1_22k", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_ENM_TELESA_MOVE2", SFX_EFFECT(0x458), "btl_e_telesa_hide1_22k", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_ENM_TELESA_MOVE3", SFX_EFFECT(0x459), "btl_e_telesa_toumei1_22k.aif", 80, 64, 0, 30, 0, 0, 0},
@@ -6397,7 +6397,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_TELESA_ATTACK1", SFX_FLAG_EFX | 0x459, "btl_e_telesa_att1_22k", 100, 64, 0, 30, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_TELESA_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_telesa_damaged1_22k", 100, 64, 0, 1, 0, 0, 0},
 #else
     {"SFX_ENM_TELESA_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_telesa_damaged1_22k", 100, 64, 0, 1, 0, 0, 0},
@@ -6405,7 +6405,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_TOGEDA_MOVE1", SFX_EFFECT(0x506), "btl_e_togeda_move1_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_TOGEDA_MOVE2", SFX_EFFECT(0x507), "btl_e_togeda_move2_22k", 105, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_TOGEDA_MOVE3", SFX_EFFECT(0x508), "btl_e_togeda_move3_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6428,7 +6428,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_NOKO_JUMP1", SFX_EFFECT(0x4EF), "btl_e_noko_jump1_22k", 105, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_NOKO_MOVE1", SFX_EFFECT(0x4F0), "btl_e_noko_move1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_NOKO_MOVE2", SFX_EFFECT(0x4F1), "btl_e_noko_move2_22k", 105, 64, 0, 0, 0, 0, 0},
@@ -6444,7 +6444,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_NOKO_MOVE3R", SFX_FLAG_EFX | 0x4F5, "btl_e_noko_move3r_22k", 90, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_NOKO_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_NOKO_DAMAGED1", SFX_FLAG_EFX | 0x40F, "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6452,7 +6452,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_URANOKO_MOVE1", SFX_EFFECT(0x524), "btl_e_uranoko_att1_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_URANOKO_MOVE2", SFX_EFFECT(0x525), "btl_e_uranoko_att2_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_URANOKO_MOVE3", SFX_EFFECT(0x526), "btl_e_uranoko_att3_22k", 110, 64, 0, 0, 0, 0, 0},
@@ -6467,7 +6467,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_TOGENOKO_MOVE1", SFX_EFFECT(0x510), "btl_e_togenoko_jump1_22k", 105, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_TOGENOKO_MOVE2", SFX_EFFECT(0x511), "btl_e_togenoko_move1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_TOGENOKO_ATTACK1", SFX_EFFECT(0x526), "btl_e_uranoko_att3_22k", 110, 64, 0, 0, 0, 0, 0},
@@ -6495,7 +6495,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_TOGENOKO_MOVE6", SFX_FLAG_EFX | 0x517, "btl_e_togenoko_move5_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_TOGENOKO_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_TOGENOKO_DAMAGED1", SFX_FLAG_EFX | 0x40F, "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6505,7 +6505,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PATA_MOVE1", SFX_EFFECT(0x4FC), "btl_e_pata_move1_22k", 105, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PATA_MOVE2", SFX_EFFECT(0x4FD), "btl_e_pata_move2_22k", 105, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PATA_MOVE3", SFX_EFFECT(0x4FE), "btl_e_pata_move3_22k", 105, 64, 0, 0, 0, 0, 0},
@@ -6517,7 +6517,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_PATA_ATTACK1", SFX_FLAG_EFX | 0x501, "btl_e_pata_swing1_22k", 105, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PATA_WAIT1", SFX_EFFECT(0x500), "btl_e_pata_wait1_22k", 90, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PATA_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6527,7 +6527,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PAIDA_MOVE1", SFX_EFFECT(0x442), "btl_e_paida_move1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PAIDA_ATTACK1", SFX_EFFECT(0x440), "btl_e_paida_att1_22k", 90, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PAIDA_ATTACK2", SFX_EFFECT(0x441), "btl_e_paida_att2_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6539,7 +6539,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_PAIDA_MOVE2", SFX_FLAG_EFX | 0x444, "btl_e_paida_move1_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PAIDA_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged1_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_PAIDA_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged1_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6547,7 +6547,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BASA_MOVE1", SFX_EFFECT(0x4BD), "btl_e_basa_move1_22k", 120, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BASA_SUCK1", SFX_EFFECT(0x501), "btl_e_basa_suck1_22k", 105, 64, 0, 0, 0, 0, 0},
 #else
@@ -6555,7 +6555,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_BASA_SUCK1", SFX_FLAG_EFX | 0x503, "btl_e_basa_suck1_22k", 105, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BASA_WAIT1", SFX_EFFECT(0x4BD), "btl_e_basa_move1_22k", 95, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BASA_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged1_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6565,7 +6565,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BUBBLE_MOVE1", SFX_EFFECT(0x4CB), "btl_e_bubble_move1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BUBBLE_MOVE2", SFX_EFFECT(0x4CC), "btl_e_bubble_move1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BUBBLE_SPLIT1", SFX_EFFECT(0x4CA), "btl_e_bubble_split1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6583,7 +6583,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_BUBBLE_FIRE1", SFX_FLAG_EFX | 0x4CC, "btl_e_bubble_fire1_22k", 90, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BUBBLE_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_BUBBLE_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6591,7 +6591,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BARRI_ATTACK1", SFX_EFFECT(0x4B0), "btl_e_barri_att1_22k", 90, 64, 0, 0, 0, 27, 0},
     { "SFX_ENM_BARRI_ATTACK2", SFX_EFFECT(0x4B2), "btl_e_barri_att2_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BARRI_ATTACK3", SFX_EFFECT(0x4B3), "btl_e_barri_att3_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6615,7 +6615,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_BARRI_ATTACK10", SFX_FLAG_EFX | 0x4B3, "btl_e_barri_att10_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BARRI_BARRIER1", SFX_EFFECT(0x4BA), "", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BARRI_BARRIER_BREAK1", SFX_EFFECT(0x13D), "", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6623,7 +6623,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_BARRI_BARRIER_BREAK1", SFX_FLAG_EFX | 0x141, "", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BARRI_SPLIT1", SFX_EFFECT(0x4BB), "btl_e_barri_split1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BARRI_SPLIT2", SFX_EFFECT(0x4BC), "btl_e_barri_split2_22k", 110, 64, 0, 0, 0, 0, 0},
 #else
@@ -6633,7 +6633,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_ENM_PUTIBARRI_MOVE1", SFX_FLAG_EFX, "btl_e_barri_move1_22k", 0, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BARRI_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BARRI_DAMAGED2", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6643,7 +6643,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PANSY_ATTACK1", SFX_EFFECT(0x443), "btl_e_panzi_attack1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PANSY_ESCAPE1_1", SFX_EFFECT(0x445), "btl_panzi_escape1_1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PANSY_ESCAPE1_2", SFX_EFFECT(0x446), "btl_panzi_escape1_2_22k", 90, 64, 0, 0, 0, 0, 0},
@@ -6655,7 +6655,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_PANSY_ESCAPE2", SFX_FLAG_EFX | 0x449, "btl_panzi_escape2_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PANSY_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_PANSY_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6663,7 +6663,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_HANNYA_MOVE1", SFX_EFFECT(0x4CF), "btl_e_hannya_move1_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HANNYA_MOVE2", SFX_EFFECT(0x4D0), "btl_e_hannya_move2_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HANNYA_MOVE3", SFX_EFFECT(0x4D1), "btl_e_hannya_move3_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6675,7 +6675,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_HANNYA_CHARGE1", SFX_FLAG_EFX | 0x4D0, "btl_e_hannya_charge1_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_HANNYA_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_HANNYA_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6683,7 +6683,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_HUMMER_ATTACK1", SFX_EFFECT(0x420), "btl_e_hummer_att1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HUMMER_ATTACK2", SFX_EFFECT(0x421), "btl_e_hummer_att2_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HUMMER_ATTACK3", SFX_EFFECT(0x422), "btl_e_hummer_att3_22k", 90, 64, 0, 0, 0, 0, 0},
@@ -6693,7 +6693,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_HUMMER_ATTACK3", SFX_FLAG_EFX | 0x424, "btl_e_hummer_att3_22k", 90, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_HUMMER_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_HUMMER_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6702,7 +6702,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BOOME_ATTACK1", SFX_EFFECT(0x3FA), "btl_e_boome_att1_22k", 90, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BOOME_ATTACK2", SFX_EFFECT(0x3FB), "btl_e_boome_att2_22k", 90, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BOOME_ATTACK3", SFX_EFFECT(0x3FC), "btl_e_boome_att3_22k", 90, 64, 0, 0, 0, 0, 0},
@@ -6714,7 +6714,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_BOOME_ATTACK4", SFX_FLAG_EFX | 0x3FF, "btl_e_boome_att4_22k", 85, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BOOME_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_BOOME_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6722,7 +6722,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_FIREB_ATTACK1", SFX_EFFECT(0x419), "btl_e_fireb_att1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_FIREB_ATTACK2", SFX_EFFECT(0x41A), "btl_e_fireb_att2_22k", 80, 64, 0, 0, 0, 0, 0},
 #else
@@ -6730,7 +6730,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_FIREB_ATTACK2", SFX_FLAG_EFX | 0x41C, "btl_e_fireb_att2_22k", 80, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_FIREB_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_FIREB_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6738,7 +6738,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PAKKUN_MOVE1", SFX_EFFECT(0x4F6), "btl_e_pakkun_move1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PAKKUN_MOVE2", SFX_EFFECT(0x4F7), "btl_e_pakkun_move2_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PAKKUN_ATTACK1", SFX_EFFECT(0xA1), "aud_paku_eat1_22k", 105, 64, 0, 0, 0, 0, 0},
@@ -6752,7 +6752,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_PAKKUN_POISON1", SFX_FLAG_EFX | 0x4FA, "btl_e_pakkun_poison1_22k", 110, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PAKKUN_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_PAKKUN_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6760,7 +6760,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_HEAVYB_ATTACK1", SFX_EFFECT(0x41C), "btl_e_heavyb_att1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HEAVYB_ATTACK2", SFX_EFFECT(0x41D), "btl_e_bomb_spark1_22k", 120, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HEAVYB_ATTACK3", SFX_EFFECT(0x123), "btl_e_heavyb_att3_22k", 120, 64, 0, 0, 0, 0, 0},
@@ -6770,7 +6770,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_HEAVYB_ATTACK3", SFX_FLAG_EFX | 0x126, "btl_e_heavyb_att3_22k", 120, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_HEAVYB_WAIT1", SFX_EFFECT(0x124), "btl_e_bomb_ready1_22k", 70, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HEAVYB_WAIT2", SFX_EFFECT(0x41E), "btl_e_heavyb_fuse1_22k", 90, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_HEAVYB_WAIT3", SFX_EFFECT(0x41F), "btl_e_heavyb_wait2_22k", 60, 64, 0, 0, 0, 0, 0},
@@ -6784,7 +6784,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BOMB_MOVE1", SFX_EFFECT(0x3F6), "btl_e_bomb_move1_22k", 80, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BOMB_MOVE2", SFX_EFFECT(0x3F7), "btl_e_bomb_move2_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BOMB_MOVE3", SFX_EFFECT(0x3F8), "btl_e_bomb_move3_22k", 80, 64, 0, 0, 0, 0, 0},
@@ -6800,7 +6800,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_BOMB_ATTACK2", SFX_FLAG_EFX | 0x3F7, "btl_e_bomb_att1_22k", 90, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BOMB_WAIT1", SFX_EFFECT(0x124), "btl_e_bomb_ready1_22k", 70, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BOMB_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6810,7 +6810,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BORODO_MOVE1L", SFX_EFFECT(0x4C4), "btl_e_borodo_move1l_22k", 70, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BORODO_MOVE1R", SFX_EFFECT(0x4C5), "btl_e_borodo_move1r_22k", 70, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BORODO_INCLINE1", SFX_EFFECT(0x4C1), "btl_e_borodo_incline1_22k", 85, 64, 0, 0, 0, 0, 0},
@@ -6824,7 +6824,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_BORODO_WAIT1", SFX_FLAG_EFX | 0x4C9, "btl_e_borodo_wait1_22k", 60, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_BORODO_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BORODO_ATT1", SFX_EFFECT(0x4BF), "btl_e_borodo_att1_22k", 115, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_BORODO_LAUGH1", SFX_EFFECT(0x4C3), "btl_e_borodo_laugh1_22k", 80, 64, 0, 0, 0, 0, 0},
@@ -6840,7 +6840,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_MAHO_CHARGE1", SFX_EFFECT(0x437), "btl_e_charge1_22k", 100, 64, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     { "SFX_ENM_MAHO_MAGIC1", SFX_EFFECT(0x438), "btl_e_maho_magic1_22k", 90, 64, 0, 0, 0, 0, 0},
@@ -6876,7 +6876,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_MET_ATTACK1", SFX_EFFECT(0x4D8), "btl_e_met_att1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_MET_ATTACK2", SFX_EFFECT(0x4D9), "btl_e_met_att2_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_MET_MOVE1L", SFX_EFFECT(0x4DE), "btl_e_met_move1l_22k", 90, 64, 0, 0, 0, 0, 0},
@@ -6894,7 +6894,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_MET_JUMP1", SFX_FLAG_EFX | 0x4DE, "btl_e_met_jump1_22k", 105, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_MET_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged_hard1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_MET_LANDING1", SFX_EFFECT(0x4DD), "btl_e_met_landing1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_MET_SHELL1", SFX_EFFECT(0x4E1), "btl_e_met_shell1_22k", 110, 64, 0, 0, 0, 0, 0},
@@ -6904,7 +6904,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_MET_SHELL1", SFX_FLAG_EFX | 0x4E3, "btl_e_met_shell1_22k", 110, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_TOGEMET_LANDING1", SFX_EFFECT(0x50C), "btl_e_togemet_landing1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_TOGEMET_LANDING1", SFX_FLAG_EFX | 0x50E, "btl_e_togemet_landing1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -6915,7 +6915,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_PATAMET_MOVE1", SFX_EFFECT(0x4F9), "btl_e_patamet_move1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PATAMET_MOVE2", SFX_EFFECT(0x4FA), "btl_e_patamet_move2_22k", 115, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_PATAMET_ATTACK1", SFX_EFFECT(0), "btl_e_patamet_att1_22k", 0, 64, 0, 0, 0, 0, 0},
@@ -6929,7 +6929,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_WAN_ATTACK1", SFX_EFFECT(0x45C), "btl_e_wan_att1_22k", 85, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_WAN_ATTACK2", SFX_EFFECT(0x45D), "btl_e_wan_att2_22k", 95, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_WAN_ATTACK3", SFX_EFFECT(0x45E), "btl_e_wan_att3_22k", 85, 64, 0, 0, 0, 0, 0},
@@ -6939,7 +6939,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_WAN_ATTACK3", SFX_FLAG_EFX | 0x460, "btl_e_wan_att3_22k", 85, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_WAN_WAIT1", SFX_EFFECT(0x460), "btl_e_wan_wait1_22k", 10, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_WAN_WAIT2", SFX_EFFECT(0x461), "btl_e_wan_wait2_22k", 95, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_WAN_WAIT3", SFX_EFFECT(0x462), "btl_e_wan_wait3_22k", 90, 64, 0, 0, 0, 0, 0},
@@ -6957,7 +6957,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_MONBAN_MOVE1", SFX_EFFECT(0x4E3), "btl_e_monban_move1_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_MONBAN_MOVE2", SFX_EFFECT(0), "btl_e_monban_move2_22k", 0, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_MONBAN_MOVE2L", SFX_EFFECT(0x4E4), "btl_e_monban_move2ｌ_22k", 90, 64, 0, 0, 0, 0, 0},
@@ -6977,7 +6977,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_MONBAN_LAUGH1", SFX_FLAG_EFX | 0x4E4, "btl_e_monban_raugh_22k", 75, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_MONBAN_WAIT1", SFX_EFFECT(0x4E9), "btl_e_monban_wait1_22k", 70, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_MONBAN_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
@@ -6987,7 +6987,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KAMEKU_MAGIC1", SFX_EFFECT(0x425), "btl_e_kameku_magic1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KAMEKU_MAGIC2", SFX_EFFECT(0), "btl_e_kameku_magic2_22k", 0, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KAMEKU_MAGIC3", SFX_EFFECT(0x426), "btl_e_kameku_magic3_22k", 85, 64, 0, 0, 0, 0, 0},
@@ -7007,13 +7007,13 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_ENM_KAMEKU_MAGIC8", SFX_FLAG_EFX | 0x42D, "btl_e_kameku_magic7_22k", 85, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KAMEKU_DAMAGED1", SFX_EFFECT(0x40F), "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_ENM_KAMEKU_DAMAGED1", SFX_FLAG_EFX | 0x411, "btl_e_damaged_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_KAMEKU_OFFSHOOT1", SFX_EFFECT(0x42C), "", 105, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_KAMEKU_OFFSHOOT2", SFX_EFFECT(0x42D), "", 95, 64, 0, 0, 0, 0, 0},
 #else
@@ -7023,7 +7023,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_JUGEM_ATTACK1", SFX_EFFECT(0x4D2), "btl_e_jugem_att1_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_JUGEM_ATTACK2", SFX_EFFECT(0x4D3), "btl_e_jugem_att2_22k", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_JUGEM_THROW1", SFX_EFFECT(0x4D5), "btl_e_jugem_throw1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -7045,7 +7045,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_ENM_TOGEZO_TURN1", SFX_EFFECT(0x520), "btl_e_togezo_turn1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_TOGEZO_TURN2", SFX_EFFECT(0x521), "btl_e_togezo_turn2_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_ENM_TOGEZO_JUMP1", SFX_EFFECT(0x518), "btl_e_togezo_jump1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -7081,7 +7081,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_KANBU_MOVE1L", SFX_EFFECT(0x4AE), "", 100, 64, 0, 0, 0, 0, 0xFD55},
     { "SFX_BOSS_KANBU_MOVE1R", SFX_EFFECT(0x4AF), "", 100, 64, 0, 0, 0, 0, 0xFD55},
     { "SFX_BOSS_KANBU_JUMP1", SFX_EFFECT(0x4A9), "", 100, 64, 0, 0, 0, 0, 0xFD55},
@@ -7103,7 +7103,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_KANBU_GUARD2", SFX_FLAG_EFX, "", 0, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_KANBU_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_KANBU_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7111,7 +7111,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_GESSO_APPEAR1", SFX_EFFECT(0xCF), "", 100, 64, 0, 15, 0, 20, 0},
     { "SFX_BOSS_GESSO_WINK1", SFX_EFFECT(0), "", 0, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_GESSO_ARM_APPEAR1", SFX_EFFECT(0xD0), "", 100, 64, 0, 15, 0, 0, 0},
@@ -7141,7 +7141,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_GESSO_SUMI1", SFX_FLAG_EFX | 0x4, "SE2_BOS_GESSO_SUMI1", 115, 64, 0, 15, 0, 0, 0x555},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_GESSO_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_GESSO_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7149,7 +7149,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_G_CHORO_MOVE1", SFX_EFFECT(0x405), "btl_e_choro_move1_22k", 75, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_G_CHORO_ATTACK1", SFX_EFFECT(0x405), "btl_e_choro_move1_22k", 75, 64, 0, 0, 0, 0, 0},
 #else
@@ -7157,7 +7157,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_G_CHORO_ATTACK1", SFX_FLAG_EFX | 0x407, "btl_e_choro_move1_22k", 75, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_G_CHORO_WAIT1", SFX_EFFECT(0x409), "btl_e_choro_wait1_22k", 65, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_G_CHORO_WAIT2", SFX_EFFECT(0x40A), "btl_e_choro_wait2_22k", 65, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_G_CHORO_LANDING1", SFX_EFFECT(0x404), "btl_e_choro_landing1_22k", 65, 64, 0, 0, 0, 0, 0},
@@ -7171,7 +7171,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_TEAM_CHORO_FALL1", SFX_EFFECT(0x405), "", 80, 64, 0, 0, 100, 0, 0},
     { "SFX_BOSS_TEAM_CHORO_FALL2", SFX_EFFECT(0xC3), "", 120, 64, 0, 0, 100, 10, 0},
     { "SFX_BOSS_TEAM_CHORO_TOGETHER1", SFX_EFFECT(0x405), "", 60, 64, 0, 0, 100, 0, 0},
@@ -7193,7 +7193,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_GNB_APPEAR1", SFX_EFFECT(0xD4), "SE2_BOS_GNB_STEP1", 120, 64, 0, 50, 0, 0, 0},
     { "SFX_BOSS_GNB_WAIT1", SFX_EFFECT(0), "", 100, 64, 0, 50, 0, 0, 0},
     { "SFX_BOSS_GNB_NECK_UP1", SFX_EFFECT(0xE3), "", 110, 64, 0, 50, 0, 0, 0},
@@ -7229,7 +7229,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_GNB_DOWN3", SFX_FLAG_EFX | 0xE0, "", 120, 64, 0, 20, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_GNB_EAT_APPEAR1", SFX_EFFECT(0xDF), "", 120, 64, 0, 30, 0, 0, 0},
     { "SFX_BOSS_GNB_EAT1", SFX_EFFECT(0xE0), "SE2_BOS_GNB_EAT1", 90, 64, 0, 0, 0, 0, 0},
 #else
@@ -7237,7 +7237,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_GNB_EAT1", SFX_FLAG_EFX | 0xE3, "SE2_BOS_GNB_EAT1", 90, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_GNB_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_GNB_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7247,7 +7247,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_MAJO_SHADOW1", SFX_EFFECT(0x23B), "SE4_BOS_MAJO_SHADOW1", 110, 64, 0, 0, 0, 0, 0x555},
     { "SFX_BOSS_MAJO_SHADOW2", SFX_EFFECT(0x2EF), "", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_MAJO_LAUGH1", SFX_EFFECT(0), "SE2_BOS_MAJO_LAUGH1", 0, 64, 0, 0, 0, 0, 0},
@@ -7269,7 +7269,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_MAJO_ATTACK_ICE1", SFX_FLAG_EFX | 0x24A, "", 127, 64, 0, 20, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_MAJO_DAMAGED1", SFX_EFFECT(0x410), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_MAJO_DAMAGED1", SFX_FLAG_EFX | 0x412, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7279,7 +7279,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_MARI_SHADOW1", SFX_EFFECT(0x23B), "SE4_BOS_MARI_SHADOW1", 110, 64, 0, 0, 0, 0, 0xFAAB},
     { "SFX_BOSS_MARI_SHADOW2", SFX_EFFECT(0x2F1), "", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_MARI_HAND_CLAP1", SFX_EFFECT(0xF7), "", 100, 64, 0, 0, 0, 0, 0},
@@ -7301,7 +7301,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_MARI_ATTACK_THUNDER1", SFX_FLAG_EFX | 0x250, "", 110, 64, 0, 1, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_MARI_DAMAGED1", SFX_EFFECT(0x410), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_MARI_DAMAGED1", SFX_FLAG_EFX | 0x412, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7309,7 +7309,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_VIVI_SHADOW1", SFX_EFFECT(0x23B), "", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_VIVI_SHADOW2", SFX_EFFECT(0x34B), "", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_VIVI_ATTACK4", SFX_EFFECT(0x34D), "", 110, 64, 0, 0, 0, 0, 0},
@@ -7321,7 +7321,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_VIVI_MAGIC1", SFX_FLAG_EFX | 0x350, "", 110, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_VIVI_DAMAGED1", SFX_EFFECT(0x410), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_VIVI_DAMAGED1", SFX_FLAG_EFX | 0x412, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7330,7 +7330,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_MBTN_PUNCH_ACTIVE1", SFX_EFFECT(0x104), "", 100, 64, 0, 50, 0, 0, 0},
     { "SFX_BOSS_MBTN_PUNCH_STOP1", SFX_EFFECT(0x105), "", 100, 64, 0, 50, 0, 0, 0x800},
     { "SFX_BOSS_MBTN_PUNCH_IGNITE1", SFX_EFFECT(0x41B), "btl_e_firling1_22k", 120, 64, 0, 50, 0, 0, 0xFAAB},
@@ -7401,7 +7401,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_ISIN_MOVE1", SFX_EFFECT(0x415), "btl_e_emon_walkl1_22k", 100, 64, 0, 0, 0, 0, 0xF800},
     { "SFX_BOSS_ISIN_MOVE2", SFX_EFFECT(0x416), "btl_e_emon_walkr2_22k", 100, 64, 0, 0, 0, 0, 0xF800},
     { "SFX_BOSS_ISIN_MOVE3", SFX_EFFECT(0x413), "btl_e_charge1_22k", 100, 64, 0, 0, 0, 0, 0xF800},
@@ -7413,7 +7413,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_ISIN_JUMP1", SFX_FLAG_EFX | 0x195, "", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_ISIN_DAMAGED1", SFX_EFFECT(0x40D), "btl_e_damaged1_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_ISIN_DAMAGED1", SFX_FLAG_EFX | 0x40F, "btl_e_damaged1_normal1_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -7422,7 +7422,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_BLED_JUMP1", SFX_EFFECT(0xBB), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_BLED_GRASP_CAILING1", SFX_EFFECT(0x49E), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_BLED_CHOP_ROUND1", SFX_EFFECT(0xBE), "", 110, 64, 0, 0, 0, 0, 0},
@@ -7460,7 +7460,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_BLED_DIE1", SFX_FLAG_EFX | 0xB9, "", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_BLED_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_BLED_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7468,7 +7468,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_GANSU_PAUSING1", SFX_EFFECT(0xCC), "", 107, 64, 0, 0, 0, 0, 0xFAAB},
     { "SFX_BOSS_GANSU_PAUSING2", SFX_EFFECT(0xCB), "", 125, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_GANSU_PAUSING3", SFX_EFFECT(0xCB), "", 125, 64, 0, 0, 0, 0, 0},
@@ -7512,7 +7512,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_GANSU_MOVE1R", SFX_FLAG_EFX | 0xC0, "", 115, 64, 0, 1, 0, 0, 0xFAAB},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_GANSU_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_GANSU_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7521,7 +7521,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_RNPL_FLY1", SFX_EFFECT(0x559), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_RNPL_STOP1", SFX_EFFECT(0), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_RNPL_FALL1", SFX_EFFECT(0x55A), "", 100, 64, 0, 0, 0, 0, 0},
@@ -7553,13 +7553,13 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_RNPL_MOVE1R", SFX_FLAG_EFX | 0x55E, "", 90, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_RNPLTRANSFORM5", SFX_EFFECT(0x2CB), "", 95, 64, 0, 0, 0, 20, 0},
 #else
     {"SFX_BOSS_RNPLTRANSFORM5", SFX_FLAG_EFX | 0x2D2, "", 95, 64, 0, 0, 0, 20, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_RNPL_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_RNPL_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7568,7 +7568,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_VOICE_NM_AC1_1", SFX_EFFECT(0x2C5), "", 125, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_VOICE_NM_AC1_2", SFX_EFFECT(0x2C6), "", 115, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_VOICE_NM_AC1_5", SFX_EFFECT(0x2C7), "", 125, 64, 0, 0, 0, 0, 0},
@@ -7621,7 +7621,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_ATMTLSA_MOVE1", SFX_EFFECT(0x49D), "SE2_BOS_ATMTLSA_MOVE1", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_ATMTLSA_MOVE2", SFX_EFFECT(0x49D), "SE2_BOS_ATMTLSA_MOVE2", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_ATMTLSA_MOVE3", SFX_EFFECT(0), "SE2_BOS_ATMTLSA_STEPON1", 0, 64, 0, 0, 0, 0, 0},
@@ -7651,7 +7651,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_ATMTLSA_UNION1", SFX_FLAG_EFX | 0xB8, "", 127, 64, 0, 30, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_ATMTLSA_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_ATMTLSA_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7659,7 +7659,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_KOR_SWORD_SHAKE1", SFX_EFFECT(0xF3), "", 120, 64, 0, 40, 0, 0, 0},
     { "SFX_BOSS_KOR_SWORD_READY1", SFX_EFFECT(0xEA), "", 120, 64, 0, 40, 0, 0, 0},
     { "SFX_BOSS_KOR_SWORD_STICK1", SFX_EFFECT(0xF1), "", 120, 64, 0, 40, 0, 0, 0},
@@ -7705,7 +7705,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_KOR_INHALE2", SFX_FLAG_SONG | 0x46767, "", 110, 64, 0, 20, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_KOR_DAMAGED1", SFX_EFFECT(0x40D), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_KOR_DAMAGED1", SFX_FLAG_EFX | 0x40F, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7713,7 +7713,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_TEAM_3RD_MOVE1L", SFX_EFFECT(0x4AE), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_TEAM_3RD_MOVE1R", SFX_EFFECT(0x4AF), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_TEAM_3RD_ATTACK1", SFX_EFFECT(0x4A9), "", 100, 64, 0, 0, 0, 0, 0},
@@ -7745,7 +7745,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_TEAM_3RD_ESCAPE1", SFX_FLAG_SONG | 0xB8D8D, "", 100, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_TEAM_3RD_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_TEAM_3RD_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7753,7 +7753,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_MOA_G_ARM_MOVE1", SFX_EFFECT(0x106), "", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_BOSS_MOA_G_ARM_MOVE2", SFX_EFFECT(0x107), "", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_BOSS_MOA_G_ARM_MOVE3", SFX_EFFECT(0x109), "", 100, 64, 0, 30, 0, 0, 0},
@@ -7787,7 +7787,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_MOA_G_EXPLOSION1", SFX_FLAG_SONG | 0x45757, "", 110, 64, 0, 30, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_MOA_G_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 30, 0, 0, 0},
 #else
     {"SFX_BOSS_MOA_G_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 30, 0, 0, 0},
@@ -7795,7 +7795,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_KOOPA_JUMP1", SFX_EFFECT(0x24), "", 127, 64, 0, 0, 0, 10, 0},
     { "SFX_BOSS_KOOPA_HIP_ATTACK1", SFX_EFFECT(0x26), "", 110, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_KOOPA_MOVE1L", SFX_EFFECT(0x49), "", 100, 64, 0, 0, 0, 0, 0},
@@ -7817,7 +7817,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_BOSS_KOOPA_FIRE_BREATH1", SFX_FLAG_EFX | 0x202, "SE2_BTL_STG_FIRE1", 127, 64, 0, 0, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_KOOPA_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_KOOPA_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7825,7 +7825,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_KAMEBABA_MAGIC1", SFX_EFFECT(0x425), "btl_e_kameku_magic1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_KAMEBABA_MAGIC2", SFX_EFFECT(0x1F0), "", 100, 64, 0, 70, 0, 0, 0x555},
     { "SFX_BOSS_KAMEBABA_MAGIC3", SFX_EFFECT(0x426), "btl_e_kameku_magic3_22k", 100, 64, 0, 0, 0, 0, 0},
@@ -7865,7 +7865,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_SRYO_STUFF_PISECE1", SFX_EFFECT(0x426), "btl_e_kameku_magic3_22k", 85, 64, 0, 0, 0, 5, 0},
     { "SFX_BOSS_SRYO_STUFF_PUTOUT1", SFX_EFFECT(0x425), "btl_e_kameku_magic1_22k", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BOSS_SRYO_STUFF_PUTOUT2", SFX_EFFECT(0x11B), "", 120, 64, 0, 0, 0, 0, 0},
@@ -7912,7 +7912,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_BPCH_THUNDER1", SFX_EFFECT(0x249), "", 110, 64, 0, 60, 0, 0, 0xF800},
     { "SFX_BOSS_BPCH_DRAIN1", SFX_EFFECT(0x111), "", 110, 64, 0, 60, 0, 0, 0},
     { "SFX_BOSS_BPCH_DRAIN2", SFX_EFFECT(0x1EC), "", 110, 64, 0, 70, 0, 0, 0xD55},
@@ -7934,7 +7934,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_BOSS_BPCH_QWEN_APPEAR2", SFX_FLAG_SONG | 0x46969, "", 110, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_BPCH_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_BPCH_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7942,7 +7942,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_QWEN_EYE_SHINE1", SFX_EFFECT(0x1F0), "", 110, 64, 0, 60, 0, 0, 0xFD55},
     { "SFX_BOSS_QWEN_THUNDER1", SFX_EFFECT(0x249), "", 110, 64, 0, 60, 0, 0, 0xF800},
     { "SFX_BOSS_QWEN_DARK_POWER1", SFX_EFFECT(0x10F), "", 10, 64, 0, 60, 0, 0, 0},
@@ -7984,7 +7984,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_BOSS_QWENH_HAND_APPEAR2", SFX_FLAG_SONG | 0x46C6C, "", 110, 64, 0, 1, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BOSS_QWEN_DAMAGED1", SFX_EFFECT(0x40F), "", 100, 64, 0, 0, 0, 0, 0},
 #else
     {"SFX_BOSS_QWEN_DAMAGED1", SFX_FLAG_EFX | 0x411, "", 100, 64, 0, 0, 0, 0, 0},
@@ -7993,7 +7993,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AUDIENCE_BOO_ALLY1", SFX_EFFECT(0x83), "", 110, 64, 0, 40, 30, 0, 0},
     { "SFX_AUDIENCE_BOO_ALLY2", SFX_EFFECT(0x84), "", 110, 64, 0, 40, 30, 0, 0},
     { "SFX_AUDIENCE_BOO_ALLY3", SFX_EFFECT(0x85), "", 110, 64, 0, 40, 30, 0, 0},
@@ -8135,7 +8135,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_BTL_STAGE_SMOKE1", SFX_EFFECT(0x14B), "", 100, 64, 0, 0, 0, 0, 0},
     { "SFX_BTL_STAGE_BURST1", SFX_EFFECT(0x139), "", 100, 64, 0, 30, 0, 0, 0},
     { "SFX_BTL_STAGE_FIRE1", SFX_EFFECT(0x143), "", 100, 64, 0, 0, 0, 0, 0},
@@ -8329,7 +8329,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AMB_WIND2", SFX_FLAG_EFX | 0xB, "", 100, 64, 0, 20, 0, 0, 0},
     {"SFX_AMB_WIND3", SFX_FLAG_EFX | 0x16, "", 40, 64, 0, 20, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_BIRD1", SFX_EFFECT(0xC), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_BIRD2", SFX_EFFECT(0xD), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_BIRD3", SFX_EFFECT(0xE), "", 100, 64, 0, 20, 0, 0, 0},
@@ -8352,7 +8352,7 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
     {"SFX_AMB_WOLF", SFX_FLAG_EFX, "", 0, 64, 0, 20, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_DUMMY", SFX_EFFECT(0), "SE2_AMB_DUMMY", 0, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_COMPUTER1", SFX_EFFECT(0x58), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_COMPUTER2", SFX_EFFECT(0x59), "", 100, 64, 0, 20, 0, 0, 0},
@@ -8368,7 +8368,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AMB_WATER3", SFX_FLAG_EFX | 0x10, "", 100, 64, 0, 20, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_PAD1", SFX_EFFECT(0x73), "", 100, 64, 0, 60, 0, 0, 0},
     { "SFX_AMB_PAD2", SFX_EFFECT(0), "SE2_AMB_PAD2", 0, 64, 0, 60, 0, 0, 0},
     { "SFX_AMB_PAD3", SFX_EFFECT(0), "SE2_AMB_PAD3", 0, 64, 0, 60, 0, 0, 0},
@@ -8395,7 +8395,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AMB_AUDIENCE1", SFX_FLAG_EFX | 0x4E, "", 120, 64, 0, 20, 0, 0, 0},
     {"SFX_AMB_AUDIENCE2", SFX_FLAG_EFX | 0x4F, "", 100, 64, 0, 20, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_AIRDUCT1", SFX_EFFECT(0x52), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_SEWAGE1", SFX_EFFECT(0), "", 0, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_WOLF_HOWL1", SFX_EFFECT(0x82), "", 100, 64, 0, 40, 0, 0, 0},
@@ -8422,7 +8422,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AMB_GEAR4", SFX_FLAG_EFX | 0x67, "", 100, 64, 0, 20, 0, 0, 0},
     {"SFX_AMB_GEAR5", SFX_FLAG_EFX | 0x68, "", 100, 64, 0, 20, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_WIND4", SFX_EFFECT(0x7D), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_WIND5", SFX_EFFECT(0x7E), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_WIND6", SFX_EFFECT(0x7D), "", 100, 64, 0, 20, 0, 0, 0xF000},
@@ -8432,7 +8432,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AMB_WIND6", SFX_FLAG_EFX | 0x7F, "", 100, 64, 0, 20, 0, 0, 0xF000},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_WINDVANE1", SFX_EFFECT(0x7F), "", 100, 64, 0, 20, 0, 0, 0},
 #else
     {"SFX_AMB_WINDVANE1", SFX_FLAG_EFX | 0x81, "", 100, 64, 0, 20, 0, 0, 0},
@@ -8448,7 +8448,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AMB_LAS1", SFX_FLAG_EFX | 0x69, "", 100, 64, 0, 50, 0, 0, 0},
     {"SFX_AMB_LAS2", SFX_FLAG_EFX | 0x6A, "", 100, 64, 0, 50, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_FOUNTAIN1", SFX_EFFECT(0x62), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_FOUNTAIN2", SFX_EFFECT(0x63), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_SINDEN1", SFX_EFFECT(0x77), "", 100, 64, 0, 60, 0, 0, 0},
@@ -8467,7 +8467,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AMB_100DAN1", SFX_FLAG_EFX | 0x4D, "", 100, 64, 0, 60, 0, 0, 0},
     {"SFX_AMB_DIM1", SFX_FLAG_EFX | 0x5D, "", 100, 64, 0, 60, 0, 0, 0},
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_WIND_GNB1", SFX_EFFECT(0x80), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_WIND_GNB2", SFX_EFFECT(0x81), "", 100, 64, 0, 20, 0, 0, 0},
 #else
@@ -8475,7 +8475,7 @@ SoundEffectEntry pssfxlist[] = {
     {"SFX_AMB_WIND_GNB2", SFX_FLAG_EFX | 0x83, "", 100, 64, 0, 20, 0, 0, 0},
 #endif
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     { "SFX_AMB_RIVER_NOK1", SFX_EFFECT(0x74), "", 100, 64, 0, 20, 0, 0, 0},
     { "SFX_AMB_RIVER_NOK2", SFX_EFFECT(0x75), "", 100, 64, 0, 20, 0, 0, 0},
 #else
@@ -8533,7 +8533,7 @@ SoundEnvList psenvlist[] = {
     {0x10, 0x107C, 0x41, 0x0, 0x0, 0x3, 0x4, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x11, 0x1045, 0x3C, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x11, 0x1046, 0x3C, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x11, 0x1009, 0x14, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x11, 0x102E, 0x3C, 0x0, 0x0, 0x8, 0x4, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8542,7 +8542,7 @@ SoundEnvList psenvlist[] = {
     {0x12, 0x1045, 0x41, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x12, 0x1046, 0x41, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x12, 0x1083, 0x7D, 0x0, 0x1, 0x2, 0x1, 0.0f, 0.0f, 200.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x12, 0x1009, 0x14, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x12, 0x102E, 0x3C, 0x0, 0x0, 0x8, 0x4, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8568,7 +8568,7 @@ SoundEnvList psenvlist[] = {
     {0x18, 0x1082, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x18, 0x1009, 0x14, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x19, 0x107F, 0x5F, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x19, 0x1009, 0x14, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x19, 0x1080, 0x46, 0x0, 0x0, 0x7, 0x5, 0.0f, 0.0f, 0.0f, 0x32, 0x32, 0x12},
@@ -8580,7 +8580,7 @@ SoundEnvList psenvlist[] = {
     {0x1B, 0x1046, 0x3C, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x1B, 0x1047, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x1C, 0x1009, 0xA, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x1D, 0x1048, 0x23, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x1D, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8592,7 +8592,7 @@ SoundEnvList psenvlist[] = {
     {0x1E, 0x1049, 0x41, 0x0, 0x1, 0x2, 0x1, -500.0f, 0.0f, -148.0f, 0x14, 0x32, 0x8},
     {0x1E, 0x1049, 0x41, 0x0, 0x1, 0x2, 0x1, -218.0f, 0.0f, -294.0f, 0x14, 0x32, 0x8},
     {0x1E, 0x1047, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x1F, 0x1048, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x1F, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8600,7 +8600,7 @@ SoundEnvList psenvlist[] = {
     {0x1F, 0x1045, 0x32, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x1F, 0x1049, 0x41, 0x0, 0x1, 0x2, 0x1, 110.0f, 0.0f, -50.0f, 0x14, 0x32, 0x8},
     {0x1F, 0x1047, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x20, 0x1048, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x20, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8608,7 +8608,7 @@ SoundEnvList psenvlist[] = {
     {0x20, 0x1045, 0x32, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x20, 0x104A, 0x2D, 0x0, 0x1, 0x2, 0x1, -52.0f, 0.0f, 49.0f, 0x14, 0x32, 0x8},
     {0x20, 0x1047, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x21, 0x1048, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x21, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8616,7 +8616,7 @@ SoundEnvList psenvlist[] = {
     {0x21, 0x1045, 0x32, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x21, 0x104A, 0x2D, 0x0, 0x1, 0x2, 0x1, -73.0f, 0.0f, 35.0f, 0x14, 0x32, 0x8},
     {0x21, 0x1047, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x22, 0x1048, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x22, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8624,7 +8624,7 @@ SoundEnvList psenvlist[] = {
     {0x22, 0x1045, 0x32, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x22, 0x1049, 0x41, 0x0, 0x1, 0x2, 0x1, 0.0f, -250.0f, 22.0f, 0x14, 0x32, 0x12},
     {0x22, 0x1047, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x23, 0x1048, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x23, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8632,7 +8632,7 @@ SoundEnvList psenvlist[] = {
     {0x23, 0x1045, 0x32, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x23, 0x1049, 0x41, 0x0, 0x1, 0x2, 0x1, -108.0f, 0.0f, -140.0f, 0x14, 0x32, 0x8},
     {0x23, 0x1047, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x24, 0x1048, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x24, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8640,14 +8640,14 @@ SoundEnvList psenvlist[] = {
     {0x24, 0x1045, 0x32, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x24, 0x1049, 0x41, 0x0, 0x1, 0x2, 0x1, 107.0f, 0.0f, -158.0f, 0x14, 0x32, 0x8},
     {0x24, 0x1047, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x25, 0x1048, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x25, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x25, 0x1045, 0x32, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x25, 0x1047, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x26, 0x1048, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x26, 0x1048, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8658,7 +8658,7 @@ SoundEnvList psenvlist[] = {
     {0x27, 0x102A, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x27, 0x104D, 0x5F, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x28, 0x104D, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x29, 0x104E, 0x55, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x2A, 0x104E, 0x23, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
@@ -8754,7 +8754,7 @@ SoundEnvList psenvlist[] = {
     {0x4B, 0x1022, 0x41, 0x0, 0x2, 0x2, 0x1, 196.0f, 30.0f, -229.0f, 0x14, 0x32, 0x8},
     {0x4C, 0x101F, 0x50, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x4D, 0x101F, 0x50, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x4D, 0x103F, 0x32, 0x0, 0x1, 0x2, 0x1, -77.0f, 0.0f, -203.0f, 0x14, 0x32, 0x12},
 #else
     {0x4D, 0x103F, 0x3C, 0x0, 0x1, 0x2, 0x1, -77.0f, 0.0f, -203.0f, 0x14, 0x32, 0x12},
@@ -8763,7 +8763,7 @@ SoundEnvList psenvlist[] = {
     {0x4F, 0x1031, 0x55, 0x0, 0x0, 0x6, 0x1, 0.0f, 0.0f, 0.0f, 0x32, 0x32, 0x12},
     {0x4F, 0x1032, 0x55, 0x0, 0x0, 0x6, 0x1, 0.0f, 0.0f, 0.0f, 0x32, 0x32, 0x12},
     {0x4F, 0x102A, 0x41, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x50, 0x1009, 0xF, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x50, 0x1056, 0x4B, 0x0, 0x0, 0x6, 0x4, 0.0f, 0.0f, 0.0f, 0x50, 0x32, 0x12},
@@ -8772,7 +8772,7 @@ SoundEnvList psenvlist[] = {
     {0x50, 0x1059, 0x69, 0x0, 0x0, 0x5, 0x5, 0.0f, 0.0f, 0.0f, 0x32, 0x32, 0x12},
     {0x50, 0x105A, 0x69, 0x0, 0x0, 0x5, 0x5, 0.0f, 0.0f, 0.0f, 0x32, 0x32, 0x12},
     {0x50, 0x1065, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x51, 0x1009, 0xF, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x51, 0x1056, 0x4B, 0x0, 0x0, 0x6, 0x4, 0.0f, 0.0f, 0.0f, 0x50, 0x32, 0x12},
@@ -8780,7 +8780,7 @@ SoundEnvList psenvlist[] = {
     {0x51, 0x1058, 0x4B, 0x0, 0x0, 0x6, 0x4, 0.0f, 0.0f, 0.0f, 0x50, 0x32, 0x12},
     {0x51, 0x1059, 0x69, 0x0, 0x0, 0x5, 0x5, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x51, 0x105A, 0x69, 0x0, 0x0, 0x5, 0x5, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x51, 0x1065, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x51, 0x1065, 0x32, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8807,13 +8807,13 @@ SoundEnvList psenvlist[] = {
     {0x56, 0x102F, 0x41, 0x0, 0x0, 0x7, 0x3, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x56, 0x1030, 0x41, 0x0, 0x0, 0x7, 0x3, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x57, 0x1077, 0x1E, 0x0, 0x0, 0x2, 0x4, 0.0f, 0.0f, 0.0f, 0x32, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x57, 0x1079, 0x28, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
     {0x57, 0x1079, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x58, 0x1078, 0x1E, 0x0, 0x0, 0x2, 0x4, 0.0f, 0.0f, 0.0f, 0x32, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x58, 0x107A, 0x2D, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x59, 0x1009, 0x14, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #else
@@ -8822,7 +8822,7 @@ SoundEnvList psenvlist[] = {
     {0x59, 0x1066, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x59, 0x1059, 0x5A, 0x0, 0x0, 0x5, 0x5, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x59, 0x105A, 0x5A, 0x0, 0x0, 0x5, 0x5, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x5A, 0x1009, 0x14, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x5A, 0x1066, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8830,7 +8830,7 @@ SoundEnvList psenvlist[] = {
     {0x5A, 0x105A, 0x5A, 0x0, 0x0, 0x5, 0x5, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x5A, 0x1069, 0x46, 0x0, 0x1, 0x2, 0x1, -343.0f, 80.0f, -280.0f, 0x14, 0x32, 0x6},
     {0x5A, 0x1069, 0x46, 0x0, 0x1, 0x2, 0x1, 343.0f, 80.0f, -280.0f, 0x14, 0x32, 0x6},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x5B, 0x1009, 0x14, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x5B, 0x1066, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8874,13 +8874,13 @@ SoundEnvList psenvlist[] = {
     {0x69, 0x1010, 0x73, 0x0, 0x1, 0x2, 0x1, 460.0f, -15.0f, 150.0f, 0x14, 0x32, 0x12},
     {0x69, 0x1072, 0x5A, 0x0, 0x2, 0x5, 0x7, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x6A, 0x1009, 0xF, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x6B, 0x1009, 0xF, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x6B, 0x105F, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x6B, 0x1060, 0x4B, 0x0, 0x1, 0x2, 0x1, 345.0f, 45.0f, -177.0f, 0x14, 0x32, 0x12},
     {0x6B, 0x1060, 0x4B, 0x0, 0x1, 0x2, 0x1, -360.0f, 85.0f, -160.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x6C, 0x1009, 0xF, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x6C, 0x105F, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8888,7 +8888,7 @@ SoundEnvList psenvlist[] = {
     {0x6C, 0x1060, 0x4B, 0x0, 0x1, 0x2, 0x1, 192.0f, -108.0f, -164.0f, 0x14, 0x32, 0x12},
     {0x6C, 0x1063, 0x4B, 0x0, 0x1, 0x2, 0x1, -270.0f, -570.0f, -37.0f, 0x14, 0x32, 0x12},
     {0x6C, 0x1060, 0x4B, 0x0, 0x1, 0x2, 0x1, 312.0f, -513.0f, 6.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x6D, 0x1009, 0xF, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x6D, 0x105F, 0x37, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8900,7 +8900,7 @@ SoundEnvList psenvlist[] = {
     {0x6F, 0x1073, 0x3C, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x70, 0x1067, 0x55, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x70, 0x107F, 0x5F, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x70, 0x1009, 0x14, 0x0, 0x3, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
 #endif
     {0x70, 0x1080, 0x46, 0x0, 0x0, 0x7, 0x5, 0.0f, 0.0f, 0.0f, 0x32, 0x32, 0x12},
@@ -8912,7 +8912,7 @@ SoundEnvList psenvlist[] = {
     {0x74, 0x102E, 0x28, 0x0, 0x0, 0x7, 0x3, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x74, 0x102F, 0x28, 0x0, 0x0, 0x7, 0x3, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x74, 0x1030, 0x28, 0x0, 0x0, 0x7, 0x3, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {0x75, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0.0f, 0.0f, 0.0f, 0x0, 0x0, 0x0}
 #else
     {0x75, 0x1045, 0x4B, 0x0, 0x0, 0x2, 0x1, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -8956,7 +8956,7 @@ const char* psenvlistname[] = {
     "ENV_STG8_LAS1", "ENV_STG8_LAS2", "ENV_STG8_LAS3", "ENV_STG8_LAS4", "ENV_STG8_LAS5",
     "ENV_STG8_LAS6", "ENV_STG8_LAS7", "ENV_STG8_LAS8", "ENV_STG8_LAS9",
     "ENV_KOOPA_KPA1",
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     "ENV_END_MUJ1",
     "ENV_END_MUJ2",
     "ENV_END_MUJ3",
@@ -8973,7 +8973,7 @@ const char psdb_bgm_txt[0x28] = "%s/sound/proj/pmario_sound_bgm_txt.db";
 const char psdb_env_txt[0x28] = "%s/sound/proj/pmario_sound_env_txt.db";
 const char psdb_sfx_txt[0x28] = "%s/sound/proj/pmario_sound_sfx_txt.db";
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s32 silent_tbl[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 #endif
 
@@ -9001,7 +9001,7 @@ PaperSoundWork psnd;
 u8 _buf[0x80];
 
 //.sdata
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 silent_tbl[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 #endif
 
@@ -9252,7 +9252,7 @@ void psndInit(void) {
     psnd.sfxSerial = 0;
     psnd.sfxDelay = 0;
     psnd.flags = 0;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     psnd.sfxCooldown = 0;
 #endif
     psnd.envVolume = 100;
@@ -9269,7 +9269,7 @@ void psndInit(void) {
  */
 void psndMain(void) {
     if (init_f) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if (psnd.sfxCooldown) {
             psnd.sfxCooldown--;
         }
@@ -9340,7 +9340,7 @@ void psndStopAllFadeOut(void) {
     int i;
 
     psndBGMOff_f_d(PSND_FADEOUT, 1000, FALSE);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     psndBGMOff_f_d(PSND_SLOT(1), 1000, FALSE);
 #else
     psndBGMOff_f_d(PSND_FADEOUT | PSND_SLOT(1), 1000, FALSE);
@@ -9399,7 +9399,7 @@ s32 psndGetFlag(void) {
 }
 
 /** Fades out every playing effect except environment sounds and those marked to survive a map change. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void psndMapChange(void) {
     if (strcmp(psnd.mapName, gp->currentMapName)) {
         psnd.reverb = 0;
@@ -9410,7 +9410,7 @@ void psndMapChange(void) {
 }
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** demo: the reverb reset is in psndBGMOn_f_d, and the SFX fade-out of psndSFXAllOff is written out here */
 void psndMapChange(void) {
     PaperSoundWork* wp = &psnd;
@@ -9447,7 +9447,7 @@ void psndSFXAllOff(void) {
     }
     if (wp->sfxFadeState != PSND_SFX_FADE_OUT) {
         wp->sfxFadeState = PSND_SFX_FADE_OUT;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         wp->sfxFadeMax = 60;
         wp->sfxFadeTime = 60;
 #else
@@ -9632,7 +9632,7 @@ void psndBGMMain(void) {
 
 /** the demo's psndBGMOn_f_d has no fade-out time parameter (it always fades the old BGM out over 750 ms) */
 BOOL psndBGMOn(u32 flags, char* bgm_name) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     return psndBGMOn_f_d(flags, bgm_name, 1000, 0);
 #else
     return psndBGMOn_f_d(flags, bgm_name, 1000, 750, 0);
@@ -9641,7 +9641,7 @@ BOOL psndBGMOn(u32 flags, char* bgm_name) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_800d7270, JP 0x800D7270. See docs/NAME_PROVENANCE.md.
 /** Starts BGM bgm_name with flags and fade-in time (psndBGMOn_f_d; US and PAL fade the previous BGM out in 750 ms). */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 BOOL psndBGMOn_f(u32 flags, char* bgm_name, u32 fadetime, s32 unused) {
     return psndBGMOn_f_d(flags, bgm_name, fadetime, unused);
 #else
@@ -9684,7 +9684,7 @@ static inline s32 psndSongFindCh(void) {
 }
 
 /** Looks BGM name up in psbgmlist (or decodes a numeric id) into *pi. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static inline s32 psndBGMSearch(char* name) {
     SoundBGMEntry* entry;
     s32 i;
@@ -9707,7 +9707,7 @@ static inline void psndBGMSearchP(const char* name, s32* pi) {
             break;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (i >= 0x106) {
         i = 0;
     }
@@ -9761,7 +9761,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     if (psnd.flags & PSND_FLAG_BGM_OFF) {
         return FALSE;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     i = psndBGMSearch(bgm_name);
     idx = flags & 0xF;
     // FAKE: the BGM id lives in the bgm_name parameter once the name is looked up (the demo reuses its
@@ -9839,14 +9839,14 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             return 0;
         }
         b0 = psbgm;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (((s32)bgm_name == PSND_BGM_BATTLE_WIN1 || (s32)bgm_name == PSND_BGM_BATTLE_WIN2) && b0->listId == PSND_BGM_EVT_DANGER4) {
 #else
         if (((id == PSND_BGM_BATTLE_WIN1) || (id == PSND_BGM_BATTLE_WIN2)) && (b0->listId == PSND_BGM_EVT_DANGER4)) {
 #endif
             return 0;
         }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         if ((id == PSND_BGM_BATTLE_WIN3) && (b0->listId == PSND_BGM_EVT_DANGER4)) {
             psndBGMOff_f_d(PSND_PAUSE, 750, 1);
         }
@@ -9862,7 +9862,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             return 0;
         }
         b0 = psbgm;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (((s32)bgm_name == PSND_BGM_BATTLE_WIN1 || (s32)bgm_name == PSND_BGM_BATTLE_WIN2) && b0->listId == PSND_BGM_EVT_KUPPA2) {
             return 0;
         }
@@ -9900,7 +9900,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             return FALSE;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     bgm = psbgm + idx;
     entry = &psbgmlist[(s32)bgm_name];
     fade2 = &bgm->fade;
@@ -9932,13 +9932,13 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
                 } else {
                     SoundSongContinueCh(bgm->streamId);
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (flags & PSND_FADEIN) {
 #else
                 if (fl & PSND_FADEIN) {
 #endif
                     fade2->state = PSND_FADE_STATE_IN;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     fade2->time = fadetime / PSND_FRAME_MS;
 #else
                     fade2->time = ft / PSND_FRAME_MS;
@@ -9949,19 +9949,19 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
                     fade2->time = 1;
                     fade2->timeMax = 1;
                 }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if ((flags & PSND_UNSILENT) && fade2->dipState == PSND_DIP_STATE_DOWN) {
 #else
                 if ((fl & PSND_UNSILENT) && (fade2->dipState == PSND_DIP_STATE_DOWN)) {
 #endif
                     fade2->dipState = PSND_DIP_STATE_UP;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     fade2->dipTimeMax = fadetime / PSND_FRAME_MS;
 #else
                     fade2->dipTimeMax = ft / PSND_FRAME_MS;
 #endif
                     fade2->dipTime = (fade2->dipTimeMax * fade2->dipPercent) / 100;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     if (flags & PSND_QUICK) {
 #else
                     if (fl & PSND_QUICK) {
@@ -9973,7 +9973,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
                 }
                 goto done;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (old == (u32)bgm_name) {
 #else
             if (old == id) {
@@ -9990,7 +9990,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             }
         }
         if (entry->flags & PSND_BGM_STREAM) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (restart) {
 #else
             if (fadetime) {
@@ -9998,7 +9998,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
                 SoundSetFadeTime(0, 100);
                 SoundSSFadeoutCh(bgm->streamId);
             } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 SoundSetFadeTime(0, 750);
 #else
                 SoundSetFadeTime(0, fo);
@@ -10006,7 +10006,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
                 SoundSSFadeoutCh(bgm->streamId);
             }
         } else {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             SoundSetFadeTime(0, 750);
 #else
             SoundSetFadeTime(0, fo);
@@ -10014,14 +10014,14 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
             SoundSongFadeoutCh(bgm->streamId);
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if ((s32)bgm_name == 0) {
 #else
     if (id == 0) {
 #endif
         return FALSE;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     vol = bgm->volume = entry->volume;
     bgm->listId = (s32)bgm_name;
 #else
@@ -10030,7 +10030,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     bgm->listId = id;
 #endif
     pan = entry->pan;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     bgm->flags = flags;
 #else
     bgm->flags = fl;
@@ -10065,13 +10065,13 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         SoundSongPlayCh(bgm->streamId, entry->flags & PSND_BGM_SONG_MASK);
         SoundSongSetVolCh(bgm->streamId, vol);
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (flags & PSND_FADEIN) {
 #else
     if (fl & PSND_FADEIN) {
 #endif
         fade2->state = PSND_FADE_STATE_IN;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         fade2->time = fadetime / PSND_FRAME_MS;
 #else
         fade2->time = ft / PSND_FRAME_MS;
@@ -10112,7 +10112,7 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 force) {
     if (bgm->listId == 0xFFFFFFFF) {
         return FALSE;
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE && bgm->listId == PSND_BGM_EVT_DANGER4) {
         return FALSE;
     }
@@ -10222,13 +10222,13 @@ s32 psndBGMPlayTime(s32 id) {
     PaperSoundBGM* bgm = &psbgm[id & 0xF];
 
     if (bgm->listId == 0xFFFFFFFF) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         return 0;
 #else
         return 600000;
 #endif
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     return OSTicksToMicroseconds(gp->renderTime - bgm->startTime);
 #else
     return OSTicksToMilliseconds(gp->renderTime - bgm->startTime);
@@ -10503,7 +10503,7 @@ sgfound:
     psnd.sfxDelay = 0;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static s32 __psndSFXOn(const char* name, u8 vol, u8 pan, u16 pitch, Vec* pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
 #else
 s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
@@ -10526,7 +10526,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOn
     if ((psnd.flags & PSND_FLAG_NO_SFX) && (ignoreSfxOff == 0)) {
         return -1;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32) (sid - 0x1BE)) <= 1)) || (sid == PSND_SFX_COIN_GET1)) {
         if (psnd.sfxCooldown) {
             return -1;
@@ -10586,7 +10586,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOn
         sfx->flags |= PSFX_FLAG_ENV;
     }
     if ((sid == PSND_SFX_STG2_BOMB_TIMER1) || (sid == PSND_SFX_STG7_ALART_WARNING1)) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         sfx->flags |= PSFX_FLAG_BATTLE_START | PSFX_FLAG_KEEP;
 #else
         sfx->flags |= (PSFX_FLAG_KEEP | PSFX_FLAG_NO_MUTE);
@@ -10600,7 +10600,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOn
     }
     if (id & PSND_SFX_BYPASS_MUTE) {
         sfx->flags |= PSFX_FLAG_BYPASS_MUTE;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     }
     if (id & PSND_SFX_KEEP) {
         sfx->flags |= PSFX_FLAG_KEEP;
@@ -10872,13 +10872,13 @@ static inline void psndEnvDone(PaperSoundEnv* e) {
 }
 
 /** Number of environment names; also the terminating id in psenvlist. */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define PSENV_COUNT 0x75
 #else
 #define PSENV_COUNT 0x76
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 
 /** Volume of environment sound e under its channel's fade; the demos write it through a pointer. */
 static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
@@ -10972,7 +10972,7 @@ static inline void psndENVApply(PaperSoundEnv* e) {
  * 1 loops at a fixed position, 2 repeats at a fixed position at intervals, 3 plays once at the listener.
  * Also runs the environment fades and low-pass filter.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void psndENVMain(void) {
 #else
 void psndENVMain(void) {
@@ -11048,7 +11048,7 @@ void psndENVMain(void) {
                 e->state++;
                 break;
             case 1:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 if (e->sfx != 0xFFFFFFFF) {
                     PaperSoundEffect* s = &(pssfx)[e->sfx & 0xff];
                     if (s->channel != 0xFFFFFFFF || (s->flags & PSFX_FLAG_START))
@@ -11108,7 +11108,7 @@ void psndENVMain(void) {
                 e->state++;
                 break;
             case 1:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 // the demo only checks that the sound still exists, and does not restart it
                 if (e->sfx == 0xFFFFFFFF || psndSFXChk(e->sfx) != 0) {
                     e->sfx = -1;
@@ -11128,7 +11128,7 @@ void psndENVMain(void) {
             break;
         }
     }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < 16; i++) {
         ent = &psenv[i];
         if (ent->id == 0 || ent->sfx == 0xFFFFFFFF)
@@ -11265,7 +11265,7 @@ void psndENVMain(void) {
                     psnd.fade[i].dipState = PSND_DIP_STATE_IDLE;
                 }
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (psnd.envLpf[i] < psnd.envFreq[i])
                 psnd.envLpf[i] += 100;
             if (psnd.envLpf[i] > psnd.envFreq[i]) {
@@ -11328,7 +11328,7 @@ static inline PaperSoundEnv* psndENVGetFree(void) {
  * Returns FALSE when nothing changed.
  */
 BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 idx;
     u16 cur;
     u16* env;
@@ -11363,7 +11363,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
     if ((cur = *env) != 0) {
         if (!(flags & PSND_RESTART)) {
             if (flags & PSND_CONTINUE) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 fade = &psnd.fade[idx];
 #endif
                 if (flags & PSND_FADEIN) {
@@ -11384,7 +11384,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
                 }
                 goto end;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             if (cur == id)
                 goto end;
 #else
@@ -11397,7 +11397,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
         *env = 0;
     }
     for (;; list++) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         if (list->id == PSENV_COUNT)
             break;
         if (list->id != id)
@@ -11441,7 +11441,7 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
         }
     }
     *env = id;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     fade = &psnd.fade[idx];
 #endif
     fade->state = PSND_FADE_STATE_IDLE;
@@ -11493,7 +11493,7 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
             fade->state = PSND_FADE_STATE_OUT;
         }
     } else if (flags & PSND_PAUSE) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         fade->state = PSND_FADE_STATE_PAUSED;
         fade->time = fadetime / PSND_FRAME_MS;
         fade->timeMax = fade->time;

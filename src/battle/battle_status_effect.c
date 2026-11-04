@@ -34,7 +34,7 @@ typedef struct StChgMsgData {
     const char* msg0;
 } StChgMsgData;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 s8 _st_pri_data[] = {
     STATUS_CHARGE, //charge is elevated
     STATUS_POISON, //poison is elevated
@@ -99,7 +99,7 @@ StChgMsgData _st_chg_msg_data[] = {
 
 //.sdata
 //Status Type Priority Data
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s8 _st_pri_data[] = {
     STATUS_CHARGE, //charge is elevated
     STATUS_POISON, //poison is elevated
@@ -684,7 +684,7 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
         dispEntry(CAMERA_2D, 900.0f, DISP_MODE_ALPHA_TEST, (DispCallback)_st_chg_msg_disp, 0);
         break;
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     if (ret) {
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             BattleUnit* unit = BattleGetUnitPtr(wp, i);

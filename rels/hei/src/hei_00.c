@@ -76,7 +76,7 @@ static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
 EvtWord evt_snd[234];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord moji_msg[];
 static EvtWord switch_evt[303];
 static EvtWord dokan_evt[335];
@@ -839,7 +839,7 @@ USER_FUNC(dist_check) {
  * shows the tablet message stg1_hei_02_01 (skipped when a cutscene has taken control away in JP and later).
  */
 EVT_BEGIN(moji_msg)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(hei_00_mario_keyoff_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
@@ -989,7 +989,7 @@ static EVT_BEGIN(dokan_evt)
     WAIT_MS(2000)
     DELETE_EVENT(LW(0))
     CALL(evt_cam3d_evt_set, 145, 100, 450, 145, 40, -140, 1000, EASING_SINE_IN_OUT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL_CHILD(cam_shake2)
 #else
     CALL_CHILD(PTR(cam_shake2))
@@ -1004,7 +1004,7 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_hei_00"))
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_img_clear_virtual_point, STRING("img"))
 #else
     CALL(evt_img_set_virtual_point, STRING("img"), 150, 25, 20)
@@ -1059,7 +1059,7 @@ static EVT_BEGIN(dokan_evt)
 EVT_END()
 
 // Descriptive name (not in the symbol maps); placeholder unk_hei_000002a8, JP hei .text+0x1E4. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(hei_00_mario_keyoff_check) {
     EvtWord* args = event->args;
 
@@ -1103,7 +1103,7 @@ static s32 itemsel_table00[] = {
 EVT_BEGIN(sun_stone_set_event)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(itemsel_table00), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table00), LW(0), 0)
@@ -1157,7 +1157,7 @@ static s32 itemsel_table01[] = {
 EVT_BEGIN(moon_stone_set_event)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)

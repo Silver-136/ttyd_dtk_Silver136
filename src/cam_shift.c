@@ -23,7 +23,7 @@ typedef struct CamShiftWork {
 } CamShiftWork;
 
 // The demos use the field clock; retail uses the render clock.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 #define CAM_SHIFT_TIME (gp->renderFieldTime)
 #else
 #define CAM_SHIFT_TIME (gp->renderTime)

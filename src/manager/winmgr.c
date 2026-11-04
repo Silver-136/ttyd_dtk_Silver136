@@ -42,7 +42,7 @@ s32 select_comp_bteresa(const void* a, const void* b);
 
 void select_main(WinMgrEntry* entry);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void select_disp(WinMgrEntry* entry);
 static void select_disp_party(WinMgrEntry* entry);
 #else
@@ -52,7 +52,7 @@ void select_disp_party(WinMgrEntry* entry);
 
 void select_disp_mario(WinMgrEntry* entry);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void select_disp_luigi(WinMgrEntry* entry);
 #else
 void select_disp_luigi(WinMgrEntry* entry);
@@ -63,7 +63,7 @@ void select_main3(WinMgrEntry* entry);
 void select_disp3(WinMgrEntry* entry);
 void select_disp3_party(WinMgrEntry* entry);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void select_disp3_mario(WinMgrEntry* entry);
 #else
 void select_disp3_mario(WinMgrEntry* entry);
@@ -80,7 +80,7 @@ static s16* mario_status_point_table[3];
 //.sdata
 static WinMgrWork* wp = &work;
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static f32 unusedSignTbl[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
 #endif
 
@@ -112,7 +112,7 @@ static const char* mario_status_name_table[] = {"ＨＰ", "ＦＰ", "ＢＰ"};
 /** What a level-up adds to Mario's HP, FP and BP: 5, 5 and 3. */
 static s32 mario_status_henka_table[] = {5, 5, 3};
 /** The ceiling of Mario's HP, FP and BP (200, 200 and 99). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 mario_status_max_table[] = {200, 200, 99};
 #endif
 
@@ -121,7 +121,7 @@ WinMgrDesc select_desc[] = {
     {0, 1, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp},
     {2, 0, 8, -280, 120, 240, 45, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
     {0, 0, 8, -240, -130, 500, 80, {0xFF, 0xFF, 0xFF, 0xFF}, select_main3, select_disp3},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {0, 1, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp},
     {2, 0, 8, -280, 120, 240, 69, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
     {0, 0, 8, -240, -130, 500, 80, {0xFF, 0xFF, 0xFF, 0xFF}, select_main3, select_disp3},
@@ -171,12 +171,12 @@ WinMgrSelectTbl select_desc_tbl[] = {
     {3, select_mario_desc},
     {3, select_desc},
     {3, select_desc},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {3, &select_desc[3]},
 #endif
     {3, select_desc},
     {3, select_desc},
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {3, select_desc},
     {3, select_desc},
 #else
@@ -194,7 +194,7 @@ static const char name_party5[12];
 static const char name_party2[12];
 static const char name_party6[12];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 // The demos keep these two as real functions at the end of the file.
 static const char* party_name_table_rtn(s32 id);
 static s32 iconid_conv(s32 icon);
@@ -232,7 +232,7 @@ static inline const char* select_party_name(u16 id) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_80239b2c, JP 0x80239B2C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(evt_win_party_lankup_chk) {
     PouchData* pouch;
     u16* p;
@@ -273,7 +273,7 @@ USER_FUNC(evt_win_party_lankup_chk) {
  * otherwise 0.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_802399f8, JP 0x802399F8. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 USER_FUNC(evt_win_party_lankdown_chk) {
     PouchData* pouch;
     u16* p;
@@ -622,7 +622,7 @@ void winMgrHelpMain(WinMgrEntry* entry) {
                     entry->scroll = 0;
                 }
             } else if (keyGetDirTrg(0) & DEMO_SUBSTICK_DOWN) {
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
                 if (entry->scroll / 2 < (entry->lines + 1) / 2 - 1) {
 #else
                 if ((entry->lines + 1) / 2 - 1 > (entry->scroll + 1) / 2) {
@@ -665,7 +665,7 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
                     PSMTXConcat(mtx, scale, mtx);
                     iconDispGx2(mtx, ICON_FLAG_2D, ICON_ARROW_DOWN);
                 }
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             } else if (entry->scroll / 2 == (entry->lines + 1) / 2 - 1) {
 #else
             } else if (entry->scroll + 2 == entry->lines) {
@@ -871,7 +871,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                         if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
                             cnt++;
                         }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     }
                 }
                 if (cnt == 2) {
@@ -919,7 +919,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                     sel->items[sel->numItems++].id = i + BADGE_MIN;
                 }
             }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_type);
 #endif
             break;
@@ -931,7 +931,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             for (i = 0; i < BADGE_COUNT; i++) {
                 m = (s16)badgeShop_get(bdsw->starmaniac_table, i + BADGE_MIN);
                 if (m - badgeShop_ThrowCheck(i + BADGE_MIN) > 0) {
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                     sel->items[sel->numItems++].id = i + BADGE_MIN;
                 }
             }
@@ -1030,12 +1030,12 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_80237a2c, JP 0x80237A2C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 // PAL: equal prices fall back to the type order
 s32 select_comp_starpiece(const void* a, const void* b) {
     const WinMgrSelectItem* itemA = a;
     const WinMgrSelectItem* itemB = b;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
     if (itemDataTable[itemA->id].star_piece_price > itemDataTable[itemB->id].star_piece_price) {
         return 1;
     }
@@ -1058,7 +1058,7 @@ s32 select_comp_starpiece(const void* a, const void* b) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_802379e4, JP 0x802379E4. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 select_comp_type(const void* a, const void* b) {
     const WinMgrSelectItem* itemA = a;
     const WinMgrSelectItem* itemB = b;
@@ -1092,7 +1092,7 @@ s32 select_comp_bteresa(const void* a, const void* b) {
 s32 winMgrSelect(WinMgrSelect* sel) {
     if (sel->flags & SELECT_DONE) {
         if (sel->flags & SELECT_CANCELLED) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             return -1;
         }
         if (sel->newItem && sel->cursor == 0 && (sel->flags & SELECT_CANCEL_OK)) {
@@ -1130,7 +1130,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 break;
             case SELECT_TYPE_PARTY_SWAP_RANK_DOWN:
                 evt->lwData[2] = party_id_table[id];
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 name = select_party_name(id);
 #else
                 name = select_party_name(id);
@@ -1160,7 +1160,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
                 evt->lwData[3] = itemDataTable[id].sell_price;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 evt->lwData[4] = sel->cursor;
 #endif
                 break;
@@ -1238,7 +1238,7 @@ void winMgrSelectDelete(WinMgrSelect* sel) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_80237448, JP 0x80237448. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 s32 winMgrSelectGetCursor(WinMgrSelect* sel) {
     return sel->cursor;
 }
@@ -1303,7 +1303,7 @@ void select_main(WinMgrEntry* entry) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
 
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             // PAL: moving the cursor resets the help window's text
             if (prev != sel->cursor && sel->numDescriptors >= 3) {
                 winMgrHelpInit(&wp->entries[sel->descriptorId[2]]);
@@ -1361,7 +1361,7 @@ void select_disp(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
     u32 left, top, wd, ht;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     GXColor gray = {0xA0, 0xA0, 0xA0, 0xFF};
 #endif
     GXColor tmp;
@@ -1401,7 +1401,7 @@ void select_disp(WinMgrEntry* entry) {
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             winIconInit();
             winIconSet(item->icon_id, (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, iconcol);
             winFontInit();
@@ -1466,7 +1466,7 @@ void select_disp(WinMgrEntry* entry) {
             }
             sprintf(buf, "%d", price);
             tw = FontGetMessageWidth(buf);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             winFontInit();
             winFontSet((Vec){entry->x + entry->width - 10 - tw, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                        black, buf);
@@ -1493,7 +1493,7 @@ void select_disp(WinMgrEntry* entry) {
         }
         GXSetScissor(left, top, wd, ht);
         switch (sel->type) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             case SELECT_TYPE_BADGE:
 #endif
             case SELECT_TYPE_BADGE_BUY:
@@ -1501,7 +1501,7 @@ void select_disp(WinMgrEntry* entry) {
             case SELECT_TYPE_BADGE_STAR_PIECE:
                 msg = msgSearch("msg_window_title_2");
                 break;
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             case SELECT_TYPE_BADGE_CHARLIETON:
                 msg = msgSearch("msg_window_title_3");
                 break;
@@ -1535,7 +1535,7 @@ void select_disp(WinMgrEntry* entry) {
             case SELECT_TYPE_ITEM_SELL:
             case SELECT_TYPE_BADGE_BUY:
             case SELECT_TYPE_BADGE_SELL:
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             case SELECT_TYPE_BADGE_CHARLIETON_PIT:
             case SELECT_TYPE_INFORMANT_PERFECT:
 #else
@@ -1611,7 +1611,7 @@ static inline s32 select_party_icon(u16 id) {
  * name, portrait (Yoshi in his colour) and one rank icon per rank already earned, with the two column titles,
  * cursor and scroll arrows.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void select_disp_party(WinMgrEntry* entry) {
     s32 i;
 #else
@@ -1629,7 +1629,7 @@ void select_disp_party(WinMgrEntry* entry) {
     GXColor tmp;
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     s32 i;
 #endif
 
@@ -1659,7 +1659,7 @@ void select_disp_party(WinMgrEntry* entry) {
                 ofs = ofs + 0.0f;
             }
             winFontInit();
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
 #else
             winFontSet((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f},
@@ -1671,7 +1671,7 @@ void select_disp_party(WinMgrEntry* entry) {
             } else {
                 winIconInit();
             }
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             winIconSet(iconid_conv(party_icon_table[sel->items[i].id]), (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.55f, 0.55f, 0.55f}, iconcol);
             winIconInit();
             for (j = 0; j < pouch->partyData[party_id_table[sel->items[i].id]].techLevel; j++) {
@@ -1918,7 +1918,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
             }
         }
         GXSetScissor(left, top, wd, ht);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         msg = msgSearch("msg_window_title_6");
         w = (ent->width - FontGetMessageWidth(msg)) / 2;
         winFontInit();
@@ -2096,7 +2096,7 @@ void select_disp3_mario(WinMgrEntry* entry) {
     pouchGetPtr();
     if (!(wp->entries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
         if (sel->items[sel->cursor].flags & SELECT_ITEM_DISABLED) {
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             if (sel->items[sel->cursor].flags & SELECT_ITEM_OVER_MAX) {
                 help = "helperr2";
             } else {
@@ -2133,7 +2133,7 @@ static const char name_party5[] = "name_party5";
 static const char name_party2[] = "name_party2";
 static const char name_party6[] = "name_party6";
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /** Swaps Yoshi's portrait icon for the one in the colour he hatched with; other icons pass through. */
 static s32 iconid_conv(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {

@@ -25,7 +25,7 @@ static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[24];
 EvtWord damage_event_yoshi[22];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord dead_event_yoshi[156];
 #else
 static EvtWord dead_event_yoshi[177];
@@ -33,7 +33,7 @@ static EvtWord dead_event_yoshi[177];
 
 static EvtWord attack_event_yoshi[748];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord wait_event_yoshi[6];
 #else
 static EvtWord wait_event_yoshi[7];
@@ -133,7 +133,7 @@ static BattleUnitDefense defence_yoshi = {{0, 0, 0, 0, 0}};
 /** Defence attributes of the Yoshi double's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_yoshi = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist_yoshi = {60, 80, 70, 100, 70, 100, 100, 70, 100, 70, 100, 70, 100, 70, 70, 0, 0, 100, 70, 100, 100, 0};
 #else
 static StatusVulnerability regist_yoshi = {
@@ -246,7 +246,7 @@ static EVT_BEGIN(dead_event_yoshi)
         WAIT_FRAMES(37)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg4_jin_26_03_yos"), 0, -2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
         WAIT_MS(500)
@@ -257,7 +257,7 @@ static EVT_BEGIN(dead_event_yoshi)
         WAIT_MS(200)
         CASE_EQUAL(1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
         LOOP(0)
@@ -268,7 +268,7 @@ static EVT_BEGIN(dead_event_yoshi)
         END_LOOP
         CASE_EQUAL(2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_D_3"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 #endif
     END_SWITCH
@@ -505,7 +505,7 @@ EVT_END()
 static EVT_BEGIN(wait_event_yoshi)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_END()
 #else
 EVT_END_PAD()

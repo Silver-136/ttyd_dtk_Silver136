@@ -58,20 +58,20 @@ EvtWord offscreen_to_kuizu[127];
 static EvtWord offscreen_to_normal[121];
 QuizEntry kuizu_data[7];
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord UNK_0x00022a90[46];
 #endif
 
 EvtWord quiz_ok[19];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord quiz_ng[];
 #else
 EvtWord quiz_ng[21];
 #endif
 
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EvtWord UNK_0x00022be8[21];
 EvtWord UNK_0x00022c3c[66];
 #endif
@@ -89,7 +89,7 @@ EvtWord kuizu_sekizou[920];
 
 EvtWord sekizou_init[47];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord aji_04_init_evt[];
 #else
 EvtWord aji_04_init_evt[55];
@@ -101,7 +101,7 @@ EvtWord aji_04_init_evt[55];
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_close)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -118,7 +118,7 @@ EVT_END()
  * the open and close scripts apply the same transform. The demo builds use 0.2217.
  */
 static EVT_BEGIN(w_door_open)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
@@ -202,13 +202,13 @@ EVT_BEGIN(sekizou_kaiten2)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(sekizou_talk)
     RETURN
 EVT_END()
 #endif
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 /**
  * Makes the statue's lower jaw (kuti, kuti2) flap for three open-and-close cycles
  * while its text is shown (it is spawned next to every statue message).
@@ -440,7 +440,7 @@ QuizEntry kuizu_data[] = {
     {"anm_7mon", "stg7_aji_18", "stg7_aji_19", 3},
 };
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(UNK_0x00022a90)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 150)
@@ -460,7 +460,7 @@ EVT_END()
 EVT_BEGIN(quiz_ok)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_map_playanim, STRING("anm_seikai"), 1, 0)
 #else
     CALL(evt_map_playanim, STRING("anm_seikai"), MAP_ANIM_PLAY_ONCE, 0)
@@ -477,13 +477,13 @@ EVT_BEGIN(quiz_ng)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_fuseikai"), MAP_ANIM_PLAY_LOOP, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     WAIT_MS(1500)
 #endif
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(UNK_0x00022be8)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -548,7 +548,7 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
     SPAWN_EVENT(sekizou_talk)
     CALL(evt_msg_print, 0, STRING("stg7_aji_01"), 0, 0)
@@ -584,7 +584,7 @@ EVT_BEGIN(kuizu_sekizou)
     // If he takes the challenge, the quiz set appears and the quiz music starts.
     CALL(evt_msg_print_add, 0, STRING("stg7_aji_05"))
     WAIT_MS(500)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_map_playanim, STRING("anm_denshoku"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_mamekyuu"), MAP_ANIM_PLAY_LOOP, 0)
 #endif
@@ -604,7 +604,7 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     LOOP(0)
         READ_INT4(LW(9), LW(10), LW(11), LW(12))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
         CALL(evt_map_playanim, LW(9), MAP_ANIM_PLAY_LOOP, 0)
         WAIT_MS(400)
 #endif
@@ -664,7 +664,7 @@ EVT_BEGIN(kuizu_sekizou)
         ADD(LW(13), 1)
 
         // A right answer earns a fanfare; the statue uses different reactions for the first three, fourth and fifth correct answers.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, 11)
         WAIT_MS(500)
         IF_INT_EQUAL(LF(0), 1)
@@ -679,7 +679,7 @@ EVT_BEGIN(kuizu_sekizou)
             END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_ao"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             SPAWN_EVENT(PTR(UNK_0x00022a90))
             WAIT_MS(1500)
             CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, EASING_SINE_IN_OUT)
@@ -695,7 +695,7 @@ EVT_BEGIN(kuizu_sekizou)
                 SPAWN_EVENT(PTR(sekizou_kaiten2))
                 WAIT_MS(500)
                 SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_22"), 0, 0)
 #else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_22"), PTR(kuti_callback), 0)
@@ -707,7 +707,7 @@ EVT_BEGIN(kuizu_sekizou)
                 SPAWN_EVENT(PTR(sekizou_kaiten2))
                 WAIT_MS(500)
                 SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_23"), 0, 0)
 #else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_23"), PTR(kuti_callback), 0)
@@ -720,7 +720,7 @@ EVT_BEGIN(kuizu_sekizou)
                 SPAWN_EVENT(PTR(sekizou_kaiten))
                 WAIT_MS(1000)
                 SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_24"), 0, 0)
 #else
                 CALL(evt_msg_print, 0, STRING("stg7_aji_24"), PTR(kuti_callback), 0)
@@ -730,7 +730,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_25"), 0, 0)
                 BREAK_LOOP
             END_SWITCH
@@ -752,7 +752,7 @@ EVT_BEGIN(kuizu_sekizou)
             END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_aka"), MAP_OBJ_FLAG_HIDDEN)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
             SPAWN_EVENT(PTR(quiz_ng))
             WAIT_MS(1500)
             CALL(evt_cam3d_evt_set, -189, 72, 207, 219, 69, -80, 0, EASING_SINE_IN_OUT)
@@ -763,7 +763,7 @@ EVT_BEGIN(kuizu_sekizou)
             SWITCH(LW(15))
                 CASE_EQUAL(1)
                 SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_26"), 0, 0)
                 CASE_EQUAL(2)
                 SPAWN_EVENT(sekizou_talk)
@@ -777,7 +777,7 @@ EVT_BEGIN(kuizu_sekizou)
                 SET_VALUE(LF(1), 1)
                 CASE_EQUAL(3)
                 SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_28"), 0, 0)
                 CALL_CHILD(offscreen_to_normal)
                 CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG7_DUN2"))
@@ -794,7 +794,7 @@ EVT_BEGIN(kuizu_sekizou)
                 WAIT_MS(250)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_29"), 0, 0)
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 250, -50)
                 CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
@@ -850,7 +850,7 @@ EVT_BEGIN(kuizu_sekizou)
                 END_INLINE_EVENT
                 WAIT_MS(300)
                 WAIT_MS(500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(sekizou_talk)
                 CALL(evt_msg_print, 0, STRING("stg7_aji_30"), 0, 0)
@@ -882,7 +882,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_npc_wait_battle_end)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
                 CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG7_DUN2"), 2000)
                 CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"), 2000)
 #endif
@@ -897,7 +897,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL_CHILD(PTR(sekizou_kaiten))
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
                 CALL(evt_msg_print, 0, STRING("stg7_aji_31"), 0, 0)
                 BREAK_LOOP
             END_SWITCH
@@ -925,7 +925,7 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 100, 0, ITEM_TYPE_FALL, -1, PTR(evt_item))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
     SPAWN_EVENT(PTR(sekizou_talk))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_msg_print, 0, STRING("stg7_aji_32"), 0, 0)
 #else
     CALL(evt_msg_print, 0, STRING("stg7_aji_32"), PTR(kuti_callback), 0)
@@ -984,7 +984,7 @@ static void callback(s32 type, void** work) {
             psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
         }
     }
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     evt = ((MsgWinData*)*work)->event;
     if (((EventEntry*)evt->lwData[8] == NULL || !evtCheckID(((EventEntry*)evt->lwData[8])->eventId)) && type == 5) {
         evt->lwData[8] = (EvtWord)evtEntry(UNK_0x00022c3c, 0, 0);
@@ -995,7 +995,7 @@ static void callback(s32 type, void** work) {
 #endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_aji_00000ed0, JP aji .text+0xE0C. See docs/NAME_PROVENANCE.md.
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 void kuti_callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;
 
@@ -1014,7 +1014,7 @@ void kuti_callback(s32 type, void** work) {
 EVT_BEGIN(aji_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_snd_set_rev_mode, 1)
 #endif
     SET_VALUE(LW(0), PTR(bero_entry_data))

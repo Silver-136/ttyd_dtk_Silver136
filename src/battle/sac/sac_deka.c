@@ -146,7 +146,7 @@ EVT_END()
  * args[0] is the partner's unit id (-1 = none).
  * The retail releases end it once yuka_end has freed the floor buffers; the demo has no such exit.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(main_deka) {
 #else
 USER_FUNC(main_deka) {
@@ -161,7 +161,7 @@ USER_FUNC(main_deka) {
         memset(w, 0, sizeof(DekaWork));
         w->unitId = evtGetValue(event, args[0]);
         yuka_init();
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     }
     if (w->tex->address == NULL) {
         return EVT_RETURN_DONE;
@@ -325,7 +325,7 @@ static void yuka_main(void) {
  * Frees the floor texture and mesh and clears the stg_b_yuka flags again.
  * The retail releases also null the buffer addresses, which is what lets main_deka finish.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(yuka_end) {
 #else
 USER_FUNC(yuka_end) {
@@ -333,11 +333,11 @@ USER_FUNC(yuka_end) {
     DekaWork* w = get_ptr();
 
     smartFree(w->tex);
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     w->tex->address = NULL;
 #endif
     smartFree(w->mesh);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     mapGrpFlagOff("stg_b_yuka", 0x400001);
 #else
     w->mesh->address = NULL;
@@ -1174,13 +1174,13 @@ EVT_BEGIN(marioAttackEvent_Deka)
 
     // The camera resets and the background and rippling floor are cleaned up.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(yuka_end)
 #endif
     CALL(btlevtcmd_SacBgsetMove, 1)
 
     // Vivian stops tracking her position.
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(end_deka)
 #endif
     IF_INT_NOT_EQUAL(LW(14), -1)
@@ -1189,7 +1189,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
             CALL(btlevtcmd_SetUnitWork, LW(14), SHADOW_TAIL_WORK_HOLD, 0)
         END_IF
     END_IF
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(yuka_end)
     CALL(end_deka)
 #endif
@@ -1260,7 +1260,7 @@ EVT_END()
  * Draws the rippling floor as 128 textured quads along the strip, using the captured floor texture.
  * The retail releases skip it once the buffers are freed.
  */
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static void yuka_disp(CameraId cam, void* param) {
 #else
 void yuka_disp(CameraId cam, void* param) {
@@ -1274,13 +1274,13 @@ void yuka_disp(CameraId cam, void* param) {
 
     w = get_ptr();
     camera = camGetPtr(cam);
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     {
 #else
     if (w->tex->address != NULL) {
 #endif
         m = w->mesh->address;
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         {
 #else
         if (m != NULL) {

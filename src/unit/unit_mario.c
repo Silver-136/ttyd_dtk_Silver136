@@ -28,7 +28,7 @@ USER_FUNC(_get_local_frame);
 static USER_FUNC(_mario_makkuro_set);
 USER_FUNC(_mario_super_emblem_anim_set);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 PoseTableEntry pose_table_mario_stay[32];
 #else
 PoseTableEntry pose_table_mario_stay[34];
@@ -56,7 +56,7 @@ EvtWord mario_appeal_event[30];
 static EvtWord attack_audience_event[15];
 EvtWord btlataudevtMarioJump[237];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EvtWord btlataudevtMarioHammer[309];
 #else
 EvtWord btlataudevtMarioHammer[356];
@@ -68,7 +68,7 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 EvtWord mario_win_reaction[9];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -126,7 +126,7 @@ PoseTableEntry pose_table_mario_stay[] = {
     {POSE_TYPE_DANGER, "M_S_3"},
     {POSE_TYPE_HAPPY_HEART, "M_V_2"},
     {POSE_TYPE_HAPPY_FLOWER, "M_V_2"},
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     {POSE_TYPE_KISSED_CHRISTINE, "M_A_3B"},
     {POSE_TYPE_KISSED_CHUCHURINA, "M_A_3B"},
 #endif
@@ -140,7 +140,7 @@ PoseTableEntry pose_table_mario_stay[] = {
     {POSE_TYPE_ACTION, "M_S_1"},
 };
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 PoseTableEntry pose_table_object[] = {
     {POSE_TYPE_NORMAL, "KRN_H_1"},
     {POSE_TYPE_DAMAGE, "KRN_H_1"},
@@ -173,7 +173,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /** Mario's status chances: 100 for every status (badges such as Feeling Fine lower them in battle). */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -201,7 +201,7 @@ static StatusVulnerability regist = {
 #endif
 
 /** Pose table for Mario's two hidden helper parts (2 and 3): the hidden KRN_H_1 animation for every pose. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 PoseTableEntry pose_table_object[] = {
     {POSE_TYPE_NORMAL, "KRN_H_1"},
     {POSE_TYPE_DAMAGE, "KRN_H_1"},
@@ -342,7 +342,7 @@ EVT_END()
 
 s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},
@@ -532,7 +532,7 @@ static USER_FUNC(_get_mario_hammer_lv) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -624,7 +624,7 @@ EVT_BEGIN(mario_appeal_event)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)
@@ -748,7 +748,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CASE_EQUAL(2)
         SET_VALUE(LW(0), STRING("M_H_5A"))
         SET_VALUE(LW(1), STRING("M_H_5B"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(2), STRING("M_H_15"))
 #else
         SET_VALUE(LW(2), STRING("M_H_14"))
@@ -756,7 +756,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("M_H_9A"))
         SET_VALUE(LW(1), STRING("M_H_9B"))
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         SET_VALUE(LW(2), STRING("M_H_14"))
 #else
         SET_VALUE(LW(2), STRING("M_H_15"))
@@ -810,7 +810,7 @@ EVT_BEGIN(btlataudevtMarioHammer)
     // The camera returns to the stage view after a pause while Mario heads back.
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_MS(1500)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
         CALL(evt_btl_camera_set_mode, 0, 0)
         WAIT_MS(1000)
     END_SIBLING_EVENT
@@ -852,7 +852,7 @@ EVT_END()
  * Pose sounds for Mario: on the low-HP pant pose M_S_3, at a quarter of the loop,
  * mario_pinch_pose_sound_callback plays one of his relief voice clips.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},
@@ -870,7 +870,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -881,7 +881,7 @@ EVT_END()
  * Mario's victory pose M_V_2 held for one second (data tag 64),
  * run for Mario and the partner when the battle is won and experience is handed out.
  */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)

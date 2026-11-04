@@ -67,7 +67,7 @@ EVT_BEGIN(sac_mario_item_on_evt)
     RETURN
 EVT_END()
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 EVT_BEGIN(sac_start_stardust)
     LOOP(6)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -86,7 +86,7 @@ EVT_BEGIN(sac_mario_item_on_end_evt)
 EVT_END()
 
 /** Six bursts of stardust 50 units above Mario, 10 frames apart, while the Crystal Star appears. */
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
 EVT_BEGIN(sac_start_stardust)
     LOOP(6)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -275,7 +275,7 @@ USER_FUNC(sac_enemy_slide_return) {
         if (unit && unit->alliance == ALLIANCE_ENEMY) {
             evt = evtEntry(enemy_slide_return_evt, 0, EVENT_START_IMMEDIATE);
             evt->unitId = i;
-#if VERSION == VERSION_EU
+#if VERSION >= VERSION_DEMO_EU
             unit->slideReturnEventId = evt->eventId;
 #endif
         }

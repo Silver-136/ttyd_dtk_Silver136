@@ -44,7 +44,7 @@ static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord evt_ori_open[130];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 extern EvtWord tsuritenjo_event[];
 #else
 EvtWord tsuritenjo_event[143];
@@ -52,7 +52,7 @@ EvtWord tsuritenjo_event[143];
 
 static s32 key_tbl[2];
 
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
 static EvtWord evt_majin[404];
 static EvtWord evt_majin2[243];
 #else
@@ -198,7 +198,7 @@ EVT_BEGIN(tsuritenjo_event)
     CALL(evt_mario_normalize)
     CALL(evt_mario_set_pos, 620, 0, 0)
     CALL(evt_party_set_pos, 0, 670, 0, 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_cam_road_reset)
 #endif
     CALL(evt_bero_mario_go_init)
@@ -235,7 +235,7 @@ EVT_BEGIN(tsuritenjo_event)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_50_SECONDS_TO_ESCAPE)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_FIELD)
     CALL(evt_npc_start_for_event)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
     CALL(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -363,7 +363,7 @@ static EVT_BEGIN(evt_majin)
                     CALL(evt_mario_set_dir, 270, 200, 0)
                 END_IF
             END_INLINE_EVENT
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
             CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
@@ -392,7 +392,7 @@ static EVT_BEGIN(evt_majin)
                 ADD(LW(1), 50)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12_11"), PTR(majin_callback), 0)
-#if VERSION > VERSION_DEMO_US
+#if VERSION >= VERSION_JP
                 CALL(evt_mario_set_pose, STRING("M_I_N"))
 #endif
                 CALL(evt_cam3d_evt_set, 380, 110, 330, 380, 57, 23, 500, EASING_SINE_IN_OUT)
@@ -413,7 +413,7 @@ static EVT_BEGIN(evt_majin2)
     CALL(evt_npc_change_fbat_mode, FBAT_MODE_EVENT)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
-#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_normalize)
 #endif
     CALL(evt_mobj_wait_animation_end, STRING("box"))
