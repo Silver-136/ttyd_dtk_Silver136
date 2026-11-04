@@ -5207,7 +5207,7 @@ EVT_BEGIN(evt_gor_door_light_sub)
 EVT_END()
 
 /**
- * Close handler for Sanders's secret door, when Mario walks back out:
+ * Close handler for Sanders's secret door, when Mario presses A at its inner side (A_ie_03_doa_04):
  * locks the controls, spawns evt_gor_door_close_sub and evt_gor_door_light_sub,
  * walks Mario and his partners to the in-position of the door while the 3D camera follows,
  * then frees the controls.

@@ -309,7 +309,7 @@ static EVT_BEGIN(cloud_evt)
     RETURN
 EVT_END()
 
-/** Event script: touch handler on the cloud hit area; intentionally empty. */
+/** A-button handler (facing the cloud hit area); empty. */
 EVT_BEGIN(touch_evt)
     RETURN
 EVT_END()

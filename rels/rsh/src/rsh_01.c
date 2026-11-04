@@ -594,7 +594,7 @@ NpcSetupInfo npc_data_2[] = {
 };
 
 /**
- * Trigger when Mario steps on the paper spot (a_kami) at STG6_22_DOCUMENT:
+ * Trigger when Mario presses A on the paper spot (a_kami) at STG6_22_DOCUMENT:
  * sets STG6_23_VITAL_PAPER and gives him the Vital Paper item with the item-get fanfare.
  */
 static EVT_BEGIN(evt_daiji_kami)
