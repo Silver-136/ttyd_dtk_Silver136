@@ -1015,7 +1015,7 @@ EVT_BEGIN(mail_evt_gor_04)
 EVT_END()
 
 /**
- * Excess Express (rsh_02_a in US and PAL, rsh_03_a in JP and the demos):
+ * Excess Express (rsh_02_a in US and PAL, rsh_03_a in JP and the early demos):
  * from day 3 (STG6_45) sends Pa-Patch's mail (21)
  * when Mario crosses the line at x = -100 (JP and demos: 400).
  */
@@ -1225,7 +1225,7 @@ EVT_END()
 
 /**
  * Twilight Town (usu_01): at STG4_04_01 sends mail 29 (RDM issue 3)
- * when Mario crosses x = 110 (the demos: 300).
+ * when Mario crosses x = 110 (the early demos: 300).
  */
 EVT_BEGIN(mail_evt_usu_01)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_3_SENT, 1)
@@ -1916,7 +1916,7 @@ USER_FUNC(evt_sub_status_gauge_check_update) {
 }
 
 #if VERSION >= VERSION_US
-/** Makes the status bar refresh its numbers at once. Not in JP or the demos. */
+/** Makes the status bar refresh its numbers at once. Not in JP or the early demos. */
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_sub_status_gauge_force_update) {
     statusWinForceUpdate();
@@ -2245,7 +2245,7 @@ USER_FUNC(bgm_start_wait) {
 #if VERSION >= VERSION_US
 /**
  * Scales the two float variables args[0] and args[1] by 60 / frame rate,
- * so per-frame steps cover the same distance at 50 Hz. Not in JP or the demos.
+ * so per-frame steps cover the same distance at 50 Hz. Not in JP or the early demos.
  */
 USER_FUNC(evt_sub_scale_by_fps) {
     EvtWord* args = event->args;

@@ -218,7 +218,7 @@ void marioSetPeakYpos(void) {
 
 /**
  * Snaps Mario to face straight left or right on screen, whichever is nearer,
- * and points his movement direction that way. JP and the demos give both cases the 90-degree move direction.
+ * and points his movement direction that way. JP and the early demos give both cases the 90-degree move direction.
  */
 void marioAdjustMoveDir(void) {
     MarioWork* mario = marioGetPtr();
@@ -271,7 +271,7 @@ f32 revise360(f32 angle) {
 /**
  * Converts a screen-relative angle in degrees into a world move direction (270 - angle + camera yaw, wrapped).
  * In paper mode the input angle is forced to 0 or 180 from the side Mario faces before that conversion.
- * The US and PAL releases round to 0.001 degree; JP and the demos to 0.01.
+ * The US and PAL releases round to 0.001 degree; JP and the early demos to 0.01.
  */
 f32 toMovedir(f32 angle) {
     MarioWork* mario = marioGetPtr();

@@ -127,7 +127,7 @@ BeroEntry bero_null[] = {
 
 /**
  * Sets where Mario respawns after falling into a bottomless pit; args are x, y, z as whole numbers.
- * Retail only (the demos lack it).
+ * Retail only (the early demos lack it).
  */
 USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
     EvtWord* args = event->args;

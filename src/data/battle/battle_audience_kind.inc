@@ -1,4 +1,4 @@
-// The kind table: ahead of the member tables in retail, last in the demos.
+// The kind table: ahead of the member tables in retail, last in the early demos.
 /**
  * Every audience kind, indexed by member type (0 Toad .. 12 Luigi):
  * its animations and thrown items, where thrown items appear, its star power weight and its sprite scale.

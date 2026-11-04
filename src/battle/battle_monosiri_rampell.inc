@@ -1,4 +1,4 @@
-// Tattle groups for Doopliss: after the message table in retail, among the other groups in the demos.
+// Tattle groups for Doopliss: after the message table in retail, among the other groups in the early demos.
 /**
  * Tattle group for Doopliss: both chapter 4 fights, his invincible form and the chapter 8 fight
  * with all his copies of Mario and the partners. Tattling any one marks them all.

@@ -1,6 +1,6 @@
 // Battle units: creating, spawning, deleting and updating the units and parts that fight in a battle.
 
-// FAKE: the demos' status functions take the enum here while their callers see the s8 prototypes.
+// FAKE: the early demos' status functions take the enum here while their callers see the s8 prototypes.
 #define BATTLE_UNIT_STATUS_ENUM
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -1133,7 +1133,7 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
  * and a zero strength for a size, attack or defense change clears an effect of that sign.
  * Cancellation and zero-strength clear paths return FALSE; unhandled types return TRUE without changing a status.
  * Retail versions also return FALSE when Charge drops below 0
- * or Allergic or Payback is set to 0 turns, which the demos treat as set.
+ * or Allergic or Payback is set to 0 turns, which the early demos treat as set.
  */
 #if VERSION <= VERSION_DEMO_JP
 BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength) {

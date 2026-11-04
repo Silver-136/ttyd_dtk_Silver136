@@ -947,7 +947,7 @@ void gcRumbleCheck(void) {
 }
 
 /**
- * The demos inline the reset check into its callers (the US demo also logs the reset);
+ * The early demos inline the reset check into its callers (the US demo also logs the reset);
  * their restart codes are only RESTART and HOTRESET.
  */
 #if VERSION <= VERSION_DEMO_JP

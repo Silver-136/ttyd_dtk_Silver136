@@ -866,7 +866,7 @@ static YuuRankingWork* _wp;
 
 /**
  * Converts a minigame score into the number of Monte (tokens) it is worth:
- * type 0 by score divided by 30000 (25000 in the demos), types 2 and 3 by the score above a base,
+ * type 0 by score divided by 30000 (25000 in the early demos), types 2 and 3 by the score above a base,
  * type 1 (a time) by how far under max it is out of 15;
  * then adds bonus and applies mul (a multiplier below 0x100, an additive amount above it). Never negative.
  */

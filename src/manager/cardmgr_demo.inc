@@ -1,4 +1,4 @@
-// cardmgr.c as the demos have it (from the LLCOOLT tree's demo view): a different file layout, most helpers inlined.
+// cardmgr.c as the early demos have it (from the LLCOOLT tree's demo view): a different file layout, most helpers inlined.
 /** Name of the game's save file on the memory card, used to find, create and delete it. */
 const char cardFileName[0x14] = "mariost_save_file";
 const char cardGameTitle[0x18] = "ペーパーマリオＲＰＧ";

@@ -1660,7 +1660,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
 /**
  * evt_lecture_msg step: blocks until the tutorial has reached step args[0].
  * In JP and later it clears WINDOW_FLAG_LECTURE_KEY_MASK on the first call and sets it once the step is reached;
- * the demos do not change that flag here.
+ * the early demos do not change that flag here.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(lecture_step_wait) {

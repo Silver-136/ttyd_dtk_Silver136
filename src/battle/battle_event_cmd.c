@@ -4430,7 +4430,7 @@ USER_FUNC(btlevtcmd_PhaseEventStartDeclare) {
 
 /**
  * Script: picks the action a confused unit args[0] takes (BattleSetConfuseAct)
- * and returns its script in args[1]; after 20 failed tries (10 in the demos) it falls back to
+ * and returns its script in args[1]; after 20 failed tries (10 in the early demos) it falls back to
  * subsetevt_confuse_flustered.
  */
 USER_FUNC(btlevtcmd_GetConfuseActEvent) {

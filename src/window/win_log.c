@@ -1879,7 +1879,7 @@ void capture(CameraId camera, void* param) {
 
 /**
  * Draws the Tattle card: the half-book page, the captured portrait with a soft edge and fade-in alpha,
- * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the demos),
+ * the enemy's log number and name (Doopliss as "?" until his name is guessed, not in the early demos),
  * and where it is found.
  */
 #if VERSION <= VERSION_DEMO_JP

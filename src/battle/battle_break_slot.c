@@ -940,7 +940,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
 }
 
-/** Frees the reels' card lists at battle end; empty in JP and the demos, which leak them with the battle heap. */
+/** Frees the reels' card lists at battle end; empty in JP and the early demos, which leak them with the battle heap. */
 void BattleBreakSlot_End(void) {
     // JP frees nothing here: the reel card arrays stay allocated
 #if VERSION >= VERSION_US
@@ -955,7 +955,7 @@ void BattleBreakSlot_End(void) {
  * called from BattleAudience_ApRecoveryBuild with the weapon's bingoSlotChance,
  * never before the first crystal star.
  * The third card is always drawn different from the second (the real result comes from the spin).
- * Debug flags and slot->flags force a card (Shine Sprite; the demos' bit 1 forces a Star).
+ * Debug flags and slot->flags force a card (Shine Sprite; the early demos' bit 1 forces a Star).
  */
 // Writes reels[reelNo] before the reelNo > 3 test below: reelNo must be below 3 on entry.
 void BattleBreakSlot_PointInc(void) {

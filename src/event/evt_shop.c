@@ -137,7 +137,7 @@ WinMgrDesc list_desc[] = {
 };
 
 #if VERSION <= VERSION_DEMO_JP
-/** the demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
+/** the early demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
 EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
     CALL(disp_list)
@@ -778,7 +778,7 @@ EVT_END()
 #endif
 
 #if VERSION >= VERSION_JP
-/** the demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
+/** the early demos define the prize list script here, in .data (retail: .sdata); the US demo never runs it */
 EVT_BEGIN(evt_shoplist)
     CALL(evt_mario_key_onoff, 0)
     CALL(disp_list)

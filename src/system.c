@@ -566,7 +566,7 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
  */
 void makeKey(void) {
 #if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
-    // the demos keep button/dirs in 32-bit locals
+    // the early demos keep button/dirs in 32-bit locals
     s32 delay;
     u32 button;
     u32 dirs;
@@ -850,7 +850,7 @@ f32 sysFrame2SecFloat(f32 frame) {
 
 /**
  * Converts milliseconds to whole frames at the current frame rate (50 or 60 in US and PAL;
- * always 60 in JP and the demos).
+ * always 60 in JP and the early demos).
  */
 s32 sysMsec2Frame(s32 msec) {
 #if VERSION >= VERSION_US
@@ -860,7 +860,7 @@ s32 sysMsec2Frame(s32 msec) {
 #endif
 }
 
-/** Converts milliseconds to frames as a float, at the current frame rate (60 in JP and the demos). */
+/** Converts milliseconds to frames as a float, at the current frame rate (60 in JP and the early demos). */
 f32 sysMsec2FrameFloat(f32 msec) {
 #if VERSION >= VERSION_US
     return (msec * (f32)gp->framerate) / 1000.0f;

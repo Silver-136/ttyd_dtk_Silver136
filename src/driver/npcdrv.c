@@ -318,7 +318,7 @@ void npcDisp_xlu(CameraId cameraId, void* param) {
 /**
  * Draw callback for an opaque NPC, registered once per render mode:
  * mode 0 updates and draws the opaque pass, modes 1 and 2 the other two passes.
- * The US and later releases apply the dimmed colour before the switch; JP and the demos only in mode 0.
+ * The US and later releases apply the dimmed colour before the switch; JP and the early demos only in mode 0.
  */
 void npcDisp(CameraId camId, void* param) {
     NpcEntry* entry = param;
@@ -2659,7 +2659,7 @@ static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
 #if VERSION <= VERSION_DEMO_JP
 
 
-/** Position of the hammer head during the spin hammer in the demos. */
+/** Position of the hammer head during the spin hammer in the early demos. */
 static inline void npcKaitenHammerPos(f32 angle, f32 r, f32* x, f32* y, f32* z) {
     MarioWork* mario = marioGetPtr();
     f32 s, c;
@@ -3160,7 +3160,7 @@ NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle
  * dead (0x10) runs deadEvent, resume (0x10000000) moveEvent, blown away (8) blowEvent,
  * found Mario (1) findEvent, lost Mario (2) lostEvent, out of territory (4) returnEvent, first match wins.
  * The new event replaces the regular one.
- * Clears the bits (keeping 0x100-0x800 outside the demos); returns TRUE if an event started.
+ * Clears the bits (keeping 0x100-0x800 outside the early demos); returns TRUE if an event started.
  */
 BOOL npcCheckInterrupt(NpcEntry* npc) {
     EventEntry* evt;

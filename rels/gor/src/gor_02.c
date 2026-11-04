@@ -1511,7 +1511,7 @@ EVT_BEGIN(powerupya_orb_use)
 #else
 
 /**
- * In the demos, Merlon takes the Up Arrow in this talk event and changes the shop's blue crystal to red.
+ * In the early demos, Merlon takes the Up Arrow in this talk event and changes the shop's blue crystal to red.
  * This talk event has the name that retail gives to its door animation.
  */
 EVT_BEGIN(powerupya_direct_talk)
@@ -4007,7 +4007,7 @@ EVT_END()
  * three smoke puffs rise at
  * the "S_i01_dan_mC" box, the camera moves in, the music and ambience dip and low-pass
  * and Mario rolls to (65, -55).
- * In the demos he always unrolls facing left; in JP and later this happens only until GSWF_GOR02_BOBBERY_DOOR_OPEN is set.
+ * In the early demos he always unrolls facing left; in JP and later this happens only until GSWF_GOR02_BOBBERY_DOOR_OPEN is set.
  * While that flag is clear, Sanders turns and asks what they want (mac_4_049).
  * It then registers evt_door_03_caseopen again as a stand-on case event.
  */
@@ -4645,7 +4645,7 @@ static USER_FUNC(enzan_lw_load) {
 
 /**
  * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
- * from "./bg/" in the demos and "./b/" in the retail versions.
+ * from "./bg/" in the early demos and "./b/" in the retail versions.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_set_bgtpl) {

@@ -1,4 +1,4 @@
-// Thrown-item tables: two groups apart in retail (AUD_ITEM_GROUP 1, 2), all together in the demos (no group set).
+// Thrown-item tables: two groups apart in retail (AUD_ITEM_GROUP 1, 2), all together in the early demos (no group set).
 #pragma once off
 #if !defined(AUD_ITEM_GROUP) || AUD_ITEM_GROUP == 1
 /**

@@ -257,7 +257,7 @@ void effWaterDamageMain(EffectEntry* effect) {
 
 /**
  * Draws each droplet as a camera-facing 8x8 quad of texture 0x89 (frame cycling every two retraces) in pale cyan
- * with a refraction layer: the demos copy the screen each frame and sample it shifted by the droplet's position,
+ * with a refraction layer: the early demos copy the screen each frame and sample it shifted by the droplet's position,
  * the retail builds use the small built-in water_damage_tex instead.
  */
 #if VERSION <= VERSION_DEMO_JP

@@ -1928,7 +1928,7 @@ void BattleMenuDisp_Operation_End(BattleWork* wp) {
 
 /**
  * Draws the Tactics list (Change Partner, Defend, Run Away, ...) with its FP costs, cursor and help window.
- * In the demos every row shows the first row's cost.
+ * In the early demos every row shows the first row's cost.
  */
 void DrawOperationWin(void) {
     Mtx rowMtx[7];

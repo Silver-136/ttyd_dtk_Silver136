@@ -118,7 +118,7 @@ USER_FUNC(johoya_keti_newjoho_check) {
  * its length to args[3] and the cost to args[4], and remembers it for setreadflag.
  * Empty label and zeros when there is none.
  * Retail reads the title from the "jketi_title_%04d" message;
- * the demos use the text inside the rumour's own tag.
+ * the early demos use the text inside the rumour's own tag.
  */
 USER_FUNC(johoya_keti_newjoho_makelabel) {
     EvtWord* args = event->args;

@@ -158,7 +158,7 @@ EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32
  * Subtypes 2+ bounce off the ground below (hitCheckFilter):
  * each bounce keeps 60% of the fall speed and 70% of the sideways speed and spin,
  * then gravity (-0.5) and spin take over; 10 bounces end it.
- * It also ends 300 units below Mario (in battle, below y = -300; the demos only check Mario).
+ * It also ends 300 units below Mario (in battle, below y = -300; the early demos only check Mario).
  * CAMERA_3D, layer 2.
  */
 #if VERSION <= VERSION_DEMO_JP

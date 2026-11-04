@@ -671,7 +671,7 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
  * Spawns field item itemId at (x, y, z) named name (generated if NULL);
  * type (ItemEntryType) picks how it appears and how long it stays,
  * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
- * When the table is full, US/PAL may replace a dropped coin or flower; JP and the demos only try
+ * When the table is full, US/PAL may replace a dropped coin or flower; JP and the early demos only try
  * the first slot for a replaceable coin, flower or heart. Returns the entry or NULL.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -1081,7 +1081,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 
 /**
  * Draws the "You got X!" box during an item get, with "badge" wording for badges;
- * US/PAL format the message per language and size the box by its line count; JP and the demos use sprintf and fixed height.
+ * US/PAL format the message per language and size the box by its line count; JP and the early demos use sprintf and fixed height.
  */
 void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
@@ -1185,7 +1185,7 @@ void winHelpDisp(WinMgrEntry* win) {
     }
 }
 
-/** Draws the full-pouch warning: retail chooses item or badge wording; the demos always use the item-full message. */
+/** Draws the full-pouch warning: retail chooses item or badge wording; the early demos always use the item-full message. */
 #if VERSION <= VERSION_DEMO_JP
 static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry;

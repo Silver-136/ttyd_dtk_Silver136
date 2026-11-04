@@ -785,7 +785,7 @@ s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon*
  * Appeal (once a Star Power is obtained), Charge and Super Charge (if equipped, with their FP cost),
  * Defend and Run Away.
  * Run Away is greyed out in no-escape battles or when the unit cannot act, and most entries while veiled.
- * The demos leave the cost of the free entries unset.
+ * The early demos leave the cost of the free entries unset.
  */
 void _btlcmd_MakeOperationTable(BattleWork* wp) {
     PouchData* pouch;
@@ -2896,7 +2896,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
 /**
  * Draws one HP bar at screen position pos: the frame texture, then the fill by barRatio,
  * with a black trail for recent damage while it drains (mode 1).
- * The US and PAL releases use other texture ids than JP and the demos.
+ * The US and PAL releases use other texture ids than JP and the early demos.
  */
 void BattleDrawEnemyHPBar(Vec pos, BattleUnit* unit, GXColor color) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);

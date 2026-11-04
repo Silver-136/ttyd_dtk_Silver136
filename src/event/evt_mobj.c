@@ -686,7 +686,7 @@ USER_FUNC(evt_mobj_floatswitch_red) {
 }
 
 #if MOBJ_EXTRA_OBJS
-/** Places a reusable red tornado switch pressed by a spin jump; only built in PAL and the demos. args[0] ignored. */
+/** Places a reusable red tornado switch pressed by a spin jump; only built in PAL and the early demos. args[0] ignored. */
 USER_FUNC(evt_mobj_tornadoswitch_red) {
     EvtWord* args = event->args;
     s32 flagVar;
@@ -2373,7 +2373,7 @@ static s32 mobj_arrow(MapObjectEntry* mobj) {
     return 0;
 }
 
-/** Places a decorative arrow sign (MOBJ_Arrow); only built in PAL and the demos. args: name, x, y, z, flag variable. */
+/** Places a decorative arrow sign (MOBJ_Arrow); only built in PAL and the early demos. args: name, x, y, z, flag variable. */
 USER_FUNC(evt_mobj_arrow) {
     EvtWord* args = event->args;
     s32 inBattle;

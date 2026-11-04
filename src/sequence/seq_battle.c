@@ -60,7 +60,7 @@ static inline BOOL loadTpl(const char* path) {
  * Enters the battle sequence: switches to the enemy's battle BGM (kept during the Great Tree time-bomb countdown
  * and after the final battle), stops field events and rumble and mutes field sound effects.
  * Later versions take Mario's control here for hit kinds 0x800000/0x1000000;
- * the demos start preloading the audience map for Mario's rank.
+ * the early demos start preloading the audience map for Mario's rank.
  */
 void seq_battleInit(SequenceWork* work) {
     FieldBattleData* fbat;

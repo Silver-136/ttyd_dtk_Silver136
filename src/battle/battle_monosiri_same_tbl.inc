@@ -1,4 +1,4 @@
-// Tattle groups of battle_monosiri.c: one list for both data orders (the demos keep them after the message table).
+// Tattle groups of battle_monosiri.c: one list for both data orders (the early demos keep them after the message table).
 BattleUnitType same_tbl_gesso[] = {
     UNIT_BLOOPER,
     UNIT_BLOOPER_LEFT_TENTACLE,

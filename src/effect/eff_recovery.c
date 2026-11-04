@@ -748,7 +748,7 @@ void effRecoveryDisp2(CameraId cameraId, void* param) {
 /**
  * Draws the label for the large forms (types 4/5) as a camera-facing 108x40 quad, twice:
  * a dark shadow offset by 2 units, then the label in pink for HP (type 4) or green for FP (type 5).
- * Texture 111/110 in US and PAL (173/172 when gp->language is 4), 0x8B/0x8A in JP and the demos.
+ * Texture 111/110 in US and PAL (173/172 when gp->language is 4), 0x8B/0x8A in JP and the early demos.
  */
 void effRecoveryDisp3(CameraId cameraId, void* param) {
     EffectEntry* effect = param;

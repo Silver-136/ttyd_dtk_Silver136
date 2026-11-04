@@ -2552,7 +2552,7 @@ EVT_END()
 /**
  * The last pedestal scene, registered on a_dai from STG7_50_A_WAITING_PROF_FRANKLY to STG7_51.
  * Professor Frankly urges Mario to hold up the last Crystal Star (mac_7_009) and the eighth magic circle forms
- * (effect type 8, 7 in the demos) with a crystal wave;
+ * (effect type 8, 7 in the early demos) with a crystal wave;
  * the seven Crystal Stars fade in around Mario and the camera
  * circles while the charge rises; the partner cries out at the door (mac_7_010), the seven star marks
  * (anm_hosi_1 to 7) and the door (anm_tobira) animate, Frankly and the partner speak (mac_7_011, mac_7_013)

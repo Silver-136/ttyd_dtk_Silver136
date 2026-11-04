@@ -1723,7 +1723,7 @@ void BattleAudienceCtrlProcess(void) {
  * itemId 0 lets the member's kind table pick the item.
  * Refused while the audience is frozen, for kinds that never throw,
  * for a missing or busy member (holding, throwing, asleep, arriving, leaving, in its shell, fuse lit, hit)
- * and outside the centre seats. Outside the demos, also refused in the side columns (outside 4-15) and,
+ * and outside the centre seats. Outside the early demos, also refused in the side columns (outside 4-15) and,
  * for a consumable item, before the first-item tutorial has been seen. TRUE when the member took the item.
  * Called by the phase reactions, the random throws in BattleAudienceCtrlProcess and Frankly's lecture.
  */
@@ -2783,7 +2783,7 @@ void BattleAudienceDispApSrc(CameraId camId, void* param) {
 /**
  * Draws the audience-count window: a frame at its sliding position,
  * the audience icon and the count shown (2D display callback queued by BattleAudience_Disp).
- * The demos draw the icon slightly larger.
+ * The early demos draw the icon slightly larger.
  */
 void BattleAudienceDispWin(CameraId camId, void* param) {
     BattleAudienceWindow* win;
@@ -3312,7 +3312,7 @@ s32 BattleAudience_GetAudienceNoFromOffset(s32 index, s32 column, s32 row) {
 
 /**
  * Picks a random seat in the first three rows for a stage object to fall on (battle_stage_object.c):
- * row 0 columns 4-15, row 1 5-14, row 2 6-13 (the demos: 1-18, 2-17, 3-16). Haiti is Japanese for seating.
+ * row 0 columns 4-15, row 1 5-14, row 2 6-13 (the early demos: 1-18, 2-17, 3-16). Haiti is Japanese for seating.
  */
 s32 BattleAudience_HaitiRandForFallObject(void) {
     s32 row = irand(3);
@@ -3880,7 +3880,7 @@ s32 BattleAudienceAddAudienceNum(s32 num) {
 
 /**
  * Sends every Puni that may leave walking out, each taken off the temporary extra
- * (the target size in the demos), and flags the escape for its announcement (msg_puni_all_escape).
+ * (the target size in the early demos), and flags the escape for its announcement (msg_puni_all_escape).
  * Called after falling objects hit the stands and after a Bulky Bob-omb blast.
  */
 void BattleAudiencePuniAllEscape(void) {
@@ -3910,7 +3910,7 @@ void BattleAudiencePuniAllEscape(void) {
 
 /**
  * Brings up to num Punies to free seats, each adding one to the temporary extra
- * (the target size in the demos); only once Mario has Star Power,
+ * (the target size in the early demos); only once Mario has Star Power,
  * when the battle's crowd includes Punies and not on a wide stage.
  * A Stylish move brings 10 (BattleAudience_PerAct), the Puni phase reaction 200.
  */
@@ -3979,7 +3979,7 @@ void BattleAudienceCheer(s32 type) {
 /**
  * Makes the idle members react: type 0 all raise their arms, 1 all hop, 2 mostly raise their arms (70 to 30),
  * 3 a mix that leans further toward big spinning hops each time it is used in the battle
- * (joyLevel 0-4; it never rises in the demos). Called by the action-command, Stylish and Appeal reactions,
+ * (joyLevel 0-4; it never rises in the early demos). Called by the action-command, Stylish and Appeal reactions,
  * the Star Power cheer and the audience scripts.
  */
 void BattleAudienceJoy(s32 type) {

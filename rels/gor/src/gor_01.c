@@ -1054,7 +1054,7 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_mario_normalize)
     CALL(evt_mario_wait_landon)
 
-    // After the demos, if Flurrie is current, wait until partner use ends before Mario resumes his normal pose.
+    // After the early demos, if Flurrie is current, wait until partner use ends before Mario resumes his normal pose.
 #if VERSION >= VERSION_JP
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
@@ -6926,7 +6926,7 @@ USER_FUNC(cook_chk) {
  * Zess T.'s two-ingredient recipe lookup: given items args[0] and args[1] (in either order),
  * returns the dish in args[2] or 0 if the pair has no recipe.
  * Anything with the Mystery item gives a random result.
- * The demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
+ * The early demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
  */
 #if VERSION >= VERSION_JP
 USER_FUNC(cook_chk2) {
@@ -7024,7 +7024,7 @@ static USER_FUNC(cook_chk) {
  * Zess T.'s two-ingredient recipe lookup: given items args[0] and args[1] (in either order),
  * returns the dish in args[2] or 0 if the pair has no recipe.
  * Anything with the Mystery item gives a random result.
- * The demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
+ * The early demos read cooking.xml from the disc, later releases search R_cookbook_recipe_table.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(cook_chk2) {
@@ -7086,7 +7086,7 @@ BOOL chkCookItem(s32 item) {
 /**
  * Builds item_tbl, the list of items Mario carries for the cooking selection (without the item he already
  * picked), ends it with -1 and returns the count in args[1].
- * args[0] is the pouch slot to leave out (the item id in the demos).
+ * args[0] is the pouch slot to leave out (the item id in the early demos).
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(make_item_tbl) {

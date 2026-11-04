@@ -147,7 +147,7 @@ static WinMgrDesc window_desc[2] = {
 /**
  * Builds the Important Items list: every key item in the pouch except those in menu_skip_list (the curses,
  * boots, hammers, Magical Map and Crystal Stars, which other menu screens show;
- * the demos also hide the Strange Sack).
+ * the early demos also hide the Strange Sack).
  */
 void winMakeSkipList(WindowWork* w) {
     s32 i;

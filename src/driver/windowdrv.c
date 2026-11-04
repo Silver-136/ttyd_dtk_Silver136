@@ -1115,7 +1115,7 @@ BOOL tpl_loaded; // Set by the asynchronous setup callback after msgWindow.tpl i
 #endif
 TEXPalette* winTpl;
 
-/** Whether the window frame textures can be drawn; the demos load them synchronously and need no check. */
+/** Whether the window frame textures can be drawn; the early demos load them synchronously and need no check. */
 static inline BOOL windowTplReady(void) {
 #if VERSION <= VERSION_DEMO_JP
     return TRUE;

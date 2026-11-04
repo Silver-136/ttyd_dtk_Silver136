@@ -122,7 +122,7 @@ void partyPaperLightOff(PartyEntry* party) {
 
 /**
  * TRUE when one of the seven partners is in a pinch:
- * HP at or below PARTY_PINCH_HP (1 in the demos, 5 in the full game), which switches her to the tired pose set.
+ * HP at or below PARTY_PINCH_HP (1 in the early demos, 5 in the full game), which switches her to the tired pose set.
  */
 static inline BOOL partyIsPinch(PartyEntry* party) {
     BOOL pinch = FALSE;
@@ -1948,7 +1948,7 @@ void allPartyRideJabara(void) {
 
 /**
  * Where the partner rides with Mario: behind him on Yoshi (the follower behind the main partner),
- * above him in plane mode, in front of the boat in boat mode (not in the demos), otherwise 20 above him.
+ * above him in plane mode, in front of the boat in boat mode (not in the early demos), otherwise 20 above him.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void getRidePos(PartyEntry* party, Vec* pos) {
@@ -3240,7 +3240,7 @@ void partyPreDisp(PartyEntry* party) {
 
 /**
  * Draw callback for the partner: builds her model matrix (scale 2, or 1.2 in background mode; left/right mirror;
- * rotations; offsets; a small per-member height fix for paper animations outside the demos) and draws the model,
+ * rotations; offsets; a small per-member height fix for paper animations outside the early demos) and draws the model,
  * slowed to 0.75 in shallow water.
  */
 #if VERSION <= VERSION_DEMO_JP

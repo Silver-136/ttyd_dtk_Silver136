@@ -2157,7 +2157,7 @@ void btlseqMove(BattleWork* wp) {
 
 /**
  * TRUE when no unit in this phase's move queue can still act (done for the turn or KO'd).
- * Outside the demos a unit also needs movesRemaining above 0.
+ * Outside the early demos a unit also needs movesRemaining above 0.
  */
 #if VERSION <= VERSION_DEMO_JP
 static BOOL BattlePhaseEndCheck(void) {
@@ -2495,7 +2495,7 @@ void btlseqTurnFirstProcess(BattleWork* wp) {
 
 /**
  * Start-of-phase bookkeeping: queues the units whose attackPhase is this phase into movePriorityQueue (skipping
- * units done for the turn; outside the demos Slowed units are still queued),
+ * units done for the turn; outside the early demos Slowed units are still queued),
  * resets their protect target and pose sounds, then sorts the queue and builds the phase event order.
  */
 #if VERSION <= VERSION_DEMO_JP

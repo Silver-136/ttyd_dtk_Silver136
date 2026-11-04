@@ -406,7 +406,7 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
 #endif
 
 /**
- * Allocates a fixed 7 MiB block from the default heap in the demos, or the dedicated smart heap minus 32 bytes in retail,
+ * Allocates a fixed 7 MiB block from the default heap in the early demos, or the dedicated smart heap minus 32 bytes in retail,
  * and resets its 0x800 block descriptors: all free, nothing allocated.
  * The first smartAlloc after this also frees group 3.
  */

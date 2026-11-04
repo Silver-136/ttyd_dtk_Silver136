@@ -39,7 +39,7 @@ typedef enum IconFlags {
     ICON_FLAG_ACTIVE = (1 << 0),             // 0x1, slot in use
     ICON_FLAG_HIDDEN = (1 << 1),             // 0x2, not drawn
 #if VERSION <= VERSION_DEMO_JP
-    // The demos number these differently (values from LLCOOLT's tree, confirmed by their code).
+    // The early demos number these differently (values from LLCOOLT's tree, confirmed by their code).
     ICON_FLAG_2D = (1 << 2),
     ICON_FLAG_FLIP_X = (1 << 3),
     ICON_FLAG_FLIP_Y = (1 << 4),

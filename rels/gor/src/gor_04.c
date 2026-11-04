@@ -2234,7 +2234,7 @@ EVT_END()
  * Depending on how Mario entered (blimp return, train return trip, n_bero door) it sets the train flags
  * and starts the matching scene.
  * Also starts Peach's mail scene, the Bowser interlude and, at STG6_55_04_BOWSER_RAWK_HAWK,
- * heals Mario and his partners (in JP and the demos, only when a partner is supplied).
+ * heals Mario and his partners (in JP and the early demos, only when a partner is supplied).
  */
 EVT_BEGIN(gor_04_init_evt)
 

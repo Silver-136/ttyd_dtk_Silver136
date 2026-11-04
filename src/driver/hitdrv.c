@@ -263,7 +263,7 @@ void hitDelete(const char* name) {
 }
 
 /**
- * Once per frame: refreshes collision-check eligibility (the retail active list, or the demos' geometry flags),
+ * Once per frame: refreshes collision-check eligibility (the retail active list, or the early demos' geometry flags),
  * applies the current frame of every playing map animation to the collision objects it moves,
  * and recomputes the world matrices and triangles of the maps that changed.
  */
@@ -822,7 +822,7 @@ inline BOOL tempfunc3(HitCheckQuery* query, HitVector* vector) {
 /**
  * Finds the closest collision object hit by the query ray, applying callback when supplied,
  * and updates the query's distance, hit position and normal. Returns NULL on no hit.
- * The demos scan every map entry (no active list) without a separate straight-up case;
+ * The early demos scan every map entry (no active list) without a separate straight-up case;
  * retail walks the active list and has separate straight-down, straight-up and horizontal cases.
  */
 HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {

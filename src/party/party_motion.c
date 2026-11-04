@@ -3876,7 +3876,7 @@ static void partyGorFix(PartyEntry* party) {
 #endif
 
 
-// The demos define the jump, follow, stay, damage, slit and roll motions here, after the helpers above; retail defines
+// The early demos define the jump, follow, stay, damage, slit and roll motions here, after the helpers above; retail defines
 // them earlier in the file. The object's function order follows the definitions, so each order keeps its own copies.
 #if VERSION <= VERSION_DEMO_JP
 

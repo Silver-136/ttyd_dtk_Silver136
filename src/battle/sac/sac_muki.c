@@ -350,7 +350,7 @@ static inline void sacMukiAudienceCall(s32 num) {
 /**
  * The cursor on the 3x3 grid: moves square to square with the Control Stick (slower while Mario is dizzy)
  * and on A hits what is in its square: a red arrow adds to the attack gauge,
- * a blue arrow to the defense gauge (0.25 in JP and the demos, 0.2 in US and PAL, up to level 9),
+ * a blue arrow to the defense gauge (0.25 in JP and the early demos, 0.2 in US and PAL, up to level 9),
  * a poison mushroom makes Mario dizzy and the crowd boo.
  */
 #if VERSION <= VERSION_DEMO_JP

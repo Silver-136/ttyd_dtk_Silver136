@@ -371,7 +371,7 @@ static const char* party_name_table_rtn(s32 i) {
 /**
  * Sets up the unit window work (_wp), the pointing-finger cursor icon,
  * and the HP/FP/BP pointers to Mario's base stats for the stat windows.
- * Retail args[0] selects window-manager mode when nonzero; otherwise, as in the demos, it starts main_evt.
+ * Retail args[0] selects window-manager mode when nonzero; otherwise, as in the early demos, it starts main_evt.
  * Must run before the other unitwin commands.
  */
 USER_FUNC(evt_unitwin_alloc) {
@@ -410,7 +410,7 @@ USER_FUNC(evt_unitwin_alloc) {
 /**
  * Tears the unit window down.
  * Blocks until a unit-window event acknowledges the free request, then removes the counter item icons,
- * the demos' case events or retail window-manager windows, the cursor icon and the work.
+ * the early demos' case events or retail window-manager windows, the cursor icon and the work.
  */
 USER_FUNC(evt_unitwin_free) {
 #if VERSION >= VERSION_JP
@@ -459,7 +459,7 @@ USER_FUNC(evt_unitwin_free) {
 /**
  * Puts goods on a shop counter.
  * args[0] is a null-terminated table of (map object, hit object, script) rows, args[1] the item id for each row;
- * shows each item's icon over its map object. The demos register a hit-object case that runs select_evt;
+ * shows each item's icon over its map object. The early demos register a hit-object case that runs select_evt;
  * retail starts select_evt to poll the counter and creates three window-manager windows.
  */
 USER_FUNC(evt_unitwin_selltable_setup) {
@@ -1257,7 +1257,7 @@ static inline const char* unitwin_party_name(s32 i) {
 /**
  * Draws the unit window each frame: the item name and description for the highlighted counter slot with prices,
  * the counter window that counts toward Mario's coins (or Star Pieces, or pouchGetSuperCoin with flag 0x4000),
- * the optional Shine Sprite counter, the lottery number (not in the demos), and the list windows by mode:
+ * the optional Shine Sprite counter, the lottery number (not in the early demos), and the list windows by mode:
  * item lists (2-3), badge/shop lists (11-16), the informant's rumour lists (17-18),
  * the partner lists (5-7) and the HP/FP/BP lists (8-10),
  * with the finger cursor and the help text of the highlighted row.

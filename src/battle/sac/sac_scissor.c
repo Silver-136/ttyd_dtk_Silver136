@@ -1145,7 +1145,7 @@ void scissor_capture(CameraId camera, void* param) {
     GXPixModeSync();
 }
 
-/** Draws the player's line in shifting rainbow colours. The demos also outline each enemy's cut box in red. */
+/** Draws the player's line in shifting rainbow colours. The early demos also outline each enemy's cut box in red. */
 #if VERSION <= VERSION_DEMO_JP
 static void scissor_disp_control(CameraId camera, void* param) {
 #else

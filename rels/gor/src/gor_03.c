@@ -589,7 +589,7 @@ USER_FUNC(evt_exchange_msg_alloc) {
 
 /**
  * Script helper that formats the exchange menu text:
- * message args[1] filled in with args[0] (the default selection) and the three coin/medal offers in JP and the demos.
+ * message args[1] filled in with args[0] (the default selection) and the three coin/medal offers in JP and the early demos.
  * US and PAL supply only the default selection outside Japanese. The text pointer goes to args[2].
  */
 USER_FUNC(evt_exchange_msg_set) {
@@ -2275,7 +2275,7 @@ EVT_END()
 
 /**
  * Talk event of Peeton across the desk: retail returns immediately while request 19 is active;
- * otherwise runs peton_talk_common, which also handles the request in the demos.
+ * otherwise runs peton_talk_common, which also handles the request in the early demos.
  */
 EVT_BEGIN(peton_desk_talk)
 #if VERSION >= VERSION_JP
@@ -6812,7 +6812,7 @@ rotate:
  * 1 resets, 2 lights the neons, 3 handles the A presses that stop the reels one by one,
  * 4 can adjust a near match to the small-window faces,
  * 5 waits until all three reels stop, 6 checks the faces (three of a kind pays 3 Monte for the first symbol (5
- * in the demos), 15 for the second, 100 for the third), 7 to 10 play the payout and the falling medals,
+ * in the early demos), 15 for the second, 100 for the third), 7 to 10 play the payout and the falling medals,
  * 11 shuts down.
  */
 void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
@@ -7354,7 +7354,7 @@ void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
 /**
  * Script helper that picks the lottery prize for rank args[0]:
  * ranks 0 and 1 give a first-win item the first time (Power Plus or Lucky Day in the final versions,
- * Mushroom in the demos) and then Zess Dynamite or Zess Special, rank 2 gives an Ultra Shroom,
+ * Mushroom in the early demos) and then Zess Dynamite or Zess Special, rank 2 gives an Ultra Shroom,
  * rank 3 a Life Shroom, otherwise a Mushroom. The item goes to args[1].
  */
 #if VERSION <= VERSION_DEMO_JP

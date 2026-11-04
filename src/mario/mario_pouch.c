@@ -758,7 +758,7 @@ s32 comp_kind_r(const void* paramA, const void* paramB) {
  * Sorts a pouch list for the item and badge menus (win_root.c).
  * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
  * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost (retail breaks ties by kind). Badges keep their worn state.
- * JP and the demos compare internal ids for badge names.
+ * JP and the early demos compare internal ids for badge names.
  */
 void pouchSortItem(s32 mode) {
     s32 k;

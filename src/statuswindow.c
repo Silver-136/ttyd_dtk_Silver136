@@ -618,7 +618,7 @@ static inline s32 calcStep(s32 target, s32 cur) {
 
 /**
  * Counts the displayed HUD numbers toward the real values every other frame while the window is open,
- * with the coin counting sound every 8th frame (6th in the demos).
+ * with the coin counting sound every 8th frame (6th in the early demos).
  */
 #if VERSION <= VERSION_DEMO_JP
 static void valueUpdate(void) {

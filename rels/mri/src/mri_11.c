@@ -387,7 +387,7 @@ EVT_END()
 
 /**
  * Victory scene of the second Puni-versus-Jabbi fight; the mirror image of the one in mri_08.
- * Waits for all active Punies to be at y=0 in the demos, or no higher than y=0 in retail;
+ * Waits for all active Punies to be at y=0 in the early demos, or no higher than y=0 in retail;
  * the camera moves to the crowd, Punio speaks (stg2_mri_e17_01_04),
  * the crowd charges the hive on the left, the beacon breaks,
  * the music returns and the fight is marked won (GSWF_MRI11_JABBI_FIGHT2_WON). Mario gets control back.

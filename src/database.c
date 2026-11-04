@@ -24,7 +24,7 @@ void* ptr;
 u32 size;
 
 /**
- * Loads the map's enemy setup file (m/<map>/s; setup/<map>/setup.xml in the demos) from the map archive
+ * Loads the map's enemy setup file (m/<map>/s; setup/<map>/setup.xml in the early demos) from the map archive
  * or the disc into ptr/size.
  * Skipped for muj_20 while the story progress (GSW 0, written as the raw value 0xF5DE0180) is 2,
  * leaving ptr NULL. Called by the map-change sequence.

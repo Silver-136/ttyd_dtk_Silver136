@@ -38,7 +38,7 @@ s32 vivian_cancel_req;
 
 /**
  * Re-applies Mario's sunk-into-the-shadow look (the "p_bibi" paper pose M_B_3 / PM_B_1, held at frame 24)
- * when mario.c refreshes his animation during the Vivian motion. Not in the demos.
+ * when mario.c refreshes his animation during the Vivian motion. Not in the early demos.
  */
 // Descriptive name (not in the symbol maps).
 void marioForceVivianAnime(void) {

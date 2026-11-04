@@ -93,7 +93,7 @@ static inline void bomheiCleanSfx(PartyEntry* p) {
     }
 }
 
-/** Stops the sounds of a bomb use; the demos keep a third id at 0x17C. */
+/** Stops the sounds of a bomb use; the early demos keep a third id at 0x17C. */
 static inline void bomheiCleanUseSfx(PartyEntry* p) {
 #if VERSION <= VERSION_DEMO_JP
     if ((u32)p->work.bomhei.throwSfxId != 0xFFFFFFFFU) {
@@ -197,7 +197,7 @@ void bomhei_exit(PartyEntry* party) {
  * Cancels a bomb in progress: back to run mode 2 unless in run mode 9,
  * clears the use flags and frees the use work.
  * Called before plane, ship and bellows rides and on run-mode changes (party_move.c).
- * The demos leave Mario's carry flag and sounds alone; retail clears the carry flag and stops the two bomb sounds.
+ * The early demos leave Mario's carry flag and sounds alone; retail clears the carry flag and stops the two bomb sounds.
  */
 void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
@@ -379,7 +379,7 @@ typedef struct BomheiWork {
 /**
  * Ends the fuse early on attribute 0xC00 (use motion 60, explode), or floor attribute 0x200
  * without 0xC00 (use motion 40, the splash). Retail checks front, then head, then floor until one applies;
- * the demos inspect only the first hit object present.
+ * the early demos inspect only the first hit object present.
  * 0x200 is the hazard water that sinks Mario (mario_hit.c, MARIO_MOTION_DAMAGE) and 0x800 the spikes
  * (MARIO_MOTION_DAMAGE_TOGE). Guess: 0x400, the other bit of 0xC00, is a further hazard.
  */

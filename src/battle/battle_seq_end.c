@@ -69,7 +69,7 @@ typedef enum SeqEndDispFlags {
     SEQEND_DISP_LVUP_HELP = (1 << 5),           // 0x20, level-up help message (_lvup_disp_flag_onoff)
 } SeqEndDispFlags;
 
-// Mario's level cap: the demos stop at 98.
+// Mario's level cap: the early demos stop at 98.
 #if VERSION <= VERSION_DEMO_JP
 #define LEVEL_MAX 98
 #else
@@ -952,7 +952,7 @@ void _LvupParamConfirmDisp(CameraId camId, void* param) {
 
 /**
  * Draws the selected HP, FP or BP level-up help message, or its cap-error message at HP/FP 200 or BP 99.
- * Retail queues it while SEQEND_DISP_LVUP_HELP is set; the demos do not queue it.
+ * Retail queues it while SEQEND_DISP_LVUP_HELP is set; the early demos do not queue it.
  */
 void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     BattleSeqEndWork* work = ((BattleWork*)param)->seqEndWork;

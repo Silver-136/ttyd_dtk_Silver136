@@ -10,7 +10,7 @@
  * emits the constants in reverse order of first use). */
 
 #ifdef DTRIGF_PLAIN_DATA
-/* FAKE: the demos' main.dol units. The block as plain data (LLCOOLT's form): their static data keeps source order,
+/* FAKE: the early demos' main.dol units. The block as plain data (LLCOOLT's form): their static data keeps source order,
  * which the inline-assembly form below would reverse. */
 typedef struct DtrigfPairedConstants {
     long long negone_one_init;

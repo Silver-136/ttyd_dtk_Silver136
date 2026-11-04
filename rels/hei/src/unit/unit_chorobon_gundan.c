@@ -55,7 +55,7 @@ extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;
 
-// The demos have no padding after these three (the release sizes are aligned up).
+// The early demos have no padding after these three (the release sizes are aligned up).
 typedef struct {
     BattleUnitDefense v;
 #if VERSION == VERSION_JP || VERSION == VERSION_US || VERSION == VERSION_EU
@@ -298,7 +298,7 @@ EVT_END()
  * Damage event of the Fuzzy Horde: for each point of damage taken it either flags the horde as shrinking (unit
  * work 0 = 1, once at most 50 Fuzzies are alive) or makes a Fuzzy escape (chorogun_escape);
  * on the final hit of an attack (damage-result flag 256), if at most 500 Fuzzies remain,
- * the whole swarm flees (escape_chorogun_event). On that final hit the demos instead remove the
+ * the whole swarm flees (escape_chorogun_event). On that final hit the early demos instead remove the
  * unit when work 0 is set.
  */
 static EVT_BEGIN(damage_event)

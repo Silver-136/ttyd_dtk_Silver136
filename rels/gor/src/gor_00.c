@@ -2733,7 +2733,7 @@ EVT_END()
  * Cutscene that starts when Mario first walks toward the back of the harbor (z <= -100):
  * Goombella (Christine) is cornered by Lord Crump and two grunts.
  * Sets GSWF_GOR00_GOOMBELLA_ASSAULTED_SEEN and STG0_04_GOOMBELLA_ASSAULTED,
- * creates the crowd of X-Naut extras (1000 in JP and the demos, 400 in US and PAL) and spawns gundan1000tai_beforebattle.
+ * creates the crowd of X-Naut extras (1000 in JP and the early demos, 400 in US and PAL) and spawns gundan1000tai_beforebattle.
  * If LW(0) is 1 on entry it first repositions Mario (the entry used when the event is started directly).
  */
 EVT_BEGIN(christine_osoware)
@@ -3028,7 +3028,7 @@ EVT_END()
 
 /**
  * Loops forever, spawning smoke puffs with an explosion-like sound (_kemuri_sub, one per round,
- * three in JP and the demos) at random spots in the harbor every 200 to 400 ms, for the X-Naut army's charge.
+ * three in JP and the early demos) at random spots in the harbor every 200 to 400 ms, for the X-Naut army's charge.
  */
 EVT_BEGIN(gundan1000tai_kemuri)
     LOOP(0)
@@ -3098,7 +3098,7 @@ EVT_END()
 
 /**
  * Continues the prologue after the Lord Crump fight:
- * the X-Nauts' extras (1000 in JP and the demos, 400 in US and PAL) pour in,
+ * the X-Nauts' extras (1000 in JP and the early demos, 400 in US and PAL) pour in,
  * the X-Naut leader gloats (mac_0_025 to mac_0_027), the army charges (gundan1000tai_totsugeki) with smoke,
  * shaking and stomping sounds, Goombella (Christine) runs off
  * and comes back to follow Mario (she officially joins in gor_01),
@@ -4841,7 +4841,7 @@ EVT_END()
  * Mario, the partners, Cortez and, in the Frankie and Francesca step (STG5_64_02_F_F_SAIL_OFF),
  * the couple are placed on the ship, which slides in 600 units from the right with the ghost ship music
  * and arrival sound.
- * At the dock the couple get off (mony_peton_event in the demos, mony_peton_depart in JP and later),
+ * At the dock the couple get off (mony_peton_event in the early demos, mony_peton_depart in JP and later),
  * the music changes back to Rogueport's and Mario gets control.
  */
 EVT_BEGIN(into_gor_ship)

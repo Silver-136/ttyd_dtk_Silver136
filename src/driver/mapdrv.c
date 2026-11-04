@@ -822,7 +822,7 @@ found:
     }
 }
 
-// The demos still use the long map file names.
+// The early demos still use the long map file names.
 #if VERSION <= VERSION_DEMO_JP
 #define MAP_PATH_DAT "./map/%s/map.dat"
 #define MAP_PATH_TPL "./map/%s/texture.tpl"

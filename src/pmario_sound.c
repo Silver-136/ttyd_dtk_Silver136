@@ -9265,7 +9265,7 @@ void psndInit(void) {
 
 /**
  * Per-frame sound update once loading is done: counts down the repeat guard for a few frequent sounds (not in
- * the demos), then runs BGM fades, environment sounds, effects and the driver.
+ * the early demos), then runs BGM fades, environment sounds, effects and the driver.
  */
 void psndMain(void) {
     if (init_f) {
@@ -10215,8 +10215,8 @@ BOOL psndBGMStartCheck(s32 id) {
 }
 
 /**
- * Returns how long BGM channel id has been playing in milliseconds (microseconds in the demos);
- * 600000 when the channel is empty (0 in the demos).
+ * Returns how long BGM channel id has been playing in milliseconds (microseconds in the early demos);
+ * 600000 when the channel is empty (0 in the early demos).
  */
 s32 psndBGMPlayTime(s32 id) {
     PaperSoundBGM* bgm = &psbgm[id & 0xF];
@@ -10880,7 +10880,7 @@ static inline void psndEnvDone(PaperSoundEnv* e) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** Volume of environment sound e under its channel's fade; the demos write it through a pointer. */
+/** Volume of environment sound e under its channel's fade; the early demos write it through a pointer. */
 static inline void psndENVVolume(PaperSoundEnv* e, PaperSoundWork* p, u8* vol) {
     PaperSoundFade* f = NULL;
     s16 dip;

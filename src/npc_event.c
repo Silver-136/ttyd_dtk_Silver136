@@ -883,7 +883,7 @@ EVT_END()
 
 /**
  * Move event of the stationary test enemy tribe:
- * sets the enemy flags (and, outside the demos, its standing pose) and then does nothing.
+ * sets the enemy flags (and, outside the early demos, its standing pose) and then does nothing.
  */
 EVT_BEGIN(testenemynpc_move_event)
 #if VERSION <= VERSION_DEMO_JP
@@ -1082,7 +1082,7 @@ EVT_BEGIN(patakuri_lost_event)
 EVT_END()
 
 /**
- * Return event of Paragoombas: rises back to its flying height (looking around first in the demos)
+ * Return event of Paragoombas: rises back to its flying height (looking around first in the early demos)
  * and flies four bobbing glides toward home.
  */
 EVT_BEGIN(patakuri_return_event)
@@ -2925,7 +2925,7 @@ USER_FUNC(piders_draw_yawn) {
 /**
  * Starts Magikoopa's magic effect (eff_magic1_n64) from args[0-2] toward args[3-5]
  * and returns the effect in args[6].
- * Outside the demos the effect is named after the Magikoopa so it can be found later.
+ * Outside the early demos the effect is named after the Magikoopa so it can be found later.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(kamec_fire_magic) {
@@ -5118,7 +5118,7 @@ USER_FUNC(zakoEntryFall) {
 /**
  * Makes a fire effect at args[0-2] for the calling NPC and keeps it burning for args[3] frames,
  * shrinking and fading it over the last 30; blocks until it is gone.
- * Used where an X-Naut PhD's bottle bursts (not in the demos).
+ * Used where an X-Naut PhD's bottle bursts (not in the early demos).
  */
 USER_FUNC(npc_fire_eff_fadeout) {
     EvtWord* args;
@@ -5477,7 +5477,7 @@ EVT_END()
 /**
  * Throws the X-Naut PhD's bottle in an arc toward Mario (LW(10) is his distance;
  * from 200 on it throws a fixed long arc), where it shatters into glass and fire with sounds and smoke.
- * Spawned by zakoM2D_find_start_event outside the demos.
+ * Spawned by zakoM2D_find_start_event outside the early demos.
  */
 EVT_BEGIN(zakoM2D_find_event)
     CALL(evt_npc_set_anim, STRING("slave_0"), STRING("B_1"))

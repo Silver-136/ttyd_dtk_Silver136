@@ -103,7 +103,7 @@ EVT_END()
  * kills the stage clock (kpa_time, its event id in GW(15)), saves Bowser's power level,
  * loads kpa_06 after 500 ms, turns the camera off once he is above y = 400
  * and launches him up with evt_mario_jump_jumpstand 800 units above the platform, using a shorter duration argument
- * and a different jump mode in the demos.
+ * and a different jump mode in the early demos.
  */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))

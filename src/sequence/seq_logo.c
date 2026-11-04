@@ -166,7 +166,7 @@ void seq_logoInit(SequenceWork* work) {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * The demos always start interlaced; the US demo also starts the logo files loading
+ * The early demos always start interlaced; the US demo also starts the logo files loading
  * and preloads the E3 demo's models and textures.
  */
 void seq_logoInit(SequenceWork* work) {
@@ -215,7 +215,7 @@ void seq_logoExit(SequenceWork* work) {
 /**
  * Logo sequence: the three logos (1 s each, 500 ms fades) while sound groups load,
  * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
- * US and PAL first show the story screen; JP and the demos read and decode the first data archive before leaving.
+ * US and PAL first show the story screen; JP and the early demos read and decode the first data archive before leaving.
  */
 void seq_logoMain(SequenceWork* work) {
     static OSTime time;
@@ -889,7 +889,7 @@ void dummy_draw(CameraId camId, void* param) {
 /**
  * Video-mode prompt: left/right toggles, A confirms, and 10 s idle picks the current choice.
  * PAL selects 50 or 60 Hz; the other versions select interlaced or progressive scan.
- * JP and the demos show the result for 2 s before switching the video mode.
+ * JP and the early demos show the result for 2 s before switching the video mode.
  * param is unused.
  */
 #if VERSION < VERSION_US

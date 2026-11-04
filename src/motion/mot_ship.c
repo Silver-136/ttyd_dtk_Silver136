@@ -274,7 +274,7 @@ void marioReInit_ship(void) {
 
 /**
  * Cleanup when the boat motion ends: dismounts the partners, turns paper off,
- * restores the normal collision box (not in the demos), stops the engine sound,
+ * restores the normal collision box (not in the early demos), stops the engine sound,
  * resets the offsets and frees the boat work.
  */
 void mot_ship_post(void) {

@@ -46,7 +46,7 @@ BOOL christineGetStatus(void) {
  * otherwise it looks at the map object Mario pushes, faces or stands on and picks the hint for that block,
  * switch, chest or sign, falling back to the "msg_kuri_map" comment on the map itself.
  * Mutes sound effects for the duration; retail also lifts her off the floor collision,
- * and returns early when she is in paper form (the demos instead require her on the ground).
+ * and returns early when she is in paper form (the early demos instead require her on the ground).
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(pre_kurio_use) {
@@ -252,7 +252,7 @@ s32 fbatNpcTalkCheck(void);
 
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
- * retail clears the floor-collision overrides kuribo_use may have set; empty in the demos.
+ * retail clears the floor-collision overrides kuribo_use may have set; empty in the early demos.
  */
 #if VERSION >= VERSION_JP
 void kuribo_use_post(PartyEntry* party) {
@@ -353,7 +353,7 @@ void kuribo_use(PartyEntry* party) {
 
 /**
  * Party table post_func, run when Goombella leaves use mode (partyUsePost or a run-mode change out of mode 3):
- * retail clears the floor-collision overrides kuribo_use may have set; empty in the demos.
+ * retail clears the floor-collision overrides kuribo_use may have set; empty in the early demos.
  */
 #if VERSION <= VERSION_DEMO_JP
 void kuribo_use_post(PartyEntry* party) {

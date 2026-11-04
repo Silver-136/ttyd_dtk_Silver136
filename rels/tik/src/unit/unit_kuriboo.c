@@ -120,7 +120,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 
 /**
  * Status vulnerability of the Goomba (percentage multipliers on a move's status chance):
- * extra prone to stop, fright and instant kill; the demos also raise gale-force susceptibility.
+ * extra prone to stop, fright and instant kill; the early demos also raise gale-force susceptibility.
  */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};

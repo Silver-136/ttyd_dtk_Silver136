@@ -126,7 +126,7 @@ EVT_END()
  * saves Bowser's current power level (evt_koopa_get_level), loads kpa_04 after 600 ms,
  * turns the camera off once he is above y = 400
  * and launches him up with evt_mario_jump_jumpstand 700 units above the platform, using a shorter duration argument
- * and a different jump mode in the demos. The EU release also cancels the attack mode first.
+ * and a different jump mode in the early demos. The EU release also cancels the attack mode first.
  */
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))

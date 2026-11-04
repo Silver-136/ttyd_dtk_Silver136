@@ -395,7 +395,7 @@ void BattleIncSeq(BattleWork* wp, BattleSequence seq) {
 
 /**
  * Allocates battle memory: from the battle area of the map heap in US and PAL,
- * from HEAP_BATTLE in JP and the demos.
+ * from HEAP_BATTLE in JP and the early demos.
  */
 void* BattleAlloc(u32 size) {
 #if VERSION >= VERSION_US

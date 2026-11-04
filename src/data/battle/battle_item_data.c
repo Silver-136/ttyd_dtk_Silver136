@@ -4988,7 +4988,7 @@ USER_FUNC(_full_ap_recover) {
 /**
  * Trial Stew: a dark cloud over the target, then its HP drops to 1,
  * its FP to 0 and the party's Star Power fills;
- * the demos play the cooking sound once, the releases after each hit.
+ * the early demos play the cooking sound once, the releases after each hit.
  */
 EVT_BEGIN(ItemEvent_LastDinner)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_PoisonKinoko))

@@ -436,7 +436,7 @@ EVT_END()
 
 /**
  * Victory scene of the first Puni-versus-Jabbi fight.
- * Waits until no active Puni is above Y=0 (the demos require Y=0), then the camera moves to the Puni crowd,
+ * Waits until no active Puni is above Y=0 (the early demos require Y=0), then the camera moves to the Puni crowd,
  * Punio (the guide) speaks (stg2_mri_e17_01), the crowd charges the hive (evt_mri_puni_win_attack)
  * and smashes the beacon with five rumbles, the Punies head back (evt_mri_puni_win_end),
  * the beacon breaks (puni_win_offscreen), the field music is scheduled to return,

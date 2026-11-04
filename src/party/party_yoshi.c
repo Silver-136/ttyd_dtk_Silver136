@@ -441,7 +441,7 @@ static inline f32 getOfs(PartyEntry* party) {
 /**
  * Runs Yoshi's ride: mounting, ground movement, flutter and jump-stand motion, dismounting and water handling.
  * Demos omit the head search and add the fly bob speed directly to the height;
- * retail accumulates a bob offset around a ground/base height. The demos also scale ordinary ride movement
+ * retail accumulates a bob offset around a ground/base height. The early demos also scale ordinary ride movement
  * to 3/4 while party bit 0x80 (shallow water) is set.
  */
 void yoshi_use(PartyEntry* party) {

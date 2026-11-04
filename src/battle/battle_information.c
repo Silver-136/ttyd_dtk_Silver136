@@ -81,8 +81,8 @@ const ItemHogTable item_hog_table = {
  * hearts and flowers from the group's HP and FP drop tables according to Mario's remaining HP and FP percentage,
  * then one item, chosen by weight between none,
  * a random pick from the enemy's drop table and one of the enemy's held items.
- * Item Hog multiplies the item weights (by 2n+2 for n badges in the demos, n+1 later)
- * and adds a pick from item_hog_table: in the demos and JP only when the held-item roll finds nothing to drop,
+ * Item Hog multiplies the item weights (by 2n+2 for n badges in the early demos, n+1 later)
+ * and adds a pick from item_hog_table: in the early demos and JP only when the held-item roll finds nothing to drop,
  * from US on whenever no item dropped. From JP on, before Frankly's house the normal held/random item roll
  * is disabled, but hearts and flowers are not.
  */

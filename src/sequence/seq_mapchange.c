@@ -134,7 +134,7 @@ static const LangTbl lang_tbl = {{
 /**
  * Map-change state machine: fades out, unloads the old map and area REL, loads the next REL and map,
  * starts the map and NPC initialization scripts, then enters SEQ_GAME (or SEQ_TITLE for a title target).
- * The demos do not stop SFX, unload the REL inline and do not set the sound mode in step 1;
+ * The early demos do not stop SFX, unload the REL inline and do not set the sound mode in step 1;
  * they run psndMapChange right after the unload and do not set the respawn point.
  */
 void seq_mapChangeMain(SequenceWork* work) {

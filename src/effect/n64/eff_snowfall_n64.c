@@ -179,7 +179,7 @@ EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
  * Moves the particles by their velocity (after each one's start delay)
  * and wraps them around the camera with cam_clip_chk;
  * the life only counts down from below 100, fading alpha over the last 10 frames.
- * US and PAL draw on layer 10 (the battle camera in battle), JP on layer 10, the demos on layer 2.
+ * US and PAL draw on layer 10 (the battle camera in battle), JP on layer 10, the early demos on layer 2.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void effSnowfallMain(EffectEntry* effect) {

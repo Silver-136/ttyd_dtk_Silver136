@@ -318,7 +318,7 @@ s32 winMarioMain(WindowWork* w) {
 void winMarioMain2(void) {
 }
 
-/** US and PAL use ASCII digits; JP and the demos use full-width digits. */
+/** US and PAL use ASCII digits; JP and the early demos use full-width digits. */
 const char* winZenkakuStr(s32 n) {
 #if VERSION <= VERSION_DEMO_JP
     const char* tbl[10] = {"０", "１", "２", "３", "４",

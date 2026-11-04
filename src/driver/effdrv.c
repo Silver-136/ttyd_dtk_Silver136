@@ -13,7 +13,7 @@
 #include <string.h>
 #include "libc_decls.h"
 
-// The demos still load the effect textures from the old eff folder.
+// The early demos still load the effect textures from the old eff folder.
 #if VERSION <= VERSION_DEMO_JP
 #define EFF_TPL_PATH "%s/eff/%s/effect_%s.tpl"
 #define EFF_TPL_JP "%s/eff/jp/effect.tpl"

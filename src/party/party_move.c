@@ -122,7 +122,7 @@ s32 partyGetFootmarkId(PartyEntry* party) {
 }
 
 /**
- * Copies the supplied other member's position in the demos unless it is absent or far, otherwise Mario's.
+ * Copies the supplied other member's position in the early demos unless it is absent or far, otherwise Mario's.
  * Retail selects the other slot and rejects it when absent, in Koops status 3, or at least 150 units from Mario.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -471,7 +471,7 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
 
 /**
  * Advances trail id's read position by one, wrapping at 80.
- * Retail stops at the write position; the demos can advance past it.
+ * Retail stops at the write position; the early demos can advance past it.
  */
 void partyNextReadId(s32 id) {
 #if VERSION >= VERSION_JP
@@ -506,7 +506,7 @@ void partyGetReadId2(s32 id, Vec* pos) {
     pos->z = fm->pos.z;
 }
 
-/** Restarts footmark trail 0 (the one the partner follows) at Mario's position; the demos also restart trail 1 at the active partner (or Mario if absent). */
+/** Restarts footmark trail 0 (the one the partner follows) at Mario's position; the early demos also restart trail 1 at the active partner (or Mario if absent). */
 void partyClearFootmark(void) {
 #if VERSION <= VERSION_DEMO_JP
     Vec mpos = marioGetPtr()->position;
@@ -541,7 +541,7 @@ void partyClearFootmark(void) {
 }
 
 /**
- * Restarts footmarks: the demos reset both trails to Mario (the partner lookup is unused).
+ * Restarts footmarks: the early demos reset both trails to Mario (the partner lookup is unused).
  * Retail resets only trail 1 to the active partner, or Mario if it is absent, in Koops status 3, or at least 150 units away.
  */
 void partyClearFootmark2(void) {
@@ -604,7 +604,7 @@ static inline BOOL partyChkMarioJumpFlag(void) {
 /**
  * Appends pos to trail id, unless successive marks are both jump marks, pos is unchanged,
  * or readId is exactly writeId + 1 (this full check does not account for wrapping).
- * Argument mask 1 marks a jump; the slit argument is 2 in the demos and 4 in retail, stored as bit 4.
+ * Argument mask 1 marks a jump; the slit argument is 2 in the early demos and 4 in retail, stored as bit 4.
  */
 static inline void partyPutFootmark(s32 id, Vec pos, u32 flags) {
     MarioWork* mario = marioGetPtr();

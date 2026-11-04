@@ -1363,7 +1363,7 @@ EVT_BEGIN(uranaisi_table_talk)
             CALL_CHILD(PTR(uranaisi_supercoin_evt))
         END_SWITCH
 
-        // The table is cleared; JP and later return to the reading menu, while the demos restore Mario's controls.
+        // The table is cleared; JP and later return to the reading menu, while the early demos restore Mario's controls.
 #if VERSION <= VERSION_DEMO_JP
         CALL_CHILD(uranai_exit)
 #else

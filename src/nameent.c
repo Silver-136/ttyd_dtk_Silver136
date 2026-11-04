@@ -140,7 +140,7 @@ const char* latin_tbl[] = {
 };
 #endif
 
-// The demos still load the name entry textures from the old window folder.
+// The early demos still load the name entry textures from the old window folder.
 #if VERSION <= VERSION_DEMO_JP
 #define NAME_TPL_JP "%s/window/jp/name.tpl"
 #else

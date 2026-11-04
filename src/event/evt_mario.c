@@ -739,7 +739,7 @@ const f32 evt_mario_half_turn = 180.0f;
 
 /**
  * Snaps Mario's display direction to 0 or 180 degrees and updates movement direction.
- * US and PAL derive movement from the snapped direction; JP and the demos use toMovedir(90) for either facing.
+ * US and PAL derive movement from the snapped direction; JP and the early demos use toMovedir(90) for either facing.
  */
 USER_FUNC(evt_mario_adjust_dir) {
     marioAdjustMoveDir();
@@ -999,7 +999,7 @@ USER_FUNC(evt_mario_set_talk_motion) {
 
 /**
  * Takes Mario out of Tube Mode and blocks until the tube flag clears; used in gor_02.
- * The demos call marioRollCancel instead of marioRollTryCancel.
+ * The early demos call marioRollCancel instead of marioRollTryCancel.
  */
 USER_FUNC(evt_mario_cancel_roll_motion) {
     if (isFirstCall) {
@@ -1128,7 +1128,7 @@ static inline f32 doorAngle(f32 cam) {
 /**
  * Moves Mario through a door to x = args[0], z = args[1] at the requested speed args[2] (reduced in background mode),
  * while the partners follow closely, then positions them behind him.
- * The demos choose their direction from the camera yaw; retail adds map-specific partner directions.
+ * The early demos choose their direction from the camera yaw; retail adds map-specific partner directions.
  */
 USER_FUNC(evt_mario_party_door_move) {
     EvtWord* args = event->args;
@@ -1303,7 +1303,7 @@ USER_FUNC(evt_mario_party_door_move) {
 /**
  * Moves Mario through an entrance to x = args[0], z = args[1] at the requested speed args[2] (reduced in background mode),
  * keeping the partners close, then positions them behind him.
- * The demos use the same angle rule for both move kinds; retail varies the angles by moveKind.
+ * The early demos use the same angle rule for both move kinds; retail varies the angles by moveKind.
  */
 USER_FUNC(evt_mario_party_bero_move) {
     EvtWord* args = event->args;

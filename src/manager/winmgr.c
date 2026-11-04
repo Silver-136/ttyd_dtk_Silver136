@@ -195,7 +195,7 @@ static const char name_party2[12];
 static const char name_party6[12];
 
 #if VERSION <= VERSION_DEMO_JP
-// The demos keep these two as real functions at the end of the file.
+// The early demos keep these two as real functions at the end of the file.
 static const char* party_name_table_rtn(s32 id);
 static s32 iconid_conv(s32 icon);
 static inline const char* select_party_name(s32 id) {
@@ -757,7 +757,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             for (i = 0; i < MAX_KEY_ITEMS; i++) {
                 id = (u16)pouchKeyItem(i);
                 if (id) {
-                    // BUG: retail's menu_skip_list has 18 entries (the demos' 19), so this also reads the u16 after it.
+                    // BUG: retail's menu_skip_list has 18 entries (the early demos' 19), so this also reads the u16 after it.
                     for (j = 0; j < 19; j++) {
                         if (id == menu_skip_list[j]) {
                             break;

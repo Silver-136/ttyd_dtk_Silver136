@@ -20,6 +20,8 @@
 //   US, the September demos, PAL   VERSION >= VERSION_US
 //   PAL and the PAL demo           VERSION >= VERSION_DEMO_EU
 //   US and the September US demo   VERSION == VERSION_US || VERSION == VERSION_DEMO_US2
+// In comments, "the demo" / "the early demos" mean the June US demo and the JP store demo; the September demos are
+// always named as such.
 // Not every set is a range: write `==` / `!=` tests for those. Every file that tests VERSION includes this header
 // itself: an undefined VERSION would silently compare as 0.
 

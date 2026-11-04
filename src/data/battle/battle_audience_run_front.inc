@@ -1,4 +1,4 @@
-// The members' walk loops: one block in retail, each next to its member's tables in the demos (AUD_RUN_FRONT selects one).
+// The members' walk loops: one block in retail, each next to its member's tables in the early demos (AUD_RUN_FRONT selects one).
 #pragma once off
 #if !defined(AUD_RUN_FRONT) || AUD_RUN_FRONT == 1
 /** Toad audience member facing the camera: walking to its seat or out of the stands (slot 7). */

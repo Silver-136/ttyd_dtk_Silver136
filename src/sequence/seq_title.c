@@ -44,7 +44,7 @@ TitleWork* wp2 = &work2;
 #define TITLE_FRAMES_PER_SEC 60
 #endif
 
-/** Resting height of the title logo; the demos show it higher. */
+/** Resting height of the title logo; the early demos show it higher. */
 #if VERSION <= VERSION_DEMO_JP
 #define TITLE_TOP_Y 130.0f
 #else
