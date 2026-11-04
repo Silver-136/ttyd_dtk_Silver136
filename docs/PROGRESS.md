@@ -2,7 +2,7 @@
 
 ## Matching
 
-All five versions build every unit from C and hash byte-identical to the originals: G8ME01 (US, 30 files), G8MJ01 (JP, 32), G8MP01 (PAL, 33), G8ME01_DEMO (US demo, 7), G8MJ01_DEMO (JP demo, 33). The tables below are from the JP and US retail builds.
+All seven versions build every unit from C and hash byte-identical to the originals: G8ME01 (US, 30 files), G8MJ01 (JP, 32), G8MP01 (PAL, 33), G8ME01_DEMO (June 2004 US demo, 7), G8MJ01_DEMO (JP demo, 33), G8ME01_DEMO2 (September 2004 US demo, 8), G8MP01_DEMO (September 2004 European demo, 8). The tables below are from the JP and US retail builds.
 
 One row per commit window, at most 3 per day. Figures come from an objdiff-cli report on each window's final tree. Rows from 2026-10-10 to 2026-10-22 are the Japanese release (G8MJ01); the last row is the US release (G8ME01).
 
@@ -69,10 +69,10 @@ Placements that stay are needed or kept on purpose: SDK startup sections, paddin
 
 ## Cleanup since 2026-10-24 (this fork)
 
-Same rule: every commit keeps all five builds byte-identical (US 30 files, JP 32, PAL 33, US demo 7, JP demo 33, objdiff
+Same rule: every commit keeps all seven builds byte-identical (US 30 files, JP 32, PAL 33, US demo 7, JP demo 33, US demo 2 8, PAL demo 8, objdiff
 100 % code and data per unit). Counts are game code (`src/`, `rels/`) from `cleanup_tools/debt_inventory.py`, start = commit
-85ac972b, last counted <!--n:counted_date-->2026-11-03<!--/n--> (`cleanup_tools/progress_counts.py --write` updates every marked number). Version differences live in ordered `VERSION` tests (`include/version.h`): <!--n:version_tests-->9,123<!--/n--> tests in
-<!--n:version_tests_files-->871<!--/n--> game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL <!--n:fakes_rows_pal-->1<!--/n-->, Demos <!--n:fakes_rows_demos-->6<!--/n-->). US retail is
+85ac972b, last counted <!--n:counted_date-->2026-11-04<!--/n--> (`cleanup_tools/progress_counts.py --write` updates every marked number). Version differences live in ordered `VERSION` tests (`include/version.h`): <!--n:version_tests-->9,142<!--/n--> tests in
+<!--n:version_tests_files-->872<!--/n--> game files. Tricks needed only by PAL or a demo are allowed, marked and listed (FAKES.md rows PAL <!--n:fakes_rows_pal-->1<!--/n-->, Demos <!--n:fakes_rows_demos-->6<!--/n-->). US retail is
 the readability priority. Comments that retell a script or describe a scene stay.
 
 | What | Start | Now |

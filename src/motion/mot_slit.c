@@ -531,7 +531,7 @@ void mot_slit_post(void) {
             marioPaperOff();
             mapResetPaperAmbColor();
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION == VERSION_EU
             if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
                 marioAdjustMoveDir();
             }
@@ -794,7 +794,7 @@ void mot_slit(void) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT1), &m->position);
         break;
     case SLIT_STATE_CHANGING:
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION == VERSION_EU
         if (m->flags & MARIO_FLAG_FORCED_MOVEMENT) {
             break;
         }
@@ -827,7 +827,7 @@ void mot_slit(void) {
             }
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION == VERSION_EU
         if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT) && m->baseSpeed >= m->baseDashSpeed) {
 #else
         if (m->baseSpeed >= m->baseDashSpeed) {
@@ -1246,7 +1246,7 @@ void mot_slit(void) {
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT2), &m->position);
     case SLIT_STATE_END_2:
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION == VERSION_EU
         if (m->flags & MARIO_FLAG_FORCED_MOVEMENT) {
             break;
         }
@@ -1273,7 +1273,7 @@ void mot_slit(void) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
 #else
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION == VERSION_EU
         if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             if (!m->controlStickSensitivity) {
                 m->baseSpeed = 0.0f;
@@ -1306,7 +1306,7 @@ void mot_slit(void) {
         marioAdjustMoveDir();
         allPartySlitOff();
 #else
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION == VERSION_EU
         if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             marioAdjustMoveDir();
         }

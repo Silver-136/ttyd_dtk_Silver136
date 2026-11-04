@@ -1,9 +1,9 @@
 # Cleanup backlog
 
-Everything left to clean up, in one place. All five builds (US, JP, PAL, US demo, JP demo) must stay byte-identical
+Everything left to clean up, in one place. All seven builds (US, JP, PAL, the two early demos, the two September 2004 demos) must stay byte-identical
 to the original games through every step; US retail is the priority for readability; nothing here changes behaviour. Per-function detail for the fakes lives in
 [FAKES.md](FAKES.md); invented names are listed in [NAME_PROVENANCE.md](NAME_PROVENANCE.md). Counts are from
-<!--n:counted_date-->2026-11-03<!--/n--> (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
+<!--n:counted_date-->2026-11-04<!--/n--> (game code unless marked; the "at adoption" column is the LLCOOLT tree at `85ac972b`).
 
 ## 1. Matching tricks (debt by policy)
 
@@ -175,7 +175,7 @@ never copied in). What the raw counts above mean for the libraries:
   row stays.
 - **dont_inline:** OSLink's pair became the unit flag `-inline noauto` (round 16, both versions identical). VI's three
   pairs (getTiming, latch0/latch1) stay: a whole-unit flag changes other helpers.
-- **Sources no build uses:** Codex round 22 G recounted 101 library sources that none of the five builds compiles.
+- **Sources no build uses:** Codex round 22 G recounted 101 library sources that none of the five builds then compiled.
   The 39 it marked for removal are gone (2026-11-03, user OK): the AX sound stack (AX, AXART, AXFX, SYN, MIX, SEQ;
   the game plays sound through MusyX, and the JP demo link map has none of these archives), the SDK copies of
   DEMOInit/DEMOPad and texPalette (the map lists them as unreferenced duplicates of the game's own files), MusyX

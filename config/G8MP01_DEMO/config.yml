@@ -1,0 +1,447 @@
+name: MarioSt
+object: sys/main.dol
+hash: 9469eb4c3593bb9dd112049b86c1613b140ceb12
+object_base: orig/G8MP01_DEMO
+symbols: config/G8MP01_DEMO/symbols.txt
+splits: config/G8MP01_DEMO/splits.txt
+mw_comment_version: 10
+force_active:
+# MSL extras.c strupr: unreferenced in the dol but kept by the original link (as in PAL)
+- strupr
+# EXIBios.c EXIGetType: unreferenced in the dol but kept by the original link (as in PAL)
+- EXIGetType
+# Unreferenced in this demo's dol and its seven RELs, but kept by the original link (the full game's
+# RELs use them)
+- bgAutoScrollOn
+- bgAutoScrollOff
+- bgSetScrlOffset
+- camRoadCurveOff
+- camRoadCurveOn
+- fadeWhiteOutOff
+- fadeWhiteOutOn
+- fadeSoftFocusOn
+- fadeTecSoftOff
+- fadeTecSoftOn
+- fadeTecOn
+- mapSearchAnmObj
+- shadowSetVolumeDecay
+- evt_map_replace_mapobj
+- animPoseGetGroupName
+- animPoseWorldPositionEvalOff
+- animPosePaperPeraOff
+- fbatHitCheckAll
+- fbatSetAttackAnnounceEnable
+- fbatSetAttackAnnounce
+- evt_sub_get_framerate
+- evt_sub_status_gauge_force_close
+- evt_key_get_button
+- evt_key_get_dir
+- evt_sub_spline_free
+- evt_sub_spline_get_value_manual
+- evt_mobj_breaking_rock
+- evt_mobj_trap_floor
+- evt_mobj_blk
+- evt_mobj_arrow
+- evt_mobj_lock_unlock
+- evt_mobj_rideswitch_green
+- evt_mobj_rideswitch_orange
+- evt_mobj_tornadoswitch_red
+- evt_mobj_floatswitch_red
+- evt_mobj_set_z_position
+- evt_mobj_set_x_position
+- evt_set_case_wrk
+- evt_img_set_z
+- evt_img_set_color
+- evt_hitobj_name_callback
+- evt_hitobj_flag_onoff
+- marioChgRollMotion
+- marioRollFixOn
+- marioShipForceStop
+- marioChkSwirlPower
+- marioSetSwirlPower
+- evt_cam3d_evt_set_now
+- evt_cam3d_road_shift_onoff
+- evt_cam3d_evt_set_rel_dir
+- evt_item_set_alpha
+- evt_item_set_bound_next_dir
+- evt_item_set_bound_next_speed
+- evt_item_change_mode
+- evt_item_set_bound_limit
+- evt_item_set_bound_rate
+- evt_item_set_gravity
+- evt_item_set_jump_power
+- evt_item_set_move_dir_speed
+- itemFlag
+- itemModeChange
+- evt_get_yoshi_frm
+- evt_set_yoshi_spd
+- evt_set_yoshi_frm
+- partySetFamicomMode
+- bomheiGetStatus
+- evt_msg_pri
+- evt_msg_print_party_add
+- evt_ext_reset
+- evt_mario_keyon_wait
+- evt_mario_get_name_hitobj_push
+- evt_mario_get_name_hitobj_under
+- evt_mario_dump_item
+- evt_mario_check_key_item
+- evt_mario_push
+- evt_mario_hello_exparty_pos
+- evt_peach_set_condition
+- evt_peach_transform_gundan_off
+- evt_peach_transform_gundan_on
+- evt_mario_check_landon
+- evt_mario_chk_hipbump
+- evt_mario_cam_keep_off
+- evt_mario_cam_keep_on
+- evt_mario_balloon_tenten
+- evt_party_cloud_breathout
+- evt_party_yoshi_fly
+- evt_party_vivian_tail
+- evt_party_vivian_unhold
+- evt_party_vivian_hold
+- evt_party_thunders_use
+- evt_party_get_status
+- evt_party_dokan
+- evt_party_trigflg_onoff
+- evt_pouch_set_yoshiname
+- evt_pouch_party_left
+- evt_bg_set_scrl_offset
+- evt_bg_auto_scroll_onoff
+- btlevtcmd_SetCounterAcCallBack
+- btlevtcmd_CheckUnitFlag
+- btlevtcmd_AnimeWaitPlayLoopTiming
+- btlevtcmd_AnimeChangeGroup
+- btlevtcmd_GetResultACDefence
+- btlevtcmd_GetDataFromDataTable
+- btlevtcmd_PartsFaceDirectionSub
+- btlevtcmd_SetJumpSpeed
+- btlevtcmd_ChangePartsFaceDirection
+- btlevtcmd_RunHitEventDirect
+- btlevtcmd_SetUnitWorkFloat
+- btlevtcmd_GetUnitWorkFloat
+- btlevtcmd_GetFpDamage
+- btlevtcmd_SetSwallowAttribute
+- btlevtcmd_SetSwallowParam
+- btlevtcmd_SetMaxFp
+- btlevtcmd_SetPartsBaseScale
+- btlevtcmd_SetPossessionItemOffset
+- btlevtcmd_SetCutHeight
+- btlevtcmd_SetCutWidth
+- btlevtcmd_SetBintaHitOffset
+- btlevtcmd_SetCutBaseOffset
+- btlevtcmd_SetPartsBaseRotate
+- btlevtcmd_GetPartsRotate
+- btlevtcmd_GetHpGaugeOffset
+- btlevtcmd_SetHeight
+- btlevtcmd_SetPartsHomePos
+- btlevtcmd_AddHomePos
+- btlevtcmd_AddPartsPos
+- btlevtcmd_DrawLots
+- btlevtcmd_GetRandomValue
+- btlevtcmd_UFOEscapeOn
+- btlevtcmd_UFODamageOn
+- btlevtcmd_UFOAction
+- BtlUnit_SetMaxFp
+- BtlUnit_SetJumpSpeed
+- BtlUnit_AddPartsOffsetPos
+- BtlUnit_SetHeight
+- BtlUnit_GetPartsBaseRotate
+- BtlUnit_GetPartsRotate
+- BtlUnit_SetPartsHomePos
+- BtlUnit_AddHomePos
+- BtlUnit_AddPartsPos
+- evt_nannpcwork_flag_onoff
+- evt_nannpc_set_color
+- evt_nannpc_set_shadow_position
+- evt_nannpc_ppflag_onoff
+- evt_nannpc_jump_position
+- evt_nannpc_move_position2
+- evt_nannpc_set_work
+- evt_nannpc_set_dir
+- evt_nannpc_set_hosei_position
+- evt_nannpc_get_position
+- evt_nannpc_set_position
+- nanNPCOption
+- evt_fade_softfocus_onoff
+- evt_fade_tec_onoff
+- tou_gamen_screen_tev_init
+- evt_audience_jump_position_gravity
+- evt_audience_move_position_frame
+- faker_mario_makkuro_set
+- evt_snd_sfx_dist
+- evt_snd_sfxon_
+- evt_snd_bgmon_f_d
+- evt_cloud_set_cap_size
+- cloudGetBreathDist
+- cloudGetBreathDir
+- cloudGetStatus
+- weaponGetPowerFromGulliblePartyAttackLv
+- weaponGetFPPowerDefault
+- effTorchEntry
+- effRippleSetRxRz
+- envGlareFilterZ
+- envGlareFilter
+- BattleAudience_GetRotate
+- btlevtcmd_BtlIconJumpPosition
+- btlevtcmd_BtlIconSetFallAccel
+- btlevtcmd_BtlIconEntry
+- effRippleN64SetRxRz
+- THPGXYuv2RgbSetup
+- THPSimpleSetVolume
+- THPSimpleGetTotalFrame
+- THPSimpleDrawCurrentFrame
+- THPSimpleDecode
+- THPSimpleLoadStop
+- THPSimpleAudioStop
+- THPSimpleAudioStart
+- THPSimplePreLoad
+- THPSimpleSetBuffer
+- THPSimpleCalcNeedMemory
+- THPSimpleClose
+- THPSimpleOpen
+- THPSimpleQuit
+- THPSimpleInit
+- evt_moving_floor_delete
+- peachTransformOff
+- peachTransformOn
+- peachSetStsCarry
+- peachSetStsOrdinary
+- peachSetStsAngry
+- peachSetStsUneasy
+- peachSetStsHappy
+- peachSetStsInvisible
+- peachSetStsAftershower
+- peachSetStsNormal
+- evt_win_nameent_off
+- evt_win_nameent_name
+- evt_win_nameent_wait
+- evt_win_nameent_on
+- effSetPeachFukiBatu
+- effPeachFukidashiEntry
+- effKemuTestSetRxRz
+- evtYuuSetWindowEvt
+- effSpiritEntry
+- effMahorn2Entry
+- __setjmp
+- longjmp
+- DCZeroRange
+- LCEnable
+- LCStoreBlocks
+- LCStoreData
+- LCQueueWait
+- THPVideoDecode
+- __THPReadFrameHeader
+- __THPReadScaneHeader
+- __THPReadQuantizationTable
+- __THPReadHuffmanTableSpecification
+- __THPPrepBitStream
+- __THPDecompressiMCURow512x448
+- __THPDecompressiMCURow640x480
+- __THPDecompressiMCURowNxN
+- __THPHuffDecodeDCTCompY
+- __THPHuffDecodeDCTCompU
+- __THPHuffDecodeDCTCompV
+- THPInit
+- THPAudioDecode
+- evt_door_open_bom_01
+- testnpc_move_event
+- npc_urouro_return_event
+- subsetevt_dead_core_nospin_norotate
+- battle_item_gundan_zako_magician
+- battle_item_gundan_zako_elite
+- battle_item_hyper_kuriboo
+- battle_item_hyper_togekuri
+- battle_item_hyper_patakuri
+- battle_item_yami_kuriboo
+- battle_item_yami_togekuri
+- battle_item_yami_patakuri
+- battle_item_yami_noko
+- battle_item_ura_noko
+- battle_item_ura_pata
+- battle_item_togenoko_ace
+- battle_item_met
+- battle_item_togemet
+- battle_item_patamet
+- battle_item_patatogemet
+- battle_item_hyper_togemet
+- battle_item_jyugem
+- battle_item_hyper_jyugem
+- battle_item_togezo
+- battle_item_green_chorobon
+- battle_item_flower_chorobon
+- battle_item_karon
+- battle_item_monochrome_kurokumorn
+- battle_item_kurokumorn
+- battle_item_bllizard
+- battle_item_dokugassun
+- battle_item_pakkun_flower
+- battle_item_sinemon
+- battle_item_hyper_sinnosuke
+- battle_item_hyper_sinemon
+- battle_item_basabasa
+- battle_item_basabasa_chururu
+- battle_item_basabasa_green
+- battle_item_teresa
+- battle_item_purple_teresa
+- battle_item_sambo
+- battle_item_sambo_mummy
+- battle_item_bomhei
+- battle_item_heavy_bom
+- battle_item_giant_bomb
+- battle_item_borodo
+- battle_item_badge_borodo
+- battle_item_mahorn
+- battle_item_super_mahorn
+- battle_item_mahorn_custom
+- battle_item_wanwan
+- battle_item_burst_wanwan
+- battle_item_bubble
+- battle_item_hermos
+- battle_item_phantom
+- battle_item_pansy
+- battle_item_twinkling_pansy
+- battle_item_dark_keeper
+- battle_heart_drop_param_default2
+- battle_heart_drop_param_default5
+- battle_flower_drop_param_default3
+- battle_flower_drop_param_default5
+- torch_obj2_texture
+- torch_obj22t_texture
+- SoundBuffer
+- WorkBuffer
+- SimpleControl
+- _MetroTRK_Has_Framing
+- enemy_event_dead_event
+- subsetevt_nodamage_motion
+- screen_evt
+- battle_item_NONE
+- battle_item_nokonoko_fighter
+- battle_item_patapata_fighter
+- battle_item_boomerang_bros
+- battle_item_fire_bros
+- battle_item_poison_pakkun
+- battle_item_ice_pakkun
+- battle_item_churantalar
+- battle_item_barriern_z
+- battle_item_barriern_custom
+- battle_item_iron_sinemon
+- battle_item_iron_sinemon2
+- battle_item_atmic_teresa
+- battle_item_killer
+- battle_item_super_killer
+- battle_item_killer_cannon
+- battle_item_super_killer_cannon
+- battle_item_borodo_king
+- battle_item_yamitogedaruma
+- battle_item_vivian1
+- battle_item_moamoa
+- battle_item_rampell
+- battle_item_faker_mario
+- battle_item_cortez
+- battle_item_macho_gance
+- battle_item_champion
+- battle_item_zonbaba
+- battle_item_default_param_list
+- battle_item_kinoko
+- battle_item_funyafunya_kun
+- battle_item_pow_block
+- battle_item_dekadeka_drink
+- battle_item_kirakira_otoshi
+- battle_item_koorino_ibuki
+- battle_item_fire_flower
+- battle_item_yurayura_jishin
+- battle_item_suitooru
+- battle_item_sinabita_kinoko
+- __THPVersion
+- OldAIDCallback
+- AudioSystem
+- _pm
+- _vp
+- CurAudioBuffer
+- LastAudioBuffer
+- SoundBufferIndex
+- sysDebugReport
+- __assert2
+- __assert
+- npcGetReactionOfLivingBody
+- evt_npc_get_battle_rule_keep_result
+- evt_npc_set_battle_rule
+- evt_npc_set_force_regl_anim
+- evt_npc_clear_paper
+- evt_npc_set_home_position
+- evt_npc_get_scale
+- evt_npc_get_ReactionOfLivingBody
+- statusWinDispOn
+block_relocations:
+# unit_party_chuchurina partyWeapon_ChuchurinaKiss+0x7C holds the flag word 0x80003500, not a pointer
+- source: 0x8038D96C
+- source: 0x802D5784
+- source: 0x802D578C
+- source: 0x802D5804
+- source: 0x802D5808
+- source: 0x802D580C
+- source: 0x802D5810
+- source: 0x802D5814
+- source: 0x802D5828
+- source: 0x802D5838
+- source: 0x802D5A78
+- source: 0x802D60AC
+- source: 0x802D60B4
+- source: 0x802D6170
+- source: 0x802D6530
+- source: 0x802D6538
+- source: 0x802D6554
+- source: 0x802D65AC
+- source: 0x802D65C8
+- source: 0x802D6610
+
+extract:
+# manager/cardmgr.c
+- symbol: _mariost_icon_tex
+  header: assets/_mariost_icon_tex.inc
+- symbol: _mariost_icon_tlut
+  header: assets/_mariost_icon_tlut.inc
+- symbol: _mariost_banner_tex
+  header: assets/_mariost_banner_tex.inc
+# musyx/runtime/dsp_import.c
+- symbol: dspSlave
+  header: assets/dspSlave.inc
+  header_type: raw
+
+modules:
+- object: files/rel/gon.rel
+  hash: 0fc9aa9f652f38e86f3377bb346c4311d7467176
+  symbols: config/G8MP01_DEMO/gon/symbols.txt
+  splits: config/G8MP01_DEMO/gon/splits.txt
+
+- object: files/rel/gor.rel
+  hash: 9da3b64236fa639e8804c9e3d61417ef5b1ad4ab
+  symbols: config/G8MP01_DEMO/gor/symbols.txt
+  splits: config/G8MP01_DEMO/gor/splits.txt
+
+- object: files/rel/hei.rel
+  hash: b4270cdaff0020ea3c93a6841adf78484ace25c9
+  symbols: config/G8MP01_DEMO/hei/symbols.txt
+  splits: config/G8MP01_DEMO/hei/splits.txt
+
+- object: files/rel/kpa.rel
+  hash: b21304d0b56364555117f66a698743bf0a7359f8
+  symbols: config/G8MP01_DEMO/kpa/symbols.txt
+  splits: config/G8MP01_DEMO/kpa/splits.txt
+
+- object: files/rel/mri.rel
+  hash: 8f511deadc078e4c2010ed2452286cd7c59f9255
+  symbols: config/G8MP01_DEMO/mri/symbols.txt
+  splits: config/G8MP01_DEMO/mri/splits.txt
+
+- object: files/rel/nok.rel
+  hash: 7744079a6445250d36de26e4d7c40ee0d363b6bf
+  symbols: config/G8MP01_DEMO/nok/symbols.txt
+  splits: config/G8MP01_DEMO/nok/splits.txt
+
+- object: files/rel/tik.rel
+  hash: e451e3b68d17c9ce43f4798d60223e49432160c7
+  symbols: config/G8MP01_DEMO/tik/symbols.txt
+  splits: config/G8MP01_DEMO/tik/splits.txt

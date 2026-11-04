@@ -1,0 +1,127 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+gor.c:
+	.text       start:0x00000000 end:0x00000620
+	.rodata     start:0x00000000 end:0x00000268
+	.data       start:0x00000000 end:0x00000858
+	.bss        start:0x00000000 end:0x00000008
+
+gor_00.c:
+	.text       start:0x00000620 end:0x00003410
+	.rodata     start:0x00000268 end:0x00001D30
+	.data       start:0x00000858 end:0x0000F820
+	.bss        start:0x00000008 end:0x00000020
+
+gor_01.c:
+	.text       start:0x00003410 end:0x00004DB4
+	.rodata     start:0x00001D30 end:0x00004950
+	.data       start:0x0000F820 end:0x0001EBF8
+	.bss        start:0x00000020 end:0x00000078
+
+gor_02.c:
+	.text       start:0x00004DB4 end:0x0000688C
+	.rodata     start:0x00004950 end:0x00006E10
+	.data       start:0x0001EBF8 end:0x0002DE40
+	.bss        start:0x00000078 end:0x000000C8
+
+gor_03.c:
+	.text       start:0x0000688C end:0x00009DE4
+	.rodata     start:0x00006E10 end:0x00009570
+	.data       start:0x0002DE40 end:0x0003AF10
+	.bss        start:0x000000C8 end:0x00000138
+
+gor_04.c:
+	.text       start:0x00009DE4 end:0x00009F04
+	.rodata     start:0x00009570 end:0x0000A080
+	.data       start:0x0003AF10 end:0x00040820
+
+gor_door.c:
+	.data       start:0x00040820 end:0x00040870
+
+event/evt_keijiban.c:
+	.text       start:0x00009F04 end:0x0000A344
+	.rodata     start:0x0000A080 end:0x0000A098
+	.data       start:0x00040870 end:0x000408D8
+
+data/battle/battle_database_gor.c:
+	.rodata     start:0x0000A098 end:0x0000A1E8
+	.data       start:0x000408D8 end:0x00041108
+
+unit/unit_kuriboo.c:
+	.text       start:0x0000A344 end:0x0000A45C
+	.rodata     start:0x0000A1E8 end:0x0000A340
+	.data       start:0x00041108 end:0x00041CA0
+
+unit/unit_monban.c:
+	.rodata     start:0x0000A340 end:0x0000A4D8
+	.data       start:0x00041CA0 end:0x00043048
+
+unit/unit_gundan_zako.c:
+	.rodata     start:0x0000A4D8 end:0x0000A6F8
+	.data       start:0x00043048 end:0x00044638
+
+unit/unit_boss_kanbu1.c:
+	.text       start:0x0000A45C end:0x0000A4D4
+	.rodata     start:0x0000A6F8 end:0x0000A920
+	.data       start:0x00044638 end:0x00045A40
+
+event/evt_yuuranking.c:
+	.text       start:0x0000A4D4 end:0x0000F214
+	.rodata     start:0x0000A920 end:0x0000AD68
+	.data       start:0x00045A40 end:0x00045AC8
+	.bss        start:0x00000138 end:0x00000140
+
+event/evt_goryuugijo.c:
+	.text       start:0x0000F214 end:0x0000F594
+	.rodata     start:0x0000AD68 end:0x0000AD70
+	.data       start:0x00045AC8 end:0x00045B28
+
+gor_irai.c:
+	.text       start:0x0000F594 end:0x00010AA4
+	.rodata     start:0x0000AD70 end:0x0000B7A0
+	.data       start:0x00045B28 end:0x00046770
+
+gor_10.c:
+	.text       start:0x00010AA4 end:0x0001161C
+	.rodata     start:0x0000B7A0 end:0x0000B930
+	.data       start:0x00046770 end:0x00046DE8
+	.bss        start:0x00000140 end:0x00000150
+
+unit/unit_npc_christine.c:
+	.rodata     start:0x0000B930 end:0x0000B9B0
+	.data       start:0x00046DE8 end:0x00047058
+
+unit/unit_lecture_christine.c:
+	.text       start:0x0001161C end:0x000118A8
+	.rodata     start:0x0000B9B0 end:0x0000BB00
+	.data       start:0x00047058 end:0x00048028
+
+unit/unit_lecture_frankli.c:
+	.rodata     start:0x0000BB00 end:0x0000BE20
+	.data       start:0x00048028 end:0x0004A580
+
+unit/unit_lecture_frankli_sac.c:
+	.text       start:0x000118A8 end:0x0001223C
+	.rodata     start:0x0000BE20 end:0x0000C038
+	.data       start:0x0004A580 end:0x0004B420
+	.bss        start:0x00000150 end:0x00000168
+
+event/evt_lect_gor.c:
+	.text       start:0x0001223C end:0x00013A14
+	.rodata     start:0x0000C038 end:0x0000C518
+	.data       start:0x0004B420 end:0x0004D598
+	.bss        start:0x00000168 end:0x00000208
+
+gor_12.c:
+	.rodata     start:0x0000C518 end:0x0000C558
+	.data       start:0x0004D598 end:0x0004D738
+
+gor_11.c:
+	.rodata     start:0x0000C558 end:0x0000C585
+	.data       start:0x0004D738 end:0x0004D8F4

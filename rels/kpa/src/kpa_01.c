@@ -1316,7 +1316,7 @@ USER_FUNC(get_togenoko_pos) {
     return EVT_RETURN_DONE;
 }
 
-#if VERSION >= VERSION_DEMO_EU
+#if VERSION == VERSION_EU
 
 /** PAL only: called at the start of kpa_03's jumpstand_evt. */
 USER_FUNC(kpa_cancel_attack_mode) {
