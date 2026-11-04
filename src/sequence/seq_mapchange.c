@@ -39,6 +39,7 @@
 #include "evt/evt_fade.h"
 #include "evt/evt_mario.h"
 #include "evt/evt_nannpc.h"
+#include "evt/evt_save_flags.h"
 
 //.sbss
 char _next_area[0x20];
@@ -358,7 +359,7 @@ void seq_mapChangeMain(SequenceWork* work) {
             mario = marioGetPtr();
             party = partyGetPtr(marioGetPartyId());
             extraParty = partyGetPtr(marioGetExtraPartyId());
-            switch (swByteGet(GSW_SAVE_RESUME_KIND)) { // GSW_SAVE_RESUME_POINT
+            switch (swByteGet(GSW_ID(GSW_SAVE_RESUME_POINT))) {
             case 0:
                 mario->position = gp->savePlayerPos;
                 evt_cam_road_reset(0, 0);

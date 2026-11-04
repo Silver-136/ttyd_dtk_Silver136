@@ -262,7 +262,7 @@ EVT_END()
 
 /**
  * Intro of the Goomba pair in the Glitz Pit (runs once, on turn 1, for the unit with work 0 set,
- * while GSWF_TOU_GOOMBA_BROS_FIRST_STRIKE_SEEN is clear):
+ * while GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN is clear):
  * pans the camera, has the partner complain about the attack before the bell (Goombella stg3_tou_83_kur,
  * Koops stg3_tou_83_nok, Flurrie stg3_tou_83_win, by unit kind 224, 225, 227) and the Goomba answer that it was
  * a welcome gift for the rookie (stg3_tou_84), then sets the flag.

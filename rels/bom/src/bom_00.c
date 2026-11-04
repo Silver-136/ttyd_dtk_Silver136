@@ -52,7 +52,7 @@ EVT_END()
 
 /**
  * Pipe-exit event used when entering from the Rogueport Sewers pipe:
- * on the very first arrival (GSWF_BOM_FAHR_REACHED not set) it hides Mario and the partner
+ * on the very first arrival (GSWF_BOM_FIRST_ARRIVAL_DONE not set) it hides Mario and the partner
  * until first_evt clears GF(0), then shows them again; leaves LW(0) = 0.
  */
 static EVT_BEGIN(first_evt_dokan)
@@ -111,7 +111,7 @@ static BeroEntry bero_entry_data[] = {
 /**
  * First arrival at Fahr Outpost: letterboxed camera pan down over the snowfield,
  * Mario and the partner walk into the scene, the partner speaks stg7_bom_01,
- * and the story progress is set to STG7_00_START with GSWF_BOM_FAHR_REACHED raised.
+ * and the story progress is set to STG7_00_START with GSWF_BOM_FIRST_ARRIVAL_DONE raised.
  * It clears GF(0) once the pan is done.
  */
 static EVT_BEGIN(first_evt)

@@ -250,6 +250,10 @@
 #define UW(id) ((id) - EVTDAT_UW_BASE)
 #define UF(id) ((id) - EVTDAT_UF_BASE)
 
+// The other way round for C code: swSet(GSWF_ID(GSWF_x)), swByteGet(GSW_ID(GSW_x)) take the flag or byte number.
+#define GSWF_ID(value) ((value) + EVTDAT_GSWF_BASE)
+#define GSW_ID(value) ((value) + EVTDAT_GSW_BASE)
+
 /* Saved variables with a known meaning */
 #include "evt/evt_story.h"
 #include "evt/evt_collect_flags.h"

@@ -248,7 +248,7 @@ static NpcSetupInfo npcEnt[] = {
  * Event script: the first entry to the Queen's chamber.
  * Mario and the partner enter through the west door, the camera sweeps over,
  * the door swings open and shut behind them, the partner remarks (stg8_las_50),
- * Peach's scene (syuryo_evt) starts and the story progress is set to STORY_STG8_14_01_QUEENS_CHAMBER.
+ * Peach's scene (syuryo_evt) starts and the story progress is set to STG8_14_01_QUEENS_CHAMBER.
  */
 static EVT_BEGIN(first_evt)
     CALL(evt_mario_key_onoff, 0)

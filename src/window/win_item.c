@@ -25,6 +25,8 @@
 #include "mot/mot_roll.h"
 #include "mot/mot_slit.h"
 #include "win/win_item.h"
+#include "evt/evt_cmd.h"
+#include "evt/evt_save_flags.h"
 
 void itemUseDisp(WinMgrEntry* entry);
 void itemUseDisp2(WinMgrEntry* entry);
@@ -461,7 +463,7 @@ s32 winItemMain(WindowWork* w) {
             if (pouchCheckMail(w->item.mail[w->item.mailSel].id) == 1) {
                 pouchOpenMail(w->item.mail[w->item.mailSel].id);
             }
-            swSet(GSWF_MAIL_OPENED_ONCE); // GSWF_MAIL_TUTORIAL_REPEAT_OFF
+            swSet(GSWF_ID(GSWF_MAIL_TUTORIAL_REPEAT_OFF));
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_STATUS_WINDOW_MAIL_MOVE1 | PSND_SFX_BYPASS_MUTE));
             w->item.state = 201;
             mail = mailGetPtr(w->item.mail[w->item.mailSel].id);

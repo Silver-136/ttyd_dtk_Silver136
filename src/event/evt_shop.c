@@ -39,6 +39,7 @@
 #include "win/win_main.h"
 #include "evt/evt_pouch.h"
 #include "icon_ids.h"
+#include "evt/evt_save_flags.h"
 
 
 void FontDrawString(f32 x, f32 y, const char* str);
@@ -1252,13 +1253,13 @@ USER_FUNC(add_shop_point) {
     s32 rshSaleMs = evtGetValue(event, args[3]);
     PouchData* pouch = pouchGetPtr();
 
-    if (!strcmp(gp->currentMapName, "mri_07") && swGet(0xFA) && mriSaleMs < 900000) { // GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE
+    if (!strcmp(gp->currentMapName, "mri_07") && swGet(GSWF_ID(GSWF_SHOP_MRI_07_DOUBLE_POINTS_SALE)) && mriSaleMs < 900000) {
         add *= 2;
     }
-    if (!strcmp(gp->currentMapName, "usu_01") && swGet(0xFB) && usuSaleMs < 900000) { // GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE
+    if (!strcmp(gp->currentMapName, "usu_01") && swGet(GSWF_ID(GSWF_SHOP_USU_01_DOUBLE_POINTS_SALE)) && usuSaleMs < 900000) {
         add *= 2;
     }
-    if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(0xFC) && rshSaleMs < 900000) { // GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE
+    if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(GSWF_ID(GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE)) && rshSaleMs < 900000) {
         add *= 2;
     }
     pouch->shopPoints += add;

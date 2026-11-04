@@ -574,7 +574,7 @@ static EVT_BEGIN(sister_talk)
 EVT_END()
 
 /**
- * Init script of Punio in the cell room: when he is waiting at the cell (GSWF_MRI03_PUNIO_WAITING_AT_CELL) he
+ * Init script of Punio in the cell room: when he is waiting at the cell (GSWF_MRI_PUNIO_WAITING_AT_JAIL) he
  * stands in front of the blue cell, facing it.
  */
 static EVT_BEGIN(guide_init)
@@ -774,7 +774,7 @@ EVT_BEGIN(jail_init_00)
 EVT_END()
 
 /**
- * Opens the red cell door: sets GSWF_MRI03_RED_CELL_DOOR_OPEN,
+ * Opens the red cell door: sets GSWF_MRI_03_RED_JAIL_OPENED,
  * swings the door open with a sound and turns off its collision groups. Called when the door unlocks.
  */
 EVT_BEGIN(red_jail_open)
@@ -845,7 +845,7 @@ EVT_BEGIN(evt_check00)
 EVT_END()
 
 /**
- * Opens the blue cell door: sets GSWF_MRI03_BLUE_CELL_DOOR_OPEN, swings the door open with a sound,
+ * Opens the blue cell door: sets GSWF_MRI_03_BLUE_JAIL_OPENED, swings the door open with a sound,
  * disables its collision groups and runs the scene with Punio's sister (guide_sister).
  */
 EVT_BEGIN(blue_jail_open)
@@ -1257,7 +1257,7 @@ EVT_END()
 /**
  * Scene when the blue cell is opened (story STG2_19_INSIDE_THE_BLUE_CELL to STG2_20_PUNIO_PETUNI):
  * the Punies step away from the cell, Punio and his sister Petuni talk with the party,
- * Petuni gives Punio a Dried Shroom that shrinks as he eats it, and Petuni joins the Puni group (GSWF_MRI_PETUNI_IN_PUNI_GROUP).
+ * Petuni gives Punio a Dried Shroom that shrinks as he eats it, and Petuni joins the Puni group (GSWF_MRI_PETUNI_JOINED).
  * Sets the story to STG2_20_PUNIO_PETUNI.
  */
 EVT_BEGIN(guide_sister)
@@ -1622,7 +1622,7 @@ EVT_END()
 
 /**
  * Short scene before the blue cell opens (story STG2_19_INSIDE_THE_BLUE_CELL): Punio waits by the cell and talks;
- * sets GSWF_MRI03_PUNIO_WAITING_AT_CELL and the story to STG2_19_01_PUNIO_PETUNI_BEFORE.
+ * sets GSWF_MRI_PUNIO_WAITING_AT_JAIL and the story to STG2_19_01_PUNIO_PETUNI_BEFORE.
  */
 EVT_BEGIN(guide_sister_before)
     CALL(evt_mario_key_onoff, 0)

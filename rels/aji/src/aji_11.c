@@ -118,7 +118,7 @@ static BeroEntry bero_entry_data[] = {
 /**
  * Exit event of the west door w_bero during Peach's disk search:
  * while the story is before STG5_46_PEACH_DISK_SEARCH
- * and she has taken the Data Disk (GSWF_AJI11_PEACH5_DATA_DISK_TAKEN),
+ * and she has taken the Data Disk (GSWF_AJI_11_DATA_DISK_TAKEN),
  * she refuses to leave (peach_aji_249_01 if the disk has not been read, peach_aji_250 if it has)
  * and LW(0) = 1 cancels the exit; otherwise LW(0) = 0 lets her through.
  */
@@ -172,7 +172,7 @@ static BeroEntry bero_peach_data[] = {
 
 /**
  * Pick-up event for the Card Key on the storage-room floor:
- * records it in GSWF_AJI11_CARD_KEY_TAKEN so it is not placed again.
+ * records it in GSWF_AJI_11_CARD_KEY so it is not placed again.
  */
 static EVT_BEGIN(key_evt)
     SET_VALUE(GSWF_AJI_11_CARD_KEY, 1)
@@ -347,7 +347,7 @@ EVT_END()
  * Peach's chapter 5 setup of the storage room: if system flag bit 64 is set, clears it and sets her condition to 2.
  * Always calls peach_evt_toumei to zero the player scale, then registers the shelf (tana) and
  * disk system (a_disksys) scripts according to whether the data disk has been taken or read.
- * It overwrites the w_bero exit with her own, and once says peach_aji_244 (GSWF_AJI11_PEACH5_ROOM_REMARK).
+ * It overwrites the w_bero exit with her own, and once says peach_aji_244 (GSWF_AJI_11_PEACH_ENTRY_LINE_SEEN).
  */
 static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_sub_get_system_flag, LW(0))

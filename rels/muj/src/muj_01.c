@@ -1616,7 +1616,7 @@ EVT_END()
  * The crew splits (nakamaware): Mario walks into the camp at STG5_11_DESERTED_ISLAND,
  * the sailors argue over their cowardice (stg5_muj_05 to 14), and three Embers (ghost flames) appear and attack;
  * the fight is battle info 6. Afterwards kyoshu_event plays.
- * The GSWF_MUJ01_SKIP_TO_SHOW_OF_HANDS flag jumps straight to kyoshu_event.
+ * The GSWF_MUJ_01_CREW_SPLIT_SKIP flag jumps straight to kyoshu_event.
  */
 EVT_BEGIN(nakamaware_event)
     // With the skip flag set (only the STG5_12 story-point start in event.c sets it), go straight to the show of hands.
@@ -1832,7 +1832,7 @@ EVT_END()
 
 /**
  * Flavio learns that Bobbery is missing (settoku): everyone turns to face Flavio, he speaks (stg5_muj_29),
- * the timid sailor answers (stg5_muj_30) and GSWF_MUJ01_TIMID_SAILOR_PERSUADED is set.
+ * the timid sailor answers (stg5_muj_30) and GSWF_MUJ_01_BOBBERY_MISSING_SCENE_SEEN is set.
  */
 EVT_BEGIN(settoku_event_main)
     CALL(evt_set_dir_to_target, STRING("水夫A"), STRING("マルコ"))

@@ -68,6 +68,7 @@
 #include "pmario_sound.h"
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
+#include "evt/evt_save_flags.h"
 
 typedef struct MonosiriFollow {
     s32 seq;
@@ -642,7 +643,7 @@ EVT_END()
 
 /**
  * Exit event of the pipe "dokan" (to tik_01): the first time through,
- * places Frankly as the follower (party slot 1) out of sight below the map and sets GSWF_GOR02_FRANKLY_INTRO_SEEN.
+ * places Frankly as the follower (party slot 1) out of sight below the map and sets GSWF_GOR_02_TUTORIAL_PIPE_TAKEN.
  * Returns 0 in LW(0) so the pipe still works.
  */
 EVT_BEGIN(gor_02_event_01)
@@ -1777,7 +1778,7 @@ EVT_END()
 /**
  * Init event of Professor Frankly (Kuri-hakase): lets him pass through walls and places him by story stage:
  * at (-135, 0, -240) at STG0_08_STOLEN_COINS and at (-220, 0, 305)
- * while he waits to start his tutorial (unless GSWF_GOR02_FRANKLY_INTRO_SEEN is set),
+ * while he waits to start his tutorial (unless GSWF_GOR_02_TUTORIAL_PIPE_TAKEN is set),
  * hidden below the map during the early scenes and the late story,
  * at (-140, 0, -225) in his house at the Pedestal step and at each Thousand-Year Door step,
  * and at (-140, 0, -250) otherwise.
@@ -2480,7 +2481,7 @@ EVT_BEGIN(tozokudan3_talk)
 EVT_END()
 
 /**
- * Makes Sanders walk to Bobbery's door and open it (50, 25) and sets GSWF_GOR02_BOBBERY_DOOR_OPEN,
+ * Makes Sanders walk to Bobbery's door and open it (50, 25) and sets GSWF_GOR_BOBBERY_DOOR_UNLOCKED,
  * then says mac_4_056_01. Does nothing if the door is already open.
  */
 EVT_BEGIN(sanders_open_door)
@@ -2504,7 +2505,7 @@ EVT_END()
 /**
  * Init event of Sanders (Bobbery) at his house: lets him pass through walls and places him by story stage:
  * at (0, 0, -50) before Mario meets Bobbery, and until his decision at (0, 0, -50)
- * or (50, 0, -30) depending on GSWF_GOR02_BOBBERY_DOOR_OPEN (whether the door has been opened).
+ * or (50, 0, -30) depending on GSWF_GOR_BOBBERY_DOOR_UNLOCKED (whether the door has been opened).
  */
 static EVT_BEGIN(sanders_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
@@ -3801,7 +3802,7 @@ static const char* door_data_03_mobj[] = {
 
 /**
  * Called when the house 03 door closes: brings the music and ambience back.
- * At STG4_34_BOBBERY_DECLINES, once (GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE),
+ * At STG4_34_BOBBERY_DECLINES, once (GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE),
  * the partner comments on Bobbery declining (mac_4_058, mac_4_059).
  * At STG4_36_BOBBERYS_DECISION it runs the scene where Bobbery departs for the port,
  * moving the party members (mac_4_087) and advancing the story to STG4_37_TO_THE_PORT.
@@ -3921,7 +3922,7 @@ static DoorParam door_data_03 = {
 
 /**
  * Door-open handler used with Sanders's door (house 03):
- * if Sanders has not opened the door yet (GSWF_GOR02_BOBBERY_DOOR_OPEN is 0) shows gor_02_012 and stays shut;
+ * if Sanders has not opened the door yet (GSWF_GOR_BOBBERY_DOOR_UNLOCKED is 0) shows gor_02_012 and stays shut;
  * otherwise runs the normal evt_door_open.
  */
 EVT_BEGIN(evt_door_sanders_open)
@@ -4008,7 +4009,7 @@ EVT_END()
  * three smoke puffs rise at
  * the "S_i01_dan_mC" box, the camera moves in, the music and ambience dip and low-pass
  * and Mario rolls to (65, -55).
- * In the early demos he always unrolls facing left; in JP and later this happens only until GSWF_GOR02_BOBBERY_DOOR_OPEN is set.
+ * In the early demos he always unrolls facing left; in JP and later this happens only until GSWF_GOR_BOBBERY_DOOR_UNLOCKED is set.
  * While that flag is clear, Sanders turns and asks what they want (mac_4_049).
  * It then registers evt_door_03_caseopen again as a stand-on case event.
  */
@@ -4888,18 +4889,18 @@ USER_FUNC(monosiri_check) {
             }
         }
     }
-    if (swGet(0x4BD) && !swGet(0x1181)) { // GSWF_GOR_GATEKEEPER_DEFEATED
+    if (swGet(GSWF_ID(GSWF_GOR_GATEKEEPER_DEFEATED)) && !swGet(0x1181)) {
         evtSetValue(event, args[0], 1);
         evtSetValue(event, args[1], 7);
         return EVT_RETURN_DONE;
     }
-    if (swGet(0x13DD) && !swGet(0x1225)) { // GSWF_PIT_BONETAIL_DEFEATED
+    if (swGet(GSWF_ID(GSWF_PIT_BONETAIL_DEFEATED)) && !swGet(0x1225)) {
         evtSetValue(event, args[0], 1);
         evtSetValue(event, args[1], 0xAB);
         return EVT_RETURN_DONE;
     }
 #if VERSION >= VERSION_JP
-    if (swGet(0x8B2) && !swGet(0x11C6)) { // GSWF_JIN_00_ATOMIC_BOO_DEFEATED
+    if (swGet(GSWF_ID(GSWF_JIN_00_ATOMIC_BOO_DEFEATED)) && !swGet(0x11C6)) {
         evtSetValue(event, args[0], 1);
         evtSetValue(event, args[1], 0x4C);
         return EVT_RETURN_DONE;

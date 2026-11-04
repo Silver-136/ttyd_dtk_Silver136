@@ -807,7 +807,7 @@ EVT_END()
 
 /**
  * Arrival cutscene on the second visit (entering through "nidome"):
- * the train pulls in, GSWF_TRAIN_AT_RIVERSIDE is set and the map changes to rsh_02_b.
+ * the train pulls in, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE is set and the map changes to rsh_02_b.
  */
 EVT_BEGIN(evt_hom_touchaku_nidome)
     CALL(evt_mario_cont_onoff, 0)

@@ -89,7 +89,7 @@ EvtWord tou_08_init_evt[289];
 /**
  * Run when Mario arrives from the toilet pipe before STG3_21_1ST_MATCH_WITH_RAWK_HAWK:
  * he walks to (-265, 125), the partner remarks (stg3_tou_422),
- * GSWF_TOU_TITLE_MATCH_RESERVED is cleared and the story advances to STG3_21_1ST_MATCH_WITH_RAWK_HAWK.
+ * GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED is cleared and the story advances to STG3_21_1ST_MATCH_WITH_RAWK_HAWK.
  */
 static EVT_BEGIN(evt_toile)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)

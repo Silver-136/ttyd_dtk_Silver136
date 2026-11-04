@@ -33,6 +33,8 @@
 #include "libc_decls.h"
 #include "win/win_log.h"
 #include "driver/mapdrv.h"
+#include "evt/evt_cmd.h"
+#include "evt/evt_save_flags.h"
 
 typedef struct TubuDt {
     s16 x;
@@ -344,7 +346,7 @@ void winLogInit(WindowWork* w) {
     if (swByteGet(0) >= STG0_16_FRANKLYS_HOUSE) winLogAddMenu(w, 1); // GSW_STORY_PROGRESS
     if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4); // GSW_STORY_PROGRESS
     if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL) winLogAddMenu(w, 2); // GSW_STORY_PROGRESS
-    if (swGet(GSWF_RECIPE_LOG_UNLOCKED)) winLogAddMenu(w, 3); // GSWF_GOR_ZESS_T_DISH_RECEIVED
+    if (swGet(GSWF_ID(GSWF_GOR_ZESS_T_DISH_RECEIVED))) winLogAddMenu(w, 3);
     w->log.stoneNum = 0;
     for (i = 0; i < 7; i++) {
         if (pouchCheckItem(stone_tbl[i])) {
@@ -384,12 +386,12 @@ void winLogInit(WindowWork* w) {
     if (!strncmp(gp->currentMapName, "rsh", 3)) {
         if (swByteGet(0) < STG6_27_RIVERSIDE_STATION) { // GSW_STORY_PROGRESS
             area = "gor";
-        } else if (swByteGet(0) < STG6_49_POSHLEY_HEIGHTS || swGet(0xDFB)) { // GSW_STORY_PROGRESS, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE
+        } else if (swByteGet(0) < STG6_49_POSHLEY_HEIGHTS || swGet(GSWF_ID(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE))) { // GSW_STORY_PROGRESS, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE
             area = "eki";
-        } else if (swGet(GSWF_TRAIN_AT_POSHLEY)) { // GSWF_HOM_TRAIN_AT_POSHLEY
+        } else if (swGet(GSWF_ID(GSWF_HOM_TRAIN_AT_POSHLEY))) {
             area = "pik";
         } else {
-            switch (swByteGet(GSW_TRAIN_LEG)) { // GSW_HOM_TRAIN_LEG
+            switch (swByteGet(GSW_ID(GSW_HOM_TRAIN_LEG))) {
             case 0:
                 area = "gor";
                 break;
@@ -583,16 +585,16 @@ static inline BOOL tubuCheck(u8 type) {
     case 0:
         return FALSE;
     case 1:
-        if (swGet(GSWF_LOG_MAP_WIN_ROUTE_SHOWN)) return TRUE; // GSWF_WIN_04_ENTERED
+        if (swGet(GSWF_ID(GSWF_WIN_04_ENTERED))) return TRUE;
         break;
     case 2:
-        if (swGet(GSWF_LOG_MAP_TIK_ROUTE_SHOWN)) return TRUE; // GSWF_TIK_01_VISITED
+        if (swGet(GSWF_ID(GSWF_TIK_01_VISITED))) return TRUE;
         break;
     case 3:
-        if (swGet(GSWF_LOG_MAP_GON_ROUTE_SHOWN)) return TRUE; // GSWF_GON_00_VISITED
+        if (swGet(GSWF_ID(GSWF_GON_00_VISITED))) return TRUE;
         break;
     case 4:
-        if (swGet(GSWF_LOG_MAP_GRA_ROUTE_SHOWN)) return TRUE; // GSWF_GRA_00_ENTERED
+        if (swGet(GSWF_ID(GSWF_GRA_00_ENTERED))) return TRUE;
         break;
     }
     return FALSE;

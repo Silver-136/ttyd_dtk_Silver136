@@ -49,6 +49,7 @@
 #include "end.h"
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
+#include "evt/evt_save_flags.h"
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 typedef struct EndMoa {
@@ -998,7 +999,7 @@ void end_image_disp(CameraId cameraId, void* param) {
     if (id >= ((TEXPalette*)*end_wp->tpl->data)->numDescriptors) {
         return;
     }
-    if (id == 9 && swGet(0x5E7)) { // GSWF_GON_12_MOWZ_MET_WITH_KOOPS
+    if (id == 9 && swGet(GSWF_ID(GSWF_GON_12_MOWZ_MET_WITH_KOOPS))) {
         id = 53;
     }
 #endif

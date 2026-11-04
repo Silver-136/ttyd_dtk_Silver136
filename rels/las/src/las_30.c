@@ -178,7 +178,7 @@ EVT_END()
 
 /**
  * Map init script for las_30, the long stairs between las_28 and las_29:
- * at STORY_STG8_15_GRODUS the danger music plays, otherwise silence with the Palace ambience;
+ * at STG8_15_GRODUS the danger music plays, otherwise silence with the Palace ambience;
  * a save block, a recovery block, two chests (an Ultra Shroom and a Jammin' Jelly) and the torches.
  */
 EVT_BEGIN(las_30_init_evt)

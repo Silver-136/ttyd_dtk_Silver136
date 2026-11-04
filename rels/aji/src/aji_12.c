@@ -158,7 +158,7 @@ const char* hit_list[] = {
 
 /**
  * Item-box script for the chest at "box": gives Mario the card key (ITEM_CARD_KEY_0x1E),
- * sets GSWF_AJI12_CARD_KEY_TAKEN, turns off the floor lights and makes Mario turn to face east.
+ * sets GSWF_AJI_12_LIT_FLOOR_DONE, turns off the floor lights and makes Mario turn to face east.
  */
 static EVT_BEGIN(evt_box)
     CALL(evt_mario_key_onoff, 0)
@@ -216,7 +216,7 @@ EVT_END()
 /**
  * Init script of aji_12, a glowing-floor room with 44 panels:
  * plays BGM_STG7_DUN2, sets up the exits and a ? block containing ITEM_HP_DRAIN_ITEM, and,
- * until the card key from the chest has been taken (GSWF_AJI12_CARD_KEY_TAKEN),
+ * until the card key from the chest has been taken (GSWF_AJI_12_LIT_FLOOR_DONE),
  * runs the floor puzzle (hikaru_yuka_init); afterwards the floor is switched off.
  */
 EVT_BEGIN(aji_12_init_evt)

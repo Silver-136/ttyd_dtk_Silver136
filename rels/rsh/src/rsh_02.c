@@ -2266,7 +2266,7 @@ EVT_END()
  * Bed on the second trip. At a station (Poshley Heights or Rogueport) it is the normal inn bed.
  * While the train is running, asking to sleep fades out,
  * restores HP/FP and changes the map to Riverside Station (hom_10, hom_11 or hom_12),
- * setting GSW_TRAIN_LEG to the next leg only when stopped at Riverside.
+ * setting GSW_HOM_TRAIN_LEG to the next leg only when stopped at Riverside.
  */
 EVT_BEGIN(evt_nidome_bed)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)

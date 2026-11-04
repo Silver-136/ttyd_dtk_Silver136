@@ -182,7 +182,7 @@ static EvtWord hikaru_yuka_init[] = {
  * Init script of aji_05, a second glowing-floor room like aji_02:
  * plays BGM_STG7_DUN2, sets up the exits and a ? block containing ITEM_SLEEPY_SHEEP,
  * and keeps the floor panels reacting to Mario (hikaru_yuka_init)
- * until the chest's card key has been taken (GSWF_AJI05_CARD_KEY_TAKEN);
+ * until the chest's card key has been taken (GSWF_AJI_05_LIT_FLOOR_DONE);
  * afterwards the panel lights are all off.
  */
 EVT_BEGIN(aji_05_init_evt)

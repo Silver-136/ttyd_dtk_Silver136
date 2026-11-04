@@ -551,7 +551,7 @@ EVT_END()
  * before STG7_02_MAYOR_BOB the first conversation (stg7_bom_20 onward,
  * continuing through 33 and setting STG7_02_MAYOR_BOB when Bobbery is present, with the partner answering);
  * then he talks about General White and the cannon (stg7_bom_34 onward,
- * depending on GSWF_PIK00_GOLDBOB_CANNON_APPROVAL and GSWF_BOM02_GENERAL_WHITE_WOKEN)
+ * depending on GSWF_PIK_GOLDBOB_PERMISSION_GIVEN and GSWF_BOM_GENERAL_WHITE_AGREED)
  * until the cannon story point.
  */
 static EVT_BEGIN(talk_soncho)
@@ -994,8 +994,8 @@ EVT_END()
 /**
  * Init of General White (ホワイト): during Trouble Center job 25 (work flag 4 set, 6 not) he is placed at (380, 45,
  * -150) facing west and either idles as a talking NPC (work flag 5) or lies in pose N_1 with a narrow width
- * and no talk script; the same bed placement is used when GSWF_STG7_WHITE_TWILIGHT_HINT is set
- * and GSWF_BOM02_GENERAL_WHITE_WOKEN is not.
+ * and no talk script; the same bed placement is used when GSWF_USU_GENERAL_WHITE_HINT_HEARD is set
+ * and GSWF_BOM_GENERAL_WHITE_AGREED is not.
  */
 static EVT_BEGIN(init_white)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)

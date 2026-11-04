@@ -533,7 +533,7 @@ EVT_END()
 
 /**
  * Retail save script, run from Save Blocks, intermissions and the first save after name entry.
- * LW(0) is the save kind stored in GSW_SAVE_RESUME_KIND:
+ * LW(0) is the save kind stored in GSW_SAVE_RESUME_POINT:
  * 0 is a Save Block, 23 the new-file save (saves without asking),
  * 21 the ending save (which uses the ending yes/no prompt).
  * Handles format/create prompts, retries a failed write,

@@ -57,6 +57,7 @@
 #include "tou.h"
 #include <dolphin/pad.h>
 #include "driver/seqdrv.h"
+#include "evt/evt_save_flags.h"
 
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
@@ -353,7 +354,7 @@ static void rankingInit(void) {
         if (swGet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE)) {
             entry->flags |= RANK_FLAG_BEATEN;
         }
-        if (swGet(GSWF_TOU_RANKING_SAVED)) { // GSWF_GLITZ_PIT_RANKING_SAVED
+        if (swGet(GSWF_ID(GSWF_GLITZ_PIT_RANKING_SAVED))) {
             for (j = 0; j < 2; j++) {
                 entry->sw[j] = swByteGet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE));
             }
@@ -364,7 +365,7 @@ static void rankingInit(void) {
             entry->flags |= RANK_FLAG_PLAYER;
         }
     }
-    swSet(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
+    swSet(GSWF_ID(GSWF_GLITZ_PIT_RANKING_SAVED));
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
         rank_wp->entries[21].flags |= RANK_FLAG_HIDDEN;
         rank_wp->entries[22].flags |= RANK_FLAG_HIDDEN;
@@ -438,13 +439,13 @@ USER_FUNC(evt_rankingReset) {
     for (i = 0; i < 20; i++) {
         swClear(i + GSWF_TOU_FIGHTER_BELOW_BASE);
     }
-    swClear(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN); // GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN
-    swClear(GSWF_TOU_CHAMP_OPENING_SEEN); // GSWF_TOU_RAWK_HAWK_OPENING_SEEN
-    swClear(GSWF_TOU_CHAMP_WIN_SEEN); // GSWF_TOU_RAWK_HAWK_FIRST_WIN
-    swClear(GSWF_TOU_TITLE_MATCH_RESERVED); // GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED
-    swClear(GSWF_TOU_RANKING_SAVED); // GSWF_GLITZ_PIT_RANKING_SAVED
-    swClear(GSWF_TOU_LAST_OPPONENT_VALID); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
-    swClear(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
+    swClear(GSWF_ID(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN));
+    swClear(GSWF_ID(GSWF_TOU_RAWK_HAWK_OPENING_SEEN));
+    swClear(GSWF_ID(GSWF_TOU_RAWK_HAWK_FIRST_WIN));
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED));
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_RANKING_SAVED));
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED));
+    swClear(GSWF_ID(GSWF_TOU_02_FANS_MOB_MARIO_SEEN));
     rankingInit();
     return EVT_RETURN_DONE;
 }
@@ -521,9 +522,9 @@ static void rankingControll(void) {
         if (nwin > 16) {
             MOVE_FLAG(win, nwin, 0x100, 14);
         }
-        if (swGet(GSWF_TOU_LAST_OPPONENT_VALID)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+        if (swGet(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED))) {
             for (i = 0; i < nwin; i++) {
-                if (win[i] == swByteGet(GSW_TOU_LAST_OPPONENT_ID)) { // GSW_GLITZ_PIT_LAST_OPPONENT
+                if (win[i] == swByteGet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT))) {
                     break;
                 }
             }
@@ -547,9 +548,9 @@ static void rankingControll(void) {
                 }
             }
         }
-        if (swGet(GSWF_TOU_LAST_OPPONENT_VALID)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+        if (swGet(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED))) {
             for (i = 0; i < nlose; i++) {
-                if (lose[i] == swByteGet(GSW_TOU_LAST_OPPONENT_ID)) { // GSW_GLITZ_PIT_LAST_OPPONENT
+                if (lose[i] == swByteGet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT))) {
                     break;
                 }
             }
@@ -807,9 +808,9 @@ USER_FUNC(evt_tou_get_rule_msg2) {
 
 /**
  * Script helper: args[0] = 0 if Mario won the match, else lost; args[1] = opponent id.
- * Updates the opponent's lost flag and GSWF_TOU_LAST_MATCH_WON,
+ * Updates the opponent's lost flag and GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT,
  * jitters every fighter's score by a random amount,
- * records the opponent in GSW_TOU_LAST_OPPONENT_ID and re-sorts the board.
+ * records the opponent in GSW_GLITZ_PIT_LAST_OPPONENT and re-sorts the board.
  */
 static USER_FUNC(evt_tou_set_ranking_win_lose) {
     EvtWord* args = event->args;
@@ -826,7 +827,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
                 break;
             }
         }
-        swSet(0x98A); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
+        swSet(GSWF_ID(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT));
     } else {
         for (i = 0; i < rank_wp->num; i++) {
             if (id == rank_wp->entries[i].id) {
@@ -834,7 +835,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
                 break;
             }
         }
-        swClear(0x98A); // GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT
+        swClear(GSWF_ID(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT));
     }
     min = 1000;
     max = -1000;
@@ -849,8 +850,8 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
             }
         }
     }
-    swByteSet(0x1FB, id);
-    swSet(0x9E4); // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
+    swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), id);
+    swSet(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED));
     rankingControll();
     return EVT_RETURN_DONE;
 }
@@ -3024,7 +3025,7 @@ static USER_FUNC(tou_champion_belt_onoff) {
 }
 
 /**
- * Rank 11 scene (once: GSWF_TOU_RANK11_SWOOPS_JOINS), after King K has gone: オクトール and ガンガン (Cleftor)
+ * Rank 11 scene (once: GSWF_GLITZ_PIT_SIR_SWOOP_JOINED), after King K has gone: オクトール and ガンガン (Cleftor)
  * talk about missing him (stg3_tou_93_28 to 30); Jolene brings in the new fighter Sir Swoop (ポグ), shows him
  * the minor-league room and the match terminal, Grubba (ガンス) books his first match over the monitor
  * (stg3_tou_93_31 to 37) and Swoop introduces himself (stg3_tou_93_38), then the guard comes in.
@@ -3467,7 +3468,7 @@ EVT_BEGIN(evt_cake)
 EVT_END()
 
 /**
- * Partner remark after Bowser's visit to the Glitz Pit (GSWF_TOU_BOWSER_RAID_DONE):
+ * Partner remark after Bowser's visit to the Glitz Pit (GSWF_TOU_RANK_5_BOWSER_EVENT_DONE):
  * the party partner says stg3_tou_403_11.
  */
 static EVT_BEGIN(evt_koopa_after)

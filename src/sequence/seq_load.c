@@ -43,6 +43,7 @@
 #include "win/win_main.h"
 #include "sdk/texPalette.h"
 #include "icon_ids.h"
+#include "evt/evt_save_flags.h"
 
 #if VERSION < VERSION_US
 #include "evt/evt_cmd.h"
@@ -1461,7 +1462,7 @@ void continueGame(void) {
     psndClearFlag(PSND_FLAG_NO_SFX);
     countDownSaveReStart();
     gp->flags |= GW_FLAG_SAVE_LOADED;
-    switch (swByteGet(GSW_SAVE_RESUME_KIND)) { // GSW_SAVE_RESUME_POINT
+    switch (swByteGet(GSW_ID(GSW_SAVE_RESUME_POINT))) {
         case 0:
             gp->areaFadeOutType = 0;
             gp->areaFadeInType = FADE_CURTAIN_SIDES_A2;

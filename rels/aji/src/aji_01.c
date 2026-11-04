@@ -1888,7 +1888,7 @@ EVT_END()
  * Peach's first interlude (STG1_18_01_PEACH_AN_OPEN_DOOR):
  * once Peach (the "mario" actor) reaches x >= 900, the east door e5 opens,
  * the e_bero_5 exit is overwritten with e_bero_5_peach and she says peach_aji_41.
- * GSWF_AJI01_PEACH1_DOOR_OPENED makes it run only once.
+ * GSWF_AJI_01_PEACH_DOOR_OPENS_SEEN makes it run only once.
  */
 EVT_BEGIN(peach_evt_stg1_2)
     IF_INT_EQUAL(GSWF_AJI_01_PEACH_DOOR_OPENS_SEEN, 1)

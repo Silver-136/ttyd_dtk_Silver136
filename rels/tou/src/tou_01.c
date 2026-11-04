@@ -58,6 +58,7 @@
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
 #include <dolphin/pad.h>
+#include "evt/evt_save_flags.h"
 
 typedef struct ShadowWork {
     GXTexObj obj;
@@ -1141,7 +1142,7 @@ EVT_END()
  * Talk script of the dad: story-dependent lines.
  * Before STG3_04_GONZALES_IS_BORN one line;
  * until STG3_32_BOSS_BATTLE the line depends on Mario's Glitz Pit ranking (evt_tou_get_ranking: above 15,
- * above 10, above 5, above 0, or 0); after that one of two lines depending on GSWF_TOU_LEFT_AS_CHAMPION.
+ * above 10, above 5, above 0, or 0); after that one of two lines depending on GSWF_TOU_LEFT_AFTER_CHAPTER.
  */
 static EVT_BEGIN(talk_papa)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1187,7 +1188,7 @@ EVT_END()
 
 /**
  * Talk script of the mom: same structure as talk_papa (a line before STG3_04_GONZALES_IS_BORN,
- * lines by Glitz Pit ranking until STG3_32_BOSS_BATTLE, then a line chosen by GSWF_TOU_LEFT_AS_CHAMPION).
+ * lines by Glitz Pit ranking until STG3_32_BOSS_BATTLE, then a line chosen by GSWF_TOU_LEFT_AFTER_CHAPTER).
  */
 static EVT_BEGIN(talk_mama)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1233,7 +1234,7 @@ EVT_END()
 
 /**
  * Talk script of konari: same structure as talk_papa (a line before STG3_04_GONZALES_IS_BORN,
- * lines by Glitz Pit ranking until STG3_32_BOSS_BATTLE, then a line chosen by GSWF_TOU_LEFT_AS_CHAMPION).
+ * lines by Glitz Pit ranking until STG3_32_BOSS_BATTLE, then a line chosen by GSWF_TOU_LEFT_AFTER_CHAPTER).
  */
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)
@@ -2311,13 +2312,13 @@ static USER_FUNC(rankingReset) {
     for (i = 0; i < 20; i++) {
         swClear(i + GSWF_TOU_FIGHTER_BELOW_BASE);
     }
-    swClear(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN);
-    swClear(GSWF_TOU_CHAMP_OPENING_SEEN);
-    swClear(GSWF_TOU_CHAMP_WIN_SEEN);
-    swClear(GSWF_TOU_TITLE_MATCH_RESERVED);
-    swClear(GSWF_TOU_RANKING_SAVED);
-    swClear(GSWF_TOU_LAST_OPPONENT_VALID);
-    swClear(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN);
+    swClear(GSWF_ID(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN));
+    swClear(GSWF_ID(GSWF_TOU_RAWK_HAWK_OPENING_SEEN));
+    swClear(GSWF_ID(GSWF_TOU_RAWK_HAWK_FIRST_WIN));
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED));
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_RANKING_SAVED));
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED));
+    swClear(GSWF_ID(GSWF_TOU_02_FANS_MOB_MARIO_SEEN));
     return EVT_RETURN_DONE;
 }
 #endif

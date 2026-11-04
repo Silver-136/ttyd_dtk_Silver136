@@ -2311,7 +2311,7 @@ EVT_END()
 /**
  * Init of General White: leaves him where he is
  * while Trouble Center job 25 is active with its work flag 6 unset;
- * otherwise, once GSWF_BOM02_GENERAL_WHITE_WOKEN is set, he stands at (50, 0, -100).
+ * otherwise, once GSWF_BOM_GENERAL_WHITE_AGREED is set, he stands at (50, 0, -100).
  */
 static EVT_BEGIN(init_white)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
@@ -2328,7 +2328,7 @@ EVT_END()
 
 /**
  * Talk script of General White: before the cannon he says stg7_bom_59_02
- * or 59_03 depending on whether Goldbob's cannon approval (GSWF_PIK00_GOLDBOB_CANNON_APPROVAL) has been given,
+ * or 59_03 depending on whether Goldbob's cannon approval (GSWF_PIK_GOLDBOB_PERMISSION_GIVEN) has been given,
  * until the end of the chapter 8 battle stg7_bom_59_04, and afterwards stg7_bom_59_05.
  */
 static EVT_BEGIN(talk_white)

@@ -158,7 +158,7 @@ EVT_END()
 /**
  * Talk script for Koopa A: his dialogue changes with story progress (before the Gold Fuzzy,
  * before father and son reunite, before Frankly's house, the chapter 7 hint about white Petalburg,
- * and after the finale). In chapter 7 he sets GSWF_STG7_WHITE_PETALBURG_HINT.
+ * and after the finale). In chapter 7 he sets GSWF_NOK_GENERAL_WHITE_HINT_HEARD.
  */
 EVT_BEGIN(nokonoko_A_talk)
     SWITCH(GSW_STORY_PROGRESS)

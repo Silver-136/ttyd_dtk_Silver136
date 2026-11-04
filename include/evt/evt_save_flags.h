@@ -1728,9 +1728,9 @@
 // Great Tree room number + 1, written by evt_puni_set_yuka (mri_00 = 1 .. mri_20 = 21); evt_puni_setup stops early at
 // 1, mri_01 init tests 2
 #define GSW_MRI_PUNI_ROOM GSW(665)
-// no code sets it (always 0); mri_01 init would start puni_mario_wait (all Punies placed around Mario) when it is 1
-// and GSW(665) is 2
-#define GSW_MRI_01_PUNI_WAIT_UNUSED GSW(666)
+// the previous Great Tree room (GSW_MRI_PUNI_ROOM before the last room change, copied by mri_puni_position_init);
+// mri_01 init starts puni_mario_wait (all Punies placed around Mario) when it is 1 and GSW_MRI_PUNI_ROOM is 2
+#define GSW_MRI_PUNI_PREV_ROOM GSW(666)
 // times Whacka (muj_00) has been hit: koburon_dead adds 1 per hit; koburon_talk picks his line by it (0-7); at 7 he
 // gives his last line; at 8 koburon_evt deletes him
 #define GSW_MUJ_WHACKA_HIT_COUNT GSW(721)

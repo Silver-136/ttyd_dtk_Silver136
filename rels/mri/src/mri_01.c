@@ -50,6 +50,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
+#include "evt/evt_save_flags.h"
 
 void* puniGetPunigp(void);
 void puniswGetindex(s32 flag, s32 index, s32* a, s32* b);
@@ -224,7 +225,7 @@ USER_FUNC(elder_talk_sub_punicheck) {
             }
         }
 #else
-        if (i == 1 && swGet(0xB14)) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
+        if (i == 1 && swGet(GSWF_ID(GSWF_MRI_PUNIO_WAITING_AT_JAIL))) {
             continue;
         }
         puniswGetindex(LSW_MRI_PUNI_RECORDS, i - 1, &puni, c);
@@ -1232,7 +1233,7 @@ EVT_END()
 /**
  * After the X-Naut battle: the Punies hurry back, the rival Puni turns up,
  * argues with Punio and the villagers react; at the end Punio joins Mario's Puni group
- * (GSWF_MRI_PUNIO_IN_PUNI_GROUP). Sets the story to STG2_12_RIVAL_ARRIVAL.
+ * (GSWF_MRI_PUNIO_JOINED). Sets the story to STG2_12_RIVAL_ARRIVAL.
  */
 EVT_BEGIN(meet_rival)
 
@@ -3838,7 +3839,7 @@ EVT_BEGIN(mri_01_init_evt)
     END_IF
     SPAWN_EVENT(PTR(door_switch_init))
     IF_INT_EQUAL(GSW_MRI_PUNI_ROOM, 2)
-        IF_INT_EQUAL(GSW_MRI_01_PUNI_WAIT_UNUSED, 1)
+        IF_INT_EQUAL(GSW_MRI_PUNI_PREV_ROOM, 1)
             SPAWN_EVENT(PTR(puni_mario_wait))
         END_IF
     END_IF

@@ -1171,7 +1171,7 @@ EVT_END()
 
 /**
  * Boggly Woods (win_01): after Flurrie joins (STG2_09) sends mail 27,
- * issue 1 of the RDM series (GSWF_MAIL_RDM_ISSUE1_SENT), when Mario crosses x = 390.
+ * issue 1 of the RDM series (GSWF_MAIL_RDM_ISSUE_1_SENT), when Mario crosses x = 390.
  */
 EVT_BEGIN(mail_evt_win_01)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_1_SENT, 1)

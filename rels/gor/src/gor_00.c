@@ -903,7 +903,7 @@ EVT_END()
 /**
  * Regular event of the rough sailor.
  * Before Goombella joins he paces the pier until the X-Naut ambush has been seen
- * (GSWF_GOR00_GOOMBELLA_ASSAULTED_SEEN) and then stands facing right;
+ * (GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED) and then stands facing right;
  * at most other stages he runs garawaru_urouro2, and he stays put during Chapter 4's Flavio scene.
  */
 EVT_BEGIN(garawaru_regl)
@@ -1571,7 +1571,7 @@ EVT_END()
 
 /**
  * Talk event of Cortez at the harbor: asks whether to sail (gor_00_025 yes/no).
- * Yes sets GSWF_GOR00_SAIL_TO_KEELHAUL and GF(13) and starts the Keelhaul Key ship with gor_muj_ship_start;
+ * Yes sets GSWF_GOR_SAILING_TO_KEELHAUL and GF(13) and starts the Keelhaul Key ship with gor_muj_ship_start;
  * no answers gor_00_026.
  */
 static EVT_BEGIN(korutesu_talk)
@@ -2732,7 +2732,7 @@ EVT_END()
 /**
  * Cutscene that starts when Mario first walks toward the back of the harbor (z <= -100):
  * Goombella (Christine) is cornered by Lord Crump and two grunts.
- * Sets GSWF_GOR00_GOOMBELLA_ASSAULTED_SEEN and STG0_04_GOOMBELLA_ASSAULTED,
+ * Sets GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED and STG0_04_GOOMBELLA_ASSAULTED,
  * creates the crowd of X-Naut extras (1000 in JP and the early demos, 400 in US and PAL) and spawns gundan1000tai_beforebattle.
  * If LW(0) is 1 on entry it first repositions Mario (the entry used when the event is started directly).
  */
@@ -4837,7 +4837,7 @@ EVT_BEGIN(gorotsuki_kikan)
 EVT_END()
 
 /**
- * Plays when Mario sails into Rogueport on the ship (GSWF_GOR00_SHIP_ARRIVAL_PENDING):
+ * Plays when Mario sails into Rogueport on the ship (GSWF_MUJ_SAILING_TO_ROGUEPORT):
  * Mario, the partners, Cortez and, in the Frankie and Francesca step (STG5_64_02_F_F_SAIL_OFF),
  * the couple are placed on the ship, which slides in 600 units from the right with the ghost ship music
  * and arrival sound.

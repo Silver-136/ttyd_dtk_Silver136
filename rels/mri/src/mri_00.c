@@ -1173,7 +1173,7 @@ f32 guide_move_data[] = {
 /**
  * Cutscene after Flurrie blows the clouds off the tree:
  * the hidden door part is shown, Punio jumps in, Mario and Flurrie talk, and the secret door (S_doa) opens.
- * Sets the story to STORY_STG2_10_SECRET_ENTRANCE_REVEALED and enables the northeast door.
+ * Sets the story to STG2_10_SECRET_ENTRANCE_REVEALED and enables the northeast door.
  */
 EVT_BEGIN(open_bigtree)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -1303,7 +1303,7 @@ EVT_END()
 /**
  * Chapter 2 epilogue back in the tree's front yard:
  * the Punies thank Mario, with Punio, the Puni elder and Punio's sister talking, and the party is praised.
- * Sets the story to STORY_STG2_26_PRAISE_FROM_THE_PUNI.
+ * Sets the story to STG2_26_PRAISE_FROM_THE_PUNI.
  */
 EVT_BEGIN(mario_see_you)
     CALL(evt_mario_key_onoff, 0)
@@ -1863,7 +1863,7 @@ EVT_BEGIN(mri_00_init_evt)
     END_IF
         SPAWN_EVENT(mario_see_you)
     END_IF
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STORY_STG2_26_PRAISE_FROM_THE_PUNI)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
 #else
 #if VERSION >= VERSION_US
         END_IF

@@ -344,7 +344,7 @@ EVT_END()
 
 /**
  * Peach's chapter 2 scene in her room: Peach's BGM, peach_aji_73 and 74,
- * then peach_evt_stg2_1 is spawned and GSWF_AJI16_PEACH2_SCENE_DONE is set.
+ * then peach_evt_stg2_1 is spawned and GSWF_AJI_16_PEACH_STG2_SCENE_SEEN is set.
  */
 static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_mario_set_mode, 1)

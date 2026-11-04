@@ -117,7 +117,7 @@ static USER_FUNC(scale_func) {
  * Case script for stepping on the teleporter pad (A_tensou):
  * Mario and the partner walk into the beam, spin faster and faster for three seconds,
  * shrink (scale_func) and rise out of sight, and the map changes:
- * to the sewers tik_00 (setting GSWF_TIK00_TELEPORTER_ARRIVAL) normally,
+ * to the sewers tik_00 (setting GSWF_AJI_TELEPORT_TO_TIK_PENDING) normally,
  * to moo_04 during STG7_25_THE_LAST_MAIL.
  */
 EVT_BEGIN(tensou_ride)

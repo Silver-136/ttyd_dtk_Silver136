@@ -3752,7 +3752,7 @@ EVT_END()
 
 /**
  * Final-battle scene ("minna no koe", everyone's voices)
- * when the map is entered through minnnanokoe at STORY_STG8_15_GRODUS:
+ * when the map is entered through minnnanokoe at STG8_15_GRODUS:
  * with Mario off stage and the town in darkness,
  * a Crystal Star effect hovers and spins over the square
  * while the three children cheer Mario on (stg8_las_148_26 to 31), villager A,

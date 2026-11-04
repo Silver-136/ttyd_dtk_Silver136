@@ -262,7 +262,7 @@ void marioSetCharMode(s32 mode) {
  * Turns 8-bit ("Famicom") Mario on (mode 1) or off (mode 0):
  * swaps the front pose set for d_mario or back to the normal outfit and resets him to standing.
  * Turned on by the dot_mario script call in aji_09 (X-Naut Fortress) and off again
- * when the aji module unloads (its _epilog) if GSWF_AJI09_PIXEL_MARIO_ACTIVE is set.
+ * when the aji module unloads (its _epilog) if GSWF_AJI_09_DOT_MARIO_SEEN is set.
  * From the Japanese release on, calling it with the mode already set still resets the pose.
  */
 void marioSetFamicomMode(s32 mode) {

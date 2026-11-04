@@ -1755,7 +1755,7 @@ EVT_BEGIN(evt_random_battle)
 EVT_END()
 
 /**
- * Bowser's ambush, played after a won match at rank 5 until GSWF_TOU_BOWSER_RAID_DONE is set:
+ * Bowser's ambush, played after a won match at rank 5 until GSWF_TOU_RANK_5_BOWSER_EVENT_DONE is set:
  * Bowser crashes in (Bowser theme), taunts Mario and the battle starts (battle setup 24);
  * after it Grubba and Bowser comment on the result
  * and the music fades out with story progress temporarily set to STG4_00_WELCOME_TO_STAGE_4.

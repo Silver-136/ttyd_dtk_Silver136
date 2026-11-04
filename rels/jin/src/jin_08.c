@@ -171,7 +171,7 @@ EVT_END()
 
 /**
  * Chest script for the second chest (hako2): the lid swings open
- * and Mario receives the Steeple Key (ITEM_STEEPLE_KEY_0x17); sets GSWF_JIN08_STEEPLE_KEY_TAKEN.
+ * and Mario receives the Steeple Key (ITEM_STEEPLE_KEY_0x17); sets GSWF_JIN_08_STEEPLE_KEY_TAKEN.
  */
 EVT_BEGIN(evt_open_kagi)
     CALL(evt_mario_key_onoff, 0)

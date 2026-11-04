@@ -236,35 +236,35 @@ static EVT_BEGIN(evt_poster_4)
     RETURN
 EVT_END()
 
-/** Case event for poster 5: sets GSWF_EKI03_POSTER_5_BLOWN and rechecks the posters with evt_chk. */
+/** Case event for poster 5: sets GSWF_EKI_03_POSTER_5_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_5)
     SET_VALUE(GSWF_EKI_03_POSTER_5_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
-/** Case event for poster 6: sets GSWF_EKI03_POSTER_6_BLOWN and rechecks the posters with evt_chk. */
+/** Case event for poster 6: sets GSWF_EKI_03_POSTER_6_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_6)
     SET_VALUE(GSWF_EKI_03_POSTER_6_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
-/** Case event for poster 7: sets GSWF_EKI03_POSTER_7_BLOWN and rechecks the posters with evt_chk. */
+/** Case event for poster 7: sets GSWF_EKI_03_POSTER_7_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_7)
     SET_VALUE(GSWF_EKI_03_POSTER_7_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
-/** Case event for poster 8: sets GSWF_EKI03_POSTER_8_BLOWN and rechecks the posters with evt_chk. */
+/** Case event for poster 8: sets GSWF_EKI_03_POSTER_8_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_8)
     SET_VALUE(GSWF_EKI_03_POSTER_8_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
-/** Case event for poster 9: sets GSWF_EKI03_POSTER_9_BLOWN and rechecks the posters with evt_chk. */
+/** Case event for poster 9: sets GSWF_EKI_03_POSTER_9_BLOWN_AWAY and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_9)
     SET_VALUE(GSWF_EKI_03_POSTER_9_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
@@ -273,7 +273,7 @@ EVT_END()
 
 /**
  * Case event when poster 10 is blown off the wall by Flurrie:
- * sets GSWF_EKI03_POSTER_10_BLOWN, turns off the hit area of the poster behind it (a_kami_13)
+ * sets GSWF_EKI_03_POSTER_10_BLOWN_AWAY, turns off the hit area of the poster behind it (a_kami_13)
  * and checks whether posters 5 to 15 are gone.
  */
 EVT_BEGIN(evt_poster_10)
@@ -317,21 +317,21 @@ EVT_BEGIN(evt_poster_12)
     RETURN
 EVT_END()
 
-/** Case event when poster 13 is blown off: sets GSWF_EKI03_POSTER_13_BLOWN and checks whether posters 5 to 15 are gone. */
+/** Case event when poster 13 is blown off: sets GSWF_EKI_03_POSTER_13_BLOWN_AWAY and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_13)
     SET_VALUE(GSWF_EKI_03_POSTER_13_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
-/** Case event when poster 14 is blown off: sets GSWF_EKI03_POSTER_14_BLOWN and checks whether posters 5 to 15 are gone. */
+/** Case event when poster 14 is blown off: sets GSWF_EKI_03_POSTER_14_BLOWN_AWAY and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_14)
     SET_VALUE(GSWF_EKI_03_POSTER_14_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
-/** Case event when poster 15 is blown off: sets GSWF_EKI03_POSTER_15_BLOWN and checks whether posters 5 to 15 are gone. */
+/** Case event when poster 15 is blown off: sets GSWF_EKI_03_POSTER_15_BLOWN_AWAY and checks whether posters 5 to 15 are gone. */
 EVT_BEGIN(evt_poster_15)
     SET_VALUE(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))

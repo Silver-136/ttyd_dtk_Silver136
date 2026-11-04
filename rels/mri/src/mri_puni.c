@@ -38,6 +38,7 @@
 #include "driver/animdrv.h"
 #include "eff/eff_n64.h"
 #include "driver/seqdrv.h"
+#include "evt/evt_save_flags.h"
 extern int abs(int);
 void envSetYami(MapTevCallbackInfo* info);
 
@@ -664,7 +665,7 @@ void puniSetYPosition(PuniData* p) {
                 break;
             case 2:
                 _ymode_mri_09(p);
-                if (!swGet(GSWF_MRI09_FLOOR_BROKEN)) { // GSWF_MRI_09_BREAKING_FLOOR_BROKEN
+                if (!swGet(GSWF_ID(GSWF_MRI_09_BREAKING_FLOOR_BROKEN))) {
                     if (IN_RECT_XZ(p, -35.0f, 35.0f, 40.0f, 110.0f)) {
                         p->pos.y = 6.0f;
                     }
@@ -672,7 +673,7 @@ void puniSetYPosition(PuniData* p) {
                 break;
             case 3:
                 p->pos.y = 0.0f;
-                if (!swGet(GSWF_MRI12_FLOOR_BROKEN)) { // GSWF_MRI_12_BREAKING_FLOOR_BROKEN
+                if (!swGet(GSWF_ID(GSWF_MRI_12_BREAKING_FLOOR_BROKEN))) {
                     if (IN_RECT_XZ(p, -80.0f, -10.0f, -99.0f, -29.0f)) {
                         p->pos.y = 6.0f;
                     }
@@ -686,7 +687,7 @@ void puniSetYPosition(PuniData* p) {
                 break;
             case 6:
                 p->pos.y = 0.0f;
-                if (!swGet(GSWF_MRI17_FLOOR_BROKEN)) { // GSWF_MRI_17_BREAKING_FLOOR_BROKEN
+                if (!swGet(GSWF_ID(GSWF_MRI_17_BREAKING_FLOOR_BROKEN))) {
                     if (IN_RECT_XZ(p, -35.0f, 35.0f, -70.0f, 0.0f)) {
                         p->pos.y = 6.0f;
                     }
@@ -5889,7 +5890,7 @@ s32 evt_puni_init(EventEntry *event, BOOL isFirstCall) {
 
 /**
  * Declares this map's floor data to the Puni system.
- * args[0] = map number (stored as floor = number + 1 and written to GSW_MRI_PUNI_CUR_MAP),
+ * args[0] = map number (stored as floor = number + 1 and written to GSW_MRI_PUNI_ROOM),
  * args[1] to args[4] = the heights of up to four floors, args[5] = height mode for puniSetYPosition (ymode),
  * args[6] = maze map kind (see evt_puni_set_maze).
  */
@@ -5902,7 +5903,7 @@ USER_FUNC(evt_puni_set_yuka) {
     Punigp->posY[3] = evtGetValue(event, args[4]);
     Punigp->ymode = evtGetValue(event, args[5]);
     Punigp->mapKind = evtGetValue(event, args[6]);
-    swByteSet(GSW_MRI_PUNI_CUR_MAP, Punigp->floor);
+    swByteSet(GSW_ID(GSW_MRI_PUNI_ROOM), Punigp->floor);
     return EVT_RETURN_DONE;
 }
 
@@ -5956,14 +5957,14 @@ USER_FUNC(evt_puni_set_maze) {
             puniMapDataSetI(13, 5, puniMapdata_MRI_06, 50.0f, -1.0f);
             break;
         case 2:
-            if (swGet(GSWF_MRI09_WALL_PANELS_ROLLED)) { // GSWF_MRI_09_WALL_PUZZLE_SOLVED
+            if (swGet(GSWF_ID(GSWF_MRI_09_WALL_PUZZLE_SOLVED))) {
                 puniMapDataSetI(7, 6, puniMapdata_MRI_09_01, 150.0f, -1.0f);
             } else {
                 puniMapDataSetI(7, 6, puniMapdata_MRI_09, 150.0f, -1.0f);
             }
             break;
         case 3:
-            if (swGet(GSWF_MRI16_WATER_SWITCH_PRESSED)) { // GSWF_MRI_16_WATER_SWITCH_PRESSED
+            if (swGet(GSWF_ID(GSWF_MRI_16_WATER_SWITCH_PRESSED))) {
                 puniMapDataSetI(11, 9, puniMapdata_MRI_16, -269.0f, -320.0f);
             }
             break;
@@ -6203,26 +6204,26 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
         }
         trap = 0;
         if (i == 1) {
-            if (!swGet(GSWF_MRI_PUNIO_IN_PUNI_GROUP)) { // GSWF_MRI_PUNIO_JOINED
+            if (!swGet(GSWF_ID(GSWF_MRI_PUNIO_JOINED))) {
                 trap = 1;
             }
         } else
             if (i == 2) {
-            if (!swGet(GSWF_MRI_PETUNI_IN_PUNI_GROUP)) { // GSWF_MRI_PETUNI_JOINED
+            if (!swGet(GSWF_ID(GSWF_MRI_PETUNI_JOINED))) {
                 trap = 1;
             }
         } else
             if (i == 4) {
-            if (!swGet(GSWF_MRI_RIVAL_IN_PUNI_GROUP)) { // GSWF_MRI_PUNIPER_JOINED
+            if (!swGet(GSWF_ID(GSWF_MRI_PUNIPER_JOINED))) {
                 trap = 1;
             }
         } else
             if (i == 3) {
-            if (!swGet(GSWF_MRI_JABBI_IN_PUNI_GROUP)) { // GSWF_MRI_JABBLE_JOINED
+            if (!swGet(GSWF_ID(GSWF_MRI_JABBLE_JOINED))) {
                 trap = 1;
             }
         } else
-            if ((swByteGet(GSW_MRI_PUNI_FOLLOWERS) + 5) <= i) { // GSW_MRI_PUNI_FOLLOWER_COUNT
+            if ((swByteGet(GSW_ID(GSW_MRI_PUNI_FOLLOWER_COUNT)) + 5) <= i) {
             trap = 1;
         }
         if (a == 0) {
@@ -6238,7 +6239,7 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
         } else {
             sprintf(buf, "No%03d,＜トラップにかかっています＞\n", i);
         }
-        if ((i == 1) && swGet(GSWF_MRI03_PUNIO_WAITING_AT_CELL)) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
+        if ((i == 1) && swGet(GSWF_ID(GSWF_MRI_PUNIO_WAITING_AT_JAIL))) {
             sprintf(buf, "No%03d,＜mri_03の牢屋に滞在しています＞\n", i);
         }
     }
@@ -6250,7 +6251,7 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
  * Sets up the Puni crowd when a map starts (called through mri_puni_init).
  * args[0] = 2 means the map was entered through a loading zone, whose direction in args[2] sets the entry flags;
  * Punies that Mario had with him (those the story has recruited: Punio, his sister, the little Jabbi,
- * the rival and the others numbered 5 to GSW_MRI_PUNI_FOLLOWERS+4) are placed either beside Mario after a save load,
+ * the rival and the others numbered 5 to GSW_MRI_PUNI_FOLLOWER_COUNT+4) are placed either beside Mario after a save load,
  * walking in from the loading zone, or at their saved lost position; trapped ones are skipped.
  * The blockers 103 to 109 are placed at the down pipes.
  */
@@ -6293,7 +6294,7 @@ USER_FUNC(evt_puni_setup) {
         Punigp->flags |= PUNI_WORK_FLAG_BATTLE_FLOOR;
     }
 #endif
-    if (swByteGet(GSW_MRI_PUNI_CUR_MAP) == 1) { // GSW_MRI_PUNI_ROOM
+    if (swByteGet(GSW_ID(GSW_MRI_PUNI_ROOM)) == 1) {
         return EVT_RETURN_DONE;
     }
     p = &Punidat[1];
@@ -6319,24 +6320,24 @@ USER_FUNC(evt_puni_setup) {
         puniswTrapGetindex(i, &a);
         if (a != 0) continue;
         if (i == 1) {
-            if (!swGet(GSWF_MRI_PUNIO_IN_PUNI_GROUP)) continue; // GSWF_MRI_PUNIO_JOINED
-            if (swGet(GSWF_MRI03_PUNIO_WAITING_AT_CELL)) continue; // GSWF_MRI_PUNIO_WAITING_AT_JAIL
+            if (!swGet(GSWF_ID(GSWF_MRI_PUNIO_JOINED))) continue;
+            if (swGet(GSWF_ID(GSWF_MRI_PUNIO_WAITING_AT_JAIL))) continue;
             Punigp->guidePuni = p;
             p->flags |= PUNI_FLAG_NPC_GUIDE;
         } else if (i == 2) {
-            if (!swGet(GSWF_MRI_PETUNI_IN_PUNI_GROUP)) continue; // GSWF_MRI_PETUNI_JOINED
+            if (!swGet(GSWF_ID(GSWF_MRI_PETUNI_JOINED))) continue;
             Punigp->sisterPuni = p;
             p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
         } else if (i == 4) {
-            if (!swGet(GSWF_MRI_RIVAL_IN_PUNI_GROUP)) continue; // GSWF_MRI_PUNIPER_JOINED
+            if (!swGet(GSWF_ID(GSWF_MRI_PUNIPER_JOINED))) continue;
             Punigp->rivalPuni = p;
             p->flags |= PUNI_FLAG_NPC_RIVAL;
         } else if (i == 3) {
-            if (!swGet(GSWF_MRI_JABBI_IN_PUNI_GROUP)) continue; // GSWF_MRI_JABBLE_JOINED
+            if (!swGet(GSWF_ID(GSWF_MRI_JABBLE_JOINED))) continue;
             Punigp->jabbiPuni = p;
             p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
         } else {
-            if (swByteGet(GSW_MRI_PUNI_FOLLOWERS) + 5 <= i) continue; // GSW_MRI_PUNI_FOLLOWER_COUNT
+            if (swByteGet(GSW_ID(GSW_MRI_PUNI_FOLLOWER_COUNT)) + 5 <= i) continue;
             p->flags |= PUNI_FLAG_SPRITE_PUNI;
         }
         if (b0 == 0) {
@@ -6735,34 +6736,34 @@ USER_FUNC(evt_puni_init_puni) {
     s32 chk = evtGetValue(event, args[5]);
 
     if (idx == 1) {
-        if (chk != 0 && swGet(GSWF_MRI_PUNIO_IN_PUNI_GROUP) == 0) { // GSWF_MRI_PUNIO_JOINED
+        if (chk != 0 && swGet(GSWF_ID(GSWF_MRI_PUNIO_JOINED)) == 0) {
             return EVT_RETURN_DONE;
         }
-        if (chk != 0 && swGet(GSWF_MRI03_PUNIO_WAITING_AT_CELL) != 0) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
+        if (chk != 0 && swGet(GSWF_ID(GSWF_MRI_PUNIO_WAITING_AT_JAIL)) != 0) {
             return EVT_RETURN_DONE;
         }
         Punigp->guidePuni = p;
         p->flags |= PUNI_FLAG_NPC_GUIDE;
     } else if (idx == 2) {
-        if (chk != 0 && swGet(GSWF_MRI_PETUNI_IN_PUNI_GROUP) == 0) { // GSWF_MRI_PETUNI_JOINED
+        if (chk != 0 && swGet(GSWF_ID(GSWF_MRI_PETUNI_JOINED)) == 0) {
             return EVT_RETURN_DONE;
         }
         Punigp->sisterPuni = p;
         p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
     } else if (idx == 4) {
-        if (chk != 0 && swGet(GSWF_MRI_RIVAL_IN_PUNI_GROUP) == 0) { // GSWF_MRI_PUNIPER_JOINED
+        if (chk != 0 && swGet(GSWF_ID(GSWF_MRI_PUNIPER_JOINED)) == 0) {
             return EVT_RETURN_DONE;
         }
         Punigp->rivalPuni = p;
         p->flags |= PUNI_FLAG_NPC_RIVAL;
     } else if (idx == 3) {
-        if (chk != 0 && swGet(GSWF_MRI_JABBI_IN_PUNI_GROUP) == 0) { // GSWF_MRI_JABBLE_JOINED
+        if (chk != 0 && swGet(GSWF_ID(GSWF_MRI_JABBLE_JOINED)) == 0) {
             return EVT_RETURN_DONE;
         }
         Punigp->jabbiPuni = p;
         p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
     } else {
-        if (chk != 0 && swByteGet(GSW_MRI_PUNI_FOLLOWERS) + 5 <= idx) { // GSW_MRI_PUNI_FOLLOWER_COUNT
+        if (chk != 0 && swByteGet(GSW_ID(GSW_MRI_PUNI_FOLLOWER_COUNT)) + 5 <= idx) {
             return EVT_RETURN_DONE;
         }
         p->flags |= PUNI_FLAG_SPRITE_PUNI;
@@ -7626,15 +7627,15 @@ USER_FUNC(puni_disp_info_sub) {
             }
         }
     }
-    total = swGet(GSWF_MRI_PUNIO_IN_PUNI_GROUP); // GSWF_MRI_PUNIO_JOINED
-    total += swGet(GSWF_MRI_PETUNI_IN_PUNI_GROUP); // GSWF_MRI_PETUNI_JOINED
-    total += swGet(GSWF_MRI_RIVAL_IN_PUNI_GROUP); // GSWF_MRI_PUNIPER_JOINED
-    total += swByteGet(GSW_MRI_PUNI_FOLLOWERS); // GSW_MRI_PUNI_FOLLOWER_COUNT
+    total = swGet(GSWF_ID(GSWF_MRI_PUNIO_JOINED));
+    total += swGet(GSWF_ID(GSWF_MRI_PETUNI_JOINED));
+    total += swGet(GSWF_ID(GSWF_MRI_PUNIPER_JOINED));
+    total += swByteGet(GSW_ID(GSW_MRI_PUNI_FOLLOWER_COUNT));
     done = FALSE;
-    if (Punigp->floor == 9 && !swGet(GSWF_MRI08_JABBI_FIGHT_WON)) { // GSWF_MRI_08_JABBI_SQUAD_DEFEATED
+    if (Punigp->floor == 9 && !swGet(GSWF_ID(GSWF_MRI_08_JABBI_SQUAD_DEFEATED))) {
         done = TRUE;
     }
-    if (Punigp->floor == 12 && !swGet(GSWF_MRI11_JABBI_FIGHT2_WON)) { // GSWF_MRI_11_JABBI_SQUAD_DEFEATED
+    if (Punigp->floor == 12 && !swGet(GSWF_ID(GSWF_MRI_11_JABBI_SQUAD_DEFEATED))) {
         done = TRUE;
     }
     if (done) {
@@ -7680,7 +7681,7 @@ EVT_END()
 
 /**
  * Event that keeps the Puni counter updated every frame.
- * Does not run at all once the Punies have been praised (STORY_STG2_26_PRAISE_FROM_THE_PUNI)
+ * Does not run at all once the Punies have been praised (STG2_26_PRAISE_FROM_THE_PUNI)
  * and the counter is no longer needed.
  */
 EVT_BEGIN(puni_disp_info)
@@ -7688,7 +7689,7 @@ EVT_BEGIN(puni_disp_info)
         RETURN
     END_IF
     LOOP(0)
-        CALL(puni_disp_info_sub, LW (0), LW (1))
+        CALL(puni_disp_info_sub, LW(0), LW(1))
         WAIT_FRAMES(1)
     END_LOOP
     RETURN
@@ -7703,9 +7704,9 @@ EVT_BEGIN(mri_puninum_fadeout)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL(evt_puni_puninum_alpha, LW (0))
+        CALL(evt_puni_puninum_alpha, LW(0))
         WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW (1), 0)
+        IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
@@ -7717,9 +7718,9 @@ EVT_BEGIN(mri_puninum_fadein)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
-        CALL(evt_puni_puninum_alpha, LW (0))
+        CALL(evt_puni_puninum_alpha, LW(0))
         WAIT_FRAMES(1)
-        IF_INT_EQUAL(LW (1), 0)
+        IF_INT_EQUAL(LW(1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
@@ -7739,16 +7740,16 @@ EVT_BEGIN(mri_puni_position_init)
     BEGIN_INLINE_EVENT
         CALL(evt_puni_puninum_alpha, 0)
         WAIT_FRAMES(2)
-        CALL(evt_bero_get_now_number, LW (10))
-        CALL(evt_bero_get_info_kinddir, LW (10), LW (0), LW (1), LW (2))
-        CALL(evt_bero_get_info_nextarea, 4264967306, 4264967299, 4264967300)
-        SET_VALUE(LF (0), 0)
-        IF_INT_EQUAL(LW (0), 2)
-            IF_INT_NOT_EQUAL(4264967299, 0)
-                SET_VALUE(LF (0), 1)
+        CALL(evt_bero_get_now_number, LW(10))
+        CALL(evt_bero_get_info_kinddir, LW(10), LW(0), LW(1), LW(2))
+        CALL(evt_bero_get_info_nextarea, LW(10), LW(3), LW(4))
+        SET_VALUE(LF(0), 0)
+        IF_INT_EQUAL(LW(0), 2)
+            IF_INT_NOT_EQUAL(LW(3), 0)
+                SET_VALUE(LF(0), 1)
             END_IF
         END_IF
-        IF_INT_EQUAL(LF (0), 0)
+        IF_INT_EQUAL(LF(0), 0)
             CALL(evt_puni_puninum_alpha, 255)
         END_IF
     END_INLINE_EVENT
@@ -7759,36 +7760,36 @@ EVT_BEGIN(mri_puni_position_init)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\215\300\225W\203Z\203b\203g\221\322\202\277"))
         CALL(evt_bero_exec_wait, BERO_EXEC_MARIO_MOVING)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217\254\223\256\225\250\212\326\214W\217\211\212\372\211\273"))
-        DEBUG_PUT_REG(GSW (GSW_MRI_PUNI_CUR_MAP))
-        DEBUG_PUT_REG(GSW (GSW_MRI_PUNI_PREV_MAP))
-        CALL(evt_bero_get_now_number, LW (10))
-        CALL(evt_bero_get_info_kinddir, 4264967306, 4264967296, 4264967297, 4264967298)
-        CALL(evt_bero_get_info_nextarea, 4264967306, 4264967299, 4264967300)
-        IF_INT_EQUAL(LW (0), 2)
-            IF_INT_NOT_EQUAL(LW (3), 0)
+        DEBUG_PUT_REG(GSW_MRI_PUNI_ROOM)
+        DEBUG_PUT_REG(GSW_MRI_PUNI_PREV_ROOM)
+        CALL(evt_bero_get_now_number, LW(10))
+        CALL(evt_bero_get_info_kinddir, LW(10), LW(0), LW(1), LW(2))
+        CALL(evt_bero_get_info_nextarea, LW(10), LW(3), LW(4))
+        IF_INT_EQUAL(LW(0), 2)
+            IF_INT_NOT_EQUAL(LW(3), 0)
                 SPAWN_EVENT(mri_puninum_fadein)
             END_IF
         END_IF
-        CALL(evt_puni_setup, LW (0), LW (1), LW (2))
-        CALL(evt_toge_setup, LW (6), LW (7), LW (8), LW (9))
+        CALL(evt_puni_setup, LW(0), LW(1), LW(2))
+        CALL(evt_toge_setup, LW(6), LW(7), LW(8), LW(9))
         CALL(evt_puni_set_systemmode, 2)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217I\227\271\221\322\202\277"))
         CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         CALL(evt_puni_set_systemmode, 3)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\216\237\202\314\216\300\215s\222\206\221\322\202\277"))
         CALL(evt_bero_exec_wait, BERO_EXEC_BUSY)
-        SET_VALUE(GSW (GSW_MRI_PUNI_PREV_MAP), GSW (GSW_MRI_PUNI_CUR_MAP))
-        CALL(evt_bero_get_now_number, LW (10))
-        CALL(evt_bero_get_info_kinddir, 4264967306, 4264967296, 4264967297, 4264967298)
-        CALL(evt_bero_get_info_nextarea, 4264967306, 4264967299, 4264967300)
-        IF_INT_EQUAL(LW (0), 1)
+        SET_VALUE(GSW_MRI_PUNI_PREV_ROOM, GSW_MRI_PUNI_ROOM)
+        CALL(evt_bero_get_now_number, LW(10))
+        CALL(evt_bero_get_info_kinddir, LW(10), LW(0), LW(1), LW(2))
+        CALL(evt_bero_get_info_nextarea, LW(10), LW(3), LW(4))
+        IF_INT_EQUAL(LW(0), 1)
             DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\224\340\221\322\202\277"))
             CALL(evt_bero_exec_wait, BERO_EXEC_MRI_DOOR_GO)
             DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\224\340\221\322\202\277\217I\202\355\202\350"))
             CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MRI_DOOR_GO)
         END_IF
-        IF_INT_EQUAL(LW (0), 2)
-            IF_INT_NOT_EQUAL(LW (3), 0)
+        IF_INT_EQUAL(LW(0), 2)
+            IF_INT_NOT_EQUAL(LW(3), 0)
                 SPAWN_EVENT(mri_puninum_fadeout)
             END_IF
         END_IF
@@ -7798,7 +7799,7 @@ EVT_BEGIN(mri_puni_position_init)
             DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\203v\203j\221\260\203g\203Q\221\260SE\213\255\220\247\203I\203t"))
             CALL(evt_puni_force_se_off)
         END_INLINE_EVENT
-        CALL(evt_puni_exit, LW (0), LW (1), LW (2), LW (3))
+        CALL(evt_puni_exit, LW(0), LW(1), LW(2), LW(3))
     END_LOOP
     RETURN
 EVT_END()
@@ -7845,9 +7846,9 @@ EVT_END()
 
 /**
  * Map init call that starts the Puni system if it is needed at the current story point.
- * The stand-ins are always registered; before STORY_STG2_10_SECRET_ENTRANCE_REVEALED and
+ * The stand-ins are always registered; before STG2_10_SECRET_ENTRANCE_REVEALED and
  * from the epilogue on there are no Punies.
- * At STORY_STG8_15_GRODUS they exist only in mri_00
+ * At STG8_15_GRODUS they exist only in mri_00
  * when entered at the ending scenes (sekai_yami1 or minnnanokoe);
  * between the praise and the queen's chamber they exist only in mri_00 and only
  * while the player has not left the tree.
@@ -7856,32 +7857,32 @@ EVT_END()
 EVT_BEGIN(mri_puni_init)
     CALL_CHILD(mri_puni_init_dvd)
     SWITCH(4124967296)
-        CASE_LESS(STORY_STG2_10_SECRET_ENTRANCE_REVEALED)
+        CASE_LESS(STG2_10_SECRET_ENTRANCE_REVEALED)
         RETURN
-        CASE_GREATER_OR_EQUAL(STORY_STG9_00_EPILOGUE)
+        CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
         RETURN
-        CASE_EQUAL(STORY_STG8_15_GRODUS)
-        CALL(evt_sub_get_mapname, LW (0))
-        IF_STR_NOT_EQUAL(4264967296, STRING("mri_00"))
+        CASE_EQUAL(STG8_15_GRODUS)
+        CALL(evt_sub_get_mapname, LW(0))
+        IF_STR_NOT_EQUAL(LW(0), STRING("mri_00"))
             RETURN
         END_IF
-        SET_VALUE(LF (0), 0)
-        CALL(evt_bero_get_entername, LW (0))
-        IF_STR_EQUAL(LW (0), STRING("sekai_yami1"))
-            SET_VALUE(LF (0), 1)
+        SET_VALUE(LF(0), 0)
+        CALL(evt_bero_get_entername, LW(0))
+        IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+            SET_VALUE(LF(0), 1)
         END_IF
-        IF_STR_EQUAL(LW (0), STRING("minnnanokoe"))
-            SET_VALUE(LF (0), 1)
+        IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))
+            SET_VALUE(LF(0), 1)
         END_IF
-        IF_INT_EQUAL(LF (0), 0)
+        IF_INT_EQUAL(LF(0), 0)
             RETURN
         END_IF
-        CASE_BETWEEN(STORY_STG2_26_PRAISE_FROM_THE_PUNI, STORY_STG8_14_01_QUEENS_CHAMBER)
-        CALL(evt_sub_get_mapname, LW (0))
-        IF_STR_NOT_EQUAL(4264967296, STRING("mri_00"))
+        CASE_BETWEEN(STG2_26_PRAISE_FROM_THE_PUNI, STG8_14_01_QUEENS_CHAMBER)
+        CALL(evt_sub_get_mapname, LW(0))
+        IF_STR_NOT_EQUAL(LW(0), STRING("mri_00"))
             RETURN
         END_IF
-        IF_INT_EQUAL(GSWF (GSWF_MRI_LEFT_TREE_AFTER_STG2), 1)
+        IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 1)
             RETURN
         END_IF
         CASE_DEFAULT

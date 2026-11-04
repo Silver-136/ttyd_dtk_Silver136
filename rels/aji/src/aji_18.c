@@ -191,7 +191,7 @@ static BeroEntry bero_entry_data[] = {
 /**
  * Case script of the three key slots of the factory door (A_kagi1 to 3):
  * Mario puts a Card Key (ITEM_CARD_KEY_0x1D, 0x1E or 0x1F) from the item menu into the slot it belongs to.
- * A right key lights the slot (GSWF_AJI18_CARD_KEY_SLOT_1 to 3) and is used up; a wrong one gets stg7_aji_67_01.
+ * A right key lights the slot (GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED to 3) and is used up; a wrong one gets stg7_aji_67_01.
  * When all three slots are filled the story becomes STG7_16_FACTORY_DOOR
  * and the door's lamp turns from red to green.
  */

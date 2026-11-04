@@ -2461,7 +2461,7 @@ EVT_END()
 
 /**
  * Init event of the Shadow Queen unit:
- * sets the shared state in GW (GW(11) form, GW(12) attack counter, GW(8)/GW(9) the two big hands,
+ * sets the shared state in GW(GW(11) form, GW(12) attack counter, GW(8)/GW(9) the two big hands,
  * GW(10) the small hand, GW(13) the queen), spawns the two big hands and starts the queen's mist.
  */
 EVT_BEGIN(queen_init_event)

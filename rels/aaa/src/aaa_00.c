@@ -642,7 +642,7 @@ EVT_END()
  * Epilogue scene, second part (entered as "epilogue2"):
  * Mario and Luigi are in the house, the end of Goombella's mail is read (ep_47), Luigi answers (ep_48),
  * Toadsworth and Peach knock, come in through the front door and talk (ep_49 to ep_54), then walk away; the ending BGM starts, a spotlight fades out on Mario,
- * the story progress is set to STORY_STG9_00_EPILOGUE and the map changes to end_00.
+ * the story progress is set to STG9_00_EPILOGUE and the map changes to end_00.
  */
 static EVT_BEGIN(epilogue_evt2)
     // Later in the epilogue: Mario and Luigi are placed in the house and the front door is opened.

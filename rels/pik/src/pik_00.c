@@ -1187,8 +1187,8 @@ static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
  * Talk script for Goldbob (ナリキンパパ) in chapter 7:
  * the first time he explains the Fahr Outpost cannon situation, and then he asks Mario a question.
  * The right answers take Mario's coins (a bribe) in a counter animation,
- * give the Goldbob Guide and then return the coins, set GSWF_PIK00_GOLDBOB_CANNON_APPROVAL and,
- * if General White has also been woken (GSWF_BOM02_GENERAL_WHITE_WOKEN),
+ * give the Goldbob Guide and then return the coins, set GSWF_PIK_GOLDBOB_PERMISSION_GIVEN and,
+ * if General White has also been woken (GSWF_BOM_GENERAL_WHITE_AGREED),
  * advance the story to STG7_03_GOLDBOB. The camera zooms in on the pair for the conversation.
  */
 EVT_BEGIN(talk_papa_taihou_kyoka)
@@ -2010,7 +2010,7 @@ EVT_END()
  * Cutscene when the Excess Express pulls into Poshley Heights (entered through "resha"):
  * Mario and the partner are hidden, the camera pulls back over the station with the "Poshley Heights" title
  * card, and after ten seconds the game
- * changes to a train map where Mario steps off (which one depends on story progress).  Sets GSWF_TRAIN_AT_POSHLEY.
+ * changes to a train map where Mario steps off (which one depends on story progress).  Sets GSWF_HOM_TRAIN_AT_POSHLEY.
  */
 EVT_BEGIN(evt_pik_00_arrival)
     CALL(evt_snd_bgm_scope, 0, 1)

@@ -167,7 +167,7 @@ static USER_FUNC(getYoshiColor) {
 
 /**
  * Script helper: picks Yoshi's color from the real time that has passed since the egg was received (stored in
- * GSW_TOU_EGG_TIME), modulo 20 minutes, and stores it in the pouch.
+ * GSW_TOU_EGG_RECEIVED_TIME), modulo 20 minutes, and stores it in the pouch.
  */
 USER_FUNC(setYoshiColor) {
     OSTime start;
@@ -312,7 +312,7 @@ EVT_END()
 
 /**
  * NPC init for Michel (マイケル), a Koopa fighter: before STG3_34_RETURN_TO_ROGUEPORT he stands at (120, 0,
- * -30) facing 270, unless the rank 12 fighter has already left (GSWF_TOU_RANK12_KING_K_GONE);
+ * -30) facing 270, unless the rank 12 fighter has already left (GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED);
  * from that story stage on he is always there.
  */
 static EVT_BEGIN(init_michel)
@@ -418,7 +418,7 @@ EVT_END()
 
 /**
  * NPC init for Brots (ブロッツ): he stands at (-160, 0, -50) facing 90 once Mario's ranking is 19
- * or worse (unless GSWF_TOU_RANK18_SCENE has played), and always from STG3_34_RETURN_TO_ROGUEPORT on.
+ * or worse (unless GSWF_TOU_RANK_18_KING_K_TALK_DONE has played), and always from STG3_34_RETURN_TO_ROGUEPORT on.
  */
 static EVT_BEGIN(init_brots)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)

@@ -294,7 +294,7 @@ EVT_END()
 /**
  * Event script: the cloud puzzle of las_14 is solved.
  * The key chest becomes visible and solid, the collision A_kura is turned off,
- * GSWF_LAS14_FLURRIE_GUST_SOLVED is set and a success jingle plays.
+ * GSWF_LAS_14_WALL_BLOWN_AWAY is set and a success jingle plays.
  */
 static EVT_BEGIN(cloud_evt)
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_NO_DISP)
@@ -325,7 +325,7 @@ EVT_END()
 /**
  * Map init script for las_14, a Riddle Tower room (the chest holds Palace Key 0x29):
  * music, the door to las_10, the cloud Flurrie must blow away (hit area A_kura)
- * until GSWF_LAS14_FLURRIE_GUST_SOLVED, the key chest (hidden until solved) and the hint plate.
+ * until GSWF_LAS_14_WALL_BLOWN_AWAY, the key chest (hidden until solved) and the hint plate.
  */
 EVT_BEGIN(las_14_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))

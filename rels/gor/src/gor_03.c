@@ -5132,7 +5132,7 @@ EVT_END()
  * himself and asks his favourite colour (mac_2_041, 042, choices Red / Green / Yellow / Black). Any answer but
  * Yellow gets Mario sent off (mac_2_044) and clears GW(10) and GW(11). Yellow passes (mac_2_043) with a success
  * jingle: the clerk unlocks the door (evt_door_01_entry on door_data_01_1), lets him through (043_01) and
- * GSWF_GOR03_SYNDICATE_BACKDOOR_OPEN is set.
+ * GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE is set.
  */
 EVT_BEGIN(uraguchi_event)
     // The area music is held while Mario and the party turn to face the clerk.
@@ -5243,7 +5243,7 @@ EVT_BEGIN(uraguchi_event)
 EVT_END()
 
 /**
- * Checks the back door: if GSWF_GOR03_SYNDICATE_BACKDOOR_OPEN is already set it does nothing,
+ * Checks the back door: if GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE is already set it does nothing,
  * otherwise it records the first two purchases and plays the scene only for a Dried Shroom followed by a Dizzy Dial.
  */
 EVT_BEGIN(uraguchi_check)

@@ -87,7 +87,7 @@ EvtWord tou_05_init_evt[445];
 
 /**
  * Entrance script for the air duct: puts Mario and the partner at the duct mouth and walks them out of it.
- * The first time (GSWF_TOU05_DUCT_GRATE_FALLEN clear) the duct grate (haikikau_2) falls off with a clatter,
+ * The first time (GSWF_TOU_05_DUCT_GRATE_FELL clear) the duct grate (haikikau_2) falls off with a clatter,
  * the partner remarks (stg3_tou_456) and the flag is set; the hit object a_haikikan is switched on.
  * Control returns to Mario and LW(0) is set to 1.
  */
