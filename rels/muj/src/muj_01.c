@@ -598,6 +598,8 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_party_run, 1)
         END_IF
 #else
+        // BUG (JP and the JP demo): Bobbery's line to Flavio is printed with speaker "me", the running talk
+        // event's NPC, so the balloon comes from Flavio. US and later print it from the partner or follower.
         CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("me"))
 #endif
         LOOP(3)

@@ -2319,6 +2319,7 @@ static EVT_BEGIN(init_white)
             RETURN
         END_IF
     END_IF
+    // A stray END_IF in the original script (no IF left to close); executing it does nothing.
     END_IF
     IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
     CALL(evt_npc_set_position, STRING("me"), 50, 0, -100)

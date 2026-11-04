@@ -1071,6 +1071,8 @@ static void rankingControll(void) {
         // Check if a match is booked (2532), and move our opponent (507) to above us for the fight.
         if (swGet(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED))) {
             for (idx = 0; idx < nAbove; idx++) {
+                // BUG: above[] holds positions in rank_wp->entries, but the saved value is a fighter id (entries[].id);
+                // they agree only until the table is first re-sorted (memcpy below), so later the wrong fighter or none is moved.
                 if (above[idx] == swByteGet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT))) {
                     break;
                 }
@@ -1136,6 +1138,8 @@ static void rankingControll(void) {
         // If a match is booked, move the entry with the saved opponent index to the front of the below-player list.
         if (swGet(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED))) {
             for (idx = 0; idx < nBelow; idx++) {
+                // BUG: below[] holds positions in rank_wp->entries, but the saved value is a fighter id (entries[].id);
+                // they agree only until the table is first re-sorted (memcpy below), so later the wrong fighter or none is moved.
                 if (below[idx] == swByteGet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT))) {
                     break;
                 }

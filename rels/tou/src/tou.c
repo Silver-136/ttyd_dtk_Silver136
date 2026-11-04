@@ -524,6 +524,8 @@ static void rankingControll(void) {
         }
         if (swGet(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED))) {
             for (i = 0; i < nwin; i++) {
+                // BUG: win[] holds positions in rank_wp->entries, but the saved value is a fighter id (entries[].id);
+                // they agree only until the table is first re-sorted (memcpy below), so later the wrong fighter or none is moved.
                 if (win[i] == swByteGet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT))) {
                     break;
                 }
@@ -550,6 +552,8 @@ static void rankingControll(void) {
         }
         if (swGet(GSWF_ID(GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED))) {
             for (i = 0; i < nlose; i++) {
+                // BUG: lose[] holds positions in rank_wp->entries, but the saved value is a fighter id (entries[].id);
+                // they agree only until the table is first re-sorted (memcpy below), so later the wrong fighter or none is moved.
                 if (lose[i] == swByteGet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT))) {
                     break;
                 }

@@ -1511,6 +1511,8 @@ static EVT_BEGIN(evt_yuka_simi)
         CALL(evt_msg_print_party, STRING("stg6_rsh_52"))
         CALL(evt_party_run, 0)
     END_IF
+    // BUG: the stain stays armed up to STG6_04 (rsh_02's init arms it below STG6_05_GALLEY_KETTLE_DISCOVERED), and
+    // this write is unconditional, so checking it again at STG6_04_GRILLING_HEFF_T sets the story back to STG6_03.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_03_STAINED_CARPET)
     CALL(evt_mario_key_onoff, 1)
     RETURN
