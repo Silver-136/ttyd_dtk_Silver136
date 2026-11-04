@@ -267,8 +267,8 @@ EVT_END()
 
 /**
  * Plays while Mario listens to Luigi's long talk (started by luigi_gor_first_talk):
- * after 1200 frames (20 s) Mario dozes off and snores, after 900 frames the partner falls asleep too,
- * and after 600 frames Mario yawns and stretches.
+ * counted from the start, after 600 frames Mario yawns and stretches, after 900 frames the partner falls asleep,
+ * and after 1200 frames (20 s) Mario dozes off and snores.
  * It runs until GF(0) is set, then wakes Mario (and the partner) up, with a wake-up voice and a short stretch.
  */
 EVT_BEGIN(mario_and_party_sleep)
@@ -310,7 +310,7 @@ EVT_BEGIN(mario_and_party_sleep)
             END_IF
         END_IF
 
-        // Mario yawns and stretches, then goes back to standing; this repeats.
+        // Mario yawns and stretches, then goes back to standing 51 frames later; this happens once.
         IF_INT_EQUAL(LW(3), 0)
             IF_INT_EQUAL(LF(0), 0)
                 SET_VALUE(LF(0), 1)

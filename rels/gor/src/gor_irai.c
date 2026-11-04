@@ -285,7 +285,7 @@ EvtWord* irai_start_event[] = {
 
 /**
  * End event of a Trouble Center request that needs no cleanup when it is cancelled
- * or solved (the default entry of irai_end_event): does nothing.
+ * (the default entry of irai_end_event): does nothing.
  */
 EVT_BEGIN(irai_end_event_null)
     RETURN
@@ -310,7 +310,7 @@ EVT_END()
 #if VERSION >= VERSION_US
 /**
  * End event of Trouble 19 (the request of ピートン, from its debug message):
- * if Mario still has the field item "wr", removes it. US and PAL only.
+ * if the field item "wr" still exists, removes it. US and later only.
  */
 EVT_BEGIN(irai_end_event19)
     DEBUG_PUT_MSG(STRING("ピートンの依頼キャンセル"))
@@ -322,7 +322,7 @@ EVT_BEGIN(irai_end_event19)
 EVT_END()
 #endif
 
-/** End scripts for each Trouble Center job, run when it is finished; most do nothing. */
+/** End scripts for each Trouble Center job, run when it is cancelled at the counter; most do nothing. */
 EvtWord* irai_end_event[] = {
     irai_end_event01, irai_end_event_null, irai_end_event_null, irai_end_event04, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
     irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
@@ -499,8 +499,8 @@ EVT_BEGIN(gor_irai_tenshu_main)
             CALL(evt_msg_print_add, 0, STRING("irai_09"))
             CALL(evt_msg_select, 0, STRING("irai_01"))
             IF_INT_EQUAL(LW(0), 0)
-                // Mario can pay: the coins are taken, the request is cleared and its items return to their
-                // owners.
+                // Mario agrees: if he has 30 coins they are taken, the request is cleared and its items are
+                // taken from him.
                 CALL(evt_pouch_get_coin, LW(10))
                 IF_INT_GREATER_OR_EQUAL(LW(10), 30)
                     CALL(evt_msg_print_add, 0, STRING("irai_10"))
@@ -597,7 +597,7 @@ USER_FUNC(irai_cancel_func) {
 /**
  * Script helper that prepares the request window:
  * allocates the work block, fills the list with the requests that exist at the current story progress (6 at the
- * start, then 3 more at story progress 56, 112, 164, 215, 261 (2 requests), 281, 339, 373 and 401),
+ * start, then 3 more at story progress 56, 112, 164 and 215, 2 at 261, 1 at 281, and 3 more at 339, 373 and 401),
  * copies each request's client and contents text, and stores the work block in LW(10).
  */
 USER_FUNC(irai_init_func) {
@@ -889,7 +889,7 @@ USER_FUNC(irai_end_func) {
 }
 
 /**
- * Draw callback of the request window (US and PAL):
+ * Draw callback of the request window (US and later):
  * draws the blue title frames and header texts,
  * the list of requests (client and contents columns) clipped to the window,
  * with texts centred or squeezed to fit; solved requests are grey and the active one is red.
@@ -907,7 +907,7 @@ static inline f32 iraiAddI(f32 a, s32 b) {
 }
 
 /**
- * Draw callback of the request window (JP and demos):
+ * Draw callback of the request window (JP and the JP demo):
  * draws the blue title frames and header texts,
  * the list of requests (client and contents columns) clipped to the window,
  * with texts drawn at fixed positions; solved requests are grey and the active one is red.

@@ -922,7 +922,7 @@ EVT_END()
  * Watches for Mario walking up to Zess T. ("Nancy") in the western alley before the contact lens quest:
  * when he enters the box near x -580 to -400 she stops pacing
  * and the first scene runs (gor_01_000 to gor_01_007), where she turns away, Mario crushes her lost
- * contact lens and she ends up blocking the way. Sets GSWF_GOR01_ZESS_BLOCKS_GATE.
+ * contact lens and she ends up blocking the way. Sets GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE.
  */
 EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
@@ -1258,7 +1258,7 @@ s32 item_tbl_nancy[] = {
 /**
  * Talk event of Zess T. Before the contact lens is delivered,
  * Mario can hand over a Contact Lens (the item list item_tbl_nancy);
- * she then thanks him, walks into her house, the west exit opens and GSWF_GOR01_LENS_DELIVERED is set.
+ * she then thanks him, walks into her house, the west exit opens and GSWF_GOR_ZESS_T_GOT_CONTACT_LENS is set.
  * After that talking to her runs cooking_evt.
  */
 EVT_BEGIN(nancy_talk)
@@ -1588,7 +1588,7 @@ EVT_BEGIN(master_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG4_32_CHATTING_WITH_FLAVIO)
 
-        // Normal talk by story progress: the same line through STG4_32, then Bobbery's house is revealed once Mario meets him.
+        // Normal talk by story progress: the same line through STG4_32, then at STG4_33_MEET_BOBBERY he tells Mario where Bobbery's house is.
         CALL(evt_msg_print, 0, STRING("gor_01_016"), 0, STRING("me"))
         CASE_LESS_OR_EQUAL(STG4_33_MEET_BOBBERY)
         CALL(evt_msg_print, 0, STRING("mac_4_047"), 0, STRING("me"))
@@ -1990,7 +1990,10 @@ EVT_BEGIN(kuribo2_init)
     RETURN
 EVT_END()
 
-/** Regular event of the second Goomba villager: wanders with gor_villager_urouro. */
+/**
+ * Regular event of the second Goomba villager: wanders with gor_villager_urouro.
+ * npcEnt does not use it (his regularEvent is NULL).
+ */
 EVT_BEGIN(kuribo2_regl)
     CALL_CHILD(PTR(gor_villager_urouro))
     RETURN
@@ -2106,8 +2109,8 @@ EVT_END()
 
 /**
  * Interrupt of Chusan during Trouble Center job 5, fired each time Mario hits him:
- * plays a hit sound and a different complaint line (irai_05_004 to irai_05_014) for each of the 11 hits,
- * then lets him recover.
+ * plays a hit sound and one line per hit count (irai_05_004 to irai_05_014; the first ten are the same text,
+ * the 11th differs), then lets him recover.
  */
 EVT_BEGIN(chusan1_dead)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -2329,7 +2332,8 @@ EVT_BEGIN(bottakuru_talk)
 #endif
     END_IF
 
-    // Charlieton's sales pitch (a longer one on the first visit), then he asks if Mario wants to shop.
+    // Charlieton's sales pitch (bottakuru_00 on the first visit, bottakuru_01 later, bottakuru_02 after a purchase
+    // this visit), then he asks if Mario wants to shop.
     IF_INT_EQUAL(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("bottakuru_00"), 0, STRING("me"))
         SET_VALUE(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 1)
@@ -2786,7 +2790,7 @@ EVT_END()
 /**
  * NPC setup of the central plaza: the badge shop owner and clerk, the old Toad, Zess T., Marco, the bar
  * owner, the shopkeepers, the inn clerk, the Goombas, the mice, the sailor Bob-omb, the rip-off merchant,
- * Luigi and the thief.
+ * Luigi, the thief and "キノピコ" (no events).
  */
 static NpcSetupInfo npcEnt[] = {
     {
@@ -3677,7 +3681,7 @@ EVT_END()
 
 /**
  * Loops forever fading the ground floor of the bar (interior, Bob-omb sailor, Chusan,
- * plus Luigi's friends) toward white or black by 10 levels per frame, following GW(14).
+ * plus Luigi's friends) toward full colour or black by 10 levels per frame, following GW(14).
  */
 EVT_BEGIN(house03_f1_fade)
     LOOP(0)
@@ -3719,7 +3723,7 @@ EVT_END()
 
 /**
  * Loops forever fading the upper floor of the bar (interior, inn clerk, the old Toad,
- * plus Luigi's friends) toward white or black by 10 levels per frame, following GW(15).
+ * plus Luigi's friends) toward full colour or black by 10 levels per frame, following GW(15).
  */
 EVT_BEGIN(house03_f2_fade)
     LOOP(0)
@@ -3817,7 +3821,7 @@ EVT_END()
 
 /**
  * Second door callback for house 03's ground floor:
- * rotates the door "S_ie_03_f1_doa" the other way by half of LW(0).
+ * rotates the door "S_ie_03_f1_doa" about X by -0.5 times LW(0).
  */
 EVT_BEGIN(evt_door_03_01_f1)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5f))
@@ -5507,7 +5511,7 @@ static EVT_BEGIN(minnnanokoe_evt)
         END_IF
     END_LOOP
 
-    // The stones pulse in height while the camera pushes in.
+    // The stones pulse in height.
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
     BEGIN_INLINE_EVENT
@@ -5538,7 +5542,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     END_INLINE_EVENT
     WAIT_MS(3000)
 
-    // The camera pulls back, then rises as the stones climb into the sky.
+    // The camera pulls back, then drops and tilts up as the stones climb into the sky.
     CALL(evt_cam3d_evt_set, 0, 110, 1093, 0, 110, 293, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     SET_VALUE(GF(0), 1)
@@ -5670,7 +5674,7 @@ EVT_END()
 /**
  * Trouble Center job 16: Ms. Mowz asks Mario for an item (the Mowz request key item),
  * kisses him when he hands it over and rewards him with the Attack FX B badge,
- * which she leaves on the floor if his badge list is already full (200 badges).
+ * which she leaves in front of the badge shop if his badge list is already full (200 badges).
  * She then joins the party as a partner (all_party_lecture for partner 7).
  * The "Ms. Mowz" theme plays during the talk.
  */
@@ -5737,8 +5741,8 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                         CALL(evt_item_get_item_end_wait, STRING("mb"))
                         SET_VALUE(GSWF_GOR_01_MS_MOWZ_ATTACK_FX_B, 1)
                     ELSE
-                        // Badge list full: she hops over the rooftops and leaves the badge on the ground for
-                        // Mario to pick up later.
+                        // Badge list full: she hops over the rooftops and leaves the badge in front of the badge
+                        // shop for Mario to pick up later.
                         CALL(evt_msg_print_add, 0, STRING("irai_16_05_1"))
                         BEGIN_INLINE_EVENT
                             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -5873,8 +5877,8 @@ EVT_END()
 
 /**
  * Background part of the badge shop ending scene:
- * opens the bar's upstairs door, then the badge shop door (door_data_03_f2, then door_data_02_f2), moves Goombella in,
- * then loops the badge shop owner's and Goombella's talk animations.
+ * opens the bar's upstairs door and moves Goombella to x -50, then opens the badge shop door
+ * (door_data_03_f2, then door_data_02_f2) and moves the owner out to face her, then loops the badge shop owner's and Goombella's talk animations.
  */
 static EVT_BEGIN(epilogue_evt_sub)
     SET_VALUE(LW(0), PTR(&door_data_03_f2))
@@ -6190,7 +6194,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 550, 0, -150, ITEM_TYPE_STILL, GSWF_STARPIECE_04, 0)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -565, 162, -160, ITEM_TYPE_STILL, GSWF_STARPIECE_05, 0)
 
-    // Until Flavio's talk the Skull Gem lies on the ground.
+    // Until Flavio's talk the Skull Gem lies in the bar.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_JP
@@ -6202,7 +6206,7 @@ EVT_BEGIN(gor_01_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
 
-    // Open the building doors, depending on story progress and whether the lens was delivered.
+    // Set up the building doors, depending on story progress and whether the lens was delivered.
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         SET_VALUE(LW(0), PTR(&door_data_01))
     ELSE
@@ -6348,7 +6352,7 @@ SimpleRecipe R_simple_recipe_table[] = {
 #endif
 
 /**
- * Zess T.'s two-ingredient recipes: pairs of ingredients and the dish they make in the retail releases.
+ * Zess T.'s two-ingredient recipes: pairs of ingredients and the dish they make in JP and every later version (the early demos read cooking.xml instead).
  */
 #if VERSION >= VERSION_JP
 CookRecipe R_cookbook_recipe_table[] = {
@@ -6734,8 +6738,8 @@ s32 special_cook_list[] = {
 
 /**
  * Creates the seven Star Stone effects of the Chapter 8 "everyone's voices" scene in a ring of radius 140 around
- * (args[0], args[1], args[2]), named "starstone0" to "starstone6", hidden at first,
- * and hooks each one into the "mahojin" magic circle effect's draw list.
+ * (args[0], args[1], args[2]), named "starstone0" to "starstone6", without the shine sound and drawn by
+ * their owner (STAR_STONE_FLAG_EXTERNAL_DRAW), and hooks each one into the "mahojin" magic circle effect's draw list.
  */
 static USER_FUNC(starstone_entry) {
     char name[16];
@@ -7140,11 +7144,12 @@ USER_FUNC(get_item_name) {
 }
 
 /**
- * Decides how a finished dish looks when it comes out of the pot:
- * 1 for failures and explosive dishes (smoke and explosion), 0 for the rest (fire).
+ * Effect type of an item, used by cook_effect (for each ingredient) and chk_cook_msg (for the dish):
+ * 1 for items below the Mushroom's id, a few non-food items (Point Swap, Fright Mask, Mystery, Inn Coupon,
+ * Spite Pouch, Koopa Curse) and explosive dishes (smoke and explosion), 0 for the rest, the Mistake included (fire).
  */
 
-// The cooking animation for the result: 0 = flames, 1 = explosion puff (cook_effect).
+// The cooking animation for an item: 0 = flames, 1 = explosion puff (cook_effect).
 s32 chk_cook_eff_type(s32 item) {
     if (item < ITEM_MUSHROOM) {
         return 1;
@@ -7181,7 +7186,7 @@ s32 chk_cook_eff_type(s32 item) {
 
 /**
  * Plays the cooking effect at Zess T.'s stove (-380, 25..60, -170) for item args[0]:
- * fire and a fire sound for type 0 items, an explosion and smoke for type 1 items (including failures).
+ * fire and a fire sound for type 0 items, an explosion and smoke for type 1 items.
  */
 USER_FUNC(cook_effect) {
     switch (chk_cook_eff_type(evtGetValue(event, event->args[0]))) {
@@ -7200,7 +7205,7 @@ USER_FUNC(cook_effect) {
 
 /**
  * Zess T. cooking animation: she walks to the stove, stirs and chops with cooking sounds,
- * the pot reacts (cook_effect for the dishes in LW(14) and LW(15)),
+ * the pot reacts (cook_effect for the ingredients in LW(14) and LW(15)),
  * a radiating light plays for special dishes (chk_special_cook on LW(13)),
  * and she walks back to the counter facing Mario.
  */
@@ -7401,7 +7406,7 @@ EVT_BEGIN(cooking_evt)
                     SET_VALUE(GSWF_GOR_01_ZESS_T_HONEY_SHROOM, 1)
                 ELSE
 
-                    // Pouch full: she leaves the Honey Shroom on the ground for him to pick up.
+                    // Pouch full: she leaves the Honey Shroom at (-440, 30, -80) for him to pick up.
                     CALL(evt_msg_print_add, 0, STRING("irai_18_006_1"))
                     CALL(evt_npc_set_ry, STRING("ナンシー"), 270)
                     WAIT_FRAMES(1)

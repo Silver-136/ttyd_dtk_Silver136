@@ -2611,8 +2611,8 @@ ExchangeRyokin exchange_ryokin_medal_tbl[][3] = {
 /**
  * Bunny Teresa's minigame menu (bunny_teresa_34 on):
  * Mario picks one of the unlocked minigames (plane, paper, tube or boat), she deducts the 10-medal entry fee,
- * the pipe rises, and he walks into the pipe that is set to lead to the chosen minigame map (yuu_00, yuu_01,
- * yuu_02 or yuu_03).
+ * the pipe rises, and he walks into the pipe that is set to lead to the chosen minigame map (yuu_00, yuu_03,
+ * yuu_02 or yuu_01).
  */
 EVT_BEGIN(bteresa_talk_sub_minigame)
     SET_VALUE(LW(15), LW(0))
@@ -3606,7 +3606,7 @@ EVT_BEGIN(kinopiko_a_talk)
     RETURN
 EVT_END()
 
-/** Init event of the Toad woman B (キノピオ女Ｂ): places her at (155, 0, -50) and lets her jump and land on the floor. */
+/** Init event of the Toad woman B (キノピオ女Ｂ): places her at (155, 0, -50) and turns on floor collision and gravity. */
 static EVT_BEGIN(kinopiko_b_init)
     CALL(evt_npc_set_position, STRING("me"), 155, 0, -50)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -3743,7 +3743,7 @@ EVT_BEGIN(kokinopio_a_talk)
     RETURN
 EVT_END()
 
-/** Init event of the small Toad b: places it at (35, -5, 300) and gives it jumping flags. */
+/** Init event of the small Toad b: places it at (35, -5, 300) and turns on floor collision and gravity. */
 EVT_BEGIN(kokinopio_b_init)
     CALL(evt_npc_set_position, STRING("me"), 35, -5, 300)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -4099,7 +4099,7 @@ static NpcSetupInfo npcEnt[] = {
 /**
  * Door-swing callback for house 1 (built from the double door S_i01_doa_m/S_i01_doa_o):
  * LW(0) is the door's angle, applied at half size around Y. The middle leaf always follows;
- * the outer leaf turns only when LF(0) is set. With LF(0) clear it first turns off the leaves' blending flags.
+ * the outer leaf turns only when LF(0) is set. With LF(0) clear it first sets the leaves' no-blend flags.
  */
 static EVT_BEGIN(evt_door_01_00)
     IF_INT_EQUAL(LF(0), 0)
@@ -4146,7 +4146,7 @@ EVT_BEGIN(evt_door_01_10)
     RETURN
 EVT_END()
 
-/** NPCs tied to the back-door shop door: the clerk. */
+/** NPCs tied to both doors of the back-door shop (building 1): the clerk. */
 static const char* door_data_01_npc[] = {
     "店員",
     NULL,
@@ -4387,7 +4387,7 @@ EVT_END()
 /**
  * Door-swing callback for house 2: LW(0) is the door angle;
  * the two leaves S_ie_02_f1_doa01 and doa02 turn by plus and minus 0.6 times it around Y (they swing apart).
- * With LF(0) clear it first turns off their blending flags.
+ * With LF(0) clear it first sets their no-blend flags.
  */
 static EVT_BEGIN(evt_door_02_00)
     IF_INT_EQUAL(LF(0), 0)
@@ -4453,7 +4453,7 @@ EVT_END()
 
 /**
  * Closes the Pianta Parlor's front door: restores the door leaves,
- * makes Bunny Teresa keep any medals Mario still carries,
+ * reads the take-out flag (the test that follows is empty, so nothing is done with it),
  * sets the slot phase to 11 (shut down) and brings the Rogueport music and ambience back.
  */
 EVT_BEGIN(door_data_02_0_close)
@@ -4999,7 +4999,7 @@ EVT_END()
 
 /**
  * Leaving house 4: with the camera fixed Mario walks out to z = -400 (S_bero_n hidden meanwhile),
- * the door's close case event runs, collision A_ie_03A comes back (JP and later) and the music
+ * the door's close case event is registered, collision A_ie_03A comes back (JP and later) and the music
  * and ambience are restored.
  */
 static EVT_BEGIN(evt_door_04_close)
@@ -5135,7 +5135,7 @@ EVT_END()
  * GSWF_GOR03_SYNDICATE_BACKDOOR_OPEN is set.
  */
 EVT_BEGIN(uraguchi_event)
-    // The area music is held while the clerk faces Mario and the party.
+    // The area music is held while Mario and the party turn to face the clerk.
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_mario_key_onoff, 0)
@@ -5320,7 +5320,7 @@ static ShopperData35 shopper_data = {
 
 /**
  * Beldam's (マジョリン) eavesdropping scene after the Train Ticket is given (STG5_65_TRAIN_TICKET):
- * the camera shows Mario's party, Beldam appears with the witch music and speaks (mac_5_900 to 905),
+ * the camera shows Mario's party, Beldam appears with the witch music, and she and the partner speak (mac_5_900 to 905),
  * then leaves, and the story moves to STG5_66_BELDAM_FINDS_OUT.
  */
 EVT_BEGIN(majorin_nusumigiki)
@@ -5433,7 +5433,7 @@ EVT_BEGIN(majorin_nusumigiki)
 EVT_END()
 
 /**
- * Return from a minigame: sets the Rogueport music, opens the Pianta Parlor doors, Mario jumps out of the pipe,
+ * Return from a minigame: sets the Rogueport music (JP and later), opens the Pianta Parlor doors, Mario jumps out of the pipe,
  * the pipe goes back down and Bunny Teresa speaks (bunny_teresa_17,
  * or bunny_teresa_17_1 after the epilogue starts).
  */
@@ -6356,7 +6356,7 @@ EVT_BEGIN(gor_03_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kou_kusas03"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
 
-    // The parlor machines, ranking board, Pianta Changer and lottery board get their triggers.
+    // The parlor machines, ranking board and Pianta Changer get their triggers.
     SPAWN_EVENT_GET_ID(PTR(desk_talk_check), GW(15))
     CALL_CHILD(PTR(debug_event_mode))
     CALL(evt_goryuugijo_alloc, LW(0), 0)

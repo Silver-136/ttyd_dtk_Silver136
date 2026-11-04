@@ -1690,8 +1690,8 @@ EVT_END()
 
 /**
  * Init event of Lumpy (Mokorim, the coin investor):
- * from the pedestal step of Chapter 1 to the end of Chapter 3 and again
- * after the Chapter 5 return he stands at (525, 15, -270) facing left.
+ * from the pedestal step of the prologue to the end of Chapter 3 and again
+ * from STG6_56_ROGUEPORT_STATION on he stands at (525, 15, -270) facing left.
  */
 EVT_BEGIN(mokorim_init)
     CALL_CHILD(PTR(npc_init_evt))
@@ -1923,7 +1923,7 @@ EVT_BEGIN(mokorim_talk)
     RETURN
 EVT_END()
 
-/** Init script of the old woman Puni in Bowser's chapter 3 scene: does the shared NPC init and enables facing the movement direction. */
+/** Init script of Kammy Koopa ("ババ") for the Chapter 4 Bowser interlude: does the shared NPC init and enables facing the movement direction. */
 static EVT_BEGIN(baba_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -2850,7 +2850,7 @@ EVT_END()
 /**
  * Waits for Mario to walk up to the X-Nauts, then Lord Crump spots him
  * and the first fight starts (battle info 2 against Lord Crump;
- * in the non-demo releases Mario's HP is raised to at least 5 first).
+ * in JP and later releases Mario's HP is raised to at least 5 first).
  * Afterwards the story becomes STG0_05_1000_X_NAUTS_BEFORE,
  * the sailors' events are cancelled and moved back, and gundan1000tai_afterbattle runs.
  */
@@ -3245,7 +3245,7 @@ EVT_BEGIN(gundan1000tai_afterbattle)
     CALL(evt_cam3d_evt_set, 285, 117, 50, 285, 25, -315, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 
-    // Goombella urges Mario to run; she then joins him as his partner.
+    // Goombella urges Mario to run; she then follows him.
     CALL(evt_msg_print, 0, STRING("mac_0_028"), 0, STRING("クリスチーヌ"))
     CALL(evt_mario_set_pos, 55, 15, -180)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
@@ -3773,7 +3773,7 @@ static s16 suifu_run_animtbl[] = {
     36, 37, 38, 39, -1, 0,
 };
 
-/** Three points where the crowd sailors walk down the stairs; each picks one at random. */
+/** Four points where the crowd sailors walk down the stairs; each picks one of the first three at random. */
 Vec suifu100kaidanDOWN[] = {
     {309.0f, 15.0f, -375.0f},
     {322.0f, 15.0f, -397.0f},
@@ -3781,7 +3781,7 @@ Vec suifu100kaidanDOWN[] = {
     {357.0f, 15.0f, -427.0f},
 };
 
-/** Three points where the crowd sailors walk up the stairs; each picks one at random. */
+/** Four points where the crowd sailors walk up the stairs; each picks one of the first three at random. */
 Vec suifu100kaidanUP[] = {
     {143.0f, 115.0f, -514.0f},
     {167.0f, 115.0f, -534.0f},
@@ -4513,7 +4513,7 @@ USER_FUNC(hosei_party_pos) {
     return EVT_RETURN_DONE;
 }
 
-/** Scatters the sailor crowd extras (the 100 waiting sailors) randomly near the right of the plaza at z 190 to 240. */
+/** Scatters the sailor crowd extras (the 100 waiting sailors) randomly on the pier at x -100 to 34 and z 190 to 240. */
 USER_FUNC(suifu100taikikan_init) {
     s32 i;
     NanNPC* npc;
@@ -4885,7 +4885,7 @@ EVT_BEGIN(into_gor_ship)
     END_IF
     SPAWN_EVENT_GET_ID(PTR(option_ship_mario), LW(9))
 
-    // The camera frames the ship; the screen fades in as the ship slides in with its arrival sound.
+    // The camera frames the ship; the wake fades out as the ship slides in with its arrival sound.
     CALL(evt_cam3d_evt_set, 188, 193, 753, 188, 74, 63, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(alpha_set_func, 255)
@@ -5392,7 +5392,7 @@ EVT_END()
 /**
  * When Mario walks to the Chapter 5 dock spot (z <= 250 and x <= -120) a mail from Peach arrives:
  * Mario's controls are locked, the mail jingle (BGM_FF_MAIL_RECEPTION1) plays with the lines gor_00_mail5_00 to
- * _02, the story moves to STG5_59_01_A_MAIL_FROM_PEACH and the second ship (S_fune_b, A_fune_b) is shown.
+ * _02, the story moves to STG5_59_01_A_MAIL_FROM_PEACH and mail 4 is received and opened.
  */
 static EVT_BEGIN(peach_mail)
     LOOP(0)
@@ -5506,7 +5506,7 @@ EVT_BEGIN(gor_muj_ship_sub)
 EVT_END()
 
 /**
- * Carries Mario and his partners along with the departing ship:
+ * Carries Mario and his partners along with the arriving ship:
  * each frame it moves them by the change of the ship's position (GW(13) and GW(14)).
  */
 static EVT_BEGIN(option_ship_mario)

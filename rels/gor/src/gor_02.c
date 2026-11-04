@@ -642,7 +642,7 @@ EVT_END()
 
 /**
  * Exit event of the pipe "dokan" (to tik_01): the first time through,
- * parks the partner out of sight below the map and sets GSWF_GOR02_FRANKLY_INTRO_SEEN.
+ * places Frankly as the follower (party slot 1) out of sight below the map and sets GSWF_GOR02_FRANKLY_INTRO_SEEN.
  * Returns 0 in LW(0) so the pipe still works.
  */
 EVT_BEGIN(gor_02_event_01)
@@ -1261,7 +1261,7 @@ EVT_END()
 
 #if VERSION >= VERSION_JP
 /**
- * Retail shop-door animation: reveals the interior, swings the door open and shut,
+ * Shop-door animation of JP and later: reveals the interior, swings the door open and shut,
  * then hides the interior again.
  */
 EVT_BEGIN(powerupya_direct_talk)
@@ -1408,7 +1408,7 @@ EVT_BEGIN(powerupya_orb_use)
         END_LOOP
     END_INLINE_EVENT
 
-    // He spins up into the air while Mario and the partner look on in surprise.
+    // He spins up into the air while Mario looks on in surprise.
     SPAWN_EVENT_GET_ID(PTR(powerupya_stardust), LW(5))
     CALL(evt_npc_get_position, STRING("me"), LW(7), LW(8), LW(9))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_STARSTONE_SHINE1"), LW(7), LW(8), LW(9), LW(6))
@@ -1512,7 +1512,7 @@ EVT_BEGIN(powerupya_orb_use)
 
 /**
  * In the early demos, Merlon takes the Up Arrow in this talk event and changes the shop's blue crystal to red.
- * This talk event has the name that retail gives to its door animation.
+ * This talk event has the name that JP and later give to the door animation.
  */
 EVT_BEGIN(powerupya_direct_talk)
     IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
@@ -1568,7 +1568,7 @@ EVT_BEGIN(powerupya_direct_talk)
 EVT_END()
 
 /**
- * Talk event of Merlon in the retail versions, run when the player talks to him at the portent point.
+ * Talk event of Merlon in JP and later, run when the player talks to him at the portent point.
  * If the portent is pending he describes it (powerup_ev_01 and 02) while the door opens;
  * otherwise, if Mario has the Up Arrow, asks him to hand it over and runs powerupya_orb_use.
  * Falls back to powerup_ev_03 or powerup_05.
@@ -1776,10 +1776,11 @@ EVT_END()
 
 /**
  * Init event of Professor Frankly (Kuri-hakase): lets him pass through walls and places him by story stage:
- * in the street at (-135, 0, -240) at STG0_08_STOLEN_COINS and at (-220, 0, 305)
+ * at (-135, 0, -240) at STG0_08_STOLEN_COINS and at (-220, 0, 305)
  * while he waits to start his tutorial (unless GSWF_GOR02_FRANKLY_INTRO_SEEN is set),
  * hidden below the map during the early scenes and the late story,
- * and at (-140, 0, -225) in his house from the Pedestal step on and at each Thousand-Year Door step.
+ * at (-140, 0, -225) in his house at the Pedestal step and at each Thousand-Year Door step,
+ * and at (-140, 0, -250) otherwise.
  */
 static EVT_BEGIN(kurihakase_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
@@ -2082,7 +2083,7 @@ EVT_BEGIN(oyabun_talk)
         SET_VALUE(GSWF_GOR_ISHNAIL_PASSWORD_TOLD, 1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_END_TO_GLITZVILLE)
-        // After the hint: one line per story stage about Don Pianta and Glitzville.
+        // After the hint: one line per story stage.
         CALL(evt_msg_print, 0, STRING("gor_02_002"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CALL(evt_msg_print, 0, STRING("gor_02_003"), 0, STRING("me"))
@@ -3269,7 +3270,7 @@ EVT_END()
 /**
  * NPCs of this room:
  * Merlon, Grifty, Professor Frankly, the bandit gang (the boss and three members), Sanders, a Goomba,
- * the Trouble Center thieves and villagers, Darkly and Luigi.
+ * other villagers, Darkly and Luigi.
  */
 static NpcSetupInfo npcEnt[] = {
     {
@@ -3952,7 +3953,7 @@ EVT_BEGIN(evt_door_sanders_close)
 EVT_END()
 
 /**
- * Entry for house 03's door: hides the wall piece and switches off the hit object named in the door parameters,
+ * Entry for house 03's door: hides the interior and switches off its hit object named in the door parameters,
  * and registers A-button-facing case events that run evt_door_sanders_close
  * and evt_door_sanders_open in front of the door's two spots.
  */
@@ -3977,7 +3978,7 @@ static EVT_BEGIN(evt_door_03_entry)
 EVT_END()
 
 /**
- * Case event for the rolling-shutter entrance of house 03:
+ * Case event for the roll-in entrance of house 03 (Mario as a paper tube):
  * locks the controls, switches off the "A_i03_rol" hit object, shakes the camera,
  * plays the roll-down sounds (SFX_STG4_MARIO_ROLL_DOWN1 and 2) and runs evt_door_open_roll.
  */
@@ -4074,7 +4075,7 @@ EVT_BEGIN(evt_door_03_roll_open)
 EVT_END()
 
 /**
- * Close callback for the rolling-shutter entrance of house 03:
+ * Close callback for the roll-in entrance of house 03:
  * dips the music and ambience and low-passes it again (no door animation).
  */
 EVT_BEGIN(evt_door_03_roll_close)
@@ -4084,7 +4085,7 @@ EVT_BEGIN(evt_door_03_roll_close)
     RETURN
 EVT_END()
 
-/** Wall callback for the rolling-shutter entrance of house 03: tilts the wall "S_ie_03B" open by LW(2) degrees. */
+/** Wall callback for the roll-in entrance of house 03: tilts the wall "S_ie_03B" open by LW(2) degrees. */
 EVT_BEGIN(evt_wall_03_roll)
     SET_FLOAT_VALUE(LW(2), LW(0))
     MULTIPLY_FLOAT(LW(2), FLOAT(0.5f))
@@ -4093,7 +4094,7 @@ EVT_BEGIN(evt_wall_03_roll)
 EVT_END()
 
 /**
- * Rolling-shutter side entrance of house 03:
+ * Roll-in side entrance of house 03:
  * it shares the interior with the front door but has its own wall script.
  */
 static DoorParam door_data_03_roll = {
@@ -4118,7 +4119,7 @@ static DoorParam door_data_03_roll = {
 };
 
 /**
- * Entry for the rolling-shutter entrance of house 03:
+ * Entry for the roll-in entrance of house 03:
  * registers the stand-on case event (evt_door_03_caseopen) that opens it when Mario steps on the spot in front.
  */
 EVT_BEGIN(evt_door_03_roll_entry)
@@ -4129,7 +4130,7 @@ EVT_BEGIN(evt_door_03_roll_entry)
 EVT_END()
 
 /**
- * Door animation callback of the house 04 door (the thieves' house):
+ * Door animation callback of the house 04 door (the Trouble Center):
  * rotates the door "S_ie_04_doa" about Y by 0.6 times the value in LW(0).
  */
 static EVT_BEGIN(evt_door_04_00)
@@ -4194,7 +4195,7 @@ static EVT_BEGIN(evt_door_04_close)
     RETURN
 EVT_END()
 
-/** NPCs shown inside house 04 (the thieves' house) when its door opens. */
+/** NPCs shown inside house 04 (the Trouble Center) when its door opens. */
 static const char* door_data_04_npc[] = {
     "盗賊団３",
     NULL,
@@ -4209,7 +4210,7 @@ static const char* door_data_04_item[] = {
 };
 
 /**
- * Front door of house 04, the thieves' house:
+ * Front door of house 04, the Trouble Center:
  * its door and wall pieces, hit areas and the scripts for entering, leaving and the open
  *  and close animation.
  */
@@ -4645,7 +4646,7 @@ static USER_FUNC(enzan_lw_load) {
 
 /**
  * Switches the map background texture to the file named by args[0] (the current map's name if NULL),
- * from "./bg/" in the early demos and "./b/" in the retail versions.
+ * from "./bg/" in the early demos and "./b/" in JP and later.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_set_bgtpl) {
@@ -5289,7 +5290,7 @@ EVT_BEGIN(cam_yurasu_event)
 EVT_END()
 
 EVT_BEGIN(steel_coin)
-    // Setup: the thief is placed off to the left and Mario and the partner come in from the left edge.
+    // Setup: the thief is placed to their right and Mario and the partner come in from the left edge.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kmn"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_set_ry, STRING("盗賊"), 270)
     CALL(evt_npc_set_position, STRING("盗賊"), -300, 0, 0)
@@ -5418,7 +5419,7 @@ EVT_END()
 
 /**
  * Cutscene when Mario and Goombella first enter Professor Frankly's house (STG0_08):
- * Frankly appears, introduces himself, takes the Magical Map,
+ * Frankly appears, introduces himself, looks at the Magical Map,
  * and sends them off to find the Thousand-Year Door pedestal. Ends by setting STG0_09_PROF_FRANKLY.
  * Frankly's talk uses the mac_0_066 to mac_0_082 lines.
  */
@@ -6119,7 +6120,7 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_cam3d_evt_set, -150, 100, 82, -150, 47, -217, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 
-    // He walks to the table, spreads the map out and then hands it back to Mario.
+    // He walks to the table, picks up the map and then hands it back to Mario.
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_move_position, STRING("クリハカセ"), -150, -205, 0, FLOAT(60.0f), 0)
     WAIT_MS(500)
@@ -6261,7 +6262,7 @@ EVT_END()
 
 /**
  * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
- * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
+ * he deciphers the map for the next star (mac_2_002_01 to mac_2_011) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
  */
 EVT_BEGIN(epigraphy_map_after_stage2)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
@@ -6902,7 +6903,7 @@ s32 stg3_list[] = {
     65,
 };
 
-/** Demo Chapter 4 or retail Chapter 5 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
+/** Demo Chapter 4 or (JP and later) Chapter 5 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 #if VERSION <= VERSION_DEMO_JP
 s32 stg4_list[] = {
     76,
@@ -7031,7 +7032,7 @@ EVT_END()
 /**
  * Enters Goombella ("c_pkr") at (-240, 0, -260) facing 270 for the ending scene at Professor Frankly's house,
  * intangible, with no wall hits, the move animation on,
- * NPC status bit 2 on (she turns to face her travel direction)
+ * NPC status 0x2 (NPC_STATUS_FACE_MOVE_DIR) on (she turns to face her travel direction)
  * and map blending off.
  */
 static EVT_BEGIN(epilogue_npc_entry)
@@ -7154,7 +7155,7 @@ EVT_END()
  * Map init for gor_02 (Rogueport east side).
  * Picks the music by story stage, sets the exits, creates the NPCs, houses and their doors, the item box,
  * the Shine Sprite blocks and the Star Pieces, and starts whichever story cutscene belongs to the current stage
- * (the epigraphy scenes at Professor Frankly's, Frankly's lecture, the Chapter 6 research, the epilogue).
+ * (the epigraphy scenes at Professor Frankly's, Frankly's lecture, the epilogue).
  */
 EVT_BEGIN(gor_02_init_evt)
     // Music and ambience: Frankly's theme during his scenes, otherwise the Rogueport theme.
@@ -7305,7 +7306,7 @@ EVT_BEGIN(gor_02_init_evt)
     SPAWN_EVENT(PTR(gor_goki2_urouro))
     SPAWN_EVENT(PTR(gor_irai_init))
     IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 0)
-        // The wall cover Flurrie can blow away in front of the thieves' back door is set up.
+        // The wall cover Flurrie can blow away in front of the Trouble Center's back door is set up.
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_i04_kabe_msk"), STRING("A_i04_kabe_msk"), PTR(evt_cloud))
         BEGIN_INLINE_EVENT
