@@ -1051,12 +1051,12 @@ void stg2_end_init(void) {
 
 /**
  * Story point STG3_06 "1st Match" (tou_03): books Mario's first Glitz Pit match:
- * opponent 0x13 (GSW_TOU_OPPONENT_ID), rule 0x2B with parameters 1 and 1, and GSWF_TOU_MATCH_RESERVED set.
+ * opponent 0x13 (GSW_GLITZ_PIT_OPPONENT), rule 0x2B with parameters 1 and 1, and GSWF_GLITZ_PIT_MATCH_RESERVED set.
  */
 void stg3_06_init(void) {
-    swSet(GSWF_TOU_MATCH_RESERVED); // GSWF_GLITZ_PIT_MATCH_RESERVED
-    swByteSet(GSW_TOU_OPPONENT_ID, 0x13);
-    swByteSet(GSW_TOU_MATCH_RULE, 0x2B);
+    swSet(GSWF_ID(GSWF_GLITZ_PIT_MATCH_RESERVED));
+    swByteSet(GSW_ID(GSW_GLITZ_PIT_OPPONENT), 0x13);
+    swByteSet(GSW_ID(GSW_GLITZ_PIT_CONDITION), 0x2B);
     swByteSet(GSW_ID(GSW_GLITZ_PIT_CONDITION_PARAM), 1);
     swByteSet(GSW_ID(GSW_GLITZ_PIT_CONDITION_PARAM2), 1);
 }
@@ -1064,7 +1064,7 @@ void stg3_06_init(void) {
 /**
  * Story point STG3_07 "Minors - 9th Pl." (tou_10):
  * marks the lowest Glitz Pit fighter as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19),
- * stores 19 in GSW_GLITZ_PIT_LAST_OPPONENT, and clears GSWF_TOU_MATCH_RESERVED and marks the Goomba Bros.
+ * stores 19 in GSW_GLITZ_PIT_LAST_OPPONENT, and clears GSWF_GLITZ_PIT_MATCH_RESERVED and marks the Goomba Bros.
  * match scenes and the first-match follow-up as seen.
  */
 void stg3_07_init__9(void) {
@@ -1074,18 +1074,18 @@ void stg3_07_init__9(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
-    swClear(GSWF_TOU_MATCH_RESERVED); // GSWF_GLITZ_PIT_MATCH_RESERVED
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_MATCH_RESERVED));
     swSet(GSWF_ID(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN));
     swSet(GSWF_ID(GSWF_TOU_GOOMBA_BROS_OPENING_SEEN));
     swSet(GSWF_ID(GSWF_TOU_GOOMBA_BROS_FIRST_WIN));
     swSet(GSWF_ID(GSWF_TOU_GOOMBA_BROS_AMBUSH_TALK_SEEN));
-    swSet(GSWF_TOU_LAST_RULE_MET); // GSWF_GLITZ_PIT_CONDITION_KEPT
+    swSet(GSWF_ID(GSWF_GLITZ_PIT_CONDITION_KEPT));
 }
 
 /**
  * Story point STG3_07 "Minors - 8th Pl." (tou_10):
  * marks the 2 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 18),
- * stores 18 in GSW_GLITZ_PIT_LAST_OPPONENT, and clears GSWF_TOU_MATCH_RESERVED and sets GSWF_TOU_RANK_18_KING_K_TALK_DONE.
+ * stores 18 in GSW_GLITZ_PIT_LAST_OPPONENT, and clears GSWF_GLITZ_PIT_MATCH_RESERVED and sets GSWF_TOU_RANK_18_KING_K_TALK_DONE.
  */
 void stg3_07_init__8(void) {
     int i;
@@ -1094,7 +1094,7 @@ void stg3_07_init__8(void) {
         swSet(0x9B4 - i);
     }
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
-    swClear(GSWF_TOU_MATCH_RESERVED); // GSWF_GLITZ_PIT_MATCH_RESERVED
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_MATCH_RESERVED));
     swSet(GSWF_ID(GSWF_TOU_RANK_18_KING_K_TALK_DONE));
 }
 
@@ -1478,10 +1478,10 @@ void stg3_20_15_init(void) {
  * opponent 0, GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, rule 6 with parameters 1 and 1.
  */
 void stg3_21_init(void) {
-    swSet(GSWF_TOU_MATCH_RESERVED); // GSWF_GLITZ_PIT_MATCH_RESERVED
-    swByteSet(GSW_TOU_OPPONENT_ID, 0);
+    swSet(GSWF_ID(GSWF_GLITZ_PIT_MATCH_RESERVED));
+    swByteSet(GSW_ID(GSW_GLITZ_PIT_OPPONENT), 0);
     swSet(GSWF_ID(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED));
-    swByteSet(GSW_TOU_MATCH_RULE, 6);
+    swByteSet(GSW_ID(GSW_GLITZ_PIT_CONDITION), 6);
     swByteSet(GSW_ID(GSW_GLITZ_PIT_CONDITION_PARAM), 1);
     swByteSet(GSW_ID(GSW_GLITZ_PIT_CONDITION_PARAM2), 1);
 }
@@ -1500,8 +1500,8 @@ void stg3_30_init(void) {
     swByteSet(GSW_ID(GSW_GLITZ_PIT_LAST_OPPONENT), 20 - i);
     swSet(GSWF_TOU_CHAMPION_SCENE);
     swClear(GSWF_ID(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED));
-    swClear(GSWF_TOU_MATCH_RESERVED); // GSWF_GLITZ_PIT_MATCH_RESERVED
-    swByteSet(GSW_TOU_OPPONENT_ID, 0);
+    swClear(GSWF_ID(GSWF_GLITZ_PIT_MATCH_RESERVED));
+    swByteSet(GSW_ID(GSW_GLITZ_PIT_OPPONENT), 0);
     swSet(GSWF_ID(GSWF_GLITZ_PIT_MATCH_JUST_ENDED));
     swSet(GSWF_ID(GSWF_TOU_RAWK_HAWK_OPENING_SEEN));
     swSet(GSWF_ID(GSWF_TOU_RAWK_HAWK_FIRST_WIN));

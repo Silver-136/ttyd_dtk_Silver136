@@ -1744,7 +1744,7 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
 #else
     if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) return FALSE;
     if (audience_kind[member->type].itemTable->type == 0) return FALSE;
-    if (itemId >= ITEM_MIN && itemId < ITEM_MAX && swGet(0xEB) == 0) return FALSE; // GSWF_ITEM_TUTORIAL_SEEN
+    if (itemId >= ITEM_MIN && itemId < ITEM_MAX && swGet(GSWF_ID(GSWF_ITEM_TUTORIAL_SEEN)) == 0) return FALSE;
     st = index % 20;
     if (st < 4 || st > 15) return FALSE;
     if (!(u8)BattleAudience_GetExist(index)) return FALSE;

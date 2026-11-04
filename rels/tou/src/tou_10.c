@@ -1417,7 +1417,7 @@ EVT_END()
 
 /**
  * Locker room door script: the staff member (キノシコワ) stops Mario at the door with stg3_tou_67
- * if no match is reserved (GSWF_TOU_MATCH_RESERVED clear), or stg3_tou_73_01 if one is.
+ * if no match is reserved (GSWF_GLITZ_PIT_MATCH_RESERVED clear), or stg3_tou_73_01 if one is.
  */
 static EVT_BEGIN(evt_door)
     CALL(evt_mario_key_onoff, 0)

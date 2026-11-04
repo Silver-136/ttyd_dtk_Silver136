@@ -2458,8 +2458,8 @@ s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_HP_RECOVER_HIT1), &mobj->position);
         mobj->state++;
     case 1:
-        if (!(gp->flags & GW_FLAG_E3) && swGet(GSWF_HEART_BLOCK_TUTORIAL_SEEN) == 0) {
-            swSet(GSWF_HEART_BLOCK_TUTORIAL_SEEN);
+        if (!(gp->flags & GW_FLAG_E3) && swGet(GSWF_ID(GSWF_HEART_BLOCK_TUTORIAL_SEEN)) == 0) {
+            swSet(GSWF_ID(GSWF_HEART_BLOCK_TUTORIAL_SEEN));
             mobj->state = 20;
             break;
         }

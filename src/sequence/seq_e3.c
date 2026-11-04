@@ -461,7 +461,7 @@ void seq_e3Main(SequenceWork* seq) {
                     break;
                 }
             }
-            swByteSet(0, prevId);
+            swByteSet(GSW_ID(GSW_STORY_PROGRESS), prevId);
             foundIdx = idx;
 
             for (i = 0; i < stageId; i++) {

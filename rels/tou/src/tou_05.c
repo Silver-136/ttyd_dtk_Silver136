@@ -142,7 +142,7 @@ static EVT_BEGIN(n_door_close)
 EVT_END()
 
 /**
- * Exit script: cancels a registered but unplayed match (clears GSWF_TOU_MATCH_RESERVED)
+ * Exit script: cancels a registered but unplayed match (clears GSWF_GLITZ_PIT_MATCH_RESERVED)
  * when Mario leaves through the door.
  */
 #if VERSION >= VERSION_JP

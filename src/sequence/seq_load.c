@@ -535,7 +535,7 @@ void loadMain(SequenceWork* seq) {
                         gp->areaFadeOutType = FADE_NONE;
                         gp->areaFadeInType = FADE_CURTAIN_SIDES_A2_3D;
                         swInit();
-                        swByteSet(0, STG0_00_PROLOGUE);
+                        swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
 #else
                     stg0_00_init();
                     gp->saveSlot = wp->slot;
@@ -548,7 +548,7 @@ void loadMain(SequenceWork* seq) {
                     gp->areaFadeOutType = FADE_NONE;
                     gp->areaFadeInType = 25;
                     swInit();
-                    swByteSet(0, STG0_00_PROLOGUE);
+                    swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
                     if (code == 0) {
                         gp->saveSlot = wp->slot;
 #if VERSION >= VERSION_US
@@ -579,7 +579,7 @@ void loadMain(SequenceWork* seq) {
                 gp->areaFadeOutType = FADE_NONE;
                 gp->areaFadeInType = FADE_CURTAIN_SIDES_A2_3D;
                 swInit();
-                swByteSet(0, STG0_00_PROLOGUE);
+                swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
 #endif
                 seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             }
@@ -1610,7 +1610,7 @@ void continueGame(void) {
             gp->areaFadeOutType = FADE_NONE;
             gp->areaFadeInType = FADE_CURTAIN_SIDES_A2_3D;
             swInit();
-            swByteSet(0, STG0_00_PROLOGUE);
+            swByteSet(GSW_ID(GSW_STORY_PROGRESS), STG0_00_PROLOGUE);
             seqSetSeq(SEQ_MAP_CHANGE, "aaa_00", "prologue");
             break;
         case 24:

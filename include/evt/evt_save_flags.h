@@ -1,5 +1,26 @@
 #pragma once
 
+// Saved values and flags used by both C code and scripts (C code passes them through GSWF_ID / GSW_ID).
+// how far the story has advanced (StoryProgress); GSW 0 alone is stored as s32
+#define GSW_STORY_PROGRESS GSW(0)
+// Glitz Pit: the opponent of the current match
+#define GSW_GLITZ_PIT_OPPONENT GSW(501)
+// Glitz Pit: the special condition of the current match
+#define GSW_GLITZ_PIT_CONDITION GSW(502)
+// Glitz Pit: Mario's saved rank
+#define GSW_GLITZ_PIT_RANK GSW(580)
+// Pit of 100 Trials: floor index 0..99 (shown as 1..100)
+#define GSW_PIT_FLOOR GSW(1321)
+#define GSWF_SHOP_TUTORIAL_SEEN GSWF(0)
+#define GSWF_SAVE_BLOCK_TUTORIAL_SEEN GSWF(233)
+// set by the heart block's first use outside kiosk mode (evt_mobj); its tutorial runs only while it is clear
+#define GSWF_HEART_BLOCK_TUTORIAL_SEEN GSWF(234)
+// set by the first item pickup (itemdrv) outside kiosk mode; also read by the battle audience's item throws
+#define GSWF_ITEM_TUTORIAL_SEEN GSWF(235)
+#define GSWF_GLITZ_PIT_MATCH_RESERVED GSWF(2388)
+// Glitz Pit: the last match's special condition was kept (rule result 6)
+#define GSWF_GLITZ_PIT_CONDITION_KEPT GSWF(2443)
+
 /* Saved flags (GSWF) and values (GSW) named from what the scripts do with them and the room's message
  * text; the game carries no names for these. Only values the code uses are listed. */
 

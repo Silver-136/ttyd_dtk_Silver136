@@ -433,7 +433,7 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
         iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_DPAD, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA)) { // GSW_STORY_PROGRESS
+        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS || partyChkJoin(PARTNER_GOOMBELLA)) {
             MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
@@ -448,7 +448,7 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXConcat(m2, s2, m2);
 #if VERSION >= VERSION_US
         iconDispGxCol(m2, ICON_FLAG_2D, (u16)gear_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) { // GSW_STORY_PROGRESS
+        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) {
             f32 xoff[6] = { 0.0f, 10.0f, 3.0f, 8.0f, 8.0f, 0.0f };
             MTXTrans(m2, -130.0f + xoff[gp->language], 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
@@ -456,7 +456,7 @@ void statusWinDisp(CameraId camId, void* param) {
             iconDispGxCol(m2, ICON_FLAG_2D, (u16)badge_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
         iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_GEAR, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-        if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) { // GSW_STORY_PROGRESS
+        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) {
             MTXTrans(m2, -130.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);

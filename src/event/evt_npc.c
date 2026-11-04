@@ -1616,8 +1616,7 @@ USER_FUNC(evt_npc_add_dirdist) {
     return EVT_RETURN_DONE;
 }
 
-/** f32 dir (in/out), f32 min, f32 max */
-// f32 dir (in/out), f32 min, f32 max
+/** Turns the angle in args[0] (in/out) by a random amount from args[1] (min) towards args[2] (max), wrapped to 0..360. */
 USER_FUNC(evt_npc_get_loiter_dir) {
     EvtWord* args = event->args;
     s32 index;
@@ -1631,6 +1630,8 @@ USER_FUNC(evt_npc_get_loiter_dir) {
     if (range <= 0.0f) {
         dir = dir + min;
     } else {
+        // BUG: rand() / range instead of a value scaled into the range: the turn is min plus 0 to 32767 / range
+        // degrees, so it can pass max (by far when the range is small).
         dir = dir + (min + rand() / range);
     }
     evtSetFloat(event, index, reviseAngle(dir));

@@ -475,7 +475,7 @@ static void insert(s32* list, s32 num, s32 from, s32 to) {
  * Fighters who are still above Mario ("win" group) are ordered by score
  * and some are pinned to fixed slots (the champion first, then slots 1, 10, 14, 18,
  * 19 for the flagged fighters); the last opponent is pushed to the end of its group.
- * Mario's marker (id 20) sits between the two groups and his rank goes to GSW_TOU_PLAYER_RANK.
+ * Mario's marker (id 20) sits between the two groups and his rank goes to GSW_GLITZ_PIT_RANK.
  */
 static void rankingControll(void) {
     s32 win[32];
@@ -572,7 +572,7 @@ static void rankingControll(void) {
     memcpy(rank_wp->entries, work, rank_wp->num * sizeof(RankEntry));
     __memFree(HEAP_DEFAULT, work);
     GET_RANK(j, i);
-    swByteSet(GSW_TOU_PLAYER_RANK, j);
+    swByteSet(GSW_ID(GSW_GLITZ_PIT_RANK), j);
 }
 
 /** Script helper: args[0] receives Mario's current rank (0 = the champion's seat). */
@@ -589,7 +589,7 @@ USER_FUNC(evt_tou_get_ranking) {
 /**
  * Script helper: args[0] receives the id of the fighter Mario fights next:
  * the one ranked just above him, or the one just below
- * after the last rule was not met (GSWF_TOU_LAST_RULE_MET clear). Mario at rank 0 gets the second fighter.
+ * after the last rule was not met (GSWF_GLITZ_PIT_CONDITION_KEPT clear). Mario at rank 0 gets the second fighter.
  */
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
@@ -858,17 +858,17 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
 
 /**
  * Script helper: args[0] = rule result bits from the match (bit 2 = rule met);
- * sets or clears GSWF_TOU_LAST_RULE_MET.
+ * sets or clears GSWF_GLITZ_PIT_CONDITION_KEPT.
  */
 static USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
 
     if (result & 4) {
-        swSet(0x98B); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swSet(GSWF_ID(GSWF_GLITZ_PIT_CONDITION_KEPT));
     } else if (result & 2) {
-        swClear(0x98B); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swClear(GSWF_ID(GSWF_GLITZ_PIT_CONDITION_KEPT));
     } else if (result & 1) {
-        swClear(0x98B); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swClear(GSWF_ID(GSWF_GLITZ_PIT_CONDITION_KEPT));
     }
     return EVT_RETURN_DONE;
 }

@@ -557,18 +557,18 @@ static void printRanking(void) {
 
 /**
  * Script helper: arg0 is the result bitmask of the last match's special rule.
- * Bit 2 (value 4) means the rule was met and sets GSWF_TOU_LAST_RULE_MET; bit 1 or bit 0 clears it, and a result
+ * Bit 2 (value 4) means the rule was met and sets GSWF_GLITZ_PIT_CONDITION_KEPT; bit 1 or bit 0 clears it, and a result
  * with none of these bits leaves it unchanged.
  */
 USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
 
     if (result & 4) {
-        swSet(GSWF_TOU_LAST_RULE_MET); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swSet(GSWF_ID(GSWF_GLITZ_PIT_CONDITION_KEPT));
     } else if (result & 2) {
-        swClear(GSWF_TOU_LAST_RULE_MET); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swClear(GSWF_ID(GSWF_GLITZ_PIT_CONDITION_KEPT));
     } else if (result & 1) {
-        swClear(GSWF_TOU_LAST_RULE_MET); // GSWF_GLITZ_PIT_CONDITION_KEPT
+        swClear(GSWF_ID(GSWF_GLITZ_PIT_CONDITION_KEPT));
     }
     return EVT_RETURN_DONE;
 }
@@ -949,7 +949,7 @@ USER_FUNC(evt_tou_get_ranking) {
  * Fighters not yet beaten ("above" the player) and beaten ones ("below") are sorted by points,
  * with the champion, the title contenders and other fixed-position fighters forced into their slots;
  * the player's entry is put between the two groups, the table is rewritten,
- * and the player's rank is saved in GSW_TOU_PLAYER_RANK.
+ * and the player's rank is saved in GSW_GLITZ_PIT_RANK.
  */
 static void rankingControll(void) {
     s32 above[32];
@@ -1172,7 +1172,7 @@ static void rankingControll(void) {
             rank++;
         }
     }
-    swByteSet(GSW_TOU_PLAYER_RANK, rank);
+    swByteSet(GSW_ID(GSW_GLITZ_PIT_RANK), rank);
 }
 
 /** Moves arr[from] to index to, shifting the elements in between by one place. */

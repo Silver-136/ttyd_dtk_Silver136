@@ -1453,8 +1453,8 @@ void itemseq_GetItem(ItemEntry* entry) {
 #endif
                 break;
             }
-            if (entry->itemId >= ITEM_MIN && entry->itemId < ITEM_MAX && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) { // saved flag 235 (no GSWF name yet): item tutorial seen
-                swSet(0xEB); // saved flag 235: item tutorial seen
+            if (entry->itemId >= ITEM_MIN && entry->itemId < ITEM_MAX && entry->itemId != ITEM_STAR_PIECE && !swGet(GSWF_ID(GSWF_ITEM_TUTORIAL_SEEN)) && !(gp->flags & GW_FLAG_E3)) {
+                swSet(GSWF_ID(GSWF_ITEM_TUTORIAL_SEEN));
 #if VERSION <= VERSION_DEMO_JP
                 entry->subState = 3;
 #else

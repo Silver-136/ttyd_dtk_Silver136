@@ -343,9 +343,9 @@ void winLogInit(WindowWork* w) {
     w->log.cursor = 0;
     w->log.count = 0;
     winLogAddMenu(w, 0);
-    if (swByteGet(0) >= STG0_16_FRANKLYS_HOUSE) winLogAddMenu(w, 1); // GSW_STORY_PROGRESS
-    if (swByteGet(0) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4); // GSW_STORY_PROGRESS
-    if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL) winLogAddMenu(w, 2); // GSW_STORY_PROGRESS
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_16_FRANKLYS_HOUSE) winLogAddMenu(w, 1);
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_07_GOOMBELLA_JOINS) winLogAddMenu(w, 4);
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= STG0_17_BADGE_TUTORIAL) winLogAddMenu(w, 2);
     if (swGet(GSWF_ID(GSWF_GOR_ZESS_T_DISH_RECEIVED))) winLogAddMenu(w, 3);
     w->log.stoneNum = 0;
     for (i = 0; i < 7; i++) {
@@ -384,9 +384,9 @@ void winLogInit(WindowWork* w) {
     if (!strcmp(gp->currentMapName, "pik_02") || !strcmp(gp->currentMapName, "pik_03")) area = "sin";
     if (!strcmp(gp->currentMapName, "win_04") || !strcmp(gp->currentMapName, "win_05")) area = "hou";
     if (!strncmp(gp->currentMapName, "rsh", 3)) {
-        if (swByteGet(0) < STG6_27_RIVERSIDE_STATION) { // GSW_STORY_PROGRESS
+        if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG6_27_RIVERSIDE_STATION) {
             area = "gor";
-        } else if (swByteGet(0) < STG6_49_POSHLEY_HEIGHTS || swGet(GSWF_ID(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE))) { // GSW_STORY_PROGRESS, GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE
+        } else if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG6_49_POSHLEY_HEIGHTS || swGet(GSWF_ID(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE))) {
             area = "eki";
         } else if (swGet(GSWF_ID(GSWF_HOM_TRAIN_AT_POSHLEY))) {
             area = "pik";
@@ -767,13 +767,13 @@ s32 winLogMain(WindowWork* w) {
 #if VERSION <= VERSION_DEMO_JP
         for (k = 0; k < 0x5D; k++) {
             t = &tubuDt[k];
-            if (swByteGet(0) < t->id)
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->id)
                 break;
             {
 #else
         for (k = 0; k < sizeof(tubuDt) / sizeof(TubuDt); k++) {
             t = &tubuDt[k];
-            if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= t->id || tubuCheck(t->type)) {
 #endif
                 if (t->big) {
                     f32 d = distABf(bx + t->x, by + t->y, x, y);
@@ -1295,13 +1295,13 @@ void winLogDisp(CameraId cam, void* param, s32 idx) {
  * Preloaded by winMain and loaded by the Journal map.
  */
 const char* winGetMapTplName(void) {
-    if (swByteGet(0) < STG0_16_FRANKLYS_HOUSE) return "map0.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < STG1_31_FRANKLYS_HOUSE_STG_1) return "map1.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < STG2_41_FRANKLYS_HOUSE_STG_2) return "map2.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < STG3_51_FRANKLYS_HOUSE_STG_3) return "map3.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < STG4_31_FRANKLYS_HOUSE_STG_4) return "map4.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < STG5_61_FRANKLYS_HOUSE_STG_5) return "map5.tpl"; // GSW_STORY_PROGRESS
-    if (swByteGet(0) < STG6_71_FRANKLYS_HOUSE_STG_6) return "map6.tpl"; // GSW_STORY_PROGRESS
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG0_16_FRANKLYS_HOUSE) return "map0.tpl";
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG1_31_FRANKLYS_HOUSE_STG_1) return "map1.tpl";
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG2_41_FRANKLYS_HOUSE_STG_2) return "map2.tpl";
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG3_51_FRANKLYS_HOUSE_STG_3) return "map3.tpl";
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG4_31_FRANKLYS_HOUSE_STG_4) return "map4.tpl";
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG5_61_FRANKLYS_HOUSE_STG_5) return "map5.tpl";
+    if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < STG6_71_FRANKLYS_HOUSE_STG_6) return "map6.tpl";
     return "map7.tpl";
 }
 
@@ -1355,11 +1355,11 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         for (i = 0; i < sizeof(tubuDt) / sizeof(TubuDt); i++) {
             t = &tubuDt[i];
 #if VERSION <= VERSION_DEMO_JP
-            if (swByteGet(0) < t->id)
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) < t->id)
                 break;
             {
 #else
-            if (swByteGet(0) >= t->id || tubuCheck(t->type)) { // GSW_STORY_PROGRESS
+            if (swByteGet(GSW_ID(GSW_STORY_PROGRESS)) >= t->id || tubuCheck(t->type)) {
 #endif
                 if (w->log.mapSel == i) {
                     // FAKE: the texture id goes through a spare temporary tex in a comma expression; ((gp->retraceCount >> 4) & 1) ? 0xB9 : 0xBA changes the object
@@ -1369,7 +1369,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
                 }
             }
         }
-        sw = swByteGet(0); // GSW_STORY_PROGRESS
+        sw = swByteGet(GSW_ID(GSW_STORY_PROGRESS));
         id = -1;
         if (sw >= STG0_16_FRANKLYS_HOUSE && sw < STG1_16_HOOKTAIL) {
             id = ICON_SAC_DEKA;
