@@ -243,7 +243,7 @@ const char* msg_us[9] = {
 
 /**
  * The system message tables by language number (gp->language):
- * Japanese, English, German, French, Spanish, Italian.
+ * Japanese, English.
  */
 static const char** msg_tbl[2] = { msg_jp, msg_us };
 #endif
@@ -258,7 +258,8 @@ void romFontMake(void);
 
 /**
  * Returns system message msg (progressive-scan prompt, disc errors, language names) in the console's language.
- * Non-JP releases fall back to the English table when the IPL font is ASCII but gp->language is Japanese;
+ * The early demos and US and later fall back to the English table when the IPL font is ASCII but gp->language
+ * is Japanese;
  * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
  */
 const char* romFontGetMessage(s32 msg) {
@@ -553,7 +554,7 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
 
 /**
  * Returns the pixel width of the widest line of message (lines split on '\n'), using the cached glyph widths.
- * SJIS double-byte codes count as one glyph unless the US/PAL ASCII font is active.
+ * SJIS double-byte codes count as one glyph unless the ASCII font is active in US and later.
  */
 s32 romFontGetWidth(const char* message) {
 #if VERSION < VERSION_US

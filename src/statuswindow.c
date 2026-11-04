@@ -118,8 +118,8 @@ void statusWinReInit(void) {
 }
 
 /**
- * Per-frame HUD logic in the field: hidden when Mario is not himself (a transformation or another character)
- * and left alone in the Pit of 100 Trials ("yuu").
+ * Per-frame HUD logic in the field: hidden when the player character is not Mario (characterId set)
+ * and left alone in the Pianta Parlor minigames ("yuu").
  * While Mario can move it opens after he stands still for 10 seconds, closes when he walks,
  * toggles with Z (held for 10 seconds, with a sound) and pops open for 2 seconds when a value changes.
  * Then starts and runs the slide animation (16 frames in, 28 out).
@@ -540,8 +540,8 @@ void statusGetValue(StatusValue* values) {
 }
 
 /**
- * Returns TRUE when any shown value differs from what the HUD last displayed, and marks HP,
- * FP or Star Power changes for a blink.
+ * Returns TRUE when any shown value differs from what the HUD last displayed, and marks Mario's HP,
+ * FP, partner HP or coin changes for a blink.
  */
 BOOL valueCheck(void) {
     StatusValue v;
@@ -698,7 +698,7 @@ void statusWinForceCloseClear(void) {
     wp->flags &= ~(STATUS_WINDOW_FLAG_FORCE_CLOSE | STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ);
 }
 
-/** Ends a forced open or close, leaving the HUD in the matching normal state; called when message windows close. */
+/** Ends a forced open or close, leaving the HUD in the matching normal state; called by room scripts, evt_win and evt_mobj. */
 void statusWinForceOff(void) {
     if (wp->flags & STATUS_WINDOW_FLAG_FORCE_OPEN) {
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN;
@@ -808,7 +808,7 @@ void statusPartyHPBlink(s32 frames) {
 void statusWinEase(f32* f) {
     f[0] = 0.0f;
 #if VERSION >= VERSION_US
-    // US pool order: 0, 60 (framerate step), pi, 1, 0.5
+    // US and later pool order: 0, 60 (framerate step), pi, 1, 0.5
     f[4] = 60.0f;
     f[2] = 3.1415927f;
     f[1] = 1.0f;

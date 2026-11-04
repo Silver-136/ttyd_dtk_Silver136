@@ -105,7 +105,7 @@ void continueGame(void);
 
 #if VERSION <= VERSION_DEMO_JP
 s32 stone_id[7] = {ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR, ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR};
-/** Demo: a 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
+/** Early demos: a 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
 static EVT_BEGIN(evt_shake)
     CALL(evt_sub_rumble_onoff, 0, 0)
     WAIT_MS(150)
@@ -115,7 +115,7 @@ EVT_END()
 #endif
 
 /**
- * Panels of the file select menu: the four save files, then the copy, delete and back buttons and the sound
+ * Panels of the file select menu: the four save files, then the delete, copy and back buttons and the sound
  * and rumble buttons; each with its position, offsets and the panel the cursor moves to up, down, left, right.
  */
 WinDt win_dt[9] = {
@@ -184,7 +184,7 @@ void seq_loadExit(SequenceWork* seq) {
 #if VERSION >= VERSION_US
 static inline BOOL loadStart(void);
 #else
-/** Starts loading the file menu's texture file (name.tpl, per language in US and PAL); TRUE once it is loaded. */
+/** Starts loading the file menu's texture file (name.tpl, from the jp folder before US); TRUE once it is loaded. */
 static inline BOOL loadStart(void) {
 #if VERSION <= VERSION_DEMO_JP
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/window/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
@@ -278,7 +278,7 @@ void seq_loadMain(SequenceWork* seq) {
 }
 
 #if VERSION >= VERSION_US
-/** Starts loading the file menu's texture file (name.tpl, per language in US and PAL); TRUE once it is loaded. */
+/** Starts loading the file menu's texture file (name.tpl, per language in US and later); TRUE once it is loaded. */
 static inline BOOL loadStart(void) {
     const char* lang[] = {"jp", "us", "ge", "fr", "sp", "it"};
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
@@ -523,7 +523,7 @@ void loadMain(SequenceWork* seq) {
                         wp->evt->lwData[0] = 0x17;
                         wp->state++;
                     } else {
-                        // demo: the new-game setup runs once the name is in, or after the first save
+                        // early demos: the new-game setup runs once the name is in, or after the first save
                         stg0_00_init();
                         gp->saveSlot = wp->slot;
                         marioPartyKill();
@@ -1423,7 +1423,7 @@ s32 stone_id[7] = {
 #endif
 
 #if VERSION >= VERSION_JP
-/** Demo: a 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
+/** A 150 ms rumble on controller 0, as feedback when rumble is switched on in the file select options. */
 static EVT_BEGIN(evt_shake)
     CALL(evt_sub_rumble_onoff, 0, 0)
     WAIT_MS(150)

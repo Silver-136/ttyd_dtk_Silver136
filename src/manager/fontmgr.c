@@ -56,7 +56,7 @@ BinaryFontGlyph* blockGlyph;
 GXTexObj fgTexObj;
 BinaryFontHeader* pfh; //pointer to font header
 
-// US passes single-byte characters to JUTFont_CodeToGlyph zero-extended
+// US and later pass single-byte characters to JUTFont_CodeToGlyph zero-extended
 #if VERSION >= VERSION_US
 #define FONT_CH(c) ((u8)(c))
 #else
@@ -125,8 +125,8 @@ void fontmgrInit(void) {
 }
 
 /**
- * Loads the font selected by gp->language in the US and PAL releases, index 1 in the US demo,
- * and index 0 in JP and the JP demo. Does nothing once a font is loaded.
+ * Loads the font selected by gp->language in US and later (the September demos too), index 1 in the June US
+ * demo, and index 0 in JP and the JP demo. Does nothing once a font is loaded.
  */
 void fontmgrTexSetup(void) {
 #if VERSION == VERSION_DEMO_US
@@ -276,7 +276,7 @@ void FontDrawCodeMtx(Mtx mtx, u16 code) {
 }
 
 /**
- * JP and demo body of FontDrawString: draws a plain string (no tags, no line breaks) left to right from pos with
+ * JP and early-demo body of FontDrawString: draws a plain string (no tags, no line breaks) left to right from pos with
  * the current scale and outline, Shift-JIS pairs as one glyph.
  */
 static void FontDrawStringVec(Vec pos, const s8* str) {
@@ -309,12 +309,12 @@ static void FontDrawStringVec(Vec pos, const s8* str) {
 
 /**
  * Draws a single-line string at x, y with proportional spacing;
- * message tags are drawn as text in JP and the early demos and skipped in the US and PAL releases.
+ * message tags are drawn as text in JP and the early demos and skipped in US and later.
  */
-// US: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
+// US and later: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
 void FontDrawString(f32 x, f32 y, const char* msg) {
 #if VERSION >= VERSION_US
-    // US: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
+    // US and later: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
     FontDrawStringVecPitch((Vec){x, y, 0.0f}, -1.0f, (const s8*)msg);
 #else
     FontDrawStringVec((Vec){x, y, 0.0f}, (const s8*)msg);
@@ -322,7 +322,7 @@ void FontDrawString(f32 x, f32 y, const char* msg) {
 }
 
 /**
- * JP and demo: FontDrawStringPitch's copy of FontDrawStringVecPitch.
+ * JP and the early demos: FontDrawStringPitch's copy of FontDrawStringVecPitch.
  * It walks the string through a local copy (msg = str);
  * calling FontDrawStringVecPitch itself, or giving it the same copy, changes the registers.
  */
@@ -371,13 +371,13 @@ void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
 }
 
 #if VERSION >= VERSION_US
-// FAKE: auto_inline off keeps the wrappers from inlining FontDrawStringVecPitch (the US wrappers call it)
+// FAKE: auto_inline off keeps the wrappers from inlining FontDrawStringVecPitch (the US-and-later wrappers call it)
 #pragma auto_inline off
 #endif
 
 /**
  * Draws a single-line string from pos, fixed pitch or (pitch < 0) proportional;
- * the shared body of FontDrawString and FontDrawStringPitch in the US and PAL releases,
+ * the shared body of FontDrawString and FontDrawStringPitch in US and later,
  * where it also skips <tag>s.
  */
 void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
@@ -406,7 +406,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
             msg += 2;
         } else {
 #if VERSION >= VERSION_US
-            // US: skips <command> tags instead of drawing them
+            // US and later: skips <command> tags instead of drawing them
             switch (c = *msg) {
                 case '<':
                     msg = (const s8*)msgGetCommand((char*)(msg + 1), cmd, arg);
@@ -965,7 +965,8 @@ GXColor HSV2RGB(GXColor hsv) {
  * Loads font file fontname[font] (.bfn) from the disc into the default heap, finds its INF1 and GLY1 blocks,
  * sets up the glyph sheet texture and forces the widths of the space (7) and full-width space (9).
  * Does nothing once a font is loaded.
- * The US and PAL releases size the buffer for the largest of the seven font files.
+ * US and later try to size the buffer for the largest of the seven font files, but that loop opens
+ * "<root>/font/" while the fonts are in "<root>/f/", so no file opens and the buffer fits the loaded font.
  */
 void JUTFontSetup(u16 font) {
 #if VERSION >= VERSION_US
@@ -1193,7 +1194,7 @@ static inline void fontPos(const s16 x, s16 y, GXColor* hsv, u8 hue) {
  * texture coordinates of its cell in the glyph sheet,
  * a rainbow vertex colour whose hue moves with x and the frame count,
  * and random noise texture coordinates (used only when FontDrawRainbowColor or FontDrawNoise add their stage).
- * The US and PAL fonts trim 2 px off the cell.
+ * US and later trim 2 px off the cell.
  */
 void _JUTFont_DrawPos(u16 code, s16 x, s16 y) {
     s32 row;

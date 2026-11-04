@@ -605,7 +605,7 @@ void winMgrHelpInit(WinMgrEntry* entry) {
  * Per-frame input of a help (description) window:
  * counts the lines of entry->msg and, when it has more than two, scrolls two lines at a time with the C stick.
  * Used by the select lists, the item and shop windows and evt_win.
- * PAL computes the last scroll position differently.
+ * PAL and the PAL demo compute the last scroll position differently.
  */
 void winMgrHelpMain(WinMgrEntry* entry) {
     u16 lines = 0;
@@ -698,7 +698,7 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
  * Opens a selection list (list, title and help windows) and fills it by type:
  * 0 key items, 1/3/4 items (use, sell, store), 2 badges, 5 stored items, 6/7 partners to rank up,
  * 8 partner to rank down, 9/10 HP/FP/BP to raise or lower,
- * 11-16 shop stock (badge shop, sell badges, Star Piece badges, bargains, the Pit's trader, Pianta Parlor),
+ * 11-16 shop stock (badge shop, sell badges, Star Piece badges, Charlieton, Charlieton in the Pit, Pianta Parlor),
  * 17/18 the informant's lists; a negative type is a -1-terminated item id list.
  * Rows flagged 3 are greyed and refused.
  * newItem is shown first, above a divider (the item being picked up when the bag is full).
@@ -757,7 +757,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             for (i = 0; i < MAX_KEY_ITEMS; i++) {
                 id = (u16)pouchKeyItem(i);
                 if (id) {
-                    // BUG: retail's menu_skip_list has 18 entries (the early demos' 19), so this also reads the u16 after it.
+                    // BUG: from JP on menu_skip_list has 18 entries (the early demos' 19), so this also reads the u16 after it.
                     for (j = 0; j < 19; j++) {
                         if (id == menu_skip_list[j]) {
                             break;
@@ -1031,7 +1031,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_80237a2c, JP 0x80237A2C. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
-// PAL: equal prices fall back to the type order
+// PAL and the PAL demo: equal prices fall back to the type order
 s32 select_comp_starpiece(const void* a, const void* b) {
     const WinMgrSelectItem* itemA = a;
     const WinMgrSelectItem* itemB = b;
@@ -1072,7 +1072,7 @@ s32 select_comp_type(const void* a, const void* b) {
 #endif
 
 #if VERSION >= VERSION_US
-/** US: badge list sorted by (buy price * 2 + 2) / 3 */
+/** US and later: the Pianta Parlor badge list sorted by its token price, (buy price * 2 + 2) / 3 */
 s32 select_comp_bteresa(const void* a, const void* b) {
     const WinMgrSelectItem* itemA = a;
     const WinMgrSelectItem* itemB = b;
@@ -1087,7 +1087,8 @@ s32 select_comp_bteresa(const void* a, const void* b) {
 
 /**
  * The result of an item-style selection list: 0 while it is still open,
- * -1 if cancelled (or, from JP on, if the new item at the top was chosen), otherwise the chosen item id.
+ * -1 if cancelled (or, from JP on, if the new item at the top was chosen in a list that allows cancelling),
+ * otherwise the chosen item id.
  */
 s32 winMgrSelect(WinMgrSelect* sel) {
     if (sel->flags & SELECT_DONE) {
@@ -1304,7 +1305,7 @@ void select_main(WinMgrEntry* entry) {
             }
 
 #if VERSION >= VERSION_DEMO_EU
-            // PAL: moving the cursor resets the help window's text
+            // PAL and the PAL demo: moving the cursor resets the help window's text
             if (prev != sel->cursor && sel->numDescriptors >= 3) {
                 winMgrHelpInit(&wp->entries[sel->descriptorId[2]]);
             }
@@ -1354,7 +1355,7 @@ void select_main(WinMgrEntry* entry) {
 /**
  * Draws an item or badge list: icon, name and (for the sell and shop types) price per row,
  * the divider under a new item, the title by type,
- * a currency icon above the price column (one for 13, another for 16), the hand cursor and scroll arrows.
+ * a currency icon above the price column (coin; Star Piece for 13, Pianta token for 16), the hand cursor and scroll arrows.
  * From US on, worn badges in the sell list get a mark.
  */
 void select_disp(WinMgrEntry* entry) {
@@ -1858,7 +1859,7 @@ void select_disp_mario(WinMgrEntry* entry) {
 
 /**
  * Draws the informant lists: each entry's title cut at its tag end, read ones in grey,
- * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
+ * and for type 17 the price of unread entries (with a coin icon from JP on). Despite the name it serves both 17 and 18.
  */
 void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US

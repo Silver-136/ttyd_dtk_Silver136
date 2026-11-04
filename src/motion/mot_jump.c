@@ -29,7 +29,7 @@
 
 /**
  * Jump curves (speed, acceleration, jerk, snap): Mario's launch off a blue jump stand (mot_jumpStand), with its
- * fall and easing values; then the jump off a red switch, rising then falling (marioSetJumpPara).
+ * fall and easing values; then the bounce off a switch (mot_jumpSw), rising (marioSetJumpPara) then falling.
  */
 static f32 marioJumpStandData[] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 f32 marioJumpSwData[] = {2.5f, -0.1f, 0.02f, -0.01f, -0.08f, -0.4f, 0.0f, -0.002f};
@@ -51,7 +51,7 @@ static inline void chgPoseC(MarioWork* mario) {
 /**
  * Common take-off for every jump: sets the jumping flag, clears the air timers, remembers the floor jumped from,
  * detaches from riding objects, loads the jump parameters and the take-off position.
- * The US and later releases also record the run speed at take-off for the Spring Jump check in mot_fall.
+ * US and later also record the run speed at take-off for the Spring Jump check in mot_fall.
  */
 void marioPreJump(void) {
     MarioWork* mario = marioGetPtr();

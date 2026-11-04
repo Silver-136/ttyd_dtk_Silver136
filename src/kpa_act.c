@@ -97,7 +97,7 @@ USER_FUNC(kpa_score_disp_init) {
 /**
  * Adds Super Bowser coins: every 100 coins also gives 1000 points, and each pickup scores 500 per coin,
  * capped at
- * 10000. Called when Bowser touches a coin (evt_mobj).
+ * 10000. Called when a Bowser-stage ? block gives a coin (evt_mobj).
  */
 void kpaAddCoin(s32 coins) {
     s32 score;

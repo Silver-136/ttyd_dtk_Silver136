@@ -103,7 +103,7 @@ BOOL marioSlitAbilityChk(void) {
 
 /**
  * Paper Mode button state: 1 when R is held while not paper (turn sideways),
- * 2 while already paper and R is still held (or pressed at least halfway on the analog trigger),
+ * 2 while already paper and R is still held (or the analog R trigger reads 50 or more),
  * 0 otherwise or while control is off, in background mode, or (JP and later) a partner action is starting.
  */
 s32 marioSlitButton(void) {
@@ -139,7 +139,7 @@ s32 marioSlitButton(void) {
 }
 
 /**
- * FALSE while Mario is slipping through a gap or turning around a crack in Paper Mode (slit states 0x50-0x52,
+ * FALSE while Mario is slipping through a gap or dropping through a floor crack in Paper Mode (slit states 0x50-0x52,
  * 0x5A-0x5E), TRUE otherwise; marioChkKey treats FALSE as no control.
  */
 BOOL marioSlitKeyDisable(void) {
@@ -184,7 +184,7 @@ BOOL marioSlitContinueChk(void) {
 /**
  * TRUE when position p is inside a narrow crack:
  * rays 20 units to both sides (each tried from the centre and from points 10 units ahead and behind) hit walls
- * whose normals face each other within 10 degrees.
+ * whose two normal angles average to within 10 degrees of 180.
  */
 BOOL marioCreviceWallChk(const Vec* p) {
     f32 offX;
@@ -314,7 +314,7 @@ BOOL marioGetSlitFloorPos(Vec* out) {
 
 /**
  * TRUE while Mario is passing through a gap in Paper Mode (slit states 0x50-0x5E);
- * the partners and evt_mario check it.
+ * the partners check it.
  */
 BOOL marioChkSlitThrouh(void) {
     MarioWork* mario = marioGetPtr();
@@ -362,7 +362,7 @@ void motSlitContinue(void) {
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * Demo only: returns to the slit motion at the state saved
+ * The early demos only: returns to the slit motion at the state saved
  * before a step-up (or ends it, state 0x64, if none was saved).
  */
 void motSlitContinue2(void) {
@@ -447,7 +447,7 @@ static inline void slitClearFlags(MarioWork* m) {
 
 /**
  * Instantly turns Mario back from Paper Mode with no animation:
- * faces him left or right, clears the paper flags, restores his collision width,
+ * faces him left or right, clears the paper flags, sets his collision width (20 in the early demos, 10 in JP and later),
  * turns the paper look and map paper tint off, recentres the camera and returns the partners to normal.
  * Used before damage, pipes and other forced motions.
  */
@@ -487,8 +487,8 @@ void marioSlitForceCancel(void) {
 
 /**
  * Cleanup when the slit motion ends: nothing if the next motion keeps Mario paper (walk, dash, jumps, falls,
- * step-up); otherwise restores him and the partners like marioSlitForceCancel (in the US release only once the
- * turn into paper has finished; when switching to Tube Mode the partners turn back by request).
+ * step-up; in US and later only once the turn into paper has finished); otherwise restores him and the partners
+ * like marioSlitForceCancel (in US and later, when switching to Tube Mode the partners turn back by request).
  */
 void mot_slit_post(void) {
     MarioWork* mario = marioGetPtr();
@@ -639,7 +639,7 @@ void marioReInit_slit(void) {
 }
 
 /**
- * TRUE when Mario should stay paper: the paper button is held (demo: held while already paper),
+ * TRUE when Mario should stay paper: the paper button is held (early demos: held while already paper),
  * walls are close around him, or he is in a narrow crack.
  */
 static inline BOOL slitContinueChk(void) {
@@ -751,7 +751,7 @@ static inline void slitCamFix(void) {
 /**
  * Paper Mode motion (paper curse, hold R): Mario turns sideways and thin, walks and runs slowly,
  * slips through narrow gaps and bars (states 0x50-0x52, walls off while he passes),
- * squeezes through cracks (0x5A-0x5E), and turns back when R is released and there is room.
+ * drops through floor cracks (0x5A-0x5E), and turns back when R is released and there is room.
  * Scripts end it with their own animations (0x6E, 0x78).
  */
 void mot_slit(void) {

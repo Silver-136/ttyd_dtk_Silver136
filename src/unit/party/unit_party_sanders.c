@@ -116,7 +116,7 @@ static StatusVulnerability regist = {
 
 /**
  * Bobbery's normal pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze,
- * instant KO), the hurt poses, walking and running, low HP, the failed Run Away tumble, talking, item use,
+ * KO), the hurt poses, walking and running, low HP, the failed Run Away tumble, talking, item use,
  * the command menu wait, the Appeal, zero gravity, the Defend stance and plain standing.
  */
 PoseTableEntry pose_table_sanders_stay[] = {
@@ -149,7 +149,8 @@ PoseTableEntry pose_table_sanders_stay[] = {
 
 /**
  * Bobbery's pose table while Hold Fast is active (wait_event swaps it in):
- * the same poses, but he stands and idles with his fuse lit (A_3).
+ * the normal poses without the stop, dizzy, poison, confusion and freeze entries (sleep is N_2), and he stands and
+ * idles with his fuse lit (A_3).
  */
 PoseTableEntry pose_table_counter_sanders[] = {
     {POSE_TYPE_SLEEP, "N_2"},
@@ -177,7 +178,7 @@ PoseTableEntry pose_table_counter_sanders[] = {
 /**
  * Bobbery's data events: Appeal, the audience attack reaction, his move list (tag 1, __makeTechMenuFunc),
  * First Strike (nothing), the victory pose, an empty step run after a move's cost is paid (7), the battle-end
- * Hold Fast reset (retail only) and the spin when he superguards an attack (47).
+ * Hold Fast reset (JP and later) and the spin when he superguards an attack (47).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, sanders_appeal_event},
@@ -750,7 +751,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
         WAIT_MS(1000)
     END_SWITCH
 
-    // He explodes (a bigger blast for a successful command in retail), the camera shakes and stage fog clears.
+    // He explodes (a bigger blast for a successful command in JP and later), the camera shakes and stage fog clears.
     CALL(btlevtcmd_ResultAC)
     CALL(evt_snd_sfxoff, LW(14))
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK3"), 0)
@@ -1419,7 +1420,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
     WAIT_FRAMES(20)
 
     // Each successful press shows the next bomb and throws it along the aimed arc; after the third throw comes
-    // the stylish chance (retail only) and the throwing stops.
+    // the stylish chance (US and later) and the throwing stops.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_4A"))
     CALL(btlevtcmd_StartAC, 1)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
@@ -1471,7 +1472,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
         DEBUG_PUT_MSG(STRING("イベント終了"))
     END_SIBLING_EVENT
 
-    // Wait for the command and the throws to finish, refill Star Power (retail only) and end the turn.
+    // Wait for the command and the throws to finish, refill Star Power (US and later) and end the turn.
     CALL(btlevtcmd_ResultAC)
     WAIT_FRAMES(60)
     CALL(btlevtcmd_StopAC)
@@ -1706,7 +1707,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Setup for each time bomb that Bomb Squad spawns (unit_bomzou): on Bobbery's side,
+ * Setup for each time bomb that Bomb Squad spawns (unit_bomzou): in the neutral (stage-object) alliance,
  * acting before the player's turn, placed off stage until the throw moves it.
  */
 #if VERSION >= VERSION_JP

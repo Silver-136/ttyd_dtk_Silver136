@@ -355,7 +355,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
 #if VERSION >= VERSION_US
     {
 
-        // US: BP label per language (indexed by gp->language)
+        // US and later: BP label per language (indexed by gp->language)
         const char* bpLabel[7] = {"\202a\202o", "BP", "OP", "PB", "PM", "PT", "BP"};
         winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, bpLabel[gp->language]);
     }
@@ -385,7 +385,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
 /**
  * Draws the scrolling badge list for the current tab:
  * equipped highlight, icon, name, BP cost and cost pips, plus the page arrows and the Z sort hint.
- * The JP and later releases gray out badges Mario cannot afford.
+ * JP and later gray out badges Mario cannot afford.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void badge_disp(WindowWork* w, f32 xo, f32 yo) {

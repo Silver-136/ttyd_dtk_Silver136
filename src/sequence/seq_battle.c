@@ -71,7 +71,7 @@ void seq_battleInit(SequenceWork* work) {
 
     debug_battle_flag = gp->debugBattle;
 #if VERSION <= VERSION_DEMO_JP
-    // the demo starts reading the battle map now
+    // the early demos start reading the battle map now
     fbatGetPointer();
     switch (pouchGetPtr()->rank) {
         case 0:
@@ -349,7 +349,7 @@ void seq_battleMain(SequenceWork* work) {
     }
 }
 
-/** Demo versions: performs the battle setup. */
+/** The early demos: performs the battle setup, including the stage map load. */
 static void battle_init(void) {
 #endif
 

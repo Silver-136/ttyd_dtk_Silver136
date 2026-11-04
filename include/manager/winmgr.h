@@ -61,7 +61,7 @@ typedef enum WinMgrSelectItemFlags {
     SELECT_ITEM_GRAY = (1 << 0),      // 0x1, drawn grayed out
     SELECT_ITEM_DISABLED = (1 << 1),  // 0x2, cannot be chosen (error sound and help)
     SELECT_ITEM_OVER_MAX = (1 << 2),  // 0x4, level up: the stat would pass its maximum ("helperr2")
-    SELECT_ITEM_EQUIPPED = (1 << 3),  // 0x8, equipped badge (lamp icon, US only)
+    SELECT_ITEM_EQUIPPED = (1 << 3),  // 0x8, equipped badge (lamp icon, US and later)
 } WinMgrSelectItemFlags;
 
 // WinMgrSelect.flags

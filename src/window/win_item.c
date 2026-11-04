@@ -902,7 +902,7 @@ static const char* hpfp_name_table[7][2] = {
     {"HP", "FP"},
 };
 
-// The HP/FP labels in the menu language (JP: full-width only). Kept as macros: the same lookup through an
+// The HP/FP labels in the menu language (before US: full-width only). Kept as macros: the same lookup through an
 // inline function changes register allocation in itemUseDisp (US).
 #define WI_HP_NAME hpfp_name_table[gp->language][0]
 #define WI_FP_NAME hpfp_name_table[gp->language][1]
@@ -1084,7 +1084,7 @@ void itemUseDisp(WinMgrEntry* entry) {
 
 /**
  * winMgr draw callback for the small orange title window over the target list:
- * centres msg_window_select_5 in it (the US and later releases resize it to the text's line count and squeeze
+ * centres msg_window_select_5 in it (US and later resize it to the text's line count and squeeze
  * long text).
  */
 void itemUseDisp2(WinMgrEntry* entry) {

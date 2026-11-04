@@ -25,7 +25,7 @@ void peachChgPose(const char* name);
 
 /**
  * Plays Peach's footstep sounds while she walks or dashes:
- * one sound every d1 frames and the other on the frames in between that are multiples of d2.
+ * one sound every period frames and the other on the frames in between that are multiples of halfPeriod.
  * The sounds differ when she wears the X-Naut disguise and when she is invisible with no height.
  */
 static inline void peachStepSe(s32 period, s32 halfPeriod) {
@@ -52,8 +52,8 @@ static inline void peachStepSe(s32 period, s32 halfPeriod) {
 }
 
 /**
- * Condition 0 of evt_peach_set_condition: clears Peach's mood and drops the X-Naut disguise if she wears it,
- * back to her ordinary poses.
+ * Condition 0 of evt_peach_set_condition: drops the X-Naut disguise if she wears it (her mood stays);
+ * otherwise clears Peach's mood, back to her ordinary poses.
  */
 void peachSetStsNormal(void) {
     MarioWork* mario = marioGetPtr();
@@ -298,7 +298,8 @@ s32 peachMain(void) {
 /**
  * Peach's standing motion (from mot_stay): switches to walking on stick input.
  * With no condition set, after 50 seconds idle she plays P_U_1, stands again,
- * then dozes off in P_N_1 until control is taken away.
+ * then dozes off in P_N_1 until she moves (the KEY_OFF test in that state is never reached: the whole switch
+ * runs only without KEY_OFF).
  */
 void peach_stay(void) {
     MarioWork* mario = marioGetPtr();
@@ -429,7 +430,7 @@ void peach_dash(void) {
 
 /**
  * Peach's talking motion (from mario_motion): stops her and turns her to the talk pose.
- * In the PAL release she returns to the standing pose after 60 frames while in the X-Naut disguise.
+ * In the PAL demo and PAL she returns to the standing pose after 60 frames while in the X-Naut disguise.
  */
 void peach_talk(void) {
     MarioWork* mario = marioGetPtr();
@@ -449,7 +450,7 @@ void peach_talk(void) {
         peachChgPose("P_T_1");
     }
 #if VERSION >= VERSION_DEMO_EU
-    // PAL: while transformed, the talk pose drops back to the stand pose after 60 frames
+    // PAL demo and PAL: while transformed, the talk pose drops back to the stand pose after 60 frames
     switch (mario->currSubMotionId) {
         case 10:
             if (--mario->multiTimer <= 0) {

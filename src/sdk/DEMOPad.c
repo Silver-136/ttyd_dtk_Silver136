@@ -1,4 +1,4 @@
-// DEMOPad: the SDK demo-library pad reader (button edges, repeat, stick directions) used by makeKey.
+// DEMOPad: the SDK demo-library pad reader (button edges, stick directions) used by makeKey, which adds the auto-repeat.
 
 #include <demo/DEMOPad.h>
 

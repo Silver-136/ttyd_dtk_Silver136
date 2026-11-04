@@ -112,7 +112,7 @@ BattleWeapon partyWeapon_ClaudaNormalAttack = {
 /**
  * Gale Force (btl_wn_pwd_lv1, 4 FP), run by partyClaudaAttack_BreathAttack: no damage, hits every enemy and can
  * blow them out of the battle. The script applies a copy of it (_make_breath_weapon) whose gale chance comes
- * from the press-and-release command.
+ * from the press-A-repeatedly command.
  */
 BattleWeapon partyWeapon_ClaudaBreathAttack = {
     "btl_wn_pwd_lv1", // name
@@ -160,8 +160,8 @@ BattleWeapon partyWeapon_ClaudaBreathAttack = {
 
 /**
  * Lip Lock (btl_wn_pwd_lv2, 3 FP), run by partyClaudaAttack_PredationAttack: a kiss on one enemy that pierces
- * defence; the damage comes from the press-on-the-light command (the script's copy, _make_kiss_weapon), and
- * Flurrie regains the HP she drains.
+ * defence; the damage is the press-on-the-light command's level plus one (weaponGetACOutputParam; the script's
+ * copy, _make_kiss_weapon, changes nothing), and Flurrie regains the HP she drains.
  */
 BattleWeapon partyWeapon_ClaudaPredationAttack = {
     "btl_wn_pwd_lv2", // name
@@ -207,7 +207,7 @@ BattleWeapon partyWeapon_ClaudaPredationAttack = {
 
 /**
  * Dodgy Fog (btl_wn_pwd_lv3, 4 FP), run by partyClaudaAttack_KumoGuard: always hits one ally, no damage, and makes
- * it Dodgy; the script's copy (_make_kumoguard_weapon) sets the turns from the timed stick command.
+ * it Dodgy; the script's copy (_make_kumoguard_weapon) sets the turns from the timed shown-button command.
  */
 BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     "btl_wn_pwd_lv3", // name
@@ -436,7 +436,8 @@ EVT_END()
 
 /**
  * Flurrie's Body Slam: she floats over the enemy and drops onto it,
- * the action command deciding whether the slam connects at full strength, then floats back home.
+ * the action command deciding whether the slam connects at all (a failed command deals no damage), then floats
+ * back home.
  */
 EVT_BEGIN(partyClaudaAttack_NormalAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))

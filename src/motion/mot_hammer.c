@@ -54,7 +54,7 @@ s32 se_data[] = {
     ITEM_ATTACK_FX_P, PSND_SFX_MARIO_HAMMER_PIKKYO_P1,
 };
 
-/** Light camera shake when a level-1 (plain Hammer) swing hits something solid. */
+/** Light camera shake at the impact frame of every swing with the plain Hammer (level 1). */
 EVT_BEGIN(lv1quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 90)
     RETURN
@@ -80,7 +80,7 @@ static inline BOOL chkRevDir(f32 angle) {
 
 /**
  * The hammer swing direction: 180 (left) or 0 (right) from Mario's facing,
- * turned 30 degrees towards the camera when Mario shows his back.
+ * turned 30 degrees when Mario shows his back.
  */
 // The hammer swing direction: straight left or right, turned 30 degrees when Mario faces away from the camera.
 static inline f32 hamDir(MarioWork* mario) {
@@ -141,8 +141,8 @@ s32 marioGetHammerLevel(void) {
 /**
  * Normal hammer swing (B button): picks the swing pose for the hammer level,
  * checks what the hammer will hit (hitEstimate) and plays a clang or a breakable-block swing,
- * shakes the camera per level on impact, spawns the hit effect,
- * plays the Attack FX badge sound in place of the swing sound when one is equipped,
+ * shakes the camera per level on impact, spawns the hit effect (JP and later),
+ * plays the Attack FX badge sound in place of the wooden impact sound when one is equipped,
  * then returns to standing after about 20 frames.
  */
 void mot_hammer(void) {
@@ -484,7 +484,7 @@ static inline void h2LightOn(void) {
 /**
  * Spin hammer motion (Super and Ultra Hammer): Mario winds up while B is held,
  * raising the charge level (hammerChargeLv, camera zooms in each level),
- * then spins around hitting everything nearby; level 3 spins longer. Ends back in the stay motion.
+ * then spins around hitting everything nearby; level 3 spins fastest and turns the most. Ends back in the stay motion.
  */
 void mot_hammer2(void) {
     MarioWork* mario = marioGetPtr();
@@ -723,8 +723,8 @@ f32 marioGetAngleKaitenHammer(void) {
 
 
 /**
- * Cleanup when the spin hammer motion ends early:
- * paper animation off, camera shift reset and the facing and mirror locks released.
+ * Cleanup run whenever the spin hammer motion ends:
+ * paper animation off, camera shift reset and the facing and (JP and later) mirror locks released.
  */
 void mot_ham2_post(void) {
     MarioWork* mario = marioGetPtr();
@@ -756,7 +756,7 @@ void mot_ham2_post(void) {
 /**
  * Probes in front of Mario where the hammer will land and returns the hit object, or NULL;
  * *out gets the hit kind (0 nothing, 4/5/6 a wall or object at high, middle or low height,
- * 7 something just above Mario's head height) that picks the swing pose and sound.
+ * 7 something just above Mario's head height) that picks the swing pose, effect and length.
  */
 #if VERSION <= VERSION_DEMO_JP
 static HitEntry* hitEstimate(s32* out) {
@@ -902,7 +902,10 @@ HitEntry* hitEstimate(s32* out) {
     return hit;
 }
 
-/** Names of the small and big blocks that only a level 1, 2 or 3 hammer (Hammer, Super, Ultra) can break. */
+/**
+ * Early demos: not_fullswing_mobj, a list of map object kinds that nothing reads.
+ * Then the names of the small and big blocks that only a level 1, 2 or 3 hammer (Hammer, Super, Ultra) can break.
+ */
 #if VERSION <= VERSION_DEMO_JP
 const char* not_fullswing_mobj[] = {
     "MOBJ_RedJumpStand",

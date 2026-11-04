@@ -383,7 +383,10 @@ void marioChgMotAuto(void) {
     }
 }
 
-/** Cleanup when the stay motion ends: stops the idle sound and the charge-up voice. */
+/**
+ * Cleanup when the stay motion ends: stops the idle sound and the charge-up voice
+ * (JP and later keep the voice when the next motion is the spin hammer or the Spring Jump).
+ */
 void mot_stay_post(void) {
     MarioWork* mario;
 #if VERSION >= VERSION_JP

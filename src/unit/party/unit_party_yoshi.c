@@ -75,7 +75,7 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_EGG_KIND 0       // random 0-2 on egg parts 2-7: pose table (0 pose_table_egg_g, 1 pose_table_egg_y, 2 pose_table_egg_p) and Yoshi's throw poses (PYS_A2_*, PYS_A3_*, PYS_A4_*)
 #define PARTS_WORK_WEAPON 2         // weapon the egg hits with (partyWeapon_YoshiEggAttack_Minimini); _egg_attack_event passes it to CheckDamage
-#define PARTS_WORK_TARGET 3         // target unit of this egg (part 2: the selected target; parts 3-7: ChoiceSamplingEnemy picks)
+#define PARTS_WORK_TARGET 3         // target unit of this egg (parts 2-7: each a ChoiceSamplingEnemy pick)
 #define PARTS_WORK_TARGET_PART 4    // target part of this egg (pairs with slot 3)
 #define PARTS_WORK_PRECHECK 5       // CommandPreCheckDamage result for this egg (1 hit; 2 miss, 3 lucky, 6 dodgy start the matching StartAvoid)
 #define PARTS_WORK_LAST_AT_TARGET 6 // -1 while sorting; 1 the last egg aimed at its target (CheckDamage with the final-hit flag), 0 an earlier egg at the same target (no final-hit flag), 2 the last egg after an earlier one already hit (pre-checked without evasion)
@@ -341,7 +341,7 @@ EVT_END()
 
 /**
  * Init for Yoshi: registers his wait, attack, damage, confusion and entry scripts and his walk,
- * run and jump sounds, clears UW_YOSHI_GROUND_POUND_ACTIVE
+ * run and jump sounds, clears unit work 2 (Ground Pound sets it to 1 from its run-up until the first pound)
  * and loads the model for his hatched colour.
  */
 static EVT_BEGIN(init_event)
@@ -1228,8 +1228,8 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
 
-    // Roll against the enemy's swallow rate: on a pass he spits it out (as a shot at the enemies behind with
-    // attribute 2), with the rating effect and a stylish chance.
+    // Roll 0-99 against the enemy's swallow rate: at or above it he spits it out (as a shot at the enemies behind
+    // with attribute 2), with the rating effect and a stylish chance.
     CALL(evt_sub_random, 99, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), LW(7))
         BEGIN_INLINE_EVENT
@@ -1616,7 +1616,8 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
         GOTO(26)
     END_IF
 
-    // Decide in advance whether each egg connects; once an egg hits an enemy, the later eggs at it cannot miss.
+    // Decide in advance whether each egg connects; once an earlier egg hits an enemy, the last egg at it is
+    // pre-checked without evasion.
     SET_VALUE(LW(12), 2)
     LABEL(28)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_LAST_AT_TARGET, LW(0))
@@ -2121,7 +2122,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Idle (retail position; the demo defines it near the top of the file): plays the stay pose from the pose table. */
+/** Idle (JP and later position; the early demos define it near the top of the file): plays the stay pose from the pose table. */
 #if VERSION >= VERSION_JP
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -2292,8 +2293,8 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_calc_param) {
 
 /**
  * Runs the flutter set up by btl_yoshi_yoroyoro_jump_calc_param one frame per call:
- * drifts unit args[0] toward the target while bobbing up and down, sets the slide sound volume in UW_YOSHI_SLIDE_SOUND_PERCENT,
- * and spawns a sweat drop every 20 frames. Blocks until the 180 frames are over, then snaps to the target.
+ * drifts unit args[0] toward the target while bobbing up and down, sets the step sound pitch scale in
+ * UNIT_WORK_STEP_PITCH_SCALE, and spawns a sweat drop every 21 frames. Blocks until the 180 frames are over, then snaps to the target.
  */
 USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
     BattleWork* wp = _battleWorkPointer;
@@ -2365,7 +2366,7 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
 
 /**
  * Pose sound callback for Yoshi's walk, run and flutter poses:
- * plays the footstep sound at volume UW_YOSHI_SLIDE_SOUND_POWER * UW_YOSHI_SLIDE_SOUND_PERCENT / 100.
+ * plays the footstep sound at pitch UNIT_WORK_STEP_PITCH * UNIT_WORK_STEP_PITCH_SCALE / 100.
  */
 void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
     BtlUnit_snd_se(unit, s->sfxName, EVT_NULLPTR, (s16)(unit->work[UNIT_WORK_STEP_PITCH] * unit->work[UNIT_WORK_STEP_PITCH_SCALE] / 100)); // the slide sound's pitch
@@ -2447,7 +2448,7 @@ USER_FUNC(_check_swallow_attribute) {
 
 /**
  * Blocks until the Stampede herd of unit args[0] exists
- * and its average position (work timer) has crossed the stage centre, so the attack can start hitting enemies.
+ * and its average X position (meanX) has crossed the stage centre, so the attack can start hitting enemies.
  */
 USER_FUNC(_wait_yoshig_run) {
     BattleUnit* unit;
@@ -2532,7 +2533,7 @@ static inline s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
  * Runs the Stampede herd for unit args[0]: allocates 256 running Yoshi sprites (work stored in
  * countersetWeapon), moves them each frame with dust puffs and a run sound that follows the herd's average X,
  * draws them, and frees the work and stops the sound when all are across.
- * The US and PAL releases cap the herd's depth at 65 instead of 80.
+ * US and later cap the herd's depth at 65 instead of 80.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_gundan_yoshi_run_effect) {
@@ -2623,7 +2624,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
     return EVT_RETURN_BLOCK;
 }
 
-/** Draws one Stampede Yoshi (later releases). */
+/** Draws one Stampede Yoshi (JP and later; the early demos draw all 256 in one call). */
 #if VERSION <= VERSION_DEMO_JP
 static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     YoshiGundanPart* p;

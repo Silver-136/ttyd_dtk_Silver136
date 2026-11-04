@@ -1,4 +1,4 @@
-// Item table (itemDataTable): names, icons, prices, sort order, HP/FP values and use scripts of every item and badge.
+// Item table (itemDataTable): names, icons, prices, sort order, HP/FP/SP values, BP costs and battle weapon data of every item and badge.
 
 #include "version.h"
 #include "data/item_data.h"

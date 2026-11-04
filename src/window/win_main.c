@@ -879,7 +879,7 @@ EVT_BEGIN(evt_lecture_msg)
 EVT_END()
 #else
 OPCODE_END_SCRIPT,
-    0 // US and the US demo: a trailing zero word in the object (the JP gap_05 data word)
+    0 // the US demo: a trailing zero word in the object (the JP gap_05 data word)
 };
 #endif
 
@@ -900,7 +900,7 @@ static USER_FUNC(itemUseFunc) {
     CALL(lecture_key_mask_off)
     RETURN
 #if VERSION >= VERSION_US
-EVT_END_PAD() // US: the script ends with one zero word (object 0x1E4 bytes)
+EVT_END_PAD() // US and later: the script ends with one zero word (object 0x1E4 bytes)
 #else
 EVT_END()
 #endif
@@ -1120,7 +1120,7 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     FontDrawMessageMtx(trans, buf);
 }
 
-/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
+/** Early-demo winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
 #else
@@ -1206,7 +1206,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     FontDrawStringMtx(trans, buf);
 }
 
-/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
+/** Early-demo winFontSetEdge: always formats into a 1 KB buffer. */
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     Mtx trans;
@@ -1566,7 +1566,7 @@ void winIconInit(void) {
 
 /**
  * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
- * used for badges that cost more BP than Mario has left.
+ * used for grayed-out (SELECT_ITEM_GRAY) entries in winmgr's select windows.
  */
 void winIconGrayInit(void) {
     winTexInit(NULL);

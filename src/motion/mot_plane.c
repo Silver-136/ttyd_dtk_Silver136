@@ -130,7 +130,7 @@ s32 marioPlaneGetFlyingDir(void) {
 
 /**
  * 0 when Mario is not in the plane motion, 2 while gliding (sub-motions 12-19), 1 during take-off or landing.
- * Used by evt_mario and the camera and shadow code in mario.c.
+ * Used by evt_mario and mario.c's pause-menu check (marioCheckMenuDisable).
  */
 s32 marioGetPlaneStatus(void) {
     MarioWork* mp = marioGetPtr();
@@ -221,7 +221,7 @@ static inline f32 planeCamFloor(void) {
 /**
  * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
  * then glides with the stick pitching it up and down (flyMain); A or B or a key-off lands him.
- * Handles landing on the ground, hitting walls (falling back to the jump motion),
+ * Handles landing on the ground or against a wall, hitting a ceiling (dropping straight down),
  * dropping into water (splash, then the water damage motion) and the camera following the flight.
  */
 void mot_plane(void) {
@@ -348,7 +348,7 @@ void mot_plane(void) {
         break;
     }
 #if VERSION >= VERSION_US
-    // US: per-map floor below which the camera stops following the plane
+    // US and later: per-map floor below which the camera stops following the plane
     if (mp->position.y < planeCamFloor()) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
         camFollowYOff();
@@ -556,7 +556,10 @@ void mot_plane(void) {
 
 #define PI 3.1415927f
 
-/** TRUE when the floor under the plane has one of the attributes 0x38 that stop the glide. */
+/**
+ * TRUE when the floor under the plane has one of the attributes 0x38 (0x8 and the plane panel bits 0x10/0x20);
+ * over such a floor flyMain speeds the plane up (to 2) and keeps its dive limit at -22.
+ */
 static inline BOOL planeChkUnder(void) {
     BOOL ret = FALSE;
     MarioWork* mario = marioGetPtr();

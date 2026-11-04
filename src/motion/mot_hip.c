@@ -21,8 +21,8 @@
 #include "mot/mot_hip.h"
 
 
-// Ids of the two hip-drop sounds (the drop sound and Mario's voice): US keeps them in MarioWork.soundId[3..4],
-// JP in the hip motion work.
+// Ids of the two hip-drop sounds (the drop sound and Mario's voice): US and later keep them in
+// MarioWork.soundId[3..4], JP and the early demos in the hip motion work.
 #if VERSION >= VERSION_US
 #define HIP_SFX_DROP (mario->soundId[3])
 #define HIP_SFX_VOICE (mario->soundId[4])
@@ -46,7 +46,7 @@ EVT_END()
 s32 chkground(void);
 
 /**
- * TRUE when the spin jump should start: Mario has been airborne at least 10 frames past the jump peak,
+ * TRUE when the spin jump should start: Mario is past the jump peak and reached it at least 10 frames into the jump,
  * A was just pressed and he has the Super Boots or better. Checked from the jump motions in mario_motion.c.
  */
 BOOL marioChkHipAttack(void) {
@@ -74,7 +74,7 @@ BOOL marioChkHipBump(void) {
     return ret;
 }
 
-// The hip-drop sounds. The US code looks MarioWork up again inside these helpers (its build has the extra
+// The hip-drop sounds. The US and later code looks MarioWork up again inside these helpers (its build has the extra
 // marioGetPtr calls) and starts each sound only when it is not already playing.
 static inline void hip_snd_reset(MarioWork* mario) {
 #if VERSION >= VERSION_US
@@ -339,7 +339,7 @@ void mot_hip(void) {
 /**
  * Landing check for the spin jump: 0 while in the air,
  * 1 when the floor sent Mario into the water (0x200) or spike (0xC00) damage motion, 2 for a normal landing.
- * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL release).
+ * Also resets the spin rotation and turns camera y-follow back on (not in background mode in the PAL demo and PAL).
  */
 s32 chkground(void) {
     MarioWork* mario;

@@ -98,7 +98,7 @@ static StatusVulnerability regist = {
 /**
  * Mario's pose table: animations for each status (sleep, stop, dizzy, poison, confusion, freeze, instant KO),
  * the hurt poses, walking and running, item use, the low-HP pants, the Happy Heart / Happy Flower
- * cheer, the kiss reactions (retail only), the failed Run Away tumble, the command menu wait, the Appeal,
+ * cheer, the kiss reactions (JP and later), the failed Run Away tumble, the command menu wait, the Appeal,
  * zero gravity, the Defend stance and plain standing.
  */
 PoseTableEntry pose_table_mario_stay[] = {
@@ -151,7 +151,7 @@ PoseTableEntry pose_table_object[] = {
 /**
  * Mario's data events: Appeal, the audience attack reaction, First Strike (nothing), Life Shroom revival,
  * death, the victory pose, the readied jump attack, the Yoshi-riding battle entry
- * and the counter after a dodge.
+ * and the spin when he superguards an attack.
  */
 BattleDataEntry data_table_mario[] = {
     {UNIT_DATA_APPEAL_EVENT, mario_appeal_event},
@@ -303,7 +303,7 @@ EVT_END()
 /**
  * Mario's battle entry (data tag 0x41) used instead of battle_entry_event
  * when he entered the battle in field motion 0x1A:
- * he runs from offstage to the partner's spot, hops from there to his home position,
+ * he runs from offstage to the partner's spot, hops 60 units on from there, runs to his home position,
  * then waits for the stand pose loop.
  * Motion 0x1A is MARIO_MOTION_YOSHI (battle_seq.c picks this event then), so Mario arrives riding Yoshi
  * and jumps off.
@@ -349,7 +349,12 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 };
 #endif
 
-/** Empty: Mario's actions come from the player's menu choices, not a unit attack script. */
+/**
+ * Init for battle Mario: registers the wait, attack, damage and confusion scripts, his jump/walk/run sounds and
+ * pose sound table, clears the pinch-voice counter (unit work 8) and the fireball part work, applies the
+ * L/W Emblem model, sets battle_entry_event as the entry, and between Trading Places and Back to Normal turns
+ * him into the silhouette (_mario_makkuro_set).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -548,7 +553,7 @@ EVT_END()
 /**
  * Mario's death (data tag 49): camera zooms in on him, he collapses with the fainted voice and pose,
  * and the unit is killed about four seconds later.
- * The US and later releases also lock the camera's height and reset its offset.
+ * US and later also lock the camera's height and reset its offset.
  */
 EVT_BEGIN(mario_dead_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -711,7 +716,7 @@ EVT_END()
  * Audience-attack reaction: Mario runs off the stage,
  * reappears in the audience and hammers the chosen audience member,
  * using the swing poses and sounds of his current hammer level, then returns home.
- * The US and later releases add a follow-through pose and walk him back through the audience area.
+ * JP and later add a follow-through pose and walk him back through the audience area.
  */
 EVT_BEGIN(btlataudevtMarioHammer)
     // Mario runs off the side of the stage.
@@ -866,6 +871,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 #endif
 
+/** Empty: Mario's actions come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()

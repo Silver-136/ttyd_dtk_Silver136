@@ -305,7 +305,7 @@ TubuDt tubuDt[] = {
  * Sets up the Journal when the pause menu opens:
  * adds the entries unlocked by story progress (map always; Tattle log once Goombella joins;
  * Crystal Stars at Frankly's; badge log after the badge tutorial;
- * recipe log once unlocked), spawns the seven Crystal Star effects (unowned ones dark),
+ * recipe log once unlocked), spawns the seven Crystal Star effects (as many lit, in table order, as Mario owns; the rest dark),
  * finds Mario's spot on the world map for the current area, and builds the sorted badge,
  * recipe and Tattle lists with their found counts.
  */
@@ -323,7 +323,7 @@ void winLogInit(WindowWork* w) {
  * Sets up the Journal when the pause menu opens:
  * adds the entries unlocked by story progress (map always; Tattle log once Goombella joins;
  * Crystal Stars at Frankly's; badge log after the badge tutorial;
- * recipe log once unlocked), spawns the seven Crystal Star effects (unowned ones dark),
+ * recipe log once unlocked), spawns the seven Crystal Star effects (as many lit, in table order, as Mario owns; the rest dark),
  * finds Mario's spot on the world map for the current area, and builds the sorted badge,
  * recipe and Tattle lists with their found counts.
  */
@@ -1453,7 +1453,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
 /**
  * Draws the Tattle log page: the known/total count,
  * 16 entries in two columns with their log numbers (unknown enemies as "???",
- * in retail, Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
+ * from JP on, Doopliss as "?" until his name is guessed), page arrows and the Z sort hint.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void monoshiriGX(WindowWork* w, f32 x, f32 y) {

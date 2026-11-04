@@ -454,7 +454,7 @@ s32 winRootMain(WindowWork* w) {
     return 0;
 }
 
-// FAKE: stand-in that nothing calls; it only places 185.0f and 1000.0f in this object's constant pool.
+// FAKE: stand-in that nothing calls; it only places 185.0f and 1000.0f (180.0f in the early demos) in this object's constant pool.
 // Removing it changes the object.
 void winRootStrippedPool(f32* f) {
     f[0] = 185.0f;
@@ -731,7 +731,7 @@ void winBgGX(WindowWork* wp, s32 type, f32 x, f32 y) {
  * Per-frame logic of the help box at the bottom of the menu:
  * slides it in on open (16 frames) and out on close (state 10),
  * and scrolls its text two lines per C-stick up/down with a sound.
- * The US release freezes the scrolling while a letter is being read (item.state 202).
+ * US and later freeze the scrolling while a letter is being read (item.state 202).
  */
 void winMsgMain(WindowWork* wp) {
     switch (wp->msgState) {
@@ -793,7 +793,7 @@ void winMsgMain(WindowWork* wp) {
 /**
  * Draws the help box at offset (x, y): the frame, the item icon when msgItem > 0,
  * the title plate when msgName is set (shifted left for msgItem -2;
- * the US release squeezes titles over 210 wide), the text scrolled by msgLine,
+ * US and later squeeze titles over 210 wide), the text scrolled by msgLine,
  * and blinking scroll arrows when it has more than two lines.
  * "msg_lottery_number" gets the Lottery Pick number filled in.
  */
@@ -831,7 +831,7 @@ void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
         fw = FontGetMessageWidth(m);
         winNameGX(wp, 1, (x - 120.0f) + ofs, ny = 8.0f + (16.0f + by), 240.0f, 32.0f);
 #if VERSION >= VERSION_US
-        // US: long names are squeezed to 210 wide
+        // US and later: long names are squeezed to 210 wide
         if (fw > 210.0f) {
             fw = 210.0f;
         }
@@ -943,7 +943,7 @@ static inline void winRootTexQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f
  * Draws a "kirinuki" (cut-out) inset panel of w x h at (x, y) from 8-pixel corner and edge pieces,
  * used for the boxes inside the pages.
  * Type 1 adds a tab under the bottom-right edge for the Badges page's remaining-BP label;
- * the US release sizes that tab to the "msg_menu_badge_nokori" text instead of a fixed 90.
+ * US and later size that tab to the "msg_menu_badge_nokori" text instead of a fixed 90.
  */
 void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
 #if VERSION < VERSION_US
@@ -979,7 +979,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         winRootTexQuad(wp, 0xE, x + w - 8, y - (h - 8), 8, 8);
     } else {
 #if VERSION >= VERSION_US
-        // US: the tab under the frame is sized to the "remaining" label
+        // US and later: the tab under the frame is sized to the "remaining" label
         f32 nk = 0.5f * FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) + 60.0f;
 #endif
         winRootTexQuad(wp, 0xB, x, y, 8, 8);
@@ -1658,7 +1658,7 @@ WinSortData sort_8[] = {
 WinSortData* sort_data[] = {sort_1, sort_2, sort_3, sort_4, sort_5, sort_6, sort_7, sort_8};
 #endif
 
-/** Items list by name (pouchSortItem 0, reversed 7), then rebuilds the page list. */
+/** Items list by name (pouchSortItem 0, reversed 7), then rebuilds the Important Items list (winMakeSkipList). */
 void sort_1_1_func(WindowWork* wp) {
     s32 sel = wp->item.cursor[0];
     s32 mode;
@@ -1735,7 +1735,7 @@ void sort_3_2_func(WindowWork* wp) {
 
 /**
  * All badges by BP cost (pouchSortItem 6, reversed 13).
- * The demo sorts by name first; retail just repeats the BP sort.
+ * The early demos sort by name first; JP and later just repeat the BP sort.
  */
 void sort_3_3_func(WindowWork* wp) {
     s32 sel = wp->badge.sel[0];
@@ -1756,7 +1756,7 @@ void sort_3_3_func(WindowWork* wp) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** The demo sorts the equipped list through the pouch, like the owned list. */
+/** The early demos sort the equipped list through the pouch, like the owned list. */
 static void sort_4_1_func(WindowWork* wp) {
     pouchSortItem(!wp->sortRev ? 4 : 11);
     wp->sortRev = 1 - wp->sortRev;
@@ -1925,7 +1925,7 @@ void sort_4_3_func(WindowWork* wp) {
 }
 
 
-/** Journal badge log by name, retail: names normalized through pouchHiraToKata first. */
+/** Journal badge log by name, JP and later: names normalized through pouchHiraToKata first. */
 s32 compare_func5_1(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
@@ -2031,7 +2031,7 @@ void sort_5_2_func(WindowWork* wp) {
 
 /**
  * Journal badge log by BP cost.
- * The demo sorts by name first, then bubbles by BP cost only; its first press puts the highest cost first.
+ * The early demos sort by name first, then bubble by BP cost only; their first press puts the highest cost first.
  */
 void sort_5_3_func(WindowWork* wp) {
     if (!wp->sortRev) {
@@ -2117,7 +2117,7 @@ void sort_5_3_func(WindowWork* wp) {
     wp->log.badge.idx = wp->log.badge.cursor / 28;
 }
 
-/** Journal recipe log by name, retail: names normalized through pouchHiraToKata first. */
+/** Journal recipe log by name, JP and later: names normalized through pouchHiraToKata first. */
 s32 compare_func6_1(const void* a, const void* b) {
 #if VERSION <= VERSION_DEMO_JP
     const s16* ea = a;
@@ -2255,7 +2255,7 @@ void sort_7_1_func(WindowWork* wp) {
 
 /**
  * Returns the place-sort rank of a tattle entry's location tag ("menu_monosiri_<area>"):
- * its index in tbl, or 0 if unknown. Retail moves the Excess Express (rsh) after the hom and eki maps.
+ * its index in tbl, or 0 if unknown. JP and later move the Excess Express (rsh) after the hom and eki maps.
  */
 static inline u32 getMonosiriPlace(const char* place) {
     static char* tbl[] = {
@@ -2340,7 +2340,7 @@ void sort_7_2_func(WindowWork* wp) {
     wp->log.enemyPage = wp->log.enemySel / 16;
 }
 
-/** Tattle Log by name, retail: normalized, with Doopliss's entries under his current name. */
+/** Tattle Log by name, JP and later: normalized, with Doopliss's entries under his current name. */
 #if VERSION >= VERSION_JP
 s32 compare_func3(const void* a, const void* b) {
     char buf1[128];
@@ -2370,7 +2370,7 @@ s32 compare_func3(const void* a, const void* b) {
 
 #if VERSION >= VERSION_JP
 
-/** Reverse of compare_func3 (retail). */
+/** Reverse of compare_func3 (JP and later). */
 s32 compare_func3_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
@@ -2399,7 +2399,7 @@ s32 compare_func3_r(const void* a, const void* b) {
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** Demo Tattle Log name comparison: compares the entries' enemyTag messages directly. */
+/** Early-demo Tattle Log name comparison: compares the entries' enemyTag messages directly. */
 static s32 compare_func3(const void* a, const void* b) {
     const WinSortEnt* ea = a;
     const WinSortEnt* eb = b;
@@ -2411,7 +2411,7 @@ static s32 compare_func3(const void* a, const void* b) {
     return strcmp(sa, sb);
 }
 
-/** Reverse of compare_func3 (demo). */
+/** Reverse of compare_func3 (early demos). */
 static s32 compare_func3_r(const void* a, const void* b) {
     const WinSortEnt* ea = a;
     const WinSortEnt* eb = b;
@@ -2505,8 +2505,8 @@ void sort_8_2_func(WindowWork* wp) {
 /**
  * Per-frame input for the sort menu while it is open (sortActive):
  * up/down picks an option, A runs its sort, B closes with a sound,
- * Start closes silently (the US release checks Start first).
- * The EU release clears sortRev whenever the cursor moves.
+ * Start closes silently (US and later check Start first).
+ * The PAL demo and PAL clear sortRev whenever the cursor moves.
  * While open it points the cursor hand at the option and shows the option's help text.
  */
 void winSortMain(WindowWork* wp) {
@@ -2518,7 +2518,7 @@ void winSortMain(WindowWork* wp) {
         rep = 0;
     }
 #if VERSION >= VERSION_US
-    // US: Start is checked before B, the stick and A, so it closes the sort menu even when one of them is pressed too
+    // US and later: Start is checked before B, the stick and A, so it closes the sort menu even when one of them is pressed too
     if (trg & PAD_BUTTON_START) {
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;

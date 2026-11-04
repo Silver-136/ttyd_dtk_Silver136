@@ -318,7 +318,7 @@ s32 winMarioMain(WindowWork* w) {
 void winMarioMain2(void) {
 }
 
-/** US and PAL use ASCII digits; JP and the early demos use full-width digits. */
+/** US and later use ASCII digits; JP and the early demos use full-width digits. */
 const char* winZenkakuStr(s32 n) {
 #if VERSION <= VERSION_DEMO_JP
     const char* tbl[10] = {"０", "１", "２", "３", "４",
@@ -464,7 +464,7 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
 
 /**
  * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,
- * the Star Power gauge, Star Points, coins, Star Pieces, Shine Sprites and play time (capped at 99:59),
+ * the Star Power gauge, Star Points, coins, Star Pieces, Shine Sprites and play time (capped at 99:59; the early demos cap only the hours at 99),
  * Mario's model, and the special-move list when open.
  */
 void winMarioDisp(s32 camId, void* param, s32 idx) {

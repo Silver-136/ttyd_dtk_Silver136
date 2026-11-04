@@ -1,4 +1,5 @@
-// Bowser's motions in the side-scrolling interludes: walk, jump, fall, power-ups and damage.
+// Bowser's motions in his interludes (3D maps and side-scrolling stages): stand, walk, dash, jump, fall, ground
+// pound, swim, power-ups and damage.
 
 #include "version.h"
 #include "mario/mario.h"
@@ -31,13 +32,13 @@ s32 _rateTbl[4] = {0, 0, 0, 0};
 s32 _rateTbl2[4] = {0, 0, 0, 0};
 f32 scaleDt[9] = {1.0f, 0.0f, 2.0f, 1.0f, 3.0f, 2.0f, 4.0f, 3.0f, 5.0f};
 
-/** Small 30-frame camera shake when big or giant Bowser lands (quake_kpaLandOn). */
+/** Small 30 ms camera shake when big or giant Bowser lands (quake_kpaLandOn). */
 EVT_BEGIN(quake_kpaLandOn_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 30)
     RETURN
 EVT_END()
 
-/** Stronger 60-frame camera shake for Bowser's ground pound landing. */
+/** Stronger 60 ms camera shake for Bowser's ground pound landing. */
 EVT_BEGIN(quake_kpaHipAttack_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 60)
     RETURN
@@ -74,7 +75,7 @@ static inline s32 kpa_stay_chk(void) {
 
 /**
  * Spawns the water droplet effect around swimming Bowser:
- * on every frame of the stroke (sub-states 0x1E/0x1F),
+ * on every frame of sub-states 0x1E/0x1F (a stroke has ended and his downward speed is braked),
  * otherwise every 10 frames while rising and every 30 while sinking.
  */
 static inline void kpa_swim_splash(void) {
@@ -447,7 +448,7 @@ void kpa_jump(void) {
 /**
  * Falling motion for Bowser (a non-Bowser player just gets Mario's fall pose):
  * turns camera follow back on near the ground, marks entering the water in kpa_03
- * and switches to swimming once fully underwater. Retail keeps the fire pose while breathing fire.
+ * and switches to swimming once fully underwater. JP and later keep the fire pose while breathing fire.
  */
 void kpa_fall(void) {
     MarioWork* mario = marioGetPtr();
@@ -645,7 +646,7 @@ void kpaSetSpec(void) {
 }
 
 /**
- * Power-up motion: flickers Bowser's scale between the old and new level size in five 5-frame steps (scaleDt),
+ * Power-up motion: flickers Bowser's scale between the old and new level size in nine 5-frame steps (scaleDt),
  * then applies the new collision, shifts the camera for his size and returns to standing;
  * reaching giant also starts star invincibility.
  */
@@ -767,7 +768,7 @@ void kpa_powdown(void) {
 #pragma dont_inline on
 /**
  * Underwater horizontal movement: accelerates kpaSpeed from the stick up to 40
- * and turns it into a walking speed (retail caps it at 2, the demo at 1 and also moves him here).
+ * and turns it into a walking speed (JP and later cap it at 2; the early demos cap it at 1 and also move him here).
  */
 #if VERSION <= VERSION_DEMO_JP
 static void kpaSwimMove(void) {

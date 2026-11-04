@@ -8,7 +8,8 @@
 /**
  * Program entry: initialises the game (marioStInit),
  * then loops forever running one game update (marioStMain) and one draw (marioStDisp) per frame,
- * recording the update and render times in OS ticks in gp->deltaGame and gp->deltaRender.
+ * recording in OS ticks the time from the frame start to the end of the update (gp->deltaGame) and to the end of
+ * the render (gp->deltaRender).
  */
 int main(void) {
     OSTick base_tick;

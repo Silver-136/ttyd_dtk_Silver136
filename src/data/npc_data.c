@@ -404,7 +404,8 @@ NpcTribeInfo npcTribe[] = {
 
 /**
  * Movement types a map's setup file can give a field NPC (Japanese names: none, standing, test enemy,
- * 2D Blooper, 2D X-Naut, wandering): flags and the init, move, defeat, spotted and blow-away scripts.
+ * the field enemy kinds, the 2D kinds, wandering): flags and the init, move, defeat, spotted, lost, return
+ * and blow-away scripts.
  */
 NpcAiInfo npc_ai_type_table[] = {
     {"なし", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL},

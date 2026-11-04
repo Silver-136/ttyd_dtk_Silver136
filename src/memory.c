@@ -26,7 +26,7 @@ SmartWork smartWork;
 
 //.sdata
 #if VERSION >= VERSION_US
-// US: no fixed battle heap (battle maps use a map sub-heap); the smart heap is index 4
+// US and later: no fixed battle heap (battle maps use a map sub-heap); the smart heap is index 4
 #define HEAP_COUNT 5
 #define SMART_HEAP 4
 #else
@@ -64,7 +64,7 @@ u32 R_battlemapalloc_size;
 BOOL g_bFirstSmartAlloc;
 void* R_battlemapalloc_base_ptr;
 void* mapalloc_base_ptr;
-// US map heap: callers pass the heap base; battle maps get their own sub-heap
+// US and later map heap: callers pass the heap base; battle maps get their own sub-heap
 #define MAPBASE_PARAM void* base_,
 #define MAPBASE ((MapAllocEntry*)base_)
 #else
@@ -86,7 +86,7 @@ u32 count;
 #endif
 
 #if VERSION <= VERSION_DEMO_JP
-// demo: the smart heap is a fixed 7 MiB block taken from the default heap
+// early demos: the smart heap is a fixed 7 MiB block taken from the default heap
 #define SMART_ALLOC_HEAP HEAP_DEFAULT
 #define SMART_HEAP_SIZE 0x700000
 #else
@@ -148,7 +148,7 @@ void memInit(void) {
 
 /**
  * Turns the whole HEAP_MALLOC heap into one free map heap block for _mapAlloc.
- * JP and the demo also reset the allocation id counter.
+ * JP and the early demos also reset the allocation id counter.
  */
 static inline void mapallocInit(void) {
 // the declaration order differs per version (it sets which callee-saved register holds each)
@@ -220,7 +220,7 @@ void __memFree(HEAP_TYPE heap, void* ptr) {
 
 #if VERSION >= VERSION_US
 /**
- * US and PAL: carves a 0x64000-byte sub-heap out of the map heap for the battle's own map allocations (battle.c
+ * US and later: carves a 0x64000-byte sub-heap out of the map heap for the battle's own map allocations (battle.c
  * allocates from it). Called when a battle starts (seq_battle); replaces JP's fixed battle heap.
  */
 // Descriptive name (not in the symbol maps).
@@ -237,7 +237,7 @@ void battleMapAlloc(void) {
     entry->inuse = 0;
 }
 
-/** US and PAL: returns the battle map sub-heap to the map heap when the battle ends (seq_battle). */
+/** US and later: returns the battle map sub-heap to the map heap when the battle ends (seq_battle). */
 // Descriptive name (not in the symbol maps).
 void battleMapFree(void) {
     (_mapFree)(mapalloc_base_ptr, R_battlemapalloc_base_ptr);
@@ -360,7 +360,7 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
 }
 
 #if VERSION >= VERSION_US
-#pragma dont_inline on // US battleMapFree calls it
+#pragma dont_inline on // battleMapFree (US and later) calls it
 #endif
 
 void (_mapFree)(MAPBASE_PARAM void* alloc) {
@@ -406,7 +406,7 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
 #endif
 
 /**
- * Allocates a fixed 7 MiB block from the default heap in the early demos, or the dedicated smart heap minus 32 bytes in retail,
+ * Allocates a fixed 7 MiB block from the default heap in the early demos, or the dedicated smart heap minus 32 bytes in JP and later,
  * and resets its 0x800 block descriptors: all free, nothing allocated.
  * The first smartAlloc after this also frees group 3.
  */

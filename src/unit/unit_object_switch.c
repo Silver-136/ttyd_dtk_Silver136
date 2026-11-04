@@ -71,7 +71,8 @@ BattleUnitKind unit_object_switch = {
 };
 
 /**
- * The switch takes no damage reduction and has no elemental defence; every hit just triggers its wobble.
+ * The switch takes no damage reduction and has no elemental defence; a hit wobbles it, a final hit plays the
+ * map's switch_a animation (damage_event).
  */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};

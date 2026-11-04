@@ -14,7 +14,7 @@
 #include "party/party_vivian.h"
 
 #if VERSION != VERSION_JP
-// US has no local duplicates of these: use the global functions
+// only JP has local duplicates of these; every other version uses the global functions
 #define bomhei_init_800BFBB0 bomhei_init
 #define kuribo_init_800C23B4 kuribo_init
 #define vivian_init_801809C0 vivian_init

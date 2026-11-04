@@ -56,10 +56,7 @@ typedef struct MotShipWork {
     Vec harborPos;                // 0x3C: docking target (checkHarbor)
 } MotShipWork;                    // size 0x48
 
-/**
- * Plays SFX_MARIO_SHIP1_1 four times, 12 frames apart,
- * at the position in LW(0..2) while Mario spins and folds into the paper boat.
- */
+/** Tuning values of Mario's paper boat: water drag and slowing, drift rates, the speed limit (2.0) that also caps the whirlpool push. */
 #if VERSION <= VERSION_DEMO_JP
 f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 #endif
@@ -94,7 +91,7 @@ EVT_BEGIN(sound_evt2)
     RETURN
 EVT_END()
 
-/** Tuning values of Mario's paper boat: water drag and slowing, drift rates, the whirlpool push limit (2.0). */
+/** Tuning values of Mario's paper boat: water drag and slowing, drift rates, the speed limit (2.0) that also caps the whirlpool push. */
 #if VERSION >= VERSION_JP
 f32 shipData[6] = {-0.05f, -0.7f, 0.02f, 0.02f, 2.0f, 0.01f};
 #endif
@@ -179,7 +176,7 @@ s32 marioShipChanging(void) {
 }
 
 /**
- * Pushes the boat for msec milliseconds with strength a toward angle b (degrees), added to its drift each frame;
+ * Pushes the boat for msec milliseconds with strength speed toward angle (degrees), added to its drift each frame;
  * the Pianta Parlor boat minigame (yuu_01) uses it for its random currents.
  */
 void marioSetSwirlPower(s32 msec, f32 speed, f32 angle) {

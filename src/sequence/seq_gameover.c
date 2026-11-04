@@ -1,5 +1,6 @@
-// seq_gameOverInit, seq_gameOverExit and evt_snd_bgm_unpause are in src/event/evt_snd.c
-// (0x80077EC4..0x80077F88); in the original that code is the tail of this file.
+// In JP and later, seq_gameOverInit, seq_gameOverExit and evt_snd_bgm_unpause are in src/event/evt_snd.c
+// (JP 0x80077EC4..0x80077F88); in the original that code is the tail of this file. The early demos define
+// seq_gameOverInit and seq_gameOverExit below.
 #include "version.h"
 #include "driver/camdrv.h"
 #include "driver/fadedrv.h"

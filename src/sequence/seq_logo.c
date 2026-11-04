@@ -58,7 +58,7 @@ static s32 logoAsyncFirst(void);
 /**
  * Releases: on a cold start, NTSC asks for progressive scan when the cable allows it (always when it is saved,
  * or with B held); PAL always asks 50 Hz or 60 Hz, preselecting the saved EURGB60 choice. The September demos
- * ask nothing: they pick 60 Hz or progressive scan themselves, then wait 2 s for the TV.
+ * ask nothing: they pick 60 Hz or progressive scan themselves when they can, and then wait 2 s for the TV.
  */
 void seq_logoInit(SequenceWork* work) {
 #if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
@@ -166,7 +166,7 @@ void seq_logoInit(SequenceWork* work) {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * The early demos always start interlaced; the US demo also starts the logo files loading
+ * The early demos always start interlaced; the US demo also starts reading the first data archive
  * and preloads the E3 demo's models and textures.
  */
 void seq_logoInit(SequenceWork* work) {
@@ -215,7 +215,7 @@ void seq_logoExit(SequenceWork* work) {
 /**
  * Logo sequence: the three logos (1 s each, 500 ms fades) while sound groups load,
  * then the dmo_00 opening (skipped with A or Start to the title), or the kiosk menu on kiosk builds.
- * US and PAL first show the story screen; JP and the early demos read and decode the first data archive before leaving.
+ * US and PAL first show the story screen (the September demos skip it); JP and the early demos read and decode the first data archive before leaving.
  */
 void seq_logoMain(SequenceWork* work) {
     static OSTime time;
@@ -553,7 +553,7 @@ void logoDisp(CameraId camId, void* param) {
         GXGetViewportv(viewport);
         GXGetScissor(&sciLeft, &sciTop, &sciWidth, &sciHeight);
 #if VERSION >= VERSION_DEMO_EU
-        // PAL: 50 Hz while the 50/60 Hz question is up, then the chosen mode
+        // PAL and the PAL demo: 50 Hz on a cold start before state 3, otherwise the saved 50/60 Hz mode
         if ((!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) && ((SequenceWork*)param)->state < 3) {
             rmode = &sRMObjHReso;
         } else if (OSGetEuRgb60Mode() != 1) {
@@ -835,7 +835,10 @@ void logoDisp(CameraId camId, void* param) {
 
 #if VERSION < VERSION_US
 
-/** JP and the demo start reading the first data file while the logos show */
+/**
+ * JP and the early demos read the first data file asynchronously; JP and the US demo start it in seq_logoInit,
+ * so it loads while the logos show, the JP demo only after the logos.
+ */
 static s32 logoAsyncFirst(void) {
     return fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
 }
@@ -889,7 +892,8 @@ void dummy_draw(CameraId camId, void* param) {
 /**
  * Video-mode prompt: left/right toggles, A confirms, and 10 s idle picks the current choice.
  * PAL selects 50 or 60 Hz; the other versions select interlaced or progressive scan.
- * JP and the early demos show the result for 2 s before switching the video mode.
+ * JP, the early demos and PAL show the result for 2 s before switching the video mode; US and the
+ * September US demo switch first and show it after.
  * param is unused.
  */
 #if VERSION < VERSION_US

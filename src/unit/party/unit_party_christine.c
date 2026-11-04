@@ -355,7 +355,8 @@ BattleWeapon partyWeapon_ChristineMonosiri = {
 
 /**
  * Multibonk (btl_wn_pkr_lv2, 3 FP), run by partyChristineAttack_RenzokuAttack: like Headbonk, but she keeps
- * bonking the same enemy until a timed press is missed, each hit weaker than the last.
+ * bonking the same enemy until a timed press is missed or the bonk limit (mario_get_renzoku_count_max) is reached,
+ * each hit weaker than the last.
  */
 BattleWeapon partyWeapon_ChristineRenzokuAttack = {
     "btl_wn_pkr_lv2", // name
@@ -533,7 +534,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     END_INLINE_EVENT
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
-        // Later bonks: she jumps straight up and spins once on the way down.
+        // Later bonks: she jumps straight up and turns half a revolution (6 x 30 degrees) on the way down.
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         ADD(LW(2), 5)
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 14, 0)
@@ -1285,7 +1286,8 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     MULTIPLY(LW(14), 45)
     CALL(evt_eff, STRING(""), STRING("kiss"), 1, LW(0), LW(1), LW(2), LW(14), 0, 0, 0, 0, 0, 0, 0)
 
-    // On success Mario blushes, hearts rise from him and he gains another move; on failure nothing happens.
+    // On success Mario blushes, hearts rise from him and he gains another move; on failure the move is only checked as a hit
+    // without its status (DAMAGE_RESULT_NO_STATUS).
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
 #if VERSION <= VERSION_DEMO_JP
         IF_BITS_SET(LW(6), 2)
@@ -1694,7 +1696,7 @@ USER_FUNC(_dictionary) {
 /**
  * Rally Wink effect on unit args[0]: if it has no moves left this turn it gets one more,
  * otherwise it is flagged for an extra move.
- * The US and later releases also raise its max moves and mark Rally Wink when it is slowed.
+ * JP and later also raise its max moves and mark Rally Wink when it is slowed.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_set_hustle) {

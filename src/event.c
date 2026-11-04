@@ -1064,8 +1064,8 @@ void stg3_06_init(void) {
 /**
  * Story point STG3_07 "Minors - 9th Pl." (tou_10):
  * marks the lowest Glitz Pit fighter as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19),
- * stores 19 in GSW_GLITZ_PIT_LAST_OPPONENT, and clears GSWF_GLITZ_PIT_MATCH_RESERVED and marks the Goomba Bros.
- * match scenes and the first-match follow-up as seen.
+ * stores 19 in GSW_GLITZ_PIT_LAST_OPPONENT, and clears GSWF_GLITZ_PIT_MATCH_RESERVED, marks the Goomba Bros.
+ * match scenes as seen and sets GSWF_GLITZ_PIT_CONDITION_KEPT.
  */
 void stg3_07_init__9(void) {
     int i;
@@ -2039,7 +2039,7 @@ void stg6_44_init(void) {
 }
 
 /**
- * Story point STG6_46 "Engineer" (rsh_00_a) in the US and PAL releases,
+ * Story point STG6_46 "Engineer" (rsh_00_a) in US and later,
  * STG6_47_00 "Baggage Car Smorgs" (rsh_05_a) in JP and the early demos: delivers mail 0x15;
  * sets GSWF_MAIL_PA_PATCH_SENT.
  */

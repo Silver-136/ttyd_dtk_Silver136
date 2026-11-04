@@ -113,7 +113,7 @@ static void _partyEntry(s32 flag) {
  * 2/3 spin and shrink into a vertical pipe, 1 spins and grows back out of one, 0 just spins in place,
  * 5 tumbles and shrinks into a sideways pipe, 4 tumbles and grows out of a sideways pipe.
  * Ends in the stay motion once Mario is out.
- * The US and later releases flip the sideways exit tumble to match the facing.
+ * US and later flip the sideways exit tumble to match the facing.
  */
 void mot_dokan(void) {
     MarioWork* mario = marioGetPtr();

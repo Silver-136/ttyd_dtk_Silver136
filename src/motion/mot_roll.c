@@ -28,9 +28,9 @@ typedef struct MotRollWork {
     s32 squashState;    // 0x0C: y-scale squash state machine (1.4 / back to 1.0)
     s32 squashTimer;     // 0x10, never accessed
 #if VERSION >= VERSION_US
-    s32 sfxId;          // 0x14: US only, rolling sound (PSND_SFX_MARIO_ROLL_MOVE1), -1 when off
+    s32 sfxId;          // 0x14: US and later only, rolling sound (PSND_SFX_MARIO_ROLL_MOVE1), -1 when off
 #endif
-} MotRollWork;          // size 0x14 JP, 0x18 US
+} MotRollWork;          // size 0x14 before US, 0x18 US and later
 
 
 f32 roll_grx;
@@ -249,14 +249,14 @@ s32 marioRollKeyDisable(void) {
 
 /**
  * Marks the roll as script-driven (roll flag 0x100);
- * set by evt_mario's move commands while they move Mario in Tube Mode.
+ * set by evt_mario_jump_pos while it moves Mario in Tube Mode.
  */
 void setRollEvtFlag(void) {
     MarioWork* mario = marioGetPtr();
     mario->mot.roll.flags |= ROLL_FLAG_EVT;
 }
 
-/** Clears the script-driven roll flag once evt_mario's move ends. */
+/** Clears the script-driven roll flag once evt_mario_jump_pos ends. */
 void clrRollEvtFlag(void) {
     MarioWork* mario = marioGetPtr();
     mario->mot.roll.flags &= ~ROLL_FLAG_EVT;
@@ -339,8 +339,8 @@ s32 marioRollTryCancel(void) {
 }
 
 /**
- * Starts unrolling (sub-motion 0x14) unless Tube Mode is locked or there is a ceiling overhead;
- * returns 1 if it started. Called from evt_mario.
+ * Starts unrolling (sub-motion 0x14) unless Tube Mode is locked (the early demos also refuse under a
+ * ceiling); returns 1 if it started. Called from evt_mario.
  */
 s32 marioRollCancel(void) {
 #if VERSION <= VERSION_DEMO_JP
@@ -369,7 +369,7 @@ s32 marioRollCancel(void) {
 #endif
 
 /**
- * Cleanup when the roll motion ends: stops the roll sound, resets the camera shift,
+ * Cleanup when the roll motion ends: stops the roll sound (JP and later), resets the camera shift,
  * turns Mario to face left or right on screen, restores his normal collision (marioSetSpec),
  * clears Tube Mode and the paper animation, frees the motion's work and dismounts the partners.
  */
@@ -1308,7 +1308,8 @@ void mot_roll(void) {
 }
 
 /**
- * Starts climbing a small step while rolling: Mario rises to mario->stepUpY over 3 frames.
+ * Starts climbing a small step while rolling: Mario rises 4 units a frame for 3 frames (the velocity
+ * toward mario->stepUpY is computed first, then overwritten).
  * Called from mario_hit.c when the step ahead is 5-11 units high.
  */
 void roll_upstairs_on(void) {
@@ -1362,8 +1363,8 @@ void mot_fall_roll(void) {
 }
 
 /**
- * Tilts the tube to the slope of the ground under Mario (offsets it along the floor normal when the slope is
- * under 45 degrees).
+ * Offsets the tube's display position by the slope of the ground under Mario when the slope is under
+ * 45 degrees (the side ray cast for steeper slopes has no effect).
  */
 static inline void marioRollCan(void) {
     MarioWork* mario = marioGetPtr();

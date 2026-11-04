@@ -95,7 +95,7 @@ s32 evt_do(EventEntry* entry) { // 5
 
 /**
  * END_LOOP: jumps back to the loop body while the count has not run out, else pops the loop level.
- * A count of 0 never ends; counts at or below -10000000 are variable references (LW, GW, ...) decremented in the
+ * A count of 0 never ends; counts below -10000000 are variable references (LW, GW, ...) decremented in the
  * variable.
  */
 s32 evt_while(EventEntry* entry) { // 6
@@ -1212,7 +1212,7 @@ s32 evt_readf_n(EventEntry* entry) { // 73
     offset = evtGetValue(entry, args[1]);
     // BUG: reads the table word through readAddr (as an integer) and converts it, where the other readf
     // commands read it through readfAddr as a float
-    evtSetFloat(entry, index, entry->readAddr[offset]); // retail reads the entry as an integer (readAddr, not readfAddr) and converts it
+    evtSetFloat(entry, index, entry->readAddr[offset]); // every version reads the entry as an integer (readAddr, not readfAddr) and converts it
 
     return EVT_RETURN_DONE;
 }
@@ -1738,7 +1738,8 @@ s32 evt_end_inline(EventEntry* entry) { // 109
 
 /**
  * BEGIN_SIBLING_EVENT: starts the commands up to END_SIBLING_EVENT as a brother event,
- * which is deleted when this event is; copies the UW/UF bases, owner and read cursor but not LW/LF.
+ * which is deleted when this event is; copies the UW/UF bases, owner and read cursor (LW/LF are copied by
+ * evtBrotherEntry).
  * This event continues after the block.
  */
 s32 evt_brother_evt(EventEntry* entry) { // 110

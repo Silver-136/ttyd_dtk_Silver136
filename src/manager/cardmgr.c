@@ -106,7 +106,7 @@ CardData* cardGetFilePtr(void) {
 /**
  * Cancels any card access in flight and resets the in-memory save file to an empty header and four erased slots;
  * the memory card scripts call it before loading the file again.
- * The demo keeps its insert-watch flag across the reset.
+ * Clears every flag, the insert watch included (the early demos keep the insert-watch bit).
  */
 void cardBufReset(void) {
     s32 timeout;
@@ -166,7 +166,7 @@ void cardInit(void) {
 // Descriptive name (not in the symbol maps); placeholder unk_800b0ed0, JP 0x800B0ED0. See docs/NAME_PROVENANCE.md.
 /**
  * Starts watching slot A for a card being inserted or removed (memcard_watch_start);
- * also keeps cardIsExec busy for 10 frames while the probe settles. Not in the demo.
+ * also keeps cardIsExec busy for 10 frames while the probe settles. Not in the early demos.
  */
 void cardInsertWatchStart(void) {
     wp->prevInserted = wp->chan;
@@ -174,7 +174,6 @@ void cardInsertWatchStart(void) {
     wp->flags |= CARD_FLAG_INSERT_WATCH;
 }
 
-/** Stops the insert watch and clears its changed flag. */
 // Descriptive name (not in the symbol maps); placeholder unk_800b0eac, JP 0x800B0EAC. See docs/NAME_PROVENANCE.md.
 /** Stops the insert watch and clears its changed flag. */
 void cardInsertWatchEnd(void) {
@@ -182,9 +181,11 @@ void cardInsertWatchEnd(void) {
     wp->flags &= ~(CARD_FLAG_INSERT_CHANGED | CARD_FLAG_INSERT_WATCH);
 }
 
-/** TRUE once a card was inserted or removed in slot A since cardInsertWatchStart; the file select scripts poll it. */
 // Descriptive name (not in the symbol maps); placeholder unk_800b0e80, JP 0x800B0E80. See docs/NAME_PROVENANCE.md.
-/** TRUE once a card was inserted or removed in slot A since cardInsertWatchStart; the file select scripts poll it. */
+/**
+ * TRUE once a card was inserted or removed in slot A since cardInsertWatchStart;
+ * the memory card scripts check it (memcard_watch_chk) before a format or create.
+ */
 BOOL cardInsertChanged(void) {
     if (wp->flags & CARD_FLAG_INSERT_WATCH && wp->flags & CARD_FLAG_INSERT_CHANGED) {
         return TRUE;
@@ -1272,7 +1273,7 @@ static void make_data(void) {
 
 /** Card-removed callback for CARDMountAsync; does nothing. */
 void mountDetachCallback(s32 chan, s32 result) {
-    ; //stubbed in retail
+    ; //empty
 }
 
 /**

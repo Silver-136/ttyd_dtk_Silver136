@@ -133,7 +133,7 @@ static void __DEMOInitRenderMode(GXRenderModeObj* mode) {
 
 /**
  * Boot-time setup: OS, DVD, VI, pads, render mode, frame buffers,
- * the game's heaps (memInit) and GX with its FIFO (0x60000 bytes in the demo, 0x64000 later).
+ * the game's heaps (memInit) and GX with its FIFO (0x60000 bytes in the early demos, 0x64000 in JP and later).
  */
 void DEMOInit(GXRenderModeObj* mode) {
     OSInit();

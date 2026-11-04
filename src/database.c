@@ -26,7 +26,7 @@ u32 size;
 /**
  * Loads the map's enemy setup file (m/<map>/s; setup/<map>/setup.xml in the early demos) from the map archive
  * or the disc into ptr/size.
- * Skipped for muj_20 while the story progress (GSW 0, written as the raw value 0xF5DE0180) is 2,
+ * Skipped for muj_20 while the story progress (GSW_STORY_PROGRESS) is 2 (STG0_02_MARIOS_HOUSE),
  * leaving ptr NULL. Called by the map-change sequence.
  */
 void setupDataLoad(const char* mapName) {
@@ -91,7 +91,7 @@ BOOL setupDataCheck(void) {
     return TRUE;
 }
 
-/** Looks up mapName in _map_attr_data; returns the NULL-named terminator entry when the map is not listed. */
+/** Looks up name in _map_attr_data; returns the NULL-named terminator entry when the map is not listed. */
 static inline MapAttrEntry* findMapAttr(const char* name) {
     MapAttrEntry* p = _map_attr_data;
     for (;;) {

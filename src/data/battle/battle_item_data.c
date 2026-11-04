@@ -310,7 +310,7 @@ EVT_BEGIN(ItemEvent_Recovery)
 EVT_END()
 
 /**
- * The common opening of the support items: the camera closes in, Mario steps forward (enemies stay put),
+ * The common opening of the support items: the camera closes in, a user on Mario's side steps forward (enemies stay put),
  * holds the item up and it is consumed.
  */
 EVT_BEGIN(ItemEvent_Support_Sub_UseDeclere)
@@ -822,7 +822,7 @@ BattleWeapon ItemWeaponData_Tankobu = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** POW Block: a POW Block appears above Mario, he hits it and every enemy takes 2 damage as the stage shakes. */
+/** POW Block: a POW Block appears above the user, who hits it, and every enemy takes 2 damage as the stage shakes. */
 EVT_BEGIN(ItemEvent_Pow_Block)
     // The camera closes in on the user; on the player's side they first walk forward.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -1060,7 +1060,7 @@ EVT_BEGIN(ItemEvent_Fire_Flower)
     RETURN
 EVT_END()
 
-/** Fire Flower: fireballs on every enemy, with a chance to burn (ItemEvent_Fire_Flower). */
+/** Fire Flower: fireballs on every enemy, fire damage only (no burn chance) (ItemEvent_Fire_Flower). */
 BattleWeapon ItemWeaponData_Fire_Flower = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3470,7 +3470,7 @@ BattleWeapon ItemWeaponData_SpaceFood = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Icicle Pop (Zess T. cooking): restores 10 HP (ItemEvent_RecoveryAndStatus). */
+/** Icicle Pop (Zess T. cooking): restores 15 FP (item table) (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_IceCandy = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3510,7 +3510,7 @@ BattleWeapon ItemWeaponData_IceCandy = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Zess Frappe (Zess T. cooking): restores 20 HP (ItemEvent_RecoveryAndStatus). */
+/** Zess Frappe (Zess T. cooking): restores 20 FP (item table) (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_NancyFrappe = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3550,7 +3550,7 @@ BattleWeapon ItemWeaponData_NancyFrappe = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Snow Bunny (Zess T. cooking): restores 15 HP but freezes the eater (ItemEvent_RecoveryAndStatus). */
+/** Snow Bunny (Zess T. cooking): restores 15 HP but may freeze the eater (50%) (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_SnowRabbit = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -4215,9 +4215,8 @@ BattleWeapon ItemWeaponData_FutarideForever = {
 };
 
 /**
- * Thrown cooked dishes (Zess Dynamite, Coconut Bomb, Egg Bomb and others):
- * the dish's icon is thrown in an arc at the target, which takes the dish's damage;
- * Zess Dynamite also shows fire pillars and the cook's ghostly image, the bombs explode.
+ * Fire Pop (Zess T. cooking), early demos only: restores 20 FP and deals 1 fire damage to the eater
+ * (ItemEvent_RecoveryAndStatus).
  */
 #if VERSION <= VERSION_DEMO_JP
 BattleWeapon ItemWeaponData_FireCandy = {
@@ -4637,7 +4636,7 @@ typedef struct ThrowWork {
 } ThrowWork;
 
 /**
- * Picks a random target of weapon args[0] among the alliance args[3]'s opponents
+ * Picks a random target of weapon args[0] among the units of alliance args[3] (the user's opponents)
  * and returns it in args[1] (unit) and args[2] (part), or -1 and -1 if there is none.
  * Used by Shooting Star's falling stars.
  */
@@ -4727,7 +4726,7 @@ USER_FUNC(_hpfp_change_declare_1) {
 
 /**
  * Blinks the HP and FP readouts for 120 frames when unit args[0] is Mario or a partner, after Point Swap.
- * The JP and later releases clear any earlier blink first.
+ * JP and later clear any earlier blink first.
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(_hpfp_change_declare_2) {
@@ -4988,7 +4987,7 @@ USER_FUNC(_full_ap_recover) {
 /**
  * Trial Stew: a dark cloud over the target, then its HP drops to 1,
  * its FP to 0 and the party's Star Power fills;
- * the early demos play the cooking sound once, the releases after each hit.
+ * the early demos play the cooking sound once, JP and later after each hit.
  */
 EVT_BEGIN(ItemEvent_LastDinner)
     SET_VALUE(LW(12), PTR(&ItemWeaponData_PoisonKinoko))

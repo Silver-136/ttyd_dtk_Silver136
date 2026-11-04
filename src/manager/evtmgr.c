@@ -460,8 +460,8 @@ EventEntry* evtRestart(EventEntry* entry) {
 /**
  * Runs every active event once per frame (from mariost.c), highest priority first,
  * skipping stopped events and ones waiting on a child.
- * Each event runs as many commands as its speed allows until one yields;
- * a command returning 1 ends the whole pass for this frame.
+ * Each event gets one evtmgrCmd run (commands until one blocks or yields) per unit of its speed;
+ * an evtmgrCmd result of 1 (a command returned a negative code) ends the whole pass for this frame.
  * Also advances each event's lifetime by the frame's time (capped after long stalls).
  */
 void evtmgrMain(void) {
@@ -652,7 +652,7 @@ void evtStart(EventEntry* entry, u32 type) {
     }
 }
 
-/** Pauses the event with this id (and its children and brothers) regardless of type. */
+/** Pauses the event with this id (and its children and brothers) for type mask 0xEF (every bit but 0x10). */
 void evtStopID(s32 eventId) {
     EventWork* wp = evtGetWork();
     EventEntry* entry = wp->entries;
@@ -665,7 +665,7 @@ void evtStopID(s32 eventId) {
     }
 }
 
-/** Resumes the event with this id (and its children and brothers) regardless of type. */
+/** Resumes the event with this id (and its children and brothers) for type mask 0xEF (every bit but 0x10). */
 void evtStartID(s32 eventId) {
     EventWork* wp = evtGetWork();
     EventEntry* entry = wp->entries;

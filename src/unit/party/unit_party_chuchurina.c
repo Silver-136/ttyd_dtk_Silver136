@@ -1603,7 +1603,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
 
-    // Stylish hit: a cheerful pose and she dashes home; otherwise (before JP, a dizzy pose first) she runs home.
+    // Stylish hit: a cheerful pose and she dashes home; otherwise (in the early demos, a fallen pose PCH_D_3 first) she runs home.
     SWITCH(LW(6))
         CASE_GREATER_OR_EQUAL(2)
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
@@ -2245,7 +2245,7 @@ static EVT_BEGIN(attack_audience_event)
         WAIT_MS(1000)
     END_SIBLING_EVENT
 
-    // She runs out of the audience, re-enters from the other side of the stage and walks home.
+    // She runs out of the audience, re-enters from the stage edge she left by and walks home.
     CALL(btlevtcmd_ftof, 35, LW(0))
     WAIT_FRAMES(LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -2480,7 +2480,7 @@ USER_FUNC(_get_itemsteal_param) {
 
 /**
  * Kiss Thief's steal from target args[0].
- * With action command result args[2] bit 2 set and room in the pouch,
+ * With AC_RESULT_SUCCESS (0x2) set in action command result args[2] and room in the pouch,
  * takes its held item (or, if none, a weighted roll of its drop table, falling back to a coin),
  * clears the item from the field battle setup and unequips it if it was a badge.
  * Returns the item in args[1], or 0 when nothing is stolen.

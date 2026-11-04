@@ -37,7 +37,7 @@ static f32 angleABTBL[] = { 1.0f,       1.273187f,  1.27303f,   1.272768f,  1.27
 
 /**
  * The build date and time of this release (from R_build.c);
- * the title screen shows them while Z is held.
+ * the title screen shows them while Z is held in debug mode (JP and later).
  */
 const char* build_date_ptr = R_build_date;
 const char* build_time_ptr = R_build_time;
@@ -54,13 +54,13 @@ const char* getMarioStDvdRoot(void) {
 }
 
 #if VERSION >= VERSION_DEMO_EU
-/** PAL keeps the assertion helpers that JP and US strip. */
+/** The PAL demo and PAL keep the assertion helpers that the other versions strip. */
 BOOL __assert(const char* filename, int line, const char* assertion) {
     OSPanic(filename, line, assertion);
     return TRUE;
 }
 
-/** PAL only: assertion failure with a printf-style message; formats it and halts with OSPanic. */
+/** PAL demo and PAL only: assertion failure with a printf-style message; formats it and halts with OSPanic. */
 BOOL __assert2(const char* filename, int line, const char* assertion, const char* message, ...) {
     char buf[1024];
     va_list args;
@@ -187,8 +187,8 @@ f32 angleABf(f32 x1, f32 y1, f32 x2, f32 y2) {
 
 /**
  * Interpolates from start to end at step currStep of steps, along curve mode:
- * 0 linear, 1-3 accelerating (power 2-4), 4-6 decelerating, 7-11 overshoot,
- * wobble ("bururun") and bounce curves, 12 sine ease-out, 13 cosine ease-in.
+ * 0 linear, 1-3 accelerating (power 2-4), 4-6 decelerating, 7-10
+ * wobble ("bururun") and bounce curves, 11 sine ease-in-out, 12 sine ease-out, 13 cosine ease-in.
  * Any other mode value is called as a custom curve function. Returns end when steps is 0.
  * Used everywhere for movement, fades and camera moves.
  */
@@ -566,7 +566,7 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
  */
 void makeKey(void) {
 #if VERSION <= VERSION_DEMO_JP || VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
-    // the early demos keep button/dirs in 32-bit locals
+    // the demos keep button/dirs in 32-bit locals
     s32 delay;
     u32 button;
     u32 dirs;
@@ -706,8 +706,7 @@ s8 keyGetStickY(u32 chan) {
     return gp->stickY[chan];
 }
 
-/** unused on retail */
-// unused on retail
+/** Returns the C stick's x position on controller chan; no version calls it. */
 s8 keyGetSubStickX(u32 chan) {
     return gp->substickX[chan];
 }
@@ -849,7 +848,7 @@ f32 sysFrame2SecFloat(f32 frame) {
 }
 
 /**
- * Converts milliseconds to whole frames at the current frame rate (50 or 60 in US and PAL;
+ * Converts milliseconds to whole frames at the current frame rate (50 or 60 in US and later;
  * always 60 in JP and the early demos).
  */
 s32 sysMsec2Frame(s32 msec) {
@@ -870,7 +869,7 @@ f32 sysMsec2FrameFloat(f32 msec) {
 }
 
 #if VERSION >= VERSION_DEMO_EU
-/** PAL only: printf-style debug line with file and line through OSReport. */
+/** PAL demo and PAL only: printf-style debug line with file and line through OSReport. */
 void sysDebugReport(const char* filename, int line, const char* format, ...) {
     char buf[2048];
     va_list args;
@@ -1047,9 +1046,8 @@ s32 LZ77Decode(u8* inputBuffer, u8* outputBuffer) {
 // clang-format off
 #ifdef __MWERKS__
 /**
- * The same word copy in C, except for the result:
- * the asm returns the address of the last word written (r3 is advanced by stwu) and, given count < 4,
- * loops 2^32 times (ctr = 0); no caller uses the result or passes less than one word.
+ * Copies count / 4 words from src to dest. Returns the address of the last word written (r3 is advanced by
+ * stwu) and, given count < 4, loops 2^32 times (ctr = 0); no caller uses the result or passes less than one word.
  */
 asm void* memcpy_as4(void* dest, const void* src, u32 count) {
     nofralloc
@@ -1086,10 +1084,10 @@ void* memcpy_as4(void* dest, const void* src, u32 count) {
 // stayed in the literal pools. These stand-ins recreate the pool contents in order.
 #if VERSION >= VERSION_US
 /**
- * US pools the int->float constant between the strings and the doubles;
+ * US and later pool the int->float constant between the strings and the doubles;
  * functions are emitted in reverse order, so the doubles come first in the source
  */
-// US pools the int->float constant between the strings and the doubles; functions are emitted in
+// US and later pool the int->float constant between the strings and the doubles; functions are emitted in
 // reverse order, so the doubles come first in the source
 void systemStrippedPool1b(f32* f, f64* d) {
     d[0] = 1.5;

@@ -22,7 +22,7 @@ typedef struct CamShiftWork {
     u8 pad_34[0x38 - 0x34]; // 0x34, never accessed
 } CamShiftWork;
 
-// The early demos use the field clock; retail uses the render clock.
+// The early demos use the field clock; JP and later use the render clock.
 #if VERSION <= VERSION_DEMO_JP
 #define CAM_SHIFT_TIME (gp->renderFieldTime)
 #else

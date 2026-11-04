@@ -36,7 +36,7 @@ void setupErrorHandler(void) {
  * otherwise it formats the exception type, all 32 GPRs,
  * LR/CR/SRR0/SRR1/DSISR/DAR and a 16-frame stack back chain,
  * reinitialises the heap for the ROM font and draws the text to the frame buffer forever.
- * The US and PAL releases scroll the text upward, use a 0.8 horizontal scale instead of 0.5,
+ * US and later scroll the text upward, scale it 0.8 wide and 1.0 high instead of 0.5 by 0.5,
  * and halt once it has scrolled off.
  * Debug mode (-1) comes from the title-screen button code X, B, R, B, Y, L (seq_title.c).
  */
@@ -69,7 +69,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     if (getDebugMode() >= 0) {
         psndExit();
 #if VERSION >= VERSION_US && defined(__MWERKS__)
-        // US: same MSR enable sequence as below (original inline asm), then halt
+        // US and later: same MSR enable sequence as below (original inline asm), then halt
         HW_ENABLE_MSR_FP_RI();
         PPCHalt();
 #endif

@@ -148,8 +148,8 @@ const char* latin_tbl[] = {
 #endif
 
 /**
- * Starts loading the name entry textures (w/<language>/name.tpl; the JP builds always use jp,
- * the demo reads window/jp) and returns TRUE once they are loaded. Callers poll it before nameEntOn.
+ * Starts loading the name entry textures (w/<language>/name.tpl; versions before US always use jp,
+ * and the early demos read window/jp) and returns TRUE once they are loaded. Callers poll it before nameEntOn.
  */
 BOOL nameEntPrepare(void) {
 #if VERSION >= VERSION_US
@@ -166,7 +166,7 @@ BOOL nameEntPrepare(void) {
  * 0 the save file name (seq_load), 1 Yoshi's name (tou_10, blank gives his default name),
  * 2 and 3 guessing Doopliss's name (gra_00) before and after the Letter P is recovered,
  * 4 the password in the X-Naut Fortress (aji_01).
- * Starts with hiragana (latin outside Japanese in the US and PAL releases),
+ * Starts with hiragana (latin outside Japanese in US and later),
  * an empty 8-character name and the cursor at the top left.
  * Type 2 blanks the grid cell the name needs (hiragana and katakana n, latin p), so it cannot be typed yet.
  */
@@ -338,7 +338,7 @@ void nameEntMain(void) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-/** The demo has no cursor travel check, no all-blank name check and no default partner name. */
+/** The early demos have no cursor travel check, no all-blank name check and no default partner name. */
 static s32 nameMain(void) {
     s32 off;
     s32 idx;
@@ -1057,8 +1057,8 @@ static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
 }
 
 /**
- * Draws the panel the character grid sits on (kirinuki, a cut-out) from nine name.tpl pieces:
- * 8-pixel corners and edges around the middle.
+ * Draws the panel the character grid sits on (kirinuki, a cut-out) from eight name.tpl quads:
+ * 8-pixel corners, the top and left edges, and the middle texture (which also fills the right and bottom edges).
  */
 void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);

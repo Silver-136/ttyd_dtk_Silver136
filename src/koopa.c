@@ -166,7 +166,7 @@ void kpaMutekiOff(void) {
 
 /**
  * Starts the 12-second star invincibility timer and clears the post-damage timer;
- * the side-scrolling update calls kpaMutekiOff when it runs out.
+ * the player update (kpa2DMain or kpa3DMain) calls kpaMutekiOff when it runs out.
  */
 void kpaMSetMutekiTimer(void) {
     MarioWork* mario = marioGetPtr();
@@ -235,7 +235,7 @@ s32 kpaGetBodyStatus(void) {
     return st;
 }
 
-/** 1 in kpa_03, the seaside stage with water (stageFlags bit 2), else 0. */
+/** 1 in kpa_03, the seaside stage with water (KPA_STAGE_FLAG_KPA03, stageFlags 0x2), else 0. */
 s32 kpaGetStageType(void) {
     return (marioGetPtr()->stageFlags >> 1) & 1;
 }
@@ -249,7 +249,7 @@ static inline void kpaSetJumpParams(MarioWork* mp, f32 velocityY, f32 accelerati
     mp->jumpSnapY = snapY;
 }
 
-/** 1 in the 3D maps, 0 in the side-scrolling stages kpa_02 to kpa_06 (stageFlags bit 1). */
+/** 1 in the 3D maps, 0 in the side-scrolling stages kpa_02 to kpa_06 (KPA_STAGE_FLAG_SIDE_SCROLLING, stageFlags 0x1). */
 s32 kpaGetStageViewType(void) {
     return !(marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING);
 }
@@ -578,7 +578,7 @@ f32 kpaSetFallPara(void) {
 
 /**
  * Player motion for being bounced off an NPC: a small fixed jump (2.6 up) that turns into a fall at the peak.
- * Mario also gets his jump poses. Run from mot_jump.
+ * The M_J_ poses apply only to Mario, but mot_jumpNpc (mot_jump) calls this only for Bowser.
  */
 void kpa_jumpNpc(void) {
     MarioWork* mario = marioGetPtr();
@@ -736,7 +736,7 @@ void kpaAttackStart(void) {
     }
 }
 
-/** Starts the fire breath attack without changing motion (state 30), used while moving or jumping. */
+/** Starts the fire breath attack without changing motion (state 30), used while swimming (kpa_swim). */
 void kpaAttackStart2(void) {
     KpaWork* w = marioGetPtr()->kpaWork;
     if (w->attackState == KPA_ATTACK_NONE) {
@@ -747,7 +747,8 @@ void kpaAttackStart2(void) {
 /**
  * Runs the fire breath attack: wind-up pose, then flames every frame for at least 400 ms and for as long as B
  * or fireHold is held, then the closing pose and back to the motion's normal pose.
- * States 1-24 are the standing attack, 30-44 the moving one; the looping sound plays while flames come out.
+ * States 1-24 are the standing attack, 30-44 the swimming one (its end picks the pose of the current motion);
+ * the looping sound plays while flames come out.
  */
 void kpaFireAttack(void) {
     MarioWork* mario = marioGetPtr();
@@ -913,7 +914,7 @@ void kpaStrippedPool(f32* f, s32 i) {
 /**
  * Keeps the fire breath effect at Bowser's mouth
  * and tests every fourth live flame puff against objects (kpaFlameHitCheck), storing the first hit in flameHit.
- * Retail skips the test at level 0 and for puffs smaller than 7 units; the demo tests them all.
+ * JP and later skip the test at level 0 and for puffs smaller than 7 units; the early demos test them all.
  * Deletes the effect when the attack ends.
  */
 #if VERSION <= VERSION_DEMO_JP

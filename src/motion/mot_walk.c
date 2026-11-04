@@ -17,9 +17,9 @@
 
 
 /**
- * Footstep sounds for walking and running: every interval frames a full step and at half that a lighter one,
- * chosen by the floor's hit attribute (0x100, 0x200000, 0x100000, 0x1000, 0x400000, or plain ground).
- * The 0x1000 floor plays the plain 0x100 sound on the Great Tree (mri) maps.
+ * Footstep sounds for walking and running: every interval frames one foot's step (the ..R sounds) and halfway
+ * between them the other foot's (..L), chosen by the floor's hit attribute (0x100, 0x200000, 0x100000, 0x1000,
+ * 0x400000, or plain ground). The 0x1000 floor plays the 0x100 floor's sound on the Great Tree (mri) maps.
  */
 void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
     s32 hitAttr;
@@ -246,7 +246,7 @@ void mot_walk(void) {
             }
             player->directionView = player->controlStickAngle;
             if (player->hitobjStandOn != NULL) {
-                // both branches pass 0x28: the gravity check is in the retail code
+                // both branches pass 0x28: the gravity check is in the original code
                 if (player->playerGravity == 1.0f) {
                     seInterval = 0x28;
                 } else {
@@ -267,7 +267,7 @@ void mot_walk(void) {
 
 /**
  * Running motion: like mot_walk at marioGetDashSpd,
- * dropping back to walking for a small stick tilt or with the Slow Go badge,
+ * dropping back to walking for a small stick tilt or (US and later) with the Slow Go badge,
  * with the pushing pose against pushable objects.
  */
 void mot_dash(void) {

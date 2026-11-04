@@ -316,7 +316,8 @@ void* loadDVD_callback(u32 offset, u32 bytes) {
 /**
  * Loads a MusyX project from the disc: path + ".pool", ".proj" and ".sdir" into memory,
  * and registers the ".samp" file for sample upload through loadDVD_callback.
- * Up to 8 projects; returns FALSE when full or a file fails.
+ * Stores them in project slot dataId, which nothing increments, so every call uses slot 0;
+ * returns FALSE when a file fails.
  */
 BOOL SoundLoadDVD2(const char* path) {
     DVDEntry* entry;
@@ -422,7 +423,8 @@ BOOL SoundLoadDVD2(const char* path) {
 }
 
 /**
- * Pushes the sound groups listed in groupIds (0xFF-terminated) of the last loaded project into MusyX,
+ * Pushes the sound groups listed in groupIds (0xFF-terminated; NULL = every group from nextGroupId on until a push
+ * fails) of the project in slot dataId (slot 0) into MusyX,
  * uploading their samples to ARAM, and counts them for SoundDropData.
  */
 BOOL SoundLoadDVD2PushGroup(u8* groupIds) {
@@ -676,8 +678,9 @@ static inline void _ssDropStop(void) {
 }
 
 /**
- * Unloads all sound data: stops everything, pops the pushed groups and frees the project, song library,
- * stream and group memory. Returns TRUE.
+ * Unloads all sound data: stops everything, frees the song library and group memory. The loops that pop the
+ * pushed groups and free the project files run up to dataId, which is never incremented (0), so they do nothing.
+ * Returns TRUE.
  */
 BOOL SoundDropData(void) {
     SoundGroup* group;
@@ -804,7 +807,7 @@ BOOL SoundDropData(void) {
     return TRUE;
 }
 
-/** Switches MusyX between mono, stereo and surround output (US and PAL only when it changes). */
+/** Switches MusyX between mono, stereo and surround output (JP and later only when it changes). */
 void SoundSetOutputMode(SND_OUTPUTMODE mode) {
 #if VERSION >= VERSION_JP
     if (sound.outputMode != mode) {
@@ -872,7 +875,8 @@ inline SoundGroup* SoundSongGetGroup(u8 groupIndex) {
 }
 
 /**
- * Starts song songId (low byte: library index, bits 16-23: MusyX group id) on song channel chan at full volume,
+ * Starts the song in groupInfo (low byte: library index, bits 8-15: song id, bits 16-23: MusyX group id) on song
+ * channel chan at full volume,
  * stopping what played there.
  */
 void SoundSongPlayCh(s32 chan, u32 groupInfo) {
@@ -977,7 +981,7 @@ inline void SoundEfxMuteCh(s32 chan) {
 }
 
 /**
- * Frees the first effect channel whose priority is at most priority and returns it (40 when none qualifies);
+ * Frees the first effect channel whose priority is at most maxPriority and returns it (40 when none qualifies);
  * used to make room for a new effect.
  */
 static s32 SoundEfxStopAll(u8 maxPriority) {
@@ -993,7 +997,7 @@ static s32 SoundEfxStopAll(u8 maxPriority) {
     return chan;
 }
 
-/** Returns whether the effect on chan is still sounding, freeing the channel when it has ended. */
+/** Returns whether the effect on chan is still sounding (it does not free the channel). */
 inline u32 SoundEfxCheckPlay(s32 chan) {
     SoundEffect* sfx = &sound.effects[chan];
     SND_VOICEID vid;
@@ -1016,7 +1020,7 @@ inline u32 SoundEfxCheckPlay(s32 chan) {
 }
 
 /**
- * Plays MusyX effect fid on a free effect channel (or takes one from a lower-priority effect) with volume
+ * Plays MusyX effect fid on a free effect channel (or takes one from an effect of lower or equal priority) with volume
  * and pan; returns the channel, or -1 when none is available.
  */
 s32 SoundEfxPlayEx(SND_FXID fid, u8 priority, u8 vol, u8 pan) {
@@ -1209,8 +1213,8 @@ void SoundEfxSetLPF(s32 chan, s16 freq) {
 }
 
 /**
- * Returns whether the effect on chan is still sounding (3D emitters count as sounding while they exist),
- * freeing the channel when it has ended.
+ * Returns whether the effect on chan is still sounding (3D emitters count as sounding while they exist);
+ * it does not free the channel.
  */
 u32 SoundEfxCheck(s32 chan) {
     SoundEffect* sfx;
@@ -1528,7 +1532,7 @@ inline void _ssResetEntries(SoundStream* stream) {
 /**
  * Marks the stream entry whose DVD read finished as loaded,
  * then starts the first stream whose entries are all ready.
- * The demo masks interrupts only around the updates, the later versions around the whole search.
+ * The early demos mask interrupts only around the updates, JP and later around the whole search.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
@@ -1660,7 +1664,10 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #endif
 }
 
-/** ARQ callback after a stream chunk reached ARAM: continues the disc read loop for that stream. */
+/**
+ * ARQ callback after a chunk of an ARAM-cached stream was copied from ARAM into its load buffer:
+ * finishes it like a disc read (_ssDVDReadAsync_activeChk).
+ */
 void cache_flush(u32 pointerToARQRequest) {
     _ssDVDReadAsync_activeChk(0, &((SoundStreamEntry*)((ARQRequest*)pointerToARQRequest)->owner)->dvd->info);
 }
@@ -1809,7 +1816,7 @@ u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 cou
     return src;
 }
 
-/** JP and demo signature of _sscallback: the first buffer's length arrives as len1. */
+/** Early-demo and JP signature of _sscallback: the first buffer's length arrives as len1. */
 #if VERSION <= VERSION_DEMO_JP
 static u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
 #else
@@ -2294,7 +2301,7 @@ void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
 
 /**
  * Stops stream chan and frees its MusyX streams and files;
- * the demo defers the stop when the stream has not started.
+ * the early demos defer the stop when the stream has not started.
  */
 void SoundSSStopCh(s32 chan) {
     SoundStream* stream;
@@ -2327,7 +2334,7 @@ void SoundSSStopCh(s32 chan) {
     }
 }
 
-/** Fades stream chan out over the fade-out time (converted to frames at the current frame rate in US and PAL). */
+/** Fades stream chan out over the fade-out time (converted to frames at the current frame rate in US and later). */
 void SoundSSFadeoutCh(s32 chan) {
     SoundStream* stream = &sound.streams[chan];
     f32 frames;

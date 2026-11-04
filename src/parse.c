@@ -11,7 +11,7 @@ ParseWork parse;
 
 /**
  * Starts parsing a text buffer of size bytes: the whole buffer becomes the single open block at depth 0.
- * Used by database.c to read the <Npc> entries of a map's NPC setup file.
+ * Used by database.c to read the <Npc> entries of a map's NPC setup file, and by gor_01 for its cooking tables.
  */
 void parseInit(void* ptr, u32 size) {
     parse.ptr = ptr;
@@ -118,6 +118,7 @@ void parsePopNext(void) {
 /**
  * Reads the next whitespace-separated value of the current block into data and advances past it.
  * type 0 is a quoted string, 1 a decimal s32, 2 an f32, 3 three f32s (a Vec).
+ * A string read leaves the read position at the end of the block, not just past the string.
  * Returns FALSE when the block has no more values.
  */
 BOOL parseGet1Next(s32 type, void* data) {

@@ -95,7 +95,7 @@ static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 10
 #endif
 
 /**
- * Vivian's pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze, instant KO),
+ * Vivian's pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze, KO),
  * the hurt poses, gliding and fast gliding, low HP, the failed Run Away tumble, talking, item use,
  * the command menu wait, zero gravity, the Defend stance and plain floating.
  */
@@ -1540,7 +1540,7 @@ USER_FUNC(_get_move_frame) {
  * Takes target unit args[0] and a position in args[1]-args[3]
  * and adjusts it in place to where Vivian should surface for Shade Fist:
  * 30 units behind her facing, plus the target's vivianOffsetX/Z, 20 units lower but not below the floor.
- * Not in the US demo.
+ * Not in the early demos.
  */
 USER_FUNC(_get_vivian_attack_position) {
     BattleWork* wp = _battleWorkPointer;
@@ -1637,7 +1637,7 @@ USER_FUNC(_disp_heart_entry) {
 }
 
 /**
- * Display callback for _disp_heart_entry: draws the heart icons at the target's hit position,
+ * Display callback for _disp_heart_entry: draws the speech-bubble and heart icons at the target's hit position,
  * scaled through the pop-in animation.
  */
 void _disp_heart(CameraId camera, void* param) {

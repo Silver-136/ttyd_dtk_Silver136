@@ -450,7 +450,7 @@ void disp1(CameraId cameraId, void* param) {
 
 /**
  * Effect-layer draw callback: draws the two logo halves at their animated positions (per-language images in US
- * and PAL) and the pulsing "press start" prompt.
+ * and later) and the pulsing "press start" prompt.
  * Later versions show the build date and time while Z is held in debug mode.
  */
 #if VERSION <= VERSION_DEMO_JP

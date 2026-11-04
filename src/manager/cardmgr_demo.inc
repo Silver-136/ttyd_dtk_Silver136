@@ -16,7 +16,7 @@ static CardWork* wp;
 #define CARD_FLAG_WRITE_STAGED 0x800    // write_main writes writeBuf (copy, erase) instead of the slot's data
 
 // Set once a card has been opened; memcard_open then reads its serial number.
-// The demo keeps it in bit 0x4000 (retail moved it to make room for the insert watch).
+// The demo keeps it in bit 0x4000 (JP and later keep it in 0x2000 and use 0x4000 for the insert watch).
 #define CARD_FLAG_SERIAL 0x4000
 
 //.sdata
@@ -136,7 +136,8 @@ void cardInit(void) {
 
 
 /**
- * TRUE while a card operation is running or a card call is in flight (or the insert watch is settling).
+ * TRUE while a card operation is running or a card call is in flight (or busyFrames is nonzero; nothing in the
+ * early demos sets it).
  * Scripts wait on it, and mariost.c waits for it before a reset so a save is never cut off.
  */
 BOOL cardIsExec(void) {
@@ -156,7 +157,7 @@ s32 cardGetCode(void) {
 
 /**
  * Advances the running card operation by one step each frame (from mariost.c):
- * write, header write, read, read all, create, format; also samples slot A for the insert watch.
+ * write, header write, read, read all, create, format (no insert watch in the early demos).
  * Each step starts one SDK call and the next frame continues once its callback has stored the result.
  * Delete (op 7) has no starter function.
  */
@@ -268,8 +269,8 @@ void cardMain(void) {
 /**
  * Loads a save slot into the running game: copies its global work, pouch, defeated-NPC records, badge shop,
  * Pianta Parlor and informant state over the live ones,
- * keeping the console settings (sound mode, rumble, last slot, progressive scan, and the language,
- * plus the 50/60 Hz choice on PAL) and runtime pointers. Called by the file select's load.
+ * keeping the console settings (sound mode, rumble, last slot, progressive scan) and runtime pointers.
+ * Called by the file select's load.
  */
 void cardCopy2Main(s32 slot) {
     CardSaveSlot* save;
@@ -1046,7 +1047,7 @@ static inline u32 header_sum(u8* data, s32 size) {
 }
 
 /**
- * Builds the save file header: the "Paper Mario" title
+ * Builds the save file header: the game title (cardGameTitle, the Japanese one)
  * and today's date comment shown in the GameCube memory card screen, the banner and icon images, and the sound,
  * rumble and last slot settings, then its checksums.
  */
@@ -1134,7 +1135,7 @@ static void memcard_probe(void) {
 
 /** Card-removed callback for CARDMountAsync; does nothing. */
 static void mountDetachCallback(s32 chan, s32 result) {
-    ; // stubbed in retail
+    ; // empty
 }
 
 /**

@@ -122,7 +122,7 @@ void partyPaperLightOff(PartyEntry* party) {
 
 /**
  * TRUE when one of the seven partners is in a pinch:
- * HP at or below PARTY_PINCH_HP (1 in the early demos, 5 in the full game), which switches her to the tired pose set.
+ * HP at or below PARTY_PINCH_HP (1 in the early demos, 5 in JP and later), which switches her to the tired pose set.
  */
 static inline BOOL partyIsPinch(PartyEntry* party) {
     BOOL pinch = FALSE;
@@ -385,7 +385,7 @@ BOOL partyGoodbye(s32 id) {
 }
 
 /**
- * Removes the partner in slot id at once: runs her member's exit function (not while riding, in the full game),
+ * Removes the partner in slot id at once: runs her member's exit function (not while riding, in JP and later),
  * remembers her as the previous member of that slot, clears the slot and frees the entry and model.
  */
 s32 partyKill(s32 id) {
@@ -730,9 +730,9 @@ void partyInit(void) {
 
 /**
  * Resets both partners when Mario is reinitialised on a map change (marioReInit):
- * clears their flags, paper animations, hit objects and scale and puts them back in following mode,
- * or in the walk-disabled wait when Mario's partner walking is off.
- * Yoshi being ridden is left alone; Ms. Mowz gets chuchu_reinit.
+ * clears their flags, paper animations (JP and later), hit objects and scale and puts them back in following mode
+ * (when Mario's partner walking is off, in the move mode that continues behind Mario).
+ * Yoshi being ridden keeps his pose and run mode; Ms. Mowz gets chuchu_reinit.
  */
 void partyReInit(void) {
     s32 poseId;
@@ -842,7 +842,7 @@ void partyReInit(void) {
 
 /**
  * Runs the partner's member post function if she is in the middle of her field ability (run mode 3),
- * to end it cleanly (from Mario's battle and map-exit code).
+ * to end it cleanly (from Mario's field-battle start, marioFBattlePrepare, and partyPrevRunMode).
  */
 void partyUsePost(PartyEntry* party) {
     PartyFunc func;
@@ -864,7 +864,7 @@ static inline void partyChgRunMo(PartyEntry* party);
  */
 // Descriptive name (not in the symbol maps).
 #if VERSION <= VERSION_DEMO_JP
-/** the demo only leaves the hello state (4) and runs the post function (3) on a run-mode change */
+/** the early demos only leave the hello state (4) and run the post function (3) on a run-mode change */
 static inline void partyLeaveRunMode(PartyEntry* party) {
 #else
 /**
@@ -941,7 +941,7 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 /**
  * Switches the partner to run mode mode (0 stand, 1 wait, 2 follow, 3 ability, 4-7 appear, 8 goodbye,
  * 9 forced walk, 10 pipe, 11 ride, 12 ride Yoshi, 13 return after damage, 14 delete),
- * remembering the old mode for partyPrevRunMode. The demo only ends the appear and ability modes.
+ * remembering the old mode for partyPrevRunMode. The early demos only end the appear and ability modes.
  */
 void partyChgRunMode(PartyEntry* party, s32 mode) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1058,7 +1058,7 @@ static inline s32 partyCountActive(void) {
 
 /**
  * Per-frame partner update from Mario's main loop:
- * when any partner is active (the full game also runs marioUsePartyMain first),
+ * when any partner is active (JP and later also run marioUsePartyMain first),
  * drives each active slot unless Mario is in background mode.
  */
 void partyMain(void) {
@@ -1336,7 +1336,7 @@ void partyHello(PartyEntry* party) {
 /**
  * Runs the partner's appear: step 0 places her at Mario's middle
  * and launches a 16-frame hop to her appear position while she grows from nothing (with the appear sound),
- * step 2 settles her facing left or right and switches to waiting.
+ * step 2 settles her facing left or right (the early demos copy Mario's facing) and switches to waiting.
  * Step 10 places her at once, 20 just stands her still, 30 puts her on Mario's ride. Returns 1 when done.
  */
 s32 partyHelloMain(PartyEntry* party) {
@@ -1578,7 +1578,7 @@ static inline void partyChgRunM(PartyEntry* party) {
  * Puts the partner in the pipe with Mario (run mode 10):
  * she takes Mario's position facing backwards and turns into the spinning pipe paper,
  * p_dokan_y for the vertical pipe kinds (Mario's dokanType 0-3) and p_dokan_x for the sideways ones (4, 5).
- * Ends Vivian's tail effect.
+ * JP and later also end Vivian's tail effect.
  */
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -1729,7 +1729,7 @@ s32 partyDokanInit(PartyEntry* party) {
 
 /**
  * The partner's frames in the pipe (run mode 10):
- * she spins at Mario's position, growing back to full size on the vertical kinds;
+ * she spins at Mario's position (before US growing back to full size on the vertical kinds);
  * once partyDokanEnd sets step 100 she plays the PM_D_1B exit paper for 18 frames,
  * then returns to normal and waits beside Mario, offset so two partners do not overlap.
  */
@@ -2005,7 +2005,8 @@ void getRidePos(PartyEntry* party, Vec* pos) {
 
 #pragma dont_inline on
 /**
- * Puts both partners straight into the riding-along state (run mode 11, step 11) hidden and without shadow,
+ * Puts both partners straight into the riding-along state (run mode 11, step 11) without shadow (and hidden
+ * in JP and later),
  * e.g. when Mario is already rolling, flying or sailing as they appear.
  */
 void allPartyForceRideOn(void) {
@@ -2029,8 +2030,8 @@ void allPartyForceRideOn(void) {
 #pragma dont_inline reset
 
 /**
- * Puts both partners in the ride mode (11) to hop onto Mario (mot_roll for the rolling paper mode,
- * and the retail bellows motion).
+ * Puts both partners in the ride mode (11) to hop onto Mario (the bellows motion, mot_jabara, in JP and later;
+ * the early demos use allPartyRideJabara).
  */
 void L_allPartyRideOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -2046,7 +2047,7 @@ void L_allPartyRideOn(void) {
 /**
  * Makes both riding partners hop off Mario to their appear position (step 100) when he leaves the rolling,
  * bellows or boat mode.
- * In the US and PAL releases, a partner that has not started riding yet just goes back to waiting.
+ * In US and later, a partner that has not started riding yet just goes back to waiting.
  */
 void allPartyRideOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -2389,10 +2390,11 @@ static inline void partyAppearMoveBack(Vec* out, f32 d, f32 ang) {
 }
 
 /**
- * Demo copy of the appear-position search (retail has it in party_move.c):
+ * Early-demo copy of the appear-position search (JP and later have it in party_move.c):
  * finds a free spot with floor 30 units from Mario for the partner to land on, trying behind him first,
  * then his sides and front; with a follower present the two take mirrored offsets.
- * In plane mode only checks behind. Returns FALSE if no spot has floor within 100 below.
+ * In plane mode it returns TRUE with Mario's own position after the first wall test.
+ * Returns FALSE if no spot has floor within 100 below.
  */
 BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
     HitCheckQuery query;
@@ -2585,7 +2587,7 @@ BOOL partyGetAppearPos(PartyEntry* party, Vec* out) {
 }
 
 /**
- * Demo copy of the spot search for a partner placed directly (partyEntry, landing from plane mode):
+ * Early-demo copy of the spot search for a partner placed directly (partyEntry, landing from plane mode):
  * 30 units behind Mario, or beside him when a follower is present, needing floor within one step below.
  * Returns FALSE if none fits.
  */
@@ -2665,7 +2667,7 @@ BOOL partyGetAppearPos2(PartyEntry* party, Vec* out) {
 }
 
 /**
- * Demo copy of the search for a free spot around Mario (Goombella's and Ms. Mowz's moves,
+ * Early-demo copy of the search for a free spot around Mario (Goombella's and Ms. Mowz's moves,
  * the partner motion code): tries nine directions starting diagonally behind him, needing open space,
  * a flat enough walkable floor (60 degrees at most) and no NPC in the way, then pushes the spot off walls.
  * Returns FALSE if none fits.
@@ -2725,8 +2727,9 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
 }
 
 /**
- * Demo copy of the search for a spot near the partner's home direction (partner motion code):
- * starts from Mario, or from the other partner for a follower, and tries eleven directions around it;
+ * Early-demo copy of the search for a spot near the partner's home direction (partner motion code):
+ * starts from Mario, or from the other partner for a follower, and tries her home direction, then the
+ * directions of an 11-entry table around it;
  * falls back to partyGetAppearPos. Returns TRUE only if one of its own directions fits.
  */
 BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
@@ -2804,8 +2807,8 @@ const Vec party_unused_zero_vec0 = {0.0f, 0.0f, 0.0f};
 const Vec party_unused_zero_vec1 = {0.0f, 0.0f, 0.0f};
 #endif
 /**
- * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
- * used by party_yoshi when Mario mounts Yoshi.
+ * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow.
+ * Nothing in the source calls it.
  */
 void party_force_ride_yoshi(PartyEntry* party) {
     Vec pos;
@@ -2821,7 +2824,7 @@ void party_force_ride_yoshi(PartyEntry* party) {
     party->moveDir = toMovedir(party->displayDirectionTarget);
 }
 
-/** Snaps the follower to her seat behind Mario on Yoshi (party_yoshi, while Yoshi carries Mario). */
+/** Snaps the follower to her seat behind Mario on Yoshi (nothing in the source calls it). */
 void party_ride_yoshi_force_move(void) {
     Vec pos;
     PartyEntry* party = partyGetPtr(marioGetExtraPartyId());
@@ -3053,7 +3056,7 @@ void partyDisp(CameraId cam, void* param);
 /**
  * Turns the partner to face left (180) or right (0) of the screen as she moves,
  * with Paper Mario's overshooting flip: eases past the target by about 40 degrees and back.
- * Leaves her alone in the paper slit or when her direction is locked.
+ * Leaves her alone in the paper slit; when her direction is locked it only eases toward the current target.
  */
 void partyMakeDispDir(PartyEntry* party) {
     f32 diff;
@@ -3325,11 +3328,17 @@ void partyDisp(CameraId cam, void* param) {
     animPoseSetLocalTimeRate(party->paperAnimGroup, (party->flags & PARTY_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f);
 }
 
-/** Empty in the shipped game; npcdrv, evt_mario and evt_mobj call it where Mario's controls are switched back on. */
+/**
+ * Empty in every version; npcdrv, evt_mario, evt_mobj and some rooms (gra, yuu) call it where Mario's controls are
+ * switched back on.
+ */
 void partyKeyOn(void) {
 }
 
-/** Empty in the shipped game; npcdrv, evt_mario and evt_mobj call it where Mario's controls are switched off. */
+/**
+ * Empty in every version; npcdrv, evt_mario, evt_mobj and some rooms (gra, yuu) call it where Mario's controls are
+ * switched off.
+ */
 void partyKeyOff(void) {
 }
 
@@ -3405,7 +3414,7 @@ static inline void partyPoseEntryF(PartyEntry* party) {
 
 /**
  * Switches the partner into (mode 1) or out of the 8-bit Famicom form, reloading her model and standing pose.
- * Unused in C.
+ * Called by the aji rooms (aji.c, aji_09.c).
  */
 void partySetFamicomMode(PartyEntry* party, s32 mode) {
     if (mode == 1) {

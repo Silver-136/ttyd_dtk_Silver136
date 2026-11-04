@@ -327,7 +327,7 @@ EVT_END()
 
 /**
  * Idle loop: plays the fuse pose, and once only one turn is left on the fuse puffs a sweat effect above the bomb
- * every 45-89 frames as a warning.
+ * every 45-90 frames as a warning.
  */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -439,7 +439,7 @@ static BattleDataEntry data_table[] = {
 };
 #endif
 
-/** Hit reaction: the default damage script with no special pose (LW10 = -2). */
+/** Hit reaction: the default damage script for this unit, part 1 (LW10, LW11). */
 #if VERSION >= VERSION_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

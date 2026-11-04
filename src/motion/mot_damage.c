@@ -119,7 +119,7 @@ void set_damage_root_ypos(f32 y) {
  * Motion for falling into water or a hazard pit:
  * Mario (or Bowser) sinks, gets bitten and thrown up by the Gazigazi,
  * flies back hidden to the hit's return position (fixed spots on muj_00, gor_00 and gor_04 when there is none),
- * drops down, loses 1 HP and returns to standing. Pre-JP builds lack the zero-distance return fix.
+ * drops down, loses 1 HP (Mario only) and returns to standing. The early demos lack the zero-distance return fix.
  */
 void mot_damage(void) {
     MarioWork* mario = marioGetPtr();
@@ -401,7 +401,7 @@ BOOL marioWaitDamageReturnFall(void) {
 /**
  * Motion for touching spikes (hit attribute 0x800):
  * Mario is knocked high into the air, carried back to the hit's return position, dropped,
- * loses 1 HP and stands up. Cancels paper, Yoshi, bomb and Koops actions first.
+ * loses 1 HP and stands up. Cancels paper, Yoshi, bomb and (JP and later) Koops actions first.
  */
 void mot_damageToge(void) {
     MarioWork* mario = marioGetPtr();

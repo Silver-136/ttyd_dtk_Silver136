@@ -1288,7 +1288,7 @@ static inline f32 hokanRate(f32 t, f32 a, f32 b, f32 k, f32 o) {
     return r;
 }
 
-/** Unused: interpolates between angles a0 and a1 (radians) the short way round. */
+/** Unused: interpolates between angles from and to (radians) the short way round. */
 static inline f32 angleLerp(f32 from, f32 to, f32 r) {
     while (from - to > 3.1415927f) {
         from -= 6.2831855f;
@@ -1302,7 +1302,7 @@ static inline f32 angleLerp(f32 from, f32 to, f32 r) {
 /**
  * Blends road states from and to by the eased t into out:
  * position (snapped to to when type is 0), heading the short way round, distance, angle,
- * rotation and shift rate. The fourth state is unused.
+ * rotation and shift rate. The third state (unused) is not read.
  */
 void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t) {
     f32 r, a0, a1, a2;
@@ -1361,7 +1361,8 @@ void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadSta
  * and floor probe (d, e, f) (world units), starts a timed blend whenever the state jumps (compareCamRoad),
  * advances the blend at 60 fps speed, and writes the resulting eye and look-at positions to out.
  * g is the sideways shift from cam_shift.
- * Called by the camera driver, door transitions (evt_bero) and camera scripts (evt_cam).
+ * Called by the camera driver, door transitions (evt_bero), camera scripts (evt_cam), map changes (seq_mapchange)
+ * and some rooms (hei_00, pik_00).
  */
 void camRoadMain(CameraParams* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
     u32 flags;
@@ -1432,7 +1433,7 @@ f32 camRoadGetCurrentShiftXRate(void) {
 
 /**
  * Clears the road state and blend tuning but keeps the loaded map file and its version state,
- * so the next camRoadMain snaps to the new position. Used by door transitions, camera scripts and game over.
+ * so the next camRoadMain snaps to the new position. Used by door transitions, camera scripts, map changes and game over.
  */
 void camRoadReset(void) {
     s32 a = wp->keptIdx;

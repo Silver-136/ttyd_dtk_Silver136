@@ -67,8 +67,8 @@ static seq_e3_work work;
 //.sdata
 static seq_e3_work* wp = &work;
 /**
- * The three scenarios of the trade-show menu: the story progress each one starts at and where its box sits
- * on screen.
+ * The scenarios of the trade-show menu (four in US and later, three before): the story progress each one
+ * starts at and where its box sits on screen.
  */
 #if VERSION >= VERSION_US
 seq_e3_entry e3_tbl[4] = {
@@ -99,7 +99,7 @@ char* anim_tbl[] = { "b_mario", "PKR_W_1", "PKR_S_1", "PKR_A_2A", "PNK_W_1", "PN
 #endif
 
 #if VERSION >= VERSION_US
-// US: anim_tbl is gone (dead-stripped) but its strings stayed at the start of .rodata
+// US and later: anim_tbl is gone (dead-stripped) but its strings stayed at the start of .rodata
 const char e3_anim_str0[] = "b_mario";
 const char e3_anim_str1[] = "PKR_W_1";
 const char e3_anim_str2[] = "PKR_S_1";
@@ -163,7 +163,7 @@ USER_FUNC(e3PoseSetRotY) {
 
 /**
  * US demo title screen loop: the four characters walk,
- * then every 5-15 s play their action animation and turn to face the other way and back.
+ * then every 5-15 s play their action animation, turn to face the other way, play it again and turn back.
  */
 EVT_BEGIN(e3_pose_evt)
     LOOP(0)
@@ -597,7 +597,7 @@ void seq_e3Main(SequenceWork* seq) {
 }
 
 #if VERSION == VERSION_DEMO_US
-// Texture ids in the demo's monthly TPL.
+// Texture ids in the US demo's e3.tpl.
 typedef enum E3Texture {
     E3_TEX_BOX = 1,
     E3_TEX_TILE = 4,
@@ -650,7 +650,6 @@ void e3Disp(CameraId cameraId, void* param) {
     }
 
     // Draw with the 2D camera: save the current camera and the GX projection/viewport (restored at the end)
-    // Backup camera and GX params so we can use them in calculating all this
     camBackup = *camGetPtr(cameraId);
     *camGetPtr(cameraId) = *camera;
 
@@ -906,7 +905,7 @@ void e3Disp(CameraId cameraId, void* param) {
                   viewportBackup[5]);
 }
 
-// FAKE: stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object
+// FAKE: stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (every version but the June US demo); removing it changes the object
 #if VERSION != VERSION_DEMO_US
 f32 forceSdata(void) {
     return 30.0f;
@@ -929,7 +928,7 @@ void e3DispOffscreen(CameraId cameraId, void* param) {
     offscreenAddBoundingBox(offscreenNameToId("fOff_peron"), left, top, right, bottom);
 }
 
-#if VERSION >= VERSION_US // US: local here, seq_title has the global copy
+#if VERSION >= VERSION_US // US and later: local here, seq_title has the global copy
 static
 #endif
 #if VERSION <= VERSION_DEMO_JP

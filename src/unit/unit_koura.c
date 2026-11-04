@@ -141,7 +141,7 @@ static StatusVulnerability regist = {
 };
 
 /**
- * Poses of the intact shell: standing (PKO_S_1), hurt (PKO_D_1) and the shield pose over Mario (PKO_Z_1).
+ * Poses of the intact shell: standing (PKO_S_1), hurt (PKO_D_1) and the open pose (PKO_Z_1, set by koura_open).
  */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "PKO_S_1"},
@@ -192,7 +192,7 @@ static BattleUnitKindPart parts[] = {
 
 /**
  * Init for Koops's Shell Shield shell: draws it at 1.5x scale, registers the wait, phase,
- * attack and damage scripts, and clears the open flag, open-for-turn flag and crack stage (unit work 1-3).
+ * attack and damage scripts, and clears the open flag, follow mode and crack stage (unit work 1-3).
  * Unit work 0 holds the shielded unit.
  */
 static EVT_BEGIN(init_event)
@@ -220,7 +220,7 @@ EVT_END()
 
 /**
  * Opens the shell off Mario before the player phase and closes it again after.
- * Since the US release it skips both when the shell has no HP left.
+ * In JP and later it skips both when the shell has no HP left.
  */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
@@ -461,7 +461,7 @@ EVT_BEGIN(destroy_event)
     RETURN
 EVT_END()
 
-/** Hit reaction: the default damage script with no special pose (LW10 = -2); the crack poses come from damage_core. */
+/** Hit reaction: the default damage script for this unit, part 1 (LW10, LW11); the crack poses come from damage_core. */
 #if VERSION >= VERSION_JP
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

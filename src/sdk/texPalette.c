@@ -10,7 +10,7 @@
 /**
  * Turns a TPL loaded in memory into usable form:
  * checks the version and converts the descriptor, texture and CLUT offsets to pointers (only once).
- * Used by the effect and background drivers after loading a .tpl.
+ * Used by the drivers (effects, background, map, icons, windows, fades, environment) after loading a .tpl.
  */
 void UnpackTexPalette(TEXPalettePtr pal) {
     u16 i;

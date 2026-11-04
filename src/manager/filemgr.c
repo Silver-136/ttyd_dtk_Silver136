@@ -628,7 +628,7 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
                 OSYieldThread();
             }
 #else
-            // busy-waits until the loader thread clears the entry (US yields instead)
+            // busy-waits until the loader thread clears the entry (US and later yield instead)
             while (search->entry) {
             }
 #endif

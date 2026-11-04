@@ -18,7 +18,6 @@
 #include "koopa_hit.h"
 #include <math.h>
 
-/** Slope of a floor normal: its angle from vertical in degrees. */
 #if VERSION <= VERSION_DEMO_JP
 #include "mario/mario_balloon.h"
 #include "mario/mario_hit.h"
@@ -29,6 +28,7 @@ static inline void kpaWallSlide(f32 vx, f32 nx, f32 vz, f32 nz, f32* mx, f32* mz
 }
 #endif
 
+/** Slope of a floor normal: its angle from vertical in degrees. */
 static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
     return angleABf(0.0f, 0.0f, sqrtf(x * x + z * z), -y);
 }
@@ -286,7 +286,7 @@ HitEntry* kpaSearchGround(f32 range, f32* outY, f32* outDepth, f32* outAng) {
 /**
  * Bowser's ceiling probe for mario_hit: casts rays up from a per-level set of points over his head (some only
  * while jumping), at a reach set by level and motion.
- * Returns the ceiling hit and puts its height in pos->y, or the gap in *h; records each hit in headHit.
+ * Returns the ceiling hit and puts its height in pos->y, or the gap in *outB; records each hit in headHit.
  * Not used while falling.
  */
 HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
@@ -392,7 +392,7 @@ HitEntry* kpaGetHitobjHead(s32 i) {
     return *e;
 }
 
-/** The first object any ceiling probe hit; JP and the demo check only the first probe. */
+/** The first object any ceiling probe hit; JP and the early demos check only the first probe. */
 HitEntry* kpaGetHitobjHead2(void) {
 #if VERSION >= VERSION_US
     s32 i;
@@ -646,7 +646,7 @@ HitEntry* kpaFlameHitCheck(f32 x, f32 y, f32 z, f32 r) {
 // _reflect2/_reflect; the demo kpaSearchWallFront's literals are 45, 0.75, 0.25, 0.5, so the US original
 // (whose only literal left is 0.5) was a different version and cannot be taken from the demo.
 #if VERSION <= VERSION_DEMO_JP
-/** demo only: Koopa's front-wall search (two rays at 3/4 and 1/4 of the body height), called from searchFrontWall */
+/** early demos only: Koopa's front-wall search (two rays at 3/4 and 1/4 of the body height), called from searchFrontWall */
 HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
     Vec p;
     Vec dir;

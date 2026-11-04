@@ -610,7 +610,7 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
 #endif
 };
 
-/** Withdraws Koops into his shell for Shell Toss: shell pose PNK_K_2, spinning 15 degrees a frame for 24 frames. */
+/** Withdraws Koops into his shell for Shell Toss and Power Shell: shell pose PNK_K_2, spinning 15 degrees a frame for 24 frames. */
 static EVT_BEGIN(_change_koura_pose)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_K_2"))
     LOOP(18)
@@ -2172,7 +2172,8 @@ USER_FUNC(_check_mario_move_count) {
 /**
  * Reads or writes unit args[0]'s moveColorLv: with args[1] zero it is returned in args[2],
  * otherwise set to args[2].
- * Shell Shield saves Mario's value, sets it to 255 during the move and restores it after.
+ * Shell Shield saves Mario's value and sets it to 255; its restore call sits after LABEL(99), which the always-true
+ * branch returns before reaching.
  */
 USER_FUNC(_color_lv_set) {
     EvtWord* args = event->args;
