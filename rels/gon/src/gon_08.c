@@ -216,9 +216,9 @@ EVT_END()
 
 /**
  * Handler of the sw_0 switch for the floating block blk_0:
- * the camera shakes with rumble while the block rises
+ * the camera shakes (with controller rumble in JP and the June demos only) while the block rises
  * or falls 600 units (the direction follows LSWF(3), which is toggled), with block-float sounds;
- * if Mario or his partner bumps the block with the head during the move,
+ * if the descending block's head-contact check matches,
  * it reverses and the switch is cancelled.
  */
 static EVT_BEGIN(main_0)
@@ -585,7 +585,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_wait_pera, STRING("me"))
 #endif
 
-    // Nokkos explains his trouble; Mario and the partner answer.
+    // Nokkos and Koops take turns talking (Mario has no lines), then Nokkos offers the reward.
     CALL(evt_msg_print, 0, STRING("irai_07_02"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_03"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_04"), 0, STRING("me"))

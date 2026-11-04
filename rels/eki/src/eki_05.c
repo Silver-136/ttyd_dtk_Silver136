@@ -201,7 +201,7 @@ static EVT_BEGIN(evt_head)
 EVT_END()
 
 /**
- * Map init for eki_05: sets up the doors to eki_06, the two glass panels,
+ * Map init for eki_05: sets up the doors to eki_04 and eki_06, the two glass panels,
  * the Ultra Boots chest and the Elevator Key (which jumps out when Mario bumps the block a_t_2 from below)
  * until each story step is passed, and loops the dripping water animation with its sound.
  */

@@ -1,5 +1,5 @@
 // Partner lecture in Twilight Town: the tutorial scenes that teach a new partner's field move (usu.rel's copy of the
-// lecture code).
+// lecture code), plus the black chest's Tube Curse lecture.
 
 #include "version.h"
 #include "evt/evt_window.h"
@@ -623,8 +623,8 @@ static USER_FUNC(lect_slit_check) {
 }
 
 /**
- * Script helper that plays a white flash: fades the screen out to white over 40 frames, holds it for 60 frames,
- * then fades back in; blocks until finished.
+ * Script helper that plays a white flash: fades the screen out to white over 40 ms, holds it for 60 ms,
+ * then fades back in over 40 ms and waits another 60 ms; blocks until finished.
  */
 static USER_FUNC(evtflash) {
     if (isFirstCall) {
@@ -918,7 +918,8 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_cont_onoff, 0, 1)
 
-    // The lesson: Mario blinks out of sight, Vivian's lesson plays, then Mario and the partner blink back in.
+    // The lesson: Mario (hidden since the backdrop opened) blinks back into view, Vivian's lesson plays, then Mario
+    // and the partner blink.
     CALL(lect_test_systemlevel)
     SWITCH(LW(9))
         CASE_EQUAL(6)

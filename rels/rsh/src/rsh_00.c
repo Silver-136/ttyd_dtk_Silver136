@@ -603,7 +603,7 @@ static EVT_BEGIN(evt_moamoa)
 EVT_END()
 
 /**
- * Called when the cab map loads while the engineer scene is under way (STG6_46_ENGINEER to
+ * Called by the init scripts of the passenger cars (rsh_01 to rsh_04) while the engineer scene is under way (STG6_46_ENGINEER to
  * STG6_47_ESCAPING_THE_SMORGS): plays the Smorg voice,
  * registers the two Smorg NPC models and the sprite effect, and shows all Smorgs at their window spots.
  */
@@ -852,8 +852,8 @@ EVT_END()
 /**
  * Talk script of the driver (unten).
  * Picks his line by story stage: the greeting that alternates,
- * the autograph request (at STG6_10 to 11 he signs and gives Mario the Autograph with the item-get
- * fanfare, STG6_11_OBTAIN_AUTOGRAPH), comments for each later stage,
+ * the autograph request (at STG6_10_THE_CONDUCTOR_ZIP_TOAD he signs and gives Mario the Autograph with the item-get
+ * fanfare and the story moves to STG6_11_OBTAIN_AUTOGRAPH), comments for each later stage,
  * the Smorg scene (evt_moamoa) before STG6_46_ENGINEER, and after the story a line for where the train is.
  */
 static EVT_BEGIN(talk_unten)

@@ -157,7 +157,7 @@ EVT_END()
 
 /**
  * Talk script for Koopa A: his dialogue changes with story progress (before the Gold Fuzzy,
- * before father and son reunite, before Frankly's house, the chapter 7 hint about white Petalburg,
+ * before father and son reunite, before Frankly's house, the chapter 7 hint about General White,
  * and after the finale). In chapter 7 he sets GSWF_NOK_GENERAL_WHITE_HINT_HEARD.
  */
 EVT_BEGIN(nokonoko_A_talk)
@@ -180,8 +180,8 @@ EVT_BEGIN(nokonoko_A_talk)
 EVT_END()
 
 /**
- * Init for Koopa B: not an encounter-style talker (talk animation off) but flagged as an enemy NPC
- * so he can be hit with the hammer (see nokonoko_B_damage).
+ * Init script written for Koopa B: talk pose off and flagged as an enemy NPC (see nokonoko_B_damage).
+ * Not used: Koopa B's entry in npcEnt has npc_init_evt as its init event.
  */
 EVT_BEGIN(nokonoko_B_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
@@ -281,15 +281,15 @@ EVT_BEGIN(nokonoko_D_talk)
 EVT_END()
 
 /**
- * Items the player may hand to Bub-ulber for Trouble Center request 15 on his first ask: the Hot Dog only,
- * ended by -1.
+ * Item list with the Hot Dog only, ended by -1 (Trouble Center request 15). No script in this module uses it:
+ * nokonoko_F_talk lets Mario pick from all his items (SELECT_TYPE_ITEM).
  */
 s32 iri_15_item_tbl1[] = {
     ITEM_HOT_DOG, -1,
 };
 
 /**
- * Items the player may hand to Bub-ulber for request 15 on his second ask: the Mousse Cake only, ended by -1.
+ * Item list with the Mousse Cake only, ended by -1 (request 15). No script in this module uses it either.
  */
 s32 iri_15_item_tbl2[] = {
     ITEM_MOUSSE_CAKE, -1,
@@ -890,7 +890,8 @@ EVT_END()
 /**
  * Bowser interlude in Petalburg (STG2_25_04_BOWSER_ACTION_STAGE):
  * Kammy flies in over the village, Koopa A flees into the shops, and Bowser is led to the Peach poster.
- * Koopa A jumps up and hangs the poster (via pposter_nok_on), the music slows down and fades,
+ * Koopa A jumps up and takes the poster down (the poster NPC is hidden and pposter_nok_on draws it on his
+ * model), runs into the house, the music slows down and fades,
  * and the story advances to STG2_25_05_BOWSER_PETALBURG.
  * Saving is offered and the scene continues into the next Bowser action stage (mri_00).
  */

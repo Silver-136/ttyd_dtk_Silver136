@@ -96,8 +96,8 @@ WinMgrDesc itemdrv_window_desc[4] = {
 
 /**
  * Puts a removed badge item on sale at the badge shop through pouchArriveBadge:
- * demos do so when ITEM_FLAG_LOST_BADGE_TO_SHOP (0x100) is clear, in or out of battle;
- * retail does so only outside battle and when the same bit is set.
+ * the June demos do so when ITEM_FLAG_LOST_BADGE_TO_SHOP (0x100) is clear, in or out of battle;
+ * JP and later (the September demos too) do so only outside battle and when the same bit is set.
  */
 inline void itemCheckBadge(ItemEntry* entry) {
 #if VERSION <= VERSION_DEMO_JP
@@ -226,7 +226,7 @@ void itemCoinDrop(Vec* position) {
 /**
  * Returns whether Mario may pick up this item now:
  * not in water or lava, Mario has control (later versions skip that for Bowser when his stage flag bit 0 is
- * set), no map event or other sequence runs, Mario is not on the boat (or, in retail, the plane panel), hiding with Vivian,
+ * set), no map event or other sequence runs, Mario is not on the boat (or, JP and later, the plane panel), hiding with Vivian,
  * taking damage or holding Koops's item, no other get is in progress, and field battle state allows it.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -671,7 +671,7 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
  * Spawns field item itemId at (x, y, z) named name (generated if NULL);
  * type (ItemEntryType) picks how it appears and how long it stays,
  * collectFlag is the GSWF or LSWF that marks it taken (-1 none), pickupEvt runs on collection.
- * When the table is full, US/PAL may replace a dropped coin or flower; JP and the early demos only try
+ * When the table is full, US, PAL and the September demos may replace a dropped coin or flower; JP and the early demos only try
  * the first slot for a replaceable coin, flower or heart. Returns the entry or NULL.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -782,7 +782,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
                 itemDelete(entry->name);
             } else {
 #if VERSION >= VERSION_US
-                // the heart found here is discarded: US never replaces a heart
+                // the heart found here is discarded: US and later never replace a heart
                 entry = itemFindDeletable(wp, ITEM_HEART);
                 entry = NULL;
 #else
@@ -931,7 +931,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
 
 /**
  * Removes the named field item (and its name windows);
- * JP, US and PAL first put a dropped badge on sale at the badge shop (itemCheckBadge).
+ * JP and later (the September demos too) first put a dropped badge on sale at the badge shop (itemCheckBadge).
  */
 void itemDelete(const char* name) {
     ItemWork* wp = itemGetWork();
@@ -1081,7 +1081,7 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
 
 /**
  * Draws the "You got X!" box during an item get, with "badge" wording for badges;
- * US/PAL format the message per language and size the box by its line count; JP and the early demos use sprintf and fixed height.
+ * US, PAL and the September demos format the message per language and size the box by its line count; JP and the early demos use sprintf and fixed height.
  */
 void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
@@ -1185,7 +1185,7 @@ void winHelpDisp(WinMgrEntry* win) {
     }
 }
 
-/** Draws the full-pouch warning: retail chooses item or badge wording; the early demos always use the item-full message. */
+/** Draws the full-pouch warning: JP and later choose item or badge wording; the June demos always use the item-full message. */
 #if VERSION <= VERSION_DEMO_JP
 static void winFullDisp(WinMgrEntry* win) {
     ItemEntry* entry;
@@ -1227,9 +1227,9 @@ void winFullDisp(WinMgrEntry* win) {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * The demo's item-get sequence: no retail sub-states 2 (control off) and 8 (motion abort),
- * so retail 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
- * and the icon flags are 0x40/0x100 where retail has 0x100/0x200.
+ * The June demos' item-get sequence: no later sub-states 2 (control off) and 8 (motion abort),
+ * so later 3-7 and 9 are 2-7 here; no badge flag bookkeeping, no item renaming after a swap,
+ * and the icon flags are 0x40/0x100 where later versions have 0x100/0x200.
  */
 static void itemseq_GetItem(ItemEntry* entry) {
 #else
@@ -1453,8 +1453,8 @@ void itemseq_GetItem(ItemEntry* entry) {
 #endif
                 break;
             }
-            if (entry->itemId >= ITEM_MIN && entry->itemId < ITEM_MAX && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) { // GSWF_ITEM_TUTORIAL_SEEN
-                swSet(0xEB); // GSWF_ITEM_TUTORIAL_SEEN
+            if (entry->itemId >= ITEM_MIN && entry->itemId < ITEM_MAX && entry->itemId != ITEM_STAR_PIECE && !swGet(0xEB) && !(gp->flags & GW_FLAG_E3)) { // saved flag 235 (no GSWF name yet): item tutorial seen
+                swSet(0xEB); // saved flag 235: item tutorial seen
 #if VERSION <= VERSION_DEMO_JP
                 entry->subState = 3;
 #else

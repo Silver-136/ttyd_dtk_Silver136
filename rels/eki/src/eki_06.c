@@ -239,8 +239,8 @@ s32 sw_cnt(MapObjectEntry* mobj) {
 
 /**
  * Called when a switch has been hit too many times:
- * sets the switches back to their idle poses and clears the counters of the ones one hit past their target
- * count (2, 11 and 4 hits).
+ * clears MOBJ_FLAG_NO_SHADOW on all three switches; the ones one hit past their target count (2, 11 and 4 hits)
+ * get a new pose (ANIM_5 / ANIM_7) and their counters cleared.
  */
 void sw_reset(void) {
     MapObjectEntry* mobj;
@@ -404,7 +404,7 @@ USER_FUNC(sw_entry) {
 /**
  * Map init for eki_06: sets up the door to eki_05,
  * the box and the three counting switches according to the story step (before STG6_34_3_BLUE_BLOCKS the
- * stairs are hidden; at that step the switches exist;
+ * stairs' hit area a_ori is off; at that step the switches exist and the folded stairs are hidden;
  * later the stairs are already unfolded), and the Shine Sprite power-up block.
  */
 EVT_BEGIN(eki_06_init_evt)

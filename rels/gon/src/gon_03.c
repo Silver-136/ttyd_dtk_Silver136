@@ -360,7 +360,7 @@ static EVT_BEGIN(senkaron_event)
         CALL(evt_msg_print, 0, STRING("stg1_gon_10"), 0, 0)
         WAIT_MS(300)
 
-        // The danger music starts as the leader gets up and the camera shakes.
+        // The danger music starts as the leader gets up and hops once.
         BEGIN_INLINE_EVENT
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
         END_INLINE_EVENT
@@ -661,8 +661,8 @@ EVT_BEGIN(richard_regl_event)
 EVT_END()
 
 /**
- * Talk event for Richard: when Mario talks to him he asks a yes/no question (stg1_gon_09_01_yn) and,
- * on the yes answer, replies with stg1_gon_09_02. Does nothing while the swarm scene is running (GW(15) is 1).
+ * Talk event for Richard: when Mario talks to him, a speakerless message (stg1_gon_09_01) offers to read the
+ * letter he holds (yes/no stg1_gon_09_01_yn) and, on the yes answer, shows the letter (stg1_gon_09_02). Does nothing while the swarm scene is running (GW(15) is 1).
  */
 EVT_BEGIN(richard_talk_event)
     IF_INT_EQUAL(GW(15), 1)
@@ -809,11 +809,11 @@ void nokotaro_callback(s32 type) {
 // Descriptive name (not in the symbol maps); placeholder unk_gon_00000374, JP gon .text+0x290. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 /**
- * Script helper (retail versions): writes 1 into LW(0)
+ * Script helper (all but the June demos): writes 1 into LW(0)
  * when Mario is touching the Dry Bones leader (the NPC marioGetTouchNpcPtr finds) while he has control,
  * otherwise 0.
- * The swarm scene polls it to start the fight; the demo versions started the fight
- * when Mario simply reached x = 350.
+ * The swarm scene polls it to start the fight; the June US and JP demos start the fight
+ * when Mario simply reaches x = 350.
  */
 USER_FUNC(leader_touch_check) {
     NpcEntry* npc = marioGetTouchNpcPtr();

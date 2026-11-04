@@ -348,7 +348,8 @@ static const char* door_5[] = {
     "5_door_close",
 };
 
-// Both hints are required. US advances the story only if needed; JP writes this story step unconditionally.
+// Both hints are required. US and PAL advance the story only if needed; JP and the demos write this story step
+// unconditionally.
 EVT_BEGIN(evt_rsh_konarikin_irai_party_talk)
     IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 0)
         RETURN
@@ -854,7 +855,7 @@ EVT_END()
  * Init event of the salaryman (サラリーマン) in rsh_04: off the map from STG6_01 to STG6_04, at
  * (190, 0, -150) from STG6_21_DAY_2 to STG6_26, off the map during day 3 (STG6_45 to 48) and
  * from STG6_49_POSHLEY_HEIGHTS on; otherwise he keeps his setup position.
- * When parked below y 0 his jumping
+ * When parked below y 0 his gravity
  * flag is turned off.
  */
 static EVT_BEGIN(init_sarary)
@@ -875,7 +876,7 @@ static EVT_BEGIN(init_sarary)
     RETURN
 EVT_END()
 
-/** Talk script of the salaryman in rsh_04: lines for the story stage (stg6_rsh_18, 79, 125, 166, 215, 229). */
+/** Talk script of the salaryman in rsh_04: lines for the story stage (stg6_rsh_18, 79, 79_01, 125, 147_08, 166, 215, 229). */
 static EVT_BEGIN(talk_sarary)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_05_GALLEY_KETTLE_DISCOVERED)
@@ -958,7 +959,6 @@ EVT_END()
 /**
  * Overheard background line of Papa Narikin (stg6_rsh_85_01) shown in a repeating balloon
  * while Mario stands in cabin 5 without talking to anybody; started by evt_narikin_room.
- * Repeats the parents' conversation (talk_papa_mama) when Mario talks to him at the right stage.
  */
 EVT_BEGIN(talk_papa_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンパパ"), NPC_FLAG_NO_TALK_BALLOON)
@@ -977,7 +977,7 @@ EVT_END()
 /**
  * Init event of Papa Narikin (ナリキンパパ): parks him off the map from STG6_27_RIVERSIDE_STATION to
  * STG6_42_DRAWBRIDGE_DOWN, during day 3 (STG6_45 to 48) and from STG6_49_POSHLEY_HEIGHTS on,
- * turning his jumping flag off; otherwise he keeps his setup position.
+ * turning his gravity flag off; otherwise he keeps his setup position.
  */
 static EVT_BEGIN(init_papa)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1016,8 +1016,7 @@ EVT_END()
 
 /**
  * Overheard background line of Mama Narikin (stg6_rsh_85_02),
- * shown alongside talk_papa_repeat while Mario stands in cabin 5;
- * repeats the parents' conversation (talk_papa_mama) when Mario talks to her at the right stage.
+ * shown alongside talk_papa_repeat while Mario stands in cabin 5.
  */
 EVT_BEGIN(talk_mama_repeat)
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンママ"), NPC_FLAG_NO_TALK_BALLOON)
@@ -1035,7 +1034,7 @@ EVT_END()
 
 /**
  * Init event of Mama Narikin (ナリキンママ): parks her off the map during day 3 (STG6_45 to 48) and from
- * STG6_49_POSHLEY_HEIGHTS on, turning her jumping flag off; otherwise she keeps her setup position.
+ * STG6_49_POSHLEY_HEIGHTS on, turning her gravity flag off; otherwise she keeps her setup position.
  */
 static EVT_BEGIN(init_mama)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1075,7 +1074,7 @@ EVT_END()
 /**
  * Init event of the Narikin child (コナリキン): parks it off the map from STG6_27_RIVERSIDE_STATION to
  * STG6_42_DRAWBRIDGE_DOWN, during day 3 (STG6_45 to 48) and from STG6_49_POSHLEY_HEIGHTS on,
- * turning its jumping flag off; otherwise it keeps its setup position.
+ * turning its gravity flag off; otherwise it keeps its setup position.
  */
 static EVT_BEGIN(init_konari)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1110,7 +1109,7 @@ static EVT_BEGIN(talk_konari)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_08_BUB)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_08_BUB)
 
-            // He asks Mario for an autograph.
+            // He asks Mario to work out what he wants for his birthday.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_91"), 0, 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_94"), 0, 0)
@@ -1217,7 +1216,7 @@ EVT_END()
  * Init event of Pennington (ポワン探偵) in rsh_04: off the map from STG6_01 to STG6_04, at
  * (230, 0, -180) from STG6_21_DAY_2 to STG6_26, off the map from STG6_27 to STG6_42,
  * during day 3 (STG6_45 to 48) and from STG6_49_POSHLEY_HEIGHTS on; otherwise he keeps his setup
- * position. When parked below y 0 his jumping flag is turned off.
+ * position. When parked below y 0 his gravity flag is turned off.
  */
 static EVT_BEGIN(init_powan)
     SWITCH(GSW_STORY_PROGRESS)

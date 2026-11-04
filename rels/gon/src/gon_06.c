@@ -302,7 +302,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_mobj_wait_animation_end, STRING("box"))
         CALL(evt_snd_sfxoff, LW(15))
 
-        // The chest chats with Mario while he shrugs, startles and shakes his head in turn.
+        // The chest chats with Mario while he shrugs, nods, startles and shrugs again in turn.
         WAIT_MS(300)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_02"), PTR(majin_callback), 0)
@@ -336,7 +336,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_07"), PTR(majin_callback), 0)
 
-        // The talk is over: the chest keeps the story-flag so it only plays once.
+        // The talk is over: the chest sets its first-talk flag so it only plays once.
         CALL(evt_mobj_exec_cancel, STRING("box"))
         SET_VALUE(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
@@ -489,7 +489,7 @@ EVT_END()
 /**
  * Map init for gon_06: sets up the doors, six dormant Dry Bones, the red switch for the bar grid,
  * the Attack FX R badge, and the black chest (box) that speaks to Mario and holds the Paper Curse;
- * once the story is past STG1_13_01_01_PAPER_MAGE_2 the chest counts as already opened.
+ * once the story is at or past STG1_13_01_01_PAPER_MAGE_2 the chest counts as already opened.
  */
 EVT_BEGIN(gon_06_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))

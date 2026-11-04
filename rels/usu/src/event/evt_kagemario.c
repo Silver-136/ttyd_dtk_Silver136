@@ -77,8 +77,8 @@ static s32 color_change_evt(s32 on) {
 }
 
 /**
- * Script helper that blocks forever after clearing the Shadow Mario tint from the active partner's pose,
- * so the partner is not drawn dark.
+ * Script helper that never finishes: on every call (each frame) it clears the Shadow Mario tint from the active
+ * partner's pose, so the partner is not drawn dark.
  */
 static USER_FUNC(check) {
     if (partyGetPtr(PARTY_SLOT_PARTY) != NULL) {

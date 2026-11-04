@@ -2122,8 +2122,8 @@ static const char* pika_tbl_rsh_06[] = {
 
 /**
  * Common start of the train-exterior scenes: marks the train as not moving,
- * zeroes the wheel speeds and spawns the wheel, rod,
- * background and star scripts (plus lamp and sparks on the maps that have them).
+ * zeroes the wheel speeds and spawns the wheel, rod, star and lamp scripts
+ * (the background script only on hom_10, hom_11, hom_12 and rsh_06_a), then puts TEV callback 1 on the pika objects.
  */
 static EVT_BEGIN(hom_10_evt_resha_sub)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 0)
@@ -2326,7 +2326,8 @@ EVT_END()
 /**
  * Cutscene and boss fight with the giant Smorg (moamoa) on the roof of the train:
  * the swarm gathers and merges (evt_moamoa_fusion) into a giant body with the passengers' faces (kinds),
- * the camera sweeps over it, Mario and the partner react (stg6_rsh_244 to 246),
+ * the camera sweeps over it, the Smorg cries out (stg6_rsh_244), the partner reacts (stg6_rsh_245) and the
+ * swallowed passengers cry out (stg6_rsh_246_02, 246_03),
  * the battle starts with the "base" NPC and, after the fight, the Smorg falls apart (evt_moamoa_blow),
  * the story advances to STG6_48_SMORG_MIASMA and the map changes to rsh_01_a.
  */
@@ -2419,7 +2420,7 @@ EVT_BEGIN(evt_great_moamoa)
     CALL(evt_party_stop, 0)
     WAIT_MS(300)
 
-    // Mario and his partner react.
+    // The partner reacts.
     CALL(evt_msg_print_party, STRING("stg6_rsh_245"))
     WAIT_MS(300)
     CALL(evt_party_run, 0)

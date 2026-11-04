@@ -127,7 +127,7 @@ static EVT_BEGIN(evt_check)
 EVT_END()
 
 /**
- * Map-init script for story steps from "Trading Places" up to just before the Superbombomb is found:
+ * Map-init script for story steps from "Trading Places" up to and including "Superbombomb found":
  * removes both partners from the map and disables their control, since Mario goes on alone as the shadow.
  */
 EVT_BEGIN(evt_usu_kagemario_party_kill)

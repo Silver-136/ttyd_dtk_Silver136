@@ -505,12 +505,12 @@ EVT_BEGIN(talk_cook)
         CALL_CHILD(PTR(talk_cook_nabe_return))
         RETURN
     END_IF
+
+    // Without a request, his line depends on the story stage.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
         IF_INT_EQUAL(LSWF_RSH_03_CHEF_FIRST_TALKED, 0)
             SET_VALUE(LSWF_RSH_03_CHEF_FIRST_TALKED, 1)
-
-            // Without a request, his line depends on the story stage.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_04"), 0, 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_05"), 0, 0)
@@ -837,7 +837,7 @@ EVT_END()
 /**
  * Cutscene of the missing lunch mystery in the dining car:
  * Pennington questions the cook, the waitress, the salaryman and Toron in turn, each with a reaction jingle,
- * and the case ends with Pennington's conclusion (stg6_rsh_23 onwards).
+ * and the case ends with Pennington still puzzled (stg6_rsh_23 onwards).
  */
 EVT_BEGIN(evt_lanch_missing)
     SET_VALUE(GF(10), 1)
@@ -1038,7 +1038,7 @@ EVT_BEGIN(evt_lanch_missing)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_38"), 0, STRING("ウェイトレス"))
     WAIT_MS(300)
 
-    // Pennington gives his conclusion.
+    // Pennington is left without a culprit.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_39"), 0, STRING("ポワン探偵"))
     WAIT_MS(300)
     CALL(evt_npc_set_autotalkpose, STRING("ウェイトレス"), STRING("S_1"), STRING("T_1"))
@@ -1055,8 +1055,9 @@ EVT_BEGIN(evt_lanch_missing)
 EVT_END()
 
 /**
- * Talk script of Pennington in the dining car: his lines by story stage (the one-line talk used while the lunch
- * is missing is in msg_tbl).
+ * Talk script of Pennington in the dining car: before STG6_02_A_CASE_OF_LOST_STEW it plays the missing lunch
+ * cutscene; afterwards, the first time, it closes the ambient msg_tbl lines and he accuses Mario
+ * (GSWF_RSH_PENNINGTON_ACCUSED_MARIO), and later talks print stg6_rsh_46.
  */
 static EVT_BEGIN(talk_powan)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1602,8 +1603,8 @@ USER_FUNC(fire) {
 }
 
 /**
- * Sets up the shop door triggers (tobira_omise to open, tobira_omise_heya to close) and shows
- * or hides the shop floors for the story stage;
+ * Sets up the shop door triggers (tobira_omise to open, tobira_omise_heya to close), hides omise_masuku
+ * and registers the OFF_d_jaba paper;
  * at STG6_19_GIVE_BLANKET and STG6_43_CONDUCTOR_APPEARS (the nights) it keeps the shop closed.
  */
 EVT_BEGIN(evt_shop_door_init)
@@ -1671,8 +1672,8 @@ static const char* access_tbl[] = {
 };
 
 /**
- * Trigger script for the shelves: prints the message in LW(1) (LW(2) after the Rogueport station stage in the
- * releases).
+ * Trigger script for the dining car's tables and fixtures (table_1, table_2, oubun, shokki, memo): prints the
+ * message in LW(1) (LW(2) from the Rogueport station stage on in the releases).
  */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
@@ -1689,7 +1690,7 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
-/** Registers the shelf triggers from access_tbl; each runs evt_access when Mario presses A while facing it. */
+/** Registers the triggers from access_tbl; each runs evt_access when Mario presses A while facing it. */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
@@ -1708,7 +1709,8 @@ EVT_END()
 
 /**
  * Shared map init for the three variants of rsh_03 on the first trip:
- * loads the dining car NPCs for the story stage (lunch mystery set at the start, the normal crew afterwards),
+ * loads the dining car NPCs for the story stage (the lunch mystery set from STG6_01_THE_CONDUCTOR to
+ * STG6_04_GRILLING_HEFF_T, the normal crew before that and from STG6_05 to STG7_00_START),
  * the shop door and the Smorg shop, the shelf signs, and the music for the story stage.
  */
 EVT_BEGIN(rsh_03_init_evt)

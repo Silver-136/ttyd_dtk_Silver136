@@ -281,7 +281,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
 
-    // If the intro was already seen, skip straight to the aftermath.
+    // With the skip flag set (only the debug story jump sets it), go straight to the aftermath.
     IF_INT_EQUAL(GSWF_GON_11_HOOKTAIL_INTRO_SKIP, 1)
         GOTO(100)
     END_IF
@@ -425,7 +425,7 @@ EVT_BEGIN(gonbaba_event)
         END_LOOP
     END_INLINE_EVENT
 
-    // The partner celebrates beating Hooktail and mentions finding the Crystal Star; Mario nods.
+    // The partner celebrates beating Hooktail and says the Crystal Star still has to be found; Mario nods.
     CALL(evt_msg_print_party, STRING("stg1_gon_33_01"))
     CALL(evt_party_set_dir, 0, 270, -1)
     WAIT_MS(800)
@@ -654,7 +654,7 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_party_set_dir, 0, 90, -1)
     END_INLINE_EVENT
 
-    // Mario and the partner walk over; the music fades.
+    // Mario walks over; the music fades.
     CALL(evt_cam3d_evt_set, 245, 75, 450, 245, 50, 245, 2000, EASING_SINE_IN_OUT)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     BEGIN_INLINE_EVENT
@@ -1090,7 +1090,7 @@ EVT_END()
 
 /**
  * End event of the request-16 cloud: places the chest (box), switches off the cloud's hit area,
- * plays the success jingle and sets GSWF_TROUBLE_WORK_1.
+ * plays the success jingle and sets GSWF_TROUBLE_WORK(1).
  */
 EVT_BEGIN(iri_16_cloud_evt)
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
@@ -1111,7 +1111,7 @@ EVT_END()
 
 /**
  * Map-init part of Trouble Center request 16: while the request is active it sets up the cloud (A_kura) with its
- * case event and the capture map, or, once the cloud is cleared (GSWF_TROUBLE_WORK_1), the reward chest (box);
+ * case event and the capture map, or, once the cloud is cleared (GSWF_TROUBLE_WORK(1)), the reward chest (box);
  * when the request is not active it disables the hit objects A_taka and A_kura.
  */
 static EVT_BEGIN(iri_16_init)
@@ -1136,7 +1136,7 @@ EVT_END()
  * Map init for gon_11 (Hooktail's lair): sets up the door back to gon_10, the music and ambience,
  * and the Hooktail and Koops' father NPCs.
  * Before Hooktail is beaten (STG1_16_HOOKTAIL) it enlarges Hooktail and starts gonbaba_event;
- * afterwards Hooktail is moved below the map; retail versions then delete both NPCs.
+ * afterwards Hooktail is moved below the map; all versions but the June demos then delete both NPCs.
  * Also sets up the Trouble Center request 16 cloud and chest (iri_16_init).
  */
 EVT_BEGIN(gon_11_init_evt)

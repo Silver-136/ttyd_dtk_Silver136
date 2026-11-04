@@ -154,8 +154,8 @@ static BeroEntry bero_data[] = {
 };
 
 /**
- * Case event for the first poster wall: advances the story to STG6_33_BLOW_THE_POSTER
- * and opens the door switch (bero_case_switch_on).
+ * Advances the story to STG6_33_BLOW_THE_POSTER and switches on the door to eki_04 (bero_case_switch_on with
+ * LW(0) = 1, w_bero_2). No script in this module refers to it.
  */
 EVT_BEGIN(evt_poster)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_33_BLOW_THE_POSTER)
@@ -342,7 +342,8 @@ EVT_END()
  * Map init for eki_03: sets up the doors to eki_01 and eki_04, the HP Plus item,
  * the Shine Sprite block (power-up block), the brick blocks (one holds a Thunder Rage),
  * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
- * Posters already blown are hidden; the wall behind them is opened by evt_chk once posters 5 to 15 are gone.
+ * Posters already blown are hidden; the door to eki_04 (w_bero_2) is switched off here and back on by evt_chk once
+ * posters 5 to 15 are gone.
  */
 EVT_BEGIN(eki_03_init_evt)
     // Doors, music and ambience; the music is dipped in volume.
@@ -456,7 +457,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
 
-    // Posters 10 to 12 also open up extra hit areas once blown away.
+    // Posters 10 to 12 also switch off extra hit areas once blown away.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_10_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_10"), STRING("a_kami_10"), PTR(evt_poster_10))
     ELSE
@@ -499,7 +500,8 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
 
-    // Poster 15; then the wall behind the posters is closed until posters 5 to 15 are gone.
+    // Poster 15; then the a_kabe hit area is switched off and the door to eki_04 (w_bero_2) is closed until
+    // posters 5 to 15 are gone.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_15"), STRING("a_kami_11"), PTR(evt_poster_15))
     ELSE

@@ -349,7 +349,7 @@ EVT_END()
 
 /**
  * Init for Detective Pennington (ポワン探偵, powan): during the sanctum manager story point (STG6_50) he stands
- * at (165, 20, -190) with the jumping and land-on-floor flags on; at other times he stays where the map put him.
+ * at (165, 20, -190) with floor collision and gravity on; at other times he stays where the map put him.
  */
 static EVT_BEGIN(init_powan)
     SWITCH(GSW_STORY_PROGRESS)
@@ -845,7 +845,7 @@ EVT_END()
 
 /**
  * Init for Tar-kun 5: walk and talk animations on;
- * hides him during the Bowser interlude, otherwise lets him hop on the floor.
+ * hides him during the Bowser interlude, otherwise turns on his floor collision and gravity.
  */
 EVT_BEGIN(takun5_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ターくん５"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -876,7 +876,7 @@ EVT_END()
 
 /**
  * Init for Tar-kun 6: walk and talk animations on;
- * hides him during the Bowser interlude, otherwise lets him hop on the floor.
+ * hides him during the Bowser interlude, otherwise turns on his floor collision and gravity.
  */
 EVT_BEGIN(takun6_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ターくん６"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)

@@ -59,7 +59,7 @@ static EVT_BEGIN(door01_open)
 EVT_END()
 
 /**
- * Run when Mario leaves the room during the escape countdown:
+ * Exit event of the w_bero door to gon_06 (the escape route of the countdown):
  * ends the countdown timer (evt_sub_countdown_end) and, at STG1_13_A_SUSPICIOUS_ROOM,
  * stops the ceiling's rumble sound GW(10).
  */

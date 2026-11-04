@@ -564,7 +564,7 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
-/** Second NPC setup of the car, used by the later-story entries: Toron and the madam. */
+/** Second NPC setup of the car, used by variants b and c and by the second-visit inits: Toron and the madam. */
 NpcSetupInfo npc_data_2[] = {
     {
         "トロン", // name

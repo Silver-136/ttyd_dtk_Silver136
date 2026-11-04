@@ -1,5 +1,5 @@
 // gon_04 (ゴンババ, Hooktail Castle): room linking gon_03, gon_05 and gon_08.
-// Floating blocks and switches, a bridge raised by a blue switch (story STG1_12_PAPER_STAIRS, STG1_14_PAPER_BRIDGE_RIGHT, STG1_14_01_PAPER_BRIDGE_LEFT).
+// Floating blocks and switches, two paper bridges each unfolded by a blue switch (story STG1_12_PAPER_STAIRS, STG1_14_PAPER_BRIDGE_RIGHT, STG1_14_01_PAPER_BRIDGE_LEFT).
 
 #include "version.h"
 #include "battle/battle_unit.h"

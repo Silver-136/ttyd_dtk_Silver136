@@ -491,7 +491,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        // The train accelerates over about 20 seconds.
+        // GW(1) follows GW(0); 1.5 seconds in it runs up to 10 faster for 2 seconds.
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
         LOOP(0)
             SET_FLOAT_VALUE(GW(1), GW(0))
@@ -600,7 +600,7 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-        // The train accelerates over about 20 seconds.
+        // GW(1) follows GW(0); 1.5 seconds in it runs up to 10 faster for 2 seconds.
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
         LOOP(0)
             SET_FLOAT_VALUE(GW(1), GW(0))
@@ -804,8 +804,8 @@ static const char* pika_tbl_rsh_06[] = {
 
 /**
  * Common start of the train-exterior scenes: marks the train as not moving,
- * zeroes the wheel speeds and spawns the wheel, rod,
- * background and star scripts (plus lamp and sparks on the maps that have them).
+ * zeroes the wheel speeds and spawns the wheel, rod, star and lamp scripts (the background scroll only on
+ * hom_10, hom_11, hom_12 and rsh_06_a), then puts the pika_* objects on the map TEV callback resha_tev.
  */
 static EVT_BEGIN(hom_10_evt_resha_sub)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 0)
@@ -921,7 +921,7 @@ EVT_END()
 
 /**
  * Exit event of the n_bero door towards the Excess Express (rsh_01_a):
- * sets GF(11) and clears LW(0) so the train-door script does not reset anything on the way out.
+ * sets GF(11) (which keeps ie_1 hidden, see under) and returns 0 in LW(0), so the normal door exit goes ahead.
  */
 EVT_BEGIN(resha_noru)
     SET_VALUE(GF(11), 1)
@@ -1115,8 +1115,8 @@ EVT_END()
 /**
  * Talk script for the station attendant.
  * Before the return to Rogueport (STG6_54_WELCOME_BACK) he says there is time before departure;
- * later he tells Mario the train is not ready until the return trip has started,
- * and otherwise offers a ride back on the Excess Express.
+ * later, while the train is not bound for Rogueport (GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT clear), he says the same
+ * (train_06), and otherwise offers a ride back on the Excess Express.
  * If Mario has the Train Ticket he shows it, the attendant steps aside and evt_train boards the train;
  * without it he says Mario needs one.
  */
@@ -1517,7 +1517,7 @@ static EVT_BEGIN(talk_mama)
                 RETURN
             END_IF
         ELSE
-            // She thanks Mario and the request moves on.
+            // After the handover she only repeats her thanks.
             CALL(evt_msg_print, 0, STRING("irai_29_18"), 0, 0)
             RETURN
         END_IF
@@ -2008,7 +2008,7 @@ EVT_END()
 
 /**
  * Cutscene when the Excess Express pulls into Poshley Heights (entered through "resha"):
- * Mario and the partner are hidden, the camera pulls back over the station with the "Poshley Heights" title
+ * Mario and the partner are hidden, the camera moves in over the station with the "Poshley Heights" title
  * card, and after ten seconds the game
  * changes to a train map where Mario steps off (which one depends on story progress).  Sets GSWF_HOM_TRAIN_AT_POSHLEY.
  */
@@ -2041,9 +2041,9 @@ EVT_BEGIN(evt_pik_00_arrival)
 EVT_END()
 
 /**
- * Secret of the left villa: when Mario steps on the floor of ie_1_2 a paper-flip effect (offscreen capture of
- * the interior with the OFF_d_two_meku_up paper animation) reveals the interior of naka_1,
- * and when he returns to the ie_1_1 floor the flip plays backwards and the interior is hidden again.
+ * Secret of the left villa: when Mario steps on the floor of ie_1_2 a paper-flip effect (offscreen capture with
+ * the OFF_d_two_meku_up paper animation A_1) flips naka_1 away and leaves it hidden (the demos hide e and
+ * ie_1_sakai instead), and when he returns to the ie_1_1 floor a second flip (A_2) shows naka_1 again.
  */
 EVT_BEGIN(evt_seacret)
     CALL(evt_paper_entry, STRING("OFF_d_two_meku_up"))
@@ -2250,7 +2250,7 @@ EVT_BEGIN(pik_00_init_evt)
     CALL(evt_hitobj_attr_onoff, 0, 1, STRING("se_bero"), 4)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
 
-    // Finally the entrances, the biting Gazigazi and the mail check.
+    // Finally the biting Gazigazi and the mail check.
     CALL_CHILD(PTR(evt_gazigazi_entry))
     SPAWN_EVENT(PTR(evt_sub_mail_event))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_2"), MAP_OBJ_FLAG_CLIP)
@@ -2387,7 +2387,7 @@ static void resha_tev(MapTevCallbackInfo* info) {
 
 /**
  * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15));
- * evt_ramp rotates the station's ramp (ranpu) by it, so the boarding ramp sways while the train stands there.
+ * evt_ramp rotates the lamps (ranpu, ranpu_c) by it, so they sway with the train's speed and stay still when it stops.
  */
 static USER_FUNC(ramp_r) {
     f32 amp = __fabsf(evtGetFloat(event, GW(0)));

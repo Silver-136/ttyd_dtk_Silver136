@@ -111,7 +111,7 @@ EvtWord all_juyoitem_lecture_rel[252];
 
 /**
  * Linear blend used by lect_mario_ido_sum: returns (total - elapsed) / total of end plus elapsed / total of
- * start, so the value moves from start toward end as elapsed grows.
+ * start, so the value moves from end (elapsed 0) toward start (elapsed = total) as elapsed grows.
  */
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;
@@ -205,7 +205,7 @@ static USER_FUNC(x_flag_wait) {
 
 /**
  * 2D draw callback that draws the two lecture button icons (when not hidden) at their positions with their
- * current alpha; icons 075 to 07D (the stick direction icons) are drawn 15 units higher.
+ * current alpha; the stick direction icons (ICON_STICK_*) are drawn 15 units lower.
  */
 static void lecture_button_disp(CameraId camera, void* param) {
     s32 i;
@@ -477,7 +477,8 @@ static USER_FUNC(effitemget_busaiku) {
 /**
  * Sets up the stage for the Ultra Boots lecture:
  * moves Mario's real position aside, places Kinopiko (the Toad teacher) next to him,
- * sets a close lecture camera and slides Mario to his lecture spot, ending with Mario facing right.
+ * sets a close lecture camera (Mario held in place for one second while it moves; the slide's start and end are
+ * his own position), then puts Mario at his lecture spot (0, -600, 0), ending with Mario facing right.
  */
 EVT_BEGIN(boots_lv3_juyoitem_lecture_init)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -560,7 +561,8 @@ EVT_END()
 /**
  * The Ultra Boots lecture proper.
  * Kinopiko explains the spring jump (lecture_u_boots_04 to 08):
- * the player holds A to crouch and releases it to launch, while the button icons show the controls;
+ * the player holds A and rotates the stick to crouch and releases A to launch, while the button icons show the
+ * controls;
  * the script lets Mario try it until he reaches the target height,
  * after which Kinopiko offers to repeat the lesson (lecture_u_boots_10 and 11)
  * and finally says goodbye (lecture_u_boots_13) and leaves.

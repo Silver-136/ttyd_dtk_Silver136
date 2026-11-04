@@ -447,8 +447,8 @@ EVT_BEGIN(jin_00_dai)
 EVT_END()
 
 /**
- * Script run when Mario drops back into the main hall from jin_06:
- * places Mario and his partners at (390, -60) and has them jump to (365, 40) on the floor.
+ * Script run when Mario comes back up into the main hall from jin_06 below:
+ * places Mario and his partners at (390, -60), under the floor, and has them jump up to (365, 40) on the floor.
  */
 EVT_BEGIN(jin_00_dai_in_sub)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -843,7 +843,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Opening scene of the steeple: Mario and Goombella (the partner) appear at the west door (x=-640),
+ * Opening scene of the steeple: Mario and his partner appear at the west door (x=-640),
  * the door animation plays, the story becomes "Steeple demo" and control returns.
  */
 EVT_BEGIN(first_jin00)
@@ -870,8 +870,8 @@ EVT_END()
 
 /**
  * Case script run every frame while Mario pushes the statue base (A_dai):
- * he keeps the pushing pose and the base (oki01) slides sideways a little each frame,
- * with dust now and then once pushed 40 frames.
+ * he keeps the pushing pose and the base (oki01) jitters sideways by 1 unit (2 units and dust now and then
+ * once pushed 40 frames).
  * After 80 frames of pushing it finishes by itself:
  * the music switches to the success jingle, the camera shakes,
  * dust puffs and the pedestal sounds play while the base slides 50 units and carries Mario along

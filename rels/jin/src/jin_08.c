@@ -81,8 +81,8 @@ static EVT_BEGIN(e_open)
 EVT_END()
 
 /**
- * Exit event for the west exit (e_bero_2) along a ramp: Mario walks back three short steps of decreasing speed;
- * returns 1 in LW(0).
+ * Exit-event style script that no door entry of this room uses (e_bero_2 has no exit event): Mario moves
+ * 50 units west three times at decreasing speed; returns 1 in LW(0).
  */
 EVT_BEGIN(evt_roll_in)
     CALL(evt_mario_key_onoff, 0)

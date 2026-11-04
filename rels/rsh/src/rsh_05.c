@@ -1,4 +1,4 @@
-// rsh_05 (列車, Excess Express): car where Smorg (moamoa) is first met and flees; conductor, waitress and ghost NPCs, a
+// rsh_05 (列車, Excess Express): car where Smorg (moamoa) is first met and flees; conductor and waitress NPCs, a
 // ghost diary and the Power Punch item; doors to rsh_04 and rsh_06.
 
 #include "version.h"
@@ -214,8 +214,8 @@ EvtWord rsh_05_init_evt_nidome[59];
 EvtWord rsh_05_a_init_evt_nidome[29];
 
 /**
- * Animation table of the swarm of small Smorgs (c_n_moa_a and c_n_moa_b): the figure, its animation set and a start offset
- * for each.
+ * Animation table of the swarm of small Smorgs (c_n_moa_a and c_n_moa_b): the figure, its animation set and a sampled
+ * frame for each.
  */
 static ExtTexInfo ext_moamoa_data[] = {
     {"c_n_moa_a", "S_1", 0.0f},
@@ -948,7 +948,7 @@ static void ext_moamoa_main(void) {
     }
 
 
-    // One ordinary hit per update; Bobbery's hit code 4 deliberately leaves that latch clear.
+    // One ordinary hit per update; Bobbery's hit code 4 leaves that latch clear.
     pose = extGetPosePtr();
     sfx = 0;
     moa = wp->moa;
@@ -1573,7 +1573,7 @@ EVT_END()
 /**
  * Cutscene when Mario first enters the baggage car with the Smorgs (STG6_46_ENGINEER):
  * the waitress and conductor are being held in the swarm, Mario is startled,
- * and messages play with the partner's reaction (stg6_rsh_237, 238_x).
+ * the Smorgs cry out (stg6_rsh_237) and the partner reacts (stg6_rsh_238_x).
  */
 static EVT_BEGIN(evt_meet_moamoa)
     CALL(evt_mario_key_onoff, 0)
@@ -2017,7 +2017,8 @@ EVT_END()
 
 /**
  * Reading the Ragged Diary: asks whether to read it and continue (stg6_rsh_130_yn) before each page.
- * If all three prompts are accepted, shows its pages (stg6_rsh_131 to 133) and the ghost's remark (stg6_rsh_134).
+ * Each accepted prompt shows the next page (stg6_rsh_131 to 133); after the third page comes the ghost's remark
+ * (stg6_rsh_134). Declining a prompt ends the reading.
  */
 EVT_BEGIN(evt_ghost_diary_read)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_130"), 0, 0)

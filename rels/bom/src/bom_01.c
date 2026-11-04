@@ -395,7 +395,7 @@ void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale) {
 /**
  * Draws the cannon's targeting display (taihou.tpl) over the aiming part of evt_taihou ("Sighting! Target is the
  * moon!"): corner frames that spin with the sight direction, blinking inner frames, the four direction arrows
- * with the one set by sight_dir lit (its counter ticking up), a five-bar level meter fed by the game's sound
+ * with the one set by sight_dir lit (arrows 2 and 3 tick a counter up while lit), a five-bar level meter fed by the game's sound
  * output (sound.samples), and running number readouts made from the render time and retrace count.
  * sight queues it only while the direction is not 5 (idle).
  */
@@ -561,7 +561,7 @@ s32 sight_dir(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Script helper: args[0] switches the bits in args[1] on
- * or off in the crowd work flags (bit 0 mutes the Bob-omb hop sounds).
+ * or off in the crowd work flags (bit 0 hides the crowd and mutes the Bob-omb hop sounds).
  */
 s32 bom_flag(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
@@ -1099,7 +1099,7 @@ static void ext_main(void) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
-/** Queues ext_disp every frame for the crowd unless the mute flag in BomWork is set. */
+/** Queues ext_disp every frame for the crowd unless bit 0 of the BomWork flags is set (it also mutes the hops). */
 static void ext_dispent(void) {
     BomWork* wp = lp->address;
 
@@ -1157,7 +1157,7 @@ EVT_BEGIN(evt_bom1000)
     RETURN
 EVT_END()
 
-/** Small camera shake (amplitude 0.002) used while the cannon is charging. */
+/** Small camera shake (amplitude 0.002) used while the floor and the cannon move. */
 EVT_BEGIN(gamen_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 0)
     RETURN
@@ -1397,12 +1397,12 @@ const char* oh_data[] = {
 
 /**
  * The cannon scene (taihou = cannon) started by talking to the mayor before STG7_05_THE_CANNON:
- * the mayor places Mario and asks General White whether the big bomb cannon is ready (stg7_bom_63 to 64_01),
+ * the mayor places Mario, the floor opens and Mario and the partner (in its damage pose) drop below;
+ * the mayor asks General White whether the big bomb cannon is ready (stg7_bom_63 to 64_01),
  * and White's crew (ニトロ, ペントリット, スラリー and ボムヘイD, oh_data) load and aim it on his orders
  * (stg7_bom_65 to 86: guidance system online, hatches and shutters open, sighting the moon with the disp_sight
  * display) while the camera switches between the room and the outside and the screen shakes;
- * the mayor orders everyone in and fires it (stg7_bom_81, 87),
- * the partner reacts in its damage pose, Mario is fired from the cannon,
+ * the mayor orders everyone in and fires it (stg7_bom_81, 87), Mario is fired from the cannon,
  * the Goldbob guide (ITEM_GOLDBOB_GUIDE) is taken from the pouch and the map changes to moo_03.
  */
 static EVT_BEGIN(evt_taihou)
@@ -2110,8 +2110,8 @@ EVT_BEGIN(init_nitoro)
 EVT_END()
 
 /**
- * Talk script for Nitoro: his line depends on story progress (before Fahr Outpost is reached,
- * before power is restored, before the cannon, until the end of Chapter 8, and afterwards).
+ * Talk script for Nitoro: his line depends on story progress (an early visit before STG6_71_01,
+ * before STG7_04_BACK_ONLINE, before the cannon, until the end of Chapter 8, and afterwards).
  */
 EVT_BEGIN(talk_nitoro)
     SWITCH(GSW_STORY_PROGRESS)
@@ -2408,7 +2408,7 @@ static EVT_BEGIN(musume_c_entry)
     RETURN
 EVT_END()
 
-/** The cast of the village square: the mayor, Nitro and the Bob-omb soldier D. */
+/** The cast of the village square: the mayor, Nitro, Pentrit, Surary, the Bob-omb soldier D and General White. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"村長"*/"\221\272\222\267", // name

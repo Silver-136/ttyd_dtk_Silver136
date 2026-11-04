@@ -195,7 +195,7 @@ EVT_BEGIN(evt_go)
 EVT_END()
 
 /**
- * Door callback of the sanctum door (evtIn): rotates the double door objects door_1_a
+ * Door callback of the sanctum door (exit animation, exitAnimeArg of s_bero): rotates the double door objects door_1_a
  * and door_1_b in opposite directions by the angle in LW(0) scaled by 0.38867188.
  */
 static EVT_BEGIN(s_door_open)
@@ -206,7 +206,7 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
-/** Door callback of the sanctum door (evtOut): the reverse of s_door_open. */
+/** Door callback of the sanctum door (entrance animation, enterAnimeArg of s_bero): the reverse of s_door_open. */
 static EVT_BEGIN(s_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1_a"), 0, LW(0), 0)
@@ -326,7 +326,7 @@ BeroEntry s_bero_peach[] = {
 /**
  * Init for Pennington in the sanctum: between STG6_51 and STG6_52 and
  * after STG6_53 he stands at (-120, 0, 490);
- * at STG6_53 (the real Garnet Star) he stands at (-100, 10, -930) in the hidden room.
+ * at STG6_53 (the real Garnet Star) he stands at (-100, 10, -930) by the altar.
  */
 static EVT_BEGIN(init_powan)
     SWITCH(GSW_STORY_PROGRESS)
@@ -342,7 +342,7 @@ EVT_END()
 
 /**
  * Talk script for Pennington in the sanctum: stg6_pik_19 before the real Garnet Star,
- * then stg6_pik_22 and stg6_pik_23 alternately (LSWF(0)) until he is back,
+ * then stg6_pik_22 and stg6_pik_23 alternately (LSWF(0)) up to STG6_54_WELCOME_BACK,
  * stg7_pik_clear_09_1 until the end of chapter 8 and stg7_pik_clear_09_1_1 afterwards.
  */
 static EVT_BEGIN(talk_powan)

@@ -225,7 +225,7 @@ EVT_BEGIN(gra_06_saku_open)
         END_LOOP
     END_LOOP
 
-    // If Mario is up at the gate with a partner, the partner comments.
+    // From the trail side (Mario's z above 160) the gate stays shut: the partner, if any, says it won't open.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(2), 160)
         CALL(evt_mario_get_party, LW(0))

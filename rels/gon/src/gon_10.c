@@ -44,8 +44,8 @@ EVT_END()
  * Door animation callback, opening for the w_bero exit to gon_11:
  * rotates map objects "door03" and "door04" about Y by 0.389 and -0.389 times the value in LW(0),
  * so the two leaves swing opposite ways.
- * In the September demos this door, the way into Hooktail's lair, ends the demo instead: it turns the letterbox
- * off and goes to the game-over sequence.
+ * In the September demos this door, the way into Hooktail's lair, ends the demo instead: it clears the letterbox-off
+ * setting (evt_cam_letter_box_disable 0) and goes to the game-over sequence.
  */
 static EVT_BEGIN(door02_open)
 #if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU

@@ -576,7 +576,7 @@ EVT_BEGIN(evt_teresa_box_open)
         END_LOOP
     END_INLINE_EVENT
 
-    // Waits until the whole swarm has left the box.
+    // Waits until the whole swarm has finished its flight.
     LOOP(0)
         PEEK_INT(LW(0), PTR(g_nNumEndProc))
         IF_INT_EQUAL(LW(0), 200)
@@ -681,7 +681,7 @@ EVT_END()
  * Creepy Steeple jin_07 map init: sets the music for the room, the shadow-Mario tint and the exits,
  * places the Star Piece, handles Mario falling in from the hole,
  * unlocks or locks the west door by the jin_08 lock flag,
- * closes the Boo box before the "Boo box" story step and hides the flame objects.
+ * closes the Boo box before the "Boo box" story step and replaces the four flame objects with torch effects.
  */
 EVT_BEGIN(jin_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))

@@ -101,7 +101,7 @@ EvtWord slit_majin_lecture[390];
 
 /**
  * Linear blend used by lect_mario_ido_sum: returns (total - elapsed) / total of end plus elapsed / total of
- * start, so the value moves from start toward end as elapsed grows.
+ * start, so the value moves from end (elapsed 0) toward start (elapsed = total) as elapsed grows.
  */
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;
@@ -195,7 +195,7 @@ static USER_FUNC(x_flag_wait) {
 
 /**
  * 2D draw callback that draws the two lecture button icons (when not hidden) at their positions with their
- * current alpha; icons 075 to 07D (the stick direction icons) are drawn 15 units higher.
+ * current alpha; the stick direction icons (ICON_STICK_DOWN_LEFT to ICON_STICK_UP_RIGHT) get a -15 y offset.
  */
 static void lecture_button_disp(CameraId camera, void* param) {
     s32 i;
@@ -446,8 +446,8 @@ static USER_FUNC(effitemget_open_ptr) {
 
 /**
  * Script helper: args[0] nonzero moves the 3D camera 2016 units up,
- * zero moves it back down (effitemget_cam_move). Nothing in this file calls it; the lecture copies in eki, gor,
- * hei and mri lift the camera and Mario 2016 units, capture the screen into an image for the paper-seal
+ * zero moves it back down (effitemget_cam_move). Nothing in this file calls it; the lecture copies that call it (eki, gor,
+ * hei, mri, muj, tou, usu, win) lift the camera and Mario (or the partner) 2016 units, capture the screen into an image for the paper-seal
  * transition one frame later, and move both back.
  */
 static USER_FUNC(effitemget_busaiku) {
@@ -489,8 +489,7 @@ static USER_FUNC(lect_mobj_hit_nasi) {
 
 /**
  * Script helper: stores the vector (args[0], args[1], args[2]) in daiv,
- * a lecture-private position that the lecture later reads back with dai_moveti_get (used to remember where Mario
- * stood).
+ * a lecture-private position that dai_moveti_get reads back. Nothing in this file calls either helper.
  */
 static USER_FUNC(dai_moveti_set) {
     EvtWord* args = event->args;
@@ -528,7 +527,7 @@ static USER_FUNC(lect_slit_check) {
 }
 
 /**
- * Script helper: flashes the screen white twice:
+ * Script helper: flashes the screen white once:
  * fades out to white over 40 frames, holds 60 ms, fades back in over 40 frames and holds 60 ms.
  * Used for the genie's light effect.
  */

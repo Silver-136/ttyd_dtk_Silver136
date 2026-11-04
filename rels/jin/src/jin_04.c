@@ -953,9 +953,9 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 /**
- * Script for the red jump stand (mobj_jump): Mario and his partner are launched up onto the ledge,
- * landing at (-75, 670, 50) on the first use (the partner jumps along when it can)
- * and at (-30, 450, 110) on the second form of the stand's effect.
+ * Script for the red jump stand (mobj_jump): when Mario steps onto it (LW(0) 0) he and his partner are launched
+ * up onto the ledge, Mario landing at (-75, 670, 50) (the partner jumps along when it can); when he drops onto it
+ * from above (LW(0) 1) they only hop off it to (-30, 450, 110), with the stand's hit object off meanwhile.
  */
 // The ascent waits for the partner jump; the descent temporarily disables the spring hit object.
 EVT_BEGIN(jin_04_jumpstand)

@@ -348,7 +348,8 @@ EVT_END()
  * while the story is between STG4_11_SUPERBOMBBOMB_LOST and STG4_13_04_THE_LETTER_P.
  * Waits until Mario walks into the strip x in [-126, 30], fades the music out,
  * then the fake Mario appears at (-125, 240, -25) and talks (stg4_gra_00 to stg4_gra_16).
- * The later rounds use the name-entry screen and move the story to STG4_14_NAME_GUESSING.
+ * Every round opens the name-entry screen; only from STG4_13_04_THE_LETTER_P on is the name checked,
+ * and a right guess moves the story to STG4_14_NAME_GUESSING.
  */
 EVT_BEGIN(evt_machibuse)
 
@@ -537,7 +538,7 @@ EVT_BEGIN(evt_machibuse)
     CALL(evt_npc_wait_battle_end)
 
     // After the fight the story advances at the relevant early steps, and Doopliss shoves Mario out of the area, back to Twilight Town
-    // or the previous trail screen.
+    // or on to the next trail screen (gra_01).
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_11_02_WAITING_DOOPLISS)
         SET_VALUE(GSW_STORY_PROGRESS, STG4_11_02_WAITING_DOOPLISS)

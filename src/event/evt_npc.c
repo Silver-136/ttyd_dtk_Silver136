@@ -84,8 +84,8 @@ USER_FUNC(evt_npc_slave_entry) {
     return EVT_RETURN_DONE;
 }
 
-/** const char* lookupName */
-// const char* lookupName
+/** NpcEntry* npc */
+// NpcEntry* npc
 #if VERSION <= VERSION_DEMO_JP
 static void npc_report_pos(NpcEntry* npc) {
     OSReport("%f%f%f", npc->position.x, npc->position.y, npc->position.z);
@@ -249,7 +249,7 @@ USER_FUNC(evt_npc_set_width) {
     return EVT_RETURN_DONE;
 }
 
-/** const char* lookupName, f32 width */
+/** const char* lookupName, f32 height */
 // const char* lookupName, f32 height
 USER_FUNC(evt_npc_set_height) {
     EvtWord* args = event->args;
@@ -512,7 +512,7 @@ USER_FUNC(evt_npc_move_position) {
 
     event->userdata[0]++;
 
-    // flag 0x4: bail if blocked and stuck > 5 frames
+    // flag 0x4: bail if blocked more than 5 frames after the move started
     if ((moveFlags & 0x4) && npc->wallHit && event->userdata[0] > 5) {
         return EVT_RETURN_DONE;
     }
@@ -528,7 +528,7 @@ USER_FUNC(evt_npc_move_position) {
             return EVT_RETURN_DONE;
         }
     } else {
-        // speed move: snap when within a step (or essentially on top of target)
+        // speed move: stop when within a step (or essentially on top of target)
         if (!npc->moveTime && dist <= step) {
             npc->moveSpeed = 0.0f;
             return EVT_RETURN_DONE;
@@ -594,7 +594,8 @@ USER_FUNC(evt_npc_move_position) {
 /**
  * Jumps an NPC to (args[1], args[2], args[3]) with jump and landing sounds, blocking until it lands.
  * args[4] time in ms, args[5] speed, args[6] arc height (0 = just drop, only for downward jumps),
- * args[7] mode (0 = speed decides the duration, 1 = the time does).
+ * args[7] mode (with an arc: 0 = speed decides the duration when above 0.1, 1 = the time does;
+ * without an arc only mode 0 fits the fall, to the time when given, else to speed).
  * The arc is driven by the NPC's own jump physics in npcdrv.
  */
 USER_FUNC(evt_npc_jump_position) {
@@ -1545,7 +1546,7 @@ f32 _get_target_dir(EventEntry* event, NpcEntry* npc, const char* targetName) {
     return angleABf(0.0f, 0.0f, diff.x, diff.z);
 }
 
-/** const char* lookupName, const char* targetName, f32 dirStoreIndex */
+/** const char* lookupName, const char* targetName, s32 dirStoreIndex (f32 out) */
 // const char* lookupName, const char* targetName, s32 dirStoreIndex (f32 out)
 USER_FUNC(evt_get_target_dir) {
     EvtWord* args = event->args;
@@ -1809,7 +1810,7 @@ NpcEntry* evtNpcNameToPtr_NoAssert(EventEntry* event, const char* name) {
 }
 
 /**
- * Freezes every enemy NPC (those with battle info) for a cutscene:
+ * Freezes every ready NPC flagged NPC_FLAG_STOP_FOR_EVENT for a cutscene:
  * stops their regular (wander) scripts and their animations.
  */
 USER_FUNC(evt_npc_stop_for_event) {
@@ -1817,7 +1818,7 @@ USER_FUNC(evt_npc_stop_for_event) {
     return EVT_RETURN_DONE;
 }
 
-/** Unfreezes all the enemy NPCs evt_npc_stop_for_event froze. */
+/** Unfreezes all the NPCs evt_npc_stop_for_event froze. */
 USER_FUNC(evt_npc_start_for_event) {
     npcStartForEvent();
     return EVT_RETURN_DONE;
@@ -2009,7 +2010,7 @@ USER_FUNC(evt_npc_battle_start) {
 /**
  * Blocks until a field battle has ended and the game is back in the field sequence with a result,
  * then gives control back to Mario and the partner and stops the battle music handling.
- * The US release also runs marioFBattlePost.
+ * US, PAL and the September demos also run marioFBattlePost.
  */
 USER_FUNC(evt_npc_wait_battle_end) {
     FieldBattleInfo* info = &fbatGetPointer()->info;
@@ -2359,8 +2360,8 @@ USER_FUNC(evt_npc_set_tribe) {
 }
 
 /**
- * Sets the stand and talk animations (args[1], args[2]; NULL keeps the current one) that NPC args[0] switches
- * between while it speaks; for "mario" it sets Mario's.
+ * Sets the stand and talk animations (args[1], args[2]; for an NPC, NULL keeps the current one) that NPC args[0]
+ * switches between while it speaks; for "mario" it sets Mario's.
  */
 USER_FUNC(evt_npc_set_autotalkpose) {
     EvtWord* args = event->args;
@@ -2563,7 +2564,7 @@ USER_FUNC(evt_npc_get_kpencount_type) {
 
 /**
  * Awards the score for defeating NPC args[0] in Bowser's side-scrolling levels (npcCalcScore):
- * 300 or 400 points, more while invincible, multiplied by the stomp combo.
+ * 300 or 400 points (none for magma), more while invincible, multiplied by the fire-breath combo.
  */
 USER_FUNC(evt_npc_calc_score) {
     const char* npcName = (const char*)evtGetValue(event, *event->args);
@@ -2575,7 +2576,7 @@ USER_FUNC(evt_npc_calc_score) {
 /**
  * Puffs broom smoke (kemuri) behind Kamek's broom every 8
  * or 16 frames depending on the animation state (3 or 2), sized by the NPC's scale.
- * On kpa_01 the smoke is drawn on camera 7 (not in the JP demo).
+ * On kpa_01 the smoke is drawn on camera 7 (not in the June demos).
  */
 #if VERSION <= VERSION_DEMO_JP
 static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
@@ -2624,7 +2625,7 @@ void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
  * Flies Kamek on his broom to x = args[1], z = args[2] like evt_npc_move_position,
  * bobbing up and down by args[3] units over the trip and leaving broom smoke (unless args[6] has 0x8).
  * args[4] time in ms, args[5] speed, args[6] flags:
- * 0x1 re-aims each frame, 0x2 and 0x4 as in evt_npc_move_position.
+ * 0x1 re-aims each frame, 0x2 as in evt_npc_move_position, 0x4 stops on a wall at once (no 5-frame grace).
  */
 USER_FUNC(evt_npc_kamek_move_position) {
     EvtWord* args = event->args;
@@ -2701,7 +2702,7 @@ USER_FUNC(evt_npc_kamek_move_position) {
             return EVT_RETURN_DONE;
         }
     } else {
-        // speed move: snap when within a step (or essentially on top of target)
+        // speed move: snap when within a step
         if (!npc->moveTime && dist2 <= step) {
             npc->prevPosition = npc->jumpTargetPos;
             npc->position = npc->prevPosition;
@@ -2826,8 +2827,8 @@ USER_FUNC(evt_fbat_trans_floor_position) {
 }
 
 #if VERSION >= VERSION_US
-/** US-only: like evt_fbat_trans_floor_position, but also probes at x +/- width/2 and keeps the highest floor */
-// US-only: like evt_fbat_trans_floor_position, but also probes at x +/- width/2 and keeps the highest floor
+/** US, PAL and September demos: like evt_fbat_trans_floor_position, but also probes at x +/- width/2 and keeps the highest floor */
+// US, PAL and September demos: like evt_fbat_trans_floor_position, but also probes at x +/- width/2 and keeps the highest floor
 USER_FUNC(evt_fbat_trans_floor_position_wide) {
     EvtWord* args = event->args;
 

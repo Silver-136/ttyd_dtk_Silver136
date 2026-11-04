@@ -181,7 +181,7 @@ static EVT_BEGIN(evt_door)
     RETURN
 EVT_END()
 
-/** Door callback of the villa (evtOut): rotates door_1 around x by half the angle in LW(0). */
+/** Unused door callback of the villa (door_1's evtOut is NULL): rotates door_1 around x by half the angle in LW(0). */
 static EVT_BEGIN(evt_door2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), LW(0), 0, 0)
@@ -202,7 +202,7 @@ static EVT_BEGIN(evt_wall)
     RETURN
 EVT_END()
 
-/** NPCs inside the house at ie_3: two of the Ta-kun (ターくん), Herringway's relatives from Shiver City. */
+/** NPCs inside the house at ie_3: two of the Ta-kun (ターくん), who moved here from Shiver City. */
 const char* ie_3_npc[] = {
     "ターくん１",
     "ターくん２",
@@ -478,7 +478,7 @@ EVT_BEGIN(evt_up)
     CALL(evt_party_move_pos2, 0, 410, 67, FLOAT(80.0f))
     CALL(evt_party_set_dir, 0, 270, 200)
 
-    // The street fades out as the doors close.
+    // The hotel interior fades out as the doors close.
 #if VERSION <= VERSION_DEMO_JP
     SPAWN_EVENT(imgstart)
 #else
@@ -621,7 +621,7 @@ EVT_END()
 
 /**
  * Elevator ride back down from the inn room: the reverse of evt_up.
- * In retail versions the camera follows the box down; the doors open at the bottom and Mario walks out onto the street.
+ * In retail versions the camera follows the box down; the doors open at the bottom and Mario walks out into the lobby.
  */
 EVT_BEGIN(evt_down)
     // The ride down: the elevator doors slide open.
@@ -759,7 +759,7 @@ EVT_BEGIN(evt_down)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
 
-    // The street fades in and its doors open.
+    // The hotel interior fades back in and the lower doors open.
     SPAWN_EVENT(PTR(imgend))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_JP
@@ -789,7 +789,7 @@ EVT_BEGIN(evt_down)
     CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
 #endif
 
-    // Mario walks out onto the street.
+    // Mario walks out into the lobby.
     CALL(evt_mario_mov_pos2, 383, -10, FLOAT(80.0f))
     CALL(evt_party_move_pos2, 0, 360, 10, FLOAT(80.0f))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -936,7 +936,7 @@ EVT_BEGIN(talk_takun2)
     RETURN
 EVT_END()
 
-/** Init for Ta-kun 3: turns on the walk and talk animations and lets him hop on the floor. */
+/** Init for Ta-kun 3: turns on the walk and talk animations, floor collision and gravity. */
 EVT_BEGIN(init_takun3)
     CALL(evt_npc_flag_onoff, 1, STRING("ターくん３"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY)
     RETURN
@@ -974,8 +974,8 @@ static EVT_BEGIN(talk_kiza)
 EVT_END()
 
 /**
- * NPCs of the street: the souvenir shop owner, the Traveling Sisters 3, two of the Ta-kun (Herringway's
- * relatives), the hotel receptionist and the French-accented dandy (キザ野郎).
+ * NPCs of the street: the souvenir shop owner, the Traveling Sisters 3, two of the Ta-kun (from Shiver City),
+ * the hotel receptionist and the French-accented dandy (キザ野郎).
  */
 static NpcSetupInfo npc_data[] = {
     {
@@ -1259,7 +1259,7 @@ static EVT_BEGIN(epilogue_evt_sub)
 EVT_END()
 
 /**
- * Epilogue cutscene in Poshley Heights: fades out the music, sets the camera on the street,
+ * Epilogue cutscene in Poshley Heights: starts BGM_STG6_PIK1, sets the camera on the street,
  * runs epilogue_evt_sub, prints ep_44 after two seconds, fades out the sound and changes to tik_00.
  */
 static EVT_BEGIN(epilogue_evt)

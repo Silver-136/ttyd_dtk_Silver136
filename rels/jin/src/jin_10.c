@@ -178,7 +178,8 @@ EVT_END()
 
 /**
  * Looping script that moves the sliding gate (saku) back toward its resting place when Mario stops pushing:
- * the gate slides back at 0.5 units per frame unless Mario, his partner or Vivian is blocking it,
+ * the gate slides back at 0.5 units per frame unless Mario, his partner or the follower is blocking it
+ * (checked only while Mario is left of the gate, and skipped while Mario is hidden in Vivian's Veil),
  * and plays the grid-movement sound while it moves.
  */
 EVT_BEGIN(unpush_evt)
@@ -192,7 +193,8 @@ EVT_BEGIN(unpush_evt)
             WAIT_FRAMES(1)
         END_LOOP
 
-        // Checks whether Mario, his partner or Vivian is standing in the gate's way back.
+        // Checks whether Mario, his partner or the follower is standing in the gate's way back
+        // (no check while Mario is hidden in Vivian's Veil).
         SET_VALUE(LF(0), 1)
         CALL(evt_mapobj_get_position, STRING("saku"), LW(0), LW(1), LW(2))
         CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))

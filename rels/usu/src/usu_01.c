@@ -909,8 +909,7 @@ EVT_BEGIN(aunt_talk)
                 // Mario hasn't met Podley yet: she repeats the request (irai_20_004).
                 CALL(evt_msg_print, 0, STRING("irai_20_004"), 0, STRING("me"))
             ELSE
-                // Mario has met Podley: he and his partner walk up to the aunt and the
-                // three children gather round.
+                // Mario has met Podley: he and his partner walk up to the aunt, who turns to Mario.
                 CALL(evt_npc_flag_onoff, 1, STRING("おばさん"), NPC_FLAG_NO_HIT)
                 CALL(evt_npc_flag_onoff, 1, STRING("子供Ｂ"), NPC_FLAG_NO_HIT)
                 SET_VALUE(GF(0), 1)
@@ -2022,7 +2021,6 @@ EVT_BEGIN(usu01_crowFG_talk_event)
                 CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
                 // Later the crows gossip about Peach being kidnapped again (stg4_usu_141 and 142),
                 // repeated in new versions after Franklys's house (142_1, 142_2) and after the ending (142_2_1, 142_2_2).
-                // .
                 CALL(evt_msg_print, 0, STRING("stg4_usu_141"), 0, STRING("カラスＦ"))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_142"), 0, STRING("カラスＧ"))
                 CALL_CHILD(PTR(cam_down))
@@ -2795,7 +2793,7 @@ static USER_FUNC(booboo_main) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper that runs until blocked: each frame it hides any NPC parked at y <= -1000 and shows the rest. */
+/** Script helper that never finishes: each frame it hides any NPC parked at y <= -1000 and shows the rest. */
 static USER_FUNC(npc_process) {
     NpcWork* wp = npcGetWorkPtr();
     NpcEntry* npc = wp->entries;
@@ -3298,7 +3296,7 @@ static ShopDb trade_list[] = {
 
 /**
  * Shopper data of the shop woman (the shopkeeper's wife): her NPC name,
- * no talk or buy hooks of its own (the init script adds them by story progress) and the shop's message
+ * no talk or buy hooks of its own (the init script adds the talk hook by story progress) and the shop's message
  * keys "usugurashop_00" onward.
  */
 static ShopperData35 shopper_data = {
@@ -3367,7 +3365,7 @@ static EVT_BEGIN(evt_majin)
     CALL(evt_mario_mov_pos2, -235, -370, FLOAT(80.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
     IF_INT_EQUAL(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 0)
-        // First visit: a voice inside the chest startles Mario (stg4_usu_majin3_01).
+        // First visit: a voice inside the chest calls out, having heard someone (stg4_usu_majin3_01).
         CALL(evt_mobj_get_position, STRING("pera_box"), LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))

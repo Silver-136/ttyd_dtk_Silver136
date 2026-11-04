@@ -719,14 +719,14 @@ EVT_BEGIN(talk_yuurei)
                 END_IF
             END_LOOP
             SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 0)
-
-            // Afterwards she repeats a hint or a closing line for each stage.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_139"), 0, 0)
             CALL(evt_pouch_remove_item, ITEM_RAGGED_DIARY, LW(0))
             SET_VALUE(GSW_STORY_PROGRESS, STG6_18_BLANKET_EXCHANGE)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_140"), 0, 0)
         END_IF
+
+        // Afterwards she repeats a hint or a closing line for each stage.
         CASE_LESS(STG6_19_GIVE_BLANKET)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_141"), 0, 0)
         CASE_LESS(STG6_20_END_OF_DAY_1)
@@ -1223,7 +1223,7 @@ EVT_BEGIN(evt_toron_catch2)
     CALL(evt_mario_mov_pos2, -210, -150, FLOAT(60.0f))
     WAIT_MS(1000)
 
-    // The stolen items are laid out: the Briefcase, the Gold Ring and the Shell Earrings.
+    // Mario receives the stolen items: the Briefcase, the Gold Ring and the Shell Earrings.
     CALL(evt_item_entry, STRING("a"), ITEM_BRIEFCASE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("a"))
     CALL(evt_item_get_item_end_wait, STRING("a"))
@@ -1291,8 +1291,9 @@ EVT_END()
 /**
  * Spawned by the map init during STG6_24: loops until the story has reached STG6_24_02_ANOTHER_CLUE
  * and Mario stands at x -110 or less (not below -330 in JP and later), z -70 or less, hidden with Vivian's
- * ability (partner 6) for at least 300 frames; then Toron (トロン) rises into view with an appear sound at one of two
- * spots (sinking away again if Mario comes out within 60 frames). Once Mario leaves the shadow, Toron jumps out
+ * ability (partner 6) for at least 300 frames; then Toron (トロン) comes into view with an appear sound at one of two
+ * spots, rising from below near x -130 or sliding sideways near x -300 (backing away again if Mario comes out within
+ * 60 frames). Once Mario leaves the shadow, Toron jumps out
  * and taunts him (stg6_rsh_181), the story moves to STG6_25_ZIP_TOAD_APPEARS, the chase music starts and
  * evt_toron_catch is spawned.
  */
@@ -1654,7 +1655,7 @@ EVT_END()
 /**
  * Init script of rsh_02_a (first visit): runs the shared init and then, depending on the story,
  * plays the arrival scenes after sleeping (day 2, day 3 and the Poshley Heights morning messages,
- * with a partner line on day 3), the first-time intro dialogue at STG6_00_START,
+ * with a partner line on day 3), the first-time intro dialogue before STG6_00_START (which it then sets),
  * the stained-floor trigger for the carpet clue, the Vital Paper clue, Toron's appearance,
  * and the Smorg window effect.
  */
@@ -2265,7 +2266,7 @@ EVT_END()
 /**
  * Bed on the second trip. At a station (Poshley Heights or Rogueport) it is the normal inn bed.
  * While the train is running, asking to sleep fades out,
- * restores HP/FP and changes the map to Riverside Station (hom_10, hom_11 or hom_12),
+ * restores HP/FP and changes the map to a train-travel scene of the hom area (hom_10, hom_11 or hom_12),
  * setting GSW_HOM_TRAIN_LEG to the next leg only when stopped at Riverside.
  */
 EVT_BEGIN(evt_nidome_bed)

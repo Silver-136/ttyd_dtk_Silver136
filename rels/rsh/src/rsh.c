@@ -164,7 +164,7 @@ EVT_END()
 
 /**
  * Companion of simi_check: clears the offscreen-capture binding of whichever floor object (s_yuka or
- * s_yuka_simi) is the visible one, so the door transition shows the right floor in rsh_02_a and rsh_03_a.
+ * s_yuka_simi) is the hidden one, so the door transition shows the right floor in rsh_02_a and rsh_03_a.
  */
 EVT_BEGIN(simi_offscreen_check)
     SET_VALUE(LF(0), 0)
@@ -219,7 +219,7 @@ EVT_END()
 
 /**
  * Companion of kami_check: clears the offscreen-capture binding of whichever paper
- * or plain floor object is currently visible in rsh_01_a and rsh_02_a.
+ * or plain floor object kami_check hides in rsh_01_a and rsh_02_a.
  */
 EVT_BEGIN(kami_offscreen_check)
     CALL(evt_sub_get_mapname, LW(10))
@@ -279,12 +279,13 @@ EVT_BEGIN(evt_rsh_door_entry)
 EVT_END()
 
 /**
- * Runs when Mario walks into a cabin door (LW(0) is the door table of evt_rsh_door_entry):
+ * Runs when Mario presses A facing a cabin door from outside (LW(0) is the door table of evt_rsh_door_entry):
  * locks input, plays the door slide sound and animation, walks Mario in,
  * then plays the page-turn capture while the cabin is revealed.
  * Also plays the story reactions that happen on entering a cabin:
  * the partner comments in cabin 5 at the blanket and conductor stages,
- * the BGM dip in cabins 5 and 4 for the ghost scenes, and Zip Toad becoming touchable.
+ * the BGM dip in cabins 5 and 4 for the ghost scenes, and (PAL only) Zip Toad's contact switched on in
+ * cabin 5 and off in cabin 4.
  */
 EVT_BEGIN(evt_rsh_door_open)
     SET_INT_READ_ADDR(LW(0))
@@ -497,8 +498,6 @@ EVT_BEGIN(evt_rsh_door_open)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
-        // Entering cabin 5 at the blanket stage makes Mario's partner remark that they should leave
-        // everything to the conductor.
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
             // Remember which cabin Mario is now inside.
             SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 1)
@@ -1597,7 +1596,7 @@ USER_FUNC(evt_rsh_get_rnd_npc_talk_evt) {
 
 /**
  * Looks up the model data of a passenger candidate.
- * Args: [0] room, [1] group, [2] index; [3] receives the NPC type name, [4] its Japanese model name.
+ * Args: [0] room, [1] group, [2] index; [3] receives the model (animation) name, [4] the Japanese tribe name.
  */
 USER_FUNC(evt_rsh_get_rnd_npc_data) {
     EvtWord* args = event->args;

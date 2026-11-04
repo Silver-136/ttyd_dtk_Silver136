@@ -1790,7 +1790,8 @@ EVT_BEGIN(usu00_crowAB_talk_event)
     END_IF
 
     // When Vivian is the partner in party status 2 (Guess: hiding Mario in her shadow), the crows talk for real:
-    // A and B chat about the internet and business ideas, by story progress; once per visit (GW(0)).
+    // A and B chat about the internet and business ideas, by story progress (from STG4_13_VIVIAN_JOINS); once until
+    // Vivian leaves that status (GW(0), cleared by usu00_check_vivian).
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 6)
         WAIT_FRAMES(1)
@@ -1844,7 +1845,10 @@ EVT_BEGIN(usu00_crowAB_talk_event)
     RETURN
 EVT_END()
 
-/** Background watcher for crows C, D and E; same as the A/B watcher but using GW(1) as its gate. */
+/**
+ * Background watcher for crows C, D and E; like the A/B watcher but around crow D with a fixed 60-unit area cut off
+ * at z <= -250, Bowser's caw "kpa_stg5_009_7_2", and GW(1) as its gate.
+ */
 EVT_BEGIN(usu00_crowCDE_talk_event)
 
     // Wait until this crow trio is allowed to talk again.
@@ -1926,7 +1930,8 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
     END_IF
 
     // When Vivian is the partner in party status 2 (Guess: hiding Mario in her shadow), the crows talk for real:
-    // C, D and E chat about energy and solar power, by story progress; once per visit (GW(1)).
+    // C, D and E chat about energy and solar power, by story progress (from STG4_13_VIVIAN_JOINS); once until
+    // Vivian leaves that status (GW(1), cleared by usu00_check_vivian).
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 6)
         WAIT_FRAMES(1)
@@ -2442,7 +2447,7 @@ EVT_BEGIN(koopa_dokan_evt)
     RETURN
 EVT_END()
 
-/** Replacement for the pipe in Bowser's interlude: Bowser tries it and is told off (koopa_dokan_evt). */
+/** Replacement for the pipe in Bowser's interlude: Bowser says a line and goes nowhere (koopa_dokan_evt). */
 BeroEntry bero_koopa_dokan[] = {
     {
         "dokan_1", // hitName
@@ -2529,7 +2534,10 @@ static EVT_BEGIN(evt_ki_2)
     RETURN
 EVT_END()
 
-/** Trees of the town square: tree 1 and tree 2 (where crows C, D and E perch) react to being shaken. */
+/**
+ * Trees of the town square: trees 1 to 3; shaking tree 1 (crows A and B) or tree 2 (crows C, D and E) makes its
+ * crows flap.
+ */
 static TreeAccess tree_tbl[] = {
     {2, "A_ki_1", "S_usu00_ki01", NULL, 0, evt_ki_1},
     {2, "A_ki_2", "S_usu00_ki02", NULL, 0, evt_ki_2},
@@ -2583,7 +2591,7 @@ EVT_END()
 
 /**
  * Bushes of the town square: bush 1 has Bowser's line in his interlude, bush 4 hides a Star Piece and bush 6
- * coins; the rest only rustle.
+ * a coin; the rest only rustle.
  */
 static KusaAccess kusa_tbl[] = {
     {2, "A_kusa_01", "S_kusa_01", kusa_01_evt},
@@ -2870,7 +2878,7 @@ static EVT_BEGIN(baba_talk)
 EVT_END()
 
 /**
- * Regular-behavior script of Kanbu (the Lord Crump-like "third-force executive"):
+ * Regular-behavior script of Kanbu (Lord Crump, tribe "third-force executive"):
  * paces between x=-200 and x=100, turning around at each end, forever.
  */
 EVT_BEGIN(kanbu_regl)
@@ -2951,7 +2959,7 @@ USER_FUNC(white_off) {
     return EVT_RETURN_DONE;
 }
 
-/** Talk script of Kanbu (the Lord Crump-like "third-force executive"): runs the second Bowser interlude scene. */
+/** Talk script of Kanbu (Lord Crump, tribe "third-force executive"): runs the second Bowser interlude scene. */
 EVT_BEGIN(kanbu_talk)
     CALL_CHILD(PTR(usu_00_koopa_second_evt))
     RETURN
@@ -4219,7 +4227,7 @@ EVT_BEGIN(usu_00_init_evt)
     END_IF
 
     // Background watchers for Vivian and the crows; the pipe is blocked while Doopliss has Mario's name, and the
-    // pig villagers' material loop runs outside Bowser's visit.
+    // pig villagers get their paper-light material flag (booboo_main, once) outside Bowser's visit.
     SPAWN_EVENT(PTR(usu00_check_vivian))
     SET_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 0)
@@ -4240,7 +4248,8 @@ EVT_BEGIN(usu_00_init_evt)
         END_INLINE_EVENT
     END_IF
 
-    // Bowser's interlude: Crump's arrival and Bowser's two scenes with Kammy.
+    // Bowser's interlude: Crump paces the square (kanbu_regl); Bowser's arrival with Kammy, then his scene with
+    // Crump and Kammy.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_47_PEACH_TEC_TALK)
         CALL(evt_npc_change_interrupt, STRING("カンブー"), 1, PTR(kanbu_regl))
         CALL(evt_npc_restart_regular_event, STRING("カンブー"))

@@ -422,7 +422,7 @@ EVT_END()
  * Cutscene at the inn when the cannon is back online:
  * the camera pans in, the mayor speaks stg7_bom_60 to 62,
  * Mario and the partner gesture (hand-up voice, partner kime pose and stg7_bom_60_2),
- * the mayor hops away and the story progress is set to STG7_04_BACK_ONLINE.
+ * the mayor walks away (then is moved off the map) and the story progress is set to STG7_04_BACK_ONLINE.
  */
 static EVT_BEGIN(evt_taihou)
     CALL(evt_cam3d_evt_set, 140, 100, 593, 140, 40, 248, 500, EASING_SINE_IN_OUT)
@@ -552,7 +552,7 @@ EVT_END()
  * continuing through 33 and setting STG7_02_MAYOR_BOB when Bobbery is present, with the partner answering);
  * then he talks about General White and the cannon (stg7_bom_34 onward,
  * depending on GSWF_PIK_GOLDBOB_PERMISSION_GIVEN and GSWF_BOM_GENERAL_WHITE_AGREED)
- * until the cannon story point.
+ * until STG7_03_GOLDBOB, and before STG7_04_BACK_ONLINE runs the cannon-online scene (evt_taihou).
  */
 static EVT_BEGIN(talk_soncho)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
@@ -684,7 +684,8 @@ static EVT_BEGIN(talk_soncho)
                     CALL(evt_msg_print, 0, STRING("stg7_bom_38_02"), 0, STRING("me"))
                 ELSE
 
-                    // Once both are found, White's wandering scene runs.
+                    // Once the Twilight Town hint has been heard (GSWF_USU_GENERAL_WHITE_HINT_HEARD), White's
+                    // wandering scene runs instead.
                     CALL_CHILD(PTR(urotuku_white))
                 END_IF
             END_IF
@@ -804,7 +805,7 @@ static EVT_BEGIN(talk_murabito_e)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
 
-        // Otherwise his remarks change with the story, up to the cannon.
+        // Otherwise his remarks change with the story.
         CALL(evt_msg_print, 0, STRING("stg7_bom_10_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
         CALL(evt_msg_print, 0, STRING("stg7_bom_10"), 0, STRING("me"))
@@ -845,7 +846,7 @@ static EVT_BEGIN(talk_murabito_f)
 EVT_END()
 
 /**
- * Init of villager G: while Trouble Center job 25 (the search for General White) is active he stands at (270,
+ * Init of villager G: while Trouble Center job 25 (Goldbob's delivery to General White) is active he stands at (270,
  * 30, -180) facing east.
  */
 static EVT_BEGIN(init_murabito_g)
@@ -859,7 +860,7 @@ EVT_END()
 
 /**
  * Talk script of villager G: during job 25 he gives the hints irai_25_00
- * and 25_01 (setting the trouble work flags); otherwise his story-dependent remarks stg7_bom_14_00 to 15_1.
+ * (setting trouble work flag 1) and 25_01; otherwise his story-dependent remarks stg7_bom_14_00 to 15_1.
  */
 static EVT_BEGIN(talk_murabito_g)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
@@ -1107,7 +1108,7 @@ EVT_END()
 };
 #endif
 
-#if VERSION < VERSION_US && VERSION >= VERSION_JP  // US and the demos: this tail is part of mario_jump (US script above)
+#if VERSION < VERSION_US && VERSION >= VERSION_JP  // US, the later versions and the demos: this tail is part of mario_jump (script above)
 EvtWord mario_jump_tail[] = {
     STRING("ホワイト"), 32, /* rest of mario_jump's evt_npc_flag_onoff call */
     CALL(evt_mario_cam_keep_off)
@@ -1123,8 +1124,8 @@ s32 iri_25_item_tbl[] = {
 
 /**
  * Talk script of General White for Trouble Center job 25, used once he is awake, with GSWF_TROUBLE_WORK_4 set and before the
- * package is delivered (GSWF_TROUBLE_WORK_6): he apologizes for the chase if Mario woke him on the bed
- * (GSWF_TROUBLE_WORK_5, irai_25_19), then an item menu asks for the package (ITEM_PACKAGE);
+ * package is delivered (GSWF_TROUBLE_WORK_6): on talks after the bed scene (GSWF_TROUBLE_WORK_5, set at its
+ * end) he first apologizes for the chase (irai_25_19), then an item menu asks for the package (ITEM_PACKAGE);
  * when it is handed in he
  * thanks Mario, sends him to Goldbob for the reward (irai_25_18) and hops away off the map. Otherwise he says
  * nothing.
@@ -1311,7 +1312,7 @@ EVT_END()
 
 /**
  * Story version of the bed scene: Mario is asked whether to bounce on General White's bed,
- * and keeps jumping while the player agrees (stg7_bom_44 to 53).
+ * and keeps jumping while the player agrees (stg7_bom_43 to 53).
  * When he finally wakes (stg7_bom_55 onwards) White talks with Mario and leaves for the cannon;
  * answering no at any prompt gives up (stg7_bom_54).
  */
@@ -1447,7 +1448,7 @@ EVT_BEGIN(evt_white_bed)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(800)
 
-    // He recognises Mario's mustache, hat and hammer and learns why Mario needs the cannon.
+    // He recognises Mario's mustache, hat and hammer and explains why he was looking for him.
     CALL(evt_msg_print, 0, STRING("stg7_bom_57"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
@@ -1924,7 +1925,7 @@ static KinopioData kino_dt = {
 /**
  * Init script of bom_02, the east part of Fahr Outpost:
  * music and ambience, snow, NPCs, the three houses (inn, shop, White's),
- * the shop and the Toad inn (Kinopio) setup, wind vanes, Star Piece, Shine Sprite block and save block,
+ * the shop and the inn (evt_kinopio_setup) setup, wind vanes, Star Piece, Shine Sprite block and save block,
  * the cutscenes for the Chapter 8 finale ("sekai_yami2" and "minnnanokoe"),
  * and the bed events for White (story and Trouble Center job 25).
  */

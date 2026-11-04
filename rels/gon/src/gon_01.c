@@ -144,13 +144,13 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Cutscene run when Mario re-enters gon_01 after the Dry Bones swarm pushed him out of gon_03:
- * the door bursts open and Mario and his partner are thrown out, tumble to the floor and get up.
+ * Mario and his partner are thrown out through the open door, which swings shut; they tumble to the floor and get up.
  * If he was pushed out a second time the partner (Goombella or Koops) comments on it (stg1_gon_13 and
  * stg1_gon_14). Then the door to gon_02 is usable again.
  */
 // Animate separate Mario and partner bounce arcs before restoring controls and reopening the door.
 EVT_BEGIN(honenoko_oidasare_evt)
-    // Control is taken; Mario appears at the east edge of the room with his partner, the door shut.
+    // Control is taken; Mario appears at the east edge of the room with his partner, the door open.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)
     CALL(evt_party_set_dir, 0, 270, -1)
@@ -173,7 +173,7 @@ EVT_BEGIN(honenoko_oidasare_evt)
     END_SWITCH
     WAIT_MS(1000)
 
-    // The door bursts open (closing animation played backward with its sound).
+    // The door swings shut (closing animation from 180 to 0 with its sound).
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         SET_VALUE(LW(1), 2)
@@ -351,7 +351,7 @@ EVT_END()
  * Cutscene played the first time Mario enters the castle courtyard:
  * castle music and a slow camera pan, the area name banner,
  * then Mario and the partner walk up to the gate
- * and the partner remarks on the castle (stg1_gon_00 and stg1_gon_01).
+ * and the partner remarks on the castle (stg1_gon_00 and stg1_gon_01; the demos use E3_stg1_gon_00).
  * If Mario had no partner, Goombella joins him.
  */
 EVT_BEGIN(gon_01_GATEEVENT_evt)

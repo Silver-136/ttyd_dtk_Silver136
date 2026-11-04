@@ -106,8 +106,8 @@ static BeroEntry bero_data[] = {
 
 /**
  * Runs when Mario uses the red jump stand: freezes him,
- * launches him with a high jump (evt_mario_jump_jumpstand) from the stand at (360, -900) up to the ledge near
- * (310, -900), and then gives control back.
+ * launches him with a high jump (evt_mario_jump_jumpstand) from the stand at (360, -900, 70) up to (300, 700, 75)
+ * (to (310, -900, 65) instead when he falls onto the stand from high above), and then gives control back.
  */
 EVT_BEGIN(evt_jump)
     CALL(evt_mario_key_onoff, 0)
