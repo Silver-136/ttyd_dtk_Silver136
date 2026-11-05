@@ -31,7 +31,6 @@ typedef struct LinkDt {
     const char* pose1;  // 0x8
     const char* pose2;  // 0xC
     u16 item;           // 0x10
-    u16 f12;            // 0x12
     const char* msg;    // 0x14
     u8 links[4];        // 0x18
 } LinkDt;
@@ -44,24 +43,24 @@ typedef struct LinkDt {
  * its help text and the entry reached by up, down, left and right. winMarioMain moves through it.
  */
 LinkDt linkDt[18] = {
-    {-268, 142, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_lv", {6, 1, 11, 9}},
-    {-268, 118, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_star_r", {0, 2, 11, 7}},
-    {-272, 68, "M_H_1", NULL, "R_1", ITEM_HAMMER, 0, NULL, {1, 3, 11, 7}},
-    {-242, 24, "M_R_1", NULL, "R_1", ITEM_BOOTS, 0, NULL, {2, 4, 11, 8}},
-    {-270, -34, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_hp", {3, 5, 13, 13}},
-    {-270, -68, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_fp", {4, 6, 13, 13}},
-    {-270, -102, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_bp", {5, 0, 13, 13}},
-    {-100, 90, "M_S_1", "M_S_1", "S_1", ITEM_PAPER_CURSE, 0, "msg_slit", {9, 10, 2, 9}},
-    {-100, 20, "M_S_1", "M_S_1", "S_1", ITEM_PLANE_CURSE, 0, "msg_plane", {10, 4, 3, 10}},
-    {-50, 130, "M_S_1", "M_S_1", "S_1", ITEM_BOAT_CURSE, 0, "msg_ship", {0, 7, 0, 11}},
-    {-50, 60, "M_S_1", "M_S_1", "S_1", ITEM_TUBE_CURSE, 0, "msg_roll", {7, 8, 8, 12}},
-    {20, 106, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_star_power", {17, 12, 9, 0}},
-    {20, 70, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_waza", {11, 13, 10, 0}},
-    {3, 10, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_star_p", {12, 14, 4, 4}},
-    {3, -18, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_coin", {13, 15, 4, 4}},
-    {3, -46, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_kakera", {14, 16, 4, 4}},
-    {3, -74, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_scoin", {15, 17, 4, 4}},
-    {3, -102, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_time", {16, 11, 4, 4}},
+    {-268, 142, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_lv", {6, 1, 11, 9}},
+    {-268, 118, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_star_r", {0, 2, 11, 7}},
+    {-272, 68, "M_H_1", NULL, "R_1", ITEM_HAMMER, NULL, {1, 3, 11, 7}},
+    {-242, 24, "M_R_1", NULL, "R_1", ITEM_BOOTS, NULL, {2, 4, 11, 8}},
+    {-270, -34, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_hp", {3, 5, 13, 13}},
+    {-270, -68, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_fp", {4, 6, 13, 13}},
+    {-270, -102, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_bp", {5, 0, 13, 13}},
+    {-100, 90, "M_S_1", "M_S_1", "S_1", ITEM_PAPER_CURSE, "msg_slit", {9, 10, 2, 9}},
+    {-100, 20, "M_S_1", "M_S_1", "S_1", ITEM_PLANE_CURSE, "msg_plane", {10, 4, 3, 10}},
+    {-50, 130, "M_S_1", "M_S_1", "S_1", ITEM_BOAT_CURSE, "msg_ship", {0, 7, 0, 11}},
+    {-50, 60, "M_S_1", "M_S_1", "S_1", ITEM_TUBE_CURSE, "msg_roll", {7, 8, 8, 12}},
+    {20, 106, "M_S_1", NULL, "S_1", 0, "msg_menu_star_power", {17, 12, 9, 0}},
+    {20, 70, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_waza", {11, 13, 10, 0}},
+    {3, 10, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_star_p", {12, 14, 4, 4}},
+    {3, -18, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_coin", {13, 15, 4, 4}},
+    {3, -46, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_kakera", {14, 16, 4, 4}},
+    {3, -74, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_scoin", {15, 17, 4, 4}},
+    {3, -102, "M_S_1", NULL, "S_1", 0, "msg_menu_mario_time", {16, 11, 4, 4}},
 };
 const char* hammer_help[] = {NULL, "msg_hammer_1", "msg_hammer_2", "msg_hammer_3"};
 const char* boots_help[] = {NULL, "msg_boots_1", "msg_boots_2", "msg_boots_3"};

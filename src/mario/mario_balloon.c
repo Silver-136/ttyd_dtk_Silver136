@@ -107,6 +107,7 @@ static inline BOOL chkBalloonJump(HitEntry* hit) {
                     }
                 }
             } else {
+                // FAKE: redundant store (ret is already FALSE); dropping this else branch changes the object
                 ret = FALSE;
             }
         }
@@ -144,6 +145,7 @@ static inline BOOL chkBalloonPush(HitEntry* hit) {
                         }
                     }
                 } else {
+                    // FAKE: redundant store (ret is already FALSE); dropping this else branch changes the object
                     ret = FALSE;
                 }
             }
@@ -166,6 +168,7 @@ static inline s32 chkItemBox(HitEntry* hit) {
 
     marioGetPtr();
     if (!(hitGetAttr(hit) & HIT_ATTR_MOBJ)) {
+        // FAKE: redundant store (ret is already -1); testing HIT_ATTR_MOBJ without this branch changes the object
         ret = -1;
     } else {
         mobj = mobjHitObjPtrToPtr(hit);

@@ -2298,15 +2298,7 @@ const s32 texfmt_tbl[11] = {4, 5, 6, 14, 0, 1, 2, 3, 8, 9, 10};
 const s32 texwrap_tbl[3] = {GX_CLAMP, GX_REPEAT, GX_MIRROR};
 const s32 palfmt_tbl[2] = {1, 2};
 const GXLightID lightid_tbl[8] = {GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7};
-/** TRUE when the projected point v lies inside the view volume; unused, mapDisp uses the MAP_CLIP_IN macro. */
-static inline BOOL mapClipTest(Vec* v) {
-    if (v->z > -1.0f && v->z < 0.0f && v->x >= -1.0f && v->x <= 1.0f && v->y >= -1.0f && v->y <= 1.0f) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-// Macro, not inline: mapClipTest(&v) at the eight sites changes the object; mapClipTest is unused.
+// Macro, not inline: an inline test at the eight sites changes the object.
 #define MAP_CLIP_IN(v) ((v).z > -1.0f && (v).z < 0.0f && (v).x >= -1.0f && (v).x <= 1.0f && (v).y >= -1.0f && (v).y <= 1.0f)
 
 /**

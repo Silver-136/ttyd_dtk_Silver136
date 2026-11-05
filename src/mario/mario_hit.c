@@ -1884,7 +1884,7 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
 #if VERSION <= VERSION_DEMO_JP
                 f32 lim = (mario->flags & MARIO_FLAG_PAPER_MODE) ? 75.0f : 50.0f;
 #else
-                f32 lim = ((u32)mario->dispFlags & MARIO_DISP_FLAG_SLIT) ? 75.0f : 50.0f;
+                f32 lim = (mario->dispFlags & MARIO_DISP_FLAG_SLIT) ? 75.0f : 50.0f;
 #endif
                 if (r <= 180.0f - lim && r >= lim) {
                     hit = NULL;
@@ -1926,6 +1926,7 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
 }
 
 /** cos(a) as f32, for marioSearchHead_roll's side offsets. */
+// FAKE: one-purpose cos helper; (f32)cos(a) at the four sites changes the object
 inline f32 marioSearchHead_roll_cos(f32 a) {
     return (f32)cos(a);
 }

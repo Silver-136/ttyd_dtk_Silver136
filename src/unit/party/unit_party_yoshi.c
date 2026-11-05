@@ -2517,7 +2517,6 @@ USER_FUNC(_gundan_yoshi_run_effect) {
     Vec pos;
     s32 id;
 
-    do {
     id = evtGetValue(event, event->args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -2588,7 +2587,6 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(DISP_MODE_XLU, DISP_MODE_ALPHA_TEST), (DispCallback)_btlYoshiDisp, &w->parts[i]);
     }
 #endif
-    } while (0);
     return EVT_RETURN_BLOCK;
 }
 

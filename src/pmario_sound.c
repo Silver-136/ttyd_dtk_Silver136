@@ -10260,6 +10260,7 @@ static void psndSFXMain(void) {
     unsigned int none;
     s32 cnt;
     s32 fade = 0;
+    // FAKE: one-element array used as a scalar channel; a plain s32 ch changes the object
     s32 ch[1];
     s32 tvol;
     PaperSoundEffect* sfx[1];

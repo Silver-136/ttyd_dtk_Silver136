@@ -1028,7 +1028,6 @@ static void nameBG(void) {
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
-#pragma inline_max_total_size(100000)
 /** Draws one textured quad from name.tpl texture id at (x, y), w x h, with the texture scaled to fit. */
 static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;

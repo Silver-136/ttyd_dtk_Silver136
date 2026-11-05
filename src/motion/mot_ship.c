@@ -117,6 +117,7 @@ static inline s32 harborKind(HitEntry* hit) {
     return k;
 }
 
+// Macro, not inline: as static inline harborProbe(m, ang, &pos, out) the object changes.
 #define HARBOR_PROBE(ANG, POS)                                                                      \
     sincosf(&sn, &cs, toMovedir(ANG));                                                              \
     tx = 40.0f * sn + m->position.x;                                                                \

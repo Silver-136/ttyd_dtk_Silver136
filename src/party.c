@@ -924,6 +924,7 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
     }
 }
 
+// FAKE: dont_inline around partyChgRunMode (JP and later); removing the pair changes the object
 #pragma dont_inline on
 #else
         }
@@ -1995,6 +1996,7 @@ static void getRidePos(PartyEntry* party, Vec* pos) {
     }
 }
 
+// FAKE: dont_inline around this function; removing the pair changes the object (early demos the same)
 #pragma dont_inline on
 /**
  * Puts both partners straight into the riding-along state (run mode 11, step 11) without shadow (and hidden

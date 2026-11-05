@@ -48,9 +48,8 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle);
 /**
  * Swings one of the two side rays of Flurrie's gust back and forth:
  * the ray's angle steps 1 degree per frame between -20 and +20 and turns around at either end.
- * The sign argument is unused here; the caller applies it.
  */
-static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
+static inline void cloudSweep(PartyEntry* party, s32 i) {
     PartyCloud* cl = CLOUD_WORK(party);
     if (cl->sweep[i].reverse == 0) {
         cl->sweep[i].angle += 1.0f;
@@ -194,6 +193,7 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
         return breathPower;
     }
 
+    // FAKE: val holds 10.0f and then 100.0f; the literals change the object
     val = 10.0f;
     if (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 &&
         party->useMotionId >= CLOUD_USE_BREATH_INIT && __fabs(party->position.y - pos->y - 18.0f) <= val) {
@@ -731,6 +731,7 @@ f32 cloudGetBreathPower(Vec pos, f32 width) {
         return breathPower;
     }
 
+    // FAKE: val holds 10.0f and then 100.0f; the literals change the object
     val = 10.0f;
     if (
         party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 && party->useMotionId >= MARIO_MOTION_FALL && ((__fabs(party->position.y - pos.y - 18.0f)) <= val)) {
@@ -856,7 +857,7 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
         sign = -1.0f;
     }
 
-    cloudSweep(party, sign, 0);
+    cloudSweep(party, 0);
     cl = CLOUD_WORK(party);
     sincosf(&dirSin, &dirCos, toMovedir(cl->sweep[0].angle * sign + cl->breathDir));
     dist = CLOUD_WORK(party)->breathDist;
@@ -868,7 +869,7 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     }
     CLOUD_WORK(party)->hitSweep[0] = hit;
 
-    cloudSweep(party, sign, 1);
+    cloudSweep(party, 1);
     cl = CLOUD_WORK(party);
     sincosf(&dirSin, &dirCos, toMovedir(cl->sweep[1].angle * sign + cl->breathDir));
     dist = CLOUD_WORK(party)->breathDist;

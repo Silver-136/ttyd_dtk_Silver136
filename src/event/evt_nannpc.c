@@ -413,6 +413,7 @@ USER_FUNC(evt_nannpc_init) {
     w->tbl = _mapAlloc(0x14);
     memset(w->tbl, 0, 0x14);
     w->subfunc0 = NULL;
+    // FAKE: stored through the global nanNPCWork instead of w (same pointer); w->subfunc1 changes the object
     nanNPCWork->subfunc1 = nannpc_ext_main_sub;
     w->subfunc2 = NULL;
     if (!initf) {

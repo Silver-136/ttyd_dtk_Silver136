@@ -92,6 +92,7 @@ void winBadgeExit();
 void winRootBgDrawDisp(CameraId unused, void* param);
 void winRootBgCaptureDisp(CameraId unused, void* param);
 
+// Macro, not inline: as static inline winRootAddTab(w, id, msg) the object changes.
 #define WIN_ROOT_ADD_TAB(n)             \
     {                                   \
         WinTab* t = &w->tab[w->tabNum]; \
@@ -998,6 +999,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h - 16, nk - 16 - 8, 8);
 #else
         winRootTexQuad(wp, 0xF, x + (w - 90), y - h, 16, 8);
+        // FAKE: 74.0f and 66.0f held in locals (JP and the early demos); the literals change the object
         winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h, w74, 8);
         winRootTexQuad(wp, 0xA, x + (w - 90) + 8, y - h - 8, 8, 8);
         winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h - 8, w74, 8);

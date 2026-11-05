@@ -155,7 +155,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/mario/mario_hit.c | searchFrontWall | two-level wrapper so dir2 is allocated as a nested-inline local (lowest stack slot, COLOURING C2) | plain assignment / one-level `sfwVecSet`: 572/595; in-loop literal: 377; whole second loop as an inline: 365; inline dir builder: 575 (R) |
 | Both | src/mario/mario_pouch.c | pouchGetItem | dead store (function returns right after); steers register allocation | plain `list`/`equipped` locals with the final init order and the pouchAdd inline: 260/297 rows; dropping the dead store: 283/297 (V) |
 | JP, Demos | src/mario/mario_pouch.c | pouchSortItem | `PouchData* pp[1]`, a one-element array used as a scalar | plain `PouchData* pp`: changes the object in JP and the early demos (US, PAL and the September demos stay the same) |
-| Both | src/motion/mot_hammer.c | hitEstimate | Vec copy through a temp; Vec dir4b = dir4 differs | see comment |
+| Both | src/motion/mot_hammer.c | hitEstimate | Vec copy through a temp; Vec dir4b = dir4 differs; 5.0f held in local k5 for four products | see comment |
 | Both | src/motion/mot_hammer.c | mot_hammer2 | self-assignment keeps the branch; removing it (or the if) changes codegen; `(u32)sfxId != 0xFFFFFFFFU` test | see comment |
 | Both | src/motion/mot_roll.c | k025, rabs, rollRad, rollCos, rSin (inline helpers) | k025/rabs/rollRad/rollCos/rSin are invented one-line inline helpers. Their result temps get later inline numbering, which gives the target FPR colouring in mot_roll (fmadds operand order, makeVec c in f31) and marioRollCan (v26 ... | 99.911 -> 100 (unit 19/19) |
 | Both | src/motion/mot_roll.c | marioSetRollDispDir (DISPDIR_BODY2) | the display-direction body written for marioSetRollDispDir: dd = tb_ - ty_ (was -(ty_ - tb_); differs only in the sign of zero, and dd is only compared with 180) and a dead int-guarded re-def of ty_ (COLOURING M) keep ty_ as a named value created ... | see comment |
@@ -169,7 +169,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/pmario_sound.c | __psndSFXOn | dead int guard (COLOURING W): its division temps add pre-RA interference at the loop-1 tail (one more neighbour for the loop pointer); folded after RA, no code | see comment |
 | Both | src/pmario_sound.c | psndBGMOn_f_d | fo/ft/fl copies of the params; flags is reused as a holder for the vol value and fadetime for the f10 test (blocks copy-propagation of ft); the dead W guard after the early return gives ft/fo a second def so they stay their own ... | see comment |
 | Both | src/pmario_sound.c | psndENVOn_f_d | env as a byte-offset sum (same address as &psnd.envId[idx]) so the add feeds an lhzu as in the target; the idx * sizeof(u16) offset is a named local o (declared after fade) shared with the unk1C/envFreq stores (same addresses) | see comment |
-| Both | src/pmario_sound.c | psndSFXMain | loop 1 walks a named copy (base) of the table pointer and loop 2 walks the pointer itself (sfx[0], a scalarized one-element array temp), as the target does (mr r24,r25 copy for loop 1; loop 2 increments r25).; walker copy w plus two dead int guards (COLOURING W, AB). The copy w = sfx[0] survives to register allocation and | see comment |
+| Both | src/pmario_sound.c | psndSFXMain | loop 1 walks a named copy (base) of the table pointer and loop 2 walks the pointer itself (sfx[0], a scalarized one-element array temp), as the target does (mr r24,r25 copy for loop 1; loop 2 increments r25).; walker copy w plus two dead int guards (COLOURING W, AB). The copy w = sfx[0] survives to register allocation and; `s32 ch[1]` used as a scalar | see comment |
 | JP | rels/gor/src/gor_irai.c | irai_window_disp | the client line's y is `iraiAddI(wp->scroll, 140 - i * 30)`, an inline float + int sum (same value) | plain `wp->scroll + (140 - i * 30)` (JP object changes) |
 | JP | src/sequence/seq_load.c | loadDraw | win1 reused as a cam alias before its win_dt web, so the win_dt web becomes a lifetime-split temp (addi straight into win1's register, loop 1 iterates a copy) as in the target; y read through a byte offset so the loop-invariant &win1->y becomes a hoisted @ temp (target pop order) | see comment |
 | US | src/sequence/seq_load.c | loadDraw | `win1` declared as a one-element array so IRO turns it into an @ temp (the address of win_dt is computed into win1, loop 1 walks a copy); win1->y read through a byte offset (`offsetof(WinDt, y)`, same load) keeps &win1->y a late loop temp | see comment |
@@ -487,6 +487,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Both | src/event/evt_nannpc.c | evt_nannpc_jump_position | el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object | see comment |
 | Both | src/event/evt_nannpc.c | nanNPCHitMove | `dot` holds PSVECDotProduct for one use | the call inside the PSVECScale argument: changes the object |
+| Both | src/event/evt_nannpc.c | evt_nannpc_init | subfunc1 stored through the global nanNPCWork while its neighbours go through w | `w->subfunc1 = ...`: changes the object |
 | Both | src/event/evt_npc.c | evt_npc_jump_position_nohit | no-op (s32) casts on the s32 elapsed; the plain arguments change the object | see comment |
 | Both | src/event/evt_npc.c | evt_npc_flag_onoff | no-op (u32) cast; the plain form changes the object | u32 mask local |
 | Both | src/event/evt_npc.c | evt_npc_status_onoff | no-op (u32) cast; the plain form changes the object | plain ~mask |
@@ -521,9 +522,10 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/mario/mario.c | marioMakeDispDir | c30 and c20 hold 30.0f and 20.0f for the negated uses below; the literals -30.0f and -20.0f change the object | see comment |
 | Both | src/mario/mario.c | marioMoveMain | `vy` zero temporary added to position.y and compared with dist | literal 0.0f: changes the object |
 | Both | src/mario/mario_balloon.c | marioBalloonMain | switch on !marioChkKey() (empty case 0, default turns the balloon off); the plain if changes the object | see comment |
+| Both | src/mario/mario_balloon.c | chkBalloonJump, chkBalloonPush, chkItemBox | redundant `else { ret = FALSE; }` branches and `ret = -1` in chkItemBox (ret already holds the value) | dropping them (tried together): changes the object |
 | Both | src/mario/mario_hit.c | marioChkGnd2 | no-op (s8) casts of the s8 stick fields; the plain fields change the object | u8 stick fields (15 units change) |
 | Both | src/mario/mario_hit.c | marioHitStrippedPool2 | stand-in that nothing calls (the linker strips it); it only places 18.0f in this object's constant pool | see comment |
-| Both | src/mario/mario_hit.c | marioSearchHead_roll | spare pointer to dir; passing &dir directly changes the object | see comment |
+| Both | src/mario/mario_hit.c | marioSearchHead_roll | spare pointer to dir; passing &dir directly changes the object; one-purpose `marioSearchHead_roll_cos` helper (4 uses) | see comment |
 | Both | src/mario/mario_hit.c | marioHitStrippedPool | stand-in that nothing calls (the linker strips it); it only places its five literals in this object's constant pool | see comment |
 | Both | src/mario/mario_hit.c | marioSlitChkWallAround | spare temporary k; the plain `pos.y = w->position.y + 5.0f;` changes the object | see comment |
 | Both | src/mario/mario_hit.c | marioCheckWallShip | dead store to the local pos before the return; removing it changes the object | see comment |
@@ -540,6 +542,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/motion/mot_plane.c | planeDead270 | stand-in that nothing calls; it only places its 270.0f literal in this object's constant pool | see comment |
 | Both | src/motion/mot_plane.c | planeDead4 | stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool | see comment |
 | Both | src/motion/mot_plane.c | mot_plane | dead store `baseSpeed = __fabsf(0.02f * wStickDir1)` overwritten two lines later | removing it: changes the object |
+| Both | src/motion/mot_plane.c | planeRoll2 | second copy of the planeRoll1 easing (inline expression instead of the target temporary) | planeRoll1 at its two call sites: changes the object |
 | Both | src/motion/mot_roll.c | marioRollStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
 | Both | src/motion/mot_ship.c | shipMove | 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
 | Both | src/motion/mot_ship.c | shipStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
@@ -548,9 +551,11 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_cloud.c | _cloud_use | re-reads the player pointer mario already holds; dropping the reload changes the object | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_cloud.c | (file) | `#define _MATH_H_` keeps math.h out | removing it: changes the object |
+| Both | src/party/party_cloud.c | cloudGetBreathPower | val local holding 10.0f then 100.0f (both version copies) | literals: changes the object |
 | Both | src/party/party_hit.c | partyWallSlide | unused zero Vec local; without it the object changes | see comment |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_hit.c | partyChkFrontStep | Vec p plus mx/mz temporaries copied into pos | building pos directly: changes the object |
+| Both | src/party/party_hit.c | partySearchWallFront | nn copy of bestNrm and nz copy of nn.z in the wall slide; US-and-later dead `hit = NULL` before the +45 probe loop | bestNrm directly: changes the object (early demos the same) |
 | Both | src/party/party_kuribo.c | pre_kurio_use | msg is always set by the chain above; dropping the test changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_stay | hand-inlined copy of partyStayDist; the call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_homing_walk | no-op function-pointer cast; the plain call changes the object | see comment |
@@ -587,6 +592,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
 | Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |
 | Both | src/window/win_root.c | winSortGX | constant locals `w = 128.0f`, `w2 = 136.0f` | literals: changes the object |
+| JP, Demos | src/window/win_root.c | winKirinukiGX | JP-side constant locals `w74 = 74.0f`, `w66 = 66.0f` | literals: changes the object |
 | Both | rels/dmo/src/dmo_00.c | demo_window | alpha multiplied by 255 and divided back; using winAlpha directly changes the object. | see comment |
 | Both | rels/eki/src/eki_00.c | evt_moamoa_end_wait | discarded pure getter call retained; removing it changes the retail object. | see comment |
 | Both | rels/eki/src/eki_03.c | USER_FUNC | discarded getter call; removing it changes the object. | see comment |
@@ -623,3 +629,5 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/sdk/arc.c | entryToPath | `#pragma inline_depth(3)` before entryToPath | removing it: changes the object (JP demo map not checked) |
 | Both | src/sequence/seq_mapchange.c | seq_mapChangeMain | LangTbl struct wrapper (lang_tbl) copied into a local `lang` | local `const char* lang[]` initialiser: changes the object |
 | Both | src/window/win_party.c | winPartyDisp | `GXColor red[1]` used as a scalar | plain `GXColor red`: changes the object |
+| Demos | src/window/win_party.c | winPartyDisp | iy assigned inside the winIconSet/winFontSetLabel arguments | separate statements: changes the early demos only (retail the same) |
+| Both | src/party/party_yoshi.c | yoshiFlyMove, inertia | constant locals: `one = 1.0f` multiplying the dash speed (yoshiFlyMove), `zero = 0.0f` subtracted from vz (inertia) | each dropped alone: changes the object |
