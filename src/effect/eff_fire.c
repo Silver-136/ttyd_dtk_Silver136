@@ -445,6 +445,8 @@ void effFireDisp2(CameraId cameraId, void* payload) {
     s32 type;
     GXTexObj texObj;
     Mtx trans, scaleMtx, rot, modelView;
+    f32 w;
+    f32 h;
 
     work = effect->userdata;
     camera = camGetPtr(cameraId);
@@ -510,22 +512,20 @@ void effFireDisp2(CameraId cameraId, void* payload) {
     GXSetTevKAlphaSel(GX_TEVSTAGE2, GX_TEV_KASEL_K0_A);
     GXSetTevKColor(GX_KCOLOR0, (GXColor){ 0, 0, 0, work->alpha });
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    {
-        f32 w = 24.0f;
-        f32 h = 40.0f;
-        GXPosition3f32(-w / 2.0f, h, 0.0f);
-        GXColor4u8(0xFF, 0xFF, 0xFF, 0xFF);
-        GXTexCoord2f32(0.0f, 0.0f);
-        GXPosition3f32(w * 0.5f, h, 0.0f);
-        GXColor4u8(0xFF, 0xFF, 0xFF, 0xFF);
-        GXTexCoord2f32(1.0f, 0.0f);
-        GXPosition3f32(w * 0.5f, 0.0f, 0.0f);
-        GXColor4u8(0x00, 0x00, 0x00, 0xFF);
-        GXTexCoord2f32(1.0f, 1.0f);
-        GXPosition3f32(-w / 2.0f, 0.0f, 0.0f);
-        GXColor4u8(0x00, 0x00, 0x00, 0xFF);
-        GXTexCoord2f32(0.0f, 1.0f);
-    }
+    w = 24.0f;
+    h = 40.0f;
+    GXPosition3f32(-w / 2.0f, h, 0.0f);
+    GXColor4u8(0xFF, 0xFF, 0xFF, 0xFF);
+    GXTexCoord2f32(0.0f, 0.0f);
+    GXPosition3f32(w * 0.5f, h, 0.0f);
+    GXColor4u8(0xFF, 0xFF, 0xFF, 0xFF);
+    GXTexCoord2f32(1.0f, 0.0f);
+    GXPosition3f32(w * 0.5f, 0.0f, 0.0f);
+    GXColor4u8(0x00, 0x00, 0x00, 0xFF);
+    GXTexCoord2f32(1.0f, 1.0f);
+    GXPosition3f32(-w / 2.0f, 0.0f, 0.0f);
+    GXColor4u8(0x00, 0x00, 0x00, 0xFF);
+    GXTexCoord2f32(0.0f, 1.0f);
     switch (type) {
         case 3:
         case 8:

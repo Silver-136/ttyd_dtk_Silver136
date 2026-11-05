@@ -568,6 +568,7 @@ void tess(Pt* pts, s32 n) {
     s32 n1, n2;
     Pt* a;
     Pt* b;
+    ScissorTri* tri;
     if (n == 3) {
         ScissorTri* tri = &w->tris[w->triCount];
         for (k = 0; k < 3; k++) {
@@ -599,15 +600,13 @@ void tess(Pt* pts, s32 n) {
             }
         }
     }
-    {
-        ScissorTri* tri = &w->tris[w->triCount];
-        for (k = 0; k < 3; k++) {
-            tri->x[k] = pts[k].x;
-            tri->y[k] = pts[k].y;
-        }
-        w->triCount++;
-        BattleFree(pts);
+    tri = &w->tris[w->triCount];
+    for (k = 0; k < 3; k++) {
+        tri->x[k] = pts[k].x;
+        tri->y[k] = pts[k].y;
     }
+    w->triCount++;
+    BattleFree(pts);
 }
 
 /**

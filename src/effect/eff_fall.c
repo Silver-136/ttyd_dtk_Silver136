@@ -363,10 +363,8 @@ void effFallMain(EffectEntry* effect) {
                         }
                         e->pos.x += 0.5f * (f32)sin(a);
                         // FAKE: block temporary for the cosine; plain `e->pos.z += 0.5f * -(f32)cos(a);` changes the object
-                        {
-                            f32 c = (f32)cos(a);
-                            e->pos.z += 0.5f * -c;
-                        }
+                        c = (f32)cos(a);
+                        e->pos.z += 0.5f * -c;
                         if (e->pos.y < y) {
                             e->pos.y = y;
                             e->timer = 0;

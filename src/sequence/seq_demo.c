@@ -848,17 +848,17 @@ u32 THPSimpleGetTotalFrame(void) {
  * buffer).
  */
 void THPAudioMixCallback(void) {
+    BOOL old;
+
     if (AudioSystem == 0) {
         SoundBufferIndex ^= 1;
         AIInitDMA((u32)SoundBuffer[SoundBufferIndex], BYTES_PER_AUDIO_FRAME);
-        {
-            BOOL old = OSEnableInterrupts();
+        old = OSEnableInterrupts();
 
-            MixAudio(SoundBuffer[SoundBufferIndex], NULL, SAMPLES_PER_AUDIO_FRAME);
-            DCFlushRange(SoundBuffer[SoundBufferIndex], BYTES_PER_AUDIO_FRAME);
+        MixAudio(SoundBuffer[SoundBufferIndex], NULL, SAMPLES_PER_AUDIO_FRAME);
+        DCFlushRange(SoundBuffer[SoundBufferIndex], BYTES_PER_AUDIO_FRAME);
 
-            OSRestoreInterrupts(old);
-        }
+        OSRestoreInterrupts(old);
     } else {
         if (AudioSystem == 1) {
             if (LastAudioBuffer) {
@@ -874,17 +874,15 @@ void THPAudioMixCallback(void) {
 
         SoundBufferIndex ^= 1;
         AIInitDMA((u32)SoundBuffer[SoundBufferIndex], BYTES_PER_AUDIO_FRAME);
-        {
-            BOOL old = OSEnableInterrupts();
+        old = OSEnableInterrupts();
 
-            if (CurAudioBuffer) {
-                DCInvalidateRange(CurAudioBuffer, BYTES_PER_AUDIO_FRAME);
-            }
-            MixAudio(SoundBuffer[SoundBufferIndex], CurAudioBuffer, SAMPLES_PER_AUDIO_FRAME);
-            DCFlushRange(SoundBuffer[SoundBufferIndex], BYTES_PER_AUDIO_FRAME);
-
-            OSRestoreInterrupts(old);
+        if (CurAudioBuffer) {
+            DCInvalidateRange(CurAudioBuffer, BYTES_PER_AUDIO_FRAME);
         }
+        MixAudio(SoundBuffer[SoundBufferIndex], CurAudioBuffer, SAMPLES_PER_AUDIO_FRAME);
+        DCFlushRange(SoundBuffer[SoundBufferIndex], BYTES_PER_AUDIO_FRAME);
+
+        OSRestoreInterrupts(old);
     }
 }
 

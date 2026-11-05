@@ -61,6 +61,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
     BattleUnit* unit;
     BattleUnitPart* parts;
     Vec hit;
+    f32 s;
 
     ac = &work->actionCommands;
     cw = (ShotTargetWork*)ac->work;
@@ -110,18 +111,14 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
                 if (cw->cntX < 0) {
                     _ac_rumble_param_set(difficulty, &cw->periodX, &cw->cntX, &cw->ampX);
                 }
-                {
-                    f32 s = cw->ampX * sinfd((cw->cntX + 1) * 180 / cw->periodX);
-                    cw->pos.x += cw->ampX * sinfd(cw->cntX * 180 / cw->periodX) - s;
-                }
+                s = cw->ampX * sinfd((cw->cntX + 1) * 180 / cw->periodX);
+                cw->pos.x += cw->ampX * sinfd(cw->cntX * 180 / cw->periodX) - s;
                 cw->cntY--;
                 if (cw->cntY < 0) {
                     _ac_rumble_param_set(difficulty, &cw->periodY, &cw->cntY, &cw->ampY);
                 }
-                {
-                    f32 s = cw->ampY * sinfd((cw->cntY + 1) * 180 / cw->periodY);
-                    cw->pos.y += cw->ampY * sinfd(cw->cntY * 180 / cw->periodY) - s;
-                }
+                s = cw->ampY * sinfd((cw->cntY + 1) * 180 / cw->periodY);
+                cw->pos.y += cw->ampY * sinfd(cw->cntY * 180 / cw->periodY) - s;
                 cw->pos.x += work->padWork[0].padData[0].stickX / 10.0f;
                 cw->pos.y += work->padWork[0].padData[0].stickY / 10.0f;
                 if (autoCommand) {

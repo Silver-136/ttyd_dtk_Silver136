@@ -378,6 +378,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     u16 unpressed;
     u16 pressed2;
     u16 unpressed2;
+    u16 icon;
 
     camGetPtr(CAMERA_2D);
     cw = (GaugeWork*)ac->work;
@@ -387,30 +388,28 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     disp->gaugeRatio = ratio;
     switch (ac->params[GAUGE_PARAM_MODE]) {
-        case 1: {
-            u16 icon;
-            t = 100.0f * disp->gaugeRatio / (f32)ac->params[GAUGE_PARAM_TARGET];
-            if (t > 100.0f) {
-                t = 100.0f;
-            }
-            if (cw->timer > 0) {
-                BattleAcDrawGauge((s32)x, (s32)y, -1.0f, 0xB2, 100, 100, 100, 100, 0);
-            } else {
-                BattleAcDrawGauge((s32)x, (s32)y, t, 0xB2, 100, 100, 100, 100, 0);
-            }
-            if (cw->gauge >= (f32)ac->params[GAUGE_PARAM_TARGET]) {
-                icon = ICON_AC_ON;
-            } else {
-                icon = ICON_AC_OFF;
-            }
-            {
-                Vec pos = {0.0f, 0.0f, 0.0f};
-                pos.x = 16.0f + (176.0f + (-288.0f + x));
-                pos.y = 18.0f + y;
-                iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
-            }
-            break;
+        case 1:
+        t = 100.0f * disp->gaugeRatio / (f32)ac->params[GAUGE_PARAM_TARGET];
+        if (t > 100.0f) {
+            t = 100.0f;
         }
+        if (cw->timer > 0) {
+            BattleAcDrawGauge((s32)x, (s32)y, -1.0f, 0xB2, 100, 100, 100, 100, 0);
+        } else {
+            BattleAcDrawGauge((s32)x, (s32)y, t, 0xB2, 100, 100, 100, 100, 0);
+        }
+        if (cw->gauge >= (f32)ac->params[GAUGE_PARAM_TARGET]) {
+            icon = ICON_AC_ON;
+        } else {
+            icon = ICON_AC_OFF;
+        }
+        {
+            Vec pos = {0.0f, 0.0f, 0.0f};
+            pos.x = 16.0f + (176.0f + (-288.0f + x));
+            pos.y = 18.0f + y;
+            iconDispGx(&pos, ICON_FLAG_2D, icon, 1.0f);
+        }
+        break;
         default:
         BattleAcDrawGauge((s32)x, (s32)y, 0.0f, 0xB2, 100, 100, 100, 100, 0);
         if (cw->timer <= 0) {

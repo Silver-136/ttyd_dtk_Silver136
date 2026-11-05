@@ -811,6 +811,7 @@ static void senkaron_ext_main(void) {
     f32 d2;
     f32 mx;
     f32 mz;
+    f32 dir;
 
     pose = extGetPosePtr();
     mario = marioGetPtr();
@@ -965,13 +966,11 @@ static void senkaron_ext_main(void) {
                         }
                     }
                 }
-                {
-                    f32 dir = 0.0f;
+                dir = 0.0f;
 
-                    if (party_hit_check((*ep->mtx)[0][3], (*ep->mtx)[2][3], &dir)) {
-                        hit = 2;
-                        push = dir;
-                    }
+                if (party_hit_check((*ep->mtx)[0][3], (*ep->mtx)[2][3], &dir)) {
+                    hit = 2;
+                    push = dir;
                 }
                 if (hit != 0) {
                     d2 = adx * adx + adz * adz;

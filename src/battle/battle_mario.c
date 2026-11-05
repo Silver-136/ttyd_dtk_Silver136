@@ -7318,6 +7318,7 @@ USER_FUNC(_mario_fire_ball_controll) {
     BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, partId);
     EffectEntry* eff;
+    EffFireWork* work;
     if (isFirstCall) {
         event->userdata[0] = 0;
         event->userdata[1] = (EvtWord)effFireEntry(5, 1000, 0.0f, 0.0f, 0.0f, battle_mario_one);
@@ -7327,10 +7328,8 @@ USER_FUNC(_mario_fire_ball_controll) {
         effDelete(eff);
         return EVT_RETURN_DONE;
     }
-    {
-        EffFireWork* work = (EffFireWork*)eff->userdata;
-        BtlUnit_GetPartsPos(part, &work->position.x, &work->position.y, &work->position.z);
-    }
+    work = (EffFireWork*)eff->userdata;
+    BtlUnit_GetPartsPos(part, &work->position.x, &work->position.y, &work->position.z);
     return EVT_RETURN_BLOCK;
 }
 

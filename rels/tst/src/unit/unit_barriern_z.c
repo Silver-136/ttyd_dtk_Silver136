@@ -756,6 +756,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
     s32 mode = 4;
     s32 i;
     s32 j;
+    f32 s;
 
     switch (type) {
         case 0:
@@ -800,10 +801,8 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         }
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
-    {
-        f32 s = intplGetValue(mode, 1.0f, scale, zanzou_count[0], frames);
-        BtlUnit_SetPartsScale(part, s, s, 1.0f);
-    }
+    s = intplGetValue(mode, 1.0f, scale, zanzou_count[0], frames);
+    BtlUnit_SetPartsScale(part, s, s, 1.0f);
     for (i = 2, j = 0; i <= 6; i++, j++) {
         f32 s;
 
@@ -879,6 +878,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
     s32 mode = 4;
     s32 i;
     s32 j;
+    f32 s;
 
     switch (type) {
         case 0:
@@ -921,10 +921,8 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
         }
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
-    {
-        f32 s = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, scale, zanzou_count[0], frames);
-        BtlUnit_SetPartsScale(part, s, s, 1.0f);
-    }
+    s = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, scale, zanzou_count[0], frames);
+    BtlUnit_SetPartsScale(part, s, s, 1.0f);
     for (i = 2, j = 0; i <= 6; i++, j++) {
         f32 s;
 
