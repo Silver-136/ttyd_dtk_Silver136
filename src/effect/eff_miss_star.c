@@ -37,7 +37,7 @@ Vec spd_tbl[15] = {
 };
 
 /** Size of each miss star in turn, between 0.8 and 1.1 (X only; entries 0-7 are read, i % 8). */
-Vec scale_tbl[15] = {
+static Vec scale_tbl[15] = {
     { 1.0f, 1.0f, 1.0f },    { 0.8f, 0.8f, 0.8f },    { 0.9f, 0.9f, 0.9f },
     { 1.1f, 1.1f, 1.1f },    { 1.0f, 1.0f, 1.0f },    { 0.8f, 0.8f, 0.8f },
     { 0.9f, 0.9f, 0.9f },    { 1.1f, 1.1f, 1.1f },    { 1.0f, 1.0f, 1.0f },

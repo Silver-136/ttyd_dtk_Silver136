@@ -11,8 +11,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
-GXColor shock_zero_color0;
-GXColor shock_zero_color1;
+static GXColor shock_zero_color0;
+static GXColor shock_zero_color1;
 
 /**
  * The jagged shock-flash mesh: white-edged spikes around a dark inner rim,

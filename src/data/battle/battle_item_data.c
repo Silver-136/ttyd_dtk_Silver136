@@ -127,7 +127,7 @@ EvtWord ItemEvent_Attiike_Shisshi[167];
 BattleWeapon ItemWeaponData_Attiike_Shisshi;
 EvtWord ItemEvent_Naniga_Okorukana[207];
 BattleWeapon ItemWeaponData_Naniga_Okorukana;
-s32 R_mystery_item_table[14];
+static s32 R_mystery_item_table[14];
 BattleWeapon ItemWeaponData_Shikaeshino_Kona;
 BattleWeapon ItemWeaponData_Kameno_Noroi;
 EvtWord ItemEvent_RecoveryAndStatus[246];
@@ -3232,7 +3232,7 @@ BattleWeapon ItemWeaponData_Naniga_Okorukana = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-s32 R_mystery_item_table[] = {
+static s32 R_mystery_item_table[] = {
     ITEM_MUSHROOM,
     ITEM_HONEY_SYRUP,
     ITEM_JAMMIN_JELLY,

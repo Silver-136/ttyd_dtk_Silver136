@@ -86,7 +86,7 @@ typedef struct TexSet {
 /** Banner letters, shadows and letter count for each language. */
 static TexSet texid_tbl[6] = { { tex_jp, tex_shadow_jp, 8 }, { tex_us, tex_shadow_us, 14 }, { tex_lang3, tex_shadow_lang3, 12 }, { tex_lang4, tex_shadow_lang4, 16 }, { tex_lang5, tex_shadow_lang5, 12 }, { tex_lang6, tex_shadow_lang6, 8 } };
 /** Rainbow (niji) texture laid over the banner letters, one per language. */
-u32 niji_tbl[] = {144, 154, 150, 156, 158, 144};
+static u32 niji_tbl[] = {144, 154, 150, 156, 158, 144};
 #endif
 
 /** Shakes the camera when a banner letter lands: 50 frames lightly, or 100 frames harder for the last letter (LW 1). */

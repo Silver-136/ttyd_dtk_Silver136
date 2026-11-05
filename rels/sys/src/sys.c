@@ -154,7 +154,7 @@ s8 stage6_lang6_tbl[8];
 s8 stage7_lang6_tbl[8];
 s8 stage8_lang6_tbl[8];
 s8* texid_lang6_tbl[9];
-s8** lang_tbl[6];
+static s8** lang_tbl[6];
 const char* lang_prefix[7];
 #else
 s8 stage1_us_tbl[7];
@@ -166,7 +166,7 @@ s8 stage6_us_tbl[7];
 s8 stage7_us_tbl[7];
 s8 stage8_us_tbl[7];
 s8* texid_us_tbl[9];
-s8** lang_tbl[2];
+static s8** lang_tbl[2];
 const char* lang_prefix[2];
 #endif
 
@@ -1190,11 +1190,11 @@ s8* texid_lang6_tbl[] = {
 };
 
 /** The title tables of every language, indexed by the game language. */
-s8** lang_tbl[] = {
+static s8** lang_tbl[] = {
     texid_jp_tbl, texid_us_tbl, texid_lang3_tbl, texid_lang4_tbl, texid_lang5_tbl, texid_lang6_tbl,
 #else
 /** The title tables of every language, indexed by the game language. */
-s8** lang_tbl[] = {
+static s8** lang_tbl[] = {
     texid_jp_tbl, texid_us_tbl,
 #endif
 };
