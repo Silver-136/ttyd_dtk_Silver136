@@ -108,7 +108,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 
 #if VERSION <= VERSION_DEMO_JP
 /**
- * Status vulnerability of Fuzzy (the demos), as percentage multipliers for the attack's base status chance:
+ * Status vulnerability of Fuzzy (the early demos), as percentage multipliers for the attack's base status chance:
  * 100 for Sleep, Stop, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy,
  * Invisible and instant KO; otherwise Dizzy 90, Confuse 90, Freeze 75, Tiny 80, Attack Down 80,
  * Defense Down 75, Allergic 75, Fright 95, Gale Force 95 and Slow 75.

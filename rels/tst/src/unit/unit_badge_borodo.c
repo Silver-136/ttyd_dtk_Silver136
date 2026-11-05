@@ -1,6 +1,6 @@
 // tst.rel's version of rels/jon/src/unit/unit_badge_borodo.c (Badge Bandit), the same earlier version as
 // tst's unit_borodo.c.
-// The JP demo's copy has none of the debug prints or the assert.
+// The early demos' copy has none of the debug prints or the assert.
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"

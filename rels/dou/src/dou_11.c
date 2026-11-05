@@ -1135,7 +1135,7 @@ EVT_END()
 
 /**
  * At map load: hides the first pair of barrels (S_taru_n01, n02) and their hit areas
- * until one island switch has been pressed (in the demos, mobj01).
+ * until one island switch has been pressed (in the early demos, mobj01).
  */
 EVT_BEGIN(ukishima_init1)
 #if VERSION <= VERSION_DEMO_JP
@@ -1154,7 +1154,7 @@ EVT_BEGIN(ukishima_init1)
 EVT_END()
 
 /**
- * The first of the two blue island switches pressed (in the demos, mobj01): the camera looks at the first stretch,
+ * The first of the two blue island switches pressed (in the early demos, mobj01): the camera looks at the first stretch,
  * the first pair of barrels pops up out of the water (ukishima_apper) and starts bobbing,
  * then ukishima_check runs.
  */
@@ -1185,7 +1185,7 @@ EVT_END()
 
 /**
  * At map load: hides the second pair of barrels (S_taru_n03, n04) and their hit areas
- * until both island switches have been pressed (or in the demos, the second switch).
+ * until both island switches have been pressed (or in the early demos, the second switch).
  */
 EVT_BEGIN(ukishima_init2)
 #if VERSION <= VERSION_DEMO_JP
@@ -1204,7 +1204,7 @@ EVT_BEGIN(ukishima_init2)
 EVT_END()
 
 /**
- * The second of the two blue island switches pressed (in the demos, mobj02): the camera looks at the second stretch,
+ * The second of the two blue island switches pressed (in the early demos, mobj02): the camera looks at the second stretch,
  * the second pair of barrels pops up out of the water and starts bobbing, then ukishima_check runs.
  */
 EVT_BEGIN(ukishima_part2)

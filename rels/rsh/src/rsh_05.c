@@ -1142,7 +1142,7 @@ static void ext_moamoa_main(void) {
                                 moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g3);
                             }
                         }
-                        }
+                    }
                 }
                 break;
 
@@ -1803,7 +1803,7 @@ EVT_END()
 
 /**
  * Init event of the conductor (車掌) in the baggage car: from STG6_46_ENGINEER to STG6_48_SMORG_MIASMA
- * he stands at (-115, 0, 20) ((-100, 0, 0) in the demos) with the O_1 / T_3 poses and the distressed tribe
+ * he stands at (-115, 0, 20) ((-100, 0, 0) in the early demos) with the O_1 / T_3 poses and the distressed tribe
  * 車掌悲, begging Mario to help the waitress the Smorgs have caught; at other times he is off the map.
  */
 static EVT_BEGIN(init_syashou)

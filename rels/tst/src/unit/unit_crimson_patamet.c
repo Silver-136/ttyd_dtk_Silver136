@@ -210,7 +210,7 @@ static BattleUnitDefenseAttr defence_attr_pata = {{DEFENSE_ATTR_NONE, DEFENSE_AT
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Red Parabuzzy in its winged state (the demos),
+ * Status vulnerability of Red Parabuzzy in its winged state (the early demos),
  * as percent multipliers on each status's chance: immune to Burn;
  * 100 (unchanged) for Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 75, Attack Down 75, Defense Down 75,
@@ -691,7 +691,7 @@ static BattleUnitDefenseAttr defence_attr_turn = {{DEFENSE_ATTR_NONE, DEFENSE_AT
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Red Parabuzzy (the demos), as percent multipliers on each status's chance:
+ * Status vulnerability of Red Parabuzzy (the early demos), as percent multipliers on each status's chance:
  * immune to Burn; 100 (unchanged) for Poison, Electric, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 90, Dizzy 75, Confuse 75, Freeze 75, Tiny 75, Attack Down 75, Defense Down 75,
  * Allergic 75, Fright 60, Gale Force 65, Slow 75 and instant KO 95.

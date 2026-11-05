@@ -346,7 +346,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data for the Elite Wizzerd's magic on all enemies: 5 damage in the demos, 8 in retail. */
+/** Attack data for the Elite Wizzerd's magic on all enemies: 5 damage in the early demos, 8 in retail. */
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -639,8 +639,8 @@ static BattleUnitSetup entry_mahorn = {
  * Its copies (unit work 4 set) do nothing.
  * After an item check, if it is the only unit of its side left it splits into copies (bunsin_event);
  * if it has copies it casts its single-target magic (or is flustered when confused);
- * otherwise it draws a spell: punch (50 in 160 in the demos, 30 in 150 in retail),
- * single-target magic (50 in the demos, 60 in retail), and 10 each for magic on all enemies,
+ * otherwise it draws a spell: punch (50 in 160 in the early demos, 30 in 150 in retail),
+ * single-target magic (50 in the early demos, 60 in retail), and 10 each for magic on all enemies,
  * size-up, defence-up, invisibility, dodgy and heal.
  */
 static EVT_BEGIN(attack_event)

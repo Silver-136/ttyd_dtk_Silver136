@@ -1067,7 +1067,7 @@ static s32 key_tbl[] = {
  * Case script on the locked door to Lord Crump: without the Card Key (ITEM_CARD_KEY_0x20) it shows stg7_aji_67;
  * with it, opens the item menu, and if the key is chosen removes it,
  * unlocks the door's entrance and sets the story progress to STG7_19_THE_DOOR_TO_LORD_CRUMP.
- * Menu argument layout differs between the demos and the final game.
+ * Menu argument layout differs between the early demos and the final game.
  */
 static EVT_BEGIN(evt_door_msg)
     CALL(evt_mario_key_onoff, 0)

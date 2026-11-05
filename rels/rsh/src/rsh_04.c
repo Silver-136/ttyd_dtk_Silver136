@@ -348,7 +348,7 @@ static const char* door_5[] = {
     "5_door_close",
 };
 
-// Both hints are required. US and PAL advance the story only if needed; JP and the demos write this story step
+// Both hints are required. US and PAL advance the story only if needed; JP and the early demos write this story step
 // unconditionally.
 EVT_BEGIN(evt_rsh_konarikin_irai_party_talk)
     IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 0)

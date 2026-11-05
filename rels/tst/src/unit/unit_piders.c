@@ -947,7 +947,7 @@ EVT_END()
 /**
  * Wind-up of the web attack: the Pider faces the target,
  * takes its attack pose (PAI_A_1, part 2 shown as PAI_A_2a at its position, pivot 30 scaled by its size,
- * or 20 Tiny / 40 Huge / 30 in the demos) and swings part 2 to 110 degrees, holds 20 frames, back to 70,
+ * or 20 Tiny / 40 Huge / 30 in the early demos) and swings part 2 to 110 degrees, holds 20 frames, back to 70,
  * holds 15, then to 100, each with the attack sound; the final angle is stored in unit work 4.
  */
 static EVT_BEGIN(piders_attack_common_event1)

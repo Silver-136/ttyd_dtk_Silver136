@@ -234,7 +234,7 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data of the Pokey's headbutt with 1 segment: 3 damage in the demos, 4 in retail. */
+/** Attack data of the Pokey's headbutt with 1 segment: 3 damage in the early demos, 4 in retail. */
 static BattleWeapon weapon_sambo_head_attack_1 = {
     NULL, 0, // name..icon
     {0}, // pad_06

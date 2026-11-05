@@ -186,7 +186,7 @@ f32 fd_end_00_one_364;
 
 
 /**
- * REL prolog of the ending module (the releases keep it in end_00.c):
+ * REL prolog of the ending module (every other version keeps it in end_00.c):
  * runs the static constructors, registers the init event of end_00 and, in the US and later versions,
  * switches off the 2D camera's letterbox bars so the credits fill the screen.
  */
@@ -1351,7 +1351,7 @@ EVT_BEGIN(end_00_init_evt)
 EVT_END()
 
 /**
- * Character-specific silhouette scripts: the demos use different models and paths from the releases
+ * Character-specific silhouette scripts: the early demos use different models and paths from the other versions
  * (most demo characters rise straight up through the middle of the screen).
  */
 EVT_BEGIN(end_credit_gesso_evt)
@@ -1377,7 +1377,7 @@ EVT_BEGIN(end_credit_gesso_evt)
     RETURN
 EVT_END()
 
-/** Parade script for Hooktail (ゴンババ): the silhouette enters from the right in the demos, from the left in the releases. */
+/** Parade script for Hooktail (ゴンババ): the silhouette enters from the right in the early demos, from the left in the other versions. */
 EVT_BEGIN(end_credit_gonbaba_evt)
     CALL(evt_npc_entry, STRING("gonbaba"), STRING("c_gonbaba"))
 #if VERSION <= VERSION_DEMO_JP
@@ -2016,7 +2016,7 @@ USER_FUNC(evt_end_staff_roll_init) {
 #if VERSION <= VERSION_DEMO_JP
     for (i = 0; i < end_wp->npcLoadNum; i++) {
 #else
-    // retail runs this empty loop; the demos' version still counts npcLoadNum here.
+    // retail runs this empty loop; the early demos' version still counts npcLoadNum here.
     for (i = 0; i < 5; i++) {
 #endif
     }
@@ -2027,7 +2027,7 @@ USER_FUNC(evt_end_staff_roll_init) {
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000a14, JP end .text+0x950. See docs/NAME_PROVENANCE.md.
 /**
  * Cleans up after the staff roll: frees the ending picture file, lets sound effects play again and,
- * in the Japanese versions, switches back to Japanese text (and in the demos reloads the global messages).
+ * in the Japanese versions, switches back to Japanese text (and in the early demos reloads the global messages).
  */
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);

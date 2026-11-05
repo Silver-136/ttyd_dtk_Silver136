@@ -274,7 +274,7 @@ EVT_END()
 
 /**
  * Trigger: once Mario stands at x >= 150 on the raised floor (y 50;
- * the demos also wait for both partners to be up there),
+ * the early demos also wait for both partners to be up there),
  * the partners step up beside him, Punio calls for Madame Flurrie (stg2_win_e05_00_02)
  * and the story becomes STG2_05_01_FLURRIE_LIVING_ROOM.
  */

@@ -768,7 +768,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 /**
  * Map init for muj_10 (the hidden dock): picks music for the story stage, registers the exits and NPCs,
  * spawns the scene for the current stage (nazo_event, oidasare_event, senin_event or korutesu_appear_event),
- * hides the ship and the bridge from STG5_42_PIRATES_VS_X_NAUTS on and, outside the demos, places the
+ * hides the ship and the bridge from STG5_42_PIRATES_VS_X_NAUTS on and, outside the early demos, places the
  * heart and save blocks before STG5_41_RETURN_TO_THE_GROTTO.
  */
 EVT_BEGIN(muj_10_init_evt)

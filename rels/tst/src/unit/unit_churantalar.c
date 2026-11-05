@@ -91,7 +91,7 @@ static USER_FUNC(piders_yarn_init) {
 }
 
 /**
- * Unit kind of Arantula: 16 max HP, level 38 in the demos and 34 in retail. The battle engine reads it when the unit spawns:
+ * Unit kind of Arantula: 16 max HP, level 38 in the early demos and 34 in retail. The battle engine reads it when the unit spawns:
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_churantalar = {
@@ -180,7 +180,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Arantula (the demos), as the percent chance a status takes hold:
+ * Status vulnerability of Arantula (the early demos), as the percent chance a status takes hold:
  * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 60, Stop 80, Dizzy 70, Confuse 70, Freeze 70, Tiny 70, Attack Down 70, Defense Down 70,
  * Allergic 70, Fright 80, Gale Force 30, Slow 70 and instant KO 30.

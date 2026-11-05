@@ -362,7 +362,7 @@ void noiseDisp(CameraId cameraId, void* param) {
 
 /**
  * Emergency lighting: waits until the story reaches STG7_25_THE_LAST_MAIL,
- * then fades the map's blend colour from white down to a red tint (green and blue to 96, 32 in the demos) over
+ * then fades the map's blend colour from white down to a red tint (green and blue to 96, 32 in the early demos) over
  * one second and keeps it. Already at that story point it sets the tint at once.
  */
 EVT_BEGIN(evt_emergency)
@@ -3326,7 +3326,7 @@ EVT_BEGIN(aji_17_init_evt)
 
     // Mario's visits: at the story point after the Moon, the first visit plays TEC's farewell (evt_last);
     // the second plays the aftermath (evt_last2). US and PAL restore HP and FP on the first visit;
-    // JP and the demos restore them only when Mario has no partner out.
+    // JP and the early demos restore them only when Mario has no partner out.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
         IF_INT_EQUAL(GSWF_AJI_17_LAST_SCENE_SEEN, 0)
             CALL(evt_mario_get_party, LW(15))

@@ -2042,7 +2042,7 @@ EVT_END()
 
 /**
  * Secret of the left villa: when Mario steps on the floor of ie_1_2 a paper-flip effect (offscreen capture with
- * the OFF_d_two_meku_up paper animation A_1) flips naka_1 away and leaves it hidden (the demos hide e and
+ * the OFF_d_two_meku_up paper animation A_1) flips naka_1 away and leaves it hidden (the early demos hide e and
  * ie_1_sakai instead), and when he returns to the ie_1_1 floor a second flip (A_2) shows naka_1 again.
  */
 EVT_BEGIN(evt_seacret)

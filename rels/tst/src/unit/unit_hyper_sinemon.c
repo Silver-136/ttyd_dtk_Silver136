@@ -86,7 +86,7 @@ BattleUnitKind unit_hyper_sinemon = {
     data_table, // dataTable
 };
 
-/** Defence of the Hyper Cleft's body per damage type: 3 against every damage type in the demos; in retail, fire has defence 99. */
+/** Defence of the Hyper Cleft's body per damage type: 3 against every damage type in the early demos; in retail, fire has defence 99. */
 #if VERSION <= VERSION_DEMO_JP
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else
@@ -96,7 +96,7 @@ static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
 /** Defence of the Hyper Cleft's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
-/** Defence attributes of the Hyper Cleft's body: none in the demos; retail fire has the immunity attribute. */
+/** Defence attributes of the Hyper Cleft's body: none in the early demos; retail fire has the immunity attribute. */
 #if VERSION <= VERSION_DEMO_JP
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 

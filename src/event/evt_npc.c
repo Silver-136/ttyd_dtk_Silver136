@@ -2612,14 +2612,14 @@ void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
         effect = effKemuri10N64Entry(0, x, (18.0f * npc->scale.x) + npc->position.y, npc->position.z, dirX, 0.0f, 0.0f,
                                      npc->scale.x);
 #if VERSION >= VERSION_JP
-                                     if (!strcmp(gp->currentMapName, "kpa_01")) {
-                                         ((EffKemuri10N64Work*)effect->userdata)->camera = CAMERA_3D_EFFECTB;
-                                     }
-                                 }
-                             }
+        if (!strcmp(gp->currentMapName, "kpa_01")) {
+            ((EffKemuri10N64Work*)effect->userdata)->camera = CAMERA_3D_EFFECTB;
+        }
+    }
+}
 #else
-                                 }
-                             }
+    }
+}
 #endif
 
 /**

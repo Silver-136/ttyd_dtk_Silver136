@@ -1837,7 +1837,7 @@ EVT_END()
  * closes it and tells Gonzales (or the champion, in tou_07) it is time for his match.
  * It then gives the guard his
  * talk event (talk_gardman) back, turns off entrance 0 and returns control to Mario.
- * The demos first run 241 iterations, each waiting one frame and for Mario's key-input lock to clear.
+ * The early demos first run 241 iterations, each waiting one frame and for Mario's key-input lock to clear.
  * Retail waits for 241 eligible idle, walking or dashing checks while Mario's controls are enabled.
  */
 static EVT_BEGIN(evt_gardman)

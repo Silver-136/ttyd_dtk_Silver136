@@ -201,7 +201,7 @@ static BattleWeapon weapon_heavy_bomb_guard = {
 };
 
 /**
- * Weapon of the Bulky Bob-omb (guard 2): targets only itself, raises Attack (2 turns in the demos, 3 in retail); used by attack_event.
+ * Weapon of the Bulky Bob-omb (guard 2): targets only itself, raises Attack (2 turns in the early demos, 3 in retail); used by attack_event.
  */
 static BattleWeapon weapon_heavy_bomb_guard_2 = {
     NULL, 0, // name..icon

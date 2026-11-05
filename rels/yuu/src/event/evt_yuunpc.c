@@ -1103,7 +1103,7 @@ s32 goalincheck(YuuNpc* npc) {
 
 /**
  * Picks a random steering error rate for an NPC (between about -0.25 and +0.25,
- * narrower for some states in the demos), so the Paper Mode racers do not all take the same line.
+ * narrower for some states in the early demos), so the Paper Mode racers do not all take the same line.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void errper_set_rtn(YuuNpc* npc) {
@@ -1890,12 +1890,12 @@ void yuunpc_pose_minigame4_main(void) {
                     case 5:
                     case 6:
 #if VERSION <= VERSION_DEMO_JP
-                        {
+                    {
 #else
                     case 27:
                     case 28: {
 #endif
-                                                if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
+                        if (npc->pos.z >= -150.0f + w && npc->pos.z < 150.0f) {
                             f32 tt = 50.0f * kind;
                             if (npc->pos.z >= -150.0f + tt && npc->pos.z < 150.0f - tt + w) {
                                 d = 0.0f;
@@ -1913,17 +1913,17 @@ void yuunpc_pose_minigame4_main(void) {
                         }
 #if VERSION <= VERSION_DEMO_JP
                     } break;
-                }
-                break;
-            }
-            d -= 20.0f;
-#else
                     }
                     break;
                 }
-                break;
-            }
-            d -= 17.0f;
+                d -= 20.0f;
+#else
+                    }
+                        break;
+                    }
+                    break;
+                }
+                d -= 17.0f;
 #endif
                 if (d < 0.0f) {
                     d = 0.0f;

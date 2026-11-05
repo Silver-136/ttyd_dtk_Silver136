@@ -670,7 +670,7 @@ HitEntry* kpaSearchWallFront(Vec* pos, f32* h, f32 dx, f32 dz) {
         pos->x += dx * s;
         pos->z += dx * c;
         return NULL;
-}
+    }
     half = 0.5f * mario->wPlayerCollisionBox.x;
     h1 = 0.75f * mario->wPlayerCollisionBox.y;
     h2 = 0.25f * mario->wPlayerCollisionBox.y;

@@ -35,11 +35,11 @@ static inline f32 _cosf(f32 x) {
 
     if (x <= PI) {
         {
-        s32 gz = 0;
-        if (gz != 0) {
-            a = (a / x) / (x / a);
-        }
-    } // FAKE: dead guard (gz is always 0, emits no code); without it the caller's 2.0f constant is loaded at a different point and the object changes
+            s32 gz = 0;
+            if (gz != 0) {
+                a = (a / x) / (x / a);
+            }
+        } // FAKE: dead guard (gz is always 0, emits no code); without it the caller's 2.0f constant is loaded at a different point and the object changes
         if (x <= HALF_PI) {
             x2 = x * x;
             a = a * x2 - b;

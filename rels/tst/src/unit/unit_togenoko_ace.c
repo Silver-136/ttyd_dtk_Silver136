@@ -421,7 +421,7 @@ static BattleWeapon weapon_togenoko_normal_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of the Dark Koopatrol's shell spin: damage 4 in the demos, 5 in retail. */
+/** Weapon of the Dark Koopatrol's shell spin: damage 4 in the early demos, 5 in retail. */
 static BattleWeapon weapon_togenoko_shell_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

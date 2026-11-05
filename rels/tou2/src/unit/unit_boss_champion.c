@@ -94,7 +94,7 @@ USER_FUNC(ceil_exist) {
 }
 
 /**
- * Unit kind of the Rawk Hawk (HP 40, level 34; 49 in the demos):
+ * Unit kind of the Rawk Hawk (HP 40, level 34; 49 in the early demos):
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
 BattleUnitKind unit_boss_champion = {
@@ -1648,7 +1648,7 @@ USER_FUNC(eff_fall_hit_wait) {
  * for the effect's hit point; Dodgy avoidance instead waits 10 frames.
  * JP and later wait for all ten drops (event ids kept in parts work 0 to 9)
  * before a final check with weapon_champion_roof_shake_last_attack on Mario, or the shell guarding him,
- * and on the partner; the demos make that final check on Mario and the partner after a fixed 32 frames.
+ * and on the partner; the early demos make that final check on Mario and the partner after a fixed 32 frames.
  */
 EVT_BEGIN(roof_shake_attack_event)
 #if VERSION >= VERSION_JP

@@ -149,7 +149,7 @@ static StatusVulnerability regist = {
 #endif
 
 /**
- * Weapon data for the Poison Pokey's head slam when it has 4 segments: 4 damage in the demos or 3 in retail, one target, may inflict
+ * Weapon data for the Poison Pokey's head slam when it has 4 segments: 4 damage in the early demos or 3 in retail, one target, may inflict
  * poison (60%).
  */
 static BattleWeapon weapon_sambo_mummy_head_attack_4 = {
@@ -196,7 +196,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_4 = {
 };
 
 /**
- * Weapon data for the Poison Pokey's head slam when it has 3 segments: 4 damage in the demos or 3 in retail, one target, may inflict
+ * Weapon data for the Poison Pokey's head slam when it has 3 segments: 4 damage in the early demos or 3 in retail, one target, may inflict
  * poison (60%).
  */
 static BattleWeapon weapon_sambo_mummy_head_attack_3 = {
@@ -243,7 +243,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_3 = {
 };
 
 /**
- * Weapon data for the Poison Pokey's head slam when it has 2 segments: 4 damage in the demos or 3 in retail, a shell-toss-type hit, one
+ * Weapon data for the Poison Pokey's head slam when it has 2 segments: 4 damage in the early demos or 3 in retail, a shell-toss-type hit, one
  * target, may inflict poison (60%).
  */
 static BattleWeapon weapon_sambo_mummy_head_attack_2 = {
@@ -332,7 +332,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon data for the Poison Pokey's segment throw when it has 4 segments: 3 damage in the demos or 4 in retail, one target. */
+/** Weapon data for the Poison Pokey's segment throw when it has 4 segments: 3 damage in the early demos or 4 in retail, one target. */
 static BattleWeapon weapon_sambo_mummy_spike_attack_4 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -373,7 +373,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_4 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon data for the Poison Pokey's segment throw when it has 3 segments: 3 damage in the demos or 4 in retail, one target. */
+/** Weapon data for the Poison Pokey's segment throw when it has 3 segments: 3 damage in the early demos or 4 in retail, one target. */
 static BattleWeapon weapon_sambo_mummy_spike_attack_3 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -414,7 +414,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_3 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon data for the Poison Pokey's segment throw when it has 2 segments: 3 damage in the demos or 4 in retail, one target. */
+/** Weapon data for the Poison Pokey's segment throw when it has 2 segments: 3 damage in the early demos or 4 in retail, one target. */
 static BattleWeapon weapon_sambo_mummy_spike_attack_2 = {
     NULL, 0, // name..icon
     {0}, // pad_06

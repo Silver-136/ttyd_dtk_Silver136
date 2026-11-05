@@ -325,7 +325,7 @@ void seq_battleMain(SequenceWork* work) {
             break;
         }
         case 4:
-        if (++work->counter > 30) {
+            if (++work->counter > 30) {
                 if ((gp->flags & GW_FLAG_E3) && (gp->flags & GW_FLAG_E3_TIMEOUT)) {
                     seqSetSeq(SEQ_GAME_OVER, (const char*)1, NULL);
                 } else {

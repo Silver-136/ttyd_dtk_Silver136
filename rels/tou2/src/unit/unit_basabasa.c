@@ -198,7 +198,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Status vulnerability multipliers of the Swooper: extra prone to gale force in the demos;
+ * Status vulnerability multipliers of the Swooper: extra prone to gale force in the early demos;
  * resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_JP

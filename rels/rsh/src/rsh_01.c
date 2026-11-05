@@ -653,7 +653,7 @@ EVT_BEGIN(evt_pikary_arrival)
 EVT_END()
 
 // Retail triples: interaction hit, message before Rogueport Station, message from that story point onward.
-// The demos use pairs containing only the interaction hit and its message.
+// The early demos use pairs containing only the interaction hit and its message.
 static const char* access_tbl[] = {
     "tana_5",
     "stg6_rsh_262",
@@ -866,7 +866,7 @@ EVT_END()
 
 /**
  * Talk script of the conductor (syasyou) on the return trip (hooked in rsh_01_init_evt_nidome):
- * says stg6_rsh_c_14, or in the releases stg6_rsh_c_09_1 once the train has reached Rogueport.
+ * says stg6_rsh_c_14, or in JP and later stg6_rsh_c_09_1 once the train has reached Rogueport.
  */
 EVT_BEGIN(talk_syasyou)
 #if VERSION >= VERSION_JP

@@ -397,7 +397,7 @@ void sys_01_msg_tex_capture_func(CameraId cameraId, void* param) {
  * Draw callback of the chapter title card (camera 3D effect A):
  * lights the letters with a rotating rainbow light, scrolls the background,
  * and draws each flying title letter and the subtitle in 3D using the effect_sys texture.
- * The US release and later lay the letters out per language; JP and the demo use a fixed layout.
+ * The US release and later lay the letters out per language; JP and the early demos use a fixed layout.
  */
 void display_func(CameraId cameraId, void* param) {
     SysWork* wp = param;

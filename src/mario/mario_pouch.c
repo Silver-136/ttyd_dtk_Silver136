@@ -631,10 +631,10 @@ void pouchHiraToKata(const char* src, char* dst) {
 
 /**
  * Sort key of an item name for the alphabetical sorts.
- * JP, US and the US September demo inline their own copy of the kana conversion here; PAL and the PAL demo
+ * the early demos, JP, US and the US September demo inline their own copy of the kana conversion here; PAL and the PAL demo
  * call pouchHiraToKata.
  */
-// PAL and the PAL demo call pouchHiraToKata; JP, US and the US September demo inline their own copy of the conversion
+// PAL and the PAL demo call pouchHiraToKata; the early demos, JP, US and the US September demo inline their own copy of the conversion
 static inline void pouchAiueoConv(const char* src, char* dst) {
 #if VERSION >= VERSION_DEMO_EU
     pouchHiraToKata(src, dst);
@@ -1296,8 +1296,8 @@ BOOL pouchRemoveKeepItem(s32 id) {
     for (i = 0; i < MAX_STORED_ITEMS; i++) {
         if (mpp->storedItems[i] == id) {
             break;
-            }
         }
+    }
     if (i < MAX_STORED_ITEMS) {
         mpp->storedItems[i] = 0;
         return TRUE;

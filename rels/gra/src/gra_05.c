@@ -203,7 +203,7 @@ static EVT_BEGIN(in_evt)
 EVT_END()
 
 /**
- * Exit event of the hole ana_1: the main partner walks to the hole (both partners in the demos), then both are removed,
+ * Exit event of the hole ana_1: the main partner walks to the hole (both partners in the early demos), then both are removed,
  * Mario enters background mode and reappears at the other hole ana_2 (50 units lower) with the jump voice,
  * hopping out to (-140, 60, -450) before control returns. Returns 1 in LW(0).
  */

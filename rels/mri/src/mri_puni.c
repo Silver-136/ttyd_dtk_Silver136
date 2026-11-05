@@ -3756,20 +3756,20 @@ void puniModeUpdraft(PuniData *p) {
     switch (p->modeStep) {
         case 0:
             if (p->breathPower > 10.0f) {
-            p->target = Punigp->marioPuni;
-            PSVECSubtract(&p->pos, &mario->position, &d);
-            mag = PSVECMag(&d);
-            if (0.0f != mag) {
-                PSVECNormalize(&d, &d);
+                p->target = Punigp->marioPuni;
+                PSVECSubtract(&p->pos, &mario->position, &d);
+                mag = PSVECMag(&d);
+                if (0.0f != mag) {
+                    PSVECNormalize(&d, &d);
+                }
+                d.y = 0.0f;
+                d.z = 0.0f;
+                p->modeF2 = 1.2f + (p->breathPower / 100.0f);
+                p->moveStart = d;
+                p->modeF0 = 0.0f;
+                p->modeF1 = 0.0f;
+                p->modeStep = 1;
             }
-            d.y = 0.0f;
-            d.z = 0.0f;
-            p->modeF2 = 1.2f + (p->breathPower / 100.0f);
-            p->moveStart = d;
-            p->modeF0 = 0.0f;
-            p->modeF1 = 0.0f;
-            p->modeStep = 1;
-        }
             break;
 
         case 1:
@@ -3778,8 +3778,8 @@ void puniModeUpdraft(PuniData *p) {
             p->modeF0 += p->modeF1;
             p->modeF1 += 0.06f;
             if ((p->modeF0) >= (p->modeF2)) {
-            p->modeF0 = p->modeF2;
-        }
+                p->modeF0 = p->modeF2;
+            }
             break;
 
         case 2:
@@ -3788,8 +3788,8 @@ void puniModeUpdraft(PuniData *p) {
             p->modeF0 -= p->modeF1;
             p->modeF1 += 0.03f;
             if ((p->modeF0) < 0.0f) {
-            p->modeStep = 0;
-        }
+                p->modeStep = 0;
+            }
             break;
 
     }

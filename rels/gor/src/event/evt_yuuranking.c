@@ -326,16 +326,16 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_JP
                         FontDrawMessage(-150.4f + wp->x, 56.0f + wp->y, msgSearch("menu_subtitle1_minigame2"));
                         break;
-                        case 2:
+                    case 2:
                         FontDrawMessage(-150.4f + wp->x, 56.0f + wp->y, msgSearch("menu_subtitle1_minigame3"));
                         break;
-                    }
-                    score = wp->dispScore;
-                    if (score >= 0) {
-                        sec = score / 1000;
-                        min = sec / 60;
-                        sec = sec % 60;
-                        sprintf(buf, "%1d%s%02d%s%02d", min, msgSearch("menu_colon"), sec, msgSearch("menu_colon"), (score % 1000) / 10);
+                }
+                score = wp->dispScore;
+                if (score >= 0) {
+                    sec = score / 1000;
+                    min = sec / 60;
+                    sec = sec % 60;
+                    sprintf(buf, "%1d%s%02d%s%02d", min, msgSearch("menu_colon"), sec, msgSearch("menu_colon"), (score % 1000) / 10);
 #else
                         str = msgSearch("menu_subtitle1_minigame2");
                         break;
@@ -372,10 +372,10 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_JP
                                 FontDrawMessage(-150.4f + wp->x, 32.0f + wp->y, msgSearch("menu_subtitle4_getmonte"));
                                 break;
-                                case 2:
+                            case 2:
                                 FontDrawMessage(-150.4f + wp->x, 32.0f + wp->y, msgSearch("menu_subtitle4_getmonte"));
                                 break;
-                            }
+                        }
 #else
                                 str = msgSearch("menu_subtitle4_getmonte");
                                 break;
@@ -401,10 +401,10 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_JP
                                     FontDrawMessage(-150.4f + wp->x, 8.0f + wp->y, msgSearch("menu_subtitle2_minigame2"));
                                     break;
-                                    case 2:
+                                case 2:
                                     FontDrawMessage(-150.4f + wp->x, 8.0f + wp->y, msgSearch("menu_subtitle2_minigame3"));
                                     break;
-                                }
+                            }
 #else
                                     str = msgSearch("menu_subtitle2_minigame2");
                                     break;
@@ -692,7 +692,7 @@ static void evt_yuuranking_disp_func(CameraId camera, void* param) {
     }
 }
 
- static USER_FUNC(evt_yuuranking_main_func) {
+static USER_FUNC(evt_yuuranking_main_func) {
     YuuRankingWork* wp = (YuuRankingWork*)event->lwData[0];
     static s32 snd_id;
 
@@ -1144,7 +1144,7 @@ USER_FUNC(yuuranking_wait_button) {
     return EVT_RETURN_BLOCK;
 }
 
- static USER_FUNC(yuuranking_get_monte) {
+static USER_FUNC(yuuranking_get_monte) {
     evtSetValue(event, event->args[0], _wp->monte);
     return EVT_RETURN_DONE;
 }

@@ -342,7 +342,7 @@ static USER_FUNC(sysflag) {
  * and STG7_25_00_1_BOWSER_POSHLEY_SANCTUM.
  * In that last stretch, entering from e_bero puts a partner back with Mario if he has none
  * and starts evt_koopa_after. US and PAL heal Mario and the partners on each such entry;
- * JP and the demos heal them only in the missing-partner branch.
+ * JP and the early demos heal them only in the missing-partner branch.
  */
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
@@ -442,7 +442,7 @@ EVT_BEGIN(aji_18_init_evt)
             END_IF
 #endif
 
-            // US and PAL recovery is outside the missing-partner branch; JP and the demos keep it inside.
+            // US and PAL recovery is outside the missing-partner branch; JP and the early demos keep it inside.
             CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
 #if VERSION >= VERSION_US

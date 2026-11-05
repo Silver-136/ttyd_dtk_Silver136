@@ -1218,7 +1218,7 @@ static void ext_moamoa_main(void) {
                                 moamoa_jump(pose, m, (d < 100.0f) ? (m->state) : (0), 0, x2, y2, z2, s2, g3);
                             }
                         }
-                        }
+                    }
                 }
                 break;
 

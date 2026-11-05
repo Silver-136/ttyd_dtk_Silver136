@@ -580,7 +580,7 @@ USER_FUNC(evt_exchange_msg_alloc) {
 /**
  * Script helper that formats the exchange menu text:
  * message args[1] filled in with args[0] (the default selection) and the three coin/medal offers in JP and the early demos.
- * US and PAL supply only the default selection outside Japanese. The text pointer goes to args[2].
+ * US and later supply only the default selection outside Japanese. The text pointer goes to args[2].
  */
 USER_FUNC(evt_exchange_msg_set) {
     EvtWord* args = event->args;

@@ -470,7 +470,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 3, LW(15))
 
-    // Big whirlpool 4 stays in place in the demos; later versions slide it a short way.
+    // Big whirlpool 4 stays in place in the early demos; later versions slide it a short way.
     CALL(yuuminigame2_get_name, 4, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))
@@ -713,7 +713,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 16, LW(15))
 
-    // Barrels 5 to 7 hold still in the demos; later versions move them too.
+    // Barrels 5 to 7 hold still in the early demos; later versions move them too.
     CALL(yuuminigame2_get_name, 17, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))

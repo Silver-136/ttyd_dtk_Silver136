@@ -293,7 +293,7 @@ EVT_END()
 
 /**
  * Poison gas attack (weapon_dokugassun_poisongas_attack: 10 damage to every enemy, piercing defense,
- * 70% poison for 10 turns, 50% in the demos):
+ * 70% poison for 10 turns, 50% in the early demos):
  * the Puff (retail: after moving to x -40) charges,
  * drops its barrier and exhales green vapor puffs on the targets' side of the stage,
  * each target is hit or avoids it by the usual guard check, and it returns home.

@@ -215,7 +215,7 @@ static StatusVulnerability regist = {20, 90, 80, 0, 80, 100, 0, 0, 100, 80, 100,
 #else
 
 /**
- * Status vulnerability of the Yux (the retail releases), as percent multipliers on the incoming status chance:
+ * Status vulnerability of the Yux (JP and later), as percent multipliers on the incoming status chance:
  * immune to poison, burn, freeze and Fright; resists 10 statuses (down to 30% of the normal chance).
  */
 static StatusVulnerability regist = {30, 80, 100, 0, 70, 100, 0, 0, 100, 90, 100, 90, 100, 95, 70, 0, 90, 100, 70, 100, 100, 95};

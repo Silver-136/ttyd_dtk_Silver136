@@ -90,7 +90,7 @@ EvtWord gance_body_attack_attack_event[515];
 static EvtWord wait_event[6];
 
 /**
- * Unit kind of the Macho Grubba (HP 60, level 71; 70 in the demos):
+ * Unit kind of the Macho Grubba (HP 60, level 71; 70 in the early demos):
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
 BattleUnitKind unit_boss_macho_gance = {

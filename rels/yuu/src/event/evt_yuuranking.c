@@ -916,9 +916,9 @@ static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
             ret = ((max - score) * 15) / max;
             break;
 #if VERSION >= VERSION_JP
-        }
-        if (ret < 0) {
-            ret = 0;
+    }
+    if (ret < 0) {
+        ret = 0;
 #endif
     }
     ret += bonus;

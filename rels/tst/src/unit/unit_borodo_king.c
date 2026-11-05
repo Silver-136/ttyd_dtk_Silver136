@@ -1,6 +1,6 @@
 // tst.rel's version of rels/tou2/src/unit/unit_borodo_king.c (Big Bandit), the same earlier version as
 // tst's unit_borodo.c.
-// The JP demo's copy has none of the debug prints or the assert.
+// The early demos' copy has none of the debug prints or the assert.
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"

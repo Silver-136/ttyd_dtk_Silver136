@@ -2130,7 +2130,7 @@ static EVT_BEGIN(sekai_yami_evt)
 #endif
 #endif
 
-            // The screen flashes white once in US/PAL, twice in JP and the demos.
+            // The screen flashes white once in US/PAL, twice in JP and the early demos.
             CALL(evt_snd_sfxon, STRING("SFX_STG8_LIGHT1"), 0)
             CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
             WAIT_MS(100)

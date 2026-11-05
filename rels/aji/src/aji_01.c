@@ -382,7 +382,7 @@ EVT_BEGIN(n4_door_close)
 EVT_END()
 
 /**
- * Slides the double door w3 (S_door5_1 and S_door5_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * Slides the double door w3 (S_door5_1 and S_door5_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the w3 exit.
  */
 EVT_BEGIN(w3_door_open)
@@ -445,7 +445,7 @@ static EVT_BEGIN(e3_door_close)
 EVT_END()
 
 /**
- * Slides the double door w4 (S_door11_1 and S_door11_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * Slides the double door w4 (S_door11_1 and S_door11_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the w4 exit.
  */
 EVT_BEGIN(w4_door_open)
@@ -474,7 +474,7 @@ EVT_BEGIN(w4_door_close)
 EVT_END()
 
 /**
- * Slides the double door e4 (S_door12_1 and S_door12_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * Slides the double door e4 (S_door12_1 and S_door12_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the e4 exit.
  */
 EVT_BEGIN(e4_door_open)
@@ -503,7 +503,7 @@ EVT_BEGIN(e4_door_close)
 EVT_END()
 
 /**
- * Slides the double door w5 (S_door13_1 and S_door13_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * Slides the double door w5 (S_door13_1 and S_door13_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the w5 exit.
  */
 EVT_BEGIN(w5_door_open)
@@ -532,7 +532,7 @@ EVT_BEGIN(w5_door_close)
 EVT_END()
 
 /**
- * Slides the double door e5 (S_door14_1 and S_door14_2) along Z by LW(0) scaled by 0.25 (0.2217 in the demos);
+ * Slides the double door e5 (S_door14_1 and S_door14_2) along Z by LW(0) scaled by 0.25 (0.2217 in the early demos);
  * door animation of the e5 exit, also called directly by peach_evt_stg1_2.
  */
 EVT_BEGIN(e5_door_open)

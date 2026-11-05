@@ -659,7 +659,7 @@ USER_FUNC(kpa_muteki_check) {
  * Draw callback of the Bowser HUD, queued each frame by kpa_status_main:
  * the stage/score/tries/time labels (language- specific icons), the six-digit score, the coin count,
  * the stage number, the try counter (leading zero dropped) and the three-digit time.
- * The US release moved the number icons up by 8.
+ * US and later move the number icons up by 8.
  */
 void kpa_status_disp(CameraId camera, void* param) {
     Vec pos;

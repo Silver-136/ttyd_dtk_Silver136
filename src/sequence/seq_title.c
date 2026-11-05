@@ -187,7 +187,7 @@ void titleInit(SequenceWork* work) {
 static void titleMain(SequenceWork* work) {
     switch (wp2->state) {
         case 0:
-        if (psndBGMStartCheck(0) != 0U) {
+            if (psndBGMStartCheck(0) != 0U) {
 #else
 void titleMain(SequenceWork* work) {
     switch (wp2->state) {

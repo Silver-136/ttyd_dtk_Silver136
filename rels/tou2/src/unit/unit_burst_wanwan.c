@@ -149,14 +149,14 @@ BattleUnitKind unit_burst_wanwan = {
     data_table, // dataTable
 };
 
-/** Base defence of the Red Chomp: 3 for every element in the demos; retail uses 99 for fire and ice and 3 for the other elements. */
+/** Base defence of the Red Chomp: 3 for every element in the early demos; retail uses 99 for fire and ice and 3 for the other elements. */
 #if VERSION <= VERSION_DEMO_JP
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 #else
 static BattleUnitDefense defence = {{3, 99, 99, 3, 3}};
 #endif
 
-/** Element reactions of the Red Chomp: normal in the demos; immune to fire and ice in retail. */
+/** Element reactions of the Red Chomp: normal in the early demos; immune to fire and ice in retail. */
 #if VERSION <= VERSION_DEMO_JP
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 #else

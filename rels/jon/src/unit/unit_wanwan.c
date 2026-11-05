@@ -344,7 +344,7 @@ EVT_END()
  * codes
  * 0x2C to 0x37, every counter except the top spikes):
  * it plays pose 39 and is knocked back a short way (25 units against its facing) over 5 frames,
- * waits half a second and, in the demos, also hops twice back toward its spot.
+ * waits half a second and, in the early demos, also hops twice back toward its spot.
  * It then restores the camera and starts the wait event again,
  * except when the hit knocked it out (damage flag 0x200) without a Life Shroom to revive it (0x800):
  * then it just

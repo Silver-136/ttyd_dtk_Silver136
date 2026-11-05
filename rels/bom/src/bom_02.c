@@ -1108,7 +1108,7 @@ EVT_END()
 };
 #endif
 
-#if VERSION < VERSION_US && VERSION >= VERSION_JP  // US, the later versions and the demos: this tail is part of mario_jump (script above)
+#if VERSION < VERSION_US && VERSION >= VERSION_JP  // every version except JP: this tail is part of mario_jump (script above)
 EvtWord mario_jump_tail[] = {
     STRING("ホワイト"), 32, /* rest of mario_jump's evt_npc_flag_onoff call */
     CALL(evt_mario_cam_keep_off)

@@ -246,7 +246,7 @@ void effNiceMain(EffectEntry* effect) {
         case 5:
         case 6:
             len = data->loopInfo->end;
-            {
+        {
             f32 tbl[7][6] = {
                 { 32.0f, 34.0f, 34.0f, 34.0f, 34.0f, 36.0f },
                 { 32.0f, 34.0f, 39.0f, 34.0f, 34.0f, 41.0f },

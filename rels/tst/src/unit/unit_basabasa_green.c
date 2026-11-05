@@ -46,7 +46,7 @@ static EvtWord attack_event[683];
 static EvtWord wait_event[6];
 
 /**
- * Unit kind of Swampire: 20 max HP, level 46 in the demos and 35 in retail.
+ * Unit kind of Swampire: 20 max HP, level 46 in the early demos and 35 in retail.
  * The battle engine reads it when the unit spawns:
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */

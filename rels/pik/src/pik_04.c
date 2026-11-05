@@ -825,7 +825,7 @@ EVT_END()
 
 /**
  * Init for the souvenir stall owner (土産屋), who sells Fresh Pasta at the stall a_roten (evt_roten): places the
- * owner at (-363, 10, 142) (y 15 in JP and the demos).
+ * owner at (-363, 10, 142) (y 15 in JP and the early demos).
  */
 EVT_BEGIN(init_miyage)
 #if VERSION >= VERSION_US

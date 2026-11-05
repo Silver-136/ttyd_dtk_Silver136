@@ -734,85 +734,85 @@ USER_FUNC(unitwin_window_select_func) {
             for (k = 0; k < 200; k++) {
                 if (pouchHaveBadge(k)) {
                     wp->count++;
+                }
             }
-        }
-        break;
-    case UNITWIN_MODE_BADGE_BUY_UNUSED:
-        wp->count = 0;
-        for (k = 0; k < 99; k++) {
-            if ((s16)badgeShop_get(bdsw->bargain_table, k + 0xF0) - badgeShop_ThrowCheck(k + 0xF0) > 0) {
+            break;
+        case UNITWIN_MODE_BADGE_BUY_UNUSED:
+            wp->count = 0;
+            for (k = 0; k < 99; k++) {
+                if ((s16)badgeShop_get(bdsw->bargain_table, k + 0xF0) - badgeShop_ThrowCheck(k + 0xF0) > 0) {
+                    wp->count++;
+                }
+            }
+            break;
+        case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
+        case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED:
+            wp->count = jdt->count;
+            break;
+        case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
+            wp->count = 0;
+            for (k = 0; k < 99; k++) {
+                if ((s16)badgeShop_get(bdsw->starmaniac_table, k + 0xF0) > 0) {
+                    wp->count++;
+                }
+            }
+            break;
+        case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
+            wp->count = 0;
+            for (k = 0; k < 0x152; k++) {
+                if ((s16)badgeShop_get(bdsw->bottakuru_table, k + 1) > 0) {
+                    wp->count++;
+                }
+            }
+            break;
+        case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
+            wp->count = 0;
+            for (k = 0; badge_bottakuru100_table[k] != 0; k++) {
                 wp->count++;
             }
-        }
-    break;
-    case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
-    case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED:
-    wp->count = jdt->count;
-    break;
-    case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
-    wp->count = 0;
-    for (k = 0; k < 99; k++) {
-        if ((s16)badgeShop_get(bdsw->starmaniac_table, k + 0xF0) > 0) {
-            wp->count++;
-        }
-    }
-    break;
-    case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
-    wp->count = 0;
-    for (k = 0; k < 0x152; k++) {
-        if ((s16)badgeShop_get(bdsw->bottakuru_table, k + 1) > 0) {
-            wp->count++;
-        }
-    }
-    break;
-    case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
-    wp->count = 0;
-    for (k = 0; badge_bottakuru100_table[k] != 0; k++) {
-        wp->count++;
-    }
-    break;
-    case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
-    wp->count = 0;
-    for (k = 0; k < 0x152; k++) {
-        if ((s16)badgeShop_get(bdsw->bteresa_table, k + 1) > 0) {
-            wp->count++;
-        }
-    }
-    break;
-    case UNITWIN_MODE_ITEM_RETRIEVE_UNUSED:
-    wp->count = 0;
-    for (k = 0; k < 32; k++) {
-        if (pouchKeepItem(k)) {
-            wp->count++;
-        }
-    }
-    break;
-    case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
-    case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
-    wp->count = 0;
-    for (k = 0; (id = party_id_table[k]) != 0; k++) {
-        if (partyChkJoin(id)) {
-            wp->count++;
-        }
-    }
-    break;
-    case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED:
-    wp->skipEntry = event->lwData[1];
-    wp->count = 0;
-    for (k = 0; (id = party_id_table[k]) != 0; k++) {
-        if (partyChkJoin(id) && wp->skipEntry != party_id_table[k]) {
-            wp->count++;
-        }
-    }
-    break;
-    case UNITWIN_MODE_STAT_UP_UNUSED:
-    case UNITWIN_MODE_STAT_UP2_UNUSED:
-    wp->count = 3;
-    break;
-    case UNITWIN_MODE_STAT_DOWN_UNUSED:
-    wp->skipEntry = event->lwData[1];
-    wp->count = 2;
-    break;
+            break;
+        case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
+            wp->count = 0;
+            for (k = 0; k < 0x152; k++) {
+                if ((s16)badgeShop_get(bdsw->bteresa_table, k + 1) > 0) {
+                    wp->count++;
+                }
+            }
+            break;
+        case UNITWIN_MODE_ITEM_RETRIEVE_UNUSED:
+            wp->count = 0;
+            for (k = 0; k < 32; k++) {
+                if (pouchKeepItem(k)) {
+                    wp->count++;
+                }
+            }
+            break;
+        case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
+        case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
+            wp->count = 0;
+            for (k = 0; (id = party_id_table[k]) != 0; k++) {
+                if (partyChkJoin(id)) {
+                    wp->count++;
+                }
+            }
+            break;
+        case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED:
+            wp->skipEntry = event->lwData[1];
+            wp->count = 0;
+            for (k = 0; (id = party_id_table[k]) != 0; k++) {
+                if (partyChkJoin(id) && wp->skipEntry != party_id_table[k]) {
+                    wp->count++;
+                }
+            }
+            break;
+        case UNITWIN_MODE_STAT_UP_UNUSED:
+        case UNITWIN_MODE_STAT_UP2_UNUSED:
+            wp->count = 3;
+            break;
+        case UNITWIN_MODE_STAT_DOWN_UNUSED:
+            wp->skipEntry = event->lwData[1];
+            wp->count = 2;
+            break;
     }
 
     prev = wp->cursor;
@@ -832,17 +832,17 @@ USER_FUNC(unitwin_window_select_func) {
     if (wp->cursor < 0.0f) {
         wp->cursor = wp->count - 1;
         if ((t = wp->count - 8) > 0) {
-    wp->scrollTop = t;
-}
+            wp->scrollTop = t;
+        }
     }
     if (prev < wp->cursor) {
         if (wp->cursor > 5.0f && wp->scrollTop < wp->count - 8) {
-    wp->scrollTop += 1.0f;
-}
+            wp->scrollTop += 1.0f;
+        }
     } else if (prev > wp->cursor) {
         if (wp->cursor - wp->scrollTop < 3.0f && wp->scrollTop > 0.0f) {
-    wp->scrollTop -= 1.0f;
-}
+            wp->scrollTop -= 1.0f;
+        }
     }
     wp->scroll += (24.0f * wp->scrollTop - wp->scroll) / 6.0f;
     wp->cursorX += (-25.0f - wp->cursorX) / 6.0f;
@@ -851,318 +851,318 @@ USER_FUNC(unitwin_window_select_func) {
     if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
         n = 0;
         switch (wp->mode) {
-    case UNITWIN_MODE_ITEM_SELL_UNUSED:
-    case UNITWIN_MODE_ITEM_STORE_UNUSED:
-        statusWinForceOff();
-        for (i = 0; i < 20; i++) {
-            if (pouchHaveItem(i)) {
-                if (n == wp->cursor) {
-                    break;
-                }
-                n++;
-            }
-        }
-        event->lwData[0] = 1;
-        event->lwData[1] = pouchHaveItem(i);
-        event->lwData[2] = (EvtWord)itemDataTable[pouchHaveItem(i)].id;
-        event->lwData[3] = itemDataTable[pouchHaveItem(i)].sell_price;
-        wp->mode = UNITWIN_MODE_IDLE;
-        return EVT_RETURN_YIELD;
-    case UNITWIN_MODE_BADGE_SELL_UNUSED:
-        statusWinForceOff();
-        for (i = 0; i < 200; i++) {
-            if (pouchHaveBadge(i)) {
-                if (n == wp->cursor) {
-                    break;
-                }
-                n++;
-            }
-        }
-        event->lwData[0] = 1;
-        event->lwData[1] = pouchHaveBadge(i);
-        event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-        event->lwData[3] = itemDataTable[event->lwData[1]].sell_price;
-        wp->mode = UNITWIN_MODE_IDLE;
-        return EVT_RETURN_YIELD;
-    case UNITWIN_MODE_BADGE_BUY_UNUSED:
-        statusWinForceOff();
-        for (i = 0; i < 99; i++) {
-            if ((s16)badgeShop_get(bdsw->bargain_table, i + 0xF0) - badgeShop_ThrowCheck(i + 0xF0) > 0) {
-                if (n == wp->cursor) {
-                    break;
-                }
-                n++;
-            }
-        }
-        event->lwData[0] = 1;
-        event->lwData[1] = i + 0xF0;
-        event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-        event->lwData[3] = itemDataTable[event->lwData[1]].buy_price;
-        event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-        wp->mode = UNITWIN_MODE_IDLE;
-        return EVT_RETURN_YIELD;
-    case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
-        statusWinForceOff();
-        j = wp->cursor;
-        sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
-        jdt->curIndex = j;
-        event->lwData[0] = 1;
-        event->lwData[1] = (EvtWord)jdt->infoEnd;
-        event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
-        event->lwData[3] = jdt->info[j].tagEndPos;
-        if (johoya_get(jdt->readFlags.perfectRead, jdt->info[j].storyId)) {
-            event->lwData[4] = 0;
-            } else {
-                event->lwData[4] = jdt->info[j].cost;
-            }
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED:
-            statusWinForceOff();
-            psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
-            j = wp->cursor;
-            sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
-            jdt->curIndex = j;
-            event->lwData[0] = 1;
-            event->lwData[1] = (EvtWord)jdt->infoEnd;
-            event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
-            event->lwData[3] = jdt->info[j].tagEndPos;
-            if (johoya_get(jdt->readFlags.luigiRead, jdt->info[j].storyId)) {
-                event->lwData[4] = 0;
-            } else {
-                event->lwData[4] = 1;
-            }
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
-            statusWinForceOff();
-            for (i = 0; i < 99; i++) {
-                if ((s16)badgeShop_get(bdsw->starmaniac_table, i + 0xF0) > 0) {
-                    if (n == wp->cursor) {
-                        break;
+            case UNITWIN_MODE_ITEM_SELL_UNUSED:
+            case UNITWIN_MODE_ITEM_STORE_UNUSED:
+                statusWinForceOff();
+                for (i = 0; i < 20; i++) {
+                    if (pouchHaveItem(i)) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
                     }
-                    n++;
                 }
-            }
-            if (itemDataTable[i + 0xF0].star_piece_price > pouchGetStarPiece()) {
-                break;
-            }
-            event->lwData[0] = 1;
-            event->lwData[1] = i + 0xF0;
-            event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-            event->lwData[3] = itemDataTable[event->lwData[1]].star_piece_price;
-            event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
-            statusWinForceOff();
-            for (i = 0; i < 0x152; i++) {
-                if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
-                    if (n == wp->cursor) {
-                        break;
+                event->lwData[0] = 1;
+                event->lwData[1] = pouchHaveItem(i);
+                event->lwData[2] = (EvtWord)itemDataTable[pouchHaveItem(i)].id;
+                event->lwData[3] = itemDataTable[pouchHaveItem(i)].sell_price;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_BADGE_SELL_UNUSED:
+                statusWinForceOff();
+                for (i = 0; i < 200; i++) {
+                    if (pouchHaveBadge(i)) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
                     }
-                    n++;
                 }
-            }
-            event->lwData[0] = 1;
-            event->lwData[1] = i + 1;
-            event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-            event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 12) / 10;
-            event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
-            statusWinForceOff();
-            for (i = 0; badge_bottakuru100_table[i] != 0; i++) {
-                if (n == wp->cursor) {
-                    break;
-                }
-                n++;
-            }
-            event->lwData[0] = 1;
-            event->lwData[1] = badge_bottakuru100_table[i];
-            event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-            event->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[event->lwData[1]].buy_price) / 10;
-            event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
-            statusWinForceOff();
-            for (i = 0; i < 0x152; i++) {
-                if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
-                    if (n == wp->cursor) {
-                        break;
+                event->lwData[0] = 1;
+                event->lwData[1] = pouchHaveBadge(i);
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = itemDataTable[event->lwData[1]].sell_price;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_BADGE_BUY_UNUSED:
+                statusWinForceOff();
+                for (i = 0; i < 99; i++) {
+                    if ((s16)badgeShop_get(bdsw->bargain_table, i + 0xF0) - badgeShop_ThrowCheck(i + 0xF0) > 0) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
                     }
-                    n++;
                 }
-            }
-            event->lwData[0] = 1;
-            event->lwData[1] = i + 1;
-            event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-            event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 2 + 2) / 3;
-            event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_ITEM_RETRIEVE_UNUSED:
-            statusWinForceOff();
-            for (i = 0; i < 32; i++) {
-                if (pouchKeepItem(i)) {
-                    if (n == wp->cursor) {
-                        break;
-                    }
-                    n++;
-                }
-            }
-            event->lwData[0] = 1;
-            event->lwData[1] = pouchKeepItem(i);
-            event->lwData[2] = (EvtWord)itemDataTable[pouchKeepItem(i)].id;
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
-        case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
-            pouch = pouchGetPtr();
-            for (i = 0; (id = party_id_table[i]) != 0; i++) {
-                if (partyChkJoin(id)) {
-                    if (n == wp->cursor) {
-                        break;
-                    }
-                    n++;
-                }
-            }
-            if (!evtGetValue(event, GSWF_GOR_UP_ARROW_USED)) {
-                if (pouch->partyData[party_id_table[i]].techLevel < 1) {
-                    ng = 0;
+                event->lwData[0] = 1;
+                event->lwData[1] = i + 0xF0;
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = itemDataTable[event->lwData[1]].buy_price;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_INFORMANT_PERFECT_UNUSED:
+                statusWinForceOff();
+                j = wp->cursor;
+                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
+                jdt->curIndex = j;
+                event->lwData[0] = 1;
+                event->lwData[1] = (EvtWord)jdt->infoEnd;
+                event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
+                event->lwData[3] = jdt->info[j].tagEndPos;
+                if (johoya_get(jdt->readFlags.perfectRead, jdt->info[j].storyId)) {
+                    event->lwData[4] = 0;
                 } else {
-                    ng = 1;
+                    event->lwData[4] = jdt->info[j].cost;
                 }
-            } else {
-                if (pouch->partyData[party_id_table[i]].techLevel < 2) {
-                    ng = 0;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_INFORMANT_LUIGI_UNUSED:
+                statusWinForceOff();
+                psndSFXOn((const char*)PSND_SFX_CURSOR_OK1);
+                j = wp->cursor;
+                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[j].storyId);
+                jdt->curIndex = j;
+                event->lwData[0] = 1;
+                event->lwData[1] = (EvtWord)jdt->infoEnd;
+                event->lwData[2] = (EvtWord)jdt->info[j].initEndPos;
+                event->lwData[3] = jdt->info[j].tagEndPos;
+                if (johoya_get(jdt->readFlags.luigiRead, jdt->info[j].storyId)) {
+                    event->lwData[4] = 0;
                 } else {
-                    ng = 2;
+                    event->lwData[4] = 1;
                 }
-            }
-            if (ng) {
-                break;
-            }
-            statusWinForceOff();
-            event->lwData[0] = 1;
-            event->lwData[1] = party_id_table[i];
-            if (arg == 6) {
-                name = party_name_table_rtn(i);
-                event->lwData[3] = (EvtWord)name;
-            }
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED:
-            pouch = pouchGetPtr();
-            for (i = 0, p = party_id_table; (id = *p) != 0; p++, i++) {
-                if (partyChkJoin(id) && wp->skipEntry != *p) {
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_BADGE_STAR_PIECE_UNUSED:
+                statusWinForceOff();
+                for (i = 0; i < 99; i++) {
+                    if ((s16)badgeShop_get(bdsw->starmaniac_table, i + 0xF0) > 0) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                if (itemDataTable[i + 0xF0].star_piece_price > pouchGetStarPiece()) {
+                    break;
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = i + 0xF0;
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = itemDataTable[event->lwData[1]].star_piece_price;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_BADGE_CHARLIETON_UNUSED:
+                statusWinForceOff();
+                for (i = 0; i < 0x152; i++) {
+                    if ((s16)badgeShop_get(bdsw->bottakuru_table, i + 1) > 0) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = i + 1;
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 12) / 10;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_BADGE_CHARLIETON_PIT_UNUSED:
+                statusWinForceOff();
+                for (i = 0; badge_bottakuru100_table[i] != 0; i++) {
                     if (n == wp->cursor) {
                         break;
                     }
                     n++;
                 }
-            }
-            if ((pouch->partyData[party_id_table[i]].techLevel > 0 ? 0 : 1) != 0) {
-                break;
-            }
-            statusWinForceOff();
-            event->lwData[0] = 1;
-            event->lwData[2] = party_id_table[i];
-            name = party_name_table_rtn(i);
-            event->lwData[4] = (EvtWord)name;
-            wp->mode = UNITWIN_MODE_IDLE;
-            return EVT_RETURN_YIELD;
-        case UNITWIN_MODE_STAT_UP_UNUSED:
-            pouchGetPtr();
-            for (i = 0; i < wp->count; i++) {
-                if (n == wp->cursor) {
-                    break;
+                event->lwData[0] = 1;
+                event->lwData[1] = badge_bottakuru100_table[i];
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[event->lwData[1]].buy_price) / 10;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_BADGE_PIANTA_TOKEN_UNUSED:
+                statusWinForceOff();
+                for (i = 0; i < 0x152; i++) {
+                    if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
                 }
-                n++;
-            }
-            ng = 0;
-            for (j = 0; j < wp->count; j++) {
-                if (j != wp->cursor) {
-                    if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
+                event->lwData[0] = 1;
+                event->lwData[1] = i + 1;
+                event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
+                event->lwData[3] = (itemDataTable[event->lwData[1]].buy_price * 2 + 2) / 3;
+                event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_ITEM_RETRIEVE_UNUSED:
+                statusWinForceOff();
+                for (i = 0; i < 32; i++) {
+                    if (pouchKeepItem(i)) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                event->lwData[0] = 1;
+                event->lwData[1] = pouchKeepItem(i);
+                event->lwData[2] = (EvtWord)itemDataTable[pouchKeepItem(i)].id;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_PARTY_RANK_UP_UNUSED:
+            case UNITWIN_MODE_PARTY_RANK_UP2_UNUSED:
+                pouch = pouchGetPtr();
+                for (i = 0; (id = party_id_table[i]) != 0; i++) {
+                    if (partyChkJoin(id)) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                if (!evtGetValue(event, GSWF_GOR_UP_ARROW_USED)) {
+                    if (pouch->partyData[party_id_table[i]].techLevel < 1) {
+                        ng = 0;
+                    } else {
                         ng = 1;
+                    }
+                } else {
+                    if (pouch->partyData[party_id_table[i]].techLevel < 2) {
+                        ng = 0;
+                    } else {
+                        ng = 2;
+                    }
+                }
+                if (ng) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[1] = party_id_table[i];
+                if (arg == 6) {
+                    name = party_name_table_rtn(i);
+                    event->lwData[3] = (EvtWord)name;
+                }
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_PARTY_RANK_DOWN_UNUSED:
+                pouch = pouchGetPtr();
+                for (i = 0, p = party_id_table; (id = *p) != 0; p++, i++) {
+                    if (partyChkJoin(id) && wp->skipEntry != *p) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                if ((pouch->partyData[party_id_table[i]].techLevel > 0 ? 0 : 1) != 0) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[2] = party_id_table[i];
+                name = party_name_table_rtn(i);
+                event->lwData[4] = (EvtWord)name;
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_STAT_UP_UNUSED:
+                pouchGetPtr();
+                for (i = 0; i < wp->count; i++) {
+                    if (n == wp->cursor) {
+                        break;
+                    }
+                    n++;
+                }
+                ng = 0;
+                for (j = 0; j < wp->count; j++) {
+                    if (j != wp->cursor) {
+                        if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
+                            ng = 1;
 #endif
 
-            }
-        }
-    }
+                        }
+                    }
+                }
 #if VERSION <= VERSION_DEMO_JP
-    if (ng) {
-        break;
-    }
-    statusWinForceOff();
-    event->lwData[0] = 1;
-    event->lwData[1] = i;
-    event->lwData[2] = (EvtWord)mario_status_name_table[i];
-    event->lwData[3] = (EvtWord)mario_status_name_table[i == 0];
-    event->lwData[4] = (EvtWord)mario_status_name_table[i != 2 ? 2 : 1];
-    for (j = 0; j < wp->count; j++) {
-        if (j == wp->cursor) {
-            event->lwData[5 + j] = *mario_status_point_table[j] + mario_status_henka_table[j] * 2;
-        } else {
-            event->lwData[5 + j] = *mario_status_point_table[j] - mario_status_henka_table[j];
-        }
-    }
-    wp->mode = UNITWIN_MODE_IDLE;
-    return EVT_RETURN_YIELD;
-    case UNITWIN_MODE_STAT_UP2_UNUSED:
-    pouchGetPtr();
-    for (i = 0; i < wp->count; i++) {
-        if (n == wp->cursor) {
-            break;
-        }
-        n++;
-    }
-    ng = 0;
-    for (j = 0; j < wp->count; j++) {
-        if (j != wp->cursor) {
-            if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
-                ng++;
-            }
-        }
-    }
-    if (ng >= 2) {
-        break;
-    }
-    statusWinForceOff();
-    event->lwData[0] = 1;
-    event->lwData[1] = i;
-    event->lwData[2] = (EvtWord)mario_status_name_table[i];
-    for (j = 0; j < wp->count; j++) {
-        if (j == wp->cursor) {
-            event->lwData[5 + j] = *mario_status_point_table[j] + mario_status_henka_table[j];
-        } else {
-            event->lwData[5 + j] = *mario_status_point_table[j];
-        }
-    }
-    wp->mode = UNITWIN_MODE_IDLE;
-    return EVT_RETURN_YIELD;
-    case UNITWIN_MODE_STAT_DOWN_UNUSED:
-    pouchGetPtr();
-    for (i = 0; i < 3; i++) {
-        if (i != wp->skipEntry) {
-            if (n == wp->cursor) {
-                break;
-            }
-            n++;
-        }
-    }
-    if (*mario_status_point_table[i] - mario_status_henka_table[i] <= 0) {
-        break;
-    }
-    statusWinForceOff();
-    event->lwData[0] = 1;
-    event->lwData[1] = i;
-    event->lwData[3] = (EvtWord)mario_status_name_table[i];
-    event->lwData[5 + i] = *mario_status_point_table[i] - mario_status_henka_table[i];
-    wp->mode = UNITWIN_MODE_IDLE;
-    return EVT_RETURN_YIELD;
+                if (ng) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[1] = i;
+                event->lwData[2] = (EvtWord)mario_status_name_table[i];
+                event->lwData[3] = (EvtWord)mario_status_name_table[i == 0];
+                event->lwData[4] = (EvtWord)mario_status_name_table[i != 2 ? 2 : 1];
+                for (j = 0; j < wp->count; j++) {
+                    if (j == wp->cursor) {
+                        event->lwData[5 + j] = *mario_status_point_table[j] + mario_status_henka_table[j] * 2;
+                    } else {
+                        event->lwData[5 + j] = *mario_status_point_table[j] - mario_status_henka_table[j];
+                    }
+                }
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_STAT_UP2_UNUSED:
+                pouchGetPtr();
+                for (i = 0; i < wp->count; i++) {
+                    if (n == wp->cursor) {
+                        break;
+                    }
+                    n++;
+                }
+                ng = 0;
+                for (j = 0; j < wp->count; j++) {
+                    if (j != wp->cursor) {
+                        if (*mario_status_point_table[j] - mario_status_henka_table[j] <= 0) {
+                            ng++;
+                        }
+                    }
+                }
+                if (ng >= 2) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[1] = i;
+                event->lwData[2] = (EvtWord)mario_status_name_table[i];
+                for (j = 0; j < wp->count; j++) {
+                    if (j == wp->cursor) {
+                        event->lwData[5 + j] = *mario_status_point_table[j] + mario_status_henka_table[j];
+                    } else {
+                        event->lwData[5 + j] = *mario_status_point_table[j];
+                    }
+                }
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
+            case UNITWIN_MODE_STAT_DOWN_UNUSED:
+                pouchGetPtr();
+                for (i = 0; i < 3; i++) {
+                    if (i != wp->skipEntry) {
+                        if (n == wp->cursor) {
+                            break;
+                        }
+                        n++;
+                    }
+                }
+                if (*mario_status_point_table[i] - mario_status_henka_table[i] <= 0) {
+                    break;
+                }
+                statusWinForceOff();
+                event->lwData[0] = 1;
+                event->lwData[1] = i;
+                event->lwData[3] = (EvtWord)mario_status_name_table[i];
+                event->lwData[5 + i] = *mario_status_point_table[i] - mario_status_henka_table[i];
+                wp->mode = UNITWIN_MODE_IDLE;
+                return EVT_RETURN_YIELD;
         }
     } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
         statusWinForceOff();

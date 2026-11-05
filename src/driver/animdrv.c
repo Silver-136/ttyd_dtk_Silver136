@@ -1424,7 +1424,7 @@ void animPoseMain(s32 poseId) {
                         ((AnimTexMtx*)v)->transS += d->transS;
                         ((AnimTexMtx*)v)->transT += d->transT;
 #endif
-                }
+                    }
                 }
             }
         } else if (pose->lastFrameZero < frame) {
@@ -1562,7 +1562,7 @@ void animPoseMain(s32 poseId) {
                         ((AnimTexMtx*)v)->transS += d->transS;
                         ((AnimTexMtx*)v)->transT += d->transT;
 #endif
-                }
+                    }
                 }
             }
         }

@@ -326,7 +326,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of the Dark Wizzerd's magic blast that hits the whole party: damage 3 in the demos, 5 in retail. */
+/** Weapon of the Dark Wizzerd's magic blast that hits the whole party: damage 3 in the early demos, 5 in retail. */
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -617,7 +617,7 @@ static BattleUnitSetup entry_mahorn = {
  * if it is the only unit left on its side it splits into copies (bunsin_event);
  * if it already has copies it casts single-target magic unless confused.
  * Otherwise it rolls among eight options by weight:
- * punch 30 and magic 60 in retail (60 and 40 in the demos), all-target magic 10 and 8 each for the dekadeka, katikati, trans,
+ * punch 30 and magic 60 in retail (60 and 40 in the early demos), all-target magic 10 and 8 each for the dekadeka, katikati, trans,
  * yokeyoke and recover support spells, all cast on itself.
  * Their weapons give Huge (size +2), Defense +3, Invisible and Dodgy for 3 turns each,
  * and the recover spell heals 10 HP.

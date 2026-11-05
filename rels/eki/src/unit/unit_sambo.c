@@ -254,7 +254,7 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
 };
 
 /**
- * Weapon data for the Pokey's lone-head hop attack, used when it has one segment left: 3 damage in the demos or 4 in retail, a
+ * Weapon data for the Pokey's lone-head hop attack, used when it has one segment left: 3 damage in the early demos or 4 in retail, a
  * shell-toss-type hit, one target.
  */
 static BattleWeapon weapon_sambo_head_attack_1 = {

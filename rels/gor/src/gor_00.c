@@ -2733,7 +2733,7 @@ EVT_END()
  * Cutscene that starts when Mario first walks toward the back of the harbor (z <= -100):
  * Goombella (Christine) is cornered by Lord Crump and two grunts.
  * Sets GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED and STG0_04_GOOMBELLA_ASSAULTED,
- * creates the crowd of X-Naut extras (1000 in JP and the early demos, 400 in US and PAL) and spawns gundan1000tai_beforebattle.
+ * creates the crowd of X-Naut extras (1000 in JP and the early demos, 400 in US and later) and spawns gundan1000tai_beforebattle.
  * If LW(0) is 1 on entry it first repositions Mario (the entry used when the event is started directly).
  */
 EVT_BEGIN(christine_osoware)
@@ -3098,7 +3098,7 @@ EVT_END()
 
 /**
  * Continues the prologue after the Lord Crump fight:
- * the X-Nauts' extras (1000 in JP and the early demos, 400 in US and PAL) pour in,
+ * the X-Nauts' extras (1000 in JP and the early demos, 400 in US and later) pour in,
  * the X-Naut leader gloats (mac_0_025 to mac_0_027), the army charges (gundan1000tai_totsugeki) with smoke,
  * shaking and stomping sounds, Goombella (Christine) runs off
  * and comes back to follow Mario (she officially joins in gor_01),
@@ -5029,7 +5029,7 @@ EVT_END()
  * Frankie and Francesca's goodbye after the voyage:
  * sets STG5_64_03_F_F_ARRIVE, they speak (mac_5_038, mac_5_039),
  * and then each jumps off the ship at the dock and runs off in turn.
- * In the US and later releases it also clears GF(15). JP and later releases (earlier ones use mony_peton_event).
+ * In US and later it also clears GF(15). Used in JP and later (the early demos use mony_peton_event).
  */
 EVT_BEGIN(mony_peton_depart)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)

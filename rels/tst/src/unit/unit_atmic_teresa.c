@@ -231,7 +231,7 @@ static StatusVulnerability regist = {40, 40, 40, 40, 40, 40, 100, 30, 0, 0, 100,
 #else
 
 /**
- * Status vulnerability of the Atomic Boo (the retail releases), as percent of each status's normal
+ * Status vulnerability of the Atomic Boo (JP and later), as percent of each status's normal
  * chance: immune to Huge, Tiny, Attack Down and Fright; resists 10 statuses (down to 5% of the normal
  * chance).
  */

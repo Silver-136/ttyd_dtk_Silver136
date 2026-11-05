@@ -2151,8 +2151,8 @@ static __declspec(section ".rodata") Vec fan_zero = {0.0f, 0.0f, 0.0f};
 
 /**
  * Loop spawned while the fans mob Mario (GF(10) set): every 2 to 7 s a fan's cry for Gonzales (stg3_tou_236 to
- * 240 and 240_01, in turn) pops up with its tail at a random spot (near Mario in the demos, within -50 to 150 of
- * the lobby centre in the releases); it ends once fewer than 10 fans are left.
+ * 240 and 240_01, in turn) pops up with its tail at a random spot (near Mario in the early demos, within -50 to 150 of
+ * the lobby centre in JP and later); it ends once fewer than 10 fans are left.
  */
 EVT_BEGIN(mario_momikucha_msg)
     SET_VALUE(LW(10), 0)
