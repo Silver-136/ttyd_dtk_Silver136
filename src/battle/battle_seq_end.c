@@ -214,60 +214,58 @@ void btlseqEnd(BattleWork* wp) {
     s32 sel;
     PouchData* pp;
     BattleSeqEndWork* nw;
+    s32 marioBelong;
+    s32 enemyBelong;
+    u32 flags;
+    BattleUnit* mu;
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
-    case SEQ_END_START: {
-        s32 marioBelong;
-        s32 enemyBelong;
-        u32 flags;
-        BattleUnit* mu;
-        BattleSeqEndWork* nw;
-        btlsubResetMoveColorLvAll(wp);
-        mu = BattleGetMarioPtr(wp);
-        marioBelong = mu->alliance;
-        enemyBelong = BtlUnit_GetEnemyBelong(mu);
-        flags = wp->flags;
-        if (flags & BATTLE_FLAG_DEMO_TIMEOUT) {
-            BattleInformationSetResult(info, BATTLE_RESULT_ESCAPE);
-        } else if (flags & BATTLE_FLAG_INTERRUPT_STOP) {
-            BattleInformationSetResult(info, BATTLE_RESULT_STOPPED);
-        } else if (wp->alliances[marioBelong].clearConditionMet) {
-            BattleInformationSetResult(info, BATTLE_RESULT_LOSE);
-        } else if (wp->alliances[enemyBelong].clearConditionMet) {
-            BattleInformationSetResult(info, BATTLE_RESULT_WIN);
-        } else if (flags & BATTLE_FLAG_ESCAPED) {
-            BattleInformationSetResult(info, BATTLE_RESULT_ESCAPE);
+    case SEQ_END_START:
+    btlsubResetMoveColorLvAll(wp);
+    mu = BattleGetMarioPtr(wp);
+    marioBelong = mu->alliance;
+    enemyBelong = BtlUnit_GetEnemyBelong(mu);
+    flags = wp->flags;
+    if (flags & BATTLE_FLAG_DEMO_TIMEOUT) {
+        BattleInformationSetResult(info, BATTLE_RESULT_ESCAPE);
+    } else if (flags & BATTLE_FLAG_INTERRUPT_STOP) {
+        BattleInformationSetResult(info, BATTLE_RESULT_STOPPED);
+    } else if (wp->alliances[marioBelong].clearConditionMet) {
+        BattleInformationSetResult(info, BATTLE_RESULT_LOSE);
+    } else if (wp->alliances[enemyBelong].clearConditionMet) {
+        BattleInformationSetResult(info, BATTLE_RESULT_WIN);
+    } else if (flags & BATTLE_FLAG_ESCAPED) {
+        BattleInformationSetResult(info, BATTLE_RESULT_ESCAPE);
+    }
+    switch (BattleInformationGetResult(info)) {
+    case BATTLE_RESULT_WIN:
+        if (fbatGetPointer()->postBattleEvent != NULL) {
+            BattleSetSeq(wp, SEQ_END, SEQ_END_POST_EVENT_START);
+            return;
         }
-        switch (BattleInformationGetResult(info)) {
-        case BATTLE_RESULT_WIN:
-            if (fbatGetPointer()->postBattleEvent != NULL) {
-                BattleSetSeq(wp, SEQ_END, SEQ_END_POST_EVENT_START);
-                return;
-            }
-            _check_audience_battle_end_exec();
-            BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_CLEAR_STATUS);
-            _BattleMarioKouraDelete();
-            break;
-        case BATTLE_RESULT_LOSE:
-            BattleSetSeq(wp, SEQ_END, SEQ_END_LOSE_FADE);
-            break;
-        case BATTLE_RESULT_ESCAPE:
-        default:
-            _ExecAllUnitBattleEndEvent();
-            BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT);
-            BattleAudienceSoundSetVolAll(0, 30);
-            break;
-        }
-        nw = BattleAlloc(sizeof(BattleSeqEndWork));
-        wp->seqEndWork = nw;
-        btlseqEnd_DispInit(wp);
-        nw->state = 0;
-        nw->expEffect = NULL;
-        nw->whistleTimer = irand(120) + 60;
-        nw->confettiEvtId = 0;
+        _check_audience_battle_end_exec();
+        BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_CLEAR_STATUS);
+        _BattleMarioKouraDelete();
+        break;
+    case BATTLE_RESULT_LOSE:
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LOSE_FADE);
+        break;
+    case BATTLE_RESULT_ESCAPE:
+    default:
+        _ExecAllUnitBattleEndEvent();
+        BattleSetSeq(wp, SEQ_END, SEQ_END_FADE_OUT);
+        BattleAudienceSoundSetVolAll(0, 30);
         break;
     }
+    nw = BattleAlloc(sizeof(BattleSeqEndWork));
+    wp->seqEndWork = nw;
+    btlseqEnd_DispInit(wp);
+    nw->state = 0;
+    nw->expEffect = NULL;
+    nw->whistleTimer = irand(120) + 60;
+    nw->confettiEvtId = 0;
+    break;
     case SEQ_END_POST_EVENT_START:
     fb = fbatGetPointer();
     e = evtEntry(fb->postBattleEvent, 10, 0);

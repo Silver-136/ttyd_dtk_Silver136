@@ -4424,17 +4424,16 @@ void puniModeEnter(PuniData* p) {
                 p->modeStep = 3;
             }
             break;
-        case 3: {
-            searchParent(p);
-            p->mode = PUNI_MODE_PARENT;
-            p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
-            PSVECSubtract(&p->parent->pos, &p->pos, &d);
-            p->prevParentDist = p->parentDist = PSVECMag(&d);
-            p->timer = 0;
-            p->modeStep = 0;
-            p->anim = 1;
-            break;
-        }
+        case 3:
+        searchParent(p);
+        p->mode = PUNI_MODE_PARENT;
+        p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
+        PSVECSubtract(&p->parent->pos, &p->pos, &d);
+        p->prevParentDist = p->parentDist = PSVECMag(&d);
+        p->timer = 0;
+        p->modeStep = 0;
+        p->anim = 1;
+        break;
     }
 }
 

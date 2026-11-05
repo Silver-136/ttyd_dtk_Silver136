@@ -984,6 +984,7 @@ void party_motion_homing_walk(PartyEntry* party) {
     f32 rx, ry, rz;
     f32 fsy, fsa, fsb;
     f32 hh;
+    f32 k;
 
     id = partyGetFootmarkId(party);
     mario = party->playerPtr;
@@ -1230,11 +1231,9 @@ found:
                 sincosf(&s4, &c4, dir);
                 // On this upward-step path x/z are replaced by sin/cos*40 without a world-position origin.
                 // FAKE: spare temporary for 40.0f; the plain constant changes the object
-                {
-                    f32 k = 40.0f;
-                    party->moveTarget.x = s4 * k;
-                    party->moveTarget.z = c4 * k;
-                }
+                k = 40.0f;
+                party->moveTarget.x = s4 * k;
+                party->moveTarget.z = c4 * k;
                 party->moveTarget.y = gy;
             }
             partyChgMot(party, PARTY_MOTION_JUMP);

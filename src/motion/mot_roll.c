@@ -514,19 +514,18 @@ void marioReInit_roll(void) {
     MarioWork* mario = marioGetPtr();
     f32 z0;
     f32 z1;
+    MarioWork* t;
     p = __memAlloc(HEAP_DEFAULT, sizeof(MotRollWork));
     marioGetPtr()->motStruct = p;
     memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
-    {
-        MarioWork* t = marioGetPtr();
+    t = marioGetPtr();
 #if VERSION >= VERSION_US
-        if (marioGetPtr()->motStruct) {
-            marioGetPtr()->motRoll->sfxId = -1;
-        }
-#else
-        t->mot.roll.sfxId = -1;
-#endif
+    if (marioGetPtr()->motStruct) {
+        marioGetPtr()->motRoll->sfxId = -1;
     }
+#else
+    t->mot.roll.sfxId = -1;
+#endif
     mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     mario->currMotionId = MARIO_MOTION_ROLL;
     mario->flags |= MARIO_FLAG_TUBE_MODE;
