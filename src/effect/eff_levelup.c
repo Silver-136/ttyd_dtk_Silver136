@@ -239,6 +239,7 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
     GXColor color;
     f32 dx;
     f32 dy;
+    // FAKE: 0.5f held in a local for the quad half-widths; width * 0.5f changes the object
     f32 halfScale = 0.5f;
 #if VERSION >= VERSION_US
     GXTexObj texObj2;
@@ -272,8 +273,10 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     for (j = 1, xofs = 4; j >= 0; j--, xofs -= 4) {
 #if VERSION >= VERSION_US
+        // FAKE: work array and texid_tbl walked by byte offsets (ofs/tofs); indexing by i changes the object
         for (i = effect->count - 1, ofs = i * sizeof(EffLevelupWork), tofs = i * sizeof(s32); i >= 1; ofs -= sizeof(EffLevelupWork), tofs -= sizeof(s32), i--) {
 #else
+        // FAKE: work array and texid_tbl walked by byte offsets (ofs/tofs); indexing by i changes the object
         for (i = effect->count - 1, ofs = i * sizeof(EffLevelupWork), tofs = i * sizeof(s32); i >= 1; i--, ofs -= sizeof(EffLevelupWork), tofs -= sizeof(s32)) {
 #endif
             w = effect->userdata;

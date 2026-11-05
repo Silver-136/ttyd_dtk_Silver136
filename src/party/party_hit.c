@@ -540,6 +540,7 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
     ox = party->position.x;
     oz = party->position.z;
     {
+        // FAKE: p (and mx/mz) built first and copied into pos; building pos directly changes the object
         Vec p = {0.0f, 0.0f, 0.0f};
         Vec dir = {0.0f, -1.0f, 0.0f};
         f32 mx;
@@ -668,6 +669,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         f32 dot;
         f32 mx, mz;
         f32 nz;
+        // FAKE: nn copies bestNrm and nz copies nn.z for the wall slide; using bestNrm directly changes the object (early demos the same)
         nn = bestNrm;
         mx = sn * dist;
         mz = cs * dist;
@@ -677,9 +679,11 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         v.z += 0.5f * (mz - dot * nz);
     }
 #if VERSION >= VERSION_US
+    // FAKE: dead store (both loops below assign hit when count >= 1); removing it changes the object in US and later
     hit = NULL;
 #endif
     sincosf(&sn2, &cs2, ang + 45.0f);
+    // FAKE: dead first store (the loop sets bestD at the top of each pass); removing it changes the object (early demos the same)
     bestD = rd;
     qpos = *pos;
     {

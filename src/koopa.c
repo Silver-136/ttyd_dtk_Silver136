@@ -112,6 +112,7 @@ static inline void kpaFireEntry2(Vec pos) {
 
 /** Spawns the fire breath at pos (see kpaFireEntry2). */
 static void kpaFireEntry(Vec pos) {
+    // FAKE: unused marioGetPtr() call; removing it changes the object
     MarioWork* mp = marioGetPtr();
     kpaFireEntry2(pos);
 }
@@ -261,6 +262,7 @@ s32 kpaGetStageViewType(void) {
 s32 kpaCamFollow(void) {
     MarioWork* mario = marioGetPtr();
     s32 v;
+    // FAKE: comma expression re-testing the stage flag; !(stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) changes the object
     if (marioBgmodeChk() == 1 || (v = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1, v == 1)) {
         return 0;
     }

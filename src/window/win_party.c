@@ -378,6 +378,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     WindowWork* wp = param;
     GXColor white2;
     GXColor black2;
+    // FAKE: one-element colour array used as a scalar; a plain GXColor red changes the object
     GXColor red[1];
     GXColor white;
     GXColor black;
@@ -458,6 +459,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     tx = 4.0f + by;
     winIconSet(ICON_HP, (Vec){bx, tx, 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
     for (i = 0; i < (wp->party.wazaCount - 2); i++) {
+        // FAKE: assignment inside the argument; assigning iy first changes the object in the early demos
         winIconSet(itemDataTable[ITEM_SHINE_SPRITE].icon_id, (Vec){bx + ((f32)(i * 34)), iy = 4.0f + (by - 32.0f), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white2);
     }
 
@@ -658,6 +660,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     winFontSetEdge((Vec){costX = bx - 20.0f, fy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, VERSION_PICK("ＦＰ", msgSearch("btl_cost_disp_FP")));
     for (i = 0; i < wp->party.wazaCount; i++) {
         char buf[0x40];
+        // FAKE: assignment inside the argument; assigning iy first changes the object in the early demos
         winFontSetLabel((Vec){10.0f + x, iy = (wy - ((f32)(i * 26))) - 30.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, winPartyDt[wp->party.dtIdx].waza[i]->name);
         sprintf(buf, "%d", winPartyDt[wp->party.dtIdx].waza[i]->baseFpCost);
         winFontSet((Vec){costX, iy, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, buf);

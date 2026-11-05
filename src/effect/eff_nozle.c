@@ -523,10 +523,12 @@ static void effNozleMain(EffectEntry* effect) {
     switch (type) {
         case 0:
         case 2:
+            // FAKE: unsigned compare on a signed counter (guards scale_dt[21]); < 21 changes the object
             if (work->timer < 21U) {
                 work->sx = scale_dt[work->timer][0] / 100.0f;
                 work->sy = scale_dt[work->timer][1] / 100.0f;
             }
+            // FAKE: unsigned compare on a signed counter (guards scale_dt[21]); < 21 changes the object
             if (work->life < 21U) {
                 work->sx = scale_dt[work->life][0] / 100.0f;
                 work->sy = scale_dt[work->life][1] / 100.0f;
@@ -598,6 +600,7 @@ static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
+    // FAKE: a separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5); one reused pair changes the object
     void** dl5;
     u8* sz5;
     u8* sz3;

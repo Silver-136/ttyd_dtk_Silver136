@@ -164,6 +164,7 @@ void nokonoko_use_cancel(void) {
     if (nokonokoGetStatus(party) != 0) {
         if (party->flags & PARTY_FLAG_IS_BEING_USED) {
             marioGetPtr();
+            // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
             if ((u32)nokoSe != 0xFFFFFFFFU) {
                 psndSFXOff(nokoSe);
                 nokoSe = -1;
@@ -197,6 +198,7 @@ void nokonoko_use_post(PartyEntry* party) {
         party->work.nokonoko.heldItem = NULL;
     }
     marioGetPtr();
+    // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
     if ((u32)nokoSe != 0xFFFFFFFFU) {
         psndSFXOff(nokoSe);
         nokoSe = -1;
@@ -216,6 +218,7 @@ void nokonoko_use_post(PartyEntry* party) {
 /** Stops the looping shell-spin sound (nokoSe) if one is playing. */
 static inline void noko_se_off(void) {
     marioGetPtr();
+    // FAKE: u32 cast against 0xFFFFFFFFU; nokoSe != -1 changes the object
     if ((u32)nokoSe != 0xFFFFFFFFU) {
         psndSFXOff(nokoSe);
         nokoSe = -1;

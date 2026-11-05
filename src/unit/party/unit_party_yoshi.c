@@ -95,7 +95,7 @@ static EvtWord party_win_reaction[25];
 static EvtWord attack_audience_event[290];
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
-u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
+u8 _yoshig_tpl_no_tbl[8];
 
 /**
  * Yoshi's pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze, instant KO),
@@ -2098,7 +2098,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 #endif
 
-u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = { // battle tex id per sweat frame (US ids +0x16)
+u8 _yoshig_tpl_no_tbl[8] = { // battle tex id per sweat frame (US ids +0x16)
     VERSION_PICK(0x46, 0x5C), VERSION_PICK(0x49, 0x5F), VERSION_PICK(0x47, 0x5D), VERSION_PICK(0x46, 0x5C),
     VERSION_PICK(0x4A, 0x60), VERSION_PICK(0x48, 0x5E), 0, 0,
 };
@@ -2517,7 +2517,6 @@ USER_FUNC(_gundan_yoshi_run_effect) {
     Vec pos;
     s32 id;
 
-    do {
     id = evtGetValue(event, event->args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -2588,7 +2587,6 @@ USER_FUNC(_gundan_yoshi_run_effect) {
         dispEntry(CAMERA_3D, dispCalcZ((Vec*)p), VERSION_PICK(DISP_MODE_XLU, DISP_MODE_ALPHA_TEST), (DispCallback)_btlYoshiDisp, &w->parts[i]);
     }
 #endif
-    } while (0);
     return EVT_RETURN_BLOCK;
 }
 

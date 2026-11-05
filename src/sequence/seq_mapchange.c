@@ -127,6 +127,7 @@ typedef struct {
 } LangTbl;
 
 /** Folder name of each language, used to load that language's window textures (win.tpl) on a map change. */
+// FAKE: struct wrapper around the language folder names, copied into a local; a plain local array changes the object
 static const LangTbl lang_tbl = {{
     "jp", "us",
 #if VERSION >= VERSION_US

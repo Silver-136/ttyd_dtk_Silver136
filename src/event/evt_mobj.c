@@ -2424,15 +2424,17 @@ extern EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 num
 // Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED (case 3).
 // FAKE: case 4 repeats these steps inline instead of calling this helper; calling it there changes the object
 static inline void recoveryHeal(void) {
+    PouchData* pouch;
     PouchPartyData* party;
     MarioWork* mario;
     s32 i;
     mario = marioGetPtr();
-    party = (PouchPartyData*)pouchGetPtr();
+    pouch = pouchGetPtr();
+    party = pouch->partyData;
     effStardustEntry(2, 50, 100, mario->position.x, mario->position.y, mario->position.z, 50.0f, 50.0f);
     marioChgPose("M_I_1");
-    ((PouchData*)party)->currentHP = ((PouchData*)party)->maximumHP;
-    ((PouchData*)party)->currentFP = ((PouchData*)party)->maximumFP;
+    pouch->currentHP = pouch->maximumHP;
+    pouch->currentFP = pouch->maximumFP;
     for (i = 0; i < 8; party++, i++) {
         if ((party->flags & PARTY_FLAG_IS_ACTIVE) && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
             party->currentHP = party->maximumHP;
@@ -2449,6 +2451,7 @@ static inline void recoveryHeal(void) {
  * and sets GSWF_HEART_BLOCK_TUTORIAL_SEEN.
  */
 static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
+    PouchData* pouch;
     MarioWork* mario;
     PouchPartyData* party;
     s32 i;
@@ -2516,11 +2519,12 @@ static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
         if (mobj->timer == 100) {
             kind = mobj->typeData[1];
             mario = marioGetPtr();
-            party = (PouchPartyData*)pouchGetPtr();
+            pouch = pouchGetPtr();
+            party = pouch->partyData;
             effStardustEntry(2, 50, 100, mario->position.x, mario->position.y, mario->position.z, 50.0f, 50.0f);
             marioChgPose("M_I_1");
-            ((PouchData*)party)->currentHP = ((PouchData*)party)->maximumHP;
-            ((PouchData*)party)->currentFP = ((PouchData*)party)->maximumFP;
+            pouch->currentHP = pouch->maximumHP;
+            pouch->currentFP = pouch->maximumFP;
             for (i = 0; i < 8; party++, i++) {
                 if ((party->flags & PARTY_FLAG_IS_ACTIVE) && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
                     party->currentHP = party->maximumHP;
@@ -3661,8 +3665,9 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
     s32 mode;
     f32 dist;
-    void* item;
-    void* p;
+    ItemEntry* item;
+    PartyEntry* member;
+    MarioWork* mp;
     s32 i;
     NpcWork* wp;
     NpcEntry* npc;
@@ -3722,14 +3727,14 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_KURURIN_FLOOR_LEAP1), &mobj->position);
             mobj->state = 1;
             item = itemNameToPtr(mobj->name);
-            if (item == NULL || !(((ItemEntry*)item)->flags & ITEM_FLAG_ACTIVE)) {
+            if (item == NULL || !(item->flags & ITEM_FLAG_ACTIVE)) {
                 if (itemEntry(mobj->position.x, 30.0f + mobj->position.y, mobj->position.z, mobj->name, ITEM_STAR_PIECE, ITEM_TYPE_SCATTER_NO_PICKUP, mobj->flagVar, NULL)) {
                     item = itemNameToPtr(mobj->name);
                     itemFlagOn(item, ITEM_FLAG_CUSTOM_BOUND);
-                    ((ItemEntry*)item)->bounceFactor = 0.6f;
-                    ((ItemEntry*)item)->gravityScale = 1.0f;
-                    ((ItemEntry*)item)->maxBounces = 5;
-                    ((ItemEntry*)item)->velocityY = 300.0f;
+                    item->bounceFactor = 0.6f;
+                    item->gravityScale = 1.0f;
+                    item->maxBounces = 5;
+                    item->velocityY = 300.0f;
                 }
             }
         }
@@ -3756,28 +3761,28 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     dispEntry(CAMERA_SHADOW, 0.0f, DISP_MODE_OPAQUE, (DispCallback)kururing_capture, mobj);
     // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
     joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
-    item = marioGetPtr();
-    if (kururing_in_box(mobj->position.x, mobj->position.z, ((MarioWork*)item)->position.x, ((MarioWork*)item)->position.z, 30.0f)) {
-        ((MarioWork*)item)->position.y = *joint;
+    mp = marioGetPtr();
+    if (kururing_in_box(mobj->position.x, mobj->position.z, mp->position.x, mp->position.z, 30.0f)) {
+        mp->position.y = *joint;
     }
-    p = partyGetPtr(marioGetPartyId());
+    member = partyGetPtr(marioGetPartyId());
 #if VERSION >= VERSION_US
-    if (p && !(((PartyEntry*)p)->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (member && !(member->flags & PARTY_FLAG_IS_BEING_USED)) {
 #else
-    if (p) {
+    if (member) {
 #endif
-        if (kururing_in_box(mobj->position.x, mobj->position.z, ((PartyEntry*)p)->position.x, ((PartyEntry*)p)->position.z, 30.0f)) {
-            ((PartyEntry*)p)->position.y = *joint;
+        if (kururing_in_box(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
+            member->position.y = *joint;
         }
     }
-    p = partyGetPtr(marioGetExtraPartyId());
+    member = partyGetPtr(marioGetExtraPartyId());
 #if VERSION >= VERSION_US
-    if (p && !(((PartyEntry*)p)->flags & PARTY_FLAG_IS_BEING_USED)) {
+    if (member && !(member->flags & PARTY_FLAG_IS_BEING_USED)) {
 #else
-    if (p) {
+    if (member) {
 #endif
-        if (kururing_in_box(mobj->position.x, mobj->position.z, ((PartyEntry*)p)->position.x, ((PartyEntry*)p)->position.z, 30.0f)) {
-            ((PartyEntry*)p)->position.y = *joint;
+        if (kururing_in_box(mobj->position.x, mobj->position.z, member->position.x, member->position.z, 30.0f)) {
+            member->position.y = *joint;
         }
     }
     wp = npcGetWorkPtr();
@@ -3789,9 +3794,9 @@ static s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             }
         }
     }
-    p = itemNearDistCheck(mobj->position.x, mobj->position.y, mobj->position.z, 42.420002f);
-    if (p) {
-        ((ItemEntry*)p)->position.y = *joint;
+    item = itemNearDistCheck(mobj->position.x, mobj->position.y, mobj->position.z, 42.420002f);
+    if (item) {
+        item->position.y = *joint;
     }
     if (animPoseGetLoopTimes(mobj->poseId) < 2.0f) {
         break;
@@ -5471,7 +5476,6 @@ static s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
     MarioWork* mario = marioGetPtr();
     s32 score;
     s32 next = 0;
-    s32 off;
     s32 i;
     switch (mobj->state) {
     case 0:
@@ -5499,9 +5503,9 @@ static s32 mobj_koopa_pole_evt(MapObjectEntry* mobj) {
         if (next == 0) {
             break;
         }
-        for (i = 0, off = 0; i < npcGetWorkPtr()->total; off += sizeof(NpcEntry), i++) {
-            NpcEntry* npc = (NpcEntry*)((char*)npcGetWorkPtr()->entries + off);
-            u32 flags = (u32)npc->flags;
+        for (i = 0; i < npcGetWorkPtr()->total; i++) {
+            NpcEntry* npc = &npcGetWorkPtr()->entries[i];
+            u32 flags = npc->flags;
             if ((flags & NPC_FLAG_IN_USE) && !(npc->statusFlags & NPC_STATUS_DEAD) && (flags & NPC_FLAG_2D) && (flags & NPC_FLAG_ENEMY)) {
                 npcGroupDead(npc, KPA_ENCOUNT_GOAL_POLE);
             }

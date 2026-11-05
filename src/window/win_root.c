@@ -92,6 +92,7 @@ void winBadgeExit();
 void winRootBgDrawDisp(CameraId unused, void* param);
 void winRootBgCaptureDisp(CameraId unused, void* param);
 
+// Macro, not inline: as static inline winRootAddTab(w, id, msg) the object changes.
 #define WIN_ROOT_ADD_TAB(n)             \
     {                                   \
         WinTab* t = &w->tab[w->tabNum]; \
@@ -998,6 +999,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h - 16, nk - 16 - 8, 8);
 #else
         winRootTexQuad(wp, 0xF, x + (w - 90), y - h, 16, 8);
+        // FAKE: 74.0f and 66.0f held in locals (JP and the early demos); the literals change the object
         winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h, w74, 8);
         winRootTexQuad(wp, 0xA, x + (w - 90) + 8, y - h - 8, 8, 8);
         winRootTexQuad(wp, 0x8, x + (w - 90) + 16, y - h - 8, w74, 8);
@@ -1008,22 +1010,23 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     }
 }
 
-/** Absolute value in double precision, for NAME_TEX below. */
+/** Absolute value in double precision, for nameTex below. */
 static inline double fabs_d(double x) { return __fabs(x); }
 
-/** Float absolute value that goes through fabs_d (double), for NAME_TEX below. */
+/** Float absolute value that goes through fabs_d (double), for nameTex below. */
 static inline float fabsf_(float x) { return (float)fabs_d((double)x); }
 
-#define NAME_TEX(obj, id, mtx, tw, th)                                                                        \
-    TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, &obj, id);                                         \
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);            \
-    GXLoadTexObj(&obj, GX_TEXMAP0);                                                                           \
-    GXSetNumTexGens(1);                                                                                       \
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);           \
-    MTXScale(mtx, fabsf_(tw) / (f32)GXGetTexObjWidth(&obj), fabsf_(th) / (f32)GXGetTexObjHeight(&obj), 1.0f); \
-    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4)
+static inline void nameTex(WindowWork* wp, GXTexObj* obj, s32 id, Mtx mtx, f32 tw, f32 th) {
+    TEXGetGXTexObjFromPalette((TEXPalette*)*wp->res->data, obj, id);
+    GXInitTexObjLOD(obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
+    GXLoadTexObj(obj, GX_TEXMAP0);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+    MTXScale(mtx, fabsf_(tw) / (f32)GXGetTexObjWidth(obj), fabsf_(th) / (f32)GXGetTexObjHeight(obj), 1.0f);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX2x4);
+}
 
-/** Emits one qw x qh textured quad with its top-left at (x0, y0) for winNameGX, using the texture NAME_TEX loaded. */
+/** Emits one qw x qh textured quad with its top-left at (x0, y0) for winNameGX, using the texture nameTex loaded. */
 static inline void nameQuad(f32 x0, f32 y0, f32 qw, f32 qh) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(x0, y0, 0.0f);
@@ -1075,21 +1078,21 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     GXSetCurrentMtx(GX_PNMTX0);
 
     if (type == 0) {
-        NAME_TEX(t0a, 0x13, m0a, w - 16.0f, 32.0f);
+        nameTex(wp, &t0a, 0x13, m0a, w - 16.0f, 32.0f);
         nameQuad(x, y, w - 16.0f, 32.0f);
-        NAME_TEX(t0b, 0x14, m0b, 16.0f, 32.0f);
+        nameTex(wp, &t0b, 0x14, m0b, 16.0f, 32.0f);
 
         nameQuad((x + w) - 16.0f, y, 16.0f, 32.0f);
     } else if (type == 1) {
-        NAME_TEX(t1a, 0x15, m1a, w - 16.0f, 32.0f);
+        nameTex(wp, &t1a, 0x15, m1a, w - 16.0f, 32.0f);
         nameQuad(x, y, w - 16.0f, 32.0f);
-        NAME_TEX(t1b, 0x16, m1b, 16.0f, 32.0f);
+        nameTex(wp, &t1b, 0x16, m1b, 16.0f, 32.0f);
 
         nameQuad((x + w) - 16.0f, y, 16.0f, 32.0f);
     } else if (type == 2) {
-        NAME_TEX(t2a, 0x78, m2a, w - 8.0f, 24.0f);
+        nameTex(wp, &t2a, 0x78, m2a, w - 8.0f, 24.0f);
         nameQuad(x, y, w - 8.0f, 24.0f);
-        NAME_TEX(t2b, 0x79, m2b, 8.0f, 24.0f);
+        nameTex(wp, &t2b, 0x79, m2b, 8.0f, 24.0f);
 
         nameQuad((x + w) - 8.0f, y, 8.0f, 24.0f);
     }
@@ -1320,8 +1323,6 @@ void winMailGX(WindowWork* wp, f32 x, f32 y) {
  * the rest a blank mark. Adds page-up/down arrows and the "msg_menu_sort_narabikae" sort hint.
  */
 void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
-    u32 c0;
-    u32 c1;
     f32 scroll;
     s32 ofs;
     s32 j;
@@ -1391,11 +1392,9 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                 winRootTexQuad(w, (a * 13 + 0x7B) + ((i + j * 7) & 1), x + i * 56, scroll + (y - j * 56) - py, 56.0f, 56.0f);
             }
         }
-        c0 = (a * 13 + 0x7D);
-        c1 = (a * 13 + 0x7E);
         for (i = 0; i < 7; i++) {
             if (i == 0) {
-                id = c0;
+                id = (a * 13 + 0x7D);
             } else if (i & 1) {
                 id = (a * 13 + 0x7F);
             } else {
@@ -1403,17 +1402,15 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
             }
             winRootTexQuad(w, id, x + i * 56, y - 224.0f + scroll - py, 8.0f, 8.0f);
             if ((i & 1) == 0) {
-                id = c1;
+                id = (a * 13 + 0x7E);
             } else {
                 id = (a * 13 + 0x80);
             }
             winRootTexQuad(w, id, 8.0f + (x + i * 56), y - 224.0f + scroll - py, 48.0f, 8.0f);
         }
-        c0 = (a * 13 + 0x85);
-        c1 = (a * 13 + 0x84);
         for (i = 0; i < 4; i++) {
             if (i == 0) {
-                id = c0;
+                id = (a * 13 + 0x85);
             } else if (i & 1) {
                 id = (a * 13 + 0x83);
             } else {
@@ -1421,7 +1418,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
             }
             winRootTexQuad(w, id, 392.0f + x, scroll + (y - i * 56) - py, 8.0f, 8.0f);
             if ((i & 1) == 0) {
-                id = c1;
+                id = (a * 13 + 0x84);
             } else {
                 id = (a * 13 + 0x82);
             }
@@ -2600,6 +2597,7 @@ static void winSortGX(WindowWork* wp) {
     f32 x = wp->sortPosX;
     f32 y = wp->sortPosY;
     s32 i;
+    // FAKE: constant locals w and w2 for the sort window sizes; the literals change the object
     f32 w = 128.0f;
     f32 w2 = 136.0f;
     f32 yy;
@@ -2825,29 +2823,30 @@ static void winMailDisp(WindowWork* wp) {
                 id = wp->item.mail[i].id;
                 kind = wp->item.mail[i].kind;
                 mail = mailGetPtr(id);
+                // FAKE: GXColor black lives in its own bare block; declaring it in the loop body changes the object
                 {
-                GXColor black = { 0x00, 0x00, 0x00, 0xFF };
-                if (mail->flags & MAIL_FLAG_PEACH) {
-                    col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
-                } else if (mail->flags & MAIL_FLAG_TROUBLE) {
-                    col = (GXColor){ 0xD3, 0xD7, 0xAC, 0xFF };
-                } else if (mail->flags & MAIL_FLAG_INFO) {
-                    col = (GXColor){ 0xAC, 0xC2, 0xD7, 0xFF };
-                } else {
-                    col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
-                }
-                winTexInit((TEXPalette*)*wp->res->data);
-                winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
-                white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
-                // FAKE: the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object
-                winTexSet((u32)(pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-                winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-                winTexSet(0x65 + (kind + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
-                winFontInit();
+                    GXColor black = { 0x00, 0x00, 0x00, 0xFF };
+                    if (mail->flags & MAIL_FLAG_PEACH) {
+                        col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
+                    } else if (mail->flags & MAIL_FLAG_TROUBLE) {
+                        col = (GXColor){ 0xD3, 0xD7, 0xAC, 0xFF };
+                    } else if (mail->flags & MAIL_FLAG_INFO) {
+                        col = (GXColor){ 0xAC, 0xC2, 0xD7, 0xFF };
+                    } else {
+                        col = (GXColor){ 0xE1, 0xE1, 0xE1, 0xFF };
+                    }
+                    winTexInit((TEXPalette*)*wp->res->data);
+                    winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), wp->item.mailScroll + ((wp->item.mailY - 56.0f) - (f32)(i * 40)), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, col);
+                    white = (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF };
+                    // FAKE: the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object
+                    winTexSet((u32)(pouchCheckMail(id) == 2 ? (void*)0x5E : (void*)0x5D), (Vec){ 72.0f + wp->item.mailX, wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                    winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                    winTexSet(0x65 + (kind + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
+                    winFontInit();
 #if VERSION >= VERSION_US
-                winFontSetWidth((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
+                    winFontSetWidth((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
 #else
-                winFontSetLabel((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
+                    winFontSetLabel((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
 #endif
                 }
             }

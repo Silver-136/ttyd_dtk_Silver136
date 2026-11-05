@@ -322,6 +322,7 @@ USER_FUNC(bakuGameBombEntry) {
  * args[2] stop level (-1, or 2/3/4 for gauge under 33/66/above). US and later halve the throw-back rate.
  */
 USER_FUNC(bakuGameMain) {
+    // FAKE: unused initialised array; removing it changes the object
     s32 unused[8] = {0, 1, 2, 3, 4, 5, 6, 7};
     BakuWork* w = GetBakuGamePtr();
     EvtWord* args;
@@ -340,6 +341,7 @@ USER_FUNC(bakuGameMain) {
     s32 n;
     BattleUnit* u;
     BattleAudienceMember* m;
+    // FAKE: constant locals v200, v100, frames; the literals change the object
     f32 v200 = -200.0f;
     f32 v100 = -100.0f;
     f32 frames = 40.0f;
@@ -524,6 +526,7 @@ state_end:
             break;
         }
         {
+            // FAKE: unused initialised Vec; removing it changes the object
             Vec unusedv = {125.0f, 0.0f, -30.0f};
         }
         w->hstate = 2;

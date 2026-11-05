@@ -117,6 +117,7 @@ static inline s32 harborKind(HitEntry* hit) {
     return k;
 }
 
+// Macro, not inline: as static inline harborProbe(m, ang, &pos, out) the object changes.
 #define HARBOR_PROBE(ANG, POS)                                                                      \
     sincosf(&sn, &cs, toMovedir(ANG));                                                              \
     tx = 40.0f * sn + m->position.x;                                                                \
@@ -334,6 +335,7 @@ static inline void shipLerpTurn(f32 t, f32 k) {
  */
 static inline void shipEff(f32 s) {
     MarioWork* mario = marioGetPtr();
+    // FAKE: zz (0.0f) added to position.y and the c temporary choosing 0.3f/0.6f; dropping both changes the object
     f32 zz = 0.0f;
     if (!s) {
         s32 c;

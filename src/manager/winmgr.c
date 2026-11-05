@@ -1745,7 +1745,6 @@ static void select_disp_mario(WinMgrEntry* entry) {
     GXColor tmp;
     GXColor iconcol;
     GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
-    GXColor white2 = white;
     GXColor* col;
     s32 i;
     s32 id;
@@ -1823,11 +1822,11 @@ static void select_disp_mario(WinMgrEntry* entry) {
         }
         w = (120 - tw) / 2.0f;
         winFontInit();
-        winFontSetEdgeWidth((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2, 100.0f, msg);
+        winFontSetEdgeWidth((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, 100.0f, msg);
 #else
         w = (120 - FontGetMessageWidth(msg)) / 2;
         winFontInit();
-        winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2, msg);
+        winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         msg = msgSearch("msg_window_title_10");
 #if VERSION >= VERSION_US
@@ -1837,11 +1836,11 @@ static void select_disp_mario(WinMgrEntry* entry) {
         }
         w = (85 - tw) / 2.0f;
         winFontInit();
-        winFontSetEdgeWidth((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2, 65.0f, msg);
+        winFontSetEdgeWidth((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, 65.0f, msg);
 #else
         w = (85 - FontGetMessageWidth(msg)) / 2;
         winFontInit();
-        winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2, msg);
+        winFontSetEdge((Vec){entry->x + entry->width * 3 / 5 + (entry->width * 2 / 5 - 85) / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         iconDispGx(&(Vec){sel->cursorX, sel->cursorY, 1.0f}, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
         if (sel->numItems > 8 && (gp->retraceCount & 31) < 20) {
@@ -1863,6 +1862,7 @@ static void select_disp_luigi(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US
     f32 tw;
 #endif
+    // FAKE: ent is a second name for entry and zero (0.0f) is added to each row y; using entry and dropping zero changes the object
     WinMgrEntry* ent = entry;
     WinMgrSelect* sel = ent->param;
     u32 left, top, wd, ht;

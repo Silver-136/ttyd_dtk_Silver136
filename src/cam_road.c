@@ -666,6 +666,7 @@ static s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
             // s is assigned only when dx or dz is nonzero; a segment with dx = dz = 0 leaves it unset (or from the previous pass).
             if (__fabs(dx) > __fabs(dz)) {
                 s = (qx - lx0) / dx;
+                // FAKE: ok is assigned and never read; removing the assignment changes the object
                 ok = (s < -0.0000001 || s > 1.0000001);
             } else if (dz != 0.0) {
                 s = (qz - lz0) / dz;

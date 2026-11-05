@@ -9525,6 +9525,7 @@ static void psndBGMMain(void) {
         if (SoundSSCheck(bgm->streamId) & SOUND_STREAM_FLAG_MUTE) {
             SoundSSMuteOff(bgm->streamId);
         }
+        // FAKE: repeated listId test (listId != -1 is known here); dropping it changes the object
         if (bgm->listId == -1) {
             alive = 0;
         } else if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {
@@ -10259,6 +10260,7 @@ static void psndSFXMain(void) {
     unsigned int none;
     s32 cnt;
     s32 fade = 0;
+    // FAKE: one-element array used as a scalar channel; a plain s32 ch changes the object
     s32 ch[1];
     s32 tvol;
     PaperSoundEffect* sfx[1];
@@ -11179,6 +11181,7 @@ static void psndENVMain(void) {
                         (psnd.fade[i].dipTime)++;
                     else
 #else
+// Macro, not inline: as a static inline over ent (US and later) the object changes.
 #define ENVAPPLY                                                                             \
     {                                                                                        \
         u8 vol;                                                                              \

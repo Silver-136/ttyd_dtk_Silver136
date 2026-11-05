@@ -65,6 +65,7 @@ static void effSyuryouMain(EffectEntry* effect) {
             return;
         }
         if (work->poseId == -1) {
+            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
             work->poseId = animPoseEntry("EFF_batug_tue", (u32)inBattle);
             animPoseSetAnim(work->poseId, "A_1", TRUE);
         }
@@ -79,6 +80,7 @@ static void effSyuryouMain(EffectEntry* effect) {
             return;
         }
         if (work->poseId == -1) {
+            // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
             work->poseId = animPoseEntry("MOBJ_EFF_baria", (u32)inBattle);
             animPoseSetAnim(work->poseId, "A_1", TRUE);
         }

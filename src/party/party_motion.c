@@ -3709,7 +3709,7 @@ static inline u32 partyGetFrontAttrFar(PartyEntry* party) {
     return hit ? hitGetAttr(hit) : 0;
 }
 
-/** Unused: sets a hit query's direction to straight down. */
+/* Unused (sets a hit query's direction to straight down), but the compiler still emits its {0, -1, 0} Vec constant. */
 static inline void partyDownDirY(HitCheckQuery* q) {
     q->targetDir = (Vec){0.0f, -1.0f, 0.0f};
 }

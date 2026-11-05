@@ -1648,7 +1648,7 @@ USER_FUNC(_disp_heart_entry) {
 static void _disp_heart(CameraId camera, void* param) {
     EventEntry* w;
     f32 scale;
-    Vec p, b, a, c;
+    Vec p, b, a;
     BattleUnit* unit;
 
     if (param == NULL) {
@@ -1668,7 +1668,6 @@ static void _disp_heart(CameraId camera, void* param) {
         p.z += 10.0f;
         a = p;
         b = p;
-        c = p;
         b.y = 16.0f * scale + a.y;
         b.z = 5.0f + a.z;
         iconDispGx(&a, 0, ICON_FUKIDASHI, scale);

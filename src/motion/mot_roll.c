@@ -979,8 +979,8 @@ void mot_roll(void) {
     nz = 0.0f;
     if (!(mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
         f32 stickX, stickY;
-        stickX = (f32)(s32)(s8)mario->wStickDir1;
-        stickY = (f32)(s32)(s8)mario->wStickDir2;
+        stickX = (f32)mario->wStickDir1;
+        stickY = (f32)mario->wStickDir2;
         nz = distABf(nx, nx, stickX, stickY);
         v31 = angleABf(0.0f, 0.0f, stickX, stickY);
         v31 = revise360(mario->targetYaw + v31);

@@ -522,6 +522,7 @@ void evtMsgFmtStr(char* buf, const char* name) {
     switch (gp->language) {
         case LANGUAGE_US:
         case 6:
+            // FAKE: (signed char) cast on the first character; switch (*name) changes the object in US, PAL and the September demos
             switch ((signed char)*name) {
             case 'A':
             case 'E':

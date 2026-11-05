@@ -194,6 +194,7 @@ USER_FUNC(btlevtcmd_DrawLots) {
     s32 *alloc;
     s32 i, count, max;
     s32 ceiling;
+    // FAKE: nv[0]/nv[1] are the pick index and the running sum in a two-element array; two scalars change the object
     s32 nv[2];
 
     args += 2;

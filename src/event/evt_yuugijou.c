@@ -314,12 +314,6 @@ void yuugijou_init(void) {
 #endif
 #endif
 }
-static inline s32 cmpSign(s32 a, s32 b) {
-    if (a > b) {
-        return 1;
-    }
-    return -1;
-}
 
 /**
  * Draws the Pianta token counter (window, token icons and number) while flags 1 and 2 are set,
@@ -380,13 +374,7 @@ void monteCountDisp(void) {
         if (delta != 0) {
             delta = delta / 10;
             if (delta == 0) {
-                s32 sg;
-                if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
-                    sg = 1;
-                } else {
-                    sg = -1;
-                }
-                delta = sg;
+                delta = (s32)yuwp->tokens > (s32)yuwp->dispTokens ? 1 : -1;
             }
             yuwp->dispTokens += delta;
         }

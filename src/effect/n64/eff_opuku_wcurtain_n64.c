@@ -76,6 +76,7 @@ static void effOpukuWcurtainMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
     s32 i;
+    s32 frame;
 
     tmp.x = work->position.x;
     tmp.y = work->position.y;
@@ -93,12 +94,12 @@ static void effOpukuWcurtainMain(EffectEntry* effect) {
         effDelete(effect);
         return;
     }
-    i = work->frame;
+    frame = work->frame;
     if (work->lifetime < 16) {
         work->alpha = work->lifetime << 4;
     }
-    if (i < 16) {
-        work->alpha = (i << 4) + 15;
+    if (frame < 16) {
+        work->alpha = (frame << 4) + 15;
     }
     for (i = 0; i < 12; i++) {
         work->offset[i] += work->speed[i];
@@ -129,6 +130,7 @@ static void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
     s32 j;
     s32 frame;
     s32 t;
+    s32 n;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -196,8 +198,8 @@ static void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
 
     for (j = 0; j < i - 1; j++) {
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-        frame = j << 1;
-        tri2(frame, frame + 2, frame + 1, frame, frame + 1, frame + 2, frame + 3, frame);
+        n = j << 1;
+        tri2(n, n + 2, n + 1, n, n + 1, n + 2, n + 3, n);
     }
 }
 

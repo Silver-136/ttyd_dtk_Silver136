@@ -93,6 +93,7 @@ static void effKemuri4Disp(CameraId cameraId, void* param);
 EffectEntry* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 flip) {
     EffectEntry* effect;
     EffKemuri4N64Work* work;
+    // FAKE: zero holds 0.0f for the two flip tests; flip != 0.0f changes the object
     f32 zero = 0.0f;
     f32 rad;
     s32 i;

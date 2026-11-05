@@ -84,7 +84,6 @@ static JetwEnt adata[] = {
 
 static struct {
     JetwEnt e[33];
-    s16 pad;
 } a2data = {{
     {0, 0, 30, 140, 0, 255, 0},
     {0, 6, 30, 120, 0, 240, 0},
@@ -119,7 +118,7 @@ static struct {
     {0, 36, 100, 77, 70, 120, 0},
     {0, 39, 110, 65, 80, 80, 0},
     {0, 42, 120, 54, 90, 40, 0},
-}, 0};
+}};
 
 #if VERSION <= VERSION_DEMO_JP
 static s32 jetw_ry_tbl[] = {0, 40, 55, 190, 20, 130, 270, 300};

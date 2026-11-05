@@ -1224,6 +1224,7 @@ static inline s32 unitwin_party_icon(s32 icon) {
     return icon;
 }
 
+// FAKE: function-pointer cast of iconDispGx (Vec*, u16, f32, u16); plain iconDispGx calls change the object
 #define ICONGX2 ((void (*)(Vec*, u16, f32, u16))iconDispGx)
 
 static inline const char* unitwin_party_name(s32 i) {
@@ -1810,6 +1811,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     row++;
                 }
                 GXSetScissor(sl, st, sw, sh);
+                // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
                     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
                     FontDrawStart();
@@ -1908,6 +1910,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     row++;
                 }
                 GXSetScissor(sl, st, sw, sh);
+                // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
                     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
                     FontDrawStart();
@@ -1985,6 +1988,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     row++;
                 }
                 GXSetScissor(sl, st, sw, sh);
+                // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
                     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
                     FontDrawStart();
@@ -2059,6 +2063,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
                     row++;
                 }
                 GXSetScissor(sl, st, sw, sh);
+                // FAKE: first character read through an s8 cast; msgName[0] changes the object
                 if (*(s8*)msgName) {
                     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -240.0f, -130.0f, 480.0f, 70.0f, 20.0f);
                     FontDrawStart();
@@ -2124,6 +2129,7 @@ static void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         }
         line1 = text;
         lines = 1;
+        // FAKE: characters read through an s8 cast; line1[k] changes the object
         for (k = 0; ((s8*)line1)[k]; k++) {
             if (((s8*)line1)[k] == '\n') {
                 text[k] = 0;

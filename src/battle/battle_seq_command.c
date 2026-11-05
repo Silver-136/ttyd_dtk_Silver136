@@ -128,6 +128,7 @@ static void _btlcmd_MakeActClassTable(BattleWork* wp) {
     cmd = &wp->commandMenu;
     pouch = pouchGetPtr();
     info = wp->fbatInfo->setup;
+    // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return;
     }
@@ -434,6 +435,7 @@ static s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     cmd = &wp->commandMenu;
     pouch = pouchGetPtr();
+    // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return 0;
     }
@@ -801,6 +803,7 @@ static void _btlcmd_MakeOperationTable(BattleWork* wp) {
     info = wp->fbatInfo->setup;
     cmd = &wp->commandMenu;
     pouch = pouchGetPtr();
+    // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return;
     }
@@ -953,6 +956,7 @@ static void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
 
     unit = BattleGetUnitPtr(wp, wp->activeUnitId);
     cmd = &wp->commandMenu;
+    // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return;
     }
@@ -1080,6 +1084,7 @@ static s32 _btlcmd_MakePartyTable(BattleWork* wp) {
     num = 0;
     selected = 0;
     pouch = pouchGetPtr();
+    // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return 0;
     }
@@ -1212,6 +1217,7 @@ s32 BattleCommandInput(BattleWork* work) {
     wp = (BattleWork*)(void*)work;
     unit = BattleGetUnitPtr(work, work->activeUnitId);
     cmd = &wp->commandMenu;
+    // FAKE: dead guard: cmd = &wp->commandMenu is never NULL; removing the test changes the object
     if (cmd == NULL) {
         return 1;
     }

@@ -778,6 +778,7 @@ static void disp_2D(CameraId cam, void* param) {
         p.x = x;
         p.y = y;
         p.z = 0.0f;
+        // FAKE: p is copied into s and s is projected; projecting p in place changes the object
         s = p;
         btlGetScreenPoint(&s, &s);
         y = s.y;
@@ -834,6 +835,7 @@ static void disp_2D(CameraId cam, void* param) {
         p.x = x;
         p.y = y;
         p.z = 0.0f;
+        // FAKE: p is copied into s and s is projected; projecting p in place changes the object
         s = p;
         btlGetScreenPoint(&s, &s);
         x = s.x;

@@ -319,7 +319,6 @@ static void effParticleDisp(CameraId cameraId, void* payload) {
     u32 idx;
     ParticleItem* p;
     GXColor col;
-    f32 d2r;
 
     effGetTexObj(0x61, &texObj);
     GXLoadTexObj(&texObj, GX_TEXMAP0);
@@ -344,7 +343,6 @@ static void effParticleDisp(CameraId cameraId, void* payload) {
     PSMTXConcat(mX, mS, mR);
     hx = 4.0f;
     hy = 8.0f;
-    d2r = 0.017453292f;
     for (idx = work->items[work->count].next; idx != work->count + 1; idx = p->next) {
         p = &work->items[idx];
         // BUG: life is Gaussian (mean 125, deviation 25) with no upper clamp, so a life of 256 or more reads past the
@@ -355,9 +353,9 @@ static void effParticleDisp(CameraId cameraId, void* payload) {
         PSMTXTrans(mX, p->pos.x, p->pos.y, p->pos.z);
         PSMTXConcat(mR, mX, mX);
         PSMTXConcat(cam->view, mX, mX);
-        PSMTXRotRad(mT, 'y', d2r * -camGetPtr(cameraId)->viewYaw);
+        PSMTXRotRad(mT, 'y', 0.017453292f * -camGetPtr(cameraId)->viewYaw);
         PSMTXConcat(mX, mT, mX);
-        PSMTXRotRad(mT, 'x', d2r * (f32)((gp->retraceCount + idx) % 360 * 10));
+        PSMTXRotRad(mT, 'x', 0.017453292f * (f32)((gp->retraceCount + idx) % 360 * 10));
         PSMTXConcat(mX, mT, mX);
         GXLoadPosMtxImm(mX, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);

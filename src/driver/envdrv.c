@@ -156,6 +156,7 @@ static void envCapture(CameraId camId, void* param) {
 
     width = gp->fbWidth;
     height = gp->efbHeight;
+    // FAKE: the & 0xFFFF masks (no-ops on the u16 values) shape the halving; (u32)width / 2 changes the object
     halfWidth = (u16)(((u32)width & 0xFFFF) / 2);
     halfHeight = (u16)(((u32)height & 0xFFFF) / 2);
     if (wp->flags & ENV_FLAG_CAPTURE_COLOR_UNUSED) {
@@ -188,6 +189,7 @@ static void envCapture2(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
     u16 halfWidth, halfHeight;
 
+    // FAKE: the & 0xFFFF masks (no-ops on the u16 values) shape the halving; (u32)gp->fbWidth / 2 changes the object
     halfWidth = (u16)(((u32)gp->fbWidth & 0xFFFF) / 2);
     halfHeight = (u16)(((u32)gp->efbHeight & 0xFFFF) / 2);
     if (wp->flags & ENV_FLAG_BLUR_CAPTURE) {
@@ -633,6 +635,7 @@ static void envGlare(EnvironmentGlare* glare) {
     EnvironmentGlareFilter* glareFilter;
     u32 texH;
     u32 texW;
+    // FAKE: glareIter/glareCur walk the coords as EnvironmentGlare pointers stepped by one EnvironmentGlareTexCoord; one coord pointer over glare->coords changes the object
     EnvironmentGlare* glareIter;
     EnvironmentGlare* glareCur;
     s32 width;

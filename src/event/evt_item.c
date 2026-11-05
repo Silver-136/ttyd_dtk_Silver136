@@ -296,6 +296,7 @@ USER_FUNC(evt_item_move_3d_position) {
         event->userdataf[2] = item->position.y;
         event->userdata3f = item->position.z;
     }
+    // FAKE: no-op (s32) casts of the u32 elapsed; an s32 elapsed with plain arguments changes the object
     if ((s32)(elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0])) < ms) {
         item->position.x = intplGetValue(mode, event->userdataf[1], x, (s32)elapsed, ms);
         item->position.y = intplGetValue(mode, event->userdataf[2], y, (s32)elapsed, ms);

@@ -102,7 +102,9 @@ static inline IconBinData* iconGetBinData(u16 iconId) {
 static void iconDisp(CameraId camId, void* param);
 static void iconGX(Mtx mtx, IconEntry* entry);
 
-#define iconGetWork() (gp->inBattle ? &work[1] : &work[0])
+static inline IconWork* iconGetWork(void) {
+    return gp->inBattle ? &work[1] : &work[0];
+}
 
 /** looks a name up in one icon work (inlined; no symbol of its own) */
 inline IconEntry* iconFindIn(IconWork* wp, const char* name) {
@@ -374,7 +376,7 @@ void iconDelete(const char* name) {
 
 /** Switches the named icon to show iconId, restarting its animation. */
 void iconChange(const char* name, u16 iconId) {
-    IconEntry* entry = iconNameToPtr(name); // inline
+    IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
     IconBinData* data;
 
     entry->iconId = iconId;
@@ -481,7 +483,10 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     CameraEntry* camera;
     IconBinData* data;
     IconEntry* ep;
+
+#if VERSION < VERSION_US
     u16 id;
+#endif
 
     camera = camGetCurPtr();
     ep = &entry;
@@ -803,7 +808,7 @@ IconEntry* iconNameToPtr(const char* name) {
 
 /** Moves the named icon to (x, y, z): world units for 3D icons, screen units for 2D ones. */
 void iconSetPos(const char* name, f32 x, f32 y, f32 z) {
-    IconEntry* entry = iconNameToPtr(name); // inline
+    IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
 
     if (entry) {
         Vec temp = { 0 };
@@ -815,14 +820,14 @@ void iconSetPos(const char* name, f32 x, f32 y, f32 z) {
 }
 
 void iconFlagOn(const char* name, s16 flags) {
-    IconEntry* entry = iconNameToPtr(name); // inline
+    IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
     if (entry) {
         entry->uflags |= flags;
     }
 }
 
 void iconFlagOff(const char* name, s16 mask) {
-    IconEntry* entry = iconNameToPtr(name); // inline
+    IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
     if (entry) {
         entry->uflags &= ~mask;
     }
@@ -830,7 +835,7 @@ void iconFlagOff(const char* name, s16 mask) {
 
 /** Sets the named icon's scale. */
 void iconSetScale(const char* name, f32 scale) {
-    IconEntry* entry = iconNameToPtr(name); // inline
+    IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
     if (entry) {
         entry->scale = scale;
     }
@@ -838,7 +843,7 @@ void iconSetScale(const char* name, f32 scale) {
 
 /** Sets the named icon's transparency (0xFF opaque); translucent 3D icons are drawn in the translucent pass. */
 void iconSetAlpha(const char* name, u8 alpha) {
-    IconEntry* entry = iconNameToPtr(name); // inline
+    IconEntry* entry = iconNameToPtr(name); // inlined by the compiler
     if (entry) {
         GXColor color = entry->color;
         color.a = alpha;

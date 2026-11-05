@@ -645,6 +645,7 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
     Mtx pRy2;
     Mtx pRz2;
     Mtx pM;
+    // FAKE: uPos is written by PSMTXTrans and never read; removing it and the call changes the object
     Mtx uPos;
     Mtx uDisp;
     Mtx uRx;

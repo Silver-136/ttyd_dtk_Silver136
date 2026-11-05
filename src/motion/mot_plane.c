@@ -193,6 +193,7 @@ static inline void planeRoll1(MarioWork* mp, f32 rate, f32 max) {
 
 /** Eases the plane's turn speed toward max (degrees per frame) in the flying direction by rate. */
 // Same easing as planeRoll1.
+// FAKE: a second copy of planeRoll1's easing; calling planeRoll1 at both sites changes the object
 static inline void planeRoll2(MarioWork* mario, f32 rate, f32 max) {
     f32* p = &mario->mot.plane.turnSpeed;
     *p += rate * (max * ((mario->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 1.0f : -1.0f) - *p);
@@ -336,6 +337,7 @@ void mot_plane(void) {
         }
         mp->wPlayerCollisionBox.x = 20.0f;
         mp->wPlayerCollisionBox.y = 12.333333f;
+        // FAKE: dead store overwritten below (baseSpeed = 1.0f); removing it changes the object
         mp->baseSpeed = __fabsf(0.02f * mp->wStickDir1);
         mp->currSubMotionId = 12;
         mp->baseSpeed = 1.0f;

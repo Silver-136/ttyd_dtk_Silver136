@@ -1890,6 +1890,7 @@ s32 BtlUnit_GetExp(BattleUnit* unit) {
             scale = 1.5f;
             break;
     }
+    // FAKE: the product is parked in t before the halving; the single return expression changes the object
     t = scale * (f32)(unitLevel - level);
     return (s32)(t / 2.0f) + unit->kindParams->bonusExp;
 }

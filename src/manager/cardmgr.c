@@ -255,79 +255,11 @@ void cardMain(void) {
             break;
 
         case CARD_OP_FORMAT:
-            if (wp->result != CARD_RESULT_READY) {
-                wp->op = CARD_OP_STOPPED;
-                wp->flags |= CARD_FLAG_FAILED;
-                wp->flags &= ~CARD_FLAG_EXEC;
-            } else if (!(wp->flags & CARD_FLAG_BUSY)) {
-                switch (wp->opStep) {
-                    case 0:
-                        memcard_probe();
-                        break;
-
-                    case 1:
-                        memcard_mount();
-                        break;
-
-                    case 2:
-                        memcard_format();
-                        break;
-
-                    case 3:
-                        memcard_unmount();
-                        break;
-
-                    case 4:
-                        wp->op = CARD_OP_IDLE;
-                        wp->flags |= CARD_FLAG_DONE;
-                        wp->flags &= ~CARD_FLAG_EXEC;
-                        break;
-                }
-                wp->opStep++;
-            } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
-                wp->result = CARDGetResultCode(wp->chan);
-                wp->flags &= ~CARD_FLAG_BUSY;
-            }
+            format_main();
             break;
 
         case CARD_OP_DELETE:
-            if (wp->result != CARD_RESULT_READY) {
-                wp->op = CARD_OP_STOPPED;
-                wp->flags |= CARD_FLAG_FAILED;
-                wp->flags &= ~CARD_FLAG_EXEC;
-            } else if (!(wp->flags & CARD_FLAG_BUSY)) {
-                switch (wp->opStep) {
-                    case 0:
-                        memcard_probe();
-                        break;
-
-                    case 1:
-                        memcard_mount();
-                        break;
-
-                    case 2:
-                        memcard_check();
-                        break;
-
-                    case 3:
-                        memcard_delete();
-                        break;
-
-                    case 4:
-                        memcard_unmount();
-                        break;
-
-                    case 5:
-                        wp->op = CARD_OP_IDLE;
-                        wp->flags |= CARD_FLAG_DONE;
-                        wp->flags &= ~CARD_FLAG_EXEC;
-                        break;
-                }
-                wp->opStep++;
-            } else if (CARDGetResultCode(wp->chan) != CARD_RESULT_BUSY && wp->result != CARDGetResultCode(wp->chan)) {
-                wp->result = CARDGetResultCode(wp->chan);
-                wp->flags &= ~CARD_FLAG_BUSY;
-            }
+            delete_main();
             break;
 
         case CARD_OP_STOPPED:
@@ -991,7 +923,7 @@ void cardFormat(void) {
     }
 }
 
-/** Step machine for formatting: mount, format, unmount. Unused: cardMain carries its own copy for op 6. */
+/** Step machine for formatting: mount, format, unmount (cardMain, op 6). */
 static void format_main(void) {
     if (wp->result != CARD_RESULT_READY) {
         wp->op = CARD_OP_STOPPED;
@@ -1030,7 +962,7 @@ static void format_main(void) {
 
 /**
  * Step machine for deleting the save file: mount, check, delete, unmount.
- * Unused: cardMain carries its own copy (op 7).
+ * Run by cardMain for op 7.
  */
 static void delete_main(void) {
     if (wp->result != CARD_RESULT_READY) {

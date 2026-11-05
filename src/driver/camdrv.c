@@ -238,6 +238,7 @@ void camMain(void) {
             focus.x = marioGetPtr()->position.x + marioGetPtr()->camZoomOfs.x;
             focus.y = marioGetPtr()->position.y + marioGetPtr()->camZoomOfs.y;
             focus.z = marioGetPtr()->position.z + marioGetPtr()->camZoomOfs.z;
+            // FAKE: projPt is a copy of focus used once by GXProject; projecting focus directly changes the object
             projPt = focus;
 
             zoom = marioGetPtr()->camZoom;

@@ -1971,6 +1971,7 @@ static s32 _keta_get(s32 n) {
 #define LVOBJ_TEX(n, tbl) (0x27 + (n))
 #endif
 
+// Macro, not inline: as a static inline (matrices passed in) the object changes.
 #define LVOBJ_PLANE(o, n, tbl)                                                         \
     if ((o)->blinkOn) {                                                                \
         PSMTXIdentity(m);                                                              \

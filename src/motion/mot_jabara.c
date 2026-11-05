@@ -177,7 +177,7 @@ BOOL marioChkJabara(void) {
     }
     if (!(mario->buttonHold & PAD_BUTTON_A)) {
         if (!(mario->buttonHold & PAD_BUTTON_B)) {
-            if (strcmp(mario->animName, "M_I_Y") == 0 && (u16)mario->currMotionId == MARIO_MOTION_STAY) {
+            if (strcmp(mario->animName, "M_I_Y") == 0 && mario->currMotionId == MARIO_MOTION_STAY) {
                 marioChgPose("M_S_1");
                 marioVoiceGlareOff();
             }
@@ -186,12 +186,12 @@ BOOL marioChkJabara(void) {
         return FALSE;
     }
 #if VERSION >= VERSION_US
-    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER) &&
+    if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & MARIO_DISP_FLAG_PAPER) &&
         mario->controlStickSensitivity) {
 #else
     mario->wMotionTimer++;
-    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && (u16)mario->currMotionId == MARIO_MOTION_STAY &&
-        !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
+    if (mario->controlStickSensitivity && mario->wMotionTimer > 10 && mario->currMotionId == MARIO_MOTION_STAY &&
+        !(mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
 #endif
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
@@ -199,7 +199,7 @@ BOOL marioChkJabara(void) {
 #if VERSION < VERSION_US
     if (mario->wMotionTimer >= 0x32) {
         mario->wMotionTimer = 0x32;
-        if ((u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
+        if (mario->currMotionId == MARIO_MOTION_STAY && !(mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {
             marioChgPose("M_I_Y");
             marioVoiceGlareOn();
         }
@@ -230,7 +230,9 @@ static inline void jabaraLand(f32 y, void* hit) {
     mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
 
-#define ANIM_STEP() animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame)
+static inline void animStep(MarioWork* mario) {
+    animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame);
+}
 // End of the spring jump: reset the pose, optionally return to standing, free the motion work
 static inline void jabTail(BOOL stay) {
     jabaraResetPose();
@@ -553,7 +555,7 @@ void mot_jabara(void) {
         mario->currSubMotionId = 0x29;
         break;
     case 0x29:
-        ANIM_STEP();
+        animStep(mario);
         mario->mot.jabara.animFrame++;
         if (mario->mot.jabara.animFrame >= 8) {
             mario->mot.jabara.animFrame = 8;
@@ -568,7 +570,7 @@ void mot_jabara(void) {
         if (mario->dispOfs.y >= 0.0f) {
             mario->dispOfs.y = 0.0f;
         }
-        ANIM_STEP();
+        animStep(mario);
         if (++mario->mot.jabara.animFrame >= 0x10) {
             mario->mot.jabara.animFrame = 0x10;
             marioChgPaper("PM_J_1G");
@@ -588,7 +590,7 @@ void mot_jabara(void) {
         mario->mot.jabara.animFrame = 0;
         marioGetPtr()->motJabara->swingDrift = 0.0f;
     case 0x32:
-        ANIM_STEP();
+        animStep(mario);
         changed = FALSE;
         if (mario->mot.jabara.animFrame >= 0x23 && mario->mot.jabara.animFrame <= 0x62) {
             step = (180.0f == mario->displayDirectionTarget) ? 0.6f : -0.6f;
@@ -658,7 +660,7 @@ void mot_jabara(void) {
         }
         break;
     case 0x34:
-        ANIM_STEP();
+        animStep(mario);
         if (--mario->multiTimer <= 0) {
             mario->currSubMotionId = 0x3c;
         }
@@ -736,7 +738,7 @@ void mot_jabara(void) {
             jabTail(TRUE);
             return;
         } else {
-            ANIM_STEP();
+            animStep(mario);
             v68 = mario->position;
             headRange = 10.0f + mario->wPlayerCollisionBox.y;
             rr = 1.0f;

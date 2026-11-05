@@ -289,8 +289,6 @@ static inline BOOL loadStart(void) {
 }
 #endif
 
-#define SFX(id) psndSFXOn((const char*)(id))
-
 /** Later versions: the same menu with no return value. */
 #if VERSION <= VERSION_DEMO_JP
 static BOOL loadMain(SequenceWork* seq) {
@@ -362,13 +360,13 @@ static void loadMain(SequenceWork* seq) {
                     case 2:
                     case 3:
                         if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
-                            SFX(PSND_SFX_CURSOR_CANCEL1);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                         } else if (flags & CARD_SAVE_FLAG_ERASED) {
                             wp->state = 0x1e;
-                            SFX(PSND_SFX_CURSOR_OK1);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                         } else {
                             wp->state = 0x14;
-                            SFX(PSND_SFX_CURSOR_OK1);
+                            psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                         }
                         break;
                     case 4:
@@ -380,11 +378,11 @@ static void loadMain(SequenceWork* seq) {
                                 }
                             }
                             if (i < 4) {
-                                SFX(PSND_SFX_CURSOR_OK1);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                                 wp->slot = 0;
                                 wp->state = 0x28;
                             } else {
-                                SFX(PSND_SFX_CURSOR_CANCEL1);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                             }
                         }
                         break;
@@ -397,39 +395,39 @@ static void loadMain(SequenceWork* seq) {
                                 }
                             }
                             if (i < 4) {
-                                SFX(PSND_SFX_CURSOR_OK1);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                                 wp->slot = 0;
                                 wp->state = 0x32;
                             } else {
-                                SFX(PSND_SFX_CURSOR_CANCEL1);
+                                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                             }
                         }
                         break;
                     case 6:
-                        SFX(PSND_SFX_CURSOR_CANCEL1);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                         wp->state = 0xa;
                         break;
                     case 7:
-                        SFX(PSND_SFX_CURSOR_OK1);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
 #if VERSION >= VERSION_JP
                         psndBGMOff(PSND_SILENT);
 #endif
                         wp->state = 0x64;
                         break;
                     case 8:
-                        SFX(PSND_SFX_CURSOR_OK1);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                         wp->state = 0xc8;
                         break;
                 }
             } else if (trg & PAD_BUTTON_B) {
-                SFX(PSND_SFX_CURSOR_CANCEL1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 wp->state = 0xa;
             }
             if (prev != wp->slot) {
                 if (wp->slot < 4) {
-                    SFX(9);
+                    psndSFXOn(SFX_NAME_WORD(9));
                 } else {
-                    SFX(PSND_SFX_CURSOR_MOVE1);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
                 }
             }
             wp->tx = win_dt[wp->slot].x + win_dt[wp->slot].ofsX;
@@ -599,23 +597,23 @@ static void loadMain(SequenceWork* seq) {
                 if (prev < 4) {
                     flags = cardGetFilePtr()->saves[wp->slot].data.flags;
                     if ((flags & CARD_SAVE_FLAG_NO_VALID_COPY) || !(flags & CARD_SAVE_FLAG_ERASED)) {
-                        SFX(PSND_SFX_CURSOR_OK1);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                         wp->state++;
                     } else {
-                        SFX(PSND_SFX_CURSOR_CANCEL1);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                     }
                 } else {
                     wp->slot = 4;
                     wp->state = 1;
-                    SFX(PSND_SFX_CURSOR_CANCEL1);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 }
             } else if (trg & PAD_BUTTON_B) {
                 wp->slot = 4;
                 wp->state = 1;
-                SFX(PSND_SFX_CURSOR_CANCEL1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
             }
             if (prev != wp->slot && wp->slot < 4) {
-                SFX(9);
+                psndSFXOn(SFX_NAME_WORD(9));
             }
             wp->tx = win_dt2[wp->slot].x + win_dt2[wp->slot].ofsX;
             wp->ty = win_dt2[wp->slot].y + win_dt2[wp->slot].ofsY;
@@ -664,20 +662,20 @@ static void loadMain(SequenceWork* seq) {
                         wp->copyFrom = wp->slot;
                         wp->copyTo = (wp->copyFrom + 1) % 4;
                         wp->slot = wp->copyTo;
-                        SFX(PSND_SFX_CURSOR_OK1);
+                        psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                     }
                 } else {
                     wp->slot = 5;
                     wp->state = 1;
-                    SFX(PSND_SFX_CURSOR_CANCEL1);
+                    psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 }
             } else if (trg & PAD_BUTTON_B) {
                 wp->slot = 5;
                 wp->state = 1;
-                SFX(PSND_SFX_CURSOR_CANCEL1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
             }
             if (prev != wp->slot && wp->slot < 4) {
-                SFX(9);
+                psndSFXOn(SFX_NAME_WORD(9));
             }
             wp->tx = win_dt2[wp->slot].x + win_dt2[wp->slot].ofsX;
             wp->ty = win_dt2[wp->slot].y + win_dt2[wp->slot].ofsY;
@@ -704,14 +702,14 @@ static void loadMain(SequenceWork* seq) {
             } else if (trg & PAD_BUTTON_A) {
                 wp->state = 0x34;
                 wp->copyTo = wp->slot;
-                SFX(PSND_SFX_CURSOR_OK1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
             } else if (trg & PAD_BUTTON_B) {
                 wp->slot = wp->copyFrom;
                 wp->state = 0x32;
-                SFX(PSND_SFX_CURSOR_CANCEL1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
             }
             if (prev != wp->slot && wp->slot < 4) {
-                SFX(9);
+                psndSFXOn(SFX_NAME_WORD(9));
             }
             wp->copyTo = wp->slot;
             wp->tx = win_dt2[wp->slot].x + win_dt2[wp->slot].ofsX;
@@ -748,10 +746,10 @@ static void loadMain(SequenceWork* seq) {
 #if VERSION <= VERSION_DEMO_JP
             if (dir & DEMO_STICK_UP) {
                 wp->soundModeSel--;
-                SFX(PSND_SFX_CURSOR_MOVE1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             } else if (dir & DEMO_STICK_DOWN) {
                 wp->soundModeSel++;
-                SFX(PSND_SFX_CURSOR_MOVE1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             } else if (trg & PAD_BUTTON_A) {
                 switch (wp->soundModeSel) {
                     case 0:
@@ -761,10 +759,10 @@ static void loadMain(SequenceWork* seq) {
             sound = wp->soundModeSel;
             if (dir & DEMO_STICK_UP) {
                 wp->soundModeSel = wp->soundModeSel - 1;
-                SFX(PSND_SFX_CURSOR_MOVE1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             } else if (dir & DEMO_STICK_DOWN) {
                 wp->soundModeSel = wp->soundModeSel + 1;
-                SFX(PSND_SFX_CURSOR_MOVE1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             } else if (trg & PAD_BUTTON_A) {
                 switch (sound) {
                     case 0:
@@ -788,14 +786,14 @@ static void loadMain(SequenceWork* seq) {
                         break;
                 }
 #if VERSION <= VERSION_DEMO_JP
-                SFX(PSND_SFX_CURSOR_OK1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
 #else
                 if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
                     SoundSetOutputMode(SND_OUTPUTMODE_MONO);
                 } else {
                     SoundSetOutputMode(SND_OUTPUTMODE_STEREO);
                 }
-                SFX(PSND_SFX_CURSOR_OK1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                 psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 psndENVOff(PSND_FADEOUT);
 #endif
@@ -804,14 +802,14 @@ static void loadMain(SequenceWork* seq) {
                 wp->state = 1;
 #if VERSION <= VERSION_DEMO_JP
             } else if (trg & PAD_BUTTON_B) {
-                SFX(PSND_SFX_CURSOR_CANCEL1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 wp->soundModeSel = wp->soundMode;
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
 #else
                 break;
             } else if (trg & PAD_BUTTON_B) {
-                SFX(PSND_SFX_CURSOR_CANCEL1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 psndBGMOn(PSND_CONTINUE | PSND_UNSILENT, NULL);
                 psndENVOff(PSND_FADEOUT);
                 wp->soundModeSel = wp->soundMode;
@@ -854,13 +852,13 @@ static void loadMain(SequenceWork* seq) {
             wp->flags |= LOAD_FLAG_DIM;
             if (dir & DEMO_STICK_UP) {
                 wp->rumbleOffSel--;
-                SFX(PSND_SFX_CURSOR_MOVE1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             } else if (dir & DEMO_STICK_DOWN) {
                 wp->rumbleOffSel++;
-                SFX(PSND_SFX_CURSOR_MOVE1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
             } else if (trg & PAD_BUTTON_A) {
                 gp->rumbleEnabled = wp->rumbleOffSel == 0;
-                SFX(PSND_SFX_CURSOR_OK1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1));
                 wp->rumbleOff = wp->rumbleOffSel;
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;
@@ -868,7 +866,7 @@ static void loadMain(SequenceWork* seq) {
                     evtEntryType(evt_shake, 0, 0, 0);
                 }
             } else if (trg & PAD_BUTTON_B) {
-                SFX(PSND_SFX_CURSOR_CANCEL1);
+                psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
                 wp->rumbleOffSel = wp->rumbleOff;
                 wp->flags &= ~LOAD_FLAG_DIM;
                 wp->state = 1;

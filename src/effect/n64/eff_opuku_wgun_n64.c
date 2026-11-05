@@ -199,6 +199,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
     GXTexObj texObj;
     Vec v;
     f32 scl;
+    // FAKE: zero is added to z in both vertices; 20.0f * work->z[i] changes the object
     f32 zero = 0.0f;
     f32 rad;
     f32 dx;
@@ -331,11 +332,8 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
         effGetTexObjN64(0x8E, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
     }
-    a = i - 1;
-    j = 0;
-    n = j;
     // FAKE: j >= 0 always holds here; the loop without the test changes the object
-    for (; j < a; j++) {
+    for (j = 0, n = 0; j < i - 1; j++) {
         if (j >= 0) {
             GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
             tri2(n, n + 2, n + 1, n, n + 1, n + 2, n + 3, n);

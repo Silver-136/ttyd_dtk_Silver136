@@ -584,6 +584,7 @@ static void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    // FAKE: nw = -w with mixed nw / 2 and w * 0.5f corners; -w * 0.5f throughout changes the object
     nw = -w;
     work++;
     for (i = 1; i < effect->count; i++, work++) {

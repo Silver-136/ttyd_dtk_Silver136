@@ -50,6 +50,7 @@ inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
 }
 
+// FAKE: makeVecByValue2 is a second copy of makeVecByValue; calling makeVecByValue at both sites changes the object
 /** Builds a Vec from x, y, z (a twin of makeVecByValue that compiles the same). */
 inline Vec makeVecByValue2(f32 x, f32 y, f32 z) {
     Vec v = (Vec){ 0.0f, 0.0f, 0.0f };
@@ -91,8 +92,10 @@ WinMgrDesc itemdrv_window_desc[4] = {
     {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, winNameDisp2},
 };
 
-// A macro: the symbol map has no itemGetWork function.
-#define itemGetWork() (gp->inBattle ? &work[1] : &work[0])
+// Always inlined: the symbol map has no itemGetWork function.
+static inline ItemWork* itemGetWork(void) {
+    return gp->inBattle ? &work[1] : &work[0];
+}
 
 /**
  * Puts a removed badge item on sale at the badge shop through pouchArriveBadge:

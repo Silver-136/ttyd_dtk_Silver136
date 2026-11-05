@@ -67,6 +67,7 @@ USER_FUNC(evt_cam_shake) {
 
     id = evtGetValue(event, args[0]);
     x = evtGetFloat(event, args[1]);
+    // FAKE: camId is a spare copy of id for two camGetPtr calls; using id changes the object
     camId = id;
     y = evtGetFloat(event, args[2]);
     msec = evtGetValue(event, args[3]);

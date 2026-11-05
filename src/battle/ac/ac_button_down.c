@@ -293,6 +293,7 @@ static void actionCommandDisp(s32 unused, f32 x, f32 y) {
     BDWork *p = (BDWork*)work->actionCommands.work;
     s32 k;
     s32 end = ((work->actionCommands.params[2]) * 3) + 2;
+    // FAKE: size is a local holding ICON_FLAG_2D for the bar and button icons; passing ICON_FLAG_2D directly changes the object
     int size;
     s32 i;
     s32 count;

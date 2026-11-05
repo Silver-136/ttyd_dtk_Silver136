@@ -159,7 +159,7 @@ void mot_hammer(void) {
     MarioWork* m;
     s32 lv;
 
-    if ((s32)mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
+    if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
         mario->flags |= MARIO_FLAG_STOP_AIR_MOVEMENT;
@@ -433,35 +433,35 @@ static inline void mot_ham(f32 shiftZ, f32 zoom) {
     mario->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
-#define H2_LEVEL_UP(lvl, shiftZ, zoom)                     \
-    {                                                      \
-        mot_ham(shiftZ, zoom);                             \
-        mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP; \
-    }
+static inline void h2LevelUp(MarioWork* mario, f32 shiftZ, f32 zoom) {
+    mot_ham(shiftZ, zoom);
+    mario->mot.hammer2.flags |= HAMMER2_FLAG_LEVEL_UP;
+}
 
-#define H2_RAMP(maxv, midv, minv, lvl, shiftZ, zoom)                   \
-    marioChgPaper("P_H_1A");                                           \
-    if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_AT_LEVEL)) {         \
-        mario->mot.hammer2.animTime += 6.0f;                           \
-        if (mario->mot.hammer2.animTime >= maxv) {                     \
-            mario->mot.hammer2.animTime = maxv;                        \
-            mario->mot.hammer2.flags |= HAMMER2_FLAG_AT_LEVEL;         \
-            mario->hammerChargeLv = lvl;                               \
-            H2_LEVEL_UP(lvl, shiftZ, zoom)                             \
-        }                                                              \
-    } else if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_SWAY_BACK)) { \
-        mario->mot.hammer2.animTime += 1.0f;                           \
-        if (mario->mot.hammer2.animTime >= midv) {                     \
-            mario->mot.hammer2.animTime = midv;                        \
-            mario->mot.hammer2.flags |= HAMMER2_FLAG_SWAY_BACK;        \
-        }                                                              \
-    } else {                                                           \
-        mario->mot.hammer2.animTime -= 1.0f;                           \
-        if (mario->mot.hammer2.animTime <= minv) {                     \
-            mario->mot.hammer2.animTime = minv;                        \
-            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_SWAY_BACK;       \
-        }                                                              \
+static inline void h2Ramp(MarioWork* mario, f32 maxv, f32 midv, f32 minv, s32 lvl, f32 shiftZ, f32 zoom) {
+    marioChgPaper("P_H_1A");
+    if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_AT_LEVEL)) {
+        mario->mot.hammer2.animTime += 6.0f;
+        if (mario->mot.hammer2.animTime >= maxv) {
+            mario->mot.hammer2.animTime = maxv;
+            mario->mot.hammer2.flags |= HAMMER2_FLAG_AT_LEVEL;
+            mario->hammerChargeLv = lvl;
+            h2LevelUp(mario, shiftZ, zoom);
+        }
+    } else if (!(mario->mot.hammer2.flags & HAMMER2_FLAG_SWAY_BACK)) {
+        mario->mot.hammer2.animTime += 1.0f;
+        if (mario->mot.hammer2.animTime >= midv) {
+            mario->mot.hammer2.animTime = midv;
+            mario->mot.hammer2.flags |= HAMMER2_FLAG_SWAY_BACK;
+        }
+    } else {
+        mario->mot.hammer2.animTime -= 1.0f;
+        if (mario->mot.hammer2.animTime <= minv) {
+            mario->mot.hammer2.animTime = minv;
+            mario->mot.hammer2.flags &= ~HAMMER2_FLAG_SWAY_BACK;
+        }
     }
+}
 
 static inline void h2LightOn(void) {
 #if VERSION < VERSION_US
@@ -469,13 +469,14 @@ static inline void h2LightOn(void) {
 #endif
 }
 
-#define H2_CLR_PAPER()                                 \
-    marioPaperOff();                                   \
-    h2LightOn();                                       \
-    marioChgPose("M_S_1");                             \
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE; \
-    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;  \
+static inline void h2ClrPaper(MarioWork* mario) {
+    marioPaperOff();
+    h2LightOn();
+    marioChgPose("M_S_1");
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
     mario->dispFlags &= ~MARIO_DISP_FLAG_FLIP;
+}
 
 /**
  * Spin hammer motion (Super and Ultra Hammer): Mario winds up while B is held,
@@ -569,13 +570,13 @@ void mot_hammer2(void) {
             mario->currSubMotionId = 11;
             marioChgPaper("P_H_1B");
             mario->hammerChargeLv = 3;
-            H2_LEVEL_UP(3, 0.4f, 1.7f)
+            h2LevelUp(mario, 0.4f, 1.7f);
         } else if (mario->hammerChargeTimer >= 3) {
-            H2_RAMP(54.0f, 54.0f, 42.0f, 3, 0.4f, 1.7f)
+            h2Ramp(mario, 54.0f, 54.0f, 42.0f, 3, 0.4f, 1.7f);
         } else if (mario->hammerChargeTimer >= 2) {
-            H2_RAMP(36.0f, 36.0f, 30.0f, 2, 0.3f, 1.6f)
+            h2Ramp(mario, 36.0f, 36.0f, 30.0f, 2, 0.3f, 1.6f);
         } else {
-            H2_RAMP(18.0f, 24.0f, 18.0f, 1, 0.2f, 1.5f)
+            h2Ramp(mario, 18.0f, 24.0f, 18.0f, 1, 0.2f, 1.5f);
         }
         if (mario->mot.hammer2.flags & HAMMER2_FLAG_LEVEL_UP) {
             mario->mot.hammer2.flags &= ~HAMMER2_FLAG_LEVEL_UP;
@@ -599,6 +600,7 @@ void mot_hammer2(void) {
         }
     case 11:
         if (!(mario->buttonHold & PAD_BUTTON_B)) {
+            // FAKE: u32 cast against 0xFFFFFFFFU; the plain s32 compare with -1 changes the object
             if ((u32)mario->mot.hammer2.sfxId != 0xFFFFFFFFU) {
                 psndSFXOff(mario->mot.hammer2.sfxId);
                 mario->mot.hammer2.sfxId = -1;
@@ -658,7 +660,7 @@ void mot_hammer2(void) {
         }
         mario->multiTimer--;
         if (mario->hammerChargeLv > 2 && mario->multiTimer == 10) {
-            H2_CLR_PAPER()
+            h2ClrPaper(mario);
         }
         if (mario->multiTimer > 0) {
             break;
@@ -676,7 +678,7 @@ void mot_hammer2(void) {
             break;
         }
         if (mario->hammerChargeLv <= 2) {
-            H2_CLR_PAPER()
+            h2ClrPaper(mario);
             mario->displayDirection = revise360(mario->displayDirection);
             marioAdjustMoveDir();
         }
@@ -768,6 +770,7 @@ static HitEntry* hitEstimate(s32* out) {
     Vec dir4Copy;
     f32 h;
     s32 i;
+    // FAKE: 5.0f held in k5 for four products; the literal changes the object
     f32 k5 = 5.0f;
 #if VERSION <= VERSION_DEMO_JP
     f32 ang;
