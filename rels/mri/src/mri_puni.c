@@ -4375,6 +4375,7 @@ void puniModeEnterSub(PuniData* p) {
  */
 void puniModeEnter(PuniData* p) {
     Vec d;
+    u32 t;
     switch (p->modeStep) {
         case 0: {
                 p->startTime = gp->renderTime;
@@ -4390,13 +4391,12 @@ void puniModeEnter(PuniData* p) {
                 p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
             }
             p->modeStep = 1;
-        case 1: {
-            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
-            if ((s32)t > p->timer) {
-                p->modeStep = 2;
-            }
-            break;
+        case 1:
+        t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
+        if ((s32)t > p->timer) {
+            p->modeStep = 2;
         }
+        break;
         case 2:
             if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
                 p->modeVar0++;

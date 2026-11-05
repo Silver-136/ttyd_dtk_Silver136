@@ -433,6 +433,7 @@ void mot_roll_post(void) {
  */
 void marioRollForceCancel(void) {
     MarioWork* mario = marioGetPtr();
+    f32 d;
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
 #if VERSION <= VERSION_DEMO_JP
         MarioWork* m;
@@ -452,19 +453,17 @@ void marioRollForceCancel(void) {
         m = marioGetPtr();
         m->camShiftTargetZ = 0.0f;
         m->camShiftRate.z = 0.004f;
-        {
-            f32 d = revise360(mario->directionView - mario->targetYaw);
-            if (d >= 180.0f) {
-                mario->displayDirection = 0.0f;
-                mario->displayDirectionTarget = 0.0f;
-                mario->moveDirection = 270.0f;
-                mario->directionView = 270.0f;
-            } else {
-                mario->displayDirection = 180.0f;
-                mario->displayDirectionTarget = 180.0f;
-                mario->moveDirection = 90.0f;
-                mario->directionView = 90.0f;
-            }
+        d = revise360(mario->directionView - mario->targetYaw);
+        if (d >= 180.0f) {
+            mario->displayDirection = 0.0f;
+            mario->displayDirectionTarget = 0.0f;
+            mario->moveDirection = 270.0f;
+            mario->directionView = 270.0f;
+        } else {
+            mario->displayDirection = 180.0f;
+            mario->displayDirectionTarget = 180.0f;
+            mario->moveDirection = 90.0f;
+            mario->directionView = 90.0f;
         }
         marioSetSpec();
         mario->rollFlags = ROLL_STATE_NONE;
