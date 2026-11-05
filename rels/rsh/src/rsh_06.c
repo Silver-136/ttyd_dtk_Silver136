@@ -1234,11 +1234,9 @@ static void ext_moamoa_main(void) {
             case MOAMOA_STATE_APPROACH: {
                     f32 z;
                     f32 x;
-                    {
-                        f32 r = randf(-45.0f, 45.0f);
-                        a = wp->angle;
-                        a += r;
-                    }
+                    r = randf(-45.0f, 45.0f);
+                    a = wp->angle;
+                    a += r;
                     a += 180.0f;
                     d = wp->dist;
                     x = (*pose->mtx)[0][3] + (30.0f * moa_sinx((6.2831855f * a) / 360.0f));

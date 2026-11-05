@@ -3947,6 +3947,7 @@ void puniModeFunbari(PuniData* p) {
     Vec s2;
     Vec d2;
     f32 dist;
+    f32 s;
 
     switch (p->modeStep) {
         case 0: {
@@ -3978,13 +3979,12 @@ void puniModeFunbari(PuniData* p) {
             break;
         }
         case 1:
-        case 2: {
-                f32 s = sin(3.1415927f * p->modeF0 / 180.0f);
-                if (p->modeF0 <= 180.0f) {
-                    p->modeF1 = 0.5f * s;
-                } else {
-                    p->modeF1 = 0.45f * s;
-                }
+        case 2:
+            s = sin(3.1415927f * p->modeF0 / 180.0f);
+            if (p->modeF0 <= 180.0f) {
+                p->modeF1 = 0.5f * s;
+            } else {
+                p->modeF1 = 0.45f * s;
             }
             p->modeF0 += 7.0f;
             if (p->modeF0 >= 360.0f) p->modeF0 = 360.0f;
