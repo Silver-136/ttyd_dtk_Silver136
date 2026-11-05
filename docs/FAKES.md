@@ -291,7 +291,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
 | Both | src/battle/battle_mario.c | (file scope) | no-op (char*) cast; PTR(battle_mario_nullstr) changes the object; battle_mario_nullstr itself is a 4-byte static array (STRING("") at both uses changes the object) | see comment |
 | Both | src/battle/battle_mario.c | _mario_fire_ball_controll | `battle_mario_one`: a named global 1.0f constant for one effFireEntry scale | literal 1.0f at the call: changes the object |
-| Both | src/battle/battle_seq.c | btlseqFirstAct | u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object | see comment |
+| Both | src/battle/battle_seq.c | btlseqFirstAct | u8* view of fbatInfo->setup, cast back to NpcBattleInfo* at its use; NpcBattleInfo* info changes the object; one-case inner `switch (type)` left by `goto done_fa` | see comment |
 | Both | src/battle/battle_seq.c | btlseqTurn | string held in sfxName before the call; passing the literal directly changes the object | see comment |
 | Both | src/battle/battle_seq.c | btlseqAct | block-local unit shadowing the function's; using the function's unit changes the object | see comment |
 | Both | src/battle/battle_seq.c | battleSortPhaseMoveTable | wp copied into a void* and cast back at every use; using wp directly changes the object | see comment |
@@ -349,7 +349,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/driver/arcdrv.c | arcOpen | info used through the pointer infop; passing &info directly changes the object | see comment |
 | Both | src/driver/camdrv.c | camMain | dead zero store (every field is set below); removing it changes the object; `projPt` is a single-use copy of focus for GXProject | see comment |
 | Both | src/driver/camdrv.c | camLetterBox | `party &&` repeats the null test; dropping it changes the object | see comment; tried 2026-11-01: inline partyIsBeingUsed(party) in !party || !used: materializes the bool, longer |
-| Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object | see comment |
+| Both | src/driver/envdrv.c | envGlare | texW/texH are reused to hold the two konst colour selections; reading glare->kcolorSel0/1 at each call changes the object; glareIter/glareCur EnvironmentGlare pointers stepped by `(EnvironmentGlareTexCoord*)p + 1` (glareCur re-copied from glareIter) | see comment |
 | Both | src/driver/envdrv.c | envWaterParent | one-use inline helper for obj->parent; writing it out changes the object | see comment |
 | Both | src/driver/envdrv.c | envCapture, envCapture2 | `& 0xFFFF` masks on the u16 frame sizes before halving | `(u16)((u32)width / 2)`: changes the object |
 | Both | src/driver/fadedrv.c | fadeEntry | types 3-5 are tested as one unsigned compare, (u32)(type - 3) <= 2; type >= 3 && type <= 5 changes the object | see comment |
@@ -402,7 +402,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/eff_kemutest.c | __declspec | zero filler objects with no known owner (4 bytes of .rodata; 28 bytes of .data in JP); without them the object changes | see comment |
 | Both | src/effect/eff_laser.c | effLaserMain | no-op (u32) cast on the BOOL argument; without it the object changes | u32 inBattle local without the cast |
 | JP | src/effect/eff_levelup.c | getX | (gp->language ? 0 : 1) == 0 stands for gp->language != LANGUAGE_JP; the plain test changes the object | see comment |
-| Both | src/effect/eff_levelup.c | effLevelupDisp | 0.5f held in `halfScale` | `width * 0.5f`: changes the object |
+| Both | src/effect/eff_levelup.c | effLevelupDisp | 0.5f held in `halfScale`; work array and texid_tbl walked by byte offsets (ofs/tofs) | `width * 0.5f`: changes the object |
 | Both | src/effect/eff_mahojin.c | effMahojinMain | work re-loaded from effect->userdata (it already holds it); without it the object changes | see comment |
 | Both | src/effect/eff_miss_star.c | effMissStarEntry | endless loop with a break; `while (index > 5) { index -= 5; }` changes the object | see comment |
 | Both | src/effect/eff_mizutama.c | effMizutamaEntry | split computation; `radius = (type + 1) * 10;` changes the object | see comment |
@@ -444,6 +444,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/effect/n64/eff_rappa_n64.c | effRappaN64Entry | block-local temporary for cos(rad); the plain expression changes the object | see comment |
 | Both | src/effect/n64/eff_recover_heart_n64.c | effRecoverHeartDisp | tex first holds the type test, then the texture id; testing the condition directly changes the object | see comment |
 | Both | src/effect/n64/eff_ripple_n64.c | effRippleDisp | type is read through a cast of userdata before work is set; reading work->type changes the object | see comment |
+| Both | src/effect/n64/eff_ripple_n64.c | (file) | `#pragma defer_codegen off` for the whole file | removing it: changes the object (a configure.py flag form not tried) |
 | Both | src/effect/n64/eff_rothammer_fail_n64.c | effRotHammerFailN64Entry | child = work + 1 through a pointer step and back; the plain assignment changes the object; zero held in a local for the 0.0f stores and sin(zero)/cos(zero) | see comment |
 | Both | src/effect/n64/eff_small_star_n64.c | effSmallStarN64Entry | zero kept in a local for the comparisons; comparing with 0.0f literals changes the object | see comment |
 | Both | src/effect/n64/eff_small_star_n64.c | alphaf | alpha scaling through an inline helper; (s32)(w->alpha * 0.6f) written out changes the object | see comment |
@@ -555,7 +556,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/party/party_hit.c | partyWallSlide | unused zero Vec local; without it the object changes | see comment |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_hit.c | partyChkFrontStep | Vec p plus mx/mz temporaries copied into pos | building pos directly: changes the object |
-| Both | src/party/party_hit.c | partySearchWallFront | nn copy of bestNrm and nz copy of nn.z in the wall slide; US-and-later dead `hit = NULL` before the +45 probe loop | bestNrm directly: changes the object (early demos the same) |
+| Both | src/party/party_hit.c | partySearchWallFront | nn copy of bestNrm and nz copy of nn.z in the wall slide; US-and-later dead `hit = NULL` before the +45 probe loop; dead first `bestD = rd` before the +45 loop | bestNrm directly: changes the object (early demos the same) |
 | Both | src/party/party_kuribo.c | pre_kurio_use | msg is always set by the chain above; dropping the test changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_stay | hand-inlined copy of partyStayDist; the call changes the object | see comment |
 | Both | src/party/party_motion.c | party_motion_homing_walk | no-op function-pointer cast; the plain call changes the object | see comment |
@@ -590,7 +591,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_root.c | winRootDisp | hand-written unsigned range test for the closing states 10 and 11; state == 10 // state == 11 changes the object | see comment; tried 2026-11-01: if (i > 0) switch (state) with case 10/11: longer, range subtract lost |
 | Both | src/window/win_root.c | winMsgDisp | the != 0 test is redundant; wp->msgItem > 0 alone changes the object | see comment |
 | Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
-| Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |
+| Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object; GXColor black declared in an extra bare block inside the loop body (block re-indented) | see comment |
 | Both | src/window/win_root.c | winSortGX | constant locals `w = 128.0f`, `w2 = 136.0f` | literals: changes the object |
 | JP, Demos | src/window/win_root.c | winKirinukiGX | JP-side constant locals `w74 = 74.0f`, `w66 = 66.0f` | literals: changes the object |
 | Both | rels/dmo/src/dmo_00.c | demo_window | alpha multiplied by 255 and divided back; using winAlpha directly changes the object. | see comment |

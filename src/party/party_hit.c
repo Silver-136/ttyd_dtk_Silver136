@@ -683,6 +683,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     hit = NULL;
 #endif
     sincosf(&sn2, &cs2, ang + 45.0f);
+    // FAKE: dead first store (the loop sets bestD at the top of each pass); removing it changes the object (early demos the same)
     bestD = rd;
     qpos = *pos;
     {

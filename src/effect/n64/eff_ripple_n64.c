@@ -1,5 +1,6 @@
 // Paper Mario 64 effect: expanding water ripple rings on a surface; base of eff_ripple.c.
 
+// FAKE: deferred code generation is off for this whole file; removing the pragma changes the object
 #pragma defer_codegen off
 #include "eff/n64/eff_ripple_n64.h"
 #include "eff/eff_n64.h"

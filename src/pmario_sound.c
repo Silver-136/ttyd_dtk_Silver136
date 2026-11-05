@@ -11181,6 +11181,7 @@ static void psndENVMain(void) {
                         (psnd.fade[i].dipTime)++;
                     else
 #else
+// Macro, not inline: as a static inline over ent (US and later) the object changes.
 #define ENVAPPLY                                                                             \
     {                                                                                        \
         u8 vol;                                                                              \

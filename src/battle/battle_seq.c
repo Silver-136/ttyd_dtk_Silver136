@@ -428,6 +428,7 @@ static void btlseqFirstAct(BattleWork* wp) {
                         }
                     }
                     BattleSetSeq(wp, SEQ_FIRST_ACT, 0x2000001);
+                    // FAKE: inner switch with one case and a goto past the outer switch; if (type == 0) { ... break; } changes the object
                     goto done_fa;
             }
             switch (type) {

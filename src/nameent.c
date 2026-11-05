@@ -938,96 +938,6 @@ static void nameEntDisp(CameraId cameraId, void* param) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 
-/**
- * Draws the screen background from name.tpl: a 32-pixel strip on each side (textures 0x22 and 0x23)
- * and the 544-pixel middle (0x21), all 480 high.
- */
-static void nameBG(void) {
-    Mtx m1, m2, m3;
-    GXTexObj obj1, obj2, obj3;
-    f32 sy;
-    double h1, w1, h2, w2, h3, w3;
-
-    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
-    GXSetZCompLoc(GX_FALSE);
-    GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
-    GXSetCullMode(GX_CULL_NONE);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-
-    TEXGetGXTexObjFromPalette(*wp->tplFile->data, &obj1, 0x22);
-    GXInitTexObjLOD(&obj1, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj1, GX_TEXMAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    h1 = __fabs(480.0);
-    w1 = __fabs(32.0);
-    sy = (f32)h1 / GXGetTexObjHeight(&obj1);
-    PSMTXScale(m1, (f32)w1 / GXGetTexObjWidth(&obj1), sy, 1.0f);
-    GXLoadTexMtxImm(m1, GX_TEXMTX0, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-304.0f, 240.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(-304.0f, -240.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(-272.0f, -240.0f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(-272.0f, 240.0f, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-
-    TEXGetGXTexObjFromPalette(*wp->tplFile->data, &obj2, 0x21);
-    GXInitTexObjLOD(&obj2, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj2, GX_TEXMAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    h2 = __fabs(480.0);
-    w2 = __fabs(544.0);
-    sy = (f32)h2 / GXGetTexObjHeight(&obj2);
-    PSMTXScale(m2, (f32)w2 / GXGetTexObjWidth(&obj2), sy, 1.0f);
-    GXLoadTexMtxImm(m2, GX_TEXMTX0, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-272.0f, 240.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(-272.0f, -240.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(272.0f, -240.0f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(272.0f, 240.0f, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-
-    TEXGetGXTexObjFromPalette(*wp->tplFile->data, &obj3, 0x23);
-    GXInitTexObjLOD(&obj3, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj3, GX_TEXMAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    h3 = __fabs(480.0);
-    w3 = __fabs(32.0);
-    sy = (f32)h3 / GXGetTexObjHeight(&obj3);
-    PSMTXScale(m3, (f32)w3 / GXGetTexObjWidth(&obj3), sy, 1.0f);
-    GXLoadTexMtxImm(m3, GX_TEXMTX0, GX_MTX2x4);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(272.0f, 240.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXPosition3f32(272.0f, -240.0f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(304.0f, -240.0f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(304.0f, 240.0f, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-}
-
 /** Draws one textured quad from name.tpl texture id at (x, y), w x h, with the texture scaled to fit. */
 static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
@@ -1053,6 +963,35 @@ static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexCoord2f32(1.0f, 1.0f);
     GXPosition3f32(x + w, y, 0.0f);
     GXTexCoord2f32(1.0f, 0.0f);
+}
+
+/**
+ * Draws the screen background from name.tpl: a 32-pixel strip on each side (textures 0x22 and 0x23)
+ * and the 544-pixel middle (0x21), all 480 high.
+ */
+static void nameBG(void) {
+    GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
+    GXSetZCompLoc(GX_FALSE);
+    GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
+    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+    GXSetNumChans(0);
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);
+    GXSetCullMode(GX_CULL_NONE);
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+    GXLoadPosMtxImm(camGetPtr(CAMERA_2D)->view, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+
+    nameTexQuad(0x22, -304.0f, 240.0f, 32.0f, 480.0f);
+    nameTexQuad(0x21, -272.0f, 240.0f, 544.0f, 480.0f);
+    nameTexQuad(0x23, 272.0f, 240.0f, 32.0f, 480.0f);
 }
 
 /**

@@ -635,6 +635,7 @@ static void envGlare(EnvironmentGlare* glare) {
     EnvironmentGlareFilter* glareFilter;
     u32 texH;
     u32 texW;
+    // FAKE: glareIter/glareCur walk the coords as EnvironmentGlare pointers stepped by one EnvironmentGlareTexCoord; one coord pointer over glare->coords changes the object
     EnvironmentGlare* glareIter;
     EnvironmentGlare* glareCur;
     s32 width;

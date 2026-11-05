@@ -43,7 +43,9 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle);
 
 // Flurrie's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define CLOUD_WORK(p) ((PartyCloud*)(p)->useStruct)
-#define BREATH_PARTICLES(p) ((EffKumokumoN64Particle*)(p)->work.cloud.breathEffect->userdata)
+static inline EffKumokumoN64Particle* breathParticles(PartyEntry* p) {
+    return (EffKumokumoN64Particle*)p->work.cloud.breathEffect->userdata;
+}
 
 /**
  * Swings one of the two side rays of Flurrie's gust back and forth:
@@ -489,13 +491,13 @@ void _cloud_use(PartyEntry* party) {
         party->position = party->moveTarget;
         if (party->work.cloud.breathEffect == NULL) {
             party->work.cloud.breathEffect = effKumokumoN64Entry(0, 0, 0.0f, 0.0f, 0.0f, 0.0f, -2.0f, 0.0f);
-            BREATH_PARTICLES(party)->camera = party->camId;
-            BREATH_PARTICLES(party)->r1 = 0x4C;
-            BREATH_PARTICLES(party)->g1 = 0xA7;
-            BREATH_PARTICLES(party)->b1 = 0xCA;
-            BREATH_PARTICLES(party)->r2 = 0x7D;
-            BREATH_PARTICLES(party)->g2 = 0x1B;
-            BREATH_PARTICLES(party)->b2 = 0xF5;
+            breathParticles(party)->camera = party->camId;
+            breathParticles(party)->r1 = 0x4C;
+            breathParticles(party)->g1 = 0xA7;
+            breathParticles(party)->b1 = 0xCA;
+            breathParticles(party)->r2 = 0x7D;
+            breathParticles(party)->g2 = 0x1B;
+            breathParticles(party)->b2 = 0xF5;
         }
         marioChgMot(MARIO_MOTION_CLOUD);
         marioChgPose("M_A_2A");
@@ -824,29 +826,29 @@ static void getHitBreatheout2(PartyEntry* party, f32 angle) {
     ofsZ = 0.0f;
 #if VERSION <= VERSION_DEMO_JP
     movePos(&ofsX, &ofsZ, 24.0f, dir);
-    BREATH_PARTICLES(party)->x = party->position.x + ofsX;
-    BREATH_PARTICLES(party)->y = 18.0f + party->position.y;
-    BREATH_PARTICLES(party)->z = party->position.z + ofsZ;
+    breathParticles(party)->x = party->position.x + ofsX;
+    breathParticles(party)->y = 18.0f + party->position.y;
+    breathParticles(party)->z = party->position.z + ofsZ;
     cl = CLOUD_WORK(party);
-    BREATH_PARTICLES(party)->scale = 0.6f * (cl->breathDist / cl->breathDistMax);
+    breathParticles(party)->scale = 0.6f * (cl->breathDist / cl->breathDistMax);
     cl = CLOUD_WORK(party);
     if (cl->breathDir >= 90.0f && cl->breathDir <= 270.0f) {
-        BREATH_PARTICLES(party)->rot = -25.0f;
+        breathParticles(party)->rot = -25.0f;
     } else {
-        BREATH_PARTICLES(party)->rot = 205.0f;
+        breathParticles(party)->rot = 205.0f;
 #else
     if (party->work.cloud.breathEffect != NULL) {
         movePos(&ofsX, &ofsZ, 24.0f, dir);
-        BREATH_PARTICLES(party)->x = party->position.x + ofsX;
-        BREATH_PARTICLES(party)->y = 18.0f + party->position.y;
-        BREATH_PARTICLES(party)->z = party->position.z + ofsZ;
+        breathParticles(party)->x = party->position.x + ofsX;
+        breathParticles(party)->y = 18.0f + party->position.y;
+        breathParticles(party)->z = party->position.z + ofsZ;
         cl = CLOUD_WORK(party);
-        BREATH_PARTICLES(party)->scale = 0.6f * (cl->breathDist / cl->breathDistMax);
+        breathParticles(party)->scale = 0.6f * (cl->breathDist / cl->breathDistMax);
         cl = CLOUD_WORK(party);
         if (cl->breathDir >= 90.0f && cl->breathDir <= 270.0f) {
-            BREATH_PARTICLES(party)->rot = -25.0f;
+            breathParticles(party)->rot = -25.0f;
         } else {
-            BREATH_PARTICLES(party)->rot = 205.0f;
+            breathParticles(party)->rot = 205.0f;
         }
 #endif
     }

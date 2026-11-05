@@ -130,6 +130,7 @@ static void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
     s32 j;
     s32 frame;
     s32 t;
+    s32 n;
 
     camera = camGetPtr(cameraId);
     work = effect->userdata;
@@ -197,8 +198,8 @@ static void effOpukuWcurtainDisp(CameraId cameraId, void* param) {
 
     for (j = 0; j < i - 1; j++) {
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
-        frame = j << 1;
-        tri2(frame, frame + 2, frame + 1, frame, frame + 1, frame + 2, frame + 3, frame);
+        n = j << 1;
+        tri2(n, n + 2, n + 1, n, n + 1, n + 2, n + 3, n);
     }
 }
 
