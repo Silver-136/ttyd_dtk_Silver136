@@ -309,31 +309,30 @@ void marioForceRollAnime(void) {
 s32 marioRollTryCancel(void) {
     s32 ret = 0;
     MarioWork* mario = marioGetPtr();
+    s32 r;
+    MarioWork* m;
     if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
         return 0;
     }
     if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
         return 0;
     }
-    {
-        s32 r;
-        MarioWork* m = marioGetPtr();
-        if (m->mot.roll.flags & ROLL_FLAG_FIX) {
-            r = 1;
-        } else if (m->flags & MARIO_FLAG_IS_TOUCHING_CEILING) {
-            r = 1;
-        } else if (!m->hitobjStandOn) {
-            r = 1;
-        } else if (marioSlitChkWallAround()) {
-            r = 1;
-        } else {
-            r = 0;
-        }
-        if (!r) {
-            ret = 1;
-            mario->currSubMotionId = 0x14;
-            camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
-        }
+    m = marioGetPtr();
+    if (m->mot.roll.flags & ROLL_FLAG_FIX) {
+        r = 1;
+    } else if (m->flags & MARIO_FLAG_IS_TOUCHING_CEILING) {
+        r = 1;
+    } else if (!m->hitobjStandOn) {
+        r = 1;
+    } else if (marioSlitChkWallAround()) {
+        r = 1;
+    } else {
+        r = 0;
+    }
+    if (!r) {
+        ret = 1;
+        mario->currSubMotionId = 0x14;
+        camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     }
     return ret;
 }

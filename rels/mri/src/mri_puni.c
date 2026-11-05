@@ -4026,6 +4026,7 @@ void puniModeFunbari(PuniData* p) {
  */
 void puniModeWater(PuniData* p) {
     Vec d;
+    u32 t;
     switch (p->modeStep) {
         case 0:
             p->flags |= PUNI_FLAG_HIDDEN;
@@ -4051,21 +4052,20 @@ void puniModeWater(PuniData* p) {
                 p->savedPos.z = z;
             }
             p->modeStep = 3;
-        case 3: {
-            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
-            if ((s32)t < 300) {
-                f32 f = (f32)(s32)t / 300.0f;
-                p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, p->savedPos.x, t, 300);
-                p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, p->savedPos.z, t, 300);
-                p->pos.y = f * (p->modeF0 * f + p->modeF1) + p->moveStart.y;
-                p->prevPos = p->pos;
-            } else {
-                p->pos = p->savedPos;
-                p->prevPos = p->pos;
-                p->modeStep = 4;
-            }
-            break;
+        case 3:
+        t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
+        if ((s32)t < 300) {
+            f32 f = (f32)(s32)t / 300.0f;
+            p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, p->savedPos.x, t, 300);
+            p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, p->savedPos.z, t, 300);
+            p->pos.y = f * (p->modeF0 * f + p->modeF1) + p->moveStart.y;
+            p->prevPos = p->pos;
+        } else {
+            p->pos = p->savedPos;
+            p->prevPos = p->pos;
+            p->modeStep = 4;
         }
+        break;
         case 4:
             p->mode = PUNI_MODE_HAGURE;
             p->anim = 0;
