@@ -67,7 +67,7 @@ typedef struct YuuNpc {
 // YuuNpc.flags
 typedef enum YuuNpcFlags {
     YUUNPC_FLAG_WRAP = (1 << 0),        // 0x1, crowd member moved to the other side of the view when the camera passes
-    YUUNPC_FLAG_RUNNER = (1 << 1),      // 0x2, race NPC (ids 200 and up)
+    YUUNPC_FLAG_RUNNER = (1 << 1),      // 0x2, race NPC (ids 200 and up; 300 in the early demos)
     YUUNPC_FLAG_POSE_HELD = (1 << 2),   // 0x4, pose shown at one frame (pose speed <= 0)
     YUUNPC_TURN_AWAY = (1 << 3),        // 0x8, turning round (turnTimer)
     YUUNPC_TURN_BACK = (1 << 4),        // 0x10, turning back to the course (turnTimer)
@@ -113,7 +113,7 @@ EvtWord evt_yuunpc_minigame4[167];
 
 /**
  * Sine table in 1-degree steps over 450 degrees, so entry a + 90 gives the cosine;
- * yuunpc_pose_sub uses it to turn the sprite NPCs to face their direction.
+ * yuunpc_pose_sub uses it to turn the poses that are not billboards to face their direction.
  */
 f32 yuusintbl[] = {
     0.0f, 0.0174519997f, 0.0348990001f, 0.0523359999f, 0.0697560012f, 0.0871559978f, 0.104528002f, 0.121868998f,
@@ -538,7 +538,7 @@ void yuunpc_set_jump_pose(const char* name, const char* anim, f32 jump) {
 }
 
 /**
- * Per-frame pose update for one NPC: rotates its billboard matrix to face ext->dir,
+ * Per-frame pose update for one NPC: unless the pose is a billboard, rotates its matrix to face ext->dir,
  * works out how far through the pose animation it is, and applies it:
  * either as the texture frame of a sprite NPC or as the local time of a real NPC's animation,
  * copying position and facing. Returns the animation phase t (0 to 1).
@@ -1103,7 +1103,7 @@ s32 goalincheck(YuuNpc* npc) {
 
 /**
  * Picks a random steering error rate for an NPC (between about -0.25 and +0.25,
- * narrower for some states in the early demos), so the Paper Mode racers do not all take the same line.
+ * only -0.1 to +0.1 in the default case and narrower for some states in the early demos), so the Paper Mode racers do not all take the same line.
  */
 #if VERSION <= VERSION_DEMO_JP
 static void errper_set_rtn(YuuNpc* npc) {
@@ -1926,6 +1926,8 @@ void yuunpc_pose_minigame4_main(void) {
 #if VERSION <= VERSION_DEMO_JP
                 cnt = d / 1.6666666f;
 #else
+                // BUG: divides by zero (the early demos divide by 1.6666666f): d > 0 gives +inf, d == 0 gives NaN,
+                // so cnt gets the float-to-int conversion's saturated value and the cnt tests below see an extreme.
                 cnt = d / 0.0f;
 #endif
                 switch (npc->flags & YUUNPC_TURN_MASK) {

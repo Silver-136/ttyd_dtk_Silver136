@@ -318,7 +318,7 @@ EVT_END()
 /**
  * Map init for tou_11, the empty minor-league locker room:
  * NPCs, the blowable poster (pos_1), the shut-in message at n_bero, music,
- * and Mario's and the partner's entry positions (and the title match entry if reserved).
+ * and Mario's and the partner's entry positions (and the shut-in scene if the title match is booked).
  */
 EVT_BEGIN(tou_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))

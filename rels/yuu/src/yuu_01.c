@@ -1020,7 +1020,7 @@ void yuuminigame_disp_2fune(CameraId camera, void* param) {
 
 /**
  * Per-frame state machine for Boat Mode: phase 1 starts minigame02_start, phases 2 and 3 run the rules check,
- * phase 4 launches minigame02_end with the coin counter, a result value and the coin count.
+ * phase 4 launches minigame02_end with the remaining time, a result value and the coin count.
  */
 void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];

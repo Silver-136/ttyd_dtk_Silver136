@@ -576,7 +576,7 @@ void yuuminigame_init_3roll(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Per-frame state machine for Tube Mode: phase 1 starts minigame03_start, phases 2 and 3 run the rules check,
- * phase 4 launches minigame03_end with the coin counter, a result value and the coin count.
+ * phase 4 launches minigame03_end with the remaining time, a result value and the coin count.
  */
 void yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];

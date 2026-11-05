@@ -247,7 +247,7 @@ EVT_END()
 
 /**
  * Init event of the tst_moj_03 map-object test map:
- * places jump stands, a locked door, item boxes, a sign, an arrow, breaking floors and a breakable rock.
+ * places jump stands, a padlock, item boxes, a sign, an arrow, breaking floors and a breakable rock.
  */
 EVT_BEGIN(tst_moj_03_init_evt)
     CALL(evt_mobj_jumpstand_red, 0, STRING("j1r"), 0, 0, -100, 0, LSWF(0))
@@ -808,7 +808,7 @@ EVT_END()
 /**
  * Init event of the tst_item_00 item display map:
  * starts at item 1, shows the first 31 items and creates a red switch that shows the next 31, plus power-up,
- * save and recovery blocks and a locked door.
+ * save and recovery blocks and a padlock.
  */
 EVT_BEGIN(tst_item_00_init_evt)
     SET_VALUE(GW(0), 1)

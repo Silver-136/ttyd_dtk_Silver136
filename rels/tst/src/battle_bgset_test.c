@@ -18,7 +18,7 @@ static USER_FUNC(_wave_offset);
 extern EvtWord bgset_tst_wave_event[];
 
 /**
- * Stage objects of the test battle stages, in four runs: entries 0-7 (trees ki_1 to ki_3, fence saku_1,
+ * Stage objects of the test battle stages, in three runs: entries 0-7 (trees ki_1 to ki_3, fence saku_1,
  * background sets B and C, and the if_wire and if_body objects), 8-12 (a smaller scene of two trees, the
  * fence, B and C), and 13-18 (the tree scene again without the wire objects).
  */
@@ -2491,7 +2491,7 @@ NpcBattleSelect btlgrpsel_test_kishi[] = {
 
 /**
  * Encounter table of tst.rel, indexed by BTLNO_TEST_*: 38 debug fights, one per enemy family (Goombas,
- * Koopas, Buzzies, Bob-ombs, Magikoopas and so on) plus a few developer test rooms. Each entry has one
+ * Koopas, Buzzies, Bob-ombs, Magikoopas and so on) plus BTLNO_TEST_TAMURA, TAMURA2, NAKAYAMA and KISHI. Each entry has one
  * group choice, the shared battle music BGM_ZAKO_BATTLE1 and a fixed random placement range. Registered
  * with relSetBtlAddr in tst.c.
  */
@@ -2926,8 +2926,9 @@ NpcTerritoryInfo btl_tst_setup_no_tbl[] = {
 };
 
 /**
- * Moves a stage object along two sine waves: x = ampX * sin(stepX / periodX), y = ampY * (1 + sin(...)).
- * Args: object name, x step var, x period, x amplitude, y step var, y period, y amplitude.
+ * Moves a stage object along two sine waves: x = ampX * sin(360 degrees * stepX / periodX), y = ampY * (1 + sin(...)).
+ * Args: object name, x step var, x period, x amplitude, y step var, y period, y amplitude. Each call advances both
+ * steps by one, so the periods count calls.
  */
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
@@ -2968,7 +2969,7 @@ static USER_FUNC(_wave_offset) {
 
 /**
  * Endless loop for the test battle stage: each frame calls _wave_offset on stage object B to make it sway on a
- * wave (800-unit x period, 300-unit y period).
+ * wave (800-frame x period, 300-frame y period).
  */
 EVT_BEGIN(bgset_tst_wave_event)
     SET_VALUE(LW(0), 0)

@@ -131,7 +131,8 @@ USER_FUNC(evt_yuucounter_free) {
  * [2] = type (0 distance in Plane Mode, 1 countdown timer, 2 rank),
  * [3] = limit in seconds for type 1 or start count for type 2.
  * Allocates the counter and starts its draw event;
- * on JP and later also tells the Pianta Parlor window event whether to show the timer.
+ * on JP and later also sets the script the Pianta Parlor pause window runs when it opens
+ * (for timers, the one that restarts the time baseline).
  */
 USER_FUNC(evt_yuucounter_alloc) {
     EvtWord* args = event->args;

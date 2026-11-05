@@ -156,7 +156,7 @@ EVT_BEGIN(n_bero_match_reset)
 EVT_END()
 #endif
 
-/** Doors of Grubba's office: the north door back to the corridor (tou_04) and the west door to tou_13. */
+/** Exits of Grubba's office: the north door back to the corridor (tou_04) and the west air-duct opening to tou_13 (no door animation; it runs evt_dakuto on entry). */
 static BeroEntry bero_data[] = {
     {
         "n_bero", // hitName
@@ -431,7 +431,7 @@ EVT_BEGIN(evt_hiki_open)
 #endif
     END_LOOP
 
-    // A button case is registered so the drawer can be pushed shut again.
+    // A push case (CASE_PUSH, no A button needed) is registered so the drawer can be pushed shut again.
     SET_VALUE(LW(0), LW(8))
     SET_VALUE(LW(1), LW(9))
     CALL(evt_run_case_evt, CASE_PUSH, 1, LW(1), 0, PTR(evt_hiki_close), 0)
@@ -804,7 +804,7 @@ static EVT_BEGIN(evt_sensyu)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("eff"), STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
 
-    // Grubba welcomes the new challenger and the camera pushes in while the partner steps aside.
+    // Grubba asks who Mario is and who let him in; the camera pushes in while the partner steps aside.
     CALL(evt_msg_print, 0, STRING("stg3_tou_43"), 0, STRING("ガンス"))
     CALL(evt_cam3d_evt_set, 75, 114, 386, 75, 45, -8, 1000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -812,7 +812,7 @@ static EVT_BEGIN(evt_sensyu)
         CALL(evt_party_set_dir_npc, 0, STRING("ガンス"))
     END_INLINE_EVENT
 
-    // Mario raises his hand to volunteer and nods as Grubba explains the contract.
+    // Mario raises his hand and nods as Grubba asks whether he wants to be a fighter.
     CALL(evt_mario_mov_pos2, 20, 0, FLOAT(60.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(300)
@@ -919,9 +919,9 @@ static EVT_BEGIN(evt_sensyu)
 EVT_END()
 
 /**
- * Chapter 3 intro scene: Grubba welcomes Mario and offers to enter him in the Glitz Pit (stg3_tou_51 to 56).
- * Choice 1 advances to STG3_03_GRUBBA and installs talk_gans; the other choice advances to
- * STG3_04_GONZALES_IS_BORN and runs evt_kinoshikowa.
+ * Chapter 3 intro scene: Grubba offers Mario the Glitz Pit contract (stg3_tou_51 to 56).
+ * Declining (menu choice 1, "I don't think so") advances to STG3_03_GRUBBA and installs talk_gans on a_p_tukue;
+ * signing (choice 0) advances to STG3_04_GONZALES_IS_BORN and runs evt_kinoshikowa.
  */
 EVT_BEGIN(evt_sensyu2)
     CALL(evt_mario_key_onoff, 0)
@@ -983,7 +983,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_1st_leagu)
 
-    // Mario and his partner stand in Grubba's office; the camera frames the desk.
+    // Mario, his partner and Jolene are placed just outside the office door (z -160 to -180); the camera frames Grubba's desk.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 0, -160)
@@ -1026,7 +1026,7 @@ static EVT_BEGIN(evt_1st_leagu)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
 
-    // Mario and his partner step aside and the door shuts.
+    // Mario and his partner come in behind Jolene and the door shuts.
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
         CALL(evt_mario_mov_pos2, -10, -20, FLOAT(60.0f))
@@ -1043,7 +1043,7 @@ static EVT_BEGIN(evt_1st_leagu)
         END_LOOP
     END_INLINE_EVENT
 
-    // Grubba, startled, leaps out from behind the desk (the drawer is shoved shut).
+    // Grubba is startled and jumps on the spot, then the open desk drawer is shoved shut.
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_npc_get_position, STRING("ガンス"), LW(0), LW(1), LW(2))
 #if VERSION >= VERSION_JP
@@ -1149,7 +1149,8 @@ EVT_END()
  * the camera moves in and a paper animation opens the dark panel (kuro_P).
  * Before STG3_20_12_JOLENES_SECRET Grubba (ガンス) and Jolene (キノシコワ) talk below:
  * the storage room intruder, King K's disappearance and keeping it quiet,
- * and Grubba asking where Jolene keeps vanishing to, which she refuses to answer (stg3_tou_316_05 to 316_17);
+ * Grubba asking where Jolene keeps vanishing to, which she refuses to answer, and whether she has heard of
+ * the Crystal Star (stg3_tou_316_05 to 316_17);
  * she leaves and Grubba grumbles that good fighters are a dying breed (320).
  * The partner whispers to Mario (321), Grubba hears the ceiling and asks who is there (322),
  * Mario picks a noise (Squeak, Meow or Belch) and Grubba reacts (325 to 325_02) and goes back to the ring;
@@ -1217,7 +1218,8 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_10"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
 
-        // The camera pulls back; Grubba asks where Jolene keeps vanishing to and she refuses to say.
+        // The camera pulls back; Grubba has her tell the others King K went home, then asks where she keeps
+        // vanishing to (she refuses to say) and whether she has heard of the Crystal Star.
         CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_11"), 0, STRING("ガンス"))
@@ -1451,7 +1453,7 @@ EVT_END()
 
 /**
  * Map init for tou_05, Grubba's office: sets up the Star Piece, the desk papers and the camera animation,
- * drops Mario in from the ceiling when he enters through "fall",
+ * drops Mario onto the vent above the office when he enters through "fall" (from the hole in tou_06),
  * and chooses the scene to run from the story progress.
  */
 EVT_BEGIN(tou_05_init_evt)
@@ -1467,8 +1469,8 @@ EVT_BEGIN(tou_05_init_evt)
 #endif
     CALL(evt_bero_get_entername, LW(0))
 
-    // Entering through the air vent ("fall"): Mario drops into the office from the ceiling
-    // and the partner follows a moment later.
+    // Entering through "fall" (the hole in the tou_06 floor): Mario starts at y 250 above the vent (x -775) and
+    // drops onto it (y 150, above the office); the partner follows a moment later.
     IF_STR_EQUAL(LW(0), STRING("fall"))
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_set_pos, -775, 150, 10)
@@ -1599,7 +1601,8 @@ EVT_BEGIN(tou_05_init_evt)
         END_IF
     END_IF
 
-    // Show the open or closed air duct, depending on whether the way out has been used.
+    // Pick the duct model by story stage: haikikau_2 shows from STG3_30_04_AIR_DUCT_EXIT until
+    // STG3_34_RETURN_TO_ROGUEPORT, and after that only once GSWF_TOU_13_DUCT_EXIT_REOPENED is set.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(LF(0), 0)

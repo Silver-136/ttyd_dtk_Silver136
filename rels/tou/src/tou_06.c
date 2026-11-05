@@ -175,7 +175,7 @@ EVT_BEGIN(evt_ana)
 EVT_END()
 
 /**
- * Mario blows the storage containers (kontena) away:
+ * Flurrie's gust blows the storage containers (kontena) away:
  * a success jingle plays and the story advances to STG3_20_09_BLOWING_CONTAINERS.
  */
 EVT_BEGIN(evt_kontena)

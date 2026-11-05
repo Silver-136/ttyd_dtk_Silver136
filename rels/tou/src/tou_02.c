@@ -523,8 +523,9 @@ EVT_BEGIN(init_gard1)
 EVT_END()
 
 /**
- * Talk script of the left guard: lines depend on story progress (before the arena intro, after he steps aside,
- * after Mario's gone champion).
+ * Talk script of the left guard: lines depend on story progress (before the arena intro, the first visit where he
+ * steps aside, then up to STG3_33_06_BOWSER_TREASURE; afterwards GSWF_TOU_LEFT_AFTER_CHAPTER and
+ * GSWF_TOU_02_GUARD_STEPPED_ASIDE choose the line).
  */
 EVT_BEGIN(talk_gard1)
     SWITCH(GSW_STORY_PROGRESS)
@@ -598,7 +599,7 @@ EVT_END()
 
 /**
  * NPC init for the madam: stands at (525, 0, 0)
- * until STG3_34_RETURN_TO_ROGUEPORT (and at that stage when Mario has not left as champion),
+ * until STG3_34_RETURN_TO_ROGUEPORT (and at that stage until Mario has left Glitzville after the chapter),
  * and is hidden below the map afterwards.
  */
 static EVT_BEGIN(init_madam)
@@ -1120,7 +1121,7 @@ EVT_END()
 
 /**
  * NPC init for チャンピョン in the lobby:
- * only at story stage STG3_33_06_BOWSER_TREASURE, when Mario did not leave as champion,
+ * only at story stage STG3_33_06_BOWSER_TREASURE, while GSWF_TOU_LEFT_AFTER_CHAPTER is clear,
  * he stands at (-15, 0, 25), with NPC_FLAG_INSTANT_TURN set until the sequence is SEQ_GAME.
  */
 static EVT_BEGIN(init_champ)
@@ -1222,7 +1223,7 @@ EVT_END()
 
 /**
  * NPC init for キノシコワ: at STG3_33_06_BOWSER_TREASURE (after the Bowser interlude, before
- * Mario leaves Glitzville) she is placed at (-25, 0, 75) unless Mario left as champion.
+ * Mario leaves Glitzville) she is placed at (-25, 0, 75) unless GSWF_TOU_LEFT_AFTER_CHAPTER is set.
  */
 EVT_BEGIN(init_shikowa)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1250,7 +1251,7 @@ EVT_END()
 
 /**
  * NPC init for ウラノコ in the lobby:
- * only at story stage STG3_33_06_BOWSER_TREASURE, when Mario did not leave as champion,
+ * only at story stage STG3_33_06_BOWSER_TREASURE, while GSWF_TOU_LEFT_AFTER_CHAPTER is clear,
  * he stands at (-75, 0, 50), with NPC_FLAG_INSTANT_TURN set until the sequence is SEQ_GAME.
  */
 static EVT_BEGIN(init_uranoko)
@@ -1282,7 +1283,7 @@ EVT_END()
 
 /**
  * NPC init for アイアンＡ: scaled 1.5 in x and y, and at
- * STG3_33_06_BOWSER_TREASURE placed at (-30, 0, -50) unless Mario left as champion.
+ * STG3_33_06_BOWSER_TREASURE placed at (-30, 0, -50) unless GSWF_TOU_LEFT_AFTER_CHAPTER is set.
  */
 EVT_BEGIN(init_ironA)
     CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT((1.0f)))
@@ -1311,7 +1312,7 @@ EVT_END()
 
 /**
  * NPC init for アイアンＢ: scaled 1.5 in x and y, and at
- * STG3_33_06_BOWSER_TREASURE placed at (-60, 0, -25) unless Mario left as champion.
+ * STG3_33_06_BOWSER_TREASURE placed at (-60, 0, -25) unless GSWF_TOU_LEFT_AFTER_CHAPTER is set.
  */
 EVT_BEGIN(init_ironB)
     CALL(evt_npc_set_scale, STRING("me"), FLOAT(1.5f), FLOAT(1.5f), FLOAT((1.0f)))
@@ -2495,7 +2496,7 @@ EVT_END()
  * and the first-visit scenes (evt_tougi2, evt_momikucha, doors to tou_01, tou_03 and tou_04).
  */
 EVT_BEGIN(tou_02_init_evt)
-    // Music: the lobby theme early in the chapter and after it, the main Glitz Pit theme in between.
+    // Music: BGM_STG3_TOU2 from STG3_00 to STG3_12 and from STG3_33_PEACH_THE_SECRET_WEAPON on, BGM_STG3_TOU1 in between.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))

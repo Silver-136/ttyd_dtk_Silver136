@@ -943,7 +943,7 @@ EVT_BEGIN(minigame01_start)
     CALL(eff_call_minigame, 0, 0, 0, 500)
     WAIT_MS(3000)
 
-    // Mario becomes a paper airplane, the controls come back and the coin counter appears.
+    // Mario becomes a paper airplane, the controls come back and the distance counter appears.
     CALL(evt_change_plane)
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_mario_key_onoff, 1)
@@ -1424,7 +1424,7 @@ void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Per-frame state machine for Plane Mode: phase 1 starts minigame01_start,
- * phase 2 waits for the rules check to finish, phase 3 launches minigame01_end with the coin count,
+ * phase 2 waits for the rules check to finish, phase 3 launches minigame01_end with the distance score,
  * result and monte count.
  */
 void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall) {

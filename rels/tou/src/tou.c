@@ -389,7 +389,7 @@ static USER_FUNC(evt_rankingReInit) {
 
 /**
  * Script helper (no arguments): resets the Glitz Pit to its starting state.
- * Removes item 0x41 from the pouch, clears every fighter's lost flag
+ * Removes item 0x41 from the pouch, clears the lost flag of fighters 0 to 19
  * and the first-match/champion/title-match/last-opponent flags, then rebuilds the ranking.
  */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00002e24, JP tou .text+0x2D60. See docs/NAME_PROVENANCE.md.
@@ -437,7 +437,8 @@ static void insert(s32* list, s32 num, s32 from, s32 to) {
  * Re-sorts the ranking.
  * Fighters who are still above Mario ("win" group) are ordered by score
  * and some are pinned to fixed slots (the champion first, then slots 1, 10, 14, 18,
- * 19 for the flagged fighters); the last opponent is pushed to the end of its group.
+ * 19 for the flagged fighters); the last opponent is moved next to Mario's marker
+ * (the end of the "win" group, or the start of the "lose" group).
  * Mario's marker (id 20) sits between the two groups and his rank goes to GSW_GLITZ_PIT_RANK.
  */
 static void rankingControll(void) {
@@ -670,8 +671,8 @@ static USER_FUNC(evt_tou_get_fighter_battle_msg) {
 
 /**
  * Script helper: picks a match rule for the registration.
- * args[0] = mode (0 forces the rule with id 6, 10 excludes the special ids 0x20/0x30/0x40,
- * anything else is random); returns name (args[1]),
+ * args[0] = mode (the script passes the opponent's fighter id: 0, Rawk Hawk, forces the rule with id 6;
+ * 10, the Armored Harriers, excludes the ids 0x20/0x30/0x40; anything else is random); returns name (args[1]),
  * rule id (args[2]) and the two rule parameters (args[3], args[4]).
  * The table depends on Mario's rank and the story.
  */
@@ -776,7 +777,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
 /**
  * Script helper: args[0] = 0 if Mario won the match, else lost; args[1] = opponent id.
  * Updates the opponent's lost flag and GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT,
- * jitters every fighter's score by a random amount,
+ * jitters the score of every visible (not hidden) fighter by a random amount,
  * records the opponent in GSW_GLITZ_PIT_LAST_OPPONENT and re-sorts the board.
  */
 static USER_FUNC(evt_tou_set_ranking_win_lose) {
@@ -824,8 +825,8 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
 }
 
 /**
- * Script helper: args[0] = rule result bits from the match (bit 2 = rule met);
- * sets or clears GSWF_GLITZ_PIT_CONDITION_KEPT.
+ * Script helper: args[0] = rule result bits from the match (the 0x4 bit = rule met);
+ * sets GSWF_GLITZ_PIT_CONDITION_KEPT when 0x4 is set and clears it when 0x2 or 0x1 is set.
  */
 static USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
@@ -972,7 +973,7 @@ static const char* suuji[] = {
 
 /**
  * Draws the ranking window: a "Ranking" title and the scrolling two-page list of fighter names with rank numbers
- * (the champion's seat in red), clipped by a scissor box.
+ * (Mario's own entry in red, the Champion's Belt icon beside the top entry), clipped by a scissor box.
  * Runs as a display entry queued by evt_tou_print_ranking.
  */
 static void disp_proc(CameraId cameraId, void* param) {
@@ -1251,8 +1252,9 @@ EVT_BEGIN(evt_close)
 EVT_END()
 
 /**
- * Locker door open script, run when Mario pushes on a locker (registered by the locker setup script;
- * evt_close is its counterpart).
+ * Locker door open script, run when Mario presses A in front of a locker (CASE_FRONT_A, registered by the locker
+ * setup script; after a close triggered by standing on the locker it is registered for CASE_PUSH instead).
+ * evt_close is its counterpart.
  * Before STG3_05_MATCH in tou_10, with no match reserved yet,
  * the locker stays shut and a staff member says stg3_tou_67 (the US and later versions skip the line if Mario's
  * input is already locked).
@@ -1613,9 +1615,10 @@ EVT_BEGIN(party_npc_replace)
 EVT_END()
 
 /**
- * Squash-and-stretch of the egg NPC ("たまご") over a hop of LW(3) milliseconds:
- * the width scale eases from 1.2 down to 0.9 and the height scale from 0.9 up to 1.1 (two inline events),
- * while the loop applies both scales to the egg every frame.
+ * Squash-and-stretch of the egg NPC ("たまご") for a hop whose time is passed in LW(3) (milliseconds):
+ * the width scale eases from 1.2 down to 0.9 and the height scale from 0.9 up to 1.1, each over (LW(3) / 2) + 1
+ * milliseconds (two inline events), while the loop applies both scales to the egg every frame for LW(4) + 1 frames
+ * (LW(4) as passed in).
  */
 static EVT_BEGIN(evt_tamago_scale)
     SET_VALUE(GW(10), FLOAT(1.1992188f))
@@ -1656,9 +1659,9 @@ static EVT_BEGIN(evt_tamago_scale)
 EVT_END()
 
 /**
- * Second squash-and-stretch step for the egg NPC ("たまご"), over LW(3) milliseconds:
- * the width eases from 0.9 back to 1.0 and the height from 1.1 back to 1.0,
- * and the loop applies the scales every frame (the settle after the hops of evt_tamago_scale).
+ * Second squash-and-stretch step for the egg NPC ("たまご"), with LW(3) passed in as milliseconds:
+ * the width eases from 0.9 back to 1.0 and the height from 1.1 back to 1.0, each over (LW(3) / 2) + 1 milliseconds,
+ * and the loop applies the scales every frame for LW(4) + 1 frames (the settle after the hops of evt_tamago_scale).
  */
 static EVT_BEGIN(evt_tamago_scale2)
     BEGIN_INLINE_EVENT
@@ -1749,7 +1752,8 @@ EVT_END()
 
 /**
  * Guard's talk script: after the poison remark or the egg scene,
- * he steps out and swings the door of the current map (tou_10, tou_08 or tou_07) open and closed for Mario.
+ * he steps out and swings the door of the current map (tou_10, tou_08 or tou_07) open, leaves, and Mario walks out;
+ * the script then changes map to tou_04 (title match booked, before chapter 3 ends) or tou_03 (the ring).
  */
 EVT_BEGIN(talk_gardman)
     IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
@@ -1989,7 +1993,7 @@ static EVT_BEGIN(evt_gardman)
 EVT_END()
 
 #if VERSION >= VERSION_JP
-/** Spawns the guard's walk-through script (evt_gardman). */
+/** Spawnable wrapper (tou_07 spawns it): runs the guard's match call (evt_gardman) as a child script. */
 EVT_BEGIN(evt_gardman_spawn)
     CALL_CHILD(PTR(evt_gardman))
     RETURN
@@ -1997,8 +2001,10 @@ EVT_END()
 #endif
 
 /**
- * Shared part of the match registration console:
- * sets which map (tou_10, tou_08 or tou_07) is running and prepares the registration prompts.
+ * Shared part of the match registration console, run once Mario has chosen to register:
+ * works out which map (tou_10, tou_08 or tou_07) is running, moves Mario and his partner to the monitor,
+ * announces the next opponent and its rank, reads out and stores the special condition,
+ * then sends the guard (evt_gardman) and marks the match as reserved.
  */
 EVT_BEGIN(evt_tou_match_make_default_sub)
     // Work out which locker room this is (and, in French, the order of the inserted rank and name).
@@ -2216,7 +2222,7 @@ EVT_END()
 /**
  * Interaction with the match registration console ("M_make"):
  * prints the registration prompt and lets Mario reserve a match, picking the opponent and rule.
- * Returns without effect if Mario's controls are disabled.
+ * JP and later return without effect if Mario's controls are disabled.
  */
 EVT_BEGIN(evt_tou_match_make_default)
 #if VERSION >= VERSION_JP
@@ -2827,7 +2833,7 @@ USER_FUNC(chk) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: waits until Mario has been idle, walking or dashing (and not locked out) for 240 frames in total. */
+/** Script helper: waits until Mario has been idle, walking or dashing (and not locked out) for 241 frames in total. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_0000063c, JP tou .text+0x578. See docs/NAME_PROVENANCE.md.
 // Accumulate 241 eligible checks; ineligible controls or motions pause rather than reset the count.
 #if VERSION >= VERSION_JP
@@ -2894,8 +2900,9 @@ USER_FUNC(octo_start) {
 }
 
 /**
- * Script helper: args[0] = Mario's rank, args[1] = won?, args[2] receives the coin payout:
- * 1 on a loss, 20 for the title match, and otherwise a payout growing as the opponent's rank rises.
+ * Script helper: args[0] = Mario's rank after the match, args[1] = won?, args[2] receives the coin payout:
+ * 1 on a loss, 20 on a win that leaves Mario at rank 0 (the champion's seat), and otherwise a payout that grows
+ * as Mario's rank number falls.
  */
 USER_FUNC(fight_money) {
     EvtWord* args = event->args;
@@ -3218,7 +3225,7 @@ EVT_BEGIN(evt_michel_8)
     RETURN
 EVT_END()
 
-/** Pogo's line (stg3_tou_255_01) with a camera move, then he walks off. */
+/** The ポグ NPC's line (stg3_tou_255_01; tou_10 calls him Poku) with a camera move, then he walks off. */
 EVT_BEGIN(evt_michel_9)
     CALL(evt_cam3d_evt_set, -45, 105, 288, -45, 60, -9, 2000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("ポグ"), 0, -80, 0, FLOAT(60.0f), 1)
@@ -3667,10 +3674,6 @@ EVT_END()
  * ranking announcements and cleanup.
  */
 // Reward routing uses the room and pre-match rank; later one-time events use the current rank.
-/**
- * Script run after a match: story follow-ups (Yoshi egg, poison cake, Swoops joining),
- * ranking announcements and cleanup.
- */
 EVT_BEGIN(evt_tou_match_after_default)
     // Back in the locker room: the partner is hidden for the Yoshi egg scenes,
     // and the Shady Koopa and Cleftor are placed where needed.
@@ -3715,10 +3718,6 @@ EVT_BEGIN(evt_tou_match_after_default)
     END_IF
 
     // Work out which locker room this is; Jolene stands beside Mario and his partner.
-    // After the Iron Clefts match the egg hatches into Yoshi (or Pogo has a word);
-    // otherwise the egg says hello.
-    // After the Iron Clefts match the egg hatches into Yoshi (or Pogo has a word);
-    // otherwise the egg says hello.
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
     SET_VALUE(LF(2), 0)
@@ -4139,6 +4138,8 @@ EVT_BEGIN(evt_tou_match_after_default)
         CALL(evt_msg_print_party, STRING("stg3_tou_365_04_03"))
         CALL(evt_pouch_add_item, ITEM_CHAMPS_BELT, LW(0))
     END_IF
+    // After the Armored Harriers match (fighter 10) with Yoshi away, the egg hatches into Yoshi from the egg story
+    // on (before it the ポグ NPC has a word); after any other match the egg hops and Yoshi returns.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
         CALL(chk, LW(0))
@@ -4210,7 +4211,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             CALL(evt_rankingReInit)
         END_IF
 
-        // Major-league milestones: the mystery e-mails, the cake at 6th and Bowser's raid at 5th.
+        // Major-league milestones: the mystery e-mails, the cake at 6th and Bowser's visit at 5th.
         CASE_EQUAL(10)
         CASE_EQUAL(9)
         CASE_EQUAL(8)

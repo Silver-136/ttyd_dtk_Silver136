@@ -106,8 +106,9 @@ EvtWord plane_majin_lecture[715];
 #endif
 
 /**
- * Linear interpolation helper for lect_mario_ido_sum:
- * returns the weighted blend of end and start, ((total - elapsed) * end + elapsed * start) / total.
+ * Linear interpolation for the lecture walking helpers:
+ * returns (total - elapsed) / total * end + elapsed / total * start,
+ * so at elapsed 0 it is end and at elapsed == total it is start.
  */
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;

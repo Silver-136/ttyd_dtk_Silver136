@@ -100,8 +100,9 @@ EvtWord slit_majin_lecture[390];
 #endif
 
 /**
- * Linear blend used by lect_mario_ido_sum: returns (total - elapsed) / total of end plus elapsed / total of
- * start, so the value moves from end (elapsed 0) toward start (elapsed = total) as elapsed grows.
+ * Linear interpolation for the lecture walking helpers:
+ * returns (total - elapsed) / total * end + elapsed / total * start,
+ * so at elapsed 0 it is end and at elapsed == total it is start.
  */
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;

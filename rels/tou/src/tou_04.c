@@ -652,7 +652,7 @@ EVT_BEGIN(move_g)
     RETURN
 EVT_END()
 
-/** Guard 1 refuses to move: he is placed at (-580, 0, 350), then walks to (-580, 300) when the door transition starts. */
+/** Guard 1 refuses to move: he is placed at (-580, 0, 350), then walks to (-580, 300) once the door entry transition is done. */
 EVT_BEGIN(move_g_1_dokimasen)
     CALL(evt_npc_set_position, STRING("me"), -580, 0, 350)
     CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
@@ -856,7 +856,7 @@ EVT_BEGIN(move_g_2)
 EVT_END()
 
 /**
- * NPC init for guard 3: placed at (-620, 0, -300) while the majors or title-room escort flag is set,
+ * NPC init for guard 3: placed at (-620, 0, -300) while the majors or tou_11 escort flag is set,
  * otherwise at his post at (-580, 0, -300).
  */
 EVT_BEGIN(init_g_3)
@@ -890,7 +890,7 @@ EVT_END()
 
 /**
  * Movement script of guard 3, at the major-league locker room door:
- * does nothing while the majors or title-room escort flag is set.
+ * does nothing while the majors or tou_11 escort flag is set.
  * Otherwise he steps out of Mario's way (move_g) when Mario is in the majors (rank 1 to 10),
  * or is the champion (rank 0) while Jolene's escort to the champion's room is pending.
  */
@@ -917,8 +917,8 @@ EVT_BEGIN(move_g_3)
 EVT_END()
 
 /**
- * Guard 4 (the main hall guard) refuses to move:
- * placed at (-300, 0, -530) and walks to (-350, -530) when the door transition starts.
+ * Guard 4 (at the door to Grubba's office) refuses to move:
+ * placed at (-300, 0, -530) and walks to (-350, -530) once the door entry transition is done.
  */
 EVT_BEGIN(move_g_4_dokimasen)
     CALL(evt_npc_set_position, STRING("me"), -300, 0, -530)
@@ -991,8 +991,8 @@ EVT_BEGIN(init_g_4)
 EVT_END()
 
 /**
- * Talk script of guard 4, the main-hall guard: he lets Mario in on the first visit (stg3_tou_42)
- * and gives story- dependent lines about the league, Grubba and the rematch.
+ * Talk script of guard 4, at the door to Grubba's office: he lets Mario in on the first visit (stg3_tou_42)
+ * and gives story-dependent lines about the league, Grubba and the rematch.
  */
 EVT_BEGIN(talk_g_4)
 
@@ -1101,7 +1101,7 @@ EVT_END()
  * from STG3_03_GRUBBA to before the first match,
  * and from STG3_31_GRUBBAS_PLANS to STG3_33_06_BOWSER_TREASURE.
  * At STG3_30_04_AIR_DUCT_EXIT, on entry through s_bero_5 from the office,
- * he starts at (-400, 0, -530) and waits for a door transition to start before walking back in front of the door.
+ * he starts at (-400, 0, -530) and waits for the door entry transition to finish before walking back in front of the door.
  */
 EVT_BEGIN(move_g_4)
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
@@ -2146,7 +2146,7 @@ EVT_BEGIN(evt_gardman3)
         WAIT_FRAMES(1)
     END_LOOP
 
-    // At the far end the guard opens the door to the title match room.
+    // At the far end the guard opens the door to tou_11 (the empty minor-league locker room).
     SET_VALUE(LW(1), 1)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
@@ -2158,7 +2158,7 @@ EVT_BEGIN(evt_gardman3)
         END_IF
     END_LOOP
 
-    // Their walk through starts in an inline event as the map changes to the title match room.
+    // Their walk through starts in an inline event as the map changes to tou_11.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("ガードマン３"), 590, 300, 0, FLOAT(60.0f), 1)
         CALL(evt_mario_mov_pos2, 590, 300, FLOAT(90.0f))
@@ -2422,7 +2422,7 @@ EVT_END()
 /**
  * Rawk Hawk's warning, run at STG3_20_05_MAJORS_4TH_PL:
  * the champion (チャンピョン) waits at (-550, 0, -400),
- * and after the door transition starts he warns Mario to stop stealing the spotlight (stg3_tou_297_27_00)
+ * and once the door entry transition is done he warns Mario to stop stealing the spotlight (stg3_tou_297_27_00)
  * and dashes off down the corridor; the partner wonders if he sent the threatening letters (stg3_tou_297_27_01)
  * and the story advances to STG3_20_06_RAWK_HAWKS_WARNING.
  */
@@ -2468,7 +2468,7 @@ EVT_END()
 /**
  * Run after STG3_34_RETURN_TO_ROGUEPORT when Mario comes out of the minor-league locker room (s_bero_7) at
  * rank 10: guard 1 starts at (-590, 0, 350)
- * and walks back to (-590, 300) in front of the door when the door transition starts.
+ * and walks back to (-590, 300) in front of the door once the door entry transition is done.
  */
 EVT_BEGIN(out_from_tou_10_re)
     CALL(evt_npc_set_position, STRING("ガードマン１"), -590, 0, 350)
@@ -2524,8 +2524,8 @@ EVT_BEGIN(tou_04_init_evt)
         SPAWN_EVENT(PTR(evt_kinoshikowa3))
     END_IF
 
-    // Choose the music and ambience for the story point: quiet while Grubba's plans unfold,
-    // the league theme for most of the story and the ring-side theme otherwise.
+    // Choose the music and ambience for the story point: none during Grubba's plans, Grubba's theme while his
+    // walk-and-talk escort runs, BGM_STG3_TOU2 in the early and late story and BGM_STG3_TOU1 in between.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -2559,7 +2559,7 @@ EVT_BEGIN(tou_04_init_evt)
         END_IF
     END_IF
 
-    // For a booked title match, keep only guard 3's title-room escort flag; clear all four for either toilet warp.
+    // For a booked title match, set guard 3's tou_11 escort flag and clear the other three; either toilet warp clears all four.
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
         SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
         SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
@@ -2579,7 +2579,7 @@ EVT_BEGIN(tou_04_init_evt)
         SET_VALUE(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 0)
     END_IF
 
-    // Run the guard escort for the trip that is pending (minors, majors, title room or champion's room),
+    // Run the guard escort for the trip that is pending (minors, majors, tou_11 or champion's room),
     // with Mario placed at its starting door.
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         CALL(evt_mario_set_pos, -625, 0, 300)

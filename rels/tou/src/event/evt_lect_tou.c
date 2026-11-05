@@ -126,8 +126,9 @@ EvtWord hammer_lv2_juyoitem_lecture[682];
 EvtWord all_juyoitem_lecture_rel[252];
 
 /**
- * Linear interpolation helper for lect_mario_ido_sum:
- * blends from `start` to `end` as `elapsed` goes from 0 to `total`.
+ * Linear interpolation for the lecture walking helpers:
+ * returns (total - elapsed) / total * end + elapsed / total * start,
+ * so at elapsed 0 it is end and at elapsed == total it is start.
  */
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;
@@ -606,8 +607,7 @@ EVT_END()
  * "joined your party" message (lecture_friends_00, 04, 07, 09 with the Yoshi's name, 12, 15 or 17),
  * then the screen is captured into a paper image over the lecture music and Mario blinks in.
  * Only the Yoshi (4) gets a lecture in this file (yoshi_party_lecture_init, yoshi_party_lecture);
- * afterwards they
- * blink out, the camera and sound are restored and the paper image closes.
+ * afterwards Mario and the partner blink out, the camera and sound are restored and the paper image closes.
  */
 EVT_BEGIN(all_party_lecture)
     // The new partner (unless it is Goombella) takes the place of its NPC and joins the party.
@@ -663,7 +663,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
 
-    // The screen is frozen into a paper image over the lecture music, the partner held off to one side.
+    // The lecture music starts; the camera and the partner are lifted 2016 units while the screen is captured into a paper image.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_camid, 7)
     CALL(effitemget_open, STRING("sub_bg"))
@@ -756,7 +756,7 @@ EVT_END()
 
 /**
  * Sets up the Super Hammer tutorial: Mario is moved to the lecture spot,
- * the Toad guide (キノピコ) is placed beside him, and the camera and controls are prepared.
+ * Toadette (キノピコ) is placed beside him, and the camera and controls are prepared.
  */
 EVT_BEGIN(hammer_lv2_juyoitem_lecture_init)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -783,7 +783,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture_init)
 EVT_END()
 
 /**
- * Super Hammer tutorial prompt, part 1: button 0 (A, blinking) bright and button 1 dimmed;
+ * Super Hammer tutorial prompt, part 1: button 0 (B, blinking) bright and button 1 dimmed;
  * animates button 0's icon between two frames every 300 ms until the script is stopped.
  */
 EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub01)
@@ -1222,10 +1222,7 @@ static USER_FUNC(efffukidashichange_cam) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Linear interpolation helper for lect_party_ido_sum:
- * blends from `start` to `end` as `elapsed` goes from 0 to `total`.
- */
+/** Linear interpolation for the partner glide, the same as lect_mario_ido_sub. */
 static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;
 
@@ -1234,7 +1231,8 @@ static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 
 /**
  * Script helper: args[0] = partner slot (0 or 1), args[1] = milliseconds;
- * slides that partner in a straight line from (LW(0), LW(1), LW(2)) to (LW(3), LW(4), LW(5)) over that time.
+ * slides that partner in a straight line over that time. The first call saves the partner's position in
+ * LW(3) to LW(5) and blocks; the partner then moves from there to (LW(0), LW(1), LW(2)).
  * Returns DONE once the time is up.
  */
 // This path waits on its first call; both movement helpers share wwstart and must not overlap.
@@ -1298,7 +1296,7 @@ static USER_FUNC(juyoitem_gogo) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: sets icon flag 2 on the item in LW(8) (marks it for display). */
+/** Script helper: hides the icon of the item in LW(8) (ICON_FLAG_HIDDEN). */
 static USER_FUNC(juyoitem_goato) {
     iconFlagOn(((ItemEntry*)event->lwData[8])->name, ICON_FLAG_HIDDEN);
     return EVT_RETURN_DONE;
@@ -1343,8 +1341,8 @@ static USER_FUNC(lect_push_b_check) {
 }
 
 /**
- * Script helper: args[0] = angle; turns the first partner to face left
- * or right (270 degrees or less = right, above 180 = left).
+ * Script helper: args[0] = angle; sets the first partner's display direction to 0 if the angle is above 180,
+ * otherwise to 180.
  */
 static USER_FUNC(set_dir) {
     s32 dir = evtGetValue(event, event->args[0]);

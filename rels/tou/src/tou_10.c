@@ -312,7 +312,7 @@ EVT_END()
 
 /**
  * NPC init for Michel (マイケル), a Koopa fighter: before STG3_34_RETURN_TO_ROGUEPORT he stands at (120, 0,
- * -30) facing 270, unless the rank 12 fighter has already left (GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED);
+ * -30) facing 270, unless the KP Koopas have retired (GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED, set on reaching rank 12);
  * from that story stage on he is always there.
  */
 static EVT_BEGIN(init_michel)
@@ -512,9 +512,10 @@ EVT_BEGIN(talk_gangan)
 EVT_END()
 
 /**
- * NPC init for Poku (ポグ): before STG3_34_RETURN_TO_ROGUEPORT he is placed at (120, 0, -30) once the Iron
- * Clefts match opening has played, and at STG3_34_RETURN_TO_ROGUEPORT itself
- * unless Mario left Glitzville as champion; otherwise his position is left alone. He faces 270.
+ * NPC init for Poku (ポグ): before STG3_34_RETURN_TO_ROGUEPORT he is placed at (120, 0, -30) once the Armored
+ * Harriers match opening has played (GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN), and at STG3_34_RETURN_TO_ROGUEPORT itself
+ * unless Mario has left by blimp after the chapter (GSWF_TOU_LEFT_AFTER_CHAPTER); otherwise his position is left alone.
+ * He faces 270.
  */
 EVT_BEGIN(init_poku)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -562,7 +563,7 @@ EVT_BEGIN(talk_poku)
     RETURN
 EVT_END()
 
-/** NPC init for the first Iron Cleft: placed at (75, 0, -100) facing 270, scaled 1.5x. */
+/** NPC init for the first Iron Cleft: placed at (75, 0, -100) facing 270, scaled 1.5 in X and Y. */
 EVT_BEGIN(init_iron)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
@@ -594,7 +595,7 @@ EVT_BEGIN(talk_iron)
     RETURN
 EVT_END()
 
-/** NPC init for the second Iron Cleft: placed at (100, 0, -80) facing 270, scaled 1.5x. */
+/** NPC init for the second Iron Cleft: placed at (100, 0, -80) facing 270, scaled 1.5 in X and Y. */
 EVT_BEGIN(init_iron2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
@@ -1131,7 +1132,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_tou_chibi_yoshi)
 
-    // Yoshi's colour comes from the hatching time and the matching baby Yoshi is created off-screen.
+    // Yoshi's colour comes from the time since the egg was received and the matching baby Yoshi is created off-screen.
     CALL(setYoshiColor)
     CALL(getYoshiColor, LW(0))
     SWITCH(LW(0))
@@ -1518,16 +1519,16 @@ EVT_BEGIN(evt_rec)
 EVT_END()
 
 /**
- * Spawned once the first match is reserved: demos first perform 241 one-frame waits, pausing each iteration
+ * Spawned once the first match is reserved: the early demos first perform 241 one-frame waits, pausing each iteration
  * while Mario's input is disabled, then wait for an idle, walking or dashing motion.
- * Retail waits for 241 eligible idle, walking or dashing checks with input and control enabled.
+ * JP and later wait for 241 eligible idle, walking or dashing checks with input and control enabled.
  * If Mario stands by the door (x within 35, z at or below -60) he is bounced back to (40, 0, -120);
  * the guard (ガードマン) opens the door, walks in and closes it, calls Mario to his match (stg3_tou_74),
  * and Jolene says Security is here to escort him (75). Control then returns to Mario.
  */
 static EVT_BEGIN(evt_gardman)
 
-    // Lock input, wait for landing and, in US/PAL, also wait for talking to end.
+    // Lock input, wait for landing and, in US and later, also wait for talking to end.
 #if VERSION <= VERSION_DEMO_JP
     SET_VALUE(LW(0), 0)
     LOOP(0)
@@ -1884,7 +1885,7 @@ EVT_END()
 
 EVT_BEGIN(tou_10_init_evt)
 
-    // Music for the story stage, and the debug skip straight to the Yoshi egg stage.
+    // Music for the story stage, and the story jump to the Yoshi egg stage (GSWF_TOU_10_JUMP_STORY_TO_EGG).
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
@@ -1984,7 +1985,7 @@ EVT_BEGIN(tou_10_init_evt)
         END_SWITCH
     END_IF
 
-    // The bed, the Dubious Paper until Jolene confiscates it, and the one-time Iron Clefts hint.
+    // The bed, the Dubious Paper until Jolene confiscates it, and the one-time partner pep talk after two losses to the Armored Harriers.
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_04_CONFISCATED)

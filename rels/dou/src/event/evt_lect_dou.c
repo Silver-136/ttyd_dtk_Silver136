@@ -103,13 +103,14 @@ EvtWord ship_majin_lecture[888];
 #endif
 
 /**
- * Weighted average used for the lecture's Mario movement:
- * (remaining * end + elapsed * start) / total, so it runs from end at elapsed = 0 to start at elapsed = total.
+ * Linear interpolation for the lecture walking helpers:
+ * returns (total - elapsed) / total * end + elapsed / total * start,
+ * so at elapsed 0 it is end and at elapsed == total it is start.
  */
-static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 from, f32 to) {
+static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;
 
-    return (rem * from + elapsed * to) / total;
+    return (rem * end + elapsed * start) / total;
 }
 
 /**

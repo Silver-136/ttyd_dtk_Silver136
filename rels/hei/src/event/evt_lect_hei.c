@@ -105,8 +105,9 @@ static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[474];
 
 /**
- * Linear interpolation used by the Mario move helper:
- * weights the end value by the time remaining and the start value by the time elapsed, out of total.
+ * Linear interpolation for the lecture walking helpers:
+ * returns (total - elapsed) / total * end + elapsed / total * start,
+ * so at elapsed 0 it is end and at elapsed == total it is start.
  */
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;
@@ -840,7 +841,7 @@ static USER_FUNC(efffukidashichange_cam) {
     return EVT_RETURN_DONE;
 }
 
-/** Linear interpolation used by the partner move helper, same formula as lect_mario_ido_sub. */
+/** Linear interpolation for the partner glide, the same as lect_mario_ido_sub. */
 static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;
 

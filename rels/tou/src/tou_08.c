@@ -799,7 +799,7 @@ EVT_END()
  * they step through into the restroom and it shuts.
  */
 
-// This entrance is available only for the first title-match escape; the return path is separate.
+// Closed with "OCCUPIED!" in the cases listed above; the way back is the separate evt_toile_door2.
 EVT_BEGIN(evt_toile_door)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
@@ -1261,7 +1261,7 @@ EVT_END()
 
 EVT_BEGIN(tou_08_init_evt)
 
-    // The story is moved up to match Mario's rank, then the debug story-skip flags are applied.
+    // The story is moved up to match Mario's rank, then the pending story-jump flags are applied.
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_LESS_OR_EQUAL(3)

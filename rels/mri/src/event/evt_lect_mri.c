@@ -104,10 +104,9 @@ EvtWord boots_lv2_juyoitem_lecture[550];
 EvtWord all_juyoitem_lecture_rel[252];
 
 /**
- * Linear interpolation helper: returns the blend between start and end for the elapsed time out of the total,
- * ((total
- * - elapsed) * end + elapsed * start) / total. Note the arguments: with elapsed = 0 the result is end, and with
- * elapsed = total it is start; lect_mario_ido_sum passes them in the matching order.
+ * Linear interpolation for the lecture walking helpers:
+ * returns (total - elapsed) / total * end + elapsed / total * start,
+ * so at elapsed 0 it is end and at elapsed == total it is start.
  */
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     f32 rem = total - elapsed;

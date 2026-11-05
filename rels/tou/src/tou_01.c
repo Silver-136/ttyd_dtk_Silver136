@@ -726,9 +726,9 @@ static ShopperData35 shopper_data = {
 };
 
 /**
- * Talk script of the hot dog vendor (ホットドッグ): he offers a Hot Dog for 10 coins (stg3_tou_13, or stg3_tou_13_01
- * with Yoshi active, and a yes/no choice)
- * and adds it to the pouch, or tells Mario to sell it if the inventory is full.
+ * Counter script of the hot dog vendor (ホットドッグ), run with A at a_kaunta_: he offers a Hot Dog for 10 coins
+ * (stg3_tou_13, or stg3_tou_13_01 with Yoshi active, and a yes/no choice)
+ * and adds it to the pouch, or tells Mario to sell something if the inventory is full.
  */
 // Charge only after the item was successfully added to the pouch.
 EVT_BEGIN(evt_hotdog)
@@ -917,7 +917,7 @@ EVT_BEGIN(evt_ship_shadow)
     RETURN
 EVT_END()
 
-/** NPC init for the blimp ticket clerk: puts him at (100, 0, 430) facing 270. */
+/** NPC init for the blimp (飛空船), which also talks as its operator: puts it at (100, 0, 430) facing 270. */
 EVT_BEGIN(init_hikuu)
     CALL(evt_npc_set_position, STRING("me"), 100, 0, 430)
     CALL(evt_npc_set_ry, STRING("me"), 270)
@@ -965,7 +965,7 @@ EVT_END()
 /**
  * Talk script of the tavern keeper.
  * Handles Trouble Center job 25 first; otherwise his lines depend on story progress,
- * including the Chapter 3 scene where Mario hears about the 8th-place rank.
+ * including the scene at STG3_20_00_MAJORS_8TH_PLACE where he hands over the Super Hammer a fan left.
  */
 EVT_BEGIN(talk_sakaba)
     // The Trouble Center search for General White: the keeper says White just stopped by.
@@ -1111,8 +1111,8 @@ EVT_BEGIN(init_hot)
 EVT_END()
 
 /**
- * Talk script of the hot dog vendor (outside the main stall):
- * different lines before and after the runaway egg (story stages 11 and 12).
+ * Talk script of the hot dog vendor NPC (the counter itself is evt_hotdog):
+ * one line before STG3_11_RUNAWAY_EGG and another until STG3_12_THE_MINI_YOSHI_EGG, then nothing.
  */
 EVT_BEGIN(talk_hot)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1810,7 +1810,7 @@ static EVT_BEGIN(talk_sarary)
             CALL(evt_msg_print_add, 0, STRING("irai_24_002"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
         ELSE
-            // Later: Mario gives the four chair counts, and one wrong number ends the talk.
+            // Later: Mario gives the four chair counts; if any of the four is wrong the talk ends.
             CALL(evt_msg_print, 0, STRING("irai_24_006"), 0, 0)
             CALL(evt_msg_select, 0, STRING("irai_24_007"))
             IF_INT_NOT_EQUAL(LW(0), 0)
@@ -2304,7 +2304,7 @@ static USER_FUNC(mario_chk) {
 }
 
 #if VERSION <= VERSION_DEMO_JP
-/** The demo's champion reset: the releases use evt_rankingReset of tou.c, which also rebuilds the ranking. */
+/** The early demos' champion reset: JP and later use evt_rankingReset of tou.c, which also rebuilds the ranking. */
 static USER_FUNC(rankingReset) {
     s32 i;
 
@@ -2356,7 +2356,7 @@ EVT_BEGIN(dummy)
     RETURN
 EVT_END()
 
-/** The hot dog vendor's interrupt script: repeatedly moves one tenth of the X/Z distance toward the egg. */
+/** The hot dog vendor's regular (move) script, installed with evt_npc_change_interrupt type 1: repeatedly moves one tenth of the X/Z distance toward the egg. */
 EVT_BEGIN(hot_move_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_WALL_COLLISION)
@@ -2408,7 +2408,7 @@ EVT_END()
 
 /**
  * Squash-and-stretch of the egg NPC ("たまご"): parallel width/height interpolations
- * from 1.2 to 0.9 and 0.9 to 1.1 each last (LW(3) / 2) + 1 milliseconds.
+ * from 1.2 to 0.9 and 0.9 to 1.1 each last (LW(3) / 2) + 1 milliseconds (LW(3) as passed in).
  * The application loop runs for the incoming LW(4) + 1 frame iterations.
  */
 static EVT_BEGIN(evt_tamago_scale)
@@ -3616,7 +3616,7 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_item_entry, STRING("item_04"), ITEM_STAR_PIECE, 615, 160, -75, ITEM_TYPE_STILL, GSWF_STARPIECE_54, 0)
     CALL(evt_item_entry, STRING("item_05"), ITEM_INN_COUPON, 450, 10, -90, ITEM_TYPE_STILL, GSWF_TOU_01_INN_COUPON, 0)
 
-    // The NPCs are left out when Mario arrives for the chapter 8 scenes.
+    // The NPC scripts (init and talk events) are not attached when Mario arrives for the chapter 8 scenes.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
@@ -3684,7 +3684,8 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_hasira"), 1, 0)
     END_IF
 
-    // Register Hot Dog sales before the egg story only above rank 15, or from STG3_12_THE_MINI_YOSHI_EGG on.
+    // Register Hot Dog sales before STG3_11_RUNAWAY_EGG only while Mario's rank number is above 15, and from
+    // STG3_12_THE_MINI_YOSHI_EGG on.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
@@ -3807,7 +3808,7 @@ EVT_BEGIN(tou_01_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_gai_1"), MAP_OBJ_FLAG_DISABLED)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("I_gai_2"), MAP_OBJ_FLAG_DISABLED)
     END_SWITCH
-#if VERSION < VERSION_DEMO_EU // PAL sets the language sign
+#if VERSION < VERSION_DEMO_EU // JP and US: every language sign hidden again (only PAL keeps the one shown above)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_hot"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_hot"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_hot"), MAP_OBJ_FLAG_DISABLED)
@@ -4009,7 +4010,7 @@ EVT_BEGIN(tou_01_init_evt)
 EVT_END()
 
 #if VERSION >= VERSION_US
-// US: copy the sign board's map-blend exemptions onto the localized letter objects
+// US and PAL: copy the sign board's map-blend exemptions onto the localized letter objects
 static inline void kanbanCopyFlags(MapObject* kanban, const char* name) {
     MapObject* obj = mapGetMapObj(name);
     if (obj != NULL) {

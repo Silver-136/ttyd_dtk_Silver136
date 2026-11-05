@@ -186,7 +186,8 @@ EvtWord zonbaba_first_event[677];
 #endif
 
 EVT_BEGIN(jon_init_evt)
-    // When map events are skipped (a debug warp), the floor number is derived from the name of the map.
+    // When the map is entered without an entrance (GW_FLAG_NO_ENTRANCE, a direct map warp), the floor number is
+    // derived from the name of the map.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         CALL(evt_sub_get_mapname, LW(0))
@@ -280,7 +281,8 @@ EVT_BEGIN(jon_init_evt)
 #endif
     END_SWITCH
 
-    // Trouble Center job 12 is set up on every floor map.
+    // Trouble Center job 12 (the sailor) is set up here on every floor map; iri_12_init does something only while
+    // that job is accepted.
     CALL_CHILD(PTR(iri_12_init))
     CALL(evt_sub_get_mapname, LW(0))
 
@@ -344,7 +346,8 @@ EVT_END()
 
 /**
  * Enemy number for each of the 100 floors of the Pit of 100 Trials: every group of twenty floors cycles through five
- * numbers twice and then the next five twice, so the number grows by ten every twenty floors.
+ * numbers twice and then the next five twice, so the number grows by ten every twenty floors. The last twenty floors
+ * break the pattern: they stop at 49 and end with 46 and 51.
  */
 u8 enemy_100[] = {
     1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 6, 7, 8, 9, 10,
@@ -1278,7 +1281,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
     END_IF
 
-    // Spania family (Spania, Hyper Spania and the like).
+    // Spania family (Spinia, Spania and Spunia).
     IF_STR_EQUAL(LW(1), STRING("ヒンニャー"))
         CALL(evt_npc_setup, PTR(npcEnt_hannya))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1364,7 +1367,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
     END_IF
 
-    // Pokey and Bone/Mummy Pokey, then the bony enemies.
+    // Pokey and Poison Pokey, then the bony enemies.
     IF_STR_EQUAL(LW(1), STRING("サンボ"))
         CALL(evt_npc_setup, PTR(npcEnt_sambo))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1416,7 +1419,8 @@ EVT_BEGIN(enemy_setup)
 #endif
     END_IF
 
-    // Bandit-type thieves share the Goomba setup.
+    // The Bandit and Badge Bandit share the Goomba setup. The Lakitu is set up here with the Poison Puff setup and
+    // again further down with the Lava Bubble setup.
     IF_STR_EQUAL(LW(1), STRING("ボロドー"))
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1490,7 +1494,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 20, LW(4))
     END_IF
 
-    // Piranha Plants, Koopatrols, the Swoopers, Bristles and Crazee Dayzees.
+    // Piranha Plants, the Dark Craw (Goomba setup), Koopatrols, the Swoopers, Bristles and Crazee Dayzees.
     IF_STR_EQUAL(LW(1), STRING("パックンフラワー"))
         CALL(evt_npc_setup, PTR(npcEnt_pakkun))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1540,8 +1544,8 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
 
-    // Bonetail on floor 100: an invisible-to-billboard NPC at the room centre whose appearance is scripted by
-    // zonbaba_first_event.
+    // Bonetail on floor 100: an NPC at the room centre that is not culled or turned toward the camera and has paper
+    // bending turned off; zonbaba_first_event scripts his appearance.
     IF_STR_EQUAL(LW(1), STRING("ゾンババ"))
         CALL(evt_npc_setup, PTR(npcEnt_zonbaba))
         CALL(evt_npc_set_position, STRING("敵"), 0, 0, 0)
@@ -1552,7 +1556,7 @@ EVT_BEGIN(enemy_setup)
         SPAWN_EVENT(PTR(zonbaba_first_event))
     END_IF
 
-    // Make the chosen spot the enemy's home, then arm its battle and watch for its defeat.
+    // In the early demos the chosen spot becomes the enemy's home. Then arm its battle and set its flags.
     CALL(evt_npc_get_position, STRING("敵"), LW(3), LW(4), LW(5))
 #if VERSION <= VERSION_DEMO_JP
     CALL(evt_npc_set_home_position, STRING("敵"), LW(3), LW(4), LW(5))
@@ -1561,7 +1565,8 @@ EVT_BEGIN(enemy_setup)
     CALL(setup_npc_ex_para, STRING("敵"))
     CALL(yattukeFlag)
 
-    // Wait until the enemy is dead, then open the exit pipe and report the kill to Trouble Center job 12.
+    // Wait until the enemy is dead, then open the exit pipe (on floor 100 set the Bonetail-defeated flag instead)
+    // and report the kill to Trouble Center job 12.
     BEGIN_INLINE_EVENT
         LABEL(1)
         WAIT_FRAMES(1)
@@ -1613,7 +1618,8 @@ EVT_END()
 
 /**
  * Regular (idle) event of the mover and the trader NPCs:
- * sets them as jumping, floor-landing and animated, then loops forever:
+ * gives them floor collision, gravity and the automatic movement animation and makes them face their movement
+ * direction, then loops forever:
  * turns around, waits, turns back and wanders 100 units in a random direction between 120
  * and 240 degrees of the loiter direction at speed 40, so they pace around the room.
  */
@@ -1683,7 +1689,7 @@ EVT_BEGIN(get_map_name)
 EVT_END()
 
 /**
- * Mover conversation. The demo's mover takes 10 coins for every trip and picks the destination before checking the coins.
+ * Mover conversation. The early demos' mover takes 10 coins for every trip and picks the destination before checking the coins.
  * Retail charges 10, 30 or 10 coins for the three travel choices and picks the destination after payment.
  */
 EVT_BEGIN(talk_idouya)
@@ -1773,8 +1779,8 @@ EVT_BEGIN(talk_idouya)
 EVT_END()
 
 /**
- * The mover (idouya) that stands at the rest rooms and warps Mario to floors he has already reached;
- * talk_idouya handles the conversation.
+ * The mover (idouya) that may stand on a floor (see idouya_setup) and, for a fee, takes Mario 2 or 5 floors down or
+ * back to Rogueport; talk_idouya handles the conversation.
  */
 NpcSetupInfo npcEnt_idouya[] = {
     {
@@ -1793,7 +1799,7 @@ NpcSetupInfo npcEnt_idouya[] = {
 
 /**
  * Gives each floor a 5% chance of a mover Puni (c_pjoho model) standing at x = -100.
- * Never on floor 100 or from floor 95 on.
+ * Never from floor 96 on (which includes floor 100).
  */
 EVT_BEGIN(idouya_setup)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
@@ -1818,8 +1824,9 @@ EVT_END()
  * offers an item shop window with coin display.
  * Mario picks an item at its price, the peddler checks the coins and the item pouch,
  * and he can keep buying until he declines or is out of coins.
- * Non-Japanese versions word the price message by language order (US and later use a format string for
- * non-English).
+ * From the JP version on, the price message is chosen by language (0 is Japanese): the other languages get the item
+ * name and the price in the opposite order, and US and later build the price message of the items below id 240 from a
+ * format string for them.
  */
 EVT_BEGIN(talk_gyousyou)
     // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
@@ -1849,8 +1856,8 @@ EVT_BEGIN(talk_gyousyou)
         GOTO(0)
     END_IF
 
-    // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
-    // name and price for some languages).
+    // The trader names the item and its price and asks Mario to confirm (outside Japanese the name and price
+    // arguments are swapped, except for the early demos).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
 #if VERSION <= VERSION_DEMO_JP
         CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -1898,7 +1905,7 @@ EVT_BEGIN(talk_gyousyou)
         RETURN
     END_IF
 
-    // Mario agrees: the item goes into his pouch, or the trader sighs that he cannot carry any more.
+    // Mario agrees: the item goes into his pouch, or the trader says Mario cannot carry any more.
     CALL(evt_pouch_add_item, LW(1), LW(0))
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_win_coin_off, LW(12))
@@ -1910,7 +1917,8 @@ EVT_BEGIN(talk_gyousyou)
         RETURN
     END_IF
 
-    // Take the price in coins, thank Mario and offer the list again.
+    // Take the price in coins and thank Mario; if he has coins left, ask whether he wants to see more and show the
+    // list again on yes.
     MULTIPLY(LW(3), -1)
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(12))
@@ -2041,7 +2049,8 @@ EVT_END()
 /**
  * Raises the exit pipe (a_dokan_1 / dokan_1_s) 30 units out of the floor over half a second,
  * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
- * Spawned from enemy_setup.
+ * Spawned from enemy_setup, and in the JP version on also run by the blue float switch ("idou_sw") that jon_init_evt
+ * puts on floors where the mover stands.
  */
 EVT_BEGIN(dokan_open)
 #if VERSION <= VERSION_DEMO_JP
@@ -2251,7 +2260,7 @@ BeroEntry bero_return[] = {
     {0},
 };
 
-/** Replacement for the rest-room floor pipe down (dokan_3) from floor 50 on: it leads to jon_01. */
+/** Replacement for the rest-room floor pipe down (dokan_3) on floors 50 to 70: it leads to jon_01. */
 BeroEntry bero_return2[] = {
     {
         "dokan_3", // hitName
@@ -2273,7 +2282,7 @@ BeroEntry bero_return2[] = {
     {0},
 };
 
-/** Replacement for the rest-room floor pipe down (dokan_3) from floor 70 on: it leads to jon_02. */
+/** Replacement for the rest-room floor pipe down (dokan_3) above floor 70 (floors 80 and 90): it leads to jon_02. */
 BeroEntry bero_return3[] = {
     {
         "dokan_3", // hitName
@@ -2296,8 +2305,8 @@ BeroEntry bero_return3[] = {
 };
 
 /**
- * Rest-room setup (floors 10, 20, ... 100): registers the pipes,
- * points the downward pipe at the next map (jon_00, or jon_01 after floor 50, jon_02 after floor 70),
+ * Rest-room setup (floors 10, 20, ... 90; floor 100 uses setup_boss): registers the pipes,
+ * points the downward pipe at the next map (jon_00, or jon_01 from floor 50 on, jon_02 after floor 70),
  * and places that floor's treasure chest (own opened flag per floor, running evt_open_box) and the signboard.
  */
 EVT_BEGIN(setup_return)
@@ -2389,7 +2398,7 @@ BeroEntry bero_prev_return[] = {
     {0},
 };
 
-/** Replacement for the pipe down (dokan_1) of the floor before a rest room in the 50s: it leads to jon_04. */
+/** Replacement for the pipe down (dokan_1) of the floor before a rest room on floors 49, 59 and 69: it leads to jon_04. */
 BeroEntry bero_prev_return2[] = {
     {
         "dokan_1", // hitName
@@ -2412,7 +2421,7 @@ BeroEntry bero_prev_return2[] = {
 };
 
 /**
- * Replacement for the pipe down (dokan_1) of the floor before a rest room from the 70s: it leads to jon_05.
+ * Replacement for the pipe down (dokan_1) of the floor before a rest room on floors 79 and 89: it leads to jon_05.
  */
 BeroEntry bero_prev_return3[] = {
     {
@@ -2436,7 +2445,7 @@ BeroEntry bero_prev_return3[] = {
 };
 
 /**
- * Replacement for the pipe down (dokan_1) of the floor before a rest room from the 90s: it leads to jon_06.
+ * Replacement for the pipe down (dokan_1) of the floor before floor 100 (floor 99): it leads to jon_06.
  */
 BeroEntry bero_prev_return4[] = {
     {
@@ -2531,7 +2540,7 @@ BeroEntry bero_normal[] = {
     {0},
 };
 
-/** Replacement for the pipe down (dokan_1) of an ordinary floor from floor 50 on: it leads to jon_01. */
+/** Replacement for the pipe down (dokan_1) of an ordinary floor on floors 50 to 80: it leads to jon_01. */
 BeroEntry bero_normal2[] = {
     {
         "dokan_1", // hitName
@@ -2553,7 +2562,7 @@ BeroEntry bero_normal2[] = {
     {0},
 };
 
-/** Replacement for the pipe down (dokan_1) of an ordinary floor from floor 70 on: it leads to jon_02. */
+/** Replacement for the pipe down (dokan_1) of an ordinary floor above floor 80: it leads to jon_02. */
 BeroEntry bero_normal3[] = {
     {
         "dokan_1", // hitName
@@ -2901,7 +2910,7 @@ EVT_END()
 
 /**
  * Talk script of the sailor Makkino (マッキノ) in Trouble Center job 12.
- * With no enemy left on the floor, his first talk plays irai_12_008, sets GSWF_TROUBLE_WORK_1,
+ * With no enemy left on the floor, his first talk plays irai_12_008, sets GSWF_TROUBLE_WORK(1),
  * drops his talk script and sends him to the pipe side; later talks play irai_12_010.
  * With an enemy still around he says irai_12_007 before the first talk and irai_12_009 after it.
  */
@@ -2958,7 +2967,7 @@ EVT_END()
 
 /**
  * Sailor drops in on a rest-room floor: lands, then does his farewell (iri_12_makkino_return),
- * or the Bonetail variants on floor 100, and marks the job's return flag (GSWF_TROUBLE_WORK_2).
+ * or the Bonetail variants on floor 100, and marks the job's return flag (GSWF_TROUBLE_WORK(2)).
  */
 EVT_BEGIN(iri_12_makkino_fall_return)
     CALL(evt_mario_key_onoff, 0)
@@ -3050,7 +3059,7 @@ EVT_END()
  * Bobbery's bomb hits the floor-50 graffiti (job 30):
  * closes the message, plays the wall-break sound,
  * captures the wall into an offscreen image and animates it away,
- * swapping the "before" objects for the "after" ones. Sets GSWF_TROUBLE_WORK_1.
+ * swapping the "before" objects for the "after" ones. Sets GSWF_TROUBLE_WORK(1).
  */
 EVT_BEGIN(evt_iri_30_bomb_rakugaki)
     CALL(evt_msg_close, STRING("irai_30_007"))
@@ -3185,8 +3194,7 @@ static EVT_BEGIN(gonbaba_down_shake)
 EVT_END()
 
 EVT_BEGIN(zonbaba_first_event)
-    // Arriving on floor 100 for the first time: Bonetail is hidden underground and the chest is not placed
-    // yet; if he was already beaten the room is set up with only the chest.
+    // If Bonetail was already beaten, he is moved far below the map and the room is set up with only the chest.
     IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
         CALL(evt_npc_set_position, STRING("敵"), 0, -1000, 0)
         CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -3254,7 +3262,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_npc_wait_battle_end)
     CALL(evt_cam3d_evt_set, -769, 50, 527, -22, 114, 7, 1, EASING_SINE_IN_OUT)
 
-    // Bonetail is beaten: he collapses where he stood, shaking the room as he falls.
+    // Bonetail is beaten: he is placed at the room centre and collapses, shaking the room as he falls.
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_H_1"))
     CALL(evt_map_fog_onoff, 0)
     CALL(evt_npc_set_position, STRING("敵"), 0, 60, 0)
@@ -3537,8 +3545,8 @@ USER_FUNC(evt_raster) {
 }
 
 /**
- * Offset of the pixel (x, y) in a 4x4-tiled IA8 texture of 8 tiles per row;
- * raster_disp writes the same arithmetic out by hand.
+ * Offset of the pixel (x, y) in a 4x4-tiled IA8 texture 16 tiles (64 pixels) wide, with the roles of x and y
+ * swapped: y runs along a row of tiles and x down the rows. raster_disp writes the same arithmetic out by hand.
  */
 inline s32 ia8_ofs(s32 x, s32 y) {
     int off = (y / 4) << 5;

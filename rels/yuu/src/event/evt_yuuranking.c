@@ -28,7 +28,7 @@
 const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 #if VERSION >= VERSION_US
-// US keeps separate rankings for 60Hz (record rows 0-3) and 50Hz (rows 4-7) play.
+// US and later keep separate rankings for 60Hz (record rows 0-3) and 50Hz (rows 4-7) play.
 #define RANKING_ROW(f) ((f) + (gp->framerate == 50 ? 1 : 0) * 4)
 #else
 #define RANKING_ROW(f) (f)
@@ -69,7 +69,7 @@ static s32 fontlenpitch(const char* str, s32 pitch) {
 }
 
 #if VERSION >= VERSION_US
-/** US: centered in [x, x + width], squeezed to fit width. */
+/** US and later: centered in [x, x + width], squeezed to fit width. */
 static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -89,7 +89,7 @@ static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 w
     FontDrawMessageMtx(mtx, msg);
 }
 
-/** US: left-aligned at x, squeezed to fit width. */
+/** US and later: left-aligned at x, squeezed to fit width. */
 static inline void yuuDrawLeft(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -107,7 +107,7 @@ static inline void yuuDrawLeft(f32 x, f32 y, f32 scale, const char* msg, s32 wid
     FontDrawMessageMtx(mtx, msg);
 }
 
-// US: right-aligned at x, squeezed to fit width.
+// US and later: right-aligned at x, squeezed to fit width.
 // FAKE: x offset + work pointer instead of x, so wp->x is read after the width test as in the target
 static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 width, YuuRankingWork* wp) {
     Mtx trans;
@@ -129,7 +129,7 @@ static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 w
 
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00008e40, JP yuu .text+0x8D74. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
-/** Squeezes a label to `width`. The demo has no such function: it draws the labels unscaled with FontDrawMessage. */
+/** Squeezes a label to `width`. The early demos have no such function: they draw the labels unscaled with FontDrawMessage. */
 void yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -149,7 +149,7 @@ void yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width
 #endif
 
 #if VERSION >= VERSION_US
-/** US: centered text, squeezed to fit width. */
+/** US and later: centered text, squeezed to fit width. */
 void yuuranking_draw_msg_fit_center(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -169,7 +169,7 @@ void yuuranking_draw_msg_fit_center(f32 x, f32 y, f32 scale, const char* msg, s3
     FontDrawMessageMtx(mtx, msg);
 }
 
-/** US: right-aligned text, squeezed to fit width. */
+/** US and later: right-aligned text, squeezed to fit width. */
 void yuuranking_draw_msg_fit_right(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
     Mtx scl;
@@ -875,8 +875,8 @@ static USER_FUNC(evt_yuuranking_main_func) {
 
 /**
  * Converts a result into monte (the medals paid out):
- * type 0 (Plane Mode) is the score divided by 30000,
- * types 3 and 2 (Boat and Tube Mode) count the time beyond a fixed par per 2 seconds,
+ * type 0 (Plane Mode) is the score divided by 30000 (25000 in the early demos),
+ * types 3 and 2 (Boat and Tube Mode) count the time beyond a fixed par per 2 seconds (the early demos use score / 10000),
  * type 1 (Paper Mode) gives 15 times the fraction of the score limit not used.
  * Then it adds the bonus, applies the multiplier (below 256 multiplies, 256 and above adds mul - 256,
  * negative values subtract) and clamps at 0. ("kesan" is calculation.)

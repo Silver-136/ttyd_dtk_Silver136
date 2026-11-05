@@ -1,4 +1,4 @@
-// tou_07 (闘技場, Glitz Pit): the champion's room; exits to tou_04, tou_08, tou_10, tou_13.
+// tou_07 (闘技場, Glitz Pit): the champion's room; doors to tou_04 and tou_13 (the Grubba scene changes to tou_08).
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -377,7 +377,7 @@ static EVT_BEGIN(evt_champion)
         END_IF
     END_LOOP
 
-    // The partner looks around the room with Mario, puzzled and then startled by what they find.
+    // The partner celebrates the win, then hears a voice in the room; Mario reacts with a question and a find balloon.
     CALL(evt_cam3d_evt_set, 63, 78, 139, 63, 55, -9, 1000, EASING_SINE_IN_OUT)
     CALL(evt_party_move_pos2, 0, 85, -100, FLOAT(60.0f))
     CALL(evt_party_set_dir, 0, 270, 200)
