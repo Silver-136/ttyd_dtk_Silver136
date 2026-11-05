@@ -5191,7 +5191,7 @@ EVT_END()
 
 /**
  * Find event of side-scrolling Goombas: "!" balloon (when on screen),
- * then runs at Mario at its running speed for up to 4 s.
+ * then runs at its running speed for up to 4 s, away from Mario (see the note at evt_npc_reverse_ry).
  */
 EVT_BEGIN(kuriboo2D_find_event)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -5201,6 +5201,9 @@ EVT_BEGIN(kuriboo2D_find_event)
     CALL(evt_npc_set_anim, STRING("me"), STRING("R_1"))
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(0))
     CALL(evt_npc_set_ry, STRING("me"), LW(0))
+
+    // The turn makes it face away from Mario, and evt_npc_facedirection_add sets the target 1000 units in the
+    // facing direction, so the Goomba runs away from him (zako2D_find_event has no turn and charges at Mario).
     CALL(evt_npc_reverse_ry, STRING("me"))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_npc_facedirection_add, STRING("me"), LW(0), 1000)

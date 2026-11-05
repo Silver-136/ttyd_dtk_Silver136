@@ -1701,6 +1701,7 @@ void btlseqTurn(BattleWork* wp) {
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     n = 0;
                     for (count = unit->badgesEquipped.HappyHeart; count > 0; count--) {
+                        // integer division: currentHp / maxHp is 0 below full HP, so the chance is 33 %, at full HP 30 %
                         rate = 33 - ((unit->currentHp / unit->maxHp) * 3);
                         if (irand(100) < rate) {
                             n++;
@@ -1750,6 +1751,7 @@ void btlseqTurn(BattleWork* wp) {
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     n = 0;
                     for (rate = unit->badgesEquipped.HappyFlower; rate > 0; rate--) {
+                        // integer division: currentFp / maxFp is 0 below full FP, so the chance is 33 %, at full FP 30 %
                         count = 33 - ((unit->currentFp / unit->maxFp) * 3);
                         if (irand(100) < count) {
                             n++;

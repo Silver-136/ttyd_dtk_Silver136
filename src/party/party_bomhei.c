@@ -638,6 +638,7 @@ void bomhei_use_main(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
             party->work.bomhei.sfxId = psndSFXOn_3D((const char*)PSND_SFX_PARTY_PBM_FUSE1, &party->playerPtr->position);
 #else
+            // the first fuse sound only starts while the second one (FUSE2) is not playing
             if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
                 party->work.bomhei.sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE1), &party->playerPtr->position);
             }

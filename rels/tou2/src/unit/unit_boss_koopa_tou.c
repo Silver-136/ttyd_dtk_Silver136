@@ -1079,7 +1079,7 @@ static USER_FUNC(_icon_jump_icon) {
  */
 static USER_FUNC(party_cannot_use_command) {
     BattleWork* wp = _battleWorkPointer;
-    s32 r = irand(1);
+    s32 r = irand(1); // always 0: case 1 (the partner's item command) is never chosen
     s32 var = event->args[0];
 #if VERSION >= VERSION_US
     s32 id = evtGetValue(event, event->args[1]);
@@ -1127,7 +1127,7 @@ static USER_FUNC(party_cannot_use_command) {
  */
 static USER_FUNC(mario_cannot_use_command) {
     BattleWork* wp = _battleWorkPointer;
-    s32 r = irand(2);
+    s32 r = irand(2); // 0 or 1: case 2 (the item command) is never chosen
     s32 var = event->args[0];
     s32 icon = 0;
 

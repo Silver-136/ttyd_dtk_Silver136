@@ -2551,6 +2551,7 @@ BOOL partyGetAppearPos5(PartyEntry* party, HitEntry* hit, Vec* out) {
             pos.z = c * r + mobj->z;
             dir = (Vec){0.0f, -1.0f, 0.0f};
             floor = partyHitCheck(party, &pos, &dir, &hitPos, &hitNrm, &dist);
+            // a spot with no floor within 150 units below is accepted too, not only one over dry floor
             if (!floor || !(hitGetAttr(floor) & HIT_ATTR_WATER_HAZARD)) {
                 break;
             }

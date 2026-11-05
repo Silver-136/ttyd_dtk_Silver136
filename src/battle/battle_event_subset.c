@@ -417,6 +417,8 @@ EVT_BEGIN(btldefaultevt_avoid_guard)
     CALL(btlevtcmd_AnimeSetMotionSpeed, LW(10), LW(11), FLOAT(1.0f))
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_BODYGUARD)
     CALL(btlevtcmd_WaitAttackEnd)
+
+    // Not the pose test above again (LW(2) now holds the z position): LW(14) and LW(15) come from the damage event.
     IF_INT_EQUAL(LW(14), LW(15))
         CALL(btlevtcmd_AnimeSetMotionSpeed, LW(10), LW(11), FLOAT(2.0f))
     END_IF

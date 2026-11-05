@@ -1032,6 +1032,11 @@ EVT_BEGIN(partyVivianAttack_MagicalPowder)
         GOTO(50)
     END_IF
     CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
+
+    // BUG: the test is the wrong way round against the prize switch below: 0 to 3 correct presses pass
+    // DAMAGE_RESULT_AC_SUCCESS, 4 and more do not. The action command itself reports success from one correct
+    // press (AC_BUTTON_DOWN_FLAG_PARTIAL_SUCCESS), so the flag only changes the case of no correct press:
+    // with All or Nothing equipped the attack still gets the badge's bonus then.
     IF_INT_LESS_OR_EQUAL(LW(0), 3)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_AC_SUCCESS, LW(5))
     ELSE
