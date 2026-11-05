@@ -9,6 +9,8 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "driver/effdrv.h"
+static void effSparkDisp(CameraId cameraId, EffectEntry* effect);
+static void effSparkMain(EffectEntry* effect);
 
 typedef struct EffSparkParticle {
     s32 type;   // 0x0
@@ -100,7 +102,7 @@ EffectEntry* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
  * Advances each spark's sequence: at frame 0 it starts 16 units from the centre on its own angle,
  * moves outward with decaying velocity and follows the scale/alpha tables. Soft delete fades the whole effect.
  */
-void effSparkMain(EffectEntry* effect) {
+static void effSparkMain(EffectEntry* effect) {
     EffSparkParticle* p = effect->userdata;
     s32 i;
     s32 type;
@@ -188,7 +190,7 @@ void effSparkMain(EffectEntry* effect) {
 }
 
 /** Draws each active spark as a camera-facing textured quad rotated to its angle. */
-void effSparkDisp(CameraId cameraId, EffectEntry* effect) {
+static void effSparkDisp(CameraId cameraId, EffectEntry* effect) {
     EffSparkParticle* p = effect->userdata;
     CameraEntry* camera;
     GXTexObj texObj;

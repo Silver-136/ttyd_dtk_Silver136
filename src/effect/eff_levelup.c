@@ -14,6 +14,8 @@
 #include <dolphin/mtx.h>
 #include "sfx_name_word.h"
 #include "evt/evt_cam.h"
+static void effLevelupDisp(CameraId cameraId, EffectEntry* effect);
+static void effLevelupMain(EffectEntry* effect);
 
 typedef struct EffLevelupWork {
     s32 type;     // 0x0
@@ -151,7 +153,7 @@ EffectEntry* effLevelupEntry(s32 type, f32 x, f32 y, f32 z, s32 limit) {
  * Drops the pieces in along y_trans (shaking the screen on landing), stretches the third one in, holds,
  * slides the first off to the right and the others to the left, and deletes the effect.
  */
-void effLevelupMain(EffectEntry* effect) {
+static void effLevelupMain(EffectEntry* effect) {
     EffLevelupWork* work = effect->userdata;
     Vec position2;
     Vec position = { 0.0f, 0.0f, 0.0f };
@@ -222,7 +224,7 @@ void effLevelupMain(EffectEntry* effect) {
 }
 
 /** Draws the banner letters in 2D at their offsets and scales. */
-void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
+static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
     s32 ofs;
     s32 tofs;
     s32 xofs;

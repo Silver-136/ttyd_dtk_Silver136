@@ -10,6 +10,8 @@
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+static void effMizutamaDisp(CameraId cameraId, EffectEntry* effect);
+static void effMizutamaMain(EffectEntry* effect);
 
 typedef struct EffMizutamaWork {
     s32 type;       // 0x0
@@ -99,7 +101,7 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
 }
 
 /** Per frame: slows each bubble, lets it drift upward while it shrinks, and deletes the effect when all are gone. */
-void effMizutamaMain(EffectEntry* effect) {
+static void effMizutamaMain(EffectEntry* effect) {
     EffMizutamaWork* work = effect->userdata;
     Vec position;
     s32 done, i;
@@ -130,7 +132,7 @@ void effMizutamaMain(EffectEntry* effect) {
 }
 
 /** Draws each bubble as a camera-facing textured quad (effect texture 0x3F). */
-void effMizutamaDisp(CameraId cameraId, EffectEntry* effect) {
+static void effMizutamaDisp(CameraId cameraId, EffectEntry* effect) {
     EffMizutamaWork* work = effect->userdata;
     CameraEntry* camera;
     f32 baseY, size, half;

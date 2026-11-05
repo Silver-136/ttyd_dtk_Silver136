@@ -6,6 +6,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "version.h"
+static void effMahornDisp(CameraId cameraId, EffectEntry* effect);
+static void effMahornMain(EffectEntry* effect);
 
 typedef struct EffMahornWork {
     s32 type;     // 0x0
@@ -75,7 +77,7 @@ EffectEntry* effMahornEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32
  * Per frame: counts down each ring's delay, pulses its scale along its scale curve while its own alpha decays
  * slowly, fades all rings out over the last 16 frames of the duration and then deletes the effect.
  */
-void effMahornMain(EffectEntry* effect) {
+static void effMahornMain(EffectEntry* effect) {
     EffMahornWork* work = effect->userdata;
     Vec position;
     s32 i;
@@ -113,7 +115,7 @@ void effMahornMain(EffectEntry* effect) {
 }
 
 /** Draws each ring as a camera-facing textured quad (effect texture 0x82) with its own scale and alpha. */
-void effMahornDisp(CameraId cameraId, EffectEntry* effect) {
+static void effMahornDisp(CameraId cameraId, EffectEntry* effect) {
     BOOL odd;
     EffMahornWork* work = effect->userdata;
     s32 alpha, i;

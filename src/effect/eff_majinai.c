@@ -14,6 +14,7 @@
 #include "memory.h"
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
+static void effMajinaiDisp(CameraId cameraId, EffectEntry* effect);
 
 /**
  * Spawns the charm/spell effect at (x, y, z); called when Mario casts a spell in battle (battle_mario.c),
@@ -164,7 +165,7 @@ void effMajinaiMain(EffectEntry* effect) {
 }
 
 /** Draws the MOBJ_EFF_majinai animation pose at the effect position. */
-void effMajinaiDisp(CameraId cameraId, EffectEntry* effect) {
+static void effMajinaiDisp(CameraId cameraId, EffectEntry* effect) {
     EffMajinaiWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

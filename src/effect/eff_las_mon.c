@@ -8,6 +8,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effLasMonDisp(CameraId cameraId, EffectEntry* effect);
+static void effLasMonMain(EffectEntry* effect);
 
 typedef struct EffLasMonWork {
     s32 type;     // 0x0
@@ -44,7 +46,7 @@ EffectEntry* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /** Loads the animation, plays A_1 once then holds S_1, and fades out over 16 frames on soft delete. */
-void effLasMonMain(EffectEntry* effect) {
+static void effLasMonMain(EffectEntry* effect) {
     EffLasMonWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -93,7 +95,7 @@ void effLasMonMain(EffectEntry* effect) {
 }
 
 /** Draws the pose at the effect position with the current alpha. */
-void effLasMonDisp(CameraId cameraId, EffectEntry* effect) {
+static void effLasMonDisp(CameraId cameraId, EffectEntry* effect) {
     EffLasMonWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

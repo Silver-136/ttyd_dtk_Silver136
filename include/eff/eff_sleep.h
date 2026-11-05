@@ -16,4 +16,3 @@ typedef struct effSleepData {
 } effSleepData;
 
 EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation);
-void effSleepMain(EffectEntry* effect);

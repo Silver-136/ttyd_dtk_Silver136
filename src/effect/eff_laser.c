@@ -10,6 +10,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effLaserDisp(CameraId cameraId, EffectEntry* effect);
+static void effLaserMain(EffectEntry* effect);
 
 typedef struct EffLaserWork {
     s32 type;       // 0x0
@@ -58,7 +60,7 @@ EffectEntry* effLaserEntry(s32 type, f32 x, f32 y, f32 z) {
  * Eases the beam down over 60 frames, then plays A_1 and fades the laser out (alpha 1 per frame). State 2, the
  * white screen fade, is skipped: state 1 jumps to 3.
  */
-void effLaserMain(EffectEntry* effect) {
+static void effLaserMain(EffectEntry* effect) {
     EffLaserWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -120,7 +122,7 @@ void effLaserMain(EffectEntry* effect) {
 }
 
 /** Draws the MOBJ_EFF_laser pose billboarded toward the camera. */
-void effLaserDisp(CameraId cameraId, EffectEntry* effect) {
+static void effLaserDisp(CameraId cameraId, EffectEntry* effect) {
     EffLaserWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

@@ -8,6 +8,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effTreasureMapDisp(CameraId cameraId, EffectEntry* effect);
+static void effTreasureMapMain(EffectEntry* effect);
 
 /**
  * Spawns the treasure map at (x, y, z); the map model is shown until the effect is removed.
@@ -38,7 +40,7 @@ EffectEntry* effTreasureMapEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /** Waits for the EFF_treasure_map group, starts its animation, and on soft delete fades alpha out over 16 frames. */
-void effTreasureMapMain(EffectEntry* effect) {
+static void effTreasureMapMain(EffectEntry* effect) {
     EffTreasureMapWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -79,7 +81,7 @@ void effTreasureMapMain(EffectEntry* effect) {
 }
 
 /** Draws the map twice: first a larger brown copy as an outline, then the normal one on top. */
-void effTreasureMapDisp(CameraId cameraId, EffectEntry* effect) {
+static void effTreasureMapDisp(CameraId cameraId, EffectEntry* effect) {
     EffTreasureMapWork* work = effect->userdata;
     Mtx trans;
     Mtx scale;

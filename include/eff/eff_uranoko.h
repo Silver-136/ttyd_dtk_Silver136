@@ -18,5 +18,3 @@ typedef struct EffUranokoWork {
 } EffUranokoWork;
 
 EffectEntry* effUranokoEntry(s32 type, s32 duration, f32 x, f32 y, f32 z);
-void effUranokoMain(EffectEntry* effect);
-void effUranokoDisp(CameraId cameraId, EffectEntry* effect);

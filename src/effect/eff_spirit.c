@@ -10,6 +10,8 @@
 #include "version.h"
 #include "eff/eff_magic1_n64.h"
 #include "driver/effdrv.h"
+static void effSpiritDisp(CameraId cameraId, EffectEntry* effect);
+static void effSpiritMain(EffectEntry* effect);
 
 typedef struct EffSpiritWork {
     s32 type;       // 0x0
@@ -81,7 +83,7 @@ EffectEntry* effSpiritEntry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, 
  * state 1 interpolates to the target along an arc (50 units high at mid-flight) while shrinking, then deletes.
  * The colour cycles every 32 frames.
  */
-void effSpiritMain(EffectEntry* effect) {
+static void effSpiritMain(EffectEntry* effect) {
     EffSpiritWork* work = effect->userdata;
     Vec position;
     f32 ang;
@@ -168,7 +170,7 @@ void effSpiritMain(EffectEntry* effect) {
 }
 
 /** Draws the orb as one camera-facing quad tinted with the current colour. */
-void effSpiritDisp(CameraId cameraId, EffectEntry* effect) {
+static void effSpiritDisp(CameraId cameraId, EffectEntry* effect) {
     EffSpiritWork* work = effect->userdata;
     CameraEntry* camera;
     GXTexObj texObj;

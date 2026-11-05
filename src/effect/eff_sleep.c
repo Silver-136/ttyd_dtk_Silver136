@@ -12,6 +12,7 @@
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
 #include "driver/effdrv.h"
+static void effSleepMain(EffectEntry* effect);
 
 // local prototypes
 static void effSleepDisp(CameraId camId, void* param);
@@ -62,7 +63,7 @@ EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
 }
 
 /** Fades the base alpha in and out, and fades in each of the 3 marks after its staggered delay. */
-void effSleepMain(EffectEntry* effect) {
+static void effSleepMain(EffectEntry* effect) {
     effSleepData* data = effect->userdata;
     int i;
     Vec position;

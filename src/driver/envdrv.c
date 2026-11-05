@@ -16,6 +16,7 @@
 #include <math.h>
 #include "driver/camdrv.h"
 #include "driver/fadedrv.h"
+static void envGlare(EnvironmentGlare* glare);
 
 // the work of the current mode: work[1] in battle, work[0] in the field
 #define envGetWork() (gp->inBattle ? &work[1] : &work[0])
@@ -625,7 +626,7 @@ void envBlurOff(void) {
  * Copies the glare filter's screen rectangle to a half-size texture and adds it back over the rectangle once per
  * offset in glare (up to 8 offsets per pass).
  */
-void envGlare(EnvironmentGlare* glare) {
+static void envGlare(EnvironmentGlare* glare) {
     static f32 frame_cnt = 0.0f;
     EnvironmentWork* envWork = envGetWork();
     s16 sx;

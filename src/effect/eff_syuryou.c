@@ -9,6 +9,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effSyuryouDisp(CameraId cameraId, EffectEntry* effect);
+static void effSyuryouMain(EffectEntry* effect);
 
 /**
  * Spawns Grodus's effect at (x, y, z): type 0 his staff animation, type 1 his barrier.
@@ -47,7 +49,7 @@ EffectEntry* effSyuryouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
  * soft delete or timeout fades the alpha over 32 frames;
  * the staff deletes itself after one loop and the barrier switches to its S_1 animation.
  */
-void effSyuryouMain(EffectEntry* effect) {
+static void effSyuryouMain(EffectEntry* effect) {
     EffSyuryouWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -108,7 +110,7 @@ void effSyuryouMain(EffectEntry* effect) {
 }
 
 /** Draws the animation pose camera-facing, with the fade alpha applied as an event colour. */
-void effSyuryouDisp(CameraId cameraId, EffectEntry* effect) {
+static void effSyuryouDisp(CameraId cameraId, EffectEntry* effect) {
     EffSyuryouWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

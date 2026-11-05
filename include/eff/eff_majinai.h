@@ -18,4 +18,3 @@ typedef struct EffMajinaiWork {
 
 EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z);
 void effMajinaiMain(EffectEntry* effect);
-void effMajinaiDisp(CameraId cameraId, EffectEntry* effect);

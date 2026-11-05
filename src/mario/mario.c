@@ -42,8 +42,9 @@
 #include "mario/mario_kemuri.h"
 #include <dolphin/pad.h>
 #include "driver/mapdrv.h"
-
-
+static void marioDispBlur(CameraId camId, void* param);
+static void marioMoveMain(void);
+static void marioCtrlOff2Main(void);
 
 // defined in mario_hit.c with no parameter, but called here with one
 void dou10_yoko_yari3(void* p);
@@ -95,7 +96,6 @@ MarioWork* marioGetPtr(void) {
 s32 marioGetColor(void) {
     return mp->colorId;
 }
-
 
 /**
  * Releases the up to three animation pose sets of the current character (front, back, event)
@@ -1115,7 +1115,6 @@ void marioReInit(void) {
     wp->returnPos = (Vec){0.0f, -10000.0f, 0.0f};
 }
 
-
 /** Every other frame while motion blur is on, records Mario's position in the 8-entry blur trail. */
 static inline void marioMainBlur(MarioWork* wp) {
     if ((wp->frameCounter & 1) && (mp->dispFlags & MARIO_DISP_FLAG_BLUR)) {
@@ -1409,7 +1408,7 @@ static inline BOOL marioChkRollMot(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void marioCtrlOff2Main(void) {
 #else
-void marioCtrlOff2Main(void) {
+static void marioCtrlOff2Main(void) {
 #endif
     MarioWork* wp = mp;
     MarioMotion mot = wp->currMotionId;
@@ -1484,7 +1483,6 @@ void marioCtrlOff2Main(void) {
 #endif
     }
 }
-
 
 /** Stores Mario's current screen position in MarioWork. */
 static inline void marioMove_screenPos(void) {
@@ -1563,7 +1561,7 @@ void marioMove(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void marioMoveMain(void) {
 #else
-void marioMoveMain(void) {
+static void marioMoveMain(void) {
 #endif
     MarioWork* wp = mp;
     PartyEntry* party;
@@ -1986,7 +1984,7 @@ f32 marioGetScale(void) {
  * overshooting and settling back for the paper-turn look (degrees); the hammer snaps instead.
  * Skipped while sideways.
  */
-void marioMakeDispDir(void) {
+static void marioMakeDispDir(void) {
     MarioWork* wp = mp;
     f32 diff;
     f32 tgt;
@@ -2136,7 +2134,7 @@ void marioMakeDispDir(void) {
  * Switches Mario's or Peach's pose to its back-facing version while he moves away from the camera,
  * and back to the front version otherwise.
  */
-void marioRearAnime(void) {
+static void marioRearAnime(void) {
     MarioWork* wp = mp;
     const char* name;
     f32 diff;
@@ -2387,7 +2385,7 @@ static void marioDispBlurSub(Mtx unused, s32 blurId) {
  * Draw callback for Mario with motion blur: draws trail slots 7 through 1 as fading ghosts through
  * marioDispBlurSub. The angle values it computes are never used.
  */
-void marioDispBlur(CameraId camId, void* param) {
+static void marioDispBlur(CameraId camId, void* param) {
     MarioWork* wp = param;
     s32 i;
     Mtx mtx;

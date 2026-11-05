@@ -9,6 +9,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effQueenDisp(CameraId cameraId, EffectEntry* effect);
+static void effQueenMain(EffectEntry* effect);
 
 typedef struct EffQueenWork {
     s32 type;       // 0x0
@@ -57,7 +59,7 @@ EffectEntry* effQueenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size
 }
 
 /** Per frame: loads the MOBJ_EFF_queen_tornade animation, fades it in and out and deletes the effect at the end. */
-void effQueenMain(EffectEntry* effect) {
+static void effQueenMain(EffectEntry* effect) {
     EffQueenWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -102,7 +104,7 @@ void effQueenMain(EffectEntry* effect) {
 }
 
 /** Draws the camera-facing tornado pose in xlu modes 1-3 at draw scale 10. */
-void effQueenDisp(CameraId cameraId, EffectEntry* effect) {
+static void effQueenDisp(CameraId cameraId, EffectEntry* effect) {
     EffQueenWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

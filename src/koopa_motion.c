@@ -21,6 +21,7 @@
 #include "sfx_name_word.h"
 #include "eff/eff_mizutama.h"
 #include "mario/mario_hit.h"
+static void kpaSwimMove(void);
 
 /**
  * Bowser's walk and dash speeds per power-up level in 3D stages (kpa_walk, kpa_dash), then the walk animation
@@ -772,7 +773,7 @@ void kpa_powdown(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void kpaSwimMove(void) {
 #else
-void kpaSwimMove(void) {
+static void kpaSwimMove(void) {
 #endif
     MarioWork* mario = marioGetPtr();
     f32 spd = mario->kpaSpeed;

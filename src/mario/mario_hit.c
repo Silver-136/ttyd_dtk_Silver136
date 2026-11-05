@@ -31,6 +31,7 @@
 #include "sfx_name_word.h"
 #include "koopa.h"
 #include "pmario_sound.h"
+static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang);
 
 /** Zero vectors that start the ray position and direction of Mario's collision checks and landing ray. */
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
@@ -354,7 +355,7 @@ static inline HitEntry* marioHitCheckAttr2Inl(Vec* pos, Vec* dir, Vec* outPos, V
  * it does not skip the hidden ? / badge / 10-coin blocks, so his head finds them on the way up.
  * Otherwise it uses the normal filters.
  */
-HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
+static HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist) {
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
     f32 d = *dist;
@@ -2737,7 +2738,7 @@ static inline BOOL marioHitCheckVecChk(Vec* p, Vec* d, Vec* op, Vec* on, f32* di
  * A floor above his feet or less than 2 below gives its y in *y and is returned,
  * which marioChkGnd uses to climb 5-11 unit steps; a lower floor gives the drop in *h and its direction in *ang.
  */
-HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
+static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
     Vec outPos;
     Vec outNrm;
     f32 x0;

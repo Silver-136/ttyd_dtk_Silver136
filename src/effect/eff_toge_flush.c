@@ -9,6 +9,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "eff/eff_magic1_n64.h"
+static void effTogeFlushDisp(CameraId cameraId, EffectEntry* effect);
+static void effTogeFlushMain(EffectEntry* effect);
 
 typedef struct EffTogeFlushWork {
     s32 type;       // 0x0
@@ -68,7 +70,7 @@ EffectEntry* effTogeFlushEntry(s32 type, f32 x, f32 y, f32 z, s32 life) {
 }
 
 /** Grows the flash and fades it out after 6 frames, spins it with decay, and pulses the glow behind it by sine. */
-void effTogeFlushMain(EffectEntry* effect) {
+static void effTogeFlushMain(EffectEntry* effect) {
     s32 life;
     EffTogeFlushWork* work = effect->userdata;
     s32 age;
@@ -109,7 +111,7 @@ void effTogeFlushMain(EffectEntry* effect) {
  * Draws a pulsing coloured glow quad, then the (non-pulsing) flash quad on top,
  * using one of three flash textures depending on the remaining life.
  */
-void effTogeFlushDisp(CameraId cameraId, EffectEntry* effect) {
+static void effTogeFlushDisp(CameraId cameraId, EffectEntry* effect) {
     EffTogeFlushWork* work = effect->userdata;
     s32 type = work->type;
     GXTexObj texObj;

@@ -5,7 +5,6 @@ void kpa_walk(void);
 
 void quake_kpaLandOn(void);
 
-void kpaSwimMove(void);
 void kpaSetSpec(void);
 void kpa_fall(void);
 void kpa_hip(void);

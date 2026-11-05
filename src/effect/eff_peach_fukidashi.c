@@ -12,6 +12,8 @@
 #include "icon_ids.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+static void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect);
+static void effPeachFukidashiMain(EffectEntry* effect);
 
 // EffPeachFukidashiWork.flags above the two icon bits: draw the cross (effSetPeachFukiBatu).
 enum { PEACH_FUKI_FLAG_CROSS = 0x80 };
@@ -80,7 +82,7 @@ EffectEntry* effPeachFukidashiEntry(s32 type, NpcEntry* npc, s32 duration, f32 x
  * Per frame: counts the display timer down (1000 or more means no limit),
  * deletes the effect at 0 and registers the draw callback.
  */
-void effPeachFukidashiMain(EffectEntry* effect) {
+static void effPeachFukidashiMain(EffectEntry* effect) {
     EffPeachFukidashiWork* work = effect->userdata;
 
     if (work->timer < 1000) {
@@ -94,7 +96,7 @@ void effPeachFukidashiMain(EffectEntry* effect) {
 }
 
 /** Draws the speech bubble next to the speaker's head, rotated around the camera view axis. */
-void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
+static void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     EffPeachFukidashiWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

@@ -149,4 +149,3 @@ void camSetTypePersp(CameraId cameraId);
 void camSetTypeOrtho(CameraId cameraId);
 
 void getScreenPoint(Vec* model, Vec* screen);
-void camLetterBox(void);

@@ -13,8 +13,6 @@ BOOL marioChkBero(HitEntry* hit);
 HitEntry* marioHitCheckVec(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 
 HitEntry* dou10_yoko_yari(f32* out);
-HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang);
-HitEntry* marioHitCheck2(Vec* pos, Vec* dir, Vec* outPos, Vec* outNrm, f32* dist);
 HitEntry* marioLandonChk_old(f32* outY, f32 spd);
 void marioSearchFrontWall_staying(f32 dz);
 HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h);

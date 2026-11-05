@@ -95,7 +95,6 @@ extern EvtWord bero_case_exec_none[];
 extern EvtWord bero_case_exec_pipe_sub[];
 extern EvtWord bero_case_exec_road[];
 extern EvtWord bero_case_init_check[];
-void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* start, Vec* end);
 extern BeroEntry bero_null[];
 extern EvtWord bero_play_out_anime[];
 extern EvtWord default_entevt[];

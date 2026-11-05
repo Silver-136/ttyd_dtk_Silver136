@@ -18,6 +18,7 @@
 #include "cam_road.h"
 #include "cam_shift.h"
 #include "battle/battle_camera.h"
+static void camLetterBox(void);
 
 // 12.5 degrees (half of the 25-degree fovY) in radians, passed to tan(): the second value is 12.5 degrees rounded
 // to float, the first is two float steps below it
@@ -804,7 +805,7 @@ static void camLetterBoxDraw(CameraId cameraId, void* param) {
  * The bars slide in 3 pixels per frame to 49 (top) and 44 (bottom) and fade out when done;
  * also sets the letterbox sound mix (quieter music, louder sound effects) while they are up.
  */
-void camLetterBox(void) {
+static void camLetterBox(void) {
     CameraEntry* camera = camPtrTbl[CAMERA_2D];
     PartyEntry* party = partyGetPtr(0);
     if (!(camera->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & BERO_EXEC_BUSY)) {

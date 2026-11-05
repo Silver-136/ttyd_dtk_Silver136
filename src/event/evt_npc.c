@@ -25,6 +25,7 @@
 #include <math.h>
 #include "sfx_name_word.h"
 #include "driver/mapdrv.h"
+static f32 _intplGetFloat(s32 mode, f32 t);
 
 // clang-format off
 // .sdata
@@ -1140,7 +1141,7 @@ USER_FUNC(evt_npc_homing_target) {
 
 /** intplGetValue, but for a normalized t in [0, 1] */
 // intplGetValue, but for a normalized t in [0, 1]
-f32 _intplGetFloat(s32 mode, f32 t) {
+static f32 _intplGetFloat(s32 mode, f32 t) {
     f32 v, u, c;
     f32 r;
 

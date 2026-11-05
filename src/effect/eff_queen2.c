@@ -11,6 +11,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
+static void effQueen2Disp(CameraId cameraId, EffectEntry* effect);
+static void effQueen2Main(EffectEntry* effect);
 
 typedef struct EffQueen2Work {
     s32 type;            // 0x0
@@ -60,7 +62,7 @@ EffectEntry* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
  * Per frame: fades the sphere in (60 frames), scales it from its start scale to 3 (120 frames), starts the charge
  * light, then two flashes 30 frames apart; soft-deletes the charge light at the second and ends the next frame.
  */
-void effQueen2Main(EffectEntry* effect) {
+static void effQueen2Main(EffectEntry* effect) {
     EffQueen2Work* work = effect->userdata;
     Vec position;
 
@@ -129,7 +131,7 @@ void effQueen2Main(EffectEntry* effect) {
 }
 
 /** Draws the dark sphere at radius 10 x scale (the scale starts at the spawn-time camera distance / 10). */
-void effQueen2Disp(CameraId cameraId, EffectEntry* effect) {
+static void effQueen2Disp(CameraId cameraId, EffectEntry* effect) {
     EffQueen2Work* work = effect->userdata;
     CameraEntry* camera;
     Mtx trans;

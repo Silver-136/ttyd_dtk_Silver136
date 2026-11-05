@@ -6,6 +6,8 @@
 #include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+static void effTorchDisp(CameraId cameraId, EffectEntry* effect);
+static void effTorchMain(EffectEntry* effect);
 
 typedef struct EffTorchWork {
     s32 type;          // 0x0
@@ -174,7 +176,7 @@ EffectEntry* effTorchEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
 }
 
 /** Does nothing per frame except queue the draw callback; the flame is animated purely by the texture scroll. */
-void effTorchMain(EffectEntry* effect) {
+static void effTorchMain(EffectEntry* effect) {
     EffTorchWork* work = effect->userdata;
 
     dispEntry(CAMERA_3D, dispCalcZ(&work->position), DISP_MODE_XLU, (DispCallback)effTorchDisp, effect);
@@ -184,7 +186,7 @@ void effTorchMain(EffectEntry* effect) {
  * Draws six overlapping quads with the flame texture pair, each scrolled upward at a slightly different phase,
  * additively blended and camera-facing.
  */
-void effTorchDisp(CameraId cameraId, EffectEntry* effect) {
+static void effTorchDisp(CameraId cameraId, EffectEntry* effect) {
     EffTorchWork* work = effect->userdata;
     CameraEntry* camera;
     s32 i;

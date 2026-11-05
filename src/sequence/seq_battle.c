@@ -33,6 +33,10 @@
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
 #include "seq/seq_battle.h"
+static void battle_exit(void);
+#if VERSION >= VERSION_JP
+static BOOL battle_init(void);
+#endif
 
 #if VERSION <= VERSION_DEMO_JP
 #include "data/mapdata.h"
@@ -278,7 +282,7 @@ void seq_battleMain(SequenceWork* work) {
 }
 
 /** Later versions: same setup, returning FALSE once done (seq_battleMain state 4 retries while TRUE). */
-BOOL battle_init(void) {
+static BOOL battle_init(void) {
 #else
 void seq_battleMain(SequenceWork* work) {
     switch (work->state) {
@@ -493,7 +497,7 @@ static void battle_init(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void battle_exit(void) {
 #else
-void battle_exit(void) {
+static void battle_exit(void) {
 #endif
     LightEntry* light;
     Mtx mtx;

@@ -699,7 +699,7 @@ USER_FUNC(bero_get_position_normal) {
  * Start and end points for pipe travel: id 0 goes into the pipe, otherwise out of it;
  * side pipes move a units along X (floor-snapped), up/down pipes a units along Y, others stay at the hit object.
  */
-void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* start, Vec* end) {
+static void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* start, Vec* end) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofs;
     hz = hy = hx = 0.0f;

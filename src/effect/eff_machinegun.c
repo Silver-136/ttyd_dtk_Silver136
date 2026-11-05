@@ -8,6 +8,8 @@
 #include "version.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+static void effMachinegunDisp(CameraId cameraId, EffectEntry* effect);
+static void effMachinegunMain(EffectEntry* effect);
 
 typedef struct EffMachinegunWork {
     s32 type;     // 0x0
@@ -44,7 +46,7 @@ EffectEntry* effMachinegunEntry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 sp
 }
 
 /** Moves the shot, slowing it by 10 percent per frame and fading 10 alpha per frame until it disappears. */
-void effMachinegunMain(EffectEntry* effect) {
+static void effMachinegunMain(EffectEntry* effect) {
     EffMachinegunWork* work = effect->userdata;
     Vec position;
 
@@ -61,7 +63,7 @@ void effMachinegunMain(EffectEntry* effect) {
 }
 
 /** Draws the shot as a rotated sprite (texture 0x89) with a grey tint. */
-void effMachinegunDisp(CameraId cameraId, EffectEntry* effect) {
+static void effMachinegunDisp(CameraId cameraId, EffectEntry* effect) {
     EffMachinegunWork* work = effect->userdata;
     CameraEntry* camera;
     GXTexObj texObj;

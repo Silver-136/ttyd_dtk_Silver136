@@ -8,6 +8,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effNokotarouDisp(CameraId cameraId, EffectEntry* effect);
+static void effNokotarouMain(EffectEntry* effect);
 
 /**
  * Spawns the Koops effect at (x, y, z) scaled by `size` for `duration` frames (0 or less: until soft-deleted);
@@ -45,7 +47,7 @@ EffectEntry* effNokotarouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 
 }
 
 /** Per frame: advances the two MOBJ_EFF_nokotarou3 animations, fades the effect and deletes it at the end. */
-void effNokotarouMain(EffectEntry* effect) {
+static void effNokotarouMain(EffectEntry* effect) {
     EffNokotarouWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -94,7 +96,7 @@ void effNokotarouMain(EffectEntry* effect) {
  * Draws two camera-facing poses (draw passes 1-3 each): S_1 scaled evenly, and A_1 stretched by the offset
  * from the start point to the current point.
  */
-void effNokotarouDisp(CameraId cameraId, EffectEntry* effect) {
+static void effNokotarouDisp(CameraId cameraId, EffectEntry* effect) {
     EffNokotarouWork* work = effect->userdata;
     Mtx mtx;
     Mtx rot;

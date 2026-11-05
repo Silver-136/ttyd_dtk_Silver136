@@ -8,6 +8,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effUranokoDisp(CameraId cameraId, EffectEntry* effect);
+static void effUranokoMain(EffectEntry* effect);
 
 EffectEntry* effUranokoEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
@@ -38,7 +40,7 @@ EffectEntry* effUranokoEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
 }
 
 /** Waits for the MOBJ_EFF_uranoko group, starts the A_1 animation, eases the scale up to 1 and fades out at the end. */
-void effUranokoMain(EffectEntry* effect) {
+static void effUranokoMain(EffectEntry* effect) {
     EffUranokoWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -78,7 +80,7 @@ void effUranokoMain(EffectEntry* effect) {
 }
 
 /** Draws the aura pose camera-facing, with the fade alpha as an event colour. */
-void effUranokoDisp(CameraId cameraId, EffectEntry* effect) {
+static void effUranokoDisp(CameraId cameraId, EffectEntry* effect) {
     EffUranokoWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

@@ -10,6 +10,8 @@
 #include "libc_decls.h"
 #include "eff/eff_mist.h"
 #include "driver/effdrv.h"
+static void effToikiDisp(CameraId cameraId, EffectEntry* effect);
+static void effToikiMain(EffectEntry* effect);
 
 typedef struct EffToikiWork {
     s32 type;         // 0x0
@@ -174,7 +176,7 @@ EffectEntry* effToikiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
  * and drops a mist puff (effMistEntry of type + 1) near its leading edge on frames where the timer
  * is a multiple of 20, while the scroll is between 1 and 4.
  */
-void effToikiMain(EffectEntry* effect) {
+static void effToikiMain(EffectEntry* effect) {
     EffToikiWork* work = effect->userdata;
     Vec position;
     Vec mist;
@@ -231,7 +233,7 @@ void effToikiMain(EffectEntry* effect) {
  * Draws the breath model (an indexed display-list cloud) tinted by a per-type colour,
  * with the texture scrolled across it.
  */
-void effToikiDisp(CameraId cameraId, EffectEntry* effect) {
+static void effToikiDisp(CameraId cameraId, EffectEntry* effect) {
     EffToikiWork* work = effect->userdata;
     static u8 color_tbl[3][4] = { { 0x03, 0x02, 0x21, 0xFF }, { 0xD8, 0x0F, 0x51, 0xFF }, { 0x0B, 0x1B, 0x00, 0xFF } };
     GXTexObj texObj;

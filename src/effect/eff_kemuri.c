@@ -13,6 +13,7 @@
 #include <string.h>
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
+static void effKemuriMain(EffectEntry* effect);
 
 static void effKemuriDisp(CameraId camId, void* param);
 static void effKemuri2Main(EffectEntry* entry);
@@ -165,7 +166,7 @@ EffectEntry* effKemuri2Entry(f32 x, f32 y, f32 z, f32 dx, f32 dz) {
  * Steps each puff's texture frame, scales it from the touchdown/heavy tables, slides type 0 puffs outward, and
  * deletes the effect once a puff reaches its lifetime.
  */
-void effKemuriMain(EffectEntry* effect) {
+static void effKemuriMain(EffectEntry* effect) {
     effKemuriData* data = effect->userdata;
     Vec pos2;
     Vec pos = {0.0f, 0.0f, 0.0f};

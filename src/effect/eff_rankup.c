@@ -10,6 +10,8 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
+static void effRankupDisp(CameraId cameraId, EffectEntry* effect);
+static void effRankupMain(EffectEntry* effect);
 
 #if VERSION >= VERSION_US
 /**
@@ -54,7 +56,7 @@ EffectEntry* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 /** Per frame: loads the banner animation, fades it out late in the loop, and deletes the effect after one loop. */
-void effRankupMain(EffectEntry* effect) {
+static void effRankupMain(EffectEntry* effect) {
     EffRankupWork* work = effect->userdata;
     Vec position;
     BOOL inBattle;
@@ -114,7 +116,7 @@ void effRankupMain(EffectEntry* effect) {
 }
 
 /** Draws the camera-facing banner animation pose in xlu modes 1-3 at draw scale 6. */
-void effRankupDisp(CameraId cameraId, EffectEntry* effect) {
+static void effRankupDisp(CameraId cameraId, EffectEntry* effect) {
     EffRankupWork* work = effect->userdata;
     Mtx mtx;
     Mtx scale;

@@ -20,5 +20,3 @@ typedef struct EffNokotarouWork {
 } EffNokotarouWork;
 
 EffectEntry* effNokotarouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size);
-void effNokotarouMain(EffectEntry* effect);
-void effNokotarouDisp(CameraId cameraId, EffectEntry* effect);

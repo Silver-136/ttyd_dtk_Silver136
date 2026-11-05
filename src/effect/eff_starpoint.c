@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include "icon_ids.h"
 #include "poly_trig.h"
+static void effStarPointDisp(CameraId cameraId, EffectEntry* effect);
+static void effStarPointMain(EffectEntry* effect);
 
 #define PI 3.1415927f
 #define HALF_PI 1.5707964f
@@ -111,7 +113,7 @@ EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
  * Runs ballistic motion for each icon once its delay is up, fading it out after it starts falling;
  * deletes the effect 60 frames after the start.
  */
-void effStarPointMain(EffectEntry* effect) {
+static void effStarPointMain(EffectEntry* effect) {
     EffStarPointWork* work = effect->userdata;
     Vec position;
     s32 i;
@@ -145,7 +147,7 @@ void effStarPointMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), DISP_MODE_ALPHA_TEST, (DispCallback)effStarPointDisp, effect);
 }
 
-void effStarPointDisp(CameraId cameraId, EffectEntry* effect) {
+static void effStarPointDisp(CameraId cameraId, EffectEntry* effect) {
     EffStarPointWork* work = effect->userdata;
     Mtx mtx;
     Mtx rot;

@@ -9,6 +9,8 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include "sfx_name_word.h"
+static void effTeresaDisp(CameraId cameraId, EffectEntry* effect);
+static void effTeresaMain(EffectEntry* effect);
 
 typedef struct EffTeresaWork {
     s32 type;                   // 0x0
@@ -61,7 +63,7 @@ EffectEntry* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
  * Type 0 shrinks and spins, then on vanishing starts a smoke puff and a second sound and fades out.
  * Type 1 expands towards scale 20 while its alpha decays; both delete once the alpha is nearly zero.
  */
-void effTeresaMain(EffectEntry* effect) {
+static void effTeresaMain(EffectEntry* effect) {
     EffTeresaWork* work = effect->userdata;
     Vec position;
     Vec tmp = { 0.0f, 0.0f, 0.0f };
@@ -111,7 +113,7 @@ void effTeresaMain(EffectEntry* effect) {
 }
 
 /** Draws the Boo texture as a camera-facing quad: white for type 0, black for type 1. */
-void effTeresaDisp(CameraId cameraId, EffectEntry* effect) {
+static void effTeresaDisp(CameraId cameraId, EffectEntry* effect) {
     EffTeresaWork* work = effect->userdata;
     CameraEntry* camera;
     s32 type;

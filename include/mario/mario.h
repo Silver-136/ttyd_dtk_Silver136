@@ -670,9 +670,7 @@ void marioPoseInit(void);
 void marioInit(void);
 void marioReInit(void);
 void marioMain(void);
-void marioCtrlOff2Main(void);
 void marioMove(void);
-void marioMoveMain(void);
 BOOL marioChkPushAnime(void);
 s32 marioAnimeId(void);
 void marioChgDamagePose(void);
@@ -689,10 +687,7 @@ void marioPaperLightOff(void);
 void marioGetScreenPos(Vec position, f32* x, f32* y, f32* z);
 BOOL marioChkInScreen(s32 x, s32 y);
 f32 marioGetScale(void);
-void marioMakeDispDir(void);
-void marioRearAnime(void);
 void marioPreDisp(void);
-void marioDispBlur(CameraId camId, void* param);
 void marioDisp(CameraId camId, void* param);
 
 #if VERSION >= VERSION_US

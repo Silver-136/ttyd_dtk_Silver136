@@ -7,6 +7,8 @@
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+static void effMissStarDisp(CameraId cameraId, EffectEntry* effect);
+static void effMissStarMain(EffectEntry* effect);
 
 typedef struct EffMissStarWork {
     Vec position;     // 0x0
@@ -108,7 +110,7 @@ EffectEntry* effMissStarEntry(s32 count, s32 delay, f32 x, f32 y, f32 z, s32 ind
  * Per frame: moves and spins each star (slowing it after 4 frames), turns it to face the camera and deletes
  * the effect 10 frames after the first star's life runs out. alpha is never changed or drawn.
  */
-void effMissStarMain(EffectEntry* effect) {
+static void effMissStarMain(EffectEntry* effect) {
     EffMissStarWork* work = effect->userdata;
     Vec position;
     Vec position2;
@@ -154,7 +156,7 @@ void effMissStarMain(EffectEntry* effect) {
 }
 
 /** Draws each star as a camera-facing textured quad (effect texture 24). */
-void effMissStarDisp(CameraId cameraId, EffectEntry* effect) {
+static void effMissStarDisp(CameraId cameraId, EffectEntry* effect) {
     EffMissStarWork* work = effect->userdata;
     GXTexObj texObj;
     Mtx mtx;

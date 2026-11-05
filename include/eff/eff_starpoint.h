@@ -7,5 +7,3 @@
 #include <dolphin/types.h>
 
 EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z);
-void effStarPointMain(EffectEntry* effect);
-void effStarPointDisp(CameraId cameraId, EffectEntry* effect);
