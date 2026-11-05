@@ -147,6 +147,13 @@ latest naming batches.
 - Split very long functions' nested one-line blocks into normal statements (whitespace-only, checked per unit).
 - Comment retail bugs and oddities met during cleanup with `// BUG:` (the code keeps the retail behaviour).
 - Certification pass per object against the cleanup standard once the classes above are done.
+- Certification review notes rechecked against the code (2026-11-05): `other` (476) and `trick`/`comment`/`dead`/`macro`
+  (342) by read-only agents; outcomes in `cleanup_notes/certification/other_notes_outcome.tsv` and
+  `trick_notes_safe_log.tsv`. Classes found and done: case bodies at their label's indent (3,114 lines), 1,300
+  functions and 6 data tables made static where the original demo maps list them local (`demo_local_scan.py`,
+  `demo_local_data_scan.py`; kept global: `mot_cloud`, `pressStartGX`, called from other files), 6,357 redundant
+  `PTR()` inside `CALL_CHILD`/`SPAWN_EVENT`/`STRING`, all `*Stripped*` stand-ins probed (all needed) and marked.
+  The ~160 "try the plain form" proposals are being probed one by one (plain form kept, or the device marked FAKE).
 
 ## 7. Libraries (SDK, runtime, TRK, MusyX, THP), sorted by Codex round 16
 
