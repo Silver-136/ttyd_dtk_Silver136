@@ -8,6 +8,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
 #include "evt/evt_msg.h"
+#include "evt/evt_memcard.h"
 
 
 /**

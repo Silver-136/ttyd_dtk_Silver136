@@ -55,6 +55,7 @@
 #include "koopa_motion.h"
 #include "mot/mot_hammer.h"
 #include "driver/mapdrv.h"
+#include "mario/mario_sbr.h"
 
 #define NPC_RAD2DEG(r) ((r) * 57.29579f)
 
@@ -66,6 +67,8 @@ typedef struct NpcWork2 {
 // External APIs retained locally until their shared contracts are settled.
 f32 cloudGetBreathPower(Vec pos, f32 width);
 
+// FAKE: private const char* prototype; fontmgr.c defines FontDrawStringShake with const s8* (game code builds with
+// -char unsigned), so the definition's prototype rejects the const char* arguments without casts.
 void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
@@ -684,7 +687,6 @@ void npcDeleteGroup(NpcEntry* entry) {
 static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param);
 void fbatTalkMode(void);
 void fbatBattleMode(void);
-s32 kpaJumpChk(void);
 
 static void npcMoveG(NpcEntry* npc);
 static BOOL npcCheckHitMarioSide(NpcEntry* npc);
@@ -1827,11 +1829,8 @@ static void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
 #endif
 }
 
-BOOL marioChkTalkable(void);
 void* fbatHitCheck(u32 flags, void* result);
 
-void marioChgMotJump2(void);
-f32 marioGetDispDir(void);
 static void npcKoopaModeEncountCheck(void);
 
 /** Yaw of the 3D camera in degrees (0-360), from its look direction. */

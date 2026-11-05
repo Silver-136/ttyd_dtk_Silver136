@@ -34,6 +34,8 @@ static void kpaFireAttack(void);
 static void kpaFireMain(void);
 static void kpaFall(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
+// FAKE: unsized f32 array view of mario_motion.c's MarioJumpData marioJumpData; reading marioJumpData.jump through
+// the struct type changes the object.
 extern f32 marioJumpData[];
 
 
