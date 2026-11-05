@@ -199,6 +199,7 @@ static void effOpukuWgunDisp(CameraId cameraId, void* param) {
     GXTexObj texObj;
     Vec v;
     f32 scl;
+    // FAKE: zero is added to z in both vertices; 20.0f * work->z[i] changes the object
     f32 zero = 0.0f;
     f32 rad;
     f32 dx;

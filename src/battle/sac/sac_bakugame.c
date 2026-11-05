@@ -527,6 +527,7 @@ state_end:
             break;
         }
         {
+            // FAKE: unused initialised Vec; removing it changes the object
             Vec unusedv = {125.0f, 0.0f, -30.0f};
         }
         w->hstate = 2;

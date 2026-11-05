@@ -598,6 +598,7 @@ static void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
         fh = 0.2f * h;
         fw = 0.2f * w;
         GXBegin(GX_QUADS, GX_VTXFMT0, 16);
+        // FAKE: cx (0.0f) doubles as the y coordinate of every vertex; 0.0f for y changes the object
         cx = 0.0f;
         cz = 0.0f;
         GXPosition3f32((cx - w), cx, (cz - h));

@@ -1870,7 +1870,8 @@ static void BattleAudienceItemCtrlProcess(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceItem* it;
-    u8* aud;
+    BattleAudienceMember* member;
+    BattleUnit* unit;
     BattleAudienceKind* kd;
     s32 j;
     f32 t;
@@ -1883,9 +1884,9 @@ static void BattleAudienceItemCtrlProcess(void) {
         if (!(it->flags & AUDIENCE_ITEM_FLAG_ACTIVE)) {
             continue;
         }
-        aud = (u8*)BattleAudienceGetPtr(it->audienceId);
-        kd = &audience_kind[((BattleAudienceMember*)aud)->type];
-        if (((BattleAudienceMember*)aud)->status == AUDIENCE_STATUS_SLEEP || ((BattleAudienceMember*)aud)->status == AUDIENCE_STATUS_FIRE || ((BattleAudienceMember*)aud)->status == 21 || ((BattleAudienceMember*)aud)->status == AUDIENCE_STATUS_ESCAPE ||
+        member = BattleAudienceGetPtr(it->audienceId);
+        kd = &audience_kind[member->type];
+        if (member->status == AUDIENCE_STATUS_SLEEP || member->status == AUDIENCE_STATUS_FIRE || member->status == 21 || member->status == AUDIENCE_STATUS_ESCAPE ||
             !(u8)BattleAudience_GetExist(it->audienceId)) {
             goto kill;
         }
@@ -1927,9 +1928,9 @@ static void BattleAudienceItemCtrlProcess(void) {
             it->scale = 1.0f;
             it->rotZ = 0.0f;
             v = (Vec){0.0f, 0.0f, 0.0f};
-            v.x = ((BattleAudienceMember*)aud)->position.x + kd->itemOffsetX;
-            v.y = (((BattleAudienceMember*)aud)->position.y + kd->itemOffsetY) - 10.0f;
-            v.z = 1.0f + ((BattleAudienceMember*)aud)->position.z;
+            v.x = member->position.x + kd->itemOffsetX;
+            v.y = (member->position.y + kd->itemOffsetY) - 10.0f;
+            v.z = 1.0f + member->position.z;
             it->position = v;
             it->state++;
 
@@ -1973,12 +1974,12 @@ static void BattleAudienceItemCtrlProcess(void) {
                 }
                 {
                     Vec v = {0.0f, 0.0f, 0.0f};
-                    v.x = ((BattleAudienceMember*)aud)->drawPosX + kd->itemOffsetX;
+                    v.x = member->drawPosX + kd->itemOffsetX;
                     ox = intplGetValue(EASING_LINEAR, -10.0f, 0.0f, k, 5);
                     // FAKE: spare temporary; `v.y = (drawPosY + itemOffsetY) + ox` changes the object
-                    t = ((BattleAudienceMember*)aud)->drawPosY + kd->itemOffsetY;
+                    t = member->drawPosY + kd->itemOffsetY;
                     v.y = t + ox;
-                    v.z = 1.0f + ((BattleAudienceMember*)aud)->drawPosZ;
+                    v.z = 1.0f + member->drawPosZ;
                     it->position = v;
                 }
             }
@@ -2011,9 +2012,9 @@ static void BattleAudienceItemCtrlProcess(void) {
                 if (!(wp->flags & BATTLE_FLAG_COMMAND_INPUT)) {
                     it->mode = 0;
                 }
-                aud = (u8*)it->target;
-                BtlUnit_GetStatus((BattleUnit*)aud, STATUS_INVISIBLE, &a, &b);
-                if (a >= 1 || BtlUnit_CheckShadowGuard((BattleUnit*)aud)) {
+                unit = it->target;
+                BtlUnit_GetStatus(unit, STATUS_INVISIBLE, &a, &b);
+                if (a >= 1 || BtlUnit_CheckShadowGuard(unit)) {
                     it->mode = 0;
                 }
                 if (it->flags & AUDIENCE_ITEM_FLAG_HARMLESS_UNUSED) {
@@ -2036,7 +2037,7 @@ static void BattleAudienceItemCtrlProcess(void) {
                     } else if (it->itemType >= ITEM_AUDIENCE_CAN && it->itemType < BADGE_MIN) {
                         BattleAudience_SetPresentItemType(PRESENT_ITEM_DAMAGE);
                     }
-                    BattleAudience_SetPresentTargetUnitId(BtlUnit_GetUnitId((BattleUnit*)aud));
+                    BattleAudience_SetPresentTargetUnitId(BtlUnit_GetUnitId(unit));
                     switch (it->itemType) {
                     case ITEM_AUDIENCE_CAN:
                         memcpy(&base->presentWeapon, &weapon_data_akikan, sizeof(BattleWeapon));

@@ -966,6 +966,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             Vec mn;
             Vec mx;
             mapGetBoundingBox(&mn, &mx);
+// Macro, not inline: as a static inline (mapSetBBoxCorner(dst, x, y, z)) the object changes.
 #define SET_BBOX_CORNER(idx, X, Y, Z)     \
     {                                     \
         Vec v = {0.0f, 0.0f, 0.0f};       \

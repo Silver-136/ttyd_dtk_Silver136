@@ -48,6 +48,7 @@ EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
     effect->type = "RotHammerFailN64";
     effect->count = 2;
     effect->userdata = work = __memAlloc(HEAP_EFFECT, sizeof(EffRotHammerFailN64Work) * 2);
+    // FAKE: zero held in a local for the stores and sin/cos(zero); 0.0f literals change the object
     zero = 0.0f;
     effect->callback = effRotHammerFailMain;
     work->lifetime = time;

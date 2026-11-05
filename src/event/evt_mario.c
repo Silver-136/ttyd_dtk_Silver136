@@ -62,6 +62,7 @@ void marioSetForceMove(s32 frames, f32 dir, f32 spd);
         return EVT_RETURN_DONE;                        \
     }
 
+// Macro, not inline: as static inline setposeBody(mp, name) the pose functions change.
 #define SETPOSE_BODY                                    \
     if (mp->flags & MARIO_FLAG_IS_8_BIT) {              \
         name = toDotMarioPose(name);                    \

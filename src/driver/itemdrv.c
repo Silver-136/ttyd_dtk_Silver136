@@ -50,6 +50,7 @@ inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
 }
 
+// FAKE: makeVecByValue2 is a second copy of makeVecByValue; calling makeVecByValue at both sites changes the object
 /** Builds a Vec from x, y, z (a twin of makeVecByValue that compiles the same). */
 inline Vec makeVecByValue2(f32 x, f32 y, f32 z) {
     Vec v = (Vec){ 0.0f, 0.0f, 0.0f };

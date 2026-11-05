@@ -600,6 +600,7 @@ static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #else
 static void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
+    // FAKE: a separate size/list pointer pair per display-list loop (sz/dl .. sz5/dl5); one reused pair changes the object
     void** dl5;
     u8* sz5;
     u8* sz3;

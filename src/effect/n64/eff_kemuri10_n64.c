@@ -70,6 +70,7 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     f32 bx, by, bz;
 
     effect = effEntry();
+    // FAKE: zr holds 0.0f for the comparisons and stores; 0.0f literals change the object
     zr = 0.0f;
     if (dx == zr && dy == zr && dz == zr) {
         return NULL;

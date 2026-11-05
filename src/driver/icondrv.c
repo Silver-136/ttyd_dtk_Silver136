@@ -483,7 +483,10 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     CameraEntry* camera;
     IconBinData* data;
     IconEntry* ep;
+
+#if VERSION < VERSION_US
     u16 id;
+#endif
 
     camera = camGetCurPtr();
     ep = &entry;

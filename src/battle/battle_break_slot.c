@@ -30,13 +30,6 @@
 #include "battle/battle_sub.h"
 #include "icon_ids.h"
 
-typedef struct {
-    s32 v[8];
-} SlotCards8;
-typedef struct {
-    s32 v[5];
-} SlotCards5;
-
 static void BattleBreakSlotDispReel(CameraId camId, void* param);
 static void item_appear_force(BreakSlotReel* reel, s32 item);
 
@@ -256,19 +249,15 @@ BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no) {
     return &BattleBreakSlotGetPtr()->reels[no];
 }
 
-const SlotCards8 R_slot_1_cards = {{0, 1, 2, 1, 2, 0, 3, 4}};
-const SlotCards8 R_slot_2_cards = {{3, 1, 0, 1, 4, 2, 0, 2}};
-const SlotCards5 R_slot_3_cards = {{0, 1, 2, 3, 4}};
-
 /**
  * Resets the Bingo slots at battle start and gives each of the three reels its cards (0 Mushroom, 1 Fire Flower,
  * 2 Star, 3 Shine Sprite, 4 Poison Mushroom): two eight-card reels and a five-card one.
  */
 void BattleBreakSlot_Init(void) {
     BreakSlotWork* wp = BattleBreakSlotGetPtr();
-    SlotCards8 c1 = R_slot_1_cards;
-    SlotCards8 c2 = R_slot_2_cards;
-    SlotCards5 c3 = R_slot_3_cards;
+    s32 c1[8] = {0, 1, 2, 1, 2, 0, 3, 4};
+    s32 c2[8] = {3, 1, 0, 1, 4, 2, 0, 2};
+    s32 c3[5] = {0, 1, 2, 3, 4};
     BreakSlotReel* reel;
     s32 i;
 
@@ -284,15 +273,15 @@ void BattleBreakSlot_Init(void) {
     reel = BattleBreakSlotReelGetPtr(0);
     reel->numCards = 8;
     reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
-    memcpy(reel->cards, &c1, reel->numCards * sizeof(s32));
+    memcpy(reel->cards, c1, reel->numCards * sizeof(s32));
     reel = BattleBreakSlotReelGetPtr(1);
     reel->numCards = 8;
     reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
-    memcpy(reel->cards, &c2, reel->numCards * sizeof(s32));
+    memcpy(reel->cards, c2, reel->numCards * sizeof(s32));
     reel = BattleBreakSlotReelGetPtr(2);
     reel->numCards = 5;
     reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
-    memcpy(reel->cards, &c3, reel->numCards * sizeof(s32));
+    memcpy(reel->cards, c3, reel->numCards * sizeof(s32));
 }
 
 /**

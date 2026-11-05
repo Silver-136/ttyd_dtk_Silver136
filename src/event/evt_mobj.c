@@ -2424,15 +2424,17 @@ extern EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 num
 // Restores Mario's HP and FP and the HP of every active partner that is not PARTY_FLAG_IS_GROUNDED (case 3).
 // FAKE: case 4 repeats these steps inline instead of calling this helper; calling it there changes the object
 static inline void recoveryHeal(void) {
+    PouchData* pouch;
     PouchPartyData* party;
     MarioWork* mario;
     s32 i;
     mario = marioGetPtr();
-    party = (PouchPartyData*)pouchGetPtr();
+    pouch = pouchGetPtr();
+    party = pouch->partyData;
     effStardustEntry(2, 50, 100, mario->position.x, mario->position.y, mario->position.z, 50.0f, 50.0f);
     marioChgPose("M_I_1");
-    ((PouchData*)party)->currentHP = ((PouchData*)party)->maximumHP;
-    ((PouchData*)party)->currentFP = ((PouchData*)party)->maximumFP;
+    pouch->currentHP = pouch->maximumHP;
+    pouch->currentFP = pouch->maximumFP;
     for (i = 0; i < 8; party++, i++) {
         if ((party->flags & PARTY_FLAG_IS_ACTIVE) && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
             party->currentHP = party->maximumHP;
