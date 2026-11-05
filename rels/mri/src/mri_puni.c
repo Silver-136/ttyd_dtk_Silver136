@@ -2287,33 +2287,32 @@ void puniSearch(PuniData* p) {
 void puniModeChangeAttack(void) {
     s32 i;
     PuniData* p = &Punidat[1];
+    PuniData* f;
     for (i = 1; i < PUNI_DATA_MAX; i++, p++) {
         if (p->flags & PUNI_FLAG_ACTIVE) {
             switch (p->mode) {
             case PUNI_MODE_IDLE:
             case PUNI_MODE_JOIN:
             case 2:
-            case 0x1d: {
-                PuniData* f;
-                if (p->flags & PUNI_FLAG_PUNI) {
-                    f = searchBattleTeki_inl(p);
-                } else {
-                    f = searchBattleMikata_inl(p);
-                }
-                if (f) {
-                    p->target = f;
-                    p->mode = PUNI_MODE_ATTACK;
-                    p->modeStep = 0;
-                    p->depth = 0;
-                    p->flags |= PUNI_FLAG_COLLIDE;
-                    PuniDokuritsu(p);
-                    if (p->effect) {
-                        effDelete(p->effect);
-                        p->effect = NULL;
-                    }
-                }
-                break;
+            case 0x1d:
+            if (p->flags & PUNI_FLAG_PUNI) {
+                f = searchBattleTeki_inl(p);
+            } else {
+                f = searchBattleMikata_inl(p);
             }
+            if (f) {
+                p->target = f;
+                p->mode = PUNI_MODE_ATTACK;
+                p->modeStep = 0;
+                p->depth = 0;
+                p->flags |= PUNI_FLAG_COLLIDE;
+                PuniDokuritsu(p);
+                if (p->effect) {
+                    effDelete(p->effect);
+                    p->effect = NULL;
+                }
+            }
+            break;
             }
         }
     }
