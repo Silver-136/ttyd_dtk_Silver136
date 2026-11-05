@@ -5381,7 +5381,6 @@ USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
     return EVT_RETURN_DONE;
 }
 
-extern void psndSFX_pit(s32 id, s32 pitch);
 
 #if VERSION >= VERSION_US
 // US and later: per-language width table [language][0] * [language][type + 1]

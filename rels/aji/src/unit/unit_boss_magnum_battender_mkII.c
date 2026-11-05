@@ -60,7 +60,6 @@ typedef struct TargetWork {
     EffectEntry* eff;
 } TargetWork;
 extern EvtWord aud_hit_event[];
-void psndSFX_vol(s32 id, u8 vol);
 EffectEntry* eff_tor;
 s32 torCount;
 EffectEntry* eff_jet[2];

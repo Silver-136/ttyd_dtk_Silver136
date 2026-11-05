@@ -34,7 +34,6 @@
 #include "pmario_sound.h"
 #include "battle/battle_disp.h"
 
-void psndSFX_pit(s32 id, s32 pitch);
 
 
 typedef struct BakuBtn {

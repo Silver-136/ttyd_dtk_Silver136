@@ -10376,12 +10376,12 @@ sgfound:
                     if (sfx[0]->channel != -1) {
                         SoundEfxSetVolume(sfx[0]->channel, b[0]);
                         SoundEfxSetSrndPan(sfx[0]->channel, b[2]);
-                        ((void(*)(s32,s16))SoundEfxSetPitch)(sfx[0]->channel, sfx[0]->pitch);
+                        SoundEfxSetPitch(sfx[0]->channel, sfx[0]->pitch);
                     }
                 } else {
                     sfx[0]->channel = SoundEfxPlayEx((u16)f, 0, sfxvol(sfx[0]), sfx[0]->pan);
                     if (sfx[0]->channel != none) {
-                        ((void(*)(s32,s16))SoundEfxSetPitch)(sfx[0]->channel, sfx[0]->pitch);
+                        SoundEfxSetPitch(sfx[0]->channel, sfx[0]->pitch);
                     }
                 }
                 if (sfx[0]->channel != none) {
@@ -10672,7 +10672,7 @@ void psndSFX_vol(s32 id, u8 vol) {
 }
 
 /** Sets the pitch bend of playing effect id (stored until it starts if still pending). */
-void psndSFX_pit(s32 id, u16 pitch) {
+void psndSFX_pit(s32 id, s16 pitch) {
     PaperSoundEffect* sfx;
 
     if (id == 0xFFFFFFFF) {

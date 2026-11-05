@@ -21,8 +21,6 @@
 #include "memory.h"
 
 double pow(double, double);
-void psndSFX_pit(s32 id, s16 pitch);
-void psndSFX_vol(s32 id, u8 vol);
 
 /**
  * Items an enemy can use in battle (attack, status and healing items; 0 ends the list). Besides badges, only

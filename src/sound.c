@@ -1092,7 +1092,7 @@ void SoundEfxStop(s32 chan) {
 }
 
 /** Bends the pitch of the effect on chan (0 = unchanged; 0x2000 is MusyX's centre). */
-void SoundEfxSetPitch(s32 chan, u16 pitch) {
+void SoundEfxSetPitch(s32 chan, s16 pitch) {
     SoundEffect* sfx;
     SND_VOICEID vid;
 

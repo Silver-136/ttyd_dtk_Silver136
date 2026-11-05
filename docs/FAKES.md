@@ -274,6 +274,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_audience.c | BattleAudience_GetPPAudienceNum_Sub | one-value range test; `member->status == AUDIENCE_STATUS_SLEEP` changes the object | see comment; tried 2026-11-01: switch with one case: cmpwi + beq, target is cmplwi + blt + bgt |
 | Both | src/battle/battle_audience.c | BattleAudienceJoy_Sub | no-op (s32) cast; `a + b` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudience_NoUsedFCHaitiRand, BattleAudience_NoUsedFCHaitiRandCenter | unused `audience = BattleAudienceBaseGetPtr()` local | bare call with rank assigned after it: changes the object |
+| Both | src/battle/battle_audience.c | BattleAudienceSoundHandBeat (psndSFX_vol) | call through a cast to an `(s32, s32)` function type so the s32 vol goes in untruncated | plain call through pmario_sound.h's u8 prototype: clrlwi on the argument, changes the object |
 | Both | src/battle/battle_break_slot.c | BattleBreakSlot_Init | i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object | see comment |
 | Both | src/battle/battle_break_slot.c | BattleBreakSlotDispReel | i is set before the reel pointer; `for (i = 0; ...)` changes the object | see comment |
 | Both | src/battle/battle_detect.c | BattleGetFirstAttackUnit | tmp holds the getter result across the swap; assigning it directly changes the object | see comment |
