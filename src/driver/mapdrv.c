@@ -791,6 +791,8 @@ static inline void mapLoadAnim_(BOOL group) {
     u32* animTbl;
     u32 n;
     u32 k;
+    MapEntryAnimData* a;
+    int i;
     w = &mapWork[activeGroup];
     {
         MapEntry* e2 = &w->entries[group];
@@ -809,14 +811,11 @@ found:
             n = OSRoundUp32B(w->entries[group].numAnims * 32);
             w->entries[group].animData = _mapAlloc(n);
             memset(w->entries[group].animData, 0, n);
-            {
-                MapEntryAnimData* a = w->entries[group].animData;
-                int i;
-                for (i = 0; i < w->entries[group].numAnims; i++) {
-                    a->flags = 0;
-                    a->anim = (MapAnimHeader*)*++animTbl;
-                    a++;
-                }
+            a = w->entries[group].animData;
+            for (i = 0; i < w->entries[group].numAnims; i++) {
+                a->flags = 0;
+                a->anim = (MapAnimHeader*)*++animTbl;
+                a++;
             }
         }
     }

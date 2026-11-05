@@ -597,6 +597,7 @@ void mot_roll(void) {
     f32 sgn;
     f32 mv;
     f32 pre;
+    f32 l;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
@@ -1123,11 +1124,9 @@ void mot_roll(void) {
                 v29 = 0.0f;
             }
         }
-        {
-            f32 l = rollData[3];
-            if (__fabsf(v28) < l) {
-                v28 = 0.0f;
-            }
+        l = rollData[3];
+        if (__fabsf(v28) < l) {
+            v28 = 0.0f;
         }
     } else {  // the speed clamp runs only on this path
         if ((mario->mot.roll.flags & ROLL_FLAG_SLOPE_DAMP_UNUSED) && mario->groundRot.z == 0.0f) {

@@ -156,6 +156,7 @@ void mot_hammer(void) {
     s32 efType;
     HitEntry* hit;
     s32 n;
+    MarioWork* m;
 
     if ((s32)mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -327,42 +328,40 @@ void mot_hammer(void) {
             effKemuTestEntry(efType, px, py + ez, pz, 1.0f);
         }
 #endif
-        {
-            MarioWork* m = marioGetPtr();
-            snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
-            switch (pouchGetHammerLv()) {
-            case 1:
-                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);
-                break;
-            case 2:
-                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON2), &m->position);
-                break;
-            case 3:
-                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
-                break;
-            }
+        m = marioGetPtr();
+        snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
+        switch (pouchGetHammerLv()) {
+        case 1:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);
+            break;
+        case 2:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON2), &m->position);
+            break;
+        case 3:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
+            break;
+        }
 #if VERSION <= VERSION_DEMO_JP
-            for (i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
 #else
-            // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
-            for (i = 0; (u32)i < 10; i++) {
+        // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
+        for (i = 0; (u32)i < 10; i++) {
 #endif
-                if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
-                    snd = se_data[m->hammerSfxIdx + 1];
-                    m->hammerSfxIdx += 2;
-                    if (m->hammerSfxIdx >= 10) {
-                        m->hammerSfxIdx -= 10;
-                    }
-                    break;
-                } else {
-                    m->hammerSfxIdx += 2;
-                    if (m->hammerSfxIdx >= 10) {
-                        m->hammerSfxIdx -= 10;
-                    }
+            if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
+                snd = se_data[m->hammerSfxIdx + 1];
+                m->hammerSfxIdx += 2;
+                if (m->hammerSfxIdx >= 10) {
+                    m->hammerSfxIdx -= 10;
+                }
+                break;
+            } else {
+                m->hammerSfxIdx += 2;
+                if (m->hammerSfxIdx >= 10) {
+                    m->hammerSfxIdx -= 10;
                 }
             }
-            psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
         }
+        psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
     }
     if (++mario->multiTimer > 20) {
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;

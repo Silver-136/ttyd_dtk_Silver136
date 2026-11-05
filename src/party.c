@@ -2135,6 +2135,7 @@ void partyRideMain(PartyEntry* party) {
     f32 z;
     f32 h;
     f32 dy;
+    f32 t;
     switch (party->motionStep) {
         case 0:
             getRidePos(party, &pos);
@@ -2152,28 +2153,26 @@ void partyRideMain(PartyEntry* party) {
             party->motionStep = 1;
             break;
 
-        case 1: {
-                f32 t;
-                party->velY = party->velY - party->gravity;
-                party->position.y = party->position.y + party->velY;
-                movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
-                party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
-                party->spinSpeed += 2.0f;
-                if (party->spinSpeed >= 30.0f) {
-                    party->spinSpeed = 30.0f;
-                }
-                t = (f32)party->moveFrames;
-                if (t > 10.0f) {
-                    t = 10.0f;
-                }
-                party->scale.x = t / 10.0f;
-                party->scale.y = party->scale.x;
-                party->scale.z = party->scale.x;
-                if (--party->moveFrames < 0) {
-                    party->motionStep = 2;
-                }
-                break;
+        case 1:
+            party->velY = party->velY - party->gravity;
+            party->position.y = party->position.y + party->velY;
+            movePos(&party->position.x, &party->position.z, party->moveSpeed, party->targetDir);
+            party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
+            party->spinSpeed += 2.0f;
+            if (party->spinSpeed >= 30.0f) {
+                party->spinSpeed = 30.0f;
             }
+            t = (f32)party->moveFrames;
+            if (t > 10.0f) {
+                t = 10.0f;
+            }
+            party->scale.x = t / 10.0f;
+            party->scale.y = party->scale.x;
+            party->scale.z = party->scale.x;
+            if (--party->moveFrames < 0) {
+                party->motionStep = 2;
+            }
+            break;
 
         case 2:
             partyChgPoseId(party, PARTY_POSE_STAND);

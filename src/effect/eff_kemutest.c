@@ -400,6 +400,7 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     s32 i;
     s32 count;
     f32 spd;
+    f32 ang;
 
     effect = effEntry();
     count = 1;
@@ -550,23 +551,22 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
             work->scale = 1.0f;
             break;
         }
-        case 3: {
-            f32 ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
-            work->pos.x = 20.0f * (f32)sin(ang);
-            work->pos.y = 20.0f * (f32)cos(ang);
-            work->pos.z = 0.0f;
-            work->life = 0x20;
-            work->frame = 0;
-            work->delay = (i - 1) * 3;
-            work->gravity = 0.95f;
-            work->gravityAcc = -0.04f;
-            work->gravityMul = 0.94f;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 1.0f;
-            break;
-        }
+        case 3:
+        ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
+        work->pos.x = 20.0f * (f32)sin(ang);
+        work->pos.y = 20.0f * (f32)cos(ang);
+        work->pos.z = 0.0f;
+        work->life = 0x20;
+        work->frame = 0;
+        work->delay = (i - 1) * 3;
+        work->gravity = 0.95f;
+        work->gravityAcc = -0.04f;
+        work->gravityMul = 0.94f;
+        work->r = 0xff;
+        work->g = 0xff;
+        work->b = 0xff;
+        work->scale = 1.0f;
+        break;
         case 4:
         case 5:
         case 9:

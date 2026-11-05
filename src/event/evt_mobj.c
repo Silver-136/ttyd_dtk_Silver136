@@ -3011,6 +3011,7 @@ USER_FUNC(evt_mobj_badgeblk) {
     s32 flagVar;
     s32 kind;
     MapObjectEntry* mobj;
+    BOOL group;
     name = (const char*)evtGetValue(event, args[0]);
     x = evtGetFloat(event, args[1]);
     y = evtGetFloat(event, args[2]);
@@ -3019,12 +3020,10 @@ USER_FUNC(evt_mobj_badgeblk) {
     val = evtGetValue(event, args[5]);
     kind = args[7];
     flagVar = args[6];
-    {
-        BOOL group = gp->inBattle != 0;
-        anim = kind != 0 ? "MOBJ_BadgeBlock" : "MOBJ_HatenaBlock";
-        if (animGroupBaseAsync(anim, group, NULL) == 0) {
-            return EVT_RETURN_BLOCK;
-        }
+    group = gp->inBattle != 0;
+    anim = kind != 0 ? "MOBJ_BadgeBlock" : "MOBJ_HatenaBlock";
+    if (animGroupBaseAsync(anim, group, NULL) == 0) {
+        return EVT_RETURN_BLOCK;
     }
     mobjEntry(name, anim);
     mobj = mobjNameToPtr(name);

@@ -460,6 +460,7 @@ void yoshi_use(PartyEntry* party) {
     f32 y;
     f32 x;
     f32 z;
+    f32 s;
 
     if (!mario->keyOffCount) {
         partyUpdateKeyData(party);
@@ -808,10 +809,9 @@ void yoshi_use(PartyEntry* party) {
             mario->mot.yoshi.baseY = party->position.y;
             party->yoshiPsndSFXId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_JUMP1), &party->position);
 #endif
-        case 21: {
-                f32 s = sin(3.141592653589793f * YOSHI_WORK(party)->angle / 180.0f);
-                mario->mot.yoshi.bobSpeed = s * (YOSHI_WORK(party)->angle <= 180.0f ? 0.5f : 0.37f);
-            }
+        case 21:
+            s = sin(3.141592653589793f * YOSHI_WORK(party)->angle / 180.0f);
+            mario->mot.yoshi.bobSpeed = s * (YOSHI_WORK(party)->angle <= 180.0f ? 0.5f : 0.37f);
 #if VERSION >= VERSION_JP
             mario->mot.yoshi.bobOfs += mario->mot.yoshi.bobSpeed;
 #endif

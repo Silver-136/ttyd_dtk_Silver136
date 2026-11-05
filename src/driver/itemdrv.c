@@ -675,6 +675,8 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
  */
 #if VERSION <= VERSION_DEMO_JP
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
+    char* nm;
+
 #else
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
 #endif
@@ -834,10 +836,8 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     default:
 #if VERSION <= VERSION_DEMO_JP
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
-        {
-            char* nm = entry->name;
-            iconSetPos(nm, x, y, z);
-        }
+        nm = entry->name;
+        iconSetPos(nm, x, y, z);
 #else
         entry->effect = NULL;
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
