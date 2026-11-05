@@ -6458,6 +6458,7 @@ static USER_FUNC(fall_rtn) {
     SlotWork* data;
     s32 i;
     s32 done = 0;
+    f32 spd;
 
     if (isFirstCall) {
         SlotWork* data = ((MiniGameWork*)event->lwData[0])->data;
@@ -6476,12 +6477,10 @@ static USER_FUNC(fall_rtn) {
             ofs = ((i & 1) * 2.0f - 1.0f) * ((rand() % 101) / 10.0f);
             sub->pos.z += ofs;
             sub->scale = 1.0f;
-            {
-                f32 spd = 2.0f + (rand() % 300) / 100.0f;
-                c = 0.0f;
-                s = 0.0f;
-                movePos(&s, &c, spd, 270.0f - 3.0f * ofs);
-            }
+            spd = 2.0f + (rand() % 300) / 100.0f;
+            c = 0.0f;
+            s = 0.0f;
+            movePos(&s, &c, spd, 270.0f - 3.0f * ofs);
             {
                 Vec vel = fall_vel0();
 
@@ -6819,6 +6818,8 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
     s32 tbl[3][3];
     s32 gara[3];
     s32 gara2[3];
+    s32 n;
+    s32 m;
 
     switch (data->phase) {
         case 1:
@@ -7027,23 +7028,20 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             }
             data->counter++;
             break;
-        case 5: {
-            s32 n;
-            s32 m;
-            n = 0;
-            for (m = 0; m < 3; m++) {
-                if (data->state[m] == 0) {
-                    n++;
-                } else {
-                    n += slot_rotate_sub(wp, data, m);
-                }
+        case 5:
+        n = 0;
+        for (m = 0; m < 3; m++) {
+            if (data->state[m] == 0) {
+                n++;
+            } else {
+                n += slot_rotate_sub(wp, data, m);
             }
-            if (n == 3) {
-                data->counter = 0;
-                data->phase++;
-            }
-            break;
         }
+        if (n == 3) {
+            data->counter = 0;
+            data->phase++;
+        }
+        break;
         case 6:
             for (i = 0; i < 3; i++) {
                 gara2[i] = slotgara[data->nowSlot][i][(s32)(data->angle[data->nowSlot][i] / 45.0f)];

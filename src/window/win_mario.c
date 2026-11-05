@@ -559,6 +559,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     AnimData* anim;
     Mtx mtx;
     char buf[0x100];
+    s32 gz;
 
     w = param;
 #if VERSION < VERSION_US
@@ -750,11 +751,9 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             q2[0] = -q2[0];
         }
     }
-    {
-        s32 gz = 0;
-        if (gz != 0) {
-            y = q1[0] + q2[0];
-        }
+    gz = 0;
+    if (gz != 0) {
+        y = q1[0] + q2[0];
     }
 #endif
 #endif

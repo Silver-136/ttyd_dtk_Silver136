@@ -2353,6 +2353,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
     s32 i;
     BattleUnit* unit2;
     BattleUnitPart* part2;
+    f32 nameWidth;
 
     _btlcmd_GetCursorPtr(cmd, wp->commandMenu.actType, &cursor);
     if (cmd->weapon[cursor->absPos].weapon->targetClassFlags & TARGET_CLASS_SINGLE) {
@@ -2374,10 +2375,8 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             } else {
                 name = msgSearch(part->partName);
             }
-            {
-                f32 nameWidth = FontGetMessageWidth(name);
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f);
-            }
+            nameWidth = FontGetMessageWidth(name);
+            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f);
             FontDrawStart();
             FontDrawString(-232.0f, 83.0f, name);
         } else {
@@ -2391,10 +2390,8 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             } else {
                 name = msgSearch(part->partName);
             }
-            {
-                f32 nameWidth = FontGetMessageWidth(name);
-                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f);
-            }
+            nameWidth = FontGetMessageWidth(name);
+            windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 86.0f, 16.0f + nameWidth, 32.0f, 10.0f);
             FontDrawStart();
             FontDrawString(-232.0f, 83.0f, name);
         }
@@ -2418,11 +2415,9 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 } else {
                     name = msgSearch(part2->partName);
                 }
-                {
-                    f32 nameWidth = FontGetMessageWidth(name);
-                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 118.0f - (f32)(i * 32), 16.0f + nameWidth,
-                                          32.0f, 10.0f);
-                }
+                nameWidth = FontGetMessageWidth(name);
+                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 118.0f - (f32)(i * 32), 16.0f + nameWidth,
+                                      32.0f, 10.0f);
                 FontDrawStart();
                 FontDrawString(-232.0f, 115.0f - (f32)(i * 32), name);
             } else {
@@ -2436,11 +2431,9 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
                 } else {
                     name = msgSearch(part2->partName);
                 }
-                {
-                    f32 nameWidth = FontGetMessageWidth(name);
-                    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 118.0f - (f32)(i * 32), 16.0f + nameWidth,
-                                          32.0f, 10.0f);
-                }
+                nameWidth = FontGetMessageWidth(name);
+                windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, -240.0f, 118.0f - (f32)(i * 32), 16.0f + nameWidth,
+                                      32.0f, 10.0f);
                 FontDrawStart();
                 FontDrawString(-232.0f, 115.0f - (f32)(i * 32), name);
             }
@@ -2941,6 +2934,8 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     BattleCursor* cursor;
     s16 list[24];
     BattleWeapon* weapon;
+    u8 cnt;
+    u8 i;
 
     if (unit->moveState == MOVE_STATE_QUICK_CHANGE) {
         unit->moveState = MOVE_STATE_NORMAL;
@@ -3027,24 +3022,20 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         return weapon->attackEvtScript;
     case CMD_ACT_OPERATION:
         _btlcmd_MakeOperationTable(wp);
-        {
-            u8 cnt;
-            u8 i;
-            _btlcmd_GetCursorPtr(cmd, 5, &cursor);
-            cnt = 0;
-            for (i = 0; i < cursor->count; i++) {
-                if (cmd->operation[i].enabled) {
-                    if (cmd->operation[i].type == CMD_OP_CHANGE_PARTY || cmd->operation[i].type == CMD_OP_DEFEND || cmd->operation[i].type == CMD_OP_ESCAPE) {
-                        list[cnt++] = i;
-                    }
+        _btlcmd_GetCursorPtr(cmd, 5, &cursor);
+        cnt = 0;
+        for (i = 0; i < cursor->count; i++) {
+            if (cmd->operation[i].enabled) {
+                if (cmd->operation[i].type == CMD_OP_CHANGE_PARTY || cmd->operation[i].type == CMD_OP_DEFEND || cmd->operation[i].type == CMD_OP_ESCAPE) {
+                    list[cnt++] = i;
                 }
             }
-            list[cnt] = -1;
-            if (cnt) {
-                cursor->absPos = list[irand(cnt)];
-            } else {
-                return subsetevt_confuse_flustered;
-            }
+        }
+        list[cnt] = -1;
+        if (cnt) {
+            cursor->absPos = list[irand(cnt)];
+        } else {
+            return subsetevt_confuse_flustered;
         }
         if (!cmd->operation[cursor->absPos].enabled) {
             return subsetevt_confuse_flustered;

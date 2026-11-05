@@ -791,17 +791,18 @@ static inline void mapLoadAnim_(BOOL group) {
     u32* animTbl;
     u32 n;
     u32 k;
+    MapEntryAnimData* a;
+    int i;
+    MapEntry* e2;
     w = &mapWork[activeGroup];
-    {
-        MapEntry* e2 = &w->entries[group];
-        for (k = 0; k < e2->header.file.chunkCount; k++) {
-            if (!strcmp(&e2->header.strings[e2->header.chunks[k].string], "animation_table")) {
-                animTbl = (u32*)((u8*)e2->header.data + e2->header.chunks[k].offset);
-                goto found;
-            }
+    e2 = &w->entries[group];
+    for (k = 0; k < e2->header.file.chunkCount; k++) {
+        if (!strcmp(&e2->header.strings[e2->header.chunks[k].string], "animation_table")) {
+            animTbl = (u32*)((u8*)e2->header.data + e2->header.chunks[k].offset);
+            goto found;
         }
-        animTbl = NULL;
     }
+    animTbl = NULL;
 found:
     if (animTbl != NULL) {
         w->entries[group].numAnims = animTbl[0];
@@ -809,14 +810,11 @@ found:
             n = OSRoundUp32B(w->entries[group].numAnims * 32);
             w->entries[group].animData = _mapAlloc(n);
             memset(w->entries[group].animData, 0, n);
-            {
-                MapEntryAnimData* a = w->entries[group].animData;
-                int i;
-                for (i = 0; i < w->entries[group].numAnims; i++) {
-                    a->flags = 0;
-                    a->anim = (MapAnimHeader*)*++animTbl;
-                    a++;
-                }
+            a = w->entries[group].animData;
+            for (i = 0; i < w->entries[group].numAnims; i++) {
+                a->flags = 0;
+                a->anim = (MapAnimHeader*)*++animTbl;
+                a++;
             }
         }
     }
@@ -911,29 +909,27 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
         wp->entries[group].rootMapObj = mapEntry(mapJoint, scale, group);
         wp->entries[group].rootHitObj = hitEntry(hitJoint, scale, group);
-        {
-            for (i = 0; i < wp->entries[group].lightTable->count; i++) {
-                MapFileLight* light = wp->entries[group].lightTable->lights[i];
-                Vec pos;
-                GXColor lcolor;
-                s32 type = 1;
-                s32 lflags = 0;
-                PSVECScale(&light->position, &pos, 10.0f);
-                if (!strcmp(light->type, "ambientLight")) {
-                    type = 0;
-                } else if (!strcmp(light->type, "pointLight")) {
-                    type = 1;
-                } else if (!strcmp(light->type, "directionalLight")) {
-                    type = 2;
-                } else if (!strcmp(light->type, "spotLight")) {
-                    type = 3;
-                }
-                if (light->magic == 0x12D60D8) {
-                    lflags = light->lflags;
-                }
-                lcolor = light->color;
-                lightEntry(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
+        for (i = 0; i < wp->entries[group].lightTable->count; i++) {
+            MapFileLight* light = wp->entries[group].lightTable->lights[i];
+            Vec pos;
+            GXColor lcolor;
+            s32 type = 1;
+            s32 lflags = 0;
+            PSVECScale(&light->position, &pos, 10.0f);
+            if (!strcmp(light->type, "ambientLight")) {
+                type = 0;
+            } else if (!strcmp(light->type, "pointLight")) {
+                type = 1;
+            } else if (!strcmp(light->type, "directionalLight")) {
+                type = 2;
+            } else if (!strcmp(light->type, "spotLight")) {
+                type = 3;
             }
+            if (light->magic == 0x12D60D8) {
+                lflags = light->lflags;
+            }
+            lcolor = light->color;
+            lightEntry(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
         }
         mapResetPaperAmbColor();
         mapResetPaperCraftAmbColor();
@@ -1179,6 +1175,7 @@ void bmapUnLoad(void) {
     MapEntry* entry;
     MapEntry* entry2;
     int i;
+    s32 gz;
 #else
 void bmapUnLoad(void) {
     MapEntry* entry2;
@@ -1241,11 +1238,9 @@ void bmapUnLoad(void) {
     // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
 #if VERSION <= VERSION_DEMO_JP
     j = 0;
-    {
-        s32 gz = 0;
-        if (gz != 0) {
-            j = 0;
-        }
+    gz = 0;
+    if (gz != 0) {
+        j = 0;
     }
     wp2 = mapWork;
     activeGroup = j;
@@ -3504,6 +3499,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
     LightEntry* lights[8];
     GXColor ambient;
     Vec pos;
+    f32 ang;
 
     count = 0;
     attnFn = GX_AF_NONE;
@@ -3579,11 +3575,9 @@ void mapSetMaterialLight(s32 flags, Vec position) {
             GXInitLightPos(&lightObj, pos.x, pos.y, pos.z);
             GXInitLightDir(&lightObj, dir.x, dir.y, dir.z);
             // FAKE: spare block and temporary for the half spot angle; the expression written in the call changes the object
-            {
-                f32 ang = lights[i]->spotAngle;
-                ang *= 0.5f;
-                GXInitLightSpot(&lightObj, ang, GX_SP_SHARP);
-            }
+            ang = lights[i]->spotAngle;
+            ang *= 0.5f;
+            GXInitLightSpot(&lightObj, ang, GX_SP_SHARP);
             GXInitLightDistAttn(&lightObj, 1000.0f, 0.5f, GX_DA_OFF);
             GXInitLightColor(&lightObj, lights[i]->color);
             GXLoadLightObjImm(&lightObj, lightid_tbl[i]);

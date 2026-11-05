@@ -2191,6 +2191,7 @@ static inline PuniData* searchBattleTeki_inl(PuniData* self) {
     PuniData* q;
     f32 minDist = 1000000.0f;
     PuniData* found = NULL;
+    PuniData* ret;
 
     q = &Punidat[PUNI_ENEMY_FIRST];
     for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++) {
@@ -2203,15 +2204,12 @@ static inline PuniData* searchBattleTeki_inl(PuniData* self) {
         }
         q++;
     }
-    {
-    PuniData* ret;
-    if (minDist < 1000000.0f) {
-        ret = found;
-    } else {
-        ret = NULL;
-    }
-    return ret;
-    }
+if (minDist < 1000000.0f) {
+    ret = found;
+} else {
+    ret = NULL;
+}
+return ret;
 }
 
 /** Inline version of "nearest living Puni within 1000 units", used by puniSearch. */
@@ -2220,6 +2218,7 @@ static inline PuniData* searchBattleMikata_inl(PuniData* self) {
     PuniData* q;
     f32 minDist = 1000000.0f;
     PuniData* found = NULL;
+    PuniData* ret;
 
     q = &Punidat[1];
     for (i = 1; i < PUNI_SOLID_FIRST; i++) {
@@ -2232,15 +2231,12 @@ static inline PuniData* searchBattleMikata_inl(PuniData* self) {
         }
         q++;
     }
-    {
-    PuniData* ret;
-    if (minDist < 1000000.0f) {
-        ret = found;
-    } else {
-        ret = NULL;
-    }
-    return ret;
-    }
+if (minDist < 1000000.0f) {
+    ret = found;
+} else {
+    ret = NULL;
+}
+return ret;
 }
 
 /** Nearest living Jabbi to self at any distance under 1000 units, or NULL. */
@@ -2287,33 +2283,32 @@ void puniSearch(PuniData* p) {
 void puniModeChangeAttack(void) {
     s32 i;
     PuniData* p = &Punidat[1];
+    PuniData* f;
     for (i = 1; i < PUNI_DATA_MAX; i++, p++) {
         if (p->flags & PUNI_FLAG_ACTIVE) {
             switch (p->mode) {
             case PUNI_MODE_IDLE:
             case PUNI_MODE_JOIN:
             case 2:
-            case 0x1d: {
-                PuniData* f;
-                if (p->flags & PUNI_FLAG_PUNI) {
-                    f = searchBattleTeki_inl(p);
-                } else {
-                    f = searchBattleMikata_inl(p);
-                }
-                if (f) {
-                    p->target = f;
-                    p->mode = PUNI_MODE_ATTACK;
-                    p->modeStep = 0;
-                    p->depth = 0;
-                    p->flags |= PUNI_FLAG_COLLIDE;
-                    PuniDokuritsu(p);
-                    if (p->effect) {
-                        effDelete(p->effect);
-                        p->effect = NULL;
-                    }
-                }
-                break;
+            case 0x1d:
+            if (p->flags & PUNI_FLAG_PUNI) {
+                f = searchBattleTeki_inl(p);
+            } else {
+                f = searchBattleMikata_inl(p);
             }
+            if (f) {
+                p->target = f;
+                p->mode = PUNI_MODE_ATTACK;
+                p->modeStep = 0;
+                p->depth = 0;
+                p->flags |= PUNI_FLAG_COLLIDE;
+                PuniDokuritsu(p);
+                if (p->effect) {
+                    effDelete(p->effect);
+                    p->effect = NULL;
+                }
+            }
+            break;
             }
         }
     }
@@ -2896,6 +2891,8 @@ void puniModeMass(PuniData* p) {
  * then goes to the away mode.
  */
 void puniModeAwayjump(PuniData* p) {
+    u32 t;
+
     switch (p->modeStep) {
         case 0:
             p->startTime = gp->renderTime;
@@ -2912,25 +2909,24 @@ void puniModeAwayjump(PuniData* p) {
             } else {
                 psndSFXOn_3D("SFX_STG2_PUNI_JUMP1", &p->pos);
             }
-        case 1: {
-            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
-            if ((s32)t > 100 && p->modeVar1 == 0) {
-                p->modeVar1 = 1;
-                p->anim = 8;
-                p->animTime = 0;
-            }
-            if ((s32)t < 200) {
-                f32 f = (f32)(s32)t / 200.0f;
-                p->pos.y = f * (p->modeF1 * f + p->modeF2) + p->modeF0;
-            } else {
-                p->pos.y = p->modeF0;
-                p->mode = PUNI_MODE_AWAY;
-                p->anim = 2;
-                p->flags &= ~PUNI_FLAG_OWN_ANIM_TIME;
-                p->modeStep = 0;
-            }
-            break;
+        case 1:
+        t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
+        if ((s32)t > 100 && p->modeVar1 == 0) {
+            p->modeVar1 = 1;
+            p->anim = 8;
+            p->animTime = 0;
         }
+        if ((s32)t < 200) {
+            f32 f = (f32)(s32)t / 200.0f;
+            p->pos.y = f * (p->modeF1 * f + p->modeF2) + p->modeF0;
+        } else {
+            p->pos.y = p->modeF0;
+            p->mode = PUNI_MODE_AWAY;
+            p->anim = 2;
+            p->flags &= ~PUNI_FLAG_OWN_ANIM_TIME;
+            p->modeStep = 0;
+        }
+        break;
     }
 }
 
@@ -3275,52 +3271,52 @@ void puniModeEscape(PuniData* p) {
  * an opponent coming within 80 units sends it back to escape mode and the wind takes it to wind mode.
  */
 void puniModeRecover(PuniData* p) {
+    int r;
+
     switch (p->modeStep) {
-        case 0: {
-            int r = puniPositionCheck(p);
-            if (r != 0) {
-                p->recoverReason = r;
-                p->recoverFromPos = p->pos;
-                puniPositionRecover(p);
-                p->recoverToPos = p->pos;
-            }
-            {
-                Vec puni_recover_vel = {0.0f, 0.0f, 0.0f};
-                p->vel = puni_recover_vel;
-            }
-            p->modeStep = 1;
-            break;
+        case 0:
+        r = puniPositionCheck(p);
+        if (r != 0) {
+            p->recoverReason = r;
+            p->recoverFromPos = p->pos;
+            puniPositionRecover(p);
+            p->recoverToPos = p->pos;
         }
-        case 1: {
-            if (p->hp * 100 / p->maxHp >= 80) {
-                p->mode = PUNI_MODE_IDLE;
-                p->anim = 0;
-                p->modeStep = 0;
-            } else if (p->breathPower > 10.0f) {
-                p->prevMode = p->mode;
-                p->target = Punigp->marioPuni;
-                p->mode = PUNI_MODE_WIND;
-                p->modeStep = 0;
-            } else {
-                if (((s32)gp->retraceCount & 3) == (*(s16*)(&p->index) & 3)) {
-                    if (p->flags & PUNI_FLAG_PUNI) {
-                        p->target = searchBattleTeki_inl(p);
-                    } else {
-                        p->target = searchBattleMikata_inl(p);
-                    }
-                }
-                if (p->target != NULL) {
-                    Vec d;
-                    PSVECSubtract(&p->target->pos, &p->pos, &d);
-                    if (PSVECMag(&d) < 80.0f) {
-                        p->mode = PUNI_MODE_ESCAPE;
-                        p->anim = 2;
-                        p->modeStep = 0;
-                    }
+        {
+            Vec puni_recover_vel = {0.0f, 0.0f, 0.0f};
+            p->vel = puni_recover_vel;
+        }
+        p->modeStep = 1;
+        break;
+        case 1:
+        if (p->hp * 100 / p->maxHp >= 80) {
+            p->mode = PUNI_MODE_IDLE;
+            p->anim = 0;
+            p->modeStep = 0;
+        } else if (p->breathPower > 10.0f) {
+            p->prevMode = p->mode;
+            p->target = Punigp->marioPuni;
+            p->mode = PUNI_MODE_WIND;
+            p->modeStep = 0;
+        } else {
+            if (((s32)gp->retraceCount & 3) == (*(s16*)(&p->index) & 3)) {
+                if (p->flags & PUNI_FLAG_PUNI) {
+                    p->target = searchBattleTeki_inl(p);
+                } else {
+                    p->target = searchBattleMikata_inl(p);
                 }
             }
-            break;
+            if (p->target != NULL) {
+                Vec d;
+                PSVECSubtract(&p->target->pos, &p->pos, &d);
+                if (PSVECMag(&d) < 80.0f) {
+                    p->mode = PUNI_MODE_ESCAPE;
+                    p->anim = 2;
+                    p->modeStep = 0;
+                }
+            }
         }
+        break;
     }
 }
 
@@ -3440,6 +3436,7 @@ void puniModeWind(PuniData* p) {
     f32 nz, ny, nx;
     f32 dist;
     Vec d;
+    Vec start;
 
     switch (p->modeStep) {
         case 0:
@@ -3510,27 +3507,25 @@ void puniModeWind(PuniData* p) {
             PSVECScale(&d, &p->vel, p->radius.x);
             p->modeStep = 4;
             // fallthrough
-        case 4: {
-            Vec start;
+        case 4:
 
-            PSVECAdd(&p->pos, &p->vel, &p->pos);
-            start = p->pos;
-            dist = 2.0f;
-            d = (Vec){0.0f, -1.0f, 0.0f};
-            start.y += 0.2f;
-            if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start.x, start.y, start.z, d.x, d.y, d.z) == NULL) {
-                p->vel = (Vec){0.0f, 0.0f, 0.0f};
-                p->mode = PUNI_MODE_FALL;
-                p->anim = 0;
-                p->rotOffsetY = 0.0f;
-                p->spin = 0.0f;
-                p->dispOfs.y = 0.0f;
-                p->modeStep = 0;
-            } else {
-                p->modeStep = 10;
-            }
-            break;
+        PSVECAdd(&p->pos, &p->vel, &p->pos);
+        start = p->pos;
+        dist = 2.0f;
+        d = (Vec){0.0f, -1.0f, 0.0f};
+        start.y += 0.2f;
+        if (hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, start.x, start.y, start.z, d.x, d.y, d.z) == NULL) {
+            p->vel = (Vec){0.0f, 0.0f, 0.0f};
+            p->mode = PUNI_MODE_FALL;
+            p->anim = 0;
+            p->rotOffsetY = 0.0f;
+            p->spin = 0.0f;
+            p->dispOfs.y = 0.0f;
+            p->modeStep = 0;
+        } else {
+            p->modeStep = 10;
         }
+        break;
         case 10:
             puniModeWind_kaiten(p);
             if (!(p->breathPower > 0.0f)) {
@@ -3732,6 +3727,7 @@ void puniModeUpdraft(PuniData *p) {
     Vec savev;
     f32 mag;
     s32 t;
+    Vec q;
     if (p->modeStep == 0) {
         {
             Vec v_ = {0.0f, 0.94f, 0.0f};
@@ -3806,37 +3802,35 @@ void puniModeUpdraft(PuniData *p) {
     save = p->pos;
     savev = p->vel;
     puniMoveAtari(p, save, d, 1, mag);
-    {
-        Vec q = p->pos;
-        q.x += (p->dispOfs.x);
-        q.y += 15.0f;
-        q.z += 3.0f;
-        ((PuniBalloonWork*)p->effect->userdata)->position.x = q.x;
-        ((PuniBalloonWork*)p->effect->userdata)->position.y = q.y;
-        ((PuniBalloonWork*)p->effect->userdata)->position.z = q.z;
-        if ((p->hitMove != NULL) || (p->hitCheck != NULL)) {
-            s32 f = 0;
-            if ((p->hitMove != NULL) && (p->hitMove->attributes & HIT_ATTR_NPC_ONLY)) {
-                f = 1;
-            }
-            if ((p->hitCheck != NULL) && (p->hitCheck->attributes & HIT_ATTR_NPC_ONLY)) {
-                f = 1;
-            }
-            if (f == 0) {
-                p->mode = PUNI_MODE_WONDER;
-                p->modeStep = 0;
-                p->dispOfs.x = 0.0f;
-            } else {
-                p->pos = save;
-                p->vel = savev;
-                PSVECAdd(&p->pos, &p->vel, &p->pos);
-            }
+    q = p->pos;
+    q.x += (p->dispOfs.x);
+    q.y += 15.0f;
+    q.z += 3.0f;
+    ((PuniBalloonWork*)p->effect->userdata)->position.x = q.x;
+    ((PuniBalloonWork*)p->effect->userdata)->position.y = q.y;
+    ((PuniBalloonWork*)p->effect->userdata)->position.z = q.z;
+    if ((p->hitMove != NULL) || (p->hitCheck != NULL)) {
+        s32 f = 0;
+        if ((p->hitMove != NULL) && (p->hitMove->attributes & HIT_ATTR_NPC_ONLY)) {
+            f = 1;
         }
-        if (p->pos.y >= 0.0f) {
+        if ((p->hitCheck != NULL) && (p->hitCheck->attributes & HIT_ATTR_NPC_ONLY)) {
+            f = 1;
+        }
+        if (f == 0) {
             p->mode = PUNI_MODE_WONDER;
             p->modeStep = 0;
             p->dispOfs.x = 0.0f;
+        } else {
+            p->pos = save;
+            p->vel = savev;
+            PSVECAdd(&p->pos, &p->vel, &p->pos);
         }
+    }
+    if (p->pos.y >= 0.0f) {
+        p->mode = PUNI_MODE_WONDER;
+        p->modeStep = 0;
+        p->dispOfs.x = 0.0f;
     }
 }
 
@@ -3943,60 +3937,58 @@ static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist
  * for 68 frames, then falls back to the floor (at once when no gather target is on).
  */
 void puniModeFunbari(PuniData* p) {
+    Vec start;
+    Vec s2;
+    Vec d2;
+    f32 dist;
+    f32 s;
+    PuniTarget* t;
+    int i;
+
     switch (p->modeStep) {
-        case 0: {
-            PuniTarget* t;
-            int i;
-            t = Punigp->targets;
-            for (i = 0; i < 10; i++, t++) {
-                if ((t->flags & PUNI_TARGET_FLAG_ON) && (t->flags & PUNI_TARGET_FLAG_MASS)) break;
-            }
-            if (i >= 10) {
-                p->modeStep = 10;
-                break;
-            }
-            if (p->pos.x > t->pos.x) {
-                p->modeF2 = -1.0f;
-                p->dir = 270.0f;
-            } else {
-                p->modeF2 = 1.0f;
-                p->dir = 90.0f;
-            }
-            p->vel.x = 0.5f;
-            p->timer = 68;
-            p->modeF0 = 1.0f;
-#if VERSION >= VERSION_US
-            p->dispOfs.y = 0.0f;
-#endif
-            p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
-            p->modeStep = 1;
+        case 0:
+        t = Punigp->targets;
+        for (i = 0; i < 10; i++, t++) {
+            if ((t->flags & PUNI_TARGET_FLAG_ON) && (t->flags & PUNI_TARGET_FLAG_MASS)) break;
+        }
+        if (i >= 10) {
+            p->modeStep = 10;
             break;
         }
+        if (p->pos.x > t->pos.x) {
+            p->modeF2 = -1.0f;
+            p->dir = 270.0f;
+        } else {
+            p->modeF2 = 1.0f;
+            p->dir = 90.0f;
+        }
+        p->vel.x = 0.5f;
+        p->timer = 68;
+        p->modeF0 = 1.0f;
+#if VERSION >= VERSION_US
+        p->dispOfs.y = 0.0f;
+#endif
+        p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
+        p->modeStep = 1;
+        break;
         case 1:
-        case 2: {
-                f32 s = sin(3.1415927f * p->modeF0 / 180.0f);
-                if (p->modeF0 <= 180.0f) {
-                    p->modeF1 = 0.5f * s;
-                } else {
-                    p->modeF1 = 0.45f * s;
-                }
+        case 2:
+            s = sin(3.1415927f * p->modeF0 / 180.0f);
+            if (p->modeF0 <= 180.0f) {
+                p->modeF1 = 0.5f * s;
+            } else {
+                p->modeF1 = 0.45f * s;
             }
             p->modeF0 += 7.0f;
             if (p->modeF0 >= 360.0f) p->modeF0 = 360.0f;
 #if VERSION >= VERSION_US
-            {
-                Vec start;
-                Vec s2;
-                Vec d2;
-                f32 dist;
-                start = p->pos;
-                dist = __fabs(p->modeF2);
-                p->vel.x = 0.5f * p->modeF2;
-                p->vel.z = p->vel.y = 0.0f;
-                d2 = p->vel;
-                s2 = start;
-                puniMoveHitLimitedInl(p, &s2, &d2, dist);
-            }
+            start = p->pos;
+            dist = __fabs(p->modeF2);
+            p->vel.x = 0.5f * p->modeF2;
+            p->vel.z = p->vel.y = 0.0f;
+            d2 = p->vel;
+            s2 = start;
+            puniMoveHitLimitedInl(p, &s2, &d2, dist);
             p->dispOfs.y += p->modeF1;
             if (p->timer-- == 0) {
                 p->modeStep = 10;
@@ -4026,6 +4018,9 @@ void puniModeFunbari(PuniData* p) {
  */
 void puniModeWater(PuniData* p) {
     Vec d;
+    u32 t;
+    f32 x;
+    f32 z;
     switch (p->modeStep) {
         case 0:
             p->flags |= PUNI_FLAG_HIDDEN;
@@ -4044,28 +4039,25 @@ void puniModeWater(PuniData* p) {
             p->modeF1 = (p->savedPos.y - p->moveStart.y) - p->modeF0;
             PSVECNormalize(&p->pushDir, &d);
             PSVECScale(&d, &d, -20.0f);
-            {
-                f32 x = d.x + p->pos.x;
-                f32 z = d.z + p->pos.z;
-                p->savedPos.x = x;
-                p->savedPos.z = z;
-            }
+            x = d.x + p->pos.x;
+            z = d.z + p->pos.z;
+            p->savedPos.x = x;
+            p->savedPos.z = z;
             p->modeStep = 3;
-        case 3: {
-            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
-            if ((s32)t < 300) {
-                f32 f = (f32)(s32)t / 300.0f;
-                p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, p->savedPos.x, t, 300);
-                p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, p->savedPos.z, t, 300);
-                p->pos.y = f * (p->modeF0 * f + p->modeF1) + p->moveStart.y;
-                p->prevPos = p->pos;
-            } else {
-                p->pos = p->savedPos;
-                p->prevPos = p->pos;
-                p->modeStep = 4;
-            }
-            break;
+        case 3:
+        t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
+        if ((s32)t < 300) {
+            f32 f = (f32)(s32)t / 300.0f;
+            p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, p->savedPos.x, t, 300);
+            p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, p->savedPos.z, t, 300);
+            p->pos.y = f * (p->modeF0 * f + p->modeF1) + p->moveStart.y;
+            p->prevPos = p->pos;
+        } else {
+            p->pos = p->savedPos;
+            p->prevPos = p->pos;
+            p->modeStep = 4;
         }
+        break;
         case 4:
             p->mode = PUNI_MODE_HAGURE;
             p->anim = 0;
@@ -4375,10 +4367,10 @@ void puniModeEnterSub(PuniData* p) {
  */
 void puniModeEnter(PuniData* p) {
     Vec d;
+    u32 t;
     switch (p->modeStep) {
-        case 0: {
-                p->startTime = gp->renderTime;
-            }
+        case 0:
+            p->startTime = gp->renderTime;
             p->timer = 200;
             if ((Punigp->flags & PUNI_WORK_FLAG_PIPE_DOWN) && !(Punigp->flags & PUNI_WORK_FLAG_NO_NEXT_MAP)) {
                 p->timer = 700;
@@ -4390,13 +4382,12 @@ void puniModeEnter(PuniData* p) {
                 p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
             }
             p->modeStep = 1;
-        case 1: {
-            u32 t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
-            if ((s32)t > p->timer) {
-                p->modeStep = 2;
-            }
-            break;
+        case 1:
+        t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);
+        if ((s32)t > p->timer) {
+            p->modeStep = 2;
         }
+        break;
         case 2:
             if (Punigp->flags & (PUNI_WORK_FLAG_PIPE_WEST | PUNI_WORK_FLAG_PIPE_EAST)) {
                 p->modeVar0++;
@@ -4424,17 +4415,16 @@ void puniModeEnter(PuniData* p) {
                 p->modeStep = 3;
             }
             break;
-        case 3: {
-            searchParent(p);
-            p->mode = PUNI_MODE_PARENT;
-            p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
-            PSVECSubtract(&p->parent->pos, &p->pos, &d);
-            p->prevParentDist = p->parentDist = PSVECMag(&d);
-            p->timer = 0;
-            p->modeStep = 0;
-            p->anim = 1;
-            break;
-        }
+        case 3:
+        searchParent(p);
+        p->mode = PUNI_MODE_PARENT;
+        p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
+        PSVECSubtract(&p->parent->pos, &p->pos, &d);
+        p->prevParentDist = p->parentDist = PSVECMag(&d);
+        p->timer = 0;
+        p->modeStep = 0;
+        p->anim = 1;
+        break;
     }
 }
 
@@ -4750,18 +4740,19 @@ static const Vec puni_fall_dir;
  * if needed, then makes it lost (hagure). Written as an inline helper for puniModeMain.
  */
 static inline void puniModeCheckPos(PuniData* p) {
+    s32 r;
+
     switch (p->modeStep) {
-        case 0: {
-            s32 r = puniPositionCheck(p);
-            if (r != 0) {
-                p->recoverReason = r;
-                p->recoverFromPos = p->pos;
-                puniPositionRecover(p);
-                p->recoverToPos = p->pos;
-            }
-            p->modeStep = 1;
-            break;
+        case 0:
+        r = puniPositionCheck(p);
+        if (r != 0) {
+            p->recoverReason = r;
+            p->recoverFromPos = p->pos;
+            puniPositionRecover(p);
+            p->recoverToPos = p->pos;
         }
+        p->modeStep = 1;
+        break;
         case 1:
             p->mode = PUNI_MODE_HAGURE;
             p->modeStep = 0;
@@ -4772,6 +4763,9 @@ static inline void puniModeCheckPos(PuniData* p) {
 // Descriptive name (not in the symbol maps); placeholder unk_mri_00012d58, JP mri .text+0x12C94. See docs/NAME_PROVENANCE.md.
 #if VERSION >= VERSION_JP
 void puniModeMain(PuniData* p) {
+    f32 m;
+    Vec d;
+
     switch (p->mode) {
         case PUNI_MODE_IDLE:
             p->flags &= ~PUNI_FLAG_STRAY;
@@ -4785,23 +4779,19 @@ void puniModeMain(PuniData* p) {
                 p->mode = PUNI_MODE_JOIN;
             }
             break;
-        case PUNI_MODE_JOIN: {
-            Vec d;
-            p->flags &= ~PUNI_FLAG_STRAY;
-            searchParent(p);
-            p->mode = PUNI_MODE_PARENT;
-            p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
-            PSVECSubtract(&p->parent->pos, &p->pos, &d);
-            {
-                f32 m = PSVECMag(&d);
-                p->parentDist = m;
-                p->prevParentDist = m;
-            }
-            p->timer = 0;
-            p->modeStep = 0;
-            p->anim = 1;
-            break;
-        }
+        case PUNI_MODE_JOIN:
+        p->flags &= ~PUNI_FLAG_STRAY;
+        searchParent(p);
+        p->mode = PUNI_MODE_PARENT;
+        p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
+        PSVECSubtract(&p->parent->pos, &p->pos, &d);
+        m = PSVECMag(&d);
+        p->parentDist = m;
+        p->prevParentDist = m;
+        p->timer = 0;
+        p->modeStep = 0;
+        p->anim = 1;
+        break;
         case PUNI_MODE_PARENT:
             p->flags &= ~PUNI_FLAG_STRAY;
             puniModeParent(p);
@@ -4974,6 +4964,12 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
  * All these modes then set the Puni's height; the other modes (updraft, fall and so on) are left alone.
  */
 void puniMoveMain(PuniData* p) {
+    Vec d2;
+    Vec s2;
+    Vec dir;
+    Vec start;
+    f32 dist;
+
     switch (p->mode) {
         case PUNI_MODE_IDLE:
         case PUNI_MODE_JOIN:
@@ -4987,38 +4983,33 @@ void puniMoveMain(PuniData* p) {
         case PUNI_MODE_DODAI:
         case PUNI_MODE_ENTER:
         case PUNI_MODE_EXIT:
-        case PUNI_MODE_POINT: {
-            Vec d2;
-            Vec s2;
-            Vec dir;
-            Vec start;
-            f32 dist = PSVECMag(&p->vel);
-            if (!dist) {
-                goto mv_end1;
-            }
-            if (dist > 1.0f) {
-                if (p->vel.x < 0.0f) {
-                    p->dir = 270.0f;
-                } else {
-                    p->dir = 90.0f;
-                }
-            }
-            if (dist > p->maxSpeed) {
-                PSVECScale(&p->vel, &p->vel, p->maxSpeed / dist);
-                dist = p->maxSpeed;
-            }
-            start = p->pos;
-            start.y += 1.0f;
-            PSVECNormalize(&p->vel, &dir);
-            s2 = start;
-            d2 = dir;
-            puniMoveHitInl(p, &s2, &d2, dist);
-            if (p->hitMove != NULL || p->hitCheck != NULL) {
-                p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
+        case PUNI_MODE_POINT:
+        dist = PSVECMag(&p->vel);
+        if (!dist) {
+            goto mv_end1;
+        }
+        if (dist > 1.0f) {
+            if (p->vel.x < 0.0f) {
+                p->dir = 270.0f;
             } else {
-                PSVECScale(&p->vel, &p->vel, 0.6f);
-                p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
+                p->dir = 90.0f;
             }
+        }
+        if (dist > p->maxSpeed) {
+            PSVECScale(&p->vel, &p->vel, p->maxSpeed / dist);
+            dist = p->maxSpeed;
+        }
+        start = p->pos;
+        start.y += 1.0f;
+        PSVECNormalize(&p->vel, &dir);
+        s2 = start;
+        d2 = dir;
+        puniMoveHitInl(p, &s2, &d2, dist);
+        if (p->hitMove != NULL || p->hitCheck != NULL) {
+            p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
+        } else {
+            PSVECScale(&p->vel, &p->vel, 0.6f);
+            p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
         }
         mv_end1:
             puniSetYPosition(p);
@@ -5075,10 +5066,9 @@ void puniMoveMain(PuniData* p) {
         mv_end3:
             puniSetYPosition(p);
             break;
-        case PUNI_MODE_FUNC: {
-            if (p->moveFunc) {
-                p->moveFunc(p);
-            }
+        case PUNI_MODE_FUNC:
+        if (p->moveFunc) {
+            p->moveFunc(p);
         }
             puniSetYPosition(p);
             break;

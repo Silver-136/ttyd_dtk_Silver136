@@ -156,6 +156,8 @@ void mot_hammer(void) {
     s32 efType;
     HitEntry* hit;
     s32 n;
+    MarioWork* m;
+    s32 lv;
 
     if ((s32)mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -208,22 +210,20 @@ void mot_hammer(void) {
         } else {
             mario->flags &= ~MARIO_FLAG_HAMMER_HIT_WALL;
         }
-        {
-            MarioWork* m = marioGetPtr();
+        m = marioGetPtr();
+        snd = PSND_SFX_MARIO_HAMMER_FURU1;
+        switch (pouchGetHammerLv()) {
+        case 1:
             snd = PSND_SFX_MARIO_HAMMER_FURU1;
-            switch (pouchGetHammerLv()) {
-            case 1:
-                snd = PSND_SFX_MARIO_HAMMER_FURU1;
-                break;
-            case 2:
-                snd = PSND_SFX_MARIO_HAMMER_FURU2;
-                break;
-            case 3:
-                snd = PSND_SFX_MARIO_HAMMER_FURU3;
-                break;
-            }
-            psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
+            break;
+        case 2:
+            snd = PSND_SFX_MARIO_HAMMER_FURU2;
+            break;
+        case 3:
+            snd = PSND_SFX_MARIO_HAMMER_FURU3;
+            break;
         }
+        psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
 #if VERSION >= VERSION_JP
         mario->mot.hammer.hitKind = kind;
 #endif
@@ -256,15 +256,13 @@ void mot_hammer(void) {
     mario->poseTime = n;
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)n);
     if (done) {
-        {
-            s32 lv = pouchGetPtr()->hammerLevel;
-            if (lv == 1) {
-                evtEntry(lv1quake_evt, 0, 0);
-            } else if (lv == 2) {
-                evtEntry(lv2quake_evt, 0, 0);
-            } else if (lv == 3) {
-                evtEntry(lv3quake_evt, 0, 0);
-            }
+        lv = pouchGetPtr()->hammerLevel;
+        if (lv == 1) {
+            evtEntry(lv1quake_evt, 0, 0);
+        } else if (lv == 2) {
+            evtEntry(lv2quake_evt, 0, 0);
+        } else if (lv == 3) {
+            evtEntry(lv3quake_evt, 0, 0);
         }
         mario->currSubMotionId = 1;
         mario->hitobjHammer = mario->hitobjHammerNew;
@@ -327,42 +325,40 @@ void mot_hammer(void) {
             effKemuTestEntry(efType, px, py + ez, pz, 1.0f);
         }
 #endif
-        {
-            MarioWork* m = marioGetPtr();
-            snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
-            switch (pouchGetHammerLv()) {
-            case 1:
-                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);
-                break;
-            case 2:
-                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON2), &m->position);
-                break;
-            case 3:
-                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
-                break;
-            }
+        m = marioGetPtr();
+        snd = PSND_SFX_MARIO_HAMMER_WOOD_DON1;
+        switch (pouchGetHammerLv()) {
+        case 1:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON1), &m->position);
+            break;
+        case 2:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON2), &m->position);
+            break;
+        case 3:
+            psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HAMMER_DON3), &m->position);
+            break;
+        }
 #if VERSION <= VERSION_DEMO_JP
-            for (i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
 #else
-            // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
-            for (i = 0; (u32)i < 10; i++) {
+        // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
+        for (i = 0; (u32)i < 10; i++) {
 #endif
-                if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
-                    snd = se_data[m->hammerSfxIdx + 1];
-                    m->hammerSfxIdx += 2;
-                    if (m->hammerSfxIdx >= 10) {
-                        m->hammerSfxIdx -= 10;
-                    }
-                    break;
-                } else {
-                    m->hammerSfxIdx += 2;
-                    if (m->hammerSfxIdx >= 10) {
-                        m->hammerSfxIdx -= 10;
-                    }
+            if (pouchEquipCheckBadge(se_data[m->hammerSfxIdx])) {
+                snd = se_data[m->hammerSfxIdx + 1];
+                m->hammerSfxIdx += 2;
+                if (m->hammerSfxIdx >= 10) {
+                    m->hammerSfxIdx -= 10;
+                }
+                break;
+            } else {
+                m->hammerSfxIdx += 2;
+                if (m->hammerSfxIdx >= 10) {
+                    m->hammerSfxIdx -= 10;
                 }
             }
-            psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
         }
+        psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
     }
     if (++mario->multiTimer > 20) {
         mario->flags &= ~MARIO_FLAG_STOP_AIR_MOVEMENT;
@@ -494,6 +490,7 @@ void mot_hammer2(void) {
     f32 ang2, ang;
     f32 nz, ny, nx, len, hz, hy, hx;
     f32 co, s;
+    MarioWork* m;
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -606,11 +603,9 @@ void mot_hammer2(void) {
                 psndSFXOff(mario->mot.hammer2.sfxId);
                 mario->mot.hammer2.sfxId = -1;
             }
-            {
-                MarioWork* m = marioGetPtr();
-                m->camShiftTargetZ = 0.0f;
-                m->camShiftRate.z = 0.01f;
-            }
+            m = marioGetPtr();
+            m->camShiftTargetZ = 0.0f;
+            m->camShiftRate.z = 0.01f;
             switch (pouchGetHammerLv()) {
             case 1:
                 marioChgPose("M_H_3B");
@@ -728,14 +723,13 @@ f32 marioGetAngleKaitenHammer(void) {
  */
 void mot_ham2_post(void) {
     MarioWork* mario = marioGetPtr();
+    MarioWork* m;
     if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }
-    {
-        MarioWork* m = marioGetPtr();
-        m->camShiftTargetZ = 0.0f;
-        m->camShiftRate.z = 0.01f;
-    }
+    m = marioGetPtr();
+    m->camShiftTargetZ = 0.0f;
+    m->camShiftRate.z = 0.01f;
     marioPaperOff();
 #if VERSION <= VERSION_DEMO_JP
     marioPaperLightOn();

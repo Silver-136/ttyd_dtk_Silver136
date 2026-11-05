@@ -1413,6 +1413,7 @@ void weapon_entry(void) {
     s32 i;
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(mario, BtlUnit_GetBodyPartsId(mario));
+    GenkiWeapon* wp;
     for (i = 0; i < w->weaponNum; i++) {
         if (w->weapon[i].state == 0) {
             idx[cnt] = i;
@@ -1421,11 +1422,9 @@ void weapon_entry(void) {
     }
     if (cnt >= 1) {
         i = idx[irand(cnt)];
-        {
-            GenkiWeapon* wp = &w->weapon[i];
-            wp->state = 1;
-            wp->timer = 7;
-        }
+        wp = &w->weapon[i];
+        wp->state = 1;
+        wp->timer = 7;
         BtlUnit_SetAnim(part, "M_C_2C");
     }
 }
@@ -1514,16 +1513,15 @@ static USER_FUNC(star_stone_appear) {
  */
 USER_FUNC(recover_cmd_disable) {
     BattleWork* w = _battleWorkPointer;
+    BattleUnit* party;
     w->commandDisabled[0] = 0;
     w->commandDisabled[1] = 0;
     w->commandDisabled[2] = 0;
 #if VERSION >= VERSION_US
-    {
-        BattleUnit* party = BattleGetPartyPtr(w);
-        if (party != NULL) {
-            party->usCommandDisabled[0] = 0;
-            party->usCommandDisabled[1] = 0;
-        }
+    party = BattleGetPartyPtr(w);
+    if (party != NULL) {
+        party->usCommandDisabled[0] = 0;
+        party->usCommandDisabled[1] = 0;
     }
 #else
     w->commandDisabled[3] = 0;

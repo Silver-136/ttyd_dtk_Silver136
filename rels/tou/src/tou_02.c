@@ -1890,21 +1890,19 @@ void ext_fan_main(void) {
     }
 
 #if VERSION >= VERSION_JP
-    {
-        for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
-            if (fan->state == 0) {
-                s32 j;
-                Fan* other;
+    for (i = 0, fan = fan_wp->fans; i < fan_wp->num; i++, fan++) {
+        if (fan->state == 0) {
+            s32 j;
+            Fan* other;
 
-                for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
-                    if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
-                        PSVECSubtract(&fan->pos, &other->pos, &dir);
-                        dir.y = 0.0f;
-                        PSVECNormalize(&dir, &dir);
-                        PSVECScale(&dir, &dir, 5.0f);
-                        PSVECAdd(&fan->vel, &dir, &fan->vel);
-                        PSVECSubtract(&other->vel, &dir, &other->vel);
-                    }
+            for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
+                if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
+                    PSVECSubtract(&fan->pos, &other->pos, &dir);
+                    dir.y = 0.0f;
+                    PSVECNormalize(&dir, &dir);
+                    PSVECScale(&dir, &dir, 5.0f);
+                    PSVECAdd(&fan->vel, &dir, &fan->vel);
+                    PSVECSubtract(&other->vel, &dir, &other->vel);
                 }
             }
         }
@@ -1973,31 +1971,30 @@ void ext_fan_main(void) {
                         // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
                         psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
                         break;
-                    case 2: {
+                    case 2:
 
-                        angle = angleABf(mario->position.x, mario->position.z, fan->pos.x, fan->pos.z);
-                        dir2 = cloudGetBreathDir();
-                        fan->state = 20;
+                    angle = angleABf(mario->position.x, mario->position.z, fan->pos.x, fan->pos.z);
+                    dir2 = cloudGetBreathDir();
+                    fan->state = 20;
 #if VERSION <= VERSION_DEMO_JP
-                        dir2 = (angle + dir2) / 2.0f;
+                    dir2 = (angle + dir2) / 2.0f;
 #else
-                        angle = (angle + dir2) / 2.0f;
+                    angle = (angle + dir2) / 2.0f;
 #endif
-                        fan->target = fan_zero;
-                        spd = randf(0.1f, 0.2f);
+                    fan->target = fan_zero;
+                    spd = randf(0.1f, 0.2f);
 #if VERSION <= VERSION_DEMO_JP
-                        angle = 6.2831855f * dir2 / 360.0f;
+                    angle = 6.2831855f * dir2 / 360.0f;
 #else
-                        angle = 6.2831855f * angle / 360.0f;
+                    angle = 6.2831855f * angle / 360.0f;
 #endif
-                        fan->param.x = spd * polySinf(angle);
-                        fan->param.y = randf(0.03f, 0.06f);
-                        fan->param.z = spd * -polyCosf(angle);
-                        fan->timer = 120;
-                        // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
-                        psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
-                        break;
-                    }
+                    fan->param.x = spd * polySinf(angle);
+                    fan->param.y = randf(0.03f, 0.06f);
+                    fan->param.z = spd * -polyCosf(angle);
+                    fan->timer = 120;
+                    // FAKE: integer cast makes the literal a CSE/loop-invariant temp (target addi r30 + mr r29 copy)
+                    psndSFXOn_3D(SFX_NAME_WORD("SFX_STG3_AUDIENCE_FAN_FLY1"), &fan->pos);
+                    break;
                 }
             }
         }

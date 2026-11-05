@@ -455,6 +455,12 @@ void yoshi_use(PartyEntry* party) {
     f32 speed;
     f32 ox;
     f32 oz;
+    MarioWork* m;
+    f32 prev;
+    f32 y;
+    f32 x;
+    f32 z;
+    f32 s;
 
     if (!mario->keyOffCount) {
         partyUpdateKeyData(party);
@@ -803,10 +809,9 @@ void yoshi_use(PartyEntry* party) {
             mario->mot.yoshi.baseY = party->position.y;
             party->yoshiPsndSFXId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_YOSH_JUMP1), &party->position);
 #endif
-        case 21: {
-                f32 s = sin(3.141592653589793f * YOSHI_WORK(party)->angle / 180.0f);
-                mario->mot.yoshi.bobSpeed = s * (YOSHI_WORK(party)->angle <= 180.0f ? 0.5f : 0.37f);
-            }
+        case 21:
+            s = sin(3.141592653589793f * YOSHI_WORK(party)->angle / 180.0f);
+            mario->mot.yoshi.bobSpeed = s * (YOSHI_WORK(party)->angle <= 180.0f ? 0.5f : 0.37f);
 #if VERSION >= VERSION_JP
             mario->mot.yoshi.bobOfs += mario->mot.yoshi.bobSpeed;
 #endif
@@ -815,14 +820,13 @@ void yoshi_use(PartyEntry* party) {
                 YOSHI_WORK(party)->angle = 360.0f;
                 party->useMotionId = 22;
             }
-        case 22: {
-                f32 y = 18.0f + party->position.y;
-                f32 x = party->position.x;
-                f32 z = party->position.z;
-                if (YOSHI_WORK(party)->effect == NULL) {
-                    YOSHI_WORK(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
-                    YOSHI_WORK(party)->timer = 20;
-                }
+        case 22:
+            y = 18.0f + party->position.y;
+            x = party->position.x;
+            z = party->position.z;
+            if (YOSHI_WORK(party)->effect == NULL) {
+                YOSHI_WORK(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
+                YOSHI_WORK(party)->timer = 20;
             }
 #if VERSION <= VERSION_DEMO_JP
             party->position.y += mario->mot.yoshi.bobSpeed;
@@ -961,14 +965,13 @@ void yoshi_use(PartyEntry* party) {
             party->work.common.accelY = marioJumpStandData[1];
             party->work.yoshi.gravityAccel = marioJumpStandData[2];
             party->accelY = marioJumpStandData[3];
-        case 61: {
-                f32 prev = party->gravity;
-                party->work.yoshi.gravityAccel += party->accelY;
-                party->work.common.accelY += party->work.yoshi.gravityAccel;
-                party->gravity += party->work.common.accelY;
-                if (prev >= party->gravity) {
-                    party->useMotionId = 62;
-                }
+        case 61:
+            prev = party->gravity;
+            party->work.yoshi.gravityAccel += party->accelY;
+            party->work.common.accelY += party->work.yoshi.gravityAccel;
+            party->gravity += party->work.common.accelY;
+            if (prev >= party->gravity) {
+                party->useMotionId = 62;
             }
             party->position.y += party->gravity;
             mario->jumpDistance += party->gravity;
@@ -1058,10 +1061,8 @@ void yoshi_use(PartyEntry* party) {
                 if (party->useMotionId == 50) {
                     party->useMotionId = 51;
                 }
-                {
-                    MarioWork* m = marioGetPtr();
-                    m->mot.yoshi.bobSpeed += m->mot.yoshi.bobOfs;
-                }
+                m = marioGetPtr();
+                m->mot.yoshi.bobSpeed += m->mot.yoshi.bobOfs;
             }
             if (mario->mot.yoshi.bobSpeed <= -10.0f) {
                 mario->mot.yoshi.bobSpeed = -10.0f;

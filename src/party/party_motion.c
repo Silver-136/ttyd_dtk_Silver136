@@ -984,6 +984,7 @@ void party_motion_homing_walk(PartyEntry* party) {
     f32 rx, ry, rz;
     f32 fsy, fsa, fsb;
     f32 hh;
+    f32 k;
 
     id = partyGetFootmarkId(party);
     mario = party->playerPtr;
@@ -1230,11 +1231,9 @@ found:
                 sincosf(&s4, &c4, dir);
                 // On this upward-step path x/z are replaced by sin/cos*40 without a world-position origin.
                 // FAKE: spare temporary for 40.0f; the plain constant changes the object
-                {
-                    f32 k = 40.0f;
-                    party->moveTarget.x = s4 * k;
-                    party->moveTarget.z = c4 * k;
-                }
+                k = 40.0f;
+                party->moveTarget.x = s4 * k;
+                party->moveTarget.z = c4 * k;
                 party->moveTarget.y = gy;
             }
             partyChgMot(party, PARTY_MOTION_JUMP);
@@ -2081,23 +2080,22 @@ void party_motion_behind_mario(PartyEntry* party) {
     f32 ty;
     f32 x, z;
     Vec target;
+    f32 t2;
+    f32 t;
 
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         party->trigFlags |= PARTY_TRIG_HALF_PUSH;
         if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET)) {
-            {
-                f32 t;
-                if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
-                    t = partyGetFollowDir(party);
-                    t += 180.0f;
-                    t = revise360(t);
-                } else {
-                    party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
-                    t = revise360(180.0f + angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z));
-                }
-                party->homeDir = t;
+            if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
+                t = partyGetFollowDir(party);
+                t += 180.0f;
+                t = revise360(t);
+            } else {
+                party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
+                t = revise360(180.0f + angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z));
             }
+            party->homeDir = t;
         }
         partyGetAppearPos4(party, &target);
         party->moveFrames = distABf(party->position.x, party->position.z, target.x, target.z);
@@ -2106,11 +2104,9 @@ void party_motion_behind_mario(PartyEntry* party) {
         }
     }
     if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET) && marioKeyOffChk()) {
-        {
-            f32 t2 = partyGetFollowDir(party);
-            t2 += 180.0f;
-            party->homeDir = revise360(t2);
-        }
+        t2 = partyGetFollowDir(party);
+        t2 += 180.0f;
+        party->homeDir = revise360(t2);
     }
     partyGetAppearPos4(party, &target);
     x = target.x;
@@ -2256,12 +2252,11 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     f32 sp;
     f32 thr;
     f32 x, z;
+    f32 t;
 
-    {
-        f32 t = partyGetFollowDir(party);
-        t += 180.0f;
-        party->homeDir = revise360(t);
-    }
+    t = partyGetFollowDir(party);
+    t += 180.0f;
+    party->homeDir = revise360(t);
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         sp = 1.5f * mario->wPlayerCollisionBox.x;
@@ -2274,11 +2269,9 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         }
     }
     if (marioKeyOffChk()) {
-        {
-            f32 t = partyGetFollowDir(party);
-            t += 180.0f;
-            party->homeDir = revise360(t);
-        }
+        t = partyGetFollowDir(party);
+        t += 180.0f;
+        party->homeDir = revise360(t);
     }
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
         sp = 1.5f * mario->wPlayerCollisionBox.x;
@@ -2375,23 +2368,21 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
     f32 dist;
     Vec pos;
     f32 sp, dir;
+    f32 t;
 
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         party->trigFlags |= PARTY_TRIG_HALF_PUSH;
         if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET)) {
-            {
-                f32 t;
-                if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
-                    t = partyGetFollowDir(party);
-                    t += 180.0f;
-                    t = revise360(t);
-                } else {
-                    party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
-                    t = revise360(angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z) + 180.0f);
-                }
-                party->homeDir = t;
+            if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
+                t = partyGetFollowDir(party);
+                t += 180.0f;
+                t = revise360(t);
+            } else {
+                party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
+                t = revise360(angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z) + 180.0f);
             }
+            party->homeDir = t;
         }
         partyGetAppearPos4(party, &party->moveTarget);
         party->moveFrames = distABf(party->position.x, party->position.z, party->moveTarget.x, party->moveTarget.z);
@@ -4483,23 +4474,22 @@ void party_motion_behind_mario(PartyEntry* party) {
     f32 x, z;
     f32 dist;
     f32 gy;
+    f32 t2;
+    f32 t;
 
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         party->trigFlags |= PARTY_TRIG_HALF_PUSH;
         if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET)) {
-            {
-                f32 t;
-                if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
-                    t = partyGetFollowDir(party);
-                    t += 180.0f;
-                    t = revise360(t);
-                } else {
-                    party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
-                    t = revise360(180.0f + angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z));
-                }
-                party->homeDir = t;
+            if (!(party->trigFlags & PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED)) {
+                t = partyGetFollowDir(party);
+                t += 180.0f;
+                t = revise360(t);
+            } else {
+                party->trigFlags &= ~PARTY_TRIG_HOME_DIR_FROM_MOVE_UNUSED;
+                t = revise360(180.0f + angleABf(mario->position.x, mario->position.z, party->moveTarget.x, party->moveTarget.z));
             }
+            party->homeDir = t;
         }
         partyGetAppearPos4(party, &target);
         party->moveFrames = distABf(party->position.x, party->position.z, target.x, target.z);
@@ -4508,11 +4498,9 @@ void party_motion_behind_mario(PartyEntry* party) {
         }
     }
     if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET) && marioKeyOffChk()) {
-        {
-            f32 t2 = partyGetFollowDir(party);
-            t2 += 180.0f;
-            party->homeDir = revise360(t2);
-        }
+        t2 = partyGetFollowDir(party);
+        t2 += 180.0f;
+        party->homeDir = revise360(t2);
     }
     partyGetAppearPos4(party, &target);
     x = target.x;
@@ -4668,12 +4656,11 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
     f32 x, z;
     f32 sp;
     f32 gy;
+    f32 t;
 
-    {
-        f32 t = partyGetFollowDir(party);
-        t += 180.0f;
-        party->homeDir = revise360(t);
-    }
+    t = partyGetFollowDir(party);
+    t += 180.0f;
+    party->homeDir = revise360(t);
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
         sp = 1.5f * mario->wPlayerCollisionBox.x;
@@ -4686,11 +4673,9 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         }
     }
     if (marioKeyOffChk()) {
-        {
-            f32 t = partyGetFollowDir(party);
-            t += 180.0f;
-            party->homeDir = revise360(t);
-        }
+        t = partyGetFollowDir(party);
+        t += 180.0f;
+        party->homeDir = revise360(t);
     }
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
         sp = 1.5f * mario->wPlayerCollisionBox.x;

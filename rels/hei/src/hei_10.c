@@ -378,6 +378,7 @@ static void ext_main(void) {
     f32 angle;
     f32 y;
     Vec pos;
+    f32 rad;
 
     pose = extGetPosePtr();
     chb = wp->chb;
@@ -423,11 +424,9 @@ static void ext_main(void) {
                 (*pose->mtx)[1][3] += chb->vy;
                 chb->vy -= chb->gravity;
                 angle = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], chb->target.x, chb->target.z);
-                {
-                    f32 rad = 3.1415927f * angle / 180.0f;
-                    (*pose->mtx)[0][3] += chb->speed * chb_sin(rad);
-                    (*pose->mtx)[2][3] += chb->speed * -chb_cos(rad);
-                }
+                rad = 3.1415927f * angle / 180.0f;
+                (*pose->mtx)[0][3] += chb->speed * chb_sin(rad);
+                (*pose->mtx)[2][3] += chb->speed * -chb_cos(rad);
                 if (--chb->timer < 0) {
                     (*pose->mtx)[0][3] = chb->target.x;
                     (*pose->mtx)[1][3] = chb->target.y;

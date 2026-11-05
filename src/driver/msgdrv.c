@@ -804,6 +804,8 @@ u16 hankakuSearch(char c);
  */
 #if VERSION <= VERSION_DEMO_JP
 void msgAnalize(smartEntry* smart, const char* msg) {
+    s32 gz;
+
 #else
 void msgAnalize(smartEntry* smart, char* msg) {
 #endif
@@ -971,11 +973,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
 
             // Shift-JIS 0x8145 is the middle dot, 0x8140 the full-width space, 0x8151 the full-width low line
 #if VERSION <= VERSION_DEMO_JP
-        {
-            s32 gz = 0;
-            if (gz != 0) {
-                y = 0;
-            }
+        gz = 0;
+        if (gz != 0) {
+            y = 0;
         }
         check = *((const u8*)msg);
         if (_ismbblead((u8)check)) {
@@ -1132,11 +1132,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #if VERSION <= VERSION_DEMO_JP
             /* FAKE: dead int guard (COLOURING W): msg is redefined in the arm while next is still live
                (the later newline test on next), so msg/next interfere and the target copy mr r21,r15 survives */
-            {
-                s32 gz = 0;
-                if (gz != 0) {
-                    msg++;
-                }
+            gz = 0;
+            if (gz != 0) {
+                msg++;
             }
 #endif
 #if VERSION <= VERSION_DEMO_JP

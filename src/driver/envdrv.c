@@ -655,6 +655,7 @@ void envGlare(EnvironmentGlare* glare) {
     GXTexObj texObj;
 
     int i;
+    int j;
 
     frame_cnt += 1.0f;
     glareFilter = &envWork->filter;
@@ -703,11 +704,8 @@ void envGlare(EnvironmentGlare* glare) {
         GXSetTevSwapMode(i * 2 + 3, GX_TEV_SWAP0, GX_TEV_SWAP0);
     }
 
-    {
-        int j;
-        for (j = 0; j < 8; j++) {
-            GXSetTexCoordGen(j, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + j * 3);
-        }
+    for (j = 0; j < 8; j++) {
+        GXSetTexCoordGen(j, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0 + j * 3);
     }
 
     if (glareFilter->flags & ENV_GLARE_FILTER_Z) {

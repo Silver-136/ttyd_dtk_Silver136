@@ -851,6 +851,18 @@ static void ext_moamoa_main(void) {
     f32 d;
     f32 r;
     f32 s;
+    f32 k;
+    f32 r1;
+    f32 r2;
+    f32 a3;
+    f32 x2;
+    f32 y2;
+    f32 z2;
+    f32 s2;
+    f32 g2;
+    f32 g3;
+    f32 k1;
+    f32 k2;
     hit = 0;
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         wp->hammerFrames++;
@@ -1001,13 +1013,9 @@ static void ext_moamoa_main(void) {
                         y = (*pose->mtx)[1][3];
                         z = (*pose->mtx)[2][3] - (5.0f * polyCosf(r));
                     }
-                    {
-                        f32 k1;
-                        f32 k2;
-                        f32 r1 = rand() / 32767.0f;
-                        f32 r2 = rand() / 32767.0f;
-                        moamoa_jump(pose, moa, moa->state, 1, rad, y, z, (r1 * (k1 = 0.5f - 0.3f)) + 0.3f, (r2 * (k2 = 0.8f - 0.5f)) + 0.5f);
-                    }
+                    r1 = rand() / 32767.0f;
+                    r2 = rand() / 32767.0f;
+                    moamoa_jump(pose, moa, moa->state, 1, rad, y, z, (r1 * (k1 = 0.5f - 0.3f)) + 0.3f, (r2 * (k2 = 0.8f - 0.5f)) + 0.5f);
                 }
                 moa->flags &= ~MOAMOA_FLAG_TO_TARGET;
                 break;
@@ -1062,54 +1070,43 @@ static void ext_moamoa_main(void) {
                         f32 r1 = rand() / 32767.0f;
                         hopSpeed = r1 * (k = 1.0f - 1.0f) + 1.0f;
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-                        {
-                            f32 g2 = randf(0.4f, 0.4f);
-                            {
-                                f32 x2 = x;
-                                f32 y2 = dist;
-                                f32 z2 = z;
-                                f32 s2 = hopSpeed;
-                                f32 g3 = g2;
-                                moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g3);
-                            }
-                        }
+                        g2 = randf(0.4f, 0.4f);
+                        x2 = x;
+                        y2 = dist;
+                        z2 = z;
+                        s2 = hopSpeed;
+                        g3 = g2;
+                        moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g3);
                     }
                 }
                 break;
 
-            case MOAMOA_STATE_APPROACH: {
-                    f32 z;
-                    f32 x;
-                    {
-                        f32 r = randf(-45.0f, 45.0f);
-                        a = wp->angle;
-                        a += r;
-                    }
-                    a += 180.0f;
-                    d = wp->dist;
-                    x = (*pose->mtx)[0][3] + (30.0f * polySinf((6.2831855f * a) / 360.0f));
-                    y = (*pose->mtx)[1][3];
-                    z = (*pose->mtx)[2][3];
-                    {
-                        f32 b;
-                        f32 k;
-                        f32 r1 = rand() / 32767.0f;
-                        f32 r2;
-                        a2 = 2.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f);
-                        r2 = rand() / 32767.0f;
-                        b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
-                        // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-                        {
-                            f32 x2 = x;
-                            f32 y2 = y;
-                            f32 z2 = z;
-                            f32 s2 = a2;
-                            f32 g2 = b;
-                            moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2);
-                        }
-                    }
-                    break;
+            case MOAMOA_STATE_APPROACH:
+                r = randf(-45.0f, 45.0f);
+                a = wp->angle;
+                a += r;
+                a += 180.0f;
+                d = wp->dist;
+                x = (*pose->mtx)[0][3] + (30.0f * polySinf((6.2831855f * a) / 360.0f));
+                y = (*pose->mtx)[1][3];
+                z = (*pose->mtx)[2][3];
+                {
+                    f32 b;
+                    f32 k;
+                    f32 r1 = rand() / 32767.0f;
+                    f32 r2;
+                    a2 = 2.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f);
+                    r2 = rand() / 32767.0f;
+                    b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
+                    // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
+                    x2 = x;
+                    y2 = y;
+                    z2 = z;
+                    s2 = a2;
+                    g2 = b;
+                    moamoa_jump(pose, moa, (d < 100.0f) ? (moa->state) : (0), 1, x2, y2, z2, s2, g2);
                 }
+                break;
 
             case MOAMOA_STATE_JUMP:
                 (*pose->mtx)[1][3] += moa->vy;
@@ -1155,11 +1152,9 @@ static void ext_moamoa_main(void) {
                             f32 rad;
                             f32 k;
                             s = rand() / 32767.0f;
-                            {
-                                f32 a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
-                                a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
-                                rad = (6.2831855f * a3) / 360.0f;
-                            }
+                            a3 = angleABf(tx, tz, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
+                            a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+                            rad = (6.2831855f * a3) / 360.0f;
                             ty = (*pose->mtx)[0][3] + (15.0f * polySinf(rad));
                             y = (*pose->mtx)[1][3];
                             z = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
@@ -1277,12 +1272,9 @@ static void ext_moamoa_main(void) {
                         }
                         x = (15.0f * polySinf(rad)) + (*pose->mtx)[0][3];
                         grav = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));
-                        {
-                            f32 k;
-                            f32 r1 = rand() / 32767.0f;
-                            f32 r2 = rand() / 32767.0f;
-                            moamoa_jump(pose, moa, moa->state, 1, x, 0.0f, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
-                        }
+                        r1 = rand() / 32767.0f;
+                        r2 = rand() / 32767.0f;
+                        moamoa_jump(pose, moa, moa->state, 1, x, 0.0f, grav, 3.0f * ((r1 * (k = 1.0f - 1.0f)) + 1.0f), (r2 * k) + 1.0f);
                     } else {
                         moa->state = MOAMOA_STATE_GONE;
                     }
@@ -1295,13 +1287,11 @@ static void ext_moamoa_main(void) {
                 pose->flags |= EXT_POSE_FLAG_NO_SHADOW;
                 break;
 
-            case MOAMOA_STATE_BLOW_START: {
-                    f32 k;
-                    s = rand() / 32767.0f;
-                    spd = randf(2.0f, 3.0f);
-                    moa->timer = irand(i / 2);
-                    rad = (6.2831855f * ((s * (k = 315.0f - 225.0f)) + 225.0f)) / 360.0f;
-                }
+            case MOAMOA_STATE_BLOW_START:
+                s = rand() / 32767.0f;
+                spd = randf(2.0f, 3.0f);
+                moa->timer = irand(i / 2);
+                rad = (6.2831855f * ((s * (k = 315.0f - 225.0f)) + 225.0f)) / 360.0f;
                 moa->target.x = spd * polySinf(rad);
                 moa->target.y = randf(1.0f, 2.0f);
                 moa->target.z = spd * (-polyCosf(rad));

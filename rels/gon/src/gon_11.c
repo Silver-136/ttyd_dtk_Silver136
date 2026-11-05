@@ -725,19 +725,19 @@ static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h) {
     s32 maxX;
     s32 minY;
     s32 maxY;
+    s32 sx;
+    s32 sy;
 
     hitObjGetPos(name, &pos);
     PSVECAdd(&pos, &v_list[0], &screen);
     getScreenPoint(&screen, &screen);
-    {
-        s32 sx = screen.x;
-        s32 sy = screen.y;
+    sx = screen.x;
+    sy = screen.y;
 
-        minX = sx;
-        maxX = sx;
-        minY = sy;
-        maxY = sy;
-    }
+    minX = sx;
+    maxX = sx;
+    minY = sy;
+    maxY = sy;
     {
         s32 i;
 
@@ -927,33 +927,32 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
             wp->state++;
             break;
 
-        case 4: {
-                img = imgNameToPtr(wp->imgName, inBattle);
-                if ((wp->lastFrame == 0.0f) || ((wp->lastFrame + 1.0f) < img->loopTimes)) {
-                    psndSFXOn_3D("SFX_OFF_CLAUD_WIND2", &mario->position);
-                    wp->lastFrame = img->loopTimes;
-                }
-                if (mario->currMotionId != MARIO_MOTION_CLOUD) {
-                    wp->state = 10;
-                    break;
-                }
-                hit = hitNameToPtr(wp->hitName);
-                if ((((hit0 != hit) && (hit1 != hit)) && (hit2 != hit)) && (hit3 != hit)) {
-                    if (wp->timer == 0) {
-                        wp->state = 10;
-                    } else {
-                        wp->timer--;
-                        wp->counter += 2;
-                    }
-                } else {
-                    wp->timer = 30;
-                    wp->counter += 2;
-                    if (wp->counter > wp->limit) {
-                        wp->state = 20;
-                    }
-                }
+        case 4:
+            img = imgNameToPtr(wp->imgName, inBattle);
+            if ((wp->lastFrame == 0.0f) || ((wp->lastFrame + 1.0f) < img->loopTimes)) {
+                psndSFXOn_3D("SFX_OFF_CLAUD_WIND2", &mario->position);
+                wp->lastFrame = img->loopTimes;
+            }
+            if (mario->currMotionId != MARIO_MOTION_CLOUD) {
+                wp->state = 10;
                 break;
             }
+            hit = hitNameToPtr(wp->hitName);
+            if ((((hit0 != hit) && (hit1 != hit)) && (hit2 != hit)) && (hit3 != hit)) {
+                if (wp->timer == 0) {
+                    wp->state = 10;
+                } else {
+                    wp->timer--;
+                    wp->counter += 2;
+                }
+            } else {
+                wp->timer = 30;
+                wp->counter += 2;
+                if (wp->counter > wp->limit) {
+                    wp->state = 20;
+                }
+            }
+            break;
         case 10:
             wp->state = 99;
             break;

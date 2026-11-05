@@ -1154,6 +1154,8 @@ void animPoseMain(s32 poseId) {
     f32 t3;
     u8* p;
     s64 ms;
+    AnimNodeDelta* delta;
+    u8* node;
 
     poses = wp->poses;
     pose = &poses[poseId];
@@ -1471,16 +1473,12 @@ void animPoseMain(s32 poseId) {
                         v[0] += delta->add;
                     }
                 }
-                {
-                    AnimNodeDelta* delta;
-                    u8* node;
-                    node = (u8*)pose->bufferNode;
-                    delta = &anim->nodeDeltas[kf->nodeStart];
-                    n = kf->nodeCount;
-                    for (j = 0; j < n; j++, delta++) {
-                        node += delta->step * 4;
-                        *(f32*)node += s * (f32)delta->value;
-                    }
+                node = (u8*)pose->bufferNode;
+                delta = &anim->nodeDeltas[kf->nodeStart];
+                n = kf->nodeCount;
+                for (j = 0; j < n; j++, delta++) {
+                    node += delta->step * 4;
+                    *(f32*)node += s * (f32)delta->value;
                 }
                 {
                     u8* tex;

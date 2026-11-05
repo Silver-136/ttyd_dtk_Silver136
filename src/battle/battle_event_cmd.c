@@ -1820,15 +1820,14 @@ USER_FUNC(btlevtcmd_SetOverTurnCount) {
     EvtWord* args = event->args;
     s32 btlId;
     s32 value;
+    BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
     value = evtGetValue(event, args[1]);
     // FAKE: block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->flippedTurns = value changes the object
-    {
-        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-        unit->flippedTurns = value;
-    }
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    unit->flippedTurns = value;
     return EVT_RETURN_DONE;
 }
 
@@ -2473,15 +2472,14 @@ USER_FUNC(btlevtcmd_ChangeFaceDirection) {
     EvtWord* args = event->args;
     s32 btlId;
     s32 value;
+    BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
     value = evtGetValue(event, args[1]);
     // FAKE: block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->faceDirection = value changes the object
-    {
-        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-        unit->faceDirection = value;
-    }
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    unit->faceDirection = value;
     return EVT_RETURN_DONE;
 }
 
@@ -2714,15 +2712,14 @@ USER_FUNC(btlevtcmd_OnToken) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     s32 id;
+    BattleUnitToken_Flags m;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     // FAKE: block-scoped enum copy of args[1]; unit->tokenFlags |= args[1] changes the object
-    {
-        BattleUnitToken_Flags m = (BattleUnitToken_Flags)args[1];
-        unit->tokenFlags |= m;
-    }
+    m = (BattleUnitToken_Flags)args[1];
+    unit->tokenFlags |= m;
     return EVT_RETURN_DONE;
 }
 
@@ -2731,15 +2728,14 @@ USER_FUNC(btlevtcmd_OffToken) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     s32 id;
+    BattleUnitToken_Flags m;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     // FAKE: block-scoped enum mask copy; direct args[1] changes the object
-    {
-        BattleUnitToken_Flags m = (BattleUnitToken_Flags)args[1];
-        unit->tokenFlags &= ~m;
-    }
+    m = (BattleUnitToken_Flags)args[1];
+    unit->tokenFlags &= ~m;
     return EVT_RETURN_DONE;
 }
 
@@ -2748,19 +2744,18 @@ USER_FUNC(btlevtcmd_CheckToken) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     s32 id, index;
+    BattleUnitToken_Flags m;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     index = args[2];
     // FAKE: block-scoped enum copy of args[1]; testing unit->tokenFlags & args[1] changes the object
-    {
-        BattleUnitToken_Flags m = (BattleUnitToken_Flags)args[1];
-        if (unit->tokenFlags & m) {
-            evtSetValue(event, index, 1);
-        } else {
-            evtSetValue(event, index, 0);
-        }
+    m = (BattleUnitToken_Flags)args[1];
+    if (unit->tokenFlags & m) {
+        evtSetValue(event, index, 1);
+    } else {
+        evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
 }

@@ -237,6 +237,7 @@ static void effKemuTestMain(EffectEntry* effect) {
     s32 i;
     s32 play = 0;
     s32 camera;
+    f32 a;
 
     tmp.x = work->pos.x;
     tmp.y = work->pos.y;
@@ -265,14 +266,13 @@ static void effKemuTestMain(EffectEntry* effect) {
             work->gravityAcc *= work->gravityMul;
             break;
         case 10:
-        case 14: {
-            f32 a = 6.2831855f * (90.0f + 180.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
-            work->pos.x += work->gravity * (f32)sin(a);
-            work->pos.y += -work->gravity * (f32)cos(a);
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            break;
-        }
+        case 14:
+        a = 6.2831855f * (90.0f + 180.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
+        work->pos.x += work->gravity * (f32)sin(a);
+        work->pos.y += -work->gravity * (f32)cos(a);
+        work->gravity += work->gravityAcc;
+        work->gravityAcc *= work->gravityMul;
+        break;
         case 4:
         case 9:
         case 17:
@@ -312,15 +312,14 @@ static void effKemuTestMain(EffectEntry* effect) {
             work->vel.y *= 0.9f;
             work->vel.z *= 0.9f;
             break;
-        case 12: {
-            f32 a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
-            work->pos.x += work->gravity * (f32)sin(a);
-            work->pos.y += -work->gravity * (f32)cos(a);
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            work->scale += 0.05f;
-            break;
-        }
+        case 12:
+        a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
+        work->pos.x += work->gravity * (f32)sin(a);
+        work->pos.y += -work->gravity * (f32)cos(a);
+        work->gravity += work->gravityAcc;
+        work->gravityAcc *= work->gravityMul;
+        work->scale += 0.05f;
+        break;
         case 13:
             work->pos.x += work->vel.x;
             work->pos.y += work->vel.y;
@@ -399,6 +398,8 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     KemuTestWork* work;
     s32 i;
     s32 count;
+    f32 spd;
+    f32 ang;
 
     effect = effEntry();
     count = 1;
@@ -535,37 +536,35 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
             }
             break;
         case 2:
-        case 16: {
-            f32 ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
-            work->pos.x = 20.0f * (f32)sin(ang);
-            work->pos.y = 20.0f * (f32)cos(ang);
-            work->pos.z = 0.0f;
-            work->life = 0x20;
-            work->frame = 0;
-            work->delay = (i - 1) * 6;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 1.0f;
-            break;
-        }
-        case 3: {
-            f32 ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
-            work->pos.x = 20.0f * (f32)sin(ang);
-            work->pos.y = 20.0f * (f32)cos(ang);
-            work->pos.z = 0.0f;
-            work->life = 0x20;
-            work->frame = 0;
-            work->delay = (i - 1) * 3;
-            work->gravity = 0.95f;
-            work->gravityAcc = -0.04f;
-            work->gravityMul = 0.94f;
-            work->r = 0xff;
-            work->g = 0xff;
-            work->b = 0xff;
-            work->scale = 1.0f;
-            break;
-        }
+        case 16:
+        ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
+        work->pos.x = 20.0f * (f32)sin(ang);
+        work->pos.y = 20.0f * (f32)cos(ang);
+        work->pos.z = 0.0f;
+        work->life = 0x20;
+        work->frame = 0;
+        work->delay = (i - 1) * 6;
+        work->r = 0xff;
+        work->g = 0xff;
+        work->b = 0xff;
+        work->scale = 1.0f;
+        break;
+        case 3:
+        ang = 6.2831855f * (f32)irand(0x168) / 360.0f;
+        work->pos.x = 20.0f * (f32)sin(ang);
+        work->pos.y = 20.0f * (f32)cos(ang);
+        work->pos.z = 0.0f;
+        work->life = 0x20;
+        work->frame = 0;
+        work->delay = (i - 1) * 3;
+        work->gravity = 0.95f;
+        work->gravityAcc = -0.04f;
+        work->gravityMul = 0.94f;
+        work->r = 0xff;
+        work->g = 0xff;
+        work->b = 0xff;
+        work->scale = 1.0f;
+        break;
         case 4:
         case 5:
         case 9:
@@ -678,10 +677,8 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
             work->g = 0xff;
             work->b = 0xff;
             work->scale = 0.6f;
-            {
-                f32 spd = 1.0f;
-                work->vel.x = spd * (f32)sin(6.2831855f * angleABf(0.0f, 0.0f, work->pos.x, work->pos.y) / 360.0f);
-            }
+            spd = 1.0f;
+            work->vel.x = spd * (f32)sin(6.2831855f * angleABf(0.0f, 0.0f, work->pos.x, work->pos.y) / 360.0f);
             break;
         case 7: {
             f32 a, s;

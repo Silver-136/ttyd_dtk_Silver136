@@ -478,6 +478,8 @@ void itemMain(void) {
     f32 newY;
     f32 y;
     s32 dx, dy;
+    f64 d;
+    f32 dirY;
 
     mario = marioGetPtr();
     entry = itemHitCheck(mario->position.x, mario->position.y, mario->position.z, mario->wPlayerCollisionBox.x * 0.5f + 12.0f);
@@ -538,32 +540,28 @@ void itemMain(void) {
                 break;
             case ITEM_MODE_GROUND:
                 y = entry->position.y;
-                {
-                    f32 dirY = -1.0f;
-                    if (entry->flags2 & ITEM_FLAG2_SUNK) {
+                dirY = -1.0f;
+                if (entry->flags2 & ITEM_FLAG2_SUNK) {
+                    hit = NULL;
+                    newY = y + dirY;
+                } else {
+                    f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
+                    f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
+                    // FAKE: f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY);
+                    // `hitDist = 20.0 + __fabs(-1.0)` changes the object
+                    d = __fabs(-1.0);
+                    hitDist = 20.0 + d;
+                    hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
+#if VERSION <= VERSION_DEMO_JP
+                    hit = hit ? hit : NULL;
+#else
+                    if (hit) {
+                        newY = hitY;
+                    } else {
                         hit = NULL;
                         newY = y + dirY;
-                    } else {
-                        f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
-                        f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
-                        // FAKE: f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY);
-                        // `hitDist = 20.0 + __fabs(-1.0)` changes the object
-                        {
-                            f64 d = __fabs(-1.0);
-                            hitDist = 20.0 + d;
-                        }
-                        hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_JP
-                        hit = hit ? hit : NULL;
-#else
-                        if (hit) {
-                            newY = hitY;
-                        } else {
-                            hit = NULL;
-                            newY = y + dirY;
-                        }
-#endif
                     }
+#endif
                 }
                 if (!hit) {
                     itemModeChange(entry, ITEM_MODE_FALL);
@@ -675,6 +673,8 @@ static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
  */
 #if VERSION <= VERSION_DEMO_JP
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* pickupEvt, f32 x, f32 y, f32 z) {
+    char* nm;
+
 #else
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z) {
 #endif
@@ -834,10 +834,8 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     default:
 #if VERSION <= VERSION_DEMO_JP
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
-        {
-            char* nm = entry->name;
-            iconSetPos(nm, x, y, z);
-        }
+        nm = entry->name;
+        iconSetPos(nm, x, y, z);
 #else
         entry->effect = NULL;
         iconEntry(entry->name, itemDataTable[itemId].icon_id);
@@ -1901,36 +1899,34 @@ void itemseq_Bound(ItemEntry* entry) {
                         entry->flags2 &= ~ITEM_FLAG2_TIMER_WAIT_LAND;
                         break;
                     }
-                    {
-                    pos = (Vec){entry->position.x, entry->position.y, entry->position.z};
-                    switch (itemId = entry->itemId) {
-                        case ITEM_COIN:
-                            psndSFXOn_3D("SFX_COIN_LEAPED1", &pos);
-                            break;
-                        case ITEM_PIANTA_TOKEN:
-                            psndSFXOn_3D("SFX_EVT_GAME_MONTE_LEAPED1", &pos);
-                            break;
-                        case ITEM_HEART:
-                            psndSFXOn_3D("SFX_HEART_LEAPED1", &pos);
-                            break;
-                        case ITEM_FLOWER:
-                            psndSFXOn_3D("SFX_FLOWER_LEAPED1", &pos);
-                            break;
-                        case ITEM_STAR_PIECE:
-                            psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
-                            break;
-                        case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
-                            psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
-                            break;
-                        default:
-                            if (itemId >= BADGE_MIN && itemId < BADGE_MAX) {
-                                psndSFXOn_3D("SFX_BADGE_LEAPED1", &pos);
-                            } else {
-                                psndSFXOn_3D("SFX_ITEM_LEAPED1", &pos);
-                            }
-                            break;
-                    }
-                    }
+                pos = (Vec){entry->position.x, entry->position.y, entry->position.z};
+                switch (itemId = entry->itemId) {
+                    case ITEM_COIN:
+                        psndSFXOn_3D("SFX_COIN_LEAPED1", &pos);
+                        break;
+                    case ITEM_PIANTA_TOKEN:
+                        psndSFXOn_3D("SFX_EVT_GAME_MONTE_LEAPED1", &pos);
+                        break;
+                    case ITEM_HEART:
+                        psndSFXOn_3D("SFX_HEART_LEAPED1", &pos);
+                        break;
+                    case ITEM_FLOWER:
+                        psndSFXOn_3D("SFX_FLOWER_LEAPED1", &pos);
+                        break;
+                    case ITEM_STAR_PIECE:
+                        psndSFXOn_3D("SFX_STAR_PIECE_LEAPED1", &pos);
+                        break;
+                    case ITEM_DIAMOND_STAR: case ITEM_EMERALD_STAR: case ITEM_GOLD_STAR: case ITEM_RUBY_STAR: case ITEM_SAPPHIRE_STAR: case ITEM_GARNET_STAR: case ITEM_CRYSTAL_STAR:
+                        psndSFXOn_3D("SFX_EVT_STARSTONE_JUMP1", &pos);
+                        break;
+                    default:
+                        if (itemId >= BADGE_MIN && itemId < BADGE_MAX) {
+                            psndSFXOn_3D("SFX_BADGE_LEAPED1", &pos);
+                        } else {
+                            psndSFXOn_3D("SFX_ITEM_LEAPED1", &pos);
+                        }
+                        break;
+                }
                     isFloor = FALSE;
                     if (entry->flags & ITEM_FLAG_ELASTIC && entry->velocityY != 0.0f) {
                         bounce = TRUE;
