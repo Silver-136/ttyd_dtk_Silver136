@@ -255,8 +255,8 @@ static inline void jabTail(BOOL stay) {
     jabTail(TRUE);
 
 static void swingMain(void);
-void jabaraSwingStart(s32 s);
-void jabaraSwingWalk(void);
+static void jabaraSwingStart(s32 s);
+static void jabaraSwingWalk(void);
 
 /**
  * Spring Jump (Ultra Boots): Mario squashes into a spring, charges while the stick is rotated,
@@ -887,7 +887,7 @@ void mot_jabara_post(void) {
  * Starts the swing after grabbing a ceiling with a fast initial spin;
  * side < 0 (ceiling found on side -1 by marioChkOverheadJabara) uses the reverse swing state 0xB.
  */
-void jabaraSwingStart(s32 side) {
+static void jabaraSwingStart(s32 side) {
     MarioWork* mario = marioGetPtr();
     mario->mot.jabara.rotTimer = 4;
     mario->mot.jabara.rotSpeed = 24.0f;
@@ -903,7 +903,7 @@ void jabaraSwingStart(s32 side) {
 
 
 /** Starts a gentle swing while Mario moves hanging under a ceiling, if he is not already swinging. */
-void jabaraSwingWalk(void) {
+static void jabaraSwingWalk(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->mot.jabara.state != 0) {
         return;

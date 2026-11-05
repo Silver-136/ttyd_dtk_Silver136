@@ -2417,6 +2417,8 @@ void mobj_sign(void) {
 }
 #endif
 
+// FAKE: private float-first prototype; eff_batfukidashi.h (and the definition) order the arguments (type, number,
+// duration, x, y, z), and calls through it change the object.
 extern EffectEntry* effCoinFukidashiEntry(f32 x, f32 y, f32 z, s32 type, s32 number, s32 duration);
 
 /** case 3 heal sequence; case 4 spells the same steps out inline (only this split reproduces the target registers) */

@@ -79,6 +79,8 @@ static WindowWork* wp;
 #include "manager/evtmgr_cmd.h"
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
 static void winLectureKeyMask(void);
+// FAKE: private u16 iconId prototype (icondrv.h and the definition take s32); winIconSet's s32 id is truncated at
+// the call, and the s32 prototype changes the object.
 void iconGetTexObj(GXTexObj* obj, u16 iconId);
 static void winDisp(CameraId camId, void* param);
 static void winDispKoopa(CameraId camId, void* param);

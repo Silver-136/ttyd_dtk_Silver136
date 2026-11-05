@@ -160,12 +160,14 @@
 #include "eff/n64/eff_timestamp_n64.h"
 #include "eff/n64/eff_whirlwind_n64.h"
 #include "eff/n64/eff_coin_n64.h"
+#include "eff/n64/eff_gareki_n64.h"
+#include "eff/n64/eff_lensflare_n64.h"
+#include "eff/n64/eff_rothammer_fail_n64.h"
 
 #include "party.h"
 
-extern EffectEntry* effGarekiN64Entry(s32, f32, f32, f32, f32);
-extern EffectEntry* effRotHammerFailN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effLensflareN64Entry(s32, s32, f32, f32, f32, f32);
+// FAKE: private six-argument prototype; eff_booboo_n64.c defines effBoobooN64Entry(void), and the evt_eff call
+// passes the set's int and float arguments to it (a call without them would drop their loads).
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
 /**

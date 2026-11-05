@@ -60,9 +60,6 @@ typedef struct MonosiriWork {
     s32 alpha;          // 0x2C
 } MonosiriWork;
 
-int compare_func5_2(void* a, void* b);
-int compare_func6_2(void* a, void* b);
-
 static void capture(CameraId camera, void* param);
 static void monosiri_disp(CameraId camera, void* param);
 
@@ -465,7 +462,7 @@ void winLogInit(WindowWork* w) {
 #endif
         }
     }
-    qqsort(w->log.badgeIds, w->log.badge.num, 2, (QSortCompare)compare_func5_2);
+    qqsort(w->log.badgeIds, w->log.badge.num, 2, compare_func5_2);
     w->log.badge.cursor = 0;
     w->log.badge.x = w->log.badge.tx = 320.0f;
     w->log.badge.y = w->log.badge.ty = -240.0f;
@@ -488,7 +485,7 @@ void winLogInit(WindowWork* w) {
 #endif
         }
     }
-    qqsort(w->log.recipeIds, w->log.recipe.num, 2, (QSortCompare)compare_func6_2);
+    qqsort(w->log.recipeIds, w->log.recipe.num, 2, compare_func6_2);
     w->log.recipe.cursor = 0;
     w->log.recipe.x = w->log.recipe.tx = 320.0f;
     w->log.recipe.y = w->log.recipe.ty = -240.0f;

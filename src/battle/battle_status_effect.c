@@ -20,6 +20,7 @@
 #include "eff/eff_sleep.h"
 #include "eff/eff_fire.h"
 #include "eff/eff_ice.h"
+#include "eff/eff_spark.h"
 
 // FAKE: no-op cast of the msg array to StChgMsg*; &_battleWorkPointer->announce.stChg.msg[i] changes the object
 #define ST_CHG_MSG(i) ((StChgMsg*)_battleWorkPointer->announce.stChg.msg + (i))
@@ -170,8 +171,6 @@ void BattleStatusEffectDelete(BattleUnit* unit) {
     BSE_FreezeDelete(unit);
     BSE_KagegakureDelete(unit);
 }
-
-EffectEntry* effSparkEntry(s32, s32, f32, f32, f32, f32);
 
 /**
  * While the unit is asleep, keeps a sleep effect (the floating Zs) at the top-right of its body part:

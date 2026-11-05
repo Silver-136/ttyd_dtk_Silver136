@@ -22,7 +22,7 @@
 
 // FAKE: 4-byte .sbss filler before mpp, in no symbol map and never used; removing it changes the object.
 PouchData* mpp_gap;
-static PouchData* mpp;
+PouchData* mpp;
 
 /**
  * Max HP of each partner by partner id (row) and HP level

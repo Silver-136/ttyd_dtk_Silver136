@@ -197,6 +197,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_item.c | item_disp | `p` is a WindowWork* stepped one s16 at a time (`(WindowWork*)((s16*)p + 1)`), so `p->item.skip[0]` reads skip[i] with 0x2E8 kept in the load displacement | `w->item.skip[i]` (r25/r26 swap); `s16* sk = w->item.skip` walk (base precomputed with addi); row/col declaration swap (worse) |
 | Both | src/window/win_main.c | float_0p5_8041dc98 (data, used through HALF_F) | the global 0.5f is `const volatile` so every use loads it | plain `const f32` (both versions change) |
 | Both | src/window/win_main.c | winMainStrippedPool | stand-in that nothing calls; it only places the int-to-float conversion constant in the pool | see comment |
+| Both | src/window/win_main.c | winIconSet (iconGetTexObj) | private prototype with a u16 iconId; icondrv.h and the definition take s32 | icondrv.h's prototype: changes the object |
 | Both | rels/gor/src/gor_01.c | cook_chk | `(volatile u32)args[n]` casts on the evtSetValue index | plain `args[n]` (both versions change) |
 | Both | rels/gor/src/gor_01.c | cook_chk2 | `(volatile u32)args[2]` casts on the evtSetValue index | plain `args[2]` (both versions change) |
 | Both | rels/gor/src/gor_01.c | chk_marco_fuki (fbatNpcTalkCheck) | call through a cast to a `(MarioWork*)` function type, passing marioGetPtr() to the no-argument function | plain `fbatNpcTalkCheck()`: the marioGetPtr call goes, changes the object (gor.rel versions) |
@@ -513,6 +514,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_mobj.c | mobj_recovery_blk | the coin count goes through kind (also the coin cost in case 4); comparing pouchGetCoin() directly changes the object | see comment |
 | Both | src/event/evt_mobj.c | mobj_koopa_ojama_blk_evt | unused Vec local; removing the block changes the object | see comment |
 | Both | src/event/evt_mobj.c | evt_mobj_koopa_hidden_blk | gp->inBattle is loaded into inBattle before the test; `inBattle = gp->inBattle != 0` changes the object | see comment |
+| Both | src/event/evt_mobj.c | mobj_recovery_blk (effCoinFukidashiEntry) | private float-first prototype (x, y, z, type, number, duration) | eff_batfukidashi.h's (type, number, duration, x, y, z) with reordered calls: changes the object |
 | Both | src/event/evt_nannpc.c | evt_nannpc_entry | the value goes through a long long cast; plain name = evtGetValue(...) changes the object | see comment |
 | Both | src/event/evt_nannpc.c | evt_nannpc_jump_position | el and uel are spare copies of the elapsed time; a single s32 elapsed changes the object | see comment |
 | Both | src/event/evt_npc.c | evt_npc_homing_target | discarded sqrtf call (retail code computes it and drops the result) | see comment |
@@ -586,6 +588,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/motion/mot_ship.c | mot_ship_post, mot_ship, shipMove | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/party/party_bomhei.c | bomhei_use_main | the acceleration is negated from a spare temporary; party->accelY = -0.8333333f changes the object; repeated `useMotionId = 50` in the else branch | see comment |
 | Both | src/party/party_bomhei.c | bomheiCleanSfx, bomheiCleanUseSfx, bomhei_use_main | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
+| Both | src/party/party_bomhei.c | bomhei_use_main (marioSetSplash) | call with no prototype in scope, Vec passed by value to the Vec* parameter | mot_damage.h and `&party->position`: changes the object |
 | Both | src/party/party_cloud.c | _cloud_use | re-reads the player pointer mario already holds; dropping the reload changes the object | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_cloud.c | (file) | `#define _MATH_H_` keeps math.h out | removing it: changes the object |
@@ -683,3 +686,5 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/event/evt_snd.c | evt_snd_bgm_unpause | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/sequence/seq_gameover.c | seq_gameOverMain | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/sequence/seq_title.c | seq_titleInit, titleInit, titleMain | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
+| Both | src/countdown.c | countDownDisp | `(u16)` cast on the digit icon id passed to iconDispGxCol (s32 parameter), twice | without the cast: changes the object |
+| Both | src/event/evt_eff.c | evt_eff (effBoobooN64Entry) | private six-argument prototype; the definition takes no arguments | not tried: a call without them drops the argument loads |

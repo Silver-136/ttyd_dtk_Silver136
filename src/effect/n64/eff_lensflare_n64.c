@@ -1,6 +1,7 @@
 // Paper Mario 64 effect: lens flare made of a bright head and five rings along a flare axis.
 
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_lensflare_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -61,7 +62,7 @@ static void effLensflareDisp(CameraId cameraId, void* payload);
  * and size. lifetime <= 0 (or 100 and above: only values below 100 count down) keeps it until deleted.
  * Played from map scripts in gor, tik and las via evt_eff64 "lensflare_n64".
  */
-EffectEntry* effLensflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
+EffectEntry* effLensflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 unused) {
     EffectEntry* effect;
     EffLensflareN64Elem* work;
     EffLensflareN64Elem* e;

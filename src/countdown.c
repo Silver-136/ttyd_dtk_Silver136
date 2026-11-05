@@ -183,6 +183,7 @@ static void countDownDisp(CameraId cameraId, void* param) {
         for (i = 0; i < 3; i++) {
             PSMTXTrans(mtx, i * 30 - 50, 8.0f, 0.0f);
             PSMTXConcat(base, mtx, mtx);
+            // FAKE: (u16) cast on the icon id (iconDispGxCol takes s32, here and below); without it the object changes
             iconDispGxCol(mtx, ICON_FLAG_2D, (u16)(digits[i] + ICON_COUNTER_DIGIT_0), white2);
         }
         PSMTXTrans(mtx, 28.0f, 10.0f, 0.0f);

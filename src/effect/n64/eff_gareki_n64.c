@@ -2,6 +2,7 @@
 // that fade.
 
 #include "eff/eff_n64.h"
+#include "eff/n64/eff_gareki_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"

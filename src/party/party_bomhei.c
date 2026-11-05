@@ -666,6 +666,8 @@ static void bomhei_use_main(PartyEntry* party) {
             psndSFXOff(party->work.bomhei.sfxId);
             party->work.bomhei.sfxId = -1;
         }
+        // FAKE: called with no prototype in scope, passing the Vec by value (the callee's Vec* then points at the
+        // caller's copy, same values); mot_damage.h's prototype with &party->position changes the object.
         marioSetSplash(0, party->position);
         BOMHEI_WORK(party)->flags |= 8;
         BOMHEI_WORK(party)->timer = (s16)(sysMsec2Frame(500) + 30);
