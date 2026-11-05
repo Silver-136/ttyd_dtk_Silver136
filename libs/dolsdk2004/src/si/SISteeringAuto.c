@@ -46,7 +46,7 @@ s32 SIReadSteering(s32 chan, SISteeringStatus* status) {
         sc->ret = -1;
     } else {
         sr = SIGetStatus(chan);
-        if (sr & 8) {
+        if (sr & SI_ERROR_NO_RESPONSE) {
             SIGetResponse(chan, &data);
             __SISteeringDisable(chan);
             sc->ret = -1;

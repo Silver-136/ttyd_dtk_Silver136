@@ -561,7 +561,7 @@ s32 DVDPrepareStream(DVDFileInfo* fileInfo, u32 length, u32 offset) {
     result = DVDPrepareStreamAbsAsync(block, length, start, cbForPrepareStreamSync);
 
     if (result == FALSE) {
-        return -1;
+        return DVD_RESULT_FATAL_ERROR;
     }
     
     enabled = OSDisableInterrupts();

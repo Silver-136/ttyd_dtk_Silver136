@@ -11,8 +11,10 @@ const char* __SIVersion = "<< Dolphin SDK - SI\tdebug build: Apr  5 2004 03:55:3
 const char* __SIVersion = "<< Dolphin SDK - SI\trelease build: Apr  5 2004 04:14:16 (0x2301) >>";
 #endif
 
+#define CHAN_NONE -1
+
 static SIControl Si = {
-    /* chan */       -1,
+    /* chan */       CHAN_NONE,
     /* poll */        0,
     /* inputBytes */  0,
     /* input */       NULL,
@@ -42,7 +44,7 @@ static void GetTypeCallback(s32 chan, u32 error, OSContext* context);
 static int SIGetResponseRaw(s32 chan);
 
 BOOL SIBusy(void) {
-    return (Si.chan != -1) ? TRUE : FALSE;
+    return (Si.chan != CHAN_NONE) ? TRUE : FALSE;
 }
 
 BOOL SIIsChanBusy(s32 chan) {
@@ -68,7 +70,7 @@ static u32 CompleteTransfer(void) {
     sr = __SIRegs[SI_STATUS_IDX];
     SIClearTCInterrupt();
 
-    if (Si.chan != -1) {
+    if (Si.chan != CHAN_NONE) {
         XferTime[Si.chan] = __OSGetSystemTime();
         input = Si.input;
         rLen = Si.inputBytes / sizeof(u32);
@@ -99,7 +101,7 @@ static u32 CompleteTransfer(void) {
             sr = 0;
         }
 
-        Si.chan = -1;
+        Si.chan = CHAN_NONE;
     }
 
     return sr;
@@ -125,8 +127,6 @@ static void SITransferNext(s32 chan) {
         }
     }
 }
-
-#define CHAN_NONE -1
 
 static void SIInterruptHandler(__OSInterrupt interrupt, OSContext* context) {
     u32 reg;
@@ -319,7 +319,7 @@ static int __SITransfer(s32 chan, void* output, u32 outputBytes, void* input, u3
     ASSERTMSGLINE(631, (inputBytes != 0) && (inputBytes <= 128), "SITransfer(): input size is out of range (must be 1 to 128).");
 
     enabled = OSDisableInterrupts();
-    if (Si.chan != -1) {
+    if (Si.chan != CHAN_NONE) {
         OSRestoreInterrupts(enabled);
         return 0;
     }
@@ -585,7 +585,7 @@ static void GetTypeCallback(s32 chan, u32 error, OSContext* context) {
     fix = __PADFixBits & chanBit;
     __PADFixBits &= ~chanBit;
 
-    if ((error & 0xF) != 0 || (type & 0x18000000) != 0x08000000 || (type & 0x80000000) == 0 || (type & 0x04000000) != 0) {
+    if ((error & 0xF) != 0 || (type & SI_TYPE_MASK) != SI_TYPE_DOLPHIN || (type & SI_GC_WIRELESS) == 0 || (type & SI_WIRELESS_IR) != 0) {
         OSSetWirelessID(chan, 0);
         CallTypeAndStatusCallback(chan, Type[chan]);
     } else {
@@ -600,7 +600,7 @@ static void GetTypeCallback(s32 chan, u32 error, OSContext* context) {
             return;
         }
 
-        if ((type & 0x00100000) != 0) {
+        if ((type & SI_WIRELESS_FIX_ID) != 0) {
             if ((id & 0xCFFF00) != (type & 0xCFFF00)) {
                 if ((id & 0x100000) == 0) {
                     id = type & 0xCFFF00;
@@ -614,7 +614,7 @@ static void GetTypeCallback(s32 chan, u32 error, OSContext* context) {
                 return;
             }
         } else {
-            if ((type & 0x40000000) != 0) {
+            if ((type & SI_WIRELESS_RECEIVED) != 0) {
                 id = type & 0xCFFF00;
                 id |= 0x100000;
                 OSSetWirelessID(chan, id >> 8);

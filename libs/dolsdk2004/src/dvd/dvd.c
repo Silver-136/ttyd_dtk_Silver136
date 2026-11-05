@@ -100,8 +100,8 @@ void DVDInit(void) {
         bootInfo = (void*)OSPhysicalToCached(0);
         IDShouldBe = &bootInfo->DVDDiskID;
 
-        __OSSetInterruptHandler(0x15, __DVDInterruptHandler);
-        __OSUnmaskInterrupts(0x400);
+        __OSSetInterruptHandler(__OS_INTERRUPT_PI_DI, __DVDInterruptHandler);
+        __OSUnmaskInterrupts(OS_INTERRUPTMASK_PI_DI);
         OSInitThreadQueue(&__DVDThreadQueue);
         __DIRegs[0] = 0x2A;
         __DIRegs[1] = 0;
@@ -591,7 +591,7 @@ static void stateReady() {
         finished = executing;
         executing = &DummyCommandBlock;
         if (finished->callback) {
-            (*finished->callback)(-1, finished);
+            (*finished->callback)(DVD_RESULT_FATAL_ERROR, finished);
         }
 
         stateReady();
@@ -1596,7 +1596,7 @@ int DVDCancelAsync(DVDCommandBlock* block, DVDCBCallback callback) {
 		block->state = DVD_STATE_CANCELED;
 
 		if (block->callback)
-			(block->callback)(-3, block);
+			(block->callback)(DVD_RESULT_CANCELED, block);
 
 		if (callback)
 			(*callback)(0, block);
@@ -1650,7 +1650,7 @@ int DVDCancelAsync(DVDCommandBlock* block, DVDCBCallback callback) {
 
 		block->state = DVD_STATE_CANCELED;
 		if (block->callback) {
-			(block->callback)(-3, block);
+			(block->callback)(DVD_RESULT_CANCELED, block);
 		}
 
 		if (callback) {

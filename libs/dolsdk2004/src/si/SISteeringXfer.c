@@ -11,7 +11,7 @@ static void __SISteeringHandler(s32 chan, u32 error, OSContext* context) {
 
     sc = &__SISteering[chan];
     if (!__SIResetSteering) {
-        if (error & 8) {
+        if (error & SI_ERROR_NO_RESPONSE) {
             sc->ret = -1;
         } else if (error & 7) {
             sc->ret = -3;
@@ -72,7 +72,7 @@ static void TypeAndStatusCallback(s32 chan, u32 type) {
     if (!__SIResetSteering) {
         ASSERTLINE(127, !(type & SI_ERROR_BUSY));
 
-        if ((u32)((type & 0xFFFF0000) + 0xF8000000) == 0) {
+        if ((type & 0xFFFF0000) == SI_GC_STEERING) {
             if (SITransfer(chan, sc, sc->outputBytes, sc->input, sc->inputBytes, __SISteeringHandler, 0)) {
                 return;
             }

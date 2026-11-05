@@ -300,9 +300,9 @@ static void __AIDHandler(__OSInterrupt interrupt, OSContext* context) {
     OSContext exceptionContext;
     u16 tmp;
 
-    tmp = __DSPRegs[5];
+    tmp = __DSPRegs[DSP_CONTROL_STATUS];
     tmp = (tmp & ~0xA0) | 8;
-    __DSPRegs[5] = tmp;
+    __DSPRegs[DSP_CONTROL_STATUS] = tmp;
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(&exceptionContext);
     if (__AID_Callback && !__AID_Active) {

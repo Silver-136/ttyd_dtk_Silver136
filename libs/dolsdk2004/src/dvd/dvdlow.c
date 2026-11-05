@@ -57,7 +57,7 @@ void __DVDInitWA(void) {
 static BOOL ProcessNextCommand(void) {
 	s32 n = NextCommandNumber;
 
-    ASSERTLINE(310, n < 3);
+    ASSERTLINE(310, n < sizeof(CommandList) / sizeof(CommandList[0]));
 
 	if (CommandList[n].command == DVD_COMMAND_READ) {
 		++NextCommandNumber;
@@ -103,11 +103,11 @@ void __DVDInterruptHandler(__OSInterrupt interrupt, OSContext* context) {
 	}
 
 	if (intr & 0x10) {
-		cause |= 1;
+		cause |= DVD_INTTYPE_TC;
 	}
 
 	if (intr & 4) {
-		cause |= 2;
+		cause |= DVD_INTTYPE_DE;
 	}
 
 	if (cause) {
@@ -183,7 +183,7 @@ static void AlarmHandlerForTimeout(OSAlarm* alarm, OSContext* context) {
 	DVDLowCallback cb;
 	OSContext exceptionContext;
 
-	__OSMaskInterrupts(0x400);
+	__OSMaskInterrupts(OS_INTERRUPTMASK_PI_DI);
 	OSClearContext(&exceptionContext);
 	OSSetCurrentContext(&exceptionContext);
 	cb = Callback;
