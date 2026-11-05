@@ -53,8 +53,8 @@
 USER_FUNC(_set_haikei_entry_scale);
 static void battleMakePhaseEvtTable(BattleWork* wp);
 static void btlseqPhaseFirstProcess(BattleWork* wp);
-void btlseqTurnFirstProcess(BattleWork* wp);
-void btlseqAct(BattleWork* wp);
+static void btlseqTurnFirstProcess(BattleWork* wp);
+static void btlseqAct(BattleWork* wp);
 static BOOL BattlePhaseEndCheck(void);
 static void btlseqMove(BattleWork* wp);
 static void btlseqPhase(BattleWork* wp);
@@ -355,7 +355,7 @@ static void btlseqInit(BattleWork* wp) {
  * 1 and 3 Jump, 2 Spin Jump, 4 Hammer, 5 Super Hammer spin, 6 Ultra Hammer, 7 Koops, 8 Bobbery.
  * 0 (no first strike) gives NULL.
  */
-BattleWeapon* _GetFirstAttackWeapon(s32 type) {
+static BattleWeapon* _GetFirstAttackWeapon(s32 type) {
     switch (type) {
         case FIRST_ATTACK_JUMP:
             return &marioDefaultWeapon_Jump;
@@ -2198,7 +2198,7 @@ static BOOL BattlePhaseEndCheck(void) {
 #if VERSION <= VERSION_DEMO_JP
 static void btlseqAct(BattleWork* wp) {
 #else
-void btlseqAct(BattleWork* wp) {
+static void btlseqAct(BattleWork* wp) {
 #endif
     BattleUnit* unit;
     EventEntry* evt;
@@ -2465,7 +2465,7 @@ void btlseqAct(BattleWork* wp) {
  * rolls each unit's move priority from its kind's turnOrder and variance, drops Defending,
  * and checks whether the fog ends.
  */
-void btlseqTurnFirstProcess(BattleWork* wp) {
+static void btlseqTurnFirstProcess(BattleWork* wp) {
     BattleUnitKind* kind;
     int i;
     BattleUnit* unit;

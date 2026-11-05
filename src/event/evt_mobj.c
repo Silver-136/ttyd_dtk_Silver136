@@ -2448,7 +2448,7 @@ static inline void recoveryHeal(void) {
  * The first hit outside E3 mode (GW_FLAG_E3) shows the "kaifuku_first_hit" tutorial instead
  * and sets GSWF_HEART_BLOCK_TUTORIAL_SEEN.
  */
-s32 mobj_recovery_blk(MapObjectEntry* mobj) {
+static s32 mobj_recovery_blk(MapObjectEntry* mobj) {
     MarioWork* mario;
     PouchPartyData* party;
     s32 i;
@@ -3593,7 +3593,7 @@ static KpaPoleScoreWork* psw;
  * Draw callback for the flipping floor panels: renders the map below the panel from straight above into a
  * texture (the panel's paper texture), so the flipped panel shows the floor; restores the camera afterwards.
  */
-void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
+static void kururing_capture(CameraId camId, MapObjectEntry* mobj) {
     u8 saved[sizeof(CameraEntry)];
     CameraEntry* cam;
     AnimationPoseData* data;

@@ -91,7 +91,7 @@ typedef struct ScissorWork {
 
 static void scissor_disp_region(CameraId camera, void* param);
 static void scissor_capture(CameraId camera, void* param);
-void tess(Pt* buf, s32 count);
+static void tess(Pt* buf, s32 count);
 static void star_disp2D_sub(s32 idx, s32 alpha);
 static s32 scissor_damage_sub2(Vec pt);
 static void scissor_damage_sub(BattleUnit* unit, s32* out);
@@ -562,7 +562,7 @@ static s32 scissor_tess(void) {
  * Splits polygon pts (n points) recursively along the first usable diagonal into triangles appended to the
  * triangle list; frees pts.
  */
-void tess(Pt* pts, s32 n) {
+static void tess(Pt* pts, s32 n) {
     ScissorWork* w = GetScissorPtr();
     s32 i, j, k;
     s32 n1, n2;

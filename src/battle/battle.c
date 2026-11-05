@@ -35,7 +35,7 @@ BattleUnitSetup entryunit_mario = { &unitdata_Mario, 0, {0}, BATTLE_PHASE_PLAYER
 BattleUnitSetup entryunit_system = { &unit_system, 0, {0}, BATTLE_PHASE_PLAYER };
 
 // forward declarations
-BOOL BattleMain(void);
+static BOOL BattleMain(void);
 static void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
 static void BattlePartyInfoWorkInit(BattleWork* wp);
 static void BattleCheckUnitBroken(BattleWork* wp);
@@ -124,7 +124,7 @@ void BattleInit(FieldBattleInfo* info) {
  * stage object, icon, stage, help, audience, Bingo and display managers.
  * Returns FALSE when the battle is over; on kiosk (demo station) builds an idle timeout aborts the battle.
  */
-BOOL BattleMain(void) {
+static BOOL BattleMain(void) {
     BattleWork* wp = _battleWorkPointer;
 
     BattleCheckUnitBroken(wp);

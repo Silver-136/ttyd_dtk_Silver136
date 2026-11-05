@@ -42,7 +42,7 @@ static void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front);
-void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front);
+static void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front);
 static void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front);
@@ -793,7 +793,7 @@ static void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front) {
 }
 
 /** Status 13, asleep after a Crazee Dayzee's song: breathes slowly with a pulsing blue tint until woken. */
-void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front) {
+static void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;
     base = BattleAudienceBaseGetPtr();

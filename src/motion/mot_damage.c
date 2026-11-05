@@ -43,7 +43,7 @@ static EVT_BEGIN(quake_bgmode_evt)
     RETURN
 EVT_END()
 
-s32 gazigazi(EventEntry* evt, BOOL isFirstCall);
+static s32 gazigazi(EventEntry* evt, BOOL isFirstCall);
 
 /**
  * Spawned when Mario climbs out of the water in mot_damage:
@@ -86,7 +86,7 @@ void marioSetSplash(s32 kind, Vec* pos) {
 }
 
 /** Script helper for evt_gazigazi: stores Mario's x, the water surface height and z in LW(0..2) as integers. */
-s32 gazigazi(EventEntry* evt, BOOL isFirstCall) {
+static s32 gazigazi(EventEntry* evt, BOOL isFirstCall) {
     MarioWork* mario = marioGetPtr();
     evt->lwData[0] = (s32)mario->position.x;
     evt->lwData[1] = (s32)mario->mot.damage.rootY;

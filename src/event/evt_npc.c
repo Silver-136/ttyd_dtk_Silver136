@@ -2585,7 +2585,7 @@ USER_FUNC(evt_npc_calc_score) {
 #if VERSION <= VERSION_DEMO_JP
 static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
 #else
-void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
+static void _kamek_houki_kemuri(NpcEntry* npc, s32 animState) {
 #endif
     static u8 cnt;
     f32 x, dirX;

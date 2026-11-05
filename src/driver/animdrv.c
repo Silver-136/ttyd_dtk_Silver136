@@ -361,7 +361,7 @@ static void initTestHeap(void) {
 }
 
 /** heavily inlined */
-void* testAlloc(u32 size) {
+static void* testAlloc(u32 size) {
     void* alloc = wp->testAlloc;
 
     if (size & 31) {

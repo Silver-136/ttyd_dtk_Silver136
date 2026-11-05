@@ -413,7 +413,7 @@ static MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, B
  * Allocates the MapObject array for map entry index, one per joint,
  * and builds the object tree from the root joint with world matrix mtx; returns the root object.
  */
-MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index) {
+static MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index) {
     MapWork* wp = mapGetWork();
     u32 size;
 

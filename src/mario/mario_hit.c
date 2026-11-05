@@ -31,6 +31,7 @@
 #include "sfx_name_word.h"
 #include "koopa.h"
 #include "pmario_sound.h"
+static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w);
 static HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang);
 
 /** Zero vectors that start the ray position and direction of Mario's collision checks and landing ray. */
@@ -2396,7 +2397,7 @@ static inline void sfwVecSetNested(Vec* d, Vec v) {
 #if VERSION <= VERSION_DEMO_JP
 static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
 #else
-HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
+static HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
 #endif
     Vec p;
     Vec dir;

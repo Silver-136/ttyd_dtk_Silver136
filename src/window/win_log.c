@@ -63,8 +63,8 @@ typedef struct MonosiriWork {
 int compare_func5_2(void* a, void* b);
 int compare_func6_2(void* a, void* b);
 
-void capture(CameraId camera, void* param);
-void monosiri_disp(CameraId camera, void* param);
+static void capture(CameraId camera, void* param);
+static void monosiri_disp(CameraId camera, void* param);
 
 /**
  * Dots of the Journal map: position on the map, big (a place) or small (the path between), the chapter switch
@@ -1752,7 +1752,7 @@ typedef struct MonoDatFile {
  * and copies the result into the card's RGB5A3 texture buffer.
  * For Smorg (unit 0x6B) it also draws 500 small parts scattered along the body's chains.
  */
-void capture(CameraId camera, void* param) {
+static void capture(CameraId camera, void* param) {
     MonosiriWork* m = param;
     AnimData* data;
     Vec min;
@@ -1889,7 +1889,7 @@ void capture(CameraId camera, void* param) {
 #if VERSION <= VERSION_DEMO_JP
 static void monosiri_disp(CameraId camera, void* param) {
 #else
-void monosiri_disp(CameraId camera, void* param) {
+static void monosiri_disp(CameraId camera, void* param) {
 #endif
     MonosiriWork* m = param;
     GXColor black = {0x00, 0x00, 0x00, 0xFF};

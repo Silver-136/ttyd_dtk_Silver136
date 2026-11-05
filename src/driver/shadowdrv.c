@@ -767,7 +767,7 @@ static void shadowCharShadowDisp_Texture(CameraId cameraId, void* param) {
  * Draws one shadow volume as a cylinder (top, bottom and sides) for stencil-like darkening of whatever it
  * intersects, with the fade of the entry's volume and decay values unless flag 4 asks for none.
  */
-void cylinder(ShadowEntry* entry) {
+static void cylinder(ShadowEntry* entry) {
     f32 inner;
     f32 volumeAlpha;
     f32 decayAlpha;

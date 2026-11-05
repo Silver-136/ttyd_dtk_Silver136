@@ -18,6 +18,7 @@
 #include "statuswindow.h"
 #include "party.h"
 #include "evt/evt_save_flags.h"
+static void stg3_12_2_init(void);
 static void stg7_03_white_1(void);
 static void stg3_52_init(void);
 static void stg3_35_init(void);
@@ -1433,7 +1434,7 @@ static void stg3_12_init__1(void) {
  * names him with the default name (name_party3) and adds him to the party;
  * sets GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN.
  */
-void stg3_12_2_init(void) {
+static void stg3_12_2_init(void) {
     yoshiSetColor();
     pouchSetYoshiName(msgSearch("name_party3"));
     partyJoin(PARTNER_YOSHI);

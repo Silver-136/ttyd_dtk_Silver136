@@ -35,10 +35,10 @@
 #include "battle/battle_damage.h"
 
 #if VERSION >= VERSION_JP
-void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
+static void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 #endif
 
-void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
+static void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 #if VERSION <= VERSION_DEMO_JP
@@ -2336,7 +2336,7 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
  * Pose sound callback for Yoshi's walk, run and flutter poses:
  * plays the footstep sound at pitch UNIT_WORK_STEP_PITCH * UNIT_WORK_STEP_PITCH_SCALE / 100.
  */
-void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
+static void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
     BtlUnit_snd_se(unit, s->sfxName, EVT_NULLPTR, (s16)(unit->work[UNIT_WORK_STEP_PITCH] * unit->work[UNIT_WORK_STEP_PITCH_SCALE] / 100)); // the slide sound's pitch
 }
 
@@ -2598,7 +2598,7 @@ static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     YoshiGundanPart* p;
     s32 i;
 #else
-void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
+static void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
 #endif
     f32 s;
 #if VERSION <= VERSION_DEMO_JP

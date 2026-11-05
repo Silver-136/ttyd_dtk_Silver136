@@ -31,7 +31,7 @@
 static void kpa2DMain(void);
 static void kpa3DMain(void);
 static void kpaFireAttack(void);
-void kpaFireMain(void);
+static void kpaFireMain(void);
 static void kpaFall(void);
 const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 extern f32 marioJumpData[];
@@ -919,7 +919,7 @@ void kpaStrippedPool(f32* f, s32 i) {
 #if VERSION <= VERSION_DEMO_JP
 static void kpaFireMain(void) {
 #else
-void kpaFireMain(void) {
+static void kpaFireMain(void) {
 #endif
     MarioWork* mario = marioGetPtr();
     Mtx mb0;

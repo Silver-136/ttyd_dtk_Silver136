@@ -39,12 +39,12 @@
 typedef void (*BtlDispTexPlaneArgOrderFn)(f32, f32, f32, f32, f32, u32, GXColor, s32);
 
 #if VERSION <= VERSION_DEMO_JP
-void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
+static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w);
 #else
-void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
+static void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p);
 #endif
 
-void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
+static void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s);
 static void __makeTechMenuFunc(BattleCommand* command, s32* count);
 
 s32 _gundan_part_update(YoshiGundanPart* p, s32 i);
@@ -2384,7 +2384,7 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
 }
 
 /** Pose sound callback: plays the footstep sound at pitch UNIT_WORK_STEP_PITCH * UNIT_WORK_STEP_PITCH_SCALE / 100. */
-void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
+static void _yoshi_slide_move_sound(BattleUnit* unit, PoseSoundTiming* s) {
     BtlUnit_snd_se(unit, s->sfxName, EVT_NULLPTR, (s16)(unit->work[UNIT_WORK_STEP_PITCH] * unit->work[UNIT_WORK_STEP_PITCH_SCALE] / 100)); // the step sound's pitch
 }
 
@@ -2656,7 +2656,7 @@ s32 _gundan_part_update(YoshiGundanPart* p, s32 i) {
  * and frame, flipped by direction).
  */
 #if VERSION <= VERSION_DEMO_JP
-void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
+static void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     YoshiGundanPart* p;
     s32 i;
     f32 s;
@@ -2667,7 +2667,7 @@ void _btlYoshiDisp(CameraId camera, YoshiGundanWork* w) {
     }
 }
 #else
-void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
+static void _btlYoshiDisp(CameraId camera, YoshiGundanPart* p) {
     f32 s;
     s = (p->vx < 0.0f) ? 0.4f : -0.4f;
     ((BtlDispTexPlaneArgOrderFn)btlDispTexPlane)(p->x, p->y + 20.0f, p->z, s, 0.4f, _yoshig_tpl_no_tbl[p->frame], (GXColor){255, 255, 255, 255}, 0);

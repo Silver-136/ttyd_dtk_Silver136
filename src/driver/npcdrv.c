@@ -687,7 +687,7 @@ void fbatBattleMode(void);
 s32 kpaJumpChk(void);
 
 static void npcMoveG(NpcEntry* npc);
-BOOL npcCheckHitMarioSide(NpcEntry* npc);
+static BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 void npcKoopaModeMain(void);
 #if VERSION >= VERSION_US
@@ -1380,7 +1380,7 @@ void npcSetStayPose(char* name) {
 #if VERSION <= VERSION_DEMO_JP
 static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 #else
-BOOL npcCheckHitMarioSide(NpcEntry* npc) {
+static BOOL npcCheckHitMarioSide(NpcEntry* npc) {
 #endif
     MarioWork* mario;
     Vec marioPos;
@@ -2515,7 +2515,7 @@ void fbatBattleMode(void) {
  * Marks one NPC dead (NPC_INTERRUPT_DEAD and NPC_STATUS_DEAD), keeps how it died in koopaEncounterType,
  * and with NPC_FLAG_RECORD_DEFEAT sets its setup index bit in deadInfo so it stays gone.
  */
-void _npcDead(NpcEntry* npc, u16 reason) {
+static void _npcDead(NpcEntry* npc, u16 reason) {
     npc->interruptFlags |= NPC_INTERRUPT_DEAD;
     npc->statusFlags |= NPC_STATUS_DEAD;
     npc->koopaEncounterType = reason;

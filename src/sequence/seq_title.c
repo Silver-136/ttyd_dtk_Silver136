@@ -54,8 +54,8 @@ TitleWork* wp2 = &work2;
 // local prototypes
 void titleInit(SequenceWork* work);
 static void titleMain(SequenceWork* work);
-void disp1(CameraId cameraId, void* param);
-void disp2(CameraId cameraId, void* param);
+static void disp1(CameraId cameraId, void* param);
+static void disp2(CameraId cameraId, void* param);
 static void titleLoadDemo(void);
 
 /** Stub of the debug battle selector's message file hook: always NULL, so a debug battle loads gon_11's messages. */
@@ -424,7 +424,7 @@ static void titleMain(SequenceWork* work) {
 }
 
 /** 3D-camera draw callback: draws the title background image from mariost.tpl through the 2D camera. */
-void disp1(CameraId cameraId, void* param) {
+static void disp1(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry saved;
     f32 proj[GX_PROJECTION_SZ];
@@ -456,7 +456,7 @@ void disp1(CameraId cameraId, void* param) {
 #if VERSION <= VERSION_DEMO_JP
 static void disp2(CameraId cameraId, void* param) {
 #else
-void disp2(CameraId cameraId, void* param) {
+static void disp2(CameraId cameraId, void* param) {
 #endif
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry saved;

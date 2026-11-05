@@ -164,7 +164,7 @@ static s32 _get_present_target_id(EventEntry* event, BOOL isFirstCall) {
  * Draws the "Got <item>!" window (btl_msg_get_item) centred near the top of the screen for the thrown item.
  * US and later fill the item name in with evtMsgFmtStr unless the language is Japanese.
  */
-void _get_item_announce_disp(CameraId cameraId, void* param) {
+static void _get_item_announce_disp(CameraId cameraId, void* param) {
     u16 lines;
     const char* itemName;
     char buf[128];

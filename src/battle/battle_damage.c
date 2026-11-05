@@ -996,7 +996,7 @@ static u8 _getRegistStatus(BattleUnit* unit, s32 type) {
  * Also handles the stat buffs (charge, attack/defence up/down, size, fast/slow, HP/FP regen) and their stacking.
  * Returns 1 after the immunity and chance checks pass, independently of the status setter's return value.
  */
-s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u32 special, s32 type, s32 rate, s32 levelDiff, s8 time, s8 strength) {
+static s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u32 special, s32 type, s32 rate, s32 levelDiff, s8 time, s8 strength) {
     s32 ok;
     s32 announce;
     s32 chance;

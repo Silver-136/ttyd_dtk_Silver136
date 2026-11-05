@@ -81,7 +81,7 @@ static WindowWork* wp;
 void FontDrawStringVecPitch(Vec* pos, const char* msg, f32 pitch);
 static void winLectureKeyMask(void);
 void iconGetTexObj(GXTexObj* obj, u16 iconId);
-void winDisp(CameraId camId, void* param);
+static void winDisp(CameraId camId, void* param);
 static void winDispKoopa(CameraId camId, void* param);
 
 
@@ -509,7 +509,7 @@ void winMain(void) {
 }
 
 /** 2D draw callback for Mario's pause menu: draws all the menu windows through winRootDisp. */
-void winDisp(CameraId camId, void* param) {
+static void winDisp(CameraId camId, void* param) {
     winRootDisp(camId, wp);
 }
 

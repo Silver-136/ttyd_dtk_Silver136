@@ -45,7 +45,7 @@ static effN64Vtx size32x64_tex32x64_vtx[] = {
     {-16, 64, 3, 0, 8192, 0, 0, 0, 255},
 };
 
-void effFreezeMain(EffectEntry* effect);
+static void effFreezeMain(EffectEntry* effect);
 static void effFreezeDisp(CameraId cameraId, void* param);
 
 /**
@@ -94,7 +94,7 @@ EffectEntry* effFreezeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 
  * and keeps the snow dust on the block.
  * When the life ends it shatters into ten glass shards and deletes the dust and the block.
  */
-void effFreezeMain(EffectEntry* effect) {
+static void effFreezeMain(EffectEntry* effect) {
     s32 lifetime;
     EffFreezeN64Work* work = effect->userdata;
     s32 i;

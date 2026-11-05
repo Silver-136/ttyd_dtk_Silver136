@@ -49,7 +49,7 @@ static TelopWork work;
 /** State of the area name banner (fade timer and the area shown); wp points to it. */
 static TelopWork* wp = &work;
 
-void telop(CameraId cameraId, void* param);
+static void telop(CameraId cameraId, void* param);
 
 /**
  * Shows the name banner for area args[0] (an index into msg_tbl: Rogueport, Petal Meadows,
@@ -107,7 +107,7 @@ USER_FUNC(evt_telop_entry) {
     return EVT_RETURN_BLOCK;
 }
 
-void telop(CameraId cameraId, void* param) {
+static void telop(CameraId cameraId, void* param) {
     GXTexObj texObj;
     Mtx mtx;
     Mtx scaleMtx;

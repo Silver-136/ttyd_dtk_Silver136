@@ -426,7 +426,7 @@ static inline void fukiTool(WindowWork* w, u16 icon, f32 x, f32 y) {
  * Draws the bubble for Mario window entry idx if Mario owns it:
  * current hammer (2), current boots (3), or the Paper, Plane, Boat and Tube curses (7-10).
  */
-void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
+static void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
     switch (idx) {
         case 2:
             if (pouchGetHammerLv() > 0) {

@@ -106,7 +106,7 @@ static void BattleAudienceAddTargetNumSub(f32 value);
 void BattleAudienceAddPuni(s32 num);
 static void BattleAudienceAddPhaseEvtList(s32 type);
 static void BattleAudienceCheer(s32 type);
-void BattleAudienceJoy(s32 type);
+static void BattleAudienceJoy(s32 type);
 static void BattleAudienceJoy_Sub(s32 a, s32 b, s32 c, s32 type);
 void BattleAudienceSoundNoiseAlways(void);
 static s32 BattleAudienceSound0(const char* name);
@@ -3974,7 +3974,7 @@ static void BattleAudienceCheer(s32 type) {
  * (joyLevel 0-4; it never rises in the early demos). Called by the action-command, Stylish and Appeal reactions,
  * the Star Power cheer and the audience scripts.
  */
-void BattleAudienceJoy(s32 type) {
+static void BattleAudienceJoy(s32 type) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
 
     switch (type) {
