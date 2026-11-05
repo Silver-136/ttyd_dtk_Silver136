@@ -1,10 +1,25 @@
-// evt_yuugijou.c: the Pianta Parlor (yuugijou, amusement hall) work (PiantaParlorWork) and its minigame commands.
+// evt_yuugijou.c: the Pianta Parlor (yuugijou, amusement hall) work (PiantaParlorWork) and its minigame commands; also the
+// minigame driver work (MiniGameWork) shared by the yuu and gor copies of the driver.
 
 #pragma once
 
 #include "version.h"
 #include <dolphin/types.h>
 #include "evt/evt_cmd.h"
+#include "manager/evtmgr.h"
+#include "driver/camdrv.h"
+
+// Minigame driver work (evt_yuuminigame in yuu, evt_goryuugijo in gor); data points at the per-game work (HikokiWork, SlitWork, ...)
+typedef struct MiniGameWork {
+    EventEntry* event;
+    EventEntry* subEvent;
+    u16 flags;
+    s32 type;
+    void (*init)(EventEntry* event, BOOL isFirstCall);
+    void (*main)(EventEntry* event, BOOL isFirstCall);
+    void (*disp)(CameraId camera, void* param);
+    void* data;
+} MiniGameWork;
 
 typedef struct PiantaParlorWork {
     u32 flags; //0x00, 1: token counter shown, 2: tokens taken out (playing), 4: counter raised, 8: window closed

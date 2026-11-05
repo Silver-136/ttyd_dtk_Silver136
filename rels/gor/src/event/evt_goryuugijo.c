@@ -4,6 +4,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "rels/gor/include/gor.h"
+#include "evt/evt_yuugijou.h"
 
 #include "manager/evtmgr_cmd.h"
 #include "memory.h"
@@ -11,16 +12,6 @@
 #include "string.h"
 #include "driver/dispdrv.h"
 
-typedef struct GoryuuWork {
-    EventEntry* event;
-    EventEntry* subEvent;
-    u16 flags;
-    s32 type;
-    void (*init)(EventEntry* event, BOOL isFirstCall);
-    void (*main)(EventEntry* event, BOOL isFirstCall);
-    void (*disp)(CameraId camera, void* param);
-    void* data;
-} GoryuuWork;
 void evt_goryuugijo_disp_func(CameraId camera, void* param);
 
 USER_FUNC(evt_goryuugijo_main_func);
@@ -51,7 +42,7 @@ USER_FUNC(eff_call_yuugijo) {
  */
 USER_FUNC(evt_goryuugijo_free) {
     EvtWord* args = event->args;
-    GoryuuWork* wp = (GoryuuWork*)evtGetValue(event, args[0]);
+    MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
 
     if (wp == NULL) {
         return EVT_RETURN_DONE;
@@ -77,9 +68,9 @@ USER_FUNC(evt_goryuugijo_free) {
  */
 USER_FUNC(evt_goryuugijo_alloc) {
     EvtWord* args = event->args;
-    GoryuuWork* wp = _mapAlloc(sizeof(GoryuuWork));
+    MiniGameWork* wp = _mapAlloc(sizeof(MiniGameWork));
 
-    memset(wp, 0, sizeof(GoryuuWork));
+    memset(wp, 0, sizeof(MiniGameWork));
     evtSetValue(event, args[0], (EvtWord)wp);
     wp->type = evtGetValue(event, args[1]);
     wp->event = evtEntry(main_evt, 0, 0);
@@ -111,7 +102,7 @@ USER_FUNC(evt_goryuugijo_alloc) {
  * and queues the 2D draw (priority 1000). Never finishes by itself.
  */
 USER_FUNC(evt_goryuugijo_main_func) {
-    GoryuuWork* wp = (GoryuuWork*)event->lwData[0];
+    MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
 
     if (wp->flags & 1) {
         wp->flags |= 2;
@@ -131,7 +122,7 @@ disp:
 
 /** Draw callback of a hall minigame: forwards to the game's own disp function. */
 void evt_goryuugijo_disp_func(CameraId camera, void* param) {
-    ((GoryuuWork*)param)->disp(camera, param);
+    ((MiniGameWork*)param)->disp(camera, param);
 }
 
 /**

@@ -69,13 +69,13 @@ typedef struct MapAnimRate {
 } MapAnimRate;
 MapAnimRate mapAnimRate;
 static u8* _ap;
-typedef struct LogoWork {
+typedef struct MujLogoWork {
     FileEntry* tpl;
     f32 y;
     s32 alpha;
     s32 state;
     s32 counter;
-} LogoWork;
+} MujLogoWork;
 static void draw(CameraId camera, void* param);
 
 static USER_FUNC(alpha_init_func);
@@ -92,7 +92,7 @@ USER_FUNC(splash_eff);
 USER_FUNC(fune_curve_pos);
 USER_FUNC(urouro_func);
 USER_FUNC(urouro_fuwafuwa_func);
-static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y);
+static void pressStartGX(MujLogoWork* wp, s32 alpha, f32 x, f32 y);
 void elmos1000tai_seq00(NanNPC* npc);
 USER_FUNC(elmos1000tai_start);
 static void alpha_tev(MapTevCallbackInfo* info);
@@ -2043,7 +2043,7 @@ EVT_BEGIN(anm_yure)
     RETURN
 EVT_END()
 
-static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
+static void pressStartGX(MujLogoWork* wp, s32 alpha, f32 x, f32 y) {
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx v17, v16;
@@ -2109,7 +2109,7 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
  * and, in the demos, the Press Start text using the wp alpha.
  */
 static void draw(CameraId camera, void* param) {
-    LogoWork* wp = param;
+    MujLogoWork* wp = param;
     CameraEntry saved;
     f32 viewport[6];
     f32 projection[7];
@@ -2443,11 +2443,11 @@ static USER_FUNC(logo) {
 USER_FUNC(logo) {
 #endif
 
-    LogoWork* wp;
+    MujLogoWork* wp;
 
     if (isFirstCall) {
-        wp = _mapAlloc(sizeof(LogoWork));
-        memset(wp, 0, sizeof(LogoWork));
+        wp = _mapAlloc(sizeof(MujLogoWork));
+        memset(wp, 0, sizeof(MujLogoWork));
         event->userdatap[0] = wp;
     }
     wp = event->userdatap[0];

@@ -60,10 +60,10 @@
 #include <dolphin/pad.h>
 #include "evt/evt_save_flags.h"
 
-typedef struct ShadowWork {
+typedef struct TouShadowWork {
     GXTexObj obj;
     smartEntry* tex;
-} ShadowWork;
+} TouShadowWork;
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
@@ -790,7 +790,7 @@ static USER_FUNC(proj_on) {
  */
 // Render the sphere into the projected shadow texture, restoring viewport, projection and scissor afterward.
 void make_shadow_disp(CameraId camera, void* param) {
-    ShadowWork* wp = param;
+    TouShadowWork* wp = param;
     Mtx44 proj;
     Mtx view;
     Mtx mtx;
@@ -844,14 +844,14 @@ void make_shadow_disp(CameraId camera, void* param) {
 
 /** Script helper: allocates the shadow texture and queues make_shadow_disp every frame; blocks forever as the owner. */
 USER_FUNC(make_shadow) {
-    ShadowWork* wp;
+    TouShadowWork* wp;
 
     if (isFirstCall) {
-        wp = _mapAlloc(sizeof(ShadowWork));
+        wp = _mapAlloc(sizeof(TouShadowWork));
         event->userdata[0] = (EvtWord)wp;
         wp->tex = smartAlloc(GXGetTexBufferSize(128, 128, GX_TF_RGB5A3, GX_FALSE, 0), SMART_GROUP_MAP);
     }
-    wp = (ShadowWork*)event->userdata[0];
+    wp = (TouShadowWork*)event->userdata[0];
     GXInitTexObj(&wp->obj, wp->tex->address, 128, 128, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     mapSetProjTexObj(&wp->obj, wp->tex);

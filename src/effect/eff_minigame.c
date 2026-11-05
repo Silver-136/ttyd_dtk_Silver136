@@ -13,7 +13,7 @@
 #include <dolphin/mtx.h>
 #include "sfx_name_word.h"
 
-typedef struct MiniGameWork {
+typedef struct EffMiniGameWork {
     s32 type;   // 0x0
     f32 x;      // 0x4
     f32 y;      // 0x8
@@ -28,7 +28,7 @@ typedef struct MiniGameWork {
     s32 pad2c;  // 0x2C
     s32 state;  // 0x30
     s32 alpha;  // 0x34
-} MiniGameWork;
+} EffMiniGameWork;
 
 void effMiniGameMain(EffectEntry* effect);
 void effMiniGameDisp(CameraId cameraId, void* param);
@@ -93,7 +93,7 @@ u8 poyon_scale[] = {0x64, 0x64, 0x69, 0x5E, 0x6E, 0x59, 0x75, 0x52, 0x7B, 0x4C, 
 
 EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
-    MiniGameWork* work;
+    EffMiniGameWork* work;
     s32 i;
     s32 n;
     s32 st;
@@ -117,7 +117,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
 #endif
     effect->type = "miniGame";
     effect->count = n;
-    work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(MiniGameWork));
+    work = __memAlloc(HEAP_EFFECT, effect->count * sizeof(EffMiniGameWork));
     effect->userdata = work;
     effect->callback = effMiniGameMain;
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
@@ -207,7 +207,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
  * deletes the effect when finished, and registers the 2D draw callback.
  */
 void effMiniGameMain(EffectEntry* effect) {
-    MiniGameWork* work = effect->userdata;
+    EffMiniGameWork* work = effect->userdata;
     Vec pos;
     Vec tmp;
     s32 i;
@@ -453,9 +453,9 @@ void effMiniGameMain(EffectEntry* effect) {
 /** Draws the banner text pieces as 2D textured quads, choosing the texture set for the current language. */
 void effMiniGameDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
-    MiniGameWork* work = effect->userdata;
+    EffMiniGameWork* work = effect->userdata;
     CameraEntry* cam;
-    MiniGameWork* p;
+    EffMiniGameWork* p;
     s32 i;
     s32 s;
     s32 type;

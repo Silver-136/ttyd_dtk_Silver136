@@ -79,16 +79,6 @@ typedef struct ExchangeRyokin {
     s32 medal;
 } ExchangeRyokin;
 s32 yuugijou_montemedal_keep(EventEntry* event, BOOL isFirstCall);
-typedef struct GoryuuWork {
-    EventEntry* event;
-    EventEntry* subEvent;
-    u16 flags;
-    s32 type;
-    void (*init)(EventEntry* event, BOOL isFirstCall);
-    void (*main)(EventEntry* event, BOOL isFirstCall);
-    void (*disp)(CameraId camera, void* param);
-    void* data;
-} GoryuuWork;
 typedef struct SlotWork {
     u32 flags;
     s32 phase;
@@ -744,7 +734,7 @@ void goryuugijo_disp_montemedal(CameraId camera, void* param) {
 /** Script helper: sets the slot machine's case id number args[1] to args[2], for the minigame work block in args[0]. */
 USER_FUNC(evt_goryuugijo_set_caseid) {
     EvtWord* args = event->args;
-    SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
+    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
     s32 idx = evtGetValue(event, args[1]);
 
     data->caseId[idx] = evtGetValue(event, args[2]);
@@ -757,7 +747,7 @@ USER_FUNC(evt_goryuugijo_set_caseid) {
  */
 USER_FUNC(evt_goryuugijo_get_caseid) {
     EvtWord* args = event->args;
-    SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
+    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
     s32 idx = evtGetValue(event, args[1]);
 
     evtSetValue(event, args[2], data->caseId[idx]);
@@ -770,7 +760,7 @@ USER_FUNC(evt_goryuugijo_get_caseid) {
  */
 USER_FUNC(evt_goryuugijo_set_nowslot) {
     EvtWord* args = event->args;
-    SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
+    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
     data->nowSlot = evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
@@ -6470,7 +6460,7 @@ static USER_FUNC(fall_rtn) {
     s32 done = 0;
 
     if (isFirstCall) {
-        SlotWork* data = ((GoryuuWork*)event->lwData[0])->data;
+        SlotWork* data = ((MiniGameWork*)event->lwData[0])->data;
         monte_p = _mapAlloc(data->monteCount * sizeof(GMonte));
         memset(monte_p, 0, data->monteCount * sizeof(GMonte));
         monte_p->owner = data;
@@ -6587,7 +6577,7 @@ static USER_FUNC(fall_rtn) {
 /** Script helper that sets the phase of a slot machine (the minigame work block in args[0]) to args[1]. */
 USER_FUNC(goryuugijo_set_slot_phase) {
     EvtWord* args = event->args;
-    SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
+    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
     data->phase = evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
@@ -6596,7 +6586,7 @@ USER_FUNC(goryuugijo_set_slot_phase) {
 /** Script helper that reads the phase of a slot machine (the minigame work block in args[0]) into args[1]. */
 USER_FUNC(goryuugijo_get_slot_phase) {
     EvtWord* args = event->args;
-    SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
+    SlotWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
 
     evtSetValue(event, args[1], data->phase);
     return EVT_RETURN_DONE;
@@ -6624,7 +6614,7 @@ void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel) {
  * and a random face.
  */
 USER_FUNC(goryuugijo_door_init_slot) {
-    GoryuuWork* wp = (GoryuuWork*)evtGetValue(event, event->args[0]);
+    MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, event->args[0]);
     SlotWork* data = wp->data;
     s32 j;
     s32 i;
@@ -6649,7 +6639,7 @@ USER_FUNC(goryuugijo_door_init_slot) {
  * and clears the win flag.
  */
 void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall) {
-    SlotWork* data = ((GoryuuWork*)event->lwData[0])->data;
+    SlotWork* data = ((MiniGameWork*)event->lwData[0])->data;
 
     data->counter = 0;
     data->reberAngle = 0.0f;
@@ -6666,7 +6656,7 @@ void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall) {
  * Flag 2 would pick a slow "lucky" spin with more neon flashes, but it is cleared right after its 1-in-10
  * roll, and flag 4 (all three window faces equal) cannot be set with faces 0, 1 and 2.
  */
-void slot_neon_sub(GoryuuWork* wp, SlotWork* data) {
+void slot_neon_sub(MiniGameWork* wp, SlotWork* data) {
     s32 i;
     s32 r;
 
@@ -6740,7 +6730,7 @@ void slot_neon_sub(GoryuuWork* wp, SlotWork* data) {
  * slows to a stop at the next face and snaps to it, keeping the angle in 0 to 360;
  * returns 1 when the reel has stopped.
  */
-s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel) {
+s32 slot_rotate_sub(MiniGameWork* wp, SlotWork* data, s32 reel) {
     s32 stopped = 0;
     f32 angle = data->angle[data->nowSlot][reel];
     f32 speed = data->speed[reel];
@@ -6816,7 +6806,7 @@ rotate:
  * 11 shuts down.
  */
 void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
-    GoryuuWork* wp = (GoryuuWork*)event->lwData[0];
+    MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
     SlotWork* data = wp->data;
     s32 r;
     s32 dir;
@@ -7165,7 +7155,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
 }
 
 void goryuugijo_disp_slot(CameraId camera, void* param) {
-    SlotWork* data = ((GoryuuWork*)param)->data;
+    SlotWork* data = ((MiniGameWork*)param)->data;
     I3 icons = disp_slot_icons;
     s32 i;
     Vec pos;

@@ -7,20 +7,9 @@
 #include "dolphin/mtx.h"
 #include "manager/evtmgr.h"
 #include "driver/camdrv.h"
+#include "evt/evt_yuugijou.h"
 
 struct EventEntry;
-
-// minigame driver work (evt_yuuminigame); data points at the per-game work (HikokiWork, SlitWork, ...)
-typedef struct MiniGameWork {
-    EventEntry* event;
-    EventEntry* subEvent;
-    u16 flags;
-    s32 type;
-    void (*init)(EventEntry* event, BOOL isFirstCall);
-    void (*main)(EventEntry* event, BOOL isFirstCall);
-    void (*disp)(CameraId camera, void* param);
-    void* data;
-} MiniGameWork;
 
 // Pianta Parlor minigame piece (yuu_00..yuu_03)
 typedef struct MonteSub {
@@ -38,6 +27,16 @@ typedef struct Monte {
     MonteSub sub;
     MiniGameWork* wp;
 } Monte;
+
+// Spawn bands of the minigame pieces (Monte) in yuu_00 and yuu_01 (montetable): num pieces in the x0..x1,
+// y0..y1 box. yuu_02 has its own x/z table (MonteTableXZ).
+typedef struct MonteTable {
+    f32 x0;
+    f32 x1;
+    f32 y0;
+    f32 y1;
+    s32 num;
+} MonteTable;
 // minigame 4 (yuu_03) work
 typedef struct SlitWork {
     u32 flags;

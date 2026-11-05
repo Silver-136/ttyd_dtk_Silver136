@@ -58,52 +58,15 @@
 #include <dolphin/pad.h>
 #include "driver/seqdrv.h"
 #include "evt/evt_save_flags.h"
+#include "rels/tou/include/tou_ranking.h"
 
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 static void rankingInit(void);
 void rankingInit(void);
-// RankEntry.flags (the Glitz Pit ranking)
-#define RANK_FLAG_BEATEN (1 << 0) // Mario beat this fighter (saved in swSet(0x9A1 + id))
-#define RANK_FLAG_HIDDEN (1 << 1) // not in the ranking yet
-#define RANK_FLAG_PLAYER (1 << 2) // Mario's own entry (id 20, drawn in red)
-
-typedef struct RankEntry {
-    u16 flags; // RANK_FLAG_*
-    s32 id;
-    union {
-        s16 score;
-        u8 sw[2];
-    };
-} RankEntry;
-typedef struct RankWork {
-    s32 num;
-    RankEntry* entries;
-} RankWork;
 static RankWork* rank_wp;
 static void rankingExit(void);
-typedef struct DispWork {
-    f32 y;
-    f32 targetY;
-    s32 page;
-} DispWork;
-typedef struct FighterData {
-    u16 flags;
-    const char* name;
-    const char* name2;
-    s32 info;
-    const char* msg1;
-    const char* msg2;
-    s16 score;
-} FighterData;
-typedef struct RuleData {
-    const char* name;
-    const char* msg;
-    s32 id;
-    s32 a;
-    s32 b;
-} RuleData;
 static DispWork* dwp;
 static FighterData fighterDt[23];
 static FighterData fighterDt_re[21];
@@ -112,7 +75,7 @@ static void rankingControll(void);
 // A macro, not an inline function: as a function the registers at the call sites change.
 #define GET_RANK(rank, i)                                       \
     rank = 0;                                                   \
-    for (i = 0; i < rank_wp->num; i++) {                        \
+    for (i = 0; i < rank_wp->count; i++) {                      \
         if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {  \
             if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) { \
                 break;                                          \
@@ -121,26 +84,26 @@ static void rankingControll(void);
         }                                                       \
     }
 static void insert(s32* list, s32 num, s32 from, s32 to);
-#define SORT_SCORE(list, n)                                                          \
-    for (i = 0; i < n - 1; i++) {                                                    \
-        for (j = i + 1; j < n; j++) {                                                \
-            if (rank_wp->entries[list[i]].score < rank_wp->entries[list[j]].score) { \
-                tmp = list[i];                                                       \
-                list[i] = list[j];                                                   \
-                list[j] = tmp;                                                       \
-            }                                                                        \
-        }                                                                            \
+#define SORT_SCORE(list, n)                                                                        \
+    for (i = 0; i < n - 1; i++) {                                                                  \
+        for (j = i + 1; j < n; j++) {                                                              \
+            if (rank_wp->entries[list[i]].points.total < rank_wp->entries[list[j]].points.total) { \
+                tmp = list[i];                                                                     \
+                list[i] = list[j];                                                                 \
+                list[j] = tmp;                                                                     \
+            }                                                                                      \
+        }                                                                                          \
     }
-#define SORT_FLAG(list, n)                                                                \
-    for (i = 0; i < n - 1; i++) {                                                         \
-        for (j = i + 1; j < n; j++) {                                                     \
-            pb = &fighterDt[rank_wp->entries[list[i]].id];                                \
-            if ((fighterDt[rank_wp->entries[list[j]].id].flags & 5) && (pb->flags & 2)) { \
-                tmp = list[i];                                                            \
-                list[i] = list[j];                                                        \
-                list[j] = tmp;                                                            \
-            }                                                                             \
-        }                                                                                 \
+#define SORT_FLAG(list, n)                                                                                                       \
+    for (i = 0; i < n - 1; i++) {                                                                                                \
+        for (j = i + 1; j < n; j++) {                                                                                            \
+            pb = &fighterDt[rank_wp->entries[list[i]].id];                                                                       \
+            if ((fighterDt[rank_wp->entries[list[j]].id].flags & (FIGHT_MAJOR | FIGHT_CHAMPION)) && (pb->flags & FIGHT_MINOR)) { \
+                tmp = list[i];                                                                                                   \
+                list[i] = list[j];                                                                                               \
+                list[j] = tmp;                                                                                                   \
+            }                                                                                                                    \
+        }                                                                                                                        \
     }
 
 // Find the first listed fighter carrying the requested FighterData flag.
@@ -344,11 +307,11 @@ static void rankingInit(void) {
     RankEntry* entry;
 
     memset(rank_wp, 0, sizeof(RankWork));
-    rank_wp->num = evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? 23 : 21;
-    rank_wp->entries = _mapAlloc(rank_wp->num * sizeof(RankEntry));
-    memset(rank_wp->entries, 0, rank_wp->num * sizeof(RankEntry));
+    rank_wp->count = evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? 23 : 21;
+    rank_wp->entries = _mapAlloc(rank_wp->count * sizeof(RankEntry));
+    memset(rank_wp->entries, 0, rank_wp->count * sizeof(RankEntry));
     entry = rank_wp->entries;
-    for (i = 0; i < rank_wp->num; i++, entry++) {
+    for (i = 0; i < rank_wp->count; i++, entry++) {
         entry->flags = 0;
         entry->id = i;
         if (swGet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE)) {
@@ -356,10 +319,10 @@ static void rankingInit(void) {
         }
         if (swGet(GSWF_ID(GSWF_GLITZ_PIT_RANKING_SAVED))) {
             for (j = 0; j < 2; j++) {
-                entry->sw[j] = swByteGet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE));
+                entry->points.bytes[j] = swByteGet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE));
             }
         } else {
-            entry->score = fighterDt[entry->id].score;
+            entry->points.total = fighterDt[entry->id].startPoints;
         }
         if (entry->id == 20) {
             entry->flags |= RANK_FLAG_PLAYER;
@@ -404,14 +367,14 @@ static void rankingExit(void) {
     s32 j;
     RankEntry* entry = rank_wp->entries;
 
-    for (i = 0; i < rank_wp->num; i++, entry++) {
+    for (i = 0; i < rank_wp->count; i++, entry++) {
         if (entry->flags & RANK_FLAG_BEATEN) {
             swSet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE);
         } else {
             swClear(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE);
         }
         for (j = 0; j < 2; j++) {
-            swByteSet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE), entry->sw[j]);
+            swByteSet(j + (entry->id * 2 + GSW_TOU_FIGHTER_POINTS_BASE), entry->points.bytes[j]);
         }
     }
     _mapFree(rank_wp->entries);
@@ -492,7 +455,7 @@ static void rankingControll(void) {
     RankEntry* work;
 
     entry = rank_wp->entries;
-    for (i = 0; i < rank_wp->num; i++, entry++) {
+    for (i = 0; i < rank_wp->count; i++, entry++) {
         if (!(entry->flags & RANK_FLAG_PLAYER)) {
             if (entry->flags & RANK_FLAG_BEATEN) {
                 lose[nlose++] = i;
@@ -563,17 +526,17 @@ static void rankingControll(void) {
             }
         }
     }
-    work = __memAlloc(HEAP_DEFAULT, rank_wp->num * sizeof(RankEntry));
+    work = __memAlloc(HEAP_DEFAULT, rank_wp->count * sizeof(RankEntry));
     for (i = 0; i < nwin; i++) {
         work[i] = rank_wp->entries[win[i]];
     }
     work[nwin].flags = RANK_FLAG_PLAYER;
     work[nwin].id = 20;
-    work[nwin].score = 0;
+    work[nwin].points.total = 0;
     for (i = 0; i < nlose; i++) {
         work[nwin + 1 + i] = rank_wp->entries[lose[i]];
     }
-    memcpy(rank_wp->entries, work, rank_wp->num * sizeof(RankEntry));
+    memcpy(rank_wp->entries, work, rank_wp->count * sizeof(RankEntry));
     __memFree(HEAP_DEFAULT, work);
     GET_RANK(j, i);
     swByteSet(GSW_ID(GSW_GLITZ_PIT_RANK), j);
@@ -604,7 +567,7 @@ static USER_FUNC(evt_tou_get_next_match) {
     s32 n = 0;
     s32 list[32];
 
-    for (i = 0; i < rank_wp->num; i++) {
+    for (i = 0; i < rank_wp->count; i++) {
         entry = &rank_wp->entries[i];
         if (!(entry->flags & RANK_FLAG_HIDDEN)) {
             list[n++] = entry->id;
@@ -643,7 +606,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
         dt = fighterDt_re;
     }
     evtSetValue(event, args[1], (EvtWord)msgSearch(dt[id].name));
-    evtSetValue(event, args[2], fighterDt[id].info);
+    evtSetValue(event, args[2], fighterDt[id].setupId);
     return EVT_RETURN_DONE;
 }
 
@@ -658,7 +621,7 @@ static USER_FUNC(evt_tou_get_fighter_name2) {
     } else {
         dt = fighterDt_re;
     }
-    evtSetValue(event, args[1], (EvtWord)msgSearch(dt[id].name2));
+    evtSetValue(event, args[1], (EvtWord)msgSearch(dt[id].title));
     return EVT_RETURN_DONE;
 }
 
@@ -673,7 +636,7 @@ static USER_FUNC(evt_tou_get_fighter_rank) {
     s32 i;
     RankEntry* entry;
 
-    for (i = 0; i < rank_wp->num; i++) {
+    for (i = 0; i < rank_wp->count; i++) {
         entry = &rank_wp->entries[i];
         if (!(entry->flags & RANK_FLAG_HIDDEN)) {
             if (id == entry->id) {
@@ -700,8 +663,8 @@ static USER_FUNC(evt_tou_get_fighter_battle_msg) {
     } else {
         dt = fighterDt_re;
     }
-    evtSetValue(event, args[1], (EvtWord)dt[id].msg1);
-    evtSetValue(event, args[2], (EvtWord)dt[id].msg2);
+    evtSetValue(event, args[1], (EvtWord)dt[id].taunt);
+    evtSetValue(event, args[2], (EvtWord)dt[id].victory);
     return EVT_RETURN_DONE;
 }
 
@@ -722,8 +685,8 @@ static USER_FUNC(evt_tou_get_rule_info) {
 
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 #if VERSION <= VERSION_DEMO_JP
-        for (i = 0; i < rank_wp->num; i++) {
-            if (rank_wp->entries[i].flags & 4) {
+        for (i = 0; i < rank_wp->count; i++) {
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                 break;
             }
         }
@@ -760,8 +723,8 @@ static USER_FUNC(evt_tou_get_rule_info) {
     }
     evtSetValue(event, args[1], (EvtWord)dt[i].name);
     evtSetValue(event, args[2], dt[i].id);
-    evtSetValue(event, args[3], dt[i].a);
-    evtSetValue(event, args[4], dt[i].b);
+    evtSetValue(event, args[3], dt[i].param);
+    evtSetValue(event, args[4], dt[i].param2);
     return EVT_RETURN_DONE;
 }
 
@@ -776,8 +739,8 @@ USER_FUNC(evt_tou_get_rule_msg2) {
 
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
 #if VERSION <= VERSION_DEMO_JP
-        for (i = 0; i < rank_wp->num; i++) {
-            if (rank_wp->entries[i].flags & 4) {
+        for (i = 0; i < rank_wp->count; i++) {
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                 break;
             }
         }
@@ -806,7 +769,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
     if (i == num) {
         i = num - 1;
     }
-    evtSetValue(event, args[1], (EvtWord)msgSearch(dt[i].msg));
+    evtSetValue(event, args[1], (EvtWord)msgSearch(dt[i].desc));
     return EVT_RETURN_DONE;
 }
 
@@ -825,7 +788,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
     s16 max;
 
     if (lose == 0) {
-        for (i = 0; i < rank_wp->num; i++) {
+        for (i = 0; i < rank_wp->count; i++) {
             if (id == rank_wp->entries[i].id) {
                 rank_wp->entries[i].flags |= RANK_FLAG_BEATEN;
                 break;
@@ -833,7 +796,7 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
         }
         swSet(GSWF_ID(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT));
     } else {
-        for (i = 0; i < rank_wp->num; i++) {
+        for (i = 0; i < rank_wp->count; i++) {
             if (id == rank_wp->entries[i].id) {
                 rank_wp->entries[i].flags &= ~RANK_FLAG_BEATEN;
                 break;
@@ -843,14 +806,14 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
     }
     min = 1000;
     max = -1000;
-    for (i = 0; i < rank_wp->num; i++) {
+    for (i = 0; i < rank_wp->count; i++) {
         if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
-            rank_wp->entries[i].score += rand() % 4 + (rand() % 4 - 3);
-            if (rank_wp->entries[i].score < min) {
-                min = rank_wp->entries[i].score;
+            rank_wp->entries[i].points.total += rand() % 4 + (rand() % 4 - 3);
+            if (rank_wp->entries[i].points.total < min) {
+                min = rank_wp->entries[i].points.total;
             }
-            if (rank_wp->entries[i].score > max) {
-                max = rank_wp->entries[i].score;
+            if (rank_wp->entries[i].points.total > max) {
+                max = rank_wp->entries[i].points.total;
             }
         }
     }
@@ -882,7 +845,7 @@ static void printRanking(void) {
     s32 i;
 
     evtGetValue(NULL, GSW_STORY_PROGRESS);
-    for (i = 0; i < rank_wp->num; i++) {
+    for (i = 0; i < rank_wp->count; i++) {
     }
 }
 
@@ -893,53 +856,53 @@ static void printRanking(void) {
  * Each has its name, title, battle setup, pre-match and victory lines and starting ranking points.
  */
 static FighterData fighterDt[] = {
-    {4, "stg3_tou_sensyu_00", "stg3_tou_sensyu2_00", 22, "stg3_tou_400_02", "stg3_tou_400_03", 250},
-    {4097, "stg3_tou_sensyu_01", "stg3_tou_sensyu2_01", 19, "stg3_tou_118_00", "stg3_tou_118_01", 200},
-    {1, "stg3_tou_sensyu_02", "stg3_tou_sensyu2_02", 18, "stg3_tou_118_02", "stg3_tou_118_03", 180},
-    {1, "stg3_tou_sensyu_03", "stg3_tou_sensyu2_03", 17, "stg3_tou_118_04", "stg3_tou_118_05", 170},
-    {1, "stg3_tou_sensyu_04", "stg3_tou_sensyu2_04", 16, "stg3_tou_118_06", "stg3_tou_118_07", 160},
-    {1, "stg3_tou_sensyu_05", "stg3_tou_sensyu2_05", 15, "stg3_tou_118_08", "stg3_tou_118_09", 150},
-    {1, "stg3_tou_sensyu_06", "stg3_tou_sensyu2_06", 14, "stg3_tou_118_10", "stg3_tou_118_11", 140},
-    {1, "stg3_tou_sensyu_07", "stg3_tou_sensyu2_07", 13, "stg3_tou_118_12", "stg3_tou_118_13", 130},
-    {1, "stg3_tou_sensyu_08", "stg3_tou_sensyu2_08", 12, "stg3_tou_118_14", "stg3_tou_118_15", 120},
-    {1, "stg3_tou_sensyu_09", "stg3_tou_sensyu2_09", 11, "stg3_tou_118_16", "stg3_tou_118_17", 110},
-    {2049, "stg3_tou_sensyu_10", "stg3_tou_sensyu2_10", 10, "stg3_tou_118_18", "stg3_tou_118_19", 100},
-    {258, "stg3_tou_sensyu_11", "stg3_tou_sensyu2_11", 9, "stg3_tou_118_20", "stg3_tou_118_21", 90},
-    {2, "stg3_tou_sensyu_12", "stg3_tou_sensyu2_12", 8, "stg3_tou_118_22", "stg3_tou_118_23", 80},
-    {2, "stg3_tou_sensyu_13", "stg3_tou_sensyu2_13", 7, "stg3_tou_118_24", "stg3_tou_118_25", 70},
-    {2, "stg3_tou_sensyu_14", "stg3_tou_sensyu2_14", 6, "stg3_tou_118_26", "stg3_tou_118_27", 60},
-    {2, "stg3_tou_sensyu_15", "stg3_tou_sensyu2_15", 5, "stg3_tou_118_28", "stg3_tou_118_29", 50},
-    {2, "stg3_tou_sensyu_16", "stg3_tou_sensyu2_16", 4, "stg3_tou_118_30", "stg3_tou_118_31", 40},
-    {2, "stg3_tou_sensyu_17", "stg3_tou_sensyu2_17", 3, "stg3_tou_118_32", "stg3_tou_118_33", 30},
-    {514, "stg3_tou_sensyu_18", "stg3_tou_sensyu2_18", 2, "stg3_tou_118_34", "stg3_tou_118_35", 20},
-    {1026, "stg3_tou_sensyu_19", "stg3_tou_sensyu2_19", 1, "stg3_tou_118_36", "stg3_tou_118_36_01", 10},
-    {8, "stg3_tou_sensyu_20", "stg3_tou_sensyu2_20", 1, 0, 0, 0},
-    {2, "stg3_tou_sensyu_21", "stg3_tou_sensyu2_21", 20, "stg3_tou_118_36_02", "stg3_tou_118_36_03", 5},
-    {2, "stg3_tou_sensyu_22", "stg3_tou_sensyu2_22", 21, "stg3_tou_118_36_04", "stg3_tou_118_36_05", 0},
+    {FIGHT_CHAMPION, "stg3_tou_sensyu_00", "stg3_tou_sensyu2_00", 22, "stg3_tou_400_02", "stg3_tou_400_03", 250},
+    {FIGHT_KOOPATROL | FIGHT_MAJOR, "stg3_tou_sensyu_01", "stg3_tou_sensyu2_01", 19, "stg3_tou_118_00", "stg3_tou_118_01", 200},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_02", "stg3_tou_sensyu2_02", 18, "stg3_tou_118_02", "stg3_tou_118_03", 180},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_03", "stg3_tou_sensyu2_03", 17, "stg3_tou_118_04", "stg3_tou_118_05", 170},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_04", "stg3_tou_sensyu2_04", 16, "stg3_tou_118_06", "stg3_tou_118_07", 160},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_05", "stg3_tou_sensyu2_05", 15, "stg3_tou_118_08", "stg3_tou_118_09", 150},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_06", "stg3_tou_sensyu2_06", 14, "stg3_tou_118_10", "stg3_tou_118_11", 140},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_07", "stg3_tou_sensyu2_07", 13, "stg3_tou_118_12", "stg3_tou_118_13", 130},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_08", "stg3_tou_sensyu2_08", 12, "stg3_tou_118_14", "stg3_tou_118_15", 120},
+    {FIGHT_MAJOR, "stg3_tou_sensyu_09", "stg3_tou_sensyu2_09", 11, "stg3_tou_118_16", "stg3_tou_118_17", 110},
+    {FIGHT_CLEFTS | FIGHT_MAJOR, "stg3_tou_sensyu_10", "stg3_tou_sensyu2_10", 10, "stg3_tou_118_18", "stg3_tou_118_19", 100},
+    {FIGHT_BANDITS | FIGHT_MINOR, "stg3_tou_sensyu_11", "stg3_tou_sensyu2_11", 9, "stg3_tou_118_20", "stg3_tou_118_21", 90},
+    {FIGHT_MINOR, "stg3_tou_sensyu_12", "stg3_tou_sensyu2_12", 8, "stg3_tou_118_22", "stg3_tou_118_23", 80},
+    {FIGHT_MINOR, "stg3_tou_sensyu_13", "stg3_tou_sensyu2_13", 7, "stg3_tou_118_24", "stg3_tou_118_25", 70},
+    {FIGHT_MINOR, "stg3_tou_sensyu_14", "stg3_tou_sensyu2_14", 6, "stg3_tou_118_26", "stg3_tou_118_27", 60},
+    {FIGHT_MINOR, "stg3_tou_sensyu_15", "stg3_tou_sensyu2_15", 5, "stg3_tou_118_28", "stg3_tou_118_29", 50},
+    {FIGHT_MINOR, "stg3_tou_sensyu_16", "stg3_tou_sensyu2_16", 4, "stg3_tou_118_30", "stg3_tou_118_31", 40},
+    {FIGHT_MINOR, "stg3_tou_sensyu_17", "stg3_tou_sensyu2_17", 3, "stg3_tou_118_32", "stg3_tou_118_33", 30},
+    {FIGHT_KOOPAS | FIGHT_MINOR, "stg3_tou_sensyu_18", "stg3_tou_sensyu2_18", 2, "stg3_tou_118_34", "stg3_tou_118_35", 20},
+    {FIGHT_GOOMBAS | FIGHT_MINOR, "stg3_tou_sensyu_19", "stg3_tou_sensyu2_19", 1, "stg3_tou_118_36", "stg3_tou_118_36_01", 10},
+    {FIGHT_PLAYER, "stg3_tou_sensyu_20", "stg3_tou_sensyu2_20", 1, 0, 0, 0},
+    {FIGHT_MINOR, "stg3_tou_sensyu_21", "stg3_tou_sensyu2_21", 20, "stg3_tou_118_36_02", "stg3_tou_118_36_03", 5},
+    {FIGHT_MINOR, "stg3_tou_sensyu_22", "stg3_tou_sensyu2_22", 21, "stg3_tou_118_36_04", "stg3_tou_118_36_05", 0},
 };
 
 static FighterData fighterDt_re[] = {
-    {4, "stg3_tou_re_315", "stg3_tou_re_338", 22, "stg3_tou_re_289", "stg3_tou_re_290", 250},
-    {4097, "stg3_tou_re_316", "stg3_tou_re_339", 19, "stg3_tou_re_179", "stg3_tou_re_180", 200},
-    {1, "stg3_tou_re_317", "stg3_tou_re_340", 18, "stg3_tou_re_181", "stg3_tou_re_182", 180},
-    {1, "stg3_tou_re_318", "stg3_tou_re_341", 17, "stg3_tou_re_183", "stg3_tou_re_184", 170},
-    {1, "stg3_tou_re_319", "stg3_tou_re_342", 16, "stg3_tou_re_185", "stg3_tou_re_186", 160},
-    {1, "stg3_tou_re_320", "stg3_tou_re_343", 15, "stg3_tou_re_187", "stg3_tou_re_188", 150},
-    {1, "stg3_tou_re_321", "stg3_tou_re_344", 14, "stg3_tou_re_189", "stg3_tou_re_190", 140},
-    {1, "stg3_tou_re_322", "stg3_tou_re_345", 13, "stg3_tou_re_191", "stg3_tou_re_192", 130},
-    {1, "stg3_tou_re_323", "stg3_tou_re_346", 12, "stg3_tou_re_193", "stg3_tou_re_194", 120},
-    {1, "stg3_tou_re_324", "stg3_tou_re_347", 11, "stg3_tou_re_195", "stg3_tou_re_196", 110},
-    {2049, "stg3_tou_re_325", "stg3_tou_re_348", 10, "stg3_tou_re_197", "stg3_tou_re_198", 100},
-    {258, "stg3_tou_re_326", "stg3_tou_re_349", 9, "stg3_tou_re_199", "stg3_tou_re_200", 90},
-    {2, "stg3_tou_re_327", "stg3_tou_re_350", 8, "stg3_tou_re_201", "stg3_tou_re_202", 80},
-    {2, "stg3_tou_re_328", "stg3_tou_re_351", 7, "stg3_tou_re_203", "stg3_tou_re_204", 70},
-    {2, "stg3_tou_re_329", "stg3_tou_re_352", 6, "stg3_tou_re_205", "stg3_tou_re_206", 60},
-    {2, "stg3_tou_re_330", "stg3_tou_re_353", 5, "stg3_tou_re_207", "stg3_tou_re_208", 50},
-    {2, "stg3_tou_re_331", "stg3_tou_re_354", 4, "stg3_tou_re_209", "stg3_tou_re_210", 40},
-    {2, "stg3_tou_re_332", "stg3_tou_re_355", 3, "stg3_tou_re_211", "stg3_tou_re_212", 30},
-    {514, "stg3_tou_re_333", "stg3_tou_re_356", 2, "stg3_tou_re_213", "stg3_tou_re_214", 20},
-    {1026, "stg3_tou_re_334", "stg3_tou_re_357", 1, "stg3_tou_re_215", "stg3_tou_re_216", 10},
-    {8, "stg3_tou_re_335", "stg3_tou_re_358", 1, 0, 0, 0},
+    {FIGHT_CHAMPION, "stg3_tou_re_315", "stg3_tou_re_338", 22, "stg3_tou_re_289", "stg3_tou_re_290", 250},
+    {FIGHT_KOOPATROL | FIGHT_MAJOR, "stg3_tou_re_316", "stg3_tou_re_339", 19, "stg3_tou_re_179", "stg3_tou_re_180", 200},
+    {FIGHT_MAJOR, "stg3_tou_re_317", "stg3_tou_re_340", 18, "stg3_tou_re_181", "stg3_tou_re_182", 180},
+    {FIGHT_MAJOR, "stg3_tou_re_318", "stg3_tou_re_341", 17, "stg3_tou_re_183", "stg3_tou_re_184", 170},
+    {FIGHT_MAJOR, "stg3_tou_re_319", "stg3_tou_re_342", 16, "stg3_tou_re_185", "stg3_tou_re_186", 160},
+    {FIGHT_MAJOR, "stg3_tou_re_320", "stg3_tou_re_343", 15, "stg3_tou_re_187", "stg3_tou_re_188", 150},
+    {FIGHT_MAJOR, "stg3_tou_re_321", "stg3_tou_re_344", 14, "stg3_tou_re_189", "stg3_tou_re_190", 140},
+    {FIGHT_MAJOR, "stg3_tou_re_322", "stg3_tou_re_345", 13, "stg3_tou_re_191", "stg3_tou_re_192", 130},
+    {FIGHT_MAJOR, "stg3_tou_re_323", "stg3_tou_re_346", 12, "stg3_tou_re_193", "stg3_tou_re_194", 120},
+    {FIGHT_MAJOR, "stg3_tou_re_324", "stg3_tou_re_347", 11, "stg3_tou_re_195", "stg3_tou_re_196", 110},
+    {FIGHT_CLEFTS | FIGHT_MAJOR, "stg3_tou_re_325", "stg3_tou_re_348", 10, "stg3_tou_re_197", "stg3_tou_re_198", 100},
+    {FIGHT_BANDITS | FIGHT_MINOR, "stg3_tou_re_326", "stg3_tou_re_349", 9, "stg3_tou_re_199", "stg3_tou_re_200", 90},
+    {FIGHT_MINOR, "stg3_tou_re_327", "stg3_tou_re_350", 8, "stg3_tou_re_201", "stg3_tou_re_202", 80},
+    {FIGHT_MINOR, "stg3_tou_re_328", "stg3_tou_re_351", 7, "stg3_tou_re_203", "stg3_tou_re_204", 70},
+    {FIGHT_MINOR, "stg3_tou_re_329", "stg3_tou_re_352", 6, "stg3_tou_re_205", "stg3_tou_re_206", 60},
+    {FIGHT_MINOR, "stg3_tou_re_330", "stg3_tou_re_353", 5, "stg3_tou_re_207", "stg3_tou_re_208", 50},
+    {FIGHT_MINOR, "stg3_tou_re_331", "stg3_tou_re_354", 4, "stg3_tou_re_209", "stg3_tou_re_210", 40},
+    {FIGHT_MINOR, "stg3_tou_re_332", "stg3_tou_re_355", 3, "stg3_tou_re_211", "stg3_tou_re_212", 30},
+    {FIGHT_KOOPAS | FIGHT_MINOR, "stg3_tou_re_333", "stg3_tou_re_356", 2, "stg3_tou_re_213", "stg3_tou_re_214", 20},
+    {FIGHT_GOOMBAS | FIGHT_MINOR, "stg3_tou_re_334", "stg3_tou_re_357", 1, "stg3_tou_re_215", "stg3_tou_re_216", 10},
+    {FIGHT_PLAYER, "stg3_tou_re_335", "stg3_tou_re_358", 1, 0, 0, 0},
 };
 
 /**
@@ -1077,9 +1040,9 @@ static void disp_proc(CameraId cameraId, void* param) {
     }
     rank = 0;
     yoff = 0;
-    for (i = 0; i < rank_wp->num; i++) {
+    for (i = 0; i < rank_wp->count; i++) {
         tx = 10.0f + x;
-        y = dwp->y + (top - yoff - 40.0f);
+        y = dwp->scroll + (top - yoff - 40.0f);
         if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
             PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
             if (rank != 0) {
@@ -1140,7 +1103,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         GXSetScissor(sx, (u16)sy, sw, (u16)sh);
     }
     {
-        f32 yy = 95.0f + dwp->y;
+        f32 yy = 95.0f + dwp->scroll;
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = 15.0f + x;
         pos.y = yy - 24.0f;
@@ -1420,7 +1383,7 @@ static USER_FUNC(evt_tou_print_ranking) {
         memset(dwp, 0, sizeof(DispWork));
         GET_RANK(rank, i);
         dwp->page = rank / 11;
-        dwp->y = dwp->targetY = dwp->page * 220;
+        dwp->scroll = dwp->target = dwp->page * 220;
         printRanking();
         return EVT_RETURN_BLOCK;
     }
@@ -1436,8 +1399,8 @@ static USER_FUNC(evt_tou_print_ranking) {
         dwp->page++;
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1));
     }
-    dwp->targetY = dwp->page * 220;
-    dwp->y += (dwp->targetY - dwp->y) / 8.0f;
+    dwp->target = dwp->page * 220;
+    dwp->scroll += (dwp->target - dwp->scroll) / 8.0f;
     dispEntry(CAMERA_2D, 300.0f, DISP_MODE_OPAQUE, disp_proc, NULL);
     return EVT_RETURN_BLOCK;
 }

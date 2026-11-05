@@ -35,95 +35,7 @@
 #include "sfx_name_word.h"
 #include "libc_decls.h"
 #include "evt/evt_save_flags.h"
-
-typedef struct RankEntry {
-    u16 flags;
-    // pad 2 bytes
-    s32 id;
-    union {
-        s16 total;
-        u8 bytes[2];
-    } points;
-    // pad 2 bytes
-} RankEntry;
-
-typedef enum RankFlags {
-    RANK_BELOW = 1 << 0, // This fighter is below us in the rankings
-    RANK_HIDDEN = 1 << 1, // This fighter is hidden from us
-    RANK_PLAYER = 1 << 2, // This is the player
-} RankFlags;
-
-typedef struct RankData {
-    s32 count;
-    RankEntry* entries;
-} RankData;
-
-typedef struct FighterData {
-    u16 flags;
-    // pad 2 bytes
-    const char* name;
-    const char* title;
-    s32 setupId;
-    const char* taunt;
-    const char* victory;
-    s16 startPoints; // ranking points a fighter starts with; copied to points.total when no ranking is saved (GSWF 2529 off); 250 for Rawk Hawk down to 0
-    // pad 2 bytes
-} FighterData;
-
-// FighterData.flags. rankingControll sorts each group by points, puts FIGHT_MAJOR/FIGHT_CHAMPION fighters above
-// FIGHT_MINOR ones, then holds the fighters with bits 8-12 at fixed indexes of the list above Mario (the story
-// fights): those bits each belong to one fighter.
-typedef enum FighterFlags {
-    FIGHT_MAJOR = 1 << 0,      // fighters 1-10
-    FIGHT_MINOR = 1 << 1,      // fighters 11-19, 21 and 22
-    FIGHT_CHAMPION = 1 << 2,   // fighter 0: always first
-    FIGHT_PLAYER = 1 << 3,     // fighter 20, Mario's own entry; nothing tests it
-    FIGHT_BANDITS = 1 << 8,    // held at list index 14
-    FIGHT_KOOPAS = 1 << 9,     // held at list index 18
-    FIGHT_GOOMBAS = 1 << 10,   // held at list index 19
-    FIGHT_CLEFTS = 1 << 11,    // held at list index 10 (below Mario: just above the first FIGHT_MINOR fighter)
-    FIGHT_KOOPATROL = 1 << 12, // held at list index 1
-} FighterFlags;
-
-typedef enum FighterId {
-    FIGHTER_RAWK_HAWK = 0,
-    FIGHTER_KOOPINATOR = 1,
-    FIGHTER_CHOMPS = 2,
-    FIGHTER_BROS = 3,
-    FIGHTER_CRAW = 4,
-    FIGHTER_MAGIKOOPA = 5,
-    FIGHTER_FUZZY = 6,
-    FIGHTER_SHADY_KOOPAS = 7,
-    FIGHTER_BRISTLES = 8,
-    FIGHTER_SPIKE_TOPS = 9,
-    FIGHTER_IRON_CLEFTS = 10,
-    FIGHTER_BANDITS = 11,
-    FIGHTER_BOB_OMB = 12,
-    FIGHTER_BALD_CLEFTS = 13,
-    FIGHTER_BOGGLY = 14,
-    FIGHTER_LAKITU = 15,
-    FIGHTER_DULL_BONES = 16,
-    FIGHTER_POKEYS = 17,
-    FIGHTER_KP_KOOPAS = 18,
-    FIGHTER_GOOMBAS = 19,
-    FIGHTER_PLAYER = 20,
-    FIGHTER_SWOOPS = 21,
-    FIGHTER_SPINIA = 22,
-} FighterId;
-
-typedef struct RuleData {
-    const char* name;
-    const char* desc;
-    s32 id;
-    s32 param; // first rule parameter: evt_tou_get_rule_info returns it; the tou.c script stores it in GSW_GLITZ_PIT_CONDITION_PARAM
-    s32 param2; // evt_tou_get_rule_info returns it in args[4]; the script stores it in GSW_GLITZ_PIT_CONDITION_PARAM2 (field_C is the CONDITION_PARAM twin: param)
-} RuleData;
-
-typedef struct DispWork {
-    f32 scroll;
-    f32 target;
-    s32 page;
-} DispWork;
+#include "rels/tou/include/tou_ranking.h"
 
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
@@ -131,7 +43,7 @@ extern voidfunctionptr _dtors[];
 extern NpcSetupBattleInfo btlsetup_tou_tbl[];
 
 
-static RankData rank_work;
+static RankWork rank_work;
 static DispWork disp_work;
 static s32 champion_belt_onoff;
 
@@ -245,7 +157,7 @@ static RuleData ruleDt_re[14] = {
 };
 
 /** Pointers to the fighter ranking and to the ranking board's display work. */
-static RankData* rank_wp = &rank_work;
+static RankWork* rank_wp = &rank_work;
 static DispWork* dwp = &disp_work;
 /** Full-width digits 0-9 used to print rank numbers on the ranking board. */
 static const char* suuji[] = { "０", "１", "２", "３", "４", "５", "６", "７", "８", "９" };
@@ -359,8 +271,8 @@ static USER_FUNC(evt_tou_print_ranking) {
         memset(dwp, 0, sizeof(DispWork));
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
-            if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-                if (rank_wp->entries[i].flags & RANK_PLAYER) {
+            if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
+                if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                     break;
                 }
                 rank++;
@@ -455,7 +367,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     for (i = 0; i < rank_wp->count; i++) {
         x = 10.0f + left;
         y = dwp->scroll + (top - num * 20 - 40.0f);
-        if (rank_wp->entries[i].flags & RANK_HIDDEN) {
+        if (rank_wp->entries[i].flags & RANK_FLAG_HIDDEN) {
             continue;
         }
         PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
@@ -479,7 +391,7 @@ static void disp_proc(CameraId cameraId, void* param) {
             FontDrawMessageMtx(mtx, entry);
         }
         FontDrawStart();
-        if (rank_wp->entries[i].flags & RANK_PLAYER) {
+        if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
             GXColor color = playerColor;
             FontDrawColor(color);
         } else {
@@ -591,7 +503,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
     if (lose == 0) {
         for (i = 0; i < rank_wp->count; i++) {
             if (id == rank_wp->entries[i].id) {
-                rank_wp->entries[i].flags |= RANK_BELOW;
+                rank_wp->entries[i].flags |= RANK_FLAG_BEATEN;
                 break;
             }
         }
@@ -599,7 +511,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
     } else {
         for (i = 0; i < rank_wp->count; i++) {
             if (id == rank_wp->entries[i].id) {
-                rank_wp->entries[i].flags &= ~RANK_BELOW;
+                rank_wp->entries[i].flags &= ~RANK_FLAG_BEATEN;
                 break;
             }
         }
@@ -609,7 +521,7 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
     min = 1000;
     max = -1000;
     for (i = 0; i < rank_wp->count; i++) {
-        if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
+        if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
             s32 b = 0;
             b += rand() % 4;
             b += rand() % 4;
@@ -646,15 +558,15 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
 #if VERSION >= VERSION_JP
-            if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-                if (rank_wp->entries[i].flags & RANK_PLAYER) {
+            if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
+                if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                     break;
                 }
                 rank++;
             }
         }
 #else
-            if (rank_wp->entries[i].flags & RANK_PLAYER) {
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                 break;
             }
             rank++;
@@ -702,15 +614,15 @@ static USER_FUNC(evt_tou_get_rule_info) {
         rank = 0;
         for (i = 0; i < rank_wp->count; i++) {
 #if VERSION >= VERSION_JP
-            if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-                if (rank_wp->entries[i].flags & RANK_PLAYER) {
+            if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
+                if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                     break;
                 }
                 rank++;
             }
         }
 #else
-            if (rank_wp->entries[i].flags & RANK_PLAYER) {
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                 break;
             }
             rank++;
@@ -839,7 +751,7 @@ static USER_FUNC(evt_tou_get_fighter_rank) {
 
     for (i = 0; i < rank_wp->count; i++) {
         RankEntry* entry = &rank_wp->entries[i];
-        if (!(entry->flags & RANK_HIDDEN)) {
+        if (!(entry->flags & RANK_FLAG_HIDDEN)) {
             if (id == entry->id) {
                 break;
             }
@@ -893,14 +805,14 @@ static USER_FUNC(evt_tou_get_next_match) {
 
     num = 0;
     for (i = 0; i < rank_wp->count; i++) {
-        if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
+        if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
             list[num++] = rank_wp->entries[i].id;
         }
     }
     rank = 0;
     for (i = 0; i < rank_wp->count; i++) {
-        if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-            if (rank_wp->entries[i].flags & RANK_PLAYER) {
+        if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                 break;
             }
             rank++;
@@ -933,8 +845,8 @@ USER_FUNC(evt_tou_get_ranking) {
 
     rank = 0;
     for (i = 0; i < rank_wp->count; i++) {
-        if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-            if (rank_wp->entries[i].flags & RANK_PLAYER) {
+        if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                 break;
             }
             rank++;
@@ -968,8 +880,8 @@ static void rankingControll(void) {
     nAbove = 0;
     nBelow = 0;
     for (idx = 0, entry = rank_wp->entries; idx < rank_wp->count; idx++, entry++) {
-        if (!(entry->flags & RANK_PLAYER)) {
-            if (entry->flags & RANK_BELOW) {
+        if (!(entry->flags & RANK_FLAG_PLAYER)) {
+            if (entry->flags & RANK_FLAG_BEATEN) {
                 below[nBelow] = idx;
                 nBelow++;
             } else {
@@ -1156,7 +1068,7 @@ static void rankingControll(void) {
     }
 
     // Put the player's own entry between the two lists.
-    buf[nAbove].flags = RANK_PLAYER;
+    buf[nAbove].flags = RANK_FLAG_PLAYER;
     buf[nAbove].id = FIGHTER_PLAYER;
     buf[nAbove].points.total = 0;
     for (i = 0; i < nBelow; i++) {
@@ -1169,8 +1081,8 @@ static void rankingControll(void) {
     // Calculate our current rank and store it in 580.
     rank = 0;
     for (i = 0; i < rank_wp->count; i++) {
-        if (!(rank_wp->entries[i].flags & RANK_HIDDEN)) {
-            if (rank_wp->entries[i].flags & RANK_PLAYER) {
+        if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
+            if (rank_wp->entries[i].flags & RANK_FLAG_PLAYER) {
                 break;
             }
             rank++;
@@ -1242,7 +1154,7 @@ static void rankingExit(void) {
     RankEntry* entry;
 
     for (i = 0, entry = rank_wp->entries; i < rank_wp->count; i++, entry++) {
-        if (entry->flags & RANK_BELOW) {
+        if (entry->flags & RANK_FLAG_BEATEN) {
             swSet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE);
         } else {
             swClear(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE);
@@ -1266,7 +1178,7 @@ static void rankingInit(void) {
     int i;
     RankEntry* entry;
 
-    memset(rank_wp, 0, sizeof(RankData));
+    memset(rank_wp, 0, sizeof(RankWork));
     // We need to handle the excluded entries if we're doing rematches
     temp = evtGetValue(NULL, GSW_STORY_PROGRESS);
     count = 21;
@@ -1281,7 +1193,7 @@ static void rankingInit(void) {
         entry->flags = 0;
         entry->id = i;
         if (swGet(entry->id + GSWF_TOU_FIGHTER_BELOW_BASE)) {
-            entry->flags |= RANK_BELOW;
+            entry->flags |= RANK_FLAG_BEATEN;
         }
         if (swGet(GSWF_ID(GSWF_GLITZ_PIT_RANKING_SAVED))) {
             int j;
@@ -1292,7 +1204,7 @@ static void rankingInit(void) {
             entry->points.total = fighterDt[entry->id].startPoints;
         }
         if (entry->id == FIGHTER_PLAYER) {
-            entry->flags |= RANK_PLAYER;
+            entry->flags |= RANK_FLAG_PLAYER;
         }
     }
 
@@ -1300,20 +1212,20 @@ static void rankingInit(void) {
 
     // Set up the initial run-through
     if (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT) {
-        rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_HIDDEN;
-        rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_HIDDEN;
+        rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_FLAG_HIDDEN;
+        rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_FLAG_HIDDEN;
 
         // If we're past this point in the story, hide King K
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
-            rank_wp->entries[FIGHTER_KP_KOOPAS].flags |= RANK_HIDDEN;
+            rank_wp->entries[FIGHTER_KP_KOOPAS].flags |= RANK_FLAG_HIDDEN;
         }
 
         // If we're past this story, Sir Swoop has been introduced
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
-            rank_wp->entries[FIGHTER_SWOOPS].flags &= ~RANK_HIDDEN;
+            rank_wp->entries[FIGHTER_SWOOPS].flags &= ~RANK_FLAG_HIDDEN;
 
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
-                rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_BELOW;
+                rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_FLAG_BEATEN;
             }
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
         }
@@ -1325,11 +1237,11 @@ static void rankingInit(void) {
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {
 #endif
 
-            rank_wp->entries[FIGHTER_BANDITS].flags |= RANK_HIDDEN;
-            rank_wp->entries[FIGHTER_SPINIA].flags &= ~RANK_HIDDEN;
+            rank_wp->entries[FIGHTER_BANDITS].flags |= RANK_FLAG_HIDDEN;
+            rank_wp->entries[FIGHTER_SPINIA].flags &= ~RANK_FLAG_HIDDEN;
 
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
-                rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_BELOW;
+                rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_FLAG_BEATEN;
             }
             evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, TRUE);
         }

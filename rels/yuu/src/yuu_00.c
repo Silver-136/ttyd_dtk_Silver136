@@ -53,13 +53,6 @@ USER_FUNC(yuuminigame1_floor_chk);
 USER_FUNC(yuuminigame1_floor_on_off);
 #endif
 
-typedef struct MonteTable {
-    f32 x0;
-    f32 x1;
-    f32 y0;
-    f32 y1;
-    s32 num;
-} MonteTable;
 static void* yuunpc_wp;
 static Monte* monte_p;
 static void monte_disp(CameraId camera, void* param);

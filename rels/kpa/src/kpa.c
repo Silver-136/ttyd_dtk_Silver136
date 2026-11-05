@@ -38,12 +38,12 @@
 #include "driver/seqdrv.h"
 #include "icon_ids.h"
 
-typedef struct KpaWork {
+typedef struct KpaGameWork {
     u8 stage;
     u8 lives;
     u8 time;
-} KpaWork;
-KpaWork* kwp;
+} KpaGameWork;
+KpaGameWork* kwp;
 void FontDrawString(f32 x, f32 y, const char* message);
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
 // IconFlags.ICON_FLAG_2D (icondrv.h clashes with the prototype above)
@@ -774,7 +774,7 @@ USER_FUNC(kpa_status_init) {
     }
     evt->uwBase = event->uwBase;
     evt->ufBase = event->ufBase;
-    kwp = _mapAlloc(sizeof(KpaWork));
+    kwp = _mapAlloc(sizeof(KpaGameWork));
     kwp->stage = stage;
     kwp->lives = lives;
     kwp->time = time;
@@ -848,7 +848,7 @@ USER_FUNC(kpa_stageclear_disp_entry) {
  * it blocks the script (EVT_RETURN_BLOCK) until the time reaches zero.
  */
 USER_FUNC(kpa_time_countdown) {
-    KpaWork* wp = kwp;
+    KpaGameWork* wp = kwp;
 
     if (wp->time != 0) {
         wp->time--;

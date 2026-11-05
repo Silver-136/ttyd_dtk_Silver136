@@ -51,30 +51,12 @@
 #include "mri.h"
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
+#include "evt/evt_cloud_room.h"
 
-typedef struct CloudWork {
-    s32 used;
-    s32 state;
-    char animName[0x20];
-    char imgName[0x20];
-    char offscreenName[0x20];
-    char groupNames[8][0x20];
-    char hitName[0x20];
-    s32 limit;
-    s32 counter;
-    EventEntry* evt;
-    void* endEvt;
-    s32 timer;
-    s32 x;
-    s32 y;
-    s32 w;
-    s32 h;
-    f32 lastFrame;
-} CloudWork;
-static CloudWork* cloud;
+static CloudRoomWork* cloud;
 static u8 cloud_once_flag;
-static void _mapsetofs_all(CloudWork* wp);
-static void _mapclsofs_all(CloudWork* wp);
+static void _mapsetofs_all(CloudRoomWork* wp);
+static void _mapclsofs_all(CloudRoomWork* wp);
 static s32 _ofs_get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, EvtWord allocMode, EvtWord x, EvtWord y, EvtWord w, EvtWord h);
 
@@ -205,7 +187,7 @@ static s32 _ofs_get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h
  * Assigns the cloud's offscreen buffer to every map group the cloud covers (up to 8),
  * so they are drawn into the capture.
  */
-static void _mapsetofs_all(CloudWork* wp) {
+static void _mapsetofs_all(CloudRoomWork* wp) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -217,7 +199,7 @@ static void _mapsetofs_all(CloudWork* wp) {
 }
 
 /** Takes the cloud's map groups back out of the offscreen buffer. */
-static void _mapclsofs_all(CloudWork* wp) {
+static void _mapclsofs_all(CloudRoomWork* wp) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -936,7 +918,7 @@ static const char* capturemap[] = {
  * Runs as an event with the cloud's work in LW(0).
  */
 static USER_FUNC(evt_cloud_main) {
-    CloudWork* wp = (CloudWork*)event->lwData[0];
+    CloudRoomWork* wp = (CloudRoomWork*)event->lwData[0];
     s32 group = gp->inBattle != 0;
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
@@ -1099,7 +1081,7 @@ static USER_FUNC(evt_cloud_main) {
 USER_FUNC(evt_mri_cloud_init) {
     s32 i;
 
-    cloud = _mapAlloc(sizeof(CloudWork) * 16);
+    cloud = _mapAlloc(sizeof(CloudRoomWork) * 16);
     for (i = 0; i < 16; i++) {
         cloud[i].used = 0;
         sprintf(cloud[i].imgName, "i_name_%1d", i);
@@ -1119,7 +1101,7 @@ USER_FUNC(evt_mri_cloud_ent) {
     char** groups;
     char* hitName;
     void* endEvt;
-    CloudWork* wp;
+    CloudRoomWork* wp;
     s32 i;
     s32 j;
 

@@ -47,27 +47,9 @@
 #include "evt/evt_sub.h"
 #include "gon.h"
 #include "driver/seqdrv.h"
+#include "evt/evt_cloud_room.h"
 
-typedef struct CloudWork {
-    s32 used;
-    s32 state;
-    char animName[0x20];
-    char imgName[0x20];
-    char offscreenName[0x20];
-    char groupNames[8][0x20];
-    char hitName[0x20];
-    s32 limit;
-    s32 counter; // Advances by 2 during contact and the loss-of-contact grace period.
-    EventEntry* evt;
-    void* endEvt;
-    s32 timer;
-    s32 x;
-    s32 y;
-    s32 w;
-    s32 h;
-    f32 lastFrame;
-} CloudWork;
-static CloudWork* cloud;
+static CloudRoomWork* cloud;
 
 #if VERSION <= VERSION_DEMO_JP
 static s8 cloud_once_flag;
@@ -75,8 +57,8 @@ static s8 cloud_once_flag;
 static u8 cloud_once_flag;
 #endif
 
-static void _mapsetofs_all(CloudWork* wp);
-static void _mapclsofs_all(CloudWork* wp);
+static void _mapsetofs_all(CloudRoomWork* wp);
+static void _mapclsofs_all(CloudRoomWork* wp);
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h);
 static void _img_alloc_capture(const char* name, s32 shadowId, const char* offName, s32 allocMode, s32 x, s32 y, s32 w, s32 h);
 
@@ -799,7 +781,7 @@ static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h) {
  * Sends every map group of the cloud effect (up to 8) to its offscreen buffer,
  * so the scenery under the cloud can be drawn into it.
  */
-static void _mapsetofs_all(CloudWork* wp) {
+static void _mapsetofs_all(CloudRoomWork* wp) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -811,7 +793,7 @@ static void _mapsetofs_all(CloudWork* wp) {
 }
 
 /** Undoes _mapsetofs_all: returns the cloud effect's map groups to normal drawing. */
-static void _mapclsofs_all(CloudWork* wp) {
+static void _mapclsofs_all(CloudRoomWork* wp) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -831,7 +813,7 @@ static void _mapclsofs_all(CloudWork* wp) {
  */
 #if VERSION <= VERSION_DEMO_JP
 static USER_FUNC(evt_cloud_main) {
-    CloudWork* wp = (CloudWork*)event->lwData[0];
+    CloudRoomWork* wp = (CloudRoomWork*)event->lwData[0];
     s32 inBattle = gp->inBattle != 0;
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
@@ -845,7 +827,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     HitEntry *hit3;
 #if VERSION >= VERSION_JP
     MarioWork *mario;
-    CloudWork *wp;
+    CloudRoomWork *wp;
     PartyEntry *ptmp;
 #endif
     HitEntry *hit;
@@ -853,7 +835,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
     ImageEntry *img;
 #if VERSION >= VERSION_JP
     BOOL inBattle;
-    wp = (CloudWork*)event->lwData[0];
+    wp = (CloudRoomWork*)event->lwData[0];
     inBattle = gp->inBattle != 0;
     mario = marioGetPtr();
     ptmp = partyGetPtr(0);
@@ -1017,7 +999,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
 USER_FUNC(evt_iri_16_cloud_init) {
     s32 i;
 
-    cloud = _mapAlloc(sizeof(CloudWork) * 16);
+    cloud = _mapAlloc(sizeof(CloudRoomWork) * 16);
     for (i = 0; i < 16; i++) {
         cloud[i].used = 0;
         sprintf(cloud[i].imgName, "i_name_%1d", i);
@@ -1037,7 +1019,7 @@ USER_FUNC(evt_iri_16_cloud_ent) {
     char** groups;
     char* hitName;
     void* endEvt;
-    CloudWork* wp;
+    CloudRoomWork* wp;
     s32 i;
     s32 j;
 

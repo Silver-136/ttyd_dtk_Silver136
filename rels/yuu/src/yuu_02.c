@@ -52,21 +52,22 @@ typedef struct RollWork {
     s32 monteCount;
     EventEntry* viewEvent;
 } RollWork;
-typedef struct MonteTable {
+// yuu_02's spawn table: x/z ranges, and a type word that ends the table (0).
+typedef struct MonteTableXZ {
     f32 x0;
     f32 x1;
     f32 z0;
     f32 z1;
     s32 num;
     s32 type;
-} MonteTable;
+} MonteTableXZ;
 static void* yuunpc_wp;
 static Monte* monte_p; /* monte_p */
 #if VERSION >= VERSION_JP
 static Monte* icon_monte_p;
 #endif
 
-extern MonteTable montetable[];
+extern MonteTableXZ montetable[];
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
 
@@ -89,7 +90,7 @@ Vec fukkipoint[15];
 EvtWord yuu_02_icon_monte_entry_evt[4];
 #endif
 
-static MonteTable montetable[11];
+static MonteTableXZ montetable[11];
 static EvtWord minigame_view_monte[4];
 
 #if VERSION <= VERSION_DEMO_JP
@@ -167,7 +168,7 @@ EVT_END()
  * with the coins set on the floor below; each type 2 row selects which accumulated candidates remain visible.
  * A zero type ends the table.
  */
-static MonteTable montetable[] = {
+static MonteTableXZ montetable[] = {
     {1500.0f, 990.0f, -200.0f, -300.0f, 1, 1},
     {1500.0f, 990.0f, -300.0f, -400.0f, 1, 2},
     {300.0f, 900.0f, -250.0f, -275.0f, 1, 1},
