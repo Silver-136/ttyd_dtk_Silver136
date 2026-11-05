@@ -399,11 +399,9 @@ void btlseqEnd(BattleWork* wp) {
     BattleAudienceSoundClap(-1, 0);
     BattleAudienceSoundWhistle();
     flag = 0;
-    {
-        BattleUnit* party = BattleGetPartyPtr(wp);
-        if (party && BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
-            flag = 1;
-        }
+    party = BattleGetPartyPtr(wp);
+    if (party && BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
+        flag = 1;
     }
     if (!flag) {
         psndBGMOff(PSND_PAUSE);

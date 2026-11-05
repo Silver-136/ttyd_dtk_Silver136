@@ -479,6 +479,7 @@ void itemMain(void) {
     f32 y;
     s32 dx, dy;
     f64 d;
+    f32 dirY;
 
     mario = marioGetPtr();
     entry = itemHitCheck(mario->position.x, mario->position.y, mario->position.z, mario->wPlayerCollisionBox.x * 0.5f + 12.0f);
@@ -539,30 +540,28 @@ void itemMain(void) {
                 break;
             case ITEM_MODE_GROUND:
                 y = entry->position.y;
-                {
-                    f32 dirY = -1.0f;
-                    if (entry->flags2 & ITEM_FLAG2_SUNK) {
+                dirY = -1.0f;
+                if (entry->flags2 & ITEM_FLAG2_SUNK) {
+                    hit = NULL;
+                    newY = y + dirY;
+                } else {
+                    f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
+                    f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
+                    // FAKE: f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY);
+                    // `hitDist = 20.0 + __fabs(-1.0)` changes the object
+                    d = __fabs(-1.0);
+                    hitDist = 20.0 + d;
+                    hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
+#if VERSION <= VERSION_DEMO_JP
+                    hit = hit ? hit : NULL;
+#else
+                    if (hit) {
+                        newY = hitY;
+                    } else {
                         hit = NULL;
                         newY = y + dirY;
-                    } else {
-                        f32 hitNZ, hitNY, hitNX, hitDist, hitZ, hitY, hitX;
-                        f32 px = entry->position.x, py = entry->position.y + 20.0f, pz = entry->position.z;
-                        // FAKE: f64 local keeps 20.0 on the left of the fadd (as in itemHitCheckY);
-                        // `hitDist = 20.0 + __fabs(-1.0)` changes the object
-                        d = __fabs(-1.0);
-                        hitDist = 20.0 + d;
-                        hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
-#if VERSION <= VERSION_DEMO_JP
-                        hit = hit ? hit : NULL;
-#else
-                        if (hit) {
-                            newY = hitY;
-                        } else {
-                            hit = NULL;
-                            newY = y + dirY;
-                        }
-#endif
                     }
+#endif
                 }
                 if (!hit) {
                     itemModeChange(entry, ITEM_MODE_FALL);

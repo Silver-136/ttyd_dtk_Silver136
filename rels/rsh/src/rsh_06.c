@@ -1338,11 +1338,8 @@ static void ext_moamoa_main(void) {
                     x = (dist * moa_sinx(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[2][3] - (dist * moa_cosx(rad));
                 }
-                {
-                    f32 k;
-                    f32 r1 = rand() / 32767.0f;
-                    spd = (r1 * mmI(6.0f - 5.0f)) + 5.0f;
-                }
+                r1 = rand() / 32767.0f;
+                spd = (r1 * mmI(6.0f - 5.0f)) + 5.0f;
                 r1 = rand() / 32767.0f;
                 s = (r1 * mmI(0.3f - 0.2f)) + 0.2f;
                 if (!sndFlag) {

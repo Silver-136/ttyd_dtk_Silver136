@@ -237,6 +237,7 @@ static void effKemuTestMain(EffectEntry* effect) {
     s32 i;
     s32 play = 0;
     s32 camera;
+    f32 a;
 
     tmp.x = work->pos.x;
     tmp.y = work->pos.y;
@@ -312,15 +313,14 @@ static void effKemuTestMain(EffectEntry* effect) {
             work->vel.y *= 0.9f;
             work->vel.z *= 0.9f;
             break;
-        case 12: {
-            f32 a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
-            work->pos.x += work->gravity * (f32)sin(a);
-            work->pos.y += -work->gravity * (f32)cos(a);
-            work->gravity += work->gravityAcc;
-            work->gravityAcc *= work->gravityMul;
-            work->scale += 0.05f;
-            break;
-        }
+        case 12:
+        a = 6.2831855f * (90.0f + 360.0f * (f32)(i - 1) / (f32)(effect->count - 2)) / 360.0f;
+        work->pos.x += work->gravity * (f32)sin(a);
+        work->pos.y += -work->gravity * (f32)cos(a);
+        work->gravity += work->gravityAcc;
+        work->gravityAcc *= work->gravityMul;
+        work->scale += 0.05f;
+        break;
         case 13:
             work->pos.x += work->vel.x;
             work->pos.y += work->vel.y;

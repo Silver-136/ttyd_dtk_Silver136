@@ -1943,6 +1943,7 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
     s32 i;
     HitEntry* hit;
     MarioWork* mario = marioGetPtr();
+    f32 t;
     *h = -1.0f;
     base = mario->wPlayerCollisionBox.y;
     i = 0;
@@ -1994,13 +1995,11 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
                 *h = 0.0f;
                 return hit;
             }
-            {
-                f32 t = outPos.y - pos->y - base;
-                if (*h < 0.0f) {
-                    *h = t;
-                } else if (*h > t) {
-                    *h = t;
-                }
+            t = outPos.y - pos->y - base;
+            if (*h < 0.0f) {
+                *h = t;
+            } else if (*h > t) {
+                *h = t;
             }
         }
     }

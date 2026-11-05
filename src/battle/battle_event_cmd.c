@@ -1820,15 +1820,14 @@ USER_FUNC(btlevtcmd_SetOverTurnCount) {
     EvtWord* args = event->args;
     s32 btlId;
     s32 value;
+    BattleUnit* unit;
 
     btlId = evtGetValue(event, args[0]);
     id = BattleTransID(event, btlId);
     value = evtGetValue(event, args[1]);
     // FAKE: block-scoped unit pointer; BattleGetUnitPtr(_battleWorkPointer, id)->flippedTurns = value changes the object
-    {
-        BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
-        unit->flippedTurns = value;
-    }
+    unit = BattleGetUnitPtr(_battleWorkPointer, id);
+    unit->flippedTurns = value;
     return EVT_RETURN_DONE;
 }
 

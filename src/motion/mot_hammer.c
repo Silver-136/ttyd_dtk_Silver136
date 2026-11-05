@@ -210,22 +210,20 @@ void mot_hammer(void) {
         } else {
             mario->flags &= ~MARIO_FLAG_HAMMER_HIT_WALL;
         }
-        {
-            MarioWork* m = marioGetPtr();
+        m = marioGetPtr();
+        snd = PSND_SFX_MARIO_HAMMER_FURU1;
+        switch (pouchGetHammerLv()) {
+        case 1:
             snd = PSND_SFX_MARIO_HAMMER_FURU1;
-            switch (pouchGetHammerLv()) {
-            case 1:
-                snd = PSND_SFX_MARIO_HAMMER_FURU1;
-                break;
-            case 2:
-                snd = PSND_SFX_MARIO_HAMMER_FURU2;
-                break;
-            case 3:
-                snd = PSND_SFX_MARIO_HAMMER_FURU3;
-                break;
-            }
-            psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
+            break;
+        case 2:
+            snd = PSND_SFX_MARIO_HAMMER_FURU2;
+            break;
+        case 3:
+            snd = PSND_SFX_MARIO_HAMMER_FURU3;
+            break;
         }
+        psndSFXOn_3D(SFX_NAME_WORD(snd), &m->position);
 #if VERSION >= VERSION_JP
         mario->mot.hammer.hitKind = kind;
 #endif

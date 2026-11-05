@@ -598,6 +598,7 @@ void mot_roll(void) {
     f32 mv;
     f32 pre;
     f32 l;
+    f32 k;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
@@ -855,10 +856,8 @@ void mot_roll(void) {
     case 1:
         if (v26 < 1.4f) {
             // FAKE: the 1.0f factor goes through the temporary k; the plain expression changes the object
-            {
-                f32 k = 1.0f;
-                v26 = k * (1.4499999f - v26) + v26;
-            }
+            k = 1.0f;
+            v26 = k * (1.4499999f - v26) + v26;
             if (v26 >= 1.4f) {
                 v26 = 1.4f;
             }

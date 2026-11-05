@@ -4974,6 +4974,12 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
  * All these modes then set the Puni's height; the other modes (updraft, fall and so on) are left alone.
  */
 void puniMoveMain(PuniData* p) {
+    Vec d2;
+    Vec s2;
+    Vec dir;
+    Vec start;
+    f32 dist;
+
     switch (p->mode) {
         case PUNI_MODE_IDLE:
         case PUNI_MODE_JOIN:
@@ -4987,38 +4993,33 @@ void puniMoveMain(PuniData* p) {
         case PUNI_MODE_DODAI:
         case PUNI_MODE_ENTER:
         case PUNI_MODE_EXIT:
-        case PUNI_MODE_POINT: {
-            Vec d2;
-            Vec s2;
-            Vec dir;
-            Vec start;
-            f32 dist = PSVECMag(&p->vel);
-            if (!dist) {
-                goto mv_end1;
-            }
-            if (dist > 1.0f) {
-                if (p->vel.x < 0.0f) {
-                    p->dir = 270.0f;
-                } else {
-                    p->dir = 90.0f;
-                }
-            }
-            if (dist > p->maxSpeed) {
-                PSVECScale(&p->vel, &p->vel, p->maxSpeed / dist);
-                dist = p->maxSpeed;
-            }
-            start = p->pos;
-            start.y += 1.0f;
-            PSVECNormalize(&p->vel, &dir);
-            s2 = start;
-            d2 = dir;
-            puniMoveHitInl(p, &s2, &d2, dist);
-            if (p->hitMove != NULL || p->hitCheck != NULL) {
-                p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
+        case PUNI_MODE_POINT:
+        dist = PSVECMag(&p->vel);
+        if (!dist) {
+            goto mv_end1;
+        }
+        if (dist > 1.0f) {
+            if (p->vel.x < 0.0f) {
+                p->dir = 270.0f;
             } else {
-                PSVECScale(&p->vel, &p->vel, 0.6f);
-                p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
+                p->dir = 90.0f;
             }
+        }
+        if (dist > p->maxSpeed) {
+            PSVECScale(&p->vel, &p->vel, p->maxSpeed / dist);
+            dist = p->maxSpeed;
+        }
+        start = p->pos;
+        start.y += 1.0f;
+        PSVECNormalize(&p->vel, &dir);
+        s2 = start;
+        d2 = dir;
+        puniMoveHitInl(p, &s2, &d2, dist);
+        if (p->hitMove != NULL || p->hitCheck != NULL) {
+            p->flags |= PUNI_FLAG_HIT_WALL_UNUSED;
+        } else {
+            PSVECScale(&p->vel, &p->vel, 0.6f);
+            p->flags &= ~PUNI_FLAG_HIT_WALL_UNUSED;
         }
         mv_end1:
             puniSetYPosition(p);
