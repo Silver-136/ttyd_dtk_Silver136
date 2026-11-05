@@ -23,12 +23,6 @@
 #include "seq/seq_e3.h"
 
 
-#if VERSION >= VERSION_US
-#define PSTATIC
-#else
-#define PSTATIC static
-#endif
-
 void FontDrawString(f32 x, f32 y, const char* msg);
 
 TitleWork work2;
@@ -528,7 +522,11 @@ void disp2(CameraId cameraId, void* param) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 
-PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
+#if VERSION >= VERSION_US
+void pressStartGX(s32 alpha, f32 x, f32 y) {
+#else
+static void pressStartGX(s32 alpha, f32 x, f32 y) {
+#endif
     CameraEntry* camera = camGetCurPtr();
     GXTexObj startText, gradient;
     Mtx mtx, scaleMtx;

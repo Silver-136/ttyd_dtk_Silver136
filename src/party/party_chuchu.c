@@ -234,9 +234,8 @@ USER_FUNC(set_msg) {
  */
 static USER_FUNC(set_msg) {
     int pass;
-    PartyEntry* cp = partyGetPtr(marioGetPartyId());
-    MarioWork* player = cp->playerPtr;
-    PartyEntry* party = (PartyEntry*)cp;
+    PartyEntry* party = partyGetPtr(marioGetPartyId());
+    MarioWork* player = party->playerPtr;
     ItemEntry* item;
     MapObjectEntry* mobj;
     f32 range;
@@ -258,18 +257,18 @@ static USER_FUNC(set_msg) {
         if (item) {
             event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
             event->lwData[1] = (pass == 0) + 1;
-            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, item->position.x, item->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
-            cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
-            cp->targetDir = cp->moveDir;
+            party->displayDirectionTarget = (revise360(angleABf(party->position.x, party->position.z, item->position.x, item->position.z) - party->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            party->moveDir = partyToMovedir(party, party->displayDirectionTarget);
+            party->targetDir = party->moveDir;
             return EVT_RETURN_DONE;
         }
         mobj = mobjNearDistCheck2(player->position.x, player->position.y, player->position.z, range, mobj_list);
         if (mobj) {
             event->lwData[0] = (EvtWord)(pass == 0 ? "map_exist_near" : "map_exist_far");
             event->lwData[1] = (pass == 0) + 1;
-            cp->displayDirectionTarget = (revise360(angleABf(cp->position.x, cp->position.z, mobj->position.x, mobj->position.z) - cp->camDir) <= 180.0f) ? 180.0f : 0.0f;
-            cp->moveDir = partyToMovedir(party, cp->displayDirectionTarget);
-            cp->targetDir = cp->moveDir;
+            party->displayDirectionTarget = (revise360(angleABf(party->position.x, party->position.z, mobj->position.x, mobj->position.z) - party->camDir) <= 180.0f) ? 180.0f : 0.0f;
+            party->moveDir = partyToMovedir(party, party->displayDirectionTarget);
+            party->targetDir = party->moveDir;
             return EVT_RETURN_DONE;
         }
     }

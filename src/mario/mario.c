@@ -1675,6 +1675,7 @@ static void marioMoveMain(void) {
     }
     vx += wp->floorMove.x;
     vz2 += wp->floorMove.z;
+    // FAKE: vy is a zero temporary (added to position.y, compared with dist); the literal changes the object
     vy = 0.0f;
     wp->position.y += vy + wp->floorMove.y;
     dist = sqrtf(vx * vx + vz2 * vz2);

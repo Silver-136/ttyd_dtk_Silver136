@@ -307,6 +307,7 @@ static inline void vivianFollow(PartyEntry* party) {
         mario->hitobjStandOn = hit;
         mario->position.y = groundY;
         if (mario->floorMove.y < 0.0f) {
+            // FAKE: dead store (groundY is not read afterwards); removing it changes the object (the early demos stay the same)
             groundY += 0.2f;
         }
     }

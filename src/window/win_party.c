@@ -378,6 +378,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     WindowWork* wp = param;
     GXColor white2;
     GXColor black2;
+    // FAKE: one-element colour array used as a scalar; a plain GXColor red changes the object
     GXColor red[1];
     GXColor white;
     GXColor black;

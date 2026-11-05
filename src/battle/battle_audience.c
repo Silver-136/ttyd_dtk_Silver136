@@ -4463,6 +4463,7 @@ void BattleAudienceSoundHandBeat(void) {
     BattleAudienceSound* sound;
     s32 left;
     s32 sum;
+    s32 vol;
 
     BattleAudienceBaseGetPtr();
     sound = BattleAudienceSoundGetPtr(AUD_SOUND_HAND_BEAT);
@@ -4478,13 +4479,13 @@ void BattleAudienceSoundHandBeat(void) {
         sound->forceFadeLength = 0;
         sound->forceFadeTimer = 0;
         if (sum == 0) {
-            right = 0;
+            vol = 0;
         } else {
-            right = 75.0f + sum * (26.0f + irand(26)) / 200.0f;
+            vol = 75.0f + sum * (26.0f + irand(26)) / 200.0f;
         }
-        psndSFX_vol(sound->sfxId, right);
-        sound->currentBaseSfxVolume = right;
-        sound->baseSfxVolume = right;
+        psndSFX_vol(sound->sfxId, vol);
+        sound->currentBaseSfxVolume = vol;
+        sound->baseSfxVolume = vol;
         sound->volumeMultiplier = 100;
     }
 }

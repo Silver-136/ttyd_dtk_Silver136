@@ -406,6 +406,7 @@ BOOL marioChkBero(HitEntry* hit) {
     return mario->currMotionId == MARIO_MOTION_SHIP;
 }
 
+// FAKE: inline size limit raised for the rest of the file; without it the object changes
 #pragma inline_max_size(1000)
 
 /**

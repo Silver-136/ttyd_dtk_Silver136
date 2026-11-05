@@ -1167,6 +1167,7 @@ void yoshiFlyMove(PartyEntry* party) {
     f32 x;
     f32 spd;
     f32 max;
+    // FAKE: one (1.0f) multiplies the dash speed; the plain expression changes the object (tried with the zero local)
     f32 one = 1.0f;
 
     inertia(party);
@@ -1220,6 +1221,7 @@ static void inertia(PartyEntry* party) {
     f32 k;
     f32 lim = 16.0f;
     f32 acc = 0.01f;
+    // FAKE: zero is subtracted from vz twice; dropping it changes the object (tried with the one local)
     f32 zero = 0.0f;
     s32 dir;
 

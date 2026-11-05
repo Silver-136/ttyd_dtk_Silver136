@@ -1,6 +1,7 @@
 // Flurrie (cloud): partner init, follow, hover and the gust (breath) ability.
 
 #include "version.h"
+// FAKE: _MATH_H_ is defined so math.h stays out of this unit; including it changes the object
 #define _MATH_H_
 #include "party/party_cloud.h"
 #include "dolphin/types.h"

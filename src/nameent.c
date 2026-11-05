@@ -92,7 +92,7 @@ const char* katakana_tbl[] = {
 };
 
 //.bss
-static NameEntryWork work __attribute__((aligned(8)));
+static NameEntryWork work;
 
 //.sdata
 static NameEntryWork* wp = &work;

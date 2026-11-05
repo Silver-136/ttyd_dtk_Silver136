@@ -9525,6 +9525,7 @@ static void psndBGMMain(void) {
         if (SoundSSCheck(bgm->streamId) & SOUND_STREAM_FLAG_MUTE) {
             SoundSSMuteOff(bgm->streamId);
         }
+        // FAKE: repeated listId test (listId != -1 is known here); dropping it changes the object
         if (bgm->listId == -1) {
             alive = 0;
         } else if (psbgmlist[bgm->listId].flags & PSND_BGM_STREAM) {

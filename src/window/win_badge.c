@@ -171,7 +171,7 @@ s32 winBadgeMain(WindowWork* w) {
         } else if (w->buttonTrg & PAD_TRIGGER_Z) {
             // FAKE: an untyped copy of w is loaded into r3 before m is chosen (a WindowWork* copy or w itself is propagated into the call)
             void* p = w;
-            s32 m = 3;
+            m = 3;
             if (w->badge.tab == 0) {
                 m = 2;
             }

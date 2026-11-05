@@ -314,12 +314,6 @@ void yuugijou_init(void) {
 #endif
 #endif
 }
-static inline s32 cmpSign(s32 a, s32 b) {
-    if (a > b) {
-        return 1;
-    }
-    return -1;
-}
 
 /**
  * Draws the Pianta token counter (window, token icons and number) while flags 1 and 2 are set,

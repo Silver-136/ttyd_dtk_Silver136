@@ -2600,6 +2600,7 @@ static void winSortGX(WindowWork* wp) {
     f32 x = wp->sortPosX;
     f32 y = wp->sortPosY;
     s32 i;
+    // FAKE: constant locals w and w2 for the sort window sizes; the literals change the object
     f32 w = 128.0f;
     f32 w2 = 136.0f;
     f32 yy;

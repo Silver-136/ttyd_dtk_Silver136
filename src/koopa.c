@@ -262,6 +262,7 @@ s32 kpaGetStageViewType(void) {
 s32 kpaCamFollow(void) {
     MarioWork* mario = marioGetPtr();
     s32 v;
+    // FAKE: comma expression re-testing the stage flag; !(stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) changes the object
     if (marioBgmodeChk() == 1 || (v = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1, v == 1)) {
         return 0;
     }

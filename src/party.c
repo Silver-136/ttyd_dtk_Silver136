@@ -1334,7 +1334,7 @@ void partyHello(PartyEntry* party) {
  */
 s32 partyHelloMain(PartyEntry* party) {
     s32 ret = 0;
-    u8* mario = (u8*)party->playerPtr;
+    MarioWork* mario = party->playerPtr;
 
     switch (party->motionStep) {
         case 0: {
@@ -1342,11 +1342,11 @@ s32 partyHelloMain(PartyEntry* party) {
 #if VERSION <= VERSION_DEMO_JP
                 psndSFXOn_3D((const char*)PSND_SFX_PARTY_OUT1, &party->position);
 #endif
-                x = ((MarioWork*)mario)->position.x;
-                y = ((MarioWork*)mario)->position.y;
-                z = ((MarioWork*)mario)->position.z;
+                x = mario->position.x;
+                y = mario->position.y;
+                z = mario->position.z;
                 party->position.x = x;
-                party->position.y = y + 0.5f * ((MarioWork*)mario)->wPlayerCollisionBox.y;
+                party->position.y = y + 0.5f * mario->wPlayerCollisionBox.y;
                 party->position.z = z;
                 partyGetAppearPos(party, &party->moveTarget);
                 party->moveFrames = 16;
@@ -1405,10 +1405,10 @@ s32 partyHelloMain(PartyEntry* party) {
                 }
                 ((PartyEntry*)party)->moveFrames = 0;
 #if VERSION <= VERSION_DEMO_JP
-                party->moveDir = ((MarioWork*)mario)->moveDirection;
-                party->targetDir = ((MarioWork*)mario)->directionView;
-                party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
-                party->displayDirection = ((MarioWork*)mario)->displayDirection;
+                party->moveDir = mario->moveDirection;
+                party->targetDir = mario->directionView;
+                party->displayDirectionTarget = mario->displayDirectionTarget;
+                party->displayDirection = mario->displayDirection;
 #else
                 if (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) {
                     party->moveDir = partyToMovedir(party, 180.0f);
@@ -1426,7 +1426,7 @@ s32 partyHelloMain(PartyEntry* party) {
                 ret = 1;
                 party->runMode = PARTY_RUN_WAIT;
 #if VERSION >= VERSION_JP
-                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_OUT1 | PSND_SFX_BYPASS_MUTE), &((MarioWork*)mario)->position);
+                psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_OUT1 | PSND_SFX_BYPASS_MUTE), &mario->position);
 #endif
                 break;
         }
@@ -2128,7 +2128,7 @@ void partyRideMain(PartyEntry* party) {
     f32 shrink; // FAKE: one function-scope temp for (f32)(16 - timer), shared by cases 110 and 111 (see docs/FAKES.md)
     Vec s;
     f32 dy0;
-    u8* mario = (u8*)party->playerPtr;
+    MarioWork* mario = party->playerPtr;
     f32 x;
     f32 y;
     f32 z;
@@ -2186,8 +2186,8 @@ void partyRideMain(PartyEntry* party) {
             break;
 
         case 10:
-            party->position = ((MarioWork*)mario)->position;
-            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
+            party->position = mario->position;
+            party->displayDirectionTarget = mario->displayDirectionTarget;
             party->moveDir = toMovedir(party->displayDirectionTarget);
             break;
 
@@ -2247,18 +2247,18 @@ void partyRideMain(PartyEntry* party) {
 #if VERSION >= VERSION_JP
             party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
 #endif
-            x = ((MarioWork*)mario)->position.x;
-            y = ((MarioWork*)mario)->position.y;
-            z = ((MarioWork*)mario)->position.z;
+            x = mario->position.x;
+            y = mario->position.y;
+            z = mario->position.z;
             party->position.x = x;
-            party->position.y = y + 0.5f * ((MarioWork*)mario)->wPlayerCollisionBox.y;
+            party->position.y = y + 0.5f * mario->wPlayerCollisionBox.y;
             party->position.z = z;
             if (party->motionStep == 100) {
                 partyGetAppearPos(party, &party->moveTarget);
             } else {
                 partyGetAppearPos2(party, &party->moveTarget);
             }
-            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
+            party->displayDirectionTarget = mario->displayDirectionTarget;
             party->moveFrames = 16;
             party->moveDistance = distABf(x, z, party->moveTarget.x, party->moveTarget.z);
             party->targetDir = angleABf(x, z, party->moveTarget.x, party->moveTarget.z);
@@ -2317,14 +2317,14 @@ void partyRideMain(PartyEntry* party) {
             }
 #if VERSION <= VERSION_DEMO_JP
             (((PartyEntry*)party)->moveFrames) = 0;
-            party->moveDir = ((MarioWork*)mario)->moveDirection;
-            party->targetDir = ((MarioWork*)mario)->directionView;
+            party->moveDir = mario->moveDirection;
+            party->targetDir = mario->directionView;
 #else
             ((PartyEntry*)party)->moveFrames = 0;
 #endif
-            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
+            party->displayDirectionTarget = mario->displayDirectionTarget;
 #if VERSION >= VERSION_JP
-            party->displayDirection = ((MarioWork*)mario)->displayDirectionTarget;
+            party->displayDirection = mario->displayDirectionTarget;
             party->moveDir = toMovedirSimple(party->displayDirection);
             party->targetDir = party->moveDir;
 #endif
