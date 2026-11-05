@@ -15,7 +15,7 @@ typedef struct EffMagic1N64Work {
     s32 alpha;    // 0x34
 } EffMagic1N64Work;
 
-extern double sin(double x);
+#include "libc_decls.h"
 
 // sin of an angle given in degrees
 static inline f32 effMagic1SinDeg(f32 deg) { return sin(6.2831855f * deg / 360.0f); }

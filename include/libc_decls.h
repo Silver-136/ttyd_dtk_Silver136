@@ -18,6 +18,7 @@ extern double hypot(double x, double y);
 extern void* memcpy(void*, const void*, unsigned long);
 extern void* memset(void*, int, unsigned long);
 extern int rand(void);
+extern double sin(double);
 extern double sqrt(double); // MSL's out-of-line double sqrt (math.h only has the inline sqrtf)
 extern int sprintf(char*, const char*, ...);
 extern int sscanf(const char* str, const char* format, ...);
