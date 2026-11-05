@@ -31,7 +31,7 @@ typedef enum PartyMember {
     PARTY_MEMBER_FLURRIE,   // 5
     PARTY_MEMBER_VIVIAN,    // 6
     PARTY_MEMBER_MS_MOWZ,   // 7
-#define MAIN_PARTY_MEMBER_MAX PARTY_MEMBER_MS_MOWZ + 1
+#define MAIN_PARTY_MEMBER_MAX (PARTY_MEMBER_MS_MOWZ + 1)
     PARTY_MEMBER_EGG,                // 8
     PARTY_MEMBER_FLAVIO,             // 9
     PARTY_MEMBER_PUNIO,              // 10

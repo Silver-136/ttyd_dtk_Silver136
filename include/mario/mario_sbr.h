@@ -36,3 +36,4 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut);
 
 f32 marioGetMoveRate(f32 dir);
 f32 marioGetDispDir(void);
+void marioSetForceMove(f32 dir, s32 time, f32 speed);

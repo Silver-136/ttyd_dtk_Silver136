@@ -40,6 +40,7 @@
 #include "battle/battle_database_common.h"
 #include "icon_ids.h"
 #include "battle/battle_message.h"
+#include "battle/battle_mario.h"
 
 static USER_FUNC(_get_mario_hammer_lv);
 
@@ -48,7 +49,6 @@ USER_FUNC(_majinai_powerup_check);
 USER_FUNC(_paper_light_off);
 USER_FUNC(_fire_wave);
 USER_FUNC(_mario_fire_ball_controll);
-USER_FUNC(mario_get_renzoku_count_max);
 USER_FUNC(_kaiten_hammer_acrobat_rotate);
 USER_FUNC(_hammer_star_effect);
 USER_FUNC(_record_renzoku_count);
@@ -58,46 +58,10 @@ USER_FUNC(_bgset_iron_frame_check);
 USER_FUNC(_jump_star_effect);
 USER_FUNC(_whirlwind_effect);
 
-extern BattleWeapon marioDefaultWeapon_Jump;
-extern BattleWeapon marioWeapon_KururinJump;
 extern BattleWeapon marioWeapon_KururinJump2;
-extern BattleWeapon marioWeapon_JyabaraJump;
 extern BattleWeapon marioWeapon_JyabaraJumpFailed;
-extern BattleWeapon marioDefaultWeapon_FirstAttackKaitenHammer;
-extern BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer;
-extern BattleWeapon marioDefaultWeapon_Hammer;
-extern BattleWeapon marioWeapon_KaitenHammer;
-extern BattleWeapon marioWeapon_KaitenHammerInvolved;
-extern BattleWeapon marioWeapon_UltraHammer;
-extern BattleWeapon marioWeapon_UltraHammerInvolved;
-extern BattleWeapon marioWeapon_UltraHammerFinish;
-extern BattleWeapon badgeWeapon_TugitugiJump;
-extern BattleWeapon badgeWeapon_GatsunJump;
-extern BattleWeapon badgeWeapon_DokanJump;
-extern BattleWeapon badgeWeapon_RenzokuJump;
-extern BattleWeapon badgeWeapon_TatsumakiJump;
 extern BattleWeapon badgeWeapon_TatsumakiJumpInvolved;
-extern BattleWeapon badgeWeapon_MiniminiFumi;
-extern BattleWeapon badgeWeapon_NemuraseFumi;
-extern BattleWeapon badgeWeapon_FunyafunyaJump;
-extern BattleWeapon badgeWeapon_GatsunHammer;
-extern BattleWeapon badgeWeapon_DokanHammer;
-extern BattleWeapon badgeWeapon_JishinHammer;
-extern BattleWeapon badgeWeapon_UltraJishinHammer;
-extern BattleWeapon badgeWeapon_HammerNageru;
-extern BattleWeapon badgeWeapon_TsuranukiNaguri;
-extern BattleWeapon badgeWeapon_ConfuseHammer;
-extern BattleWeapon badgeWeapon_FireNaguri;
 extern BattleWeapon badgeWeapon_FireNaguriFailed;
-extern BattleWeapon badgeWeapon_IceNaguri;
-extern BattleWeapon badgeWeapon_Charge;
-extern BattleWeapon badgeWeapon_ChargeP;
-extern BattleWeapon badgeWeapon_SuperCharge;
-extern BattleWeapon badgeWeapon_SuperChargeP;
-extern BattleWeapon badgeWeapon_2KaiItem;
-extern BattleWeapon badgeWeapon_3KaiItem;
-extern BattleWeapon badgeWeapon_DefenceCommand;
-extern BattleWeapon badgeWeapon_DefenceCommandP;
 extern BattleWeapon marioWeapon_BakuGame;
 extern BattleWeapon marioWeapon_Scissor;
 extern BattleWeapon marioWeapon_ZubaStar;

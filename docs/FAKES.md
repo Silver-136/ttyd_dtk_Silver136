@@ -656,7 +656,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Demos | src/battle/battle_unit.c | BtlUnit_GetStatus, BtlUnit_SetStatus, BtlUnit_CheckRecoveryStatus, BtlUnit_CheckStatus | BATTLE_UNIT_STATUS_ENUM: the file sees the enum prototypes while its callers see s8 (same bytes retail reads through s8) | one prototype for all units: the callers then lose their sign extension |
 | Both | src/battle/battle_unit.c | BtlUnit_GetExp | temporary t for `scale * (unitLevel - level)` before the return | one return expression: changes the object |
 | Both | src/event/evt_badgeshop.c | evt_badgeShop_throw_get_kind_cnt | `long i` instead of int: register choice in the demos, no change in retail | int |
-| Demos | src/event/evt_mario.c | evt_mario_mov_pos (demo guard) | marioSetForceMove called through a (s32, f32, f32) cast; the demo prototype is (f32, s32, f32) as its other callers need | plain call |
+| Both | src/event/evt_mario.c | evt_mario_mov_pos | marioSetForceMove called through a (s32, f32, f32) cast (frames first); mario_sbr.h declares the definition's (dir, time, speed), which the other three calls use | plain call in the definition's order: the frame count and direction load the other way round |
 | All demos | src/battle/battle_seq_end.c | _LvupParamHelpMsgDisp | stripped in every demo: only the strings stay compiled there, so its numbers stay out of the pool | full body |
 | Demos | src/manager/cardmgr_demo.inc | (demo copy of cardmgr.c) | no-op self-assignment the target compiles to a register copy; | see comment |
 | Demos | src/driver/npcdrv.c | fbatHitCheck (demo copy) | `(*(T*)&...)` field reads as in the retail copy's row | plain field reads |

@@ -134,7 +134,7 @@ s32 marioPartyEntry(PartyId id) {
     MarioWork* mario = marioGetPtr();
     s32 ret;
 
-    if (id < 8) {
+    if (id < MAIN_PARTY_MEMBER_MAX) {
         if (!partyChkJoin(id)) {
             return -1;
         }
@@ -168,7 +168,7 @@ s32 marioPartyHello(PartyId id) {
     s32 ret = -1;
     MarioWork* mario = marioGetPtr();
 
-    if (id < 8) {
+    if (id < MAIN_PARTY_MEMBER_MAX) {
         if (!partyChkJoin(id)) {
             return -1;
         }
