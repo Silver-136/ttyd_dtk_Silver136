@@ -404,6 +404,8 @@ static EVT_BEGIN(attack_event)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: attack_event has no LABEL(98): evtSearchLabel returns the GOTO's own argument word, so 98 runs as
+        // an opcode and the script goes on after it (PRECHECK_PREEMPTIVE_SPIKY lands here).
         GOTO(98)
         CASE_END
     END_SWITCH

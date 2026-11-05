@@ -574,6 +574,8 @@ USER_FUNC(bts_wariai_enzan_1f_intpl_w) {
         r1 = intplGetValue(t1, 0.0f, 1.0f, b - a, b);
     }
     if (t2 >= 14.0f) {
+        // BUG: subtracts from t1 instead of t2 (the branch above does t1 -= 14), so the second mode
+        // comes from the first one.
         t2 = t1 - 14.0f;
         if (t2 >= 14.0f) {
             evtSetFloat(event, out, c);

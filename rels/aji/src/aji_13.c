@@ -556,6 +556,8 @@ static USER_FUNC(mario_chk) {
             mario->floorMove.x *= 60.0f / gp->framerate; // PAL: the push per frame is scaled to the frame rate
 #endif
         }
+        // BUG: tests hitobjUnder (only ever cleared, never set) but passes hitobjStandOn, so this test is always
+        // false and the partner never gets the belt push here.
         if (party != NULL && party->hitobjUnder != NULL && hitIsGroup(party->hitobjStandOn, hitNameToPtr("A_bel"))) {
             party->floorMoveX = 0.6f;
 #if VERSION >= VERSION_DEMO_EU

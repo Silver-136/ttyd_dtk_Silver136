@@ -403,6 +403,9 @@ static EVT_BEGIN(attack_event_yoshi)
         CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
     END_SWITCH
+
+    // BUG: PKR_A_2B and PKR_J_1A are Goombella's pose names; the Yoshi model has no such animations, so
+    // animPoseGetAnimIdx gives animation 0 (held for 20 frames before the first stomp).
     IF_INT_LESS_OR_EQUAL(LW(10), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_A_2B"))
         WAIT_FRAMES(20)

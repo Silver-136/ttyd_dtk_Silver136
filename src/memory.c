@@ -632,6 +632,8 @@ smartEntry* smartAlloc(u32 size, u8 type) {
                     break;
             }
             smartGarbage();
+            // BUG: no NULL check: when no block is left in use allocTail is NULL and is read through here (the
+            // bytesLeft path above is not retried).
             prevEntry = wp->allocTail;
             if (prevEntry->spaceAfter >= sz) {
                 entry->address = (u8*)prevEntry->address + prevEntry->size;

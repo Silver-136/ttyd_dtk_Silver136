@@ -369,6 +369,8 @@ static EVT_BEGIN(dmg_fall_event_pata)
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(1.0f))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 10, -1)
     CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
+    // BUG: changes the fallen Red Spiky Parabuzzy to the plain Spike Top kind (73), not to the Red Spiky Buzzy
+    // kind that unit_crimson_togemet uses.
     CALL(btlevtcmd_ChangeKind, LW(10), 73)
     CALL(btlevtcmd_GetHpDamageCount, LW(10), LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)

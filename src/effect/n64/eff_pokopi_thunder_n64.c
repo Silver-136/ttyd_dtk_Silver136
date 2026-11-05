@@ -112,7 +112,8 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
         work->length = sqrtf(len);
     } else {
 
-        // The work and callback have already been attached to the effect on this path.
+        // BUG: the effect stays registered with its callback, length and colours unset, and the caller gets NULL,
+        // so it runs on (endless when duration <= 0) and cannot be deleted by the caller.
         return NULL;
     }
     work->length = 0.005f * work->length;

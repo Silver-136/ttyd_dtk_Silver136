@@ -346,6 +346,8 @@ void effParticleDisp(CameraId cameraId, void* payload) {
     d2r = 0.017453292f;
     for (idx = work->items[work->count].next; idx != work->count + 1; idx = p->next) {
         p = &work->items[idx];
+        // BUG: life is Gaussian (mean 125, deviation 25) with no upper clamp, so a life of 256 or more reads past the
+        // 32 colours (needs about 5 deviations).
         col = hibana_col[p->life >> 3];
         col.a = alpha * col.a / 255;
         GXSetChanMatColor(GX_COLOR0A0, col);

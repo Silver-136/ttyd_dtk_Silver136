@@ -1523,10 +1523,8 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             SET_VALUE(LW(5), 5)
             LOOP(LW(5))
-                // BUG: stores the follow state in LW(10) but tests LW(0), which still holds the target's unit id, so the
-                // loop does not wait for the slide (state 3) to end unless that id is 3.
-                // BUG: reads into LW(10) but tests LW(0) (Mario's unit id), so the loop ends on its first pass and the slide
-                // is not waited for. Fix: read into LW(0).
+                // BUG: reads the follow state into LW(10) but tests LW(0), the target's unit id from GetUnitId above,
+                // so unless that id equals KOURA_FOLLOW_SLIDE the loop breaks on its first pass and the slide is not waited for.
                 CALL(btlevtcmd_GetUnitWork, LW(10), SHELL_SHIELD_WORK_FOLLOW, LW(10))
                 IF_INT_NOT_EQUAL(LW(0), KOURA_FOLLOW_SLIDE)
                     BREAK_LOOP
@@ -1578,6 +1576,8 @@ EVT_BEGIN(partyNokotarouAttack_KouraGuard)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(evt_btl_camera_off_posoffset_manual, 0)
+        // BUG: returns without the _color_lv_set restore of Mario's moveColorLv (saved in LW(14), set to 255
+        // above); that restore after LABEL(99) is reached only through the no-target GOTO, with LW(14) unset.
         RETURN
     END_IF
 

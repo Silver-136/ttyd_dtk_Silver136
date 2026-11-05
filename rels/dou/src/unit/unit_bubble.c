@@ -343,6 +343,7 @@ EVT_END()
 static EVT_BEGIN(damage_fire_explosion_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
+    // BUG: LW(0) was just loaded with its X position by GetPos, so the wait lasts that many frames.
     WAIT_FRAMES(LW(0))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     LOOP(0)

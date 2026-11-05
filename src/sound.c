@@ -349,6 +349,8 @@ BOOL SoundLoadDVD2(const char* path) {
         } else {
             length = OSRoundUp32B(length);
             pointer = __memAlloc(HEAP_DEFAULT, length);
+            // BUG: here and for the .proj and .sdir files, DVDMgrClose runs only after a good read: an empty file,
+            // a failed allocation or a failed read leaves the entry open.
             if (pointer == NULL) {
                 pointer = NULL;
             } else if (DVDMgrRead(entry, pointer, length, 0) <= 0) {
@@ -762,6 +764,8 @@ BOOL SoundDropData(void) {
         }
     }
 
+    // BUG: SoundLoadDVD2 stores into slot dataId but never increments it, so dataId is 0 here and none of these
+    // loops runs: the groups stay pushed and the slot 0 project buffers are not freed.
     for (i = 0; i < sound.dataId; i++) {
         while (sound.groupCount[i]) {
             sndPopGroup();

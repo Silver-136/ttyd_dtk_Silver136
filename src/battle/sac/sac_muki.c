@@ -1038,6 +1038,8 @@ EVT_BEGIN(marioAttackEvent_Muki)
     END_IF
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
+        // BUG: this script has no LABEL(99): evtSearchLabel returns the GOTO's own argument word, which then runs
+        // as a command (opcode 99, SET_TYPE), and the script goes on with LW(3) = -1.
         GOTO(99)
     END_IF
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))

@@ -1183,6 +1183,7 @@ s32 mobj_jumpstand_red(MapObjectEntry* mobj) {
                 } else {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND2), &mobj->position);
                 }
+                // BUG: irand(4) returns 0..3, so case 4 (the fifth voice) never plays.
                 switch (irand(4)) {
                 case 0:
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_1), &mobj->position);
@@ -1283,6 +1284,7 @@ s32 mobj_jumpstand_blue(MapObjectEntry* mobj) {
                 } else {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MOBJ_JUMP_STAND2), &mobj->position);
                 }
+                // BUG: irand(4) returns 0..3, so case 4 (the fifth voice) never plays.
                 switch (irand(4)) {
                 case 0:
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_VOICE_MARIO_AC2_1), &mobj->position);

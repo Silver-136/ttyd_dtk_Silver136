@@ -560,6 +560,8 @@ EVT_BEGIN(gesso_fall_check)
     CALL(btlevtcmd_SetPartsDefenceAttrTable, LW(3), 1, PTR(R_defence_attr_turn))
     CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(R_regist_turn))
     CALL(btlevtcmd_SetHitOffset, LW(3), 1, -15, -90, 0)
+    // BUG: sets the icon offset of UNIT_ID_SELF (the dying tentacle running this) instead of the body LW(3),
+    // so the fallen Blooper keeps the 46, 118 offset set above.
     CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 55, 113)
     CALL(evt_btl_camera_shake_h, BTL_CAM_PRI_NORMAL, 6, 0, 30, 4)
     CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_UNIT_WORK_STATE, 1)

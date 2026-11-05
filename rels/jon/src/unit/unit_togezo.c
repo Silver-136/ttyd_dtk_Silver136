@@ -663,6 +663,8 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_togezo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SET_VALUE(LW(0), 36)
     MULTIPLY(LW(0), LW(14))
+    // BUG: stores the literal -36 instead of LW(0) (36 times the face direction), so the rebound spin matches
+    // LW(0) only when LW(14) is -1; facing right it keeps the roll's direction.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROLL_SPEED, -36)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 30)

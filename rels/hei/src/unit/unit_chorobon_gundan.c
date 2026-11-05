@@ -888,7 +888,8 @@ USER_FUNC(chorogun_dive_target) {
     row = (*p->mtx)[2];
     dx = x - (*p->mtx)[0][3];
 
-    // Both offsets use the current Z translation, including the vertical calculation.
+    // BUG: row is mtx[2], so the vertical offset dy uses the Z translation instead of Y (mtx[1][3]),
+    // and the launch speed vel.y is computed from that.
     dy = y - row[3];
     dz = z - row[3];
     c->vel.x = dx / t;
@@ -963,6 +964,8 @@ USER_FUNC(chorogun_escape) {
             }
         }
     }
+    // BUG: j starts at 1, not i + 1, so this leaves the nearest first and the rest in descending order; with
+    // more than 50 candidates the 50 that escape are not the 50 nearest.
     for (i = 0; i < n - 1; i++) {
         for (j = 1; j < n; j++) {
             if (dist[i] > dist[j]) {

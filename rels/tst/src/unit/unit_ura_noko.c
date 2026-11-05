@@ -765,6 +765,8 @@ static EVT_BEGIN(ura_attack_event)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 100)
 
     // It slides on past the target.
+    // BUG: LW(5) held this unit's Y, but PreCheckDamage overwrote it with the result code (2..6 here), so the
+    // move goes to that height.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 1)
     GOTO(97)
     LABEL(91)

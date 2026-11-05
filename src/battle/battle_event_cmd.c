@@ -2862,6 +2862,7 @@ USER_FUNC(btlevtcmd_GetBackItem) {
                 break;
             }
         }
+        // BUG: no check for a full list: with all 8 slots used, i is 8 and the write lands past recoveredItems.
         info->recoveredItems[i] = item;
         unit->heldItem = ITEM_NULL;
     }

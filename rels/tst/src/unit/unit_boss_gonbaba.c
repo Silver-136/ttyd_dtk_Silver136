@@ -705,6 +705,7 @@ EVT_BEGIN(negotiation_event)
     // the Shell Shield follows him again.
     CALL(btlevtcmd_GetPos, UNIT_ID_MARIO, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(1), EVT_NULLPTR, EVT_NULLPTR)
+    // BUG: the loop never re-reads LW(0)/LW(1), so it never ends if Mario was not at home when they were read.
     LABEL(41)
     IF_INT_NOT_EQUAL(LW(0), LW(1))
         WAIT_FRAMES(1)
@@ -1173,6 +1174,8 @@ EVT_BEGIN(gon_extra_eaten_event)
         CALL(evt_audience_move_position_speed, LW(0), -300, LW(2), LW(3), FLOAT(4.5f))
         DELETE_EVENT(LW(6))
         CALL(evt_snd_sfxoff, LW(5))
+        // BUG: unlike spectator 53 and the others, this path deletes the member without
+        // evt_audience_num_updown_in_event(-1), so the audience target count stays one higher.
         CALL(evt_audience_delete, LW(0))
         RETURN
     END_IF

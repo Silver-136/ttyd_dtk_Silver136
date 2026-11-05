@@ -778,6 +778,8 @@ void effThunderDisp(CameraId cameraId, void* payload) {
         GXSetTevColor(GX_TEVREG1, (GXColor){0, 0, 0, 255});
         GXSetNumChans(1);
         GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+        // BUG: four stages are set up below but only two enabled, so stages 2-3 (the A1 subtract and the vertex
+        // alpha multiply, set up with TEVREG1 and the channel above) never run.
         GXSetNumTevStages(2);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
         GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);

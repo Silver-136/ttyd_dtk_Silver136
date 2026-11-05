@@ -177,6 +177,7 @@ USER_FUNC(evt_win_item_maketable) {
         item++;
     }
     table[n] = -1;
+    // BUG: when no item is carried the block is dropped without _mapFree, so it stays allocated on the map heap.
     if (n == 0) {
         table = NULL;
     }

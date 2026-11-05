@@ -282,6 +282,8 @@ void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
             GXTexCoord2f32(0.0f, v);
         } else {
 #if VERSION <= VERSION_DEMO_JP
+            // BUG: (early demos) reuses the outer counter i: after element 5 the outer loop goes on from i = 4, so
+            // data walks two elements past the 14 allocated.
             for (i = 0; i < 3; i++) {
 #else
             s32 j;

@@ -192,6 +192,8 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     }
                     loop = 1;
                 }
+                // BUG: speed is set from speed0 only in AC_STATE_INIT, never after a throw, so each later throw
+                // starts from the charge the previous one reached.
                 sw->speed += 1.0f;
                 if (sw->speed > 100.0f) {
                     sw->speed = 100.0f;

@@ -2751,6 +2751,8 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
             out->y = mario->position.y;
         }
     }
+    // BUG: i runs to 11 inclusive, reading one element past the 11-entry tables; for Mario's own spot (not a
+    // partner) `other` is never set but is tested below. out also drifts between passes (movePos on out).
     for (i = 0; i <= sizeof(angA) / sizeof(angA[0]); i++) {
         if (i == 0) {
             ang = party->homeDir;

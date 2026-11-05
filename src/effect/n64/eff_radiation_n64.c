@@ -172,6 +172,8 @@ void effRadiationMain(EffectEntry* effect) {
     s32 lf;
     s32 j;
 
+    // BUG: pos0 is never written (Entry fills position), so the depth passed to dispCalcZ below comes from
+    // uncleared heap memory.
     tmp.x = p->pos0.x;
     tmp.y = p->pos0.y;
     tmp.z = p->pos0.z;

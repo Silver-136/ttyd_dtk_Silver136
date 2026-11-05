@@ -1021,6 +1021,8 @@ void loadDraw(CameraId camera, void* param) {
             col = white;
         }
 #if VERSION <= VERSION_DEMO_JP
+        // BUG (early demos): tests state 0x29 (start of delete), not 0x33 (copy target choice), so the copy slots
+        // are never highlighted while choosing, only for the one frame of 0x29 with stale copyFrom/copyTo.
         if (wp->state == 0x29 && (i == wp->copyFrom || i == wp->copyTo)) {
 #else
         if (wp->state == 0x33 && (i == wp->copyFrom || i == wp->copyTo)) {

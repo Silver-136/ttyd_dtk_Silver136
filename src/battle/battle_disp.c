@@ -877,6 +877,7 @@ void btlUnitPartsDisp(CameraId camId, void* param) {
     if (color->r == 0xFF && color->g == 0xFF && color->b == 0xFF) {
         if (BtlUnit_CheckStatus(unit, STATUS_POISON)) {
             color->r = color->r * 160 / 255;
+            // BUG: scales the already reduced r (160), so b becomes 100, not 160.
             color->b = color->r * 160 / 255;
         }
         color->r = color->r * unit->moveColorLvDisp / 255;

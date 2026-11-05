@@ -933,6 +933,8 @@ void evtMsgFmtInt(char* buf, s32 count) {
                 } else {
                     strcat(msg_plural_buf, "oggtti");
                 }
+                // BUG: <OGGETTO> is 9 characters but only 7 are skipped, so "O>" stays in the text; the plural above
+                // is spelled "oggtti".
                 strcat(msg_plural_buf, marker + 7);
             } else if ((marker = strstr(msg_num_buf, "<S>")) != NULL) {
                 len = strlen(msg_num_buf) - strlen(marker);

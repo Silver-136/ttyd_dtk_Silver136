@@ -2797,6 +2797,8 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
 #if VERSION <= VERSION_DEMO_JP
+        // BUG (early demos): -29999997 is LW(3), the target, so the 40-unit step follows the target's facing
+        // instead of Doopliss's own (JP and later pass UNIT_ID_SELF).
         CALL(btlevtcmd_FaceDirectionAdd, -29999997, LW(0), 40)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
 #else
@@ -2901,6 +2903,8 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
     CALL(evt_btl_camera_set_zoom, 0, 400)
     WAIT_MS(500)
+    // BUG: LW(15) holds the face direction from CalculateFaceDirection (+1/-1), not an event id: no event
+    // is meant here, and with +1 the event with id 1 is deleted if it is running.
     DELETE_EVENT(LW(15))
     CALL(evt_snd_sfxoff, LW(13))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_NOKO_SHUBIBIN2"), EVT_NULLPTR, 0, LW(13))
@@ -3549,6 +3553,8 @@ static EVT_BEGIN(attack_event_yoshi)
         CASE_EQUAL(PRECHECK_HIT)
         CASE_DEFAULT
     END_SWITCH
+    // BUG: the Yoshi form sets Goombella's poses PKR_A_2B and PKR_J_1A here (as in the Goombella form's
+    // script above) instead of Yoshi (PYS_) poses.
     IF_INT_LESS_OR_EQUAL(LW(10), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_A_2B"))
         WAIT_FRAMES(20)

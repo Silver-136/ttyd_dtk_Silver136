@@ -1494,6 +1494,8 @@ EVT_BEGIN(gance_rariat_attack_attack_event)
     // Sample the targets; if LW(3) is -1, a confused Grubba is flustered and the action ends.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
+    // BUG: no ChoiceSamplingEnemy sets LW(3) before this test (it is still 0 from attack_event),
+    // so the no-target exit is never taken.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1886,6 +1888,8 @@ USER_FUNC(wariai_enzan_1f_intpl_w) {
         r1 = intplGetValue(t1, 0.0f, 1.0f, b - a, b);
     }
     if (t2 >= 14.0f) {
+        // BUG: subtracts from t1 instead of t2 (the branch above does t1 -= 14), so the second mode
+        // comes from the first one.
         t2 = t1 - 14.0f;
         if (t2 >= 14.0f) {
             evtSetFloat(event, out, c);

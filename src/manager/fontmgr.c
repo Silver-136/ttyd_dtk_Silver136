@@ -996,6 +996,8 @@ void JUTFontSetup(u16 font) {
 #if VERSION >= VERSION_US
         maxsize = size;
         for (j = 0; j < (s32)(sizeof(fontname) / sizeof(fontname[0])); j++) {
+            // BUG (US and later): opens <root>/font/ while the fonts are loaded from <root>/f/ above, so no file
+            // opens and maxsize stays the size of the loaded font.
             sprintf(path, "%s/font/%s.bfn", getMarioStDvdRoot(), fontname[j]);
             other = DVDMgrOpen(path, 2, 0);
             if (other) {

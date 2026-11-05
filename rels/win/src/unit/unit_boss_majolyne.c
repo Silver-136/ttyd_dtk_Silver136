@@ -860,6 +860,8 @@ static EVT_BEGIN(attack_event)
         SUBTRACT(LW(14), 1)
 
         // Roll the die and run the chosen attack.
+        // BUG: the cutoffs below are fixed (40/60/80) while LW(14) only grew for useful moves, so a powder can be
+        // chosen whose target is missing (LW(10..13) unset) or already Huge/Tiny, and a useful move can be cut off.
         CALL(evt_sub_random, LW(14), LW(0))
         SET_VALUE(LW(1), 40)
         IF_INT_LESS(LW(0), LW(1))

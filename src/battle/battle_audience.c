@@ -4234,6 +4234,7 @@ void BattleAudienceSoundClap(s32 duration, s32 fade) {
         strcpy(name, "SFX_AUDIENCE_CLAPPING4");
         sound->kind = 4;
     }
+    // BUG: with no member taking part (sum 0) name is never written, so an uninitialised buffer is played.
     sound->sfxId = BattleAudienceSound1(name, right, left);
     AUD_SOUND_START(sound, duration + fade, fade);
 }
@@ -4274,6 +4275,7 @@ void BattleAudienceSoundNoiseAlways(void) {
             strcpy(name, "SFX_AUDIENCE_NOISY4");
             sound->kind = 4;
         }
+        // BUG: with no member taking part (sum 0) name is never written, so an uninitialised buffer is played.
         sound->sfxId = BattleAudienceSound1(name, right, left);
         if (sound->sfxId != -1) {
             sound->flags |= AUD_SOUND_FLAG_PLAYING;
@@ -4366,6 +4368,8 @@ void BattleAudienceSoundCheerKind(s32 kind, s32 duration, s32 fade) {
         strcpy(name, "SFX_AUDIENCE_CHEER_ALLY4");
         sound->kind = 4;
     }
+    // BUG: kind 0 (BattleAudienceSoundCheer with no member taking part) never writes name, so an uninitialised
+    // buffer is played.
     if (lowPitch == 1) {
         sound->sfxId = BattleAudienceSound1(name, right, left);
         psndSFX_pit(sound->sfxId, 0x7F);

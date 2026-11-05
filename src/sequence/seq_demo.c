@@ -484,6 +484,7 @@ BOOL THPSimplePreLoad(s32 loop) {
             SimpleControl.totalReadFrame++;
 
             if (SimpleControl.totalReadFrame > SimpleControl.header.numFrames - 1) {
+                // BUG: reads SimpleControl.loop before it is set from loop below, so the wrap uses the previous value.
                 if (SimpleControl.loop == 1) {
                     SimpleControl.totalReadFrame = 0;
                     SimpleControl.curOffset = (s32)SimpleControl.header.movieDataOffsets;

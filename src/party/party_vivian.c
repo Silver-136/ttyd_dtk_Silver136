@@ -661,6 +661,8 @@ void vivian_use(PartyEntry* party) {
         if (party->dispOfs.y <= 2.7f) {
             party->dispOfs.y = 2.7f;
         }
+        // BUG: the clamps test > 0 (not < 0), so any count left after the decrement is zeroed and state 26, entered
+        // with moveFrames 24, ends on its first frame.
         if (--party->work.vivian.marioAnimTime > 0) {
             party->work.vivian.marioAnimTime = 0;
         }

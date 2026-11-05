@@ -457,6 +457,8 @@ static EVT_BEGIN(normal_attack_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+        // BUG: this script has no LABEL(99): evtSearchLabel returns the GOTO's own argument word, so 99 runs as
+        // an opcode and the script goes on after END_IF with LW(3) == -1.
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_teresa_attack))
@@ -710,6 +712,8 @@ static EVT_BEGIN(move_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+        // BUG: this script has no LABEL(99): evtSearchLabel returns the GOTO's own argument word, so 99 runs as
+        // an opcode and the script goes on after END_IF with LW(3) == -1.
         GOTO(99)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

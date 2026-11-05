@@ -2165,6 +2165,7 @@ USER_FUNC(evt_sub_get_coin) {
         winMgrCloseAutoDelete(event->userdata3);
         work[1] = 0;
         event->userdata[0] = 101;
+        // BUG: returns DONE instead of BLOCK, so case 101 never runs and the 8-byte work block is never _mapFree'd.
         return EVT_RETURN_DONE;
     case 101:
         if (!winMgrAction(event->userdata3)) {

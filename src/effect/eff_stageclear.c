@@ -247,6 +247,8 @@ void effStageClearMain(EffectEntry* effect) {
         if (work->delay != 0) {
             work->delay--;
             if (work->delay == 0) {
+                // BUG: tests type == 0 where the rest of the file tests type % 10, so type 10 (evt_sub's chapter clear)
+                // plays SFX_KUPPA_GOALIN1 (same sample, volume 100 instead of 50).
                 psndSFXOn(SFX_NAME_WORD(type == 0 ? PSND_SFX_EVT_STAGE_CLEAR1 : PSND_SFX_KUPPA_GOALIN1));
             }
         } else {

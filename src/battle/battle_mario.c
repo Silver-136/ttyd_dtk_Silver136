@@ -5996,6 +5996,8 @@ EVT_BEGIN(marioAttackEvent_UltraJishinHammer)
         WAIT_FRAMES(10)
         CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
         MULTIPLY(LW(5), 45)
+        // BUG: the interpolation runs 10 steps but the loop reads it 15 times; steps 11-14 of the sine curve swing
+        // the rotation back from LW(5) before the ease-out below starts again from LW(5).
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, LW(5), 10)
         LOOP(15)
             CALL(evt_sub_intpl_get_value)
@@ -7073,6 +7075,7 @@ USER_FUNC(_jump_star_effect) {
         if (size > 2.0f) {
             size = 2.0f;
         }
+        // BUG: passes pos[0] (x) as the z coordinate; pos[2] is read but never used.
         effEnergyEntry(type, 50, pos[0], pos[1], pos[0], size, rot, 0.05f);
     }
     if (event->userdata[0] <= 24) {
@@ -7251,6 +7254,7 @@ USER_FUNC(_hammer_star_effect) {
     pos[1] += unit->sizeMultiplier * (0.85f * BtlUnit_GetHeight(unit));
     pos[0] += unit->sizeMultiplier * (26.0f * -sinfd(angle));
     pos[1] += unit->sizeMultiplier * (26.0f * cosfd(angle));
+    // BUG: passes pos[0] (x) as the z coordinate; pos[2] is read but never used.
     effEnergyEntry(type, 30, pos[0], pos[1], pos[0], 0.08f * event->userdata[0] + 0.1f, rot, 0.05f);
     if (event->userdata[0] < 12) {
         event->userdata[0]++;

@@ -270,6 +270,8 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table))
     CALL(btlevtcmd_ReplaceParts, LW(10), LW(11), PTR(parts), 1)
     CALL(btlevtcmd_AnimeChangePoseDirect, LW(10), LW(11), STRING("NKT_D_1"))
+    // BUG: nothing installs the grounded `regist` table (no btlevtcmd_SetRegistStatus; `regist` is never
+    // referenced), so the unit keeps regist_patapata after it falls.
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_KIND_CHANGED)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)

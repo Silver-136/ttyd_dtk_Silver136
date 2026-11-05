@@ -1307,6 +1307,7 @@ void roll_upstairs_on(void) {
     marioClearJumpPara();
     mario->multiTimer = 3;
     mario->jumpVelocityY = (mario->stepUpY - mario->position.y) / (f32)(s32)mario->multiTimer;
+    // BUG: overwrites the step-height velocity just computed, so roll_upstairs always climbs 3 x 4 = 12 units.
     mario->jumpVelocityY = 4.0f;
     mario->jumpAccelerationY = -0.42f;
     mario->jumpJerkY = 0.04f;

@@ -948,6 +948,8 @@ EVT_BEGIN(subsetevt_happy_heart)
 #if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 60)
 #else
+        // BUG (JP and later): the status tests use LW(3), which nothing sets (0 from evtEntry), not UNIT_ID_SELF,
+        // so they check unit 0 instead of the healed unit.
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_CheckStatus, LW(3), STATUS_SLEEP, LW(0))
@@ -977,6 +979,8 @@ EVT_BEGIN(subsetevt_happy_flower)
 #if VERSION <= VERSION_DEMO_JP
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(5), 61)
 #else
+        // BUG (JP and later): the status tests use LW(3), which nothing sets (0 from evtEntry), not UNIT_ID_SELF,
+        // so they check unit 0 instead of the healed unit.
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_FREEZE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_CheckStatus, LW(3), STATUS_SLEEP, LW(0))

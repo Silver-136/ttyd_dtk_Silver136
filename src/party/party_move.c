@@ -974,6 +974,8 @@ void partyChgWalkPose(PartyEntry* party, f32 spd) {
     }
     a = (1.0f == party->playerPtr->playerGravity) ? 1.65f : 2.0f;
     b = (1.0f == party->playerPtr->playerGravity) ? 0.8f : 0.0f;
+    // BUG: the upper bound compares spd with spd + b (not a + b): always true when b > 0, always false when b == 0,
+    // so the walk/run band has no top and the spd >= a branch only runs at other gravities.
     if (a - b < spd && spd < spd + b) {
         if (marioGetMovementSpeed() == 1) {
             partyChgPoseId(party, PARTY_POSE_WALK);
@@ -2467,6 +2469,8 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
         if (hitCheckVecFilter(&query, NULL)) {
             continue;
         }
+        // BUG: moves out itself and a rejected spot does not undo it, so later passes start from the last tried
+        // spot, not from Mario or the other member.
         movePos(&out->x, &out->z, radius, ang);
         query.targetDistance = 87.0f;
         query.targetPos = (Vec){out->x, 37.0f + out->y, out->z};

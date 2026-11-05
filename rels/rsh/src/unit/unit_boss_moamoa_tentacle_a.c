@@ -558,6 +558,8 @@ EVT_END()
  */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
+    // BUG: nothing sets LW(6) (the body id) in a wait event, so it is 0 and the other tentacles' ids are
+    // read from unit 0's work instead of the body's.
     CALL(btlevtcmd_GetUnitWork, LW(6), MOAMOA_UNIT_WORK_TENTACLE_B, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
         CALL(btlevtcmd_AnimeChangePoseFromTable, LW(10), 1)

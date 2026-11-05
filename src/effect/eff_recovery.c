@@ -457,6 +457,8 @@ void effRecoveryMain(EffectEntry* effect) {
             }
         }
         if (type == 0 || type == 1 || type == 7 || type == 8 || type == 4 || type == 5) {
+            // BUG: types 4/5 have 20 icons but amount is 10 here, so the effect is deleted once 10 icons are done
+            // (done is also not reset between catch-up steps, so a lagging frame counts finished icons again).
             if (done >= amount) {
                 work = effect->userdata;
                 if (type != 7 && type != 8) {

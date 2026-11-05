@@ -543,6 +543,8 @@ static EVT_BEGIN(talk_gans)
         WAIT_MS(300)
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("a"), 0, 4, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(1500)
+        // BUG: signing stores STG3_03_GRUBBA (already the value here; evt_sensyu2's signing stores STG3_04), so the
+        // story stays at 03 and the room init keeps installing talk_gans until tou_04 sets STG3_05_MATCH.
         SET_VALUE(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
         CALL_CHILD(PTR(evt_kinoshikowa))
     END_IF

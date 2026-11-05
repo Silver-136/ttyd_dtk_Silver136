@@ -372,6 +372,8 @@ void effPokopiPchargeDisp(CameraId cameraId, void* param) {
             case 4:
             case 5:
                 effSetVtxDescN64(size10x10_tex32x32_2_vtx);
+                // BUG: changes the effect's type inside the per-streak loop, so only the first streak of types 3-5
+                // uses this vertex table; the later ones take cases 0-2 and the first table.
                 type -= 3;
                 GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
                 tri2(type * 4, type * 4 + 1, type * 4 + 2, 0, type * 4, type * 4 + 2, type * 4 + 3, 0);

@@ -247,6 +247,8 @@ void effKemuri8Disp(CameraId cameraId, void* param) {
     u1 = 0.0625f * (f32)next;
     work++;
     for (i = 1; i < effect->count; i++, work++) {
+        // BUG: texFrame is only written to the header element; the puffs' copy is never set (heap not cleared),
+        // so a puff is skipped whenever that leftover value is above 15.
         if (work->texFrame > 15) {
             continue;
         }

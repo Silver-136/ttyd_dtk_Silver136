@@ -348,6 +348,8 @@ void effKemuri1Disp(CameraId cameraId, void* param) {
     for (i = 1, work++; i < effect->count; i++, work++) {
         f32 h;
         f32 w;
+        // BUG: animFrame is only written to the header element; the puffs' copy is never set (heap not cleared),
+        // so a puff is skipped whenever that leftover value is above 15.
         if (work->animFrame > 15) {
             continue;
         }

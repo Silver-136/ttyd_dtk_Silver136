@@ -655,6 +655,7 @@ s32 winItemMain(WindowWork* w) {
                     list[k++] = &winPartyDt[i];
                 }
             }
+            // BUG (early demos): only hp_restored is applied here; the FP and Star Power amounts are added from JP on.
             if (w->item.useTarget < 1) {
                 pouchSetHP(pouchGetHP() + itemDataTable[w->item.useItem].hp_restored);
 #if VERSION >= VERSION_JP

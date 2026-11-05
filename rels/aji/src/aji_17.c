@@ -356,6 +356,8 @@ void noiseDisp(CameraId cameraId, void* param) {
     GXTexCoord2s16(1, 1);
     GXPosition3s16(gp->fbWidth / 2, -gp->efbHeight / 2, 0);
     GXTexCoord2s16(1, 0);
+    // BUG: -gp->fbWidth without the / 2 of the other corners, so this corner sits half a screen further left and
+    // the quad is a trapezoid (the noise texture is skewed across its lower left).
     GXPosition3s16(-gp->fbWidth, -gp->efbHeight / 2, 0);
     GXTexCoord2s16(0, 0);
 }

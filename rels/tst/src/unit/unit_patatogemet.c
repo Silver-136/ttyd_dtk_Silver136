@@ -148,6 +148,8 @@ BattleUnitKind unit_patatogemet = {
 #if VERSION >= VERSION_US
     &regist_pata,
 #else
+    // BUG (JP and early demos): the winged form points at the grounded form's table regist, so regist_pata
+    // is never used; US and later point it at regist_pata.
     &regist,
 #endif
     1,

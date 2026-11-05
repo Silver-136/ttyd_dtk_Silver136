@@ -778,6 +778,8 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
     f32 x, y, z;
     GXColor col;
     if (w->star.state >= 6) {
+        // BUG: one timer for all five stars, stepped on each call: star_disp2D calls this 5 times a frame, so the
+        // 30-step fade ends after 6 frames and each star of a frame fades a step further than the one before.
         w->star.timer++;
         if (w->star.timer > 30) {
             w->star.timer = 30;

@@ -282,6 +282,8 @@ void mot_ship_post(void) {
         marioPaperOff();
     }
 #if VERSION <= VERSION_DEMO_JP
+    // BUG (early demos): MARIO_DISP_FLAG_NO_DIR_FLIP and the ship's 40 x 40 collision box set by the ship motion
+    // are left as they are when it ends here (JP and later restore both).
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 #else

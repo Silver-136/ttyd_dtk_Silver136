@@ -449,6 +449,8 @@ static EVT_BEGIN(normal_attack_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+        // BUG: this script has no LABEL(99): evtSearchLabel returns the GOTO's own argument word, so 99 runs as
+        // an opcode and the script goes on after END_IF with LW(3) == -1.
         GOTO(99)
     END_IF
 
@@ -696,6 +698,8 @@ static EVT_BEGIN(move_event)
             CALL_CHILD(PTR(subsetevt_confuse_flustered))
             RETURN
         END_IF
+        // BUG: this script has no LABEL(99): evtSearchLabel returns the GOTO's own argument word, so 99 runs as
+        // an opcode and the script goes on after END_IF with LW(3) == -1.
         GOTO(99)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -703,6 +707,8 @@ static EVT_BEGIN(move_event)
     SET_VALUE(LW(12), 80)
     LABEL(0)
 #if VERSION >= VERSION_DEMO_EU
+    // BUG (PAL versions): resets LW(15) on every LABEL(0) pass, so it is at most 1 at the LW(15) >= 2 test
+    // after the loop and the 145-frame minimum wait never applies.
     SET_VALUE(LW(15), 0)
 #endif
     CALL(teresa_check_teresa, LW(3), LW(5))

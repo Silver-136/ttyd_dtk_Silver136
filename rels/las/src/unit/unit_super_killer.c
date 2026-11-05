@@ -340,6 +340,8 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(1), LW(2))
     ADD(LW(2), 10)
     ADD(LW(1), 30)
+    // BUG: attack_event never sets LW(10) (0 from evtEntry), so the offset comes from battle unit 0's kind
+    // instead of this unit's.
     CALL(_add_star_point_disp_offset, LW(10), LW(3), LW(1), LW(2))
     CALL(evt_eff, STRING(""), STRING("star_point"), 0, LW(3), LW(1), LW(2), LW(0), 0, 0, 0, 0, 0, 0, 0)
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

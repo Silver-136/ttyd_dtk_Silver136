@@ -311,6 +311,7 @@ USER_FUNC(evt_eff) {
             entry = effParticleEntry(int2, float3, float4, float5, float6, float7, float8, int9, int10);
             break;
         case 9:
+            // BUG: the entry is not stored, so effName is never set on it and it cannot be found by name later.
             effStardustEntry(int2, int8, int9, float3, float4, float5, float6, float7);
             break;
         case 44:
@@ -717,6 +718,7 @@ USER_FUNC(evt_eff64) {
             break;
 
         case 63:
+            // BUG: the entry is not stored, so effName is never set on it and it cannot be found by name later.
             effMagicHoraoN64Entry(int2, float3, float4, float5, float6, int7, float8, int9, float10, int11);
             break;
 

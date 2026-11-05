@@ -479,6 +479,8 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(subsetevt_confuse_flustered)
             RETURN
         END_IF
+        // BUG: skips the -30 drop below, but LABEL(99) still adds 30 to a hanging unit, so it ends 30 units above
+        // where it hung.
         GOTO(99)
     END_IF
 

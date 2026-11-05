@@ -1414,6 +1414,8 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
             winIconSet(id, (Vec){mx + pos_tbl[k][0], 45.0f + (my + pos_tbl[k][1]), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
         }
         if (w->log.pose != -1) {
+            // BUG: reads the loop length of the Mario page's pose (mario.poseId), not of the map marker's own pose
+            // (log.pose), so the marker's local time wraps at another animation's length.
             animPoseGetAnimPosePtr(w->mario.poseId);
             data = animPoseGetAnimDataPtr(w->mario.poseId);
             scale = 1.5f;

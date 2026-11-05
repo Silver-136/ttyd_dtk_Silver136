@@ -347,6 +347,8 @@ static EVT_BEGIN(damage_check_sub)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
+        // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
         GOTO(98)
         CASE_END
     END_SWITCH
@@ -741,6 +743,8 @@ EVT_BEGIN(normal_attack_event_confuse)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
+        // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
         GOTO(98)
         CASE_END
     END_SWITCH
@@ -852,6 +856,8 @@ EVT_BEGIN(renzoku_attack_event_confuse)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // BUG: the script has no LABEL(98): evtSearchLabel falls back to the GOTO's own argument, run as opcode 98
+        // (SET_SPD, reading the next word as the speed), and the script goes on to LABEL(90) as for a miss.
         GOTO(98)
         CASE_END
     END_SWITCH

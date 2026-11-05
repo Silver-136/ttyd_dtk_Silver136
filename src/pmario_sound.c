@@ -9519,6 +9519,8 @@ void psndBGMMain(void) {
         if (bgm->listId == -1) {
             continue;
         }
+        // BUG: checks the stream table for every BGM, also for songs, whose streamId is a song channel: an
+        // unrelated stream with that index is unmuted.
         if (SoundSSCheck(bgm->streamId) & SOUND_STREAM_FLAG_MUTE) {
             SoundSSMuteOff(bgm->streamId);
         }
@@ -9586,6 +9588,8 @@ void psndBGMMain(void) {
                         SoundSSFadeoutCh(bgm->streamId);
                     } else {
                         SoundSetFadeTime(0, 100);
+                        // BUG: calls the fade-in, not SoundSongFadeoutCh: the song is never stopped and keeps its
+                        // last (faded) volume after listId is cleared.
                         SoundSongFadeinCh(bgm->streamId);
                     }
                 }

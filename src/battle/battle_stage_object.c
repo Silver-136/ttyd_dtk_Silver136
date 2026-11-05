@@ -4062,6 +4062,8 @@ USER_FUNC(_object_fall_attack) {
                         if (e->unitId == o2->unitId) {
                             o2->delay = delay;
                             delay += irand(22) + 20;
+                            // BUG: o2 is an earlier entry whose pre-check already ran, and forceHit is read only by
+                            // that pre-check, so setting it here changes nothing.
                             if (o2->noAc) {
                                 o2->forceHit = 1;
                             }

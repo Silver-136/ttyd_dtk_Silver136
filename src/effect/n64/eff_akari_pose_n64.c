@@ -239,6 +239,7 @@ void effAkariPoseDisp(CameraId cameraId, void* param) {
         PSMTXConcat(camMtx, mtx, mtx);
         GXLoadPosMtxImm(mtx, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
+        // BUG: stage 0 is GX_REPLACE (texture only), so this alpha never reaches the drawing: the flares do not fade.
         GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, (alpha * work->alpha) >> 8});
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 6);
         tri2(0, 1, 2, 0, 0, 2, 3, 0);

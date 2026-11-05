@@ -280,6 +280,8 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table))
     CALL(btlevtcmd_ReplaceParts, LW(10), LW(11), PTR(parts), 1)
     CALL(btlevtcmd_AnimeChangePoseDirect, LW(10), LW(11), STRING("NKT_D_1"))
+    // BUG: nothing installs the grounded `regist` table (no btlevtcmd_SetRegistStatus; `regist` is never
+    // referenced), so the unit keeps regist_patapata after it falls.
     CALL(btlevtcmd_ChangeKind, LW(10), UNIT_SHADY_KOOPA)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_KIND_CHANGED)
     SET_VALUE(LW(11), 1)
@@ -1145,6 +1147,8 @@ static EVT_BEGIN(ura_attack_event)
     // The shell missed: it rolls on past the target.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 100)
+    // BUG: LW(5) held this unit's Y, but PreCheckDamage overwrote it with the result code (2..6 here), so the
+    // move goes to that height.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 1)
     GOTO(97)
 

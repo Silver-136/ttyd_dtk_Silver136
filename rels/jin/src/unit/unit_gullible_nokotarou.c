@@ -600,6 +600,8 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
 #if VERSION <= VERSION_DEMO_JP
+        // BUG (early demos): offsets the miss overshoot by the target's (LW(3)) facing instead of his own,
+        // so he ends 40 units on the side the target faces; JP and later use UNIT_ID_SELF.
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 40)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
 #else
@@ -703,6 +705,8 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
     CALL(evt_btl_camera_set_zoom, 0, 400)
     WAIT_MS(500)
+    // BUG: LW(15) holds the face direction from CalculateFaceDirection (1 or -1), not an event id, so this
+    // deletes whatever event has id 1 or -1, if one is running.
     DELETE_EVENT(LW(15))
     CALL(evt_snd_sfxoff, LW(13))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_NOKO_SHUBIBIN2"), EVT_NULLPTR, 0, LW(13))

@@ -2315,6 +2315,8 @@ EVT_BEGIN(batten_leader_thunder_attack_event)
     END_IF
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
+    // BUG: no ChoiceSamplingEnemy sets LW(3) here (GetSelectEnemy below does), so the no-target test and
+    // AttackDeclare use whatever LW(3) and LW(4) held before (0 in a fresh attack event).
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -2430,6 +2432,8 @@ EVT_BEGIN(batten_leader_fire_attack_event)
     END_IF
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
+    // BUG: no ChoiceSamplingEnemy sets LW(3) here (GetSelectEnemy below does), so the no-target test reads
+    // whatever LW(3) held before (0 in a fresh attack event).
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -3043,6 +3047,8 @@ USER_FUNC(_hp_gauge_flag_on) {
 u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     BattenSpline* sp;
 
+    // BUG: allocates before the empty-slot test, so an empty slot returns without freeing sp (it stays in the
+    // battle heap).
     sp = BTL_ALLOC(sizeof(BattenSpline));
     if (unit->work[UNIT_WORK_SATELLITE + n] == -1) {
         return FALSE;
