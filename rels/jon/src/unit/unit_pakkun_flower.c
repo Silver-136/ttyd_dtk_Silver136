@@ -624,7 +624,7 @@ static USER_FUNC(shadow_scale_memory) {
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 
-    if (_battleWorkPointer->stageObjectWork.flags & 0x20) {
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], 1);

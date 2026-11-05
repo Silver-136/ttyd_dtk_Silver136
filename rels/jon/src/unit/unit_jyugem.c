@@ -327,22 +327,22 @@ static EVT_BEGIN(damage_event)
             // Otherwise, unless the hit is one of a few special kinds, a lingering status (poison, burn, tiny,
             // defense down, slow or allergic) makes it fumble the egg a short way and hide it; it still counts
             // as holding it.
-            IF_INT_EQUAL(LW(0), 22)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_STATUS_ONLY)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 30)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_NO_DAMAGE)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 31)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_AVOID_TOP_SPIKY)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 38)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_LUCKY)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 39)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_DODGY)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 41)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_PROTECTED)
                 GOTO(90)
             END_IF
             CALL(btlevtcmd_CheckStatus, LW(10), STATUS_POISON, LW(15))

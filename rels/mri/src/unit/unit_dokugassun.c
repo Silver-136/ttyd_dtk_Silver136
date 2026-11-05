@@ -376,7 +376,7 @@ static EVT_BEGIN(poisongas_event)
     // It puffs out 20 clouds of poison gas, one every 3 frames, over the opposing side.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetEnemyBelong, LW(3), LW(10))
-        IF_INT_EQUAL(LW(10), 0)
+        IF_INT_EQUAL(LW(10), ALLIANCE_PLAYER)
             LOOP(20)
                 CALL(eff_poison_breath, 1)
                 WAIT_FRAMES(3)

@@ -122,7 +122,7 @@ static USER_FUNC(_steal_item) {
 #if VERSION >= VERSION_DEMO_EU
         for (i = 0; i < heldMax; i++) {
 #else
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < MAX_HELD_ITEMS; i++) {
 #endif
             if (pouch->heldItems[i] != 0) {
                 count++;
@@ -136,7 +136,7 @@ static USER_FUNC(_steal_item) {
             s32 j;
 
             r -= count;
-            for (j = 0; j < 200; j++) {
+            for (j = 0; j < MAX_BADGES; j++) {
                 if (pouch->badges[j] != 0) {
                     if (--r < 0) {
                         item = pouch->badges[j];
@@ -150,7 +150,7 @@ static USER_FUNC(_steal_item) {
 #if VERSION >= VERSION_DEMO_EU
             for (k = 0; k < heldMax; k++) {
 #else
-            for (k = 0; k < 20; k++) {
+            for (k = 0; k < MAX_HELD_ITEMS; k++) {
 #endif
                 if (pouch->heldItems[k] != 0) {
                     if (--r < 0) {
