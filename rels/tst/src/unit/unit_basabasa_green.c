@@ -13,11 +13,7 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 #include "system.h"
-
-// Unit work slots of the Green Swoopula.
-enum {
-    UNIT_WORK_START_FLYING = 0, // set by the battle setup: 1 when it starts already flying
-};
+#include "battle/unit/unit_basabasa_green.h"
 
 BattleUnitKind unit_basabasa_green;
 static BattleUnitDefense defence;

@@ -27,16 +27,7 @@
 #include "driver/mapdrv.h"
 #include "battle/battle_damage.h"
 #include "battle/battle_camera.h"
-
-// Unit work slots of this unit (btlevtcmd_SetUnitWork / GetUnitWork).
-enum {
-    UNIT_WORK_SATELLITE_COUNT = 0,   // Mini-Yux it has out (from the battle setup at first, updated by unison_phase_event)
-    UNIT_WORK_WAWAWA_ATTACK = 1,   // ring attack in progress: 0 the single ring (wakka), 1 the combined rings (wawawa)
-    UNIT_WORK_SHOTS_DONE = 2,        // rings of the combined attack that finished their flight
-    UNIT_WORK_BARRIER_EFFECT = 3,    // EffectEntry of the barrier effect while a Mini-Yux is left (C only)
-    UNIT_WORK_SATELLITE = 4,      // slots 4-7: unit ids of its Mini-Yux (-1: none; this Yux uses 4-5)
-    UNIT_WORK_SATELLITE_SPLINE = 10, // slots 10-11: spline state of each Mini-Yux's move (C only)
-};
+#include "battle/unit/unit_barriern.h"
 
 s32 irand(s32 scalar);
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);

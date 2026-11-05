@@ -16,12 +16,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_damage.h"
 #include "system.h"
-
-// Unit work slots of the Pokey (btlevtcmd_SetUnitWork / GetUnitWork).
-enum {
-    UNIT_WORK_BODY_COUNT = 0,       // body segments left (4 at the start); picks the target part and the height
-    UNIT_WORK_CALL_DEPTH = 1, // Inherited summon depth (call_friend_event); a new Pokey gets its caller's value + 1
-};
+#include "battle/unit/unit_sambo.h"
 
 BattleUnitKind unit_sambo;
 static BattleUnitDefense defence;

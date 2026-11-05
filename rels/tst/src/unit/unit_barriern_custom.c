@@ -27,22 +27,7 @@
 #include "battle/battle_damage.h"
 #include "battle/battle_camera.h"
 #include "battle/unit_work.h"
-
-// Unit work slots of the X-Yux (btlevtcmd_SetUnitWork / GetUnitWork, unit->work)
-enum {
-    UNIT_WORK_SATELLITE_COUNT = 0, // Mini-X-Yux in orbit (starts from the battle setup; reset after each re-split)
-    UNIT_WORK_WAWAWA_ATTACK = 1, // 1 while the combined ring attack (wawawa) runs: rings fly blurred
-    UNIT_WORK_RINGS_DONE = 2,      // rings of the combined attack that have finished their flight
-    UNIT_WORK_BARRIER_EFFECT = 3,  // barrier effect (EffectEntry*) shown while a satellite is alive
-    UNIT_WORK_SATELLITE = 4,     // unit id of Mini-X-Yux 1, or -1 (slots 4-7 hold satellites 1-4)
-    UW_BARRIERN_CUSTOM_SATELLITE_2 = 5,     // unit id of Mini-X-Yux 2, or -1
-    UW_BARRIERN_CUSTOM_SATELLITE_3 = 6,     // unit id of Mini-X-Yux 3, or -1
-    UW_BARRIERN_CUSTOM_SATELLITE_4 = 7,     // unit id of Mini-X-Yux 4, or -1
-    UNIT_WORK_SATELLITE_SPLINE = 10,       // SatelliteSpline* of the move in progress for satellite 1 (slots 10-13 for 1-4)
-    UW_BARRIERN_CUSTOM_SPLINE_2 = 11,       // SatelliteSpline* for satellite 2
-    UW_BARRIERN_CUSTOM_SPLINE_3 = 12,       // SatelliteSpline* for satellite 3
-    UW_BARRIERN_CUSTOM_SPLINE_4 = 13,       // SatelliteSpline* for satellite 4
-};
+#include "battle/unit/unit_barriern_custom.h"
 
 s32 irand(s32 scalar);
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
@@ -2003,25 +1988,25 @@ static USER_FUNC(outSplineTableSet) {
         case 2:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
             part->work[2] = (EvtWord)splineTableOut2_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UW_BARRIERN_CUSTOM_SATELLITE_2]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
             part->work[2] = (EvtWord)splineTableOut2_2;
             break;
         case 3:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
             part->work[2] = (EvtWord)splineTableOut3_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UW_BARRIERN_CUSTOM_SATELLITE_2]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
             part->work[2] = (EvtWord)splineTableOut3_2;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UW_BARRIERN_CUSTOM_SATELLITE_3]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 2]), 1);
             part->work[2] = (EvtWord)splineTableOut3_3;
             break;
         case 4:
             part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE]), 1);
             part->work[2] = (EvtWord)splineTableOut4_1;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UW_BARRIERN_CUSTOM_SATELLITE_2]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 1]), 1);
             part->work[2] = (EvtWord)splineTableOut4_2;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UW_BARRIERN_CUSTOM_SATELLITE_3]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 2]), 1);
             part->work[2] = (EvtWord)splineTableOut4_3;
-            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UW_BARRIERN_CUSTOM_SATELLITE_4]), 1);
+            part = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + 3]), 1);
             part->work[2] = (EvtWord)splineTableOut4_4;
             break;
     }

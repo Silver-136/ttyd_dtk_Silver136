@@ -13,10 +13,7 @@
 #include "data_tables.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_START_FLYING 0 // setup value: 1 = leaves the ceiling at once and flies (init_event runs ceil_sky_event), 0 = starts hanging from the ceiling
-
+#include "battle/unit/unit_basabasa_chururu.h"
 
 BattleUnitKind unit_basabasa_chururu;
 static BattleUnitDefense defence;

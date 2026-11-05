@@ -12,11 +12,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SPIN_DONE 0  // 1 ends the sibling loop that spins the shell during the attack
-#define UNIT_WORK_SPIN_SPEED 1 // degrees per frame of that spin around y (20, 40, 10)
-
+#include "battle/unit/unit_nokonoko_fighter.h"
 
 BattleUnitKind unit_nokonoko_fighter;
 static PoseTableEntry pose_table[18];

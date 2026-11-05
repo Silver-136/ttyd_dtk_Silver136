@@ -18,10 +18,7 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_GREEN 0    // 1 on the green Iron Cleft (init_event2), 0 on the red one (init_event1); only the red one runs the phase and damage messages
-#define UNIT_WORK_OTHER_ID 1 // unit id of the other Iron Cleft (get_id); it speaks the second line of the phase and damage messages
+#include "battle/unit/unit_iron_sinemon2.h"
 
 static USER_FUNC(get_id);
 static USER_FUNC(yoshi_exist);

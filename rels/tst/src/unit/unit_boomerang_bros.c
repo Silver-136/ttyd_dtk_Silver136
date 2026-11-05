@@ -14,18 +14,7 @@
 #include "battle/battle_damage.h"
 #include "battle/battle_camera.h"
 #include "system.h"
-
-// Unit work slots of the Boomerang Bro (btlevtcmd_SetUnitWork / GetUnitWork / AddUnitWork).
-enum {
-    UNIT_WORK_RETURNED = 0,      // boomerangs back in his hand this attack
-    UW_BOOMERANG_BROS_TARGET_1 = 1,      // unit id of the first target (-1 if none)
-    UW_BOOMERANG_BROS_TARGET_2 = 2,      // unit id of the second target (-1 if none)
-    UW_BOOMERANG_BROS_TARGET_PART_1 = 3, // part of the first target
-    UW_BOOMERANG_BROS_TARGET_PART_2 = 4, // part of the second target
-    UNIT_WORK_TARGET1_HIT = 5,      // result of the outbound hit on the first target
-    UNIT_WORK_TARGET2_HIT = 6,      // result of the outbound hit on the second target
-    UNIT_WORK_AC_DEFENCE_DONE = 7,       // 1 once the action-command defence result has been taken for this pass
-};
+#include "battle/unit/unit_boomerang_bros.h"
 
 BattleUnitKind unit_boomerang_bros;
 static BattleUnitDefense defence;
@@ -428,8 +417,8 @@ EVT_BEGIN(boomerang_move_event)
             END_IF
             SWITCH(LW(9))
                 CASE_EQUAL(0)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_BOOMERANG_BROS_TARGET_1, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_BOOMERANG_BROS_TARGET_PART_1, LW(4))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(9), 1)
                     BREAK_SWITCH
@@ -445,8 +434,8 @@ EVT_BEGIN(boomerang_move_event)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, LW(0))
                 CASE_END
                 CASE_EQUAL(1)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_BOOMERANG_BROS_TARGET_2, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_BOOMERANG_BROS_TARGET_PART_2, LW(4))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_PART, LW(4))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(9), 2)
                     BREAK_SWITCH
@@ -462,8 +451,8 @@ EVT_BEGIN(boomerang_move_event)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, LW(0))
                 CASE_END
                 CASE_EQUAL(2)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_BOOMERANG_BROS_TARGET_2, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_BOOMERANG_BROS_TARGET_PART_2, LW(4))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_PART, LW(4))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(9), 3)
                     BREAK_SWITCH
@@ -483,8 +472,8 @@ EVT_BEGIN(boomerang_move_event)
                 SET_VALUE(LW(9), 3)
                 CASE_END
                 CASE_EQUAL(3)
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_BOOMERANG_BROS_TARGET_1, LW(3))
-                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UW_BOOMERANG_BROS_TARGET_PART_1, LW(4))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1, LW(3))
+                CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_PART, LW(4))
                 IF_INT_EQUAL(LW(3), -1)
                     SET_VALUE(LW(9), 4)
                     BREAK_SWITCH
@@ -566,8 +555,8 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_boomerang_bros_attack))
-    SET_VALUE(LW(0), UW_BOOMERANG_BROS_TARGET_1)
-    SET_VALUE(LW(1), UW_BOOMERANG_BROS_TARGET_PART_1)
+    SET_VALUE(LW(0), UNIT_WORK_TARGET1)
+    SET_VALUE(LW(1), UNIT_WORK_TARGET1_PART)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, 0)
@@ -630,8 +619,8 @@ static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_boomerang_bros_renzoku_attack))
-    SET_VALUE(LW(0), UW_BOOMERANG_BROS_TARGET_1)
-    SET_VALUE(LW(1), UW_BOOMERANG_BROS_TARGET_PART_1)
+    SET_VALUE(LW(0), UNIT_WORK_TARGET1)
+    SET_VALUE(LW(1), UNIT_WORK_TARGET1_PART)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, 0)

@@ -1,7 +1,8 @@
 #pragma once
 
 // BattleUnit.work / BattleUnitPart.work slots that C code reads as well as the unit's own scripts. Slots only a
-// unit's own script uses are named in that unit's file (UNIT_WORK_* / PARTS_WORK_* defines).
+// unit's own script uses are named in that unit's file (UNIT_WORK_* / PARTS_WORK_* defines), or in
+// include/battle/unit/<unit>.h when the unit is built in several RELs.
 
 // Any unit: added to the defence of its parts with kPartUnitWorkDefense (BattleCalculateDamage)
 #define UNIT_WORK_PART_DEFENSE 1

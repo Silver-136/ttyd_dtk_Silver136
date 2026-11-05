@@ -26,16 +26,7 @@
 #include "eff/n64/eff_kemuri9_n64.h"
 #include "battle/battle_damage.h"
 #include "battle/unit_work.h"
-
-// Unit work slots of Hooktail.
-enum {
-    UNIT_WORK_POWER_DOWN = 0,    // Attack FX R cricket hits so far (up to 20); taken off her attack power
-    // 1: UNIT_WORK_PART_DEFENSE (battle/unit_work.h), defence change from cricket hits (down to -2), read by GONBABA_DEFENSE_ATTR
-    UNIT_WORK_MESSAGE_STEP = 2,   // which cricket speech she gives next (0-3)
-    UNIT_WORK_NEGOTIATED = 3,      // 1 once her plea for mercy (negotiation_event) has run
-    UNIT_WORK_EATEN_AUDIENCE = 4, // swallowed spectators left that a head hit can shake loose
-    UNIT_WORK_ATTACK_STEP = 5,   // first attacks: 0 fire breath next, 1 stomp next, 2 random
-};
+#include "battle/unit/unit_boss_gonbaba.h"
 
 u32 weaponGetPower_Gonbaba(BattleUnit* attacker, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part);
 static USER_FUNC(_leg_smoke_effect);

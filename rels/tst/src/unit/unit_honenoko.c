@@ -17,13 +17,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
-
-// Unit work slots of the Dull Bones.
-enum {
-    UNIT_WORK_SPIN_DONE = 0,  // set to 1 when the thrown bone lands; stops its spin loop
-    UNIT_WORK_REWARD_GIVEN = 1, // 1 once the coins, experience and star points were awarded
-    UNIT_WORK_REBIRTH_TURNS = 2, // turns left until the collapsed Dull Bones rebuilds itself (0: standing)
-};
+#include "battle/unit/unit_honenoko.h"
 
 static USER_FUNC(honenoko_copy_status);
 

@@ -21,10 +21,7 @@
 #include "battle/battle_weapon_power.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_BUNSIN 4       // 0 for the original: wait_event then also restarts the poses of the copies (mahorn_get_bunsin); nothing in this file sets it nonzero
-#define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry* of the magic shot (effMahorn2Entry, eff_magic); eff_magic_get_posX reads the x of its type-3 element
+#include "battle/unit/unit_mahorn.h"
 
 double __fabs(double x);
 /** Absolute value of a double. */
@@ -541,7 +538,7 @@ static EVT_BEGIN(init_event)
     CALL(set_hand_dest, UNIT_ID_SELF, 5, FLOAT(25.0f), FLOAT(10.0f), FLOAT(10.0f))
     SPAWN_EVENT(PTR(hand_ctrl_event))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 6, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

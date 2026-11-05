@@ -27,9 +27,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_FACE_HIDDEN 0 // 1 while it hides its face (kaokakusi_event, pose_table_kaokakusi); surprise_event and breath_event reveal it (0, pose_table); attack_event picks surprise/breath while 1
+#include "battle/unit/unit_atmic_teresa.h"
 
 typedef struct AtmTeresa {
     u8 state;

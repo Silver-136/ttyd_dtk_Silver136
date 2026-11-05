@@ -15,12 +15,7 @@
 #include "battle/battle_status_effect.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_ON_CEILING 0 // nonzero at battle start puts it on the ceiling (init_event2: ceiling tables, y 130); cleared when it drops
-#define UNIT_WORK_SPIN_DONE 1  // 1 ends the sibling loop that spins the shell during the attack
-#define UNIT_WORK_SPIN_SPEED 2 // degrees per frame of that spin around y (10, 20)
-
+#include "battle/unit/unit_patatogemet.h"
 
 BattleUnitKind unit_patatogemet;
 static BattleWeapon weapon_patamet_attack;

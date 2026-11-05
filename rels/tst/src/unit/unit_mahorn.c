@@ -21,13 +21,7 @@
 #include "battle/battle_damage.h"
 #include "battle/battle_status_effect.h"
 #include "system.h"
-
-// Unit work slots of the Wizzerd (slots 0-3 hold the hand offset buffers of hand_init).
-enum {
-    UNIT_WORK_BUNSIN = 4,      // set on a copy of the Wizzerd; only the original moves its copies
-    UW_MAHORN_COPY_REMOVED = 6, // set when a copy is being removed (the Dark Wizzerd's scripts); cleared here
-    UNIT_WORK_MAGIC_EFFECT = 7, // EffectEntry of the magic bolt started by eff_magic
-};
+#include "battle/unit/unit_mahorn.h"
 
 /** Absolute value of a double (__fabs), kept as an inline helper for eff_magic's speed calculation. */
 static inline double mahorn_fabs(double x) {
@@ -581,7 +575,7 @@ static EVT_BEGIN(init_event)
     CALL(set_hand_dest, UNIT_ID_SELF, 5, FLOAT(25.0f), FLOAT(10.0f), FLOAT(10.0f))
     SPAWN_EVENT(hand_ctrl_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_MAHORN_COPY_REMOVED, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

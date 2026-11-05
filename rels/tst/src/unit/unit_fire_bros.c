@@ -15,12 +15,7 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
 #include "battle/battle_camera.h"
-
-// Unit work slots of this unit (btlevtcmd_SetUnitWork / GetUnitWork).
-enum {
-    UNIT_WORK_FIRE_THROWN = 0,   // fireballs thrown so far in the barrage (nagemakuri) attack
-    UNIT_WORK_FIRE_DONE = 1, // fireballs whose flight has finished (fire_move_event counts them)
-};
+#include "battle/unit/unit_fire_bros.h"
 
 BattleUnitKind unit_fire_bros;
 static BattleUnitDefense defence;

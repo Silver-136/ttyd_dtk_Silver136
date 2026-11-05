@@ -18,13 +18,7 @@
 #include "tst.h"
 #include "battle/battle_damage.h"
 #include "battle/battle_camera.h"
-
-// Unit work slots of the Gold Fuzzy (btlevtcmd_SetUnitWork / GetUnitWork).
-enum {
-    UNIT_WORK_CHOROGUN_CALLED = 0, // 1 once the Fuzzy Horde has been spawned and called in
-    UNIT_WORK_CHOROGUN_GONE = 1,   // 1 once the horde has been sent away (so it only happens once)
-    UNIT_WORK_CHOROGUN = 2,   // unit id of the spawned Fuzzy Horde
-};
+#include "battle/unit/unit_gold_chorobon.h"
 
 USER_FUNC(get_gold_chorobon_id);
 

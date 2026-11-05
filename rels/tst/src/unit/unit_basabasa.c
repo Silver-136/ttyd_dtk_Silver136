@@ -12,11 +12,7 @@
 #include "battle/battle_damage.h"
 #include "battle/battle_camera.h"
 #include "system.h"
-
-// Unit work slots of the Swooper (initial values come from the battle setup).
-enum {
-    UNIT_WORK_START_FLYING = 0, // 1: starts the battle already in flight instead of hanging from the ceiling
-};
+#include "battle/unit/unit_basabasa.h"
 
 BattleUnitKind unit_basabasa;
 static BattleUnitDefense defence;

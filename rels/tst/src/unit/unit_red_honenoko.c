@@ -17,13 +17,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
-
-// Unit work slots of the Red Bones (btlevtcmd_Get/SetUnitWork).
-enum {
-    UNIT_WORK_SPIN_DONE = 0,    // set to 1 when the thrown bone lands: ends the bone's spin loop
-    UNIT_WORK_REWARD_GIVEN = 1, // 1 once its coins and experience were paid out
-    UNIT_WORK_REVIVE_TURNS = 2, // turns left while collapsed (2, 3 or 4); at 0 it rebuilds itself
-};
+#include "battle/unit/unit_red_honenoko.h"
 
 static USER_FUNC(honenoko_copy_status);
 extern BattleUnitKind unit_honenoko;

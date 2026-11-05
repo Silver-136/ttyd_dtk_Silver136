@@ -19,11 +19,7 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SPIN_DONE 0   // 1 ends the sibling loop that spins the shell during the attack
-#define UNIT_WORK_SPIN_SPEED 1  // degrees per frame of that spin around y (5, 10, 20, 40)
-#define UNIT_WORK_AURA_EFFECT 2 // EffectEntry* of the effUranokoEntry aura that eff_aura keeps on the unit
+#include "battle/unit/unit_ura_pata.h"
 
 static USER_FUNC(eff_aura);
 

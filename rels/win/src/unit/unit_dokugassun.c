@@ -21,9 +21,7 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_LOWERED 0 // 1 while it hangs low (y 10, hammer and shell can reach it), 0 while raised (y 40); unison_phase_event flips it at random (25 %)
+#include "battle/unit/unit_dokugassun.h"
 
 static USER_FUNC(eff_poison_barrier);
 static USER_FUNC(eff_poison_breath);

@@ -16,11 +16,7 @@
 #include "battle/battle_database_common.h"
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_THROW_TARGET 0      // slots 0-4: target unit of each hammer in nagemakuri_attack_event (5 random picks from hammer_bros_nagemakuri_set_target; 4 are thrown) (slots 0-4)
-#define UNIT_WORK_THROW_TARGET_PART 5 // slots 5-9: target part for slots 0-4 (slots 5-9)
-#define UNIT_WORK_THROW_HIT 10        // slots 10-14: 1 once a non-final hammer hit the target of throw n (PreCheckDamage result 1); the last hammer at that target then hits with the final-hit flag without a new check; slot 10 does the same for the renzoku attack; attack_event clears them (slots 10-14)
+#include "battle/unit/unit_hammer_bros.h"
 
 static USER_FUNC(hammer_bros_nagemakuri_set_target);
 static void hammer_bros_get_next_target(s32* unitIdx, s32* partIdx);

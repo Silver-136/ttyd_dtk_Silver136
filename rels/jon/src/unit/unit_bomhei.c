@@ -14,10 +14,7 @@
 #include "battle/battle_status_effect.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SPARK_SFX 0 // sound id of the looping SFX_ENM_BOMB_WAIT1 that wait_event_spark starts once lit; -1 = none; bomb_event stops it
-
+#include "battle/unit/unit_bomhei.h"
 
 BattleUnitKind unit_bomhei;
 static BattleUnitDefense defence;

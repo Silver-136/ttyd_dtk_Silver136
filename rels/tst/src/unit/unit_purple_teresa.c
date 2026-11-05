@@ -16,11 +16,7 @@
 #include "battle/battle_damage.h"
 #include "battle/battle_status_effect.h"
 #include "system.h"
-
-// Unit work slots of the Dark Boo.
-enum {
-    UNIT_WORK_LIFTED = 0, // 1 once it has done the group move (move_event_sub); cleared at init
-};
+#include "battle/unit/unit_purple_teresa.h"
 
 static USER_FUNC(teresa_check_move);
 static USER_FUNC(teresa_check_teresa);

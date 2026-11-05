@@ -13,11 +13,7 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 #include "system.h"
-
-// Unit work slots of the Swoopula.
-enum {
-    UNIT_WORK_START_FLYING = 0, // 1 (from the battle setup): starts off the ceiling, already flying
-};
+#include "battle/unit/unit_basabasa_chururu.h"
 
 BattleUnitKind unit_basabasa_chururu;
 static BattleUnitDefense defence;

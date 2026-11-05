@@ -25,24 +25,7 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
 #include "battle/battle_camera.h"
-
-// Unit work slots of the Pider (also read in C by piders_get_first_pos_attr and piders_draw_yarn).
-enum {
-    UNIT_WORK_LOW = 0,            // 1 while it hangs low (y 10), in reach of hammers and shell tosses; 0 while high (y 70)
-    UNIT_WORK_THREAD_ALPHA = 1,   // alpha of its thread: 255 while shown; battle_end_event sets 254 to fade it out
-    UNIT_WORK_THREAD_END_Y = 2,       // lower end of its thread (its hanging height); the thread is drawn up to y 400
-    UNIT_WORK_FIRST_DROP = 3,     // 1 until it first drops down (that drop plays SFX_ENM_PAIDA_MOVE1)
-    UNIT_WORK_WINDUP_ANGLE = 4,      // angle of its throwing arm (part 2) after the wind-up
-    UNIT_WORK_TARGET_UNIT = 5,  // rapid-fire attack: unit of the first target
-    UW_PIDERS_TARGET_UNIT_2 = 6,  // rapid-fire attack: unit of the second target
-    UW_PIDERS_TARGET_UNIT_3 = 7,  // rapid-fire attack: unit of the third target
-    UNIT_WORK_TARGET_PART = 8,  // rapid-fire attack: part of the first target
-    UW_PIDERS_TARGET_PART_2 = 9,  // rapid-fire attack: part of the second target
-    UW_PIDERS_TARGET_PART_3 = 10, // rapid-fire attack: part of the third target
-    UNIT_WORK_TARGET_HIT = 11,  // rapid-fire attack: 1 once the first target was hit (target unit slot plus 6)
-    UW_PIDERS_TARGET_HIT_2 = 12,  // rapid-fire attack: 1 once the second target was hit
-    UW_PIDERS_TARGET_HIT_3 = 13,  // rapid-fire attack: 1 once the third target was hit
-};
+#include "battle/unit/unit_piders.h"
 
 static void piders_get_next_target(s32* unitIdx, s32* partIdx);
 static void piders_get_target(s32* unitIdx, s32* partIdx);
@@ -850,8 +833,8 @@ EVT_END()
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_HIT, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_PIDERS_TARGET_HIT_2, 0)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_PIDERS_TARGET_HIT_3, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_HIT + 1, 0)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_HIT + 2, 0)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -1153,11 +1136,11 @@ static EVT_BEGIN(renzoku_attack_event)
     END_IF
     CALL(piders_renzoku_attack_set_target, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT, LW(0))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_PIDERS_TARGET_UNIT_2, LW(2))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_PIDERS_TARGET_UNIT_3, LW(4))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT + 1, LW(2))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT + 2, LW(4))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART, LW(1))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_PIDERS_TARGET_PART_2, LW(3))
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_PIDERS_TARGET_PART_3, LW(5))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART + 1, LW(3))
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART + 2, LW(5))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT, LW(3))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART, LW(4))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

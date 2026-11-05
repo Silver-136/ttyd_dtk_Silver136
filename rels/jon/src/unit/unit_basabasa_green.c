@@ -13,10 +13,7 @@
 #include "data_tables.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_START_FLYING 0 // 1 (from the setup, all jon setups): init_event runs ceil_sky_event so it starts flying instead of hanging from the ceiling
-
+#include "battle/unit/unit_basabasa_green.h"
 
 BattleUnitKind unit_basabasa_green;
 static BattleUnitDefense defence;

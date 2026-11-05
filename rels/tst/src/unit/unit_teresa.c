@@ -16,11 +16,7 @@
 #include "battle/battle_damage.h"
 #include "battle/battle_status_effect.h"
 #include "system.h"
-
-// Unit work slots of the Boo (btlevtcmd_Get/SetUnitWork).
-enum {
-    UNIT_WORK_RAISED = 0, // 1 once move_event_sub has lifted it; Boos still at 0 join the next group move
-};
+#include "battle/unit/unit_teresa.h"
 
 static USER_FUNC(teresa_check_move);
 static USER_FUNC(teresa_check_teresa);

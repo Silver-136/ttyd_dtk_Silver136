@@ -28,11 +28,7 @@
 #include "system.h"
 #include "libc_decls.h"
 #include "battle/battle_damage.h"
-
-// Unit work slots of the Atomic Boo (btlevtcmd_SetUnitWork / GetUnitWork)
-enum {
-    UNIT_WORK_FACE_HIDDEN = 0, // 1 while it hides its face (pose_table_kaokakusi), 0 once it shows it again
-};
+#include "battle/unit/unit_atmic_teresa.h"
 
 AtmTeresa* teresa;
 #define atmic_teresa_scale atmic_teresa_scale

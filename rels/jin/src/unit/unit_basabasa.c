@@ -12,10 +12,7 @@
 #include "battle/battle_camera.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_START_FLYING 0 // 1 from the battle setup (unitWork) = starts in flight: init_event runs ceil_sky_event (off the ceiling, airborne)
-
+#include "battle/unit/unit_basabasa.h"
 
 BattleUnitKind unit_basabasa;
 static BattleUnitDefense defence;

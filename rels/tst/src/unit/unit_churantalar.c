@@ -25,24 +25,7 @@
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
 #include "battle/battle_camera.h"
-
-// Unit work slots of the Arantula (btlevtcmd_Get/SetUnitWork).
-enum {
-    UNIT_WORK_LOWERED = 0,        // 1 after it dropped to y 10, 0 while it hangs at y 70
-    UNIT_WORK_YARN_ALPHA = 1,   // alpha of its thread; below 255 the yarn event fades it out
-    UNIT_WORK_YARN_Y = 2,   // y of the thread's lower end (400 at the entrance, lowered as it drops in)
-    UNIT_WORK_FIRST_LOWER = 3,     // 1 until its first drop, which plays SFX_ENM_PAIDA_MOVE1
-    UNIT_WORK_PART2_ROTATION = 4,      // arm angle kept between the web throw's wind-up and throw
-    UNIT_WORK_TARGET1_ID = 5, // chained attack: target unit id of throw 1 (2 and 3 follow)
-    UNIT_WORK_TARGET2_ID = 6, // chained attack: target unit id of throw 2
-    UNIT_WORK_TARGET3_ID = 7, // chained attack: target unit id of throw 3
-    UNIT_WORK_TARGET1_PART = 8,   // chained attack: target part id of throw 1 (2 and 3 follow)
-    UNIT_WORK_TARGET2_PART = 9,   // chained attack: target part id of throw 2
-    UNIT_WORK_TARGET3_PART = 10,  // chained attack: target part id of throw 3
-    UNIT_WORK_TARGET1_HIT = 11,   // chained attack: 1 once throw 1's target was hit (2 and 3 follow)
-    UNIT_WORK_TARGET2_HIT = 12,   // chained attack: 1 once throw 2's target was hit
-    UNIT_WORK_TARGET3_HIT = 13,   // chained attack: 1 once throw 3's target was hit
-};
+#include "battle/unit/unit_churantalar.h"
 
 static void piders_get_next_target(s32* unitIdx, s32* partIdx);
 static void piders_get_target(s32* unitIdx, s32* partIdx);

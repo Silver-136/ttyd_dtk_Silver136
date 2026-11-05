@@ -16,9 +16,7 @@
 #include "evt/evt_eff.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
-
-// BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_CHARGED_UNUSED 0 // Records charge use; attack selection checks STATUS_CHARGE instead.
+#include "battle/unit/unit_hyper_kuriboo.h"
 
 static USER_FUNC(krb_get_dir);
 
