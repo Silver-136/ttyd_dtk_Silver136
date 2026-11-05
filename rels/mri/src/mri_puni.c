@@ -3943,6 +3943,11 @@ static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist
  * for 68 frames, then falls back to the floor (at once when no gather target is on).
  */
 void puniModeFunbari(PuniData* p) {
+    Vec start;
+    Vec s2;
+    Vec d2;
+    f32 dist;
+
     switch (p->modeStep) {
         case 0: {
             PuniTarget* t;
@@ -3984,19 +3989,13 @@ void puniModeFunbari(PuniData* p) {
             p->modeF0 += 7.0f;
             if (p->modeF0 >= 360.0f) p->modeF0 = 360.0f;
 #if VERSION >= VERSION_US
-            {
-                Vec start;
-                Vec s2;
-                Vec d2;
-                f32 dist;
-                start = p->pos;
-                dist = __fabs(p->modeF2);
-                p->vel.x = 0.5f * p->modeF2;
-                p->vel.z = p->vel.y = 0.0f;
-                d2 = p->vel;
-                s2 = start;
-                puniMoveHitLimitedInl(p, &s2, &d2, dist);
-            }
+            start = p->pos;
+            dist = __fabs(p->modeF2);
+            p->vel.x = 0.5f * p->modeF2;
+            p->vel.z = p->vel.y = 0.0f;
+            d2 = p->vel;
+            s2 = start;
+            puniMoveHitLimitedInl(p, &s2, &d2, dist);
             p->dispOfs.y += p->modeF1;
             if (p->timer-- == 0) {
                 p->modeStep = 10;
