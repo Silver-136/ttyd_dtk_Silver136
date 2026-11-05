@@ -1629,6 +1629,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     CounterWork cw;
     Vec hit;
     Vec hit2;
+    // FAKE: cwp is a second name for &cw; passing &cw directly changes the object
     CounterWork* cwp;
     Vec pos;
     u32 result;

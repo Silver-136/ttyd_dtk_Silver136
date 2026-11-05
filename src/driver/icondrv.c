@@ -102,7 +102,9 @@ static inline IconBinData* iconGetBinData(u16 iconId) {
 static void iconDisp(CameraId camId, void* param);
 static void iconGX(Mtx mtx, IconEntry* entry);
 
-#define iconGetWork() (gp->inBattle ? &work[1] : &work[0])
+static inline IconWork* iconGetWork(void) {
+    return gp->inBattle ? &work[1] : &work[0];
+}
 
 /** looks a name up in one icon work (inlined; no symbol of its own) */
 inline IconEntry* iconFindIn(IconWork* wp, const char* name) {

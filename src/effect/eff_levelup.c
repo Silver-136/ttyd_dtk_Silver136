@@ -239,6 +239,7 @@ static void effLevelupDisp(CameraId cameraId, EffectEntry* effect) {
     GXColor color;
     f32 dx;
     f32 dy;
+    // FAKE: 0.5f held in a local for the quad half-widths; width * 0.5f changes the object
     f32 halfScale = 0.5f;
 #if VERSION >= VERSION_US
     GXTexObj texObj2;

@@ -4,8 +4,6 @@
 // Shared battle drop tables: item drops and heart and flower point drops used by enemy units.
 
 #include "battle/battle_unit.h"
-#include "evt/evt_cmd.h"
-#include "driver/npcdrv.h"
 #include "mario/mario_pouch.h"
 #include "battle/battle_database_common.h"
 

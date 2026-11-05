@@ -3186,6 +3186,7 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
     if (flags & MAP_OBJ_TEV_CALLBACK_MASK) {
         MapTevCallbackInfo info;
         MapTevCallback callback;
+        // FAKE: ip is a second name for &info; callback(&info) changes the object
         MapTevCallbackInfo* ip = &info;
 
         info.mapObj = current_mp;

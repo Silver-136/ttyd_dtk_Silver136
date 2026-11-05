@@ -1,8 +1,6 @@
 // Audience data: the item and animation tables for each kind of audience member.
 
 #include "version.h"
-#include "battle/battle_unit.h"
-#include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"
 #include "battle/battle_audience_kind_data.h"
 #include "battle/battle_audience_anim.h"

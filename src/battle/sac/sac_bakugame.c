@@ -324,6 +324,7 @@ USER_FUNC(bakuGameBombEntry) {
  * args[2] stop level (-1, or 2/3/4 for gauge under 33/66/above). US and later halve the throw-back rate.
  */
 USER_FUNC(bakuGameMain) {
+    // FAKE: unused initialised array; removing it changes the object
     s32 unused[8] = {0, 1, 2, 3, 4, 5, 6, 7};
     BakuWork* w = GetBakuGamePtr();
     EvtWord* args;

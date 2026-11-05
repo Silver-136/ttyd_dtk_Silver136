@@ -6383,6 +6383,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru_object)
 EVT_END()
 
 /** Empty effect name passed to evt_eff and evt_eff64 for Fire Drive's sparks and smoke. */
+// FAKE: a 4-byte static array for the empty effect name; STRING("") at the two uses changes the object
 static const char battle_mario_nullstr[4] = "";
 extern const f32 battle_mario_one;
 
@@ -7395,4 +7396,5 @@ USER_FUNC(_paper_light_off) {
 }
 
 /** The 1.0 scale passed to effFireEntry for the flames on Fire Drive's fireball (_mario_fire_ball_controll). */
+// FAKE: a named global 1.0f for one effFireEntry scale; the literal 1.0f at the call changes the object (.sdata2 order)
 const f32 battle_mario_one = 1.0f;

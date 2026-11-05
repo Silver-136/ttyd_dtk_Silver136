@@ -123,7 +123,10 @@ static void effSandarsMain(EffectEntry* effect) {
     s32 type;
     s32 i;
 
-    pos2 = effSandarsMakeVec(bx = work->position.x, by = work->position.y, bz = work->position.z);
+    bx = work->position.x;
+    by = work->position.y;
+    bz = work->position.z;
+    pos2 = effSandarsMakeVec(bx, by, bz);
     type = work->type;
     camId = work->camId;
     inBattle = gp->inBattle != 0;

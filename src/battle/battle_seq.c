@@ -260,6 +260,7 @@ static void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
             }
         }
     } else {
+        // FAKE: alert is already FALSE in this branch; dropping the store changes the object
         alert = FALSE;
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             unit = BattleGetUnitPtr(wp, i);

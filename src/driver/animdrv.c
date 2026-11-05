@@ -593,6 +593,7 @@ poseFound:
             count = wp->totalTextures;
             for (pc[0] = 0; pc[0] < count; pc[0]++) {
                 tex[0] = &wp->textures[pc[0]];
+                // FAKE: the BOOL active is read through a u32 view; the plain field changes the object
                 if (*((u32*)(&tex[0]->active))) {
                     if (tex[0]->handle) {
                         if (!strcmp(tex[0]->handle->filename, textureName)) {
@@ -608,6 +609,7 @@ poseFound:
 
             for (pc[0] = 0; pc[0] < wp->totalTextures; pc[0]++) {
                 tt[0] = &wp->textures[pc[0]];
+                // FAKE: the BOOL active is read through a u32 view; the plain field changes the object
                 if (!(*((u32*)(&tt[0]->active)))) {
                     tex[0] = tt[0];
                     goto textureSlotFound;

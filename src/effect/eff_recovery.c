@@ -208,7 +208,6 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     s32 delay;
     RecoveryWork* pp;
     s32 size;
-    f32 zero;
     s32 i;
 
     effect = effEntry();
@@ -293,31 +292,30 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
         work->timer = 180;
         break;
     }
-    zero = 0.0f;
     pp = work + 1;
     for (i = 1, delay = 8; i < effect->count; delay += 8, i++, pp++) {
         work = pp;
-        work->position.x = zero;
+        work->position.x = 0.0f;
         switch (type) {
         case 4:
         case 5:
-            work->position.y = (i < 10) ? zero : -15.0f;
+            work->position.y = (i < 10) ? 0.0f : -15.0f;
             break;
         default:
             work->position.y = 0.0f;
             break;
         }
-        work->position.z = zero;
-        work->scale.x = zero;
-        work->scale.y = zero;
-        work->scale.z = zero;
-        work->velocity.x = zero;
-        work->velocity.y = zero;
-        work->velocity.z = zero;
+        work->position.z = 0.0f;
+        work->scale.x = 0.0f;
+        work->scale.y = 0.0f;
+        work->scale.z = 0.0f;
+        work->velocity.x = 0.0f;
+        work->velocity.y = 0.0f;
+        work->velocity.z = 0.0f;
         work->timer = 0;
         work->state = 0;
         work->alpha = 255;
-        work->angle = zero;
+        work->angle = 0.0f;
         switch (type) {
         case 6:
             if (i == 1) {

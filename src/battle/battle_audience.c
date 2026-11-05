@@ -669,7 +669,6 @@ void BattleAudience_PerPhase(u32 value) {
  */
 u8 BattleAudience_CheckReactionPerPhase(void) {
     BattleAudience* audience;
-    BattleAudience* pe;
     BattleAudienceMember* member;
     s32 i, counter, k, qn;
     s32 queue[14];
@@ -677,7 +676,6 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
     u32 n;
 
     audience = BattleAudienceBaseGetPtr();
-    pe = audience;
     pouchGetPtr();
     if (!(audience->flags & AUDIENCE_FLAG_PHASE_REACTION)) {
         return FALSE;
@@ -751,9 +749,9 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             }
             break;
         case 13:
-            memcpy(queue, pe->phaseList, pe->phaseListCount * sizeof(s32));
-            qn = pe->phaseListCount;
-            pe->phaseListCount = counter = 0;
+            memcpy(queue, audience->phaseList, audience->phaseListCount * sizeof(s32));
+            qn = audience->phaseListCount;
+            audience->phaseListCount = counter = 0;
             for (; counter < qn; counter++) {
                 switch (queue[counter]) {
                     case 0:
@@ -796,7 +794,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         }
                         break;
                     case 3:
-                        if (pe->typeWeights[AUDIENCE_PUNI]) {
+                        if (audience->typeWeights[AUDIENCE_PUNI]) {
                             for (i = 0; i < audience->maxAudience; ) {
                                 if (!(u8)BattleAudience_GetExist(i)) {
                                     BattleAudienceAddPhaseEvtList(3);
@@ -948,18 +946,18 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         break;
                 }
             }
-            if (pe->phaseListCount >= 1) {
-                pe->phaseList[0] = pe->phaseList[irand(pe->phaseListCount)];
-                pe->phaseListCount = 1;
+            if (audience->phaseListCount >= 1) {
+                audience->phaseList[0] = audience->phaseList[irand(audience->phaseListCount)];
+                audience->phaseListCount = 1;
             } else {
-                pe->phaseListCount = 0;
+                audience->phaseListCount = 0;
             }
             audience->checkPhaseReactionState = 12;
-            pe->phaseSub = 0;
+            audience->phaseSub = 0;
             /* fallthrough */
         case 12:
-            if (pe->phaseListCount == 1) {
-                switch (pe->phaseList[0]) {
+            if (audience->phaseListCount == 1) {
+                switch (audience->phaseList[0]) {
                     case 0:
                     n = 0;
                     for (i = 0; i <= 59; i++) {
@@ -974,7 +972,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         }
                     }
                     BattleAudienceItemOn(list[irand(n)], ITEM_NULL, 1);
-                    pe->phaseListCount = 0;
+                    audience->phaseListCount = 0;
                     break;
                     case 1:
                         for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
@@ -992,7 +990,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
 #endif
                             }
                         }
-                        pe->phaseListCount = 0;
+                        audience->phaseListCount = 0;
                         break;
                     case 2:
                         for (i = 0; i <= 59; i++) {
@@ -1005,36 +1003,36 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                 BattleAudienceItemOn(i, ITEM_AUDIENCE_BONE, 100);
                             }
                         }
-                        pe->phaseListCount = 0;
+                        audience->phaseListCount = 0;
                         break;
                     case 3:
-                        switch (pe->phaseSub) {
+                        switch (audience->phaseSub) {
                             case 0:
                                 BattleAudienceAddPuni(200);
-                                pe->phaseSub = 5;
+                                audience->phaseSub = 5;
                                 break;
                             case 5:
                                 for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
                                     if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_ENTER) break;
                                 }
                                 if (i == 200) {
-                                    pe->phaseSub = 10;
+                                    audience->phaseSub = 10;
                                 }
                                 break;
                             case 10:
-                                pe->phaseSub = 15;
+                                audience->phaseSub = 15;
                                 audience->event = evtEntry(&msg_puni_all_enter, 0, EVENT_START_IMMEDIATE);
                                 break;
                             case 15:
                                 if (!evtCheckID(audience->event->eventId)) {
                                     audience->event = NULL;
-                                    pe->phaseListCount = 0;
+                                    audience->phaseListCount = 0;
                                 }
                                 break;
                         }
                         break;
                     case 4:
-                        switch (pe->phaseSub) {
+                        switch (audience->phaseSub) {
                             case 0:
                                 for (counter = 0, i = 0; i <= 59; i++) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1048,13 +1046,13 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                     }
                                 }
                                 BattleAudience_ChangeStatus(list[irand(counter)], AUDIENCE_STATUS_TRANS_EVT);
-                                pe->phaseSub = 5;
+                                audience->phaseSub = 5;
                             case 5:
                                 for (i = 0; i <= 59; i++) {
                                     if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_TRANS_EVT) break;
                                 }
                                 if (i == 60) {
-                                    pe->phaseListCount = 0;
+                                    audience->phaseListCount = 0;
                                 }
                                 break;
                         }
@@ -1070,7 +1068,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                 BattleAudienceItemOn(i, ITEM_AUDIENCE_ROCK, 100);
                             }
                         }
-                        pe->phaseListCount = 0;
+                        audience->phaseListCount = 0;
                         break;
                     case 6:
                         for (counter = 0, i = 0; i <= 59; i++) {
@@ -1085,7 +1083,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                             }
                         }
                         BattleAudienceItemOn(list[irand(counter)], ITEM_NULL, 1);
-                        pe->phaseListCount = 0;
+                        audience->phaseListCount = 0;
                         break;
                     case 7:
                         for (counter = 0, i = 0; i <= 59; i++) {
@@ -1100,7 +1098,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                             }
                         }
                         BattleAudienceItemOn(list[irand(counter)], ITEM_AUDIENCE_HAMMER, 1);
-                        pe->phaseListCount = 0;
+                        audience->phaseListCount = 0;
                         break;
                     case 8:
                         for (counter = 0, i = 0; i <= 59; i++) {
@@ -1115,10 +1113,10 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                             }
                         }
                         BattleAudienceItemOn(list[irand(counter)], ITEM_NULL, 1);
-                        pe->phaseListCount = 0;
+                        audience->phaseListCount = 0;
                         break;
                     case 9:
-                        switch (pe->phaseSub) {
+                        switch (audience->phaseSub) {
                             case 0:
                                 for (counter = 0, i = 0; i <= 59; i++) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1132,19 +1130,19 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                     }
                                 }
                                 BattleAudience_ChangeStatus(list[irand(counter)], AUDIENCE_STATUS_INTRUDE);
-                                pe->phaseSub = 5;
+                                audience->phaseSub = 5;
                             case 5:
                                 for (i = 0; i <= 59; i++) {
                                     if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_INTRUDE) break;
                                 }
                                 if (i == 60) {
-                                    pe->phaseListCount = 0;
+                                    audience->phaseListCount = 0;
                                 }
                                 break;
                         }
                         break;
                     case 10:
-                        switch (pe->phaseSub) {
+                        switch (audience->phaseSub) {
                             case 0:
                                 for (counter = 0, i = 0; i <= 59; i++) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1158,23 +1156,23 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                     }
                                 }
                                 BattleAudience_ChangeStatus(list[irand(counter)], AUDIENCE_STATUS_SING);
-                                pe->phaseSub = 5;
+                                audience->phaseSub = 5;
                             case 5:
                                 for (i = 0; i <= 59; i++) {
                                     if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_SING) break;
                                 }
                                 if (i == 60) {
-                                    pe->phaseSub = 10;
+                                    audience->phaseSub = 10;
                                 }
                                 break;
                             case 10:
-                                pe->phaseSub = 15;
+                                audience->phaseSub = 15;
                                 audience->event = evtEntry(&msg_pansy_sing, 0, EVENT_START_IMMEDIATE);
                                 break;
                             case 15:
                                 if (!evtCheckID(audience->event->eventId)) {
                                     audience->event = NULL;
-                                    pe->phaseListCount = 0;
+                                    audience->phaseListCount = 0;
                                 }
                                 break;
                         }
@@ -1195,10 +1193,10 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         member = BattleAudienceGetPtr(k);
                         BattleAudience_ChangeStatus(k, AUDIENCE_STATUS_IGNITE);
                         member->statusTimer = 5;
-                        pe->phaseListCount = 0;
+                        audience->phaseListCount = 0;
                         break;
                     case 12:
-                        switch (pe->phaseSub) {
+                        switch (audience->phaseSub) {
                             case 0:
                                 for (counter = 0, i = 0; i <= 59; i++) {
 #if VERSION <= VERSION_DEMO_JP
@@ -1212,13 +1210,13 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                     }
                                 }
                                 BattleAudience_ChangeStatus(list[irand(counter)], AUDIENCE_STATUS_EAT);
-                                pe->phaseSub = 5;
+                                audience->phaseSub = 5;
                             case 5:
                                 for (i = 0; i <= 59; i++) {
                                     if ((u8)BattleAudience_GetSysCtrl(i) && BattleAudienceGetPtr(i)->status == AUDIENCE_STATUS_EAT) break;
                                 }
                                 if (i == 60) {
-                                    pe->phaseListCount = 0;
+                                    audience->phaseListCount = 0;
                                 }
                                 break;
                         }
@@ -1235,7 +1233,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                                 break;
                             }
                         }
-                        pe->phaseListCount = 0;
+                        audience->phaseListCount = 0;
                         break;
                 }
             } else {
@@ -1262,7 +1260,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             BattleBreakSlot_DecBreakTurn();
         case 20:
             audience->flags &= ~AUDIENCE_FLAG_PHASE_REACTION;
-            pe->phaseListCount = 0;
+            audience->phaseListCount = 0;
             return FALSE;
     }
     return TRUE;
@@ -2164,7 +2162,6 @@ static void BattleAudienceItemCtrlProcess(void) {
  */
 static void BattleAudienceApSrcCtrlProcess(void) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
-    BattleAudienceStar* star;
     s32 cnt;
     s32 i;
     s32 k;
@@ -2175,7 +2172,6 @@ static void BattleAudienceApSrcCtrlProcess(void) {
         return;
     }
     cnt = 0;
-    star = base->starpower;
     for (i = 0; i < AUDIENCE_ITEM_MAX; i++) {
         if (base->starpower[i].flags & AUDIENCE_STAR_FLAG_ACTIVE) {
             cnt++;

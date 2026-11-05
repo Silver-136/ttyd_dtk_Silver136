@@ -441,7 +441,6 @@ static inline void gaugeQuad(CameraEntry* cam, f32 x0, f32 y0, f32 x1, f32 y1, u
  */
 void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32 b, s32 c, s32 flags) {
     BattleWork* wp = _battleWorkPointer;
-    s32 max = 100;
     GXColor* mod = &wp->actionCommands.disp.color;
     Vec pos;
     GXColor color = {0x00, 0xE4, 0x86, 0xFF};
@@ -455,15 +454,15 @@ void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32
     iconDispGx(&pos, ICON_FLAG_2D, ICON_AC_GAUGE_FRAME, 1.0f);
 
     if (level >= 2) {
-        gaugeQuad(cam, x - 289, y + 50, x - 289 + width * a / max, y + 32, 0x21, 0x21, 0x75, 0xFF);
+        gaugeQuad(cam, x - 289, y + 50, x - 289 + width * a / 100, y + 32, 0x21, 0x21, 0x75, 0xFF);
         if (b - a > 0) {
-            gaugeQuad(cam, x - 289 + width * a / max, y + 50, x - 289 + width * b / max, y + 32, 0x1D, 0x23, 0xA3, 0xFF);
+            gaugeQuad(cam, x - 289 + width * a / 100, y + 50, x - 289 + width * b / 100, y + 32, 0x1D, 0x23, 0xA3, 0xFF);
         }
         if (c - b > 0) {
-            gaugeQuad(cam, x - 289 + width * b / max, y + 50, x - 289 + width * c / max, y + 32, 0x46, 0x0C, 0xB4, 0xFF);
+            gaugeQuad(cam, x - 289 + width * b / 100, y + 50, x - 289 + width * c / 100, y + 32, 0x46, 0x0C, 0xB4, 0xFF);
         }
         if (100 - c > 0) {
-            gaugeQuad(cam, x - 289 + width * c / max, y + 50, x - 289 + width * 100 / max, y + 32, 0x73, 0x0D, 0x13, 0xFF);
+            gaugeQuad(cam, x - 289 + width * c / 100, y + 50, x - 289 + width * 100 / 100, y + 32, 0x73, 0x0D, 0x13, 0xFF);
         }
     }
 
@@ -473,7 +472,7 @@ void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32
         btlDispGXQuads2DRasta(x - 289, y + 50, x - 289, y + 32, 0x2D, 0x38, 0xD2, 0xFF);
         if (a > 0) {
             f32 tx0, ty0, tx1, ty1;
-            tx1 = x - 289 + width * a / max;
+            tx1 = x - 289 + width * a / 100;
             ty1 = y + 32;
             ty0 = y + 50;
             tx0 = tx1 - 2.0f;
@@ -485,7 +484,7 @@ void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32
         }
         if (b - a > 0) {
             f32 tx0, ty0, tx1, ty1;
-            tx1 = x - 289 + width * b / max;
+            tx1 = x - 289 + width * b / 100;
             ty1 = y + 32;
             ty0 = y + 50;
             tx0 = tx1 - 2.0f;
@@ -497,7 +496,7 @@ void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32
         }
         if (c - b > 0) {
             f32 tx0, ty0, tx1, ty1;
-            tx1 = x - 289 + width * c / max;
+            tx1 = x - 289 + width * c / 100;
             ty1 = y + 32;
             ty0 = y + 50;
             tx0 = tx1 - 2.0f;
@@ -551,7 +550,7 @@ void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32
         r = b;
     }
     if (r - a > 0.0f) {
-        gaugeQuad(cam, x - 289 + width * a / max, y + 50, (f32)(x - 289) + width * r / 100.0f, y + 32, 0x2E, 0xB4, 0xF2, 0xFF);
+        gaugeQuad(cam, x - 289 + width * a / 100, y + 50, (f32)(x - 289) + width * r / 100.0f, y + 32, 0x2E, 0xB4, 0xF2, 0xFF);
     }
 
     r = ratio;
@@ -559,14 +558,14 @@ void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32
         r = c;
     }
     if (r - b > 0.0f) {
-        gaugeQuad(cam, x - 289 + width * b / max, y + 50, (f32)(x - 289) + width * r / 100.0f, y + 32, 0x75, 0x70, 0xFF, 0xFF);
+        gaugeQuad(cam, x - 289 + width * b / 100, y + 50, (f32)(x - 289) + width * r / 100.0f, y + 32, 0x75, 0x70, 0xFF, 0xFF);
     }
 
     if (ratio > 100.0f) {
         ratio = 100.0f;
     }
     if (ratio - c > 0.0f) {
-        gaugeQuad(cam, x - 289 + width * c / max, y + 50, (f32)(x - 289) + width * ratio / 100.0f, y + 32, 0xF3, 0x04, 0xBC, 0xFF);
+        gaugeQuad(cam, x - 289 + width * c / 100, y + 50, (f32)(x - 289) + width * ratio / 100.0f, y + 32, 0xF3, 0x04, 0xBC, 0xFF);
     }
 }
 

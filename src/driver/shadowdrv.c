@@ -265,6 +265,7 @@ void shadowInit(void) {
     cswp->numEntries = 0;
     cswp->entries = __memAlloc(HEAP_DEFAULT, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
     memset(cswp->entries, 0, sizeof(ShadowEntry) * SHADOW_ENTRY_MAX);
+    // FAKE: wp is a spare copy of cswp; cswp->base.texBuffer changes the object
     wp = cswp;
     bufferSize = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
     wp->base.texBuffer = smartAlloc(bufferSize, SMART_GROUP_PERMANENT);
