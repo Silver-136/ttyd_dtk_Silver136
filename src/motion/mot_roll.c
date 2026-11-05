@@ -602,6 +602,7 @@ void mot_roll(void) {
     MarioWork* m;
     s32 z0;
     s32 z1;
+    MarioWork* t;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
@@ -615,16 +616,14 @@ void mot_roll(void) {
             marioGetPtr()->motStruct = p;
         }
         memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
-        {
-            MarioWork* t = marioGetPtr();
+        t = marioGetPtr();
 #if VERSION >= VERSION_US
-            if (marioGetPtr()->motStruct) {
-                marioGetPtr()->motRoll->sfxId = -1;
-            }
-#else
-            t->mot.roll.sfxId = -1;
-#endif
+        if (marioGetPtr()->motStruct) {
+            marioGetPtr()->motRoll->sfxId = -1;
         }
+#else
+        t->mot.roll.sfxId = -1;
+#endif
         mario->currSubMotionId = 0;
     }
     switch (mario->currSubMotionId) {

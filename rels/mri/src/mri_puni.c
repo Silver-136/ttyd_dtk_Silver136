@@ -4773,6 +4773,7 @@ static inline void puniModeCheckPos(PuniData* p) {
 #if VERSION >= VERSION_JP
 void puniModeMain(PuniData* p) {
     f32 m;
+    Vec d;
 
     switch (p->mode) {
         case PUNI_MODE_IDLE:
@@ -4787,21 +4788,19 @@ void puniModeMain(PuniData* p) {
                 p->mode = PUNI_MODE_JOIN;
             }
             break;
-        case PUNI_MODE_JOIN: {
-            Vec d;
-            p->flags &= ~PUNI_FLAG_STRAY;
-            searchParent(p);
-            p->mode = PUNI_MODE_PARENT;
-            p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
-            PSVECSubtract(&p->parent->pos, &p->pos, &d);
-            m = PSVECMag(&d);
-            p->parentDist = m;
-            p->prevParentDist = m;
-            p->timer = 0;
-            p->modeStep = 0;
-            p->anim = 1;
-            break;
-        }
+        case PUNI_MODE_JOIN:
+        p->flags &= ~PUNI_FLAG_STRAY;
+        searchParent(p);
+        p->mode = PUNI_MODE_PARENT;
+        p->flags |= (PUNI_FLAG_IN_CHAIN | PUNI_FLAG_COLLIDE);
+        PSVECSubtract(&p->parent->pos, &p->pos, &d);
+        m = PSVECMag(&d);
+        p->parentDist = m;
+        p->prevParentDist = m;
+        p->timer = 0;
+        p->modeStep = 0;
+        p->anim = 1;
+        break;
         case PUNI_MODE_PARENT:
             p->flags &= ~PUNI_FLAG_STRAY;
             puniModeParent(p);

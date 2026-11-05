@@ -213,6 +213,7 @@ void btlseqEnd(BattleWork* wp) {
     EventEntry* e;
     s32 sel;
     PouchData* pp;
+    BattleSeqEndWork* nw;
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
@@ -274,24 +275,22 @@ void btlseqEnd(BattleWork* wp) {
         BattleSetSeq(wp, SEQ_END, SEQ_END_POST_EVENT_WAIT);
         return;
     }
-    case SEQ_END_POST_EVENT_WAIT: {
-        FieldBattleData* fb = fbatGetPointer();
-        BattleSeqEndWork* nw;
-        if (evtCheckID(fb->postBattleEventId)) break;
-        if (!BattleWaitAllActiveEvtEnd(wp)) break;
-        if (fb->postBattleMode) {
-            BattleSetSeq(wp, SEQ_TURN, 0x3000001);
-            BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_TURN);
-            return;
-        }
-        BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_CLEAR_STATUS);
-        _BattleMarioKouraDelete();
-        nw = BattleAlloc(sizeof(BattleSeqEndWork));
-        wp->seqEndWork = nw;
-        btlseqEnd_DispInit(wp);
-        nw->state = 0;
+    case SEQ_END_POST_EVENT_WAIT:
+    fb = fbatGetPointer();
+    if (evtCheckID(fb->postBattleEventId)) break;
+    if (!BattleWaitAllActiveEvtEnd(wp)) break;
+    if (fb->postBattleMode) {
+        BattleSetSeq(wp, SEQ_TURN, 0x3000001);
+        BattleSetSeq(wp, SEQ_UNKNOWN, BATTLE_STAGE_TURN);
         return;
     }
+    BattleSetSeq(wp, SEQ_END, SEQ_END_WIN_CLEAR_STATUS);
+    _BattleMarioKouraDelete();
+    nw = BattleAlloc(sizeof(BattleSeqEndWork));
+    wp->seqEndWork = nw;
+    btlseqEnd_DispInit(wp);
+    nw->state = 0;
+    return;
     case SEQ_END_LOSE_FADE:
     _ExecAllUnitBattleEndEvent();
     btl_camera_set_moveSpeedLv(BTL_CAM_PRI_NORMAL, 2);
