@@ -4027,6 +4027,8 @@ void puniModeFunbari(PuniData* p) {
 void puniModeWater(PuniData* p) {
     Vec d;
     u32 t;
+    f32 x;
+    f32 z;
     switch (p->modeStep) {
         case 0:
             p->flags |= PUNI_FLAG_HIDDEN;
@@ -4045,12 +4047,10 @@ void puniModeWater(PuniData* p) {
             p->modeF1 = (p->savedPos.y - p->moveStart.y) - p->modeF0;
             PSVECNormalize(&p->pushDir, &d);
             PSVECScale(&d, &d, -20.0f);
-            {
-                f32 x = d.x + p->pos.x;
-                f32 z = d.z + p->pos.z;
-                p->savedPos.x = x;
-                p->savedPos.z = z;
-            }
+            x = d.x + p->pos.x;
+            z = d.z + p->pos.z;
+            p->savedPos.x = x;
+            p->savedPos.z = z;
             p->modeStep = 3;
         case 3:
         t = OSTicksToMilliseconds((u32)gp->renderTime - p->startTimeLo);

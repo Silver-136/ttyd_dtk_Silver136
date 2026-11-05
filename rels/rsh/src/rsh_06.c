@@ -999,6 +999,11 @@ static void ext_moamoa_main(void) {
     f32 r1;
     f32 a3;
     f32 tz;
+    f32 x2;
+    f32 y2;
+    f32 z2;
+    f32 s2;
+    f32 g2;
 
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         wp->hammerFrames++;
@@ -1248,14 +1253,12 @@ static void ext_moamoa_main(void) {
                         r2 = rand() / 32767.0f;
                         b = 2.0f * ((r2 * (k = 0.4f - 0.4f)) + 0.4f);
                         // FAKE: block-local copies of the float args (behaviour-identical) put the f1..f5 arg moves ahead of the ?: as in the target
-                        {
-                            f32 x2 = x;
-                            f32 y2 = y;
-                            f32 z2 = z;
-                            f32 s2 = a2;
-                            f32 g2 = b;
-                            moamoa_jump(pose, m, (d < 100.0f) ? (m->state) : (0), 0, x2, y2, z2, s2, g2);
-                        }
+                        x2 = x;
+                        y2 = y;
+                        z2 = z;
+                        s2 = a2;
+                        g2 = b;
+                        moamoa_jump(pose, m, (d < 100.0f) ? (m->state) : (0), 0, x2, y2, z2, s2, g2);
                     }
                     break;
                 }

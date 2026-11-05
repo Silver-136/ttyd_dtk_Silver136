@@ -232,17 +232,16 @@ s32 marioRollCancelDisable(void) {
  */
 s32 marioRollKeyDisable(void) {
     MarioWork* mario = marioGetPtr();
+    s32 sub;
     if (mario->currMotionId != MARIO_MOTION_ROLL) {
         return 1;
     }
-    {
-        s32 sub = mario->currSubMotionId;
-        if (sub >= 0 && sub <= 1) {
-            return 0;
-        }
-        if (sub >= 0x14 && sub <= 0x16) {
-            return 0;
-        }
+    sub = mario->currSubMotionId;
+    if (sub >= 0 && sub <= 1) {
+        return 0;
+    }
+    if (sub >= 0x14 && sub <= 0x16) {
+        return 0;
     }
     return 1;
 }
