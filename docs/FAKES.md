@@ -199,6 +199,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_main.c | winMainStrippedPool | stand-in that nothing calls; it only places the int-to-float conversion constant in the pool | see comment |
 | Both | rels/gor/src/gor_01.c | cook_chk | `(volatile u32)args[n]` casts on the evtSetValue index | plain `args[n]` (both versions change) |
 | Both | rels/gor/src/gor_01.c | cook_chk2 | `(volatile u32)args[2]` casts on the evtSetValue index | plain `args[2]` (both versions change) |
+| Both | rels/gor/src/gor_01.c | chk_marco_fuki (fbatNpcTalkCheck) | call through a cast to a `(MarioWork*)` function type, passing marioGetPtr() to the no-argument function | plain `fbatNpcTalkCheck()`: the marioGetPtr call goes, changes the object (gor.rel versions) |
 | Both | src/manager/evtmgr.c | make_jump_table | empty `if (n >= 16) { "unused"; }` after the label scan | without it (both versions change) |
 | Both | libs/dolsdk2004/src/os/OSAudioSystem.c | __OSInitAudioSystem | dead comparison `reg16 != 0x81800;` | without it (both versions change) |
 | Both | rels/tou2/src/tou2.c | tou_champion_belt | the star stone work is read through `EffStarStoneWork** work = (EffStarStoneWork**)&eff->userdata`, so userdata is reloaded at every store as in the target | an `EffStarStoneWork*` local from `eff->userdata` (86.67%); `((EffStarStoneWork*)eff->userdata)->field` per access (99.26%) |

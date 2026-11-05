@@ -19,7 +19,6 @@
 #include "win/win_main.h"
 #include <string.h>
 
-extern void* fbatNpcTalkCheck(void);
 
 typedef struct CaseWork {
     s32 count; //0x0

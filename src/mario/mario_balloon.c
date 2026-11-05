@@ -10,7 +10,6 @@
 #include <string.h>
 #include "mario/mario_hit.h"
 
-extern NpcEntry* fbatNpcTalkCheck(void);
 
 /** Clears the balloon effect pointer; run from marioInit and marioReInit (the "Baloon" spelling is the original's). */
 void marioBaloonInit(void) {

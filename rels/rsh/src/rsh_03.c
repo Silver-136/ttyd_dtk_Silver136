@@ -43,7 +43,6 @@
 #include "evt/evt_shop.h"
 #include "data_tables.h"
 
-NpcEntry* fbatNpcTalkCheck(void);
 static char tmp[32];
 Vec camPt;
 Vec camAt;

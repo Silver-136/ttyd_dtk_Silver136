@@ -76,7 +76,6 @@ static void mot_dummy(void);
 
 
 BOOL marioCreviceWallChk(Vec pos);
-void* fbatNpcTalkCheck(void);
 
 /**
  * Mario's motions by motion id (standing, walking, dashing, jumping, ... and Bowser's): the function that runs

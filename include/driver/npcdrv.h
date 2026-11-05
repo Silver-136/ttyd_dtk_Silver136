@@ -475,6 +475,7 @@ void npcDeleteGroup(NpcEntry* entry);
 void npcMain(void);
 NpcEntry* npcNameToPtr(const char* name);
 NpcEntry* npcNameToPtr_NoAssert(const char* name);
+NpcEntry* fbatNpcTalkCheck(void);
 void npcSetLink(NpcEntry* npc, NpcEntry* other);
 void npcSetBtlSetupWork(NpcEntry* npc, s32 index, s32 value);
 s32 npcGetBtlSetupWork(NpcEntry* npc, s32 index);
