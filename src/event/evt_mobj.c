@@ -3658,6 +3658,9 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
     f32 dist;
     void* item;
     void* p;
+    s32 i;
+    NpcWork* wp;
+    NpcEntry* npc;
     party = partyGetPtr(marioGetPartyId());
     switch (mobj->state) {
     case 0:
@@ -3772,15 +3775,12 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
                 ((PartyEntry*)p)->position.y = *joint;
             }
         }
-        {
-            s32 i;
-            NpcWork* wp = npcGetWorkPtr();
-            NpcEntry* npc = wp->entries;
-            for (i = 0; i < wp->total; i++, npc++) {
-                if (npc->flags & NPC_FLAG_IN_USE) {
-                    if (kururing_in_box(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
-                        npc->position.y = *joint;
-                    }
+        wp = npcGetWorkPtr();
+        npc = wp->entries;
+        for (i = 0; i < wp->total; i++, npc++) {
+            if (npc->flags & NPC_FLAG_IN_USE) {
+                if (kururing_in_box(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
+                    npc->position.y = *joint;
                 }
             }
         }

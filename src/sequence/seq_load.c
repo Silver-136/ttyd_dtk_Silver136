@@ -1041,20 +1041,19 @@ void loadDraw(CameraId camera, void* param) {
             case 10:
             case 11:
             case 12:
-            case 13: {
-                col.a = 0xfe;
-                winTexInit(*wp->file->data);
+            case 13:
+            col.a = 0xfe;
+            winTexInit(*wp->file->data);
 #if VERSION >= VERSION_US
-                winTexSet(0xe, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-                winTexInit(*wp->file->data);
-                winTexSet(win1[0][i].tex, (Vec){win1[0][i].x, 60.0f + win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+            winTexSet(0xe, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+            winTexInit(*wp->file->data);
+            winTexSet(win1[0][i].tex, (Vec){win1[0][i].x, 60.0f + win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #else
-                winTexSet(0xe, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-                winTexInit(*wp->file->data);
-                winTexSet(win1[i].tex, (Vec){win1[i].x, 60.0f + win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+            winTexSet(0xe, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
+            winTexInit(*wp->file->data);
+            winTexSet(win1[i].tex, (Vec){win1[i].x, 60.0f + win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #endif
-                break;
-            }
+            break;
             default:
             winTexInit_x2(*wp->file->data);
 #if VERSION >= VERSION_US

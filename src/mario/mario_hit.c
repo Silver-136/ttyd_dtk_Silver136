@@ -2757,6 +2757,8 @@ HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
     HitEntry* hit;
     BOOL ok;
     MarioWork* mario = marioGetPtr();
+    f32 c;
+    f32 rad;
     mario->groundRot.x = 0.0f;
     mario->groundRot.y = 0.0f;
     mario->groundRot.z = 0.0f;
@@ -2775,14 +2777,11 @@ HitEntry* marioChkFrontStep(f32* y, f32* h, f32* ang) {
     } else {
         r = 0.265f * mario->wPlayerCollisionBox.x;
     }
-    {
-        f32 c;
-        f32 rad = (3.1415927f * a) / 180.0f;
-        s = (f32)sin(rad);
-        c = (f32)cos(rad);
-        s = r * s;
-        a = r * -c;
-    }
+    rad = (3.1415927f * a) / 180.0f;
+    s = (f32)sin(rad);
+    c = (f32)cos(rad);
+    s = r * s;
+    a = r * -c;
     y0 = mario->position.y;
     x0 = mario->position.x;
     z0 = mario->position.z;

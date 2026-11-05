@@ -456,6 +456,7 @@ void yoshi_use(PartyEntry* party) {
     f32 ox;
     f32 oz;
     MarioWork* m;
+    f32 prev;
 
     if (!mario->keyOffCount) {
         partyUpdateKeyData(party);
@@ -962,14 +963,13 @@ void yoshi_use(PartyEntry* party) {
             party->work.common.accelY = marioJumpStandData[1];
             party->work.yoshi.gravityAccel = marioJumpStandData[2];
             party->accelY = marioJumpStandData[3];
-        case 61: {
-                f32 prev = party->gravity;
-                party->work.yoshi.gravityAccel += party->accelY;
-                party->work.common.accelY += party->work.yoshi.gravityAccel;
-                party->gravity += party->work.common.accelY;
-                if (prev >= party->gravity) {
-                    party->useMotionId = 62;
-                }
+        case 61:
+            prev = party->gravity;
+            party->work.yoshi.gravityAccel += party->accelY;
+            party->work.common.accelY += party->work.yoshi.gravityAccel;
+            party->gravity += party->work.common.accelY;
+            if (prev >= party->gravity) {
+                party->useMotionId = 62;
             }
             party->position.y += party->gravity;
             mario->jumpDistance += party->gravity;

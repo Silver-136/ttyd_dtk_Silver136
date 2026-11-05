@@ -973,11 +973,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
 
             // Shift-JIS 0x8145 is the middle dot, 0x8140 the full-width space, 0x8151 the full-width low line
 #if VERSION <= VERSION_DEMO_JP
-        {
-            s32 gz = 0;
-            if (gz != 0) {
-                y = 0;
-            }
+        gz = 0;
+        if (gz != 0) {
+            y = 0;
         }
         check = *((const u8*)msg);
         if (_ismbblead((u8)check)) {

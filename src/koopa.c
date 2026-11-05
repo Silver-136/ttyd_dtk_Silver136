@@ -439,6 +439,7 @@ void kpa2DMain(void) {
 void kpa3DMain(void) {
     MarioWork* mp = marioGetPtr();
     struct HitEntry* h = kpaHitCheck();
+    MarioWork* m2;
     if (h) {
         mp->hitobjHead = h;
     }
@@ -461,13 +462,11 @@ void kpa3DMain(void) {
     marioItemGetChk();
     kpaFireAttack();
     kpaFireMain();
-    {
-        MarioWork* m2 = marioGetPtr();
-        if (m2->kpaWork->mutekiTimer > 0) {
-            if (--m2->kpaWork->mutekiTimer <= 0) {
-                m2->kpaWork->mutekiTimer = 0;
-                kpaMutekiOff();
-            }
+    m2 = marioGetPtr();
+    if (m2->kpaWork->mutekiTimer > 0) {
+        if (--m2->kpaWork->mutekiTimer <= 0) {
+            m2->kpaWork->mutekiTimer = 0;
+            kpaMutekiOff();
         }
     }
     if (mp->currMotionId == MARIO_MOTION_JUMP_3) {

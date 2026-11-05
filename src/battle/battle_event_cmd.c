@@ -2748,19 +2748,18 @@ USER_FUNC(btlevtcmd_CheckToken) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     s32 id, index;
+    BattleUnitToken_Flags m;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     index = args[2];
     // FAKE: block-scoped enum copy of args[1]; testing unit->tokenFlags & args[1] changes the object
-    {
-        BattleUnitToken_Flags m = (BattleUnitToken_Flags)args[1];
-        if (unit->tokenFlags & m) {
-            evtSetValue(event, index, 1);
-        } else {
-            evtSetValue(event, index, 0);
-        }
+    m = (BattleUnitToken_Flags)args[1];
+    if (unit->tokenFlags & m) {
+        evtSetValue(event, index, 1);
+    } else {
+        evtSetValue(event, index, 0);
     }
     return EVT_RETURN_DONE;
 }

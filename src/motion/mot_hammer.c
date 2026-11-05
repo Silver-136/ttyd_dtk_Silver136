@@ -728,14 +728,13 @@ f32 marioGetAngleKaitenHammer(void) {
  */
 void mot_ham2_post(void) {
     MarioWork* mario = marioGetPtr();
+    MarioWork* m;
     if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }
-    {
-        MarioWork* m = marioGetPtr();
-        m->camShiftTargetZ = 0.0f;
-        m->camShiftRate.z = 0.01f;
-    }
+    m = marioGetPtr();
+    m->camShiftTargetZ = 0.0f;
+    m->camShiftRate.z = 0.01f;
     marioPaperOff();
 #if VERSION <= VERSION_DEMO_JP
     marioPaperLightOn();

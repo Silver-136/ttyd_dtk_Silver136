@@ -878,6 +878,7 @@ static void ext_moamoa_main(void) {
     Vec sp2_;
     Vec v;
     f32 k;
+    f32 a3;
 
     mario = marioGetPtr();
     party = partyGetPtr(0);
@@ -1360,12 +1361,9 @@ static void ext_moamoa_main(void) {
                 if ((*pose->mtx)[0][3] > -350.0f) {
                     f32 rad;
                     s = rand() / 32767.0f;
-                    {
-                        f32 k;
-                        f32 a3 = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -350.0f, -100.0f);
-                        a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
-                        rad = (6.2831855f * a3) / 360.0f;
-                    }
+                    a3 = angleABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], -350.0f, -100.0f);
+                    a3 += ((s * (k = 45.0f - -45.0f)) + -45.0f);
+                    rad = (6.2831855f * a3) / 360.0f;
                     x = (15.0f * polySinf(rad)) + (*pose->mtx)[0][3];
                     y = (*pose->mtx)[1][3];
                     grav = (*pose->mtx)[2][3] - (15.0f * polyCosf(rad));

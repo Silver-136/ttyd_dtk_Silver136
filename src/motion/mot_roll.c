@@ -592,6 +592,7 @@ void mot_roll(void) {
     f32 b31;
     f32 s;
     f32 rd;
+    MarioWork* m2;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
@@ -1278,10 +1279,8 @@ void mot_roll(void) {
     }
     if (mario->forceMoveTimer == 0 && !getRollEvtFlag() && s) {
         v31 = mario->moveDirection;
-        {
-            MarioWork* m2 = marioGetPtr();
-            DISPDIR_BODY2(v30, v31, m2)
-        }
+        m2 = marioGetPtr();
+        DISPDIR_BODY2(v30, v31, m2)
         ((MarioWork*)mario)->directionView = v31;
         mario->moveDirection = v31;
     }

@@ -725,19 +725,19 @@ static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h) {
     s32 maxX;
     s32 minY;
     s32 maxY;
+    s32 sx;
+    s32 sy;
 
     hitObjGetPos(name, &pos);
     PSVECAdd(&pos, &v_list[0], &screen);
     getScreenPoint(&screen, &screen);
-    {
-        s32 sx = screen.x;
-        s32 sy = screen.y;
+    sx = screen.x;
+    sy = screen.y;
 
-        minX = sx;
-        maxX = sx;
-        minY = sy;
-        maxY = sy;
-    }
+    minX = sx;
+    maxX = sx;
+    minY = sy;
+    maxY = sy;
     {
         s32 i;
 

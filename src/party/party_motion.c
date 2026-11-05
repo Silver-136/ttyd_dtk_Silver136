@@ -4483,6 +4483,7 @@ void party_motion_behind_mario(PartyEntry* party) {
     f32 x, z;
     f32 dist;
     f32 gy;
+    f32 t2;
 
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
@@ -4508,11 +4509,9 @@ void party_motion_behind_mario(PartyEntry* party) {
         }
     }
     if (!(party->trigFlags & PARTY_TRIG_BEHIND_DIR_SET) && marioKeyOffChk()) {
-        {
-            f32 t2 = partyGetFollowDir(party);
-            t2 += 180.0f;
-            party->homeDir = revise360(t2);
-        }
+        t2 = partyGetFollowDir(party);
+        t2 += 180.0f;
+        party->homeDir = revise360(t2);
     }
     partyGetAppearPos4(party, &target);
     x = target.x;

@@ -2194,27 +2194,26 @@ void partyRideMain(PartyEntry* party) {
             party->moveDir = toMovedir(party->displayDirectionTarget);
             break;
 
-        case 11: {
-                partyChgPoseId(party, PARTY_POSE_STAND);
+        case 11:
+            partyChgPoseId(party, PARTY_POSE_STAND);
 #if VERSION <= VERSION_DEMO_JP
-                party->velY = 0.0f;
-                party->scale = (Vec){0.0f, 0.0f, 0.0f};
+            party->velY = 0.0f;
+            party->scale = (Vec){0.0f, 0.0f, 0.0f};
 #else
-                party->flags2 |= PARTY_DISP_FLAG_HIDE;
+            party->flags2 |= PARTY_DISP_FLAG_HIDE;
 #endif
-                partyShadowOff(party);
-                getRidePos(party, &pos);
+            partyShadowOff(party);
+            getRidePos(party, &pos);
 #if VERSION >= VERSION_JP
-                party->scale = (Vec){0.0f, 0.0f, 0.0f};
+            party->scale = (Vec){0.0f, 0.0f, 0.0f};
 #endif
-                party->position = pos;
+            party->position = pos;
 #if VERSION >= VERSION_JP
-                party->velY = 0.0f;
+            party->velY = 0.0f;
 #endif
-                party->displayDirectionTarget = party->playerPtr->displayDirectionTarget;
-                party->moveDir = toMovedir(party->displayDirectionTarget);
-                break;
-            }
+            party->displayDirectionTarget = party->playerPtr->displayDirectionTarget;
+            party->moveDir = toMovedir(party->displayDirectionTarget);
+            break;
 
         case 20:
             party->motionStep = 21;
