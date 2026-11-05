@@ -494,6 +494,7 @@ void mot_hammer2(void) {
     f32 ang2, ang;
     f32 nz, ny, nx, len, hz, hy, hx;
     f32 co, s;
+    MarioWork* m;
 
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
@@ -606,11 +607,9 @@ void mot_hammer2(void) {
                 psndSFXOff(mario->mot.hammer2.sfxId);
                 mario->mot.hammer2.sfxId = -1;
             }
-            {
-                MarioWork* m = marioGetPtr();
-                m->camShiftTargetZ = 0.0f;
-                m->camShiftRate.z = 0.01f;
-            }
+            m = marioGetPtr();
+            m->camShiftTargetZ = 0.0f;
+            m->camShiftRate.z = 0.01f;
             switch (pouchGetHammerLv()) {
             case 1:
                 marioChgPose("M_H_3B");

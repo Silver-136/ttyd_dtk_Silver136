@@ -593,6 +593,10 @@ void mot_roll(void) {
     f32 s;
     f32 rd;
     MarioWork* m2;
+    s32 flip;
+    f32 sgn;
+    f32 mv;
+    f32 pre;
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
@@ -1265,18 +1269,13 @@ void mot_roll(void) {
         }
     }
     rd = rollData[4];
-    {
-        s32 flip;
-        f32 sgn;
-        f32 mv = toMovedir(mario->displayDirection);
-        f32 pre;
-        // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
-        tcA = ((MarioWork*)mario)->directionView;
-        flip = angOut(tcA, 90.0f, mv);
-        pre = mario->baseSpeed * rd;
-        sgn = (flip == 1) ? -1.0f : 1.0f;
-        mario->rot.z = revise360(pre * sgn + mario->rot.z);
-    }
+    mv = toMovedir(mario->displayDirection);
+    // FAKE: no-op (MarioWork*) cast on the directionView/groundRot reads below (were raw MWOFF offsets); the plain field reorders a const load
+    tcA = ((MarioWork*)mario)->directionView;
+    flip = angOut(tcA, 90.0f, mv);
+    pre = mario->baseSpeed * rd;
+    sgn = (flip == 1) ? -1.0f : 1.0f;
+    mario->rot.z = revise360(pre * sgn + mario->rot.z);
     if (mario->forceMoveTimer == 0 && !getRollEvtFlag() && s) {
         v31 = mario->moveDirection;
         m2 = marioGetPtr();

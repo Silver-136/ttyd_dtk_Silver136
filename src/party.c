@@ -2175,18 +2175,17 @@ void partyRideMain(PartyEntry* party) {
                 break;
             }
 
-        case 2: {
-                partyChgPoseId(party, PARTY_POSE_STAND);
-                party->velY = 0.0f;
-                party->position.y = party->moveTarget.y;
-                party->scale = (Vec){0.0f, 0.0f, 0.0f};
+        case 2:
+            partyChgPoseId(party, PARTY_POSE_STAND);
+            party->velY = 0.0f;
+            party->position.y = party->moveTarget.y;
+            party->scale = (Vec){0.0f, 0.0f, 0.0f};
 #if VERSION >= VERSION_JP
-                party->flags2 |= PARTY_DISP_FLAG_HIDE;
+            party->flags2 |= PARTY_DISP_FLAG_HIDE;
 #endif
-                partyShadowOff(party);
-                party->motionStep = 10;
-                break;
-            }
+            partyShadowOff(party);
+            party->motionStep = 10;
+            break;
 
         case 10:
             party->position = ((MarioWork*)mario)->position;

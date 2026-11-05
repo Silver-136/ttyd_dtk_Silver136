@@ -5075,10 +5075,9 @@ void puniMoveMain(PuniData* p) {
         mv_end3:
             puniSetYPosition(p);
             break;
-        case PUNI_MODE_FUNC: {
-            if (p->moveFunc) {
-                p->moveFunc(p);
-            }
+        case PUNI_MODE_FUNC:
+        if (p->moveFunc) {
+            p->moveFunc(p);
         }
             puniSetYPosition(p);
             break;

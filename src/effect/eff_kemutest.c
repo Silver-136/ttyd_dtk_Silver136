@@ -399,6 +399,7 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     KemuTestWork* work;
     s32 i;
     s32 count;
+    f32 spd;
 
     effect = effEntry();
     count = 1;
@@ -678,10 +679,8 @@ EffectEntry* effKemuTestEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
             work->g = 0xff;
             work->b = 0xff;
             work->scale = 0.6f;
-            {
-                f32 spd = 1.0f;
-                work->vel.x = spd * (f32)sin(6.2831855f * angleABf(0.0f, 0.0f, work->pos.x, work->pos.y) / 360.0f);
-            }
+            spd = 1.0f;
+            work->vel.x = spd * (f32)sin(6.2831855f * angleABf(0.0f, 0.0f, work->pos.x, work->pos.y) / 360.0f);
             break;
         case 7: {
             f32 a, s;

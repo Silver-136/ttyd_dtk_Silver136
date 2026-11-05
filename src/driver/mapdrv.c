@@ -911,29 +911,27 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         PSMTXScale(scale, 10.0f, 10.0f, 10.0f);
         wp->entries[group].rootMapObj = mapEntry(mapJoint, scale, group);
         wp->entries[group].rootHitObj = hitEntry(hitJoint, scale, group);
-        {
-            for (i = 0; i < wp->entries[group].lightTable->count; i++) {
-                MapFileLight* light = wp->entries[group].lightTable->lights[i];
-                Vec pos;
-                GXColor lcolor;
-                s32 type = 1;
-                s32 lflags = 0;
-                PSVECScale(&light->position, &pos, 10.0f);
-                if (!strcmp(light->type, "ambientLight")) {
-                    type = 0;
-                } else if (!strcmp(light->type, "pointLight")) {
-                    type = 1;
-                } else if (!strcmp(light->type, "directionalLight")) {
-                    type = 2;
-                } else if (!strcmp(light->type, "spotLight")) {
-                    type = 3;
-                }
-                if (light->magic == 0x12D60D8) {
-                    lflags = light->lflags;
-                }
-                lcolor = light->color;
-                lightEntry(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
+        for (i = 0; i < wp->entries[group].lightTable->count; i++) {
+            MapFileLight* light = wp->entries[group].lightTable->lights[i];
+            Vec pos;
+            GXColor lcolor;
+            s32 type = 1;
+            s32 lflags = 0;
+            PSVECScale(&light->position, &pos, 10.0f);
+            if (!strcmp(light->type, "ambientLight")) {
+                type = 0;
+            } else if (!strcmp(light->type, "pointLight")) {
+                type = 1;
+            } else if (!strcmp(light->type, "directionalLight")) {
+                type = 2;
+            } else if (!strcmp(light->type, "spotLight")) {
+                type = 3;
             }
+            if (light->magic == 0x12D60D8) {
+                lflags = light->lflags;
+            }
+            lcolor = light->color;
+            lightEntry(light->name, type, &pos, &light->rotation, &lcolor, light->spotAngle, light->attenAngle, light->attenType, lflags);
         }
         mapResetPaperAmbColor();
         mapResetPaperCraftAmbColor();

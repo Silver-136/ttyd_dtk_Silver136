@@ -6458,6 +6458,7 @@ static USER_FUNC(fall_rtn) {
     SlotWork* data;
     s32 i;
     s32 done = 0;
+    f32 spd;
 
     if (isFirstCall) {
         SlotWork* data = ((MiniGameWork*)event->lwData[0])->data;
@@ -6476,12 +6477,10 @@ static USER_FUNC(fall_rtn) {
             ofs = ((i & 1) * 2.0f - 1.0f) * ((rand() % 101) / 10.0f);
             sub->pos.z += ofs;
             sub->scale = 1.0f;
-            {
-                f32 spd = 2.0f + (rand() % 300) / 100.0f;
-                c = 0.0f;
-                s = 0.0f;
-                movePos(&s, &c, spd, 270.0f - 3.0f * ofs);
-            }
+            spd = 2.0f + (rand() % 300) / 100.0f;
+            c = 0.0f;
+            s = 0.0f;
+            movePos(&s, &c, spd, 270.0f - 3.0f * ofs);
             {
                 Vec vel = fall_vel0();
 

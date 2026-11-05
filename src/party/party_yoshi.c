@@ -457,6 +457,9 @@ void yoshi_use(PartyEntry* party) {
     f32 oz;
     MarioWork* m;
     f32 prev;
+    f32 y;
+    f32 x;
+    f32 z;
 
     if (!mario->keyOffCount) {
         partyUpdateKeyData(party);
@@ -817,14 +820,13 @@ void yoshi_use(PartyEntry* party) {
                 YOSHI_WORK(party)->angle = 360.0f;
                 party->useMotionId = 22;
             }
-        case 22: {
-                f32 y = 18.0f + party->position.y;
-                f32 x = party->position.x;
-                f32 z = party->position.z;
-                if (YOSHI_WORK(party)->effect == NULL) {
-                    YOSHI_WORK(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
-                    YOSHI_WORK(party)->timer = 20;
-                }
+        case 22:
+            y = 18.0f + party->position.y;
+            x = party->position.x;
+            z = party->position.z;
+            if (YOSHI_WORK(party)->effect == NULL) {
+                YOSHI_WORK(party)->effect = effSweatN64Entry(1, x, y, z, 1.0f, 70.0f * (party->displayDirectionTarget == 180.0f ? -1.0f : 1.0f), 0x16);
+                YOSHI_WORK(party)->timer = 20;
             }
 #if VERSION <= VERSION_DEMO_JP
             party->position.y += mario->mot.yoshi.bobSpeed;

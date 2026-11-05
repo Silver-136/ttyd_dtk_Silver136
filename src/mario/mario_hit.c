@@ -2700,9 +2700,7 @@ HitEntry* dou10_yoko_yari3(void) {
     hit = hitCheckVecFilter(&query, NULL);
     if (hit) {
         mario->hitobjFront = hit;
-        {
-            return hit;
-        }
+        return hit;
     }
     x = mario->position.x;
     y = mario->position.y;

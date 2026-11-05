@@ -2731,15 +2731,14 @@ USER_FUNC(btlevtcmd_OffToken) {
     EvtWord* args = event->args;
     BattleUnit* unit;
     s32 id;
+    BattleUnitToken_Flags m;
 
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
     // FAKE: block-scoped enum mask copy; direct args[1] changes the object
-    {
-        BattleUnitToken_Flags m = (BattleUnitToken_Flags)args[1];
-        unit->tokenFlags &= ~m;
-    }
+    m = (BattleUnitToken_Flags)args[1];
+    unit->tokenFlags &= ~m;
     return EVT_RETURN_DONE;
 }
 

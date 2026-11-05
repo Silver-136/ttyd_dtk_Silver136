@@ -210,6 +210,7 @@ void btlseqEnd(BattleWork* wp) {
     PartyEntry* pe;
     FieldBattleData* fb;
     NpcEntry* p;
+    EventEntry* e;
 
     _audience_Whistle_control();
     switch (BattleGetSeq(wp, SEQ_END)) {
@@ -717,17 +718,15 @@ void btlseqEnd(BattleWork* wp) {
         if (work->confettiEvtId) evtDeleteID(work->confettiEvtId);
         BattleSetSeq(wp, SEQ_END, SEQ_END_RANK_UP_START);
         break;
-    case SEQ_END_RANK_UP_START: {
-        EventEntry* e;
-        if (!_get_rank_data(pouch->level)) {
-            BattleSetSeq(wp, SEQ_END, SEQ_END_LEAVE);
-            break;
-        }
-        pouch->rank = _get_rank_data(pouch->level)->rankId;
-        e = evtEntry(_rank_up_event, 10, 0);
-        work->rankUpEvtId = e->eventId;
-        BattleSetSeq(wp, SEQ_END, SEQ_END_RANK_UP_WAIT);
+    case SEQ_END_RANK_UP_START:
+    if (!_get_rank_data(pouch->level)) {
+        BattleSetSeq(wp, SEQ_END, SEQ_END_LEAVE);
+        break;
     }
+    pouch->rank = _get_rank_data(pouch->level)->rankId;
+    e = evtEntry(_rank_up_event, 10, 0);
+    work->rankUpEvtId = e->eventId;
+    BattleSetSeq(wp, SEQ_END, SEQ_END_RANK_UP_WAIT);
 
     // fall through
     case SEQ_END_RANK_UP_WAIT:
