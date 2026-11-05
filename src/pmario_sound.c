@@ -10047,6 +10047,8 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     bgm->startTime = gp->renderTime;
     if (entry->flags & PSND_BGM_STREAM) {
         bgm->streamId = psndSSFindCh();
+        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
         if ((u32)bgm->streamId == 0xFFFFFFFF) {
             goto fail;
         }
@@ -10543,10 +10545,10 @@ static s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u3
     delay = 0;
     for (i = 0; i < 40; i++) {
         PaperSoundEffect *t = pssfx + i;
-        if ((((((u32) t->listId) != 0xFFFFFFFF) && (((u32) (t->listId & PSND_SFX_INDEX_MASK)) == ((u32) sid))) && (t->flags & PSFX_FLAG_NEW)) && (delay == 0)) {
+        if (t->listId != 0xFFFFFFFF && (t->listId & PSND_SFX_INDEX_MASK) == (u32)sid && (t->flags & PSFX_FLAG_NEW) && delay == 0) {
             delay = (psnd.sfxDelay += 8);
         }
-        if (((u32) t->listId) == 0xFFFFFFFF) {
+        if (t->listId == 0xFFFFFFFF) {
             sfx = t;
             idx = i;
         }
@@ -10934,6 +10936,8 @@ static inline void psndENVApply(PaperSoundEnv* e) {
     // FAKE: the first read of e->sfx goes through an s32 pointer (same value): a plain read is shared with the second
     // read below, the target loads it twice
     id = *(s32*)&e->sfx;
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if ((u32)id != 0xFFFFFFFF) {
         sfx = &pssfx[id & 0xFF];
         if (sfx->listId != 0xFFFFFFFF) {

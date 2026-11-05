@@ -379,6 +379,8 @@ void mot_roll_post(void) {
 #else
     MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_US
+    // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+    // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
     if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
         psndSFXOff(marioGetPtr()->motRoll->sfxId);
         marioGetPtr()->motRoll->sfxId = -1;
@@ -438,6 +440,8 @@ void marioRollForceCancel(void) {
 #else
         MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_US
+        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
         if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
             psndSFXOff(marioGetPtr()->motRoll->sfxId);
             marioGetPtr()->motRoll->sfxId = -1;
@@ -721,6 +725,8 @@ void mot_roll(void) {
             MarioWork* m = marioGetPtr();
 #if VERSION >= VERSION_JP
 #if VERSION >= VERSION_US
+            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
             if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
                 psndSFXOff(marioGetPtr()->motRoll->sfxId);
                 marioGetPtr()->motRoll->sfxId = -1;

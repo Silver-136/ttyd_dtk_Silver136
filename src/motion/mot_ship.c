@@ -291,6 +291,8 @@ void mot_ship_post(void) {
 #endif
     marioGetPtr();
     if (marioGetPtr()->motStruct != NULL) {
+        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
         if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
             psndSFXOff(marioGetPtr()->motShip->sfxId);
             marioGetPtr()->motShip->sfxId = -1;
@@ -680,6 +682,8 @@ void mot_ship(void) {
         MotShipWork* ms2;
         marioGetPtr();
         if (marioGetPtr()->motStruct != NULL) {
+            // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+            // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
             if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
                 psndSFXOff(marioGetPtr()->motShip->sfxId);
                 marioGetPtr()->motShip->sfxId = -1;
@@ -1145,6 +1149,8 @@ static void shipMove(void) {
     }
     if (len >= 1.0f) {
         MarioWork* mm = marioGetPtr();
+        // FAKE: unsigned compares with -1 (0xFFFFFFFF) on a signed sound id here and below in this function; the plain
+        // signed `!= -1` / `== -1` compiles cmpwi instead of cmplwi and changes the object.
         if (marioGetPtr()->motStruct != NULL && (u32)marioGetPtr()->motShip->sfxId == 0xFFFFFFFFU) {
             snd = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_SHIP1), &mm->position);
             marioGetPtr()->motShip->sfxId = snd;

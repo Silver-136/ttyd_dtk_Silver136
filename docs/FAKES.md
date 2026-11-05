@@ -266,6 +266,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/pmario_sound.c | psndBGMMain | f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object; second `bgm->listId == -1` test after SoundSSMuteOff (already ruled out by the continue) | see comment |
 | Both | src/pmario_sound.c | psndSFXChk | no-op mask of the u16 serial; key != sfx->serial changes the object | see comment |
 | Both | src/pmario_sound.c | psndStrippedPool | stand-in that nothing calls; deleting it changes the object (its s32-to-f32 conversion likely shapes the constant pool, as hitStrippedPool does in hitdrv.c) | see comment |
+| Both | src/pmario_sound.c | psndBGMOn_f_d, psndENVApply | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/battle/battle_ac_help.c | BattleAcHelpMain | spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudience_CheckReactionPerPhase | comma expression; `--member->statusTimer <= 0` changes the object | see comment |
 | Both | src/battle/battle_audience.c | BattleAudienceItemCtrlProcess | s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object | see comment |
@@ -296,6 +297,7 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckTrigger | args is reused to hold the result index; a separate index local changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_PadCheckNow | args is reused to hold the result index; a separate index local changes the object | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_DrawLots | pick index and running sum kept in `s32 nv[2]` | two scalar locals: changes the object |
+| Both | src/battle/battle_event_cmd.c | _MoveSoundControlEndCore | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/battle/battle_icon.c | btlIconStrippedPool | not called anywhere; it only places the literals 0.0f, 1.0f and 0.5f in this object's constant pool. | see comment |
 | Both | src/battle/battle_mario.c | (file scope) | no-op (char*) cast; PTR(battle_mario_nullstr) changes the object; battle_mario_nullstr itself is a 4-byte static array (STRING("") at both uses changes the object) | see comment |
 | Both | src/battle/battle_mario.c | _mario_fire_ball_controll | `battle_mario_one`: a named global 1.0f constant for one effFireEntry scale | literal 1.0f at the call: changes the object |
@@ -571,15 +573,20 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/motion/mot_plane.c | planeDead4 | stand-in that nothing calls; it only places its 4.0f literal in this object's constant pool | see comment |
 | Both | src/motion/mot_plane.c | mot_plane | dead store `baseSpeed = __fabsf(0.02f * wStickDir1)` overwritten two lines later | removing it: changes the object |
 | Both | src/motion/mot_plane.c | planeRoll2 | second copy of the planeRoll1 easing (inline expression instead of the target temporary) | planeRoll1 at its two call sites: changes the object |
+| Both | src/motion/mot_plane.c | planeSfxOff, flyMain | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/motion/mot_roll.c | marioRollStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
+| Both | src/motion/mot_roll.c | mot_roll_post, marioRollForceCancel, mot_roll | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/motion/mot_ship.c | shipMove | 64-bit index variable that always holds 3 for shipData[3]; indexing with the constant changes the object | see comment |
 | Both | src/motion/mot_ship.c | shipStrippedPool | stand-in that nothing calls; it only places these literals in this object's constant pool | see comment |
 | Both | src/motion/mot_ship.c | shipEff | zero local zz added to position.y; int c choosing 0.3f/0.6f | without zz and c: changes the object |
+| Both | src/motion/mot_ship.c | mot_ship_post, mot_ship, shipMove | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/party/party_bomhei.c | bomhei_use_main | the acceleration is negated from a spare temporary; party->accelY = -0.8333333f changes the object; repeated `useMotionId = 50` in the else branch | see comment |
+| Both | src/party/party_bomhei.c | bomheiCleanSfx, bomheiCleanUseSfx, bomhei_use_main | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/party/party_cloud.c | _cloud_use | re-reads the player pointer mario already holds; dropping the reload changes the object | see comment |
 | Both | src/party/party_cloud.c | partyCloudStrippedPool | stand-in that nothing calls; it only puts 0.0f, 70.0f, 180.0f and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_cloud.c | (file) | `#define _MATH_H_` keeps math.h out | removing it: changes the object |
 | Both | src/party/party_cloud.c | cloudGetBreathPower | val local holding 10.0f then 100.0f (both version copies) | literals: changes the object |
+| Both | src/party/party_cloud.c | cloud_use, _cloud_use, cloud_exit | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
 | Both | src/party/party_hit.c | partyWallSlide | unused zero Vec local; without it the object changes | see comment |
 | Both | src/party/party_hit.c | partyHitStrippedPool | stand-in that nothing calls; it only places these literals and the int-to-float conversion constant in this object's constant pool | see comment |
 | Both | src/party/party_hit.c | partyChkFrontStep | Vec p plus mx/mz temporaries copied into pos | building pos directly: changes the object |
@@ -669,3 +676,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_party.c | winPartyDisp | `GXColor red[1]` used as a scalar | plain `GXColor red`: changes the object |
 | Demos | src/window/win_party.c | winPartyDisp | iy assigned inside the winIconSet/winFontSetLabel arguments | separate statements: changes the early demos only (retail the same) |
 | Both | src/party/party_yoshi.c | yoshiFlyMove, inertia | constant locals: `one = 1.0f` multiplying the dash speed (yoshiFlyMove), `zero = 0.0f` subtracted from vz (inertia) | each dropped alone: changes the object |
+| Both | src/event/evt_snd.c | evt_snd_bgm_unpause | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
+| Both | src/sequence/seq_gameover.c | seq_gameOverMain | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
+| Both | src/sequence/seq_title.c | seq_titleInit, titleInit, titleMain | `(u32)` compares (or `-1U`) of a signed sound id with 0xFFFFFFFF | `!= -1` / `== -1`: signed compare, changes the object |
