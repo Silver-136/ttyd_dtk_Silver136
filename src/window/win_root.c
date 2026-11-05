@@ -33,6 +33,8 @@ typedef struct WinSortData {
     void (*func)(WindowWork* wp);
 } WinSortData;
 
+// FAKE: private s32/WindowWork* view of winLogDisp (win_log.c: CameraId, void*); the definition's prototype changes
+// the object (register allocation in winRootDisp), with or without winRootDisp's camId as CameraId.
 void winLogDisp(s32 camId, WindowWork* wp, s32 n);
 static void winMailDisp(WindowWork* wp);
 static void winMsgDisp(WindowWork* wp, f32 x, f32 y);
@@ -87,6 +89,8 @@ u8 enemy_monoshiri_sort_table[] = {
 #include "icon_ids.h"
 #include "driver/animdrv.h"
 
+// FAKE: old-style declarations, so both can be called with w though they take no parameters (win_mario.c,
+// win_badge.c); the two calls without the argument change the object.
 void winMarioMain2();
 void winBadgeExit();
 void winRootBgDrawDisp(CameraId unused, void* param);

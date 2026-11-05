@@ -421,6 +421,7 @@ void seq_logoMain(SequenceWork* work) {
             if (keyGetButtonTrg(0) & (PAD_BUTTON_START | PAD_BUTTON_A)) {
                 wp->skipStory = TRUE;
             }
+            // FAKE: unsigned compare of the BOOL result with 0U; `!psndPushGroup()` compiles cmpwi and changes the object
             if ((u32)psndPushGroup() == 0U) {
                 DVDMgrSetupCallback(NULL);
                 if (fadeIsFinish()) {
@@ -443,7 +444,7 @@ void seq_logoMain(SequenceWork* work) {
             VISetBlack(FALSE);
             VIWaitForRetrace();
             ret = (FileEntry*)logoAsyncFirst();
-            if (ret == 0U) {
+            if (ret == NULL) {
                 ok = 0;
             } else if ((s32)ret == -1) {
                 ok = 1;
@@ -472,6 +473,7 @@ void seq_logoMain(SequenceWork* work) {
             VISetBlack(FALSE);
             VIWaitForRetrace();
             ret = logoAsyncFirst();
+            // FAKE: unsigned compare with 0U; `ret == 0` changes the object (JP)
             if (ret == 0U) {
                 ok = 0;
             } else if (ret == -1) {

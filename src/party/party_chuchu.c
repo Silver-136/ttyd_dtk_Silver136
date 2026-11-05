@@ -30,6 +30,8 @@ typedef struct ChuchuTreasure {
     s32 z;
 } ChuchuTreasure;
 
+// FAKE: private prototype with a second mode argument (the calls pass 1); party_move.c defines partyWalkInit(party)
+// alone, and calls through that prototype change the object.
 extern void partyWalkInit(PartyEntry* party, s32 mode);
 
 

@@ -1457,6 +1457,8 @@ s32 BattleCommandInput(BattleWork* work) {
             break;
         case CMD_STATE_PARTY_SETUP:
         case CMD_STATE_PARTY_REOPEN:
+            // FAKE: calls through a cast to pass TRUE/FALSE to the one-parameter setup (it ignores them); an unused
+            // second parameter on the definition and plain calls change the object.
             if (state == 24) {
                 ((void (*)(BattleWork*, s32))BattleCommandDisplay_ChangePartySelectMenuSetup)(wp, TRUE);
             } else {

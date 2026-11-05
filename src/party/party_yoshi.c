@@ -36,8 +36,6 @@ typedef struct YoshiWork {
 } YoshiWork;
 
 
-extern HitEntry* dou10_yoko_yari2(void* out);
-
 #if VERSION <= VERSION_DEMO_JP
 static f32 yoshiSignTbl[16] = {
     -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
@@ -1521,8 +1519,8 @@ static void checkWall(PartyEntry* party, f32 spd, f32 dir) {
     MarioWork* mario = marioGetPtr();
     HitEntry* hit;
     Vec pos;
-    s32 work1;
-    s32 work2;
+    f32 work1;
+    f32 work2;
     s32 attr;
 
     pos = party->position;
