@@ -70,7 +70,7 @@ void seq_logoInit(SequenceWork* work) {
 #if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
     wp->progressive = FALSE;
 #endif
-    if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
+    if (!OSIsRestart() || OSGetResetCode() & RESET_CODE_NO_VIDEO_MODE) {
 #if VERSION == VERSION_DEMO_US2 || VERSION == VERSION_DEMO_EU
         // A PAL TV is switched to 60 Hz (EURGB60), an NTSC TV on a component cable to progressive scan unless B
         // is held. On a PAL TV sRMObjHReso_prog is the EURGB60 mode (the September US demo's marioStInit copied
@@ -133,7 +133,7 @@ void seq_logoInit(SequenceWork* work) {
 #if VERSION < VERSION_US
     logoAsyncFirst();
 #endif
-    if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
+    if (!OSIsRestart() || OSGetResetCode() & RESET_CODE_NO_VIDEO_MODE) {
         VIConfigure(&sRMObjHReso);
         VIFlush();
         VIWaitForRetrace();
@@ -552,7 +552,7 @@ static void logoDisp(CameraId camId, void* param) {
         GXGetScissor(&sciLeft, &sciTop, &sciWidth, &sciHeight);
 #if VERSION >= VERSION_DEMO_EU
         // PAL and the PAL demo: 50 Hz on a cold start before state 3, otherwise the saved 50/60 Hz mode
-        if ((!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) && ((SequenceWork*)param)->state < 3) {
+        if ((!OSIsRestart() || OSGetResetCode() & RESET_CODE_NO_VIDEO_MODE) && ((SequenceWork*)param)->state < 3) {
             rmode = &sRMObjHReso;
         } else if (OSGetEuRgb60Mode() != 1) {
             rmode = &sRMObjHReso;

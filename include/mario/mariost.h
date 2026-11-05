@@ -6,6 +6,12 @@
 #include "evt/evt_lottery.h"
 #include "countdown.h"
 
+// Reset code stored with OSResetSystem and read back by OSGetResetCode after the restart:
+// bit 0 progressive video mode, bit 1 no video mode was set (the early demos store 0 for that); the language follows from bit 2 (US and PAL).
+#define RESET_CODE_INTERLACED 0
+#define RESET_CODE_PROGRESSIVE 1
+#define RESET_CODE_NO_VIDEO_MODE 2
+
 // GlobalWork.systemLevelFlags: marioStSystemLevel(n) sets the stop bits of levels below n; a stopped level's
 // timer (systemLv0Time..systemLv3Time) does not advance
 typedef enum SystemLevelFlags {
