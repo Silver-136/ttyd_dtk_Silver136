@@ -176,12 +176,12 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
  * animation names, 18 entries such as BSA_N_1, BSA_Y_1, BSA_K_1, BSA_X_1.
  */
 static PoseTableEntry pose_table[] = {
-    {STATUS_SLEEP, "BSA_N_1"},
-    {STATUS_STOP, "BSA_Y_1"},
-    {STATUS_FREEZE, "BSA_Y_1"},
-    {STATUS_CONFUSE, "BSA_K_1"},
-    {STATUS_POISON, "BSA_X_1"},
-    {STATUS_DIZZY, "BSA_X_1"},
+    {POSE_TYPE_SLEEP, "BSA_N_1"},
+    {POSE_TYPE_STOP, "BSA_Y_1"},
+    {POSE_TYPE_FREEZE, "BSA_Y_1"},
+    {POSE_TYPE_CONFUSE, "BSA_K_1"},
+    {POSE_TYPE_POISON, "BSA_X_1"},
+    {POSE_TYPE_DIZZY, "BSA_X_1"},
     {BTL_POSE_NORMAL, "BSA_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "BSA_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "BSA_Q_1"},
@@ -201,12 +201,12 @@ static PoseTableEntry pose_table[] = {
  * talk and so on) to animation names, 18 entries such as BSA_N_2, BSA_Y_2, BSA_K_2, BSA_X_2.
  */
 static PoseTableEntry pose_table_ceil[] = {
-    {STATUS_SLEEP, "BSA_N_2"},
-    {STATUS_STOP, "BSA_Y_2"},
-    {STATUS_FREEZE, "BSA_Y_2"},
-    {STATUS_CONFUSE, "BSA_K_2"},
-    {STATUS_POISON, "BSA_X_2"},
-    {STATUS_DIZZY, "BSA_X_2"},
+    {POSE_TYPE_SLEEP, "BSA_N_2"},
+    {POSE_TYPE_STOP, "BSA_Y_2"},
+    {POSE_TYPE_FREEZE, "BSA_Y_2"},
+    {POSE_TYPE_CONFUSE, "BSA_K_2"},
+    {POSE_TYPE_POISON, "BSA_X_2"},
+    {POSE_TYPE_DIZZY, "BSA_X_2"},
     {BTL_POSE_NORMAL, "BSA_S_2"},
     {POSE_TYPE_DAMAGE_FIRE, "BSA_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "BSA_Q_2"},

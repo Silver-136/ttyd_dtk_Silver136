@@ -370,7 +370,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(5), LW(6), LW(7))
         SET_VALUE(LW(8), 0)
 
-        // It leaps at the target, spinning in the air as it goes.
+        // For 32 frames of the leap its body tilts along the jump arc (krb_get_dir).
         LOOP(32)
             CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(9), LW(10), LW(11))
             CALL(krb_get_dir, LW(5), LW(6), LW(9), LW(10), LW(8))

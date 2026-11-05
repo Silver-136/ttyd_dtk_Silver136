@@ -1,4 +1,4 @@
-// Spike Top (togemet): enemy battle unit; Creepy Steeple's copy of the unit data and scripts.
+// Spike Top (togemet): enemy battle unit; tst.rel's copy of rels/jin/src/unit/unit_togemet.c.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -509,17 +509,17 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Attack script of the Spike Top: its shell roll. If it is still flipped over it gets up instead.
+ * Attack script of the Spike Top: its shell roll. If it is still flipped over it runs wakeup_event instead.
  * With a first-strike flag the target is the one already chosen,
  * otherwise it checks for an item use and samples a target.
  * It then curls up and spins (unit work 1 and 2 hold the stop flag and spin speed for a background rotation
  * loop), trailing smoke, and slides along the floor into the target.
- * A miss or block makes it bounce away, a hit deals damage and knocks it back in two hops.
+ * A miss, dodge or lucky evasion makes it bounce away, a hit deals damage and knocks it back in two hops.
  * Afterwards it walks home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
 
-    // If the Spike Top is still on its back it just gets up instead of attacking.
+    // If the Spike Top is still on its back it runs the wake-up countdown instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)
@@ -691,7 +691,7 @@ EVT_END()
 /**
  * Damage script of the Spike Top while on the ceiling:
  * runs the default damage handling, then, if the attack did real damage (and its damage code does not have DAMAGE_RESULT_ZERO_HP
- * without DAMAGE_RESULT_REVIVAL), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
+ * without DAMAGE_RESULT_REVIVAL) and the unit still has the ceiling attribute set, it falls via ceil_fall_ready_event.
  */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)

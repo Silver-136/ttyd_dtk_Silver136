@@ -33,7 +33,8 @@ static EvtWord wait_event[6];
 /**
  * Script helper: args[0] and args[1] are unit ids (BattleTransID).
  * Copies the size-change (Mini/Mega) turns and strength from the first unit to the second,
- * so a unit spawned or replaced mid-battle keeps the size it had. Called with the new unit (LW(3)).
+ * so a freshly spawned Bombshell Bill takes on the Blaster's size change. Called with the Blaster and the new
+ * unit (LW(3)).
  */
 static USER_FUNC(killer_copy_status) {
     EvtWord* args = event->args;

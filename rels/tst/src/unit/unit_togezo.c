@@ -1,4 +1,4 @@
-// Pit of 100 Trials battle unit: the Spiny (`togezo`): parts, stats, poses and AI scripts.
+// Battle unit Spiny (`togezo`): tst.rel's copy of rels/jon/src/unit/unit_togezo.c.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -58,7 +58,7 @@ static EvtWord guard_cancel_event[89];
 static EvtWord wait_event[6];
 
 /**
- * Unit data of the Spiny in the Pit of 100 Trials: 3 HP, level 9;
+ * Unit data of the Spiny: 3 HP, level 9;
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_togezo = {

@@ -376,7 +376,7 @@ EVT_END()
  * The Spiky Parabuzzy's dive attack.
  * It picks a target (the first-attack target on a pre-emptive strike), rises 40 units,
  * dives at the target in its rolled pose and, depending on the pre-damage check,
- * passes it (avoid) or hits it with SFX_ENM_PATAMET_ATTACK1 damage, then flies back home.
+ * passes it (avoid) or hits it (impact sound SFX_ENM_PATAMET_ATTACK1), then flies back home.
  */
 static EVT_BEGIN(attack_event_pata)
 
@@ -406,7 +406,7 @@ static EVT_BEGIN(attack_event_pata)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and waits for any bodyguard to move into place.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -923,7 +923,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and waits for any bodyguard to move into place.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1152,7 +1152,7 @@ EVT_END()
 /**
  * Attack of the ceiling Spike Top.
  * It slides over the target and drops on it (SFX_ENM_MET_FALL1),
- * with a miss or hit decided by the pre-damage check, then swings back and forth,
+ * with a miss or hit decided by the pre-damage check, then waits a second,
  * leaves the ceiling state, takes two hops near the target, then walks back to its home position on the floor.
  */
 static EVT_BEGIN(attack_event_ceil)
@@ -1183,7 +1183,7 @@ static EVT_BEGIN(attack_event_ceil)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and waits for any bodyguard to move into place.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(7), LW(8), LW(9))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))

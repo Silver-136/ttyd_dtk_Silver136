@@ -380,7 +380,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Data-table event 37, run when an attacker is hurt by the Spiny's top spikes (counter hit event 0x1F):
+ * Data-table events 37 and 39, run when an attacker is hurt by the Spiny's top or front spikes:
  * after 30 frames it plays the toge_flush spark effect 35 units above the Spiny (45 when Huge, 25 when Tiny).
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_event)
@@ -549,7 +549,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(14))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(14))
 
-    // The Spiny curls up into a spiky ball, spinning faster and faster.
+    // The Spiny curls up into a spiky ball and spins on the spot.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEZO_TURN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 15, 0)

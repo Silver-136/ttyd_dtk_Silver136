@@ -130,7 +130,7 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_twinkling_pansy", "c_kpansy", 0.0f, 0.0f, 0.0f, 0.0f, 29.0f, 0.0f, 0.0f, 34.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
-/** Amazy Dayzee's attack: 20 damage to every target, a plain attack. */
+/** Amazy Dayzee's attack: 20 damage to every target, with a 75% chance of Sleep for 5 turns. */
 static BattleWeapon weapon_twinkling_pansy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -396,7 +396,7 @@ static EVT_BEGIN(song_event)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 256)
 
-            // The notes stop and the map fades back to normal.
+            // The tint has faded back to normal.
             BREAK_LOOP
         END_IF
         CALL(evt_map_set_blend, 0, LW(0), LW(1), LW(1), 255)

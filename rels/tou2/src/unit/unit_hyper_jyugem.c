@@ -903,7 +903,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
-/** Wait event: sets the idle animation from the unit's pose table. */
+/** Wait event: sets part 1's pose for its current state from its current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

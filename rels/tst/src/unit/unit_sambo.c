@@ -994,8 +994,8 @@ EVT_END()
  * Attack AI of the Pokey. It runs a selected enemy-item script if one is returned.
  * At 4 segments, if its inherited summon depth is at most 1,
  * it has a 30% chance to call another Pokey (call_friend_event) when there is room beside it.
- * With 2 or more segments it then draws: about 30 in 69 for a head attack (attack_head_2_event,
- * with the weapon matching the segment count), otherwise it fires its spike (attack_spike_event);
+ * With 2 or more segments it then draws 0 to 69: 0 to 30 (31 in 70) picks a head attack (attack_head_2_event,
+ * with the weapon matching the segment count) if a target is found, otherwise it throws a segment (attack_spike_event);
  * with a single segment it hops at the target (attack_head_1_event).
  */
 static EVT_BEGIN(attack_event)

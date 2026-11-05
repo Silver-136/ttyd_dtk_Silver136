@@ -1,4 +1,4 @@
-// Battle unit Dark Wizzerd (`super_mahorn`): tst.rel's copy of rels/jon/src/unit/unit_super_mahorn.c.
+// Battle unit Dark Wizzerd (`super_mahorn`): tst.rel's copy of rels/jon/src/unit/unit_super_mahorn.c (plus early-demo coin, damage and attack-weight values).
 
 #include "version.h"
 #include "eff/eff_mahorn2.h"
@@ -162,7 +162,7 @@ BattleUnitKind unit_super_mahorn = {
 
 /**
  * Unit data of the Dark Wizzerd's illusion copy in the Pit of 100 Trials:
- * 10 HP, level 1, with its own status table.
+ * 10 HP, level 1; it lists the real one's status table, which spawn_event replaces with regist_bunsin.
  */
 static BattleUnitKind unit_super_mahorn_bunsin = {
     UNIT_DARK_WIZZERD_CLONE, // unitType
@@ -1041,7 +1041,7 @@ EVT_END()
 
 /**
  * Death of the Dark Wizzerd when Gale Force blows it away (data table entry 58, run for damage code 0x1D):
- * it spins in the blow-away pose while flying off toward the stage edge, hands out coins and experience,
+ * it spins in its damage pose while flying off toward the stage edge, hands out coins and experience,
  * removes its copies and kills the unit.
  */
 static EVT_BEGIN(mahorn_subset_blow_dead_event)
@@ -1165,7 +1165,7 @@ static EVT_BEGIN(attack_punch_event)
         ADD(LW(10), 1)
     END_LOOP
 
-    // The hands slam into the target together.
+    // The hands flail about at random offsets for 50 frames.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LOOP(25)
         SET_VALUE(LW(10), 2)
@@ -2091,7 +2091,7 @@ static USER_FUNC(eff_magic_get_posX) {
 
 /**
  * Script helper: args[0] = unit, args[1] = target x, args[2..3] are unused, args[4] = travel time in frames.
- * Starts the Wizzerd's magic effect from its wand towards the target and stores it in work[7];
+ * Starts the Wizzerd's magic effect from just in front of it towards the target and stores it in work[7];
  * the speed is derived from the distance and time.
  */
 static USER_FUNC(eff_magic) {
@@ -2116,8 +2116,8 @@ static USER_FUNC(eff_magic) {
 
 /**
  * Script helper: args[0] = source unit, args[1] = destination unit.
- * Copies the HP and status block from the real unit to a copy (or back), and resets the HP gauge,
- * so the copies share damage and ailments.
+ * Copies the HP and status block from the real unit to a new copy and resets the copy's HP gauge,
+ * so the copy starts with the real one's HP and ailments (spawn_event only).
  */
 static USER_FUNC(mahorn_copy_status) {
     EvtWord* args = event->args;

@@ -340,7 +340,8 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // A second front-barrel launch with its own weight.
+    // A second front-barrel launch with its own weight; it keeps scanning after a launch, so it can fire at
+    // every free spot of the three.
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -465,7 +466,8 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // A second upper-barrel launch with its own weight.
+    // A second upper-barrel launch with its own weight; like the second front launch it keeps scanning after a
+    // launch, and it lowers the barrel only after the scan.
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -512,7 +514,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     LABEL(99)
 
-    // If no free space was found nothing is launched, and it goes back to waiting.
+    // Launched or not (no free space found), it goes back to waiting.
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

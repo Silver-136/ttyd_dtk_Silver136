@@ -1,4 +1,4 @@
-// Buzzy Beetle (met): enemy battle unit; Creepy Steeple's copy of the unit data and scripts.
+// Battle unit Buzzy Beetle (`met`): tst.rel's copy of rels/jin/src/unit/unit_met.c.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -16,7 +16,7 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_CEILING 0    // setup value: nonzero = starts on the ceiling (init_event2 sets the ceiling tables and events); the fall/turn events clear it
+#define UNIT_WORK_CEILING 0    // setup value: nonzero = starts on the ceiling (init_event2 sets the ceiling tables and events); the fall, ceiling counter-damage and ceiling attack events clear it
 #define UNIT_WORK_SPIN_DONE 1  // 1 ends the sibling loop that spins it during the attack (and resets the rotation)
 #define UNIT_WORK_SPIN_SPEED 2 // degrees per frame of that spin (0, 10, 20)
 
@@ -204,8 +204,9 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Event table of the Buzzy Beetle:
- * the reaction when it is hurt while attacking, nothing special on a First Strike.
+ * Event table of the Buzzy Beetle on the ceiling:
+ * every counter-damage kind (spiky, fiery, icy, electric, explosive, poison, Payback, Hold Fast, Superguard ...)
+ * runs counter_damage_event_ceil, which returns it to the floor; nothing special on a First Strike.
  */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
@@ -498,7 +499,7 @@ EVT_END()
  * It then curls up and spins (unit work 1 and 2 hold the stop flag and spin speed for a background rotation
  * loop), trailing smoke, and slides along the floor into the target.
  * A miss makes it bounce away, a hit deals damage and knocks it back in two hops.
- * Afterwards it walks home. If it has no target it can be flustered when confused.
+ * Afterwards it runs home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
 
@@ -509,7 +510,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // First Strike: the first-attack target is already fixed and the camera pulls in on it.
+    // First Strike: it takes the first-attack target already chosen.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -655,7 +656,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     GOTO(98)
 
-    // It walks back to its home position.
+    // It runs back to its home position.
     LABEL(98)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
@@ -774,12 +775,13 @@ EVT_END()
  * Attack script of the Buzzy Beetle while on the ceiling:
  * it moves above the target, drops onto it (SFX_ENM_MET_FALL1 and landing sound) and, if the hit connects,
  * deals damage.
- * It then wobbles on the floor for 60 frames, loses the ceiling attributes and tables for good,
- * hops back to its original x position and runs init_event2 to continue as a floor unit.
+ * It then wobbles for 60 frames where it landed (18 units up, on the target), loses the ceiling attributes and
+ * tables for good, hops off the target in two hops, runs back to its original x position on the floor and runs
+ * init_event2 to continue as a floor unit.
  */
 static EVT_BEGIN(attack_event_ceil)
 
-    // First Strike: the first-attack target is already fixed and the camera pulls in on it.
+    // First Strike: it takes the first-attack target already chosen.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -873,7 +875,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_ceil_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
 
-    // It wobbles on the floor, then loses its ceiling status for good and switches to its floor poses
+    // It wobbles where it landed, then loses its ceiling status for good and switches to its floor poses
     // and events.
     LABEL(98)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, -18, 0)
@@ -900,7 +902,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
 #endif
 
-    // It hops back toward its original spot and carries on as a floor unit.
+    // It hops off the target twice, runs back to its original spot and carries on as a floor unit.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

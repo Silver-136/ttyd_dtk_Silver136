@@ -29,7 +29,7 @@
 #define UNIT_WORK_SKY 0          // nonzero = the flying version (sky pose/data tables, airborne, y 40); dmg_fall_event clears it; clones copy it
 #define UNIT_WORK_BUNSIN 1       // 1 on a clone (unit_kamec_green_bunsin spawned by spawn_event), 0 on the real one; clones skip attack/wait and die when hit
 #define UNIT_WORK_KILL_BUNSIN 2  // damage_event: 1 if the real one was hit while clones exist; after the damage all clones are killed
-#define UNIT_WORK_FADING 3       // clone: 1 once bunsin_kill_event has faded it out, so it fades only once
+#define UNIT_WORK_FADING 3       // clone: 1 once bunsin_kill_event has started fading it out, so it fades only once
 #define UNIT_WORK_STAFF_EFFECT 4 // EffectEntry of the staff effect (effPokopiPchargeN64Entry / effThunderflareN64Entry) kept on the wand tip
 #define UNIT_WORK_MAGIC_EFFECT 5 // EffectEntry of the magic shot (effMagic1N64Entry); eff_magic_get_posX reads its x
 
@@ -698,7 +698,7 @@ EVT_END()
 
 /**
  * Fades the unit whose id is in LW(0) out over 30 frames (alpha 254 down to 0),
- * then hides its body part (0x2000000, PART_ATTR_NO_SHADOW) so no shadow is left; LW(0) = -1 does nothing.
+ * then hides its body part's shadow (0x2000000, PART_ATTR_NO_SHADOW); LW(0) = -1 does nothing.
  * bunsin_magic_event uses it on the Magikoopa before it splits.
  */
 static EVT_BEGIN(alpha_down_event)
@@ -778,7 +778,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Kills all four of the Magikoopa's clones: fetches their unit ids with kamec_get_bunsin
+ * Kills the Magikoopa's clones (up to four): fetches their unit ids with kamec_get_bunsin
  * and spawns bunsin_kill_event for each existing one.
  */
 static EVT_BEGIN(kamec_subset_bunsin_all_kill)
@@ -809,9 +809,10 @@ static EVT_BEGIN(kamec_subset_bunsin_all_kill)
 EVT_END()
 
 /**
- * Death handler shared by the dead events, for the unit in LW(10):
- * runs its data-table death event if it has one (slot 50), takes its back item, clears its statuses,
- * removes its clones and then kills the unit (kill mode 2, or 0 when DAMAGE_RESULT_DEATH is set).
+ * Death event of the Magikoopa (data table UNIT_DATA_DEAD_EVENT), for the unit in LW(10):
+ * runs its pre-death data event if it has one (slot 50), spins, leaves smoke, coins, Exp and Star Points,
+ * takes its back item, clears its statuses, removes its clones and then kills the unit (kill mode 2, or 0
+ * when DAMAGE_RESULT_DEATH is set).
  */
 static EVT_BEGIN(kamec_subset_dead_event)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
@@ -935,7 +936,8 @@ EVT_END()
 
 /**
  * Fall reaction when a Green Magikoopa is hit while floating:
- * it selects the real or clone ground data table, fades, falls with SFX_ENM_FALL1 and lands. Guess.
+ * it selects the ground pose table and the real or clone ground data table, shows its part 2 (KMG_H_1) and
+ * fades that part out, falls with SFX_ENM_FALL1, lands, clears unit work 0 and reruns init_event2.
  */
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -994,8 +996,8 @@ EVT_END()
 
 /**
  * Attack script of the Magikoopa.
- * Chooses a spell: usually the attack magic (weapon_kamec_attack_magic), or the heal, buff, Huge, Electric,
- * Invisible or defence spells for its allies, or creates its clones (bunsin_magic_event) depending on how many
+ * Chooses a spell: usually the attack magic (weapon_kamec_attack_magic), or Electric or Invisible spells
+ * (rarely the heal-all spell) for its allies, or creates its clones (bunsin_magic_event) depending on how many
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
@@ -1019,7 +1021,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // Alone on the stage (no clones), it casts the attack spell or makes clones of itself.
+    // Alone on the enemy side (no clones), it casts the attack spell or makes clones of itself.
     CALL(kamec_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         LABEL(10)
@@ -1079,7 +1081,7 @@ static EVT_BEGIN(attack_event)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_dekadeka_magic))
 
-                // the Huge spell on an ally,
+                // the Huge spell on an ally (weight 0: never chosen),
                 CALL_CHILD(PTR(dekadeka_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1090,7 +1092,7 @@ static EVT_BEGIN(attack_event)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_katikati_magic))
 
-                // the defense-boosting spell,
+                // the defense-boosting spell (weight 0: never chosen),
                 CALL_CHILD(PTR(katikati_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1123,7 +1125,8 @@ static EVT_BEGIN(attack_event)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_recover_magic))
 
-                // and the healing spells, for one ally or for all.
+                // and the healing spells: the single heal has weight 0 (never chosen); the heal-all in the ELSE
+                // runs only on a roll of 90 (1 in 91).
                 CALL_CHILD(PTR(recover_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1766,7 +1769,8 @@ EVT_END()
 
 /**
  * Heal spell on all allies: restores up to 4 HP each.
- * Only the first target's missing HP is checked, so it may heal nobody when only that one is at full HP.
+ * Only the first target's missing HP is checked: when that one is at full HP the spell is not cast (LW(0) = 0),
+ * even if other allies are hurt.
  */
 static EVT_BEGIN(all_recover_magic_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1976,7 +1980,7 @@ static USER_FUNC(eff_staff1) {
 
 /**
  * Script helper: arg0 = source unit, arg1 = destination unit;
- * the clone (bunsin) gets the real Magikoopa's HP and status turns so they stay in step.
+ * the clone (bunsin) gets the real Magikoopa's HP and status turns (a one-time copy when it spawns).
  */
 static USER_FUNC(kamec_copy_status) {
     EvtWord* args = event->args;
@@ -2087,7 +2091,7 @@ static USER_FUNC(kamec_get_live_num) {
 
 /**
  * Spawns one clone at the position in LW(0) to LW(2):
- * copies the airborne flag and statuses of the real unit, marks it as a clone in work 1,
+ * copies the airborne flag, HP and statuses of the real unit, marks it as a clone in work 1,
  * gives it the clone attack event and resistances, and starts it invisible until alpha_up_event.
  */
 static EVT_BEGIN(spawn_event)

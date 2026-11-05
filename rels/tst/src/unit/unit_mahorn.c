@@ -219,14 +219,14 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data of the Wizzerd's all-target magic attack: hits every opposing unit for 2 electric damage in the demos, 6 in retail. */
+/** Attack data of the Wizzerd's all-target magic attack: hits every opposing unit for 2 electric damage in the early demos, 6 in JP and later. */
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-    0, // superguardsAllowed (JP value; jon's US/PAL copy has 2)
+    0, // superguardsAllowed (jon's copy has 2 in US and later)
     1.0f, // reserved_14
     1, // stylishCommandMultiplier
     1, // reserved_19
@@ -435,7 +435,7 @@ static BattleWeapon weapon_mahorn_recover_magic = {
  * Attack AI of the Wizzerd. On a first strike it always casts the attack spell.
  * Otherwise, if no enemy-item script is selected, it draws one of:
  * attack spell (50), spell on all targets (30), Huge (10), Defense up (10), confuse (10) or heal an ally (10).
- * The first two weights are 60 and 10 in the demo versions.
+ * The first two weights are 60 and 10 in the early demos.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -696,7 +696,7 @@ EVT_END()
  */
 static EVT_BEGIN(attack_punch_event)
 
-    // Picks the target: the preset first-attack target when battle flag 2 is set, otherwise a random opposing unit;
+    // Picks the target: the First Strike target on a First Strike, otherwise a random opposing unit;
     // with no target it does nothing (or is flustered when confused).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -790,8 +790,8 @@ static EVT_BEGIN(attack_punch_event)
         ADD(LW(10), 1)
     END_LOOP
 
-    // Checks the outcome of the hit: a miss, dodge or guard goes to the no-damage branch; a connecting hit applies
-    // the Action Command defence result and deals the damage.
+    // Checks the outcome of the hit: a miss, Lucky, Dodgy or intangible target goes to the no-damage branch; a
+    // connecting hit applies the Action Command defence result and deals the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
@@ -894,8 +894,8 @@ static EVT_BEGIN(attack_enemy_common_event)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_MAGIC2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
 
-    // Checks the outcome of the hit: a miss, dodge or guard goes to the no-damage branch; a connecting hit applies
-    // the Action Command defence result and deals the damage.
+    // Checks the outcome of the hit: a miss, Lucky, Dodgy or intangible target goes to the no-damage branch; a
+    // connecting hit applies the Action Command defence result and deals the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
@@ -1210,7 +1210,7 @@ static EVT_BEGIN(attack_enemy_common_event_sub_hit)
 EVT_END()
 
 /**
- * Casts the attack spell: picks the target (the fixed first target in a flag-2 battle,
+ * Casts the attack spell: picks the target (the First Strike target on a First Strike,
  * otherwise a sampled enemy; confused-flustered if there is none) and runs attack_enemy_common_event.
  */
 static EVT_BEGIN(attack_magic_event)
@@ -1481,7 +1481,7 @@ EVT_END()
 
 /**
  * Idle script. Clones and the real Wizzerd refresh their poses from the pose table.
- * While the Wizzerd is asleep, stopped or otherwise disabled its hands hang limp (MAH_Z_2);
+ * While the Wizzerd is asleep, stopped or frozen its hands hang limp (MAH_Z_2);
  * otherwise each hand flips between two poses at random 15 to 30 frame intervals.
  */
 static EVT_BEGIN(wait_event)

@@ -660,7 +660,10 @@ static BattleUnitSetup entry_kamec = {
     NULL, // itemDropTable
 };
 
-/** Init script of the real Magikoopa. Registers its wait, attack, damage and other scripts and starts it waiting. */
+/**
+ * Init script of the Magikoopa, also run by each clone (unit_kamec_white_bunsin; spawn_event marks the clone
+ * afterwards). Registers its wait, attack, damage and other scripts and starts it waiting.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
@@ -670,7 +673,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-/** Shared init script of the real Magikoopa and its clones: selects ground or sky tables from UNIT_WORK_SKY and UNIT_WORK_BUNSIN. */
+/** Shared init script of the real Magikoopa and its clones; selects the sky pose/data tables and floating attributes only when UNIT_WORK_SKY is set. */
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -998,8 +1001,8 @@ EVT_END()
 
 /**
  * Attack script of the Magikoopa.
- * Chooses a spell: usually the attack magic (weapon_kamec_attack_magic), or the heal, buff, Huge, Electric,
- * Invisible or defence spells for its allies, or creates its clones (bunsin_magic_event) depending on how many
+ * Chooses a spell: usually the attack magic (weapon_kamec_attack_magic), or healing spells
+ * for its allies, or creates its clones (bunsin_magic_event) depending on how many
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
@@ -1023,7 +1026,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // Alone on the stage (no clones), it casts the attack spell, heals itself or makes clones of itself.
+    // Alone on the enemy side (no clones), it casts the attack spell, heals itself or makes clones of itself.
     CALL(kamec_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         LABEL(10)
@@ -1767,7 +1770,8 @@ EVT_END()
 
 /**
  * Heal spell on all allies: restores up to 4 HP each.
- * Only the first target's missing HP is checked, so it may heal nobody when only that one is at full HP.
+ * Only the first target's missing HP is checked: when that one is at full HP and another target exists,
+ * the spell is not cast (LW(0) = 0), even if the others are hurt.
  */
 static EVT_BEGIN(all_recover_magic_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1967,7 +1971,7 @@ static USER_FUNC(eff_staff1) {
 
 /**
  * Script helper: arg0 = source unit, arg1 = destination unit;
- * the clone (bunsin) gets the real Magikoopa's HP and status turns so they stay in step.
+ * the clone (bunsin) gets a one-time copy of the real Magikoopa's HP and status turns (spawn_event).
  */
 static USER_FUNC(kamec_copy_status) {
     EvtWord* args = event->args;
@@ -2078,7 +2082,8 @@ static USER_FUNC(kamec_get_live_num) {
 /**
  * Spawns one clone (entry_kamec) at the position in LW(0) to LW(2):
  * copies the airborne flag and statuses of the real unit, marks it as a clone in work 1,
- * gives it the clone attack event and resistances, and starts it invisible until alpha_up_event.
+ * gives it attack_event (which a clone leaves at once outside a first strike) and regist_bunsin, and starts it
+ * invisible until alpha_up_event.
  */
 static EVT_BEGIN(spawn_event)
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_kamec), 0)

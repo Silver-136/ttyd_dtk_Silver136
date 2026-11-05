@@ -209,12 +209,12 @@ EVT_END()
  * plays; the idle animation is `PKF_S_1`.
  */
 static PoseTableEntry pose_table[] = {
-    {STATUS_SLEEP, "PKF_N_1"},
-    {STATUS_STOP, "PKF_Y_1"},
-    {STATUS_FREEZE, "PKF_Y_1"},
-    {STATUS_CONFUSE, "PKF_K_1"},
-    {STATUS_POISON, "PKF_X_1"},
-    {STATUS_DIZZY, "PKF_X_1"},
+    {POSE_TYPE_SLEEP, "PKF_N_1"},
+    {POSE_TYPE_STOP, "PKF_Y_1"},
+    {POSE_TYPE_FREEZE, "PKF_Y_1"},
+    {POSE_TYPE_CONFUSE, "PKF_K_1"},
+    {POSE_TYPE_POISON, "PKF_X_1"},
+    {POSE_TYPE_DIZZY, "PKF_X_1"},
     {BTL_POSE_NORMAL, "PKF_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "PKF_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PKF_Q_1"},
@@ -234,12 +234,12 @@ static PoseTableEntry pose_table[] = {
  * action) and the animation each one plays; the idle animation is `PKF_S_3`.
  */
 static PoseTableEntry pose_table_ceil[] = {
-    {STATUS_SLEEP, "PKF_N_2"},
-    {STATUS_STOP, "PKF_Y_2"},
-    {STATUS_FREEZE, "PKF_Y_2"},
-    {STATUS_CONFUSE, "PKF_K_2"},
-    {STATUS_POISON, "PKF_X_2"},
-    {STATUS_DIZZY, "PKF_X_2"},
+    {POSE_TYPE_SLEEP, "PKF_N_2"},
+    {POSE_TYPE_STOP, "PKF_Y_2"},
+    {POSE_TYPE_FREEZE, "PKF_Y_2"},
+    {POSE_TYPE_CONFUSE, "PKF_K_2"},
+    {POSE_TYPE_POISON, "PKF_X_2"},
+    {POSE_TYPE_DIZZY, "PKF_X_2"},
     {BTL_POSE_NORMAL, "PKF_S_3"},
     {POSE_TYPE_DAMAGE_FIRE, "PKF_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PKF_Q_2"},

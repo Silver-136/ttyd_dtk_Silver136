@@ -513,7 +513,7 @@ static PoseTableEntry pose_table_parts[] = {
 
 /**
  * Event data table of the Pokey: scripts that replace the standard handling for an attacker being hurt by
- * its side spikes, losing a segment (tags 16 and 19), a segment being knocked off (tag
+ * its top or front spikes, losing a segment (tags 16 and 19), a segment being knocked off (tag
  * 18) and being swallowed by Yoshi.
  */
 static BattleDataEntry data_table[] = {
@@ -604,7 +604,7 @@ EVT_END()
  * Damage reaction used when the hit can knock off body segments:
  * if only the head is left (unit work 0 = 1) it reacts as a plain hit,
  * otherwise the segment count goes down by one and the parts, status icon height,
- * kiss hit offset and swallow attribute are rebuilt for the shorter Pokey (_body_param_set),
+ * kiss hit offset and swallow attribute are rebuilt for the shorter Pokey (height by _body_param_set),
  * then subset_dmg_sambo_fall settles the remaining body.
  */
 static EVT_BEGIN(damage_event_bodylost)
@@ -758,7 +758,7 @@ static EVT_BEGIN(damage_event_bodylost_blow)
             CASE_EQUAL(1)
             SET_VALUE(LW(11), 4)
 
-            // Hit points, size and status icon positions are adjusted to the new height.
+            // The active part, swallow settings and status icon, cut and kiss offsets are adjusted to the new height.
             CALL(btlevtcmd_SetSwallowParam, UNIT_ID_SELF, 50)
             CALL(btlevtcmd_SetSwallowAttribute, UNIT_ID_SELF, 2)
             CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 14, 20)
@@ -1612,7 +1612,7 @@ static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2), 0, 20, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 5, kHidden)
 
-    // Otherwise the ball bounces away off the stage.
+    // Otherwise the ball bounces away across the floor and is hidden.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     LABEL(99)

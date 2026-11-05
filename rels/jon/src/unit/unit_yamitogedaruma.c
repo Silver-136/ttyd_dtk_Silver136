@@ -394,7 +394,7 @@ EVT_END()
  * During a first strike it pauses 750 ms and uses the first attack target;
  * otherwise it uses an enemy item or samples a target for weapon_togedaruma_attack (flusters if none and confused).
  * It crouches (TGD_J_1), curls into a ball and rolls at the target at speed 7 (TGD_A_1);
- * a miss makes it bounce just past the target in a 60-frame hop and sit there in the TGD_N_1 pose for 1.5 s;
+ * a miss makes it hop onto the target's spot in a 60-frame hop and sit there in the TGD_N_1 pose for 1.5 s;
  * a hit shakes the camera and applies the damage with the action command defence check.
  * Either way it then jumps back to its place and settles in TGD_S_4.
  */
@@ -410,7 +410,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
 
-        // Pick a target for the attack; a confused unit that has none flusters.
+        // On a First Strike it attacks the First Strike target.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -480,7 +480,7 @@ static EVT_BEGIN(attack_event)
     END_SWITCH
     LABEL(90)
 
-    // On a miss it bounces just past the target and sits there for a moment.
+    // On a miss it hops onto the target's spot and sits there for a moment.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("TGD_A_1"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)

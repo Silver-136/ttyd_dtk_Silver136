@@ -502,7 +502,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Data-table hook (entry 42) for counters: does nothing. */
+/** Data-table hook (entry 42, run when an attacker avoids its electric contact): does nothing. */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()

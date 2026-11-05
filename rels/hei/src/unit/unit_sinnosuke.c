@@ -255,7 +255,7 @@ EVT_END()
 
 /**
  * Pose part of the Bald Cleft's damage reaction: shows the hurt pose (SIS_D_1) when damage was dealt,
- * and while he lies flipped over shows SIS_D_2 and hops twice.
+ * and while he lies flipped over shows SIS_D_2 and hops twice. Nothing in this unit references it.
  */
 static EVT_BEGIN(damage_event_sub)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
@@ -466,7 +466,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_EMON_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
 
-    // It walks back to its home position.
+    // It runs back to its home position.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)

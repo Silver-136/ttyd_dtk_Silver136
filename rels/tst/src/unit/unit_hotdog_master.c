@@ -143,7 +143,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-/** Idle script: sets the standard waiting pose from the unit's pose table. */
+/** Idle script: sets part 1's pose for its current state from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -248,7 +248,8 @@ EVT_END()
  * it fires a Bombshell Bill into free space beside it.
  * It can use an item; otherwise it draws a number and picks one of the weighted launches:
  * from the front barrel (friend_event), or from the upper barrel (friend_event_sky) after raising it;
- * LW(12) = 1 selects the charged shot with extra charging flashes.
+ * LW(12) = 1 selects the charged shot with extra charging flashes; both charged launches have weight 0, so the
+ * roll never picks them.
  * If none of the tested positions is free, nothing is launched.
  */
 static EVT_BEGIN(attack_event)
@@ -268,7 +269,7 @@ static EVT_BEGIN(attack_event)
     ADD(LW(0), 10)
     SUBTRACT(LW(0), 1)
 
-    // A random roll picks one of six weighted launches.
+    // A random roll (0 to 54) picks one of six weighted launches (weights 15, 0, 10, 20, 0, 10).
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 15)
 
@@ -303,7 +304,8 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 0)
 
-    // Launch 2: the same front-barrel shot, but as the charged version with extra charging flashes.
+    // Launch 2: the same front-barrel shot, but as the charged version with extra charging flashes (weight 0:
+    // never picked).
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)
@@ -334,7 +336,8 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 10)
 
-    // Launch 3: another plain front-barrel shot.
+    // Launch 3: another plain front-barrel shot; this copy does not leave the loop after a launch, so the
+    // remaining spots are still tested.
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)
@@ -412,7 +415,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 0)
 
-    // Launch 5: the charged shot from the raised upper barrel.
+    // Launch 5: the charged shot from the raised upper barrel (weight 0: never picked).
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)
@@ -459,7 +462,8 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 10)
 
-    // Launch 6: another plain shot from the raised upper barrel.
+    // Launch 6: another plain shot from the raised upper barrel; as in launch 3 the loop goes on testing the
+    // remaining spots after a launch, and the barrel is lowered afterwards.
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)

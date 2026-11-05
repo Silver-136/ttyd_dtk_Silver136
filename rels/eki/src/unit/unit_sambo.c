@@ -514,7 +514,7 @@ static PoseTableEntry pose_table_parts[] = {
 
 /**
  * Event table of the Pokey: the spike counters (dmg_avoid_counter_thorn_side_event),
- * knockback hits (damage patterns 15 and 17) (damage_event_bodylost, tag 19), Super Hammer and Ultra Hammer
+ * being struck by a unit knocked into it by Super or Ultra Hammer (damage patterns 15 and 17) (damage_event_bodylost, tag 19), Super Hammer and Ultra Hammer
  * knockback (damage_event_bodylost_blow, tag 18), Koops' shell hits (damage_event_bodylost, tag 16), the
  * First Strike reaction (does nothing) and Yoshi's Gulp (damage_swallow_body).
  */
@@ -875,8 +875,8 @@ static EVT_BEGIN(damage_event_bodylost_blow)
         CALL(btlevtcmd_SetPartsPos, LW(10), 5, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, kHidden)
 
-        // A Super Hammer hit (damage pattern 15) uses the Super Hammer knock-on weapon; an Ultra Hammer hit
-        // uses the Ultra Hammer one.
+        // Damage pattern 15 (the Super Hammer knock-on) selects the Super Hammer knock-on weapon; any other
+        // pattern, including a direct Super Hammer hit (14), selects the Ultra Hammer one.
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_KAITEN_HAMMER_INVOLVED, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(13), PTR(&marioWeapon_KaitenHammerInvolved))
@@ -934,7 +934,7 @@ EVT_END()
  * with one segment left it plays the hurt pose 39,
  * otherwise the segment handling of damage_event_bodylost applies (a segment is dropped,
  * the height and hit offsets shrink to the shorter stack,
- * the lost segment hops and blinks away) after a 3-frame wait.
+ * the lost segment (part 5) slides 25 units forward and is hidden) after a 3-frame wait.
  */
 static EVT_BEGIN(damage_swallow_body)
     SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
@@ -1012,8 +1012,8 @@ EVT_END()
  * With a full stack of 4 and inherited summon depth at most 1,
  * it has a 30 percent chance to call a friend (call_friend_event) if there is room beside it.
  * With 2 or more segments it then rolls 0 to 69 and, on 30 or less,
- * throws its head segments (attack_head_2_event) if a target is available;
- * otherwise it uses the spike attack (attack_spike_event). A single segment always uses attack_head_1_event.
+ * slams its top segments down on the target (attack_head_2_event) if a target is available;
+ * otherwise it throws a segment (attack_spike_event). A single segment always uses attack_head_1_event.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 0, 0)

@@ -286,7 +286,7 @@ EVT_END()
  * The Amazy Dayzee's song attack (weapon_twinkling_pansy_attack: hits every target,
  * 75% chance of Sleep for 5 turns):
  * it picks targets with the weapon in LW(9), turns to face them and sings (ATTACK1 sound, music-note effects
- * drifting the way it faces) while map blend 0 tints the stage (red channel down to 192),
+ * drifting the way it faces) after map blend 0 has tinted the stage (red channel down to 192),
  * then the damage check runs on every target in turn (PreCheckDamage,
  * avoid poses, CheckDamage with the defence result on the first) and the lighting fades back to normal.
  */
@@ -323,7 +323,7 @@ static EVT_BEGIN(song_event)
         WAIT_FRAMES(1)
     END_LOOP
 
-    // The Amazy Dayzee sings: music notes drift out while the stage tints darker.
+    // With the stage tinted, the Amazy Dayzee sings and music notes drift out.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     BEGIN_SIBLING_EVENT

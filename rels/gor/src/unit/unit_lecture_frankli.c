@@ -217,7 +217,7 @@ BattleWeapon _lec_weapon_hammer = {
 
 /**
  * Event table of Prof. Frankly: the jump and hammer practice weapons
- *  and the end-of-lecture script (the tags are one higher in the retail versions).
+ *  and the end-of-lecture script (the tags are one higher in JP and later than in the early demos).
  */
 static BattleDataEntry data_table[] = {
 #if VERSION <= VERSION_DEMO_JP
@@ -296,7 +296,7 @@ static EVT_BEGIN(phase_event)
         END_IF
         CASE_EQUAL(2)
 
-        // Step 1, after Mario's jump: Frankly points out the NICE rating,
+        // Step 2, after Mario's jump: Frankly points out the NICE rating,
         // then asks Goombella to take her turn and she answers.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -340,7 +340,7 @@ static EVT_BEGIN(phase_event)
         END_IF
         CASE_EQUAL(4)
 
-        // Step 2, before the player's phase: Frankly explains the Guard action command Mario just did.
+        // Step 4, before the player's phase: Frankly explains the Guard action command Mario just did.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 5)
@@ -357,7 +357,7 @@ static EVT_BEGIN(phase_event)
         END_IF
         CASE_EQUAL(6)
 
-        // Step 3, after the attack: Frankly praises the Action Command,
+        // Step 6, after the attack: Frankly praises the Action Command,
         // then asks Goombella to attack Mario once more for the Superguard lesson.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -411,7 +411,7 @@ static EVT_BEGIN(phase_event)
         END_IF
         CASE_EQUAL(8)
 
-        // Step 4, before the player's phase: Frankly explains the Superguard
+        // Step 8, before the player's phase: Frankly explains the Superguard
         // and offers more practice (a yes or no choice).
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -443,7 +443,7 @@ static EVT_BEGIN(phase_event)
         END_IF
         CASE_EQUAL(9)
 
-        // Step 5, before the player's phase: Frankly's feedback on Mario's practice try (nicely done,
+        // Step 9, before the player's phase: Frankly's feedback on Mario's guard try (nicely done,
         // a little early or a little late).
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -463,7 +463,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
 
-        // Step 6, after the player's phase: the same feedback after the next try.
+        // Step 9, after the player's phase: the same feedback on Mario's attack try.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
@@ -503,7 +503,7 @@ static EVT_BEGIN(wait_event)
 EVT_END()
 
 /**
- * Mario's Jump in the Action Command tutorial, the attack script of _lec_weapon_jump (data table tag 67 in demos, 68 in retail):
+ * Mario's Jump in the Action Command tutorial, the attack script of _lec_weapon_jump (data table tag 67 in the early demos, 68 in JP and later):
  * approaches
  * the target with Professor Frankly's explanation (mac_0_b_t2_001),
  * freezes just before landing for his prompt to
@@ -740,7 +740,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
 EVT_END()
 
 /**
- * Mario's Hammer in the Action Command tutorial, the attack script of _lec_weapon_hammer (data table tag 68 in demos, 69 in retail):
+ * Mario's Hammer in the Action Command tutorial, the attack script of _lec_weapon_hammer (data table tag 68 in the early demos, 69 in JP and later):
  * Professor Frankly prompts the player to tilt and hold the stick left (mac_0_b_t2_008, 009) and to release it
  * when
  * the light comes on (mac_0_b_t2_010); unit work 2 is cleared, then receives the timing result during free practice,

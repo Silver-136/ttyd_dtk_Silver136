@@ -36,7 +36,7 @@ static EvtWord wait_event[102];
 /**
  * Unit data of the test-area Dark Bristle (kind 165): a spiked rock creature with 8 HP and high Defense.
  * Jumping on it or hammering its front hurts the attacker; it charges at its target,
- * and a flip leaves it helpless on its back for a turn.
+ * and a flip leaves it on its back with an overturned counter of 2 (it rights itself when its turn brings that to 0).
  */
 BattleUnitKind unit_yamitogedaruma = {
     UNIT_DARK_BRISTLE,
@@ -122,8 +122,8 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static BattleUnitDefense defence_turn = {0};
 
 /**
- * Status vulnerabilities of the Dark Bristle (percent chance per status;
- * the newer releases tweak a few values).
+ * Status vulnerabilities of the Dark Bristle (percentage multipliers on each move's status chance;
+ * JP and later tweak a few values).
  */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {20, 70, 30, 100, 30, 100, 100, 50, 100, 50, 100, 50, 100, 50, 50, 30, 55, 100, 50, 100, 100, 30};
@@ -200,7 +200,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * The Dark Bristle's charge: 8 damage (7 in the demos) to the front-most opposing target,
+ * The Dark Bristle's charge: 8 damage (7 in the early demos) to the front-most opposing target,
  * a hammer-like blow that is guardable and superguardable; the spikes make it hurt whoever touches it.
  */
 static BattleWeapon weapon_togedaruma_attack = {
@@ -427,7 +427,7 @@ EVT_END()
  * Otherwise it uses an item if it decides to, or picks the front-most target (the first-attack target on a first
  * strike), rears up (TGD_J_1) and charges at it (TGD_A_1).
  * A dodge or miss sends it hopping onto the target's spot, where it sits (TGD_N_1) for 1.5 s;
- * a hit shakes the camera and damages the target (8 damage, 7 in the demos). It then hops home.
+ * a hit shakes the camera and damages the target (8 damage, 7 in the early demos). It then hops home.
  */
 static EVT_BEGIN(attack_event)
 
@@ -509,7 +509,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // Dodged, blocked or missed: it rolls past onto the target's spot, sits there for a second and a half,
+    // Dodged or missed: it rolls past onto the target's spot, sits there for a second and a half,
     // then rears up.
     LABEL(90)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("TGD_A_1"))

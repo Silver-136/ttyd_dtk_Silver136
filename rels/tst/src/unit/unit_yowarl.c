@@ -1,4 +1,4 @@
-// yowarl: a placeholder (unit kind 197) with the Goomba model and poses: it waits, takes damage and at most uses an item.
+// yowarl: a placeholder (UNIT_UNUSED_YOWARL) with the Goomba model and poses: it waits, takes damage and at most uses an item.
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -23,7 +23,7 @@ static EvtWord wait_event[6];
  * reacts to damage the default way and at most uses a held item.
  */
 BattleUnitKind unit_yowarl = {
-    197,
+    UNIT_UNUSED_YOWARL,
     "btl_un_yowarl",
     2,
     0,
@@ -94,14 +94,14 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Yowarl has no elemental defence. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-/** Yowarl is fully vulnerable to every status effect (100 for each). */
+/** Status multipliers of Yowarl: 100 for every status, so each takes hold at its normal chance. */
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 /** Poses of Yowarl: the Goomba's standing frame (KUR_S_1) and hurt frame (KUR_D_1). */
 static PoseTableEntry pose_table[] = {
-    {28, "KUR_S_1"},
-    {31, "KUR_S_1"},
-    {39, "KUR_D_1"},
+    {POSE_TYPE_NORMAL, "KUR_S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KUR_S_1"},
+    {POSE_TYPE_DAMAGE, "KUR_D_1"},
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 

@@ -507,7 +507,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Data-table hook (entry 42) for counters: does nothing. */
+/** Data-table hook (entry 42, run when an attacker avoids its electric contact): does nothing. */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
@@ -605,7 +605,7 @@ static EVT_BEGIN(normal_attack_event)
         END_LOOP
     END_SIBLING_EVENT
 
-    // It rears back (A_2A) and dives to a spot behind itself.
+    // It rears back (A_2A) and rises to height 60, a little behind itself.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2A"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -645,7 +645,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The tackle misses or is blocked: it goes by the target.
+    // The tackle misses (intangible, lucky, dodgy or miss): no damage, it goes by the target.
     LABEL(90)
     GOTO(98)
 

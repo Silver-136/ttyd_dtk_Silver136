@@ -115,8 +115,8 @@ BattleUnitKind unit_iron_sinemon2 = {
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /**
- * Damage-type reactions of the Iron Cleft: immune to normal, fire, ice, explosion and electric unless the
- * attack pierces.
+ * Damage-type reactions of the Iron Cleft: immune to normal, fire, ice, explosion and electric except to
+ * Yoshi's Gulp (DAMAGE_RESULT_GULP).
  */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, DEFENSE_ATTR_IMMUNE_EXCEPT_GULP}};
 
@@ -127,7 +127,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_IMMUNE_EXCEPT_GULP, D
 static BattleUnitDefense defence_turn = {0};
 
 /**
- * Status vulnerability of the Iron Cleft, as the percent chance each status takes hold: immune to sleep,
+ * Status vulnerability of the Iron Cleft, as percent of each status's normal chance (0 for all): immune to sleep,
  * stop, dizziness, poison, confusion, shock, burn, freeze, Huge, Tiny, Attack Up, Attack Down, Defense Up,
  * Defense Down, allergy, Fright, Gale Force, Fast, Slow, Dodgy, Invisible and instant KO.
  */
@@ -426,8 +426,8 @@ EVT_END()
 /**
  * Attack of an Iron Cleft: it may use an item, otherwise picks a target,
  * stomps toward it with the heavy walking sounds and slams into it;
- * a miss makes it overshoot and stop, a hit makes it jump twice onto the target with camera shake.
- * Afterwards it walks back home.
+ * a miss makes it overshoot and stop, a hit makes it hop twice back away from the target with camera shake.
+ * Afterwards it runs back home.
  */
 static EVT_BEGIN(attack_event)
 
@@ -464,7 +464,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It stamps up beside the target, each step sounding heavily.
+    // Heavy step sounds loop (in place) until it starts its charge.
     BEGIN_SIBLING_EVENT_GET_ID(LW(14))
         LOOP(0)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ISIN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -539,7 +539,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ISIN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
 
-    // The Iron Cleft walks back to its home position.
+    // The Iron Cleft runs back to its home position.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)

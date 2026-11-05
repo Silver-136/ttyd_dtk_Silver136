@@ -562,7 +562,7 @@ EVT_END()
  * The Sky-Blue Spiny's rolling attack: it curls into a ball (TGZ_P_1),
  * spins up (SFX_ENM_TOGEZO_ROLL1) and rolls into the target, spinning along the ground (ROLL2 to ROLL5).
  * The target takes the damage when it is reached.
- * After a hit it bounces back in two hops. It then either unrolls (TGZ_S_1) and walks home,
+ * After a hit it bounces back in two hops. It then either unrolls (TGZ_S_1) and runs home,
  * or returns home spinning (SFX_ENM_TOGEZO_ROLL3) and rests in guard
  * (swapping to the guard tables with unit work 0 set), with a 50 percent chance of the latter.
  */
@@ -738,7 +738,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPINNING, 0)
     WAIT_FRAMES(3)
 
-    // A coin flip decides how it ends: it either unrolls and walks home, or stays curled up and rolls home.
+    // A coin flip decides how it ends: it either unrolls and runs home, or stays curled up and rolls home.
     CALL(evt_sub_random, 99, LW(0))
     IF_INT_LESS(LW(0), 50)
         GOTO(98)
@@ -746,7 +746,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(97)
     END_IF
 
-    // It unrolls (TGZ_S_1) and walks back home.
+    // It unrolls (TGZ_S_1) and runs back home.
     LABEL(97)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEZO_TURN2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -814,7 +814,7 @@ EVT_END()
 
 /**
  * The Sky-Blue Spiny curls up into its guard stance:
- * plays the curl sound and a half-spin into TGZ_P_1,
+ * plays the curl sound and a full turn into TGZ_P_1,
  * then swaps in the guarding defence (99 to every element, with immunity supplied by the element-attribute table),
  * defence attributes, status resistances, pose and data tables,
  * clears the shelled part attribute (0x1000) and sets unit work 0 to 1.
@@ -848,7 +848,7 @@ EVT_END()
 
 /**
  * The Sky-Blue Spiny uncurls from its guard stance:
- * plays the uncurl sound and a half-spin into TGZ_S_1, restores the normal defence (4), defence attributes,
+ * plays the uncurl sound and a full turn into TGZ_S_1, restores the normal defence (4), defence attributes,
  * status resistances, pose and data tables, sets the shelled part attribute (0x1000) again
  * and clears unit work 0.
  */

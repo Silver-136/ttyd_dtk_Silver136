@@ -228,12 +228,12 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
  * names, 18 entries such as CBN_N_1, CBN_Y_1, CBN_K_1, CBN_X_1.
  */
 static PoseTableEntry pose_table[] = {
-    {STATUS_SLEEP, "CBN_N_1"},
-    {STATUS_STOP, "CBN_Y_1"},
-    {STATUS_FREEZE, "CBN_Y_1"},
-    {STATUS_CONFUSE, "CBN_K_1"},
-    {STATUS_POISON, "CBN_X_1"},
-    {STATUS_DIZZY, "CBN_X_1"},
+    {POSE_TYPE_SLEEP, "CBN_N_1"},
+    {POSE_TYPE_STOP, "CBN_Y_1"},
+    {POSE_TYPE_FREEZE, "CBN_Y_1"},
+    {POSE_TYPE_CONFUSE, "CBN_K_1"},
+    {POSE_TYPE_POISON, "CBN_X_1"},
+    {POSE_TYPE_DIZZY, "CBN_X_1"},
     {BTL_POSE_NORMAL, "CBN_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "CBN_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CBN_Q_1"},

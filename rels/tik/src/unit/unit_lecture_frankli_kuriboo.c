@@ -1,5 +1,5 @@
-// Rogueport Sewers (tik) battle unit: Professor Frankly (frankli) in his lecture battle: its parts, defence/status
-// tables, and the lecture events.
+// Rogueport Sewers (tik) battle unit: Professor Frankly (frankli) lecturing during the Goomba-trio battle: its parts,
+// defence/status tables, and the lecture events.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -36,12 +36,12 @@ static EvtWord phase_event[160];
 static EvtWord damage_event[10];
 static EvtWord wait_event[6];
 
-/** Script helper for the lecture Goomba's init script; does nothing. */
+/** Script helper for Frankly's init script; does nothing. */
 static USER_FUNC(lecture_init) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper. Stores args[0] in the battle's lectureUnitId, the unit that the lecture is aimed at. */
+/** Script helper. Stores args[0] in the battle's lectureUnitId, the unit the lecture messages come from (Frankly registers himself). */
 static USER_FUNC(_battle_set_lecture_unit_id) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -53,8 +53,7 @@ static USER_FUNC(_battle_set_lecture_unit_id) {
 }
 
 /**
- * Unit kind of the Goomba in Prof.
- * Frankly's lecture (HP 10, level 1): its size, offsets, damage sounds, status vulnerability,
+ * Unit kind of Prof. Frankly in the Goomba-battle lecture (HP 10, level 1): its size, offsets, damage sounds, status vulnerability,
  * parts and init event.
  */
 BattleUnitKind unit_lecture_frankli_kuriboo = {
@@ -105,15 +104,15 @@ BattleUnitKind unit_lecture_frankli_kuriboo = {
     data_table, // dataTable
 };
 
-/** Defence of the Goomba in Prof. Frankly's lecture: no damage reduction. */
+/** Defence of Prof. Frankly in the Goomba-battle lecture: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
-/** Element reactions of the Goomba in Prof. Frankly's lecture: no special reaction to any element. */
+/** Element reactions of Prof. Frankly in the Goomba-battle lecture: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Goomba in Prof.
- * Frankly's lecture (percent chance to take each status):
+ * Status vulnerability of Prof. Frankly in the Goomba-battle lecture (percent of the normal chance for each
+ * status):
  * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
  * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
  * invisibility and instant kill.
@@ -151,22 +150,22 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
-/** Data table of the Goomba in Prof. Frankly's lecture: empty; it has no event hooks. */
+/** Data table of Prof. Frankly in the Goomba-battle lecture: empty; it has no event hooks. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
 /**
- * Body part of the Goomba in Prof.
- * Frankly's lecture (model c_kuri_h): hit position, defences, attributes and pose table.
+ * Body part of Prof. Frankly in the Goomba-battle lecture (model c_kuri_h): hit position, defences, attributes and pose table.
  */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable | kNoHpLoss, 0, pose_table},
 };
 
 /**
- * Init script of the Goomba in Professor Frankly's lecture battle.
- * It uses the default confusion script, clears its work flag and starts waiting.
+ * Init script of Professor Frankly in the Goomba-battle lecture.
+ * It registers him as the lecture unit, uses the default confusion script, clears its work flag, parks him off
+ * stage (y = -1000) until entry_event and starts waiting.
  */
 static EVT_BEGIN(init_event)
     CALL(lecture_init)
@@ -185,7 +184,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
-/** Entrance of the lecture Goomba: it runs in (R_1) and settles into its idle pose (S_1). */
+/** Entrance of Frankly: he runs in (R_1) and settles into its idle pose (S_1). */
 static EVT_BEGIN(entry_event)
     WAIT_MS(900)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, -250, 0, -30)
@@ -195,7 +194,11 @@ static EVT_BEGIN(entry_event)
     RETURN
 EVT_END()
 
-/** Phase script of the lecture Goomba: puts Mario back in his idle pose (M_S_1) during the lecture's phases. */
+/**
+ * Phase script of Frankly: before the player's phase of turn 1 it puts Mario in his idle pose (M_S_1) and Frankly
+ * talks about the three enemies, the Spiny Goomba's spike and the airborne Paragoomba, and the attack order
+ * switch (mac_0_092_01 to 05) while the camera pans between them.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -245,7 +248,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-/** Damage reaction of the lecture Goomba: the default damage script. */
+/** Damage reaction of Frankly: the default damage script. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -253,7 +256,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Wait script of the lecture Goomba: shows its idle pose from the pose table. */
+/** Wait script of Frankly: shows his idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

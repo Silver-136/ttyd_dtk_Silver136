@@ -71,11 +71,10 @@ s32 _gundan_part_update(YoshiGundanPart* p, s32 i);
 #include "mario/mario_pouch.h"
 
 // Unit work slots of Yoshi (btlevtcmd_SetUnitWork / GetUnitWork, unit->work).
-// Slot 3 is set to -1 by Ground Pound and never read, so it keeps its number.
+// Slot 3 is set to -1 when Ground Pound starts (as the partner Yoshi does) and never read, so it keeps its number.
 enum {
     UNIT_WORK_SWALLOWED = 1,          // 1 once Gulp has eaten the target outright; he then walks home alone
     UW_YOSHI_GROUND_POUND_ACTIVE = 2, // 1 while Ground Pound runs
-    define = 3,            // set to -1 when Ground Pound starts (as the partner Yoshi does); nothing reads it
     UW_YOSHI_SLIDE_SOUND_POWER = 4,   // slide sound strength, following the action-command power (power * 2387 / 100)
     UW_YOSHI_SLIDE_SOUND_PERCENT = 5, // percent of the slide sound strength played (falls as he slides)
 };
@@ -552,7 +551,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
 };
 
 /**
- * Gulp's fire breath: after eating a fire-type enemy Yoshi breathes fire on every enemy for 1 damage of the
+ * Gulp's fire breath: after eating an enemy with swallow attribute 4 Yoshi breathes fire on every enemy for 1 damage of the
  * fire element, ignoring Defense.
  */
 BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
@@ -637,8 +636,8 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
 };
 
 /**
- * Yoshi's Mini-Egg (btl_wn_pys_lv2, 3 FP): eggs that hit every ground enemy for 1 damage each and shrink
- * them; the action command is a single press when the light comes on.
+ * Yoshi's Mini-Egg (btl_wn_pys_lv2, 3 FP): eggs thrown at randomly sampled enemies for 1 damage each that
+ * shrink them; each timed press during the action command lays one more egg.
  */
 BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     "btl_wn_pys_lv2", // name
@@ -691,7 +690,7 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
 
 /**
  * Yoshi's Stampede (btl_wn_pys_lv3, 6 FP): the herd of Yoshis that runs across the stage;
- * 1 damage per hit to every ground enemy, repeated as the action command is mashed.
+ * 1 damage per hit to every enemy, repeated as the action command is mashed.
  * Its attack script is partyYoshiAttack_CallGuard.
  */
 BattleWeapon partyWeapon_YoshiCallGuard = {
@@ -765,7 +764,8 @@ PoseSoundTiming posesound_normal_attack[] = {
 /**
  * Yoshi's basic attack (partyWeapon_YoshiNormalAttack), first entry of his move menu:
  * a charge-up (PYS_W_1, PYS_R_5) while a sibling event ramps the slide sound's volume,
- * then a run at the chosen enemy with an action command that sets how hard he hits.
+ * then a jump and flutter over the chosen enemy (btl_yoshi_yoroyoro_jump_*) with an action command whose
+ * result sets how many times he pounds it.
  * Its weapon name btl_wn_pys_normal is Ground Pound in English (description msg_pys_hip_drop).
  */
 EVT_BEGIN(partyYoshiAttack_NormalAttack)
@@ -791,7 +791,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_GROUND_POUND_ACTIVE, 1)
-    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, define, -1)
+    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 3, -1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_SLIDE_SOUND_POWER, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_YOSHI_SLIDE_SOUND_PERCENT, 100)
     CALL(btlevtcmd_AnimeSetPoseSoundTable, UNIT_ID_SELF, 1, PTR(posesound_normal_attack))
@@ -869,7 +869,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     SET_VALUE(LW(13), 1)
     CALL(btlevtcmd_AcGetOutputParam, 2, LW(14))
 
-    // Each stomp: the game checks whether it connects, is dodged or is blocked.
+    // Each stomp: the game checks whether it connects or is avoided.
     LABEL(50)
     IF_INT_GREATER_OR_EQUAL(LW(13), 2)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 1048832, LW(5))
@@ -961,7 +961,8 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(btlevtcmd_ac_timing_flag_onoff, 0, 1)
     CALL(btlevtcmd_GetResultAC, LW(0))
 
-    // On a good command the stomp lands and deals its damage; the audience reacts to the result.
+    // The stomp deals its damage either way; a good command also shows the rating effect, and the audience
+    // reacts to the result.
     IF_BITS_SET(LW(0), 2)
         IF_INT_GREATER_OR_EQUAL(LW(13), LW(14))
             CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 131328, LW(5))
@@ -1089,8 +1090,8 @@ EVT_END()
  * with an action command whose difficulty comes from the move level.
  * A dodged tongue plays the target's avoid; a failed command
  * or an enemy that cannot be swallowed (_get_swallow_param -1) only takes the no-damage hit
- * (partyWeapon_YoshiNomikomi_Dmg0); a swallowable Pokey segment (swallow attribute 8) is eaten with damage
- * pattern 7.
+ * (partyWeapon_YoshiNomikomi_Dmg0); an enemy with swallow attribute 8 only plays its damage pattern 7
+ * reaction and is not swallowed.
  * Otherwise the enemy is gulped (damage pattern 2).
  * If a roll of 0 to 99 reaches its swallow value he spits it out (partyWeapon_YoshiNomikomi_Shot,
  * or _Spew when its swallow attribute lacks bit 2);
@@ -1160,7 +1161,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         GOTO(5)
     END_IF
 
-    // If the target is out of reach (a flying enemy), Yoshi first moves to where he can reach it.
+    // Against a pre-emptive spiky enemy he walks up to it first and takes the spike damage on the way.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), 256, LW(5))
     IF_INT_EQUAL(LW(5), PRECHECK_PREEMPTIVE_SPIKY)
 #if VERSION <= VERSION_DEMO_JP
@@ -1239,7 +1240,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW2"), 0)
 
-    // A Pokey-like enemy (swallow flag 8) is eaten a piece at a time instead of being swallowed whole.
+    // An enemy with swallow flag 8 only plays its gulp reaction (damage pattern 7); Yoshi lets it go.
     CALL(_check_swallow_attribute, LW(3), 8, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 7, 1)
@@ -1345,7 +1346,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         END_IF
     END_IF
 
-    // An enemy with swallow flag 4 (a fire-type), but not flag 1, makes him breathe fire on every enemy.
+    // An enemy with swallow flag 4, but not flag 1, makes him breathe fire on every enemy.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_4"))
     WAIT_FRAMES(22)
     BEGIN_SIBLING_EVENT
@@ -1848,14 +1849,14 @@ EVT_END()
 
 /**
  * Yoshi's Stampede (partyWeapon_YoshiCallGuard,
- * named btl_wn_pys_lv3: a herd of Yoshis attacks all ground enemies):
+ * named btl_wn_pys_lv3: a herd of Yoshis attacks every enemy):
  * he pays the cost, runs the action command (PYS_A_10, A_11) and calls the herd with a call sound;
  * _gundan_yoshi_run_effect runs the herd across the stage,
  * and each sampled enemy takes as many hits as the command's output gives, the last with the last-hit flag.
  */
 EVT_BEGIN(partyYoshiAttack_CallGuard)
 
-    // Stampede is declared and its FP cost paid; all ground enemies are targeted.
+    // Stampede is declared and its FP cost paid; every enemy is targeted.
     SET_VALUE(LW(12), PTR(&partyWeapon_YoshiCallGuard))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
@@ -2282,7 +2283,7 @@ USER_FUNC(_yoshi_slide_ac_check) {
 }
 
 /**
- * Script helper for Yoshi's staggering ('yoroyoro') walk:
+ * Script helper for Yoshi's Ground Pound flutter ('yoroyoro' jump):
  * args[0] is the unit, args[1]-args[3] the target x, y, z;
  * sets up a 180-frame move at a constant speed and writes the speed to args[4] and the frame count to args[5].
  */
@@ -2331,8 +2332,8 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_calc_param) {
 }
 
 /**
- * Script helper called every frame: advances Yoshi's staggering walk toward the target set by
- * btl_yoshi_yoroyoro_jump_calc_param, bobbing him up and down and spawning a sweat drop every 20 frames;
+ * Script helper called every frame: advances Yoshi's flutter toward the target set by
+ * btl_yoshi_yoroyoro_jump_calc_param, bobbing him up and down and spawning a sweat drop every 21 frames;
  * returns DONE when the 180 frames are used up.
  */
 USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
@@ -2628,8 +2629,8 @@ USER_FUNC(_gundan_yoshi_run_effect) {
 
 /**
  * Updates herd member i of the Stampede for one frame.
- * State 0 places it in a row of 16 behind the left edge (x = -300 minus 30 per row, plus up to 10 at random;
- * z lane -80 + 10 * (i % 16)), with a random start delay of up to 3 frames, animation frame,
+ * State 0 places it in a row of 16 behind the left edge (x = -300 minus 30 per row, plus 0 to 9 at random;
+ * z lane -80 + 10 * (i % 16)), with a random start delay of 0 to 2 frames, animation frame,
  * speed 3 to 4 and z drift.
  * It then runs right, bouncing its z between -80 and 80 (65 from US on), until it reaches x = 300,
  * where it stops (state 999). Returns TRUE while it is still running, FALSE once stopped.

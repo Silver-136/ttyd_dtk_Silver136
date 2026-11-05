@@ -660,7 +660,10 @@ static BattleUnitSetup entry_kamec = {
     NULL, // itemDropTable
 };
 
-/** Init script of the real Magikoopa. Registers its wait, attack, damage and other scripts and starts it waiting. */
+/**
+ * Init script of the Magikoopa, also run by each clone (unit_kamec_red_bunsin; spawn_event marks the clone
+ * afterwards). Registers its wait, attack, damage and other scripts and starts it waiting.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FADING, 0)
@@ -699,7 +702,7 @@ EVT_END()
 /**
  * Fades the unit whose id is in LW(0) out over 30 frames (alpha 254 down to 0),
  * then hides its body part's shadow (0x2000000, PART_ATTR_NO_SHADOW); LW(0) = -1 does nothing.
- * bunsin_magic_event uses it on the Magikoopa before it splits.
+ * bunsin_magic_event uses it on the Magikoopa before it splits, bunsin_kill_event on a clone it removes.
  */
 static EVT_BEGIN(alpha_down_event)
     IF_INT_EQUAL(LW(0), -1)
@@ -1137,7 +1140,7 @@ EVT_END()
 /**
  * Casting animation on the ground, shared with the clones:
  * a staff glow (eff_staff1) on the caster and on each clone,
- * or only the larger glow (eff_staff2) on the caster when LW(15) is nonzero,
+ * or only the charge effect (eff_staff2) on the caster when LW(15) is nonzero,
  * the KMR_A_1A to KMR_A_1E poses played in step on all of them,
  * and the magic sounds (SFX_ENM_KAMEKU_MAGIC1, 4 and 8).
  */
@@ -1756,7 +1759,8 @@ EVT_END()
 
 /**
  * Heal spell on all allies: restores up to 4 HP each.
- * Only the first target's missing HP is checked, so it may heal nobody when only that one is at full HP.
+ * Only the first target's missing HP is checked: when that one is at full HP and another target exists,
+ * the spell is not cast (LW(0) = 0), even if the others are hurt.
  */
 static EVT_BEGIN(all_recover_magic_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1966,7 +1970,7 @@ static USER_FUNC(eff_staff1) {
 
 /**
  * Script helper: arg0 = source unit, arg1 = destination unit;
- * the clone (bunsin) gets the real Magikoopa's HP and status turns so they stay in step.
+ * the clone (bunsin) gets a one-time copy of the real Magikoopa's HP and status turns (spawn_event).
  */
 static USER_FUNC(kamec_copy_status) {
     EvtWord* args = event->args;

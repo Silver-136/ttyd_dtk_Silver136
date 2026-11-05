@@ -1,4 +1,4 @@
-// Battle unit Bristle (`togedaruma`): tst.rel's copy of rels/hei/src/unit/unit_togedaruma.c.
+// Battle unit Bristle (`togedaruma`): tst.rel's copy of rels/hei/src/unit/unit_togedaruma.c (the early-demo status table differs).
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "party/party_motion.h"
@@ -117,12 +117,12 @@ static BattleUnitDefense defence_turn = {0};
 
 #if VERSION <= VERSION_DEMO_JP
 
-/** Status vulnerability of the Bristle in the demo builds: immune to burn; resists most other statuses. */
+/** Status vulnerability of the Bristle in the early demos: immune to burn; resists most other statuses. */
 static StatusVulnerability regist = {40, 90, 50, 100, 50, 100, 0, 70, 100, 70, 100, 70, 100, 70, 70, 50, 75, 100, 70, 100, 100, 95};
 #else
 
 /**
- * Status vulnerability of the Bristle in the retail builds: immune to burn; resists most other statuses.
+ * Status vulnerability of the Bristle in JP and later: immune to burn; resists most other statuses.
  */
 static StatusVulnerability regist = {40, 100, 40, 100, 40, 100, 0, 60, 100, 60, 100, 60, 100, 100, 60, 50, 40, 100, 60, 100, 100, 95};
 #endif
@@ -131,12 +131,12 @@ static StatusVulnerability regist = {40, 100, 40, 100, 40, 100, 0, 60, 100, 60, 
  * Pose table of the Bristle: maps each battle pose (waiting, hurt, running...) to one of its TGD_* animations.
  */
 static PoseTableEntry pose_table[] = {
-    {STATUS_SLEEP, "TGD_N_1"},
-    {STATUS_STOP, "TGD_I_1"},
-    {STATUS_FREEZE, "TGD_I_1"},
-    {STATUS_CONFUSE, "TGD_K_1"},
-    {STATUS_POISON, "TGD_X_1"},
-    {STATUS_DIZZY, "TGD_X_1"},
+    {POSE_TYPE_SLEEP, "TGD_N_1"},
+    {POSE_TYPE_STOP, "TGD_I_1"},
+    {POSE_TYPE_FREEZE, "TGD_I_1"},
+    {POSE_TYPE_CONFUSE, "TGD_K_1"},
+    {POSE_TYPE_POISON, "TGD_X_1"},
+    {POSE_TYPE_DIZZY, "TGD_X_1"},
     {BTL_POSE_NORMAL, "TGD_S_4"},
     {POSE_TYPE_DAMAGE_FIRE, "TGD_Q_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGD_Q_1"},
@@ -156,12 +156,12 @@ static PoseTableEntry pose_table[] = {
  * maps each battle pose (waiting, hurt, running...) to one of its TGD_* animations.
  */
 static PoseTableEntry pose_table_turn[] = {
-    {STATUS_SLEEP, "TGD_N_2"},
-    {STATUS_STOP, "TGD_I_2"},
-    {STATUS_FREEZE, "TGD_Z_4"},
-    {STATUS_CONFUSE, "TGD_K_2"},
-    {STATUS_POISON, "TGD_X_2"},
-    {STATUS_DIZZY, "TGD_X_2"},
+    {POSE_TYPE_SLEEP, "TGD_N_2"},
+    {POSE_TYPE_STOP, "TGD_I_2"},
+    {POSE_TYPE_FREEZE, "TGD_Z_4"},
+    {POSE_TYPE_CONFUSE, "TGD_K_2"},
+    {POSE_TYPE_POISON, "TGD_X_2"},
+    {POSE_TYPE_DIZZY, "TGD_X_2"},
     {BTL_POSE_NORMAL, "TGD_S_5"},
     {POSE_TYPE_DAMAGE_FIRE, "TGD_Q_2"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGD_Q_2"},

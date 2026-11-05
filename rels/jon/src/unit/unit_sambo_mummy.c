@@ -640,10 +640,10 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Damage event of the Poison Pokey that loses its top segment when a hit does damage:
- * plays the damage pose, takes one off the body length (unit work 0), re-applies the height and the status icon,
- * cut and kiss offsets for the shorter stack, and drops the old top as a loose head (part 5) that falls to the
- * floor and bounces.
+ * Damage event of the Poison Pokey that loses its top segment on the hit: with only its head left (unit work 0
+ * = 1) it plays the damage pose, or the no-damage reaction when the hit does no damage. Otherwise it takes one off
+ * the body length (unit work 0), re-applies the height and the status icon, cut and kiss offsets for the shorter
+ * stack, and drops the old top as a loose segment (part 5) that hops to the floor twice and blinks out.
  */
 static EVT_BEGIN(damage_event_bodylost)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
@@ -774,7 +774,8 @@ EVT_END()
  * only its head left (unit work 0 = 1) it takes the shot-away damage.
  * Otherwise it loses a segment: the loose segment
  * (part 5) is knocked through each ally after it in turn, hitting them with marioWeapon_KaitenHammerInvolved
- * (pattern 15) or marioWeapon_UltraHammerInvolved, then flies off the stage edge; with pattern 16 the
+ * (only for pattern 15, which never runs this event) or else marioWeapon_UltraHammerInvolved, then flies off
+ * the stage edge; with pattern 16 the
  * marioWeapon_UltraHammerFinish hit then lands on the Poison Pokey itself.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
@@ -1259,7 +1260,8 @@ EVT_END()
 /**
  * The attack of a Poison Pokey that is down to its head:
  * it hops (sambo_rabbit_move, 35 units a hop) beside the target,
- * spins forward on a jump over it with the attack sound, then lands with a few shrinking bounces and hops home.
+ * spins forward in a jump onto it (over it and beyond on a miss); after a hit it bounces back with a few
+ * shrinking hops, then hops home.
  * The weapon is weapon_sambo_mummy_head_attack_1.
  */
 static EVT_BEGIN(attack_head_1_event)
@@ -1454,7 +1456,8 @@ EVT_END()
  * according to its body length, shrinks by one segment
  * and throws that top segment (part 5, pose SNB_B_1) in a rising arc at the target,
  * the hit or the miss deciding where it lands.
- * The segment then drops to the floor, bounces three times and is lost.
+ * After a hit it drops to the floor with three bounces; after a miss it flies on toward the stage edge; a
+ * Superguard sends it back into the Pokey. It is hidden afterwards.
  */
 static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(10))
@@ -1500,7 +1503,8 @@ static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // The Pokey pulls its top segment off the stack, so the stack is one segment shorter.
+    // The thrown segment is drawn smaller when the Pokey is shrunk; then the Pokey pulls its top segment off
+    // the stack, so the stack is one segment shorter.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, 5, FLOAT(0.69921875f), FLOAT(0.69921875f), FLOAT(1.0f))
@@ -1608,7 +1612,7 @@ static EVT_BEGIN(attack_spike_event)
     MULTIPLY(LW(0), LW(9))
     SUBTRACT(LW(1), 5)
 
-    // The segment sails past the target and drops to the floor.
+    // The segment sails past the target toward the stage edge and is hidden.
     CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, 5, FLOAT(10.0f))
     CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, 5, FLOAT(0.099609375f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
@@ -1643,7 +1647,8 @@ static EVT_BEGIN(attack_spike_event)
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(11))
         CALL(btlevtcmd_GetHitPos, UNIT_ID_SELF, LW(11), LW(0), LW(1), LW(2))
 
-        // The segment bounces off the target and drops to the floor with three bounces, then is lost.
+        // Superguarded: the segment flies back into the Pokey, which takes the hit itself, and bounces away
+        // in three dives before it is hidden.
         CALL(btlevtcmd_SetPartsMoveSpeed, UNIT_ID_SELF, 5, FLOAT(4.5f))
         CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, 5, FLOAT(0.39941406f))
         CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 5, LW(0), LW(1), LW(2), 40, MOVE_SOUND_FROM_TABLE)
@@ -1738,7 +1743,7 @@ static EVT_BEGIN(call_friend_event)
         CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
     END_INLINE_EVENT
 
-    // The new, short Pokey drops in through a smoke puff at the free spot.
+    // The new Pokey rises from below the floor through a smoke puff at the free spot.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_sambo), 0)
     SET_VALUE(LW(0), LW(6))
     SET_VALUE(LW(1), LW(7))
@@ -1786,7 +1791,7 @@ static EVT_BEGIN(call_friend_event)
 EVT_END()
 
 /**
- * Setup used to spawn a short Poison Pokey (called by another):
+ * Setup used to spawn a Poison Pokey (called by another):
  * unit kind, alliance, position and turn phase.
  */
 static BattleUnitSetup entry_sambo = {

@@ -778,7 +778,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Kills all four of the Magikoopa's clones: fetches their unit ids with kamec_get_bunsin
+ * Kills the Magikoopa's clones (up to four): fetches their unit ids with kamec_get_bunsin
  * and spawns bunsin_kill_event for each existing one.
  */
 static EVT_BEGIN(kamec_subset_bunsin_all_kill)
@@ -985,8 +985,8 @@ EVT_END()
 
 /**
  * Attack script of the Magikoopa.
- * Chooses a spell: usually the attack magic (weapon_kamec_attack_magic), or healing, Electric or Invisible spells
- * for its allies, or creates its clones (bunsin_magic_event) depending on how many
+ * Chooses a spell: usually the attack magic (weapon_kamec_attack_magic), or Electric or Invisible spells
+ * (rarely the heal-all spell) for its allies, or creates its clones (bunsin_magic_event) depending on how many
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
@@ -1069,7 +1069,7 @@ static EVT_BEGIN(attack_event)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_dekadeka_magic))
 
-                // the Huge spell on an ally,
+                // the Huge spell on an ally (weight 0: never chosen),
                 CALL_CHILD(PTR(dekadeka_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1080,7 +1080,7 @@ static EVT_BEGIN(attack_event)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_katikati_magic))
 
-                // the defense-boosting spell,
+                // the defense-boosting spell (weight 0: never chosen),
                 CALL_CHILD(PTR(katikati_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1113,7 +1113,8 @@ static EVT_BEGIN(attack_event)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_recover_magic))
 
-                // and the healing spells, for one ally or for all.
+                // and the healing spells: the single heal has weight 0 (never chosen); the heal-all in the ELSE
+                // runs only on a roll of 90 (1 in 91).
                 CALL_CHILD(PTR(recover_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1756,7 +1757,8 @@ EVT_END()
 
 /**
  * Heal spell on all allies: restores up to 4 HP each.
- * Only the first target's missing HP is checked, so it may heal nobody when only that one is at full HP.
+ * Only the first target's missing HP is checked: when that one is at full HP the spell is not cast (LW(0) = 0),
+ * even if other allies are hurt.
  */
 static EVT_BEGIN(all_recover_magic_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1966,7 +1968,7 @@ static USER_FUNC(eff_staff1) {
 
 /**
  * Script helper: arg0 = source unit, arg1 = destination unit;
- * the clone (bunsin) gets the real Magikoopa's HP and status turns so they stay in step.
+ * the clone (bunsin) gets the real Magikoopa's HP and status turns (a one-time copy when it spawns).
  */
 static USER_FUNC(kamec_copy_status) {
     EvtWord* args = event->args;

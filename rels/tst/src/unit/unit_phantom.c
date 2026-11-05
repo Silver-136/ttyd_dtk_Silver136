@@ -1,4 +1,4 @@
-// Pit of 100 Trials battle unit: the Phantom Ember (`phantom`): parts, stats, poses and AI scripts.
+// Battle unit Phantom Ember (`phantom`): tst.rel's copy of rels/jon/src/unit/unit_phantom.c (parts, stats, poses and AI scripts).
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -559,7 +559,7 @@ static EVT_BEGIN(normal_attack_event)
     END_LOOP
     GOTO(98)
 
-    // It hops over and behind the target and floats back home.
+    // It hops back away from the target in two arcs, then floats to its home position.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)

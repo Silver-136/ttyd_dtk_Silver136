@@ -160,8 +160,8 @@ static BattleUnitDefense defence_turn = {0};
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 /**
- * Status vulnerability of the Sky-Blue Spiny while it is flipped onto its back, as the percent chance each
- * status takes hold: every status lands at the normal rate.
+ * Status vulnerability of the Sky-Blue Spiny while it is flipped onto its back, as percent of each status's
+ * normal chance: 100 for every status.
  */
 static StatusVulnerability regist_turn = {
     100, // sleep
@@ -201,8 +201,8 @@ static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 static BattleUnitDefenseAttr defence_attr_guard = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
- * Status vulnerability of the Sky-Blue Spiny while it is curled up guarding, as the percent chance each
- * status takes hold: every status lands at the normal rate.
+ * Status vulnerability of the Sky-Blue Spiny while it is curled up guarding, as percent of each status's
+ * normal chance: 100 for every status.
  */
 static StatusVulnerability regist_guard = {
     100, // sleep
@@ -420,7 +420,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Data event 39 (damage code 33, run when an attacker is hurt by its spikes):
+ * Data events 37 and 39 (damage codes 31 and 33, run when an attacker is hurt by its spikes):
  * after 30 frames flashes the "toge_flush" spike effect above the unit,
  * 45 units up when Huge (STATUS_HUGE), 25 when Tiny (STATUS_TINY) and 35 otherwise.
  */
@@ -555,7 +555,7 @@ EVT_END()
 
 /**
  * The Sky-Blue Spiny's rolling attack (weapon_togezo_attack):
- * it curls up with the turn sounds, spins faster and faster and rolls along the floor into the target.
+ * it curls up with the turn sound, keeps spinning and rolls along the floor into the target.
  * A miss rolls past and winds down; a hit shakes the camera,
  * knocks the target and the Spiny rebounds in two hops.
  * After a hit there is a 50% chance that it keeps rolling home
@@ -594,7 +594,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(14))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(14))
 
-    // The Spiny curls up into a spiky ball, spinning faster and faster.
+    // The Spiny curls up into a spiky ball and keeps spinning.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEZO_TURN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 15, 0)
@@ -897,7 +897,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
-/** Wait event: sets the idle animation from the unit's pose table. */
+/** Wait event: sets part 1's pose for its current state from its current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

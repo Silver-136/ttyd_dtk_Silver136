@@ -617,7 +617,7 @@ static BattleUnitSetup entry_mahorn = {
  * Attack script of the Elite Wizzerd. On a first strike it just punches.
  * Its copies (unit work 4 set) do nothing.
  * After an item check, if it is the only unit of its side left it splits into copies (bunsin_event);
- * if it has copies it casts its single-target magic (or is flustered when confused with no target);
+ * if it has copies it casts its single-target magic (or is flustered when confused);
  * otherwise it draws a spell: punch (30 in 150), single-target magic (60), and 10 each for magic on all enemies,
  * size-up, defence-up, invisibility, dodgy and heal.
  */
@@ -804,7 +804,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Fades the unit in LW(0) out over 30 frames (all five body parts) and then hides all its parts.
+ * Fades the unit in LW(0) out over 30 frames (all five body parts) and then turns off the shadows of all its parts.
  * A unit id of -1 does nothing. Used when the Elite Wizzerd vanishes to make or remove copies.
  */
 static EVT_BEGIN(alpha_down_event)
@@ -836,7 +836,7 @@ static EVT_BEGIN(alpha_down_event)
 EVT_END()
 
 /**
- * Fades the unit in LW(0) back in over 30 frames (all five body parts) after showing its parts again;
+ * Fades the unit in LW(0) back in over 30 frames (all five body parts) after turning their shadows back on;
  * a unit id of -1 does nothing.
  */
 static EVT_BEGIN(alpha_up_event)
@@ -1543,9 +1543,9 @@ static EVT_BEGIN(attack_enemy_common_event_sub2)
 EVT_END()
 
 /**
- * A copy's spell: the Elite Wizzerd in LW(15) sends its magic orb (eff_magic, 40 frames) to the far edge of the
- * stage and does the casting gesture (attack_enemy_common_event_sub2) with SFX_ENM_MAHO_MAGIC1 and MAGIC3,
- * so it looks like a real attack.
+ * A missed spell, run for the Elite Wizzerd and each copy: the caster in LW(15) sends its magic orb (eff_magic,
+ * 40 frames) to the far edge of the stage and does the casting gesture (attack_enemy_common_event_sub2) with
+ * SFX_ENM_MAHO_MAGIC1 and MAGIC3.
  */
 static EVT_BEGIN(attack_enemy_common_event_sub_no_hit)
     IF_INT_EQUAL(LW(15), -1)
@@ -1568,7 +1568,7 @@ static EVT_BEGIN(attack_enemy_common_event_sub_no_hit)
 EVT_END()
 
 /**
- * The real spell: the Elite Wizzerd in LW(15) sends its magic orb (eff_magic, 20 frames) at the target's hit
+ * A spell that hits, run for the Elite Wizzerd and each copy: the caster in LW(15) sends its magic orb (eff_magic, 20 frames) at the target's hit
  * position and does the casting gesture (attack_enemy_common_event_sub2) with SFX_ENM_MAHO_MAGIC1 and MAGIC3.
  */
 static EVT_BEGIN(attack_enemy_common_event_sub_hit)
@@ -1618,8 +1618,8 @@ EVT_END()
 
 /**
  * The Elite Wizzerd's confusion spell: picks a target,
- * casts the single-target spell (attack_enemy_common_event) with the confuse weapon in LW(9) (50 percent chance,
- * 3 turns) and resets its facing. When confused with no target it is flustered.
+ * casts the single-target spell (attack_enemy_common_event) with the weapon already in LW(9) (this unit defines no
+ * confusion weapon, and its attack script never runs this event) and resets its facing. When confused with no target it is flustered.
  */
 static EVT_BEGIN(confuse_magic_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -2072,7 +2072,7 @@ static USER_FUNC(eff_magic_get_posX) {
 /**
  * Script helper: args[0] = unit, args[1] = target x, args[4] = travel time in frames;
  * args[2..3] are read but do not affect the effect's target y and z, which use its starting y and z.
- * Starts the Wizzerd's magic effect from its wand towards the target and stores it in work[7];
+ * Starts the Wizzerd's magic effect from just in front of it (18 units up, scaled by size) towards the target and stores it in work[7];
  * the speed is derived from the distance and time.
  */
 static USER_FUNC(eff_magic) {
@@ -2097,8 +2097,8 @@ static USER_FUNC(eff_magic) {
 
 /**
  * Script helper: args[0] = source unit, args[1] = destination unit.
- * Copies the HP and status block from the real unit to a copy (or back), and resets the HP gauge,
- * so the copies share damage and ailments.
+ * Copies the HP and status block from the real unit to a new copy (spawn_event), and resets
+ * the copy's HP gauge, so it starts with the same HP and statuses (a one-time copy, not kept in step).
  */
 static USER_FUNC(mahorn_copy_status) {
     EvtWord* args = event->args;

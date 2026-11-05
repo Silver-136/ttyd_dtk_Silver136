@@ -209,9 +209,8 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Makes the target play its dodge reaction for the precheck result in LW(5) (3, 6 and 2 map to avoid poses 38,
- * 39 and
- * 40) on the target in LW(3); other results do nothing.
+ * Makes the target play its dodge reaction for the precheck result in LW(5) (lucky 3, dodgy 6 and miss 2 map to
+ * damage codes 0x26, 0x27 and 0x28) on the target in LW(3); other results do nothing.
  */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)

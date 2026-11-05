@@ -35,7 +35,7 @@ static EvtWord wait_event[6];
 /**
  * Script helper: args[0] and args[1] are unit ids (BattleTransID).
  * Copies the size-change (Mini/Mega) turns and strength from the first unit to the second,
- * so a unit spawned or replaced mid-battle keeps the size it had. Called with the new unit (LW(3)).
+ * so the Bullet Bill just spawned (LW(3)) gets the Bill Blaster's size change; HP is not copied.
  */
 static USER_FUNC(killer_copy_status) {
     EvtWord* args = event->args;
@@ -288,7 +288,8 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // Ground shot with a longer charge-up before firing; the Bill it fires is charged.
+    // Ground shot with a longer charge-up before firing; the Bill it fires is charged. Its weight is 0, so it is
+    // never drawn.
     ADD(LW(0), 0)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -349,7 +350,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // Sky shot: the barrel part is raised and the cannon fires a Bullet Bill down onto a free spot, then the barrel
+    // Sky shot: the barrel part is raised and the cannon fires a Bullet Bill to a free spot, then the barrel
     // swings back down.
     ADD(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
@@ -397,7 +398,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // Sky shot with a longer charge-up; the Bill it fires is charged.
+    // Sky shot with a longer charge-up; the Bill it fires is charged. Its weight is 0, so it is never drawn.
     ADD(LW(0), 0)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -498,7 +499,7 @@ EVT_END()
 
 /**
  * Fires a Bullet Bill from the Bill Blaster's main cannon: LW(12) = 1 plays a longer charge-up first.
- * After a pause the cannon flashes (KTA_A_1) and the shot sound plays;
+ * The cannon plays its firing animation (KTA_A_1), and after a pause the shot sound plays;
  * the smoke size depends on whether the Blaster is Huge (STATUS_HUGE) or Tiny (STATUS_TINY).
  * The camera shakes and a new Bullet Bill (entry_killer) is spawned with the Blaster's status copied
  * (killer_copy_status), flies to the free position LW(0), LW(2) at y = 10 and becomes its home position.
@@ -563,7 +564,7 @@ EVT_END()
 /**
  * Same as friend_event for the "sky" cannon (part 2):
  * first lowers the cannon's angle (part 2 rotation) to aim at the free spot, then charges (if LW(12) = 1),
- * fires, shakes the camera and spawns a Bullet Bill that flies down to the position at y = 40,
+ * fires, shakes the camera and spawns a Bullet Bill at y = 10 that flies up to the free position at y = 40,
  * rotated to match the barrel angle during the launch.
  */
 static EVT_BEGIN(friend_event_sky)

@@ -304,7 +304,7 @@ EVT_END()
  * the holding state and counter attribute are cleared and its pose table is restored
  * before the default damage runs.
  * Otherwise, unless the damage code is 22, 30, 31, 38, 39 or 41,
- * it tosses the egg part a shorter way and hides it
+ * it pops the egg part up in place and hides it
  * while it has STATUS_POISON, STATUS_BURN, STATUS_TINY, STATUS_DEFENSE_DOWN, STATUS_SLOW or STATUS_ALLERGIC (Poison, Burn, Tiny, Defense Down, Slow, Allergic), without clearing
  * the holding state; the default damage then runs.
  */
@@ -366,7 +366,7 @@ static EVT_BEGIN(damage_event)
             CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
 
             // Otherwise, unless the hit is one of a few special kinds, a lingering status (poison, burn, tiny,
-            // defense down, slow or allergic) makes it fumble the egg a short way and hide it; it still counts
+            // defense down, slow or allergic) makes the egg pop up in place and hide; it still counts
             // as holding it.
             IF_INT_EQUAL(LW(0), DAMAGE_CODE_STATUS_ONLY)
                 GOTO(90)
@@ -418,7 +418,7 @@ EVT_END()
 
 /**
  * Before the player's phase, on every turn but the first, if the Dark Lakitu can act and is not in STATUS_INSTANT_KILL, STATUS_DIZZY,
- * 5 or 6 (KO, Dizzy, Confuse, Electric), it has a 50 percent chance to pick up an egg:
+ * STATUS_CONFUSE or STATUS_ELECTRIC (KO, Dizzy, Confuse, Electric), it has a 50 percent chance to pick up an egg:
  * it plays JGM_A_1 and A_2 with the hold sounds, sets unit work 0 and counter attribute 1 (top-spiky) on part 1,
  * switches to the holding pose table and raises its hit offset by 20.
  */
@@ -507,7 +507,7 @@ EVT_END()
 /**
  * Attack script of the Dark Lakitu.
  * After an item check it draws lots: 40 against 90 (70 after the first turn) between throwing an egg that
- * hatches a Spiny into a free spot (friend_event, trying the space to its right first and then to its left)
+ * hatches a Spiny into a free spot (friend_event, trying spots in front of it up to the centre line first, then behind it up to x 150)
  * and an attack. A charged Dark Lakitu (unit work 2 set) always throws an egg.
  * Otherwise the attack is drawn from the plain egg throw,
  * the Spiny-hatching throw and charging up (charge_event) in the ratio 30:30:30 on the first turn
@@ -598,7 +598,7 @@ EVT_END()
  * If unit work 1 is set and the target guarded the egg (damage flag 0x40000) the
  * egg also bounces to a free spot and hatches a Sky-Blue Spiny there (togezo_copy_status copies its size
  * status).
- * Otherwise the egg hops and lands behind the target and is picked up again.
+ * Otherwise the egg drops to the floor further past the target and is hidden.
  */
 static EVT_BEGIN(normal_attack_event)
 
@@ -763,7 +763,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_SetRotateOffset, LW(3), 0, 0, 0)
     GOTO(99)
 
-    // The egg hops back to the Dark Lakitu and is picked up again.
+    // Otherwise the egg drops to the floor further past the target and is hidden.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))

@@ -484,7 +484,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Empty counter script (just returns). */
+/** Data event 42 (an attacker avoided its electric contact): empty, just returns. */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()

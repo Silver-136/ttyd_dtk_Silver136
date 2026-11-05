@@ -160,8 +160,8 @@ EVT_BEGIN(btldefaultevt_Damage)
         GOTO(10)
     END_IF
 
-    // Attacks stopped before they land: codes 31-37 (the attack bounced off this unit's spikes or flames)
-    // run data-table events 37-43, and a Superguard (42) runs event 47.
+    // Attacks stopped before they land: codes 31-37 (this unit's attack was stopped by its target's spikes or
+    // flames) run data-table events 37-43, and a Superguard (42) runs event 47.
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(DAMAGE_CODE_AVOID_TOP_SPIKY)

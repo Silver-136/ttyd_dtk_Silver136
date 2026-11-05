@@ -189,12 +189,12 @@ static StatusVulnerability regist = {90, 90, 50, 100, 90, 100, 100, 90, 100, 90,
  * Pose table of the Pider: maps each battle pose (waiting, hurt, running...) to one of its PAI_* animations.
  */
 static PoseTableEntry pose_table[] = {
-    {STATUS_SLEEP, "PAI_N_1"},
-    {STATUS_STOP, "PAI_Y_1"},
-    {STATUS_FREEZE, "PAI_Y_1"},
-    {STATUS_CONFUSE, "PAI_K_1"},
-    {STATUS_POISON, "PAI_X_1"},
-    {STATUS_DIZZY, "PAI_X_1"},
+    {POSE_TYPE_SLEEP, "PAI_N_1"},
+    {POSE_TYPE_STOP, "PAI_Y_1"},
+    {POSE_TYPE_FREEZE, "PAI_Y_1"},
+    {POSE_TYPE_CONFUSE, "PAI_K_1"},
+    {POSE_TYPE_POISON, "PAI_X_1"},
+    {POSE_TYPE_DIZZY, "PAI_X_1"},
     {BTL_POSE_NORMAL, "PAI_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "PAI_D_1"},
     {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PAI_D_1"},

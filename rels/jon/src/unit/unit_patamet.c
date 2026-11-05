@@ -267,7 +267,7 @@ EVT_END()
 /**
  * Fall reaction of the flying Parabuzzy (data event 14), run when it loses its wings.
  * It clears its flying attribute, switches to the walking pose table, data table and parts, drops to the floor,
- * and changes its unit kind to the Buzzy Beetle, which re-runs init_event for the grounded form.
+ * changes its unit kind to the Buzzy Beetle and then runs init_event for the grounded form.
  * If its HP-damage count is above 1 it also lands flipped over (dmg_turn_event).
  */
 static EVT_BEGIN(dmg_fall_event_pata)
@@ -359,7 +359,7 @@ static EVT_BEGIN(attack_event_pata)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
-    // It flaps up over the target.
+    // It flaps 40 units up.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PATAMET_MOVE1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -530,7 +530,7 @@ static BattleDataEntry data_table_ceil[] = {
     {0},
 };
 
-/** Attack data for the Parabuzzy's spiked shell roll: 3 damage. */
+/** Attack data for the Parabuzzy's shell roll (Buzzy Beetle form): 3 damage. */
 static BattleWeapon weapon_met_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -793,7 +793,7 @@ EVT_END()
  * otherwise it checks for an item use and samples a target.
  * It then curls up and spins (unit work 1 and 2 hold the stop flag and spin speed for a background rotation
  * loop), trailing smoke, and slides along the floor into the target.
- * A miss or block makes it bounce away, a hit deals damage and knocks it back in two hops.
+ * A miss makes it skid past and hop back, a hit deals damage and knocks it back in two hops.
  * Afterwards it walks home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
@@ -970,7 +970,7 @@ EVT_END()
 /**
  * Damage script of the Buzzy Beetle form of the Parabuzzy while on the ceiling:
  * runs the default damage handling, then, if the attack did real damage (and its damage code does not have DAMAGE_RESULT_ZERO_HP
- * without DAMAGE_RESULT_REVIVAL), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
+ * without DAMAGE_RESULT_REVIVAL) and the unit still has the ceiling attribute, it falls via ceil_fall_ready_event.
  */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -1063,7 +1063,7 @@ EVT_END()
  * Attack script of the Buzzy Beetle form of the Parabuzzy while on the ceiling:
  * it moves above the target, drops onto it (SFX_ENM_MET_FALL1 and landing sound) and, if the hit connects,
  * deals damage.
- * It then wobbles on the floor for 60 frames, loses the ceiling attributes and tables for good,
+ * It then wobbles where it landed for 60 frames, loses the ceiling attributes and tables for good,
  * takes two hops near the target, then walks back to its original x position and runs init_event2 to continue as a floor unit.
  */
 static EVT_BEGIN(attack_event_ceil)
@@ -1159,7 +1159,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_ceil_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
 
-    // The Parabuzzy wobbles on the floor, then leaves the ceiling for good and goes back to its floor tables.
+    // The Parabuzzy wobbles where it landed (height 18 at the target), then leaves the ceiling for good and goes back to its floor tables.
     LABEL(98)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, -18, 0)
     SET_FLOAT_VALUE(LW(12), FLOAT(30.0f))

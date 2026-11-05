@@ -1,4 +1,4 @@
-// Spiky Parabuzzy (patatogemet): enemy battle unit; Riverside Station's copy of the unit data and scripts.
+// Spiky Parabuzzy (`patatogemet`): enemy battle unit; tst.rel's copy of the unit data and scripts (rels/eki/src/unit/unit_patatogemet.c, with early-demo differences).
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -394,7 +394,7 @@ EVT_END()
  * The Spiky Parabuzzy's dive attack.
  * It picks a target (the first-attack target on a pre-emptive strike), rises 40 units,
  * dives at the target in its rolled pose and, depending on the pre-damage check,
- * passes it (avoid) or hits it with SFX_ENM_PATAMET_ATTACK1 damage, then flies back home.
+ * passes it (avoid) or hits it (impact sound SFX_ENM_PATAMET_ATTACK1), then flies back home.
  */
 static EVT_BEGIN(attack_event_pata)
 
@@ -1189,7 +1189,7 @@ EVT_END()
 /**
  * Attack of the ceiling Spike Top.
  * It slides over the target and drops on it (SFX_ENM_MET_FALL1),
- * with a miss or hit decided by the pre-damage check, then swings back and forth,
+ * with a miss or hit decided by the pre-damage check, then waits a second,
  * leaves the ceiling state, takes two hops near the target, then walks back to its home position on the floor.
  */
 static EVT_BEGIN(attack_event_ceil)

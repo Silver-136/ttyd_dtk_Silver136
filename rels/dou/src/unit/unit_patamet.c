@@ -756,7 +756,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Flips the Buzzy Beetle onto its back after a stomp-type hit:
+ * Flips the Buzzy Beetle onto its back after a flipping hit (DAMAGE_RESULT_FLIPPED):
  * switches to the overturned defence tables and pose table, sets status flag 1,
  * sets the overturned counter to 1 and hops to the floor.
  */
@@ -1206,7 +1206,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 12, 15, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
 
-    // It hops down onto the floor twice, walks back to its home position and runs the init event again.
+    // It hops down onto the floor twice, walks back to its home position and runs init_event2 again.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 25)

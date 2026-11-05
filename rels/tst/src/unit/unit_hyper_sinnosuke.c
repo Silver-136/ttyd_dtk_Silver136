@@ -380,7 +380,9 @@ EVT_END()
 
 /**
  * Attack event of the Hyper Bald Cleft: a flipped unit runs wakeup_event.
- * Otherwise it uses an enemy item if one fits, or picks a target (the first-strike target in a first strike),
+ * Otherwise, unless it is already charged, it uses an enemy item if one fits, or draws lots between the dash
+ * (50) and charging up (50 on the first turn, 16 later; weapon_sinnosuke_charge, ends the turn);
+ * for the dash it picks a target (the first-strike target in a first strike),
  * moves to a spot in front of the target with stamping steps,
  * rears up and dashes along the floor into the target (weapon_sinnosuke_attack).
  * A miss runs on past it; a hit shakes the camera and the Cleft bounces off in two hops. Then it returns home.
@@ -413,7 +415,7 @@ static EVT_BEGIN(attack_event)
             RETURN
         END_IF
 
-        // Draw lots: either charge up for a turn (powering up its next attack) or go on with the charge attack below.
+        // Draw lots: either charge up for a turn (powering up its next attack) or go on with the dash attack below.
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
@@ -560,7 +562,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_EMON_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
 
-    // The Cleft walks back to its home position.
+    // The Cleft runs back to its home position.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -573,7 +575,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Wait event: sets the idle animation from the unit's pose table. */
+/** Wait event: sets part 1's pose for its current state from its current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

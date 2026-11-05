@@ -120,7 +120,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
 
 /**
- * Pose table of the trap unit `wanawana`: maps each battle pose (waiting, hurt, running...) to an animation.
+ * Pose table of the trap unit `wanawana`: the normal, guarded-hit, damage and action poses all play S_1.
  */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "S_1"},

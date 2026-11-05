@@ -310,8 +310,9 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * When the attack is Superguarded the Toad is knocked off: the second body (part 3) flies out and lands while the rider runs away
- * and comes back.
+ * When the attack is Superguarded the body is knocked away from under the rider: part 2 is hidden and its copy
+ * (part 3) flies spinning to the stage edge; the rider runs after it, the body is shown on part 2 again and the
+ * rider returns home.
  */
 static EVT_BEGIN(hit_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)

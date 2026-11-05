@@ -171,8 +171,8 @@ static PoseTableEntry pose_table_turn[] = {
 };
 
 /**
- * Event data table of the Bristle: scripts that replace the standard handling for being flipped over by a
- * stomp, an attacker being hurt by its spiked head and an attacker being hurt by its
+ * Event data table of the Bristle: scripts that replace the standard handling for being flipped over by an
+ * explosion (kIsBombFlippable), an attacker being hurt by its spiked head and an attacker being hurt by its
  * front spikes.
  */
 static BattleDataEntry data_table[] = {
@@ -409,7 +409,7 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * The Bristle's attack: it wakes up first if it is on its back;
+ * The Bristle's attack: on its back it runs its recovery countdown instead;
  * otherwise it uses an item or picks a target, bounces up (TGD_J_1) and rams it (TGD_A_1).
  * A miss makes it slip past and recover, a hit applies the damage,
  * and it lands back in its stance (TGD_J_2, TGD_S_4).
@@ -495,7 +495,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The roll missed: the Bristle rolls past the target, then sits still for a moment, dizzy, before rolling upright again.
+    // The roll missed: the Bristle rolls past the target, then sits still for a moment (TGD_N_1, its sleep pose) before curling up again (TGD_J_1).
     LABEL(90)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("TGD_A_1"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

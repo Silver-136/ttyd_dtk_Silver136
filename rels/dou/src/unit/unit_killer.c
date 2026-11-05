@@ -265,7 +265,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and waits for any bodyguard to finish moving.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

@@ -106,7 +106,7 @@ static StatusVulnerability regist = {
 
 /**
  * Pose table of Goombella:
- * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ * the animation played for each pose type (idle, guarded hit, hurt and action; all PKR_S_1).
  */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "PKR_S_1"},

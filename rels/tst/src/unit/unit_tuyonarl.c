@@ -98,7 +98,7 @@ static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100
 
 /**
  * Pose table of the placeholder unit `tuyonarl`:
- * maps each battle pose (waiting, hurt, running...) to one of its KUR_* animations.
+ * maps the normal, damage and action poses and pose 31 to KUR_S_1 or KUR_D_1.
  */
 static PoseTableEntry pose_table[] = {
     {BTL_POSE_NORMAL, "KUR_S_1"},

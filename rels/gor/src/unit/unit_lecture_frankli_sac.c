@@ -404,7 +404,7 @@ EVT_END()
 
 /**
  * Init event of Professor Frankly in the special-action-command tutorial:
- * starts lecture mode, registers himself as the lecture unit, hooks actend_event on Mario and the partner,
+ * sets up the lecture's audience and bingo reels (lecture_init), registers himself as the lecture unit, hooks actend_event on Mario and the partner,
  * clears work 0 to 2 and sets his maximum action count to zero.
  */
 static EVT_BEGIN(init_event)
@@ -470,7 +470,7 @@ EVT_END()
  * After the first special move (act type 4) Frankly shows the
  * emptied gauge and asks to be attacked (mac_0_b_t3_003 to 005);
  * after each attack he praises or scolds the action
- * command result (006 to 010, the audience growing or shrinking) and, once the icons match,
+ * command result (006 to 010, the audience growing or shrinking) and, after the third success,
  * explains the bingo and
  * the hammer-throwing audience member (013 to 014_3); at step 3 he ends the lecture (014_4, 015).
  */
@@ -570,8 +570,8 @@ EVT_BEGIN(actend_event)
                     GOTO(99)
                 END_IF
                 IF_INT_EQUAL(LW(0), 2)
-                    // Three matching icons: the crowd goes wild; Frankly explains the bingo
-                    // and the Appeal command.
+                    // Third successful action command: Frankly praises the three matched icons, explains
+                    // the bingo and the Appeal command.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_013"), 0, -6)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -600,7 +600,7 @@ EVT_BEGIN(actend_event)
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_014_3"), 0, -6)
                     CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, UNIT_WORK_LESSON, 3)
 
-                    // Frankly explains that audience throws can be stopped with a button press.
+                    // The audience-attack part starts (aud_attack_init) and only the no-command lesson is left.
                     CALL(aud_attack_init)
                     CALL(btlevtcmd_onoff_battleflag, 0, BATTLE_FLAG_LECTURE_ATTACK)
                     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_LECTURE_NO_COMMAND)
@@ -609,7 +609,7 @@ EVT_BEGIN(actend_event)
             ELSE
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, UNIT_WORK_AC_FAILURES, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
-                    // Bad result: the audience feels cheated and shrinks; Frankly scolds the miss.
+                    // Bad result: Frankly scolds the miss (the audience shrinks only on the second miss).
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_008"), 0, -6)
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)

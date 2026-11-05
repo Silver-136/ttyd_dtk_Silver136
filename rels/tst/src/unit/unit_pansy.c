@@ -129,7 +129,10 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_pansy", "c_pansy", 0.0f, 0.0f, 0.0f, 0.0f, 29.0f, 0.0f, 0.0f, 34.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
-/** Crazee Dayzee's attack: 2 damage to every target, a plain attack. */
+/**
+ * Crazee Dayzee's song: 2 damage to every target, ignoring defense, with a chance to put each target to sleep for
+ * 5 turns (sleepChance 50 in US and later, 75 in JP and the early demos).
+ */
 BattleWeapon weapon_pansy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -266,7 +269,7 @@ EVT_END()
 
 /**
  * The Dayzee's lullaby (the weapon in LW(9)): faces the first target,
- * darkens the map while music notes (onpu) float from it for two seconds,
+ * tints the map blue (red and green down to 192) and lets music notes (onpu) float from it for two seconds,
  * then runs the pre-damage check and applies the hit (with the action-command result) to each enemy in turn,
  * and finally fades the map back to normal.
  */
@@ -290,7 +293,7 @@ static EVT_BEGIN(song_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
 
-    // The map darkens while the Dayzee takes a breath.
+    // The map is tinted blue (red and green fade to 192) while the Dayzee takes a breath.
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -374,12 +377,12 @@ static EVT_BEGIN(song_event)
     END_IF
     GOTO(10)
     LABEL(98)
+
+    // The map tint fades back to normal.
     SET_VALUE(LW(0), 192)
     SET_VALUE(LW(1), 255)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 256)
-
-            // The notes stop and the map fades back to normal.
             BREAK_LOOP
         END_IF
         CALL(evt_map_set_blend, 0, LW(0), LW(0), LW(1), 255)

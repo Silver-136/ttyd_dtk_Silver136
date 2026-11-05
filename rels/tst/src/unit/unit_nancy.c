@@ -98,7 +98,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /**
- * Pose table of the `nancy` placeholder unit: its 7 battle poses (status, hurt and action) and the animation
+ * Pose table of the `nancy` placeholder unit: its 7 battle poses (idle, guarded hit, hurt, run, walk, talk and action) and the animation
  * each one plays; the idle animation is `EM_S_1`.
  */
 static PoseTableEntry pose_table[] = {

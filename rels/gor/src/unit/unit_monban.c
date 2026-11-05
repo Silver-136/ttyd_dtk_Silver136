@@ -146,7 +146,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
-/** Event table of Gus: the counter for an attacker hurt by its spikes, nothing special on a First Strike. */
+/**
+ * Event table of Gus: a spark effect when an attack is turned away by his spiked head
+ * (dmg_avoid_counter_thorn_head_event), nothing special on a First Strike.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
@@ -259,7 +262,7 @@ EVT_END()
 /**
  * Spark effect (toge_flush) shown when an attack on Gus's spiked head is turned away:
  * it waits 30 frames, then places the flash above his head at a height that depends on whether he has STATUS_HUGE
- * or 11.
+ * or STATUS_TINY.
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
@@ -376,7 +379,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
 
-    // Wind-up: Gus stomps forward in heavy steps (MOVE sounds).
+    // Wind-up: Gus stomps in place (pose R_2 with alternating MOVE2 step sounds) before he charges.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MONBAN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1"))
     WAIT_FRAMES(20)
@@ -423,7 +426,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss: he lunges and comes up short (the target dodges for some kinds of miss).
+    // Miss: he runs on 30 units past the spot he stopped at (the target dodges for some kinds of miss).
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))

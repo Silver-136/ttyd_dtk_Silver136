@@ -654,8 +654,8 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(bunsin_event))
         RETURN
     ELSE
-        // While its illusions are out it only casts the magic ball at one target (flustered if confused with
-        // no target).
+        // While its illusions are out it only casts the magic ball at one target (it flusters instead when the
+        // kConfusedAction token is set).
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -704,35 +704,35 @@ static EVT_BEGIN(attack_event)
             END_IF
             ADD(LW(0), 8)
             IF_INT_LESS(LW(1), LW(0))
-                // Dekadeka spell: grows an ally.
+                // Dekadeka spell: makes itself Huge.
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_dekadeka_magic))
                 CALL_CHILD(PTR(dekadeka_magic_event))
                 GOTO(99)
             END_IF
             ADD(LW(0), 8)
             IF_INT_LESS(LW(1), LW(0))
-                // Katikati spell: raises an ally's Defense.
+                // Katikati spell: raises its own Defense.
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_katikati_magic))
                 CALL_CHILD(PTR(katikati_magic_event))
                 GOTO(99)
             END_IF
             ADD(LW(0), 8)
             IF_INT_LESS(LW(1), LW(0))
-                // Trans spell: makes an ally invisible.
+                // Trans spell: makes itself invisible.
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_trans_magic))
                 CALL_CHILD(PTR(trans_magic_event))
                 GOTO(99)
             END_IF
             ADD(LW(0), 8)
             IF_INT_LESS(LW(1), LW(0))
-                // Yokeyoke spell: makes an ally Dodgy.
+                // Yokeyoke spell: makes itself Dodgy.
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_yokeyoke_magic))
                 CALL_CHILD(PTR(yokeyoke_magic_event))
                 GOTO(99)
             END_IF
             ADD(LW(0), 8)
             IF_INT_LESS(LW(1), LW(0))
-                // Recover spell: heals an ally.
+                // Recover spell: heals itself.
                 SET_VALUE(LW(9), PTR(&weapon_mahorn_recover_magic))
                 CALL_CHILD(PTR(recover_magic_event))
                 GOTO(99)
@@ -795,7 +795,7 @@ static BattleDataEntry data_table_bunsin[] = {
 
 /**
  * Init event of the Dark Wizzerd: installs its wait, attack, damage and confusion events,
- * starts hand_ctrl_event, which floats its hands, and clears unit work 4 (copy flag) and 6 (hide flag).
+ * starts hand_ctrl_event, which floats its hands, and clears unit work 4 (copy flag) and 6 (fade-out flag).
  */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -906,8 +906,8 @@ EVT_END()
 
 /**
  * Damage event of the Dark Wizzerd: when an illusion copy is hit it disappears (bunsin_kill_event)
- * and the real one is not hurt; when the real one is hit all the copies vanish
- * (mahorn_subset_bunsin_all_kill) and the default damage handling runs.
+ * and the real one is not hurt; when the real one is hit the default damage handling runs,
+ * then, if it still exists, all the copies vanish (mahorn_subset_bunsin_all_kill).
  */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -969,7 +969,7 @@ EVT_END()
 /**
  * Death sequence of the Dark Wizzerd: it spins, a smoke puff, the coins, experience and star points appear,
  * its statuses are cleared and the illusion copies are removed
- * before the unit is killed (with a different kill mode for damage code 0x400).
+ * before the unit is killed (with a different kill mode for the DAMAGE_RESULT_DEATH result, 0x400).
  */
 static EVT_BEGIN(mahorn_subset_dead_event)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
@@ -1027,7 +1027,7 @@ static EVT_BEGIN(mahorn_subset_dead_event)
     RETURN
 EVT_END()
 
-/** Death sequence when the Dark Wizzerd is blown away: plays the blow-away pose, removes its copies, and kills it. */
+/** Death sequence when the Dark Wizzerd is blown away: spins in its damage pose while flying off, removes its copies, and kills it. */
 static EVT_BEGIN(mahorn_subset_blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -1085,8 +1085,8 @@ EVT_END()
 
 /**
  * Punch attack of the Dark Wizzerd (weapon_mahorn_attack_punch):
- * its hand part flies out to the target, which can dodge or take the hit with the action command defence check,
- * and the hand then returns.
+ * it hops up in front of the target and its four blurred hands jitter at it; the target can dodge or take the hit
+ * with the action command defence check, and it then hops back.
  */
 static EVT_BEGIN(attack_punch_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -1757,7 +1757,7 @@ EVT_END()
 
 /**
  * Yokeyoke spell of the Dark Wizzerd (weapon_mahorn_yokeyoke_magic):
- * sets the target's chance to dodge attacks (dodgyChance 100).
+ * makes itself Dodgy (dodgyChance 100, 3 turns).
  */
 static EVT_BEGIN(yokeyoke_magic_event)
     SET_VALUE(LW(3), UNIT_ID_SELF)

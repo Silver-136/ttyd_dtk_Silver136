@@ -319,7 +319,7 @@ EVT_END()
 /**
  * Fall reaction of the flying Spiky Parabuzzy (data event 14), run when it loses its wings.
  * It clears its flying attribute, switches to the walking pose table, data table and parts, drops to the floor,
- * and changes its unit kind to the Spike Top, which re-runs init_event for the grounded form.
+ * and changes its unit kind to the Spike Top, then runs init_event for the grounded form.
  * If its HP-damage count is above 1 it also lands flipped over (dmg_turn_event).
  */
 static EVT_BEGIN(dmg_fall_event_pata)
@@ -884,7 +884,7 @@ EVT_END()
  * otherwise it checks for an item use and samples a target.
  * It then curls up and spins (unit work 1 and 2 hold the stop flag and spin speed for a background rotation
  * loop), trailing smoke, and slides along the floor into the target.
- * A miss or block makes it bounce away, a hit deals damage and knocks it back in two hops.
+ * A miss makes it skid past and hop back, a hit deals damage and knocks it back in two hops.
  * Afterwards it walks home. If it has no target it can be flustered when confused.
  */
 static EVT_BEGIN(attack_event)
@@ -1061,7 +1061,7 @@ EVT_END()
 /**
  * Damage script of the Spike Top form of the Spiky Parabuzzy while on the ceiling:
  * runs the default damage handling, then, if the attack did real damage (and its damage code does not have DAMAGE_RESULT_ZERO_HP
- * without DAMAGE_RESULT_REVIVAL), the unit still has the ceiling attribute set and it falls via ceil_fall_ready_event.
+ * without DAMAGE_RESULT_REVIVAL) and the unit still has the ceiling attribute set, it falls via ceil_fall_ready_event.
  */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -1252,7 +1252,7 @@ static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_met_ceil_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
 
-    // The Spiky Parabuzzy wobbles on the floor, then leaves the ceiling for good and goes back to its floor
+    // The Spiky Parabuzzy waits a second on the floor, then leaves the ceiling for good and goes back to its floor
     // tables.
     LABEL(98)
     WAIT_FRAMES(60)

@@ -139,7 +139,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
-/** Pose table of the Trap: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
+/** Pose table of the Trap: the normal, guarded-hit, damage and action poses all play S_1. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "S_1"},

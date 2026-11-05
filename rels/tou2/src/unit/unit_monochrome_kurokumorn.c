@@ -438,7 +438,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event data table of the Dark Puff: scripts that replace the standard handling for its counter hook and the battle opening with a First Strike on it.
+ * Event data table of the Dark Puff: scripts that replace the standard handling for its electric-contact-avoided hook and the battle opening with a First Strike on it.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},
@@ -506,7 +506,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
-/** Counter event of the Puff: empty, it does nothing. */
+/** Data-table event 42 of the Puff (an attacker avoided its electric contact): empty, it does nothing. */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()

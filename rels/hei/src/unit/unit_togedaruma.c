@@ -422,7 +422,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // First Strike: the first-attack target is already fixed and the camera pulls in on it.
+    // First Strike: after 750 ms it takes the already fixed first-attack target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -496,8 +496,8 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss: it rolls past the target (which dodges for some kinds of miss), hops, uncurls
-    // and shakes off the dizziness.
+    // Miss: it rolls past the target (which dodges for some kinds of miss), hops, rests in its
+    // sleep pose (TGD_N_1) for 1.5 s and curls up again (TGD_J_1).
     LABEL(90)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("TGD_A_1"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

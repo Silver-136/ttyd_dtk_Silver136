@@ -171,7 +171,7 @@ BattleUnitKind unit_kamec = {
 };
 
 /**
- * Unit kind of the Magikoopa (HP 7, level 0): its size, offsets, damage sounds, status vulnerability,
+ * Unit kind of the Magikoopa clone (HP 7, level 0): its size, offsets, damage sounds, status vulnerability,
  * parts and init event.
  */
 BattleUnitKind unit_kamec_bunsin = {
@@ -246,7 +246,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of the Magikoopa: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-/** Status vulnerability of the Magikoopa (percent chance to take each status): resists most statuses. */
+/** Status vulnerability of the Magikoopa (percent multiplier on each status's chance): resists most statuses. */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {70, 70, 60, 100, 60, 100, 100, 60, 100, 50, 100, 50, 100, 50, 50, 40, 70, 100, 60, 100, 100, 95};
 #else
@@ -276,7 +276,7 @@ static StatusVulnerability regist = {
 };
 #endif
 
-/** Status vulnerability of the Magikoopa (clone) (percent chance to take each status): immune to sleep. */
+/** Status vulnerability of a Magikoopa clone (set by spawn_event): all 0, so it is immune to every status. */
 static StatusVulnerability regist_bunsin = {0};
 
 static PoseTableEntry pose_table[] = {
@@ -765,7 +765,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 /**
- * Kills all four of the Magikoopa's clones: fetches their unit ids with kamec_get_bunsin
+ * Kills the Magikoopa's clones (up to four): fetches their unit ids with kamec_get_bunsin
  * and spawns bunsin_kill_event for each existing one.
  */
 static EVT_BEGIN(kamec_subset_bunsin_all_kill)
@@ -955,7 +955,7 @@ static EVT_BEGIN(dmg_fall_event)
 EVT_END()
 
 /**
- * Data event 48 of the flying Magikoopa (data_table_sky), run by the default damage event when the battle opens
+ * Data event 48 of the flying Magikoopa and its clones (data_table_sky, data_table_sky_bunsin), run by the default damage event when the battle opens
  * with Mario's or the partner's First Strike on it (damage code 0x39): sets its Y to 10 and waits for the attack
  * to end.
  */
@@ -995,7 +995,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // Only one enemy-side unit remains: it picks attack magic, healing an ally,
+    // Only one enemy-side unit remains: it picks attack magic, healing itself,
     // or splitting into clones.
     CALL(kamec_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1037,7 +1037,7 @@ static EVT_BEGIN(attack_event)
             GOTO(99)
         ELSE
             // Otherwise it picks a spell at random: the attack spell most often, or else the Huge,
-            // defence-up, Electric, Invisible and heal spells,
+            // defence-up, Electric, Invisible, heal and heal-all spells,
             // trying again when no ally needs the chosen one.
             LABEL(20)
             SET_VALUE(LW(1), 50)
@@ -1747,7 +1747,8 @@ EVT_END()
 
 /**
  * Heal spell on all allies: restores up to 4 HP each.
- * Only the first target's missing HP is checked, so it may heal nobody when only that one is at full HP.
+ * Only the first target's missing HP is checked: when that one is at full HP the spell is not cast (LW(0) = 0),
+ * even if other allies are hurt.
  */
 static EVT_BEGIN(all_recover_magic_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1954,8 +1955,8 @@ static USER_FUNC(eff_staff1) {
 
 /**
  * Script helper.
- * Makes the Magikoopa clone args[1] share the real Magikoopa args[0]'s HP
- * and status effects (the copy's HP gauge is refreshed).
+ * Copies the real Magikoopa args[0]'s HP and status effects to the Magikoopa clone args[1]
+ * (the copy's HP gauge is refreshed).
  */
 static USER_FUNC(kamec_copy_status) {
     EvtWord* args = event->args;

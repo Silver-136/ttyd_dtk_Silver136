@@ -1,4 +1,4 @@
-// Ruff Puff (kurokumorn): enemy battle unit (thunder attack); Riverside Station's copy of the unit data and scripts.
+// Ruff Puff (kurokumorn): enemy battle unit (thunder attack); tst.rel's copy of rels/eki/src/unit/unit_kurokumorn.c.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -428,8 +428,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Event table of the Ruff Puff: the attacker being shocked by its charge (counter_event) and the First
- * Strike reaction (dmg_first_attack_pos).
+ * Event table of the Ruff Puff: its own reaction when its attack is stopped by an electric target (counter_event,
+ * which does nothing) and the First Strike reaction (dmg_first_attack_pos).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},

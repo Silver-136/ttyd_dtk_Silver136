@@ -287,7 +287,7 @@ EVT_END()
  * electric, freeze or stop knocks the egg out of its hands:
  * part 2 is thrown 200 units behind it to the floor and hidden, the hold (unit work 0),
  * its spiky counter attribute, pose table and hit offset are reset, then the default damage reaction runs.
- * Otherwise, unless the damage code is 22, 30, 31 (an attacker hurt by its spikes), 38 (lucky),
+ * Otherwise, unless the damage code is 22 (status only), 30 (no damage), 31 (an attacker hurt by its spikes), 38 (lucky),
  * 39 (dodged) or 41 (protected by a bodyguard), a poison, burn, Tiny, defense-down,
  * slow or allergic status only makes the egg pop up and vanish again; the Lakitu keeps holding it.
  */
@@ -342,7 +342,7 @@ static EVT_BEGIN(damage_event)
             CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
             CALL_CHILD(PTR(btldefaultevt_Damage))
         ELSE
-            // Hits where the attacker was hurt by spikes, or that were lucky, dodged or protected by a bodyguard, leave the egg alone.
+            // Status-only and no-damage hits, hits where the attacker was hurt by spikes, or that were lucky, dodged or protected by a bodyguard, leave the egg alone.
             CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
             IF_INT_EQUAL(LW(0), DAMAGE_CODE_STATUS_ONLY)
                 GOTO(90)
@@ -730,7 +730,7 @@ EVT_END()
 
 /**
  * The Lakitu calls a friend: winds up, tosses the Spiny egg to the free spot in LW(0), LW(2),
- * and spawns a Spiny (entry_togezo) there, copying its status from the Lakitu (togezo_copy_status)
+ * and spawns a Spiny (entry_togezo) there, copying its size status from the Lakitu (togezo_copy_status)
  * and rolling it into place.
  */
 static EVT_BEGIN(friend_event)

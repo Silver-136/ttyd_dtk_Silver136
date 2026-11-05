@@ -1,4 +1,4 @@
-// Bullet Bill (killer): battle unit used in Pirate's Grotto.
+// Battle unit Bullet Bill (`killer`): tst.rel's copy of rels/dou/src/unit/unit_killer.c.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -227,7 +227,7 @@ static EVT_BEGIN(start_avoid)
 EVT_END()
 
 /**
- * Attack of the Bullet Bill: picks a target (the fixed first target in a flag-2 battle,
+ * Attack of the Bullet Bill: picks a target (the First Strike target on a First Strike,
  * otherwise a sampled enemy; uses an enemy item first if the item-use check selects one), zooms the camera on it,
  * charges for 30 frames and then flies into it.
  * Its hit/miss cleanup removes the Bill from battle; item-use and confused no-target returns bypass it:
@@ -264,7 +264,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and waits for any bodyguard to finish moving.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

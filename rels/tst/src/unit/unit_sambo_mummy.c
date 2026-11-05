@@ -561,7 +561,7 @@ static PoseTableEntry pose_table_parts[] = {
 
 /**
  * Event table of the Poison Pokey: the spike counters (dmg_avoid_counter_thorn_side_event),
- * knockback hits (damage patterns 15 and 17) (damage_event_bodylost, tag 19), Super Hammer and Ultra Hammer
+ * hits by a unit knocked back by a hammer (damage patterns 15 and 17) (damage_event_bodylost, tag 19), Super Hammer and Ultra Hammer
  * knockback (damage_event_bodylost_blow, tag 18), Koops' shell hits (damage_event_bodylost, tag 16), the
  * First Strike reaction (does nothing) and Yoshi's Gulp (damage_swallow_body).
  */
@@ -658,7 +658,7 @@ EVT_END()
 
 /**
  * Damage reaction that knocks a segment off the Poison Pokey's stack.
- * With one segment left (unit work 0 is 1) it only plays the damage pose;
+ * With one segment left (unit work 0 is 1) it plays a damage or no-damage reaction;
  * otherwise it drops one segment (unit work 0 minus 1), recomputes the height with _body_param_set,
  * moves the status icon, cut and kiss offsets for the shorter stack and hands the hit to the next part down.
  * The lost segment (part 5) hops to the floor twice and blinks 40 times before disappearing.
@@ -790,7 +790,8 @@ EVT_END()
  * With one segment left it plays the shot-damage subscript;
  * otherwise it removes a segment as before, then sends the lost segment (part 5) bouncing from enemy to enemy,
  * damaging each with marioWeapon_UltraHammerInvolved (marioWeapon_KaitenHammerInvolved, the Super Hammer's
- * knock-on weapon, when the damage pattern is 15), until it lands off the stage; after an Ultra Hammer hit
+ * knock-on weapon, only when the damage pattern is 15, which the two patterns that run this event never are),
+ * until it lands off the stage; after an Ultra Hammer hit
  * the Pokey also takes marioWeapon_UltraHammerFinish.
  */
 static EVT_BEGIN(damage_event_bodylost_blow)
@@ -857,8 +858,8 @@ static EVT_BEGIN(damage_event_bodylost_blow)
         CALL(btlevtcmd_SetPartsPos, LW(10), 5, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_OffPartsAttribute, LW(10), 5, kHidden)
 
-        // A Super Hammer hit (damage pattern 15) uses the Super Hammer knock-on weapon; an Ultra Hammer hit
-        // uses the Ultra Hammer one.
+        // Damage pattern 15 (a hit by a knocked-back unit) picks the Super Hammer knock-on weapon; any other
+        // pattern, the Super Hammer hit itself (14) included, picks the Ultra Hammer one.
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_KAITEN_HAMMER_INVOLVED, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(13), PTR(&marioWeapon_KaitenHammerInvolved))
@@ -913,10 +914,10 @@ EVT_END()
 
 /**
  * Damage reaction when the Poison Pokey is swallowed (Yoshi's Gulp):
- * with one segment left it plays the hurt pose 39,
+ * with one segment left it plays the hurt pose 39 if damaged, otherwise the no-damage reaction,
  * otherwise the segment handling of damage_event_bodylost applies (a segment is dropped,
  * the height and hit offsets shrink to the shorter stack,
- * the lost segment hops and blinks away) after a 3-frame wait.
+ * the lost segment dives forward and is hidden) after a 3-frame wait.
  */
 static EVT_BEGIN(damage_swallow_body)
     SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
@@ -1314,7 +1315,7 @@ static EVT_BEGIN(attack_head_1_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
 
-    // Wind-up: the head hops across the floor toward the target in short bounces.
+    // Approach: the head hops across the floor toward the target in short bounces.
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(2.0f))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.5996094f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(5), LW(6), LW(7))
