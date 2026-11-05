@@ -10,6 +10,8 @@
 
 //.sbss
 BOOL dbg_lotteryinfo;
+// FAKE: 4-byte .sbss filler between dbg_lotteryinfo and the next object, in no symbol map and never used;
+// removing it changes the object.
 static s32 lotteryUnused;
 
 /** Returns the lottery state kept in the save data (gp->lotteryInfo); the shop menus read the ticket number from it. */
