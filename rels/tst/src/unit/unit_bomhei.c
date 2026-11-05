@@ -488,7 +488,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss: it circles around the target and stands there for a moment.
+    // Miss: it passes the target in three slowing steps and stands there for a moment.
     LABEL(90)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))

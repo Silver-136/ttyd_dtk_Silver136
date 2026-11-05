@@ -337,7 +337,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(evt_btl_camera_set_mode, 0, 3)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
 
-    // It tilts into its dive pose and swoops down at the target.
+    // It tilts into its dive pose and draws back farther in front of the target.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 50)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
@@ -464,14 +464,14 @@ static BattleUnitDefenseAttr defence_attr = {0};
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of the Paragoomba once its wings are gone in the demo builds:
+ * Unused Goomba-form status vulnerability table in the demo builds:
  * extra prone to stop, fright, Gale Force and instant KO.
  */
 static StatusVulnerability regist = {100, 120, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 120, 120, 100, 100, 100, 100, 150};
 #else
 
 /**
- * Status vulnerability of the Paragoomba once its wings are gone in the retail builds:
+ * Unused Goomba-form status vulnerability table in the retail builds:
  * extra prone to stop, fright and instant KO.
  */
 static StatusVulnerability regist = {100, 110, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 110, 100, 100, 100, 100, 100, 150};

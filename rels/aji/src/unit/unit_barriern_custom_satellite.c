@@ -159,7 +159,7 @@ static StatusVulnerability regist = {
 #endif
 
 /**
- * Pose table of the Mini-X-Yux: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ * Pose table of the Mini-X-Yux: the animation each battle pose (idle, hurt, walk, run and so on) plays.
  */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_2"},

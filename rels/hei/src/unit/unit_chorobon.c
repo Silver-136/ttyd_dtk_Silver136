@@ -601,7 +601,7 @@ static EVT_BEGIN(drain_attack_event)
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_CHORO1_ATTACK3"), 0, 0, -1, -1, 0, 0)
         LOOP(2)
 
-            // It bounces back in smaller hops, shrinking to normal size.
+            // It squashes before each in-place bounce.
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
             WAIT_FRAMES(1)
         END_LOOP

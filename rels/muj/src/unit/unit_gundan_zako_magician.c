@@ -748,7 +748,7 @@ static EVT_BEGIN(attack_common_event2)
         GOTO(98)
         CASE_END
 
-        // The bottle misses or is blocked: it flies past, smashes into glass shards and the part is put back.
+        // The bottle misses or is avoided: it flies past, smashes into glass shards and the part is hidden.
         LABEL(90)
         CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, 2)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
@@ -967,7 +967,7 @@ static EVT_BEGIN(minimini_bottle_event)
         GOTO(99)
     END_IF
 
-    // The X-Naut PhD steps up and prepares to throw (the shared run-up script).
+    // The X-Naut PhD prepares to throw (the shared bottle-preparation script).
     CALL_CHILD(attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1E"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

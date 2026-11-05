@@ -379,7 +379,7 @@ EVT_END()
 /**
  * Attack script of the Bob-omb: a body bump.
  * After an item check it picks a target, hops twice, runs to it and, if the bump connects,
- * deals the damage and gets knocked back in two hops; a miss makes it circle the target and then it walks home.
+ * deals the damage and gets knocked back in two hops; a miss makes it pass the target and then it walks home.
  * When confused with no target it is flustered. The demo builds use longer waits and a slower walk home.
  */
 static EVT_BEGIN(attack_event)
@@ -460,7 +460,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss: it circles around the target and stands there for a moment.
+    // Miss: it passes the target in three slowing steps and stands there for a moment.
     LABEL(90)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))

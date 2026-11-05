@@ -188,7 +188,7 @@ static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 /**
  * Status vulnerability of the Dark Koopatrol while flipped over:
- * percent chance that each status takes hold (100 is normal).
+ * percentage multipliers on status-infliction chances (100 is normal).
  */
 static StatusVulnerability regist_turn = {
     100, // sleep
@@ -229,7 +229,7 @@ static BattleUnitDefenseAttr defence_attr_guard = {{DEFENSE_ATTR_IMMUNE, DEFENSE
 
 /**
  * Status vulnerability of the Dark Koopatrol while guarding:
- * percent chance that each status takes hold (100 is normal).
+ * percentage multipliers on status-infliction chances (100 is normal).
  */
 static StatusVulnerability regist_guard = {
     100, // sleep
@@ -359,7 +359,7 @@ static BattleDataEntry data_table[] = {
 
 /**
  * Data table of the Dark Koopatrol while flipped over:
- * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * event scripts and values the battle looks up by tag (damage reactions, first strike).
  */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -635,7 +635,7 @@ static BattleUnitSetup entry_togenoko = {
 
 /**
  * Attack event of the Dark Koopatrol. In the forced-attack case it just does the normal attack.
- * If it is flipped over it wakes up.
+ * If flipped, it spends its action on the recovery countdown.
  * While guarding (unit work 0 = 1) it leaves the guard with 80 percent chance.
  * If it is Charged (STATUS_CHARGE), it picks the normal or shell attack at 50/35.
  * Otherwise it runs a selected enemy-item script if one is returned, then rolls among normal attack, shell attack and charge
@@ -653,7 +653,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
 
-        // A flipped-over Dark Koopatrol gets back on its feet.
+        // A flipped-over Dark Koopatrol counts down and gets back on its feet only at zero.
         CALL_CHILD(PTR(wakeup_event))
         RETURN
     END_IF

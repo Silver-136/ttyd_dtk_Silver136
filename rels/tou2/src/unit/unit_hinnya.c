@@ -1,4 +1,4 @@
-// unit_hinnya: Spinia, battle unit, one of the three spinning spiked enemies (Spania, Spunia, Spinia).
+// unit_hinnya: Spinia, battle unit, one of the three spinning enemies (Spania, Spunia, Spinia).
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -121,8 +121,8 @@ static StatusVulnerability regist = {
 #endif
 
 /**
- * Event data table of the Spinia: no custom reactions, so the standard battle handlers run for every
- * event.
+ * Event data table of the Spinia: the First Strike position event uses the no-op btldefaultevt_Dummy;
+ * no other custom event handlers are listed.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

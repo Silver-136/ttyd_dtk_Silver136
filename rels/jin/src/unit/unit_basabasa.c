@@ -97,7 +97,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Stand-in weapon for the damage check when the Swooper's drain attack runs into a counter from its target (no damage of its own).
+ * Unused Swooper drain-attack counter weapon data (no damage of its own).
  */
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
@@ -298,7 +298,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 };
 
 /**
- * Brings a Swooper down from the ceiling when it is first hit or attacks:
+ * Permanently brings a Swooper down from the ceiling when called:
  * if its ceiling attribute is still set (attribute 2) it clears it, sets the flying attribute (4),
  * switches to the flying pose table and moves it 30 units down with new hit, cursor,
  * kiss and status icon offsets. Leaves its home position in LW(0) to LW(2).

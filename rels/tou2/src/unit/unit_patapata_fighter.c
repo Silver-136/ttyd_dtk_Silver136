@@ -714,7 +714,7 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * The Koopa's shell spin when it makes a first strike on Mario's side (the pre-battle attack):
+ * Unused script for the Koopa's first-strike shell spin:
  * it pulls into its shell with SFX_ENM_NOKO_SHELL1 and spins into the target,
  * which takes the hit via the damage check; afterwards it settles back into its rest pose.
  */
@@ -787,14 +787,14 @@ static EVT_BEGIN(first_attack_event)
 EVT_END()
 
 /**
- * The Koopa's attack: while it is flipped over it just wakes up (wakeup_event);
+ * The Koopa's attack: while flipped over it counts down to recovery (wakeup_event);
  * otherwise it uses an item or picks a target, pulls into its shell (SFX_ENM_NOKO_SHELL1) and spins into it,
  * kicking up kemuri_test dust; a miss lets it slide past, a hit applies the damage,
  * and it returns to its stance.
  */
 static EVT_BEGIN(attack_event)
 
-    // If the Koopa is flipped over, it first rights itself with wakeup_event.
+    // If flipped over, wakeup_event counts down and rights it only when the counter reaches zero.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)

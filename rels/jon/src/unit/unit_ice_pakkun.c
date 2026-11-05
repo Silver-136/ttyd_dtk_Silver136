@@ -94,7 +94,7 @@ BattleUnitKind unit_ice_pakkun = {
     data_table, // dataTable
 };
 
-/** Damage reduction of the Frost Piranha: none, every attack type does full damage. */
+/** Damage reduction of the Frost Piranha: no flat defence; elemental reactions are separate. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /** Element response of the Frost Piranha: it takes extra damage from fire and is healed by ice. */
@@ -176,7 +176,7 @@ static BattleWeapon weapon_ice_pakkun_attack = {
 
 /**
  * Attack script of the Frost Piranha: its normal attack on a first strike,
- * otherwise an item check and then the normal attack.
+ * otherwise a selected item event, or the normal attack when none is selected.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -447,7 +447,7 @@ EVT_END()
 
 static EVT_BEGIN(normal_attack_event)
 
-    // After a First Strike it pauses a moment; otherwise it picks a target (a confused Frost Piranha with
+    // During a First Strike it pauses a moment; otherwise it picks a target (a confused Frost Piranha with
     // nobody to bite gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

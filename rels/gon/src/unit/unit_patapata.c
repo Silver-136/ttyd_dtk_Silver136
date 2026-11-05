@@ -332,7 +332,7 @@ EVT_END()
  */
 static EVT_BEGIN(attack_event_patapata)
 
-    // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
+    // Choose the First Strike victim or a sampled opposing unit; a ready item is used instead.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -360,7 +360,7 @@ static EVT_BEGIN(attack_event_patapata)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
 
-    // The camera follows the Paratroopa as it declares the attack and the guard window opens.
+    // The camera follows the Paratroopa as it declares the attack and waits for bodyguard movement to finish.
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -454,7 +454,7 @@ static EVT_BEGIN(attack_event_patapata)
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PATA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
 
-    // After the kick it spins through three full turns while it drops back to the ground.
+    // After the kick it spins through three full turns while it arcs back from the target.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 40)
     ADD(LW(1), 30)
@@ -677,7 +677,7 @@ EVT_END()
 /**
  * Flips the Koopa onto its back after a stomp-type hit:
  * switches to the overturned defence and pose tables, sets status flag 1 and the overturned counter to 2,
- * and hops once.
+ * and hops twice.
  */
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
@@ -816,7 +816,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
+    // Choose the First Strike victim or a sampled opposing unit; a ready item is used instead.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -843,7 +843,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and waits for bodyguard movement to finish.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

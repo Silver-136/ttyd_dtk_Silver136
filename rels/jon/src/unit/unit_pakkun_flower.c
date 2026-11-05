@@ -173,7 +173,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
 
 /**
  * Attack script of the Piranha Plant: its normal attack on a first strike,
- * otherwise an item check and then the normal attack.
+ * otherwise a selected item event, or the normal attack when none is selected.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -445,7 +445,7 @@ EVT_END()
 
 static EVT_BEGIN(normal_attack_event)
 
-    // After a First Strike it pauses a moment; otherwise it picks a target (a confused Piranha Plant with
+    // During a First Strike it pauses a moment; otherwise it picks a target (a confused Piranha Plant with
     // nobody to bite gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

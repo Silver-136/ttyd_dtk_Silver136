@@ -185,8 +185,8 @@ static PoseTableEntry pose_table_ceil[] = {
 };
 
 /**
- * Data table of the Swoopula: event scripts and values the battle looks up by tag (damage reactions, dodge,
- * first strike and so on).
+ * Data table of the Swoopula: the counter-damage handlers and
+ * first-strike-positioning handler the battle looks up by tag.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

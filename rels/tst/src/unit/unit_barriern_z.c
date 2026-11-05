@@ -28,18 +28,18 @@
 
 // Unit work slots of the Yux family (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
-    UNIT_WORK_SATELLITE_COUNT = 0, // Mini-Yux it should have (battle setup), updated when it splits
+    UNIT_WORK_SATELLITE_COUNT = 0, // Mini-Z-Yux it should have (battle setup), updated when it splits
     UNIT_WORK_WAWAWA_ATTACK = 1,    // 1 during the group ring attack, 0 during the single ring attack
     UNIT_WORK_SHOTS_DONE = 2,    // rings of the group attack that have landed
-    UNIT_WORK_BARRIER_EFFECT = 3,  // barrier effect (EffectEntry*) while a Mini-Yux lives; C only
-    UNIT_WORK_SATELLITE = 4,      // unit id of the first Mini-Yux, -1 when the slot is empty
-    UW_BARRIERN_Z_MINI_YUX_1 = 5,      // unit id of the second Mini-Yux, or -1
-    UW_BARRIERN_Z_MINI_YUX_2 = 6,      // unit id of the third Mini-Yux, or -1
-    UW_BARRIERN_Z_MINI_YUX_3 = 7,      // unit id of the fourth Mini-Yux, or -1
-    UNIT_WORK_SATELLITE_SPLINE = 10,       // orbit spline work of the first Mini-Yux (SatelliteSpline*); C only
-    UW_BARRIERN_Z_SPLINE_1 = 11,       // orbit spline work of the second Mini-Yux; C only
-    UW_BARRIERN_Z_SPLINE_2 = 12,       // orbit spline work of the third Mini-Yux; C only
-    UW_BARRIERN_Z_SPLINE_3 = 13        // orbit spline work of the fourth Mini-Yux; C only
+    UNIT_WORK_BARRIER_EFFECT = 3,  // barrier effect (EffectEntry*) while a Mini-Z-Yux lives; C only
+    UNIT_WORK_SATELLITE = 4,      // unit id of the first Mini-Z-Yux, -1 when the slot is empty
+    UW_BARRIERN_Z_MINI_YUX_1 = 5,      // unit id of the second Mini-Z-Yux, or -1
+    UW_BARRIERN_Z_MINI_YUX_2 = 6,      // unit id of the third Mini-Z-Yux, or -1
+    UW_BARRIERN_Z_MINI_YUX_3 = 7,      // unit id of the fourth Mini-Z-Yux, or -1
+    UNIT_WORK_SATELLITE_SPLINE = 10,       // orbit spline work of the first Mini-Z-Yux (SatelliteSpline*); C only
+    UW_BARRIERN_Z_SPLINE_1 = 11,       // orbit spline work of the second Mini-Z-Yux; C only
+    UW_BARRIERN_Z_SPLINE_2 = 12,       // orbit spline work of the third Mini-Z-Yux; C only
+    UW_BARRIERN_Z_SPLINE_3 = 13        // orbit spline work of the fourth Mini-Z-Yux; C only
 };
 
 s32 irand(s32 scalar);
@@ -215,8 +215,8 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Z-Yux (the demos), as the percent chance a status takes hold:
- * immune to Poison, Freeze, Fright and Gale Force; always hit by Electric, Burn, Huge, Attack Up,
+ * Status vulnerability of Z-Yux (the early demos), as percent multipliers on the incoming status chance:
+ * zero for Poison, Freeze, Fright and Gale Force; 100 for Electric, Burn, Huge, Attack Up,
  * Defense Up, Fast, Dodgy and Invisible; otherwise Sleep 10, Stop 80, Dizzy 70, Confuse 70, Tiny 70,
  * Attack Down 70, Defense Down 70, Allergic 70, Slow 70 and instant KO 95.
  */
@@ -224,8 +224,8 @@ static StatusVulnerability regist = {10, 80, 70, 0, 70, 100, 100, 0, 100, 70, 10
 #else
 
 /**
- * Status vulnerability of Z-Yux (the final versions), as the percent chance a status takes hold:
- * immune to Poison, Freeze and Fright; always hit by Electric, Burn, Huge, Attack Up, Defense Up, Fast,
+ * Status vulnerability of Z-Yux (JP and later), as percent multipliers on the incoming status chance:
+ * zero for Poison, Freeze and Fright; 100 for Electric, Burn, Huge, Attack Up, Defense Up, Fast,
  * Dodgy and Invisible; otherwise Sleep 20, Stop 70, Dizzy 95, Confuse 60, Tiny 85, Attack Down 85,
  * Defense Down 90, Allergic 60, Gale Force 80, Slow 60 and instant KO 95.
  */
@@ -322,7 +322,7 @@ static BattleUnitSetup entry_barriern_satellite = {
 };
 
 /**
- * Pose table of Z-Yux: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to animation
+ * Pose table of Z-Yux: maps its battle pose types (stay, walk, hurt, run, talk and so on) to animation
  * names, 18 entries such as N_1, Y_1, K_1, X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -598,8 +598,8 @@ static Vec splineTableOut4_4[] = {
 /**
  * Init script of a Yux (also used by the X-Yux and Z-Yux):
  * registers its wait, unison-phase, attack, damage and confusion handlers, sets its body part scale to 1.0,
- * empties its four satellite slots (UNIT_WORK_SATELLITE to _3 = -1)
- * and spawns as many Mini-Yux satellites as UNIT_WORK_SATELLITE_COUNT asks for.
+ * empties its four satellite slots (slots 4-7 = -1)
+ * and spawns as many Mini-Z-Yux satellites as UNIT_WORK_SATELLITE_COUNT asks for.
  * Each satellite gets the Yux's unit id in its unit work 0 and 1 in its unit work 1,
  * and is placed around the Yux (battleGetBarriernSatelliteInitPos) before the satellite orbit spline is set up.
  */
@@ -662,8 +662,8 @@ static EVT_BEGIN(barriern_dmg_first_attack_pos)
 EVT_END()
 
 /**
- * Turns on the afterimage blur (SetPartsBlur) and kMotionBlur on the body part of each Mini-Yux
- * satellite (UNIT_WORK_SATELLITE to _3) so their movement leaves trails.
+ * Turns on the afterimage blur (SetPartsBlur) and kMotionBlur on the body part of each Mini-Z-Yux
+ * satellite (slots 4-7) so their movement leaves trails.
  */
 static EVT_BEGIN(satellite_blur_on)
     SET_VALUE(LW(2), UNIT_WORK_SATELLITE)
@@ -679,7 +679,7 @@ static EVT_BEGIN(satellite_blur_on)
     RETURN
 EVT_END()
 
-/** Turns kMotionBlur off again on the body part of each Mini-Yux satellite (UNIT_WORK_SATELLITE to _3). */
+/** Turns kMotionBlur off again on the body part of each Mini-Yux satellite (slots 4-7). */
 static EVT_BEGIN(satellite_blur_off)
     SET_VALUE(LW(2), UNIT_WORK_SATELLITE)
     LOOP(4)
@@ -824,7 +824,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
 }
 
 /**
- * Script helper called every frame: the afterimage charge-up of the Mini-Yux in slot args[1] of the Yux args[0]
+ * Script helper called every frame: the afterimage charge-up of the Mini-Z-Yux in slot args[1] of the Yux args[0]
  * (looked up in work[UNIT_WORK_SATELLITE + n]); see barriern_satellite_zanzou_sub (type 0).
  */
 static USER_FUNC(barriern_satellite_zanzou) {
@@ -841,7 +841,7 @@ static USER_FUNC(barriern_satellite_zanzou) {
 }
 
 /**
- * Script helper called every frame: the outward-burst afterimage of the Mini-Yux in slot args[1] of the Yux
+ * Script helper called every frame: the outward-burst afterimage of the Mini-Z-Yux in slot args[1] of the Yux
  * args[0]; see barriern_satellite_zanzou_sub (type 1).
  */
 static USER_FUNC(barriern_satellite_zanzou2) {
@@ -858,8 +858,8 @@ static USER_FUNC(barriern_satellite_zanzou2) {
 }
 
 /**
- * Afterimage effect of a Mini-Yux (parts 2-6, animation Z_2),
- * like barriern_zanzou_sub but with a separate frame counter per satellite n.
+ * Afterimage effect of a Mini-Z-Yux (parts 2-6, animation Z_2),
+ * like barriern_zanzou_sub but with a separate afterimage frame counter per satellite n; the body uses counter 0.
  * type 0 converges over 36 frames, type 1 bursts out over 8 frames.
  */
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {
@@ -947,7 +947,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
 /**
  * Start-of-turn event of the Yux (not on turn 1 and only while it can act):
  * after a short random delay, if it has fewer than four satellites,
- * the satellites merge into it (SFX_ENM_BARRI_ATTACK9 and SPLIT1) and it spawns one new Mini-Yux,
+ * the satellites merge into it (SFX_ENM_BARRI_ATTACK9 and SPLIT1) and it spawns one new Mini-Z-Yux,
  * then the satellites spread out again around it (SFX_ENM_BARRI_SPLIT2) with their afterimage blur on;
  * UNIT_WORK_SATELLITE_COUNT is updated to the new satellite count.
  */
@@ -1113,12 +1113,12 @@ EVT_END()
  * the attacking part (LW(15)) takes the Z_3 pose
  * and is launched at the target (its PART_ATTR_HIDDEN cleared while it flies),
  * the Yux plays A_5 and results 3, 6 or 2 start the target's avoid reaction;
- * afterwards UNIT_WORK_WAWAWA_ATTACK decides whether the part is hidden again.
+ * afterwards UNIT_WORK_WAWAWA_ATTACK selects the single- or combined-ring flight and scale timing.
  * The code name wakka is Japanese for "ring".
  */
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
 
-    // The ring part is set up on the Yux: with motion blur enabled for the group attack, then placed on the Yux in its Z_3 pose.
+    // The ring uses motion blur for the group attack and starts at the source unit in LW(12), in its Z_3 pose.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
@@ -1214,7 +1214,7 @@ EVT_END()
 
 /**
  * The part of the Yux's ring attack when the shot hits:
- * the attacking part (LW(15)) is flung at the target in the Z_3 pose and returns (A_5 pose);
+ * the attacking part (LW(15)) is flung at the target in the Z_3 pose while the Yux plays A_5;
  * UNIT_WORK_WAWAWA_ATTACK decides whether the part stays visible.
  * The code name wakka is Japanese for "ring".
  */
@@ -1658,7 +1658,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_no_last)
 EVT_END()
 
 /**
- * The last ring of the wawawa attack: a hit runs wakka_attack_common_event_hit and applies ResultACDefence
+ * The last ring of the wawawa attack: a recorded earlier hit runs wakka_attack_common_event_hit and applies ResultACDefence
  * and CheckDamage with weapon_wawawa_attack, then turns off its motion blur and hides the ring part;
  * otherwise it resolves the shot with damage_check_event_sub (LW(10) = 1).
  */
@@ -1699,7 +1699,7 @@ EVT_END()
  * and keeps checking them every frame in a sibling event, sets its idle pose,
  * tells each satellite to start idling (unit work 1 = 1),
  * and at random intervals of 30 to 150 frames holds the S_3 pose for 180 frames,
- * as long as it can act and is not asleep, stopped or dizzy.
+ * as long as it can act and is not confused, dizzy or poisoned.
  */
 static EVT_BEGIN(wait_event)
     CALL(_check_satellite)
@@ -1769,7 +1769,7 @@ static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
 
 /**
  * Moves satellite n one frame along its spline:
- * samples it at frame / 60, places the satellite (and its home position) relative to the Yux with x mirrored by
+ * samples it with quadratic-out easing over 60 frames, places the satellite (and its home position) relative to the Yux with x mirrored by
  * facing direction, and frees the spline after 60 frames. Returns TRUE while the satellite is still moving.
  */
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
@@ -2076,7 +2076,7 @@ static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
 
 /**
  * Script helper run from the Yux's wait event.
- * Drops satellites (UNIT_WORK_SATELLITE to _3) that no longer exist;
+ * Drops satellites (slots 4-7) that no longer exist;
  * with none left the barrier breaks (the body loses its damage immunity,
  * the barrier effect in UNIT_WORK_BARRIER_EFFECT is deleted and glass shards fly) and args[0] receives 0.
  * While satellites live it raises the barrier (immune body part, barrier effect kept under the Yux)

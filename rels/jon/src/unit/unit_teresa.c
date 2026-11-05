@@ -378,7 +378,7 @@ static BattleWeapon weapon_teresa_move = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Pose table of the Boo: animation names for each pose type (idle, walk, hurt, attack and so on). */
+/** Pose table of the Boo: animation names for each pose type (idle, walk, hurt, talk and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -400,8 +400,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Data table of the Boo: event scripts and values the battle looks up by tag (damage reactions, dodge, first
- * strike and so on).
+ * Data table of the Boo: empty; no tagged event scripts or values.
  */
 static BattleDataEntry data_table[] = {
     {0, NULL},
@@ -435,7 +434,7 @@ EVT_END()
 
 /**
  * Attack event of the Boo.
- * Uses an enemy item if it has one, otherwise rolls among four options:
+ * Runs a selected enemy-item script if one is returned, otherwise rolls among four options:
  * the Invisible move on itself (25, only if it is not already Invisible, STATUS_INVISIBLE),
  * the same move on another Boo (25, if teresa_check_trans finds one; not allowed while it is Confused,
  * STATUS_CONFUSE),

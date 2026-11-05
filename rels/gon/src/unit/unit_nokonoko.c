@@ -275,7 +275,7 @@ EVT_END()
 /**
  * Flips the Koopa onto its back after a stomp-type hit:
  * switches to the overturned defence and pose tables, sets status flag 1 and the overturned counter to 2,
- * and hops once.
+ * and hops twice.
  */
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
@@ -328,7 +328,7 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Pre-emptive strike by the Koopa (used when the battle starts with the enemy's attack):
+ * Unused pre-emptive-strike script for the Koopa:
  * retreats into its shell, spins into the first-attack target and hits it,
  * with the action-command defence and damage checks.
  */
@@ -414,7 +414,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // Choose the target: the First Strike victim, an item if one is ready, or a sampled opposing unit.
+    // Choose the First Strike victim or a sampled opposing unit; a ready item is used instead.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -441,7 +441,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // The camera follows it as it declares the attack and the guard window opens.
+    // The camera follows it as it declares the attack and waits for bodyguard movement to finish.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

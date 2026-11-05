@@ -355,7 +355,7 @@ EVT_END()
  */
 static EVT_BEGIN(attack_event)
 
-    // A Cleft lying on its back only spends its turn getting up (wakeup_event).
+    // A Cleft lying on its back spends its turn on its recovery countdown (wakeup_event).
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)

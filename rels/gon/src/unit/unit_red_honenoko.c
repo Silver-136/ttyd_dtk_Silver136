@@ -561,7 +561,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is declared and the guard window opens.
+    // The attack is declared and waits for bodyguard movement to finish.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)

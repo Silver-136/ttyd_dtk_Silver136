@@ -196,7 +196,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Dark Boo (percent chance to take each status): immune to poison and slow;
+ * Status vulnerability of the Dark Boo (multipliers for status chance): immune to poison and slow;
  * resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -531,7 +531,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_teresa_attack), LW(3), LW(4))
     END_IF
 
-    // No target left: a confused Dark Boo is flustered; either way it ends its turn.
+    // No target: a confused Dark Boo flusters; otherwise GOTO(99) has no matching label in this event.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -541,7 +541,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
 
-    // The attack is announced and the guard timing is awaited.
+    // The attack is announced and protecting-unit movement is awaited.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_teresa_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)

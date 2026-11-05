@@ -482,7 +482,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Battle script helper: computes the angle (degrees) of the vector from (args[0], args[1]) to (args[2], args[3])
+ * Battle script helper: computes the angle (degrees) of the vector from (args[2], args[3]) to (args[0], args[1])
  * into args[4], used to rotate the Spiky Goomba during its jump;
  * leaves the old value in place when the two points coincide.
  */
@@ -506,7 +506,7 @@ static USER_FUNC(krb_get_dir) {
 
 
 /**
- * Returns the angle in degrees (0..359) of the point (x, z) by a binary search of the sine table;
+ * Returns the angle in degrees (0..360) of the point (x, z) by a binary search of the sine table;
  * apparently unused by this unit's scripts.
  */
 static u16 krb_comp_dir(f32 x, f32 z) {

@@ -334,7 +334,7 @@ EVT_END()
 
 /**
  * Counter-damage event of the Chain-Chomp: after it is hit by a counter-type attack it is thrown into the air
- * and tumbles back to the ground (in the US and later versions the landing is handled by the engine),
+ * and tumbles back to the ground (in the JP and later versions the landing is handled by the engine),
  * then returns to its idle pose unless it was hit by damage code 512 without 2048.
  */
 static EVT_BEGIN(counter_damage_event)

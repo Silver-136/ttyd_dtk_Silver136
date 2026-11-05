@@ -221,7 +221,7 @@ static PoseTableEntry pose_table_patapata[] = {
 
 /**
  * Data table of the flying Dark Paratroopa: event scripts
- * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * and values the battle looks up by tag (damage reactions, first strike).
  */
 static BattleDataEntry data_table_patapata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
@@ -552,7 +552,7 @@ static PoseTableEntry pose_table_turn[] = {
 
 /**
  * Data table of the Dark Paratroopa once it has lost its wings (a Dark Koopa):
- * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ * event scripts and values the battle looks up by tag (damage reactions, first strike).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -826,7 +826,7 @@ static EVT_BEGIN(first_attack_event)
 EVT_END()
 
 /**
- * Attack event of the Dark Paratroopa: wakes up first if it is flipped.
+ * Attack event of the Dark Paratroopa: spends the action counting down to recovery if flipped.
  * In the forced-attack case it uses the first attack target after a half-second pause,
  * otherwise it runs a selected enemy-item event or samples a target.
  * It then spins into its shell and rams the target (NKT_A_1, with a smoke puff),

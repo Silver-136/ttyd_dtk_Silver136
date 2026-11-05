@@ -87,7 +87,7 @@ BattleUnitKind unit_sinemon = {
 
 /**
  * Defence of the Moon Cleft: 5 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{5, 99, 5, 5, 5}};
 
@@ -343,12 +343,12 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Attack event of the Moon Cleft: gets up first if it is flipped over;
+ * Attack event of the Moon Cleft: advances its recovery countdown if flipped over;
  * otherwise it uses an enemy item if the item-use check selects one, or dashes at one target (SFX_ENM_EMON_DASH1) and rams it.
  * The pre-damage check decides between a miss and a hit; a hit then checks the action-command defence result before the return hops.
  */
 static EVT_BEGIN(attack_event)
-    // If the Moon Cleft is lying flipped on its back, it spends the turn getting back up (wakeup_event).
+    // If the Moon Cleft is lying flipped on its back, it spends the turn on its recovery countdown (wakeup_event).
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)
@@ -447,7 +447,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The dash misses or is blocked: it rushes past the target, then stops after a short pause.
+    // The dash misses or is avoided: it rushes past the target, then stops after a short pause.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 50)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)

@@ -255,8 +255,8 @@ EVT_END()
 
 /**
  * Attack event of the Goomba.
- * It picks a target (the first-strike target when it ambushes Mario), uses an enemy item if it has one,
- * runs to a point 100 units in the direction the target faces, then leaps at it in a 32-frame arc to hit it.
+ * It picks a target (the first-strike target when it ambushes Mario) and may use an enemy item instead;
+ * otherwise it runs to a point 100 units in the direction the target faces, then leaps at it in a 32-frame arc to hit it.
  * It tilts along its path as it goes (krb_get_dir gives the angle from its travel direction every frame);
  * the damage and result checks follow, then it returns home. If confused with no target it is flustered.
  */

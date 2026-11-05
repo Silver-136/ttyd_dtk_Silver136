@@ -161,8 +161,8 @@ static BattleWeapon weapon_patapata_attack = {
 static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 
 /**
- * Defense of the Shady Paratroopa against normal, fire, ice, explosion and electric attacks in its winged
- * form: none, so it takes full damage from every element.
+ * Damage-type reactions of the Shady Paratroopa against normal, fire, ice, explosion and electric attacks
+ * in its winged form: no special reaction to any element.
  */
 static BattleUnitDefenseAttr defence_patapata_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
@@ -373,7 +373,7 @@ static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.5f))
 
-    // The Paratroopa flies up and around to a spot behind its target.
+    // The Paratroopa flies up and around to a spot in front of its target.
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -777,7 +777,7 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * The Koopa's shell spin when it makes a first strike on Mario's side (the pre-battle attack):
+ * Unused script for the Koopa's first-strike shell spin:
  * it pulls into its shell with SFX_ENM_NOKO_SHELL1 and spins into the target,
  * which takes the hit via the damage check; afterwards it settles back into its rest pose.
  */

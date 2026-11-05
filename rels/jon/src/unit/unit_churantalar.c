@@ -240,7 +240,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Draw callback for the Pider's thread: one thin white quad from the unit's hanging height up to the ceiling (y
+ * Draw callback for the Pider's thread: one thin white quad from its lower endpoint up to the ceiling (y
  * = 400), with the alpha from the yarn work block.
  */
 static void piders_draw_yarn_sub(CameraId camera, void* param) {
@@ -272,7 +272,7 @@ static void piders_draw_yarn_sub(CameraId camera, void* param) {
 
 /**
  * Script helper: args[0] = alpha.
- * Sets the thread's two end points above the Pider's home position (the Pider's hanging height from work[2] up
+ * Sets the thread's two end points above the Pider's home position (the lower endpoint from work[2] up
  * to y = 400) and queues the draw callback.
  */
 static USER_FUNC(piders_draw_yarn) {
@@ -566,7 +566,7 @@ EVT_END()
 
 /**
  * Entrance of the Arantula: it starts at y 180 with its thread dropped by 400 (unit work 2),
- * waits a delay based on its x position and then reels itself down over 40 frames as the drop decreases to 0.
+ * waits a delay based on its x position and then lowers the thread end to 0 over 40 frames; its y stays 180.
  */
 static EVT_BEGIN(entry_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -691,7 +691,7 @@ static EVT_BEGIN(battle_end_event)
 EVT_END()
 
 /**
- * Makes the Arantula sway: a damped back and forth rotation about the vertical axis that decays over about 110
+ * Makes the Arantula sway: a damped back and forth rotation about the vertical axis over 92
  * frames, run as a separate event so it does not block the caller.
  */
 static EVT_BEGIN(yure_event)
@@ -1004,7 +1004,7 @@ static EVT_BEGIN(piders_attack_common_event1)
 EVT_END()
 
 /**
- * Wind-up used for the later throws of the chained attack:
+ * Shorter wind-up (no script in this file calls it):
  * it takes the arm angle saved in unit work 4 up to 100 in five frames with SFX_ENM_PAIDA_ATTACK1,
  * then saves the angle again.
  */
@@ -1141,7 +1141,7 @@ EVT_END()
 /**
  * The Arantula's chained attack: three web throws in a row at three targets picked at random by
  * piders_renzoku_attack_set_target (target unit ids go in unit work 5 to 7 and part ids in 8 to 10).
- * Each throw spawns renzoku_attack_event_sub to resolve its damage while the arm swings on to the next,
+ * The first two throws spawn renzoku_attack_event_sub; the third waits for it as a child,
  * and a throw can pick the same target again.
  */
 static EVT_BEGIN(renzoku_attack_event)

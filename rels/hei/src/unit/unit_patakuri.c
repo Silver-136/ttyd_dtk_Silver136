@@ -324,7 +324,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
 
-    // Wind-up: a short hover, then it swoops down onto the target;
+    // Wind-up: a short hover, then it draws back farther in front of the target;
     // the pre-damage check decides between a dodge and a hit.
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     WAIT_MS(100)

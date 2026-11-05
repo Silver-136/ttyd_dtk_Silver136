@@ -370,8 +370,8 @@ EVT_END()
  * and head spin in place for 48 frames with SFX_BTL_ENEMY_DIE1_1,
  * then the unit puffs out in smoke with SFX_BTL_ENEMY_DIE1_2 and a "star_point" effect,
  * its coins and experience are stored, the chain pieces shake for 30 frames,
- * it returns any item it held and is removed from the battle (without a defeat reward if hit with damage code
- * 1024).
+ * it returns any item it held and uses kill mode 0 when the DEATH flag (0x400) is set,
+ * otherwise mode 2; the coins and experience were already stored.
  */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
@@ -434,13 +434,13 @@ EVT_END()
 /**
  * Attack script of the Red Chomp: it lunges at its target.
  * It clears unit work 0 (nothing in this file reads it) and stops its wait script first,
- * jumps twice in place while barking, snaps its head forward into the target and bites for a couple of rounds,
+ * jumps twice in place while barking, snaps its head forward into the target and makes one damage check,
  * dealing damage on the bite. It then sets unit work 0 back to 1 and resumes waiting.
- * After a first strike it pauses 750 ms first.
+ * During a first strike it pauses 750 ms first.
  */
 static EVT_BEGIN(attack_event)
 
-    // After a First Strike it waits a moment first; otherwise it uses an item when the item check selects one, or picks a target
+    // During a First Strike it waits a moment first; otherwise it uses an item when the item check selects one, or picks a target
     // (a confused Red Chomp with nobody to bite gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -753,7 +753,7 @@ EVT_END_PAD()
 /**
  * Per-frame script helper that animates the Chomp's chain (parts 2-9). args[0] = unit.
  * Part 9 is the stake, behind the chomp; when work[2] is 2 the current link layout is recorded relative to the
- * stake and when it is 1 the links keep that shape (the Chomp has been pulled away).
+ * stake and when it is 1 the links keep that shape (during damage, sleep, stop or freeze).
  * Otherwise the links hang as a sagging chain between the Chomp (part 1, capped at y = 110 in retail) and the stake,
  * each link moved to a fixed distance from its neighbour and held above the floor.
  */

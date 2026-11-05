@@ -248,7 +248,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Draw callback for the Pider's thread: one thin white quad from the unit's hanging height up to the ceiling (y
+ * Draw callback for the Pider's thread: one thin white quad from its lower endpoint up to the ceiling (y
  * = 400), with the alpha from the yarn work block.
  */
 static void piders_draw_yarn_sub(CameraId camera, void* param) {
@@ -280,7 +280,7 @@ static void piders_draw_yarn_sub(CameraId camera, void* param) {
 
 /**
  * Script helper: args[0] = alpha.
- * Sets the thread's two end points above the Pider's home position (the Pider's hanging height from work[2] up
+ * Sets the thread's two end points above the Pider's home position (the lower endpoint from work[2] up
  * to y = 400) and queues the draw callback.
  */
 static USER_FUNC(piders_draw_yarn) {
@@ -573,8 +573,8 @@ EVT_END()
 
 /**
  * Entry event of the Pider: starts it at y=180, with the thread at y=400,
- * waits a delay depending on its x position, then lowers the thread from 400 to 0 over 40 frames as the Pider
- * drops to the ground.
+ * waits a delay depending on its x position, then lowers the thread from 400 to 0 over 40 frames; the unit
+ * remains at y=180 in this event.
  */
 static EVT_BEGIN(entry_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -735,7 +735,7 @@ EVT_END()
 
 /**
  * Moves the Pider to the ground (y 10) with a 4-footstep sound pattern and a wobble, sets its home there,
- * clears the part attributes 6291456 (that made it untargetable in the air) and sets its height state to 1.
+ * clears the hammer/shell-toss targeting restrictions on part 1 and sets its height state to 1.
  * The first time it uses a different step sound.
  */
 static EVT_BEGIN(move_kuutei_event)
@@ -768,7 +768,7 @@ EVT_END()
 
 /**
  * Moves the Pider up into the air (y 70) with a wobble and a step sound, sets its home there,
- * sets the part attributes 6291456 (untargetable while hanging) and its height state to 0.
+ * sets the hammer/shell-toss targeting restrictions on part 1 and its height state to 0.
  */
 static EVT_BEGIN(move_kuuchu_event)
     SPAWN_EVENT(yure_event)
@@ -1103,7 +1103,7 @@ EVT_END()
 
 /**
  * The Pider's single attack: picks a target, declares the attack, winds up (common event 1),
- * swings back (event 2) while the attack part, a spat web-wad, flies out (event 3) and the damage check runs,
+ * swings back (event 2) while the attack part, a spat web-wad, flies out (event 3); damage is checked after event 3 returns,
  * then waits half a second.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -1222,7 +1222,7 @@ static EVT_BEGIN(renzoku_attack_event_sub)
     RETURN
 EVT_END()
 
-/** Resolves a shot that is not the last: runs the common damage check. */
+/** Resolves a shot that is not the last at its target: runs the common damage check. */
 static EVT_BEGIN(renzoku_attack_event_sub_no_last)
     SET_VALUE(LW(8), 0)
     SET_VALUE(LW(10), 1)
@@ -1231,7 +1231,7 @@ static EVT_BEGIN(renzoku_attack_event_sub_no_last)
 EVT_END()
 
 /**
- * Resolves the last shot of the combo: finds the matching target slot and, if an earlier shot hit it,
+ * Resolves the last shot at a target: finds the matching target slot and, if an earlier shot hit it,
  * applies the guard result and final-hit damage directly; otherwise it runs the common damage check.
  */
 static EVT_BEGIN(renzoku_attack_event_sub_last)

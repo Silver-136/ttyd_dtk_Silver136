@@ -91,7 +91,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 /**
  * Status vulnerability multipliers of the Spania (percent of the base chance): immune to dodgy and invisibility;
  * extra prone to stop, poison, electric shock, burn, growing huge, attack up, defence up, fright, gale force,
- * speed up and instant kill; most other multipliers are 90% in demos and 100% in retail.
+ * speed up and instant kill; most other multipliers are 90% in the early demos and 100% from JP onward.
  */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {90, 110, 90, 150, 90, 150, 150, 90, 150, 90, 150, 90, 150, 90, 90, 110, 110, 150, 90, 0, 0, 150};

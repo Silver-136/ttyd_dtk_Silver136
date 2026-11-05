@@ -164,7 +164,7 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IM
 #endif
 
 /**
- * Status vulnerability of the Red Chomp (percent chance to take each status): immune to sleep;
+ * Status vulnerability of the Red Chomp (multipliers of base status chances): immune to sleep;
  * resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -220,7 +220,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Data table of the Red Chomp: event handlers for the counter-hit reactions,
- * a First Strike on it (no reaction) and being defeated.
+ * first-strike positioning (a dummy handler) and being defeated.
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -347,7 +347,7 @@ EVT_END()
 /**
  * Data events 25 to 36, which the standard damage reaction runs for the counter-damage codes 44 to 55:
  * the Red Chomp takes the hurt pose (type 39) and its head (part 1) is flung 25 units back and up;
- * up to the US demo it then drops back to the floor in two hops.
+ * in the early-demo branch it then drops back to the floor in two hops.
  * After 30 frames the camera resets, and it restarts its wait event
  * unless the damage code has 512 set without 2048.
  */
@@ -446,7 +446,7 @@ EVT_END()
  * otherwise picks a target (BATTLE_FLAG_FIRST_ATTACK uses the first-strike target),
  * hops twice on the spot barking, then lunges at the target on its chain
  * and bites (damage with weapon_wanwan_attack).
- * A miss falls short and it pulls back; a hit shakes the camera first.
+ * A miss returns the head to the unit's base position; a hit shakes the camera first.
  * A confused unit with no target runs subsetevt_confuse_flustered. It always ends back in the wait event.
  */
 static EVT_BEGIN(attack_event)
@@ -555,7 +555,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The bite missed: the Chomp falls short and pulls back in.
+    // The bite missed: the head returns to the unit's base position.
     LABEL(90)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(14), 0, EVT_NULLPTR)

@@ -122,7 +122,7 @@ static StatusVulnerability regist = {
 };
 #endif
 
-/** Poses of the X-Naut: idle, status, hurt, run, attack and talking animations (the names have no prefix). */
+/** Poses of the X-Naut: idle, status, hurt, run and talking animations (the names have no prefix). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -362,7 +362,7 @@ EVT_END()
 /**
  * Shared run-up for both X-Naut attacks (weapon in LW(9), target in LW(3)/LW(4)):
  * declares the attack, points the camera at the target, scuffs its feet in place for 10 dust puffs,
- * then runs to the target's hit position.
+ * then runs to a point 90 facing-relative units short of the target's hit position.
  */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
@@ -452,7 +452,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL_CHILD(attack_common_event1)
 
     // Lunge: the X-Naut springs at the target,
-    // sliding along the ground until it reaches the target's x position.
+    // moving through the air until it reaches the target's x position.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

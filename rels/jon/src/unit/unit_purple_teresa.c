@@ -547,7 +547,7 @@ EVT_END()
  * It dips and shows pose A_1, fades its alpha down (unless it was already in STATUS_INVISIBLE),
  * turns around in two 90 degree steps (15 degrees x 6 frames each), switching to pose S_1 between them,
  * and applies weapon_teresa_trans_myself to itself with the defence check:
- * a sure STATUS_INVISIBLE (Invisible) for 2 turns.
+ * invisibleChance 100 and invisibleTime 2 (status immunity, or Allergy from JP onward, can prevent it).
  */
 static EVT_BEGIN(trans_myself_event)
     SET_VALUE(LW(3), -2)
@@ -604,8 +604,8 @@ EVT_END()
 /**
  * The Dark Boo's move that turns an ally invisible.
  * It picks another Boo (teresa_check_teresa) that is not yet in STATUS_INVISIBLE, fades out and reappears beside it,
- * applies weapon_teresa_trans_myself with the defence check (a sure STATUS_INVISIBLE, Invisible,
- * for 2 turns on that Boo)
+ * applies weapon_teresa_trans_myself with the defence check (invisibleChance 100, invisibleTime 2;
+ * status immunity, or Allergy from JP onward, can prevent it)
  * and returns home.
  */
 static EVT_BEGIN(trans_event)

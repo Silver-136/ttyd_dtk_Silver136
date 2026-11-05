@@ -160,7 +160,7 @@ static BattleWeapon weapon_chorobon_drain_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack script of the Fuzzy: after an item check it always uses its drain attack (drain_attack_event). */
+/** Attack script of the Fuzzy: uses a selected item event, otherwise its drain attack (drain_attack_event). */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

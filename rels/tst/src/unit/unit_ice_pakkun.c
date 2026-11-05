@@ -121,7 +121,7 @@ BattleUnitKind unit_ice_pakkun = {
     data_table,
 };
 
-/** Defence of the Frost Piranha: none, so it takes full damage from every kind of attack. */
+/** Defence of the Frost Piranha: no flat defence; elemental reactions are separate. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
 /**
@@ -195,7 +195,7 @@ static BattleWeapon weapon_ice_pakkun_attack = {
 };
 
 /**
- * Attack script of the Frost Piranha: when battle flag 2 is set it attacks straight away;
+ * Attack script of the Frost Piranha: when battle flag 2 is set it runs normal_attack_event;
  * otherwise it uses a selected item event, or its normal attack (weapon_ice_pakkun_attack) if none is returned.
  */
 static EVT_BEGIN(attack_event)

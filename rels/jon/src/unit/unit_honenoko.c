@@ -393,9 +393,9 @@ EVT_END()
 /**
  * Attack script of the Dull Bones. On a first strike it just throws its bone.
  * If it is collapsed (unit work 2 above 0) it runs rebirth_event.
- * Otherwise, after an item check, it throws a bone 85 times in 100
- * and calls a friend (call_friend_event) 15 times in 100,
- * trying space to the right of it first and then to the left.
+ * Otherwise, after an item check, it rolls with weights 85 for a bone throw
+ * and 15 for a friend call, rerolling if no free spot is found,
+ * trying space in front of it first and then behind it.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -487,7 +487,7 @@ EVT_END()
  * The Dull Bones' attack: it rears back (KRN_A_1 and A_2)
  * and throws its bone (part 2, spinning at 25 degrees a frame) at the target.
  * A dodging target gets its avoid reaction (start_avoid) as the bone reaches it,
- * and the damage is dealt on impact. The bone then lands behind the target and is hidden again.
+ * and damage is dealt on impact if it hits. The bone then bounces back toward the thrower and is hidden again.
  * After a first strike it pauses first. When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -602,7 +602,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
 
-    // Hit: the bone strikes and the damage is dealt; the bone then drops behind the target.
+    // Hit: the bone strikes and the damage is dealt; the bone then bounces back toward the thrower.
     LABEL(91)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
     ADD(LW(1), 14)

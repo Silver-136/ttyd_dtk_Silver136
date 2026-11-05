@@ -220,7 +220,7 @@ static BattleWeapon weapon_honenoko_link_attack = {
 };
 
 /**
- * Spawn setup for the extra Dry Bones created when it splits: enemy side, parked off-screen until its
+ * Spawn setup for the extra Dry Bones recruited by call_friend_event: enemy side, parked off-screen until its
  * script places it.
  */
 static BattleUnitSetup entry_honenoko = {
@@ -425,9 +425,9 @@ EVT_END()
 /**
  * Attack script of the Dry Bones. On a first strike it just throws its bone.
  * If it is collapsed (unit work 2 above 0) it runs rebirth_event.
- * Otherwise, after an item check, it draws a random number:
- * 50 in 100 for a single bone throw, 30 in 100 for the three-bone link attack
- * and 20 in 100 to call a friend (call_friend_event, trying space to its right first and then to its left).
+ * Otherwise, after an item check, each roll chooses a single throw (50/100), a link attack (30/100)
+ * or recruitment (20/100). If no recruitment space is found, it rolls again.
+ * Recruitment searches first in the facing direction, then in the opposite direction.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -524,7 +524,7 @@ EVT_END()
  * The Dry Bones' single bone throw: it rears back (KRN_A_1 and A_2) and throws a bone (part 2,
  * spinning at 25 degrees a frame, SFX_ENM_HONENOKO_BONE_THROW2) at the target.
  * A dodging target gets its avoid reaction (start_avoid) as the bone reaches it,
- * and the damage is dealt on impact. The bone then lands behind the target and is hidden again.
+ * and the damage is dealt on impact. The bone then rebounds toward the thrower and is hidden again.
  * After a first strike it pauses first. When confused with no target it is flustered.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -639,7 +639,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
 
-    // Hit: the bone strikes and the damage is dealt; the bone then drops behind the target.
+    // Hit: the bone strikes and the damage is dealt; the bone then rebounds toward the thrower.
     LABEL(91)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
     ADD(LW(1), 14)
@@ -738,7 +738,7 @@ EVT_END()
  * The Dry Bones rears back (KRN_A_1 and A_2) and throws a bone (SFX_ENM_HONENOKO_BONE_THROW3) that spins at the
  * target.
  * The target is checked in turn; each hit reads the defence action command result;
- * only the last bone (LW(13) = 3) uses the final-hit flag 256. Each bone lands behind the target and is hidden again.
+ * only the last CheckDamage call uses the final-hit flag 256. On a hit the bone rebounds toward the thrower and is hidden.
  */
 static EVT_BEGIN(link_attack_event_sub)
 

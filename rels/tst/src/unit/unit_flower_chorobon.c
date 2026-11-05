@@ -116,8 +116,8 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Flower Fuzzy (the demos), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability multipliers of Flower Fuzzy (early-demo branch):
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 90, Stop 90, Dizzy 80, Confuse 80, Freeze 65, Tiny 70, Attack Down 70, Defense Down 65,
  * Allergic 65, Fright 85, Gale Force 85, Slow 65 and instant KO 95.
  */
@@ -125,8 +125,8 @@ static StatusVulnerability regist = {90, 90, 80, 100, 80, 100, 100, 65, 100, 70,
 #else
 
 /**
- * Status vulnerability of Flower Fuzzy (the final versions), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability multipliers of Flower Fuzzy (JP-and-later branch):
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 85, Stop 85, Dizzy 80, Confuse 85, Freeze 70, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 60, Fright 85, Gale Force 80, Slow 80 and instant KO 95.
  */
@@ -301,8 +301,8 @@ EVT_END()
 /**
  * The Flower Fuzzy's magic attack (weapon_chorobon_magic_attack, all targets):
  * it spends 2 FP, floats up on the spot and fires three shock rings with the magic sound
- * while the camera shakes, then each target in turn gets the avoid, guard or hit check,
- * with the guard-timing result for the first one.
+ * then the camera shakes and each target in turn gets an avoid or hit check;
+ * guard timing is requested only if target ordinal zero reaches the hit branch.
  */
 static EVT_BEGIN(magic_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -420,7 +420,7 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
 };
 
 /**
- * Pose table of Flower Fuzzy: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
+ * Pose table of Flower Fuzzy: maps its battle pose types (stay, walk, hurt, sleep, talk and so on) to
  * animation names, 18 entries such as CBN_N_1, CBN_Y_1, CBN_K_1, CBN_X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -664,7 +664,7 @@ static EVT_BEGIN(drain_attack_event)
         CASE_END
     END_SWITCH
 
-    // On a miss it bounces off the target and lands in front of it.
+    // On a miss it bounces off the target and lands behind it.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))

@@ -60,8 +60,8 @@ BattleUnitKind unit_barriern_z_satellite = {
     {8.0f, 0.0f, -10.0f}, // heldItemBaseOffset
     {0.0f, 0.0f, 0.0f}, // burnFlameOffset
 #endif
-    0.0f, // vivianOffsetX
-    0.0f, // vivianOffsetZ
+    0.0f, // centerOffset.x in early demos; vivianOffsetX in JP and later
+    0.0f, // centerOffset.y in early demos; vivianOffsetZ in JP and later
 #if VERSION <= VERSION_DEMO_JP
     0.0f,
     0,

@@ -363,7 +363,7 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * The Koopa's shell spin when it makes a first strike on Mario's side (the pre-battle attack):
+ * Unused script for the Koopa's first-strike shell spin:
  * it pulls into its shell with SFX_ENM_NOKO_SHELL1 and spins into the target,
  * which takes the hit via the damage check; afterwards it settles back into its rest pose.
  */

@@ -161,8 +161,8 @@ static BattleUnitDefense defence_turn = {0};
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 /**
- * Status vulnerability of the Dark Koopatrol while it is flipped onto its back, as the percent chance each
- * status takes hold: every status lands at the normal rate.
+ * Status vulnerability of the Dark Koopatrol while it is flipped onto its back, as percentage multipliers on
+ * status-infliction chances: every status lands at the normal rate.
  */
 static StatusVulnerability regist_turn = {
     100, // sleep
@@ -202,8 +202,8 @@ static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 static BattleUnitDefenseAttr defence_attr_guard = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
- * Status vulnerability of the Dark Koopatrol while it is curled up guarding, as the percent chance each
- * status takes hold: every status lands at the normal rate.
+ * Status vulnerability of the Dark Koopatrol while it is curled up guarding, as percentage multipliers on
+ * status-infliction chances: every status lands at the normal rate.
  */
 static StatusVulnerability regist_guard = {
     100, // sleep
@@ -592,12 +592,12 @@ static BattleUnitSetup entry_togenoko = {
 };
 
 /**
- * The Dark Koopatrol's action: it wakes up first if it is on its back;
+ * The Dark Koopatrol's action: it handles a flipped turn with the recovery countdown;
  * while guarding (unit work 0 = 1) it mostly (80%) stands up again (guard_cancel_event);
  * when charged it makes a normal or shell attack;
  * otherwise it may use an item; recruitment checks use zero thresholds, so this chooser never calls a friend.
  * It otherwise picks between the normal attack, the shell attack,
- * the charge (charge_event) and curling into guard (guard_event) by weighted chance.
+ * the charge (charge_event); curling into guard (guard_event) has zero weight.
  */
 static EVT_BEGIN(attack_event)
     // At the start of a first strike the Dark Koopatrol goes straight into its normal attack.
@@ -608,7 +608,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 
-    // If it is flipped over, it first rights itself with wakeup_event.
+    // If flipped over, wakeup_event counts down and rights it only at zero.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(wakeup_event))
@@ -712,7 +712,7 @@ static EVT_BEGIN(attack_event)
             CASE_END
         END_SWITCH
 
-        // Otherwise it picks by weighted chance: the normal attack, the shell attack, a charge-up, or curling into its guard.
+        // Otherwise it picks by weighted chance: the normal attack, the shell attack or a charge-up; guarding has zero weight.
         LABEL(11)
         SET_VALUE(LW(0), 0)
         ADD(LW(0), 50)
@@ -748,8 +748,8 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * The Dark Koopatrol's normal attack: it runs up to the target (R_3), thrusts (A_2) with SFX_ENM_TOGENOKO_MOVE5,
- * and the pre-damage check decides between a miss and a hit; then it hops back.
+ * The Dark Koopatrol's normal attack: it winds up in R_3, then thrusts in A_2 with SFX_ENM_TOGENOKO_MOVE5,
+ * and the pre-damage check decides between a miss and a hit; on a hit it then hops back.
  */
 static EVT_BEGIN(normal_attack_event)
     // In a first strike it waits, then uses the target of that strike; otherwise it chooses a target.
@@ -826,7 +826,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The swing missed: the Dark Koopatrol turns around and walks back, taking its idle pose.
+    // The swing missed: the Dark Koopatrol runs past, reappears at x 300 and returns home to its idle pose.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 500)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)

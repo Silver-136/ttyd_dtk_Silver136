@@ -589,7 +589,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
 
-    // The bone hits: the damage is applied, then the bone drops to the ground.
+    // The bone hits: the damage is applied, then the bone bounces back from the target.
     LABEL(91)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
     ADD(LW(1), 14)

@@ -558,7 +558,7 @@ EVT_END()
 /**
  * The Boo makes itself invisible: it declares an attack on itself,
  * spins and fades out (unless it already is invisible, STATUS_INVISIBLE),
- * and the weapon (weapon_teresa_trans_myself: a sure STATUS_INVISIBLE, Invisible, for 2 turns) applies the invisibility
+ * and the weapon (weapon_teresa_trans_myself: invisibleChance 100, invisibleTime 2) attempts to apply invisibility
  * to it.
  */
 static EVT_BEGIN(trans_myself_event)

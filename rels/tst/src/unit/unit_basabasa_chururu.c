@@ -168,7 +168,7 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
 };
 
 /**
- * Pose table of Swoopula: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
+ * Pose table of Swoopula: maps its battle pose types (stay, walk, hurt, sleep, talk and so on) to
  * animation names, 18 entries such as CYU_N_1, CYU_Y_1, CYU_K_1, CYU_X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -193,7 +193,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Pose table of Swoopula hanging from the ceiling: maps its battle pose types (stay, walk, hurt, dead,
+ * Pose table of Swoopula hanging from the ceiling: maps its battle pose types (stay, walk, hurt, sleep,
  * talk and so on) to animation names, 18 entries such as CYU_N_2, CYU_Y_2, CYU_K_2, CYU_X_2.
  */
 static PoseTableEntry pose_table_ceil[] = {
@@ -249,8 +249,8 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Swoopula (the demos), as the percent chance a status takes hold:
- * always hit by Poison, Electric, Burn, Huge, Attack Up, Defense Up, Gale Force, Fast,
+ * Status vulnerability multipliers of Swoopula (early-demo branch):
+ * 100 for Poison, Electric, Burn, Huge, Attack Up, Defense Up, Gale Force, Fast,
  * Dodgy and Invisible; otherwise Sleep 60, Stop 75, Dizzy 90, Confuse 70, Freeze 70, Tiny 70,
  * Attack Down 70, Defense Down 70, Allergic 70, Fright 70, Slow 70 and instant KO 95.
  */
@@ -258,8 +258,8 @@ static StatusVulnerability regist = {60, 75, 90, 100, 70, 100, 100, 70, 100, 70,
 #else
 
 /**
- * Status vulnerability of Swoopula (the final versions), as the percent chance a status takes hold:
- * always hit by Dizzy, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability multipliers of Swoopula (JP-and-later branch):
+ * 100 for Dizzy, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Sleep 70, Stop 75, Confuse 70, Freeze 70, Tiny 80, Attack Down 80, Defense Down 90,
  * Allergic 70, Fright 70, Gale Force 85, Slow 70 and instant KO 95.
  */
@@ -322,7 +322,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 /**
  * Brings the bat down from the ceiling into the open air the first time it is needed:
  * if it is still hanging (unit attribute 2 set) it clears that, sets attribute 4,
- * restores the flying pose table (pose type 40),
+ * switches to the flying pose table and selects walk pose (type 40),
  * shifts the unit and its home position down 30 (then another 40 for its home), adjusts the hit,
  * cursor and status icon offsets and hands the damage event over to damage_event.
  * Leaves the home position in LW(0) to LW(2).
@@ -501,7 +501,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
 
-    // If it is hanging from the ceiling it drops down first, then turns toward the target.
+    // If it is hanging from the ceiling it drops down; it has already turned toward the target.
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
@@ -585,7 +585,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, -45)
 
-    // The Swoopula latches on with a sucking sound and its CYU_A_2 pose, pulsing in size as it drinks, while the camera shakes and the bite damage lands.
+    // The Swoopula latches on with a sucking sound and its CYU_A_2 pose, pulsing in size before the camera shake and bite damage check.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BASA_SUCK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CYU_A_2"))
     LOOP(2)

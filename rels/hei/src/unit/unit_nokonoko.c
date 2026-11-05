@@ -313,7 +313,7 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * First-strike attack of the Koopa Troopa (used when the battle starts with its attack on Mario):
+ * Unused first-strike attack script of the Koopa Troopa:
  * it hops into its shell, spins up (unit work 1 is the spin speed) and dashes into the first attack target;
  * the hit is applied with the action-command result, then it bounces off and walks home.
  */

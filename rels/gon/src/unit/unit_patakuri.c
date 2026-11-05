@@ -222,7 +222,7 @@ static BattleDataEntry data_table_patakuri[] = {
 };
 
 /**
- * Sound table of the Paragoomba: which sound each of its poses (idle, walk, run, attack and so on) plays, and
+ * Sound table of the Paragoomba: which sound its listed poses (idle, walk, run and so on) plays, and
  * when.
  */
 static PoseSoundTiming pose_sound_timing_table[] = {
@@ -325,7 +325,7 @@ static EVT_BEGIN(attack_event_patakuri)
         GOTO(99)
     END_IF
 
-    // The camera follows the Paragoomba as it declares the attack and the guard window opens.
+    // The camera follows the Paragoomba as it declares the attack and waits for any bodyguard movement to finish.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -350,7 +350,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
 
-    // It turns to the target and swoops down at it with a whoosh.
+    // It turns to the target and draws back farther in front of it with a whoosh.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 50)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
@@ -643,7 +643,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // The camera follows the Goomba as it declares the attack and the guard window opens.
+    // The camera follows the Goomba as it declares the attack and waits for any bodyguard movement to finish.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))

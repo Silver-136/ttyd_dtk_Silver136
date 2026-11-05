@@ -133,8 +133,8 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Mini-X-Yux (the demos), as the percent chance a status takes hold:
- * immune to Poison, Freeze and Fright; always hit by Electric, Burn, Huge, Attack Up, Defense Up, Fast,
+ * Status vulnerability of Mini-X-Yux (the early demos), as percent multipliers on the incoming status chance:
+ * zero for Poison, Freeze and Fright; 100 for Electric, Burn, Huge, Attack Up, Defense Up, Fast,
  * Dodgy and Invisible; otherwise Sleep 70, Stop 90, Dizzy 90, Confuse 10, Tiny 80, Attack Down 80,
  * Defense Down 80, Allergic 80, Gale Force 90, Slow 80 and instant KO 25.
  */
@@ -142,8 +142,8 @@ static StatusVulnerability regist = {70, 90, 90, 0, 10, 100, 100, 0, 100, 80, 10
 #else
 
 /**
- * Status vulnerability of Mini-X-Yux (the final versions), as the percent chance a status takes hold:
- * immune to Poison, Freeze and Fright; always hit by Electric, Burn, Huge, Attack Up, Defense Up, Fast,
+ * Status vulnerability of Mini-X-Yux (JP and later), as percent multipliers on the incoming status chance:
+ * zero for Poison, Freeze and Fright; 100 for Electric, Burn, Huge, Attack Up, Defense Up, Fast,
  * Dodgy and Invisible; otherwise Sleep 70, Stop 90, Dizzy 90, Confuse 10, Tiny 80, Attack Down 80,
  * Defense Down 85, Allergic 80, Gale Force 90, Slow 80 and instant KO 25.
  */
@@ -151,7 +151,7 @@ static StatusVulnerability regist = {70, 90, 90, 0, 10, 100, 100, 0, 100, 80, 10
 #endif
 
 /**
- * Pose table of Mini-X-Yux: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
+ * Pose table of Mini-X-Yux: maps its battle pose types (stay, walk, hurt, run, danger and so on) to
  * animation names, 17 entries such as N_2, Y_2, K_2, X_2.
  */
 static PoseTableEntry pose_table[] = {

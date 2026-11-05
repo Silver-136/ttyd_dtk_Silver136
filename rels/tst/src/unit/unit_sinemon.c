@@ -83,7 +83,7 @@ BattleUnitKind unit_sinemon = {
 
 /**
  * Defence of the Moon Cleft: 5 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{5, 99, 5, 5, 5}};
 
@@ -189,7 +189,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Pose table of the Moon Cleft while it is flipped on its back:
- * maps each battle pose (waiting, hurt, running...) to one of its SIN_* animations.
+ * maps each battle pose (waiting, hurt, talking...) to one of its SIN_* animations.
  */
 static PoseTableEntry pose_table_turn[] = {
     {1, "SIN_N_2"},

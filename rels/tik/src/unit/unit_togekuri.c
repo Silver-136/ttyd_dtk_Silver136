@@ -99,7 +99,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Spiky Goomba (percent chance to take each status):
+ * Status vulnerability of the Spiky Goomba (percent multipliers on each status's base chance):
  * extra prone to stop, fright, gale force and instant kill.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -500,7 +500,7 @@ static USER_FUNC(krb_get_dir) {
 }
 
 /**
- * Returns the direction in whole degrees (0 to 359) of the vector (x, z) by binary-searching SinTable for the
+ * Returns the direction in whole degrees (0 to 360) of the vector (x, z) by binary-searching SinTable for the
  * angle whose sine matches |z| / length and adjusting for the quadrant.
  */
 // Choose the nearest degree from the quarter-wave table, then reflect it into the input quadrant.

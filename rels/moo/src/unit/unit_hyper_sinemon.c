@@ -394,7 +394,7 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Attack event of the Hyper Cleft: gets up first if it is flipped over;
+ * Attack event of the Hyper Cleft: advances its recovery countdown if flipped over;
  * on a field first strike it goes straight for the first attack target, otherwise,
  * unless it is already charged (STATUS_CHARGE), it may use an enemy item
  * or draw lots (75% on turn 1, 25/25 later) to spend the turn charging (weapon_sinemon_charge, crystal effect).
@@ -403,7 +403,7 @@ EVT_END()
  */
 static EVT_BEGIN(attack_event)
 
-    // If the Hyper Cleft is lying flipped on its back, it spends the turn getting back up (wakeup_event).
+    // If the Hyper Cleft is lying flipped on its back, it spends the turn on its recovery countdown (wakeup_event).
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)
@@ -547,7 +547,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
 
-    // The dash misses or is blocked: it rushes past the target, then stops after a short pause.
+    // The dash misses or is avoided: it rushes past the target, then stops after a short pause.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 50)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)

@@ -449,7 +449,7 @@ EVT_END()
  * when collapsed it rebuilds itself (rebirth_event);
  * otherwise it can use an item, or draws a number from 0 to 99:
  * bone throw (50), three-bone throw (30) or calling a Dry Bones friend (20).
- * For the call it first checks that there is room beside it by turning to both sides with btlevtcmd_CheckSpace.
+ * For recruitment it checks space first in its facing direction, then in the opposite direction.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -628,7 +628,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The bone misses: the target may dodge as it flies past, and it lands on the stage floor beyond.
+    // The bone misses: the target may dodge as it flies past, and it continues to the stage edge.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -826,7 +826,7 @@ static EVT_BEGIN(link_attack_event_sub)
         CASE_END
     END_SWITCH
 
-    // The bone misses: the target may dodge as it flies past, and it lands on the stage floor beyond.
+    // The bone misses: the target may dodge as it flies past, and it continues to the stage edge.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)

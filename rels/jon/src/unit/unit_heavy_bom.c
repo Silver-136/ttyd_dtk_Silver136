@@ -114,8 +114,8 @@ BattleUnitKind unit_heavy_bom = {
 };
 
 /**
- * Attack data for the Bulky Bob-omb's super explosion that hits every enemy when the fuse runs out: 2
- * damage.
+ * Attack data for the Bulky Bob-omb's super explosion when the fuse runs out: 2 damage, targeting eligible
+ * units on both sides except itself.
  */
 static BattleWeapon weapon_heavy_bomb_super_explosion = {
     NULL, 0, // name..icon

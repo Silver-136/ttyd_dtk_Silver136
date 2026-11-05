@@ -340,7 +340,7 @@ EVT_END()
 /**
  * The Dark Keeper's charge: winds up with stamping footsteps,
  * then runs along the floor into the target (weapon in LW(9)).
- * A hit shakes the camera and knocks the target back; a miss runs on past.
+ * A hit shakes the camera and knocks the target back; a miss advances another 30 units.
  * Afterwards it walks home and laughs three times before going back to its stance.
  */
 static EVT_BEGIN(normal_attack_event)
@@ -422,7 +422,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // The charge missed: Dark Craw runs on past the target.
+    // The charge missed: Dark Craw advances another 30 units in its facing direction.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
@@ -557,7 +557,7 @@ static EVT_BEGIN(throw_attack_event)
         CASE_END
     END_SWITCH
 
-    // The throw missed: the weapon flies on and is restored to Dark Craw.
+    // The throw missed: the weapon continues its arc to the floor, then is hidden.
     LABEL(90)
     CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, 2)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)

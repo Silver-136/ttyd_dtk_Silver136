@@ -91,7 +91,7 @@ static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 /** Element response of the Cleft: it is immune to fire. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-/** Damage reduction of the Cleft, flipped on its back: none, every attack type does full damage. */
+/** Numerical defence of the Cleft while flipped: zero; its fire-immunity attribute remains active. */
 static BattleUnitDefense defence_turn = {0};
 
 #if VERSION <= VERSION_DEMO_JP
@@ -340,14 +340,14 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Attack script of the Cleft. If it is flipped over it gets up first.
+ * Attack script of the Cleft. If flipped over, it advances its recovery countdown instead.
  * After an item check (skipped on a first strike, when it also waits 800 ms) it dashes:
- * it runs round behind the target, then rushes through it (SFX_ENM_EMON_DASH1) and the target takes the damage;
- * afterwards it hops back past the target to its home position.
+ * it walks to a point in the target's facing direction, then rushes through it (SFX_ENM_EMON_DASH1) and the target takes the damage;
+ * after a hit it retreats in two hops, then runs to its home position.
  */
 static EVT_BEGIN(attack_event)
 
-    // If the Cleft is still on its back it gets up instead of attacking.
+    // If the Cleft is still on its back it advances its recovery countdown instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)
@@ -392,7 +392,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_sinemon_attack))
 
-    // It runs around to the far side of the target.
+    // It walks to a point 100 units in the target's facing direction.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)

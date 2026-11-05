@@ -1,4 +1,4 @@
-// Rogueport Sewers (tik) battle unit: Koopa Troopa (nokonoko): its parts, defence/status tables, and attack events.
+// tst.rel's Koopa Troopa (nokonoko) battle unit: its parts, defence/status tables, and attack events.
 
 #include "version.h"
 #include "battle/battle_unit.h"

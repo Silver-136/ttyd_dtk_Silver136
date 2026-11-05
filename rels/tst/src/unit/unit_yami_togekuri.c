@@ -565,7 +565,7 @@ static USER_FUNC(krb_get_dir) {
 
 
 /**
- * Angle in degrees (0-359) of the vector (x, z) from the sine table,
+ * Angle in degrees (0-360) of the vector (x, z) from the sine table,
  * found by a seven-step binary search of SinTable and then placed in the right quadrant.
  * Not called anywhere in this file.
  */

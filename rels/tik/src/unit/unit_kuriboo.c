@@ -260,7 +260,7 @@ static EVT_BEGIN(attack_event)
     END_IF
 
     // The camera frames the Goomba and its target, then the attack is announced
-    // and the guard timing is awaited.
+    // and any bodyguard movement is awaited.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))

@@ -212,24 +212,24 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of X-Yux (the demos), as the percent chance a status takes hold:
+ * Status vulnerability of X-Yux (the early demos), as percent multipliers on the incoming status chance:
  * immune to Sleep, Stop, Dizzy, Poison, Confuse, Electric, Burn, Freeze, Fright and Gale Force;
- * always hit by Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * 100 for Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
  * otherwise Tiny 10, Attack Down 10, Defense Down 10, Allergic 10, Slow 10 and instant KO 10.
  */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 100, 10, 100, 10, 100, 10, 10, 0, 0, 100, 10, 100, 100, 10};
 #else
 
 /**
- * Status vulnerability of X-Yux (the final versions), as the percent chance a status takes hold:
+ * Status vulnerability of X-Yux (JP and later), as percent multipliers on the incoming status chance:
  * immune to Sleep, Stop, Dizzy, Poison, Confuse, Electric, Burn, Freeze, Tiny, Attack Down, Defense Down,
- * Allergic, Fright, Gale Force and Slow; always hit by Huge, Attack Up, Defense Up, Fast,
+ * Allergic, Fright, Gale Force and Slow; 100 for Huge, Attack Up, Defense Up, Fast,
  * Dodgy and Invisible; otherwise instant KO 10.
  */
 static StatusVulnerability regist = {0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100, 0, 100, 100, 10};
 #endif
 
-/** Attack data of X-Yux's wakka attack: base damage 3, 100% accuracy; may inflict stop 100% (80% in the final versions). */
+/** Attack data of X-Yux's wakka attack: base damage 3, 100% accuracy; base Stop chance 100% in early demos, 80% in JP and later. */
 static BattleWeapon weapon_wakka_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -273,7 +273,7 @@ static BattleWeapon weapon_wakka_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Attack data of X-Yux's wawawa attack: base damage 2, 100% accuracy; may inflict stop 100% (80% in the final versions). */
+/** Attack data of X-Yux's wawawa attack: base damage 2, 100% accuracy; base Stop chance 100% in early demos, 80% in JP and later. */
 static BattleWeapon weapon_wawawa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -333,7 +333,7 @@ static BattleUnitSetup entry_barriern_satellite = {
 };
 
 /**
- * Pose table of X-Yux: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to animation
+ * Pose table of X-Yux: maps its battle pose types (stay, walk, hurt, run, talk and so on) to animation
  * names, 18 entries such as N_1, Y_1, K_1, X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -872,7 +872,7 @@ static USER_FUNC(barriern_satellite_zanzou2) {
 
 /**
  * Afterimage effect of a Mini-X-Yux (parts 2-6, animation Z_2),
- * like barriern_zanzou_sub but with a separate frame counter per satellite n.
+ * like barriern_zanzou_sub but with a separate afterimage frame counter per satellite n; the body uses counter 0.
  * type 0 converges over 36 frames, type 1 bursts out over 8 frames.
  */
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {
@@ -1126,12 +1126,12 @@ EVT_END()
  * the attacking part (LW(15)) takes the Z_3 pose
  * and is launched at the target (its attribute 16777216 cleared while it flies),
  * the Yux plays A_5 and results 3, 6 or 2 start the target's avoid reaction;
- * afterwards the satellites' state (unit work 1) decides whether the part is hidden again.
+ * afterwards unit work 1 selects the single- or combined-ring flight and scale timing.
  * The code name wakka is Japanese for "ring".
  */
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
 
-    // The ring part is set up on the Yux: with motion blur enabled for the group attack, then placed on the Yux in its Z_3 pose.
+    // The ring uses motion blur for the group attack and starts at the source unit in LW(12), in its Z_3 pose.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WAWAWA_ATTACK, LW(6))
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
@@ -1227,7 +1227,7 @@ EVT_END()
 
 /**
  * The part of the Yux's ring attack when the shot hits:
- * the attacking part (LW(15)) is flung at the target in the Z_3 pose and returns (A_5 pose);
+ * the attacking part (LW(15)) is flung at the target in the Z_3 pose while the Yux plays A_5;
  * the satellites' state (unit work 1) decides whether the part stays visible.
  * The code name wakka is Japanese for "ring".
  */
@@ -1671,7 +1671,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_no_last)
 EVT_END()
 
 /**
- * The last ring of the wawawa attack: a hit runs wakka_attack_common_event_hit and applies ResultACDefence
+ * The last ring of the wawawa attack: a recorded earlier hit runs wakka_attack_common_event_hit and applies ResultACDefence
  * and CheckDamage with weapon_wawawa_attack, then turns off its motion blur and hides the ring part;
  * otherwise it resolves the shot with damage_check_event_sub (LW(10) = 1).
  */
@@ -1712,7 +1712,7 @@ EVT_END()
  * and keeps checking them every frame in a sibling event, sets its idle pose,
  * tells each satellite to start idling (unit work 1 = 1),
  * and at random intervals of 30 to 150 frames holds the S_3 pose for 180 frames,
- * as long as it can act and is not asleep, stopped or dizzy.
+ * as long as it can act and is not confused, dizzy or poisoned.
  */
 static EVT_BEGIN(wait_event)
     CALL(_check_satellite)
@@ -1782,7 +1782,7 @@ static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
 
 /**
  * Moves satellite n one frame along its spline:
- * samples it at frame / 60, places the satellite (and its home position) relative to the Yux with x mirrored by
+ * samples it with quadratic-out easing over 60 frames, places the satellite (and its home position) relative to the Yux with x mirrored by
  * facing direction, and frees the spline after 60 frames. Returns TRUE while the satellite is still moving.
  */
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {

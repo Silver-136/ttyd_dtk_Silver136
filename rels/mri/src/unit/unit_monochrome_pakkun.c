@@ -220,7 +220,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
-/** Poses of the Pale Piranha while it hangs from the ceiling, before it drops (the _2 and _3 animations). */
+/** Poses of the Pale Piranha while it hangs from the ceiling, before it drops (the _2 through _5 animations). */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "PKF_N_2"},
     {POSE_TYPE_STOP, "PKF_Y_2"},

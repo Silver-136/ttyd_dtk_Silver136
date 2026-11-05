@@ -521,7 +521,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_teresa_attack), LW(3), LW(4))
     END_IF
 
-    // No target to attack: a confused Boo just flusters about, otherwise it skips its turn.
+    // No target: a confused Boo flusters; otherwise GOTO(99) has no matching label in this event.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

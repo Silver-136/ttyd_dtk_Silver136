@@ -271,7 +271,7 @@ EVT_END()
  * Death script for the Red Bones: spins the unit (15 degrees per frame for 48 frames) with the death sound,
  * puffs smoke, banks its coins and experience and shows the star points (only the first time, tracked in unit
  * work 1), then tips the unit over for 30 frames,
- * takes its back item and kills it (kill mode 0 if the damage code says it was blown away, otherwise 2).
+ * takes its back item and kills it (kill mode 0 when the damage has the DEATH flag 0x400, otherwise 2).
  */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)

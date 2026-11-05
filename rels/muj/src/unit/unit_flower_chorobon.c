@@ -211,7 +211,7 @@ static BattleWeapon weapon_chorobon_drain_attack_fp = {
 };
 
 /**
- * Weapon of the Flower Fuzzy (magic attack): targets every unit for 3 damage, ignores Defense;
+ * Weapon of the Flower Fuzzy (magic attack): targets eligible units for 3 damage, ignores Defense;
  * used by magic_attack_event.
  */
 static BattleWeapon weapon_chorobon_magic_attack = {
@@ -300,7 +300,7 @@ EVT_END()
 /**
  * The Flower Fuzzy's magic attack on every enemy (weapon_chorobon_magic_attack):
  * costs 2 FP, the Fuzzy hops, three "shock_n64" flashes go off with the magic sound, the camera shakes,
- * and every target is damage-checked in turn (the action command result is taken from the first).
+ * and every target is damage-checked in turn (defence is requested only if the first target reaches the hit branch).
  */
 static EVT_BEGIN(magic_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -651,7 +651,7 @@ static EVT_BEGIN(drain_attack_event)
         CASE_END
     END_SWITCH
 
-    // The leap misses or is blocked: it bounces off in two hops, lands in front of the target and waits a
+    // The leap misses or is avoided: it bounces off in two hops, lands behind the target and waits a
     // moment.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))

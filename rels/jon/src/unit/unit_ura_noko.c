@@ -156,7 +156,7 @@ static PoseTableEntry pose_table_turn[] = {
 
 /**
  * Data table of the Shady Koopa: event scripts and values the battle looks up by tag (damage reactions,
- * dodge, first strike and so on).
+ * first strike).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -372,7 +372,7 @@ EVT_END()
 /**
  * Unreferenced first-strike attack (no table or script in this file points to it):
  * it targets the first attack target and slides into it in its shell (NKT_A_1, SHELL1 and MOVE sounds),
- * always hitting with weapon_nokonoko_attack (no pre-check), then bounces off twice and walks back to its place.
+ * resolving defence and damage with weapon_nokonoko_attack without a pre-check when a target exists, then bouncing off twice and walking back to its place.
  */
 static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))

@@ -526,7 +526,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // The draining bite: it tilts and pulses in size with the sucking sound while the damage is dealt.
+    // The draining bite: it tilts and pulses in size with the sucking sound before the CheckDamage call.
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, -45)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BASA_SUCK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CYU_A_2"))

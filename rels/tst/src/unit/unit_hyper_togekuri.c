@@ -582,7 +582,7 @@ static USER_FUNC(krb_get_dir) {
 }
 
 /**
- * Finds the direction in degrees (0 to 359) of the vector (x, z) with a binary search over SinTable (seven
+ * Finds the direction in degrees (0 to 360) of the vector (x, z) with a binary search over SinTable (seven
  * halvings between 0 and 90 degrees), then reflects the result into the right quadrant.
  */
 static u16 krb_comp_dir(f32 x, f32 z) {

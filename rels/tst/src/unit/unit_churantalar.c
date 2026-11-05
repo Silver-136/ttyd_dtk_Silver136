@@ -197,7 +197,7 @@ static StatusVulnerability regist = {70, 70, 30, 100, 70, 100, 100, 70, 100, 80,
 #endif
 
 /**
- * Pose table of Arantula: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
+ * Pose table of Arantula: maps its battle pose types (stay, walk, hurt, attack, talk and so on) to
  * animation names, 18 entries such as PAI_N_1, PAI_Y_1, PAI_K_1, PAI_X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -247,7 +247,7 @@ static BattleUnitKindPart parts[] = {
 
 /**
  * Draw callback: draws the Pider's thread as a thin white quad (2 units wide, with the unit's yarn alpha) from
- * the ceiling point down to the spider, using direct GX calls and no texture.
+ * the ceiling point down to the lower yarn endpoint, using direct GX calls and no texture.
  */
 static void piders_draw_yarn_sub(CameraId camera, void* param) {
     PidersYarn* yarn = param;
@@ -278,7 +278,7 @@ static void piders_draw_yarn_sub(CameraId camera, void* param) {
 
 /**
  * Script helper: args[0] is the thread's alpha.
- * Sets the thread from y = 400 (ceiling) down to the Pider's hanging height (work[2])
+ * Sets the thread from y = 400 (ceiling) down to the lower endpoint in work[2]
  * and queues piders_draw_yarn_sub to draw it.
  */
 static USER_FUNC(piders_draw_yarn) {
@@ -1187,7 +1187,7 @@ static EVT_BEGIN(renzoku_attack_event)
     CALL(evt_btl_camera_set_mode, 0, 0)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
 
-    // The attack is declared on all of them and its cost paid.
+    // The attack is declared on the first selected target and its cost paid.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))

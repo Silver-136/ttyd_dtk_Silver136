@@ -307,7 +307,7 @@ EVT_END()
 /**
  * The Flower Fuzzy's magic attack on every enemy (weapon_chorobon_magic_attack):
  * costs 2 FP, the Fuzzy hops, three "shock_n64" flashes go off with the magic sound, the camera shakes,
- * and every target is damage-checked in turn (the action command result is taken from the first).
+ * and every target is damage-checked in turn (defence is requested only if the first target reaches the hit branch).
  */
 static EVT_BEGIN(magic_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

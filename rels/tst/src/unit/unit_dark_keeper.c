@@ -421,7 +421,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_END
     END_SWITCH
 
-    // Miss or dodge: it runs on past the target.
+    // Miss or dodge: it advances another 30 units in its facing direction.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
@@ -468,7 +468,7 @@ EVT_END()
 /**
  * The Dark Craw's throw: it winds up (A_2, SFX_ENM_MONBAN_THROW1)
  * and throws part 2, its spear, spinning at the target in an arc.
- * The part is checked as it flies, hits or is dodged, and the Craw laughs three times afterwards.
+ * After the part reaches the target, the hit or dodge is checked, and the Craw laughs three times afterwards.
  */
 static EVT_BEGIN(throw_attack_event)
 
@@ -531,7 +531,7 @@ static EVT_BEGIN(throw_attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 30, 0, FLOAT(0.5f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
 
-    // Find out whether the spear hits as it flies in.
+    // After the spear reaches the target, find out whether it hits.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)

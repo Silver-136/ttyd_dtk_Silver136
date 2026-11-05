@@ -151,7 +151,7 @@ static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_patapata_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Paratroopa (Paratroopa form) (percent chance to take each status):
+ * Status vulnerability of the Paratroopa (Paratroopa form) (percentage multipliers on status-infliction chances):
  * extra prone to dizzy and gale force; resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -539,7 +539,7 @@ static BattleUnitDefenseAttr defence_attr = {0};
 /** Defence of the Paratroopa (flipped over): no damage reduction. */
 static BattleUnitDefense defence_turn = {0};
 
-/** Status vulnerability of the Paratroopa (percent chance to take each status): resists most statuses. */
+/** Unused grounded-form status-vulnerability multipliers: resists most statuses. */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {100, 100, 90, 100, 95, 100, 100, 95, 100, 95, 100, 95, 100, 95, 95, 100, 90, 100, 95, 100, 100, 100};
 #else

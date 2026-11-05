@@ -165,7 +165,7 @@ static StatusVulnerability regist = {
 #endif
 
 /**
- * Pose table of the X-Naut PhD: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ * Pose table of the X-Naut PhD: the animation each listed battle pose (idle, hurt, walk, talk and so on) plays.
  */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -518,7 +518,7 @@ EVT_END()
  * officer the dodgy bottle or the regen bottle.
  */
 static EVT_BEGIN(attack_event)
-    // After a First Strike it always throws the fire bottle.
+    // During a first strike it always throws the fire bottle.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(fire_bottle_event))
@@ -628,7 +628,7 @@ EVT_END()
 
 /**
  * Shared start of the X-Naut PhD's bottle throws:
- * pays for the attack, aims the camera, faces the target (or the target side),
+ * pays for the attack, faces the target (or the target side),
  * plays the throw wind-up sounds and poses A_1A to A_5A.
  */
 static EVT_BEGIN(attack_common_event1)
@@ -962,7 +962,7 @@ static EVT_BEGIN(minimini_bottle_event)
         GOTO(99)
     END_IF
 
-    // Wind-up: it steps up to its throwing spot (attack_common_event1).
+    // Wind-up: it prepares the bottle throw (attack_common_event1).
     CALL_CHILD(attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1E"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1007,8 +1007,8 @@ static EVT_BEGIN(minimini_bottle_event)
     SET_VALUE(LW(10), 0)
     LABEL(0)
 
-    // Each target in turn gets the hit check and then the shrink effect; the action-command result is read
-    // once.
+    // Each target gets a hit check; only a hit reaches CheckDamage. Defence is requested only for target
+    // ordinal zero, if that target reaches the hit branch.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)

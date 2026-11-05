@@ -146,7 +146,7 @@ static PoseTableEntry pose_table_turn[] = {
 
 /**
  * Data table of the Dark Koopa: event scripts and values the battle looks up by tag (damage reactions,
- * dodge, first strike and so on).
+ * first strike).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},

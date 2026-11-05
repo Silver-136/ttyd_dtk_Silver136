@@ -227,8 +227,8 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Data table of the Chain-Chomp: event scripts and values the battle looks up by tag (damage reactions,
- * dodge, first strike and so on).
+ * Data table of the Chain-Chomp: event scripts the battle looks up by tag (counter damage,
+ * death and first-strike positioning).
  */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
@@ -354,7 +354,7 @@ EVT_END()
  * Data-table events 25-36, which btldefaultevt_Damage runs for damage codes 44-55 when a counter (spikes, fire,
  * ice, electricity, explosions, poison, Payback, Hold Fast) hurts the Chomp while attacking:
  * the Chomp's head recoils 25 units back and up in the damage pose and hangs for 30 frames,
- * then the camera resets. The two demos also bounce it twice down to the floor first.
+ * then the camera resets. The early-demo branch also bounces it twice down to the floor first.
  * It restarts its wait event unless the counter knocked it out (KO flag 0x200 without the Life Shroom flag
  * 0x800).
  */
@@ -512,7 +512,7 @@ static EVT_BEGIN(attack_event)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(20)
 
-        // It lunges at the target with its chain stretched taut.
+        // The head returns to its idle pose during the wind-up hop.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_S_1A"))
     END_SIBLING_EVENT
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_ATTACK1"), LW(14), 0, EVT_NULLPTR)
@@ -555,7 +555,7 @@ static EVT_BEGIN(attack_event)
     END_SWITCH
     LABEL(90)
 
-    // It lunges past the target and lands beyond it.
+    // After the miss, its head returns to the unit's base position.
     WAIT_FRAMES(30)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(14), 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_S_1A"))
@@ -771,7 +771,7 @@ EVT_END_PAD()
 /**
  * Per-frame script helper that animates the Chomp's chain (parts 2-9). args[0] = unit.
  * Part 9 is the stake, behind the chomp; when work[2] is 2 the current link layout is recorded relative to the
- * stake and when it is 1 the links keep that shape (the Chomp has been pulled away).
+ * stake and when it is 1 the links keep that shape (during damage, sleep, stop or freeze).
  * Otherwise the links hang as a sagging chain between the Chomp (part 1, capped at y = 110 in retail) and the stake,
  * each link moved to a fixed distance from its neighbour and held above the floor.
  */

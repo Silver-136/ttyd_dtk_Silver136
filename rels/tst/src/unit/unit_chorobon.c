@@ -170,7 +170,7 @@ static BattleWeapon weapon_chorobon_drain_attack = {
 };
 
 /**
- * Attack script of the Fuzzy: after the item-use check it always uses its drain attack
+ * Attack script of the Fuzzy: if no item event is selected, it uses its drain attack
  * (weapon_chorobon_drain_attack) via drain_attack_event.
  */
 static EVT_BEGIN(attack_event)
@@ -224,7 +224,7 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
 };
 
 /**
- * Pose table of Fuzzy: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to animation
+ * Pose table of Fuzzy: maps its battle pose types (stay, walk, hurt, sleep, talk and so on) to animation
  * names, 18 entries such as CBN_N_1, CBN_Y_1, CBN_K_1, CBN_X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -467,7 +467,7 @@ static EVT_BEGIN(drain_attack_event)
         CASE_END
     END_SWITCH
 
-    // On a miss it bounces off the target and lands in front of it.
+    // On a miss it bounces off the target and lands behind it.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))

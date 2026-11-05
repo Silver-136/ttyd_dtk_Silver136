@@ -150,13 +150,13 @@ static PoseTableEntry pose_table_spark[] = {
     {POSE_TYPE_ACTION, "BOM_S_2"},
 };
 
-/** Data table of the Bob-omb: event handlers for a First Strike on it (no reaction). */
+/** Data table of the Bob-omb: a dummy handler for first-strike positioning. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
-/** Data table of the Bob-omb once its fuse is lit: a First Strike on it is ignored. */
+/** Data table of the Bob-omb once its fuse is lit: a dummy handler for first-strike positioning. */
 static BattleDataEntry data_table_spark[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
@@ -168,7 +168,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Status vulnerability of the Bob-omb (percent chance to take each status): immune to poison;
+ * Status vulnerability of the Bob-omb (multipliers of the base status chances): immune to poison;
  * extra prone to electric shock; resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -386,7 +386,7 @@ EVT_END()
  * Attack event of the Bob-omb before its fuse is lit:
  * uses an enemy item if one fits, otherwise picks a target, hops twice and runs along the floor at it.
  * A hit does damage with weapon_bomhei_attack and it bounces off in two hops;
- * a miss it runs past, then walks back in three slowing steps. Either way it returns home.
+ * on a miss it passes the target in three slowing steps. Either way it returns home.
  * A confused unit with no target runs subsetevt_confuse_flustered.
  */
 static EVT_BEGIN(attack_event)
@@ -551,7 +551,7 @@ EVT_END()
 
 /**
  * Attack event of the lit Bob-omb: picks a target, hops twice and runs at it.
- * On a hit it does the weapon_bomhei_bomb damage; on a miss it runs 500 units past the target.
+ * On a hit it does the weapon_bomhei_bomb damage; on a miss it runs 500 units farther along its facing direction.
  * In both cases it explodes afterwards with bomb_event, removing itself.
  */
 static EVT_BEGIN(attack_event_spark)

@@ -1,4 +1,4 @@
-// Rogueport Sewers (tik) battle unit: Koopa Paratroopa (patapata): its parts, defence/status tables, and attack events.
+// tst.rel's Koopa Paratroopa (patapata) battle unit: its parts, defence/status tables, and attack events.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -151,7 +151,7 @@ static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 static BattleUnitDefenseAttr defence_patapata_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Paratroopa (Paratroopa form) (percent chance to take each status):
+ * Status vulnerability of the Paratroopa (Paratroopa form) (percentage multipliers on status-infliction chances):
  * extra prone to dizzy and gale force; resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -316,7 +316,7 @@ static EVT_BEGIN(patapata_dmg_first_attack_pos)
 EVT_END()
 
 /**
- * Attack of the flying Koopa Paratroopa: picks a target as in attack_event, flies in behind/above it,
+ * Attack of the flying Koopa Paratroopa: picks a target as in attack_event, flies in front of/above it,
  * flaps up (PTP_A_1, PTP_A_4) and dive-kicks it. In a flag-2 battle the attack uses an extra damage flag.
  * A miss makes it fly past and loop away; a hit shakes the camera,
  * the Paratroopa somersaults away (a 24-frame spin) and then returns to its home position.
@@ -545,7 +545,7 @@ static BattleUnitDefenseAttr defence_attr = {0};
 /** Defence of the Paratroopa (flipped over): no damage reduction. */
 static BattleUnitDefense defence_turn = {0};
 
-/** Status vulnerability of the Paratroopa (percent chance to take each status): resists most statuses. */
+/** Unused grounded-form status-vulnerability multipliers: resists most statuses. */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {95, 100, 95, 100, 95, 100, 100, 95, 100, 95, 100, 95, 100, 95, 95, 100, 90, 100, 95, 100, 100, 100};
 #else

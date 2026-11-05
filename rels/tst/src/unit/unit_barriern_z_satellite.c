@@ -12,7 +12,7 @@
 #include "evt/evt_sub.h"
 #include "tst.h"
 
-// Unit work slots of a Mini-Yux (btlevtcmd_SetUnitWork / GetUnitWork).
+// Unit work slots of a Mini-Z-Yux (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
     UW_BARRIERN_Z_SATELLITE_PARENT = 0, // unit id of the Yux it orbits (set by the Yux when it spawns it)
     BARRIERN_SATELLITE_WORK_IDLE_POSE = 1    // non-zero once the Yux lets it play its idle pose
@@ -133,8 +133,8 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Mini-Z-Yux (the demos), as the percent chance a status takes hold:
- * immune to Poison, Freeze and Fright; always hit by Electric, Burn, Huge, Attack Up, Defense Up, Fast,
+ * Status vulnerability of Mini-Z-Yux (the early demos), as percent multipliers on the incoming status chance:
+ * zero for Poison, Freeze and Fright; 100 for Electric, Burn, Huge, Attack Up, Defense Up, Fast,
  * Dodgy, Invisible and instant KO; otherwise Sleep 70, Stop 90, Dizzy 90, Confuse 80, Tiny 80,
  * Attack Down 80, Defense Down 80, Allergic 80, Gale Force 90 and Slow 80.
  */
@@ -142,8 +142,8 @@ static StatusVulnerability regist = {70, 90, 90, 0, 80, 100, 100, 0, 100, 80, 10
 #else
 
 /**
- * Status vulnerability of Mini-Z-Yux (the final versions), as the percent chance a status takes hold:
- * immune to Poison, Freeze and Fright; always hit by Electric, Burn, Huge, Attack Up, Defense Up, Fast,
+ * Status vulnerability of Mini-Z-Yux (JP and later), as percent multipliers on the incoming status chance:
+ * zero for Poison, Freeze and Fright; 100 for Electric, Burn, Huge, Attack Up, Defense Up, Fast,
  * Dodgy, Invisible and instant KO; otherwise Sleep 70, Stop 90, Dizzy 95, Confuse 80, Tiny 85,
  * Attack Down 85, Defense Down 90, Allergic 80, Gale Force 95 and Slow 80.
  */
@@ -151,7 +151,7 @@ static StatusVulnerability regist = {70, 90, 95, 0, 80, 100, 100, 0, 100, 85, 10
 #endif
 
 /**
- * Pose table of Mini-Z-Yux: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to
+ * Pose table of Mini-Z-Yux: maps its battle pose types (stay, walk, hurt, run, danger and so on) to
  * animation names, 17 entries such as N_2, Y_2, K_2, X_2.
  */
 static PoseTableEntry pose_table[] = {
@@ -183,7 +183,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Init script of a Mini-Yux satellite: registers its wait, unison-phase,
+ * Init script of a Mini-Z-Yux satellite: registers its wait, unison-phase,
  * attack and damage handlers (confusion uses the default handler),
  * sets the unit flags 0x300000 and starts the idle event.
  */
@@ -199,7 +199,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Damage reaction of a Mini-Yux: runs the default damage handling with LW(10) = -2 (the unit itself)
+ * Damage reaction of a Mini-Z-Yux: runs the default damage handling with LW(10) = -2 (the unit itself)
  * and LW(11) = 1.
  */
 static EVT_BEGIN(damage_event)
@@ -214,14 +214,14 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
-/** Start-of-turn event of a Mini-Yux: empty, it only restarts its idle event. The parent Yux does the moving. */
+/** Start-of-turn event of a Mini-Z-Yux: empty, it only restarts its idle event. The parent Yux does the moving. */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 /**
- * Attack event of a Mini-Yux: empty, it only restarts its idle event.
+ * Attack event of a Mini-Z-Yux: empty, it only restarts its idle event.
  * The parent Yux makes the satellites attack through its own scripts.
  */
 static EVT_BEGIN(attack_event)
@@ -230,7 +230,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 /**
- * Idle event of a Mini-Yux: shows its pose from the pose table, then at random intervals of 30 to 150 frames,
+ * Idle event of a Mini-Z-Yux: shows its pose from the pose table, then at random intervals of 30 to 150 frames,
  * if its unit work 1 is set (the parent told it to idle) and it can act and is not confused,
  * holds the S_4 pose for 180 frames before returning to the table pose.
  */

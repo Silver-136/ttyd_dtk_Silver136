@@ -230,7 +230,7 @@ EVT_END()
 
 /**
  * Attack event of the Gloomba: picks a target (the first attack target during a first strike),
- * flusters if there is none, and uses a selected enemy-item script if one is returned.
+ * flusters if there is none and it is confused, and uses a selected enemy-item script if one is returned.
  * Otherwise it runs at the target, then leaps onto it in a 32-frame arc,
  * tilting along its path every frame (krb_get_dir gives the angle).
  * A miss lands it nearby; a hit applies weapon_kuriboo_attack with the action command defence check.

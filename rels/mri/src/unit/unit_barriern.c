@@ -37,7 +37,7 @@
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_TARGET_UNIT 0 // part 1: first of the target unit ids (slots 0-4) of the current attack
 #define PARTS_WORK_TARGET_PART 5 // part 1: first of the target part ids (slots 5-9), paired with PARTS_WORK_TARGET_UNIT
-#define PARTS_WORK_TARGET_HIT 10 // part 1: first of the per-target hit flags (slots 10-14): 1 once that target was hit; the last shot then hits it without a damage check
+#define PARTS_WORK_TARGET_HIT 10 // part 1: first of the per-target hit flags (slots 10-14): 1 once that target was hit; the last shot then hits it without a pre-damage check
 #define PARTS_WORK_SFX 15        // shot parts (7..): id of the SFX_ENM_BARRI_ATTACK7/8 sound, stopped when the shot ends
 
 #if VERSION >= VERSION_US
@@ -231,7 +231,7 @@ static StatusVulnerability regist = {
 #endif
 
 /**
- * Weapon of the Yux (ring attack): targets one unit for 2 damage, ignores Defense in US and PAL;
+ * Weapon of the Yux (ring attack): targets one unit for 2 damage, ignores Defense in US and later;
  * used by wakka_attack_event.
  */
 static BattleWeapon weapon_wakka_attack = {
@@ -275,7 +275,7 @@ static BattleWeapon weapon_wakka_attack = {
 };
 
 /**
- * Weapon of the Yux (three-ring attack): targets every unit for 1 damage, ignores Defense in US and PAL;
+ * Weapon of the Yux (three-ring attack): targets every unit for 1 damage, ignores Defense in US and later;
  * used by wawawa_attack_event, wawawa_attack_event_sub_no_last.
  */
 static BattleWeapon weapon_wawawa_attack = {
@@ -806,7 +806,7 @@ static USER_FUNC(barriern_satellite_zanzou2) {
 
 /**
  * Shared code of the Mini-Yux afterimage blur: the same effect as barriern_zanzou_sub but on the Mini-Yux unit,
- * with its own counter per satellite (zanzou_count[n + 1]).
+ * with a counter per satellite for its afterimages (zanzou_count[n + 1]); the body uses zanzou_count[0].
  * Type 0 shrinks in over 36 frames, type 1 expands and fades over 8 frames.
  */
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {
@@ -1981,7 +1981,7 @@ static USER_FUNC(_check_satellite) {
 
 /**
  * Gives the starting offset of Mini-Yux number args[2]
- * when the Yux has args[1] of them (1 to 4 in a ring: one to the right; two left and right;
+ * when the Yux has args[1] of them (1 to 4 in a ring: one in its facing direction; two left and right;
  * three above and below; four in the corners), returned in args[3] to args[5].
  */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {

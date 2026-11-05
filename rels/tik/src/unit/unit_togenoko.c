@@ -119,7 +119,7 @@ static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 /** Element reactions of the Koopatrol: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-/** Status vulnerability of the Koopatrol (percent chance to take each status): resists most statuses. */
+/** Status vulnerability of the Koopatrol (percentage multipliers on status-infliction chances): resists most statuses. */
 #if VERSION <= VERSION_DEMO_JP
 static StatusVulnerability regist = {70, 70, 60, 100, 60, 100, 100, 60, 100, 70, 100, 70, 100, 70, 70, 60, 60, 100, 60, 100, 100, 95};
 #else
@@ -156,7 +156,7 @@ static BattleUnitDefense defence_turn = {0};
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 /**
- * Status vulnerability of the Koopatrol (flipped over) (percent chance to take each status):
+ * Status vulnerability of the Koopatrol (flipped over) (percentage multipliers on status-infliction chances):
  * average vulnerability to every status.
  */
 static StatusVulnerability regist_turn = {
@@ -197,7 +197,7 @@ static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 static BattleUnitDefenseAttr defence_attr_guard = {{DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE, DEFENSE_ATTR_IMMUNE}};
 
 /**
- * Status vulnerability of the Koopatrol (guarding) (percent chance to take each status):
+ * Status vulnerability of the Koopatrol (guarding) (percentage multipliers on status-infliction chances):
  * average vulnerability to every status.
  */
 static StatusVulnerability regist_guard = {
@@ -569,7 +569,7 @@ static BattleUnitSetup entry_togenoko = {
 /**
  * Attack script of the Koopatrol.
  * Chooses between the normal attack, the shell attack, the charge, guarding and calling a friend,
- * based on its state, the number of Koopatrols alive (togenoko_getnum) and random chances.
+ * based on its state, the number of occupied Koopatrol slots (togenoko_getnum) and random chances.
  */
 static EVT_BEGIN(attack_event)
     // In a First Strike it just attacks normally.
@@ -658,7 +658,7 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_LOOP
 
-        // With room to spare, it may call a friend to join (the fewer Koopatrols are alive, the likelier).
+        // With room to spare, it may call a friend to join (the fewer occupied slots hold Koopatrols, the likelier).
         LABEL(10)
         CALL(togenoko_getnum, LW(10))
         CALL(evt_sub_random, 99, LW(11))
@@ -722,7 +722,7 @@ EVT_END()
 
 /**
  * The Koopatrol's normal attack: it winds up (R_3), then lunges at the target (A_2) with SFX_ENM_TOGENOKO_MOVE5,
- * and the pre-damage check decides between a miss and a hit; then it hops back.
+ * and the pre-damage check decides between a miss and a hit; on a hit it then hops back.
  */
 static EVT_BEGIN(normal_attack_event)
     // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.

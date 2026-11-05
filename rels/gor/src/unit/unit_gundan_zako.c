@@ -123,7 +123,7 @@ static StatusVulnerability regist = {
 
 /**
  * Pose table of the X-Naut:
- * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ * the animation played for each pose type (idle, hurt, walk, run and so on).
  */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
@@ -308,8 +308,8 @@ EVT_END()
 /**
  * Attack event of the X-Naut: uses the normal attack for a First Strike;
  * otherwise uses an enemy item if the item-use check selects one, or picks its attack at random:
- * 50% charging attack (normal_attack_event), 30% jump attack,
- * 20% dekadeka_event, which it skips while it already has STATUS_HUGE (Huge).
+ * Each roll is 50% charging attack (normal_attack_event), 30% jump attack,
+ * 20% dekadeka_event; it rerolls the bottle choice while it already has STATUS_HUGE (Huge).
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -437,7 +437,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     END_IF
 
-    // No target: a confused X-Naut flusters, otherwise the attack ends.
+    // No target: a confused X-Naut flusters.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

@@ -206,14 +206,14 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of the Yux (both demos), as the percent chance each status takes hold: immune to
+ * Status vulnerability of the Yux (both demos), as percent multipliers on the incoming status chance: immune to
  * poison, burn, freeze and Fright; resists 11 statuses (down to 20% of the normal chance).
  */
 static StatusVulnerability regist = {20, 90, 80, 0, 80, 100, 0, 0, 100, 80, 100, 80, 100, 80, 80, 0, 80, 100, 80, 100, 100, 95};
 #else
 
 /**
- * Status vulnerability of the Yux (the retail releases), as the percent chance each status takes hold:
+ * Status vulnerability of the Yux (the retail releases), as percent multipliers on the incoming status chance:
  * immune to poison, burn, freeze and Fright; resists 10 statuses (down to 30% of the normal chance).
  */
 static StatusVulnerability regist = {30, 80, 100, 0, 70, 100, 0, 0, 100, 90, 100, 90, 100, 95, 70, 0, 90, 100, 70, 100, 100, 95};
@@ -308,7 +308,7 @@ static BattleUnitSetup entry_barriern_satellite = {
     NULL, // itemDropTable
 };
 
-/** Pose table of the Yux: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
+/** Pose table of the Yux: maps each battle pose (idle, hurt, walking and so on) to its animation. */
 static PoseTableEntry pose_table[] = {
     {1, "N_1"},
     {2, "Y_1"},
@@ -843,7 +843,7 @@ static USER_FUNC(barriern_satellite_zanzou2) {
 
 /**
  * Afterimage effect of a Mini-Yux (parts 2-6, animation Z_2),
- * like barriern_zanzou_sub but with a separate frame counter per satellite n.
+ * like barriern_zanzou_sub but with a separate afterimage frame counter per satellite n; the body uses counter 0.
  * type 0 converges over 36 frames, type 1 bursts out over 8 frames.
  */
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {
@@ -1097,7 +1097,7 @@ EVT_END()
  * the attacking part (LW(15)) takes the Z_3 pose
  * and is launched at the target (its attribute 16777216 cleared while it flies),
  * the Yux plays A_5 and results 3, 6 or 2 start the target's avoid reaction;
- * afterwards the satellites' state (unit work 1) decides whether the part is hidden again.
+ * afterwards unit work 1 selects the single- or combined-ring flight and scale timing.
  * The code name wakka is Japanese for "ring".
  */
 static EVT_BEGIN(wakka_attack_common_event_no_hit)
@@ -1642,7 +1642,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_no_last)
 EVT_END()
 
 /**
- * The last ring of the wawawa attack: a hit runs wakka_attack_common_event_hit and applies ResultACDefence
+ * The last ring of the wawawa attack: a recorded earlier hit runs wakka_attack_common_event_hit and applies ResultACDefence
  * and CheckDamage with weapon_wawawa_attack, then turns off its motion blur and hides the ring part;
  * otherwise it resolves the shot with damage_check_event_sub (LW(10) = 1).
  */
@@ -1683,7 +1683,7 @@ EVT_END()
  * and keeps checking them every frame in a sibling event, sets its idle pose,
  * tells each satellite to start idling (unit work 1 = 1),
  * and at random intervals of 30 to 150 frames holds the S_3 pose for 180 frames,
- * as long as it can act and is not asleep, stopped or dizzy.
+ * as long as it can act and is not confused, dizzy or poisoned.
  */
 static EVT_BEGIN(wait_event)
     CALL(_check_satellite)
@@ -1753,7 +1753,7 @@ static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
 
 /**
  * Moves satellite n one frame along its spline:
- * samples it at frame / 60, places the satellite (and its home position) relative to the Yux with x mirrored by
+ * samples it with quadratic-out easing over 60 frames, places the satellite (and its home position) relative to the Yux with x mirrored by
  * facing direction, and frees the spline after 60 frames. Returns TRUE while the satellite is still moving.
  */
 static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {

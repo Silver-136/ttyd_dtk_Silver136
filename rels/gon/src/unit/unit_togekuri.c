@@ -308,7 +308,7 @@ EVT_END()
 
 
 /**
- * Returns a heading in degrees (0 to 359) for the offset (x, z):
+ * Returns a heading in degrees (0 to 360) for the offset (x, z):
  * finds the whole degree whose sine in SinTable is closest to |z| / length by bisection and
  * then maps it into the right quadrant.
  */
@@ -349,7 +349,7 @@ f32 hypotf(f32 x, f32 y) {
 
 /**
  * Script helper for the Spiky Goomba's battle scripts:
- * args[0], args[1] and args[2], args[3] are two (x, z) positions;
+ * args[0], args[1] and args[2], args[3] are two (x, y) positions;
  * writes into args[4] the facing angle between them (angleABf of their difference),
  * leaving args[4] unchanged when the two positions coincide.
  */

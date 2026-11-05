@@ -1,4 +1,4 @@
-// unit_hannya: Spania, battle unit, one of the three spinning spiked enemies (Spania, Spunia, Spinia).
+// unit_hannya: Spania, battle unit, one of the three spinning enemies (Spania, Spunia, Spinia).
 
 #include "version.h"
 #include "battle/battle_unit.h"

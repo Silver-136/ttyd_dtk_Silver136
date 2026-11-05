@@ -115,7 +115,7 @@ static BattleUnitKind unit_heavy_bom = {
 };
 
 /**
- * Weapon of the Bulky Bob-omb (super explosion): targets every unit for 2 damage, explosion element;
+ * Weapon of the Bulky Bob-omb (super explosion): targets eligible units except itself for 2 damage, explosion element;
  * used by explosion_event.
  */
 static BattleWeapon weapon_heavy_bomb_super_explosion = {
@@ -160,7 +160,7 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
 };
 
 /**
- * Weapon of the Bulky Bob-omb (guard): targets every unit, raises Defense (3 turns); used by attack_event.
+ * Weapon of the Bulky Bob-omb (guard): targets only itself, raises Defense (3 turns); used by attack_event.
  */
 static BattleWeapon weapon_heavy_bomb_guard = {
     NULL, 0, // name..icon
@@ -201,7 +201,7 @@ static BattleWeapon weapon_heavy_bomb_guard = {
 };
 
 /**
- * Weapon of the Bulky Bob-omb (guard 2): targets every unit, raises Attack (2 turns in the demos, 3 in retail); used by attack_event.
+ * Weapon of the Bulky Bob-omb (guard 2): targets only itself, raises Attack (2 turns in the demos, 3 in retail); used by attack_event.
  */
 static BattleWeapon weapon_heavy_bomb_guard_2 = {
     NULL, 0, // name..icon
@@ -244,7 +244,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
-/** Weapon of the Bulky Bob-omb (guard 3): targets every unit; used by attack_event. */
+/** Weapon of the Bulky Bob-omb (guard 3): targets only itself; used by attack_event. */
 static BattleWeapon weapon_heavy_bomb_guard_3 = {
     NULL, 0, // name..icon
     {0}, // pad_06

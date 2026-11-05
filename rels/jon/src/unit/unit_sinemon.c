@@ -87,7 +87,7 @@ BattleUnitKind unit_sinemon = {
 
 /**
  * Defence of the Moon Cleft: 5 against normal, ice, explosion and electric hits;
- * immune to fire (defence 99 cancels the hit).
+ * 99 against fire, with immunity supplied by the separate element-attribute table.
  */
 static BattleUnitDefense defence = {{5, 99, 5, 5, 5}};
 
@@ -199,7 +199,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Pose table of the Moon Cleft while flipped over:
- * animation names for each pose type (idle, walk, hurt, attack and so on).
+ * animation names for each pose type (idle, hurt, talk and so on).
  */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "SIN_N_2"},
@@ -327,8 +327,8 @@ static EVT_BEGIN(dmg_turn_event)
 EVT_END()
 
 /**
- * Flips the Moon Cleft back onto its feet: counts the over-turn down by one,
- * restores the normal defence and pose tables, clears the flipped flag,
+ * Counts the over-turn down by one; if it is still nonzero, waits this turn.
+ * At zero, restores the normal defence and pose tables, clears the flipped flag,
  * returns to height 0 and the SIN_S_1 pose with a hop and the INSIDE2 sound,
  * and turns the counter attribute back on.
  */
@@ -360,17 +360,17 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Attack event of the Moon Cleft: if flipped over it only wakes up (wakeup_event).
+ * Attack event of the Moon Cleft: if flipped over it runs its recovery countdown (wakeup_event).
  * Otherwise it uses an enemy item if the item-use check selects one, else picks a target with weapon_sinemon_attack,
- * backs away with a short hop, then charges at the target (dash sound, speed 5).
+ * walks to its wind-up position, then charges at the target (dash sound, speed 5).
  * A miss runs it past the target; a hit shakes the camera
  * and applies the damage with the action command defence check,
- * after which it jumps back past the target and returns to its place.
+ * after which it bounces back in two hops and returns to its place.
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
-        // A flipped-over Moon Cleft only gets back on its feet.
+        // A flipped-over Moon Cleft advances its recovery countdown.
         CALL_CHILD(wakeup_event)
         RETURN
     END_IF
@@ -412,7 +412,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_sinemon_attack))
 
-    // Back away from the target with a short hop.
+    // Walk to a point 100 units in the target's facing direction.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)
@@ -484,7 +484,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_sinemon_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinemon_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
 
-    // After the hit it jumps back over the target and returns to its place.
+    // After the hit it bounces back in two hops and returns to its place.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(1.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 75)

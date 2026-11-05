@@ -120,7 +120,7 @@ static StatusVulnerability regist = {
 };
 #endif
 
-/** Pose table of the X-Naut: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
+/** Pose table of the X-Naut: the animation each battle pose (idle, hurt, walk, run and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -421,7 +421,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     END_IF
 
-    // No valid target: a confused X-Naut is flustered, otherwise the turn is skipped.
+    // No valid target: a confused X-Naut is flustered.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)

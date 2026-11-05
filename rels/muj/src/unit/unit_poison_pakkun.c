@@ -110,7 +110,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
 /**
- * Status vulnerability of the Putrid Piranha (percent chance to take each status): immune to poison;
+ * Status vulnerability of the Putrid Piranha (percent multipliers on each status's base chance): immune to poison;
  * resists most other statuses.
  */
 #if VERSION <= VERSION_DEMO_JP
@@ -234,7 +234,7 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
 };
 
 /**
- * Attack event (also its confusion event) of the Putrid Piranha: on a first strike it bites at once;
+ * Attack event (also its confusion event) of the Putrid Piranha: on a first strike it uses its bite;
  * otherwise it may use an item, and else it bites (normal_attack_event, weight 60)
  * or breathes poison (breath_event, weight 40).
  */
@@ -275,8 +275,8 @@ EVT_END()
 
 /**
  * Poison breath of the Putrid Piranha: it burrows,
- * re-emerges at the front (x = -40) and breathes a stream of poison gas (eff_poison_breath) at the selected
- * target (weapon_poison_pakkun_breath_attack is single-target):
+ * re-emerges at the front (x = -40) and breathes a stream of poison gas (eff_poison_breath) at each
+ * sampled target (despite weapon_poison_pakkun_breath_attack having the single-target flag):
  * 2 damage and a 50% chance of Poison (1 a turn for 10 turns); then it returns (return_event).
  */
 static EVT_BEGIN(breath_event)

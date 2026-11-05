@@ -202,7 +202,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Data event 37 (the thorn-head counter, run when a player attack is bounced off its spiked head):
+ * Unused spike-counter effect (not registered in the Spinia's data table):
  * plays pose type 31, waits 30 frames, then flashes the "toge_flush" spike effect above the unit for 60 frames.
  * The effect sits 53 units up when the unit is Huge (STATUS_HUGE), 33 when Tiny (STATUS_TINY) and 43 otherwise.
  */

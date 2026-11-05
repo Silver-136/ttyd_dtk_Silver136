@@ -89,7 +89,7 @@ static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
 #endif
 
-/** Damage reduction of the Hyper Cleft, flipped on its back: none, every attack type does full damage. */
+/** Numerical defence of the Hyper Cleft while flipped: zero; fire immunity remains active from JP onward. */
 static BattleUnitDefense defence_turn = {0};
 
 #if VERSION <= VERSION_DEMO_JP
@@ -380,18 +380,18 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Attack script of the Hyper Cleft. If it is flipped over it gets up first.
+ * Attack script of the Hyper Cleft. If flipped over, it advances its recovery countdown instead.
  * On a First Strike it waits 800 ms and attacks; when already charged it also attacks directly.
  * Otherwise, after an item check, it draws lots for charging up (SFX_ENM_CHARGE1, a "crystal_n64" effect,
  * then the charge weapon is applied to itself):
  * weights 25 to attack and 75 to charge on the first turn, 25 and 25 afterwards.
- * The attack is a dash: it runs round behind the target,
+ * The attack is a dash: it walks to a point in the target's facing direction,
  * then rushes through it (SFX_ENM_EMON_DASH1) and the target takes the damage;
- * afterwards it hops back past the target to its home position.
+ * after a hit it retreats in two hops, then runs to its home position.
  */
 static EVT_BEGIN(attack_event)
 
-    // If the Hyper Cleft is still on its back it gets up instead of attacking.
+    // If the Hyper Cleft is still on its back it advances its recovery countdown instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)
@@ -476,7 +476,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_sinemon_attack))
 
-    // It runs around to the far side of the target.
+    // It walks to a point 100 units in the target's facing direction.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)

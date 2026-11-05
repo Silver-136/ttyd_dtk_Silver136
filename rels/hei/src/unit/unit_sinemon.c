@@ -209,7 +209,7 @@ static PoseTableEntry pose_table[] = {
 
 /**
  * Pose table of the Moon Cleft while flipped over:
- * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ * the animation played for each pose type (idle, hurt, talk and so on).
  */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "SIN_N_2"},
@@ -367,13 +367,13 @@ static EVT_BEGIN(wakeup_event)
 EVT_END()
 
 /**
- * Attack event of the Moon Cleft: gets up first if it is flipped over;
+ * Attack event of the Moon Cleft: advances its recovery countdown if flipped over;
  * otherwise it uses an enemy item if the item-use check selects one, or dashes at one target (SFX_ENM_EMON_DASH1) and rams it.
  * The pre-damage check decides between a miss and a hit; a hit then checks the action-command defence result before the return hops.
  */
 static EVT_BEGIN(attack_event)
 
-    // Flipped over: it gets up instead of attacking.
+    // Flipped over: it advances its recovery countdown instead of attacking.
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL_CHILD(wakeup_event)

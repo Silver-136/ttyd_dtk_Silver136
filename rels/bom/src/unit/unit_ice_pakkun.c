@@ -137,7 +137,7 @@ static BattleUnitKindPart parts[] = {
 };
 
 /**
- * Weapon data for the Frost Piranha's bite: 5 damage, a hammer-type hit, every target, may inflict freeze
+ * Weapon data for the Frost Piranha's bite: 5 damage, a hammer-type hit, one selected target in its attack script, may inflict freeze
  * (30%).
  */
 static BattleWeapon weapon_ice_pakkun_attack = {

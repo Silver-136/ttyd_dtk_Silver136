@@ -253,7 +253,7 @@ static EVT_BEGIN(attack_event)
         RETURN
     END_IF
 
-    // The camera follows the Goomba as it declares the attack and the guard window opens.
+    // The camera follows the Goomba as it declares the attack and waits for any bodyguard movement to finish.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))

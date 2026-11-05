@@ -299,8 +299,8 @@ EVT_END()
 /**
  * Attack event of the X-Naut: uses the basic attack for a First Strike;
  * otherwise uses an enemy item when selected by the item-use check, or picks at random:
- * 50% charging attack (normal_attack_event), 30% jump attack,
- * 20% dekadeka_event, which it skips while it is already Huge (STATUS_HUGE).
+ * Each roll is 50% charging attack (normal_attack_event), 30% jump attack,
+ * 20% dekadeka_event; it rerolls the bottle choice while already Huge (STATUS_HUGE).
  */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -437,7 +437,7 @@ static EVT_BEGIN(normal_attack_event)
     // The X-Naut runs up to its target (the shared run-up script).
     CALL_CHILD(attack_common_event1)
 
-    // It hops forward with a battle cry (A_3) and swings at the target as it lands next to it.
+    // It hops forward with a battle cry (A_3) and swings as it reaches the target's x position.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

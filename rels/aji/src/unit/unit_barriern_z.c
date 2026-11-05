@@ -37,7 +37,7 @@
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_TARGET_UNIT 0 // part 1: first of the target unit ids (slots 0-4) of the current attack
 #define PARTS_WORK_TARGET_PART 5 // part 1: first of the target part ids (slots 5-9), paired with PARTS_WORK_TARGET_UNIT
-#define PARTS_WORK_TARGET_HIT 10 // part 1: first of the per-target hit flags (slots 10-14): 1 once that target was hit; the last shot then hits it without a damage check
+#define PARTS_WORK_TARGET_HIT 10 // part 1: first of the per-target hit flags (slots 10-14): 1 once that target was hit; the last shot then hits it without a pre-damage check
 #define PARTS_WORK_SFX 15        // shot parts (7..): id of the SFX_ENM_BARRI_ATTACK7/8 sound, stopped when the shot ends
 
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
@@ -312,7 +312,7 @@ static BattleUnitSetup entry_barriern_satellite = {
     NULL, // itemDropTable
 };
 
-/** Pose table of the Z-Yux: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
+/** Pose table of the Z-Yux: the animation each battle pose (idle, hurt, walk, run and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -341,7 +341,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 1 of 1 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 1 of 1 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn1_1[] = {
@@ -353,7 +353,7 @@ static Vec splineTableIn1_1[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 1 of 2 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 1 of 2 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn2_1[] = {
@@ -365,7 +365,7 @@ static Vec splineTableIn2_1[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 2 of 2 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 2 of 2 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn2_2[] = {
@@ -377,7 +377,7 @@ static Vec splineTableIn2_2[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 1 of 3 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 1 of 3 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn3_1[] = {
@@ -389,7 +389,7 @@ static Vec splineTableIn3_1[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 2 of 3 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 2 of 3 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn3_2[] = {
@@ -401,7 +401,7 @@ static Vec splineTableIn3_2[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 3 of 3 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 3 of 3 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn3_3[] = {
@@ -413,7 +413,7 @@ static Vec splineTableIn3_3[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 1 of 4 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 1 of 4 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn4_1[] = {
@@ -425,7 +425,7 @@ static Vec splineTableIn4_1[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 2 of 4 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 2 of 4 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn4_2[] = {
@@ -437,7 +437,7 @@ static Vec splineTableIn4_2[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 3 of 4 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 3 of 4 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn4_3[] = {
@@ -449,7 +449,7 @@ static Vec splineTableIn4_3[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 4 of 4 follows when it moves back in to its shield position
+ * Path (five spline points) that Mini-Z-Yux number 4 of 4 follows when it moves back in to its shield position
  * at the Z-Yux.
  */
 static Vec splineTableIn4_4[] = {
@@ -461,7 +461,7 @@ static Vec splineTableIn4_4[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 1 of 1 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 1 of 1 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut1_1[] = {
@@ -473,7 +473,7 @@ static Vec splineTableOut1_1[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 1 of 2 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 1 of 2 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut2_1[] = {
@@ -485,7 +485,7 @@ static Vec splineTableOut2_1[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 2 of 2 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 2 of 2 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut2_2[] = {
@@ -497,7 +497,7 @@ static Vec splineTableOut2_2[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 1 of 3 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 1 of 3 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut3_1[] = {
@@ -509,7 +509,7 @@ static Vec splineTableOut3_1[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 2 of 3 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 2 of 3 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut3_2[] = {
@@ -521,7 +521,7 @@ static Vec splineTableOut3_2[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 3 of 3 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 3 of 3 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut3_3[] = {
@@ -533,7 +533,7 @@ static Vec splineTableOut3_3[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 1 of 4 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 1 of 4 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut4_1[] = {
@@ -545,7 +545,7 @@ static Vec splineTableOut4_1[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 2 of 4 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 2 of 4 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut4_2[] = {
@@ -557,7 +557,7 @@ static Vec splineTableOut4_2[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 3 of 4 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 3 of 4 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut4_3[] = {
@@ -569,7 +569,7 @@ static Vec splineTableOut4_3[] = {
 };
 
 /**
- * Path (five spline points) that Mini-Yux number 4 of 4 follows when it moves out to its outer position
+ * Path (five spline points) that Mini-Z-Yux number 4 of 4 follows when it moves out to its outer position
  * around the Z-Yux.
  */
 static Vec splineTableOut4_4[] = {
@@ -831,8 +831,8 @@ static USER_FUNC(barriern_satellite_zanzou2) {
 }
 
 /**
- * Runs one frame of a Mini-Yux's afterimage effect (type 0 shrinking in over the effect's frames,
- * type 1 expanding out over 8) with its frame count in zanzou_count[n + 1];
+ * Runs one frame of a Mini-Z-Yux's afterimage effect (type 0 shrinking in over the effect's frames,
+ * type 1 expanding out over 8) with afterimage counts in zanzou_count[n + 1]; the body uses counter 0;
  * the same ghost-ring scaling and fading as barriern_zanzou_sub.
  */
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {
@@ -923,7 +923,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
  * Unison phase script of the Z-Yux, run before the player's phase:
  * skipped on turn 1 and when the Z-Yux cannot act, and does nothing if all 4 satellites are alive.
  * After a short random delay it pulls its satellites into its body (SFX_ENM_BARRI_SPLIT1),
- * spawns 1 replacement Mini-Yux, sends the satellites back out to their orbit positions (SFX_ENM_BARRI_SPLIT2)
+ * spawns 1 replacement Mini-Z-Yux, sends the satellites back out to their orbit positions (SFX_ENM_BARRI_SPLIT2)
  * and restores the wait event.
  */
 static EVT_BEGIN(unison_phase_event)

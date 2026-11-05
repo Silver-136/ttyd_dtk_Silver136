@@ -496,7 +496,7 @@ static PoseTableEntry pose_table_ceil[] = {
 
 /**
  * Data table of the Putrid Piranha: reaction scripts for an attacker hurt by its spikes
- * and taking a hit with a particular damage pattern; a First Strike on it triggers nothing special.
+ * and taking counter damage; a First Strike on it triggers nothing special.
  */
 static BattleDataEntry data_table[] = {
     {37, dmg_avoid_counter_thorn_head_event},

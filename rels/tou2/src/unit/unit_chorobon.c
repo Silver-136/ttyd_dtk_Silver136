@@ -386,7 +386,7 @@ EVT_END()
  * If an electric or similar counter (pre-check result 14 or 17) protects the target,
  * the Fuzzy takes weapon_chorobon_drain_attack_biribiri_counterd instead and the move ends.
  * Otherwise the target takes the weapon damage,
- * and the Fuzzy swells by the HP drained and recovers that much HP (or FP, for the FP-drain weapon),
+ * and the Fuzzy swells after positive damage and recovers the HP drained (or FP, for the FP-drain weapon),
  * with a recovery sparkle. After a miss it hops past and waits a second. It then hops home with return_event.
  */
 static EVT_BEGIN(drain_attack_event)

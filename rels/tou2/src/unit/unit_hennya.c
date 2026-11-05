@@ -1,4 +1,4 @@
-// unit_hennya: Spunia, battle unit, one of the three spinning spiked enemies (Spania, Spunia, Spinia).
+// unit_hennya: Spunia, battle unit, one of the three spinning enemies (Spania, Spunia, Spinia).
 // No formation or script of this REL uses it.
 
 #include "version.h"

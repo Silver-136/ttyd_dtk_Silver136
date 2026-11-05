@@ -199,8 +199,8 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 /**
- * Plays the "toge_flush" spark effect over the Spinia's spiked top 30 frames
- * after an attacker is hurt by its spikes,
+ * Unused spike-counter effect (not registered in the Spinia's data table):
+ * plays "toge_flush" above the unit after a 30-frame wait,
  * with the pose type 31 reaction and a height that depends on its size statuses 10
  * (Huge) and 11 (Tiny).
  */

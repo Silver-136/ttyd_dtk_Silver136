@@ -37,7 +37,7 @@
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_TARGET_UNIT 0 // part 1: first of the target unit ids (slots 0-4) of the current attack
 #define PARTS_WORK_TARGET_PART 5 // part 1: first of the target part ids (slots 5-9), paired with PARTS_WORK_TARGET_UNIT
-#define PARTS_WORK_TARGET_HIT 10 // part 1: first of the per-target hit flags (slots 10-14): 1 once that target was hit; the last shot then hits it without a damage check
+#define PARTS_WORK_TARGET_HIT 10 // part 1: first of the per-target hit flags (slots 10-14): 1 once that target was hit; the last shot then hits it without a pre-damage check
 #define PARTS_WORK_SFX 15        // shot parts (7..): id of the SFX_ENM_BARRI_ATTACK7/8 sound, stopped when the shot ends
 
 static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
@@ -320,7 +320,7 @@ static BattleUnitSetup entry_barriern_satellite = {
     NULL, // itemDropTable
 };
 
-/** Pose table of the Yux: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
+/** Pose table of the Yux: the animation each battle pose (idle, hurt, walk, run and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -590,7 +590,7 @@ static Vec splineTableOut4_4[] = {
 
 /**
  * Battle init for the Yux: registers its wait, unison-phase, attack, damage and confusion events,
- * scales its body part to 0.8, then spawns its 2 Mini-Yux satellites (unit_barriern_satellite),
+ * scales its body part to 0.8, then spawns the configured number of Mini-Yux satellites (unit work 0),
  * stores their unit ids in unit work 4 onward, links each back to the parent
  * and places them around it with battleGetBarriernSatelliteInitPos;
  * finally builds the out-spline tables for the current satellite count.
@@ -855,7 +855,7 @@ static USER_FUNC(barriern_satellite_zanzou2) {
 
 /**
  * Runs one frame of a Mini-Yux's afterimage effect (type 0 shrinking in over the effect's frames,
- * type 1 expanding out over 8) with its frame count in zanzou_count[n + 1];
+ * type 1 expanding out over 8) with afterimage frame counts in zanzou_count[n + 1];
  * the same ghost-ring scaling and fading as barriern_zanzou_sub.
  */
 static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, s32 n, s32 type) {

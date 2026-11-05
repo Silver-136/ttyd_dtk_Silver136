@@ -234,7 +234,7 @@ static BattleUnitKindPart parts[] = {
 
 /**
  * Draw callback: draws the Pider's thread as a thin white quad (2 units wide, with the unit's yarn alpha) from
- * the ceiling point down to the spider, using direct GX calls and no texture.
+ * the ceiling point down to the lower yarn endpoint, using direct GX calls and no texture.
  */
 static void piders_draw_yarn_sub(CameraId camera, void* param) {
     PidersYarn* yarn = param;
@@ -265,7 +265,7 @@ static void piders_draw_yarn_sub(CameraId camera, void* param) {
 
 /**
  * Script helper: args[0] is the thread's alpha.
- * Sets the thread from y = 400 (ceiling) down to the Pider's hanging height (work[2])
+ * Sets the thread from y = 400 (ceiling) down to the lower endpoint in work[2]
  * and queues piders_draw_yarn_sub to draw it.
  */
 static USER_FUNC(piders_draw_yarn) {
@@ -1215,7 +1215,7 @@ static EVT_BEGIN(renzoku_attack_event_sub)
 EVT_END()
 
 /**
- * Resolves a web ball when another ball will still hit the same target:
+ * Resolves a web ball when another ball is aimed at the same target:
  * damage_check_event_sub without the last-hit flag (LW(8) = 0), marking the target as hit (LW(10) = 1).
  */
 static EVT_BEGIN(renzoku_attack_event_sub_no_last)

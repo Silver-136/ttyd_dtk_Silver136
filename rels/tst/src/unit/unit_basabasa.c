@@ -121,7 +121,7 @@ static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 /** Element reactions of Swooper: none, every element hits normally. */
 static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE, DEFENSE_ATTR_NONE}};
 
-/** Attack data of Swooper's drain attack biribiri counterd attack: no damage, 100% accuracy. */
+/** Unused Swooper drain-attack biribiri counter weapon data: no damage, base accuracy 100. */
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -160,7 +160,7 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
 };
 
 /**
- * Pose table of Swooper: maps its battle pose types (stay, walk, hurt, dead, talk and so on) to animation
+ * Pose table of Swooper: maps its battle pose types (stay, walk, hurt, sleep, talk and so on) to animation
  * names, 18 entries such as BSA_N_1, BSA_Y_1, BSA_K_1, BSA_X_1.
  */
 static PoseTableEntry pose_table[] = {
@@ -185,7 +185,7 @@ static PoseTableEntry pose_table[] = {
 };
 
 /**
- * Pose table of Swooper hanging from the ceiling: maps its battle pose types (stay, walk, hurt, dead,
+ * Pose table of Swooper hanging from the ceiling: maps its battle pose types (stay, walk, hurt, sleep,
  * talk and so on) to animation names, 18 entries such as BSA_N_2, BSA_Y_2, BSA_K_2, BSA_X_2.
  */
 static PoseTableEntry pose_table_ceil[] = {
@@ -241,17 +241,17 @@ static BattleUnitKindPart parts[] = {
 #if VERSION <= VERSION_DEMO_JP
 
 /**
- * Status vulnerability of Swooper (the demos), as the percent chance a status takes hold:
- * always hit by Dizzy, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Gale Force, Fast,
- * Dodgy and Invisible; otherwise Sleep 70, Stop 85, Confuse 80, Freeze 80, Tiny 80, Attack Down 80,
+ * Status vulnerability multipliers of Swooper (early-demo branch): 100 for Dizzy, Poison, Electric, Burn,
+ * Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible; Gale Force 110;
+ * otherwise Sleep 70, Stop 85, Confuse 80, Freeze 80, Tiny 80, Attack Down 80,
  * Defense Down 80, Allergic 80, Fright 80, Slow 80 and instant KO 95.
  */
 static StatusVulnerability regist = {70, 85, 100, 100, 80, 100, 100, 80, 100, 80, 100, 80, 100, 80, 80, 80, 110, 100, 80, 100, 100, 95};
 #else
 
 /**
- * Status vulnerability of Swooper (the final versions), as the percent chance a status takes hold:
- * always hit by Dizzy, Poison, Electric, Burn, Huge, Attack Up, Defense Up, Fast, Dodgy and Invisible;
+ * Status vulnerability multipliers of Swooper (JP-and-later branch): 100 for Poison, Electric, Burn, Huge,
+ * Attack Up, Defense Up, Fast, Dodgy and Invisible; Dizzy 105;
  * otherwise Sleep 80, Stop 85, Confuse 80, Freeze 80, Tiny 90, Attack Down 90, Defense Down 95,
  * Allergic 80, Fright 80, Gale Force 95, Slow 80 and instant KO 95.
  */
@@ -314,7 +314,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
 /**
  * Brings the bat down from the ceiling into the open air the first time it is needed:
  * if it is still hanging (unit attribute 2 set) it clears that, sets attribute 4,
- * restores the flying pose table (pose type 40),
+ * switches to the flying pose table and selects walk pose (type 40),
  * shifts the unit and its home position down 30 (then another 40 for its home), adjusts the hit,
  * cursor and status icon offsets and hands the damage event over to damage_event.
  * Leaves the home position in LW(0) to LW(2).
@@ -492,7 +492,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
 
-    // If it is hanging from the ceiling it drops down first, then turns toward the target.
+    // If it is hanging from the ceiling it drops down; it has already turned toward the target.
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)

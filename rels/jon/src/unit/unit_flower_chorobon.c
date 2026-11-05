@@ -288,8 +288,8 @@ EVT_END()
 /**
  * The Flower Fuzzy's magic attack: it spends 2 FP,
  * hops in place and sets off three "shock_n64" bursts with SFX_ENM_CHORO2_MAGIC1,
- * then checks every target in turn and damages them with the magic weapon (the defence action command result is
- * taken once, for the first target). When confused with no target it is flustered.
+ * then checks every target in turn and damages them with the magic weapon (defence is requested only if
+ * the first target reaches the hit branch). When confused with no target it is flustered.
  */
 static EVT_BEGIN(magic_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
