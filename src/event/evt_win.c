@@ -307,7 +307,7 @@ void unitwin_point_disp(WinMgrEntry* entry) {
 #else
 static s32 iconid_conv(s32 icon) {
     if (icon == ICON_PARTY_YOSHI) {
-        switch (pouchGetPartyColor(4)) {
+        switch (pouchGetPartyColor(PARTNER_YOSHI)) {
             case 0:
                 icon = ICON_PARTY_YOSHI;
                 break;

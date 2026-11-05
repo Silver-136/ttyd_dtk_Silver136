@@ -49,7 +49,7 @@ static EvtWord wait_event[26];
 
 /** Unit data of the Badge Bandit (tst's earlier copy): stats, sounds, attributes, part, scripts. */
 BattleUnitKind unit_badge_borodo = {
-    158,
+    UNIT_BADGE_BANDIT,
     "btl_un_badge_borodo",
     12,
     0,
@@ -136,7 +136,7 @@ static BattleWeapon weapon_borodo_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -178,21 +178,21 @@ static StatusVulnerability regist = {80, 70, 50, 100, 80, 100, 100, 50, 100, 85,
 
 /** Pose table of the Badge Bandit while empty-handed: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
     {BTL_POSE_NORMAL, "S_1"},
-    {29, "Q_1"},
-    {30, "Q_1"},
-    {31, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
     {BTL_POSE_DAMAGE, "D_1"},
-    {50, "A_1"},
-    {51, "A_2"},
+    {POSE_TYPE_ATTACK, "A_1"},
+    {POSE_TYPE_ATTACK_2, "A_2"},
     {POSE_TYPE_RUN, "R_1"},
-    {41, "R_1"},
+    {POSE_TYPE_RUN_HOME, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
 #if VERSION <= VERSION_DEMO_JP
     {POSE_TYPE_DANGER, "I_1"},
@@ -211,26 +211,26 @@ static PoseTableEntry pose_table[] = {
  * Set by init_event and the stealing attack.
  */
 static PoseTableEntry pose_table_item_have[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
 #if VERSION <= VERSION_DEMO_JP
-    {4, "I_1"},
-    {3, "I_1"},
+    {POSE_TYPE_POISON, "I_1"},
+    {POSE_TYPE_DIZZY, "I_1"},
 #else
-    {4, "X_1"},
-    {3, "X_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
 #endif
     {BTL_POSE_NORMAL, "S_2"},
-    {29, "Q_1"},
-    {30, "Q_1"},
-    {31, "S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_2"},
     {BTL_POSE_DAMAGE, "D_1"},
-    {50, "A_1"},
-    {51, "A_2"},
+    {POSE_TYPE_ATTACK, "A_1"},
+    {POSE_TYPE_ATTACK_2, "A_2"},
     {POSE_TYPE_RUN, "R_2"},
-    {41, "R_2"},
+    {POSE_TYPE_RUN_HOME, "R_2"},
     {POSE_TYPE_WALK, "W_2"},
     {POSE_TYPE_TALK, "S_2"},
     {POSE_TYPE_ACTION, "S_2"},
@@ -337,7 +337,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         END_IF
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -351,11 +351,11 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 60)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
     // It turns around and stamps its feet, winding up the charge.
@@ -367,7 +367,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_MOVE1R"), EVT_NULLPTR, 0, LW(14))
         WAIT_FRAMES(3)
     END_LOOP
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
 
     // Find out whether the charge connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -381,12 +381,12 @@ static EVT_BEGIN(_borodo_normal_attack)
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
-        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
         // The dash back into the target.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_ATT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
         CALL(evt_snd_sfxoff, LW(14))
@@ -394,7 +394,7 @@ static EVT_BEGIN(_borodo_normal_attack)
         RETURN
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_ATT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 20)
@@ -406,14 +406,14 @@ static EVT_BEGIN(_borodo_normal_attack)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -452,7 +452,7 @@ static EVT_BEGIN(_borodo_normal_attack)
             SET_VALUE(LW(6), 0)
         END_IF
         CALL(btlevtcmd_SetRotateOffsetFromCenterOffset, UNIT_ID_SELF)
-        CALL(evt_sub_intpl_init, 13, LW(5), LW(6), 24)
+        CALL(evt_sub_intpl_init, EASING_SINE_IN, LW(5), LW(6), 24)
         LOOP(25)
             CALL(evt_sub_intpl_get_value)
             CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, LW(0))
@@ -465,7 +465,7 @@ static EVT_BEGIN(_borodo_normal_attack)
 
     // Walk back home.
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -497,7 +497,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         END_IF
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -511,11 +511,11 @@ static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 60)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
     // It turns around and stamps its feet, winding up the charge.
@@ -527,7 +527,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_MOVE1R"), EVT_NULLPTR, 0, LW(14))
         WAIT_FRAMES(3)
     END_LOOP
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
 
     // Find out whether the charge connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_borodo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -541,12 +541,12 @@ static EVT_BEGIN(_borodo_steal_attack)
         CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(6))
-        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+        CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
         // The dash back into the target.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_ATT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
         CALL(evt_snd_sfxoff, LW(14))
@@ -554,7 +554,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         RETURN
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_ATT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 20)
@@ -566,14 +566,14 @@ static EVT_BEGIN(_borodo_steal_attack)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -637,7 +637,7 @@ static EVT_BEGIN(_borodo_steal_attack)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_INCLINE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("B_1"))
         WAIT_FRAMES(52)
-        CALL(evt_btl_camera_set_mode, 0, 0)
+        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_4"))
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -655,7 +655,7 @@ static EVT_BEGIN(_borodo_steal_attack)
 
     // Walk back home.
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -683,7 +683,7 @@ static EVT_BEGIN(escape_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_ESCAPE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(9.0f))
-    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, 300, LW(1), LW(2), 0, 0, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, 300, LW(1), LW(2), 0, MOVE_SOUND_NONE, 0)
     CALL(btlevtcmd_SetPartsBlur, UNIT_ID_SELF, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_FRAMES(40)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
@@ -824,9 +824,9 @@ static USER_FUNC(_steal_item) {
             TST_BATTLE_UNIT(unit)->heldItem = item;
             if (item >= BADGE_MIN && item < BADGE_MAX) {
                 if (target->currentKind == UNIT_MARIO) {
-                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_MARIO, 0);
+                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
                 } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
-                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_PARTNER, 0);
+                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
                 }
                 pouchReviseMarioParam();
                 pouchRevisePartyParam();

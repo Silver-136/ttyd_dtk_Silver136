@@ -53,7 +53,7 @@ static USER_FUNC(killer_copy_status) {
  * parts and init script.
  */
 BattleUnitKind unit_super_killer_cannon = {
-    125,
+    UNIT_BOMBSHELL_BILL_BLASTER,
     "btl_un_super_killer_cannon",
     10,
     0,
@@ -169,7 +169,7 @@ static BattleUnitKindPart parts[] = {
  */
 static BattleUnitSetup entry_killer = {
     &unit_super_killer, // unitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position
@@ -183,20 +183,20 @@ static BattleUnitSetup entry_killer = {
  * animations.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "KTA_N_1"},
-    {2, "KTA_Y_1"},
-    {9, "KTA_Y_1"},
-    {5, "KTA_K_1"},
-    {4, "KTA_X_1"},
-    {3, "KTA_X_1"},
-    {28, "KTA_S_1"},
-    {29, "KTA_Q_1"},
-    {30, "KTA_Q_1"},
-    {31, "KTA_A_1"},
-    {39, "KTA_D_1"},
-    {56, "KTA_X_1"},
-    {57, "KTA_X_1"},
-    {50, "KTA_A_1"},
+    {POSE_TYPE_SLEEP, "KTA_N_1"},
+    {POSE_TYPE_STOP, "KTA_Y_1"},
+    {POSE_TYPE_FREEZE, "KTA_Y_1"},
+    {POSE_TYPE_CONFUSE, "KTA_K_1"},
+    {POSE_TYPE_POISON, "KTA_X_1"},
+    {POSE_TYPE_DIZZY, "KTA_X_1"},
+    {POSE_TYPE_NORMAL, "KTA_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KTA_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KTA_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KTA_A_1"},
+    {POSE_TYPE_DAMAGE, "KTA_D_1"},
+    {POSE_TYPE_DANGER, "KTA_X_1"},
+    {POSE_TYPE_PERIL, "KTA_X_1"},
+    {POSE_TYPE_ATTACK, "KTA_A_1"},
     {POSE_TYPE_TALK, "KTA_T_1"},
     {POSE_TYPE_ACTION, "KTA_S_1"},
 };

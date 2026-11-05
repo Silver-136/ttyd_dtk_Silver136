@@ -85,7 +85,7 @@ extern EvtWord teresa_entry[];
  * and event data table.
  */
 BattleUnitKind unit_atmic_teresa = {
-    76,
+    UNIT_ATOMIC_BOO,
     "btl_un_atmic_teresa",
     40,
     0,
@@ -165,16 +165,16 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
 
 /** Pose table of the Atomic Boo: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
     {BTL_POSE_NORMAL, "S_1"},
-    {29, "Q_1"},
-    {30, "Q_1"},
-    {31, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
     {BTL_POSE_DAMAGE, "D_1"},
     {POSE_TYPE_RUN, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
@@ -186,16 +186,16 @@ static PoseTableEntry pose_table[] = {
 
 /** Pose table of the Atomic Boo while it covers its face with its hands. */
 PoseTableEntry pose_table_kaokakusi[] = {
-    {1, "A_1"},
-    {2, "A_1"},
-    {9, "A_1"},
-    {5, "A_1"},
-    {4, "A_1"},
-    {3, "A_1"},
+    {POSE_TYPE_SLEEP, "A_1"},
+    {POSE_TYPE_STOP, "A_1"},
+    {POSE_TYPE_FREEZE, "A_1"},
+    {POSE_TYPE_CONFUSE, "A_1"},
+    {POSE_TYPE_POISON, "A_1"},
+    {POSE_TYPE_DIZZY, "A_1"},
     {BTL_POSE_NORMAL, "A_1"},
-    {29, "Q_1"},
-    {30, "Q_1"},
-    {31, "A_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "A_1"},
     {BTL_POSE_DAMAGE, "D_1"},
     {POSE_TYPE_RUN, "A_1"},
     {POSE_TYPE_WALK, "A_1"},
@@ -257,7 +257,7 @@ BattleWeapon weapon_atmic_teresa_press = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -300,7 +300,7 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -350,7 +350,7 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -397,7 +397,7 @@ BattleWeapon weapon_atmic_teresa_breath = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -501,20 +501,20 @@ EVT_END()
  * hands-over-face pose table.
  */
 EVT_BEGIN(kaokakusi_event)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_MOVE2"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 60)
     SUBTRACT(LW(1), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, 4, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, EASING_QUADRATIC_OUT, 0, -1)
     WAIT_FRAMES(20)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_FACE_HIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1"))
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 180, 0)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, 0, 5, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, 0, EASING_CUBIC_OUT, 0, -1)
     WAIT_FRAMES(10)
     LOOP(15)
         WAIT_FRAMES(1)
@@ -548,7 +548,7 @@ EVT_BEGIN(press_event)
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_atmic_teresa_press))
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -556,10 +556,10 @@ EVT_BEGIN(press_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     SUBTRACT(LW(2), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -125, 100, LW(2), 120, 10, 4, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -125, 100, LW(2), 120, 10, EASING_QUADRATIC_OUT, 0, -1)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("Z_1"))
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -125, 0, LW(2), 30, 0, 1, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -125, 0, LW(2), 30, 0, EASING_QUADRATIC_IN, 0, -1)
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 0)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
@@ -570,15 +570,15 @@ EVT_BEGIN(press_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -601,13 +601,13 @@ EVT_BEGIN(press_event)
         ADD(LW(10), 1)
         GOTO(0)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     LABEL(98)
     WAIT_FRAMES(60)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("W_1"))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 50, 6, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 50, EASING_QUARTIC_OUT, 0, -1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     WAIT_MS(250)
     LABEL(99)
@@ -650,8 +650,8 @@ EVT_BEGIN(surprise_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 30)
     SUBTRACT(LW(1), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, 4, 0, -1)
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, EASING_QUADRATIC_OUT, 0, -1)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -659,7 +659,7 @@ EVT_BEGIN(surprise_event)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 0, 0)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, 0, LW(1), LW(2), 10, 0, 5, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, 0, LW(1), LW(2), 10, 0, EASING_CUBIC_OUT, 0, -1)
 
     // It spins around, uncovers its face and lunges at the party with a strong camera shake.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_SURPRISED1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -676,15 +676,15 @@ EVT_BEGIN(surprise_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -711,15 +711,15 @@ EVT_BEGIN(surprise_event)
         ADD(LW(10), 1)
         GOTO(0)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 
     // The Atomic Boo floats back to its home position.
     LABEL(98)
     WAIT_FRAMES(90)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("W_1"))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -20, 6, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, -20, EASING_QUARTIC_OUT, 0, -1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     WAIT_MS(250)
     LABEL(99)
@@ -758,7 +758,7 @@ EVT_BEGIN(bikkuri_event)
     // Small Boos split off the Atomic Boo and circle the party's side of the stage.
     CALL(teresa_appear_bikkuri)
     WAIT_FRAMES(75)
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, LW(3), -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 5)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -784,14 +784,14 @@ EVT_BEGIN(bikkuri_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -820,7 +820,7 @@ EVT_BEGIN(bikkuri_event)
     END_IF
     LABEL(98)
     WAIT_FRAMES(30)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(60)
 
     // The Atomic Boo whistles the small Boos back and they merge into it in puffs of smoke.
@@ -874,14 +874,14 @@ static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 30)
     SUBTRACT(LW(1), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, 4, 0, -1)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 10, EASING_QUADRATIC_OUT, 0, -1)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FACE_HIDDEN, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, 0, 5, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, 0, EASING_CUBIC_OUT, 0, -1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_BLOW2"), EVT_NULLPTR, 0, LW(15))
     CALL(teresa_appear_breath, 0)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -894,7 +894,7 @@ static EVT_BEGIN(breath_event)
     GOTO(10)
     LABEL(20)
     WAIT_FRAMES(120)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(teresa_wait_breath)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_WHISTLE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -928,14 +928,14 @@ EVT_BEGIN(breath_event_sub)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -1033,7 +1033,7 @@ void teresa_ext_init(void) {
 
     teresa = BattleAlloc(sizeof(AtmTeresa) * 30);
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
-        pose->flags = 1;
+        pose->flags = EXT_POSE_FLAG_VISIBLE;
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
         (*pose->mtx)[1][3] = -1000.0f;
@@ -1175,7 +1175,7 @@ void teresa_ext_main(void) {
                 (*pose->mtx)[0][0] = 1.0f;
                 break;
             case 1:
-                pose->flags &= ~2;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 (*pose->mtx)[0][3] = x;
                 (*pose->mtx)[1][3] = y;
                 (*pose->mtx)[2][3] = z - 5.0f;
@@ -1204,7 +1204,7 @@ void teresa_ext_main(void) {
                 (*pose->mtx)[0][0] += 0.02f;
                 (*pose->mtx)[1][1] += 0.02f;
                 if (t->timer <= 0) {
-                    pose->flags |= 2;
+                    pose->flags |= EXT_POSE_FLAG_BILLBOARD;
                     t->state = 10;
                     t->timer = 150;
                     t->vel.x = 0.0f;
@@ -1305,7 +1305,7 @@ void teresa_ext_main(void) {
                     t->vel.x = 0.0f;
                     t->vel.y = 0.0f;
                     t->vel.z = 0.0f;
-                    pose->flags &= ~2;
+                    pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 }
                 t->timer--;
                 break;
@@ -1318,7 +1318,7 @@ void teresa_ext_main(void) {
                 break;
             case 51:
             case 52:
-                pose->flags &= ~2;
+                pose->flags &= ~EXT_POSE_FLAG_BILLBOARD;
                 (*pose->mtx)[0][3] = x - 15.0f;
                 (*pose->mtx)[1][3] = y - 5.0f;
                 (*pose->mtx)[2][3] = 5.0f + z;
@@ -1399,7 +1399,7 @@ void teresa_ext_main(void) {
                 break;
         }
     }
-    dispEntry(4, 0.0f, DISP_MODE_ALPHA_TEST, teresa_ext_disp, NULL);
+    dispEntry(CAMERA_3D, 0.0f, DISP_MODE_ALPHA_TEST, teresa_ext_disp, NULL);
 }
 
 /**

@@ -13,6 +13,7 @@
 #include "battle/battle_sub.h"
 #include "evt/evt_eff.h"
 #include "battle/battle_damage.h"
+#include "battle/battle.h"
 
 BattleUnitKind unit_yamitogedaruma;
 static BattleUnitDefense defence;
@@ -38,7 +39,7 @@ static EvtWord wait_event[102];
  * and a flip leaves it helpless on its back for a turn.
  */
 BattleUnitKind unit_yamitogedaruma = {
-    165,
+    UNIT_DARK_BRISTLE,
     "btl_un_yamitogedaruma",
     8,
     0,
@@ -134,22 +135,22 @@ static StatusVulnerability regist = {20, 80, 20, 100, 20, 100, 100, 40, 100, 50,
  * Poses of the upright Dark Bristle (TGD_*): rolled-up standing frames, hurt, charge and talking poses.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "TGD_N_1"},
-    {2, "TGD_I_1"},
-    {9, "TGD_I_1"},
-    {5, "TGD_K_1"},
-    {4, "TGD_X_1"},
-    {3, "TGD_X_1"},
-    {28, "TGD_S_4"},
-    {29, "TGD_Q_1"},
-    {30, "TGD_Q_1"},
-    {31, "TGD_S_2"},
-    {39, "TGD_D_1"},
-    {50, "TGD_A_1"},
-    {40, "TGD_S_4"},
-    {42, "TGD_S_4"},
-    {56, "TGD_X_1"},
-    {57, "TGD_X_1"},
+    {POSE_TYPE_SLEEP, "TGD_N_1"},
+    {POSE_TYPE_STOP, "TGD_I_1"},
+    {POSE_TYPE_FREEZE, "TGD_I_1"},
+    {POSE_TYPE_CONFUSE, "TGD_K_1"},
+    {POSE_TYPE_POISON, "TGD_X_1"},
+    {POSE_TYPE_DIZZY, "TGD_X_1"},
+    {POSE_TYPE_NORMAL, "TGD_S_4"},
+    {POSE_TYPE_DAMAGE_FIRE, "TGD_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGD_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "TGD_S_2"},
+    {POSE_TYPE_DAMAGE, "TGD_D_1"},
+    {POSE_TYPE_ATTACK, "TGD_A_1"},
+    {POSE_TYPE_WALK, "TGD_S_4"},
+    {POSE_TYPE_RUN, "TGD_S_4"},
+    {POSE_TYPE_DANGER, "TGD_X_1"},
+    {POSE_TYPE_PERIL, "TGD_X_1"},
     {POSE_TYPE_TALK, "TGD_T_1"},
     {POSE_TYPE_ACTION, "TGD_S_4"},
 };
@@ -159,19 +160,19 @@ static PoseTableEntry pose_table[] = {
  * itself.
  */
 static PoseTableEntry pose_table_turn[] = {
-    {1, "TGD_N_2"},
-    {2, "TGD_I_2"},
-    {9, "TGD_Z_4"},
-    {5, "TGD_K_2"},
-    {4, "TGD_X_2"},
-    {3, "TGD_X_2"},
-    {28, "TGD_S_5"},
-    {29, "TGD_Q_2"},
-    {30, "TGD_Q_2"},
-    {31, "TGD_S_3"},
-    {39, "TGD_D_2"},
-    {56, "TGD_X_2"},
-    {57, "TGD_X_2"},
+    {POSE_TYPE_SLEEP, "TGD_N_2"},
+    {POSE_TYPE_STOP, "TGD_I_2"},
+    {POSE_TYPE_FREEZE, "TGD_Z_4"},
+    {POSE_TYPE_CONFUSE, "TGD_K_2"},
+    {POSE_TYPE_POISON, "TGD_X_2"},
+    {POSE_TYPE_DIZZY, "TGD_X_2"},
+    {POSE_TYPE_NORMAL, "TGD_S_5"},
+    {POSE_TYPE_DAMAGE_FIRE, "TGD_Q_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGD_Q_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "TGD_S_3"},
+    {POSE_TYPE_DAMAGE, "TGD_D_2"},
+    {POSE_TYPE_DANGER, "TGD_X_2"},
+    {POSE_TYPE_PERIL, "TGD_X_2"},
     {POSE_TYPE_TALK, "TGD_S_5"},
     {POSE_TYPE_ACTION, "TGD_S_5"},
 };
@@ -182,11 +183,11 @@ static PoseTableEntry pose_table_turn[] = {
  * and event 48 (First Strike) does nothing.
  */
 static BattleDataEntry data_table[] = {
-    {13, dmg_turn_event},
-    {37, dmg_avoid_counter_thorn_head_event},
-    {39, dmg_avoid_counter_thorn_front_event},
-    {38, dmg_avoid_counter_thorn_front_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
+    {UNIT_DATA_AVOID_THORN_EVENT, dmg_avoid_counter_thorn_front_event},
+    {UNIT_DATA_AVOID_THORN_FRONT_EVENT, dmg_avoid_counter_thorn_front_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -224,7 +225,7 @@ static BattleWeapon weapon_togedaruma_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -439,7 +440,7 @@ static EVT_BEGIN(attack_event)
 
     // After a First Strike it attacks the unit that was struck;
     // otherwise it may use an item or picks the front-most target.
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -476,7 +477,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEDA_MOVE2"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("TGD_A_1"))
     WAIT_MS(400)
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -491,14 +492,14 @@ static EVT_BEGIN(attack_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -538,7 +539,7 @@ static EVT_BEGIN(attack_event)
 
     // It hops back to its home position, uncurls and returns to idle.
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(5.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1)

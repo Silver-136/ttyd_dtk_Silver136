@@ -14,6 +14,7 @@
 #include "data_tables.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
+#include "battle/battle.h"
 
 static USER_FUNC(krb_get_dir);
 
@@ -48,7 +49,7 @@ static EvtWord wait_event[6];
  * parts and init script.
  */
 BattleUnitKind unit_patakuri = {
-    2,
+    UNIT_PARAGOOMBA,
     "btl_un_patakuri",
     2,
     0,
@@ -154,7 +155,7 @@ static BattleWeapon weapon_patakuri_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -182,20 +183,20 @@ static BattleUnitKindPart parts_patakuri[] = {
  * maps each battle pose (waiting, hurt, running...) to one of its PTK_* animations.
  */
 static PoseTableEntry pose_table_patakuri[] = {
-    {1, "PTK_N_1"},
-    {2, "PTK_Y_1"},
-    {9, "PTK_Y_1"},
-    {5, "PTK_K_1"},
-    {4, "PTK_I_1"},
-    {3, "PTK_I_1"},
+    {POSE_TYPE_SLEEP, "PTK_N_1"},
+    {POSE_TYPE_STOP, "PTK_Y_1"},
+    {POSE_TYPE_FREEZE, "PTK_Y_1"},
+    {POSE_TYPE_CONFUSE, "PTK_K_1"},
+    {POSE_TYPE_POISON, "PTK_I_1"},
+    {POSE_TYPE_DIZZY, "PTK_I_1"},
     {BTL_POSE_NORMAL, "PTK_S_1"},
-    {29, "PTK_Q_1"},
-    {30, "PTK_Q_1"},
-    {31, "PTK_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "PTK_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PTK_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PTK_S_1"},
     {BTL_POSE_DAMAGE, "PTK_D_1"},
-    {50, "PTK_A_1"},
+    {POSE_TYPE_ATTACK, "PTK_A_1"},
     {POSE_TYPE_RUN, "PTK_R_1"},
-    {41, "PTK_R_2"},
+    {POSE_TYPE_RUN_HOME, "PTK_R_2"},
     {POSE_TYPE_WALK, "PTK_W_1"},
     {POSE_TYPE_DANGER, "PTK_I_1"},
     {POSE_TYPE_PERIL, "PTK_I_1"},
@@ -208,8 +209,8 @@ static PoseTableEntry pose_table_patakuri[] = {
  * reaction scripts for being knocked out of the air and a First Strike opening the battle.
  */
 static BattleDataEntry data_table_patakuri[] = {
-    {14, dmg_fall_event},
-    {48, patakuri_dmg_first_attack_pos},
+    {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patakuri_dmg_first_attack_pos},
     {0, NULL},
 };
 
@@ -263,7 +264,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(500)
-    CALL(btlevtcmd_ChangeKind, LW(10), 1)
+    CALL(btlevtcmd_ChangeKind, LW(10), UNIT_GOOMBA)
     CALL_CHILD(init_event)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), BTL_POSE_DAMAGE)
@@ -313,7 +314,7 @@ static EVT_BEGIN(attack_event_patakuri)
     END_IF
 
     // The camera frames the Paragoomba and its target.
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -327,22 +328,22 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 50)
     ADD(LW(1), 40)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, 0, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, EASING_LINEAR, 0, -1)
     WAIT_MS(100)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
 
     // It tilts into its dive pose and draws back farther in front of the target.
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 50)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PATAKURI_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 5, 4, 0, 0)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 5, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_NONE)
 
     // Check whether the attack will connect; some miss results make the target dodge.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_patakuri_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -351,14 +352,14 @@ static EVT_BEGIN(attack_event_patakuri)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -375,7 +376,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, LW(3), LW(0), 50)
     SUBTRACT(LW(1), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -20, 1, 0, 0)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -20, EASING_QUADRATIC_IN, 0, MOVE_SOUND_NONE)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
     GOTO(98)
@@ -386,7 +387,7 @@ static EVT_BEGIN(attack_event_patakuri)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, 1, 0, 0)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, EASING_QUADRATIC_IN, 0, MOVE_SOUND_NONE)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
@@ -396,12 +397,12 @@ static EVT_BEGIN(attack_event_patakuri)
 
     // The dive is over: it flies back up to its place.
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_PATAKURI_MOVE1"), STRING("SFX_ENM_PATAKURI_MOVE1"), 0, 15, 15, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(7.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, 0, 0, -2)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_LINEAR, 0, -2)
 
     // Turn finished: the Paragoomba goes back to waiting.
     LABEL(99)
@@ -424,21 +425,21 @@ EVT_END()
  * maps each battle pose (waiting, hurt, running...) to one of its KUR_* animations.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "KUR_N_1"},
-    {2, "KUR_Y_1"},
-    {9, "KUR_Y_1"},
-    {5, "KUR_K_1"},
-    {4, "KUR_I_1"},
-    {3, "KUR_I_1"},
+    {POSE_TYPE_SLEEP, "KUR_N_1"},
+    {POSE_TYPE_STOP, "KUR_Y_1"},
+    {POSE_TYPE_FREEZE, "KUR_Y_1"},
+    {POSE_TYPE_CONFUSE, "KUR_K_1"},
+    {POSE_TYPE_POISON, "KUR_I_1"},
+    {POSE_TYPE_DIZZY, "KUR_I_1"},
     {BTL_POSE_NORMAL, "KUR_S_1"},
-    {29, "KUR_Q_1"},
-    {30, "KUR_Q_1"},
-    {31, "KUR_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KUR_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KUR_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KUR_S_1"},
     {BTL_POSE_DAMAGE, "KUR_D_1"},
-    {50, "KUR_A_1"},
-    {51, "KUR_A_2"},
+    {POSE_TYPE_ATTACK, "KUR_A_1"},
+    {POSE_TYPE_ATTACK_2, "KUR_A_2"},
     {POSE_TYPE_RUN, "KUR_R_1"},
-    {41, "KUR_R_2"},
+    {POSE_TYPE_RUN_HOME, "KUR_R_2"},
     {POSE_TYPE_WALK, "KUR_W_1"},
     {POSE_TYPE_DANGER, "KUR_I_1"},
     {POSE_TYPE_PERIL, "KUR_I_1"},
@@ -451,7 +452,7 @@ static PoseTableEntry pose_table[] = {
  * a First Strike on it triggers nothing special.
  */
 static BattleDataEntry data_table[] = {
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
@@ -516,7 +517,7 @@ static BattleWeapon weapon_kuriboo_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -567,7 +568,7 @@ EVT_END()
 static EVT_BEGIN(attack_event)
 
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -597,7 +598,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.5996094f))
 
     // The camera frames the Goomba and its target.
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -608,17 +609,17 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
 
     // The Goomba runs up to the target and crouches.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, -1, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(170)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
 
     // It leaps, its body tilting along the arc of the jump.
@@ -638,7 +639,7 @@ static EVT_BEGIN(attack_event)
         LOOP(12)
             WAIT_FRAMES(1)
         END_LOOP
-        SET_VALUE(LW(15), 50)
+        SET_VALUE(LW(15), POSE_TYPE_ATTACK)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, LW(15))
     END_INLINE_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -653,14 +654,14 @@ static EVT_BEGIN(attack_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -707,9 +708,9 @@ static EVT_BEGIN(attack_event)
 
     // It runs back to its place.
     LABEL(95)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), STRING("SFX_ENM_KURI_MOVE2"), 0, 3, 3, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 41)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN_HOME)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -2, 0)

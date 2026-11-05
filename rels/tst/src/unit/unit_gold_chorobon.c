@@ -17,6 +17,7 @@
 #include "evt/evt_msg.h"
 #include "tst.h"
 #include "battle/battle_damage.h"
+#include "battle/battle_camera.h"
 
 // Unit work slots of the Gold Fuzzy (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
@@ -57,7 +58,7 @@ static EvtWord wait_event[6];
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_gold_chorobon = {
-    20,
+    UNIT_GOLD_FUZZY,
     "btl_un_gold_chorobon",
     10,
     0,
@@ -144,18 +145,18 @@ static StatusVulnerability regist = {0, 0, 0, 100, 0, 100, 100, 0, 100, 0, 100, 
  * animation names, 18 entries such as CBN_N_1, CBN_Y_1, CBN_K_1, CBN_X_1.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "CBN_N_1"},
-    {2, "CBN_Y_1"},
-    {9, "CBN_Y_1"},
-    {5, "CBN_K_1"},
-    {4, "CBN_X_1"},
-    {3, "CBN_X_1"},
+    {POSE_TYPE_SLEEP, "CBN_N_1"},
+    {POSE_TYPE_STOP, "CBN_Y_1"},
+    {POSE_TYPE_FREEZE, "CBN_Y_1"},
+    {POSE_TYPE_CONFUSE, "CBN_K_1"},
+    {POSE_TYPE_POISON, "CBN_X_1"},
+    {POSE_TYPE_DIZZY, "CBN_X_1"},
     {BTL_POSE_NORMAL, "CBN_S_1"},
-    {29, "CBN_Q_1"},
-    {30, "CBN_Q_1"},
-    {31, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "CBN_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CBN_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CBN_S_1"},
     {BTL_POSE_DAMAGE, "CBN_D_1"},
-    {50, "CBN_A_1"},
+    {POSE_TYPE_ATTACK, "CBN_A_1"},
     {POSE_TYPE_RUN, "CBN_R_1"},
     {POSE_TYPE_WALK, "CBN_W_1"},
     {POSE_TYPE_DANGER, "CBN_X_1"},
@@ -169,20 +170,20 @@ static PoseTableEntry pose_table[] = {
  * tag 0 ends it.
  */
 static BattleDataEntry data_table[] = {
-    {24, counter_damage_event},
-    {26, counter_damage_event},
-    {25, counter_damage_event},
-    {27, counter_damage_event},
-    {28, counter_damage_event},
-    {29, counter_damage_event},
-    {30, counter_damage_event},
-    {31, counter_damage_event},
-    {32, counter_damage_event},
-    {33, counter_damage_event},
-    {34, counter_damage_event},
-    {35, counter_damage_event},
-    {36, counter_damage_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_FIERY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ICY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIC_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_EXPLOSIVE_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_VOLATILE_EXPLOSIVE_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_POISON_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIFIED_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_PAYBACK_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, counter_damage_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -213,7 +214,7 @@ BattleWeapon weapon_gold_chorobon_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -274,7 +275,7 @@ EVT_BEGIN(gold_chorobon_rabbit_move)
         GOTO(0)
     ELSE
         CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
-        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(5), LW(6), LW(7), 0, 0)
+        CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(5), LW(6), LW(7), 0, MOVE_SOUND_NONE)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_G_CHORO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         LOOP(2)
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
@@ -294,7 +295,7 @@ EVT_END()
  */
 BattleUnitSetup entry_chorogun = {
     &unit_chorobon_gundan, // unitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
     {75.0f, 0.0f, 0.0f}, // position
@@ -310,16 +311,16 @@ BattleUnitSetup entry_chorogun = {
 EVT_BEGIN(call_chorogun_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CBN_S_1"))
     WAIT_MS(1000)
-    CALL(btlevtcmd_StatusWindowOnOff, 0)
-    CALL(evt_btl_camera_set_prilimit, 1)
-    CALL(evt_btl_camera_set_mode, 1, 3)
+    CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+    CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 120, 40, 200, 120, -10, -500, 30, 0)
     WAIT_FRAMES(60)
     CALL(btlevtcmd_reset_move_color_lv_all)
-    CALL(evt_msg_print, 2, STRING("stg1_hei_43"), 0, UNIT_ID_SELF)
-    CALL(btlevtcmd_StatusWindowOnOff, 1)
-    CALL(evt_btl_camera_set_mode, 1, 0)
-    CALL(evt_btl_camera_set_prilimit, 0)
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg1_hei_43"), 0, UNIT_ID_SELF)
+    CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_DEFAULT)
+    CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     WAIT_MS(1000)
     BEGIN_SIBLING_EVENT
         WAIT_MS(500)
@@ -518,7 +519,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_gold_chorobon_attack))
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 100)
@@ -547,14 +548,14 @@ static EVT_BEGIN(attack_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -640,7 +641,7 @@ static EVT_BEGIN(attack_event)
 
     // It hops back home and the camera resets.
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 0)
     CALL_CHILD(return_event)
@@ -667,7 +668,7 @@ USER_FUNC(get_gold_chorobon_id) {
 
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == 0x14) {
+        if (unit != NULL && unit->initialKind == UNIT_GOLD_FUZZY) {
             break;
         }
     }

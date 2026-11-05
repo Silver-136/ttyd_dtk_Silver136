@@ -17,6 +17,7 @@
 #include "evt/evt_msg.h"
 #include "libc_decls.h"
 #include "battle/battle_damage.h"
+#include "battle/unit_work.h"
 
 static USER_FUNC(get_attacker);
 static USER_FUNC(krb_get_dir);
@@ -41,7 +42,7 @@ static EvtWord wait_event[6];
  * parts and init script.
  */
 BattleUnitKind unit_togekuri = {
-    3,
+    UNIT_SPIKY_GOOMBA,
     "btl_un_togekuri",
     2,
     0,
@@ -152,7 +153,7 @@ static BattleWeapon weapon_togekuri_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -175,19 +176,19 @@ static BattleWeapon weapon_togekuri_attack = {
  * animations.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "TGK_N_1"},
-    {2, "TGK_Y_1"},
-    {9, "TGK_Y_1"},
-    {5, "TGK_K_1"},
-    {4, "TGK_I_1"},
-    {3, "TGK_I_1"},
+    {POSE_TYPE_SLEEP, "TGK_N_1"},
+    {POSE_TYPE_STOP, "TGK_Y_1"},
+    {POSE_TYPE_FREEZE, "TGK_Y_1"},
+    {POSE_TYPE_CONFUSE, "TGK_K_1"},
+    {POSE_TYPE_POISON, "TGK_I_1"},
+    {POSE_TYPE_DIZZY, "TGK_I_1"},
     {BTL_POSE_NORMAL, "TGK_S_1"},
-    {29, "TGK_Q_1"},
-    {30, "TGK_Q_1"},
-    {31, "TGK_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "TGK_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "TGK_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "TGK_S_1"},
     {BTL_POSE_DAMAGE, "TGK_D_1"},
-    {50, "TGK_A_1"},
-    {41, "TGK_R_2"},
+    {POSE_TYPE_ATTACK, "TGK_A_1"},
+    {POSE_TYPE_RUN_HOME, "TGK_R_2"},
     {POSE_TYPE_RUN, "TGK_R_1"},
     {POSE_TYPE_WALK, "TGK_W_1"},
     {POSE_TYPE_DANGER, "TGK_I_1"},
@@ -201,8 +202,8 @@ static PoseTableEntry pose_table[] = {
  * a First Strike on it triggers nothing special.
  */
 static BattleDataEntry data_table[] = {
-    {37, dmg_avoid_counter_thorn_head_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -248,24 +249,24 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     CALL(evt_eff, STRING(""), STRING("toge_flush"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_LECTURE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
-        CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, 0, LW(0))
+        CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(get_attacker, LW(0))
             IF_INT_EQUAL(LW(0), 2)
                 RETURN
             END_IF
             WAIT_MS(2500)
-            CALL(btlevtcmd_StatusWindowOnOff, 0)
+            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_LECTURE, -1)
             CALL(get_attacker, LW(0))
             IF_INT_EQUAL(LW(0), 0)
-                CALL(evt_msg_print, 2, STRING("mac_0_092_06"), 0, UNIT_ID_LECTURE)
+                CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_06"), 0, UNIT_ID_LECTURE)
             ELSE
-                CALL(evt_msg_print, 2, STRING("mac_0_092_07"), 0, UNIT_ID_LECTURE)
+                CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_07"), 0, UNIT_ID_LECTURE)
             END_IF
-            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, 0, 1)
+            CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_KURIBOO_WORK_TOGEKURI_TALK_DONE, 1)
             CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_LECTURE, 1)
-            CALL(btlevtcmd_StatusWindowOnOff, 1)
+            CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         END_IF
     END_IF
     RETURN
@@ -331,7 +332,7 @@ static EVT_BEGIN(attack_event)
     END_IF
 
     // The camera frames the Spiky Goomba and its target.
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -342,19 +343,19 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 80)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
 
     // The Spiky Goomba runs up beside the target.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, -1, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, BTL_POSE_STAY)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(170)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 15, 0)
 
     // It leaps, its body tilting along the arc of the jump.
@@ -374,7 +375,7 @@ static EVT_BEGIN(attack_event)
         LOOP(12)
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 51)
+        CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK_2)
     END_INLINE_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 2)
@@ -390,14 +391,14 @@ static EVT_BEGIN(attack_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -478,9 +479,9 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 6, -1)
     GOTO(95)
     LABEL(95)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), STRING("SFX_ENM_KURI_MOVE2"), 0, 3, 3, 0, 0)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 41)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN_HOME)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -2, 0)
@@ -561,9 +562,9 @@ static USER_FUNC(get_attacker) {
     EvtWord* args = event->args;
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
 
-    if (unit->initialKind == 0xDE) {
+    if (unit->initialKind == UNIT_MARIO) {
         evtSetValue(event, args[0], 0);
-    } else if (unit->initialKind == 0xE0) {
+    } else if (unit->initialKind == UNIT_GOOMBELLA) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 2);

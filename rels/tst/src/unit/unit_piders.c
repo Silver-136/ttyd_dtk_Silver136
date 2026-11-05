@@ -24,6 +24,7 @@
 #include "unit/unit_piders.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
+#include "battle/battle_camera.h"
 
 // Unit work slots of the Pider (also read in C by piders_get_first_pos_attr and piders_draw_yarn).
 enum {
@@ -195,11 +196,11 @@ static PoseTableEntry pose_table[] = {
     {STATUS_POISON, "PAI_X_1"},
     {STATUS_DIZZY, "PAI_X_1"},
     {BTL_POSE_NORMAL, "PAI_S_1"},
-    {29, "PAI_D_1"},
-    {30, "PAI_D_1"},
-    {31, "PAI_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "PAI_D_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PAI_D_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PAI_S_1"},
     {BTL_POSE_DAMAGE, "PAI_D_1"},
-    {50, "PAI_A_1"},
+    {POSE_TYPE_ATTACK, "PAI_A_1"},
     {POSE_TYPE_WALK, "PAI_W_1"},
     {POSE_TYPE_RUN, "PAI_W_1"},
     {POSE_TYPE_DANGER, "PAI_X_1"},
@@ -213,10 +214,10 @@ static PoseTableEntry pose_table[] = {
  * the end of the battle and a First Strike opening the battle.
  */
 static BattleDataEntry data_table[] = {
-    {49, dead_event},
-    {58, blow_dead_event},
-    {63, battle_end_event},
-    {48, dmg_first_attack_pos},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
+    {UNIT_DATA_BLOW_DEAD_EVENT, blow_dead_event},
+    {UNIT_DATA_BATTLE_END_EVENT, battle_end_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},
     {0, NULL},
 };
 
@@ -435,7 +436,7 @@ static BattleWeapon weapon_piders_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -472,7 +473,7 @@ static BattleWeapon weapon_piders_renzoku_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -565,7 +566,7 @@ static EVT_BEGIN(entry_event)
     DIVIDE(LW(0), 10)
     ADD(LW(0), 80)
     WAIT_FRAMES(LW(0))
-    CALL(evt_sub_intpl_init, 4, 400, 0, 40)
+    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 400, 0, 40)
     LOOP(40)
         CALL(evt_sub_intpl_get_value)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THREAD_END_Y, LW(0))
@@ -661,7 +662,7 @@ static EVT_BEGIN(blow_dead_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     ADD(LW(1), 40)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, 2, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_CUBIC_IN, 0, -1)
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
     CALL(btlevtcmd_GetExp, LW(10), LW(0))
@@ -746,7 +747,7 @@ static EVT_BEGIN(move_kuutei_event)
     CALL_CHILD(yure_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -10, 4, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, -10, EASING_QUADRATIC_OUT, 0, -1)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, 1)
@@ -768,7 +769,7 @@ static EVT_BEGIN(move_kuuchu_event)
             WAIT_FRAMES(7)
         END_LOOP
     END_SIBLING_EVENT
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 10, 4, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 10, EASING_QUADRATIC_OUT, 0, -1)
     CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, PART_ATTR_HAMMERLIKE_CANNOT_TARGET | PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW, 0)
@@ -891,14 +892,14 @@ static EVT_BEGIN(damage_check_event_sub)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -950,7 +951,7 @@ EVT_END()
  * holds 15, then to 100, each with the attack sound; the final angle is stored in unit work 4.
  */
 static EVT_BEGIN(piders_attack_common_event1)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(2), FLOAT(3.0f))
@@ -977,7 +978,7 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, LW(0), 0)
 #endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_sub_intpl_init, 4, 0, 110, 5)
+    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 0, 110, 5)
     LOOP(5)
         CALL(evt_sub_intpl_get_value)
         MULTIPLY(LW(0), LW(8))
@@ -986,7 +987,7 @@ static EVT_BEGIN(piders_attack_common_event1)
     END_LOOP
     WAIT_FRAMES(20)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_sub_intpl_init, 4, 110, 70, 5)
+    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 110, 70, 5)
     LOOP(5)
         CALL(evt_sub_intpl_get_value)
         MULTIPLY(LW(0), LW(8))
@@ -995,7 +996,7 @@ static EVT_BEGIN(piders_attack_common_event1)
     END_LOOP
     WAIT_FRAMES(15)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_sub_intpl_init, 4, 70, 100, 5)
+    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 70, 100, 5)
     LOOP(5)
         CALL(evt_sub_intpl_get_value)
         MULTIPLY(LW(0), LW(8))
@@ -1013,7 +1014,7 @@ EVT_END()
  * Nothing in this file runs it.
  */
 static EVT_BEGIN(piders_attack_common_event1_2)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(2), FLOAT(3.0f))
@@ -1041,7 +1042,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
 #endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_WINDUP_ANGLE, LW(0))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    CALL(evt_sub_intpl_init, 4, LW(0), 100, 5)
+    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, LW(0), 100, 5)
     LOOP(5)
         CALL(evt_sub_intpl_get_value)
         MULTIPLY(LW(0), LW(8))
@@ -1058,9 +1059,9 @@ EVT_END()
  * swings part 2 from 100 degrees back to 0 over 15 frames, returns to its stand pose (PAI_S_1) and hides part 2.
  */
 static EVT_BEGIN(piders_attack_common_event2)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(8))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
-    CALL(evt_sub_intpl_init, 4, 100, 0, 15)
+    CALL(evt_sub_intpl_init, EASING_QUADRATIC_OUT, 100, 0, 15)
     LOOP(15)
         CALL(evt_sub_intpl_get_value)
         MULTIPLY(LW(0), LW(8))
@@ -1097,7 +1098,7 @@ EVT_END()
  * and resolves it with damage_check_event_sub as the last hit. Then it waits half a second.
  */
 static EVT_BEGIN(normal_attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(99)
     ELSE
@@ -1125,7 +1126,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL_CHILD(piders_attack_common_event3)
     SET_VALUE(LW(10), 0)
     CALL_CHILD(damage_check_event_sub)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(500)
     LABEL(99)
     RETURN
@@ -1159,7 +1160,7 @@ static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UW_PIDERS_TARGET_PART_3, LW(5))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_UNIT, LW(3))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_PART, LW(4))
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1179,7 +1180,7 @@ static EVT_BEGIN(renzoku_attack_event)
         WAIT_FRAMES(30)
     END_LOOP
     SPAWN_EVENT(piders_attack_common_event2)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(250)
     LABEL(99)
     RETURN

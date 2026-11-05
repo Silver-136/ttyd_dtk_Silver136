@@ -14,6 +14,7 @@
 #include "battle/battle_sub.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
+#include "battle/battle_camera.h"
 
 // Unit work slots of this unit (btlevtcmd_SetUnitWork / GetUnitWork).
 enum {
@@ -99,7 +100,7 @@ USER_FUNC(fire_bros_nagemakuri_set_target) {
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_fire_bros = {
-    58,
+    UNIT_FIRE_BRO,
     "btl_un_fire_bros",
     7,
     0,
@@ -207,17 +208,17 @@ static StatusVulnerability regist = {80, 80, 70, 100, 80, 100, 100, 70, 100, 80,
  * animation names, 18 entries such as BRO_N_1, BRO_Y_1, BRO_K_1, BRO_X_1.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "BRO_N_1"},
-    {2, "BRO_Y_1"},
-    {9, "BRO_Y_1"},
-    {5, "BRO_K_1"},
-    {4, "BRO_X_1"},
-    {3, "BRO_X_1"},
-    {27, "BRO_D_1"},
+    {POSE_TYPE_SLEEP, "BRO_N_1"},
+    {POSE_TYPE_STOP, "BRO_Y_1"},
+    {POSE_TYPE_FREEZE, "BRO_Y_1"},
+    {POSE_TYPE_CONFUSE, "BRO_K_1"},
+    {POSE_TYPE_POISON, "BRO_X_1"},
+    {POSE_TYPE_DIZZY, "BRO_X_1"},
+    {POSE_TYPE_KO, "BRO_D_1"},
     {BTL_POSE_NORMAL, "BRO_S_1"},
-    {29, "BRO_Q_1"},
-    {30, "BRO_Q_1"},
-    {31, "BRO_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "BRO_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "BRO_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "BRO_S_1"},
     {BTL_POSE_DAMAGE, "BRO_D_1"},
     {POSE_TYPE_RUN, "BRO_R_1"},
     {POSE_TYPE_WALK, "BRO_W_1"},
@@ -269,7 +270,7 @@ BattleWeapon weapon_fire_bros_attack = {
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_FIRE, // element
-    0, // damagePattern
+    ATTACKPATTERN_NULL, // damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -309,7 +310,7 @@ BattleWeapon weapon_fire_bros_renzoku_attack = {
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_FIRE, // element
-    0, // damagePattern
+    ATTACKPATTERN_NULL, // damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -349,7 +350,7 @@ BattleWeapon weapon_fire_bros_nagemakuri_attack = {
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_FIRE, // element
-    0, // damagePattern
+    ATTACKPATTERN_NULL, // damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -400,7 +401,7 @@ EVT_END()
  * with more HP it picks the single throw 70 percent and the double throw 30 percent.
  */
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(normal_attack_event)
         GOTO(99)
@@ -455,14 +456,14 @@ static EVT_BEGIN(damage_check_sub)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -757,7 +758,7 @@ EVT_END()
  * part) and waits until it has landed (unit work 1).
  */
 static EVT_BEGIN(normal_attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
@@ -773,12 +774,12 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_fire_bros_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_fire_bros_attack))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRE_DONE, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BRO_A_1A"))
@@ -818,12 +819,12 @@ static EVT_BEGIN(renzoku_attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_fire_bros_renzoku_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_fire_bros_renzoku_attack))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRE_DONE, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, 10, 0)
@@ -877,7 +878,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_fire_bros_nagemakuri_attack))
 
     // The attack is declared on every target and its cost paid.
@@ -934,7 +935,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
             WAIT_FRAMES(20)
             CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(15), LW(10), LW(3))
             CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(15), LW(11), LW(4))
-            CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(14))
+            CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(14))
             CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(14))
             CALL_CHILD(nagemakuri_judge_last_attack_event)
             SET_VALUE(LW(6), PTR(&weapon_fire_bros_nagemakuri_attack))

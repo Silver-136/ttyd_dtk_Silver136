@@ -45,7 +45,7 @@ static inline f32 tanf(f32 x) {
  * status vulnerability, parts and init script.
  */
 BattleUnitKind unit_wanawana = {
-    199,
+    UNIT_UNUSED_WANAWANA,
     "btl_un_wanawana",
     2,
     0,
@@ -123,9 +123,9 @@ static StatusVulnerability regist = {100, 100, 100, 100, 100, 100, 100, 100, 100
  * Pose table of the trap unit `wanawana`: maps each battle pose (waiting, hurt, running...) to an animation.
  */
 static PoseTableEntry pose_table[] = {
-    {28, "S_1"},
-    {31, "S_1"},
-    {39, "S_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
+    {POSE_TYPE_DAMAGE, "S_1"},
     {POSE_TYPE_ACTION, "S_1"},
 };
 

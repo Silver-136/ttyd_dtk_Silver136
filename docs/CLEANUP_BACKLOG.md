@@ -205,3 +205,17 @@ pushed commit (cleanup_notes, round 22):
 - F: prototypes, casts, placeholder fields, pragmas, FAKE rows
 - G: the 107 library sources built in no version
 - H: one inventory for the progress numbers
+
+## 10. Comment accuracy review and header placement (2026-11-04)
+- Comment review against the code (brief cleanup_notes/rels_comment_brief.md): src/ and include/ done except
+  src/effect; rels/ rooms done for gor tik las mri muj tou2 usu gon rsh jin pik bom gra eki nok; still to read: src/effect,
+  rels hei dou aji kpa moo win tou yuu jon dmo dig end hom aaa tst (rooms).
+- Battle units: Codex round 23 covered 186 of 386 files (509 fixes, applied 2fa91c6cd) before its weekly limit; the
+  other 200 files (199k lines, list cleanup_notes/round23_unread_units.tsv; most in tst, tou2, las, jon) are ours.
+  Its code-oddity list (codex_research/round23_bugs.tsv, 89 rows) is unconfirmed: check before any BUG comment.
+- Header placement (Zephiles): scanner cleanup_tools/header_placement_scan.py. Done: one version numbering,
+  HEAP_TYPE, shared types (cloud rooms, minigame driver, Monte tables, Glitz Pit ranking), per-version values in
+  owner headers. Left: battle-unit types and UNIT_WORK enums repeated across REL copies (after the unit comment
+  review), eff_balloon_n64's effN64Vtx copy (tri1 called without a prototype), kpa/yuucounter icon prototypes
+  (kept, they change code), 9 placeholder names in headers (--detail unk), and a scan for raw numbers where a header
+  enum exists (by parameter type).

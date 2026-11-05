@@ -151,7 +151,7 @@ static BattleWeapon weapon_chorobon_drain_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -207,7 +207,7 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, 0, 0, // acHelpMsg..counterResistFlags
@@ -235,11 +235,11 @@ static PoseTableEntry pose_table[] = {
     {STATUS_POISON, "CBN_X_1"},
     {STATUS_DIZZY, "CBN_X_1"},
     {BTL_POSE_NORMAL, "CBN_S_1"},
-    {29, "CBN_Q_1"},
-    {30, "CBN_Q_1"},
-    {31, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "CBN_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CBN_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CBN_S_1"},
     {BTL_POSE_DAMAGE, "CBN_D_1"},
-    {50, "CBN_A_1"},
+    {POSE_TYPE_ATTACK, "CBN_A_1"},
     {POSE_TYPE_RUN, "CBN_R_1"},
     {POSE_TYPE_WALK, "CBN_W_1"},
     {POSE_TYPE_DANGER, "CBN_X_1"},
@@ -253,19 +253,19 @@ static PoseTableEntry pose_table[] = {
  * tag 0 ends it.
  */
 static BattleDataEntry data_table[] = {
-    {26, counter_damage_event},
-    {25, counter_damage_event},
-    {27, counter_damage_event},
-    {28, counter_damage_event},
-    {29, counter_damage_event},
-    {30, counter_damage_event},
-    {31, counter_damage_event},
-    {32, counter_damage_event},
-    {33, counter_damage_event},
-    {34, counter_damage_event},
-    {35, counter_damage_event},
-    {36, counter_damage_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_FIERY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ICY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIC_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_EXPLOSIVE_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_VOLATILE_EXPLOSIVE_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_POISON_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIFIED_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_PAYBACK_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, counter_damage_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -417,9 +417,9 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_chorobon_drain_attack))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -450,14 +450,14 @@ static EVT_BEGIN(drain_attack_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -507,7 +507,7 @@ static EVT_BEGIN(drain_attack_event)
     // Otherwise it clings on: the target shakes while the Fuzzy spins on its back.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO1_ATTACK1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(0))
-    CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(0), 37)
+    CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(0), POSE_TYPE_DAMAGE_DRAINED)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), 89)
         SET_VALUE(LW(1), 1)
@@ -651,7 +651,7 @@ static EVT_BEGIN(drain_attack_event)
 
     // It hops back home and the camera resets.
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 0)
     CALL_CHILD(return_event)

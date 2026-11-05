@@ -12,6 +12,7 @@
 #include "data_tables.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
+#include "system.h"
 
 // Unit work slots of the Swoopula.
 enum {
@@ -49,7 +50,7 @@ static EvtWord wait_event[6];
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_basabasa_chururu = {
-    123,
+    UNIT_SWOOPULA,
     "btl_un_basabasa_chururu",
     9,
     0,
@@ -151,7 +152,7 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, 0, 0, // acHelpMsg..counterResistFlags
@@ -172,18 +173,18 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
  * animation names, 18 entries such as CYU_N_1, CYU_Y_1, CYU_K_1, CYU_X_1.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "CYU_N_1"},
-    {2, "CYU_Y_1"},
-    {9, "CYU_Y_1"},
-    {5, "CYU_K_1"},
-    {4, "CYU_X_1"},
-    {3, "CYU_X_1"},
+    {POSE_TYPE_SLEEP, "CYU_N_1"},
+    {POSE_TYPE_STOP, "CYU_Y_1"},
+    {POSE_TYPE_FREEZE, "CYU_Y_1"},
+    {POSE_TYPE_CONFUSE, "CYU_K_1"},
+    {POSE_TYPE_POISON, "CYU_X_1"},
+    {POSE_TYPE_DIZZY, "CYU_X_1"},
     {BTL_POSE_NORMAL, "CYU_S_1"},
-    {29, "CYU_Q_1"},
-    {30, "CYU_Q_1"},
-    {31, "CYU_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "CYU_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CYU_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CYU_S_1"},
     {BTL_POSE_DAMAGE, "CYU_D_1"},
-    {50, "CYU_A_1"},
+    {POSE_TYPE_ATTACK, "CYU_A_1"},
     {POSE_TYPE_RUN, "CYU_R_1"},
     {POSE_TYPE_WALK, "CYU_W_1"},
     {POSE_TYPE_DANGER, "CYU_X_1"},
@@ -197,18 +198,18 @@ static PoseTableEntry pose_table[] = {
  * talk and so on) to animation names, 18 entries such as CYU_N_2, CYU_Y_2, CYU_K_2, CYU_X_2.
  */
 static PoseTableEntry pose_table_ceil[] = {
-    {1, "CYU_N_2"},
-    {2, "CYU_Y_2"},
-    {9, "CYU_Y_2"},
-    {5, "CYU_K_2"},
-    {4, "CYU_X_2"},
-    {3, "CYU_X_2"},
+    {POSE_TYPE_SLEEP, "CYU_N_2"},
+    {POSE_TYPE_STOP, "CYU_Y_2"},
+    {POSE_TYPE_FREEZE, "CYU_Y_2"},
+    {POSE_TYPE_CONFUSE, "CYU_K_2"},
+    {POSE_TYPE_POISON, "CYU_X_2"},
+    {POSE_TYPE_DIZZY, "CYU_X_2"},
     {BTL_POSE_NORMAL, "CYU_S_2"},
-    {29, "CYU_Q_2"},
-    {30, "CYU_Q_2"},
-    {31, "CYU_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "CYU_Q_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CYU_Q_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CYU_S_2"},
     {BTL_POSE_DAMAGE, "CYU_D_2"},
-    {50, "CYU_A_1"},
+    {POSE_TYPE_ATTACK, "CYU_A_1"},
     {POSE_TYPE_RUN, "CYU_S_1"},
     {POSE_TYPE_WALK, "CYU_S_1"},
     {POSE_TYPE_DANGER, "CYU_X_2"},
@@ -222,19 +223,19 @@ static PoseTableEntry pose_table_ceil[] = {
  * dmg_first_attack_pos); tag 0 ends it. Tag 48 is a First Strike.
  */
 static BattleDataEntry data_table[] = {
-    {26, counter_damage_event},
-    {25, counter_damage_event},
-    {27, counter_damage_event},
-    {28, counter_damage_event},
-    {29, counter_damage_event},
-    {30, counter_damage_event},
-    {31, counter_damage_event},
-    {32, counter_damage_event},
-    {33, counter_damage_event},
-    {34, counter_damage_event},
-    {35, counter_damage_event},
-    {36, counter_damage_event},
-    {48, dmg_first_attack_pos},
+    {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_FIERY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ICY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIC_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_EXPLOSIVE_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_VOLATILE_EXPLOSIVE_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_POISON_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIFIED_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_PAYBACK_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, counter_damage_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},
     {0, NULL},
 };
 
@@ -285,7 +286,7 @@ static BattleWeapon weapon_basabasa_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -427,7 +428,7 @@ static EVT_BEGIN(damage_event_ceil)
         RETURN
     END_IF
     CALL_CHILD(ceil_sky_event)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, 0, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_LINEAR, 0, -1)
     RETURN
 EVT_END()
 
@@ -455,7 +456,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(btldefaultevt_Damage)
     CALL_CHILD(ceil_sky_event)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, 0, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_LINEAR, 0, -1)
     RETURN
 EVT_END()
 
@@ -494,9 +495,9 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_basabasa_attack))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -511,7 +512,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
         SUBTRACT(LW(1), 40)
-        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, 0, 0, -1)
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, EASING_LINEAR, 0, -1)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     END_IF
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -521,32 +522,32 @@ static EVT_BEGIN(attack_event)
     // It swoops in, dipping up and down twice before the final dive at the target's position.
     LOOP(2)
         ADD(LW(1), 13)
-        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, 10, 0, 0, -1)
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, 10, EASING_LINEAR, 0, -1)
         ADD(LW(1), -13)
-        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, -10, 0, 0, -1)
+        CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, -10, EASING_LINEAR, 0, -1)
     END_LOOP
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.5f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
     SUBTRACT(LW(1), 10)
     SUBTRACT(LW(2), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, 0, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -16, EASING_LINEAR, 0, -1)
 
     // The damage check decides between a miss (it sails past) and a hit.
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -562,7 +563,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 50)
     ADD(LW(1), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, 0, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, EASING_LINEAR, 0, -1)
     WAIT_MS(200)
     GOTO(98)
     LABEL(91)
@@ -580,7 +581,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_basabasa_attack))
         SET_VALUE(LW(9), PTR(&weapon_basabasa_drain_attack_biribiri_counterd))
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, -45)
@@ -602,14 +603,14 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_basabasa_attack))
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_basabasa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 15)
     ADD(LW(2), 10)
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, EASING_LINEAR, 0, MOVE_SOUND_NONE)
 
     // If the bite did damage, it recovers that much HP and squashes and stretches happily; the recovery number pops up.
     CALL(btlevtcmd_GetDamage, LW(3), LW(10))
@@ -656,7 +657,7 @@ static EVT_BEGIN(attack_event)
 
     // The Swoopula flies back to its home position (up to the ceiling if it came from there).
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -664,7 +665,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(7), 1)
         SUBTRACT(LW(1), 30)
     END_IF
-    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, 0, 0, -1)
+    CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -10, EASING_LINEAR, 0, -1)
     LABEL(99)
 
     // It goes back to its idle pose, hanging (CYU_S_2) if it started on the ceiling, and returns to waiting.

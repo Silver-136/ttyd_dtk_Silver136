@@ -68,6 +68,7 @@ s32 _gundan_part_update(YoshiGundanPart* p, s32 i);
 #include "eff/n64/eff_sweat_n64.h"
 #include "data_tables.h"
 #include "battle/battle_damage.h"
+#include "mario/mario_pouch.h"
 
 // Unit work slots of Yoshi (btlevtcmd_SetUnitWork / GetUnitWork, unit->work).
 // Slot 3 is set to -1 by Ground Pound and never read, so it keeps its number.
@@ -2081,7 +2082,7 @@ USER_FUNC(yoshi_original_color_anim_set) {
     id = evtGetValue(event, *args++);
     id = BattleTransID(event, id);
     BattleGetUnitPtr(wp, id);
-    switch (pouchGetPartyColor(4)) {
+    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
         case 1:
             name = "c_babyyoshi2";
             break;

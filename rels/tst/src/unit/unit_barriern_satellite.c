@@ -38,7 +38,7 @@ static EvtWord wait_event[56];
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_barriern_satellite = {
-    30,
+    UNIT_MINI_YUX,
     "btl_un_barriern_satellite",
     1,
     0,
@@ -155,22 +155,22 @@ static StatusVulnerability regist = {80, 100, 100, 0, 90, 100, 0, 0, 100, 90, 10
  * animation names, 17 entries such as N_2, Y_2, K_2, X_2.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "N_2"},
-    {2, "Y_2"},
-    {9, "Y_2"},
-    {5, "K_2"},
-    {4, "X_2"},
-    {3, "X_2"},
-    {28, "S_2"},
-    {29, "Q_2"},
-    {30, "Q_2"},
-    {31, "S_2"},
-    {39, "D_2"},
-    {42, "R_2"},
-    {41, "R_2"},
-    {40, "W_2"},
-    {56, "X_2"},
-    {57, "X_2"},
+    {POSE_TYPE_SLEEP, "N_2"},
+    {POSE_TYPE_STOP, "Y_2"},
+    {POSE_TYPE_FREEZE, "Y_2"},
+    {POSE_TYPE_CONFUSE, "K_2"},
+    {POSE_TYPE_POISON, "X_2"},
+    {POSE_TYPE_DIZZY, "X_2"},
+    {POSE_TYPE_NORMAL, "S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_2"},
+    {POSE_TYPE_DAMAGE, "D_2"},
+    {POSE_TYPE_RUN, "R_2"},
+    {POSE_TYPE_RUN_HOME, "R_2"},
+    {POSE_TYPE_WALK, "W_2"},
+    {POSE_TYPE_DANGER, "X_2"},
+    {POSE_TYPE_PERIL, "X_2"},
     {POSE_TYPE_ACTION, "S_2"},
 };
 

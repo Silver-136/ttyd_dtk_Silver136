@@ -2563,11 +2563,11 @@ USER_FUNC(_chuchu_item_steal) {
     }
     if (item >= BADGE_MIN && item < BADGE_MAX) {
         if (unit->currentKind == UNIT_MARIO) {
-            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_MARIO, 0);
+            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
         } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_PARTNER, 0);
+            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
         } else {
-            BtlUnit_EquipItem(unit, EQUIP_RESET, 0);
+            BtlUnit_EquipItem(unit, EQUIP_RESET, ITEM_NULL);
         }
     }
 

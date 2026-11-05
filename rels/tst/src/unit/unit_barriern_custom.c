@@ -25,6 +25,8 @@
 #include "system.h"
 #include "driver/mapdrv.h"
 #include "battle/battle_damage.h"
+#include "battle/battle_camera.h"
+#include "battle/unit_work.h"
 
 // Unit work slots of the X-Yux (btlevtcmd_SetUnitWork / GetUnitWork, unit->work)
 enum {
@@ -117,7 +119,7 @@ static EvtWord wait_event[116];
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_barriern_custom = {
-    117,
+    UNIT_X_YUX,
     "btl_un_barriern_custom",
     10,
     0,
@@ -248,7 +250,7 @@ static BattleWeapon weapon_wakka_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -292,7 +294,7 @@ static BattleWeapon weapon_wawawa_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -323,7 +325,7 @@ static BattleWeapon weapon_wawawa_attack = {
  */
 static BattleUnitSetup entry_barriern_satellite = {
     &unit_barriern_custom_satellite, // unitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
     {1000.0f, 0.0f, 1000.0f}, // position
@@ -337,22 +339,22 @@ static BattleUnitSetup entry_barriern_satellite = {
  * names, 18 entries such as N_1, Y_1, K_1, X_1.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "N_1"},
-    {2, "Y_1"},
-    {9, "Y_1"},
-    {5, "K_1"},
-    {4, "X_1"},
-    {3, "X_1"},
-    {28, "S_1"},
-    {29, "Q_1"},
-    {30, "Q_1"},
-    {31, "S_1"},
-    {39, "D_1"},
-    {42, "R_1"},
-    {41, "R_1"},
-    {40, "W_1"},
-    {56, "X_1"},
-    {57, "X_1"},
+    {POSE_TYPE_SLEEP, "N_1"},
+    {POSE_TYPE_STOP, "Y_1"},
+    {POSE_TYPE_FREEZE, "Y_1"},
+    {POSE_TYPE_CONFUSE, "K_1"},
+    {POSE_TYPE_POISON, "X_1"},
+    {POSE_TYPE_DIZZY, "X_1"},
+    {POSE_TYPE_NORMAL, "S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
+    {POSE_TYPE_DAMAGE, "D_1"},
+    {POSE_TYPE_RUN, "R_1"},
+    {POSE_TYPE_RUN_HOME, "R_1"},
+    {POSE_TYPE_WALK, "W_1"},
+    {POSE_TYPE_DANGER, "X_1"},
+    {POSE_TYPE_PERIL, "X_1"},
     {POSE_TYPE_TALK, "T_1"},
     {POSE_TYPE_ACTION, "S_1"},
 };
@@ -362,7 +364,7 @@ static PoseTableEntry pose_table[] = {
  * (barriern_dmg_first_attack_pos); tag 0 ends it. Tag 48 is a First Strike.
  */
 static BattleDataEntry data_table[] = {
-    {48, barriern_dmg_first_attack_pos},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, barriern_dmg_first_attack_pos},
     {0, NULL},
 };
 
@@ -636,8 +638,8 @@ static EVT_BEGIN(init_event)
         ADD(LW(8), UNIT_WORK_SATELLITE)
         CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_barriern_satellite), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(8), LW(3))
-        CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(5))
-        CALL(btlevtcmd_SetUnitWork, LW(3), 1, 1)
+        CALL(btlevtcmd_SetUnitWork, LW(3), BARRIERN_SATELLITE_WORK_OWNER, LW(5))
+        CALL(btlevtcmd_SetUnitWork, LW(3), BARRIERN_SATELLITE_WORK_IDLE_POSE, 1)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(battleGetBarriernSatelliteInitPos, UNIT_ID_SELF, LW(7), LW(6), LW(10), LW(11), LW(12))
         ADD(LW(0), LW(10))
@@ -820,7 +822,7 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
         part = BtlUnit_GetPartsPtr(unit, i);
         s = intpl_ff(start[j], end[j], mode, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
-        part->color.a = intplGetValue(0, alphaStart, alphaEnd, zanzou_count[0], frames);
+        part->color.a = intplGetValue(EASING_LINEAR, alphaStart, alphaEnd, zanzou_count[0], frames);
     }
     if (zanzou_count[0] >= frames) {
         part = BtlUnit_GetPartsPtr(unit, 1);
@@ -933,7 +935,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
     {
-        f32 s = intplGetValue(4, 1.0f, scale, zanzou_count[0], frames);
+        f32 s = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, scale, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
     }
     for (i = 2, j = 0; i <= 6; i++, j++) {
@@ -942,7 +944,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
         part = BtlUnit_GetPartsPtr(unit, i);
         s = intplGetValue(mode, start[j], end[j], zanzou_count[(s32)(n + 1)], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
-        part->color.a = intplGetValue(0, alphaStart, alphaEnd, zanzou_count[(s32)(n + 1)], frames);
+        part->color.a = intplGetValue(EASING_LINEAR, alphaStart, alphaEnd, zanzou_count[(s32)(n + 1)], frames);
     }
     if (zanzou_count[(s32)(n + 1)] >= frames) {
         part = BtlUnit_GetPartsPtr(unit, 1);
@@ -1010,7 +1012,7 @@ static EVT_BEGIN(unison_phase_event)
             CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_barriern_satellite), 0)
             CALL(btlevtcmd_AddPos, LW(3), 0, 0, -1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(1), LW(3))
-            CALL(btlevtcmd_SetUnitWork, LW(3), 0, LW(4))
+            CALL(btlevtcmd_SetUnitWork, LW(3), BARRIERN_SATELLITE_WORK_OWNER, LW(4))
             ADD(LW(0), 1)
             ADD(LW(5), 1)
             IF_INT_GREATER_OR_EQUAL(LW(5), 2)
@@ -1087,14 +1089,14 @@ EVT_END()
  * calls RecoverHp with 0 HP and plays the recovery effect above it.
  */
 static EVT_BEGIN(recovery_event)
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_zoom, 0, 300)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_3"))
     WAIT_FRAMES(120)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, 1, 0)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(5), LW(6), LW(7))
     ADD(LW(6), 30)
@@ -1110,13 +1112,13 @@ EVT_END()
  */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
     END_IF
     IF_INT_EQUAL(LW(5), 6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
     END_IF
     IF_INT_EQUAL(LW(5), 2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_IF
     RETURN
 EVT_END()
@@ -1336,7 +1338,7 @@ static EVT_BEGIN(damage_check_event_sub)
     CALL_CHILD(wakka_attack_common_event_hit)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     IF_INT_EQUAL(LW(10), 1)
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     END_IF
@@ -1370,7 +1372,7 @@ static EVT_BEGIN(wakka_attack_event)
     SET_VALUE(LW(10), 1)
     SET_VALUE(LW(12), -2)
     SET_VALUE(LW(15), 7)
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1378,7 +1380,7 @@ static EVT_BEGIN(wakka_attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_wakka_attack))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(14))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(14))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(14))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1399,7 +1401,7 @@ static EVT_BEGIN(wakka_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_4"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BARRI_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1474,7 +1476,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 1, 14, 0)
 
     // The camera zooms in on the Yux, the attack is declared on every target and its cost is paid.
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1484,7 +1486,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_wawawa_attack))
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, 0, LW(3))
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, 1, 5, LW(4))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
     // The Yux and its four satellites start to spin with afterimages, one satellite after another.
@@ -1562,7 +1564,7 @@ static EVT_BEGIN(wawawa_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_4"))
     SET_VALUE(LW(12), -2)
@@ -1694,7 +1696,7 @@ static EVT_BEGIN(wawawa_attack_event_sub_last)
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(wakka_attack_common_event_hit)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_wawawa_attack))
-        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_wawawa_attack), 256, LW(5))
+        CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_wawawa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(15), 0, -1000, 0)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(15), kMotionBlur)
@@ -1724,7 +1726,7 @@ static EVT_BEGIN(wait_event)
         END_IF
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(12))
         IF_INT_NOT_EQUAL(LW(12), -1)
-            CALL(btlevtcmd_SetUnitWork, LW(12), 1, 1)
+            CALL(btlevtcmd_SetUnitWork, LW(12), BARRIERN_SATELLITE_WORK_IDLE_POSE, 1)
         END_IF
         ADD(LW(11), 1)
     END_LOOP
@@ -1776,7 +1778,7 @@ static u8 barriernSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     sp->points = table;
     sp->frame = 0;
     spline_maketable(5, sp->points, sp->knots, sp->curvature);
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[2] = (EvtWord)table;
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
     return TRUE;
 }
 
@@ -1805,7 +1807,7 @@ static u8 barriernSatelliteTo_Main(BattleUnit* unit, s32 n) {
         }
         return FALSE;
     }
-    spline_getvalue(&pos, intplGetValue(4, 0.0f, 1.0f, sp->frame, 60), sp->numPoints, sp->points, sp->knots, sp->curvature);
+    spline_getvalue(&pos, intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 1.0f, sp->frame, 60), sp->numPoints, sp->points, sp->knots, sp->curvature);
     sat = BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]);
     if (sat == NULL) {
         return FALSE;
@@ -1834,7 +1836,7 @@ static USER_FUNC(barriernSatelliteToInside) {
     if (isFirstCall) {
         for (i = 0; i < 4; i++) {
             if (unit->work[UNIT_WORK_SATELLITE + i] != -1) {
-                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + i]), 1)->work[2];
+                EvtWord table = BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + i]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE];
 
                 if (table == (EvtWord)splineTableOut1_1) {
                     barriernSatelliteTo_Init(unit, i, splineTableIn1_1);
@@ -2030,7 +2032,7 @@ static USER_FUNC(outSplineTableSet) {
 
 /** Stores an orbit spline table pointer in the work[2] of the body part of satellite n. */
 static void outSplineTableSet_Sub(BattleUnit* unit, s32 n, Vec* table) {
-    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[2] = (EvtWord)table;
+    BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[BARRIERN_SATELLITE_PARTS_WORK_SPLINE] = (EvtWord)table;
 }
 
 /**

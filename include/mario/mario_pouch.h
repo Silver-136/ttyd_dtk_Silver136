@@ -106,8 +106,8 @@ typedef enum ItemType {
     ITEM_VITAL_PAPER,                  // 0x50
     ITEM_BRIEFCASE,                    // 0x51
     ITEM_GOLDBOB_GUIDE,                // 0x52
-    ITEM_UNK_PAPER_0x53,               // 0x53
-    ITEM_UNK_PAPER_0x54,               // 0x54
+    ITEM_GOLDBOB_GUIDE_2_UNUSED,       // 0x53, item table: a second copy of the Goldbob permit (in_unknown_item)
+    ITEM_GOLDBOB_GUIDE_3_UNUSED,       // 0x54, a third copy
     ITEM_COG,                          // 0x55
     ITEM_DATA_DISK,                    // 0x56
     ITEM_SHINE_SPRITE,                 // 0x57
@@ -128,15 +128,15 @@ typedef enum ItemType {
     ITEM_RED_POTION,                   // 0x66
     ITEM_ORANGE_POTION,                // 0x67
     ITEM_GREEN_POTION,                 // 0x68
-    ITEM_UNK_STAR_0x69,                // 0x69
+    ITEM_STAR_STONE_UNUSED,            // 0x69, item table entry in_star_stone; nothing gives it
     ITEM_LOTTERY_PICK,                 // 0x6A
     ITEM_BATTLE_TRUNKS,                // 0x6B
     ITEM_UP_ARROW,                     // 0x6C
     ITEM_PACKAGE,                      // 0x6D
     ITEM_ATTACK_FX_B_KEY_ITEM,         // 0x6E
-    ITEM_UNKNOWN_0x6F,                 // 0x6F
-    ITEM_UNKNOWN_0x70,                 // 0x70
-    ITEM_UNKNOWN_0x71,                 // 0x71
+    ITEM_FREE_SLOT_1_UNUSED,           // 0x6F, 0x6F-0x71: placeholder rows (in_unknown_item) whose names spell a
+    ITEM_FREE_SLOT_2_UNUSED,           // 0x70, "use this area" note across the three entries
+    ITEM_FREE_SLOT_3_UNUSED,           // 0x71
     ITEM_DIAMOND_STAR,                 // 0x72
     ITEM_EMERALD_STAR,                 // 0x73
     ITEM_GOLD_STAR,                    // 0x74

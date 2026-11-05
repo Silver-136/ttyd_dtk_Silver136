@@ -19,6 +19,8 @@
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
+#include "battle/battle_status_effect.h"
+#include "system.h"
 
 // Unit work slots of the Wizzerd (slots 0-3 hold the hand offset buffers of hand_init).
 enum {
@@ -71,7 +73,7 @@ static EvtWord wait_event[386];
 
 /** Unit definition of the Wizzerd: 10 HP, level 30, 5 parts, with its sounds, init script and data table. */
 BattleUnitKind unit_mahorn = {
-    161,
+    UNIT_WIZZERD,
     "btl_un_mahorn",
     10,
     0,
@@ -195,7 +197,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -241,7 +243,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
     ELEMENT_ELECTRIC, // element
-    0, // damagePattern
+    ATTACKPATTERN_NULL, // damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -280,7 +282,7 @@ static BattleWeapon weapon_mahorn_dekadeka_magic = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -322,7 +324,7 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -366,7 +368,7 @@ BattleWeapon weapon_mahorn_confuse_magic = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -412,7 +414,7 @@ static BattleWeapon weapon_mahorn_recover_magic = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OPPOSITE_SIDE | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, 0, // acHelpMsg..special
@@ -518,16 +520,16 @@ EVT_END()
  * the idle animation is `MAH_S_1`.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "MAH_N_1"},
-    {2, "MAH_Y_1"},
-    {9, "MAH_Y_1"},
-    {5, "MAH_K_1"},
-    {4, "MAH_X_1"},
-    {3, "MAH_X_1"},
+    {POSE_TYPE_SLEEP, "MAH_N_1"},
+    {POSE_TYPE_STOP, "MAH_Y_1"},
+    {POSE_TYPE_FREEZE, "MAH_Y_1"},
+    {POSE_TYPE_CONFUSE, "MAH_K_1"},
+    {POSE_TYPE_POISON, "MAH_X_1"},
+    {POSE_TYPE_DIZZY, "MAH_X_1"},
     {BTL_POSE_NORMAL, "MAH_S_1"},
-    {29, "MAH_Q_1"},
-    {30, "MAH_Q_1"},
-    {31, "MAH_A_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "MAH_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "MAH_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "MAH_A_1"},
     {BTL_POSE_DAMAGE, "MAH_D_1"},
     {POSE_TYPE_WALK, "MAH_W_1"},
     {POSE_TYPE_RUN, "MAH_R_1"},
@@ -542,8 +544,8 @@ static PoseTableEntry pose_table[] = {
  * (btldefaultevt_Dummy).
  */
 static BattleDataEntry data_table[] = {
-    {46, avoid_miss_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -552,8 +554,8 @@ static BattleDataEntry data_table[] = {
  * nothing (btldefaultevt_Dummy).
  */
 static BattleDataEntry data_table_bunsin[] = {
-    {46, avoid_miss_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
@@ -595,7 +597,7 @@ static EVT_BEGIN(alpha_down_event)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 254)
     CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
-    CALL(evt_sub_intpl_init, 0, 255, 0, 30)
+    CALL(evt_sub_intpl_init, EASING_LINEAR, 255, 0, 30)
     LOOP(30)
         CALL(evt_sub_intpl_get_value_para, LW(1), LW(2))
         CALL(btlevtcmd_SetAlpha, LW(0), 1, LW(1))
@@ -632,7 +634,7 @@ static EVT_BEGIN(alpha_up_event)
     CALL(btlevtcmd_SetAlpha, LW(0), 1, 0)
     CALL(btlevtcmd_AnimeFlagOnOff, LW(0), 1, PART_ANIM_CHANGED, 1)
     WAIT_FRAMES(1)
-    CALL(evt_sub_intpl_init, 0, 0, 254, 30)
+    CALL(evt_sub_intpl_init, EASING_LINEAR, 0, 254, 30)
     LOOP(30)
         CALL(evt_sub_intpl_get_value_para, LW(1), LW(2))
         CALL(btlevtcmd_SetAlpha, LW(0), 1, LW(1))
@@ -718,9 +720,9 @@ static EVT_BEGIN(attack_punch_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -796,14 +798,14 @@ static EVT_BEGIN(attack_punch_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -842,13 +844,13 @@ EVT_END()
  */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
     END_IF
     IF_INT_EQUAL(LW(5), 6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
     END_IF
     IF_INT_EQUAL(LW(5), 2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_IF
     RETURN
 EVT_END()
@@ -867,7 +869,7 @@ static EVT_BEGIN(attack_enemy_common_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
 
     // The Wizzerd and each of its clones start the spell together (the charge sound plays, the casting runs once per
@@ -997,7 +999,7 @@ static EVT_BEGIN(attack_enemy_all_common_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     SET_VALUE(LW(15), -2)
@@ -1020,14 +1022,14 @@ static EVT_BEGIN(attack_enemy_all_common_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -1281,7 +1283,7 @@ EVT_END()
  * creating a "mahorn" effect on itself and on the ally.
  */
 static EVT_BEGIN(support_friend_common_event)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1344,7 +1346,7 @@ static EVT_BEGIN(dekadeka_magic_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_FRAMES(10)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -1372,7 +1374,7 @@ static EVT_BEGIN(katikati_magic_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_FRAMES(10)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -1403,7 +1405,7 @@ static EVT_BEGIN(trans_magic_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_FRAMES(10)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -1436,7 +1438,7 @@ static EVT_BEGIN(yokeyoke_magic_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_FRAMES(10)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -1470,7 +1472,7 @@ static EVT_BEGIN(recover_magic_event)
     ADD(LW(2), 10)
     CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), 6, 0, 0, 0, 0, 0, 0, 0)
     WAIT_FRAMES(10)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
@@ -1685,7 +1687,7 @@ static USER_FUNC(mahorn_get_bunsin) {
     // indices of the wizzerd's copies
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && (unit->currentKind == 0x81 || unit->currentKind == 0xAA)) {
+        if (unit != NULL && (unit->currentKind == UNIT_DARK_WIZZERD_CLONE || unit->currentKind == UNIT_ELITE_WIZZERD_CLONE)) {
             copies[n] = i;
             n++;
         }
@@ -1729,11 +1731,11 @@ static USER_FUNC(set_hand_dest) {
     }
     hand -= 2;
     dest = (f32*)unit->work[hand];
-    if (BtlUnit_CheckStatus(unit, 10)) {
+    if (BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
         dest[0] = 1.25f * -x;
         dest[1] = 1.25f * y;
         dest[2] = 1.25f * z;
-    } else if (BtlUnit_CheckStatus(unit, 11)) {
+    } else if (BtlUnit_CheckStatus(unit, STATUS_TINY)) {
         dest[0] = 0.75f * -x;
         dest[1] = 0.75f * y;
         dest[2] = 0.75f * z;
@@ -1769,15 +1771,15 @@ static USER_FUNC(hand_ctrl) {
     if (unit == NULL) {
         return EVT_RETURN_BLOCK;
     }
-    BtlUnit_GetStatus(unit, 2, &turns, &strength);
+    BtlUnit_GetStatus(unit, STATUS_STOP, &turns, &strength);
     if (turns > 0) {
         return EVT_RETURN_DONE;
     }
-    BtlUnit_GetStatus(unit, 9, &turns, &strength);
+    BtlUnit_GetStatus(unit, STATUS_FREEZE, &turns, &strength);
     if (turns > 0) {
         return EVT_RETURN_DONE;
     }
-    BtlUnit_GetStatus(unit, 1, &turns, &strength);
+    BtlUnit_GetStatus(unit, STATUS_SLEEP, &turns, &strength);
     if (turns > 0) {
         return EVT_RETURN_DONE;
     }

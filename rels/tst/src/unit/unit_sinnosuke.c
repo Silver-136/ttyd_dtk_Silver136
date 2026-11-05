@@ -10,6 +10,7 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
+#include "battle/battle.h"
 
 BattleUnitKind unit_sinnosuke;
 static BattleUnitDefense defence;
@@ -32,7 +33,7 @@ static EvtWord wait_event[6];
  * parts and init script.
  */
 BattleUnitKind unit_sinnosuke = {
-    18,
+    UNIT_BALD_CLEFT,
     "btl_un_sinnosuke",
     2,
     0,
@@ -147,7 +148,7 @@ static BattleWeapon weapon_sinnosuke_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -170,18 +171,18 @@ static BattleWeapon weapon_sinnosuke_attack = {
  * animations.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "SIS_N_1"},
-    {2, "SIS_Y_1"},
-    {9, "SIS_Y_1"},
-    {5, "SIS_K_1"},
-    {4, "SIS_I_1"},
-    {3, "SIS_I_1"},
+    {POSE_TYPE_SLEEP, "SIS_N_1"},
+    {POSE_TYPE_STOP, "SIS_Y_1"},
+    {POSE_TYPE_FREEZE, "SIS_Y_1"},
+    {POSE_TYPE_CONFUSE, "SIS_K_1"},
+    {POSE_TYPE_POISON, "SIS_I_1"},
+    {POSE_TYPE_DIZZY, "SIS_I_1"},
     {BTL_POSE_NORMAL, "SIS_S_1"},
-    {29, "SIS_Q_1"},
-    {30, "SIS_Q_1"},
-    {31, "SIS_A_1a"},
+    {POSE_TYPE_DAMAGE_FIRE, "SIS_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "SIS_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SIS_A_1a"},
     {BTL_POSE_DAMAGE, "SIS_D_1"},
-    {50, "SIS_A_1a"},
+    {POSE_TYPE_ATTACK, "SIS_A_1a"},
     {POSE_TYPE_WALK, "SIS_W_1"},
     {POSE_TYPE_RUN, "SIS_R_1"},
     {POSE_TYPE_DANGER, "SIS_I_1"},
@@ -195,16 +196,16 @@ static PoseTableEntry pose_table[] = {
  * maps each battle pose (waiting, hurt, running...) to one of its SIS_* animations.
  */
 static PoseTableEntry pose_table_turn[] = {
-    {1, "SIS_N_2"},
-    {2, "SIS_Y_2"},
-    {9, "SIS_Y_2"},
-    {5, "SIS_K_2"},
-    {4, "SIS_K_2"},
-    {3, "SIS_K_2"},
+    {POSE_TYPE_SLEEP, "SIS_N_2"},
+    {POSE_TYPE_STOP, "SIS_Y_2"},
+    {POSE_TYPE_FREEZE, "SIS_Y_2"},
+    {POSE_TYPE_CONFUSE, "SIS_K_2"},
+    {POSE_TYPE_POISON, "SIS_K_2"},
+    {POSE_TYPE_DIZZY, "SIS_K_2"},
     {BTL_POSE_NORMAL, "SIS_D_2"},
-    {29, "SIS_D_2"},
-    {30, "SIS_D_2"},
-    {31, "SIS_D_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "SIS_D_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "SIS_D_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SIS_D_2"},
     {BTL_POSE_DAMAGE, "SIS_D_2"},
     {POSE_TYPE_DANGER, "SIS_K_2"},
     {POSE_TYPE_PERIL, "SIS_K_2"},
@@ -217,8 +218,8 @@ static PoseTableEntry pose_table_turn[] = {
  * a First Strike on it triggers nothing special.
  */
 static BattleDataEntry data_table[] = {
-    {13, dmg_turn_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -355,12 +356,12 @@ static EVT_BEGIN(attack_event)
     END_IF
 
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
 
         // The camera frames the Bald Cleft and its target.
-        CALL(evt_btl_camera_set_mode, 0, 8)
+        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
@@ -386,7 +387,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -399,11 +400,11 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, -1, 1)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         LOOP(0)
@@ -416,11 +417,11 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_EMON_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
 
     // It rears back and revs up, shaking, for about three quarters of a second.
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(750)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_EMON_DASH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -431,20 +432,20 @@ static EVT_BEGIN(attack_event)
     DELETE_EVENT(LW(15))
 
     // Check whether the attack will connect; some misses send the target into its dodge.
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinnosuke_attack), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinnosuke_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -468,7 +469,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_sinnosuke_attack))
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinnosuke_attack), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinnosuke_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(1.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 75)
@@ -481,7 +482,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_EMON_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

@@ -12,6 +12,8 @@
 #include "battle/battle_sub.h"
 #include "evt/evt_sub.h"
 #include "battle/battle_damage.h"
+#include "battle/battle_camera.h"
+#include "system.h"
 
 // Unit work slots of the Boomerang Bro (btlevtcmd_SetUnitWork / GetUnitWork / AddUnitWork).
 enum {
@@ -48,7 +50,7 @@ static EvtWord wait_event[6];
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_boomerang_bros = {
-    57,
+    UNIT_BOOMERANG_BRO,
     "btl_un_boomerang_bros",
     7,
     0,
@@ -147,17 +149,17 @@ static StatusVulnerability regist = {80, 80, 70, 100, 80, 100, 100, 70, 100, 80,
  * animation names, 18 entries such as BRO_N_1, BRO_Y_1, BRO_K_1, BRO_X_1.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "BRO_N_1"},
-    {2, "BRO_Y_1"},
-    {9, "BRO_Y_1"},
-    {5, "BRO_K_1"},
-    {4, "BRO_X_1"},
-    {3, "BRO_X_1"},
-    {27, "BRO_D_1"},
+    {POSE_TYPE_SLEEP, "BRO_N_1"},
+    {POSE_TYPE_STOP, "BRO_Y_1"},
+    {POSE_TYPE_FREEZE, "BRO_Y_1"},
+    {POSE_TYPE_CONFUSE, "BRO_K_1"},
+    {POSE_TYPE_POISON, "BRO_X_1"},
+    {POSE_TYPE_DIZZY, "BRO_X_1"},
+    {POSE_TYPE_KO, "BRO_D_1"},
     {BTL_POSE_NORMAL, "BRO_S_1"},
-    {29, "BRO_Q_1"},
-    {30, "BRO_Q_1"},
-    {31, "BRO_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "BRO_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "BRO_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "BRO_S_1"},
     {BTL_POSE_DAMAGE, "BRO_D_1"},
     {POSE_TYPE_RUN, "BRO_R_1"},
     {POSE_TYPE_WALK, "BRO_W_1"},
@@ -205,7 +207,7 @@ BattleWeapon weapon_boomerang_bros_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -242,7 +244,7 @@ BattleWeapon weapon_boomerang_bros_renzoku_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_MULTIPLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -332,14 +334,14 @@ static EVT_BEGIN(damage_check_sub)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -515,10 +517,10 @@ EVT_BEGIN(boomerang_move_event)
 
     // The boomerang's flight sounds play while it curves out and back.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK2"), EVT_NULLPTR, 0, LW(8))
-    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), -200, LW(1), LW(2), 40, FLOAT(-20.0f), 4, 0, -1)
+    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), -200, LW(1), LW(2), 40, FLOAT(-20.0f), EASING_QUADRATIC_OUT, 0, -1)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK3"), EVT_NULLPTR, 0, LW(8))
-    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2), 40, FLOAT(20.0f), 1, 0, -1)
+    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2), 40, FLOAT(20.0f), EASING_QUADRATIC_IN, 0, -1)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_NO_SHADOW)
@@ -557,7 +559,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL_CHILD(normal_attack_event_confuse)
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -621,7 +623,7 @@ static EVT_BEGIN(renzoku_attack_event)
         CALL_CHILD(normal_attack_event_confuse)
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_renzoku_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -676,7 +678,7 @@ EVT_END()
 EVT_BEGIN(normal_attack_event_confuse)
 
     // The confused Bro turns toward his own side and winds up for a throw.
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -705,14 +707,14 @@ EVT_BEGIN(normal_attack_event_confuse)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK2"), EVT_NULLPTR, 0, LW(8))
-    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), 250, 40, 0, 15, FLOAT(-20.0f), 4, 0, -1)
+    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), 250, 40, 0, 15, FLOAT(-20.0f), EASING_QUADRATIC_OUT, 0, -1)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
-    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), -30, 40, 0, 15, FLOAT(20.0f), 1, 0, -1)
+    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), -30, 40, 0, 15, FLOAT(20.0f), EASING_QUADRATIC_IN, 0, -1)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK3"), EVT_NULLPTR, 0, LW(8))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
-    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2), 15, FLOAT(-10.0f), 1, 0, -1)
+    CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2), 15, FLOAT(-10.0f), EASING_QUADRATIC_IN, 0, -1)
     CALL(evt_snd_sfxoff, LW(8))
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_NO_SHADOW)
@@ -726,14 +728,14 @@ EVT_BEGIN(normal_attack_event_confuse)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -772,7 +774,7 @@ EVT_BEGIN(normal_attack_event_confuse)
 
     // The Bro pauses to watch the result before the camera resets.
     WAIT_FRAMES(100)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
 
@@ -785,7 +787,7 @@ EVT_END()
 EVT_BEGIN(renzoku_attack_event_confuse)
 
     // The confused Bro turns toward his own side and winds up for a throw.
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_boomerang_bros_renzoku_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -815,14 +817,14 @@ EVT_BEGIN(renzoku_attack_event_confuse)
             END_LOOP
         END_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK2"), EVT_NULLPTR, 0, LW(8))
-        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), 250, 40, 0, 15, FLOAT(-20.0f), 4, 0, -1)
+        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), 250, 40, 0, 15, FLOAT(-20.0f), EASING_QUADRATIC_OUT, 0, -1)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
-        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), -30, 40, 0, 15, FLOAT(20.0f), 1, 0, -1)
+        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), -30, 40, 0, 15, FLOAT(20.0f), EASING_QUADRATIC_IN, 0, -1)
         CALL(evt_snd_sfxoff, LW(8))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BOOME_ATTACK3"), EVT_NULLPTR, 0, LW(8))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(1), 20)
-        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2), 15, FLOAT(-10.0f), 1, 0, -1)
+        CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, LW(15), LW(0), LW(1), LW(2), 15, FLOAT(-10.0f), EASING_QUADRATIC_IN, 0, -1)
         CALL(evt_snd_sfxoff, LW(8))
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_HIDDEN)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, LW(15), PART_ATTR_NO_SHADOW)
@@ -837,14 +839,14 @@ EVT_BEGIN(renzoku_attack_event_confuse)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -885,7 +887,7 @@ EVT_BEGIN(renzoku_attack_event_confuse)
 
     // The Bro pauses to watch the result before the camera resets.
     WAIT_FRAMES(160)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
 

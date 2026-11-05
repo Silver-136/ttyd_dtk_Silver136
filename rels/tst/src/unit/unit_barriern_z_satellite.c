@@ -38,7 +38,7 @@ static EvtWord wait_event[56];
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_barriern_z_satellite = {
-    116,
+    UNIT_MINI_Z_YUX,
     "btl_un_barriern_satellite_z",
     2,
     0,
@@ -100,7 +100,7 @@ BattleUnitKind unit_barriern_z_satellite = {
     "SFX_BTL_DAMAGE_FIRE1",
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
-    0x4,
+    kFloating,
     &regist,
     6,
     parts,
@@ -122,12 +122,12 @@ static BattleUnitDefenseAttr defence_attr = {{DEFENSE_ATTR_NONE, DEFENSE_ATTR_NO
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x600009, 0, pose_table},
-    {2, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {3, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {4, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {5, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
-    {6, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13010000, 0, pose_table},
+    {1, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
+    {2, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {3, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {4, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {5, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {6, "btl_un_barriern_satellite_z", "c_baria_z", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
 #if VERSION <= VERSION_DEMO_JP
@@ -155,22 +155,22 @@ static StatusVulnerability regist = {70, 90, 95, 0, 80, 100, 100, 0, 100, 85, 10
  * animation names, 17 entries such as N_2, Y_2, K_2, X_2.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "N_2"},
-    {2, "Y_2"},
-    {9, "Y_2"},
-    {5, "K_2"},
-    {4, "X_2"},
-    {3, "X_2"},
-    {28, "S_2"},
-    {29, "Q_2"},
-    {30, "Q_2"},
-    {31, "S_2"},
-    {39, "D_2"},
-    {42, "R_2"},
-    {41, "R_2"},
-    {40, "W_2"},
-    {56, "X_2"},
-    {57, "X_2"},
+    {POSE_TYPE_SLEEP, "N_2"},
+    {POSE_TYPE_STOP, "Y_2"},
+    {POSE_TYPE_FREEZE, "Y_2"},
+    {POSE_TYPE_CONFUSE, "K_2"},
+    {POSE_TYPE_POISON, "X_2"},
+    {POSE_TYPE_DIZZY, "X_2"},
+    {POSE_TYPE_NORMAL, "S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "Q_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "Q_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "S_2"},
+    {POSE_TYPE_DAMAGE, "D_2"},
+    {POSE_TYPE_RUN, "R_2"},
+    {POSE_TYPE_RUN_HOME, "R_2"},
+    {POSE_TYPE_WALK, "W_2"},
+    {POSE_TYPE_DANGER, "X_2"},
+    {POSE_TYPE_PERIL, "X_2"},
     {POSE_TYPE_ACTION, "S_2"},
 };
 

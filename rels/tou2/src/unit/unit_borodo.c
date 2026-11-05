@@ -165,9 +165,9 @@ static USER_FUNC(_steal_item) {
             unit->heldItem = item;
             if (item >= 240 && item < 339) {
                 if (target->currentKind == UNIT_MARIO) {
-                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_MARIO, 0);
+                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_MARIO, ITEM_NULL);
                 } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
-                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_PARTNER, 0);
+                    BtlUnit_EquipItem(target, EQUIP_RESET | EQUIP_PARTNER, ITEM_NULL);
                 }
                 pouchReviseMarioParam();
                 pouchRevisePartyParam();

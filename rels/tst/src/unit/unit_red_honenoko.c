@@ -51,7 +51,7 @@ static EvtWord wait_event[6];
  * parts and init script.
  */
 BattleUnitKind unit_red_honenoko = {
-    22,
+    UNIT_RED_BONES,
     "btl_un_red_honenoko",
     5,
     0,
@@ -172,7 +172,7 @@ static BattleWeapon weapon_honenoko_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -196,7 +196,7 @@ static BattleWeapon weapon_honenoko_attack = {
  */
 static BattleUnitSetup entry_honenoko = {
     &unit_honenoko, // unitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position
@@ -209,23 +209,23 @@ static BattleUnitSetup entry_honenoko = {
  * Pose table of the Red Bones: maps each battle pose (waiting, hurt, running...) to one of its KRN_* animations.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "KRN_N_1"},
-    {2, "KRN_Y_1"},
-    {9, "KRN_Y_1"},
-    {5, "KRN_K_1"},
-    {4, "KRN_X_1"},
-    {3, "KRN_X_1"},
-    {27, "KRN_Z_2"},
-    {28, "KRN_S_1"},
-    {29, "KRN_Q_1"},
-    {30, "KRN_Q_1"},
-    {31, "KRN_S_1"},
-    {39, "KRN_D_1"},
-    {50, "KRN_A_1"},
-    {42, "KRN_R_1"},
-    {40, "KRN_W_1"},
-    {56, "KRN_X_1"},
-    {57, "KRN_X_1"},
+    {POSE_TYPE_SLEEP, "KRN_N_1"},
+    {POSE_TYPE_STOP, "KRN_Y_1"},
+    {POSE_TYPE_FREEZE, "KRN_Y_1"},
+    {POSE_TYPE_CONFUSE, "KRN_K_1"},
+    {POSE_TYPE_POISON, "KRN_X_1"},
+    {POSE_TYPE_DIZZY, "KRN_X_1"},
+    {POSE_TYPE_KO, "KRN_Z_2"},
+    {POSE_TYPE_NORMAL, "KRN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KRN_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KRN_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KRN_S_1"},
+    {POSE_TYPE_DAMAGE, "KRN_D_1"},
+    {POSE_TYPE_ATTACK, "KRN_A_1"},
+    {POSE_TYPE_RUN, "KRN_R_1"},
+    {POSE_TYPE_WALK, "KRN_W_1"},
+    {POSE_TYPE_DANGER, "KRN_X_1"},
+    {POSE_TYPE_PERIL, "KRN_X_1"},
     {POSE_TYPE_TALK, "KRN_T_1"},
     {POSE_TYPE_ACTION, "KRN_S_1"},
 };
@@ -235,9 +235,9 @@ static PoseTableEntry pose_table[] = {
  * a First Strike on it triggers nothing special.
  */
 static BattleDataEntry data_table[] = {
-    {49, dead_event},
-    {15, fake_dead_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DEAD_EVENT, dead_event},
+    {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -402,7 +402,7 @@ EVT_END()
  * a bone throw (60) or calling a Dull Bones (40) if there is room beside it.
  */
 static EVT_BEGIN(attack_event)
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(normal_attack_event)
         GOTO(99)
@@ -476,13 +476,13 @@ EVT_END()
  */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
     END_IF
     IF_INT_EQUAL(LW(5), 6)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
     END_IF
     IF_INT_EQUAL(LW(5), 2)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_IF
     RETURN
 EVT_END()
@@ -496,7 +496,7 @@ EVT_END()
 static EVT_BEGIN(normal_attack_event)
 
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -519,7 +519,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_honenoko_attack))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
 
@@ -600,7 +600,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(9))
     MULTIPLY(LW(0), LW(9))
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(6.0f), FLOAT(0.049804688f))
-    CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, 0)
+    CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
 
@@ -611,20 +611,20 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(6.0f), FLOAT(0.19921875f))
-    CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, 0)
+    CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), -50)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(2.0f), FLOAT(0.2998047f))
-    CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, 0)
+    CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
 
     // Either way the bone is hidden again.
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_HIDDEN)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, PART_ATTR_NO_SHADOW)
@@ -647,7 +647,7 @@ EVT_END()
 static EVT_BEGIN(call_friend_event)
 
     // The camera zooms in on the Red Bones.
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -693,7 +693,7 @@ static EVT_BEGIN(call_friend_event)
             END_LOOP
         END_SIBLING_EVENT
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 3, 0, FLOAT(6.0f), FLOAT(1.0f))
-        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2), 20, 0)
+        CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2), 20, MOVE_SOUND_NONE)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 3, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 4, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -732,7 +732,7 @@ static EVT_BEGIN(call_friend_event)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
     CALL(honenoko_copy_status, UNIT_ID_SELF, LW(3))
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     RETURN
 EVT_END()
 

@@ -25,6 +25,7 @@
 #include "evt/evt_npc.h"
 #include "libc_decls.h"
 #include "battle/battle_damage.h"
+#include "battle/battle_camera.h"
 
 // Unit work slots (btlevtcmd_SetUnitWork / GetUnitWork)
 enum {
@@ -87,7 +88,7 @@ BattleUnit* chorogun_get_ptr(void) {
 
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->initialKind == 0x15) {
+        if (unit != NULL && unit->initialKind == UNIT_FUZZY_HORDE) {
             return unit;
         }
     }
@@ -99,7 +100,7 @@ BattleUnit* chorogun_get_ptr(void) {
  * size, offsets, sounds, status vulnerability, parts, init script and event table.
  */
 BattleUnitKind unit_chorobon_gundan = {
-    21,
+    UNIT_FUZZY_HORDE,
     "btl_un_chorobon_gundan",
     20,
     0,
@@ -185,18 +186,18 @@ static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
  * animation names, 15 entries such as CBN_N_1, CBN_Y_1, CBN_K_1, CBN_X_1.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "CBN_N_1"},
-    {2, "CBN_Y_1"},
-    {9, "CBN_Y_1"},
-    {5, "CBN_K_1"},
-    {4, "CBN_X_1"},
-    {3, "CBN_X_1"},
+    {POSE_TYPE_SLEEP, "CBN_N_1"},
+    {POSE_TYPE_STOP, "CBN_Y_1"},
+    {POSE_TYPE_FREEZE, "CBN_Y_1"},
+    {POSE_TYPE_CONFUSE, "CBN_K_1"},
+    {POSE_TYPE_POISON, "CBN_X_1"},
+    {POSE_TYPE_DIZZY, "CBN_X_1"},
     {BTL_POSE_NORMAL, "CBN_S_1"},
-    {29, "CBN_Q_1"},
-    {30, "CBN_Q_1"},
-    {31, "CBN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "CBN_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "CBN_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "CBN_S_1"},
     {BTL_POSE_DAMAGE, "CBN_D_1"},
-    {50, "CBN_A_1"},
+    {POSE_TYPE_ATTACK, "CBN_A_1"},
     {POSE_TYPE_RUN, "CBN_R_1"},
     {POSE_TYPE_WALK, "CBN_W_1"},
     {POSE_TYPE_ACTION, "CBN_S_1"},
@@ -207,7 +208,7 @@ static PoseTableEntry pose_table[] = {
  * tag 0 ends it.
  */
 static BattleDataEntry data_table[] = {
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -238,7 +239,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_NO_FLOATING2 | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -371,7 +372,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_chorobon_gundan_attack))
-    CALL(evt_btl_camera_set_mode, 0, 7)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, LW(3), -1)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(chorogun_set_target_id, LW(3))
@@ -384,14 +385,14 @@ static EVT_BEGIN(attack_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -439,7 +440,7 @@ static EVT_BEGIN(attack_event)
 
     // The swarm flies back home and the camera resets.
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(chorogun_after_attack)
     WAIT_MS(1000)
     LABEL(99)
@@ -505,7 +506,7 @@ void chorogun_ext_init(void) {
 
     chorogun = BattleAlloc(sizeof(Chorogun) * 1000);
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
-        pose->flags = 1;
+        pose->flags = EXT_POSE_FLAG_VISIBLE;
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
         (*pose->mtx)[1][3] = -1000.0f;
@@ -639,8 +640,8 @@ void chorogun_ext_main(void) {
                 c->state = 21;
                 break;
             case 21:
-                d = unit->position.x - unit->homePosition.x + intplGetValue(0, c->pos.x, unit->homePosition.x, n, 1000);
-                tz = unit->position.z - unit->homePosition.z + intplGetValue(0, c->pos.z, unit->homePosition.z, n, 1000);
+                d = unit->position.x - unit->homePosition.x + intplGetValue(EASING_LINEAR, c->pos.x, unit->homePosition.x, n, 1000);
+                tz = unit->position.z - unit->homePosition.z + intplGetValue(EASING_LINEAR, c->pos.z, unit->homePosition.z, n, 1000);
                 if ((*pose->mtx)[1][3] <= unit->position.y) {
                     dx2 = d - (*pose->mtx)[0][3];
                     dz2 = tz - (*pose->mtx)[2][3];

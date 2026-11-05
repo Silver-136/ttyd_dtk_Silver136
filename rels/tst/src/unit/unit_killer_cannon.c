@@ -11,6 +11,7 @@
 #include "battle/battle_camera.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_sub.h"
+#include "battle/battle_status_effect.h"
 
 static USER_FUNC(killer_get_angle);
 static USER_FUNC(killer_copy_status);
@@ -53,7 +54,7 @@ static USER_FUNC(killer_copy_status) {
  * Unit definition of the Bill Blaster: 5 HP, level 22, 3 parts, with its sounds, init script and data table.
  */
 BattleUnitKind unit_killer_cannon = {
-    90,
+    UNIT_BILL_BLASTER,
     "btl_un_killer_cannon",
     5,
     0,
@@ -146,9 +147,9 @@ static StatusVulnerability regist = {0, 0, 0, 0, 0, 150, 100, 100, 100, 90, 100,
  * pose table.
  */
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, 0x9, 0, pose_table},
-    {2, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, 0x10000, 0, pose_table},
-    {3, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, 0x10000, 0, pose_table},
+    {1, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {2, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
+    {3, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
 };
 
 /**
@@ -157,7 +158,7 @@ static BattleUnitKindPart parts[] = {
  */
 static BattleUnitSetup entry_killer = {
     &unit_killer, // unitKindParams
-    1, // alliance
+    ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
     {-1000.0f, -1000.0f, -1000.0f}, // position
@@ -171,20 +172,20 @@ static BattleUnitSetup entry_killer = {
  * plays; the idle animation is `KTA_S_1`.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "KTA_N_1"},
-    {2, "KTA_Y_1"},
-    {9, "KTA_Y_1"},
-    {5, "KTA_K_1"},
-    {4, "KTA_X_1"},
-    {3, "KTA_X_1"},
-    {28, "KTA_S_1"},
-    {29, "KTA_Q_1"},
-    {30, "KTA_Q_1"},
-    {31, "KTA_A_1"},
-    {39, "KTA_D_1"},
-    {56, "KTA_X_1"},
-    {57, "KTA_X_1"},
-    {50, "KTA_A_1"},
+    {POSE_TYPE_SLEEP, "KTA_N_1"},
+    {POSE_TYPE_STOP, "KTA_Y_1"},
+    {POSE_TYPE_FREEZE, "KTA_Y_1"},
+    {POSE_TYPE_CONFUSE, "KTA_K_1"},
+    {POSE_TYPE_POISON, "KTA_X_1"},
+    {POSE_TYPE_DIZZY, "KTA_X_1"},
+    {POSE_TYPE_NORMAL, "KTA_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "KTA_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "KTA_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "KTA_A_1"},
+    {POSE_TYPE_DAMAGE, "KTA_D_1"},
+    {POSE_TYPE_DANGER, "KTA_X_1"},
+    {POSE_TYPE_PERIL, "KTA_X_1"},
+    {POSE_TYPE_ATTACK, "KTA_A_1"},
     {POSE_TYPE_TALK, "KTA_T_1"},
     {POSE_TYPE_ACTION, "KTA_S_1"},
 };
@@ -554,7 +555,7 @@ static EVT_BEGIN(friend_event)
     CALL(btlevtcmd_JumpPosition, LW(3), LW(0), 10, LW(2), FLOAT(7.0f), -1)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), 10, LW(2))
     IF_INT_EQUAL(LW(12), 1)
-        CALL(btlevtcmd_OnOffStatus, LW(3), 16, 1, 1, 1)
+        CALL(btlevtcmd_OnOffStatus, LW(3), STATUS_CHARGE, 1, 1, 1)
     END_IF
     RETURN
 EVT_END()
@@ -633,7 +634,7 @@ static EVT_BEGIN(friend_event_sky)
     CALL(btlevtcmd_SetPartsRotate, LW(3), LW(4), 0, 0, 0)
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), 40, LW(2))
     IF_INT_EQUAL(LW(12), 1)
-        CALL(btlevtcmd_OnOffStatus, LW(3), 16, 1, 1, 1)
+        CALL(btlevtcmd_OnOffStatus, LW(3), STATUS_CHARGE, 1, 1, 1)
     END_IF
     CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET)
     CALL(btlevtcmd_OnPartsAttribute, LW(3), LW(4), PART_ATTR_HAMMERLIKE_CANNOT_TARGET)

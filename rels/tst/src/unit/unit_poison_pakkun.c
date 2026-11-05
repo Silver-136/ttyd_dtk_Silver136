@@ -57,7 +57,7 @@ static EvtWord wait_event[6];
  * parts and init script.
  */
 BattleUnitKind unit_poison_pakkun = {
-    88,
+    UNIT_PUTRID_PIRANHA,
     "btl_un_poison_pakkun",
     8,
     0,
@@ -173,7 +173,7 @@ BattleWeapon weapon_poison_pakkun_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -217,7 +217,7 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_JUMPLIKE | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -307,7 +307,7 @@ static EVT_BEGIN(breath_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_poison_pakkun_breath_attack))
 
     // The breath is declared against every target.
@@ -333,10 +333,10 @@ static EVT_BEGIN(breath_event)
 
     // It resurfaces at x = -40, facing its targets.
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, -40, 0, LW(2))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
@@ -367,7 +367,7 @@ static EVT_BEGIN(breath_event)
     WAIT_MS(300)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_3B"))
     WAIT_MS(300)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetEnemyBelong, LW(3), LW(10))
         IF_INT_EQUAL(LW(10), 0)
@@ -395,14 +395,14 @@ static EVT_BEGIN(breath_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -449,18 +449,18 @@ EVT_END()
  * animations.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "PKF_N_1"},
-    {2, "PKF_Y_1"},
-    {9, "PKF_Y_1"},
-    {5, "PKF_K_1"},
-    {4, "PKF_X_1"},
-    {3, "PKF_X_1"},
+    {POSE_TYPE_SLEEP, "PKF_N_1"},
+    {POSE_TYPE_STOP, "PKF_Y_1"},
+    {POSE_TYPE_FREEZE, "PKF_Y_1"},
+    {POSE_TYPE_CONFUSE, "PKF_K_1"},
+    {POSE_TYPE_POISON, "PKF_X_1"},
+    {POSE_TYPE_DIZZY, "PKF_X_1"},
     {BTL_POSE_NORMAL, "PKF_S_1"},
-    {29, "PKF_Q_1"},
-    {30, "PKF_Q_1"},
-    {31, "PKF_S_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "PKF_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PKF_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PKF_S_2"},
     {BTL_POSE_DAMAGE, "PKF_D_1"},
-    {50, "PKF_A_1B"},
+    {POSE_TYPE_ATTACK, "PKF_A_1B"},
     {POSE_TYPE_WALK, "PKF_S_1"},
     {POSE_TYPE_RUN, "PKF_S_1"},
     {POSE_TYPE_DANGER, "PKF_X_1"},
@@ -474,18 +474,18 @@ static PoseTableEntry pose_table[] = {
  * maps each battle pose (waiting, hurt, running...) to one of its PKF_* animations.
  */
 static PoseTableEntry pose_table_ceil[] = {
-    {1, "PKF_N_2"},
-    {2, "PKF_Y_2"},
-    {9, "PKF_Y_2"},
-    {5, "PKF_K_2"},
-    {4, "PKF_X_2"},
-    {3, "PKF_X_2"},
+    {POSE_TYPE_SLEEP, "PKF_N_2"},
+    {POSE_TYPE_STOP, "PKF_Y_2"},
+    {POSE_TYPE_FREEZE, "PKF_Y_2"},
+    {POSE_TYPE_CONFUSE, "PKF_K_2"},
+    {POSE_TYPE_POISON, "PKF_X_2"},
+    {POSE_TYPE_DIZZY, "PKF_X_2"},
     {BTL_POSE_NORMAL, "PKF_S_3"},
-    {29, "PKF_Q_2"},
-    {30, "PKF_Q_2"},
-    {31, "PKF_S_4"},
+    {POSE_TYPE_DAMAGE_FIRE, "PKF_Q_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "PKF_Q_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "PKF_S_4"},
     {BTL_POSE_DAMAGE, "PKF_D_2"},
-    {50, "PKF_A_5"},
+    {POSE_TYPE_ATTACK, "PKF_A_5"},
     {POSE_TYPE_WALK, "PKF_S_3"},
     {POSE_TYPE_RUN, "PKF_S_3"},
     {POSE_TYPE_DANGER, "PKF_X_2"},
@@ -499,20 +499,20 @@ static PoseTableEntry pose_table_ceil[] = {
  * and taking counter damage; a First Strike on it triggers nothing special.
  */
 static BattleDataEntry data_table[] = {
-    {37, dmg_avoid_counter_thorn_head_event},
-    {26, counter_damage_event},
-    {25, counter_damage_event},
-    {27, counter_damage_event},
-    {28, counter_damage_event},
-    {29, counter_damage_event},
-    {30, counter_damage_event},
-    {31, counter_damage_event},
-    {32, counter_damage_event},
-    {33, counter_damage_event},
-    {34, counter_damage_event},
-    {35, counter_damage_event},
-    {36, counter_damage_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
+    {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_FIERY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ICY_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIC_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_EXPLOSIVE_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_VOLATILE_EXPLOSIVE_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_POISON_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_ELECTRIFIED_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_PAYBACK_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_HOLD_FAST_EVENT, counter_damage_event},
+    {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, counter_damage_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
@@ -538,7 +538,7 @@ EVT_END()
  * "toge_flush" spike effect above its head, 50 units up (63 when Huge, 37 when Tiny).
  */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 31)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_GUARDED)
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_1"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -645,7 +645,7 @@ EVT_END()
  * the ceiling pose table) with ceil_fall_ready_event as its ceiling-fall script.
  */
 static EVT_BEGIN(return_event)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(pakkun_ceil_exist, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_sub_random, 1, LW(15))
@@ -768,10 +768,10 @@ static EVT_BEGIN(normal_attack_event)
 
     // It resurfaces on the ground in front of the target.
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -800,14 +800,14 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -859,7 +859,7 @@ static USER_FUNC(shadow_scale_return) {
     if (isFirstCall) {
         unit->work[1] = 0;
     }
-    part->shadowScale = intplGetValue(0, 0.0f, unit->work[0], unit->work[1], 15);
+    part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, unit->work[0], unit->work[1], 15);
     if (unit->work[1] >= 15) {
         return EVT_RETURN_DONE;
     }
@@ -879,7 +879,7 @@ static USER_FUNC(shadow_scale_small) {
     if (isFirstCall) {
         unit->work[1] = 0;
     }
-    part->shadowScale = intplGetValue(0, unit->work[0], 0.0f, unit->work[1], 15);
+    part->shadowScale = intplGetValue(EASING_LINEAR, unit->work[0], 0.0f, unit->work[1], 15);
     if (unit->work[1] >= 15) {
         return EVT_RETURN_DONE;
     }

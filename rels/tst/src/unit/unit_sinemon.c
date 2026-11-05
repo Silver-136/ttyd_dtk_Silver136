@@ -11,6 +11,7 @@
 #include "battle/battle_sub.h"
 #include "evt/evt_eff.h"
 #include "battle/battle_damage.h"
+#include "battle/battle.h"
 
 BattleUnitKind unit_sinemon;
 static BattleUnitDefense defence;
@@ -33,7 +34,7 @@ static EvtWord wait_event[6];
  * Unit definition of the Moon Cleft: its HP, level, sizes, sounds, status vulnerability, parts and init script.
  */
 BattleUnitKind unit_sinemon = {
-    114, // unitType
+    UNIT_MOON_CLEFT, // unitType
     "btl_un_sinemon", // name
     6, // maxHp
     0, // maxFp
@@ -144,7 +145,7 @@ static BattleWeapon weapon_sinemon_attack = {
     {0}, // fpDamageWork
     TARGET_CLASS_NO_TREE_OR_SWITCH | TARGET_CLASS_NO_SYSTEM_UNIT | TARGET_CLASS_NO_OWN_SIDE | TARGET_CLASS_NO_SELF | TARGET_CLASS_ONLY_MAIN_PARTS | TARGET_CLASS_SINGLE, // targetClassFlags
     TARGET_PROP_HAMMERLIKE | TARGET_PROP_ONLY_FRONTMOST | TARGET_PROP_OPPOSITE_SIDE_FIRST, // targetPropertyFlags
-    ELEMENT_NORMAL, 0, // element..damagePattern
+    ELEMENT_NORMAL, ATTACKPATTERN_NULL, // element..damagePattern
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
@@ -167,22 +168,22 @@ static BattleWeapon weapon_sinemon_attack = {
  * animations.
  */
 static PoseTableEntry pose_table[] = {
-    {1, "SIN_N_1"},
-    {2, "SIN_Y_1"},
-    {9, "SIN_Y_1"},
-    {5, "SIN_K_1"},
-    {4, "SIN_I_1"},
-    {3, "SIN_I_1"},
-    {28, "SIN_S_1"},
-    {29, "SIN_Q_1"},
-    {30, "SIN_Q_1"},
-    {31, "SIN_A_1a"},
-    {39, "SIN_D_1"},
-    {50, "SIN_A_1a"},
-    {40, "SIN_W_1"},
-    {42, "SIN_R_1"},
-    {56, "SIN_I_1"},
-    {57, "SIN_I_1"},
+    {POSE_TYPE_SLEEP, "SIN_N_1"},
+    {POSE_TYPE_STOP, "SIN_Y_1"},
+    {POSE_TYPE_FREEZE, "SIN_Y_1"},
+    {POSE_TYPE_CONFUSE, "SIN_K_1"},
+    {POSE_TYPE_POISON, "SIN_I_1"},
+    {POSE_TYPE_DIZZY, "SIN_I_1"},
+    {POSE_TYPE_NORMAL, "SIN_S_1"},
+    {POSE_TYPE_DAMAGE_FIRE, "SIN_Q_1"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "SIN_Q_1"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SIN_A_1a"},
+    {POSE_TYPE_DAMAGE, "SIN_D_1"},
+    {POSE_TYPE_ATTACK, "SIN_A_1a"},
+    {POSE_TYPE_WALK, "SIN_W_1"},
+    {POSE_TYPE_RUN, "SIN_R_1"},
+    {POSE_TYPE_DANGER, "SIN_I_1"},
+    {POSE_TYPE_PERIL, "SIN_I_1"},
     {POSE_TYPE_TALK, "SIN_T_1"},
     {POSE_TYPE_ACTION, "SIN_S_1"},
 };
@@ -192,19 +193,19 @@ static PoseTableEntry pose_table[] = {
  * maps each battle pose (waiting, hurt, talking...) to one of its SIN_* animations.
  */
 static PoseTableEntry pose_table_turn[] = {
-    {1, "SIN_N_2"},
-    {2, "SIN_Y_2"},
-    {9, "SIN_Y_2"},
-    {5, "SIN_K_2"},
-    {4, "SIN_K_2"},
-    {3, "SIN_K_2"},
-    {28, "SIN_D_2"},
-    {29, "SIN_D_2"},
-    {30, "SIN_D_2"},
-    {31, "SIN_D_2"},
-    {39, "SIN_D_2"},
-    {56, "SIN_K_2"},
-    {57, "SIN_K_2"},
+    {POSE_TYPE_SLEEP, "SIN_N_2"},
+    {POSE_TYPE_STOP, "SIN_Y_2"},
+    {POSE_TYPE_FREEZE, "SIN_Y_2"},
+    {POSE_TYPE_CONFUSE, "SIN_K_2"},
+    {POSE_TYPE_POISON, "SIN_K_2"},
+    {POSE_TYPE_DIZZY, "SIN_K_2"},
+    {POSE_TYPE_NORMAL, "SIN_D_2"},
+    {POSE_TYPE_DAMAGE_FIRE, "SIN_D_2"},
+    {POSE_TYPE_DAMAGE_FIRE_2_UNUSED, "SIN_D_2"},
+    {POSE_TYPE_DAMAGE_GUARDED, "SIN_D_2"},
+    {POSE_TYPE_DAMAGE, "SIN_D_2"},
+    {POSE_TYPE_DANGER, "SIN_K_2"},
+    {POSE_TYPE_PERIL, "SIN_K_2"},
     {POSE_TYPE_TALK, "SIN_D_2"},
     {POSE_TYPE_ACTION, "SIN_D_2"},
 };
@@ -214,9 +215,9 @@ static PoseTableEntry pose_table_turn[] = {
  * a First Strike on it triggers nothing special.
  */
 static BattleDataEntry data_table[] = {
-    {13, dmg_turn_event},
-    {37, dmg_avoid_counter_thorn_head_event},
-    {48, btldefaultevt_Dummy},
+    {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
+    {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
+    {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
@@ -362,12 +363,12 @@ static EVT_BEGIN(attack_event)
     END_IF
 
     // First-strike battle: the target is already fixed; otherwise one is picked from the opposing party.
-    CALL(btlevtcmd_check_battleflag, LW(0), 2)
+    CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
 
         // The camera frames the Moon Cleft and its target.
-        CALL(evt_btl_camera_set_mode, 0, 8)
+        CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 3)
         WAIT_MS(800)
     ELSE
@@ -392,7 +393,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
     END_IF
-    CALL(evt_btl_camera_set_mode, 0, 8)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
@@ -405,11 +406,11 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 100)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), 1, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, -1, 1)
-    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), 16, LW(15))
+    CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         LOOP(0)
@@ -422,11 +423,11 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_EMON_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
 
     // It rears back and revs up, shaking, for about three quarters of a second.
-    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, 50)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     WAIT_MS(750)
-    CALL(evt_btl_camera_set_mode, 0, 3)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_EMON_DASH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -437,20 +438,20 @@ static EVT_BEGIN(attack_event)
     DELETE_EVENT(LW(15))
 
     // Check whether the attack will connect or miss.
-    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinemon_attack), 256, LW(5))
+    CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinemon_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(PRECHECK_INTANGIBLE)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_LUCKY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 38)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
         GOTO(90)
         CASE_END
         CASE_EQUAL(PRECHECK_DODGY)
-        CALL(btlevtcmd_StartAvoid, LW(3), 39)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_DODGY)
         GOTO(90)
         CASE_EQUAL(PRECHECK_MISS)
-        CALL(btlevtcmd_StartAvoid, LW(3), 40)
+        CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         GOTO(90)
         CASE_EQUAL(PRECHECK_HIT)
         GOTO(91)
@@ -474,7 +475,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_sinemon_attack))
-    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinemon_attack), 256, LW(5))
+    CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_sinemon_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(1.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 75)
@@ -487,7 +488,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_EMON_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
     LABEL(98)
-    CALL(evt_btl_camera_set_mode, 0, 0)
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
