@@ -33,6 +33,7 @@
         }                                                   \
     } while(0);
 
+// Inserts by ascending priority; equal priorities keep their registration order (the search passes <=).
 #define ENQUEUE_INFO_PRIO(info, queue)               \
     do {                                             \
         OSResetFunctionInfo* __prev;         \
@@ -97,45 +98,47 @@ int __OSCallResetFunctions(BOOL final) {
 }
 
 #ifdef __GEKKO__
+// Branches forward through fetch1..fetch3 and back to set_hid0 first; then sets HID0_ABE, waits
+// 0x1124 timebase ticks, writes 3 and then resetCode to the PI reset register (0xCC003024) and spins.
 static asm void Reset(u32 resetCode) {
     nofralloc
-    b L_000001BC
-L_000001A0:
+    b fetch1
+set_hid0:
     mfspr r8, HID0
-    ori r8, r8, 0x8
+    ori r8, r8, HID0_ABE
     mtspr HID0, r8
     isync
     sync
     nop
-    b L_000001C0
-L_000001BC:
-    b L_000001DC
-L_000001C0:
+    b delay
+fetch1:
+    b fetch2
+delay:
     mftb r5, 268
-L_000001C4:
+delay_loop:
     mftb r6, 268
     subf r7, r5, r6
     cmplwi r7, 0x1124
-    blt L_000001C4
+    blt delay_loop
     nop
-    b L_000001E0
-L_000001DC:
-    b L_000001FC
-L_000001E0:
+    b write_reset
+fetch2:
+    b fetch3
+write_reset:
     lis r8, 0xcc00
     ori r8, r8, 0x3000
     li r4, 0x3
     stw r4, 0x24(r8)
     stw r3, 0x24(r8)
     nop
-    b L_00000200
-L_000001FC:
-    b L_00000208
-L_00000200:
+    b spin
+fetch3:
+    b fetch_done
+spin:
     nop
-    b L_00000200
-L_00000208:
-    b L_000001A0
+    b spin
+fetch_done:
+    b set_hid0
 }
 #endif
 
@@ -203,7 +206,7 @@ void OSResetSystem(BOOL reset, u32 resetCode, BOOL forceMenu) {
     }
 
     if (reset == OS_RESET_SHUTDOWN ||
-        (reset == OS_RESET_RESTART && (bootThisDol || resetCode + 0x3fff0000 == 0)))
+        (reset == OS_RESET_RESTART && (bootThisDol || resetCode == 0xC0010000)))
     {
         __OSShutdownDevices(FALSE);
     } else {
@@ -220,6 +223,7 @@ void OSResetSystem(BOOL reset, u32 resetCode, BOOL forceMenu) {
         __OSReboot(resetCode, bootThisDol);
     }
 
+    // Clear the OS words in low memory.
     memset(OSPhysicalToCached(0x40), 0, 0xcc - 0x40);
     memset(OSPhysicalToCached(0xd4), 0, 0xe8 - 0xd4);
     memset(OSPhysicalToCached(0xf4), 0, 0xf8 - 0xf4);
@@ -228,10 +232,10 @@ void OSResetSystem(BOOL reset, u32 resetCode, BOOL forceMenu) {
     memset(OSPhysicalToCached(0x30e2), 0, 1);
 }
 
-u32 OSGetResetCode() {
+u32 OSGetResetCode(void) {
     u32 resetCode;
     if (__OSRebootParams.valid) {
-        resetCode = 0x80000000 | __OSRebootParams.restartCode;
+        resetCode = OS_RESETCODE_RESTART | __OSRebootParams.restartCode;
     } else {
         resetCode = (__PIRegs[9] & 0xFFFFFFF8) / 8;
     }

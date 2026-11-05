@@ -9,6 +9,8 @@ static BOOL LastState;
 static OSTime HoldUp;
 static OSTime HoldDown;
 
+// __PIRegs[0] bit 0x10000 is clear while the reset button is down; writing 2 clears the reset-switch
+// interrupt (cause bit 0x2). The press must last 100 us before the callback runs.
 void __OSResetSWInterruptHandler(s16 exception, OSContext* context) {
     OSResetCallback callback;
 
@@ -47,6 +49,9 @@ OSResetCallback OSSetResetCallback(OSResetCallback callback) {
     return prevCallback;
 }
 
+// A press counts once held for 100 us; after a counted press is released the state stays TRUE for 40 ms.
+// When the timer in the low 5 bits of __gUnknown800030E3 (minutes, see __OSSetResetButtonTimer) has run
+// out since start-up, the state alternates every 2 seconds.
 BOOL OSGetResetButtonState(void) {
     BOOL enabled = OSDisableInterrupts();
     int state;

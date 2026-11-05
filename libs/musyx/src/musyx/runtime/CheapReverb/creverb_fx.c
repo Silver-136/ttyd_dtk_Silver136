@@ -19,8 +19,8 @@ extern bool ReverbSTDCreate(_SND_REVSTD_WORK* rv, f32 coloration, f32 time, f32 
                             f32 preDelay);
 extern void ReverbSTDFree(_SND_REVSTD_WORK* rev);
 extern void ReverbSTDCallback(s32* left, s32* right, s32* surround, _SND_REVSTD_WORK* rv);
-extern unsigned long ReverbSTDModify(_SND_REVSTD_WORK* rv, float coloration, float time, float mix,
-                                     float damping, float predelay);
+extern bool ReverbSTDModify(_SND_REVSTD_WORK* rv, float coloration, float time, float mix,
+                            float damping, float predelay);
 
 void sndAuxCallbackReverbSTD(u8 reason, SND_AUX_INFO* info, void* user) {
   switch (reason) {

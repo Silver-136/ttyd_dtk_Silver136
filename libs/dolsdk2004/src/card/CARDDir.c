@@ -17,7 +17,7 @@ static void WriteCallback(s32 chan, s32 result) {
 
     if (result >= 0) {
         CARDDir* dir0 = (CARDDir*)((u8*)card->workArea + CARD_SYSTEM_BLOCK_SIZE);
-        CARDDir* dir1 = (CARDDir*)((u8*)card->workArea + 0x4000);
+        CARDDir* dir1 = (CARDDir*)((u8*)card->workArea + 2 * CARD_SYSTEM_BLOCK_SIZE);
 
         ASSERTLINE(79, card->currentDir);
 

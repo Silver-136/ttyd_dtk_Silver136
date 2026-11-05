@@ -85,9 +85,9 @@ s32 hwInit(u32* frq, u16 numVoices, u16 numStudios, u32 flags) {
   salMessageCallback = NULL;
   if (salInitAi(snd_handle_irq, flags, frq) != 0) {
     MUSY_DEBUG("salInitAi() is done.\n\n");
-    if (salInitDspCtrl(numVoices, numStudios, (flags & 1) != 0) != 0) {
+    if (salInitDspCtrl(numVoices, numStudios, (flags & SND_FLAGS_DEFAULT_STUDIO_DPL2) != 0) != 0) {
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 1)
-      if (flags & 0x8) {
+      if (flags & SND_FLAGS_COMPRESSOR) {
         hwEnableCompressor();
       }
 #endif
@@ -262,14 +262,14 @@ void hwSetPitch(u32 v, u16 speed) {
 }
 
 void hwSetSRCType(u32 v, u8 salSRCType) {
-  static u16 dspSRCType[3] = {0, 1, 2};
+  static u16 dspSRCType[3] = {0, 1, 2}; // identity map
   struct DSPvoice* dsp_vptr = &dspVoice[v];
   dsp_vptr->srcTypeSelect = dspSRCType[salSRCType];
   dsp_vptr->changed[0] |= 0x100;
 }
 
 void hwSetPolyPhaseFilter(u32 v, u8 salCoefSel) {
-  static u16 dspCoefSel[3] = {0, 1, 2};
+  static u16 dspCoefSel[3] = {0, 1, 2}; // identity map
   DSPvoice* dsp_vptr = &dspVoice[v];
   dsp_vptr->srcCoefSelect = dspCoefSel[salCoefSel];
   dsp_vptr->changed[0] |= 0x80;
@@ -328,7 +328,6 @@ void hwSetITDMode(u32 v, u8 mode) {
   dspVoice[v].flags &= ~0x80000000;
 }
 
-#define hwGetITDMode(dsp_vptr) (dsp_vptr->flags & 0x80000000)
 
 void hwSetVolume(u32 v, u8 table, float vol, u32 pan, u32 span, float auxa, float auxb) {
   SAL_VOLINFO vi;
@@ -348,7 +347,7 @@ void hwSetVolume(u32 v, u8 table, float vol, u32 pan, u32 span, float auxa, floa
     auxb = 1.f;
   }
 
-  salCalcVolume(table, &vi, vol, pan, span, auxa, auxb, hwGetITDMode(dsp_vptr) != 0,
+  salCalcVolume(table, &vi, vol, pan, span, auxa, auxb, (dsp_vptr->flags & 0x80000000) != 0,
                 dspStudio[dsp_vptr->studio].type == SND_STUDIO_TYPE_DPL2);
 
   il = 32767.f * vi.volL;
@@ -390,7 +389,7 @@ void hwSetVolume(u32 v, u8 table, float vol, u32 pan, u32 span, float auxa, floa
     dsp_vptr->lastUpdate.volB = 0;
   }
 
-  if (hwGetITDMode(dsp_vptr)) {
+  if (dsp_vptr->flags & 0x80000000) {
     SetupITD(dsp_vptr, (pan >> 16));
   }
 }
@@ -432,6 +431,7 @@ u32 hwGetPos(u32 v) {
     return 0;
   }
 
+  // pos stays unset for a compType without a case here
   switch (dspVoice[v].smp_info.compType) {
   case 0:
   case 1:
@@ -530,8 +530,8 @@ void hwSaveSample(void* header, void* data
 #endif
 }
 
-void hwSetSaveSampleCallback(ARAMUploadCallback callback, unsigned long chunckSize) {
-  aramSetUploadCallback(callback, chunckSize);
+void hwSetSaveSampleCallback(ARAMUploadCallback callback, unsigned long chunkSize) {
+  aramSetUploadCallback(callback, chunkSize);
 }
 
 void hwRemoveSample(void* header, void* data
@@ -562,7 +562,7 @@ void hwFrameDone() {}
 #if MUSY_VERSION >= MUSY_VERSION_CHECK(2, 0, 3)
 void sndSetHooks(SND_HOOKS* hooks) {
   salHooks.malloc = hooks->malloc;
-  salHooks.mallocPhysical = hooks->malloc;
+  salHooks.mallocPhysical = hooks->malloc; // SND_HOOKS has no physical allocator: the same function
   salHooks.free = hooks->free;
 }
 #else

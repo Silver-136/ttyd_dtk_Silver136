@@ -32,7 +32,8 @@ void* OSAllocFromArenaLo(u32 size, u32 align) {
     u8* arenaLo;
 
     ptr = OSGetArenaLo();
-    arenaLo = ptr = (void*)ROUND(ptr, align);
+    ptr = (void*)ROUND(ptr, align);
+    arenaLo = ptr;
     arenaLo += size;
     arenaLo = (u8*)ROUND(arenaLo, align);
     OSSetArenaLo(arenaLo);
@@ -46,7 +47,8 @@ void* OSAllocFromArenaHi(u32 size, u32 align) {
     arenaHi = OSGetArenaHi();
     arenaHi = (u8*)TRUNC(arenaHi, align);
     arenaHi -= size;
-    arenaHi = ptr = (void*)TRUNC(arenaHi, align);
+    ptr = (void*)TRUNC(arenaHi, align);
+    arenaHi = ptr;
     OSSetArenaHi(arenaHi);
     return ptr;
 }

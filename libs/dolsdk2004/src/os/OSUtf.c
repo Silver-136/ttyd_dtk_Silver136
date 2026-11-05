@@ -67,6 +67,7 @@ char* OSUTF32to8(u32 utf32, char* utf8) {
         return NULL;
     }
 
+    // BUG: len is not set for utf32 < 0x80, but the loop below reads it.
     if (utf32 < 0x80u) {
         *utf8 = (s8)utf32;
         utf8++;
@@ -136,8 +137,8 @@ u16* OSUTF32to16(u32 utf32, u16* utf16) {
         *utf16 = utf32;
         utf16++;
     } else if (utf32 <= 0x10FFFFu) {
-        w1 = -0x122800;
-        w2 = -0x122400;
+        w1 = -0x122800; // 0xD800 after the u16 truncation (high surrogate base)
+        w2 = -0x122400; // 0xDC00 after the u16 truncation (low surrogate base)
         utf32 -= 0x10000;
         ASSERTLINE(0xD1, utf32 <= 0xFFFFF);
 
@@ -173,6 +174,8 @@ u8 OSUTF32toANSI(u32 utf32) {
         return utf32;
     }
 
+    // BUG: only 0x80-0x9F get here, so this range test is never true and the function returns 0 for
+    // them; UcsAnsiTable is never searched.
     if (utf32 >= 0x152 && utf32 <= 0x2122) {
         for (i = 0; i <= 31; i++) {
             if (utf32 == UcsAnsiTable[i]) {
@@ -192,6 +195,8 @@ u32 OSANSItoUTF32(u8 ansi) {
     return ansi;
 }
 
+// UcsXX[i]: Shift-JIS code of the UCS-2 character 0xXX00 + i (0 = none). The SjisXX tables further down
+// map Shift-JIS lead byte 0xXX the other way.
 static u16 Ucs00[256] = {
 	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
 	0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -4470,6 +4475,8 @@ static u16 UcsFF[256] = {
 	0x0000, 0x0000, 0x0000, 0x0000
 };
 
+// Every entry is NULL in this source (the UcsXX tables are not referenced), so OSUTF32toSJIS returns 0.
+// This file is not built for the game.
 static u16* UcsSjisTable[256] = {0};
 
 u16 OSUTF32toSJIS(u32 utf32) {
@@ -6327,6 +6334,7 @@ static u16 SjisEA[256] = {
 	0x0000, 0x0000, 0x0000, 0x0000
 };
 
+// Every entry is NULL in this source (the SjisXX tables are not referenced), so OSSJIStoUTF32 returns 0.
 static u16* SjisUcsTable[256] = {0};
 
 u32 OSSJIStoUTF32(u16 sjis) {

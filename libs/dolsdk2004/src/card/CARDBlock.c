@@ -20,8 +20,8 @@ static void WriteCallback(s32 chan, s32 result) {
     card = &__CARDBlock[chan];
 
     if (result >= 0) {
-        fat0 = (u16*)((u8*)card->workArea + 0x6000);
-        fat1 = (u16*)((u8*)card->workArea + 0x8000);
+        fat0 = (u16*)((u8*)card->workArea + 3 * CARD_SYSTEM_BLOCK_SIZE);
+        fat1 = (u16*)((u8*)card->workArea + 4 * CARD_SYSTEM_BLOCK_SIZE);
 
         ASSERTLINE(82, card->currentFat);
         if (card->currentFat == fat0) {

@@ -2,6 +2,7 @@
 #include <dolphin/os.h>
 #include <dolphin/gx.h>
 #include <dolphin/exi.h>
+#include <dolphin/hw_regs.h>
 
 #include "__os.h"
 
@@ -110,27 +111,27 @@ static void ConfigureVideo(u16 xfbW, u16 xfbH) {
     mode.viHeight = xfbH;
 
     switch (VIGetTvFormat()) {
-    case 2:
-    case 0:
-        if (__VIRegs[54] & 1) {
-            mode.viTVmode = 2;
+    case VI_MPAL:
+    case VI_NTSC:
+        if (__VIRegs[VI_CLOCK_SEL] & 1) {
+            mode.viTVmode = VI_TVMODE_NTSC_PROG;
             mode.viYOrigin = 0;
-            mode.xFBmode = 0;
+            mode.xFBmode = VI_XFBMODE_SF;
         } else {
-            mode.viTVmode = 0;
+            mode.viTVmode = VI_TVMODE_NTSC_INT;
             mode.viYOrigin = 0;
-            mode.xFBmode = 1;
+            mode.xFBmode = VI_XFBMODE_DF;
         }
         break;
-    case 5:
-        mode.viTVmode = 20;
+    case VI_EURGB60:
+        mode.viTVmode = VI_TVMODE_EURGB60_INT;
         mode.viYOrigin = 0;
-        mode.xFBmode = 1;
+        mode.xFBmode = VI_XFBMODE_DF;
         break;
-    case 1:
-        mode.viTVmode = 4;
+    case VI_PAL:
+        mode.viTVmode = VI_TVMODE_PAL_INT;
         mode.viYOrigin = 47;
-        mode.xFBmode = 1;
+        mode.xFBmode = VI_XFBMODE_DF;
         break;
     }
 
@@ -138,6 +139,8 @@ static void ConfigureVideo(u16 xfbW, u16 xfbH) {
     VIConfigurePan(0, 0, 640, 480);
 }
 
+// RGB to YCbCr with the ITU-R BT.601 coefficients, Y clamped to 16-235 and Cb/Cr to 16-240.
+// The result keeps Y in .r, Cb in .g and Cr in .b (ScreenClear and ScreenReport read it that way).
 static GXColor RGB2YUV(GXColor rgb) {
     f32 Y;
     f32 Cb;
@@ -223,6 +226,7 @@ static void Halt() {
     fontData = OSAllocFromArenaLo(0xA1004, DOLPHIN_ALIGNMENT);
     OSLoadFont(fontData, OSGetArenaLo());
     
+    // 640 x 480 frame buffer, 2 bytes per pixel (YCbCr 4:2:2)
     xfb = OSAllocFromArenaLo(0x96000, DOLPHIN_ALIGNMENT);
     ScreenClear(xfb, 640, 480, RGB2YUV(fp->bg));
     VISetNextFrameBuffer(xfb);

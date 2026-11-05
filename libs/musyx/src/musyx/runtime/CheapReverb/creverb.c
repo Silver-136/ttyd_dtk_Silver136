@@ -27,7 +27,7 @@ static void DLcreate(_SND_REVSTD_DELAYLINE* dl, s32 len) {
   dl->inputs = (f32*)salMalloc(len * sizeof(f32));
   memset(dl->inputs, 0, len * sizeof(*dl->inputs));
   dl->lastOutput = 0.f;
-  DLsetdelay(dl, len >> 1);
+  DLsetdelay(dl, len >> 1); // no effect: inPoint is not set yet and outPoint is reset below
   dl->inPoint = 0;
   dl->outPoint = 0;
 }
@@ -97,11 +97,12 @@ bool ReverbSTDModify(_SND_REVSTD_WORK* rv, float coloration, float time, float m
     return FALSE;
   }
 
+  // These settings are overwritten: ReverbSTDCreate below clears rv and sets them again.
   rv->allPassCoeff = coloration;
   rv->level = mix;
   rv->damping = damping;
   if (rv->damping < 0.05f) {
-    rv->damping = 0.05;
+    rv->damping = 0.05f;
   }
 
   rv->damping = 1.f - (rv->damping * 0.8f + 0.05f);
@@ -199,7 +200,7 @@ lbl_803B56C8:
   stw r30, 0x54(r1)
   lfd f12, 0x50(r1)
   fsubs f12, f12, f5
-  li r31, 0x9f
+  li r31, 0x9f // SND_AUX_BLOCKSIZE - 1
   mtctr r31
 
 lbl_803B5780:

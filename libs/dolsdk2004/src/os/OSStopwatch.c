@@ -5,7 +5,7 @@ void OSInitStopwatch(OSStopwatch* sw, char* name) {
     sw->name = name;
     sw->total = 0;
     sw->hits = 0;
-    sw->min = 0x00000000FFFFFFFF;
+    sw->min = 0x00000000FFFFFFFF; // the 32-bit maximum, so the first measured time becomes the minimum
     sw->max = 0;
 }
 

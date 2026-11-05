@@ -644,7 +644,7 @@ void GXLoadTexObjPreLoaded(GXTexObj* obj, GXTexRegion* region, GXTexMapID id) {
 
     __GXData->tImage0[id] = t->image0;
     __GXData->tMode0[id] = t->mode0;
-    __GXData->dirtyState |= 1;
+    __GXData->dirtyState |= GX_DIRTY_SU_TEX;
     __GXData->bpSentNot = 0;
 }
 

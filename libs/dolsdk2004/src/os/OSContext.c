@@ -1,14 +1,12 @@
 #include <dolphin.h>
 #include <dolphin/os.h>
+#include <dolphin/db.h>
 
 #include "__os.h"
 
 // external functions
 extern void __RAS_OSDisableInterrupts_begin();
 extern void __RAS_OSDisableInterrupts_end();
-extern void DBPrintf(char*, ...);
-
-#define HID2 920
 
 volatile OSContext* __OSCurrentContext AT_ADDRESS(OS_BASE_CACHED | 0x00D4);
 volatile OSContext* __OSFPUContext AT_ADDRESS(OS_BASE_CACHED | 0x00D8);
@@ -209,10 +207,10 @@ asm void OSSetCurrentContext(register OSContext* context){
     bne     _disableFPU
 
     lwz     r6, context->srr1
-    ori     r6, r6, 0x2000
+    ori     r6, r6, MSR_FP
     stw     r6, context->srr1
     mfmsr   r6
-    ori     r6, r6, 2
+    ori     r6, r6, MSR_RI
     mtmsr   r6
     blr
 
@@ -222,7 +220,7 @@ _disableFPU:
     stw     r6, context->srr1
     mfmsr   r6
     rlwinm  r6, r6, 0, 19, 17
-    ori     r6, r6, 2
+    ori     r6, r6, MSR_RI
     mtmsr   r6
     isync
     blr
@@ -386,7 +384,7 @@ asm void OSInitContext(register OSContext* context, register u32 pc, register u3
     stw     pc,  OS_CONTEXT_SRR0(context)
     stw     newsp,  OS_CONTEXT_R1(context)
     li      r11, 0
-    ori     r11, r11, 0x00008000 | 0x00000020 | 0x00000010 | 0x00000002 | 0x00001000
+    ori     r11, r11, MSR_EE | MSR_IR | MSR_DR | MSR_RI | MSR_ME
     stw     r11, OS_CONTEXT_SRR1(context)
     li      r0,  0x0
     stw     r0,  OS_CONTEXT_CR(context)
@@ -494,11 +492,11 @@ void OSDumpContext(OSContext* context) {
 static asm void OSSwitchFPUContext(register __OSException exception, register OSContext* context) {
     nofralloc
     mfmsr   r5
-    ori     r5, r5, 0x2000
+    ori     r5, r5, MSR_FP
     mtmsr   r5
     isync
     lwz     r5, OS_CONTEXT_SRR1(context)
-    ori     r5, r5, 0x2000
+    ori     r5, r5, MSR_FP
     mtsrr1  r5
     addis   r3, r0, OS_CACHED_REGION_PREFIX
     lwz     r5, 0x00D8(r3) 
@@ -541,7 +539,7 @@ void __OSContextInit(void) {
 asm void OSFillFPUContext(register OSContext* context) {
     nofralloc
     mfmsr   r5
-    ori     r5, r5, 0x2000
+    ori     r5, r5, MSR_FP
     mtmsr   r5
     isync
 

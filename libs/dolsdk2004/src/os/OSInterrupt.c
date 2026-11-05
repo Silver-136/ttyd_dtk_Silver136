@@ -1,5 +1,6 @@
 #include <dolphin.h>
 #include <dolphin/os.h>
+#include <dolphin/hw_regs.h>
 
 #include "__os.h"
 
@@ -24,7 +25,7 @@ static OSInterruptMask InterruptPrioTable[] = {
         OS_INTERRUPTMASK_EXI | OS_INTERRUPTMASK_PI_SI | OS_INTERRUPTMASK_PI_DI,
     OS_INTERRUPTMASK_DSP_AI,
     OS_INTERRUPTMASK_PI_CP,
-    0xFFFFFFFF,
+    0xFFFFFFFF, // matches any cause left, ends the search in __OSDispatchInterrupt
 };
 
 #if DEBUG
@@ -97,7 +98,7 @@ asm BOOL OSEnableInterrupts(void) {
     nofralloc
 
     mfmsr   r3
-    ori     r4, r3, 0x8000
+    ori     r4, r3, MSR_EE
     mtmsr   r4
     rlwinm  r3, r3, 17, 31, 31
     blr
@@ -109,7 +110,7 @@ asm BOOL OSRestoreInterrupts(register BOOL level) {
     cmpwi   level, 0
     mfmsr   r4
     beq     _disable
-    ori     r5, r4, 0x8000
+    ori     r5, r4, MSR_EE
     b       _restore
 _disable:
     rlwinm  r5, r4, 0, 17, 15
@@ -124,7 +125,7 @@ __OSInterruptHandler __OSSetInterruptHandler(__OSInterrupt interrupt, __OSInterr
     __OSInterruptHandler oldHandler;
  
     ASSERTMSGLINE(411, InterruptHandlerTable, "__OSSetInterruptHandler(): OSInit() must be called in advance.");
-    ASSERTMSGLINE(413, interrupt < 0x20, "__OSSetInterruptHandler(): unknown interrupt.");
+    ASSERTMSGLINE(413, interrupt < __OS_INTERRUPT_MAX, "__OSSetInterruptHandler(): unknown interrupt.");
 
     oldHandler = InterruptHandlerTable[interrupt];
     InterruptHandlerTable[interrupt] = handler;
@@ -133,7 +134,7 @@ __OSInterruptHandler __OSSetInterruptHandler(__OSInterrupt interrupt, __OSInterr
 
 __OSInterruptHandler __OSGetInterruptHandler(__OSInterrupt interrupt) {
     ASSERTMSGLINE(433, InterruptHandlerTable, "__OSGetInterruptHandler(): OSInit() must be called in advance.");
-    ASSERTMSGLINE(435, interrupt < 0x20, "__OSGetInterruptHandler(): unknown interrupt.");
+    ASSERTMSGLINE(435, interrupt < __OS_INTERRUPT_MAX, "__OSGetInterruptHandler(): unknown interrupt.");
     return InterruptHandlerTable[interrupt];
 }
 
@@ -183,7 +184,7 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
     case __OS_INTERRUPT_DSP_AI:
     case __OS_INTERRUPT_DSP_ARAM:
     case __OS_INTERRUPT_DSP_DSP:
-        reg = __DSPRegs[0x00000005];
+        reg = __DSPRegs[DSP_CONTROL_STATUS];
         reg &= ~0x1F8;
         if (!(current & OS_INTERRUPTMASK_DSP_AI))
             reg |= 0x10;
@@ -191,7 +192,7 @@ static u32 SetInterruptMask(OSInterruptMask mask, OSInterruptMask current) {
             reg |= 0x40;
         if (!(current & OS_INTERRUPTMASK_DSP_DSP))
             reg |= 0x100;
-        __DSPRegs[0x00000005] = (u16)reg;
+        __DSPRegs[DSP_CONTROL_STATUS] = (u16)reg;
         mask &= ~OS_INTERRUPTMASK_DSP;
         break;
     case __OS_INTERRUPT_AI_AI:
@@ -390,7 +391,7 @@ void __OSDispatchInterrupt(__OSException exception, OSContext* context) {
     }
 
     if (intsr & 0x00000040) {
-        reg = __DSPRegs[5];
+        reg = __DSPRegs[DSP_CONTROL_STATUS];
         if (reg & 0x8)
             cause |= OS_INTERRUPTMASK_DSP_AI;
         if (reg & 0x20)

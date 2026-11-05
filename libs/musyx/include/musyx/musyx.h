@@ -170,6 +170,7 @@ void sndSetHooks(SND_HOOKS* hooks);
 #define SND_FLAGS_EMITTERGROUPSUSEMAXVOICES                                                        \
   0x00000002 // define this to enable usage of max. voices from FX table for emitter group start
              // management
+#define SND_FLAGS_COMPRESSOR 0x00000008 // hwInit calls hwEnableCompressor (MusyX 2.0.1 and later)
 
 // Platform dependend flags : PC
 

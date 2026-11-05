@@ -4,6 +4,11 @@
 #include <dolphin/card.h>
 #include <dolphin/exi.h>
 
+// __CARDReadStatus bits (names from their uses: DoMount unlocks the card while UNLOCKED is clear,
+// __CARDExiHandler reports CARD_RESULT_IOERROR for the ERROR bits)
+#define CARD_STATUS_UNLOCKED 0x40
+#define CARD_STATUS_ERROR    0x18
+
 #ifdef __cplusplus
 extern "C" {
 #endif

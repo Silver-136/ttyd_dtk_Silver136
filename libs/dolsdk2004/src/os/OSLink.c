@@ -129,7 +129,7 @@ static BOOL Relocate(OSModuleHeader* newModule, OSModuleHeader* module) {
     OSRel* rel;
     OSSectionInfo* si;
     OSSectionInfo* siFlush;
-    u32* p;
+    u32* p; // first set by an R_DOLPHIN_SECTION record; each import list relies on starting with one
     u32 offset;
     u32 x;
 
@@ -330,6 +330,8 @@ BOOL OSLinkFixed(OSModuleInfo* newModule, void* bss) {
     return Link(newModule, bss, TRUE);
 }
 
+// Walks the same relocation lists as Relocate but writes 0 for each target, or for R_PPC_REL24 a branch
+// to the module's unresolved stub when it has one.
 static BOOL Undo(OSModuleHeader* newModule, OSModuleHeader* module) {
     OSModuleID idNew;
     OSImportInfo* imp;

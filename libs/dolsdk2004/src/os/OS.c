@@ -81,17 +81,16 @@ u32 __OSIsDebuggerPresent(void) {
     return *(u32*)OSPhysicalToCached(0x40);
 }
 
-/* clang-format off */
 #ifdef __GEKKO__
 asm void __OSFPRInit(void) {
     // clang-format off
     nofralloc
 
     mfmsr r3
-    ori r3, r3, 0x2000
+    ori r3, r3, MSR_FP
     mtmsr r3
 
-    mfspr r3, 0x398
+    mfspr r3, HID2
     rlwinm. r3, r3, 3, 0x1f, 0x1f
     beq skip_ps_init
 
@@ -185,12 +184,12 @@ u32 OSGetConsoleType(void) {
     return BootInfo->consoleType;
 }
 
-// needed for assert
+// NULL as plain 0 for the comparison in the ASSERTLINE of ClearArena
 #undef NULL
 #define NULL 0
 
 static void ClearArena(void) {
-    if (!((OSGetResetCode() & 0x80000000) ? TRUE : FALSE)) {
+    if (!OSIsRestart()) {
         memset(OSGetArenaLo(), 0, (u32)OSGetArenaHi() - (u32)OSGetArenaLo());
         return;
     }
@@ -218,7 +217,7 @@ static void ClearArena(void) {
 
 static void InquiryCallback(s32, DVDCommandBlock* block) {
     switch (block->state) {
-    case 0:
+    case DVD_STATE_END:
         __OSDeviceCode = (u16)(0x8000 | DriveInfo.deviceCode);
         break;
     default:
@@ -276,7 +275,7 @@ void OSInit(void) {
         OSInitAlarm();
         __OSModuleInit();
         __OSInterruptInit();
-        __OSSetInterruptHandler(0x16, &__OSResetSWInterruptHandler);
+        __OSSetInterruptHandler(__OS_INTERRUPT_PI_RSW, &__OSResetSWInterruptHandler);
         __OSContextInit();
         __OSCacheInit();
         EXIInit();
@@ -300,13 +299,13 @@ void OSInit(void) {
         OSReport("Console Type : ");
 
         consoleType = OSGetConsoleType();
-        switch (consoleType & 0xF0000000) {
+        switch (consoleType & OS_CONSOLE_MASK) {
         case OS_CONSOLE_RETAIL:
             OSReport("Retail %d\n", consoleType);
             break;
         case OS_CONSOLE_DEVELOPMENT:
         case OS_CONSOLE_TDEV:
-            switch (consoleType & 0x0FFFFFFF) {
+            switch (consoleType & ~OS_CONSOLE_MASK) {
             case OS_CONSOLE_EMULATOR:
                 OSReport("Mac Emulator\n");
                 break;
@@ -320,7 +319,7 @@ void OSInit(void) {
                 OSReport("EPPC Minnow\n");
                 break;
             default:
-                OSReport("Development HW%d (%08x)\n", (consoleType & 0xFFFFFFF) - 3, consoleType);
+                OSReport("Development HW%d (%08x)\n", (consoleType & ~OS_CONSOLE_MASK) - 3, consoleType);
                 break;
             }
             break;
@@ -471,7 +470,7 @@ entry __OSDBINTSTART
     lwz     r3, DB_EXCEPTIONDEST_OFFSET(r5)
     oris    r3, r3, OS_CACHED_REGION_PREFIX
     mtlr    r3
-    li      r3, 0x30 // MSR_IR | MSR_DR     // turn on memory addressing
+    li      r3, MSR_IR | MSR_DR // turn on memory addressing
     mtmsr   r3
     blr
 entry __OSDBINTEND
@@ -544,7 +543,7 @@ entry __DBVECTOR
     // Set SRR1[IR|DR] to turn on address
     // translation at the next RFI
     mfmsr   r3
-    ori     r3, r3, 0x30
+    ori     r3, r3, MSR_IR | MSR_DR
     mtsrr1  r3
 
     // This lets us change the exception number based on the

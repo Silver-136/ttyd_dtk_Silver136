@@ -21,7 +21,7 @@ static void DLcreate(_SND_REVHI_DELAYLINE* delayline, s32 length) {
   delayline->inputs = (f32*)salMalloc(length * sizeof(f32));
   memset(delayline->inputs, 0, length * sizeof(*delayline->inputs));
   delayline->lastOutput = 0.f;
-  DLsetdelay(delayline, length >> 1);
+  DLsetdelay(delayline, length >> 1); // no effect: inPoint is not set yet and outPoint is reset below
   delayline->inPoint = 0;
   delayline->outPoint = 0;
 }

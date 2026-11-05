@@ -458,7 +458,7 @@ void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXCha
 
     GX_WRITE_RAS_REG(*ptref);
     __GXData->bpSentNot = 0;
-    __GXData->dirtyState |= 1;
+    __GXData->dirtyState |= GX_DIRTY_SU_TEX;
 }
 
 void GXSetNumTevStages(u8 nStages) {
@@ -466,5 +466,5 @@ void GXSetNumTevStages(u8 nStages) {
 
     ASSERTMSGLINE(1189, nStages != 0 && nStages <= 16, "GXSetNumTevStages: Exceed max number of tex stages");
     SET_REG_FIELD(1190, __GXData->genMode, 4, 10, nStages - 1);
-    __GXData->dirtyState |= 4;
+    __GXData->dirtyState |= GX_DIRTY_GEN_MODE;
 }

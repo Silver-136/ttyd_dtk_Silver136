@@ -12,7 +12,7 @@ static int LeapYearDays[MONTH_MAX] = {0,   31,  60,  91,  121, 152,
 
 #ifdef __GEKKO__
 asm OSTime OSGetTime(void) {
-jump:
+retry:
     nofralloc
 
     mftbu r3
@@ -21,7 +21,7 @@ jump:
     // Check for possible carry from TBL to TBU
     mftbu r5
     cmpw r3, r5
-    bne jump
+    bne retry
 
     blr
 }
@@ -45,7 +45,7 @@ asm static void __SetTime(OSTime time) {
 
 void __OSSetTime(OSTime time) {
     BOOL enabled;
-    OSTime* timeAdjustAddr;
+    OSTime* timeAdjustAddr; // FAKE: pointer copy of __OSSystemTime; *__OSSystemTime directly changes the object
 
     timeAdjustAddr = __OSSystemTime;
     enabled = OSDisableInterrupts();
@@ -56,9 +56,9 @@ void __OSSetTime(OSTime time) {
     OSRestoreInterrupts(enabled);
 }
 
-OSTime __OSGetSystemTime() {
+OSTime __OSGetSystemTime(void) {
     BOOL enabled;
-    OSTime* timeAdjustAddr;
+    OSTime* timeAdjustAddr; // FAKE: pointer copy of __OSSystemTime; *__OSSystemTime directly changes the object
     OSTime result;
 
     timeAdjustAddr = __OSSystemTime;
@@ -71,7 +71,7 @@ OSTime __OSGetSystemTime() {
 
 OSTime __OSTimeToSystemTime(OSTime time) {
     BOOL enabled;
-    OSTime* timeAdjustAddr = __OSSystemTime;
+    OSTime* timeAdjustAddr = __OSSystemTime; // FAKE: see __OSSetTime
     OSTime result;
 
     enabled = OSDisableInterrupts();
@@ -193,7 +193,7 @@ OSTime OSCalendarTimeToTicks(OSCalendarTime* td) {
            (OSTime)SECS_IN_HOUR * td->hour +
            (OSTime)SECS_IN_MIN * td->min +
            td->sec -
-           (OSTime)0xEB1E1BF80ULL;
+           (OSTime)SECS_IN_DAY * BIAS;
 
     return OS_SEC_TO_TICKS(secs) + OS_MSEC_TO_TICKS((OSTime)td->msec) +
            OS_USEC_TO_TICKS((OSTime)td->usec);

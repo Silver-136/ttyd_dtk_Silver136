@@ -167,7 +167,7 @@ void GXSetIndTexOrder(GXIndTexStageID ind_stage, GXTexCoordID tex_coord, GXTexMa
         break;
     }
     GX_WRITE_SOME_REG5(GX_LOAD_BP_REG, __GXData->iref);
-    __GXData->dirtyState |= 3;
+    __GXData->dirtyState |= GX_DIRTY_SU_TEX | GX_DIRTY_BP_MASK;
     __GXData->bpSentNot = 0;
 }
 
@@ -175,7 +175,7 @@ void GXSetNumIndStages(u8 nIndStages) {
     CHECK_GXBEGIN(353, "GXSetNumIndStages");
     ASSERTMSGLINE(355, nIndStages <= 4, "GXSetNumIndStages: Exceeds max. number of indirect texture stages");
     SET_REG_FIELD(356, __GXData->genMode, 3, 16, nIndStages);
-    __GXData->dirtyState |= 6;
+    __GXData->dirtyState |= GX_DIRTY_BP_MASK | GX_DIRTY_GEN_MODE;
 }
 
 void GXSetTevDirect(GXTevStageID tev_stage) {
@@ -292,6 +292,7 @@ void GXSetTevIndRepeat(GXTevStageID tev_stage) {
     GXSetTevIndirect(tev_stage, GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_NONE, GX_ITM_OFF, GX_ITW_0, GX_ITW_0, GX_TRUE, GX_FALSE, GX_ITBA_OFF);
 }
 
+// Empty in this SDK version; __GXSetDirtyState still calls it for GX_DIRTY_BP_MASK.
 void __GXUpdateBPMask(void) {}
 
 void __GXSetIndirectMask(u32 mask) {

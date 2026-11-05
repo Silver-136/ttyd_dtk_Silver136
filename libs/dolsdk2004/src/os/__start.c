@@ -4,9 +4,6 @@
 #include "__os.h"
 
 #define PAD3_BUTTON_ADDR        0x800030E4
-#define OS_RESET_RESTART        0
-#define FALSE                   0
-#define TRUE                    1
 #define EXCEPTIONMASK_ADDR      0x80000044
 #define BOOTINFO2_ADDR          0x800000F4
 #define OS_BI2_DEBUGFLAG_OFFSET 0xC
@@ -79,6 +76,8 @@ __declspec(weak) asm void __start(void) {
 	stw r0, 4(r1)
 	stw r0, 0(r1)
 	bl __init_data
+	// Clear the exception mask word. The debug flag comes from BI2 + 0xC when a BI2 block exists,
+	// else from low memory when ArenaHi is set (else straight to main).
 	li r0, 0
 	lis r6, EXCEPTIONMASK_ADDR@ha
 	addi r6, r6, EXCEPTIONMASK_ADDR@l
@@ -87,7 +86,7 @@ __declspec(weak) asm void __start(void) {
 	addi r6, r6, BOOTINFO2_ADDR@l
 	lwz r6, 0(r6)
 
-_check_TRK:
+_check_bi2:
 	cmplwi r6, 0
 	beq _load_lomem_debug_flag
 	lwz r7, OS_BI2_DEBUGFLAG_OFFSET(r6)
@@ -104,6 +103,8 @@ _load_lomem_debug_flag:
 	lwz r7, 0(r7)
 
 _check_debug_flag:
+	// Flag 2 or 3: InitMetroTRK with r5 = 0 or 1; flag 4: r5 = 2 and __set_debug_bba.
+	// li r5, 1 sits between the compare and its branch; r5 only matters when the branch is taken.
 	li r5, 0
 	cmplwi r7, 2
 	beq _goto_inittrk
@@ -124,6 +125,8 @@ _goto_inittrk:
 	blrl
 	
 _goto_main:
+	// Arguments: BI2 + 8 holds the offset of the list (count, then offsets). Each offset becomes an
+	// address (+ the BI2 base), and ArenaHi moves down to the list (rounded down to 32 bytes).
 	lis r6, BOOTINFO2_ADDR@ha
 	addi r6, r6, BOOTINFO2_ADDR@l
 	lwz r5, 0(r6)
@@ -158,6 +161,7 @@ _no_args:
 _end_of_parseargs:
 	bl DBInit
 	bl OSInit
+	// __check_pad3 runs when the DVD device code has no valid bit (0x8000) or its code is 1.
 	lis r4, DVD_DEVICECODE_ADDR@ha
 	addi r4, r4, DVD_DEVICECODE_ADDR@l
 	lhz r3, 0(r4)

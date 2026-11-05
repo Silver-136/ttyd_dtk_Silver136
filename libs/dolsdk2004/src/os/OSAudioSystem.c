@@ -1,5 +1,6 @@
 #include <dolphin.h>
 #include <dolphin/os.h>
+#include <dolphin/hw_regs.h>
 
 #include "__os.h"
 
@@ -17,73 +18,76 @@ static u8 DSPInitCode[128] = {
 #define __DSPWorkBuffer (void*)0x81000000
 
 void __OSInitAudioSystem(void) {
-    u8 errFlag;
+    u8 errFlag; // FAKE: assigned once and never read; removing it changes the object
     u16 reg16;
     u32 start_tick;
 
+    // Save the work buffer below the arena top, then put the DSP init program there.
     memcpy((void*)((u32)OSGetArenaHi() - 0x80), __DSPWorkBuffer, sizeof(DSPInitCode));
     memcpy(__DSPWorkBuffer, (void*)DSPInitCode, sizeof(DSPInitCode));
     DCFlushRange(__DSPWorkBuffer, sizeof(DSPInitCode));
 
-    __DSPRegs[9] = 0x43;
-    ASSERTMSGLINE(113, !(__DSPRegs[5] & 0x200), "__OSInitAudioSystem(): ARAM DMA already in progress");
-    ASSERTMSGLINE(117, !(__DSPRegs[5] & 0x400), "__OSInitAudioSystem(): DSP DMA already in progress");
-    ASSERTMSGLINE(121, (__DSPRegs[5] & 0x004), "__OSInitAudioSystem(): DSP already working");
+    __DSPRegs[DSP_ARAM_SIZE] = 0x43;
+    ASSERTMSGLINE(113, !(__DSPRegs[DSP_CONTROL_STATUS] & 0x200), "__OSInitAudioSystem(): ARAM DMA already in progress");
+    ASSERTMSGLINE(117, !(__DSPRegs[DSP_CONTROL_STATUS] & 0x400), "__OSInitAudioSystem(): DSP DMA already in progress");
+    ASSERTMSGLINE(121, (__DSPRegs[DSP_CONTROL_STATUS] & 0x004), "__OSInitAudioSystem(): DSP already working");
     
-    __DSPRegs[5] = 0x8AC;
-    __DSPRegs[5] |= 1;
+    __DSPRegs[DSP_CONTROL_STATUS] = 0x8AC;
+    __DSPRegs[DSP_CONTROL_STATUS] |= 1;
 
-    while (__DSPRegs[5] & 1);
-    __DSPRegs[0] = 0;
+    while (__DSPRegs[DSP_CONTROL_STATUS] & 1);
+    __DSPRegs[DSP_MAILBOX_IN_HI] = 0;
 
-    while (((__DSPRegs[2] << 16) | __DSPRegs[3]) & 0x80000000);
+    while (((__DSPRegs[DSP_MAILBOX_OUT_HI] << 16) | __DSPRegs[DSP_MAILBOX_OUT_LO]) & 0x80000000);
 
-    *(u32*)&__DSPRegs[16] = 0x1000000;
-    *(u32*)&__DSPRegs[18] = 0;
-    *(u32*)&__DSPRegs[20] = 0x20;
+    *(u32*)&__DSPRegs[DSP_ARAM_DMA_MM_HI] = 0x1000000;
+    *(u32*)&__DSPRegs[DSP_ARAM_DMA_ARAM_HI] = 0;
+    *(u32*)&__DSPRegs[DSP_ARAM_DMA_SIZE_HI] = 0x20;
 
-    reg16 = __DSPRegs[5];
+    reg16 = __DSPRegs[DSP_CONTROL_STATUS];
     while (!(reg16 & 0x20))
-        reg16 = __DSPRegs[5];
+        reg16 = __DSPRegs[DSP_CONTROL_STATUS];
 
-    __DSPRegs[5] = reg16;
+    __DSPRegs[DSP_CONTROL_STATUS] = reg16;
 
     start_tick = OSGetTick();
     while ((s32)(OSGetTick() - start_tick) < 0x892);
 
-    *(u32*)&__DSPRegs[16] = 0x1000000;
-    *(u32*)&__DSPRegs[18] = 0;
-    *(u32*)&__DSPRegs[20] = 0x20;
+    *(u32*)&__DSPRegs[DSP_ARAM_DMA_MM_HI] = 0x1000000;
+    *(u32*)&__DSPRegs[DSP_ARAM_DMA_ARAM_HI] = 0;
+    *(u32*)&__DSPRegs[DSP_ARAM_DMA_SIZE_HI] = 0x20;
 
-    reg16 = __DSPRegs[5];
+    reg16 = __DSPRegs[DSP_CONTROL_STATUS];
     while (!(reg16 & 0x20)) {
-        reg16 = __DSPRegs[5];
+        reg16 = __DSPRegs[DSP_CONTROL_STATUS];
     }
-    __DSPRegs[5] = reg16;
+    __DSPRegs[DSP_CONTROL_STATUS] = reg16;
 
-    __DSPRegs[5] &= ~0x800;
-    while ((__DSPRegs[5]) & 0x400);
+    __DSPRegs[DSP_CONTROL_STATUS] &= ~0x800;
+    while ((__DSPRegs[DSP_CONTROL_STATUS]) & 0x400);
     
-    __DSPRegs[5] &= ~4;
+    __DSPRegs[DSP_CONTROL_STATUS] &= ~4;
     errFlag = 0;
 
-    reg16 = __DSPRegs[2];
+    reg16 = __DSPRegs[DSP_MAILBOX_OUT_HI];
 
     while (!(reg16 & 0x8000)) {
-        reg16 = __DSPRegs[2];
+        reg16 = __DSPRegs[DSP_MAILBOX_OUT_HI];
     }
 
-    if (((u32)((reg16 << 16) | __DSPRegs[3]) + 0x7FAC0000U) != 0x4348) {
+    // The init program answers with the mail word 0x80544348 (0x4348 after adding 0x7FAC0000).
+    if (((u32)((reg16 << 16) | __DSPRegs[DSP_MAILBOX_OUT_LO]) + 0x7FAC0000U) != 0x4348) {
         ASSERTMSGLINE(193, 0, "__OSInitAudioSystem(): DSP returns invalid message");
     }
 
     // FAKE: dead comparison, no effect; without it the register allocation differs from the game code
     reg16 != 0x81800;
-    __DSPRegs[5] |= 4;
-    __DSPRegs[5] = 0x8AC;
-    __DSPRegs[5] |= 1;
-    while (__DSPRegs[5] & 1);
+    __DSPRegs[DSP_CONTROL_STATUS] |= 4;
+    __DSPRegs[DSP_CONTROL_STATUS] = 0x8AC;
+    __DSPRegs[DSP_CONTROL_STATUS] |= 1;
+    while (__DSPRegs[DSP_CONTROL_STATUS] & 1);
 
+    // Restore the saved work buffer.
     memcpy(__DSPWorkBuffer, (void*)((u32)OSGetArenaHi() - 0x80), sizeof(DSPInitCode));
 }
 
@@ -97,22 +101,22 @@ void __OSStopAudioSystem(void) {
             reg16 = (load);        \
         }
 
-    __DSPRegs[5] = 0x804;
-    reg16 = __DSPRegs[27];
-    __DSPRegs[27] = reg16 & ~0x8000;
-    waitUntil(__DSPRegs[5], 0x400);
-    waitUntil(__DSPRegs[5], 0x200);
-    __DSPRegs[5] = 0x8ac;
-    __DSPRegs[0] = 0;
+    __DSPRegs[DSP_CONTROL_STATUS] = 0x804;
+    reg16 = __DSPRegs[DSP_DMA_CONTROL_LEN];
+    __DSPRegs[DSP_DMA_CONTROL_LEN] = reg16 & ~DSP_DMA_START_FLAG;
+    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], 0x400);
+    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], 0x200);
+    __DSPRegs[DSP_CONTROL_STATUS] = 0x8ac;
+    __DSPRegs[DSP_MAILBOX_IN_HI] = 0;
 
-    while (((__DSPRegs[2] << 16) | __DSPRegs[3]) & 0x80000000);
+    while (((__DSPRegs[DSP_MAILBOX_OUT_HI] << 16) | __DSPRegs[DSP_MAILBOX_OUT_LO]) & 0x80000000);
 
     start_tick = OSGetTick();
     while ((s32)(OSGetTick() - start_tick) < 0x2c);
 
-    reg16 = __DSPRegs[5];
-    __DSPRegs[5] = reg16 | 1;
-    waitUntil(__DSPRegs[5], 0x001);
+    reg16 = __DSPRegs[DSP_CONTROL_STATUS];
+    __DSPRegs[DSP_CONTROL_STATUS] = reg16 | 1;
+    waitUntil(__DSPRegs[DSP_CONTROL_STATUS], 0x001);
 
     #undef waitUntil
 }

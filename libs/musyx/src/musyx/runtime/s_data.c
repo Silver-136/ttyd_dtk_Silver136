@@ -1,5 +1,3 @@
-#define _MATH_H_
-
 #include "musyx/assert.h"
 #include "musyx/hardware.h"
 #include "musyx/s3d.h"
@@ -204,8 +202,8 @@ static void InsertFXTab(unsigned short gid, FX_DATA* fd) { dataInsertFX(gid, fd-
 
 static void RemoveFXTab(unsigned short gid) { dataRemoveFX(gid); }
 
-void sndSetSampleDataUploadCallback(void* (*callback)(u32, u32), u32 chunckSize) {
-  hwSetSaveSampleCallback(callback, chunckSize);
+void sndSetSampleDataUploadCallback(void* (*callback)(u32, u32), u32 chunkSize) {
+  hwSetSaveSampleCallback(callback, chunkSize);
 }
 
 bool sndPushGroup(void* prj_data, u16 gid, void* samples, void* sdir, void* pool) {
@@ -352,7 +350,6 @@ u32 seqPlaySong(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 irq_cal
 
   MUSY_DEBUG("Group ID=%d is not on soundstack.", sgid);
   seqId = 0xffffffff;
-done:
   return seqId;
 }
 
@@ -366,7 +363,7 @@ u32 sndSeqPlayEx(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 studio
   GSROOT* root;
   void* prj;
   for (root = gsRoot; root != NULL; root = root->next) {
-    /* fake: r steps one GSTACK per i; reproduces the register use of seqPlaySong(.., 0, ..) inlined */
+    /* FAKE: r steps one GSTACK per i; reproduces the register use of seqPlaySong(.., 0, ..) inlined */
     GSROOT* r;
     for (i = 0, r = root; i < root->sp; r = (GSROOT*)((u8*)r + sizeof(GSTACK)), ++i) {
       if (r->stack[0].gAddr->id != sgid) {
@@ -387,9 +384,11 @@ u32 sndSeqPlayEx(u16 sgid, u16 sid, void* arrfile, SND_PLAYPARA* para, u8 studio
           }
           ++midiSetup;
         }
-        seqId = 0xffffffff; goto done;
+        seqId = 0xffffffff;
+        goto done;
       } else {
-        seqId = 0xffffffff; goto done;
+        seqId = 0xffffffff;
+        goto done;
       }
     }
   }

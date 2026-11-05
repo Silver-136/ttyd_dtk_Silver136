@@ -89,7 +89,7 @@ void __CARDExiHandler(s32 chan, OSContext* context) {
         goto error;
     }
 
-    if ((result = (status & 0x18) ? CARD_RESULT_IOERROR : CARD_RESULT_READY) == CARD_RESULT_IOERROR &&
+    if ((result = (status & CARD_STATUS_ERROR) ? CARD_RESULT_IOERROR : CARD_RESULT_READY) == CARD_RESULT_IOERROR &&
         --card->retry > 0)
     {
         result = Retry(chan);
@@ -294,7 +294,7 @@ static void SetupTimeoutAlarm(CARDControl* card) {
     case 0xF3:
         break;
     case 0xF4:
-        if (card->pageSize > 0x80) {
+        if (card->pageSize > CARD_PAGE_SIZE) {
             OSSetAlarm(&card->alarm, OSSecondsToTicks((OSTime)2) * (card->cBlock / 0x40),
                        TimeoutHandler);
             break;
@@ -462,7 +462,7 @@ s32 __CARDReadSegment(s32 chan, CARDCallback callback) {
     } else if (result >= 0) {
         if (!EXIImmEx(chan, card->cmd, card->cmdlen, EXI_WRITE) ||
             !EXIImmEx(chan, (u8* )card->workArea + sizeof(CARDID), card->latency,
-            EXI_WRITE) || // XXX use DMA if possible
+            EXI_WRITE) || // latency bytes by immediate transfer, then the DMA read
             !EXIDma(chan, card->buffer, CARD_SEG_SIZE, card->mode, __CARDTxHandler))
         {
             card->txCallback = NULL;
@@ -488,7 +488,7 @@ s32 __CARDWritePage(s32 chan, CARDCallback callback) {
     ASSERTLINE(906, card->addr < (u32) card->size * 1024 * 1024 / 8);
     card->cmd[0] = 0xF2;
 
-    if (card->pageSize > 0x80) {
+    if (card->pageSize > CARD_PAGE_SIZE) {
         card->cmd[1] = AD1(card->addr) | 0x80;
     } else {
         card->cmd[1] = AD1(card->addr);
@@ -561,7 +561,7 @@ s32 __CARDEraseSector(s32 chan, u32 addr, CARDCallback callback) {
     ASSERTLINE(1012, addr % card->sectorSize == 0);
     ASSERTLINE(1013, addr < (u32) card->size * 1024 * 1024 / 8);
 
-    if (card->pageSize > 0x80) {
+    if (card->pageSize > CARD_PAGE_SIZE) {
         if (callback) {
             callback(chan, 0);
         }
@@ -656,6 +656,7 @@ s32 CARDSetDiskID(s32 chan, const DVDDiskID* diskID) {
     enabled = OSDisableInterrupts();
 
     if (card->result == CARD_RESULT_BUSY) {
+        // BUG: returns with interrupts still disabled (no OSRestoreInterrupts on this path)
         return CARD_RESULT_BUSY;   
     }
 

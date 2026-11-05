@@ -108,6 +108,8 @@ bool sndAuxCallbackPrepareDelay(SND_AUX_DELAY* delay) {
   return sndAuxCallbackUpdateSettingsDelay(delay);
 }
 
+// The pointers keep their values after salFree; sndAuxCallbackUpdateSettingsDelay allocates new ones
+// right after its call here.
 bool sndAuxCallbackShutdownDelay(SND_AUX_DELAY* delay) {
   if (delay->left != NULL) {
     salFree(delay->left);

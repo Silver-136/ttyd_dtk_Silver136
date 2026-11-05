@@ -84,7 +84,7 @@ s32 __CARDSetStatusExAsync(s32 chan, s32 fileNo, CARDDir* dirent, CARDCallback c
     if ((memcmp(&ent->fileName, &dirent->fileName, 32) != 0) || (memcmp(ent->gameName, dirent->gameName, 4) != 0) || (memcmp(ent->company, dirent->company, 2) != 0)) {
         for(i = 0; i < CARD_MAX_FILE; i++) {
             if (i != fileNo) {
-                CARDDir* ent = &dir[i]; // sure, just redeclare ent again...
+                CARDDir* ent = &dir[i]; // shadows the outer ent (the entry being changed)
                 if (((u8) ent->gameName[0] != 0xFF) 
                     && (memcmp(&ent->gameName, &dirent->gameName, 4) == 0) 
                     && (memcmp(&ent->company, &dirent->company, 2) == 0) 

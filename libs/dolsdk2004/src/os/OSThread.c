@@ -91,7 +91,6 @@ static void UpdatePriority(OSThread* thread);
 static OSThread* SelectThread(int yield);
 static int CheckThreadQueue(OSThreadQueue* queue);
 static int IsMember(OSThreadQueue* queue, OSThread* thread);
-static void OSSetCurrentThread(OSThread* thread);
 
 static void DefaultSwitchThreadCallback(OSThread* from, OSThread* to) {}
 static OSSwitchThreadCallback SwitchThreadCallback = DefaultSwitchThreadCallback;
@@ -118,7 +117,7 @@ static inline void OSSetCurrentThread(OSThread* thread) {
     __OSCurrentThread = thread;
 }
 
-void __OSThreadInit() {
+void __OSThreadInit(void) {
     OSThread* thread = &DefaultThread;
     OSPriority prio;
 
@@ -143,7 +142,7 @@ void __OSThreadInit() {
     OSSetCurrentContext(&thread->context);
     thread->stackBase = (u8*)&_stack_addr;
     thread->stackEnd = (u32*)&_stack_end;
-    *(u32*)thread->stackEnd = OS_THREAD_STACK_MAGIC;
+    *thread->stackEnd = OS_THREAD_STACK_MAGIC;
     OSSetCurrentThread(thread);
     OSClearStack(0);
     RunQueueBits = 0;
@@ -170,7 +169,7 @@ void OSInitThreadQueue(OSThreadQueue* queue) {
     queue->head = queue->tail = 0;
 }
 
-OSThread* OSGetCurrentThread() {
+OSThread* OSGetCurrentThread(void) {
     return __OSCurrentThread;
 }
 
@@ -207,7 +206,7 @@ static BOOL __OSIsThreadActive(OSThread* thread) {
 }
 
 s32 OSDisableScheduler(void) {
-    register BOOL enabled;
+    BOOL enabled;
     s32 count;
 
     enabled = OSDisableInterrupts();
@@ -218,7 +217,7 @@ s32 OSDisableScheduler(void) {
 }
 
 s32 OSEnableScheduler(void) {
-    register BOOL enabled;
+    BOOL enabled;
     s32 count;
 
     enabled = OSDisableInterrupts();
@@ -444,7 +443,7 @@ int OSCreateThread(OSThread* thread, void* (*func)(void*), void* param, void* st
     thread->context.lr = (u32)&OSExitThread;
     thread->context.gpr[3] = (u32)param;
     thread->stackBase = stack;
-    thread->stackEnd = (void*)((unsigned int)stack - stackSize);
+    thread->stackEnd = (u32*)((unsigned int)stack - stackSize);
     *thread->stackEnd = OS_THREAD_STACK_MAGIC;
     thread->error = 0;
     for (i = 0; i < OS_THREAD_SPECIFIC_MAX; i++) {
@@ -693,7 +692,7 @@ int OSSetThreadPriority(OSThread* thread, s32 priority) {
     enabled = OSDisableInterrupts();
 
     ASSERTMSG1LINE(LINE(1317, 1348, 1348), __OSIsThreadActive(thread) != 0, "OSSetThreadPriority(): thread %p is not active.", thread);
-    ASSERTMSG1LINE(LINE(1319, 1350, 1350), thread->state != 8, "OSSetThreadPriority(): thread %p is terminated.", thread);
+    ASSERTMSG1LINE(LINE(1319, 1350, 1350), thread->state != OS_THREAD_STATE_MORIBUND, "OSSetThreadPriority(): thread %p is terminated.", thread);
 
     if (thread->base != priority) {
         thread->base = priority;

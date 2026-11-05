@@ -191,10 +191,10 @@ s32 __CARDUnlock(s32 chan, u8 flashID[12]) {
     s32 rlen;
     u32 rshift;
 
-    u8 fsts;
+    u8 fsts; // FAKE: only assigned 0; removing it changes the object
     u32 wk, wk1;
     u32 Ans1 = 0;
-    u32 Ans2 = 0;
+    u32 Ans2 = 0; // FAKE: never read; removing it changes the object
     u32* dp;
     u8 rbuf[64];
     u32 para1A = 0;
@@ -339,7 +339,7 @@ static void DoneCallback(void* _task) {
     s32 rlen;
     u32 rshift;
 
-    u8 unk;
+    u8 status;
     u32 wk, wk1;
     u32 Ans2;
 
@@ -389,14 +389,14 @@ static void DoneCallback(void* _task) {
         return;
     }
 
-    result = __CARDReadStatus(chan, &unk);
+    result = __CARDReadStatus(chan, &status);
     if (!EXIProbe(chan)) {
         EXIUnlock(chan);
         __CARDMountCallback(chan, CARD_RESULT_NOCARD);
         return;
     }
 
-    if (result == CARD_RESULT_READY && !(unk & 0x40)) {
+    if (result == CARD_RESULT_READY && !(status & CARD_STATUS_UNLOCKED)) {
         EXIUnlock(chan);
         result = CARD_RESULT_IOERROR;
     }

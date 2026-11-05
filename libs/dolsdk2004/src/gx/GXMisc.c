@@ -18,7 +18,7 @@ void GXSetMisc(GXMiscToken token, u32 val) {
         __GXData->bpSentNot = 1;
 
         if (__GXData->vNum != 0) {
-            __GXData->dirtyState |= 8;
+            __GXData->dirtyState |= GX_DIRTY_VCD;
         }
         break;
     case GX_MT_DL_SAVE_CONTEXT:
@@ -376,7 +376,7 @@ u32 GXCompressZ16(u32 z24, GXZFmt16 zfmt) {
 #define temp exp
 #else
     s32 temp;
-    u8 unused[4];
+    u8 unused[4]; // FAKE: unused, pads the stack frame of the release build
 #endif
 
     z24n = ~(z24 << 8);

@@ -109,7 +109,7 @@ static float rsmpTab12khz[512] = {
     0.802215576172f,  0.097503662109f,
 };
 
-const double i2fMagic = 4.503601774854144E15;
+const double i2fMagic = 4.503601774854144E15; // 0x4330000080000000 (2^52 + 2^31): int-to-float constant of the asm kernels
 
 #ifdef __MWERKS__
 // clang-format off
@@ -588,6 +588,8 @@ void sndAuxCallbackChorus(u8 reason, SND_AUX_INFO* info, void* user) {
         break;
       }
 
+      // pitchHi is 0 while pitchOffset is negative and 1 while it is positive (below 0x10000); no other
+      // value runs a resampler.
       switch (c->work.src.pitchHi) {
       case 0:
         do_src1(&c->work.src);
@@ -605,16 +607,16 @@ void sndAuxCallbackChorus(u8 reason, SND_AUX_INFO* info, void* user) {
   case SND_AUX_REASON_PARAMETERUPDATE:
     break;
   default:
-      #line 957
-        MUSY_ASSERT(FALSE);
-        break;
+#line 957 // the original source line of the assert below
+    MUSY_ASSERT(FALSE);
+    break;
   }
 }
 
 bool sndAuxCallbackUpdateSettingsChorus(SND_AUX_CHORUS* ch) {
-  ch->work.currentPosHi = 0x140 - ((ch->baseDelay - 5) << 5);
+  ch->work.currentPosHi = 2 * SND_AUX_BLOCKSIZE - ((ch->baseDelay - 5) << 5);
   ch->work.currentPosLo = 0;
-  ch->work.currentPosHi = (ch->work.currentPosHi + (ch->work.currentLast - 1) * 0xa0) % 0x1e0;
+  ch->work.currentPosHi = (ch->work.currentPosHi + (ch->work.currentLast - 1) * SND_AUX_BLOCKSIZE) % (_SND_CHORUS_NUM_BLOCKS * SND_AUX_BLOCKSIZE);
   ch->work.pitchOffsetPeriod = (ch->period / 5) + 1 & ~1;
   ch->work.pitchOffsetPeriodCount = (u32)ch->work.pitchOffsetPeriod >> 1;
   ch->work.pitchOffset = (ch->variation << 16) / (ch->work.pitchOffsetPeriod * 5);
@@ -627,7 +629,7 @@ bool sndAuxCallbackPrepareChorus(SND_AUX_CHORUS* chorus) {
   s32* lastRight;
   s32* lastSur;
 
-  chorus->work.lastLeft[0] = (s32*)salMalloc(0x1680);
+  chorus->work.lastLeft[0] = (s32*)salMalloc(3 * _SND_CHORUS_NUM_BLOCKS * SND_AUX_BLOCKSIZE * sizeof(s32));
 
   if (chorus->work.lastLeft[0] != NULL) {
     chorus->work.lastRight[0] = chorus->work.lastLeft[0] + (_SND_CHORUS_NUM_BLOCKS * SND_AUX_BLOCKSIZE);
@@ -642,7 +644,7 @@ bool sndAuxCallbackPrepareChorus(SND_AUX_CHORUS* chorus) {
     lastLeft = chorus->work.lastLeft[0];
     lastRight = chorus->work.lastRight[0];
     lastSur = chorus->work.lastSur[0];
-    for (i = 0; i < 0x140; i += 1) {
+    for (i = 0; i < 2 * SND_AUX_BLOCKSIZE; i += 1) {
       *lastLeft++ = 0;
       *lastRight++ = 0;
       *lastSur++ = 0;

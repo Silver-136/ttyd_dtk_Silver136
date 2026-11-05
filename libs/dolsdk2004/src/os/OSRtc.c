@@ -3,6 +3,8 @@
 
 #include "__os.h"
 
+// Copy of the SRAM. Scb.offset is the first byte that still has to be written back; SRAM_SIZE means
+// the copy and the SRAM agree (set after a successful read or write).
 static SramControl Scb ATTRIBUTE_ALIGN(DOLPHIN_ALIGNMENT);
 
 // prototypes
@@ -31,6 +33,7 @@ static int GetRTC(u32* rtc) {
     return !err;
 }
 
+// Reads the RTC twice and accepts the value only when both reads agree; up to 16 tries.
 int __OSGetRTC(u32* rtc) {
     int err;
     u32 t0;
@@ -166,12 +169,12 @@ static int UnlockSram(int commit, u32 offset) {
     if (commit != 0) {
         if (offset == 0) {
             OSSram* sram  = (OSSram*)Scb.sram;
-            if (2u < (sram->flags & 3)) {
+            if (2u < (sram->flags & 3)) { // above OS_VIDEO_MODE_MPAL; the int name changes the compare
                 sram->flags &= ~3;
             }
 
             sram->checkSum = sram->checkSumInv = 0;
-            for(p = (u16*)&sram->counterBias; p < ((u16*)&Scb.sram[0x14]); p++) {
+            for(p = (u16*)&sram->counterBias; p < ((u16*)&Scb.sram[sizeof(OSSram)]); p++) {
                 sram->checkSum += *p;
                 sram->checkSumInv += ~(*p);
             }
@@ -180,7 +183,7 @@ static int UnlockSram(int commit, u32 offset) {
             Scb.offset = offset;
         }
 
-        if (Scb.offset <= 0x14) {
+        if (Scb.offset <= sizeof(OSSram)) {
             OSSramEx* sram = (OSSramEx*)(Scb.sram + sizeof(OSSram));
             if (((u32)sram->gbs & 0x7c00) == 0x5000 || ((u32)sram->gbs & 0xc0) == 0xc0) {
                 sram->gbs = 0;
@@ -221,7 +224,7 @@ int __OSCheckSram(void) {
 
     sram = (OSSram*)Scb.sram;
 
-    for (p = (void*)&sram->counterBias; p < (u16*)&Scb.sram[0x14]; p++) {
+    for (p = (void*)&sram->counterBias; p < (u16*)&Scb.sram[sizeof(OSSram)]; p++) {
         checkSum += *p;
         checkSumInv += ~(*p);
     }
@@ -298,7 +301,7 @@ u32 OSGetSoundMode(void) {
 
 void OSSetSoundMode(u32 mode) {
     OSSram* sram;
-    int unused;
+    int unused; // FAKE: never used; removing it changes the stack frame
 
     ASSERTLINE(617, mode == OS_SOUND_MODE_MONO || mode == OS_SOUND_MODE_STEREO);
     mode *= 4;
@@ -308,7 +311,7 @@ void OSSetSoundMode(u32 mode) {
         __OSUnlockSram(0);
         return;
     }
-    sram->flags &= 0xFFFFFFFB;
+    sram->flags &= ~4;
     sram->flags |= mode;
     __OSUnlockSram(1);
 }
@@ -325,7 +328,7 @@ u32 OSGetProgressiveMode(void) {
 
 void OSSetProgressiveMode(u32 on) {
 #ifndef DEBUG
-    u32 padding[1];
+    u32 padding[1]; // FAKE: unused, pads the stack frame of the release build
 #endif
     OSSram* sram;
 
@@ -360,7 +363,7 @@ u32 OSGetVideoMode(void) {
 
 void OSSetVideoMode(u32 mode) {
     OSSram* sram;
-    int unused;
+    int unused; // FAKE: never used; removing it changes the stack frame
 
     ASSERTLINE(731, OS_VIDEO_MODE_NTSC <= mode && mode <= OS_VIDEO_MODE_MPAL);
 
@@ -374,7 +377,7 @@ void OSSetVideoMode(u32 mode) {
         __OSUnlockSram(0);
         return;
     }
-    sram->flags &= 0xFFFFFFFC;
+    sram->flags &= ~3;
     sram->flags |= mode;
     __OSUnlockSram(1);
 }
@@ -389,7 +392,7 @@ u8 OSGetLanguage(void) {
 
 void OSSetLanguage(u8 language) {
     OSSram* sram = __OSLockSram();
-    int unused;
+    int unused; // FAKE: never used; removing it changes the stack frame
 
     if (language == sram->language) {
         __OSUnlockSram(0);
@@ -408,7 +411,7 @@ u8 __OSGetBootMode(void) {
 
 void __OSSetBootMode(u8 ntd) {
     OSSram* sram;
-    int unused;
+    int unused; // FAKE: never used; removing it changes the stack frame
 
     ntd &= 0x80;
     sram = __OSLockSram();
@@ -416,7 +419,7 @@ void __OSSetBootMode(u8 ntd) {
         __OSUnlockSram(0);
         return;
     }
-    sram->ntd &= 0xFFFFFF7F;
+    sram->ntd &= ~0x80;
     sram->ntd |= ntd;
     __OSUnlockSram(1);
 }
@@ -433,7 +436,7 @@ u32 OSGetEuRgb60Mode(void) {
 
 void OSSetEuRgb60Mode(u32 on) {
 #ifndef DEBUG
-    u32 padding[1];
+    u32 padding[1]; // FAKE: unused, pads the stack frame of the release build
 #endif
     OSSram* sram;
 
@@ -486,7 +489,7 @@ u16 OSGetGbsMode(void) {
 
 void OSSetGbsMode(u16 mode) {
 #ifndef DEBUG
-    u32 padding[1];
+    u32 padding[1]; // FAKE: unused, pads the stack frame of the release build
 #endif
     OSSramEx* sram;
 

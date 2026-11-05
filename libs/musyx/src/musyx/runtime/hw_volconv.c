@@ -75,6 +75,7 @@ static void CalcBusDPL2(float* vol_tab, float* fvl, float* fvr, float* rvl, floa
   v *= (1.f - pi->span_fm) * pan_tab[pi->span_im] + pi->span_fm * pan_tab[pi->span_im + 1];
   *fvr = v * ((1.f - pi->pan_f) * pan_tab[pi->pan_i] + pi->pan_f * pan_tab[pi->pan_i + 1]);
   *fvl = v * ((1.f - pi->pan_fm) * pan_tab[pi->pan_im] + pi->pan_fm * pan_tab[pi->pan_im + 1]);
+  // The rear terms interpolate between pan_tab_dpl2[i] and pan_tab[i + 1] (two different tables).
   *rvr =
       vs * ((1.f - pi->rpan_f) * pan_tab_dpl2[pi->rpan_i] + pi->rpan_f * pan_tab[pi->rpan_i + 1]);
   *rvl = vs *

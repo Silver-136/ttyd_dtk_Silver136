@@ -238,7 +238,8 @@ void streamHandle() {
               if (!(si->flags & SND_STREAM_MANUALARAMUPD)) {
                 if (len > si->size - si->last) {
                   hwFlushStream(si->buffer, off, si->bytes - off, si->hwStreamHandle, NULL, 0);
-                  hwFlushStream(si->buffer, 0, (cpos / SND_STREAM_ADPCM_BLKSIZE) << 3, si->hwStreamHandle, NULL, 0);
+                  // rounds cpos down to whole blocks (the other flushes round up)
+                  hwFlushStream(si->buffer, 0, (cpos / SND_STREAM_ADPCM_BLKSIZE) * SND_STREAM_ADPCM_BLKBYTES, si->hwStreamHandle, NULL, 0);
                 } else if (cpos == 0) {
                   hwFlushStream(si->buffer, off, si->bytes - off, si->hwStreamHandle, NULL, 0);
                 } else {
@@ -276,10 +277,12 @@ void streamHandle() {
   }
 }
 
+// Empty in this version.
 void streamCorrectLoops() {}
 
 void streamKill(u32 voice) {
 #if MUSY_VERSION <= MUSY_VERSION_CHECK(2, 0, 1)
+  // This arm (not built for the game) uses si without declaring it; only the #else arm declares it.
   si = &streamInfo[voice];
   switch (si->state) {
   case 1:
@@ -540,7 +543,7 @@ SND_STREAMID sndStreamAllocEx(u8 prio, void* buffer, u32 samples, u32 frq, u8 vo
     streamInfo[i].bytes = bytes;
     streamInfo[i].updateFunction = updateFunction;
     streamInfo[i].voice = -1;
-    if (flags & 1) {
+    if (flags & SND_STREAM_ADPCM) {
       if (adpcmInfo != NULL) {
         for (j = 0; j < 8; j++) {
           streamInfo[i].adpcmInfo.coefTab[j][0] = adpcmInfo->coefTab[j][0];
@@ -577,7 +580,8 @@ SND_STREAMID sndStreamAllocEx(u8 prio, void* buffer, u32 samples, u32 frq, u8 vo
     streamInfo[i].nextStreamHandle = -1;
     streamInfo[i].state = 3;
     if ((streamInfo[i].hwStreamHandle = hwInitStream(bytes)) != 0xFF) {
-      if (!(flags & 0x10000) && !sndStreamActivate(stid)) {
+      if (!(flags & SND_STREAM_INACTIVE) && !sndStreamActivate(stid)) {
+        // BUG: the ARAM stream from hwInitStream is not released (only sndStreamFree calls hwExitStream)
         MUSY_DEBUG("No voice could be allocated for streaming.\n");
         stid = -1;
       }
@@ -746,7 +750,7 @@ void sndStreamMixParameterVolume(u32 stid, u8 vol, u8 auxa, u8 auxb) {
 #endif
 
 #pragma push
-#pragma inline_depth(3)
+#pragma inline_depth(3) // FAKE: limits the inlining of the recursive call; without the pragma the object changes
 void sndStreamFrq(u32 stid, u32 frq) {
   u32 i;
   u16 pitch;

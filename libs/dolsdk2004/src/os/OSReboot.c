@@ -16,7 +16,7 @@ void __OSReboot(u32 resetCode, u32 bootDol) {
     OSClearContext(&exceptionContext);
     OSSetCurrentContext(&exceptionContext);
     argvToPass = NULL;
-    __OSBootDol(bootDol, resetCode | 0x80000000, &argvToPass);
+    __OSBootDol(bootDol, resetCode | OS_RESETCODE_RESTART, &argvToPass);
 }
 
 void OSSetSaveRegion(void* start, void* end) {

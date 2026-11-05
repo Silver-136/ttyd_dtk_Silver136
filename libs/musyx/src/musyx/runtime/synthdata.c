@@ -595,7 +595,7 @@ bool dataRemoveMacro(u16 mid) {
   }
 
   hwEnableIrq();
-  return FALSE;
+  return FALSE; // BUG: FALSE even after a removal (the other dataRemove* functions return TRUE then)
 }
 
 static s32 maccmp(void* p1, void* p2) { return ((MAC_SUBTAB*)p1)->id - ((MAC_SUBTAB*)p2)->id; }

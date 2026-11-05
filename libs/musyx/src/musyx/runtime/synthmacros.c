@@ -614,6 +614,8 @@ static void DoSetPitch(SYNTH_VOICE* svoice) {
 
     f /= (1 << no);
 
+    // BUG (here and below): when f is exactly 4096 (an exact octave ratio), f > kf[0] fails too and the
+    // search runs below kf[0].
     for (i = 11;; i--) {
       if (f > kf[i]) {
         break;
@@ -694,7 +696,7 @@ static void mcmdSetADSR(SYNTH_VOICE* svoice, MSTEP* cstep) {
           ((u8*)&adsr_ptr->data.dls.dscale)[2] << 16 | ((u8*)&adsr_ptr->data.dls.dscale)[3] << 24;
 
       if (ascale != 0x80000000) {
-        adsr.data.dls.atime += (s32)(FLT_EPSILON * svoice->orgVolume * ascale);
+        adsr.data.dls.atime += (s32)(FLT_EPSILON * svoice->orgVolume * ascale); // FLT_EPSILON = 2^-23, used as a scale factor
       }
 
       if (dscale != 0x80000000) {
@@ -777,7 +779,7 @@ static void mcmdSetPitchADSR(SYNTH_VOICE* svoice, MSTEP* cstep) {
       (((u8*)&adsr_ptr->data.dls.dscale)[2] << 16) | (((u8*)&adsr_ptr->data.dls.dscale)[3] << 24);
 
   if (ascale != 0x80000000) {
-    adsr.data.dls.atime += (s32)((FLT_EPSILON * svoice->orgVolume) * (f32)ascale);
+    adsr.data.dls.atime += (s32)((FLT_EPSILON * svoice->orgVolume) * (f32)ascale); // FLT_EPSILON = 2^-23, used as a scale factor
   }
   if (dscale != 0x80000000) {
     adsr.data.dls.dtime += (s32)((0.0078125f * svoice->orgNote) * (f32)dscale);
@@ -789,7 +791,7 @@ static void mcmdSetPitchADSR(SYNTH_VOICE* svoice, MSTEP* cstep) {
   svoice->pitchADSR.data.dls.dTime = adsrConvertTimeCents(adsr.data.dls.dtime);
   sl = (adsr.data.dls.slevel >> 2);
 
-  svoice->pitchADSR.data.dls.sLevel = 193 - dspScale2IndexTab[MIN(sl, 0x3ffull)];
+  svoice->pitchADSR.data.dls.sLevel = 193 - dspScale2IndexTab[MIN(sl, 0x3ffull)]; // FAKE: 64-bit literal; 0x3ff changes the object
   svoice->pitchADSR.data.dls.rTime = adsr.data.dls.rtime;
   adsrSetup(&svoice->pitchADSR);
   svoice->cFlags |= 0x20000000000;
@@ -1212,7 +1214,7 @@ static void mcmdIfVarCompare(SYNTH_VOICE* svoice, MSTEP* cstep, u8 cmp) {
 
   switch (cmp) {
   case 0:
-    result = !(b - a);
+    result = (a == b);
     break;
   case 1:
     result = (a < b);

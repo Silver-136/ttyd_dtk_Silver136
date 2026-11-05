@@ -64,7 +64,7 @@ static asm void Run(register void* entryPoint) {
     isync 
     mtlr r31
     blr
-
+    // never reached: the blr above jumps to the entry point; this epilogue is in the original too
     lwz r0, 0x1c(r1)
     lwz r31, 0x14(r1)
     addi r1, r1, 0x18
@@ -200,7 +200,7 @@ static AppLoaderStruct* LoadApploader() {
     ReadDisc(header, sizeof(AppLoaderStruct), GetApploaderPosition());
     ASSERTMSGLINE(LINE(401, 407, 409), header->rebootSize != 0, "OSResetSystem(): old apploader");
 
-    ReadDisc((void*)0x81200000, OSRoundUp32B(header->size), GetApploaderPosition() + 0x20);
+    ReadDisc((void*)0x81200000, OSRoundUp32B(header->size), GetApploaderPosition() + sizeof(AppLoaderStruct));
     ICInvalidateRange((void*)0x81200000, OSRoundUp32B(header->size));
     return header;
 }

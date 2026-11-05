@@ -467,6 +467,8 @@ u32 seqStartPlay(PAGE* norm, PAGE* drum, MIDISETUP* midiSetup, u32* song, SND_PL
   }
   if (midiSetup != NULL) {
     for (i = 0; i < 16; i++) {
+      // BUG: DoPrgChange clears seqMIDIPriority[curSeqId] (the sequence seqHandle ran last), not the row
+      // of this new instance (that row is reset below anyway).
       DoPrgChange(nseq, midiSetup->channel[i].program, i);
       inpSetMidiCtrl(SND_MIDICTRL_VOLUME, i, seqId, midiSetup->channel[i].volume);
       inpSetMidiCtrl(SND_MIDICTRL_PANNING, i, seqId, midiSetup->channel[i].panning);
@@ -627,6 +629,8 @@ void seqStop(u32 seqId) {
   }
 }
 
+// BUG (both loops here and in seqKillInstancesByGroupID): seqStop puts si at the head of the free list
+// (si->next = seqFreeRoot), so si = si->next then walks the free list and the rest of the list is skipped.
 void seqKillAllInstances() {
   SEQ_INSTANCE* si;
   for (si = seqActiveRoot; si != NULL; si = si->next) {

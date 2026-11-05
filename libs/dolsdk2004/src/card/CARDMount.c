@@ -185,7 +185,7 @@ static s32 DoMount(s32 chan) {
             goto error;
         }
 
-        if (!(status & 0x40)) {
+        if (!(status & CARD_STATUS_UNLOCKED)) {
             result = __CARDUnlock(chan, card->id);
             if (result < 0)
                 goto error;

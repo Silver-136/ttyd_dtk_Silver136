@@ -322,6 +322,8 @@ static inline u32 ConvLightID2Num(GXLightID id) {
     }
 }
 
+// Release builds copy the light object into the FIFO with this paired-single block; the DEBUG build of
+// GXLoadLightObjImm writes the same sixteen words one by one.
 static inline void PushLight(const register GXLightObj* lt_obj, register void* dest) {
     register u32 zero, color;
     register f32 a0_a1, a2_k0, k1_k2;
@@ -530,7 +532,7 @@ void GXSetNumChans(u8 nChans) {
 
     SET_REG_FIELD(860, __GXData->genMode, 3, 4, nChans);
     GX_WRITE_XF_REG(9, nChans);
-    __GXData->dirtyState |= 4;
+    __GXData->dirtyState |= GX_DIRTY_GEN_MODE;
 }
 
 void GXSetChanCtrl(GXChannelID chan, GXBool enable, GXColorSrc amb_src, GXColorSrc mat_src, u32 light_mask, GXDiffuseFn diff_fn, GXAttnFn attn_fn) {

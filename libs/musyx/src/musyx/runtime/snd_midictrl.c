@@ -328,6 +328,8 @@ void inpSetMidiCtrl(u8 ctrl, u8 channel, u8 set, u8 value) {
 #endif
 
   } else {
+    // BUG: in this FX branch set is 0xFF, but the RPN helpers (controllers 6, 38, 96, 97) index
+    // midi_ctrl[set] and inpChannelDefaults[set], which have 8 rows.
     switch (ctrl) {
     case 6:
       inpSetRPNHi(set, channel, value);
@@ -579,7 +581,7 @@ static u16 _GetInputValue(struct SYNTH_VOICE* svoice, struct CTRL_DEST* inp,
   for (value = 0, i = 0; i < inp->numSource; ++i) {
     if (inp->source[i].combine & 0x10) {
       tmp = (svoice != NULL ? varGet(svoice, 0, inp->source[i].midiCtrl) : 0);
-      goto block_18;
+      goto apply_scale;
     }
     ctrl = inp->source[i].midiCtrl;
     if (ctrl == 128 || ctrl == 1 || ctrl == 10 || ctrl == 160 || ctrl == 161 || ctrl == 131) {
@@ -597,9 +599,11 @@ static u16 _GetInputValue(struct SYNTH_VOICE* svoice, struct CTRL_DEST* inp,
         tmp = inpGetMidiCtrl(ctrl, midi, midiSet) - 0x2000;
         break;
       }
-    block_18:
+    apply_scale:
       tmp = (tmp * (inp->source[i].scale >> 1)) >> 15;
       tmp = CLAMP_INV(tmp, -0x2000, 0x1FFF);
+      // sign is never initialised and only ever set TRUE: a list whose first source has combine 1-3
+      // reads it unset.
       switch (inp->source[i].combine & 15) {
       case 0:
         value = tmp + 0x2000;

@@ -121,7 +121,6 @@ void* salAiGetDest() {
 }
 
 u32 salInitDsp() {
-  u8 _[8];
   dsp_task.iram_mmem_addr = (u16*)dspSlave;
   dsp_task.iram_length = dspSlaveLength;
   dsp_task.iram_addr = 0;

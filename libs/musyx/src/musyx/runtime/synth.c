@@ -233,15 +233,15 @@ static u32 StartLayer(u16 layerID, s16 prio, u8 maxVoices,
 
     switch (l->id & 0xC000) {
     case 0:
-      new_id = macStart(l->id, prio, maxVoices, allocId, k | key & 0x80, v, p, midi, midiSet,
+      new_id = macStart(l->id, prio, maxVoices, allocId, k | (key & 0x80), v, p, midi, midiSet,
                         section, step, trackid, 0, vGroup, studio, itd);
       break;
     case 0x4000:
-      new_id = StartKeymap(l->id, prio, maxVoices, allocId, k | key & 0x80, v, p, midi, midiSet,
+      new_id = StartKeymap(l->id, prio, maxVoices, allocId, k | (key & 0x80), v, p, midi, midiSet,
                            section, step, trackid, 0, vGroup, studio, itd);
       break;
     case 0x8000:
-      new_id = StartLayer(l->id, prio, maxVoices, allocId, k | key & 0x80, v, p, midi, midiSet,
+      new_id = StartLayer(l->id, prio, maxVoices, allocId, k | (key & 0x80), v, p, midi, midiSet,
                           section, step, trackid, 0, vGroup, studio, itd);
       break;
     }
@@ -293,7 +293,7 @@ static u32 StartKeymap(u16 keymapID, s16 prio, u8 maxVoices,
     o = key & 0x7f;
     if (keymap[o].id != 0xffff && (keymap[o].id & 0xc000) != 0x4000) {
       if ((keymap[o].panning & 0x80) == 0) {
-        p = (keymap[key].panning - 0x40);
+        p = (keymap[key].panning - 0x40); // BUG: indexes with key, not with o = key & 0x7f as the lines around it
         p += panning;
         if (p < 0) {
           panning = 0;
@@ -319,11 +319,11 @@ static u32 StartKeymap(u16 keymapID, s16 prio, u8 maxVoices,
         if (vid != 0xffffffff) {
           return vid;
         }
-        return macStart(keymap[o].id, prio, maxVoices, allocId, k | key & 0x80, vol, panning, midi,
+        return macStart(keymap[o].id, prio, maxVoices, allocId, k | (key & 0x80), vol, panning, midi,
                         midiSet, section, step, trackid, vidFlag, vGroup, studio, itd);
       }
 
-      return StartLayer(keymap[o].id, prio, maxVoices, allocId, k | key & 0x80, vol, panning, midi,
+      return StartLayer(keymap[o].id, prio, maxVoices, allocId, k | (key & 0x80), vol, panning, midi,
                         midiSet, section, step, trackid, vidFlag & 0xff, vGroup, studio, itd);
     }
   }
@@ -683,7 +683,7 @@ static void ZeroOffsetHandler(u32 i) {
   if ((sv->treScale | sv->treModAddScale) != 0) {
     Modulation = inpGetModulation(sv);
     lfo = (f32)(8192 - (8192 - ((s16)inpGetTremolo(sv) - 8192) >> 1)) * (1.f / 8192.f);
-    mscale = 1.f - (f32)Modulation * (4096 - sv->treModAddScale) * 1.490207e-08f /* 1/(8192^2)? */;
+    mscale = 1.f - (f32)Modulation * (4096 - sv->treModAddScale) * 1.490207e-08f /* 1 / (16383 * 4096) */;
     scale = (f32)sv->treScale * mscale * (1.f / 4096.f);
     if (sv->treCurScale < scale) {
       if ((sv->treCurScale += 0.2f) > scale) {
@@ -725,13 +725,13 @@ static void ZeroOffsetHandler(u32 i) {
 
   if (volUpdate || (sv->midiDirtyFlags & 0xf01) != 0) {
     preVol = voiceVol;
-    postVol = voiceVol * vol * (f32)inpGetVolume(sv) * (1.f / 16383.f) /* 1/16384? */;
+    postVol = voiceVol * vol * (f32)inpGetVolume(sv) * (1.f / 16383.f);
     auxa = ((f32)sv->revVolOffset * (1.f / 127.f)) +
-           ((preVol * (f32)inpGetPreAuxA(sv) * (1.f / 16383.f) /* 1/16384? */) +
+           ((preVol * (f32)inpGetPreAuxA(sv) * (1.f / 16383.f)) +
             ((f32)sv->revVolScale *
-             (postVol * (f32)inpGetReverb(sv) * (1.f / 16383.f) /* 1/16384? */) * (1.f / 127.f)));
-    auxb = (preVol * (f32)inpGetPreAuxB(sv) * (1.f / 16383.f) /* 1/16384? */) +
-           (postVol * (f32)inpGetPostAuxB(sv) * (1.f / 16383.f) /* 1/16384? */);
+             (postVol * (f32)inpGetReverb(sv) * (1.f / 16383.f)) * (1.f / 127.f)));
+    auxb = (preVol * (f32)inpGetPreAuxB(sv) * (1.f / 16383.f)) +
+           (postVol * (f32)inpGetPostAuxB(sv) * (1.f / 16383.f));
     sv->curOutputVolume = (u16)(postVol * 32767.f);
     hwSetVolume(i, sv->volTable, postVol, sv->lastPan, sv->lastSPan, auxa, auxb);
   }
@@ -1244,6 +1244,7 @@ void synthVolume(u8 volume, u16 time, u8 vGroup, u8 seqMode, u32 seqId) {
     return;
 
   default:
+    // BUG: no range check: a vGroup of 32 or more (below the special groups) indexes past synthMasterFader[32]
     SetupFader(&synthMasterFader[vGroup], volume, ltime, seqMode, seqId);
     synthMasterFaderActiveFlags |= 1 << vGroup;
     return;
@@ -1336,7 +1337,7 @@ void synthPauseVolume(u8 volume, u16 time, u8 vGroup) {
     return;
 
   default:
-    smf = &synthMasterFader[vGroup];
+    smf = &synthMasterFader[vGroup]; // BUG: the same unchecked index as in synthVolume
     smf->pauseStart = smf->pauseVol;
     smf->pauseTarget = (f32)volume * (1.f / 127.f);
     smf->pauseTime = 1.f;

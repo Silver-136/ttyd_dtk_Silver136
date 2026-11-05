@@ -3,7 +3,7 @@
 
 #include "__os.h"
 
-typedef char* (*ParseStringCallback)(u16, char*, OSFontHeader**, int*);
+typedef char* (*ParseStringCallback)(u16, const char*, OSFontHeader**, int*);
 
 static OSFontHeader* FontDataAnsi;
 static OSFontHeader* FontDataSjis;
@@ -15,6 +15,7 @@ static u16 FontEncode = 0xFFFF;
 static char* ParseStringS(u16 encode, const char* string, OSFontHeader** pfont, int* pfontCode);
 static char* ParseStringW(u16 encode, const char* string, OSFontHeader** pfont, int* pfontCode);
 
+// Glyph index for the single-byte Shift-JIS codes 0x20-0xDF, indexed by code - 0x20 (GetFontCode).
 static u16 HankakuToCode[]
     = { 0x20C, 0x20D, 0x20E, 0x20F, 0x210, 0x211, 0x212, 0x213,
         0x214, 0x215, 0x216, 0x217, 0x218, 0x219, 0x21A, 0x21B,
@@ -42,6 +43,8 @@ static u16 HankakuToCode[]
         0x2A2, 0x2A3, 0x2A4, 0x2A5, 0x2A6, 0x2A7, 0x2A8, 0x2A9,
     };
 
+// Glyph index for the two-byte Shift-JIS codes 0x8140-0x879D, indexed by (lead - 0x81) * 188 + trail
+// position (GetFontCode).
 static u16 Zenkaku2Code[]
     = { 0x000, 0x001, 0x002, 0x003, 0x004, 0x005, 0x006, 0x007,
         0x008, 0x009, 0x00A, 0x00B, 0x00C, 0x00D, 0x00E, 0x00F,
@@ -209,6 +212,9 @@ static BOOL IsSjisTrailByte(u8 c) {
     return (0x40 <= c && c <= 0xFC) && (c != 0x7F);
 }
 
+// SJIS: one-byte codes and the two-byte codes below 0x879E go through the tables above; the kanji
+// 0x889F-0x9872 map straight to glyphs 0x2BE onward. Each lead byte has 188 trail bytes (0x40-0xFC
+// without 0x7F). ANSI: glyph = code - 0x20.
 static int GetFontCode(u16 encode, u16 code) {
     if (encode == OS_FONT_ENCODE_SJIS) {
         if (code >= 0x20 && code <= 0xDF) {
@@ -253,6 +259,9 @@ static int GetFontCode(u16 encode, u16 code) {
     return 0;
 }
 
+// Expands the compressed font image s (the "Yay" format, see GetFontSize) into d. Header words:
+// +0x4 size of the expanded data, +0x8 offset of the link table, +0xC offset of the literal bytes;
+// the mask bits start at +0x10.
 static void Decode(u8* s, u8* d) {
     int i;
     int j;
@@ -262,11 +271,11 @@ static void Decode(u8* s, u8* d) {
     int linkOffset;
     int dataOffset;
     int cnt;
-    int os;
+    int decodedSize;
     unsigned int flag;
     unsigned int code;
 
-    os  = *(int*)(s + 0x4);
+    decodedSize = *(int*)(s + 0x4);
     linkOffset  = *(int*)(s + 0x8);
     dataOffset = *(int*)(s + 0xC);
 
@@ -310,7 +319,7 @@ static void Decode(u8* s, u8* d) {
         // Prepare next mask bit
         code <<= 1;
         flag--;
-    } while (q < os);
+    } while (q < decodedSize);
 }
 
 static u32 GetFontSize(u8* buf) {
@@ -326,7 +335,7 @@ u16 OSGetFontEncode(void) {
         return FontEncode;
     }
 
-    switch (*(int*)OSPhysicalToCached(0xCC)) {
+    switch (__OSTVMode) {
     case VI_NTSC:
         FontEncode = (__VIRegs[VI_DTV_STAT] & 2) ? OS_FONT_ENCODE_SJIS : OS_FONT_ENCODE_ANSI;
         break;
@@ -339,7 +348,7 @@ u16 OSGetFontEncode(void) {
         FontEncode = OS_FONT_ENCODE_ANSI;
     }
 
-    ParseString = (ParseStringCallback)ParseStringS;
+    ParseString = ParseStringS;
     return FontEncode;
 }
 
@@ -351,8 +360,8 @@ u16 OSSetFontEncode(u16 encode) {
     prev = OSGetFontEncode();
     if (encode <= OS_FONT_ENCODE_MAX) {
         FontEncode = encode;
-        if (encode >= 3 && encode <= OS_FONT_ENCODE_MAX) {
-            ParseString = (ParseStringCallback)ParseStringW;
+        if (encode >= OS_FONT_ENCODE_UTF8 && encode <= OS_FONT_ENCODE_MAX) {
+            ParseString = ParseStringW;
         }
     }
 
@@ -370,14 +379,14 @@ static void ReadROM(void* buf, int length, int offset) {
         }
 
         offset += len;
-        (u8*)buf += len;
+        buf = (u8*)buf + len;
     }
 }
 
 static u32 ReadFont(void* img, u16 encode, void* fontData) {
     u32 size;
 #ifndef DEBUG
-    u32 padding[1];
+    u32 padding[1]; // FAKE: unused, pads the stack frame of the release build
 #endif
 
     if (encode == OS_FONT_ENCODE_SJIS) {
@@ -405,6 +414,7 @@ static u32 ReadFont(void* img, u16 encode, void* fontData) {
         u8* src;
         u16 imageT[4] = {0x2ABE, 0x003D, 0x003D, 0x003D};
 
+        // Overwrite the first four pixels of rows 4-7 of the glyph for code 0x54 with the fixed pattern in imageT.
         fontCode = GetFontCode(encode, 0x54);
         sheet = fontCode / (font->sheetColumn * font->sheetRow);
         numChars = fontCode - (sheet * (font->sheetColumn * font->sheetRow)); 
@@ -444,9 +454,9 @@ u32 OSLoadFont(OSFontHeader* fontData, void* tmp) {
         FontDataSjis = fontData;
         size = ReadFont(tmp, OS_FONT_ENCODE_SJIS, FontDataSjis);
         break;
-    case 3:
-    case 4:
-    case 5:
+    case OS_FONT_ENCODE_UTF8:
+    case OS_FONT_ENCODE_UTF16:
+    case OS_FONT_ENCODE_UTF32:
         FontDataAnsi = fontData;
         size = ReadFont(tmp, OS_FONT_ENCODE_ANSI, FontDataAnsi);
         if (size != 0) {
@@ -520,13 +530,13 @@ static char* ParseStringW(u16 encode, const char* string, OSFontHeader** pfont, 
             code = (code << 8 | *string++);
         }
         break;
-    case 3:
+    case OS_FONT_ENCODE_UTF8:
         string = OSUTF8to32(string, &utf32);
         break;
-    case 4:
+    case OS_FONT_ENCODE_UTF16:
         string = (const char*)OSUTF16to32((u16*)string, &utf32);
         break;
-    case 5:
+    case OS_FONT_ENCODE_UTF32:
         utf32 = *(u32*)string;
         if (utf32 != 0) {
             string += 4;
@@ -572,7 +582,7 @@ char* OSGetFontTexel(const char* string, void* image, s32 pos, s32 stride, s32* 
     u8* imageSrc;
 
     encode = OSGetFontEncode();
-    string = ParseString(encode, (char*)string, &font, &fontCode);
+    string = ParseString(encode, string, &font, &fontCode);
     colorIndex = &font->c0;
     ASSERTLINE(828, font->sheetFormat == GX_TF_I4);
     
@@ -647,7 +657,7 @@ int OSInitFont(OSFontHeader* fontData) {
     encode = OSGetFontEncode();
     switch (encode) {
     case OS_FONT_ENCODE_ANSI:
-        tmp = (void*)((u8*)fontData + 0x1D120);
+        tmp = (void*)((u8*)fontData + OS_FONT_SIZE_ANSI - OS_FONT_ROM_SIZE_ANSI);
         FontDataAnsi = fontData;
         size = ReadFont(tmp, OS_FONT_ENCODE_ANSI, FontDataAnsi);
         if (size == 0) {
@@ -670,9 +680,9 @@ int OSInitFont(OSFontHeader* fontData) {
         FontDataSjis->sheetImage = OSRoundUp32B(FontDataSjis->sheetImage);
         ExpandFontSheet(FontDataSjis, img, (u8*)FontDataSjis + FontDataSjis->sheetImage);
         break;
-    case 3:
-    case 4:
-    case 5:
+    case OS_FONT_ENCODE_UTF8:
+    case OS_FONT_ENCODE_UTF16:
+    case OS_FONT_ENCODE_UTF32:
         tmp = (void*)((u8*)fontData + 0xF4020);
         FontDataAnsi = fontData;
         size = ReadFont(tmp, OS_FONT_ENCODE_ANSI, FontDataAnsi);
@@ -684,7 +694,7 @@ int OSInitFont(OSFontHeader* fontData) {
         FontDataAnsi->sheetImage = OSRoundUp32B(FontDataAnsi->sheetImage);
         ExpandFontSheet(FontDataAnsi, img, (u8*)FontDataAnsi + FontDataAnsi->sheetImage);
 
-        FontDataSjis = (OSFontHeader*)((u8*)FontDataAnsi + 0x20120);
+        FontDataSjis = (OSFontHeader*)((u8*)FontDataAnsi + OS_FONT_SIZE_ANSI);
         size = ReadFont(tmp, OS_FONT_ENCODE_SJIS, FontDataSjis);
         if (size == 0) {
             return 0;
@@ -712,7 +722,7 @@ char* OSGetFontTexture(const char* string, void** image, s32* x, s32* y, s32* wi
     int column;
 
     encode = OSGetFontEncode();
-    string = ParseString(encode, (char*)string, &font, &fontCode);
+    string = ParseString(encode, string, &font, &fontCode);
     sheet = fontCode / (font->sheetColumn * font->sheetRow);
     ((u32*)image)[0] = (u32)font + font->sheetImage + (font->sheetSize * sheet);
     numChars = fontCode - (sheet * (font->sheetColumn * font->sheetRow)); 
@@ -735,7 +745,7 @@ char* OSGetFontWidth(const char* string, s32* width) {
     int fontCode;
 
     encode = OSGetFontEncode();
-    string = ParseString(encode, (char*)string, &font, &fontCode);
+    string = ParseString(encode, string, &font, &fontCode);
     
     if (width != 0) {
         *width = ((u8*)font + font->widthTable)[fontCode];

@@ -4,7 +4,7 @@
 
 #include "__os.h"
 
-OSErrorHandler __OSErrorTable[17];
+OSErrorHandler __OSErrorTable[__OS_EXCEPTION_FLOATING_POINT_EXCEPTION + 1];
 #ifdef VERSION_G8ME01
 #pragma force_active on
 u8 gap_OSError_bss[0xC];
@@ -52,7 +52,7 @@ OSErrorHandler OSSetErrorHandler(OSError error, OSErrorHandler handler) {
     OSThread* thread;
     int i;
 
-    ASSERTMSGLINE(209, error < 17, "OSSetErrorHandler(): unknown error.");
+    ASSERTMSGLINE(209, error < __OS_EXCEPTION_FLOATING_POINT_EXCEPTION + 1, "OSSetErrorHandler(): unknown error.");
 
     enabled = OSDisableInterrupts();
     oldHandler = __OSErrorTable[error];
@@ -202,7 +202,7 @@ void __OSUnhandledException(__OSException exception, OSContext* context, u32 dsi
     case __OS_EXCEPTION_PROGRAM:
         OSReport("\nProgram exception : Possible illegal instruction/operation "
                     "at or around 0x%x (read from SRR0)\n",
-                    context->srr0, dar);
+                    context->srr0, dar); // dar is passed but the format prints one value
         break;
     case __OS_EXCEPTION_MEMORY_PROTECTION:
         OSReport("\n");

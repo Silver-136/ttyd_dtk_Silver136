@@ -4,8 +4,6 @@
 
 #include "__os.h"
 
-#define HID2 920
-
 // prototypes
 void DMAErrorHandler(OSError error, OSContext* context, ...);
 
@@ -13,7 +11,7 @@ void DMAErrorHandler(OSError error, OSContext* context, ...);
 asm void DCFlashInvalidate(void) {
     nofralloc
     mfspr r3, HID0
-    ori r3, r3, 0x400
+    ori r3, r3, HID0_DCFI
     mtspr HID0, r3
     blr
 }
@@ -22,7 +20,7 @@ asm void DCEnable(void) {
     nofralloc
     sync
     mfspr r3, HID0
-    ori   r3, r3, 0x4000
+    ori   r3, r3, HID0_DCE
     mtspr HID0, r3
     blr
 }
@@ -40,7 +38,7 @@ asm void DCFreeze(void) {
     nofralloc
     sync
     mfspr r3, HID0
-    ori r3, r3, 0x1000
+    ori r3, r3, HID0_DLOCK
     mtspr HID0, r3
     blr
 }
@@ -231,7 +229,7 @@ asm void ICInvalidateRange(register void* addr, register u32 nBytes) {
 asm void ICFlashInvalidate(void) {
     nofralloc
     mfspr r3, HID0
-    ori r3, r3, 0x800
+    ori r3, r3, HID0_ICFI
     mtspr HID0, r3
     blr
 }
@@ -240,7 +238,7 @@ asm void ICEnable(void) {
     nofralloc
     isync
     mfspr r3, HID0
-    ori r3, r3, 0x8000
+    ori r3, r3, HID0_ICE
     mtspr HID0, r3
     blr
 }
@@ -258,7 +256,7 @@ asm void ICFreeze(void) {
     nofralloc
     isync
     mfspr r3, HID0
-    ori r3, r3, 0x2000
+    ori r3, r3, HID0_ILOCK
     mtspr HID0, r3
     blr
 }
@@ -289,7 +287,7 @@ asm void ICSync(void) {
 static asm void __LCEnable(void) {
     nofralloc
     mfmsr   r5
-    ori     r5, r5, 0x1000
+    ori     r5, r5, MSR_ME
     mtmsr   r5
 
     lis     r3, OS_CACHED_REGION_PREFIX
@@ -301,7 +299,7 @@ _touchloop:
     addi    r3,r3,32
     bdnz    _touchloop
     mfspr   r4, HID2
-    oris    r4, r4, 0x100F
+    oris    r4, r4, (HID2_LCE | HID2_DCHEE | HID2_DNCEE | HID2_DCMEE | HID2_DQOEE) >> 16
     mtspr   HID2, r4
 
     nop 
@@ -412,7 +410,7 @@ asm void LCLoadBlocks(register void* destTag, register void* srcAddr, register u
     mtspr   DMA_U, r6
     rlwinm  r6, numBlocks, 2, 28, 29
     or      r6, r6, destTag
-    ori     r6, r6, 0x12
+    ori     r6, r6, DMA_L_LOAD | DMA_L_TRIGGER
     mtspr   DMA_L, r6
     blr
 }
@@ -425,7 +423,7 @@ asm void LCStoreBlocks(register void* destAddr, register void* srcTag, register 
     mtspr   DMA_U, r6
     rlwinm  r6, numBlocks, 2, 28, 29
     or      r6, r6, srcTag
-    ori     r6, r6, 0x2
+    ori     r6, r6, DMA_L_STORE | DMA_L_TRIGGER
     mtspr   DMA_L, r6
     blr
 }

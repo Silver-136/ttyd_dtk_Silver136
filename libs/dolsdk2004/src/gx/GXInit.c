@@ -194,38 +194,31 @@ static int __GXShutdown(BOOL final) {
     return 1;
 }
 
-#define SOME_SET_REG_MACRO(reg, size, shift, val)                                                   \
-	do {                                                                                            \
-		(reg) = (u32)__rlwimi((u32)(reg), (val), (shift), (32 - (shift) - (size)), (31 - (shift))); \
-	} while (0);
-
 void __GXInitRevisionBits(void) {
     u32 i;
 
     for (i = 0; i < 8; i++) {
-        s32 regAddr;
-        SOME_SET_REG_MACRO(__GXData->vatA[i], 1, 30, 1);
-        SOME_SET_REG_MACRO(__GXData->vatB[i], 1, 31, 1);
+        SET_REG_FIELD(0, __GXData->vatA[i], 1, 30, 1);
+        SET_REG_FIELD(0, __GXData->vatB[i], 1, 31, 1);
 
         GX_WRITE_U8(0x8);
         GX_WRITE_U8(i | 0x80);
         GX_WRITE_U32(__GXData->vatB[i]);
-        regAddr = i - 12;
     }
 
     {
         u32 reg1 = 0;
         u32 reg2 = 0;
 
-        SOME_SET_REG_MACRO(reg1, 1, 0, 1);
-        SOME_SET_REG_MACRO(reg1, 1, 1, 1);
-        SOME_SET_REG_MACRO(reg1, 1, 2, 1);
-        SOME_SET_REG_MACRO(reg1, 1, 3, 1);
-        SOME_SET_REG_MACRO(reg1, 1, 4, 1);
-        SOME_SET_REG_MACRO(reg1, 1, 5, 1);
+        SET_REG_FIELD(0, reg1, 1, 0, 1);
+        SET_REG_FIELD(0, reg1, 1, 1, 1);
+        SET_REG_FIELD(0, reg1, 1, 2, 1);
+        SET_REG_FIELD(0, reg1, 1, 3, 1);
+        SET_REG_FIELD(0, reg1, 1, 4, 1);
+        SET_REG_FIELD(0, reg1, 1, 5, 1);
         GX_WRITE_XF_REG(0, reg1);
 
-        SOME_SET_REG_MACRO(reg2, 1, 0, 1);
+        SET_REG_FIELD(0, reg2, 1, 0, 1);
         GX_WRITE_XF_REG(0x12, reg2);
 #if DEBUG
         __gxVerif->xfRegsDirty[0] = 0;
@@ -234,11 +227,11 @@ void __GXInitRevisionBits(void) {
 
     {
         u32 reg = 0;
-        SOME_SET_REG_MACRO(reg, 1, 0, 1);
-        SOME_SET_REG_MACRO(reg, 1, 1, 1);
-        SOME_SET_REG_MACRO(reg, 1, 2, 1);
-        SOME_SET_REG_MACRO(reg, 1, 3, 1);
-        SOME_SET_REG_MACRO(reg, 8, 24, 0x58);
+        SET_REG_FIELD(0, reg, 1, 0, 1);
+        SET_REG_FIELD(0, reg, 1, 1, 1);
+        SET_REG_FIELD(0, reg, 1, 2, 1);
+        SET_REG_FIELD(0, reg, 1, 3, 1);
+        SET_REG_FIELD(0, reg, 8, 24, 0x58);
         GX_WRITE_RAS_REG(reg);
     }
 }
@@ -362,7 +355,6 @@ GXFifoObj* GXInit(void* base, u32 size) {
     {
         u32 reg = 0;
 #if DEBUG
-        s32 regAddr;
 #endif
         GX_SET_CP_REG(3, reg);
 
@@ -415,14 +407,14 @@ void __GXInitGX(void) {
     }
 
     GXSetCopyClear(clear, 0xFFFFFF);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX2, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD3, GX_TG_MTX2x4, GX_TG_TEX3, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD4, GX_TG_MTX2x4, GX_TG_TEX4, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD5, GX_TG_MTX2x4, GX_TG_TEX5, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD6, GX_TG_MTX2x4, GX_TG_TEX6, 0x3C);
-    GXSetTexCoordGen(GX_TEXCOORD7, GX_TG_MTX2x4, GX_TG_TEX7, 0x3C);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX2, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD3, GX_TG_MTX2x4, GX_TG_TEX3, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD4, GX_TG_MTX2x4, GX_TG_TEX4, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD5, GX_TG_MTX2x4, GX_TG_TEX5, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD6, GX_TG_MTX2x4, GX_TG_TEX6, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD7, GX_TG_MTX2x4, GX_TG_TEX7, GX_IDENTITY);
     GXSetNumTexGens(1);
     GXClearVtxDesc();
     GXInvalidateVtxCache();

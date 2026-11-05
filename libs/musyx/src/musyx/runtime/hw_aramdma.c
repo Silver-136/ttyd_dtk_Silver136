@@ -1,3 +1,4 @@
+// The #line directives keep the original source line numbers of the asserts that follow them.
 #include "musyx/assert.h"
 #include "musyx/musyx.h"
 #include "musyx/hardware.h"
@@ -164,13 +165,13 @@ unsigned long aramGetUserBytes(unsigned long len) { return len - sizeof(s16) * 6
 #endif
 
 void aramSetUploadCallback(void* (*callback)(unsigned long, unsigned long),
-                           unsigned long chunckSize) {
+                           unsigned long chunkSize) {
   unsigned long acs;
 
   if (callback != NULL) {
-    chunckSize = (chunckSize + 31) & ~31;
+    chunkSize = (chunkSize + 31) & ~31;
     acs = ARQGetChunkSize();
-    aramUploadChunkSize = chunckSize < acs ? acs : chunckSize;
+    aramUploadChunkSize = chunkSize < acs ? acs : chunkSize;
   }
 
   aramUploadCallback = callback;
@@ -311,6 +312,9 @@ unsigned char aramAllocateStreamBuffer(unsigned long len) {
       aramUsedStreamBuffers = oSb;
     }
   } else {
+    // BUG: lastSb is the predecessor only for an exact-size match (the loop breaks there). For a larger
+    // best fit the loop runs to the end, so lastSb is the last free buffer and the unlink below patches
+    // the wrong node.
     if (lastSb != NULL) {
       lastSb->next = oSb->next;
     } else {
@@ -458,7 +462,7 @@ void aramExit() {}
 unsigned long aramGetZeroBuffer() { return 0; }
 
 void aramSetUploadCallback(void* (*callback)(unsigned long, unsigned long),
-                           unsigned long chunckSize) {}
+                           unsigned long chunkSize) {}
 
 void* aramStoreData(void* src, unsigned long len) {}
 

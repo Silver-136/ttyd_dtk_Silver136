@@ -17,7 +17,7 @@
 extern bool ReverbHICreate(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32 damping,
                            f32 preDelay, f32 crosstalk);
 extern void ReverbHIFree(_SND_REVHI_WORK* rev);
-extern void ReverbHIModify(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32 damping,
+extern bool ReverbHIModify(_SND_REVHI_WORK* rev, f32 coloration, f32 time, f32 mix, f32 damping,
                            f32 preDelay, f32 crosstalk);
 extern void ReverbHICallback(s32* left, s32* right, s32* surround, SND_AUX_REVERBHI* rev);
 

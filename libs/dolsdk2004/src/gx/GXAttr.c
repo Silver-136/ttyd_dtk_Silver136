@@ -107,7 +107,7 @@ void GXSetVtxDesc(GXAttr attr, GXAttrType type) {
     } else {
         SET_REG_FIELD(0, __GXData->vcdLo, 2, 11, 0);
     }
-    __GXData->dirtyState |= 8;
+    __GXData->dirtyState |= GX_DIRTY_VCD;
 }
 
 void GXSetVtxDescv(const GXVtxDescList* attrPtr) {
@@ -127,7 +127,7 @@ void GXSetVtxDescv(const GXVtxDescList* attrPtr) {
     } else {
         SET_REG_FIELD(326, __GXData->vcdLo, 2, 11, 0);
     }
-    __GXData->dirtyState |= 8;
+    __GXData->dirtyState |= GX_DIRTY_VCD;
 }
 
 void __GXSetVCD(void) {
@@ -245,7 +245,7 @@ void GXClearVtxDesc(void) {
     __GXData->vcdHi = 0;
     __GXData->hasNrms = 0;
     __GXData->hasBiNrms = 0;
-    __GXData->dirtyState |= 8;
+    __GXData->dirtyState |= GX_DIRTY_VCD;
 }
 
 static inline void SETVAT(u32* va, u32* vb, u32* vc, GXAttr attr, GXCompCnt cnt, GXCompType type, u8 shft) {
@@ -336,7 +336,7 @@ void GXSetVtxAttrFmt(GXVtxFmt vtxfmt, GXAttr attr, GXCompCnt cnt, GXCompType typ
     __GXVerifyVATImm(attr, cnt, type, frac);
 #endif
 
-    __GXData->dirtyState |= 0x10;
+    __GXData->dirtyState |= GX_DIRTY_VAT;
     __GXData->dirtyVAT |= (u8)(1 << (u8)vtxfmt);
 }
 
@@ -362,7 +362,7 @@ void GXSetVtxAttrFmtv(GXVtxFmt vtxfmt, const GXVtxAttrFmtList* list) {
 #endif
         list++;
     }
-    __GXData->dirtyState |= 0x10;
+    __GXData->dirtyState |= GX_DIRTY_VAT;
     __GXData->dirtyVAT |= (u8)(1 << (u8)vtxfmt);
 }
 
@@ -531,7 +531,6 @@ void GXInvalidateVtxCache(void) {
 void GXSetTexCoordGen2(GXTexCoordID dst_coord, GXTexGenType func, GXTexGenSrc src_param, u32 mtx, GXBool normalize, u32 pt_texmtx) {
     u32 reg = 0;
     u32 row;
-    u32 bumprow;  // unused
     u32 form;
     GXAttr mtxIdAttr;
 
@@ -555,13 +554,13 @@ void GXSetTexCoordGen2(GXTexCoordID dst_coord, GXTexGenType func, GXTexGenSrc sr
     case GX_TG_TEX5:    row = 10; break;
     case GX_TG_TEX6:    row = 11; break;
     case GX_TG_TEX7:    row = 12; break;
-    case GX_TG_TEXCOORD0: bumprow; break;
-    case GX_TG_TEXCOORD1: bumprow; break;
-    case GX_TG_TEXCOORD2: bumprow; break;
-    case GX_TG_TEXCOORD3: bumprow; break;
-    case GX_TG_TEXCOORD4: bumprow; break;
-    case GX_TG_TEXCOORD5: bumprow; break;
-    case GX_TG_TEXCOORD6: bumprow; break;
+    case GX_TG_TEXCOORD0: break;
+    case GX_TG_TEXCOORD1: break;
+    case GX_TG_TEXCOORD2: break;
+    case GX_TG_TEXCOORD3: break;
+    case GX_TG_TEXCOORD4: break;
+    case GX_TG_TEXCOORD5: break;
+    case GX_TG_TEXCOORD6: break;
     default:
         ASSERTMSGLINE(1059, 0, "GXSetTexCoordGen: Invalid source parameter");
         break;
@@ -636,5 +635,5 @@ void GXSetNumTexGens(u8 nTexGens) {
     CHECK_GXBEGIN(1172, "GXSetNumTexGens");
     SET_REG_FIELD(1174, __GXData->genMode, 4, 0, nTexGens);
     GX_WRITE_XF_REG(0x3F, nTexGens);
-    __GXData->dirtyState |= 4;
+    __GXData->dirtyState |= GX_DIRTY_GEN_MODE;
 }

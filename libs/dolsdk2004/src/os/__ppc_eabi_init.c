@@ -27,6 +27,7 @@ __declspec(section ".init") asm void __init_hardware(void)
 __declspec(section ".init") asm void __flush_cache(void *address, unsigned int size)
 { // clang-format off
     nofralloc
+    // The mask 0xFFFFFFF1 clears bits 1-3 of the start address (bit 0 stays); the loop steps 8 bytes.
     lis     r5, 0xffff
     ori     r5, r5, 0xfff1
     and     r5, r5, r3

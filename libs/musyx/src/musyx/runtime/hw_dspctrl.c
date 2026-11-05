@@ -15,7 +15,6 @@
 
 
 
-#define _MATH_H_
 #include "dolphin/os/OSCache.h"
 #include "musyx/assert.h"
 #include "musyx/dspvoice.h"
@@ -660,8 +659,8 @@ static void SortVoices(DSPvoice** voices, long l, long r) {
 }
 
 void salBuildCommandList(s16* dest, u32 nsDelay) {
-  static const u16 pbOffsets[10] = {10, 12, 24, 14, 16, 26, 18, 20, 22};
-  static DSPvoice* voices[64];
+  static const u16 pbOffsets[10] = {10, 12, 24, 14, 16, 26, 18, 20, 22}; // nine used (loop i < 9), the tenth is 0
+  static DSPvoice* voices[64]; // filled per studio with no bound check: more than 64 voices would overrun it
 
   u8 s;
   u8 mix_start;
@@ -1064,7 +1063,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
             }
             dsp_vptr->state = 2;
             newVoice = 1;
-            goto block_186;
+            goto apply_changes;
           }
           if ((dsp_vptr->smp_info.compType == 4) || (dsp_vptr->smp_info.compType == 5)) {
             pb->adpcmLoop.loop_pred_scale = dsp_vptr->streamLoopPS;
@@ -1312,7 +1311,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
           mix_start = 0;
           newVoice = 0;
           dsp_vptr->currentAddr = (pb->addr.currentAddressHi << 0x10) | pb->addr.currentAddressLo;
-        block_186:
+        apply_changes:
           if ((dsp_vptr->changed[mix_start] & 0x40) != 0) {
             adsrRelease(&dsp_vptr->adsr);
           }
@@ -1472,7 +1471,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
               dspCmdPtr[0] = 2; // PB_ADDR
               dspCmdPtr[1] = (u32)pb >> 0x10;
               dspCmdPtr[2] = (u32)pb;
-              dspCmdPtr += 3; // PROCESS
+              dspCmdPtr += 3;
 #ifdef _DEBUG
               dbgActiveVoices++;
 #endif
@@ -1492,7 +1491,7 @@ void salBuildCommandList(s16* dest, u32 nsDelay) {
       }
       if (procVoiceFlag != 0) {
         if ((dspCmdPtr + 1) > (dspCmdMaxPtr - 4)) {
-          u16 size; // r1+0x28;
+          u16 size;
           dspCmdPtr[0] = 13; // MORE
           dspCmdPtr[1] = (u32)dspCmdMaxPtr >> 16;
           dspCmdPtr[2] = (u32)dspCmdMaxPtr;

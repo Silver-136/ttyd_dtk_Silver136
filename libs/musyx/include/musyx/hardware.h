@@ -96,7 +96,7 @@ void hwChangeStudioMix(u8 studio, u32 isMaster);
 void hwSetStreamLoopPS(u32 voice, u8 ps);
 void hwFlushStream(void* base, u32 offset, u32 bytes, u8 hwStreamHandle, void (*callback)(size_t),
                    u32 user);
-void hwSetSaveSampleCallback(ARAMUploadCallback callback, unsigned long chunckSize);
+void hwSetSaveSampleCallback(ARAMUploadCallback callback, unsigned long chunkSize);
 void hwSyncSampleMem();
 void hwSetAUXProcessingCallbacks(u8 studio, SND_AUX_CALLBACK auxA, void* userA,
                                  SND_AUX_CALLBACK auxB, void* userB);
@@ -155,7 +155,7 @@ ARAMInfo* dataARAMDefaultGetInfo();
 #endif
 u8 aramAllocateStreamBuffer(u32 len);
 unsigned long aramGetZeroBuffer();
-void aramSetUploadCallback(ARAMUploadCallback callback, u32 chunckSize);
+void aramSetUploadCallback(ARAMUploadCallback callback, u32 chunkSize);
 void aramSyncTransferQueue();
 
 #ifdef __cplusplus

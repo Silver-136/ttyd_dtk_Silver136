@@ -64,12 +64,11 @@ static void vsFreeBuffer(u8 bufferIndex) {
 
 u32 vsSampleStartNotify(unsigned long vid) {
   u8 voice;
-  u8 v1 = vid;
   u8 sb;
   u8 i;
   size_t addr;
 
-  voice = v1 & 0xFF;
+  voice = vid & 0xFF;
   for (i = 0; i < vs.numBuffers; ++i) {
     if (vs.streamBuffer[i].state != 0 && vs.streamBuffer[i].voice == voice) {
       vsFreeBuffer(i);
@@ -90,7 +89,7 @@ u32 vsSampleStartNotify(unsigned long vid) {
     vs.streamBuffer[sb].info.data.extraData = hwGetSampleExtraData(voice);
     vs.streamBuffer[sb].smpType = hwGetSampleType(voice);
     vs.streamBuffer[sb].voice = voice;
-    if (vs.callback != NULL && vs.callback(0, &vs.streamBuffer[sb].info) == 0) {
+    if (vs.callback != NULL && vs.callback(SND_VIRTUALSAMPLE_REASON_INIT, &vs.streamBuffer[sb].info) == 0) {
       return (vs.streamBuffer[sb].info.instID << 8) | voice;
     }
     hwSetVirtualSampleLoopBuffer(voice, 0, 0);
@@ -113,7 +112,7 @@ void vsSampleEndNotify(u32 pubID) {
     if (sb != 0xFF) {
       if (vs.streamBuffer[sb].info.instID == ((pubID >> 8) & 0xFFFF)) {
         if (vs.callback != NULL) {
-          vs.callback(2, &vs.streamBuffer[sb].info);
+          vs.callback(SND_VIRTUALSAMPLE_REASON_STOP, &vs.streamBuffer[sb].info);
         }
         vsFreeBuffer(sb);
       }
@@ -133,7 +132,7 @@ void vsUpdateBuffer(struct VS_BUFFER* sb, unsigned long cpos) {
       sb->info.data.update.len1 = cpos - sb->last;
       sb->info.data.update.off2 = 0;
       sb->info.data.update.len2 = 0;
-      if ((len = vs.callback(1, &sb->info)) != 0) {
+      if ((len = vs.callback(SND_VIRTUALSAMPLE_REASON_UPDATE, &sb->info)) != 0) {
         sb->last = (sb->last + len) % vs.bufferLength;
       }
     } break;
@@ -142,7 +141,7 @@ void vsUpdateBuffer(struct VS_BUFFER* sb, unsigned long cpos) {
       sb->info.data.update.len1 = cpos - sb->last;
       sb->info.data.update.off2 = 0;
       sb->info.data.update.len2 = 0;
-      if ((len = vs.callback(1, &sb->info)) != 0) {
+      if ((len = vs.callback(SND_VIRTUALSAMPLE_REASON_UPDATE, &sb->info)) != 0) {
         sb->last = (sb->last + len) % vs.bufferLength;
       }
     } break;
@@ -156,7 +155,7 @@ void vsUpdateBuffer(struct VS_BUFFER* sb, unsigned long cpos) {
       sb->info.data.update.len1 = vs.bufferLength - sb->last;
       sb->info.data.update.off2 = 0;
       sb->info.data.update.len2 = 0;
-      if ((len = vs.callback(1, &sb->info)) != 0) {
+      if ((len = vs.callback(SND_VIRTUALSAMPLE_REASON_UPDATE, &sb->info)) != 0) {
         sb->last = (sb->last + len) % vs.bufferLength;
       }
     } break;
@@ -165,7 +164,7 @@ void vsUpdateBuffer(struct VS_BUFFER* sb, unsigned long cpos) {
       sb->info.data.update.len1 = vs.bufferLength - sb->last;
       sb->info.data.update.off2 = 0;
       sb->info.data.update.len2 = 0;
-      if ((len = vs.callback(1, &sb->info)) != 0) {
+      if ((len = vs.callback(SND_VIRTUALSAMPLE_REASON_UPDATE, &sb->info)) != 0) {
         sb->last = (sb->last + len) % vs.bufferLength;
       }
     } break;
@@ -179,7 +178,7 @@ void vsUpdateBuffer(struct VS_BUFFER* sb, unsigned long cpos) {
       sb->info.data.update.len1 = vs.bufferLength - sb->last;
       sb->info.data.update.off2 = 0;
       sb->info.data.update.len2 = cpos;
-      if ((len = vs.callback(1, &sb->info)) != 0) {
+      if ((len = vs.callback(SND_VIRTUALSAMPLE_REASON_UPDATE, &sb->info)) != 0) {
         sb->last = (sb->last + len) % vs.bufferLength;
       }
     } break;
@@ -188,7 +187,7 @@ void vsUpdateBuffer(struct VS_BUFFER* sb, unsigned long cpos) {
       sb->info.data.update.len1 = vs.bufferLength - sb->last;
       sb->info.data.update.off2 = 0;
       sb->info.data.update.len2 = cpos;
-      if ((len = vs.callback(1, &sb->info)) != 0) {
+      if ((len = vs.callback(SND_VIRTUALSAMPLE_REASON_UPDATE, &sb->info)) != 0) {
         sb->last = (sb->last + len) % vs.bufferLength;
       }
     } break;

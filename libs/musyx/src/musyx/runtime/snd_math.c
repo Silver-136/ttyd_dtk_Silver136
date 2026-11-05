@@ -7,6 +7,7 @@ void salApplyMatrix(const SND_FMATRIX* mat, const SND_FVECTOR* in, SND_FVECTOR* 
   out->z = mat->m[2][0] * in->x + mat->m[2][1] * in->y + mat->m[2][2] * in->z + mat->t[2];
 }
 
+// No zero-length test: callers must pass a non-zero vector (snd3d.c tests the length first).
 float salNormalizeVector(SND_FVECTOR* vec) {
   float l = sqrtf(vec->x * vec->x + vec->y * vec->y + vec->z * vec->z);
   vec->x /= l;

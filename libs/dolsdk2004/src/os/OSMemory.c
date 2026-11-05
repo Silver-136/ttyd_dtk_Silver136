@@ -50,9 +50,9 @@ static void MEMIntrruptHandler(__OSInterrupt interrupt, OSContext* context) {
     u32 addr;
     u32 cause;
 
-    cause = __MEMRegs[0xf];
-    addr = (((u32)__MEMRegs[0x12] & 0x3ff) << 16) | __MEMRegs[0x11];
-    __MEMRegs[0x10] = 0;
+    cause = __MEMRegs[15];
+    addr = (((u32)__MEMRegs[18] & 0x3ff) << 16) | __MEMRegs[17];
+    __MEMRegs[16] = 0;
 
     if (__OSErrorTable[__OS_EXCEPTION_MEMORY_PROTECTION]) {
         __OSErrorTable[__OS_EXCEPTION_MEMORY_PROTECTION](__OS_EXCEPTION_MEMORY_PROTECTION, context, cause, addr);
@@ -103,6 +103,8 @@ void OSProtectRange(u32 chan, void* addr, u32 nBytes, u32 control) {
 }
 
 #ifdef __GEKKO__
+// Maps the cached region 0x80000000 onto 24 MB with BAT 0 (16 MB) and BAT 2 (8 MB at 0x81000000), data
+// and instruction BATs alike, then returns to the caller through rfi with translation on.
 static asm void Config24MB(void) {
     nofralloc
     li r7, 0x0
@@ -132,7 +134,7 @@ static asm void Config24MB(void) {
     mtibatu 2, r5
     isync
     mfmsr r3
-    ori r3, r3, 0x30
+    ori r3, r3, MSR_IR | MSR_DR
     mtsrr1 r3
     mflr r3
     mtsrr0 r3
@@ -141,6 +143,7 @@ static asm void Config24MB(void) {
 #endif
 
 #ifdef __GEKKO__
+// As Config24MB for 48 MB: BAT 0 covers 32 MB, BAT 2 16 MB at 0x82000000.
 static asm void Config48MB(void) {
     nofralloc
     li r7, 0x0
@@ -170,7 +173,7 @@ static asm void Config48MB(void) {
     mtibatu 2, r5
     isync
     mfmsr r3
-    ori r3, r3, 0x30
+    ori r3, r3, MSR_IR | MSR_DR
     mtsrr1 r3
     mflr r3
     mtsrr0 r3
@@ -192,7 +195,7 @@ static asm void RealMode(register u32 addr) {
 
 void __OSInitMemoryProtection(void) {
 #ifndef DEBUG
-    u32 padding[9];
+    u32 padding[9]; // FAKE: unused, pads the stack frame of the release build
     u32 temp;
 #endif
     BOOL enabled;

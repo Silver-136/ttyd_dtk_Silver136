@@ -94,10 +94,10 @@ s32 sndInit(u8 voices, u8 music, u8 sfx, u8 studios, u32 flags, u32 aramSize) {
   } else {
     synthInfo.voiceNum = SYNTH_MAX_VOICES;
   }
-  if (studios <= 8) {
+  if (studios <= SND_STUDIO_MAXNUM) {
     synthInfo.studioNum = studios;
   } else {
-    synthInfo.studioNum = 8;
+    synthInfo.studioNum = SND_STUDIO_MAXNUM;
   }
 
   synthInfo.maxMusic = music;

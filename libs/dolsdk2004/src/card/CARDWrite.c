@@ -25,7 +25,7 @@ static void WriteCallback(s32 chan, s32 result) {
         if (fileInfo->length <= 0) {
             dir = __CARDGetDirBlock(card);
             ent = dir + fileInfo->fileNo;
-            ent->time = OSGetTime()/(__OSBusClock/4);
+            ent->time = OSTicksToSeconds(OSGetTime());
             callback = card->apiCallback;
             card->apiCallback = NULL;
             result = __CARDUpdateDir(chan, callback);
@@ -49,7 +49,7 @@ after:;
         callback = card->apiCallback;
         card->apiCallback = NULL;
         __CARDPutControlBlock(card, result);
-        ASSERTLINE(0x86, callback);
+        ASSERTLINE(134, callback);
         callback(chan, result);
     }
 }

@@ -1,4 +1,3 @@
-#define _MATH_H_
 #define SND3D_LISTENER_NO_ROOM 1
 #define SND3D_EMITTER_NO_ROOM 1
 #include "musyx/musyx.h"
@@ -7,21 +6,6 @@
 #include "musyx/sal.h"
 #include "musyx/synth.h"
 #include "musyx/s3d_key.h"
-
-#define S3D_DEFINE_SQRT(name)                    \
-  extern inline float name(float x) {            \
-    volatile float y;                            \
-    if (x > 0.0f) {                              \
-      double guess = __frsqrte((double)x);       \
-      guess = 0.5 * guess * (3.0 - guess * guess * x); \
-      guess = 0.5 * guess * (3.0 - guess * guess * x); \
-      guess = 0.5 * guess * (3.0 - guess * guess * x); \
-      y = (float)(x * guess);                    \
-      return y;                                  \
-    }                                            \
-    return x;                                    \
-  }
-S3D_DEFINE_SQRT(sqrtf)
 
 static u8 s3dCallCnt;
 u8 gap_08_80418DD9_sbss[7];
@@ -182,8 +166,8 @@ typedef struct START_LIST {
   f32 yPan;                // offset 0xC, size 0x4
   f32 zPan;                // offset 0x10, size 0x4
   f32 pitch;               // offset 0x14, size 0x4
-  f32 occl;
-  SND_EMITTER* em;         // offset 0x18, size 0x4
+  f32 occl;                // offset 0x18, size 0x4
+  SND_EMITTER* em;         // offset 0x1C, size 0x4
 } START_LIST;
 
 typedef struct RUN_LIST {
@@ -201,6 +185,7 @@ typedef struct START_GROUP {
   unsigned short numRunning; // offset 0xC, size 0x2
 } START_GROUP;
 
+// FAKE: one-element arrays used as scalars; plain literals change the object (constant order)
 static const f32 s3d_f16383[1] = {16383.0f};
 static const f32 s3d_f127[1] = {127.0f};
 static const f32 s3d_f64[1] = {64.0f};
@@ -420,6 +405,8 @@ static inline void ClearStartList() {
   runListNum = 0;
 }
 
+// BUG: no bound checks here (AddStartingEmitter has them): a 65th group overruns startGroup[64] and a
+// 129th running emitter overruns runList[128].
 static inline void AddRunningEmitter(SND_EMITTER* em, f32 vol) {
   long i;
   RUN_LIST* rl;
@@ -593,7 +580,6 @@ void StartContinousEmitters() {
         u8 key = s3dGetEmitterKey(em);
       if ((em->vid = synthFXStart(em->fxid, key, 127, 64, em->studio, (em->flags & 0x10) != 0))
           == -1) {
-      set_flags2:
         if (!(em->flags & 0x2)) {
           em->flags |= 0x40000;
           em->flags &= ~0x20000;
@@ -649,7 +635,7 @@ void s3dHandle() {
     --s3dCallCnt;
     return;
   }
-  s3dCallCnt = 3;
+  s3dCallCnt = 3; // the rest of s3dHandle runs on every fourth call
   ClearStartList();
   em = s3dEmitterRoot;
   for (; em != NULL; em = nem) {
@@ -658,29 +644,31 @@ void s3dHandle() {
       EmitterShutdown(em);
       continue;
     }
+    // BUG: only this call sets vol, xPan, yPan, zPan, pitch and occl; an emitter with neither bit
+    // (not continuous, no start pending) that still has a voice reads them unset further down.
     if ((em->flags & 0x20001) != 0) {
       CalcEmitter(em, &vol, &pitch, &xPan, &yPan, &zPan, &occl);
     }
 
     if (!(em->flags & 0x80000)) {
       if (em->flags & 0x20000) {
-        if (vol == 0.f && em->flags & 0x4) {
+        if (vol == 0.f && em->flags & SND_EMITTER_PAUSABLE) {
           em->flags |= 0x80000;
           em->flags &= ~0x20000;
           goto found_emitter;
-        } else if (vol == 0.f && em->flags & 0x40) {
+        } else if (vol == 0.f && em->flags & SND_EMITTER_NOSILENTSTART) {
           EmitterShutdown(em);
           continue;
         }
 
-        if (em->flags & 1) {
+        if (em->flags & SND_EMITTER_CONTINUOUS) {
           if (AddStartingEmitter(em, vol, xPan, yPan, zPan, pitch, occl)) {
             continue;
           }
         } else {
           u8 key = s3dGetEmitterKey(em);
-          if ((em->vid = synthFXStart(em->fxid, key, 127, 64, em->studio, (em->flags & 0x10) != 0)) == -1) {
-            if (!(em->flags & 2)) {
+          if ((em->vid = synthFXStart(em->fxid, key, 127, 64, em->studio, (em->flags & SND_EMITTER_ITD) != 0)) == -1) {
+            if (!(em->flags & SND_EMITTER_RESTARTABLE)) {
               em->flags |= 0x40000;
               em->flags &= ~0x20000;
             } else {
@@ -689,7 +677,7 @@ void s3dHandle() {
           }
         }
       } else if ((em->vid = sndFXCheck(em->vid)) == -1) {
-        if ((em->flags & 2)) {
+        if ((em->flags & SND_EMITTER_RESTARTABLE)) {
           em->flags |= 0x20000;
         } else {
           em->flags |= 0x40000;
@@ -698,13 +686,13 @@ void s3dHandle() {
 
     found_emitter:
       if (em->vid != -1) {
-        if ((em->flags & 1) != 0) {
+        if ((em->flags & SND_EMITTER_CONTINUOUS) != 0) {
           AddRunningEmitter(em, vol);
         }
-        if ((vol == 0.f) && ((em->flags & 4) != 0)) {
+        if ((vol == 0.f) && ((em->flags & SND_EMITTER_PAUSABLE) != 0)) {
           synthSendKeyOff(em->vid);
           em->vid = 0xffffffff;
-          if ((em->flags & 2)) {
+          if ((em->flags & SND_EMITTER_RESTARTABLE)) {
             em->flags |= 0x80000;
           } else {
             em->flags |= 0x40000;

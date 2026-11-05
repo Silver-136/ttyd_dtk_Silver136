@@ -8,9 +8,12 @@
 extern "C" {
 #endif
 
-#define OS_FONT_ENCODE_ANSI 0u
-#define OS_FONT_ENCODE_SJIS 1u
-#define OS_FONT_ENCODE_MAX  5u
+#define OS_FONT_ENCODE_ANSI  0u
+#define OS_FONT_ENCODE_SJIS  1u
+#define OS_FONT_ENCODE_UTF8  3u // OSUTF8to32 decodes the string
+#define OS_FONT_ENCODE_UTF16 4u // OSUTF16to32 decodes the string
+#define OS_FONT_ENCODE_UTF32 5u // one u32 per character
+#define OS_FONT_ENCODE_MAX   5u
 #define OS_FONT_SIZE_ANSI (288 + 131072)    // 9 sheets
 #define OS_FONT_SIZE_SJIS (3840 + 1179648)  // 1 sheet
 #define OS_FONT_ROM_SIZE_ANSI 0x03000

@@ -309,6 +309,13 @@ typedef struct __GXData_struct {
     u32 dirtyState;
 } GXData;
 
+// GXData.dirtyState bits, named after the update __GXSetDirtyState runs for each
+#define GX_DIRTY_SU_TEX   0x01 // __GXSetSUTexRegs
+#define GX_DIRTY_BP_MASK  0x02 // __GXUpdateBPMask
+#define GX_DIRTY_GEN_MODE 0x04 // __GXSetGenMode
+#define GX_DIRTY_VCD      0x08 // __GXSetVCD
+#define GX_DIRTY_VAT      0x10 // __GXSetVAT (VCD or VAT also runs __GXCalculateVLim)
+
 extern GXData* const __GXData;
 extern void* __memReg;
 extern void* __peReg;
